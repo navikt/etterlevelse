@@ -27,7 +27,7 @@ import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import {BodyShort, Heading} from '@navikt/ds-react'
+import { BodyShort, Heading } from '@navikt/ds-react'
 import { lovdataBase } from '../components/Lov'
 
 export const TemaPage = () => {
@@ -44,7 +44,9 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
     <>
       {!noHeader && (
         <>
-          <Heading level="1" size="large" spacing>{tema.shortName}</Heading>
+          <Heading level="1" size="large" spacing>
+            {tema.shortName}
+          </Heading>
           <Helmet>
             <meta charSet="utf-8" />
             <title>{tema.shortName}</title>
@@ -65,18 +67,20 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
 
       {expand && (
         <Block marginBottom={theme.sizing.scale900}>
-          <Heading className="mt-7" level="2" size="medium" spacing>Ansvarlig for lovtolkning</Heading>
+          <Heading className="mt-7" level="2" size="medium" spacing>
+            Ansvarlig for lovtolkning
+          </Heading>
           {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code, index) => (
             <BodyShort key={code + '_' + index} size="large" spacing>
               {codelist.getCode(ListName.UNDERAVDELING, code)?.shortName}
             </BodyShort>
           ))}
-          <Heading level="2" size="medium" spacing>Lovdata</Heading>
+          <Heading level="2" size="medium" spacing>
+            Lovdata
+          </Heading>
           {lover.map((l, index) => (
             <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
-              <ExternalLink href={lovdataBase(l.code)}>
-                {l.shortName}
-              </ExternalLink>
+              <ExternalLink href={lovdataBase(l.code)}>{l.shortName}</ExternalLink>
             </Block>
           ))}
         </Block>
@@ -110,7 +114,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
-      ; (async () => {
+      ;(async () => {
         const allKravPriority = await getAllKravPriority()
         const kraver = _.cloneDeep(data.krav.content)
         kraver.map((k) => {
@@ -133,7 +137,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
       header={getTemaMainHeader(tema, lover, expand, setExpand)}
     >
       <Block>
-        <HeadingXLarge marginLeft='0px'>{loading ? '?' : data?.krav.numberOfElements || 0} krav</HeadingXLarge>
+        <HeadingXLarge marginLeft="0px">{loading ? '?' : data?.krav.numberOfElements || 0} krav</HeadingXLarge>
         {loading && <SkeletonPanel count={10} />}
         {!loading &&
           kravList &&

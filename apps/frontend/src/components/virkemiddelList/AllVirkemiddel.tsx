@@ -100,7 +100,7 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
             {totalDataLength} Virkemiddel
           </HeadingXLarge>
         </Block>
-        <Block display='flex' justifyContent="center" alignContent="center" width="100%">
+        <Block display="flex" justifyContent="center" alignContent="center" width="100%">
           <Block display="flex" justifyContent="flex-start" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             <StatefulInput
               size="compact"

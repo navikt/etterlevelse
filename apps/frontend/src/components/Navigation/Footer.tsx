@@ -41,7 +41,7 @@ export const Footer = () => {
           <div className="w-full min-h-[100px] flex items-center">
             <div className="w-full flex justify-around items-center">
               <ExternalLink href={datajegerSlackLink} className="text-white" openOnSamePage>
-                  #etterlevelse på Slack
+                #etterlevelse på Slack
               </ExternalLink>
               <ExternalLink href={githubRepo} openOnSamePage className="text-white">
                 Github

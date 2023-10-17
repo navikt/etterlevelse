@@ -1,13 +1,13 @@
-import {Block} from 'baseui/block'
+import { Block } from 'baseui/block'
 import Button from '../common/Button'
-import {borderRadius, marginAll} from '../common/Style'
-import {HeadingXXLarge} from 'baseui/typography'
-import {ettlevColors, maxPageWidth, responsivePaddingExtraLarge} from '../../util/theme'
+import { borderRadius, marginAll } from '../common/Style'
+import { HeadingXXLarge } from 'baseui/typography'
+import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
 import CustomizedModal from '../common/CustomizedModal'
-import {getTemaMainHeader} from '../../pages/TemaPage'
-import {useState} from 'react'
-import {EtterlevelseDokumentasjon} from '../../constants'
-import {LovCode, TemaCode} from '../../services/Codelist'
+import { getTemaMainHeader } from '../../pages/TemaPage'
+import { useState } from 'react'
+import { EtterlevelseDokumentasjon } from '../../constants'
+import { LovCode, TemaCode } from '../../services/Codelist'
 
 type SecondaryHeaderProps = {
   etterlevelseDokumentasjon: EtterlevelseDokumentasjon | undefined

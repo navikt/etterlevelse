@@ -218,14 +218,14 @@ export const AllKrav = () => {
   ) : (
     <Block>
       <Block width="100%" justifyContent="center" marginTop="20px" marginBottom="20px">
-        <Block display='flex' justifyContent="center" alignContent="center" width="100%">
+        <Block display="flex" justifyContent="center" alignContent="center" width="100%">
           <Block display="flex" justifyContent="flex-start" width="100%">
             <HeadingXLarge marginTop="0px" marginBottom="0px">
               {kravene.totalElements ? kravene.totalElements : 0} Krav
             </HeadingXLarge>
           </Block>
           <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
-            <Block display='flex' alignItems="center" justifyContent="flex-start" width="100%">
+            <Block display="flex" alignItems="center" justifyContent="flex-start" width="100%">
               <LabelSmall>Filter</LabelSmall>
               {/* {getSelector(filter.tema[0].id?.toString(), KravListFilter.TEMAER, getOptions(
                 'Alle tema',
@@ -295,7 +295,7 @@ export const AllKrav = () => {
 
             {gqlLoading && (
               <Block marginLeft={theme.sizing.scale400}>
-                <Loader size="large"/>
+                <Loader size="large" />
               </Block>
             )}
           </Block>

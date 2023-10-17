@@ -67,9 +67,7 @@ export const EtterlevelseEditFields = ({
   etterlevelseMetadata,
   setEtterlevelseMetadata,
 }: EditProps) => {
-  const [etterlevelseStatus] = React.useState<string>(
-    editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,
-  )
+  const [etterlevelseStatus] = React.useState<string>(editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [radioHover] = React.useState<string>('')
   const [isOppfylesSenere, setOppfylesSenere] = React.useState<boolean>(etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE)
   const [isNotatfeltOpen, setIsNotatfeltOpen] = React.useState(false)
@@ -232,9 +230,7 @@ export const EtterlevelseEditFields = ({
 
               <Block width="100%" backgroundColor={kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV ? 'transparent' : ettlevColors.green100}>
                 {!documentEdit && (
-                  <div
-                    className="flex w-full items-center justify-end gap-12 px-8"
-                  >
+                  <div className="flex w-full items-center justify-end gap-12 px-8">
                     {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
                       <Block display="flex" flexDirection="column" paddingTop="27px" paddingBottom="24px" minWidth={'fit-content'}>
                         <Checkbox

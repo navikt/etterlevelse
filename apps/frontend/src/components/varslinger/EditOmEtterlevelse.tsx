@@ -35,7 +35,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
   if (isLoading) {
     return (
       <Block display="flex" justifyContent="center">
-        <Loader size="large"/>
+        <Loader size="large" />
       </Block>
     )
   }

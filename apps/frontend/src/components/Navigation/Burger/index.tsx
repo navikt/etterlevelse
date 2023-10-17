@@ -20,7 +20,7 @@ const Brand = () => (
   </StyledLink>
 )
 
-const MenuItem = (props: { to: string, text: string, icon: string, setShowMenu: Function }) => (
+const MenuItem = (props: { to: string; text: string; icon: string; setShowMenu: Function }) => (
   <Block
     display={'flex'}
     alignItems={'center'}

@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { Block } from 'baseui/block'
-import { JsonView} from 'react-json-view-lite'
+import { JsonView } from 'react-json-view-lite'
 import React, { useEffect, useState } from 'react'
 import { LabelLarge } from 'baseui/typography'
 import { AuditActionIcon, AuditLabel as Label } from './AuditComponents'
@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBinoculars, faExchangeAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
 import { StatefulPopover } from 'baseui/popover'
-import {Differ, Viewer} from 'json-diff-kit'
+import { Differ, Viewer } from 'json-diff-kit'
 import { Spinner } from 'baseui/spinner'
 import { useRefs } from '../../../util/hooks'
 import { theme } from '../../../util'
@@ -100,7 +100,7 @@ export const AuditView = (props: AuditViewProps) => {
                         content={() => (
                           <Card>
                             <Viewer
-                              diff={new Differ().diff(auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {},  audit.data)}
+                              diff={new Differ().diff(auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {}, audit.data)}
                               highlightInlineDiff={true}
                               lineNumbers={true}
                               indent={4}
@@ -128,7 +128,7 @@ export const AuditView = (props: AuditViewProps) => {
                   <JsonView
                     data={audit.data}
                     shouldExpandNode={() => {
-                      if(openAll) {
+                      if (openAll) {
                         return true
                       } else {
                         return index === 0 ? true : false

@@ -68,11 +68,10 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
       <ModalHeader>{etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Arkivering bestilt' : 'Arkivér i Websak'}</ModalHeader>
       <ModalBody>
         <BodyLong className="mb-4">
-             Arkiveringen skjer puljevis hver dag klokka 12.00 og 00.00. 
-             Etter disse tidspunktene vil du finne din etterlevelsesdokumentasjon i WebSak ved å søke på ditt etterlevelsesnummer. 
-             Etterlevelsesnummeret begynner med E etterfulgt av tre tall.
+          Arkiveringen skjer puljevis hver dag klokka 12.00 og 00.00. Etter disse tidspunktene vil du finne din etterlevelsesdokumentasjon i WebSak ved å søke på ditt
+          etterlevelsesnummer. Etterlevelsesnummeret begynner med E etterfulgt av tre tall.
         </BodyLong>
-        
+
         {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.IKKE_ARKIVER && (
           <BodyLong className="mb-4">Arkivering av etterlevelsesdokumentasjon i Websak gir sporbarhet og dokumenterer grunnlaget for risikovurderinger og rapportering.</BodyLong>
         )}

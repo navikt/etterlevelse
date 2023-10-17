@@ -13,7 +13,6 @@ type AlertUnsavedPopupProps = {
 }
 
 export const AlertUnsavedPopup = ({ isActive, isModalOpen, setIsModalOpen, onClose, onSubmit }: AlertUnsavedPopupProps) => {
-
   return (
     <CustomizedModal
       onClose={() => setIsModalOpen(false)}

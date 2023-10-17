@@ -1,16 +1,7 @@
 import { Block, BlockProps } from 'baseui/block'
 import { LabelMedium } from 'baseui/typography'
 import { Field, FieldProps } from 'formik'
-import {
-  Code,
-  codelist,
-  CodeListFormValues,
-  ListName,
-  LovCodeData,
-  LovCodeRelevans,
-  lovCodeRelevansToOptions,
-  TemaCodeData,
-} from '../../../services/Codelist'
+import { Code, codelist, CodeListFormValues, ListName, LovCodeData, LovCodeRelevans, lovCodeRelevansToOptions, TemaCodeData } from '../../../services/Codelist'
 import { SIZE as InputSIZE } from 'baseui/input'
 import { OptionList } from '../../common/Inputs'
 import { temaBilder } from '../../Images'
