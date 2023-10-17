@@ -3,11 +3,11 @@ import { Etterlevelse, KRAV_FILTER_TYPE } from '../../constants'
 import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, mapEtterlevelseToFormValue } from '../../api/EtterlevelseApi'
 import React, { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
-import { Spinner } from '../common/Spinner'
 
 import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
 import { toKravId } from './common/utils'
 import { EditEtterlevelse } from '../etterlevelse/EditEtterlevelse'
+import { Loader } from '@navikt/ds-react'
 
 export const KravView = (props: {
   kravId: KravId
@@ -62,7 +62,7 @@ export const KravView = (props: {
     <Block width="100%">
       {loadingEtterlevelseData && (
         <Block width="100%" display="flex" justifyContent="center" marginTop="50px">
-          <Spinner size={'large'} />
+          <Loader size={'large'} />
         </Block>
       )}
       {!loadingEtterlevelseData && etterlevelse && (

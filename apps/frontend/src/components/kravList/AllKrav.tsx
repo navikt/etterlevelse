@@ -6,7 +6,6 @@ import { Block, Responsive, Scale } from 'baseui/block'
 import { Option, SelectOverrides } from 'baseui/select'
 import CustomizedSelect from '../common/CustomizedSelect'
 import { ettlevColors, theme } from '../../util/theme'
-import { Spinner } from '../common/Spinner'
 import { Notification } from 'baseui/notification'
 import { HeadingXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
 import Button from '../common/Button'
@@ -14,6 +13,7 @@ import { KravPanels, sortKrav } from '../../pages/KravListPage'
 import { borderColor } from '../common/Style'
 import { kravStatus } from '../../pages/KravPage'
 import { PlusIcon } from '@navikt/aksel-icons'
+import { Loader } from '@navikt/ds-react'
 
 type KravFilter = {
   status: Option[]
@@ -212,7 +212,7 @@ export const AllKrav = () => {
   }
 
   return loading && !kravene.numberOfElements ? (
-    <Spinner size={'large'} />
+    <Loader size={'large'} />
   ) : error ? (
     <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
   ) : (
@@ -295,7 +295,7 @@ export const AllKrav = () => {
 
             {gqlLoading && (
               <Block marginLeft={theme.sizing.scale400}>
-                <Spinner size={'large'} />
+                <Loader size={'large'} />
               </Block>
             )}
           </Block>

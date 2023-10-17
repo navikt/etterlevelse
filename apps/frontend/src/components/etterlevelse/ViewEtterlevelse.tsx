@@ -5,7 +5,6 @@ import { theme } from '../../util'
 import moment from 'moment'
 import RouteLink from '../common/RouteLink'
 import { useBehandling } from '../../api/BehandlingApi'
-import { Spinner } from '../common/Spinner'
 import { HeadingLarge, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
 import { Card } from 'baseui/card'
 import { ettlevColors } from '../../util/theme'
@@ -17,7 +16,7 @@ import EditBegrunnelse from './Edit/EditBegrunnelse'
 import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../common/Style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faCircle } from '@fortawesome/free-solid-svg-icons'
-import { ReadMore } from '@navikt/ds-react'
+import { Loader, ReadMore } from '@navikt/ds-react'
 
 const getHeaderText = (status: EtterlevelseStatus) => {
   switch (status) {
@@ -101,7 +100,7 @@ export const ViewEtterlevelse = ({
           etterlevelse.behandlingId && (
             <Block>
               {' '}
-              <Spinner size={'large'} />
+              <Loader size={'large'} />
               {etterlevelse.behandlingId}
             </Block>
           )

@@ -6,11 +6,11 @@ import { AlertType, Melding, MeldingStatus, MeldingType } from '../../constants'
 import { FieldWrapper, TextAreaField } from '../common/Inputs'
 import Button from '../common/Button'
 import { ettlevColors, theme } from '../../util/theme'
-import { Spinner } from '../common/Spinner'
 import { FormControl } from 'baseui/form-control'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { ParagraphMedium } from 'baseui/typography'
 import { EyeSlashIcon, TrashIcon } from '@navikt/aksel-icons'
+import { Loader } from '@navikt/ds-react'
 
 export const getAlertTypeText = (type: AlertType) => {
   if (!type) return ''
@@ -55,7 +55,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
   if (isLoading) {
     return (
       <Block display="flex" justifyContent="center">
-        <Spinner size={'large'} />
+        <Loader size={'large'} />
       </Block>
     )
   }

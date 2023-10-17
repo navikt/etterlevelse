@@ -8,7 +8,6 @@ import { Card } from 'baseui/card'
 import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
 import { StatefulPopover } from 'baseui/popover'
 import { Differ, Viewer } from 'json-diff-kit'
-import { Spinner } from 'baseui/spinner'
 import { useRefs } from '../../../util/hooks'
 import { theme } from '../../../util'
 import { intl } from '../../../util/intl/intl'
@@ -17,6 +16,7 @@ import { ObjectLink } from '../../common/RouteLink'
 import Button from '../../common/Button'
 import { ettlevColors } from '../../../util/theme'
 import { ArrowRightLeftIcon, GlassesIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { Loader } from '@navikt/ds-react'
 
 type AuditViewProps = {
   auditLog?: AuditLog
@@ -41,7 +41,7 @@ export const AuditView = (props: AuditViewProps) => {
 
   return (
     <Card>
-      {loading && <Spinner $color={ettlevColors.green400} $size={theme.sizing.scale2400} />}
+      {loading && <Loader size="large" />}
       {!loading && auditLog && !logFound && <LabelLarge>{intl.auditNotFound}</LabelLarge>}
 
       {logFound && (

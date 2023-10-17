@@ -2,7 +2,6 @@ import { AdresseType, Krav, SlackChannel, SlackUser, TeamResource, Varslingsadre
 import { getSlackChannelById, getSlackUserByEmail, getSlackUserById, usePersonSearch, useSlackChannelSearch } from '../../../api/TeamApi'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
-import { Spinner } from '../../common/Spinner'
 import { theme } from '../../../util'
 import { Notification } from 'baseui/notification'
 import * as yup from 'yup'
@@ -19,6 +18,7 @@ import { RenderTagList } from '../../common/TagList'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
 import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
+import { Loader } from '@navikt/ds-react'
 
 export const KravVarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -237,7 +237,7 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
           </Button>
         </Block>
       </Block>
-      {loadingSlackId && <Spinner size={'large'} />}
+      {loadingSlackId && <Loader size={'large'} />}
       {error && (
         <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>
           {error}

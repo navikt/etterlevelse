@@ -5,7 +5,6 @@ import { Block, Responsive, Scale } from 'baseui/block'
 import { Option } from 'baseui/select'
 import CustomizedSelect from '../common/CustomizedSelect'
 import { ettlevColors } from '../../util/theme'
-import { Spinner } from '../common/Spinner'
 import { HeadingXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
 import { borderColor, borderWidth } from '../common/Style'
 import { useVirkemiddelFilter } from '../../api/VirkemiddelApi'
@@ -16,6 +15,7 @@ import { searchIcon } from '../Images'
 import { VirkemiddelTable } from './VirkemiddelTable'
 import { EditVirkemiddelModal } from '../virkemiddel/edit/EditVirkemiddelModal'
 import { XMarkIcon } from '@navikt/aksel-icons'
+import { Loader } from '@navikt/ds-react'
 
 type VirkemiddelFilter = {
   virkemiddelType: Option[]
@@ -92,7 +92,7 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
   }
 
   return loading ? (
-    <Spinner size={'large'} />
+    <Loader size={'large'} />
   ) : (
     <Block>
       <Block width="100%" justifyContent="center" marginTop="20px" marginBottom="20px">

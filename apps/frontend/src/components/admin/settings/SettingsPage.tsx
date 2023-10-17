@@ -1,6 +1,5 @@
 import React, { FormEvent, useState } from 'react'
 import { Block } from 'baseui/block'
-import { Spinner } from 'baseui/spinner'
 import { HeadingMedium, LabelMedium } from 'baseui/typography'
 import { getSettings, Settings, writeSettings } from './SettingsApi'
 import { intl } from '../../../util/intl/intl'
@@ -10,6 +9,7 @@ import { Markdown } from '../../common/Markdown'
 import { CustomizedStatefulTextarea } from '../../common/CustomizedTextarea'
 import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 import { Helmet } from 'react-helmet'
+import { Loader } from '@navikt/ds-react'
 
 export const SettingsPage = () => {
   const [loading, setLoading] = React.useState<boolean>(true)
@@ -41,7 +41,7 @@ export const SettingsPage = () => {
         <title>Innstillinger</title>
       </Helmet>
       <HeadingMedium>{intl.settings}</HeadingMedium>
-      {loading && <Spinner $color={ettlevColors.green400} $size={40} />}
+      {loading && <Loader size="large" />}
       {(error || !settings) && error}
       {!loading && !(error || !settings) && (
         <Block>

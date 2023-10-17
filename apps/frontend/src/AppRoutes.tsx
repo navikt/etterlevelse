@@ -31,8 +31,8 @@ import { VirkemiddelListPage } from './pages/VirkemiddelListPage'
 import EtterlevelseDokumentasjonAdminPage from './pages/EtterlevelseDokumentasjonAdminPage'
 import { useEffect } from 'react'
 import { searchEtterlevelsedokumentasjonByBehandlingId } from './api/EtterlevelseDokumentasjonApi'
-import { Spinner } from './components/common/Spinner'
 import { ampli } from './services/Amplitude'
+import { Loader } from '@navikt/ds-react'
 
 const AppRoutes = (): JSX.Element => {
   useEffect(() => {
@@ -159,7 +159,7 @@ const RedirectToEtterlevelseDokumentasjonPage = () => {
 
   return (
     <div className="flex w-full justify-center">
-      <Spinner size={'large'} />
+      <Loader size={'large'} />
     </div>
   )
 }

@@ -6,7 +6,6 @@ import { gql, useQuery } from '@apollo/client'
 import { Block } from 'baseui/block'
 import { LabelLarge, LabelSmall } from 'baseui/typography'
 import { theme } from '../../../util'
-import { Spinner } from '../../common/Spinner'
 import Button from '../../common/Button'
 import { getBehandling, useSearchBehandling } from '../../../api/BehandlingApi'
 import CustomizedSelect from '../../common/CustomizedSelect'
@@ -14,6 +13,7 @@ import { intl } from '../../../util/intl/intl'
 import { TYPE } from 'baseui/select'
 import { updateBehandlingNameWithNumber } from '../common/utils'
 import { PlusIcon } from '@navikt/aksel-icons'
+import { Loader } from '@navikt/ds-react'
 
 export const BehandlingSok = () => {
   const pageSize = 20
@@ -99,7 +99,7 @@ export const BehandlingSok = () => {
       {loading && (
         <Block>
           <Block marginLeft={theme.sizing.scale400} marginTop={theme.sizing.scale400}>
-            <Spinner size={'large'} />
+            <Loader size={'large'} />
           </Block>
         </Block>
       )}
@@ -124,7 +124,7 @@ export const BehandlingSok = () => {
 
             {gqlLoading && (
               <Block marginLeft={theme.sizing.scale400}>
-                <Spinner size={'large'} />
+                <Loader size={'large'} />
               </Block>
             )}
           </Block>

@@ -1,5 +1,4 @@
 import { KravFilters, useKravFilter } from '../../api/KravGraphQLApi'
-import { Spinner } from './Spinner'
 import { Cell, Table } from './Table'
 import { Code, codelistCompareField, codelistsCompareField } from '../../services/Codelist'
 import RouteLink from './RouteLink'
@@ -8,6 +7,7 @@ import React from 'react'
 import { KravQL, PageResponse } from '../../constants'
 import { QueryResult } from '@apollo/client'
 import { Notification } from 'baseui/notification'
+import { Loader } from '@navikt/ds-react'
 
 type KravFilterTableProps = {
   emptyText?: string
@@ -30,7 +30,7 @@ export const KravTable = (props: KravTableProps) => {
   const { variables, data, loading, error } = props.queryResult
 
   return loading && !data?.krav?.numberOfElements ? (
-    <Spinner size={'large'} />
+    <Loader size={'large'} />
   ) : error ? (
     <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
   ) : (

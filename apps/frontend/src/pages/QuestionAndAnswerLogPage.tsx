@@ -17,7 +17,7 @@ import { ColumnCompares } from '../util/hooks'
 import { ettlevColors, maxPageWidth } from '../util/theme'
 import { codelist, ListName } from '../services/Codelist'
 import { ampli } from '../services/Amplitude'
-import { Spinner } from '../components/common/Spinner'
+import { Loader } from '@navikt/ds-react'
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string
@@ -153,7 +153,7 @@ export const QuestionAndAnswerLogPage = () => {
           />
         ) : (
           <Block display={'flex'} justifyContent={'center'}>
-            <Spinner size={'large'} />
+            <Loader size={'large'} />
           </Block>
         )}
       </Block>

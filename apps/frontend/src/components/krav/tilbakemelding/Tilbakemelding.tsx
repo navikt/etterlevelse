@@ -13,7 +13,6 @@ import { HeadingMedium, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSma
 import Button from '../../common/Button'
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import { borderRadius } from '../../common/Style'
-import { Spinner } from '../../common/Spinner'
 import moment from 'moment'
 import { user } from '../../../services/User'
 import { Notification } from 'baseui/notification'
@@ -41,6 +40,7 @@ import { customSelectOverrides } from '../Edit/RegelverkEdit'
 import { Checkbox } from 'baseui/checkbox'
 import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
+import { Loader } from '@navikt/ds-react'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -64,7 +64,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
 
   return (
     <Block width="100%">
-      {loading && <Spinner size={'large'} />}
+      {loading && <Loader size={'large'} />}
       {!loading && !!tilbakemeldinger.length && (
         <Block display={'flex'} flexDirection={'column'}>
           <CustomizedAccordion>
@@ -433,7 +433,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
             )} */}
         {loading && (
           <Block alignSelf="center" marginLeft={theme.sizing.scale400}>
-            <Spinner size={'large'} />
+            <Loader size={'large'} />
           </Block>
         )}
 
@@ -443,7 +443,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
               <Block>
                 {isUpdatingStatus ? (
                   <Block alignSelf="center" marginLeft={theme.sizing.scale400}>
-                    <Spinner size={'large'} />
+                    <Loader size={'large'} />
                   </Block>
                 ) : (
                   <Button

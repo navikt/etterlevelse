@@ -5,7 +5,6 @@ import { LabelMedium } from 'baseui/typography'
 import { Value } from 'baseui/select'
 import { Button } from 'baseui/button'
 
-import { Spinner } from 'baseui/spinner'
 import { Cell, Row, Table } from '../../common/Table'
 import { theme } from '../../../util'
 import { codelist, CodeUsage } from '../../../services/Codelist'
@@ -14,6 +13,7 @@ import { ObjectType } from '../audit/AuditTypes'
 import { replaceCodelistUsage } from '../../../api/CodelistApi'
 import CustomizedSelect from '../../common/CustomizedSelect'
 import { ettlevColors } from '../../../util/theme'
+import { Loader } from '@navikt/ds-react'
 
 const UsageTable = (props: { usage: CodeUsage }) => {
   const { usage } = props
@@ -121,7 +121,7 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
       )}
 
       {usage && <UsageTable usage={usage} />}
-      {!usage && <Spinner $color={ettlevColors.green400} />}
+      {!usage && <Loader size="large" />}
     </Block>
   )
 }

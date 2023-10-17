@@ -16,13 +16,13 @@ import { ampli } from '../services/Amplitude'
 import { getFilterType } from './EtterlevelseDokumentasjonPage'
 
 import { getAllKravPriority } from '../api/KravPriorityApi'
-import { Spinner } from 'baseui/spinner'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getMainHeader } from '../components/etterlevelseDokumentasjon/common/utils'
 import { SecondaryHeader } from '../components/etterlevelseDokumentasjonTema/SecondaryHeader'
 import { KravList } from '../components/etterlevelseDokumentasjonTema/KravList'
 import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 import { KravPanelHeaderWithSorting } from '../components/etterlevelseDokumentasjon/KravPanelHeader'
+import { Loader } from '@navikt/ds-react'
 
 export const sortingOptions = [
   { label: 'Anbefalt rekkefølge', id: 'priority' },
@@ -250,7 +250,7 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
                   />
                 ) : (
                   <Block display={'flex'} justifyContent={'center'}>
-                    <Spinner />
+                    <Loader />
                   </Block>
                 )}
               </Block>

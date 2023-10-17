@@ -1,5 +1,4 @@
 import { Block } from 'baseui/block'
-import { Spinner } from 'baseui/icon'
 import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
 import _ from 'lodash'
 import moment from 'moment'
@@ -18,6 +17,7 @@ import { ViewEtterlevelse } from '../etterlevelse/ViewEtterlevelse'
 import { sadFolderIcon } from '../Images'
 import { Option } from 'baseui/select'
 import CustomizedSelect from '../common/CustomizedSelect'
+import { Loader } from '@navikt/ds-react'
 
 const etterlevelseFilter = [
   { label: 'Alle', id: 'ALLE' },
@@ -115,7 +115,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
           </div>
         </div>
       )}
-      {loading && <Spinner size={theme.sizing.scale800} />}
+      {loading && <Loader size="large" />}
       {!loading && !etterlevelser.length && (
         <InfoBlock icon={sadFolderIcon} alt={'Trist mappe ikon'} text={'Det er ikke dokumentert etterlevelse på dette kravet'} color={ettlevColors.red50} />
       )}

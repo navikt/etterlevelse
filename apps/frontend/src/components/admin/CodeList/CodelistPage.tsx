@@ -2,13 +2,10 @@ import * as React from 'react'
 import { useEffect } from 'react'
 import { StatefulSelect } from 'baseui/select'
 import { Block } from 'baseui/block'
-import { KIND, SIZE as ButtonSize } from 'baseui/button'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { HeadingXXLarge } from 'baseui/typography'
-import { Spinner } from 'baseui/spinner'
 import Button from '../../common/Button'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { useAwait, useForceUpdate } from '../../../util/hooks'
 import { Code, codelist, CodeListFormValues } from '../../../services/Codelist'
 import { createCodelist } from '../../../api/CodelistApi'
@@ -19,6 +16,7 @@ import CodeListTable from './CodeListStyledTable'
 import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 import { Helmet } from 'react-helmet'
 import { PlusIcon } from '@navikt/aksel-icons'
+import { Loader } from '@navikt/ds-react'
 
 const CodeListPage = () => {
   const params = useParams<{ listname?: string }>()
@@ -60,7 +58,7 @@ const CodeListPage = () => {
   if (!user.isAdmin() || !lists) {
     return (
       <Block overrides={{ Block: { props: { role: 'main' } } }}>
-        <Spinner $color={ettlevColors.green400} $size={theme.sizing.scale2400} />
+        <Loader size="large" />
       </Block>
     )
   }
@@ -73,7 +71,7 @@ const CodeListPage = () => {
       </Helmet>
       <HeadingXXLarge>Administrering av kodeverk</HeadingXXLarge>
       {loading ? (
-        <Spinner $color={ettlevColors.green400} />
+        <Loader size="large" />
       ) : (
         <Block display="flex" justifyContent="space-between" width="100%">
           <Block width="600px">

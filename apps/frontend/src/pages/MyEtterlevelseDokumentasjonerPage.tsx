@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 import { useMyTeams } from '../api/TeamApi'
 import { theme } from '../util'
 import Button, { ExternalButton } from '../components/common/Button'
-import { Spinner } from '../components/common/Spinner'
 import { emptyPage, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
 import { StatefulInput } from 'baseui/input'
 import { gql, useQuery } from '@apollo/client'
@@ -28,6 +27,7 @@ import { ampli } from '../services/Amplitude'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import BehandlingSok from '../components/etterlevelseDokumentasjon/tabs/BehandlingSok'
 import { PlusIcon } from '@navikt/aksel-icons'
+import { Loader } from '@navikt/ds-react'
 
 type Section = 'mine' | 'siste' | 'alle' | 'behandlingsok'
 
@@ -370,7 +370,7 @@ const Alle = () => {
           {loading && (
             <Block>
               <Block marginLeft={theme.sizing.scale400} marginTop={theme.sizing.scale400}>
-                <Spinner size={'large'} />
+                <Loader size={'large'} />
               </Block>
             </Block>
           )}
@@ -401,7 +401,7 @@ const Alle = () => {
 
                 {gqlLoading && (
                   <Block marginLeft={theme.sizing.scale400}>
-                    <Spinner size={'large'} />
+                    <Loader size={'large'} />
                   </Block>
                 )}
               </Block>

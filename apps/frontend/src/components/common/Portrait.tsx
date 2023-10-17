@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { personImageLink } from '../../util/config'
-import { Spinner } from './Spinner'
 import { avatarPlaceholder } from '../Images'
+import { Loader } from '@navikt/ds-react'
 
 export const Portrait = (props: { ident: string; size?: string }) => {
   const [loading, setLoading] = useState(true)
@@ -9,7 +9,7 @@ export const Portrait = (props: { ident: string; size?: string }) => {
   const [error, setError] = useState<boolean>(false)
   return (
     <div className="w-11 h-11">
-      {loading && <Spinner size={'large'} />}
+      {loading && <Loader size={'large'} />}
       {!error ? (
         <img
           onLoad={() => {

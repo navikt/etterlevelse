@@ -20,9 +20,8 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { TemaCardEtterlevelseDokumentasjon } from '../components/etterlevelseDokumentasjon/TemaCardEtterlevelseDokumentasjon'
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
-import { Spinner } from '../components/common/Spinner'
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import { BodyShort, Label } from '@navikt/ds-react'
+import { BodyShort, Label, Loader } from '@navikt/ds-react'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 
 export const DokumentasjonPage = () => {
@@ -233,7 +232,7 @@ export const DokumentasjonPage = () => {
         {getRelevansContent(etterlevelseDokumentasjon)}
         {loading ? (
           <Block display="flex" width="100%" justifyContent="center" marginTop={theme.sizing.scale550}>
-            <Spinner size={'large'} />
+            <Loader size={'large'} />
           </Block>
         ) : (
           <div className="flex flex-row flex-wrap gap-2 w-full">

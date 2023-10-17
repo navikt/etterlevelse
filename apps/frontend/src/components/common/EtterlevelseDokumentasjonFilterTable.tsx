@@ -1,12 +1,11 @@
-import { Spinner } from './Spinner'
 import { Cell, Row, Table } from './Table'
 import RouteLink from './RouteLink'
-import React from 'react'
 import { gql, useQuery } from '@apollo/client'
 import { EtterlevelseDokumentasjon, PageResponse } from '../../constants'
 import { DotTags } from './DotTag'
 import { ListName } from '../../services/Codelist'
 import { EtterlevelseDokumentasjonFilter } from '../../api/EtterlevelseDokumentasjonApi'
+import { Loader } from '@navikt/ds-react'
 
 const query = gql`
   query getEtterlevelsedokumentasjon($relevans: [String!]) {
@@ -27,7 +26,7 @@ export const EtterlevelseDokumentasjonFilterTable = (props: { filter: Etterlevel
   const { data, loading } = useQuery<{ etterlevelseDokumentasjon: PageResponse<EtterlevelseDokumentasjon> }>(query, { variables: props.filter })
 
   return loading && !data ? (
-    <Spinner size={'large'} />
+    <Loader size={'large'} />
   ) : (
     <Table
       data={data!.etterlevelseDokumentasjon.content}

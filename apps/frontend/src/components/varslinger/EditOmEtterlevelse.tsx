@@ -5,8 +5,8 @@ import { createMelding, mapMeldingToFormValue, updateMelding } from '../../api/M
 import { AlertType, Melding, MeldingStatus } from '../../constants'
 import { InputField, TextAreaField } from '../common/Inputs'
 import Button from '../common/Button'
-import { Spinner } from '../common/Spinner'
 import { HeadingXXLarge } from 'baseui/typography'
+import { Loader } from '@navikt/ds-react'
 
 export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
@@ -34,7 +34,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
   if (isLoading) {
     return (
       <Block display="flex" justifyContent="center">
-        <Spinner size={'large'} />
+        <Loader size={'large'} />
       </Block>
     )
   }

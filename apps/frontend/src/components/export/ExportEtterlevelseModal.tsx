@@ -14,9 +14,9 @@ import { codelist, ListName } from '../../services/Codelist'
 import axios from 'axios'
 import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
-import { Spinner } from 'baseui/spinner'
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { ParagraphMedium } from 'baseui/typography'
+import { Loader } from '@navikt/ds-react'
 
 type ExportEtterlevelseModalProps = {
   etterlevelseDokumentasjonId: String
@@ -57,7 +57,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
         <ModalBody>
           {isLoading ? (
             <Block display="flex" justifyContent="center" width="100%">
-              <Spinner $color={ettlevColors.green400} $size={theme.sizing.scale2400} />
+              <Loader size="large" />
             </Block>
           ) : (
             <Block>
