@@ -111,9 +111,9 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; 
                     K{k.kravNummer}.{k.kravVersjon}
                   </BodyShort>
                   <BodyLong><Label>{k.navn}</Label></BodyLong>
-                  <BodyShort>{!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
-                  <BodyShort>{tema && tema.shortName ? tema.shortName : ''}</BodyShort>
                   <StatusView status={k.status} />
+                  <BodyShort>{tema && tema.shortName ? tema.shortName : ''}</BodyShort>
+                  <BodyShort>{!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
                 </LinkPanel.Title>
               </LinkPanel>
             </div>
