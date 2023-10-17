@@ -108,7 +108,19 @@ export const PanelButton = ({
   hideChevron,
 }: PanelButtonProps) => {
   return (
-    <Button notBold onClick={onClick} variant="tertiary">
+    <Button
+      notBold
+      onClick={onClick}
+      kind="tertiary"
+      $style={{
+        ...paddingZero,
+        width: '100%',
+        boxShadow: 'unset',
+        ':hover': { boxShadow: 'unset' },
+        ':active': { boxShadow: 'unset' },
+        ':focus': { boxShadow: 'unset', outline: 'unset' },
+      }}
+    >
       <SimplePanel
         button
         title={title}
@@ -271,7 +283,7 @@ export const PanelLinkCard = ({
   )
 
   return (
-    <Block onClick={() => onClick && onClick()} width={width} maxWidth={maxWidth} overrides={rootOverrides} marginRight={marginRight} height="inherit">
+    <Block  onClick={() => onClick && onClick()} width={width} maxWidth={maxWidth} overrides={rootOverrides} marginRight={marginRight} height="inherit">
       <RouteLink href={href} hideUnderline requireLogin={requireLogin} openinnewtab={(!!openinnewtab).toString()}>
         <Block
           onMouseEnter={() => setHover(true)}
@@ -283,7 +295,11 @@ export const PanelLinkCard = ({
           }}
           height="100%"
         >
-          <Block overrides={headerOverrides} display="block" marginBottom={theme.sizing.scale600}>
+          <Block
+            overrides={headerOverrides}
+            display='block'
+            marginBottom={theme.sizing.scale600}
+          >
             {icon && (
               <Block display={'flex'} justifyContent={'center'} marginTop={theme.sizing.scale600} marginRight={theme.sizing.scale850}>
                 <img src={icon} alt={''} aria-hidden />
@@ -412,55 +428,68 @@ export const SimplePanel = ({
   return (
     <Block display={responsiveDisplay} overrides={mergedOverrides} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
       <div className="flex gap-2">
-        {panelIcon && (
-          <Block display="flex" marginLeft="27px" alignItems="center">
-            {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
-          </Block>
-        )}
-
-        <Block
-          marginLeft={theme.sizing.scale600}
-          marginRight={theme.sizing.scale600}
-          $style={{ flexGrow: 1, textAlign: 'left' }}
-          display={'flex'}
-          flexDirection={flip ? 'column-reverse' : 'column'}
-          justifyContent={'center'}
-          alignItems="flex-start"
-          maxWidth={button ? '537px' : '547px'}
-        >
-          <Block
-            $style={{
-              textDecoration: useTitleUnderLine && hover ? 'underline' : 'none',
-            }}
-          >
-            {title instanceof String ? <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge> : title}
-          </Block>
-          <Block
-            $style={{
-              textDecoration: useDescriptionUnderline && hover ? 'underline' : 'none',
-            }}
-          >
-            {beskrivelse instanceof String ? (
-              <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>
-                {beskrivelse}
-              </ParagraphSmall>
-            ) : (
-              beskrivelse
-            )}
-          </Block>
+      {panelIcon && (
+        <Block display="flex" marginLeft="27px" alignItems="center">
+          {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
         </Block>
+      )}
+
+      <Block
+        marginLeft={theme.sizing.scale600}
+        marginRight={theme.sizing.scale600}
+        $style={{ flexGrow: 1, textAlign: 'left' }}
+        display={'flex'}
+        flexDirection={flip ? 'column-reverse' : 'column'}
+        justifyContent={'center'}
+        alignItems="flex-start"
+        maxWidth={button ? '537px' : '547px'}
+      >
+        <Block
+          $style={{
+            textDecoration: useTitleUnderLine && hover ? 'underline' : 'none',
+          }}
+        >
+          {title instanceof String ? <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge> : title}
+        </Block>
+        <Block
+          $style={{
+            textDecoration: useDescriptionUnderline && hover ? 'underline' : 'none',
+          }}
+        >
+          {beskrivelse instanceof String ? (
+            <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>
+              {beskrivelse}
+            </ParagraphSmall>
+          ) : (
+            beskrivelse
+          )}
+        </Block>
+      </Block>
       </div>
 
       <Block display="flex">
         {statusText && (
-          <Block minWidth="100px" display="flex" flexDirection="row-reverse" marginRight="20px" alignItems="center">
+          <Block
+            minWidth="100px"
+            display="flex"
+            flexDirection='row-reverse'
+            marginRight="20px"
+            alignItems="center"
+          >
             {statusText instanceof String ? <LabelSmall>{statusText}</LabelSmall> : statusText}
           </Block>
         )}
         <Block display="flex" width="100%">
           {(rightTitle || rightBeskrivelse) && (
             <Block display="flex">
-              <Block minWidth="175px" maxWidth="175px" display="flex" flexDirection={flip ? 'column-reverse' : 'column'} justifyContent="center" $style={{ textAlign: 'left' }}>
+              <Block
+                minWidth="175px"
+                maxWidth="175px"
+                display="flex"
+                flexDirection={flip ? 'column-reverse' : 'column'}
+                justifyContent="center"
+                $style={{textAlign: 'left'}}
+              >
                 {rightTitle && <LabelSmall $style={{ fontSize: '14px' }}>{rightTitle}</LabelSmall>}
                 {rightBeskrivelse && (
                   <ParagraphXSmall marginBottom="0px" marginTop="0px" $style={{ lineHeight: '15px' }}>

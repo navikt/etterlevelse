@@ -11,6 +11,7 @@ import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
 import { MarkdownInfo } from '../../common/Markdown'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
+import { buttonContentStyle } from '../../common/Button'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
@@ -89,10 +90,31 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
               <ModalFooter>
                 <Block display="flex" justifyContent="flex-end">
                   <Block marginRight="auto">{errorOnCreate && <p>{errorOnCreate}</p>}</Block>
-                  <Button type="button" kind={KIND.secondary} onClick={() => onClose()}>
+                  <Button
+                    type="button"
+                    kind={KIND.secondary}
+                    onClick={() => onClose()}
+                    overrides={{
+                      BaseButton: {
+                        style: {
+                          ...buttonContentStyle,
+                        },
+                      },
+                    }}
+                  >
                     <strong>Avbryt</strong>
                   </Button>
-                  <ModalButton type="button" onClick={submitForm}>
+                  <ModalButton
+                    type="button"
+                    onClick={submitForm}
+                    overrides={{
+                      BaseButton: {
+                        style: {
+                          ...buttonContentStyle,
+                        },
+                      },
+                    }}
+                  >
                     <strong>Lagre</strong>
                   </ModalButton>
                 </Block>

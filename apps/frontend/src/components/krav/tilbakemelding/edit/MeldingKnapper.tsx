@@ -1,3 +1,4 @@
+import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { Block } from 'baseui/block'
 import Button from '../../../common/Button'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
@@ -10,7 +11,6 @@ import { user } from '../../../../services/User'
 import { pageWidth } from '../../../../util/theme'
 import { PersonName } from '../../../common/PersonName'
 import TilbakemeldingEdit from './TilbakemeldingEdit'
-import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
 
 export const MeldingKnapper = (props: {
   melding: TilbakemeldingMelding
@@ -28,10 +28,10 @@ export const MeldingKnapper = (props: {
   return (
     <>
       <Block marginLeft={props.marginLeft ? '42px' : undefined} width="50%">
-        <Button variant="tertiary" size={'xsmall'} icon={<PencilIcon />} onClick={() => setEditModal(true)}>
+        <Button kind={'underline-hover'} size={'mini'} icon={faPencilAlt} onClick={() => setEditModal(true)}>
           Rediger
         </Button>
-        <Button variant="tertiary" size={'xsmall'} icon={<TrashIcon />} marginLeft onClick={() => setDeleteModal(true)}>
+        <Button kind={'underline-hover'} size={'mini'} icon={faTrashAlt} marginLeft onClick={() => setDeleteModal(true)}>
           Slett
         </Button>
       </Block>
@@ -47,10 +47,12 @@ export const MeldingKnapper = (props: {
             <ParagraphMedium $style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{melding.innhold}</ParagraphMedium>
           </ModalBody>
           <ModalFooter>
-            <Button variant={'secondary'} onClick={() => setDeleteModal(false)}>
+            <Button kind={'secondary'} size={'compact'} onClick={() => setDeleteModal(false)}>
               Avbryt
             </Button>
             <Button
+              kind={'primary'}
+              size={'compact'}
               marginLeft
               onClick={() =>
                 tilbakemeldingslettMelding({ tilbakemeldingId, meldingNr }).then((t) => {

@@ -469,7 +469,8 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       {krav.status === KravStatus.AKTIV && !newVersion && (
                         <Block marginRight="9px">
                           <Button
-                            variant="secondary"
+                            size="compact"
+                            kind="secondary"
                             onClick={() => {
                               setUtgaattKravMessage(true)
                             }}
@@ -484,7 +485,8 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       {user.isAdmin() && krav.status === KravStatus.UTGAATT && !newVersion && (
                         <Block marginRight="9px">
                           <Button
-                            variant="secondary"
+                            size="compact"
+                            kind="secondary"
                             onClick={() => {
                               setAktivKravMessage(true)
                             }}
@@ -499,7 +501,8 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       {user.isAdmin() && !newVersion && (
                         <Block marginRight="9px">
                           <Button
-                            variant="secondary"
+                            size="compact"
+                            kind="secondary"
                             onClick={() => {
                               values.status = KravStatus.UTKAST
                               submitForm()
@@ -522,7 +525,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         <ModalBody>Denne handligen kan ikke reverseres</ModalBody>
                         <Block marginRight="24px" marginLeft="24px" marginBottom="34px" marginTop="27px" display="flex" justifyContent="center">
                           <Block display="flex" width="100%">
-                            <Button onClick={() => setUtgaattKravMessage(false)} variant={'secondary'} marginRight>
+                            <Button onClick={() => setUtgaattKravMessage(false)} kind={'secondary'} marginRight>
                               Nei, avbryt handlingen
                             </Button>
                           </Block>
@@ -550,7 +553,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         <ModalBody>Kravet har en nyere versjon som settes til utkast</ModalBody>
                         <Block marginRight="24px" marginLeft="24px" marginBottom="34px" marginTop="27px" display="flex" justifyContent="center">
                           <Block display="flex" width="100%">
-                            <Button onClick={() => setAktivKravMessage(false)} variant={'secondary'} marginRight>
+                            <Button onClick={() => setAktivKravMessage(false)} kind={'secondary'} marginRight>
                               Nei, avbryt handlingen
                             </Button>
                           </Block>
@@ -583,11 +586,13 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       </BaseModal>
                     </Block>
                     <Block display="flex" justifyContent="flex-end" width="100%">
-                      <Button variant={'secondary'} type={'button'} onClick={close} marginLeft>
+                      <Button size="compact" kind={'secondary'} type={'button'} onClick={close} marginLeft>
                         Avbryt
                       </Button>
 
                       <Button
+                        size="compact"
+                        kind="primary"
                         onClick={() => {
                           if (newVersion) {
                             values.status = KravStatus.UTKAST
@@ -605,6 +610,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
                       {(newVersion || krav.status === KravStatus.UTKAST) && (
                         <Button
+                          size="compact"
                           onClick={() => {
                             values.status = KravStatus.AKTIV
                             submitForm()

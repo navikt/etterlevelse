@@ -1,20 +1,21 @@
-import { Block } from 'baseui/block'
-import { FormControl } from 'baseui/form-control'
-import { ParagraphMedium } from 'baseui/typography'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
+import {Block} from 'baseui/block'
+import {FormControl} from 'baseui/form-control'
+import {ParagraphMedium} from 'baseui/typography'
+import {FieldArray, FieldArrayRenderProps} from 'formik'
 import React from 'react'
-import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
-import { useDebouncedState } from '../../../util/hooks'
-import { ettlevColors, theme } from '../../../util/theme'
-import { FieldWrapper } from '../../common/Inputs'
+import {EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus} from '../../../constants'
+import {useDebouncedState} from '../../../util/hooks'
+import {ettlevColors, theme} from '../../../util/theme'
+import {FieldWrapper} from '../../common/Inputs'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import { Error } from '../../common/ModalSchema'
+import {Error} from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../../common/Style'
-import { LabelAboveContent } from '../../common/PropertyLabel'
-import { Markdown } from '../../common/Markdown'
-import { ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides } from 'baseui/radio'
-import { Heading, ReadMore } from '@navikt/ds-react'
+import {borderColor, borderRadius, borderStyle, borderWidth} from '../../common/Style'
+import {LabelAboveContent} from '../../common/PropertyLabel'
+import {buttonContentStyle} from '../../common/Button'
+import {Markdown} from '../../common/Markdown'
+import {ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides} from 'baseui/radio'
+import {Heading, ReadMore} from '@navikt/ds-react'
 
 const radioButtonOverrides: RadioOverrides & RadioGroupOverrides = {
   Root: {
@@ -23,6 +24,7 @@ const radioButtonOverrides: RadioOverrides & RadioGroupOverrides = {
       ...borderStyle('solid'),
       ...borderWidth('1px'),
       ...borderRadius('4px'),
+      ...buttonContentStyle,
       backgroundColor: $checked ? ettlevColors.green100 : ettlevColors.white,
       marginRight: '16px',
       display: 'flex',
@@ -67,7 +69,15 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
   }
 }
 
-export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit, viewMode }: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean; viewMode: boolean }) => {
+export const SuksesskriterierBegrunnelseEdit = ({
+  suksesskriterie,
+  disableEdit,
+  viewMode,
+}: {
+  suksesskriterie: Suksesskriterie[]
+  disableEdit: boolean
+  viewMode: boolean
+}) => {
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterieBegrunnelser'}>
@@ -82,11 +92,13 @@ const KriterieBegrunnelseList = ({
   suksesskriterie,
   disableEdit,
   viewMode,
+  setIsFormDirty,
 }: {
   props: FieldArrayRenderProps
   suksesskriterie: Suksesskriterie[]
   disableEdit: boolean
   viewMode: boolean
+  setIsFormDirty?: (v: boolean) => void
 }) => {
   const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
 
@@ -241,7 +253,9 @@ const KriterieBegrunnelse = ({
         <ReadMore header="Utfyllende om kriteriet">
           <Markdown source={suksesskriterie.beskrivelse} />
         </ReadMore>
+
       </div>
+
 
       <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="24px" marginBottom="24px" />
 

@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Behandling, emptyPage, EtterlevelseDokumentasjonQL, PageResponse } from '../../../constants'
-import { EtterlevelseDokumentasjonerPanels, tabMarginBottom, Variables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { Behandling, EtterlevelseDokumentasjonQL, PageResponse, emptyPage } from '../../../constants'
+import { EtterlevelseDokumentasjonerPanels, Variables, tabMarginBottom } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { gql, useQuery } from '@apollo/client'
 import { Block } from 'baseui/block'
 import { LabelLarge, LabelSmall } from 'baseui/typography'
 import { theme } from '../../../util'
 import Button from '../../common/Button'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { getBehandling, useSearchBehandling } from '../../../api/BehandlingApi'
 import CustomizedSelect from '../../common/CustomizedSelect'
 import { intl } from '../../../util/intl/intl'
 import { TYPE } from 'baseui/select'
 import { updateBehandlingNameWithNumber } from '../common/utils'
-import { PlusIcon } from '@navikt/aksel-icons'
 import { Loader } from '@navikt/ds-react'
 
 export const BehandlingSok = () => {
@@ -99,7 +99,7 @@ export const BehandlingSok = () => {
       {loading && (
         <Block>
           <Block marginLeft={theme.sizing.scale400} marginTop={theme.sizing.scale400}>
-            <Loader size={'large'} />
+            <Loader size="large" />
           </Block>
         </Block>
       )}
@@ -115,8 +115,9 @@ export const BehandlingSok = () => {
           <Block display="flex" alignItems="center">
             <Button
               onClick={lastMer}
-              icon={<PlusIcon />}
-              variant={'secondary'}
+              icon={faPlus}
+              kind={'secondary'}
+              size="compact"
               disabled={gqlLoading || etterlevelseDokumentasjoner.numberOfElements >= etterlevelseDokumentasjoner.totalElements}
             >
               Vis mer
@@ -124,7 +125,7 @@ export const BehandlingSok = () => {
 
             {gqlLoading && (
               <Block marginLeft={theme.sizing.scale400}>
-                <Loader size={'large'} />
+                <Loader size="large" />
               </Block>
             )}
           </Block>

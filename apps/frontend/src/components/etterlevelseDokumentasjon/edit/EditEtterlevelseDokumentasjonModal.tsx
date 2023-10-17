@@ -10,7 +10,7 @@ import {
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../../../constants'
 import { Code, codelist, ListName } from '../../../services/Codelist'
-import Button from '../../common/Button'
+import Button, { buttonContentStyle } from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
 import { Button as BaseUIButton, KIND } from 'baseui/button'
 import { FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
@@ -33,7 +33,6 @@ import { useSearchTeam } from '../../../api/TeamApi'
 import { RenderTagList } from '../../common/TagList'
 import { useNavigate } from 'react-router-dom'
 import { updateBehandlingNameWithNumber } from '../common/utils'
-import { DocPencilIcon, PlusIcon } from '@navikt/aksel-icons'
 
 type EditEtterlevelseDokumentasjonModalProps = {
   etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
@@ -132,7 +131,11 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
 
   return (
     <Block>
-      <Button onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)} icon={props.isEditButton ? <DocPencilIcon /> : <PlusIcon />}>
+      <Button
+        onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)}
+        startEnhancer={props.isEditButton ? <img src={editIcon} alt="edit icon" /> : <img src={plusIcon} alt="plus icon" />}
+        size="compact"
+      >
         {props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Nytt etterlevelsesdokument'}
       </Button>
 
@@ -265,6 +268,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                       overrides={{
                                         BaseButton: {
                                           style: {
+                                            ...buttonContentStyle,
                                             backgroundColor: selectedFilter.includes(i) ? ettlevColors.green100 : ettlevColors.white,
                                             ...borderWidth('1px'),
                                             ...borderStyle('solid'),
@@ -421,7 +425,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                   )}
 
                   <Block display="flex" justifyContent="flex-end">
-                    <Button variant="secondary" type="button" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
+                    <Button kind="secondary" type="button" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
                       Avbryt
                     </Button>
                     <Button

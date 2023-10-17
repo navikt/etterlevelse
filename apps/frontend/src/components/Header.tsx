@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { useState } from 'react'
-import Button from './common/Button'
 import { Location, useLocation } from 'react-router-dom'
 import { useQueryParam } from '../util/hooks'
 import { intl } from '../util/intl/intl'
@@ -15,7 +14,7 @@ import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from './common/Markdown'
 import { ampli } from '../services/Amplitude'
 import { BarChartIcon, ChevronDownIcon, ChevronUpIcon, DocPencilIcon, HouseIcon, InformationIcon, MenuHamburgerIcon, PersonIcon, ReceiptIcon } from '@navikt/aksel-icons'
-import { Checkbox, Dropdown, InternalHeader, Label, Link, Spacer } from '@navikt/ds-react'
+import { Button, Checkbox, Dropdown, InternalHeader, Label, Link, Spacer } from '@navikt/ds-react'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -28,7 +27,7 @@ export const LoginButton = () => {
   const location = useLocation()
   return (
     <Link className="bg-white" underline={false} href={loginUrl(location, location.pathname)}>
-      <InternalHeader.Button as={Link} variant="secondary">
+      <InternalHeader.Button as={Link}>
         <strong>Logg inn</strong>
       </InternalHeader.Button>
     </Link>

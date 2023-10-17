@@ -9,6 +9,7 @@ import TextEditor from '../common/TextEditor/TextEditor'
 import { notesIcon } from '../Images'
 import Button from '../common/Button'
 import { ettlevColors } from '../../util/theme'
+import { padding } from '../common/Style'
 import { createEtterlevelseMetadata, updateEtterlevelseMetadata } from '../../api/EtterlevelseMetadataApi'
 import React, { useEffect, useState } from 'react'
 import AlertUnsavedPopup from '../common/AlertUnsavedPopup'
@@ -107,18 +108,31 @@ export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata
               </FormControl>
               <Button
                 type={'button'}
-                variant="tertiary"
+                kind={'underline-hover'}
                 onClick={() => {
                   setIsFormDirty(false)
                   setNotater(etterlevelseMetadata.notater || '')
                   setIsNotatfeltOpen(false)
+                }}
+                $style={{
+                  ':hover': { backgroundColor: ettlevColors.green50 },
+                  ...padding('8px', '16px'),
+                  fontWeight: '600',
+                  marginRight: '35px',
                 }}
               >
                 <ParagraphMedium margin={0} padding={0}>
                   Lukk uten å lagre
                 </ParagraphMedium>
               </Button>
-              <Button type={'submit'}>
+              <Button
+                type={'submit'}
+                $style={{
+                  ...padding('8px', '16px'),
+                  fontWeight: '700',
+                  fontStyle: 'bold',
+                }}
+              >
                 <ParagraphMedium margin={0} padding={0} color={ettlevColors.green50}>
                   Lagre og lukk
                 </ParagraphMedium>

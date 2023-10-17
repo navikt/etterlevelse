@@ -1,13 +1,16 @@
 import moment from 'moment'
 import { Block } from 'baseui/block'
-import { JsonView } from 'react-json-view-lite'
+import { JsonView} from 'react-json-view-lite'
 import React, { useEffect, useState } from 'react'
 import { LabelLarge } from 'baseui/typography'
 import { AuditActionIcon, AuditLabel as Label } from './AuditComponents'
 import { Card } from 'baseui/card'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBinoculars, faExchangeAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
 import { StatefulPopover } from 'baseui/popover'
-import { Differ, Viewer } from 'json-diff-kit'
+import {Differ, Viewer} from 'json-diff-kit'
+import { Spinner } from 'baseui/spinner'
 import { useRefs } from '../../../util/hooks'
 import { theme } from '../../../util'
 import { intl } from '../../../util/intl/intl'
@@ -15,8 +18,6 @@ import { AuditAction, AuditLog } from './AuditTypes'
 import { ObjectLink } from '../../common/RouteLink'
 import Button from '../../common/Button'
 import { ettlevColors } from '../../../util/theme'
-import { ArrowRightLeftIcon, GlassesIcon, XMarkIcon } from '@navikt/aksel-icons'
-import { Loader } from '@navikt/ds-react'
 
 type AuditViewProps = {
   auditLog?: AuditLog
@@ -41,7 +42,7 @@ export const AuditView = (props: AuditViewProps) => {
 
   return (
     <Card>
-      {loading && <Loader size="large" />}
+      {loading && <Spinner $color={ettlevColors.green400} $size={theme.sizing.scale2400} />}
       {!loading && auditLog && !logFound && <LabelLarge>{intl.auditNotFound}</LabelLarge>}
 
       {logFound && (
@@ -53,21 +54,25 @@ export const AuditView = (props: AuditViewProps) => {
               <Label label={intl.audits}>{auditLog?.audits.length}</Label>
             </Block>
             <Block display="flex">
-              <Button variant="tertiary" marginRight onClick={() => setOpenAll(!openAll)}>
+              <Button size="compact" kind="tertiary" marginRight onClick={() => setOpenAll(!openAll)}>
                 {openAll ? 'Lukke' : 'Åpne'} alle
               </Button>
               {newestAudit?.action !== AuditAction.DELETE && (
                 <StatefulTooltip content={() => intl.view} placement={PLACEMENT.top}>
                   <Block>
                     <ObjectLink id={newestAudit!.tableId} type={newestAudit!.table} audit={newestAudit}>
-                      <Button variant="tertiary" icon={<GlassesIcon title="Se forskjell" />} />
+                      <Button size="compact" shape="round" kind="tertiary">
+                        <FontAwesomeIcon icon={faBinoculars} />
+                      </Button>
                     </ObjectLink>
                   </Block>
                 </StatefulTooltip>
               )}
               <StatefulTooltip content={() => intl.close} placement={PLACEMENT.top}>
                 <Block>
-                  <Button variant="tertiary" onClick={() => viewId('')} icon={<XMarkIcon title="Lukk" />} />
+                  <Button size="compact" shape="round" kind="tertiary" onClick={() => viewId('')}>
+                    <FontAwesomeIcon icon={faTimes} />
+                  </Button>
                 </Block>
               </StatefulTooltip>
             </Block>
@@ -95,7 +100,7 @@ export const AuditView = (props: AuditViewProps) => {
                         content={() => (
                           <Card>
                             <Viewer
-                              diff={new Differ().diff(auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {}, audit.data)}
+                              diff={new Differ().diff(auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {},  audit.data)}
                               highlightInlineDiff={true}
                               lineNumbers={true}
                               indent={4}
@@ -113,7 +118,9 @@ export const AuditView = (props: AuditViewProps) => {
                         }}
                       >
                         <div>
-                          <Button variant="tertiary" icon={<ArrowRightLeftIcon title="Sammenling" />} />
+                          <Button size="compact" shape="round" kind="tertiary">
+                            <FontAwesomeIcon icon={faExchangeAlt} />
+                          </Button>
                         </div>
                       </StatefulPopover>
                     </Block>
@@ -121,7 +128,7 @@ export const AuditView = (props: AuditViewProps) => {
                   <JsonView
                     data={audit.data}
                     shouldExpandNode={() => {
-                      if (openAll) {
+                      if(openAll) {
                         return true
                       } else {
                         return index === 0 ? true : false

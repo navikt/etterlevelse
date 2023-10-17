@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from 'react'
 import { Block } from 'baseui/block'
+import { Spinner } from 'baseui/spinner'
 import { HeadingMedium, LabelMedium } from 'baseui/typography'
 import { getSettings, Settings, writeSettings } from './SettingsApi'
 import { intl } from '../../../util/intl/intl'
@@ -9,7 +10,6 @@ import { Markdown } from '../../common/Markdown'
 import { CustomizedStatefulTextarea } from '../../common/CustomizedTextarea'
 import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 import { Helmet } from 'react-helmet'
-import { Loader } from '@navikt/ds-react'
 
 export const SettingsPage = () => {
   const [loading, setLoading] = React.useState<boolean>(true)
@@ -41,14 +41,14 @@ export const SettingsPage = () => {
         <title>Innstillinger</title>
       </Helmet>
       <HeadingMedium>{intl.settings}</HeadingMedium>
-      {loading && <Loader size="large" />}
+      {loading && <Spinner $color={ettlevColors.green400} $size={40} />}
       {(error || !settings) && error}
       {!loading && !(error || !settings) && (
         <Block>
           <FrontpageMessage message={settings?.frontpageMessage} setMessage={(frontpageMessage) => setSettings({ ...settings, frontpageMessage })} />
 
           <Block display="flex" justifyContent="flex-end" marginTop={theme.sizing.scale800}>
-            <Button type="button" variant="secondary" marginRight onClick={load}>
+            <Button type="button" kind="secondary" marginRight onClick={load}>
               {intl.abort}
             </Button>
             <Button type="button" onClick={save}>

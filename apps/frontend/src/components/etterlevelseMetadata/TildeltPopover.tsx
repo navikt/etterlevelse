@@ -50,7 +50,7 @@ export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata,
       content={({ close }) => (
         <Block padding={'20px'}>
           <Button
-            variant="tertiary"
+            kind="underline-hover"
             onClick={() => {
               const ident = user.getName()
               if (etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] && etterlevelseMetadata.id !== 'ny') {

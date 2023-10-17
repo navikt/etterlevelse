@@ -2,10 +2,13 @@ import * as React from 'react'
 import { useEffect } from 'react'
 import { StatefulSelect } from 'baseui/select'
 import { Block } from 'baseui/block'
+import { KIND, SIZE as ButtonSize } from 'baseui/button'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { HeadingXXLarge } from 'baseui/typography'
+import { Spinner } from 'baseui/spinner'
 import Button from '../../common/Button'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { useAwait, useForceUpdate } from '../../../util/hooks'
 import { Code, codelist, CodeListFormValues } from '../../../services/Codelist'
 import { createCodelist } from '../../../api/CodelistApi'
@@ -15,8 +18,6 @@ import CreateCodeListModal from './ModalCreateCodeList'
 import CodeListTable from './CodeListStyledTable'
 import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 import { Helmet } from 'react-helmet'
-import { PlusIcon } from '@navikt/aksel-icons'
-import { Loader } from '@navikt/ds-react'
 
 const CodeListPage = () => {
   const params = useParams<{ listname?: string }>()
@@ -58,7 +59,7 @@ const CodeListPage = () => {
   if (!user.isAdmin() || !lists) {
     return (
       <Block overrides={{ Block: { props: { role: 'main' } } }}>
-        <Loader size="large" />
+        <Spinner $color={ettlevColors.green400} $size={theme.sizing.scale2400} />
       </Block>
     )
   }
@@ -71,7 +72,7 @@ const CodeListPage = () => {
       </Helmet>
       <HeadingXXLarge>Administrering av kodeverk</HeadingXXLarge>
       {loading ? (
-        <Loader size="large" />
+        <Spinner $color={ettlevColors.green400} />
       ) : (
         <Block display="flex" justifyContent="space-between" width="100%">
           <Block width="600px">
@@ -86,7 +87,7 @@ const CodeListPage = () => {
           </Block>
           {listname && (
             <Block>
-              <Button tooltip="Legg til ny" icon={<PlusIcon />} size={'small'} variant={'tertiary'} onClick={() => setCreateCodeListModal(!createCodeListModal)}>
+              <Button tooltip="Legg til ny" icon={faPlus} size={ButtonSize.compact} kind={KIND.tertiary} onClick={() => setCreateCodeListModal(!createCodeListModal)}>
                 Opprett ny kode
               </Button>
             </Block>

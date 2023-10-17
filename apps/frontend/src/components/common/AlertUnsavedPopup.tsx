@@ -13,6 +13,7 @@ type AlertUnsavedPopupProps = {
 }
 
 export const AlertUnsavedPopup = ({ isActive, isModalOpen, setIsModalOpen, onClose, onSubmit }: AlertUnsavedPopupProps) => {
+
   return (
     <CustomizedModal
       onClose={() => setIsModalOpen(false)}
@@ -51,7 +52,7 @@ export const AlertUnsavedPopup = ({ isActive, isModalOpen, setIsModalOpen, onClo
           </Button>
           <Button
             marginLeft
-            variant="secondary"
+            kind="secondary"
             onClick={() => {
               setIsModalOpen(false)
             }}

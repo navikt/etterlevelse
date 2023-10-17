@@ -11,7 +11,7 @@ import { Block } from 'baseui/block'
 import { theme } from '../../../util'
 import { HeadingMedium, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
 import Button from '../../common/Button'
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronUp, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { borderRadius } from '../../common/Style'
 import moment from 'moment'
 import { user } from '../../../services/User'
@@ -39,7 +39,6 @@ import { Select, SIZE } from 'baseui/select'
 import { customSelectOverrides } from '../Edit/RegelverkEdit'
 import { Checkbox } from 'baseui/checkbox'
 import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
-import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Loader } from '@navikt/ds-react'
 
 const DEFAULT_COUNT_SIZE = 5
@@ -64,7 +63,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
 
   return (
     <Block width="100%">
-      {loading && <Loader size={'large'} />}
+      {loading && <Loader size="large" />}
       {!loading && !!tilbakemeldinger.length && (
         <Block display={'flex'} flexDirection={'column'}>
           <CustomizedAccordion>
@@ -208,7 +207,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
 
           {tilbakemeldinger.length > DEFAULT_COUNT_SIZE && (
             <Block $style={{ alignSelf: 'flex-end' }} marginTop={theme.sizing.scale400}>
-              <Button variant="tertiary" icon={<PlusIcon />} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
+              <Button kind="tertiary" size="compact" icon={faPlus} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
                 Last flere
               </Button>
             </Block>
@@ -233,7 +232,11 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
               <ParagraphMedium>Du må være innlogget for å stille kraveier et spørsmål, og for å se tidligere spørsmål og svar.</ParagraphMedium>
             )}
 
-            {user.canWrite() && <Button onClick={() => setAddTilbakemelding(true)}>Still et spørsmål</Button>}
+            {user.canWrite() && (
+              <Button kind={'primary'} size="compact" onClick={() => setAddTilbakemelding(true)}>
+                Still et spørsmål
+              </Button>
+            )}
             {!user.isLoggedIn() && <LoginButton />}
           </Block>
 
@@ -393,10 +396,12 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
               <ParagraphMedium $style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{tilbakemelding.meldinger[0].innhold}</ParagraphMedium>
             </ModalBody>
             <ModalFooter>
-              <Button variant={'secondary'} onClick={() => setDeleteModal(false)}>
+              <Button kind={'secondary'} size={'compact'} onClick={() => setDeleteModal(false)}>
                 Avbryt
               </Button>
               <Button
+                kind={'primary'}
+                size={'compact'}
                 marginLeft
                 onClick={() =>
                   tilbakemeldingslettMelding({ tilbakemeldingId: tilbakemelding.id, meldingNr: 1 }).then((t) => {
@@ -414,7 +419,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
       <Block display="flex" marginTop={'8px'} width={'100%'}>
         {user.isAdmin() && (
           <Block>
-            <Button icon={<TrashIcon />} variant={'secondary'} onClick={() => setDeleteModal(true)}>
+            <Button size="compact" icon={faTrashAlt} kind={'secondary'} onClick={() => setDeleteModal(true)}>
               Slett hele samtalen
             </Button>
           </Block>
@@ -433,7 +438,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
             )} */}
         {loading && (
           <Block alignSelf="center" marginLeft={theme.sizing.scale400}>
-            <Loader size={'large'} />
+            <Loader size="large" />
           </Block>
         )}
 
@@ -443,11 +448,12 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
               <Block>
                 {isUpdatingStatus ? (
                   <Block alignSelf="center" marginLeft={theme.sizing.scale400}>
-                    <Loader size={'large'} />
+                    <Loader size="large" />
                   </Block>
                 ) : (
                   <Button
-                    variant="secondary"
+                    kind="secondary"
+                    size={'compact'}
                     marginLeft
                     onClick={() => {
                       setIsUpdatingStatus(true)
@@ -468,7 +474,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
                 )}
               </Block>
             )}
-            <Button marginLeft disabled={!response} onClick={submit}>
+            <Button kind="primary" size={'compact'} marginLeft disabled={!response} onClick={submit}>
               {ubesvartOgKraveier ? 'Svar' : 'Send'}
               {user.isKraveier() ? ' og oppdater status' : ''}
             </Button>

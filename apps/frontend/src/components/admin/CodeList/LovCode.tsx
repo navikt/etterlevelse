@@ -1,7 +1,16 @@
 import { Block, BlockProps } from 'baseui/block'
 import { LabelMedium } from 'baseui/typography'
 import { Field, FieldProps } from 'formik'
-import { Code, codelist, CodeListFormValues, ListName, LovCodeData, LovCodeRelevans, lovCodeRelevansToOptions, TemaCodeData } from '../../../services/Codelist'
+import {
+  Code,
+  codelist,
+  CodeListFormValues,
+  ListName,
+  LovCodeData,
+  LovCodeRelevans,
+  lovCodeRelevansToOptions,
+  TemaCodeData,
+} from '../../../services/Codelist'
 import { SIZE as InputSIZE } from 'baseui/input'
 import { OptionList } from '../../common/Inputs'
 import { temaBilder } from '../../Images'
@@ -166,7 +175,7 @@ const PreviewImages = (props: { set: (key: string) => void }) => {
   return (
     <Block display="flex" flexDirection="column" height="80vh" overflow={'scrollY'}>
       {Object.keys(temaBilder).map((key) => (
-        <Button type="button" variant="tertiary" onClick={() => props.set(key)}>
+        <Button type="button" kind="tertiary" onClick={() => props.set(key)}>
           <Block key={key} marginBottom={theme.sizing.scale600}>
             <Block>{key}</Block>
             <Block>

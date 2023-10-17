@@ -4,6 +4,7 @@ import { questionmarkHoverIcon, questionmarkIcon } from '../Images'
 import { Block } from 'baseui/block'
 import { LabelLarge } from 'baseui/typography'
 import { ettlevColors, theme } from '../../util/theme'
+import { buttonContentStyle } from './Button'
 
 const LabelWithToolTip = (props: { label?: string; tooltip?: React.ReactNode; fontColor?: string; noMarginBottom?: boolean }) => {
   if (props.tooltip) {
@@ -35,7 +36,7 @@ const LabelWithToolTip = (props: { label?: string; tooltip?: React.ReactNode; fo
             },
           }}
         >
-          <button type="button" style={{ border: 'none', background: 'none' }}>
+          <button type="button" style={{ border: 'none', background: 'none', ...buttonContentStyle }}>
             <img
               src={questionmarkIcon}
               alt={`Hjelpetekst for ${props.label}`}

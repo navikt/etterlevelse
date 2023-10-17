@@ -67,7 +67,9 @@ export const EtterlevelseEditFields = ({
   etterlevelseMetadata,
   setEtterlevelseMetadata,
 }: EditProps) => {
-  const [etterlevelseStatus] = React.useState<string>(editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
+  const [etterlevelseStatus] = React.useState<string>(
+    editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,
+  )
   const [radioHover] = React.useState<string>('')
   const [isOppfylesSenere, setOppfylesSenere] = React.useState<boolean>(etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE)
   const [isNotatfeltOpen, setIsNotatfeltOpen] = React.useState(false)
@@ -95,7 +97,17 @@ export const EtterlevelseEditFields = ({
   return (
     <div className="w-full">
       <div className="flex flex-row-reverse">
-        <Button notBold onClick={() => setIsNotatfeltOpen(true)}>
+        <Button
+          notBold
+          $style={{
+            backgroundColor: ettlevColors.green50,
+            color: ettlevColors.green600,
+            ':hover': { backgroundColor: ettlevColors.green100 },
+            borderBottomRightRadius: '0px',
+            borderTopRightRadius: '0px',
+          }}
+          onClick={() => setIsNotatfeltOpen(true)}
+        >
           <div>
             <Block>{etterlevelseMetadata.notater ? <img src={notesWithContentIcon} alt="Notater med innohold" /> : <img src={notesIcon} alt="Notater" />}</Block>
             {etterlevelseMetadata.notater ? 'Vis arbeidsnotat' : 'Lag arbeidsnotat'}
@@ -220,7 +232,9 @@ export const EtterlevelseEditFields = ({
 
               <Block width="100%" backgroundColor={kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV ? 'transparent' : ettlevColors.green100}>
                 {!documentEdit && (
-                  <div className="flex w-full items-center justify-end gap-12 px-8">
+                  <div
+                    className="flex w-full items-center justify-end gap-12 px-8"
+                  >
                     {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
                       <Block display="flex" flexDirection="column" paddingTop="27px" paddingBottom="24px" minWidth={'fit-content'}>
                         <Checkbox
@@ -287,13 +301,13 @@ export const EtterlevelseEditFields = ({
                     )}
                     <div className="flex flex-col">
                       <Block paddingTop="27px" paddingBottom="24px" width="100%">
-                        <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" variant="secondary" marginRight onClick={close}>
+                        <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" kind="secondary" marginRight onClick={close}>
                           {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt og forkast endringene'}
                         </Button>
                         {kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV && (
                           <Button
                             type="button"
-                            variant="secondary"
+                            kind="secondary"
                             marginRight
                             disabled={isSubmitting || disableEdit}
                             onClick={() => {
@@ -392,7 +406,7 @@ export const EtterlevelseEditFields = ({
                     </Button>
                     <Button
                       marginLeft
-                      variant="secondary"
+                      kind="secondary"
                       onClick={() => {
                         setNavigatePath('')
                         setIsAlertUnsavedModalOpen(false)
