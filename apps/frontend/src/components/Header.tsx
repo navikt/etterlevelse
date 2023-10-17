@@ -186,7 +186,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
         <SkipToContent />
         <div className="w-full">
           <InternalHeader >
-            <InternalHeader.Title as="h1">
+            <InternalHeader.Title href="/">
       Etterlevelse
             </InternalHeader.Title>
             <Spacer />
