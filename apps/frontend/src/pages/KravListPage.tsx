@@ -106,14 +106,20 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; 
                   },
                 }}*/
               >
-                <LinkPanel.Title>
-                  <BodyShort size={"small"}>
-                    K{k.kravNummer}.{k.kravVersjon}
-                  </BodyShort>
-                  <BodyLong><Label>{k.navn}</Label></BodyLong>
-                  <StatusView status={k.status} />
-                  <BodyShort>{tema && tema.shortName ? tema.shortName : ''}</BodyShort>
-                  <BodyShort>{!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
+                <LinkPanel.Title className={"flex"}>
+                  <div>
+                    <BodyShort size={"small"}>
+                      K{k.kravNummer}.{k.kravVersjon}
+                    </BodyShort>
+                    <BodyLong><Label>{k.navn}</Label></BodyLong>
+                  </div>
+                  <div>
+                    <StatusView status={k.status}/>
+                  </div>
+                  <div>
+                    <BodyShort>{tema && tema.shortName ? tema.shortName : ''}</BodyShort>
+                    <BodyShort>{!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
+                  </div>
                 </LinkPanel.Title>
               </LinkPanel>
             </div>
