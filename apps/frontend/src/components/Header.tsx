@@ -82,11 +82,11 @@ const LoggedInHeader = () => {
           [{ label: 'Dokumentere etterlevelse', href: '/dokumentasjoner', icon: <DocPencilIcon /> }],
           [{ label: 'Status i organisasjonen', href: '//metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse', icon: <BarChartIcon /> }],
           [{ label: 'Forstå kravene', href: '/tema', icon: <ReceiptIcon /> }],
-          [{ label: 'Mer om etterlevelse i NAV', href: '/help', icon: <InformationIcon /> }],
+          [{ label: 'Mer om etterlevelse i NAV', href: '/omstottetiletterlevelse', icon: <InformationIcon /> }],
         ]}
         title={'Meny'}
       />
-      
+
     </div>
   )
 }

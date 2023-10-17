@@ -197,7 +197,7 @@ export const MainPage = () => {
             }}
           >
             <PanelLink
-              href="/help"
+              href="/omstottetiletterlevelse"
               title={
                 <HeadingXLarge marginBottom={0} marginTop={0}>
                   Mer om etterlevelse i NAV
