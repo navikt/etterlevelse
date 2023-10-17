@@ -7,7 +7,7 @@ import { getMeldingByType, mapMeldingToFormValue } from '../api/MeldingApi'
 import { Markdown } from '../components/common/Markdown'
 import moment from 'moment'
 import { user } from '../services/User'
-import {BodyLong, BodyShort, Detail, Heading} from "@navikt/ds-react";
+import {BodyLong, Detail, Heading} from "@navikt/ds-react";
 
 export const FAQ = () => {
   const [melding, setMelding] = useState<Melding>()
