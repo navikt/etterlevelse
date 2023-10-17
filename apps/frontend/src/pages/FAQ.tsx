@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../util/theme'
-import { HeadingXLarge, HeadingXXLarge, ParagraphLarge, ParagraphSmall } from 'baseui/typography'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { Block } from 'baseui/block'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import { Melding, MeldingType } from '../constants'
@@ -10,6 +7,7 @@ import { getMeldingByType, mapMeldingToFormValue } from '../api/MeldingApi'
 import { Markdown } from '../components/common/Markdown'
 import moment from 'moment'
 import { user } from '../services/User'
+import {BodyLong, BodyShort, Detail, Heading} from "@navikt/ds-react";
 
 export const FAQ = () => {
   const [melding, setMelding] = useState<Melding>()
@@ -28,67 +26,49 @@ export const FAQ = () => {
   ampli.logEvent('sidevisning', { side: 'FAQ side', sidetittel: 'Om Støtte til etterlevelse' })
 
   return (
-    <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
+    <div className="w-full pb-52" id="content" role='main'>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Om Støtte til etterlevelse</title>
       </Helmet>
-      <Block width="100%" display={'flex'} justifyContent={'center'}>
-        <Block maxWidth={maxPageWidth} width={responsiveWidthLarge} paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-          <Block paddingTop={theme.sizing.scale800}>
+      <div className="w-full flex">
+        <div className="max-w-7xl pl-48">
+          <div className="pt-6">
             <CustomizedBreadcrumbs currentPage="Om Støtte til etterlevelse" />
-          </Block>
-        </Block>
-      </Block>
+          </div>
+        </div>
+      </div>
 
-      <Block display={'flex'} justifyContent="center" width="100%">
-        <Block
-          maxWidth={maxPageWidth}
-          width={responsiveWidthLarge}
-          display="flex"
-          justifyContent="center"
-          paddingLeft={responsivePaddingLarge}
-          paddingRight={responsivePaddingLarge}
-        >
-          <Block>
-            <Block maxWidth="800px">
-              <HeadingXXLarge marginTop="54px" marginBottom="32px">
+      <div className="flex justify-center w-full">
+        <div className="max-w-7xl flex justify-center">
+          <div>
+            <div className="max-w-4xl">
+              <Heading size="large" className="mt-14 mb-8">
                 Om Støtte til etterlevelse
-              </HeadingXXLarge>
+              </Heading>
 
-              <ParagraphLarge marginTop="0px" $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
+              <BodyLong className="mt-0" >
                 {melding?.melding}
-              </ParagraphLarge>
-            </Block>
+              </BodyLong>
+            </div>
 
-            <Block maxWidth="600px">
-              <HeadingXLarge marginTop="56px" marginBottom="24px">
+            <div className="max-w-xl">
+              <Heading size="medium" className="mt-14 mb-6">
                 {melding?.secondaryTittel}
-              </HeadingXLarge>
-              <Markdown source={melding?.secondaryMelding} fontColor={ettlevColors.green800} />
+              </Heading>
+              <Markdown source={melding?.secondaryMelding}/>
 
-              {/*<ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>*/}
-              {/*  Siden er under arbeid, og vi tar gjerne imot innspill på Slack <strong>#etterlevelse.</strong>*/}
-              {/*</ParagraphLarge>*/}
-              {/*<ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>*/}
-              {/*  Inntil videre kan dere lese om{' '}*/}
-              {/*  <ExternalLink href={'https://navno.sharepoint.com/sites/fag-og-ytelser-informasjonsforvaltning/SitePages/Etterlevelseskrav-for-systemutvikling.aspx'}>*/}
-              {/*    Støtte til etterlevelse på Navet*/}
-              {/*  </ExternalLink>*/}
-              {/*  .*/}
-              {/*</ParagraphLarge>*/}
-
-              <Block marginTop="88px">
+              <div className="mt-20">
                 {user.isAdmin() && melding && (
-                  <ParagraphSmall>
+                  <Detail>
                     Sist endret: {moment(melding.changeStamp.lastModifiedDate).format('ll')} av {melding.changeStamp.lastModifiedBy.split('-')[1]}
-                  </ParagraphSmall>
+                  </Detail>
                 )}
-              </Block>
-            </Block>
-          </Block>
-        </Block>
-      </Block>
-    </Block>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
