@@ -111,7 +111,7 @@ export const KravPanels = ({kravene, loading}: { kravene?: KravQL[] | Krav[]; lo
 }
 
 const KravTabs = () => {
-  const params = useParams<{ tab?: Section }>()
+  const params = useParams<{ tab?: string }>()
   const navigate = useNavigate()
   const [tab, setTab] = useState<string>(params.tab || 'siste')
 
