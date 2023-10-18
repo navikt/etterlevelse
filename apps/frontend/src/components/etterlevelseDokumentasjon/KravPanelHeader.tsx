@@ -1,13 +1,13 @@
-import { Block } from 'baseui/block'
-import { Responsive } from 'baseui/theme'
-import { HeadingXLarge, LabelSmall, ParagraphXSmall } from 'baseui/typography'
-import { Krav, KravEtterlevelseData } from '../../constants'
-import { theme } from '../../util'
-import { ettlevColors } from '../../util/theme'
+import {Block} from 'baseui/block'
+import {Responsive} from 'baseui/theme'
+import {LabelSmall, ParagraphXSmall} from 'baseui/typography'
+import {Krav, KravEtterlevelseData} from '../../constants'
+import {ettlevColors} from '../../util/theme'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { Option } from 'baseui/select'
-import { kravRelevansOptions, sortingOptions } from '../../pages/EtterlevelseDokumentasjonTemaPage'
-import { useNavigate } from 'react-router-dom'
+import {Option} from 'baseui/select'
+import {kravRelevansOptions, sortingOptions} from '../../pages/EtterlevelseDokumentasjonTemaPage'
+import {useNavigate} from 'react-router-dom'
+import {BodyShort, Heading, Label} from "@navikt/ds-react";
 
 const responsiveBreakPoints: Responsive<any> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -21,26 +21,26 @@ export const KravPanelHeader = (props: { title: string; kravData: KravEtterlevel
   const responsiveAlignment: Responsive<any> = ['flex-start', 'flex-start', 'flex-start', 'flex-end', 'flex-end', 'flex-end']
 
   return (
-    <Block display="flex" width="100%">
-      <Block display="flex" justifyContent="center">
-        <HeadingXLarge $style={{ lineHeight: '35px' }} marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
+    <div className={"flex w-full"}>
+      <div className={"flex justify-center"}>
+        <Heading className={"mt-1.5 mb-1.5"} size={"medium"}>
           {props.title}
-        </HeadingXLarge>
-      </Block>
-      <Block display="flex" justifyContent="flex-end" flex="1" marginRight="26px">
-        <Block>
-          <Block display="flex" justifyContent="flex-end" alignItems="baseline" flex="1">
-            <LabelSmall marginRight="4px" $style={{ color: ettlevColors.navOransje, fontSize: '20px', lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>
+        </Heading>
+      </div>
+      <div className={"flex justify-end flex-1 mr-6"}>
+        <div>
+          <div className={"flex justify-end align-baseline flex-1"}>
+            <Label className={"mr-1"} size={"small"}>
               {props.kravData.length}
-            </LabelSmall>
-            <ParagraphXSmall $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>krav</ParagraphXSmall>
-          </Block>
-          <Block display="flex" justifyContent="flex-end" flex="1">
-            <ParagraphXSmall $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>{antallSuksesskriterier} suksesskriterier</ParagraphXSmall>
-          </Block>
-        </Block>
-      </Block>
-    </Block>
+            </Label>
+            <BodyShort size={"small"}>krav</BodyShort>
+          </div>
+          <div className={"flex justify-end flex-1"}>
+            <BodyShort size={"small"}>{antallSuksesskriterier} suksesskriterier</BodyShort>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 

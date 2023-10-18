@@ -1,20 +1,21 @@
-import { codelist, ListName } from '../../services/Codelist'
-import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../common/CustomizedAccordion'
-import React, { useEffect, useState } from 'react'
-import { getAllKrav } from '../../api/KravApi'
-import { Krav, KravStatus } from '../../constants'
-import { Block } from 'baseui/block'
-import { LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
-import { KravPanelHeader } from '../etterlevelseDokumentasjon/KravPanelHeader'
-import { borderStyle, marginAll, padding } from '../common/Style'
+import {codelist, ListName} from '../../services/Codelist'
+import {CustomizedPanel, CustomPanelDivider} from '../common/CustomizedAccordion'
+import React, {useEffect, useState} from 'react'
+import {getAllKrav} from '../../api/KravApi'
+import {Krav, KravStatus} from '../../constants'
+import {Block} from 'baseui/block'
+import {LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {KravPanelHeader} from '../etterlevelseDokumentasjon/KravPanelHeader'
+import {borderStyle, marginAll, padding} from '../common/Style'
 import StatusView from '../common/StatusTag'
-import { PanelLink } from '../common/PanelLink'
+import {PanelLink} from '../common/PanelLink'
 import moment from 'moment'
-import { ettlevColors, theme } from '../../util/theme'
+import {ettlevColors, theme} from '../../util/theme'
 import Button from '../common/Button'
-import { EditPriorityModal } from './edit/EditPriorityModal'
-import { sortKraverByPriority } from '../../util/sort'
-import { getAllKravPriority } from '../../api/KravPriorityApi'
+import {EditPriorityModal} from './edit/EditPriorityModal'
+import {sortKraverByPriority} from '../../util/sort'
+import {getAllKravPriority} from '../../api/KravPriorityApi'
+import {Accordion} from '@navikt/ds-react'
 
 export const TemaList = () => {
   const [allActiveKrav, setAllActiveKrav] = useState<Krav[]>([])
@@ -43,7 +44,7 @@ export const TemaList = () => {
 
   return (
     <>
-      <CustomizedAccordion>
+      <Accordion>
         {codelist.getCodes(ListName.TEMA).map((t) => {
           const activeKraver = allActiveKrav?.filter((k) => {
             return k.regelverk.map((r) => r.lov.data && r.lov.data.tema).includes(t.code)
@@ -65,7 +66,7 @@ export const TemaList = () => {
             </CustomizedPanel>
           )
         })}
-      </CustomizedAccordion>
+      </Accordion>
     </>
   )
 }
