@@ -215,15 +215,15 @@ export const AllKrav = () => {
     <Alert variant={'error'}>{JSON.stringify(error, null, 2)}</Alert>
   ) : (
     <div>
-      <div className={"w-full justify-center"}>
+      <div className={"w-full justify-center mt-4 mb-4"}>
         <div className={"flex justify-center content-center w-full"}>
           <div className={"flex justify-start w-full"}>
             <Heading size={"medium"}>
               {kravene.totalElements ? kravene.totalElements : 0} Krav
             </Heading>
           </div>
-          <div className={"flex justify-end w-full items-center"}>
-            <div className={"flex items-center justify-start w-full"}>
+          <div className={"flex w-full items-center"}>
+            <div className={"flex items-center justify-end w-full"}>
               <Label size={"small"}>Filter</Label>
               {/* {getSelector(filter.tema[0].id?.toString(), KravListFilter.TEMAER, getOptions(
                 'Alle tema',
