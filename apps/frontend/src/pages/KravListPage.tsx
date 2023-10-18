@@ -17,8 +17,6 @@ import {PlusIcon} from '@navikt/aksel-icons'
 
 type Section = 'siste' | 'alle' | 'tema'
 
-const tabMarginBottom = '10px'
-
 export const sortKrav = (kravene: KravQL[]) => {
   return [...kravene].sort((a, b) => {
     if (a.navn.toLocaleLowerCase() === b.navn.toLocaleLowerCase()) {
