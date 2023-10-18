@@ -9,16 +9,12 @@ import {kravRelevansOptions, sortingOptions} from '../../pages/EtterlevelseDokum
 import {useNavigate} from 'react-router-dom'
 import {BodyShort, Heading, Label} from "@navikt/ds-react";
 
-const responsiveBreakPoints: Responsive<any> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
-
 export const KravPanelHeader = (props: { title: string; kravData: KravEtterlevelseData[] | Krav[] }) => {
   let antallSuksesskriterier = 0
 
   props.kravData.forEach((k) => {
     antallSuksesskriterier += k.suksesskriterier.length
   })
-
-  const responsiveAlignment: Responsive<any> = ['flex-start', 'flex-start', 'flex-start', 'flex-end', 'flex-end', 'flex-end']
 
   return (
     <div className={"flex w-full"}>
