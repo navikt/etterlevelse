@@ -33,18 +33,18 @@ export const sortKrav = (kravene: KravQL[]) => {
 }
 
 export const KravListPage = () => {
-  ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav' })
+  ampli.logEvent('sidevisning', {side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav'})
 
   return (
     <div className={"w-full pb-52"} id="content">
       <Helmet>
-        <meta charSet="utf-8" />
+        <meta charSet="utf-8"/>
         <title>Forvalte og opprette krav</title>
       </Helmet>
       <div className={"w-full flex justify-center"}>
         <div className={"w-full max-w-7xl"}>
           <div className={"pt-6"}>
-            <CustomizedBreadcrumbs currentPage="Forvalte og opprette krav" />
+            <CustomizedBreadcrumbs currentPage="Forvalte og opprette krav"/>
             <div className={"flex"}>
               <div className={"flex-1"}>
                 <Heading className={"mt-0"} size="xlarge">Forvalte og opprette krav</Heading>
@@ -67,7 +67,7 @@ export const KravListPage = () => {
       <div className={"flex justify-center w-full"}>
         <div className={"w-full max-w-7xl"}>
           <div className={"pt-6"}>
-            <KravTabs />
+            <KravTabs/>
           </div>
         </div>
       </div>
@@ -75,7 +75,7 @@ export const KravListPage = () => {
   )
 }
 
-export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; loading?: boolean }) => {
+export const KravPanels = ({kravene, loading}: { kravene?: KravQL[] | Krav[]; loading?: boolean }) => {
   if (loading) return <Skeleton variant={"rectangle"}/>
   return (
     <div className={"mb-2.5"}>
@@ -105,20 +105,23 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; 
                     },
                   },
                 }}*/
+
               >
-                <LinkPanel.Title className={"flex"}>
-                  <div>
-                    <BodyShort size={"small"}>
-                      K{k.kravNummer}.{k.kravVersjon}
-                    </BodyShort>
-                    <BodyLong><Label>{k.navn}</Label></BodyLong>
-                  </div>
-                  <div>
-                    <StatusView status={k.status}/>
-                  </div>
-                  <div>
-                    <BodyShort>{tema && tema.shortName ? tema.shortName : ''}</BodyShort>
-                    <BodyShort>{!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
+                <LinkPanel.Title className={"flex justify-between bg-blue-400"}>
+                  <div className={"flex justify-between"}>
+                    <div>
+                      <BodyShort size={"small"}>
+                        K{k.kravNummer}.{k.kravVersjon}
+                      </BodyShort>
+                      <BodyLong><Label>{k.navn}</Label></BodyLong>
+                    </div>
+                    <div>
+                      <StatusView status={k.status}/>
+                    </div>
+                    <div className={"justify-items-end"}>
+                      <BodyShort size={"medium"}>{tema && tema.shortName ? tema.shortName : ''}</BodyShort>
+                      <BodyShort size={"small"}>{!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
+                    </div>
                   </div>
                 </LinkPanel.Title>
               </LinkPanel>
@@ -152,17 +155,17 @@ const KravTabs = () => {
         {
           key: 'siste',
           title: 'Sist endret av meg',
-          content: <SistRedigertKrav />,
+          content: <SistRedigertKrav/>,
         },
         {
           key: 'tema',
           title: 'Tema',
-          content: <TemaList />,
+          content: <TemaList/>,
         },
         {
           key: 'alle',
           title: 'Alle krav',
-          content: <AllKrav />,
+          content: <AllKrav/>,
         },
       ]}
     />
