@@ -1,19 +1,18 @@
-import { useEffect, useState } from 'react'
-import { codelist, ListName } from '../../services/Codelist'
-import { useKravFilter } from '../../api/KravGraphQLApi'
-import { emptyPage, KravListFilter, KravQL, KravStatus } from '../../constants'
-import { Block, Responsive, Scale } from 'baseui/block'
-import { Option, SelectOverrides } from 'baseui/select'
+import {useEffect, useState} from 'react'
+import {codelist, ListName} from '../../services/Codelist'
+import {useKravFilter} from '../../api/KravGraphQLApi'
+import {emptyPage, KravListFilter, KravQL, KravStatus} from '../../constants'
+import {Block, Responsive, Scale} from 'baseui/block'
+import {Option, SelectOverrides} from 'baseui/select'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { ettlevColors, theme } from '../../util/theme'
-import { Notification } from 'baseui/notification'
-import { HeadingXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
-import Button from '../common/Button'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { KravPanels, sortKrav } from '../../pages/KravListPage'
-import { borderColor } from '../common/Style'
-import { kravStatus } from '../../pages/KravPage'
-import { Loader } from '@navikt/ds-react'
+import {ettlevColors, theme} from '../../util/theme'
+import {Notification} from 'baseui/notification'
+import {HeadingXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
+import {KravPanels, sortKrav} from '../../pages/KravListPage'
+import {borderColor} from '../common/Style'
+import {kravStatus} from '../../pages/KravPage'
+import {Button, Loader} from '@navikt/ds-react'
+import {PlusIcon} from "@navikt/aksel-icons";
 
 type KravFilter = {
   status: Option[]
@@ -289,7 +288,13 @@ export const AllKrav = () => {
       {!loading && kravene.totalElements !== 0 && (
         <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
           <Block display="flex" alignItems="center">
-            <Button onClick={lastMer} icon={faPlus} kind={'secondary'} size="compact" disabled={gqlLoading || kravene.numberOfElements >= kravene.totalElements}>
+            <Button
+              onClick={lastMer}
+              icon={<PlusIcon/>}
+              variant={'secondary'}
+              size="medium"
+              disabled={gqlLoading || kravene.numberOfElements >= kravene.totalElements}
+            >
               Vis mer
             </Button>
 
