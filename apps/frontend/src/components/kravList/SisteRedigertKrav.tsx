@@ -1,13 +1,8 @@
-import { useEffect, useState } from 'react'
-import { emptyPage, KravQL } from '../../constants'
-import { useKravFilter } from '../../api/KravGraphQLApi'
-import { Notification } from 'baseui/notification'
-import { Block, Responsive } from 'baseui/block'
-import { HeadingXLarge, ParagraphMedium } from 'baseui/typography'
-import { KravPanels, sortKrav } from '../../pages/KravListPage'
-import { Loader } from '@navikt/ds-react'
-
-const responsiveDisplay: Responsive<any> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
+import {useEffect, useState} from 'react'
+import {emptyPage, KravQL} from '../../constants'
+import {useKravFilter} from '../../api/KravGraphQLApi'
+import {KravPanels, sortKrav} from '../../pages/KravListPage'
+import {Alert, Heading, Loader} from '@navikt/ds-react'
 
 export const SistRedigertKrav = () => {
   const [sorting] = useState('sist')
@@ -46,42 +41,22 @@ export const SistRedigertKrav = () => {
   return loading && !data?.krav?.numberOfElements ? (
     <Loader size={'large'} />
   ) : error ? (
-    <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
+    <Alert variant={"error"}>{JSON.stringify(error, null, 2)}</Alert>
   ) : (
-    <Block>
-      <Block display={responsiveDisplay} justifyContent="center" alignContent="center" width="100%" marginTop="20px" marginBottom="20px">
-        <Block display="flex" justifyContent="flex-start" width="100%">
-          <HeadingXLarge marginTop="0px" marginBottom="0px">
+    <div>
+      <div className={"justify-center content-center w-full mt-5 mb-5"}>
+        <div className={"flex justify-start w-full"}>
+          <Heading size={"large"} className={"mt-0 mb-0"}>
             {sortedKravList.length ? sortedKravList.length : 0} Krav
-          </HeadingXLarge>
-        </Block>
-        {/* <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
-          <Block >
-            <LabelSmall>Sorter:</LabelSmall>
-          </Block>
-          <Block marginLeft="17px">
-            <RadioGroup
-              align={ALIGN.horizontal}
-              value={sorting}
-              onChange={e => setSorting(e.currentTarget.value)}
-              name="sorting"
-            >
-              <Radio value='sist'>
-                Sist endret
-              </Radio>
-              <Radio value='alfabetisk'>
-                Alfabetisk
-              </Radio>
-            </RadioGroup>
-          </Block>
-        </Block> */}
-      </Block>
+          </Heading>
+        </div>
+      </div>
       <KravPanels kravene={sortedKravList} loading={loading} />
       {sortedKravList.length === 0 && (
-        <Block width="100%" display="flex" justifyContent="center">
-          <ParagraphMedium>Fant ingen krav</ParagraphMedium>
-        </Block>
+        <div className={"w-full flex justify-center"}>
+          Fant ingen krav
+        </div>
       )}
-    </Block>
+    </div>
   )
 }
