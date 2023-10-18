@@ -6,12 +6,11 @@ import {Block, Responsive, Scale} from 'baseui/block'
 import {Option, SelectOverrides} from 'baseui/select'
 import CustomizedSelect from '../common/CustomizedSelect'
 import {ettlevColors, theme} from '../../util/theme'
-import {Notification} from 'baseui/notification'
-import {HeadingXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
+import {LabelSmall} from 'baseui/typography'
 import {KravPanels, sortKrav} from '../../pages/KravListPage'
 import {borderColor} from '../common/Style'
 import {kravStatus} from '../../pages/KravPage'
-import {Button, Loader} from '@navikt/ds-react'
+import {Alert, BodyShort, Button, Heading, Label, Loader} from '@navikt/ds-react'
 import {PlusIcon} from "@navikt/aksel-icons";
 
 type KravFilter = {
@@ -213,19 +212,19 @@ export const AllKrav = () => {
   return loading && !kravene.numberOfElements ? (
     <Loader size="large" />
   ) : error ? (
-    <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
+    <Alert variant={'error'}>{JSON.stringify(error, null, 2)}</Alert>
   ) : (
-    <Block>
-      <Block width="100%" justifyContent="center" marginTop="20px" marginBottom="20px">
-        <Block display="flex" justifyContent="center" alignContent="center" width="100%">
-          <Block display="flex" justifyContent="flex-start" width="100%">
-            <HeadingXLarge marginTop="0px" marginBottom="0px">
+    <div>
+      <div className={"w-full justify-center"}>
+        <div className={"flex justify-center content-center w-full"}>
+          <div className={"flex justify-start w-full"}>
+            <Heading size={"medium"}>
               {kravene.totalElements ? kravene.totalElements : 0} Krav
-            </HeadingXLarge>
-          </Block>
-          <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
-            <Block display="flex" alignItems="center" justifyContent="flex-start" width="100%">
-              <LabelSmall>Filter</LabelSmall>
+            </Heading>
+          </div>
+          <div className={"flex justify-end w-full items-center"}>
+            <div className={"flex items-center justify-start w-full"}>
+              <Label size={"small"}>Filter</Label>
               {/* {getSelector(filter.tema[0].id?.toString(), KravListFilter.TEMAER, getOptions(
                 'Alle tema',
                 temaer?.map((t) => {
@@ -253,7 +252,7 @@ export const AllKrav = () => {
                 ),
                 filter.status,
               )}
-            </Block>
+            </div>
 
             {/*
             <Block >
@@ -275,14 +274,14 @@ export const AllKrav = () => {
               </RadioGroup>
             </Block>
                       */}
-          </Block>
-        </Block>
-      </Block>
+          </div>
+        </div>
+      </div>
       <KravPanels kravene={sortedKravList} loading={loading} />
       {sortedKravList.length === 0 && (
-        <Block width="100%" display="flex" justifyContent="center">
-          <ParagraphMedium>Fant ingen krav</ParagraphMedium>
-        </Block>
+        <div className={"w-full flex justify-center"}>
+          <BodyShort size={"small"}>Fant ingen krav</BodyShort>
+        </div>
       )}
 
       {!loading && kravene.totalElements !== 0 && (
@@ -309,6 +308,6 @@ export const AllKrav = () => {
           </LabelSmall>
         </Block>
       )}
-    </Block>
+    </div>
   )
 }
