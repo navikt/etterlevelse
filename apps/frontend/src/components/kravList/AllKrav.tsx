@@ -10,7 +10,7 @@ import {LabelSmall} from 'baseui/typography'
 import {KravPanels, sortKrav} from '../../pages/KravListPage'
 import {borderColor} from '../common/Style'
 import {kravStatus} from '../../pages/KravPage'
-import {Alert, BodyShort, Button, Heading, Label, Loader} from '@navikt/ds-react'
+import {Alert, BodyShort, Button, Heading, Label, Loader, Select} from '@navikt/ds-react'
 import {PlusIcon} from "@navikt/aksel-icons";
 
 type KravFilter = {
@@ -185,6 +185,7 @@ export const AllKrav = () => {
       },
     }
 
+    console.log(options)
     return (
       <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
         <CustomizedSelect
@@ -205,6 +206,20 @@ export const AllKrav = () => {
           value={value}
           onChange={(params) => updateFilter(params.value, kravFilter)}
         />
+        <Select
+          key={'krav_filter_' + kravFilter}
+          size={"small"}
+          label={""}
+          placeholder={"tema"}
+          onChange={(params)=> {
+            console.log(params.currentTarget.value)
+            updateFilter(params.currentTarget.value,kravFilter)
+          }}
+        >
+          {
+            options.map(o=><option value={o.id}>{o.label}</option>)
+          }
+        </Select>
       </Block>
     )
   }
