@@ -1,7 +1,6 @@
 import ReactMarkdown from 'react-markdown'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
-import { Block } from 'baseui/block'
 import { ExternalLink } from './RouteLink'
 import { markdownLink } from '../../util/config'
 import remarkGfm from 'remark-gfm'
@@ -136,7 +135,7 @@ export const MarkdownEditor = (props: MarkdownEditorProps) => {
 }
 
 export const MarkdownInfo = () => (
-  <Block>
+  <div>
     Feltet bruker <ExternalLink href={markdownLink}>Markdown</ExternalLink>, se her for mer informasjon om formatet
-  </Block>
+  </div>
 )

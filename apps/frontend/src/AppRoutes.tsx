@@ -116,7 +116,7 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/tema/" element={<TemaPage />} caseSensitive={true} />
 
         <Route path="/status" element={<StatusPage />} caseSensitive={true} />
-        <Route path="/help" element={<FAQ />} caseSensitive={true} />
+        <Route path="/omstottetiletterlevelse" element={<FAQ />} caseSensitive={true} />
 
         <Route path="/forbidden" element={<Forbidden />} caseSensitive={true} />
 
