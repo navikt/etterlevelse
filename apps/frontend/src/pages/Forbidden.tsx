@@ -1,14 +1,11 @@
 import * as React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Block } from 'baseui/block'
-import { theme } from '../util'
-import { HeadingXXLarge } from 'baseui/typography'
 import { intl } from '../util/intl/intl'
 import notFound from '../resources/notfound.svg'
-import { maxPageWidth } from '../util/theme'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import { user } from '../services/User'
+import {Heading} from "@navikt/ds-react";
 
 const Forbidden = () => {
   const params = useParams<{ role?: string }>()
@@ -28,16 +25,16 @@ const Forbidden = () => {
   ampli.logEvent('sidevisning', { side: 'Forbidden', sidetittel: '403 forbidden' })
 
   return (
-    <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
+    <div className="max-w-7xl w-full" role="main" id="content">
       <Helmet>
         <meta charSet="utf-8" />
         <title>403 forbidden</title>
       </Helmet>
-      <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center" alignContent="center" marginTop={theme.sizing.scale2400}>
-        <HeadingXXLarge>Du prøvde å komme inn i en side du ikke har tilgang til.</HeadingXXLarge>
+      <div className="pl-10 pr-10">
+        <Heading className="pt-10 pb-10" size="large">Du prøvde å komme inn i en side du ikke har tilgang til.</Heading>
         <img src={notFound} alt={intl.pageNotFound} style={{ maxWidth: '65%' }} />
-      </Block>
-    </Block>
+      </div>
+    </div>
   )
 }
 
