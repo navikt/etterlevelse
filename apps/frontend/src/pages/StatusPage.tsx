@@ -1,48 +1,40 @@
 import * as React from 'react'
-import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../util/theme'
-import { HeadingXXLarge, ParagraphLarge } from 'baseui/typography'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { Block } from 'baseui/block'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
+import {BodyLong, Heading} from "@navikt/ds-react";
 
 export const StatusPage = () => {
   ampli.logEvent('sidevisning', { side: 'Status side', sidetittel: 'Status i organisasjonen' })
 
   return (
-    <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
+    <div className="w-full pb-52" role="main" id="content" >
       <Helmet>
         <meta charSet="utf-8" />
         <title>Status i organisasjonen</title>
       </Helmet>
-      <Block width="100%" display={'flex'} justifyContent={'center'}>
-        <Block maxWidth={maxPageWidth} width={responsiveWidthLarge} paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-          <Block paddingTop={theme.sizing.scale800}>
+      <div className="w-full flex">
+        <div className="max-w-7xl pl-48">
+          <div className="pt-6">
             <CustomizedBreadcrumbs currentPage="Status i organisasjonene" />
-          </Block>
-        </Block>
-      </Block>
+          </div>
+        </div>
+      </div>
 
-      <Block display={'flex'} justifyContent="center" width="100%">
-        <Block
-          maxWidth={maxPageWidth}
-          width={responsiveWidthLarge}
-          display="flex"
-          justifyContent="center"
-          paddingLeft={responsivePaddingLarge}
-          paddingRight={responsivePaddingLarge}
-        >
-          <Block maxWidth="800px">
-            <HeadingXXLarge marginTop="54px" marginBottom="32px">
+      <div className="w-full flex justify-center">
+        <div className="max-w-7xl flex justify-center">
+          <div className="max-w-3xl">
+
+            <Heading size="large" className="mt-14 mb-8">
               Status i organisasjonen
-            </HeadingXXLarge>
+            </Heading>
 
-            <ParagraphLarge marginTop="0px" $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
+            <BodyLong size="large" className="mt-0" >
               Vi jobber med å få på plass nyttig statistikk og oversikter over etterlevels Har du innspill hører vi gjerne fra deg på <strong>#etterlevelse</strong>.
-            </ParagraphLarge>
-          </Block>
-        </Block>
-      </Block>
-    </Block>
+            </BodyLong>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
