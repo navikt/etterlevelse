@@ -42,7 +42,7 @@ export const EtterlevelseAdminPage = () => {
                       setEtterlevelseId('')
                     })
                     .catch((e) => {
-                      setUpdateMessage('Oppdatering mislykket, error: ' + e)
+                      setUpdateMessage('Sletting mislykket, error: ' + e)
                     })
                 }}
               >
