@@ -10,6 +10,7 @@ import {KravPanels, sortKrav} from '../../pages/KravListPage'
 import {kravStatus} from '../../pages/KravPage'
 import {Alert, BodyShort, Button, Heading, Label, Loader, Select} from '@navikt/ds-react'
 import {PlusIcon} from "@navikt/aksel-icons";
+import { String } from 'lodash'
 
 type KravFilter = {
   status: Option[]
@@ -28,15 +29,8 @@ export const AllKrav = () => {
     lover: [{ label: 'Alle lover', id: 'alle' }],
   })
 
-  // USIKKERT OM VI SKAL FILTRERER BASERT PÅ TEMA
-  // const [temaFilter, setTemaFilter] = useState<string[]>([])
-  // const temaer = codelist.getCodes(ListName.TEMA)
-
   const relevans = codelist.getCodes(ListName.RELEVANS)
   const lover = codelist.getCodes(ListName.LOV)
-
-  // BRUKER KUN NÅR VI SKAL FILTRERE PÅ TEMA
-  // const [loverFilter, setLoverFilter] = useState(lover)
 
   const {
     data,
@@ -46,12 +40,13 @@ export const AllKrav = () => {
     refetch,
   } = useKravFilter({
     relevans: filter.relevans[0]?.id === 'alle' ? undefined : filter.relevans.map((r) => (r.id ? r.id.toString() : '')),
-    // lover: filter.lover[0].id === 'alle' && filter.tema[0].id === 'alle' ? undefined : filter.lover[0].id !== 'alle' ? filter.lover.map((l) => (l.id ? l.id.toString() : '')) : temaFilter,
     lover: filter.lover[0].id === 'alle' ? undefined : filter.lover.map((l) => (l.id ? l.id.toString() : '')),
     status: filter.status[0]?.id === 'alle' ? undefined : filter.status.map((s) => (s.id ? s.id?.toString() : '')),
     pageNumber: 0,
     pageSize,
   })
+
+  const [filterValue, setFilterValue] = useState<string>()
   const [sortedKravList, setSortedKravList] = useState<KravQL[]>([])
 
   const loading = !data && gqlLoading
@@ -97,23 +92,6 @@ export const AllKrav = () => {
   }, [sorting])
 
   useEffect(() => {
-    // USIKKERT OM VI SKAL FILTRERER BASERT PÅ TEMA
-    // if (filter.tema[0].id !== 'alle') {
-    //   const temaLover: string[] = []
-    //   const gyldiglover: LovCode[] = []
-    //   lover.forEach((l) => {
-    //     if (l.data?.tema === filter.tema[0].id) {
-    //       temaLover.push(l.code)
-    //       gyldiglover.push(l)
-    //     }
-    //   })
-    //   setTemaFilter(temaLover)
-    //   setLoverFilter(gyldiglover)
-    // } else {
-    //   setTemaFilter([])
-    //   setLoverFilter(lover)
-    // }
-
     refetch()
   }, [filter])
 
@@ -135,9 +113,6 @@ export const AllKrav = () => {
     setFilter(newFilterValue)
   }
 
-  const selectorMarginLeft: Responsive<Scale> = ['0px', '0px', '0px', '12px', '12px', '12px']
-  const selectorMarginTop: Responsive<Scale> = ['10px', '10px', '10px', '0px', '0px', '0px']
-
   const kravene = data?.krav || emptyPage
 
   const getOptions = (label: string, options: any[]) => [{ label: label, id: 'alle' }, ...options]
@@ -149,72 +124,21 @@ export const AllKrav = () => {
         return { label: l.shortName, id: l.code }
       }),
     )
-
-    // BRUKER KUN NÅR VI SKAL FILTRERE PÅ TEMA
-    // if (filter.tema[0].id === 'alle') {
-    //   return getOptions(
-    //     'Alle lover',
-    //     lover.map((l) => {
-    //       return { label: l.shortName, id: l.code }
-    //     }),
-    //   )
-    // } else {
-    //   return getOptions(
-    //     'Alle lover',
-    //     loverFilter?.map((t) => {
-    //       return { label: t.shortName, id: t.code }
-    //     }),
-    //   )
-    // }
   }
 
-  //must be run in function to not affect other selectors others overrides
-  const getSelector = (filterId: string | undefined, kravFilter: KravListFilter, options: any[], value: Option[]) => {
-    const customSelectOverrides: SelectOverrides = {
-      Root: {
-        style: {
-          width: '150px',
-        },
-      },
-      DropdownContainer: {
-        style: {
-          width: 'fit-content',
-          maxWidth: '300px',
-        },
-      },
-    }
 
-    // console.log(options)
+  const getSelector = (kravFilter: KravListFilter, options: any[]) => {
     return (
-      <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
-        {/*<CustomizedSelect*/}
-        {/*  key={'krav_filter_' + kravFilter}*/}
-        {/*  clearable={false}*/}
-        {/*  size="compact"*/}
-        {/*  placeholder="tema"*/}
-        {/*  options={options}*/}
-        {/*  overrides={{*/}
-        {/*    ...customSelectOverrides,*/}
-        {/*    ControlContainer: {*/}
-        {/*      style: {*/}
-        {/*        backgroundColor: filterId === 'alle' ? ettlevColors.white : ettlevColors.green50,*/}
-        {/*        ...borderColor(filterId === 'alle' ? ettlevColors.grey200 : ettlevColors.green800),*/}
-        {/*      },*/}
-        {/*    },*/}
-        {/*  }}*/}
-        {/*  value={value}*/}
-        {/*  onChange={(params) => {*/}
-        {/*    updateFilter(params.value, kravFilter)*/}
-        {/*    console.log(params.value)*/}
-        {/*  }}*/}
-        {/*/>*/}
+      <div className="ml-3 mt-3 min-w-fit">
         <Select
           key={'krav_filter_' + kravFilter}
           size={"small"}
           label={""}
           placeholder={"tema"}
+          value={filterValue}
           onChange={(params)=> {
             console.log(params.currentTarget.value)
+            setFilterValue(params.currentTarget.value)
             updateFilter([{
               id: params.currentTarget.value,
               label: options.filter(o=>o.id===params.currentTarget.value)[0].label
@@ -225,12 +149,14 @@ export const AllKrav = () => {
             options.map(o=><option value={o.id} key={kravFilter + '_' + o.id}>{o.label}</option>)
           }
         </Select>
-      </Block>
+      </div>
     )
   }
 
   return loading && !kravene.numberOfElements ? (
-    <Loader size="large" />
+    <div className="justify-center flex flex-1 mt-10">
+      <Loader size="large" />
+    </div>
   ) : error ? (
     <Alert variant={'error'}>{JSON.stringify(error, null, 2)}</Alert>
   ) : (
@@ -245,14 +171,7 @@ export const AllKrav = () => {
           <div className={"flex w-full items-center"}>
             <div className={"flex items-center justify-end w-full"}>
               <Label size={"small"}>Filter</Label>
-              {/* {getSelector(filter.tema[0].id?.toString(), KravListFilter.TEMAER, getOptions(
-                'Alle tema',
-                temaer?.map((t) => {
-                  return { label: t.shortName, id: t.code }
-                }),
-              ), filter.tema)} */}
               {getSelector(
-                filter.relevans[0].id?.toString(),
                 KravListFilter.RELEVANS,
                 getOptions(
                   'Alle relevans',
@@ -260,40 +179,16 @@ export const AllKrav = () => {
                     return { label: r.shortName, id: r.code }
                   }),
                 ),
-                filter.relevans,
               )}
-              {getSelector(filter.lover[0].id?.toString(), KravListFilter.LOVER, getLovOptions(), filter.lover)}
+              {getSelector(KravListFilter.LOVER, getLovOptions())}
               {getSelector(
-                filter.status[0].id?.toString(),
                 KravListFilter.STATUS,
                 getOptions(
                   'Alle statuser',
                   Object.values(KravStatus).map((id) => ({ id, label: kravStatus(id) })),
                 ),
-                filter.status,
               )}
             </div>
-
-            {/*
-            <Block >
-              <LabelSmall>Sorter:</LabelSmall>
-            </Block>
-            <Block marginLeft="17px">
-              <RadioGroup
-                align={ALIGN.horizontal}
-                value={sorting}
-                onChange={e => setSorting(e.currentTarget.value)}
-                name="sorting"
-              >
-                <Radio value='sist'>
-                  Sist endret
-                </Radio>
-                <Radio value='alfabetisk'>
-                  Alfabetisk
-                </Radio>
-              </RadioGroup>
-            </Block>
-                      */}
           </div>
         </div>
       </div>
@@ -305,8 +200,8 @@ export const AllKrav = () => {
       )}
 
       {!loading && kravene.totalElements !== 0 && (
-        <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
-          <Block display="flex" alignItems="center">
+        <div className="flex justify-between mt-10">
+          <div className="flex items-center">
             <Button
               onClick={lastMer}
               icon={<PlusIcon/>}
@@ -318,15 +213,15 @@ export const AllKrav = () => {
             </Button>
 
             {gqlLoading && (
-              <Block marginLeft={theme.sizing.scale400}>
+              <div className="w-full flex justify-center">
                 <Loader size="large" />
-              </Block>
+              </div>
             )}
-          </Block>
+          </div>
           <LabelSmall marginRight={theme.sizing.scale400}>
             Viser {kravene.numberOfElements}/{kravene.totalElements}
           </LabelSmall>
-        </Block>
+        </div>
       )}
     </div>
   )
