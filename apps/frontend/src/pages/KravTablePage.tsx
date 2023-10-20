@@ -8,6 +8,7 @@ import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { BodyShort, Heading, Label, Link, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
+import { handleSort } from '../util/handleTableSort'
 
 
 export const KravTablePage = () => {
@@ -17,21 +18,6 @@ export const KravTablePage = () => {
   const [sort, setSort] = useState<SortState>()
 
   let sortedData = tableContent
-
-
-  const handleSort = (sortKey?: string) => {
-    setSort(
-      sort && sortKey === sort.orderBy && sort.direction === 'descending'
-        ? undefined
-        : {
-          orderBy: sortKey,
-          direction:
-            sort && sortKey === sort.orderBy && sort.direction === 'ascending'
-              ? 'descending'
-              : 'ascending',
-        } as SortState
-    )
-  }
 
   const comparator = (a: Krav, b: Krav, orderBy: string) => {
     switch (orderBy) {
@@ -88,7 +74,7 @@ export const KravTablePage = () => {
 
           {tableContent.length && (
             <div className="w-full">
-              <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sortKey)}>
+              <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>
                 <Table.Header>
                   <Table.Row>
                     <Table.ColumnHeader className="w-[6%]" sortKey="kravNummer" sortable>Krav ID</Table.ColumnHeader>
