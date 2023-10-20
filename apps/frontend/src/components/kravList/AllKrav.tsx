@@ -4,11 +4,9 @@ import {useKravFilter} from '../../api/KravGraphQLApi'
 import {emptyPage, KravListFilter, KravQL, KravStatus} from '../../constants'
 import {Block, Responsive, Scale} from 'baseui/block'
 import {Option, SelectOverrides} from 'baseui/select'
-import CustomizedSelect from '../common/CustomizedSelect'
-import {ettlevColors, theme} from '../../util/theme'
+import {theme} from '../../util/theme'
 import {LabelSmall} from 'baseui/typography'
 import {KravPanels, sortKrav} from '../../pages/KravListPage'
-import {borderColor} from '../common/Style'
 import {kravStatus} from '../../pages/KravPage'
 import {Alert, BodyShort, Button, Heading, Label, Loader, Select} from '@navikt/ds-react'
 import {PlusIcon} from "@navikt/aksel-icons";
@@ -121,6 +119,7 @@ export const AllKrav = () => {
 
   const updateFilter = (value: any, type: KravListFilter) => {
     const newFilterValue = { ...filter }
+    console.log(newFilterValue)
     if (type === KravListFilter.RELEVANS) {
       newFilterValue.relevans = value
     }
@@ -185,27 +184,30 @@ export const AllKrav = () => {
       },
     }
 
-    console.log(options)
+    // console.log(options)
     return (
       <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
-        <CustomizedSelect
-          key={'krav_filter_' + kravFilter}
-          clearable={false}
-          size="compact"
-          placeholder="tema"
-          options={options}
-          overrides={{
-            ...customSelectOverrides,
-            ControlContainer: {
-              style: {
-                backgroundColor: filterId === 'alle' ? ettlevColors.white : ettlevColors.green50,
-                ...borderColor(filterId === 'alle' ? ettlevColors.grey200 : ettlevColors.green800),
-              },
-            },
-          }}
-          value={value}
-          onChange={(params) => updateFilter(params.value, kravFilter)}
-        />
+        {/*<CustomizedSelect*/}
+        {/*  key={'krav_filter_' + kravFilter}*/}
+        {/*  clearable={false}*/}
+        {/*  size="compact"*/}
+        {/*  placeholder="tema"*/}
+        {/*  options={options}*/}
+        {/*  overrides={{*/}
+        {/*    ...customSelectOverrides,*/}
+        {/*    ControlContainer: {*/}
+        {/*      style: {*/}
+        {/*        backgroundColor: filterId === 'alle' ? ettlevColors.white : ettlevColors.green50,*/}
+        {/*        ...borderColor(filterId === 'alle' ? ettlevColors.grey200 : ettlevColors.green800),*/}
+        {/*      },*/}
+        {/*    },*/}
+        {/*  }}*/}
+        {/*  value={value}*/}
+        {/*  onChange={(params) => {*/}
+        {/*    updateFilter(params.value, kravFilter)*/}
+        {/*    console.log(params.value)*/}
+        {/*  }}*/}
+        {/*/>*/}
         <Select
           key={'krav_filter_' + kravFilter}
           size={"small"}
@@ -213,11 +215,14 @@ export const AllKrav = () => {
           placeholder={"tema"}
           onChange={(params)=> {
             console.log(params.currentTarget.value)
-            updateFilter(params.currentTarget.value,kravFilter)
+            updateFilter([{
+              id: params.currentTarget.value,
+              label: options.filter(o=>o.id===params.currentTarget.value)[0].label
+            }],kravFilter)
           }}
         >
           {
-            options.map(o=><option value={o.id}>{o.label}</option>)
+            options.map(o=><option value={o.id} key={kravFilter + '_' + o.id}>{o.label}</option>)
           }
         </Select>
       </Block>
