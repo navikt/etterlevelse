@@ -1,10 +1,7 @@
 import {useEffect, useState} from 'react'
 import {codelist, ListName} from '../../services/Codelist'
 import {useKravFilter} from '../../api/KravGraphQLApi'
-import {emptyPage, KravListFilter, KravQL, KravStatus} from '../../constants'
-import {Option} from 'baseui/select'
-import {theme} from '../../util/theme'
-import {LabelSmall} from 'baseui/typography'
+import {emptyPage, KravListFilter, KravQL, KravStatus, Option} from '../../constants'
 import {KravPanels, sortKrav} from '../../pages/KravListPage'
 import {kravStatus} from '../../pages/KravPage'
 import {Alert, BodyShort, Button, Heading, Label, Loader, Select} from '@navikt/ds-react'
@@ -217,9 +214,9 @@ export const AllKrav = () => {
               </div>
             )}
           </div>
-          <LabelSmall marginRight={theme.sizing.scale400}>
+          <Label className={"mr-2.5"}>
             Viser {kravene.numberOfElements}/{kravene.totalElements}
-          </LabelSmall>
+          </Label>
         </div>
       )}
     </div>
