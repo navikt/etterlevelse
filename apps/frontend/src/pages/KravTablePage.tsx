@@ -24,7 +24,6 @@ export const KravTablePage = () => {
       case 'kravNummer':
         return a.kravNummer - b.kravNummer
       case 'navn':
-        console.log((a.navn || '').localeCompare(b.navn || ''))
         return (a.navn || '').localeCompare(b.navn || '')
       case 'avdeling':
         return (a.underavdeling?.shortName || '').localeCompare(b.underavdeling?.shortName || '')
