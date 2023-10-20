@@ -2,15 +2,13 @@ import {useEffect, useState} from 'react'
 import {codelist, ListName} from '../../services/Codelist'
 import {useKravFilter} from '../../api/KravGraphQLApi'
 import {emptyPage, KravListFilter, KravQL, KravStatus} from '../../constants'
-import {Block, Responsive, Scale} from 'baseui/block'
-import {Option, SelectOverrides} from 'baseui/select'
+import {Option} from 'baseui/select'
 import {theme} from '../../util/theme'
 import {LabelSmall} from 'baseui/typography'
 import {KravPanels, sortKrav} from '../../pages/KravListPage'
 import {kravStatus} from '../../pages/KravPage'
 import {Alert, BodyShort, Button, Heading, Label, Loader, Select} from '@navikt/ds-react'
 import {PlusIcon} from "@navikt/aksel-icons";
-import { String } from 'lodash'
 
 type KravFilter = {
   status: Option[]
@@ -129,7 +127,7 @@ export const AllKrav = () => {
 
   const getSelector = (kravFilter: KravListFilter, options: any[]) => {
     return (
-      <div className="ml-3 mt-3 min-w-fit">
+      <div className="ml-3 min-w-fit">
         <Select
           key={'krav_filter_' + kravFilter}
           size={"small"}
@@ -144,6 +142,7 @@ export const AllKrav = () => {
               label: options.filter(o=>o.id===params.currentTarget.value)[0].label
             }],kravFilter)
           }}
+          className={"flex"}
         >
           {
             options.map(o=><option value={o.id} key={kravFilter + '_' + o.id}>{o.label}</option>)
@@ -163,7 +162,7 @@ export const AllKrav = () => {
     <div>
       <div className={"w-full justify-center mt-4 mb-4"}>
         <div className={"flex justify-center content-center w-full"}>
-          <div className={"flex justify-start w-full"}>
+          <div className={"flex justify-start align-middle w-full"}>
             <Heading size={"medium"}>
               {kravene.totalElements ? kravene.totalElements : 0} Krav
             </Heading>
