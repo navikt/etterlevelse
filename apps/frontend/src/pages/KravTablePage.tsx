@@ -1,34 +1,69 @@
-import { Block } from 'baseui/block'
-import { ettlevColors, maxPageWidth } from '../util/theme'
-import { HeadingXXLarge } from 'baseui/typography'
-import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { Krav } from '../constants'
 import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
-import { Cell, Row, Table } from '../components/common/Table'
-import { ColumnCompares } from '../util/hooks'
 import moment from 'moment'
 import { codelist, ListName } from '../services/Codelist'
 import { kravStatus } from './KravPage'
-import { Layout2 } from '../components/scaffold/Page'
-import RouteLink from '../components/common/RouteLink'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
+import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
+import { BodyShort, Heading, Label, Link, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
 
-const kravSorting: ColumnCompares<Krav> = {
-  kravNummer: (a, b) => a.kravNummer - b.kravNummer,
-  navn: (a, b) => (a.navn || '').localeCompare(b.navn || ''),
-  avdeling: (a, b) => (a.underavdeling?.shortName || '').localeCompare(b.underavdeling?.shortName || ''),
-  tema: (a, b) => (codelist.getCode(ListName.TEMA, a.tema)?.shortName || '').localeCompare(codelist.getCode(ListName.TEMA, b.tema)?.shortName || ''),
-  status: (a, b) => (a.status || '').localeCompare(b.status || ''),
-  changeStamp: (a, b) => (a.changeStamp.lastModifiedDate || '').localeCompare(b.changeStamp.lastModifiedDate || ''),
-}
 
 export const KravTablePage = () => {
   const [tableContent, setTableContent] = useState<Krav[]>([])
+  const [page, setPage] = useState(1)
+  const [rowsPerPage, setRowsPerPage] = useState(20)
+  const [sort, setSort] = useState<SortState>()
+
+  let sortedData = tableContent
+
+
+  const handleSort = (sortKey?: string) => {
+    setSort(
+      sort && sortKey === sort.orderBy && sort.direction === 'descending'
+        ? undefined
+        : {
+          orderBy: sortKey,
+          direction:
+            sort && sortKey === sort.orderBy && sort.direction === 'ascending'
+              ? 'descending'
+              : 'ascending',
+        } as SortState
+    )
+  }
+
+  const comparator = (a: Krav, b: Krav, orderBy: string) => {
+    switch (orderBy) {
+      case 'kravNummer':
+        return a.kravNummer - b.kravNummer
+      case 'navn':
+        console.log((a.navn || '').localeCompare(b.navn || ''))
+        return (a.navn || '').localeCompare(b.navn || '')
+      case 'avdeling':
+        return (a.underavdeling?.shortName || '').localeCompare(b.underavdeling?.shortName || '')
+      case 'tema':
+        return (codelist.getCode(ListName.TEMA, a.tema)?.shortName || '').localeCompare(codelist.getCode(ListName.TEMA, b.tema)?.shortName || '')
+      case 'status':
+        return (a.status || '').localeCompare(b.status || '')
+      case 'changeStamp':
+        return (a.changeStamp.lastModifiedDate || '').localeCompare(b.changeStamp.lastModifiedDate || '')
+      default:
+        return 0
+    }
+  }
+
+  sortedData = sortedData.sort((a, b) => {
+    if (sort) {
+      return sort.direction === 'ascending'
+        ? comparator(b, a, sort.orderBy)
+        : comparator(a, b, sort.orderBy)
+    }
+    return 1
+  }).slice((page - 1) * rowsPerPage, page * rowsPerPage)
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
       setTableContent(mappedKraver)
@@ -37,62 +72,81 @@ export const KravTablePage = () => {
   }, [])
 
   return (
-    <Layout2
-      headerBackgroundColor={ettlevColors.grey25}
-      childrenBackgroundColor={ettlevColors.grey25}
-      currentPage="Administrere Krav"
-      mainHeader={
-        <Block maxWidth={maxPageWidth} width="100%" display={'flex'} justifyContent="flex-start">
-          <Helmet>
-            <meta charSet="utf-8" />
-            <title>Administrere Krav</title>
-          </Helmet>
-          <HeadingXXLarge marginTop="0">Administrere Krav</HeadingXXLarge>
-        </Block>
-      }
-    >
-      <Block>
-        {tableContent.length && (
-          <Table
-            emptyText=""
-            data={tableContent}
-            config={{
-              initialSortColumn: 'kravNummer',
-              sorting: kravSorting,
-              pageSizes: [5, 10, 20, 50, 100],
-              defaultPageSize: 20,
-            }}
-            headers={[
-              { $style: { maxWidth: '6%' }, title: 'Krav ID', column: 'kravNummer' },
-              { $style: { maxWidth: '25%', minWidth: '25%' }, title: 'Kravnavn', column: 'navn' },
-              { title: 'Ansvarlig', column: 'underavdeling' },
-              { title: 'Tema', column: 'tema' },
-              { title: 'Status', column: 'status' },
-              { title: 'Siste endret', column: 'changeStamp' },
-            ]}
-            render={(tableData) => {
-              return tableData.data.slice((tableData.page - 1) * tableData.limit, (tableData.page - 1) * tableData.limit + tableData.limit).map((krav, index) => {
-                return (
-                  <Row key={krav.id}>
-                    <Cell $style={{ maxWidth: '6%' }}>
-                      {krav.kravNummer}.{krav.kravVersjon}
-                    </Cell>
-                    <Cell $style={{ maxWidth: '25%', minWidth: '25%' }}>
-                      <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</RouteLink>
-                    </Cell>
-                    <Cell>{krav.underavdeling && krav.underavdeling.shortName}</Cell>
-                    <Cell>
-                      <RouteLink href={`/tema/${krav.tema}`}>{codelist.getCode(ListName.TEMA, krav.tema)?.shortName}</RouteLink>
-                    </Cell>
-                    <Cell>{kravStatus(krav.status)}</Cell>
-                    <Cell>{moment(krav.changeStamp.lastModifiedDate).format('ll')}</Cell>
-                  </Row>
-                )
-              })
-            }}
-          />
-        )}
-      </Block>
-    </Layout2>
+    <div className="w-full" id="content" role="main">
+      <div className="w-full flex justify-center items-center flex-col mt-6">
+        <div className="w-full max-w-7xl px-8">
+          <div className="flex-1 justify-start flex">
+            <CustomizedBreadcrumbs currentPage="Administrere Krav" />
+          </div>
+          <div>
+            <Helmet>
+              <meta charSet="utf-8" />
+              <title>Administrere Krav</title>
+            </Helmet>
+            <Heading size="xlarge">Administrere Krav</Heading>
+          </div>
+
+          {tableContent.length && (
+            <div className="w-full">
+              <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sortKey)}>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeader className="w-[6%]" sortKey="kravNummer" sortable>Krav ID</Table.ColumnHeader>
+                    <Table.ColumnHeader className="w-[25%]" sortKey="navn" sortable>Kravnavn</Table.ColumnHeader>
+                    <Table.ColumnHeader sortKey="avdeling" sortable>Ansvarlig</Table.ColumnHeader>
+                    <Table.ColumnHeader sortKey="tema" sortable>Tema</Table.ColumnHeader>
+                    <Table.ColumnHeader sortKey="status" sortable>Status</Table.ColumnHeader>
+                    <Table.ColumnHeader className="w-[10%]" sortKey="changeStamp" sortable>Siste endret</Table.ColumnHeader>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {sortedData.map((krav: Krav) => {
+                    return (
+                      <Table.Row key={krav.id}>
+                        <Table.HeaderCell className="w-[6%] text-end" scope="row">{krav.kravNummer}.{krav.kravVersjon}</Table.HeaderCell>
+                        <Table.DataCell className="w-[25%]"><Link href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</Link></Table.DataCell>
+                        <Table.DataCell>{krav.underavdeling && krav.underavdeling.shortName}</Table.DataCell>
+                        <Table.DataCell> <Link href={`/tema/${krav.tema}`}>{codelist.getCode(ListName.TEMA, krav.tema)?.shortName}</Link></Table.DataCell>
+                        <Table.DataCell>{kravStatus(krav.status)}</Table.DataCell>
+                        <Table.DataCell className="w-[10%] text-end">{moment(krav.changeStamp.lastModifiedDate).format('ll')}</Table.DataCell>
+                      </Table.Row>
+                    )
+                  })}
+                </Table.Body>
+              </Table>
+              <div className="flex w-full justify-center items-center mt-3">
+                <Select
+                  label="Antall rader:"
+                  value={rowsPerPage}
+                  onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+                  size="small"
+                >
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </Select>
+                <Spacer />
+                <div>
+                  <Pagination
+                    page={page}
+                    onPageChange={setPage}
+                    count={Math.ceil(tableContent.length / rowsPerPage)}
+                    prevNextTexts
+                    size="small"
+                  />
+                </div>
+                <Spacer />
+                <BodyShort>
+                  Totalt antall rader: {tableContent.length}
+                </BodyShort>
+
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   )
 }
