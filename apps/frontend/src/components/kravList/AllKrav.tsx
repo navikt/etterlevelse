@@ -92,7 +92,6 @@ export const AllKrav = () => {
 
   const updateFilter = (value: any, type: KravListFilter) => {
     const newFilterValue = { ...filter }
-    console.log(newFilterValue)
     if (type === KravListFilter.RELEVANS) {
       newFilterValue.relevans = value
     }
