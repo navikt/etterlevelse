@@ -14,7 +14,6 @@ import {UnderavdelingPage} from './pages/UnderavdelingPage'
 import {TemaPage} from './pages/TemaPage'
 import {LovPage} from './pages/LovPage'
 import ScrollToTop from './util/ScrollToTop'
-import {StatusPage} from './pages/StatusPage'
 import {KravTablePage} from './pages/KravTablePage'
 import {FAQ} from './pages/FAQ'
 import QuestionAndAnswerLogPage from './pages/QuestionAndAnswerLogPage'
@@ -115,7 +114,6 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/tema/:tema" element={<TemaPage />} caseSensitive={true} />
         <Route path="/tema/" element={<TemaPage />} caseSensitive={true} />
 
-        <Route path="/status" element={<StatusPage />} caseSensitive={true} />
         <Route path="/omstottetiletterlevelse" element={<FAQ />} caseSensitive={true} />
 
         <Route path="/forbidden" element={<Forbidden />} caseSensitive={true} />
