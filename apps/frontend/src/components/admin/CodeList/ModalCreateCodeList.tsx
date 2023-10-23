@@ -1,5 +1,3 @@
-import * as React from 'react'
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE } from 'baseui/modal'
 import { Block, BlockProps } from 'baseui/block'
 import { LabelMedium } from 'baseui/typography'
 import { Field, FieldProps, Form, Formik } from 'formik'
@@ -12,6 +10,7 @@ import { MarkdownInfo } from '../../common/Markdown'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
 import { buttonContentStyle } from '../../common/Button'
+import { Modal } from '@navikt/ds-react'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
@@ -19,26 +18,19 @@ const modalBlockProps: BlockProps = {
   paddingLeft: '2rem',
 }
 
-const rowBlockProps: BlockProps = {
-  display: 'flex',
-  width: '100%',
-  marginTop: '1rem',
-  alignItems: 'center',
-}
-
 type ModalCreateProps = {
   title: string
   list: string
-  isOpen: boolean
+  modalRef: React.RefObject<HTMLDialogElement>
   errorOnCreate: any | undefined
   submit: (code: CodeListFormValues) => Promise<void>
   onClose: () => void
 }
 
-const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, submit }: ModalCreateProps) => {
+const CreateCodeListModal = ({ modalRef, title, list, errorOnCreate, onClose, submit }: ModalCreateProps) => {
   return (
-    <Modal closeable={false} animate autoFocus size={SIZE.auto} role={ROLE.dialog} isOpen={isOpen} onClose={() => onClose()}>
-      <Block {...modalBlockProps}>
+    <Modal ref={modalRef} onClose={() => onClose()} header={{ heading: title }}>
+      <div className="w-full max-w-2xl px-8">
         <Formik
           onSubmit={(values) => {
             submit(values)
@@ -57,37 +49,36 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
         >
           {({ submitForm }) => (
             <Form>
-              <ModalHeader>{title}</ModalHeader>
-              <ModalBody>
-                <Block {...rowBlockProps}>
+              <Modal.Body>
+                <div className="flex w-full mt-4 items-center">
                   <LabelMedium marginRight={'1rem'} width="25%">
                     Code:
                   </LabelMedium>
                   <Field name="code" render={({ field }: FieldProps) => <CustomizedInput {...field} type="input" size={InputSIZE.default} />} />
-                </Block>
+                </div>
                 <Error fieldName="code" />
 
-                <Block {...rowBlockProps}>
+                <div className="flex w-full mt-4 items-center">
                   <LabelMedium marginRight={'1rem'} width="25%">
                     Short name:
                   </LabelMedium>
                   <Field name="shortName" render={({ field }: FieldProps) => <CustomizedInput {...field} type="input" size={InputSIZE.default} />} />
-                </Block>
+                </div>
                 <Error fieldName="shortName" />
 
-                <Block {...rowBlockProps}>
+                <div className="flex w-full mt-4 items-center">
                   <LabelMedium marginRight={'1rem'} width="25%">
                     Description:
                   </LabelMedium>
                   <Field name="description" render={({ field }: FieldProps) => <CustomizedTextarea {...field} type="input" rows={10} />} />
-                </Block>
+                </div>
                 <Error fieldName="description" />
                 {(list === ListName.LOV || list === ListName.TEMA) && <MarkdownInfo />}
 
                 {list === ListName.LOV && <LovCodeDataForm />}
                 {list === ListName.TEMA && <TemaCodeDataForm />}
-              </ModalBody>
-              <ModalFooter>
+              </Modal.Body>
+              <Modal.Footer>
                 <Block display="flex" justifyContent="flex-end">
                   <Block marginRight="auto">{errorOnCreate && <p>{errorOnCreate}</p>}</Block>
                   <Button
@@ -104,7 +95,7 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
                   >
                     <strong>Avbryt</strong>
                   </Button>
-                  <ModalButton
+                  {/* <ModalButton
                     type="button"
                     onClick={submitForm}
                     overrides={{
@@ -116,13 +107,13 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
                     }}
                   >
                     <strong>Lagre</strong>
-                  </ModalButton>
+                  </ModalButton> */}
                 </Block>
-              </ModalFooter>
+              </Modal.Footer>
             </Form>
           )}
         </Formik>
-      </Block>
+      </div>
     </Modal>
   )
 }
