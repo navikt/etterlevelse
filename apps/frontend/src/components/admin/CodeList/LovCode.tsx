@@ -14,6 +14,7 @@ import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedSelect from '../../common/CustomizedSelect'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
 import { Error } from '../../common/ModalSchema'
+import { Label, Select, TextField, Textarea } from '@navikt/ds-react'
 
 const rowBlockProps: BlockProps = {
   display: 'flex',
@@ -24,12 +25,12 @@ const rowBlockProps: BlockProps = {
 
 export const LovCodeDataForm = () => {
   return (
-    <Block {...rowBlockProps} flexDirection="column">
-      <Block {...rowBlockProps}>
-        <LabelMedium marginRight={'1rem'} width="25%">
+    <div className="flex w-full mt-4 items-center flex-col">
+      <div className="flex w-full mt-4 items-center">
+        <Label className="mr-4 w-1/4">
           Lovkode data
-        </LabelMedium>
-      </Block>
+        </Label>
+      </div>
       <Field name="data">
         {({ field, form }: FieldProps<LovCodeData, CodeListFormValues>) => {
           const data = field.value
@@ -49,54 +50,53 @@ export const LovCodeDataForm = () => {
 
           return (
             <>
-              <Block {...rowBlockProps}>
-                <LabelMedium marginRight={'1rem'} width="25%">
+              <div className="flex w-full mt-4 items-center">
+                <Label className="mr-4 w-1/4">
                   Lov ID:
-                </LabelMedium>
-                <CustomizedInput type="input" size={InputSIZE.default} value={data.lovId} onChange={(str) => set({ lovId: (str.target as HTMLInputElement).value })} />
-              </Block>
+                </Label>
+                <TextField onChange={(str) => set({ lovId: (str.target as HTMLInputElement).value })} className="w-full" label="Lov ID" hideLabel />
+              </div>
 
-              <Block {...rowBlockProps}>
-                <LabelMedium marginRight={'1rem'} width="25%">
-                  {' '}
-                  Underavdeling:{' '}
-                </LabelMedium>
+              <div className="flex w-full mt-4 items-center">
+                <Label className="mr-4 w-1/4">
+                  Underavdeling:
+                </Label>
                 <OptionList
                   listName={ListName.UNDERAVDELING}
                   value={codelist.getCode(ListName.UNDERAVDELING, data.underavdeling)}
                   onChange={(val) => set({ underavdeling: val.code })}
-                  label={'Underavdeling'}
+                  label={'underavdeling'}
                 />
-              </Block>
+              </div>
 
-              <Block {...rowBlockProps}>
-                <LabelMedium marginRight={'1rem'} width="25%">
-                  Tema:{' '}
-                </LabelMedium>
+              <div className="flex w-full mt-4 items-center">
+                <Label className="mr-4 w-1/4">
+                  Tema:
+                </Label>
                 <OptionList
                   listName={ListName.TEMA}
                   value={codelist.getCode(ListName.TEMA, data.tema) as Code | undefined}
                   onChange={(val) => set({ tema: val.code })}
-                  label={'Tema'}
+                  label={'tema'}
                 />
-              </Block>
+              </div>
 
-              <Block {...rowBlockProps}>
-                <LabelMedium marginRight={'1rem'} width="25%">
-                  Relevant for:{' '}
-                </LabelMedium>
+              <div className="flex w-full mt-4 items-center">
+                <Label className="mr-4 w-1/4">
+                  Relevant for:
+                </Label>
                 <OptionList
                   options={lovCodeRelevansToOptions()}
                   value={data.relevantFor ? data.relevantFor : undefined}
                   onChange={(val) => set({ relevantFor: val })}
-                  label={'Relevant for'}
+                  label={'relevant for'}
                 />
-              </Block>
+              </div>
             </>
           )
         }}
       </Field>
-    </Block>
+    </div>
   )
 }
 
@@ -108,12 +108,12 @@ export const TemaCodeDataForm = () => {
   }))
 
   return (
-    <Block {...rowBlockProps} flexDirection="column">
-      <Block {...rowBlockProps}>
-        <LabelMedium marginRight={'1rem'} width="25%">
+    <div className="flex w-full mt-4 items-center flex-col">
+      <div className="flex w-full mt-4 items-center">
+        <Label className="mr-4 w-1/4">
           Lovkode data
-        </LabelMedium>
-      </Block>
+        </Label>
+      </div>
       <Field name="data">
         {({ field, form }: FieldProps<TemaCodeData, CodeListFormValues>) => {
           const data = field.value
@@ -123,42 +123,40 @@ export const TemaCodeDataForm = () => {
           }
           return (
             <>
-              <Block {...rowBlockProps}>
-                <LabelMedium marginRight={'1rem'} width="25%">
+              <div className="flex w-full mt-4 items-center">
+                <Label className="mr-4 w-1/4">
                   Bilde:
-                  <StatefulTooltip content={<PreviewImages set={(image) => set({ image })} />}>
-                    <Block display="inline" marginLeft={theme.sizing.scale600}>
-                      <FontAwesomeIcon color={theme.colors.primary400} icon={faQuestionCircle} />
-                    </Block>
-                  </StatefulTooltip>
-                </LabelMedium>
-                <CustomizedSelect
-                  options={temaBildeOptions}
-                  clearable={false}
-                  value={temaBildeOptions.filter((o) => o.id === data.image)}
-                  onChange={(s) => {
-                    const image = s.option?.id as string
+                </Label>
+                <Select
+                  className="w-full"
+                  label="Bilde"
+                  hideLabel
+                  onChange={(e) => {
+                    const image = e.target.value
                     return set({ image })
                   }}
-                />
-              </Block>
-              <Block {...rowBlockProps}>
-                <LabelMedium marginRight={'1rem'} width="25%">
+                >
+                  <option value="">Velg bilde</option>
+                  {temaBildeOptions.map((t, i) => <option key={i + '_' + t.label} value={t.id}>{t.label}</option>)}
+                </Select>
+              </div>
+              <div className="flex w-full mt-4 items-center" >
+                <Label className="mr-4 w-1/4">
                   Short Desciption:
-                </LabelMedium>
-                <CustomizedTextarea
-                  type="input"
-                  size={InputSIZE.default}
-                  value={data.shortDesciption}
+                </Label>
+                <Textarea
+                  label="Short Desciption"
+                  className="w-full"
+                  hideLabel
                   onChange={(str) => set({ shortDesciption: (str.target as HTMLTextAreaElement).value })}
                 />
-              </Block>
+              </div>
               <Error fieldName="data.shortDesciption" />
             </>
           )
         }}
       </Field>
-    </Block>
+    </div>
   )
 }
 
