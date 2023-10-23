@@ -138,7 +138,13 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
 
   return (
     <>
-      <AlertUnsavedPopup isActive={isFormDirty} isModalOpen={isAlertModalOpen} setIsModalOpen={setIsAlertModalOpen} onClose={() => close()} onSubmit={() => submit()} />
+      <AlertUnsavedPopup
+        isActive={isFormDirty}
+        isModalOpen={isAlertModalOpen}
+        setIsModalOpen={setIsAlertModalOpen}
+        onClose={() => close()}
+        onSubmit={() => submit()}
+      />
       <Formik
         initialValues={{
           krav: kravElements,

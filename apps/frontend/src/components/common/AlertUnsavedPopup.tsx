@@ -1,8 +1,8 @@
-import { Block } from 'baseui/block'
-import { ModalHeader } from 'baseui/modal'
+import {Block} from 'baseui/block'
+import {ModalHeader} from 'baseui/modal'
 import Button from './Button'
 import CustomizedModal from './CustomizedModal'
-import { borderRadius, marginAll } from './Style'
+import {borderRadius, marginAll} from './Style'
 
 type AlertUnsavedPopupProps = {
   isActive: boolean
@@ -19,6 +19,11 @@ export const AlertUnsavedPopup = ({ isActive, isModalOpen, setIsModalOpen, onClo
       isOpen={isModalOpen}
       size="default"
       overrides={{
+        Root:{
+          style: {
+            zIndex:100
+          }
+        },
         Dialog: {
           style: {
             ...borderRadius('0px'),
