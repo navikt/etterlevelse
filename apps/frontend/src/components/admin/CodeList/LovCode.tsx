@@ -58,7 +58,7 @@ export const LovCodeDataForm = () => {
               </div>
 
               <div className="flex w-full mt-4 items-center">
-                <Label className="mr-4 w-1/4">
+                <Label className="mr-1.5 w-1/4">
                   Underavdeling:
                 </Label>
                 <OptionList
