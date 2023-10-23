@@ -114,7 +114,7 @@ export const ObjectLink = (props: ObjectLinkProps) => {
   return props.withHistory ? (
     <Block color={props.fontColor ? props.fontColor : ettlevColors.green800} display="flex" justifyContent="space-between" width="100%" alignItems="center">
       {link}
-      <AuditButton fontColor={props.fontColor} id={props.id} kind={KIND.tertiary} />
+      <AuditButton fontColor={props.fontColor} id={props.id} variant="tertiary" />
     </Block>
   ) : (
     link
