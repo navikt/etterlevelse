@@ -86,7 +86,6 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
                   <FieldWrapper>
                     <Field name="virkemiddelType">
                       {(fp: FieldProps) => {
-                        console.log(fp.form.errors.virkemiddelType)
                         return (
                           <FormControl label={<LabelWithTooltip label="Legg til virkemiddeltype" tooltip="Søk og legg til virkemiddeltype fra kodeverket" />}>
                             <Block width="100%" maxWidth="400px">
