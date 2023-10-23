@@ -44,7 +44,7 @@ export const SistRedigertKrav = () => {
     <Alert variant={"error"}>{JSON.stringify(error, null, 2)}</Alert>
   ) : (
     <div>
-      <div className={"justify-center content-center w-full mt-5 mb-5"}>
+      <div className={"justify-center content-center w-full my-5"}>
         <div className={"flex justify-start w-full"}>
           <Heading size={"large"} className="my-0">
             {sortedKravList.length ? sortedKravList.length : 0} Krav

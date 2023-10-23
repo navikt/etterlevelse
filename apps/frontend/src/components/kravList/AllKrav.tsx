@@ -156,7 +156,7 @@ export const AllKrav = () => {
     <Alert variant={'error'}>{JSON.stringify(error, null, 2)}</Alert>
   ) : (
     <div>
-      <div className={"w-full justify-center mt-4 mb-4"}>
+      <div className={"w-full justify-center my-4"}>
         <div className={"flex justify-center content-center w-full"}>
           <div className={"flex justify-start align-middle w-full"}>
             <Heading size={"medium"}>
