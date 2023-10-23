@@ -1,27 +1,12 @@
-import { Block, BlockProps } from 'baseui/block'
-import { LabelMedium } from 'baseui/typography'
+import { Block } from 'baseui/block'
 import { Field, FieldProps } from 'formik'
-import { Code, codelist, CodeListFormValues, ListName, LovCodeData, LovCodeRelevans, lovCodeRelevansToOptions, TemaCodeData } from '../../../services/Codelist'
-import { SIZE as InputSIZE } from 'baseui/input'
+import { codelist, CodeListFormValues, ListName, LovCodeData, LovCodeRelevans, lovCodeRelevansToOptions, TemaCodeData } from '../../../services/Codelist'
 import { OptionList } from '../../common/Inputs'
 import { temaBilder } from '../../Images'
-import { StatefulTooltip } from 'baseui/tooltip'
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { theme } from '../../../util'
 import Button from '../../common/Button'
-import CustomizedInput from '../../common/CustomizedInput'
-import CustomizedSelect from '../../common/CustomizedSelect'
-import CustomizedTextarea from '../../common/CustomizedTextarea'
 import { Error } from '../../common/ModalSchema'
 import { Label, Select, TextField, Textarea } from '@navikt/ds-react'
-
-const rowBlockProps: BlockProps = {
-  display: 'flex',
-  width: '100%',
-  marginTop: '1rem',
-  alignItems: 'center',
-}
 
 export const LovCodeDataForm = () => {
   return (
@@ -54,7 +39,7 @@ export const LovCodeDataForm = () => {
                 <Label className="mr-4 w-1/4">
                   Lov ID:
                 </Label>
-                <TextField onChange={(str) => set({ lovId: (str.target as HTMLInputElement).value })} className="w-full" label="Lov ID" hideLabel />
+                <TextField value={data.lovId} onChange={(e) => set({ lovId: e.target.value })} className="w-full" label="Lov ID" hideLabel />
               </div>
 
               <div className="flex w-full mt-4 items-center">
@@ -63,7 +48,7 @@ export const LovCodeDataForm = () => {
                 </Label>
                 <OptionList
                   listName={ListName.UNDERAVDELING}
-                  value={codelist.getCode(ListName.UNDERAVDELING, data.underavdeling)}
+                  value={codelist.getCode(ListName.UNDERAVDELING, data.underavdeling)?.code}
                   onChange={(val) => set({ underavdeling: val.code })}
                   label={'underavdeling'}
                 />
@@ -75,7 +60,7 @@ export const LovCodeDataForm = () => {
                 </Label>
                 <OptionList
                   listName={ListName.TEMA}
-                  value={codelist.getCode(ListName.TEMA, data.tema) as Code | undefined}
+                  value={codelist.getCode(ListName.TEMA, data.tema)?.code}
                   onChange={(val) => set({ tema: val.code })}
                   label={'tema'}
                 />

@@ -365,7 +365,7 @@ export const OptionField = (
   return (
     <FieldWrapper>
       <Field name={props.name}>
-        {(p: FieldProps<string | Code>) => (
+        {(p: FieldProps<string>) => (
           <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
             <OptionList {...props} onChange={(val) => p.form.setFieldValue(props.name, val)} value={p.field.value} />
           </FormControl>
@@ -376,7 +376,7 @@ export const OptionField = (
 }
 
 export const OptionList = (
-  props: { label: string; clearable?: boolean; value?: Code | string; onChange: (val?: any) => void } & Or<{ options: Value }, { listName: ListName }>,
+  props: { label: string; value?: string; onChange: (val?: any) => void } & Or<{ options: Value }, { listName: ListName }>,
 ) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
@@ -384,6 +384,7 @@ export const OptionList = (
       label={props.label}
       hideLabel
       className="w-full"
+      value={props.value}
       onChange={(e) => {
         const val = e.target.value
         const toSet = props.listName && val ? codelist.getCode(props.listName, val) : val
