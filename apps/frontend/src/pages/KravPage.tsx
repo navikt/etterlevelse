@@ -194,7 +194,7 @@ export const KravPage = () => {
               </title>
             </Helmet>
           )}
-          <div className={"w-full"}>
+          <div className={"w-full max-w-7xl"}>
             <div className={"flex flex-col justify-center mb-10"}>
               <div className={"flex justify-center w-full mt-6"}>
                 <div className={"w-full flex flex-col"}>
