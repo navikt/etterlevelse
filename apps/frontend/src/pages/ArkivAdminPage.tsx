@@ -99,11 +99,11 @@ export const ArkivAdminPage = () => {
               label="Oppdatere arkivering status"
               placeholder='Arkiverings UID'
               onChange={(e) => setArkiveringId(e.target.value)}
-              className="w-full mr-3"
+              className="flex-1 mr-3"
             />
             <Select
               label="Velg status"
-              className="mr-3"
+              className="flex-1 mr-3"
               value={arkiveringsStatus}
               onChange={(e) => setArkiveringsStatus(e.target.value as EtterlevelseArkivStatus)}
             >
