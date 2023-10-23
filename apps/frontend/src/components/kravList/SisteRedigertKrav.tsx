@@ -46,7 +46,7 @@ export const SistRedigertKrav = () => {
     <div>
       <div className={"justify-center content-center w-full mt-5 mb-5"}>
         <div className={"flex justify-start w-full"}>
-          <Heading size={"large"} className={"mt-0 mb-0"}>
+          <Heading size={"large"} className="my-0">
             {sortedKravList.length ? sortedKravList.length : 0} Krav
           </Heading>
         </div>

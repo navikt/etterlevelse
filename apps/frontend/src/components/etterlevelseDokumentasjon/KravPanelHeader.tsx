@@ -19,7 +19,7 @@ export const KravPanelHeader = (props: { title: string; kravData: KravEtterlevel
   return (
     <div className={"flex w-full"}>
       <div className={"flex justify-center"}>
-        <Heading className={"mt-1.5 mb-1.5"} size={"medium"}>
+        <Heading className={"my-1.5"} size={"medium"}>
           {props.title}
         </Heading>
       </div>
