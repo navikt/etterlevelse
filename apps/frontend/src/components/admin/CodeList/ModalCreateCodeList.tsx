@@ -71,7 +71,7 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
                 <Button
                   type="button"
                   variant="secondary"
-                  className="mr-3"
+                  className="mr-4"
                   onClick={() => onClose()}
                 >
                   Avbryt

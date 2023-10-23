@@ -1,5 +1,4 @@
 import { CodeListFormValues } from '../../../services/Codelist'
-import { buttonContentStyle } from '../../common/Button'
 import { BodyShort, Button, Modal } from '@navikt/ds-react'
 
 type ModalDeleteProps = {
