@@ -1,20 +1,14 @@
-import { codelist, ListName } from '../../services/Codelist'
-import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../common/CustomizedAccordion'
-import React, { useEffect, useState } from 'react'
-import { getAllKrav } from '../../api/KravApi'
-import { Krav, KravStatus } from '../../constants'
-import { Block } from 'baseui/block'
-import { LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
-import { KravPanelHeader } from '../etterlevelseDokumentasjon/KravPanelHeader'
-import { borderStyle, marginAll, padding } from '../common/Style'
+import {codelist, ListName} from '../../services/Codelist'
+import React, {useEffect, useState} from 'react'
+import {getAllKrav} from '../../api/KravApi'
+import {Krav, KravStatus} from '../../constants'
+import {KravPanelHeader} from '../etterlevelseDokumentasjon/KravPanelHeader'
 import StatusView from '../common/StatusTag'
-import { PanelLink } from '../common/PanelLink'
 import moment from 'moment'
-import { ettlevColors, theme } from '../../util/theme'
-import Button from '../common/Button'
-import { EditPriorityModal } from './edit/EditPriorityModal'
-import { sortKraverByPriority } from '../../util/sort'
-import { getAllKravPriority } from '../../api/KravPriorityApi'
+import {EditPriorityModal} from './edit/EditPriorityModal'
+import {sortKraverByPriority} from '../../util/sort'
+import {getAllKravPriority} from '../../api/KravPriorityApi'
+import {Accordion, BodyLong, BodyShort, Button, Label, LinkPanel, Spacer} from '@navikt/ds-react'
 
 export const TemaList = () => {
   const [allActiveKrav, setAllActiveKrav] = useState<Krav[]>([])
@@ -43,7 +37,7 @@ export const TemaList = () => {
 
   return (
     <>
-      <CustomizedAccordion>
+      <Accordion>
         {codelist.getCodes(ListName.TEMA).map((t) => {
           const activeKraver = allActiveKrav?.filter((k) => {
             return k.regelverk.map((r) => r.lov.data && r.lov.data.tema).includes(t.code)
@@ -52,20 +46,28 @@ export const TemaList = () => {
             return k.regelverk.map((r) => r.lov.data && r.lov.data.tema).includes(t.code)
           })
           return activeKraver && activeKraver.length > 0 ? (
-            <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={[...activeKraver, ...draftKraver]} />} key={`${t.code}_krav_list`}>
-              <KravTemaList activeKraver={sortKraverByPriority(activeKraver, t.shortName)} tema={t.shortName} refresh={fetchKrav} draftKrav={draftKraver} />
-            </CustomizedPanel>
+            <Accordion.Item>
+              <Accordion.Header key={`${t.code}_krav_list`}>
+                <KravPanelHeader title={t.shortName} kravData={[...activeKraver, ...draftKraver]}/>
+              </Accordion.Header>
+              <Accordion.Content>
+                <KravTemaList activeKraver={sortKraverByPriority(activeKraver, t.shortName)} tema={t.shortName} refresh={fetchKrav} draftKrav={draftKraver}/>
+              </Accordion.Content>
+            </Accordion.Item>
           ) : (
-            <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={[]} />} key={`${t.code}_krav_list`}>
-              <CustomPanelDivider>
-                <Block display="flex" width="100%" marginLeft="24px">
-                  <ParagraphXSmall>Ingen krav</ParagraphXSmall>
-                </Block>
-              </CustomPanelDivider>
-            </CustomizedPanel>
+            <Accordion.Item>
+              <Accordion.Header key={`${t.code}_krav_list`}>
+                <KravPanelHeader title={t.shortName} kravData={[]}/>
+              </Accordion.Header>
+              <Accordion.Content>
+                <div className="flex w-full ml-6">
+                  <BodyShort size="small">Ingen krav</BodyShort>
+                </div>
+              </Accordion.Content>
+            </Accordion.Item>
           )
         })}
-      </CustomizedAccordion>
+      </Accordion>
     </>
   )
 }
@@ -73,29 +75,27 @@ export const TemaList = () => {
 const getKravTemaRowsWithLabel = (kraver: Krav[], tema: string) => {
   return kraver.map((k, index) => {
     return (
-      <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${tema}_${index}`}>
-        <PanelLink
-          hideChevron
-          useDescriptionUnderline
+      <div key={`${k.navn}_${k.kravNummer}_${tema}_${index}`}>
+        <LinkPanel
           href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
-          title={
-            <ParagraphMedium $style={{ fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px' }}>
-              K{k.kravNummer}.{k.kravVersjon}
-            </ParagraphMedium>
-          }
-          beskrivelse={<LabelSmall $style={{ fontSize: '18px', fontWeight: 600 }}>{k.navn}</LabelSmall>}
-          rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
-          statusText={<StatusView status={k.status} />}
-          overrides={{
-            Block: {
-              style: {
-                ':hover': { boxShadow: 'none' },
-                ...borderStyle('hidden'),
-              },
-            },
-          }}
-        />
-      </CustomPanelDivider>
+        >
+          <LinkPanel.Title className="flex items-center">
+            <div className="max-w-xl">
+              <BodyShort size="small">
+                K{k.kravNummer}.{k.kravVersjon}
+              </BodyShort>
+              <BodyLong><Label>{k.navn}</Label></BodyLong>
+            </div>
+            <Spacer/>
+            <div className="mr-5">
+              <StatusView status={k.status}/>
+            </div>
+            <div className="w-44">
+              <BodyShort size="small">{!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
+            </div>
+          </LinkPanel.Title>
+        </LinkPanel>
+      </div>
     )
   })
 }
@@ -104,34 +104,16 @@ const KravTemaList = (props: { activeKraver: Krav[]; tema: string; refresh: Func
   const [isEditPriorityModalOpen, setIsEditPriorityModalOpen] = React.useState(false)
 
   return (
-    <Block>
+    <div>
       {getKravTemaRowsWithLabel(props.draftKrav, props.tema)}
       {getKravTemaRowsWithLabel(props.activeKraver, props.tema)}
 
-      <CustomPanelDivider>
-        <Block
-          width="calc(100% - 44px)"
-          $style={{
-            backgroundColor: ettlevColors.white,
-            ...marginAll(theme.sizing.scale300),
-            margintRight: '22px',
-            marginLeft: '22px',
-          }}
-        >
-          <Block
-            display="flex"
-            justifyContent="flex-end"
-            $style={{
-              ...padding(theme.sizing.scale500, theme.sizing.scale1000),
-              paddingRight: '16px',
-            }}
-          >
-            <Button kind="secondary" size="mini" onClick={() => setIsEditPriorityModalOpen(true)}>
-              Justere rekkefølgen på krav
-            </Button>
-          </Block>
-        </Block>
-      </CustomPanelDivider>
+      <div className={"w-full flex flex-row-reverse pt-5"}>
+        <Button variant="secondary" size="medium" onClick={() => setIsEditPriorityModalOpen(true)}>
+          Justere rekkefølgen på krav
+        </Button>
+      </div>
+
       <EditPriorityModal
         tema={props.tema}
         isOpen={isEditPriorityModalOpen}
@@ -139,6 +121,6 @@ const KravTemaList = (props: { activeKraver: Krav[]; tema: string; refresh: Func
         kravListe={props.activeKraver}
         refresh={props.refresh}
       ></EditPriorityModal>
-    </Block>
+    </div>
   )
 }
