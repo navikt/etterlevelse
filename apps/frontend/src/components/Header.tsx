@@ -53,20 +53,22 @@ const LoggedInHeader = () => {
   )
 
   const kravPages = user.isKraveier()
-    ? [{ label: 'Forvalte og opprette krav', href: '/kravliste' }, { label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }]
+    ? [{ label: 'Forvalte og opprette krav', href: '/kravliste' },
+    //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
+    ]
     : []
   const adminPages = user.isAdmin()
     ? [
-        { label: 'Administrere krav', href: '/admin/krav' },
-        { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
-        { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
-        { label: 'Administrere arkivering', href: '/admin/arkiv' },
-        { label: intl.audit, href: '/admin/audit' },
-        { label: 'Kodeverk', href: '/admin/codelist' },
-        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-        { label: intl.notifications, href: '/admin/varsel' },
-        // { label: intl.settings, href: '/admin/settings', disabled: true },
-      ]
+      { label: 'Administrere krav', href: '/admin/krav' },
+      { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
+      { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
+      { label: 'Administrere arkivering', href: '/admin/arkiv' },
+      { label: intl.audit, href: '/admin/audit' },
+      { label: 'Kodeverk', href: '/admin/codelist' },
+      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+      { label: intl.notifications, href: '/admin/varsel' },
+      // { label: intl.settings, href: '/admin/settings', disabled: true },
+    ]
     : []
 
   return (
@@ -116,8 +118,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
 
   const allPages = props.pages.length
     ? props.pages
-        .filter((p) => p.length)
-        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
+      .filter((p) => p.length)
+      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -171,7 +173,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])
@@ -187,7 +189,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
         <div className="w-full">
           <InternalHeader >
             <InternalHeader.Title href="/">
-      Etterlevelse
+              Etterlevelse
             </InternalHeader.Title>
             <Spacer />
             {!props.noSearchBar && (
@@ -207,9 +209,8 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
       </div>
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
         <div
-          className={`flex flex-col items-center py-2 border-b border-t ${
-            systemVarsel.alertType === 'INFO' ? 'bg-surface-info-subtle border-surface-info' : 'bg-surface-warning-subtle border-surface-warning'
-          }`}
+          className={`flex flex-col items-center py-2 border-b border-t ${systemVarsel.alertType === 'INFO' ? 'bg-surface-info-subtle border-surface-info' : 'bg-surface-warning-subtle border-surface-warning'
+            }`}
           aria-label="Systemvarsel"
           role="complementary"
         >
