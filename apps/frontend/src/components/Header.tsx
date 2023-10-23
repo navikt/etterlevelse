@@ -26,8 +26,8 @@ export const LoginButton = () => {
   // updates window.location on navigation
   const location = useLocation()
   return (
-    <Link className="bg-white" underline={false} href={loginUrl(location, location.pathname)}>
-      <InternalHeader.Button as={Link}>
+    <Link underline={false} href={loginUrl(location, location.pathname)}>
+      <InternalHeader.Button as={Link} className="text-white" underline={false} >
         <strong>Logg inn</strong>
       </InternalHeader.Button>
     </Link>
