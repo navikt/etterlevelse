@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { useEffect } from 'react'
+import { Block } from 'baseui/block'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAwait, useForceUpdate } from '../../../util/hooks'
@@ -17,9 +18,9 @@ const CodeListPage = () => {
   const navigate = useNavigate()
   const [loading, setLoading] = React.useState(true)
   const [listname, setListname] = React.useState(params.listname)
+  const [createCodeListModal, setCreateCodeListModal] = React.useState(false)
   const [errorOnResponse, setErrorOnResponse] = React.useState(null)
   const forceUpdate = useForceUpdate()
-  const createCodeListModalRef = React.useRef<HTMLDialogElement>(null)
   useAwait(codelist.wait(), setLoading)
 
   const lists = codelist.lists?.codelist
@@ -30,7 +31,9 @@ const CodeListPage = () => {
     try {
       await createCodelist({ ...values } as Code)
       await codelist.refreshCodeLists()
+      setCreateCodeListModal(false)
     } catch (error: any) {
+      setCreateCodeListModal(true)
       setErrorOnResponse(error.message)
     }
     setLoading(false)
@@ -73,12 +76,12 @@ const CodeListPage = () => {
             onChange={(e) => setListname(e.target.value)}
           >
             <option value="">Velg kodeverk</option>
-            {codelist.makeIdLabelForAllCodeLists().map((c) => {
-              return <option value={c.id}>{c.label}</option>
+            {codelist.makeIdLabelForAllCodeLists().map((c, i) => {
+              return <option key={i + '_' + c.label} value={c.id}>{c.label}</option>
             })}
           </Select>
           {listname && (
-            <Button icon={<PlusIcon />} variant="tertiary" onClick={() => createCodeListModalRef.current?.showModal()}>
+            <Button icon={<PlusIcon />} variant="tertiary" onClick={() => setCreateCodeListModal(!createCodeListModal)}>
               Opprett ny kode
             </Button>
           )}
@@ -94,10 +97,10 @@ const CodeListPage = () => {
       <CreateCodeListModal
         title="Ny kode"
         list={listname!}
-        modalRef={createCodeListModalRef}
+        isOpen={createCodeListModal}
         errorOnCreate={errorOnResponse}
         onClose={() => {
-          createCodeListModalRef.current?.showModal()
+          setCreateCodeListModal(false)
           setErrorOnResponse(null)
         }}
         submit={handleCreateCodelist}
