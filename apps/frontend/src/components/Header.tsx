@@ -26,11 +26,9 @@ export const LoginButton = () => {
   // updates window.location on navigation
   const location = useLocation()
   return (
-    <Link underline={false} href={loginUrl(location, location.pathname)}>
-      <InternalHeader.Button as={Link} className="text-white" underline={false} >
-        <strong>Logg inn</strong>
-      </InternalHeader.Button>
-    </Link>
+    <InternalHeader.Button as={Link} href={loginUrl(location, location.pathname)} className="text-white" underline={false} >
+      Logg inn
+    </InternalHeader.Button>
   )
 }
 
@@ -54,7 +52,7 @@ const LoggedInHeader = () => {
 
   const kravPages = user.isKraveier()
     ? [{ label: 'Forvalte og opprette krav', href: '/kravliste' },
-    //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
+      //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
     ]
     : []
   const adminPages = user.isAdmin()
