@@ -111,7 +111,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
 
   const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
     if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
-      console.log(etterlevelseDokumentasjon)
       await createEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
         if (props.setEtterlevelseDokumentasjon) {

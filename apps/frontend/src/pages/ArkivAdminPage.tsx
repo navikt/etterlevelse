@@ -1,6 +1,3 @@
-import { Block } from 'baseui/block'
-import { Button } from 'baseui/button'
-import { HeadingXXLarge, LabelLarge } from 'baseui/typography'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
@@ -12,20 +9,50 @@ import {
   getEtterlevelseArkiv,
   updateAsAdminEtterlevelseArkiv,
 } from '../api/ArkiveringApi'
-import CustomizedInput from '../components/common/CustomizedInput'
-import { CustomizedStatefulSelect } from '../components/common/CustomizedSelect'
-import RouteLink from '../components/common/RouteLink'
-import { Cell, Row, Table } from '../components/common/Table'
-import { Layout2 } from '../components/scaffold/Page'
+
 import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../constants'
 import { ampli } from '../services/Amplitude'
-import { ettlevColors, maxPageWidth } from '../util/theme'
+import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
+import { BodyShort, Button, Heading, Label, Link, Pagination, Select, SortState, Spacer, Table, TextField } from '@navikt/ds-react'
+import { UpdateMessage } from './EtterlevelseAdminPage'
+import { handleSort } from '../util/handleTableSort'
 
 export const ArkivAdminPage = () => {
   const [arkiveringId, setArkiveringId] = useState<string>('')
-  const [arkiveringsStatus, setArkiveringsStatus] = useState<EtterlevelseArkivStatus>()
+  const [updateMessage, setUpdateMessage] = useState<string>('')
+  const [deleteArkiveringId, setDeleteArkiveringId] = useState<string>('')
+  const [deleteMessage, setDeleteMessage] = useState<string>('')
+  const [arkiveringsStatus, setArkiveringsStatus] = useState<EtterlevelseArkivStatus>(EtterlevelseArkivStatus.IKKE_ARKIVER)
   const [reloadTable, setReloadTable] = useState(false)
   const [tableContent, setTableContent] = useState<EtterlevelseArkiv[]>([])
+
+  const [page, setPage] = useState(1)
+  const [rowsPerPage, setRowsPerPage] = useState(20)
+  const [sort, setSort] = useState<SortState>()
+
+  let sortedData = tableContent
+
+  const comparator = (a: EtterlevelseArkiv, b: EtterlevelseArkiv, orderBy: string) => {
+    switch (orderBy) {
+      case 'status':
+        return (a.status || '').localeCompare(b.status || '')
+      case 'tilArkiveringDato':
+        return (a.tilArkiveringDato || '').localeCompare(b.tilArkiveringDato || '')
+      case 'arkiveringDato':
+        return (a.arkiveringDato || '').localeCompare(b.arkiveringDato || '')
+      default:
+        return 0
+    }
+  }
+
+  sortedData = sortedData.sort((a, b) => {
+    if (sort) {
+      return sort.direction === 'ascending'
+        ? comparator(b, a, sort.orderBy)
+        : comparator(a, b, sort.orderBy)
+    }
+    return 1
+  }).slice((page - 1) * rowsPerPage, page * rowsPerPage)
 
   const options = [
     { label: 'Ikke arkiver', id: EtterlevelseArkivStatus.IKKE_ARKIVER },
@@ -36,7 +63,7 @@ export const ArkivAdminPage = () => {
   ]
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const arkivering = await getAllArkivering()
       const mappedArkivering = arkivering.map((a) => arkiveringMapToFormVal(a))
       setTableContent(mappedArkivering)
@@ -45,7 +72,7 @@ export const ArkivAdminPage = () => {
   }, [])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const arkivering = await getAllArkivering()
       const mappedArkivering = arkivering.map((a) => arkiveringMapToFormVal(a))
       setTableContent(mappedArkivering)
@@ -53,61 +80,41 @@ export const ArkivAdminPage = () => {
   }, [reloadTable])
 
   return (
-    <Layout2
-      headerBackgroundColor={ettlevColors.grey25}
-      childrenBackgroundColor={ettlevColors.grey25}
-      currentPage="Administrere Arkivering"
-      mainHeader={
-        <Block maxWidth={maxPageWidth} width="100%" display={'flex'} justifyContent="flex-start">
-          <Helmet>
-            <meta charSet="utf-8" />
-            <title>Administrere arkivering</title>
-          </Helmet>
-          <HeadingXXLarge marginTop="0">Administrere arkivering</HeadingXXLarge>
-        </Block>
-      }
-    >
-      <Block display="flex" alignItems="center">
-        <Block display="flex" width="100%">
-          <Block width="100%" marginRight="5px">
-            <CustomizedInput
-              value={arkiveringId}
-              placeholder="Arkiverings UID"
-              size="compact"
-              onChange={(e) => {
-                setArkiveringId(e.target.value)
-              }}
+    <div className="w-full" id="content" role="main">
+      <div className="w-full flex justify-center items-center flex-col mt-6">
+        <div className="w-full max-w-7xl px-8">
+          <div className="flex-1 justify-start flex">
+            <CustomizedBreadcrumbs currentPage="Administrere Arkivering" />
+          </div>
+          <div>
+            <Helmet>
+              <meta charSet="utf-8" />
+              <title>Administrere Arkivering</title>
+            </Helmet>
+            <Heading size="xlarge">Administrere Arkivering</Heading>
+          </div>
+
+          <div className="flex items-end">
+            <TextField
+              label="Oppdatere arkivering status"
+              placeholder='Arkiverings UID'
+              onChange={(e) => setArkiveringId(e.target.value)}
+              className="w-full mr-3"
             />
-          </Block>
-          <Block width="40%">
-            <CustomizedStatefulSelect
-              size="compact"
-              options={options}
-              onChange={(status) => setArkiveringsStatus(status?.value[0]?.id as EtterlevelseArkivStatus)}
-              overrides={{
-                Root: {
-                  style: {
-                    marginRight: '5px',
-                  },
-                },
-              }}
-              aria-label={'Velg arkivering status'}
-            />
-          </Block>
-        </Block>
-        <Block display="flex" marginLeft="5px">
-          <Button
-            onClick={() => {
-              deleteEtterlevelseArkiv(arkiveringId).then(() => {
-                setArkiveringId('')
-                setReloadTable(!reloadTable)
-              })
-            }}
-          >
-            Delete
-          </Button>
-          <Block marginLeft="5px" marginRight="5px">
+            <Select
+              label="Velg status"
+              className="mr-3"
+              value={arkiveringsStatus}
+              onChange={(e) => setArkiveringsStatus(e.target.value as EtterlevelseArkivStatus)}
+            >
+              {options.map((o) => {
+                return (
+                  <option value={o.id}>{o.label}</option>
+                )
+              })}
+            </Select>
             <Button
+              disabled={!arkiveringsStatus || !arkiveringId}
               onClick={() => {
                 getEtterlevelseArkiv(arkiveringId).then((arkivering) => {
                   if (arkiveringsStatus) {
@@ -116,8 +123,11 @@ export const ArkivAdminPage = () => {
                       status: arkiveringsStatus,
                     }).then(() => {
                       setArkiveringId('')
-                      setArkiveringsStatus(undefined)
+                      setArkiveringsStatus(EtterlevelseArkivStatus.IKKE_ARKIVER)
                       setReloadTable(!reloadTable)
+                      setUpdateMessage('Oppdatering vellykket for arkivering med uid: ' + arkiveringId)
+                    }).catch((e) => {
+                      setUpdateMessage('Oppdatering mislykket, error: ' + e)
                     })
                   }
                 })
@@ -125,46 +135,96 @@ export const ArkivAdminPage = () => {
             >
               Oppdater Status
             </Button>
-          </Block>
-        </Block>
-      </Block>
+          </div>
+          <UpdateMessage message={updateMessage} />
 
-      <Block marginTop="32px">
-        <LabelLarge>Arkiv tabell</LabelLarge>
-        {tableContent.length && (
-          <Table
-            emptyText=""
-            data={tableContent}
-            config={{
-              pageSizes: [5, 10, 20, 50, 100],
-              defaultPageSize: 20,
-            }}
-            headers={[
-              { title: 'Arkivering ID', column: 'id' },
-              { title: 'Etterlevelse Dokumentasjon ID', column: 'etterlevelseDokumentasjonId' },
-              { title: 'Status', column: 'status' },
-              { title: 'Bestilt Arkiverings dato', column: 'tilArkiveringDato' },
-              { title: 'Arkiverings dato', column: 'arkiveringDato' },
-            ]}
-            render={(tableData) => {
-              return tableData.data.slice((tableData.page - 1) * tableData.limit, (tableData.page - 1) * tableData.limit + tableData.limit).map((arkivering, index) => {
-                return (
-                  <Row key={arkivering.id}>
-                    <Cell>{arkivering.id}</Cell>
-                    <Cell>
-                      <RouteLink href={`/dokumentasjon/${arkivering.etterlevelseDokumentasjonId}`}>{arkivering.etterlevelseDokumentasjonId}</RouteLink>
-                    </Cell>
-                    <Cell>{arkiveringStatusToString(arkivering.status)}</Cell>
-                    <Cell>{moment(arkivering.tilArkiveringDato).format('lll')}</Cell>
-                    <Cell>{moment(arkivering.arkiveringDato).format('lll')}</Cell>
-                  </Row>
-                )
-              })
-            }}
-          />
-        )}
-      </Block>
-    </Layout2>
+          <div className="flex items-end mt-8">
+            <TextField
+              label="Slett arkivering"
+              placeholder='Arkiverings UID'
+              onChange={(e) => setDeleteArkiveringId(e.target.value)}
+              className="w-full mr-3"
+            />
+            <Button
+              disabled={!deleteArkiveringId}
+              onClick={() => {
+                deleteEtterlevelseArkiv(deleteArkiveringId).then(() => {
+                  setArkiveringId('')
+                  setReloadTable(!reloadTable)
+                  setDeleteMessage('Sletting vellykket for arkivering med uid: ' + deleteArkiveringId)
+                }).catch((e) => {
+                  setDeleteMessage('Sletting mislykket, error: ' + e)
+                })
+              }}
+            >
+              Slett
+            </Button>
+          </div>
+          <UpdateMessage message={deleteMessage} />
+
+          <div className="mt-8 w-full">
+            <Label>Arkiv tabell</Label>
+            {tableContent.length && (
+              <div>
+                <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.ColumnHeader >Arkivering UID</Table.ColumnHeader>
+                      <Table.ColumnHeader >Etterlevelse Dokumentasjon ID</Table.ColumnHeader>
+                      <Table.ColumnHeader sortKey="status" sortable>Status</Table.ColumnHeader>
+                      <Table.ColumnHeader sortKey="tilArkiveringDato" sortable>Bestilt Arkiverings dato</Table.ColumnHeader>
+                      <Table.ColumnHeader sortKey="arkiveringDato" sortable>Arkiverings dato</Table.ColumnHeader>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {sortedData.map((arkivering: EtterlevelseArkiv) => {
+                      return (
+                        <Table.Row key={arkivering.id}>
+                          <Table.HeaderCell scope="row">{arkivering.id}</Table.HeaderCell>
+                          <Table.DataCell ><Link href={`/dokumentasjon/${arkivering.etterlevelseDokumentasjonId}`}>{arkivering.etterlevelseDokumentasjonId}</Link></Table.DataCell>
+                          <Table.DataCell >{arkiveringStatusToString(arkivering.status)}</Table.DataCell>
+                          <Table.DataCell > {moment(arkivering.tilArkiveringDato).format('lll')}</Table.DataCell>
+                          <Table.DataCell >{moment(arkivering.arkiveringDato).format('lll')}</Table.DataCell>
+                        </Table.Row>
+                      )
+                    })}
+                  </Table.Body>
+                </Table>
+                <div className="flex w-full justify-center items-center mt-3">
+                  <Select
+                    label="Antall rader:"
+                    value={rowsPerPage}
+                    onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+                    size="small"
+                  >
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </Select>
+                  <Spacer />
+                  <div>
+                    <Pagination
+                      page={page}
+                      onPageChange={setPage}
+                      count={Math.ceil(tableContent.length / rowsPerPage)}
+                      prevNextTexts
+                      size="small"
+                    />
+                  </div>
+                  <Spacer />
+                  <BodyShort>
+                    Totalt antall rader: {tableContent.length}
+                  </BodyShort>
+                </div>
+              </div>
+            )}
+          </div>
+
+        </div>
+      </div>
+    </div>
   )
 }
 export default ArkivAdminPage

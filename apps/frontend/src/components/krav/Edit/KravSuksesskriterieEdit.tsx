@@ -87,7 +87,6 @@ const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderPr
                           nummer={i + 1}
                           update={(updated) => p.replace(i, updated)}
                           remove={() => {
-                            console.log('remove' + i)
                             p.remove(i)
                           }}
                           dragHandleProps={dprov.dragHandleProps ? dprov.dragHandleProps : undefined}
