@@ -112,10 +112,10 @@ export const ObjectLink = (props: ObjectLinkProps) => {
   } else link = <ExternalLink href={urlForObject(props.type, props.id, props.audit)}>{props.children}</ExternalLink>
 
   return props.withHistory ? (
-    <Block color={props.fontColor ? props.fontColor : ettlevColors.green800} display="flex" justifyContent="space-between" width="100%" alignItems="center">
+    <div className="flex justify-between w-full items-center">
       {link}
       <AuditButton fontColor={props.fontColor} id={props.id} variant="tertiary" />
-    </Block>
+    </div>
   ) : (
     link
   )
