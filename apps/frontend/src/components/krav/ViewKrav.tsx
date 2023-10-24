@@ -1,18 +1,18 @@
-import { AdresseType, Begrep, Krav, KravQL, KravVersjon } from '../../constants'
-import { Block, Responsive } from 'baseui/block'
+import {AdresseType, Begrep, Krav, KravQL, KravVersjon} from '../../constants'
+import {Block, Responsive} from 'baseui/block'
 import React from 'react'
-import { theme } from '../../util'
+import {theme} from '../../util'
 import moment from 'moment'
-import { DotTag, DotTags } from '../common/DotTag'
-import { ListName } from '../../services/Codelist'
-import { Label, LabelAboveContent } from '../common/PropertyLabel'
-import { ExternalLink } from '../common/RouteLink'
-import { slackLink, slackUserLink, termUrl } from '../../util/config'
-import { user } from '../../services/User'
-import { LovViewList } from '../Lov'
-import { SuksesskriterieCard } from './Suksesskriterie'
-import { LabelSmall, ParagraphMedium } from 'baseui/typography'
-import { Markdown } from '../common/Markdown'
+import {DotTag, DotTags} from '../common/DotTag'
+import {ListName} from '../../services/Codelist'
+import {Label, LabelAboveContent} from '../common/PropertyLabel'
+import {ExternalLink} from '../common/RouteLink'
+import {slackLink, slackUserLink, termUrl} from '../../util/config'
+import {user} from '../../services/User'
+import {LovViewList} from '../Lov'
+import {SuksesskriterieCard} from './Suksesskriterie'
+import {LabelSmall, ParagraphMedium} from 'baseui/typography'
+import {Markdown} from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
 import SidePanel from './SidePanel'
 
@@ -27,18 +27,18 @@ const labelMargin = '24px'
 
 export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
   return (
-    <Block display="flex" width="100%">
-      <Block width="100%">
+    <div className={"flex w-full"}>
+      <div className={"w-full"}>
         {krav.suksesskriterier.map((s, i) => (
           <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length} />
         ))}
         {/*  <LabelAboveContent header title='Beskrivelse' markdown={krav.beskrivelse} /> */}
         {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />}
-      </Block>
-      <Block display="block" position={'fixed'} right={'-211px'}>
+      </div>
+      <div className={"block fixed right-0"}>
         <SidePanel />
-      </Block>
-    </Block>
+      </div>
+    </div>
   )
 }
 
