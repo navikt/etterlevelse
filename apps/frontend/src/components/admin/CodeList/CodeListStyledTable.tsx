@@ -8,7 +8,7 @@ import UpdateCodeListModal from './ModalUpdateCodeList'
 import DeleteCodeListModal from './ModalDeleteCodeList'
 import { Usage } from './CodeListUsage'
 import { AuditButton } from '../audit/AuditButton'
-import { Code, CodeListFormValues, CodeUsage } from '../../../services/Codelist'
+import { Code, CodeListFormValues, CodeUsage, LovCodeRelevans } from '../../../services/Codelist'
 import { deleteCodelist, getCodelistUsage, updateCodelist } from '../../../api/CodelistApi'
 import { Cell, Row, Table as TableTemp } from '../../common/Table'
 import { theme } from '../../../util'
@@ -160,7 +160,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
             code: selectedCode.code ?? '',
             shortName: selectedCode.shortName ?? '',
             description: selectedCode.description ?? '',
-            data: selectedCode.data || {},
+            data: selectedCode.data ? selectedCode.data.relevantFor ? selectedCode.data : { ...selectedCode.data, relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL } : { relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL },
           }}
           isOpen={showEditModal}
           onClose={() => {

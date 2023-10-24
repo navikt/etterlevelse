@@ -1,5 +1,5 @@
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { CodeListFormValues, codeListSchema, ListName } from '../../../services/Codelist'
+import { CodeListFormValues, codeListSchema, ListName, LovCodeRelevans } from '../../../services/Codelist'
 import { Error } from '../../common/ModalSchema'
 import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
 import { MarkdownInfo } from '../../common/Markdown'
@@ -29,7 +29,9 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
             code: '',
             shortName: '',
             description: '',
-            data: {},
+            data: {
+              relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL
+            },
           } as CodeListFormValues
         }
         validationSchema={codeListSchema}

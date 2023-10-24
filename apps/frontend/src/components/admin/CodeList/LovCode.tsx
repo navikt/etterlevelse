@@ -28,10 +28,6 @@ export const LovCodeDataForm = () => {
           if (!data.lovId && form.values.description) {
             set({ lovId: form.values.description })
           }
-          // Migrate old
-          if (!data.relevantFor) {
-            set({ relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL })
-          }
 
           return (
             <>
