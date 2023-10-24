@@ -276,16 +276,7 @@ export const KravPage = () => {
             </Block>
           </div>
 
-          <Block
-            display={'flex'}
-            justifyContent="center"
-            width={responsiveWidthSmall}
-            paddingLeft={responsivePaddingSmall}
-            paddingRight={responsivePaddingSmall}
-            $style={{
-              background: `linear-gradient(top, ${ettlevColors.green100} 50px, ${ettlevColors.grey25} 0%)`,
-            }}
-          >
+          <div className={"flex justify-center"}>
             <Block maxWidth={pageWidth} width="100%">
               <Tabs
                 defaultValue={tab}
@@ -316,7 +307,7 @@ export const KravPage = () => {
                 </Tabs.Panel>
               </Tabs>
             </Block>
-          </Block>
+          </div>
         </div>
       )}
 
