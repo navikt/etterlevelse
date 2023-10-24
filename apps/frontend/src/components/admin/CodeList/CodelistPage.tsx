@@ -59,7 +59,7 @@ const CodeListPage = () => {
   }
 
   return (
-    <div role="main" className="px-8 w-full">
+    <div role="main" className="px-8 w-full max-w-7xl">
       <Helmet>
         <meta charSet="utf-8" />
         <title>{listname ? listname : 'Velg kodeverk'} </title>
