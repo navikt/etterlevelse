@@ -1,5 +1,3 @@
-import {Block} from 'baseui/block'
-import {HeadingXLarge} from 'baseui/typography'
 import {useParams} from 'react-router-dom'
 import {deleteKrav, getKravByKravNummer, KravId as KravIdQueryVariables, KravIdParams, kravMapToFormVal} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
@@ -11,7 +9,7 @@ import {FormikProps} from 'formik'
 import {DeleteItem} from '../components/DeleteItem'
 import {useQuery} from '@apollo/client'
 import {Tilbakemeldinger} from '../components/krav/tilbakemelding/Tilbakemelding'
-import {ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
+import {ettlevColors} from '../util/theme'
 import {useLocationState, useQueryParam} from '../util/hooks'
 import {gql} from '@apollo/client/core'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
@@ -194,7 +192,7 @@ export const KravPage = () => {
             </Helmet>
           )}
           <div className={"w-full max-w-7xl"}>
-            <div className={"px-8 flex flex-col justify-center mb-10"}>
+            <div className={"flex flex-col justify-center mb-10"}>
               <div className={"flex items-center w-full justify-center mt-5"}>
                 <div className={"w-full flex flex-col"}>
                   {krav?.id && (
@@ -238,12 +236,12 @@ export const KravPage = () => {
               </div>
             </div>
 
-            <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
-              <Block maxWidth={pageWidth} width="100%">
+            <div className={"flex"}>
+              <div className={"w-full max-w-7xl"}>
                 <div>
                   {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
                 </div>
-                <Heading size="small" className={"mt-4"}>
+                <Heading size="large" className={"mt-4"}>
                   {krav && krav?.navn ? krav.navn : 'Ny'}{' '}
                 </Heading>
 
@@ -257,27 +255,24 @@ export const KravPage = () => {
                 )}
 
                 {hasKravExpired() && krav && <ExpiredAlert alleKravVersjoner={alleKravVersjoner} statusName={krav.status}/>}
-              </Block>
-            </Block>
+              </div>
+            </div>
           </div>
         </div>
       )}
 
       {krav && !kravLoading && (
         <div className={"w-full"}>
+
           <div className={"flex w-full justify-center"}>
-            <Block maxWidth={maxPageWidth} width="100%">
-              <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} justifyContent="center" display="flex">
-                <Block marginTop="40px" width={pageWidth}>
-                  <HeadingXLarge marginTop="0px">Hensikten med kravet</HeadingXLarge>
+            <div className={"w-full max-w-7xl"}>
+                  <Heading size={"large"}>Hensikten med kravet</Heading>
                   <Markdown p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]}/>
-                </Block>
-              </Block>
-            </Block>
+            </div>
           </div>
 
           <div className={"flex justify-center"}>
-            <Block maxWidth={pageWidth} width="100%">
+            <div className={"w-full max-w-7xl"}>
               <Tabs
                 defaultValue={tab}
                 onChange={(s) => setTab(s as Section)}
@@ -306,7 +301,7 @@ export const KravPage = () => {
                   <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()}/>
                 </Tabs.Panel>
               </Tabs>
-            </Block>
+            </div>
           </div>
         </div>
       )}
