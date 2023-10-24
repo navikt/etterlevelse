@@ -137,6 +137,6 @@ public class Krav implements DomainObject, KravIdStatus {
     }
 
     public InstanceId convertToInstanceId() {
-        return new InstanceId(id.toString(), navn);
+        return new InstanceId(id.toString(), navn, "K" + kravNummer + "." + kravVersjon);
     }
 }

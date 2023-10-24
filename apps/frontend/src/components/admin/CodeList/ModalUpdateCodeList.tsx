@@ -1,32 +1,10 @@
-import * as React from 'react'
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE } from 'baseui/modal'
-
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 
-import { Button, KIND } from 'baseui/button'
-import { Block, BlockProps } from 'baseui/block'
-import { LabelMedium } from 'baseui/typography'
-import { SIZE as InputSIZE } from 'baseui/input'
 import { CodeListFormValues, codeListSchema, ListName } from '../../../services/Codelist'
 import { Error } from '../../common/ModalSchema'
 import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
 import { MarkdownInfo } from '../../common/Markdown'
-import CustomizedInput from '../../common/CustomizedInput'
-import CustomizedTextarea from '../../common/CustomizedTextarea'
-import { buttonContentStyle } from '../../common/Button'
-
-const modalBlockProps: BlockProps = {
-  width: '700px',
-  paddingRight: '2rem',
-  paddingLeft: '2rem',
-}
-
-const rowBlockProps: BlockProps = {
-  display: 'flex',
-  width: '100%',
-  marginTop: '1rem',
-  alignItems: 'center',
-}
+import { BodyShort, Button, Label, Modal, TextField, Textarea } from '@navikt/ds-react'
 
 type ModalUpdateProps = {
   title: string
@@ -39,8 +17,8 @@ type ModalUpdateProps = {
 
 const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onClose, submit }: ModalUpdateProps) => {
   return (
-    <Modal onClose={onClose} closeable={false} isOpen={isOpen} animate autoFocus size={SIZE.auto} role={ROLE.dialog}>
-      <Block {...modalBlockProps}>
+    <Modal className="px-8 w-full max-w-2xl" onClose={onClose} open={isOpen} header={{ heading: title }}>
+      <div>
         <Formik
           onSubmit={(values) => {
             submit(values)
@@ -51,72 +29,58 @@ const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onCl
         >
           {(formik: FormikProps<CodeListFormValues>) => (
             <Form>
-              <ModalHeader>{title}</ModalHeader>
-              <ModalBody>
-                <Block {...rowBlockProps}>
-                  <LabelMedium marginRight={'1rem'} width="25%">
+              <Modal.Body>
+                <div className="flex w-full mt-4 items-center">
+                  <Label className="mr-4 w-1/4">
                     Short name:
-                  </LabelMedium>
+                  </Label>
                   <Field name="shortName">
-                    {({ field }: FieldProps<CodeListFormValues>) => (
-                      <CustomizedInput name="shortName" value={formik.values.shortName} onChange={formik.handleChange} type="input" size={InputSIZE.default} />
+                    {({ field }: FieldProps) => (
+                      <TextField className="w-full" label="shortName" hideLabel {...field} />
                     )}
                   </Field>
-                </Block>
+                </div>
                 <Error fieldName="shortName" />
 
-                <Block {...rowBlockProps}>
-                  <LabelMedium marginRight={'1rem'} width="25%">
+                <div className="flex w-full mt-4 items-center">
+                  <Label className="mr-4 w-1/4">
                     Description:
-                  </LabelMedium>
+                  </Label>
                   <Field name="description">
-                    {({ field }: FieldProps<CodeListFormValues>) => (
-                      <CustomizedTextarea name="description" value={formik.values.description} onChange={formik.handleChange} type="input" rows={10} />
+                    {({ field }: FieldProps) => (
+                      <Textarea label="description" hideLabel className="w-full" {...field} minRows={10} />
                     )}
                   </Field>
-                </Block>
+                </div>
                 <Error fieldName="description" />
                 {(initialValues.list === ListName.LOV || initialValues.list === ListName.TEMA) && <MarkdownInfo />}
 
                 {initialValues.list === ListName.LOV && <LovCodeDataForm />}
                 {initialValues.list === ListName.TEMA && <TemaCodeDataForm />}
-              </ModalBody>
-              <ModalFooter>
-                <Block display="flex" justifyContent="flex-end">
-                  <Block marginRight="auto">{errorOnUpdate && <p>{errorOnUpdate}</p>}</Block>
+              </Modal.Body>
+              <Modal.Footer>
+                <div className="flex justify-end">
+                  <div className="mr-auto" >{errorOnUpdate && <BodyShort>{errorOnUpdate}</BodyShort>}</div>
                   <Button
                     type="button"
-                    kind={KIND.secondary}
+                    variant="secondary"
+                    className="mr-4"
                     onClick={() => onClose()}
-                    overrides={{
-                      BaseButton: {
-                        style: {
-                          ...buttonContentStyle,
-                        },
-                      },
-                    }}
                   >
-                    <strong>Avbryt</strong>
+                    Avbryt
                   </Button>
-                  <ModalButton
+                  <Button
                     type="button"
                     onClick={formik.submitForm}
-                    overrides={{
-                      BaseButton: {
-                        style: {
-                          ...buttonContentStyle,
-                        },
-                      },
-                    }}
                   >
-                    <strong>Lagre</strong>
-                  </ModalButton>
-                </Block>
-              </ModalFooter>
+                    Lagre
+                  </Button>
+                </div>
+              </Modal.Footer>
             </Form>
           )}
         </Formik>
-      </Block>
+      </div>
     </Modal>
   )
 }

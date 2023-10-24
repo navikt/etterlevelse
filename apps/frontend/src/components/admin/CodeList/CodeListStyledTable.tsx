@@ -1,18 +1,14 @@
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { KIND, SIZE as ButtonSize } from 'baseui/button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faGhost, faTrash } from '@fortawesome/free-solid-svg-icons'
 import UpdateCodeListModal from './ModalUpdateCodeList'
 import DeleteCodeListModal from './ModalDeleteCodeList'
 import { Usage } from './CodeListUsage'
 import { AuditButton } from '../audit/AuditButton'
-import { Code, CodeListFormValues, CodeUsage } from '../../../services/Codelist'
+import { Code, CodeListFormValues, CodeUsage, LovCodeRelevans } from '../../../services/Codelist'
 import { deleteCodelist, getCodelistUsage, updateCodelist } from '../../../api/CodelistApi'
-import { Cell, Row, Table } from '../../common/Table'
-import Button from '../../common/Button'
-import { theme } from '../../../util'
+import { BodyLong, Button, SortState, Table, Tooltip } from '@navikt/ds-react'
+import { handleSort } from '../../../util/handleTableSort'
+import { DocPencilIcon, GlassesIcon, TrashIcon } from '@navikt/aksel-icons'
 
 type TableCodelistProps = {
   tableData: Code[]
@@ -27,9 +23,11 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
   const [errorOnResponse, setErrorOnResponse] = React.useState(null)
   const [usage, setUsage] = useState<CodeUsage>()
 
+  const [sort, setSort] = useState<SortState>()
+
   useEffect(() => {
     if (showUsage && selectedCode) {
-      ;(async () => {
+      ; (async () => {
         setUsage(undefined)
         const usage = await getCodelistUsage(selectedCode.list, selectedCode.code)
         setUsage(usage)
@@ -60,81 +58,93 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
     }
   }
 
+  let sortedData = tableData
+
+  const comparator = (a: Code, b: Code, orderBy: string) => {
+    switch (orderBy) {
+      case 'code':
+        return a.code.localeCompare(b.code)
+      case 'navn':
+        return (a.shortName || '').localeCompare(b.shortName || '')
+      default:
+        return 0
+    }
+  }
+
+  sortedData = sortedData.sort((a, b) => {
+    if (sort) {
+      return sort.direction === 'ascending'
+        ? comparator(b, a, sort.orderBy)
+        : comparator(a, b, sort.orderBy)
+    }
+    return 1
+  })
+
   return (
     <>
-      <Table
-        emptyText="koder"
-        data={tableData}
-        config={{
-          useDefaultStringCompare: true,
-          initialSortColumn: 'code',
-        }}
-        headers={[
-          { title: 'code', column: 'code', small: true },
-          { title: 'Navn', column: 'shortName', small: true },
-          { title: 'Beskrivelse', column: 'description', $style: { width: '55%' } },
-          { title: '', small: true },
-        ]}
-        render={(table) =>
-          table.data.map((row, index) => (
-            <Row key={index}>
-              <Cell small $style={{ wordBreak: 'break-word' }}>
-                {row.code}
-              </Cell>
-              <Cell small>{row.shortName}</Cell>
-              <Cell $style={{ width: '55%' }}>
-                <Block display="flex" flexDirection="column" width="100%">
-                  <Block>{row.description}</Block>
-                  <Block $style={{ wordBreak: 'break-word' }} color={theme.colors.negative300}>
-                    {row.data && JSON.stringify(row.data, null, 1)}
-                  </Block>
-                </Block>
-              </Cell>
-              <Cell small>
-                <Block display="flex" justifyContent="flex-end" width="100%">
-                  <Button
-                    tooltip={'Bruk'}
-                    size={ButtonSize.compact}
-                    kind={row === selectedCode && showUsage ? KIND.primary : KIND.tertiary}
-                    onClick={() => {
-                      setSelectedCode(row)
-                      setShowUsage(true)
-                    }}
-                    label={'Vis bruk'}
-                  >
-                    <FontAwesomeIcon icon={faGhost} />
-                  </Button>
-                  <AuditButton id={`${row.list}-${row.code}`} kind={KIND.tertiary} />
-                  <Button
-                    tooltip={'Rediger'}
-                    size={ButtonSize.compact}
-                    kind={KIND.tertiary}
-                    onClick={() => {
-                      setSelectedCode(row)
-                      setShowEditModal(true)
-                    }}
-                    label={'Rediger'}
-                  >
-                    <FontAwesomeIcon icon={faEdit} />
-                  </Button>
-                  <Button
-                    tooltip={'Slett'}
-                    size={ButtonSize.compact}
-                    kind={KIND.tertiary}
-                    onClick={() => {
-                      setSelectedCode(row)
-                      setShowDeleteModal(true)
-                    }}
-                    label={'Slett'}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </Button>
-                </Block>
-              </Cell>
-            </Row>
-          ))
-        }
-      />
+      <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader sortKey="code" className="w-[15%]" sortable>Code</Table.ColumnHeader>
+            <Table.ColumnHeader sortKey="navn" className="w-[25%]" sortable>Navn</Table.ColumnHeader>
+            <Table.ColumnHeader className="w-1/2 break-all" >Beskrivelse</Table.ColumnHeader>
+            <Table.ColumnHeader ></Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {sortedData.map((code: Code, i) => {
+            return (
+              <Table.Row key={i + '_' + code.shortName}>
+                <Table.DataCell className="w-[15%] break-all" scope="row">{code.code}</Table.DataCell>
+                <Table.DataCell >{code.shortName}</Table.DataCell>
+                <Table.DataCell className="w-1/2 break-all">
+                  <div>
+                    <BodyLong>{code.description}</BodyLong>
+                    <div className="break-words text-icon-warning">
+                      {code.data && JSON.stringify(code.data, null, 1)}
+                    </div>
+                  </div>
+                </Table.DataCell>
+                <Table.DataCell>
+                  <div className="flex justify-end w-full">
+                    <Tooltip content="Vis bruk">
+                      <Button
+                        variant={code === selectedCode && showUsage ? 'primary' : 'tertiary'}
+                        onClick={() => {
+                          setSelectedCode(code)
+                          setShowUsage(true)
+                        }}
+                        icon={<GlassesIcon title="Vis bruk" />}
+                      />
+                    </Tooltip>
+                    <AuditButton id={`${code.list}-${code.code}`} variant="tertiary" />
+                    <Tooltip content="Rediger">
+                      <Button
+                        variant="tertiary"
+                        onClick={() => {
+                          setSelectedCode(code)
+                          setShowEditModal(true)
+                        }}
+                        icon={<DocPencilIcon title="Rediger" />}
+                      />
+                    </Tooltip>
+                    <Tooltip content="Slett">
+                      <Button
+                        variant="tertiary"
+                        onClick={() => {
+                          setSelectedCode(code)
+                          setShowDeleteModal(true)
+                        }}
+                        icon={<TrashIcon title="Slett" />}
+                      />
+                    </Tooltip>
+                  </div>
+                </Table.DataCell>
+              </Table.Row>
+            )
+          })}
+        </Table.Body>
+      </Table>
 
       {showEditModal && selectedCode && (
         <UpdateCodeListModal
@@ -144,7 +154,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
             code: selectedCode.code ?? '',
             shortName: selectedCode.shortName ?? '',
             description: selectedCode.description ?? '',
-            data: selectedCode.data || {},
+            data: selectedCode.data ? selectedCode.data.relevantFor ? selectedCode.data : { ...selectedCode.data, relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL } : { relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL },
           }}
           isOpen={showEditModal}
           onClose={() => {

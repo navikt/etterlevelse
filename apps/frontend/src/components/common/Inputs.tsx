@@ -20,6 +20,7 @@ import TextEditor from './TextEditor/TextEditor'
 import { Error } from './ModalSchema'
 import { ettlevColors } from '../../util/theme'
 import { borderColor, borderStyle, borderWidth } from './Style'
+import { Select } from '@navikt/ds-react'
 
 export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode; marginBottom?: string }) => {
   return <Block marginBottom={marginBottom ? marginBottom : '1.5rem'}>{children}</Block>
@@ -364,7 +365,7 @@ export const OptionField = (
   return (
     <FieldWrapper>
       <Field name={props.name}>
-        {(p: FieldProps<string | Code>) => (
+        {(p: FieldProps<string>) => (
           <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
             <OptionList {...props} onChange={(val) => p.form.setFieldValue(props.name, val)} value={p.field.value} />
           </FormControl>
@@ -375,29 +376,26 @@ export const OptionField = (
 }
 
 export const OptionList = (
-  props: { label: string; clearable?: boolean; value?: Code | string; onChange: (val?: any) => void } & Or<{ options: Value }, { listName: ListName }>,
+  props: { label: string; value?: string; onChange: (val?: any) => void } & Or<{ options: Value }, { listName: ListName }>,
 ) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
-    <CustomizedSelect
-      options={options}
-      clearable={props.clearable}
-      value={options.filter((o) => o.id === (props.listName ? (props.value as Code | undefined)?.code : props.value))}
-      onChange={(s) => {
-        const val = s.option?.id
-        const toSet = props.listName && val ? codelist.getCode(props.listName, val as string) : val
+    <Select
+      label={props.label}
+      hideLabel
+      className="w-full"
+      value={props.value}
+      onChange={(e) => {
+        const val = e.target.value
+        const toSet = props.listName && val ? codelist.getCode(props.listName, val) : val
         return props.onChange(toSet)
       }}
-      placeholder={props.label}
-      aria-label={props.label}
-      overrides={{
-        ControlContainer: {
-          style: {
-            ...borderWidth('2px'),
-          },
-        },
-      }}
-    />
+    >
+      <option value="">Velg {props.label}</option>
+      {options.map((c, i) => {
+        return <option key={i + '_' + c.label} value={c.id}>{c.label}</option>
+      })}
+    </Select>
   )
 }
 

@@ -99,7 +99,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
               <Row key={audit.id}>
                 <Cell $style={{ maxWidth: '13%' }}>
                   <Block marginRight={theme.sizing.scale400}>{rowNum}</Block>
-                  <AuditButton kind="tertiary" id={audit.tableId} auditId={audit.id} ariaLabel={`Vis versjonering for ${audit.id}`}>
+                  <AuditButton variant="tertiary" id={audit.tableId} auditId={audit.id}>
                     <StatefulTooltip content={audit.time} placement={PLACEMENT.top}>
                       {moment(audit.time).fromNow()}
                     </StatefulTooltip>
