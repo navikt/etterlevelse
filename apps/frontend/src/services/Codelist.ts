@@ -196,6 +196,7 @@ export interface CodeUsage {
 export interface Use {
   id: string
   name: string
+  number: string
 }
 
 export interface CategoryUsage {

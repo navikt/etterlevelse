@@ -17,8 +17,8 @@ type ModalUpdateProps = {
 
 const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onClose, submit }: ModalUpdateProps) => {
   return (
-    <Modal onClose={onClose} open={isOpen} header={{ heading: title }}>
-      <div className="px-8 w-full max-w-2xl">
+    <Modal className="px-8 w-full max-w-2xl" onClose={onClose} open={isOpen} header={{ heading: title }}>
+      <div>
         <Formik
           onSubmit={(values) => {
             submit(values)

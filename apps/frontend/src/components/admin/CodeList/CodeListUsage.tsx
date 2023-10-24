@@ -34,7 +34,7 @@ const UsageTable = (props: { usage: CodeUsage }) => {
                 <Table.DataCell>
                   {kr && (
                     <ObjectLink id={kr.id} type={ObjectType.Krav} withHistory={true}>
-                      {kr.name}
+                      {kr.number} {kr.name}
                     </ObjectLink>
                   )}
                 </Table.DataCell>}
@@ -42,7 +42,7 @@ const UsageTable = (props: { usage: CodeUsage }) => {
                 <Table.DataCell>
                   {ed && (
                     <ObjectLink id={ed.id} type={ObjectType.EtterlevelseDokumentasjon} withHistory={true}>
-                      {ed.name}
+                      {ed.number} {ed.name}
                     </ObjectLink>
                   )}
                 </Table.DataCell>}

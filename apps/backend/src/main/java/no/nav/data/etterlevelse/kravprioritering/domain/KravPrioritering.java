@@ -46,6 +46,6 @@ public class KravPrioritering implements DomainObject, KravId {
     }
 
     public InstanceId convertToInstanceId() {
-        return new InstanceId(id.toString(), kravId());
+        return new InstanceId(id.toString(), kravId(), "");
     }
 }

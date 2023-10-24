@@ -18,6 +18,7 @@ public class InstanceId {
 
     private String id;
     private String name;
+    private String number;
 
     @JsonIgnore
     public UUID getIdAsUUID() {

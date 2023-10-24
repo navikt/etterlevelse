@@ -57,7 +57,7 @@ public class Virkemiddel implements DomainObject {
     }
 
     public InstanceId convertToInstanceId() {
-        return new InstanceId(id.toString(), navn);
+        return new InstanceId(id.toString(), navn, "");
     }
 
 }
