@@ -1,18 +1,12 @@
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { KIND, SIZE as ButtonSize } from 'baseui/button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faGhost, faTrash } from '@fortawesome/free-solid-svg-icons'
 import UpdateCodeListModal from './ModalUpdateCodeList'
 import DeleteCodeListModal from './ModalDeleteCodeList'
 import { Usage } from './CodeListUsage'
 import { AuditButton } from '../audit/AuditButton'
 import { Code, CodeListFormValues, CodeUsage, LovCodeRelevans } from '../../../services/Codelist'
 import { deleteCodelist, getCodelistUsage, updateCodelist } from '../../../api/CodelistApi'
-import { Cell, Row, Table as TableTemp } from '../../common/Table'
-import { theme } from '../../../util'
-import { Button, SortState, Table, Tooltip } from '@navikt/ds-react'
+import { BodyLong, Button, SortState, Table, Tooltip } from '@navikt/ds-react'
 import { handleSort } from '../../../util/handleTableSort'
 import { DocPencilIcon, GlassesIcon, TrashIcon } from '@navikt/aksel-icons'
 
@@ -93,7 +87,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
           <Table.Row>
             <Table.ColumnHeader sortKey="code" className="w-[15%]" sortable>Code</Table.ColumnHeader>
             <Table.ColumnHeader sortKey="navn" className="w-[25%]" sortable>Navn</Table.ColumnHeader>
-            <Table.ColumnHeader className="w-1/2" >Beskrivelse</Table.ColumnHeader>
+            <Table.ColumnHeader className="w-1/2 break-all" >Beskrivelse</Table.ColumnHeader>
             <Table.ColumnHeader ></Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -103,9 +97,9 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
               <Table.Row key={i + '_' + code.shortName}>
                 <Table.DataCell className="w-[15%] break-all" scope="row">{code.code}</Table.DataCell>
                 <Table.DataCell >{code.shortName}</Table.DataCell>
-                <Table.DataCell className="w-1/2">
-                  <div className="flex flex-col w-full">
-                    <div>{code.description}</div>
+                <Table.DataCell className="w-1/2 break-all">
+                  <div>
+                    <BodyLong>{code.description}</BodyLong>
                     <div className="break-words text-icon-warning">
                       {code.data && JSON.stringify(code.data, null, 1)}
                     </div>

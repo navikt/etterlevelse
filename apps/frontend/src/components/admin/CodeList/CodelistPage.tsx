@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { useEffect } from 'react'
-import { Block } from 'baseui/block'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAwait, useForceUpdate } from '../../../util/hooks'
