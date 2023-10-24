@@ -17,6 +17,7 @@ import { Markdown } from '../../common/Markdown'
 import { responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 import { Helmet } from 'react-helmet'
 import { buttonContentStyle } from '../../common/Button'
+import {Box} from "@navikt/ds-react";
 
 interface MailLog {
   time: string
@@ -81,9 +82,9 @@ export const MailLogPage = () => {
             <LabelLarge marginTop={0} marginBottom={theme.sizing.scale400}>
               Emne: {l.subject}
             </LabelLarge>
-            <Card>
+            <Box className="px-2" borderWidth="2" borderColor="border-subtle" borderRadius="large" background="surface-default">
               <Markdown source={html} escapeHtml={false} />
-            </Card>
+            </Box>
           </Block>
         )
       })}
