@@ -11,7 +11,6 @@ import {FormikProps} from 'formik'
 import {DeleteItem} from '../components/DeleteItem'
 import {useQuery} from '@apollo/client'
 import {Tilbakemeldinger} from '../components/krav/tilbakemelding/Tilbakemelding'
-import {CustomizedTabs} from '../components/common/CustomizedTabs'
 import {ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
 import {useLocationState, useQueryParam} from '../util/hooks'
 import {gql} from '@apollo/client/core'
@@ -23,7 +22,7 @@ import Etterlevelser from '../components/krav/Etterlevelser'
 import {ampli} from '../services/Amplitude'
 import {Markdown} from '../components/common/Markdown'
 import {InformationSquareIcon, PencilIcon, PlusIcon} from '@navikt/aksel-icons'
-import {BodyLong, BodyShort, Button, Heading, Skeleton, Tag} from '@navikt/ds-react'
+import {BodyLong, BodyShort, Button, Heading, Skeleton, Tabs, Tag} from '@navikt/ds-react'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} ${krav.navn}`
@@ -185,7 +184,7 @@ export const KravPage = () => {
         </div>
       }
       {!kravLoading && (
-        <div className={"w-full flex justify-center"}>
+        <div className={"flex w-full justify-center pb-8"}>
           {krav?.id && (
             <Helmet>
               <meta charSet="utf-8"/>
@@ -195,8 +194,8 @@ export const KravPage = () => {
             </Helmet>
           )}
           <div className={"w-full max-w-7xl"}>
-            <div className={"flex flex-col justify-center mb-10"}>
-              <div className={"flex justify-center w-full mt-6"}>
+            <div className={"px-8 flex flex-col justify-center mb-10"}>
+              <div className={"flex items-center w-full justify-center mt-5"}>
                 <div className={"w-full flex flex-col"}>
                   {krav?.id && (
                     <CustomizedBreadcrumbs
@@ -239,12 +238,12 @@ export const KravPage = () => {
               </div>
             </div>
 
-            <div className={"flex justify-center"}>
-              <div>
-                <Heading size={"xsmall"}>
+            <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
+              <Block maxWidth={pageWidth} width="100%">
+                <div>
                   {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
-                </Heading>
-                <Heading size={"large"}>
+                </div>
+                <Heading size="small" className={"mt-4"}>
                   {krav && krav?.navn ? krav.navn : 'Ny'}{' '}
                 </Heading>
 
@@ -258,15 +257,15 @@ export const KravPage = () => {
                 )}
 
                 {hasKravExpired() && krav && <ExpiredAlert alleKravVersjoner={alleKravVersjoner} statusName={krav.status}/>}
-              </div>
-            </div>
+              </Block>
+            </Block>
           </div>
         </div>
       )}
 
       {krav && !kravLoading && (
-        <Block width="100%">
-          <Block backgroundColor={ettlevColors.green100} display="flex" width="100%" justifyContent="center">
+        <div className={"w-full"}>
+          <div className={"flex w-full justify-center"}>
             <Block maxWidth={maxPageWidth} width="100%">
               <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} justifyContent="center" display="flex">
                 <Block marginTop="40px" width={pageWidth}>
@@ -275,7 +274,7 @@ export const KravPage = () => {
                 </Block>
               </Block>
             </Block>
-          </Block>
+          </div>
 
           <Block
             display={'flex'}
@@ -288,33 +287,37 @@ export const KravPage = () => {
             }}
           >
             <Block maxWidth={pageWidth} width="100%">
-              <CustomizedTabs
-                fontColor={ettlevColors.green600}
-                activeColor={ettlevColors.green800}
-                tabBackground={ettlevColors.green100}
-                activeKey={tab}
-                onChange={(k) => setTab(k.activeKey as Section)}
-                tabs={[
-                  {
-                    title: 'Hvordan etterleve?',
-                    key: 'krav',
-                    content: <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner}/>,
-                  },
-                  {
-                    title: 'Eksempler på etterlevelse',
-                    key: 'etterlevelser',
-                    content: <Etterlevelser loading={etterlevelserLoading} krav={krav}/>,
-                  },
-                  {
-                    title: 'Spørsmål og svar',
-                    key: 'tilbakemeldinger',
-                    content: <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()}/>,
-                  },
-                ]}
-              />
+              <Tabs
+                defaultValue={tab}
+                onChange={(s) => setTab(s as Section)}
+              >
+                <Tabs.List>
+                  <Tabs.Tab
+                    value="krav"
+                    label="Hvordan etterleve?"
+                  />
+                  <Tabs.Tab
+                    value="etterlevelser"
+                    label="Eksempler på etterlevelse"
+                  />
+                  <Tabs.Tab
+                    value="tilbakemeldinger"
+                    label="Spørsmål og svar"
+                  />
+                </Tabs.List>
+                <Tabs.Panel value="krav">
+                  <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner}/>
+                </Tabs.Panel>
+                <Tabs.Panel value="etterlevelser">
+                  <Etterlevelser loading={etterlevelserLoading} krav={krav}/>
+                </Tabs.Panel>
+                <Tabs.Panel value="tilbakemeldinger">
+                  <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()}/>
+                </Tabs.Panel>
+              </Tabs>
             </Block>
           </Block>
-        </Block>
+        </div>
       )}
 
       {krav && (
