@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import moment from 'moment'
 import { PLACEMENT, StatefulPopover } from 'baseui/popover'
 import { AuditButton } from './AuditButton'
@@ -12,8 +12,36 @@ import * as _ from 'lodash'
 import { JsonView } from 'react-json-view-lite'
 import { ObjectLink } from '../../common/RouteLink'
 import { ampli } from '../../../services/Amplitude'
-import { BodyShort, Button, Label, Pagination, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
+import { BodyShort, Button, Label, Pagination, Popover, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
 import { faCode } from '@fortawesome/free-solid-svg-icons'
+import { ArrowRightLeftIcon, CodeIcon } from '@navikt/aksel-icons'
+
+const CodeView = ({ audit }: { audit: AuditItem }) => {
+  const [popoverOpen, setPopoverOpen] = useState(false)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  return (
+    <div>
+      <Button key={audit.id} ref={buttonRef} onClick={() => setPopoverOpen(!popoverOpen)} variant="tertiary"> 
+        Vis data
+      </Button>
+      <Popover
+        key={audit.id}
+        placement="bottom"
+        open={popoverOpen}
+        onClose={() => setPopoverOpen(false)}
+        anchorEl={buttonRef.current}
+        arrow={false}
+        className="w-3/4 max-h-[75%] overflow-y-scroll"
+        strategy="fixed"
+      >
+        <Popover.Content>
+          <JsonView data={audit.data} />
+        </Popover.Content>
+      </Popover>
+    </div>
+  )
+}
 
 export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType }) => {
   const [audits, setAudits] = useState<PageResponse<AuditItem>>(emptyPage)
@@ -83,7 +111,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader className="w-[13%]">{intl.time}</Table.ColumnHeader>
-            <Table.ColumnHeader className="w-[27%]">{intl.action}</Table.ColumnHeader>
+            <Table.ColumnHeader className="w-[17%]">{intl.action}</Table.ColumnHeader>
             <Table.ColumnHeader>{intl.id}</Table.ColumnHeader>
             <Table.ColumnHeader>{intl.user}</Table.ColumnHeader>
             <Table.ColumnHeader />
@@ -129,18 +157,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
                         Vis bruk (åpnes i ny fane)
                       </Button>
                     </ObjectLink>
-                    <StatefulPopover
-                      accessibilityType="tooltip"
-                      overrides={{ Body: { style: { width: '80%' } } }}
-                      placement={PLACEMENT.leftBottom}
-                      content={<JsonView data={audit.data} />}
-                    >
-                      <Button
-                        variant="tertiary"
-                      >
-                        <FontAwesomeIcon icon={faCode} />
-                      </Button>
-                    </StatefulPopover>
+                    <CodeView audit={audit}/>
                   </div>
                 </Table.DataCell>
               </Table.Row>
