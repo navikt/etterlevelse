@@ -1,29 +1,21 @@
-import { Block, BlockProps } from 'baseui/block'
-import { LabelMedium, LabelSmall } from 'baseui/typography'
-import React from 'react'
+import { Block } from 'baseui/block'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
 import { faInfoCircle, faMinusCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import { theme } from '../../../util'
 import { intl } from '../../../util/intl/intl'
 import { AuditAction } from './AuditTypes'
+import { Label } from '@navikt/ds-react'
 
-const labelBlockProps: BlockProps = {
-  display: ['flex', 'block', 'block', 'flex'],
-  width: ['20%', '100%', '100%', '20%'],
-  alignSelf: 'flex-start',
-}
 
 export const AuditLabel = (props: { label: string; children: any }) => {
   return (
-    <Block display="flex">
-      <Block {...labelBlockProps}>
-        <LabelMedium>{props.label}</LabelMedium>
-      </Block>
-      <Block>
-        <LabelSmall>{props.children}</LabelSmall>
-      </Block>
-    </Block>
+    <div className="flex">
+      <div className="flex w-1/5 self-center">
+        <Label>{props.label}</Label>
+      </div>
+      {props.children}
+    </div>
   )
 }
 
