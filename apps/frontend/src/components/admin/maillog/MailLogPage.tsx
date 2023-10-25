@@ -1,23 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { HeadingXXLarge, LabelLarge } from 'baseui/typography'
 import { intl } from '../../../util/intl/intl'
 import axios from 'axios'
 import { env } from '../../../util/env'
 import { PageResponse } from '../../../constants'
-import { Block } from 'baseui/block'
-import { Card } from 'baseui/card'
 import moment from 'moment'
-import { theme } from '../../../util'
-import { PLACEMENT, StatefulPopover } from 'baseui/popover'
-import { StatefulMenu } from 'baseui/menu'
-import { Button, KIND } from 'baseui/button'
-import { TriangleDown } from 'baseui/icon'
-import { Pagination } from 'baseui/pagination'
 import { Markdown } from '../../common/Markdown'
-import { responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 import { Helmet } from 'react-helmet'
-import { buttonContentStyle } from '../../common/Button'
-import {Box} from "@navikt/ds-react";
+import {BodyShort, Box, Heading, Pagination, Select, Spacer} from "@navikt/ds-react";
 
 interface MailLog {
   time: string
@@ -33,36 +22,19 @@ const getMailLog = async (start: number, count: number) => {
 export const MailLogPage = () => {
   const [log, setLog] = useState<PageResponse<MailLog>>({ content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 })
   const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(20)
+  const [rowsPerPage, setRowsPerPage] = useState(20)
 
   useEffect(() => {
-    getMailLog(page - 1, limit).then(setLog)
-  }, [page, limit])
-
-  const handlePageChange = (nextPage: number) => {
-    if (nextPage < 1) {
-      return
-    }
-    if (nextPage > log.pages) {
-      return
-    }
-    setPage(nextPage)
-  }
-
-  useEffect(() => {
-    const nextPageNum = Math.ceil(log.totalElements / limit)
-    if (log.totalElements && nextPageNum < page) {
-      setPage(nextPageNum)
-    }
-  }, [limit, log.totalElements])
+    getMailLog(page - 1, rowsPerPage).then(setLog)
+  }, [page, rowsPerPage])
 
   return (
-    <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} overrides={{ Block: { props: { role: 'main' } } }}>
+    <div className="w-full px-16" role="main">
       <Helmet>
         <meta charSet="utf-8" />
         <title>Tilbakemeldings log</title>
       </Helmet>
-      <HeadingXXLarge>{intl.mailLog}</HeadingXXLarge>
+      <Heading className="mt-4" size="large" spacing>{intl.mailLog}</Heading>
       {log?.content.map((l, i) => {
         let html = l.body
         const bodyIdx = l.body.indexOf('<body>')
@@ -75,59 +47,49 @@ export const MailLogPage = () => {
         const rowNum = log.pageNumber * log.pageSize + i + 1
 
         return (
-          <Block key={i} marginBottom={theme.sizing.scale800}>
-            <LabelLarge marginBottom={0}>
+          <div key={i} className="mb-6">
+            <BodyShort>
               #{rowNum} Tid: {moment(l.time).format('lll')} Til: {l.to}
-            </LabelLarge>
-            <LabelLarge marginTop={0} marginBottom={theme.sizing.scale400}>
+            </BodyShort>
+            <BodyShort className="mb-3">
               Emne: {l.subject}
-            </LabelLarge>
+            </BodyShort>
             <Box className="px-2" borderWidth="2" borderColor="border-subtle" borderRadius="large" background="surface-default">
               <Markdown source={html} escapeHtml={false} />
             </Box>
-          </Block>
+          </div>
         )
       })}
 
-      <Block display="flex" justifyContent="space-between" marginTop="1rem">
-        <StatefulPopover
-          content={({ close }) => (
-            <StatefulMenu
-              items={[5, 10, 20, 50, 100].map((i) => ({ label: i }))}
-              onItemSelect={({ item }) => {
-                setLimit(item.label)
-                close()
-              }}
-              overrides={{
-                List: {
-                  style: { height: '150px', width: '100px' },
-                },
-              }}
-            />
-          )}
-          placement={PLACEMENT.bottom}
-        >
-          <Button
-            kind={KIND.tertiary}
-            endEnhancer={TriangleDown}
-            overrides={{
-              BaseButton: {
-                style: {
-                  ...buttonContentStyle,
-                },
-              },
-            }}
+        <div className="flex w-full justify-center items-center mt-3">
+          <Select
+            label="Antall rader:"
+            value={rowsPerPage}
+            onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+            size="small"
           >
-            <strong>{`${limit} ${intl.rows}`}</strong>
-          </Button>
-        </StatefulPopover>
-        <Pagination
-          currentPage={page}
-          numPages={log.pages}
-          onPageChange={({ nextPage }) => handlePageChange(nextPage)}
-          labels={{ nextButton: intl.nextButton, prevButton: intl.prevButton }}
-        />
-      </Block>
-    </Block>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </Select>
+          <Spacer />
+          <div>
+            <Pagination
+              onClick={()=>{console.log("page" + page)}}
+              page={page}
+              onPageChange={setPage}
+              count={Math.ceil(log.totalElements / rowsPerPage)}
+              prevNextTexts
+              size="small"
+            />
+          </div>
+          <Spacer />
+          <BodyShort>
+            Totalt antall rader: {log.totalElements}
+          </BodyShort>
+        </div>
+    </div>
   )
 }
