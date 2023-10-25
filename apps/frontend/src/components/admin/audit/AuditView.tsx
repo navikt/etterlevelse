@@ -7,7 +7,7 @@ import { useRefs } from '../../../util/hooks'
 import { intl } from '../../../util/intl/intl'
 import { AuditAction, AuditItem, AuditLog } from './AuditTypes'
 import { ObjectLink } from '../../common/RouteLink'
-import { Box, Button, Label, Loader, Popover, Tooltip } from '@navikt/ds-react'
+import { Box, Button, Label, Loader, Modal, Popover, Tooltip } from '@navikt/ds-react'
 import { ArrowRightLeftIcon, XMarkIcon } from '@navikt/aksel-icons'
 
 type AuditViewProps = {
@@ -25,31 +25,28 @@ type ComparisonViewProps = {
 
 const ComparisonView = (props: ComparisonViewProps) => {
   const { auditLog, audit, index } = props
-  const [popoverOpen, setPopoverOpen] = useState(false)
-  const buttonRef = useRef<HTMLButtonElement>(null)
+  const [modalOpen, setModalOpen] = useState(false)
 
   return (
     <div>
-      <Button key={audit.id} ref={buttonRef} onClick={() => setPopoverOpen(!popoverOpen)} variant="tertiary" icon={<ArrowRightLeftIcon title="se forskjell" />} />
-      <Popover
+      <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant="tertiary" icon={<ArrowRightLeftIcon title="se forskjell" />} />
+      <Modal
         key={audit.id}
-        placement="left"
-        open={popoverOpen}
-        onClose={() => setPopoverOpen(false)}
-        anchorEl={buttonRef.current}
-        arrow={false}
-        className="w-3/4 h-3/4 overflow-y-scroll"
-        strategy="fixed"
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        width="75%"
+        className="h-3/4 overflow-y-scroll"
       >
-        <Popover.Content>
+        <Modal.Header/>
+        <Modal.Body>
           <Viewer
             diff={new Differ().diff(auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {}, audit.data)}
             highlightInlineDiff={true}
             lineNumbers={true}
             indent={4}
           />
-        </Popover.Content>
-      </Popover>
+        </Modal.Body>
+      </Modal>
     </div>
   )
 }

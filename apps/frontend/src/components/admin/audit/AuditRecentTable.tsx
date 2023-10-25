@@ -24,7 +24,7 @@ const CodeView = ({ audit }: { audit: AuditItem }) => {
         key={audit.id}
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        className="w-3/4 max-h-[75%] overflow-y-scroll"
+        className="max-h-[75%] overflow-y-scroll"
       >
         <Modal.Header>Data visning</Modal.Header>
         <Modal.Body>
