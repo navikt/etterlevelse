@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import RouteLink from '../components/common/RouteLink'
 import {user} from '../services/User'
 import moment from 'moment'
 import {Krav, KravQL} from '../constants'
@@ -48,11 +47,9 @@ export const KravListPage = () => {
 
               <div className="flex justify-end">
                 {user.isKraveier() && (
-                  <RouteLink hideUnderline href="/krav/ny">
-                    <Button iconPosition="left" icon={<PlusIcon/>} size="medium">
+                    <Button iconPosition="left" icon={<PlusIcon/>} size="medium" as="a" href="/krav/ny">
                       Nytt krav
                     </Button>
-                  </RouteLink>
                 )}
               </div>
             </div>
