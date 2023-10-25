@@ -1,91 +1,41 @@
-import { Block } from 'baseui/block'
-import { Card, CardOverrides } from 'baseui/card'
-import { ParagraphXSmall } from 'baseui/typography'
-import _ from 'lodash'
-import { KravStatus } from '../../constants'
-import { kravStatus } from '../../pages/KravPage'
-import { ettlevColors } from '../../util/theme'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from './Style'
+import {KravStatus} from '../../constants'
+import {kravStatus} from '../../pages/KravPage'
+import {BodyShort, Tag} from '@navikt/ds-react'
+
+interface StatusViewProps{
+  status: KravStatus | string
+  variant?: any
+  icon?: React.ReactNode
+}
 
 export const StatusView = ({
   status,
-  statusDisplay,
-  overrides,
-  background,
+  variant,
   icon,
-  lineHeight,
-  fontSize,
-  fontStyle,
-}: {
-  status: KravStatus | string
-  statusDisplay?: { background: string; border?: string }
-  background?: string
-  overrides?: CardOverrides
-  icon?: React.ReactNode
-  lineHeight?: string
-  fontSize?: string
-  fontStyle?: string
-}) => {
-  const getStatusDisplay = (background: string, border?: string) => {
-    const cardOverrides: CardOverrides = {
-      Contents: {
-        style: {
-          ...marginAll('4px'),
-        },
-      },
-      Body: {
-        style: {
-          ...marginAll('4px'),
-        },
-      },
-      Root: {
-        style: {
-          // Did not use border, margin and border radius to remove warnings.
-          backgroundColor: background,
-          ...borderColor(border),
-          ...borderWidth('1px'),
-          ...borderStyle('solid'),
-          ...borderRadius('4px'),
-        },
-      },
-    }
-
-    const customOverrides = _.merge(cardOverrides, overrides)
-
+}:StatusViewProps) => {
+  const getStatusDisplay = (variant: any) => {
     return (
-      <Block width="fit-content">
-        <Card overrides={customOverrides}>
-          <Block display="flex" justifyContent="center" alignItems="center">
+        <Tag className={"w-fit"} variant={variant}>
+          <div className={"flex justify-center items-center"}>
             {icon}
-            <ParagraphXSmall
-              $style={{
-                color: ettlevColors.navMorkGra,
-                ...marginAll('0px'),
-                whiteSpace: 'nowrap',
-                marginLeft: icon ? '10px' : undefined,
-                lineHeight: lineHeight ? lineHeight : undefined,
-                fontSize: fontSize ? fontSize : '14px',
-                fontStyle: fontStyle ? fontStyle : undefined,
-              }}
-            >
+            <BodyShort>
               {kravStatus(status)}
-            </ParagraphXSmall>
-          </Block>
-        </Card>
-      </Block>
+            </BodyShort>
+          </div>
+        </Tag>
     )
   }
 
-  if (statusDisplay) {
-    return getStatusDisplay(background ? background : statusDisplay.background, statusDisplay.border)
+  if(variant){
+    return getStatusDisplay(variant)
   } else if (status === KravStatus.UTKAST) {
-    return getStatusDisplay(background ? background : '#FFECCC', '#D47B00')
+    return getStatusDisplay("warning")
   } else if (status === KravStatus.AKTIV) {
-    return getStatusDisplay(background ? background : ettlevColors.green50, ettlevColors.green400)
+    return getStatusDisplay("success")
   } else if (status === KravStatus.UTGAATT) {
-    return getStatusDisplay(background ? background : ettlevColors.grey50, ettlevColors.grey200)
+    return getStatusDisplay("error")
   } else {
-    return getStatusDisplay('#E0D8E9', '#8269A2')
+    return getStatusDisplay("neutral")
   }
 }
 export default StatusView
