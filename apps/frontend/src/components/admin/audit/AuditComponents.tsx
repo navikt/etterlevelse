@@ -5,7 +5,8 @@ import { faInfoCircle, faMinusCircle, faPlusCircle } from '@fortawesome/free-sol
 import { theme } from '../../../util'
 import { intl } from '../../../util/intl/intl'
 import { AuditAction } from './AuditTypes'
-import { Label } from '@navikt/ds-react'
+import { Label, Tooltip } from '@navikt/ds-react'
+import { InformationSquareIcon, MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons'
 
 
 export const AuditLabel = (props: { label: string; children: any }) => {
@@ -20,15 +21,15 @@ export const AuditLabel = (props: { label: string; children: any }) => {
 }
 
 export const AuditActionIcon = (props: { action: AuditAction; withText?: boolean }) => {
-  const icon = (props.action === AuditAction.CREATE && { icon: faPlusCircle, color: theme.colors.positive300 }) ||
-    (props.action === AuditAction.UPDATE && { icon: faInfoCircle, color: theme.colors.warning300 }) ||
-    (props.action === AuditAction.DELETE && { icon: faMinusCircle, color: theme.colors.negative400 }) || { icon: undefined, color: undefined }
+  const icon = (props.action === AuditAction.CREATE && <PlusCircleIcon color="#007C2E" />) ||
+    (props.action === AuditAction.UPDATE && <InformationSquareIcon color="#C77300" />) ||
+    (props.action === AuditAction.DELETE && <MinusCircleIcon color="#C30000" />) || <div />
 
   return (
-    <StatefulTooltip content={() => intl[props.action]} placement={PLACEMENT.top}>
-      <Block marginRight=".5rem" display="inline">
-        <FontAwesomeIcon icon={icon.icon!} color={icon.color} /> {props.withText && intl[props.action]}
-      </Block>
-    </StatefulTooltip>
+    <Tooltip content={intl[props.action]} placement="top">
+      <div className="mr-2 flex justify-center items-center">
+        {icon} {props.withText && intl[props.action]}
+      </div>
+    </Tooltip>
   )
 }
