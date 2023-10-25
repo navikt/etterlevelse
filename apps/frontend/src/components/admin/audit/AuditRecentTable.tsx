@@ -10,31 +10,27 @@ import * as _ from 'lodash'
 import { JsonView } from 'react-json-view-lite'
 import { ObjectLink } from '../../common/RouteLink'
 import { ampli } from '../../../services/Amplitude'
-import { BodyShort, Button, Label, Pagination, Popover, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
+import { BodyShort, Button, Label, Modal, Pagination, Popover, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
 
 const CodeView = ({ audit }: { audit: AuditItem }) => {
-  const [popoverOpen, setPopoverOpen] = useState(false)
-  const buttonRef = useRef<HTMLButtonElement>(null)
+  const [modalOpen, setModalOpen] = useState(false)
 
   return (
     <div>
-      <Button key={audit.id} ref={buttonRef} onClick={() => setPopoverOpen(!popoverOpen)} variant="tertiary"> 
+      <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant="tertiary"> 
         Vis data
       </Button>
-      <Popover
+      <Modal
         key={audit.id}
-        placement="bottom"
-        open={popoverOpen}
-        onClose={() => setPopoverOpen(false)}
-        anchorEl={buttonRef.current}
-        arrow={false}
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
         className="w-3/4 max-h-[75%] overflow-y-scroll"
-        strategy="fixed"
       >
-        <Popover.Content>
+        <Modal.Header>Data visning</Modal.Header>
+        <Modal.Body>
           <JsonView data={audit.data} />
-        </Popover.Content>
-      </Popover>
+        </Modal.Body>
+      </Modal>
     </div>
   )
 }
