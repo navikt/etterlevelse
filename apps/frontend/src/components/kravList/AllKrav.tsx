@@ -127,11 +127,11 @@ export const AllKrav = () => {
         <Select
           key={'krav_filter_' + kravFilter}
           size={"small"}
-          label={""}
+          label={`Filter ${kravFilter}`}
+          hideLabel
           placeholder={"tema"}
           value={filterValue}
           onChange={(params)=> {
-            console.log(params.currentTarget.value)
             setFilterValue(params.currentTarget.value)
             updateFilter([{
               id: params.currentTarget.value,

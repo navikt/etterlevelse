@@ -78,6 +78,6 @@ public class Etterlevelse implements DomainObject, KravId {
     }
 
     public InstanceId convertToInstanceId() {
-        return new InstanceId(id.toString(), behandlingId + "-" + kravId());
+        return new InstanceId(id.toString(), behandlingId + "-" + kravId(), "");
     }
 }

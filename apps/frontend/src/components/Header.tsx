@@ -26,11 +26,9 @@ export const LoginButton = () => {
   // updates window.location on navigation
   const location = useLocation()
   return (
-    <Link underline={false} href={loginUrl(location, location.pathname)}>
-      <InternalHeader.Button as={Link} className="text-white" underline={false} >
-        <strong>Logg inn</strong>
-      </InternalHeader.Button>
-    </Link>
+    <InternalHeader.Button as={Link} href={loginUrl(location, location.pathname)} className="text-white" underline={false} >
+      Logg inn
+    </InternalHeader.Button>
   )
 }
 
@@ -54,7 +52,7 @@ const LoggedInHeader = () => {
 
   const kravPages = user.isKraveier()
     ? [{ label: 'Forvalte og opprette krav', href: '/kravliste' },
-    //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
+      //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
     ]
     : []
   const adminPages = user.isAdmin()
@@ -186,14 +184,14 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
     <div className="w-full">
       <div role="banner" className="w-full flex justify-center">
         <SkipToContent />
-        <div className="w-full">
-          <InternalHeader >
+        <InternalHeader className="w-full justify-center items-center">
+          <div className="w-full flex max-w-7xl">
             <InternalHeader.Title href="/">
               Etterlevelse
             </InternalHeader.Title>
             <Spacer />
             {!props.noSearchBar && (
-              <div className="flex w-full max-w-xl justify-center items-center" role="search">
+              <div className="flex w-full max-w-xl " role="search">
                 <MainSearch />
               </div>
             )}
@@ -204,8 +202,8 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
                 {user.isLoggedIn() && <LoggedInHeader />}
               </div>
             )}
-          </InternalHeader>
-        </div>
+          </div>
+        </InternalHeader>
       </div>
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
         <div

@@ -1,20 +1,10 @@
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { LabelMedium } from 'baseui/typography'
-import { Value } from 'baseui/select'
-import { Button } from 'baseui/button'
-
-import { Spinner } from 'baseui/spinner'
-import { Cell, Row, Table } from '../../common/Table'
-import { theme } from '../../../util'
 import { codelist, CodeUsage } from '../../../services/Codelist'
 import { ObjectLink } from '../../common/RouteLink'
 import { ObjectType } from '../audit/AuditTypes'
 import { replaceCodelistUsage } from '../../../api/CodelistApi'
-import CustomizedSelect from '../../common/CustomizedSelect'
-import { ettlevColors } from '../../../util/theme'
-import { buttonContentStyle } from '../../common/Button'
+import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
 
 const UsageTable = (props: { usage: CodeUsage }) => {
   const { usage } = props
@@ -25,60 +15,56 @@ const UsageTable = (props: { usage: CodeUsage }) => {
   const rows = usage ? Math.max(usage.krav.length, usage.etterlevelseDokumentasjoner.length, usage.codelist.length) : -1
 
   return (
-    <Table
-      emptyText={'i bruk'}
-      hoverColor={theme.colors.primary100}
-      data={usage.inUse ? [0] : []}
-      headers={[
-        { title: 'Krav', hide: !krav },
-        { title: 'Etterlevelse Dokumentasjoner', hide: !etterlevelseDokumentasjoner },
-        { title: 'Codelist', hide: !codelist },
-      ].filter((v) => !!v)}
-      render={(table) =>
-        Array.from(Array(rows).keys()).map((index) => {
+    <Table>
+      <Table.Header>
+        <Table.Row>
+          {krav && <Table.ColumnHeader>Krav</Table.ColumnHeader>}
+          {etterlevelseDokumentasjoner && <Table.ColumnHeader>Etterlevelse Dokumentasjoner</Table.ColumnHeader>}
+          {codelist && <Table.ColumnHeader>Codelist</Table.ColumnHeader>}
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {Array.from(Array(rows).keys()).map((index) => {
           const kr = usage.krav[index]
           const ed = usage.etterlevelseDokumentasjoner[index]
           const cl = usage.codelist[index]
           return (
-            <Row key={index} $style={{ borderBottomStyle: 'none' }}>
-              {krav && (
-                <Cell>
+            <Table.Row key={index}>
+              {krav &&
+                <Table.DataCell>
                   {kr && (
                     <ObjectLink id={kr.id} type={ObjectType.Krav} withHistory={true}>
-                      {kr.name}
+                      {kr.number} {kr.name}
                     </ObjectLink>
                   )}
-                </Cell>
-              )}
-              {etterlevelseDokumentasjoner && (
-                <Cell>
+                </Table.DataCell>}
+              {etterlevelseDokumentasjoner &&
+                <Table.DataCell>
                   {ed && (
                     <ObjectLink id={ed.id} type={ObjectType.EtterlevelseDokumentasjon} withHistory={true}>
-                      {ed.name}
+                      {ed.number} {ed.name}
                     </ObjectLink>
                   )}
-                </Cell>
-              )}
-              {codelist && (
-                <Cell>
+                </Table.DataCell>}
+              {codelist &&
+                <Table.DataCell>
                   {cl && (
                     <ObjectLink id={cl.list} type={ObjectType.Codelist} withHistory={true}>
                       {cl.list} - {cl.code}
                     </ObjectLink>
                   )}
-                </Cell>
-              )}
-            </Row>
+                </Table.DataCell>}
+            </Table.Row>
           )
-        })
-      }
-    />
+        })}
+      </Table.Body>
+    </Table>
   )
 }
 
 export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
   const [showReplace, setShowReplace] = useState(false)
-  const [newValue, setNewValue] = useState<Value>([])
+  const [newValue, setNewValue] = useState<string>()
   const ref = React.createRef<HTMLDivElement>()
 
   const { usage, refresh } = props
@@ -89,64 +75,52 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
   }, [usage])
 
   const replace = async () => {
-    await replaceCodelistUsage(usage!.listName, usage!.code, newValue[0].id as string)
-    refresh()
+    if (newValue) {
+      await replaceCodelistUsage(usage!.listName, usage!.code, newValue).then(() => refresh())
+    }
   }
 
   return (
-    <Block marginTop="2rem" ref={ref}>
-      <Block display="flex" justifyContent="space-between" marginBottom=".5rem">
-        <LabelMedium font="font450">Bruk</LabelMedium>
+    <div className="mt-8" ref={ref}>
+      <div className="flex justify-between mb-2">
+        <Label>Bruk</Label>
         {!!usage?.inUse && (
           <Button
             type="button"
-            kind="secondary"
-            size="compact"
-            onClick={() => setShowReplace(true)}
-            overrides={{
-              BaseButton: {
-                style: {
-                  ...buttonContentStyle,
-                },
-              },
-            }}
+            variant="secondary"
+            onClick={() => setShowReplace(!showReplace)}
           >
-            <strong>Erstatt all bruk</strong>
+            Erstatt all bruk
           </Button>
         )}
-      </Block>
+      </div>
 
       {showReplace && usage && usage.listName && (
-        <Block display="flex" margin="1rem" justifyContent="space-between">
-          <CustomizedSelect
-            size="compact"
-            maxDropdownHeight="300px"
-            searchable={true}
-            placeholder={'Ny verdi'}
-            options={codelist.getParsedOptions(usage.listName)}
+        <div className="flex m-4 justify-end">
+          <Select
+            label="Velg ny verdi"
+            hideLabel
             value={newValue}
-            onChange={(params) => setNewValue(params.value)}
-          />
+            className="mr-4"
+            onChange={(e) => setNewValue(e.target.value)}
+          >
+            <option value="">Ny verdi</option>
+            {codelist.getParsedOptions(usage.listName).map((c, i) =>
+              <option key={i + '_' + c.label} value={c.id}>{c.label}</option>
+            )}
+          </Select>
           <Button
             type="button"
-            size="compact"
             onClick={replace}
-            disabled={!newValue.length}
-            overrides={{
-              BaseButton: {
-                style: {
-                  ...buttonContentStyle,
-                },
-              },
-            }}
+            disabled={!newValue}
           >
-            <strong>Erstatt</strong>
+            Erstatt
           </Button>
-        </Block>
+        </div>
       )}
 
       {usage && <UsageTable usage={usage} />}
-      {!usage && <Spinner $color={ettlevColors.green400} />}
-    </Block>
+      {!usage && <Loader size="large" />}
+    </div>
   )
 }

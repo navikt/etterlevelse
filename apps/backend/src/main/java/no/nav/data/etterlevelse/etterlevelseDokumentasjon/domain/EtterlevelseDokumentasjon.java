@@ -78,6 +78,6 @@ public class EtterlevelseDokumentasjon implements DomainObject {
     }
 
     public InstanceId convertToInstanceId() {
-        return new InstanceId(id.toString(), title);
+        return new InstanceId(id.toString(), title, "E" + etterlevelseNummer);
     }
 }

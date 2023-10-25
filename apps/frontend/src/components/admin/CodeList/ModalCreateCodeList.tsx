@@ -1,30 +1,10 @@
-import * as React from 'react'
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE } from 'baseui/modal'
-import { Block, BlockProps } from 'baseui/block'
-import { LabelMedium } from 'baseui/typography'
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { SIZE as InputSIZE } from 'baseui/input'
-import { Button, KIND } from 'baseui/button'
-import { CodeListFormValues, codeListSchema, ListName } from '../../../services/Codelist'
+import { CodeListFormValues, codeListSchema, ListName, LovCodeRelevans } from '../../../services/Codelist'
 import { Error } from '../../common/ModalSchema'
 import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
 import { MarkdownInfo } from '../../common/Markdown'
-import CustomizedInput from '../../common/CustomizedInput'
-import CustomizedTextarea from '../../common/CustomizedTextarea'
-import { buttonContentStyle } from '../../common/Button'
 
-const modalBlockProps: BlockProps = {
-  width: '700px',
-  paddingRight: '2rem',
-  paddingLeft: '2rem',
-}
-
-const rowBlockProps: BlockProps = {
-  display: 'flex',
-  width: '100%',
-  marginTop: '1rem',
-  alignItems: 'center',
-}
+import { BodyShort, Button, Label, Modal, TextField, Textarea } from '@navikt/ds-react'
 
 type ModalCreateProps = {
   title: string
@@ -37,8 +17,8 @@ type ModalCreateProps = {
 
 const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, submit }: ModalCreateProps) => {
   return (
-    <Modal closeable={false} animate autoFocus size={SIZE.auto} role={ROLE.dialog} isOpen={isOpen} onClose={() => onClose()}>
-      <Block {...modalBlockProps}>
+    <Modal className="w-full max-w-2xl px-8" open={isOpen} onClose={() => onClose()} header={{ heading: title }}>
+      <div>
         <Formik
           onSubmit={(values) => {
             submit(values)
@@ -50,79 +30,67 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
               code: '',
               shortName: '',
               description: '',
-              data: {},
+              data: {
+                relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL
+              },
             } as CodeListFormValues
           }
           validationSchema={codeListSchema}
         >
           {({ submitForm }) => (
             <Form>
-              <ModalHeader>{title}</ModalHeader>
-              <ModalBody>
-                <Block {...rowBlockProps}>
-                  <LabelMedium marginRight={'1rem'} width="25%">
+              <Modal.Body>
+                <div className="flex w-full mt-4 items-center">
+                  <Label className="mr-4 w-1/4">
                     Code:
-                  </LabelMedium>
-                  <Field name="code" render={({ field }: FieldProps) => <CustomizedInput {...field} type="input" size={InputSIZE.default} />} />
-                </Block>
+                  </Label>
+                  <Field name="code" render={({ field }: FieldProps) => <TextField {...field} className="w-full" label="Code" hideLabel />} />
+                </div>
                 <Error fieldName="code" />
 
-                <Block {...rowBlockProps}>
-                  <LabelMedium marginRight={'1rem'} width="25%">
+                <div className="flex w-full mt-4 items-center">
+                  <Label className="mr-4 w-1/4">
                     Short name:
-                  </LabelMedium>
-                  <Field name="shortName" render={({ field }: FieldProps) => <CustomizedInput {...field} type="input" size={InputSIZE.default} />} />
-                </Block>
+                  </Label>
+                  <Field name="shortName" render={({ field }: FieldProps) => <TextField {...field} className="w-full" label="Short name" hideLabel />} />
+                </div>
                 <Error fieldName="shortName" />
 
-                <Block {...rowBlockProps}>
-                  <LabelMedium marginRight={'1rem'} width="25%">
+                <div className="flex w-full mt-4 items-center">
+                  <Label className="mr-4 w-1/4">
                     Description:
-                  </LabelMedium>
-                  <Field name="description" render={({ field }: FieldProps) => <CustomizedTextarea {...field} type="input" rows={10} />} />
-                </Block>
+                  </Label>
+                  <Field name="description" render={({ field }: FieldProps) => <Textarea {...field} className="w-full" label="Description" minRows={10} hideLabel />} />
+                </div>
                 <Error fieldName="description" />
                 {(list === ListName.LOV || list === ListName.TEMA) && <MarkdownInfo />}
 
                 {list === ListName.LOV && <LovCodeDataForm />}
                 {list === ListName.TEMA && <TemaCodeDataForm />}
-              </ModalBody>
-              <ModalFooter>
-                <Block display="flex" justifyContent="flex-end">
-                  <Block marginRight="auto">{errorOnCreate && <p>{errorOnCreate}</p>}</Block>
+              </Modal.Body>
+              <Modal.Footer>
+                <div className="flex justify-end">
+                  <div className="mr-auto">{errorOnCreate && <BodyShort>{errorOnCreate}</BodyShort>}</div>
                   <Button
                     type="button"
-                    kind={KIND.secondary}
+                    variant="secondary"
+                    className="mr-4"
                     onClick={() => onClose()}
-                    overrides={{
-                      BaseButton: {
-                        style: {
-                          ...buttonContentStyle,
-                        },
-                      },
-                    }}
                   >
-                    <strong>Avbryt</strong>
+                    Avbryt
                   </Button>
-                  <ModalButton
+                  <Button
                     type="button"
                     onClick={submitForm}
-                    overrides={{
-                      BaseButton: {
-                        style: {
-                          ...buttonContentStyle,
-                        },
-                      },
-                    }}
                   >
-                    <strong>Lagre</strong>
-                  </ModalButton>
-                </Block>
-              </ModalFooter>
+                    Lagre
+                  </Button>
+                </div>
+              </Modal.Footer>
             </Form>
           )}
         </Formik>
-      </Block>
+      </div>
     </Modal>
   )
 }
