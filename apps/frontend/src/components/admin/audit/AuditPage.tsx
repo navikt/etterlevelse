@@ -1,8 +1,6 @@
-import { Block } from 'baseui/block'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import _ from 'lodash'
-import { HeadingXXLarge, ParagraphMedium } from 'baseui/typography'
 import { AuditLog } from './AuditTypes'
 import { getAuditLog } from '../../../api/AuditApi'
 import { AuditView } from './AuditView'
@@ -10,9 +8,8 @@ import { AuditRecentTable } from './AuditRecentTable'
 import { AuditLabel } from './AuditComponents'
 import { useDebouncedState } from '../../../util/hooks'
 import { intl } from '../../../util/intl/intl'
-import CustomInput from '../../common/CustomizedInput'
-import { responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 import { Helmet } from 'react-helmet'
+import { BodyLong, Heading, TextField } from '@navikt/ds-react'
 
 const format = (id: string) => _.trim(id, '"')
 
@@ -25,7 +22,7 @@ export const AuditPage = () => {
   const [idSearch, setIdInput, idInput] = useDebouncedState(params.id || '', 400)
 
   const lookupVersion = (id?: string) => {
-    ;(async () => {
+    ; (async () => {
       if (id === auditLog?.id) {
         return
       }
@@ -53,27 +50,28 @@ export const AuditPage = () => {
   useEffect(() => lookupVersion(idSearch), [idSearch])
 
   return (
-    <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} overrides={{ Block: { props: { role: 'main' } } }}>
+    <div role="main" id="content" className="px-8 w-full max-w-7xl">
       <Helmet>
         <meta charSet="utf-8" />
         <title>Versjonering</title>
       </Helmet>
-      <HeadingXXLarge>{intl.audit}</HeadingXXLarge>
-      <Block marginBottom="1rem">
+      <Heading size="xlarge">{intl.audit}</Heading>
+      <div className="my-4">
         <AuditLabel label={intl.searchId}>
-          <CustomInput
-            size="compact"
+          <TextField
+            label={intl.searchId}
+            hideLabel
             value={idInput}
-            overrides={{ Input: { style: { width: '300px' } } }}
             placeholder={intl.id}
             onChange={(e) => setIdInput(format((e.target as HTMLInputElement).value))}
+            className="w-72"
           />
         </AuditLabel>
-      </Block>
+      </div>
 
-      {error && <ParagraphMedium>{_.escape(error)}</ParagraphMedium>}
+      {error && <BodyLong>{_.escape(error)}</BodyLong>}
       {idInput && <AuditView auditLog={auditLog} auditId={params.auditId} loading={loading} viewId={lookupVersion} />}
       <AuditRecentTable show={!idInput} />
-    </Block>
+    </div>
   )
 }
