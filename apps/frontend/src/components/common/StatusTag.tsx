@@ -29,7 +29,7 @@ export const StatusView = ({
   if(variant){
     return getStatusDisplay(variant)
   } else if (status === KravStatus.UTKAST) {
-    return getStatusDisplay("warning")
+    return getStatusDisplay("neutral")
   } else if (status === KravStatus.AKTIV) {
     return getStatusDisplay("success")
   } else if (status === KravStatus.UTGAATT) {
