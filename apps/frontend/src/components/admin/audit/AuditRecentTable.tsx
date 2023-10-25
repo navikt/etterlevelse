@@ -149,7 +149,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
                 <Table.DataCell>
                   <div className="flex">
                     <ObjectLink id={tableId(audit)} type={audit.table} audit={audit} noNewTabLabel>
-                      <Button variant="tertiary">
+                      <Button variant="tertiary" as="a">
                         Vis bruk (åpnes i ny fane)
                       </Button>
                     </ObjectLink>
