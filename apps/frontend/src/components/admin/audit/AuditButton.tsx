@@ -1,7 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHistory } from '@fortawesome/free-solid-svg-icons'
 import { user } from '../../../services/User'
-import RouteLink from '../../common/RouteLink'
 import { intl } from '../../../util/intl/intl'
 import { Button, ButtonProps, Link, Tooltip } from '@navikt/ds-react'
 import { ClockDashedIcon } from '@navikt/aksel-icons'

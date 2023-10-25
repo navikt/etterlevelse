@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import moment from 'moment'
-import { PLACEMENT, StatefulPopover } from 'baseui/popover'
 import { AuditButton } from './AuditButton'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AuditActionIcon } from './AuditComponents'
 import { emptyPage, PageResponse } from '../../../constants'
 import { AuditItem, ObjectType } from './AuditTypes'
@@ -13,8 +11,6 @@ import { JsonView } from 'react-json-view-lite'
 import { ObjectLink } from '../../common/RouteLink'
 import { ampli } from '../../../services/Amplitude'
 import { BodyShort, Button, Label, Pagination, Popover, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
-import { faCode } from '@fortawesome/free-solid-svg-icons'
-import { ArrowRightLeftIcon, CodeIcon } from '@navikt/aksel-icons'
 
 const CodeView = ({ audit }: { audit: AuditItem }) => {
   const [popoverOpen, setPopoverOpen] = useState(false)

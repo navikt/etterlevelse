@@ -1,8 +1,3 @@
-import { Block } from 'baseui/block'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
-import { faInfoCircle, faMinusCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
-import { theme } from '../../../util'
 import { intl } from '../../../util/intl/intl'
 import { AuditAction } from './AuditTypes'
 import { Label, Tooltip } from '@navikt/ds-react'
