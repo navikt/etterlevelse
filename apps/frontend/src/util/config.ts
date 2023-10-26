@@ -14,7 +14,7 @@ export const teamKatPersonLink = (navIdent: string) => `${env.teamKatBaseUrl}res
 export const personImageLink = (navIdent: string) => `/api/team/resource/${navIdent}/photo`
 export const teamKatTeamLink = (id: string) => `${env.teamKatBaseUrl}team/${id}`
 export const behandlingLink = (id: string) => `${env.pollyBaseUrl}process/${id}`
-export const termUrl = (termId: string) => `https://begrepskatalog.intern.nav.no/begrep/${termId}`
+export const termUrl = (termId: string) => `https://navno.sharepoint.com/sites/begreper/SitePages/Begrep.aspx?bid=${termId}`
 
 export const navStartDate = '2006-07-01'
 export const maxDate = '9999-12-31'
