@@ -215,12 +215,12 @@ const BegrepView = ({ begrep }: { begrep: Begrep }) => (
 )
 
 const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<Krav> }) => (
-  <Block maxWidth={'650px'}>
+  <div className={"max-w-2xl"}>
     <DotTag>
       <ExternalLink href={`/krav/${kravRelasjon.id}`} label={'Link til krav relasjon'}>
         {`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}
       </ExternalLink>{' '}
       - {kravRelasjon.navn}
     </DotTag>
-  </Block>
+  </div>
 )
