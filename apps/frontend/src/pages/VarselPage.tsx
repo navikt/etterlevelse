@@ -1,18 +1,18 @@
-import { Helmet } from 'react-helmet'
+import {Helmet} from 'react-helmet'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React, {useEffect, useState} from 'react'
+import {useParams} from 'react-router-dom'
 import EditMelding from '../components/varslinger/EditMelding'
-import { Melding, MeldingType } from '../constants'
-import { getMeldingByType, mapMeldingToFormValue } from '../api/MeldingApi'
-import { ObjectType } from '../components/admin/audit/AuditTypes'
-import { AuditRecentTable } from '../components/admin/audit/AuditRecentTable'
-import { ampli } from '../services/Amplitude'
+import {Melding, MeldingType} from '../constants'
+import {getMeldingByType, mapMeldingToFormValue} from '../api/MeldingApi'
+import {ObjectType} from '../components/admin/audit/AuditTypes'
+import {AuditRecentTable} from '../components/admin/audit/AuditRecentTable'
+import {ampli} from '../services/Amplitude'
 import EditOmEtterlevelse from '../components/varslinger/EditOmEtterlevelse'
 import VarselAdminPage from './VarselAdminPage'
 import {Heading, Tabs} from "@navikt/ds-react";
 
-type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE
+type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE | MeldingType.OM_ETTERLEVELSE
 
 export const VarselPage = () => {
   return (
@@ -76,13 +76,12 @@ const VarselTabs = () => {
   }, [tab])
 
   return (
-    <>
       <Tabs defaultValue="utsendtMelding">
         <Tabs.List>
           <Tabs.Tab value="utsendtMelding" label="Utsendte meldinger"/>
-          <Tabs.Tab value={MeldingType.SYSTEM} label="Systemmelding"/>
-          <Tabs.Tab value={MeldingType.FORSIDE} label="Informasjon på forsiden"/>
-          <Tabs.Tab value={MeldingType.OM_ETTERLEVELSE} label="Om etterlevelse"/>
+          <Tabs.Tab value={MeldingType.SYSTEM} label="Systemmelding"onClick={()=> {setTab(MeldingType.SYSTEM)}}/>
+          <Tabs.Tab value={MeldingType.FORSIDE} label="Informasjon på forsiden"onClick={()=> {setTab(MeldingType.FORSIDE)}}/>
+          <Tabs.Tab value={MeldingType.OM_ETTERLEVELSE} label="Om etterlevelse"onClick={()=> {setTab(MeldingType.OM_ETTERLEVELSE)}}/>
           <Tabs.Tab value="Administrer meldinger" label="Administrer meldinger"/>
         </Tabs.List>
         <Tabs.Panel value="utsendtMelding">
@@ -101,44 +100,5 @@ const VarselTabs = () => {
           <VarselAdminPage />
         </Tabs.Panel>
     </Tabs>
-
-{/*
-
-
-    <CustomizedTabs
-      fontColor={ettlevColors.green800}
-      small
-      backgroundColor={ettlevColors.grey25}
-      activeKey={tab}
-      onChange={(args) => setTab(args.activeKey as Section)}
-      tabs={[
-        {
-          key: 'utsendtMelding',
-          title: 'Utsendte meldinger',
-          content: <AuditRecentTable show={true} tableType={ObjectType.Melding} />,
-        },
-        {
-          key: MeldingType.SYSTEM,
-          title: 'Systemmelding',
-          content: <EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} />,
-        },
-        {
-          key: MeldingType.FORSIDE,
-          title: 'Informasjon på forsiden',
-          content: <EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} maxChar={500} />,
-        },
-        {
-          key: MeldingType.OM_ETTERLEVELSE,
-          title: 'Om etterlevelse',
-          content: <EditOmEtterlevelse melding={melding} setMelding={setMelding} isLoading={isLoading} maxChar={500} />,
-        },
-        {
-          key: 'Administrer meldinger',
-          title: 'Administrer meldinger',
-          content: <VarselAdminPage />,
-        },
-      ]}
-    />*/}
-    </>
   )
 }
