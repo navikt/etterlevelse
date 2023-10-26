@@ -1,6 +1,3 @@
-import { Block } from 'baseui/block'
-
-import { HeadingXXLarge, ParagraphMedium } from 'baseui/typography'
 import moment from 'moment'
 import * as React from 'react'
 import { ReactNode, useEffect, useState } from 'react'
@@ -8,16 +5,13 @@ import { Helmet } from 'react-helmet'
 import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
 import { PersonName } from '../components/common/PersonName'
-import RouteLink from '../components/common/RouteLink'
-import { Cell, Row, Table } from '../components/common/Table'
 import { getMelderInfo } from '../components/krav/tilbakemelding/Tilbakemelding'
-import { Layout2 } from '../components/scaffold/Page'
-import { Krav, PageResponse, Tilbakemelding, TilbakemeldingMeldingStatus } from '../constants'
-import { ColumnCompares } from '../util/hooks'
-import { ettlevColors, maxPageWidth } from '../util/theme'
+import {Krav, PageResponse, Tilbakemelding, TilbakemeldingMeldingStatus} from '../constants'
 import { codelist, ListName } from '../services/Codelist'
 import { ampli } from '../services/Amplitude'
-import { Loader } from '@navikt/ds-react'
+import {BodyShort, Heading, Link, Loader, Pagination, Select, SortState, Spacer, Table} from '@navikt/ds-react'
+import CustomizedBreadcrumbs from "../components/common/CustomizedBreadcrumbs";
+import {handleSort} from "../util/handleTableSort";
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string
@@ -29,18 +23,43 @@ type SporsmaalOgSvarKrav = {
 
 type KravMessage = Tilbakemelding & SporsmaalOgSvarKrav
 
-const kravSorting: ColumnCompares<KravMessage> = {
-  kravNummer: (a, b) => a.kravNummer - b.kravNummer,
-  kravNavn: (a, b) => (a.kravNavn || '').localeCompare(b.kravNavn || ''),
-  tidForSporsmaal: (a, b) => (b.tidForSporsmaal || '').localeCompare(a.tidForSporsmaal || ''),
-  tema: (a, b) => (a.tema || '').localeCompare(b.tema || ''),
-  tidForSvar: (a, b) => (a.tidForSvar || '').localeCompare(b.tidForSvar || ''),
-}
-
 export const QuestionAndAnswerLogPage = () => {
   const [tableContent, setTableContent] = useState<Krav[]>([])
   const [kravMessages, setKravMessages] = useState<KravMessage[]>([])
   const [isloading, setIsLoading] = useState<boolean>(false)
+
+  const [page, setPage] = useState(1)
+  const [rowsPerPage, setRowsPerPage] = useState(20)
+  const [sort, setSort] = useState<SortState>()
+
+  let sortedData = kravMessages.sort((a,b) => (b.tidForSporsmaal || '').localeCompare(a.tidForSporsmaal || ''))
+
+  const comparator = (a: KravMessage, b: KravMessage, orderBy: string) => {
+    switch (orderBy) {
+      case 'kravNummer':
+        return a.kravNummer - b.kravNummer
+      case 'kravNavn':
+        return (a.kravNavn || '').localeCompare(b.kravNavn || '')
+      case 'tema':
+        return (a.tema || '').localeCompare(b.tema || '')
+      case 'tidForSporsmaal':
+        return (a.tidForSporsmaal || '').localeCompare(b.tidForSporsmaal || '')
+      case 'tidForSvar':
+        return (a.tidForSvar || '').localeCompare(b.tidForSvar || '')
+      default:
+        return 0
+    }
+  }
+
+  sortedData = sortedData.sort((a, b) => {
+    if (sort) {
+      return sort.direction === 'ascending'
+        ? comparator(b, a, sort.orderBy)
+        : comparator(a, b, sort.orderBy)
+    }
+    return 1
+  }).slice((page - 1) * rowsPerPage, page * rowsPerPage)
+
   ampli.logEvent('sidevisning', { side: 'Log side for spørsmål og svar', sidetittel: 'Spørsmål og svar' })
 
   useEffect(() => {
@@ -91,73 +110,106 @@ export const QuestionAndAnswerLogPage = () => {
   }, [tableContent])
 
   return (
-    <Layout2
-      headerBackgroundColor={ettlevColors.grey25}
-      childrenBackgroundColor={ettlevColors.grey25}
-      currentPage="Spørsmål og svar"
-      mainHeader={
-        <Block maxWidth={maxPageWidth} width="100%" display={'flex'} justifyContent="flex-start">
-          <Helmet>
-            <meta charSet="utf-8" />
-            <title>Spørsmål og svar</title>
-          </Helmet>
-          <HeadingXXLarge marginTop="0">Spørsmål og svar</HeadingXXLarge>
-        </Block>
-      }
-    >
-      <Block>
+    <div className="w-full" id="content" role="main">
+      <div className="w-full flex justify-center items-center flex-col mt-6">
+        <div className="w-full max-w-7xl px-8">
+          <div className="flex-1 justify-start flex">
+            <CustomizedBreadcrumbs currentPage="Spørsmål og svar"/>
+          </div>
+
+      <div >
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Spørsmål og svar</title>
+        </Helmet>
+        <Heading size="xlarge">Spørsmål og svar</Heading>
+      </div>
+
+      <div>
         {!isloading && kravMessages.length ? (
-          <Table
-            emptyText=""
-            data={kravMessages}
-            config={{
-              initialSortColumn: 'tidForSporsmaal',
-              sorting: kravSorting,
-              pageSizes: [5, 10, 20, 50, 100],
-              defaultPageSize: 20,
-            }}
-            headers={[
-              { $style: { maxWidth: '6%' }, title: 'Krav ID', column: 'kravNummer' },
-              { $style: { maxWidth: '25%', minWidth: '25%' }, title: 'Kravtittel', column: 'kravNavn' },
-              { title: 'Tema', column: 'tema' },
-              { title: 'Fra', column: 'melderNavn' },
-              { title: 'Mottatt', column: 'tidForSporsmaal' },
-              { title: 'Besvart', column: 'tidForSvar' },
-            ]}
-            render={(tableData) => {
-              return tableData.data.slice((tableData.page - 1) * tableData.limit, (tableData.page - 1) * tableData.limit + tableData.limit).map((krav, index) => {
+          <div>
+          <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeader sortKey="kravNummer" sortable>Krav ID</Table.ColumnHeader>
+                <Table.ColumnHeader sortKey="kravNavn" sortable>Kravtittel</Table.ColumnHeader>
+                <Table.ColumnHeader sortKey="tema" sortable>Tema</Table.ColumnHeader>
+                <Table.ColumnHeader>Fra</Table.ColumnHeader>
+                <Table.ColumnHeader sortKey="tidForSporsmaal" sortable>Mottatt</Table.ColumnHeader>
+                <Table.ColumnHeader sortKey="tidForSvar" sortable>Besvart</Table.ColumnHeader>
+              </Table.Row>
+              </Table.Header>
+            <Table.Body>
+              {sortedData.map((message : KravMessage) => {
                 return (
-                  <Row key={krav.id}>
-                    <Cell $style={{ maxWidth: '6%' }}>
-                      K{krav.kravNummer}.{krav.kravVersjon}
-                    </Cell>
-                    <Cell $style={{ maxWidth: '25%', minWidth: '25%' }}>
-                      <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}?tilbakemeldingId=${krav.id}`}>{krav.kravNavn}</RouteLink>
-                    </Cell>
-                    <Cell>{codelist.getCode(ListName.TEMA, krav.tema)?.shortName}</Cell>
-                    <Cell>{krav.melderNavn}</Cell>
-                    <Cell>{moment(krav.tidForSporsmaal).format('lll')}</Cell>
-                    <Cell>
-                      {krav.tidForSvar ? (
-                        moment(krav.tidForSvar).format('lll')
+                  <Table.Row key={message.id}>
+                    <Table.HeaderCell scope="row"> K{message.kravNummer}.{message.kravVersjon}</Table.HeaderCell>
+
+                    <Table.DataCell>
+                      <Link href={`/krav/${message.kravNummer}/${message.kravVersjon}?tilbakemeldingId=${message.id}`}>{message.kravNavn}</Link>
+                    </Table.DataCell>
+                    <Table.DataCell>{codelist.getCode(ListName.TEMA, message.tema)?.shortName}</Table.DataCell>
+                    <Table.DataCell>{message.melderNavn}</Table.DataCell>
+                    <Table.DataCell>{moment(message.tidForSporsmaal).format('lll')}</Table.DataCell>
+                    <Table.DataCell>
+                      {message.tidForSvar ? (
+                        moment(message.tidForSvar).format('lll')
                       ) : (
-                        <ParagraphMedium $style={{ fontSize: '16px', lineHeight: '22px', marginTop: '0px', marginBottom: '0px', color: ettlevColors.red600 }}>
+                        <BodyShort>
                           Ikke besvart
-                        </ParagraphMedium>
+                        </BodyShort>
                       )}
-                    </Cell>
-                  </Row>
+                    </Table.DataCell>
+                  </Table.Row>
                 )
-              })
-            }}
-          />
-        ) : (
-          <Block display={'flex'} justifyContent={'center'}>
+              }
+                )
+              }
+         </Table.Body>
+          </Table>
+
+          <div className="flex w-full justify-center items-center mt-3">
+            <Select
+              label="Antall rader:"
+              value={rowsPerPage}
+              onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+              size="small"
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </Select>
+            <Spacer />
+            <div>
+              <Pagination
+                page={page}
+                onPageChange={setPage}
+                count={Math.ceil(kravMessages.length / rowsPerPage)}
+                prevNextTexts
+                size="small"
+              />
+            </div>
+            <Spacer />
+            <BodyShort>
+              Totalt antall rader: {kravMessages.length}
+            </BodyShort>
+          </div>
+          </div>
+          )
+          :
+          (
+          <div className="flex justify-center">
             <Loader size={'large'} />
-          </Block>
+          </div>
         )}
-      </Block>
-    </Layout2>
+      </div>
+
+        </div>
+      </div>
+  </div>
+
   )
 }
 export default QuestionAndAnswerLogPage

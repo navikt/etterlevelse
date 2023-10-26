@@ -1,19 +1,19 @@
-import { EtterlevelseMetadata, KRAV_FILTER_TYPE, KravEtterlevelseData } from '../../constants'
-import { useEffect, useState } from 'react'
-import { getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
-import { Block } from 'baseui/block'
-import { ettlevColors } from '../../util/theme'
-import { borderStyle, marginAll } from '../common/Style'
-import { LabelSmall, ParagraphXSmall } from 'baseui/typography'
+import {EtterlevelseMetadata, KRAV_FILTER_TYPE, KravEtterlevelseData} from '../../constants'
+import {useEffect, useState} from 'react'
+import {getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi'
+import {Block} from 'baseui/block'
+import {ettlevColors} from '../../util/theme'
+import {borderStyle} from '../common/Style'
+import {LabelSmall, ParagraphXSmall} from 'baseui/typography'
 import StatusView from '../common/StatusTag'
 import moment from 'moment'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
-import { warningAlert } from '../Images'
-import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '../../api/EtterlevelseApi'
-import { useLocation } from 'react-router-dom'
-import { getNumberOfDaysBetween } from '../../util/checkAge'
-import { getEtterlevelseStatus, getStatusLabelColor } from '../etterlevelseDokumentasjon/common/utils'
+import {faEllipsisVertical} from '@fortawesome/free-solid-svg-icons'
+import {warningAlert} from '../Images'
+import {getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber} from '../../api/EtterlevelseApi'
+import {useLocation} from 'react-router-dom'
+import {getNumberOfDaysBetween} from '../../util/checkAge'
+import {getEtterlevelseStatus, getStatusLabelColor} from '../etterlevelseDokumentasjon/common/utils'
 import RouteLink from '../common/RouteLink'
 
 export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean; etterlevelseDokumentasjonId: string; noVarsling?: boolean; kravFilter: KRAV_FILTER_TYPE }) => {
@@ -114,39 +114,14 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
                   {props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && props.krav && props.krav.etterlevelseStatus && (
                     <StatusView
                       status={getEtterlevelseStatus(props.krav.etterlevelseStatus, props.krav.frist)}
-                      statusDisplay={getStatusLabelColor(props.krav.etterlevelseStatus)}
+                      variant={getStatusLabelColor(props.krav.etterlevelseStatus)}
                     />
                   )}
                 </Block>
 
                 {props.kravFilter !== KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
                   <Block marginLeft="31px" maxWidth="140px" width="100%">
-                    <StatusView
-                      status={props.kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ? 'Bortfiltrert' : 'Utgått'}
-                      statusDisplay={{
-                        background: ettlevColors.grey50,
-                        border: ettlevColors.grey200,
-                      }}
-                      overrides={{
-                        Root: {
-                          style: {
-                            marginLeft: '21px',
-                          },
-                        },
-                        Contents: {
-                          style: {
-                            ...marginAll('2px'),
-                          },
-                        },
-                        Body: {
-                          style: {
-                            ...marginAll('2px'),
-                            paddingRight: '8px',
-                            paddingLeft: '8px',
-                          },
-                        },
-                      }}
-                    />
+                    <StatusView status={props.kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ? 'Bortfiltrert' : 'Utgått'}/>
                   </Block>
                 )}
 

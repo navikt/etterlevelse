@@ -1,16 +1,16 @@
-import { Behandling, EtterlevelseDokumentasjon, EtterlevelseStatus } from '../../../constants'
-import { ReactNode } from 'react'
-import { Block, Responsive } from 'baseui/block'
-import { Helmet } from 'react-helmet'
-import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
-import { ettlevColors } from '../../../util/theme'
-import { Teams } from '../../common/TeamName'
-import { env } from '../../../util/env'
-import { ExternalLink } from '../../common/RouteLink'
+import {Behandling, EtterlevelseDokumentasjon, EtterlevelseStatus} from '../../../constants'
+import {ReactNode} from 'react'
+import {Block, Responsive} from 'baseui/block'
+import {Helmet} from 'react-helmet'
+import {HeadingXXLarge, LabelSmall} from 'baseui/typography'
+import {ettlevColors} from '../../../util/theme'
+import {Teams} from '../../common/TeamName'
+import {env} from '../../../util/env'
+import {ExternalLink} from '../../common/RouteLink'
 import moment from 'moment'
 import EditEtterlevelseDokumentasjonModal from '../edit/EditEtterlevelseDokumentasjonModal'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../../common/Style'
-import { warningAlert } from '../../Images'
+import {borderColor, borderRadius, borderStyle, borderWidth, padding} from '../../common/Style'
+import {warningAlert} from '../../Images'
 
 export const responsiveDisplayEtterlevelseDokumentasjonPage: Responsive<any> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
@@ -184,39 +184,18 @@ export const updateBehandlingNameWithNumber = (behandlinger: Behandling[]) => {
 export const getStatusLabelColor = (status: EtterlevelseStatus) => {
   switch (status) {
     case EtterlevelseStatus.UNDER_REDIGERING:
-      return {
-        background: ettlevColors.white,
-        border: '#0B483F',
-      }
+      return "info"
     case EtterlevelseStatus.FERDIG:
-      return {
-        background: ettlevColors.white,
-        border: '#0B483F',
-      }
+      return "info"
     case EtterlevelseStatus.IKKE_RELEVANT:
-      return {
-        background: ettlevColors.grey50,
-        border: ettlevColors.grey200,
-      }
+      return "neutral"
     case EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
-      return {
-        background: ettlevColors.grey50,
-        border: ettlevColors.grey200,
-      }
+      return "neutral"
     case EtterlevelseStatus.FERDIG_DOKUMENTERT:
-      return {
-        background: ettlevColors.green50,
-        border: ettlevColors.green400,
-      }
+      return "success"
     case EtterlevelseStatus.OPPFYLLES_SENERE:
-      return {
-        background: ettlevColors.warning50,
-        border: '#D47B00',
-      }
+      return "warning"
     default:
-      return {
-        background: ettlevColors.white,
-        border: ettlevColors.green400,
-      }
+      return "neutral"
   }
 }
