@@ -77,10 +77,9 @@ export const MailLogPage = () => {
           <Spacer />
           <div>
             <Pagination
-              onClick={()=>{console.log("page" + page)}}
               page={page}
               onPageChange={setPage}
-              count={Math.ceil(log.totalElements / rowsPerPage)}
+              count={Math.ceil(log.totalElements  / rowsPerPage)}
               prevNextTexts
               size="small"
             />
