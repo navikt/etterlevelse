@@ -79,9 +79,9 @@ const VarselTabs = () => {
       <Tabs defaultValue="utsendtMelding">
         <Tabs.List>
           <Tabs.Tab value="utsendtMelding" label="Utsendte meldinger"/>
-          <Tabs.Tab value={MeldingType.SYSTEM} label="Systemmelding"onClick={()=> {setTab(MeldingType.SYSTEM)}}/>
-          <Tabs.Tab value={MeldingType.FORSIDE} label="Informasjon på forsiden"onClick={()=> {setTab(MeldingType.FORSIDE)}}/>
-          <Tabs.Tab value={MeldingType.OM_ETTERLEVELSE} label="Om etterlevelse"onClick={()=> {setTab(MeldingType.OM_ETTERLEVELSE)}}/>
+          <Tabs.Tab value={MeldingType.SYSTEM} label="Systemmelding" onClick={()=> {setTab(MeldingType.SYSTEM)}}/>
+          <Tabs.Tab value={MeldingType.FORSIDE} label="Informasjon på forsiden" onClick={()=> {setTab(MeldingType.FORSIDE)}}/>
+          <Tabs.Tab value={MeldingType.OM_ETTERLEVELSE} label="Om etterlevelse" onClick={()=> {setTab(MeldingType.OM_ETTERLEVELSE)}}/>
           <Tabs.Tab value="Administrer meldinger" label="Administrer meldinger"/>
         </Tabs.List>
         <Tabs.Panel value="utsendtMelding">
