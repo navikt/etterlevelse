@@ -79,7 +79,7 @@ export const MailLogPage = () => {
             <Pagination
               page={page}
               onPageChange={setPage}
-              count={Math.ceil(log.totalElements  / rowsPerPage)}
+              count={log.pages ? log.pages : 1}
               prevNextTexts
               size="small"
             />
