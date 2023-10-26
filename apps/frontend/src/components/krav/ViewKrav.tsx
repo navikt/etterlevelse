@@ -1,7 +1,6 @@
 import {AdresseType, Begrep, Krav, KravQL, KravVersjon} from '../../constants'
 import {Block, Responsive} from 'baseui/block'
 import React from 'react'
-import {theme} from '../../util'
 import moment from 'moment'
 import {DotTag, DotTags} from '../common/DotTag'
 import {ListName} from '../../services/Codelist'
@@ -14,7 +13,7 @@ import {SuksesskriterieCard} from './Suksesskriterie'
 import {Markdown} from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
 import SidePanel from './SidePanel'
-import {BodyShort, Heading, Label} from "@navikt/ds-react";
+import {BodyShort, Box, Heading, Label} from "@navikt/ds-react";
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
   <div className={"my-12"}>
@@ -23,7 +22,6 @@ const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
 )
 
 const responsiveView: Responsive<any> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
-const labelMargin = '24px'
 
 export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
   return (
@@ -147,25 +145,25 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
       )}
 
       {hasKravExpired() && (
-        <Block $style={{ marginTop: theme.sizing.scale900, marginBottom: theme.sizing.scale1200 }}>
+        <div className={"my-8"}>
           <ExpiredAlert alleKravVersjoner={alleKravVersjoner} statusName={krav.status} />
-        </Block>
+        </div>
       )}
 
-      <div className={"p-8"}>
-        <Block marginBottom={labelMargin}>
+      <Box className={"p-8"}>
+        <div className={"mb-6"}>
           <CustomLabel display={responsiveView} title="Ansvarlig" compact>
             {krav.underavdeling?.shortName}
           </CustomLabel>
-        </Block>
+        </div>
 
-        <Block marginBottom={labelMargin}>
+        <div className={"mb-6"}>
           <CustomLabel display={responsiveView} title="Regelverk" hide={!krav.regelverk.length} compact>
             <LovViewList regelverk={krav.regelverk} />
           </CustomLabel>
-        </Block>
+        </div>
 
-        <Block marginBottom={labelMargin}>
+        <div className={"mb-6"}>
           <CustomLabel display={responsiveView} title="Varslingsadresser" hide={!user.isKraveier()} compact>
             {krav.varslingsadresser.map((va, i) => {
               const marginBottom = '8px'
@@ -193,7 +191,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
               )
             })}
           </CustomLabel>
-        </Block>
+        </div>
 
         {/* <Block marginBottom={labelMargin}>
           <Label title="Status" display={responsiveView} compact>
@@ -203,7 +201,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
 
         {/* {krav.periode?.start && <Label title='Gyldig fom'>{formatDate(krav.periode?.start)}</Label>}
       {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>} */}
-      </div>
+      </Box>
 
       <div>
         <BodyShort size={"small"}>
