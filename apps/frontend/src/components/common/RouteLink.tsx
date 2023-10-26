@@ -73,6 +73,7 @@ type ObjectLinkProps = {
   hideUnderline?: boolean
   fontColor?: string
   external?: boolean
+  noNewTabLabel?: boolean
 }
 
 export const urlForObject = (type: NavigableItem | string, id: string, audit?: AuditItem) => {
@@ -109,7 +110,7 @@ export const ObjectLink = (props: ObjectLinkProps) => {
 
   if (props.disable) {
     link = props.children
-  } else link = <ExternalLink href={urlForObject(props.type, props.id, props.audit)}>{props.children}</ExternalLink>
+  } else link = <ExternalLink noNewTabLabel={props.noNewTabLabel} href={urlForObject(props.type, props.id, props.audit)}>{props.children}</ExternalLink>
 
   return props.withHistory ? (
     <div className="flex justify-between w-full items-center">
@@ -127,16 +128,18 @@ export const ExternalLink = ({
   className,
   label,
   openOnSamePage,
+  noNewTabLabel
 }: {
   href: string
   className?: string
   label?: string
   children: React.ReactNode
   openOnSamePage?: boolean
+  noNewTabLabel?: boolean
 }) => {
   return (
     <Link className={className} href={href} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer" aria-label={label}>
-      {children} {!openOnSamePage && ' (åpnes i ny fane)'}
+      {children} {(!openOnSamePage && !noNewTabLabel) && ' (åpnes i ny fane)'}
     </Link>
   )
 }
