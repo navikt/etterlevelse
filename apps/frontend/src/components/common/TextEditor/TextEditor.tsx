@@ -4,7 +4,6 @@ import { Editor } from 'react-draft-wysiwyg'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import './customStyle.css'
-import { Block } from 'baseui/block'
 import { ettlevColors } from '../../../util/theme'
 import { useDebouncedState } from '../../../util/hooks'
 import { FormikErrors } from 'formik'
@@ -69,13 +68,12 @@ const TextEditor = (props: TextEditorProps) => {
   }
 
   return (
-    <Block
-      backgroundColor={ettlevColors.white}
-      $style={{
-        ...borderColor(props.errors && props.name && props.errors[props.name] ? ettlevColors.red600 : ettlevColors.textAreaBorder),
-        ...borderWidth('2px'),
-        ...borderStyle('solid'),
-        width: props.width || undefined,
+    <div style={{
+      backgroundColor: ettlevColors.white,
+      ...borderColor(props.errors && props.name && props.errors[props.name] ? ettlevColors.red600 : ettlevColors.textAreaBorder),
+      ...borderWidth('2px'),
+      ...borderStyle('solid'),
+      width: props.width || undefined,
       }}
     >
       <Editor
@@ -110,7 +108,7 @@ const TextEditor = (props: TextEditorProps) => {
           //image: { alt: { present: true, mandatory: true }, },
         }}
       />
-    </Block>
+    </div>
   )
 }
 
