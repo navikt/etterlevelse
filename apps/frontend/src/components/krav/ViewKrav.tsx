@@ -5,13 +5,12 @@ import {theme} from '../../util'
 import moment from 'moment'
 import {DotTag, DotTags} from '../common/DotTag'
 import {ListName} from '../../services/Codelist'
-import {CustomLabel, LabelAboveContent} from '../common/PropertyLabel'
+import {CustomLabel} from '../common/PropertyLabel'
 import {ExternalLink} from '../common/RouteLink'
 import {slackLink, slackUserLink, termUrl} from '../../util/config'
 import {user} from '../../services/User'
 import {LovViewList} from '../Lov'
 import {SuksesskriterieCard} from './Suksesskriterie'
-import {LabelSmall} from 'baseui/typography'
 import {Markdown} from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
 import SidePanel from './SidePanel'
@@ -73,14 +72,19 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
 
       {user.isKraveier() && (
         <LabelWrapper>
-          <LabelAboveContent header title="Etiketter">
+          <Heading size={"medium"}>
+            Etiketter
+          </Heading>
             {krav.tagger.join(', ')}
-          </LabelAboveContent>
         </LabelWrapper>
       )}
 
       <LabelWrapper>
-        <LabelAboveContent header title="Relevante implementasjoner" markdown={krav.implementasjoner} maxWidth="650px" />
+        {/*<LabelAboveContent header title="" markdown={krav.implementasjoner} maxWidth="650px" />*/}
+        <Heading size={"medium"}>
+          Relevante implementasjoner
+        </Heading>
+        <Markdown source={krav.implementasjoner}/>
       </LabelWrapper>
 
       <LabelWrapper>
@@ -91,11 +95,14 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
       </LabelWrapper>
 
       <LabelWrapper>
-        <LabelAboveContent header title="Relasjoner til andre krav">
+        <Heading size={"medium"}>
+          Relasjoner til andre krav
+        </Heading>
+        {/*<LabelAboveContent header title="">*/}
           {krav.kravRelasjoner.map((kr, i) => (
             <KravRelasjonView key={'kravRelasjon' + i} kravRelasjon={kr} />
           ))}
-        </LabelAboveContent>
+        {/*</LabelAboveContent>*/}
       </LabelWrapper>
 
       {/* <LabelWrapper>
@@ -107,14 +114,18 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
       {/* <LabelAboveContent title='Avdeling'>{krav.avdeling?.shortName}</LabelAboveContent> */}
 
       <LabelWrapper>
-        <LabelAboveContent header title="Kravet er relevant for">
+        <Heading size={"medium"}>
+          Kravet er relevant for
+        </Heading>
+        {/*<LabelAboveContent header title="">*/}
           <DotTags list={ListName.RELEVANS} codes={krav.relevansFor} inColumn />
-        </LabelAboveContent>
+        {/*</LabelAboveContent>*/}
       </LabelWrapper>
 
       {alleKravVersjoner.length !== 0 && krav.kravVersjon > 1 && (
         <LabelWrapper>
-          <LabelAboveContent title={'Tidligere versjoner'} header>
+          <Heading size={ "medium"}>Tidligere versjoner</Heading>
+          {/*<LabelAboveContent title={''} header>*/}
             {alleKravVersjoner.map((k, i) => {
               if (k.kravVersjon && parseInt(k.kravVersjon.toString()) < krav.kravVersjon) {
                 return (
@@ -126,12 +137,12 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
               return null
             })}
             {krav.versjonEndringer && (
-              <Block marginTop={theme.sizing.scale900} marginBottom={theme.sizing.scale1600}>
-                <LabelSmall>Dette er nytt fra forrige versjon</LabelSmall>
+              <div className={"my-8"}>
+                <Label>Dette er nytt fra forrige versjon</Label>
                 <Markdown source={krav.versjonEndringer} />
-              </Block>
+              </div>
             )}
-          </LabelAboveContent>
+          {/*</LabelAboveContent>*/}
         </LabelWrapper>
       )}
 
