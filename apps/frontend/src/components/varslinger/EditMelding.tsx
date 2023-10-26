@@ -1,9 +1,8 @@
-import { Field, FieldProps, Formik, FormikProps } from 'formik'
+import {Field, FieldProps, Form, Formik, FormikProps} from 'formik'
 import React, { useEffect, useState } from 'react'
 import { createMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
-import { FormControl } from 'baseui/form-control'
 import {Button, Radio, RadioGroup} from '@navikt/ds-react'
 import { Loader } from '@navikt/ds-react'
 
@@ -63,13 +62,13 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
               <div className="mb-6">
                 <Field name="alertType">
                   {(p: FieldProps<string>) => (
-                    <FormControl>
+                    <Form>
                       <RadioGroup className="mt-8" legend="Varseltype"
                         disabled={disableEdit}
                         value={meldingAlertType}
                         onChange={(event) => {
-                          p.form.setFieldValue('alertType', event.currentTarget.value)
-                          setMeldingAlertType(event.currentTarget.value)
+                          p.form.setFieldValue('alertType', event)
+                          setMeldingAlertType(event)
                         }}
                       >
                         {Object.values(AlertType).map((id) => {
@@ -79,13 +78,13 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                               key={id}
                             >
                               <div className="hover:underline">
-                                  {getAlertTypeText(id)}
+                                {getAlertTypeText(id)}
                               </div>
                             </Radio>
                           )
                         })}
                       </RadioGroup>
-                    </FormControl>
+                    </Form>
                   )}
                 </Field>
               </div>
@@ -100,10 +99,9 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                 name="melding"
               />
               <div className="flex w-full">
-
                 <div className="flex justify-end w-full">
                   {melding.meldingStatus === MeldingStatus.ACTIVE && (
-                    <Button
+                    <Button className="mx-6"
                       variant="secondary"
                       disabled={disableEdit}
                       onClick={() => {
