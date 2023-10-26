@@ -1,40 +1,35 @@
-import { KIND, SIZE as ButtonSize } from 'baseui/button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHistory } from '@fortawesome/free-solid-svg-icons'
-import React from 'react'
 import { user } from '../../../services/User'
-import RouteLink from '../../common/RouteLink'
-import Button from '../../common/Button'
 import { intl } from '../../../util/intl/intl'
+import { Button, ButtonProps, Link, Tooltip } from '@navikt/ds-react'
+import { ClockDashedIcon } from '@navikt/aksel-icons'
 
-export const AuditButton = (props: {
+interface AuditButtonProps extends ButtonProps {
   id: string
   fontColor?: string
   auditId?: string
-  kind?: (typeof KIND)[keyof typeof KIND]
   marginLeft?: boolean
   marginRight?: boolean
-  children?: any
-  ariaLabel?: string
-}) => {
+}
+
+
+export const AuditButton = (props: AuditButtonProps) => {
+  const { id, auditId, marginLeft, marginRight, ...restProps } = props
   return user.isAdmin() ? (
-    <RouteLink ariaLabel={props.ariaLabel ? props.ariaLabel : undefined} fontColor={props.fontColor} href={`/admin/audit/${props.id}` + (props.auditId ? `/${props.auditId}` : '')}>
+    <Link
+      className={`${marginLeft ? 'ml-2' : ''} ${marginRight ? 'mr-2' : ''}`}
+      href={`/admin/audit/${props.id}` + (props.auditId ? `/${props.auditId}` : '')}>
       {props.children ? (
         props.children
       ) : (
         <>
-          <Button
-            tooltip={intl.version}
-            marginLeft={props.marginLeft}
-            marginRight={props.marginRight}
-            size={ButtonSize.compact}
-            kind={props.kind || 'outline'}
-            label={'Versjonering'}
-          >
-            <FontAwesomeIcon icon={faHistory} />
-          </Button>
+          <Tooltip content={intl.version}>
+            <Button
+              {...restProps}
+              icon={<ClockDashedIcon title="Versjonering" />}
+            />
+          </Tooltip>
         </>
       )}
-    </RouteLink>
+    </Link>
   ) : null
 }

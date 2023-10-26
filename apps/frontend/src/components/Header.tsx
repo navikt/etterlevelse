@@ -6,7 +6,7 @@ import { intl } from '../util/intl/intl'
 import { user } from '../services/User'
 import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
-import { informationIcon, logo, warningAlert } from './Images'
+import { informationIcon, warningAlert } from './Images'
 import { Portrait } from './common/Portrait'
 import SkipToContent from './common/SkipToContent/SkipToContent'
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
@@ -26,11 +26,9 @@ export const LoginButton = () => {
   // updates window.location on navigation
   const location = useLocation()
   return (
-    <Link underline={false} href={loginUrl(location, location.pathname)}>
-      <InternalHeader.Button as={Link} className="text-white" underline={false} >
-        <strong>Logg inn</strong>
-      </InternalHeader.Button>
-    </Link>
+    <InternalHeader.Button as={Link} href={loginUrl(location, location.pathname)} className="text-white" underline={false} >
+      Logg inn
+    </InternalHeader.Button>
   )
 }
 
@@ -39,7 +37,7 @@ const LoggedInHeader = () => {
 
   const roller = (
     <div>
-      <Button size={'xsmall'} variant="tertiary" onClick={() => setViewRoller(!viewRoller)} icon={viewRoller ? <ChevronUpIcon /> : <ChevronDownIcon />}>
+      <Button size={'xsmall'} variant="tertiary" onClick={() => setViewRoller(!viewRoller)} icon={viewRoller ? <ChevronUpIcon area-label="" aria-hidden /> : <ChevronDownIcon area-label="" aria-hidden />}>
         Endre aktive roller
       </Button>
       <div className={`mt-2 ${viewRoller ? 'block' : 'hidden'}`}>
@@ -53,36 +51,38 @@ const LoggedInHeader = () => {
   )
 
   const kravPages = user.isKraveier()
-    ? [{ label: 'Forvalte og opprette krav', href: '/kravliste' }, { label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }]
+    ? [{ label: 'Forvalte og opprette krav', href: '/kravliste' },
+      //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
+    ]
     : []
   const adminPages = user.isAdmin()
     ? [
-        { label: 'Administrere krav', href: '/admin/krav' },
-        { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
-        { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
-        { label: 'Administrere arkivering', href: '/admin/arkiv' },
-        { label: intl.audit, href: '/admin/audit' },
-        { label: 'Kodeverk', href: '/admin/codelist' },
-        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-        { label: intl.notifications, href: '/admin/varsel' },
-        // { label: intl.settings, href: '/admin/settings', disabled: true },
-      ]
+      { label: 'Administrere krav', href: '/admin/krav' },
+      { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
+      { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
+      { label: 'Administrere arkivering', href: '/admin/arkiv' },
+      { label: intl.audit, href: '/admin/audit' },
+      { label: 'Kodeverk', href: '/admin/codelist' },
+      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+      { label: intl.notifications, href: '/admin/varsel' },
+      // { label: intl.settings, href: '/admin/settings', disabled: true },
+    ]
     : []
 
   return (
     <div className="flex items-center justify-center">
-      <Menu pages={[[{ label: <UserInfo /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={<PersonIcon />} />
+      <Menu pages={[[{ label: <UserInfo /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={<PersonIcon area-label="" aria-hidden/>} />
 
       <div className="w-3" />
 
       <Menu
-        icon={<MenuHamburgerIcon />}
+        icon={<MenuHamburgerIcon area-label="" aria-hidden/>}
         pages={[
-          [{ label: 'Forsiden', href: '/', icon: <HouseIcon /> }],
-          [{ label: 'Dokumentere etterlevelse', href: '/dokumentasjoner', icon: <DocPencilIcon /> }],
-          [{ label: 'Status i organisasjonen', href: '//metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse', icon: <BarChartIcon /> }],
-          [{ label: 'Forstå kravene', href: '/tema', icon: <ReceiptIcon /> }],
-          [{ label: 'Mer om etterlevelse i NAV', href: '/omstottetiletterlevelse', icon: <InformationIcon /> }],
+          [{ label: 'Forsiden', href: '/', icon: <HouseIcon  area-label="" aria-hidden/> }],
+          [{ label: 'Dokumentere etterlevelse', href: '/dokumentasjoner', icon: <DocPencilIcon area-label="" aria-hidden /> }],
+          [{ label: 'Status i organisasjonen', href: '//metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse', icon: <BarChartIcon area-label="" aria-hidden /> }],
+          [{ label: 'Forstå kravene', href: '/tema', icon: <ReceiptIcon area-label="" aria-hidden/> }],
+          [{ label: 'Mer om etterlevelse i NAV', href: '/omstottetiletterlevelse', icon: <InformationIcon area-label="" aria-hidden /> }],
         ]}
         title={'Meny'}
       />
@@ -116,8 +116,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
 
   const allPages = props.pages.length
     ? props.pages
-        .filter((p) => p.length)
-        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
+      .filter((p) => p.length)
+      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -171,7 +171,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])
@@ -184,14 +184,14 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
     <div className="w-full">
       <div role="banner" className="w-full flex justify-center">
         <SkipToContent />
-        <div className="w-full">
-          <InternalHeader >
+        <InternalHeader className="w-full justify-center items-center">
+          <div className="w-full flex max-w-7xl">
             <InternalHeader.Title href="/">
-      Etterlevelse
+              Etterlevelse
             </InternalHeader.Title>
             <Spacer />
             {!props.noSearchBar && (
-              <div className="flex w-full max-w-xl justify-center items-center" role="search">
+              <div className="flex w-full max-w-xl " role="search">
                 <MainSearch />
               </div>
             )}
@@ -202,14 +202,13 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
                 {user.isLoggedIn() && <LoggedInHeader />}
               </div>
             )}
-          </InternalHeader>
-        </div>
+          </div>
+        </InternalHeader>
       </div>
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
         <div
-          className={`flex flex-col items-center py-2 border-b border-t ${
-            systemVarsel.alertType === 'INFO' ? 'bg-surface-info-subtle border-surface-info' : 'bg-surface-warning-subtle border-surface-warning'
-          }`}
+          className={`flex flex-col items-center py-2 border-b border-t ${systemVarsel.alertType === 'INFO' ? 'bg-surface-info-subtle border-surface-info' : 'bg-surface-warning-subtle border-surface-warning'
+            }`}
           aria-label="Systemvarsel"
           role="complementary"
         >

@@ -1,23 +1,16 @@
 import * as React from 'react'
 import { useEffect } from 'react'
-import { StatefulSelect } from 'baseui/select'
-import { Block } from 'baseui/block'
-import { KIND, SIZE as ButtonSize } from 'baseui/button'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { HeadingXXLarge } from 'baseui/typography'
-import { Spinner } from 'baseui/spinner'
-import Button from '../../common/Button'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { useAwait, useForceUpdate } from '../../../util/hooks'
 import { Code, codelist, CodeListFormValues } from '../../../services/Codelist'
 import { createCodelist } from '../../../api/CodelistApi'
-import { theme } from '../../../util'
 import { user } from '../../../services/User'
 import CreateCodeListModal from './ModalCreateCodeList'
 import CodeListTable from './CodeListStyledTable'
-import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 import { Helmet } from 'react-helmet'
+import { Button, Heading, Loader, Select } from '@navikt/ds-react'
+import { PlusIcon } from '@navikt/aksel-icons'
 
 const CodeListPage = () => {
   const params = useParams<{ listname?: string }>()
@@ -58,47 +51,46 @@ const CodeListPage = () => {
 
   if (!user.isAdmin() || !lists) {
     return (
-      <Block overrides={{ Block: { props: { role: 'main' } } }}>
-        <Spinner $color={ettlevColors.green400} $size={theme.sizing.scale2400} />
-      </Block>
+      <div role="main" >
+        <Loader size="large" />
+      </div>
     )
   }
 
   return (
-    <Block overrides={{ Block: { props: { role: 'main' } } }} width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
+    <div role="main" id="content" className="px-8 w-full max-w-7xl">
       <Helmet>
         <meta charSet="utf-8" />
         <title>{listname ? listname : 'Velg kodeverk'} </title>
       </Helmet>
-      <HeadingXXLarge>Administrering av kodeverk</HeadingXXLarge>
+      <Heading size="xlarge">Administrering av kodeverk</Heading>
       {loading ? (
-        <Spinner $color={ettlevColors.green400} />
+        <Loader size="large" />
       ) : (
-        <Block display="flex" justifyContent="space-between" width="100%">
-          <Block width="600px">
-            <StatefulSelect
-              aria-label={'Velg kodeverk'}
-              options={codelist.makeIdLabelForAllCodeLists()}
-              onChange={({ value }) => setListname(value[0].id as string)}
-              clearable={false}
-              placeholder="Velg kodeverk"
-              initialState={{ value: listname ? [{ id: listname, label: listname }] : [] }}
-            />
-          </Block>
+        <div className="flex justify-between w-full">
+          <Select
+            label="Velg kodeverk"
+            hideLabel
+            className="w-full max-w-xl"
+            onChange={(e) => setListname(e.target.value)}
+          >
+            <option value="">Velg kodeverk</option>
+            {codelist.makeIdLabelForAllCodeLists().map((c, i) => {
+              return <option key={i + '_' + c.label} value={c.id}>{c.label}</option>
+            })}
+          </Select>
           {listname && (
-            <Block>
-              <Button tooltip="Legg til ny" icon={faPlus} size={ButtonSize.compact} kind={KIND.tertiary} onClick={() => setCreateCodeListModal(!createCodeListModal)}>
-                Opprett ny kode
-              </Button>
-            </Block>
+            <Button icon={<PlusIcon area-label="" aria-hidden />} variant="tertiary" onClick={() => setCreateCodeListModal(!createCodeListModal)}>
+              Opprett ny kode
+            </Button>
           )}
-        </Block>
+        </div>
       )}
 
       {!loading && currentCodelist && (
-        <Block marginTop={theme.sizing.scale600}>
+        <div className="mt-4">
           <CodeListTable tableData={currentCodelist || []} refresh={update} />
-        </Block>
+        </div>
       )}
 
       <CreateCodeListModal
@@ -107,12 +99,12 @@ const CodeListPage = () => {
         isOpen={createCodeListModal}
         errorOnCreate={errorOnResponse}
         onClose={() => {
-          setCreateCodeListModal(!createCodeListModal)
+          setCreateCodeListModal(false)
           setErrorOnResponse(null)
         }}
         submit={handleCreateCodelist}
       />
-    </Block>
+    </div>
   )
 }
 

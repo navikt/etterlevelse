@@ -61,6 +61,6 @@ public class EtterlevelseArkiv implements DomainObject {
     }
 
     public InstanceId convertToInstanceId() {
-        return new InstanceId(id.toString(), behandlingId + "-" + webSakNummer);
+        return new InstanceId(id.toString(), behandlingId + "-" + webSakNummer, "");
     }
 }

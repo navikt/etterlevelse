@@ -1,51 +1,42 @@
 import { ErrorMessage } from 'formik'
-import { Block } from 'baseui/block'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { LabelMedium } from 'baseui/typography'
-import * as React from 'react'
-import { theme } from '../../util'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
-import { paddingZero } from './Style'
-import CustomizedStatefulTooltip from './CustomizedStatefulTooltip'
-import { ettlevColors } from '../../util/theme'
+import { Alert, Label, Tooltip } from '@navikt/ds-react'
+import { ExclamationmarkIcon } from '@navikt/aksel-icons'
 
 export const Error = (props: { fieldName: string; fullWidth?: boolean }) => (
   <ErrorMessage name={props.fieldName}>
     {(msg) => (
-      <Block display="flex" width="100%" marginTop=".2rem">
+      <div className="flex w-full mt-1">
         {!props.fullWidth && <ModalLabel />}
-        <Block width="100%">
-          <Notification
-            overrides={{ Body: { style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 } } }}
-            kind={NKIND.negative}
+        <div className="w-full" >
+          <Alert
+            className="w-auto"
+            variant="error"
           >
             {msg}
-          </Notification>
-        </Block>
-      </Block>
+          </Alert>
+        </div>
+      </div>
     )}
   </ErrorMessage>
 )
 
-export const ModalLabel = (props: { label?: any; tooltip?: string | React.ReactElement; fullwidth?: boolean }) => {
-  const width = props.fullwidth ? { witdh: '100%' } : { minWidth: '25%', maxWidth: '25%' }
+export const ModalLabel = (props: { label?: any; tooltip?: string; fullwidth?: boolean }) => {
   return (
-    <Block {...width} alignSelf="center" paddingRight="1rem">
+    <div className={`self-center pr-4 ${props.fullwidth ? 'w-full' : 'w-1/4'}`} >
       {props.tooltip ? (
-        <CustomizedStatefulTooltip content={props.tooltip}>
-          <LabelMedium font="font300" display="flex" width="100%" justifyContent="flex-start">
-            <Block display="flex">
-              <Block>{props.label}</Block>
-              <Block>
-                <FontAwesomeIcon style={{ marginLeft: '.5rem', alignSelf: 'center' }} icon={faExclamationCircle} color={theme.colors.primary300} size="sm" />
-              </Block>
-            </Block>
-          </LabelMedium>
-        </CustomizedStatefulTooltip>
+        <Tooltip content={props.tooltip}>
+          <Label className="flex w-full justify-center">
+            <div className="flex">
+              <div>{props.label}</div>
+              <div>
+                <ExclamationmarkIcon area-label="" aria-hidden className="ml-2 self-center" />
+              </div>
+            </div>
+          </Label>
+        </Tooltip>
       ) : (
-        <LabelMedium font="font300">{props.label}</LabelMedium>
+        <Label>{props.label}</Label>
       )}
-    </Block>
+    </div>
   )
 }

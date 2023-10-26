@@ -22,7 +22,7 @@ export const ArkivAdminPage = () => {
   const [updateMessage, setUpdateMessage] = useState<string>('')
   const [deleteArkiveringId, setDeleteArkiveringId] = useState<string>('')
   const [deleteMessage, setDeleteMessage] = useState<string>('')
-  const [arkiveringsStatus, setArkiveringsStatus] = useState<EtterlevelseArkivStatus>(EtterlevelseArkivStatus.IKKE_ARKIVER)
+  const [arkiveringsStatus, setArkiveringsStatus] = useState<EtterlevelseArkivStatus>()
   const [reloadTable, setReloadTable] = useState(false)
   const [tableContent, setTableContent] = useState<EtterlevelseArkiv[]>([])
 
@@ -107,9 +107,10 @@ export const ArkivAdminPage = () => {
               value={arkiveringsStatus}
               onChange={(e) => setArkiveringsStatus(e.target.value as EtterlevelseArkivStatus)}
             >
-              {options.map((o) => {
+              {options.map((o, i) => {
+                <option value="">Velg status</option>
                 return (
-                  <option value={o.id}>{o.label}</option>
+                  <option key={i + '_' + o.label} value={o.id}>{o.label}</option>
                 )
               })}
             </Select>

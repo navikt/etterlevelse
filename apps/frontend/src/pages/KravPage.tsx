@@ -217,7 +217,7 @@ export const KravPage = () => {
                         {krav.status === KravStatus.AKTIV && (
                           <Button onClick={newVersion} variant="tertiary">
                             <div className="flex flex-nowrap items-center whitespace-nowrap gap-1">
-                              <PlusIcon className="text-2xl"/>
+                              <PlusIcon area-label="" aria-hidden className="text-2xl" />
                               Ny versjon
                             </div>
                           </Button>
@@ -225,7 +225,7 @@ export const KravPage = () => {
                         {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kravliste'}/>}
                         <Button variant="tertiary" onClick={() => setEdit(!edit)}>
                           <div className="flex flex-nowrap items-center gap-1">
-                            <PencilIcon className="text-2xl"/>
+                            <PencilIcon  area-label="" aria-hidden className="text-2xl" />
                             Rediger
                           </div>
                         </Button>
