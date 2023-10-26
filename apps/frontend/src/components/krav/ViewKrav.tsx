@@ -5,21 +5,22 @@ import {theme} from '../../util'
 import moment from 'moment'
 import {DotTag, DotTags} from '../common/DotTag'
 import {ListName} from '../../services/Codelist'
-import {Label, LabelAboveContent} from '../common/PropertyLabel'
+import {CustomLabel, LabelAboveContent} from '../common/PropertyLabel'
 import {ExternalLink} from '../common/RouteLink'
 import {slackLink, slackUserLink, termUrl} from '../../util/config'
 import {user} from '../../services/User'
 import {LovViewList} from '../Lov'
 import {SuksesskriterieCard} from './Suksesskriterie'
-import {LabelSmall, ParagraphMedium} from 'baseui/typography'
+import {LabelSmall} from 'baseui/typography'
 import {Markdown} from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
 import SidePanel from './SidePanel'
+import {BodyShort, Heading, Label} from "@navikt/ds-react";
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
-  <Block marginTop="48px" marginBottom="48px">
+  <div className={"my-12"}>
     {children}
-  </Block>
+  </div>
 )
 
 const responsiveView: Responsive<any> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
@@ -58,9 +59,12 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
     </LabelWrapper> */}
 
       <LabelWrapper>
-        <LabelAboveContent header title="Kilder">
+        <Heading size={"medium"}>
+          Kilder
+        </Heading>
+        <Label>
           <DotTags items={krav.dokumentasjon} markdown inColumn />
-        </LabelAboveContent>
+        </Label>
       </LabelWrapper>
 
       {/* <LabelWrapper>
@@ -80,11 +84,10 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
       </LabelWrapper>
 
       <LabelWrapper>
-        <LabelAboveContent header title="Begreper">
+        <Heading size={"medium"}>Begreper</Heading>
           {krav.begreper.map((b, i) => (
             <BegrepView key={'begrep_' + i} begrep={b} />
           ))}
-        </LabelAboveContent>
       </LabelWrapper>
 
       <LabelWrapper>
@@ -138,21 +141,21 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
         </Block>
       )}
 
-      <Block backgroundColor="#F1F1F1" padding="32px">
+      <div className={"p-8"}>
         <Block marginBottom={labelMargin}>
-          <Label display={responsiveView} title="Ansvarlig" compact>
+          <CustomLabel display={responsiveView} title="Ansvarlig" compact>
             {krav.underavdeling?.shortName}
-          </Label>
+          </CustomLabel>
         </Block>
 
         <Block marginBottom={labelMargin}>
-          <Label display={responsiveView} title="Regelverk" hide={!krav.regelverk.length} compact>
+          <CustomLabel display={responsiveView} title="Regelverk" hide={!krav.regelverk.length} compact>
             <LovViewList regelverk={krav.regelverk} />
-          </Label>
+          </CustomLabel>
         </Block>
 
         <Block marginBottom={labelMargin}>
-          <Label display={responsiveView} title="Varslingsadresser" hide={!user.isKraveier()} compact>
+          <CustomLabel display={responsiveView} title="Varslingsadresser" hide={!user.isKraveier()} compact>
             {krav.varslingsadresser.map((va, i) => {
               const marginBottom = '8px'
               if (va.type === AdresseType.SLACK)
@@ -178,7 +181,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
                 </Block>
               )
             })}
-          </Label>
+          </CustomLabel>
         </Block>
 
         {/* <Block marginBottom={labelMargin}>
@@ -189,26 +192,26 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
 
         {/* {krav.periode?.start && <Label title='Gyldig fom'>{formatDate(krav.periode?.start)}</Label>}
       {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>} */}
-      </Block>
+      </div>
 
-      <Block>
-        <ParagraphMedium>
+      <div>
+        <BodyShort size={"small"}>
           Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')} {user.isAdmin() || user.isKraveier() ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1] : ''}
-        </ParagraphMedium>
-      </Block>
+        </BodyShort>
+      </div>
     </>
   )
 }
 
 const BegrepView = ({ begrep }: { begrep: Begrep }) => (
-  <Block maxWidth={'650px'}>
+  <div className={"max-w-2xl"}>
     <DotTag>
       <ExternalLink href={termUrl(begrep.id)} label={'Link begrepskatalogen'}>
         {begrep.navn}
       </ExternalLink>{' '}
       - {begrep.beskrivelse}
     </DotTag>
-  </Block>
+  </div>
 )
 
 const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<Krav> }) => (
