@@ -131,8 +131,8 @@ export const QuestionAndAnswerLogPage = () => {
           <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>
             <Table.Header>
               <Table.Row>
-                <Table.ColumnHeader sortKey="kravNummer" sortable>Krav ID</Table.ColumnHeader>
-                <Table.ColumnHeader sortKey="kravNavn" sortable>Kravtittel</Table.ColumnHeader>
+                <Table.ColumnHeader  className="w-[6%]" sortKey="kravNummer" sortable>Krav ID</Table.ColumnHeader>
+                <Table.ColumnHeader className="w-[25%]" sortKey="kravNavn" sortable>Kravtittel</Table.ColumnHeader>
                 <Table.ColumnHeader sortKey="tema" sortable>Tema</Table.ColumnHeader>
                 <Table.ColumnHeader>Fra</Table.ColumnHeader>
                 <Table.ColumnHeader sortKey="tidForSporsmaal" sortable>Mottatt</Table.ColumnHeader>
@@ -143,9 +143,9 @@ export const QuestionAndAnswerLogPage = () => {
               {sortedData.map((message : KravMessage) => {
                 return (
                   <Table.Row key={message.id}>
-                    <Table.HeaderCell scope="row"> K{message.kravNummer}.{message.kravVersjon}</Table.HeaderCell>
+                    <Table.HeaderCell  className="w-[6%]" scope="row"> K{message.kravNummer}.{message.kravVersjon}</Table.HeaderCell>
 
-                    <Table.DataCell>
+                    <Table.DataCell className="w-[25%]">
                       <Link href={`/krav/${message.kravNummer}/${message.kravVersjon}?tilbakemeldingId=${message.id}`}>{message.kravNavn}</Link>
                     </Table.DataCell>
                     <Table.DataCell>{codelist.getCode(ListName.TEMA, message.tema)?.shortName}</Table.DataCell>
