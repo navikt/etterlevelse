@@ -29,7 +29,7 @@ export const ModalLabel = (props: { label?: any; tooltip?: string; fullwidth?: b
             <div className="flex">
               <div>{props.label}</div>
               <div>
-                <ExclamationmarkIcon className="ml-2 self-center" />
+                <ExclamationmarkIcon area-label="" aria-hidden className="ml-2 self-center" />
               </div>
             </div>
           </Label>

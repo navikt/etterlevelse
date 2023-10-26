@@ -16,9 +16,9 @@ export const AuditLabel = (props: { label: string; children: any }) => {
 }
 
 export const AuditActionIcon = (props: { action: AuditAction; withText?: boolean }) => {
-  const icon = (props.action === AuditAction.CREATE && <PlusCircleIcon color="#007C2E" />) ||
-    (props.action === AuditAction.UPDATE && <InformationSquareIcon color="#C77300" />) ||
-    (props.action === AuditAction.DELETE && <MinusCircleIcon color="#C30000" />) || <div />
+  const icon = (props.action === AuditAction.CREATE && <PlusCircleIcon area-label="" aria-hidden color="#007C2E" />) ||
+    (props.action === AuditAction.UPDATE && <InformationSquareIcon area-label="" aria-hidden color="#C77300" />) ||
+    (props.action === AuditAction.DELETE && <MinusCircleIcon area-label="" aria-hidden color="#C30000" />) || <div />
 
   return (
     <Tooltip content={intl[props.action]} placement="top">

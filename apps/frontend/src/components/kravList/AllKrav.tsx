@@ -5,7 +5,7 @@ import {emptyPage, KravListFilter, KravQL, KravStatus, Option} from '../../const
 import {KravPanels, sortKrav} from '../../pages/KravListPage'
 import {kravStatus} from '../../pages/KravPage'
 import {Alert, BodyShort, Button, Heading, Label, Loader, Select} from '@navikt/ds-react'
-import {PlusIcon} from "@navikt/aksel-icons";
+import {PlusIcon} from '@navikt/aksel-icons'
 
 type KravFilter = {
   status: Option[]
@@ -199,7 +199,7 @@ export const AllKrav = () => {
           <div className="flex items-center">
             <Button
               onClick={lastMer}
-              icon={<PlusIcon/>}
+              icon={<PlusIcon area-label="" aria-hidden/>}
               variant={'secondary'}
               size="medium"
               disabled={gqlLoading || kravene.numberOfElements >= kravene.totalElements}
