@@ -31,10 +31,10 @@ export const InputField = (props: { label: string; name: string; caption?: React
       {(p: FieldProps) => (
         <FormControl
           overrides={{ Label: { style: { marginTop: '0px', marginBottom: '0px', paddingTop: '8px', paddingBottom: '8px' } } }}
-          label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />}
+          label={<Label>{props.label}</Label>}
           caption={props.caption}
         >
-          <Block>
+          <div>
             <CustomInput
               {...p.field}
               placeholder={!props.disablePlaceHolder ? props.label : undefined}
@@ -52,7 +52,7 @@ export const InputField = (props: { label: string; name: string; caption?: React
               }}
             />
             <Error fieldName={props.name} fullWidth />
-          </Block>
+          </div>
         </FormControl>
       )}
     </Field>

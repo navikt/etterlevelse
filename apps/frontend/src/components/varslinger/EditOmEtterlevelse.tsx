@@ -1,13 +1,9 @@
-import { Block } from 'baseui/block'
 import { Formik, FormikProps } from 'formik'
 import React, { useState } from 'react'
 import { createMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
 import { AlertType, Melding, MeldingStatus } from '../../constants'
 import { InputField, TextAreaField } from '../common/Inputs'
-import Button from '../common/Button'
-import { theme } from '../../util/theme'
-import { HeadingXXLarge } from 'baseui/typography'
-import { Loader } from '@navikt/ds-react'
+import {Button, Heading, Loader} from '@navikt/ds-react'
 
 export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
@@ -34,19 +30,19 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
 
   if (isLoading) {
     return (
-      <Block display="flex" justifyContent="center">
+      <div className="flex justify-center">
         <Loader size="large" />
-      </Block>
+      </div>
     )
   }
 
   return (
-    <Block>
+    <div>
       {melding && (
         <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
           {({ values, submitForm }: FormikProps<Melding>) => (
-            <Block>
-              <HeadingXXLarge marginBottom={'44px'}>Om støtte til etterlevelse</HeadingXXLarge>
+            <div>
+              <Heading size="large" className="my-12" >Om støtte til etterlevelse</Heading>
               {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
 
               <TextAreaField maxCharacter={maxChar} height="200px" label={'Innledende tekst'} noPlaceholder name="melding" />
@@ -54,16 +50,8 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
 
               <TextAreaField maxCharacter={maxChar} markdown height="200px" label={'Innhold'} noPlaceholder name="secondaryMelding" />
 
-              <Block display="flex" justifyContent="flex-end" width="100%">
-                <Button
-                  kind="secondary"
-                  onClick={() => {
-                    window.location.reload()
-                  }}
-                  marginRight
-                >
-                  Avbryt
-                </Button>
+              <div className="flex justify-end w-full">
+
                 <Button
                   disabled={disableEdit}
                   onClick={() => {
@@ -73,12 +61,12 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
                 >
                   Publiser
                 </Button>
-              </Block>
-            </Block>
+              </div>
+            </div>
           )}
         </Formik>
       )}
-    </Block>
+    </div>
   )
 }
 
