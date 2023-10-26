@@ -1,7 +1,6 @@
-import { default as React, ReactNode } from 'react'
-import { Block, Responsive } from 'baseui/block'
-import { theme } from '../../util'
-import { HeadingXLarge, LabelLarge } from 'baseui/typography'
+import {default as React, ReactNode} from 'react'
+import {Block, Responsive} from 'baseui/block'
+import {Heading, Label} from "@navikt/ds-react";
 
 type DataTextProps = {
   label?: string
@@ -22,21 +21,22 @@ const DataText = (props: DataTextProps) => {
   const getLabel = () => {
     if (props.header) {
       return (
-        <Block>
-          <HeadingXLarge>{props.label}</HeadingXLarge>
-        </Block>
+        <div>
+          <Heading size={"medium"}>{props.label}</Heading>
+        </div>
       )
     } else {
       return (
-        <Block minWidth={labelWidth} maxWidth={labelWidth} paddingRight={theme.sizing.scale400}>
-          <LabelLarge $style={{ lineHeight: theme.sizing.scale800 }}>{props.label}</LabelLarge>
-        </Block>
+        <div className={"pr-2.5"}>
+          <Label size={"medium"}>{props.label}</Label>
+        </div>
       )
     }
   }
 
   return (
     <Block display={props.display ? props.display : props.notFlexed ? 'block' : 'flex'} marginBottom={props.compact ? '.5rem' : '2rem'} width="100%">
+      {/*<div className={`${props.display ? props.display : props.notFlexed ? 'block' : 'flex'} ${props.compact ? 'mb-2' : 'mb-8'} w-full`}>*/}
       {props.label && getLabel()}
       <Block font="ParagraphMedium">{props.children}</Block>
     </Block>
