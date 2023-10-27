@@ -5,7 +5,6 @@ import moment from 'moment'
 import { useState } from 'react'
 import { Etterlevelse, EtterlevelseQL, EtterlevelseStatus, Krav, KravQL, SuksesskriterieStatus } from '../../constants'
 import { kravNumView } from '../../pages/KravPage'
-import { theme } from '../../util'
 import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
 import Button from '../common/Button'
 import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../common/CustomizedAccordion'
@@ -15,9 +14,8 @@ import { PanelButton, PanelLink } from '../common/PanelLink'
 import { borderRadius, borderStyle, marginAll } from '../common/Style'
 import { ViewEtterlevelse } from '../etterlevelse/ViewEtterlevelse'
 import { sadFolderIcon } from '../Images'
-import { Option } from 'baseui/select'
-import CustomizedSelect from '../common/CustomizedSelect'
-import { Loader } from '@navikt/ds-react'
+import { Heading, Label, Loader, Select } from '@navikt/ds-react'
+import { options } from 'amplitude-js'
 
 const etterlevelseFilter = [
   { label: 'Alle', id: 'ALLE' },
@@ -29,7 +27,7 @@ const etterlevelseFilter = [
 export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolean; krav: KravQL; modalVersion?: boolean }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [openEtterlse, setOpenEtterlevelse] = useState<EtterlevelseQL>()
-  const [filter, setFilter] = useState<readonly Option[]>([etterlevelseFilter[0]])
+  const [filter, setFilter] = useState<string>('ALLE')
 
   const etterlevelser = (krav.etterlevelser || [])
     .filter((e) => e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || e.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)
@@ -68,18 +66,18 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
   })
 
   const filteredEtterlevelse = etterlevelser.filter((e) => {
-    if (filter[0].id !== 'ALLE') {
-      if (filter[0].id === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
+    if (filter !== 'ALLE') {
+      if (filter === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
         return (
           e.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ||
           e.suksesskriterieBegrunnelser.filter((s) => s.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT).length > 0
         )
-      } else if (filter[0].id === SuksesskriterieStatus.IKKE_OPPFYLT) {
+      } else if (filter === SuksesskriterieStatus.IKKE_OPPFYLT) {
         return e.suksesskriterieBegrunnelser.filter((s) => s.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT).length > 0
-      } else if (filter[0].id === SuksesskriterieStatus.OPPFYLT) {
+      } else if (filter === SuksesskriterieStatus.OPPFYLT) {
         return e.suksesskriterieBegrunnelser.filter((s) => s.suksesskriterieStatus === SuksesskriterieStatus.OPPFYLT).length > 0
       } else {
-        return e.status === filter[0].id
+        return e.status === filter
       }
     } else {
       return e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || e.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
@@ -96,22 +94,22 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
   )
 
   return (
-    <Block marginBottom="32px" width="100%">
-      <HeadingXLarge>Her kan du se hvordan andre team har dokumentert etterlevelse</HeadingXLarge>
+    <div className="mb-8 w-full">
+      <Heading size="medium">Her kan du se hvordan andre team har dokumentert etterlevelse</Heading>
       {!loading && etterlevelser.length > 0 && (
         <div className="flex items-center" style={{ paddingTop: '22px', paddingBottom: '22px' }}>
-          <LabelSmall $style={{ fontSize: '16px', lineHeight: '18px' }}>Vis:</LabelSmall>
-          <div style={{ paddingLeft: '20px', paddingRight: '16px', width: '290px' }}>
-            <CustomizedSelect
-              size="default"
-              clearable={false}
-              searchable={false}
-              options={etterlevelseFilter}
+          <Label>Vis:</Label>
+          <div className="px-4 w-72">
+            <Select
+              label="Velg etterlevelse filter"
+              hideLabel
               value={filter}
               onChange={(params) => {
-                setFilter(params.value)
+                setFilter(params.target.value)
               }}
-            />
+            >
+              {etterlevelseFilter.map((ef, i) => <option key={i + '_' + ef.label} value={ef.id}>{ef.label}</option>)}
+            </Select>
           </div>
         </div>
       )}
@@ -164,7 +162,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                             },
                           },
                         }}
-                        // panelIcon={(hover) => <PageIcon hover={hover} />}
+                      // panelIcon={(hover) => <PageIcon hover={hover} />}
                       />
                     ) : (
                       <PanelLink
@@ -190,7 +188,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                             },
                           },
                         }}
-                        // panelIcon={(hover) => <PageIcon hover={hover} />}
+                      // panelIcon={(hover) => <PageIcon hover={hover} />}
                       />
                     )}
                   </CustomPanelDivider>
@@ -200,11 +198,11 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
           })}
         </CustomizedAccordion>
       ) : (
-        <div className="flex item-center">{etterlevelser.length >= 1 && <LabelLarge>Ingen etterlevelser med {filter[0].label} status</LabelLarge>}</div>
+        <div className="flex item-center">{etterlevelser.length >= 1 && <LabelLarge>Ingen etterlevelser med {etterlevelseFilter.filter((ef) => ef.id === filter)[0].label} status</LabelLarge>}</div>
       )}
 
       {modalVersion && openEtterlse && krav && <EtterlevelseModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} etterlevelse={openEtterlse} kravData={krav} />}
-    </Block>
+    </div>
   )
 }
 
