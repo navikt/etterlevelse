@@ -8,6 +8,7 @@ type DataTextProps = {
   hideComponent?: boolean
   notFlexed?: boolean
   header?: boolean
+  labelWidth?: string
 }
 
 const DataText = (props: DataTextProps) => {
@@ -22,8 +23,8 @@ const DataText = (props: DataTextProps) => {
       )
     } else {
       return (
-        <div className={"pr-2.5"}>
-          <Label size={"medium"}>{props.label}</Label>
+        <div className={`${props.labelWidth?"w-["+props.labelWidth+"]":"w-48"} pr-2.5`}>
+          <Label size={"medium"} >{props.label}</Label>
         </div>
       )
     }
