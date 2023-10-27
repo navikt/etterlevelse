@@ -3,24 +3,17 @@ import { Block } from 'baseui/block'
 import { IconInCircle } from './Icon'
 import { HeadingXLarge, ParagraphSmall } from 'baseui/typography'
 import React from 'react'
+import { BodyShort } from '@navikt/ds-react'
 
 export const InfoBlock = (props: { icon: string; alt: string; text: string; color: string }) => (
-  <Block
-    $style={{
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderStyle: 'solid',
-      borderColor: ettlevColors.grey100,
-      borderRadius: '4px',
-    }}
-  >
-    <Block display={'flex'} flexDirection={'column'} alignItems={'center'} padding={theme.sizing.scale700}>
-      <IconInCircle icon={props.icon} alt={props.alt} backgroundColor={props.color} size={'64px'} />
-      <ParagraphSmall marginBottom={0}>{props.text}</ParagraphSmall>
-    </Block>
-  </Block>
+  <div>
+    <div className="w-full flex justify-center items-center">
+      <div className="flex flex-col items-center p-5">
+        <IconInCircle icon={props.icon} alt={props.alt} backgroundColor={props.color} size={'64px'} />
+        <BodyShort>{props.text}</BodyShort>
+      </div>
+    </div>
+  </div>
 )
 
 export const InfoBlock2 = (props: { icon: string; alt: string; title: string; beskrivelse?: string; backgroundColor?: string; children?: React.ReactNode }) => (
