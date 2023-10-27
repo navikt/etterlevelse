@@ -173,7 +173,7 @@ export const KravPage = () => {
   }, [edit])
 
   return (
-    <div className={"w-full"} key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon} id="content">
+    <div className="w-full" key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon} id="content">
       {kravLoading &&
         <div className="grid gap-2">
           <Skeleton variant="text" width="60%"/>
@@ -182,7 +182,7 @@ export const KravPage = () => {
         </div>
       }
       {!kravLoading && (
-        <div className={"flex w-full justify-center pb-8"}>
+        <div className="flex w-full justify-center pb-8">
           {krav?.id && (
             <Helmet>
               <meta charSet="utf-8"/>
@@ -191,10 +191,10 @@ export const KravPage = () => {
               </title>
             </Helmet>
           )}
-          <div className={"w-full max-w-7xl"}>
-            <div className={"flex flex-col justify-center mb-10"}>
-              <div className={"flex items-center w-full justify-center mt-5"}>
-                <div className={"w-full flex flex-col"}>
+          <div className="w-full max-w-7xl">
+            <div className="flex flex-col justify-center mb-10">
+              <div className="flex items-center w-full justify-center mt-5">
+                <div className="w-full flex flex-col">
                   {krav?.id && (
                     <CustomizedBreadcrumbs
                       fontColor={ettlevColors.grey25}
@@ -204,8 +204,8 @@ export const KravPage = () => {
                   )}
                   <div className="flex gap-2 items-center">
                     {krav && (
-                      <div className={"flex w-full justify-end"}>
-                        <Tag variant={"neutral"}>
+                      <div className="flex w-full justify-end">
+                        <Tag variant="neutral">
                           <BodyShort>
                             Status: {kravStatus(krav.status)}
                           </BodyShort>
@@ -213,7 +213,7 @@ export const KravPage = () => {
                       </div>
                     )}
                     {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
-                      <div className={"flex flex-1 justify-end"}>
+                      <div className="flex flex-1 justify-end">
                         {krav.status === KravStatus.AKTIV && (
                           <Button onClick={newVersion} variant="tertiary">
                             <div className="flex flex-nowrap items-center whitespace-nowrap gap-1">
@@ -236,19 +236,19 @@ export const KravPage = () => {
               </div>
             </div>
 
-            <div className={"flex"}>
-              <div className={"w-full max-w-7xl"}>
+            <div className="flex">
+              <div className="w-full max-w-7xl">
                 <div>
                   {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
                 </div>
-                <Heading size="large" className={"mt-4"}>
+                <Heading size="large" className="mt-4">
                   {krav && krav?.navn ? krav.navn : 'Ny'}{' '}
                 </Heading>
 
                 {krav?.varselMelding && (
-                  <div className={"w-fit flex justify-center items-center"}>
-                    <InformationSquareIcon fontSize={"1.5rem"}/>
-                    <BodyLong className={"ml-1"}>
+                  <div className="w-fit flex justify-center items-center">
+                    <InformationSquareIcon fontSize="1.5rem"/>
+                    <BodyLong className="ml-1">
                       {krav.varselMelding}
                     </BodyLong>
                   </div>
@@ -262,17 +262,17 @@ export const KravPage = () => {
       )}
 
       {krav && !kravLoading && (
-        <div className={"w-full"}>
+        <div className="w-full">
 
-          <div className={"flex w-full justify-center"}>
-            <div className={"w-full max-w-7xl"}>
-                  <Heading size={"large"}>Hensikten med kravet</Heading>
+          <div className="flex w-full justify-center">
+            <div className="w-full max-w-7xl">
+                  <Heading size="large">Hensikten med kravet</Heading>
                   <Markdown p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]}/>
             </div>
           </div>
 
-          <div className={"flex justify-center"}>
-            <div className={"w-full max-w-7xl"}>
+          <div className="flex justify-center">
+            <div className="w-full max-w-7xl">
               <Tabs
                 defaultValue={tab}
                 onChange={(s) => setTab(s as Section)}
