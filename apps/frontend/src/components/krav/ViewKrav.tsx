@@ -1,42 +1,46 @@
-import {AdresseType, Begrep, Krav, KravQL, KravVersjon} from '../../constants'
+import { AdresseType, Begrep, Krav, KravQL, KravVersjon } from '../../constants'
 import React from 'react'
 import moment from 'moment'
-import {DotTag, DotTags} from '../common/DotTag'
-import {ListName} from '../../services/Codelist'
-import {CustomLabel, LabelAboveContent} from '../common/PropertyLabel'
-import {ExternalLink} from '../common/RouteLink'
-import {slackLink, slackUserLink, termUrl} from '../../util/config'
-import {user} from '../../services/User'
-import {LovViewList} from '../Lov'
-import {SuksesskriterieCard} from './Suksesskriterie'
-import {Markdown} from '../common/Markdown'
+import { DotTag, DotTags } from '../common/DotTag'
+import { ListName } from '../../services/Codelist'
+import { CustomLabel, LabelAboveContent } from '../common/PropertyLabel'
+import { ExternalLink } from '../common/RouteLink'
+import { slackLink, slackUserLink, termUrl } from '../../util/config'
+import { user } from '../../services/User'
+import { LovViewList } from '../Lov'
+import { SuksesskriterieCard } from './Suksesskriterie'
+import { Markdown } from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
 import SidePanel from './SidePanel'
-import {BodyShort, Box, Label} from "@navikt/ds-react";
+import { BodyShort, Box, Label } from "@navikt/ds-react";
 
-const LabelWrapper = ({children}: { children: React.ReactNode }) => (
+const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
   <div className={"my-12"}>
     {children}
   </div>
 )
 
-export const ViewKrav = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
+export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
   return (
-    <div className={"flex w-full"}>
-      <div className={"w-full"}>
-        {krav.suksesskriterier.map((s, i) => (
-          <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length}/>
-        ))}
-        {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner}/>}
-      </div>
-      <div className={"block fixed right-0"}>
-        <SidePanel/>
+    <div>
+      <div className="flex w-full">
+        <div className="w-full">
+          {krav.suksesskriterier.map((s, i) => (
+            <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length} />
+          ))}
+          {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />}
+        </div>
+        {//deactivate side panel, waiting for feedback from design
+        }
+        {/* <div className={"block fixed right-0"}>
+        <SidePanel />
+      </div> */}
       </div>
     </div>
   )
 }
 
-export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
+export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
   const hasKravExpired = () => {
     return krav && krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString())
   }
@@ -58,7 +62,7 @@ export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersj
       )}
 
       <LabelWrapper>
-        <LabelAboveContent header title="Relevante implementasjoner" markdown={krav.implementasjoner}/>
+        <LabelAboveContent header title="Relevante implementasjoner" markdown={krav.implementasjoner} />
       </LabelWrapper>
 
       <LabelWrapper>
@@ -121,7 +125,7 @@ export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersj
 
         <div className={"mb-6"}>
           <CustomLabel title="Regelverk" hide={!krav.regelverk.length}>
-            <LovViewList regelverk={krav.regelverk}/>
+            <LovViewList regelverk={krav.regelverk} />
           </CustomLabel>
         </div>
 
@@ -163,7 +167,7 @@ export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersj
   )
 }
 
-const BegrepView = ({begrep}: { begrep: Begrep }) => (
+const BegrepView = ({ begrep }: { begrep: Begrep }) => (
   <div className={"max-w-2xl"}>
     <DotTag>
       <ExternalLink href={termUrl(begrep.id)} label={'Link begrepskatalogen'}>
@@ -174,7 +178,7 @@ const BegrepView = ({begrep}: { begrep: Begrep }) => (
   </div>
 )
 
-const KravRelasjonView = ({kravRelasjon}: { kravRelasjon: Partial<Krav> }) => (
+const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<Krav> }) => (
   <div className={"max-w-2xl"}>
     <DotTag>
       <ExternalLink href={`/krav/${kravRelasjon.id}`} label={'Link til krav relasjon'}>
