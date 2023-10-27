@@ -1,22 +1,16 @@
 import { Etterlevelse, EtterlevelseStatus, Krav, SuksesskriterieStatus } from '../../constants'
 import { Block } from 'baseui/block'
 import { useRef, useState } from 'react'
-import { theme } from '../../util'
 import moment from 'moment'
-import RouteLink from '../common/RouteLink'
-import { useBehandling } from '../../api/BehandlingApi'
-import { HeadingLarge, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
-import { Card } from 'baseui/card'
+import { LabelSmall, ParagraphMedium } from 'baseui/typography'
 import { ettlevColors } from '../../util/theme'
 import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
 import { FormikProps } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { Markdown } from '../common/Markdown'
-import EditBegrunnelse from './Edit/EditBegrunnelse'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../common/Style'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faCircle } from '@fortawesome/free-solid-svg-icons'
-import { Loader, ReadMore } from '@navikt/ds-react'
+import { Alert, BodyShort, Box, Heading, Label, Link, Loader, ReadMore } from '@navikt/ds-react'
+import { useEtterlevelseDokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
+import { CheckmarkIcon } from '@navikt/aksel-icons'
 
 const getHeaderText = (status: EtterlevelseStatus) => {
   switch (status) {
@@ -43,308 +37,160 @@ export const ViewEtterlevelse = ({
   krav: Krav
   modalVersion?: boolean
 }) => {
-  const [behandling] = useBehandling(etterlevelse.behandlingId)
+  const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(etterlevelse.etterlevelseDokumentasjonId)
   const formRef = useRef<FormikProps<any>>()
   const [edit, setEdit] = useState(etterlevelse && !etterlevelse.id)
   const navigate = useNavigate()
 
   return (
-    <Block width="100%" marginTop="48px">
-      <Block>
-        <HeadingXLarge>{getHeaderText(etterlevelse.status)}</HeadingXLarge>
-        {behandling ? (
-          <Block marginBottom={'48px'}>
-            <ParagraphMedium>
-              <strong>
-                B{behandling.nummer} {behandling.overordnetFormaal.shortName}
-              </strong>
-              : {behandling.navn}
-            </ParagraphMedium>
+    <div className="w-full mt-12">
+      <div>
+        <Heading size="medium">{getHeaderText(etterlevelse.status)}</Heading>
+        {etterlevelseDokumentasjon ? (
+          <div className='mb-12'>
+            <BodyShort>
+              E{etterlevelseDokumentasjon.etterlevelseNummer} - {etterlevelseDokumentasjon.title}
+            </BodyShort>
             {!modalVersion && (
-              <Block display="flex" alignContent="center">
-                <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', paddingTop: '7px', marginRight: '8px' }} aria-hidden={true} />
-                <RouteLink
-                  href={`/behandling/${behandling.id}`}
-                  style={{
-                    fontSize: '18px',
-                    fontWeight: 400,
-                    lineHeight: '22px',
-                    color: ettlevColors.green800,
-                  }}
+              <div className="flex content-center">
+                <li />
+                <Link
+                  href={`/dokumentasjon/${etterlevelseDokumentasjon.id}`}
                 >
-                  Gå til behandling
-                </RouteLink>
-              </Block>
+                  Gå til etterlevelse dokumentasjon
+                </Link>
+              </div>
             )}
             {!modalVersion && (
-              <Block marginTop="8px" display="flex" alignContent="center">
-                <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', marginTop: '7px', marginRight: '8px' }} aria-hidden={true} />
-                <RouteLink
+              <div className="mt-2 flex content-center">
+                <li />
+                <Link
                   href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
-                  style={{
-                    fontSize: '18px',
-                    fontWeight: 400,
-                    lineHeight: '22px',
-                    color: ettlevColors.green800,
-                  }}
                 >
                   Gå til kravet
-                </RouteLink>
-              </Block>
+                </Link>
+              </div>
             )}
-            {/* <Block marginTop={theme.sizing.scale850}>
-              <Teams teams={behandling.teams} link list />
-            </Block> */}
-          </Block>
+          </div>
         ) : (
-          etterlevelse.behandlingId && (
-            <Block>
+          etterlevelse.etterlevelseDokumentasjonId && (
+            <div>
               {' '}
               <Loader size={'large'} />
-              {etterlevelse.behandlingId}
-            </Block>
+              {etterlevelse.etterlevelseDokumentasjonId}
+            </div>
           )
         )}
-      </Block>
+      </div>
 
-      <Block marginTop={theme.sizing.scale950} width="fit-content">
-        <Block>
-          <Card
-            overrides={{
-              Contents: {
-                style: {
-                  ...marginAll('4px'),
-                },
-              },
-              Body: {
-                style: {
-                  ...marginAll('4px'),
-                },
-              },
-              Root: {
-                style: {
-                  // Did not use border, margin and border radius to remove warnings.
-                  backgroundColor:
-                    etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.success50 : '#FFECCC',
-                  ...borderColor(
-                    etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.success400 : '#D47B00',
-                  ),
-                  ...borderWidth('1px'),
-                  ...borderStyle('solid'),
-                  ...borderRadius('4px'),
-                },
-              },
-            }}
-          >
-            <ParagraphXSmall $style={{ color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 400, lineHeight: '20px' }}>
-              Status:{' '}
-              {etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? 'Ferdig utfylt' : 'Under utfylling'}
-            </ParagraphXSmall>
-          </Card>
-        </Block>
-      </Block>
+      <div className="mt-9 w-fit">
+        <Alert
+          size="small"
+          variant={etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? 'success' : 'warning'}
+        >
+          Status: {etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? 'Ferdig utfylt' : 'Under utfylling'}
+        </Alert>
+      </div>
 
-      {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT && (
-        <Block marginTop={'32px'} marginBottom={'40px'}>
-          <HeadingLarge
-            $style={{
-              marginTop: 0,
-              marginBottom: '12px',
-            }}
-          >
-            Hvorfor er ikke kravet relevant?
-          </HeadingLarge>
-          <ParagraphMedium
-            $style={{
-              marginTop: 0,
-              marginBottom: '12px',
-            }}
-          >
-            <Markdown source={etterlevelse.statusBegrunnelse} />
-          </ParagraphMedium>
-        </Block>
-      )}
-      {etterlevelse.status === EtterlevelseStatus.OPPFYLLES_SENERE && (
-        <Block marginTop={'32px'} marginBottom={'40px'}>
-          <HeadingLarge
-            $style={{
-              marginTop: 0,
-              marginBottom: '12px',
-            }}
-          >
-            Oppfylles innen
-          </HeadingLarge>
-          <ParagraphMedium
-            $style={{
-              marginTop: 0,
-              marginBottom: '12px',
-            }}
-          >
-            {moment(etterlevelse.fristForFerdigstillelse).format('ll')}
-          </ParagraphMedium>
-        </Block>
-      )}
-      <Block marginTop={theme.sizing.scale650}>
-        <Block display="flex">
-          {/* {!viewMode && (
-            <Block display="flex" flex="1" justifyContent="flex-end">
-              <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end" alignItems="center">
-                {etterlevelse?.id && user.canWrite() && (
-                  <Block>
-                    <Button
-                      startEnhancer={!edit ? <img src={editSecondaryIcon} alt="edit" /> : undefined}
-                      size={SIZE.compact}
-                      kind={edit ? KIND.secondary : KIND.tertiary}
-                      onClick={() => setEdit(!edit)}
-                      marginLeft
-                    >
-                      {edit ? 'Avbryt' : 'Rediger dokumentasjon'}
-                    </Button>
-                  </Block>
-                )}
-                {edit && (
-                  <Block>
-                    <Button size={SIZE.compact} kind={KIND.primary} onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>
-                      Lagre
-                    </Button>
-                  </Block>
-                )}
-              </Block>
-            </Block>
-          )} */}
-        </Block>
-        {!edit &&
-          etterlevelse &&
+      {
+        etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT && (
+          <div className="my-8">
+            <Heading size="medium">
+              Hvorfor er ikke kravet relevant?
+            </Heading>
+            <ParagraphMedium
+              $style={{
+                marginTop: 0,
+                marginBottom: '12px',
+              }}
+            >
+              <Markdown source={etterlevelse.statusBegrunnelse} />
+            </ParagraphMedium>
+          </div>
+        )
+      }
+      {
+        etterlevelse.status === EtterlevelseStatus.OPPFYLLES_SENERE && (
+          <div className="my-8">
+            <Heading size="medium">
+              Oppfylles innen
+            </Heading>
+            <BodyShort>
+              {moment(etterlevelse.fristForFerdigstillelse).format('ll')}
+            </BodyShort>
+          </div>
+        )
+      }
+      <div className="mt-4">
+        {etterlevelse &&
           !loading &&
           krav.suksesskriterier.map((s, i) => {
             const suksessbeskrivelseBegrunnelse = getSuksesskriterieBegrunnelse(etterlevelse.suksesskriterieBegrunnelser, s)
             return (
-              <Block marginBottom={theme.sizing.scale700} key={s.id}>
-                <Card
-                  overrides={{
-                    Root: {
-                      style: {
-                        ...borderWidth('1px'),
-                        ...borderRadius('4px'),
-                        backgroundColor: etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
-                      },
-                    },
-                  }}
-                >
-                  <Block display="flex" justifyContent="center" marginTop={'32px'} marginBottom={'16px'}>
-                    <Block display="flex" flex="1">
-                      <ParagraphMedium
-                        $style={{
-                          fontSize: '16px',
-                          lineHeight: '18,75',
-                          marginTop: '3px',
-                          marginBottom: '5px',
-                          font: 'roboto',
-                          color: ettlevColors.grey600,
-                        }}
-                      >
+              <div key={s.id} className="mb-5">
+                <Box className="bg-white" padding="4">
+                  <div className="flex justify-center mt-8 mb-4">
+                    <div className="flex flex-1">
+                      <BodyShort size="small">
                         Suksesskriterium {i + 1} av {krav.suksesskriterier.length}
-                      </ParagraphMedium>
-                    </Block>
+                      </BodyShort>
+                    </div>
                     {(!suksessbeskrivelseBegrunnelse.behovForBegrunnelse || suksessbeskrivelseBegrunnelse.begrunnelse) && (
-                      <Block display="flex" justifyContent="flex-end">
-                        <ParagraphXSmall
-                          $style={{
-                            lineHeight: '24px',
-                            color: ettlevColors.green800,
-                            marginTop: '0px',
-                            marginBottom: '0px',
-                            fontStyle: 'italic',
-                          }}
-                        >
+                      <div className="flex justify-end">
+                        <BodyShort size="small" className="flex items-center">
                           {suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.OPPFYLT && (
-                            <FontAwesomeIcon icon={faCheck} color={ettlevColors.green400} style={{ marginRight: '4px' }} />
+                            <CheckmarkIcon aria-label="" aria-hidden color="#06893A" />
                           )}
                           {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT
                             ? 'Ikke Relevant'
                             : suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT
-                            ? 'Ikke oppfylt'
-                            : 'Oppfylt'}
-                        </ParagraphXSmall>
-                      </Block>
+                              ? 'Ikke oppfylt'
+                              : 'Oppfylt'}
+                        </BodyShort>
+                      </div>
                     )}
-                  </Block>
-                  <LabelSmall $style={{ fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '10px' }}>{s.navn}</LabelSmall>
+                  </div>
+                  <Label>{s.navn}</Label>
 
                   <ReadMore header="Utfyllende om kriteriet">
                     <Markdown source={s.beskrivelse} />
                   </ReadMore>
 
-                  <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="15px" marginBottom="23px" />
+                  <div className="w-full h-[1px] mt-4 mb-6 bg-gray-400" />
 
                   {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse || suksessbeskrivelseBegrunnelse.begrunnelse ? (
-                    <Block>
-                      <LabelSmall $style={{ lineHeight: '22px' }} marginTop="16px">
+                    <div>
+                      <Label>
                         {suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT
                           ? 'Hvorfor er ikke kriteriet relevant?'
                           : suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT
-                          ? 'Hvorfor er kriteriet ikke oppfylt?'
-                          : 'Hvordan er kriteriet oppfylt?'}
-                      </LabelSmall>
-                      <Block marginBottom={'48px'}>
+                            ? 'Hvorfor er kriteriet ikke oppfylt?'
+                            : 'Hvordan er kriteriet oppfylt?'}
+                      </Label>
+                      <div className="mb-12">
                         {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse && !suksessbeskrivelseBegrunnelse.begrunnelse ? (
-                          <ParagraphMedium>Kriteriet har ikke behov for begrunnelse</ParagraphMedium>
+                          <BodyShort>Kriteriet har ikke behov for begrunnelse</BodyShort>
                         ) : (
                           <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse} />
                         )}
-                      </Block>
-                    </Block>
+                      </div>
+                    </div>
                   ) : (
-                    <Block marginBottom={'48px'}>
-                      <ParagraphMedium $style={{ color: ettlevColors.green800, fontStyle: 'italic' }}>
+                    <div className="mb-12">
+                      <BodyShort>
                         {etterlevelse.status === EtterlevelseStatus.OPPFYLLES_SENERE ? 'Oppfyles senere' : 'Mangler utfylling'}
-                      </ParagraphMedium>
-                    </Block>
+                      </BodyShort>
+                    </div>
                   )}
-                </Card>
-              </Block>
+                </Box>
+              </div>
             )
           })}
-        {edit && etterlevelse && krav && !viewMode && (
-          <EditBegrunnelse
-            etterlevelse={etterlevelse}
-            formRef={formRef}
-            krav={krav}
-            close={(k) => {
-              if (k && setEtterlevelse) {
-                setEtterlevelse(k)
-                if (k.id !== etterlevelse.id) {
-                  navigate(`/etterlevelse/${k.id}`)
-                }
-              }
-              setEdit(false)
-            }}
-          />
-        )}
-      </Block>
+      </div>
 
-      <Block>
-        <ParagraphMedium
-          $style={{
-            marginTop: 0,
-            marginBottom: 0,
-            fontSize: '16px',
-            lineHeight: '22px',
-          }}
-        >
-          Sist endret: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
-        </ParagraphMedium>
-      </Block>
-      {/* <Block height={theme.sizing.scale600} />
-
-
-      <Label title='Dokumentasjon' markdown={etterlevelse.dokumentasjon} />
-
-      <Block height={theme.sizing.scale600} />
-
-      <Label title='Frist for ferdigstillelse'>{formatDate(etterlevelse.fristForFerdigstillelse)}</Label>
-
-      <Block height={theme.sizing.scale600} /> */}
-    </Block>
+      <BodyShort size="small">
+        Sist endret: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
+      </BodyShort>
+    </div >
   )
 }
