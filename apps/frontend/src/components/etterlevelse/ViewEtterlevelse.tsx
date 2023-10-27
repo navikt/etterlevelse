@@ -1,14 +1,11 @@
 import { Etterlevelse, EtterlevelseStatus, Krav, SuksesskriterieStatus } from '../../constants'
-import { Block } from 'baseui/block'
 import { useRef, useState } from 'react'
 import moment from 'moment'
-import { LabelSmall, ParagraphMedium } from 'baseui/typography'
-import { ettlevColors } from '../../util/theme'
 import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
 import { FormikProps } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { Markdown } from '../common/Markdown'
-import { Alert, BodyShort, Box, Heading, Label, Link, Loader, ReadMore } from '@navikt/ds-react'
+import { BodyShort, Box, Heading, Label, Link, Loader, ReadMore, Tag } from '@navikt/ds-react'
 import { useEtterlevelseDokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
 import { CheckmarkIcon } from '@navikt/aksel-icons'
 
@@ -84,12 +81,12 @@ export const ViewEtterlevelse = ({
       </div>
 
       <div className="mt-9 w-fit">
-        <Alert
+        <Tag
           size="small"
           variant={etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? 'success' : 'warning'}
         >
           Status: {etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? 'Ferdig utfylt' : 'Under utfylling'}
-        </Alert>
+        </Tag>
       </div>
 
       {
@@ -98,14 +95,9 @@ export const ViewEtterlevelse = ({
             <Heading size="medium">
               Hvorfor er ikke kravet relevant?
             </Heading>
-            <ParagraphMedium
-              $style={{
-                marginTop: 0,
-                marginBottom: '12px',
-              }}
-            >
+            <BodyShort>
               <Markdown source={etterlevelse.statusBegrunnelse} />
-            </ParagraphMedium>
+            </BodyShort>
           </div>
         )
       }
