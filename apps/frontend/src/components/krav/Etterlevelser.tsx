@@ -15,7 +15,6 @@ import { borderRadius, borderStyle, marginAll } from '../common/Style'
 import { ViewEtterlevelse } from '../etterlevelse/ViewEtterlevelse'
 import { sadFolderIcon } from '../Images'
 import { Heading, Label, Loader, Select } from '@navikt/ds-react'
-import { options } from 'amplitude-js'
 
 const etterlevelseFilter = [
   { label: 'Alle', id: 'ALLE' },
