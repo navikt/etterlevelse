@@ -15,7 +15,7 @@ import SidePanel from './SidePanel'
 import { BodyShort, Box, Label } from "@navikt/ds-react";
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
-  <div className={"my-12"}>
+  <div className="my-12">
     {children}
   </div>
 )
@@ -101,8 +101,8 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
               return null
             })}
             {krav.versjonEndringer && (
-              <div className={"my-8"}>
-                <Label size={"medium"}>Dette er nytt fra forrige versjon</Label>
+              <div className="my-8">
+                <Label size="medium">Dette er nytt fra forrige versjon</Label>
                 <Markdown source={krav.versjonEndringer} />
               </div>
             )}
@@ -111,44 +111,44 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
       )}
 
       {hasKravExpired() && (
-        <div className={"my-8"}>
+        <div className="my-8">
           <ExpiredAlert alleKravVersjoner={alleKravVersjoner} statusName={krav.status} />
         </div>
       )}
 
-      <Box className={"p-8"}>
-        <div className={"mb-6"}>
+      <Box className="p-8">
+        <div className="mb-6">
           <CustomLabel title="Ansvarlig">
             {krav.underavdeling?.shortName}
           </CustomLabel>
         </div>
 
-        <div className={"mb-6"}>
+        <div className="mb-6">
           <CustomLabel title="Regelverk" hide={!krav.regelverk.length}>
             <LovViewList regelverk={krav.regelverk} />
           </CustomLabel>
         </div>
 
-        <div className={"mb-6"}>
+        <div className="mb-6">
           <CustomLabel title="Varslingsadresser" hide={!user.isKraveier()}>
             {krav.varslingsadresser.map((va, i) => {
               if (va.type === AdresseType.SLACK)
                 return (
-                  <div className={"flex mb-2"} key={'kravVarsling_list_SLACK_' + i}>
-                    <div className={"mr-1"}>Slack:</div>
+                  <div className="flex mb-2" key={'kravVarsling_list_SLACK_' + i}>
+                    <div className="mr-1">Slack:</div>
                     <ExternalLink href={slackLink(va.adresse)}>{`#${va.slackChannel?.name || va.adresse}`}</ExternalLink>
                   </div>
                 )
               if (va.type === AdresseType.SLACK_USER)
                 return (
-                  <div className={"flex mb-2"} key={'kravVarsling_list_SLACK_USER_' + i}>
-                    <div className={"mr-1"}>Slack:</div>
+                  <div className="flex mb-2" key={'kravVarsling_list_SLACK_USER_' + i}>
+                    <div className="mr-1">Slack:</div>
                     <ExternalLink href={slackUserLink(va.adresse)}>{`${va.slackUser?.name || va.adresse}`}</ExternalLink>
                   </div>
                 )
               return (
-                <div className={"flex mb-2"} key={'kravVarsling_list_EMAIL_' + i}>
-                  <div className={"mr-1"}>Epost:</div>
+                <div className="flex mb-2" key={'kravVarsling_list_EMAIL_' + i}>
+                  <div className="mr-1">Epost:</div>
                   <ExternalLink href={`mailto:${va.adresse}`} openOnSamePage>
                     {va.adresse}
                   </ExternalLink>
@@ -159,7 +159,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
         </div>
       </Box>
       <div>
-        <BodyShort size={"small"}>
+        <BodyShort size="small">
           Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')} {user.isAdmin() || user.isKraveier() ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1] : ''}
         </BodyShort>
       </div>
@@ -168,7 +168,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
 }
 
 const BegrepView = ({ begrep }: { begrep: Begrep }) => (
-  <div className={"max-w-2xl"}>
+  <div className="max-w-2xl">
     <DotTag>
       <ExternalLink href={termUrl(begrep.id)} label={'Link begrepskatalogen'}>
         {begrep.navn}
@@ -179,7 +179,7 @@ const BegrepView = ({ begrep }: { begrep: Begrep }) => (
 )
 
 const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<Krav> }) => (
-  <div className={"max-w-2xl"}>
+  <div className="max-w-2xl">
     <DotTag>
       <ExternalLink href={`/krav/${kravRelasjon.id}`} label={'Link til krav relasjon'}>
         {`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}
