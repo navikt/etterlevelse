@@ -11,8 +11,8 @@ import {LovViewList} from '../Lov'
 import {SuksesskriterieCard} from './Suksesskriterie'
 import {Markdown} from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
-import SidePanel from './SidePanel'
 import {BodyShort, Box, Label} from "@navikt/ds-react";
+import SidePanel from "./SidePanel";
 
 const LabelWrapper = ({children}: { children: React.ReactNode }) => (
   <div className={"my-12"}>
