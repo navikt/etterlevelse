@@ -73,7 +73,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
 
   return (
     <div>
-      <div className="flex justify-between mb-2">
+      <div className="flex justify-between my-2">
         <Label>{intl.lastChanges}</Label>
         {!props.tableType && (
           <div className="w-72 flex justify-between items-center">
