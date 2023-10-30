@@ -106,7 +106,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
             <Table.ColumnHeader className="w-[17%]">{intl.action}</Table.ColumnHeader>
             <Table.ColumnHeader>{intl.id}</Table.ColumnHeader>
             <Table.ColumnHeader>{intl.user}</Table.ColumnHeader>
-            <Table.ColumnHeader />
+            <Table.ColumnHeader>Endring</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -143,14 +143,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
                   {audit.user}
                 </Table.DataCell>
                 <Table.DataCell>
-                  <div className="flex">
-                    <ObjectLink id={tableId(audit)} type={audit.table} audit={audit} noNewTabLabel>
-                      <Button variant="tertiary" as="a">
-                        Vis bruk (åpnes i ny fane)
-                      </Button>
-                    </ObjectLink>
                     <CodeView audit={audit}/>
-                  </div>
                 </Table.DataCell>
               </Table.Row>
             )
