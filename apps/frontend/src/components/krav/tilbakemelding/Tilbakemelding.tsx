@@ -11,7 +11,7 @@ import { Block } from 'baseui/block'
 import { theme } from '../../../util'
 import { HeadingMedium, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
 import Button from '../../common/Button'
-import { faChevronDown, faChevronUp, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import moment from 'moment'
 import { user } from '../../../services/User'
 import { Notification } from 'baseui/notification'
@@ -25,9 +25,7 @@ import { PersonName } from '../../common/PersonName'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
 import * as _ from 'lodash'
 import { LoginButton } from '../../Header'
-import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
 import StatusView from '../../common/StatusTag'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ResponseMelding from './ResponseMelding'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
@@ -337,7 +335,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
           <Modal closeable={false} isOpen onClose={() => setDeleteModal(false)}>
             <ModalHeader>Er du sikker på at du vil slette hele meldingen?</ModalHeader>
             <ModalBody>
-              <ParagraphSmall>
+              <ParagraphSmall >
                 {moment(tilbakemelding.meldinger[0].tid).format('ll')} <PersonName ident={tilbakemelding.meldinger[0].fraIdent} />
               </ParagraphSmall>
               <ParagraphMedium $style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{tilbakemelding.meldinger[0].innhold}</ParagraphMedium>

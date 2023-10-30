@@ -1,16 +1,13 @@
-import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
-import { Block } from 'baseui/block'
-import Button from '../../../common/Button'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
 import { ParagraphMedium, ParagraphSmall } from 'baseui/typography'
 import moment from 'moment'
 import { useState } from 'react'
 import { tilbakemeldingslettMelding } from '../../../../api/TilbakemeldingApi'
 import { Tilbakemelding, TilbakemeldingMelding } from '../../../../constants'
 import { user } from '../../../../services/User'
-import { pageWidth } from '../../../../util/theme'
 import { PersonName } from '../../../common/PersonName'
 import TilbakemeldingEdit from './TilbakemeldingEdit'
+import { BodyShort, Button, Modal } from '@navikt/ds-react'
+import { DocPencilIcon, TrashIcon } from '@navikt/aksel-icons'
 
 export const MeldingKnapper = (props: {
   melding: TilbakemeldingMelding
@@ -26,34 +23,32 @@ export const MeldingKnapper = (props: {
   if ((!user.isAdmin() && melding.fraIdent !== user.getIdent()) || !user.canWrite()) return null
 
   return (
-    <>
-      <Block marginLeft={props.marginLeft ? '42px' : undefined} width="50%">
-        <Button kind={'underline-hover'} size={'mini'} icon={faPencilAlt} onClick={() => setEditModal(true)}>
+    <div>
+      <div className={`${props.marginLeft ? 'ml-10' : undefined} w-1/2 flex`}>
+        <Button variant="tertiary" size="xsmall" icon={<DocPencilIcon aria-label="" aria-hidden />} onClick={() => setEditModal(true)}>
           Rediger
         </Button>
-        <Button kind={'underline-hover'} size={'mini'} icon={faTrashAlt} marginLeft onClick={() => setDeleteModal(true)}>
+        <Button className="ml-2.5" variant="tertiary" size="xsmall" icon={<TrashIcon aria-label="" aria-hidden />} onClick={() => setDeleteModal(true)}>
           Slett
         </Button>
-      </Block>
+      </div>
 
       {deleteModal && (
-        <Modal closeable={false} isOpen onClose={() => setDeleteModal(false)}>
-          <ModalHeader>Er du sikker på at du vil slette meldingen?</ModalHeader>
-          <ModalBody>
-            {meldingNr === 1 && <ParagraphMedium>Hele meldingstråden vil bli slettet.</ParagraphMedium>}
-            <ParagraphSmall>
-              {moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent} />
-            </ParagraphSmall>
-            <ParagraphMedium $style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{melding.innhold}</ParagraphMedium>
-          </ModalBody>
-          <ModalFooter>
-            <Button kind={'secondary'} size={'compact'} onClick={() => setDeleteModal(false)}>
+        <Modal open onClose={() => setDeleteModal(false)}>
+          <Modal.Header>Er du sikker på at du vil slette meldingen?</Modal.Header>
+          <Modal.Body>
+            {meldingNr === 1 && <BodyShort>Hele meldingstråden vil bli slettet.</BodyShort>}
+            <BodyShort className="flex">
+              {moment(melding.tid).format('ll')} <div className="ml-1"><PersonName ident={melding.fraIdent} /></div>
+            </BodyShort>
+            <BodyShort>{melding.innhold}</BodyShort>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setDeleteModal(false)}>
               Avbryt
             </Button>
             <Button
-              kind={'primary'}
-              size={'compact'}
-              marginLeft
+              className="ml-2.5"
               onClick={() =>
                 tilbakemeldingslettMelding({ tilbakemeldingId, meldingNr }).then((t) => {
                   if (meldingNr === 1) {
@@ -67,29 +62,21 @@ export const MeldingKnapper = (props: {
             >
               Slett
             </Button>
-          </ModalFooter>
+          </Modal.Footer>
         </Modal>
       )}
 
       {editModal && (
         <Modal
-          isOpen
-          closeable={false}
+          open={editModal}
           onClose={() => setEditModal(false)}
-          overrides={{
-            Dialog: {
-              style: {
-                width: '60%',
-                maxWidth: pageWidth,
-              },
-            },
-          }}
+          className="w-2/3"
         >
-          <ModalHeader>Rediger melding</ModalHeader>
-          <ModalBody>
-            <ParagraphSmall>
-              {moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent} />
-            </ParagraphSmall>
+          <Modal.Header>Rediger melding</Modal.Header>
+          <Modal.Body>
+            <BodyShort className="flex">
+              {moment(melding.tid).format('ll')} <div className="ml-1"><PersonName ident={melding.fraIdent} /></div>
+            </BodyShort>
             <TilbakemeldingEdit
               tilbakemeldingId={tilbakemeldingId}
               melding={melding}
@@ -99,10 +86,10 @@ export const MeldingKnapper = (props: {
               }}
               setEditModal={setEditModal}
             />
-          </ModalBody>
+          </Modal.Body>
         </Modal>
       )}
-    </>
+    </div>
   )
 }
 export default MeldingKnapper
