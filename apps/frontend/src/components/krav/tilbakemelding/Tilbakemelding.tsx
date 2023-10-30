@@ -7,12 +7,8 @@ import {
   useTilbakemeldinger,
 } from '../../../api/TilbakemeldingApi'
 import React, { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { theme } from '../../../util'
-import { HeadingMedium, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
 import moment from 'moment'
 import { user } from '../../../services/User'
-import { Notification } from 'baseui/notification'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useQueryParam, useRefs } from '../../../util/hooks'
 import { ettlevColors } from '../../../util/theme'
@@ -20,7 +16,6 @@ import { mailboxPoppingIcon } from '../../Images'
 import { InfoBlock } from '../../common/InfoBlock'
 import { Portrait } from '../../common/Portrait'
 import { PersonName } from '../../common/PersonName'
-import CustomizedTextarea from '../../common/CustomizedTextarea'
 import * as _ from 'lodash'
 import { LoginButton } from '../../Header'
 import StatusView from '../../common/StatusTag'
@@ -28,13 +23,9 @@ import ResponseMelding from './ResponseMelding'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
 import NyTilbakemeldingModal from './edit/NyTilbakemeldingModal'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
 import { getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, tilbakemeldingStatusToText } from './utils'
-import { Select, SIZE } from 'baseui/select'
-import { customSelectOverrides } from '../Edit/RegelverkEdit'
-import { Checkbox } from 'baseui/checkbox'
 import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
-import { Accordion, BodyLong, BodyShort, Button, Heading, Label, Loader, Spacer } from '@navikt/ds-react'
+import { Accordion, Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Label, Loader, Modal, Select, Spacer, Textarea } from '@navikt/ds-react'
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 
 const DEFAULT_COUNT_SIZE = 5
@@ -151,7 +142,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
 
           {tilbakemeldinger.length > DEFAULT_COUNT_SIZE && (
             <div className="self-end mt-2.5">
-              <Button variant="tertiary" icon={<PlusIcon aria-label="" aria-hidden/>} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
+              <Button variant="tertiary" icon={<PlusIcon aria-label="" aria-hidden />} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
                 Last flere
               </Button>
             </div>
@@ -273,71 +264,57 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
   }
 
   return (
-    <Block width={'100%'}>
+    <div className="w-full">
       {(melderInfo.kanSkrive || user.isKraveier()) && (
-        <HeadingMedium color={ettlevColors.green800} marginBottom="9px" marginTop="34px">
+        <Heading size="medium" className="mb-2 mt-8">
           {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
-        </HeadingMedium>
+        </Heading>
       )}
 
       {user.isKraveier() && (
-        <Block>
-          <Block width={'fit-content'} marginBottom={'8px'}>
+        <div>
+          <div className="w-fit mb-2">
             <Checkbox
-              overrides={{
-                Checkmark: {
-                  style: ({ $isFocused }) => ({
-                    outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
-                    outlineWidth: $isFocused ? '3px' : undefined,
-                    outlineStyle: $isFocused ? 'solid' : undefined,
-                  }),
-                },
-              }}
-              checked={isEndretKrav}
+              value={isEndretKrav}
               onChange={() => setIsEndretKrav(!isEndretKrav)}
             >
               Tilbakemelding har ført til kravendring
             </Checkbox>
-          </Block>
-          <Block marginBottom={'8px'} display={'flex'} alignItems={'center'}>
-            <LabelSmall minWidth={'fit-content'} marginRight={'8px'}>
-              Velg spørsmål status:{' '}
-            </LabelSmall>
+          </div>
+          <div className="flex items-center mb-2">
+            <Label className="mr-2 w-fit">
+              Velg spørsmål status:
+            </Label>
             <Select
-              overrides={{
-                ...customSelectOverrides,
+              label="Velg spørsmål status"
+              hideLabel
+              value={getTilbakeMeldingStatusToOption(tilbakeMeldingStatus)[0].id}
+              onChange={(e) => {
+                setTilbakemeldingStatus(e.target.value as TilbakemeldingMeldingStatus)
               }}
-              size={SIZE.compact}
-              placeholder={'Velg status til tilbakemeldingen'}
-              options={getParsedOptionsforTilbakeMelding()}
-              value={getTilbakeMeldingStatusToOption(tilbakeMeldingStatus)}
-              onChange={({ value }) => {
-                if (value.length > 0) {
-                  setTilbakemeldingStatus(value[0].id as TilbakemeldingMeldingStatus)
-                } else {
-                  setTilbakemeldingStatus(TilbakemeldingMeldingStatus.UBESVART)
-                }
-              }}
-            />
-          </Block>
-        </Block>
+            >
+              {getParsedOptionsforTilbakeMelding().map((o, i) => <option key={i + '_' + o.label} value={o.id}>{o.label}</option>)}
+            </Select>
+          </div>
+        </div>
       )}
-      <Block display="flex" width="100%" alignItems="flex-end" justifyContent="center">
+      <div className="flex w-full items-end justify-center">
         {(melderInfo.kanSkrive || user.isKraveier()) && (
-          <Block display="flex" width="100%">
-            <CustomizedTextarea rows={6} onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)} value={response} disabled={loading} />
-          </Block>
+          <Textarea className="w-full" label="Ny tilbakemelding" hideLabel minRows={6} onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)} value={response} disabled={loading} />
         )}
         {deleteModal && (
-          <Modal closeable={false} isOpen onClose={() => setDeleteModal(false)}>
-            <ModalHeader>Er du sikker på at du vil slette hele meldingen?</ModalHeader>
-            <ModalBody>
-              <ParagraphSmall >
-                {moment(tilbakemelding.meldinger[0].tid).format('ll')} <PersonName ident={tilbakemelding.meldinger[0].fraIdent} />
-              </ParagraphSmall>
-              <ParagraphMedium $style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{tilbakemelding.meldinger[0].innhold}</ParagraphMedium>
-            </ModalBody>
-            <ModalFooter>
+          <Modal open={deleteModal} onClose={() => setDeleteModal(false)}>
+            <Modal.Header>Er du sikker på at du vil slette hele meldingen?</Modal.Header>
+            <Modal.Body>
+              <BodyShort className="flex" >
+                {moment(tilbakemelding.meldinger[0].tid).format('ll')}
+                <div className="ml-1">
+                  <PersonName ident={tilbakemelding.meldinger[0].fraIdent} />
+                </div>
+              </BodyShort>
+              <BodyLong>{tilbakemelding.meldinger[0].innhold}</BodyLong>
+            </Modal.Body>
+            <Modal.Footer>
               <Button variant="secondary" onClick={() => setDeleteModal(false)}>
                 Avbryt
               </Button>
@@ -352,17 +329,15 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
               >
                 Slett
               </Button>
-            </ModalFooter>
+            </Modal.Footer>
           </Modal>
         )}
-      </Block>
-      <Block display="flex" marginTop={'8px'} width={'100%'}>
+      </div>
+      <div className="flex mt-2 w-full">
         {user.isAdmin() && (
-          <Block>
-            <Button icon={<TrashIcon aria-label="" aria-hidden/>} variant="secondary" onClick={() => setDeleteModal(true)}>
-              Slett hele samtalen
-            </Button>
-          </Block>
+          <Button icon={<TrashIcon aria-label="" aria-hidden />} variant="secondary" onClick={() => setDeleteModal(true)}>
+            Slett hele samtalen
+          </Button>
         )}
         {/* {user.isKraveier() && !loading && melderInfo.melder && (
               <Block marginBottom={theme.sizing.scale400} display="flex" flexDirection="column">
@@ -377,19 +352,19 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
               </Block>
             )} */}
         {loading && (
-          <Block alignSelf="center" marginLeft={theme.sizing.scale400}>
+          <div className="self-center ml-2.5">
             <Loader size="large" />
-          </Block>
+          </div>
         )}
 
         {(melderInfo.kanSkrive || user.isKraveier()) && (
-          <Block display={'flex'} flex={'1'} justifyContent={'flex-end'}>
+          <div className="flex flex-1 justify-end">
             {user.isKraveier() && (
-              <Block>
+              <div>
                 {isUpdatingStatus ? (
-                  <Block alignSelf="center" marginLeft={theme.sizing.scale400}>
+                  <div className="self-center ml-2.5">
                     <Loader size="large" />
-                  </Block>
+                  </div>
                 ) : (
                   <Button
                     variant="secondary"
@@ -411,20 +386,20 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
                     Oppdater status
                   </Button>
                 )}
-              </Block>
+              </div>
             )}
             <Button className="ml-2.5" disabled={!response} onClick={submit}>
               {ubesvartOgKraveier ? 'Svar' : 'Send'}
               {user.isKraveier() ? ' og oppdater status' : ''}
             </Button>
-          </Block>
+          </div>
         )}
-      </Block>
+      </div>
       {error && (
-        <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>
+        <Alert variant="error">
           {error}
-        </Notification>
+        </Alert>
       )}
-    </Block>
+    </div>
   )
 }
