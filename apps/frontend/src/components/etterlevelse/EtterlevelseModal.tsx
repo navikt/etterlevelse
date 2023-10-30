@@ -27,7 +27,7 @@ export const EtterlevelseModal = ({
         <Heading size="xlarge">{kravData.navn}</Heading>
       </Modal.Header>
       <Modal.Body>
-        <ViewEtterlevelse etterlevelse={etterlevelse} viewMode krav={kravData} modalVersion />
+        <ViewEtterlevelse etterlevelse={etterlevelse} krav={kravData} modalVersion />
         <div className="flex justify-end pb-8 pt-24">
           <Button
             onClick={() => {
