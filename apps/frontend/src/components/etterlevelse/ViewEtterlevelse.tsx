@@ -21,23 +21,16 @@ const getHeaderText = (status: EtterlevelseStatus) => {
 }
 export const ViewEtterlevelse = ({
   etterlevelse,
-  setEtterlevelse,
   loading,
-  viewMode,
   krav,
   modalVersion,
 }: {
   etterlevelse: Etterlevelse
-  setEtterlevelse?: Function
   loading?: boolean
-  viewMode?: boolean
   krav: Krav
   modalVersion?: boolean
 }) => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(etterlevelse.etterlevelseDokumentasjonId)
-  const formRef = useRef<FormikProps<any>>()
-  const [edit, setEdit] = useState(etterlevelse && !etterlevelse.id)
-  const navigate = useNavigate()
 
   return (
     <div className="w-full mt-12">
