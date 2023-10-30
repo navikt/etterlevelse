@@ -116,7 +116,6 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                           <Tooltip content="Velg hvilken adresse du vil varsles på når kraveier svarer på spørsmålet">
                             <Label>Din varslingsadresse</Label>
                           </Tooltip>
-                          {p.meta.error && <Alert variant="error">{p.meta.error}</Alert>}
                           <div>
                             <div className="flex flex-col mt-4">
                               {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse} />}
@@ -142,6 +141,8 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                                 )}
                               </div>
                             </div>
+                            {p.meta.error && <Alert variant="error">{p.meta.error}</Alert>}
+
                             {values.varslingsadresse && <VarslingsadresserTagList varslingsadresser={[values.varslingsadresse]} remove={() => setVarslingsadresse(undefined)} />}
                           </div>
                         </div>
@@ -165,7 +166,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                     </Button>
                   </div>
                 ) : (
-                  <div className="flex justify-end">
+                  <div className="flex justify-end flex-1">
                     <div>
                       {error && (
                         <Alert variant="error">
@@ -173,10 +174,10 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                         </Alert>
                       )}
                     </div>
-                    <Button variant="secondary" onClick={() => close}>
+                    <Button variant="secondary" onClick={() => close()}>
                       Avbryt
                     </Button>
-                    <Button className="ml-2.5" disabled={isSubmitting} onClick={() => submitForm}>
+                    <Button disabled={isSubmitting} onClick={() => submitForm()}>
                       Send spørsmål
                     </Button>
                   </div>
