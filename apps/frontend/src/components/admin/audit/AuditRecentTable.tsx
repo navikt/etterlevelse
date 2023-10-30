@@ -9,7 +9,7 @@ import { getAudits } from '../../../api/AuditApi'
 import * as _ from 'lodash'
 import { JsonView } from 'react-json-view-lite'
 import { ampli } from '../../../services/Amplitude'
-import { BodyShort, Button, Label, Modal, Pagination, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
+import {BodyShort, Button, Heading, Label, Modal, Pagination, Select, Spacer, Table, Tooltip} from '@navikt/ds-react'
 
 const CodeView = ({ audit }: { audit: AuditItem }) => {
   const [modalOpen, setModalOpen] = useState(false)
@@ -73,8 +73,8 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
 
   return (
     <div>
-      <div className="flex justify-between my-2">
-        <Label>{intl.lastChanges}</Label>
+      <div className="flex justify-between my-4">
+        <Heading size="medium" level="2">{intl.lastChanges}</Heading>
         {!props.tableType && (
           <div className="w-72 flex justify-between items-center">
             <Label className="mr-2">

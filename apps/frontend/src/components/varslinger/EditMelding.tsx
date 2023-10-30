@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import {createMelding, deleteMelding, mapMeldingToFormValue, updateMelding} from '../../api/MeldingApi'
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
-import {Button, Radio, RadioGroup} from '@navikt/ds-react'
+import {Button, Heading, Radio, RadioGroup} from '@navikt/ds-react'
 import { Loader } from '@navikt/ds-react'
 
 export const getAlertTypeText = (type: AlertType) => {
@@ -59,7 +59,9 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
         <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
           {({ values, submitForm }: FormikProps<Melding>) => (
             <div>
+
               <div className="mb-6">
+                <Heading className="my-4" size="medium" level="2">{melding.meldingType === MeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'}</Heading>
                 <Field name="alertType">
                   {(p: FieldProps<string>) => (
                     <Form>
