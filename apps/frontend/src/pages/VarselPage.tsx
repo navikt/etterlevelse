@@ -9,7 +9,6 @@ import {ObjectType} from '../components/admin/audit/AuditTypes'
 import {AuditRecentTable} from '../components/admin/audit/AuditRecentTable'
 import {ampli} from '../services/Amplitude'
 import EditOmEtterlevelse from '../components/varslinger/EditOmEtterlevelse'
-import VarselAdminPage from './VarselAdminPage'
 import {Heading, Tabs} from "@navikt/ds-react";
 
 type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE | MeldingType.OM_ETTERLEVELSE
@@ -25,7 +24,7 @@ export const VarselPage = () => {
         <div className="max-w-7xl w-full">
           <div className="px-24 pt-6">
             <CustomizedBreadcrumbs currentPage="Varslinger" />
-            <Heading size="large" >Varslinger</Heading>
+            <Heading size="large" level="1" >Varslinger</Heading>
           </div>
         </div>
       </div>

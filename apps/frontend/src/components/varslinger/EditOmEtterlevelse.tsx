@@ -42,7 +42,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
         <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
           {({ values, submitForm }: FormikProps<Melding>) => (
             <div>
-              <Heading size="large" className="my-12" >Om støtte til etterlevelse</Heading>
+              <Heading size="large" level="2" className="my-12" >Om støtte til etterlevelse</Heading>
               {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
 
               <TextAreaField maxCharacter={maxChar} height="200px" label={'Innledende tekst'} noPlaceholder name="melding" />

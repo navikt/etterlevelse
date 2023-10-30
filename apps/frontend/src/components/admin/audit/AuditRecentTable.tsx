@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import moment from 'moment'
 import { AuditButton } from './AuditButton'
 import { AuditActionIcon } from './AuditComponents'
@@ -10,14 +10,14 @@ import * as _ from 'lodash'
 import { JsonView } from 'react-json-view-lite'
 import { ObjectLink } from '../../common/RouteLink'
 import { ampli } from '../../../services/Amplitude'
-import { BodyShort, Button, Label, Modal, Pagination, Popover, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
+import { BodyShort, Button, Label, Modal, Pagination, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
 
 const CodeView = ({ audit }: { audit: AuditItem }) => {
   const [modalOpen, setModalOpen] = useState(false)
 
   return (
     <div>
-      <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant="tertiary"> 
+      <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant="tertiary">
         Vis data
       </Button>
       <Modal
