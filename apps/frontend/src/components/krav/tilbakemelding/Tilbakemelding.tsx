@@ -1,4 +1,4 @@
-import {Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle} from '../../../constants'
+import { Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
 import {
   tilbakemeldingNewMelding,
   TilbakemeldingNewMeldingRequest,
@@ -6,39 +6,39 @@ import {
   updateTilbakemeldingStatusOgEndretKrav,
   useTilbakemeldinger,
 } from '../../../api/TilbakemeldingApi'
-import React, {useEffect, useState} from 'react'
-import {Block} from 'baseui/block'
-import {theme} from '../../../util'
-import {HeadingMedium, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
+import React, { useEffect, useState } from 'react'
+import { Block } from 'baseui/block'
+import { theme } from '../../../util'
+import { HeadingMedium, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
 import Button from '../../common/Button'
-import {faChevronDown, faChevronUp, faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronUp, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import moment from 'moment'
-import {user} from '../../../services/User'
-import {Notification} from 'baseui/notification'
-import {useLocation, useNavigate} from 'react-router-dom'
-import {useQueryParam, useRefs} from '../../../util/hooks'
-import {ettlevColors} from '../../../util/theme'
-import {mailboxPoppingIcon} from '../../Images'
-import {InfoBlock} from '../../common/InfoBlock'
-import {Portrait} from '../../common/Portrait'
-import {PersonName} from '../../common/PersonName'
+import { user } from '../../../services/User'
+import { Notification } from 'baseui/notification'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useQueryParam, useRefs } from '../../../util/hooks'
+import { ettlevColors } from '../../../util/theme'
+import { mailboxPoppingIcon } from '../../Images'
+import { InfoBlock } from '../../common/InfoBlock'
+import { Portrait } from '../../common/Portrait'
+import { PersonName } from '../../common/PersonName'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
 import * as _ from 'lodash'
-import {LoginButton} from '../../Header'
-import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
+import { LoginButton } from '../../Header'
+import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
 import StatusView from '../../common/StatusTag'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ResponseMelding from './ResponseMelding'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
 import NyTilbakemeldingModal from './edit/NyTilbakemeldingModal'
-import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
-import {getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, tilbakemeldingStatusToText} from './utils'
-import {Select, SIZE} from 'baseui/select'
-import {customSelectOverrides} from '../Edit/RegelverkEdit'
-import {Checkbox} from 'baseui/checkbox'
-import {ShowWarningMessage} from '../../etterlevelseDokumentasjonTema/KravCard'
-import {Loader} from '@navikt/ds-react'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
+import { getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, tilbakemeldingStatusToText } from './utils'
+import { Select, SIZE } from 'baseui/select'
+import { customSelectOverrides } from '../Edit/RegelverkEdit'
+import { Checkbox } from 'baseui/checkbox'
+import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
+import { Accordion, BodyLong, BodyShort, Label, Loader, Spacer } from '@navikt/ds-react'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -61,131 +61,96 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
   }
 
   return (
-    <Block width="100%">
+    <div className="w-full">
       {loading && <Loader size="large" />}
       {!loading && !!tilbakemeldinger.length && (
-        <Block display={'flex'} flexDirection={'column'}>
-          <CustomizedAccordion>
+        <div className="flex flex-col">
+          <Accordion>
             {tilbakemeldinger.slice(0, count).map((t) => {
               const focused = focusNr === t.id
               const { status, ubesvartOgKraveier, melderOrKraveier } = getMelderInfo(t)
-
-              const statusView = (icon: React.ReactNode) => (
-                <Block width="100%" maxWidth="70px">
-                  <Block display="flex" flexDirection="column" alignItems="flex-end">
-                    <StatusView status={tilbakemeldingStatusToText(status)}/>
-                  </Block>
-                  <Block width="50px" marginLeft="20px" marginTop="8px" display="flex" flexDirection="column" alignItems="center">
-                    {icon}
-                  </Block>
-                </Block>
-              )
-
               return (
-                <CustomizedPanel
-                  onClick={() => setFocus(focused ? '' : t.id)}
-                  expanded={t.id === focusNr}
-                  noUnderLine
+                <Accordion.Item
                   key={t.id}
-                  overrides={{
-                    Header: {
-                      style: {
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                      },
-                    },
-                    Content: {
-                      style: {
-                        backgroundColor: ettlevColors.white,
-                        paddingLeft: '20px',
-                        paddingRight: '20px',
-                        paddingBottom: '8px',
-                      },
-                    },
-                  }}
-                  toggleIcon={{
-                    expanded: statusView(<FontAwesomeIcon icon={faChevronUp} />),
-                    unexpanded: statusView(<FontAwesomeIcon icon={faChevronDown} />),
-                  }}
-                  title={
-                    <Block width="100%" padding={'8px'}>
-                      {t.endretKrav && <ShowWarningMessage noMarginLeft warningMessage="Spørsmålet har ført til at innholdet i kravet er endret" />}
-                      <Block display="flex" width="100%" marginTop={t.endretKrav ? '8px' : ''}>
-                        <Portrait ident={t.melderIdent} />
-                        <Block display="flex" flexDirection="column" marginLeft={theme.sizing.scale400} width="100%">
-                          <Block display="flex" width="100%">
-                            <Block display="flex" alignItems="center" width="100%">
-                              <LabelSmall>
-                                <PersonName ident={t.melderIdent} />
-                              </LabelSmall>
-                              <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px" $style={{ fontSize: '14px' }}>
-                                <Block display="flex">
-                                  <Block>Sendt: {moment(t.meldinger[0].tid).format('lll')}</Block>
-                                  <Block marginLeft="14px">
-                                    Kravversjon: K{t.kravNummer}.{t.kravVersjon}
-                                  </Block>
-                                </Block>
-                              </ParagraphSmall>
-                            </Block>
-                          </Block>
-                          {!focused && (
-                            <Block display="flex" width="100%">
-                              <ParagraphMedium marginBottom={0} marginRight="29px" marginTop="4px" width="100%">
-                                {_.truncate(t.meldinger[0].innhold, { length: 80, separator: /[.,] +/ })}
-                              </ParagraphMedium>
-                            </Block>
-                          )}
-                        </Block>
-                      </Block>
-                    </Block>
-                  }
+                  open={t.id === focusNr}
                 >
-                  {focused && (
-                    <Block display="flex" width="100%">
-                      <ParagraphMedium
-                        marginBottom={0}
-                        marginTop="-30px"
-                        width="100%"
-                        $style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}
-                        marginLeft={'57px'}
-                        marginRight={'52px'}
-                      >
-                        {t.meldinger[0].innhold}
-                      </ParagraphMedium>
-                    </Block>
-                  )}
-                  <Block display="flex" width="100%" alignItems="center" marginTop="17px">
-                    {focused && t.meldinger.length === 1 && <MeldingKnapper marginLeft melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace} remove={remove} />}
+                  <Accordion.Header
+                    onClick={() => setFocus(focused ? '' : t.id)}
+                  >
+                    <div className="w-full p-2 flex">
+                      <div>
+                        {t.endretKrav && <ShowWarningMessage noMarginLeft warningMessage="Spørsmålet har ført til at innholdet i kravet er endret" />}
+                        <div className={`flex w-full ${t.endretKrav ? 'mt-2' : ''}`} >
+                          <Portrait ident={t.melderIdent} />
+                          <div className="flex flex-col w-full ml-2.5">
+                            <div className="flex w-full items-center">
+                              <Label>
+                                <PersonName ident={t.melderIdent} />
+                              </Label>
+                              <div className="flex ml-6">
+                                <BodyShort>Sendt: {moment(t.meldinger[0].tid).format('lll')}</BodyShort>
+                                <BodyShort className="ml-3.5">
+                                  Kravversjon: K{t.kravNummer}.{t.kravVersjon}
+                                </BodyShort>
+                              </div>
+                            </div>
+                            {!focused && (
+                              <div className="flex w-full">
+                                <BodyShort className="mr-7 mt-1 w-full">
+                                  {_.truncate(t.meldinger[0].innhold, { length: 80, separator: /[.,] +/ })}
+                                </BodyShort>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <Spacer />
+                      <div>
+                        <StatusView status={tilbakemeldingStatusToText(status)} />
+                      </div>
+                    </div>
+                  </Accordion.Header>
+                  <Accordion.Content>
+                    {focused && (
+                      <div className="flex w-full">
+                        <BodyLong>
+                          {t.meldinger[0].innhold}
+                        </BodyLong>
+                      </div>
+                    )}
+                    <div className="flex w-full items-center mt-4">
+                      {focused && t.meldinger.length === 1 && <MeldingKnapper marginLeft melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace} remove={remove} />}
 
-                    {focused && <EndretInfo melding={t.meldinger[0]} />}
-                  </Block>
+                      {focused && <EndretInfo melding={t.meldinger[0]} />}
+                    </div>
 
-                  {/* meldingsliste */}
-                  {focused && (
-                    <Block display={'flex'} flexDirection={'column'} marginTop={theme.sizing.scale600}>
-                      {t.meldinger.slice(1).map((m) => (
-                        <ResponseMelding key={m.meldingNr} m={m} tilbakemelding={t} oppdater={replace} remove={remove} />
-                      ))}
-                    </Block>
-                  )}
+                    {/* meldingsliste */}
+                    {focused && (
+                      <div className="flex flex-col mt-4">
+                        {t.meldinger.slice(1).map((m) => (
+                          <ResponseMelding key={m.meldingNr} m={m} tilbakemelding={t} oppdater={replace} remove={remove} />
+                        ))}
+                      </div>
+                    )}
 
-                  {/* knapprad bunn */}
-                  {melderOrKraveier && user.canWrite() && focused && (
-                    <TilbakemeldingSvar
-                      tilbakemelding={t}
-                      setFocusNummer={setFocusNr}
-                      ubesvartOgKraveier={ubesvartOgKraveier}
-                      close={(t) => {
-                        t && replace(t)
-                      }}
-                      remove={remove}
-                      replace={replace}
-                    />
-                  )}
-                </CustomizedPanel>
+                    {/* knapprad bunn */}
+                    {melderOrKraveier && user.canWrite() && focused && (
+                      <TilbakemeldingSvar
+                        tilbakemelding={t}
+                        setFocusNummer={setFocusNr}
+                        ubesvartOgKraveier={ubesvartOgKraveier}
+                        close={(t) => {
+                          t && replace(t)
+                        }}
+                        remove={remove}
+                        replace={replace}
+                      />
+                    )}
+                  </Accordion.Content>
+                </Accordion.Item>
               )
             })}
-          </CustomizedAccordion>
+          </Accordion>
 
           {tilbakemeldinger.length > DEFAULT_COUNT_SIZE && (
             <Block $style={{ alignSelf: 'flex-end' }} marginTop={theme.sizing.scale400}>
@@ -194,7 +159,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
               </Button>
             </Block>
           )}
-        </Block>
+        </div>
       )}
 
       {!loading && !tilbakemeldinger.length && (
@@ -234,7 +199,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
       )}
 
       <Block height="300px" />
-    </Block>
+    </div>
   )
 }
 
