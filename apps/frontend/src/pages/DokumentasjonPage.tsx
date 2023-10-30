@@ -117,7 +117,7 @@ export const DokumentasjonPage = () => {
       <div className="flex items-center gap-2">
         {emptyRelevans ? (
           <div className="flex items-center gap-1">
-            <ExclamationmarkTriangleFillIcon className="text-2xl text-icon-warning" />
+            <ExclamationmarkTriangleFillIcon area-label="" aria-hidden className="text-2xl text-icon-warning" />
             <Label size="small">Ingen egenskaper er oppgitt</Label>
           </div>
         ) : (

@@ -47,7 +47,7 @@ export const KravListPage = () => {
 
               <div className="flex justify-end">
                 {user.isKraveier() && (
-                    <Button iconPosition="left" icon={<PlusIcon/>} size="medium" as="a" href="/krav/ny">
+                    <Button iconPosition="left" icon={<PlusIcon area-label="" aria-hidden/>} size="medium" as="a" href="/krav/ny">
                       Nytt krav
                     </Button>
                 )}

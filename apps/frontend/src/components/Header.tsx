@@ -6,7 +6,7 @@ import { intl } from '../util/intl/intl'
 import { user } from '../services/User'
 import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
-import { informationIcon, logo, warningAlert } from './Images'
+import { informationIcon, warningAlert } from './Images'
 import { Portrait } from './common/Portrait'
 import SkipToContent from './common/SkipToContent/SkipToContent'
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
@@ -37,7 +37,7 @@ const LoggedInHeader = () => {
 
   const roller = (
     <div>
-      <Button size={'xsmall'} variant="tertiary" onClick={() => setViewRoller(!viewRoller)} icon={viewRoller ? <ChevronUpIcon /> : <ChevronDownIcon />}>
+      <Button size={'xsmall'} variant="tertiary" onClick={() => setViewRoller(!viewRoller)} icon={viewRoller ? <ChevronUpIcon area-label="" aria-hidden /> : <ChevronDownIcon area-label="" aria-hidden />}>
         Endre aktive roller
       </Button>
       <div className={`mt-2 ${viewRoller ? 'block' : 'hidden'}`}>
@@ -71,18 +71,18 @@ const LoggedInHeader = () => {
 
   return (
     <div className="flex items-center justify-center">
-      <Menu pages={[[{ label: <UserInfo /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={<PersonIcon />} />
+      <Menu pages={[[{ label: <UserInfo /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={<PersonIcon area-label="" aria-hidden/>} />
 
       <div className="w-3" />
 
       <Menu
-        icon={<MenuHamburgerIcon />}
+        icon={<MenuHamburgerIcon area-label="" aria-hidden/>}
         pages={[
-          [{ label: 'Forsiden', href: '/', icon: <HouseIcon /> }],
-          [{ label: 'Dokumentere etterlevelse', href: '/dokumentasjoner', icon: <DocPencilIcon /> }],
-          [{ label: 'Status i organisasjonen', href: '//metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse', icon: <BarChartIcon /> }],
-          [{ label: 'Forstå kravene', href: '/tema', icon: <ReceiptIcon /> }],
-          [{ label: 'Mer om etterlevelse i NAV', href: '/omstottetiletterlevelse', icon: <InformationIcon /> }],
+          [{ label: 'Forsiden', href: '/', icon: <HouseIcon  area-label="" aria-hidden/> }],
+          [{ label: 'Dokumentere etterlevelse', href: '/dokumentasjoner', icon: <DocPencilIcon area-label="" aria-hidden /> }],
+          [{ label: 'Status i organisasjonen', href: '//metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse', icon: <BarChartIcon area-label="" aria-hidden /> }],
+          [{ label: 'Forstå kravene', href: '/tema', icon: <ReceiptIcon area-label="" aria-hidden/> }],
+          [{ label: 'Mer om etterlevelse i NAV', href: '/omstottetiletterlevelse', icon: <InformationIcon area-label="" aria-hidden /> }],
         ]}
         title={'Meny'}
       />

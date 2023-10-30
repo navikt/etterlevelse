@@ -1,29 +1,54 @@
 import moment from 'moment'
-import { Block } from 'baseui/block'
 import { JsonView } from 'react-json-view-lite'
-import React, { useEffect, useState } from 'react'
-import { LabelLarge } from 'baseui/typography'
-import { AuditActionIcon, AuditLabel as Label } from './AuditComponents'
-import { Card } from 'baseui/card'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBinoculars, faExchangeAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
-import { StatefulPopover } from 'baseui/popover'
+import { useEffect, useState } from 'react'
+import { AuditActionIcon, AuditLabel } from './AuditComponents'
 import { Differ, Viewer } from 'json-diff-kit'
-import { Spinner } from 'baseui/spinner'
 import { useRefs } from '../../../util/hooks'
-import { theme } from '../../../util'
 import { intl } from '../../../util/intl/intl'
-import { AuditAction, AuditLog } from './AuditTypes'
+import { AuditAction, AuditItem, AuditLog } from './AuditTypes'
 import { ObjectLink } from '../../common/RouteLink'
-import Button from '../../common/Button'
-import { ettlevColors } from '../../../util/theme'
+import { Box, Button, Label, Loader, Modal, Tooltip } from '@navikt/ds-react'
+import { ArrowRightLeftIcon, XMarkIcon } from '@navikt/aksel-icons'
 
 type AuditViewProps = {
   auditLog?: AuditLog
   auditId?: string
   loading: boolean
   viewId: (id: string) => void
+}
+
+type ComparisonViewProps = {
+  auditLog: AuditLog
+  audit: AuditItem
+  index: number
+}
+
+const ComparisonView = (props: ComparisonViewProps) => {
+  const { auditLog, audit, index } = props
+  const [modalOpen, setModalOpen] = useState(false)
+
+  return (
+    <div>
+      <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant="tertiary" icon={<ArrowRightLeftIcon title="se forskjell" />} />
+      <Modal
+        key={audit.id}
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        width="75%"
+        className="h-3/4 overflow-y-scroll"
+      >
+        <Modal.Header/>
+        <Modal.Body>
+          <Viewer
+            diff={new Differ().diff(auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {}, audit.data)}
+            highlightInlineDiff={true}
+            lineNumbers={true}
+            indent={4}
+          />
+        </Modal.Body>
+      </Modal>
+    </div>
+  )
 }
 
 export const AuditView = (props: AuditViewProps) => {
@@ -41,90 +66,53 @@ export const AuditView = (props: AuditViewProps) => {
   const newestAudit = auditLog?.audits[0]
 
   return (
-    <Card>
-      {loading && <Spinner $color={ettlevColors.green400} $size={theme.sizing.scale2400} />}
-      {!loading && auditLog && !logFound && <LabelLarge>{intl.auditNotFound}</LabelLarge>}
+    <Box background="surface-default" padding="4">
+      {loading && <Loader size="large" />}
+      {!loading && auditLog && !logFound && <Label>{intl.auditNotFound}</Label>}
 
       {logFound && (
-        <>
-          <Block display="flex" justifyContent="space-between">
-            <Block width="90%">
-              <Label label={intl.id}>{auditLog?.id}</Label>
-              <Label label={intl.table}>{newestAudit?.table}</Label>
-              <Label label={intl.audits}>{auditLog?.audits.length}</Label>
-            </Block>
-            <Block display="flex">
-              <Button size="compact" kind="tertiary" marginRight onClick={() => setOpenAll(!openAll)}>
+        <div>
+          <div className="flex justify-between">
+            <div className="w-11/12 mb-4" >
+              <AuditLabel label={intl.id}>{auditLog?.id}</AuditLabel>
+              <AuditLabel label={intl.table}>{newestAudit?.table}</AuditLabel>
+              <AuditLabel label={intl.audits}>{auditLog?.audits.length}</AuditLabel>
+            </div>
+            <div className="flex">
+              <Button variant="tertiary" className="mr-2" onClick={() => setOpenAll(!openAll)}>
                 {openAll ? 'Lukke' : 'Åpne'} alle
               </Button>
               {newestAudit?.action !== AuditAction.DELETE && (
-                <StatefulTooltip content={() => intl.view} placement={PLACEMENT.top}>
-                  <Block>
-                    <ObjectLink id={newestAudit!.tableId} type={newestAudit!.table} audit={newestAudit}>
-                      <Button size="compact" shape="round" kind="tertiary">
-                        <FontAwesomeIcon icon={faBinoculars} />
-                      </Button>
-                    </ObjectLink>
-                  </Block>
-                </StatefulTooltip>
-              )}
-              <StatefulTooltip content={() => intl.close} placement={PLACEMENT.top}>
-                <Block>
-                  <Button size="compact" shape="round" kind="tertiary" onClick={() => viewId('')}>
-                    <FontAwesomeIcon icon={faTimes} />
+                <ObjectLink id={newestAudit!.tableId} type={newestAudit!.table} noNewTabLabel audit={newestAudit}>
+                  <Button variant="tertiary">
+                    Vis bruk (åpnes i ny fane)
                   </Button>
-                </Block>
-              </StatefulTooltip>
-            </Block>
-          </Block>
+                </ObjectLink>
+              )}
+              <Tooltip content="Lukk" placement="top">
+                <Button variant="tertiary" onClick={() => viewId('')} icon={<XMarkIcon title="Lukk" />} />
+              </Tooltip>
+            </div>
+          </div>
 
           {auditLog &&
             auditLog.audits.map((audit, index) => {
               const time = moment(audit.time)
               return (
-                <Block key={audit.id} ref={refs[audit.id]} marginBottom="1rem" marginTop=".5rem" backgroundColor={audit.id === props.auditId ? theme.colors.mono200 : undefined}>
-                  <Block display="flex" justifyContent="space-between">
-                    <Block width="90%">
-                      <Label label={intl.auditNr}>{auditLog.audits.length - index}</Label>
-                      <Label label={intl.action}>
+                <div key={audit.id} ref={refs[audit.id]} className="mb-4 mt-2">
+                  <div className="flex justify-between">
+                    <div className="w-11/12">
+                      <AuditLabel label={intl.auditNr}>{auditLog.audits.length - index}</AuditLabel>
+                      <AuditLabel label={intl.action}>
                         <AuditActionIcon action={audit.action} withText={true} />
-                      </Label>
-                      <Label label={intl.time}>
+                      </AuditLabel>
+                      <AuditLabel label={intl.time}>
                         {time.format('LL')} {time.format('HH:mm:ss.SSS Z')}
-                      </Label>
-                      <Label label={intl.user}>{audit.user}</Label>
-                    </Block>
-                    <Block>
-                      <StatefulPopover
-                        placement={PLACEMENT.left}
-                        content={() => (
-                          <Card>
-                            <Viewer
-                              diff={new Differ().diff(auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {}, audit.data)}
-                              highlightInlineDiff={true}
-                              lineNumbers={true}
-                              indent={4}
-                            />
-                          </Card>
-                        )}
-                        overrides={{
-                          Body: {
-                            style: () => ({
-                              width: '80%',
-                              maxHeight: '80%',
-                              overflowY: 'scroll',
-                            }),
-                          },
-                        }}
-                      >
-                        <div>
-                          <Button size="compact" shape="round" kind="tertiary">
-                            <FontAwesomeIcon icon={faExchangeAlt} />
-                          </Button>
-                        </div>
-                      </StatefulPopover>
-                    </Block>
-                  </Block>
+                      </AuditLabel>
+                      <AuditLabel label={intl.user}>{audit.user}</AuditLabel>
+                    </div>
+                    <ComparisonView auditLog={auditLog} audit={audit} index={index} />
+                  </div>
                   <JsonView
                     data={audit.data}
                     shouldExpandNode={() => {
@@ -135,11 +123,11 @@ export const AuditView = (props: AuditViewProps) => {
                       }
                     }}
                   />
-                </Block>
+                </div>
               )
             })}
-        </>
+        </div>
       )}
-    </Card>
+    </Box>
   )
 }

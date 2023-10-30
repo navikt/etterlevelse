@@ -80,7 +80,7 @@ const CodeListPage = () => {
             })}
           </Select>
           {listname && (
-            <Button icon={<PlusIcon />} variant="tertiary" onClick={() => setCreateCodeListModal(!createCodeListModal)}>
+            <Button icon={<PlusIcon area-label="" aria-hidden />} variant="tertiary" onClick={() => setCreateCodeListModal(!createCodeListModal)}>
               Opprett ny kode
             </Button>
           )}

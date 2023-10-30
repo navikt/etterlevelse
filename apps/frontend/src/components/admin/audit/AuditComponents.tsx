@@ -1,42 +1,30 @@
-import { Block, BlockProps } from 'baseui/block'
-import { LabelMedium, LabelSmall } from 'baseui/typography'
-import React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
-import { faInfoCircle, faMinusCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
-import { theme } from '../../../util'
 import { intl } from '../../../util/intl/intl'
 import { AuditAction } from './AuditTypes'
+import { Label, Tooltip } from '@navikt/ds-react'
+import { InformationSquareIcon, MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons'
 
-const labelBlockProps: BlockProps = {
-  display: ['flex', 'block', 'block', 'flex'],
-  width: ['20%', '100%', '100%', '20%'],
-  alignSelf: 'flex-start',
-}
 
 export const AuditLabel = (props: { label: string; children: any }) => {
   return (
-    <Block display="flex">
-      <Block {...labelBlockProps}>
-        <LabelMedium>{props.label}</LabelMedium>
-      </Block>
-      <Block>
-        <LabelSmall>{props.children}</LabelSmall>
-      </Block>
-    </Block>
+    <div className="flex">
+      <div className="flex w-1/5 self-center">
+        <Label>{props.label}</Label>
+      </div>
+      {props.children}
+    </div>
   )
 }
 
 export const AuditActionIcon = (props: { action: AuditAction; withText?: boolean }) => {
-  const icon = (props.action === AuditAction.CREATE && { icon: faPlusCircle, color: theme.colors.positive300 }) ||
-    (props.action === AuditAction.UPDATE && { icon: faInfoCircle, color: theme.colors.warning300 }) ||
-    (props.action === AuditAction.DELETE && { icon: faMinusCircle, color: theme.colors.negative400 }) || { icon: undefined, color: undefined }
+  const icon = (props.action === AuditAction.CREATE && <PlusCircleIcon area-label="" aria-hidden color="#007C2E" />) ||
+    (props.action === AuditAction.UPDATE && <InformationSquareIcon area-label="" aria-hidden color="#C77300" />) ||
+    (props.action === AuditAction.DELETE && <MinusCircleIcon area-label="" aria-hidden color="#C30000" />) || <div />
 
   return (
-    <StatefulTooltip content={() => intl[props.action]} placement={PLACEMENT.top}>
-      <Block marginRight=".5rem" display="inline">
-        <FontAwesomeIcon icon={icon.icon!} color={icon.color} /> {props.withText && intl[props.action]}
-      </Block>
-    </StatefulTooltip>
+    <Tooltip content={intl[props.action]} placement="top">
+      <div className="mr-2 flex justify-center items-center">
+        {icon} {props.withText && intl[props.action]}
+      </div>
+    </Tooltip>
   )
 }
