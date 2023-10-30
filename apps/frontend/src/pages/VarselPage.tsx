@@ -82,7 +82,6 @@ const VarselTabs = () => {
           <Tabs.Tab value={MeldingType.SYSTEM} label="Systemmelding" onClick={()=> {setTab(MeldingType.SYSTEM)}}/>
           <Tabs.Tab value={MeldingType.FORSIDE} label="Informasjon på forsiden" onClick={()=> {setTab(MeldingType.FORSIDE)}}/>
           <Tabs.Tab value={MeldingType.OM_ETTERLEVELSE} label="Om etterlevelse" onClick={()=> {setTab(MeldingType.OM_ETTERLEVELSE)}}/>
-          <Tabs.Tab value="Administrer meldinger" label="Administrer meldinger"/>
         </Tabs.List>
         <Tabs.Panel value="utsendtMelding">
           <AuditRecentTable show={true} tableType={ObjectType.Melding} />
@@ -95,9 +94,6 @@ const VarselTabs = () => {
         </Tabs.Panel>
         <Tabs.Panel value={MeldingType.OM_ETTERLEVELSE}>
           <EditOmEtterlevelse melding={melding} setMelding={setMelding} isLoading={isLoading} maxChar={500} />
-        </Tabs.Panel>
-        <Tabs.Panel value="Administrer meldinger">
-          <VarselAdminPage />
         </Tabs.Panel>
     </Tabs>
   )
