@@ -18,21 +18,21 @@ export const KravPanelHeader = (props: { title: string; kravData: KravEtterlevel
 
   return (
     <div className={"flex w-full"}>
-      <div className={"flex justify-center"}>
-        <Heading level="2" className={"my-1.5"} size={"medium"}>
+      <div className={"flex justify-center items-center"}>
+        <span>
           {props.title}
-        </Heading>
-      </div>
+        </span>
+      </div>  
       <div className={"flex justify-end flex-1 mr-6"}>
         <div>
           <div className={"flex justify-end align-baseline flex-1"}>
-            <Label className={"mr-1"} size={"small"}>
+            <span className={"mr-1"}>
               {props.kravData.length}
-            </Label>
-            <BodyShort size={"small"}>krav</BodyShort>
+            </span>
+            <span>krav</span>
           </div>
           <div className={"flex justify-end flex-1"}>
-            <BodyShort size={"small"}>{antallSuksesskriterier} suksesskriterier</BodyShort>
+            <span>{antallSuksesskriterier} suksesskriterier</span>
           </div>
         </div>
       </div>
