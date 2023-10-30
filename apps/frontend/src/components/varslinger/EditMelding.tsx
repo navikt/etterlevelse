@@ -1,6 +1,6 @@
 import {Field, FieldProps, Form, Formik, FormikProps} from 'formik'
 import React, { useEffect, useState } from 'react'
-import { createMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
+import {createMelding, deleteMelding, mapMeldingToFormValue, updateMelding} from '../../api/MeldingApi'
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
 import {Button, Radio, RadioGroup} from '@navikt/ds-react'
@@ -99,6 +99,17 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                 name="melding"
               />
               <div className="flex w-full">
+                <Button
+                        variant="secondary"
+                        disabled={disableEdit}
+                        onClick={() => {
+                          deleteMelding(melding.id).then(() => {
+                            setMelding('')
+                          })
+                        }}
+                >
+                  Slett
+                </Button>
                 <div className="flex justify-end w-full">
                   {melding.meldingStatus === MeldingStatus.ACTIVE && (
                     <Button className="mx-6"

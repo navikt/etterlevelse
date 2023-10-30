@@ -1,6 +1,6 @@
 import { Formik, FormikProps } from 'formik'
 import React, { useState } from 'react'
-import { createMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
+import {createMelding, deleteMelding, mapMeldingToFormValue, updateMelding} from '../../api/MeldingApi'
 import { AlertType, Melding, MeldingStatus } from '../../constants'
 import { InputField, TextAreaField } from '../common/Inputs'
 import {Button, Heading, Loader} from '@navikt/ds-react'
@@ -50,8 +50,19 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
 
               <TextAreaField maxCharacter={maxChar} markdown height="200px" label={'Innhold'} noPlaceholder name="secondaryMelding" />
 
+              <div className="flex w-full">
+                <Button
+                  variant="secondary"
+                  disabled={disableEdit}
+                  onClick={() => {
+                    deleteMelding(melding.id).then(() => {
+                      setMelding('')
+                    })
+                  }}
+                >
+                  Slett
+                </Button>
               <div className="flex justify-end w-full">
-
                 <Button
                   disabled={disableEdit}
                   onClick={() => {
@@ -61,6 +72,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
                 >
                   Publiser
                 </Button>
+              </div>
               </div>
             </div>
           )}
