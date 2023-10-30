@@ -9,9 +9,7 @@ import {
 import React, { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
 import { theme } from '../../../util'
-import { HeadingMedium, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
-import Button from '../../common/Button'
-import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { HeadingMedium, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
 import moment from 'moment'
 import { user } from '../../../services/User'
 import { Notification } from 'baseui/notification'
@@ -36,7 +34,8 @@ import { Select, SIZE } from 'baseui/select'
 import { customSelectOverrides } from '../Edit/RegelverkEdit'
 import { Checkbox } from 'baseui/checkbox'
 import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
-import { Accordion, BodyLong, BodyShort, Label, Loader, Spacer } from '@navikt/ds-react'
+import { Accordion, BodyLong, BodyShort, Button, Heading, Label, Loader, Spacer } from '@navikt/ds-react'
+import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -151,11 +150,11 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
           </Accordion>
 
           {tilbakemeldinger.length > DEFAULT_COUNT_SIZE && (
-            <Block $style={{ alignSelf: 'flex-end' }} marginTop={theme.sizing.scale400}>
-              <Button kind="tertiary" size="compact" icon={faPlus} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
+            <div className="self-end mt-2.5">
+              <Button variant="tertiary" icon={<PlusIcon aria-label="" aria-hidden/>} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
                 Last flere
               </Button>
-            </Block>
+            </div>
           )}
         </div>
       )}
@@ -165,25 +164,25 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
       )}
 
       {!hasKravExpired && (
-        <>
-          <Block marginTop={theme.sizing.scale1000}>
-            <HeadingXLarge>Spørsmål til kraveier</HeadingXLarge>
+        <div>
+          <div className="mt-10">
+            <Heading size="large">Spørsmål til kraveier</Heading>
             {user.isLoggedIn() ? (
-              <ParagraphMedium maxWidth={'600px'}>
+              <BodyLong className="max-w-xl">
                 Her kan du stille kraveier et spørsmål dersom det er uklarheter vedrørende hvordan kravet skal forstås. Spørsmål og svar fra kraveier blir synlig for alle på denne
                 siden.
-              </ParagraphMedium>
+              </BodyLong>
             ) : (
-              <ParagraphMedium>Du må være innlogget for å stille kraveier et spørsmål, og for å se tidligere spørsmål og svar.</ParagraphMedium>
+              <BodyShort>Du må være innlogget for å stille kraveier et spørsmål, og for å se tidligere spørsmål og svar.</BodyShort>
             )}
 
             {user.canWrite() && (
-              <Button kind={'primary'} size="compact" onClick={() => setAddTilbakemelding(true)}>
+              <Button onClick={() => setAddTilbakemelding(true)}>
                 Still et spørsmål
               </Button>
             )}
             {!user.isLoggedIn() && <LoginButton />}
-          </Block>
+          </div>
 
           <NyTilbakemeldingModal
             krav={krav}
@@ -193,10 +192,8 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
               setAddTilbakemelding(false)
             }}
           />
-        </>
+        </div>
       )}
-
-      <Block height="300px" />
     </div>
   )
 }
@@ -341,13 +338,11 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
               <ParagraphMedium $style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{tilbakemelding.meldinger[0].innhold}</ParagraphMedium>
             </ModalBody>
             <ModalFooter>
-              <Button kind={'secondary'} size={'compact'} onClick={() => setDeleteModal(false)}>
+              <Button variant="secondary" onClick={() => setDeleteModal(false)}>
                 Avbryt
               </Button>
               <Button
-                kind={'primary'}
-                size={'compact'}
-                marginLeft
+                className="ml-2.5"
                 onClick={() =>
                   tilbakemeldingslettMelding({ tilbakemeldingId: tilbakemelding.id, meldingNr: 1 }).then((t) => {
                     remove({ ...t, meldinger: [] })
@@ -364,7 +359,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
       <Block display="flex" marginTop={'8px'} width={'100%'}>
         {user.isAdmin() && (
           <Block>
-            <Button size="compact" icon={faTrashAlt} kind={'secondary'} onClick={() => setDeleteModal(true)}>
+            <Button icon={<TrashIcon aria-label="" aria-hidden/>} variant="secondary" onClick={() => setDeleteModal(true)}>
               Slett hele samtalen
             </Button>
           </Block>
@@ -397,9 +392,8 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
                   </Block>
                 ) : (
                   <Button
-                    kind="secondary"
-                    size={'compact'}
-                    marginLeft
+                    variant="secondary"
+                    className="ml-2.5"
                     onClick={() => {
                       setIsUpdatingStatus(true)
                       updateTilbakemeldingStatusOgEndretKrav({
@@ -419,7 +413,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
                 )}
               </Block>
             )}
-            <Button kind="primary" size={'compact'} marginLeft disabled={!response} onClick={submit}>
+            <Button className="ml-2.5" disabled={!response} onClick={submit}>
               {ubesvartOgKraveier ? 'Svar' : 'Send'}
               {user.isKraveier() ? ' og oppdater status' : ''}
             </Button>
