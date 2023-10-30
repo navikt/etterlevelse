@@ -15,6 +15,7 @@ import {useLocation} from 'react-router-dom'
 import {getNumberOfDaysBetween} from '../../util/checkAge'
 import {getEtterlevelseStatus, getStatusLabelColor} from '../etterlevelseDokumentasjon/common/utils'
 import RouteLink from '../common/RouteLink'
+import { BodyShort } from '@navikt/ds-react'
 
 export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean; etterlevelseDokumentasjonId: string; noVarsling?: boolean; kravFilter: KRAV_FILTER_TYPE }) => {
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
@@ -170,7 +171,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
 
 export const ShowWarningMessage = ({ warningMessage, noMarginLeft }: { warningMessage: string; noMarginLeft?: boolean }) => {
   return (
-    <Block display="flex" alignItems="center">
+    <div className="flex items-center">
       <img
         src={warningAlert}
         width="18px"
@@ -181,17 +182,9 @@ export const ShowWarningMessage = ({ warningMessage, noMarginLeft }: { warningMe
           marginRight: '5px',
         }}
       />
-      <ParagraphXSmall
-        $style={{
-          fontSize: '16px',
-          lineHeight: '16px',
-          fontStyle: 'italic',
-          marginTop: '0px',
-          marginBottom: '0px',
-        }}
-      >
+      <BodyShort>
         {warningMessage}
-      </ParagraphXSmall>
-    </Block>
+      </BodyShort>
+    </div>
   )
 }
