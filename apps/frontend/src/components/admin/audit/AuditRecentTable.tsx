@@ -8,7 +8,6 @@ import { intl } from '../../../util/intl/intl'
 import { getAudits } from '../../../api/AuditApi'
 import * as _ from 'lodash'
 import { JsonView } from 'react-json-view-lite'
-import { ObjectLink } from '../../common/RouteLink'
 import { ampli } from '../../../services/Amplitude'
 import { BodyShort, Button, Label, Modal, Pagination, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
 
@@ -184,8 +183,3 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   )
 }
 
-const tableId = (audit: AuditItem) => {
-  if (audit.table === ObjectType.Codelist) return audit.tableId.substr(0, audit.tableId.indexOf('-'))
-  if (audit.table === ObjectType.BehandlingData) return (audit.data as any).data.behandlingId
-  return audit.tableId
-}
