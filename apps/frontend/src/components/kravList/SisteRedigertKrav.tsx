@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import {emptyPage, KravQL} from '../../constants'
 import {useKravFilter} from '../../api/KravGraphQLApi'
 import {KravPanels, sortKrav} from '../../pages/KravListPage'
-import {Alert, Heading, Loader} from '@navikt/ds-react'
+import {Alert, Heading, Label, Loader} from '@navikt/ds-react'
 
 export const SistRedigertKrav = () => {
   const [sorting] = useState('sist')
@@ -46,9 +46,9 @@ export const SistRedigertKrav = () => {
     <div>
       <div className={"justify-center content-center w-full my-5"}>
         <div className={"flex justify-start w-full"}>
-          <Heading size={"medium"} className="my-0">
+          <Label className="my-0">
             {sortedKravList.length ? sortedKravList.length : 0} Krav
-          </Heading>
+          </Label>
         </div>
       </div>
       <KravPanels kravene={sortedKravList} loading={loading} />

@@ -159,9 +159,9 @@ export const AllKrav = () => {
       <div className={"w-full justify-center my-4"}>
         <div className={"flex justify-center content-center w-full"}>
           <div className={"flex justify-start align-middle w-full"}>
-            <Heading size={"medium"}>
+            <Label size={"medium"}>
               {kravene.totalElements ? kravene.totalElements : 0} Krav
-            </Heading>
+            </Label>
           </div>
           <div className={"flex w-full items-center"}>
             <div className={"flex items-center justify-end w-full"}>
