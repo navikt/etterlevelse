@@ -2,13 +2,13 @@ import { Formik, FormikProps } from 'formik'
 import React, { useState } from 'react'
 import {createMelding, deleteMelding, mapMeldingToFormValue, updateMelding} from '../../api/MeldingApi'
 import { AlertType, Melding, MeldingStatus } from '../../constants'
-import { InputField, TextAreaField } from '../common/Inputs'
+import {TextAreaField } from '../common/Inputs'
 import {Button, Heading, Loader} from '@navikt/ds-react'
 
 export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
-  // const [secondaryTittel, setSecondaryTittel] = useState<string>('')
-  // const [secondaryMelding, setSecondaryMelding] = useState<string>('')
+
+  const initialNumberOfRows = 1
 
   const submit = async (melding: Melding) => {
     const newMelding = { ...melding, alertType: AlertType.INFO }
@@ -46,7 +46,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
               {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
 
               <TextAreaField maxCharacter={maxChar} height="200px" label={'Innledende tekst'} noPlaceholder name="melding" />
-              <InputField label={'Overskrift'} name={'secondaryTittel'} disablePlaceHolder />
+              <TextAreaField rows={initialNumberOfRows} label={'Overskrift'} name={'secondaryTittel'} noPlaceholder />
 
               <TextAreaField maxCharacter={maxChar} markdown height="200px" label={'Innhold'} noPlaceholder name="secondaryMelding" />
 
