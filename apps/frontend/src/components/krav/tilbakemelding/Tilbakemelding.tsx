@@ -1,4 +1,4 @@
-import { Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
+import {Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle} from '../../../constants'
 import {
   tilbakemeldingNewMelding,
   TilbakemeldingNewMeldingRequest,
@@ -6,27 +6,27 @@ import {
   updateTilbakemeldingStatusOgEndretKrav,
   useTilbakemeldinger,
 } from '../../../api/TilbakemeldingApi'
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import moment from 'moment'
-import { user } from '../../../services/User'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useQueryParam, useRefs } from '../../../util/hooks'
-import { ettlevColors } from '../../../util/theme'
-import { mailboxPoppingIcon } from '../../Images'
-import { InfoBlock } from '../../common/InfoBlock'
-import { Portrait } from '../../common/Portrait'
-import { PersonName } from '../../common/PersonName'
+import {user} from '../../../services/User'
+import {useLocation, useNavigate} from 'react-router-dom'
+import {useQueryParam, useRefs} from '../../../util/hooks'
+import {ettlevColors} from '../../../util/theme'
+import {mailboxPoppingIcon} from '../../Images'
+import {InfoBlock} from '../../common/InfoBlock'
+import {Portrait} from '../../common/Portrait'
+import {PersonName} from '../../common/PersonName'
 import * as _ from 'lodash'
-import { LoginButton } from '../../Header'
+import {LoginButton} from '../../Header'
 import StatusView from '../../common/StatusTag'
 import ResponseMelding from './ResponseMelding'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
 import NyTilbakemeldingModal from './edit/NyTilbakemeldingModal'
-import { getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, tilbakemeldingStatusToText } from './utils'
-import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
-import { Accordion, Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Label, Loader, Modal, Select, Spacer, Textarea } from '@navikt/ds-react'
-import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
+import {getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, tilbakemeldingStatusToText} from './utils'
+import {ShowWarningMessage} from '../../etterlevelseDokumentasjonTema/KravCard'
+import {Accordion, Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Label, Loader, Modal, Select, Spacer, Textarea} from '@navikt/ds-react'
+import {PlusIcon, TrashIcon} from '@navikt/aksel-icons'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -67,7 +67,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                   >
                     <div className="w-full p-2 flex">
                       <div>
-                        {t.endretKrav && <ShowWarningMessage noMarginLeft warningMessage="Spørsmålet har ført til at innholdet i kravet er endret" />}
+                        {t.endretKrav && <ShowWarningMessage warningMessage="Spørsmålet har ført til at innholdet i kravet er endret" />}
                         <div className={`flex w-full ${t.endretKrav ? 'mt-2' : ''}`} >
                           <Portrait ident={t.melderIdent} />
                           <div className="flex flex-col w-full ml-2.5">
