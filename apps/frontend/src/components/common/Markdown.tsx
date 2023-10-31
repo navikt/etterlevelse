@@ -104,6 +104,10 @@ export const Markdown = ({
       const { children } = ulProps
       return <List>{children}</List>
     },
+    ol: (olProps: any) => {
+      const { children } = olProps
+      return <List as="ol">{children}</List>
+    }
   }
 
   const sources: string[] = sourcesOrig || (source ? [source] : [''])
