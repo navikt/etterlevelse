@@ -57,10 +57,6 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
       }
     })()
   }, [])
-
-  if (props.krav.kravNummer === 102) {
-    console.log(props.krav)
-  }
   
   return (
         <LinkPanel 

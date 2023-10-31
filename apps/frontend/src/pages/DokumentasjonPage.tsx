@@ -45,7 +45,7 @@ export const DokumentasjonPage = () => {
     variables: { etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id },
   })
 
-  const [relevanteStats, setRelevanteStats] = useState<any[]>([])
+  const [relevanteStats, setRelevanteStats] = useState<KravQL[]>([])
   const [utgaattStats, setUtgaattStats] = useState<any[]>([])
   const [arkivModal, setArkivModal] = useState<boolean>(false)
 
@@ -228,7 +228,6 @@ export const DokumentasjonPage = () => {
     const lover = codelist.getCodesForTema(tema.code)
     const lovCodes = lover.map((c) => c.code)
     const krav = relevanteStats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lovCodes.includes(r)))
-    
     return filterKrav(kravPriority, krav, tema)
   }
 
@@ -318,6 +317,11 @@ export const statsQuery = gql`
               behandlingId
               status
               etterlevelseDokumentasjonId
+              changeStamp {
+                lastModifiedBy
+                lastModifiedDate
+                createdDate
+              }
             }
             regelverk {
               lov {
@@ -348,6 +352,11 @@ export const statsQuery = gql`
               behandlingId
               status
               etterlevelseDokumentasjonId
+              changeStamp {
+                lastModifiedBy
+                lastModifiedDate
+                createdDate
+              }
             }
             regelverk {
               lov {
@@ -378,6 +387,11 @@ export const statsQuery = gql`
               behandlingId
               status
               etterlevelseDokumentasjonId
+              changeStamp {
+                lastModifiedBy
+                lastModifiedDate
+                createdDate
+              }
             }
             regelverk {
               lov {
@@ -408,6 +422,11 @@ export const statsQuery = gql`
               behandlingId
               status
               etterlevelseDokumentasjonId
+              changeStamp {
+                lastModifiedBy
+                lastModifiedDate
+                createdDate
+              }
             }
             regelverk {
               lov {
