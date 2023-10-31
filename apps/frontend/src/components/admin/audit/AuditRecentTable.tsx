@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import moment from 'moment'
 import { AuditButton } from './AuditButton'
 import { AuditActionIcon } from './AuditComponents'
@@ -8,16 +8,15 @@ import { intl } from '../../../util/intl/intl'
 import { getAudits } from '../../../api/AuditApi'
 import * as _ from 'lodash'
 import { JsonView } from 'react-json-view-lite'
-import { ObjectLink } from '../../common/RouteLink'
 import { ampli } from '../../../services/Amplitude'
-import { BodyShort, Button, Label, Modal, Pagination, Popover, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
+import {BodyShort, Button, Heading, Label, Modal, Pagination, Select, Spacer, Table, Tooltip} from '@navikt/ds-react'
 
 const CodeView = ({ audit }: { audit: AuditItem }) => {
   const [modalOpen, setModalOpen] = useState(false)
 
   return (
     <div>
-      <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant="tertiary"> 
+      <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant="tertiary">
         Vis data
       </Button>
       <Modal
@@ -74,8 +73,8 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
 
   return (
     <div>
-      <div className="flex justify-between mb-2">
-        <Label>{intl.lastChanges}</Label>
+      <div className="flex justify-between my-4">
+        <Heading size="medium" level="2">{intl.lastChanges}</Heading>
         {!props.tableType && (
           <div className="w-72 flex justify-between items-center">
             <Label className="mr-2">
@@ -106,7 +105,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
             <Table.ColumnHeader className="w-[17%]">{intl.action}</Table.ColumnHeader>
             <Table.ColumnHeader>{intl.id}</Table.ColumnHeader>
             <Table.ColumnHeader>{intl.user}</Table.ColumnHeader>
-            <Table.ColumnHeader />
+            <Table.ColumnHeader>Endring</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -143,14 +142,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
                   {audit.user}
                 </Table.DataCell>
                 <Table.DataCell>
-                  <div className="flex">
-                    <ObjectLink id={tableId(audit)} type={audit.table} audit={audit} noNewTabLabel>
-                      <Button variant="tertiary" as="a">
-                        Vis bruk (åpnes i ny fane)
-                      </Button>
-                    </ObjectLink>
                     <CodeView audit={audit}/>
-                  </div>
                 </Table.DataCell>
               </Table.Row>
             )
@@ -191,8 +183,3 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   )
 }
 
-const tableId = (audit: AuditItem) => {
-  if (audit.table === ObjectType.Codelist) return audit.tableId.substr(0, audit.tableId.indexOf('-'))
-  if (audit.table === ObjectType.BehandlingData) return (audit.data as any).data.behandlingId
-  return audit.tableId
-}

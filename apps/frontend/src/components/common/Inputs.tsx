@@ -15,15 +15,14 @@ import { Radio, RadioGroup } from 'baseui/radio'
 import LabelWithTooltip from '../common/LabelWithTooltip'
 import CustomInput from '../common/CustomizedInput'
 import CustomizedSelect from '../common/CustomizedSelect'
-import CustomizedTextarea from './CustomizedTextarea'
 import TextEditor from './TextEditor/TextEditor'
 import { Error } from './ModalSchema'
 import { ettlevColors } from '../../util/theme'
-import { borderColor, borderStyle, borderWidth } from './Style'
-import { Select } from '@navikt/ds-react'
+import { borderColor} from './Style'
+import {Label, Select, Textarea} from '@navikt/ds-react'
 
 export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode; marginBottom?: string }) => {
-  return <Block marginBottom={marginBottom ? marginBottom : '1.5rem'}>{children}</Block>
+  return <div className={`${marginBottom ? 'mb-6' : ''}`}>{children}</div>
 }
 
 export const InputField = (props: { label: string; name: string; caption?: ReactNode; tooltip?: string; marginBottom?: string; disablePlaceHolder?: boolean }) => (
@@ -32,10 +31,10 @@ export const InputField = (props: { label: string; name: string; caption?: React
       {(p: FieldProps) => (
         <FormControl
           overrides={{ Label: { style: { marginTop: '0px', marginBottom: '0px', paddingTop: '8px', paddingBottom: '8px' } } }}
-          label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />}
+          label={<Label>{props.label}</Label>}
           caption={props.caption}
         >
-          <Block>
+          <div>
             <CustomInput
               {...p.field}
               placeholder={!props.disablePlaceHolder ? props.label : undefined}
@@ -53,7 +52,7 @@ export const InputField = (props: { label: string; name: string; caption?: React
               }}
             />
             <Error fieldName={props.name} fullWidth />
-          </Block>
+          </div>
         </FormControl>
       )}
     </Field>
@@ -87,13 +86,13 @@ export const TextAreaField = (props: {
               },
               Caption: { style: { marginBottom: '0px' } },
             }}
-            label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />}
+            label={<Label>{props.label}</Label>}
             caption={
               props.markdown ? (
-                <Block display="flex" flexDirection={'column'}>
+                <div className="flex flex-col">
                   {props.caption}
                   {/* <MarkdownInfo /> */}
-                </Block>
+                </div>
               ) : (
                 props.caption
               )
@@ -101,7 +100,7 @@ export const TextAreaField = (props: {
           >
             <>
               {props.markdown && (
-                <Block>
+                <div>
                   <TextEditor
                     height={props.height}
                     initialValue={p.field.value}
@@ -114,23 +113,17 @@ export const TextAreaField = (props: {
                   />
                   {/* <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
                 onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} /> */}
-                </Block>
+                </div>
               )}
               {!props.markdown && (
-                <CustomizedTextarea
-                  rows={props.rows ? props.rows : 8}
+                <Textarea
+                  minRows={props.rows ? props.rows : 8}
+                  label={props.label}
+                  hideLabel
                   maxLength={props.maxCharacter ? props.maxCharacter : undefined}
                   {...p.field}
                   placeholder={props.noPlaceholder ? '' : props.placeholder ? props.placeholder : props.label}
-                  overrides={{
-                    InputContainer: {
-                      style: {
-                        ...borderColor(p.form.errors && props.name && p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.textAreaBorder),
-                        ...borderWidth('2px'),
-                        ...borderStyle('solid'),
-                      },
-                    },
-                  }}
+
                   onChange={(v) => {
                     if (props.setIsFormDirty) {
                       props.setIsFormDirty(true)

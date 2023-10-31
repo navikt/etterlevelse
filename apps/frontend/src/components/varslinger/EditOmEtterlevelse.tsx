@@ -1,18 +1,14 @@
-import { Block } from 'baseui/block'
 import { Formik, FormikProps } from 'formik'
 import React, { useState } from 'react'
-import { createMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
+import {createMelding, deleteMelding, mapMeldingToFormValue, updateMelding} from '../../api/MeldingApi'
 import { AlertType, Melding, MeldingStatus } from '../../constants'
-import { InputField, TextAreaField } from '../common/Inputs'
-import Button from '../common/Button'
-import { theme } from '../../util/theme'
-import { HeadingXXLarge } from 'baseui/typography'
-import { Loader } from '@navikt/ds-react'
+import {TextAreaField } from '../common/Inputs'
+import {Button, Heading, Loader} from '@navikt/ds-react'
 
 export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
-  // const [secondaryTittel, setSecondaryTittel] = useState<string>('')
-  // const [secondaryMelding, setSecondaryMelding] = useState<string>('')
+
+  const initialNumberOfRows = 1
 
   const submit = async (melding: Melding) => {
     const newMelding = { ...melding, alertType: AlertType.INFO }
@@ -34,36 +30,39 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
 
   if (isLoading) {
     return (
-      <Block display="flex" justifyContent="center">
+      <div className="flex justify-center">
         <Loader size="large" />
-      </Block>
+      </div>
     )
   }
 
   return (
-    <Block>
+    <div>
       {melding && (
         <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
           {({ values, submitForm }: FormikProps<Melding>) => (
-            <Block>
-              <HeadingXXLarge marginBottom={'44px'}>Om støtte til etterlevelse</HeadingXXLarge>
+            <div>
+              <Heading size="medium" level="2" className="my-4" >Om støtte til etterlevelse</Heading>
               {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
 
               <TextAreaField maxCharacter={maxChar} height="200px" label={'Innledende tekst'} noPlaceholder name="melding" />
-              <InputField label={'Overskrift'} name={'secondaryTittel'} disablePlaceHolder />
+              <TextAreaField rows={initialNumberOfRows} label={'Overskrift'} name={'secondaryTittel'} noPlaceholder />
 
               <TextAreaField maxCharacter={maxChar} markdown height="200px" label={'Innhold'} noPlaceholder name="secondaryMelding" />
 
-              <Block display="flex" justifyContent="flex-end" width="100%">
+              <div className="flex w-full">
                 <Button
-                  kind="secondary"
+                  variant="secondary"
+                  disabled={disableEdit}
                   onClick={() => {
-                    window.location.reload()
+                    deleteMelding(melding.id).then(() => {
+                      setMelding('')
+                    })
                   }}
-                  marginRight
                 >
-                  Avbryt
+                  Slett
                 </Button>
+              <div className="flex justify-end w-full">
                 <Button
                   disabled={disableEdit}
                   onClick={() => {
@@ -73,12 +72,13 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
                 >
                   Publiser
                 </Button>
-              </Block>
-            </Block>
+              </div>
+              </div>
+            </div>
           )}
         </Formik>
       )}
-    </Block>
+    </div>
   )
 }
 

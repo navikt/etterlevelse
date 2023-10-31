@@ -1,59 +1,42 @@
-import { Helmet } from 'react-helmet'
-import { Block } from 'baseui/block'
-import { ettlevColors, maxPageWidth, theme } from '../util/theme'
+import {Helmet} from 'react-helmet'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { HeadingXXLarge } from 'baseui/typography'
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import CustomizedTabs from '../components/common/CustomizedTabs'
+import React, {useEffect, useState} from 'react'
+import {useParams} from 'react-router-dom'
 import EditMelding from '../components/varslinger/EditMelding'
-import { Melding, MeldingType } from '../constants'
-import { getMeldingByType, mapMeldingToFormValue } from '../api/MeldingApi'
-import { ObjectType } from '../components/admin/audit/AuditTypes'
-import { AuditRecentTable } from '../components/admin/audit/AuditRecentTable'
-import { ampli } from '../services/Amplitude'
+import {Melding, MeldingType} from '../constants'
+import {getMeldingByType, mapMeldingToFormValue} from '../api/MeldingApi'
+import {ObjectType} from '../components/admin/audit/AuditTypes'
+import {AuditRecentTable} from '../components/admin/audit/AuditRecentTable'
+import {ampli} from '../services/Amplitude'
 import EditOmEtterlevelse from '../components/varslinger/EditOmEtterlevelse'
-import VarselAdminPage from './VarselAdminPage'
+import {Heading, Tabs} from "@navikt/ds-react";
 
-type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE
+type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE | MeldingType.OM_ETTERLEVELSE
 
 export const VarselPage = () => {
   return (
-    <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
+    <div className="w-full pb-52" id="content" role="main">
       <Helmet>
         <meta charSet="utf-8" />
         <title>Varslinger</title>
       </Helmet>
-      <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
-        <Block maxWidth={maxPageWidth} width="100%">
-          <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
-            {/* <RouteLink hideUnderline>
-            <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{ transform: 'rotate(180deg)' }} />} size="compact" kind="tertiary">
-              {' '}
-              Tilbake
-            </Button>
-          </RouteLink> */}
+      <div className="w-full flex justify-center">
+        <div className="max-w-7xl w-full">
+          <div className="px-24 pt-6">
             <CustomizedBreadcrumbs currentPage="Varslinger" />
-            <HeadingXXLarge marginTop="0">Varslinger</HeadingXXLarge>
-          </Block>
-        </Block>
-      </Block>
+            <Heading className="mt-2" size="large" level="1" >Varslinger</Heading>
+          </div>
+        </div>
+      </div>
 
-      <Block
-        display={'flex'}
-        justifyContent="center"
-        width="100%"
-        $style={{
-          background: `linear-gradient(top, ${ettlevColors.grey50} 80px, ${ettlevColors.grey25} 0%)`,
-        }}
-      >
-        <Block maxWidth={maxPageWidth} width="100%">
-          <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
+      <div className="flex justify-center w-full">
+        <div className="max-w-7xl w-full">
+          <div className="px-24 pt-6">
             <VarselTabs />
-          </Block>
-        </Block>
-      </Block>
-    </Block>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -92,39 +75,25 @@ const VarselTabs = () => {
   }, [tab])
 
   return (
-    <CustomizedTabs
-      fontColor={ettlevColors.green800}
-      small
-      backgroundColor={ettlevColors.grey25}
-      activeKey={tab}
-      onChange={(args) => setTab(args.activeKey as Section)}
-      tabs={[
-        {
-          key: 'utsendtMelding',
-          title: 'Utsendte meldinger',
-          content: <AuditRecentTable show={true} tableType={ObjectType.Melding} />,
-        },
-        {
-          key: MeldingType.SYSTEM,
-          title: 'Systemmelding',
-          content: <EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} />,
-        },
-        {
-          key: MeldingType.FORSIDE,
-          title: 'Informasjon på forsiden',
-          content: <EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} maxChar={500} />,
-        },
-        {
-          key: MeldingType.OM_ETTERLEVELSE,
-          title: 'Om etterlevelse',
-          content: <EditOmEtterlevelse melding={melding} setMelding={setMelding} isLoading={isLoading} maxChar={500} />,
-        },
-        {
-          key: 'Administrer meldinger',
-          title: 'Administrer meldinger',
-          content: <VarselAdminPage />,
-        },
-      ]}
-    />
+      <Tabs defaultValue="utsendtMelding">
+        <Tabs.List>
+          <Tabs.Tab value="utsendtMelding" label="Utsendte meldinger"/>
+          <Tabs.Tab value={MeldingType.SYSTEM} label="Systemmelding" onClick={()=> {setTab(MeldingType.SYSTEM)}}/>
+          <Tabs.Tab value={MeldingType.FORSIDE} label="Informasjon på forsiden" onClick={()=> {setTab(MeldingType.FORSIDE)}}/>
+          <Tabs.Tab value={MeldingType.OM_ETTERLEVELSE} label="Om etterlevelse" onClick={()=> {setTab(MeldingType.OM_ETTERLEVELSE)}}/>
+        </Tabs.List>
+        <Tabs.Panel value="utsendtMelding">
+          <AuditRecentTable show={true} tableType={ObjectType.Melding} />
+        </Tabs.Panel>
+        <Tabs.Panel value={MeldingType.SYSTEM}>
+          <EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} />
+        </Tabs.Panel>
+        <Tabs.Panel value={MeldingType.FORSIDE}>
+          <EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} maxChar={500} />
+        </Tabs.Panel>
+        <Tabs.Panel value={MeldingType.OM_ETTERLEVELSE}>
+          <EditOmEtterlevelse melding={melding} setMelding={setMelding} isLoading={isLoading} maxChar={500} />
+        </Tabs.Panel>
+    </Tabs>
   )
 }
