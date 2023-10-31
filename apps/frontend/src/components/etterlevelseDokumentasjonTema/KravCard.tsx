@@ -9,13 +9,12 @@ import StatusView from '../common/StatusTag'
 import moment from 'moment'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
 import {faEllipsisVertical} from '@fortawesome/free-solid-svg-icons'
-import {warningAlert} from '../Images'
 import {getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber} from '../../api/EtterlevelseApi'
 import {useLocation} from 'react-router-dom'
 import {getNumberOfDaysBetween} from '../../util/checkAge'
 import {getEtterlevelseStatus, getStatusLabelColor} from '../etterlevelseDokumentasjon/common/utils'
 import RouteLink from '../common/RouteLink'
-import { BodyShort } from '@navikt/ds-react'
+import {Alert} from '@navikt/ds-react'
 
 export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean; etterlevelseDokumentasjonId: string; noVarsling?: boolean; kravFilter: KRAV_FILTER_TYPE }) => {
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
@@ -169,22 +168,12 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
   )
 }
 
-export const ShowWarningMessage = ({ warningMessage, noMarginLeft }: { warningMessage: string; noMarginLeft?: boolean }) => {
+export const ShowWarningMessage = ({ warningMessage }: { warningMessage: string }) => {
   return (
     <div className="flex items-center">
-      <img
-        src={warningAlert}
-        width="18px"
-        height="18px"
-        alt="warning icon"
-        style={{
-          marginLeft: noMarginLeft ? undefined : '18px',
-          marginRight: '5px',
-        }}
-      />
-      <BodyShort>
+      <Alert variant={"info"} size={"small"}>
         {warningMessage}
-      </BodyShort>
+      </Alert>
     </div>
   )
 }
