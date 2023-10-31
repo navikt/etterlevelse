@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
@@ -6,7 +6,7 @@ import { HeadingXLarge, ParagraphMedium } from 'baseui/typography'
 import { ettlevColors, theme } from '../util/theme'
 import { Layout2 } from '../components/scaffold/Page'
 import { ellipse80, saveArchiveIcon } from '../components/Images'
-import { EtterlevelseDokumentasjonQL, EtterlevelseDokumentasjonStats, KRAV_FILTER_TYPE, KravEtterlevelseData, KravPrioritering, KravQL, KravStatus, PageResponse } from '../constants'
+import { EtterlevelseDokumentasjonQL, EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, KravEtterlevelseData, KravPrioritering, KravQL, KravStatus, PageResponse } from '../constants'
 import { gql, useQuery } from '@apollo/client'
 import { Code, codelist, ListName, TemaCode } from '../services/Codelist'
 import { Button, KIND, SIZE } from 'baseui/button'
@@ -17,14 +17,12 @@ import { getMainHeader, getNewestKravVersjon } from '../components/etterlevelseD
 import { user } from '../services/User'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
-import { TemaCardEtterlevelseDokumentasjon } from '../components/etterlevelseDokumentasjon/TemaCardEtterlevelseDokumentasjon'
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
 import { Accordion, BodyShort, Label, Loader } from '@navikt/ds-react'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
-import { getFilterType } from './EtterlevelseDokumentasjonPage'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 
@@ -35,7 +33,9 @@ export const DokumentasjonPage = () => {
   const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByEtterlevelseDokumentasjonId(params.id)
   const [kravPriority, setKravPriority] = useState<KravPrioritering[]>([])
 
-  getAllKravPriority().then((priority) => setKravPriority(priority))
+  useEffect(() => {
+    getAllKravPriority().then((priority) => setKravPriority(priority))
+  }, [])
 
   const {
     data: relevanteData,
@@ -250,20 +250,22 @@ export const DokumentasjonPage = () => {
             <Loader size={'large'} />
           </Block>
         ) : (
-          <Accordion>
+          <Accordion className="pt-6">
             {temaListe
               .filter((tema) => getKravForTema(tema).length > 0)
-              .map((tema) => (
-                <Accordion.Item key={`${tema.shortName}_panel`}>
-                  <Accordion.Header>{tema.shortName}</Accordion.Header>
+              .map((tema) => {
+                const kravliste = getKravForTema(tema)
+                const utfylteKrav = kravliste.filter((krav) => krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT)
+                return (<Accordion.Item key={`${tema.shortName}_panel`}>
+                  <Accordion.Header>{tema.shortName} ({utfylteKrav.length} av {kravliste.length} krav er utfylt{utfylteKrav.length === 1 ? "" : "e"})</Accordion.Header>
                   <Accordion.Content>
                     <div className="flex flex-col gap-2">
-                      {getKravForTema(tema).map((krav) =>
+                      {kravliste.map((krav) =>
                         <KravCard krav={krav} kravFilter={KRAV_FILTER_TYPE.RELEVANTE_KRAV} etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} temaCode={tema.code} />
                       )}
                     </div>
                   </Accordion.Content>
-                </Accordion.Item>
+                </Accordion.Item>)
                 // <TemaCardEtterlevelseDokumentasjon
                 //   tema={tema}
                 //   stats={relevanteStats}
@@ -271,7 +273,7 @@ export const DokumentasjonPage = () => {
                 //   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                 //   key={`${tema.shortName}_panel`}
                 // />
-              ))}
+              })}
           </Accordion>
         )}
         {/*
