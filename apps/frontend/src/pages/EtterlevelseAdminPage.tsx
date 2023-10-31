@@ -20,7 +20,7 @@ export const EtterlevelseAdminPage = () => {
               <meta charSet="utf-8" />
               <title>Administrere Etterlevelse</title>
             </Helmet>
-            <Heading size="xlarge">Administrere Etterlevelse</Heading>
+            <Heading size="xlarge" level="1">Administrere Etterlevelse</Heading>
           </div>
 
           <div className="mt-5">

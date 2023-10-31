@@ -42,7 +42,7 @@ export const KravListPage = () => {
             <CustomizedBreadcrumbs currentPage="Forvalte og opprette krav"/>
             <div className="flex">
               <div className="flex-1">
-                <Heading className="mt-0" size="xlarge">Forvalte og opprette krav</Heading>
+                <Heading className="mt-0" size="xlarge" level="1">Forvalte og opprette krav</Heading>
               </div>
 
               <div className="flex justify-end">

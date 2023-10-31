@@ -8,7 +8,7 @@ import { Button, Heading, TextField } from '@navikt/ds-react'
 export const EtterlevelseDokumentasjonAdminPage = () => {
   const [etterlevelseDokumentasjonId, setEtterlevelseDokumentasjonId] = useState('')
   const [updateMessage, setUpdateMessage] = useState('')
-  
+
   return (
     <div className="w-full" id="content" role="main">
       <div className="w-full flex justify-center items-center flex-col mt-6">
@@ -21,7 +21,7 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
               <meta charSet="utf-8" />
               <title>Administrere Etterlevelse Dokumentasjon</title>
             </Helmet>
-            <Heading size="xlarge">Administrere Etterlevelse Dokumentasjon</Heading>
+            <Heading size="xlarge" level="1">Administrere Etterlevelse Dokumentasjon</Heading>
           </div>
 
           <div className="mt-5">

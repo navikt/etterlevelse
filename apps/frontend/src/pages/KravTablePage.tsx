@@ -68,7 +68,7 @@ export const KravTablePage = () => {
               <meta charSet="utf-8" />
               <title>Administrere Krav</title>
             </Helmet>
-            <Heading size="xlarge">Administrere Krav</Heading>
+            <Heading size="xlarge" level="1">Administrere Krav</Heading>
           </div>
 
           {tableContent.length && (

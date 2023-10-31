@@ -91,7 +91,7 @@ export const ArkivAdminPage = () => {
               <meta charSet="utf-8" />
               <title>Administrere Arkivering</title>
             </Helmet>
-            <Heading size="xlarge">Administrere Arkivering</Heading>
+            <Heading size="xlarge" level="1">Administrere Arkivering</Heading>
           </div>
 
           <div className="flex items-end">

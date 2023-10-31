@@ -43,7 +43,7 @@ export const FAQ = () => {
         <div className="max-w-7xl flex justify-center">
           <div>
             <div className="max-w-4xl">
-              <Heading size="large" className="mt-14 mb-8">
+              <Heading size="xlarge" level="1" className="mt-14 mb-8">
                 Om Støtte til etterlevelse
               </Heading>
 
@@ -53,10 +53,17 @@ export const FAQ = () => {
             </div>
 
             <div className="max-w-xl">
-              <Heading size="medium" className="mt-14 mb-6">
-                {melding?.secondaryTittel}
-              </Heading>
-              <Markdown source={melding?.secondaryMelding}/>
+              {melding?.secondaryTittel &&
+                <Heading size="medium" level="2" className="mt-14 mb-6">
+                  {melding?.secondaryTittel}
+                </Heading>
+              }
+              <div className="my-6">
+                <Markdown  source={melding?.secondaryMelding}/>
+              </div>
+
+
+
 
               <div className="mt-20">
                 {user.isAdmin() && melding && (
