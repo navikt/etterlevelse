@@ -187,7 +187,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
         <InternalHeader className="w-full justify-center items-center">
           <div className="w-full flex max-w-7xl">
             <InternalHeader.Title href="/">
-              Etterlevelse
+              Støtte til etterlevelse
             </InternalHeader.Title>
             <Spacer />
             {!props.noSearchBar && (
