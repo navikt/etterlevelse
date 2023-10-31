@@ -92,7 +92,7 @@ export const urlForObject = (type: NavigableItem | string, id: string, audit?: A
     case ListName.UNDERAVDELING:
       return `/underavdeling/${id}`
     case ListName.LOV:
-      return `/lov/${id}`
+      return `/lov/${id}` // will probably never be used
     case ListName.TEMA:
       return `/tema/${id}`
     case ObjectType.Codelist:

@@ -12,7 +12,6 @@ import {EtterlevelsePage} from './pages/EtterlevelsePage'
 import {RelevansPage} from './pages/RelevansPage'
 import {UnderavdelingPage} from './pages/UnderavdelingPage'
 import {TemaPage} from './pages/TemaPage'
-import {LovPage} from './pages/LovPage'
 import ScrollToTop from './util/ScrollToTop'
 import {KravTablePage} from './pages/KravTablePage'
 import {FAQ} from './pages/FAQ'
@@ -91,9 +90,6 @@ const AppRoutes = (): JSX.Element => {
 
         <Route path="/underavdeling/:underavdeling" element={<PrivateRoute component={<UnderavdelingPage />} adminPage />} caseSensitive={true} />
         <Route path="/underavdeling/" element={<PrivateRoute component={<UnderavdelingPage />} adminPage />} caseSensitive={true} />
-
-        <Route path="/lov/:lov" element={<LovPage />} caseSensitive={true} />
-        <Route path="/lov/" element={<LovPage />} caseSensitive={true} />
 
         <Route path="/admin/codelist/:listname" element={<PrivateRoute component={<CodeListPage />} adminPage />} caseSensitive={true} />
         <Route path="/admin/codelist/" element={<PrivateRoute component={<CodeListPage />} adminPage />} caseSensitive={true} />
