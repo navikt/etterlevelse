@@ -1,35 +1,35 @@
-import { Krav, KravQL, KravStatus, KravVersjon } from '../../constants'
-import { Form, Formik } from 'formik'
-import { createKrav, getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav } from '../../api/KravApi'
-import { Block } from 'baseui/block'
-import React, { useEffect } from 'react'
+import {Krav, KravQL, KravStatus, KravVersjon} from '../../constants'
+import {Form, Formik} from 'formik'
+import {createKrav, getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav} from '../../api/KravApi'
+import {Block} from 'baseui/block'
+import React, {useEffect} from 'react'
 import * as yup from 'yup'
-import { codelist, ListName } from '../../services/Codelist'
-import { InputField, MultiInputField, TextAreaField } from '../common/Inputs'
+import {codelist, ListName} from '../../services/Codelist'
+import {InputField, MultiInputField, TextAreaField} from '../common/Inputs'
 import axios from 'axios'
-import { env } from '../../util/env'
-import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
-import { RegelverkEdit } from './Edit/RegelverkEdit'
-import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
-import { EditBegreper } from './Edit/KravBegreperEdit'
-import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
+import {env} from '../../util/env'
+import {KravVarslingsadresserEdit} from './Edit/KravVarslingsadresserEdit'
+import {RegelverkEdit} from './Edit/RegelverkEdit'
+import {KravSuksesskriterierEdit} from './Edit/KravSuksesskriterieEdit'
+import {EditBegreper} from './Edit/KravBegreperEdit'
+import {HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
-import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
+import {ettlevColors, responsivePaddingLarge, responsiveWidthLarge, theme} from '../../util/theme'
+import {getEtterlevelserByKravNumberKravVersion} from '../../api/EtterlevelseApi'
 import ErrorModal from '../ErrorModal'
-import { Error } from '../common/ModalSchema'
-import { ErrorMessageModal } from './ErrorMessageModal'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
-import { Checkbox } from 'baseui/checkbox'
-import { warningAlert } from '../Images'
-import { user } from '../../services/User'
-import { Modal as BaseModal, ModalBody, ModalHeader } from 'baseui/modal'
-import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
+import {Error} from '../common/ModalSchema'
+import {ErrorMessageModal} from './ErrorMessageModal'
+import {KIND as NKIND, Notification} from 'baseui/notification'
+import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {EditKravMultiOptionField} from './Edit/EditKravMultiOptionField'
+import {borderColor, borderRadius, borderStyle, borderWidth} from '../common/Style'
+import {Checkbox} from 'baseui/checkbox'
+import {warningAlert} from '../Images'
+import {user} from '../../services/User'
+import {Modal as BaseModal, ModalBody, ModalHeader} from 'baseui/modal'
+import {EditKravRelasjoner} from './Edit/EditKravRelasjoner'
 import AlertUnsavedPopup from '../common/AlertUnsavedPopup'
 import _ from 'lodash'
 
@@ -167,7 +167,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
   }, [isOpen])
 
   return (
-    <Block maxWidth={maxPageWidth}>
+    <div>
       <CustomizedModal
         closeable={false}
         onClose={() => {
@@ -214,17 +214,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                 onClose={() => close(values)}
                 onSubmit={() => submit(values)}
               />
-              <Block
-                backgroundColor={ettlevColors.green800}
-                paddingTop="23px"
-                paddingBottom={!stickyHeader ? '48px' : '20px'}
-                paddingLeft={responsivePaddingLarge}
-                paddingRight={responsivePaddingLarge}
-                position="sticky"
-                top={0}
-                display={!stickyHeader ? 'block' : 'flex'}
-                $style={{ zIndex: 3 }}
-              >
+              <div className={`pt-6 ${!stickyHeader ? 'pb-12' : 'pb-5'} px-24 sticky top-0 ${!stickyHeader ? 'block' : 'flex'} z-30 bg-green-800`}>
                 {stickyHeader && (
                   <Block display="flex" width="100%" justifyContent="flex-start">
                     <LabelLarge $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</LabelLarge>
@@ -265,7 +255,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     )}
                   </Block>
                 )}
-              </Block>
+              </div>
               <Block>
                 <Block
                   className="title_container"
@@ -368,7 +358,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     <Block marginTop="80px" marginBottom={inputMarginBottom}>
                       <HeadingXLarge>Gruppering og etiketter</HeadingXLarge>
                     </Block>
-                    {/* 
+                    {/*
                     <Block width="100%" maxWidth={maxInputWidth}>
                       <EditVirkemidler />
                     </Block> */}
@@ -635,7 +625,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
           )}
         </Formik>
       </CustomizedModal>
-    </Block>
+    </div>
   )
 }
 
