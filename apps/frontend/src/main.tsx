@@ -30,12 +30,14 @@ const Main = (props: any) => {
               <title>Etterlevelse</title>
             </Helmet>
 
-            <div className="min-h-screen relative items-center justify-center w-full bg-slate-100">
-              <div className="flex flex-col items-center justify-center w-full bg-slate-100">
+            <div className="min-h-screen relative items-center justify-center w-full bg-gray-100">
+              <div className="flex flex-col items-center justify-center w-full bg-gray-100">
                 <Header />
                 <AppRoutes />
               </div>
-              <div className="h-36 bg-slate-100 w-full" />
+              <div className="h-36 bg-gray-100 w-full flex justify-center" >
+                <div className=" h-36 bg-white  w-full max-w-7xl"/>
+              </div>
             </div>
           </BrowserRouter>
           <ErrorModal />

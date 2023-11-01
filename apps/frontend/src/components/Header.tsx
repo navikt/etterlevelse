@@ -71,17 +71,17 @@ const LoggedInHeader = () => {
 
   return (
     <div className="flex items-center justify-center">
-      <Menu pages={[[{ label: <UserInfo /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={<PersonIcon area-label="" aria-hidden/>} />
+      <Menu pages={[[{ label: <UserInfo /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={<PersonIcon area-label="" aria-hidden />} />
 
       <div className="w-3" />
 
       <Menu
-        icon={<MenuHamburgerIcon area-label="" aria-hidden/>}
+        icon={<MenuHamburgerIcon area-label="" aria-hidden />}
         pages={[
-          [{ label: 'Forsiden', href: '/', icon: <HouseIcon  area-label="" aria-hidden/> }],
+          [{ label: 'Forsiden', href: '/', icon: <HouseIcon area-label="" aria-hidden /> }],
           [{ label: 'Dokumentere etterlevelse', href: '/dokumentasjoner', icon: <DocPencilIcon area-label="" aria-hidden /> }],
           [{ label: 'Status i organisasjonen', href: '//metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse', icon: <BarChartIcon area-label="" aria-hidden /> }],
-          [{ label: 'Forstå kravene', href: '/tema', icon: <ReceiptIcon area-label="" aria-hidden/> }],
+          [{ label: 'Forstå kravene', href: '/tema', icon: <ReceiptIcon area-label="" aria-hidden /> }],
           [{ label: 'Mer om etterlevelse i NAV', href: '/omstottetiletterlevelse', icon: <InformationIcon area-label="" aria-hidden /> }],
         ]}
         title={'Meny'}
@@ -184,42 +184,50 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
     <div className="w-full">
       <div className="w-full flex justify-center">
         <SkipToContent />
-        <InternalHeader className="w-full justify-center items-center">
-          <div className="w-full flex max-w-7xl">
-            <InternalHeader.Title href="/">
-              Støtte til etterlevelse
-            </InternalHeader.Title>
-            <Spacer />
-            {!props.noSearchBar && (
-              <div className="flex w-full max-w-xl " role="search">
-                <MainSearch />
-              </div>
-            )}
-            <Spacer />
-            {!props.noLoginButton && (
-              <div className="flex">
-                {!user.isLoggedIn() && <LoginButton />}
-                {user.isLoggedIn() && <LoggedInHeader />}
-              </div>
-            )}
-          </div>
+        <InternalHeader className="w-full justify-center items-center max-w-7xl">
+          <InternalHeader.Title href="/">
+            Støtte til etterlevelse
+          </InternalHeader.Title>
+          <Spacer />
+          {!props.noSearchBar && (
+            <div className="flex w-full max-w-xl " role="search">
+              <MainSearch />
+            </div>
+          )}
+          <Spacer />
+          {!props.noLoginButton && (
+            <div className="flex">
+              {!user.isLoggedIn() && <LoginButton />}
+              {user.isLoggedIn() && <LoggedInHeader />}
+            </div>
+          )}
         </InternalHeader>
       </div>
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
-        <div
-          className={`flex flex-col items-center py-2 border-b border-t ${systemVarsel.alertType === 'INFO' ? 'bg-surface-info-subtle border-surface-info' : 'bg-surface-warning-subtle border-surface-warning'
-            }`}
-          aria-label="Systemvarsel"
-          role="complementary"
-        >
-          <div className="flex gap-2">
-            <img
-              src={systemVarsel.alertType === AlertType.INFO ? informationIcon : warningAlert}
-              width="20px"
-              height="20px"
-              alt={systemVarsel.alertType === AlertType.INFO ? 'information icon' : 'warning icon'}
-            />
-            <Markdown source={systemVarsel.melding} />
+        <div className="w-full flex justify-center">
+          <div
+            className={`flex 
+          flex-col 
+          items-center 
+          py-2 
+          border-b 
+          border-t 
+          w-full
+          max-w-7xl
+          ${systemVarsel.alertType === 'INFO' ? 'bg-surface-info-subtle border-surface-info' : 'bg-surface-warning-subtle border-surface-warning'
+              }`}
+            aria-label="Systemvarsel"
+            role="complementary"
+          >
+            <div className="flex gap-2">
+              <img
+                src={systemVarsel.alertType === AlertType.INFO ? informationIcon : warningAlert}
+                width="20px"
+                height="20px"
+                alt={systemVarsel.alertType === AlertType.INFO ? 'information icon' : 'warning icon'}
+              />
+              <Markdown source={systemVarsel.melding} />
+            </div>
           </div>
         </div>
       )}
