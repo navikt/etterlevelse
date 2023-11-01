@@ -57,81 +57,77 @@ export const KravTablePage = () => {
   }, [])
 
   return (
-    <div className="w-full" id="content" role="main">
-      <div className="w-full flex justify-center items-center flex-col">
-        <div className="w-full max-w-7xl px-8 bg-white">
-          <div className="flex-1 justify-start flex">
-            <CustomizedBreadcrumbs currentPage="Administrere Krav" />
-          </div>
-          <div>
-            <Helmet>
-              <meta charSet="utf-8" />
-              <title>Administrere Krav</title>
-            </Helmet>
-            <Heading size="medium">Administrere Krav</Heading>
-          </div>
-
-          {tableContent.length && (
-            <div className="w-full">
-              <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeader className="w-[6%]" sortKey="kravNummer" sortable>Krav ID</Table.ColumnHeader>
-                    <Table.ColumnHeader className="w-[25%]" sortKey="navn" sortable>Kravnavn</Table.ColumnHeader>
-                    <Table.ColumnHeader sortKey="avdeling" sortable>Ansvarlig</Table.ColumnHeader>
-                    <Table.ColumnHeader sortKey="tema" sortable>Tema</Table.ColumnHeader>
-                    <Table.ColumnHeader sortKey="status" sortable>Status</Table.ColumnHeader>
-                    <Table.ColumnHeader className="w-[10%]" sortKey="changeStamp" sortable>Siste endret</Table.ColumnHeader>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {sortedData.map((krav: Krav) => {
-                    return (
-                      <Table.Row key={krav.id}>
-                        <Table.HeaderCell className="w-[6%] text-end" scope="row">{krav.kravNummer}.{krav.kravVersjon}</Table.HeaderCell>
-                        <Table.DataCell className="w-[25%]"><Link href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</Link></Table.DataCell>
-                        <Table.DataCell>{krav.underavdeling && krav.underavdeling.shortName}</Table.DataCell>
-                        <Table.DataCell> <Link href={`/tema/${krav.tema}`}>{codelist.getCode(ListName.TEMA, krav.tema)?.shortName}</Link></Table.DataCell>
-                        <Table.DataCell>{kravStatus(krav.status)}</Table.DataCell>
-                        <Table.DataCell className="w-[10%] text-end">{moment(krav.changeStamp.lastModifiedDate).format('ll')}</Table.DataCell>
-                      </Table.Row>
-                    )
-                  })}
-                </Table.Body>
-              </Table>
-              <div className="flex w-full justify-center items-center mt-3">
-                <Select
-                  label="Antall rader:"
-                  value={rowsPerPage}
-                  onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
-                  size="small"
-                >
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                </Select>
-                <Spacer />
-                <div>
-                  <Pagination
-                    page={page}
-                    onPageChange={setPage}
-                    count={Math.ceil(tableContent.length / rowsPerPage)}
-                    prevNextTexts
-                    size="small"
-                  />
-                </div>
-                <Spacer />
-                <BodyShort>
-                  Totalt antall rader: {tableContent.length}
-                </BodyShort>
-
-              </div>
-            </div>
-          )}
-        </div>
+    <div className="w-full pb-6" id="content" role="main">
+      <div className="flex-1 justify-start flex">
+        <CustomizedBreadcrumbs currentPage="Administrere Krav" />
       </div>
+      <div>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Administrere Krav</title>
+        </Helmet>
+        <Heading size="medium">Administrere Krav</Heading>
+      </div>
+
+      {tableContent.length && (
+        <div className="w-full">
+          <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeader className="w-[6%]" sortKey="kravNummer" sortable>Krav ID</Table.ColumnHeader>
+                <Table.ColumnHeader className="w-[25%]" sortKey="navn" sortable>Kravnavn</Table.ColumnHeader>
+                <Table.ColumnHeader sortKey="avdeling" sortable>Ansvarlig</Table.ColumnHeader>
+                <Table.ColumnHeader sortKey="tema" sortable>Tema</Table.ColumnHeader>
+                <Table.ColumnHeader sortKey="status" sortable>Status</Table.ColumnHeader>
+                <Table.ColumnHeader className="w-[10%]" sortKey="changeStamp" sortable>Siste endret</Table.ColumnHeader>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {sortedData.map((krav: Krav) => {
+                return (
+                  <Table.Row key={krav.id}>
+                    <Table.HeaderCell className="w-[6%] text-end" scope="row">{krav.kravNummer}.{krav.kravVersjon}</Table.HeaderCell>
+                    <Table.DataCell className="w-[25%]"><Link href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</Link></Table.DataCell>
+                    <Table.DataCell>{krav.underavdeling && krav.underavdeling.shortName}</Table.DataCell>
+                    <Table.DataCell> <Link href={`/tema/${krav.tema}`}>{codelist.getCode(ListName.TEMA, krav.tema)?.shortName}</Link></Table.DataCell>
+                    <Table.DataCell>{kravStatus(krav.status)}</Table.DataCell>
+                    <Table.DataCell className="w-[10%] text-end">{moment(krav.changeStamp.lastModifiedDate).format('ll')}</Table.DataCell>
+                  </Table.Row>
+                )
+              })}
+            </Table.Body>
+          </Table>
+          <div className="flex w-full justify-center items-center mt-3">
+            <Select
+              label="Antall rader:"
+              value={rowsPerPage}
+              onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+              size="small"
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </Select>
+            <Spacer />
+            <div>
+              <Pagination
+                page={page}
+                onPageChange={setPage}
+                count={Math.ceil(tableContent.length / rowsPerPage)}
+                prevNextTexts
+                size="small"
+              />
+            </div>
+            <Spacer />
+            <BodyShort>
+              Totalt antall rader: {tableContent.length}
+            </BodyShort>
+
+          </div>
+        </div>
+      )}
     </div>
   )
 }
