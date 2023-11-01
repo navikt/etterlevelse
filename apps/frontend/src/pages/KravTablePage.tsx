@@ -58,8 +58,8 @@ export const KravTablePage = () => {
 
   return (
     <div className="w-full" id="content" role="main">
-      <div className="w-full flex justify-center items-center flex-col mt-6">
-        <div className="w-full max-w-7xl px-8">
+      <div className="w-full flex justify-center items-center flex-col">
+        <div className="w-full max-w-7xl px-8 bg-white">
           <div className="flex-1 justify-start flex">
             <CustomizedBreadcrumbs currentPage="Administrere Krav" />
           </div>
