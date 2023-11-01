@@ -182,7 +182,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
 
   return (
     <div className="w-full">
-      <div role="banner" className="w-full flex justify-center">
+      <div className="w-full flex justify-center">
         <SkipToContent />
         <InternalHeader className="w-full justify-center items-center">
           <div className="w-full flex max-w-7xl">
