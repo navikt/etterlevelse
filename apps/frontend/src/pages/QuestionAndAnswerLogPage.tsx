@@ -10,8 +10,8 @@ import { Krav, PageResponse, Tilbakemelding, TilbakemeldingMeldingStatus } from 
 import { codelist, ListName } from '../services/Codelist'
 import { ampli } from '../services/Amplitude'
 import { BodyShort, Heading, Link, Loader, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
-import CustomizedBreadcrumbs from "../components/common/CustomizedBreadcrumbs";
-import { handleSort } from "../util/handleTableSort";
+import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
+import { handleSort } from '../util/handleTableSort'
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string

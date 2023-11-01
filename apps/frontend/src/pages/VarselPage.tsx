@@ -9,7 +9,7 @@ import { ObjectType } from '../components/admin/audit/AuditTypes'
 import { AuditRecentTable } from '../components/admin/audit/AuditRecentTable'
 import { ampli } from '../services/Amplitude'
 import EditOmEtterlevelse from '../components/varslinger/EditOmEtterlevelse'
-import { Heading, Tabs } from "@navikt/ds-react";
+import { Heading, Tabs } from '@navikt/ds-react'
 
 type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE | MeldingType.OM_ETTERLEVELSE
 

@@ -13,7 +13,7 @@ import {
 import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../constants'
 import { ampli } from '../services/Amplitude'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { BodyShort, Button, Heading, Label, Link, Pagination, Select, SortState, Spacer, Table, TextField } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Link, Pagination, Select, SortState, Spacer, Table, TextField } from '@navikt/ds-react'
 import { UpdateMessage } from './EtterlevelseAdminPage'
 import { handleSort } from '../util/handleTableSort'
 

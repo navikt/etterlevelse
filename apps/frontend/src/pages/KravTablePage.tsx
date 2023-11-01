@@ -7,7 +7,7 @@ import { kravStatus } from './KravPage'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { BodyShort, Heading, Label, Link, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
+import { BodyShort, Heading, Link, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
 import { handleSort } from '../util/handleTableSort'
 
 

@@ -5,7 +5,7 @@ import notFound from '../resources/notfound.svg'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import { user } from '../services/User'
-import {Heading} from "@navikt/ds-react";
+import {Heading} from '@navikt/ds-react'
 
 const Forbidden = () => {
   const params = useParams<{ role?: string }>()
