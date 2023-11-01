@@ -197,7 +197,7 @@ const TemaListe = () => {
               Vi har totalt {kravAntall} krav gruppert i {temaListe.length} tema
             </BodyLong>
           </div>
-          <div className="mt-6">
+          <div className="mt-6 flex flex-col gap-2">
             {temaListe.map((tema) => (
               <TemaPanel key={tema.code} tema={tema} setNum={updateNum} />
             ))}
