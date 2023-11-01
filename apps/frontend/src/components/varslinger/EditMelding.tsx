@@ -61,7 +61,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
             <div>
 
               <div className="mb-6">
-                <Heading className="my-4" size="medium" level="2">{melding.meldingType === MeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'}</Heading>
+                <Heading className="my-4" size="small" level="2">{melding.meldingType === MeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'}</Heading>
                 <Field name="alertType">
                   {(p: FieldProps<string>) => (
                     <Form>

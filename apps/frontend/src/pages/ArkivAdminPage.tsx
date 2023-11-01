@@ -91,7 +91,7 @@ export const ArkivAdminPage = () => {
               <meta charSet="utf-8" />
               <title>Administrere Arkivering</title>
             </Helmet>
-            <Heading size="xlarge">Administrere Arkivering</Heading>
+            <Heading size="medium">Administrere Arkivering</Heading>
           </div>
 
           <div className="flex items-end">
@@ -164,7 +164,7 @@ export const ArkivAdminPage = () => {
           <UpdateMessage message={deleteMessage} />
 
           <div className="mt-8 w-full">
-            <Label>Arkiv tabell</Label>
+            <Heading level="2" size="small">Arkiv tabell</Heading>
             {tableContent.length && (
               <div>
                 <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>

@@ -21,7 +21,7 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
               <meta charSet="utf-8" />
               <title>Administrere Etterlevelse Dokumentasjon</title>
             </Helmet>
-            <Heading size="xlarge">Administrere Etterlevelse Dokumentasjon</Heading>
+            <Heading size="medium">Administrere Etterlevelse Dokumentasjon</Heading>
           </div>
 
           <div className="mt-5">

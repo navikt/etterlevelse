@@ -122,7 +122,7 @@ export const QuestionAndAnswerLogPage = () => {
           <meta charSet="utf-8" />
           <title>Spørsmål og svar</title>
         </Helmet>
-        <Heading size="xlarge">Spørsmål og svar</Heading>
+        <Heading size="medium">Spørsmål og svar</Heading>
       </div>
 
       <div>

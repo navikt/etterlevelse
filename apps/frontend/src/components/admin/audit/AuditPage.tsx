@@ -55,7 +55,7 @@ export const AuditPage = () => {
         <meta charSet="utf-8" />
         <title>Versjonering</title>
       </Helmet>
-      <Heading size="xlarge">{intl.audit}</Heading>
+      <Heading size="medium">{intl.audit}</Heading>
       <div className="my-4">
         <AuditLabel label={intl.searchId}>
           <TextField

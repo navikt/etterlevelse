@@ -24,7 +24,7 @@ export const VarselPage = () => {
         <div className="max-w-7xl w-full">
           <div className="px-24 pt-6">
             <CustomizedBreadcrumbs currentPage="Varslinger" />
-            <Heading className="mt-2" size="large" level="1" >Varslinger</Heading>
+            <Heading className="mt-2" size="medium" level="1" >Varslinger</Heading>
           </div>
         </div>
       </div>
