@@ -19,7 +19,7 @@ const CustomizedBreadcrumbs = (props: CustomizedProps) => {
   const linkColor = /^\/(lov|krav|etterlevelse)\//.test(window.location.pathname) ? 'text-white' : 'text-text-default'
 
   return (
-    <div className="flex gap-1 items-center mb-6">
+    <div className="flex gap-1 items-center my-6">
       <Link href="/" className={`gap-1 flex ${linkColor}`}>
         Forsiden <ChevronRightIcon area-label="" aria-hidden />
       </Link>
