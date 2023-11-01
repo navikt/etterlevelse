@@ -25,7 +25,7 @@ const Forbidden = () => {
   ampli.logEvent('sidevisning', { side: 'Forbidden', sidetittel: '403 forbidden' })
 
   return (
-    <div className="max-w-7xl w-full" role="main" id="content">
+    <div className="w-full" role="main" id="content">
       <Helmet>
         <meta charSet="utf-8" />
         <title>403 forbidden</title>

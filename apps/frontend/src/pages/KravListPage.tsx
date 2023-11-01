@@ -37,8 +37,8 @@ export const KravListPage = () => {
         <title>Forvalte og opprette krav</title>
       </Helmet>
       <div className="w-full flex justify-center">
-        <div className="w-full max-w-7xl">
-          <div className="pt-6">
+        <div className="w-full">
+          <div>
             <CustomizedBreadcrumbs currentPage="Forvalte og opprette krav"/>
             <div className="flex">
               <div className="flex-1">
@@ -58,7 +58,7 @@ export const KravListPage = () => {
       </div>
 
       <div className="flex justify-center w-full">
-        <div className="w-full max-w-7xl">
+        <div className="w-full">
           <div className="pt-6">
             <KravTabs/>
           </div>

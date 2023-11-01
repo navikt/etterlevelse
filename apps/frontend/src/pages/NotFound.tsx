@@ -4,7 +4,7 @@ import { intl } from '../util/intl/intl'
 import notFound from '../resources/notfound.svg'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import {Heading} from "@navikt/ds-react";
+import {Heading} from '@navikt/ds-react'
 
 const NotFound = () => {
   const location = useLocation()
@@ -12,7 +12,7 @@ const NotFound = () => {
   ampli.logEvent('sidevisning', { side: 'NotFound', sidetittel: '404 not found' })
 
   return (
-    <div className="max-w-7xl w-full" role="main" id="content">
+    <div className="w-full" role="main" id="content">
       <Helmet>
         <meta charSet="utf-8" />
         <title>404 not found</title>

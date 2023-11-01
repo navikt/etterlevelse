@@ -33,11 +33,19 @@ export const Markdown = ({
       }
       return <BodyLong>{children}</BodyLong>
     },
+    h1: (headerProps: any) => {
+      const { children } = headerProps
+      return (
+        <Heading size="medium" level="1">
+          {children}
+        </Heading>
+      )
+    },
     h2: (headerProps: any) => {
       const { children } = headerProps
 
       return (
-        <Heading size="medium" level="2">
+        <Heading size="small" level="2">
           {children}
         </Heading>
       )
@@ -47,7 +55,7 @@ export const Markdown = ({
       const { children } = headerProps
 
       return (
-        <Heading size="medium" level="3">
+        <Heading size="xsmall" level="3">
           {children}
         </Heading>
       )
@@ -56,7 +64,7 @@ export const Markdown = ({
       const { children } = headerProps
 
       return (
-        <Heading size="medium" level="4">
+        <Heading size="xsmall" level="4">
           {children}
         </Heading>
       )

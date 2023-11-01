@@ -184,7 +184,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
     <div className="w-full">
       <div className="w-full flex justify-center">
         <SkipToContent />
-        <InternalHeader className="w-full justify-center items-center max-w-7xl">
+        <InternalHeader className="w-full justify-center items-center">
           <InternalHeader.Title href="/">
             Støtte til etterlevelse
           </InternalHeader.Title>
@@ -213,7 +213,6 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           border-b 
           border-t 
           w-full
-          max-w-7xl
           ${systemVarsel.alertType === 'INFO' ? 'bg-surface-info-subtle border-surface-info' : 'bg-surface-warning-subtle border-surface-warning'
               }`}
             aria-label="Systemvarsel"
