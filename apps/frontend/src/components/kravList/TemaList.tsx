@@ -104,7 +104,7 @@ const KravTemaList = (props: { activeKraver: Krav[]; tema: string; refresh: Func
   const [isEditPriorityModalOpen, setIsEditPriorityModalOpen] = React.useState(false)
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       {getKravTemaRowsWithLabel(props.draftKrav, props.tema)}
       {getKravTemaRowsWithLabel(props.activeKraver, props.tema)}
 
