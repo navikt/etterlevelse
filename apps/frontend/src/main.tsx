@@ -33,7 +33,7 @@ const Main = (props: any) => {
             <div className="flex w-full justify-center bg-gray-100">
               <div className="flex flex-col w-full max-w-7xl bg-white min-h-screen">
                 <Header />
-                <div className="px-2">
+                <div className="px-2 pb-6">
                   <AppRoutes />
                 </div>
               </div>
