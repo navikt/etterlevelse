@@ -22,12 +22,12 @@ import { QueryHookOptions } from '@apollo/client/react/types/types'
 import { gql } from '@apollo/client/core'
 import { useForceUpdate } from '../util/hooks'
 import { borderRadius, margin } from '../components/common/Style'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { BodyShort, Heading } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Heading } from '@navikt/ds-react'
 import { lovdataBase } from '../components/Lov'
 
 export const TemaPage = () => {
@@ -190,84 +190,35 @@ const TemaListe = () => {
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
 
   return (
-    <Layout2
-      mainHeader={<HeadingXXLarge marginTop="0px">Forstå kravene</HeadingXXLarge>}
-      headerBackgroundColor={ettlevColors.grey50}
-      childrenBackgroundColor={ettlevColors.grey25}
-      currentPage={'Forstå kravene'}
-      headerOverlap={'100px'}
-    >
-      {visFilter && <RelevansFilter relevans={relevans} onClickFilter={onClickFilter} kravAntall={kravAntall} />}
-      <Block {...sectionProps} marginTop={theme.sizing.scale600}>
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>Forstå kravene</title>
-        </Helmet>
-        {!visFilter && <TemaInfo kravAntall={kravAntall} temaAntall={temaListe.length} />}
-        {temaListe.map((tema) => (
-          <TemaCard key={tema.code} tema={tema} relevans={relevans} setNum={updateNum} />
-        ))}
-      </Block>
-    </Layout2>
+    <div className="w-full" role="main" id="content">
+      <div className="w-full flex justify-center items-center flex-col mt-6">
+        <div className="w-full max-w-7xl px-8">
+          <div className="flex-1 justify-start flex">
+            <CustomizedBreadcrumbs currentPage="Forstå kravene" />
+          </div>
+          <div>
+            <Helmet>
+              <meta charSet="utf-8" />
+              <title>Forstå kravene</title>
+            </Helmet>
+            <Heading size="medium">Forstå kravene</Heading>
+            <BodyLong>
+              Vi har totalt {kravAntall} krav gruppert i {temaListe.length} tema
+            </BodyLong>
+          </div>
+          {temaListe.map((tema) => (
+            <TemaCard key={tema.code} tema={tema} relevans={relevans} setNum={updateNum} />
+          ))}
+        </div>
+      </div>
+    </div>
   )
 }
-
-const RelevansFilter = ({ onClickFilter, relevans, kravAntall }: { onClickFilter: (rel: string) => void; relevans: string[]; kravAntall: number }) => (
-  <Block
-    backgroundColor={ettlevColors.grey75}
-    display={'flex'}
-    justifyContent={'space-between'}
-    alignItems={'center'}
-    paddingLeft={theme.sizing.scale600}
-    paddingRight={theme.sizing.scale600}
-  >
-    <Block display={'flex'} alignItems={'center'} marginTop={theme.sizing.scale700} marginBottom={theme.sizing.scale700}>
-      <LabelLarge $style={{ flexShrink: 0 }}>Vis relevante krav for:</LabelLarge>
-      <Block display={'flex'} flexWrap>
-        {codelist.getCodes(ListName.RELEVANS).map((rel) => (
-          <SimpleTag key={rel.code} onClick={() => onClickFilter(rel.code)} active={relevans.indexOf(rel.code) >= 0} activeIcon>
-            {rel.shortName}
-          </SimpleTag>
-        ))}
-      </Block>
-    </Block>
-
-    <Block>
-      <ParagraphSmall marginTop={0} marginBottom={0} $style={{ flexShrink: 0 }}>
-        Totalt: <span style={{ fontWeight: 700 }}> {kravAntall}</span> krav
-      </ParagraphSmall>
-    </Block>
-  </Block>
-)
 
 export const cardWidth = '32%'
 export const cardHeight = '220px'
 export const cardMaxheight = '250px'
 const headerBgOverlap = '47px'
-
-const TemaInfo = (props: { kravAntall: number; temaAntall: number }) => (
-  <Block
-    $style={{
-      marginTop: theme.sizing.scale400,
-      marginBottom: theme.sizing.scale400,
-      ...borderRadius('4px'),
-      backgroundColor: ettlevColors.green800,
-    }}
-    width={cardWidth}
-  >
-    <Block padding={theme.sizing.scale1000}>
-      <HeadingXLarge color={ettlevColors.white} $style={{ lineHeight: '40px' }}>
-        Vi har totalt &nbsp;
-        <span style={{ fontSize: '40px', lineHeight: '40px', color: ettlevColors.warning400 }}>{props.kravAntall}</span> &nbsp; krav gruppert i {props.temaAntall} tema
-      </HeadingXLarge>
-
-      <ParagraphMedium color={ettlevColors.white}>
-        Alle vi som utvikler produkter i NAV må forholde oss til en del forskjellige lover og regler. Disse skal bidra til å sikre at den generelle rettsikkerheten til brukerne
-        våre ivaretas.
-      </ParagraphMedium>
-    </Block>
-  </Block>
-)
 
 export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans: string[]; setNum: (tema: string, num: number) => void }) => {
   const lover = codelist.getCodesForTema(tema.code)
