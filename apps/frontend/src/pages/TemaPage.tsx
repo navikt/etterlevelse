@@ -197,7 +197,7 @@ const TemaListe = () => {
               Totalt {kravAntall} krav fordelt på {temaListe.length} temaer
             </BodyLong>
           </div>
-          <div className="mt-6 flex flex-col gap-2">
+          <div className="mt-6 lg:columns-2">
             {temaListe.map((tema) => (
               <TemaPanel key={tema.code} tema={tema} setNum={updateNum} />
             ))}
@@ -224,7 +224,7 @@ export const TemaPanel = ({ tema, setNum }: { tema: TemaCode, setNum: (tema: str
   }
 
   return (
-    <LinkPanel key={tema.code} href={'/tema/' + tema.code} >
+    <LinkPanel className="mb-2" key={tema.code} href={'/tema/' + tema.code} >
       <LinkPanel.Title className="flex justify-center">
         {tema.shortName}
         <Spacer />
