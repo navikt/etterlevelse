@@ -27,7 +27,7 @@ import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { BodyLong, BodyShort, Heading, LinkPanel, Loader } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Heading, LinkPanel, Loader, Spacer, Tag } from '@navikt/ds-react'
 import { lovdataBase } from '../components/Lov'
 
 export const TemaPage = () => {
@@ -194,7 +194,7 @@ const TemaListe = () => {
             </Helmet>
             <Heading size="medium">Forstå kravene</Heading>
             <BodyLong>
-              Vi har totalt {kravAntall} krav gruppert i {temaListe.length} tema
+              Totalt {kravAntall} krav fordelt på {temaListe.length} temaer
             </BodyLong>
           </div>
           <div className="mt-6 flex flex-col gap-2">
@@ -225,8 +225,11 @@ export const TemaPanel = ({ tema, setNum }: { tema: TemaCode, setNum: (tema: str
 
   return (
     <LinkPanel key={tema.code} href={'/tema/' + tema.code} >
-      <LinkPanel.Title>{tema.shortName}</LinkPanel.Title>
-      <LinkPanel.Description>Antall krav i tema: {krav.length || 0}</LinkPanel.Description>
+      <LinkPanel.Title className="flex justify-center">
+        {tema.shortName}
+        <Spacer />
+        <Tag variant="info">{krav.length || 0} krav</Tag>
+      </LinkPanel.Title>
     </LinkPanel>
   )
 }
