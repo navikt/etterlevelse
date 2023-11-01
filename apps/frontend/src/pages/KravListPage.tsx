@@ -71,7 +71,7 @@ export const KravListPage = () => {
 export const KravPanels = ({kravene, loading}: { kravene?: KravQL[] | Krav[]; loading?: boolean }) => {
   if (loading) return <Skeleton variant="rectangle"/>
   return (
-    <div className="mb-2.5">
+    <div className="mb-2.5 flex flex-col gap-2">
       {kravene &&
         kravene.map((k, index) => {
           const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
@@ -129,7 +129,7 @@ const KravTabs = () => {
         />
         <Tabs.Tab
           value="tema"
-          label="Tema"
+          label="Juster krav rekkefølge"
         />
         <Tabs.Tab
           value="alle"
