@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { Block, BlockProps } from 'baseui/block'
 import { useEffect, useState } from 'react'
-import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall } from 'baseui/typography'
+import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphXSmall } from 'baseui/typography'
 import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
 import { ExternalLink, urlForObject } from '../components/common/RouteLink'
 import { theme } from '../util'
@@ -14,14 +14,14 @@ import { PanelLink, PanelLinkCard, PanelLinkCardOverrides } from '../components/
 import { kravNumView } from './KravPage'
 import * as _ from 'lodash'
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import { Layout2, Page } from '../components/scaffold/Page'
+import { Page } from '../components/scaffold/Page'
 import { SimpleTag } from '../components/common/SimpleTag'
 import { Krav, KravQL, PageResponse } from '../constants'
 import { useQuery } from '@apollo/client'
 import { QueryHookOptions } from '@apollo/client/react/types/types'
 import { gql } from '@apollo/client/core'
 import { useForceUpdate } from '../util/hooks'
-import { borderRadius, margin } from '../components/common/Style'
+import { margin } from '../components/common/Style'
 import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
@@ -166,7 +166,6 @@ const sectionProps: BlockProps = {
 }
 
 const TemaListe = () => {
-  const [relevans, setRelevans] = useState<string[]>([])
   const [num] = useState<{ [t: string]: number }>({})
   const update = useForceUpdate()
 
