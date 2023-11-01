@@ -27,7 +27,7 @@ import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { BodyLong, BodyShort, Heading } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Heading, LinkPanel, Loader } from '@navikt/ds-react'
 import { lovdataBase } from '../components/Lov'
 
 export const TemaPage = () => {
@@ -114,7 +114,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
-      ;(async () => {
+      ; (async () => {
         const allKravPriority = await getAllKravPriority()
         const kraver = _.cloneDeep(data.krav.content)
         kraver.map((k) => {
@@ -169,17 +169,8 @@ const TemaListe = () => {
   const [relevans, setRelevans] = useState<string[]>([])
   const [num] = useState<{ [t: string]: number }>({})
   const update = useForceUpdate()
-  const visFilter = false // feature toggled
 
   ampli.logEvent('sidevisning', { side: 'Tema side' })
-
-  const onClickFilter = (nyVerdi: string) => {
-    if (relevans.indexOf(nyVerdi) >= 0) {
-      const nyList = [...relevans]
-      _.remove(nyList, (it) => it === nyVerdi)
-      setRelevans(nyList)
-    } else setRelevans([...relevans, nyVerdi])
-  }
 
   const updateNum = (tema: string, temaNum: number) => {
     num[tema] = temaNum
@@ -206,9 +197,11 @@ const TemaListe = () => {
               Vi har totalt {kravAntall} krav gruppert i {temaListe.length} tema
             </BodyLong>
           </div>
-          {temaListe.map((tema) => (
-            <TemaCard key={tema.code} tema={tema} relevans={relevans} setNum={updateNum} />
-          ))}
+          <div className="mt-6">
+            {temaListe.map((tema) => (
+              <TemaPanel key={tema.code} tema={tema} setNum={updateNum} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -219,6 +212,24 @@ export const cardWidth = '32%'
 export const cardHeight = '220px'
 export const cardMaxheight = '250px'
 const headerBgOverlap = '47px'
+
+export const TemaPanel = ({ tema, setNum }: { tema: TemaCode, setNum: (tema: string, num: number) => void }) => {
+  const lover = codelist.getCodesForTema(tema.code)
+  const { data, loading } = useKravCounter({ lover: [...lover.map((l) => l.code)] }, { skip: !lover.length })
+  const krav = data?.krav.content || []
+  useEffect(() => setNum(tema.code, krav.length), [krav])
+
+  if (loading) {
+    return <Loader size="large" />
+  }
+
+  return (
+    <LinkPanel key={tema.code} href={'/tema/' + tema.code} >
+      <LinkPanel.Title>{tema.shortName}</LinkPanel.Title>
+      <LinkPanel.Description>Antall krav i tema: {krav.length || 0}</LinkPanel.Description>
+    </LinkPanel>
+  )
+}
 
 export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans: string[]; setNum: (tema: string, num: number) => void }) => {
   const lover = codelist.getCodesForTema(tema.code)
