@@ -6,12 +6,12 @@ import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
 import { PersonName } from '../components/common/PersonName'
 import { getMelderInfo } from '../components/krav/tilbakemelding/Tilbakemelding'
-import {Krav, PageResponse, Tilbakemelding, TilbakemeldingMeldingStatus} from '../constants'
+import { Krav, PageResponse, Tilbakemelding, TilbakemeldingMeldingStatus } from '../constants'
 import { codelist, ListName } from '../services/Codelist'
 import { ampli } from '../services/Amplitude'
-import {BodyShort, Heading, Link, Loader, Pagination, Select, SortState, Spacer, Table} from '@navikt/ds-react'
+import { BodyShort, Heading, Link, Loader, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
 import CustomizedBreadcrumbs from "../components/common/CustomizedBreadcrumbs";
-import {handleSort} from "../util/handleTableSort";
+import { handleSort } from "../util/handleTableSort";
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string
@@ -32,7 +32,7 @@ export const QuestionAndAnswerLogPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
 
-  let sortedData = kravMessages.sort((a,b) => (b.tidForSporsmaal || '').localeCompare(a.tidForSporsmaal || ''))
+  let sortedData = kravMessages.sort((a, b) => (b.tidForSporsmaal || '').localeCompare(a.tidForSporsmaal || ''))
 
   const comparator = (a: KravMessage, b: KravMessage, orderBy: string) => {
     switch (orderBy) {
@@ -63,7 +63,7 @@ export const QuestionAndAnswerLogPage = () => {
   ampli.logEvent('sidevisning', { side: 'Log side for spørsmål og svar', sidetittel: 'Spørsmål og svar' })
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
       setTableContent([...mappedKraver])
@@ -111,11 +111,9 @@ export const QuestionAndAnswerLogPage = () => {
 
   return (
     <div className="w-full" id="content" role="main">
-      <div className="w-full flex justify-center items-center flex-col mt-6">
-        <div className="w-full max-w-7xl px-8">
-          <div className="flex-1 justify-start flex">
-            <CustomizedBreadcrumbs currentPage="Spørsmål og svar"/>
-          </div>
+      <div className="flex-1 justify-start flex">
+        <CustomizedBreadcrumbs currentPage="Spørsmål og svar" />
+      </div>
 
       <div >
         <Helmet>
@@ -128,87 +126,84 @@ export const QuestionAndAnswerLogPage = () => {
       <div>
         {!isloading && kravMessages.length ? (
           <div>
-          <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeader  className="w-[6%]" sortKey="kravNummer" sortable>Krav ID</Table.ColumnHeader>
-                <Table.ColumnHeader className="w-[25%]" sortKey="kravNavn" sortable>Kravtittel</Table.ColumnHeader>
-                <Table.ColumnHeader sortKey="tema" sortable>Tema</Table.ColumnHeader>
-                <Table.ColumnHeader>Fra</Table.ColumnHeader>
-                <Table.ColumnHeader sortKey="tidForSporsmaal" sortable>Mottatt</Table.ColumnHeader>
-                <Table.ColumnHeader sortKey="tidForSvar" sortable>Besvart</Table.ColumnHeader>
-              </Table.Row>
+            <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>
+              <Table.Header>
+                <Table.Row>
+                  <Table.ColumnHeader className="w-[6%]" sortKey="kravNummer" sortable>Krav ID</Table.ColumnHeader>
+                  <Table.ColumnHeader className="w-[25%]" sortKey="kravNavn" sortable>Kravtittel</Table.ColumnHeader>
+                  <Table.ColumnHeader sortKey="tema" sortable>Tema</Table.ColumnHeader>
+                  <Table.ColumnHeader>Fra</Table.ColumnHeader>
+                  <Table.ColumnHeader sortKey="tidForSporsmaal" sortable>Mottatt</Table.ColumnHeader>
+                  <Table.ColumnHeader sortKey="tidForSvar" sortable>Besvart</Table.ColumnHeader>
+                </Table.Row>
               </Table.Header>
-            <Table.Body>
-              {sortedData.map((message : KravMessage) => {
-                return (
-                  <Table.Row key={message.id}>
-                    <Table.HeaderCell  className="w-[6%]" scope="row"> K{message.kravNummer}.{message.kravVersjon}</Table.HeaderCell>
+              <Table.Body>
+                {sortedData.map((message: KravMessage) => {
+                  return (
+                    <Table.Row key={message.id}>
+                      <Table.HeaderCell className="w-[6%]" scope="row"> K{message.kravNummer}.{message.kravVersjon}</Table.HeaderCell>
 
-                    <Table.DataCell className="w-[25%]">
-                      <Link href={`/krav/${message.kravNummer}/${message.kravVersjon}?tilbakemeldingId=${message.id}`}>{message.kravNavn}</Link>
-                    </Table.DataCell>
-                    <Table.DataCell>{codelist.getCode(ListName.TEMA, message.tema)?.shortName}</Table.DataCell>
-                    <Table.DataCell>{message.melderNavn}</Table.DataCell>
-                    <Table.DataCell>{moment(message.tidForSporsmaal).format('lll')}</Table.DataCell>
-                    <Table.DataCell>
-                      {message.tidForSvar ? (
-                        moment(message.tidForSvar).format('lll')
-                      ) : (
-                        <BodyShort>
-                          Ikke besvart
-                        </BodyShort>
-                      )}
-                    </Table.DataCell>
-                  </Table.Row>
+                      <Table.DataCell className="w-[25%]">
+                        <Link href={`/krav/${message.kravNummer}/${message.kravVersjon}?tilbakemeldingId=${message.id}`}>{message.kravNavn}</Link>
+                      </Table.DataCell>
+                      <Table.DataCell>{codelist.getCode(ListName.TEMA, message.tema)?.shortName}</Table.DataCell>
+                      <Table.DataCell>{message.melderNavn}</Table.DataCell>
+                      <Table.DataCell>{moment(message.tidForSporsmaal).format('lll')}</Table.DataCell>
+                      <Table.DataCell>
+                        {message.tidForSvar ? (
+                          moment(message.tidForSvar).format('lll')
+                        ) : (
+                          <BodyShort>
+                            Ikke besvart
+                          </BodyShort>
+                        )}
+                      </Table.DataCell>
+                    </Table.Row>
+                  )
+                }
                 )
-              }
-                )
-              }
-         </Table.Body>
-          </Table>
+                }
+              </Table.Body>
+            </Table>
 
-          <div className="flex w-full justify-center items-center mt-3">
-            <Select
-              label="Antall rader:"
-              value={rowsPerPage}
-              onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
-              size="small"
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </Select>
-            <Spacer />
-            <div>
-              <Pagination
-                page={page}
-                onPageChange={setPage}
-                count={Math.ceil(kravMessages.length / rowsPerPage)}
-                prevNextTexts
+            <div className="flex w-full justify-center items-center mt-3">
+              <Select
+                label="Antall rader:"
+                value={rowsPerPage}
+                onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
                 size="small"
-              />
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </Select>
+              <Spacer />
+              <div>
+                <Pagination
+                  page={page}
+                  onPageChange={setPage}
+                  count={Math.ceil(kravMessages.length / rowsPerPage)}
+                  prevNextTexts
+                  size="small"
+                />
+              </div>
+              <Spacer />
+              <BodyShort>
+                Totalt antall rader: {kravMessages.length}
+              </BodyShort>
             </div>
-            <Spacer />
-            <BodyShort>
-              Totalt antall rader: {kravMessages.length}
-            </BodyShort>
           </div>
-          </div>
-          )
+        )
           :
           (
-          <div className="flex justify-center">
-            <Loader size={'large'} />
-          </div>
-        )}
+            <div className="flex justify-center">
+              <Loader size={'large'} />
+            </div>
+          )}
       </div>
-
-        </div>
-      </div>
-  </div>
+    </div>
 
   )
 }

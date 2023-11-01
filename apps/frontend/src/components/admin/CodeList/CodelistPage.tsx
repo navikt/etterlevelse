@@ -11,6 +11,7 @@ import CodeListTable from './CodeListStyledTable'
 import { Helmet } from 'react-helmet'
 import { Button, Heading, Loader, Select } from '@navikt/ds-react'
 import { PlusIcon } from '@navikt/aksel-icons'
+import CustomizedBreadcrumbs from '../../common/CustomizedBreadcrumbs'
 
 const CodeListPage = () => {
   const params = useParams<{ listname?: string }>()
@@ -58,7 +59,10 @@ const CodeListPage = () => {
   }
 
   return (
-    <div role="main" id="content" className="px-8 w-full max-w-7xl">
+    <div role="main" id="content" className="w-full" >
+      <div className="flex-1 justify-start flex">
+        <CustomizedBreadcrumbs currentPage="Administrering av kodeverk" />
+      </div>
       <Helmet>
         <meta charSet="utf-8" />
         <title>{listname ? listname : 'Velg kodeverk'} </title>

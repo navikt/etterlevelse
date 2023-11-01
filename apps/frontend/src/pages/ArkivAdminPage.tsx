@@ -81,150 +81,146 @@ export const ArkivAdminPage = () => {
 
   return (
     <div className="w-full" id="content" role="main">
-      <div className="w-full flex justify-center items-center flex-col mt-6">
-        <div className="w-full max-w-7xl px-8">
-          <div className="flex-1 justify-start flex">
-            <CustomizedBreadcrumbs currentPage="Administrere Arkivering" />
-          </div>
-          <div>
-            <Helmet>
-              <meta charSet="utf-8" />
-              <title>Administrere Arkivering</title>
-            </Helmet>
-            <Heading size="medium">Administrere Arkivering</Heading>
-          </div>
-
-          <div className="flex items-end">
-            <TextField
-              label="Oppdatere arkivering status"
-              placeholder='Arkiverings UID'
-              onChange={(e) => setArkiveringId(e.target.value)}
-              className="flex-1 mr-3"
-            />
-            <Select
-              label="Velg status"
-              className="flex-1 mr-3"
-              value={arkiveringsStatus}
-              onChange={(e) => setArkiveringsStatus(e.target.value as EtterlevelseArkivStatus)}
-            >
-              {options.map((o, i) => {
-                <option value="">Velg status</option>
-                return (
-                  <option key={i + '_' + o.label} value={o.id}>{o.label}</option>
-                )
-              })}
-            </Select>
-            <Button
-              disabled={!arkiveringsStatus || !arkiveringId}
-              onClick={() => {
-                getEtterlevelseArkiv(arkiveringId).then((arkivering) => {
-                  if (arkiveringsStatus) {
-                    updateAsAdminEtterlevelseArkiv({
-                      ...arkivering,
-                      status: arkiveringsStatus,
-                    }).then(() => {
-                      setArkiveringId('')
-                      setArkiveringsStatus(EtterlevelseArkivStatus.IKKE_ARKIVER)
-                      setReloadTable(!reloadTable)
-                      setUpdateMessage('Oppdatering vellykket for arkivering med uid: ' + arkiveringId)
-                    }).catch((e) => {
-                      setUpdateMessage('Oppdatering mislykket, error: ' + e)
-                    })
-                  }
-                })
-              }}
-            >
-              Oppdater Status
-            </Button>
-          </div>
-          <UpdateMessage message={updateMessage} />
-
-          <div className="flex items-end mt-8">
-            <TextField
-              label="Slett arkivering"
-              placeholder='Arkiverings UID'
-              onChange={(e) => setDeleteArkiveringId(e.target.value)}
-              className="w-full mr-3"
-            />
-            <Button
-              disabled={!deleteArkiveringId}
-              onClick={() => {
-                deleteEtterlevelseArkiv(deleteArkiveringId).then(() => {
-                  setArkiveringId('')
-                  setReloadTable(!reloadTable)
-                  setDeleteMessage('Sletting vellykket for arkivering med uid: ' + deleteArkiveringId)
-                }).catch((e) => {
-                  setDeleteMessage('Sletting mislykket, error: ' + e)
-                })
-              }}
-            >
-              Slett
-            </Button>
-          </div>
-          <UpdateMessage message={deleteMessage} />
-
-          <div className="mt-8 w-full">
-            <Heading level="2" size="small">Arkiv tabell</Heading>
-            {tableContent.length && (
-              <div>
-                <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.ColumnHeader >Arkivering UID</Table.ColumnHeader>
-                      <Table.ColumnHeader >Etterlevelse Dokumentasjon ID</Table.ColumnHeader>
-                      <Table.ColumnHeader sortKey="status" sortable>Status</Table.ColumnHeader>
-                      <Table.ColumnHeader sortKey="tilArkiveringDato" sortable>Bestilt Arkiverings dato</Table.ColumnHeader>
-                      <Table.ColumnHeader sortKey="arkiveringDato" sortable>Arkiverings dato</Table.ColumnHeader>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {sortedData.map((arkivering: EtterlevelseArkiv) => {
-                      return (
-                        <Table.Row key={arkivering.id}>
-                          <Table.HeaderCell scope="row">{arkivering.id}</Table.HeaderCell>
-                          <Table.DataCell ><Link href={`/dokumentasjon/${arkivering.etterlevelseDokumentasjonId}`}>{arkivering.etterlevelseDokumentasjonId}</Link></Table.DataCell>
-                          <Table.DataCell >{arkiveringStatusToString(arkivering.status)}</Table.DataCell>
-                          <Table.DataCell > {moment(arkivering.tilArkiveringDato).format('lll')}</Table.DataCell>
-                          <Table.DataCell >{moment(arkivering.arkiveringDato).format('lll')}</Table.DataCell>
-                        </Table.Row>
-                      )
-                    })}
-                  </Table.Body>
-                </Table>
-                <div className="flex w-full justify-center items-center mt-3">
-                  <Select
-                    label="Antall rader:"
-                    value={rowsPerPage}
-                    onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
-                    size="small"
-                  >
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                  </Select>
-                  <Spacer />
-                  <div>
-                    <Pagination
-                      page={page}
-                      onPageChange={setPage}
-                      count={Math.ceil(tableContent.length / rowsPerPage)}
-                      prevNextTexts
-                      size="small"
-                    />
-                  </div>
-                  <Spacer />
-                  <BodyShort>
-                    Totalt antall rader: {tableContent.length}
-                  </BodyShort>
-                </div>
-              </div>
-            )}
-          </div>
-
-        </div>
+      <div className="flex-1 justify-start flex">
+        <CustomizedBreadcrumbs currentPage="Administrere Arkivering" />
       </div>
+      <div>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Administrere Arkivering</title>
+        </Helmet>
+        <Heading size="medium">Administrere Arkivering</Heading>
+      </div>
+
+      <div className="flex items-end">
+        <TextField
+          label="Oppdatere arkivering status"
+          placeholder='Arkiverings UID'
+          onChange={(e) => setArkiveringId(e.target.value)}
+          className="flex-1 mr-3"
+        />
+        <Select
+          label="Velg status"
+          className="flex-1 mr-3"
+          value={arkiveringsStatus}
+          onChange={(e) => setArkiveringsStatus(e.target.value as EtterlevelseArkivStatus)}
+        >
+          {options.map((o, i) => {
+            <option value="">Velg status</option>
+            return (
+              <option key={i + '_' + o.label} value={o.id}>{o.label}</option>
+            )
+          })}
+        </Select>
+        <Button
+          disabled={!arkiveringsStatus || !arkiveringId}
+          onClick={() => {
+            getEtterlevelseArkiv(arkiveringId).then((arkivering) => {
+              if (arkiveringsStatus) {
+                updateAsAdminEtterlevelseArkiv({
+                  ...arkivering,
+                  status: arkiveringsStatus,
+                }).then(() => {
+                  setArkiveringId('')
+                  setArkiveringsStatus(EtterlevelseArkivStatus.IKKE_ARKIVER)
+                  setReloadTable(!reloadTable)
+                  setUpdateMessage('Oppdatering vellykket for arkivering med uid: ' + arkiveringId)
+                }).catch((e) => {
+                  setUpdateMessage('Oppdatering mislykket, error: ' + e)
+                })
+              }
+            })
+          }}
+        >
+          Oppdater Status
+        </Button>
+      </div>
+      <UpdateMessage message={updateMessage} />
+
+      <div className="flex items-end mt-8">
+        <TextField
+          label="Slett arkivering"
+          placeholder='Arkiverings UID'
+          onChange={(e) => setDeleteArkiveringId(e.target.value)}
+          className="w-full mr-3"
+        />
+        <Button
+          disabled={!deleteArkiveringId}
+          onClick={() => {
+            deleteEtterlevelseArkiv(deleteArkiveringId).then(() => {
+              setArkiveringId('')
+              setReloadTable(!reloadTable)
+              setDeleteMessage('Sletting vellykket for arkivering med uid: ' + deleteArkiveringId)
+            }).catch((e) => {
+              setDeleteMessage('Sletting mislykket, error: ' + e)
+            })
+          }}
+        >
+          Slett
+        </Button>
+      </div>
+      <UpdateMessage message={deleteMessage} />
+
+      <div className="mt-8 w-full">
+        <Heading level="2" size="small">Arkiv tabell</Heading>
+        {tableContent.length && (
+          <div>
+            <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>
+              <Table.Header>
+                <Table.Row>
+                  <Table.ColumnHeader >Arkivering UID</Table.ColumnHeader>
+                  <Table.ColumnHeader >Etterlevelse Dokumentasjon ID</Table.ColumnHeader>
+                  <Table.ColumnHeader sortKey="status" sortable>Status</Table.ColumnHeader>
+                  <Table.ColumnHeader sortKey="tilArkiveringDato" sortable>Bestilt Arkiverings dato</Table.ColumnHeader>
+                  <Table.ColumnHeader sortKey="arkiveringDato" sortable>Arkiverings dato</Table.ColumnHeader>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {sortedData.map((arkivering: EtterlevelseArkiv) => {
+                  return (
+                    <Table.Row key={arkivering.id}>
+                      <Table.HeaderCell scope="row">{arkivering.id}</Table.HeaderCell>
+                      <Table.DataCell ><Link href={`/dokumentasjon/${arkivering.etterlevelseDokumentasjonId}`}>{arkivering.etterlevelseDokumentasjonId}</Link></Table.DataCell>
+                      <Table.DataCell >{arkiveringStatusToString(arkivering.status)}</Table.DataCell>
+                      <Table.DataCell > {moment(arkivering.tilArkiveringDato).format('lll')}</Table.DataCell>
+                      <Table.DataCell >{moment(arkivering.arkiveringDato).format('lll')}</Table.DataCell>
+                    </Table.Row>
+                  )
+                })}
+              </Table.Body>
+            </Table>
+            <div className="flex w-full justify-center items-center mt-3">
+              <Select
+                label="Antall rader:"
+                value={rowsPerPage}
+                onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+                size="small"
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </Select>
+              <Spacer />
+              <div>
+                <Pagination
+                  page={page}
+                  onPageChange={setPage}
+                  count={Math.ceil(tableContent.length / rowsPerPage)}
+                  prevNextTexts
+                  size="small"
+                />
+              </div>
+              <Spacer />
+              <BodyShort>
+                Totalt antall rader: {tableContent.length}
+              </BodyShort>
+            </div>
+          </div>
+        )}
+      </div>
+
     </div>
   )
 }
