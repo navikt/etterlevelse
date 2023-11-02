@@ -9,8 +9,6 @@ import {KravListPage} from './pages/KravListPage'
 import {KravPage} from './pages/KravPage'
 import {EtterlevelseListPage} from './pages/EtterlevelseListPage'
 import {EtterlevelsePage} from './pages/EtterlevelsePage'
-import {RelevansPage} from './pages/RelevansPage'
-import {UnderavdelingPage} from './pages/UnderavdelingPage'
 import {TemaPage} from './pages/TemaPage'
 import ScrollToTop from './util/ScrollToTop'
 import {KravTablePage} from './pages/KravTablePage'
@@ -84,12 +82,6 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/dokumentasjoner/" element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} />} caseSensitive={true} />
         <Route path="/dokumentasjon/:id" element={<PrivateRoute component={<DokumentasjonPage />} />} caseSensitive={true} />
         <Route path="/dokumentasjon/" element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} />} caseSensitive={true} />
-
-        <Route path="/relevans/:relevans" element={<PrivateRoute component={<RelevansPage />} adminPage />} caseSensitive={true} />
-        <Route path="/relevans/" element={<PrivateRoute component={<RelevansPage />} adminPage />} caseSensitive={true} />
-
-        <Route path="/underavdeling/:underavdeling" element={<PrivateRoute component={<UnderavdelingPage />} adminPage />} caseSensitive={true} />
-        <Route path="/underavdeling/" element={<PrivateRoute component={<UnderavdelingPage />} adminPage />} caseSensitive={true} />
 
         <Route path="/admin/codelist/:listname" element={<PrivateRoute component={<CodeListPage />} adminPage />} caseSensitive={true} />
         <Route path="/admin/codelist/" element={<PrivateRoute component={<CodeListPage />} adminPage />} caseSensitive={true} />
