@@ -38,7 +38,7 @@ export const FAQ = () => {
       <div className="flex justify-center w-full">
         <div>
           <div className="max-w-4xl">
-            <Heading size="medium" className="mt-14 mb-8">
+            <Heading size="medium" level="1" className="mt-14 mb-8">
               Om Støtte til etterlevelse
             </Heading>
 

@@ -34,7 +34,7 @@ export const MailLogPage = () => {
         <meta charSet="utf-8" />
         <title>Tilbakemeldings log</title>
       </Helmet>
-      <Heading className="mt-4" size="large" spacing>{intl.mailLog}</Heading>
+      <Heading className="mt-4" size="large" level="1" spacing>{intl.mailLog}</Heading>
       {log?.content.map((l, i) => {
         let html = l.body
         const bodyIdx = l.body.indexOf('<body>')
