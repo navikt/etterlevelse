@@ -47,6 +47,7 @@ const TextEditor = (props: TextEditorProps) => {
           },
         },
       },
+      preserveNewlines: true
     })
   }
 
@@ -64,6 +65,7 @@ const TextEditor = (props: TextEditorProps) => {
           }
         },
       },
+      preserveNewlines: true
     })
   }
 

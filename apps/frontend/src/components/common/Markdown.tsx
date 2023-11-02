@@ -33,6 +33,7 @@ export const Markdown = ({
       }
       return <BodyLong>{children}</BodyLong>
     },
+
     h1: (headerProps: any) => {
       const { children } = headerProps
       return (
@@ -118,11 +119,11 @@ export const Markdown = ({
     }
   }
 
-  const sources: string[] = sourcesOrig || (source ? [source] : [''])
+  const sources: string[] = sourcesOrig || (source ? [source.replaceAll('\n\n', '\n\n &nbsp; \n\n').replaceAll('\n', '\n\n')] : [''])
   const htmlPlugins = escapeHtml ? [] : [rehypeRaw]
   return (
     <div>
-      <ReactMarkdown children={sources.join(vertical ? '\n\n' : ', ')} components={renderers} remarkPlugins={[remarkGfm]} rehypePlugins={htmlPlugins as any} />
+      <ReactMarkdown children={sources.join(vertical ? '\n\n' : ', ')} components={renderers} remarkPlugins={[remarkGfm]} rehypePlugins={htmlPlugins} />
     </div>
   )
 }
