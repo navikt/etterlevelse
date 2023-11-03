@@ -20,7 +20,7 @@ export const VarselPage = () => {
         <meta charSet="utf-8" />
         <title>Varslinger</title>
       </Helmet>
-      <div className="pt-6">
+      <div>
         <CustomizedBreadcrumbs currentPage="Varslinger" />
         <Heading className="mt-2" size="medium" level="1" >Varslinger</Heading>
       </div>
