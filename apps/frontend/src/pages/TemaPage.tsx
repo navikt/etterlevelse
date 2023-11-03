@@ -196,7 +196,7 @@ const TemaListe = () => {
               Totalt {kravAntall} krav fordelt på {temaListe.length} temaer
             </BodyLong>
           </div>
-          <div className="mt-6 lg:columns-2">
+          <div className="mt-6">
             {temaListe.map((tema) => (
               <TemaPanel key={tema.code} tema={tema} setNum={updateNum} />
             ))}
@@ -224,11 +224,23 @@ export const TemaPanel = ({ tema, setNum }: { tema: TemaCode, setNum: (tema: str
 
   return (
     <LinkPanel className="mb-2" key={tema.code} href={'/tema/' + tema.code} >
-      <LinkPanel.Title className="flex justify-center">
-        {tema.shortName}
+      <div className="w-full flex items-center ">
+        <div>
+          <LinkPanel.Title className="flex">
+            {tema.shortName}
+          </LinkPanel.Title>
+          <LinkPanel.Description className="lg:flex items-center gap-2">
+            {lover.map((l, i) =>
+              <div key={l.code} className="flex items-center gap-2">
+                {l.shortName}
+                {i < lover.length - 1 && <span className="hidden lg:block h-2 w-2 rotate-45 rounded-[1px] bg-red-200"></span>}
+              </div>
+            )}
+          </LinkPanel.Description>
+        </div>
         <Spacer />
         <Tag variant="info">{krav.length || 0} krav</Tag>
-      </LinkPanel.Title>
+      </div>
     </LinkPanel>
   )
 }
