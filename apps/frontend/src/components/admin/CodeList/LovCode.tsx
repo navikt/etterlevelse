@@ -92,7 +92,7 @@ export const TemaCodeDataForm = () => {
     <div className="flex w-full mt-4 items-center flex-col">
       <div className="flex w-full mt-4 items-center">
         <Label className="mr-4 w-1/4">
-          Lovkode data
+          Temakode data
         </Label>
       </div>
       <Field name="data">
@@ -112,6 +112,7 @@ export const TemaCodeDataForm = () => {
                   className="w-full"
                   label="Bilde"
                   hideLabel
+                  value={data.image}
                   onChange={(e) => {
                     const image = e.target.value
                     return set({ image })
@@ -129,6 +130,7 @@ export const TemaCodeDataForm = () => {
                   label="Short Desciption"
                   className="w-full"
                   hideLabel
+                  value={data.shortDesciption}
                   onChange={(str) => set({ shortDesciption: (str.target as HTMLTextAreaElement).value })}
                 />
               </div>
