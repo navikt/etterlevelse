@@ -181,7 +181,7 @@ const TemaListe = () => {
 
   return (
     <div className="w-full" role="main" id="content">
-      <div className="w-full flex justify-center items-center flex-col mt-6">
+      <div className="w-full flex justify-center items-center flex-col">
         <div className="w-full max-w-7xl px-8">
           <div className="flex-1 justify-start flex">
             <CustomizedBreadcrumbs currentPage="Forstå kravene" />
