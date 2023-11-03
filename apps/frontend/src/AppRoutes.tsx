@@ -102,6 +102,7 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/tema/:tema" element={<TemaPage />} caseSensitive={true} />
         <Route path="/tema/" element={<TemaPage />} caseSensitive={true} />
 
+        <Route path="/help" element={<RedirectHelpUrl />} caseSensitive={true} />
         <Route path="/omstottetiletterlevelse" element={<FAQ />} caseSensitive={true} />
 
         <Route path="/forbidden" element={<Forbidden />} caseSensitive={true} />
@@ -109,6 +110,17 @@ const AppRoutes = (): JSX.Element => {
         <Route path="*" element={<NotFound />} caseSensitive={true} />
       </Routes>
     </ScrollToTop>
+  )
+}
+
+const RedirectHelpUrl = () => {
+  const navigate = useNavigate()
+  navigate ('/omstottetiletterlevelse')
+
+  return (
+    <div className="flex w-full justify-center">
+      <Loader size="large" />
+    </div>
   )
 }
 
