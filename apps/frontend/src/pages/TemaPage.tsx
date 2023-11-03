@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { Block, BlockProps } from 'baseui/block'
 import { useEffect, useState } from 'react'
-import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall } from 'baseui/typography'
+import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphXSmall } from 'baseui/typography'
 import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
 import { ExternalLink, urlForObject } from '../components/common/RouteLink'
 import { theme } from '../util'
@@ -14,20 +14,20 @@ import { PanelLink, PanelLinkCard, PanelLinkCardOverrides } from '../components/
 import { kravNumView } from './KravPage'
 import * as _ from 'lodash'
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import { Layout2, Page } from '../components/scaffold/Page'
+import { Page } from '../components/scaffold/Page'
 import { SimpleTag } from '../components/common/SimpleTag'
 import { Krav, KravQL, PageResponse } from '../constants'
 import { useQuery } from '@apollo/client'
 import { QueryHookOptions } from '@apollo/client/react/types/types'
 import { gql } from '@apollo/client/core'
 import { useForceUpdate } from '../util/hooks'
-import { borderRadius, margin } from '../components/common/Style'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { margin } from '../components/common/Style'
+import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { BodyShort, Heading } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Heading, LinkPanel, Loader, Spacer, Tag } from '@navikt/ds-react'
 import { lovdataBase } from '../components/Lov'
 
 export const TemaPage = () => {
@@ -114,7 +114,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
-      ;(async () => {
+      ; (async () => {
         const allKravPriority = await getAllKravPriority()
         const kraver = _.cloneDeep(data.krav.content)
         kraver.map((k) => {
@@ -166,20 +166,10 @@ const sectionProps: BlockProps = {
 }
 
 const TemaListe = () => {
-  const [relevans, setRelevans] = useState<string[]>([])
   const [num] = useState<{ [t: string]: number }>({})
   const update = useForceUpdate()
-  const visFilter = false // feature toggled
 
   ampli.logEvent('sidevisning', { side: 'Tema side' })
-
-  const onClickFilter = (nyVerdi: string) => {
-    if (relevans.indexOf(nyVerdi) >= 0) {
-      const nyList = [...relevans]
-      _.remove(nyList, (it) => it === nyVerdi)
-      setRelevans(nyList)
-    } else setRelevans([...relevans, nyVerdi])
-  }
 
   const updateNum = (tema: string, temaNum: number) => {
     num[tema] = temaNum
@@ -190,84 +180,70 @@ const TemaListe = () => {
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
 
   return (
-    <Layout2
-      mainHeader={<HeadingXXLarge marginTop="0px">Forstå kravene</HeadingXXLarge>}
-      headerBackgroundColor={ettlevColors.grey50}
-      childrenBackgroundColor={ettlevColors.grey25}
-      currentPage={'Forstå kravene'}
-      headerOverlap={'100px'}
-    >
-      {visFilter && <RelevansFilter relevans={relevans} onClickFilter={onClickFilter} kravAntall={kravAntall} />}
-      <Block {...sectionProps} marginTop={theme.sizing.scale600}>
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>Forstå kravene</title>
-        </Helmet>
-        {!visFilter && <TemaInfo kravAntall={kravAntall} temaAntall={temaListe.length} />}
-        {temaListe.map((tema) => (
-          <TemaCard key={tema.code} tema={tema} relevans={relevans} setNum={updateNum} />
-        ))}
-      </Block>
-    </Layout2>
+    <div className="w-full" role="main" id="content">
+      <div className="w-full flex justify-center items-center flex-col mt-6">
+        <div className="w-full max-w-7xl px-8">
+          <div className="flex-1 justify-start flex">
+            <CustomizedBreadcrumbs currentPage="Forstå kravene" />
+          </div>
+          <div>
+            <Helmet>
+              <meta charSet="utf-8" />
+              <title>Forstå kravene</title>
+            </Helmet>
+            <Heading size="medium">Forstå kravene</Heading>
+            <BodyLong>
+              Totalt {kravAntall} krav fordelt på {temaListe.length} temaer
+            </BodyLong>
+          </div>
+          <div className="mt-6">
+            {temaListe.map((tema) => (
+              <TemaPanel key={tema.code} tema={tema} setNum={updateNum} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
-
-const RelevansFilter = ({ onClickFilter, relevans, kravAntall }: { onClickFilter: (rel: string) => void; relevans: string[]; kravAntall: number }) => (
-  <Block
-    backgroundColor={ettlevColors.grey75}
-    display={'flex'}
-    justifyContent={'space-between'}
-    alignItems={'center'}
-    paddingLeft={theme.sizing.scale600}
-    paddingRight={theme.sizing.scale600}
-  >
-    <Block display={'flex'} alignItems={'center'} marginTop={theme.sizing.scale700} marginBottom={theme.sizing.scale700}>
-      <LabelLarge $style={{ flexShrink: 0 }}>Vis relevante krav for:</LabelLarge>
-      <Block display={'flex'} flexWrap>
-        {codelist.getCodes(ListName.RELEVANS).map((rel) => (
-          <SimpleTag key={rel.code} onClick={() => onClickFilter(rel.code)} active={relevans.indexOf(rel.code) >= 0} activeIcon>
-            {rel.shortName}
-          </SimpleTag>
-        ))}
-      </Block>
-    </Block>
-
-    <Block>
-      <ParagraphSmall marginTop={0} marginBottom={0} $style={{ flexShrink: 0 }}>
-        Totalt: <span style={{ fontWeight: 700 }}> {kravAntall}</span> krav
-      </ParagraphSmall>
-    </Block>
-  </Block>
-)
 
 export const cardWidth = '32%'
 export const cardHeight = '220px'
 export const cardMaxheight = '250px'
 const headerBgOverlap = '47px'
 
-const TemaInfo = (props: { kravAntall: number; temaAntall: number }) => (
-  <Block
-    $style={{
-      marginTop: theme.sizing.scale400,
-      marginBottom: theme.sizing.scale400,
-      ...borderRadius('4px'),
-      backgroundColor: ettlevColors.green800,
-    }}
-    width={cardWidth}
-  >
-    <Block padding={theme.sizing.scale1000}>
-      <HeadingXLarge color={ettlevColors.white} $style={{ lineHeight: '40px' }}>
-        Vi har totalt &nbsp;
-        <span style={{ fontSize: '40px', lineHeight: '40px', color: ettlevColors.warning400 }}>{props.kravAntall}</span> &nbsp; krav gruppert i {props.temaAntall} tema
-      </HeadingXLarge>
+export const TemaPanel = ({ tema, setNum }: { tema: TemaCode, setNum: (tema: string, num: number) => void }) => {
+  const lover = codelist.getCodesForTema(tema.code)
+  const { data, loading } = useKravCounter({ lover: [...lover.map((l) => l.code)] }, { skip: !lover.length })
+  const krav = data?.krav.content || []
+  useEffect(() => setNum(tema.code, krav.length), [krav])
 
-      <ParagraphMedium color={ettlevColors.white}>
-        Alle vi som utvikler produkter i NAV må forholde oss til en del forskjellige lover og regler. Disse skal bidra til å sikre at den generelle rettsikkerheten til brukerne
-        våre ivaretas.
-      </ParagraphMedium>
-    </Block>
-  </Block>
-)
+  if (loading) {
+    return <Loader size="large" />
+  }
+
+  return (
+    <LinkPanel className="mb-2" key={tema.code} href={'/tema/' + tema.code} >
+      <div className="w-full flex items-center ">
+        <div>
+          <LinkPanel.Title className="flex">
+            {tema.shortName}
+          </LinkPanel.Title>
+          <LinkPanel.Description className="lg:flex items-center gap-2">
+            {lover.map((l, i) =>
+              <div key={l.code} className="flex items-center gap-2">
+                {l.shortName}
+                {i < lover.length - 1 && <span className="hidden lg:block h-2 w-2 rotate-45 rounded-[1px] bg-red-200"></span>}
+              </div>
+            )}
+          </LinkPanel.Description>
+        </div>
+        <Spacer />
+        <Tag variant="info">{krav.length || 0} krav</Tag>
+      </div>
+    </LinkPanel>
+  )
+}
 
 export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans: string[]; setNum: (tema: string, num: number) => void }) => {
   const lover = codelist.getCodesForTema(tema.code)
