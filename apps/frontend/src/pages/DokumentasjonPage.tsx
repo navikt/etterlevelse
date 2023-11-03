@@ -6,7 +6,16 @@ import { HeadingXLarge, ParagraphMedium } from 'baseui/typography'
 import { ettlevColors, theme } from '../util/theme'
 import { Layout2 } from '../components/scaffold/Page'
 import { ellipse80, saveArchiveIcon } from '../components/Images'
-import { EtterlevelseDokumentasjonQL, EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, KravEtterlevelseData, KravPrioritering, KravQL, KravStatus, PageResponse } from '../constants'
+import {
+  EtterlevelseDokumentasjonQL,
+  EtterlevelseDokumentasjonStats,
+  EtterlevelseStatus,
+  KRAV_FILTER_TYPE,
+  KravPrioritering,
+  KravQL,
+  KravStatus,
+  PageResponse,
+} from '../constants'
 import { gql, useQuery } from '@apollo/client'
 import { Code, codelist, ListName, TemaCode } from '../services/Codelist'
 import { Button, KIND, SIZE } from 'baseui/button'
@@ -20,7 +29,7 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import { Accordion, BodyShort, Label, Loader } from '@navikt/ds-react'
+import { BodyShort, Label, Loader, Accordion, Link } from '@navikt/ds-react'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
 import { getAllKravPriority } from '../api/KravPriorityApi'
@@ -249,22 +258,33 @@ export const DokumentasjonPage = () => {
             <Loader size={'large'} />
           </Block>
         ) : (
-          <Accordion className="pt-6">
+          <Accordion>
             {temaListe
               .filter((tema) => getKravForTema(tema).length > 0)
               .map((tema) => {
                 const kravliste = getKravForTema(tema)
                 const utfylteKrav = kravliste.filter((krav) => krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT)
-                return (<Accordion.Item key={`${tema.shortName}_panel`}>
-                  <Accordion.Header>{tema.shortName} ({utfylteKrav.length} av {kravliste.length} krav er utfylt{utfylteKrav.length === 1 ? "" : "e"})</Accordion.Header>
-                  <Accordion.Content>
-                    <div className="flex flex-col gap-2">
-                      {kravliste.map((krav) =>
-                        <KravCard krav={krav} kravFilter={KRAV_FILTER_TYPE.RELEVANTE_KRAV} etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} temaCode={tema.code} />
-                      )}
-                    </div>
-                  </Accordion.Content>
-                </Accordion.Item>)
+                return (
+                  <Accordion.Item key={`${tema.shortName}_panel`} className="flex flex-col gap-2">
+                    <Accordion.Header id={tema.code}>
+                      {tema.shortName} ({utfylteKrav.length} av {kravliste.length} krav er utfylt{utfylteKrav.length === 1 ? '' : 'e'})
+                    </Accordion.Header>
+                    <Accordion.Content>
+                      <div className="flex flex-col gap-6">
+                        <div>
+                          <Link href={`/tema/${tema.code}`} target="_blank">
+                            Lær mer om {tema.shortName}, og ansvarlig for tema (åpnes i ny fane)
+                          </Link>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          {kravliste.map((krav) => (
+                            <KravCard krav={krav} kravFilter={KRAV_FILTER_TYPE.RELEVANTE_KRAV} etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} temaCode={tema.code} />
+                          ))}
+                        </div>
+                      </div>
+                    </Accordion.Content>
+                  </Accordion.Item>
+                )
                 // <TemaCardEtterlevelseDokumentasjon
                 //   tema={tema}
                 //   stats={relevanteStats}

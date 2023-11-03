@@ -15,8 +15,8 @@ export const StatusView = ({
 }:StatusViewProps) => {
   const getStatusDisplay = (variant: any) => {
     return (
-        <Tag className={"w-fit"} variant={variant}>
-          <div className={"flex justify-center items-center"}>
+        <Tag variant={variant}>
+          <div className={"flex items-center"}>
             {icon}
             <BodyShort>
               {kravStatus(status)}
