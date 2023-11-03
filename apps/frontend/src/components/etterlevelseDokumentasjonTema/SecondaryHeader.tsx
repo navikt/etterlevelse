@@ -68,7 +68,7 @@ export const SecondaryHeader = ({ etterlevelseDokumentasjon, temaData, lovListe 
               </HeadingXXLarge>
             </Block>
             <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-              <Block>{getTemaMainHeader(temaData, lovListe, true, () => {}, true, true)}</Block>
+              <Block>{getTemaMainHeader(temaData, lovListe, true)}</Block>
               <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                 <Button onClick={() => setIsTemaModalOpen(false)}>Lukk visning</Button>
               </Block>

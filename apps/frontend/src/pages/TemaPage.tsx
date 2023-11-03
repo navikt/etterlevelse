@@ -1,20 +1,17 @@
 import { useParams } from 'react-router-dom'
 import { Block, BlockProps } from 'baseui/block'
 import { useEffect, useState } from 'react'
-import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphXSmall } from 'baseui/typography'
+import { LabelSmall, ParagraphXSmall } from 'baseui/typography'
 import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
 import { ExternalLink, urlForObject } from '../components/common/RouteLink'
 import { theme } from '../util'
 import { Markdown } from '../components/common/Markdown'
 import { ettlevColors } from '../util/theme'
-import Button from '../components/common/Button'
 import { KravFilters } from '../api/KravGraphQLApi'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
-import { PanelLink, PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
+import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
 import { kravNumView } from './KravPage'
 import * as _ from 'lodash'
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import { Page } from '../components/scaffold/Page'
 import { SimpleTag } from '../components/common/SimpleTag'
 import { Krav, KravQL, PageResponse } from '../constants'
 import { useQuery } from '@apollo/client'
@@ -27,7 +24,7 @@ import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { BodyLong, BodyShort, Heading, LinkPanel, Loader, Spacer, Tag } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Detail, Heading, Label, LinkPanel, Loader, Spacer, Tag } from '@navikt/ds-react'
 import { lovdataBase } from '../components/Lov'
 
 export const TemaPage = () => {
@@ -39,68 +36,43 @@ export const TemaPage = () => {
   return <TemaSide tema={code} />
 }
 
-export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: boolean, setExpand: (e: boolean) => void, noExpandButton?: boolean, noHeader?: boolean) => {
+export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], noHeader?: boolean) => {
   return (
-    <>
-      {!noHeader && (
-        <>
-          <Heading level="1" size="large" spacing>
+    <div className="lg:grid lg:grid-flow-col lg:gap-2">
+      <div>
+        {!noHeader && (
+          <Heading level="1" size="medium" spacing>
             {tema.shortName}
           </Heading>
-          <Helmet>
-            <meta charSet="utf-8" />
-            <title>{tema.shortName}</title>
-          </Helmet>
-        </>
-      )}
-      <Block
-        minHeight={'125px'}
-        maxHeight={expand ? undefined : '125px'}
-        maxWidth={'750px'}
-        overflow={'hidden'}
-        $style={{
-          maskImage: expand ? undefined : `linear-gradient(${ettlevColors.black} 40%, transparent)`,
-        }}
-      >
-        <Markdown source={tema.description} p1 />
-      </Block>
+        )}
+        <Markdown source={tema.description} />
+      </div>
 
-      {expand && (
-        <Block marginBottom={theme.sizing.scale900}>
-          <Heading className="mt-7" level="2" size="medium" spacing>
-            Ansvarlig for lovtolkning
-          </Heading>
-          {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code, index) => (
-            <BodyShort key={code + '_' + index} size="large" spacing>
-              {codelist.getCode(ListName.UNDERAVDELING, code)?.shortName}
-            </BodyShort>
-          ))}
-          <Heading level="2" size="medium" spacing>
-            Lovdata
-          </Heading>
-          {lover.map((l, index) => (
-            <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
-              <ExternalLink href={lovdataBase(l.code)}>{l.shortName}</ExternalLink>
-            </Block>
-          ))}
-        </Block>
-      )}
-
-      {!noExpandButton && (
-        <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600}>
-          <Button onClick={() => setExpand(!expand)} icon={expand ? faChevronUp : faChevronDown} kind={'underline-hover'}>
-            {expand ? 'Mindre' : 'Mer'} om tema
-          </Button>
-        </Block>
-      )}
-    </>
+      <div className="my-8 lg:border-l-2 lg:pl-2 lg:border-gray-200">
+        <Heading level="2" size="small" spacing>
+          Ansvarlig for lovtolkning
+        </Heading>
+        {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code, index) => (
+          <BodyShort key={code + '_' + index} size="large" spacing>
+            {codelist.getCode(ListName.UNDERAVDELING, code)?.shortName}
+          </BodyShort>
+        ))}
+        <Heading level="2" size="small" spacing>
+          Lovdata
+        </Heading>
+        {lover.map((l, index) => (
+          <div key={l.code + '_' + index} className="mb-1.5">
+            <ExternalLink href={lovdataBase(l.code)}>{l.shortName}</ExternalLink>
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
 
 const TemaSide = ({ tema }: { tema: TemaCode }) => {
   const lover = codelist.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter({ lover: lover.map((c) => c.code) }, { skip: !lover.length })
-  const [expand, setExpand] = useState(false)
   const [kravList, setKravList] = useState<Krav[]>([])
 
   ampli.logEvent('sidevisning', { side: 'Tema side', sidetittel: tema.shortName })
@@ -128,33 +100,30 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
   }, [data])
 
   return (
-    <Page
-      breadcrumbPaths={breadcrumbPaths}
-      currentPage={tema.shortName}
-      headerBackgroundColor={ettlevColors.green100}
-      backgroundColor={ettlevColors.grey25}
-      headerOverlap={'125px'}
-      header={getTemaMainHeader(tema, lover, expand, setExpand)}
-    >
-      <Block>
-        <HeadingXLarge marginLeft="0px">{loading ? '?' : data?.krav.numberOfElements || 0} krav</HeadingXLarge>
+    <div className="w-full" id="content" role="main">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{tema.shortName}</title>
+      </Helmet>
+      <div className="flex-1 justify-start flex">
+        <CustomizedBreadcrumbs paths={breadcrumbPaths} currentPage={tema.shortName} />
+      </div>
+      {getTemaMainHeader(tema, lover)}
+      <div className="mt-6">
+        <Label>{loading ? '?' : data?.krav.numberOfElements || 0} krav</Label>
         {loading && <SkeletonPanel count={10} />}
-        {!loading &&
-          kravList &&
-          kravList.map((k, index) => (
-            <Block key={k.kravNummer + '.' + k.kravVersjon + '_' + index} marginBottom={'8px'}>
-              <PanelLink
-                key={k.kravNummer + '.' + k.kravVersjon + '_' + index + '_panel'}
-                useUnderline
-                href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
-                beskrivelse={kravNumView(k)}
-                title={<LabelLarge $style={{ fontSize: '18px' }}>{k.navn}</LabelLarge>}
-                flip
-              />
-            </Block>
-          ))}
-      </Block>
-    </Page>
+        {!loading && kravList && (
+          <div className="grid gap-2 lg:grid-cols-2">
+            {kravList.map((k, index) => (
+              <LinkPanel href={`/krav/${k.kravNummer}/${k.kravVersjon}`} key={k.kravNummer + '.' + k.kravVersjon + '_' + index}>
+                <Detail weight="semibold">{kravNumView(k)}</Detail>
+                <BodyShort>{k.navn}</BodyShort>
+              </LinkPanel>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
 
@@ -212,7 +181,7 @@ export const cardHeight = '220px'
 export const cardMaxheight = '250px'
 const headerBgOverlap = '47px'
 
-export const TemaPanel = ({ tema, setNum }: { tema: TemaCode, setNum: (tema: string, num: number) => void }) => {
+export const TemaPanel = ({ tema, setNum }: { tema: TemaCode; setNum: (tema: string, num: number) => void }) => {
   const lover = codelist.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter({ lover: [...lover.map((l) => l.code)] }, { skip: !lover.length })
   const krav = data?.krav.content || []
@@ -223,19 +192,17 @@ export const TemaPanel = ({ tema, setNum }: { tema: TemaCode, setNum: (tema: str
   }
 
   return (
-    <LinkPanel className="mb-2" key={tema.code} href={'/tema/' + tema.code} >
+    <LinkPanel className="mb-2" key={tema.code} href={'/tema/' + tema.code}>
       <div className="w-full flex items-center ">
         <div>
-          <LinkPanel.Title className="flex">
-            {tema.shortName}
-          </LinkPanel.Title>
+          <LinkPanel.Title className="flex">{tema.shortName}</LinkPanel.Title>
           <LinkPanel.Description className="lg:flex items-center gap-2">
-            {lover.map((l, i) =>
+            {lover.map((l, i) => (
               <div key={l.code} className="flex items-center gap-2">
                 {l.shortName}
                 {i < lover.length - 1 && <span className="hidden lg:block h-2 w-2 rotate-45 rounded-[1px] bg-red-200"></span>}
               </div>
-            )}
+            ))}
           </LinkPanel.Description>
         </div>
         <Spacer />

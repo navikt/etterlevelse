@@ -66,7 +66,7 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
                 {(list === ListName.LOV || list === ListName.TEMA) && <MarkdownInfo />}
 
                 {list === ListName.LOV && <LovCodeDataForm />}
-                {list === ListName.TEMA && <TemaCodeDataForm />}
+                {/* {list === ListName.TEMA && <TemaCodeDataForm />} */}
               </Modal.Body>
               <Modal.Footer>
                 <div className="flex justify-end">
