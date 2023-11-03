@@ -38,15 +38,17 @@ export const TemaPage = () => {
 
 export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], noHeader?: boolean) => {
   return (
-    <div>
-      {!noHeader && (
-        <Heading level="1" size="medium" spacing>
-          {tema.shortName}
-        </Heading>
-      )}
-      <Markdown source={tema.description} p1 />
+    <div className="lg:grid lg:grid-flow-col lg:gap-2">
+      <div>
+        {!noHeader && (
+          <Heading level="1" size="medium" spacing>
+            {tema.shortName}
+          </Heading>
+        )}
+        <Markdown source={tema.description} />
+      </div>
 
-      <div className="my-8">
+      <div className="my-8 lg:border-l-2 lg:pl-2 lg:border-gray-200">
         <Heading level="2" size="small" spacing>
           Ansvarlig for lovtolkning
         </Heading>
@@ -84,7 +86,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
-      ;(async () => {
+      ; (async () => {
         const allKravPriority = await getAllKravPriority()
         const kraver = _.cloneDeep(data.krav.content)
         kraver.map((k) => {
@@ -107,7 +109,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
         <CustomizedBreadcrumbs paths={breadcrumbPaths} currentPage={tema.shortName} />
       </div>
       {getTemaMainHeader(tema, lover)}
-      <div>
+      <div className="mt-6">
         <Label>{loading ? '?' : data?.krav.numberOfElements || 0} krav</Label>
         {loading && <SkeletonPanel count={10} />}
         {!loading && kravList && (
