@@ -56,7 +56,7 @@ const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onCl
                 {(initialValues.list === ListName.LOV || initialValues.list === ListName.TEMA) && <MarkdownInfo />}
 
                 {initialValues.list === ListName.LOV && <LovCodeDataForm />}
-                {initialValues.list === ListName.TEMA && <TemaCodeDataForm />}
+                {/* {initialValues.list === ListName.TEMA && <TemaCodeDataForm />} */}
               </Modal.Body>
               <Modal.Footer>
                 <div className="flex justify-end">
