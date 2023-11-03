@@ -185,22 +185,24 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
       <div className="w-full flex justify-center">
         <SkipToContent />
         <InternalHeader className="w-full justify-center items-center">
-          <InternalHeader.Title href="/">
-            Støtte til etterlevelse
-          </InternalHeader.Title>
-          <Spacer />
-          {!props.noSearchBar && (
-            <div className="flex w-full max-w-xl " role="search">
-              <MainSearch />
-            </div>
-          )}
-          <Spacer />
-          {!props.noLoginButton && (
-            <div className="flex">
-              {!user.isLoggedIn() && <LoginButton />}
-              {user.isLoggedIn() && <LoggedInHeader />}
-            </div>
-          )}
+          <div className="max-w-7xl flex w-full">
+            <InternalHeader.Title href="/">
+              Støtte til etterlevelse
+            </InternalHeader.Title>
+            <Spacer />
+            {!props.noSearchBar && (
+              <div className="flex w-full max-w-xl " role="search">
+                <MainSearch />
+              </div>
+            )}
+            <Spacer />
+            {!props.noLoginButton && (
+              <div className="flex">
+                {!user.isLoggedIn() && <LoginButton />}
+                {user.isLoggedIn() && <LoggedInHeader />}
+              </div>
+            )}
+          </div>
         </InternalHeader>
       </div>
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (

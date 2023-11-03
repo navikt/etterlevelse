@@ -30,9 +30,9 @@ const Main = (props: any) => {
               <title>Etterlevelse</title>
             </Helmet>
 
-            <div className="flex w-full justify-center bg-gray-100">
+            <div className="flex flex-col w-full items-center bg-white">
+              <Header />
               <div className="flex flex-col w-full max-w-7xl bg-white min-h-screen">
-                <Header />
                 <div className="px-2 pb-6">
                   <AppRoutes />
                 </div>
