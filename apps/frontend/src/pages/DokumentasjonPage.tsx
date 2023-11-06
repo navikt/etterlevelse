@@ -329,6 +329,7 @@ export const statsQuery = gql`
               behandlingId
               status
               etterlevelseDokumentasjonId
+              fristForFerdigstillelse
               changeStamp {
                 lastModifiedBy
                 lastModifiedDate
@@ -364,6 +365,7 @@ export const statsQuery = gql`
               behandlingId
               status
               etterlevelseDokumentasjonId
+              fristForFerdigstillelse
               changeStamp {
                 lastModifiedBy
                 lastModifiedDate
@@ -399,6 +401,7 @@ export const statsQuery = gql`
               behandlingId
               status
               etterlevelseDokumentasjonId
+              fristForFerdigstillelse
               changeStamp {
                 lastModifiedBy
                 lastModifiedDate
