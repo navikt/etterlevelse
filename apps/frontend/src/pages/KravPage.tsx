@@ -1,22 +1,15 @@
-import {Block} from 'baseui/block'
-import {HeadingXLarge, HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
 import {useParams} from 'react-router-dom'
 import {deleteKrav, getKravByKravNummer, KravId as KravIdQueryVariables, KravIdParams, kravMapToFormVal} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
 import {Krav, KravId, KravQL, KravStatus, KravVersjon} from '../constants'
 import {ViewKrav} from '../components/krav/ViewKrav'
 import {EditKrav} from '../components/krav/EditKrav'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
 import {user} from '../services/User'
-import {theme} from '../util'
 import {FormikProps} from 'formik'
 import {DeleteItem} from '../components/DeleteItem'
-import {borderColor, borderRadius, borderStyle, borderWidth, padding} from '../components/common/Style'
 import {useQuery} from '@apollo/client'
 import {Tilbakemeldinger} from '../components/krav/tilbakemelding/Tilbakemelding'
-import {informationIcon} from '../components/Images'
-import {CustomizedTabs} from '../components/common/CustomizedTabs'
-import {ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
+import {ettlevColors} from '../util/theme'
 import {useLocationState, useQueryParam} from '../util/hooks'
 import {gql} from '@apollo/client/core'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
@@ -26,8 +19,8 @@ import {Helmet} from 'react-helmet'
 import Etterlevelser from '../components/krav/Etterlevelser'
 import {ampli} from '../services/Amplitude'
 import {Markdown} from '../components/common/Markdown'
-import {PencilIcon, PlusIcon} from '@navikt/aksel-icons'
-import {BodyShort, Button, Tag} from '@navikt/ds-react'
+import {InformationSquareIcon, PencilIcon, PlusIcon} from '@navikt/aksel-icons'
+import {BodyLong, BodyShort, Button, Heading, Skeleton, Tabs, Tag} from '@navikt/ds-react'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} ${krav.navn}`
@@ -51,7 +44,7 @@ type LocationState = { tab: Section; avdelingOpen?: string }
 
 const getQueryVariableFromParams = (params: Readonly<Partial<KravIdParams>>) => {
   if (params.id) {
-    return { id: params.id }
+    return {id: params.id}
   } else if (params.kravNummer && params.kravVersjon) {
     return {
       kravNummer: parseInt(params.kravNummer),
@@ -76,11 +69,11 @@ export const KravPage = () => {
     fetchPolicy: 'no-cache',
   })
 
-  const { state, navigate, changeState } = useLocationState<LocationState>()
+  const {state, navigate, changeState} = useLocationState<LocationState>()
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
   const [tab, setTab] = useState<Section>(!!tilbakemeldingId ? 'tilbakemeldinger' : state?.tab || 'krav')
 
-  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{ kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' }])
+  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast'}])
   const [kravTema, setKravTema] = useState<TemaCode>()
   const [newVersionWarning, setNewVersionWarning] = useState<boolean>(false)
   const [newKrav, setNewKrav] = useState<boolean>(false)
@@ -91,7 +84,7 @@ export const KravPage = () => {
         if (resp.content.length) {
           const alleVersjoner = resp.content
             .map((k) => {
-              return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer, kravStatus: k.status }
+              return {kravVersjon: k.kravVersjon, kravNummer: k.kravNummer, kravStatus: k.status}
             })
             .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
 
@@ -113,14 +106,14 @@ export const KravPage = () => {
     if (krav && kravTema) {
       ampli.logEvent('sidevisning', {
         side: 'Krav side',
-        sidetittel: `${kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} ${krav.navn}`,
+        sidetittel: `${kravNumView({kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon})} ${krav.navn}`,
         section: kravTema?.shortName.toString(),
       })
     }
   }, [krav, kravTema])
 
   useEffect(() => {
-    if (tab !== state?.tab) changeState({ tab })
+    if (tab !== state?.tab) changeState({tab})
   }, [tab])
 
   useEffect(() => {
@@ -151,8 +144,8 @@ export const KravPage = () => {
 
   const newVersion = () => {
     if (!krav) return
-    setKravId({ id: krav.id, kravVersjon: krav.kravVersjon })
-    setKrav({ ...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true })
+    setKravId({id: krav.id, kravVersjon: krav.kravVersjon})
+    setKrav({...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true})
     setEdit(true)
     setNewVersionWarning(true)
   }
@@ -180,33 +173,39 @@ export const KravPage = () => {
   }, [edit])
 
   return (
-    <div className={"w-full"} key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon} id="content">
-      {kravLoading && <LoadingSkeleton header="Krav" />}{/*TODO*/}
+    <div className="w-full" key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon} id="content">
+      {kravLoading &&
+        <div className="grid gap-2">
+          <Skeleton variant="text" width="60%"/>
+          <Skeleton variant="rectangle" width="100%" height={30}/>
+          <Skeleton variant="rounded" width="100%" height={40}/>
+        </div>
+      }
       {!kravLoading && (
-        <div className={"w-full flex justify-center"}>
+        <div className="flex w-full justify-center pb-8">
           {krav?.id && (
             <Helmet>
-              <meta charSet="utf-8" />
+              <meta charSet="utf-8"/>
               <title>
-                {kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} {krav.navn}
+                {kravNumView({kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon})} {krav.navn}
               </title>
             </Helmet>
           )}
-          <div className={"w-full max-w-7xl"}>
-            <div className={"flex flex-col justify-center mb-10"}>
-              <div className={"flex justify-center w-full mt-6"}>
-                <div className={"w-full flex flex-col"}>
+          <div className="w-full max-w-7xl">
+            <div className="flex flex-col justify-center mb-10">
+              <div className="flex items-center w-full justify-center mt-5">
+                <div className="w-full flex flex-col">
                   {krav?.id && (
                     <CustomizedBreadcrumbs
                       fontColor={ettlevColors.grey25}
-                      currentPage={kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })}
+                      currentPage={kravNumView({kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon})}
                       paths={getBreadcrumPaths()}
                     />
                   )}
                   <div className="flex gap-2 items-center">
                     {krav && (
-                      <div className={"flex w-full justify-end"}>
-                        <Tag variant={"neutral"}>
+                      <div className="flex w-full justify-end">
+                        <Tag variant="neutral">
                           <BodyShort>
                             Status: {kravStatus(krav.status)}
                           </BodyShort>
@@ -214,119 +213,97 @@ export const KravPage = () => {
                       </div>
                     )}
                     {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
-                      <Block flex="1" display="flex" justifyContent="flex-end">
+                      <div className="flex flex-1 justify-end">
                         {krav.status === KravStatus.AKTIV && (
-                          <Button onClick={newVersion} variant="tertiary" className="text-white">
+                          <Button onClick={newVersion} variant="tertiary">
                             <div className="flex flex-nowrap items-center whitespace-nowrap gap-1">
                               <PlusIcon area-label="" aria-hidden className="text-2xl" />
                               Ny versjon
                             </div>
                           </Button>
                         )}
-                        {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kravliste'} />}
-                        <Button variant="tertiary" className="text-white" onClick={() => setEdit(!edit)}>
+                        {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kravliste'}/>}
+                        <Button variant="tertiary" onClick={() => setEdit(!edit)}>
                           <div className="flex flex-nowrap items-center gap-1">
                             <PencilIcon  area-label="" aria-hidden className="text-2xl" />
                             Rediger
                           </div>
                         </Button>
-                      </Block>
+                      </div>
                     )}
                   </div>
                 </div>
               </div>
             </div>
 
-            <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
-              <Block maxWidth={pageWidth} width="100%">
-                <Block $style={{ color: '#F8F8F8', fontWeight: 700, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
+            <div className="flex">
+              <div className="w-full max-w-7xl">
+                <div>
                   {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
-                </Block>
-                <HeadingXXLarge $style={{ color: '#F8F8F8' }} marginTop="16px">
+                </div>
+                <Heading size="large" className="mt-4">
                   {krav && krav?.navn ? krav.navn : 'Ny'}{' '}
-                </HeadingXXLarge>
+                </Heading>
 
                 {krav?.varselMelding && (
-                  <Block
-                    width="fit-content"
-                    display="flex"
-                    backgroundColor={'#E5F0F7'}
-                    $style={{
-                      ...padding('12px', '16px'),
-                      ...borderColor('#102723'),
-                      ...borderWidth('1px'),
-                      ...borderStyle('solid'),
-                      ...borderRadius('4px'),
-                      marginBottom: '32px',
-                    }}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                  >
-                    <img src={informationIcon} alt="information icon" />
-                    <ParagraphMedium marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
+                  <div className="w-fit flex justify-center items-center">
+                    <InformationSquareIcon fontSize="1.5rem"/>
+                    <BodyLong className="ml-1">
                       {krav.varselMelding}
-                    </ParagraphMedium>
-                  </Block>
+                    </BodyLong>
+                  </div>
                 )}
 
-                {hasKravExpired() && krav && <ExpiredAlert alleKravVersjoner={alleKravVersjoner} statusName={krav.status} />}
-              </Block>
-            </Block>
+                {hasKravExpired() && krav && <ExpiredAlert alleKravVersjoner={alleKravVersjoner} statusName={krav.status}/>}
+              </div>
+            </div>
           </div>
         </div>
       )}
 
       {krav && !kravLoading && (
-        <Block width="100%">
-          <Block backgroundColor={ettlevColors.green100} display="flex" width="100%" justifyContent="center">
-            <Block maxWidth={maxPageWidth} width="100%">
-              <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} justifyContent="center" display="flex">
-                <Block marginTop="40px" width={pageWidth}>
-                  <HeadingXLarge marginTop="0px">Hensikten med kravet</HeadingXLarge>
-                  <Markdown p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
-                </Block>
-              </Block>
-            </Block>
-          </Block>
+        <div className="w-full">
 
-          <Block
-            display={'flex'}
-            justifyContent="center"
-            width={responsiveWidthSmall}
-            paddingLeft={responsivePaddingSmall}
-            paddingRight={responsivePaddingSmall}
-            $style={{
-              background: `linear-gradient(top, ${ettlevColors.green100} 50px, ${ettlevColors.grey25} 0%)`,
-            }}
-          >
-            <Block maxWidth={pageWidth} width="100%">
-              <CustomizedTabs
-                fontColor={ettlevColors.green600}
-                activeColor={ettlevColors.green800}
-                tabBackground={ettlevColors.green100}
-                activeKey={tab}
-                onChange={(k) => setTab(k.activeKey as Section)}
-                tabs={[
-                  {
-                    title: 'Hvordan etterleve?',
-                    key: 'krav',
-                    content: <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />,
-                  },
-                  {
-                    title: 'Eksempler på etterlevelse',
-                    key: 'etterlevelser',
-                    content: <Etterlevelser loading={etterlevelserLoading} krav={krav} />,
-                  },
-                  {
-                    title: 'Spørsmål og svar',
-                    key: 'tilbakemeldinger',
-                    content: <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()} />,
-                  },
-                ]}
-              />
-            </Block>
-          </Block>
-        </Block>
+          <div className="flex w-full justify-center">
+            <div className="w-full max-w-7xl">
+                  <Heading size="large">Hensikten med kravet</Heading>
+                  <Markdown p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]}/>
+            </div>
+          </div>
+
+          <div className="flex justify-center">
+            <div className="w-full max-w-7xl">
+              <Tabs
+                defaultValue={tab}
+                onChange={(s) => setTab(s as Section)}
+              >
+                <Tabs.List>
+                  <Tabs.Tab
+                    value="krav"
+                    label="Hvordan etterleve?"
+                  />
+                  <Tabs.Tab
+                    value="etterlevelser"
+                    label="Eksempler på etterlevelse"
+                  />
+                  <Tabs.Tab
+                    value="tilbakemeldinger"
+                    label="Spørsmål og svar"
+                  />
+                </Tabs.List>
+                <Tabs.Panel value="krav">
+                  <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner}/>
+                </Tabs.Panel>
+                <Tabs.Panel value="etterlevelser">
+                  <Etterlevelser loading={etterlevelserLoading} krav={krav}/>
+                </Tabs.Panel>
+                <Tabs.Panel value="tilbakemeldinger">
+                  <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()}/>
+                </Tabs.Panel>
+              </Tabs>
+            </div>
+          </div>
+        </div>
       )}
 
       {krav && (
@@ -346,7 +323,7 @@ export const KravPage = () => {
                 reloadKrav()
               }
             } else if (krav.nyKravVersjon) {
-              setKrav({ ...krav, id: kravId!.id, kravVersjon: kravId!.kravVersjon })
+              setKrav({...krav, id: kravId!.id, kravVersjon: kravId!.kravVersjon})
             }
             setEdit(false)
             setNewVersionWarning(false)
