@@ -12,20 +12,27 @@ import { SuksesskriterieCard } from './Suksesskriterie'
 import { Markdown } from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
 import SidePanel from './SidePanel'
-import { BodyShort, Box, Label } from '@navikt/ds-react'
+import { BodyShort, Label } from '@navikt/ds-react'
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => <div className="mb-4">{children}</div>
 
 export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
   return (
     <div>
-      <div className="flex w-full">
-        <div className="w-full">
-          {krav.suksesskriterier.map((s, i) => (
-            <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length} />
-          ))}
-          {/* {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />} */}
-        </div>
+      <div className="w-full">
+        {krav.suksesskriterier.map((s, i) => (
+          <SuksesskriterieCard
+            key={s.id}
+            suksesskriterie={s} num={i + 1}
+            totalt={krav.suksesskriterier.length}
+          />
+        ))}
+        {/* {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />} */}
+
+        <BodyShort size="small" className="mt-6">
+          Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')} {user.isAdmin() || user.isKraveier() ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1] : ''}
+        </BodyShort>
+
         {
           //deactivate side panel, waiting for feedback from design
         }
@@ -37,18 +44,16 @@ export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVe
   )
 }
 
-export const AllInfo = ({ krav, alleKravVersjoner, noBulletPoints }: { krav: KravQL, alleKravVersjoner: KravVersjon[], noBulletPoints?:boolean }) => {
+export const AllInfo = ({ krav, alleKravVersjoner, noBulletPoints, noLastModifiedDate }: { krav: KravQL, alleKravVersjoner: KravVersjon[], noBulletPoints?: boolean, noLastModifiedDate?: boolean }) => {
   const hasKravExpired = () => {
     return krav && krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString())
   }
-
-  console.log(noBulletPoints)
 
   return (
     <div>
       <LabelWrapper>
         <LabelAboveContent header title="Kilder">
-          <DotTags items={krav.dokumentasjon} markdown inColumn  noBulletPoints={noBulletPoints}/>
+          <DotTags items={krav.dokumentasjon} markdown inColumn noBulletPoints={noBulletPoints} />
         </LabelAboveContent>
       </LabelWrapper>
 
@@ -67,7 +72,7 @@ export const AllInfo = ({ krav, alleKravVersjoner, noBulletPoints }: { krav: Kra
       <LabelWrapper>
         <LabelAboveContent header title="Begreper">
           {krav.begreper.map((b, i) => (
-            <BegrepView key={'begrep_' + i} begrep={b} noBulletPoints={noBulletPoints}/>
+            <BegrepView key={'begrep_' + i} begrep={b} noBulletPoints={noBulletPoints} />
           ))}
         </LabelAboveContent>
       </LabelWrapper>
@@ -82,7 +87,7 @@ export const AllInfo = ({ krav, alleKravVersjoner, noBulletPoints }: { krav: Kra
 
       <LabelWrapper>
         <LabelAboveContent header title="Kravet er relevant for">
-          <DotTags list={ListName.RELEVANS} codes={krav.relevansFor} inColumn noBulletPoints={noBulletPoints}/>
+          <DotTags list={ListName.RELEVANS} codes={krav.relevansFor} inColumn noBulletPoints={noBulletPoints} />
         </LabelAboveContent>
       </LabelWrapper>
 
@@ -160,11 +165,11 @@ export const AllInfo = ({ krav, alleKravVersjoner, noBulletPoints }: { krav: Kra
         </LabelWrapper>
       )}
 
-      <div>
+      {!noLastModifiedDate && <div>
         <BodyShort size="small">
           Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')} {user.isAdmin() || user.isKraveier() ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1] : ''}
         </BodyShort>
-      </div>
+      </div>}
     </div>
   )
 }

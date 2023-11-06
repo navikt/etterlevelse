@@ -186,7 +186,7 @@ export const KravPage = () => {
               </title>
             </Helmet>
           )}
-          <div className="flex flex-col mb-10 w-full">
+          <div className="flex flex-col w-full">
             {krav?.id && <CustomizedBreadcrumbs currentPage={kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} paths={getBreadcrumPaths()} />}
             <div className="w-full">
               <BodyShort>{krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}</BodyShort>
@@ -210,7 +210,7 @@ export const KravPage = () => {
 
       {krav && !kravLoading && (
         <div className="flex w-full">
-          <div className="pr-14">
+          <div className="pr-14 w-full">
             <div className="bg-blue-50 px-5 py-3 mb-5">
               <Heading size="small" level="2">
                 Hensikten med kravet
@@ -238,13 +238,12 @@ export const KravPage = () => {
             </div>
           </div>
           <div className="max-w-sm w-full border-l-2 border-gray-200 pl-3">
-            <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} noBulletPoints />
+            <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} noBulletPoints noLastModifiedDate/>
 
             <div className="mt-8">
               {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
                 <div>
                   <div className="flex flex-1">
-
                     <Button
                       size="small" variant="tertiary"
                       onClick={() => setEdit(!edit)}

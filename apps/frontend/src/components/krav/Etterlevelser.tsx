@@ -5,7 +5,7 @@ import { EtterlevelseQL, EtterlevelseStatus, KravQL, SuksesskriterieStatus } fro
 import { ettlevColors } from '../../util/theme'
 import { InfoBlock } from '../common/InfoBlock'
 import { sadFolderIcon } from '../Images'
-import { Accordion, BodyShort,Heading, Label, LinkPanel, Loader, Select, Spacer } from '@navikt/ds-react'
+import { Accordion, BodyShort, Heading, Label, LinkPanel, Loader, Select, Spacer } from '@navikt/ds-react'
 import EtterlevelseModal from '../etterlevelse/EtterlevelseModal'
 
 const etterlevelseFilter = [
@@ -85,7 +85,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
   )
 
   return (
-    <div className="mb-8 w-full">
+    <div className="w-full">
       <Heading size="medium">Her kan du se hvordan andre team har dokumentert etterlevelse</Heading>
       {!loading && etterlevelser.length > 0 && (
         <div className="flex items-center" style={{ paddingTop: '22px', paddingBottom: '22px' }}>
@@ -123,38 +123,40 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
               >
                 <Accordion.Header>{t ? (t.productAreaName ? t.productAreaName : t.productAreaId) : ''}</Accordion.Header>
                 <Accordion.Content>
-                  {productAreaEtterlevelser.map((e, i) => {
-                    return (
-                      <LinkPanel
-                        href={modalVersion ? undefined : `/etterlevelse/${e.id}`}
-                        onClick={modalVersion ? () => {
-                          setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
-                          setIsModalOpen(true)
-                        } : undefined}
-                      >
-                        <LinkPanel.Title className="flex items-center">
-                          <div>
-                            <BodyShort>
-                              <strong>E{e.etterlevelseDokumentasjon.etterlevelseNummer}</strong>: {e.etterlevelseDokumentasjon.title}
-                            </BodyShort>
-                          </div>
-                          <Spacer />
-                          <div className="w-44">
-                            <BodyShort>
-                              {
-                                !!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length
-                                  ? e.etterlevelseDokumentasjon.teamsData.map((t) => (t.name ? t.name : t.id)).join(', ')
-                                  : 'Ingen team'
-                              }
-                            </BodyShort>
-                            <BodyShort>
-                              {`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
-                            </BodyShort>
-                          </div>
-                        </LinkPanel.Title>
-                      </LinkPanel>
-                    )
-                  })}
+                  <div className="flex flex-col gap-2">
+                    {productAreaEtterlevelser.map((e, i) => {
+                      return (
+                        <LinkPanel
+                          href={modalVersion ? undefined : `/etterlevelse/${e.id}`}
+                          onClick={modalVersion ? () => {
+                            setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
+                            setIsModalOpen(true)
+                          } : undefined}
+                        >
+                          <LinkPanel.Title className="flex items-center">
+                            <div>
+                              <BodyShort>
+                                <strong>E{e.etterlevelseDokumentasjon.etterlevelseNummer}</strong>: {e.etterlevelseDokumentasjon.title}
+                              </BodyShort>
+                            </div>
+                            <Spacer />
+                            <div className="w-44">
+                              <BodyShort>
+                                {
+                                  !!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length
+                                    ? e.etterlevelseDokumentasjon.teamsData.map((t) => (t.name ? t.name : t.id)).join(', ')
+                                    : 'Ingen team'
+                                }
+                              </BodyShort>
+                              <BodyShort>
+                                {`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
+                              </BodyShort>
+                            </div>
+                          </LinkPanel.Title>
+                        </LinkPanel>
+                      )
+                    })}
+                  </div>
                 </Accordion.Content>
               </Accordion.Item>
             )
