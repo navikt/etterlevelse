@@ -244,19 +244,11 @@ export const DokumentasjonPage = () => {
       >
         <div className="pt-4 flex flex-col gap-4">
           {getRelevansContent(etterlevelseDokumentasjon)}
-          <div className="navds-alert navds-alert--info navds-alert--medium w-fit">
+          <div className="navds-alert navds-alert--info navds-alert--medium">
             <div className="flex flex-col gap-2">
-              <p>
-                Vi tester ut en ny layout på denne siden! Tema og krav har nå blitt slått sammen til én side.
-                <br />
-                Det betyr at det er en del mer informasjon på samme side, men forhåpentligvis er det mer oversiktlig.
-              </p>
-              <p>
-                Rekkefølgen på kravene er fremdeles relevant. Krav vises i to kolonner;
-                <br />
-                første krav ligger øverst til venstre, krav to er til høyre, og krav tre ligger på en ny linje.
-              </p>
-              <p>Som alltid ønsker vi tilbakemeldinger, så <Link target="_blank" href="https://nav-it.slack.com/archives/C01V697SSR2">send oss gjerne en melding i #etterlevelse på Slack (åpnes i ny fane)</Link>!</p>
+              <p>Vi tester nytt oppsett med at tema og krav vises nå på samme side, slik at det forhåpentligvis blir lettere å navigere seg i.</p>
+              <p>Kravene er vist i anbefalt rekkefølge hvis man leser de fra venstre til høyre.</p>
+              <p>Vi vil gjerne ha tilbakemeldinger på hvordan det fungerer. <Link target="_blank" href="https://nav-it.slack.com/archives/C01V697SSR2">Skriv til oss i #etterlevelse på Slack (åpnes i ny fane)</Link>.</p>
             </div>
           </div>
           {loading ? (
