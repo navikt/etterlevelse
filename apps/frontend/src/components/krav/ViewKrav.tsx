@@ -177,7 +177,7 @@ export const AllInfo = ({ krav, alleKravVersjoner, noBulletPoints, noLastModifie
 const BegrepView = ({ begrep, noBulletPoints }: { begrep: Begrep, noBulletPoints?: boolean }) => (
   <div className="max-w-2xl">
     <DotTag noBulletPoints={noBulletPoints}>
-      <ExternalLink href={termUrl(begrep.id)} label={'Link begrepskatalogen'}>
+      <ExternalLink href={termUrl(begrep.id)}>
         {begrep.navn}
       </ExternalLink>
       {/* {' '}
@@ -189,7 +189,7 @@ const BegrepView = ({ begrep, noBulletPoints }: { begrep: Begrep, noBulletPoints
 const KravRelasjonView = ({ kravRelasjon, noBulletPoints }: { kravRelasjon: Partial<Krav>, noBulletPoints?: boolean }) => (
   <div className="max-w-2xl">
     <DotTag noBulletPoints={noBulletPoints}>
-      <ExternalLink href={`/krav/${kravRelasjon.id}`} label={'Link til krav relasjon'}>
+      <ExternalLink href={`/krav/${kravRelasjon.id}`}>
         {`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}
       </ExternalLink>{' '}
       - {kravRelasjon.navn}

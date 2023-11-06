@@ -174,7 +174,7 @@ export const KravPage = () => {
   }, [edit])
 
   return (
-    <div className="w-full" key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon} id="content">
+    <div className="w-full" key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon} id="content" role="main">
       {kravLoading && <LoadingSkeleton header="Krav" />}
       {!kravLoading && (
         <div className="flex w-full pb-8">

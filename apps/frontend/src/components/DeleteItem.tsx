@@ -12,7 +12,7 @@ export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string, b
       <Button
         variant="danger"
         onClick={() => setOpen(true)}
-        icon={<TrashIcon />}
+        icon={<TrashIcon aria-label="" aria-hidden/>}
         size={props.buttonSize ? props.buttonSize : undefined}
       >
         {props.buttonLabel ? props.buttonLabel : 'Slett'}
