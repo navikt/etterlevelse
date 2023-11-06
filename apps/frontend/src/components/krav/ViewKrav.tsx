@@ -12,13 +12,9 @@ import { SuksesskriterieCard } from './Suksesskriterie'
 import { Markdown } from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
 import SidePanel from './SidePanel'
-import { BodyShort, Box, Label } from "@navikt/ds-react";
+import { BodyShort, Box, Label } from '@navikt/ds-react'
 
-const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
-  <div className="my-12">
-    {children}
-  </div>
-)
+const LabelWrapper = ({ children }: { children: React.ReactNode }) => <div className="mb-4">{children}</div>
 
 export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
   return (
@@ -28,9 +24,10 @@ export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVe
           {krav.suksesskriterier.map((s, i) => (
             <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length} />
           ))}
-          {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />}
+          {/* {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />} */}
         </div>
-        {//deactivate side panel, waiting for feedback from design
+        {
+          //deactivate side panel, waiting for feedback from design
         }
         {/* <div className={"block fixed right-0"}>
         <SidePanel />
@@ -116,21 +113,23 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
         </div>
       )}
 
-      <Box className="p-8">
-        <div className="mb-6">
-          <CustomLabel title="Ansvarlig">
-            {krav.underavdeling?.shortName}
-          </CustomLabel>
-        </div>
+      <LabelWrapper>
+        <LabelAboveContent header title="Ansvarlig">
+          {krav.underavdeling?.shortName}
+        </LabelAboveContent>
+      </LabelWrapper>
 
-        <div className="mb-6">
-          <CustomLabel title="Regelverk" hide={!krav.regelverk.length}>
+      {krav.regelverk.length && (
+        <LabelWrapper>
+          <LabelAboveContent header title="Regelverk">
             <LovViewList regelverk={krav.regelverk} />
-          </CustomLabel>
-        </div>
+          </LabelAboveContent>
+        </LabelWrapper>
+      )}
 
-        <div className="mb-6">
-          <CustomLabel title="Varslingsadresser" hide={!user.isKraveier()}>
+      {user.isKraveier() && (
+        <LabelWrapper>
+          <LabelAboveContent header title="Varslingsadresser">
             {krav.varslingsadresser.map((va, i) => {
               if (va.type === AdresseType.SLACK)
                 return (
@@ -155,9 +154,10 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
                 </div>
               )
             })}
-          </CustomLabel>
-        </div>
-      </Box>
+          </LabelAboveContent>
+        </LabelWrapper>
+      )}
+
       <div>
         <BodyShort size="small">
           Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')} {user.isAdmin() || user.isKraveier() ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1] : ''}
@@ -172,8 +172,9 @@ const BegrepView = ({ begrep }: { begrep: Begrep }) => (
     <DotTag>
       <ExternalLink href={termUrl(begrep.id)} label={'Link begrepskatalogen'}>
         {begrep.navn}
-      </ExternalLink>{' '}
-      - {begrep.beskrivelse}
+      </ExternalLink>
+      {/* {' '}
+      - {begrep.beskrivelse} */}
     </DotTag>
   </div>
 )

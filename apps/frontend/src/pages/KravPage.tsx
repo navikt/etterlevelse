@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 import { deleteKrav, getKravByKravNummer, KravId as KravIdQueryVariables, KravIdParams, kravMapToFormVal } from '../api/KravApi'
 import React, { useEffect, useRef, useState } from 'react'
 import { Krav, KravId, KravQL, KravStatus, KravVersjon } from '../constants'
-import { ViewKrav } from '../components/krav/ViewKrav'
+import { AllInfo, ViewKrav } from '../components/krav/ViewKrav'
 import { EditKrav } from '../components/krav/EditKrav'
 import { user } from '../services/User'
 import { FormikProps } from 'formik'
@@ -19,8 +19,9 @@ import Etterlevelser from '../components/krav/Etterlevelser'
 import { ampli } from '../services/Amplitude'
 import { Markdown } from '../components/common/Markdown'
 import { InformationSquareIcon, PencilIcon, PlusIcon } from '@navikt/aksel-icons'
-import { BodyLong, BodyShort, Button, Detail, Heading, Tabs, Tag } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Box, Button, Detail, Heading, Tabs, Tag } from '@navikt/ds-react'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import StatusTag from '../components/common/StatusTag'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} ${krav.navn}`
@@ -187,22 +188,8 @@ export const KravPage = () => {
           )}
           <div className="flex flex-col mb-10 w-full">
             <div className="w-full flex flex-col">
-              {krav?.id && (
-                <CustomizedBreadcrumbs
-                  currentPage={kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })}
-                  paths={getBreadcrumPaths()}
-                />
-              )}
+              {krav?.id && <CustomizedBreadcrumbs currentPage={kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} paths={getBreadcrumPaths()} />}
               <div className="flex gap-2 items-center justify-end w-full">
-                {krav && (
-                  <div className="flex w-full justify-end">
-                    <Tag variant="neutral">
-                      <BodyShort>
-                        Status: {kravStatus(krav.status)}
-                      </BodyShort>
-                    </Tag>
-                  </div>
-                )}
                 {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
                   <div className="flex flex-1 justify-end">
                     {krav.status === KravStatus.AKTIV && (
@@ -226,19 +213,16 @@ export const KravPage = () => {
             </div>
 
             <div className="w-full">
-              <BodyShort>
-                {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
-              </BodyShort>
-              <Heading size="medium" level="1">
+              <BodyShort>{krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}</BodyShort>
+              <Heading className="mb-3" size="medium" level="1">
                 {krav && krav?.navn ? krav.navn : 'Ny'}{' '}
               </Heading>
+              {krav && <StatusTag status={krav.status} />}
 
               {krav?.varselMelding && (
                 <div className="w-fit flex justify-center items-center">
                   <InformationSquareIcon fontSize="1.5rem" />
-                  <BodyLong className="ml-1">
-                    {krav.varselMelding}
-                  </BodyLong>
+                  <BodyLong className="ml-1">{krav.varselMelding}</BodyLong>
                 </div>
               )}
 
@@ -249,27 +233,21 @@ export const KravPage = () => {
       )}
 
       {krav && !kravLoading && (
-        <div>
-          <Heading size="medium" level="1">Hensikten med kravet</Heading>
+        <div className="flex w-full">
+          <div className="pr-14">
+            <div className="bg-blue-50 px-5 py-3 mb-5">
+            <Heading size="small" level="2">
+            Hensikten med kravet
+          </Heading>
           <Markdown sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
+            </div>
+
           <div className="w-full">
-            <Tabs
-              defaultValue={tab}
-              onChange={(s) => setTab(s as Section)}
-            >
+            <Tabs defaultValue={tab} onChange={(s) => setTab(s as Section)}>
               <Tabs.List>
-                <Tabs.Tab
-                  value="krav"
-                  label="Hvordan etterleve?"
-                />
-                <Tabs.Tab
-                  value="etterlevelser"
-                  label="Eksempler på etterlevelse"
-                />
-                <Tabs.Tab
-                  value="tilbakemeldinger"
-                  label="Spørsmål og svar"
-                />
+                <Tabs.Tab value="krav" label="Hvordan etterleve?" />
+                <Tabs.Tab value="etterlevelser" label="Eksempler på etterlevelse" />
+                <Tabs.Tab value="tilbakemeldinger" label="Spørsmål og svar" />
               </Tabs.List>
               <Tabs.Panel value="krav">
                 <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />
@@ -282,6 +260,11 @@ export const KravPage = () => {
               </Tabs.Panel>
             </Tabs>
           </div>
+          </div>
+          <div className="max-w-sm w-full border-l-2 border-gray-200 pl-3">
+            <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner}/>
+          </div>
+
         </div>
       )}
 

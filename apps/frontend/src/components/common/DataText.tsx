@@ -18,7 +18,7 @@ const DataText = (props: DataTextProps) => {
     if (props.header) {
       return (
         <div>
-          <Heading size={"medium"}>{props.label}</Heading>
+          <Heading size="small" level="2">{props.label}</Heading>
         </div>
       )
     } else {
