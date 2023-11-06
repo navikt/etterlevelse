@@ -262,7 +262,7 @@ export const KravPage = () => {
           </div>
           </div>
           <div className="max-w-sm w-full border-l-2 border-gray-200 pl-3">
-            <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner}/>
+            <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} noBulletPoints/>
           </div>
 
         </div>
