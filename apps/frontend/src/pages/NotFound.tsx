@@ -18,7 +18,7 @@ const NotFound = () => {
         <title>404 not found</title>
       </Helmet>
       <div className="pl-10 pr-10">
-        <Heading className="pt-10 pb-10" size="medium">
+        <Heading className="pt-10 pb-10" size="medium" level="1">
           {intl.pageNotFound} - {location.pathname}
         </Heading>
         <img src={notFound} alt={intl.pageNotFound} style={{ maxWidth: '65%' }} />

@@ -67,7 +67,7 @@ const CodeListPage = () => {
         <meta charSet="utf-8" />
         <title>{listname ? listname : 'Velg kodeverk'} </title>
       </Helmet>
-      <Heading size="medium">Administrering av kodeverk</Heading>
+      <Heading size="medium" level="1">Administrering av kodeverk</Heading>
       {loading ? (
         <Loader size="large" />
       ) : (

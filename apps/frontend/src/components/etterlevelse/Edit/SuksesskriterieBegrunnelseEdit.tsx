@@ -240,7 +240,7 @@ const KriterieBegrunnelse = ({
       </Block>
 
       <div className="flex flex-col gap-4">
-        <Heading size="medium">{suksesskriterie.navn}</Heading>
+        <Heading size="xsmall" level="3">{suksesskriterie.navn}</Heading>
 
         <ReadMore header="Utfyllende om kriteriet">
           <Markdown source={suksesskriterie.beskrivelse} />
