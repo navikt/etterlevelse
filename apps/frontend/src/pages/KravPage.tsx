@@ -187,31 +187,7 @@ export const KravPage = () => {
             </Helmet>
           )}
           <div className="flex flex-col mb-10 w-full">
-            <div className="w-full flex flex-col">
-              {krav?.id && <CustomizedBreadcrumbs currentPage={kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} paths={getBreadcrumPaths()} />}
-              <div className="flex gap-2 items-center justify-end w-full">
-                {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
-                  <div className="flex flex-1 justify-end">
-                    {krav.status === KravStatus.AKTIV && (
-                      <Button onClick={newVersion} variant="tertiary">
-                        <div className="flex flex-nowrap items-center whitespace-nowrap gap-1">
-                          <PlusIcon area-label="" aria-hidden className="text-2xl" />
-                          Ny versjon
-                        </div>
-                      </Button>
-                    )}
-                    {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kravliste'} />}
-                    <Button variant="tertiary" onClick={() => setEdit(!edit)}>
-                      <div className="flex flex-nowrap items-center gap-1">
-                        <PencilIcon area-label="" aria-hidden className="text-2xl" />
-                        Rediger
-                      </div>
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </div>
-
+            {krav?.id && <CustomizedBreadcrumbs currentPage={kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} paths={getBreadcrumPaths()} />}
             <div className="w-full">
               <BodyShort>{krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}</BodyShort>
               <Heading className="mb-3" size="medium" level="1">
@@ -236,35 +212,59 @@ export const KravPage = () => {
         <div className="flex w-full">
           <div className="pr-14">
             <div className="bg-blue-50 px-5 py-3 mb-5">
-            <Heading size="small" level="2">
-            Hensikten med kravet
-          </Heading>
-          <Markdown sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
+              <Heading size="small" level="2">
+                Hensikten med kravet
+              </Heading>
+              <Markdown sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
             </div>
 
-          <div className="w-full">
-            <Tabs defaultValue={tab} onChange={(s) => setTab(s as Section)}>
-              <Tabs.List>
-                <Tabs.Tab value="krav" label="Hvordan etterleve?" />
-                <Tabs.Tab value="etterlevelser" label="Eksempler på etterlevelse" />
-                <Tabs.Tab value="tilbakemeldinger" label="Spørsmål og svar" />
-              </Tabs.List>
-              <Tabs.Panel value="krav">
-                <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />
-              </Tabs.Panel>
-              <Tabs.Panel value="etterlevelser">
-                <Etterlevelser loading={etterlevelserLoading} krav={krav} />
-              </Tabs.Panel>
-              <Tabs.Panel value="tilbakemeldinger">
-                <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()} />
-              </Tabs.Panel>
-            </Tabs>
-          </div>
+            <div className="w-full">
+              <Tabs defaultValue={tab} onChange={(s) => setTab(s as Section)}>
+                <Tabs.List>
+                  <Tabs.Tab value="krav" label="Hvordan etterleve?" />
+                  <Tabs.Tab value="etterlevelser" label="Eksempler på etterlevelse" />
+                  <Tabs.Tab value="tilbakemeldinger" label="Spørsmål og svar" />
+                </Tabs.List>
+                <Tabs.Panel value="krav">
+                  <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />
+                </Tabs.Panel>
+                <Tabs.Panel value="etterlevelser">
+                  <Etterlevelser loading={etterlevelserLoading} krav={krav} />
+                </Tabs.Panel>
+                <Tabs.Panel value="tilbakemeldinger">
+                  <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()} />
+                </Tabs.Panel>
+              </Tabs>
+            </div>
           </div>
           <div className="max-w-sm w-full border-l-2 border-gray-200 pl-3">
-            <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} noBulletPoints/>
-          </div>
+            <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} noBulletPoints />
 
+            <div className="mt-8">
+              {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
+                <div>
+                  <div className="flex flex-1">
+
+                    <Button
+                      size="small" variant="tertiary"
+                      onClick={() => setEdit(!edit)}
+                    >
+                      Rediger krav
+                    </Button>
+
+                    {krav.status === KravStatus.AKTIV && (
+                      <Button className="ml-1" size="small" onClick={newVersion} variant="tertiary">
+                        Ny versjon av krav
+                      </Button>
+                    )}
+                  </div>
+                  <div className="mt-2">
+                    {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && <DeleteItem buttonLabel="Slett krav" buttonSize="small" fun={() => deleteKrav(krav.id)} redirect={'/kravliste'} />}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
 
