@@ -59,35 +59,44 @@ export const KravCard = (props: {
   }, [])
 
   return (
-    <LinkPanel 
-      href={`/dokumentasjon/${props.etterlevelseDokumentasjonId}/${props.temaCode}/RELEVANTE_KRAV/krav/${props.krav.kravNummer}/${props.krav.kravVersjon}/`}
-    >
-      <Detail weight="semibold">K{props.krav.kravNummer}.{props.krav.kravVersjon}</Detail>
-      <BodyShort>{props.krav.navn}</BodyShort>
-      <div className="flex gap-2">
-        {!props.noVarsling && props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined && kravAge < 30 && <ShowWarningMessage warningMessage="Nytt krav" />}
-        {!props.noVarsling && props.krav.etterlevelseStatus === undefined && nyVersionFlag && props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && kravAge < 30 && (
-          <ShowWarningMessage warningMessage="Ny versjon" />
-        )}
+    <LinkPanel href={`/dokumentasjon/${props.etterlevelseDokumentasjonId}/${props.temaCode}/RELEVANTE_KRAV/krav/${props.krav.kravNummer}/${props.krav.kravVersjon}/`}>
+      <div className="md:flex justify-between">
+        <div className="self-start">
+          <Detail weight="semibold">
+            K{props.krav.kravNummer}.{props.krav.kravVersjon}
+          </Detail>
+          <BodyShort>{props.krav.navn}</BodyShort>
+          <div className="flex gap-2">
+            {!props.noVarsling && props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined && kravAge < 30 && <ShowWarningMessage warningMessage="Nytt krav" />}
+            {!props.noVarsling && props.krav.etterlevelseStatus === undefined && nyVersionFlag && props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && kravAge < 30 && (
+              <ShowWarningMessage warningMessage="Ny versjon" />
+            )}
+
+            {!props.krav.isIrrelevant && (
+              <div className="md:flex w-full gap-2">
+                {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (
+                  <Detail className="whitespace-nowrap">
+                    {'Sist utfylt: ' + moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
+                  </Detail>
+                )}
+                {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 && (
+                  <Detail className="whitespace-nowrap">
+                    Tildelt: {etterlevelseMetadata.tildeltMed[0].length > 12 ? etterlevelseMetadata.tildeltMed[0].substring(0, 11) + '...' : etterlevelseMetadata.tildeltMed[0]}
+                  </Detail>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
         {props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && props.krav && props.krav.etterlevelseStatus && (
-          <StatusView 
-            status={getEtterlevelseStatus(props.krav.etterlevelseStatus, props.krav.frist)}
-            variant={getStatusLabelColor(props.krav.etterlevelseStatus)} 
-          />
+          <div className="self-center">
+            <StatusView status={getEtterlevelseStatus(props.krav.etterlevelseStatus, props.krav.frist)} variant={getStatusLabelColor(props.krav.etterlevelseStatus)} />
+          </div>
         )}
 
-        {props.kravFilter !== KRAV_FILTER_TYPE.RELEVANTE_KRAV && <StatusView status={props.kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ? 'Bortfiltrert' : 'Utgått'} />}
-
-        {!props.krav.isIrrelevant && (
-          <div>
-            {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 && (
-              <Detail className="whitespace-nowrap">
-                Tildelt: {etterlevelseMetadata.tildeltMed[0].length > 12 ? etterlevelseMetadata.tildeltMed[0].substring(0, 11) + '...' : etterlevelseMetadata.tildeltMed[0]}
-              </Detail>
-            )}
-            {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (
-              <Detail className="whitespace-nowrap">{'Sist utfylt: ' + moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}</Detail>
-            )}
+        {props.kravFilter !== KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
+          <div className="self-center">
+            <StatusView status={props.kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ? 'Bortfiltrert' : 'Utgått'} />
           </div>
         )}
       </div>

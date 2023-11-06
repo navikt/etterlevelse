@@ -1,6 +1,6 @@
 import {KravStatus} from '../../constants'
 import {kravStatus} from '../../pages/KravPage'
-import {BodyShort, Tag} from '@navikt/ds-react'
+import {BodyShort, Detail, Tag} from '@navikt/ds-react'
 
 interface StatusViewProps{
   status: KravStatus | string
@@ -15,12 +15,12 @@ export const StatusView = ({
 }:StatusViewProps) => {
   const getStatusDisplay = (variant: any) => {
     return (
-        <Tag variant={variant}>
+        <Tag variant={variant} className="h-fit">
           <div className={"flex items-center"}>
             {icon}
-            <BodyShort>
+            <Detail className="whitespace-nowrap">
               {kravStatus(status)}
-            </BodyShort>
+            </Detail>
           </div>
         </Tag>
     )

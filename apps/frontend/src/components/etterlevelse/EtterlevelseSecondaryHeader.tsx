@@ -72,7 +72,7 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, ette
             if (tab !== 'dokumentasjon') {
               setTab('dokumentasjon')
             }
-            setNavigatePath(`/dokumentasjon/${etterlevelseDokumentasjon?.id}/${temaData?.code}/${params.filter}`)
+            setNavigatePath(`/dokumentasjon/${etterlevelseDokumentasjon?.id}`)
           }}
           $style={{
             ...paddingAll('0px'),
