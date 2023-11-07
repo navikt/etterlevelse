@@ -128,6 +128,8 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                       return (
                         <LinkPanel
                           href={modalVersion ? undefined : `/etterlevelse/${e.id}`}
+                          target="_blank" 
+                          rel="noopener noreferrer"
                           onClick={modalVersion ? () => {
                             setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
                             setIsModalOpen(true)
