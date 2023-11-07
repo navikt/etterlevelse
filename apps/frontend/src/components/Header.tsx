@@ -22,13 +22,23 @@ export const loginUrl = (location: Location, path?: string) => {
   return `/login?redirect_uri=${frontpage}${path || ''}`
 }
 
-export const LoginButton = () => {
+export const LoginHeaderButton = () => {
   // updates window.location on navigation
   const location = useLocation()
   return (
     <InternalHeader.Button as={Link} href={loginUrl(location, location.pathname)} className="text-white" underline={false}>
       Logg inn
     </InternalHeader.Button>
+  )
+}
+
+export const LoginButton = () => {
+  // updates window.location on navigation
+  const location = useLocation()
+  return (
+    <Button as={Link} href={loginUrl(location, location.pathname)} className="text-white" underline={false}>
+      Logg inn
+    </Button>
   )
 }
 
@@ -201,7 +211,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             <Spacer />
             {!props.noLoginButton && (
               <div className="flex">
-                {!user.isLoggedIn() && <LoginButton />}
+                {!user.isLoggedIn() && <LoginHeaderButton />}
                 {user.isLoggedIn() && <LoggedInHeader />}
               </div>
             )}

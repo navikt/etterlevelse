@@ -1,23 +1,12 @@
-import { Block } from 'baseui/block'
-import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
 import _ from 'lodash'
 import moment from 'moment'
 import { useState } from 'react'
-import { Etterlevelse, EtterlevelseQL, EtterlevelseStatus, Krav, KravQL, SuksesskriterieStatus } from '../../constants'
-import { kravNumView } from '../../pages/KravPage'
-import { theme } from '../../util'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
-import Button from '../common/Button'
-import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../common/CustomizedAccordion'
-import CustomizedModal from '../common/CustomizedModal'
+import { EtterlevelseQL, EtterlevelseStatus, KravQL, SuksesskriterieStatus } from '../../constants'
+import { ettlevColors } from '../../util/theme'
 import { InfoBlock } from '../common/InfoBlock'
-import { PanelButton, PanelLink } from '../common/PanelLink'
-import { borderRadius, borderStyle, marginAll } from '../common/Style'
-import { ViewEtterlevelse } from '../etterlevelse/ViewEtterlevelse'
 import { sadFolderIcon } from '../Images'
-import { Option } from 'baseui/select'
-import CustomizedSelect from '../common/CustomizedSelect'
-import { Loader } from '@navikt/ds-react'
+import { Accordion, BodyShort, Heading, Label, LinkPanel, Loader, Select, Spacer } from '@navikt/ds-react'
+import EtterlevelseModal from '../etterlevelse/EtterlevelseModal'
 
 const etterlevelseFilter = [
   { label: 'Alle', id: 'ALLE' },
@@ -29,7 +18,7 @@ const etterlevelseFilter = [
 export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolean; krav: KravQL; modalVersion?: boolean }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [openEtterlse, setOpenEtterlevelse] = useState<EtterlevelseQL>()
-  const [filter, setFilter] = useState<readonly Option[]>([etterlevelseFilter[0]])
+  const [filter, setFilter] = useState<string>('ALLE')
 
   const etterlevelser = (krav.etterlevelser || [])
     .filter((e) => e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || e.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)
@@ -68,18 +57,18 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
   })
 
   const filteredEtterlevelse = etterlevelser.filter((e) => {
-    if (filter[0].id !== 'ALLE') {
-      if (filter[0].id === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
+    if (filter !== 'ALLE') {
+      if (filter === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
         return (
           e.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ||
           e.suksesskriterieBegrunnelser.filter((s) => s.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT).length > 0
         )
-      } else if (filter[0].id === SuksesskriterieStatus.IKKE_OPPFYLT) {
+      } else if (filter === SuksesskriterieStatus.IKKE_OPPFYLT) {
         return e.suksesskriterieBegrunnelser.filter((s) => s.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT).length > 0
-      } else if (filter[0].id === SuksesskriterieStatus.OPPFYLT) {
+      } else if (filter === SuksesskriterieStatus.OPPFYLT) {
         return e.suksesskriterieBegrunnelser.filter((s) => s.suksesskriterieStatus === SuksesskriterieStatus.OPPFYLT).length > 0
       } else {
-        return e.status === filter[0].id
+        return e.status === filter
       }
     } else {
       return e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || e.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
@@ -96,22 +85,25 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
   )
 
   return (
-    <Block marginBottom="32px" width="100%">
-      <HeadingXLarge>Her kan du se hvordan andre team har dokumentert etterlevelse</HeadingXLarge>
+    <div className="w-full">
       {!loading && etterlevelser.length > 0 && (
-        <div className="flex items-center" style={{ paddingTop: '22px', paddingBottom: '22px' }}>
-          <LabelSmall $style={{ fontSize: '16px', lineHeight: '18px' }}>Vis:</LabelSmall>
-          <div style={{ paddingLeft: '20px', paddingRight: '16px', width: '290px' }}>
-            <CustomizedSelect
-              size="default"
-              clearable={false}
-              searchable={false}
-              options={etterlevelseFilter}
+        <div className="flex items-center py-5">
+          <Label>Vis:</Label>
+          <div className="px-4 w-72">
+            <Select
+              label="Velg etterlevelse filter"
+              hideLabel
               value={filter}
               onChange={(params) => {
-                setFilter(params.value)
+                setFilter(params.target.value)
               }}
-            />
+            >
+              {etterlevelseFilter.map((ef, i) => (
+                <option key={i + '_' + ef.label} value={ef.id}>
+                  {ef.label}
+                </option>
+              ))}
+            </Select>
           </div>
         </div>
       )}
@@ -121,7 +113,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
       )}
 
       {productAreas.length > 0 ? (
-        <CustomizedAccordion accordion={false}>
+        <Accordion>
           {productAreas.map((t) => {
             let productAreaEtterlevelser = filteredEtterlevelse?.filter(
               (e) => e.etterlevelseDokumentasjon.teamsData && t && e.etterlevelseDokumentasjon.teamsData.filter((team) => team.productAreaId === t.productAreaId).length > 0,
@@ -129,144 +121,58 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
 
             const antall = productAreaEtterlevelser.length
             return (
-              <CustomizedPanel
-                key={t && t.productAreaId}
-                title={t ? (t.productAreaName ? t.productAreaName : t.productAreaId) : ''}
-                HeaderActiveBackgroundColor={ettlevColors.green50}
-              >
-                {productAreaEtterlevelser.map((e, i) => (
-                  <CustomPanelDivider key={e.id}>
-                    {modalVersion ? (
-                      <PanelButton
-                        onClick={() => {
-                          setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
-                          setIsModalOpen(true)
-                        }}
-                        square
-                        hideBorderBottom={i !== antall - 1}
-                        useUnderline
-                        title={
-                          <span>
-                            <strong>E{e.etterlevelseDokumentasjon.etterlevelseNummer}</strong>: {e.etterlevelseDokumentasjon.title}
-                          </span>
-                        }
-                        rightTitle={
-                          !!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length
-                            ? e.etterlevelseDokumentasjon.teamsData.map((t) => (t.name ? t.name : t.id)).join(', ')
-                            : 'Ingen team'
-                        }
-                        rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
-                        overrides={{
-                          Block: {
-                            style: {
-                              ...borderStyle('hidden'),
-                              maxWidth: '812px',
-                            },
-                          },
-                        }}
-                        // panelIcon={(hover) => <PageIcon hover={hover} />}
-                      />
-                    ) : (
-                      <PanelLink
-                        href={`/etterlevelse/${e.id}`}
-                        square
-                        hideBorderBottom={i !== antall - 1}
-                        useUnderline
-                        title={
-                          <span>
-                            <strong>E{e.etterlevelseDokumentasjon.etterlevelseNummer}</strong>: {e.etterlevelseDokumentasjon.title}
-                          </span>
-                        }
-                        rightTitle={
-                          !!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length
-                            ? e.etterlevelseDokumentasjon.teamsData.map((t) => (t.name ? t.name : t.id)).join(', ')
-                            : 'Ingen team'
-                        }
-                        rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
-                        overrides={{
-                          Block: {
-                            style: {
-                              ...borderStyle('hidden'),
-                            },
-                          },
-                        }}
-                        // panelIcon={(hover) => <PageIcon hover={hover} />}
-                      />
-                    )}
-                  </CustomPanelDivider>
-                ))}
-              </CustomizedPanel>
+              <Accordion.Item key={t && t.productAreaId}>
+                <Accordion.Header>{t ? (t.productAreaName ? t.productAreaName : t.productAreaId) : ''}</Accordion.Header>
+                <Accordion.Content>
+                  <div className="flex flex-col gap-2">
+                    {productAreaEtterlevelser.map((e, i) => {
+                      return (
+                        <LinkPanel
+                          href={modalVersion ? undefined : `/etterlevelse/${e.id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={
+                            modalVersion
+                              ? () => {
+                                  setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
+                                  setIsModalOpen(true)
+                                }
+                              : undefined
+                          }
+                        >
+                          <LinkPanel.Title className="flex items-center">
+                            <div>
+                              <BodyShort>
+                                <strong>E{e.etterlevelseDokumentasjon.etterlevelseNummer}</strong>: {e.etterlevelseDokumentasjon.title}
+                              </BodyShort>
+                            </div>
+                            <Spacer />
+                            <div className="w-44">
+                              <BodyShort>
+                                {!!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length
+                                  ? e.etterlevelseDokumentasjon.teamsData.map((t) => (t.name ? t.name : t.id)).join(', ')
+                                  : 'Ingen team'}
+                              </BodyShort>
+                              <BodyShort>{`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}</BodyShort>
+                            </div>
+                          </LinkPanel.Title>
+                        </LinkPanel>
+                      )
+                    })}
+                  </div>
+                </Accordion.Content>
+              </Accordion.Item>
             )
           })}
-        </CustomizedAccordion>
+        </Accordion>
       ) : (
-        <div className="flex item-center">{etterlevelser.length >= 1 && <LabelLarge>Ingen etterlevelser med {filter[0].label} status</LabelLarge>}</div>
+        <div className="flex item-center">
+          {etterlevelser.length >= 1 && <Label>Ingen etterlevelser med {etterlevelseFilter.filter((ef) => ef.id === filter)[0].label} status</Label>}
+        </div>
       )}
 
       {modalVersion && openEtterlse && krav && <EtterlevelseModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} etterlevelse={openEtterlse} kravData={krav} />}
-    </Block>
-  )
-}
-
-export const EtterlevelseModal = ({
-  isModalOpen,
-  setIsModalOpen,
-  etterlevelse,
-  kravData,
-}: {
-  isModalOpen: boolean
-  setIsModalOpen: (state: boolean) => void
-  etterlevelse: Etterlevelse
-  kravData: Krav
-}) => {
-  return (
-    <CustomizedModal
-      onClose={() => setIsModalOpen(false)}
-      closeIconColor={ettlevColors.white}
-      closeIconHoverColor={ettlevColors.green100}
-      isOpen={isModalOpen}
-      size="full"
-      overrides={{
-        Dialog: {
-          style: {
-            ...borderRadius('0px'),
-            ...marginAll('0px'),
-            width: '100%',
-            maxWidth: maxPageWidth,
-          },
-        },
-      }}
-    >
-      <Block width="100%">
-        <Block backgroundColor={ettlevColors.green800} paddingTop="32px" paddingBottom="32px">
-          <Block paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-            <ParagraphMedium
-              $style={{
-                marginTop: '0px',
-                marginBottom: '0px',
-                color: ettlevColors.white,
-              }}
-            >
-              {kravNumView(kravData)}
-            </ParagraphMedium>
-            <HeadingXXLarge $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white }}>{kravData.navn}</HeadingXXLarge>
-          </Block>
-        </Block>
-
-        <Block paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-          <ViewEtterlevelse etterlevelse={etterlevelse} viewMode krav={kravData} modalVersion />
-          <Block display="flex" justifyContent="flex-end" paddingBottom="31px" paddingTop="95px">
-            <Button
-              onClick={() => {
-                setIsModalOpen(false)
-              }}
-            >
-              Lukk visning
-            </Button>
-          </Block>
-        </Block>
-      </Block>
-    </CustomizedModal>
+    </div>
   )
 }
 

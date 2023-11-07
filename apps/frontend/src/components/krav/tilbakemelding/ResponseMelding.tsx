@@ -8,6 +8,7 @@ import { PersonName } from '../../common/PersonName'
 import { Portrait } from '../../common/Portrait'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
+import { BodyLong, BodyShort, Label } from '@navikt/ds-react'
 
 export const ResponseMelding = (props: {
   m: TilbakemeldingMelding
@@ -17,34 +18,27 @@ export const ResponseMelding = (props: {
 }) => {
   const { m, tilbakemelding, oppdater, remove } = props
   const kraveier = m.rolle === TilbakemeldingRolle.KRAVEIER
-  const melder = m.rolle === TilbakemeldingRolle.MELDER
   const sisteMelding = m.meldingNr === tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1].meldingNr
 
   return (
-    <Block display={'flex'} flexDirection={'column'} marginBottom={theme.sizing.scale600} backgroundColor={melder ? 'inherit' : ettlevColors.grey50} padding={'8px'}>
-      <Block display="flex" width="100%">
+    <div className="flex flex-col mb-4 p-2">
+      <div className="flex w-full">
         <Portrait ident={m.fraIdent} />
-        <Block display="flex" flexDirection="column" marginLeft={theme.sizing.scale400} width="100%">
-          <Block display="flex" width="100%">
-            <Block display="flex" alignItems="center" width="100%">
-              <LabelSmall>{<PersonName ident={m.fraIdent} kraveier={kraveier} />}</LabelSmall>
-              <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px" $style={{ fontSize: '14px' }}>
-                Sendt: {moment(m.tid).format('lll')}
-              </ParagraphSmall>
-            </Block>
-          </Block>
-          <Block display="flex" width="100%">
-            <ParagraphMedium marginBottom={0} marginRight="29px" marginTop="4px" $style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>
-              {m.innhold}
-            </ParagraphMedium>
-          </Block>
-        </Block>
-      </Block>
-      <Block display="flex" width="calc(100% - 42px)" alignItems="center" marginTop="17px" paddingLeft={theme.sizing.scale1200}>
+        <div className="flex flex-col w-full ml-2.5">
+          <div className="flex items-center w-full">
+            <Label>{<PersonName ident={m.fraIdent} kraveier={kraveier} />}</Label>
+            <BodyShort className="ml-6">Sendt: {moment(m.tid).format('lll')}</BodyShort>
+          </div>
+          <div className="flex w-full">
+            <BodyLong className="mr-7 mt-1">{m.innhold}</BodyLong>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center mt-4 pl-12">
         {sisteMelding && <MeldingKnapper melding={m} tilbakemeldingId={tilbakemelding.id} oppdater={oppdater} remove={remove} />}
         <EndretInfo melding={m} />
-      </Block>
-    </Block>
+      </div>
+    </div>
   )
 }
 export default ResponseMelding

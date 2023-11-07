@@ -15,7 +15,7 @@ import { EditBegreper } from './Edit/KravBegreperEdit'
 import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
+import { ettlevColors, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
 import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
 import ErrorModal from '../ErrorModal'
 import { Error } from '../common/ModalSchema'
@@ -167,7 +167,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
   }, [isOpen])
 
   return (
-    <Block maxWidth={maxPageWidth}>
+    <div>
       <CustomizedModal
         closeable={false}
         onClose={() => {
@@ -214,17 +214,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                 onClose={() => close(values)}
                 onSubmit={() => submit(values)}
               />
-              <Block
-                backgroundColor={ettlevColors.green800}
-                paddingTop="23px"
-                paddingBottom={!stickyHeader ? '48px' : '20px'}
-                paddingLeft={responsivePaddingLarge}
-                paddingRight={responsivePaddingLarge}
-                position="sticky"
-                top={0}
-                display={!stickyHeader ? 'block' : 'flex'}
-                $style={{ zIndex: 3 }}
-              >
+              <div className={`pt-6 ${!stickyHeader ? 'pb-12' : 'pb-5'} px-24 sticky top-0 ${!stickyHeader ? 'block' : 'flex'} z-30 bg-green-800`}>
                 {stickyHeader && (
                   <Block display="flex" width="100%" justifyContent="flex-start">
                     <LabelLarge $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</LabelLarge>
@@ -265,7 +255,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     )}
                   </Block>
                 )}
-              </Block>
+              </div>
               <Block>
                 <Block
                   className="title_container"
@@ -368,7 +358,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     <Block marginTop="80px" marginBottom={inputMarginBottom}>
                       <HeadingXLarge>Gruppering og etiketter</HeadingXLarge>
                     </Block>
-                    {/* 
+                    {/*
                     <Block width="100%" maxWidth={maxInputWidth}>
                       <EditVirkemidler />
                     </Block> */}
@@ -635,7 +625,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
           )}
         </Formik>
       </CustomizedModal>
-    </Block>
+    </div>
   )
 }
 

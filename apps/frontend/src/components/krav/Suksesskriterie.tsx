@@ -1,39 +1,21 @@
 import { Suksesskriterie } from '../../constants'
-import { Block } from 'baseui/block'
-import { Card } from 'baseui/card'
-import { theme } from '../../util'
-import { HeadingXLarge, LabelLarge } from 'baseui/typography'
 import { Markdown } from '../common/Markdown'
-import { borderRadius, borderWidth, marginAll } from '../common/Style'
-import { ettlevColors, pageWidth } from '../../util/theme'
+import { Box, Heading, Label } from '@navikt/ds-react'
 
 export const SuksesskriterieCard = (props: { suksesskriterie: Suksesskriterie; num: number; totalt: number; fullWidth?: boolean }) => {
   const { suksesskriterie, num, totalt, fullWidth } = props
 
   return (
-    <Block marginBottom={theme.sizing.scale800}>
-      <Card
-        overrides={{
-          Root: {
-            style: {
-              ...borderRadius('4px'),
-              ...borderWidth('1px'),
-              maxWidth: fullWidth ? '100%' : pageWidth,
-            },
-          },
-          Contents: {
-            style: {
-              ...marginAll(theme.sizing.scale1200),
-            },
-          },
-        }}
-      >
-        <LabelLarge color={ettlevColors.green600}>
+    <div className="border-b-2 border-gray-200 py-5">
+      <Box>
+        <Label>
           Suksesskriterium {num} av {totalt}
-        </LabelLarge>
-        <HeadingXLarge>{suksesskriterie.navn}</HeadingXLarge>
+        </Label>
+        <Heading size="small" level="2">
+          {suksesskriterie.navn}
+        </Heading>
         <Markdown source={suksesskriterie.beskrivelse} />
-      </Card>
-    </Block>
+      </Box>
+    </div>
   )
 }

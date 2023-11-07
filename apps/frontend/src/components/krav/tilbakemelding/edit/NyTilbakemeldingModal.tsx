@@ -1,28 +1,17 @@
 import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
-import { faEnvelope, faThumbsUp, faUser } from '@fortawesome/free-solid-svg-icons'
-import { Block } from 'baseui/block'
-import Button from '../../../common/Button'
-import { FormControl } from 'baseui/form-control'
-import { ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
-import { HeadingLarge, HeadingXLarge, LabelLarge, ParagraphLarge, ParagraphMedium } from 'baseui/typography'
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
 import { createNewTilbakemelding, CreateTilbakemeldingRequest } from '../../../../api/TilbakemeldingApi'
 import { AdresseType, Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingType, Varslingsadresse } from '../../../../constants'
-import { theme } from '../../../../util'
-import CustomizedModal from '../../../common/CustomizedModal'
 import { TextAreaField } from '../../../common/Inputs'
-import LabelWithTooltip from '../../../common/LabelWithTooltip'
 import { AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList } from '../../Edit/KravVarslingsadresserEdit'
-import { Notification } from 'baseui/notification'
 import * as yup from 'yup'
-import { Card } from 'baseui/card'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ettlevColors } from '../../../../util/theme'
-import { borderColor, borderRadius, borderWidth } from '../../../common/Style'
-import { CustomizedAccordion, CustomizedPanel } from '../../../common/CustomizedAccordion'
 import { Markdown } from '../../../common/Markdown'
 import { Error } from '../../../common/ModalSchema'
+import { Accordion, Alert, BodyLong, BodyShort, Box, Button, Heading, Label, Modal, Tooltip } from '@navikt/ds-react'
+import { EnvelopeClosedIcon, PersonCircleIcon } from '@navikt/aksel-icons'
 
 type NyTilbakemeldingModalProps = {
   open?: boolean
@@ -57,19 +46,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
   }
 
   return (
-    <CustomizedModal
-      size="auto"
-      overrides={{
-        Dialog: {
-          style: {
-            //  maxWidth: '514px',
-          },
-        },
-      }}
-      isOpen={open}
-      closeable={false}
-      onClose={() => close()}
-    >
+    <Modal className="max-w-xl w-full" open={open} onClose={() => close()}>
       <Formik
         onSubmit={submit}
         initialValues={newTilbakemelding(krav) as CreateTilbakemeldingRequest}
@@ -84,83 +61,39 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
           }
           return (
             <Form>
-              <ModalHeader>
-                <HeadingXLarge>Spørsmål til kraveier</HeadingXLarge>
-              </ModalHeader>
-              <ModalBody>
+              <Modal.Header>
+                <Heading size="large">Spørsmål til kraveier</Heading>
+              </Modal.Header>
+              <Modal.Body>
                 {showNotification ? (
-                  <Card
-                    overrides={{
-                      Root: {
-                        style: {
-                          backgroundColor: ettlevColors.green50,
-                          marginBottom: '35px',
-                          ...borderRadius('4px'),
-                          ...borderWidth('1px'),
-                          ...borderColor(ettlevColors.green100),
-                        },
-                      },
-                    }}
-                  >
-                    <Block display="flex" alignItems="center">
+                  <Box className="mb-9" padding="8">
+                    <div className="flex items-center">
                       <FontAwesomeIcon icon={faThumbsUp} size="lg" />
-                      <HeadingLarge
-                        $style={{
-                          fontSize: '20px',
-                          lineHeight: '25px',
-                          marginLeft: '5px',
-                          marginTop: '0px',
-                          marginBottom: '0px',
-                        }}
-                      >
-                        Spørsmålet er sendt til kraveier!
-                      </HeadingLarge>
-                    </Block>
-                    <Block marginTop={'17px'}>
-                      <ParagraphLarge
-                        $style={{
-                          fontSize: '20px',
-                          lineHeight: '25px',
-                          marginTop: '0px',
-                          marginBottom: '0px',
-                        }}
-                      >
-                        Du får varsel på {getMessageType(showNotification)} når spørsmålet er besvart.
-                      </ParagraphLarge>
-                    </Block>
-                  </Card>
+                      <Heading size="large">Spørsmålet er sendt til kraveier!</Heading>
+                    </div>
+                    <BodyLong className="mt-4">Du får varsel på {getMessageType(showNotification)} når spørsmålet er besvart.</BodyLong>
+                  </Box>
                 ) : (
-                  <Block>
-                    <CustomizedAccordion>
+                  <div>
+                    <Accordion>
                       {krav.suksesskriterier.map((s, i) => {
                         return (
-                          <CustomizedPanel
-                            overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
-                            title={
-                              <Block>
-                                <ParagraphMedium
-                                  $style={{
-                                    fontSize: '16px',
-                                    lineHeight: '18,75',
-                                    marginTop: '3px',
-                                    marginBottom: '5px',
-                                    font: 'roboto',
-                                    color: ettlevColors.grey600,
-                                  }}
-                                >
+                          <Accordion.Item key={s.id}>
+                            <Accordion.Header>
+                              <div>
+                                <BodyShort>
                                   Suksesskriterium {i + 1} av {krav.suksesskriterier.length}
-                                </ParagraphMedium>
-                                <LabelLarge color={ettlevColors.green600}>{s.navn}</LabelLarge>
-                              </Block>
-                            }
-                          >
-                            <Block width="100%">
+                                </BodyShort>
+                                <Label>{s.navn}</Label>
+                              </div>
+                            </Accordion.Header>
+                            <Accordion.Content>
                               <Markdown source={s.beskrivelse} />
-                            </Block>
-                          </CustomizedPanel>
+                            </Accordion.Content>
+                          </Accordion.Item>
                         )
                       })}
-                    </CustomizedAccordion>
+                    </Accordion>
 
                     <TextAreaField tooltip="Skriv ditt spørsmål i tekstfeltet" label="Ditt spørsmål" name="foersteMelding" placeholder="Skriv her.." />
                     {errors.foersteMelding && <Error fieldName="foersteMelding" fullWidth />}
@@ -168,46 +101,59 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                     {/* <OptionField label="Type" name="type" clearable={false} options={Object.values(TilbakemeldingType).map((o) => ({ id: o, label: typeText(o) }))} /> */}
                     <Field name="varslingsadresse.adresse">
                       {(p: FieldProps) => (
-                        <FormControl
-                          label={<LabelWithTooltip label="Din varslingsadresse" tooltip="Velg hvilken adresse du vil varsles på når kraveier svarer på spørsmålet" />}
-                          error={p.meta.error}
-                        >
-                          <Block>
-                            <Block display="flex" flexDirection="column" marginTop={theme.sizing.scale600}>
+                        <div>
+                          <Tooltip content="Velg hvilken adresse du vil varsles på når kraveier svarer på spørsmålet">
+                            <Label>Din varslingsadresse</Label>
+                          </Tooltip>
+                          <div>
+                            <div className="flex flex-col mt-4">
                               {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse} />}
                               {adresseType !== AdresseType.SLACK && !values.varslingsadresse && (
-                                <Button kind="secondary" size="compact" type="button" icon={faSlackHash} onClick={() => setAdresseType(AdresseType.SLACK)}>
+                                <Button variant="secondary" icon={<FontAwesomeIcon icon={faSlackHash} />} onClick={() => setAdresseType(AdresseType.SLACK)}>
                                   Slack-kanal
                                 </Button>
                               )}
-                              <Block marginTop={theme.sizing.scale400} />
-                              {adresseType === AdresseType.SLACK_USER && <SlackUserSearch add={setVarslingsadresse} />}
-                              {adresseType !== AdresseType.SLACK_USER && !values.varslingsadresse && (
-                                <Button kind="secondary" size="compact" marginLeft type="button" icon={faUser} onClick={() => setAdresseType(AdresseType.SLACK_USER)}>
-                                  Slack-bruker
-                                </Button>
-                              )}
-                              <Block marginTop={theme.sizing.scale400} />
-                              {adresseType === AdresseType.EPOST && <AddEmail add={setVarslingsadresse} />}
-                              {adresseType !== AdresseType.EPOST && !values.varslingsadresse && (
-                                <Button kind="secondary" size="compact" marginLeft type="button" icon={faEnvelope} onClick={() => setAdresseType(AdresseType.EPOST)}>
-                                  Epost
-                                </Button>
-                              )}
-                            </Block>
+                              <div className="mt-2.5">
+                                {adresseType === AdresseType.SLACK_USER && <SlackUserSearch add={setVarslingsadresse} />}
+                                {adresseType !== AdresseType.SLACK_USER && !values.varslingsadresse && (
+                                  <Button
+                                    variant="secondary"
+                                    className="ml-2.5"
+                                    icon={<PersonCircleIcon aria-label="" aria-hidden />}
+                                    onClick={() => setAdresseType(AdresseType.SLACK_USER)}
+                                  >
+                                    Slack-bruker
+                                  </Button>
+                                )}
+                              </div>
+                              <div className="mt-2.5">
+                                {adresseType === AdresseType.EPOST && <AddEmail add={setVarslingsadresse} />}
+                                {adresseType !== AdresseType.EPOST && !values.varslingsadresse && (
+                                  <Button
+                                    variant="secondary"
+                                    className="ml-2.5"
+                                    icon={<EnvelopeClosedIcon aria-label="" aria-hidden />}
+                                    onClick={() => setAdresseType(AdresseType.EPOST)}
+                                  >
+                                    Epost
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
+                            {p.meta.error && <Alert variant="error">{p.meta.error}</Alert>}
+
                             {values.varslingsadresse && <VarslingsadresserTagList varslingsadresser={[values.varslingsadresse]} remove={() => setVarslingsadresse(undefined)} />}
-                          </Block>
-                        </FormControl>
+                          </div>
+                        </div>
                       )}
                     </Field>
-                  </Block>
+                  </div>
                 )}
-              </ModalBody>
-              <ModalFooter>
+              </Modal.Body>
+              <Modal.Footer>
                 {showNotification ? (
-                  <Block display="flex" justifyContent="flex-end">
+                  <div className="flex justify-end">
                     <Button
-                      type="button"
                       onClick={() => {
                         close(newTilbakeMelding)
                         setShowNotification(undefined)
@@ -216,31 +162,24 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                     >
                       Lukk
                     </Button>
-                  </Block>
+                  </div>
                 ) : (
-                  <Block display="flex" justifyContent="flex-end">
-                    <Block>
-                      {error && (
-                        <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>
-                          {error}
-                        </Notification>
-                      )}
-                    </Block>
-                    <Button kind="secondary" size="compact" type="button" onClick={close}>
-                      {' '}
-                      Avbryt{' '}
+                  <div className="flex justify-end flex-1">
+                    <div>{error && <Alert variant="error">{error}</Alert>}</div>
+                    <Button variant="secondary" onClick={() => close()}>
+                      Avbryt
                     </Button>
-                    <Button type="button" marginLeft disabled={isSubmitting} onClick={submitForm}>
+                    <Button disabled={isSubmitting} onClick={() => submitForm()}>
                       Send spørsmål
                     </Button>
-                  </Block>
+                  </div>
                 )}
-              </ModalFooter>
+              </Modal.Footer>
             </Form>
           )
         }}
       </Formik>
-    </CustomizedModal>
+    </Modal>
   )
 }
 

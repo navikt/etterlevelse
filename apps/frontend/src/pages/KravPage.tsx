@@ -1,22 +1,14 @@
-import { Block } from 'baseui/block'
-import { HeadingXLarge, HeadingXXLarge, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
 import { useParams } from 'react-router-dom'
 import { deleteKrav, getKravByKravNummer, KravId as KravIdQueryVariables, KravIdParams, kravMapToFormVal } from '../api/KravApi'
 import React, { useEffect, useRef, useState } from 'react'
 import { Krav, KravId, KravQL, KravStatus, KravVersjon } from '../constants'
-import { ViewKrav } from '../components/krav/ViewKrav'
+import { AllInfo, ViewKrav } from '../components/krav/ViewKrav'
 import { EditKrav } from '../components/krav/EditKrav'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { user } from '../services/User'
-import { theme } from '../util'
 import { FormikProps } from 'formik'
 import { DeleteItem } from '../components/DeleteItem'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../components/common/Style'
 import { useQuery } from '@apollo/client'
 import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
-import { informationIcon } from '../components/Images'
-import { CustomizedTabs } from '../components/common/CustomizedTabs'
-import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 import { useLocationState, useQueryParam } from '../util/hooks'
 import { gql } from '@apollo/client/core'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
@@ -26,8 +18,10 @@ import { Helmet } from 'react-helmet'
 import Etterlevelser from '../components/krav/Etterlevelser'
 import { ampli } from '../services/Amplitude'
 import { Markdown } from '../components/common/Markdown'
-import { PencilIcon, PlusIcon } from '@navikt/aksel-icons'
-import { Button } from '@navikt/ds-react'
+import { InformationSquareIcon, PencilIcon, PlusIcon } from '@navikt/aksel-icons'
+import { BodyLong, BodyShort, Box, Button, Detail, Heading, Tabs, Tag } from '@navikt/ds-react'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import StatusTag from '../components/common/StatusTag'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} ${krav.navn}`
@@ -180,10 +174,10 @@ export const KravPage = () => {
   }, [edit])
 
   return (
-    <Block key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon} width="100%" id="content" overrides={{ Block: { props: { role: 'main' } } }}>
+    <div className="w-full" key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon} id="content" role="main">
       {kravLoading && <LoadingSkeleton header="Krav" />}
       {!kravLoading && (
-        <Block backgroundColor={ettlevColors.green800} display="flex" width="100%" justifyContent="center" paddingBottom="32px">
+        <div className="flex w-full pb-8">
           {krav?.id && (
             <Helmet>
               <meta charSet="utf-8" />
@@ -192,143 +186,84 @@ export const KravPage = () => {
               </title>
             </Helmet>
           )}
-          <Block maxWidth={maxPageWidth} width="100%">
-            <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} display="flex" flexDirection="column" justifyContent="center" marginBottom="40px">
-              <Block display="flex" alignItems="center" width="100%" justifyContent="center" marginTop="24px">
-                <Block width="100%" display="flex" flexDirection="column">
-                  {krav?.id && (
-                    <CustomizedBreadcrumbs
-                      fontColor={ettlevColors.grey25}
-                      currentPage={kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })}
-                      paths={getBreadcrumPaths()}
-                    />
-                  )}
-                  <div className="flex gap-2 items-center">
-                    {krav && (
-                      <Block display="flex" width="100%" justifyContent="flex-end">
-                        <Block $style={{ ...borderWidth('1px'), ...borderColor('#A0A0A0'), ...borderStyle('solid'), ...borderRadius('4px') }}>
-                          <ParagraphXSmall
-                            $style={{ color: '#CCD9D7', fontSize: '16px', lineHeight: '20px', paddingLeft: '8px', paddingRight: '8px', marginTop: '2px', marginBottom: '2px' }}
-                          >
-                            Status: {kravStatus(krav.status)}
-                          </ParagraphXSmall>
-                        </Block>
-                      </Block>
-                    )}
-                    {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
-                      <Block flex="1" display="flex" justifyContent="flex-end">
-                        {krav.status === KravStatus.AKTIV && (
-                          <Button onClick={newVersion} variant="tertiary" className="text-white">
-                            <div className="flex flex-nowrap items-center whitespace-nowrap gap-1">
-                              <PlusIcon area-label="" aria-hidden className="text-2xl" />
-                              Ny versjon
-                            </div>
-                          </Button>
-                        )}
-                        {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kravliste'} />}
-                        <Button variant="tertiary" className="text-white" onClick={() => setEdit(!edit)}>
-                          <div className="flex flex-nowrap items-center gap-1">
-                            <PencilIcon area-label="" aria-hidden className="text-2xl" />
-                            Rediger
-                          </div>
-                        </Button>
-                      </Block>
-                    )}
-                  </div>
-                </Block>
-              </Block>
-            </Block>
+          <div className="flex flex-col w-full">
+            {krav?.id && <CustomizedBreadcrumbs currentPage={kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} paths={getBreadcrumPaths()} />}
+            <div className="w-full">
+              <BodyShort>{krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}</BodyShort>
+              <Heading className="mb-3" size="medium" level="1">
+                {krav && krav?.navn ? krav.navn : 'Ny'}{' '}
+              </Heading>
+              {krav && <StatusTag status={krav.status} />}
 
-            <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
-              <Block maxWidth={pageWidth} width="100%">
-                <Block $style={{ color: '#F8F8F8', fontWeight: 700, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
-                  {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
-                </Block>
-                <HeadingXXLarge $style={{ color: '#F8F8F8' }} marginTop="16px">
-                  {krav && krav?.navn ? krav.navn : 'Ny'}{' '}
-                </HeadingXXLarge>
+              {krav?.varselMelding && (
+                <div className="w-fit flex justify-center items-center">
+                  <InformationSquareIcon fontSize="1.5rem" />
+                  <BodyLong className="ml-1">{krav.varselMelding}</BodyLong>
+                </div>
+              )}
 
-                {krav?.varselMelding && (
-                  <Block
-                    width="fit-content"
-                    display="flex"
-                    backgroundColor={'#E5F0F7'}
-                    $style={{
-                      ...padding('12px', '16px'),
-                      ...borderColor('#102723'),
-                      ...borderWidth('1px'),
-                      ...borderStyle('solid'),
-                      ...borderRadius('4px'),
-                      marginBottom: '32px',
-                    }}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                  >
-                    <img src={informationIcon} alt="information icon" />
-                    <ParagraphMedium marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
-                      {krav.varselMelding}
-                    </ParagraphMedium>
-                  </Block>
-                )}
-
-                {hasKravExpired() && krav && <ExpiredAlert alleKravVersjoner={alleKravVersjoner} statusName={krav.status} />}
-              </Block>
-            </Block>
-          </Block>
-        </Block>
+              {hasKravExpired() && krav && <ExpiredAlert alleKravVersjoner={alleKravVersjoner} statusName={krav.status} />}
+            </div>
+          </div>
+        </div>
       )}
 
       {krav && !kravLoading && (
-        <Block width="100%">
-          <Block backgroundColor={ettlevColors.green100} display="flex" width="100%" justifyContent="center">
-            <Block maxWidth={maxPageWidth} width="100%">
-              <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} justifyContent="center" display="flex">
-                <Block marginTop="40px" width={pageWidth}>
-                  <HeadingXLarge marginTop="0px">Hensikten med kravet</HeadingXLarge>
-                  <Markdown p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
-                </Block>
-              </Block>
-            </Block>
-          </Block>
+        <div className="flex w-full">
+          <div className="pr-14 w-full">
+            <div className="bg-blue-50 px-5 py-3 mb-5">
+              <Heading size="small" level="2">
+                Hensikten med kravet
+              </Heading>
+              <Markdown sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
+            </div>
 
-          <Block
-            display={'flex'}
-            justifyContent="center"
-            width={responsiveWidthSmall}
-            paddingLeft={responsivePaddingSmall}
-            paddingRight={responsivePaddingSmall}
-            $style={{
-              background: `linear-gradient(top, ${ettlevColors.green100} 50px, ${ettlevColors.grey25} 0%)`,
-            }}
-          >
-            <Block maxWidth={pageWidth} width="100%">
-              <CustomizedTabs
-                fontColor={ettlevColors.green600}
-                activeColor={ettlevColors.green800}
-                tabBackground={ettlevColors.green100}
-                activeKey={tab}
-                onChange={(k) => setTab(k.activeKey as Section)}
-                tabs={[
-                  {
-                    title: 'Hvordan etterleve?',
-                    key: 'krav',
-                    content: <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />,
-                  },
-                  {
-                    title: 'Eksempler på etterlevelse',
-                    key: 'etterlevelser',
-                    content: <Etterlevelser loading={etterlevelserLoading} krav={krav} />,
-                  },
-                  {
-                    title: 'Spørsmål og svar',
-                    key: 'tilbakemeldinger',
-                    content: <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()} />,
-                  },
-                ]}
-              />
-            </Block>
-          </Block>
-        </Block>
+            <div className="w-full">
+              <Tabs defaultValue={tab} onChange={(s) => setTab(s as Section)}>
+                <Tabs.List>
+                  <Tabs.Tab value="krav" label="Hvordan etterleve?" />
+                  <Tabs.Tab value="etterlevelser" label="Eksempler på etterlevelse" />
+                  <Tabs.Tab value="tilbakemeldinger" label="Spørsmål og svar" />
+                </Tabs.List>
+                <Tabs.Panel value="krav">
+                  <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />
+                </Tabs.Panel>
+                <Tabs.Panel value="etterlevelser">
+                  <Etterlevelser loading={etterlevelserLoading} krav={krav} />
+                </Tabs.Panel>
+                <Tabs.Panel value="tilbakemeldinger">
+                  <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()} />
+                </Tabs.Panel>
+              </Tabs>
+            </div>
+          </div>
+          <div className="max-w-sm w-full border-l-2 border-gray-200 pl-3">
+            <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} noBulletPoints noLastModifiedDate />
+
+            <div className="mt-8">
+              {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
+                <div>
+                  <div className="flex flex-1">
+                    <Button size="small" variant="tertiary" onClick={() => setEdit(!edit)}>
+                      Rediger krav
+                    </Button>
+
+                    {krav.status === KravStatus.AKTIV && (
+                      <Button className="ml-1" size="small" onClick={newVersion} variant="tertiary">
+                        Ny versjon av krav
+                      </Button>
+                    )}
+                  </div>
+                  <div className="mt-2">
+                    {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && (
+                      <DeleteItem buttonLabel="Slett krav" buttonSize="small" fun={() => deleteKrav(krav.id)} redirect={'/kravliste'} />
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
 
       {krav && (
@@ -356,7 +291,7 @@ export const KravPage = () => {
           }}
         />
       )}
-    </Block>
+    </div>
   )
 }
 

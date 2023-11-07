@@ -22,7 +22,7 @@ export const kravLink = (kravNummer: string) => {
 
 export const EtterlevelsePage = () => {
   const params = useParams<{ id?: string }>()
-  const [etterlevelse, setEtterlevelse] = useEtterlevelse(params.id)
+  const [etterlevelse] = useEtterlevelse(params.id)
   const [edit] = useState(etterlevelse && !etterlevelse.id)
   const [krav, setKrav] = useState<Krav>()
   const [kravTema, setKravTema] = useState<TemaCode>()
@@ -154,7 +154,7 @@ export const EtterlevelsePage = () => {
 
       <Block display="flex" width={responsiveWidthSmall} justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
         <Block maxWidth={pageWidth} width="100%">
-          {etterlevelse && !loading && krav && <ViewEtterlevelse etterlevelse={etterlevelse} setEtterlevelse={setEtterlevelse} loading={loading} krav={krav} />}
+          {etterlevelse && !loading && krav && <ViewEtterlevelse etterlevelse={etterlevelse} loading={loading} krav={krav} />}
         </Block>
       </Block>
     </Block>

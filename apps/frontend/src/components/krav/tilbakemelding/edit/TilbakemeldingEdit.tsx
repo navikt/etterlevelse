@@ -1,11 +1,7 @@
-import { Block } from 'baseui/block'
-import Button from '../../../common/Button'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { tilbakemeldingEditMelding } from '../../../../api/TilbakemeldingApi'
 import { Tilbakemelding, TilbakemeldingMelding } from '../../../../constants'
-import CustomizedTextarea from '../../../common/CustomizedTextarea'
-import { Notification } from 'baseui/notification'
-import { theme } from '../../../../util'
+import { Alert, Button, Textarea } from '@navikt/ds-react'
 
 export const TilbakemeldingEdit = ({
   tilbakemeldingId,
@@ -33,22 +29,18 @@ export const TilbakemeldingEdit = ({
   }
 
   return (
-    <Block alignItems="flex-end">
-      <CustomizedTextarea rows={15} onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)} value={response} disabled={loading} />
-      <Block marginTop={theme.sizing.scale400} display="flex" justifyContent={'flex-end'}>
-        <Button kind={'secondary'} size={'compact'} onClick={() => setEditModal(false)}>
+    <div className="items-end">
+      <Textarea label="Rediger melding" hideLabel minRows={15} onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)} value={response} disabled={loading} />
+      <div className="mt-2.5 flex justify-end">
+        <Button variant="secondary" onClick={() => setEditModal(false)}>
           Avbryt
         </Button>
-        <Button marginLeft size="compact" disabled={!response || loading} onClick={submit}>
+        <Button className="ml-2.5" disabled={!response || loading} onClick={submit}>
           Lagre
         </Button>
-      </Block>
-      {error && (
-        <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>
-          {error}
-        </Notification>
-      )}
-    </Block>
+      </div>
+      {error && <Alert variant="error">{error}</Alert>}
+    </div>
   )
 }
 export default TilbakemeldingEdit

@@ -1,36 +1,27 @@
-import Button from './common/Button'
 import React, { useState } from 'react'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
 import { useNavigate } from 'react-router-dom'
-import { deleteIcon } from './Images'
+import { Button, Modal } from '@navikt/ds-react'
+import { TrashIcon } from '@navikt/aksel-icons'
 
-export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string }) => {
+export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string; buttonLabel?: string; buttonSize?: 'small' | 'medium' | 'xsmall' }) => {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
 
   return (
     <>
-      <Button
-        startEnhancer={<img src={deleteIcon} alt="delete" />}
-        $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
-        kind="tertiary"
-        size="compact"
-        onClick={() => setOpen(true)}
-        marginLeft
-      >
-        Slett
+      <Button variant="danger" onClick={() => setOpen(true)} icon={<TrashIcon aria-label="" aria-hidden />} size={props.buttonSize ? props.buttonSize : undefined}>
+        {props.buttonLabel ? props.buttonLabel : 'Slett'}
       </Button>
-      <Modal closeable={false} isOpen={open} onClose={() => setOpen(false)}>
-        <ModalHeader>Bekreft slett</ModalHeader>
-        <ModalBody>Er du sikker på at du vil slette?</ModalBody>
-        <ModalFooter>
-          <Button onClick={() => setOpen(false)} size={'compact'} kind={'secondary'} marginRight>
+      <Modal open={open} onClose={() => setOpen(false)} header={{ heading: 'Bekreft slett' }}>
+        <Modal.Body>Er du sikker på at du vil slette?</Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => setOpen(false)} size={'small'} variant={'secondary'}>
             Avbryt
           </Button>
-          <Button onClick={() => props.fun().then(() => navigate(props.redirect))} size={'compact'}>
+          <Button onClick={() => props.fun().then(() => navigate(props.redirect))} size={'small'}>
             Slett
           </Button>
-        </ModalFooter>
+        </Modal.Footer>
       </Modal>
     </>
   )

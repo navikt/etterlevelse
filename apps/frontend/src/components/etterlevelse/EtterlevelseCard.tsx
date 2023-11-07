@@ -6,7 +6,7 @@ import { Etterlevelse, Krav } from '../../constants'
 import { ettlevColors } from '../../util/theme'
 
 import Button from '../common/Button'
-import { EtterlevelseModal } from '../krav/Etterlevelser'
+import EtterlevelseModal from './EtterlevelseModal'
 
 export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)

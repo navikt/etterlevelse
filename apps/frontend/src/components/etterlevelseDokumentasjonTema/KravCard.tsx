@@ -102,7 +102,7 @@ export const KravCard = (props: {
   )
 }
 
-export const ShowWarningMessage = ({ warningMessage, noMarginLeft }: { warningMessage: string; noMarginLeft?: boolean }) => {
+export const ShowWarningMessage = ({ warningMessage }: { warningMessage: string }) => {
   return (
     <div className="flex items-center gap-2">
       <img src={warningAlert} width="18px" height="18px" alt="warning icon" />
