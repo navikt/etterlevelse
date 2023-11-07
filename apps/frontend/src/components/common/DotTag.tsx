@@ -6,7 +6,7 @@ import { NavigableItem } from '../admin/audit/AuditTypes'
 import { BodyShort } from '@navikt/ds-react'
 
 export const DotTag = (props: { children: ReactNode; noBulletPoints?: boolean }) => (
-  <div className={'mx-1 flex'}>
+  <div className={'flex'}>
     {!props.noBulletPoints && <li />}
     <BodyShort className={'break-words'}>{props.children}</BodyShort>
   </div>
