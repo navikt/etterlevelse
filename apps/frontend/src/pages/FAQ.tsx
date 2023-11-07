@@ -13,7 +13,7 @@ export const FAQ = () => {
   const [melding, setMelding] = useState<Melding>()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const response = await getMeldingByType(MeldingType.OM_ETTERLEVELSE)
       if (response.numberOfElements > 0) {
         setMelding(response.content[0])
@@ -26,7 +26,7 @@ export const FAQ = () => {
   ampli.logEvent('sidevisning', { side: 'FAQ side', sidetittel: 'Om Støtte til etterlevelse' })
 
   return (
-    <div className="w-full" id="content" role='main'>
+    <div className="w-full" id="content" role="main">
       <Helmet>
         <meta charSet="utf-8" />
         <title>Om Støtte til etterlevelse</title>
@@ -42,13 +42,11 @@ export const FAQ = () => {
               Om Støtte til etterlevelse
             </Heading>
 
-            <BodyLong className="mt-0" >
-              {melding?.melding}
-            </BodyLong>
+            <BodyLong className="mt-0">{melding?.melding}</BodyLong>
           </div>
 
           <div className="max-w-xl">
-            <Heading  level="2" size="small" className="mt-14 mb-6">
+            <Heading level="2" size="small" className="mt-14 mb-6">
               {melding?.secondaryTittel}
             </Heading>
             <Markdown source={melding?.secondaryMelding} />

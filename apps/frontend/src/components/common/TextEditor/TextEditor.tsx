@@ -47,7 +47,7 @@ const TextEditor = (props: TextEditorProps) => {
           },
         },
       },
-      preserveNewlines: true
+      preserveNewlines: true,
     })
   }
 
@@ -65,17 +65,18 @@ const TextEditor = (props: TextEditorProps) => {
           }
         },
       },
-      preserveNewlines: true
+      preserveNewlines: true,
     })
   }
 
   return (
-    <div style={{
-      backgroundColor: ettlevColors.white,
-      ...borderColor(props.errors && props.name && props.errors[props.name] ? ettlevColors.red600 : ettlevColors.textAreaBorder),
-      ...borderWidth('2px'),
-      ...borderStyle('solid'),
-      width: props.width || undefined,
+    <div
+      style={{
+        backgroundColor: ettlevColors.white,
+        ...borderColor(props.errors && props.name && props.errors[props.name] ? ettlevColors.red600 : ettlevColors.textAreaBorder),
+        ...borderWidth('2px'),
+        ...borderStyle('solid'),
+        width: props.width || undefined,
       }}
     >
       <Editor

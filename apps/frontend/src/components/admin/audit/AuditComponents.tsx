@@ -3,7 +3,6 @@ import { AuditAction } from './AuditTypes'
 import { Label, Tooltip } from '@navikt/ds-react'
 import { InformationSquareIcon, MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons'
 
-
 export const AuditLabel = (props: { label: string; children: any }) => {
   return (
     <div className="flex">

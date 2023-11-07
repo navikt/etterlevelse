@@ -75,9 +75,7 @@ export const KravCard = (props: {
             {!props.krav.isIrrelevant && (
               <div className="md:flex w-full gap-2">
                 {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (
-                  <Detail className="whitespace-nowrap">
-                    {'Sist utfylt: ' + moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
-                  </Detail>
+                  <Detail className="whitespace-nowrap">{'Sist utfylt: ' + moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}</Detail>
                 )}
                 {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 && (
                   <Detail className="whitespace-nowrap">

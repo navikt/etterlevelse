@@ -9,7 +9,7 @@ import { getAudits } from '../../../api/AuditApi'
 import * as _ from 'lodash'
 import { JsonView } from 'react-json-view-lite'
 import { ampli } from '../../../services/Amplitude'
-import {BodyShort, Button, Heading, Label, Modal, Pagination, Select, Spacer, Table, Tooltip} from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Label, Modal, Pagination, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
 
 const CodeView = ({ audit }: { audit: AuditItem }) => {
   const [modalOpen, setModalOpen] = useState(false)
@@ -19,12 +19,7 @@ const CodeView = ({ audit }: { audit: AuditItem }) => {
       <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant="tertiary">
         Vis data
       </Button>
-      <Modal
-        key={audit.id}
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        className="max-h-[75%] overflow-y-scroll"
-      >
+      <Modal key={audit.id} open={modalOpen} onClose={() => setModalOpen(false)} className="max-h-[75%] overflow-y-scroll">
         <Modal.Header>Data visning</Modal.Header>
         <Modal.Body>
           <JsonView data={audit.data} />
@@ -41,7 +36,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   const [page, setPage] = useState(1)
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       props.show && setAudits(await getAudits(page - 1, limit, table))
     })()
   }, [page, limit, props.show, table])
@@ -74,12 +69,12 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   return (
     <div>
       <div className="flex justify-between my-4">
-        <Heading size="small" level="2">{intl.lastChanges}</Heading>
+        <Heading size="small" level="2">
+          {intl.lastChanges}
+        </Heading>
         {!props.tableType && (
           <div className="w-72 flex justify-between items-center">
-            <Label className="mr-2">
-              {intl.table}:
-            </Label>
+            <Label className="mr-2">{intl.table}:</Label>
             <Select
               label="Velg type for versjonering"
               hideLabel
@@ -92,7 +87,11 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
               }}
             >
               <option value="">Velg type for versjonering</option>
-              {tableOptions.map((to, i) => <option key={i + '_' + to.label} value={to.id}>{to.label}</option>)}
+              {tableOptions.map((to, i) => (
+                <option key={i + '_' + to.label} value={to.id}>
+                  {to.label}
+                </option>
+              ))}
             </Select>
           </div>
         )}
@@ -116,14 +115,10 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
               <Table.Row key={audit.id}>
                 <Table.HeaderCell className="w-[13%] text-end" scope="row">
                   <div className="flex">
-                    <div className="mr-2">
-                      {rowNum}
-                    </div>
+                    <div className="mr-2">{rowNum}</div>
                     <AuditButton variant="tertiary" id={audit.tableId} auditId={audit.id}>
                       <Tooltip content={audit.time} placement="top">
-                        <div>
-                          {moment(audit.time).fromNow()}
-                        </div>
+                        <div>{moment(audit.time).fromNow()}</div>
                       </Tooltip>
                     </AuditButton>
                   </div>
@@ -138,11 +133,9 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
                     <div>{_.truncate(audit.tableId, { length })}</div>
                   </Tooltip>
                 </Table.DataCell>
+                <Table.DataCell>{audit.user}</Table.DataCell>
                 <Table.DataCell>
-                  {audit.user}
-                </Table.DataCell>
-                <Table.DataCell>
-                    <CodeView audit={audit}/>
+                  <CodeView audit={audit} />
                 </Table.DataCell>
               </Table.Row>
             )
@@ -154,7 +147,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
           label="Antall rader:"
           value={limit}
           onChange={(e) => {
-            setLimit((parseInt(e.target.value)))
+            setLimit(parseInt(e.target.value))
           }}
           size="small"
         >
@@ -166,20 +159,11 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
         </Select>
         <Spacer />
         <div>
-          <Pagination
-            page={page}
-            onPageChange={(page) => handlePageChange(page)}
-            count={audits.pages}
-            prevNextTexts
-            size="small"
-          />
+          <Pagination page={page} onPageChange={(page) => handlePageChange(page)} count={audits.pages} prevNextTexts size="small" />
         </div>
         <Spacer />
-        <BodyShort>
-          Totalt antall rader: {audits.totalElements}
-        </BodyShort>
+        <BodyShort>Totalt antall rader: {audits.totalElements}</BodyShort>
       </div>
-    </div >
+    </div>
   )
 }
-

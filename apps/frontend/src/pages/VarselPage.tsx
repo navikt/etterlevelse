@@ -22,7 +22,9 @@ export const VarselPage = () => {
       </Helmet>
       <div>
         <CustomizedBreadcrumbs currentPage="Varslinger" />
-        <Heading className="mt-2" size="medium" level="1" >Varslinger</Heading>
+        <Heading className="mt-2" size="medium" level="1">
+          Varslinger
+        </Heading>
       </div>
 
       <div className="pt-6">
@@ -51,7 +53,7 @@ const VarselTabs = () => {
   const [melding, setMelding] = useState<Melding>()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       setLoading(true)
       if (tab !== 'utsendtMelding') {
         ampli.logEvent('sidevisning', { side: 'Varsel side for admin', sidetittel: 'Opprett varsel melding for ' + tab })
@@ -70,9 +72,27 @@ const VarselTabs = () => {
     <Tabs defaultValue="utsendtMelding">
       <Tabs.List>
         <Tabs.Tab value="utsendtMelding" label="Utsendte meldinger" />
-        <Tabs.Tab value={MeldingType.SYSTEM} label="Systemmelding" onClick={() => { setTab(MeldingType.SYSTEM) }} />
-        <Tabs.Tab value={MeldingType.FORSIDE} label="Informasjon på forsiden" onClick={() => { setTab(MeldingType.FORSIDE) }} />
-        <Tabs.Tab value={MeldingType.OM_ETTERLEVELSE} label="Om etterlevelse" onClick={() => { setTab(MeldingType.OM_ETTERLEVELSE) }} />
+        <Tabs.Tab
+          value={MeldingType.SYSTEM}
+          label="Systemmelding"
+          onClick={() => {
+            setTab(MeldingType.SYSTEM)
+          }}
+        />
+        <Tabs.Tab
+          value={MeldingType.FORSIDE}
+          label="Informasjon på forsiden"
+          onClick={() => {
+            setTab(MeldingType.FORSIDE)
+          }}
+        />
+        <Tabs.Tab
+          value={MeldingType.OM_ETTERLEVELSE}
+          label="Om etterlevelse"
+          onClick={() => {
+            setTab(MeldingType.OM_ETTERLEVELSE)
+          }}
+        />
       </Tabs.List>
       <Tabs.Panel value="utsendtMelding">
         <AuditRecentTable show={true} tableType={ObjectType.Melding} />

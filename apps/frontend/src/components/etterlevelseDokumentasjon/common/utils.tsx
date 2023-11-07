@@ -1,16 +1,16 @@
-import {Behandling, EtterlevelseDokumentasjon, EtterlevelseStatus} from '../../../constants'
-import {ReactNode} from 'react'
-import {Block, Responsive} from 'baseui/block'
-import {Helmet} from 'react-helmet'
-import {HeadingXXLarge, LabelSmall} from 'baseui/typography'
-import {ettlevColors} from '../../../util/theme'
-import {Teams} from '../../common/TeamName'
-import {env} from '../../../util/env'
-import {ExternalLink} from '../../common/RouteLink'
+import { Behandling, EtterlevelseDokumentasjon, EtterlevelseStatus } from '../../../constants'
+import { ReactNode } from 'react'
+import { Block, Responsive } from 'baseui/block'
+import { Helmet } from 'react-helmet'
+import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
+import { ettlevColors } from '../../../util/theme'
+import { Teams } from '../../common/TeamName'
+import { env } from '../../../util/env'
+import { ExternalLink } from '../../common/RouteLink'
 import moment from 'moment'
 import EditEtterlevelseDokumentasjonModal from '../edit/EditEtterlevelseDokumentasjonModal'
-import {borderColor, borderRadius, borderStyle, borderWidth, padding} from '../../common/Style'
-import {warningAlert} from '../../Images'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../../common/Style'
+import { warningAlert } from '../../Images'
 
 export const responsiveDisplayEtterlevelseDokumentasjonPage: Responsive<any> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
@@ -184,18 +184,18 @@ export const updateBehandlingNameWithNumber = (behandlinger: Behandling[]) => {
 export const getStatusLabelColor = (status: EtterlevelseStatus) => {
   switch (status) {
     case EtterlevelseStatus.UNDER_REDIGERING:
-      return "info"
+      return 'info'
     case EtterlevelseStatus.FERDIG:
-      return "info"
+      return 'info'
     case EtterlevelseStatus.IKKE_RELEVANT:
-      return "neutral"
+      return 'neutral'
     case EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
-      return "neutral"
+      return 'neutral'
     case EtterlevelseStatus.FERDIG_DOKUMENTERT:
-      return "success"
+      return 'success'
     case EtterlevelseStatus.OPPFYLLES_SENERE:
-      return "warning"
+      return 'warning'
     default:
-      return "neutral"
+      return 'neutral'
   }
 }
