@@ -114,47 +114,37 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
 
     //Removing utgått krav with aktiv versjons
     utgaatKravData = utgaatKravData.filter((uk) => relevantKravData.every((rk) => uk.kravNummer !== rk.kravNummer))
-    ;(async () => {
-      setUtgaatKravData(await filterKrav(allKravPriority, utgaatKravData, temaData))
-    })()
+    setUtgaatKravData(filterKrav(allKravPriority, utgaatKravData, temaData))
   }, [relevantKravData, allKravPriority])
 
   useEffect(() => {
-    ;(async () => {
-      filterKrav(allKravPriority, relevanteKraverGraphQLResponse?.krav.content, temaData, true).then((kravListe) => {
-        setRelevantKravData(kravListe)
-      })
-    })()
+    setRelevantKravData(filterKrav(allKravPriority, relevanteKraverGraphQLResponse?.krav.content, temaData, true))
   }, [allKravPriority, relevanteKraverGraphQLResponse])
 
   useEffect(() => {
-    ;(async () => {
-      filterKrav(allKravPriority, irrelevanteKraverGraphQLResponse?.krav.content).then((kravListe) => {
-        const newKravList = kravListe.filter((k) => {
-          if (k.etterlevelseStatus === undefined) {
-            let notFound = true
+    const newKravList = filterKrav(allKravPriority, irrelevanteKraverGraphQLResponse?.krav.content).filter((k) => {
+      if (k.etterlevelseStatus === undefined) {
+        let notFound = true
 
-            relevantKravData.forEach((krav) => {
-              if (krav.kravNummer === k.kravNummer && krav.kravVersjon === k.kravVersjon) {
-                notFound = false
-              }
-            })
-
-            return notFound
-          } else {
-            return false
+        relevantKravData.forEach((krav) => {
+          if (krav.kravNummer === k.kravNummer && krav.kravVersjon === k.kravVersjon) {
+            notFound = false
           }
         })
-        setIrrelevantKravData([
-          ...newKravList.map((k) => {
-            return {
-              ...k,
-              isIrrelevant: true,
-            }
-          }),
-        ])
-      })
-    })()
+
+        return notFound
+      } else {
+        return false
+      }
+    })
+    setIrrelevantKravData([
+      ...newKravList.map((k) => {
+        return {
+          ...k,
+          isIrrelevant: true,
+        }
+      }),
+    ])
   }, [relevantKravData, allKravPriority, irrelevanteKraverGraphQLResponse])
 
   const breadcrumbPaths: breadcrumbPaths[] = [

@@ -1,25 +1,23 @@
-import {EtterlevelseMetadata, KRAV_FILTER_TYPE, KravEtterlevelseData} from '../../constants'
-import {useEffect, useState} from 'react'
-import {getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi'
-import {Block} from 'baseui/block'
-import {ettlevColors} from '../../util/theme'
-import {borderStyle} from '../common/Style'
-import {LabelSmall, ParagraphXSmall} from 'baseui/typography'
+import { EtterlevelseMetadata, KRAV_FILTER_TYPE, KravEtterlevelseData } from '../../constants'
+import { useEffect, useState } from 'react'
+import { getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
 import StatusView from '../common/StatusTag'
 import moment from 'moment'
-import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
-import {faEllipsisVertical} from '@fortawesome/free-solid-svg-icons'
-import {getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber} from '../../api/EtterlevelseApi'
-import {useLocation} from 'react-router-dom'
-import {getNumberOfDaysBetween} from '../../util/checkAge'
-import {getEtterlevelseStatus, getStatusLabelColor} from '../etterlevelseDokumentasjon/common/utils'
-import RouteLink from '../common/RouteLink'
-import {Alert} from '@navikt/ds-react'
+import { warningAlert } from '../Images'
+import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '../../api/EtterlevelseApi'
+import { getNumberOfDaysBetween } from '../../util/checkAge'
+import { getEtterlevelseStatus, getStatusLabelColor } from '../etterlevelseDokumentasjon/common/utils'
+import { BodyShort, Detail, LinkPanel } from '@navikt/ds-react'
 
-export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean; etterlevelseDokumentasjonId: string; noVarsling?: boolean; kravFilter: KRAV_FILTER_TYPE }) => {
+export const KravCard = (props: {
+  krav: KravEtterlevelseData
+  noStatus?: boolean
+  etterlevelseDokumentasjonId: string
+  noVarsling?: boolean
+  kravFilter: KRAV_FILTER_TYPE
+  temaCode?: string
+}) => {
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
-  const [hover, setHover] = useState(false)
-  const location = useLocation()
   const [kravAge, setKravAge] = useState<number>(0)
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
@@ -61,119 +59,56 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
   }, [])
 
   return (
-    <Block
-      display={'flex'}
-      $style={{
-        boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
-        ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
-        ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
-        ':focus': {
-          boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
-          outlineWidth: '3px',
-          outlineStyle: 'solid',
-          outlinwColor: ettlevColors.focusOutline,
-        },
-      }}
-    >
-      <Block width="100%" paddingRight="24px" paddingTop="8px" paddingBottom="8px" paddingLeft="8px">
-        <RouteLink
-          href={location.pathname + '/krav/' + props.krav.kravNummer + '/' + props.krav.kravVersjon + '/'}
-          hideUnderline
-          $style={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'flex-start',
-            backgroundColor: ettlevColors.white,
-            ...borderStyle('hidden'),
-            ':hover': { backgroundColor: 'none', boxShadow: '' },
-            boxShadow: '',
-          }}
-        >
-          <Block display="flex" justifyContent="center" alignItems="center" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-            <Block marginLeft="14px">
-              <Block display={'flex'} alignItems={'center'}>
-                <ParagraphXSmall
-                  $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content', textDecoration: hover ? 'underline' : 'none' }}
-                >
-                  K{props.krav.kravNummer}.{props.krav.kravVersjon}
-                </ParagraphXSmall>
-                {!props.noVarsling && props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined && kravAge < 30 && (
-                  <ShowWarningMessage warningMessage="Nytt krav" />
-                )}
-                {!props.noVarsling && props.krav.etterlevelseStatus === undefined && nyVersionFlag && props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && kravAge < 30 && (
-                  <ShowWarningMessage warningMessage="Ny versjon" />
-                )}
-              </Block>
-              <LabelSmall $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none' }}>
-                {props.krav.navn}
-              </LabelSmall>
-            </Block>
-            <Block display="flex" justifyContent="flex-end" flex="1" width="100%">
-              <Block width="350px" display="flex" justifyContent="flex-end" marginLeft="32px">
-                <Block display="flex" width="100%" maxWidth="220px" justifyContent="flex-end">
-                  {props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && props.krav && props.krav.etterlevelseStatus && (
-                    <StatusView
-                      status={getEtterlevelseStatus(props.krav.etterlevelseStatus, props.krav.frist)}
-                      variant={getStatusLabelColor(props.krav.etterlevelseStatus)}
-                    />
-                  )}
-                </Block>
+    <LinkPanel href={`/dokumentasjon/${props.etterlevelseDokumentasjonId}/${props.temaCode}/RELEVANTE_KRAV/krav/${props.krav.kravNummer}/${props.krav.kravVersjon}/`}>
+      <div className="md:flex justify-between">
+        <div className="self-start">
+          <Detail weight="semibold">
+            K{props.krav.kravNummer}.{props.krav.kravVersjon}
+          </Detail>
+          <BodyShort>{props.krav.navn}</BodyShort>
+          <div className="flex gap-2">
+            {!props.noVarsling && props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined && kravAge < 30 && <ShowWarningMessage warningMessage="Nytt krav" />}
+            {!props.noVarsling && props.krav.etterlevelseStatus === undefined && nyVersionFlag && props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && kravAge < 30 && (
+              <ShowWarningMessage warningMessage="Ny versjon" />
+            )}
 
-                {props.kravFilter !== KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
-                  <Block marginLeft="31px" maxWidth="140px" width="100%">
-                    <StatusView status={props.kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ? 'Bortfiltrert' : 'Utgått'}/>
-                  </Block>
+            {!props.krav.isIrrelevant && (
+              <div className="md:flex w-full gap-2">
+                {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (
+                  <Detail className="whitespace-nowrap">
+                    {'Sist utfylt: ' + moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
+                  </Detail>
                 )}
-
-                {!props.krav.isIrrelevant && (
-                  <Block marginLeft="31px" maxWidth="140px" width="100%">
-                    {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 ? (
-                      <Block>
-                        <LabelSmall $style={{ fontSize: '14px', lineHeight: '14px', textAlign: 'right' }}>
-                          Tildelt:{' '}
-                          {etterlevelseMetadata.tildeltMed[0].length > 12 ? etterlevelseMetadata.tildeltMed[0].substring(0, 11) + '...' : etterlevelseMetadata.tildeltMed[0]}
-                        </LabelSmall>
-                      </Block>
-                    ) : (
-                      <Block>
-                        <LabelSmall $style={{ fontSize: '14px', lineHeight: '14px', textAlign: 'right', fontStyle: 'italic', fontWeight: 400 }}>Ikke tildelt</LabelSmall>
-                      </Block>
-                    )}
-                    {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (
-                      <Block width="100%" display="flex" justifyContent="flex-end">
-                        <ParagraphXSmall $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
-                          {'Sist utfylt: ' + moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
-                        </ParagraphXSmall>
-                      </Block>
-                    )}
-                  </Block>
+                {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 && (
+                  <Detail className="whitespace-nowrap">
+                    Tildelt: {etterlevelseMetadata.tildeltMed[0].length > 12 ? etterlevelseMetadata.tildeltMed[0].substring(0, 11) + '...' : etterlevelseMetadata.tildeltMed[0]}
+                  </Detail>
                 )}
-              </Block>
-            </Block>
-          </Block>
-        </RouteLink>
-      </Block>
+              </div>
+            )}
+          </div>
+        </div>
+        {props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && props.krav && props.krav.etterlevelseStatus && (
+          <div className="self-center">
+            <StatusView status={getEtterlevelseStatus(props.krav.etterlevelseStatus, props.krav.frist)} variant={getStatusLabelColor(props.krav.etterlevelseStatus)} />
+          </div>
+        )}
 
-      {props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && etterlevelseMetadata && (
-        <Block display="flex" alignItems="center" paddingRight={'8px'}>
-          <TildeltPopoever
-            etterlevelseMetadata={etterlevelseMetadata}
-            setEtterlevelseMetadata={setEtterlevelseMetadata}
-            icon={faEllipsisVertical}
-            iconColor={ettlevColors.grey600}
-          />
-        </Block>
-      )}
-    </Block>
+        {props.kravFilter !== KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
+          <div className="self-center">
+            <StatusView status={props.kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ? 'Bortfiltrert' : 'Utgått'} />
+          </div>
+        )}
+      </div>
+    </LinkPanel>
   )
 }
 
 export const ShowWarningMessage = ({ warningMessage }: { warningMessage: string }) => {
   return (
-    <div className="flex items-center">
-      <Alert variant={"info"} size={"small"}>
-        {warningMessage}
-      </Alert>
+    <div className="flex items-center gap-2">
+      <img src={warningAlert} width="18px" height="18px" alt="warning icon" />
+      <Detail className="whitespace-nowrap">{warningMessage}</Detail>
     </div>
   )
 }
