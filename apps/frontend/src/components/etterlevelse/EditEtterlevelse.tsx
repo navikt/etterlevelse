@@ -32,6 +32,7 @@ import moment from 'moment'
 import {Detail} from '@navikt/ds-react'
 
 type EditEttlevProps = {
+  temaName?: string
   etterlevelse: Etterlevelse
   kravId: KravId
   formRef?: React.Ref<any>
@@ -49,6 +50,7 @@ type EditEttlevProps = {
 }
 
 export const EditEtterlevelse = ({
+  temaName,
   kravId,
   etterlevelse,
   varsleMelding,
@@ -141,10 +143,10 @@ export const EditEtterlevelse = ({
     }
 
     if (etterlevelse.id || existingEtterlevelseId) {
-      await updateEtterlevelse(mutatedEtterlevelse).then(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}/${params.tema}/${getFilterType(params.filter)}`))
+      await updateEtterlevelse(mutatedEtterlevelse).then(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`))
     } else {
       await createEtterlevelse(mutatedEtterlevelse).then(() => {
-        navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}/${params.tema}/${getFilterType(params.filter)}`)
+        navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
       })
     }
   }
@@ -185,7 +187,7 @@ export const EditEtterlevelse = ({
                     color: ettlevColors.white,
                   }}
                 >
-                  {kravNumView(krav)}
+                  {temaName} / {kravNumView(krav)}
                 </ParagraphMedium>
                 {kravFilter !== KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
                   <StatusView status={kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV ? 'Utgått' : 'Bortfiltrert'}/>
@@ -389,7 +391,7 @@ export const EditEtterlevelse = ({
                       disableEdit={disableEdit}
                       documentEdit={documentEdit}
                       close={() => {
-                        setTimeout(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}/${params.tema}/${params.filter}`), 1)
+                        setTimeout(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`), 1)
                       }}
                       setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
                       isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}

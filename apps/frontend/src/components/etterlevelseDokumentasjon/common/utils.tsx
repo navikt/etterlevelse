@@ -166,7 +166,7 @@ export const getEtterlevelseStatus = (status?: EtterlevelseStatus, frist?: strin
       return 'Ferdig utfylt'
     case EtterlevelseStatus.OPPFYLLES_SENERE:
       if (frist) {
-        return 'Utsatt til: ' + moment(frist).format('ll')
+        return 'Utsatt til ' + moment(frist).format('ll')
       } else {
         return 'Utsatt'
       }

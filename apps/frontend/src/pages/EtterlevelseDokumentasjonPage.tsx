@@ -62,10 +62,6 @@ export const EtterlevelseDokumentasjonPage = () => {
       pathName: 'Tema for dokumentasjon',
       href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,
     },
-    {
-      pathName: temaData?.shortName || '',
-      href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id + '/' + temaData?.code + '/' + params.filter,
-    },
   ]
 
   return (
@@ -80,8 +76,7 @@ export const EtterlevelseDokumentasjonPage = () => {
             <Helmet>
               <meta charSet="utf-8" />
               <title>
-                K{kravId?.kravNummer?.toString()}.{kravId?.kravVersjon?.toString()} {temaData?.shortName} E{etterlevelseDokumentasjon.etterlevelseNummer.toString()}{' '}
-                {etterlevelseDokumentasjon.title.toString()}
+                {`K${kravId?.kravNummer?.toString()}.${kravId?.kravVersjon?.toString()} ${temaData?.shortName} E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`}
               </title>
             </Helmet>,
           )}
@@ -92,6 +87,7 @@ export const EtterlevelseDokumentasjonPage = () => {
           <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginBottom="64px">
             {kravId && etterlevelseDokumentasjon && (
               <KravView
+                temaName={temaData?.shortName}
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                 etterlevelseDokumentasjonTitle={etterlevelseDokumentasjon.title}
                 etterlevelseNummer={etterlevelseDokumentasjon.etterlevelseNummer}
