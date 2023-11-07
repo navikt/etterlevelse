@@ -20,11 +20,14 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import { BodyShort, Label, Loader, Accordion, Link, Alert } from '@navikt/ds-react'
+import { BodyShort, Label, Loader, Accordion, Link, Alert, Tag } from '@navikt/ds-react'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
+import { getNumberOfDaysBetween } from '../util/checkAge'
+import moment from 'moment'
+import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '../api/EtterlevelseApi'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
@@ -248,7 +251,13 @@ export const DokumentasjonPage = () => {
             <div className="flex flex-col gap-2">
               <p>Vi tester nytt oppsett med at tema og krav vises nå på samme side, slik at det forhåpentligvis blir lettere å navigere seg i.</p>
               <p>Kravene er vist i anbefalt rekkefølge hvis man leser de fra venstre til høyre.</p>
-              <p>Vi vil gjerne ha tilbakemeldinger på hvordan det fungerer. <Link target="_blank" href="https://nav-it.slack.com/archives/C01V697SSR2">Skriv til oss i #etterlevelse på Slack (åpnes i ny fane)</Link>.</p>
+              <p>
+                Vi vil gjerne ha tilbakemeldinger på hvordan det fungerer.{' '}
+                <Link target="_blank" href="https://nav-it.slack.com/archives/C01V697SSR2">
+                  Skriv til oss i #etterlevelse på Slack (åpnes i ny fane)
+                </Link>
+                .
+              </p>
             </div>
           </div>
           {loading ? (
@@ -265,7 +274,22 @@ export const DokumentasjonPage = () => {
                   return (
                     <Accordion.Item key={`${tema.shortName}_panel`} className="flex flex-col gap-2">
                       <Accordion.Header id={tema.code}>
-                        {tema.shortName} ({utfylteKrav.length} av {kravliste.length} krav er utfylt{utfylteKrav.length === 1 ? '' : 'e'})
+                        <div className="flex gap-4">
+                          <span>
+                            {tema.shortName} ({utfylteKrav.length} av {kravliste.length} krav er utfylt{utfylteKrav.length === 1 ? '' : 'e'})
+                          </span>
+                          {kravliste.find(
+                            (krav) =>
+                              krav.kravVersjon === 1 && krav.etterlevelseStatus === undefined && getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) < 30,
+                          ) && <Tag variant="warning">Nytt krav</Tag>}
+                          {kravliste.find(
+                            (krav) =>
+                              krav.kravVersjon > 1 &&
+                              krav.etterlevelseStatus === undefined &&
+                              utgaattStats.filter((kl) => kl.kravNummer === krav.kravNummer && kl.etterlevelser.length > 0).length > 0 &&
+                              getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) < 30,
+                          ) && <Tag variant="warning">Ny versjon</Tag>}
+                        </div>
                       </Accordion.Header>
                       <Accordion.Content>
                         <div className="flex flex-col gap-6">
