@@ -6,7 +6,7 @@ import { borderWidth } from './Style'
 
 export const RenderTagList = ({ list, onRemove, onClick, wide }: { list: React.ReactNode[]; onRemove: (i: number) => void; onClick?: (i: number) => void; wide?: boolean }) => {
   return (
-    <React.Fragment>
+    <div className="flex flex-wrap">
       {list && list.length > 0
         ? list.map((item, index) => (
             <React.Fragment key={index}>
@@ -42,6 +42,6 @@ export const RenderTagList = ({ list, onRemove, onClick, wide }: { list: React.R
             </React.Fragment>
           ))
         : null}
-    </React.Fragment>
+    </div>
   )
 }
