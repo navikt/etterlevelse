@@ -10,7 +10,6 @@ import {KravPage} from './pages/KravPage'
 import {EtterlevelseListPage} from './pages/EtterlevelseListPage'
 import {EtterlevelsePage} from './pages/EtterlevelsePage'
 import {TemaPage} from './pages/TemaPage'
-import ScrollToTop from './util/ScrollToTop'
 import {KravTablePage} from './pages/KravTablePage'
 import {FAQ} from './pages/FAQ'
 import QuestionAndAnswerLogPage from './pages/QuestionAndAnswerLogPage'
@@ -44,7 +43,6 @@ const AppRoutes = (): JSX.Element => {
   }, [])
 
   return (
-    <ScrollToTop>
       <Routes>
         <Route path="/" element={<MainPage />} caseSensitive={true} />
 
@@ -111,7 +109,6 @@ const AppRoutes = (): JSX.Element => {
 
         <Route path="*" element={<NotFound />} caseSensitive={true} />
       </Routes>
-    </ScrollToTop>
   )
 }
 
