@@ -86,9 +86,8 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
 
   return (
     <div className="w-full">
-      <Heading size="medium">Her kan du se hvordan andre team har dokumentert etterlevelse</Heading>
       {!loading && etterlevelser.length > 0 && (
-        <div className="flex items-center" style={{ paddingTop: '22px', paddingBottom: '22px' }}>
+        <div className="flex items-center py-5">
           <Label>Vis:</Label>
           <div className="px-4 w-72">
             <Select
