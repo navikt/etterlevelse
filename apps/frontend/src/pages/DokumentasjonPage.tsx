@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
@@ -6,9 +6,9 @@ import { HeadingXLarge, ParagraphMedium } from 'baseui/typography'
 import { ettlevColors, theme } from '../util/theme'
 import { Layout2 } from '../components/scaffold/Page'
 import { ellipse80, saveArchiveIcon } from '../components/Images'
-import { EtterlevelseDokumentasjonQL, EtterlevelseDokumentasjonStats, KravQL, KravStatus, PageResponse } from '../constants'
+import { EtterlevelseDokumentasjonQL, EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, KravPrioritering, KravQL, KravStatus, PageResponse } from '../constants'
 import { gql, useQuery } from '@apollo/client'
-import { Code, codelist, ListName } from '../services/Codelist'
+import { Code, codelist, ListName, TemaCode } from '../services/Codelist'
 import { Button, KIND, SIZE } from 'baseui/button'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
@@ -17,18 +17,28 @@ import { getMainHeader, getNewestKravVersjon } from '../components/etterlevelseD
 import { user } from '../services/User'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
-import { TemaCardEtterlevelseDokumentasjon } from '../components/etterlevelseDokumentasjon/TemaCardEtterlevelseDokumentasjon'
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import { BodyShort, Label, Loader } from '@navikt/ds-react'
+import { BodyShort, Label, Loader, Accordion, Link, Alert, Tag } from '@navikt/ds-react'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
+import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
+import { getAllKravPriority } from '../api/KravPriorityApi'
+import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
+import { getNumberOfDaysBetween } from '../util/checkAge'
+import moment from 'moment'
+import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '../api/EtterlevelseApi'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
   const options = codelist.getParsedOptions(ListName.RELEVANS)
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByEtterlevelseDokumentasjonId(params.id)
+  const [kravPriority, setKravPriority] = useState<KravPrioritering[]>([])
+
+  useEffect(() => {
+    getAllKravPriority().then((priority) => setKravPriority(priority))
+  }, [])
 
   const {
     data: relevanteData,
@@ -38,7 +48,7 @@ export const DokumentasjonPage = () => {
     variables: { etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id },
   })
 
-  const [relevanteStats, setRelevanteStats] = useState<any[]>([])
+  const [relevanteStats, setRelevanteStats] = useState<KravQL[]>([])
   const [utgaattStats, setUtgaattStats] = useState<any[]>([])
   const [arkivModal, setArkivModal] = useState<boolean>(false)
 
@@ -217,6 +227,13 @@ export const DokumentasjonPage = () => {
     },
   ]
 
+  const getKravForTema = (tema: TemaCode) => {
+    const lover = codelist.getCodesForTema(tema.code)
+    const lovCodes = lover.map((c) => c.code)
+    const krav = relevanteStats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lovCodes.includes(r)))
+    return filterKrav(kravPriority, krav, tema)
+  }
+
   return (
     <Block width="100%">
       <Layout2
@@ -228,26 +245,72 @@ export const DokumentasjonPage = () => {
         currentPage={'Tema for dokumentasjon'}
         breadcrumbPaths={breadcrumbPaths}
       >
-        <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}></Block>
-        {getRelevansContent(etterlevelseDokumentasjon)}
-        {loading ? (
-          <Block display="flex" width="100%" justifyContent="center" marginTop={theme.sizing.scale550}>
-            <Loader size={'large'} />
-          </Block>
-        ) : (
-          <div className="flex flex-row flex-wrap gap-2 w-full">
-            {temaListe.map((tema) => (
-              <TemaCardEtterlevelseDokumentasjon
-                tema={tema}
-                stats={relevanteStats}
-                utgaattStats={utgaattStats}
-                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                key={`${tema.shortName}_panel`}
-              />
-            ))}
+        <div className="pt-4 flex flex-col gap-4">
+          {getRelevansContent(etterlevelseDokumentasjon)}
+          <div className="navds-alert navds-alert--info navds-alert--medium">
+            <div className="flex flex-col gap-2">
+              <p>Vi tester nytt oppsett med at tema og krav vises nå på samme side, slik at det forhåpentligvis blir lettere å navigere seg i.</p>
+              <p>Kravene er vist i anbefalt rekkefølge hvis man leser de fra venstre til høyre.</p>
+              <p>
+                Vi vil gjerne ha tilbakemeldinger på hvordan det fungerer.{' '}
+                <Link target="_blank" href="https://nav-it.slack.com/archives/C01V697SSR2">
+                  Skriv til oss i #etterlevelse på Slack (åpnes i ny fane)
+                </Link>
+                .
+              </p>
+            </div>
           </div>
-        )}
-        {/*
+          {loading ? (
+            <Block display="flex" width="100%" justifyContent="center" marginTop={theme.sizing.scale550}>
+              <Loader size={'large'} />
+            </Block>
+          ) : (
+            <Accordion indent={false}>
+              {temaListe
+                .filter((tema) => getKravForTema(tema).length > 0)
+                .map((tema) => {
+                  const kravliste = getKravForTema(tema)
+                  const utfylteKrav = kravliste.filter((krav) => krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)
+                  return (
+                    <Accordion.Item key={`${tema.shortName}_panel`} className="flex flex-col gap-2">
+                      <Accordion.Header id={tema.code}>
+                        <div className="flex gap-4">
+                          <span>
+                            {tema.shortName} ({utfylteKrav.length} av {kravliste.length} krav er utfylt{utfylteKrav.length === 1 ? '' : 'e'})
+                          </span>
+                          {kravliste.find(
+                            (krav) =>
+                              krav.kravVersjon === 1 && krav.etterlevelseStatus === undefined && getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) < 30,
+                          ) && <Tag variant="warning">Nytt krav</Tag>}
+                          {kravliste.find(
+                            (krav) =>
+                              krav.kravVersjon > 1 &&
+                              krav.etterlevelseStatus === undefined &&
+                              utgaattStats.filter((kl) => kl.kravNummer === krav.kravNummer && kl.etterlevelser.length > 0).length > 0 &&
+                              getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) < 30,
+                          ) && <Tag variant="warning">Ny versjon</Tag>}
+                        </div>
+                      </Accordion.Header>
+                      <Accordion.Content>
+                        <div className="flex flex-col gap-6">
+                          <div>
+                            <Link href={`/tema/${tema.code}`} target="_blank">
+                              Lær mer om {tema.shortName}, og ansvarlig for tema (åpnes i ny fane)
+                            </Link>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            {kravliste.map((krav) => (
+                              <KravCard krav={krav} kravFilter={KRAV_FILTER_TYPE.RELEVANTE_KRAV} etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} temaCode={tema.code} />
+                            ))}
+                          </div>
+                        </div>
+                      </Accordion.Content>
+                    </Accordion.Item>
+                  )
+                })}
+            </Accordion>
+          )}
+          {/*
         DISABLED TEMPORARY
         {irrelevanteStats.length > 0 && (
           <>
@@ -262,6 +325,7 @@ export const DokumentasjonPage = () => {
             </Block>
           </>
         )} */}
+        </div>
       </Layout2>
     </Block>
   )
@@ -275,6 +339,7 @@ export const statsQuery = gql`
           fyltKrav {
             kravNummer
             kravVersjon
+            navn
             status
             aktivertDato
             kravIdRelasjoner
@@ -288,6 +353,12 @@ export const statsQuery = gql`
               behandlingId
               status
               etterlevelseDokumentasjonId
+              fristForFerdigstillelse
+              changeStamp {
+                lastModifiedBy
+                lastModifiedDate
+                createdDate
+              }
             }
             regelverk {
               lov {
@@ -304,6 +375,7 @@ export const statsQuery = gql`
           ikkeFyltKrav {
             kravNummer
             kravVersjon
+            navn
             status
             aktivertDato
             kravIdRelasjoner
@@ -317,6 +389,12 @@ export const statsQuery = gql`
               behandlingId
               status
               etterlevelseDokumentasjonId
+              fristForFerdigstillelse
+              changeStamp {
+                lastModifiedBy
+                lastModifiedDate
+                createdDate
+              }
             }
             regelverk {
               lov {
@@ -333,6 +411,7 @@ export const statsQuery = gql`
           irrelevantKrav {
             kravNummer
             kravVersjon
+            navn
             status
             aktivertDato
             kravIdRelasjoner
@@ -346,6 +425,12 @@ export const statsQuery = gql`
               behandlingId
               status
               etterlevelseDokumentasjonId
+              fristForFerdigstillelse
+              changeStamp {
+                lastModifiedBy
+                lastModifiedDate
+                createdDate
+              }
             }
             regelverk {
               lov {
@@ -362,6 +447,7 @@ export const statsQuery = gql`
           utgaattKrav {
             kravNummer
             kravVersjon
+            navn
             status
             aktivertDato
             kravIdRelasjoner
@@ -375,6 +461,11 @@ export const statsQuery = gql`
               behandlingId
               status
               etterlevelseDokumentasjonId
+              changeStamp {
+                lastModifiedBy
+                lastModifiedDate
+                createdDate
+              }
             }
             regelverk {
               lov {

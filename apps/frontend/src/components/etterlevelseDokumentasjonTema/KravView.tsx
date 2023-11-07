@@ -10,6 +10,7 @@ import { EditEtterlevelse } from '../etterlevelse/EditEtterlevelse'
 import { Loader } from '@navikt/ds-react'
 
 export const KravView = (props: {
+  temaName?: string
   kravId: KravId
   etterlevelseDokumentasjonTitle: string
   etterlevelseDokumentasjonId: string
@@ -68,6 +69,7 @@ export const KravView = (props: {
       {!loadingEtterlevelseData && etterlevelse && (
         <Block width="100%" display="flex" justifyContent="center">
           <EditEtterlevelse
+            temaName={props.temaName}
             tidligereEtterlevelser={tidligereEtterlevelser}
             etterlevelseDokumentasjonTitle={props.etterlevelseDokumentasjonTitle}
             etterlevelseDokumentasjonId={props.etterlevelseDokumentasjonId}

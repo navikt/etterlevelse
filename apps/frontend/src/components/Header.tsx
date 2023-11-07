@@ -22,13 +22,23 @@ export const loginUrl = (location: Location, path?: string) => {
   return `/login?redirect_uri=${frontpage}${path || ''}`
 }
 
+export const LoginHeaderButton = () => {
+  // updates window.location on navigation
+  const location = useLocation()
+  return (
+    <InternalHeader.Button as={Link} href={loginUrl(location, location.pathname)} className="text-white" underline={false}>
+      Logg inn
+    </InternalHeader.Button>
+  )
+}
+
 export const LoginButton = () => {
   // updates window.location on navigation
   const location = useLocation()
   return (
-    <InternalHeader.Button as={Link} href={loginUrl(location, location.pathname)} className="text-white" underline={false} >
+    <Button as={Link} href={loginUrl(location, location.pathname)} className="text-white" underline={false}>
       Logg inn
-    </InternalHeader.Button>
+    </Button>
   )
 }
 
@@ -37,7 +47,12 @@ const LoggedInHeader = () => {
 
   const roller = (
     <div>
-      <Button size={'xsmall'} variant="tertiary" onClick={() => setViewRoller(!viewRoller)} icon={viewRoller ? <ChevronUpIcon area-label="" aria-hidden /> : <ChevronDownIcon area-label="" aria-hidden />}>
+      <Button
+        size={'xsmall'}
+        variant="tertiary"
+        onClick={() => setViewRoller(!viewRoller)}
+        icon={viewRoller ? <ChevronUpIcon area-label="" aria-hidden /> : <ChevronDownIcon area-label="" aria-hidden />}
+      >
         Endre aktive roller
       </Button>
       <div className={`mt-2 ${viewRoller ? 'block' : 'hidden'}`}>
@@ -51,22 +66,23 @@ const LoggedInHeader = () => {
   )
 
   const kravPages = user.isKraveier()
-    ? [{ label: 'Forvalte og opprette krav', href: '/kravliste' },
-      //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
-    ]
+    ? [
+        { label: 'Forvalte og opprette krav', href: '/kravliste' },
+        //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
+      ]
     : []
   const adminPages = user.isAdmin()
     ? [
-      { label: 'Administrere krav', href: '/admin/krav' },
-      { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
-      { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
-      { label: 'Administrere arkivering', href: '/admin/arkiv' },
-      { label: intl.audit, href: '/admin/audit' },
-      { label: 'Kodeverk', href: '/admin/codelist' },
-      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-      { label: intl.notifications, href: '/admin/varsel' },
-      // { label: intl.settings, href: '/admin/settings', disabled: true },
-    ]
+        { label: 'Administrere krav', href: '/admin/krav' },
+        { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
+        { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
+        { label: 'Administrere arkivering', href: '/admin/arkiv' },
+        { label: intl.audit, href: '/admin/audit' },
+        { label: 'Kodeverk', href: '/admin/codelist' },
+        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+        { label: intl.notifications, href: '/admin/varsel' },
+        // { label: intl.settings, href: '/admin/settings', disabled: true },
+      ]
     : []
 
   return (
@@ -86,7 +102,6 @@ const LoggedInHeader = () => {
         ]}
         title={'Meny'}
       />
-
     </div>
   )
 }
@@ -116,8 +131,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
 
   const allPages = props.pages.length
     ? props.pages
-      .filter((p) => p.length)
-      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
+        .filter((p) => p.length)
+        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -171,7 +186,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])
@@ -186,9 +201,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
         <SkipToContent />
         <InternalHeader className="w-full justify-center items-center">
           <div className="max-w-7xl flex w-full">
-            <InternalHeader.Title href="/">
-              Støtte til etterlevelse
-            </InternalHeader.Title>
+            <InternalHeader.Title href="/">Støtte til etterlevelse</InternalHeader.Title>
             <Spacer />
             {!props.noSearchBar && (
               <div className="flex w-full max-w-xl " role="search">
@@ -198,7 +211,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             <Spacer />
             {!props.noLoginButton && (
               <div className="flex">
-                {!user.isLoggedIn() && <LoginButton />}
+                {!user.isLoggedIn() && <LoginHeaderButton />}
                 {user.isLoggedIn() && <LoggedInHeader />}
               </div>
             )}
@@ -215,8 +228,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           border-b 
           border-t 
           w-full
-          ${systemVarsel.alertType === 'INFO' ? 'bg-surface-info-subtle border-surface-info' : 'bg-surface-warning-subtle border-surface-warning'
-              }`}
+          ${systemVarsel.alertType === 'INFO' ? 'bg-surface-info-subtle border-surface-info' : 'bg-surface-warning-subtle border-surface-warning'}`}
             aria-label="Systemvarsel"
             role="complementary"
           >

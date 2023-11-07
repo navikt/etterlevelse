@@ -1,41 +1,35 @@
-import {KravStatus} from '../../constants'
-import {kravStatus} from '../../pages/KravPage'
-import {BodyShort, Tag} from '@navikt/ds-react'
+import { KravStatus } from '../../constants'
+import { kravStatus } from '../../pages/KravPage'
+import { BodyShort, Detail, Tag } from '@navikt/ds-react'
 
-interface StatusViewProps{
+interface StatusViewProps {
   status: KravStatus | string
   variant?: any
   icon?: React.ReactNode
 }
 
-export const StatusView = ({
-  status,
-  variant,
-  icon,
-}:StatusViewProps) => {
+export const StatusView = ({ status, variant, icon }: StatusViewProps) => {
   const getStatusDisplay = (variant: any) => {
     return (
-        <Tag className={"w-fit"} variant={variant}>
-          <div className={"flex justify-center items-center"}>
-            {icon}
-            <BodyShort>
-              {kravStatus(status)}
-            </BodyShort>
-          </div>
-        </Tag>
+      <Tag variant={variant} className="h-fit">
+        <div className={'flex items-center'}>
+          {icon}
+          <Detail className="whitespace-nowrap">{kravStatus(status)}</Detail>
+        </div>
+      </Tag>
     )
   }
 
-  if(variant){
+  if (variant) {
     return getStatusDisplay(variant)
   } else if (status === KravStatus.UTKAST) {
-    return getStatusDisplay("neutral")
+    return getStatusDisplay('neutral')
   } else if (status === KravStatus.AKTIV) {
-    return getStatusDisplay("success")
+    return getStatusDisplay('success')
   } else if (status === KravStatus.UTGAATT) {
-    return getStatusDisplay("error")
+    return getStatusDisplay('error')
   } else {
-    return getStatusDisplay("neutral")
+    return getStatusDisplay('neutral')
   }
 }
 export default StatusView

@@ -4,7 +4,7 @@ import { sortKraverByPriority } from '../../../util/sort'
 import { mapEtterlevelseData } from '../../../pages/EtterlevelseDokumentasjonTemaPage'
 import { TemaCode } from '../../../services/Codelist'
 
-export const filterKrav = async (allKravPriority: KravPrioritering[], kravList?: KravQL[], temaData?: TemaCode, filterFerdigDokumentert?: boolean) => {
+export const filterKrav = (allKravPriority: KravPrioritering[], kravList?: KravQL[], temaData?: TemaCode, filterFerdigDokumentert?: boolean) => {
   const unfilteredkraver = kravList ? _.cloneDeep(kravList) : []
 
   unfilteredkraver.map((k) => {

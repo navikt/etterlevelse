@@ -52,14 +52,14 @@ const CodeListPage = () => {
 
   if (!user.isAdmin() || !lists) {
     return (
-      <div role="main" >
+      <div role="main">
         <Loader size="large" />
       </div>
     )
   }
 
   return (
-    <div role="main" id="content" className="w-full" >
+    <div role="main" id="content" className="w-full">
       <div className="flex-1 justify-start flex">
         <CustomizedBreadcrumbs currentPage="Administrering av kodeverk" />
       </div>
@@ -67,20 +67,21 @@ const CodeListPage = () => {
         <meta charSet="utf-8" />
         <title>{listname ? listname : 'Velg kodeverk'} </title>
       </Helmet>
-      <Heading size="medium" level="1">Administrering av kodeverk</Heading>
+      <Heading size="medium" level="1">
+        Administrering av kodeverk
+      </Heading>
       {loading ? (
         <Loader size="large" />
       ) : (
         <div className="flex justify-between w-full">
-          <Select
-            label="Velg kodeverk"
-            hideLabel
-            className="w-full max-w-xl"
-            onChange={(e) => setListname(e.target.value)}
-          >
+          <Select label="Velg kodeverk" hideLabel className="w-full max-w-xl" onChange={(e) => setListname(e.target.value)}>
             <option value="">Velg kodeverk</option>
             {codelist.makeIdLabelForAllCodeLists().map((c, i) => {
-              return <option key={i + '_' + c.label} value={c.id}>{c.label}</option>
+              return (
+                <option key={i + '_' + c.label} value={c.id}>
+                  {c.label}
+                </option>
+              )
             })}
           </Select>
           {listname && (

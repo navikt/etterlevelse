@@ -240,7 +240,9 @@ const KriterieBegrunnelse = ({
       </Block>
 
       <div className="flex flex-col gap-4">
-        <Heading size="xsmall" level="3">{suksesskriterie.navn}</Heading>
+        <Heading size="xsmall" level="3">
+          {suksesskriterie.navn}
+        </Heading>
 
         <ReadMore header="Utfyllende om kriteriet">
           <Markdown source={suksesskriterie.beskrivelse} />
@@ -289,7 +291,7 @@ const KriterieBegrunnelse = ({
 
       {(disableEdit || viewMode) && (
         <Block marginTop={theme.sizing.scale1000}>
-          <LabelAboveContent title={getLabelForSuksessKriterie()} markdown={begrunnelse} labelWidth={'24rem'} />
+          <LabelAboveContent title={getLabelForSuksessKriterie()} markdown={begrunnelse} />
         </Block>
       )}
 

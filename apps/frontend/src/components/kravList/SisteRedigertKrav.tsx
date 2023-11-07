@@ -1,8 +1,8 @@
-import {useEffect, useState} from 'react'
-import {emptyPage, KravQL} from '../../constants'
-import {useKravFilter} from '../../api/KravGraphQLApi'
-import {KravPanels, sortKrav} from '../../pages/KravListPage'
-import {Alert, Heading, Label, Loader} from '@navikt/ds-react'
+import { useEffect, useState } from 'react'
+import { emptyPage, KravQL } from '../../constants'
+import { useKravFilter } from '../../api/KravGraphQLApi'
+import { KravPanels, sortKrav } from '../../pages/KravListPage'
+import { Alert, Heading, Label, Loader } from '@navikt/ds-react'
 
 export const SistRedigertKrav = () => {
   const [sorting] = useState('sist')
@@ -41,22 +41,16 @@ export const SistRedigertKrav = () => {
   return loading && !data?.krav?.numberOfElements ? (
     <Loader size={'large'} />
   ) : error ? (
-    <Alert variant={"error"}>{JSON.stringify(error, null, 2)}</Alert>
+    <Alert variant={'error'}>{JSON.stringify(error, null, 2)}</Alert>
   ) : (
     <div>
-      <div className={"justify-center content-center w-full my-5"}>
-        <div className={"flex justify-start w-full"}>
-          <Label className="my-0">
-            {sortedKravList.length ? sortedKravList.length : 0} Krav
-          </Label>
+      <div className={'justify-center content-center w-full my-5'}>
+        <div className={'flex justify-start w-full'}>
+          <Label className="my-0">{sortedKravList.length ? sortedKravList.length : 0} Krav</Label>
         </div>
       </div>
       <KravPanels kravene={sortedKravList} loading={loading} />
-      {sortedKravList.length === 0 && (
-        <div className={"w-full flex justify-center"}>
-          Fant ingen krav
-        </div>
-      )}
+      {sortedKravList.length === 0 && <div className={'w-full flex justify-center'}>Fant ingen krav</div>}
     </div>
   )
 }

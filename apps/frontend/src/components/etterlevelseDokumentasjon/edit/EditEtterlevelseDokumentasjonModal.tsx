@@ -33,6 +33,7 @@ import { useSearchTeam } from '../../../api/TeamApi'
 import { RenderTagList } from '../../common/TagList'
 import { useNavigate } from 'react-router-dom'
 import { updateBehandlingNameWithNumber } from '../common/utils'
+import { Modal } from '@navikt/ds-react'
 
 type EditEtterlevelseDokumentasjonModalProps = {
   etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
@@ -138,7 +139,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
         {props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Nytt etterlevelsesdokument'}
       </Button>
 
-      <CustomizedModal size="default" isOpen={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)} closeable={false}>
+      <Modal open={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
         <ModalHeader>{props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Opprett nytt etterlevelsesdokument'}</ModalHeader>
         <ModalBody>
           <Formik
@@ -372,7 +373,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                     error={!!p.form.errors.behandlinger && !!p.form.submitCount}
                                   />
                                 </Block>
-                                <RenderTagList wide list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} />
+                                <RenderTagList list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} />
                               </Block>
                             </FormControl>
                           )
@@ -414,7 +415,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                     error={!!p.form.errors.teamsData && !!p.form.submitCount}
                                   />
                                 </Block>
-                                <RenderTagList wide list={p.form.values.teamsData.map((t: Team) => t.name)} onRemove={p.remove} />
+                                <RenderTagList list={p.form.values.teamsData.map((t: Team) => t.name)} onRemove={p.remove} />
                               </Block>
                             </FormControl>
                           )
@@ -442,7 +443,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
             }}
           </Formik>
         </ModalBody>
-      </CustomizedModal>
+      </Modal>
     </Block>
   )
 }

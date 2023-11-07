@@ -1,20 +1,15 @@
 import React, { ReactNode } from 'react'
-import { faCircle } from '@fortawesome/free-solid-svg-icons'
-import { Block } from 'baseui/block'
-import { theme } from '../../util'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ExternalLink, urlForObject } from './RouteLink'
 import { Markdown } from './Markdown'
 import { Code, codelist, ListName } from '../../services/Codelist'
 import { NavigableItem } from '../admin/audit/AuditTypes'
-import { ettlevColors } from '../../util/theme'
+import { BodyShort } from '@navikt/ds-react'
 
-export const DotTag = (props: { children: ReactNode }) => (
-  <Block marginLeft={theme.sizing.scale100} marginRight={theme.sizing.scale100} display="flex" alignItems="flex-start">
-    <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', marginTop: '9px' }} aria-hidden={true} />
-    <Block display="inline" marginRight={theme.sizing.scale100} />
-    <Block $style={{ wordBreak: 'break-word' }}>{props.children}</Block>
-  </Block>
+export const DotTag = (props: { children: ReactNode; noBulletPoints?: boolean }) => (
+  <div className={'flex'}>
+    {!props.noBulletPoints && <li />}
+    <BodyShort className={'break-words'}>{props.children}</BodyShort>
+  </div>
 )
 
 const Content = (props: { item: ReactNode | string; list?: ListName; linkCodelist?: boolean; markdown?: boolean }) => {
@@ -37,36 +32,37 @@ type DotTagsParams = {
   markdown?: boolean
   list?: ListName
   inColumn?: boolean
+  noBulletPoints?: boolean
 }
 
 export const DotTags = (props: DotTagsParams) => {
-  const { commaSeparator } = props
+  const { commaSeparator, noBulletPoints } = props
   const items = props.items || props.codes?.map((c) => c.code) || []
 
   if (!items.length) return <>{'Ikke angitt'}</>
 
   if (commaSeparator)
     return (
-      <Block display="inline">
+      <div className={'inline'}>
         {items.map((item, i) => (
           <React.Fragment key={i}>
             <Content {...props} item={item} />
             <span>{i < items.length - 1 ? ', ' : ''}</span>
           </React.Fragment>
         ))}
-      </Block>
+      </div>
     )
 
   return (
-    <Block display={props.inColumn ? 'block' : 'flex'} flexWrap>
+    <div className={`${props.inColumn ? 'block' : 'flex'} flex-wrap`}>
       {items.map((item, i) => (
-        <Block marginBottom={props.inColumn ? theme.sizing.scale200 : 'none'} key={i} marginRight={i < items.length && !commaSeparator ? theme.sizing.scale200 : 0}>
-          <DotTag>
+        <div className={`${props.inColumn ? 'mb-1.5' : 'mb-0'} ${i < items.length && !commaSeparator ? 'mb-1.5' : 'mb-0'}`} key={i}>
+          <DotTag noBulletPoints={noBulletPoints}>
             {' '}
             <Content {...props} item={item} />{' '}
           </DotTag>
-        </Block>
+        </div>
       ))}
-    </Block>
+    </div>
   )
 }

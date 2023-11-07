@@ -27,7 +27,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
 
   useEffect(() => {
     if (showUsage && selectedCode) {
-      ; (async () => {
+      ;(async () => {
         setUsage(undefined)
         const usage = await getCodelistUsage(selectedCode.list, selectedCode.code)
         setUsage(usage)
@@ -73,9 +73,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
 
   sortedData = sortedData.sort((a, b) => {
     if (sort) {
-      return sort.direction === 'ascending'
-        ? comparator(b, a, sort.orderBy)
-        : comparator(a, b, sort.orderBy)
+      return sort.direction === 'ascending' ? comparator(b, a, sort.orderBy) : comparator(a, b, sort.orderBy)
     }
     return 1
   })
@@ -85,24 +83,28 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
       <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader sortKey="code" className="w-[15%]" sortable>Code</Table.ColumnHeader>
-            <Table.ColumnHeader sortKey="navn" className="w-[25%]" sortable>Navn</Table.ColumnHeader>
-            <Table.ColumnHeader className="w-1/2 break-all" >Beskrivelse</Table.ColumnHeader>
-            <Table.ColumnHeader ></Table.ColumnHeader>
+            <Table.ColumnHeader sortKey="code" className="w-[15%]" sortable>
+              Code
+            </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey="navn" className="w-[25%]" sortable>
+              Navn
+            </Table.ColumnHeader>
+            <Table.ColumnHeader className="w-1/2 break-all">Beskrivelse</Table.ColumnHeader>
+            <Table.ColumnHeader></Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {sortedData.map((code: Code, i) => {
             return (
               <Table.Row key={i + '_' + code.shortName}>
-                <Table.DataCell className="w-[15%] break-all" scope="row">{code.code}</Table.DataCell>
-                <Table.DataCell >{code.shortName}</Table.DataCell>
+                <Table.DataCell className="w-[15%] break-all" scope="row">
+                  {code.code}
+                </Table.DataCell>
+                <Table.DataCell>{code.shortName}</Table.DataCell>
                 <Table.DataCell className="w-1/2 break-all">
                   <div>
                     <BodyLong>{code.description}</BodyLong>
-                    <div className="break-words text-icon-warning">
-                      {code.data && JSON.stringify(code.data, null, 1)}
-                    </div>
+                    <div className="break-words text-icon-warning">{code.data && JSON.stringify(code.data, null, 1)}</div>
                   </div>
                 </Table.DataCell>
                 <Table.DataCell>
@@ -154,7 +156,11 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
             code: selectedCode.code ?? '',
             shortName: selectedCode.shortName ?? '',
             description: selectedCode.description ?? '',
-            data: selectedCode.data ? selectedCode.data.relevantFor ? selectedCode.data : { ...selectedCode.data, relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL } : { relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL },
+            data: selectedCode.data
+              ? selectedCode.data.relevantFor
+                ? selectedCode.data
+                : { ...selectedCode.data, relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL }
+              : { relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL },
           }}
           isOpen={showEditModal}
           onClose={() => {

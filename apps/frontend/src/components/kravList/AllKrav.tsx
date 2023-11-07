@@ -1,11 +1,11 @@
-import {useEffect, useState} from 'react'
-import {codelist, ListName} from '../../services/Codelist'
-import {useKravFilter} from '../../api/KravGraphQLApi'
-import {emptyPage, KravListFilter, KravQL, KravStatus, Option} from '../../constants'
-import {KravPanels, sortKrav} from '../../pages/KravListPage'
-import {kravStatus} from '../../pages/KravPage'
-import {Alert, BodyShort, Button, Heading, Label, Loader, Select} from '@navikt/ds-react'
-import {PlusIcon} from '@navikt/aksel-icons'
+import { useEffect, useState } from 'react'
+import { codelist, ListName } from '../../services/Codelist'
+import { useKravFilter } from '../../api/KravGraphQLApi'
+import { emptyPage, KravListFilter, KravQL, KravStatus, Option } from '../../constants'
+import { KravPanels, sortKrav } from '../../pages/KravListPage'
+import { kravStatus } from '../../pages/KravPage'
+import { Alert, BodyShort, Button, Heading, Label, Loader, Select } from '@navikt/ds-react'
+import { PlusIcon } from '@navikt/aksel-icons'
 
 type KravFilter = {
   status: Option[]
@@ -120,29 +120,35 @@ export const AllKrav = () => {
     )
   }
 
-
   const getSelector = (kravFilter: KravListFilter, options: any[]) => {
     return (
       <div className="ml-3 min-w-fit">
         <Select
           key={'krav_filter_' + kravFilter}
-          size={"small"}
+          size={'small'}
           label={`Filter ${kravFilter}`}
           hideLabel
-          placeholder={"tema"}
+          placeholder={'tema'}
           value={filterValue}
-          onChange={(params)=> {
+          onChange={(params) => {
             setFilterValue(params.currentTarget.value)
-            updateFilter([{
-              id: params.currentTarget.value,
-              label: options.filter(o=>o.id===params.currentTarget.value)[0].label
-            }],kravFilter)
+            updateFilter(
+              [
+                {
+                  id: params.currentTarget.value,
+                  label: options.filter((o) => o.id === params.currentTarget.value)[0].label,
+                },
+              ],
+              kravFilter,
+            )
           }}
-          className={"flex"}
+          className={'flex'}
         >
-          {
-            options.map(o=><option value={o.id} key={kravFilter + '_' + o.id}>{o.label}</option>)
-          }
+          {options.map((o) => (
+            <option value={o.id} key={kravFilter + '_' + o.id}>
+              {o.label}
+            </option>
+          ))}
         </Select>
       </div>
     )
@@ -156,16 +162,14 @@ export const AllKrav = () => {
     <Alert variant={'error'}>{JSON.stringify(error, null, 2)}</Alert>
   ) : (
     <div>
-      <div className={"w-full justify-center my-4"}>
-        <div className={"flex justify-center content-center w-full"}>
-          <div className={"flex justify-start align-middle w-full"}>
-            <Label size={"medium"}>
-              {kravene.totalElements ? kravene.totalElements : 0} Krav
-            </Label>
+      <div className={'w-full justify-center my-4'}>
+        <div className={'flex justify-center content-center w-full'}>
+          <div className={'flex justify-start align-middle w-full'}>
+            <Label size={'medium'}>{kravene.totalElements ? kravene.totalElements : 0} Krav</Label>
           </div>
-          <div className={"flex w-full items-center"}>
-            <div className={"flex items-center justify-end w-full"}>
-              <Label size={"small"}>Filter</Label>
+          <div className={'flex w-full items-center'}>
+            <div className={'flex items-center justify-end w-full'}>
+              <Label size={'small'}>Filter</Label>
               {getSelector(
                 KravListFilter.RELEVANS,
                 getOptions(
@@ -189,8 +193,8 @@ export const AllKrav = () => {
       </div>
       <KravPanels kravene={sortedKravList} loading={loading} />
       {sortedKravList.length === 0 && (
-        <div className={"w-full flex justify-center"}>
-          <BodyShort size={"small"}>Fant ingen krav</BodyShort>
+        <div className={'w-full flex justify-center'}>
+          <BodyShort size={'small'}>Fant ingen krav</BodyShort>
         </div>
       )}
 
@@ -199,7 +203,7 @@ export const AllKrav = () => {
           <div className="flex items-center">
             <Button
               onClick={lastMer}
-              icon={<PlusIcon area-label="" aria-hidden/>}
+              icon={<PlusIcon area-label="" aria-hidden />}
               variant={'secondary'}
               size="medium"
               disabled={gqlLoading || kravene.numberOfElements >= kravene.totalElements}
@@ -213,7 +217,7 @@ export const AllKrav = () => {
               </div>
             )}
           </div>
-          <Label className={"mr-2.5"}>
+          <Label className={'mr-2.5'}>
             Viser {kravene.numberOfElements}/{kravene.totalElements}
           </Label>
         </div>

@@ -1,23 +1,23 @@
 import CustomizedModal from '../../common/CustomizedModal'
-import {Krav} from '../../../constants'
+import { Krav } from '../../../constants'
 import Button from '../../common/Button'
-import React, {ReactElement, useEffect} from 'react'
-import {FieldArray, Form, Formik} from 'formik'
-import {FieldWrapper} from '../../common/Inputs'
-import {arrayMove, List} from 'baseui/dnd-list'
-import {CustomPanelDivider} from '../../common/CustomizedAccordion'
-import {SimplePanel} from '../../common/PanelLink'
-import {HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
+import React, { ReactElement, useEffect } from 'react'
+import { FieldArray, Form, Formik } from 'formik'
+import { FieldWrapper } from '../../common/Inputs'
+import { arrayMove, List } from 'baseui/dnd-list'
+import { CustomPanelDivider } from '../../common/CustomizedAccordion'
+import { SimplePanel } from '../../common/PanelLink'
+import { HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
 import moment from 'moment'
 import StatusView from '../../common/StatusTag'
-import {borderRadius, borderStyle, paddingZero} from '../../common/Style'
-import {Block} from 'baseui/block'
-import {ettlevColors, responsivePaddingSmall} from '../../../util/theme'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faGripVertical} from '@fortawesome/free-solid-svg-icons'
-import {createKravPriority, kravMapToKravPrioriting, updateKravPriority} from '../../../api/KravPriorityApi'
+import { borderRadius, borderStyle, paddingZero } from '../../common/Style'
+import { Block } from 'baseui/block'
+import { ettlevColors, responsivePaddingSmall } from '../../../util/theme'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
+import { createKravPriority, kravMapToKravPrioriting, updateKravPriority } from '../../../api/KravPriorityApi'
 import AlertUnsavedPopup from '../../common/AlertUnsavedPopup'
-import {Loader} from '@navikt/ds-react'
+import { Loader } from '@navikt/ds-react'
 
 export const kravListPriorityModal = () => document.querySelector('#krav-list-edit-priority-modal')
 
@@ -138,13 +138,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
 
   return (
     <>
-      <AlertUnsavedPopup
-        isActive={isFormDirty}
-        isModalOpen={isAlertModalOpen}
-        setIsModalOpen={setIsAlertModalOpen}
-        onClose={() => close()}
-        onSubmit={() => submit()}
-      />
+      <AlertUnsavedPopup isActive={isFormDirty} isModalOpen={isAlertModalOpen} setIsModalOpen={setIsAlertModalOpen} onClose={() => close()} onSubmit={() => submit()} />
       <Formik
         initialValues={{
           krav: kravElements,
@@ -170,8 +164,8 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
                   id: 'krav-list-edit-priority-modal',
                 },
                 style: {
-                  zIndex:5
-                }
+                  zIndex: 5,
+                },
               },
               Dialog: {
                 style: {
@@ -189,7 +183,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
               paddingRight={responsivePaddingSmall}
               marginBottom="54px"
             >
-              <HeadingXXLarge $style={{ lineHeight: '48px', color: ettlevColors.white}}>Justere rekkefølgen på krav</HeadingXXLarge>
+              <HeadingXXLarge $style={{ lineHeight: '48px', color: ettlevColors.white }}>Justere rekkefølgen på krav</HeadingXXLarge>
             </Block>
             <Block display="flex" justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
               <Block display="flex" justifyContent="flex-start" flex="1">
@@ -229,7 +223,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
                               style: {
                                 ...paddingZero,
                                 flexDirection: 'row-reverse',
-                                zIndex:10
+                                zIndex: 10,
                               },
                             },
                           }}

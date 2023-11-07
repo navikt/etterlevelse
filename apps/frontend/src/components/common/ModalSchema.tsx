@@ -7,11 +7,8 @@ export const Error = (props: { fieldName: string; fullWidth?: boolean }) => (
     {(msg) => (
       <div className="flex w-full mt-1">
         {!props.fullWidth && <ModalLabel />}
-        <div className="w-full" >
-          <Alert
-            className="w-auto"
-            variant="error"
-          >
+        <div className="w-full">
+          <Alert className="w-auto" variant="error">
             {msg}
           </Alert>
         </div>
@@ -22,7 +19,7 @@ export const Error = (props: { fieldName: string; fullWidth?: boolean }) => (
 
 export const ModalLabel = (props: { label?: any; tooltip?: string; fullwidth?: boolean }) => {
   return (
-    <div className={`self-center pr-4 ${props.fullwidth ? 'w-full' : 'w-1/4'}`} >
+    <div className={`self-center pr-4 ${props.fullwidth ? 'w-full' : 'w-1/4'}`}>
       {props.tooltip ? (
         <Tooltip content={props.tooltip}>
           <Label className="flex w-full justify-center">

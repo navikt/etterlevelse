@@ -18,14 +18,16 @@ export const EtterlevelseAdminPage = () => {
           <meta charSet="utf-8" />
           <title>Administrere Etterlevelse</title>
         </Helmet>
-        <Heading size="medium" level="1">Administrere Etterlevelse</Heading>
+        <Heading size="medium" level="1">
+          Administrere Etterlevelse
+        </Heading>
       </div>
 
       <div className="mt-5">
         <div className="flex items-end">
           <TextField
             label="Slette etterlevelses dokumentasjon ved uid"
-            placeholder='Etterlevelse UID'
+            placeholder="Etterlevelse UID"
             onChange={(e) => setEtterlevelseId(e.target.value)}
             className="w-full mr-3"
           />
@@ -54,24 +56,6 @@ export const EtterlevelseAdminPage = () => {
 }
 
 export const UpdateMessage = ({ message }: { message?: string }) => {
-  return (
-    <div>
-      {message ? (
-        <div>
-          {message.match('error') ? (
-            <BodyShort className="text-nav-red">
-              {message}
-            </BodyShort>
-          ) : (
-            <BodyShort>
-              {message}
-            </BodyShort>
-          )}
-        </div>
-      ) : (
-        <div />
-      )}
-    </div>
-  )
+  return <div>{message ? <div>{message.match('error') ? <BodyShort className="text-nav-red">{message}</BodyShort> : <BodyShort>{message}</BodyShort>}</div> : <div />}</div>
 }
 export default EtterlevelseAdminPage

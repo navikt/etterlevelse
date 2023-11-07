@@ -1,45 +1,42 @@
 import { default as React, ReactNode } from 'react'
-import { Block, Responsive } from 'baseui/block'
-import { theme } from '../../util'
-import { HeadingXLarge, LabelLarge } from 'baseui/typography'
+import { BodyShort, Heading, Label } from '@navikt/ds-react'
 
 type DataTextProps = {
   label?: string
   text?: false | string | string[]
   children?: ReactNode
   hideComponent?: boolean
-  compact?: boolean
   notFlexed?: boolean
   header?: boolean
   labelWidth?: string
-  display?: Responsive<any>
 }
 
 const DataText = (props: DataTextProps) => {
   if (props.hideComponent) return null
-  const labelWidth = props.labelWidth ? props.labelWidth : '12rem'
 
   const getLabel = () => {
     if (props.header) {
       return (
-        <Block>
-          <HeadingXLarge>{props.label}</HeadingXLarge>
-        </Block>
+        <div>
+          <Heading size="small" level="2">
+            {props.label}
+          </Heading>
+        </div>
       )
     } else {
       return (
-        <Block minWidth={labelWidth} maxWidth={labelWidth} paddingRight={theme.sizing.scale400}>
-          <LabelLarge $style={{ lineHeight: theme.sizing.scale800 }}>{props.label}</LabelLarge>
-        </Block>
+        <div className={`${props.labelWidth ? 'w-[' + props.labelWidth + ']' : 'w-48'} pr-2.5`}>
+          <Label size={'medium'}>{props.label}</Label>
+        </div>
       )
     }
   }
 
   return (
-    <Block display={props.display ? props.display : props.notFlexed ? 'block' : 'flex'} marginBottom={props.compact ? '.5rem' : '2rem'} width="100%">
+    <div className={`${props.notFlexed ? 'block' : 'flex'} w-full`}>
       {props.label && getLabel()}
-      <Block font="ParagraphMedium">{props.children}</Block>
-    </Block>
+      <BodyShort>{props.children}</BodyShort>
+    </div>
   )
 }
 

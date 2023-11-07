@@ -1,37 +1,38 @@
-import {Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL, KravStatus} from '../../constants'
-import {FormikProps} from 'formik'
-import {createEtterlevelse, getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, updateEtterlevelse} from '../../api/EtterlevelseApi'
-import {Block} from 'baseui/block'
+import { Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL, KravStatus } from '../../constants'
+import { FormikProps } from 'formik'
+import { createEtterlevelse, getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, updateEtterlevelse } from '../../api/EtterlevelseApi'
+import { Block } from 'baseui/block'
 import Button from '../common/Button'
-import React, {useEffect, useRef, useState} from 'react'
-import {theme} from '../../util'
-import {getKravByKravNumberAndVersion, KravId} from '../../api/KravApi'
-import {kravNumView, query} from '../../pages/KravPage'
-import {HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
-import {ettlevColors, maxPageWidth, responsivePaddingExtraLarge} from '../../util/theme'
-import {user} from '../../services/User'
-import {faChevronDown} from '@fortawesome/free-solid-svg-icons'
-import {borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding} from '../common/Style'
-import {useQuery} from '@apollo/client'
-import {informationIcon, warningAlert} from '../Images'
+import React, { useEffect, useRef, useState } from 'react'
+import { theme } from '../../util'
+import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
+import { kravNumView, query } from '../../pages/KravPage'
+import { HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
+import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
+import { user } from '../../services/User'
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding } from '../common/Style'
+import { useQuery } from '@apollo/client'
+import { informationIcon, warningAlert } from '../Images'
 import CustomizedTabs from '../common/CustomizedTabs'
-import {Tilbakemeldinger} from '../krav/tilbakemelding/Tilbakemelding'
+import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
 import Etterlevelser from '../krav/Etterlevelser'
-import {Markdown} from '../common/Markdown'
-import {getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi'
+import { Markdown } from '../common/Markdown'
+import { getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
 import CustomizedModal from '../common/CustomizedModal'
-import {ampli} from '../../services/Amplitude'
+import { ampli } from '../../services/Amplitude'
 import StatusView from '../common/StatusTag'
-import {getPageWidth} from '../../util/pageWidth'
-import {useNavigate, useParams} from 'react-router-dom'
-import {getFilterType, Section} from '../../pages/EtterlevelseDokumentasjonPage'
-import {syncEtterlevelseKriterieBegrunnelseWithKrav} from '../etterlevelseDokumentasjonTema/common/utils'
+import { getPageWidth } from '../../util/pageWidth'
+import { useNavigate, useParams } from 'react-router-dom'
+import { getFilterType, Section } from '../../pages/EtterlevelseDokumentasjonPage'
+import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import moment from 'moment'
-import {Detail} from '@navikt/ds-react'
+import { Detail } from '@navikt/ds-react'
 
 type EditEttlevProps = {
+  temaName?: string
   etterlevelse: Etterlevelse
   kravId: KravId
   formRef?: React.Ref<any>
@@ -49,6 +50,7 @@ type EditEttlevProps = {
 }
 
 export const EditEtterlevelse = ({
+  temaName,
   kravId,
   etterlevelse,
   varsleMelding,
@@ -141,10 +143,10 @@ export const EditEtterlevelse = ({
     }
 
     if (etterlevelse.id || existingEtterlevelseId) {
-      await updateEtterlevelse(mutatedEtterlevelse).then(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}/${params.tema}/${getFilterType(params.filter)}`))
+      await updateEtterlevelse(mutatedEtterlevelse).then(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`))
     } else {
       await createEtterlevelse(mutatedEtterlevelse).then(() => {
-        navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}/${params.tema}/${getFilterType(params.filter)}`)
+        navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
       })
     }
   }
@@ -185,11 +187,9 @@ export const EditEtterlevelse = ({
                     color: ettlevColors.white,
                   }}
                 >
-                  {kravNumView(krav)}
+                  {temaName} / {kravNumView(krav)}
                 </ParagraphMedium>
-                {kravFilter !== KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
-                  <StatusView status={kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV ? 'Utgått' : 'Bortfiltrert'}/>
-                )}
+                {kravFilter !== KRAV_FILTER_TYPE.RELEVANTE_KRAV && <StatusView status={kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV ? 'Utgått' : 'Bortfiltrert'} />}
               </Block>
               <HeadingXXLarge $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</HeadingXXLarge>
               {krav.aktivertDato !== null && (
@@ -389,7 +389,7 @@ export const EditEtterlevelse = ({
                       disableEdit={disableEdit}
                       documentEdit={documentEdit}
                       close={() => {
-                        setTimeout(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}/${params.tema}/${params.filter}`), 1)
+                        setTimeout(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`), 1)
                       }}
                       setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
                       isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}

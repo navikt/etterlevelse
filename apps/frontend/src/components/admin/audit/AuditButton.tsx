@@ -11,22 +11,16 @@ interface AuditButtonProps extends ButtonProps {
   marginRight?: boolean
 }
 
-
 export const AuditButton = (props: AuditButtonProps) => {
   const { id, auditId, marginLeft, marginRight, ...restProps } = props
   return user.isAdmin() ? (
-    <Link
-      className={`${marginLeft ? 'ml-2' : ''} ${marginRight ? 'mr-2' : ''}`}
-      href={`/admin/audit/${props.id}` + (props.auditId ? `/${props.auditId}` : '')}>
+    <Link className={`${marginLeft ? 'ml-2' : ''} ${marginRight ? 'mr-2' : ''}`} href={`/admin/audit/${props.id}` + (props.auditId ? `/${props.auditId}` : '')}>
       {props.children ? (
         props.children
       ) : (
         <>
           <Tooltip content={intl.version}>
-            <Button
-              {...restProps}
-              icon={<ClockDashedIcon title="Versjonering" />}
-            />
+            <Button {...restProps} icon={<ClockDashedIcon title="Versjonering" />} />
           </Tooltip>
         </>
       )}

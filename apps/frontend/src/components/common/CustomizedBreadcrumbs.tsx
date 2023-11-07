@@ -16,7 +16,7 @@ type CustomizedProps = Props
 
 const CustomizedBreadcrumbs = (props: CustomizedProps) => {
   const getName = (pathName: string) => (pathName.length > 25 ? pathName.substring(0, 25) + '...' : pathName)
-  const linkColor = /^\/(lov|krav|etterlevelse)\//.test(window.location.pathname) ? 'text-white' : 'text-text-default'
+  const linkColor = /^\/(lov|etterlevelse)\//.test(window.location.pathname) ? 'text-white' : 'text-text-default'
 
   return (
     <div className="flex gap-1 items-center my-6">

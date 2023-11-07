@@ -1,31 +1,22 @@
-import { ettlevColors, theme } from '../../util/theme'
-import { Block } from 'baseui/block'
+import { ettlevColors } from '../../util/theme'
 import { IconInCircle } from './Icon'
-import { HeadingXLarge, ParagraphSmall } from 'baseui/typography'
 import React from 'react'
+import { BodyShort, Heading } from '@navikt/ds-react'
 
 export const InfoBlock = (props: { icon: string; alt: string; text: string; color: string }) => (
-  <Block
-    $style={{
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderStyle: 'solid',
-      borderColor: ettlevColors.grey100,
-      borderRadius: '4px',
-    }}
-  >
-    <Block display={'flex'} flexDirection={'column'} alignItems={'center'} padding={theme.sizing.scale700}>
-      <IconInCircle icon={props.icon} alt={props.alt} backgroundColor={props.color} size={'64px'} />
-      <ParagraphSmall marginBottom={0}>{props.text}</ParagraphSmall>
-    </Block>
-  </Block>
+  <div>
+    <div className="w-full flex justify-center items-center">
+      <div className="flex flex-col items-center p-5">
+        <IconInCircle icon={props.icon} alt={props.alt} backgroundColor={props.color} size={'64px'} />
+        <BodyShort>{props.text}</BodyShort>
+      </div>
+    </div>
+  </div>
 )
 
 export const InfoBlock2 = (props: { icon: string; alt: string; title: string; beskrivelse?: string; backgroundColor?: string; children?: React.ReactNode }) => (
-  <Block
-    $style={{
+  <div
+    style={{
       width: '100%',
       display: 'flex',
       borderWidth: '2px',
@@ -35,18 +26,14 @@ export const InfoBlock2 = (props: { icon: string; alt: string; title: string; be
       backgroundColor: props.backgroundColor || ettlevColors.white,
     }}
   >
-    <Block alignSelf={'center'} marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale800}>
+    <div className="self-center mx-6">
       <img src={props.icon} alt={props.alt} width={'80px'} height={'80px'} />
-    </Block>
+    </div>
 
-    <Block display={'flex'} flexDirection={'column'} padding={theme.sizing.scale700}>
-      <HeadingXLarge marginTop={0} marginBottom={0}>
-        {props.title}
-      </HeadingXLarge>
-      <ParagraphSmall maxWidth={'400px'} marginTop={0}>
-        {props.beskrivelse}
-      </ParagraphSmall>
+    <div className="flex flex-col p-5">
+      <Heading size="large">{props.title}</Heading>
+      <BodyShort className="max-w-sm">{props.beskrivelse}</BodyShort>
       {props.children}
-    </Block>
-  </Block>
+    </div>
+  </div>
 )
