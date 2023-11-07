@@ -108,7 +108,7 @@ export const ShowWarningMessage = ({ warningMessage, noMarginLeft }: { warningMe
   return (
     <div className="flex items-center gap-2">
       <img src={warningAlert} width="18px" height="18px" alt="warning icon" />
-      <Detail>{warningMessage}</Detail>
+      <Detail className="whitespace-nowrap">{warningMessage}</Detail>
     </div>
   )
 }
