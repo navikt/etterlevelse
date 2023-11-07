@@ -161,7 +161,7 @@ export const getEtterlevelseStatus = (status?: EtterlevelseStatus, frist?: strin
     case EtterlevelseStatus.IKKE_RELEVANT:
       return 'Ikke relevant'
     case EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
-      return 'Ikke relevant'
+      return 'Ferdig utfylt'
     case EtterlevelseStatus.FERDIG_DOKUMENTERT:
       return 'Ferdig utfylt'
     case EtterlevelseStatus.OPPFYLLES_SENERE:
@@ -190,7 +190,7 @@ export const getStatusLabelColor = (status: EtterlevelseStatus) => {
     case EtterlevelseStatus.IKKE_RELEVANT:
       return 'neutral'
     case EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
-      return 'neutral'
+      return "success"
     case EtterlevelseStatus.FERDIG_DOKUMENTERT:
       return 'success'
     case EtterlevelseStatus.OPPFYLLES_SENERE:
