@@ -42,4 +42,8 @@ public class EtterlevelseStatistikkResponse {
     private LocalDateTime lastModifiedDate;
     private LocalDateTime createdDate;
     private LocalDateTime ferdigDokumentertDato;
+
+    private List<String> team;
+    private List<String> teamId;
+    private String tema;
 }

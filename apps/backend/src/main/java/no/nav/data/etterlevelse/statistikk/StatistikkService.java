@@ -236,6 +236,25 @@ public class StatistikkService {
                 ferdigDokumentertDato = etterlevelse.getChangeStamp().getLastModifiedDate().withNano(0);
             }
         }
+
+        List<String> teamNames = etterlevelseDokumentasjon.getTeams().stream().map(t -> teamService.getTeam(t).isPresent() ? teamService.getTeam(t).get().getName() : "").toList();
+
+        String temaName = "Ingen";
+        var krav = kravService.getByKravNummer(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon());
+
+        if(krav.isPresent()) {
+            var regelverkResponse = StreamUtils.convert(krav.get().getRegelverk(), Regelverk::toResponse);
+            if (!regelverkResponse.isEmpty()) {
+                var temaData = CodelistService.getCodelist(ListName.TEMA, regelverkResponse.get(0).getLov().getData().get("tema").textValue());
+                if (temaData != null) {
+                    temaName = temaData.getShortName();
+                }
+            }
+        }
+
+
+
+
         return EtterlevelseStatistikkResponse.builder()
                 .id(etterlevelse.getId())
                 .etterlevelseDokumentasjonId(etterlevelse.getEtterlevelseDokumentasjonId())
@@ -253,6 +272,9 @@ public class StatistikkService {
                 .createdDate(etterlevelse.getChangeStamp().getCreatedDate().withNano(0))
                 .ferdigDokumentertDato(ferdigDokumentertDato)
                 .antallSuksesskriterie(etterlevelse.getSuksesskriterieBegrunnelser().size())
+                .teamId(etterlevelseDokumentasjon.getTeams())
+                .team(teamNames)
+                .tema(temaName)
                 .oppfyltSuksesskriterieIder(
                         etterlevelse.getSuksesskriterieBegrunnelser().stream()
                                 .filter(sb -> sb.getSuksesskriterieStatus() == SuksesskriterieStatus.OPPFYLT)
