@@ -116,7 +116,7 @@ export const Markdown = ({
     ol: (olProps: any) => {
       const { children } = olProps
       return <List as="ol">{children}</List>
-    }
+    },
   }
 
   const sources: string[] = sourcesOrig || (source ? [source.replaceAll('\n\n', '\n\n &nbsp; \n\n').replaceAll('\n', '\n\n')] : [''])

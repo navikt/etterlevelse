@@ -31,12 +31,8 @@ export const InfoBlock2 = (props: { icon: string; alt: string; title: string; be
     </div>
 
     <div className="flex flex-col p-5">
-      <Heading size="large">
-        {props.title}
-      </Heading>
-      <BodyShort className="max-w-sm">
-        {props.beskrivelse}
-      </BodyShort>
+      <Heading size="large">{props.title}</Heading>
+      <BodyShort className="max-w-sm">{props.beskrivelse}</BodyShort>
       {props.children}
     </div>
   </div>

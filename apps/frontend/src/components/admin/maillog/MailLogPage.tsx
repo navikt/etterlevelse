@@ -6,7 +6,7 @@ import { PageResponse } from '../../../constants'
 import moment from 'moment'
 import { Markdown } from '../../common/Markdown'
 import { Helmet } from 'react-helmet'
-import {BodyShort, Box, Heading, Pagination, Select, Spacer} from "@navikt/ds-react";
+import { BodyShort, Box, Heading, Pagination, Select, Spacer } from '@navikt/ds-react'
 
 interface MailLog {
   time: string
@@ -34,7 +34,9 @@ export const MailLogPage = () => {
         <meta charSet="utf-8" />
         <title>Tilbakemeldings log</title>
       </Helmet>
-      <Heading className="mt-4" size="large" level="1" spacing>{intl.mailLog}</Heading>
+      <Heading className="mt-4" size="large" level="1" spacing>
+        {intl.mailLog}
+      </Heading>
       {log?.content.map((l, i) => {
         let html = l.body
         const bodyIdx = l.body.indexOf('<body>')
@@ -51,9 +53,7 @@ export const MailLogPage = () => {
             <BodyShort>
               #{rowNum} Tid: {moment(l.time).format('lll')} Til: {l.to}
             </BodyShort>
-            <BodyShort className="mb-3">
-              Emne: {l.subject}
-            </BodyShort>
+            <BodyShort className="mb-3">Emne: {l.subject}</BodyShort>
             <Box className="px-2" borderWidth="2" borderColor="border-subtle" borderRadius="large" background="surface-default">
               <Markdown source={html} escapeHtml={false} />
             </Box>
@@ -61,34 +61,21 @@ export const MailLogPage = () => {
         )
       })}
 
-        <div className="flex w-full justify-center items-center mt-3">
-          <Select
-            label="Antall rader:"
-            value={rowsPerPage}
-            onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
-            size="small"
-          >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-          </Select>
-          <Spacer />
-          <div>
-            <Pagination
-              page={page}
-              onPageChange={setPage}
-              count={log.pages ? log.pages : 1}
-              prevNextTexts
-              size="small"
-            />
-          </div>
-          <Spacer />
-          <BodyShort>
-            Totalt antall rader: {log.totalElements}
-          </BodyShort>
+      <div className="flex w-full justify-center items-center mt-3">
+        <Select label="Antall rader:" value={rowsPerPage} onChange={(e) => setRowsPerPage(parseInt(e.target.value))} size="small">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </Select>
+        <Spacer />
+        <div>
+          <Pagination page={page} onPageChange={setPage} count={log.pages ? log.pages : 1} prevNextTexts size="small" />
         </div>
+        <Spacer />
+        <BodyShort>Totalt antall rader: {log.totalElements}</BodyShort>
+      </div>
     </div>
   )
 }

@@ -1,21 +1,21 @@
-import {Block} from 'baseui/block'
-import {FormControl} from 'baseui/form-control'
-import {ParagraphMedium} from 'baseui/typography'
-import {FieldArray, FieldArrayRenderProps} from 'formik'
+import { Block } from 'baseui/block'
+import { FormControl } from 'baseui/form-control'
+import { ParagraphMedium } from 'baseui/typography'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React from 'react'
-import {EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus} from '../../../constants'
-import {useDebouncedState} from '../../../util/hooks'
-import {ettlevColors, theme} from '../../../util/theme'
-import {FieldWrapper} from '../../common/Inputs'
+import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
+import { useDebouncedState } from '../../../util/hooks'
+import { ettlevColors, theme } from '../../../util/theme'
+import { FieldWrapper } from '../../common/Inputs'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import {Error} from '../../common/ModalSchema'
+import { Error } from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
-import {borderColor, borderRadius, borderStyle, borderWidth} from '../../common/Style'
-import {LabelAboveContent} from '../../common/PropertyLabel'
-import {buttonContentStyle} from '../../common/Button'
-import {Markdown} from '../../common/Markdown'
-import {ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides} from 'baseui/radio'
-import {Heading, ReadMore} from '@navikt/ds-react'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../../common/Style'
+import { LabelAboveContent } from '../../common/PropertyLabel'
+import { buttonContentStyle } from '../../common/Button'
+import { Markdown } from '../../common/Markdown'
+import { ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides } from 'baseui/radio'
+import { Heading, ReadMore } from '@navikt/ds-react'
 
 const radioButtonOverrides: RadioOverrides & RadioGroupOverrides = {
   Root: {
@@ -240,7 +240,9 @@ const KriterieBegrunnelse = ({
       </Block>
 
       <div className="flex flex-col gap-4">
-        <Heading size="xsmall" level="3">{suksesskriterie.navn}</Heading>
+        <Heading size="xsmall" level="3">
+          {suksesskriterie.navn}
+        </Heading>
 
         <ReadMore header="Utfyllende om kriteriet">
           <Markdown source={suksesskriterie.beskrivelse} />
@@ -289,7 +291,7 @@ const KriterieBegrunnelse = ({
 
       {(disableEdit || viewMode) && (
         <Block marginTop={theme.sizing.scale1000}>
-          <LabelAboveContent title={getLabelForSuksessKriterie()} markdown={begrunnelse}/>
+          <LabelAboveContent title={getLabelForSuksessKriterie()} markdown={begrunnelse} />
         </Block>
       )}
 

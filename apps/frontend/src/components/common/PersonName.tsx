@@ -3,7 +3,7 @@ import React from 'react'
 import { teamKatPersonLink } from '../../util/config'
 import { Link } from '@navikt/ds-react'
 
-export const PersonName = (props: { ident: string; link?: boolean; kraveier?: boolean}) => {
+export const PersonName = (props: { ident: string; link?: boolean; kraveier?: boolean }) => {
   const name = usePersonName()(props.ident)
 
   return props.link ? (

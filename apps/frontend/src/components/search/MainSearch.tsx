@@ -205,81 +205,81 @@ const useMainSearch = (searchParam?: string) => {
     } else {
       if (search && search.replace(/ /g, '').length > 2) {
         console.log(search)
-          ; (async () => {
-            let results: SearchItem[] = []
-            let searches: Promise<any>[] = []
-            const compareFn = (a: SearchItem, b: SearchItem) => prefixBiasedSort(search, a.sortKey, b.sortKey)
-            const add = (items: SearchItem[]) => {
-              results = [...results, ...items]
-              results = results
-                .filter((item, index, self) => index === self.findIndex((searchItem) => searchItem.id === item.id))
-                .sort((a, b) => {
-                  const same = a.type === b.type
-                  const typeOrder = order(a.type) - order(b.type)
-                  return same || typeOrder !== 0 ? typeOrder : compareFn(a, b)
-                })
-              setSearchResult(results)
+        ;(async () => {
+          let results: SearchItem[] = []
+          let searches: Promise<any>[] = []
+          const compareFn = (a: SearchItem, b: SearchItem) => prefixBiasedSort(search, a.sortKey, b.sortKey)
+          const add = (items: SearchItem[]) => {
+            results = [...results, ...items]
+            results = results
+              .filter((item, index, self) => index === self.findIndex((searchItem) => searchItem.id === item.id))
+              .sort((a, b) => {
+                const same = a.type === b.type
+                const typeOrder = order(a.type) - order(b.type)
+                return same || typeOrder !== 0 ? typeOrder : compareFn(a, b)
+              })
+            setSearchResult(results)
+          }
+          setLoading(true)
+
+          if (type === 'all') {
+            add(searchCodelist(search, ListName.UNDERAVDELING, 'Underavdeling', searchResultColor.underavdelingBackground))
+          }
+
+          if (type === 'all' || type === ObjectType.Krav) {
+            searches.push((async () => add((await searchKrav(search)).filter((k) => k.status !== KravStatus.UTGAATT).map(kravMap)))())
+
+            let kravNumber = search
+            if (kravNumber[0].toLowerCase() === 'k') {
+              kravNumber = kravNumber.substring(1)
             }
-            setLoading(true)
 
-            if (type === 'all') {
-              add(searchCodelist(search, ListName.UNDERAVDELING, 'Underavdeling', searchResultColor.underavdelingBackground))
+            if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 === 0) {
+              searches.push(
+                (async () =>
+                  add(
+                    (await searchKravByNumber(Number.parseFloat(kravNumber).toString()))
+                      .filter((k) => k.status !== KravStatus.UTGAATT)
+                      .sort((a, b) => {
+                        if (a.kravNummer === b.kravNummer) {
+                          return b.kravVersjon - a.kravVersjon
+                        } else {
+                          return b.kravNummer - a.kravNummer
+                        }
+                      })
+                      .map(kravMap),
+                  ))(),
+              )
             }
 
-            if (type === 'all' || type === ObjectType.Krav) {
-              searches.push((async () => add((await searchKrav(search)).filter((k) => k.status !== KravStatus.UTGAATT).map(kravMap)))())
+            if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
+              const kravNummerMedVersjon = kravNumber.split('.')
+              const searchResult = [await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1])].filter((k) => k && k.status !== KravStatus.UTGAATT)
+              if (typeof searchResult[0] !== 'undefined') {
+                const mappedResult = [
+                  {
+                    id: searchResult[0].id,
+                    sortKey: searchResult[0].navn,
+                    label: <SearchLabel name={kravName(searchResult[0])} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />,
+                    type: ObjectType.Krav,
+                  },
+                ]
 
-              let kravNumber = search
-              if (kravNumber[0].toLowerCase() === 'k') {
-                kravNumber = kravNumber.substring(1)
+                searches.push((async () => add(mappedResult))())
               }
-
-              if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 === 0) {
-                searches.push(
-                  (async () =>
-                    add(
-                      (await searchKravByNumber(Number.parseFloat(kravNumber).toString()))
-                        .filter((k) => k.status !== KravStatus.UTGAATT)
-                        .sort((a, b) => {
-                          if (a.kravNummer === b.kravNummer) {
-                            return b.kravVersjon - a.kravVersjon
-                          } else {
-                            return b.kravNummer - a.kravNummer
-                          }
-                        })
-                        .map(kravMap),
-                    ))(),
-                )
-              }
-
-              if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
-                const kravNummerMedVersjon = kravNumber.split('.')
-                const searchResult = [await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1])].filter((k) => k && k.status !== KravStatus.UTGAATT)
-                if (typeof searchResult[0] !== 'undefined') {
-                  const mappedResult = [
-                    {
-                      id: searchResult[0].id,
-                      sortKey: searchResult[0].navn,
-                      label: <SearchLabel name={kravName(searchResult[0])} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />,
-                      type: ObjectType.Krav,
-                    },
-                  ]
-
-                  searches.push((async () => add(mappedResult))())
-                }
-              }
             }
+          }
 
-            if (type === 'all' || type === ObjectType.Behandling) {
-              searches.push((async () => add((await searchBehandling(search)).map(behandlingMap)))())
-            }
-            if (type === 'all' || type === ObjectType.EtterlevelseDokumentasjon) {
-              searches.push((async () => add((await searchEtterlevelsedokumentasjon(search)).map(EtterlevelseDokumentasjonMap)))())
-            }
+          if (type === 'all' || type === ObjectType.Behandling) {
+            searches.push((async () => add((await searchBehandling(search)).map(behandlingMap)))())
+          }
+          if (type === 'all' || type === ObjectType.EtterlevelseDokumentasjon) {
+            searches.push((async () => add((await searchEtterlevelsedokumentasjon(search)).map(EtterlevelseDokumentasjonMap)))())
+          }
 
-            await Promise.all(searches)
-            setLoading(false)
-          })()
+          await Promise.all(searches)
+          setLoading(false)
+        })()
       }
     }
   }, [search, type])
@@ -450,15 +450,15 @@ const MainSearch = () => {
           }}
           onChange={(params) => {
             const item = params.value[0] as SearchItem
-              ; (async () => {
-                if (item && item.type !== '__ungrouped') {
-                  setValue([item])
-                  navigate(urlForObject(item.type, item.id))
-                  window.location.reload()
-                } else if (item && item.type === '__ungrouped') {
-                  setFilterClicked(true)
-                }
-              })()
+            ;(async () => {
+              if (item && item.type !== '__ungrouped') {
+                setValue([item])
+                navigate(urlForObject(item.type, item.id))
+                window.location.reload()
+              } else if (item && item.type === '__ungrouped') {
+                setFilterClicked(true)
+              }
+            })()
           }}
           filterOptions={(options) => options}
           setValue={setValue}

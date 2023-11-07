@@ -6,7 +6,9 @@ export const LoadingSkeleton = (props: { header: string }) => (
   <div className="w-full">
     <div className="flex justify-between items-center w-full">
       <div className="flex w-full">
-        <Heading level="1" size="medium" className="mr-2.5">{props.header}</Heading>
+        <Heading level="1" size="medium" className="mr-2.5">
+          {props.header}
+        </Heading>
         <Skeleton height="40px" width="400px" />
       </div>
       <div className="flex">

@@ -238,16 +238,13 @@ export const KravPage = () => {
             </div>
           </div>
           <div className="max-w-sm w-full border-l-2 border-gray-200 pl-3">
-            <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} noBulletPoints noLastModifiedDate/>
+            <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} noBulletPoints noLastModifiedDate />
 
             <div className="mt-8">
               {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
                 <div>
                   <div className="flex flex-1">
-                    <Button
-                      size="small" variant="tertiary"
-                      onClick={() => setEdit(!edit)}
-                    >
+                    <Button size="small" variant="tertiary" onClick={() => setEdit(!edit)}>
                       Rediger krav
                     </Button>
 
@@ -258,7 +255,9 @@ export const KravPage = () => {
                     )}
                   </div>
                   <div className="mt-2">
-                    {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && <DeleteItem buttonLabel="Slett krav" buttonSize="small" fun={() => deleteKrav(krav.id)} redirect={'/kravliste'} />}
+                    {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && (
+                      <DeleteItem buttonLabel="Slett krav" buttonSize="small" fun={() => deleteKrav(krav.id)} redirect={'/kravliste'} />
+                    )}
                   </div>
                 </div>
               )}

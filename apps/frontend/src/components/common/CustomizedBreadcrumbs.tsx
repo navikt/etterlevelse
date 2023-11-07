@@ -1,5 +1,5 @@
-import {BodyShort, Link} from '@navikt/ds-react'
-import {ChevronRightIcon} from '@navikt/aksel-icons'
+import { BodyShort, Link } from '@navikt/ds-react'
+import { ChevronRightIcon } from '@navikt/aksel-icons'
 
 export interface breadcrumbPaths {
   href: string

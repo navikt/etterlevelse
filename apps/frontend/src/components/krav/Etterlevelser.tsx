@@ -99,7 +99,11 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                 setFilter(params.target.value)
               }}
             >
-              {etterlevelseFilter.map((ef, i) => <option key={i + '_' + ef.label} value={ef.id}>{ef.label}</option>)}
+              {etterlevelseFilter.map((ef, i) => (
+                <option key={i + '_' + ef.label} value={ef.id}>
+                  {ef.label}
+                </option>
+              ))}
             </Select>
           </div>
         </div>
@@ -118,9 +122,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
 
             const antall = productAreaEtterlevelser.length
             return (
-              <Accordion.Item
-                key={t && t.productAreaId}
-              >
+              <Accordion.Item key={t && t.productAreaId}>
                 <Accordion.Header>{t ? (t.productAreaName ? t.productAreaName : t.productAreaId) : ''}</Accordion.Header>
                 <Accordion.Content>
                   <div className="flex flex-col gap-2">
@@ -128,12 +130,16 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                       return (
                         <LinkPanel
                           href={modalVersion ? undefined : `/etterlevelse/${e.id}`}
-                          target="_blank" 
+                          target="_blank"
                           rel="noopener noreferrer"
-                          onClick={modalVersion ? () => {
-                            setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
-                            setIsModalOpen(true)
-                          } : undefined}
+                          onClick={
+                            modalVersion
+                              ? () => {
+                                  setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
+                                  setIsModalOpen(true)
+                                }
+                              : undefined
+                          }
                         >
                           <LinkPanel.Title className="flex items-center">
                             <div>
@@ -144,15 +150,11 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                             <Spacer />
                             <div className="w-44">
                               <BodyShort>
-                                {
-                                  !!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length
-                                    ? e.etterlevelseDokumentasjon.teamsData.map((t) => (t.name ? t.name : t.id)).join(', ')
-                                    : 'Ingen team'
-                                }
+                                {!!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length
+                                  ? e.etterlevelseDokumentasjon.teamsData.map((t) => (t.name ? t.name : t.id)).join(', ')
+                                  : 'Ingen team'}
                               </BodyShort>
-                              <BodyShort>
-                                {`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
-                              </BodyShort>
+                              <BodyShort>{`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}</BodyShort>
                             </div>
                           </LinkPanel.Title>
                         </LinkPanel>
@@ -165,7 +167,9 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
           })}
         </Accordion>
       ) : (
-        <div className="flex item-center">{etterlevelser.length >= 1 && <Label>Ingen etterlevelser med {etterlevelseFilter.filter((ef) => ef.id === filter)[0].label} status</Label>}</div>
+        <div className="flex item-center">
+          {etterlevelser.length >= 1 && <Label>Ingen etterlevelser med {etterlevelseFilter.filter((ef) => ef.id === filter)[0].label} status</Label>}
+        </div>
       )}
 
       {modalVersion && openEtterlse && krav && <EtterlevelseModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} etterlevelse={openEtterlse} kravData={krav} />}

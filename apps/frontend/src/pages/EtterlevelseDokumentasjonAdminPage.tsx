@@ -19,14 +19,16 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
           <meta charSet="utf-8" />
           <title>Administrere Etterlevelse Dokumentasjon</title>
         </Helmet>
-        <Heading size="medium" level="1">Administrere Etterlevelse Dokumentasjon</Heading>
+        <Heading size="medium" level="1">
+          Administrere Etterlevelse Dokumentasjon
+        </Heading>
       </div>
 
       <div className="mt-5">
         <div className="flex items-end">
           <TextField
             label="Slett etterlevelse dokumentasjon med uid"
-            placeholder='Etterlevelse dokumentasjon UID'
+            placeholder="Etterlevelse dokumentasjon UID"
             onChange={(e) => setEtterlevelseDokumentasjonId(e.target.value)}
             className="w-full mr-3"
           />

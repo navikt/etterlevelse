@@ -30,14 +30,8 @@ const ComparisonView = (props: ComparisonViewProps) => {
   return (
     <div>
       <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant="tertiary" icon={<ArrowRightLeftIcon title="se forskjell" />} />
-      <Modal
-        key={audit.id}
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        width="75%"
-        className="h-3/4 overflow-y-scroll"
-      >
-        <Modal.Header/>
+      <Modal key={audit.id} open={modalOpen} onClose={() => setModalOpen(false)} width="75%" className="h-3/4 overflow-y-scroll">
+        <Modal.Header />
         <Modal.Body>
           <Viewer
             diff={new Differ().diff(auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {}, audit.data)}
@@ -73,7 +67,7 @@ export const AuditView = (props: AuditViewProps) => {
       {logFound && (
         <div>
           <div className="flex justify-between">
-            <div className="w-11/12 mb-4" >
+            <div className="w-11/12 mb-4">
               <AuditLabel label={intl.id}>{auditLog?.id}</AuditLabel>
               <AuditLabel label={intl.table}>{newestAudit?.table}</AuditLabel>
               <AuditLabel label={intl.audits}>{auditLog?.audits.length}</AuditLabel>
@@ -84,9 +78,7 @@ export const AuditView = (props: AuditViewProps) => {
               </Button>
               {newestAudit?.action !== AuditAction.DELETE && (
                 <ObjectLink id={newestAudit!.tableId} type={newestAudit!.table} noNewTabLabel audit={newestAudit}>
-                  <Button variant="tertiary">
-                    Vis bruk (åpnes i ny fane)
-                  </Button>
+                  <Button variant="tertiary">Vis bruk (åpnes i ny fane)</Button>
                 </ObjectLink>
               )}
               <Tooltip content="Lukk" placement="top">

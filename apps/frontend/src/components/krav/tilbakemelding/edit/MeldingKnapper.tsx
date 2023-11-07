@@ -39,7 +39,10 @@ export const MeldingKnapper = (props: {
           <Modal.Body>
             {meldingNr === 1 && <BodyShort>Hele meldingstråden vil bli slettet.</BodyShort>}
             <BodyShort className="flex">
-              {moment(melding.tid).format('ll')} <div className="ml-1"><PersonName ident={melding.fraIdent} /></div>
+              {moment(melding.tid).format('ll')}{' '}
+              <div className="ml-1">
+                <PersonName ident={melding.fraIdent} />
+              </div>
             </BodyShort>
             <BodyShort>{melding.innhold}</BodyShort>
           </Modal.Body>
@@ -67,15 +70,14 @@ export const MeldingKnapper = (props: {
       )}
 
       {editModal && (
-        <Modal
-          open={editModal}
-          onClose={() => setEditModal(false)}
-          className="w-2/3"
-        >
+        <Modal open={editModal} onClose={() => setEditModal(false)} className="w-2/3">
           <Modal.Header>Rediger melding</Modal.Header>
           <Modal.Body>
             <BodyShort className="flex">
-              {moment(melding.tid).format('ll')} <div className="ml-1"><PersonName ident={melding.fraIdent} /></div>
+              {moment(melding.tid).format('ll')}{' '}
+              <div className="ml-1">
+                <PersonName ident={melding.fraIdent} />
+              </div>
             </BodyShort>
             <TilbakemeldingEdit
               tilbakemeldingId={tilbakemeldingId}

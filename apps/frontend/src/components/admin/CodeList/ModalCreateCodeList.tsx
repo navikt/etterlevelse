@@ -31,7 +31,7 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
               shortName: '',
               description: '',
               data: {
-                relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL
+                relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL,
               },
             } as CodeListFormValues
           }
@@ -41,25 +41,19 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
             <Form>
               <Modal.Body>
                 <div className="flex w-full mt-4 items-center">
-                  <Label className="mr-4 w-1/4">
-                    Code:
-                  </Label>
+                  <Label className="mr-4 w-1/4">Code:</Label>
                   <Field name="code" render={({ field }: FieldProps) => <TextField {...field} className="w-full" label="Code" hideLabel />} />
                 </div>
                 <Error fieldName="code" />
 
                 <div className="flex w-full mt-4 items-center">
-                  <Label className="mr-4 w-1/4">
-                    Short name:
-                  </Label>
+                  <Label className="mr-4 w-1/4">Short name:</Label>
                   <Field name="shortName" render={({ field }: FieldProps) => <TextField {...field} className="w-full" label="Short name" hideLabel />} />
                 </div>
                 <Error fieldName="shortName" />
 
                 <div className="flex w-full mt-4 items-center">
-                  <Label className="mr-4 w-1/4">
-                    Description:
-                  </Label>
+                  <Label className="mr-4 w-1/4">Description:</Label>
                   <Field name="description" render={({ field }: FieldProps) => <Textarea {...field} className="w-full" label="Description" minRows={10} hideLabel />} />
                 </div>
                 <Error fieldName="description" />
@@ -71,18 +65,10 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
               <Modal.Footer>
                 <div className="flex justify-end">
                   <div className="mr-auto">{errorOnCreate && <BodyShort>{errorOnCreate}</BodyShort>}</div>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    className="mr-4"
-                    onClick={() => onClose()}
-                  >
+                  <Button type="button" variant="secondary" className="mr-4" onClick={() => onClose()}>
                     Avbryt
                   </Button>
-                  <Button
-                    type="button"
-                    onClick={submitForm}
-                  >
+                  <Button type="button" onClick={submitForm}>
                     Lagre
                   </Button>
                 </div>

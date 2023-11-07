@@ -1,9 +1,9 @@
-import {Field, FieldProps, Form, Formik, FormikProps} from 'formik'
+import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 import React, { useEffect, useState } from 'react'
-import {createMelding, deleteMelding, mapMeldingToFormValue, updateMelding} from '../../api/MeldingApi'
+import { createMelding, deleteMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
-import {Button, Heading, Radio, RadioGroup} from '@navikt/ds-react'
+import { Button, Heading, Radio, RadioGroup } from '@navikt/ds-react'
 import { Loader } from '@navikt/ds-react'
 
 export const getAlertTypeText = (type: AlertType) => {
@@ -59,13 +59,16 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
         <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
           {({ values, submitForm }: FormikProps<Melding>) => (
             <div>
-
               <div className="mb-6">
-                <Heading className="my-4" size="small" level="2">{melding.meldingType === MeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'}</Heading>
+                <Heading className="my-4" size="small" level="2">
+                  {melding.meldingType === MeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'}
+                </Heading>
                 <Field name="alertType">
                   {(p: FieldProps<string>) => (
                     <Form>
-                      <RadioGroup className="mt-8" legend="Varseltype"
+                      <RadioGroup
+                        className="mt-8"
+                        legend="Varseltype"
                         disabled={disableEdit}
                         value={meldingAlertType}
                         onChange={(event) => {
@@ -75,13 +78,8 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                       >
                         {Object.values(AlertType).map((id) => {
                           return (
-                            <Radio
-                              value={id}
-                              key={id}
-                            >
-                              <div className="hover:underline">
-                                {getAlertTypeText(id)}
-                              </div>
+                            <Radio value={id} key={id}>
+                              <div className="hover:underline">{getAlertTypeText(id)}</div>
                             </Radio>
                           )
                         })}
@@ -102,19 +100,20 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
               />
               <div className="flex w-full">
                 <Button
-                        variant="secondary"
-                        disabled={disableEdit}
-                        onClick={() => {
-                          deleteMelding(melding.id).then(() => {
-                            setMelding('')
-                          })
-                        }}
+                  variant="secondary"
+                  disabled={disableEdit}
+                  onClick={() => {
+                    deleteMelding(melding.id).then(() => {
+                      setMelding('')
+                    })
+                  }}
                 >
                   Slett
                 </Button>
                 <div className="flex justify-end w-full">
                   {melding.meldingStatus === MeldingStatus.ACTIVE && (
-                    <Button className="mx-6"
+                    <Button
+                      className="mx-6"
                       variant="secondary"
                       disabled={disableEdit}
                       onClick={() => {

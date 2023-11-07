@@ -19,17 +19,7 @@ const getHeaderText = (status: EtterlevelseStatus) => {
       return 'Kravet etterleves av:'
   }
 }
-export const ViewEtterlevelse = ({
-  etterlevelse,
-  loading,
-  krav,
-  modalVersion,
-}: {
-  etterlevelse: Etterlevelse
-  loading?: boolean
-  krav: Krav
-  modalVersion?: boolean
-}) => {
+export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: { etterlevelse: Etterlevelse; loading?: boolean; krav: Krav; modalVersion?: boolean }) => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(etterlevelse.etterlevelseDokumentasjonId)
 
   return (
@@ -37,28 +27,20 @@ export const ViewEtterlevelse = ({
       <div>
         <Heading size="medium">{getHeaderText(etterlevelse.status)}</Heading>
         {etterlevelseDokumentasjon ? (
-          <div className='mb-12'>
+          <div className="mb-12">
             <BodyShort>
               E{etterlevelseDokumentasjon.etterlevelseNummer} - {etterlevelseDokumentasjon.title}
             </BodyShort>
             {!modalVersion && (
               <div className="flex content-center">
                 <li />
-                <Link
-                  href={`/dokumentasjon/${etterlevelseDokumentasjon.id}`}
-                >
-                  Gå til etterlevelse dokumentasjon
-                </Link>
+                <Link href={`/dokumentasjon/${etterlevelseDokumentasjon.id}`}>Gå til etterlevelse dokumentasjon</Link>
               </div>
             )}
             {!modalVersion && (
               <div className="mt-2 flex content-center">
                 <li />
-                <Link
-                  href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
-                >
-                  Gå til kravet
-                </Link>
+                <Link href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>Gå til kravet</Link>
               </div>
             )}
           </div>
@@ -82,30 +64,20 @@ export const ViewEtterlevelse = ({
         </Tag>
       </div>
 
-      {
-        etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT && (
-          <div className="my-8">
-            <Heading size="medium">
-              Hvorfor er ikke kravet relevant?
-            </Heading>
-            <BodyShort>
-              <Markdown source={etterlevelse.statusBegrunnelse} />
-            </BodyShort>
-          </div>
-        )
-      }
-      {
-        etterlevelse.status === EtterlevelseStatus.OPPFYLLES_SENERE && (
-          <div className="my-8">
-            <Heading size="medium">
-              Oppfylles innen
-            </Heading>
-            <BodyShort>
-              {moment(etterlevelse.fristForFerdigstillelse).format('ll')}
-            </BodyShort>
-          </div>
-        )
-      }
+      {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT && (
+        <div className="my-8">
+          <Heading size="medium">Hvorfor er ikke kravet relevant?</Heading>
+          <BodyShort>
+            <Markdown source={etterlevelse.statusBegrunnelse} />
+          </BodyShort>
+        </div>
+      )}
+      {etterlevelse.status === EtterlevelseStatus.OPPFYLLES_SENERE && (
+        <div className="my-8">
+          <Heading size="medium">Oppfylles innen</Heading>
+          <BodyShort>{moment(etterlevelse.fristForFerdigstillelse).format('ll')}</BodyShort>
+        </div>
+      )}
       <div className="mt-4">
         {etterlevelse &&
           !loading &&
@@ -123,14 +95,12 @@ export const ViewEtterlevelse = ({
                     {(!suksessbeskrivelseBegrunnelse.behovForBegrunnelse || suksessbeskrivelseBegrunnelse.begrunnelse) && (
                       <div className="flex justify-end">
                         <BodyShort size="small" className="flex items-center">
-                          {suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.OPPFYLT && (
-                            <CheckmarkIcon aria-label="" aria-hidden color="#06893A" />
-                          )}
+                          {suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.OPPFYLT && <CheckmarkIcon aria-label="" aria-hidden color="#06893A" />}
                           {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT
                             ? 'Ikke Relevant'
                             : suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT
-                              ? 'Ikke oppfylt'
-                              : 'Oppfylt'}
+                            ? 'Ikke oppfylt'
+                            : 'Oppfylt'}
                         </BodyShort>
                       </div>
                     )}
@@ -149,8 +119,8 @@ export const ViewEtterlevelse = ({
                         {suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT
                           ? 'Hvorfor er ikke kriteriet relevant?'
                           : suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT
-                            ? 'Hvorfor er kriteriet ikke oppfylt?'
-                            : 'Hvordan er kriteriet oppfylt?'}
+                          ? 'Hvorfor er kriteriet ikke oppfylt?'
+                          : 'Hvordan er kriteriet oppfylt?'}
                       </Label>
                       <div className="mb-12">
                         {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse && !suksessbeskrivelseBegrunnelse.begrunnelse ? (
@@ -162,9 +132,7 @@ export const ViewEtterlevelse = ({
                     </div>
                   ) : (
                     <div className="mb-12">
-                      <BodyShort>
-                        {etterlevelse.status === EtterlevelseStatus.OPPFYLLES_SENERE ? 'Oppfyles senere' : 'Mangler utfylling'}
-                      </BodyShort>
+                      <BodyShort>{etterlevelse.status === EtterlevelseStatus.OPPFYLLES_SENERE ? 'Oppfyles senere' : 'Mangler utfylling'}</BodyShort>
                     </div>
                   )}
                 </Box>
@@ -176,6 +144,6 @@ export const ViewEtterlevelse = ({
       <BodyShort size="small">
         Sist endret: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
       </BodyShort>
-    </div >
+    </div>
   )
 }

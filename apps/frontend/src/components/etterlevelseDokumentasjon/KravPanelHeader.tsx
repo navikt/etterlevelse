@@ -1,13 +1,13 @@
-import {Block} from 'baseui/block'
-import {Responsive} from 'baseui/theme'
-import {LabelSmall, ParagraphXSmall} from 'baseui/typography'
-import {Krav, KravEtterlevelseData} from '../../constants'
-import {ettlevColors} from '../../util/theme'
+import { Block } from 'baseui/block'
+import { Responsive } from 'baseui/theme'
+import { LabelSmall, ParagraphXSmall } from 'baseui/typography'
+import { Krav, KravEtterlevelseData } from '../../constants'
+import { ettlevColors } from '../../util/theme'
 import CustomizedSelect from '../common/CustomizedSelect'
-import {Option} from 'baseui/select'
-import {kravRelevansOptions, sortingOptions} from '../../pages/EtterlevelseDokumentasjonTemaPage'
-import {useNavigate} from 'react-router-dom'
-import {BodyShort, Heading, Label} from "@navikt/ds-react";
+import { Option } from 'baseui/select'
+import { kravRelevansOptions, sortingOptions } from '../../pages/EtterlevelseDokumentasjonTemaPage'
+import { useNavigate } from 'react-router-dom'
+import { BodyShort, Heading, Label } from '@navikt/ds-react'
 
 export const KravPanelHeader = (props: { title: string; kravData: KravEtterlevelseData[] | Krav[] }) => {
   let antallSuksesskriterier = 0
@@ -17,21 +17,17 @@ export const KravPanelHeader = (props: { title: string; kravData: KravEtterlevel
   })
 
   return (
-    <div className={"flex w-full"}>
-      <div className={"flex justify-center items-center"}>
-        <span>
-          {props.title}
-        </span>
-      </div>  
-      <div className={"flex justify-end flex-1 mr-6"}>
+    <div className={'flex w-full'}>
+      <div className={'flex justify-center items-center'}>
+        <span>{props.title}</span>
+      </div>
+      <div className={'flex justify-end flex-1 mr-6'}>
         <div>
-          <div className={"flex justify-end align-baseline flex-1"}>
-            <span className={"mr-1"}>
-              {props.kravData.length}
-            </span>
+          <div className={'flex justify-end align-baseline flex-1'}>
+            <span className={'mr-1'}>{props.kravData.length}</span>
             <span>krav</span>
           </div>
-          <div className={"flex justify-end flex-1"}>
+          <div className={'flex justify-end flex-1'}>
             <span>{antallSuksesskriterier} suksesskriterier</span>
           </div>
         </div>

@@ -46,11 +46,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
   }
 
   return (
-    <Modal
-      className="max-w-xl w-full"
-      open={open}
-      onClose={() => close()}
-    >
+    <Modal className="max-w-xl w-full" open={open} onClose={() => close()}>
       <Formik
         onSubmit={submit}
         initialValues={newTilbakemelding(krav) as CreateTilbakemeldingRequest}
@@ -70,19 +66,12 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
               </Modal.Header>
               <Modal.Body>
                 {showNotification ? (
-                  <Box
-                    className="mb-9"
-                    padding="8"
-                  >
+                  <Box className="mb-9" padding="8">
                     <div className="flex items-center">
                       <FontAwesomeIcon icon={faThumbsUp} size="lg" />
-                      <Heading size="large">
-                        Spørsmålet er sendt til kraveier!
-                      </Heading>
+                      <Heading size="large">Spørsmålet er sendt til kraveier!</Heading>
                     </div>
-                    <BodyLong className="mt-4">
-                      Du får varsel på {getMessageType(showNotification)} når spørsmålet er besvart.
-                    </BodyLong>
+                    <BodyLong className="mt-4">Du får varsel på {getMessageType(showNotification)} når spørsmålet er besvart.</BodyLong>
                   </Box>
                 ) : (
                   <div>
@@ -127,15 +116,25 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                               <div className="mt-2.5">
                                 {adresseType === AdresseType.SLACK_USER && <SlackUserSearch add={setVarslingsadresse} />}
                                 {adresseType !== AdresseType.SLACK_USER && !values.varslingsadresse && (
-                                  <Button variant="secondary" className="ml-2.5" icon={<PersonCircleIcon aria-label="" aria-hidden />} onClick={() => setAdresseType(AdresseType.SLACK_USER)}>
+                                  <Button
+                                    variant="secondary"
+                                    className="ml-2.5"
+                                    icon={<PersonCircleIcon aria-label="" aria-hidden />}
+                                    onClick={() => setAdresseType(AdresseType.SLACK_USER)}
+                                  >
                                     Slack-bruker
                                   </Button>
                                 )}
                               </div>
-                              <div className="mt-2.5" >
+                              <div className="mt-2.5">
                                 {adresseType === AdresseType.EPOST && <AddEmail add={setVarslingsadresse} />}
                                 {adresseType !== AdresseType.EPOST && !values.varslingsadresse && (
-                                  <Button variant="secondary" className="ml-2.5" icon={<EnvelopeClosedIcon aria-label="" aria-hidden />} onClick={() => setAdresseType(AdresseType.EPOST)}>
+                                  <Button
+                                    variant="secondary"
+                                    className="ml-2.5"
+                                    icon={<EnvelopeClosedIcon aria-label="" aria-hidden />}
+                                    onClick={() => setAdresseType(AdresseType.EPOST)}
+                                  >
                                     Epost
                                   </Button>
                                 )}
@@ -149,8 +148,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                       )}
                     </Field>
                   </div>
-                )
-                }
+                )}
               </Modal.Body>
               <Modal.Footer>
                 {showNotification ? (
@@ -167,13 +165,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                   </div>
                 ) : (
                   <div className="flex justify-end flex-1">
-                    <div>
-                      {error && (
-                        <Alert variant="error">
-                          {error}
-                        </Alert>
-                      )}
-                    </div>
+                    <div>{error && <Alert variant="error">{error}</Alert>}</div>
                     <Button variant="secondary" onClick={() => close()}>
                       Avbryt
                     </Button>
@@ -186,8 +178,8 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
             </Form>
           )
         }}
-      </Formik >
-    </Modal >
+      </Formik>
+    </Modal>
   )
 }
 

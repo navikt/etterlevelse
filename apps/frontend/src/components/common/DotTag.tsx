@@ -1,26 +1,26 @@
-import React, {ReactNode} from 'react'
-import {ExternalLink, urlForObject} from './RouteLink'
-import {Markdown} from './Markdown'
-import {Code, codelist, ListName} from '../../services/Codelist'
-import {NavigableItem} from '../admin/audit/AuditTypes'
-import {BodyShort} from "@navikt/ds-react";
+import React, { ReactNode } from 'react'
+import { ExternalLink, urlForObject } from './RouteLink'
+import { Markdown } from './Markdown'
+import { Code, codelist, ListName } from '../../services/Codelist'
+import { NavigableItem } from '../admin/audit/AuditTypes'
+import { BodyShort } from '@navikt/ds-react'
 
-export const DotTag = (props: { children: ReactNode, noBulletPoints?: boolean }) => (
-    <div className={'mx-1 flex'}>
-      {!props.noBulletPoints && <li/>}
-      <BodyShort className={"break-words"}>{props.children}</BodyShort>
-    </div>
+export const DotTag = (props: { children: ReactNode; noBulletPoints?: boolean }) => (
+  <div className={'mx-1 flex'}>
+    {!props.noBulletPoints && <li />}
+    <BodyShort className={'break-words'}>{props.children}</BodyShort>
+  </div>
 )
 
 const Content = (props: { item: ReactNode | string; list?: ListName; linkCodelist?: boolean; markdown?: boolean }) => {
-  const {item, list, linkCodelist, markdown} = props
+  const { item, list, linkCodelist, markdown } = props
   if (list) {
     const itemString = item as string
     if (linkCodelist)
       return <ExternalLink href={urlForObject(list as ListName & NavigableItem, itemString)}>{codelist.getShortname(list as ListName & NavigableItem, itemString)}</ExternalLink>
     return <>{codelist.getShortname(list, itemString)}</>
   }
-  if (markdown) return <Markdown source={item as string}/>
+  if (markdown) return <Markdown source={item as string} />
   return <>{item}</>
 }
 
@@ -36,17 +36,17 @@ type DotTagsParams = {
 }
 
 export const DotTags = (props: DotTagsParams) => {
-  const {commaSeparator, noBulletPoints} = props
+  const { commaSeparator, noBulletPoints } = props
   const items = props.items || props.codes?.map((c) => c.code) || []
 
   if (!items.length) return <>{'Ikke angitt'}</>
 
   if (commaSeparator)
     return (
-      <div className={"inline"}>
+      <div className={'inline'}>
         {items.map((item, i) => (
           <React.Fragment key={i}>
-            <Content {...props} item={item}/>
+            <Content {...props} item={item} />
             <span>{i < items.length - 1 ? ', ' : ''}</span>
           </React.Fragment>
         ))}
@@ -59,7 +59,7 @@ export const DotTags = (props: DotTagsParams) => {
         <div className={`${props.inColumn ? 'mb-1.5' : 'mb-0'} ${i < items.length && !commaSeparator ? 'mb-1.5' : 'mb-0'}`} key={i}>
           <DotTag noBulletPoints={noBulletPoints}>
             {' '}
-            <Content {...props} item={item}/>{' '}
+            <Content {...props} item={item} />{' '}
           </DotTag>
         </div>
       ))}

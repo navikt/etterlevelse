@@ -1,7 +1,7 @@
 import React from 'react'
 import DataText from './DataText'
-import {Markdown} from './Markdown'
-import {Or} from '../../constants'
+import { Markdown } from './Markdown'
+import { Or } from '../../constants'
 
 const empty = (arg: any) => !arg || (Array.isArray(arg) && !arg.length)
 
@@ -18,7 +18,7 @@ export const CustomLabel = (props: LabelProps) => {
   return (
     <DataText label={props.title} header={props.header} labelWidth={props.labelWidth}>
       {props.markdown ? (
-          <Markdown p1={props.p1} sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks />
+        <Markdown p1={props.p1} sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks />
       ) : (
         props.children
       )}
@@ -31,7 +31,7 @@ export const LabelAboveContent = (props: LabelProps) => {
   return (
     <DataText notFlexed label={props.title} header={props.header} labelWidth={props.labelWidth}>
       {props.markdown ? (
-          <Markdown p1={props.p1} sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks />
+        <Markdown p1={props.p1} sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks />
       ) : (
         props.children
       )}

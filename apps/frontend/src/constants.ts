@@ -1,6 +1,6 @@
-import {Code, LovCode} from './services/Codelist'
-import {Group} from './services/User'
-import * as React from "react";
+import { Code, LovCode } from './services/Codelist'
+import { Group } from './services/User'
+import * as React from 'react'
 
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P]
@@ -11,9 +11,9 @@ type Not<T> = { [key in keyof T]?: never }
 export type Or<T, U> = (T & Not<U>) | (U & Not<T>)
 
 export type Option = Readonly<{
-  id?: string | number;
-  label?: React.ReactNode;
-}>;
+  id?: string | number
+  label?: React.ReactNode
+}>
 
 export enum TilbakemeldingMeldingStatus {
   UBESVART = 'UBESVART',

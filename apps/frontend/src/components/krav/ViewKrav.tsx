@@ -21,11 +21,7 @@ export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVe
     <div>
       <div className="w-full">
         {krav.suksesskriterier.map((s, i) => (
-          <SuksesskriterieCard
-            key={s.id}
-            suksesskriterie={s} num={i + 1}
-            totalt={krav.suksesskriterier.length}
-          />
+          <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length} />
         ))}
         {/* {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />} */}
 
@@ -44,7 +40,17 @@ export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVe
   )
 }
 
-export const AllInfo = ({ krav, alleKravVersjoner, noBulletPoints, noLastModifiedDate }: { krav: KravQL, alleKravVersjoner: KravVersjon[], noBulletPoints?: boolean, noLastModifiedDate?: boolean }) => {
+export const AllInfo = ({
+  krav,
+  alleKravVersjoner,
+  noBulletPoints,
+  noLastModifiedDate,
+}: {
+  krav: KravQL
+  alleKravVersjoner: KravVersjon[]
+  noBulletPoints?: boolean
+  noLastModifiedDate?: boolean
+}) => {
   const hasKravExpired = () => {
     return krav && krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString())
   }
@@ -165,34 +171,32 @@ export const AllInfo = ({ krav, alleKravVersjoner, noBulletPoints, noLastModifie
         </LabelWrapper>
       )}
 
-      {!noLastModifiedDate && <div>
-        <BodyShort size="small">
-          Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')} {user.isAdmin() || user.isKraveier() ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1] : ''}
-        </BodyShort>
-      </div>}
+      {!noLastModifiedDate && (
+        <div>
+          <BodyShort size="small">
+            Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')}{' '}
+            {user.isAdmin() || user.isKraveier() ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1] : ''}
+          </BodyShort>
+        </div>
+      )}
     </div>
   )
 }
 
-const BegrepView = ({ begrep, noBulletPoints }: { begrep: Begrep, noBulletPoints?: boolean }) => (
+const BegrepView = ({ begrep, noBulletPoints }: { begrep: Begrep; noBulletPoints?: boolean }) => (
   <div className="max-w-2xl">
     <DotTag noBulletPoints={noBulletPoints}>
-      <ExternalLink href={termUrl(begrep.id)}>
-        {begrep.navn}
-      </ExternalLink>
+      <ExternalLink href={termUrl(begrep.id)}>{begrep.navn}</ExternalLink>
       {/* {' '}
       - {begrep.beskrivelse} */}
     </DotTag>
   </div>
 )
 
-const KravRelasjonView = ({ kravRelasjon, noBulletPoints }: { kravRelasjon: Partial<Krav>, noBulletPoints?: boolean }) => (
+const KravRelasjonView = ({ kravRelasjon, noBulletPoints }: { kravRelasjon: Partial<Krav>; noBulletPoints?: boolean }) => (
   <div className="max-w-2xl">
     <DotTag noBulletPoints={noBulletPoints}>
-      <ExternalLink href={`/krav/${kravRelasjon.id}`}>
-        {`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}
-      </ExternalLink>{' '}
-      - {kravRelasjon.navn}
+      <ExternalLink href={`/krav/${kravRelasjon.id}`}>{`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}</ExternalLink> - {kravRelasjon.navn}
     </DotTag>
   </div>
 )

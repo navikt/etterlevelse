@@ -23,7 +23,7 @@ export const AuditPage = () => {
   const [idSearch, setIdInput, idInput] = useDebouncedState(params.id || '', 400)
 
   const lookupVersion = (id?: string) => {
-    ; (async () => {
+    ;(async () => {
       if (id === auditLog?.id) {
         return
       }
@@ -59,7 +59,9 @@ export const AuditPage = () => {
         <meta charSet="utf-8" />
         <title>Versjonering</title>
       </Helmet>
-      <Heading size="medium" level="1">{intl.audit}</Heading>
+      <Heading size="medium" level="1">
+        {intl.audit}
+      </Heading>
       <div className="my-4">
         <AuditLabel label={intl.searchId}>
           <TextField

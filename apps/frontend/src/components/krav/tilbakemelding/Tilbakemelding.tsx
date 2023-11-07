@@ -1,4 +1,4 @@
-import {Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle} from '../../../constants'
+import { Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
 import {
   tilbakemeldingNewMelding,
   TilbakemeldingNewMeldingRequest,
@@ -6,27 +6,27 @@ import {
   updateTilbakemeldingStatusOgEndretKrav,
   useTilbakemeldinger,
 } from '../../../api/TilbakemeldingApi'
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import moment from 'moment'
-import {user} from '../../../services/User'
-import {useLocation, useNavigate} from 'react-router-dom'
-import {useQueryParam, useRefs} from '../../../util/hooks'
-import {ettlevColors} from '../../../util/theme'
-import {mailboxPoppingIcon} from '../../Images'
-import {InfoBlock} from '../../common/InfoBlock'
-import {Portrait} from '../../common/Portrait'
-import {PersonName} from '../../common/PersonName'
+import { user } from '../../../services/User'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useQueryParam, useRefs } from '../../../util/hooks'
+import { ettlevColors } from '../../../util/theme'
+import { mailboxPoppingIcon } from '../../Images'
+import { InfoBlock } from '../../common/InfoBlock'
+import { Portrait } from '../../common/Portrait'
+import { PersonName } from '../../common/PersonName'
 import * as _ from 'lodash'
-import {LoginButton} from '../../Header'
+import { LoginButton } from '../../Header'
 import StatusView from '../../common/StatusTag'
 import ResponseMelding from './ResponseMelding'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
 import NyTilbakemeldingModal from './edit/NyTilbakemeldingModal'
-import {getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, tilbakemeldingStatusToText} from './utils'
-import {ShowWarningMessage} from '../../etterlevelseDokumentasjonTema/KravCard'
-import {Accordion, Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Label, Loader, Modal, Select, Spacer, Textarea} from '@navikt/ds-react'
-import {PlusIcon, TrashIcon} from '@navikt/aksel-icons'
+import { getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, tilbakemeldingStatusToText } from './utils'
+import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
+import { Accordion, Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Label, Loader, Modal, Select, Spacer, Textarea } from '@navikt/ds-react'
+import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -58,17 +58,12 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
               const focused = focusNr === t.id
               const { status, ubesvartOgKraveier, melderOrKraveier } = getMelderInfo(t)
               return (
-                <Accordion.Item
-                  key={t.id}
-                  open={t.id === focusNr}
-                >
-                  <Accordion.Header
-                    onClick={() => setFocus(focused ? '' : t.id)}
-                  >
+                <Accordion.Item key={t.id} open={t.id === focusNr}>
+                  <Accordion.Header onClick={() => setFocus(focused ? '' : t.id)}>
                     <div className="w-full p-2 flex">
                       <div>
                         {t.endretKrav && <ShowWarningMessage warningMessage="Spørsmålet har ført til at innholdet i kravet er endret" />}
-                        <div className={`flex w-full ${t.endretKrav ? 'mt-2' : ''}`} >
+                        <div className={`flex w-full ${t.endretKrav ? 'mt-2' : ''}`}>
                           <Portrait ident={t.melderIdent} />
                           <div className="flex flex-col w-full ml-2.5">
                             <div className="flex w-full items-center">
@@ -84,9 +79,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                             </div>
                             {!focused && (
                               <div className="flex w-full">
-                                <BodyShort className="mr-7 mt-1 w-full">
-                                  {_.truncate(t.meldinger[0].innhold, { length: 80, separator: /[.,] +/ })}
-                                </BodyShort>
+                                <BodyShort className="mr-7 mt-1 w-full">{_.truncate(t.meldinger[0].innhold, { length: 80, separator: /[.,] +/ })}</BodyShort>
                               </div>
                             )}
                           </div>
@@ -101,9 +94,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                   <Accordion.Content>
                     {focused && (
                       <div className="flex w-full">
-                        <BodyLong>
-                          {t.meldinger[0].innhold}
-                        </BodyLong>
+                        <BodyLong>{t.meldinger[0].innhold}</BodyLong>
                       </div>
                     )}
                     <div className="flex w-full items-center mt-4">
@@ -142,7 +133,12 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
 
           {tilbakemeldinger.length > DEFAULT_COUNT_SIZE && (
             <div className="self-end mt-2.5">
-              <Button variant="tertiary" icon={<PlusIcon aria-label="" aria-hidden />} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
+              <Button
+                variant="tertiary"
+                icon={<PlusIcon aria-label="" aria-hidden />}
+                onClick={() => setCount(count + DEFAULT_COUNT_SIZE)}
+                disabled={tilbakemeldinger.length <= count}
+              >
                 Last flere
               </Button>
             </div>
@@ -167,11 +163,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
               <BodyShort>Du må være innlogget for å stille kraveier et spørsmål, og for å se tidligere spørsmål og svar.</BodyShort>
             )}
 
-            {user.canWrite() && (
-              <Button onClick={() => setAddTilbakemelding(true)}>
-                Still et spørsmål
-              </Button>
-            )}
+            {user.canWrite() && <Button onClick={() => setAddTilbakemelding(true)}>Still et spørsmål</Button>}
             {!user.isLoggedIn() && <LoginButton />}
           </div>
 
@@ -274,17 +266,12 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
       {user.isKraveier() && (
         <div>
           <div className="w-fit mb-2">
-            <Checkbox
-              value={isEndretKrav}
-              onChange={() => setIsEndretKrav(!isEndretKrav)}
-            >
+            <Checkbox value={isEndretKrav} onChange={() => setIsEndretKrav(!isEndretKrav)}>
               Tilbakemelding har ført til kravendring
             </Checkbox>
           </div>
           <div className="flex items-center mb-2">
-            <Label className="mr-2 w-fit">
-              Velg spørsmål status:
-            </Label>
+            <Label className="mr-2 w-fit">Velg spørsmål status:</Label>
             <Select
               label="Velg spørsmål status"
               hideLabel
@@ -293,20 +280,32 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
                 setTilbakemeldingStatus(e.target.value as TilbakemeldingMeldingStatus)
               }}
             >
-              {getParsedOptionsforTilbakeMelding().map((o, i) => <option key={i + '_' + o.label} value={o.id}>{o.label}</option>)}
+              {getParsedOptionsforTilbakeMelding().map((o, i) => (
+                <option key={i + '_' + o.label} value={o.id}>
+                  {o.label}
+                </option>
+              ))}
             </Select>
           </div>
         </div>
       )}
       <div className="flex w-full items-end justify-center">
         {(melderInfo.kanSkrive || user.isKraveier()) && (
-          <Textarea className="w-full" label="Ny tilbakemelding" hideLabel minRows={6} onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)} value={response} disabled={loading} />
+          <Textarea
+            className="w-full"
+            label="Ny tilbakemelding"
+            hideLabel
+            minRows={6}
+            onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)}
+            value={response}
+            disabled={loading}
+          />
         )}
         {deleteModal && (
           <Modal open={deleteModal} onClose={() => setDeleteModal(false)}>
             <Modal.Header>Er du sikker på at du vil slette hele meldingen?</Modal.Header>
             <Modal.Body>
-              <BodyShort className="flex" >
+              <BodyShort className="flex">
                 {moment(tilbakemelding.meldinger[0].tid).format('ll')}
                 <div className="ml-1">
                   <PersonName ident={tilbakemelding.meldinger[0].fraIdent} />
@@ -395,11 +394,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
           </div>
         )}
       </div>
-      {error && (
-        <Alert variant="error">
-          {error}
-        </Alert>
-      )}
+      {error && <Alert variant="error">{error}</Alert>}
     </div>
   )
 }
