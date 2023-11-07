@@ -1,14 +1,14 @@
-import {codelist, ListName} from '../../services/Codelist'
-import React, {useEffect, useState} from 'react'
-import {getAllKrav} from '../../api/KravApi'
-import {Krav, KravStatus} from '../../constants'
-import {KravPanelHeader} from '../etterlevelseDokumentasjon/KravPanelHeader'
+import { codelist, ListName } from '../../services/Codelist'
+import React, { useEffect, useState } from 'react'
+import { getAllKrav } from '../../api/KravApi'
+import { Krav, KravStatus } from '../../constants'
+import { KravPanelHeader } from '../etterlevelseDokumentasjon/KravPanelHeader'
 import StatusView from '../common/StatusTag'
 import moment from 'moment'
-import {EditPriorityModal} from './edit/EditPriorityModal'
-import {sortKraverByPriority} from '../../util/sort'
-import {getAllKravPriority} from '../../api/KravPriorityApi'
-import {Accordion, BodyLong, BodyShort, Button, Label, LinkPanel, Spacer} from '@navikt/ds-react'
+import { EditPriorityModal } from './edit/EditPriorityModal'
+import { sortKraverByPriority } from '../../util/sort'
+import { getAllKravPriority } from '../../api/KravPriorityApi'
+import { Accordion, BodyLong, BodyShort, Button, Label, LinkPanel, Spacer } from '@navikt/ds-react'
 
 export const TemaList = () => {
   const [allActiveKrav, setAllActiveKrav] = useState<Krav[]>([])
@@ -48,16 +48,16 @@ export const TemaList = () => {
           return activeKraver && activeKraver.length > 0 ? (
             <Accordion.Item>
               <Accordion.Header key={`${t.code}_krav_list`}>
-                <KravPanelHeader title={t.shortName} kravData={[...activeKraver, ...draftKraver]}/>
+                <KravPanelHeader title={t.shortName} kravData={[...activeKraver, ...draftKraver]} />
               </Accordion.Header>
               <Accordion.Content>
-                <KravTemaList activeKraver={sortKraverByPriority(activeKraver, t.shortName)} tema={t.shortName} refresh={fetchKrav} draftKrav={draftKraver}/>
+                <KravTemaList activeKraver={sortKraverByPriority(activeKraver, t.shortName)} tema={t.shortName} refresh={fetchKrav} draftKrav={draftKraver} />
               </Accordion.Content>
             </Accordion.Item>
           ) : (
             <Accordion.Item>
               <Accordion.Header key={`${t.code}_krav_list`}>
-                <KravPanelHeader title={t.shortName} kravData={[]}/>
+                <KravPanelHeader title={t.shortName} kravData={[]} />
               </Accordion.Header>
               <Accordion.Content>
                 <div className="flex w-full ml-6">
@@ -76,19 +76,19 @@ const getKravTemaRowsWithLabel = (kraver: Krav[], tema: string) => {
   return kraver.map((k, index) => {
     return (
       <div key={`${k.navn}_${k.kravNummer}_${tema}_${index}`}>
-        <LinkPanel
-          href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
-        >
+        <LinkPanel href={`/krav/${k.kravNummer}/${k.kravVersjon}`}>
           <LinkPanel.Title className="flex items-center">
             <div className="max-w-xl">
               <BodyShort size="small">
                 K{k.kravNummer}.{k.kravVersjon}
               </BodyShort>
-              <BodyLong><Label>{k.navn}</Label></BodyLong>
+              <BodyLong>
+                <Label>{k.navn}</Label>
+              </BodyLong>
             </div>
-            <Spacer/>
+            <Spacer />
             <div className="mr-5">
-              <StatusView status={k.status}/>
+              <StatusView status={k.status} />
             </div>
             <div className="w-44">
               <BodyShort size="small">{!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
@@ -108,7 +108,7 @@ const KravTemaList = (props: { activeKraver: Krav[]; tema: string; refresh: Func
       {getKravTemaRowsWithLabel(props.draftKrav, props.tema)}
       {getKravTemaRowsWithLabel(props.activeKraver, props.tema)}
 
-      <div className={"w-full flex flex-row-reverse pt-5"}>
+      <div className={'w-full flex flex-row-reverse pt-5'}>
         <Button variant="secondary" size="medium" onClick={() => setIsEditPriorityModalOpen(true)}>
           Justere rekkefølgen på krav
         </Button>

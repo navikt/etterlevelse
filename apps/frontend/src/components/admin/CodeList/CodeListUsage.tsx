@@ -30,30 +30,33 @@ const UsageTable = (props: { usage: CodeUsage }) => {
           const cl = usage.codelist[index]
           return (
             <Table.Row key={index}>
-              {krav &&
+              {krav && (
                 <Table.DataCell>
                   {kr && (
                     <ObjectLink id={kr.id} type={ObjectType.Krav} withHistory={true}>
                       {kr.number} {kr.name}
                     </ObjectLink>
                   )}
-                </Table.DataCell>}
-              {etterlevelseDokumentasjoner &&
+                </Table.DataCell>
+              )}
+              {etterlevelseDokumentasjoner && (
                 <Table.DataCell>
                   {ed && (
                     <ObjectLink id={ed.id} type={ObjectType.EtterlevelseDokumentasjon} withHistory={true}>
                       {ed.number} {ed.name}
                     </ObjectLink>
                   )}
-                </Table.DataCell>}
-              {codelist &&
+                </Table.DataCell>
+              )}
+              {codelist && (
                 <Table.DataCell>
                   {cl && (
                     <ObjectLink id={cl.list} type={ObjectType.Codelist} withHistory={true}>
                       {cl.list} - {cl.code}
                     </ObjectLink>
                   )}
-                </Table.DataCell>}
+                </Table.DataCell>
+              )}
             </Table.Row>
           )
         })}
@@ -85,11 +88,7 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
       <div className="flex justify-between mb-2">
         <Label>Bruk</Label>
         {!!usage?.inUse && (
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => setShowReplace(!showReplace)}
-          >
+          <Button type="button" variant="secondary" onClick={() => setShowReplace(!showReplace)}>
             Erstatt all bruk
           </Button>
         )}
@@ -97,23 +96,15 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
 
       {showReplace && usage && usage.listName && (
         <div className="flex m-4 justify-end">
-          <Select
-            label="Velg ny verdi"
-            hideLabel
-            value={newValue}
-            className="mr-4"
-            onChange={(e) => setNewValue(e.target.value)}
-          >
+          <Select label="Velg ny verdi" hideLabel value={newValue} className="mr-4" onChange={(e) => setNewValue(e.target.value)}>
             <option value="">Ny verdi</option>
-            {codelist.getParsedOptions(usage.listName).map((c, i) =>
-              <option key={i + '_' + c.label} value={c.id}>{c.label}</option>
-            )}
+            {codelist.getParsedOptions(usage.listName).map((c, i) => (
+              <option key={i + '_' + c.label} value={c.id}>
+                {c.label}
+              </option>
+            ))}
           </Select>
-          <Button
-            type="button"
-            onClick={replace}
-            disabled={!newValue}
-          >
+          <Button type="button" onClick={replace} disabled={!newValue}>
             Erstatt
           </Button>
         </div>

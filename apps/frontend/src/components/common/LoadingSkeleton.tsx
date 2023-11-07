@@ -20,7 +20,7 @@ export const LoadingSkeleton = (props: { header: string }) => (
       </Block>
     </Block>
     <Block maxWidth="600px">
-      <SkeletonPanel count={12}/>
+      <SkeletonPanel count={12} />
     </Block>
   </Block>
 )
@@ -29,7 +29,7 @@ export const SkeletonPanel = (props: { count: number }) => (
   <>
     {_.range(props.count).map((i) => (
       <div key={i} className="mb-1.5">
-        <Skeleton variant="rectangle" width="100%" height="82px"/>
+        <Skeleton variant="rectangle" width="100%" height="82px" />
       </div>
     ))}
   </>

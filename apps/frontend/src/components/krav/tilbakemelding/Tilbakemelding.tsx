@@ -1,4 +1,4 @@
-import {Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle} from '../../../constants'
+import { Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
 import {
   tilbakemeldingNewMelding,
   TilbakemeldingNewMeldingRequest,
@@ -6,39 +6,39 @@ import {
   updateTilbakemeldingStatusOgEndretKrav,
   useTilbakemeldinger,
 } from '../../../api/TilbakemeldingApi'
-import React, {useEffect, useState} from 'react'
-import {Block} from 'baseui/block'
-import {theme} from '../../../util'
-import {HeadingMedium, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
+import React, { useEffect, useState } from 'react'
+import { Block } from 'baseui/block'
+import { theme } from '../../../util'
+import { HeadingMedium, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
 import Button from '../../common/Button'
-import {faChevronDown, faChevronUp, faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronUp, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import moment from 'moment'
-import {user} from '../../../services/User'
-import {Notification} from 'baseui/notification'
-import {useLocation, useNavigate} from 'react-router-dom'
-import {useQueryParam, useRefs} from '../../../util/hooks'
-import {ettlevColors} from '../../../util/theme'
-import {mailboxPoppingIcon} from '../../Images'
-import {InfoBlock} from '../../common/InfoBlock'
-import {Portrait} from '../../common/Portrait'
-import {PersonName} from '../../common/PersonName'
+import { user } from '../../../services/User'
+import { Notification } from 'baseui/notification'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useQueryParam, useRefs } from '../../../util/hooks'
+import { ettlevColors } from '../../../util/theme'
+import { mailboxPoppingIcon } from '../../Images'
+import { InfoBlock } from '../../common/InfoBlock'
+import { Portrait } from '../../common/Portrait'
+import { PersonName } from '../../common/PersonName'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
 import * as _ from 'lodash'
-import {LoginButton} from '../../Header'
-import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
+import { LoginButton } from '../../Header'
+import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
 import StatusView from '../../common/StatusTag'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ResponseMelding from './ResponseMelding'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
 import NyTilbakemeldingModal from './edit/NyTilbakemeldingModal'
-import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
-import {getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, tilbakemeldingStatusToText} from './utils'
-import {Select, SIZE} from 'baseui/select'
-import {customSelectOverrides} from '../Edit/RegelverkEdit'
-import {Checkbox} from 'baseui/checkbox'
-import {ShowWarningMessage} from '../../etterlevelseDokumentasjonTema/KravCard'
-import {Loader} from '@navikt/ds-react'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
+import { getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, tilbakemeldingStatusToText } from './utils'
+import { Select, SIZE } from 'baseui/select'
+import { customSelectOverrides } from '../Edit/RegelverkEdit'
+import { Checkbox } from 'baseui/checkbox'
+import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
+import { Loader } from '@navikt/ds-react'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -73,7 +73,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
               const statusView = (icon: React.ReactNode) => (
                 <Block width="100%" maxWidth="70px">
                   <Block display="flex" flexDirection="column" alignItems="flex-end">
-                    <StatusView status={tilbakemeldingStatusToText(status)}/>
+                    <StatusView status={tilbakemeldingStatusToText(status)} />
                   </Block>
                   <Block width="50px" marginLeft="20px" marginTop="8px" display="flex" flexDirection="column" alignItems="center">
                     {icon}

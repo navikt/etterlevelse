@@ -12,9 +12,7 @@ export const LovCodeDataForm = () => {
   return (
     <div className="flex w-full mt-4 items-center flex-col">
       <div className="flex w-full mt-4 items-center">
-        <Label className="mr-4 w-1/4">
-          Lovkode data
-        </Label>
+        <Label className="mr-4 w-1/4">Lovkode data</Label>
       </div>
       <Field name="data">
         {({ field, form }: FieldProps<LovCodeData, CodeListFormValues>) => {
@@ -32,16 +30,12 @@ export const LovCodeDataForm = () => {
           return (
             <>
               <div className="flex w-full mt-4 items-center">
-                <Label className="mr-4 w-1/4">
-                  Lov ID:
-                </Label>
+                <Label className="mr-4 w-1/4">Lov ID:</Label>
                 <TextField value={data.lovId} onChange={(e) => set({ lovId: e.target.value })} className="w-full" label="Lov ID" hideLabel />
               </div>
 
               <div className="flex w-full mt-4 items-center">
-                <Label className="mr-1.5 w-1/4">
-                  Underavdeling:
-                </Label>
+                <Label className="mr-1.5 w-1/4">Underavdeling:</Label>
                 <OptionList
                   listName={ListName.UNDERAVDELING}
                   value={codelist.getCode(ListName.UNDERAVDELING, data.underavdeling)?.code}
@@ -51,21 +45,12 @@ export const LovCodeDataForm = () => {
               </div>
 
               <div className="flex w-full mt-4 items-center">
-                <Label className="mr-4 w-1/4">
-                  Tema:
-                </Label>
-                <OptionList
-                  listName={ListName.TEMA}
-                  value={codelist.getCode(ListName.TEMA, data.tema)?.code}
-                  onChange={(val) => set({ tema: val.code })}
-                  label={'tema'}
-                />
+                <Label className="mr-4 w-1/4">Tema:</Label>
+                <OptionList listName={ListName.TEMA} value={codelist.getCode(ListName.TEMA, data.tema)?.code} onChange={(val) => set({ tema: val.code })} label={'tema'} />
               </div>
 
               <div className="flex w-full mt-4 items-center">
-                <Label className="mr-4 w-1/4">
-                  Relevant for:
-                </Label>
+                <Label className="mr-4 w-1/4">Relevant for:</Label>
                 <OptionList
                   options={lovCodeRelevansToOptions()}
                   value={data.relevantFor ? data.relevantFor : undefined}
@@ -91,9 +76,7 @@ export const TemaCodeDataForm = () => {
   return (
     <div className="flex w-full mt-4 items-center flex-col">
       <div className="flex w-full mt-4 items-center">
-        <Label className="mr-4 w-1/4">
-          Temakode data
-        </Label>
+        <Label className="mr-4 w-1/4">Temakode data</Label>
       </div>
       <Field name="data">
         {({ field, form }: FieldProps<TemaCodeData, CodeListFormValues>) => {
@@ -105,9 +88,7 @@ export const TemaCodeDataForm = () => {
           return (
             <>
               <div className="flex w-full mt-4 items-center">
-                <Label className="mr-4 w-1/4">
-                  Bilde:
-                </Label>
+                <Label className="mr-4 w-1/4">Bilde:</Label>
                 <Select
                   className="w-full"
                   label="Bilde"
@@ -119,13 +100,15 @@ export const TemaCodeDataForm = () => {
                   }}
                 >
                   <option value="">Velg bilde</option>
-                  {temaBildeOptions.map((t, i) => <option key={i + '_' + t.label} value={t.id}>{t.label}</option>)}
+                  {temaBildeOptions.map((t, i) => (
+                    <option key={i + '_' + t.label} value={t.id}>
+                      {t.label}
+                    </option>
+                  ))}
                 </Select>
               </div>
-              <div className="flex w-full mt-4 items-center" >
-                <Label className="mr-4 w-1/4">
-                  Short Desciption:
-                </Label>
+              <div className="flex w-full mt-4 items-center">
+                <Label className="mr-4 w-1/4">Short Desciption:</Label>
                 <Textarea
                   label="Short Desciption"
                   className="w-full"

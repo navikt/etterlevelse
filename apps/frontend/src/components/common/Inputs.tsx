@@ -18,8 +18,8 @@ import CustomizedSelect from '../common/CustomizedSelect'
 import TextEditor from './TextEditor/TextEditor'
 import { Error } from './ModalSchema'
 import { ettlevColors } from '../../util/theme'
-import { borderColor} from './Style'
-import {Label, Select, Textarea} from '@navikt/ds-react'
+import { borderColor } from './Style'
+import { Label, Select, Textarea } from '@navikt/ds-react'
 
 export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode; marginBottom?: string }) => {
   return <div className={`${marginBottom ? 'mb-6' : ''}`}>{children}</div>
@@ -123,7 +123,6 @@ export const TextAreaField = (props: {
                   maxLength={props.maxCharacter ? props.maxCharacter : undefined}
                   {...p.field}
                   placeholder={props.noPlaceholder ? '' : props.placeholder ? props.placeholder : props.label}
-
                   onChange={(v) => {
                     if (props.setIsFormDirty) {
                       props.setIsFormDirty(true)
@@ -368,9 +367,7 @@ export const OptionField = (
   )
 }
 
-export const OptionList = (
-  props: { label: string; value?: string; onChange: (val?: any) => void } & Or<{ options: Value }, { listName: ListName }>,
-) => {
+export const OptionList = (props: { label: string; value?: string; onChange: (val?: any) => void } & Or<{ options: Value }, { listName: ListName }>) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
     <Select
@@ -386,7 +383,11 @@ export const OptionList = (
     >
       <option value="">Velg {props.label}</option>
       {options.map((c, i) => {
-        return <option key={i + '_' + c.label} value={c.id}>{c.label}</option>
+        return (
+          <option key={i + '_' + c.label} value={c.id}>
+            {c.label}
+          </option>
+        )
       })}
     </Select>
   )
