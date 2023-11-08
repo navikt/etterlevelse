@@ -249,7 +249,7 @@ export const KravPage = () => {
                     </Button>
 
                     {krav.status === KravStatus.AKTIV && (
-                      <Button className="ml-4" size="small" onClick={newVersion} variant="primary">
+                      <Button className="ml-4" size="small" onClick={newVersion} variant="secondary">
                         Ny versjon av krav  
                       </Button>
                     )}
@@ -257,9 +257,7 @@ export const KravPage = () => {
                   </div>
                   {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && (
                     <div className="mt-2.5 flex">
-                      <Spacer />
                       <DeleteItem buttonLabel="Slett krav" buttonSize="small" fun={() => deleteKrav(krav.id)} redirect={'/kravliste'} />
-                      <Spacer />
                     </div>
                   )}
                 </div>

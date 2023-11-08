@@ -9,7 +9,7 @@ export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string; b
 
   return (
     <>
-      <Button variant="danger" onClick={() => setOpen(true)} icon={<TrashIcon aria-label="" aria-hidden />} size={props.buttonSize ? props.buttonSize : undefined}>
+      <Button variant="danger" onClick={() => setOpen(true)} size={props.buttonSize ? props.buttonSize : undefined}>
         {props.buttonLabel ? props.buttonLabel : 'Slett'}
       </Button>
       <Modal open={open} onClose={() => setOpen(false)} header={{ heading: 'Bekreft slett' }}>
