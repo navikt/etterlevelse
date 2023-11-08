@@ -13,7 +13,18 @@ import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from './common/Markdown'
 import { ampli } from '../services/Amplitude'
-import { BarChartIcon, ChevronDownIcon, ChevronUpIcon, DocPencilIcon, HouseIcon, InformationIcon, MagnifyingGlassIcon, MenuHamburgerIcon, PersonIcon, ReceiptIcon } from '@navikt/aksel-icons'
+import {
+  BarChartIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  DocPencilIcon,
+  HouseIcon,
+  InformationIcon,
+  MagnifyingGlassIcon,
+  MenuHamburgerIcon,
+  PersonIcon,
+  ReceiptIcon,
+} from '@navikt/aksel-icons'
 import { Button, Checkbox, Dropdown, InternalHeader, Label, Link, Spacer, Switch } from '@navikt/ds-react'
 
 export const loginUrl = (location: Location, path?: string) => {
@@ -67,22 +78,22 @@ const LoggedInHeader = () => {
 
   const kravPages = user.isKraveier()
     ? [
-      { label: 'Forvalte og opprette krav', href: '/kravliste' },
-      //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
-    ]
+        { label: 'Forvalte og opprette krav', href: '/kravliste' },
+        //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
+      ]
     : []
   const adminPages = user.isAdmin()
     ? [
-      { label: 'Administrere krav', href: '/admin/krav' },
-      { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
-      { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
-      { label: 'Administrere arkivering', href: '/admin/arkiv' },
-      { label: intl.audit, href: '/admin/audit' },
-      { label: 'Kodeverk', href: '/admin/codelist' },
-      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-      { label: intl.notifications, href: '/admin/varsel' },
-      // { label: intl.settings, href: '/admin/settings', disabled: true },
-    ]
+        { label: 'Administrere krav', href: '/admin/krav' },
+        { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
+        { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
+        { label: 'Administrere arkivering', href: '/admin/arkiv' },
+        { label: intl.audit, href: '/admin/audit' },
+        { label: 'Kodeverk', href: '/admin/codelist' },
+        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+        { label: intl.notifications, href: '/admin/varsel' },
+        // { label: intl.settings, href: '/admin/settings', disabled: true },
+      ]
     : []
 
   return (
@@ -131,8 +142,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
 
   const allPages = props.pages.length
     ? props.pages
-      .filter((p) => p.length)
-      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
+        .filter((p) => p.length)
+        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -186,7 +197,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])
@@ -204,7 +215,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             <InternalHeader.Title href="/">Støtte til etterlevelse</InternalHeader.Title>
             <Spacer />
             {!props.noSearchBar && (
-              <div className=" w-full max-w-xl flex justify-center items-center" role="search">
+              <div className="hidden lg:flex w-full max-w-xl justify-center items-center" role="search">
                 <MainSearch />
               </div>
             )}
@@ -217,7 +228,12 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             )}
           </div>
         </InternalHeader>
-      </div >
+      </div>
+      <div className="flex lg:hidden bg-icon-default py-1 px-1 w-full justify-center items-center" role="search">
+      <div className=" max-w-xl w-full ">
+        <MainSearch />
+      </div>
+      </div>
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
         <div className="w-full flex justify-center">
           <div
@@ -244,7 +260,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           </div>
         </div>
       )}
-    </div >
+    </div>
   )
 }
 
