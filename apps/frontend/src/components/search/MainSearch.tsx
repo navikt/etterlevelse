@@ -125,7 +125,6 @@ const MainSearch = () => {
   return (
     <div className="w-full">
       <AsyncSelect
-        id="search"
         aria-label="Søk etter krav, dokumentasjon eller behandling"
         placeholder="Søk etter krav, dokumentasjon eller behandling"
         autoFocus={location.pathname === '/'}
@@ -137,6 +136,7 @@ const MainSearch = () => {
             ? 'Skriv minst tre tegn for å søke'
             : `Fant ingen resultater for "${inputValue}"`
         }
+        isClearable={false}
         loadOptions={useMainSearch}
         onChange={(selectedOption) => selectedOption && navigate([selectedOption].flat()[0].url)}
         styles={{
