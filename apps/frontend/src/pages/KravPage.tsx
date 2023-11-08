@@ -249,8 +249,8 @@ export const KravPage = () => {
                     </Button>
 
                     {krav.status === KravStatus.AKTIV && (
-                      <Button className="ml-2.5" size="small" onClick={newVersion} variant="tertiary">
-                        Ny versjon av krav
+                      <Button className="ml-4" size="small" onClick={newVersion} variant="primary">
+                        Ny versjon av krav  
                       </Button>
                     )}
                     <Spacer />
