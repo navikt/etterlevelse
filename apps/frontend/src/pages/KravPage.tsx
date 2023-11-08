@@ -19,7 +19,7 @@ import Etterlevelser from '../components/krav/Etterlevelser'
 import { ampli } from '../services/Amplitude'
 import { Markdown } from '../components/common/Markdown'
 import { InformationSquareIcon, PencilIcon, PlusIcon } from '@navikt/aksel-icons'
-import { BodyLong, BodyShort, Box, Button, Detail, Heading, Tabs, Tag } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Box, Button, Detail, Heading, Spacer, Tabs, Tag } from '@navikt/ds-react'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import StatusTag from '../components/common/StatusTag'
 
@@ -249,16 +249,19 @@ export const KravPage = () => {
                     </Button>
 
                     {krav.status === KravStatus.AKTIV && (
-                      <Button className="ml-1" size="small" onClick={newVersion} variant="tertiary">
+                      <Button className="ml-2.5" size="small" onClick={newVersion} variant="tertiary">
                         Ny versjon av krav
                       </Button>
                     )}
+                    <Spacer />
                   </div>
-                  <div className="mt-2">
-                    {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && (
+                  {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && (
+                    <div className="mt-2.5 flex">
+                      <Spacer />
                       <DeleteItem buttonLabel="Slett krav" buttonSize="small" fun={() => deleteKrav(krav.id)} redirect={'/kravliste'} />
-                    )}
-                  </div>
+                      <Spacer />
+                    </div>
+                  )}
                 </div>
               )}
             </div>
