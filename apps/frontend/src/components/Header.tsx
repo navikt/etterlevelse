@@ -204,28 +204,11 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             <InternalHeader.Title href="/">Støtte til etterlevelse</InternalHeader.Title>
             <Spacer />
             {!props.noSearchBar && (
-              <div className="hidden w-full max-w-xl lg:flex" role="search">
+              <div className=" w-full max-w-xl flex justify-center items-center" role="search">
                 <MainSearch />
               </div>
             )}
-
-            <div className="flex lg:hidden">
-              <Dropdown>
-                <InternalHeader.Button as={Dropdown.Toggle}>
-                  <MagnifyingGlassIcon aria-label="" aria-hidden /> Søk
-                </InternalHeader.Button>
-                <Dropdown.Menu className="min-w-max h-auto">
-                  <Dropdown.Menu.List>
-                    <Dropdown.Menu.List.Item>
-                      <MainSearch />
-                    </Dropdown.Menu.List.Item>
-                  </Dropdown.Menu.List>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-
-
-            <div className="hidden lg:flex flex-1" />
+            <Spacer />
             {!props.noLoginButton && (
               <div className="flex">
                 {!user.isLoggedIn() && <LoginHeaderButton />}
