@@ -244,7 +244,7 @@ export const KravPage = () => {
               {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
                 <div>
                   <div className="flex flex-1">
-                    <Button size="small" variant="tertiary" onClick={() => setEdit(!edit)}>
+                    <Button size="small" variant="primary" onClick={() => setEdit(!edit)}>
                       Rediger krav
                     </Button>
 
