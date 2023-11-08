@@ -270,7 +270,9 @@ export const DokumentasjonPage = () => {
                 .filter((tema) => getKravForTema(tema).length > 0)
                 .map((tema) => {
                   const kravliste = getKravForTema(tema)
-                  const utfylteKrav = kravliste.filter((krav) => krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)
+                  const utfylteKrav = kravliste.filter(
+                    (krav) => krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT,
+                  )
                   return (
                     <Accordion.Item key={`${tema.shortName}_panel`} className="flex flex-col gap-2">
                       <Accordion.Header id={tema.code}>

@@ -13,19 +13,8 @@ import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from './common/Markdown'
 import { ampli } from '../services/Amplitude'
-import {
-  BarChartIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  DocPencilIcon,
-  HouseIcon,
-  InformationIcon,
-  MagnifyingGlassIcon,
-  MenuHamburgerIcon,
-  PersonIcon,
-  ReceiptIcon,
-} from '@navikt/aksel-icons'
-import { Button, Checkbox, Dropdown, InternalHeader, Label, Link, Spacer, Switch } from '@navikt/ds-react'
+import { BarChartIcon, ChevronDownIcon, ChevronUpIcon, DocPencilIcon, HouseIcon, InformationIcon, MenuHamburgerIcon, PersonIcon, ReceiptIcon } from '@navikt/aksel-icons'
+import { Button, Dropdown, InternalHeader, Label, Link, Spacer, Switch } from '@navikt/ds-react'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -230,9 +219,9 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
         </InternalHeader>
       </div>
       <div className="flex lg:hidden bg-icon-default py-1 px-1 w-full justify-center items-center" role="search">
-      <div className=" max-w-xl w-full ">
-        <MainSearch />
-      </div>
+        <div className=" max-w-xl w-full ">
+          <MainSearch />
+        </div>
       </div>
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
         <div className="w-full flex justify-center">

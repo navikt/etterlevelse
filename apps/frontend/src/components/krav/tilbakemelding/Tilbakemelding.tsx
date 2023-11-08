@@ -153,7 +153,9 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
       {!hasKravExpired && (
         <div>
           <div className="mt-10">
-            <Heading size="medium" level="1">Spørsmål til kraveier</Heading>
+            <Heading size="medium" level="1">
+              Spørsmål til kraveier
+            </Heading>
             {user.isLoggedIn() ? (
               <BodyLong className="max-w-xl">
                 Her kan du stille kraveier et spørsmål dersom det er uklarheter vedrørende hvordan kravet skal forstås. Spørsmål og svar fra kraveier blir synlig for alle på denne

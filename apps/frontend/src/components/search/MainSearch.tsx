@@ -10,20 +10,20 @@ import { OptionProps, components } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { BodyShort } from '@navikt/ds-react'
 
-type SearchItem = { value: string, label: string, tag: string, url: string }
+type SearchItem = { value: string; label: string; tag: string; url: string }
 
 const kravMap = (t: Krav) => ({
   value: t.id,
   label: kravName(t),
   tag: ObjectType.Krav as string,
-  url: `krav/${t.id}`
+  url: `krav/${t.id}`,
 })
 
 const behandlingMap = (t: Behandling): SearchItem => ({
   value: t.id,
   label: behandlingName(t),
   tag: ObjectType.Behandling,
-  url: `dokumentasjoner/behandlingsok?behandlingId=${t.id}`
+  url: `dokumentasjoner/behandlingsok?behandlingId=${t.id}`,
 })
 
 const EtterlevelseDokumentasjonMap = (t: EtterlevelseDokumentasjon): SearchItem => ({
@@ -37,12 +37,10 @@ const kravSearch = async (searchParam: string) => {
   let result: SearchItem[] = []
   const add = (items: SearchItem[]) => {
     result = [...result, ...items]
-    result = result
-      .filter((item, index, self) => index === self.findIndex((searchItem) => searchItem.value === item.value))
+    result = result.filter((item, index, self) => index === self.findIndex((searchItem) => searchItem.value === item.value))
   }
 
   result.push(...(await searchKrav(searchParam)).filter((k) => k.status !== KravStatus.UTGAATT).map(kravMap))
-
 
   let kravNumber = searchParam
   if (kravNumber[0].toLowerCase() === 'k') {
@@ -73,7 +71,7 @@ const kravSearch = async (searchParam: string) => {
           value: searchResult[0].id,
           label: kravName(searchResult[0]),
           tag: ObjectType.Krav,
-          url: `krav/${searchResult[0].id}`
+          url: `krav/${searchResult[0].id}`,
         },
       ]
       add(mappedResult)
@@ -82,26 +80,25 @@ const kravSearch = async (searchParam: string) => {
   return result
 }
 
-
 const useMainSearch = async (searchParam: string) => {
   if (searchParam && searchParam.replace(/ /g, '').length > 2) {
     const result = await Promise.all([
-      (await kravSearch(searchParam)),
+      await kravSearch(searchParam),
       (await searchEtterlevelsedokumentasjon(searchParam)).map(EtterlevelseDokumentasjonMap),
-      (await searchBehandling(searchParam)).map(behandlingMap)
+      (await searchBehandling(searchParam)).map(behandlingMap),
     ])
     return [
       {
         label: ObjectType.Krav,
-        options: result[0]
+        options: result[0],
       },
       {
         label: 'Dokumentasjon',
-        options: result[1]
+        options: result[1],
       },
       {
         label: ObjectType.Behandling,
-        options: result[2]
+        options: result[2],
       },
     ]
   }
@@ -131,11 +128,7 @@ const MainSearch = () => {
         components={{ Option }}
         controlShouldRenderValue={false}
         loadingMessage={() => 'Søker...'}
-        noOptionsMessage={({ inputValue }) =>
-          inputValue.length < 3
-            ? 'Skriv minst tre tegn for å søke'
-            : `Fant ingen resultater for "${inputValue}"`
-        }
+        noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
         isClearable={false}
         loadOptions={useMainSearch}
         onChange={(selectedOption) => selectedOption && navigate([selectedOption].flat()[0].url)}
@@ -155,7 +148,7 @@ const MainSearch = () => {
             fontWeight: 'var(--a-font-weight-bold)',
             letterSpacing: 0,
             lineHeight: 'var(--a-font-line-height-large)',
-            maring: 0
+            maring: 0,
           }),
           // Make border and size of input box to be identical with those from DesignSystem
           valueContainer: (base) => ({ ...base, color: 'black' }),
