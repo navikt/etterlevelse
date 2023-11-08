@@ -27,11 +27,11 @@ import { getAllKravPriority } from '../api/KravPriorityApi'
 import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 import { getNumberOfDaysBetween } from '../util/checkAge'
 import moment from 'moment'
-import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '../api/EtterlevelseApi'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import { ExternalLink } from '../components/common/RouteLink'
 import { env } from '../util/env'
-import { Teams, TeamsV2 } from '../components/common/TeamName'
+import { Teams } from '../components/common/TeamName'
+import { Helmet } from 'react-helmet'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
@@ -171,7 +171,13 @@ export const DokumentasjonPage = () => {
   }
 
   return (
-    <div>
+    <div role="main" id="content">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>
+          E{etterlevelseDokumentasjon.etterlevelseNummer.toString()} {etterlevelseDokumentasjon.title}
+        </title> 
+      </Helmet>
       <CustomizedBreadcrumbs currentPage={'Temaoversikt'} paths={breadcrumbPaths} />
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
@@ -208,7 +214,7 @@ export const DokumentasjonPage = () => {
             </div>
           )}
           {etterlevelseDokumentasjon.teams.length > 0 ? (
-            <TeamsV2 teams={etterlevelseDokumentasjon.teams} link />
+            <Teams teams={etterlevelseDokumentasjon.teams} link />
           ) : (
             <Detail>Team er ikke angitt</Detail>
           )}
@@ -285,8 +291,8 @@ export const DokumentasjonPage = () => {
                           </Link>
                         </div>
                         <div className="grid grid-cols-2 gap-2">
-                          {kravliste.map((krav) => (
-                            <KravCard krav={krav} kravFilter={KRAV_FILTER_TYPE.RELEVANTE_KRAV} etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} temaCode={tema.code} />
+                          {kravliste.map((krav, idx) => (
+                            <KravCard key={`krav_${idx}`} krav={krav} kravFilter={KRAV_FILTER_TYPE.RELEVANTE_KRAV} etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} temaCode={tema.code} />
                           ))}
                         </div>
                       </div>

@@ -46,8 +46,8 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                 onChange={(ev) => setValgtTema(ev.currentTarget.value)}
                 value={valgtTema}
               >
-                <option value="">Velg tema</option>
-                {codelist.getParsedOptions(ListName.TEMA).map((opt) => <option value={opt.id}>{opt.label}</option>)}
+                <option key="" value="">Velg tema</option>
+                {codelist.getParsedOptions(ListName.TEMA).map((opt) => <option key={`option_${opt.id}`} value={opt.id}>{opt.label}</option>)}
               </Select>
               {errorMessage && (
                 <Block width="100%" marginTop="16px">
