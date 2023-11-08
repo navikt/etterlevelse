@@ -190,7 +190,7 @@ export const getStatusLabelColor = (status: EtterlevelseStatus) => {
     case EtterlevelseStatus.IKKE_RELEVANT:
       return 'neutral'
     case EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
-      return "success"
+      return 'success'
     case EtterlevelseStatus.FERDIG_DOKUMENTERT:
       return 'success'
     case EtterlevelseStatus.OPPFYLLES_SENERE:

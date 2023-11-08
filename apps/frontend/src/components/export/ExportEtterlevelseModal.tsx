@@ -29,10 +29,10 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
       <Modal
         open={isExportModalOpen}
         onClose={() => {
-          setValgtTema("")
+          setValgtTema('')
           setIsExportModalOpen(false)
         }}
-        header={{heading: "Eksporter etterlevelse"}}        
+        header={{ heading: 'Eksporter etterlevelse' }}
       >
         <Modal.Body>
           {isLoading ? (
@@ -40,14 +40,16 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
               <Loader size="large" />
             </Block>
           ) : (
-            <div className='flex flex-col gap-4'>
-              <Select
-                label="Velg et tema for eksportering"
-                onChange={(ev) => setValgtTema(ev.currentTarget.value)}
-                value={valgtTema}
-              >
-                <option key="" value="">Velg tema</option>
-                {codelist.getParsedOptions(ListName.TEMA).map((opt) => <option key={`option_${opt.id}`} value={opt.id}>{opt.label}</option>)}
+            <div className="flex flex-col gap-4">
+              <Select label="Velg et tema for eksportering" onChange={(ev) => setValgtTema(ev.currentTarget.value)} value={valgtTema}>
+                <option key="" value="">
+                  Velg tema
+                </option>
+                {codelist.getParsedOptions(ListName.TEMA).map((opt) => (
+                  <option key={`option_${opt.id}`} value={opt.id}>
+                    {opt.label}
+                  </option>
+                ))}
               </Select>
               {errorMessage && (
                 <Block width="100%" marginTop="16px">
@@ -74,11 +76,16 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                   </Notification>
                 </Block>
               )}
-              <div className='flex gap-2'>
-                <Button variant='tertiary' onClick={() => {
-                  setValgtTema("")
-                  setIsExportModalOpen(false)
-                }}>Avbryt</Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="tertiary"
+                  onClick={() => {
+                    setValgtTema('')
+                    setIsExportModalOpen(false)
+                  }}
+                >
+                  Avbryt
+                </Button>
                 <Button
                   variant="secondary"
                   onClick={() => {
@@ -104,7 +111,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                 </Button>
                 <Button
                   variant="primary"
-                  disabled={valgtTema == ""}
+                  disabled={valgtTema == ''}
                   onClick={() => {
                     ;(async () => {
                       setIsLoading(true)
@@ -127,7 +134,6 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                 >
                   Eksporter valgt tema
                 </Button>
-
               </div>
             </div>
           )}

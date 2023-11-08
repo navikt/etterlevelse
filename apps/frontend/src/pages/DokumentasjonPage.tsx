@@ -147,7 +147,9 @@ export const DokumentasjonPage = () => {
       <div className="flex flex-wrap gap-2">
         {options.map((o, index) => (
           <div key={o.id} className="flex items-center gap-1">
-            <Tag variant="info" size="small">{o.label}</Tag>
+            <Tag variant="info" size="small">
+              {o.label}
+            </Tag>
           </div>
         ))}
       </div>
@@ -176,7 +178,7 @@ export const DokumentasjonPage = () => {
         <meta charSet="utf-8" />
         <title>
           E{etterlevelseDokumentasjon.etterlevelseNummer.toString()} {etterlevelseDokumentasjon.title}
-        </title> 
+        </title>
       </Helmet>
       <CustomizedBreadcrumbs currentPage={'Temaoversikt'} paths={breadcrumbPaths} />
       <div className="flex flex-col gap-4">
@@ -213,11 +215,7 @@ export const DokumentasjonPage = () => {
               )}
             </div>
           )}
-          {etterlevelseDokumentasjon.teams.length > 0 ? (
-            <Teams teams={etterlevelseDokumentasjon.teams} link />
-          ) : (
-            <Detail>Team er ikke angitt</Detail>
-          )}
+          {etterlevelseDokumentasjon.teams.length > 0 ? <Teams teams={etterlevelseDokumentasjon.teams} link /> : <Detail>Team er ikke angitt</Detail>}
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
@@ -230,7 +228,7 @@ export const DokumentasjonPage = () => {
             {!etterlevelseDokumentasjon.irrelevansFor.length ? getRelevans() : getRelevans(etterlevelseDokumentasjon.irrelevansFor)}
           </div>
         </div>
-        <div className='flex justify-between w-full items-center'>
+        <div className="flex justify-between w-full items-center">
           <BodyShort size="small">
             Totalt {getNewestKravVersjon(relevanteStats).length} krav, {antallFylttKrav} ferdig utfylt
           </BodyShort>
@@ -292,7 +290,13 @@ export const DokumentasjonPage = () => {
                         </div>
                         <div className="grid grid-cols-2 gap-2">
                           {kravliste.map((krav, idx) => (
-                            <KravCard key={`krav_${idx}`} krav={krav} kravFilter={KRAV_FILTER_TYPE.RELEVANTE_KRAV} etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} temaCode={tema.code} />
+                            <KravCard
+                              key={`krav_${idx}`}
+                              krav={krav}
+                              kravFilter={KRAV_FILTER_TYPE.RELEVANTE_KRAV}
+                              etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                              temaCode={tema.code}
+                            />
                           ))}
                         </div>
                       </div>
