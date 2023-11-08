@@ -13,8 +13,8 @@ import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from './common/Markdown'
 import { ampli } from '../services/Amplitude'
-import { BarChartIcon, ChevronDownIcon, ChevronUpIcon, DocPencilIcon, HouseIcon, InformationIcon, MenuHamburgerIcon, PersonIcon, ReceiptIcon } from '@navikt/aksel-icons'
-import { Button, Checkbox, Dropdown, InternalHeader, Label, Link, Spacer } from '@navikt/ds-react'
+import { BarChartIcon, ChevronDownIcon, ChevronUpIcon, DocPencilIcon, HouseIcon, InformationIcon, MagnifyingGlassIcon, MenuHamburgerIcon, PersonIcon, ReceiptIcon } from '@navikt/aksel-icons'
+import { Button, Checkbox, Dropdown, InternalHeader, Label, Link, Spacer, Switch } from '@navikt/ds-react'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -57,9 +57,9 @@ const LoggedInHeader = () => {
       </Button>
       <div className={`mt-2 ${viewRoller ? 'block' : 'hidden'}`}>
         {user.getAvailableGroups().map((g) => (
-          <Checkbox key={g.group} checked={user.hasGroup(g.group)} onChange={(e) => user.toggleGroup(g.group, (e.target as HTMLInputElement).checked)}>
+          <Switch size="small" key={g.group} checked={user.hasGroup(g.group)} onChange={(e) => user.toggleGroup(g.group, (e.target as HTMLInputElement).checked)}>
             {g.name}
-          </Checkbox>
+          </Switch>
         ))}
       </div>
     </div>
@@ -67,22 +67,22 @@ const LoggedInHeader = () => {
 
   const kravPages = user.isKraveier()
     ? [
-        { label: 'Forvalte og opprette krav', href: '/kravliste' },
-        //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
-      ]
+      { label: 'Forvalte og opprette krav', href: '/kravliste' },
+      //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
+    ]
     : []
   const adminPages = user.isAdmin()
     ? [
-        { label: 'Administrere krav', href: '/admin/krav' },
-        { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
-        { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
-        { label: 'Administrere arkivering', href: '/admin/arkiv' },
-        { label: intl.audit, href: '/admin/audit' },
-        { label: 'Kodeverk', href: '/admin/codelist' },
-        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-        { label: intl.notifications, href: '/admin/varsel' },
-        // { label: intl.settings, href: '/admin/settings', disabled: true },
-      ]
+      { label: 'Administrere krav', href: '/admin/krav' },
+      { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
+      { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
+      { label: 'Administrere arkivering', href: '/admin/arkiv' },
+      { label: intl.audit, href: '/admin/audit' },
+      { label: 'Kodeverk', href: '/admin/codelist' },
+      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+      { label: intl.notifications, href: '/admin/varsel' },
+      // { label: intl.settings, href: '/admin/settings', disabled: true },
+    ]
     : []
 
   return (
@@ -131,8 +131,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
 
   const allPages = props.pages.length
     ? props.pages
-        .filter((p) => p.length)
-        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
+      .filter((p) => p.length)
+      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -186,7 +186,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])
@@ -204,11 +204,28 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             <InternalHeader.Title href="/">Støtte til etterlevelse</InternalHeader.Title>
             <Spacer />
             {!props.noSearchBar && (
-              <div className="flex w-full max-w-xl " role="search">
+              <div className="hidden w-full max-w-xl lg:flex" role="search">
                 <MainSearch />
               </div>
             )}
-            <Spacer />
+
+            <div className="flex lg:hidden">
+              <Dropdown>
+                <InternalHeader.Button as={Dropdown.Toggle}>
+                  <MagnifyingGlassIcon aria-label="" aria-hidden /> Søk
+                </InternalHeader.Button>
+                <Dropdown.Menu className="min-w-max h-auto">
+                  <Dropdown.Menu.List>
+                    <Dropdown.Menu.List.Item>
+                      <MainSearch />
+                    </Dropdown.Menu.List.Item>
+                  </Dropdown.Menu.List>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+
+
+            <div className="hidden lg:flex flex-1" />
             {!props.noLoginButton && (
               <div className="flex">
                 {!user.isLoggedIn() && <LoginHeaderButton />}
@@ -217,7 +234,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             )}
           </div>
         </InternalHeader>
-      </div>
+      </div >
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
         <div className="w-full flex justify-center">
           <div
@@ -244,7 +261,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           </div>
         </div>
       )}
-    </div>
+    </div >
   )
 }
 
