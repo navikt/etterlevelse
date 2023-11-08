@@ -9,8 +9,8 @@ import { ellipse80, saveArchiveIcon } from '../components/Images'
 import { EtterlevelseDokumentasjonQL, EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, KravPrioritering, KravQL, KravStatus, PageResponse } from '../constants'
 import { gql, useQuery } from '@apollo/client'
 import { Code, codelist, ListName, TemaCode } from '../services/Codelist'
-import { Button, KIND, SIZE } from 'baseui/button'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { KIND, SIZE } from 'baseui/button'
+import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
 import { ampli } from '../services/Amplitude'
 import { getMainHeader, getNewestKravVersjon } from '../components/etterlevelseDokumentasjon/common/utils'
@@ -20,14 +20,18 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import { BodyShort, Label, Loader, Accordion, Link, Alert, Tag } from '@navikt/ds-react'
+import { BodyShort, Label, Loader, Accordion, Link, Alert, Tag, Heading, Detail, Button } from '@navikt/ds-react'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 import { getNumberOfDaysBetween } from '../util/checkAge'
 import moment from 'moment'
-import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '../api/EtterlevelseApi'
+import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
+import { ExternalLink } from '../components/common/RouteLink'
+import { env } from '../util/env'
+import { Teams } from '../components/common/TeamName'
+import { Helmet } from 'react-helmet'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
@@ -120,73 +124,6 @@ export const DokumentasjonPage = () => {
     }
   })
 
-  const getRelevansContent = (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
-    const emptyRelevans = etterlevelseDokumentasjon.irrelevansFor.length === options.length ? true : false
-
-    return (
-      <div className="flex items-center gap-2">
-        {emptyRelevans ? (
-          <div className="flex items-center gap-1">
-            <ExclamationmarkTriangleFillIcon area-label="" aria-hidden className="text-2xl text-icon-warning" />
-            <Label size="small">Ingen egenskaper er oppgitt</Label>
-          </div>
-        ) : (
-          <Label size="small">Aktive egenskaper:</Label>
-        )}
-        {!etterlevelseDokumentasjon.irrelevansFor.length ? getRelevans() : getRelevans(etterlevelseDokumentasjon.irrelevansFor)}
-      </div>
-    )
-  }
-
-  const getSecondaryHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => (
-    <Block width="100%" display="flex" alignItems="center" justifyContent="space-between" marginTop={'8px'} marginBottom={'8px'}>
-      <Block display="flex" alignItems="center">
-        <Block>
-          <HeadingXLarge marginTop="0px" marginBottom="0px">
-            Tema for dokumentasjon
-          </HeadingXLarge>
-          {
-            // TODO: overskriften er kjip, tenk på det
-          }
-        </Block>
-      </Block>
-
-      <Block display="flex" alignItems="center">
-        {user.isAdmin() && (
-          <Button kind={KIND.tertiary} size={SIZE.compact} onClick={() => setArkivModal(true)} startEnhancer={<img src={saveArchiveIcon} alt="arkiv ikon" />}>
-            Arkivér i WebSak
-          </Button>
-        )}
-
-        <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
-
-        <Block display="flex" alignItems="baseline" marginRight="30px">
-          <ParagraphMedium $style={{ fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0 }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
-            {getNewestKravVersjon(relevanteStats).length}
-          </ParagraphMedium>
-          <ParagraphMedium>krav</ParagraphMedium>
-        </Block>
-
-        <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
-
-        <ArkiveringModal
-          arkivModal={arkivModal}
-          setArkivModal={setArkivModal}
-          etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-          etterlevelseArkiv={etterlevelseArkiv}
-          setEtterlevelseArkiv={setEtterlevelseArkiv}
-        />
-
-        <Block display="flex" alignItems="baseline" marginLeft="30px">
-          <ParagraphMedium $style={{ fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0 }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
-            {antallFylttKrav}
-          </ParagraphMedium>
-          <ParagraphMedium>ferdig utfylt</ParagraphMedium>
-        </Block>
-      </Block>
-    </Block>
-  )
-
   const getRelevans = (irrelevans?: Code[]) => {
     if (irrelevans?.length === options.length) {
       return <BodyShort size="small">For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved dokumentasjonen.</BodyShort>
@@ -196,7 +133,7 @@ export const DokumentasjonPage = () => {
       const relevans = options.filter((n) => !irrelevans.map((ir: Code) => ir.code).includes(n.id))
 
       return (
-        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap gap-2">
           {relevans.map((r, index) => (
             <div key={r.id} className="flex items-center gap-1">
               <BodyShort size="small">{r.label}</BodyShort>
@@ -207,11 +144,10 @@ export const DokumentasjonPage = () => {
       )
     }
     return (
-      <div className="flex flex-wrap gap-1">
+      <div className="flex flex-wrap gap-2">
         {options.map((o, index) => (
           <div key={o.id} className="flex items-center gap-1">
-            <BodyShort size="small">{o.label}</BodyShort>
-            {index < options.length - 1 && <img alt="dot" src={ellipse80} />}
+            <Tag variant="info" size="small">{o.label}</Tag>
           </div>
         ))}
       </div>
@@ -235,82 +171,138 @@ export const DokumentasjonPage = () => {
   }
 
   return (
-    <Block width="100%">
-      <Layout2
-        headerBackgroundColor={ettlevColors.grey50}
-        mainHeader={getMainHeader(etterlevelseDokumentasjon, setEtterlevelseDokumentasjon)}
-        secondaryHeaderBackgroundColor={ettlevColors.white}
-        secondaryHeader={getSecondaryHeader(etterlevelseDokumentasjon)}
-        childrenBackgroundColor={ettlevColors.grey25}
-        currentPage={'Tema for dokumentasjon'}
-        breadcrumbPaths={breadcrumbPaths}
-      >
-        <div className="pt-4 flex flex-col gap-4">
-          {getRelevansContent(etterlevelseDokumentasjon)}
-          <div className="navds-alert navds-alert--info navds-alert--medium">
-            <div className="flex flex-col gap-2">
-              <p>Vi tester nytt oppsett med at tema og krav vises nå på samme side, slik at det forhåpentligvis blir lettere å navigere seg i.</p>
-              <p>Kravene er vist i anbefalt rekkefølge hvis man leser de fra venstre til høyre.</p>
-              <p>
-                Vi vil gjerne ha tilbakemeldinger på hvordan det fungerer.{' '}
-                <Link target="_blank" href="https://nav-it.slack.com/archives/C01V697SSR2">
-                  Skriv til oss i #etterlevelse på Slack (åpnes i ny fane)
-                </Link>
-                .
-              </p>
-            </div>
+    <div role="main" id="content">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>
+          E{etterlevelseDokumentasjon.etterlevelseNummer.toString()} {etterlevelseDokumentasjon.title}
+        </title> 
+      </Helmet>
+      <CustomizedBreadcrumbs currentPage={'Temaoversikt'} paths={breadcrumbPaths} />
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <Heading level="1" size="medium">
+            Temaoversikt
+          </Heading>
+          <div className="flex gap-2 items-center">
+            <Heading level="2" size="small">
+              E{etterlevelseDokumentasjon.etterlevelseNummer.toString()} {etterlevelseDokumentasjon.title}
+            </Heading>
           </div>
-          {loading ? (
-            <Block display="flex" width="100%" justifyContent="center" marginTop={theme.sizing.scale550}>
-              <Loader size={'large'} />
-            </Block>
-          ) : (
-            <Accordion indent={false}>
-              {temaListe
-                .filter((tema) => getKravForTema(tema).length > 0)
-                .map((tema) => {
-                  const kravliste = getKravForTema(tema)
-                  const utfylteKrav = kravliste.filter((krav) => krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)
+          {etterlevelseDokumentasjon.behandlerPersonopplysninger && (
+            <div className="flex gap-2 flex-wrap items-center">
+              <Detail className="font-bold">Behandling:</Detail>
+              {etterlevelseDokumentasjon.behandlingIds && etterlevelseDokumentasjon.behandlingIds.length >= 1 && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
+                etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => {
                   return (
-                    <Accordion.Item key={`${tema.shortName}_panel`} className="flex flex-col gap-2">
-                      <Accordion.Header id={tema.code}>
-                        <div className="flex gap-4">
-                          <span>
-                            {tema.shortName} ({utfylteKrav.length} av {kravliste.length} krav er utfylt{utfylteKrav.length === 1 ? '' : 'e'})
-                          </span>
-                          {kravliste.find(
-                            (krav) =>
-                              krav.kravVersjon === 1 && krav.etterlevelseStatus === undefined && getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) < 30,
-                          ) && <Tag variant="warning">Nytt krav</Tag>}
-                          {kravliste.find(
-                            (krav) =>
-                              krav.kravVersjon > 1 &&
-                              krav.etterlevelseStatus === undefined &&
-                              utgaattStats.filter((kl) => kl.kravNummer === krav.kravNummer && kl.etterlevelser.length > 0).length > 0 &&
-                              getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) < 30,
-                          ) && <Tag variant="warning">Ny versjon</Tag>}
-                        </div>
-                      </Accordion.Header>
-                      <Accordion.Content>
-                        <div className="flex flex-col gap-6">
-                          <div>
-                            <Link href={`/tema/${tema.code}`} target="_blank">
-                              Lær mer om {tema.shortName}, og ansvarlig for tema (åpnes i ny fane)
-                            </Link>
-                          </div>
-                          <div className="grid grid-cols-2 gap-2">
-                            {kravliste.map((krav) => (
-                              <KravCard krav={krav} kravFilter={KRAV_FILTER_TYPE.RELEVANTE_KRAV} etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} temaCode={tema.code} />
-                            ))}
-                          </div>
-                        </div>
-                      </Accordion.Content>
-                    </Accordion.Item>
+                    <div key={'behandling_link_' + index}>
+                      {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger[index].navn ? (
+                        <ExternalLink className="text-sm" href={`${env.pollyBaseUrl}process/${behandlingId}`}>
+                          {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger.length > 0
+                            ? `${etterlevelseDokumentasjon.behandlinger[index].navn}`
+                            : 'Ingen data'}
+                        </ExternalLink>
+                      ) : (
+                        <BodyShort>{etterlevelseDokumentasjon.behandlinger ? etterlevelseDokumentasjon.behandlinger[index].navn : 'Ingen data'}</BodyShort>
+                      )}
+                    </div>
                   )
-                })}
-            </Accordion>
+                })
+              ) : (
+                <BodyShort>Husk å legge til behandling fra behandlingskatalogen</BodyShort>
+              )}
+            </div>
           )}
-          {/*
+          {etterlevelseDokumentasjon.teams.length > 0 ? (
+            <Teams teams={etterlevelseDokumentasjon.teams} link />
+          ) : (
+            <Detail>Team er ikke angitt</Detail>
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            {etterlevelseDokumentasjon.irrelevansFor.length === options.length && (
+              <div className="flex items-center gap-1">
+                <ExclamationmarkTriangleFillIcon area-label="" aria-hidden className="text-2xl text-icon-warning" />
+                <Label size="small">Ingen egenskaper er oppgitt</Label>
+              </div>
+            )}
+            {!etterlevelseDokumentasjon.irrelevansFor.length ? getRelevans() : getRelevans(etterlevelseDokumentasjon.irrelevansFor)}
+          </div>
+        </div>
+        <div className='flex justify-between w-full items-center'>
+          <BodyShort size="small">
+            Totalt {getNewestKravVersjon(relevanteStats).length} krav, {antallFylttKrav} ferdig utfylt
+          </BodyShort>
+          <EditEtterlevelseDokumentasjonModal etterlevelseDokumentasjon={etterlevelseDokumentasjon} setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon} isEditButton />
+        </div>
+      </div>
+      <div className="pt-4 flex flex-col gap-4">
+        <div className="navds-alert navds-alert--info navds-alert--medium">
+          <div className="flex flex-col gap-2">
+            <p>Vi tester nytt oppsett med at tema og krav vises nå på samme side, slik at det forhåpentligvis blir lettere å navigere seg i.</p>
+            <p>Kravene er vist i anbefalt rekkefølge hvis man leser de fra venstre til høyre.</p>
+            <p>
+              Vi vil gjerne ha tilbakemeldinger på hvordan det fungerer.{' '}
+              <Link target="_blank" href="https://nav-it.slack.com/archives/C01V697SSR2">
+                Skriv til oss i #etterlevelse på Slack (åpnes i ny fane)
+              </Link>
+              .
+            </p>
+          </div>
+        </div>
+        {loading ? (
+          <Block display="flex" width="100%" justifyContent="center" marginTop={theme.sizing.scale550}>
+            <Loader size={'large'} />
+          </Block>
+        ) : (
+          <Accordion indent={false}>
+            {temaListe
+              .filter((tema) => getKravForTema(tema).length > 0)
+              .map((tema) => {
+                const kravliste = getKravForTema(tema)
+                const utfylteKrav = kravliste.filter(
+                  (krav) => krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT,
+                )
+                return (
+                  <Accordion.Item key={`${tema.shortName}_panel`} className="flex flex-col gap-2">
+                    <Accordion.Header id={tema.code}>
+                      <div className="flex gap-4">
+                        <span>
+                          {tema.shortName} ({utfylteKrav.length} av {kravliste.length} krav er ferdig utfylt)
+                        </span>
+                        {kravliste.find(
+                          (krav) => krav.kravVersjon === 1 && krav.etterlevelseStatus === undefined && getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) < 30,
+                        ) && <Tag variant="warning">Nytt krav</Tag>}
+                        {kravliste.find(
+                          (krav) =>
+                            krav.kravVersjon > 1 &&
+                            krav.etterlevelseStatus === undefined &&
+                            utgaattStats.filter((kl) => kl.kravNummer === krav.kravNummer && kl.etterlevelser.length > 0).length > 0 &&
+                            getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) < 30,
+                        ) && <Tag variant="warning">Ny versjon</Tag>}
+                      </div>
+                    </Accordion.Header>
+                    <Accordion.Content>
+                      <div className="flex flex-col gap-6">
+                        <div>
+                          <Link href={`/tema/${tema.code}`} target="_blank">
+                            Lær mer om {tema.shortName}, og ansvarlig for tema (åpnes i ny fane)
+                          </Link>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          {kravliste.map((krav, idx) => (
+                            <KravCard key={`krav_${idx}`} krav={krav} kravFilter={KRAV_FILTER_TYPE.RELEVANTE_KRAV} etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} temaCode={tema.code} />
+                          ))}
+                        </div>
+                      </div>
+                    </Accordion.Content>
+                  </Accordion.Item>
+                )
+              })}
+          </Accordion>
+        )}
+        {/*
         DISABLED TEMPORARY
         {irrelevanteStats.length > 0 && (
           <>
@@ -325,9 +317,23 @@ export const DokumentasjonPage = () => {
             </Block>
           </>
         )} */}
+        <div className="w-full flex justify-end items-center">
+          <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
+          {user.isAdmin() && (
+            <Button variant="tertiary" size="small" onClick={() => setArkivModal(true)}>
+              Arkivér i WebSak
+            </Button>
+          )}
+          <ArkiveringModal
+            arkivModal={arkivModal}
+            setArkivModal={setArkivModal}
+            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+            etterlevelseArkiv={etterlevelseArkiv}
+            setEtterlevelseArkiv={setEtterlevelseArkiv}
+          />
         </div>
-      </Layout2>
-    </Block>
+      </div>
+    </div>
   )
 }
 

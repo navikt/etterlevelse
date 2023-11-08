@@ -153,7 +153,7 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
       href: '/dokumentasjoner',
     },
     {
-      pathName: 'Tema for dokumentasjon',
+      pathName: 'Temaoversikt',
       href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,
     },
   ]

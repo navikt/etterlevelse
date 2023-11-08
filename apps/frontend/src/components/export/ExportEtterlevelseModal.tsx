@@ -1,22 +1,14 @@
-import { faFileWord } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Block } from 'baseui/block'
-import { Button, KIND } from 'baseui/button'
-import { SIZE } from 'baseui/input'
 import React, { useState } from 'react'
 import { env } from '../../util/env'
-import CustomizedModal from '../common/CustomizedModal'
 import { borderColor, borderRadius, borderStyle, borderWidth, marginZero } from '../common/Style'
 import { ModalBody, ModalHeader } from 'baseui/modal'
-import { Select, Value } from 'baseui/select'
-import { customSelectOverrides } from '../krav/Edit/RegelverkEdit'
 import { codelist, ListName } from '../../services/Codelist'
 import axios from 'axios'
-import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { ParagraphMedium } from 'baseui/typography'
-import { Loader } from '@navikt/ds-react'
+import { Button, Loader, Modal, Select } from '@navikt/ds-react'
 
 type ExportEtterlevelseModalProps = {
   etterlevelseDokumentasjonId: String
@@ -24,53 +16,39 @@ type ExportEtterlevelseModalProps = {
 
 export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => {
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
-  const [selectedTema, setSelectedTema] = useState<Value>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<String>('')
+  const [valgtTema, setValgtTema] = useState<string>('')
 
   return (
-    <Block display="flex" alignItems="center" marginRight="12px">
-      <Button kind={KIND.tertiary} size={SIZE.compact} onClick={() => setIsExportModalOpen(true)}>
-        <Block marginRight="6px">
-          <FontAwesomeIcon icon={faFileWord} />
-        </Block>
-        <Block>Eksporter</Block>
+    <div>
+      <Button variant="tertiary" size="small" onClick={() => setIsExportModalOpen(true)}>
+        Eksporter til Word
       </Button>
 
-      <CustomizedModal
-        isOpen={isExportModalOpen}
+      <Modal
+        open={isExportModalOpen}
         onClose={() => {
+          setValgtTema("")
           setIsExportModalOpen(false)
         }}
-        size="default"
-        overrides={{
-          Dialog: {
-            style: {
-              width: '375px',
-              boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
-              ...borderRadius('4px'),
-            },
-          },
-        }}
+        header={{heading: "Eksporter etterlevelse"}}        
       >
-        <ModalHeader>Eksporter etterlevelse</ModalHeader>
-        <ModalBody>
+        <Modal.Body>
           {isLoading ? (
             <Block display="flex" justifyContent="center" width="100%">
               <Loader size="large" />
             </Block>
           ) : (
-            <Block>
+            <div className='flex flex-col gap-4'>
               <Select
-                placeholder="Velg et tema for eksportering"
-                options={codelist.getParsedOptions(ListName.TEMA)}
-                value={selectedTema}
-                onChange={({ value }) => {
-                  setErrorMessage('')
-                  setSelectedTema(value)
-                }}
-                overrides={customSelectOverrides}
-              />
+                label="Velg et tema for eksportering"
+                onChange={(ev) => setValgtTema(ev.currentTarget.value)}
+                value={valgtTema}
+              >
+                <option key="" value="">Velg tema</option>
+                {codelist.getParsedOptions(ListName.TEMA).map((opt) => <option key={`option_${opt.id}`} value={opt.id}>{opt.label}</option>)}
+              </Select>
               {errorMessage && (
                 <Block width="100%" marginTop="16px">
                   <Notification
@@ -96,18 +74,18 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                   </Notification>
                 </Block>
               )}
-              <Block marginTop="16px" display="flex" $style={{ justifyContent: 'flex-end', paddingTop: '16px' }}>
+              <div className='flex gap-2'>
+                <Button variant='tertiary' onClick={() => {
+                  setValgtTema("")
+                  setIsExportModalOpen(false)
+                }}>Avbryt</Button>
                 <Button
-                  kind={KIND.primary}
-                  size={SIZE.compact}
+                  variant="secondary"
                   onClick={() => {
                     ;(async () => {
                       setIsLoading(true)
                       setErrorMessage('')
-                      const exportUrl =
-                        selectedTema.length > 0
-                          ? `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}&temakode=${selectedTema[0].id}`
-                          : `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}`
+                      const exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}`
 
                       axios
                         .get(exportUrl)
@@ -122,17 +100,40 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                     })()
                   }}
                 >
-                  <Block marginRight="6px">
-                    <FontAwesomeIcon icon={faFileWord} />
-                  </Block>
-                  <Block>{selectedTema.length > 0 ? 'Eksporter med valgt tema' : 'Eksporter alle tema'}</Block>
+                  Eksporter alle tema
                 </Button>
-              </Block>
-            </Block>
+                <Button
+                  variant="primary"
+                  disabled={valgtTema == ""}
+                  onClick={() => {
+                    ;(async () => {
+                      setIsLoading(true)
+                      setErrorMessage('')
+                      const exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}&temakode=${valgtTema}`
+
+                      axios
+                        .get(exportUrl)
+                        .then(() => {
+                          window.location.href = exportUrl
+                          setIsLoading(false)
+                          setIsExportModalOpen(false)
+                        })
+                        .catch((e) => {
+                          setErrorMessage(e.response.data.message)
+                          setIsLoading(false)
+                        })
+                    })()
+                  }}
+                >
+                  Eksporter valgt tema
+                </Button>
+
+              </div>
+            </div>
           )}
-        </ModalBody>
-      </CustomizedModal>
-    </Block>
+        </Modal.Body>
+      </Modal>
+    </div>
   )
 }
 
