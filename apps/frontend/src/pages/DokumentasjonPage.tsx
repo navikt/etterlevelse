@@ -2,18 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { HeadingXLarge, ParagraphMedium } from 'baseui/typography'
-import { ettlevColors, theme } from '../util/theme'
-import { Layout2 } from '../components/scaffold/Page'
+import { theme } from '../util/theme'
 import { ellipse80, saveArchiveIcon } from '../components/Images'
-import { EtterlevelseDokumentasjonQL, EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, KravPrioritering, KravQL, KravStatus, PageResponse } from '../constants'
+import { EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, KravPrioritering, KravQL, KravStatus, PageResponse } from '../constants'
 import { gql, useQuery } from '@apollo/client'
 import { Code, codelist, ListName, TemaCode } from '../services/Codelist'
-import { KIND, SIZE } from 'baseui/button'
 import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
 import { ampli } from '../services/Amplitude'
-import { getMainHeader, getNewestKravVersjon } from '../components/etterlevelseDokumentasjon/common/utils'
+import { getNewestKravVersjon } from '../components/etterlevelseDokumentasjon/common/utils'
 import { user } from '../services/User'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
@@ -36,6 +33,9 @@ import { Helmet } from 'react-helmet'
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
   const options = codelist.getParsedOptions(ListName.RELEVANS)
+  const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
+  const [openAccordions, setOpenAccordions] = useState<boolean[]>(temaListe.map(() => false))
+
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByEtterlevelseDokumentasjonId(params.id)
   const [kravPriority, setKravPriority] = useState<KravPrioritering[]>([])
@@ -115,7 +115,6 @@ export const DokumentasjonPage = () => {
     }
   }, [etterlevelseDokumentasjon])
 
-  const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
   let antallFylttKrav = 0
 
   getNewestKravVersjon(relevanteStats).forEach((k: KravQL) => {
@@ -154,6 +153,12 @@ export const DokumentasjonPage = () => {
         ))}
       </div>
     )
+  }
+
+  const toggleAccordion = (index: number) => {
+    const newState = [...openAccordions]
+    newState[index] = !openAccordions[index]
+    setOpenAccordions(newState)
   }
 
   if (!etterlevelseDokumentasjon) return <LoadingSkeleton header="Dokumentasjon" />
@@ -234,6 +239,14 @@ export const DokumentasjonPage = () => {
           </BodyShort>
           <EditEtterlevelseDokumentasjonModal etterlevelseDokumentasjon={etterlevelseDokumentasjon} setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon} isEditButton />
         </div>
+        <div className="flex items-center gap-4">
+          <Button variant="tertiary" size="xsmall" onClick={() => setOpenAccordions(temaListe.map(() => true))}>
+            Åpne alle tema
+          </Button>
+          <Button variant="tertiary" size="xsmall" onClick={() => setOpenAccordions(temaListe.map(() => false))}>
+            Lukk alle tema
+          </Button>
+        </div>
       </div>
       <div className="pt-4 flex flex-col gap-4">
         <div className="navds-alert navds-alert--info navds-alert--medium">
@@ -257,14 +270,14 @@ export const DokumentasjonPage = () => {
           <Accordion indent={false}>
             {temaListe
               .filter((tema) => getKravForTema(tema).length > 0)
-              .map((tema) => {
+              .map((tema, index) => {
                 const kravliste = getKravForTema(tema)
                 const utfylteKrav = kravliste.filter(
                   (krav) => krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT,
                 )
                 return (
-                  <Accordion.Item key={`${tema.shortName}_panel`} className="flex flex-col gap-2">
-                    <Accordion.Header id={tema.code}>
+                  <Accordion.Item key={`${tema.shortName}_panel`} className="flex flex-col gap-2" open={openAccordions[index]}>
+                    <Accordion.Header id={tema.code} onClick={() => toggleAccordion(index)}>
                       <div className="flex gap-4">
                         <span>
                           {tema.shortName} ({utfylteKrav.length} av {kravliste.length} krav er ferdig utfylt)
