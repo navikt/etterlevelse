@@ -136,8 +136,7 @@ export const DokumentasjonPage = () => {
         <div className="flex flex-wrap gap-2">
           {relevans.map((r, index) => (
             <div key={r.id} className="flex items-center gap-1">
-              <BodyShort size="small">{r.label}</BodyShort>
-              {index < relevans.length - 1 && <img alt="dot" src={ellipse80} />}
+              <Tag variant="info" size="small">{r.label}</Tag>
             </div>
           ))}
         </div>
@@ -216,9 +215,8 @@ export const DokumentasjonPage = () => {
             </div>
           )}
           {etterlevelseDokumentasjon.teams.length > 0 ? <Teams teams={etterlevelseDokumentasjon.teams} link /> : <Detail>Team er ikke angitt</Detail>}
-        </div>
-        <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
+            <Detail className="font-bold">Egenskaper:</Detail>
             {etterlevelseDokumentasjon.irrelevansFor.length === options.length && (
               <div className="flex items-center gap-1">
                 <ExclamationmarkTriangleFillIcon area-label="" aria-hidden className="text-2xl text-icon-warning" />
@@ -228,18 +226,18 @@ export const DokumentasjonPage = () => {
             {!etterlevelseDokumentasjon.irrelevansFor.length ? getRelevans() : getRelevans(etterlevelseDokumentasjon.irrelevansFor)}
           </div>
         </div>
+        <EditEtterlevelseDokumentasjonModal etterlevelseDokumentasjon={etterlevelseDokumentasjon} setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon} isEditButton />
         <div className="flex justify-between w-full items-center">
           <BodyShort size="small">
             Totalt {getNewestKravVersjon(relevanteStats).length} krav, {antallFylttKrav} ferdig utfylt
           </BodyShort>
-          <EditEtterlevelseDokumentasjonModal etterlevelseDokumentasjon={etterlevelseDokumentasjon} setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon} isEditButton />
         </div>
       </div>
       <div className="pt-4 flex flex-col gap-4">
         <div className="navds-alert navds-alert--info navds-alert--medium">
           <div className="flex flex-col gap-2">
             <p>Vi tester nytt oppsett med at tema og krav vises nå på samme side, slik at det forhåpentligvis blir lettere å navigere seg i.</p>
-            <p>Kravene er vist i anbefalt rekkefølge hvis man leser de fra venstre til høyre.</p>
+            <p>Kravene under hvert tema er vist i anbefalt rekkefølge hvis man leser de fra venstre til høyre.</p>
             <p>
               Vi vil gjerne ha tilbakemeldinger på hvordan det fungerer.{' '}
               <Link target="_blank" href="https://nav-it.slack.com/archives/C01V697SSR2">
@@ -285,7 +283,7 @@ export const DokumentasjonPage = () => {
                       <div className="flex flex-col gap-6">
                         <div>
                           <Link href={`/tema/${tema.code}`} target="_blank">
-                            Lær mer om {tema.shortName}, og ansvarlig for tema (åpnes i ny fane)
+                            Lær mer om {tema.shortName} (åpnes i ny fane)
                           </Link>
                         </div>
                         <div className="grid grid-cols-2 gap-2">
