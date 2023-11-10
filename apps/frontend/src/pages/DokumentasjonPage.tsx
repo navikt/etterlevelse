@@ -136,7 +136,7 @@ export const DokumentasjonPage = () => {
         <div className="flex flex-wrap gap-2">
           {relevans.map((r, index) => (
             <div key={r.id} className="flex items-center gap-1">
-              <Tag variant="info" size="small">{r.label}</Tag>
+              <Tag variant="info" size="small"><Detail>{r.label}</Detail></Tag>
             </div>
           ))}
         </div>
@@ -147,7 +147,7 @@ export const DokumentasjonPage = () => {
         {options.map((o, index) => (
           <div key={o.id} className="flex items-center gap-1">
             <Tag variant="info" size="small">
-              {o.label}
+              <Detail>{o.label}</Detail>
             </Tag>
           </div>
         ))}
