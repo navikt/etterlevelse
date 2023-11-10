@@ -59,7 +59,7 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, ette
               },
             }}
           >
-            Tema for dokumentasjon
+            Temaoversikt
           </LabelSmall>
         </Button>
       </Block>

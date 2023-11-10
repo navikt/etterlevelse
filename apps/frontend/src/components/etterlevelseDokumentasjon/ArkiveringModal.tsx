@@ -4,10 +4,7 @@ import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../../constants'
 import { createEtterlevelseArkiv, updateEtterlevelseArkiv } from '../../api/ArkiveringApi'
 import React, { useState } from 'react'
 import moment from 'moment'
-import CustomizedModal from '../common/CustomizedModal'
-import { borderRadius } from '../common/Style'
-import Button from '../common/Button'
-import { BodyLong } from '@navikt/ds-react'
+import { BodyLong, Button, Modal } from '@navikt/ds-react'
 import { user } from '../../services/User'
 
 type ArkiveringModalProps = {
@@ -48,21 +45,11 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
   }
 
   return (
-    <CustomizedModal
-      isOpen={arkivModal}
+    <Modal
+      open={arkivModal}
       onClose={() => {
         setIsArchivingCancelled(false)
         setArkivModal(false)
-      }}
-      size="default"
-      overrides={{
-        Dialog: {
-          style: {
-            width: '375px',
-            boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
-            ...borderRadius('4px'),
-          },
-        },
       }}
     >
       <ModalHeader>{etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Arkivering bestilt' : 'Arkivér i Websak'}</ModalHeader>
@@ -111,12 +98,7 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
                   setIsArchivingCancelled(false)
                 }
               }}
-              kind={etterlevelseArkiv.status !== EtterlevelseArkivStatus.TIL_ARKIVERING ? 'primary' : 'secondary'}
-              $style={{
-                borderWidth: '2px',
-                marginRight: '16px',
-                padding: '14px 16px',
-              }}
+              variant={etterlevelseArkiv.status !== EtterlevelseArkivStatus.TIL_ARKIVERING ? 'primary' : 'secondary'}
             >
               {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Avbryt arkivering i WebSak' : 'Arkivér i WebSak'}
             </Button>
@@ -127,16 +109,13 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
                 setIsArchivingCancelled(false)
                 setArkivModal(false)
               }}
-              kind="primary"
-              $style={{
-                padding: '14px 16px',
-              }}
+              variant="primary"
             >
               Lukk
             </Button>
           )}
         </Block>
       </ModalBody>
-    </CustomizedModal>
+    </Modal>
   )
 }
