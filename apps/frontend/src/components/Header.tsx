@@ -14,7 +14,7 @@ import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from './common/Markdown'
 import { ampli } from '../services/Amplitude'
 import { BarChartIcon, ChevronDownIcon, ChevronUpIcon, DocPencilIcon, HouseIcon, InformationIcon, MenuHamburgerIcon, PersonIcon, ReceiptIcon } from '@navikt/aksel-icons'
-import { Button, Checkbox, Dropdown, InternalHeader, Label, Link, Spacer } from '@navikt/ds-react'
+import { Button, Dropdown, InternalHeader, Label, Link, Spacer, Switch } from '@navikt/ds-react'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -57,9 +57,9 @@ const LoggedInHeader = () => {
       </Button>
       <div className={`mt-2 ${viewRoller ? 'block' : 'hidden'}`}>
         {user.getAvailableGroups().map((g) => (
-          <Checkbox key={g.group} checked={user.hasGroup(g.group)} onChange={(e) => user.toggleGroup(g.group, (e.target as HTMLInputElement).checked)}>
+          <Switch size="small" key={g.group} checked={user.hasGroup(g.group)} onChange={(e) => user.toggleGroup(g.group, (e.target as HTMLInputElement).checked)}>
             {g.name}
-          </Checkbox>
+          </Switch>
         ))}
       </div>
     </div>
@@ -204,7 +204,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             <InternalHeader.Title href="/">Støtte til etterlevelse</InternalHeader.Title>
             <Spacer />
             {!props.noSearchBar && (
-              <div className="flex w-full max-w-xl " role="search">
+              <div className="hidden lg:flex w-full max-w-xl justify-center items-center" role="search">
                 <MainSearch />
               </div>
             )}
@@ -217,6 +217,11 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             )}
           </div>
         </InternalHeader>
+      </div>
+      <div className="flex lg:hidden bg-icon-default py-1 px-1 w-full justify-center items-center" role="search">
+        <div className=" max-w-xl w-full ">
+          <MainSearch />
+        </div>
       </div>
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
         <div className="w-full flex justify-center">
