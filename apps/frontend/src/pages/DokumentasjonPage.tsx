@@ -136,7 +136,9 @@ export const DokumentasjonPage = () => {
         <div className="flex flex-wrap gap-2">
           {relevans.map((r, index) => (
             <div key={r.id} className="flex items-center gap-1">
-              <Tag variant="info" size="small"><Detail>{r.label}</Detail></Tag>
+              <Tag variant="info" size="small">
+                <Detail>{r.label}</Detail>
+              </Tag>
             </div>
           ))}
         </div>
@@ -238,13 +240,22 @@ export const DokumentasjonPage = () => {
           <div className="flex flex-col gap-2">
             <p>Vi tester nytt oppsett med at tema og krav vises nå på samme side, slik at det forhåpentligvis blir lettere å navigere seg i.</p>
             <p>Kravene under hvert tema er vist i anbefalt rekkefølge hvis man leser de fra venstre til høyre.</p>
-            <p>
-              Vi vil gjerne ha tilbakemeldinger på hvordan det fungerer.{' '}
-              <Link target="_blank" href="https://nav-it.slack.com/archives/C01V697SSR2">
-                Skriv til oss i #etterlevelse på Slack (åpnes i ny fane)
-              </Link>
-              .
-            </p>
+            <div>
+              <p>
+                Vi vil gjerne ha tilbakemeldinger på hvordan det fungerer.{' '}
+                <Link target="_blank" href="https://nav-it.slack.com/archives/C01V697SSR2">
+                  Skriv til oss i #etterlevelse på Slack (åpnes i ny fane)
+                </Link>
+                .
+              </p>
+              <p>
+                For dere som ikke bruker Slack,{' '}
+                <Link target="_blank" href="https://teamkatalog.nav.no/team/264cebfa-ad46-4af9-8867-592f99f491e6">
+                  kontakt oss via Teamkatalogen
+                </Link>
+                .
+              </p>
+            </div>
           </div>
         </div>
         {loading ? (
