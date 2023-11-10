@@ -239,14 +239,6 @@ export const DokumentasjonPage = () => {
             Totalt {getNewestKravVersjon(relevanteStats).length} krav, {antallFylttKrav} ferdig utfylt
           </BodyShort>
         </div>
-        <div className="flex items-center gap-4">
-          <Button variant="tertiary" size="xsmall" onClick={() => setOpenAccordions(temaListe.map(() => true))}>
-            Åpne alle tema
-          </Button>
-          <Button variant="tertiary" size="xsmall" onClick={() => setOpenAccordions(temaListe.map(() => false))}>
-            Lukk alle tema
-          </Button>
-        </div>
       </div>
       <div className="pt-4 flex flex-col gap-4">
         <div className="navds-alert navds-alert--info navds-alert--medium">
@@ -271,6 +263,15 @@ export const DokumentasjonPage = () => {
             </div>
           </div>
         </div>
+        <div className="flex items-center gap-4">
+          <Button variant="tertiary" size="xsmall" onClick={() => setOpenAccordions(temaListe.map(() => true))}>
+            Åpne alle tema
+          </Button>
+          <Button variant="tertiary" size="xsmall" onClick={() => setOpenAccordions(temaListe.map(() => false))}>
+            Lukk alle tema
+          </Button>
+        </div>
+
         {loading ? (
           <Block display="flex" width="100%" justifyContent="center" marginTop={theme.sizing.scale550}>
             <Loader size={'large'} />
