@@ -298,15 +298,6 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     <RegelverkEdit />
                     {errors.regelverk && <ErrorMessageModal msg={errors.regelverk} fullWidth={true} />}
 
-                    <TextAreaField
-                      label="Relevante implementasjoner"
-                      name="implementasjoner"
-                      height="250px"
-                      markdown
-                      tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'}
-                      setIsFormDirty={setIsFormDirty}
-                    />
-
                     {!newKrav && (
                       <TextAreaField
                         label="Endringer siden siste versjon"
@@ -323,7 +314,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
 
                     <div className="mx-20">
-                      <Heading level="3" size="medium">Gruppering og etiketter</Heading>
+                      <Heading level="3" size="medium">Gruppering</Heading>
                     </div>
                     {/*
                     <Block width="100%" maxWidth={maxInputWidth}>
@@ -340,14 +331,6 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       />
                       {errors.relevansFor && <ErrorMessageModal msg={errors.relevansFor} fullWidth={true} />}
                     </div>
-
-                    <MultiInputField
-                      marginBottom={inputMarginBottom}
-                      maxInputWidth={maxInputWidth}
-                      label="Etiketter"
-                      name="tagger"
-                      tooltip={'Tag kravet med et eller flere nøkkelord. Hensikten er å skape relasjon(er) til andre krav.'}
-                    />
 
                     <div className="w-full mb-20 max-w-md">
                       <EditBegreper />
