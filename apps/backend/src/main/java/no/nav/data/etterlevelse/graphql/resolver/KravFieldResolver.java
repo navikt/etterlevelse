@@ -67,7 +67,10 @@ public class KravFieldResolver implements GraphQLResolver<KravResponse> {
 
     public String prioriteringsId(KravResponse krav) {
         var kravPrioritering = kravPrioriteringService.getByKravNummer(krav.getKravNummer(), krav.getKravVersjon());
-        return kravPrioritering.get(0).getPrioriteringsId();
+        if(!kravPrioritering.isEmpty()){
+            return kravPrioritering.get(0).getPrioriteringsId();
+        }
+        return "";
     }
 
     public List<KravResponse> kravRelasjoner(KravResponse krav){
