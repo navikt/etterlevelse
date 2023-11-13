@@ -2,10 +2,7 @@ package no.nav.data.etterlevelse.kravprioritering;
 
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
-import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
-import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
-import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
 import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
 import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioriteringRepo;
 import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringRequest;
@@ -39,6 +36,10 @@ public class KravPrioriteringService extends DomainService<KravPrioritering> {
             return getByKravNummer(kravNummer);
         }
         return GenericStorage.to(repo.findByKravNummer(kravNummer, kravVersjon), KravPrioritering.class);
+    }
+
+    public List<KravPrioritering> getByTema(String  tema) {
+        return GenericStorage.to(repo.findByTema(tema.substring(0, 3)), KravPrioritering.class);
     }
 
     public KravPrioritering save(KravPrioriteringRequest request) {

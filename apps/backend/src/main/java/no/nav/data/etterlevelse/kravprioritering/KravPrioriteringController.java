@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
 import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringRequest;
 import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringResponse;
@@ -38,6 +40,7 @@ public class KravPrioriteringController {
 
 
     private final KravPrioriteringService service;
+    private final CodelistService codelistService;
 
     @Operation(summary = "Get all krav prioritering")
     @ApiResponse(description = "ok")
@@ -53,12 +56,27 @@ public class KravPrioriteringController {
     @Operation(summary = "Get krav prioritering by KravNummer and KravVersjon")
     @ApiResponse(description = "ok")
     @GetMapping({"/kravnummer/{kravNummer}/{kravVersjon}", "/kravNummer/{kraVnummer}"})
-    public ResponseEntity<RestResponsePage<KravPrioriteringResponse>> getById(
+    public ResponseEntity<RestResponsePage<KravPrioriteringResponse>> getByKravNummer(
             @PathVariable Integer kravNummer,
             @PathVariable(required = false) Integer kravVersjon
     ) {
         log.info("Get krav prioritering for kravnummer={}", kravNummer);
         List<KravPrioritering> kravPrioriteringList = service.getByKravNummer(kravNummer, kravVersjon);
+        return ResponseEntity.ok(new RestResponsePage<>(kravPrioriteringList).convert(KravPrioritering::toResponse));
+    }
+
+    @Operation(summary = "Get krav prioritering by tema code")
+    @ApiResponse(description = "ok")
+    @GetMapping("/tema/{temacode}")
+    public ResponseEntity<RestResponsePage<KravPrioriteringResponse>> getByTemaCode(@PathVariable String temacode) {
+        log.info("Get krav prioritering for tema={}", temacode);
+        if(temacode.length() < 3) {
+            throw new ValidationException("Tema code must be more than 3 characters");
+        }
+
+        codelistService.validateListNameAndCode(ListName.TEMA.name(), temacode);
+
+        List<KravPrioritering> kravPrioriteringList = service.getByTema(temacode);
         return ResponseEntity.ok(new RestResponsePage<>(kravPrioriteringList).convert(KravPrioritering::toResponse));
     }
 
