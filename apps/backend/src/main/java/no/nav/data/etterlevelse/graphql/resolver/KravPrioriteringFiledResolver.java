@@ -50,6 +50,6 @@ public class KravPrioriteringFiledResolver implements GraphQLResolver<KravPriori
 
         var krav = kravService.getByKravNummer(nummer, versjon);
 
-        return krav.map(Krav::getNavn).orElse(null);
+        return krav.map(Krav::getNavn).orElse("");
     }
 }
