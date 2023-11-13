@@ -20,13 +20,12 @@ import { Error } from '../common/ModalSchema'
 import { ErrorMessageModal } from './ErrorMessageModal'
 import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
-import { Checkbox } from 'baseui/checkbox'
 import { user } from '../../services/User'
 import { Modal as BaseModal, ModalBody, ModalHeader } from 'baseui/modal'
 import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
 import AlertUnsavedPopup from '../common/AlertUnsavedPopup'
 import _ from 'lodash'
-import {Alert, BodyLong, BodyShort, Heading} from "@navikt/ds-react";
+import {Alert, BodyShort, ConfirmationPanel, Heading} from "@navikt/ds-react";
 
 type EditKravProps = {
   krav: KravQL
@@ -239,26 +238,19 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'}
                   />
                   <div className="mb-14">
-                    <Checkbox
-                      overrides={{
-                        Checkmark: {
-                          style: ({ $isFocused }) => ({
-                            outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
-                            outlineWidth: $isFocused ? '3px' : undefined,
-                            outlineStyle: $isFocused ? 'solid' : undefined,
-                          }),
-                        },
-                      }}
+                    <ConfirmationPanel
+                      label="Send varselmelding"
                       checked={varlselMeldingActive}
                       onChange={() => setVarselMeldingActive(!varlselMeldingActive)}
                     >
                       Gi kravet en varselmelding (eks. for kommende krav)
-                    </Checkbox>
-                    {varlselMeldingActive && (
-                      <div className="w-full ml-8 mt-6">
-                        <TextAreaField label="Forklaring til etterlevere" name="varselMelding" maxCharacter={100} rows={1} setIsFormDirty={setIsFormDirty} />
-                      </div>
-                    )}
+                      {varlselMeldingActive && (
+                        <div className="w-full ml-8 mt-6">
+                          <TextAreaField label="Forklaring til etterlevere" name="varselMelding" maxCharacter={100} rows={1} setIsFormDirty={setIsFormDirty} />
+                        </div>
+                      )}
+                    </ConfirmationPanel>
+
                   </div>
                   <TextAreaField
                     label="Hensikt"
