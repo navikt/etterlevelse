@@ -38,7 +38,7 @@ public class KravPrioriteringService extends DomainService<KravPrioritering> {
         return GenericStorage.to(repo.findByKravNummer(kravNummer, kravVersjon), KravPrioritering.class);
     }
 
-    public List<KravPrioritering> getByTema(String  tema) {
+    public List<KravPrioritering> getByTema(String tema) {
         return GenericStorage.to(repo.findByTema(tema.substring(0, 3)), KravPrioritering.class);
     }
 
