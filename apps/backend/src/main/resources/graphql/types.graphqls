@@ -46,6 +46,7 @@ type KravPrioritering {
     prioriteringsId: String!
 
     kravNavn: String!
+    kravStatus: KravStatus!
     etterlevelser(onlyForEtterlevelseDokumentasjon: Boolean): [Etterlevelse!]!
 }
 

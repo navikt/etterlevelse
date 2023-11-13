@@ -121,6 +121,7 @@ public class QueryResolver implements GraphQLQueryResolver {
         if (all) {
             return new RestResponsePage<>(filtered).convert(KravPrioritering::toResponse);
         }
+
         return pageInput.pageFrom(filtered).convert(KravPrioritering::toResponse);
     }
 

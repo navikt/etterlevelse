@@ -9,6 +9,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringFilter;
 import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringResponse;
 import org.springframework.stereotype.Component;
@@ -51,5 +52,15 @@ public class KravPrioriteringFiledResolver implements GraphQLResolver<KravPriori
         var krav = kravService.getByKravNummer(nummer, versjon);
 
         return krav.map(Krav::getNavn).orElse("");
+    }
+
+    public KravStatus kravStatus(KravPrioriteringResponse kravPrioritering) {
+        Integer nummer = kravPrioritering.getKravNummer();
+        Integer versjon = kravPrioritering.getKravVersjon();
+        log.info("krav navn for krav {}.{}", nummer, versjon);
+
+        var krav = kravService.getByKravNummer(nummer, versjon);
+
+        return krav.map(Krav::getStatus).orElse(KravStatus.UTGAATT);
     }
 }
