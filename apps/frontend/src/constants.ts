@@ -416,6 +416,7 @@ export type KravQL = Replace<
     begreper: Begrep[]
     virkemidler: Virkemiddel[]
     kravRelasjoner: Krav[]
+    prioriteringsId: string
   }
 >
 
