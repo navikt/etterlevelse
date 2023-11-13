@@ -26,6 +26,7 @@ type Krav {
     underavdeling: Code
     relevansFor: [Code!]!
     status: KravStatus!
+    prioriteringsId: String!
 
     etterlevelser(onlyForEtterlevelseDokumentasjon: Boolean): [Etterlevelse!]!
     tilbakemeldinger: [Tilbakemelding!]!
