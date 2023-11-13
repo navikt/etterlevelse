@@ -26,6 +26,7 @@ type Krav {
     underavdeling: Code
     relevansFor: [Code!]!
     status: KravStatus!
+    prioriteringsId: String!
 
     etterlevelser(onlyForEtterlevelseDokumentasjon: Boolean): [Etterlevelse!]!
     tilbakemeldinger: [Tilbakemelding!]!
@@ -34,19 +35,6 @@ type Krav {
     kravIdRelasjoner: [String!]!
     kravRelasjoner: [Krav!]!
     aktivertDato: DateTime
-}
-
-type KravPrioritering {
-    id: ID!
-    changeStamp: ChangeStamp!
-    version: Int!
-
-    kravNummer: Int!
-    kravVersjon: Int!
-    prioriteringsId: String!
-
-    kravNavn: String!
-    etterlevelser(onlyForEtterlevelseDokumentasjon: Boolean): [Etterlevelse!]!
 }
 
 type Begrep {
@@ -305,14 +293,4 @@ type KravPage {
     totalElements: Int!
     paged: Boolean
     content: [Krav!]!
-}
-
-type KravPrioriteringPage {
-    pageNumber: Int!
-    pageSize: Int!
-    pages: Int!
-    numberOfElements: Int!
-    totalElements: Int!
-    paged: Boolean
-    content: [KravPrioritering!]!
 }

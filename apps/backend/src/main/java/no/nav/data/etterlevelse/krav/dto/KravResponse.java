@@ -66,5 +66,7 @@ public class KravResponse implements KravId {
     private List<BegrepResponse> begreper;
     @JsonIgnore
     private List<VirkemiddelResponse>  virkemidler;
+    @JsonIgnore
+    private String prioriteringsId;
 
 }
