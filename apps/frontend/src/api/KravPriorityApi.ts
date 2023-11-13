@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { KravPrioritering, KravQL, PageResponse } from '../constants'
 import { env } from '../util/env'
+import { gql } from '@apollo/client'
 
 export const getAllKravPriority = async () => {
   const PAGE_SIZE = 100
@@ -35,7 +36,7 @@ export const getKravPriorityByKravNumberAndVersion = async (kravNummer: number |
     })
 }
 
-export const getKravPriorityByTemaCode = async (temaCode: string ) => {
+export const getKravPriorityByTemaCode = async (temaCode: string) => {
   return await axios
     .get<KravPrioritering>(`${env.backendBaseUrl}/kravprioritering/tema/${temaCode}`)
     .then((resp) => {
@@ -77,3 +78,39 @@ export const kravMapToKravPrioriting = (krav: Partial<KravQL>): KravPrioritering
   changeStamp: krav.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
   version: -1,
 })
+
+
+
+export const etterlevelseDokumentasjonKravPriorityQuery = gql`
+  query getKravPriorityByFilter($etterlevelseDokumentasjonId: String, $tema: String) {
+    kravPrioritering(
+      filter: {
+        etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
+        tema: $tema
+      }
+    ) {
+      content {
+        id
+        kravVersjo
+        kravNummer
+        prioriteringsId
+        kravNavn
+        changeStamp {
+          lastModifiedBy
+          lastModifiedDate
+          createdDate
+        }
+        etterlevelser(onlyForEtterlevelseDokumentasjon: true) {
+          id
+          etterleves
+          fristForFerdigstillelse
+          status
+          changeStamp {
+            lastModifiedBy
+            lastModifiedDate
+          }
+        }
+      }
+    }
+  }
+`
