@@ -343,6 +343,38 @@ export const etterlevelseDokumentasjonKravQuery = gql`
   }
 `
 
+export const KravMedPrioriteringOgEtterlevelseQuery = gql`
+  query getKravByFilter($etterlevelseDokumentasjonId: String, $lover: [String!], $gjeldendeKrav: Boolean, $etterlevelseDokumentasjonIrrevantKrav: Boolean, $status: [String!]) {
+    krav(
+      filter: {
+        etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
+        lover: $lover
+        gjeldendeKrav: $gjeldendeKrav
+        etterlevelseDokumentasjonIrrevantKrav: $etterlevelseDokumentasjonIrrevantKrav
+        status: $status
+      }
+    ) {
+      content {
+        navn
+        kravNummer
+        kravVersjon
+        status
+        prioriteringsId
+        etterlevelser(onlyForEtterlevelseDokumentasjon: true) {
+          id
+          etterleves
+          fristForFerdigstillelse
+          status
+          changeStamp {
+            lastModifiedBy
+            lastModifiedDate
+          }
+        }
+      }
+    }
+  }
+`
+
 export const statsQuery = gql`
   query getBehandlingStats($behandlingId: ID) {
     behandling(filter: { id: $behandlingId }) {

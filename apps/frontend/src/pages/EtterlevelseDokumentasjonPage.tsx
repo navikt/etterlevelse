@@ -4,16 +4,15 @@ import { useParams } from 'react-router-dom'
 import { ettlevColors } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { Layout2 } from '../components/scaffold/Page'
-import { KravId, etterlevelseDokumentasjonKravQuery } from '../api/KravApi'
+import { KravId, KravMedPrioriteringOgEtterlevelseQuery } from '../api/KravApi'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { KRAV_FILTER_TYPE, KravPrioriteringQL, KravQL, KravStatus, PageResponse } from '../constants'
+import { KRAV_FILTER_TYPE, KravQL, KravStatus, PageResponse } from '../constants'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getMainHeader } from '../components/etterlevelseDokumentasjon/common/utils'
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
 import { useQuery } from '@apollo/client'
-import { kravPriorityQueryWithEtterlevelse } from '../api/KravPriorityApi'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
@@ -33,7 +32,9 @@ export const EtterlevelseDokumentasjonPage = () => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const lover = codelist.getCodesForTema(params.tema)
 
-  const { data, loading } = useQuery<{ krav: PageResponse<KravQL> }>(etterlevelseDokumentasjonKravQuery, {
+
+  //CODE FOR GETTING KRAV LIST WITH PRIORTY
+  const { data, loading } = useQuery<{ krav: PageResponse<KravQL> }>(KravMedPrioriteringOgEtterlevelseQuery, {
     variables: {
       etterlevelseDokumentasjonId: params.id,
       lover: lover.map((l) => l.code),
@@ -43,7 +44,16 @@ export const EtterlevelseDokumentasjonPage = () => {
     fetchPolicy: 'no-cache',
   })
 
-  console.log(data)
+  // CODE FOR SORTING WITH PRIORITY
+  // console.log(data?.krav.content.sort((a, b) => {
+  //   if (a.prioriteringsId === '') {
+  //     return 1
+  //   } else if (b.prioriteringsId === '') {
+  //     return -1
+  //   } else {
+  //     return a.prioriteringsId.localeCompare(b.prioriteringsId)
+  //   }
+  // }))
 
   const [kravId, setKravId] = useState<KravId | undefined>()
 
