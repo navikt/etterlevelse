@@ -149,6 +149,12 @@ export interface KravPrioritering extends DomainObject {
   prioriteringsId: string
 }
 
+
+export type KravPrioriteringQL = KravPrioritering & {
+  kravNavn: string
+  etterlevelser: EtterlevelseQL[]
+}
+
 export interface KravId {
   id: string
   kravVersjon: number
