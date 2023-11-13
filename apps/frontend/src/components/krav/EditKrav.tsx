@@ -1,7 +1,6 @@
 import { Krav, KravQL, KravStatus, KravVersjon } from '../../constants'
 import { Form, Formik } from 'formik'
 import { createKrav, getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav } from '../../api/KravApi'
-import { Block } from 'baseui/block'
 import React, { useEffect } from 'react'
 import * as yup from 'yup'
 import { codelist, ListName } from '../../services/Codelist'
@@ -12,7 +11,6 @@ import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
 import { RegelverkEdit } from './Edit/RegelverkEdit'
 import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
 import { EditBegreper } from './Edit/KravBegreperEdit'
-import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
 import { ettlevColors, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
@@ -20,18 +18,15 @@ import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseA
 import ErrorModal from '../ErrorModal'
 import { Error } from '../common/ModalSchema'
 import { ErrorMessageModal } from './ErrorMessageModal'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
 import { Checkbox } from 'baseui/checkbox'
-import { warningAlert } from '../Images'
 import { user } from '../../services/User'
 import { Modal as BaseModal, ModalBody, ModalHeader } from 'baseui/modal'
 import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
 import AlertUnsavedPopup from '../common/AlertUnsavedPopup'
 import _ from 'lodash'
+import {Alert, BodyLong, BodyShort, Heading} from "@navikt/ds-react";
 
 type EditKravProps = {
   krav: KravQL
@@ -217,41 +212,20 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
               <div className={`pt-6 ${!stickyHeader ? 'pb-12' : 'pb-5'} px-24 sticky top-0 ${!stickyHeader ? 'block' : 'flex'} z-30 bg-green-800`}>
                 {stickyHeader && (
                   <div className="flex w-full justify-start">
-                    <LabelLarge $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</LabelLarge>
+                    <BodyShort className="text-white">{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</BodyShort>
                   </div>
                 )}
                 {!stickyHeader && (
                   <div className="w-full">
-                    <HeadingXXLarge $style={{ color: '#F8F8F8' }}>{newVersion ? 'Ny versjon' : newKrav ? 'Ny krav' : 'Rediger kravside'}: </HeadingXXLarge>
-                    <HeadingXLarge $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </HeadingXLarge>
+                    <Heading level="1" size="medium" className="text-white">{newVersion ? 'Ny versjon' : newKrav ? 'Nytt krav' : 'Rediger kravside'}: </Heading>
+                    <Heading level="2" size="small" className="text-white">{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </Heading>
                     {newVersion && (
-                      <Notification
-                        closeable
-                        overrides={{
-                          Body: {
-                            style: {
-                              backgroundColor: ettlevColors.warning50,
-                              ...borderWidth('1px'),
-                              ...borderColor('#D47B00'),
-                              ...borderRadius('4px'),
-                              width: '100%',
-                            },
-                          },
-                        }}
-                      >
-                        <div className="flex">
-                          <div className="mr-3" >
-                            <img src={warningAlert} alt="warning icon" />
-                          </div>
-                          <div>
-                            <LabelSmall $style={{ fontSize: '16px', lineHeight: '20px' }}>Sikker på at du vil opprette en ny versjon?</LabelSmall>
-                            <ParagraphXSmall $style={{ fontSize: '16px', lineHeight: '20px' }}>
+                      <Alert variant="warning">
+                            <Heading spacing size="small" level="4">Sikker på at du vil opprette en ny versjon?</Heading>
+
                               Ny versjon av kravet skal opprettes når det er <strong>vesentlige endringer</strong> i kravet som gjør at <strong>teamene må revurdere</strong> sin
                               besvarelse av kravet. Ved alle mindre justeringer, endre i det aktive kravet, og da slipper teamene å revurdere sin besvarelse.
-                            </ParagraphXSmall>
-                          </div>
-                        </div>
-                      </Notification>
+                      </Alert>
                     )}
                   </div>
                 )}
@@ -302,11 +276,11 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
                 <div className="content_container flex w-full justify-center">
                   <div className="w-5/6">
-                    <HeadingXLarge marginBottom={inputMarginBottom}>Suksesskriterier</HeadingXLarge>
+                    <Heading level="3" size="medium" className="mb-8">Suksesskriterier</Heading>
                     <KravSuksesskriterierEdit setIsFormDirty={setIsFormDirty} newVersion={!!newVersion} />
 
                     <div className="mb-8">
-                      <HeadingXLarge>Dokumentasjon</HeadingXLarge>
+                      <Heading level="3" size="medium">Dokumentasjon</Heading>
                     </div>
 
                     <MultiInputField
@@ -349,7 +323,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
 
                     <div className="mx-20">
-                      <HeadingXLarge>Gruppering og etiketter</HeadingXLarge>
+                      <Heading level="3" size="medium">Gruppering og etiketter</Heading>
                     </div>
                     {/*
                     <Block width="100%" maxWidth={maxInputWidth}>
@@ -384,7 +358,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     </div>
 
                     <div className="mb-8">
-                      <HeadingXLarge>Egenskaper</HeadingXLarge>
+                      <Heading level="3" size="medium">Egenskaper</Heading>
                     </div>
 
                     <KravVarslingsadresserEdit />
@@ -392,33 +366,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     <div className="w-full">
                       {Object.keys(errors).length > 0 && !errors.dokumentasjon && (
                         <div className="flex w-full my-12">
-                          <div className="w-full">
-                            <Notification
-                              overrides={{
-                                Body: {
-                                  style: {
-                                    width: 'auto',
-                                    ...borderStyle('solid'),
-                                    ...borderWidth('1px'),
-                                    ...borderColor(ettlevColors.red600),
-                                    ...borderRadius('4px'),
-                                  },
-                                },
-                              }}
-                              kind={NKIND.negative}
-                            >
-                              <div className="flex justify-center">
-                                <FontAwesomeIcon
-                                  icon={faTimesCircle}
-                                  style={{
-                                    marginRight: '5px',
-                                  }}
-                                />
-                                <ParagraphMedium marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
-                                  Du må fylle ut alle obligatoriske felter
-                                </ParagraphMedium>
-                              </div>
-                            </Notification>
+                          <div className="w-full bg-red-300">
+                            <Alert variant="warning" role="status">
+                              Du må fylle ut alle obligatoriske felter
+                            </Alert>
                           </div>
                         </div>
                       )}
@@ -426,7 +377,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                   </div>
                 </div>
                 <div
-                  className="button_container sticky bottom-0 flex flex-col py-4 px-24"
+                  className="button_container sticky bottom-0 flex flex-col py-4 px-24 bg-gray-50"
 /*                  backgroundColor={ettlevColors.grey25}
                   position="sticky"
                   bottom={0}
