@@ -8,10 +8,12 @@ import { KravId } from '../api/KravApi'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { KRAV_FILTER_TYPE } from '../constants'
+import { KRAV_FILTER_TYPE, KravPrioriteringQL, PageResponse } from '../constants'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getMainHeader } from '../components/etterlevelseDokumentasjon/common/utils'
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
+import { useQuery } from '@apollo/client'
+import { kravPriorityQueryWithEtterlevelse } from '../api/KravPriorityApi'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
@@ -29,6 +31,13 @@ export const EtterlevelseDokumentasjonPage = () => {
   const params = useParams<{ id: string; tema: string; kravNummer: string; kravVersjon: string; filter: string }>()
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema?.replace('i', ''))
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
+
+
+  const { data, loading } = useQuery<{ krav: PageResponse<KravPrioriteringQL> }>(kravPriorityQueryWithEtterlevelse, {
+    variables: { etterlevelseDokumentasjonId: params.id, tema : params.tema },
+    skip: !params.tema || !params.id,
+    fetchPolicy: 'no-cache',
+  })
 
   const [kravId, setKravId] = useState<KravId | undefined>()
 

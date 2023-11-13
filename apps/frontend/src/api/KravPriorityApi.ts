@@ -81,17 +81,17 @@ export const kravMapToKravPrioriting = (krav: Partial<KravQL>): KravPrioritering
 
 
 
-export const etterlevelseDokumentasjonKravPriorityQuery = gql`
+export const kravPriorityQueryWithEtterlevelse = gql`
   query getKravPriorityByFilter($etterlevelseDokumentasjonId: String, $tema: String) {
     kravPrioritering(
       filter: {
         etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
-        tema: $tema
+        temaCode: $tema
       }
     ) {
       content {
         id
-        kravVersjo
+        kravVersjon
         kravNummer
         prioriteringsId
         kravNavn
