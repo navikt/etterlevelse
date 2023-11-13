@@ -7,7 +7,7 @@ scalar NonNegativeInt
 type Query {
     kravById(id: ID, nummer: Int, versjon: Int): Krav
     krav(filter: KravFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): KravPage!
-
+    kravPrioritering(filter: KravPrioriteringFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0 ): KravPrioriteringPage!
     etterlevelseById(id: ID!) : Etterlevelse
 
     etterlevelseDokumentasjon(filter: EtterlevelseDokumentasjonFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): EtterlevelseDokumentasjonPage!
@@ -28,6 +28,13 @@ input KravFilter {
     gjeldendeKrav: Boolean = false
     """min 1, max 20"""
     sistRedigert: NonNegativeInt
+}
+
+input KravPrioriteringFilter {
+    id: ID
+    kravNummer: Int
+    etterlevelseDokumentasjonId: String
+    temaCode: String
 }
 
 input EtterlevelseDokumentasjonFilter {

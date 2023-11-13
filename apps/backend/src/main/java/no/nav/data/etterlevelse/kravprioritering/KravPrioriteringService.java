@@ -5,7 +5,9 @@ import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
 import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioriteringRepo;
+import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringFilter;
 import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -40,6 +42,20 @@ public class KravPrioriteringService extends DomainService<KravPrioritering> {
 
     public List<KravPrioritering> getByTema(String tema) {
         return GenericStorage.to(repo.findByTema(tema.substring(0, 3)), KravPrioritering.class);
+    }
+
+    public List<KravPrioritering> getByFilter(KravPrioriteringFilter filter) {
+        if (!StringUtils.isBlank(filter.getId())) {
+            KravPrioritering kravPrioritering = storage.get(UUID.fromString(filter.getId()), KravPrioritering.class);
+            if (kravPrioritering != null) {
+                return List.of(kravPrioritering);
+            }
+            return List.of();
+        } else if (filter.getKravNummer() != null) {
+            return GenericStorage.to(repo.findByKravNummer(filter.getKravNummer()), KravPrioritering.class);
+        }
+
+        return GenericStorage.to(repo.findByTema(filter.getTemaCode().substring(0, 3)), KravPrioritering.class);
     }
 
     public KravPrioritering save(KravPrioriteringRequest request) {

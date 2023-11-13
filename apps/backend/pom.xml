@@ -18,7 +18,7 @@
         <java.version>17</java.version>
 
         <springdoc-openapi-starter-webmvc-ui.version>2.2.0</springdoc-openapi-starter-webmvc-ui.version>
-        <hypersistence-utils-hibernate-60.version>3.6.0</hypersistence-utils-hibernate-60.version>
+        <hypersistence-utils-hibernate-60.version>3.6.1</hypersistence-utils-hibernate-60.version>
         <simpleclient.version>0.16.0</simpleclient.version>
         <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
         <shedlock.version>5.10.0</shedlock.version>
@@ -27,7 +27,7 @@
         <graphql.version>21.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
 
-        <microsoft-graph.version>5.75.0</microsoft-graph.version>
+        <microsoft-graph.version>5.76.0</microsoft-graph.version>
         <msal4j.version>1.14.0</msal4j.version>
 
         <!-- transitive versions -->
