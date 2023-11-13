@@ -9,7 +9,6 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
-import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringFilter;
 import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringResponse;
 import org.springframework.stereotype.Component;
@@ -22,7 +21,7 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KravPrioriteringFiledResolver implements GraphQLResolver<KravResponse> {
+public class KravPrioriteringFiledResolver implements GraphQLResolver<KravPrioriteringResponse> {
 
     private final EtterlevelseService etterlevelseService;
     private final KravService kravService;
