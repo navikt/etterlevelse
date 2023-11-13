@@ -37,20 +37,6 @@ type Krav {
     aktivertDato: DateTime
 }
 
-type KravPrioritering {
-    id: ID!
-    changeStamp: ChangeStamp!
-    version: Int!
-
-    kravNummer: Int!
-    kravVersjon: Int!
-    prioriteringsId: String!
-
-    kravNavn: String!
-    kravStatus: KravStatus!
-    etterlevelser(onlyForEtterlevelseDokumentasjon: Boolean): [Etterlevelse!]!
-}
-
 type Begrep {
     id: ID!
     navn: String!
@@ -307,14 +293,4 @@ type KravPage {
     totalElements: Int!
     paged: Boolean
     content: [Krav!]!
-}
-
-type KravPrioriteringPage {
-    pageNumber: Int!
-    pageSize: Int!
-    pages: Int!
-    numberOfElements: Int!
-    totalElements: Int!
-    paged: Boolean
-    content: [KravPrioritering!]!
 }

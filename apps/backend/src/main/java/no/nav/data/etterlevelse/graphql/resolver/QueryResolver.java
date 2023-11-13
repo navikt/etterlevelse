@@ -18,9 +18,6 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.kravprioritering.KravPrioriteringService;
-import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
-import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringFilter;
-import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -103,26 +100,6 @@ public class QueryResolver implements GraphQLQueryResolver {
             return new RestResponsePage<>(filtered).convert(EtterlevelseDokumentasjon::toResponse);
         }
         return pageInput.pageFrom(filtered).convert(EtterlevelseDokumentasjon::toResponse);
-    }
-
-    public RestResponsePage<KravPrioriteringResponse> kravPrioritering(KravPrioriteringFilter filter, Integer page, Integer pageSize) {
-        log.info("kravPrioriteringFilter filter {}", filter);
-        var pageInput = new PageParameters(page, pageSize);
-
-        if (filter == null || filter.isEmpty()) {
-            var resp = kravPrioriteringService.getAll(pageInput);
-
-            return new RestResponsePage<>(resp).convert(KravPrioritering::toResponse);
-        }
-
-        List<KravPrioritering> filtered = new ArrayList<>(kravPrioriteringService.getByFilter(filter));
-
-        var all = pageSize == 0;
-        if (all) {
-            return new RestResponsePage<>(filtered).convert(KravPrioritering::toResponse);
-        }
-
-        return pageInput.pageFrom(filtered).convert(KravPrioritering::toResponse);
     }
 
     public EtterlevelseResponse etterlevelseById(UUID id) {
