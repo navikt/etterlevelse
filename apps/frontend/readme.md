@@ -43,7 +43,7 @@ See 'kubectl port-forward -h' for help and examples
 
 1. You need to add config (see below) in `.zshrc`.
 2. Run `gcloud auth login`
-3. Run `kubectl port-forward deployment/etterlevelse-backend 8080 --namespace teamdatajegerne`
+3. Run `kpfe`
 4. Then run in separate window `yarn run start`
 5. Go to `http://localhost:3000/`
 6. Done!
