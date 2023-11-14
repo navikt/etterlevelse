@@ -18,13 +18,11 @@ import ErrorModal from '../ErrorModal'
 import { Error } from '../common/ModalSchema'
 import { ErrorMessageModal } from './ErrorMessageModal'
 import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
 import { user } from '../../services/User'
-import { Modal as BaseModal, ModalBody, ModalHeader } from 'baseui/modal'
 import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
 import AlertUnsavedPopup from '../common/AlertUnsavedPopup'
 import _ from 'lodash'
-import {Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading} from "@navikt/ds-react";
+import {Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal} from "@navikt/ds-react";
 
 type EditKravProps = {
   krav: KravQL
@@ -426,83 +424,75 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         </div>
                       )}
 
-                      <BaseModal
-                        overrides={{ Dialog: { style: { ...borderRadius('4px') } } }}
-                        closeable={false}
-                        isOpen={UtgaattKravMessage}
-                        onClose={() => setUtgaattKravMessage(false)}
+                      <Modal
+                        header={{
+                          closeButton: false,
+                          heading: "Sikker på at du vil sette kravet til utgått?"
+                        }}
+                        open={UtgaattKravMessage}
                       >
-                        <ModalHeader>Sikker på at du vil sette kravet til utgått?</ModalHeader>
-                        <ModalBody>Denne handligen kan ikke reverseres</ModalBody>
-                        <div className="flex justify-center mx-6 my-8">
-                          <div className="flex w-full">
-                            <Button
-                              className="mr-4"
-                              variant="secondary"
-                              onClick={() => setUtgaattKravMessage(false)}>
-                              Nei, avbryt handlingen
-                            </Button>
-                          </div>
-                          <div className="flex w-full justify-end">
-                            <Button
-                              variant="secondary"
-                              onClick={() => {
-                                values.status = KravStatus.UTGAATT
-                                submitForm()
-                                setUtgaattKravMessage(false)
-                              }}
-                            >
-                              Ja, sett til utgått
-                            </Button>
-                          </div>
-                        </div>
-                      </BaseModal>
+                        <Modal.Body>Denne handligen kan ikke reverseres</Modal.Body>
+                        <Modal.Footer>
+                          <Button
+                            className="mr-4"
+                            variant="secondary"
+                            onClick={() => setUtgaattKravMessage(false)}>
+                            Nei, avbryt handlingen
+                          </Button>
+                          <Button
+                            variant="primary"
+                            onClick={() => {
+                              values.status = KravStatus.UTGAATT
+                              submitForm()
+                              setUtgaattKravMessage(false)
+                            }}
+                          >
+                            Ja, sett til utgått
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
 
-                      <BaseModal
-                        overrides={{ Dialog: { style: { ...borderRadius('4px') } } }}
-                        closeable={false}
-                        isOpen={aktivKravMessage}
+                      <Modal
+                        header={{
+                          closeButton: false,
+                          heading:"Sikker på at du vil sette versjonen til aktiv?"
+                        }}
+                        open={aktivKravMessage}
                         onClose={() => setAktivKravMessage(false)}
                       >
-                        <ModalHeader>Sikker på at du vil sette versjonen til aktiv?</ModalHeader>
-                        <ModalBody>Kravet har en nyere versjon som settes til utkast</ModalBody>
-                        <div className="flex justify-center mx-6 my-8">
-                          <div className="flex w-full">
-                            <Button
-                              className="mr-4"
-                              variant="secondary"
-                              onClick={() => setAktivKravMessage(false)}>
-                              Nei, avbryt handlingen
-                            </Button>
-                          </div>
-                          <div className="flex w-full justify-end">
-                            <Button
-                              variant="primary"
-                              onClick={async () => {
-                                const newVersionOfKrav = await getKravByKravNumberAndVersion(krav.kravNummer, krav.kravVersjon + 1)
-                                if (newVersionOfKrav) {
-                                  updateKrav(
-                                    kravMapToFormVal({
-                                      ...newVersionOfKrav,
-                                      status: KravStatus.UTKAST,
-                                    }) as KravQL,
-                                  ).then(() => {
-                                    values.status = KravStatus.AKTIV
-                                    submitForm()
-                                    setAktivKravMessage(false)
-                                  })
-                                } else {
+                        <Modal.Body>Kravet har en nyere versjon som settes til utkast</Modal.Body>
+                        <Modal.Footer>
+                          <Button
+                            variant="primary"
+                            onClick={async () => {
+                              const newVersionOfKrav = await getKravByKravNumberAndVersion(krav.kravNummer, krav.kravVersjon + 1)
+                              if (newVersionOfKrav) {
+                                updateKrav(
+                                  kravMapToFormVal({
+                                    ...newVersionOfKrav,
+                                    status: KravStatus.UTKAST,
+                                  }) as KravQL,
+                                ).then(() => {
                                   values.status = KravStatus.AKTIV
                                   submitForm()
                                   setAktivKravMessage(false)
-                                }
-                              }}
-                            >
-                              Ja, sett til aktiv
-                            </Button>
-                          </div>
-                        </div>
-                      </BaseModal>
+                                })
+                              } else {
+                                values.status = KravStatus.AKTIV
+                                submitForm()
+                                setAktivKravMessage(false)
+                              }
+                            }}
+                          >
+                            Ja, sett til aktiv
+                          </Button>
+                          <Button
+                            variant="secondary"
+                            onClick={() => setAktivKravMessage(false)}>
+                            Nei, avbryt handlingen
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
                     </div>
                     <div className="flex w-full justify-end">
                       <Button className="ml-4"
