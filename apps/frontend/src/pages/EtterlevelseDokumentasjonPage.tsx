@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { KravId } from '../api/KravApi'
+import { KravId, KravMedPrioriteringOgEtterlevelseQuery } from '../api/KravApi'
 import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
