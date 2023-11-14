@@ -33,7 +33,7 @@ Remember to flush sockets when you can't login
 
 ###
 
-#### Kubenetics error
+#### Kubernetes error
 
 ```
 frontend git:(master) ✗ kubectl port-forward deployment/etterlevelse-backend
