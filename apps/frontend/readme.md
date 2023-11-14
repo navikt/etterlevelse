@@ -41,9 +41,30 @@ error: TYPE/NAME and list of ports are required for port-forward
 See 'kubectl port-forward -h' for help and examples
 ```
 
-1. You need to add config in `.zshrc`.
+1. You need to add config (see below) in `.zshrc`.
 2. Run `gcloud auth login`
 3. Run `kubectl port-forward deployment/etterlevelse-backend 8080 --namespace teamdatajegerne`
 4. Then run in separate window `yarn run start`
 5. Go to `http://localhost:3000/`
 6. Done!
+
+##### `.bashrc` or `.zshrc` config
+
+```
+# etterlevelse-back end proxy connection
+kpfe() {
+  while true; do
+          kubectl port-forward deployment/etterlevelse-backend 8080 --namespace teamdatajegerne;
+  done
+}
+
+# behandlingskatalog-backend proxy connection
+kpfb() {
+  while true; do
+          kubectl port-forward deployment/behandlingskatalog-backend 8080 --namespace teamdatajegerne;
+  done
+}
+
+# logge inn i gcloud for å ha tilgang til gcp clusters
+alias gli="gcloud auth login"
+```
