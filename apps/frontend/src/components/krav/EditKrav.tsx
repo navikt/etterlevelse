@@ -36,6 +36,7 @@ type EditKravProps = {
 
 const maxInputWidth = '400px'
 const inputMarginBottom = theme.sizing.scale900
+const modalWidth = '1276px'
 
 export const kravModal = () => document.querySelector('#krav-modal')
 
@@ -158,23 +159,12 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
   return (
     <div>
-      <CustomizedModal
-        closeable={false}
-        onClose={() => {
-          if (isFormDirty) {
-            setIsAlertModalOpen(true)
-          } else {
-            setIsOpen(false)
-          }
-        }}
-        isOpen={isOpen}
-        overrides={{
-          Root: {
-            props: {
-              id: 'krav-modal',
-            },
-          },
-        }}
+      <Modal
+        width={modalWidth}
+        header={{
+          heading: newVersion ? 'Ny versjon' : newKrav ? 'Nytt krav' : 'Rediger kravside',
+          closeButton: false}}
+        open={isOpen}
       >
         <Formik
           onSubmit={submit}
@@ -526,7 +516,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
             </Form>
           )}
         </Formik>
-      </CustomizedModal>
+      </Modal>
     </div>
   )
 }
