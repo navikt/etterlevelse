@@ -73,7 +73,7 @@ public class KravPrioriteringService extends DomainService<KravPrioritering> {
         List<KravPrioriteringResponse> kravPrioriteringer = GenericStorage.to(repo.getAll(),KravPrioritering.class).stream().map(KravPrioritering::toResponse).toList();
         kravPrioriteringer.forEach(this::setKravStatus);
 
-        return kravPrioriteringer;
+        return filterForKravStatus(kravPrioriteringer, filter);
     }
 
     private List<KravPrioriteringResponse> filterForKravStatus(List<KravPrioriteringResponse> kravPrioriteringResponse, KravPrioriteringFilter filter) {
