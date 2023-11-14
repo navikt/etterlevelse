@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
 import { useParams } from 'react-router-dom'
-import { ettlevColors } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { Layout2 } from '../components/scaffold/Page'
 import { KravId } from '../api/KravApi'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import { KRAV_FILTER_TYPE } from '../constants'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
-import { getMainHeader } from '../components/etterlevelseDokumentasjon/common/utils'
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
@@ -65,43 +61,49 @@ export const EtterlevelseDokumentasjonPage = () => {
   ]
 
   return (
-    <>
+    <div role="main" id="content">
       {etterlevelseDokumentasjon && (
-        <Layout2
-          headerBackgroundColor="#F8F8F8"
-          headerOverlap="31px"
-          mainHeader={getMainHeader(
-            etterlevelseDokumentasjon,
-            undefined,
-            <Helmet>
-              <meta charSet="utf-8" />
-              <title>
-                {`K${kravId?.kravNummer?.toString()}.${kravId?.kravVersjon?.toString()} ${temaData?.shortName} E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`}
-              </title>
-            </Helmet>,
+        // <Layout2
+        //   headerBackgroundColor="#F8F8F8"
+        //   headerOverlap="31px"
+        //   mainHeader={getMainHeader(
+        //     etterlevelseDokumentasjon,
+        //     undefined,
+        //     <Helmet>
+        //       <meta charSet="utf-8" />
+        //       <title>
+        //         {`K${kravId?.kravNummer?.toString()}.${kravId?.kravVersjon?.toString()} ${temaData?.shortName} E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`}
+        //       </title>
+        //     </Helmet>,
+        //   )}
+        //   childrenBackgroundColor={ettlevColors.grey25}
+        //   currentPage={'K' + kravId?.kravNummer + '.' + kravId?.kravVersjon}
+        //   breadcrumbPaths={breadcrumbPaths}
+        // >
+        <div>
+          <Helmet>
+            <meta charSet="utf-8" />
+            <title>
+              {`K${kravId?.kravNummer?.toString()}.${kravId?.kravVersjon?.toString()} ${temaData?.shortName} E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`}
+            </title>
+          </Helmet>
+          <CustomizedBreadcrumbs currentPage={'K' + kravId?.kravNummer + '.' + kravId?.kravVersjon} paths={breadcrumbPaths} />
+          {kravId && etterlevelseDokumentasjon && (
+            <KravView
+              temaName={temaData?.shortName}
+              etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+              etterlevelseDokumentasjonTitle={etterlevelseDokumentasjon.title}
+              etterlevelseNummer={etterlevelseDokumentasjon.etterlevelseNummer}
+              kravId={kravId}
+              navigatePath={navigatePath}
+              setNavigatePath={setNavigatePath}
+              tab={tab}
+              setTab={setTab}
+              kravFilter={getFilterType(params.filter)}
+            />
           )}
-          childrenBackgroundColor={ettlevColors.grey25}
-          currentPage={'K' + kravId?.kravNummer + '.' + kravId?.kravVersjon}
-          breadcrumbPaths={breadcrumbPaths}
-        >
-          <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginBottom="64px">
-            {kravId && etterlevelseDokumentasjon && (
-              <KravView
-                temaName={temaData?.shortName}
-                etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                etterlevelseDokumentasjonTitle={etterlevelseDokumentasjon.title}
-                etterlevelseNummer={etterlevelseDokumentasjon.etterlevelseNummer}
-                kravId={kravId}
-                navigatePath={navigatePath}
-                setNavigatePath={setNavigatePath}
-                tab={tab}
-                setTab={setTab}
-                kravFilter={getFilterType(params.filter)}
-              />
-            )}
-          </Block>
-        </Layout2>
+        </div>
       )}
-    </>
+    </div>
   )
 }

@@ -60,14 +60,13 @@ export const KravView = (props: {
   }, [])
 
   return (
-    <Block width="100%">
+    <div className='w-full'>
       {loadingEtterlevelseData && (
-        <Block width="100%" display="flex" justifyContent="center" marginTop="50px">
+        <div className='flex justify-center'>
           <Loader size={'large'} />
-        </Block>
+        </div>
       )}
       {!loadingEtterlevelseData && etterlevelse && (
-        <Block width="100%" display="flex" justifyContent="center">
           <EditEtterlevelse
             temaName={props.temaName}
             tidligereEtterlevelser={tidligereEtterlevelser}
@@ -83,8 +82,7 @@ export const KravView = (props: {
             setTab={props.setTab}
             kravFilter={props.kravFilter}
           />
-        </Block>
       )}
-    </Block>
+    </div>
   )
 }
