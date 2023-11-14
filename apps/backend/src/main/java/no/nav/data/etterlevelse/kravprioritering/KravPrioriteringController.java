@@ -87,10 +87,10 @@ public class KravPrioriteringController {
     @ApiResponse(description = "ok")
     @GetMapping("/filter")
     public ResponseEntity<RestResponsePage<KravPrioriteringResponse>> getByFilter(
-            @RequestParam(name="id") String id,
-            @RequestParam(name="kravNummer") Integer kravNummer,
-            @RequestParam(name="temaCode") String temaCode,
-            @RequestParam(name="kravStatus") KravStatus kravStatus
+            @RequestParam(name="id",required = false) String id,
+            @RequestParam(name="kravNummer",required = false) Integer kravNummer,
+            @RequestParam(name="temaCode",required = false) String temaCode,
+            @RequestParam(name="kravStatus",required = false) KravStatus kravStatus
     ) {
         KravPrioriteringFilter filter = KravPrioriteringFilter.builder()
                 .id(id)
