@@ -28,6 +28,9 @@ public interface KravPrioriteringRepo extends JpaRepository<GenericStorage, UUID
     @Query(value = "select * from generic_storage where data ->> 'prioriteringsId' ilike %?1% and type = 'KravPrioritering'", nativeQuery = true)
     List<GenericStorage> findByTema(String tema);
 
+    @Query(value = "select * from generic_storage where type = 'KravPrioritering'", nativeQuery = true)
+    List<GenericStorage> getAll();
+
     @Modifying(clearAutomatically = true)
     @Transactional
     @Query(value = "update generic_storage set DATA = jsonb_set(DATA, '{kravVersjon}', to_jsonb(?1) , false ) where data -> 'kravNummer' = to_jsonb(?2) and type = 'KravPrioritering'", nativeQuery = true)

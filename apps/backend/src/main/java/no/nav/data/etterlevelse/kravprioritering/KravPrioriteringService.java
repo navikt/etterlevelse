@@ -64,12 +64,16 @@ public class KravPrioriteringService extends DomainService<KravPrioritering> {
             List<KravPrioriteringResponse> kravPrioriteringList = GenericStorage.to(repo.findByKravNummer(filter.getKravNummer()), KravPrioritering.class).stream().map(KravPrioritering::toResponse).toList();
             kravPrioriteringList.forEach(this::setKravStatus);
             return filterForKravStatus(kravPrioriteringList, filter);
+        } else if(filter.getTemaCode() != null) {
+            List<KravPrioriteringResponse> kravPrioriteringerResp = GenericStorage.to(repo.findByTema(filter.getTemaCode().substring(0, 3)), KravPrioritering.class).stream().map(KravPrioritering::toResponse).toList();
+            kravPrioriteringerResp.forEach(this::setKravStatus);
+            return filterForKravStatus(kravPrioriteringerResp, filter);
         }
 
-        List<KravPrioriteringResponse> kravPrioriteringerResp = GenericStorage.to(repo.findByTema(filter.getTemaCode().substring(0, 3)), KravPrioritering.class).stream().map(KravPrioritering::toResponse).toList();
-        kravPrioriteringerResp.forEach(this::setKravStatus);
+        List<KravPrioriteringResponse> kravPrioriteringer = GenericStorage.to(repo.getAll(),KravPrioritering.class).stream().map(KravPrioritering::toResponse).toList();
+        kravPrioriteringer.forEach(this::setKravStatus);
 
-        return filterForKravStatus(kravPrioriteringerResp, filter);
+        return kravPrioriteringer;
     }
 
     private List<KravPrioriteringResponse> filterForKravStatus(List<KravPrioriteringResponse> kravPrioriteringResponse, KravPrioriteringFilter filter) {
