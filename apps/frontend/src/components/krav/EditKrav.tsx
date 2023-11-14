@@ -12,7 +12,6 @@ import { RegelverkEdit } from './Edit/RegelverkEdit'
 import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
 import { EditBegreper } from './Edit/KravBegreperEdit'
 import CustomizedModal from '../common/CustomizedModal'
-import Button from '../common/Button'
 import { ettlevColors, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
 import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
 import ErrorModal from '../ErrorModal'
@@ -25,7 +24,7 @@ import { Modal as BaseModal, ModalBody, ModalHeader } from 'baseui/modal'
 import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
 import AlertUnsavedPopup from '../common/AlertUnsavedPopup'
 import _ from 'lodash'
-import {Alert, BodyShort, ConfirmationPanel, Heading} from "@navikt/ds-react";
+import {Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading} from "@navikt/ds-react";
 
 type EditKravProps = {
   krav: KravQL
@@ -238,18 +237,24 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'}
                   />
                   <div className="mb-14">
-                    <ConfirmationPanel
-                      label="Send varselmelding"
-                      checked={varlselMeldingActive}
-                      onChange={() => setVarselMeldingActive(!varlselMeldingActive)}
+                    <CheckboxGroup
+                      legend="Send varselmelding"
                     >
-                      Gi kravet en varselmelding (eks. for kommende krav)
-                      {varlselMeldingActive && (
-                        <div className="w-full ml-8 mt-6">
-                          <TextAreaField label="Forklaring til etterlevere" name="varselMelding" maxCharacter={100} rows={1} setIsFormDirty={setIsFormDirty} />
-                        </div>
-                      )}
-                    </ConfirmationPanel>
+                      <Checkbox
+                        value="Varsel"
+                        onChange={() => {
+                          setVarselMeldingActive(!varlselMeldingActive)
+                        }}
+                      >Gi kravet en varselmelding (eks. for kommende krav)
+                      </Checkbox>
+                    </CheckboxGroup>
+
+                    {varlselMeldingActive && (
+                      <div className="w-full ml-8 mt-6">
+                        <TextAreaField label="Forklaring til etterlevere" name="varselMelding" maxCharacter={100} rows={1} setIsFormDirty={setIsFormDirty} />
+                      </div>
+                    )}
+
 
                   </div>
                   <TextAreaField
@@ -378,8 +383,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       {krav.status === KravStatus.AKTIV && !newVersion && (
                         <div className="mr-2">
                           <Button
-                            size="compact"
-                            kind="secondary"
+                            variant="secondary"
                             onClick={() => {
                               setUtgaattKravMessage(true)
                             }}
@@ -394,8 +398,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       {user.isAdmin() && krav.status === KravStatus.UTGAATT && !newVersion && (
                         <div className="mr-2">
                           <Button
-                            size="compact"
-                            kind="secondary"
+                            variant="secondary"
                             onClick={() => {
                               setAktivKravMessage(true)
                             }}
@@ -410,8 +413,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       {user.isAdmin() && !newVersion && (
                         <div className="mr-2">
                           <Button
-                            size="compact"
-                            kind="secondary"
+                            variant="secondary"
                             onClick={() => {
                               values.status = KravStatus.UTKAST
                               submitForm()
@@ -434,12 +436,16 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         <ModalBody>Denne handligen kan ikke reverseres</ModalBody>
                         <div className="flex justify-center mx-6 my-8">
                           <div className="flex w-full">
-                            <Button onClick={() => setUtgaattKravMessage(false)} kind={'secondary'} marginRight>
+                            <Button
+                              className="mr-4"
+                              variant="secondary"
+                              onClick={() => setUtgaattKravMessage(false)}>
                               Nei, avbryt handlingen
                             </Button>
                           </div>
                           <div className="flex w-full justify-end">
                             <Button
+                              variant="secondary"
                               onClick={() => {
                                 values.status = KravStatus.UTGAATT
                                 submitForm()
@@ -462,12 +468,16 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         <ModalBody>Kravet har en nyere versjon som settes til utkast</ModalBody>
                         <div className="flex justify-center mx-6 my-8">
                           <div className="flex w-full">
-                            <Button onClick={() => setAktivKravMessage(false)} kind={'secondary'} marginRight>
+                            <Button
+                              className="mr-4"
+                              variant="secondary"
+                              onClick={() => setAktivKravMessage(false)}>
                               Nei, avbryt handlingen
                             </Button>
                           </div>
                           <div className="flex w-full justify-end">
                             <Button
+                              variant="primary"
                               onClick={async () => {
                                 const newVersionOfKrav = await getKravByKravNumberAndVersion(krav.kravNummer, krav.kravVersjon + 1)
                                 if (newVersionOfKrav) {
@@ -495,13 +505,14 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       </BaseModal>
                     </div>
                     <div className="flex w-full justify-end">
-                      <Button size="compact" kind={'secondary'} type={'button'} onClick={close} marginLeft>
+                      <Button className="ml-4"
+                        variant="secondary"
+                        onClick={()=> {setIsOpen(false)}}>
                         Avbryt
                       </Button>
 
-                      <Button
-                        size="compact"
-                        kind="primary"
+                      <Button className="ml-4"
+                        variant="primary"
                         onClick={() => {
                           if (newVersion) {
                             values.status = KravStatus.UTKAST
@@ -511,22 +522,18 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                           submitForm()
                         }}
                         disabled={isSubmitting}
-                        type={'button'}
-                        marginLeft
                       >
                         {newVersion || krav.status !== KravStatus.AKTIV ? 'Lagre' : 'Publiser endringer'}
                       </Button>
 
                       {(newVersion || krav.status === KravStatus.UTKAST) && (
-                        <Button
-                          size="compact"
+                        <Button className="ml-4"
+                          variant="primary"
                           onClick={() => {
                             values.status = KravStatus.AKTIV
                             submitForm()
                           }}
                           disabled={isSubmitting}
-                          type={'button'}
-                          marginLeft
                         >
                           Publiser og gjør aktiv
                         </Button>
