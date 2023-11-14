@@ -12,7 +12,7 @@ Do this in Google Chrome as it doesn't work in Firefox
 
 `gcloud auth login`
 
-Remember to flush sockets you can't login
+Remember to flush sockets when you can't login
 
 `chrome://net-internals/#sockets`
 
