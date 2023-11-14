@@ -11,9 +11,12 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
+import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringFilter;
 import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringRequest;
 import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringResponse;
+import org.apache.commons.lang3.EnumUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,6 +81,23 @@ public class KravPrioriteringController {
 
         List<KravPrioritering> kravPrioriteringList = service.getByTema(temacode);
         return ResponseEntity.ok(new RestResponsePage<>(kravPrioriteringList).convert(KravPrioritering::toResponse));
+    }
+
+    @Operation(summary = "Get krav prioritering by filter")
+    @ApiResponse(description = "ok")
+    @GetMapping("/filter")
+    public ResponseEntity<RestResponsePage<KravPrioriteringResponse>> getByFilter(KravPrioriteringFilter filter) {
+        log.info("Get krav prioritering with filter={}", filter);
+        if(filter.getTemaCode() != null) {
+            codelistService.validateListNameAndCode(ListName.TEMA.name(), filter.getTemaCode());
+        }
+        if(filter.getKravStatus() != null) {
+            if(!EnumUtils.isValidEnum(KravStatus.class, filter.getKravStatus())) {
+                throw new ValidationException("Invalid status: " + filter.getKravStatus());
+            }
+        }
+
+        return ResponseEntity.ok(new RestResponsePage<>(service.getByFilter(filter)));
     }
 
     @Operation(summary = "Get one krav prioritering")

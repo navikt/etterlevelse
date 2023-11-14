@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 
 import java.util.UUID;
 
@@ -21,5 +22,7 @@ public class KravPrioriteringResponse {
     private Integer kravNummer;
     private Integer kravVersjon;
     private String prioriteringsId;
+
+    private KravStatus kravStatus;
 
 }
