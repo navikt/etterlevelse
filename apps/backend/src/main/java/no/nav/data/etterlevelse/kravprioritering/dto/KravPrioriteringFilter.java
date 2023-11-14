@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
@@ -22,14 +23,13 @@ public class KravPrioriteringFilter {
     private String id;
     private Integer kravNummer;
     private String temaCode;
-    private String kravStatus;
+    private KravStatus kravStatus;
 
     public boolean isEmpty() {
         return  StringUtils.isBlank(id)
                 && kravNummer == null
                 && kravStatus == null
-                && temaCode == null
-                ;
+                && temaCode == null;
     }
 
     public static <T> T get(DataFetchingEnvironment env, String field) {

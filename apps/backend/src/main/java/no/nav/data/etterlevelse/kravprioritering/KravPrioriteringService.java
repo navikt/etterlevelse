@@ -74,7 +74,7 @@ public class KravPrioriteringService extends DomainService<KravPrioritering> {
 
     private List<KravPrioriteringResponse> filterForKravStatus(List<KravPrioriteringResponse> kravPrioriteringResponse, KravPrioriteringFilter filter) {
         if(filter.getKravStatus() != null) {
-            return kravPrioriteringResponse.stream().filter(kp-> kp.getKravStatus().name().equals(filter.getKravStatus())).toList();
+            return kravPrioriteringResponse.stream().filter(kp-> kp.getKravStatus().equals(filter.getKravStatus())).toList();
         }
         return kravPrioriteringResponse;
     }

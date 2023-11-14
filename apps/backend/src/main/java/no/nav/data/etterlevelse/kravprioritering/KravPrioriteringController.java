@@ -16,7 +16,6 @@ import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
 import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringFilter;
 import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringRequest;
 import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringResponse;
-import org.apache.commons.lang3.EnumUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -86,17 +86,22 @@ public class KravPrioriteringController {
     @Operation(summary = "Get krav prioritering by filter")
     @ApiResponse(description = "ok")
     @GetMapping("/filter")
-    public ResponseEntity<RestResponsePage<KravPrioriteringResponse>> getByFilter(KravPrioriteringFilter filter) {
+    public ResponseEntity<RestResponsePage<KravPrioriteringResponse>> getByFilter(
+            @RequestParam(name="id") String id,
+            @RequestParam(name="kravNummer") Integer kravNummer,
+            @RequestParam(name="temaCode") String temaCode,
+            @RequestParam(name="kravStatus") KravStatus kravStatus
+    ) {
+        KravPrioriteringFilter filter = KravPrioriteringFilter.builder()
+                .id(id)
+                .kravNummer(kravNummer)
+                .temaCode(temaCode)
+                .kravStatus(kravStatus)
+                .build();
         log.info("Get krav prioritering with filter={}", filter);
         if(filter.getTemaCode() != null) {
             codelistService.validateListNameAndCode(ListName.TEMA.name(), filter.getTemaCode());
         }
-        if(filter.getKravStatus() != null) {
-            if(!EnumUtils.isValidEnum(KravStatus.class, filter.getKravStatus())) {
-                throw new ValidationException("Invalid status: " + filter.getKravStatus());
-            }
-        }
-
         return ResponseEntity.ok(new RestResponsePage<>(service.getByFilter(filter)));
     }
 
