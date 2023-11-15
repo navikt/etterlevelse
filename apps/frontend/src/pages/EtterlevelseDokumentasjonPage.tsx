@@ -119,6 +119,8 @@ export const EtterlevelseDokumentasjonPage = () => {
               etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
               etterlevelseDokumentasjonTitle={etterlevelseDokumentasjon.title}
               etterlevelseNummer={etterlevelseDokumentasjon.etterlevelseNummer}
+              behandlinger={etterlevelseDokumentasjon.behandlinger}
+              teams={etterlevelseDokumentasjon.teamsData}
               kravId={kravId}
               navigatePath={navigatePath}
               setNavigatePath={setNavigatePath}

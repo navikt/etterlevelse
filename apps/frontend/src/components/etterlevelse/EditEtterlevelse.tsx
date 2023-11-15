@@ -1,4 +1,4 @@
-import { Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL, KravStatus } from '../../constants'
+import { Behandling, Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL, KravStatus, Team } from '../../constants'
 import { FormikProps } from 'formik'
 import { createEtterlevelse, getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, updateEtterlevelse } from '../../api/EtterlevelseApi'
 import { Block } from 'baseui/block'
@@ -33,9 +33,12 @@ import { getFilterType, Section } from '../../pages/EtterlevelseDokumentasjonPag
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import moment from 'moment'
-import { BodyShort, Button, Detail, Heading, Label } from '@navikt/ds-react'
-import { behandlingLink } from '../../util/config'
+import { BodyLong, BodyShort, Button, Detail, Heading, Label, Tabs } from '@navikt/ds-react'
+import { behandlingLink, teamKatTeamLink } from '../../util/config'
 import { ExternalLink } from '../common/RouteLink'
+import { useTeam } from '../../api/TeamApi'
+import { TeamName } from '../common/TeamName'
+import { AllInfo } from '../krav/ViewKrav'
 
 type EditEttlevProps = {
   temaName?: string
@@ -46,6 +49,8 @@ type EditEttlevProps = {
   etterlevelseDokumentasjonTitle?: string
   etterlevelseDokumentasjonId?: string
   etterlevelseNummer?: number
+  behandlinger: Behandling[] | undefined
+  teams: Team[] | undefined
   varsleMelding?: string
   navigatePath: string
   setNavigatePath: (state: string) => void
@@ -65,6 +70,8 @@ export const EditEtterlevelse = ({
   etterlevelseDokumentasjonTitle,
   etterlevelseDokumentasjonId,
   etterlevelseNummer,
+  behandlinger,
+  teams,
   navigatePath,
   setNavigatePath,
   tidligereEtterlevelser,
@@ -185,42 +192,42 @@ export const EditEtterlevelse = ({
                 {krav.navn}
               </Heading>
               {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
-              <div className="flex items-center gap-2">
-                <BodyShort size="small">
-                  {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 ? etterlevelseMetadata.tildeltMed[0] : 'Ikke tildelt'}
-                </BodyShort>
-                <Button
-                  variant="tertiary"
-                  size="small"
-                  onClick={() => {
-                    const ident = user.getName()
-                    if (etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] && etterlevelseMetadata.id !== 'ny') {
-                      updateEtterlevelseMetadata({
-                        ...etterlevelseMetadata,
-                        tildeltMed: [],
-                      }).then((resp) => {
-                        setEtterlevelseMetadata(resp)
-                      })
-                    } else if (etterlevelseMetadata.id !== 'ny') {
-                      updateEtterlevelseMetadata({
-                        ...etterlevelseMetadata,
-                        tildeltMed: [ident],
-                      }).then((resp) => {
-                        setEtterlevelseMetadata(resp)
-                      })
-                    } else {
-                      createEtterlevelseMetadata({
-                        ...etterlevelseMetadata,
-                        tildeltMed: [ident],
-                      }).then((resp) => {
-                        setEtterlevelseMetadata(resp)
-                      })
-                    }
-                  }}
-                >
-                  {etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] ? 'Fjern meg selv' : 'Tildel meg selv'}
-                </Button>
-              </div>
+                <div className="flex items-center gap-2">
+                  <BodyShort size="small">
+                    {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 ? etterlevelseMetadata.tildeltMed[0] : 'Ikke tildelt'}
+                  </BodyShort>
+                  <Button
+                    variant="tertiary"
+                    size="small"
+                    onClick={() => {
+                      const ident = user.getName()
+                      if (etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] && etterlevelseMetadata.id !== 'ny') {
+                        updateEtterlevelseMetadata({
+                          ...etterlevelseMetadata,
+                          tildeltMed: [],
+                        }).then((resp) => {
+                          setEtterlevelseMetadata(resp)
+                        })
+                      } else if (etterlevelseMetadata.id !== 'ny') {
+                        updateEtterlevelseMetadata({
+                          ...etterlevelseMetadata,
+                          tildeltMed: [ident],
+                        }).then((resp) => {
+                          setEtterlevelseMetadata(resp)
+                        })
+                      } else {
+                        createEtterlevelseMetadata({
+                          ...etterlevelseMetadata,
+                          tildeltMed: [ident],
+                        }).then((resp) => {
+                          setEtterlevelseMetadata(resp)
+                        })
+                      }
+                    }}
+                  >
+                    {etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] ? 'Fjern meg selv' : 'Tildel meg selv'}
+                  </Button>
+                </div>
               )}
             </div>
           </div>
@@ -373,94 +380,51 @@ export const EditEtterlevelse = ({
               )}
             </Block>
           </Block> */}
-          <div className="grid grid-cols-[3fr_1fr]">
-            <div className="pr-4 flex flex-col gap-4">
+          <div className="grid grid-cols-12">
+            <div className="pr-4 flex flex-col gap-4 col-span-8">
               <div className="bg-blue-50 p-4 rounded">
-                <Heading level="2" size="small">Hensikten med kravet</Heading>
+                <Heading level="2" size="small">
+                  Hensikten med kravet
+                </Heading>
                 <Markdown sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
               </div>
-                <CustomizedTabs
-                  fontColor={ettlevColors.green600}
-                  activeColor={ettlevColors.green800}
-                  tabBackground={ettlevColors.green100}
-                  activeKey={tab}
-                  onChange={(k) => {
-                    ampli.logEvent('klikk', {
-                      sidetittel: `B${etterlevelseNummer?.toString()} ${etterlevelseDokumentasjonTitle?.toString()}`,
-                      section: `K${kravId.kravNummer}.${kravId.kravVersjon}`,
-                      title: k.activeKey.toString(),
-                      type: 'tab',
-                    })
-                    if (k.activeKey !== 'dokumentasjon' && etterlevelseFormRef.current && etterlevelseFormRef.current.values) {
-                      setEditedEtterlevelse(etterlevelseFormRef.current.values)
-                    }
-                    setTab(k.activeKey as Section)
-                  }}
-                  overrides={{
-                    Root: {
-                      style: {
-                        width: '100%',
-                      },
-                    },
-                    TabList: {
-                      style: {
-                        width: '100%',
-                        paddingLeft: pageWidth <= 960 ? '16px' : '200px',
-                        paddingRight: pageWidth <= 960 ? '16px' : '200px',
-                        marginLeft: '0px',
-                        marginRight: '0px',
-                      },
-                    },
-                  }}
-                  tabs={[
-                    {
-                      title: 'Dokumentasjon',
-                      key: 'dokumentasjon',
-                      content: (
-                        <EtterlevelseEditFields
-                          viewMode={kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ? true : false}
-                          kravFilter={kravFilter}
-                          krav={krav}
-                          etterlevelse={etterlevelse}
-                          submit={submit}
-                          formRef={etterlevelseFormRef}
-                          varsleMelding={varsleMelding}
-                          disableEdit={disableEdit}
-                          documentEdit={documentEdit}
-                          close={() => {
-                            setTimeout(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`), 1)
-                          }}
-                          setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
-                          isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
-                          navigatePath={navigatePath}
-                          setNavigatePath={setNavigatePath}
-                          editedEtterlevelse={editedEtterlevelse}
-                          tidligereEtterlevelser={tidligereEtterlevelser}
-                          etterlevelseMetadata={etterlevelseMetadata}
-                          setEtterlevelseMetadata={setEtterlevelseMetadata}
-                        />
-                      ),
-                    },
-                    {
-                      title: 'Hvordan har andre gjort det?',
-                      key: 'etterlevelser',
-                      content: (
-                        <Block display={'flex'} justifyContent="center" width="100%" paddingLeft="200px" paddingRight="200px">
-                          <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />
-                        </Block>
-                      ),
-                    },
-                    {
-                      title: 'Spørsmål og svar',
-                      key: 'tilbakemeldinger',
-                      content: (
-                        <Block display={'flex'} justifyContent="center" width="100%" paddingLeft="200px" paddingRight="200px">
-                          <Tilbakemeldinger krav={krav} hasKravExpired={false} />
-                        </Block>
-                      ),
-                    },
-                  ]}
-                />
+              <Tabs defaultValue="dokumentajson">
+                <Tabs.List>
+                  <Tabs.Tab value="dokumentasjon" label="Dokumentasjon" />
+                  <Tabs.Tab value="etterlevelser" label="Hvordan har andre gjort det?" />
+                  <Tabs.Tab value="tilbakemeldinger" label="Spørsmål og svar" />
+                </Tabs.List>
+                <Tabs.Panel value="dokumentasjon">
+                  <EtterlevelseEditFields
+                    viewMode={kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ? true : false}
+                    kravFilter={kravFilter}
+                    krav={krav}
+                    etterlevelse={etterlevelse}
+                    submit={submit}
+                    formRef={etterlevelseFormRef}
+                    varsleMelding={varsleMelding}
+                    disableEdit={disableEdit}
+                    documentEdit={documentEdit}
+                    close={() => {
+                      setTimeout(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`), 1)
+                    }}
+                    setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
+                    isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
+                    navigatePath={navigatePath}
+                    setNavigatePath={setNavigatePath}
+                    editedEtterlevelse={editedEtterlevelse}
+                    tidligereEtterlevelser={tidligereEtterlevelser}
+                    etterlevelseMetadata={etterlevelseMetadata}
+                    setEtterlevelseMetadata={setEtterlevelseMetadata}
+                  />
+                </Tabs.Panel>
+                <Tabs.Panel value="etterlevelser">
+                  <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />
+                </Tabs.Panel>
+                <Tabs.Panel value="tilbakemeldinger">
+                  <Tilbakemeldinger krav={krav} hasKravExpired={false} />
+                </Tabs.Panel>
+              </Tabs>
 
               <CustomizedModal
                 onClose={() => setIsVersjonEndringerModalOpen(false)}
@@ -508,16 +472,38 @@ export const EditEtterlevelse = ({
                 </Block>
               </CustomizedModal>
             </div>
-            <div className="pl-4 border-l border-border-divider">
-                <Heading level="2" size="xsmall">Etterlevelsesdokument</Heading>
-                <div>
-                  <Label size="small">Tittel</Label>
-                  <BodyShort>{etterlevelseDokumentasjonTitle}</BodyShort>
-                </div>
-                <div>
-                  <Label size="small">Behandling</Label>
-                  <ExternalLink href={behandlingLink(etterlevelse.behandlingId)}>hallo</ExternalLink>
-                </div>
+            <div className="pl-4 border-l border-border-divider col-span-4">
+              <Tabs defaultValue="notat" size="small">
+                <Tabs.List>
+                  <Tabs.Tab value="notat" label="Notat" />
+                  <Tabs.Tab className="whitespace-nowrap" value="dokument" label="Om etterlevelsen" />
+                  <Tabs.Tab className="whitespace-nowrap" value="mer" label="Mer om kravet" />
+                </Tabs.List>
+                <Tabs.Panel value="notat">
+                  <BodyLong>{etterlevelseMetadata.notater}</BodyLong>
+                </Tabs.Panel>
+                <Tabs.Panel value="dokument">
+                  <div>
+                    <Label size="small">Tittel</Label>
+                    <BodyShort>{etterlevelseDokumentasjonTitle}</BodyShort>
+                  </div>
+                  <div>
+                    <Label size="small">Behandling</Label>
+                    {behandlinger?.map((behandling) => (
+                      <ExternalLink key={behandling.id} href={behandlingLink(behandling.id)}>
+                        {behandling.navn}
+                      </ExternalLink>
+                    ))}
+                  </div>
+                  <div className="flex flex-col">
+                    <Label size="small">Team</Label>
+                    {teams?.map((team) => <TeamName id={team.id} big link />)}
+                  </div>
+                </Tabs.Panel>
+                <Tabs.Panel value="mer">
+                  <AllInfo krav={krav} alleKravVersjoner={[{ kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status }]} />
+                </Tabs.Panel>
+              </Tabs>
             </div>
           </div>
         </div>

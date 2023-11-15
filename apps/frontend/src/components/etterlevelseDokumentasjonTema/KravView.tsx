@@ -1,5 +1,5 @@
 import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
-import { Etterlevelse, KRAV_FILTER_TYPE } from '../../constants'
+import { Behandling, Etterlevelse, KRAV_FILTER_TYPE, Team } from '../../constants'
 import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, mapEtterlevelseToFormValue } from '../../api/EtterlevelseApi'
 import React, { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
@@ -15,6 +15,8 @@ export const KravView = (props: {
   etterlevelseDokumentasjonTitle: string
   etterlevelseDokumentasjonId: string
   etterlevelseNummer: number
+  behandlinger: Behandling[] | undefined
+  teams: Team[] | undefined
   navigatePath: string
   setNavigatePath: (state: string) => void
   tab: Section
@@ -75,6 +77,8 @@ export const KravView = (props: {
             etterlevelseNummer={props.etterlevelseNummer}
             kravId={toKravId(etterlevelse)}
             etterlevelse={etterlevelse}
+            behandlinger={props.behandlinger}
+            teams={props.teams}
             varsleMelding={varsleMelding}
             navigatePath={props.navigatePath}
             setNavigatePath={props.setNavigatePath}

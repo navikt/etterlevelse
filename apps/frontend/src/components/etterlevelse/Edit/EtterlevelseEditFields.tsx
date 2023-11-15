@@ -94,31 +94,6 @@ export const EtterlevelseEditFields = ({
 
   return (
     <div className="w-full">
-      <div className="flex flex-row-reverse">
-        <Button
-          notBold
-          $style={{
-            backgroundColor: ettlevColors.green50,
-            color: ettlevColors.green600,
-            ':hover': { backgroundColor: ettlevColors.green100 },
-            borderBottomRightRadius: '0px',
-            borderTopRightRadius: '0px',
-          }}
-          onClick={() => setIsNotatfeltOpen(true)}
-        >
-          <div>
-            <Block>{etterlevelseMetadata.notater ? <img src={notesWithContentIcon} alt="Notater med innohold" /> : <img src={notesIcon} alt="Notater" />}</Block>
-            {etterlevelseMetadata.notater ? 'Vis arbeidsnotat' : 'Lag arbeidsnotat'}
-          </div>
-        </Button>
-      </div>
-      <EditNotatfelt
-        isOpen={isNotatfeltOpen}
-        setIsNotatfeltOpen={setIsNotatfeltOpen}
-        etterlevelseMetadata={etterlevelseMetadata}
-        setEtterlevelseMetadata={setEtterlevelseMetadata}
-      />
-
       {viewMode === false ? (
         <Formik
           onSubmit={submit}
@@ -138,8 +113,8 @@ export const EtterlevelseEditFields = ({
           validateOnBlur={false}
         >
           {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
-            <div className="lg:-mt-24 flex flex-col items-center">
-              <div className="w-8/12">
+            <div className="flex flex-col">
+              <div>
                 <Form>
                   <Block>
                     <Block>
@@ -163,31 +138,6 @@ export const EtterlevelseEditFields = ({
                       </Block>
 
                       <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false} />
-
-                      <Block marginBottom="24px">
-                        <CustomizedAccordion>
-                          {/*The commented code block is part of a feature that will be implemented later.*/}
-                          {/*<CustomizedPanel*/}
-                          {/*  title="Krav du bør se i relasjon til dette"*/}
-                          {/*  overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}*/}
-                          {/*>*/}
-                          {/*  <Block />*/}
-                          {/*</CustomizedPanel>*/}
-                          <CustomizedPanel
-                            title={
-                              <Block>
-                                <HeadingXLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
-                                  Lenker og annen informasjon om kravet
-                                </HeadingXLarge>
-                              </Block>
-                            }
-                            overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
-                          >
-                            <Block width="100%" height="1px" backgroundColor="#E3E3E3" />
-                            <AllInfo krav={krav} alleKravVersjoner={[{ kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status }]} />
-                          </CustomizedPanel>
-                        </CustomizedAccordion>
-                      </Block>
 
                       <Block width={'100%'} marginTop={'65px'}>
                         {Object.keys(errors).length > 0 && (
