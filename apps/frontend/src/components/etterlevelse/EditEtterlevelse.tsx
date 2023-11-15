@@ -39,6 +39,7 @@ import { ExternalLink } from '../common/RouteLink'
 import { useTeam } from '../../api/TeamApi'
 import { TeamName } from '../common/TeamName'
 import { AllInfo } from '../krav/ViewKrav'
+import { FileTextIcon } from '@navikt/aksel-icons'
 
 type EditEttlevProps = {
   temaName?: string
@@ -191,46 +192,12 @@ export const EditEtterlevelse = ({
               <Heading size="medium" level="1">
                 {krav.navn}
               </Heading>
-              {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
-                <div className="flex items-center gap-2">
-                  <BodyShort size="small">
-                    {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 ? etterlevelseMetadata.tildeltMed[0] : 'Ikke tildelt'}
-                  </BodyShort>
-                  <Button
-                    variant="tertiary"
-                    size="small"
-                    onClick={() => {
-                      const ident = user.getName()
-                      if (etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] && etterlevelseMetadata.id !== 'ny') {
-                        updateEtterlevelseMetadata({
-                          ...etterlevelseMetadata,
-                          tildeltMed: [],
-                        }).then((resp) => {
-                          setEtterlevelseMetadata(resp)
-                        })
-                      } else if (etterlevelseMetadata.id !== 'ny') {
-                        updateEtterlevelseMetadata({
-                          ...etterlevelseMetadata,
-                          tildeltMed: [ident],
-                        }).then((resp) => {
-                          setEtterlevelseMetadata(resp)
-                        })
-                      } else {
-                        createEtterlevelseMetadata({
-                          ...etterlevelseMetadata,
-                          tildeltMed: [ident],
-                        }).then((resp) => {
-                          setEtterlevelseMetadata(resp)
-                        })
-                      }
-                    }}
-                  >
-                    {etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] ? 'Fjern meg selv' : 'Tildel meg selv'}
-                  </Button>
-                </div>
-              )}
             </div>
           </div>
+          {
+            // todo: remove all of the stuff in the commented out section below once we're sure we have
+            // replicated everything we want/need
+          }
           {/* <Block backgroundColor={ettlevColors.green800} paddingTop="32px" paddingBottom="32px">
             <Block paddingLeft="200px" paddingRight="200px">
               <Block display={'flex'}>
@@ -382,6 +349,54 @@ export const EditEtterlevelse = ({
           </Block> */}
           <div className="grid grid-cols-12">
             <div className="pr-4 flex flex-col gap-4 col-span-8">
+              <div className="flex items-center justify-between">
+                <div>
+                  {
+                    // todo: ny versjon + se hva som er nytt goes here
+                    // the div should _always_ exist to push tildel-functions to the right side,
+                    // so don't programmatically remove it
+                  }
+                </div>
+                {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
+                  <div className="flex items-center gap-2">
+                    <BodyShort size="small">
+                      {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 ? etterlevelseMetadata.tildeltMed[0] : 'Ikke tildelt'}
+                    </BodyShort>
+                    <Button
+                      variant="tertiary"
+                      size="small"
+                      onClick={() => {
+                        const ident = user.getName()
+                        if (etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] && etterlevelseMetadata.id !== 'ny') {
+                          updateEtterlevelseMetadata({
+                            ...etterlevelseMetadata,
+                            tildeltMed: [],
+                          }).then((resp) => {
+                            setEtterlevelseMetadata(resp)
+                          })
+                        } else if (etterlevelseMetadata.id !== 'ny') {
+                          updateEtterlevelseMetadata({
+                            ...etterlevelseMetadata,
+                            tildeltMed: [ident],
+                          }).then((resp) => {
+                            setEtterlevelseMetadata(resp)
+                          })
+                        } else {
+                          createEtterlevelseMetadata({
+                            ...etterlevelseMetadata,
+                            tildeltMed: [ident],
+                          }).then((resp) => {
+                            setEtterlevelseMetadata(resp)
+                          })
+                        }
+                      }}
+                    >
+                      {etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] ? 'Fjern meg selv' : 'Tildel meg selv'}
+                    </Button>
+                  </div>
+                )}
+              </div>
+
               <div className="bg-blue-50 p-4 rounded">
                 <Heading level="2" size="small">
                   Hensikten med kravet
@@ -394,7 +409,10 @@ export const EditEtterlevelse = ({
                   <Tabs.Tab value="etterlevelser" label="Hvordan har andre gjort det?" />
                   <Tabs.Tab value="tilbakemeldinger" label="Spørsmål og svar" />
                 </Tabs.List>
-                <Tabs.Panel value="dokumentasjon">
+                <Tabs.Panel value="dokumentasjon" className="flex flex-col gap-2 mt-2">
+                  {
+                    // todo: this heckin' component needs some care
+                  }
                   <EtterlevelseEditFields
                     viewMode={kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ? true : false}
                     kravFilter={kravFilter}
@@ -418,10 +436,10 @@ export const EditEtterlevelse = ({
                     setEtterlevelseMetadata={setEtterlevelseMetadata}
                   />
                 </Tabs.Panel>
-                <Tabs.Panel value="etterlevelser">
+                <Tabs.Panel value="etterlevelser" className="flex flex-col gap-2 mt-2">
                   <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />
                 </Tabs.Panel>
-                <Tabs.Panel value="tilbakemeldinger">
+                <Tabs.Panel value="tilbakemeldinger" className="flex flex-col gap-2 mt-2">
                   <Tilbakemeldinger krav={krav} hasKravExpired={false} />
                 </Tabs.Panel>
               </Tabs>
@@ -479,10 +497,17 @@ export const EditEtterlevelse = ({
                   <Tabs.Tab className="whitespace-nowrap" value="dokument" label="Om etterlevelsen" />
                   <Tabs.Tab className="whitespace-nowrap" value="mer" label="Mer om kravet" />
                 </Tabs.List>
-                <Tabs.Panel value="notat">
+                <Tabs.Panel value="notat" className="flex flex-col gap-2 mt-2">
+                  <div className="flex justify-between">
+                    <Label className="flex gap-1"><FileTextIcon fontSize="1.5rem" />Notat</Label>
+                    <Button variant="secondary" size="xsmall">Rediger</Button>
+                    {
+                      // todo: the button above should open a modal for editing arbeidsnotat
+                    }
+                  </div>
                   <BodyLong>{etterlevelseMetadata.notater}</BodyLong>
                 </Tabs.Panel>
-                <Tabs.Panel value="dokument">
+                <Tabs.Panel value="dokument" className="flex flex-col gap-2 mt-2">
                   <div>
                     <Label size="small">Tittel</Label>
                     <BodyShort>{etterlevelseDokumentasjonTitle}</BodyShort>
@@ -500,7 +525,10 @@ export const EditEtterlevelse = ({
                     {teams?.map((team) => <TeamName id={team.id} big link />)}
                   </div>
                 </Tabs.Panel>
-                <Tabs.Panel value="mer">
+                <Tabs.Panel value="mer" className="flex flex-col gap-2 mt-2">
+                  {
+                    // todo: formatting inside AllInfo seems weird right now, needs fixing
+                  }
                   <AllInfo krav={krav} alleKravVersjoner={[{ kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status }]} />
                 </Tabs.Panel>
               </Tabs>
