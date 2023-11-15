@@ -5,13 +5,6 @@ import { Code, codelist, ListName } from '../../services/Codelist'
 import { NavigableItem } from '../admin/audit/AuditTypes'
 import { BodyShort } from '@navikt/ds-react'
 
-export const DotTag = (props: { children: ReactNode; noBulletPoints?: boolean }) => (
-  <div className={'flex'}>
-    {!props.noBulletPoints && <li />}
-    <BodyShort className={'break-words'}>{props.children}</BodyShort>
-  </div>
-)
-
 const Content = (props: { item: ReactNode | string; list?: ListName; linkCodelist?: boolean; markdown?: boolean }) => {
   const { item, list, linkCodelist, markdown } = props
   if (list) {
@@ -57,10 +50,9 @@ export const DotTags = (props: DotTagsParams) => {
     <div className={`${props.inColumn ? 'block' : 'flex'} flex-wrap`}>
       {items.map((item, i) => (
         <div className={`${props.inColumn ? 'mb-1.5' : 'mb-0'} ${i < items.length && !commaSeparator ? 'mb-1.5' : 'mb-0'}`} key={i}>
-          <DotTag noBulletPoints={noBulletPoints}>
-            {' '}
+          <BodyShort className={'break-words'}>
             <Content {...props} item={item} />{' '}
-          </DotTag>
+          </BodyShort>
         </div>
       ))}
     </div>
