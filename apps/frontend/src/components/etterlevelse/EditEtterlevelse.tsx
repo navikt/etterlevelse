@@ -33,13 +33,13 @@ import { getFilterType, Section } from '../../pages/EtterlevelseDokumentasjonPag
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import moment from 'moment'
-import { BodyLong, BodyShort, Button, Detail, Heading, Label, Tabs } from '@navikt/ds-react'
+import { Alert, BodyLong, BodyShort, Button, Detail, Heading, Label, ReadMore, Tabs, Tag } from '@navikt/ds-react'
 import { behandlingLink, teamKatTeamLink } from '../../util/config'
 import { ExternalLink } from '../common/RouteLink'
 import { useTeam } from '../../api/TeamApi'
 import { TeamName } from '../common/TeamName'
 import { AllInfo } from '../krav/ViewKrav'
-import { FileTextIcon } from '@navikt/aksel-icons'
+import { FileTextIcon, InformationSquareIcon } from '@navikt/aksel-icons'
 import EditNotatfelt from '../etterlevelseMetadata/EditNotatfelt'
 
 type EditEttlevProps = {
@@ -190,212 +190,89 @@ export const EditEtterlevelse = ({
             <Detail className="font-bold">
               {temaName} / {krav.kravNummer}.{krav.kravVersjon}
             </Detail>
-            <div className="flex gap-4 items-center">
+            <div>
               <Heading size="medium" level="1">
                 {krav.navn}
               </Heading>
-            </div>
-          </div>
-          {
-            // todo: remove all of the stuff in the commented out section below once we're sure we have
-            // replicated everything we want/need
-          }
-          {/* <Block backgroundColor={ettlevColors.green800} paddingTop="32px" paddingBottom="32px">
-            <Block paddingLeft="200px" paddingRight="200px">
-              <Block display={'flex'}>
-                <ParagraphMedium
-                  $style={{
-                    marginTop: '0px',
-                    marginBottom: '0px',
-                    color: ettlevColors.white,
-                  }}
-                >
-                  {temaName} / {kravNumView(krav)}
-                </ParagraphMedium>
-                {kravFilter !== KRAV_FILTER_TYPE.RELEVANTE_KRAV && <StatusView status={kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV ? 'Utgått' : 'Bortfiltrert'} />}
-              </Block>
-              <HeadingXXLarge $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</HeadingXXLarge>
-              {krav.aktivertDato !== null && (
-                <Detail className="text-white">
-                  {krav.kravVersjon > 1
-                    ? `Ny versjon av kravet ble publisert ${moment(krav.aktivertDato).format('ll')}`
-                    : `Kravet ble opprettet ${moment(krav.aktivertDato).format('ll')}`}
-                </Detail>
+
+              {varsleMelding && (
+                <div>
+                  <Alert size="small" variant="info">
+                    {varsleMelding}
+                  </Alert>
+                </div>
               )}
+
               {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
-                <ParagraphMedium
-                  $style={{
-                    marginTop: '0px',
-                    marginBottom: '0px',
-                    paddingBottom: '32px',
-                    color: ettlevColors.white,
-                    lineHeight: '22px',
-                    maxWidth: '650px',
-                  }}
-                >
+                <BodyShort>
                   <strong>Kravet er bortfiltrert og derfor ikke relevant.</strong>
-                </ParagraphMedium>
+                </BodyShort>
               )}
 
               {kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV && (
-                <ParagraphMedium
-                  $style={{
-                    marginTop: '0px',
-                    marginBottom: '0px',
-                    paddingBottom: '32px',
-                    color: ettlevColors.white,
-                    lineHeight: '22px',
-                    maxWidth: '650px',
-                  }}
-                >
+                <BodyShort>
                   <strong>Kravet er utgått.</strong> Dere skal ikke dokumentere ny etterlevelse på dette kravet.
-                </ParagraphMedium>
+                </BodyShort>
               )}
-
-              {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 && kravFilter !== KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
-                <Block
-                  width="fit-content"
-                  display="flex"
-                  backgroundColor="transparent"
-                  $style={{
-                    marginTop: '16px',
-                  }}
-                >
-                  {etterlevelse.id === '' && (
-                    <>
-                      <img
-                        src={warningAlert}
-                        alt="warning icon"
-                        width="24px"
-                        height="24px"
-                        style={{
-                          marginRight: '5px',
-                        }}
-                      />
-                      <ParagraphMedium
-                        $style={{
-                          lineHeight: '22px',
-                          marginTop: '0px',
-                          marginBottom: '0px',
-                          fontWeight: 600,
-                          color: ettlevColors.white,
-                        }}
-                      >
-                        Dette er en ny versjon.
-                      </ParagraphMedium>
-                    </>
-                  )}
-                  {krav.versjonEndringer && (
-                    <Button
-                      type="button"
-                      kind="underline-hover"
-                      $style={{
-                        marginLeft: '2px',
-                        ':hover': { textDecoration: 'none' },
-                      }}
-                      onClick={() => setIsVersjonEndringerModalOpen(true)}
-                    >
-                      <ParagraphMedium
-                        $style={{
-                          lineHeight: '22px',
-                          marginTop: '0px',
-                          marginBottom: '0px',
-                          fontWeight: 600,
-                          color: ettlevColors.white,
-                          textDecoration: 'underline',
-                        }}
-                      >
-                        Se hva som er nytt fra forrige versjon.
-                      </ParagraphMedium>
-                    </Button>
-                  )}
-                </Block>
-              )}
-
-              {varsleMelding && (
-                <Block
-                  width="fit-content"
-                  display="flex"
-                  backgroundColor={'#E5F0F7'}
-                  $style={{
-                    ...padding('12px', '16px'),
-                    ...borderColor('#005B82'),
-                    ...borderWidth('1px'),
-                    ...borderStyle('solid'),
-                    ...borderRadius('4px'),
-                    marginTop: '16px',
-                  }}
-                >
-                  <img src={informationIcon} alt="information icon" width={'24px'} height={'24px'} />
-                  <ParagraphMedium marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
-                    {varsleMelding}
-                  </ParagraphMedium>
-                </Block>
-              )}
-
-              {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
-                <Block display="flex" justifyContent="flex-start" alignItems="center" marginTop="32px">
-                  <LabelSmall $style={{ color: ettlevColors.white, fontSize: '18px', lineHeight: '14px', textAlign: 'right' }}>
-                    Tildelt:{' '}
-                    {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 ? etterlevelseMetadata.tildeltMed[0] : 'Ikke tildelt'}
-                  </LabelSmall>
-                  <TildeltPopoever
-                    etterlevelseMetadata={etterlevelseMetadata}
-                    setEtterlevelseMetadata={setEtterlevelseMetadata}
-                    icon={faChevronDown}
-                    iconColor={ettlevColors.white}
-                  />
-                </Block>
-              )}
-            </Block>
-          </Block> */}
+            </div>
+          </div>
           <div className="grid grid-cols-12">
             <div className="pr-4 flex flex-col gap-4 col-span-8">
-              <div className="flex items-center justify-between">
-                <div>
-                  {
-                    // todo: ny versjon + se hva som er nytt goes here
-                    // the div should _always_ exist to push tildel-functions to the right side,
-                    // so don't programmatically remove it
-                  }
-                </div>
-                {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
-                  <div className="flex items-center gap-2">
-                    <BodyShort size="small">
-                      {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 ? etterlevelseMetadata.tildeltMed[0] : 'Ikke tildelt'}
-                    </BodyShort>
-                    <Button
-                      variant="tertiary"
-                      size="small"
-                      onClick={() => {
-                        const ident = user.getName()
-                        if (etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] && etterlevelseMetadata.id !== 'ny') {
-                          updateEtterlevelseMetadata({
-                            ...etterlevelseMetadata,
-                            tildeltMed: [],
-                          }).then((resp) => {
-                            setEtterlevelseMetadata(resp)
-                          })
-                        } else if (etterlevelseMetadata.id !== 'ny') {
-                          updateEtterlevelseMetadata({
-                            ...etterlevelseMetadata,
-                            tildeltMed: [ident],
-                          }).then((resp) => {
-                            setEtterlevelseMetadata(resp)
-                          })
-                        } else {
-                          createEtterlevelseMetadata({
-                            ...etterlevelseMetadata,
-                            tildeltMed: [ident],
-                          }).then((resp) => {
-                            setEtterlevelseMetadata(resp)
-                          })
-                        }
-                      }}
-                    >
-                      {etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] ? 'Fjern meg selv' : 'Tildel meg selv'}
-                    </Button>
+              <div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    {krav.aktivertDato !== null && (
+                      <Tag variant="warning">
+                        {krav.kravVersjon > 1
+                          ? `Ny versjon ${moment(krav.aktivertDato).format('ll')}`
+                          : `Opprettet ${moment(krav.aktivertDato).format('ll')}`}
+                      </Tag>
+                    )}
                   </div>
+                  {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
+                    <div className="flex items-center gap-2">
+                      <BodyShort size="small">
+                        {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 ? etterlevelseMetadata.tildeltMed[0] : 'Ikke tildelt'}
+                      </BodyShort>
+                      <Button
+                        variant="tertiary"
+                        size="small"
+                        onClick={() => {
+                          const ident = user.getName()
+                          if (etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] && etterlevelseMetadata.id !== 'ny') {
+                            updateEtterlevelseMetadata({
+                              ...etterlevelseMetadata,
+                              tildeltMed: [],
+                            }).then((resp) => {
+                              setEtterlevelseMetadata(resp)
+                            })
+                          } else if (etterlevelseMetadata.id !== 'ny') {
+                            updateEtterlevelseMetadata({
+                              ...etterlevelseMetadata,
+                              tildeltMed: [ident],
+                            }).then((resp) => {
+                              setEtterlevelseMetadata(resp)
+                            })
+                          } else {
+                            createEtterlevelseMetadata({
+                              ...etterlevelseMetadata,
+                              tildeltMed: [ident],
+                            }).then((resp) => {
+                              setEtterlevelseMetadata(resp)
+                            })
+                          }
+                        }}
+                      >
+                        {etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] ? 'Fjern meg selv' : 'Tildel meg selv'}
+                      </Button>
+                    </div>
+                  )}
+                </div>
+
+                {krav.versjonEndringer && (
+                  <ReadMore header="Se hva som er nytt">
+                    <Markdown source={krav.versjonEndringer} />
+                  </ReadMore>
                 )}
               </div>
 
@@ -443,52 +320,6 @@ export const EditEtterlevelse = ({
                   <Tilbakemeldinger krav={krav} hasKravExpired={false} />
                 </Tabs.Panel>
               </Tabs>
-
-              <CustomizedModal
-                onClose={() => setIsVersjonEndringerModalOpen(false)}
-                isOpen={isVersjonEndringerModalOpen}
-                size="full"
-                closeIconColor={ettlevColors.white}
-                closeIconHoverColor={ettlevColors.green100}
-                overrides={{
-                  Dialog: {
-                    style: {
-                      ...borderRadius('0px'),
-                      ...marginAll('0px'),
-                      width: '100%',
-                      maxWidth: maxPageWidth,
-                    },
-                  },
-                }}
-              >
-                <Block width="100%">
-                  <Block
-                    paddingTop="120px"
-                    paddingBottom="40px"
-                    backgroundColor={ettlevColors.green800}
-                    paddingLeft={responsivePaddingExtraLarge}
-                    paddingRight={responsivePaddingExtraLarge}
-                  >
-                    <LabelSmall color={ettlevColors.white}>
-                      K{krav.kravNummer}.{krav.kravVersjon}
-                    </LabelSmall>
-                    <HeadingXXLarge marginTop="0px" marginBottom="0px" color={ettlevColors.white}>
-                      {krav.navn}
-                    </HeadingXXLarge>
-                  </Block>
-                  <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-                    <Block minHeight="300px">
-                      <HeadingXLarge marginTop="0px" marginBottom="24px">
-                        Dette er nytt fra forrige versjon
-                      </HeadingXLarge>
-                      <Markdown source={krav.versjonEndringer} />
-                    </Block>
-                    <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
-                      <Button onClick={() => setIsVersjonEndringerModalOpen(false)}>Lukk visning</Button>
-                    </Block>
-                  </Block>
-                </Block>
-              </CustomizedModal>
             </div>
             <div className="pl-4 border-l border-border-divider col-span-4">
               <Tabs defaultValue="notat" size="small">
