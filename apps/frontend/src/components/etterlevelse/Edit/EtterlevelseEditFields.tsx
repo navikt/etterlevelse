@@ -44,8 +44,6 @@ type EditProps = {
   tidligereEtterlevelser?: Etterlevelse[]
   viewMode?: boolean
   kravFilter: KRAV_FILTER_TYPE
-  etterlevelseMetadata: EtterlevelseMetadata
-  setEtterlevelseMetadata: React.Dispatch<React.SetStateAction<EtterlevelseMetadata>>
 }
 
 export const EtterlevelseEditFields = ({
@@ -63,14 +61,11 @@ export const EtterlevelseEditFields = ({
   editedEtterlevelse,
   tidligereEtterlevelser,
   viewMode,
-  kravFilter,
-  etterlevelseMetadata,
-  setEtterlevelseMetadata,
+  kravFilter
 }: EditProps) => {
   const [etterlevelseStatus] = React.useState<string>(editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [radioHover] = React.useState<string>('')
   const [isOppfylesSenere, setOppfylesSenere] = React.useState<boolean>(etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE)
-  const [isNotatfeltOpen, setIsNotatfeltOpen] = React.useState(false)
 
   const navigate = useNavigate()
 

@@ -40,6 +40,7 @@ import { useTeam } from '../../api/TeamApi'
 import { TeamName } from '../common/TeamName'
 import { AllInfo } from '../krav/ViewKrav'
 import { FileTextIcon } from '@navikt/aksel-icons'
+import EditNotatfelt from '../etterlevelseMetadata/EditNotatfelt'
 
 type EditEttlevProps = {
   temaName?: string
@@ -93,6 +94,7 @@ export const EditEtterlevelse = ({
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
   const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
   const [pageWidth, setPageWidth] = useState<number>(1276)
+  const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
@@ -109,7 +111,7 @@ export const EditEtterlevelse = ({
   const navigate = useNavigate()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       etterlevelseDokumentasjonId &&
         kravId.kravNummer &&
         getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(etterlevelseDokumentasjonId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
@@ -432,8 +434,6 @@ export const EditEtterlevelse = ({
                     setNavigatePath={setNavigatePath}
                     editedEtterlevelse={editedEtterlevelse}
                     tidligereEtterlevelser={tidligereEtterlevelser}
-                    etterlevelseMetadata={etterlevelseMetadata}
-                    setEtterlevelseMetadata={setEtterlevelseMetadata}
                   />
                 </Tabs.Panel>
                 <Tabs.Panel value="etterlevelser" className="flex flex-col gap-2 mt-2">
@@ -500,10 +500,20 @@ export const EditEtterlevelse = ({
                 <Tabs.Panel value="notat" className="flex flex-col gap-2 mt-2">
                   <div className="flex justify-between">
                     <Label className="flex gap-1"><FileTextIcon fontSize="1.5rem" />Notat</Label>
-                    <Button variant="secondary" size="xsmall">Rediger</Button>
-                    {
-                      // todo: the button above should open a modal for editing arbeidsnotat
-                    }
+                    <Button
+                      variant="secondary"
+                      size="xsmall"
+                      onClick={() => setIsNotatModalOpen(true)}
+                    >
+                      Rediger
+                    </Button>
+
+                    <EditNotatfelt
+                      isOpen={isNotatModalOpen}
+                      setIsNotatfeltOpen={setIsNotatModalOpen}
+                      etterlevelseMetadata={etterlevelseMetadata}
+                      setEtterlevelseMetadata={setEtterlevelseMetadata}
+                    />
                   </div>
                   <BodyLong>{etterlevelseMetadata.notater}</BodyLong>
                 </Tabs.Panel>
