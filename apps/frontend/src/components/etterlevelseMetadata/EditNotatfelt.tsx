@@ -1,16 +1,10 @@
-import { Block } from 'baseui/block'
-import { FormControl } from 'baseui/form-control'
-import { ParagraphMedium } from 'baseui/typography'
 import { Form, Formik, FormikProps } from 'formik'
 import { EtterlevelseMetadata } from '../../constants'
 import { useDebouncedState } from '../../util/hooks'
 import TextEditor from '../common/TextEditor/TextEditor'
-import Button from '../common/Button'
-import { ettlevColors } from '../../util/theme'
-import { padding } from '../common/Style'
 import { createEtterlevelseMetadata, updateEtterlevelseMetadata } from '../../api/EtterlevelseMetadataApi'
 import React from 'react'
-import { Heading, Modal } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react'
 import { FileTextIcon } from '@navikt/aksel-icons'
 
 type EditNotatfeltProps = {
@@ -64,46 +58,30 @@ export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata
         >
           {({ errors }: FormikProps<EtterlevelseMetadata>) => (
             <Form>
-              <Block>
+              <div>
+                <BodyShort className="mb-6">Notatet er kun for internt bruk, og ikke en del av dokumentasjonen</BodyShort>
 
-                <Block marginBottom="24px">
-                  <ParagraphMedium $style={{ marginTop: '0px', marginBottom: '0px' }}>Notatet er kun for internt bruk, og ikke en del av dokumentasjonen</ParagraphMedium>
-                </Block>
+                <TextEditor initialValue={notater} setValue={setNotater} height={'350px'} errors={errors} simple />
 
-                <FormControl>
-                  <TextEditor initialValue={notater} setValue={setNotater} height={'350px'} errors={errors} simple />
-                </FormControl>
-                <Button
-                  type={'button'}
-                  kind={'underline-hover'}
-                  onClick={() => {
-                    setNotater(etterlevelseMetadata.notater || '')
-                    setIsNotatfeltOpen(false)
-                  }}
-                  $style={{
-                    ':hover': { backgroundColor: ettlevColors.green50 },
-                    ...padding('8px', '16px'),
-                    fontWeight: '600',
-                    marginRight: '35px',
-                  }}
-                >
-                  <ParagraphMedium margin={0} padding={0}>
-                    Lukk uten å lagre
-                  </ParagraphMedium>
-                </Button>
-                <Button
-                  type={'submit'}
-                  $style={{
-                    ...padding('8px', '16px'),
-                    fontWeight: '700',
-                    fontStyle: 'bold',
-                  }}
-                >
-                  <ParagraphMedium margin={0} padding={0} color={ettlevColors.green50}>
-                    Lagre og lukk
-                  </ParagraphMedium>
-                </Button>
-              </Block>
+                <div className="w-full flex justify-end mt-6">
+                  <Button
+                    type="button"
+                    className="mr-4"
+                    variant="secondary"
+                    onClick={() => {
+                      setNotater(etterlevelseMetadata.notater || '')
+                      setIsNotatfeltOpen(false)
+                    }}
+                  >
+                    Avbryt
+                  </Button>
+                  <Button
+                    type="submit"
+                  >
+                    Lagre arbeidsnotat
+                  </Button>
+                </div>
+              </div>
             </Form>
           )}
         </Formik>
