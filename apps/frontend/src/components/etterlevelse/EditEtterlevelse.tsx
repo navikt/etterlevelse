@@ -388,7 +388,7 @@ export const EditEtterlevelse = ({
                 </Heading>
                 <Markdown sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
               </div>
-              <Tabs defaultValue="dokumentajson">
+              <Tabs defaultValue="dokumentasjon">
                 <Tabs.List>
                   <Tabs.Tab value="dokumentasjon" label="Dokumentasjon" />
                   <Tabs.Tab value="etterlevelser" label="Hvordan har andre gjort det?" />
