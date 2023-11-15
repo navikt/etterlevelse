@@ -90,9 +90,6 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
             }
         });
 
-        log.info("etterlevelse data: " + etterlevelser);
-        log.info("Krav data: " + krav);
-
         var fylt = filter(krav, k -> etterlevelser.stream().anyMatch(e -> e.isEtterleves() && e.kravId().equals(k.kravId())));
         var ikkeFylt = filter(krav, k -> !fylt.contains(k));
 
