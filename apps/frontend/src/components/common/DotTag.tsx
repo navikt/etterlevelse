@@ -25,11 +25,10 @@ type DotTagsParams = {
   markdown?: boolean
   list?: ListName
   inColumn?: boolean
-  noBulletPoints?: boolean
 }
 
 export const DotTags = (props: DotTagsParams) => {
-  const { commaSeparator, noBulletPoints } = props
+  const { commaSeparator } = props
   const items = props.items || props.codes?.map((c) => c.code) || []
 
   if (!items.length) return <>{'Ikke angitt'}</>
