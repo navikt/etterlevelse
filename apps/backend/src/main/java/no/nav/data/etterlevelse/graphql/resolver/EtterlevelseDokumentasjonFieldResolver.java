@@ -66,6 +66,8 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
 
     public EtterlevelseDokumentasjonStats stats(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon) {
 
+        var etterlevelser = etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString());
+
         List<KravResponse> krav;
         List<KravResponse> irrelevantKrav;
         List<KravResponse> utgaattKrav = convert(kravService.getByFilter(KravFilter.builder()
@@ -88,8 +90,8 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
             }
         });
 
-        var fylt = filter(krav, k -> !k.getEtterlevelser().isEmpty());
-        var ikkeFylt = filter(krav, k -> k.getEtterlevelser().isEmpty());
+        var fylt = filter(krav, k -> etterlevelser.stream().anyMatch(e -> e.isEtterleves() && e.kravId().equals(k.kravId())));
+        var ikkeFylt = filter(krav, k -> !fylt.contains(k));
 
         var irrelevant = filter(irrelevantKrav, i -> !fylt.contains(i) && !ikkeFylt.contains(i));
 
