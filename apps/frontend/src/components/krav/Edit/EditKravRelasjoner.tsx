@@ -5,14 +5,13 @@ import { intl } from '../../../util/intl/intl'
 import { TYPE } from 'baseui/select'
 import { FormControl } from 'baseui/form-control'
 import { Error } from '../../common/ModalSchema'
-import { RenderTagList } from '../../common/TagList'
 import { Krav } from '../../../constants'
-import { Block } from 'baseui/block'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { searchIcon } from '../../Images'
 import CustomizedSelect from '../../common/CustomizedSelect'
 import { borderWidth } from '../../common/Style'
 import { useSearchKrav } from '../../../api/KravApi'
+import {Chips} from "@navikt/ds-react";
 
 export const EditKravRelasjoner = () => {
   const [searchResult, setSearch, loading] = useSearchKrav()
@@ -23,7 +22,8 @@ export const EditKravRelasjoner = () => {
         {(p) => {
           return (
             <FormControl label={<LabelWithTooltip label={'Relasjoner til andre krav'} tooltip={'Legg ved lenke til relasjoner til andre krav'} />}>
-              <Block>
+              <div>
+
                 <CustomizedSelect
                   overrides={{
                     SearchIcon: {
@@ -78,8 +78,18 @@ export const EditKravRelasjoner = () => {
                   error={!!p.form.errors.begreper && !!p.form.submitCount}
                   isLoading={loading}
                 />
-                <RenderTagList wide list={p.form.values.kravRelasjoner.map((kr: Partial<Krav>) => `K${kr.kravNummer}.${kr.kravVersjon}`)} onRemove={p.remove} />
-              </Block>
+
+                 <Chips>{p.form.values.kravRelasjoner.map((kr: any, index: number) => (
+                  <Chips.Removable
+                    key={kr.id}
+                    variant="action"
+                    onDelete={() => p.remove(index)}
+                  >
+                      {`K${kr.kravNummer}.${kr.kravVersjon}`}
+                 </Chips.Removable>
+                  ))}
+                   </Chips>
+              </div>
             </FormControl>
           )
         }}
