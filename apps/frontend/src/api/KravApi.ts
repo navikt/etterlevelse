@@ -200,6 +200,7 @@ export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   etterlevelser: [],
   kravIdRelasjoner: [],
   aktivertDato: krav.aktivertDato || '',
+  prioriteringsId: ''
 })
 
 export const kravFullQuery = gql`
@@ -301,6 +302,7 @@ export const etterlevelseDokumentasjonKravQuery = gql`
         status
         aktivertDato
         kravIdRelasjoner
+        prioriteringsId
         kravRelasjoner {
           id
           kravNummer
@@ -326,6 +328,38 @@ export const etterlevelseDokumentasjonKravQuery = gql`
           lastModifiedDate
           createdDate
         }
+        etterlevelser(onlyForEtterlevelseDokumentasjon: true) {
+          id
+          etterleves
+          fristForFerdigstillelse
+          status
+          changeStamp {
+            lastModifiedBy
+            lastModifiedDate
+          }
+        }
+      }
+    }
+  }
+`
+
+export const KravMedPrioriteringOgEtterlevelseQuery = gql`
+  query getKravByFilter($etterlevelseDokumentasjonId: String, $lover: [String!], $gjeldendeKrav: Boolean, $etterlevelseDokumentasjonIrrevantKrav: Boolean, $status: [String!]) {
+    krav(
+      filter: {
+        etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
+        lover: $lover
+        gjeldendeKrav: $gjeldendeKrav
+        etterlevelseDokumentasjonIrrevantKrav: $etterlevelseDokumentasjonIrrevantKrav
+        status: $status
+      }
+    ) {
+      content {
+        navn
+        kravNummer
+        kravVersjon
+        status
+        prioriteringsId
         etterlevelser(onlyForEtterlevelseDokumentasjon: true) {
           id
           etterleves

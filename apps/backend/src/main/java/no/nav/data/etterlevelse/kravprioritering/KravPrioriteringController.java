@@ -11,7 +11,9 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
+import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringFilter;
 import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringRequest;
 import no.nav.data.etterlevelse.kravprioritering.dto.KravPrioriteringResponse;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -78,6 +81,28 @@ public class KravPrioriteringController {
 
         List<KravPrioritering> kravPrioriteringList = service.getByTema(temacode);
         return ResponseEntity.ok(new RestResponsePage<>(kravPrioriteringList).convert(KravPrioritering::toResponse));
+    }
+
+    @Operation(summary = "Get krav prioritering by filter")
+    @ApiResponse(description = "ok")
+    @GetMapping("/filter")
+    public ResponseEntity<RestResponsePage<KravPrioriteringResponse>> getByFilter(
+            @RequestParam(name="id",required = false) String id,
+            @RequestParam(name="kravNummer",required = false) Integer kravNummer,
+            @RequestParam(name="temaCode",required = false) String temaCode,
+            @RequestParam(name="kravStatus",required = false) KravStatus kravStatus
+    ) {
+        KravPrioriteringFilter filter = KravPrioriteringFilter.builder()
+                .id(id)
+                .kravNummer(kravNummer)
+                .temaCode(temaCode)
+                .kravStatus(kravStatus)
+                .build();
+        log.info("Get krav prioritering with filter={}", filter);
+        if(filter.getTemaCode() != null) {
+            codelistService.validateListNameAndCode(ListName.TEMA.name(), filter.getTemaCode());
+        }
+        return ResponseEntity.ok(new RestResponsePage<>(service.getByFilter(filter)));
     }
 
     @Operation(summary = "Get one krav prioritering")
