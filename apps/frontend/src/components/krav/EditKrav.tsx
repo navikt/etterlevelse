@@ -4,7 +4,7 @@ import { createKrav, getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav
 import React, { useEffect } from 'react'
 import * as yup from 'yup'
 import { codelist, ListName } from '../../services/Codelist'
-import { InputField, MultiInputField, TextAreaField } from '../common/Inputs'
+import { MultiInputField, TextAreaField } from '../common/Inputs'
 import axios from 'axios'
 import { env } from '../../util/env'
 import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
@@ -20,9 +20,8 @@ import { ErrorMessageModal } from './ErrorMessageModal'
 import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
 import { user } from '../../services/User'
 import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
-import AlertUnsavedPopup from '../common/AlertUnsavedPopup'
 import _ from 'lodash'
-import {Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal} from "@navikt/ds-react";
+import {Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal, Textarea, TextField} from "@navikt/ds-react";
 
 type EditKravProps = {
   krav: KravQL
@@ -37,6 +36,7 @@ type EditKravProps = {
 
 const maxInputWidth = '400px'
 const inputMarginBottom = theme.sizing.scale900
+const modalWidth = '1276px'
 
 export const kravModal = () => document.querySelector('#krav-modal')
 
@@ -159,23 +159,12 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
   return (
     <div>
-      <CustomizedModal
-        closeable={false}
-        onClose={() => {
-          if (isFormDirty) {
-            setIsAlertModalOpen(true)
-          } else {
-            setIsOpen(false)
-          }
-        }}
-        isOpen={isOpen}
-        overrides={{
-          Root: {
-            props: {
-              id: 'krav-modal',
-            },
-          },
-        }}
+      <Modal
+        width={modalWidth}
+        header={{
+          heading: newVersion ? 'Ny versjon' : newKrav ? 'Nytt krav' : 'Rediger kravside',
+          closeButton: false}}
+        open={isOpen}
       >
         <Formik
           onSubmit={submit}
@@ -198,13 +187,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                 }
               }}
             >
-              <AlertUnsavedPopup
-                isActive={isFormDirty}
-                isModalOpen={isAlertModalOpen}
-                setIsModalOpen={setIsAlertModalOpen}
-                onClose={() => close(values)}
-                onSubmit={() => submit(values)}
-              />
+
               <div className={`pt-6 ${!stickyHeader ? 'pb-12' : 'pb-5'} px-24 sticky top-0 ${!stickyHeader ? 'block' : 'flex'} z-30 bg-green-800`}>
                 {stickyHeader && (
                   <div className="flex w-full justify-start">
@@ -228,16 +211,14 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
               </div>
               <div>
                 <div className="title_container py-16 px-24">
-                  <InputField
-                    marginBottom={inputMarginBottom}
+                  <TextField
+                    className="mb-6"
                     label="Krav-tittel"
                     name="navn"
-                    tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'}
+                    description="Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting."
                   />
                   <div className="mb-14">
-                    <CheckboxGroup
-                      legend="Send varselmelding"
-                    >
+                    <CheckboxGroup legend="Send varselmelding">
                       <Checkbox
                         value="Varsel"
                         onChange={() => {
@@ -249,10 +230,13 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
                     {varlselMeldingActive && (
                       <div className="w-full ml-8 mt-6">
-                        <TextAreaField label="Forklaring til etterlevere" name="varselMelding" maxCharacter={100} rows={1} setIsFormDirty={setIsFormDirty} />
+                        <Textarea
+                          label="Forklaring til etterlevere"
+                          name="varselMelding"
+                          maxLength={100}
+                          minRows={2}/>
                       </div>
                     )}
-
 
                   </div>
                   <TextAreaField
@@ -264,7 +248,6 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     shortenLinks
                     onImageUpload={onImageUpload(krav.id)}
                     tooltip={'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'}
-                    setIsFormDirty={setIsFormDirty}
                   />
                   <Error fieldName={'hensikt'} fullWidth />
                 </div>
@@ -302,19 +285,12 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         markdown
                         shortenLinks
                         tooltip={'Beskrivelse av hva som er nytt siden siste versjon.'}
-                        setIsFormDirty={setIsFormDirty}
                       />
                     )}
-
-                    {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
 
                     <div className="mx-20">
                       <Heading level="3" size="medium">Gruppering</Heading>
                     </div>
-                    {/*
-                    <Block width="100%" maxWidth={maxInputWidth}>
-                      <EditVirkemidler />
-                    </Block> */}
 
                     <div className="w-full max-w-md">
                       <EditKravMultiOptionField
@@ -540,7 +516,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
             </Form>
           )}
         </Formik>
-      </CustomizedModal>
+      </Modal>
     </div>
   )
 }
