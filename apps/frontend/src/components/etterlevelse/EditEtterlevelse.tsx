@@ -1,19 +1,11 @@
 import { Behandling, Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL, KravStatus, Team } from '../../constants'
 import { FormikProps } from 'formik'
 import { createEtterlevelse, getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, updateEtterlevelse } from '../../api/EtterlevelseApi'
-import { Block } from 'baseui/block'
 import React, { useEffect, useRef, useState } from 'react'
-import { theme } from '../../util'
 import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
-import { kravNumView, query } from '../../pages/KravPage'
-import { HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
+import { query } from '../../pages/KravPage'
 import { user } from '../../services/User'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding } from '../common/Style'
 import { useQuery } from '@apollo/client'
-import { informationIcon, warningAlert } from '../Images'
-import CustomizedTabs from '../common/CustomizedTabs'
 import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
 import Etterlevelser from '../krav/Etterlevelser'
 import { Markdown } from '../common/Markdown'
@@ -23,23 +15,18 @@ import {
   mapEtterlevelseMetadataToFormValue,
   updateEtterlevelseMetadata,
 } from '../../api/EtterlevelseMetadataApi'
-import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
-import CustomizedModal from '../common/CustomizedModal'
-import { ampli } from '../../services/Amplitude'
-import StatusView from '../common/StatusTag'
 import { getPageWidth } from '../../util/pageWidth'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getFilterType, Section } from '../../pages/EtterlevelseDokumentasjonPage'
+import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import moment from 'moment'
 import { Alert, BodyLong, BodyShort, Button, Detail, Heading, Label, ReadMore, Tabs, Tag } from '@navikt/ds-react'
-import { behandlingLink, teamKatTeamLink } from '../../util/config'
+import { behandlingLink } from '../../util/config'
 import { ExternalLink } from '../common/RouteLink'
-import { useTeam } from '../../api/TeamApi'
 import { TeamName } from '../common/TeamName'
 import { AllInfo } from '../krav/ViewKrav'
-import { FileTextIcon, InformationSquareIcon } from '@navikt/aksel-icons'
+import { FileTextIcon } from '@navikt/aksel-icons'
 import EditNotatfelt from '../etterlevelseMetadata/EditNotatfelt'
 
 type EditEttlevProps = {
@@ -197,7 +184,7 @@ export const EditEtterlevelse = ({
 
               {varsleMelding && (
                 <div>
-                  <Alert size="small" variant="info">
+                  <Alert size="small" variant="info" className="w-fit">
                     {varsleMelding}
                   </Alert>
                 </div>
@@ -216,7 +203,7 @@ export const EditEtterlevelse = ({
               )}
             </div>
           </div>
-          <div className="grid grid-cols-12">
+          <div className="w-full flex">
             <div className="pr-4 flex flex-col gap-4 col-span-8">
               <div>
                 <div className="flex items-center justify-between">
@@ -276,7 +263,7 @@ export const EditEtterlevelse = ({
                 )}
               </div>
 
-              <div className="bg-blue-50 p-4 rounded">
+              <div className="p-4 rounded bg-purple-50">
                 <Heading level="2" size="small">
                   Hensikten med kravet
                 </Heading>
@@ -321,7 +308,7 @@ export const EditEtterlevelse = ({
                 </Tabs.Panel>
               </Tabs>
             </div>
-            <div className="pl-4 border-l border-border-divider col-span-4">
+            <div className="pl-4 border-l border-border-divider max-w-sm">
               <Tabs defaultValue="notat" size="small">
                 <Tabs.List>
                   <Tabs.Tab value="notat" label="Notat" />
