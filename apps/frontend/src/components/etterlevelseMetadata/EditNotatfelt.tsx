@@ -42,7 +42,7 @@ export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata
       <Modal.Header>
         <div className="flex items-center" >
           <FileTextIcon aria-label="" aria-hidden width="24px" height="26px" />
-          <Heading level="2" size="small">Arbeidsnotat</Heading>
+          <Heading level="2" size="small">Notat</Heading>
         </div>
       </Modal.Header>
 
