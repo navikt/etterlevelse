@@ -21,10 +21,10 @@ import EtterlevelseCard from '../EtterlevelseCard'
 import { ModalHeader } from 'baseui/modal'
 import { etterlevelseSchema } from './etterlevelseSchema'
 import _ from 'lodash'
-import { Checkbox } from 'baseui/checkbox'
+
 import { DateField } from '../../common/Inputs'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
-import { Alert, BodyShort, Label } from '@navikt/ds-react'
+import { Alert, BodyShort, Checkbox, Label } from '@navikt/ds-react'
 
 type EditProps = {
   krav: KravQL
@@ -136,7 +136,7 @@ export const EtterlevelseEditFields = ({
                 </div>
               </Form>
 
-              <Block width="100%" backgroundColor={kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV ? 'transparent' : ettlevColors.green100}>
+              <div className="w-full">
                 {!documentEdit && (
                   <div className="flex w-full items-center justify-end gap-12 px-8">
                     {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
@@ -147,35 +147,8 @@ export const EtterlevelseEditFields = ({
                             setOppfylesSenere(!isOppfylesSenere)
                           }}
                           key={EtterlevelseStatus.OPPFYLLES_SENERE}
-                          overrides={{
-                            Root: {
-                              style: {
-                                textUnderlineOffset: '3px',
-                                ':hover': { textDecoration: 'underline 1px' },
-                                marginRight: 'auto',
-                              },
-                            },
-                            ToggleInner: {
-                              style: {
-                                backgroundColor: ettlevColors.white,
-                                ':hover': { backgroundColor: ettlevColors.white },
-                                ':active': { backgroundColor: ettlevColors.green600 },
-                              },
-                            },
-                            Checkmark: {
-                              style: ({ $isFocused }) => ({
-                                outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
-                                outlineWidth: $isFocused ? '3px' : undefined,
-                                outlineStyle: $isFocused ? 'solid' : undefined,
-                              }),
-                            },
-                          }}
                         >
-                          <Block $style={{ textDecoration: radioHover === EtterlevelseStatus.OPPFYLLES_SENERE ? 'underline' : 'none' }}>
-                            <ParagraphMedium $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
-                              Kravet skal etterleves senere
-                            </ParagraphMedium>
-                          </Block>
+                          Kravet skal etterleves senere
                         </Checkbox>
 
                         {isOppfylesSenere && (
@@ -267,7 +240,7 @@ export const EtterlevelseEditFields = ({
                     </div>
                   </div>
                 )}
-              </Block>
+              </div>
 
               <CustomizedModal
                 onClose={() => setIsAlertUnsavedModalOpen(false)}
