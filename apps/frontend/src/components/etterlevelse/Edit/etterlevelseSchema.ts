@@ -18,7 +18,7 @@ export const etterlevelseSchema = () => {
             }
             return true
           },
-        }),
+        }).required('Du må velge et status'),
         behovForBegrunnelse: yup.boolean(),
         begrunnelse: yup.string().test({
           name: 'begrunnelseText',

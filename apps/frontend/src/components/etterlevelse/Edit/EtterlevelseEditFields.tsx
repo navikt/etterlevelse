@@ -102,7 +102,7 @@ export const EtterlevelseEditFields = ({
 
                 <div className="w-full my-6">
                   {Object.keys(errors).length > 0 && (
-                    <Alert size="small" fullWidth variant="error">
+                    <Alert fullWidth variant="error">
                       Du må fylle ut alle obligatoriske felter
                     </Alert>
                   )}
