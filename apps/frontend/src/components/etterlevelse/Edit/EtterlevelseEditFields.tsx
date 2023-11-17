@@ -108,7 +108,9 @@ export const EtterlevelseEditFields = ({
                 <div>
                   {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
                     <div className={'mb-12'}>
-                      <Alert className="mb-1" size="small" variant="info">Dette kravet er dokumentert som ikke relevant 20.05.2022</Alert>
+                      <Alert className="mb-1" size="small" variant="info">
+                        Dette kravet er dokumentert som ikke relevant 20.05.2022
+                      </Alert>
                       <Label>Beskrivelse av hvorfor kraver er ikke relevant</Label>
                       <BodyShort>{etterlevelse.statusBegrunnelse}</BodyShort>
                     </div>
@@ -124,40 +126,13 @@ export const EtterlevelseEditFields = ({
 
                   <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false} />
 
-                  <Block width={'100%'} marginTop={'65px'}>
+                  <div className="w-full mt-16">
                     {Object.keys(errors).length > 0 && (
-                      <Block display="flex" width="100%">
-                        <Block width="100%">
-                          <Notification
-                            overrides={{
-                              Body: {
-                                style: {
-                                  width: 'auto',
-                                  ...borderStyle('solid'),
-                                  ...borderWidth('1px'),
-                                  ...borderColor(ettlevColors.red600),
-                                  ...borderRadius('4px'),
-                                },
-                              },
-                            }}
-                            kind={NKIND.negative}
-                          >
-                            <Block display="flex" justifyContent="center">
-                              <FontAwesomeIcon
-                                icon={faTimesCircle}
-                                style={{
-                                  marginRight: '5px',
-                                }}
-                              />
-                              <ParagraphMedium marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
-                                Du må fylle ut alle obligatoriske felter
-                              </ParagraphMedium>
-                            </Block>
-                          </Notification>
-                        </Block>
-                      </Block>
+                      <Alert size="small" fullWidth variant="error">
+                        Du må fylle ut alle obligatoriske felter
+                      </Alert>
                     )}
-                  </Block>
+                  </div>
                 </div>
               </Form>
 
