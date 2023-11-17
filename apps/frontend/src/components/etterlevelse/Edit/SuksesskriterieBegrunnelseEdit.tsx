@@ -69,11 +69,11 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
   }
 }
 
-export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit, viewMode }: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean; viewMode: boolean }) => {
+export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit}: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean }) => {
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterieBegrunnelser'}>
-        {(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} viewMode={viewMode} />}
+        {(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} />}
       </FieldArray>
     </FieldWrapper>
   )
@@ -83,14 +83,10 @@ const KriterieBegrunnelseList = ({
   props,
   suksesskriterie,
   disableEdit,
-  viewMode,
-  setIsFormDirty,
 }: {
   props: FieldArrayRenderProps
   suksesskriterie: Suksesskriterie[]
   disableEdit: boolean
-  viewMode: boolean
-  setIsFormDirty?: (v: boolean) => void
 }) => {
   const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
 
@@ -107,7 +103,6 @@ const KriterieBegrunnelseList = ({
               suksesskriterieBegrunnelser={suksesskriterieBegrunnelser}
               update={(updated) => props.replace(i, updated)}
               props={props}
-              viewMode={viewMode}
               totalSuksesskriterie={suksesskriterie.length}
             />
           </Block>
@@ -125,7 +120,6 @@ const KriterieBegrunnelse = ({
   update,
   status,
   props,
-  viewMode,
   totalSuksesskriterie,
 }: {
   suksesskriterie: Suksesskriterie
@@ -135,7 +129,6 @@ const KriterieBegrunnelse = ({
   update: (s: SuksesskriterieBegrunnelse) => void
   status: string
   props: FieldArrayRenderProps
-  viewMode: boolean
   totalSuksesskriterie: number
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
@@ -187,11 +180,7 @@ const KriterieBegrunnelse = ({
     }
   }
   const getBackgroundColor = () => {
-    if (viewMode === true) {
-      return ettlevColors.grey50
-    } else {
       return ettlevColors.white
-    }
   }
 
   const getLabelForSuksessKriterie = () => {
@@ -223,7 +212,7 @@ const KriterieBegrunnelse = ({
             Suksesskriterium {index + 1} av {totalSuksesskriterie}
           </ParagraphMedium>
         </Block>
-        {viewMode === true && (
+        {/* {viewMode === true && (
           <Block alignSelf="flex-end">
             <ParagraphMedium
               $style={{
@@ -236,7 +225,7 @@ const KriterieBegrunnelse = ({
               Bortfiltert
             </ParagraphMedium>
           </Block>
-        )}
+        )} */}
       </Block>
 
       <div className="flex flex-col gap-4">
@@ -251,8 +240,6 @@ const KriterieBegrunnelse = ({
 
       <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="24px" marginBottom="24px" />
 
-      {viewMode === false && (
-        <>
           <Block>
             <RadioGroup
               value={suksessKriterieStatus}
@@ -277,10 +264,8 @@ const KriterieBegrunnelse = ({
             </RadioGroup>
           </Block>
           <Error fieldName={`suksesskriterieBegrunnelser[${index}].suksesskriterieStatus`} fullWidth={true} />
-        </>
-      )}
 
-      {(!disableEdit || !viewMode) && suksesskriterie.behovForBegrunnelse && (
+      {!disableEdit  && suksesskriterie.behovForBegrunnelse && (
         <Block marginTop={theme.sizing.scale1000}>
           <FormControl label={<LabelWithToolTip label={getLabelForSuksessKriterie()} />}>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%" />
@@ -289,7 +274,7 @@ const KriterieBegrunnelse = ({
         </Block>
       )}
 
-      {(disableEdit || viewMode) && (
+      {disableEdit && (
         <Block marginTop={theme.sizing.scale1000}>
           <LabelAboveContent title={getLabelForSuksessKriterie()} markdown={begrunnelse} />
         </Block>

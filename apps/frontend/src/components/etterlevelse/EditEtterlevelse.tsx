@@ -34,7 +34,6 @@ type EditEttlevProps = {
   etterlevelse: Etterlevelse
   kravId: KravId
   formRef?: React.Ref<any>
-  documentEdit?: boolean
   etterlevelseDokumentasjonTitle?: string
   etterlevelseDokumentasjonId?: string
   etterlevelseNummer?: number
@@ -52,7 +51,6 @@ export const EditEtterlevelse = ({
   etterlevelse,
   varsleMelding,
   formRef,
-  documentEdit,
   etterlevelseDokumentasjonTitle,
   etterlevelseDokumentasjonId,
   etterlevelseNummer,
@@ -260,23 +258,38 @@ export const EditEtterlevelse = ({
                   {
                     // todo: this heckin' component needs some care
                   }
-                  <EtterlevelseEditFields
-                    viewMode={kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ? true : false}
-                    kravFilter={kravFilter}
-                    krav={krav}
-                    etterlevelse={etterlevelse}
-                    submit={submit}
-                    formRef={etterlevelseFormRef}
-                    varsleMelding={varsleMelding}
-                    disableEdit={disableEdit}
-                    documentEdit={documentEdit}
-                    close={() => {
-                      setTimeout(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`), 1)
-                    }}
-                    navigatePath={navigatePath}
-                    editedEtterlevelse={editedEtterlevelse}
-                    tidligereEtterlevelser={tidligereEtterlevelser}
-                  />
+                  {kravFilter !== KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ?
+                    <EtterlevelseEditFields
+                      kravFilter={kravFilter}
+                      krav={krav}
+                      etterlevelse={etterlevelse}
+                      submit={submit}
+                      formRef={etterlevelseFormRef}
+                      varsleMelding={varsleMelding}
+                      disableEdit={disableEdit}
+                      close={() => {
+                        setTimeout(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`), 1)
+                      }}
+                      navigatePath={navigatePath}
+                      editedEtterlevelse={editedEtterlevelse}
+                      tidligereEtterlevelser={tidligereEtterlevelser}
+                    />
+                    :
+                    <div>
+                      {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
+                        <div className={'mb-12'}>
+                          <Alert className="mb-1" size="small" variant="info">
+                            Dette kravet er dokumentert som ikke relevant 20.05.2022, og senere blitt bortfiltrert
+                          </Alert>
+                          <Label>Beskrivelse av hvorfor kraver er ikke relevant</Label>
+                          <BodyShort>{etterlevelse.statusBegrunnelse}</BodyShort>
+                        </div>
+                      )}
+
+                      {/* <SuksesskriterierBegrunnelseEdit disableEdit={true} suksesskriterie={krav.suksesskriterier}/> */}
+
+                    </div>
+                  }
                 </Tabs.Panel>
                 <Tabs.Panel value="etterlevelser" className="flex flex-col gap-2 mt-2">
                   <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />
