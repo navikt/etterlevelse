@@ -19,7 +19,7 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
   }, [])
 
   return (
-    <div className="w-full">
+    <div>
       <Button type="button" variant="tertiary" onClick={() => setIsModalOpen(true)}>
         Se dokumentasjon på forrige versjon
       </Button>
