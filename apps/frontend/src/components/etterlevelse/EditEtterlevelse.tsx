@@ -293,9 +293,7 @@ export const EditEtterlevelse = ({
                       setTimeout(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`), 1)
                     }}
                     setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
-                    isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
                     navigatePath={navigatePath}
-                    setNavigatePath={setNavigatePath}
                     editedEtterlevelse={editedEtterlevelse}
                     tidligereEtterlevelser={tidligereEtterlevelser}
                   />

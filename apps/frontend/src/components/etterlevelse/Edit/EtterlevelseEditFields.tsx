@@ -2,29 +2,22 @@ import { Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus 
 import { Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import { mapEtterlevelseToFormValue } from '../../../api/EtterlevelseApi'
 import { Block } from 'baseui/block'
-import Button from '../../common/Button'
 import React, { useEffect } from 'react'
 
-import { LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
-import { ettlevColors, responsivePaddingInnerPage, responsiveWidthInnerPage, theme } from '../../../util/theme'
+import { LabelSmall, ParagraphMedium } from 'baseui/typography'
+import { ettlevColors, responsivePaddingInnerPage, responsiveWidthInnerPage } from '../../../util/theme'
 import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../../common/Style'
 import moment from 'moment'
 import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
 import { AllInfo } from '../../krav/ViewKrav'
-import CustomizedModal from '../../common/CustomizedModal'
 import { useNavigate } from 'react-router-dom'
 import EtterlevelseCard from '../EtterlevelseCard'
-import { ModalHeader } from 'baseui/modal'
 import { etterlevelseSchema } from './etterlevelseSchema'
 import _ from 'lodash'
 
 import { DateField } from '../../common/Inputs'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
-import { Alert, BodyShort, Checkbox, Label } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, Checkbox, Label } from '@navikt/ds-react'
 
 type EditProps = {
   krav: KravQL
@@ -36,9 +29,7 @@ type EditProps = {
   documentEdit?: boolean
   close: (k?: Etterlevelse | undefined) => void
   setIsAlertUnsavedModalOpen: (state: boolean) => void
-  isAlertUnsavedModalOpen: boolean
   navigatePath: string
-  setNavigatePath: (state: string) => void
   editedEtterlevelse?: Etterlevelse
   tidligereEtterlevelser?: Etterlevelse[]
   viewMode?: boolean
@@ -54,16 +45,13 @@ export const EtterlevelseEditFields = ({
   documentEdit,
   close,
   setIsAlertUnsavedModalOpen,
-  isAlertUnsavedModalOpen,
   navigatePath,
-  setNavigatePath,
   editedEtterlevelse,
   tidligereEtterlevelser,
   viewMode,
   kravFilter,
 }: EditProps) => {
   const [etterlevelseStatus] = React.useState<string>(editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
-  const [radioHover] = React.useState<string>('')
   const [isOppfylesSenere, setOppfylesSenere] = React.useState<boolean>(etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE)
 
   const navigate = useNavigate()
@@ -126,7 +114,7 @@ export const EtterlevelseEditFields = ({
 
                   <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false} />
 
-                  <div className="w-full mt-16">
+                  <div className="w-full my-6">
                     {Object.keys(errors).length > 0 && (
                       <Alert size="small" fullWidth variant="error">
                         Du må fylle ut alle obligatoriske felter
@@ -136,164 +124,103 @@ export const EtterlevelseEditFields = ({
                 </div>
               </Form>
 
-              <div className="w-full">
-                {!documentEdit && (
-                  <div className="flex w-full items-center justify-end gap-12 px-8">
-                    {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
-                      <Block display="flex" flexDirection="column" paddingTop="27px" paddingBottom="24px" minWidth={'fit-content'}>
-                        <Checkbox
-                          checked={isOppfylesSenere}
-                          onChange={() => {
-                            setOppfylesSenere(!isOppfylesSenere)
-                          }}
-                          key={EtterlevelseStatus.OPPFYLLES_SENERE}
-                        >
-                          Kravet skal etterleves senere
-                        </Checkbox>
+              {!documentEdit && (
+                <div className=" flex w-full border-t border-border-divider pt-5">
+                  {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
+                    <div className="w-full flex flex-col min-w-fit">
+                      <Checkbox
+                        checked={isOppfylesSenere}
+                        onChange={() => {
+                          setOppfylesSenere(!isOppfylesSenere)
+                        }}
+                        key={EtterlevelseStatus.OPPFYLLES_SENERE}
+                      >
+                        Kravet skal etterleves senere
+                      </Checkbox>
 
-                        {isOppfylesSenere && (
-                          <Block width="100%" marginLeft="33px">
-                            <Block maxWidth="170px" width="100%">
-                              <DateField error={!!errors.fristForFerdigstillelse} label="Dato" name="fristForFerdigstillelse" />
-                            </Block>
-                            {/* {errors.fristForFerdigstillelse && (
-                            <Block display="flex" width="100%" marginTop=".2rem">
-                              <Block width="100%">
-                                <Notification
-                                  overrides={{
-                                    Body: {
-                                      style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 },
-                                    },
-                                  }}
-                                  kind={NKIND.negative}
-                                >
-                                  {errors.fristForFerdigstillelse}
-                                </Notification>
-                              </Block>
-                            </Block>
-                          )} */}
-                          </Block>
-                        )}
-                      </Block>
-                    )}
-                    <div className="flex flex-col">
-                      <Block paddingTop="27px" paddingBottom="24px" width="100%">
-                        <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" kind="secondary" marginRight onClick={close}>
-                          {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt og forkast endringene'}
+                      {isOppfylesSenere && (
+                        <div className="w-full">
+                          <div className="w-full max-w-[170px]">
+                            <DateField error={!!errors.fristForFerdigstillelse} label="Dato" name="fristForFerdigstillelse" />
+                          </div>
+                          {errors.fristForFerdigstillelse && (
+                            <Alert variant="error" size="small">
+                              {errors.fristForFerdigstillelse}
+                            </Alert>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="w-full justify-end">
+                    <div className="flex w-full pb-3 justify-end">
+                      {kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV && (
+                        <Button
+                          type="button"
+                          disabled={isSubmitting || disableEdit}
+                          onClick={() => {
+                            submitForm()
+                          }}
+                        >
+                          Lagre endringer
                         </Button>
-                        {kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV && (
+                      )}
+                      {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
+                        <div className="flex">
                           <Button
+                            className="mr-6"
                             type="button"
-                            kind="secondary"
-                            marginRight
+                            variant="secondary"
                             disabled={isSubmitting || disableEdit}
                             onClick={() => {
+                              if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || !isOppfylesSenere) {
+                                values.status = EtterlevelseStatus.UNDER_REDIGERING
+                              } else if (isOppfylesSenere) {
+                                values.status = EtterlevelseStatus.OPPFYLLES_SENERE
+                              }
                               submitForm()
                             }}
                           >
-                            Lagre endringer
+                            Lagre og fortsett senere
                           </Button>
-                        )}
-                        {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
-                          <>
-                            <Button
-                              type="button"
-                              // kind="secondary"
-                              marginRight
-                              disabled={isSubmitting || disableEdit}
-                              onClick={() => {
-                                if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || !isOppfylesSenere) {
-                                  values.status = EtterlevelseStatus.UNDER_REDIGERING
-                                } else if (isOppfylesSenere) {
-                                  values.status = EtterlevelseStatus.OPPFYLLES_SENERE
+                          <Button
+                            disabled={disableEdit || isOppfylesSenere}
+                            type="button"
+                            onClick={() => {
+                              values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
+                              values.suksesskriterieBegrunnelser.forEach((skb, index) => {
+                                if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
+                                  setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
                                 }
-                                submitForm()
-                              }}
-                            >
-                              Lagre og fortsett senere
-                            </Button>
-                            <Button
-                              disabled={disableEdit || isOppfylesSenere}
-                              type="button"
-                              onClick={() => {
-                                values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
-                                values.suksesskriterieBegrunnelser.forEach((skb, index) => {
-                                  if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
-                                    setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
-                                  }
-                                })
-                                submitForm()
-                              }}
-                            >
-                              Ferdig utfylt
-                            </Button>
-                          </>
-                        )}
-                      </Block>
-                      {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
-                        <Block paddingBottom="16px" display="flex" justifyContent="flex-end" width="100%">
-                          <ParagraphXSmall marginTop="0px" marginBottom="0px">
-                            Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
-                          </ParagraphXSmall>
-                        </Block>
+                              })
+                              submitForm()
+                            }}
+                          >
+                            Ferdig utfylt
+                          </Button>
+                        </div>
                       )}
                     </div>
-                  </div>
-                )}
-              </div>
 
-              <CustomizedModal
-                onClose={() => setIsAlertUnsavedModalOpen(false)}
-                isOpen={isAlertUnsavedModalOpen}
-                size="default"
-                overrides={{
-                  Dialog: {
-                    style: {
-                      ...borderRadius('0px'),
-                      ...marginAll('0px'),
-                      maxWidth: '500px',
-                      width: '100%',
-                    },
-                  },
-                }}
-              >
-                <Block width="100%">
-                  <ModalHeader>Er du sikkert på at du vil forlate redigerings siden uten å lagre?</ModalHeader>
-                  <Block paddingBottom="32px" paddingLeft="24px" paddingRight="32px" display="flex" justifyContent="flex-end">
-                    <Button
-                      onClick={() => {
-                        if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-                          values.status = Object.values(EtterlevelseStatus).filter((e) => e === etterlevelseStatus)[0]
-                        }
-                        submitForm()
-                        navigate(navigatePath)
-                        setIsAlertUnsavedModalOpen(false)
-                      }}
-                    >
-                      Lagre og fortsett
-                    </Button>
-                    <Button
-                      marginLeft
-                      onClick={() => {
-                        setIsAlertUnsavedModalOpen(false)
-                        setTimeout(() => navigate(navigatePath), 1)
-                      }}
-                    >
-                      Fortsett uten å lagre
-                    </Button>
-                    <Button
-                      marginLeft
-                      kind="secondary"
-                      onClick={() => {
-                        setNavigatePath('')
-                        setIsAlertUnsavedModalOpen(false)
-                      }}
-                    >
-                      Avbryt
-                    </Button>
-                  </Block>
-                </Block>
-              </CustomizedModal>
+                    <div className="pb-6 flex justify-end w-full">
+                      <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" variant="tertiary" onClick={() => close()}>
+                        {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt'}
+                      </Button>
+                    </div>
+
+
+                    {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
+                      <div className="pb-6 flex justify-end w-full">
+                        <BodyShort>
+                          Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
+                        </BodyShort>
+                      </div>
+                    )}
+
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </Formik>
@@ -336,7 +263,7 @@ export const EtterlevelseEditFields = ({
           )}
         </Formik>
       )}
-    </div>
+    </div >
   )
 }
 
