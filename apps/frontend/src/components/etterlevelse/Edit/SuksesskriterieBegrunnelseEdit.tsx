@@ -15,7 +15,7 @@ import { LabelAboveContent } from '../../common/PropertyLabel'
 import { buttonContentStyle } from '../../common/Button'
 import { Markdown } from '../../common/Markdown'
 import { ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides } from 'baseui/radio'
-import { Heading, ReadMore } from '@navikt/ds-react'
+import { BodyShort, Box, Heading, ReadMore } from '@navikt/ds-react'
 
 const radioButtonOverrides: RadioOverrides & RadioGroupOverrides = {
   Root: {
@@ -91,10 +91,10 @@ const KriterieBegrunnelseList = ({
   const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
 
   return (
-    <Block>
+    <div>
       {suksesskriterie.map((s, i) => {
         return (
-          <Block key={s.navn + '_' + i}>
+          <div key={s.navn + '_' + i}>
             <KriterieBegrunnelse
               status={props.form.values.status}
               disableEdit={disableEdit}
@@ -105,10 +105,10 @@ const KriterieBegrunnelseList = ({
               props={props}
               totalSuksesskriterie={suksesskriterie.length}
             />
-          </Block>
+          </div>
         )
       })}
-    </Block>
+    </div>
   )
 }
 
@@ -150,37 +150,13 @@ const KriterieBegrunnelse = ({
   const getBorderColor = () => {
     if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
       if (!begrunnelse && suksesskriterie.behovForBegrunnelse) {
-        return {
-          ...borderWidth('1px'),
-          ...borderStyle('solid'),
-          ...borderColor('#C9C9C9'),
-          outlineWidth: '2px',
-          outlineStyle: 'solid',
-          outlineColor: '#842D08',
-        }
+        return "border-danger"
       } else {
-        return {
-          ...borderWidth('1px'),
-          ...borderStyle('solid'),
-          ...borderColor('#C9C9C9'),
-          outlineWidth: undefined,
-          outlineStyle: undefined,
-          outlineColor: undefined,
-        }
+        return "border-alt-1"
       }
     } else {
-      return {
-        ...borderWidth('1px'),
-        ...borderStyle('solid'),
-        ...borderColor('#C9C9C9'),
-        outlineWidth: undefined,
-        outlineStyle: undefined,
-        outlineColor: undefined,
-      }
+      return "border-alt-1"
     }
-  }
-  const getBackgroundColor = () => {
-      return ettlevColors.white
   }
 
   const getLabelForSuksessKriterie = () => {
@@ -196,37 +172,10 @@ const KriterieBegrunnelse = ({
   }
 
   return (
-    <Block $style={getBorderColor()} backgroundColor={getBackgroundColor()} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
-      <Block display="flex" justifyContent="space-between" width="100%" alignItems="center">
-        <Block>
-          <ParagraphMedium
-            $style={{
-              fontSize: '16px',
-              lineHeight: '18,75',
-              marginTop: '3px',
-              marginBottom: '5px',
-              font: 'roboto',
-              color: ettlevColors.grey600,
-            }}
-          >
+    <Box className="mb-4" borderColor={getBorderColor()} padding="8" borderWidth="3" borderRadius="medium">
+          <BodyShort>
             Suksesskriterium {index + 1} av {totalSuksesskriterie}
-          </ParagraphMedium>
-        </Block>
-        {/* {viewMode === true && (
-          <Block alignSelf="flex-end">
-            <ParagraphMedium
-              $style={{
-                marginTop: '0px',
-                marginBottom: '0px',
-                color: ettlevColors.red600,
-                fontStyle: 'italic',
-              }}
-            >
-              Bortfiltert
-            </ParagraphMedium>
-          </Block>
-        )} */}
-      </Block>
+          </BodyShort>
 
       <div className="flex flex-col gap-4">
         <Heading size="xsmall" level="3">
@@ -281,6 +230,6 @@ const KriterieBegrunnelse = ({
       )}
 
       <Block marginTop={'8px'}>{suksesskriterieBegrunnelse.behovForBegrunnelse && begrunnelse.length > 0 && <Error fieldName={'status'} fullWidth={true} />}</Block>
-    </Block>
+    </Box>
   )
 }
