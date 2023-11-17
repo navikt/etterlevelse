@@ -221,43 +221,20 @@ export const EtterlevelseEditFields = ({
           )}
         </Formik>
       ) : (
-        <Formik onSubmit={submit} initialValues={editedEtterlevelse ? mapEtterlevelseToFormValue(editedEtterlevelse) : mapEtterlevelseToFormValue(etterlevelse)} innerRef={formRef}>
-          {() => (
-            <Block>
-              <Block marginTop="32px" justifyContent="center" width={responsiveWidthInnerPage} paddingLeft={responsivePaddingInnerPage} paddingRight={responsivePaddingInnerPage}>
-                <Form>
-                  <Block>
-                    <Block>
-                      {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
-                        <ParagraphMedium $style={{ fontStyle: 'italic' }}>Dette kravet er dokumentert som ikke relevant 20.05.2022, og senere blitt bortfiltrert</ParagraphMedium>
-                      )}
-
-                      {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
-                        <Block marginBottom="48px">
-                          <LabelSmall $style={{ lineHeight: '32px' }}>Beskrivelse av hvorfor kraver er ikke relevant</LabelSmall>
-                          <ParagraphMedium>{etterlevelse.statusBegrunnelse}</ParagraphMedium>
-                        </Block>
-                      )}
-
-                      <SuksesskriterierBegrunnelseEdit disableEdit={true} suksesskriterie={krav.suksesskriterier} viewMode={true} />
-                      <Block marginBottom="24px">
-                        <CustomizedAccordion>
-                          <CustomizedPanel
-                            title="Lenker og annen informasjon om kravet"
-                            overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
-                          >
-                            <Block width="100%" height="1px" backgroundColor="#E3E3E3" />
-                            <AllInfo krav={krav} alleKravVersjoner={[{ kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status }]} />
-                          </CustomizedPanel>
-                        </CustomizedAccordion>
-                      </Block>
-                    </Block>
-                  </Block>
-                </Form>
-              </Block>
-            </Block>
+        <div>
+          {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
+            <div className={'mb-12'}>
+              <Alert className="mb-1" size="small" variant="info">
+                Dette kravet er dokumentert som ikke relevant 20.05.2022, og senere blitt bortfiltrert
+              </Alert>
+              <Label>Beskrivelse av hvorfor kraver er ikke relevant</Label>
+              <BodyShort>{etterlevelse.statusBegrunnelse}</BodyShort>
+            </div>
           )}
-        </Formik>
+
+          {/* <SuksesskriterierBegrunnelseEdit disableEdit={true} suksesskriterie={krav.suksesskriterier} viewMode={true} /> */}
+          
+        </div>
       )}
     </div >
   )

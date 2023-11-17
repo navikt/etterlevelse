@@ -13,9 +13,9 @@ import { useQuery } from '@apollo/client'
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
 export const getFilterType = (id: string | number | undefined): KRAV_FILTER_TYPE => {
-  if (id === KRAV_FILTER_TYPE.RELEVANTE_KRAV) {
+  if (id === 'RELEVANTE_KRAV') {
     return KRAV_FILTER_TYPE.RELEVANTE_KRAV
-  } else if (id === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV) {
+  } else if (id === 'BORTFILTTERTE_KRAV'){
     return KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV
   } else {
     return KRAV_FILTER_TYPE.UTGAATE_KRAV
@@ -27,7 +27,6 @@ export const EtterlevelseDokumentasjonPage = () => {
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema?.replace('i', ''))
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const lover = codelist.getCodesForTema(params.tema)
-
 
   //CODE FOR GETTING KRAV LIST WITH PRIORTY
   const { data, loading } = useQuery<{ krav: PageResponse<KravQL> }>(KravMedPrioriteringOgEtterlevelseQuery, {

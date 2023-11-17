@@ -27,7 +27,6 @@ export const KravView = (props: {
   const [etterlevelse, setEtterlevelse] = useState<Etterlevelse>()
   const [loadingEtterlevelseData, setLoadingEtterlevelseData] = useState<boolean>(false)
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
-
   useEffect(() => {
     ;(async () => {
       setLoadingEtterlevelseData(true)
