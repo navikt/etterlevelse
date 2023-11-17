@@ -1,8 +1,6 @@
-import { ParagraphMedium } from 'baseui/typography'
 import { useEffect, useState } from 'react'
 import { getKravByKravNumberAndVersion } from '../../api/KravApi'
 import { Etterlevelse, Krav } from '../../constants'
-import { ettlevColors } from '../../util/theme'
 
 import EtterlevelseModal from './EtterlevelseModal'
 import { Button } from '@navikt/ds-react'
