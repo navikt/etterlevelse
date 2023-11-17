@@ -18,7 +18,7 @@ export const EtterlevelseModal = ({
     <Modal className="w-full max-w-4xl" onClose={() => setIsModalOpen(false)} open={isModalOpen}>
       <Modal.Header className="w-full">
         <BodyShort>{kravNumView(kravData)}</BodyShort>
-        <Heading size="xlarge">{kravData.navn}</Heading>
+        <Heading size="medium" level="1">{kravData.navn}</Heading>
       </Modal.Header>
       <Modal.Body>
         <ViewEtterlevelse etterlevelse={etterlevelse} krav={kravData} modalVersion />

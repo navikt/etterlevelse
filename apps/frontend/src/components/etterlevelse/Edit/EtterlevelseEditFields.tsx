@@ -26,6 +26,7 @@ import { DateField } from '../../common/Inputs'
 import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
 import { notesIcon, notesWithContentIcon } from '../../Images'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
+import { Alert, BodyShort, Label } from '@navikt/ds-react'
 
 type EditProps = {
   krav: KravQL
@@ -61,7 +62,7 @@ export const EtterlevelseEditFields = ({
   editedEtterlevelse,
   tidligereEtterlevelser,
   viewMode,
-  kravFilter
+  kravFilter,
 }: EditProps) => {
   const [etterlevelseStatus] = React.useState<string>(editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [radioHover] = React.useState<string>('')
@@ -82,10 +83,6 @@ export const EtterlevelseEditFields = ({
       }
     }
   }, [navigatePath])
-
-  const getTidligereEtterlevelser = () => {
-    return <Block>{tidligereEtterlevelser && tidligereEtterlevelser.length > 0 && <EtterlevelseCard etterlevelse={tidligereEtterlevelser[0]} />}</Block>
-  }
 
   return (
     <div className="w-full">
@@ -109,69 +106,62 @@ export const EtterlevelseEditFields = ({
         >
           {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
             <div className="flex flex-col">
-              <div>
-                <Form>
-                  <Block>
-                    <Block>
-                      {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
-                        <ParagraphMedium $style={{ fontStyle: 'italic' }}>Dette kravet er dokumentert som ikke relevant 20.05.2022</ParagraphMedium>
-                      )}
+              <Form>
+                <div>
+                  {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
+                    <div className={'mb-12'}>
+                      <Alert className="mb-1" size="small" variant="info">Dette kravet er dokumentert som ikke relevant 20.05.2022</Alert>
+                      <Label>Beskrivelse av hvorfor kraver er ikke relevant</Label>
+                      <BodyShort>{etterlevelse.statusBegrunnelse}</BodyShort>
+                    </div>
+                  )}
+                  <div className="flex w-full mb-4">
+                    <Label className="min-w-fit">Hvilke suksesskriterier er oppfylt?</Label>
+                    {tidligereEtterlevelser && tidligereEtterlevelser.length > 0 && (
+                      <div className="flex w-full justify-end">
+                        <EtterlevelseCard etterlevelse={tidligereEtterlevelser[0]} />
+                      </div>
+                    )}
+                  </div>
 
-                      {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
-                        <Block marginBottom="48px">
-                          <LabelSmall $style={{ lineHeight: '32px' }}>Beskrivelse av hvorfor kraver er ikke relevant</LabelSmall>
-                          <ParagraphMedium>{etterlevelse.statusBegrunnelse}</ParagraphMedium>
-                        </Block>
-                      )}
-                      <Block display={'flex'} width={'100%'} marginBottom={'16px'}>
-                        <LabelSmall minWidth={'fit-content'}>Hvilke suksesskriterier er oppfylt?</LabelSmall>
-                        {tidligereEtterlevelser && tidligereEtterlevelser.length > 0 && (
-                          <Block display="flex" width="100%" justifyContent="flex-end">
-                            {getTidligereEtterlevelser()}
-                          </Block>
-                        )}
-                      </Block>
+                  <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false} />
 
-                      <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false} />
-
-                      <Block width={'100%'} marginTop={'65px'}>
-                        {Object.keys(errors).length > 0 && (
-                          <Block display="flex" width="100%">
-                            <Block width="100%">
-                              <Notification
-                                overrides={{
-                                  Body: {
-                                    style: {
-                                      width: 'auto',
-                                      ...borderStyle('solid'),
-                                      ...borderWidth('1px'),
-                                      ...borderColor(ettlevColors.red600),
-                                      ...borderRadius('4px'),
-                                    },
-                                  },
+                  <Block width={'100%'} marginTop={'65px'}>
+                    {Object.keys(errors).length > 0 && (
+                      <Block display="flex" width="100%">
+                        <Block width="100%">
+                          <Notification
+                            overrides={{
+                              Body: {
+                                style: {
+                                  width: 'auto',
+                                  ...borderStyle('solid'),
+                                  ...borderWidth('1px'),
+                                  ...borderColor(ettlevColors.red600),
+                                  ...borderRadius('4px'),
+                                },
+                              },
+                            }}
+                            kind={NKIND.negative}
+                          >
+                            <Block display="flex" justifyContent="center">
+                              <FontAwesomeIcon
+                                icon={faTimesCircle}
+                                style={{
+                                  marginRight: '5px',
                                 }}
-                                kind={NKIND.negative}
-                              >
-                                <Block display="flex" justifyContent="center">
-                                  <FontAwesomeIcon
-                                    icon={faTimesCircle}
-                                    style={{
-                                      marginRight: '5px',
-                                    }}
-                                  />
-                                  <ParagraphMedium marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
-                                    Du må fylle ut alle obligatoriske felter
-                                  </ParagraphMedium>
-                                </Block>
-                              </Notification>
+                              />
+                              <ParagraphMedium marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
+                                Du må fylle ut alle obligatoriske felter
+                              </ParagraphMedium>
                             </Block>
-                          </Block>
-                        )}
+                          </Notification>
+                        </Block>
                       </Block>
-                    </Block>
+                    )}
                   </Block>
-                </Form>
-              </div>
+                </div>
+              </Form>
 
               <Block width="100%" backgroundColor={kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV ? 'transparent' : ettlevColors.green100}>
                 {!documentEdit && (
