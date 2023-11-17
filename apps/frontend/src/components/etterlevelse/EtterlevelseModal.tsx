@@ -24,6 +24,7 @@ export const EtterlevelseModal = ({
         <ViewEtterlevelse etterlevelse={etterlevelse} krav={kravData} modalVersion />
         <div className="flex justify-end pb-8 pt-24">
           <Button
+            type="button"
             onClick={() => {
               setIsModalOpen(false)
             }}
