@@ -88,23 +88,6 @@ export const EtterlevelseDokumentasjonPage = () => {
   return (
     <div role="main" id="content">
       {etterlevelseDokumentasjon && (
-        // <Layout2
-        //   headerBackgroundColor="#F8F8F8"
-        //   headerOverlap="31px"
-        //   mainHeader={getMainHeader(
-        //     etterlevelseDokumentasjon,
-        //     undefined,
-        //     <Helmet>
-        //       <meta charSet="utf-8" />
-        //       <title>
-        //         {`K${kravId?.kravNummer?.toString()}.${kravId?.kravVersjon?.toString()} ${temaData?.shortName} E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`}
-        //       </title>
-        //     </Helmet>,
-        //   )}
-        //   childrenBackgroundColor={ettlevColors.grey25}
-        //   currentPage={'K' + kravId?.kravNummer + '.' + kravId?.kravVersjon}
-        //   breadcrumbPaths={breadcrumbPaths}
-        // >
         <div>
           <Helmet>
             <meta charSet="utf-8" />
