@@ -42,9 +42,6 @@ type EditEttlevProps = {
   teams: Team[] | undefined
   varsleMelding?: string
   navigatePath: string
-  setNavigatePath: (state: string) => void
-  tab: Section
-  setTab: (s: Section) => void
   tidligereEtterlevelser: Etterlevelse[] | undefined
   kravFilter: KRAV_FILTER_TYPE
 }
@@ -62,13 +59,9 @@ export const EditEtterlevelse = ({
   behandlinger,
   teams,
   navigatePath,
-  setNavigatePath,
   tidligereEtterlevelser,
-  tab,
-  setTab,
   kravFilter,
 }: EditEttlevProps) => {
-  const params = useParams<{ id: string; tema: string; kravNummer: string; kravVersjon: string; filter: string }>()
   const { data, loading } = useQuery<{ kravById: KravQL }, KravId>(query, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
@@ -80,7 +73,6 @@ export const EditEtterlevelse = ({
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
   const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
-  const [pageWidth, setPageWidth] = useState<number>(1276)
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
@@ -92,9 +84,6 @@ export const EditEtterlevelse = ({
     }),
   )
 
-  const [isVersjonEndringerModalOpen, setIsVersjonEndringerModalOpen] = React.useState<boolean>(false)
-
-  const [isAlertUnsavedModalOpen, setIsAlertUnsavedModalOpen] = useState<boolean>(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -117,14 +106,6 @@ export const EditEtterlevelse = ({
         })
     })()
   }, [])
-
-  useEffect(() => {
-    const reportWindowSize = () => {
-      setPageWidth(getPageWidth())
-    }
-    window.onload = reportWindowSize
-    window.onresize = reportWindowSize
-  })
 
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
@@ -292,7 +273,6 @@ export const EditEtterlevelse = ({
                     close={() => {
                       setTimeout(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`), 1)
                     }}
-                    setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
                     navigatePath={navigatePath}
                     editedEtterlevelse={editedEtterlevelse}
                     tidligereEtterlevelser={tidligereEtterlevelser}
@@ -352,9 +332,6 @@ export const EditEtterlevelse = ({
                   </div>
                 </Tabs.Panel>
                 <Tabs.Panel value="mer" className="flex flex-col gap-2 mt-2">
-                  {
-                    // todo: formatting inside AllInfo seems weird right now, needs fixing
-                  }
                   <AllInfo krav={krav} alleKravVersjoner={[{ kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status }]} />
                 </Tabs.Panel>
               </Tabs>

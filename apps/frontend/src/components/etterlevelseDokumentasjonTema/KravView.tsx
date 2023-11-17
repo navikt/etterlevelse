@@ -2,7 +2,6 @@ import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
 import { Behandling, Etterlevelse, KRAV_FILTER_TYPE, Team } from '../../constants'
 import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, mapEtterlevelseToFormValue } from '../../api/EtterlevelseApi'
 import React, { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
 
 import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
 import { toKravId } from './common/utils'
@@ -81,9 +80,6 @@ export const KravView = (props: {
             teams={props.teams}
             varsleMelding={varsleMelding}
             navigatePath={props.navigatePath}
-            setNavigatePath={props.setNavigatePath}
-            tab={props.tab}
-            setTab={props.setTab}
             kravFilter={props.kravFilter}
           />
       )}

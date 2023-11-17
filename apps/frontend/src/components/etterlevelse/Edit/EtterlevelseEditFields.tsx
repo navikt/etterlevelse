@@ -28,7 +28,6 @@ type EditProps = {
   disableEdit: boolean
   documentEdit?: boolean
   close: (k?: Etterlevelse | undefined) => void
-  setIsAlertUnsavedModalOpen: (state: boolean) => void
   navigatePath: string
   editedEtterlevelse?: Etterlevelse
   tidligereEtterlevelser?: Etterlevelse[]
@@ -44,7 +43,6 @@ export const EtterlevelseEditFields = ({
   disableEdit,
   documentEdit,
   close,
-  setIsAlertUnsavedModalOpen,
   navigatePath,
   editedEtterlevelse,
   tidligereEtterlevelser,
@@ -64,8 +62,6 @@ export const EtterlevelseEditFields = ({
         kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV
       ) {
         navigate(navigatePath)
-      } else if (kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV) {
-        setIsAlertUnsavedModalOpen(true)
       }
     }
   }, [navigatePath])
