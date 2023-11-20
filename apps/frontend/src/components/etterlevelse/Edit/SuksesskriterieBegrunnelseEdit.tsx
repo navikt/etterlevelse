@@ -4,14 +4,14 @@ import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React from 'react'
 import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
 import { useDebouncedState } from '../../../util/hooks'
-import {  theme } from '../../../util/theme'
+import { theme } from '../../../util/theme'
 import { FieldWrapper } from '../../common/Inputs'
 import TextEditor from '../../common/TextEditor/TextEditor'
 import { Error } from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
 import { LabelAboveContent } from '../../common/PropertyLabel'
 import { Markdown } from '../../common/Markdown'
-import { BodyShort, Box, Heading, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
+import { BodyShort, Box, Heading, Label, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
 
 export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[], suksessKriterie: Suksesskriterie) => {
   const sb = suksesskriterieBegrunnelser.find((item) => {
@@ -32,22 +32,12 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
 export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit }: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean }) => {
   return (
     <FieldWrapper>
-      <FieldArray name={'suksesskriterieBegrunnelser'}>
-        {(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} />}
-      </FieldArray>
+      <FieldArray name={'suksesskriterieBegrunnelser'}>{(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} />}</FieldArray>
     </FieldWrapper>
   )
 }
 
-const KriterieBegrunnelseList = ({
-  props,
-  suksesskriterie,
-  disableEdit,
-}: {
-  props: FieldArrayRenderProps
-  suksesskriterie: Suksesskriterie[]
-  disableEdit: boolean
-}) => {
+const KriterieBegrunnelseList = ({ props, suksesskriterie, disableEdit }: { props: FieldArrayRenderProps; suksesskriterie: Suksesskriterie[]; disableEdit: boolean }) => {
   const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
 
   return (
@@ -146,7 +136,7 @@ const KriterieBegrunnelse = ({
       </div>
 
       <div className="flex w-full">
-        <div>
+        <div className="min-w-fit">
           <RadioGroup
             value={suksessKriterieStatus}
             legend="Oppgi status på suksesskriteriet"
@@ -154,36 +144,33 @@ const KriterieBegrunnelse = ({
             name={'suksesskriterieStatus' + suksesskriterie.id}
           >
             <Radio value={SuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</Radio>
-            <Radio value={SuksesskriterieStatus.OPPFYLT} >
-              Oppfylt
-            </Radio>
-            <Radio value={SuksesskriterieStatus.IKKE_OPPFYLT} >
-              Ikke oppfylt
-            </Radio>
-            <Radio value={SuksesskriterieStatus.IKKE_RELEVANT}>
-              Ikke relevant
-            </Radio>
+            <Radio value={SuksesskriterieStatus.OPPFYLT}>Oppfylt</Radio>
+            <Radio value={SuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</Radio>
+            <Radio value={SuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</Radio>
           </RadioGroup>
         </div>
+        {!disableEdit && suksesskriterie.behovForBegrunnelse && (
+          <div className="w-full ml-20 mt-12 ">
+            <Label>{getLabelForSuksessKriterie()}</Label>
+            <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%" />
+            <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
+          </div>
+        )}
+
+        {!disableEdit && !suksesskriterie.behovForBegrunnelse && (
+          <div className="w-full ml-20 mt-12 ">
+            <Label>Sukseskriteriet har ikke behov for begrunnelse.</Label>
+          </div>
+        )}
+        {disableEdit && (
+          <div className="w-full ml-20 mt-12 ">
+            <LabelAboveContent fullWidth title={getLabelForSuksessKriterie()} markdown={begrunnelse} />
+          </div>
+        )}
       </div>
       <Error fieldName={`suksesskriterieBegrunnelser[${index}].suksesskriterieStatus`} fullWidth={true} />
 
-      {!disableEdit && suksesskriterie.behovForBegrunnelse && (
-        <Block marginTop={theme.sizing.scale1000}>
-          <FormControl label={<LabelWithToolTip label={getLabelForSuksessKriterie()} />}>
-            <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%" />
-          </FormControl>
-          <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
-        </Block>
-      )}
-
-      {disableEdit && (
-        <Block marginTop={theme.sizing.scale1000}>
-          <LabelAboveContent title={getLabelForSuksessKriterie()} markdown={begrunnelse} />
-        </Block>
-      )}
-
-      <Block marginTop={'8px'}>{suksesskriterieBegrunnelse.behovForBegrunnelse && begrunnelse.length > 0 && <Error fieldName={'status'} fullWidth={true} />}</Block>
+      <div className="mt-2">{suksesskriterieBegrunnelse.behovForBegrunnelse && begrunnelse.length > 0 && <Error fieldName={'status'} fullWidth={true} />}</div>
     </Box>
   )
 }
