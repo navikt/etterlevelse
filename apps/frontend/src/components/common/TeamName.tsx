@@ -2,11 +2,11 @@ import { useTeam } from '../../api/TeamApi'
 import { teamKatTeamLink } from '../../util/config'
 import { Detail, Link } from '@navikt/ds-react'
 
-export const TeamName = (props: { id: string; link?: boolean }) => {
+export const TeamName = (props: { id: string; link?: boolean, big?: boolean }) => {
   const [name] = useTeam()(props.id)
 
   return props.link ? (
-    <Link className="text-sm" rel="noopener noreferrer" target={'_blank'} href={teamKatTeamLink(props.id)}>
+    <Link className={props.big ? "" : "text-sm"} rel="noopener noreferrer" target={'_blank'} href={teamKatTeamLink(props.id)}>
       {name} (åpnes i ny fane)
     </Link>
   ) : (

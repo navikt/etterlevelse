@@ -1,7 +1,7 @@
 import { AdresseType, Begrep, Krav, KravQL, KravVersjon } from '../../constants'
 import React from 'react'
 import moment from 'moment'
-import { DotTag, DotTags } from '../common/DotTag'
+import { DotTags } from '../common/DotTag'
 import { ListName } from '../../services/Codelist'
 import { CustomLabel, LabelAboveContent } from '../common/PropertyLabel'
 import { ExternalLink } from '../common/RouteLink'
@@ -43,12 +43,10 @@ export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVe
 export const AllInfo = ({
   krav,
   alleKravVersjoner,
-  noBulletPoints,
   noLastModifiedDate,
 }: {
   krav: KravQL
   alleKravVersjoner: KravVersjon[]
-  noBulletPoints?: boolean
   noLastModifiedDate?: boolean
 }) => {
   const hasKravExpired = () => {
@@ -59,7 +57,7 @@ export const AllInfo = ({
     <div>
       <LabelWrapper>
         <LabelAboveContent header title="Kilder">
-          <DotTags items={krav.dokumentasjon} markdown inColumn noBulletPoints={noBulletPoints} />
+          <DotTags items={krav.dokumentasjon} markdown inColumn />
         </LabelAboveContent>
       </LabelWrapper>
 
@@ -78,7 +76,7 @@ export const AllInfo = ({
       <LabelWrapper>
         <LabelAboveContent header title="Begreper">
           {krav.begreper.map((b, i) => (
-            <BegrepView key={'begrep_' + i} begrep={b} noBulletPoints={noBulletPoints} />
+            <BegrepView key={'begrep_' + i} begrep={b} />
           ))}
         </LabelAboveContent>
       </LabelWrapper>
@@ -86,14 +84,14 @@ export const AllInfo = ({
       <LabelWrapper>
         <LabelAboveContent header title="Relasjoner til andre krav">
           {krav.kravRelasjoner.map((kr, i) => (
-            <KravRelasjonView key={'kravRelasjon' + i} kravRelasjon={kr} noBulletPoints={noBulletPoints} />
+            <KravRelasjonView key={'kravRelasjon' + i} kravRelasjon={kr} />
           ))}
         </LabelAboveContent>
       </LabelWrapper>
 
       <LabelWrapper>
         <LabelAboveContent header title="Kravet er relevant for">
-          <DotTags list={ListName.RELEVANS} codes={krav.relevansFor} inColumn noBulletPoints={noBulletPoints} />
+          <DotTags list={ListName.RELEVANS} codes={krav.relevansFor} inColumn />
         </LabelAboveContent>
       </LabelWrapper>
 
@@ -103,9 +101,9 @@ export const AllInfo = ({
             {alleKravVersjoner.map((k, i) => {
               if (k.kravVersjon && parseInt(k.kravVersjon.toString()) < krav.kravVersjon) {
                 return (
-                  <DotTag key={'kravVersjon_list_' + i} noBulletPoints={noBulletPoints}>
+                  <BodyShort key={'kravVersjon_list_' + i} className={'break-words'}>
                     <ExternalLink href={'/krav/' + k.kravNummer + '/' + k.kravVersjon}>{`K${k.kravNummer}.${k.kravVersjon}`}</ExternalLink>
-                  </DotTag>
+                  </BodyShort>
                 )
               }
               return null
@@ -183,20 +181,20 @@ export const AllInfo = ({
   )
 }
 
-const BegrepView = ({ begrep, noBulletPoints }: { begrep: Begrep; noBulletPoints?: boolean }) => (
+const BegrepView = ({ begrep }: { begrep: Begrep }) => (
   <div className="max-w-2xl">
-    <DotTag noBulletPoints={noBulletPoints}>
+    <BodyShort className="break-words">
       <ExternalLink href={termUrl(begrep.id)}>{begrep.navn}</ExternalLink>
       {/* {' '}
       - {begrep.beskrivelse} */}
-    </DotTag>
+    </BodyShort>
   </div>
 )
 
-const KravRelasjonView = ({ kravRelasjon, noBulletPoints }: { kravRelasjon: Partial<Krav>; noBulletPoints?: boolean }) => (
+const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<Krav> }) => (
   <div className="max-w-2xl">
-    <DotTag noBulletPoints={noBulletPoints}>
+    <BodyShort className="break-words">
       <ExternalLink href={`/krav/${kravRelasjon.id}`}>{`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}</ExternalLink> - {kravRelasjon.navn}
-    </DotTag>
+    </BodyShort>
   </div>
 )
