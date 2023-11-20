@@ -315,7 +315,7 @@ export const EditEtterlevelse = ({
                       setEtterlevelseMetadata={setEtterlevelseMetadata}
                     />
                   </div>
-                  <BodyLong>{etterlevelseMetadata.notater}</BodyLong>
+                  <BodyLong className="break-words">{etterlevelseMetadata.notater}</BodyLong>
                 </Tabs.Panel>
                 <Tabs.Panel value="dokument" className="flex flex-col gap-2 mt-2">
                   <div>
