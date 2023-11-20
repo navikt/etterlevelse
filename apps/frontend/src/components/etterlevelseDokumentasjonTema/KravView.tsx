@@ -60,27 +60,27 @@ export const KravView = (props: {
   }, [])
 
   return (
-    <div className='w-full'>
+    <div className="w-full">
       {loadingEtterlevelseData && (
-        <div className='flex justify-center'>
+        <div className="flex justify-center">
           <Loader size={'large'} />
         </div>
       )}
       {!loadingEtterlevelseData && etterlevelse && (
-          <EditEtterlevelse
-            temaName={props.temaName}
-            tidligereEtterlevelser={tidligereEtterlevelser}
-            etterlevelseDokumentasjonTitle={props.etterlevelseDokumentasjonTitle}
-            etterlevelseDokumentasjonId={props.etterlevelseDokumentasjonId}
-            etterlevelseNummer={props.etterlevelseNummer}
-            kravId={toKravId(etterlevelse)}
-            etterlevelse={etterlevelse}
-            behandlinger={props.behandlinger}
-            teams={props.teams}
-            varsleMelding={varsleMelding}
-            navigatePath={props.navigatePath}
-            kravFilter={props.kravFilter}
-          />
+        <EditEtterlevelse
+          temaName={props.temaName}
+          tidligereEtterlevelser={tidligereEtterlevelser}
+          etterlevelseDokumentasjonTitle={props.etterlevelseDokumentasjonTitle}
+          etterlevelseDokumentasjonId={props.etterlevelseDokumentasjonId}
+          etterlevelseNummer={props.etterlevelseNummer}
+          kravId={toKravId(etterlevelse)}
+          etterlevelse={etterlevelse}
+          behandlinger={props.behandlinger}
+          teams={props.teams}
+          varsleMelding={varsleMelding}
+          navigatePath={props.navigatePath}
+          kravFilter={props.kravFilter}
+        />
       )}
     </div>
   )

@@ -84,7 +84,7 @@ export const EditEtterlevelse = ({
   const navigate = useNavigate()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       etterlevelseDokumentasjonId &&
         kravId.kravNummer &&
         getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(etterlevelseDokumentasjonId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
@@ -188,16 +188,16 @@ export const EditEtterlevelse = ({
                   <div>
                     {krav.aktivertDato !== null && (
                       <Tag variant="warning">
-                        {krav.kravVersjon > 1
-                          ? `Ny versjon ${moment(krav.aktivertDato).format('ll')}`
-                          : `Opprettet ${moment(krav.aktivertDato).format('ll')}`}
+                        {krav.kravVersjon > 1 ? `Ny versjon ${moment(krav.aktivertDato).format('ll')}` : `Opprettet ${moment(krav.aktivertDato).format('ll')}`}
                       </Tag>
                     )}
                   </div>
                   {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
                     <div className="flex items-center gap-2">
                       <BodyShort size="small">
-                        {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 ? etterlevelseMetadata.tildeltMed[0] : 'Ikke tildelt'}
+                        {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1
+                          ? etterlevelseMetadata.tildeltMed[0]
+                          : 'Ikke tildelt'}
                       </BodyShort>
                       <Button
                         variant="tertiary"
@@ -257,7 +257,7 @@ export const EditEtterlevelse = ({
                   {
                     // todo: this heckin' component needs some care
                   }
-                  {kravFilter !== KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV &&
+                  {kravFilter !== KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
                     <EtterlevelseEditFields
                       kravFilter={kravFilter}
                       krav={krav}
@@ -273,14 +273,10 @@ export const EditEtterlevelse = ({
                       editedEtterlevelse={editedEtterlevelse}
                       tidligereEtterlevelser={tidligereEtterlevelser}
                     />
-                  }
-                  {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV &&
-                    <EtterlevelseViewFields
-                      etterlevelse={etterlevelse}
-                      suksesskriterie={krav.suksesskriterier}
-                      tidligereEtterlevelser={tidligereEtterlevelser}
-                    />
-                  }
+                  )}
+                  {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+                    <EtterlevelseViewFields etterlevelse={etterlevelse} suksesskriterie={krav.suksesskriterier} tidligereEtterlevelser={tidligereEtterlevelser} />
+                  )}
                 </Tabs.Panel>
                 <Tabs.Panel value="etterlevelser" className="flex flex-col gap-2 mt-2">
                   <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />
@@ -299,12 +295,11 @@ export const EditEtterlevelse = ({
                 </Tabs.List>
                 <Tabs.Panel value="notat" className="flex flex-col gap-2 mt-2">
                   <div className="flex justify-between">
-                    <Label className="flex gap-1"><FileTextIcon fontSize="1.5rem" />Notat</Label>
-                    <Button
-                      variant="secondary"
-                      size="xsmall"
-                      onClick={() => setIsNotatModalOpen(true)}
-                    >
+                    <Label className="flex gap-1">
+                      <FileTextIcon fontSize="1.5rem" />
+                      Notat
+                    </Label>
+                    <Button variant="secondary" size="xsmall" onClick={() => setIsNotatModalOpen(true)}>
                       Rediger
                     </Button>
 

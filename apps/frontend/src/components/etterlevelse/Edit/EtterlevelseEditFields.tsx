@@ -98,7 +98,7 @@ export const EtterlevelseEditFields = ({
                   )}
                 </div>
 
-                <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier}/>
+                <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} />
 
                 <div className="w-full my-6">
                   {Object.keys(errors).length > 0 && (
@@ -194,7 +194,6 @@ export const EtterlevelseEditFields = ({
                   </Button>
                 </div>
 
-
                 {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
                   <div className="pb-6 flex justify-end w-full">
                     <BodyShort>
@@ -202,13 +201,12 @@ export const EtterlevelseEditFields = ({
                     </BodyShort>
                   </div>
                 )}
-
               </div>
             </div>
           </div>
         )}
       </Formik>
-    </div >
+    </div>
   )
 }
 

@@ -48,7 +48,6 @@ export const isFerdigUtfylt = (status: EtterlevelseStatus | undefined) => {
   return status === EtterlevelseStatus.FERDIG_DOKUMENTERT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT || status === EtterlevelseStatus.OPPFYLLES_SENERE
 }
 
-
 //UNUSED COMPONENT
 // MAKE SURE TO MOVE EXPORTED FUNCTIONS ABOVE BEFORE DELETING THIS FILE
 export const EtterlevelseDokumentasjonTemaPage = () => {

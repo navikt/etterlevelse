@@ -15,7 +15,7 @@ export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 export const getFilterType = (id: string | number | undefined): KRAV_FILTER_TYPE => {
   if (id === 'RELEVANTE_KRAV') {
     return KRAV_FILTER_TYPE.RELEVANTE_KRAV
-  } else if (id === 'BORTFILTTERTE_KRAV'){
+  } else if (id === 'BORTFILTTERTE_KRAV') {
     return KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV
   } else {
     return KRAV_FILTER_TYPE.UTGAATE_KRAV
@@ -33,7 +33,7 @@ export const EtterlevelseDokumentasjonPage = () => {
     variables: {
       etterlevelseDokumentasjonId: params.id,
       lover: lover.map((l) => l.code),
-      status: KravStatus.AKTIV
+      status: KravStatus.AKTIV,
     },
     skip: !params.tema || !params.id,
     fetchPolicy: 'no-cache',

@@ -5,10 +5,17 @@ import { Markdown } from '../common/Markdown'
 import { LabelAboveContent } from '../common/PropertyLabel'
 import EtterlevelseCard from './EtterlevelseCard'
 
-export const EtterlevelseViewFields = ({ etterlevelse, suksesskriterie, tidligereEtterlevelser }: { etterlevelse: Etterlevelse, suksesskriterie: Suksesskriterie[], tidligereEtterlevelser?: Etterlevelse[] }) => {
+export const EtterlevelseViewFields = ({
+  etterlevelse,
+  suksesskriterie,
+  tidligereEtterlevelser,
+}: {
+  etterlevelse: Etterlevelse
+  suksesskriterie: Suksesskriterie[]
+  tidligereEtterlevelser?: Etterlevelse[]
+}) => {
   return (
     <div>
-
       {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
         <div className={'mb-12'}>
           <Alert className="mb-1" size="small" variant="info">
@@ -59,20 +66,15 @@ const KriterieBegrunnelse = ({
 
   return (
     <Box className="mb-4" borderColor="border-alt-1" padding="8" borderWidth="3" borderRadius="medium">
-
       <div className="flex w-full">
         <BodyShort className="min-w-fit">
           Suksesskriterium {index + 1} av {totalSuksesskriterie}
         </BodyShort>
 
         <div className="flex w-full justify-end">
-          <BodyShort className="text-text-danger">
-            Bortfiltert
-          </BodyShort>
+          <BodyShort className="text-text-danger">Bortfiltert</BodyShort>
         </div>
       </div>
-
-
 
       <div className="flex flex-col gap-4">
         <Heading size="xsmall" level="3">

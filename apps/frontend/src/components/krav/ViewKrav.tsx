@@ -40,15 +40,7 @@ export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVe
   )
 }
 
-export const AllInfo = ({
-  krav,
-  alleKravVersjoner,
-  noLastModifiedDate,
-}: {
-  krav: KravQL
-  alleKravVersjoner: KravVersjon[]
-  noLastModifiedDate?: boolean
-}) => {
+export const AllInfo = ({ krav, alleKravVersjoner, noLastModifiedDate }: { krav: KravQL; alleKravVersjoner: KravVersjon[]; noLastModifiedDate?: boolean }) => {
   const hasKravExpired = () => {
     return krav && krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString())
   }

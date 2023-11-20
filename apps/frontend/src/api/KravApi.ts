@@ -200,7 +200,7 @@ export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   etterlevelser: [],
   kravIdRelasjoner: [],
   aktivertDato: krav.aktivertDato || '',
-  prioriteringsId: ''
+  prioriteringsId: '',
 })
 
 export const kravFullQuery = gql`

@@ -30,7 +30,7 @@ export enum ObjectType {
   BehandlingData = 'BehandlingData',
   Melding = 'Melding',
   EtterlevelseArkiv = 'EtterlevelseArkiv',
-  EtterlevelseMetadata = 'EtterlevelseMetadata'
+  EtterlevelseMetadata = 'EtterlevelseMetadata',
 }
 
 export type NavigableItem = ObjectType | ListName.RELEVANS | ListName.UNDERAVDELING | ListName.TEMA | ListName.LOV

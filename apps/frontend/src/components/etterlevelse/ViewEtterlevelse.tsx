@@ -99,8 +99,8 @@ export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: 
                           {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT
                             ? 'Ikke Relevant'
                             : suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT
-                            ? 'Ikke oppfylt'
-                            : 'Oppfylt'}
+                              ? 'Ikke oppfylt'
+                              : 'Oppfylt'}
                         </BodyShort>
                       </div>
                     )}
@@ -119,8 +119,8 @@ export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: 
                         {suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT
                           ? 'Hvorfor er ikke kriteriet relevant?'
                           : suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT
-                          ? 'Hvorfor er kriteriet ikke oppfylt?'
-                          : 'Hvordan er kriteriet oppfylt?'}
+                            ? 'Hvorfor er kriteriet ikke oppfylt?'
+                            : 'Hvordan er kriteriet oppfylt?'}
                       </Label>
                       <div className="mb-12">
                         {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse && !suksessbeskrivelseBegrunnelse.begrunnelse ? (
