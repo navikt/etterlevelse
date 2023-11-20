@@ -49,6 +49,7 @@ export const DokumentasjonPage = () => {
     loading,
   } = useQuery<{ etterlevelseDokumentasjon: PageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
     variables: { etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id },
+    fetchPolicy: 'cache-and-network'
   })
 
   const [relevanteStats, setRelevanteStats] = useState<KravQL[]>([])
@@ -58,10 +59,10 @@ export const DokumentasjonPage = () => {
   const filterData = (
     unfilteredData:
       | {
-          etterlevelseDokumentasjon: PageResponse<{
-            stats: EtterlevelseDokumentasjonStats
-          }>
-        }
+        etterlevelseDokumentasjon: PageResponse<{
+          stats: EtterlevelseDokumentasjonStats
+        }>
+      }
       | undefined,
   ) => {
     const relevanteStatusListe: any[] = []
