@@ -8,7 +8,6 @@ import { theme } from '../../../util/theme'
 import { FieldWrapper } from '../../common/Inputs'
 import TextEditor from '../../common/TextEditor/TextEditor'
 import { Error } from '../../common/ModalSchema'
-import LabelWithToolTip from '../../common/LabelWithTooltip'
 import { LabelAboveContent } from '../../common/PropertyLabel'
 import { Markdown } from '../../common/Markdown'
 import { BodyShort, Box, Heading, Label, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
@@ -26,6 +25,18 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
     }
   } else {
     return sb
+  }
+}
+
+export const getLabelForSuksessKriterie = (suksessKriterieStatus?: SuksesskriterieStatus) => {
+  if (suksessKriterieStatus === SuksesskriterieStatus.UNDER_ARBEID) {
+    return 'Hva er oppfylt og hva er under arbeid?'
+  } else if (suksessKriterieStatus === SuksesskriterieStatus.OPPFYLT) {
+    return 'Hvordan oppfylles kriteriet?'
+  } else if (suksessKriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT) {
+    return 'Hvorfor er ikke kriteriet oppfylt?'
+  } else {
+    return 'Hvorfor er ikke kriteriet relevant?'
   }
 }
 
@@ -107,18 +118,6 @@ const KriterieBegrunnelse = ({
     }
   }
 
-  const getLabelForSuksessKriterie = () => {
-    if (suksessKriterieStatus === SuksesskriterieStatus.UNDER_ARBEID) {
-      return 'Hva er oppfylt og hva er under arbeid?'
-    } else if (suksessKriterieStatus === SuksesskriterieStatus.OPPFYLT) {
-      return 'Hvordan oppfylles kriteriet?'
-    } else if (suksessKriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT) {
-      return 'Hvorfor er ikke kriteriet oppfylt?'
-    } else {
-      return 'Hvorfor er ikke kriteriet relevant?'
-    }
-  }
-
   return (
     <Box className="mb-4" borderColor={getBorderColor()} padding="8" borderWidth="3" borderRadius="medium">
       <BodyShort>
@@ -151,7 +150,7 @@ const KriterieBegrunnelse = ({
         </div>
         {!disableEdit && suksesskriterie.behovForBegrunnelse && (
           <div className="w-full ml-20 mt-12 ">
-            <Label>{getLabelForSuksessKriterie()}</Label>
+            <Label>{getLabelForSuksessKriterie(suksessKriterieStatus)}</Label>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%" />
             <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
           </div>

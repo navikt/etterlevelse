@@ -15,9 +15,7 @@ import {
   mapEtterlevelseMetadataToFormValue,
   updateEtterlevelseMetadata,
 } from '../../api/EtterlevelseMetadataApi'
-import { getPageWidth } from '../../util/pageWidth'
-import { useNavigate, useParams } from 'react-router-dom'
-import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
+import { useNavigate } from 'react-router-dom'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import moment from 'moment'
@@ -28,6 +26,7 @@ import { TeamName } from '../common/TeamName'
 import { AllInfo } from '../krav/ViewKrav'
 import { FileTextIcon } from '@navikt/aksel-icons'
 import EditNotatfelt from '../etterlevelseMetadata/EditNotatfelt'
+import EtterlevelseViewFields from './EtterlevelseViewFields'
 
 type EditEttlevProps = {
   temaName?: string
@@ -258,7 +257,7 @@ export const EditEtterlevelse = ({
                   {
                     // todo: this heckin' component needs some care
                   }
-                  {kravFilter !== KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ?
+                  {kravFilter !== KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV &&
                     <EtterlevelseEditFields
                       kravFilter={kravFilter}
                       krav={krav}
@@ -274,21 +273,13 @@ export const EditEtterlevelse = ({
                       editedEtterlevelse={editedEtterlevelse}
                       tidligereEtterlevelser={tidligereEtterlevelser}
                     />
-                    :
-                    <div>
-                      {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
-                        <div className={'mb-12'}>
-                          <Alert className="mb-1" size="small" variant="info">
-                            Dette kravet er dokumentert som ikke relevant 20.05.2022, og senere blitt bortfiltrert
-                          </Alert>
-                          <Label>Beskrivelse av hvorfor kraver er ikke relevant</Label>
-                          <BodyShort>{etterlevelse.statusBegrunnelse}</BodyShort>
-                        </div>
-                      )}
-
-                      {/* <SuksesskriterierBegrunnelseEdit disableEdit={true} suksesskriterie={krav.suksesskriterier}/> */}
-
-                    </div>
+                  }
+                  {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV &&
+                    <EtterlevelseViewFields
+                      etterlevelse={etterlevelse}
+                      suksesskriterie={krav.suksesskriterier}
+                      tidligereEtterlevelser={tidligereEtterlevelser}
+                    />
                   }
                 </Tabs.Panel>
                 <Tabs.Panel value="etterlevelser" className="flex flex-col gap-2 mt-2">
