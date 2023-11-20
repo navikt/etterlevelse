@@ -48,6 +48,9 @@ export const isFerdigUtfylt = (status: EtterlevelseStatus | undefined) => {
   return status === EtterlevelseStatus.FERDIG_DOKUMENTERT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT || status === EtterlevelseStatus.OPPFYLLES_SENERE
 }
 
+
+//UNUSED COMPONENT
+// MAKE SURE TO MOVE EXPORTED FUNCTIONS ABOVE BEFORE DELETING THIS FILE
 export const EtterlevelseDokumentasjonTemaPage = () => {
   const params = useParams<{ id?: string; tema?: string; filter?: string }>()
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
