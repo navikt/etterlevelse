@@ -129,12 +129,12 @@ export const DokumentasjonPage = () => {
     }
 
     if (irrelevans) {
-      const relevans = options.filter((n) => !irrelevans.map((ir: Code) => ir.code).includes(n.id))
+      const relevans = options.filter((n) => !irrelevans.map((ir: Code) => ir.code).includes(n.value))
 
       return (
         <div className="flex flex-wrap gap-2">
           {relevans.map((r, index) => (
-            <div key={r.id} className="flex items-center gap-1">
+            <div key={r.value} className="flex items-center gap-1">
               <Tag variant="info" size="small">
                 <Detail>{r.label}</Detail>
               </Tag>
@@ -146,7 +146,7 @@ export const DokumentasjonPage = () => {
     return (
       <div className="flex flex-wrap gap-2">
         {options.map((o, index) => (
-          <div key={o.id} className="flex items-center gap-1">
+          <div key={o.value} className="flex items-center gap-1">
             <Tag variant="info" size="small">
               <Detail>{o.label}</Detail>
             </Tag>

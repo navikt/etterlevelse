@@ -88,7 +88,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
 
   useEffect(() => {
     if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.irrelevansFor.length) {
-      const irrelevans = props.etterlevelseDokumentasjon.irrelevansFor.map((ir: Code) => relevansOptions.findIndex((o) => o.id === ir.code))
+      const irrelevans = props.etterlevelseDokumentasjon.irrelevansFor.map((ir: Code) => relevansOptions.findIndex((o) => o.value === ir.code))
       setSelectedFilter(
         relevansOptions
           .map((r, i) => {
@@ -232,10 +232,10 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                 onClick={(e, i) => {
                                   if (!selectedFilter.includes(i)) {
                                     setSelectedFilter([...selectedFilter, i])
-                                    p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === relevansOptions[i].id))
+                                    p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === relevansOptions[i].value))
                                   } else {
                                     setSelectedFilter(selectedFilter.filter((value) => value !== i))
-                                    p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].id as string))
+                                    p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
                                   }
                                 }}
                                 overrides={{
@@ -249,7 +249,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                 {relevansOptions.map((r, i) => {
                                   return (
                                     <BaseUIButton
-                                      key={'relevans_' + r.id}
+                                      key={'relevans_' + r.value}
                                       type="button"
                                       startEnhancer={() => {
                                         if (selectedFilter.includes(i)) {

@@ -99,7 +99,7 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
           <Select label="Velg ny verdi" hideLabel value={newValue} className="mr-4" onChange={(e) => setNewValue(e.target.value)}>
             <option value="">Ny verdi</option>
             {codelist.getParsedOptions(usage.listName).map((c, i) => (
-              <option key={i + '_' + c.label} value={c.id}>
+              <option key={i + '_' + c.label} value={c.value}>
                 {c.label}
               </option>
             ))}

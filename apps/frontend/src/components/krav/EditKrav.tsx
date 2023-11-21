@@ -472,6 +472,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     <div className="flex w-full justify-end">
                       <Button className="ml-4"
                         variant="secondary"
+                        type="button"
                         onClick={() => { setIsOpen(false) }}>
                         Avbryt
                       </Button>
