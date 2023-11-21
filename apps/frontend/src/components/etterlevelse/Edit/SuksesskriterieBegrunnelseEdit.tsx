@@ -152,7 +152,10 @@ const KriterieBegrunnelse = ({
           <div className="w-full ml-20 mt-12 ">
             <Label>{getLabelForSuksessKriterie(suksessKriterieStatus)}</Label>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%" />
-            <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
+
+            <div className="mt-1">
+              <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
+            </div>
           </div>
         )}
 
