@@ -286,7 +286,7 @@ export const EditEtterlevelse = ({
                 </Tabs.Panel>
               </Tabs>
             </div>
-            <div className="pl-4 border-l border-border-divider max-w-sm">
+            <div className="pl-4 border-l border-border-divider w-full max-w-sm">
               <Tabs defaultValue="notat" size="small">
                 <Tabs.List>
                   <Tabs.Tab value="notat" label="Notat" />
