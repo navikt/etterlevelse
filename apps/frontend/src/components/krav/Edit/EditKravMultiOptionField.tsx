@@ -41,7 +41,7 @@ export const EditKravMultiOptionField = (
     name: string
     caption?: ReactNode
     tooltip?: string
-    marginBottom?: string
+    marginBottom?: boolean
     overrides?: SelectOverrides
   } & Or<{ options: Value }, { listName: ListName }>,
 ) => {

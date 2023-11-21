@@ -58,7 +58,7 @@ export const RegelverkEdit = ({ forVirkemiddel }: RegelverkEditProps) => {
   const regelverkObject = () => ({ lov: codelist.getCode(ListName.LOV, lov[0].id as string)!, spesifisering: text })
 
   return (
-    <FieldWrapper marginBottom="32px">
+    <FieldWrapper marginBottom>
       <FieldArray name="regelverk">
         {(p) => {
           const add = () => {

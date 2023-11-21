@@ -4,15 +4,13 @@ import { createKrav, getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav
 import React, { useEffect } from 'react'
 import * as yup from 'yup'
 import { codelist, ListName } from '../../services/Codelist'
-import { MultiInputField, TextAreaField } from '../common/Inputs'
+import { InputField, MultiInputField, TextAreaField } from '../common/Inputs'
 import axios from 'axios'
 import { env } from '../../util/env'
 import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
 import { RegelverkEdit } from './Edit/RegelverkEdit'
 import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
 import { EditBegreper } from './Edit/KravBegreperEdit'
-import CustomizedModal from '../common/CustomizedModal'
-import { ettlevColors, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
 import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
 import ErrorModal from '../ErrorModal'
 import { Error } from '../common/ModalSchema'
@@ -21,7 +19,7 @@ import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
 import { user } from '../../services/User'
 import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
 import _ from 'lodash'
-import {Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal, Textarea, TextField} from "@navikt/ds-react";
+import { Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal, Textarea } from '@navikt/ds-react'
 
 type EditKravProps = {
   krav: KravQL
@@ -35,7 +33,6 @@ type EditKravProps = {
 }
 
 const maxInputWidth = '400px'
-const inputMarginBottom = theme.sizing.scale900
 const modalWidth = '1276px'
 
 export const kravModal = () => document.querySelector('#krav-modal')
@@ -45,11 +42,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
   const [stickyFooterStyle, setStickyFooterStyle] = React.useState(true)
   const [showErrorModal, setShowErrorModal] = React.useState(false)
   const [errorModalMessage, setErrorModalMessage] = React.useState('')
-  const [varlselMeldingActive, setVarselMeldingActive] = React.useState<boolean>(krav.varselMelding ? true : false)
+  const [varselMeldingActive, setVarselMeldingActive] = React.useState<String[]>(krav.varselMelding ? ['VarselMelding'] : [])
   const [UtgaattKravMessage, setUtgaattKravMessage] = React.useState<boolean>(false)
   const [aktivKravMessage, setAktivKravMessage] = React.useState<boolean>(false)
 
-  const [isAlertModalOpen, setIsAlertModalOpen] = React.useState<boolean>(false)
   const [isFormDirty, setIsFormDirty] = React.useState<boolean>(false)
 
   const kravSchema = () =>
@@ -121,7 +117,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
     const mutatedKrav = {
       ...krav,
       underavdeling: underavdeling,
-      varselMelding: varlselMeldingActive ? krav.varselMelding : undefined,
+      varselMelding: varselMeldingActive ? krav.varselMelding : undefined,
     }
 
     const etterlevelser = await getEtterlevelserByKravNumberKravVersion(krav.kravNummer, krav.kravVersjon)
@@ -130,10 +126,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
       setShowErrorModal(true)
     } else if (krav.id) {
       close(await updateKrav(mutatedKrav))
-      setVarselMeldingActive(!!mutatedKrav.varselMelding)
+      setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
     } else {
       close(await createKrav(mutatedKrav))
-      setVarselMeldingActive(!!mutatedKrav.varselMelding)
+      setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
     }
   }
 
@@ -163,7 +159,8 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
         width={modalWidth}
         header={{
           heading: newVersion ? 'Ny versjon' : newKrav ? 'Nytt krav' : 'Rediger kravside',
-          closeButton: false}}
+          closeButton: false
+        }}
         open={isOpen}
       >
         <Formik
@@ -200,10 +197,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     <Heading level="2" size="small" className="text-white">{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </Heading>
                     {newVersion && (
                       <Alert variant="warning">
-                            <Heading spacing size="small" level="4">Sikker på at du vil opprette en ny versjon?</Heading>
+                        <Heading spacing size="small" level="4">Sikker på at du vil opprette en ny versjon?</Heading>
 
-                              Ny versjon av kravet skal opprettes når det er <strong>vesentlige endringer</strong> i kravet som gjør at <strong>teamene må revurdere</strong> sin
-                              besvarelse av kravet. Ved alle mindre justeringer, endre i det aktive kravet, og da slipper teamene å revurdere sin besvarelse.
+                        Ny versjon av kravet skal opprettes når det er <strong>vesentlige endringer</strong> i kravet som gjør at <strong>teamene må revurdere</strong> sin
+                        besvarelse av kravet. Ved alle mindre justeringer, endre i det aktive kravet, og da slipper teamene å revurdere sin besvarelse.
                       </Alert>
                     )}
                   </div>
@@ -211,30 +208,34 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
               </div>
               <div>
                 <div className="title_container py-16 px-24">
-                  <TextField
-                    className="mb-6"
+                  <InputField
+                    marginBottom
                     label="Krav-tittel"
                     name="navn"
                     description="Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting."
                   />
                   <div className="mb-14">
-                    <CheckboxGroup legend="Send varselmelding">
-                      <Checkbox
-                        value="Varsel"
-                        onChange={() => {
-                          setVarselMeldingActive(!varlselMeldingActive)
-                        }}
-                      >Gi kravet en varselmelding (eks. for kommende krav)
+                    <CheckboxGroup
+                      legend="Send varselmelding"
+                      value={varselMeldingActive}
+                      onChange={(value) => {
+                        setVarselMeldingActive(value)
+                      }}
+                    >
+                      <Checkbox value="VarselMelding">
+                        Gi kravet en varselmelding (eks. for kommende krav)
                       </Checkbox>
                     </CheckboxGroup>
 
-                    {varlselMeldingActive && (
+                    {varselMeldingActive.length > 0 && (
                       <div className="w-full ml-8 mt-6">
-                        <Textarea
+                        <TextAreaField
                           label="Forklaring til etterlevere"
                           name="varselMelding"
-                          maxLength={100}
-                          minRows={2}/>
+                          maxCharacter={100}
+                          rows={2} 
+                          noPlaceholder
+                          />
                       </div>
                     )}
 
@@ -243,7 +244,6 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     label="Hensikt"
                     name="hensikt"
                     height="250px"
-                    marginBottom="0px"
                     markdown
                     shortenLinks
                     onImageUpload={onImageUpload(krav.id)}
@@ -262,7 +262,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     </div>
 
                     <MultiInputField
-                      marginBottom={inputMarginBottom}
+                      marginBottom
                       maxInputWidth={maxInputWidth}
                       linkLabel="Navn på kilde"
                       name="dokumentasjon"
@@ -281,20 +281,19 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         label="Endringer siden siste versjon"
                         name="versjonEndringer"
                         height="250px"
-                        marginBottom="0px"
                         markdown
                         shortenLinks
                         tooltip={'Beskrivelse av hva som er nytt siden siste versjon.'}
                       />
                     )}
 
-                    <div className="mx-20">
+                    <div className="mt-20">
                       <Heading level="3" size="medium">Gruppering</Heading>
                     </div>
 
                     <div className="w-full max-w-md">
                       <EditKravMultiOptionField
-                        marginBottom={inputMarginBottom}
+                        marginBottom
                         name="relevansFor"
                         label="Legg til relevante kategorier"
                         listName={ListName.RELEVANS}
@@ -332,19 +331,19 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                 </div>
                 <div
                   className="button_container sticky bottom-0 flex flex-col py-4 px-24 bg-gray-50"
-/*                  backgroundColor={ettlevColors.grey25}
-                  position="sticky"
-                  bottom={0}
-                  display="flex"
-                  flexDirection="column"
-                  paddingLeft={responsivePaddingLarge}
-                  paddingRight={responsivePaddingLarge}
-                  paddingBottom="16px"
-                  paddingTop="16px"
-                  $style={{
-                    boxShadow: stickyFooterStyle ? '0px -4px 4px rgba(0, 0, 0, 0.12)' : '',
-                    zIndex: 3,
-                  }}*/
+                /*                  backgroundColor={ettlevColors.grey25}
+                                  position="sticky"
+                                  bottom={0}
+                                  display="flex"
+                                  flexDirection="column"
+                                  paddingLeft={responsivePaddingLarge}
+                                  paddingRight={responsivePaddingLarge}
+                                  paddingBottom="16px"
+                                  paddingTop="16px"
+                                  $style={{
+                                    boxShadow: stickyFooterStyle ? '0px -4px 4px rgba(0, 0, 0, 0.12)' : '',
+                                    zIndex: 3,
+                                  }}*/
                 >
                   {errors.status && (
                     <div className="mb-3">
@@ -431,7 +430,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       <Modal
                         header={{
                           closeButton: false,
-                          heading:"Sikker på at du vil sette versjonen til aktiv?"
+                          heading: "Sikker på at du vil sette versjonen til aktiv?"
                         }}
                         open={aktivKravMessage}
                         onClose={() => setAktivKravMessage(false)}
@@ -473,7 +472,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     <div className="flex w-full justify-end">
                       <Button className="ml-4"
                         variant="secondary"
-                        onClick={()=> {setIsOpen(false)}}>
+                        onClick={() => { setIsOpen(false) }}>
                         Avbryt
                       </Button>
 
