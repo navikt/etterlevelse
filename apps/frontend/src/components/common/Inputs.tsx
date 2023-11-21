@@ -19,41 +19,25 @@ import TextEditor from './TextEditor/TextEditor'
 import { Error } from './ModalSchema'
 import { ettlevColors } from '../../util/theme'
 import { borderColor } from './Style'
-import { Label, Select, Textarea } from '@navikt/ds-react'
+import { Detail, Label, Select, TextField, Textarea } from '@navikt/ds-react'
+import { MarkdownInfo } from './Markdown'
 
-export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode; marginBottom?: string }) => {
+export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode; marginBottom?: boolean }) => {
   return <div className={`${marginBottom ? 'mb-6' : ''}`}>{children}</div>
 }
 
-export const InputField = (props: { label: string; name: string; caption?: ReactNode; tooltip?: string; marginBottom?: string; disablePlaceHolder?: boolean }) => (
+export const InputField = (props: { label: string; name: string, description?: string, marginBottom?: boolean, disablePlaceHolder?: boolean }) => (
   <FieldWrapper marginBottom={props.marginBottom}>
     <Field name={props.name}>
       {(p: FieldProps) => (
-        <FormControl
-          overrides={{ Label: { style: { marginTop: '0px', marginBottom: '0px', paddingTop: '8px', paddingBottom: '8px' } } }}
-          label={<Label>{props.label}</Label>}
-          caption={props.caption}
-        >
-          <div>
-            <CustomInput
-              {...p.field}
-              placeholder={!props.disablePlaceHolder ? props.label : undefined}
-              overrides={{
-                Input: {
-                  style: {
-                    backgroundColor: p.form.errors[props.name] && ettlevColors.error50,
-                  },
-                },
-                Root: {
-                  style: {
-                    ...borderColor(p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200),
-                  },
-                },
-              }}
-            />
-            <Error fieldName={props.name} fullWidth />
-          </div>
-        </FormControl>
+        <div className="w-full">
+          <TextField
+            label={props.label}
+            {...p.field}
+            placeholder={!props.disablePlaceHolder ? props.label : undefined}
+          />
+          <Error fieldName={props.name} fullWidth />
+        </div>
       )}
     </Field>
   </FieldWrapper>
@@ -61,7 +45,7 @@ export const InputField = (props: { label: string; name: string; caption?: React
 
 export const TextAreaField = (props: {
   height?: string
-  marginBottom?: string
+  marginBottom?: boolean
   label: string
   name: string
   markdown?: boolean
@@ -79,60 +63,42 @@ export const TextAreaField = (props: {
     <FieldWrapper marginBottom={props.marginBottom}>
       <Field name={props.name}>
         {(p: FieldProps) => (
-          <FormControl
-            overrides={{
-              ControlContainer: {
-                style: { marginBottom: '0px' },
-              },
-              Caption: { style: { marginBottom: '0px' } },
-            }}
-            label={<Label>{props.label}</Label>}
-            caption={
-              props.markdown ? (
-                <div className="flex flex-col">
-                  {props.caption}
-                  {/* <MarkdownInfo /> */}
-                </div>
-              ) : (
-                props.caption
-              )
-            }
-          >
-            <>
-              {props.markdown && (
-                <div>
-                  <TextEditor
-                    height={props.height}
-                    initialValue={p.field.value}
-                    setValue={(v) => p.form.setFieldValue(props.name, v)}
-                    onImageUpload={props.onImageUpload}
-                    shortenLinks={props.shortenLinks}
-                    errors={p.form.errors}
-                    name={props.name}
-                    setIsFormDirty={props.setIsFormDirty}
-                  />
-                  {/* <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
-                onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} /> */}
-                </div>
-              )}
-              {!props.markdown && (
-                <Textarea
-                  minRows={props.rows ? props.rows : 8}
-                  label={props.label}
-                  hideLabel
-                  maxLength={props.maxCharacter ? props.maxCharacter : undefined}
-                  {...p.field}
-                  placeholder={props.noPlaceholder ? '' : props.placeholder ? props.placeholder : props.label}
-                  onChange={(v) => {
-                    if (props.setIsFormDirty) {
-                      props.setIsFormDirty(true)
-                    }
-                    p.field.onChange(v)
-                  }}
+          <div>
+            {props.markdown && (
+              <div>
+                <Label>{props.label}</Label>
+                <Detail>{props.caption}</Detail>
+                <MarkdownInfo />
+                <TextEditor
+                  height={props.height}
+                  initialValue={p.field.value}
+                  setValue={(v) => p.form.setFieldValue(props.name, v)}
+                  onImageUpload={props.onImageUpload}
+                  shortenLinks={props.shortenLinks}
+                  errors={p.form.errors}
+                  name={props.name}
+                  setIsFormDirty={props.setIsFormDirty}
                 />
-              )}
-            </>
-          </FormControl>
+                {/* <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
+                onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} /> */}
+              </div>
+            )}
+            {!props.markdown && (
+              <Textarea
+                minRows={props.rows ? props.rows : 8}
+                label={props.label}
+                maxLength={props.maxCharacter ? props.maxCharacter : undefined}
+                {...p.field}
+                placeholder={props.noPlaceholder ? '' : props.placeholder ? props.placeholder : props.label}
+                onChange={(v) => {
+                  if (props.setIsFormDirty) {
+                    props.setIsFormDirty(true)
+                  }
+                  p.field.onChange(v)
+                }}
+              />
+            )}
+          </div>
         )}
       </Field>
     </FieldWrapper>
@@ -228,7 +194,7 @@ export const MultiInputField = (props: {
   caption?: ReactNode
   tooltip?: string
   maxInputWidth?: string
-  marginBottom?: string
+  marginBottom?: boolean
   setErrors?: Function
 }) => {
   const [val, setVal] = useState('')
@@ -399,7 +365,7 @@ export const MultiOptionField = (
     name: string
     caption?: ReactNode
     tooltip?: string
-    marginBottom?: string
+    marginBottom?: boolean
   } & Or<{ options: Value }, { listName: ListName }>,
 ) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
