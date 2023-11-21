@@ -53,8 +53,7 @@ export const EditKravMultiOptionField = (
           const selectedIds = (p.form.values[props.name] as any[]).map((v) => (props.listName ? (v as Code).code : v))
           return (
             <div>
-              {props.caption && <Detail>{props.caption}</Detail>}
-              <SelectBase
+              {/* <SelectBase
                 placeholder={'Velg ' + _.lowerFirst(props.label)}
                 aria-label={'Velg ' + _.lowerFirst(props.label)}
                 maxDropdownHeight="400px"
@@ -63,22 +62,28 @@ export const EditKravMultiOptionField = (
                   value.length && p.push(props.listName ? codelist.getCode(props.listName, value[0].value as string) : value[0].value)
                 }}
               />
+
+              <RenderTagList list={selectedIds.map((v) => options.find((o) => o.value === v)?.label)} onRemove={p.remove} wide /> */}
+
+
               <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
+              {props.caption && <Detail>{props.caption}</Detail>}
               <Select
                 isMulti
                 options={options}
                 value={selectedIds.map((v) => options.find((o) => o.value === v))}
                 onChange={(value) => {
-                  console.log(value)
-                  // if(value.length > 0) {
-                  //   p.form.setFieldValue(props.name, value.map((v) => v ? v.value : v))
-                  // } else {
-                  //   p.form.setFieldValue(props.name, [])
-                  // }
+                  if (value.length) {
+                    if (props.listName) {
+                      p.form.setFieldValue(props.name, value.map((v) => codelist.getCode(props.listName, v?.value)))
+                    } else {
+                      p.form.setFieldValue(props.name, value.map((v) => v?.value))
+                    }
+                  } else {
+                    p.form.setFieldValue(props.name, [])
+                  }
                 }}
               />
-
-              <RenderTagList list={selectedIds.map((v) => options.find((o) => o.value === v)?.label)} onRemove={p.remove} wide />
             </div>
           )
         }}
