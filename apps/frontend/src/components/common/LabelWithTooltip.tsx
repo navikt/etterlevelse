@@ -5,54 +5,26 @@ import { Block } from 'baseui/block'
 import { LabelLarge } from 'baseui/typography'
 import { ettlevColors, theme } from '../../util/theme'
 import { buttonContentStyle } from './Button'
+import { Button, Label, Tooltip } from '@navikt/ds-react'
+import { InformationSquareIcon, QuestionmarkDiamondIcon } from '@navikt/aksel-icons'
 
-const LabelWithToolTip = (props: { label?: string; tooltip?: React.ReactNode; fontColor?: string; noMarginBottom?: boolean }) => {
-  if (props.tooltip) {
-    return (
-      <Block display="flex" alignItems="center" marginBottom={props.noMarginBottom ? '0px' : theme.sizing.scale200}>
-        <Block marginRight="scale200">
-          <LabelLarge $style={{ color: props.fontColor ? props.fontColor : 'black' }}>{props.label}</LabelLarge>
-        </Block>
-        <CustomizedStatefulTooltip
-          content={() => <Block>{props.tooltip}</Block>}
-          showArrow
-          overrides={{
-            Body: {
-              style: {
-                border: `solid ${ettlevColors.green800} 1px`,
-              },
-            },
-            Inner: {
-              style: {
-                backgroundColor: ettlevColors.green100,
-                color: ettlevColors.green800,
-              },
-            },
-            Arrow: {
-              style: {
-                backgroundColor: ettlevColors.green100,
-                border: `solid ${ettlevColors.green800} 1px`,
-              },
-            },
-          }}
-        >
-          <button type="button" style={{ border: 'none', background: 'none', ...buttonContentStyle }}>
-            <img
-              src={questionmarkIcon}
-              alt={`Hjelpetekst for ${props.label}`}
-              onMouseOver={(e) => (e.currentTarget.src = questionmarkHoverIcon)}
-              onMouseOut={(e) => (e.currentTarget.src = questionmarkIcon)}
-            />
-          </button>
-        </CustomizedStatefulTooltip>
-      </Block>
-    )
-  }
-
+const LabelWithToolTip = (props: { label?: string; tooltip?: string; fontColor?: string; noMarginBottom?: boolean }) => {
   return (
-    <Block>
-      <LabelLarge>{props.label}</LabelLarge>
-    </Block>
+    <div className={`flex items-center ${props.noMarginBottom ? undefined : 'mb-1.5'}`}>
+      <div className={`${props.tooltip ? 'mr-1.5' : undefined}`}>
+        <Label>{props.label}</Label>
+      </div>
+      {props.tooltip && (
+        <Tooltip content={props.tooltip} arrow>
+          <Button
+            type="button"
+            variant="tertiary"
+            icon={<InformationSquareIcon title="Tooltip" aria-label="Tooltip" />}
+            // icon={<QuestionmarkDiamondIcon title="Tooltip" aria-label="Tooltip"/>}
+          />
+        </Tooltip>
+      )}
+    </div>
   )
 }
 export default LabelWithToolTip
