@@ -63,18 +63,6 @@ export const AllInfo = ({
         </LabelAboveContent>
       </LabelWrapper>
 
-      {user.isKraveier() && (
-        <LabelWrapper>
-          <LabelAboveContent header title="Etiketter">
-            {krav.tagger.join(', ')}
-          </LabelAboveContent>
-        </LabelWrapper>
-      )}
-
-      <LabelWrapper>
-        <LabelAboveContent header title="Relevante implementasjoner" markdown={krav.implementasjoner} />
-      </LabelWrapper>
-
       <LabelWrapper>
         <LabelAboveContent header title="Begreper">
           {krav.begreper.map((b, i) => (
