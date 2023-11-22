@@ -114,12 +114,6 @@ export const AllInfo = ({
         </div>
       )}
 
-      <LabelWrapper>
-        <LabelAboveContent header title="Ansvarlig">
-          {krav.underavdeling?.shortName}
-        </LabelAboveContent>
-      </LabelWrapper>
-
       {krav.regelverk.length && (
         <LabelWrapper>
           <LabelAboveContent header title="Regelverk">
@@ -127,6 +121,12 @@ export const AllInfo = ({
           </LabelAboveContent>
         </LabelWrapper>
       )}
+
+      <LabelWrapper>
+        <LabelAboveContent header title="Ansvarlig">
+          {krav.underavdeling?.shortName}
+        </LabelAboveContent>
+      </LabelWrapper>
 
       {user.isKraveier() && (
         <LabelWrapper>
