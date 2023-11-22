@@ -100,7 +100,7 @@ export const RegelverkEdit = ({ forVirkemiddel }: RegelverkEditProps) => {
                       />
                     </Block>
                     <Block width="100%">
-                      <LabelWithTooltip label={'Paragraf, kapittel eller artikkel i regelverk'} tooltip={'Beskrivelse'} />
+                      <LabelWithTooltip label={'Paragraf, kapittel eller artikkel i regelverk'} tooltip={'Legg til paragraf, kapittel eller artikkel fra regelverk du har valgt.'} />
                       <CustomizedInput
                         value={text}
                         onChange={(e) => setText((e.target as HTMLInputElement).value)}
