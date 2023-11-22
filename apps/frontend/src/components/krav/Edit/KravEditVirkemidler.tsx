@@ -71,7 +71,7 @@ export const EditVirkemidler = () => {
                   error={!!p.form.errors.begreper && !!p.form.submitCount}
                   isLoading={loading}
                 />
-                <RenderTagList wide list={p.form.values.virkemidler.map((v: Virkemiddel) => v.navn)} onRemove={p.remove} />
+                <RenderTagList list={p.form.values.virkemidler.map((v: Virkemiddel) => v.navn)} onRemove={p.remove} />
               </Block>
             </FormControl>
           )

@@ -173,16 +173,15 @@ export const VarslingsadresserTagList = ({ varslingsadresser, remove }: { varsli
 
   return (
     <RenderTagList
-      wide
       list={varslingsadresser.map((v, i) => {
         if (v.type === AdresseType.SLACK) {
           const channel = slackChannels.find((c) => c.id === v.adresse)
-          return <Block key={i}>{channel ? slackChannelView(channel) : `Slack: ${v.adresse}`}</Block>
+          return channel ? slackChannelView(channel) : `Slack: ${v.adresse}`
         } else if (v.type === AdresseType.SLACK_USER) {
           const user = slackUsers.find((u) => u.id === v.adresse)
-          return <Block key={i}>{user ? `Slack: ${user.name}` : `Slack: ${v.adresse}`}</Block>
+          return user ? `Slack: ${user.name}` : `Slack: ${v.adresse}`
         }
-        return <Block key={i}>Epost: {v.adresse}</Block>
+        return "Epost: " + v.adresse
       })}
       onRemove={remove}
     />

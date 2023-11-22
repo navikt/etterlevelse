@@ -137,7 +137,6 @@ export const RegelverkEdit = ({ forVirkemiddel }: RegelverkEditProps) => {
                   )}
                 </Block>
                 <RenderTagList
-                  wide
                   list={p.form.values.regelverk.map((r: Regelverk) => (
                     <LovView regelverk={r} />
                   ))}

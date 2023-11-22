@@ -71,7 +71,7 @@ export const EditBegreper = () => {
                   error={!!p.form.errors.begreper && !!p.form.submitCount}
                   isLoading={loading}
                 />
-                <RenderTagList wide list={p.form.values.begreper.map((b: Begrep) => b.navn)} onRemove={p.remove} />
+                <RenderTagList list={p.form.values.begreper.map((b: Begrep) => b.navn)} onRemove={p.remove} />
               </Block>
             </FormControl>
           )

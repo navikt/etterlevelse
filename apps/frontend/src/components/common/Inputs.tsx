@@ -25,16 +25,12 @@ export const FieldWrapper = ({ children, marginBottom }: { children: React.React
   return <div className={`${marginBottom ? 'mb-6' : ''}`}>{children}</div>
 }
 
-export const InputField = (props: { label: string; name: string, description?: string, marginBottom?: boolean, disablePlaceHolder?: boolean }) => (
+export const InputField = (props: { label: string; name: string; description?: string; marginBottom?: boolean; disablePlaceHolder?: boolean }) => (
   <FieldWrapper marginBottom={props.marginBottom}>
     <Field name={props.name}>
       {(p: FieldProps) => (
         <div className="w-full">
-          <TextField
-            label={props.label}
-            {...p.field}
-            placeholder={!props.disablePlaceHolder ? props.label : undefined}
-          />
+          <TextField label={props.label} {...p.field} placeholder={!props.disablePlaceHolder ? props.label : undefined} />
           <Error fieldName={props.name} fullWidth />
         </div>
       )}
@@ -248,18 +244,12 @@ export const MultiInputField = (props: {
                 {props.link && (
                   <div className={`w-full ${props.maxInputWidth ? 'max-w-[' + props.maxInputWidth + ']' : undefined}`}>
                     <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
-                    <TextField 
-                      label={props.label}
-                      hideLabel
-                      onKeyDown={onKey}
-                      value={linkName}
-                      onChange={(e) => setLinkName((e.target as HTMLInputElement).value)}
-                    />
+                    <TextField label={props.label} hideLabel onKeyDown={onKey} value={linkName} onChange={(e) => setLinkName((e.target as HTMLInputElement).value)} />
                   </div>
                 )}
                 <div className={`w-full ${props.link ? 'ml-3' : undefined} ${!props.link ? 'max-w-[' + props.maxInputWidth + ']' : undefined}`}>
                   <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
-                  <TextField 
+                  <TextField
                     label={props.label}
                     hideLabel
                     onKeyDown={onKey}
@@ -271,12 +261,12 @@ export const MultiInputField = (props: {
                 </div>
 
                 <div className="min-w-[107px] ml-2.5">
-                  <Button type="button" onClick={() => add()} variant="secondary" >
+                  <Button type="button" onClick={() => add()} variant="secondary">
                     Legg til
                   </Button>
                 </div>
               </div>
-              <RenderTagList list={(p.form.values[props.name] as string[]).map(linkNameFor)} onRemove={p.remove} onClick={(i) => onClick(p, i)} />
+              <RenderTagList list={(p.form.values[props.name] as string[]).map(linkNameFor)} onRemove={p.remove} />
             </div>
           )
         }}
@@ -334,9 +324,9 @@ export const MultiOptionField = (
     caption?: ReactNode
     tooltip?: string
     marginBottom?: boolean
-  } & Or<{ options: Value }, { listName: ListName }>,
+  } & Or<{ options: { value: string; label: string; description: string }[] }, { listName: ListName }>,
 ) => {
-  const options: Value = props.options || codelist.getParsedOptions(props.listName)
+  const options = props.options || codelist.getParsedOptions(props.listName)
   return (
     <FieldWrapper marginBottom={props.marginBottom}>
       <FieldArray name={props.name}>
@@ -350,13 +340,13 @@ export const MultiOptionField = (
                     placeholder={'Velg ' + _.lowerFirst(props.label)}
                     aria-label={'Velg ' + _.lowerFirst(props.label)}
                     maxDropdownHeight="400px"
-                    options={options.filter((o) => selectedIds.indexOf(o.id) < 0)}
+                    options={options.filter((o) => selectedIds.indexOf(o.value) < 0)}
                     onChange={({ value }) => {
                       value.length && p.push(props.listName ? codelist.getCode(props.listName, value[0].id as string) : value[0].id)
                     }}
                   />
                 </Block>
-                <RenderTagList list={selectedIds.map((v) => options.find((o) => o.id === v)?.label)} onRemove={p.remove} wide />
+               {/* <RenderTagList list={selectedIds.map((v) => options.find((o) => o.value === v).label)} onRemove={p.remove} wide /> */}
               </Block>
             </FormControl>
           )
@@ -366,7 +356,7 @@ export const MultiOptionField = (
   )
 }
 
-export const MultiSearchField = (props: { label: string; name: string; search: SearchType; itemLabel?: (id: string) => React.ReactNode }) => {
+export const MultiSearchField = (props: { label: string; name: string; search: SearchType; itemLabel?: (id: string) => string }) => {
   const [results, setSearch, loading] = props.search
 
   return (
@@ -390,7 +380,7 @@ export const MultiSearchField = (props: { label: string; name: string; search: S
                   isLoading={loading}
                 />
               </Block>
-              <RenderTagList list={(p.form.values[props.name] as string[]).map((v) => (props.itemLabel ? props.itemLabel(v) : v))} onRemove={p.remove} wide />
+              <RenderTagList list={(p.form.values[props.name] as string[]).map((v) => (props.itemLabel ? props.itemLabel(v) : v))} onRemove={p.remove} />
             </Block>
           </FormControl>
         )}
