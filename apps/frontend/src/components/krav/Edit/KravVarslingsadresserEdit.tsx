@@ -13,14 +13,13 @@ import { FieldWrapper } from '../../common/Inputs'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { FormControl } from 'baseui/form-control'
 import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
 import { RenderTagList } from '../../common/TagList'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
 import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
 import { borderColor, borderStyle, borderWidth } from '../../common/Style'
 import { ettlevColors } from '../../../util/theme'
-import { Loader } from '@navikt/ds-react'
+import { Loader, Modal } from '@navikt/ds-react'
 
 export const KravVarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -117,14 +116,14 @@ export const KravVarslingsadresserEdit = () => {
 }
 
 const AddModal = ({ isOpen, close, title, children }: { isOpen: boolean; close: () => void; title: string; children: ReactNode }) => (
-  <Modal closeable={false} isOpen={isOpen} onClose={close}>
-    <ModalHeader>{title}</ModalHeader>
-    <ModalBody>{children}</ModalBody>
-    <ModalFooter>
+  <Modal open={isOpen} onClose={close}>
+    <Modal.Header>{title}</Modal.Header>
+    <Modal.Body>{children}</Modal.Body>
+    <Modal.Footer>
       <Button kind="secondary" size="compact" type="button" onClick={close}>
         Avbryt
       </Button>
-    </ModalFooter>
+    </Modal.Footer>
   </Modal>
 )
 
