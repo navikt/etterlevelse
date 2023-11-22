@@ -332,7 +332,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                   </div>
                 </div>
                 <div
-                  className="button_container sticky bottom-0 flex flex-col py-4 px-24 bg-gray-50"
+                  className="button_container sticky bottom-0 flex flex-col py-4 px-24 bg-gray-50 z-10"
                 /*                  backgroundColor={ettlevColors.grey25}
                                   position="sticky"
                                   bottom={0}
