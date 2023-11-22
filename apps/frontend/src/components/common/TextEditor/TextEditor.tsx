@@ -123,7 +123,6 @@ const translations = {
   'generic.cancel': 'Avbryt',
 
   // BlockType
-  'components.controls.blocktype.h1': 'H1',
   'components.controls.blocktype.h2': 'H2',
   'components.controls.blocktype.h3': 'H3',
   'components.controls.blocktype.h4': 'H4',
