@@ -196,19 +196,6 @@ export const MultiInputField = (props: {
   const [linkName, setLinkName] = useState('')
   const inputRef = React.useRef<HTMLInputElement>(null)
 
-  let onClick = (p: FieldArrayRenderProps, i: number) => {
-    const oldVal = p.form.values[props.name][i]
-    const groups = oldVal.match(linkReg)
-    if (groups) {
-      setVal(groups[2])
-      setLinkName(groups[1])
-    } else {
-      setVal(oldVal)
-    }
-    p.remove(i)
-    inputRef?.current?.focus()
-  }
-
   return (
     <FieldWrapper marginBottom={props.marginBottom}>
       <FieldArray name={props.name}>
@@ -314,45 +301,6 @@ export const OptionList = (props: { label: string; value?: string; onChange: (va
         )
       })}
     </Select>
-  )
-}
-
-export const MultiOptionField = (
-  props: {
-    label: string
-    name: string
-    caption?: ReactNode
-    tooltip?: string
-    marginBottom?: boolean
-  } & Or<{ options: { value: string; label: string; description: string }[] }, { listName: ListName }>,
-) => {
-  const options = props.options || codelist.getParsedOptions(props.listName)
-  return (
-    <FieldWrapper marginBottom={props.marginBottom}>
-      <FieldArray name={props.name}>
-        {(p: FieldArrayRenderProps) => {
-          const selectedIds = (p.form.values[props.name] as any[]).map((v) => (props.listName ? (v as Code).code : v))
-          return (
-            <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} caption={props.caption}>
-              <Block>
-                <Block display="flex">
-                  <CustomizedSelect
-                    placeholder={'Velg ' + _.lowerFirst(props.label)}
-                    aria-label={'Velg ' + _.lowerFirst(props.label)}
-                    maxDropdownHeight="400px"
-                    options={options.filter((o) => selectedIds.indexOf(o.value) < 0)}
-                    onChange={({ value }) => {
-                      value.length && p.push(props.listName ? codelist.getCode(props.listName, value[0].id as string) : value[0].id)
-                    }}
-                  />
-                </Block>
-               {/* <RenderTagList list={selectedIds.map((v) => options.find((o) => o.value === v).label)} onRemove={p.remove} wide /> */}
-              </Block>
-            </FormControl>
-          )
-        }}
-      </FieldArray>
-    </FieldWrapper>
   )
 }
 

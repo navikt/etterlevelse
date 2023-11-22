@@ -53,19 +53,6 @@ export const EditKravMultiOptionField = (
           const selectedIds = (p.form.values[props.name] as any[]).map((v) => (props.listName ? (v as Code).code : v))
           return (
             <div>
-              {/* <SelectBase
-                placeholder={'Velg ' + _.lowerFirst(props.label)}
-                aria-label={'Velg ' + _.lowerFirst(props.label)}
-                maxDropdownHeight="400px"
-                options={options.filter((o) => selectedIds.indexOf(o.value) < 0)}
-                onChange={({ value }) => {
-                  value.length && p.push(props.listName ? codelist.getCode(props.listName, value[0].value as string) : value[0].value)
-                }}
-              />
-
-              <RenderTagList list={selectedIds.map((v) => options.find((o) => o.value === v)?.label)} onRemove={p.remove} wide /> */}
-
-
               <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
               {props.caption && <Detail>{props.caption}</Detail>}
               <Select
@@ -84,6 +71,7 @@ export const EditKravMultiOptionField = (
                   }
                 }}
               />
+              {/* <RenderTagList list={selectedIds.map((v) => options.find((o) => o.value === v)?.label)} onRemove={p.remove} /> */}
             </div>
           )
         }}
