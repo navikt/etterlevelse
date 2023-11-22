@@ -27,6 +27,8 @@ export const LovView = (props: { regelverk?: Regelverk; openOnSamePage?: boolean
   let lovDisplay = lov && codelist.getShortname(ListName.LOV, lovCode)
 
   let descriptionText = codelist.valid(ListName.LOV, lovCode) ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering, props.openOnSamePage) : spesifisering
+ 
+  console.log(descriptionText)
 
   return <span>{descriptionText}</span>
 }
@@ -58,26 +60,26 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
     },
     {
       // triple '§§§' is hidden, used as a trick in combination with rule 1 above
-      regex: /(.*) §(§§)?(§)?\s*(\d+(-\d+)?)/g,
+      regex: /(.*) §(§§)?(§)?\s*(\d+(-\d+)?)( *\([0-9]*\))*/g,
       fn: (key: string, result: string[]) => (
         <Link key={key} href={`${lovdataBase(law)}/§${result[4]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
-          {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
+          {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]} {result[6]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
         </Link>
       ),
     },
     {
-      regex: /(.*) kap(ittel)?\s*(\d+)/gi,
+      regex: /(.*) kap(ittel)?\s*(\d+)( *\([0-9]*\))*/gi,
       fn: (key: string, result: string[]) => (
         <Link key={key} href={`${lovdataBase(law)}/KAPITTEL_${result[3]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
-          {result[1]} Kapittel {result[3]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
+          {result[1]} Kapittel {result[3]} {result[4]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
         </Link>
       ),
     },
     {
-      regex: /(.*) art(ikkel)?\s*(\d+)/gi,
+      regex: /(.*) art(ikkel)?\s*(\d+)( *\([0-9]*\))*/gi,
       fn: (key: string, result: string[]) => (
         <Link key={key} href={`${lovdataBase(law)}/ARTIKKEL_${result[3]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
-          {result[1]} Artikkel {result[3]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
+          {result[1]} Artikkel {result[3]} {result[4]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
         </Link>
       ),
     },
