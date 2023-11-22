@@ -3,12 +3,11 @@ import { ExternalLink, urlForObject } from './RouteLink'
 import { Markdown } from './Markdown'
 import { Code, codelist, ListName } from '../../services/Codelist'
 import { NavigableItem } from '../admin/audit/AuditTypes'
-import { BodyShort } from '@navikt/ds-react'
 
 export const DotTag = (props: { children: ReactNode; noBulletPoints?: boolean }) => (
-  <div className={'flex'}>
+  <div className="flex">
     {!props.noBulletPoints && <li />}
-    <BodyShort className={'break-words'}>{props.children}</BodyShort>
+    <div className="break-words">{props.children}</div>
   </div>
 )
 

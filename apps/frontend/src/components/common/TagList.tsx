@@ -5,7 +5,7 @@ export const RenderTagList = ({ list, onRemove }: { list: string[]; onRemove: (i
     <Chips className="mt-2">
       {list && list.length > 0
         ? list.map((item, index) => (
-            <div key={'tags_' + item}>
+            <div key={'tags_' + item + '_' + index}>
               {item ? (
                 <Chips.Removable variant="neutral" onClick={() => onRemove(index)}>
                   {item}
