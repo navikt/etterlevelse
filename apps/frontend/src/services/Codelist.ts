@@ -117,7 +117,7 @@ class CodelistService {
     })
   }
 
-  getParsedOptionsForLov(forVirkemiddel?: boolean): { id: string; label: string; description: string }[] {
+  getParsedOptionsForLov(forVirkemiddel?: boolean): { value: string; label: string; description: string }[] {
     const lovList = this.getCodes(ListName.LOV)
     let filteredLovList = []
 
@@ -128,7 +128,7 @@ class CodelistService {
     }
 
     return filteredLovList.map((code: LovCode) => {
-      return { id: code.code, label: code.shortName, description: code.description }
+      return { value: code.code, label: code.shortName, description: code.description }
     })
   }
 
