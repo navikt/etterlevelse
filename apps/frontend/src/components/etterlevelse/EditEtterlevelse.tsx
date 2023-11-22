@@ -296,7 +296,7 @@ export const EditEtterlevelse = ({
                 <Tabs.Panel value="notat" className="flex flex-col gap-2 mt-2">
                   <div className="flex justify-between">
                     <Label className="flex gap-1">
-                      <FileTextIcon fontSize="1.5rem" />
+                      <FileTextIcon fontSize="1.5rem" area-label="" aria-hidden />
                       Notat
                     </Label>
                     <Button variant="secondary" size="xsmall" onClick={() => setIsNotatModalOpen(true)}>
