@@ -278,7 +278,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     <RegelverkEdit />
                     {errors.regelverk && <ErrorMessageModal msg={errors.regelverk} fullWidth={true} />}
 
-                    {!newKrav && (
+                    {!newKrav && krav.kravVersjon > 1 && (
                       <TextAreaField
                         label="Endringer siden siste versjon"
                         name="versjonEndringer"
