@@ -3,7 +3,6 @@ import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
 import { FormControl } from 'baseui/form-control'
 import React, { ReactNode, useState } from 'react'
 import { Block } from 'baseui/block'
-import Button from './Button'
 import { RenderTagList } from './TagList'
 import { Value } from 'baseui/select'
 import { Code, codelist, ListName } from '../../services/Codelist'
@@ -19,7 +18,7 @@ import TextEditor from './TextEditor/TextEditor'
 import { Error } from './ModalSchema'
 import { ettlevColors } from '../../util/theme'
 import { borderColor } from './Style'
-import { Detail, Label, Select, TextField, Textarea } from '@navikt/ds-react'
+import { Button, Detail, Label, Select, TextField, Textarea } from '@navikt/ds-react'
 import { MarkdownInfo } from './Markdown'
 
 export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode; marginBottom?: boolean }) => {
@@ -244,72 +243,41 @@ export const MultiInputField = (props: {
           const onKey = (e: React.KeyboardEvent) => e.key === 'Enter' && add()
 
           return (
-            <FormControl
-              // error={p.form.touched[props.name] && p.form.errors[props.name]}
-              caption={props.caption}
-            >
-              <Block>
-                <Block display="flex" width="100%" alignItems={'flex-end'}>
-                  {props.link && (
-                    <Block width="100%" maxWidth={props.maxInputWidth}>
-                      <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
-                      <CustomInput
-                        onKeyDown={onKey}
-                        value={linkName}
-                        onChange={(e) => setLinkName((e.target as HTMLInputElement).value)}
-                        overrides={{
-                          Input: {
-                            style: {
-                              backgroundColor: p.form.errors[props.name] && ettlevColors.error50,
-                            },
-                          },
-                          Root: {
-                            style: {
-                              borderRightColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                              borderLeftColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                              borderTopColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                              borderBottomColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                            },
-                          },
-                        }}
-                      />
-                    </Block>
-                  )}
-                  <Block marginLeft={props.link ? '12px' : '0px'} width="100%" maxWidth={!props.link ? props.maxInputWidth : undefined}>
-                    <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
-                    <CustomInput
+            <div>
+              <div className="flex w-full items-end">
+                {props.link && (
+                  <div className={`w-full ${props.maxInputWidth ? 'max-w-[' + props.maxInputWidth + ']' : undefined}`}>
+                    <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
+                    <TextField 
+                      label={props.label}
+                      hideLabel
                       onKeyDown={onKey}
-                      value={val}
-                      inputRef={inputRef}
-                      onChange={(e) => setVal((e.target as HTMLInputElement).value)}
-                      onBlur={!props.link ? add : undefined}
-                      overrides={{
-                        Input: {
-                          style: {
-                            backgroundColor: p.form.errors[props.name] && ettlevColors.error50,
-                          },
-                        },
-                        Root: {
-                          style: {
-                            borderRightColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                            borderLeftColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                            borderTopColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                            borderBottomColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                          },
-                        },
-                      }}
+                      value={linkName}
+                      onChange={(e) => setLinkName((e.target as HTMLInputElement).value)}
                     />
-                  </Block>
+                  </div>
+                )}
+                <div className={`w-full ${props.link ? 'ml-3' : undefined} ${!props.link ? 'max-w-[' + props.maxInputWidth + ']' : undefined}`}>
+                  <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
+                  <TextField 
+                    label={props.label}
+                    hideLabel
+                    onKeyDown={onKey}
+                    value={val}
+                    ref={inputRef}
+                    onChange={(e) => setVal((e.target as HTMLInputElement).value)}
+                    onBlur={!props.link ? add : undefined}
+                  />
+                </div>
 
-                  <Block minWidth="107px">
-                    <Button type="button" onClick={add} marginLeft label={'Legg til'} kind="secondary" size="compact">
-                      Legg til
-                    </Button>
-                  </Block>
-                </Block>
-                <RenderTagList list={(p.form.values[props.name] as string[]).map(linkNameFor)} onRemove={p.remove} onClick={(i) => onClick(p, i)} />
-              </Block>
-            </FormControl>
+                <div className="min-w-[107px] ml-2.5">
+                  <Button type="button" onClick={() => add()} variant="secondary" >
+                    Legg til
+                  </Button>
+                </div>
+              </div>
+              <RenderTagList list={(p.form.values[props.name] as string[]).map(linkNameFor)} onRemove={p.remove} onClick={(i) => onClick(p, i)} />
+            </div>
           )
         }}
       </FieldArray>

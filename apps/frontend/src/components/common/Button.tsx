@@ -86,7 +86,7 @@ export const primaryFocusBorder = {
   },
 }
 
-const Button = (props: ButtonProps) => {
+export const Button = (props: ButtonProps) => {
   const baseuiKind = props.kind === 'outline' ? KIND.secondary : props.kind === 'underline-hover' ? KIND.tertiary : props.kind
 
   const boxShadow =
