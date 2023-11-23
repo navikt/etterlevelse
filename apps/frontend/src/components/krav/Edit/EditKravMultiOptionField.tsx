@@ -73,7 +73,7 @@ export const EditKravMultiOptionField = (
                 styles={{
                   control: (baseStyles) => ({
                     ...baseStyles,
-                    height: '48px'
+                    minHeight: '48px'
                   })
                 }}
               />
