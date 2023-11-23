@@ -182,7 +182,14 @@ export const useMyProductAreas = () => {
 
 export type SearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]
 
-export const usePersonSearch = () => useSearch(searchResourceByName)
+export const usePersonSearch = async (searchParam: string) => {
+  if (searchParam && searchParam.replace(/ /g, '').length > 2) {
+    const searchResult = await searchResourceByName(searchParam)
+    return searchResult.map((p) => { return { value: p.navIdent, label: p.fullName, ...p } })
+  }
+  return []
+}
+
 export const useSlackChannelSearch = async (searchParam: string) => {
   if (searchParam && searchParam.replace(/ /g, '').length > 2) {
     const searchResult = await searchSlackChannel(searchParam)
