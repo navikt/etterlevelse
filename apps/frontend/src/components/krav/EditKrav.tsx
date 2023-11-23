@@ -19,7 +19,7 @@ import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
 import { user } from '../../services/User'
 import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
 import _ from 'lodash'
-import { Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal, Textarea } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal } from '@navikt/ds-react'
 
 type EditKravProps = {
   krav: KravQL
@@ -254,8 +254,8 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                   <Error fieldName={'hensikt'} fullWidth />
                 </div>
 
-                <div className="content_container flex w-full justify-center">
-                  <div className="px-24 mb-2.5">
+                <div className="flex w-full justify-center">
+                  <div className="w-full px-24 mb-2.5">
                     <Heading level="3" size="medium" className="mb-8">Suksesskriterier</Heading>
                     <KravSuksesskriterierEdit setIsFormDirty={setIsFormDirty} newVersion={!!newVersion} />
 
