@@ -12,6 +12,7 @@ import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { Alert, Button, Loader, Modal, TextField } from '@navikt/ds-react'
 import { EnvelopeClosedIcon, PersonIcon, PlusIcon } from '@navikt/aksel-icons'
 import AsyncSelect from 'react-select/async'
+import { DropdownIndicator } from './KravBegreperEdit'
 
 export const KravVarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -149,6 +150,7 @@ export const SlackChannelSearch = ({ added, add, close }: AddVarslingsadressePro
       controlShouldRenderValue={false}
       loadingMessage={() => 'Søker...'}
       isClearable={false}
+      components={{DropdownIndicator}}
       loadOptions={useSlackChannelSearch}
       onChange={(slackKanal) => {
         const channel = slackKanal as SlackChannel
@@ -196,6 +198,7 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
             loadingMessage={() => 'Søker...'}
             isClearable={false}
             loadOptions={usePersonSearch}
+            components={{DropdownIndicator}}
             onFocus={() => setError('')}
             onBlur={() => setError('')}
             onChange={(person) => {
