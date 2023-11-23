@@ -28,8 +28,6 @@ export const LovView = (props: { regelverk?: Regelverk; openOnSamePage?: boolean
 
   let descriptionText = codelist.valid(ListName.LOV, lovCode) ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering, props.openOnSamePage) : spesifisering
  
-  console.log(descriptionText)
-
   return <span>{descriptionText}</span>
 }
 
