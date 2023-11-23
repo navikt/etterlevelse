@@ -333,19 +333,6 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                 </div>
                 <div
                   className="button_container sticky bottom-0 flex flex-col py-4 px-24 bg-gray-50 z-10"
-                /*                  backgroundColor={ettlevColors.grey25}
-                                  position="sticky"
-                                  bottom={0}
-                                  display="flex"
-                                  flexDirection="column"
-                                  paddingLeft={responsivePaddingLarge}
-                                  paddingRight={responsivePaddingLarge}
-                                  paddingBottom="16px"
-                                  paddingTop="16px"
-                                  $style={{
-                                    boxShadow: stickyFooterStyle ? '0px -4px 4px rgba(0, 0, 0, 0.12)' : '',
-                                    zIndex: 3,
-                                  }}*/
                 >
                   {errors.status && (
                     <div className="mb-3">
