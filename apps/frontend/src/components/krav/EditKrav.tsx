@@ -120,19 +120,17 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
       varselMelding: varselMeldingActive ? krav.varselMelding : undefined,
     }
 
-    console.log(mutatedKrav)
-
-    // const etterlevelser = await getEtterlevelserByKravNumberKravVersion(krav.kravNummer, krav.kravVersjon)
-    // if (etterlevelser.totalElements > 0 && krav.status === KravStatus.UTKAST && !newVersion) {
-    //   setErrorModalMessage('Kravet kan ikke settes til «Utkast» når det er tilknyttet dokumentasjon av etterlevelse')
-    //   setShowErrorModal(true)
-    // } else if (krav.id) {
-    //   close(await updateKrav(mutatedKrav))
-    //   setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
-    // } else {
-    //   close(await createKrav(mutatedKrav))
-    //   setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
-    // }
+    const etterlevelser = await getEtterlevelserByKravNumberKravVersion(krav.kravNummer, krav.kravVersjon)
+    if (etterlevelser.totalElements > 0 && krav.status === KravStatus.UTKAST && !newVersion) {
+      setErrorModalMessage('Kravet kan ikke settes til «Utkast» når det er tilknyttet dokumentasjon av etterlevelse')
+      setShowErrorModal(true)
+    } else if (krav.id) {
+      close(await updateKrav(mutatedKrav))
+      setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
+    } else {
+      close(await createKrav(mutatedKrav))
+      setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
+    }
   }
 
   useEffect(() => {
@@ -381,7 +379,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                               submitForm()
                             }}
                             disabled={isSubmitting}
-                            type={'button'}
+                            type="button"
                           >
                             Sett kravet til utkast
                           </Button>
@@ -391,7 +389,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       <Modal
                         header={{
                           closeButton: false,
-                          heading: "Sikker på at du vil sette kravet til utgått?"
+                          heading: 'Sikker på at du vil sette kravet til utgått?'
                         }}
                         open={UtgaattKravMessage}
                       >
@@ -419,7 +417,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       <Modal
                         header={{
                           closeButton: false,
-                          heading: "Sikker på at du vil sette versjonen til aktiv?"
+                          heading: 'Sikker på at du vil sette versjonen til aktiv?'
                         }}
                         open={aktivKravMessage}
                         onClose={() => setAktivKravMessage(false)}

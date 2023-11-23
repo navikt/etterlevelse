@@ -1,26 +1,17 @@
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal'
-import { buttonContentStyle } from './common/Button'
-import React from 'react'
+import { Button, Modal } from '@navikt/ds-react'
 
 const ErrorModal = (props: { isOpen: boolean; submit: Function; errorMessage: string }) => {
   return (
-    <Modal closeable={false} isOpen={props.isOpen}>
-      <ModalHeader>Feilmelding</ModalHeader>
-      <ModalBody>{props.errorMessage}</ModalBody>
-      <ModalFooter>
-        <ModalButton
+    <Modal open={props.isOpen} header={{ heading: 'Feilmelding' }}>
+      <Modal.Body>{props.errorMessage}</Modal.Body>
+      <Modal.Footer>
+        <Button
           onClick={() => props.submit(false)}
-          overrides={{
-            BaseButton: {
-              style: {
-                ...buttonContentStyle,
-              },
-            },
-          }}
+          type="button"
         >
-          <strong>Lukk</strong>
-        </ModalButton>
-      </ModalFooter>
+          Lukk
+        </Button>
+      </Modal.Footer>
     </Modal>
   )
 }
