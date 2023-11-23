@@ -2,24 +2,20 @@ import { AdresseType, Krav, SlackChannel, SlackUser, TeamResource, Varslingsadre
 import { getSlackChannelById, getSlackUserByEmail, getSlackUserById, usePersonSearch, useSlackChannelSearch } from '../../../api/TeamApi'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
-import { theme } from '../../../util'
 import { Notification } from 'baseui/notification'
 import * as yup from 'yup'
-import Button from '../../common/Button'
 import { user } from '../../../services/User'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faPlus, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FieldWrapper } from '../../common/Inputs'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
-import { FormControl } from 'baseui/form-control'
 import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
 import { RenderTagList } from '../../common/TagList'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
 import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
-import { borderColor, borderStyle, borderWidth } from '../../common/Style'
-import { ettlevColors } from '../../../util/theme'
-import { Loader, Modal } from '@navikt/ds-react'
+import { Button, Loader, Modal } from '@navikt/ds-react'
+import { EnvelopeClosedIcon, PersonIcon } from '@navikt/aksel-icons'
 
 export const KravVarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -35,66 +31,39 @@ export const KravVarslingsadresserEdit = () => {
             if (!varslingsadresser.find((v2) => v2.adresse === v.adresse)) p.push(v)
           }
           return (
-            <>
-              <FormControl
-                label={<LabelWithTooltip label={'Varslingsadresser'} tooltip={'Angi varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger til kravet.'} />}
-              >
-                <Block>
-                  <Block marginBottom={theme.sizing.scale400}>
-                    <Button
-                      kind="secondary"
-                      size="compact"
-                      type="button"
-                      onClick={() => setAddSlackChannel(true)}
-                      $style={{
-                        ...borderColor(p.form.errors['varslingsadresser'] ? ettlevColors.red600 : ettlevColors.green600),
-                        ...borderStyle(p.form.errors['varslingsadresser'] ? 'solid' : 'solid'),
-                        ...borderWidth(p.form.errors['varslingsadresser'] ? '2px' : '2px'),
-                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit',
-                      }}
-                    >
-                      <span>
-                        <FontAwesomeIcon icon={faSlackHash} /> Legg til slack-kanal
-                      </span>
-                    </Button>
-                    <Button
-                      kind="secondary"
-                      size="compact"
-                      marginLeft
-                      type="button"
-                      onClick={() => setAddSlackUser(true)}
-                      $style={{
-                        ...borderColor(p.form.errors['varslingsadresser'] ? ettlevColors.red600 : ettlevColors.green600),
-                        ...borderStyle(p.form.errors['varslingsadresser'] ? 'solid' : 'solid'),
-                        ...borderWidth(p.form.errors['varslingsadresser'] ? '2px' : '2px'),
-                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit',
-                      }}
-                    >
-                      <span>
-                        <FontAwesomeIcon icon={faUser} /> Legg til slack-bruker
-                      </span>
-                    </Button>
-                    <Button
-                      kind="secondary"
-                      size="compact"
-                      marginLeft
-                      type="button"
-                      onClick={() => setAddEmail(true)}
-                      $style={{
-                        ...borderColor(p.form.errors['varslingsadresser'] ? ettlevColors.red600 : ettlevColors.green600),
-                        ...borderStyle(p.form.errors['varslingsadresser'] ? 'solid' : 'solid'),
-                        ...borderWidth(p.form.errors['varslingsadresser'] ? '2px' : '2px'),
-                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit',
-                      }}
-                    >
-                      <span>
-                        <FontAwesomeIcon icon={faEnvelope} /> Legg til epost
-                      </span>
-                    </Button>
-                  </Block>
-                  <VarslingsadresserTagList remove={p.remove} varslingsadresser={varslingsadresser} />
-                </Block>
-              </FormControl>
+            <div>
+              <LabelWithTooltip label={'Varslingsadresser'} tooltip={'Angi varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger til kravet.'} />
+              <div>
+                <div className="mb-2.5">
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={() => setAddSlackChannel(true)}
+                    icon={<FontAwesomeIcon icon={faSlackHash} aria-hidden aria-label="" />}
+                  >
+                    Legg til slack-kanal
+                  </Button>
+                  <Button
+                    className="ml-2.5"
+                    variant="secondary"
+                    type="button"
+                    onClick={() => setAddSlackUser(true)}
+                    icon={<PersonIcon aria-hidden aria-label="" />}
+                  >
+                    Legg til slack-bruker
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    className="ml-2.5"
+                    type="button"
+                    onClick={() => setAddEmail(true)}
+                    icon={<EnvelopeClosedIcon aria-hidden aria-label="" />}
+                  >
+                    Legg til epost
+                  </Button>
+                </div>
+                <VarslingsadresserTagList remove={p.remove} varslingsadresser={varslingsadresser} />
+              </div>
 
               <AddModal title="Legg til Slack kanal" isOpen={addSlackChannel} close={() => setAddSlackChannel(false)}>
                 <SlackChannelSearch added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddSlackChannel(false)} />
@@ -107,7 +76,7 @@ export const KravVarslingsadresserEdit = () => {
               <AddModal title="Legg til Epost adresse" isOpen={addEmail} close={() => setAddEmail(false)}>
                 <AddEmail added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddEmail(false)} />
               </AddModal>
-            </>
+            </div>
           )
         }}
       </FieldArray>
@@ -120,7 +89,7 @@ const AddModal = ({ isOpen, close, title, children }: { isOpen: boolean; close: 
     <Modal.Header>{title}</Modal.Header>
     <Modal.Body>{children}</Modal.Body>
     <Modal.Footer>
-      <Button kind="secondary" size="compact" type="button" onClick={close}>
+      <Button variant="secondary" type="button" onClick={close}>
         Avbryt
       </Button>
     </Modal.Footer>
@@ -132,7 +101,7 @@ export const VarslingsadresserTagList = ({ varslingsadresser, remove }: { varsli
   const [slackUsers, setSlackUsers] = useState<SlackUser[]>([])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const loadedChannels: SlackChannel[] = []
       const loadedUsers: SlackUser[] = []
       const channels = await Promise.all(
@@ -267,7 +236,7 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
           isLoading={loading}
         />
         <Block>
-          <Button type="button" onClick={() => addEmail(user.getEmail())} marginLeft>
+          <Button type="button" onClick={() => addEmail(user.getEmail())} className="ml-2.5">
             Meg{' '}
           </Button>
         </Block>
@@ -308,10 +277,10 @@ export const AddEmail = ({ added, add: doAdd, close }: AddVarslingsadresseProps)
       <Block display="flex">
         <CustomizedInput onKeyDown={onKey} value={val} onFocus={() => setError('')} onChange={(e) => setVal((e.target as HTMLInputElement).value)} onBlur={() => add()} />
         <Block display="flex" justifyContent="space-between">
-          <Button type="button" onClick={() => add(user.getEmail())} marginLeft>
+          <Button type="button" onClick={() => add(user.getEmail())} className="ml-2.5">
             Meg{' '}
           </Button>
-          <Button type="button" onClick={add} marginLeft>
+          <Button type="button" onClick={() => add} className="ml-2.5">
             <FontAwesomeIcon icon={faPlus} />{' '}
           </Button>
         </Block>

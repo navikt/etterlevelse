@@ -235,9 +235,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                           label="Forklaring til etterlevere"
                           name="varselMelding"
                           maxCharacter={100}
-                          rows={2} 
+                          rows={2}
                           noPlaceholder
-                          />
+                        />
                       </div>
                     )}
 
@@ -255,7 +255,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                 </div>
 
                 <div className="content_container flex w-full justify-center">
-                  <div className="w-5/6">
+                  <div className="px-24 mb-2.5">
                     <Heading level="3" size="medium" className="mb-8">Suksesskriterier</Heading>
                     <KravSuksesskriterierEdit setIsFormDirty={setIsFormDirty} newVersion={!!newVersion} />
 
