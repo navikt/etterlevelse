@@ -183,7 +183,13 @@ export const useMyProductAreas = () => {
 export type SearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]
 
 export const usePersonSearch = () => useSearch(searchResourceByName)
-export const useSlackChannelSearch = () => useSearch(searchSlackChannel)
+export const useSlackChannelSearch = async (searchParam: string) => {
+  if (searchParam && searchParam.replace(/ /g, '').length > 2) {
+    const searchResult = await searchSlackChannel(searchParam)
+    return searchResult.map((sk) => { return { value: sk.id, label: sk.name, ...sk } })
+  }
+  return []
+}
 
 /**
  * Will not work unless the people have been loaded already (by using usePersonName hook etc)

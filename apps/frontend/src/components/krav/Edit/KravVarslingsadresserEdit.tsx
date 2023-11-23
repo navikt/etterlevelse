@@ -16,6 +16,7 @@ import CustomizedInput from '../../common/CustomizedInput'
 import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
 import { Button, Loader, Modal } from '@navikt/ds-react'
 import { EnvelopeClosedIcon, PersonIcon } from '@navikt/aksel-icons'
+import AsyncSelect from 'react-select/async'
 
 export const KravVarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -65,11 +66,11 @@ export const KravVarslingsadresserEdit = () => {
                 <VarslingsadresserTagList remove={p.remove} varslingsadresser={varslingsadresser} />
               </div>
 
-              <AddModal title="Legg til Slack kanal" isOpen={addSlackChannel} close={() => setAddSlackChannel(false)}>
+              <AddModal largeHeight title="Legg til Slack kanal" isOpen={addSlackChannel} close={() => setAddSlackChannel(false)}>
                 <SlackChannelSearch added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddSlackChannel(false)} />
               </AddModal>
 
-              <AddModal title="Legg til Slack bruker" isOpen={addSlackUser} close={() => setAddSlackUser(false)}>
+              <AddModal largeHeight title="Legg til Slack bruker" isOpen={addSlackUser} close={() => setAddSlackUser(false)}>
                 <SlackUserSearch added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddSlackUser(false)} />
               </AddModal>
 
@@ -84,10 +85,9 @@ export const KravVarslingsadresserEdit = () => {
   )
 }
 
-const AddModal = ({ isOpen, close, title, children }: { isOpen: boolean; close: () => void; title: string; children: ReactNode }) => (
-  <Modal open={isOpen} onClose={close}>
-    <Modal.Header>{title}</Modal.Header>
-    <Modal.Body>{children}</Modal.Body>
+const AddModal = ({ isOpen, close, title, children, largeHeight }: { isOpen: boolean; close: () => void; title: string; children: ReactNode, largeHeight?: boolean }) => (
+  <Modal open={isOpen} onClose={close} header={{heading: title}} width="medium">
+    <Modal.Body className={`${largeHeight ? 'min-h-[300px]' : undefined}`}>{children}</Modal.Body>
     <Modal.Footer>
       <Button variant="secondary" type="button" onClick={close}>
         Avbryt
@@ -163,35 +163,30 @@ type AddVarslingsadresseProps = {
 }
 
 export const SlackChannelSearch = ({ added, add, close }: AddVarslingsadresseProps) => {
-  const [slackSearch, setSlackSearch, loading] = useSlackChannelSearch()
-
   return (
-    <CustomizedStatefulSelect
-      placeholder={'Søk slack kanaler'}
-      maxDropdownHeight="400px"
-      filterOptions={(o) => o}
-      searchable
-      noResultsMsg="Ingen resultat"
-      getOptionLabel={(args) => {
-        const channel = args.option as SlackChannel
-        return slackChannelView(channel, true)
-      }}
-      options={slackSearch.filter((ch) => !added || !added.find((va) => va.adresse === ch.id))}
-      onChange={({ value }) => {
-        const channel = value[0] as SlackChannel
-        if (channel) add({ type: AdresseType.SLACK, adresse: channel.id })
-        close && close()
-      }}
-      onInputChange={(event) => {
-        if (event.currentTarget.value.includes('#')) {
-          const newValue = event.currentTarget.value.slice(1)
-          setSlackSearch(newValue)
-        } else {
-          setSlackSearch(event.currentTarget.value)
-        }
-      }}
-      isLoading={loading}
-    />
+    <div>
+      <AsyncSelect
+        aria-label="Søk etter slack-kanal"
+        placeholder="Søk etter slack-kanal"
+        noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
+        controlShouldRenderValue={false}
+        loadingMessage={() => 'Søker...'}
+        isClearable={false}
+        loadOptions={useSlackChannelSearch}
+        onChange={(slackKanal) => {
+          const channel = slackKanal as SlackChannel
+          if (channel) add({ type: AdresseType.SLACK, adresse: channel.id })
+          close && close()
+        }}
+        styles={{
+          control: (base) => ({
+            ...base,
+            cursor: 'text',
+            height: '48px'
+          })
+        }}
+      />
+    </div>
   )
 }
 
