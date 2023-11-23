@@ -1,21 +1,16 @@
 import { AdresseType, Krav, SlackChannel, SlackUser, TeamResource, Varslingsadresse, VarslingsadresseQL } from '../../../constants'
 import { getSlackChannelById, getSlackUserByEmail, getSlackUserById, usePersonSearch, useSlackChannelSearch } from '../../../api/TeamApi'
 import React, { ReactNode, useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { Notification } from 'baseui/notification'
 import * as yup from 'yup'
 import { user } from '../../../services/User'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FieldWrapper } from '../../common/Inputs'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
 import { RenderTagList } from '../../common/TagList'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import CustomizedInput from '../../common/CustomizedInput'
-import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
-import { Alert, Button, Loader, Modal } from '@navikt/ds-react'
-import { EnvelopeClosedIcon, PersonIcon } from '@navikt/aksel-icons'
+import { Alert, Button, Loader, Modal, TextField } from '@navikt/ds-react'
+import { EnvelopeClosedIcon, PersonIcon, PlusIcon } from '@navikt/aksel-icons'
 import AsyncSelect from 'react-select/async'
 
 export const KravVarslingsadresserEdit = () => {
@@ -201,6 +196,8 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
             loadingMessage={() => 'Søker...'}
             isClearable={false}
             loadOptions={usePersonSearch}
+            onFocus={() => setError('')}
+            onBlur={() => setError('')}
             onChange={(person) => {
               const resource = person as TeamResource
               if (resource) {
@@ -241,6 +238,7 @@ const emailValidator = yup
 export const AddEmail = ({ added, add: doAdd, close }: AddVarslingsadresseProps) => {
   const [val, setVal] = useState('')
   const [error, setError] = useState('')
+
   const add = (adresse?: string) => {
     const toAdd = adresse || val
     if (!toAdd) return
@@ -250,29 +248,31 @@ export const AddEmail = ({ added, add: doAdd, close }: AddVarslingsadresseProps)
         return
       }
       doAdd({ type: AdresseType.EPOST, adresse: toAdd })
+      setVal('')
     }
     close && close()
   }
+
   const onKey = (e: React.KeyboardEvent) => e.key === 'Enter' && add()
   return (
-    <Block display="flex" flexDirection="column">
-      <Block display="flex">
-        <CustomizedInput onKeyDown={onKey} value={val} onFocus={() => setError('')} onChange={(e) => setVal((e.target as HTMLInputElement).value)} onBlur={() => add()} />
-        <Block display="flex" justifyContent="space-between">
-          <Button type="button" onClick={() => add(user.getEmail())} className="ml-2.5">
-            Meg{' '}
+    <div className="flex flex-col">
+      <div className="flex">
+        <TextField label="epost" hideLabel onKeyDown={onKey} value={val} onFocus={() => setError('')} onChange={(e) => setVal((e.target as HTMLInputElement).value)} onBlur={() => add()}/>
+        <div  className="flex justify-between ml-2.5">
+          <Button type="button" onClick={() => add(user.getEmail())}>
+            Meg
           </Button>
           <Button type="button" onClick={() => add} className="ml-2.5">
-            <FontAwesomeIcon icon={faPlus} />{' '}
+            <PlusIcon title="legg til epost" aria-label="legg til epost" />
           </Button>
-        </Block>
-      </Block>
+        </div>
+      </div>
       {error && (
-        <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>
+        <Alert variant="error" className="mt-2.5">
           {error}
-        </Notification>
+        </Alert>
       )}
-    </Block>
+    </div>
   )
 }
 
