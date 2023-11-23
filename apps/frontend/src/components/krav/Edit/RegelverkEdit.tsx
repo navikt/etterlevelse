@@ -57,7 +57,11 @@ export const RegelverkEdit = ({ forVirkemiddel }: RegelverkEditProps) => {
                       styles={{
                         control: (baseStyles) => ({
                           ...baseStyles,
-                          height: '48px'
+                          height: '48px',
+                        }),
+                        menu: (baseStyles) => ({
+                          ...baseStyles,
+                          zIndex: 2,
                         })
                       }}
                     />
