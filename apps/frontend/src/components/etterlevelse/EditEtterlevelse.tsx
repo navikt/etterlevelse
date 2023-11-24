@@ -84,7 +84,7 @@ export const EditEtterlevelse = ({
   const navigate = useNavigate()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       etterlevelseDokumentasjonId &&
         kravId.kravNummer &&
         getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(etterlevelseDokumentasjonId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
@@ -182,7 +182,7 @@ export const EditEtterlevelse = ({
             </div>
           </div>
           <div className="w-full flex">
-            <div className="pr-4 flex flex-col gap-4 col-span-8">
+            <div className="pr-4 flex flex-1 flex-col gap-4 col-span-8">
               <div>
                 <div className="flex items-center justify-between">
                   <div>
@@ -293,45 +293,51 @@ export const EditEtterlevelse = ({
                   <Tabs.Tab className="whitespace-nowrap" value="dokument" label="Om etterlevelsen" />
                   <Tabs.Tab className="whitespace-nowrap" value="mer" label="Mer om kravet" />
                 </Tabs.List>
-                <Tabs.Panel value="notat" className="flex flex-col gap-2 mt-2">
-                  <div className="flex justify-between">
-                    <Label className="flex gap-1">
-                      <FileTextIcon fontSize="1.5rem" area-label="" aria-hidden />
-                      Notat
-                    </Label>
-                    <Button variant="secondary" size="xsmall" onClick={() => setIsNotatModalOpen(true)}>
-                      Rediger
-                    </Button>
+                <Tabs.Panel value="notat">
+                  <div className="mt-2">
+                    <div className="flex justify-between">
+                      <Label className="flex gap-1">
+                        <FileTextIcon fontSize="1.5rem" area-label="" aria-hidden />
+                        Notat
+                      </Label>
+                      <Button variant="secondary" size="xsmall" onClick={() => setIsNotatModalOpen(true)}>
+                        Rediger
+                      </Button>
 
-                    <EditNotatfelt
-                      isOpen={isNotatModalOpen}
-                      setIsNotatfeltOpen={setIsNotatModalOpen}
-                      etterlevelseMetadata={etterlevelseMetadata}
-                      setEtterlevelseMetadata={setEtterlevelseMetadata}
-                    />
-                  </div>
-                  <BodyLong className="break-words">{etterlevelseMetadata.notater}</BodyLong>
-                </Tabs.Panel>
-                <Tabs.Panel value="dokument" className="flex flex-col gap-2 mt-2">
-                  <div>
-                    <Label size="small">Tittel</Label>
-                    <BodyShort>{etterlevelseDokumentasjonTitle}</BodyShort>
-                  </div>
-                  <div>
-                    <Label size="small">Behandling</Label>
-                    {behandlinger?.map((behandling) => (
-                      <ExternalLink key={behandling.id} href={behandlingLink(behandling.id)}>
-                        {behandling.navn}
-                      </ExternalLink>
-                    ))}
-                  </div>
-                  <div className="flex flex-col">
-                    <Label size="small">Team</Label>
-                    {teams?.map((team) => <TeamName id={team.id} big link />)}
+                      <EditNotatfelt
+                        isOpen={isNotatModalOpen}
+                        setIsNotatfeltOpen={setIsNotatModalOpen}
+                        etterlevelseMetadata={etterlevelseMetadata}
+                        setEtterlevelseMetadata={setEtterlevelseMetadata}
+                      />
+                    </div>
+                    <BodyLong className="break-words">{etterlevelseMetadata.notater}</BodyLong>
                   </div>
                 </Tabs.Panel>
-                <Tabs.Panel value="mer" className="flex flex-col gap-2 mt-2">
-                  <AllInfo krav={krav} alleKravVersjoner={[{ kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status }]} />
+                <Tabs.Panel value="dokument">
+                  <div className="mt-2">
+                    <div className="mb-4">
+                      <Label size="medium">Tittel</Label>
+                      <BodyShort>{etterlevelseDokumentasjonTitle}</BodyShort>
+                    </div>
+                    <div className="mb-4">
+                      <Label size="medium">Behandling</Label>
+                      {behandlinger?.map((behandling) => (
+                        <ExternalLink key={behandling.id} href={behandlingLink(behandling.id)}>
+                          {behandling.navn}
+                        </ExternalLink>
+                      ))}
+                    </div>
+                    <div className="flex flex-col">
+                      <Label size="medium">Team</Label>
+                      {teams?.map((team) => <TeamName id={team.id} big link />)}
+                    </div>
+                  </div>
+                </Tabs.Panel>
+                <Tabs.Panel value="mer">
+                  <div className="mt-2">
+                    <AllInfo krav={krav} alleKravVersjoner={[{ kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status }]} />
+                  </div>
                 </Tabs.Panel>
               </Tabs>
             </div>

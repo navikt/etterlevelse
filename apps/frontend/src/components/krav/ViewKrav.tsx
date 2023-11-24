@@ -40,7 +40,7 @@ export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVe
   )
 }
 
-export const AllInfo = ({ krav, alleKravVersjoner, noLastModifiedDate }: { krav: KravQL; alleKravVersjoner: KravVersjon[]; noLastModifiedDate?: boolean }) => {
+export const AllInfo = ({ krav, alleKravVersjoner, noLastModifiedDate, header }: { krav: KravQL; alleKravVersjoner: KravVersjon[]; noLastModifiedDate?: boolean, header?: boolean }) => {
   const hasKravExpired = () => {
     return krav && krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString())
   }
@@ -48,25 +48,25 @@ export const AllInfo = ({ krav, alleKravVersjoner, noLastModifiedDate }: { krav:
   return (
     <div>
       <LabelWrapper>
-        <LabelAboveContent header title="Kilder">
+        <LabelAboveContent header={header} title="Kilder">
           <DotTags items={krav.dokumentasjon} markdown inColumn />
         </LabelAboveContent>
       </LabelWrapper>
 
       {user.isKraveier() && (
         <LabelWrapper>
-          <LabelAboveContent header title="Etiketter">
+          <LabelAboveContent header={header} title="Etiketter">
             {krav.tagger.join(', ')}
           </LabelAboveContent>
         </LabelWrapper>
       )}
 
       <LabelWrapper>
-        <LabelAboveContent header title="Relevante implementasjoner" markdown={krav.implementasjoner} />
+        <LabelAboveContent header={header} title="Relevante implementasjoner" markdown={krav.implementasjoner} />
       </LabelWrapper>
 
       <LabelWrapper>
-        <LabelAboveContent header title="Begreper">
+        <LabelAboveContent header={header} title="Begreper">
           {krav.begreper.map((b, i) => (
             <BegrepView key={'begrep_' + i} begrep={b} />
           ))}
@@ -74,7 +74,7 @@ export const AllInfo = ({ krav, alleKravVersjoner, noLastModifiedDate }: { krav:
       </LabelWrapper>
 
       <LabelWrapper>
-        <LabelAboveContent header title="Relasjoner til andre krav">
+        <LabelAboveContent header={header} title="Relasjoner til andre krav">
           {krav.kravRelasjoner.map((kr, i) => (
             <KravRelasjonView key={'kravRelasjon' + i} kravRelasjon={kr} />
           ))}
@@ -82,14 +82,14 @@ export const AllInfo = ({ krav, alleKravVersjoner, noLastModifiedDate }: { krav:
       </LabelWrapper>
 
       <LabelWrapper>
-        <LabelAboveContent header title="Kravet er relevant for">
+        <LabelAboveContent header={header} title="Kravet er relevant for">
           <DotTags list={ListName.RELEVANS} codes={krav.relevansFor} inColumn />
         </LabelAboveContent>
       </LabelWrapper>
 
       {alleKravVersjoner.length !== 0 && krav.kravVersjon > 1 && (
         <LabelWrapper>
-          <LabelAboveContent title={'Tidligere versjoner'} header>
+          <LabelAboveContent title={'Tidligere versjoner'} header={header}>
             {alleKravVersjoner.map((k, i) => {
               if (k.kravVersjon && parseInt(k.kravVersjon.toString()) < krav.kravVersjon) {
                 return (
@@ -117,14 +117,14 @@ export const AllInfo = ({ krav, alleKravVersjoner, noLastModifiedDate }: { krav:
       )}
 
       <LabelWrapper>
-        <LabelAboveContent header title="Ansvarlig">
+        <LabelAboveContent header={header} title="Ansvarlig">
           {krav.underavdeling?.shortName}
         </LabelAboveContent>
       </LabelWrapper>
 
       {krav.regelverk.length && (
         <LabelWrapper>
-          <LabelAboveContent header title="Regelverk">
+          <LabelAboveContent header={header} title="Regelverk">
             <LovViewList regelverk={krav.regelverk} />
           </LabelAboveContent>
         </LabelWrapper>
@@ -132,7 +132,7 @@ export const AllInfo = ({ krav, alleKravVersjoner, noLastModifiedDate }: { krav:
 
       {user.isKraveier() && (
         <LabelWrapper>
-          <LabelAboveContent header title="Varslingsadresser">
+          <LabelAboveContent header={header} title="Varslingsadresser">
             {krav.varslingsadresser.map((va, i) => {
               if (va.type === AdresseType.SLACK)
                 return (
