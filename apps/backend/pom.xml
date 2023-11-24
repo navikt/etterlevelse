@@ -27,7 +27,7 @@
         <graphql.version>21.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
 
-        <microsoft-graph.version>5.76.0</microsoft-graph.version>
+        <microsoft-graph.version>5.77.0</microsoft-graph.version>
         <msal4j.version>1.14.0</msal4j.version>
 
         <!-- transitive versions -->
@@ -39,7 +39,7 @@
         <stax2-api.version>4.2.2</stax2-api.version>
 
         <!-- Test -->
-        <testcontainers.version>1.19.2</testcontainers.version>
+        <testcontainers.version>1.19.3</testcontainers.version>
         <wiremock.version>2.27.2</wiremock.version>
         <docx4j.version>11.4.9</docx4j.version>
     </properties>

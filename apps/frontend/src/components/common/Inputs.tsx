@@ -8,8 +8,6 @@ import { Value } from 'baseui/select'
 import { Code, codelist, ListName } from '../../services/Codelist'
 import { SearchType } from '../../api/TeamApi'
 import * as _ from 'lodash'
-import { Datepicker } from 'baseui/datepicker'
-import moment from 'moment'
 import { Radio, RadioGroup } from 'baseui/radio'
 import LabelWithTooltip from '../common/LabelWithTooltip'
 import CustomInput from '../common/CustomizedInput'
@@ -18,8 +16,8 @@ import TextEditor from './TextEditor/TextEditor'
 import { Error } from './ModalSchema'
 import { ettlevColors } from '../../util/theme'
 import { borderColor } from './Style'
-import { Button, Detail, Label, Select, TextField, Textarea } from '@navikt/ds-react'
 import { MarkdownInfo } from './Markdown'
+import { DatePicker, Button, Detail, Label, Select, TextField, Textarea, useDatepicker } from '@navikt/ds-react'
 
 export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode; marginBottom?: boolean }) => {
   return <div className={`${marginBottom ? 'mb-6' : ''}`}>{children}</div>
@@ -136,42 +134,31 @@ export const BoolField = (props: { label: string; name: string; nullable?: boole
   </FieldWrapper>
 )
 
-export const DateField = (props: { label: string; name: string; caption?: ReactNode; tooltip?: string; error?: boolean }) => (
-  <FieldWrapper>
-    <Field name={props.name}>
-      {(p: FieldProps) => (
-        <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
-          <Datepicker
-            clearable
-            formatString={'dd-MM-yyyy'}
-            value={p.field.value ? moment(p.field.value).toDate() : undefined}
-            onChange={({ date }) => {
-              const dateSingle = Array.isArray(date) ? date[0] : date
+export const DateField = (props: { label: string; name: string; caption?: ReactNode; tooltip?: string; error?: boolean }) => {
+  const { datepickerProps, inputProps } = useDatepicker({})
+
+  return (
+    <FieldWrapper>
+      <Field name={props.name}>
+        {(p: FieldProps) => (
+          <DatePicker
+            {...datepickerProps}
+            onSelect={(date: any) => {
+              const dateSingle: Date = Array.isArray(date) ? date[0] : date
               if (dateSingle) {
                 const newDate = dateSingle.setDate(dateSingle.getDate() + 1)
                 const formatedDate = new Date(newDate)
                 p.form.setFieldValue(props.name, formatedDate.toISOString().split('T')[0])
               } else p.form.setFieldValue(props.name, undefined)
             }}
-            overrides={{
-              Input: {
-                props: {
-                  overrides: {
-                    Root: {
-                      style: {
-                        ...borderColor(props.error ? ettlevColors.red600 : undefined),
-                      },
-                    },
-                  },
-                },
-              },
-            }}
-          />
-        </FormControl>
-      )}
-    </Field>
-  </FieldWrapper>
-)
+          >
+            <DatePicker.Input {...inputProps} label="Velg dato" />
+          </DatePicker>
+        )}
+      </Field>
+    </FieldWrapper>
+  )
+}
 
 const linkReg = /\[(.+)\]\((.+)\)/i
 const linkNameFor = (t: string) => {

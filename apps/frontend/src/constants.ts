@@ -276,7 +276,7 @@ export interface SuksesskriterieBegrunnelse {
   suksesskriterieId: number
   begrunnelse: string
   behovForBegrunnelse: boolean
-  suksesskriterieStatus: SuksesskriterieStatus
+  suksesskriterieStatus?: SuksesskriterieStatus
 }
 
 export interface Behandling {

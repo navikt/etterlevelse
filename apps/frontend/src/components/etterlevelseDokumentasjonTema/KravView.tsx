@@ -1,8 +1,7 @@
 import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
-import { Etterlevelse, KRAV_FILTER_TYPE } from '../../constants'
+import { Behandling, Etterlevelse, KRAV_FILTER_TYPE, Team } from '../../constants'
 import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, mapEtterlevelseToFormValue } from '../../api/EtterlevelseApi'
 import React, { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
 
 import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
 import { toKravId } from './common/utils'
@@ -15,6 +14,8 @@ export const KravView = (props: {
   etterlevelseDokumentasjonTitle: string
   etterlevelseDokumentasjonId: string
   etterlevelseNummer: number
+  behandlinger: Behandling[] | undefined
+  teams: Team[] | undefined
   navigatePath: string
   setNavigatePath: (state: string) => void
   tab: Section
@@ -26,7 +27,6 @@ export const KravView = (props: {
   const [etterlevelse, setEtterlevelse] = useState<Etterlevelse>()
   const [loadingEtterlevelseData, setLoadingEtterlevelseData] = useState<boolean>(false)
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
-
   useEffect(() => {
     ;(async () => {
       setLoadingEtterlevelseData(true)
@@ -60,31 +60,28 @@ export const KravView = (props: {
   }, [])
 
   return (
-    <Block width="100%">
+    <div className="w-full">
       {loadingEtterlevelseData && (
-        <Block width="100%" display="flex" justifyContent="center" marginTop="50px">
+        <div className="flex justify-center">
           <Loader size={'large'} />
-        </Block>
+        </div>
       )}
       {!loadingEtterlevelseData && etterlevelse && (
-        <Block width="100%" display="flex" justifyContent="center">
-          <EditEtterlevelse
-            temaName={props.temaName}
-            tidligereEtterlevelser={tidligereEtterlevelser}
-            etterlevelseDokumentasjonTitle={props.etterlevelseDokumentasjonTitle}
-            etterlevelseDokumentasjonId={props.etterlevelseDokumentasjonId}
-            etterlevelseNummer={props.etterlevelseNummer}
-            kravId={toKravId(etterlevelse)}
-            etterlevelse={etterlevelse}
-            varsleMelding={varsleMelding}
-            navigatePath={props.navigatePath}
-            setNavigatePath={props.setNavigatePath}
-            tab={props.tab}
-            setTab={props.setTab}
-            kravFilter={props.kravFilter}
-          />
-        </Block>
+        <EditEtterlevelse
+          temaName={props.temaName}
+          tidligereEtterlevelser={tidligereEtterlevelser}
+          etterlevelseDokumentasjonTitle={props.etterlevelseDokumentasjonTitle}
+          etterlevelseDokumentasjonId={props.etterlevelseDokumentasjonId}
+          etterlevelseNummer={props.etterlevelseNummer}
+          kravId={toKravId(etterlevelse)}
+          etterlevelse={etterlevelse}
+          behandlinger={props.behandlinger}
+          teams={props.teams}
+          varsleMelding={varsleMelding}
+          navigatePath={props.navigatePath}
+          kravFilter={props.kravFilter}
+        />
       )}
-    </Block>
+    </div>
   )
 }

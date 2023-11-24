@@ -11,6 +11,7 @@ type LabelProps = {
   header?: boolean
   p1?: boolean
   labelWidth?: string
+  fullWidth?: boolean
 } & Or<{ children: React.ReactNode }, { markdown: string | string[]; vertical?: boolean }>
 
 export const CustomLabel = (props: LabelProps) => {
@@ -29,7 +30,7 @@ export const CustomLabel = (props: LabelProps) => {
 export const LabelAboveContent = (props: LabelProps) => {
   if (props.hide || (empty(props.children) && empty(props.markdown))) return null
   return (
-    <DataText notFlexed label={props.title} header={props.header} labelWidth={props.labelWidth}>
+    <DataText fullWidth={props.fullWidth} notFlexed label={props.title} header={props.header} labelWidth={props.labelWidth}>
       {props.markdown ? (
         <Markdown p1={props.p1} sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks />
       ) : (

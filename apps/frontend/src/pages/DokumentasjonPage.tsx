@@ -3,7 +3,6 @@ import { Block } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { theme } from '../util/theme'
-import { ellipse80, saveArchiveIcon } from '../components/Images'
 import { EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, KravPrioritering, KravQL, KravStatus, PageResponse } from '../constants'
 import { gql, useQuery } from '@apollo/client'
 import { Code, codelist, ListName, TemaCode } from '../services/Codelist'
@@ -17,7 +16,7 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import { BodyShort, Label, Loader, Accordion, Link, Alert, Tag, Heading, Detail, Button } from '@navikt/ds-react'
+import { BodyShort, Label, Loader, Accordion, Link, Tag, Heading, Detail, Button } from '@navikt/ds-react'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
 import { getAllKravPriority } from '../api/KravPriorityApi'
@@ -50,6 +49,7 @@ export const DokumentasjonPage = () => {
     loading,
   } = useQuery<{ etterlevelseDokumentasjon: PageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
     variables: { etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id },
+    fetchPolicy: 'cache-and-network',
   })
 
   const [relevanteStats, setRelevanteStats] = useState<KravQL[]>([])
@@ -375,15 +375,7 @@ export const statsQuery = gql`
             navn
             status
             aktivertDato
-            kravIdRelasjoner
-            kravRelasjoner {
-              id
-              kravNummer
-              kravVersjon
-              navn
-            }
             etterlevelser {
-              behandlingId
               status
               etterlevelseDokumentasjonId
               fristForFerdigstillelse
@@ -411,15 +403,7 @@ export const statsQuery = gql`
             navn
             status
             aktivertDato
-            kravIdRelasjoner
-            kravRelasjoner {
-              id
-              kravNummer
-              kravVersjon
-              navn
-            }
             etterlevelser {
-              behandlingId
               status
               etterlevelseDokumentasjonId
               fristForFerdigstillelse
@@ -447,15 +431,7 @@ export const statsQuery = gql`
             navn
             status
             aktivertDato
-            kravIdRelasjoner
-            kravRelasjoner {
-              id
-              kravNummer
-              kravVersjon
-              navn
-            }
             etterlevelser {
-              behandlingId
               status
               etterlevelseDokumentasjonId
               fristForFerdigstillelse
@@ -483,13 +459,6 @@ export const statsQuery = gql`
             navn
             status
             aktivertDato
-            kravIdRelasjoner
-            kravRelasjoner {
-              id
-              kravNummer
-              kravVersjon
-              navn
-            }
             etterlevelser {
               behandlingId
               status
@@ -510,71 +479,6 @@ export const statsQuery = gql`
               lastModifiedBy
               lastModifiedDate
               createdDate
-            }
-          }
-          lovStats {
-            lovCode {
-              code
-              shortName
-            }
-            fyltKrav {
-              id
-              kravNummer
-              kravVersjon
-              status
-              navn
-              kravIdRelasjoner
-              kravRelasjoner {
-                id
-                kravNummer
-                kravVersjon
-                navn
-              }
-              changeStamp {
-                lastModifiedBy
-                lastModifiedDate
-                createdDate
-              }
-            }
-            ikkeFyltKrav {
-              id
-              kravNummer
-              kravVersjon
-              status
-              aktivertDato
-              navn
-              kravIdRelasjoner
-              kravRelasjoner {
-                id
-                kravNummer
-                kravVersjon
-                navn
-              }
-              changeStamp {
-                lastModifiedBy
-                lastModifiedDate
-                createdDate
-              }
-            }
-            irrelevantKrav {
-              id
-              kravNummer
-              kravVersjon
-              status
-              aktivertDato
-              navn
-              kravIdRelasjoner
-              kravRelasjoner {
-                id
-                kravNummer
-                kravVersjon
-                navn
-              }
-              changeStamp {
-                lastModifiedBy
-                lastModifiedDate
-                createdDate
-              }
             }
           }
         }

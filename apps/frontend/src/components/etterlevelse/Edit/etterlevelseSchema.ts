@@ -5,20 +5,23 @@ export const etterlevelseSchema = () => {
   return yup.object({
     suksesskriterieBegrunnelser: yup.array().of(
       yup.object({
-        suksesskriterieStatus: yup.string().test({
-          name: 'suksesskriterieStatus',
-          message: 'Du kan ikke dokumentere ferdig hvis et suksesskriterium er under arbeid.',
-          test: function (suksesskriterieStatus) {
-            const { options } = this
-            if (
-              (options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
-              suksesskriterieStatus === SuksesskriterieStatus.UNDER_ARBEID
-            ) {
-              return false
-            }
-            return true
-          },
-        }),
+        suksesskriterieStatus: yup
+          .string()
+          .test({
+            name: 'suksesskriterieStatus',
+            message: 'Du kan ikke dokumentere ferdig hvis et suksesskriterium er under arbeid.',
+            test: function (suksesskriterieStatus) {
+              const { options } = this
+              if (
+                (options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
+                suksesskriterieStatus === SuksesskriterieStatus.UNDER_ARBEID
+              ) {
+                return false
+              }
+              return true
+            },
+          })
+          .required('Du må velge et status'),
         behovForBegrunnelse: yup.boolean(),
         begrunnelse: yup.string().test({
           name: 'begrunnelseText',
