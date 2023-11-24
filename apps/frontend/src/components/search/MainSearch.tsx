@@ -6,9 +6,10 @@ import { kravName } from '../../pages/KravPage'
 import { getKravByKravNumberAndVersion, searchKrav, searchKravByNumber } from '../../api/KravApi'
 import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
 import { etterlevelseDokumentasjonName, searchEtterlevelsedokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
-import { OptionProps, components } from 'react-select'
+import { DropdownIndicatorProps, OptionProps, components } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { BodyShort } from '@navikt/ds-react'
+import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
 
 type SearchItem = { value: string; label: string; tag: string; url: string }
 
@@ -115,6 +116,16 @@ const Option = (properties: OptionProps<SearchItem>) => {
   )
 }
 
+const DropdownIndicator = (
+  props: DropdownIndicatorProps<SearchItem>
+) => {
+  return (
+    <components.DropdownIndicator {...props}>
+      <MagnifyingGlassIcon title="Søk" aria-label="Søk"/>
+    </components.DropdownIndicator>
+  )
+}
+
 const MainSearch = () => {
   const location = useLocation()
   const navigate = useNavigate()
@@ -125,7 +136,7 @@ const MainSearch = () => {
         aria-label="Søk etter krav, dokumentasjon eller behandling"
         placeholder="Søk etter krav, dokumentasjon eller behandling"
         autoFocus={location.pathname === '/'}
-        components={{ Option }}
+        components={{ Option,DropdownIndicator }}
         controlShouldRenderValue={false}
         loadingMessage={() => 'Søker...'}
         noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
@@ -154,8 +165,6 @@ const MainSearch = () => {
           valueContainer: (base) => ({ ...base, color: 'black' }),
           // Remove separator
           indicatorSeparator: (base) => ({ ...base, display: 'none' }),
-          // Remove dropdownIndicator
-          dropdownIndicator: (base) => ({ ...base, display: 'none' }),
         }}
       />
     </div>

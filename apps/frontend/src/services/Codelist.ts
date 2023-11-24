@@ -105,9 +105,9 @@ class CodelistService {
     return code ? code.description : codeName
   }
 
-  getParsedOptions(listName: ListName): { id: string; label: string; description: string }[] {
+  getParsedOptions(listName: ListName): { value: string; label: string; description: string }[] {
     return this.getCodes(listName).map((code: Code) => {
-      return { id: code.code, label: code.shortName, description: code.description }
+      return { value: code.code, label: code.shortName, description: code.description }
     })
   }
 
@@ -117,7 +117,7 @@ class CodelistService {
     })
   }
 
-  getParsedOptionsForLov(forVirkemiddel?: boolean): { id: string; label: string; description: string }[] {
+  getParsedOptionsForLov(forVirkemiddel?: boolean): { value: string; label: string; description: string }[] {
     const lovList = this.getCodes(ListName.LOV)
     let filteredLovList = []
 
@@ -128,7 +128,7 @@ class CodelistService {
     }
 
     return filteredLovList.map((code: LovCode) => {
-      return { id: code.code, label: code.shortName, description: code.description }
+      return { value: code.code, label: code.shortName, description: code.description }
     })
   }
 
@@ -136,9 +136,9 @@ class CodelistService {
     return selected.map((code) => ({ id: code, label: this.getShortname(listName, code) }))
   }
 
-  getParsedOptionsFilterOutSelected(listName: ListName, currentSelected: string[]): { id: string; label: string }[] {
+  getParsedOptionsFilterOutSelected(listName: ListName, currentSelected: string[]): { value: string; label: string }[] {
     let parsedOptions = this.getParsedOptions(listName)
-    return !currentSelected ? parsedOptions : parsedOptions.filter((option) => (currentSelected.includes(option.id) ? null : option.id))
+    return !currentSelected ? parsedOptions : parsedOptions.filter((option) => (currentSelected.includes(option.value) ? null : option.value))
   }
 
   isForskrift(nationalLawCode?: string) {

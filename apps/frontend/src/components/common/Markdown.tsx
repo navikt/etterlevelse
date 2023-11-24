@@ -37,7 +37,7 @@ export const Markdown = ({
     h1: (headerProps: any) => {
       const { children } = headerProps
       return (
-        <Heading size="medium" level="1">
+        <Heading size="small" level="2">
           {children}
         </Heading>
       )

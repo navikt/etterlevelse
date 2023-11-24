@@ -53,18 +53,6 @@ export const AllInfo = ({ krav, alleKravVersjoner, noLastModifiedDate, header }:
         </LabelAboveContent>
       </LabelWrapper>
 
-      {user.isKraveier() && (
-        <LabelWrapper>
-          <LabelAboveContent header={header} title="Etiketter">
-            {krav.tagger.join(', ')}
-          </LabelAboveContent>
-        </LabelWrapper>
-      )}
-
-      <LabelWrapper>
-        <LabelAboveContent header={header} title="Relevante implementasjoner" markdown={krav.implementasjoner} />
-      </LabelWrapper>
-
       <LabelWrapper>
         <LabelAboveContent header={header} title="Begreper">
           {krav.begreper.map((b, i) => (
@@ -116,12 +104,6 @@ export const AllInfo = ({ krav, alleKravVersjoner, noLastModifiedDate, header }:
         </div>
       )}
 
-      <LabelWrapper>
-        <LabelAboveContent header={header} title="Ansvarlig">
-          {krav.underavdeling?.shortName}
-        </LabelAboveContent>
-      </LabelWrapper>
-
       {krav.regelverk.length && (
         <LabelWrapper>
           <LabelAboveContent header={header} title="Regelverk">
@@ -129,6 +111,12 @@ export const AllInfo = ({ krav, alleKravVersjoner, noLastModifiedDate, header }:
           </LabelAboveContent>
         </LabelWrapper>
       )}
+
+      <LabelWrapper>
+        <LabelAboveContent header title="Ansvarlig">
+          {krav.underavdeling?.shortName}
+        </LabelAboveContent>
+      </LabelWrapper>
 
       {user.isKraveier() && (
         <LabelWrapper>

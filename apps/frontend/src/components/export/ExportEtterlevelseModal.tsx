@@ -46,7 +46,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                   Velg tema
                 </option>
                 {codelist.getParsedOptions(ListName.TEMA).map((opt) => (
-                  <option key={`option_${opt.id}`} value={opt.id}>
+                  <option key={`option_${opt.value}`} value={opt.value}>
                     {opt.label}
                   </option>
                 ))}

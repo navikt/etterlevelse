@@ -3,7 +3,6 @@ import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
 import { FormControl } from 'baseui/form-control'
 import React, { ReactNode, useState } from 'react'
 import { Block } from 'baseui/block'
-import Button from './Button'
 import { RenderTagList } from './TagList'
 import { Value } from 'baseui/select'
 import { Code, codelist, ListName } from '../../services/Codelist'
@@ -17,41 +16,21 @@ import TextEditor from './TextEditor/TextEditor'
 import { Error } from './ModalSchema'
 import { ettlevColors } from '../../util/theme'
 import { borderColor } from './Style'
-import { DatePicker, Label, Select, Textarea, useDatepicker } from '@navikt/ds-react'
+import { MarkdownInfo } from './Markdown'
+import { DatePicker, Button, Detail, Label, Select, TextField, Textarea, useDatepicker } from '@navikt/ds-react'
 
-export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode; marginBottom?: string }) => {
+export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode; marginBottom?: boolean }) => {
   return <div className={`${marginBottom ? 'mb-6' : ''}`}>{children}</div>
 }
 
-export const InputField = (props: { label: string; name: string; caption?: ReactNode; tooltip?: string; marginBottom?: string; disablePlaceHolder?: boolean }) => (
+export const InputField = (props: { label: string; name: string; description?: string; marginBottom?: boolean; disablePlaceHolder?: boolean }) => (
   <FieldWrapper marginBottom={props.marginBottom}>
     <Field name={props.name}>
       {(p: FieldProps) => (
-        <FormControl
-          overrides={{ Label: { style: { marginTop: '0px', marginBottom: '0px', paddingTop: '8px', paddingBottom: '8px' } } }}
-          label={<Label>{props.label}</Label>}
-          caption={props.caption}
-        >
-          <div>
-            <CustomInput
-              {...p.field}
-              placeholder={!props.disablePlaceHolder ? props.label : undefined}
-              overrides={{
-                Input: {
-                  style: {
-                    backgroundColor: p.form.errors[props.name] && ettlevColors.error50,
-                  },
-                },
-                Root: {
-                  style: {
-                    ...borderColor(p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200),
-                  },
-                },
-              }}
-            />
-            <Error fieldName={props.name} fullWidth />
-          </div>
-        </FormControl>
+        <div className="w-full">
+          <TextField label={props.label} {...p.field} placeholder={!props.disablePlaceHolder ? props.label : undefined} />
+          <Error fieldName={props.name} fullWidth />
+        </div>
       )}
     </Field>
   </FieldWrapper>
@@ -59,7 +38,7 @@ export const InputField = (props: { label: string; name: string; caption?: React
 
 export const TextAreaField = (props: {
   height?: string
-  marginBottom?: string
+  marginBottom?: boolean
   label: string
   name: string
   markdown?: boolean
@@ -77,60 +56,42 @@ export const TextAreaField = (props: {
     <FieldWrapper marginBottom={props.marginBottom}>
       <Field name={props.name}>
         {(p: FieldProps) => (
-          <FormControl
-            overrides={{
-              ControlContainer: {
-                style: { marginBottom: '0px' },
-              },
-              Caption: { style: { marginBottom: '0px' } },
-            }}
-            label={<Label>{props.label}</Label>}
-            caption={
-              props.markdown ? (
-                <div className="flex flex-col">
-                  {props.caption}
-                  {/* <MarkdownInfo /> */}
-                </div>
-              ) : (
-                props.caption
-              )
-            }
-          >
-            <>
-              {props.markdown && (
-                <div>
-                  <TextEditor
-                    height={props.height}
-                    initialValue={p.field.value}
-                    setValue={(v) => p.form.setFieldValue(props.name, v)}
-                    onImageUpload={props.onImageUpload}
-                    shortenLinks={props.shortenLinks}
-                    errors={p.form.errors}
-                    name={props.name}
-                    setIsFormDirty={props.setIsFormDirty}
-                  />
-                  {/* <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
-                onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} /> */}
-                </div>
-              )}
-              {!props.markdown && (
-                <Textarea
-                  minRows={props.rows ? props.rows : 8}
-                  label={props.label}
-                  hideLabel
-                  maxLength={props.maxCharacter ? props.maxCharacter : undefined}
-                  {...p.field}
-                  placeholder={props.noPlaceholder ? '' : props.placeholder ? props.placeholder : props.label}
-                  onChange={(v) => {
-                    if (props.setIsFormDirty) {
-                      props.setIsFormDirty(true)
-                    }
-                    p.field.onChange(v)
-                  }}
+          <div>
+            {props.markdown && (
+              <div>
+                <Label>{props.label}</Label>
+                <Detail>{props.caption}</Detail>
+                <MarkdownInfo />
+                <TextEditor
+                  height={props.height}
+                  initialValue={p.field.value}
+                  setValue={(v) => p.form.setFieldValue(props.name, v)}
+                  onImageUpload={props.onImageUpload}
+                  shortenLinks={props.shortenLinks}
+                  errors={p.form.errors}
+                  name={props.name}
+                  setIsFormDirty={props.setIsFormDirty}
                 />
-              )}
-            </>
-          </FormControl>
+                {/* <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
+                onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} /> */}
+              </div>
+            )}
+            {!props.markdown && (
+              <Textarea
+                minRows={props.rows ? props.rows : 8}
+                label={props.label}
+                maxLength={props.maxCharacter ? props.maxCharacter : undefined}
+                {...p.field}
+                placeholder={props.noPlaceholder ? '' : props.placeholder ? props.placeholder : props.label}
+                onChange={(v) => {
+                  if (props.setIsFormDirty) {
+                    props.setIsFormDirty(true)
+                  }
+                  p.field.onChange(v)
+                }}
+              />
+            )}
+          </div>
         )}
       </Field>
     </FieldWrapper>
@@ -142,7 +103,7 @@ const YES = 'YES',
   UNCLARIFIED = 'UNCLARIFIED'
 const boolToRadio = (bool?: boolean) => (bool === undefined ? UNCLARIFIED : bool ? YES : NO)
 const radioToBool = (radio: string) => (radio === UNCLARIFIED ? undefined : radio === YES)
-export const BoolField = (props: { label: string; name: string; nullable?: boolean; tooltip?: React.ReactNode }) => (
+export const BoolField = (props: { label: string; name: string; nullable?: boolean; tooltip?: string }) => (
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) => (
@@ -215,25 +176,12 @@ export const MultiInputField = (props: {
   caption?: ReactNode
   tooltip?: string
   maxInputWidth?: string
-  marginBottom?: string
+  marginBottom?: boolean
   setErrors?: Function
 }) => {
   const [val, setVal] = useState('')
   const [linkName, setLinkName] = useState('')
   const inputRef = React.useRef<HTMLInputElement>(null)
-
-  let onClick = (p: FieldArrayRenderProps, i: number) => {
-    const oldVal = p.form.values[props.name][i]
-    const groups = oldVal.match(linkReg)
-    if (groups) {
-      setVal(groups[2])
-      setLinkName(groups[1])
-    } else {
-      setVal(oldVal)
-    }
-    p.remove(i)
-    inputRef?.current?.focus()
-  }
 
   return (
     <FieldWrapper marginBottom={props.marginBottom}>
@@ -265,72 +213,35 @@ export const MultiInputField = (props: {
           const onKey = (e: React.KeyboardEvent) => e.key === 'Enter' && add()
 
           return (
-            <FormControl
-              // error={p.form.touched[props.name] && p.form.errors[props.name]}
-              caption={props.caption}
-            >
-              <Block>
-                <Block display="flex" width="100%" alignItems={'flex-end'}>
-                  {props.link && (
-                    <Block width="100%" maxWidth={props.maxInputWidth}>
-                      <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
-                      <CustomInput
-                        onKeyDown={onKey}
-                        value={linkName}
-                        onChange={(e) => setLinkName((e.target as HTMLInputElement).value)}
-                        overrides={{
-                          Input: {
-                            style: {
-                              backgroundColor: p.form.errors[props.name] && ettlevColors.error50,
-                            },
-                          },
-                          Root: {
-                            style: {
-                              borderRightColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                              borderLeftColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                              borderTopColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                              borderBottomColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                            },
-                          },
-                        }}
-                      />
-                    </Block>
-                  )}
-                  <Block marginLeft={props.link ? '12px' : '0px'} width="100%" maxWidth={!props.link ? props.maxInputWidth : undefined}>
-                    <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
-                    <CustomInput
-                      onKeyDown={onKey}
-                      value={val}
-                      inputRef={inputRef}
-                      onChange={(e) => setVal((e.target as HTMLInputElement).value)}
-                      onBlur={!props.link ? add : undefined}
-                      overrides={{
-                        Input: {
-                          style: {
-                            backgroundColor: p.form.errors[props.name] && ettlevColors.error50,
-                          },
-                        },
-                        Root: {
-                          style: {
-                            borderRightColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                            borderLeftColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                            borderTopColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                            borderBottomColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                          },
-                        },
-                      }}
-                    />
-                  </Block>
+            <div>
+              <div className="flex w-full items-end">
+                {props.link && (
+                  <div className={`w-full ${props.maxInputWidth ? 'max-w-[' + props.maxInputWidth + ']' : undefined}`}>
+                    <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
+                    <TextField label={props.label} hideLabel onKeyDown={onKey} value={linkName} onChange={(e) => setLinkName((e.target as HTMLInputElement).value)} />
+                  </div>
+                )}
+                <div className={`w-full ${props.link ? 'ml-3' : undefined} ${!props.link ? 'max-w-[' + props.maxInputWidth + ']' : undefined}`}>
+                  <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
+                  <TextField
+                    label={props.label}
+                    hideLabel
+                    onKeyDown={onKey}
+                    value={val}
+                    ref={inputRef}
+                    onChange={(e) => setVal((e.target as HTMLInputElement).value)}
+                    onBlur={!props.link ? add : undefined}
+                  />
+                </div>
 
-                  <Block minWidth="107px">
-                    <Button type="button" onClick={add} marginLeft label={'Legg til'} kind="secondary" size="compact">
-                      Legg til
-                    </Button>
-                  </Block>
-                </Block>
-                <RenderTagList list={(p.form.values[props.name] as string[]).map(linkNameFor)} onRemove={p.remove} onClick={(i) => onClick(p, i)} />
-              </Block>
-            </FormControl>
+                <div className="min-w-[107px] ml-2.5">
+                  <Button type="button" onClick={() => add()} variant="secondary">
+                    Legg til
+                  </Button>
+                </div>
+              </div>
+              <RenderTagList list={(p.form.values[props.name] as string[]).map(linkNameFor)} onRemove={p.remove} />
+            </div>
           )
         }}
       </FieldArray>
@@ -380,46 +291,7 @@ export const OptionList = (props: { label: string; value?: string; onChange: (va
   )
 }
 
-export const MultiOptionField = (
-  props: {
-    label: string
-    name: string
-    caption?: ReactNode
-    tooltip?: string
-    marginBottom?: string
-  } & Or<{ options: Value }, { listName: ListName }>,
-) => {
-  const options: Value = props.options || codelist.getParsedOptions(props.listName)
-  return (
-    <FieldWrapper marginBottom={props.marginBottom}>
-      <FieldArray name={props.name}>
-        {(p: FieldArrayRenderProps) => {
-          const selectedIds = (p.form.values[props.name] as any[]).map((v) => (props.listName ? (v as Code).code : v))
-          return (
-            <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} caption={props.caption}>
-              <Block>
-                <Block display="flex">
-                  <CustomizedSelect
-                    placeholder={'Velg ' + _.lowerFirst(props.label)}
-                    aria-label={'Velg ' + _.lowerFirst(props.label)}
-                    maxDropdownHeight="400px"
-                    options={options.filter((o) => selectedIds.indexOf(o.id) < 0)}
-                    onChange={({ value }) => {
-                      value.length && p.push(props.listName ? codelist.getCode(props.listName, value[0].id as string) : value[0].id)
-                    }}
-                  />
-                </Block>
-                <RenderTagList list={selectedIds.map((v) => options.find((o) => o.id === v)?.label)} onRemove={p.remove} wide />
-              </Block>
-            </FormControl>
-          )
-        }}
-      </FieldArray>
-    </FieldWrapper>
-  )
-}
-
-export const MultiSearchField = (props: { label: string; name: string; search: SearchType; itemLabel?: (id: string) => React.ReactNode }) => {
+export const MultiSearchField = (props: { label: string; name: string; search: SearchType; itemLabel?: (id: string) => string }) => {
   const [results, setSearch, loading] = props.search
 
   return (
@@ -443,7 +315,7 @@ export const MultiSearchField = (props: { label: string; name: string; search: S
                   isLoading={loading}
                 />
               </Block>
-              <RenderTagList list={(p.form.values[props.name] as string[]).map((v) => (props.itemLabel ? props.itemLabel(v) : v))} onRemove={p.remove} wide />
+              <RenderTagList list={(p.form.values[props.name] as string[]).map((v) => (props.itemLabel ? props.itemLabel(v) : v))} onRemove={p.remove} />
             </Block>
           </FormControl>
         )}

@@ -1,7 +1,6 @@
 import { Krav, KravQL, KravStatus, KravVersjon } from '../../constants'
 import { Form, Formik } from 'formik'
 import { createKrav, getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav } from '../../api/KravApi'
-import { Block } from 'baseui/block'
 import React, { useEffect } from 'react'
 import * as yup from 'yup'
 import { codelist, ListName } from '../../services/Codelist'
@@ -12,26 +11,16 @@ import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
 import { RegelverkEdit } from './Edit/RegelverkEdit'
 import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
 import { EditBegreper } from './Edit/KravBegreperEdit'
-import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
-import CustomizedModal from '../common/CustomizedModal'
-import Button from '../common/Button'
-import { ettlevColors, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
 import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
 import ErrorModal from '../ErrorModal'
 import { Error } from '../common/ModalSchema'
 import { ErrorMessageModal } from './ErrorMessageModal'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
-import { Checkbox } from 'baseui/checkbox'
-import { warningAlert } from '../Images'
 import { user } from '../../services/User'
-import { Modal as BaseModal, ModalBody, ModalHeader } from 'baseui/modal'
 import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
-import AlertUnsavedPopup from '../common/AlertUnsavedPopup'
 import _ from 'lodash'
+import { Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal } from '@navikt/ds-react'
+import Select from 'react-select/dist/declarations/src/Select'
 
 type EditKravProps = {
   krav: KravQL
@@ -45,7 +34,7 @@ type EditKravProps = {
 }
 
 const maxInputWidth = '400px'
-const inputMarginBottom = theme.sizing.scale900
+const modalWidth = '1276px'
 
 export const kravModal = () => document.querySelector('#krav-modal')
 
@@ -54,11 +43,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
   const [stickyFooterStyle, setStickyFooterStyle] = React.useState(true)
   const [showErrorModal, setShowErrorModal] = React.useState(false)
   const [errorModalMessage, setErrorModalMessage] = React.useState('')
-  const [varlselMeldingActive, setVarselMeldingActive] = React.useState<boolean>(krav.varselMelding ? true : false)
+  const [varselMeldingActive, setVarselMeldingActive] = React.useState<String[]>(krav.varselMelding ? ['VarselMelding'] : [])
   const [UtgaattKravMessage, setUtgaattKravMessage] = React.useState<boolean>(false)
   const [aktivKravMessage, setAktivKravMessage] = React.useState<boolean>(false)
 
-  const [isAlertModalOpen, setIsAlertModalOpen] = React.useState<boolean>(false)
   const [isFormDirty, setIsFormDirty] = React.useState<boolean>(false)
 
   const kravSchema = () =>
@@ -130,7 +118,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
     const mutatedKrav = {
       ...krav,
       underavdeling: underavdeling,
-      varselMelding: varlselMeldingActive ? krav.varselMelding : undefined,
+      varselMelding: varselMeldingActive ? krav.varselMelding : undefined,
     }
 
     const etterlevelser = await getEtterlevelserByKravNumberKravVersion(krav.kravNummer, krav.kravVersjon)
@@ -139,10 +127,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
       setShowErrorModal(true)
     } else if (krav.id) {
       close(await updateKrav(mutatedKrav))
-      setVarselMeldingActive(!!mutatedKrav.varselMelding)
+      setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
     } else {
       close(await createKrav(mutatedKrav))
-      setVarselMeldingActive(!!mutatedKrav.varselMelding)
+      setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
     }
   }
 
@@ -168,23 +156,13 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
   return (
     <div>
-      <CustomizedModal
-        closeable={false}
-        onClose={() => {
-          if (isFormDirty) {
-            setIsAlertModalOpen(true)
-          } else {
-            setIsOpen(false)
-          }
+      <Modal
+        width={modalWidth}
+        header={{
+          heading: newVersion ? 'Ny versjon' : newKrav ? 'Nytt krav' : 'Rediger kravside',
+          closeButton: false
         }}
-        isOpen={isOpen}
-        overrides={{
-          Root: {
-            props: {
-              id: 'krav-modal',
-            },
-          },
-        }}
+        open={isOpen}
       >
         <Formik
           onSubmit={submit}
@@ -207,117 +185,85 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                 }
               }}
             >
-              <AlertUnsavedPopup
-                isActive={isFormDirty}
-                isModalOpen={isAlertModalOpen}
-                setIsModalOpen={setIsAlertModalOpen}
-                onClose={() => close(values)}
-                onSubmit={() => submit(values)}
-              />
+
               <div className={`pt-6 ${!stickyHeader ? 'pb-12' : 'pb-5'} px-24 sticky top-0 ${!stickyHeader ? 'block' : 'flex'} z-30 bg-green-800`}>
                 {stickyHeader && (
-                  <Block display="flex" width="100%" justifyContent="flex-start">
-                    <LabelLarge $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</LabelLarge>
-                  </Block>
+                  <div className="flex w-full justify-start">
+                    <BodyShort className="text-white">{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</BodyShort>
+                  </div>
                 )}
                 {!stickyHeader && (
-                  <Block width="100%">
-                    <HeadingXXLarge $style={{ color: '#F8F8F8' }}>{newVersion ? 'Ny versjon' : newKrav ? 'Ny krav' : 'Rediger kravside'}: </HeadingXXLarge>
-                    <HeadingXLarge $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </HeadingXLarge>
+                  <div className="w-full">
+                    <Heading level="1" size="medium" className="text-white">{newVersion ? 'Ny versjon' : newKrav ? 'Nytt krav' : 'Rediger kravside'}: </Heading>
+                    <Heading level="2" size="small" className="text-white">{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </Heading>
                     {newVersion && (
-                      <Notification
-                        closeable
-                        overrides={{
-                          Body: {
-                            style: {
-                              backgroundColor: ettlevColors.warning50,
-                              ...borderWidth('1px'),
-                              ...borderColor('#D47B00'),
-                              ...borderRadius('4px'),
-                              width: '100%',
-                            },
-                          },
-                        }}
-                      >
-                        <Block display="flex">
-                          <Block marginRight="12px">
-                            <img src={warningAlert} alt="warning icon" />
-                          </Block>
-                          <Block>
-                            <LabelSmall $style={{ fontSize: '16px', lineHeight: '20px' }}>Sikker på at du vil opprette en ny versjon?</LabelSmall>
-                            <ParagraphXSmall $style={{ fontSize: '16px', lineHeight: '20px' }}>
-                              Ny versjon av kravet skal opprettes når det er <strong>vesentlige endringer</strong> i kravet som gjør at <strong>teamene må revurdere</strong> sin
-                              besvarelse av kravet. Ved alle mindre justeringer, endre i det aktive kravet, og da slipper teamene å revurdere sin besvarelse.
-                            </ParagraphXSmall>
-                          </Block>
-                        </Block>
-                      </Notification>
+                      <Alert variant="warning">
+                        <Heading spacing size="small" level="4">Sikker på at du vil opprette en ny versjon?</Heading>
+
+                        Ny versjon av kravet skal opprettes når det er <strong>vesentlige endringer</strong> i kravet som gjør at <strong>teamene må revurdere</strong> sin
+                        besvarelse av kravet. Ved alle mindre justeringer, endre i det aktive kravet, og da slipper teamene å revurdere sin besvarelse.
+                      </Alert>
                     )}
-                  </Block>
+                  </div>
                 )}
               </div>
-              <Block>
-                <Block
-                  className="title_container"
-                  backgroundColor={ettlevColors.grey50}
-                  paddingTop="48px"
-                  paddingLeft={responsivePaddingLarge}
-                  paddingRight={responsivePaddingLarge}
-                  paddingBottom="64px"
-                >
+              <div>
+                <div className="title_container py-16 px-24">
                   <InputField
-                    marginBottom={inputMarginBottom}
+                    marginBottom
                     label="Krav-tittel"
                     name="navn"
-                    tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'}
+                    description="Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting."
                   />
-                  <Block marginBottom="55px">
-                    <Checkbox
-                      overrides={{
-                        Checkmark: {
-                          style: ({ $isFocused }) => ({
-                            outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
-                            outlineWidth: $isFocused ? '3px' : undefined,
-                            outlineStyle: $isFocused ? 'solid' : undefined,
-                          }),
-                        },
+                  <div className="mb-14">
+                    <CheckboxGroup
+                      legend="Send varselmelding"
+                      value={varselMeldingActive}
+                      onChange={(value) => {
+                        setVarselMeldingActive(value)
                       }}
-                      checked={varlselMeldingActive}
-                      onChange={() => setVarselMeldingActive(!varlselMeldingActive)}
                     >
-                      Gi kravet en varselmelding (eks. for kommende krav)
-                    </Checkbox>
-                    {varlselMeldingActive && (
-                      <Block width="100%" marginLeft="30px" marginTop="24px">
-                        <TextAreaField label="Forklaring til etterlevere" name="varselMelding" maxCharacter={100} rows={1} setIsFormDirty={setIsFormDirty} />
-                      </Block>
+                      <Checkbox value="VarselMelding">
+                        Gi kravet en varselmelding (eks. for kommende krav)
+                      </Checkbox>
+                    </CheckboxGroup>
+
+                    {varselMeldingActive.length > 0 && (
+                      <div className="w-full ml-8 mt-6">
+                        <TextAreaField
+                          label="Forklaring til etterlevere"
+                          name="varselMelding"
+                          maxCharacter={100}
+                          rows={2}
+                          noPlaceholder
+                        />
+                      </div>
                     )}
-                  </Block>
+
+                  </div>
                   <TextAreaField
                     label="Hensikt"
                     name="hensikt"
                     height="250px"
-                    marginBottom="0px"
                     markdown
                     shortenLinks
                     onImageUpload={onImageUpload(krav.id)}
                     tooltip={'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'}
-                    setIsFormDirty={setIsFormDirty}
                   />
                   <Error fieldName={'hensikt'} fullWidth />
-                </Block>
+                </div>
 
-                <Block className="content_container" display="flex" width="100%" justifyContent="center">
-                  <Block width={responsiveWidthLarge}>
-                    <HeadingXLarge marginBottom={inputMarginBottom}>Suksesskriterier</HeadingXLarge>
+                <div className="flex w-full justify-center">
+                  <div className="w-full px-24 mb-2.5">
+                    <Heading level="3" size="medium" className="mb-8">Suksesskriterier</Heading>
                     <KravSuksesskriterierEdit setIsFormDirty={setIsFormDirty} newVersion={!!newVersion} />
 
-                    <Block marginBottom={inputMarginBottom}>
-                      <HeadingXLarge>Dokumentasjon</HeadingXLarge>
-                    </Block>
+                    <div className="mb-8">
+                      <Heading level="3" size="medium">Dokumentasjon</Heading>
+                    </div>
 
                     <MultiInputField
-                      marginBottom={inputMarginBottom}
+                      marginBottom
                       maxInputWidth={maxInputWidth}
                       linkLabel="Navn på kilde"
                       name="dokumentasjon"
@@ -331,136 +277,74 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     <RegelverkEdit />
                     {errors.regelverk && <ErrorMessageModal msg={errors.regelverk} fullWidth={true} />}
 
-                    <TextAreaField
-                      label="Relevante implementasjoner"
-                      name="implementasjoner"
-                      height="250px"
-                      markdown
-                      tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'}
-                      setIsFormDirty={setIsFormDirty}
-                    />
-
-                    {!newKrav && (
+                    {!newKrav && krav.kravVersjon > 1 && (
                       <TextAreaField
                         label="Endringer siden siste versjon"
                         name="versjonEndringer"
                         height="250px"
-                        marginBottom="0px"
                         markdown
                         shortenLinks
                         tooltip={'Beskrivelse av hva som er nytt siden siste versjon.'}
-                        setIsFormDirty={setIsFormDirty}
                       />
                     )}
 
-                    {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
+                    <div className="mt-20">
+                      <Heading level="3" size="medium">Gruppering</Heading>
+                    </div>
 
-                    <Block marginTop="80px" marginBottom={inputMarginBottom}>
-                      <HeadingXLarge>Gruppering og etiketter</HeadingXLarge>
-                    </Block>
-                    {/*
-                    <Block width="100%" maxWidth={maxInputWidth}>
-                      <EditVirkemidler />
-                    </Block> */}
-
-                    <Block width="100%" maxWidth={maxInputWidth}>
+                    <div className="w-full max-w-md">
                       <EditKravMultiOptionField
-                        marginBottom={inputMarginBottom}
+                        marginBottom
                         name="relevansFor"
                         label="Legg til relevante kategorier"
                         listName={ListName.RELEVANS}
                         tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}
                       />
                       {errors.relevansFor && <ErrorMessageModal msg={errors.relevansFor} fullWidth={true} />}
-                    </Block>
+                    </div>
 
-                    <MultiInputField
-                      marginBottom={inputMarginBottom}
-                      maxInputWidth={maxInputWidth}
-                      label="Etiketter"
-                      name="tagger"
-                      tooltip={'Tag kravet med et eller flere nøkkelord. Hensikten er å skape relasjon(er) til andre krav.'}
-                    />
-
-                    <Block width="100%" maxWidth={maxInputWidth} marginBottom="80px">
+                    <div className="w-full mb-20 max-w-md">
                       <EditBegreper />
-                    </Block>
+                    </div>
 
-                    <Block width="100%" maxWidth={maxInputWidth} marginBottom="80px">
+                    <div className="w-full mb-20 max-w-md">
                       <EditKravRelasjoner />
-                    </Block>
+                    </div>
 
-                    <Block marginBottom={inputMarginBottom}>
-                      <HeadingXLarge>Egenskaper</HeadingXLarge>
-                    </Block>
+                    <div className="mb-8">
+                      <Heading level="3" size="medium">Egenskaper</Heading>
+                    </div>
 
                     <KravVarslingsadresserEdit />
                     {errors.varslingsadresser && <ErrorMessageModal msg={errors.varslingsadresser} fullWidth={true} />}
-                    <Block width={'100%'}>
+                    <div className="w-full">
                       {Object.keys(errors).length > 0 && !errors.dokumentasjon && (
-                        <Block display="flex" width="100%" marginTop="3rem" marginBottom=".6em">
-                          <Block width="100%">
-                            <Notification
-                              overrides={{
-                                Body: {
-                                  style: {
-                                    width: 'auto',
-                                    ...borderStyle('solid'),
-                                    ...borderWidth('1px'),
-                                    ...borderColor(ettlevColors.red600),
-                                    ...borderRadius('4px'),
-                                  },
-                                },
-                              }}
-                              kind={NKIND.negative}
-                            >
-                              <Block display="flex" justifyContent="center">
-                                <FontAwesomeIcon
-                                  icon={faTimesCircle}
-                                  style={{
-                                    marginRight: '5px',
-                                  }}
-                                />
-                                <ParagraphMedium marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
-                                  Du må fylle ut alle obligatoriske felter
-                                </ParagraphMedium>
-                              </Block>
-                            </Notification>
-                          </Block>
-                        </Block>
+                        <div className="flex w-full my-12">
+                          <div className="w-full bg-red-300">
+                            <Alert variant="warning" role="status">
+                              Du må fylle ut alle obligatoriske felter
+                            </Alert>
+                          </div>
+                        </div>
                       )}
-                    </Block>
-                  </Block>
-                </Block>
-                <Block
-                  className="button_container"
-                  backgroundColor={ettlevColors.grey25}
-                  position="sticky"
-                  bottom={0}
-                  display="flex"
-                  flexDirection="column"
-                  paddingLeft={responsivePaddingLarge}
-                  paddingRight={responsivePaddingLarge}
-                  paddingBottom="16px"
-                  paddingTop="16px"
-                  $style={{
-                    boxShadow: stickyFooterStyle ? '0px -4px 4px rgba(0, 0, 0, 0.12)' : '',
-                    zIndex: 3,
-                  }}
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="button_container sticky bottom-0 flex flex-col py-4 px-24 bg-gray-50 z-10"
                 >
                   {errors.status && (
-                    <Block marginBottom="12px">
+                    <div className="mb-3">
                       <Error fieldName="status" fullWidth />
-                    </Block>
+                    </div>
                   )}
 
-                  <Block display="flex" width="100%">
-                    <Block display="flex" width="100%">
+                  <div className="flex w-full">
+                    <div className="flex w-full">
                       {krav.status === KravStatus.AKTIV && !newVersion && (
-                        <Block marginRight="9px">
+                        <div className="mr-2">
                           <Button
-                            size="compact"
-                            kind="secondary"
+                            variant="secondary"
                             onClick={() => {
                               setUtgaattKravMessage(true)
                             }}
@@ -469,14 +353,13 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                           >
                             Sett kravet til utgått
                           </Button>
-                        </Block>
+                        </div>
                       )}
 
                       {user.isAdmin() && krav.status === KravStatus.UTGAATT && !newVersion && (
-                        <Block marginRight="9px">
+                        <div className="mr-2">
                           <Button
-                            size="compact"
-                            kind="secondary"
+                            variant="secondary"
                             onClick={() => {
                               setAktivKravMessage(true)
                             }}
@@ -485,104 +368,105 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                           >
                             Sett versjonen til aktiv
                           </Button>
-                        </Block>
+                        </div>
                       )}
 
                       {user.isAdmin() && !newVersion && (
-                        <Block marginRight="9px">
+                        <div className="mr-2">
                           <Button
-                            size="compact"
-                            kind="secondary"
+                            variant="secondary"
                             onClick={() => {
                               values.status = KravStatus.UTKAST
                               submitForm()
                             }}
                             disabled={isSubmitting}
-                            type={'button'}
+                            type="button"
                           >
                             Sett kravet til utkast
                           </Button>
-                        </Block>
+                        </div>
                       )}
 
-                      <BaseModal
-                        overrides={{ Dialog: { style: { ...borderRadius('4px') } } }}
-                        closeable={false}
-                        isOpen={UtgaattKravMessage}
-                        onClose={() => setUtgaattKravMessage(false)}
+                      <Modal
+                        header={{
+                          closeButton: false,
+                          heading: 'Sikker på at du vil sette kravet til utgått?'
+                        }}
+                        open={UtgaattKravMessage}
                       >
-                        <ModalHeader>Sikker på at du vil sette kravet til utgått?</ModalHeader>
-                        <ModalBody>Denne handligen kan ikke reverseres</ModalBody>
-                        <Block marginRight="24px" marginLeft="24px" marginBottom="34px" marginTop="27px" display="flex" justifyContent="center">
-                          <Block display="flex" width="100%">
-                            <Button onClick={() => setUtgaattKravMessage(false)} kind={'secondary'} marginRight>
-                              Nei, avbryt handlingen
-                            </Button>
-                          </Block>
-                          <Block display="flex" width="100%" justifyContent="flex-end">
-                            <Button
-                              onClick={() => {
-                                values.status = KravStatus.UTGAATT
-                                submitForm()
-                                setUtgaattKravMessage(false)
-                              }}
-                            >
-                              Ja, sett til utgått
-                            </Button>
-                          </Block>
-                        </Block>
-                      </BaseModal>
+                        <Modal.Body>Denne handligen kan ikke reverseres</Modal.Body>
+                        <Modal.Footer>
+                          <Button
+                            className="mr-4"
+                            variant="secondary"
+                            onClick={() => setUtgaattKravMessage(false)}>
+                            Nei, avbryt handlingen
+                          </Button>
+                          <Button
+                            variant="primary"
+                            onClick={() => {
+                              values.status = KravStatus.UTGAATT
+                              submitForm()
+                              setUtgaattKravMessage(false)
+                            }}
+                          >
+                            Ja, sett til utgått
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
 
-                      <BaseModal
-                        overrides={{ Dialog: { style: { ...borderRadius('4px') } } }}
-                        closeable={false}
-                        isOpen={aktivKravMessage}
+                      <Modal
+                        header={{
+                          closeButton: false,
+                          heading: 'Sikker på at du vil sette versjonen til aktiv?'
+                        }}
+                        open={aktivKravMessage}
                         onClose={() => setAktivKravMessage(false)}
                       >
-                        <ModalHeader>Sikker på at du vil sette versjonen til aktiv?</ModalHeader>
-                        <ModalBody>Kravet har en nyere versjon som settes til utkast</ModalBody>
-                        <Block marginRight="24px" marginLeft="24px" marginBottom="34px" marginTop="27px" display="flex" justifyContent="center">
-                          <Block display="flex" width="100%">
-                            <Button onClick={() => setAktivKravMessage(false)} kind={'secondary'} marginRight>
-                              Nei, avbryt handlingen
-                            </Button>
-                          </Block>
-                          <Block display="flex" width="100%" justifyContent="flex-end">
-                            <Button
-                              onClick={async () => {
-                                const newVersionOfKrav = await getKravByKravNumberAndVersion(krav.kravNummer, krav.kravVersjon + 1)
-                                if (newVersionOfKrav) {
-                                  updateKrav(
-                                    kravMapToFormVal({
-                                      ...newVersionOfKrav,
-                                      status: KravStatus.UTKAST,
-                                    }) as KravQL,
-                                  ).then(() => {
-                                    values.status = KravStatus.AKTIV
-                                    submitForm()
-                                    setAktivKravMessage(false)
-                                  })
-                                } else {
+                        <Modal.Body>Kravet har en nyere versjon som settes til utkast</Modal.Body>
+                        <Modal.Footer>
+                          <Button
+                            variant="primary"
+                            onClick={async () => {
+                              const newVersionOfKrav = await getKravByKravNumberAndVersion(krav.kravNummer, krav.kravVersjon + 1)
+                              if (newVersionOfKrav) {
+                                updateKrav(
+                                  kravMapToFormVal({
+                                    ...newVersionOfKrav,
+                                    status: KravStatus.UTKAST,
+                                  }) as KravQL,
+                                ).then(() => {
                                   values.status = KravStatus.AKTIV
                                   submitForm()
                                   setAktivKravMessage(false)
-                                }
-                              }}
-                            >
-                              Ja, sett til aktiv
-                            </Button>
-                          </Block>
-                        </Block>
-                      </BaseModal>
-                    </Block>
-                    <Block display="flex" justifyContent="flex-end" width="100%">
-                      <Button size="compact" kind={'secondary'} type={'button'} onClick={close} marginLeft>
+                                })
+                              } else {
+                                values.status = KravStatus.AKTIV
+                                submitForm()
+                                setAktivKravMessage(false)
+                              }
+                            }}
+                          >
+                            Ja, sett til aktiv
+                          </Button>
+                          <Button
+                            variant="secondary"
+                            onClick={() => setAktivKravMessage(false)}>
+                            Nei, avbryt handlingen
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
+                    </div>
+                    <div className="flex w-full justify-end">
+                      <Button className="ml-4"
+                        variant="secondary"
+                        type="button"
+                        onClick={() => { setIsOpen(false) }}>
                         Avbryt
                       </Button>
 
-                      <Button
-                        size="compact"
-                        kind="primary"
+                      <Button className="ml-4"
+                        variant="primary"
                         onClick={() => {
                           if (newVersion) {
                             values.status = KravStatus.UTKAST
@@ -592,39 +476,35 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                           submitForm()
                         }}
                         disabled={isSubmitting}
-                        type={'button'}
-                        marginLeft
                       >
                         {newVersion || krav.status !== KravStatus.AKTIV ? 'Lagre' : 'Publiser endringer'}
                       </Button>
 
                       {(newVersion || krav.status === KravStatus.UTKAST) && (
-                        <Button
-                          size="compact"
+                        <Button className="ml-4"
+                          variant="primary"
                           onClick={() => {
                             values.status = KravStatus.AKTIV
                             submitForm()
                           }}
                           disabled={isSubmitting}
-                          type={'button'}
-                          marginLeft
                         >
                           Publiser og gjør aktiv
                         </Button>
                       )}
-                    </Block>
-                  </Block>
-                </Block>
+                    </div>
+                  </div>
+                </div>
 
-                <Block backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="64px">
+                <div className="px-24 py-12">
                   <TextAreaField label="Notater (Kun synlig for kraveier)" name="notat" height="250px" markdown tooltip={'Kraveiers notater'} />
-                </Block>
-              </Block>
+                </div>
+              </div>
               <ErrorModal isOpen={showErrorModal} errorMessage={errorModalMessage} submit={setShowErrorModal} />
             </Form>
           )}
         </Formik>
-      </CustomizedModal>
+      </Modal>
     </div>
   )
 }

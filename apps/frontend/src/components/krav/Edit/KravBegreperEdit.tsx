@@ -2,78 +2,56 @@ import { FieldWrapper } from '../../common/Inputs'
 import { useBegrepSearch } from '../../../api/BegrepApi'
 import React from 'react'
 import { FieldArray } from 'formik'
-import { intl } from '../../../util/intl/intl'
-import { TYPE } from 'baseui/select'
-import { FormControl } from 'baseui/form-control'
 import { Error } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 import { Begrep } from '../../../constants'
-import { Block } from 'baseui/block'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { searchIcon } from '../../Images'
-import CustomizedSelect from '../../common/CustomizedSelect'
-import { borderWidth } from '../../common/Style'
+import AsyncSelect from 'react-select/async'
+import { DropdownIndicatorProps, components } from 'react-select'
+import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
+
+
+export const DropdownIndicator = (
+  props: DropdownIndicatorProps
+) => {
+  return (
+    <components.DropdownIndicator {...props}>
+      <MagnifyingGlassIcon title="Søk" aria-label="Søk"/>
+    </components.DropdownIndicator>
+  )
+}
 
 export const EditBegreper = () => {
-  const [result, setSearch, loading] = useBegrepSearch()
-
   return (
     <FieldWrapper>
       <FieldArray name="begreper">
         {(p) => {
           return (
-            <FormControl label={<LabelWithTooltip label={'Begreper'} tooltip={'Legg ved lenke til relevante begrep(er) i Begrepskatalogen.'} />}>
-              <Block>
-                <CustomizedSelect
-                  overrides={{
-                    SearchIcon: {
-                      component: () => <img src={searchIcon} alt="search icon" />,
-                      style: {
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                      },
-                    },
-                    SearchIconContainer: {
-                      style: {
-                        width: 'calc(100% - 20px)',
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                      },
-                    },
-                    IconsContainer: {
-                      style: {
-                        marginRight: '20px',
-                      },
-                    },
-                    ValueContainer: {
-                      style: {
-                        paddingLeft: '10px',
-                      },
-                    },
-                    ControlContainer: {
-                      style: {
-                        ...borderWidth('2px'),
-                      },
-                    },
-                  }}
-                  labelKey={'navn'}
-                  noResultsMsg={intl.emptyTable}
-                  maxDropdownHeight="350px"
-                  searchable={true}
-                  type={TYPE.search}
-                  options={result}
-                  placeholder={'Begreper'}
-                  onInputChange={(event) => setSearch(event.currentTarget.value)}
-                  onChange={(params) => {
-                    let term = params.value.length ? params.value[0] : undefined
-                    term && p.push(term)
-                  }}
-                  error={!!p.form.errors.begreper && !!p.form.submitCount}
-                  isLoading={loading}
-                />
-                <RenderTagList wide list={p.form.values.begreper.map((b: Begrep) => b.navn)} onRemove={p.remove} />
-              </Block>
-            </FormControl>
+            <div>
+              <LabelWithTooltip label={'Begreper'} tooltip={'Legg ved lenke til relevante begrep(er) i Begrepskatalogen.'} />
+              <AsyncSelect
+                aria-label="Søk etter begrep"
+                placeholder="Søk etter begrep"
+                components={{DropdownIndicator}}
+                noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
+                controlShouldRenderValue={false}
+                loadingMessage={() => 'Søker...'}
+                isClearable={false}
+                loadOptions={useBegrepSearch}
+                onChange={(begrep) => {
+                  begrep && p.push(begrep)
+                }}
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    cursor: 'text',
+                    height: '48px'
+                  })
+                }}
+              />
+
+              <RenderTagList list={p.form.values.begreper.map((b: Begrep) => b.navn)} onRemove={p.remove} />
+            </div>
           )
         }}
       </FieldArray>

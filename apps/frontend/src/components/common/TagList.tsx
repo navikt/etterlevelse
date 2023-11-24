@@ -1,47 +1,19 @@
-import * as React from 'react'
-import { Tag, VARIANT } from 'baseui/tag'
-import { theme } from '../../util'
-import { ettlevColors, pageWidth } from '../../util/theme'
-import { borderWidth } from './Style'
+import { Chips } from '@navikt/ds-react'
 
-export const RenderTagList = ({ list, onRemove, onClick, wide }: { list: React.ReactNode[]; onRemove: (i: number) => void; onClick?: (i: number) => void; wide?: boolean }) => {
+export const RenderTagList = ({ list, onRemove }: { list: string[]; onRemove: (i: number) => void }) => {
   return (
-    <div className="flex flex-wrap">
+    <Chips className="mt-2">
       {list && list.length > 0
         ? list.map((item, index) => (
-            <React.Fragment key={index}>
+            <div key={'tags_' + item + '_' + index}>
               {item ? (
-                <Tag
-                  key={index}
-                  variant={VARIANT.outlined}
-                  onClick={onClick ? () => onClick(index) : undefined}
-                  onActionClick={() => onRemove(index)}
-                  overrides={{
-                    Text: {
-                      style: {
-                        maxWidth: wide ? undefined : pageWidth,
-                        fontSize: theme.sizing.scale650,
-                        lineHeight: theme.sizing.scale750,
-                        fontWeight: 400,
-                      },
-                    },
-                    Root: {
-                      style: {
-                        ...borderWidth('1px'),
-                        ':hover': {
-                          backgroundColor: ettlevColors.green50,
-                          borderColor: '#0B483F',
-                        },
-                      },
-                    },
-                  }}
-                >
+                <Chips.Removable variant="neutral" onClick={() => onRemove(index)}>
                   {item}
-                </Tag>
+                </Chips.Removable>
               ) : null}
-            </React.Fragment>
+            </div>
           ))
         : null}
-    </div>
+    </Chips>
   )
 }

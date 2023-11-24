@@ -1,26 +1,18 @@
 import { AdresseType, Krav, SlackChannel, SlackUser, TeamResource, Varslingsadresse, VarslingsadresseQL } from '../../../constants'
 import { getSlackChannelById, getSlackUserByEmail, getSlackUserById, usePersonSearch, useSlackChannelSearch } from '../../../api/TeamApi'
 import React, { ReactNode, useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { theme } from '../../../util'
-import { Notification } from 'baseui/notification'
 import * as yup from 'yup'
-import Button from '../../common/Button'
 import { user } from '../../../services/User'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faPlus, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FieldWrapper } from '../../common/Inputs'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
-import { FormControl } from 'baseui/form-control'
 import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
 import { RenderTagList } from '../../common/TagList'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import CustomizedInput from '../../common/CustomizedInput'
-import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
-import { borderColor, borderStyle, borderWidth } from '../../common/Style'
-import { ettlevColors } from '../../../util/theme'
-import { Loader } from '@navikt/ds-react'
+import { Alert, Button, Loader, Modal, TextField } from '@navikt/ds-react'
+import { EnvelopeClosedIcon, PersonIcon, PlusIcon } from '@navikt/aksel-icons'
+import AsyncSelect from 'react-select/async'
+import { DropdownIndicator } from './KravBegreperEdit'
 
 export const KravVarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -36,79 +28,35 @@ export const KravVarslingsadresserEdit = () => {
             if (!varslingsadresser.find((v2) => v2.adresse === v.adresse)) p.push(v)
           }
           return (
-            <>
-              <FormControl
-                label={<LabelWithTooltip label={'Varslingsadresser'} tooltip={'Angi varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger til kravet.'} />}
-              >
-                <Block>
-                  <Block marginBottom={theme.sizing.scale400}>
-                    <Button
-                      kind="secondary"
-                      size="compact"
-                      type="button"
-                      onClick={() => setAddSlackChannel(true)}
-                      $style={{
-                        ...borderColor(p.form.errors['varslingsadresser'] ? ettlevColors.red600 : ettlevColors.green600),
-                        ...borderStyle(p.form.errors['varslingsadresser'] ? 'solid' : 'solid'),
-                        ...borderWidth(p.form.errors['varslingsadresser'] ? '2px' : '2px'),
-                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit',
-                      }}
-                    >
-                      <span>
-                        <FontAwesomeIcon icon={faSlackHash} /> Legg til slack-kanal
-                      </span>
-                    </Button>
-                    <Button
-                      kind="secondary"
-                      size="compact"
-                      marginLeft
-                      type="button"
-                      onClick={() => setAddSlackUser(true)}
-                      $style={{
-                        ...borderColor(p.form.errors['varslingsadresser'] ? ettlevColors.red600 : ettlevColors.green600),
-                        ...borderStyle(p.form.errors['varslingsadresser'] ? 'solid' : 'solid'),
-                        ...borderWidth(p.form.errors['varslingsadresser'] ? '2px' : '2px'),
-                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit',
-                      }}
-                    >
-                      <span>
-                        <FontAwesomeIcon icon={faUser} /> Legg til slack-bruker
-                      </span>
-                    </Button>
-                    <Button
-                      kind="secondary"
-                      size="compact"
-                      marginLeft
-                      type="button"
-                      onClick={() => setAddEmail(true)}
-                      $style={{
-                        ...borderColor(p.form.errors['varslingsadresser'] ? ettlevColors.red600 : ettlevColors.green600),
-                        ...borderStyle(p.form.errors['varslingsadresser'] ? 'solid' : 'solid'),
-                        ...borderWidth(p.form.errors['varslingsadresser'] ? '2px' : '2px'),
-                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit',
-                      }}
-                    >
-                      <span>
-                        <FontAwesomeIcon icon={faEnvelope} /> Legg til epost
-                      </span>
-                    </Button>
-                  </Block>
-                  <VarslingsadresserTagList remove={p.remove} varslingsadresser={varslingsadresser} />
-                </Block>
-              </FormControl>
+            <div>
+              <LabelWithTooltip label={'Varslingsadresser'} tooltip={'Angi varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger til kravet.'} />
+              <div>
+                <div className="mb-2.5">
+                  <Button variant="secondary" type="button" onClick={() => setAddSlackChannel(true)} icon={<FontAwesomeIcon icon={faSlackHash} aria-hidden aria-label="" />}>
+                    Legg til slack-kanal
+                  </Button>
+                  <Button className="ml-2.5" variant="secondary" type="button" onClick={() => setAddSlackUser(true)} icon={<PersonIcon aria-hidden aria-label="" />}>
+                    Legg til slack-bruker
+                  </Button>
+                  <Button variant="secondary" className="ml-2.5" type="button" onClick={() => setAddEmail(true)} icon={<EnvelopeClosedIcon aria-hidden aria-label="" />}>
+                    Legg til epost
+                  </Button>
+                </div>
+                <VarslingsadresserTagList remove={p.remove} varslingsadresser={varslingsadresser} />
+              </div>
 
-              <AddModal title="Legg til Slack kanal" isOpen={addSlackChannel} close={() => setAddSlackChannel(false)}>
+              <AddModal largeHeight title="Legg til Slack kanal" isOpen={addSlackChannel} close={() => setAddSlackChannel(false)}>
                 <SlackChannelSearch added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddSlackChannel(false)} />
               </AddModal>
 
-              <AddModal title="Legg til Slack bruker" isOpen={addSlackUser} close={() => setAddSlackUser(false)}>
+              <AddModal largeHeight title="Legg til Slack bruker" isOpen={addSlackUser} close={() => setAddSlackUser(false)}>
                 <SlackUserSearch added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddSlackUser(false)} />
               </AddModal>
 
               <AddModal title="Legg til Epost adresse" isOpen={addEmail} close={() => setAddEmail(false)}>
                 <AddEmail added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddEmail(false)} />
               </AddModal>
-            </>
+            </div>
           )
         }}
       </FieldArray>
@@ -116,15 +64,14 @@ export const KravVarslingsadresserEdit = () => {
   )
 }
 
-const AddModal = ({ isOpen, close, title, children }: { isOpen: boolean; close: () => void; title: string; children: ReactNode }) => (
-  <Modal closeable={false} isOpen={isOpen} onClose={close}>
-    <ModalHeader>{title}</ModalHeader>
-    <ModalBody>{children}</ModalBody>
-    <ModalFooter>
-      <Button kind="secondary" size="compact" type="button" onClick={close}>
+const AddModal = ({ isOpen, close, title, children, largeHeight }: { isOpen: boolean; close: () => void; title: string; children: ReactNode; largeHeight?: boolean }) => (
+  <Modal open={isOpen} onClose={close} header={{ heading: title }} width="medium">
+    <Modal.Body className={`${largeHeight ? 'min-h-[300px]' : undefined}`}>{children}</Modal.Body>
+    <Modal.Footer>
+      <Button variant="secondary" type="button" onClick={close}>
         Avbryt
       </Button>
-    </ModalFooter>
+    </Modal.Footer>
   </Modal>
 )
 
@@ -173,16 +120,15 @@ export const VarslingsadresserTagList = ({ varslingsadresser, remove }: { varsli
 
   return (
     <RenderTagList
-      wide
       list={varslingsadresser.map((v, i) => {
         if (v.type === AdresseType.SLACK) {
           const channel = slackChannels.find((c) => c.id === v.adresse)
-          return <Block key={i}>{channel ? slackChannelView(channel) : `Slack: ${v.adresse}`}</Block>
+          return channel ? slackChannelView(channel) : `Slack: ${v.adresse}`
         } else if (v.type === AdresseType.SLACK_USER) {
           const user = slackUsers.find((u) => u.id === v.adresse)
-          return <Block key={i}>{user ? `Slack: ${user.name}` : `Slack: ${v.adresse}`}</Block>
+          return user ? `Slack: ${user.name}` : `Slack: ${v.adresse}`
         }
-        return <Block key={i}>Epost: {v.adresse}</Block>
+        return 'Epost: ' + v.adresse
       })}
       onRemove={remove}
     />
@@ -196,40 +142,33 @@ type AddVarslingsadresseProps = {
 }
 
 export const SlackChannelSearch = ({ added, add, close }: AddVarslingsadresseProps) => {
-  const [slackSearch, setSlackSearch, loading] = useSlackChannelSearch()
-
   return (
-    <CustomizedStatefulSelect
-      placeholder={'Søk slack kanaler'}
-      maxDropdownHeight="400px"
-      filterOptions={(o) => o}
-      searchable
-      noResultsMsg="Ingen resultat"
-      getOptionLabel={(args) => {
-        const channel = args.option as SlackChannel
-        return slackChannelView(channel, true)
-      }}
-      options={slackSearch.filter((ch) => !added || !added.find((va) => va.adresse === ch.id))}
-      onChange={({ value }) => {
-        const channel = value[0] as SlackChannel
+    <AsyncSelect
+      aria-label="Søk etter slack-kanal"
+      placeholder="Søk etter slack-kanal"
+      noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
+      controlShouldRenderValue={false}
+      loadingMessage={() => 'Søker...'}
+      isClearable={false}
+      components={{DropdownIndicator}}
+      loadOptions={useSlackChannelSearch}
+      onChange={(slackKanal) => {
+        const channel = slackKanal as SlackChannel
         if (channel) add({ type: AdresseType.SLACK, adresse: channel.id })
         close && close()
       }}
-      onInputChange={(event) => {
-        if (event.currentTarget.value.includes('#')) {
-          const newValue = event.currentTarget.value.slice(1)
-          setSlackSearch(newValue)
-        } else {
-          setSlackSearch(event.currentTarget.value)
-        }
+      styles={{
+        control: (base) => ({
+          ...base,
+          cursor: 'text',
+          height: '48px',
+        }),
       }}
-      isLoading={loading}
     />
   )
 }
 
 export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
-  const [slackSearch, setSlackSearch, loading] = usePersonSearch()
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
 
@@ -237,6 +176,8 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
     getSlackUserByEmail(email)
       .then((user) => {
         add({ type: AdresseType.SLACK_USER, adresse: user.id })
+        setLoadingSlackId(false)
+        setError('')
         close && close()
       })
       .catch((e) => {
@@ -246,41 +187,49 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
   }
 
   return (
-    <Block display="flex" flexDirection="column">
-      <Block display="flex">
-        <CustomizedStatefulSelect
-          placeholder={'Søk slack brukere'}
-          maxDropdownHeight="400px"
-          filterOptions={(o) => o}
-          searchable
-          noResultsMsg="Ingen resultat"
-          getOptionLabel={(args) => (args.option as TeamResource).fullName}
-          onFocus={() => setError('')}
-          disabled={loadingSlackId}
-          options={slackSearch}
-          onChange={({ value }) => {
-            const resource = value[0] as TeamResource
-            if (resource) {
-              setLoadingSlackId(true)
-              addEmail(resource.email)
-            }
-          }}
-          onInputChange={(event) => setSlackSearch(event.currentTarget.value)}
-          isLoading={loading}
-        />
-        <Block>
-          <Button type="button" onClick={() => addEmail(user.getEmail())} marginLeft>
-            Meg{' '}
+    <div className="flex flex-col">
+      <div className="flex w-full">
+        <div className="w-full">
+          <AsyncSelect
+            aria-label="Søk etter slack-bruker"
+            placeholder="Søk etter slack-bruker"
+            noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
+            controlShouldRenderValue={false}
+            loadingMessage={() => 'Søker...'}
+            isClearable={false}
+            loadOptions={usePersonSearch}
+            components={{DropdownIndicator}}
+            onFocus={() => setError('')}
+            onBlur={() => setError('')}
+            onChange={(person) => {
+              const resource = person as TeamResource
+              if (resource) {
+                setLoadingSlackId(true)
+                addEmail(resource.email)
+              }
+            }}
+            styles={{
+              control: (base) => ({
+                ...base,
+                cursor: 'text',
+                height: '48px',
+              }),
+            }}
+          />
+        </div>
+        <div className="flex justify-end ml-2.5">
+          <Button type="button" onClick={() => addEmail(user.getEmail())} >
+            Meg
           </Button>
-        </Block>
-      </Block>
+        </div>
+      </div>
       {loadingSlackId && <Loader size="large" />}
       {error && (
-        <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>
+        <Alert className="mt-2.5" variant="error">
           {error}
-        </Notification>
+        </Alert>
       )}
-    </Block>
+    </div>
   )
 }
 
@@ -292,6 +241,7 @@ const emailValidator = yup
 export const AddEmail = ({ added, add: doAdd, close }: AddVarslingsadresseProps) => {
   const [val, setVal] = useState('')
   const [error, setError] = useState('')
+
   const add = (adresse?: string) => {
     const toAdd = adresse || val
     if (!toAdd) return
@@ -301,29 +251,31 @@ export const AddEmail = ({ added, add: doAdd, close }: AddVarslingsadresseProps)
         return
       }
       doAdd({ type: AdresseType.EPOST, adresse: toAdd })
+      setVal('')
     }
     close && close()
   }
+
   const onKey = (e: React.KeyboardEvent) => e.key === 'Enter' && add()
   return (
-    <Block display="flex" flexDirection="column">
-      <Block display="flex">
-        <CustomizedInput onKeyDown={onKey} value={val} onFocus={() => setError('')} onChange={(e) => setVal((e.target as HTMLInputElement).value)} onBlur={() => add()} />
-        <Block display="flex" justifyContent="space-between">
-          <Button type="button" onClick={() => add(user.getEmail())} marginLeft>
-            Meg{' '}
+    <div className="flex flex-col">
+      <div className="flex">
+        <TextField label="epost" hideLabel onKeyDown={onKey} value={val} onFocus={() => setError('')} onChange={(e) => setVal((e.target as HTMLInputElement).value)} onBlur={() => add()}/>
+        <div  className="flex justify-between ml-2.5">
+          <Button type="button" onClick={() => add(user.getEmail())}>
+            Meg
           </Button>
-          <Button type="button" onClick={add} marginLeft>
-            <FontAwesomeIcon icon={faPlus} />{' '}
+          <Button type="button" onClick={() => add} className="ml-2.5">
+            <PlusIcon title="legg til epost" aria-label="legg til epost" />
           </Button>
-        </Block>
-      </Block>
+        </div>
+      </div>
       {error && (
-        <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>
+        <Alert variant="error" className="mt-2.5">
           {error}
-        </Notification>
+        </Alert>
       )}
-    </Block>
+    </div>
   )
 }
 
