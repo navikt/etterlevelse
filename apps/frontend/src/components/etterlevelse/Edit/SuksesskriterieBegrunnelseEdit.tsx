@@ -134,7 +134,7 @@ const KriterieBegrunnelse = ({
         </ReadMore>
       </div>
 
-      <div className="flex w-full">
+      <div className="w-full">
         <div className="min-w-fit">
           <RadioGroup
             value={suksessKriterieStatus}
@@ -149,7 +149,7 @@ const KriterieBegrunnelse = ({
           </RadioGroup>
         </div>
         {!disableEdit && suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
-          <div className="w-full ml-20 mt-12 ">
+          <div className="w-full mt-4">
             <Label>{getLabelForSuksessKriterie(suksessKriterieStatus)}</Label>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%" />
 
@@ -160,12 +160,12 @@ const KriterieBegrunnelse = ({
         )}
 
         {!disableEdit && !suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
-          <div className="w-full ml-20 mt-12 ">
+          <div className="w-full mt-4">
             <Label>Sukseskriteriet har ikke behov for begrunnelse.</Label>
           </div>
         )}
         {disableEdit && (
-          <div className="w-full ml-20 mt-12 ">
+          <div className="w-full mt-4">
             <LabelAboveContent fullWidth title={getLabelForSuksessKriterie()} markdown={begrunnelse} />
           </div>
         )}
