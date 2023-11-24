@@ -296,7 +296,7 @@ export const EditEtterlevelse = ({
                 <Tabs.Panel value="notat">
                   <div className="mt-2">
                     <div className="flex justify-between">
-                      <Label className="flex gap-1">
+                      <Label className="flex gap-1" size="medium">
                         <FileTextIcon fontSize="1.5rem" area-label="" aria-hidden />
                         Notat
                       </Label>
