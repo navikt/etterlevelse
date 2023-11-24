@@ -113,7 +113,7 @@ export const AllInfo = ({ krav, alleKravVersjoner, noLastModifiedDate, header }:
       )}
 
       <LabelWrapper>
-        <LabelAboveContent header title="Ansvarlig">
+        <LabelAboveContent header={header} title="Ansvarlig">
           {krav.underavdeling?.shortName}
         </LabelAboveContent>
       </LabelWrapper>
