@@ -62,16 +62,19 @@ export const KravCard = (props: {
     <LinkPanel href={`/dokumentasjon/${props.etterlevelseDokumentasjonId}/${props.temaCode}/RELEVANTE_KRAV/krav/${props.krav.kravNummer}/${props.krav.kravVersjon}/`}>
       <div className="md:flex justify-between">
         <div className="self-start">
-          <Detail weight="semibold">
-            K{props.krav.kravNummer}.{props.krav.kravVersjon}
-          </Detail>
-          <BodyShort>{props.krav.navn}</BodyShort>
-          <div className="flex gap-2">
+          <div className="flex items-center">
+            <Detail weight="semibold">
+              K{props.krav.kravNummer}.{props.krav.kravVersjon}
+            </Detail>
+            <div className="ml-4">
             {!props.noVarsling && props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined && kravAge < 30 && <ShowWarningMessage warningMessage="Nytt krav" />}
             {!props.noVarsling && props.krav.etterlevelseStatus === undefined && nyVersionFlag && props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && kravAge < 30 && (
               <ShowWarningMessage warningMessage="Ny versjon" />
             )}
-
+            </div>
+          </div>
+          <BodyShort>{props.krav.navn}</BodyShort>
+          <div className="flex gap-2">
             {!props.krav.isIrrelevant && (
               <div className="md:flex w-full gap-2">
                 {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (

@@ -241,7 +241,7 @@ export const DokumentasjonPage = () => {
         </div>
       </div>
       <div className="pt-4 flex flex-col gap-4">
-        <div className="navds-alert navds-alert--info navds-alert--medium">
+        {/* <div className="navds-alert navds-alert--info navds-alert--medium">
           <div className="flex flex-col gap-2">
             <p>Vi tester nytt oppsett med at tema og krav vises nå på samme side, slik at det forhåpentligvis blir lettere å navigere seg i.</p>
             <p>Kravene under hvert tema er vist i anbefalt rekkefølge hvis man leser de fra venstre til høyre.</p>
@@ -262,7 +262,7 @@ export const DokumentasjonPage = () => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="flex items-center gap-4">
           <Button variant="tertiary" size="xsmall" onClick={() => setOpenAccordions(temaListe.map(() => true))}>
             Åpne alle tema
@@ -311,7 +311,7 @@ export const DokumentasjonPage = () => {
                             Lær mer om {tema.shortName} (åpnes i ny fane)
                           </Link>
                         </div>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="flex flex-col gap-2">
                           {kravliste.map((krav, idx) => (
                             <KravCard
                               key={`krav_${idx}`}
