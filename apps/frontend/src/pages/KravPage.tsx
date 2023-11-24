@@ -238,7 +238,7 @@ export const KravPage = () => {
             </div>
           </div>
           <div className="max-w-sm w-full border-l-2 border-gray-200 pl-3">
-            <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} noLastModifiedDate />
+            <AllInfo header krav={krav} alleKravVersjoner={alleKravVersjoner} noLastModifiedDate />
 
             <div className="mt-8">
               {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
