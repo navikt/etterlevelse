@@ -148,7 +148,7 @@ const KriterieBegrunnelse = ({
             <Radio value={SuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</Radio>
           </RadioGroup>
         </div>
-        {!disableEdit && suksesskriterie.behovForBegrunnelse && (
+        {!disableEdit && suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
           <div className="w-full ml-20 mt-12 ">
             <Label>{getLabelForSuksessKriterie(suksessKriterieStatus)}</Label>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%" />
@@ -159,7 +159,7 @@ const KriterieBegrunnelse = ({
           </div>
         )}
 
-        {!disableEdit && !suksesskriterie.behovForBegrunnelse && (
+        {!disableEdit && !suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
           <div className="w-full ml-20 mt-12 ">
             <Label>Sukseskriteriet har ikke behov for begrunnelse.</Label>
           </div>
