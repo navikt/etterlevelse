@@ -3,6 +3,7 @@ import { ExternalLink, urlForObject } from './RouteLink'
 import { Markdown } from './Markdown'
 import { Code, codelist, ListName } from '../../services/Codelist'
 import { NavigableItem } from '../admin/audit/AuditTypes'
+import { BodyShort } from '@navikt/ds-react'
 
 const Content = (props: { item: ReactNode | string; list?: ListName; linkCodelist?: boolean; markdown?: boolean }) => {
   const { item, list, linkCodelist, markdown } = props
