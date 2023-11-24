@@ -124,7 +124,7 @@ const KriterieBegrunnelse = ({
         Suksesskriterium {index + 1} av {totalSuksesskriterie}
       </BodyShort>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 mb-4">
         <Heading size="xsmall" level="3">
           {suksesskriterie.navn}
         </Heading>
