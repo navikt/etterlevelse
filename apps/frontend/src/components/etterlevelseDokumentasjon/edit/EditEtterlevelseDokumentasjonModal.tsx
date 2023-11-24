@@ -1,5 +1,3 @@
-import { Block } from 'baseui/block'
-import { ModalBody, ModalHeader } from 'baseui/modal'
 import { useEffect, useState } from 'react'
 import { useSearchBehandling } from '../../../api/BehandlingApi'
 import {
@@ -12,18 +10,13 @@ import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../.
 import { Code, codelist, ListName } from '../../../services/Codelist'
 import { Button as BaseUIButton, KIND } from 'baseui/button'
 import { FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import { FormControl } from 'baseui/form-control'
 import { BoolField, FieldWrapper, InputField } from '../../common/Inputs'
 import { ButtonGroup } from 'baseui/button-group'
-import { ACCESSIBILITY_TYPE } from 'baseui/popover'
-import { PLACEMENT } from 'baseui/toast'
-import { StatefulTooltip } from 'baseui/tooltip'
 import { ParagraphMedium } from 'baseui/typography'
-import { theme } from '../../../util'
 import { ettlevColors } from '../../../util/theme'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '../../common/Style'
-import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, editIcon, outlineInfoIcon, plusIcon, searchIcon } from '../../Images'
+import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, outlineInfoIcon, searchIcon } from '../../Images'
 import CustomizedSelect from '../../common/CustomizedSelect'
 import { intl } from '../../../util/intl/intl'
 import { SelectOverrides, TYPE } from 'baseui/select'
@@ -31,7 +24,7 @@ import { useSearchTeam } from '../../../api/TeamApi'
 import { RenderTagList } from '../../common/TagList'
 import { useNavigate } from 'react-router-dom'
 import { updateBehandlingNameWithNumber } from '../common/utils'
-import { Button, Modal } from '@navikt/ds-react'
+import { Button, Modal, Tooltip } from '@navikt/ds-react'
 import { buttonContentStyle } from '../../common/Button'
 
 type EditEtterlevelseDokumentasjonModalProps = {
@@ -134,9 +127,8 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
         {props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Nytt etterlevelsesdokument'}
       </Button>
 
-      <Modal open={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
-        <ModalHeader>{props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Opprett nytt etterlevelsesdokument'}</ModalHeader>
-        <ModalBody>
+      <Modal header={{ heading: props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Opprett nytt etterlevelsesdokument' }} open={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
+        <Modal.Body>
           <Formik
             initialValues={etterlevelseDokumentasjonMapToFormVal(props.etterlevelseDokumentasjon ? props.etterlevelseDokumentasjon : {})}
             onSubmit={submit}
@@ -222,107 +214,101 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                     <FieldArray name="irrelevansFor">
                       {(p: FieldArrayRenderProps) => {
                         return (
-                          <FormControl>
-                            <Block height="100%" width="calc(100% - 16px)" paddingTop={theme.sizing.scale750}>
-                              <ButtonGroup
-                                mode="checkbox"
-                                kind={KIND.secondary}
-                                selected={selectedFilter}
-                                size="mini"
-                                onClick={(e, i) => {
-                                  if (!selectedFilter.includes(i)) {
-                                    setSelectedFilter([...selectedFilter, i])
-                                    p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === relevansOptions[i].value))
-                                  } else {
-                                    setSelectedFilter(selectedFilter.filter((value) => value !== i))
-                                    p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
-                                  }
-                                }}
-                                overrides={{
-                                  Root: {
-                                    style: {
-                                      flexWrap: 'wrap',
-                                    },
+                          <div className="h-full pt-5 w-[calc(100% - 16px)]" >
+                            <ButtonGroup
+                              mode="checkbox"
+                              kind={KIND.secondary}
+                              selected={selectedFilter}
+                              size="mini"
+                              onClick={(e, i) => {
+                                if (!selectedFilter.includes(i)) {
+                                  setSelectedFilter([...selectedFilter, i])
+                                  p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === relevansOptions[i].value))
+                                } else {
+                                  setSelectedFilter(selectedFilter.filter((value) => value !== i))
+                                  p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
+                                }
+                              }}
+                              overrides={{
+                                Root: {
+                                  style: {
+                                    flexWrap: 'wrap',
                                   },
-                                }}
-                              >
-                                {relevansOptions.map((r, i) => {
-                                  return (
-                                    <BaseUIButton
-                                      key={'relevans_' + r.value}
-                                      type="button"
-                                      startEnhancer={() => {
-                                        if (selectedFilter.includes(i)) {
-                                          return <img src={checkboxChecked} alt="checked" />
-                                        } else if (!selectedFilter.includes(i) && hover === i) {
-                                          return <img src={checkboxUncheckedHover} alt="checkbox hover" />
-                                        } else {
-                                          return <img src={checkboxUnchecked} alt="unchecked" />
-                                        }
-                                      }}
-                                      overrides={{
-                                        BaseButton: {
-                                          style: {
-                                            ...buttonContentStyle,
-                                            backgroundColor: selectedFilter.includes(i) ? ettlevColors.green100 : ettlevColors.white,
-                                            ...borderWidth('1px'),
-                                            ...borderStyle('solid'),
-                                            ...borderColor('#6A6A6A'),
-                                            paddingLeft: '8px',
-                                            paddingRight: '16px',
-                                            paddingTop: '8px',
-                                            paddingBottom: '10px',
-                                            marginRight: '16px',
-                                            marginBottom: '16px',
-                                            ...borderRadius('4px'),
-                                            ':hover': {
-                                              backgroundColor: ettlevColors.white,
-                                              boxShadow: '0px 2px 0px rgba(0, 0, 0, 0.25), inset 0px -1px 0px rgba(0, 0, 0, 0.25);',
-                                            },
-                                            ':focus': {
-                                              boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
-                                              outlineWidth: '3px',
-                                              outlineStyle: 'solid',
-                                              outlinwColor: ettlevColors.focusOutline,
-                                            },
-                                            width: '100%',
-                                            maxWidth: '260px',
-                                            justifyContent: 'flex-start',
+                                },
+                              }}
+                            >
+                              {relevansOptions.map((r, i) => {
+                                return (
+                                  <BaseUIButton
+                                    key={'relevans_' + r.value}
+                                    type="button"
+                                    startEnhancer={() => {
+                                      if (selectedFilter.includes(i)) {
+                                        return <img src={checkboxChecked} alt="checked" />
+                                      } else if (!selectedFilter.includes(i) && hover === i) {
+                                        return <img src={checkboxUncheckedHover} alt="checkbox hover" />
+                                      } else {
+                                        return <img src={checkboxUnchecked} alt="unchecked" />
+                                      }
+                                    }}
+                                    overrides={{
+                                      BaseButton: {
+                                        style: {
+                                          ...buttonContentStyle,
+                                          backgroundColor: selectedFilter.includes(i) ? ettlevColors.green100 : ettlevColors.white,
+                                          ...borderWidth('1px'),
+                                          ...borderStyle('solid'),
+                                          ...borderColor('#6A6A6A'),
+                                          paddingLeft: '8px',
+                                          paddingRight: '16px',
+                                          paddingTop: '8px',
+                                          paddingBottom: '10px',
+                                          marginRight: '16px',
+                                          marginBottom: '16px',
+                                          ...borderRadius('4px'),
+                                          ':hover': {
+                                            backgroundColor: ettlevColors.white,
+                                            boxShadow: '0px 2px 0px rgba(0, 0, 0, 0.25), inset 0px -1px 0px rgba(0, 0, 0, 0.25);',
                                           },
-                                          props: {
-                                            onMouseEnter: () => {
-                                              setHover(i)
-                                            },
-                                            onMouseLeave: () => {
-                                              setHover(undefined)
-                                            },
+                                          ':focus': {
+                                            boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
+                                            outlineWidth: '3px',
+                                            outlineStyle: 'solid',
+                                            outlinwColor: ettlevColors.focusOutline,
+                                          },
+                                          width: '100%',
+                                          maxWidth: '260px',
+                                          justifyContent: 'flex-start',
+                                        },
+                                        props: {
+                                          onMouseEnter: () => {
+                                            setHover(i)
+                                          },
+                                          onMouseLeave: () => {
+                                            setHover(undefined)
                                           },
                                         },
-                                      }}
+                                      },
+                                    }}
+                                  >
+                                    <div className="w-full mr-1">
+                                      <ParagraphMedium margin="0px" $style={{ lineHeight: '22px' }}>
+                                        {r.label}
+                                      </ParagraphMedium>
+                                    </div>
+                                    <Tooltip
+                                      content={r.description}
+                                      arrow
                                     >
-                                      <Block width="100%" marginRight="5px">
-                                        <ParagraphMedium margin="0px" $style={{ lineHeight: '22px' }}>
-                                          {r.label}
-                                        </ParagraphMedium>
-                                      </Block>
-                                      <StatefulTooltip
-                                        content={() => <Block padding="20px">{r.description}</Block>}
-                                        placement={PLACEMENT.bottom}
-                                        accessibilityType={ACCESSIBILITY_TYPE.tooltip}
-                                        returnFocus
-                                        showArrow
-                                        autoFocus
-                                      >
-                                        <Block display="flex" justifyContent="flex-end">
-                                          <img src={outlineInfoIcon} alt="informasjons ikon" />
-                                        </Block>
-                                      </StatefulTooltip>
-                                    </BaseUIButton>
-                                  )
-                                })}
-                              </ButtonGroup>
-                            </Block>
-                          </FormControl>
+                                      <div className="flex justify-end">
+                                        <img src={outlineInfoIcon} alt="informasjons ikon" />
+                                      </div>
+                                    </Tooltip>
+                                  </BaseUIButton>
+                                )
+                              })}
+                            </ButtonGroup>
+                          </div>
                         )
                       }}
                     </FieldArray>
@@ -340,37 +326,32 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       <FieldArray name="behandlinger">
                         {(p: FieldArrayRenderProps) => {
                           return (
-                            <FormControl
-                              label={
-                                <LabelWithTooltip
-                                  label={'Legg til behandlinger fra Behandlingskatalogen'}
-                                  tooltip="Siden løsningen behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Du kan knytte én eller flere behandlinger til etterlevelsesdokumentet."
+                            <div>
+                              <LabelWithTooltip
+                                label={'Legg til behandlinger fra Behandlingskatalogen'}
+                                tooltip="Siden løsningen behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Du kan knytte én eller flere behandlinger til etterlevelsesdokumentet."
+                              />
+                              <div className="flex">
+                                <CustomizedSelect
+                                  overrides={selectCustomOverrides('behandlinger', p)}
+                                  placeholder="Søk behandlinger"
+                                  aria-label="Søk behandlinger"
+                                  noResultsMsg={intl.emptyTable}
+                                  maxDropdownHeight="350px"
+                                  searchable={true}
+                                  type={TYPE.search}
+                                  labelKey="navn"
+                                  onInputChange={(event) => setBehandlingSearchResult(event.currentTarget.value)}
+                                  options={updateBehandlingNameWithNumber(behandlingSearchResult)}
+                                  onChange={({ value }) => {
+                                    value.length && p.push(value[0])
+                                  }}
+                                  isLoading={loadingBehandlingSearchResult}
+                                  error={!!p.form.errors.behandlinger && !!p.form.submitCount}
                                 />
-                              }
-                            >
-                              <Block>
-                                <Block display="flex">
-                                  <CustomizedSelect
-                                    overrides={selectCustomOverrides('behandlinger', p)}
-                                    placeholder="Søk behandlinger"
-                                    aria-label="Søk behandlinger"
-                                    noResultsMsg={intl.emptyTable}
-                                    maxDropdownHeight="350px"
-                                    searchable={true}
-                                    type={TYPE.search}
-                                    labelKey="navn"
-                                    onInputChange={(event) => setBehandlingSearchResult(event.currentTarget.value)}
-                                    options={updateBehandlingNameWithNumber(behandlingSearchResult)}
-                                    onChange={({ value }) => {
-                                      value.length && p.push(value[0])
-                                    }}
-                                    isLoading={loadingBehandlingSearchResult}
-                                    error={!!p.form.errors.behandlinger && !!p.form.submitCount}
-                                  />
-                                </Block>
-                                <RenderTagList list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} />
-                              </Block>
-                            </FormControl>
+                              </div>
+                              <RenderTagList list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} />
+                            </div>
                           )
                         }}
                       </FieldArray>
@@ -387,39 +368,38 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       <FieldArray name="teamsData">
                         {(p: FieldArrayRenderProps) => {
                           return (
-                            <FormControl label={<LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />}>
-                              <Block>
-                                <Block display="flex">
-                                  <CustomizedSelect
-                                    overrides={selectCustomOverrides('teamsData', p)}
-                                    placeholder="Søk team"
-                                    aria-label="Søk team"
-                                    noResultsMsg={intl.emptyTable}
-                                    maxDropdownHeight="350px"
-                                    searchable={true}
-                                    type={TYPE.search}
-                                    labelKey="name"
-                                    onInputChange={(event) => {
-                                      setTeamSearchResult(event.currentTarget.value)
-                                    }}
-                                    options={teamSearchResult}
-                                    onChange={({ value }) => {
-                                      value.length && p.push(value[0])
-                                    }}
-                                    isLoading={loadingTeamSearchResult}
-                                    error={!!p.form.errors.teamsData && !!p.form.submitCount}
-                                  />
-                                </Block>
-                                <RenderTagList list={p.form.values.teamsData.map((t: Team) => t.name)} onRemove={p.remove} />
-                              </Block>
-                            </FormControl>
+                            <div>
+                              <LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />
+                              <div className="flex">
+                                <CustomizedSelect
+                                  overrides={selectCustomOverrides('teamsData', p)}
+                                  placeholder="Søk team"
+                                  aria-label="Søk team"
+                                  noResultsMsg={intl.emptyTable}
+                                  maxDropdownHeight="350px"
+                                  searchable={true}
+                                  type={TYPE.search}
+                                  labelKey="name"
+                                  onInputChange={(event) => {
+                                    setTeamSearchResult(event.currentTarget.value)
+                                  }}
+                                  options={teamSearchResult}
+                                  onChange={({ value }) => {
+                                    value.length && p.push(value[0])
+                                  }}
+                                  isLoading={loadingTeamSearchResult}
+                                  error={!!p.form.errors.teamsData && !!p.form.submitCount}
+                                />
+                              </div>
+                              <RenderTagList list={p.form.values.teamsData.map((t: Team) => t.name)} onRemove={p.remove} />
+                            </div>
                           )
                         }}
                       </FieldArray>
                     </FieldWrapper>
                   )}
 
-                  <Block display="flex" justifyContent="flex-end">
+                  <div className="flex justify-end">
                     <Button variant="secondary" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
                       Avbryt
                     </Button>
@@ -428,15 +408,16 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       onClick={() => {
                         submitForm()
                       }}
+                      className="ml-2.5"
                     >
                       {props.isEditButton ? 'Lagre' : 'Opprett'}
                     </Button>
-                  </Block>
+                  </div>
                 </Form>
               )
             }}
           </Formik>
-        </ModalBody>
+        </Modal.Body>
       </Modal>
     </div>
   )
