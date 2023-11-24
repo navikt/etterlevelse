@@ -152,9 +152,9 @@ export const EditEtterlevelse = ({
       {krav && (
         <div className="flex flex-col gap-8">
           <div>
-            <Detail className="font-bold">
+            <BodyShort size="small">
               {temaName} / {krav.kravNummer}.{krav.kravVersjon}
-            </Detail>
+            </BodyShort>
             <div>
               <Heading size="medium" level="1">
                 {krav.navn}
