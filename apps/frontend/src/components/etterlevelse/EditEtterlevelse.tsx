@@ -152,9 +152,9 @@ export const EditEtterlevelse = ({
       {krav && (
         <div className="flex flex-col gap-8">
           <div>
-            <Detail className="font-bold">
+            <BodyShort size="small">
               {temaName} / {krav.kravNummer}.{krav.kravVersjon}
-            </Detail>
+            </BodyShort>
             <div>
               <Heading size="medium" level="1">
                 {krav.navn}
@@ -296,7 +296,7 @@ export const EditEtterlevelse = ({
                 <Tabs.Panel value="notat">
                   <div className="mt-2">
                     <div className="flex justify-between">
-                      <Label className="flex gap-1">
+                      <Label className="flex gap-1" size="medium">
                         <FileTextIcon fontSize="1.5rem" area-label="" aria-hidden />
                         Notat
                       </Label>

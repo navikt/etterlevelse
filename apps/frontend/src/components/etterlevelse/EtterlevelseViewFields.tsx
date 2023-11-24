@@ -76,7 +76,7 @@ const KriterieBegrunnelse = ({
         </div>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 mb-4">
         <Heading size="xsmall" level="3">
           {suksesskriterie.navn}
         </Heading>
