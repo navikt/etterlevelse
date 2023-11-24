@@ -2,26 +2,14 @@ import { FieldWrapper } from '../../common/Inputs'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React, { useEffect, useState } from 'react'
 import { KravStatus, Suksesskriterie } from '../../../constants'
-import { FormControl } from 'baseui/form-control'
-import { Block } from 'baseui/block'
-import { buttonBorderStyle, Button as OldButton } from '../../common/Button'
 import * as _ from 'lodash'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { faGripVertical, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import { Card } from 'baseui/card'
-import { theme } from '../../../util'
 import { useDebouncedState } from '../../../util/hooks'
 import { DragDropContext, Draggable, DraggableProvidedDragHandleProps, DraggingStyle, Droppable } from 'react-beautiful-dnd'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { kravModal } from '../EditKrav'
-import CustomizedInput from '../../common/CustomizedInput'
-import { ettlevColors } from '../../../util/theme'
 import { Error } from '../../common/ModalSchema'
-import { borderColor } from '../../common/Style'
-import { ALIGN, Radio, RadioGroup } from 'baseui/radio'
-import { LabelSmall } from 'baseui/typography'
-import { Box, Button, Tooltip } from '@navikt/ds-react'
+import { Box, Button, Radio, RadioGroup, TextField, Tooltip } from '@navikt/ds-react'
 import { DragVerticalIcon, PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 
 type KravSuksesskriterieEditProps = {
@@ -169,70 +157,43 @@ const Kriterie = ({
           </div>
         </div>
 
-        <FormControl
-          label={
-            <Block display={'flex'} width={'100%'} justifyContent={'space-between'}>
-              <LabelWithTooltip
-                label={`Suksesskriterium ${nummer}`}
-                tooltip={
-                  'Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'
-                }
-              />
-            </Block>
-          }
-        >
-          <Block>
-            <CustomizedInput
-              value={navnInput}
-              onChange={(e) => setNavn((e.target as HTMLInputElement).value)}
-              placeholder={'Navn'}
-              overrides={{
-                Root: {
-                  style: {
-                    ...borderColor(p.form.errors['suksesskriterier'] ? ettlevColors.red600 : ettlevColors.grey200),
-                  },
-                },
-                Input: {
-                  style: {
-                    backgroundColor: p.form.errors['suksesskriterier'] && ettlevColors.error50,
-                  },
-                },
-              }}
-            />
-            <Error fieldName={'suksesskriterier'} fullWidth />
-          </Block>
-        </FormControl>
-        <FormControl label={<LabelWithTooltip label={'Beskrivelse av suksesskriteriet'} tooltip={'Nærmere detaljer rundt oppnåelse av suksesskriteriet.'} />}>
+        <div>
+          <LabelWithTooltip
+            label={`Suksesskriterium ${nummer}`}
+            tooltip={
+              'Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'
+            }
+          />
+          <TextField
+            label={`Suksesskriterium ${nummer}`}
+            hideLabel
+            value={navnInput}
+            onChange={(e) => setNavn((e.target as HTMLInputElement).value)}
+            placeholder={'Navn'}
+          />
+          <Error fieldName={'suksesskriterier'} fullWidth />
+        </div>
+
+        <div>
+          <LabelWithTooltip label={'Beskrivelse av suksesskriteriet'} tooltip={'Nærmere detaljer rundt oppnåelse av suksesskriteriet.'} />
           {/* <MarkdownEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} /> */}
           <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} setIsFormDirty={setIsFormDirty} />
-        </FormControl>
-        <Block display="flex" flex="1" justifyContent="center">
-          <LabelSmall marginBottom="6px" marginTop="6px" marginRight="14px" $style={{ maxWidth: '162px', width: '100%', fontWeight: 600, lineHeight: '22px' }}>
-            Velg type besvarelse:
-          </LabelSmall>
+        </div>
 
-          <FormControl overrides={{ ControlContainer: { style: { marginBottom: '0px' } } }}>
-            <RadioGroup
-              value={behovForBegrunnelse}
-              onChange={(e) => {
-                p.form.setFieldValue('behovForBegrunnelse', e.target.value === 'true' ? true : false)
-                setBehovForBegrunnelse(e.target.value)
-              }}
-              name="behovForBegrunnelse"
-              align={ALIGN.horizontal}
-              overrides={{
-                RadioGroupRoot: {
-                  style: {
-                    marginRight: '34px',
-                  },
-                },
-              }}
-            >
-              <Radio value="true">Bekreftelse med tekstlig begrunnelse</Radio>
-              <Radio value="false">Kun bekreftelse </Radio>
-            </RadioGroup>
-          </FormControl>
-        </Block>
+
+        <div className="flex flex-1 mt-1">
+          <RadioGroup
+            legend="Velg type besvarelse:"
+            value={behovForBegrunnelse}
+            onChange={(value) => {
+              p.form.setFieldValue('behovForBegrunnelse', value === 'true' ? true : false)
+              setBehovForBegrunnelse(value)
+            }}
+          >
+            <Radio value="true">Bekreftelse med tekstlig begrunnelse</Radio>
+            <Radio value="false">Kun bekreftelse </Radio>
+          </RadioGroup>
+        </div>
       </div>
     </Box>
   )
