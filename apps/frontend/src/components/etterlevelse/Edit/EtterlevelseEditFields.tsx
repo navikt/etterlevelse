@@ -90,7 +90,6 @@ export const EtterlevelseEditFields = ({
                   </div>
                 )}
                 <div className="flex w-full items-center mb-4">
-                  <Label className="min-w-fit">Hvilke suksesskriterier er oppfylt?</Label>
                   {tidligereEtterlevelser && tidligereEtterlevelser.length > 0 && (
                     <div className="flex w-full justify-end">
                       <EtterlevelseCard etterlevelse={tidligereEtterlevelser[0]} />
