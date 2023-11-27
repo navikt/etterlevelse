@@ -206,17 +206,20 @@ export const EditEtterlevelse = ({
               <div>
                 <div className="flex items-center justify-between">
                   <div>
-                    {krav.aktivertDato !== null && (
+                    {krav.aktivertDato !== null && krav.kravVersjon > 1 && (
                       <Tag variant="warning">
-                        {krav.kravVersjon > 1 ? `Ny versjon ${moment(krav.aktivertDato).format('ll')}` : `Opprettet ${moment(krav.aktivertDato).format('ll')}`}
+                        Ny versjon {moment(krav.aktivertDato).format('ll')}
                       </Tag>
+                    )}
+                    {krav.aktivertDato !== null && krav.kravVersjon === 1 && (
+                      <BodyShort>Opprettet {moment(krav.aktivertDato).format('ll')}</BodyShort>
                     )}
                   </div>
                   {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
                     <div className="flex items-center gap-2">
                       <BodyShort size="small">
                         {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1
-                          ? etterlevelseMetadata.tildeltMed[0]
+                          ? 'Tildelt ' +  etterlevelseMetadata.tildeltMed[0]
                           : 'Ikke tildelt'}
                       </BodyShort>
                       <Button
@@ -261,7 +264,7 @@ export const EditEtterlevelse = ({
                 )}
               </div>
 
-              <div className="p-4 rounded bg-purple-50">
+              <div className="rounded bg-purple-50 p-8">
                 <Heading level="2" size="small">
                   Hensikten med kravet
                 </Heading>
@@ -311,35 +314,19 @@ export const EditEtterlevelse = ({
               </Tabs>
             </div>
             <div className="pl-4 border-l border-border-divider w-full max-w-sm">
-              <Tabs defaultValue="notat" size="small">
+              <Tabs defaultValue="mer" size="small">
                 <Tabs.List>
-                  <Tabs.Tab value="notat" label="Notat" />
-                  <Tabs.Tab className="whitespace-nowrap" value="dokument" label="Om etterlevelsen" />
                   <Tabs.Tab className="whitespace-nowrap" value="mer" label="Mer om kravet" />
+                  <Tabs.Tab className="whitespace-nowrap" value="dokument" label="Om etterlevelsen" />
+                  <Tabs.Tab value="notat" label="Notat" />
                 </Tabs.List>
-                <Tabs.Panel value="notat">
-                  <div className="mt-2">
-                    <div className="flex justify-between">
-                      <Label className="flex gap-1" size="medium">
-                        <FileTextIcon fontSize="1.5rem" area-label="" aria-hidden />
-                        Notat
-                      </Label>
-                      <Button variant="secondary" size="xsmall" onClick={() => setIsNotatModalOpen(true)}>
-                        Rediger
-                      </Button>
-
-                      <EditNotatfelt
-                        isOpen={isNotatModalOpen}
-                        setIsNotatfeltOpen={setIsNotatModalOpen}
-                        etterlevelseMetadata={etterlevelseMetadata}
-                        setEtterlevelseMetadata={setEtterlevelseMetadata}
-                      />
-                    </div>
-                    <BodyLong className="break-words">{etterlevelseMetadata.notater}</BodyLong>
+                <Tabs.Panel value="mer">
+                  <div className="mt-2 p-4">
+                    <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />
                   </div>
                 </Tabs.Panel>
                 <Tabs.Panel value="dokument">
-                  <div className="mt-2">
+                  <div className="mt-2 p-4">
                     <div className="mb-4">
                       <Label size="medium">Tittel</Label>
                       <BodyShort>{etterlevelseDokumentasjonTitle}</BodyShort>
@@ -358,11 +345,31 @@ export const EditEtterlevelse = ({
                     </div>
                   </div>
                 </Tabs.Panel>
-                <Tabs.Panel value="mer">
-                  <div className="mt-2">
-                    <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />
+                <Tabs.Panel value="notat">
+                  <div className="mt-2 p-4">
+                    <div className="flex justify-between mb-2.5">
+                      <Label className="flex gap-1" size="medium">
+                        <FileTextIcon fontSize="1.5rem" area-label="" aria-hidden />
+                        Notat
+                      </Label>
+                      <Button variant="secondary" size="xsmall" onClick={() => setIsNotatModalOpen(true)}>
+                        Rediger
+                      </Button>
+                    </div>
+
+                    <EditNotatfelt
+                      isOpen={isNotatModalOpen}
+                      setIsNotatfeltOpen={setIsNotatModalOpen}
+                      etterlevelseMetadata={etterlevelseMetadata}
+                      setEtterlevelseMetadata={setEtterlevelseMetadata}
+                    />
+
+                    <div className="break-words">
+                      <Markdown source={etterlevelseMetadata.notater} />
+                    </div>
                   </div>
                 </Tabs.Panel>
+
               </Tabs>
             </div>
           </div>

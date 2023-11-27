@@ -29,9 +29,9 @@ export const Markdown = ({
     p: (parProps: any) => {
       const { children } = parProps
       if (p1) {
-        return <BodyLong>{children}</BodyLong>
+        return <BodyLong className="break-words">{children}</BodyLong>
       }
-      return <BodyLong>{children}</BodyLong>
+      return <BodyLong className="break-words">{children}</BodyLong>
     },
 
     h1: (headerProps: any) => {
@@ -102,11 +102,13 @@ export const Markdown = ({
       if (p1) {
         return (
           <List.Item>
-            <BodyShort>{children}</BodyShort>
+            <BodyShort className="break-words">{children}</BodyShort>
           </List.Item>
         )
       } else {
-        return <List.Item>{children}</List.Item>
+        return <List.Item className="break-all">
+          {children}
+        </List.Item>
       }
     },
     ul: (ulProps: any) => {
