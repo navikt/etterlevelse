@@ -273,33 +273,40 @@ export const EditEtterlevelse = ({
                   <Tabs.Tab value="etterlevelser" label="Hvordan har andre gjort det?" />
                   <Tabs.Tab value="tilbakemeldinger" label="Spørsmål og svar" />
                 </Tabs.List>
-                <Tabs.Panel value="dokumentasjon" className="flex flex-col gap-2 mt-2">
-                  {kravFilter !== KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
-                    <EtterlevelseEditFields
-                      kravFilter={kravFilter}
-                      krav={krav}
-                      etterlevelse={etterlevelse}
-                      submit={submit}
-                      formRef={etterlevelseFormRef}
-                      varsleMelding={varsleMelding}
-                      disableEdit={disableEdit}
-                      close={() => {
-                        setTimeout(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`), 1)
-                      }}
-                      navigatePath={navigatePath}
-                      editedEtterlevelse={editedEtterlevelse}
-                      tidligereEtterlevelser={tidligereEtterlevelser}
-                    />
-                  )}
-                  {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
-                    <EtterlevelseViewFields etterlevelse={etterlevelse} suksesskriterie={krav.suksesskriterier} tidligereEtterlevelser={tidligereEtterlevelser} />
-                  )}
+                <Tabs.Panel value="dokumentasjon">
+                  <div className="mt-2">
+                    {kravFilter !== KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+                      <EtterlevelseEditFields
+                        kravFilter={kravFilter}
+                        krav={krav}
+                        etterlevelse={etterlevelse}
+                        submit={submit}
+                        formRef={etterlevelseFormRef}
+                        varsleMelding={varsleMelding}
+                        disableEdit={disableEdit}
+                        close={() => {
+                          setTimeout(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`), 1)
+                        }}
+                        navigatePath={navigatePath}
+                        editedEtterlevelse={editedEtterlevelse}
+                        tidligereEtterlevelser={tidligereEtterlevelser}
+                      />
+                    )}
+                    {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+                      <EtterlevelseViewFields etterlevelse={etterlevelse} suksesskriterie={krav.suksesskriterier} tidligereEtterlevelser={tidligereEtterlevelser} />
+                    )}
+                  </div>
                 </Tabs.Panel>
-                <Tabs.Panel value="etterlevelser" className="flex flex-col gap-2 mt-2">
-                  <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />
+                <Tabs.Panel value="etterlevelser" >
+                  <div className="mt-2">
+                    <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />
+                  </div>
+
                 </Tabs.Panel>
-                <Tabs.Panel value="tilbakemeldinger" className="flex flex-col gap-2 mt-2">
-                  <Tilbakemeldinger krav={krav} hasKravExpired={false} />
+                <Tabs.Panel value="tilbakemeldinger" >
+                  <div className="mt-2">
+                    <Tilbakemeldinger krav={krav} hasKravExpired={false} />
+                  </div>
                 </Tabs.Panel>
               </Tabs>
             </div>
