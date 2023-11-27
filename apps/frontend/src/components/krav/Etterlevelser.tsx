@@ -85,7 +85,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
   )
 
   return (
-    <div className="w-full">
+    <div>
       {!loading && etterlevelser.length > 0 && (
         <div className="flex items-center py-5">
           <Label>Vis:</Label>
@@ -112,7 +112,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
         <InfoBlock icon={sadFolderIcon} alt={'Trist mappe ikon'} text={'Det er ikke dokumentert etterlevelse på dette kravet'} color={ettlevColors.red50} />
       )}
 
-      {productAreas.length > 0 ? (
+      {productAreas.length > 0 && (
         <Accordion>
           {productAreas.map((t) => {
             let productAreaEtterlevelser = filteredEtterlevelse?.filter(
@@ -134,9 +134,9 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                           onClick={
                             modalVersion
                               ? () => {
-                                  setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
-                                  setIsModalOpen(true)
-                                }
+                                setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
+                                setIsModalOpen(true)
+                              }
                               : undefined
                           }
                         >
@@ -165,7 +165,9 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
             )
           })}
         </Accordion>
-      ) : (
+      )}
+
+      {productAreas.length === 0 && (
         <div className="flex item-center">
           {etterlevelser.length >= 1 && <Label>Ingen etterlevelser med {etterlevelseFilter.filter((ef) => ef.id === filter)[0].label} status</Label>}
         </div>

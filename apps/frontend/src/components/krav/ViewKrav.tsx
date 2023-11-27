@@ -16,7 +16,7 @@ import { BodyShort, Label } from '@navikt/ds-react'
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => <div className="mb-4">{children}</div>
 
-export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
+export const ViewKrav = ({ krav }: { krav: KravQL}) => {
   return (
     <div>
       <div className="w-full">

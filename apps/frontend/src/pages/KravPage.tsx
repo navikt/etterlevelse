@@ -226,7 +226,7 @@ export const KravPage = () => {
                   <Tabs.Tab value="tilbakemeldinger" label="Spørsmål og svar" />
                 </Tabs.List>
                 <Tabs.Panel value="krav">
-                  <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />
+                  <ViewKrav krav={krav} />
                 </Tabs.Panel>
                 <Tabs.Panel value="etterlevelser">
                   <Etterlevelser loading={etterlevelserLoading} krav={krav} />

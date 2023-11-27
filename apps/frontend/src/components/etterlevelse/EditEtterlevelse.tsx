@@ -1,8 +1,8 @@
-import { Behandling, Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL, KravStatus, Team } from '../../constants'
+import { Behandling, Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL, KravStatus, KravVersjon, Team } from '../../constants'
 import { FormikProps } from 'formik'
 import { createEtterlevelse, getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, updateEtterlevelse } from '../../api/EtterlevelseApi'
 import React, { useEffect, useRef, useState } from 'react'
-import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
+import { getKravByKravNumberAndVersion, getKravByKravNummer, KravId } from '../../api/KravApi'
 import { query } from '../../pages/KravPage'
 import { user } from '../../services/User'
 import { useQuery } from '@apollo/client'
@@ -71,6 +71,7 @@ export const EditEtterlevelse = ({
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
   const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
+  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{ kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' }])
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
@@ -135,9 +136,28 @@ export const EditEtterlevelse = ({
   useEffect(() => {
     if (data?.kravById) {
       setKrav(data.kravById)
-      getKravByKravNumberAndVersion(data.kravById.kravNummer, data.kravById.kravVersjon + 1).then((krav) => {
-        if (krav && krav.status === KravStatus.AKTIV) setNyereKrav(krav)
+
+      getKravByKravNummer(data.kravById.kravNummer).then((resp) => {
+        if (resp.content.length) {
+          const alleVersjoner = resp.content
+            .map((k) => {
+              return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer, kravStatus: k.status }
+            })
+            .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
+
+          const filteredVersjoner = alleVersjoner.filter((k) => k.kravStatus !== KravStatus.UTKAST)
+
+          if (filteredVersjoner.length) {
+            setAlleKravVersjoner(filteredVersjoner)
+          }
+
+          const krav = resp.content.filter((k) => k.kravVersjon === data.kravById.kravVersjon + 1)
+
+          if (krav.length && krav[0].status === KravStatus.AKTIV) setNyereKrav(krav[0])
+
+        }
       })
+
     }
   }, [data])
 
@@ -254,9 +274,6 @@ export const EditEtterlevelse = ({
                   <Tabs.Tab value="tilbakemeldinger" label="Spørsmål og svar" />
                 </Tabs.List>
                 <Tabs.Panel value="dokumentasjon" className="flex flex-col gap-2 mt-2">
-                  {
-                    // todo: this heckin' component needs some care
-                  }
                   {kravFilter !== KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
                     <EtterlevelseEditFields
                       kravFilter={kravFilter}
@@ -336,7 +353,7 @@ export const EditEtterlevelse = ({
                 </Tabs.Panel>
                 <Tabs.Panel value="mer">
                   <div className="mt-2">
-                    <AllInfo krav={krav} alleKravVersjoner={[{ kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status }]} />
+                    <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />
                   </div>
                 </Tabs.Panel>
               </Tabs>
