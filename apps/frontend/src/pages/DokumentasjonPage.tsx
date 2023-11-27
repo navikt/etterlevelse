@@ -205,7 +205,7 @@ export const DokumentasjonPage = () => {
                   return (
                     <div key={'behandling_link_' + index}>
                       {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger[index].navn ? (
-                        <ExternalLink className="text-medium"href={`${env.pollyBaseUrl}process/${behandlingId}`}>
+                        <ExternalLink className="text-medium" href={`${env.pollyBaseUrl}process/${behandlingId}`}>
                           {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger.length > 0
                             ? `${etterlevelseDokumentasjon.behandlinger[index].navn}`
                             : 'Ingen data'}
@@ -234,13 +234,6 @@ export const DokumentasjonPage = () => {
           </div>
         </div>
         <EditEtterlevelseDokumentasjonModal etterlevelseDokumentasjon={etterlevelseDokumentasjon} setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon} isEditButton />
-        <div className="flex justify-between w-full items-center">
-          <BodyShort size="medium">
-            <strong>
-              Totalt {getNewestKravVersjon(relevanteStats).length} krav, {antallFylttKrav} ferdig utfylt
-            </strong>
-          </BodyShort>
-        </div>
       </div>
       <div className="pt-4 flex flex-col gap-4">
         {/* <div className="navds-alert navds-alert--info navds-alert--medium">
@@ -265,13 +258,21 @@ export const DokumentasjonPage = () => {
             </div>
           </div>
         </div> */}
-        <div className="flex items-center gap-4">
-          <Button variant="tertiary" size="xsmall" onClick={() => setOpenAccordions(temaListe.map(() => true))}>
-            Åpne alle tema
-          </Button>
-          <Button variant="tertiary" size="xsmall" onClick={() => setOpenAccordions(temaListe.map(() => false))}>
-            Lukk alle tema
-          </Button>
+        <div className="flex items-center w-full">
+          <div className="flex items-center w-full gap-4">
+            <Button variant="tertiary" size="xsmall" onClick={() => setOpenAccordions(temaListe.map(() => true))}>
+              Åpne alle tema
+            </Button>
+            <Button variant="tertiary" size="xsmall" onClick={() => setOpenAccordions(temaListe.map(() => false))}>
+              Lukk alle tema
+            </Button>
+          </div>
+
+          <div className="flex justify-end w-full items-center">
+            <BodyShort size="medium">
+              Totalt {getNewestKravVersjon(relevanteStats).length} krav, {antallFylttKrav} ferdig utfylt
+            </BodyShort>
+          </div>
         </div>
 
         {loading ? (
