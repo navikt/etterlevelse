@@ -136,7 +136,7 @@ export const DokumentasjonPage = () => {
           {relevans.map((r, index) => (
             <div key={r.value} className="flex items-center gap-1">
               <Tag variant="info" size="small">
-                <Detail>{r.label}</Detail>
+                <BodyShort size="small">{r.label}</BodyShort>
               </Tag>
             </div>
           ))}
@@ -148,7 +148,7 @@ export const DokumentasjonPage = () => {
         {options.map((o, index) => (
           <div key={o.value} className="flex items-center gap-1">
             <Tag variant="info" size="small">
-              <Detail>{o.label}</Detail>
+              <BodyShort size="small">{o.label}</BodyShort>
             </Tag>
           </div>
         ))}
@@ -199,13 +199,13 @@ export const DokumentasjonPage = () => {
           </div>
           {etterlevelseDokumentasjon.behandlerPersonopplysninger && (
             <div className="flex gap-2 flex-wrap items-center">
-              <Detail className="font-bold">Behandling:</Detail>
+              <BodyShort size="small">Behandling:</BodyShort>
               {etterlevelseDokumentasjon.behandlingIds && etterlevelseDokumentasjon.behandlingIds.length >= 1 && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
                 etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => {
                   return (
                     <div key={'behandling_link_' + index}>
                       {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger[index].navn ? (
-                        <ExternalLink className="text-sm" href={`${env.pollyBaseUrl}process/${behandlingId}`}>
+                        <ExternalLink className="text-medium"href={`${env.pollyBaseUrl}process/${behandlingId}`}>
                           {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger.length > 0
                             ? `${etterlevelseDokumentasjon.behandlinger[index].navn}`
                             : 'Ingen data'}
@@ -221,9 +221,9 @@ export const DokumentasjonPage = () => {
               )}
             </div>
           )}
-          {etterlevelseDokumentasjon.teams.length > 0 ? <Teams teams={etterlevelseDokumentasjon.teams} link /> : <Detail>Team er ikke angitt</Detail>}
+          {etterlevelseDokumentasjon.teams.length > 0 ? <Teams teams={etterlevelseDokumentasjon.teams} link /> : <BodyShort size="small">Team er ikke angitt</BodyShort>}
           <div className="flex items-center gap-2">
-            <Detail className="font-bold">Egenskaper:</Detail>
+            <BodyShort size="small">Egenskaper:</BodyShort>
             {etterlevelseDokumentasjon.irrelevansFor.length === options.length && (
               <div className="flex items-center gap-1">
                 <ExclamationmarkTriangleFillIcon area-label="" aria-hidden className="text-2xl text-icon-warning" />
