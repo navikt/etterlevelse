@@ -59,10 +59,10 @@ export const DokumentasjonPage = () => {
   const filterData = (
     unfilteredData:
       | {
-          etterlevelseDokumentasjon: PageResponse<{
-            stats: EtterlevelseDokumentasjonStats
-          }>
-        }
+        etterlevelseDokumentasjon: PageResponse<{
+          stats: EtterlevelseDokumentasjonStats
+        }>
+      }
       | undefined,
   ) => {
     const relevanteStatusListe: any[] = []
@@ -235,8 +235,10 @@ export const DokumentasjonPage = () => {
         </div>
         <EditEtterlevelseDokumentasjonModal etterlevelseDokumentasjon={etterlevelseDokumentasjon} setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon} isEditButton />
         <div className="flex justify-between w-full items-center">
-          <BodyShort size="small">
-            Totalt {getNewestKravVersjon(relevanteStats).length} krav, {antallFylttKrav} ferdig utfylt
+          <BodyShort size="medium">
+            <strong>
+              Totalt {getNewestKravVersjon(relevanteStats).length} krav, {antallFylttKrav} ferdig utfylt
+            </strong>
           </BodyShort>
         </div>
       </div>
