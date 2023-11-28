@@ -83,15 +83,16 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
         }
 
         krav.forEach(k -> {
-            if (k.getEtterlevelser() != null) {
+            if (k.getEtterlevelser() != null && !k.getEtterlevelser().isEmpty()) {
                 k.setEtterlevelser(k.getEtterlevelser().stream().filter(e -> e.getEtterlevelseDokumentasjonId().equals(etterlevelseDokumentasjon.getId().toString())).toList());
             }
         });
 
-        var fylt = filter(krav, k -> k.getEtterlevelser() != null && !k.getEtterlevelser().isEmpty());
-        var ikkeFylt = filter(krav, k -> k.getEtterlevelser() == null || k.getEtterlevelser().isEmpty() );
+        var fylt = krav.stream().filter(k -> k.getEtterlevelser() != null && !k.getEtterlevelser().isEmpty()).toList();
 
-        var irrelevant = filter(irrelevantKrav, i -> !fylt.contains(i) && !ikkeFylt.contains(i));
+        var ikkeFylt = krav.stream().filter(k -> k.getEtterlevelser() == null || k.getEtterlevelser().isEmpty()).toList();
+
+        var irrelevant = irrelevantKrav.stream().filter(i -> !fylt.contains(i) && !ikkeFylt.contains(i)).toList();
 
         return EtterlevelseDokumentasjonStats.builder()
                 .fyltKrav(fylt)
