@@ -50,3 +50,15 @@ export const behandlingName = (behandling?: Behandling) => {
   return behandlingName
 }
 export const useSearchBehandling = () => useSearch(searchBehandling)
+
+export const searchBehandlingOptions = async (searchParam: string) => {
+  if (searchParam && searchParam.length > 2) {
+    const behandlinger = await (await axios.get<PageResponse<Behandling>>(`${env.backendBaseUrl}/behandling/search/${searchParam}`)).data.content
+    if(behandlinger && behandlinger.length) {
+      return behandlinger.map((b) => {
+        return {value: b.id, label: 'B' + b.nummer + ' ' + b.navn, ...b}
+      })
+    }
+  }
+  return []
+}

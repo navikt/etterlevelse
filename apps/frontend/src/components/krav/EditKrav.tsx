@@ -20,7 +20,6 @@ import { user } from '../../services/User'
 import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
 import _ from 'lodash'
 import { Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal } from '@navikt/ds-react'
-import Select from 'react-select/dist/declarations/src/Select'
 
 type EditKravProps = {
   krav: KravQL

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSearchBehandling } from '../../../api/BehandlingApi'
+import { searchBehandlingOptions, useSearchBehandling } from '../../../api/BehandlingApi'
 import {
   createEtterlevelseDokumentasjon,
   etterlevelseDokumentasjonMapToFormVal,
@@ -26,6 +26,8 @@ import { useNavigate } from 'react-router-dom'
 import { updateBehandlingNameWithNumber } from '../common/utils'
 import { Button, Modal, Tooltip } from '@navikt/ds-react'
 import { buttonContentStyle } from '../../common/Button'
+import AsyncSelect from 'react-select/async'
+import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 
 type EditEtterlevelseDokumentasjonModalProps = {
   etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
@@ -206,7 +208,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       <Error fieldName="virkemiddelId" fullWidth />
                     </FieldWrapper>
                   ) : ( */}
-                  <>
+                  <div>
                     <LabelWithTooltip
                       tooltip="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
                       label={'Hvilke egenskaper gjelder for etterlevelsen?'}
@@ -312,7 +314,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                         )
                       }}
                     </FieldArray>
-                  </>
+                  </div>
                   {/* )} */}
 
                   <BoolField
@@ -331,26 +333,29 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                 label={'Legg til behandlinger fra Behandlingskatalogen'}
                                 tooltip="Siden løsningen behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Du kan knytte én eller flere behandlinger til etterlevelsesdokumentet."
                               />
-                              <div className="flex">
-                                <CustomizedSelect
-                                  overrides={selectCustomOverrides('behandlinger', p)}
-                                  placeholder="Søk behandlinger"
-                                  aria-label="Søk behandlinger"
-                                  noResultsMsg={intl.emptyTable}
-                                  maxDropdownHeight="350px"
-                                  searchable={true}
-                                  type={TYPE.search}
-                                  labelKey="navn"
-                                  onInputChange={(event) => setBehandlingSearchResult(event.currentTarget.value)}
-                                  options={updateBehandlingNameWithNumber(behandlingSearchResult)}
-                                  onChange={({ value }) => {
-                                    value.length && p.push(value[0])
+                              <div className="w-full">
+                                <AsyncSelect
+                                  aria-label="Søk etter behandlinger"
+                                  placeholder="Søk etter behandlinger"
+                                  components={{ DropdownIndicator }}
+                                  noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
+                                  controlShouldRenderValue={false}
+                                  loadingMessage={() => 'Søker...'}
+                                  isClearable={false}
+                                  loadOptions={searchBehandlingOptions}
+                                  onChange={(value) => {
+                                    value && p.push(value)
                                   }}
-                                  isLoading={loadingBehandlingSearchResult}
-                                  error={!!p.form.errors.behandlinger && !!p.form.submitCount}
+                                  styles={{
+                                    control: (base) => ({
+                                      ...base,
+                                      cursor: 'text',
+                                      height: '48px'
+                                    })
+                                  }}
                                 />
                               </div>
-                              <RenderTagList list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} />
+                              <RenderTagList list={p.form.values.behandlinger.map((b: Behandling) => 'B' + b.nummer + ' ' + b.navn)} onRemove={p.remove} />
                             </div>
                           )
                         }}
