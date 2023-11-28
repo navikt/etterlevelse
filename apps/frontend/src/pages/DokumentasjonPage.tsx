@@ -34,7 +34,7 @@ export const DokumentasjonPage = () => {
   const options = codelist.getParsedOptions(ListName.RELEVANS)
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
   const [openAccordions, setOpenAccordions] = useState<boolean[]>(temaListe.map(() => false))
-
+  const variables = { etterlevelseDokumentasjonId: params.id }
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByEtterlevelseDokumentasjonId(params.id)
   const [kravPriority, setKravPriority] = useState<KravPrioritering[]>([])
@@ -48,8 +48,8 @@ export const DokumentasjonPage = () => {
     refetch: refetchRelevanteData,
     loading,
   } = useQuery<{ etterlevelseDokumentasjon: PageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
-    variables: { etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id },
-    skip: !etterlevelseDokumentasjon
+    variables,
+    skip: !params.id 
   })
 
   const [relevanteStats, setRelevanteStats] = useState<KravQL[]>([])
