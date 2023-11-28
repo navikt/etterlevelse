@@ -104,6 +104,18 @@ export const usePersonName = () => {
 }
 export const useSearchTeam = () => useSearch(searchTeam)
 
+export const useSearchTeamOptions = async (searchParam: string) => {
+  if (searchParam && searchParam.length > 2) {
+    const teams = await searchTeam(searchParam)
+    if (teams && teams.length) {
+      return teams.map((t) => {
+        return { value: t.id, label: t.name, ...t }
+      })
+    }
+  }
+  return []
+}
+
 export const useTeam = () => {
   const update = useForceUpdate()
   return (id: string) => {

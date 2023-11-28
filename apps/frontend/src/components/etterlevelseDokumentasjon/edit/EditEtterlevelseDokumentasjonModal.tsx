@@ -20,7 +20,7 @@ import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, outlineInfo
 import CustomizedSelect from '../../common/CustomizedSelect'
 import { intl } from '../../../util/intl/intl'
 import { SelectOverrides, TYPE } from 'baseui/select'
-import { useSearchTeam } from '../../../api/TeamApi'
+import { useSearchTeam, useSearchTeamOptions } from '../../../api/TeamApi'
 import { RenderTagList } from '../../common/TagList'
 import { useNavigate } from 'react-router-dom'
 import { updateBehandlingNameWithNumber } from '../common/utils'
@@ -76,7 +76,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const [selectedFilter, setSelectedFilter] = useState<number[]>(relevansOptions.map((r, i) => i))
   const [hover, setHover] = useState<number>()
   const [isEtterlevelseDokumentasjonerModalOpen, setIsEtterlevelseDokumntasjonerModalOpen] = useState<boolean>(false)
-  const [behandlingSearchResult, setBehandlingSearchResult, loadingBehandlingSearchResult] = useSearchBehandling()
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
   const [teamSearchResult, setTeamSearchResult, loadingTeamSearchResult] = useSearchTeam()
   const navigate = useNavigate()
@@ -375,25 +374,26 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                           return (
                             <div>
                               <LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />
-                              <div className="flex">
-                                <CustomizedSelect
-                                  overrides={selectCustomOverrides('teamsData', p)}
-                                  placeholder="Søk team"
-                                  aria-label="Søk team"
-                                  noResultsMsg={intl.emptyTable}
-                                  maxDropdownHeight="350px"
-                                  searchable={true}
-                                  type={TYPE.search}
-                                  labelKey="name"
-                                  onInputChange={(event) => {
-                                    setTeamSearchResult(event.currentTarget.value)
+                              <div className="w-full">
+                                <AsyncSelect
+                                  aria-label="Søk etter team"
+                                  placeholder="Søk etter team"
+                                  components={{ DropdownIndicator }}
+                                  noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
+                                  controlShouldRenderValue={false}
+                                  loadingMessage={() => 'Søker...'}
+                                  isClearable={false}
+                                  loadOptions={useSearchTeamOptions}
+                                  onChange={(value) => {
+                                    value && p.push(value)
                                   }}
-                                  options={teamSearchResult}
-                                  onChange={({ value }) => {
-                                    value.length && p.push(value[0])
+                                  styles={{
+                                    control: (base) => ({
+                                      ...base,
+                                      cursor: 'text',
+                                      height: '48px'
+                                    })
                                   }}
-                                  isLoading={loadingTeamSearchResult}
-                                  error={!!p.form.errors.teamsData && !!p.form.submitCount}
                                 />
                               </div>
                               <RenderTagList list={p.form.values.teamsData.map((t: Team) => t.name)} onRemove={p.remove} />
