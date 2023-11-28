@@ -9,6 +9,7 @@ import { KRAV_FILTER_TYPE, KravQL, KravStatus, PageResponse } from '../constants
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
 import { useQuery } from '@apollo/client'
+import { sortKraverByPriority } from '../util/sort'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
@@ -28,7 +29,7 @@ export const EtterlevelseDokumentasjonPage = () => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const lover = codelist.getCodesForTema(params.tema)
 
-  //CODE FOR GETTING KRAV LIST WITH PRIORTY
+  //--------CODE FOR GETTING KRAV LIST WITH PRIORTY---------------
   const { data, loading } = useQuery<{ krav: PageResponse<KravQL> }>(KravMedPrioriteringOgEtterlevelseQuery, {
     variables: {
       etterlevelseDokumentasjonId: params.id,
@@ -39,16 +40,17 @@ export const EtterlevelseDokumentasjonPage = () => {
     fetchPolicy: 'no-cache',
   })
 
-  // CODE FOR SORTING WITH PRIORITY
-  // console.log(data?.krav.content.sort((a, b) => {
-  //   if (a.prioriteringsId === '') {
-  //     return 1
-  //   } else if (b.prioriteringsId === '') {
-  //     return -1
-  //   } else {
-  //     return a.prioriteringsId.localeCompare(b.prioriteringsId)
-  //   }
-  // }))
+  const [kravList, setKravList] = useState<KravQL[]>()
+
+  useEffect(() => {
+    if (data && !loading) {
+      setKravList(
+        sortKraverByPriority<KravQL>(data?.krav.content, temaData?.shortName || '')
+      )
+    }
+  }, [data, loading, temaData])
+  //-----------------------––––––––––––---------------------------
+
 
   const [kravId, setKravId] = useState<KravId | undefined>()
 
