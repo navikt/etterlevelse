@@ -8,16 +8,12 @@ import { Value } from 'baseui/select'
 import { Code, codelist, ListName } from '../../services/Codelist'
 import { SearchType } from '../../api/TeamApi'
 import * as _ from 'lodash'
-import { Radio, RadioGroup } from 'baseui/radio'
 import LabelWithTooltip from '../common/LabelWithTooltip'
-import CustomInput from '../common/CustomizedInput'
 import CustomizedSelect from '../common/CustomizedSelect'
 import TextEditor from './TextEditor/TextEditor'
 import { Error } from './ModalSchema'
-import { ettlevColors } from '../../util/theme'
-import { borderColor } from './Style'
 import { MarkdownInfo } from './Markdown'
-import { DatePicker, Button, Detail, Label, Select, TextField, Textarea, useDatepicker } from '@navikt/ds-react'
+import { DatePicker, Button, Detail, Label, Select, TextField, Textarea, useDatepicker, RadioGroup, Radio } from '@navikt/ds-react'
 
 export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode; marginBottom?: boolean }) => {
   return <div className={`${marginBottom ? 'mb-6' : ''}`}>{children}</div>
@@ -109,21 +105,21 @@ export const BoolField = (props: { label: string; name: string; nullable?: boole
       {(p: FieldProps) => (
         <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error}>
           <RadioGroup
+            legend={props.label}
+            hideLegend
             value={boolToRadio(p.field.value)}
-            align="horizontal"
-            overrides={{ RadioGroupRoot: { style: { width: '100%', justifyContent: 'stretch' } } }}
-            onChange={(e) => {
-              p.form.setFieldValue(props.name, radioToBool((e.target as HTMLInputElement).value))
+            onChange={(value) => {
+              p.form.setFieldValue(props.name, radioToBool(value))
             }}
           >
-            <Radio overrides={{ Label: { style: { marginRight: '2rem' } } }} value={YES}>
+            <Radio value={YES}>
               Ja
             </Radio>
-            <Radio overrides={{ Label: { style: { marginRight: '2rem' } } }} value={NO}>
+            <Radio value={NO}>
               Nei
             </Radio>
             {props.nullable && (
-              <Radio overrides={{ Label: { style: { marginRight: '2rem' } } }} value={UNCLARIFIED}>
+              <Radio value={UNCLARIFIED}>
                 Uavklart
               </Radio>
             )}
