@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { searchBehandlingOptions, useSearchBehandling } from '../../../api/BehandlingApi'
+import { searchBehandlingOptions } from '../../../api/BehandlingApi'
 import {
   createEtterlevelseDokumentasjon,
   etterlevelseDokumentasjonMapToFormVal,
@@ -8,24 +8,13 @@ import {
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../../../constants'
 import { Code, codelist, ListName } from '../../../services/Codelist'
-import { Button as BaseUIButton, KIND } from 'baseui/button'
-import { FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
+import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import { BoolField, FieldWrapper, InputField } from '../../common/Inputs'
-import { ButtonGroup } from 'baseui/button-group'
-import { ParagraphMedium } from 'baseui/typography'
-import { ettlevColors } from '../../../util/theme'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../../common/Style'
-import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, outlineInfoIcon, searchIcon } from '../../Images'
-import CustomizedSelect from '../../common/CustomizedSelect'
-import { intl } from '../../../util/intl/intl'
-import { SelectOverrides, TYPE } from 'baseui/select'
-import { useSearchTeam, useSearchTeamOptions } from '../../../api/TeamApi'
+import { useSearchTeamOptions } from '../../../api/TeamApi'
 import { RenderTagList } from '../../common/TagList'
 import { useNavigate } from 'react-router-dom'
-import { updateBehandlingNameWithNumber } from '../common/utils'
-import { Button, Modal, Tooltip } from '@navikt/ds-react'
-import { buttonContentStyle } from '../../common/Button'
+import { Button, Checkbox, CheckboxGroup, Modal } from '@navikt/ds-react'
 import AsyncSelect from 'react-select/async'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 
@@ -35,49 +24,11 @@ type EditEtterlevelseDokumentasjonModalProps = {
   isEditButton?: boolean
 }
 
-const selectCustomOverrides = (fieldName: string, fp: FieldProps | FieldArrayRenderProps): SelectOverrides => {
-  return {
-    SearchIcon: {
-      component: () => <img src={searchIcon} alt="search icon" />,
-      style: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-      },
-    },
-    SearchIconContainer: {
-      style: {
-        width: 'calc(100% - 20px)',
-        display: 'flex',
-        justifyContent: 'flex-end',
-      },
-    },
-    IconsContainer: {
-      style: {
-        marginRight: '20px',
-      },
-    },
-    ValueContainer: {
-      style: {
-        paddingLeft: '10px',
-      },
-    },
-    ControlContainer: {
-      style: {
-        ...borderWidth('2px'),
-        backgroundColor: fp.form.errors[fieldName] ? ettlevColors.error50 : ettlevColors.white,
-        ...borderColor(fp.form.errors[fieldName] ? ettlevColors.red600 : ettlevColors.grey200),
-      },
-    },
-  }
-}
-
 export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokumentasjonModalProps) => {
   const relevansOptions = codelist.getParsedOptions(ListName.RELEVANS)
   const [selectedFilter, setSelectedFilter] = useState<number[]>(relevansOptions.map((r, i) => i))
-  const [hover, setHover] = useState<number>()
   const [isEtterlevelseDokumentasjonerModalOpen, setIsEtterlevelseDokumntasjonerModalOpen] = useState<boolean>(false)
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
-  const [teamSearchResult, setTeamSearchResult, loadingTeamSearchResult] = useSearchTeam()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -207,120 +158,58 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       <Error fieldName="virkemiddelId" fullWidth />
                     </FieldWrapper>
                   ) : ( */}
-                  <div>
-                    <LabelWithTooltip
-                      tooltip="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
-                      label={'Hvilke egenskaper gjelder for etterlevelsen?'}
-                    />
-                    <FieldArray name="irrelevansFor">
-                      {(p: FieldArrayRenderProps) => {
-                        return (
-                          <div className="h-full pt-5 w-[calc(100% - 16px)]" >
-                            <ButtonGroup
-                              mode="checkbox"
-                              kind={KIND.secondary}
-                              selected={selectedFilter}
-                              size="mini"
-                              onClick={(e, i) => {
-                                if (!selectedFilter.includes(i)) {
-                                  setSelectedFilter([...selectedFilter, i])
-                                  p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === relevansOptions[i].value))
-                                } else {
-                                  setSelectedFilter(selectedFilter.filter((value) => value !== i))
-                                  p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
-                                }
-                              }}
-                              overrides={{
-                                Root: {
-                                  style: {
-                                    flexWrap: 'wrap',
-                                  },
-                                },
-                              }}
-                            >
-                              {relevansOptions.map((r, i) => {
-                                return (
-                                  <BaseUIButton
-                                    key={'relevans_' + r.value}
-                                    type="button"
-                                    startEnhancer={() => {
-                                      if (selectedFilter.includes(i)) {
-                                        return <img src={checkboxChecked} alt="checked" />
-                                      } else if (!selectedFilter.includes(i) && hover === i) {
-                                        return <img src={checkboxUncheckedHover} alt="checkbox hover" />
-                                      } else {
-                                        return <img src={checkboxUnchecked} alt="unchecked" />
-                                      }
-                                    }}
-                                    overrides={{
-                                      BaseButton: {
-                                        style: {
-                                          ...buttonContentStyle,
-                                          backgroundColor: selectedFilter.includes(i) ? ettlevColors.green100 : ettlevColors.white,
-                                          ...borderWidth('1px'),
-                                          ...borderStyle('solid'),
-                                          ...borderColor('#6A6A6A'),
-                                          paddingLeft: '8px',
-                                          paddingRight: '16px',
-                                          paddingTop: '8px',
-                                          paddingBottom: '10px',
-                                          marginRight: '16px',
-                                          marginBottom: '16px',
-                                          ...borderRadius('4px'),
-                                          ':hover': {
-                                            backgroundColor: ettlevColors.white,
-                                            boxShadow: '0px 2px 0px rgba(0, 0, 0, 0.25), inset 0px -1px 0px rgba(0, 0, 0, 0.25);',
-                                          },
-                                          ':focus': {
-                                            boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
-                                            outlineWidth: '3px',
-                                            outlineStyle: 'solid',
-                                            outlinwColor: ettlevColors.focusOutline,
-                                          },
-                                          width: '100%',
-                                          maxWidth: '260px',
-                                          justifyContent: 'flex-start',
-                                        },
-                                        props: {
-                                          onMouseEnter: () => {
-                                            setHover(i)
-                                          },
-                                          onMouseLeave: () => {
-                                            setHover(undefined)
-                                          },
-                                        },
-                                      },
-                                    }}
-                                  >
-                                    <div className="w-full mr-1">
-                                      <ParagraphMedium margin="0px" $style={{ lineHeight: '22px' }}>
-                                        {r.label}
-                                      </ParagraphMedium>
-                                    </div>
-                                    <Tooltip
-                                      content={r.description}
-                                      arrow
-                                    >
-                                      <div className="flex justify-end">
-                                        <img src={outlineInfoIcon} alt="informasjons ikon" />
-                                      </div>
-                                    </Tooltip>
-                                  </BaseUIButton>
-                                )
-                              })}
-                            </ButtonGroup>
-                          </div>
-                        )
-                      }}
-                    </FieldArray>
-                  </div>
-                  {/* )} */}
 
-                  <BoolField
-                    label="Behandler løsningen du dokumenterer etterlevelse for personopplysninger?"
-                    name="behandlerPersonopplysninger"
-                    tooltip="Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å opprette etterlevelse og legge til behandling etterpå."
-                  />
+                  <FieldArray name="irrelevansFor">
+                    {(p: FieldArrayRenderProps) => {
+                      return (
+                        <div className="h-full pt-5 w-[calc(100% - 16px)]" >
+                          <CheckboxGroup
+                            legend="Hvilke egenskaper gjelder for etterlevelsen?"
+                            description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
+                            value={selectedFilter}
+                            onChange={(selected) => {
+                              setSelectedFilter(selected)
+
+                              const irrelevansListe = relevansOptions.filter((v , i) => !selected.includes(i))
+                              p.form.setFieldValue('irrelevansFor', irrelevansListe.map((il) => codelist.getCode(ListName.RELEVANS, il.value) ))                  
+                              // selected.forEach((value) => {
+                              //   const i = parseInt(value)
+                              //   if (!selectedFilter.includes(i)) {
+                              //     setSelectedFilter([...selectedFilter, i])
+                              //     p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === relevansOptions[i].value))
+                              //   } else {
+                              //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
+                              //     p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
+                              //   }
+                              // })
+                            }}
+                          >
+                            {relevansOptions.map((r, i) => {
+                              return (
+                                <Checkbox
+                                  key={'relevans_' + r.value}
+                                  value={i}
+                                  description={r.description}
+                                >
+                                  {r.label}
+                                </Checkbox>
+                              )
+                            })}
+                          </CheckboxGroup>
+                        </div>
+                      )
+                    }}
+                  </FieldArray>
+
+                  {/* DONT REMOVE */}
+                  {/* )} */}
+                  <div className="mt-2.5">
+                    <BoolField
+                      label="Behandler løsningen du dokumenterer etterlevelse for personopplysninger?"
+                      name="behandlerPersonopplysninger"
+                      tooltip="Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å opprette etterlevelse og legge til behandling etterpå."
+                    />
+                  </div>
 
                   {values.behandlerPersonopplysninger && (
                     <FieldWrapper>
@@ -354,18 +243,21 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                   }}
                                 />
                               </div>
-                              <RenderTagList list={p.form.values.behandlinger.map((b: Behandling) => 'B' + b.nummer + ' ' + b.navn)} onRemove={p.remove} />
+                              <RenderTagList list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} />
                             </div>
                           )
                         }}
                       </FieldArray>
                     </FieldWrapper>
                   )}
-                  <BoolField
-                    label="Er etterlevelsesdokumentet knyttet til et team i Teamkatalogen?"
-                    name="knytteTilTeam"
-                    tooltip="Når du legger til et team vil medlemmene i det teamet kunne se dette dokumentet under «Mine dokumentasjoner». Dette er ikke nødvendig for å opprette etterlevelsesdokumentet, men anbefales."
-                  />
+
+                  <div className="mt-2.5">
+                    <BoolField
+                      label="Er etterlevelsesdokumentet knyttet til et team i Teamkatalogen?"
+                      name="knytteTilTeam"
+                      tooltip="Når du legger til et team vil medlemmene i det teamet kunne se dette dokumentet under «Mine dokumentasjoner». Dette er ikke nødvendig for å opprette etterlevelsesdokumentet, men anbefales."
+                    />
+                  </div>
 
                   {values.knytteTilTeam && (
                     <FieldWrapper>

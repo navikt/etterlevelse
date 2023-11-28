@@ -3,6 +3,7 @@ import { Behandling, PageResponse } from '../constants'
 import { env } from '../util/env'
 import { useSearch } from '../util/hooks'
 import { useEffect, useState } from 'react'
+import { updateBehandlingNameWithNumber } from '../components/etterlevelseDokumentasjon/common/utils'
 
 export const getBehandling = async (id: string) => {
   return (await axios.get<Behandling>(`${env.backendBaseUrl}/behandling/${id}`)).data
@@ -56,7 +57,7 @@ export const searchBehandlingOptions = async (searchParam: string) => {
     const behandlinger = await searchBehandling(searchParam)
     if(behandlinger && behandlinger.length) {
       return behandlinger.map((b) => {
-        return {value: b.id, label: 'B' + b.nummer + ' ' + b.navn, ...b}
+        return {value: b.id, label: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn, ...b}
       })
     }
   }

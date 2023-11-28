@@ -103,10 +103,10 @@ export const BoolField = (props: { label: string; name: string; nullable?: boole
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) => (
-        <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error}>
+        <div>
           <RadioGroup
             legend={props.label}
-            hideLegend
+            description={props.tooltip}
             value={boolToRadio(p.field.value)}
             onChange={(value) => {
               p.form.setFieldValue(props.name, radioToBool(value))
@@ -124,7 +124,8 @@ export const BoolField = (props: { label: string; name: string; nullable?: boole
               </Radio>
             )}
           </RadioGroup>
-        </FormControl>
+          <Error fieldName={props.name} fullWidth />
+        </div>
       )}
     </Field>
   </FieldWrapper>
