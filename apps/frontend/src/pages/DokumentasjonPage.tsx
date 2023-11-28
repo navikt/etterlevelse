@@ -49,6 +49,7 @@ export const DokumentasjonPage = () => {
     loading,
   } = useQuery<{ etterlevelseDokumentasjon: PageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
     variables: { etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id },
+    skip: !etterlevelseDokumentasjon
   })
 
   const [relevanteStats, setRelevanteStats] = useState<KravQL[]>([])

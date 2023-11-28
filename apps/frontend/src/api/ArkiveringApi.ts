@@ -77,7 +77,7 @@ export const useArkiveringByEtterlevelseDokumentasjonId = (etterlevelseDokumenta
   const [data, setData] = useState<EtterlevelseArkiv | undefined>(undefined)
 
   useEffect(() => {
-    etterlevelseDokumentasjonId &&
+    etterlevelseDokumentasjonId && etterlevelseDokumentasjonId !== '' &&
       getEtterlevelseArkivByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
         .then((resp) => setData(arkiveringMapToFormVal(resp.content[0])))
         .catch((e) => {
