@@ -70,13 +70,13 @@ export const DokumentasjonPage = () => {
 
     unfilteredData?.etterlevelseDokumentasjon.content.forEach(({ stats }) => {
       stats.fyltKrav.forEach((k) => {
-        if (k.regelverk.length && k.status === KravStatus.AKTIV) {
-          relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
+        if (k.regelverk.length) {
+          relevanteStatusListe.push(k)
         }
       })
       stats.ikkeFyltKrav.forEach((k) => {
-        if (k.regelverk.length && k.status === KravStatus.AKTIV) {
-          relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
+        if (k.regelverk.length) {
+          relevanteStatusListe.push(k)
         }
       })
       utgaattStatusListe.push(...stats.utgaattKrav)
