@@ -15,7 +15,7 @@ import no.nav.data.etterlevelse.graphql.DataLoaderReg;
 import no.nav.data.etterlevelse.graphql.support.LoaderUtils;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
-import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.team.dto.TeamResponse;
@@ -68,11 +68,6 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
 
         List<KravResponse> krav;
         List<KravResponse> irrelevantKrav;
-        List<KravResponse> utgaattKrav = convert(kravService.getByFilter(KravFilter.builder()
-                .status(List.of("UTGAATT"))
-                .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString())
-                .gjeldendeKrav(false)
-                .build()), Krav::toResponse);
 
         if (etterlevelseDokumentasjon.isKnyttetTilVirkemiddel() && (etterlevelseDokumentasjon.getVirkemiddelId() != null)) {
             krav = convert(kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString(), etterlevelseDokumentasjon.getVirkemiddelId()), Krav::toResponse);
@@ -88,11 +83,13 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
             }
         });
 
-        var fylt = krav.stream().filter(k -> k.getEtterlevelser() != null && !k.getEtterlevelser().isEmpty()).toList();
+        var fylt = krav.stream().filter(k -> k.getEtterlevelser() != null && !k.getEtterlevelser().isEmpty() && k.getStatus().equals(KravStatus.AKTIV) ).toList();
 
-        var ikkeFylt = krav.stream().filter(k -> k.getEtterlevelser() == null || k.getEtterlevelser().isEmpty()).toList();
+        var ikkeFylt = krav.stream().filter(k -> (k.getEtterlevelser() == null || k.getEtterlevelser().isEmpty()) && k.getStatus().equals(KravStatus.AKTIV)).toList();
 
         var irrelevant = irrelevantKrav.stream().filter(i -> !fylt.contains(i) && !ikkeFylt.contains(i)).toList();
+
+        var utgaattKrav = krav.stream().filter(k -> k.getStatus().equals(KravStatus.UTGAATT)).toList();
 
         return EtterlevelseDokumentasjonStats.builder()
                 .fyltKrav(fylt)
