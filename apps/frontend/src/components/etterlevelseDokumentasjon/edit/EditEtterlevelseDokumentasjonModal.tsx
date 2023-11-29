@@ -66,8 +66,9 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
     } else {
       await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
+        const mutatedBehandlinger = response.behandlinger && response.behandlinger.map((b) => {return {...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn}})
         if (props.setEtterlevelseDokumentasjon) {
-          props.setEtterlevelseDokumentasjon({ ...response, virkemiddel: selectedVirkemiddel })
+          props.setEtterlevelseDokumentasjon({ ...response, behandlinger: mutatedBehandlinger, virkemiddel: selectedVirkemiddel })
         }
       })
     }
@@ -170,8 +171,8 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                             onChange={(selected) => {
                               setSelectedFilter(selected)
 
-                              const irrelevansListe = relevansOptions.filter((v , i) => !selected.includes(i))
-                              p.form.setFieldValue('irrelevansFor', irrelevansListe.map((il) => codelist.getCode(ListName.RELEVANS, il.value) ))                  
+                              const irrelevansListe = relevansOptions.filter((v, i) => !selected.includes(i))
+                              p.form.setFieldValue('irrelevansFor', irrelevansListe.map((il) => codelist.getCode(ListName.RELEVANS, il.value)))
                               // selected.forEach((value) => {
                               //   const i = parseInt(value)
                               //   if (!selectedFilter.includes(i)) {
@@ -297,11 +298,10 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                   )}
 
                   <div className="flex justify-end">
-                    <Button variant="secondary" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
+                    <Button type="button" variant="secondary" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
                       Avbryt
                     </Button>
                     <Button
-                      type="button"
                       onClick={() => {
                         submitForm()
                       }}
