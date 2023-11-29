@@ -378,7 +378,7 @@ export const statsQuery = gql`
             navn
             status
             aktivertDato
-            etterlevelser(onlyForEtterlevelseDokumentasjon: true) {
+            etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
               status
               etterlevelseDokumentasjonId
               fristForFerdigstillelse
@@ -406,7 +406,7 @@ export const statsQuery = gql`
             navn
             status
             aktivertDato
-            etterlevelser(onlyForEtterlevelseDokumentasjon: true) {
+            etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
               status
               etterlevelseDokumentasjonId
               fristForFerdigstillelse
@@ -434,7 +434,7 @@ export const statsQuery = gql`
             navn
             status
             aktivertDato
-            etterlevelser(onlyForEtterlevelseDokumentasjon: true) {
+            etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
               status
               etterlevelseDokumentasjonId
               fristForFerdigstillelse
@@ -462,7 +462,7 @@ export const statsQuery = gql`
             navn
             status
             aktivertDato
-            etterlevelser(onlyForEtterlevelseDokumentasjon: true) {
+            etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
               behandlingId
               status
               etterlevelseDokumentasjonId
