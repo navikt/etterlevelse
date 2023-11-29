@@ -74,9 +74,8 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
             assertThat(response, "etterlevelseDokumentasjon")
                     .hasNoErrors()
                     .hasSize("content", 1)
-                    .hasSize("content[0].stats.ikkeFyltKrav", 1)
-                    .hasSize("content[0].stats.fyltKrav", 1)
-                    .hasSize("content[0].stats.fyltKrav[0].etterlevelser", 1);
+                    .hasSize("content[0].stats.relevantKrav", 2)
+                    .hasSize("content[0].stats.relevantKrav[0].etterlevelser", 1);
         }
     }
 }
