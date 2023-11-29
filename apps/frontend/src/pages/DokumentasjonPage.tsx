@@ -53,7 +53,7 @@ export const DokumentasjonPage = () => {
   })
 
   const [relevanteStats, setRelevanteStats] = useState<KravQL[]>([])
-  const [utgaattStats, setUtgaattStats] = useState<any[]>([])
+  const [utgaattStats, setUtgaattStats] = useState<KravQL[]>([])
   const [arkivModal, setArkivModal] = useState<boolean>(false)
 
   const filterData = (
@@ -65,24 +65,21 @@ export const DokumentasjonPage = () => {
       }
       | undefined,
   ) => {
-    const relevanteStatusListe: any[] = []
-    const utgaattStatusListe: any[] = []
+    const relevanteStatusListe: KravQL[] = []
+    const utgaattStatusListe: KravQL[] = []
 
     unfilteredData?.etterlevelseDokumentasjon.content.forEach(({ stats }) => {
       stats.fyltKrav.forEach((k) => {
         if (k.regelverk.length && k.status === KravStatus.AKTIV) {
           relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
-        } else if (k.regelverk.length && k.status === KravStatus.UTGAATT) {
-          utgaattStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
         }
       })
       stats.ikkeFyltKrav.forEach((k) => {
         if (k.regelverk.length && k.status === KravStatus.AKTIV) {
           relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
-        } else if (k.regelverk.length && k.status === KravStatus.UTGAATT) {
-          utgaattStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
         }
       })
+      utgaattStatusListe.push(...stats.utgaattKrav)
     })
 
     relevanteStatusListe.sort((a, b) => {
