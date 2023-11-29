@@ -77,13 +77,20 @@ export const useArkiveringByEtterlevelseDokumentasjonId = (etterlevelseDokumenta
   const [data, setData] = useState<EtterlevelseArkiv | undefined>(undefined)
 
   useEffect(() => {
-    etterlevelseDokumentasjonId && etterlevelseDokumentasjonId !== '' &&
+    if (etterlevelseDokumentasjonId !== undefined && etterlevelseDokumentasjonId !== '') {
       getEtterlevelseArkivByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
-        .then((resp) => setData(arkiveringMapToFormVal(resp.content[0])))
+        .then((resp) => {
+          if(resp.content.length) {
+            setData(arkiveringMapToFormVal(resp.content[0]))
+          }else {
+            setData(arkiveringMapToFormVal({}))
+          } 
+        })
         .catch((e) => {
           setData(arkiveringMapToFormVal({ id: '' }))
           console.log("couldn't find arkivering with etterlevelse dokumentasjon id = ", e)
         })
+    }
   }, [etterlevelseDokumentasjonId])
 
   return [data, setData] as [EtterlevelseArkiv | undefined, (etterlevelseArkiv: EtterlevelseArkiv | undefined) => void]
