@@ -1,7 +1,6 @@
 import axios from 'axios'
 import React, { useState } from 'react'
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal'
-import { buttonContentStyle } from '../components/common/Button'
+import { Button, Modal } from '@navikt/ds-react'
 
 let done = false
 
@@ -30,14 +29,13 @@ export const useNetworkStatus = () => {
   }
 
   return (
-    <Modal closeable={false} isOpen={error} onClose={clear}>
-      <ModalHeader>{error?.message ? error?.message : 'Nettverksfeil'}</ModalHeader>
-      <ModalBody>{error?.response?.data?.message ? error?.response?.data?.message : error?.toString()}</ModalBody>
-      <ModalFooter>
-        <ModalButton onClick={clear} overrides={{ BaseButton: { style: { ...buttonContentStyle } } }}>
-          <strong>Lukk</strong>
-        </ModalButton>
-      </ModalFooter>
+    <Modal open={error} onClose={clear} header={{ heading: error?.message ? error?.message : 'Nettverksfeil' }}>
+      <Modal.Body>{error?.response?.data?.message ? error?.response?.data?.message : error?.toString()}</Modal.Body>
+      <Modal.Footer>
+        <Button onClick={clear}>
+          Lukk
+        </Button>
+      </Modal.Footer>
     </Modal>
   )
 }
