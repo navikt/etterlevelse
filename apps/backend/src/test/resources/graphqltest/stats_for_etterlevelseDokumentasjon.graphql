@@ -2,6 +2,16 @@ query getEtterlevelseDokumentasjonStats($etterlevelseDokumentasjonId: ID) {
     etterlevelseDokumentasjon(filter: { id: $etterlevelseDokumentasjonId }) {
         content {
             stats {
+                fyltKrav {
+                    kravNummer
+                    kravVersjon
+                    navn
+                    aktivertDato
+                    etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
+                        etterlevelseDokumentasjonId
+                        id
+                    }
+                }
                 ikkeFyltKrav {
                     kravNummer
                     kravVersjon

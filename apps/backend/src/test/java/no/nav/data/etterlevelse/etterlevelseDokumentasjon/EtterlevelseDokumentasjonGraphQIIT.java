@@ -6,6 +6,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.graphql.GraphQLTestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -50,8 +51,15 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
 
             storageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                     .status(KravStatus.AKTIV)
                     .relevansFor(List.of("SAK"))
                     .build());
+            storageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(1)
+                    .status(KravStatus.AKTIV)
+                    .relevansFor(List.of("SAK"))
+                    .build());
+
             storageService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
                     .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
@@ -66,7 +74,9 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
             assertThat(response, "etterlevelseDokumentasjon")
                     .hasNoErrors()
                     .hasSize("content", 1)
-                    .hasSize("content[0].stats.ikkeFyltKrav[0].etterlevelser", 1);
+                    .hasSize("content[0].stats.ikkeFyltKrav", 1)
+                    .hasSize("content[0].stats.fyltKrav", 1)
+                    .hasSize("content[0].stats.fyltKrav[0].etterlevelser", 1);
         }
     }
 }
