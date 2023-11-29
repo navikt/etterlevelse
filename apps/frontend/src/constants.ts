@@ -311,8 +311,7 @@ export interface EtterlevelseDokumentasjon {
 }
 
 export interface EtterlevelseDokumentasjonStats {
-  fyltKrav: KravQL[]
-  ikkeFyltKrav: KravQL[]
+  relevantKrav: KravQL[]
   irrelevantKrav: KravQL[]
   utgaattKrav: KravQL[]
   lovStats: LovStats[]
@@ -320,8 +319,8 @@ export interface EtterlevelseDokumentasjonStats {
 
 export interface LovStats {
   lovCode: Code
-  fyltKrav: KravQL[]
-  ikkeFyltKrav: KravQL[]
+  relevantKrav: KravQL[]
+  irrelevantKrav: KravQL[]
   utgaattKrav: KravQL[]
 }
 

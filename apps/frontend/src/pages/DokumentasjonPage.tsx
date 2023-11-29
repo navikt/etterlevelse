@@ -69,16 +69,7 @@ export const DokumentasjonPage = () => {
     const utgaattStatusListe: KravQL[] = []
 
     unfilteredData?.etterlevelseDokumentasjon.content.forEach(({ stats }) => {
-      stats.fyltKrav.forEach((k) => {
-        if (k.regelverk.length) {
-          relevanteStatusListe.push(k)
-        }
-      })
-      stats.ikkeFyltKrav.forEach((k) => {
-        if (k.regelverk.length) {
-          relevanteStatusListe.push(k)
-        }
-      })
+      relevanteStatusListe.push(...stats.relevantKrav)
       utgaattStatusListe.push(...stats.utgaattKrav)
     })
 
@@ -369,35 +360,7 @@ export const statsQuery = gql`
     etterlevelseDokumentasjon(filter: { id: $etterlevelseDokumentasjonId }) {
       content {
         stats {
-          fyltKrav {
-            kravNummer
-            kravVersjon
-            navn
-            status
-            aktivertDato
-            etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
-              status
-              etterlevelseDokumentasjonId
-              fristForFerdigstillelse
-              changeStamp {
-                lastModifiedBy
-                lastModifiedDate
-                createdDate
-              }
-            }
-            regelverk {
-              lov {
-                code
-                shortName
-              }
-            }
-            changeStamp {
-              lastModifiedBy
-              lastModifiedDate
-              createdDate
-            }
-          }
-          ikkeFyltKrav {
+          relevantKrav {
             kravNummer
             kravVersjon
             navn
