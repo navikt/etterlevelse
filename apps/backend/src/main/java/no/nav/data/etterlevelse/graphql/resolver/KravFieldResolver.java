@@ -39,17 +39,18 @@ public class KravFieldResolver implements GraphQLResolver<KravResponse> {
     private final KravService kravService;
     private final KravPrioriteringService kravPrioriteringService;
 
-    public List<EtterlevelseResponse> etterlevelser(KravResponse krav, boolean onlyForEtterlevelseDokumentasjon, DataFetchingEnvironment env) {
+    public List<EtterlevelseResponse> etterlevelser(KravResponse krav, boolean onlyForEtterlevelseDokumentasjon, UUID etterlevelseDokumentasjonId, DataFetchingEnvironment env) {
         Integer nummer = krav.getKravNummer();
         Integer versjon = krav.getKravVersjon();
         log.info("etterlevelse for krav {}.{}", nummer, versjon);
 
         var etterlevelser = etterlevelseService.getByKravNummer(nummer, versjon);
 
-        if (onlyForEtterlevelseDokumentasjon) {
-            String etterlevelseDokumentasjonId = KravFilter.get(env, Fields.etterlevelseDokumentasjonId);
-            if(etterlevelseDokumentasjonId != null) {
-                etterlevelser = filter(etterlevelser, e -> etterlevelseDokumentasjonId.equals(e.getEtterlevelseDokumentasjonId()));
+        if (onlyForEtterlevelseDokumentasjon || etterlevelseDokumentasjonId != null) {
+            String dokumentasjonId = etterlevelseDokumentasjonId != null ? etterlevelseDokumentasjonId.toString() : KravFilter.get(env, Fields.etterlevelseDokumentasjonId);
+
+            if(dokumentasjonId != null) {
+                etterlevelser = filter(etterlevelser, e -> dokumentasjonId.equals(e.getEtterlevelseDokumentasjonId()));
             }
         }
 
