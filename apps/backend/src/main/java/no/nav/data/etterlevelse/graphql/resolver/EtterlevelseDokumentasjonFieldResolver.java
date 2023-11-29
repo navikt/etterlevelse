@@ -66,6 +66,8 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
 
     public EtterlevelseDokumentasjonStats stats(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon) {
 
+        List<Etterlevelse> etterlevelseList = etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString());
+
         List<KravResponse> krav;
         List<KravResponse> irrelevantKrav;
         List<KravResponse> utgaattKrav = convert(kravService.getByFilter(KravFilter.builder()
@@ -83,9 +85,7 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
         }
 
         krav.forEach(k -> {
-            if (k.getEtterlevelser() != null && !k.getEtterlevelser().isEmpty()) {
-                k.setEtterlevelser(k.getEtterlevelser().stream().filter(e -> e.getEtterlevelseDokumentasjonId().equals(etterlevelseDokumentasjon.getId().toString())).toList());
-            }
+            k.setEtterlevelser(etterlevelseList.stream().filter(e -> e.getKravNummer().equals(k.getKravNummer()) && e.getKravVersjon().equals(k.getKravVersjon())).map(Etterlevelse::toResponse).toList());
         });
 
         var fylt = krav.stream().filter(k -> k.getEtterlevelser() != null && !k.getEtterlevelser().isEmpty()).toList();
