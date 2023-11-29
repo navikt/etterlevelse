@@ -66,8 +66,6 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
 
     public EtterlevelseDokumentasjonStats stats(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon) {
 
-        List<Etterlevelse> etterlevelseList = etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString());
-
         List<KravResponse> krav;
         List<KravResponse> irrelevantKrav;
 
@@ -79,27 +77,19 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
             irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId().toString()), Krav::toResponse);
         }
 
-        krav.forEach(k -> {
-            k.setEtterlevelser(etterlevelseList.stream().filter(e -> e.getKravNummer().equals(k.getKravNummer()) && e.getKravVersjon().equals(k.getKravVersjon())).map(Etterlevelse::toResponse).toList());
-        });
+        var relevantKrav = krav.stream().filter(k -> k.getStatus().equals(KravStatus.AKTIV) ).toList();
 
-        var fylt = krav.stream().filter(k -> k.getEtterlevelser() != null && !k.getEtterlevelser().isEmpty() && k.getStatus().equals(KravStatus.AKTIV) ).toList();
-
-        var ikkeFylt = krav.stream().filter(k -> (k.getEtterlevelser() == null || k.getEtterlevelser().isEmpty()) && k.getStatus().equals(KravStatus.AKTIV)).toList();
-
-        var irrelevant = irrelevantKrav.stream().filter(i -> !fylt.contains(i) && !ikkeFylt.contains(i)).toList();
+        var irrelevant = irrelevantKrav.stream().filter(i -> !relevantKrav.contains(i)).toList();
 
         var utgaattKrav = krav.stream().filter(k -> k.getStatus().equals(KravStatus.UTGAATT)).toList();
 
         return EtterlevelseDokumentasjonStats.builder()
-                .fyltKrav(fylt)
-                .ikkeFyltKrav(ikkeFylt)
+                .relevantKrav(relevantKrav)
                 .irrelevantKrav(irrelevant)
                 .utgaattKrav(utgaattKrav)
                 .lovStats(convert(CodelistService.getCodelist(ListName.LOV), c -> EtterlevelseDokumentasjonStats.LovStats.builder()
                         .lovCode(c.toResponse())
-                        .fyltKrav(filter(fylt, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
-                        .ikkeFyltKrav(filter(ikkeFylt, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
+                        .relevantKrav(filter(relevantKrav, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
                         .irrelevantKrav(filter(irrelevant, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
                         .utgaattKrav(filter(utgaattKrav, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
                         .build()))

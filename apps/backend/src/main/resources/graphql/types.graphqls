@@ -186,8 +186,7 @@ type Behandling {
 }
 
 type EtterlevelseDokumentasjonStats {
-    fyltKrav: [Krav!]!
-    ikkeFyltKrav: [Krav!]!
+    relevantKrav: [Krav!]!
     irrelevantKrav: [Krav!]!
     utgaattKrav: [Krav!]!
     lovStats: [LovStats!]!
@@ -214,8 +213,7 @@ type EtterlevelseDokumentasjon {
 
 type LovStats {
     lovCode: Code!
-    fyltKrav: [Krav!]!
-    ikkeFyltKrav: [Krav!]!
+    relevantKrav: [Krav!]!
     irrelevantKrav: [Krav!]!
     utgaattKrav: [Krav!]!
 }

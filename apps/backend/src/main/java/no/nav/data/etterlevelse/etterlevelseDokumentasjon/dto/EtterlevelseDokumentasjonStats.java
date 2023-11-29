@@ -16,10 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 public class EtterlevelseDokumentasjonStats {
 
-    @Singular("fylt")
-    private List<KravResponse> fyltKrav;
-    @Singular("ikkeFylt")
-    private List<KravResponse> ikkeFyltKrav;
+    @Singular("relevant")
+    private List<KravResponse> relevantKrav;
     @Singular("irrelevant")
     private List<KravResponse> irrelevantKrav;
     @Singular("utgaatt")
@@ -34,10 +32,8 @@ public class EtterlevelseDokumentasjonStats {
     public static class LovStats {
 
         private CodelistResponse lovCode;
-        @Singular("fylt")
-        private List<KravResponse> fyltKrav;
-        @Singular("ikkeFylt")
-        private List<KravResponse> ikkeFyltKrav;
+        @Singular("relevant")
+        private List<KravResponse> relevantKrav;
         @Singular("irrelevant")
         private List<KravResponse> irrelevantKrav;
         @Singular("utgaatt")
