@@ -28,7 +28,7 @@ type Krav {
     status: KravStatus!
     prioriteringsId: String!
 
-    etterlevelser(onlyForEtterlevelseDokumentasjon: Boolean): [Etterlevelse!]!
+    etterlevelser(onlyForEtterlevelseDokumentasjon: Boolean, etterlevelseDokumentasjonId: ID): [Etterlevelse!]!
     tilbakemeldinger: [Tilbakemelding!]!
     begreper: [Begrep!]!
     virkemidler: [Virkemiddel!]!
