@@ -28,6 +28,7 @@ import { ExternalLink } from '../components/common/RouteLink'
 import { env } from '../util/env'
 import { Teams } from '../components/common/TeamName'
 import { Helmet } from 'react-helmet'
+import { hotjar } from 'react-hotjar'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
@@ -49,7 +50,7 @@ export const DokumentasjonPage = () => {
     loading,
   } = useQuery<{ etterlevelseDokumentasjon: PageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
     variables,
-    skip: !params.id 
+    skip: !params.id
   })
 
   const [relevanteStats, setRelevanteStats] = useState<KravQL[]>([])
@@ -86,6 +87,10 @@ export const DokumentasjonPage = () => {
 
     return [relevanteStatusListe, utgaattStatusListe]
   }
+
+  React.useEffect(() => {
+    hotjar.initialize(148751, 6)
+  }, [])
 
   React.useEffect(() => {
     const [relevanteStatusListe, utgaattStatusListe] = filterData(relevanteData)
