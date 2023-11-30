@@ -217,7 +217,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       <FieldArray name="behandlinger">
                         {(p: FieldArrayRenderProps) => {
                           return (
-                            <div>
+                            <div className="mb-4">
                               <LabelWithTooltip
                                 label={'Legg til behandlinger fra Behandlingskatalogen'}
                                 tooltip="Siden løsningen behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Du kan knytte én eller flere behandlinger til etterlevelsesdokumentet."
