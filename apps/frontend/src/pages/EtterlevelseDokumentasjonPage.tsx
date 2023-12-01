@@ -40,8 +40,11 @@ export const EtterlevelseDokumentasjonPage = () => {
     fetchPolicy: 'no-cache',
   })
 
+  //USE this state to access krav list
   const [kravList, setKravList] = useState<KravQL[]>()
 
+
+  //Use effect for sorting krav list. after that we add filter or more sorting
   useEffect(() => {
     if (data && !loading) {
       setKravList(
