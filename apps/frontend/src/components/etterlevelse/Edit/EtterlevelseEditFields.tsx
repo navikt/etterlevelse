@@ -12,7 +12,8 @@ import _ from 'lodash'
 
 import { DateField } from '../../common/Inputs'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
-import { Alert, BodyShort, Button, Checkbox, Label } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, Checkbox, Label, Modal } from '@navikt/ds-react'
+import { user } from '../../../services/User'
 
 type EditProps = {
   krav: KravQL
@@ -42,9 +43,9 @@ export const EtterlevelseEditFields = ({
 }: EditProps) => {
   const [etterlevelseStatus] = React.useState<string>(editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [isOppfylesSenere, setOppfylesSenere] = React.useState<boolean>(etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE)
+  const [isAvbrytModalOpen, setIsAvbryModalOpen] = React.useState<boolean>(false)
 
   const navigate = useNavigate()
-
   useEffect(() => {
     if (navigatePath) {
       if (
@@ -193,7 +194,7 @@ export const EtterlevelseEditFields = ({
                       if(!dirty){
                         close()
                       } else {
-
+                        setIsAvbryModalOpen(true)
                       }
                     }}
                   >
@@ -208,6 +209,16 @@ export const EtterlevelseEditFields = ({
                     </BodyShort>
                   </div>
                 )}
+
+                <Modal onClose={() => setIsAvbryModalOpen(false) } header={{heading: 'Avbryt dokumentering'}} open={isAvbrytModalOpen}>
+                  <Modal.Body>
+                    Er du sikker på at du vil avbryte dokumentering? Endringer du har gjort blir ikke lagret og du blir sendt til teamoversikten.
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button onClick={() => close()} type="button">Ja, jeg vil avbryte</Button>
+                    <Button onClick={() => setIsAvbryModalOpen(false) }type="button" variant="secondary">Nei, jeg vil fortsette</Button>
+                  </Modal.Footer>
+                </Modal>
               </div>
             </div>
           </div>
