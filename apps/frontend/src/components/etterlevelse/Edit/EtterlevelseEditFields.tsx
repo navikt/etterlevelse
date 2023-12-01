@@ -182,7 +182,7 @@ export const EtterlevelseEditFields = ({
                           submitForm()
                         }}
                       >
-                        Ferdig utfylt
+                        Sett krav til ferdig utfylt
                       </Button>
                     </div>
                   )}

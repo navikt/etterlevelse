@@ -42,6 +42,7 @@ type EditEttlevProps = {
   navigatePath: string
   tidligereEtterlevelser: Etterlevelse[] | undefined
   kravFilter: KRAV_FILTER_TYPE
+  nextKravToDocument: string
 }
 
 export const EditEtterlevelse = ({
@@ -58,6 +59,7 @@ export const EditEtterlevelse = ({
   navigatePath,
   tidligereEtterlevelser,
   kravFilter,
+  nextKravToDocument,
 }: EditEttlevProps) => {
   const { data, loading } = useQuery<{ kravById: KravQL }, KravId>(query, {
     variables: kravId,
@@ -85,7 +87,7 @@ export const EditEtterlevelse = ({
   const navigate = useNavigate()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       etterlevelseDokumentasjonId &&
         kravId.kravNummer &&
         getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(etterlevelseDokumentasjonId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
@@ -125,10 +127,22 @@ export const EditEtterlevelse = ({
     }
 
     if (etterlevelse.id || existingEtterlevelseId) {
-      await updateEtterlevelse(mutatedEtterlevelse).then(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`))
+      await updateEtterlevelse(mutatedEtterlevelse).then(() => {
+        if (nextKravToDocument !== '') {
+          const currentPath = window.location.pathname.split('/krav')
+          navigate(currentPath[0] + '/krav' + nextKravToDocument)
+        } else {
+          navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
+        }
+      })
     } else {
       await createEtterlevelse(mutatedEtterlevelse).then(() => {
-        navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
+        if (nextKravToDocument !== '') {
+          const currentPath = window.location.pathname.split('/krav')
+          navigate(currentPath[0] + '/krav' + nextKravToDocument)
+        } else {
+          navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
+        }
       })
     }
   }
@@ -154,10 +168,8 @@ export const EditEtterlevelse = ({
           const krav = resp.content.filter((k) => k.kravVersjon === data.kravById.kravVersjon + 1)
 
           if (krav.length && krav[0].status === KravStatus.AKTIV) setNyereKrav(krav[0])
-
         }
       })
-
     }
   }, [data])
 
@@ -206,20 +218,14 @@ export const EditEtterlevelse = ({
               <div>
                 <div className="flex items-center justify-between">
                   <div>
-                    {krav.aktivertDato !== null && krav.kravVersjon > 1 && (
-                      <Tag variant="warning">
-                        Ny versjon {moment(krav.aktivertDato).format('ll')}
-                      </Tag>
-                    )}
-                    {krav.aktivertDato !== null && krav.kravVersjon === 1 && (
-                      <BodyShort>Opprettet {moment(krav.aktivertDato).format('ll')}</BodyShort>
-                    )}
+                    {krav.aktivertDato !== null && krav.kravVersjon > 1 && <Tag variant="warning">Ny versjon {moment(krav.aktivertDato).format('ll')}</Tag>}
+                    {krav.aktivertDato !== null && krav.kravVersjon === 1 && <BodyShort>Opprettet {moment(krav.aktivertDato).format('ll')}</BodyShort>}
                   </div>
                   {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
                     <div className="flex items-center gap-2">
                       <BodyShort size="small">
                         {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1
-                          ? 'Tildelt ' +  etterlevelseMetadata.tildeltMed[0]
+                          ? 'Tildelt ' + etterlevelseMetadata.tildeltMed[0]
                           : 'Ikke tildelt'}
                       </BodyShort>
                       <Button
@@ -300,13 +306,12 @@ export const EditEtterlevelse = ({
                     )}
                   </div>
                 </Tabs.Panel>
-                <Tabs.Panel value="etterlevelser" >
+                <Tabs.Panel value="etterlevelser">
                   <div className="mt-2">
                     <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />
                   </div>
-
                 </Tabs.Panel>
-                <Tabs.Panel value="tilbakemeldinger" >
+                <Tabs.Panel value="tilbakemeldinger">
                   <div className="mt-2">
                     <Tilbakemeldinger krav={krav} hasKravExpired={false} />
                   </div>
@@ -341,7 +346,7 @@ export const EditEtterlevelse = ({
                     </div>
                     <div className="flex flex-col">
                       <Label size="medium">Team</Label>
-                      {teams?.map((team, index) => <TeamName key={'team_'+index} id={team.id} big link />)}
+                      {teams?.map((team, index) => <TeamName key={'team_' + index} id={team.id} big link />)}
                     </div>
                   </div>
                 </Tabs.Panel>
@@ -369,7 +374,6 @@ export const EditEtterlevelse = ({
                     </div>
                   </div>
                 </Tabs.Panel>
-
               </Tabs>
             </div>
           </div>

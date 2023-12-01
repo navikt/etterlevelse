@@ -5,7 +5,7 @@ import { KravId, KravMedPrioriteringOgEtterlevelseQuery } from '../api/KravApi'
 import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { KRAV_FILTER_TYPE, KravQL, KravStatus, PageResponse } from '../constants'
+import { EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus, PageResponse } from '../constants'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
 import { useQuery } from '@apollo/client'
@@ -39,23 +39,30 @@ export const EtterlevelseDokumentasjonPage = () => {
     skip: !params.tema || !params.id,
     fetchPolicy: 'no-cache',
   })
-
+  
   //USE this state to access krav list
-  const [kravList, setKravList] = useState<KravQL[]>()
-
-
+  const [nextKravToDocument, setNextKravToDocument] = useState<string>('')
+  const [kravId, setKravId] = useState<KravId | undefined>()
+  
   //Use effect for sorting krav list. after that we add filter or more sorting
   useEffect(() => {
     if (data && !loading) {
-      setKravList(
-        sortKraverByPriority<KravQL>(data?.krav.content, temaData?.shortName || '')
+      const kravPriorityList = sortKraverByPriority<KravQL>(data?.krav.content, temaData?.shortName || '').filter(
+        (k) =>
+          k.etterlevelser.length === 0 ||
+          (k.etterlevelser.length > 0 && k.etterlevelser[0].status !== EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
+          k.etterlevelser[0].status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT,
       )
+      const currentKravIndex = kravPriorityList.findIndex((k) => k.kravNummer === kravId?.kravNummer)
+      if (currentKravIndex && kravPriorityList.length - 1 !== currentKravIndex) {
+        const nextKrav = kravPriorityList[currentKravIndex + 1]
+        setNextKravToDocument('/' + nextKrav.kravNummer + '/'+  nextKrav.kravVersjon)
+      }
+      
     }
   }, [data, loading, temaData])
   //-----------------------––––––––––––---------------------------
 
-
-  const [kravId, setKravId] = useState<KravId | undefined>()
 
   const [navigatePath, setNavigatePath] = useState<string>('')
 
@@ -102,6 +109,7 @@ export const EtterlevelseDokumentasjonPage = () => {
           <CustomizedBreadcrumbs currentPage={'K' + kravId?.kravNummer + '.' + kravId?.kravVersjon} paths={breadcrumbPaths} />
           {kravId && etterlevelseDokumentasjon && (
             <KravView
+              nextKravToDocument={nextKravToDocument}
               temaName={temaData?.shortName}
               etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
               etterlevelseDokumentasjonTitle={etterlevelseDokumentasjon.title}

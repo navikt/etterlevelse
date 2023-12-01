@@ -21,6 +21,7 @@ export const KravView = (props: {
   tab: Section
   setTab: (s: Section) => void
   kravFilter: KRAV_FILTER_TYPE
+  nextKravToDocument: string
 }) => {
   const [varsleMelding, setVarsleMelding] = useState('')
 
@@ -68,6 +69,7 @@ export const KravView = (props: {
       )}
       {!loadingEtterlevelseData && etterlevelse && (
         <EditEtterlevelse
+          nextKravToDocument={props.nextKravToDocument}
           temaName={props.temaName}
           tidligereEtterlevelser={tidligereEtterlevelser}
           etterlevelseDokumentasjonTitle={props.etterlevelseDokumentasjonTitle}
