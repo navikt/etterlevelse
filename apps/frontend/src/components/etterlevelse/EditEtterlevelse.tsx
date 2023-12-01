@@ -89,7 +89,7 @@ export const EditEtterlevelse = ({
 
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       etterlevelseDokumentasjonId &&
         kravId.kravNummer &&
         getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(etterlevelseDokumentasjonId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
@@ -132,7 +132,8 @@ export const EditEtterlevelse = ({
       await updateEtterlevelse(mutatedEtterlevelse).then(() => {
         if (nextKravToDocument !== '') {
           const currentPath = location.pathname.split('/krav')
-          navigate(currentPath[0] + '/krav' + nextKravToDocument)
+          navigate(currentPath[0] + '/krav' + nextKravToDocument + '/')
+          window.location.reload()
         } else {
           navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
         }
@@ -141,7 +142,8 @@ export const EditEtterlevelse = ({
       await createEtterlevelse(mutatedEtterlevelse).then(() => {
         if (nextKravToDocument !== '') {
           const currentPath = location.pathname.split('/krav')
-          navigate(currentPath[0] + '/krav' + nextKravToDocument)
+          navigate(currentPath[0] + '/krav' + nextKravToDocument + '/')
+          window.location.reload()
         } else {
           navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
         }
