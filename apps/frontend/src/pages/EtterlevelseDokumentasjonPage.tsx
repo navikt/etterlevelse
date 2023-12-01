@@ -51,7 +51,6 @@ export const EtterlevelseDokumentasjonPage = () => {
           (k.etterlevelser.length > 0 && k.etterlevelser[0].status !== EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
           k.etterlevelser[0].status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT))
         const nextKrav = kravPriorityList[nextKravIndex]
-        console.log('/' + nextKrav.kravNummer + '/' + nextKrav.kravVersjon)
         setNextKravToDocument('/' + nextKrav.kravNummer + '/' + nextKrav.kravVersjon)
       }
 
