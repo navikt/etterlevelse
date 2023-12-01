@@ -29,7 +29,6 @@ export const EtterlevelseDokumentasjonPage = () => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const lover = codelist.getCodesForTema(params.tema)
 
-  //--------CODE FOR GETTING KRAV LIST WITH PRIORTY---------------
   const { data, loading } = useQuery<{ krav: PageResponse<KravQL> }>(KravMedPrioriteringOgEtterlevelseQuery, {
     variables: {
       etterlevelseDokumentasjonId: params.id,
@@ -39,29 +38,25 @@ export const EtterlevelseDokumentasjonPage = () => {
     skip: !params.tema || !params.id,
     fetchPolicy: 'no-cache',
   })
-  
-  //USE this state to access krav list
+
   const [nextKravToDocument, setNextKravToDocument] = useState<string>('')
   const [kravId, setKravId] = useState<KravId | undefined>()
-  
-  //Use effect for sorting krav list. after that we add filter or more sorting
+
   useEffect(() => {
     if (data && !loading) {
-      const kravPriorityList = sortKraverByPriority<KravQL>(data?.krav.content, temaData?.shortName || '').filter(
-        (k) =>
-          k.etterlevelser.length === 0 ||
-          (k.etterlevelser.length > 0 && k.etterlevelser[0].status !== EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
-          k.etterlevelser[0].status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT,
-      )
+      const kravPriorityList = sortKraverByPriority<KravQL>(data?.krav.content, temaData?.shortName || '')
       const currentKravIndex = kravPriorityList.findIndex((k) => k.kravNummer === kravId?.kravNummer)
-      if (currentKravIndex && kravPriorityList.length - 1 !== currentKravIndex) {
-        const nextKrav = kravPriorityList[currentKravIndex + 1]
-        setNextKravToDocument('/' + nextKrav.kravNummer + '/'+  nextKrav.kravVersjon)
+      if (currentKravIndex !== null && kravPriorityList.length - 1 !== currentKravIndex) {
+        const nextKravIndex = kravPriorityList.findIndex((k, i) => i > currentKravIndex && (k.etterlevelser.length === 0 ||
+          (k.etterlevelser.length > 0 && k.etterlevelser[0].status !== EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
+          k.etterlevelser[0].status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT))
+        const nextKrav = kravPriorityList[nextKravIndex]
+        console.log('/' + nextKrav.kravNummer + '/' + nextKrav.kravVersjon)
+        setNextKravToDocument('/' + nextKrav.kravNummer + '/' + nextKrav.kravVersjon)
       }
-      
+
     }
-  }, [data, loading, temaData])
-  //-----------------------––––––––––––---------------------------
+  }, [data, loading, temaData, kravId])
 
 
   const [navigatePath, setNavigatePath] = useState<string>('')

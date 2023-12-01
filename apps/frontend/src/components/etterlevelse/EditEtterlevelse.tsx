@@ -15,7 +15,7 @@ import {
   mapEtterlevelseMetadataToFormValue,
   updateEtterlevelseMetadata,
 } from '../../api/EtterlevelseMetadataApi'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import moment from 'moment'
@@ -74,6 +74,9 @@ export const EditEtterlevelse = ({
   const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
   const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{ kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' }])
+  const location = useLocation()
+  const navigate = useNavigate()
+
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
@@ -84,7 +87,6 @@ export const EditEtterlevelse = ({
     }),
   )
 
-  const navigate = useNavigate()
 
   useEffect(() => {
     ;(async () => {
@@ -129,7 +131,7 @@ export const EditEtterlevelse = ({
     if (etterlevelse.id || existingEtterlevelseId) {
       await updateEtterlevelse(mutatedEtterlevelse).then(() => {
         if (nextKravToDocument !== '') {
-          const currentPath = window.location.pathname.split('/krav')
+          const currentPath = location.pathname.split('/krav')
           navigate(currentPath[0] + '/krav' + nextKravToDocument)
         } else {
           navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
@@ -138,7 +140,7 @@ export const EditEtterlevelse = ({
     } else {
       await createEtterlevelse(mutatedEtterlevelse).then(() => {
         if (nextKravToDocument !== '') {
-          const currentPath = window.location.pathname.split('/krav')
+          const currentPath = location.pathname.split('/krav')
           navigate(currentPath[0] + '/krav' + nextKravToDocument)
         } else {
           navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
