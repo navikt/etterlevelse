@@ -15,7 +15,7 @@ import {
   mapEtterlevelseMetadataToFormValue,
   updateEtterlevelseMetadata,
 } from '../../api/EtterlevelseMetadataApi'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import moment from 'moment'
@@ -66,6 +66,7 @@ export const EditEtterlevelse = ({
     skip: !kravId.id && !kravId.kravNummer,
     fetchPolicy: 'no-cache',
   })
+
   const etterlevelserLoading = loading
   const [krav, setKrav] = useState<KravQL>()
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
@@ -87,7 +88,6 @@ export const EditEtterlevelse = ({
     }),
   )
 
-
   useEffect(() => {
     ; (async () => {
       etterlevelseDokumentasjonId &&
@@ -108,6 +108,21 @@ export const EditEtterlevelse = ({
         })
     })()
   }, [])
+
+  //Navigate to same component does not work
+  //Work around for redirecting to same component
+  //create a anchor tag with new url and trigger it
+  const redirectOnSameComponent = (nextKravPath: string) => {
+      const currentPath = location.pathname.split('/krav')
+      var a = document.createElement('a')
+      var linkText = document.createTextNode('Sender til neste krav')
+      a.appendChild(linkText)
+      a.title = 'Sender til neste krav'
+      a.href = currentPath[0] + '/krav' + nextKravPath
+      a.id = 'SendToNextKrav'
+      document.body.appendChild(a)
+      document.getElementById('SendToNextKrav')?.click()
+  }
 
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
@@ -131,9 +146,7 @@ export const EditEtterlevelse = ({
     if (etterlevelse.id || existingEtterlevelseId) {
       await updateEtterlevelse(mutatedEtterlevelse).then(() => {
         if (nextKravToDocument !== '') {
-          const currentPath = location.pathname.split('/krav')
-          navigate(currentPath[0] + '/krav' + nextKravToDocument + '/')
-          window.location.reload()
+          redirectOnSameComponent(nextKravToDocument)
         } else {
           navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
         }
@@ -141,9 +154,7 @@ export const EditEtterlevelse = ({
     } else {
       await createEtterlevelse(mutatedEtterlevelse).then(() => {
         if (nextKravToDocument !== '') {
-          const currentPath = location.pathname.split('/krav')
-          navigate(currentPath[0] + '/krav' + nextKravToDocument + '/')
-          window.location.reload()
+          redirectOnSameComponent(nextKravToDocument)
         } else {
           navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
         }
