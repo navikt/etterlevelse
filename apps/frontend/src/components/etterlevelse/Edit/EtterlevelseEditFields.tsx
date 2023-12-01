@@ -61,7 +61,7 @@ export const EtterlevelseEditFields = ({
     <div className="w-full">
       <Formik
         onSubmit={submit}
-        initialValues={editedEtterlevelse ? mapEtterlevelseToFormValue(editedEtterlevelse) : mapEtterlevelseToFormValue(etterlevelse)}
+        initialValues={editedEtterlevelse ? mapEtterlevelseToFormValue(editedEtterlevelse, krav) : mapEtterlevelseToFormValue(etterlevelse, krav)}
         validate={(value) => {
           const mutatedEtterlevelse = value
           value.suksesskriterieBegrunnelser = syncEtterlevelseKriterieBegrunnelseWithKrav(value, krav)
@@ -76,7 +76,7 @@ export const EtterlevelseEditFields = ({
         validateOnChange={false}
         validateOnBlur={false}
       >
-        {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
+        {({ values, isSubmitting, submitForm, errors, setFieldError, dirty }: FormikProps<Etterlevelse>) => (
           <div className="flex flex-col">
             <Form>
               <div>
@@ -188,7 +188,15 @@ export const EtterlevelseEditFields = ({
                 </div>
 
                 <div className="pb-6 flex justify-end w-full">
-                  <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" variant="tertiary" onClick={() => close()}>
+                  <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" variant="tertiary"
+                    onClick={() => {
+                      if(!dirty){
+                        close()
+                      } else {
+
+                      }
+                    }}
+                  >
                     {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt'}
                   </Button>
                 </div>
