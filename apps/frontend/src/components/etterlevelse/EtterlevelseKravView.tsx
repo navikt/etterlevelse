@@ -28,7 +28,7 @@ import { FileTextIcon } from '@navikt/aksel-icons'
 import EditNotatfelt from '../etterlevelseMetadata/EditNotatfelt'
 import EtterlevelseViewFields from './EtterlevelseViewFields'
 
-type EditEttlevProps = {
+type EttlevelseKravViewProps = {
   temaName?: string
   etterlevelse: Etterlevelse
   kravId: KravId
@@ -45,7 +45,7 @@ type EditEttlevProps = {
   nextKravToDocument: string
 }
 
-export const EditEtterlevelse = ({
+export const EtterlevelseKravView = ({
   temaName,
   kravId,
   etterlevelse,
@@ -60,7 +60,7 @@ export const EditEtterlevelse = ({
   tidligereEtterlevelser,
   kravFilter,
   nextKravToDocument,
-}: EditEttlevProps) => {
+}: EttlevelseKravViewProps) => {
   const { data, loading } = useQuery<{ kravById: KravQL }, KravId>(query, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 
 import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
 import { toKravId } from './common/utils'
-import { EditEtterlevelse } from '../etterlevelse/EditEtterlevelse'
+import { EtterlevelseKravView } from '../etterlevelse/EtterlevelseKravView'
 import { Loader } from '@navikt/ds-react'
 
 export const KravView = (props: {
@@ -68,7 +68,7 @@ export const KravView = (props: {
         </div>
       )}
       {!loadingEtterlevelseData && etterlevelse && (
-        <EditEtterlevelse
+        <EtterlevelseKravView
           nextKravToDocument={props.nextKravToDocument}
           temaName={props.temaName}
           tidligereEtterlevelser={tidligereEtterlevelser}
