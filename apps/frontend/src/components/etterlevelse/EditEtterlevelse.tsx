@@ -341,7 +341,7 @@ export const EditEtterlevelse = ({
                     </div>
                     <div className="flex flex-col">
                       <Label size="medium">Team</Label>
-                      {teams?.map((team) => <TeamName id={team.id} big link />)}
+                      {teams?.map((team, index) => <TeamName key={'team_'+index} id={team.id} big link />)}
                     </div>
                   </div>
                 </Tabs.Panel>
