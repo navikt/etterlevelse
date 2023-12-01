@@ -42,7 +42,7 @@ const DataText = (props: DataTextProps) => {
   return (
     <div className={`${props.notFlexed ? 'block' : 'flex'} w-full`}>
       {props.label && getLabel()}
-      <div>{props.children}</div>
+      {props.children}
     </div>
   )
 }

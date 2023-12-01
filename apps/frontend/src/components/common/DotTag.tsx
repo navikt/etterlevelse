@@ -33,7 +33,7 @@ export const DotTags = (props: DotTagsParams) => {
 
   if (!items.length) return <>{'Ikke angitt'}</>
 
-  if (commaSeparator)
+  if (commaSeparator) {
     return (
       <div className={'inline'}>
         {items.map((item, i) => (
@@ -44,14 +44,19 @@ export const DotTags = (props: DotTagsParams) => {
         ))}
       </div>
     )
+  }
 
   return (
     <div className={`${props.inColumn ? 'block' : 'flex'} flex-wrap`}>
       {items.map((item, i) => (
         <div className={`${props.inColumn ? 'mb-1.5' : 'mb-0'} ${i < items.length && !commaSeparator ? 'mb-1.5' : 'mb-0'}`} key={i}>
-          <BodyShort className={'break-words'}>
-            <Content {...props} item={item} />{' '}
-          </BodyShort>
+          {!props.markdown &&
+            <BodyShort className={'break-words'}>
+              <Content {...props} item={item} />{' '}
+            </BodyShort>
+          }
+
+          {props.markdown && <Content {...props} item={item} />}
         </div>
       ))}
     </div>
