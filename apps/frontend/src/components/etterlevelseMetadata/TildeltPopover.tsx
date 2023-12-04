@@ -5,7 +5,7 @@ import { Button as BaseButton } from 'baseui/button'
 import { PLACEMENT } from 'baseui/tooltip'
 import Button from '../common/Button'
 import { createEtterlevelseMetadata, updateEtterlevelseMetadata } from '../../api/EtterlevelseMetadataApi'
-import { user } from '../../services/User'
+import { useUser } from '../../services/User'
 import { ettlevColors } from '../../util/theme'
 import { LabelSmall } from 'baseui/typography'
 import { borderColor, borderStyle, borderWidth } from '../common/Style'
@@ -20,6 +20,8 @@ type TildeltPopoverProps = {
 }
 
 export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata, icon, iconColor }: TildeltPopoverProps) => {
+  const user = useUser
+
   return (
     <StatefulPopover
       focusLock={true}

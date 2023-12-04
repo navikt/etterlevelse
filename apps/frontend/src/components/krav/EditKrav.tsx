@@ -16,7 +16,7 @@ import ErrorModal from '../ErrorModal'
 import { Error } from '../common/ModalSchema'
 import { ErrorMessageModal } from './ErrorMessageModal'
 import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
-import { user } from '../../services/User'
+import { useUser } from '../../services/User'
 import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
 import _ from 'lodash'
 import { Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal } from '@navikt/ds-react'
@@ -38,6 +38,7 @@ const modalWidth = '1276px'
 export const kravModal = () => document.querySelector('#krav-modal')
 
 export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, newKrav, alleKravVersjoner }: EditKravProps) => {
+  const user = useUser
   const [stickyHeader, setStickyHeader] = React.useState(false)
   const [stickyFooterStyle, setStickyFooterStyle] = React.useState(true)
   const [showErrorModal, setShowErrorModal] = React.useState(false)

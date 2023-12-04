@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { Location, useLocation } from 'react-router-dom'
+import { Location, useLocation, useNavigate } from 'react-router-dom'
 import { useQueryParam } from '../util/hooks'
 import { intl } from '../util/intl/intl'
-import { user } from '../services/User'
+import { useUser } from '../services/User'
 import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
 import { informationIcon, warningAlert } from './Images'
@@ -43,6 +43,7 @@ export const LoginButton = () => {
 }
 
 const LoggedInHeader = () => {
+  const user = useUser
   const [viewRoller, setViewRoller] = useState(false)
 
   const roller = (
@@ -67,22 +68,22 @@ const LoggedInHeader = () => {
 
   const kravPages = user.isKraveier()
     ? [
-        { label: 'Forvalte og opprette krav', href: '/kravliste' },
-        //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
-      ]
+      { label: 'Forvalte og opprette krav', href: '/kravliste' },
+      //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
+    ]
     : []
   const adminPages = user.isAdmin()
     ? [
-        { label: 'Administrere krav', href: '/admin/krav' },
-        { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
-        { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
-        { label: 'Administrere arkivering', href: '/admin/arkiv' },
-        { label: intl.audit, href: '/admin/audit' },
-        { label: 'Kodeverk', href: '/admin/codelist' },
-        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-        { label: intl.notifications, href: '/admin/varsel' },
-        // { label: intl.settings, href: '/admin/settings', disabled: true },
-      ]
+      { label: 'Administrere krav', href: '/admin/krav' },
+      { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
+      { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
+      { label: 'Administrere arkivering', href: '/admin/arkiv' },
+      { label: intl.audit, href: '/admin/audit' },
+      { label: 'Kodeverk', href: '/admin/codelist' },
+      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+      { label: intl.notifications, href: '/admin/varsel' },
+      // { label: intl.settings, href: '/admin/settings', disabled: true },
+    ]
     : []
 
   return (
@@ -107,6 +108,7 @@ const LoggedInHeader = () => {
 }
 
 const UserInfo = () => {
+  const user = useUser
   const location = useLocation()
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
   const path = location.pathname
@@ -131,8 +133,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
 
   const allPages = props.pages.length
     ? props.pages
-        .filter((p) => p.length)
-        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
+      .filter((p) => p.length)
+      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -176,6 +178,7 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
 let sourceReported = false
 
 const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
+  const user = useUser
   const [systemVarsel, setSystemVarsel] = useState<Melding>()
   const location = useLocation()
 
@@ -186,7 +189,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])

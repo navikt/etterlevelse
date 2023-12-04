@@ -1,6 +1,6 @@
 import { EtterlevelseDokumentasjonQL, KRAV_FILTER_TYPE, KravEtterlevelseData } from '../../constants'
 import _ from 'lodash'
-import { user } from '../../services/User'
+import { useUser } from '../../services/User'
 import { Block } from 'baseui/block'
 import { CustomPanelDivider } from '../common/CustomizedAccordion'
 import { KravCard } from './KravCard'
@@ -20,6 +20,8 @@ type KravListProps = {
 }
 
 export const KravList = ({ kravList, EmptyMessage, sortingAvailable, noStatus, sorting, sortingOptions, etterlevelseDokumentasjon, noVarsling, kravFilter }: KravListProps) => {
+  const user = useUser
+
   if (kravList.length) {
     let sortedKravList = _.cloneDeep(kravList)
     if (sortingAvailable && sorting[0].id === sortingOptions[1].id) {

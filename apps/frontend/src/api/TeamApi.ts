@@ -4,7 +4,7 @@ import { env } from '../util/env'
 import { useForceUpdate, useSearch } from '../util/hooks'
 import { Option } from 'baseui/select'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { user } from '../services/User'
+import { useUser } from '../services/User'
 
 export const getResourceById = async (resourceId: string) => {
   return (await axios.get<TeamResource>(`${env.backendBaseUrl}/team/resource/${resourceId}`)).data
@@ -135,6 +135,8 @@ export const useMyTeams = () => {
   const [productAreas] = useMyProductAreas()
   const [data, setData] = useState<Team[]>([])
   const [loading, setLoading] = useState(true)
+  const user = useUser
+  
   const ident = user.getIdent()
 
   useEffect(() => {
@@ -172,6 +174,8 @@ export const useMyTeams = () => {
 export const useMyProductAreas = () => {
   const [data, setData] = useState<ProductArea[]>([])
   const [loading, setLoading] = useState(true)
+  const user = useUser
+  
   const ident = user.getIdent()
 
   useEffect(() => {

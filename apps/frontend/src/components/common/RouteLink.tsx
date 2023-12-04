@@ -7,7 +7,7 @@ import { KIND } from 'baseui/button'
 import { ListName } from '../../services/Codelist'
 import CustomizedLink from './CustomizedLink'
 import _ from 'lodash'
-import { user } from '../../services/User'
+import { useUser } from '../../services/User'
 import { loginUrl } from '../Header'
 import { ettlevColors } from '../../util/theme'
 import { Link } from '@navikt/ds-react'
@@ -26,6 +26,8 @@ const RouteLink = (props: RouteLinkProps) => {
   const { hideUnderline, plain, requireLogin, style, fontColor, ariaLabel, ...restprops } = props
   const navigate = useNavigate()
   const location = useLocation()
+  const user = useUser
+
 
   const onClick = (e: Event) => {
     if (requireLogin && !user.isLoggedIn()) return

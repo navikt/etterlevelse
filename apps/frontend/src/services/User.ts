@@ -100,7 +100,7 @@ class UserService {
   }
 }
 
-export const user = new UserService()
+export const useUser = new UserService()
 
 const nameFor = (group: Group) => {
   switch (group) {
@@ -114,3 +114,5 @@ const nameFor = (group: Group) => {
       return 'Kraveier'
   }
 }
+
+

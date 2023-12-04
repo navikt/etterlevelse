@@ -4,10 +4,11 @@ import { intl } from '../util/intl/intl'
 import notFound from '../resources/notfound.svg'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { user } from '../services/User'
+import { useUser } from '../services/User'
 import { Heading } from '@navikt/ds-react'
 
 const Forbidden = () => {
+  const user = useUser
   const params = useParams<{ role?: string }>()
 
   const navigate = useNavigate()

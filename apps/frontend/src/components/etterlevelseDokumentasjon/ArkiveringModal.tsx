@@ -5,7 +5,7 @@ import { createEtterlevelseArkiv, updateEtterlevelseArkiv } from '../../api/Arki
 import React, { useState } from 'react'
 import moment from 'moment'
 import { BodyLong, Button, Modal } from '@navikt/ds-react'
-import { user } from '../../services/User'
+import { useUser } from '../../services/User'
 
 type ArkiveringModalProps = {
   arkivModal: boolean
@@ -17,6 +17,7 @@ type ArkiveringModalProps = {
 
 export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumentasjonId, etterlevelseArkiv, setEtterlevelseArkiv }: ArkiveringModalProps) => {
   const [isArchivingCancelled, setIsArchivingCancelled] = useState<boolean>(false)
+  const user = useUser
 
   const getStatustext = (etterlevelseArkivStatus: EtterlevelseArkivStatus) => {
     switch (etterlevelseArkivStatus) {

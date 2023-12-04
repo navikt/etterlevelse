@@ -8,7 +8,7 @@ import {
 } from '../../../api/TilbakemeldingApi'
 import React, { useEffect, useState } from 'react'
 import moment from 'moment'
-import { user } from '../../../services/User'
+import { useUser } from '../../../services/User'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useQueryParam, useRefs } from '../../../util/hooks'
 import { ettlevColors } from '../../../util/theme'
@@ -31,6 +31,7 @@ import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 const DEFAULT_COUNT_SIZE = 5
 
 export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKravExpired: boolean }) => {
+  const user = useUser
   const [tilbakemeldinger, loading, add, replace, remove] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
@@ -198,6 +199,7 @@ const getStatus = (tilbakemelding: Tilbakemelding) => {
 }
 
 export const getMelderInfo = (tilbakemelding: Tilbakemelding) => {
+  const user = useUser
   const sistMelding = tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1]
   const status = getStatus(tilbakemelding)
   const melder = user.getIdent() === tilbakemelding.melderIdent
@@ -220,6 +222,7 @@ type TilbakemeldingSvarProps = {
 }
 
 const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgKraveier, remove, replace }: TilbakemeldingSvarProps) => {
+  const user = useUser
   const melderInfo = getMelderInfo(tilbakemelding)
   const [response, setResponse] = useState('')
   const [replyRole] = useState(melderInfo.rolle)

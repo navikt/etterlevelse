@@ -13,7 +13,6 @@ import _ from 'lodash'
 import { DateField } from '../../common/Inputs'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
 import { Alert, BodyShort, Button, Checkbox, Label, Modal } from '@navikt/ds-react'
-import { user } from '../../../services/User'
 
 type EditProps = {
   krav: KravQL
