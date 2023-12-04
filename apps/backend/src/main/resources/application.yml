@@ -63,6 +63,20 @@ spring:
       max-request-size: 20MB
   codec:
     max-in-memory-size: 5MB
+  security:
+    oauth2:
+      client:
+        registration:
+          email:
+            provider: azure
+            client-id: ${AZURE_APP_CLIENT_ID}
+            client-secret: ${AZURE_APP_CLIENT_SECRET}
+            authorization-grant-type: client_credentials
+            scope:
+              - https://graph.microsoft.com/.default
+        provider:
+          azure:
+            issuer-uri: https://login.microsoftonline.com/${AZURE_APP_TENANT_ID}/v2.0
 
 springdoc:
   api-docs:
