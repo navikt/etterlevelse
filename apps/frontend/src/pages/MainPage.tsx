@@ -49,7 +49,7 @@ export const MainPage = () => {
   return (
     <Page
       hideBackBtn
-      headerBackgroundColor={ettlevColors.green800}
+      headerBackgroundColor={ettlevColors.lysBla}
       backgroundColor={ettlevColors.grey50}
       headerOverlap={'100px'}
       rawMain
