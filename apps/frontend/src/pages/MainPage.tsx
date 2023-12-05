@@ -54,7 +54,7 @@ export const MainPage = () => {
       headerOverlap={'100px'}
       rawMain
       header={
-        <HeadingXXLarge display={'flex'} flexDirection={'column'} color={ettlevColors.white} marginTop={theme.sizing.scale1400} marginBottom={theme.sizing.scale1400}>
+        <HeadingXXLarge display={'flex'} flexDirection={'column'} marginTop={theme.sizing.scale1400} marginBottom={theme.sizing.scale1400}>
           <span style={{ fontWeight: 400 }}>Støtte til etterlevelse</span>
           <span>som ivaretar rettssikkerheten til brukerne våre</span>
         </HeadingXXLarge>
