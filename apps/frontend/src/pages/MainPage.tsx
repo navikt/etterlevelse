@@ -26,20 +26,12 @@ export const MainPage = () => {
   ampli.logEvent('sidevisning', { side: 'Hovedside' })
 
   return (
-    <Page
-      hideBackBtn
-      headerBackgroundColor={ettlevColors.lysBla}
-      backgroundColor={ettlevColors.grey50}
-      headerOverlap={'100px'}
-      rawMain
-      header={
-        <HeadingXXLarge display={'flex'} flexDirection={'column'} marginTop={theme.sizing.scale1400} marginBottom={theme.sizing.scale1400}>
-          <span style={{ fontWeight: 400 }}>Støtte til etterlevelse</span>
-          <span>som ivaretar rettssikkerheten til brukerne våre</span>
-        </HeadingXXLarge>
-      }
-    >
-      <Block display={'flex'} flexDirection={'column'} alignItems={'center'} width={'100%'}>
+    <div className="w-full pb-52" id="content" role="main">
+      <HeadingXXLarge display={'flex'} flexDirection={'column'} marginTop={theme.sizing.scale1400} marginBottom={theme.sizing.scale1400}>
+        <span style={{ fontWeight: 400 }}>Støtte til etterlevelse</span>
+        <span>som ivaretar rettssikkerheten til brukerne våre</span>
+      </HeadingXXLarge>
+      <div className="flex flex-col items-center w-full">
         <Wide>
           <div>
             <TemaListe />
@@ -47,24 +39,23 @@ export const MainPage = () => {
         </Wide>
 
         <Narrow>
-          <Block $style={{}} marginTop={theme.sizing.scale1600} marginBottom={theme.sizing.scale900} id={'forsideVarselMelding'}>
-            {forsideVarsel && forsideVarsel.meldingStatus === MeldingStatus.ACTIVE && (
-              <Block
-                $style={{
-                  ...borderWidth('1px'),
-                  ...borderStyle('solid'),
-                  ...borderColor(forsideVarsel.alertType === AlertType.INFO ? ettlevColors.navDypBla : ettlevColors.navOransje),
-                  backgroundColor: forsideVarsel.alertType === AlertType.INFO ? ettlevColors.navLysBla : ettlevColors.warning50,
-                  ...paddingAll('32px'),
-                  marginBottom: '64px',
-                }}
-              >
-                <Markdown source={forsideVarsel.melding} />
-              </Block>
+          <div className="mt-16 mb-32" id="forsideVarselMelding">
+            {forsideVarsel?.meldingStatus === MeldingStatus.ACTIVE && (
+              <>
+                {forsideVarsel.alertType === AlertType.INFO ? (
+                  <div className="border-blue-100 border-solid border-1  bg-blue-100  mt-16 p-8">
+                    <Markdown source={forsideVarsel.melding} />
+                  </div>
+                ) : (
+                  <div className="border-solid border-1 border-orange-100 bg-orange-100  mt-16 p-8">
+                    <Markdown source={forsideVarsel.melding} />
+                  </div>
+                )}
+              </>
             )}
-          </Block>
+          </div>
         </Narrow>
-      </Block>
-    </Page>
+      </div>
+    </div>
   )
 }
