@@ -134,7 +134,7 @@ const sectionProps: BlockProps = {
   flexWrap: true,
 }
 
-const TemaListe = () => {
+export const TemaListe = () => {
   const [num] = useState<{ [t: string]: number }>({})
   const update = useForceUpdate()
 

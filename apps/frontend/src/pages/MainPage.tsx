@@ -17,6 +17,7 @@ import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { ampli } from '../services/Amplitude'
 import { getPageWidth } from '../util/pageWidth'
+import { TemaListe } from './TemaPage'
 
 const cardWidth = ['95%', '95%', '95%', '95%', '31%', '31%']
 const cardHeight = ['auto', 'auto', 'auto', 'auto', '140px', '140px']
@@ -111,10 +112,13 @@ export const MainPage = () => {
               openinnewtab
             />
           </div>
+          <div>
+            <TemaListe />
+          </div>
         </Wide>
 
         <Narrow>
-          <Block $style={{}} marginTop={theme.sizing.scale1600} marginBottom={theme.sizing.scale900} id={'forsideVarselMelding'}>
+          {/* <Block $style={{}} marginTop={theme.sizing.scale1600} marginBottom={theme.sizing.scale900} id={'forsideVarselMelding'}>
             {forsideVarsel && forsideVarsel.meldingStatus === MeldingStatus.ACTIVE && (
               <Block
                 $style={{
@@ -137,10 +141,10 @@ export const MainPage = () => {
             </HeadingXLarge>
             <ParagraphMedium $style={{ maxWidth: '600px', width: '100%' }}>
               Hvorfor er etterlevelse viktig, og hvordan bør vi jobbe med kravene? Se filmen om etterlevelse og få en introduksjon på under 2 minutter
-            </ParagraphMedium>
-          </Block>
+            </ParagraphMedium> 
+          </Block> */}
 
-          <Card
+          {/* <Card
             overrides={{
               Root: {
                 style: {
@@ -186,9 +190,9 @@ export const MainPage = () => {
                 light={'img/EtterlevelseVideoDark.png'}
               />
             </Block>
-          </Card>
+          </Card> */}
 
-          <Block
+          {/* <Block
             $style={{
               ...margin(theme.sizing.scale800, '0'),
               border: `1px solid ${ettlevColors.grey100}`,
@@ -216,7 +220,7 @@ export const MainPage = () => {
                 },
               }}
             />
-          </Block>
+          </Block> */}
         </Narrow>
       </Block>
     </Page>
