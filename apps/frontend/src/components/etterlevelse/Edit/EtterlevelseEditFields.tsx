@@ -14,6 +14,7 @@ import { DateField } from '../../common/Inputs'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
 import { Alert, BodyShort, Button, Checkbox, Label, Modal } from '@navikt/ds-react'
 import { ampli } from '../../../services/Amplitude'
+import { useUser } from '../../../services/User'
 
 type EditProps = {
   krav: KravQL
@@ -45,6 +46,7 @@ export const EtterlevelseEditFields = ({
   const [isOppfylesSenere, setOppfylesSenere] = React.useState<boolean>(etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE)
   const [isAvbrytModalOpen, setIsAvbryModalOpen] = React.useState<boolean>(false)
   const location = useLocation()
+  const user = useUser
 
   const navigate = useNavigate()
   useEffect(() => {
@@ -165,7 +167,8 @@ export const EtterlevelseEditFields = ({
                           } else if (isOppfylesSenere) {
                             values.status = EtterlevelseStatus.OPPFYLLES_SENERE
                           }
-                          ampli.logEvent('knapp klikket', { context: 'Lagre og fortsett til neste krav', pagePath: location.pathname })
+                          ampli.logEvent('knapp klikket', { context: 'Lagre og fortsett til neste krav', pagePath: location.pathname,
+                          role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
                           submitForm()
                         }}
                       >
@@ -181,7 +184,8 @@ export const EtterlevelseEditFields = ({
                               setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
                             }
                           })
-                          ampli.logEvent('knapp klikket', { context: 'Sett krav til ferdig utfylt og fortsett til neste krav', pagePath: location.pathname })
+                          ampli.logEvent('knapp klikket', { context: 'Sett krav til ferdig utfylt og fortsett til neste krav', pagePath: location.pathname,
+                          role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
                           submitForm()
                         }}
                       >
@@ -195,7 +199,8 @@ export const EtterlevelseEditFields = ({
                   <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" variant="tertiary"
                     onClick={() => {
                       if (!dirty) {
-                        ampli.logEvent('knapp klikket', { context: 'Avbryt uten endring i etterlevelse', pagePath: location.pathname })
+                        ampli.logEvent('knapp klikket', { context: 'Avbryt uten endring i etterlevelse', pagePath: location.pathname,
+                        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
                         close()
                       } else {
                         setIsAvbryModalOpen(true)
@@ -220,7 +225,8 @@ export const EtterlevelseEditFields = ({
                   </Modal.Body>
                   <Modal.Footer>
                     <Button onClick={() => {
-                      ampli.logEvent('knapp klikket', { context: 'Avbryt med endring i etterlevelse', pagePath: location.pathname })
+                      ampli.logEvent('knapp klikket', { context: 'Avbryt med endring i etterlevelse', pagePath: location.pathname,
+                      role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
                       close()
                     }
                     } type="button">Ja, jeg vil avbryte</Button>

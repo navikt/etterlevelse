@@ -10,6 +10,7 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
 import { useQuery } from '@apollo/client'
 import { sortKraverByPriority } from '../util/sort'
+import { useUser } from '../services/User'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
@@ -61,6 +62,7 @@ export const EtterlevelseDokumentasjonPage = () => {
   const [navigatePath, setNavigatePath] = useState<string>('')
 
   const [tab, setTab] = useState<Section>('dokumentasjon')
+  const user = useUser
 
   useEffect(() => {
     if (params.kravNummer && params.kravVersjon) {
@@ -75,6 +77,7 @@ export const EtterlevelseDokumentasjonPage = () => {
         sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`,
         section: `K${kravId.kravNummer}.${kravId.kravVersjon}`,
         temaKey: temaData.shortName.toString(),
+        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER'
       })
     }
   }, [etterlevelseDokumentasjon])

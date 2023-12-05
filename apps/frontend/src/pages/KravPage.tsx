@@ -110,6 +110,7 @@ export const KravPage = () => {
         side: 'Krav side',
         sidetittel: `${kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} ${krav.navn}`,
         section: kravTema?.shortName.toString(),
+        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER'
       })
     }
   }, [krav, kravTema])

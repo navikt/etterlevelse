@@ -9,12 +9,14 @@ import { ampli } from '../services/Amplitude'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { BodyShort, Heading, Link, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
 import { handleSort } from '../util/handleTableSort'
+import { useUser } from '../services/User'
 
 export const KravTablePage = () => {
   const [tableContent, setTableContent] = useState<Krav[]>([])
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
+  const user = useUser
 
   let sortedData = tableContent
 
@@ -51,7 +53,8 @@ export const KravTablePage = () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
       setTableContent(mappedKraver)
-      ampli.logEvent('sidevisning', { side: 'Krav admin side', sidetittel: 'Administrere Krav' })
+      ampli.logEvent('sidevisning', { side: 'Krav admin side', sidetittel: 'Administrere Krav',
+      role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
     })()
   }, [])
 

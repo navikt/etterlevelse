@@ -18,7 +18,8 @@ export const EtterlevelseListPage = () => {
 
   useEffect(() => {
     if (!loading) {
-      ampli.logEvent('sidevisning', { side: 'Dokumentasjons liste for etterlevelse' })
+      ampli.logEvent('sidevisning', { side: 'Dokumentasjons liste for etterlevelse',
+      role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
     }
   }, [loading])
 

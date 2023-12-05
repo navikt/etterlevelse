@@ -23,6 +23,7 @@ import { KravList } from '../components/etterlevelseDokumentasjonTema/KravList'
 import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 import { KravPanelHeaderWithSorting } from '../components/etterlevelseDokumentasjon/KravPanelHeader'
 import { Loader } from '@navikt/ds-react'
+import { useUser } from '../services/User'
 
 export const sortingOptions = [
   { label: 'Anbefalt rekkefølge', id: 'priority' },
@@ -60,6 +61,7 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
   const [allKravPriority, setAllKravPriority] = useState<KravPrioritering[]>([])
   const location = useLocation()
   const [temaPageUrl] = useState<string>(location.pathname)
+  const user = useUser
 
   const { data: relevanteKraverGraphQLResponse, loading: relevanteKraverGraphQLLoading } = useQuery<{ krav: PageResponse<KravQL> }>(etterlevelseDokumentasjonKravQuery, {
     variables,
@@ -97,6 +99,7 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
         side: 'Tema side for dokumentasjon',
         sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`,
         section: `${temaData.shortName}`,
+        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER'
       })
     }
   }, [etterlevelseDokumentasjon])

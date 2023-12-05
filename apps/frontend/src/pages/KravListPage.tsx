@@ -29,7 +29,8 @@ export const sortKrav = (kravene: KravQL[]) => {
 
 export const KravListPage = () => {
   const user = useUser
-  ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav' })
+  ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav',
+  role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
 
   return (
     <div className="w-full pb-52" id="content" role="main">

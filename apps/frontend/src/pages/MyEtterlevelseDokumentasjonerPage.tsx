@@ -39,7 +39,9 @@ type CustomTeamObject = dokumentasjonCount & Team
 export const tabMarginBottom = '48px'
 
 export const MyEtterlevelseDokumentasjonerPage = () => {
-  ampli.logEvent('sidevisning', { side: 'Side for Dokumentasjoner', sidetittel: 'Dokumentere etterlevelse' })
+  const user = useUser
+  ampli.logEvent('sidevisning', { side: 'Side for Dokumentasjoner', sidetittel: 'Dokumentere etterlevelse',
+  role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
 
   return (
     <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>

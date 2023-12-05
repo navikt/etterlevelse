@@ -17,6 +17,7 @@ import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { ampli } from '../services/Amplitude'
 import { getPageWidth } from '../util/pageWidth'
+import { useUser } from '../services/User'
 
 const cardWidth = ['95%', '95%', '95%', '95%', '31%', '31%']
 const cardHeight = ['auto', 'auto', 'auto', 'auto', '140px', '140px']
@@ -25,6 +26,7 @@ const cardMarginRight = ['none', 'none', 'none', 'none', theme.sizing.scale800, 
 export const MainPage = () => {
   const [forsideVarsel, setForsideVarsle] = useState<Melding>()
   const [pageWidth, setPageWidth] = useState<number>()
+  const user = useUser
 
   useEffect(() => {
     ;(async () => {
@@ -44,7 +46,8 @@ export const MainPage = () => {
     window.onresize = reportWindowSize
   })
 
-  ampli.logEvent('sidevisning', { side: 'Hovedside' })
+  ampli.logEvent('sidevisning', { side: 'Hovedside',
+  role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
 
   return (
     <Page

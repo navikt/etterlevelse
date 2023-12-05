@@ -13,6 +13,7 @@ import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/Cus
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
+import { useUser } from '../services/User'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
 
@@ -28,6 +29,7 @@ export const EtterlevelsePage = () => {
   const [kravTema, setKravTema] = useState<TemaCode>()
 
   const loading = !edit && !etterlevelse
+  const user = useUser
 
   useEffect(() => {
     etterlevelse &&
@@ -44,6 +46,7 @@ export const EtterlevelsePage = () => {
       ampli.logEvent('sidevisning', {
         side: 'Etterlevelse side',
         sidetittel: `Etterlevelse: K${etterlevelse.kravNummer.toString()}.${etterlevelse.kravVersjon.toString()} ${krav?.navn}`,
+        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER'
       })
     }
   }, [etterlevelse])
