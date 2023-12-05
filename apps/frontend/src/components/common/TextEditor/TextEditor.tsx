@@ -69,6 +69,48 @@ const TextEditor = (props: TextEditorProps) => {
     })
   }
 
+
+
+  //--------ADD nessesary roles to toolbar options and editor------------
+
+  let editorToolbar = document.getElementsByClassName('rdw-editor-toolbar')
+
+  for (let i = 0; i < editorToolbar.length; i++) {
+    editorToolbar[i].setAttribute('role', 'toolbar')
+  }
+
+  let editorTextArea = document.getElementsByClassName('rdw-editor-wrapper')
+
+  for (let i = 0; i < editorTextArea.length; i++) {
+    editorTextArea[i].setAttribute('aria-label', '')
+  }
+
+  let toolbarOptionWrapper = document.getElementsByClassName('rdw-option-wrapper')
+
+  for (let i = 0; i < toolbarOptionWrapper.length; i++) {
+    toolbarOptionWrapper[i].setAttribute('role', 'option')
+  }
+
+  let toolbarInlineWrapper = document.getElementsByClassName('rdw-inline-wrapper')
+
+  for (let i = 0; i < toolbarInlineWrapper.length; i++) {
+    toolbarInlineWrapper[i].setAttribute('role', 'listbox')
+  }
+
+  let toolbarListWrapper = document.getElementsByClassName('rdw-list-wrapper')
+
+  for (let i = 0; i < toolbarListWrapper.length; i++) {
+    toolbarListWrapper[i].setAttribute('role', 'listbox')
+  }
+
+  let toolbarLinkWrapper = document.getElementsByClassName('rdw-link-wrapper')
+
+  for (let i = 0; i < toolbarLinkWrapper.length; i++) {
+    toolbarLinkWrapper[i].setAttribute('role', 'listbox')
+  }
+  //--------------------------
+
+
   return (
     <div
       style={{
