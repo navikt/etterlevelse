@@ -1,8 +1,6 @@
-import { Narrow, Page, Wide } from '../components/scaffold/Page'
-import { ettlevColors, theme } from '../util/theme'
-import { Block } from 'baseui/block'
+import { Narrow, Wide } from '../components/scaffold/Page'
+import { theme } from '../util/theme'
 import { HeadingXXLarge } from 'baseui/typography'
-import { borderColor, borderStyle, borderWidth, paddingAll } from '../components/common/Style'
 import { useEffect, useState } from 'react'
 import { Markdown } from '../components/common/Markdown'
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
@@ -43,11 +41,11 @@ export const MainPage = () => {
             {forsideVarsel?.meldingStatus === MeldingStatus.ACTIVE && (
               <>
                 {forsideVarsel.alertType === AlertType.INFO ? (
-                  <div className="border-blue-100 border-solid border-1  bg-blue-100  mt-16 p-8">
+                  <div className="border-solid border-1 mt-16 p-8 bg-surface-info-subtle border-surface-info">
                     <Markdown source={forsideVarsel.melding} />
                   </div>
                 ) : (
-                  <div className="border-solid border-1 border-orange-100 bg-orange-100  mt-16 p-8">
+                  <div className="border-solid border-1 mt-16 p-8 bg-surface-warning-subtle border-surface-warning">
                     <Markdown source={forsideVarsel.melding} />
                   </div>
                 )}
