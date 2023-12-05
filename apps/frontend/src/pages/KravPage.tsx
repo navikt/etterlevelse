@@ -246,12 +246,12 @@ export const KravPage = () => {
               {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
                 <div>
                   <div className="flex flex-1">
-                    <Button size="small" variant="primary" onClick={() => setEdit(!edit)}>
+                    <Button type="button" size="small" variant="primary" onClick={() => setEdit(!edit)}>
                       Rediger krav
                     </Button>
 
                     {krav.status === KravStatus.AKTIV && (
-                      <Button className="ml-4" size="small" onClick={newVersion} variant="secondary">
+                      <Button type="button" className="ml-4" size="small" onClick={newVersion} variant="secondary">
                         Ny versjon av krav
                       </Button>
                     )}

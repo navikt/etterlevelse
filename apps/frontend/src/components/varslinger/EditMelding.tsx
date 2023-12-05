@@ -100,6 +100,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
               />
               <div className="flex w-full">
                 <Button
+                  type="button"
                   variant="secondary"
                   disabled={disableEdit}
                   onClick={() => {
@@ -113,6 +114,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                 <div className="flex justify-end w-full">
                   {melding.meldingStatus === MeldingStatus.ACTIVE && (
                     <Button
+                      type="button"
                       className="mx-6"
                       variant="secondary"
                       disabled={disableEdit}
@@ -125,6 +127,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                     </Button>
                   )}
                   <Button
+                    type="button"
                     variant="primary"
                     disabled={disableEdit}
                     onClick={() => {

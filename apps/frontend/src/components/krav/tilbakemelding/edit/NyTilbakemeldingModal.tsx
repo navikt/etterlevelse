@@ -109,7 +109,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                             <div className="flex flex-col mt-4">
                               {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse} />}
                               {adresseType !== AdresseType.SLACK && !values.varslingsadresse && (
-                                <Button variant="secondary" icon={<FontAwesomeIcon icon={faSlackHash} />} onClick={() => setAdresseType(AdresseType.SLACK)}>
+                                <Button type="button" variant="secondary" icon={<FontAwesomeIcon icon={faSlackHash} />} onClick={() => setAdresseType(AdresseType.SLACK)}>
                                   Slack-kanal
                                 </Button>
                               )}
@@ -117,6 +117,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                                 {adresseType === AdresseType.SLACK_USER && <SlackUserSearch add={setVarslingsadresse} />}
                                 {adresseType !== AdresseType.SLACK_USER && !values.varslingsadresse && (
                                   <Button
+                                    type="button"
                                     variant="secondary"
                                     className="ml-2.5"
                                     icon={<PersonCircleIcon aria-label="" aria-hidden />}
@@ -130,6 +131,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                                 {adresseType === AdresseType.EPOST && <AddEmail add={setVarslingsadresse} />}
                                 {adresseType !== AdresseType.EPOST && !values.varslingsadresse && (
                                   <Button
+                                    type="button"
                                     variant="secondary"
                                     className="ml-2.5"
                                     icon={<EnvelopeClosedIcon aria-label="" aria-hidden />}
@@ -154,6 +156,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                 {showNotification ? (
                   <div className="flex justify-end">
                     <Button
+                      type="button"
                       onClick={() => {
                         close(newTilbakeMelding)
                         setShowNotification(undefined)
@@ -166,10 +169,10 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                 ) : (
                   <div className="flex justify-end flex-1">
                     <div>{error && <Alert variant="error">{error}</Alert>}</div>
-                    <Button variant="secondary" onClick={() => close()}>
+                    <Button type="button" variant="secondary" onClick={() => close()}>
                       Avbryt
                     </Button>
-                    <Button disabled={isSubmitting} onClick={() => submitForm()}>
+                    <Button type="button" disabled={isSubmitting} onClick={() => submitForm()}>
                       Send spørsmål
                     </Button>
                   </div>

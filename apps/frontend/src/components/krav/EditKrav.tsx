@@ -392,10 +392,11 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       >
                         <Modal.Body>Denne handligen kan ikke reverseres</Modal.Body>
                         <Modal.Footer>
-                          <Button className="mr-4" variant="secondary" onClick={() => setUtgaattKravMessage(false)}>
+                          <Button type="button" className="mr-4" variant="secondary" onClick={() => setUtgaattKravMessage(false)}>
                             Nei, avbryt handlingen
                           </Button>
                           <Button
+                            type="button"
                             variant="primary"
                             onClick={() => {
                               values.status = KravStatus.UTGAATT
@@ -419,6 +420,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         <Modal.Body>Kravet har en nyere versjon som settes til utkast</Modal.Body>
                         <Modal.Footer>
                           <Button
+                            type="button"
                             variant="primary"
                             onClick={async () => {
                               const newVersionOfKrav = await getKravByKravNumberAndVersion(krav.kravNummer, krav.kravVersjon + 1)
@@ -442,7 +444,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                           >
                             Ja, sett til aktiv
                           </Button>
-                          <Button variant="secondary" onClick={() => setAktivKravMessage(false)}>
+                          <Button type="button" variant="secondary" onClick={() => setAktivKravMessage(false)}>
                             Nei, avbryt handlingen
                           </Button>
                         </Modal.Footer>
@@ -478,6 +480,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
                       {(newVersion || krav.status === KravStatus.UTKAST) && (
                         <Button
+                          type="button"
                           className="ml-4"
                           variant="primary"
                           onClick={() => {

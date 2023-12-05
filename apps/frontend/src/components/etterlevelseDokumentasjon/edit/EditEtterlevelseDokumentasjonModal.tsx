@@ -309,6 +309,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       Avbryt
                     </Button>
                     <Button
+                      type="button"
                       onClick={() => {
                         submitForm()
                       }}
