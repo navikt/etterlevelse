@@ -109,9 +109,9 @@ export const EtterlevelseEditFields = ({
               </div>
             </Form>
 
-            <div className=" flex w-full border-t border-border-divider pt-5">
+            <div className="w-full border-t border-border-divider pt-5">
               {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
-                <div className="w-full flex flex-col min-w-fit">
+                <div className="w-full flex flex-col min-w-fit mb-4">
                   <Checkbox
                     checked={isOppfylesSenere}
                     onChange={() => {
@@ -166,7 +166,7 @@ export const EtterlevelseEditFields = ({
                           submitForm()
                         }}
                       >
-                        Lagre og fortsett senere
+                        Lagre og fortsett til neste krav
                       </Button>
                       <Button
                         disabled={disableEdit || isOppfylesSenere}
@@ -181,7 +181,7 @@ export const EtterlevelseEditFields = ({
                           submitForm()
                         }}
                       >
-                        Sett krav til ferdig utfylt
+                        Sett krav til ferdig utfylt og fortsett til neste krav
                       </Button>
                     </div>
                   )}
