@@ -168,7 +168,7 @@ export const EtterlevelseEditFields = ({
                             values.status = EtterlevelseStatus.OPPFYLLES_SENERE
                           }
                           ampli.logEvent('knapp klikket', {
-                            context: 'Lagre og fortsett til neste krav',
+                            tekst: 'Lagre og fortsett til neste krav',
                             pagePath: location.pathname,
                             role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
                           })
@@ -188,7 +188,7 @@ export const EtterlevelseEditFields = ({
                             }
                           })
                           ampli.logEvent('knapp klikket', {
-                            context: 'Sett krav til ferdig utfylt og fortsett til neste krav',
+                            tekst: 'Sett krav til ferdig utfylt og fortsett til neste krav',
                             pagePath: location.pathname,
                             role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
                           })
@@ -209,7 +209,7 @@ export const EtterlevelseEditFields = ({
                     onClick={() => {
                       if (!dirty) {
                         ampli.logEvent('knapp klikket', {
-                          context: 'Avbryt uten endring i etterlevelse',
+                          tekst: 'Avbryt uten endring i etterlevelse',
                           pagePath: location.pathname,
                           role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
                         })
