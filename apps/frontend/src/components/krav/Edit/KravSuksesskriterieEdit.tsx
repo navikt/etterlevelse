@@ -160,17 +160,9 @@ const Kriterie = ({
         <div>
           <LabelWithTooltip
             label={`Suksesskriterium ${nummer}`}
-            tooltip={
-              'Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'
-            }
+            tooltip={'Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'}
           />
-          <TextField
-            label={`Suksesskriterium ${nummer}`}
-            hideLabel
-            value={navnInput}
-            onChange={(e) => setNavn((e.target as HTMLInputElement).value)}
-            placeholder={'Navn'}
-          />
+          <TextField label={`Suksesskriterium ${nummer}`} hideLabel value={navnInput} onChange={(e) => setNavn((e.target as HTMLInputElement).value)} placeholder={'Navn'} />
           <Error fieldName={'suksesskriterier'} fullWidth />
         </div>
 
@@ -179,7 +171,6 @@ const Kriterie = ({
           {/* <MarkdownEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} /> */}
           <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} setIsFormDirty={setIsFormDirty} />
         </div>
-
 
         <div className="flex flex-1 mt-1">
           <RadioGroup

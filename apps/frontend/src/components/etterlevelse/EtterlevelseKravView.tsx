@@ -78,7 +78,6 @@ export const EtterlevelseKravView = ({
   const location = useLocation()
   const navigate = useNavigate()
 
-
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
       id: 'ny',
@@ -89,7 +88,7 @@ export const EtterlevelseKravView = ({
   )
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       etterlevelseDokumentasjonId &&
         kravId.kravNummer &&
         getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(etterlevelseDokumentasjonId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
@@ -113,15 +112,15 @@ export const EtterlevelseKravView = ({
   //Work around for redirecting to same component
   //create a anchor tag with new url and trigger it
   const redirectOnSameComponent = (nextKravPath: string) => {
-      const currentPath = location.pathname.split('/krav')
-      var a = document.createElement('a')
-      var linkText = document.createTextNode('Sender til neste krav')
-      a.appendChild(linkText)
-      a.title = 'Sender til neste krav'
-      a.href = currentPath[0] + '/krav' + nextKravPath
-      a.id = 'SendToNextKrav'
-      document.body.appendChild(a)
-      document.getElementById('SendToNextKrav')?.click()
+    const currentPath = location.pathname.split('/krav')
+    var a = document.createElement('a')
+    var linkText = document.createTextNode('Sender til neste krav')
+    a.appendChild(linkText)
+    a.title = 'Sender til neste krav'
+    a.href = currentPath[0] + '/krav' + nextKravPath
+    a.id = 'SendToNextKrav'
+    document.body.appendChild(a)
+    document.getElementById('SendToNextKrav')?.click()
   }
 
   const submit = async (etterlevelse: Etterlevelse) => {

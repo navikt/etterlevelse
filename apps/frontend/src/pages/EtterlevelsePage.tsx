@@ -46,7 +46,7 @@ export const EtterlevelsePage = () => {
       ampli.logEvent('sidevisning', {
         side: 'Etterlevelse side',
         sidetittel: `Etterlevelse: K${etterlevelse.kravNummer.toString()}.${etterlevelse.kravVersjon.toString()} ${krav?.navn}`,
-        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER'
+        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
       })
     }
   }, [etterlevelse])

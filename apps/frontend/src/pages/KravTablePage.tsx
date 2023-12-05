@@ -53,8 +53,7 @@ export const KravTablePage = () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
       setTableContent(mappedKraver)
-      ampli.logEvent('sidevisning', { side: 'Krav admin side', sidetittel: 'Administrere Krav',
-      role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
+      ampli.logEvent('sidevisning', { side: 'Krav admin side', sidetittel: 'Administrere Krav', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
     })()
   }, [])
 

@@ -66,7 +66,11 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
     } else {
       await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
-        const mutatedBehandlinger = response.behandlinger && response.behandlinger.map((b) => {return {...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn}})
+        const mutatedBehandlinger =
+          response.behandlinger &&
+          response.behandlinger.map((b) => {
+            return { ...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn }
+          })
         if (props.setEtterlevelseDokumentasjon) {
           props.setEtterlevelseDokumentasjon({ ...response, behandlinger: mutatedBehandlinger, virkemiddel: selectedVirkemiddel })
         }
@@ -80,7 +84,11 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
         {props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Nytt etterlevelsesdokument'}
       </Button>
 
-      <Modal header={{ heading: props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Opprett nytt etterlevelsesdokument' }} open={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
+      <Modal
+        header={{ heading: props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Opprett nytt etterlevelsesdokument' }}
+        open={!!isEtterlevelseDokumentasjonerModalOpen}
+        onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}
+      >
         <Modal.Body>
           <Formik
             initialValues={etterlevelseDokumentasjonMapToFormVal(props.etterlevelseDokumentasjon ? props.etterlevelseDokumentasjon : {})}
@@ -163,7 +171,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                   <FieldArray name="irrelevansFor">
                     {(p: FieldArrayRenderProps) => {
                       return (
-                        <div className="h-full pt-5 w-[calc(100% - 16px)]" >
+                        <div className="h-full pt-5 w-[calc(100% - 16px)]">
                           <CheckboxGroup
                             legend="Hvilke egenskaper gjelder for etterlevelsen?"
                             description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
@@ -172,7 +180,10 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                               setSelectedFilter(selected)
 
                               const irrelevansListe = relevansOptions.filter((v, i) => !selected.includes(i))
-                              p.form.setFieldValue('irrelevansFor', irrelevansListe.map((il) => codelist.getCode(ListName.RELEVANS, il.value)))
+                              p.form.setFieldValue(
+                                'irrelevansFor',
+                                irrelevansListe.map((il) => codelist.getCode(ListName.RELEVANS, il.value)),
+                              )
                               // selected.forEach((value) => {
                               //   const i = parseInt(value)
                               //   if (!selectedFilter.includes(i)) {
@@ -187,11 +198,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                           >
                             {relevansOptions.map((r, i) => {
                               return (
-                                <Checkbox
-                                  key={'relevans_' + r.value}
-                                  value={i}
-                                  description={r.description}
-                                >
+                                <Checkbox key={'relevans_' + r.value} value={i} description={r.description}>
                                   {r.label}
                                 </Checkbox>
                               )
@@ -239,8 +246,8 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                     control: (base) => ({
                                       ...base,
                                       cursor: 'text',
-                                      height: '48px'
-                                    })
+                                      height: '48px',
+                                    }),
                                   }}
                                 />
                               </div>
@@ -284,8 +291,8 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                     control: (base) => ({
                                       ...base,
                                       cursor: 'text',
-                                      height: '48px'
-                                    })
+                                      height: '48px',
+                                    }),
                                   }}
                                 />
                               </div>

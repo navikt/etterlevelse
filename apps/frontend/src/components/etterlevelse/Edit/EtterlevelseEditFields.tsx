@@ -167,8 +167,11 @@ export const EtterlevelseEditFields = ({
                           } else if (isOppfylesSenere) {
                             values.status = EtterlevelseStatus.OPPFYLLES_SENERE
                           }
-                          ampli.logEvent('knapp klikket', { context: 'Lagre og fortsett til neste krav', pagePath: location.pathname,
-                          role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
+                          ampli.logEvent('knapp klikket', {
+                            context: 'Lagre og fortsett til neste krav',
+                            pagePath: location.pathname,
+                            role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                          })
                           submitForm()
                         }}
                       >
@@ -184,8 +187,11 @@ export const EtterlevelseEditFields = ({
                               setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
                             }
                           })
-                          ampli.logEvent('knapp klikket', { context: 'Sett krav til ferdig utfylt og fortsett til neste krav', pagePath: location.pathname,
-                          role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
+                          ampli.logEvent('knapp klikket', {
+                            context: 'Sett krav til ferdig utfylt og fortsett til neste krav',
+                            pagePath: location.pathname,
+                            role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                          })
                           submitForm()
                         }}
                       >
@@ -196,11 +202,17 @@ export const EtterlevelseEditFields = ({
                 </div>
 
                 <div className="pb-6 flex justify-end w-full">
-                  <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" variant="tertiary"
+                  <Button
+                    disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit}
+                    type="button"
+                    variant="tertiary"
                     onClick={() => {
                       if (!dirty) {
-                        ampli.logEvent('knapp klikket', { context: 'Avbryt uten endring i etterlevelse', pagePath: location.pathname,
-                        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
+                        ampli.logEvent('knapp klikket', {
+                          context: 'Avbryt uten endring i etterlevelse',
+                          pagePath: location.pathname,
+                          role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                        })
                         close()
                       } else {
                         setIsAvbryModalOpen(true)
@@ -220,17 +232,24 @@ export const EtterlevelseEditFields = ({
                 )}
 
                 <Modal onClose={() => setIsAvbryModalOpen(false)} header={{ heading: 'Avbryt dokumentering' }} open={isAvbrytModalOpen}>
-                  <Modal.Body>
-                    Er du sikker på at du vil avbryte dokumentering? Endringer du har gjort blir ikke lagret og du blir sendt til teamoversikten.
-                  </Modal.Body>
+                  <Modal.Body>Er du sikker på at du vil avbryte dokumentering? Endringer du har gjort blir ikke lagret og du blir sendt til teamoversikten.</Modal.Body>
                   <Modal.Footer>
-                    <Button onClick={() => {
-                      ampli.logEvent('knapp klikket', { context: 'Avbryt med endring i etterlevelse', pagePath: location.pathname,
-                      role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
-                      close()
-                    }
-                    } type="button">Ja, jeg vil avbryte</Button>
-                    <Button onClick={() => setIsAvbryModalOpen(false)} type="button" variant="secondary">Nei, jeg vil fortsette</Button>
+                    <Button
+                      onClick={() => {
+                        ampli.logEvent('knapp klikket', {
+                          context: 'Avbryt med endring i etterlevelse',
+                          pagePath: location.pathname,
+                          role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                        })
+                        close()
+                      }}
+                      type="button"
+                    >
+                      Ja, jeg vil avbryte
+                    </Button>
+                    <Button onClick={() => setIsAvbryModalOpen(false)} type="button" variant="secondary">
+                      Nei, jeg vil fortsette
+                    </Button>
                   </Modal.Footer>
                 </Modal>
               </div>

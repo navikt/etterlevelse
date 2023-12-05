@@ -114,5 +114,3 @@ const nameFor = (group: Group) => {
       return 'Kraveier'
   }
 }
-
-

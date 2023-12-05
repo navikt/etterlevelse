@@ -116,12 +116,10 @@ const Option = (properties: OptionProps<SearchItem>) => {
   )
 }
 
-const DropdownIndicator = (
-  props: DropdownIndicatorProps<SearchItem>
-) => {
+const DropdownIndicator = (props: DropdownIndicatorProps<SearchItem>) => {
   return (
     <components.DropdownIndicator {...props}>
-      <MagnifyingGlassIcon title="Søk" aria-label="Søk"/>
+      <MagnifyingGlassIcon title="Søk" aria-label="Søk" />
     </components.DropdownIndicator>
   )
 }
@@ -136,7 +134,7 @@ const MainSearch = () => {
         aria-label="Søk etter krav, dokumentasjon eller behandling"
         placeholder="Søk etter krav, dokumentasjon eller behandling"
         autoFocus={location.pathname === '/'}
-        components={{ Option,DropdownIndicator }}
+        components={{ Option, DropdownIndicator }}
         controlShouldRenderValue={false}
         loadingMessage={() => 'Søker...'}
         noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}

@@ -38,7 +38,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   const user = useUser
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       props.show && setAudits(await getAudits(page - 1, limit, table))
     })()
   }, [page, limit, props.show, table])
@@ -67,8 +67,9 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   const tableOptions = Object.keys(ObjectType).map((ot) => ({ id: ot, label: ot }))
 
   ampli.logEvent('sidevisning', {
-    side: 'Varsel side for admin', sidetittel: 'Log side for varslinger',
-    role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER'
+    side: 'Varsel side for admin',
+    sidetittel: 'Log side for varslinger',
+    role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
   })
 
   return (

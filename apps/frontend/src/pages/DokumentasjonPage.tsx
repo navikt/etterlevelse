@@ -51,7 +51,7 @@ export const DokumentasjonPage = () => {
     loading,
   } = useQuery<{ etterlevelseDokumentasjon: PageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
     variables,
-    skip: !params.id
+    skip: !params.id,
   })
 
   const [relevanteStats, setRelevanteStats] = useState<KravQL[]>([])
@@ -61,10 +61,10 @@ export const DokumentasjonPage = () => {
   const filterData = (
     unfilteredData:
       | {
-        etterlevelseDokumentasjon: PageResponse<{
-          stats: EtterlevelseDokumentasjonStats
-        }>
-      }
+          etterlevelseDokumentasjon: PageResponse<{
+            stats: EtterlevelseDokumentasjonStats
+          }>
+        }
       | undefined,
   ) => {
     const relevanteStatusListe: KravQL[] = []
@@ -105,7 +105,7 @@ export const DokumentasjonPage = () => {
       ampli.logEvent('sidevisning', {
         side: 'Etterlevelse Dokumentasjon Page',
         sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title}`,
-        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER'
+        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
       })
     }
   }, [etterlevelseDokumentasjon])

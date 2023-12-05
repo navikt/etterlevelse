@@ -77,8 +77,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
   const { data, loading } = useKravCounter({ lover: lover.map((c) => c.code) }, { skip: !lover.length })
   const [kravList, setKravList] = useState<Krav[]>([])
 
-  ampli.logEvent('sidevisning', { side: 'Tema side', sidetittel: tema.shortName,
-  role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
+  ampli.logEvent('sidevisning', { side: 'Tema side', sidetittel: tema.shortName, role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
@@ -142,8 +141,7 @@ const TemaListe = () => {
   const [num] = useState<{ [t: string]: number }>({})
   const update = useForceUpdate()
 
-  ampli.logEvent('sidevisning', { side: 'Tema side',
-  role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
+  ampli.logEvent('sidevisning', { side: 'Tema side', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
 
   const updateNum = (tema: string, temaNum: number) => {
     num[tema] = temaNum

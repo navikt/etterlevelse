@@ -62,10 +62,9 @@ export const RegelverkEdit = ({ forVirkemiddel }: RegelverkEditProps) => {
                         menu: (baseStyles) => ({
                           ...baseStyles,
                           zIndex: 2,
-                        })
+                        }),
                       }}
                     />
-
                   </div>
                   <div className="w-full">
                     <LabelWithTooltip label="Paragraf, kapittel eller artikkel i regelverk" tooltip="Legg til paragraf, kapittel eller artikkel fra regelverk du har valgt." />

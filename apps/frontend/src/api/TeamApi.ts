@@ -136,7 +136,7 @@ export const useMyTeams = () => {
   const [data, setData] = useState<Team[]>([])
   const [loading, setLoading] = useState(true)
   const user = useUser
-  
+
   const ident = user.getIdent()
 
   useEffect(() => {
@@ -175,7 +175,7 @@ export const useMyProductAreas = () => {
   const [data, setData] = useState<ProductArea[]>([])
   const [loading, setLoading] = useState(true)
   const user = useUser
-  
+
   const ident = user.getIdent()
 
   useEffect(() => {
@@ -201,7 +201,9 @@ export type SearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]
 export const usePersonSearch = async (searchParam: string) => {
   if (searchParam && searchParam.replace(/ /g, '').length > 2) {
     const searchResult = await searchResourceByName(searchParam)
-    return searchResult.map((p) => { return { value: p.navIdent, label: p.fullName, ...p } })
+    return searchResult.map((p) => {
+      return { value: p.navIdent, label: p.fullName, ...p }
+    })
   }
   return []
 }
@@ -209,7 +211,9 @@ export const usePersonSearch = async (searchParam: string) => {
 export const useSlackChannelSearch = async (searchParam: string) => {
   if (searchParam && searchParam.replace(/ /g, '').length > 2) {
     const searchResult = await searchSlackChannel(searchParam)
-    return searchResult.map((sk) => { return { value: sk.id, label: sk.name, ...sk } })
+    return searchResult.map((sk) => {
+      return { value: sk.id, label: sk.name, ...sk }
+    })
   }
   return []
 }

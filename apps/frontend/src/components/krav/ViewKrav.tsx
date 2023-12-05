@@ -16,7 +16,7 @@ import { BodyShort, Label } from '@navikt/ds-react'
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => <div className="mb-4">{children}</div>
 
-export const ViewKrav = ({ krav }: { krav: KravQL}) => {
+export const ViewKrav = ({ krav }: { krav: KravQL }) => {
   const user = useUser
   return (
     <div>
@@ -41,7 +41,17 @@ export const ViewKrav = ({ krav }: { krav: KravQL}) => {
   )
 }
 
-export const AllInfo = ({ krav, alleKravVersjoner, noLastModifiedDate, header }: { krav: KravQL; alleKravVersjoner: KravVersjon[]; noLastModifiedDate?: boolean, header?: boolean }) => {
+export const AllInfo = ({
+  krav,
+  alleKravVersjoner,
+  noLastModifiedDate,
+  header,
+}: {
+  krav: KravQL
+  alleKravVersjoner: KravVersjon[]
+  noLastModifiedDate?: boolean
+  header?: boolean
+}) => {
   const user = useUser
   const hasKravExpired = () => {
     return krav && krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString())

@@ -134,9 +134,9 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                           onClick={
                             modalVersion
                               ? () => {
-                                setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
-                                setIsModalOpen(true)
-                              }
+                                  setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
+                                  setIsModalOpen(true)
+                                }
                               : undefined
                           }
                         >

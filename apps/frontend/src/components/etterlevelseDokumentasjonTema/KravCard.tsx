@@ -67,10 +67,12 @@ export const KravCard = (props: {
               K{props.krav.kravNummer}.{props.krav.kravVersjon}
             </Detail>
             <div className="ml-4">
-            {!props.noVarsling && props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined && kravAge < 30 && <ShowWarningMessage warningMessage="Nytt krav" />}
-            {!props.noVarsling && props.krav.etterlevelseStatus === undefined && nyVersionFlag && props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && kravAge < 30 && (
-              <ShowWarningMessage warningMessage="Ny versjon" />
-            )}
+              {!props.noVarsling && props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined && kravAge < 30 && (
+                <ShowWarningMessage warningMessage="Nytt krav" />
+              )}
+              {!props.noVarsling && props.krav.etterlevelseStatus === undefined && nyVersionFlag && props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && kravAge < 30 && (
+                <ShowWarningMessage warningMessage="Ny versjon" />
+              )}
             </div>
           </div>
           <BodyShort>{props.krav.navn}</BodyShort>

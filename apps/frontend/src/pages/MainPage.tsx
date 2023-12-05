@@ -46,8 +46,7 @@ export const MainPage = () => {
     window.onresize = reportWindowSize
   })
 
-  ampli.logEvent('sidevisning', { side: 'Hovedside',
-  role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
+  ampli.logEvent('sidevisning', { side: 'Hovedside', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
 
   return (
     <Page

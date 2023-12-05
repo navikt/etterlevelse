@@ -99,7 +99,7 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
         side: 'Tema side for dokumentasjon',
         sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`,
         section: `${temaData.shortName}`,
-        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER'
+        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
       })
     }
   }, [etterlevelseDokumentasjon])

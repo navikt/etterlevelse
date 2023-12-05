@@ -69,8 +69,11 @@ export const ArkivAdminPage = () => {
       const arkivering = await getAllArkivering()
       const mappedArkivering = arkivering.map((a) => arkiveringMapToFormVal(a))
       setTableContent(mappedArkivering)
-      ampli.logEvent('sidevisning', { side: 'Etterlevelse arkivering admin side', sidetittel: 'Administrere arkivering',
-      role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
+      ampli.logEvent('sidevisning', {
+        side: 'Etterlevelse arkivering admin side',
+        sidetittel: 'Administrere arkivering',
+        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+      })
     })()
   }, [])
 

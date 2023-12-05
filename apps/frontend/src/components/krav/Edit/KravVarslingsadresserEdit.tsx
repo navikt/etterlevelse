@@ -150,7 +150,7 @@ export const SlackChannelSearch = ({ added, add, close }: AddVarslingsadressePro
       controlShouldRenderValue={false}
       loadingMessage={() => 'Søker...'}
       isClearable={false}
-      components={{DropdownIndicator}}
+      components={{ DropdownIndicator }}
       loadOptions={useSlackChannelSearch}
       onChange={(slackKanal) => {
         const channel = slackKanal as SlackChannel
@@ -199,7 +199,7 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
             loadingMessage={() => 'Søker...'}
             isClearable={false}
             loadOptions={usePersonSearch}
-            components={{DropdownIndicator}}
+            components={{ DropdownIndicator }}
             onFocus={() => setError('')}
             onBlur={() => setError('')}
             onChange={(person) => {
@@ -219,7 +219,7 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
           />
         </div>
         <div className="flex justify-end ml-2.5">
-          <Button type="button" onClick={() => addEmail(user.getEmail())} >
+          <Button type="button" onClick={() => addEmail(user.getEmail())}>
             Meg
           </Button>
         </div>
@@ -262,8 +262,16 @@ export const AddEmail = ({ added, add: doAdd, close }: AddVarslingsadresseProps)
   return (
     <div className="flex flex-col">
       <div className="flex">
-        <TextField label="epost" hideLabel onKeyDown={onKey} value={val} onFocus={() => setError('')} onChange={(e) => setVal((e.target as HTMLInputElement).value)} onBlur={() => add()}/>
-        <div  className="flex justify-between ml-2.5">
+        <TextField
+          label="epost"
+          hideLabel
+          onKeyDown={onKey}
+          value={val}
+          onFocus={() => setError('')}
+          onChange={(e) => setVal((e.target as HTMLInputElement).value)}
+          onBlur={() => add()}
+        />
+        <div className="flex justify-between ml-2.5">
           <Button type="button" onClick={() => add(user.getEmail())}>
             Meg
           </Button>

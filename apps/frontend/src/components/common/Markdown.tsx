@@ -106,9 +106,7 @@ export const Markdown = ({
           </List.Item>
         )
       } else {
-        return <List.Item className="break-all">
-          {children}
-        </List.Item>
+        return <List.Item className="break-all">{children}</List.Item>
       }
     },
     ul: (ulProps: any) => {

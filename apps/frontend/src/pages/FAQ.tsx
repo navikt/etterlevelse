@@ -14,7 +14,7 @@ export const FAQ = () => {
   const [melding, setMelding] = useState<Melding>()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const response = await getMeldingByType(MeldingType.OM_ETTERLEVELSE)
       if (response.numberOfElements > 0) {
         setMelding(response.content[0])
@@ -25,8 +25,9 @@ export const FAQ = () => {
   }, [])
 
   ampli.logEvent('sidevisning', {
-    side: 'FAQ side', sidetittel: 'Om Støtte til etterlevelse',
-    role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER'
+    side: 'FAQ side',
+    sidetittel: 'Om Støtte til etterlevelse',
+    role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
   })
 
   return (

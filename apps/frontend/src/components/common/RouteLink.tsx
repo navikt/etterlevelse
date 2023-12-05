@@ -28,7 +28,6 @@ const RouteLink = (props: RouteLinkProps) => {
   const location = useLocation()
   const user = useUser
 
-
   const onClick = (e: Event) => {
     if (requireLogin && !user.isLoggedIn()) return
     e.preventDefault()

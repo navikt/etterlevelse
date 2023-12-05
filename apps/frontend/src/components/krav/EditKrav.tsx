@@ -160,7 +160,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
         width={modalWidth}
         header={{
           heading: newVersion ? 'Ny versjon' : newKrav ? 'Nytt krav' : 'Rediger kravside',
-          closeButton: false
+          closeButton: false,
         }}
         open={isOpen}
       >
@@ -185,7 +185,6 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                 }
               }}
             >
-
               <div className={`pt-6 ${!stickyHeader ? 'pb-12' : 'pb-5'} px-24 sticky top-0 ${!stickyHeader ? 'block' : 'flex'} z-30 bg-green-800`}>
                 {stickyHeader && (
                   <div className="flex w-full justify-start">
@@ -194,12 +193,17 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                 )}
                 {!stickyHeader && (
                   <div className="w-full">
-                    <Heading level="1" size="medium" className="text-white">{newVersion ? 'Ny versjon' : newKrav ? 'Nytt krav' : 'Rediger kravside'}: </Heading>
-                    <Heading level="2" size="small" className="text-white">{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </Heading>
+                    <Heading level="1" size="medium" className="text-white">
+                      {newVersion ? 'Ny versjon' : newKrav ? 'Nytt krav' : 'Rediger kravside'}:{' '}
+                    </Heading>
+                    <Heading level="2" size="small" className="text-white">
+                      {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}{' '}
+                    </Heading>
                     {newVersion && (
                       <Alert variant="warning">
-                        <Heading spacing size="small" level="4">Sikker på at du vil opprette en ny versjon?</Heading>
-
+                        <Heading spacing size="small" level="4">
+                          Sikker på at du vil opprette en ny versjon?
+                        </Heading>
                         Ny versjon av kravet skal opprettes når det er <strong>vesentlige endringer</strong> i kravet som gjør at <strong>teamene må revurdere</strong> sin
                         besvarelse av kravet. Ved alle mindre justeringer, endre i det aktive kravet, og da slipper teamene å revurdere sin besvarelse.
                       </Alert>
@@ -209,12 +213,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
               </div>
               <div>
                 <div className="title_container py-16 px-24">
-                  <InputField
-                    marginBottom
-                    label="Krav-tittel"
-                    name="navn"
-                    description="Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting."
-                  />
+                  <InputField marginBottom label="Krav-tittel" name="navn" description="Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting." />
                   <div className="mb-14">
                     <CheckboxGroup
                       legend="Send varselmelding"
@@ -223,23 +222,14 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         setVarselMeldingActive(value)
                       }}
                     >
-                      <Checkbox value="VarselMelding">
-                        Gi kravet en varselmelding (eks. for kommende krav)
-                      </Checkbox>
+                      <Checkbox value="VarselMelding">Gi kravet en varselmelding (eks. for kommende krav)</Checkbox>
                     </CheckboxGroup>
 
                     {varselMeldingActive.length > 0 && (
                       <div className="w-full ml-8 mt-6">
-                        <TextAreaField
-                          label="Forklaring til etterlevere"
-                          name="varselMelding"
-                          maxCharacter={100}
-                          rows={2}
-                          noPlaceholder
-                        />
+                        <TextAreaField label="Forklaring til etterlevere" name="varselMelding" maxCharacter={100} rows={2} noPlaceholder />
                       </div>
                     )}
-
                   </div>
                   <TextAreaField
                     label="Hensikt"
@@ -255,11 +245,15 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
                 <div className="flex w-full justify-center">
                   <div className="w-full px-24 mb-2.5">
-                    <Heading level="3" size="medium" className="mb-8">Suksesskriterier</Heading>
+                    <Heading level="3" size="medium" className="mb-8">
+                      Suksesskriterier
+                    </Heading>
                     <KravSuksesskriterierEdit setIsFormDirty={setIsFormDirty} newVersion={!!newVersion} />
 
                     <div className="mb-8">
-                      <Heading level="3" size="medium">Dokumentasjon</Heading>
+                      <Heading level="3" size="medium">
+                        Dokumentasjon
+                      </Heading>
                     </div>
 
                     <MultiInputField
@@ -289,7 +283,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     )}
 
                     <div className="mt-20">
-                      <Heading level="3" size="medium">Gruppering</Heading>
+                      <Heading level="3" size="medium">
+                        Gruppering
+                      </Heading>
                     </div>
 
                     <div className="w-full max-w-md">
@@ -312,7 +308,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     </div>
 
                     <div className="mb-8">
-                      <Heading level="3" size="medium">Egenskaper</Heading>
+                      <Heading level="3" size="medium">
+                        Egenskaper
+                      </Heading>
                     </div>
 
                     <KravVarslingsadresserEdit />
@@ -330,9 +328,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     </div>
                   </div>
                 </div>
-                <div
-                  className="button_container sticky bottom-0 flex flex-col py-4 px-24 bg-gray-50 z-10"
-                >
+                <div className="button_container sticky bottom-0 flex flex-col py-4 px-24 bg-gray-50 z-10">
                   {errors.status && (
                     <div className="mb-3">
                       <Error fieldName="status" fullWidth />
@@ -390,16 +386,13 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       <Modal
                         header={{
                           closeButton: false,
-                          heading: 'Sikker på at du vil sette kravet til utgått?'
+                          heading: 'Sikker på at du vil sette kravet til utgått?',
                         }}
                         open={UtgaattKravMessage}
                       >
                         <Modal.Body>Denne handligen kan ikke reverseres</Modal.Body>
                         <Modal.Footer>
-                          <Button
-                            className="mr-4"
-                            variant="secondary"
-                            onClick={() => setUtgaattKravMessage(false)}>
+                          <Button className="mr-4" variant="secondary" onClick={() => setUtgaattKravMessage(false)}>
                             Nei, avbryt handlingen
                           </Button>
                           <Button
@@ -418,7 +411,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       <Modal
                         header={{
                           closeButton: false,
-                          heading: 'Sikker på at du vil sette versjonen til aktiv?'
+                          heading: 'Sikker på at du vil sette versjonen til aktiv?',
                         }}
                         open={aktivKravMessage}
                         onClose={() => setAktivKravMessage(false)}
@@ -449,23 +442,26 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                           >
                             Ja, sett til aktiv
                           </Button>
-                          <Button
-                            variant="secondary"
-                            onClick={() => setAktivKravMessage(false)}>
+                          <Button variant="secondary" onClick={() => setAktivKravMessage(false)}>
                             Nei, avbryt handlingen
                           </Button>
                         </Modal.Footer>
                       </Modal>
                     </div>
                     <div className="flex w-full justify-end">
-                      <Button className="ml-4"
+                      <Button
+                        className="ml-4"
                         variant="secondary"
                         type="button"
-                        onClick={() => { setIsOpen(false) }}>
+                        onClick={() => {
+                          setIsOpen(false)
+                        }}
+                      >
                         Avbryt
                       </Button>
 
-                      <Button className="ml-4"
+                      <Button
+                        className="ml-4"
                         variant="primary"
                         onClick={() => {
                           if (newVersion) {
@@ -481,7 +477,8 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       </Button>
 
                       {(newVersion || krav.status === KravStatus.UTKAST) && (
-                        <Button className="ml-4"
+                        <Button
+                          className="ml-4"
                           variant="primary"
                           onClick={() => {
                             values.status = KravStatus.AKTIV
