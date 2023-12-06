@@ -5,7 +5,7 @@ import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { ampli } from '../services/Amplitude'
 import { TemaListe } from './TemaPage'
-import { Heading } from '@navikt/ds-react'
+import { Button, Heading } from '@navikt/ds-react'
 
 export const MainPage = () => {
   const [forsideVarsel, setForsideVarsle] = useState<Melding>()
@@ -24,12 +24,25 @@ export const MainPage = () => {
 
   return (
     <div className="w-full pb-52" id="content" role="main">
-      <div className="bg-surface-info-subtle">
-        <div className="flex flex-col">
+      <div className="bg-surface-info-subtle p-10">
+        <div className="flex flex-col pd">
           <Heading className="flex justify-center" size="xlarge">
             Etterlevelse i NAV
           </Heading>
           <span className="flex justify-center">Forstå og dokumentér</span>
+        </div>
+        <div className="bg-white mt-8 p-8">
+          <Heading size="medium">Etterlevelse i NAV</Heading>
+          <span>
+            For å dokumentere etterlevelse må du opprette et etterlevelsesdokument. Du vil da se hvilke krav som gjelder for din løsning og kan dokumentere hvordan løsningen
+            etterlever kravene.
+          </span>
+          <div className="mt-8 flex justify-end">
+            <Button className="mr-3" variant="secondary">
+              Nytt etterlevelsesdokument
+            </Button>
+            <Button variant="tertiary">Alle etterlevelsesdokumenter</Button>
+          </div>
         </div>
       </div>
 
