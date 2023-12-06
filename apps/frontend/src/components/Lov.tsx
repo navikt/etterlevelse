@@ -58,26 +58,26 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
     },
     {
       // triple '§§§' is hidden, used as a trick in combination with rule 1 above
-      regex: /(.*) §(§§)?(§)?\s*(\d+(-\d+)? ?[aA-zZ]?)( *\([0-9]*\))*/g,
+      regex: /(.*) §(§§)?(§)?\s*(\d+(-\d+)?) ?([aA-zZ]?)( *\([0-9]*\))*/g,
       fn: (key: string, result: string[]) => (
-        <Link key={key} href={`${lovdataBase(law)}/§${result[4]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
-          {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]} {result[6]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
+        <Link key={key} href={`${lovdataBase(law)}/§${result[4]}${result[6]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
+          {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]}{result[6]} {result[7]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
         </Link>
       ),
     },
     {
-      regex: /(.*) kap(ittel)?\s*(\d+ ?[aA-zZ]?)( *\([0-9]*\))*/gi,
+      regex: /(.*) kap(ittel)?\s*(\d+) ?([aA-zZ]?)( *\([0-9]*\))*/gi,
       fn: (key: string, result: string[]) => (
-        <Link key={key} href={`${lovdataBase(law)}/KAPITTEL_${result[3]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
-          {result[1]} Kapittel {result[3]} {result[4]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
+        <Link key={key} href={`${lovdataBase(law)}/KAPITTEL_${result[3]}${result[4]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
+          {result[1]} Kapittel {result[3]} {result[4]} {result[5]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
         </Link>
       ),
     },
     {
-      regex: /(.*) art(ikkel)?\s*(\d+ ?[aA-zZ]?)( *\([0-9]*\))*/gi,
+      regex: /(.*) art(ikkel)?\s*(\d+) ?([aA-zZ]?)( *\([0-9]*\))*/gi,
       fn: (key: string, result: string[]) => (
-        <Link key={key} href={`${lovdataBase(law)}/ARTIKKEL_${result[3]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
-          {result[1]} Artikkel {result[3]} {result[4]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
+        <Link key={key} href={`${lovdataBase(law)}/ARTIKKEL_${result[3]}${result[4]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
+          {result[1]} Artikkel {result[3]} {result[4]} {result[5]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
         </Link>
       ),
     },
