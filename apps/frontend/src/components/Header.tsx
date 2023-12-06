@@ -9,12 +9,13 @@ import MainSearch from './search/MainSearch'
 import { informationIcon, warningAlert } from './Images'
 import { Portrait } from './common/Portrait'
 import SkipToContent from './common/SkipToContent/SkipToContent'
-import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
+import { AlertType, Melding, MeldingStatus, MeldingType, UserInfo } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from './common/Markdown'
 import { ampli } from '../services/Amplitude'
 import { BarChartIcon, ChevronDownIcon, ChevronUpIcon, DocPencilIcon, HouseIcon, InformationIcon, MenuHamburgerIcon, PersonIcon, ReceiptIcon } from '@navikt/aksel-icons'
 import { Button, Dropdown, InternalHeader, Label, Link, Spacer, Switch } from '@navikt/ds-react'
+import { getUserInfo } from '../api/UserApi'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -87,7 +88,7 @@ const LoggedInHeader = () => {
 
   return (
     <div className="flex items-center justify-center">
-      <Menu pages={[[{ label: <UserInfo /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={<PersonIcon area-label="" aria-hidden />} />
+      <Menu pages={[[{ label: <UserInfoView /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={<PersonIcon area-label="" aria-hidden />} />
 
       <div className="w-3" />
 
@@ -106,7 +107,7 @@ const LoggedInHeader = () => {
   )
 }
 
-const UserInfo = () => {
+const UserInfoView = () => {
   const location = useLocation()
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
   const path = location.pathname
@@ -178,12 +179,25 @@ let sourceReported = false
 const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   const [systemVarsel, setSystemVarsel] = useState<Melding>()
   const location = useLocation()
+  const [userInfo, setUserInfo] = useState<UserInfo>({groups: [], loggedIn: false, ident: '',name: ''})
 
   const source = useQueryParam('source')
   if (!sourceReported) {
     sourceReported = true
     writeLog('info', 'pageload', `pageload from ${source}`)
   }
+
+  React.useEffect(() => {
+    (async () => {
+      await getUserInfo().then((resp) => {
+        if(resp.data) {
+          setUserInfo(resp.data)
+        }
+      })
+    })()
+  }, [])
+
+
 
   React.useEffect(() => {
     ;(async () => {
@@ -211,8 +225,8 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             <Spacer />
             {!props.noLoginButton && (
               <div className="flex">
-                {!user.isLoggedIn() && <LoginHeaderButton />}
-                {user.isLoggedIn() && <LoggedInHeader />}
+                {!userInfo.loggedIn && <LoginHeaderButton />}
+                {userInfo.loggedIn && <LoggedInHeader />}
               </div>
             )}
           </div>
