@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 import { useQueryParam } from '../util/hooks'
 import { intl } from '../util/intl/intl'
-import { useUser } from '../services/User'
+import { user } from '../services/User'
 import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
 import { informationIcon, warningAlert } from './Images'
@@ -43,7 +43,6 @@ export const LoginButton = () => {
 }
 
 const LoggedInHeader = () => {
-  const user = useUser
   const [viewRoller, setViewRoller] = useState(false)
 
   const roller = (
@@ -108,7 +107,6 @@ const LoggedInHeader = () => {
 }
 
 const UserInfo = () => {
-  const user = useUser
   const location = useLocation()
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
   const path = location.pathname
@@ -178,7 +176,6 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
 let sourceReported = false
 
 const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
-  const user = useUser
   const [systemVarsel, setSystemVarsel] = useState<Melding>()
   const location = useLocation()
 

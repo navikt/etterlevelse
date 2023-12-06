@@ -2,7 +2,7 @@ import { AdresseType, Krav, SlackChannel, SlackUser, TeamResource, Varslingsadre
 import { getSlackChannelById, getSlackUserByEmail, getSlackUserById, usePersonSearch, useSlackChannelSearch } from '../../../api/TeamApi'
 import React, { ReactNode, useEffect, useState } from 'react'
 import * as yup from 'yup'
-import { useUser } from '../../../services/User'
+import { user } from '../../../services/User'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { FieldWrapper } from '../../common/Inputs'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
@@ -169,7 +169,6 @@ export const SlackChannelSearch = ({ added, add, close }: AddVarslingsadressePro
 }
 
 export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
-  const user = useUser
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
 
@@ -240,7 +239,6 @@ const emailValidator = yup
   .matches(/.+@nav.no/i)
 
 export const AddEmail = ({ added, add: doAdd, close }: AddVarslingsadresseProps) => {
-  const user = useUser
   const [val, setVal] = useState('')
   const [error, setError] = useState('')
 

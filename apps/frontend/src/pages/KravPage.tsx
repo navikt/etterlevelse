@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Krav, KravId, KravQL, KravStatus, KravVersjon } from '../constants'
 import { AllInfo, ViewKrav } from '../components/krav/ViewKrav'
 import { EditKrav } from '../components/krav/EditKrav'
-import { useUser } from '../services/User'
+import { user } from '../services/User'
 import { FormikProps } from 'formik'
 import { DeleteItem } from '../components/DeleteItem'
 import { useQuery } from '@apollo/client'
@@ -57,7 +57,6 @@ const getQueryVariableFromParams = (params: Readonly<Partial<KravIdParams>>) => 
 }
 
 export const KravPage = () => {
-  const user = useUser
   const params = useParams<KravIdParams>()
   const [krav, setKrav] = useState<KravQL | undefined>()
   const [kravId, setKravId] = useState<KravId>()

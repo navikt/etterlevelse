@@ -4,7 +4,7 @@ import { createEtterlevelse, getEtterlevelserByEtterlevelseDokumentasjonIdKravNu
 import React, { useEffect, useRef, useState } from 'react'
 import { getKravByKravNumberAndVersion, getKravByKravNummer, KravId } from '../../api/KravApi'
 import { query } from '../../pages/KravPage'
-import { useUser } from '../../services/User'
+import { user } from '../../services/User'
 import { useQuery } from '@apollo/client'
 import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
 import Etterlevelser from '../krav/Etterlevelser'
@@ -66,7 +66,6 @@ export const EtterlevelseKravView = ({
     skip: !kravId.id && !kravId.kravNummer,
     fetchPolicy: 'no-cache',
   })
-  const user = useUser
   const etterlevelserLoading = loading
   const [krav, setKrav] = useState<KravQL>()
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()

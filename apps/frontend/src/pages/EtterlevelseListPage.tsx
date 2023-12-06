@@ -6,14 +6,13 @@ import Button from '../components/common/Button'
 import { theme } from '../util'
 import RouteLink from '../components/common/RouteLink'
 import { etterlevelseName } from './EtterlevelsePage'
-import { useUser } from '../services/User'
+import { user } from '../services/User'
 import { maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import { Loader } from '@navikt/ds-react'
 
 export const EtterlevelseListPage = () => {
-  const user = useUser
   const [etterlevelse, prev, next, loading] = useEtterlevelsePage(20)
 
   useEffect(() => {

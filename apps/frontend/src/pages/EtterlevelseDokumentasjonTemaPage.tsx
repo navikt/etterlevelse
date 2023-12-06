@@ -23,7 +23,7 @@ import { KravList } from '../components/etterlevelseDokumentasjonTema/KravList'
 import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 import { KravPanelHeaderWithSorting } from '../components/etterlevelseDokumentasjon/KravPanelHeader'
 import { Loader } from '@navikt/ds-react'
-import { useUser } from '../services/User'
+import { user } from '../services/User'
 
 export const sortingOptions = [
   { label: 'Anbefalt rekkefølge', id: 'priority' },
@@ -61,7 +61,6 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
   const [allKravPriority, setAllKravPriority] = useState<KravPrioritering[]>([])
   const location = useLocation()
   const [temaPageUrl] = useState<string>(location.pathname)
-  const user = useUser
 
   const { data: relevanteKraverGraphQLResponse, loading: relevanteKraverGraphQLLoading } = useQuery<{ krav: PageResponse<KravQL> }>(etterlevelseDokumentasjonKravQuery, {
     variables,

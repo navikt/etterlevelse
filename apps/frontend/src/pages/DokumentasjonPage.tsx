@@ -10,7 +10,7 @@ import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/Cus
 
 import { ampli } from '../services/Amplitude'
 import { getNewestKravVersjon } from '../components/etterlevelseDokumentasjon/common/utils'
-import { useUser } from '../services/User'
+import { user } from '../services/User'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
@@ -31,7 +31,6 @@ import { Helmet } from 'react-helmet'
 import { hotjar } from 'react-hotjar'
 
 export const DokumentasjonPage = () => {
-  const user = useUser
   const params = useParams<{ id?: string }>()
   const options = codelist.getParsedOptions(ListName.RELEVANS)
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))

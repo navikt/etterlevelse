@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { useUser } from '../services/User'
+import { user } from '../services/User'
 import moment from 'moment'
 import { Krav, KravQL } from '../constants'
 import { codelist, ListName } from '../services/Codelist'
@@ -28,7 +28,6 @@ export const sortKrav = (kravene: KravQL[]) => {
 }
 
 export const KravListPage = () => {
-  const user = useUser
   ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
 
   return (

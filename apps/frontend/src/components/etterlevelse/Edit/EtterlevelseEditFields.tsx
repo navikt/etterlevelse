@@ -14,7 +14,7 @@ import { DateField } from '../../common/Inputs'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
 import { Alert, BodyShort, Button, Checkbox, Label, Modal } from '@navikt/ds-react'
 import { ampli } from '../../../services/Amplitude'
-import { useUser } from '../../../services/User'
+import { user } from '../../../services/User'
 
 type EditProps = {
   krav: KravQL
@@ -46,7 +46,6 @@ export const EtterlevelseEditFields = ({
   const [isOppfylesSenere, setOppfylesSenere] = React.useState<boolean>(etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE)
   const [isAvbrytModalOpen, setIsAvbryModalOpen] = React.useState<boolean>(false)
   const location = useLocation()
-  const user = useUser
 
   const navigate = useNavigate()
   useEffect(() => {

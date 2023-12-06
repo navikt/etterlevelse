@@ -26,7 +26,7 @@ import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import { BodyLong, BodyShort, Detail, Heading, Label, LinkPanel, Loader, Spacer, Tag } from '@navikt/ds-react'
 import { lovdataBase } from '../components/Lov'
-import { useUser } from '../services/User'
+import { user } from '../services/User'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
@@ -72,7 +72,6 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], noHeader?: b
 }
 
 const TemaSide = ({ tema }: { tema: TemaCode }) => {
-  const user = useUser
   const lover = codelist.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter({ lover: lover.map((c) => c.code) }, { skip: !lover.length })
   const [kravList, setKravList] = useState<Krav[]>([])
@@ -137,7 +136,6 @@ const sectionProps: BlockProps = {
 }
 
 const TemaListe = () => {
-  const user = useUser
   const [num] = useState<{ [t: string]: number }>({})
   const update = useForceUpdate()
 

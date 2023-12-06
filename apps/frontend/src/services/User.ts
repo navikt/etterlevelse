@@ -100,7 +100,7 @@ class UserService {
   }
 }
 
-export const useUser = new UserService()
+export const user = new UserService()
 
 const nameFor = (group: Group) => {
   switch (group) {

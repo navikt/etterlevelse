@@ -16,7 +16,7 @@ import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { BodyShort, Button, Heading, Link, Pagination, Select, SortState, Spacer, Table, TextField } from '@navikt/ds-react'
 import { UpdateMessage } from './EtterlevelseAdminPage'
 import { handleSort } from '../util/handleTableSort'
-import { useUser } from '../services/User'
+import { user } from '../services/User'
 
 export const ArkivAdminPage = () => {
   const [arkiveringId, setArkiveringId] = useState<string>('')
@@ -30,7 +30,6 @@ export const ArkivAdminPage = () => {
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
-  const user = useUser
 
   let sortedData = tableContent
 

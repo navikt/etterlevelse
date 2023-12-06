@@ -9,14 +9,13 @@ import { ampli } from '../services/Amplitude'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { BodyShort, Heading, Link, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
 import { handleSort } from '../util/handleTableSort'
-import { useUser } from '../services/User'
+import { user } from '../services/User'
 
 export const KravTablePage = () => {
   const [tableContent, setTableContent] = useState<Krav[]>([])
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
-  const user = useUser
 
   let sortedData = tableContent
 

@@ -1,4 +1,4 @@
-import { useUser } from '../../../services/User'
+import { user } from '../../../services/User'
 import { intl } from '../../../util/intl/intl'
 import { Button, ButtonProps, Link, Tooltip } from '@navikt/ds-react'
 import { ClockDashedIcon } from '@navikt/aksel-icons'
@@ -12,7 +12,6 @@ interface AuditButtonProps extends ButtonProps {
 }
 
 export const AuditButton = (props: AuditButtonProps) => {
-  const user = useUser
   const { id, auditId, marginLeft, marginRight, ...restProps } = props
   return user.isAdmin() ? (
     <Link className={`${marginLeft ? 'ml-2' : ''} ${marginRight ? 'mr-2' : ''}`} href={`/admin/audit/${props.id}` + (props.auditId ? `/${props.auditId}` : '')}>
