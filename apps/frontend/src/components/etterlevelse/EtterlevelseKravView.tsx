@@ -109,17 +109,9 @@ export const EtterlevelseKravView = ({
 
   //Navigate to same component does not work
   //Work around for redirecting to same component
-  //create a anchor tag with new url and trigger it
   const redirectOnSameComponent = (nextKravPath: string) => {
     const currentPath = location.pathname.split('/krav')
-    var a = document.createElement('a')
-    var linkText = document.createTextNode('Sender til neste krav')
-    a.appendChild(linkText)
-    a.title = 'Sender til neste krav'
-    a.href = currentPath[0] + '/krav' + nextKravPath
-    a.id = 'SendToNextKrav'
-    document.body.appendChild(a)
-    document.getElementById('SendToNextKrav')?.click()
+    window.location.href = currentPath[0] + '/krav' + nextKravPath
   }
 
   const submit = async (etterlevelse: Etterlevelse) => {
