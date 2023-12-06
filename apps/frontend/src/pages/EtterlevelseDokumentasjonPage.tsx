@@ -58,7 +58,7 @@ export const EtterlevelseDokumentasjonPage = () => {
         )
         const nextKrav = kravPriorityList[nextKravIndex]
         if (nextKrav) {
-          // setNextKravToDocument('/' + nextKrav.kravNummer + '/' + nextKrav.kravVersjon)
+          setNextKravToDocument('/' + nextKrav.kravNummer + '/' + nextKrav.kravVersjon)
         }
       }
     }
