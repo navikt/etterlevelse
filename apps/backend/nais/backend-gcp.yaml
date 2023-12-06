@@ -23,6 +23,9 @@ spec:
       {{#each replies as |url|}}
          - {{url}}
       {{/each}}
+    sidecar:
+      enabled: true
+      autoLogin: true
   tokenx:
     enabled: true
   ingresses:
