@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { Location, useLocation, useNavigate } from 'react-router-dom'
+import { Location, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useQueryParam } from '../util/hooks'
 import { intl } from '../util/intl/intl'
 import { user } from '../services/User'
@@ -68,22 +68,22 @@ const LoggedInHeader = () => {
 
   const kravPages = user.isKraveier()
     ? [
-        { label: 'Forvalte og opprette krav', href: '/kravliste' },
-        //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
-      ]
+      { label: 'Forvalte og opprette krav', href: '/kravliste' },
+      //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
+    ]
     : []
   const adminPages = user.isAdmin()
     ? [
-        { label: 'Administrere krav', href: '/admin/krav' },
-        { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
-        { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
-        { label: 'Administrere arkivering', href: '/admin/arkiv' },
-        { label: intl.audit, href: '/admin/audit' },
-        { label: 'Kodeverk', href: '/admin/codelist' },
-        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-        { label: intl.notifications, href: '/admin/varsel' },
-        // { label: intl.settings, href: '/admin/settings', disabled: true },
-      ]
+      { label: 'Administrere krav', href: '/admin/krav' },
+      { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
+      { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
+      { label: 'Administrere arkivering', href: '/admin/arkiv' },
+      { label: intl.audit, href: '/admin/audit' },
+      { label: 'Kodeverk', href: '/admin/codelist' },
+      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+      { label: intl.notifications, href: '/admin/varsel' },
+      // { label: intl.settings, href: '/admin/settings', disabled: true },
+    ]
     : []
 
   return (
@@ -118,9 +118,9 @@ const UserInfoView = () => {
         <Label>{user.getName()}</Label>
         <Label size="small">{user.isAdmin() ? 'Admin' : user.isKraveier() ? 'Kraveier' : user.canWrite() ? 'Etterlever' : 'Gjest'}</Label>
       </div>
-      <div className="flex self-end ml-6">
+      {/* <div className="flex self-end ml-6">
         <Link href={`/logout?redirect_uri=${frontpage}${path}`}>Logg ut</Link>
-      </div>
+      </div> */}
     </div>
   )
 }
@@ -132,8 +132,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
 
   const allPages = props.pages.length
     ? props.pages
-        .filter((p) => p.length)
-        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
+      .filter((p) => p.length)
+      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -179,8 +179,6 @@ let sourceReported = false
 const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   const [systemVarsel, setSystemVarsel] = useState<Melding>()
   const location = useLocation()
-  const [userInfo, setUserInfo] = useState<UserInfo>({groups: [], loggedIn: false, ident: '',name: ''})
-
   const source = useQueryParam('source')
   if (!sourceReported) {
     sourceReported = true
@@ -188,19 +186,17 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    (async () => {
-      await getUserInfo().then((resp) => {
-        if(resp.data) {
-          setUserInfo(resp.data)
-        }
-      })
-    })()
+    setTimeout(() => {
+      if (!user.isLoggedIn()) {
+        window.location.href = loginUrl(location, location.pathname)
+      }
+    }, 500)
   }, [])
 
 
 
   React.useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])
@@ -225,8 +221,8 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             <Spacer />
             {!props.noLoginButton && (
               <div className="flex">
-                {!userInfo.loggedIn && <LoginHeaderButton />}
-                {userInfo.loggedIn && <LoggedInHeader />}
+                {!user.isLoggedIn() && <LoginHeaderButton />}
+                {user.isLoggedIn() && <LoggedInHeader />}
               </div>
             )}
           </div>
