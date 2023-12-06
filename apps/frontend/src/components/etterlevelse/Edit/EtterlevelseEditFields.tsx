@@ -167,15 +167,16 @@ export const EtterlevelseEditFields = ({
                           } else if (isOppfylesSenere) {
                             values.status = EtterlevelseStatus.OPPFYLLES_SENERE
                           }
-                          ampli.logEvent('knapp klikket', {
-                            tekst: 'Lagre og fortsett til neste krav',
-                            pagePath: location.pathname,
-                            role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
-                          })
+                          // ampli.logEvent('knapp klikket', {
+                          //   tekst: 'Lagre og fortsett til neste krav',
+                          //   pagePath: location.pathname,
+                          //   role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                          // })
                           submitForm()
                         }}
                       >
-                        Lagre og fortsett til neste krav
+                        {/* Lagre og fortsett til neste krav */}
+                        Lagre og fortsett senere
                       </Button>
                       <Button
                         disabled={disableEdit || isOppfylesSenere}
@@ -187,15 +188,16 @@ export const EtterlevelseEditFields = ({
                               setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
                             }
                           })
-                          ampli.logEvent('knapp klikket', {
-                            tekst: 'Sett krav til ferdig utfylt og fortsett til neste krav',
-                            pagePath: location.pathname,
-                            role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
-                          })
+                          // ampli.logEvent('knapp klikket', {
+                          //   tekst: 'Sett krav til ferdig utfylt og fortsett til neste krav',
+                          //   pagePath: location.pathname,
+                          //   role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                          // })
                           submitForm()
                         }}
                       >
-                        Sett krav til ferdig utfylt og fortsett til neste krav
+                        {/* Sett krav til ferdig utfylt og fortsett til neste krav */}
+                        Ferdig utfylt
                       </Button>
                     </div>
                   )}
@@ -207,16 +209,19 @@ export const EtterlevelseEditFields = ({
                     type="button"
                     variant="tertiary"
                     onClick={() => {
-                      if (!dirty) {
-                        ampli.logEvent('knapp klikket', {
-                          tekst: 'Avbryt uten endring i etterlevelse',
-                          pagePath: location.pathname,
-                          role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
-                        })
-                        close()
-                      } else {
-                        setIsAvbryModalOpen(true)
-                      }
+                      // if (!dirty) {
+                      //   ampli.logEvent('knapp klikket', {
+                      //     tekst: 'Avbryt uten endring i etterlevelse',
+                      //     pagePath: location.pathname,
+                      //     role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                      //   })
+                      //   close()
+                      // } else {
+                      //   setIsAvbryModalOpen(true)
+                      // }
+
+                      // original logic for buttons, uncommet and use code above to test new logic.
+                      close()
                     }}
                   >
                     {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt'}
