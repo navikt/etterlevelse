@@ -57,7 +57,7 @@ export const EtterlevelseDokumentasjonPage = () => {
                 k.etterlevelser[0].status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)),
         )
         const nextKrav = kravPriorityList[nextKravIndex]
-        setNextKravToDocument('/' + nextKrav.kravNummer + '/' + nextKrav.kravVersjon)
+        // setNextKravToDocument('/' + nextKrav.kravNummer + '/' + nextKrav.kravVersjon)
       }
     }
   }, [data, loading, temaData, kravId])
