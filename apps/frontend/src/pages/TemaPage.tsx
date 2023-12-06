@@ -134,11 +134,26 @@ const sectionProps: BlockProps = {
   flexWrap: true,
 }
 
-export const TemaListe = () => {
+const TemaListe = () => {
+  ampli.logEvent('sidevisning', { side: 'Tema side' })
+
+  return (
+    <div className="w-full" role="main" id="content">
+      <div className="w-full flex justify-center items-center flex-col">
+        <div className="w-full max-w-7xl px-8">
+          <div className="flex-1 justify-start flex">
+            <CustomizedBreadcrumbs currentPage="Forstå kravene" />
+          </div>
+          <TemaListeUtenBrodsti />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export const TemaListeUtenBrodsti = () => {
   const [num] = useState<{ [t: string]: number }>({})
   const update = useForceUpdate()
-
-  ampli.logEvent('sidevisning', { side: 'Tema side' })
 
   const updateNum = (tema: string, temaNum: number) => {
     num[tema] = temaNum
@@ -149,30 +164,23 @@ export const TemaListe = () => {
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
 
   return (
-    <div className="w-full" role="main" id="content">
-      <div className="w-full flex justify-center items-center flex-col">
-        <div className="w-full max-w-7xl px-8">
-          <div className="flex-1 justify-start flex">
-            <CustomizedBreadcrumbs currentPage="Forstå kravene" />
-          </div>
-          <div>
-            <Helmet>
-              <meta charSet="utf-8" />
-              <title>Forstå kravene</title>
-            </Helmet>
-            <Heading size="medium">Forstå kravene</Heading>
-            <BodyLong>
-              Totalt {kravAntall} krav fordelt på {temaListe.length} temaer
-            </BodyLong>
-          </div>
-          <div className="mt-6">
-            {temaListe.map((tema) => (
-              <TemaPanel key={tema.code} tema={tema} setNum={updateNum} />
-            ))}
-          </div>
-        </div>
+    <>
+      <div>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Forstå kravene</title>
+        </Helmet>
+        <Heading size="medium">Forstå kravene</Heading>
+        <BodyLong>
+          Totalt {kravAntall} krav fordelt på {temaListe.length} temaer
+        </BodyLong>
       </div>
-    </div>
+      <div className="mt-6">
+        {temaListe.map((tema) => (
+          <TemaPanel key={tema.code} tema={tema} setNum={updateNum} />
+        ))}
+      </div>
+    </>
   )
 }
 

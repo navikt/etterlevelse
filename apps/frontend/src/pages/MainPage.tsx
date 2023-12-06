@@ -4,7 +4,7 @@ import { Markdown } from '../components/common/Markdown'
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { ampli } from '../services/Amplitude'
-import { TemaListe } from './TemaPage'
+import { TemaListeUtenBrodsti } from './TemaPage'
 import { Button, Heading } from '@navikt/ds-react'
 
 export const MainPage = () => {
@@ -48,8 +48,8 @@ export const MainPage = () => {
 
       <div className="flex flex-col items-center w-full">
         <Wide>
-          <div>
-            <TemaListe />
+          <div className="mt-8">
+            <TemaListeUtenBrodsti />
           </div>
         </Wide>
 
