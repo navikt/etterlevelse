@@ -1,12 +1,11 @@
 import { Narrow, Wide } from '../components/scaffold/Page'
-import { theme } from '../util/theme'
-import { HeadingXXLarge } from 'baseui/typography'
 import { useEffect, useState } from 'react'
 import { Markdown } from '../components/common/Markdown'
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { ampli } from '../services/Amplitude'
 import { TemaListe } from './TemaPage'
+import { Heading } from '@navikt/ds-react'
 
 export const MainPage = () => {
   const [forsideVarsel, setForsideVarsle] = useState<Melding>()
@@ -25,10 +24,13 @@ export const MainPage = () => {
 
   return (
     <div className="w-full pb-52" id="content" role="main">
-      <HeadingXXLarge display={'flex'} flexDirection={'column'} marginTop={theme.sizing.scale1400} marginBottom={theme.sizing.scale1400}>
-        <span style={{ fontWeight: 400 }}>Støtte til etterlevelse</span>
-        <span>som ivaretar rettssikkerheten til brukerne våre</span>
-      </HeadingXXLarge>
+      <div className="flex flex-col">
+        <Heading className="flex justify-center" size="xlarge">
+          Etterlevelse i NAV
+        </Heading>
+        <span className="flex justify-center">Forstå og dokumentér</span>
+      </div>
+
       <div className="flex flex-col items-center w-full">
         <Wide>
           <div>
