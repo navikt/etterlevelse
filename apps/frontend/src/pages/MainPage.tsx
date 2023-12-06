@@ -24,11 +24,13 @@ export const MainPage = () => {
 
   return (
     <div className="w-full pb-52" id="content" role="main">
-      <div className="flex flex-col">
-        <Heading className="flex justify-center" size="xlarge">
-          Etterlevelse i NAV
-        </Heading>
-        <span className="flex justify-center">Forstå og dokumentér</span>
+      <div className="bg-surface-info-subtle">
+        <div className="flex flex-col">
+          <Heading className="flex justify-center" size="xlarge">
+            Etterlevelse i NAV
+          </Heading>
+          <span className="flex justify-center">Forstå og dokumentér</span>
+        </div>
       </div>
 
       <div className="flex flex-col items-center w-full">
