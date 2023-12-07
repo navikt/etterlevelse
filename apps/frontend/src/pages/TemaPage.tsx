@@ -29,7 +29,6 @@ import { lovdataBase } from '../components/Lov'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
-  if (!tema) return <TemaListe />
 
   const code = codelist.getCode(ListName.TEMA, tema)
   if (!code) return <>'invalid code'</>
@@ -86,7 +85,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
-      ;(async () => {
+      ; (async () => {
         const allKravPriority = await getAllKravPriority()
         const kraver = _.cloneDeep(data.krav.content)
         kraver.map((k) => {
@@ -127,98 +126,11 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
   )
 }
 
-const sectionProps: BlockProps = {
-  display: 'flex',
-  width: '100%',
-  justifyContent: 'space-between',
-  flexWrap: true,
-}
-
-const TemaListe = () => {
-  ampli.logEvent('sidevisning', { side: 'Tema side' })
-
-  return (
-    <div className="w-full" role="main" id="content">
-      <div className="w-full flex justify-center items-center flex-col">
-        <div className="w-full max-w-7xl px-8">
-          <div className="flex-1 justify-start flex">
-            <CustomizedBreadcrumbs currentPage="Forstå kravene" />
-          </div>
-          <TemaListeUtenBrodsti />
-        </div>
-      </div>
-    </div>
-  )
-}
-
-export const TemaListeUtenBrodsti = () => {
-  const [num] = useState<{ [t: string]: number }>({})
-  const update = useForceUpdate()
-
-  const updateNum = (tema: string, temaNum: number) => {
-    num[tema] = temaNum
-    update()
-  }
-
-  const kravAntall = Object.values(num).reduce((p, c) => p + c, 0)
-  const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
-
-  return (
-    <>
-      <div>
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>Forstå kravene</title>
-        </Helmet>
-        <Heading size="medium">Forstå kravene</Heading>
-        <BodyLong>
-          Totalt {kravAntall} krav fordelt på {temaListe.length} temaer
-        </BodyLong>
-      </div>
-      <div className="mt-6">
-        {temaListe.map((tema) => (
-          <TemaPanel key={tema.code} tema={tema} setNum={updateNum} />
-        ))}
-      </div>
-    </>
-  )
-}
-
 export const cardWidth = '32%'
 export const cardHeight = '220px'
 export const cardMaxheight = '250px'
 const headerBgOverlap = '47px'
 
-export const TemaPanel = ({ tema, setNum }: { tema: TemaCode; setNum: (tema: string, num: number) => void }) => {
-  const lover = codelist.getCodesForTema(tema.code)
-  const { data, loading } = useKravCounter({ lover: [...lover.map((l) => l.code)] }, { skip: !lover.length })
-  const krav = data?.krav.content || []
-  useEffect(() => setNum(tema.code, krav.length), [krav])
-
-  if (loading) {
-    return <Loader size="large" />
-  }
-
-  return (
-    <LinkPanel className="mb-2" key={tema.code} href={'/tema/' + tema.code}>
-      <div className="w-full flex items-center ">
-        <div>
-          <LinkPanel.Title className="flex">{tema.shortName}</LinkPanel.Title>
-          <LinkPanel.Description className="lg:flex items-center gap-2">
-            {lover.map((l, i) => (
-              <div key={l.code} className="flex items-center gap-2">
-                {l.shortName}
-                {i < lover.length - 1 && <span className="hidden lg:block h-2 w-2 rotate-45 rounded-[1px] bg-red-200"></span>}
-              </div>
-            ))}
-          </LinkPanel.Description>
-        </div>
-        <Spacer />
-        <Tag variant="info">{krav.length || 0} krav</Tag>
-      </div>
-    </LinkPanel>
-  )
-}
 
 export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans: string[]; setNum: (tema: string, num: number) => void }) => {
   const lover = codelist.getCodesForTema(tema.code)

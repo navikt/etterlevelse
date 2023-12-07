@@ -4,9 +4,9 @@ import { Markdown } from '../components/common/Markdown'
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { ampli } from '../services/Amplitude'
-import { TemaListeUtenBrodsti } from './TemaPage'
 import { Button, Heading, Link } from '@navikt/ds-react'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
+import { TemaPanels } from './TemaoversiktPage'
 
 export const MainPage = () => {
   const [forsideVarsel, setForsideVarsle] = useState<Melding>()
@@ -52,7 +52,7 @@ export const MainPage = () => {
       <div className="flex flex-col items-center w-full">
         <Wide>
           <div className="mt-8">
-            <TemaListeUtenBrodsti />
+            <TemaPanels />
           </div>
         </Wide>
 
