@@ -76,12 +76,12 @@ export const EditKravMultiOptionField = (
                     p.form.setFieldValue(props.name, [])
                   }
                 }}
-                styles={{
-                  control: (baseStyles) => ({
-                    ...baseStyles,
-                    minHeight: '48px',
-                  }),
-                }}
+                // styles={{
+                //   control: (baseStyles) => ({
+                //     ...baseStyles,
+                //     minHeight: '48px',
+                //   }),
+                // }}
               />
               {/* <RenderTagList list={selectedIds.map((v) => options.find((o) => o.value === v)?.label)} onRemove={p.remove} /> */}
             </div>
