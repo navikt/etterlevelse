@@ -12,19 +12,19 @@ import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemeldi
 import { useLocationState, useQueryParam } from '../util/hooks'
 import { gql } from '@apollo/client/core'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { Helmet } from 'react-helmet'
 import Etterlevelser from '../components/krav/Etterlevelser'
 import { ampli } from '../services/Amplitude'
 import { Markdown } from '../components/common/Markdown'
-import { InformationSquareIcon, PencilIcon, PlusIcon } from '@navikt/aksel-icons'
-import { BodyLong, BodyShort, Box, Button, Detail, Heading, Spacer, Tabs, Tag } from '@navikt/ds-react'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { BodyLong, BodyShort, Button, Heading, Spacer, Tabs } from '@navikt/ds-react'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import StatusTag from '../components/common/StatusTag'
+import { PageLayout } from '../components/scaffold/Page'
 
-export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
-export const kravName = (krav: Krav) => `${kravNumView(krav)} ${krav.navn}`
+export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) : string => `K${it.kravNummer}.${it.kravVersjon}`
+export const kravName = (krav: Krav): string => `${kravNumView(krav)} ${krav.navn}`
 
 export const kravStatus = (status: KravStatus | string) => {
   if (!status) return ''
@@ -175,20 +175,16 @@ export const KravPage = () => {
   }, [edit])
 
   return (
-    <div className="w-full" key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon} id="content" role="main">
+    <PageLayout
+      key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon}
+      pageTitle={ kravNumView({ kravNummer: krav?.kravNummer || 0, kravVersjon: krav?.kravVersjon || 0}) + ' ' + krav?.navn}
+      currentPage={kravNumView({ kravNummer: krav?.kravNummer || 0, kravVersjon: krav?.kravVersjon || 0})}
+      breadcrumbPaths={getBreadcrumPaths()}
+    >
       {kravLoading && <LoadingSkeleton header="Krav" />}
       {!kravLoading && (
         <div className="flex w-full pb-8">
-          {krav?.id && (
-            <Helmet>
-              <meta charSet="utf-8" />
-              <title>
-                {kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} {krav.navn}
-              </title>
-            </Helmet>
-          )}
           <div className="flex flex-col w-full">
-            {krav?.id && <CustomizedBreadcrumbs currentPage={kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} paths={getBreadcrumPaths()} />}
             <div className="w-full">
               <BodyShort>{krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}</BodyShort>
               <Heading className="mb-3" size="medium" level="1">
@@ -293,7 +289,7 @@ export const KravPage = () => {
           }}
         />
       )}
-    </div>
+    </PageLayout>
   )
 }
 

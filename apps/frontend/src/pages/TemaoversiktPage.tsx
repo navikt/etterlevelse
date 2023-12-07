@@ -1,5 +1,3 @@
-import { Helmet } from 'react-helmet'
-import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { useEffect, useState } from 'react'
 import { ampli } from '../services/Amplitude'
 import { useForceUpdate } from '../util/hooks'
@@ -7,27 +5,21 @@ import { ListName, TemaCode, codelist } from '../services/Codelist'
 import { BodyLong, Heading, LinkPanel, Loader, Spacer, Tag } from '@navikt/ds-react'
 import { useKravCounter } from './TemaPage'
 import { user } from '../services/User'
+import { PageLayout } from '../components/scaffold/Page'
 
 export const TemaOversiktPage = () => {
   useEffect(() => {
-    ampli.logEvent('sidevisning', { side: 'Tema side', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER'  })
+    ampli.logEvent('sidevisning', { side: 'Tema side', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
   }, [])
 
   return (
-    <div className="w-full" role="main" id="content">
+    <PageLayout pageTitle="Forstå kravene" currentPage="Forstå kravene">
       <div className="w-full flex justify-center items-center flex-col">
-        <div className="w-full max-w-7xl px-8">
-          <div className="flex-1 justify-start flex">
-            <CustomizedBreadcrumbs currentPage="Forstå kravene" />
-            <Helmet>
-              <meta charSet="utf-8" />
-              <title>Forstå kravene</title>
-            </Helmet>
-          </div>
+        <div className="w-full px-8">
           <TemaPanels />
         </div>
       </div>
-    </div>
+    </PageLayout>
   )
 }
 

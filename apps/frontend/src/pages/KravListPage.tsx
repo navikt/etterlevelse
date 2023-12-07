@@ -13,6 +13,7 @@ import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import { BodyLong, BodyShort, Button, Heading, Label, LinkPanel, Skeleton, Spacer, Tabs } from '@navikt/ds-react'
 import { PlusIcon } from '@navikt/aksel-icons'
+import { PageLayout } from '../components/scaffold/Page'
 
 type Section = 'siste' | 'alle' | 'tema'
 
@@ -31,40 +32,40 @@ export const KravListPage = () => {
   ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
 
   return (
-    <div className="w-full pb-52" id="content" role="main">
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Forvalte og opprette krav</title>
-      </Helmet>
-      <div className="w-full flex justify-center">
-        <div className="w-full">
-          <div>
-            <CustomizedBreadcrumbs currentPage="Forvalte og opprette krav" />
-            <div className="flex">
-              <div className="flex-1">
-                <Heading size="medium">Forvalte og opprette krav</Heading>
-              </div>
+    <PageLayout
+      pageTitle="Forvalte og opprette krav"
+      currentPage="Forvalte og opprette krav"
+    >
+      <div className="pb-52 w-full">
+        <div className="w-full flex justify-center">
+          <div className="w-full">
+            <div>
+              <div className="flex">
+                <div className="flex-1">
+                  <Heading size="medium">Forvalte og opprette krav</Heading>
+                </div>
 
-              <div className="flex justify-end">
-                {user.isKraveier() && (
-                  <Button iconPosition="left" icon={<PlusIcon area-label="" aria-hidden />} size="medium" as="a" href="/krav/ny">
-                    Nytt krav
-                  </Button>
-                )}
+                <div className="flex justify-end">
+                  {user.isKraveier() && (
+                    <Button iconPosition="left" icon={<PlusIcon area-label="" aria-hidden />} size="medium" as="a" href="/krav/ny">
+                      Nytt krav
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex justify-center w-full">
-        <div className="w-full">
-          <div className="pt-6">
-            <KravTabs />
+        <div className="flex justify-center w-full">
+          <div className="w-full">
+            <div className="pt-6">
+              <KravTabs />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </PageLayout>
   )
 }
 

@@ -18,14 +18,14 @@ import { useQuery } from '@apollo/client'
 import { QueryHookOptions } from '@apollo/client/react/types/types'
 import { gql } from '@apollo/client/core'
 import { margin } from '../components/common/Style'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
-import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import { BodyShort, Detail, Heading, Label, LinkPanel } from '@navikt/ds-react'
 import { lovdataBase } from '../components/Lov'
 import { user } from '../services/User'
+import { PageLayout } from '../components/scaffold/Page'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
@@ -101,14 +101,7 @@ const TemaView = ({ tema }: { tema: TemaCode }) => {
   }, [data])
 
   return (
-    <div className="w-full" id="content" role="main">
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>{tema.shortName}</title>
-      </Helmet>
-      <div className="flex-1 justify-start flex">
-        <CustomizedBreadcrumbs paths={breadcrumbPaths} currentPage={tema.shortName} />
-      </div>
+    <PageLayout pageTitle={tema.shortName} breadcrumbPaths={breadcrumbPaths} currentPage={tema.shortName}>
       {getTemaMainHeader(tema, lover)}
       <div className="mt-6">
         <Label>{loading ? '?' : data?.krav.numberOfElements || 0} krav</Label>
@@ -124,7 +117,7 @@ const TemaView = ({ tema }: { tema: TemaCode }) => {
           </div>
         )}
       </div>
-    </div>
+    </PageLayout>
   )
 }
 

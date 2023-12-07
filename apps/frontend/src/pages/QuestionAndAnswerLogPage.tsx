@@ -1,7 +1,6 @@
 import moment from 'moment'
 import * as React from 'react'
 import { ReactNode, useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet'
 import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
 import { PersonName } from '../components/common/PersonName'
@@ -10,8 +9,8 @@ import { Krav, PageResponse, Tilbakemelding, TilbakemeldingMeldingStatus } from 
 import { codelist, ListName } from '../services/Codelist'
 import { ampli } from '../services/Amplitude'
 import { BodyShort, Heading, Link, Loader, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
-import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { handleSort } from '../util/handleTableSort'
+import { PageLayout } from '../components/scaffold/Page'
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string
@@ -61,7 +60,7 @@ export const QuestionAndAnswerLogPage = () => {
     .slice((page - 1) * rowsPerPage, page * rowsPerPage)
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
       setTableContent([...mappedKraver])
@@ -109,20 +108,10 @@ export const QuestionAndAnswerLogPage = () => {
   }, [tableContent])
 
   return (
-    <div className="w-full" id="content" role="main">
-      <div className="flex-1 justify-start flex">
-        <CustomizedBreadcrumbs currentPage="Spørsmål og svar" />
-      </div>
-
-      <div>
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>Spørsmål og svar</title>
-        </Helmet>
-        <Heading size="medium" level="1">
-          Spørsmål og svar
-        </Heading>
-      </div>
+    <PageLayout pageTitle="Spørsmål og svar" currentPage="Spørsmål og svar">
+      <Heading size="medium" level="1">
+        Spørsmål og svar
+      </Heading>
 
       <div>
         {!isloading && kravMessages.length ? (
@@ -192,7 +181,7 @@ export const QuestionAndAnswerLogPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </PageLayout>
   )
 }
 export default QuestionAndAnswerLogPage
