@@ -31,14 +31,14 @@ export const MainPage = () => {
           </Heading>
           <span className="flex justify-center">Forstå og dokumentér</span>
         </div>
-        <div className="bg-white mt-8 p-8">
+        <div className="bg-white mt-8 p-8 shadow-lg shadow-slate-900">
           <Heading size="medium">Etterlevelse i NAV</Heading>
           <span>
             For å dokumentere etterlevelse må du opprette et etterlevelsesdokument. Du vil da se hvilke krav som gjelder for din løsning og kan dokumentere hvordan løsningen
             etterlever kravene.
           </span>
           <div className="mt-8 flex justify-end">
-            <Button className="mr-3" variant="primary">
+            <Button onClick={() => {}} className="mr-3" variant="primary">
               Nytt etterlevelsesdokument
             </Button>
             <Link href="/dokumentasjoner">
