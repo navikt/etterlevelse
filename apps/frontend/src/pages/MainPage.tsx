@@ -25,7 +25,7 @@ export const MainPage = () => {
 
   return (
     <div className="w-full pb-52" id="content" role="main">
-      <div className="bg-surface-info-subtle p-10">
+      <div className="bg-[#E6F0FF] p-10">
         <div className="flex flex-col pd">
           <Heading className="flex justify-center" size="xlarge">
             Etterlevelse i NAV
