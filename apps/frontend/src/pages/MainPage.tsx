@@ -31,7 +31,7 @@ export const MainPage = () => {
           </Heading>
           <span className="flex justify-center">Forstå og dokumentér</span>
         </div>
-        <div className="bg-white mt-8 p-8 shadow-lg shadow-slate-900">
+        <div className="bg-white mt-8 p-8 shadow-md shadow-slate-900 shadow-[#00000040]">
           <Heading size="medium">Etterlevelse i NAV</Heading>
           <span>
             For å dokumentere etterlevelse må du opprette et etterlevelsesdokument. Du vil da se hvilke krav som gjelder for din løsning og kan dokumentere hvordan løsningen
