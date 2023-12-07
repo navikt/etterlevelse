@@ -3,7 +3,7 @@ import moment from 'moment'
 import { useState } from 'react'
 import { tilbakemeldingslettMelding } from '../../../../api/TilbakemeldingApi'
 import { Tilbakemelding, TilbakemeldingMelding } from '../../../../constants'
-import { useUser } from '../../../../services/User'
+import { user } from '../../../../services/User'
 import { PersonName } from '../../../common/PersonName'
 import TilbakemeldingEdit from './TilbakemeldingEdit'
 import { BodyShort, Button, Modal } from '@navikt/ds-react'
@@ -17,7 +17,6 @@ export const MeldingKnapper = (props: {
   marginLeft?: boolean
 }) => {
   const { melding, tilbakemeldingId, oppdater, remove } = props
-  const user = useUser
   const meldingNr = melding.meldingNr
   const [deleteModal, setDeleteModal] = useState(false)
   const [editModal, setEditModal] = useState(false)

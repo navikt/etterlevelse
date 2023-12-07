@@ -62,9 +62,15 @@ export const EditKravMultiOptionField = (
                 onChange={(value) => {
                   if (value.length) {
                     if (props.listName) {
-                      p.form.setFieldValue(props.name, value.map((v) => codelist.getCode(props.listName, v?.value)))
+                      p.form.setFieldValue(
+                        props.name,
+                        value.map((v) => codelist.getCode(props.listName, v?.value)),
+                      )
                     } else {
-                      p.form.setFieldValue(props.name, value.map((v) => v?.value))
+                      p.form.setFieldValue(
+                        props.name,
+                        value.map((v) => v?.value),
+                      )
                     }
                   } else {
                     p.form.setFieldValue(props.name, [])
@@ -73,8 +79,8 @@ export const EditKravMultiOptionField = (
                 styles={{
                   control: (baseStyles) => ({
                     ...baseStyles,
-                    minHeight: '48px'
-                  })
+                    minHeight: '48px',
+                  }),
                 }}
               />
               {/* <RenderTagList list={selectedIds.map((v) => options.find((o) => o.value === v)?.label)} onRemove={p.remove} /> */}

@@ -9,7 +9,7 @@ import RouteLink from '../../common/RouteLink'
 import { useLocation } from 'react-router-dom'
 import { env } from '../../../util/env'
 import { useStyletron } from 'styletron-react'
-import { useUser } from '../../../services/User'
+import { user } from '../../../services/User'
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { ettlevColors } from '../../../util/theme'
 import { arkPennIcon, exitIcon, grafIcon, husIcon, paragrafIcon } from '../../Images'
@@ -68,7 +68,6 @@ const SignOutButton = (props: { location: string }) => {
 }
 
 const BurgerMenu = () => {
-  const user = useUser
   const location = useLocation()
   const [showMenu, setShowMenu] = React.useState<boolean>(false)
   const [url, setUrl] = React.useState(window.location.href)

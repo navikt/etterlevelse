@@ -80,11 +80,11 @@ export const useArkiveringByEtterlevelseDokumentasjonId = (etterlevelseDokumenta
     if (etterlevelseDokumentasjonId !== undefined && etterlevelseDokumentasjonId !== '') {
       getEtterlevelseArkivByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
         .then((resp) => {
-          if(resp.content.length) {
+          if (resp.content.length) {
             setData(arkiveringMapToFormVal(resp.content[0]))
-          }else {
+          } else {
             setData(arkiveringMapToFormVal({}))
-          } 
+          }
         })
         .catch((e) => {
           setData(arkiveringMapToFormVal({ id: '' }))

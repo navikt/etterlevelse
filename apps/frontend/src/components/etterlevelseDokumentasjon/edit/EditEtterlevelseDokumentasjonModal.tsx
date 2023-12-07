@@ -9,8 +9,8 @@ import {
 import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../../../constants'
 import { Code, codelist, ListName } from '../../../services/Codelist'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
-import { BoolField, FieldWrapper, InputField } from '../../common/Inputs'
-import LabelWithTooltip from '../../common/LabelWithTooltip'
+import { BoolField, FieldWrapper, InputField, TextAreaField } from '../../common/Inputs'
+import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { useSearchTeamOptions } from '../../../api/TeamApi'
 import { RenderTagList } from '../../common/TagList'
 import { useNavigate } from 'react-router-dom'
@@ -66,7 +66,11 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
     } else {
       await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
-        const mutatedBehandlinger = response.behandlinger && response.behandlinger.map((b) => {return {...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn}})
+        const mutatedBehandlinger =
+          response.behandlinger &&
+          response.behandlinger.map((b) => {
+            return { ...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn }
+          })
         if (props.setEtterlevelseDokumentasjon) {
           props.setEtterlevelseDokumentasjon({ ...response, behandlinger: mutatedBehandlinger, virkemiddel: selectedVirkemiddel })
         }
@@ -101,7 +105,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
             {({ values, submitForm }) => {
               return (
                 <Form>
-                  <InputField disablePlaceHolder label="Skriv inn tittel på etterlevelsesdokumentet" name="title" />
+                  <TextAreaField noPlaceholder label="Skriv inn tittel på etterlevelsesdokumentet" name="title" />
 
                   {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
 
@@ -172,7 +176,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                   <FieldArray name="irrelevansFor">
                     {(p: FieldArrayRenderProps) => {
                       return (
-                        <div className="h-full pt-5 w-[calc(100% - 16px)]" >
+                        <div className="h-full pt-5 w-[calc(100% - 16px)]">
                           <CheckboxGroup
                             legend="Hvilke egenskaper gjelder for etterlevelsen?"
                             description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
@@ -181,7 +185,10 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                               setSelectedFilter(selected)
 
                               const irrelevansListe = relevansOptions.filter((v, i) => !selected.includes(i))
-                              p.form.setFieldValue('irrelevansFor', irrelevansListe.map((il) => codelist.getCode(ListName.RELEVANS, il.value)))
+                              p.form.setFieldValue(
+                                'irrelevansFor',
+                                irrelevansListe.map((il) => codelist.getCode(ListName.RELEVANS, il.value)),
+                              )
                               // selected.forEach((value) => {
                               //   const i = parseInt(value)
                               //   if (!selectedFilter.includes(i)) {
@@ -196,11 +203,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                           >
                             {relevansOptions.map((r, i) => {
                               return (
-                                <Checkbox
-                                  key={'relevans_' + r.value}
-                                  value={i}
-                                  description={r.description}
-                                >
+                                <Checkbox key={'relevans_' + r.value} value={i} description={r.description}>
                                   {r.label}
                                 </Checkbox>
                               )
@@ -227,9 +230,9 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                         {(p: FieldArrayRenderProps) => {
                           return (
                             <div className="mb-4">
-                              <LabelWithTooltip
+                              <LabelWithDescription
                                 label={'Legg til behandlinger fra Behandlingskatalogen'}
-                                tooltip="Siden løsningen behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Du kan knytte én eller flere behandlinger til etterlevelsesdokumentet."
+                                description="Siden løsningen behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Du kan knytte én eller flere behandlinger til etterlevelsesdokumentet."
                               />
                               <div className="w-full">
                                 <AsyncSelect
@@ -248,8 +251,8 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                     control: (base) => ({
                                       ...base,
                                       cursor: 'text',
-                                      height: '48px'
-                                    })
+                                      height: '48px',
+                                    }),
                                   }}
                                 />
                               </div>
@@ -293,8 +296,8 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                     control: (base) => ({
                                       ...base,
                                       cursor: 'text',
-                                      height: '48px'
-                                    })
+                                      height: '48px',
+                                    }),
                                   }}
                                 />
                               </div>
@@ -311,6 +314,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       Avbryt
                     </Button>
                     <Button
+                      type="button"
                       onClick={() => {
                         submitForm()
                       }}

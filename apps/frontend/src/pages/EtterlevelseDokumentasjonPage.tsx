@@ -10,6 +10,7 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
 import { useQuery } from '@apollo/client'
 import { sortKraverByPriority } from '../util/sort'
+import { user } from '../services/User'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
@@ -47,16 +48,21 @@ export const EtterlevelseDokumentasjonPage = () => {
       const kravPriorityList = sortKraverByPriority<KravQL>(data?.krav.content, temaData?.shortName || '')
       const currentKravIndex = kravPriorityList.findIndex((k) => k.kravNummer === kravId?.kravNummer)
       if (currentKravIndex !== null && kravPriorityList.length - 1 !== currentKravIndex) {
-        const nextKravIndex = kravPriorityList.findIndex((k, i) => i > currentKravIndex && (k.etterlevelser.length === 0 ||
-          (k.etterlevelser.length > 0 && k.etterlevelser[0].status !== EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
-          k.etterlevelser[0].status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT))
+        const nextKravIndex = kravPriorityList.findIndex(
+          (k, i) =>
+            i > currentKravIndex &&
+            (k.etterlevelser.length === 0 ||
+              (k.etterlevelser.length > 0 &&
+                k.etterlevelser[0].status !== EtterlevelseStatus.FERDIG_DOKUMENTERT &&
+                k.etterlevelser[0].status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)),
+        )
         const nextKrav = kravPriorityList[nextKravIndex]
-        setNextKravToDocument('/' + nextKrav.kravNummer + '/' + nextKrav.kravVersjon)
+        if (nextKrav) {
+          setNextKravToDocument('/' + nextKrav.kravNummer + '/' + nextKrav.kravVersjon)
+        }
       }
-
     }
   }, [data, loading, temaData, kravId])
-
 
   const [navigatePath, setNavigatePath] = useState<string>('')
 
@@ -75,6 +81,7 @@ export const EtterlevelseDokumentasjonPage = () => {
         sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`,
         section: `K${kravId.kravNummer}.${kravId.kravVersjon}`,
         temaKey: temaData.shortName.toString(),
+        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
       })
     }
   }, [etterlevelseDokumentasjon])

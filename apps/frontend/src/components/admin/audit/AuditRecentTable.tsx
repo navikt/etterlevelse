@@ -10,6 +10,7 @@ import * as _ from 'lodash'
 import { JsonView } from 'react-json-view-lite'
 import { ampli } from '../../../services/Amplitude'
 import { BodyShort, Button, Heading, Label, Modal, Pagination, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
+import { user } from '../../../services/User'
 
 const CodeView = ({ audit }: { audit: AuditItem }) => {
   const [modalOpen, setModalOpen] = useState(false)
@@ -34,6 +35,14 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   const [limit, setLimit] = useState(20)
   const [table, setTable] = useState<ObjectType | undefined>(props.tableType)
   const [page, setPage] = useState(1)
+
+  useEffect(() => {
+    ampli.logEvent('sidevisning', {
+      side: 'Varsel side for admin',
+      sidetittel: 'Log side for varslinger',
+      role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+    })
+  }, [])
 
   useEffect(() => {
     ;(async () => {
@@ -63,8 +72,6 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   }
 
   const tableOptions = Object.keys(ObjectType).map((ot) => ({ id: ot, label: ot }))
-
-  ampli.logEvent('sidevisning', { side: 'Varsel side for admin', sidetittel: 'Log side for varslinger' })
 
   return (
     <div>

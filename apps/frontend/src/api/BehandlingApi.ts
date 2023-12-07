@@ -55,9 +55,9 @@ export const useSearchBehandling = () => useSearch(searchBehandling)
 export const searchBehandlingOptions = async (searchParam: string) => {
   if (searchParam && searchParam.length > 2) {
     const behandlinger = await searchBehandling(searchParam)
-    if(behandlinger && behandlinger.length) {
+    if (behandlinger && behandlinger.length) {
       return behandlinger.map((b) => {
-        return {value: b.id, label: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn, ...b}
+        return { value: b.id, label: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn, ...b }
       })
     }
   }

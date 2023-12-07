@@ -50,11 +50,11 @@ export const DotTags = (props: DotTagsParams) => {
     <div className={`${props.inColumn ? 'block' : 'flex'} flex-wrap`}>
       {items.map((item, i) => (
         <div className={`${props.inColumn ? 'mb-1.5' : 'mb-0'} ${i < items.length && !commaSeparator ? 'mb-1.5' : 'mb-0'}`} key={i}>
-          {!props.markdown &&
+          {!props.markdown && (
             <BodyShort className={'break-words'}>
               <Content {...props} item={item} />{' '}
             </BodyShort>
-          }
+          )}
 
           {props.markdown && <Content {...props} item={item} />}
         </div>

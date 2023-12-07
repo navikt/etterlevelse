@@ -251,6 +251,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
               className="krav-list-button-container"
             >
               <Button
+                type="button"
                 size="compact"
                 kind="secondary"
                 onClick={() => {
@@ -261,7 +262,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
               >
                 Avbryt
               </Button>
-              <Button size="compact" onClick={p.submitForm} disabled={loading} marginLeft>
+              <Button type="button" size="compact" onClick={p.submitForm} disabled={loading} marginLeft>
                 Lagre
               </Button>
             </Block>

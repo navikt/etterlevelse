@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useAwait, useForceUpdate } from '../../../util/hooks'
 import { Code, codelist, CodeListFormValues } from '../../../services/Codelist'
 import { createCodelist } from '../../../api/CodelistApi'
-import { useUser } from '../../../services/User'
+import { user } from '../../../services/User'
 import CreateCodeListModal from './ModalCreateCodeList'
 import CodeListTable from './CodeListStyledTable'
 import { Helmet } from 'react-helmet'
@@ -14,7 +14,6 @@ import { PlusIcon } from '@navikt/aksel-icons'
 import CustomizedBreadcrumbs from '../../common/CustomizedBreadcrumbs'
 
 const CodeListPage = () => {
-  const user = useUser
   const params = useParams<{ listname?: string }>()
   const navigate = useNavigate()
   const [loading, setLoading] = React.useState(true)

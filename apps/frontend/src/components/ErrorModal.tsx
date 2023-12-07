@@ -5,10 +5,7 @@ const ErrorModal = (props: { isOpen: boolean; submit: Function; errorMessage: st
     <Modal open={props.isOpen} header={{ heading: 'Feilmelding' }}>
       <Modal.Body>{props.errorMessage}</Modal.Body>
       <Modal.Footer>
-        <Button
-          onClick={() => props.submit(false)}
-          type="button"
-        >
+        <Button onClick={() => props.submit(false)} type="button">
           Lukk
         </Button>
       </Modal.Footer>

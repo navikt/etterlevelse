@@ -54,6 +54,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
 
               <div className="flex w-full">
                 <Button
+                  type="button"
                   variant="secondary"
                   disabled={disableEdit}
                   onClick={() => {
@@ -66,6 +67,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
                 </Button>
                 <div className="flex justify-end w-full">
                   <Button
+                    type="button"
                     disabled={disableEdit}
                     onClick={() => {
                       values.meldingStatus = MeldingStatus.ACTIVE

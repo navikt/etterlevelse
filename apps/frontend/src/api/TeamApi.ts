@@ -4,7 +4,7 @@ import { env } from '../util/env'
 import { useForceUpdate, useSearch } from '../util/hooks'
 import { Option } from 'baseui/select'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { useUser } from '../services/User'
+import { user } from '../services/User'
 
 export const getResourceById = async (resourceId: string) => {
   return (await axios.get<TeamResource>(`${env.backendBaseUrl}/team/resource/${resourceId}`)).data
@@ -135,8 +135,7 @@ export const useMyTeams = () => {
   const [productAreas] = useMyProductAreas()
   const [data, setData] = useState<Team[]>([])
   const [loading, setLoading] = useState(true)
-  const user = useUser
-  
+
   const ident = user.getIdent()
 
   useEffect(() => {
@@ -174,8 +173,6 @@ export const useMyTeams = () => {
 export const useMyProductAreas = () => {
   const [data, setData] = useState<ProductArea[]>([])
   const [loading, setLoading] = useState(true)
-  const user = useUser
-  
   const ident = user.getIdent()
 
   useEffect(() => {
@@ -201,7 +198,9 @@ export type SearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]
 export const usePersonSearch = async (searchParam: string) => {
   if (searchParam && searchParam.replace(/ /g, '').length > 2) {
     const searchResult = await searchResourceByName(searchParam)
-    return searchResult.map((p) => { return { value: p.navIdent, label: p.fullName, ...p } })
+    return searchResult.map((p) => {
+      return { value: p.navIdent, label: p.fullName, ...p }
+    })
   }
   return []
 }
@@ -209,7 +208,9 @@ export const usePersonSearch = async (searchParam: string) => {
 export const useSlackChannelSearch = async (searchParam: string) => {
   if (searchParam && searchParam.replace(/ /g, '').length > 2) {
     const searchResult = await searchSlackChannel(searchParam)
-    return searchResult.map((sk) => { return { value: sk.id, label: sk.name, ...sk } })
+    return searchResult.map((sk) => {
+      return { value: sk.id, label: sk.name, ...sk }
+    })
   }
   return []
 }

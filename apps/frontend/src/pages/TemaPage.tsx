@@ -25,6 +25,7 @@ import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import { BodyShort, Detail, Heading, Label, LinkPanel } from '@navikt/ds-react'
 import { lovdataBase } from '../components/Lov'
+import { user } from '../services/User'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
@@ -74,7 +75,7 @@ const TemaView = ({ tema }: { tema: TemaCode }) => {
   const [kravList, setKravList] = useState<Krav[]>([])
 
   useEffect(() => {
-    ampli.logEvent('sidevisning', { side: 'Tema side', sidetittel: tema.shortName })
+    ampli.logEvent('sidevisning', { side: 'Tema side', sidetittel: tema.shortName, role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
   }, [])
 
   const breadcrumbPaths: breadcrumbPaths[] = [

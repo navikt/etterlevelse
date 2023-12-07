@@ -10,13 +10,10 @@ import AsyncSelect from 'react-select/async'
 import { DropdownIndicatorProps, components } from 'react-select'
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
 
-
-export const DropdownIndicator = (
-  props: DropdownIndicatorProps
-) => {
+export const DropdownIndicator = (props: DropdownIndicatorProps) => {
   return (
     <components.DropdownIndicator {...props}>
-      <MagnifyingGlassIcon title="Søk" aria-label="Søk"/>
+      <MagnifyingGlassIcon title="Søk" aria-label="Søk" />
     </components.DropdownIndicator>
   )
 }
@@ -32,7 +29,7 @@ export const EditBegreper = () => {
               <AsyncSelect
                 aria-label="Søk etter begrep"
                 placeholder="Søk etter begrep"
-                components={{DropdownIndicator}}
+                components={{ DropdownIndicator }}
                 noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
                 controlShouldRenderValue={false}
                 loadingMessage={() => 'Søker...'}
@@ -45,8 +42,8 @@ export const EditBegreper = () => {
                   control: (base) => ({
                     ...base,
                     cursor: 'text',
-                    height: '48px'
-                  })
+                    height: '48px',
+                  }),
                 }}
               />
 

@@ -4,7 +4,7 @@ import { createEtterlevelse, getEtterlevelserByEtterlevelseDokumentasjonIdKravNu
 import React, { useEffect, useRef, useState } from 'react'
 import { getKravByKravNumberAndVersion, getKravByKravNummer, KravId } from '../../api/KravApi'
 import { query } from '../../pages/KravPage'
-import { useUser } from '../../services/User'
+import { user } from '../../services/User'
 import { useQuery } from '@apollo/client'
 import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
 import Etterlevelser from '../krav/Etterlevelser'
@@ -19,7 +19,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import moment from 'moment'
-import { Alert, BodyLong, BodyShort, Button, Detail, Heading, Label, ReadMore, Tabs, Tag } from '@navikt/ds-react'
+import { Alert, BodyLong, BodyShort, Button, Detail, Heading, Label, Link, Modal, ReadMore, Tabs, Tag } from '@navikt/ds-react'
 import { behandlingLink } from '../../util/config'
 import { ExternalLink } from '../common/RouteLink'
 import { TeamName } from '../common/TeamName'
@@ -27,6 +27,7 @@ import { AllInfo } from '../krav/ViewKrav'
 import { FileTextIcon } from '@navikt/aksel-icons'
 import EditNotatfelt from '../etterlevelseMetadata/EditNotatfelt'
 import EtterlevelseViewFields from './EtterlevelseViewFields'
+import { ampli } from '../../services/Amplitude'
 
 type EttlevelseKravViewProps = {
   temaName?: string
@@ -66,7 +67,6 @@ export const EtterlevelseKravView = ({
     skip: !kravId.id && !kravId.kravNummer,
     fetchPolicy: 'no-cache',
   })
-  const user = useUser
   const etterlevelserLoading = loading
   const [krav, setKrav] = useState<KravQL>()
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
@@ -75,9 +75,9 @@ export const EtterlevelseKravView = ({
   const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
   const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{ kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' }])
+  const [isNavigationModalOpen, setIsNavigationModalOpen] = useState<boolean>(false)
   const location = useLocation()
   const navigate = useNavigate()
-
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
@@ -89,7 +89,7 @@ export const EtterlevelseKravView = ({
   )
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       etterlevelseDokumentasjonId &&
         kravId.kravNummer &&
         getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(etterlevelseDokumentasjonId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
@@ -111,17 +111,14 @@ export const EtterlevelseKravView = ({
 
   //Navigate to same component does not work
   //Work around for redirecting to same component
-  //create a anchor tag with new url and trigger it
   const redirectOnSameComponent = (nextKravPath: string) => {
-      const currentPath = location.pathname.split('/krav')
-      var a = document.createElement('a')
-      var linkText = document.createTextNode('Sender til neste krav')
-      a.appendChild(linkText)
-      a.title = 'Sender til neste krav'
-      a.href = currentPath[0] + '/krav' + nextKravPath
-      a.id = 'SendToNextKrav'
-      document.body.appendChild(a)
-      document.getElementById('SendToNextKrav')?.click()
+    const currentPath = location.pathname.split('/krav')
+    window.location.href = currentPath[0] + '/krav' + nextKravPath
+  }
+
+  const getNextKravUrl = (nextKravPath: string): string => {
+    const currentPath = location.pathname.split('/krav')
+    return currentPath[0] + '/krav' + nextKravPath
   }
 
   const submit = async (etterlevelse: Etterlevelse) => {
@@ -146,7 +143,7 @@ export const EtterlevelseKravView = ({
     if (etterlevelse.id || existingEtterlevelseId) {
       await updateEtterlevelse(mutatedEtterlevelse).then(() => {
         if (nextKravToDocument !== '') {
-          redirectOnSameComponent(nextKravToDocument)
+          setIsNavigationModalOpen(true)
         } else {
           navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
         }
@@ -154,7 +151,7 @@ export const EtterlevelseKravView = ({
     } else {
       await createEtterlevelse(mutatedEtterlevelse).then(() => {
         if (nextKravToDocument !== '') {
-          redirectOnSameComponent(nextKravToDocument)
+          setIsNavigationModalOpen(true)
         } else {
           navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
         }
@@ -392,6 +389,44 @@ export const EtterlevelseKravView = ({
               </Tabs>
             </div>
           </div>
+
+          <Modal open={isNavigationModalOpen} onClose={() => setIsNavigationModalOpen(false)} header={{ heading: 'Hvor ønsker du å gå?' }}>
+            <Modal.Body>
+              <BodyShort>Vi undersøker i en periode hvordan man ønsker å navigere seg mellom krav og temaer.</BodyShort>
+              <BodyShort>Trykk på knappen som passer best for deg.</BodyShort>
+            </Modal.Body>
+            <Modal.Footer>
+              <Link
+                href={getNextKravUrl(nextKravToDocument)}
+                onClick={() => {
+                  ampli.logEvent('knapp klikket', {
+                    tekst: 'Til nest krav som ikke er ferdig utfylt i dette temaet',
+                    pagePath: location.pathname,
+                    role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                  })
+                }}
+              >
+                <Button as="a" variant="secondary">
+                  Til neste krav som ikke er ferdig utfylt i dette temaet
+                </Button>
+              </Link>
+
+              <Link
+                href={'/dokumentasjon/' + etterlevelseDokumentasjonId}
+                onClick={() => {
+                  ampli.logEvent('knapp klikket', {
+                    tekst: 'Til temaoversikten',
+                    pagePath: location.pathname,
+                    role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                  })
+                }}
+              >
+                <Button as="a" variant="secondary">
+                  Til temaoversikten
+                </Button>
+              </Link>
+            </Modal.Footer>
+          </Modal>
         </div>
       )}
     </div>

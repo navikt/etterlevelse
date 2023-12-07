@@ -1,20 +1,21 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { Location, useLocation, useNavigate } from 'react-router-dom'
+import { Location, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useQueryParam } from '../util/hooks'
 import { intl } from '../util/intl/intl'
-import { useUser } from '../services/User'
+import { user } from '../services/User'
 import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
 import { informationIcon, warningAlert } from './Images'
 import { Portrait } from './common/Portrait'
 import SkipToContent from './common/SkipToContent/SkipToContent'
-import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
+import { AlertType, Melding, MeldingStatus, MeldingType, UserInfo } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from './common/Markdown'
 import { ampli } from '../services/Amplitude'
 import { BarChartIcon, ChevronDownIcon, ChevronUpIcon, DocPencilIcon, HouseIcon, InformationIcon, MenuHamburgerIcon, PersonIcon, ReceiptIcon } from '@navikt/aksel-icons'
 import { Button, Dropdown, InternalHeader, Label, Link, Spacer, Switch } from '@navikt/ds-react'
+import { getUserInfo } from '../api/UserApi'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -43,7 +44,6 @@ export const LoginButton = () => {
 }
 
 const LoggedInHeader = () => {
-  const user = useUser
   const [viewRoller, setViewRoller] = useState(false)
 
   const roller = (
@@ -68,27 +68,27 @@ const LoggedInHeader = () => {
 
   const kravPages = user.isKraveier()
     ? [
-      { label: 'Forvalte og opprette krav', href: '/kravliste' },
-      //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
-    ]
+        { label: 'Forvalte og opprette krav', href: '/kravliste' },
+        //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
+      ]
     : []
   const adminPages = user.isAdmin()
     ? [
-      { label: 'Administrere krav', href: '/admin/krav' },
-      { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
-      { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
-      { label: 'Administrere arkivering', href: '/admin/arkiv' },
-      { label: intl.audit, href: '/admin/audit' },
-      { label: 'Kodeverk', href: '/admin/codelist' },
-      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-      { label: intl.notifications, href: '/admin/varsel' },
-      // { label: intl.settings, href: '/admin/settings', disabled: true },
-    ]
+        { label: 'Administrere krav', href: '/admin/krav' },
+        { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
+        { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
+        { label: 'Administrere arkivering', href: '/admin/arkiv' },
+        { label: intl.audit, href: '/admin/audit' },
+        { label: 'Kodeverk', href: '/admin/codelist' },
+        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+        { label: intl.notifications, href: '/admin/varsel' },
+        // { label: intl.settings, href: '/admin/settings', disabled: true },
+      ]
     : []
 
   return (
     <div className="flex items-center justify-center">
-      <Menu pages={[[{ label: <UserInfo /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={<PersonIcon area-label="" aria-hidden />} />
+      <Menu pages={[[{ label: <UserInfoView /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={<PersonIcon area-label="" aria-hidden />} />
 
       <div className="w-3" />
 
@@ -107,8 +107,7 @@ const LoggedInHeader = () => {
   )
 }
 
-const UserInfo = () => {
-  const user = useUser
+const UserInfoView = () => {
   const location = useLocation()
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
   const path = location.pathname
@@ -119,9 +118,9 @@ const UserInfo = () => {
         <Label>{user.getName()}</Label>
         <Label size="small">{user.isAdmin() ? 'Admin' : user.isKraveier() ? 'Kraveier' : user.canWrite() ? 'Etterlever' : 'Gjest'}</Label>
       </div>
-      <div className="flex self-end ml-6">
+      {/* <div className="flex self-end ml-6">
         <Link href={`/logout?redirect_uri=${frontpage}${path}`}>Logg ut</Link>
-      </div>
+      </div> */}
     </div>
   )
 }
@@ -133,8 +132,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
 
   const allPages = props.pages.length
     ? props.pages
-      .filter((p) => p.length)
-      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
+        .filter((p) => p.length)
+        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -178,10 +177,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
 let sourceReported = false
 
 const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
-  const user = useUser
   const [systemVarsel, setSystemVarsel] = useState<Melding>()
   const location = useLocation()
-
   const source = useQueryParam('source')
   if (!sourceReported) {
     sourceReported = true
@@ -189,7 +186,15 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    ; (async () => {
+    setTimeout(() => {
+      if (!user.isLoggedIn()) {
+        window.location.href = loginUrl(location, location.pathname)
+      }
+    }, 500)
+  }, [])
+
+  React.useEffect(() => {
+    ;(async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])

@@ -6,7 +6,7 @@ import { ListName } from '../../services/Codelist'
 import { CustomLabel, LabelAboveContent } from '../common/PropertyLabel'
 import { ExternalLink } from '../common/RouteLink'
 import { slackLink, slackUserLink, termUrl } from '../../util/config'
-import { useUser } from '../../services/User'
+import { user } from '../../services/User'
 import { LovViewList } from '../Lov'
 import { SuksesskriterieCard } from './Suksesskriterie'
 import { Markdown } from '../common/Markdown'
@@ -16,8 +16,7 @@ import { BodyShort, Label } from '@navikt/ds-react'
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => <div className="mb-4">{children}</div>
 
-export const ViewKrav = ({ krav }: { krav: KravQL}) => {
-  const user = useUser
+export const ViewKrav = ({ krav }: { krav: KravQL }) => {
   return (
     <div>
       <div className="w-full">
@@ -41,8 +40,17 @@ export const ViewKrav = ({ krav }: { krav: KravQL}) => {
   )
 }
 
-export const AllInfo = ({ krav, alleKravVersjoner, noLastModifiedDate, header }: { krav: KravQL; alleKravVersjoner: KravVersjon[]; noLastModifiedDate?: boolean, header?: boolean }) => {
-  const user = useUser
+export const AllInfo = ({
+  krav,
+  alleKravVersjoner,
+  noLastModifiedDate,
+  header,
+}: {
+  krav: KravQL
+  alleKravVersjoner: KravVersjon[]
+  noLastModifiedDate?: boolean
+  header?: boolean
+}) => {
   const hasKravExpired = () => {
     return krav && krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString())
   }

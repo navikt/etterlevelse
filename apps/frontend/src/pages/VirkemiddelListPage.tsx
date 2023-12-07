@@ -2,7 +2,7 @@ import { Block } from 'baseui/block'
 import { HeadingXXLarge } from 'baseui/typography'
 import React, { useState } from 'react'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { useUser } from '../services/User'
+import { user } from '../services/User'
 import { theme } from '../util'
 import { ettlevColors, maxPageWidth, responsivePaddingLarge } from '../util/theme'
 import { Helmet } from 'react-helmet'
@@ -14,7 +14,6 @@ import { plusIcon } from '../components/Images'
 export const VirkemiddelListPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette virkemiddel' })
-  const user = useUser
 
   return (
     <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>

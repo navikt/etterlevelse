@@ -112,17 +112,9 @@ export const BoolField = (props: { label: string; name: string; nullable?: boole
               p.form.setFieldValue(props.name, radioToBool(value))
             }}
           >
-            <Radio value={YES}>
-              Ja
-            </Radio>
-            <Radio value={NO}>
-              Nei
-            </Radio>
-            {props.nullable && (
-              <Radio value={UNCLARIFIED}>
-                Uavklart
-              </Radio>
-            )}
+            <Radio value={YES}>Ja</Radio>
+            <Radio value={NO}>Nei</Radio>
+            {props.nullable && <Radio value={UNCLARIFIED}>Uavklart</Radio>}
           </RadioGroup>
           <Error fieldName={props.name} fullWidth />
         </div>

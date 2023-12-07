@@ -9,7 +9,6 @@ import AsyncSelect from 'react-select/async'
 import { DropdownIndicator } from './KravBegreperEdit'
 
 export const EditKravRelasjoner = () => {
-
   return (
     <FieldWrapper>
       <FieldArray name="kravRelasjoner">
@@ -20,7 +19,7 @@ export const EditKravRelasjoner = () => {
               <AsyncSelect
                 aria-label="Søk etter krav"
                 placeholder="Søk etter krav"
-                components={{DropdownIndicator}}
+                components={{ DropdownIndicator }}
                 noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
                 controlShouldRenderValue={false}
                 loadingMessage={() => 'Søker...'}
@@ -33,8 +32,8 @@ export const EditKravRelasjoner = () => {
                   control: (base) => ({
                     ...base,
                     cursor: 'text',
-                    height: '48px'
-                  })
+                    height: '48px',
+                  }),
                 }}
               />
 

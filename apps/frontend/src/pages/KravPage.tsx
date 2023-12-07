@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Krav, KravId, KravQL, KravStatus, KravVersjon } from '../constants'
 import { AllInfo, ViewKrav } from '../components/krav/ViewKrav'
 import { EditKrav } from '../components/krav/EditKrav'
-import { useUser } from '../services/User'
+import { user } from '../services/User'
 import { FormikProps } from 'formik'
 import { DeleteItem } from '../components/DeleteItem'
 import { useQuery } from '@apollo/client'
@@ -57,7 +57,6 @@ const getQueryVariableFromParams = (params: Readonly<Partial<KravIdParams>>) => 
 }
 
 export const KravPage = () => {
-  const user = useUser
   const params = useParams<KravIdParams>()
   const [krav, setKrav] = useState<KravQL | undefined>()
   const [kravId, setKravId] = useState<KravId>()
@@ -110,6 +109,7 @@ export const KravPage = () => {
         side: 'Krav side',
         sidetittel: `${kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} ${krav.navn}`,
         section: kravTema?.shortName.toString(),
+        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
       })
     }
   }, [krav, kravTema])
@@ -245,12 +245,12 @@ export const KravPage = () => {
               {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
                 <div>
                   <div className="flex flex-1">
-                    <Button size="small" variant="primary" onClick={() => setEdit(!edit)}>
+                    <Button type="button" size="small" variant="primary" onClick={() => setEdit(!edit)}>
                       Rediger krav
                     </Button>
 
                     {krav.status === KravStatus.AKTIV && (
-                      <Button className="ml-4" size="small" onClick={newVersion} variant="secondary">
+                      <Button type="button" className="ml-4" size="small" onClick={newVersion} variant="secondary">
                         Ny versjon av krav
                       </Button>
                     )}

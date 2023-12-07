@@ -1,11 +1,10 @@
 import React, { Dispatch, RefObject, SetStateAction, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useUser } from '../../services/User'
+import { user } from '../../services/User'
 
 export function useDebouncedState<T>(initialValue: T, delay: number, passThrough?: (val: T) => void): [T, Dispatch<SetStateAction<T>>, T] {
   const [value, setValue] = useState<T>(initialValue)
   const [debouncedValue, setDebouncedValue] = useState<T>(value)
-  const user = useUser
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -37,7 +36,6 @@ export function useUpdateOnChange(value: any) {
 export let updateUser: () => void
 
 export function useAwaitUser() {
-  const user = useUser
   useAwait(user.wait())
   updateUser = useForceUpdate()
 }

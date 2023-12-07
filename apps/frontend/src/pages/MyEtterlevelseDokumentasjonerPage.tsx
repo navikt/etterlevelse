@@ -16,7 +16,7 @@ import { InfoBlock2 } from '../components/common/InfoBlock'
 import moment from 'moment'
 import { useDebouncedState } from '../util/hooks'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
-import { useUser } from '../services/User'
+import { user } from '../services/User'
 import { useNavigate, useParams } from 'react-router-dom'
 import { faExternalLinkAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { borderWidth } from '../components/common/Style'
@@ -39,7 +39,11 @@ type CustomTeamObject = dokumentasjonCount & Team
 export const tabMarginBottom = '48px'
 
 export const MyEtterlevelseDokumentasjonerPage = () => {
-  ampli.logEvent('sidevisning', { side: 'Side for Dokumentasjoner', sidetittel: 'Dokumentere etterlevelse' })
+  ampli.logEvent('sidevisning', {
+    side: 'Side for Dokumentasjoner',
+    sidetittel: 'Dokumentere etterlevelse',
+    role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+  })
 
   return (
     <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
@@ -88,7 +92,6 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
 }
 
 const DokumentasjonTabs = () => {
-  const user = useUser
   const params = useParams<{ tab?: Section }>()
   const navigate = useNavigate()
   const [tab, setTab] = useState<Section>(params.tab || 'mine')
