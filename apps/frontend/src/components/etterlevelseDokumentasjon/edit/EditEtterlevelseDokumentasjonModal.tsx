@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Checkbox, CheckboxGroup, Modal } from '@navikt/ds-react'
 import AsyncSelect from 'react-select/async'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
+import { CSSObjectWithLabel } from 'react-select'
 
 type EditEtterlevelseDokumentasjonModalProps = {
   etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
@@ -250,9 +251,9 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                   styles={{
                                     control: (base) => ({
                                       ...base,
-                                      // cursor: 'text',
+                                      cursor: 'text',
                                       height: '48px',
-                                    }),
+                                    } as CSSObjectWithLabel),
                                   }}
                                 />
                               </div>
