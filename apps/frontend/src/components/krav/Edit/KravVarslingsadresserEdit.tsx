@@ -13,6 +13,7 @@ import { Alert, Button, Loader, Modal, TextField } from '@navikt/ds-react'
 import { EnvelopeClosedIcon, PersonIcon, PlusIcon } from '@navikt/aksel-icons'
 import AsyncSelect from 'react-select/async'
 import { DropdownIndicator } from './KravBegreperEdit'
+import { CSSObjectWithLabel } from 'react-select'
 
 export const KravVarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -157,13 +158,13 @@ export const SlackChannelSearch = ({ added, add, close }: AddVarslingsadressePro
         if (channel) add({ type: AdresseType.SLACK, adresse: channel.id })
         close && close()
       }}
-      // styles={{
-      //   control: (base) => ({
-      //     ...base,
-      //     cursor: 'text',
-      //     height: '48px',
-      //   }),
-      // }}
+      styles={{
+        control: (base) => ({
+          ...base,
+          cursor: 'text',
+          height: '48px',
+        } as CSSObjectWithLabel),
+      }}
     />
   )
 }
@@ -208,13 +209,13 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
                 addEmail(resource.email)
               }
             }}
-            // styles={{
-            //   control: (base) => ({
-            //     ...base,
-            //     cursor: 'text',
-            //     height: '48px',
-            //   }),
-            // }}
+            styles={{
+              control: (base) => ({
+                ...base,
+                cursor: 'text',
+                height: '48px',
+              } as CSSObjectWithLabel),
+            }}
           />
         </div>
         <div className="flex justify-end ml-2.5">

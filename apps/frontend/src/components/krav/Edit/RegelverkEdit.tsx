@@ -9,7 +9,7 @@ import { LovView } from '../../Lov'
 import { RenderTagList } from '../../common/TagList'
 import { Regelverk } from '../../../constants'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import Select from 'react-select'
+import Select, { CSSObjectWithLabel } from 'react-select'
 import { Button, TextField } from '@navikt/ds-react'
 
 type RegelverkEditProps = {
@@ -55,14 +55,14 @@ export const RegelverkEdit = ({ forVirkemiddel }: RegelverkEditProps) => {
                         }
                       }}
                       styles={{
-                        // control: (baseStyles) => ({
-                        //   ...baseStyles,
-                        //   height: '48px',
-                        // }),
-                        // menu: (baseStyles) => ({
-                        //   ...baseStyles,
-                        //   zIndex: 2,
-                        // }),
+                        control: (baseStyles) => ({
+                          ...baseStyles,
+                          height: '48px',
+                        } as CSSObjectWithLabel),
+                        menu: (baseStyles) => ({
+                          ...baseStyles,
+                          zIndex: 2,
+                        } as CSSObjectWithLabel),
                       }}
                     />
                   </div>

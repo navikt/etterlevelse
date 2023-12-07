@@ -7,7 +7,7 @@ import { RenderTagList } from '../../common/TagList'
 import { Begrep } from '../../../constants'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import AsyncSelect from 'react-select/async'
-import { DropdownIndicatorProps, components } from 'react-select'
+import { CSSObjectWithLabel, DropdownIndicatorProps, components } from 'react-select'
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
 
 export const DropdownIndicator = (props: DropdownIndicatorProps) => {
@@ -38,13 +38,13 @@ export const EditBegreper = () => {
                 onChange={(begrep) => {
                   begrep && p.push(begrep)
                 }}
-                // styles={{
-                //   control: (base) => ({
-                //     ...base,
-                //     cursor: 'text',
-                //     height: '48px',
-                //   }),
-                // }}
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    cursor: 'text',
+                    height: '48px',
+                  } as CSSObjectWithLabel),
+                }}
               />
 
               <RenderTagList list={p.form.values.begreper.map((b: Begrep) => b.navn)} onRemove={p.remove} />

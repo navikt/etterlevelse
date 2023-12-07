@@ -7,6 +7,7 @@ import { useSearchKrav } from '../../../api/KravApi'
 import { Chips } from '@navikt/ds-react'
 import AsyncSelect from 'react-select/async'
 import { DropdownIndicator } from './KravBegreperEdit'
+import { CSSObjectWithLabel } from 'react-select'
 
 export const EditKravRelasjoner = () => {
   return (
@@ -28,13 +29,13 @@ export const EditKravRelasjoner = () => {
                 onChange={(krav) => {
                   krav && p.push(krav)
                 }}
-                // styles={{
-                //   control: (base) => ({
-                //     ...base,
-                //     cursor: 'text',
-                //     height: '48px',
-                //   }),
-                // }}
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    cursor: 'text',
+                    height: '48px',
+                  } as CSSObjectWithLabel),
+                }}
               />
 
               <Chips className="mt-2.5">

@@ -11,7 +11,7 @@ import { borderWidth } from '../../common/Style'
 import { RenderTagList } from '../../common/TagList'
 import { navChevronDownIcon } from '../../Images'
 import { Detail } from '@navikt/ds-react'
-import Select from 'react-select'
+import Select, { CSSObjectWithLabel } from 'react-select'
 
 const customOverrides: SelectOverrides = {
   ControlContainer: {
@@ -76,12 +76,12 @@ export const EditKravMultiOptionField = (
                     p.form.setFieldValue(props.name, [])
                   }
                 }}
-                // styles={{
-                //   control: (baseStyles) => ({
-                //     ...baseStyles,
-                //     minHeight: '48px',
-                //   }),
-                // }}
+                styles={{
+                  control: (baseStyles) => ({
+                    ...baseStyles,
+                    minHeight: '48px',
+                  } as CSSObjectWithLabel),
+                }}
               />
               {/* <RenderTagList list={selectedIds.map((v) => options.find((o) => o.value === v)?.label)} onRemove={p.remove} /> */}
             </div>

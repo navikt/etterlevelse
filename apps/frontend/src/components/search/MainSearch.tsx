@@ -6,7 +6,7 @@ import { kravName } from '../../pages/KravPage'
 import { getKravByKravNumberAndVersion, searchKrav, searchKravByNumber } from '../../api/KravApi'
 import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
 import { etterlevelseDokumentasjonName, searchEtterlevelsedokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
-import { DropdownIndicatorProps, OptionProps, components } from 'react-select'
+import { CSSObjectWithLabel, DropdownIndicatorProps, OptionProps, components } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { BodyShort } from '@navikt/ds-react'
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
@@ -141,29 +141,29 @@ const MainSearch = () => {
         isClearable={false}
         loadOptions={useMainSearch}
         onChange={(selectedOption) => selectedOption && navigate([selectedOption].flat()[0].url)}
-        // styles={{
-        //   // Removes default focus-border so it can be replaced with focus from DesignSystem
-        //   control: (base) => ({
-        //     ...base,
-        //     boxShadow: 'none',
-        //     border: 0,
-        //     cursor: 'text',
-        //     div: { div: { color: 'var(--a-text-default)' } },
-        //   }),
-        //   groupHeading: (base) => ({
-        //     ...base,
-        //     color: 'black',
-        //     fontSize: 'var(--a-font-size-large)',
-        //     fontWeight: 'var(--a-font-weight-bold)',
-        //     letterSpacing: 0,
-        //     lineHeight: 'var(--a-font-line-height-large)',
-        //     maring: 0,
-        //   }),
-        //   // Make border and size of input box to be identical with those from DesignSystem
-        //   valueContainer: (base) => ({ ...base, color: 'black' }),
-        //   // Remove separator
-        //   indicatorSeparator: (base) => ({ ...base, display: 'none' }),
-        // }}
+        styles={{
+          // Removes default focus-border so it can be replaced with focus from DesignSystem
+          control: (base) => ({
+            ...base,
+            boxShadow: 'none',
+            border: 0,
+            cursor: 'text',
+            div: { div: { color: 'var(--a-text-default)' } },
+          } as CSSObjectWithLabel),
+          groupHeading: (base) => ({
+            ...base,
+            color: 'black',
+            fontSize: 'var(--a-font-size-large)',
+            fontWeight: 'var(--a-font-weight-bold)',
+            letterSpacing: 0,
+            lineHeight: 'var(--a-font-line-height-large)',
+            maring: 0,
+          } as CSSObjectWithLabel),
+          // Make border and size of input box to be identical with those from DesignSystem
+          valueContainer: (base) => ({ ...base, color: 'black' } as CSSObjectWithLabel),
+          // Remove separator
+          indicatorSeparator: (base) => ({ ...base, display: 'none' } as CSSObjectWithLabel),
+        }}
       />
     </div>
   )
