@@ -41,7 +41,7 @@ export const MainPage = () => {
             <Button className="mr-3" variant="primary">
               Nytt etterlevelsesdokument
             </Button>
-            <Link href="#">
+            <Link href="/dokumentasjoner">
               <Button as="a" variant="tertiary">
                 Alle etterlevelsesdokumenter
               </Button>
