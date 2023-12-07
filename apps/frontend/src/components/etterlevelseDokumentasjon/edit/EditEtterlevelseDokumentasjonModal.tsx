@@ -251,7 +251,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                     control: (base) => ({
                                       ...base,
                                       // cursor: 'text',
-                                      // height: '48px',
+                                      height: '48px',
                                     }),
                                   }}
                                 />
