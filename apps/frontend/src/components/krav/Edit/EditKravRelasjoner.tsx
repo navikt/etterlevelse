@@ -28,13 +28,13 @@ export const EditKravRelasjoner = () => {
                 onChange={(krav) => {
                   krav && p.push(krav)
                 }}
-                styles={{
-                  control: (base) => ({
-                    ...base,
-                    cursor: 'text',
-                    height: '48px',
-                  }),
-                }}
+                // styles={{
+                //   control: (base) => ({
+                //     ...base,
+                //     cursor: 'text',
+                //     height: '48px',
+                //   }),
+                // }}
               />
 
               <Chips className="mt-2.5">
