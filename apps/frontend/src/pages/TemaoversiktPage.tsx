@@ -36,7 +36,7 @@ export const TemaPanels = () => {
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
 
   return (
-    <>
+    <div>
       <div>
         <Heading size="medium">Forstå kravene</Heading>
         <BodyLong>
@@ -48,7 +48,7 @@ export const TemaPanels = () => {
           <TemaPanel key={tema.code} tema={tema} setNum={updateNum} />
         ))}
       </div>
-    </>
+    </div>
   )
 }
 
@@ -56,7 +56,7 @@ export const TemaPanel = ({ tema, setNum }: { tema: TemaCode; setNum: (tema: str
   const lover = codelist.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter({ lover: [...lover.map((l) => l.code)] }, { skip: !lover.length })
   const krav = data?.krav.content || []
-  useEffect(() => setNum(tema.code, krav.length), [krav])
+  useEffect(() => setNum(tema.code, krav.length), [])
 
   if (loading) {
     return <Loader size="large" />
