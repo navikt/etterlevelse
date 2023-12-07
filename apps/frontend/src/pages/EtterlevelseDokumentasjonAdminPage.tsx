@@ -4,25 +4,17 @@ import { useState } from 'react'
 import { UpdateMessage } from './EtterlevelseAdminPage'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { Button, Heading, TextField } from '@navikt/ds-react'
+import { PageLayout } from '../components/scaffold/Page'
 
 export const EtterlevelseDokumentasjonAdminPage = () => {
   const [etterlevelseDokumentasjonId, setEtterlevelseDokumentasjonId] = useState('')
   const [updateMessage, setUpdateMessage] = useState('')
 
   return (
-    <div className="w-full" id="content" role="main">
-      <div className="flex-1 justify-start flex">
-        <CustomizedBreadcrumbs currentPage="Administrere Etterlevelse Dokumentasjon" />
-      </div>
-      <div>
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>Administrere Etterlevelse Dokumentasjon</title>
-        </Helmet>
-        <Heading size="medium" level="1">
-          Administrere Etterlevelse Dokumentasjon
-        </Heading>
-      </div>
+    <PageLayout pageTitle="dministrere Etterlevelse Dokumentasjon" currentPage="Administrere Etterlevelse Dokumentasjon">
+      <Heading size="medium" level="1">
+        Administrere Etterlevelse Dokumentasjon
+      </Heading>
 
       <div className="mt-5">
         <div className="flex items-end">
@@ -52,7 +44,7 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
         </div>
       </div>
       <UpdateMessage message={updateMessage} />
-    </div>
+    </PageLayout>
   )
 }
 export default EtterlevelseDokumentasjonAdminPage

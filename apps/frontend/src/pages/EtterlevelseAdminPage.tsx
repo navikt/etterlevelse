@@ -3,25 +3,17 @@ import { Helmet } from 'react-helmet'
 import { deleteEtterlevelse } from '../api/EtterlevelseApi'
 import { BodyShort, Button, Heading, TextField } from '@navikt/ds-react'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
+import { PageLayout } from '../components/scaffold/Page'
 
 export const EtterlevelseAdminPage = () => {
   const [updateMessage, setUpdateMessage] = useState<string>('')
   const [etterlevelseId, setEtterlevelseId] = useState<string>('')
 
   return (
-    <div className="w-full" id="content" role="main">
-      <div className="flex-1 justify-start flex">
-        <CustomizedBreadcrumbs currentPage="Administrere Etterlevelse" />
-      </div>
-      <div>
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>Administrere Etterlevelse</title>
-        </Helmet>
-        <Heading size="medium" level="1">
-          Administrere Etterlevelse
-        </Heading>
-      </div>
+    <PageLayout pageTitle="Administrere Etterlevelse" currentPage="Administrere Etterlevelse">
+      <Heading size="medium" level="1">
+        Administrere Etterlevelse
+      </Heading>
 
       <div className="mt-5">
         <div className="flex items-end">
@@ -51,7 +43,7 @@ export const EtterlevelseAdminPage = () => {
         </div>
       </div>
       <UpdateMessage message={updateMessage} />
-    </div>
+    </PageLayout>
   )
 }
 
