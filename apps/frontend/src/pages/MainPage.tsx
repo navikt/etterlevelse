@@ -7,12 +7,13 @@ import { ampli } from '../services/Amplitude'
 import { Button, Heading, Link } from '@navikt/ds-react'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import { TemaPanels } from './TemaoversiktPage'
+import { user } from '../services/User'
 
 export const MainPage = () => {
   const [forsideVarsel, setForsideVarsle] = useState<Melding>()
 
   useEffect(() => {
-    ampli.logEvent('sidevisning', { side: 'Hovedside' })
+    ampli.logEvent('sidevisning', { side: 'Hovedside', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER'  })
     ;(async () => {
       await getMeldingByType(MeldingType.FORSIDE).then((r) => {
         if (r.numberOfElements > 0) {

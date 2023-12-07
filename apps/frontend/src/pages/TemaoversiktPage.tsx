@@ -6,10 +6,11 @@ import { useForceUpdate } from '../util/hooks'
 import { ListName, TemaCode, codelist } from '../services/Codelist'
 import { BodyLong, Heading, LinkPanel, Loader, Spacer, Tag } from '@navikt/ds-react'
 import { useKravCounter } from './TemaPage'
+import { user } from '../services/User'
 
 export const TemaOversiktPage = () => {
   useEffect(() => {
-    ampli.logEvent('sidevisning', { side: 'Tema side' })
+    ampli.logEvent('sidevisning', { side: 'Tema side', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER'  })
   }, [])
 
   return (
