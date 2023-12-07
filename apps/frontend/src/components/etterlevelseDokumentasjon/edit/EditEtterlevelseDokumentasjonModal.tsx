@@ -10,7 +10,7 @@ import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../.
 import { Code, codelist, ListName } from '../../../services/Codelist'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import { BoolField, FieldWrapper, InputField, TextAreaField } from '../../common/Inputs'
-import LabelWithTooltip from '../../common/LabelWithTooltip'
+import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { useSearchTeamOptions } from '../../../api/TeamApi'
 import { RenderTagList } from '../../common/TagList'
 import { useNavigate } from 'react-router-dom'
@@ -225,9 +225,10 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                         {(p: FieldArrayRenderProps) => {
                           return (
                             <div className="mb-4">
-                              <LabelWithTooltip
+                              <LabelWithDescription
                                 label={'Legg til behandlinger fra Behandlingskatalogen'}
-                                tooltip="Siden løsningen behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Du kan knytte én eller flere behandlinger til etterlevelsesdokumentet."
+
+                                description="Siden løsningen behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Du kan knytte én eller flere behandlinger til etterlevelsesdokumentet."
                               />
                               <div className="w-full">
                                 <AsyncSelect
