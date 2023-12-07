@@ -54,16 +54,16 @@ export const RegelverkEdit = ({ forVirkemiddel }: RegelverkEditProps) => {
                           setLov(value)
                         }
                       }}
-                      // styles={{
-                      //   control: (baseStyles) => ({
-                      //     ...baseStyles,
-                      //     height: '48px',
-                      //   }),
-                      //   menu: (baseStyles) => ({
-                      //     ...baseStyles,
-                      //     zIndex: 2,
-                      //   }),
-                      // }}
+                      styles={{
+                        // control: (baseStyles) => ({
+                        //   ...baseStyles,
+                        //   height: '48px',
+                        // }),
+                        menu: (baseStyles) => ({
+                          ...baseStyles,
+                          zIndex: 2,
+                        }),
+                      }}
                     />
                   </div>
                   <div className="w-full">
