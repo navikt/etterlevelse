@@ -67,4 +67,5 @@ kpfb() {
 
 # logge inn i gcloud for å ha tilgang til gcp clusters
 alias gli="gcloud auth login"
+
 ```
