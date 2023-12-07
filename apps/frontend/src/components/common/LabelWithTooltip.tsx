@@ -1,10 +1,4 @@
-import * as React from 'react'
-import CustomizedStatefulTooltip from './CustomizedStatefulTooltip'
-import { questionmarkHoverIcon, questionmarkIcon } from '../Images'
-import { Block } from 'baseui/block'
-import { LabelLarge } from 'baseui/typography'
-import { ettlevColors, theme } from '../../util/theme'
-import { buttonContentStyle } from './Button'
+
 import { BodyShort, Button, Label, Tooltip } from '@navikt/ds-react'
 import { InformationSquareIcon, QuestionmarkDiamondIcon } from '@navikt/aksel-icons'
 
