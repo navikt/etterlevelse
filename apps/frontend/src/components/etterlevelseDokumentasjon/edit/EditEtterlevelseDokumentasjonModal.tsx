@@ -76,11 +76,20 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
 
   return (
     <div>
-      <Button onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)} size="small" variant="secondary" className="whitespace-nowrap">
+      <Button
+        onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)}
+        size={props.isEditButton ? 'small' : 'medium'}
+        variant={props.isEditButton ? 'secondary' : 'primary'}
+        className="whitespace-nowrap"
+      >
         {props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Nytt etterlevelsesdokument'}
       </Button>
 
-      <Modal header={{ heading: props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Opprett nytt etterlevelsesdokument' }} open={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
+      <Modal
+        header={{ heading: props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Opprett nytt etterlevelsesdokument' }}
+        open={!!isEtterlevelseDokumentasjonerModalOpen}
+        onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}
+      >
         <Modal.Body>
           <Formik
             initialValues={etterlevelseDokumentasjonMapToFormVal(props.etterlevelseDokumentasjon ? props.etterlevelseDokumentasjon : {})}
