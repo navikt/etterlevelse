@@ -12,6 +12,7 @@ export const MainPage = () => {
   const [forsideVarsel, setForsideVarsle] = useState<Melding>()
 
   useEffect(() => {
+    ampli.logEvent('sidevisning', { side: 'Hovedside' })
     ;(async () => {
       await getMeldingByType(MeldingType.FORSIDE).then((r) => {
         if (r.numberOfElements > 0) {
@@ -21,11 +22,9 @@ export const MainPage = () => {
     })()
   }, [])
 
-  ampli.logEvent('sidevisning', { side: 'Hovedside' })
-
   return (
     <div className="w-full pb-52" id="content" role="main">
-      <div className="bg-[#E6F0FF] p-10">
+      <div className="bg-blue-50 p-10">
         <div className="flex flex-col pd">
           <Heading className="flex justify-center" size="xlarge">
             Etterlevelse i NAV
