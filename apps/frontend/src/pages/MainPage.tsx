@@ -38,7 +38,9 @@ export const MainPage = () => {
             etterlever kravene.
           </span>
           <div className="mt-8 flex justify-end">
-            <EditEtterlevelseDokumentasjonModal />
+            <div className="mr-4">
+              <EditEtterlevelseDokumentasjonModal />
+            </div>
             <Link href="/dokumentasjoner">
               <Button as="a" variant="tertiary">
                 Alle etterlevelsesdokumenter
