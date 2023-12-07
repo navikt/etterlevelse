@@ -17,14 +17,13 @@ import { Krav, KravQL, PageResponse } from '../constants'
 import { useQuery } from '@apollo/client'
 import { QueryHookOptions } from '@apollo/client/react/types/types'
 import { gql } from '@apollo/client/core'
-import { useForceUpdate } from '../util/hooks'
 import { margin } from '../components/common/Style'
 import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { BodyLong, BodyShort, Detail, Heading, Label, LinkPanel, Loader, Spacer, Tag } from '@navikt/ds-react'
+import { BodyShort, Detail, Heading, Label, LinkPanel } from '@navikt/ds-react'
 import { lovdataBase } from '../components/Lov'
 
 export const TemaPage = () => {
@@ -32,7 +31,7 @@ export const TemaPage = () => {
 
   const code = codelist.getCode(ListName.TEMA, tema)
   if (!code) return <>'invalid code'</>
-  return <TemaSide tema={code} />
+  return <TemaView tema={code} />
 }
 
 export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], noHeader?: boolean) => {
@@ -69,12 +68,14 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], noHeader?: b
   )
 }
 
-const TemaSide = ({ tema }: { tema: TemaCode }) => {
+const TemaView = ({ tema }: { tema: TemaCode }) => {
   const lover = codelist.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter({ lover: lover.map((c) => c.code) }, { skip: !lover.length })
   const [kravList, setKravList] = useState<Krav[]>([])
 
-  ampli.logEvent('sidevisning', { side: 'Tema side', sidetittel: tema.shortName })
+  useEffect(() => {
+    ampli.logEvent('sidevisning', { side: 'Tema side', sidetittel: tema.shortName })
+  }, [])
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
