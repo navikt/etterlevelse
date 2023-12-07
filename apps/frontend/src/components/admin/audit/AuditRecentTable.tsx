@@ -35,7 +35,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   const [limit, setLimit] = useState(20)
   const [table, setTable] = useState<ObjectType | undefined>(props.tableType)
   const [page, setPage] = useState(1)
-  
+
   useEffect(() => {
     ampli.logEvent('sidevisning', {
       side: 'Varsel side for admin',
@@ -45,7 +45,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   }, [])
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       props.show && setAudits(await getAudits(page - 1, limit, table))
     })()
   }, [page, limit, props.show, table])
@@ -72,7 +72,6 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   }
 
   const tableOptions = Object.keys(ObjectType).map((ot) => ({ id: ot, label: ot }))
-
 
   return (
     <div>

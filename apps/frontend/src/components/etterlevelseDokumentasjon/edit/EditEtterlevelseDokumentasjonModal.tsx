@@ -100,7 +100,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
             {({ values, submitForm }) => {
               return (
                 <Form>
-                  <TextAreaField noPlaceholder label="Skriv inn tittel på etterlevelsesdokumentet" name="title"/>
+                  <TextAreaField noPlaceholder label="Skriv inn tittel på etterlevelsesdokumentet" name="title" />
 
                   {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
 
@@ -227,7 +227,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                             <div className="mb-4">
                               <LabelWithDescription
                                 label={'Legg til behandlinger fra Behandlingskatalogen'}
-
                                 description="Siden løsningen behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Du kan knytte én eller flere behandlinger til etterlevelsesdokumentet."
                               />
                               <div className="w-full">

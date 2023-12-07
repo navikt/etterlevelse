@@ -34,11 +34,7 @@ export const LabelWithDescription = (props: { label?: string; description?: stri
       <div className={`${props.description ? 'mb-0.5' : undefined}`}>
         <Label>{props.label}</Label>
       </div>
-      {props.description && (
-        <BodyShort className="navds-fieldset__description navds-body-short navds-body-short--medium">
-          {props.description}
-        </BodyShort>
-      )}
+      {props.description && <BodyShort className="navds-fieldset__description navds-body-short navds-body-short--medium">{props.description}</BodyShort>}
     </div>
   )
 }

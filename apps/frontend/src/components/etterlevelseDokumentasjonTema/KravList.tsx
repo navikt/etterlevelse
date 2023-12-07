@@ -20,7 +20,6 @@ type KravListProps = {
 }
 
 export const KravList = ({ kravList, EmptyMessage, sortingAvailable, noStatus, sorting, sortingOptions, etterlevelseDokumentasjon, noVarsling, kravFilter }: KravListProps) => {
-
   if (kravList.length) {
     let sortedKravList = _.cloneDeep(kravList)
     if (sortingAvailable && sorting[0].id === sortingOptions[1].id) {

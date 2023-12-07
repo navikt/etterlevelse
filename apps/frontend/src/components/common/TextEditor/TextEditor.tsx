@@ -69,8 +69,6 @@ const TextEditor = (props: TextEditorProps) => {
     })
   }
 
-
-
   //--------ADD nessesary roles to toolbar options and editor------------
 
   let editorToolbar = document.getElementsByClassName('rdw-editor-toolbar')
@@ -109,7 +107,6 @@ const TextEditor = (props: TextEditorProps) => {
     toolbarLinkWrapper[i].setAttribute('role', 'listbox')
   }
   //--------------------------
-
 
   return (
     <div

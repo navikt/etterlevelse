@@ -61,7 +61,8 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
       regex: /(.*) §(§§)?(§)?\s*(\d+(-\d+)?) ?([aA-zZ]?)( *\([0-9]*\))*/g,
       fn: (key: string, result: string[]) => (
         <Link key={key} href={`${lovdataBase(law)}/§${result[4]}${result[6]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
-          {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]}{result[6]} {result[7]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
+          {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]}
+          {result[6]} {result[7]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
         </Link>
       ),
     },

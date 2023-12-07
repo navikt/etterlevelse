@@ -89,7 +89,7 @@ export const EtterlevelseKravView = ({
   )
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       etterlevelseDokumentasjonId &&
         kravId.kravNummer &&
         getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(etterlevelseDokumentasjonId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
@@ -390,34 +390,40 @@ export const EtterlevelseKravView = ({
             </div>
           </div>
 
-          <Modal
-            open={isNavigationModalOpen}
-            onClose={() => setIsNavigationModalOpen(false)}
-            header={{ heading: 'Hvor ønsker du å gå?' }}
-          >
+          <Modal open={isNavigationModalOpen} onClose={() => setIsNavigationModalOpen(false)} header={{ heading: 'Hvor ønsker du å gå?' }}>
             <Modal.Body>
               <BodyShort>Vi undersøker i en periode hvordan man ønsker å navigere seg mellom krav og temaer.</BodyShort>
               <BodyShort>Trykk på knappen som passer best for deg.</BodyShort>
             </Modal.Body>
             <Modal.Footer>
-              <Link href={getNextKravUrl(nextKravToDocument)} onClick={() => {
-                ampli.logEvent('knapp klikket', {
-                  tekst: 'Til nest krav som ikke er ferdig utfylt i dette temaet',
-                  pagePath: location.pathname,
-                  role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
-                })
-              }}>
-                <Button as="a" variant="secondary">Til neste krav som ikke er ferdig utfylt i dette temaet</Button>
+              <Link
+                href={getNextKravUrl(nextKravToDocument)}
+                onClick={() => {
+                  ampli.logEvent('knapp klikket', {
+                    tekst: 'Til nest krav som ikke er ferdig utfylt i dette temaet',
+                    pagePath: location.pathname,
+                    role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                  })
+                }}
+              >
+                <Button as="a" variant="secondary">
+                  Til neste krav som ikke er ferdig utfylt i dette temaet
+                </Button>
               </Link>
 
-              <Link href={'/dokumentasjon/' + etterlevelseDokumentasjonId} onClick={() => {
-                ampli.logEvent('knapp klikket', {
-                  tekst: 'Til temaoversikten',
-                  pagePath: location.pathname,
-                  role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
-                })
-              }}>
-                <Button as="a" variant="secondary">Til temaoversikten</Button>
+              <Link
+                href={'/dokumentasjon/' + etterlevelseDokumentasjonId}
+                onClick={() => {
+                  ampli.logEvent('knapp klikket', {
+                    tekst: 'Til temaoversikten',
+                    pagePath: location.pathname,
+                    role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                  })
+                }}
+              >
+                <Button as="a" variant="secondary">
+                  Til temaoversikten
+                </Button>
               </Link>
             </Modal.Footer>
           </Modal>

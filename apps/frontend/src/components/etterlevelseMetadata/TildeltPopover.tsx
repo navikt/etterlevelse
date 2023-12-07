@@ -20,7 +20,6 @@ type TildeltPopoverProps = {
 }
 
 export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata, icon, iconColor }: TildeltPopoverProps) => {
-
   return (
     <StatefulPopover
       focusLock={true}
