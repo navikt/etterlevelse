@@ -5,7 +5,7 @@ import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { ampli } from '../services/Amplitude'
 import { TemaListeUtenBrodsti } from './TemaPage'
-import { Button, Heading } from '@navikt/ds-react'
+import { Button, Heading, Link } from '@navikt/ds-react'
 
 export const MainPage = () => {
   const [forsideVarsel, setForsideVarsle] = useState<Melding>()
@@ -38,10 +38,14 @@ export const MainPage = () => {
             etterlever kravene.
           </span>
           <div className="mt-8 flex justify-end">
-            <Button className="mr-3" variant="secondary">
+            <Button className="mr-3" variant="primary">
               Nytt etterlevelsesdokument
             </Button>
-            <Button variant="tertiary">Alle etterlevelsesdokumenter</Button>
+            <Link href="#">
+              <Button as="a" variant="tertiary">
+                Alle etterlevelsesdokumenter
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
