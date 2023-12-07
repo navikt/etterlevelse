@@ -13,14 +13,14 @@ export const MainPage = () => {
   const [forsideVarsel, setForsideVarsle] = useState<Melding>()
 
   useEffect(() => {
-    ampli.logEvent('sidevisning', { side: 'Hovedside', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER'  })
-    ;(async () => {
-      await getMeldingByType(MeldingType.FORSIDE).then((r) => {
-        if (r.numberOfElements > 0) {
-          setForsideVarsle(r.content[0])
-        }
-      })
-    })()
+    ampli.logEvent('sidevisning', { side: 'Hovedside', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
+      ; (async () => {
+        await getMeldingByType(MeldingType.FORSIDE).then((r) => {
+          if (r.numberOfElements > 0) {
+            setForsideVarsle(r.content[0])
+          }
+        })
+      })()
   }, [])
 
   return (
@@ -51,30 +51,26 @@ export const MainPage = () => {
         </div>
       </div>
 
-      <div className="flex flex-col items-center w-full">
-        <Wide>
-          <div className="mt-8">
-            <TemaPanels />
-          </div>
-        </Wide>
+      <div className="flex flex-col items-center w-full bg-no-repeat bg-[left_4.5rem] bg-[url('/src/resources/icons/main-page-background-icon.svg')]">
+        <div className="mt-8">
+          <TemaPanels />
+        </div>
 
-        <Narrow>
-          <div className="mt-16 mb-32" id="forsideVarselMelding">
-            {forsideVarsel?.meldingStatus === MeldingStatus.ACTIVE && (
-              <>
-                {forsideVarsel.alertType === AlertType.INFO ? (
-                  <div className="border-solid border-1 mt-16 p-8 bg-surface-info-subtle border-surface-info">
-                    <Markdown source={forsideVarsel.melding} />
-                  </div>
-                ) : (
-                  <div className="border-solid border-1 mt-16 p-8 bg-surface-warning-subtle border-surface-warning">
-                    <Markdown source={forsideVarsel.melding} />
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        </Narrow>
+        <div className="mt-16 mb-32" id="forsideVarselMelding">
+          {forsideVarsel?.meldingStatus === MeldingStatus.ACTIVE && (
+            <>
+              {forsideVarsel.alertType === AlertType.INFO ? (
+                <div className="border-solid border-1 mt-16 p-8 bg-surface-info-subtle border-surface-info">
+                  <Markdown source={forsideVarsel.melding} />
+                </div>
+              ) : (
+                <div className="border-solid border-1 mt-16 p-8 bg-surface-warning-subtle border-surface-warning">
+                  <Markdown source={forsideVarsel.melding} />
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   )
