@@ -9,7 +9,7 @@ import {
 import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../../../constants'
 import { Code, codelist, ListName } from '../../../services/Codelist'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
-import { BoolField, FieldWrapper, InputField } from '../../common/Inputs'
+import { BoolField, FieldWrapper, InputField, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { useSearchTeamOptions } from '../../../api/TeamApi'
 import { RenderTagList } from '../../common/TagList'
@@ -100,7 +100,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
             {({ values, submitForm }) => {
               return (
                 <Form>
-                  <InputField disablePlaceHolder label="Skriv inn tittel på etterlevelsesdokumentet" name="title" />
+                  <TextAreaField noPlaceholder label="Skriv inn tittel på etterlevelsesdokumentet" name="title"/>
 
                   {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
 
