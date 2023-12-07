@@ -59,10 +59,10 @@ export const RegelverkEdit = ({ forVirkemiddel }: RegelverkEditProps) => {
                         //   ...baseStyles,
                         //   height: '48px',
                         // }),
-                        menu: (baseStyles) => ({
-                          ...baseStyles,
-                          zIndex: 2,
-                        }),
+                        // menu: (baseStyles) => ({
+                        //   ...baseStyles,
+                        //   zIndex: 2,
+                        // }),
                       }}
                     />
                   </div>

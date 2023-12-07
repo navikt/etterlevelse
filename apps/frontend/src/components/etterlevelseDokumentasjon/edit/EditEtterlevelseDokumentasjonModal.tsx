@@ -247,13 +247,13 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                   onChange={(value) => {
                                     value && p.push(value)
                                   }}
-                                  // styles={{
-                                  //   control: (base) => ({
-                                  //     ...base,
-                                  //     cursor: 'text',
-                                  //     height: '48px',
-                                  //   }),
-                                  // }}
+                                  styles={{
+                                    control: (base) => ({
+                                      ...base,
+                                      // cursor: 'text',
+                                      // height: '48px',
+                                    }),
+                                  }}
                                 />
                               </div>
                               <RenderTagList list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} />
@@ -294,7 +294,9 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                   }}
                                   styles={{
                                     control: (base) => ({
-                                      ...base
+                                      ...base,
+                                      cursor: 'text',
+                                      height: '48px',
                                     }),
                                   }}
                                 />
