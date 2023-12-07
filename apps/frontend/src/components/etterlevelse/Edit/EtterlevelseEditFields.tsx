@@ -167,15 +167,15 @@ export const EtterlevelseEditFields = ({
                             values.status = EtterlevelseStatus.OPPFYLLES_SENERE
                           }
                           ampli.logEvent('knapp klikket', {
-                            tekst: 'Lagre og fortsett til neste krav',
+                            tekst: 'Lagre og fortsett',
                             pagePath: location.pathname,
                             role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
                           })
                           submitForm()
                         }}
                       >
-                        Lagre og fortsett til neste krav
-                        {/* Lagre og fortsett senere */}
+                        {/* Lagre og fortsett til neste krav */}
+                        Lagre og fortsett senere
                       </Button>
                       <Button
                         disabled={disableEdit || isOppfylesSenere}
@@ -188,15 +188,15 @@ export const EtterlevelseEditFields = ({
                             }
                           })
                           ampli.logEvent('knapp klikket', {
-                            tekst: 'Sett krav til ferdig utfylt og fortsett til neste krav',
+                            tekst: 'Sett krav til ferdig utfylt',
                             pagePath: location.pathname,
                             role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
                           })
                           submitForm()
                         }}
                       >
-                        Sett krav til ferdig utfylt og fortsett til neste krav
-                        {/* Ferdig utfylt */}
+                        {/* Sett krav til ferdig utfylt og fortsett til neste krav */}
+                        Ferdig utfylt
                       </Button>
                     </div>
                   )}
