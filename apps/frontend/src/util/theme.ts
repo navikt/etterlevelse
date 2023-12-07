@@ -42,6 +42,7 @@ export const ettlevColors = {
   focusOutline: '#0056B4',
   navDypBla: '#004367',
   navLysBla: '#E5F0F7',
+  lysBla: '#E6F1F8',
 }
 
 export const primitives: ThemePrimitives & { primary150: string; primary350: string } = {

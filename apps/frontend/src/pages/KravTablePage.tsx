@@ -4,12 +4,11 @@ import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import moment from 'moment'
 import { codelist, ListName } from '../services/Codelist'
 import { kravStatus } from './KravPage'
-import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { BodyShort, Heading, Link, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
 import { handleSort } from '../util/handleTableSort'
 import { user } from '../services/User'
+import { PageLayout } from '../components/scaffold/Page'
 
 export const KravTablePage = () => {
   const [tableContent, setTableContent] = useState<Krav[]>([])
@@ -48,7 +47,7 @@ export const KravTablePage = () => {
     .slice((page - 1) * rowsPerPage, page * rowsPerPage)
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
       setTableContent(mappedKraver)
@@ -57,19 +56,10 @@ export const KravTablePage = () => {
   }, [])
 
   return (
-    <div className="w-full" id="content" role="main">
-      <div className="flex-1 justify-start flex">
-        <CustomizedBreadcrumbs currentPage="Administrere Krav" />
-      </div>
-      <div>
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>Administrere Krav</title>
-        </Helmet>
-        <Heading size="medium" level="1">
-          Administrere Krav
-        </Heading>
-      </div>
+    <PageLayout pageTitle="Administrere Krav" currentPage="Administrere Krav">
+      <Heading size="medium" level="1">
+        Administrere Krav
+      </Heading>
 
       {tableContent.length && (
         <div className="w-full">
@@ -135,6 +125,6 @@ export const KravTablePage = () => {
           </div>
         </div>
       )}
-    </div>
+    </PageLayout>
   )
 }

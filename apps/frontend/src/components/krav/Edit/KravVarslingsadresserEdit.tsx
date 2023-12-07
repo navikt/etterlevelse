@@ -157,13 +157,13 @@ export const SlackChannelSearch = ({ added, add, close }: AddVarslingsadressePro
         if (channel) add({ type: AdresseType.SLACK, adresse: channel.id })
         close && close()
       }}
-      styles={{
-        control: (base) => ({
-          ...base,
-          cursor: 'text',
-          height: '48px',
-        }),
-      }}
+      // styles={{
+      //   control: (base) => ({
+      //     ...base,
+      //     cursor: 'text',
+      //     height: '48px',
+      //   }),
+      // }}
     />
   )
 }
@@ -208,13 +208,13 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
                 addEmail(resource.email)
               }
             }}
-            styles={{
-              control: (base) => ({
-                ...base,
-                cursor: 'text',
-                height: '48px',
-              }),
-            }}
+            // styles={{
+            //   control: (base) => ({
+            //     ...base,
+            //     cursor: 'text',
+            //     height: '48px',
+            //   }),
+            // }}
           />
         </div>
         <div className="flex justify-end ml-2.5">

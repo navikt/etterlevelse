@@ -17,24 +17,22 @@ import { Krav, KravQL, PageResponse } from '../constants'
 import { useQuery } from '@apollo/client'
 import { QueryHookOptions } from '@apollo/client/react/types/types'
 import { gql } from '@apollo/client/core'
-import { useForceUpdate } from '../util/hooks'
 import { margin } from '../components/common/Style'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
-import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { BodyLong, BodyShort, Detail, Heading, Label, LinkPanel, Loader, Spacer, Tag } from '@navikt/ds-react'
+import { BodyShort, Detail, Heading, Label, LinkPanel } from '@navikt/ds-react'
 import { lovdataBase } from '../components/Lov'
 import { user } from '../services/User'
+import { PageLayout } from '../components/scaffold/Page'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
-  if (!tema) return <TemaListe />
 
   const code = codelist.getCode(ListName.TEMA, tema)
   if (!code) return <>'invalid code'</>
-  return <TemaSide tema={code} />
+  return <TemaView tema={code} />
 }
 
 export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], noHeader?: boolean) => {
@@ -71,7 +69,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], noHeader?: b
   )
 }
 
-const TemaSide = ({ tema }: { tema: TemaCode }) => {
+const TemaView = ({ tema }: { tema: TemaCode }) => {
   const lover = codelist.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter({ lover: lover.map((c) => c.code) }, { skip: !lover.length })
   const [kravList, setKravList] = useState<Krav[]>([])
@@ -89,7 +87,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
-      ;(async () => {
+      ; (async () => {
         const allKravPriority = await getAllKravPriority()
         const kraver = _.cloneDeep(data.krav.content)
         kraver.map((k) => {
@@ -103,14 +101,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
   }, [data])
 
   return (
-    <div className="w-full" id="content" role="main">
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>{tema.shortName}</title>
-      </Helmet>
-      <div className="flex-1 justify-start flex">
-        <CustomizedBreadcrumbs paths={breadcrumbPaths} currentPage={tema.shortName} />
-      </div>
+    <PageLayout pageTitle={tema.shortName} breadcrumbPaths={breadcrumbPaths} currentPage={tema.shortName}>
       {getTemaMainHeader(tema, lover)}
       <div className="mt-6">
         <Label>{loading ? '?' : data?.krav.numberOfElements || 0} krav</Label>
@@ -126,58 +117,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
           </div>
         )}
       </div>
-    </div>
-  )
-}
-
-const sectionProps: BlockProps = {
-  display: 'flex',
-  width: '100%',
-  justifyContent: 'space-between',
-  flexWrap: true,
-}
-
-const TemaListe = () => {
-  const [num] = useState<{ [t: string]: number }>({})
-  const update = useForceUpdate()
-
-  useEffect(() => {
-    ampli.logEvent('sidevisning', { side: 'Tema side', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
-  }, [])
-
-  const updateNum = (tema: string, temaNum: number) => {
-    num[tema] = temaNum
-    update()
-  }
-
-  const kravAntall = Object.values(num).reduce((p, c) => p + c, 0)
-  const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
-
-  return (
-    <div className="w-full" role="main" id="content">
-      <div className="w-full flex justify-center items-center flex-col">
-        <div className="w-full max-w-7xl px-8">
-          <div className="flex-1 justify-start flex">
-            <CustomizedBreadcrumbs currentPage="Forstå kravene" />
-          </div>
-          <div>
-            <Helmet>
-              <meta charSet="utf-8" />
-              <title>Forstå kravene</title>
-            </Helmet>
-            <Heading size="medium">Forstå kravene</Heading>
-            <BodyLong>
-              Totalt {kravAntall} krav fordelt på {temaListe.length} temaer
-            </BodyLong>
-          </div>
-          <div className="mt-6">
-            {temaListe.map((tema) => (
-              <TemaPanel key={tema.code} tema={tema} setNum={updateNum} />
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
+    </PageLayout>
   )
 }
 
@@ -186,36 +126,6 @@ export const cardHeight = '220px'
 export const cardMaxheight = '250px'
 const headerBgOverlap = '47px'
 
-export const TemaPanel = ({ tema, setNum }: { tema: TemaCode; setNum: (tema: string, num: number) => void }) => {
-  const lover = codelist.getCodesForTema(tema.code)
-  const { data, loading } = useKravCounter({ lover: [...lover.map((l) => l.code)] }, { skip: !lover.length })
-  const krav = data?.krav.content || []
-  useEffect(() => setNum(tema.code, krav.length), [krav])
-
-  if (loading) {
-    return <Loader size="large" />
-  }
-
-  return (
-    <LinkPanel className="mb-2" key={tema.code} href={'/tema/' + tema.code}>
-      <div className="w-full flex items-center ">
-        <div>
-          <LinkPanel.Title className="flex">{tema.shortName}</LinkPanel.Title>
-          <LinkPanel.Description className="lg:flex items-center gap-2">
-            {lover.map((l, i) => (
-              <div key={l.code} className="flex items-center gap-2">
-                {l.shortName}
-                {i < lover.length - 1 && <span className="hidden lg:block h-2 w-2 rotate-45 rounded-[1px] bg-red-200"></span>}
-              </div>
-            ))}
-          </LinkPanel.Description>
-        </div>
-        <Spacer />
-        <Tag variant="info">{krav.length || 0} krav</Tag>
-      </div>
-    </LinkPanel>
-  )
-}
 
 export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans: string[]; setNum: (tema: string, num: number) => void }) => {
   const lover = codelist.getCodesForTema(tema.code)

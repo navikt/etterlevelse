@@ -1,5 +1,3 @@
-import { Helmet } from 'react-helmet'
-import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import EditMelding from '../components/varslinger/EditMelding'
@@ -10,27 +8,22 @@ import { AuditRecentTable } from '../components/admin/audit/AuditRecentTable'
 import { ampli } from '../services/Amplitude'
 import EditOmEtterlevelse from '../components/varslinger/EditOmEtterlevelse'
 import { Heading, Tabs } from '@navikt/ds-react'
+import { PageLayout } from '../components/scaffold/Page'
 
 type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE | MeldingType.OM_ETTERLEVELSE
 
 export const VarselPage = () => {
   return (
-    <div className="w-full" id="content" role="main">
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Varslinger</title>
-      </Helmet>
-      <div>
-        <CustomizedBreadcrumbs currentPage="Varslinger" />
-        <Heading className="mt-2" size="medium" level="1">
-          Varslinger
-        </Heading>
-      </div>
+    <PageLayout pageTitle="Varslinger" currentPage="Varslinger">
+
+      <Heading className="mt-2" size="medium" level="1">
+        Varslinger
+      </Heading>
 
       <div className="pt-6">
         <VarselTabs />
       </div>
-    </div>
+    </PageLayout>
   )
 }
 
@@ -53,7 +46,7 @@ const VarselTabs = () => {
   const [melding, setMelding] = useState<Melding>()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       setLoading(true)
       if (tab !== 'utsendtMelding') {
         ampli.logEvent('sidevisning', { side: 'Varsel side for admin', sidetittel: 'Opprett varsel melding for ' + tab })

@@ -28,6 +28,7 @@ import { useEffect } from 'react'
 import { searchEtterlevelsedokumentasjonByBehandlingId } from './api/EtterlevelseDokumentasjonApi'
 import { ampli } from './services/Amplitude'
 import { Loader } from '@navikt/ds-react'
+import { TemaOversiktPage } from './pages/TemaoversiktPage'
 
 const AppRoutes = (): JSX.Element => {
   useEffect(() => {
@@ -96,7 +97,7 @@ const AppRoutes = (): JSX.Element => {
       <Route path="/admin/varsel" element={<PrivateRoute component={<VarselPage />} adminPage />} caseSensitive={true} />
 
       <Route path="/tema/:tema" element={<TemaPage />} caseSensitive={true} />
-      <Route path="/tema/" element={<TemaPage />} caseSensitive={true} />
+      <Route path="/tema/" element={<TemaOversiktPage />} caseSensitive={true} />
 
       <Route path="/help" element={<RedirectHelpUrl />} caseSensitive={true} />
       <Route path="/omstottetiletterlevelse" element={<FAQ />} caseSensitive={true} />

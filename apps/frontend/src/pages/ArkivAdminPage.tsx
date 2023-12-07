@@ -1,6 +1,5 @@
 import moment from 'moment'
 import { useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet'
 import {
   arkiveringMapToFormVal,
   arkiveringStatusToString,
@@ -12,11 +11,11 @@ import {
 
 import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../constants'
 import { ampli } from '../services/Amplitude'
-import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { BodyShort, Button, Heading, Link, Pagination, Select, SortState, Spacer, Table, TextField } from '@navikt/ds-react'
 import { UpdateMessage } from './EtterlevelseAdminPage'
 import { handleSort } from '../util/handleTableSort'
 import { user } from '../services/User'
+import { PageLayout } from '../components/scaffold/Page'
 
 export const ArkivAdminPage = () => {
   const [arkiveringId, setArkiveringId] = useState<string>('')
@@ -64,7 +63,7 @@ export const ArkivAdminPage = () => {
   ]
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const arkivering = await getAllArkivering()
       const mappedArkivering = arkivering.map((a) => arkiveringMapToFormVal(a))
       setTableContent(mappedArkivering)
@@ -77,7 +76,7 @@ export const ArkivAdminPage = () => {
   }, [])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const arkivering = await getAllArkivering()
       const mappedArkivering = arkivering.map((a) => arkiveringMapToFormVal(a))
       setTableContent(mappedArkivering)
@@ -85,15 +84,11 @@ export const ArkivAdminPage = () => {
   }, [reloadTable])
 
   return (
-    <div className="w-full" id="content" role="main">
-      <div className="flex-1 justify-start flex">
-        <CustomizedBreadcrumbs currentPage="Administrere Arkivering" />
-      </div>
+    <PageLayout
+      pageTitle="Administrere Arkivering"
+      currentPage="Administrere Arkivering"
+    >
       <div>
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>Administrere Arkivering</title>
-        </Helmet>
         <Heading size="medium" level="1">
           Administrere Arkivering
         </Heading>
@@ -103,7 +98,7 @@ export const ArkivAdminPage = () => {
         <TextField label="Oppdatere arkivering status" placeholder="Arkiverings UID" onChange={(e) => setArkiveringId(e.target.value)} className="flex-1 mr-3" />
         <Select label="Velg status" className="flex-1 mr-3" value={arkiveringsStatus} onChange={(e) => setArkiveringsStatus(e.target.value as EtterlevelseArkivStatus)}>
           {options.map((o, i) => {
-            ;<option value="">Velg status</option>
+            ; <option value="">Velg status</option>
             return (
               <option key={i + '_' + o.label} value={o.id}>
                 {o.label}
@@ -215,7 +210,7 @@ export const ArkivAdminPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </PageLayout>
   )
 }
 export default ArkivAdminPage

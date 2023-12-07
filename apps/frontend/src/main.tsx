@@ -32,11 +32,7 @@ const Main = (props: any) => {
 
             <div className="flex flex-col w-full items-center bg-white">
               <Header />
-              <div className="flex flex-col w-full max-w-7xl bg-white min-h-screen">
-                <div className="px-2 pb-6">
-                  <AppRoutes />
-                </div>
-              </div>
+              <AppRoutes />
             </div>
           </BrowserRouter>
           <ErrorModal />

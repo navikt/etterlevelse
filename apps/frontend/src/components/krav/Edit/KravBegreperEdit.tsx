@@ -38,13 +38,13 @@ export const EditBegreper = () => {
                 onChange={(begrep) => {
                   begrep && p.push(begrep)
                 }}
-                styles={{
-                  control: (base) => ({
-                    ...base,
-                    cursor: 'text',
-                    height: '48px',
-                  }),
-                }}
+                // styles={{
+                //   control: (base) => ({
+                //     ...base,
+                //     cursor: 'text',
+                //     height: '48px',
+                //   }),
+                // }}
               />
 
               <RenderTagList list={p.form.values.begreper.map((b: Begrep) => b.navn)} onRemove={p.remove} />
