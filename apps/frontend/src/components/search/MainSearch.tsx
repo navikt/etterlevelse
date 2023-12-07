@@ -148,7 +148,7 @@ const MainSearch = () => {
             boxShadow: 'none',
             border: 0,
             cursor: 'text',
-            div: { div: { color: 'var(--a-text-default)' } },
+            // div: { div: { color: 'var(--a-text-default)' } },
           }),
           groupHeading: (base) => ({
             ...base,
