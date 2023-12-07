@@ -11,6 +11,7 @@ import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
 import { useQuery } from '@apollo/client'
 import { sortKraverByPriority } from '../util/sort'
 import { user } from '../services/User'
+import { PageLayout } from '../components/scaffold/Page'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
@@ -98,16 +99,13 @@ export const EtterlevelseDokumentasjonPage = () => {
   ]
 
   return (
-    <div role="main" id="content">
+    <PageLayout
+      pageTitle={`K${kravId?.kravNummer?.toString()}.${kravId?.kravVersjon?.toString()} ${temaData?.shortName} E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title.toString()}`}
+      currentPage={'K' + kravId?.kravNummer + '.' + kravId?.kravVersjon}
+      breadcrumbPaths={breadcrumbPaths}
+    >
       {etterlevelseDokumentasjon && (
         <div>
-          <Helmet>
-            <meta charSet="utf-8" />
-            <title>
-              {`K${kravId?.kravNummer?.toString()}.${kravId?.kravVersjon?.toString()} ${temaData?.shortName} E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`}
-            </title>
-          </Helmet>
-          <CustomizedBreadcrumbs currentPage={'K' + kravId?.kravNummer + '.' + kravId?.kravVersjon} paths={breadcrumbPaths} />
           {kravId && etterlevelseDokumentasjon && (
             <KravView
               nextKravToDocument={nextKravToDocument}
@@ -127,6 +125,6 @@ export const EtterlevelseDokumentasjonPage = () => {
           )}
         </div>
       )}
-    </div>
+    </PageLayout>
   )
 }

@@ -29,6 +29,7 @@ import { env } from '../util/env'
 import { Teams } from '../components/common/TeamName'
 import { Helmet } from 'react-helmet'
 import { hotjar } from 'react-hotjar'
+import { PageLayout } from '../components/scaffold/Page'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
@@ -173,14 +174,11 @@ export const DokumentasjonPage = () => {
   }
 
   return (
-    <div role="main" id="content">
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>
-          E{etterlevelseDokumentasjon.etterlevelseNummer.toString()} {etterlevelseDokumentasjon.title}
-        </title>
-      </Helmet>
-      <CustomizedBreadcrumbs currentPage={'Temaoversikt'} paths={breadcrumbPaths} />
+    <PageLayout
+      pageTitle={'E' + etterlevelseDokumentasjon.etterlevelseNummer.toString() + ' ' + etterlevelseDokumentasjon.title}
+      currentPage="Temaoversikt"    
+      breadcrumbPaths={breadcrumbPaths}
+    >
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Heading level="1" size="medium">
@@ -357,7 +355,7 @@ export const DokumentasjonPage = () => {
           />
         </div>
       </div>
-    </div>
+    </PageLayout>
   )
 }
 

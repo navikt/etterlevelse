@@ -8,6 +8,7 @@ import { Markdown } from '../components/common/Markdown'
 import moment from 'moment'
 import { user } from '../services/User'
 import { BodyLong, Detail, Heading } from '@navikt/ds-react'
+import { PageLayout } from '../components/scaffold/Page'
 
 export const FAQ = () => {
   const [melding, setMelding] = useState<Melding>()
@@ -30,15 +31,10 @@ export const FAQ = () => {
   })
 
   return (
-    <div className="w-full" id="content" role="main">
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Om Støtte til etterlevelse</title>
-      </Helmet>
-      <div className="w-full flex">
-        <CustomizedBreadcrumbs currentPage="Om Støtte til etterlevelse" />
-      </div>
-
+    <PageLayout
+      pageTitle="Om Støtte til etterlevelse"
+      currentPage="Om Støtte til etterlevelse"
+    >
       <div className="flex justify-center w-full">
         <div>
           <div className="max-w-4xl">
@@ -65,6 +61,6 @@ export const FAQ = () => {
           </div>
         </div>
       </div>
-    </div>
+    </PageLayout>
   )
 }
