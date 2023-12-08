@@ -23,7 +23,7 @@
         <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
         <shedlock.version>5.10.1</shedlock.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <graphql-spring-boot-starter.version>15.0.0</graphql-spring-boot-starter.version>
+        <graphql-spring-boot-starter.version>15.1.0</graphql-spring-boot-starter.version>
         <graphql.version>21.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
 
