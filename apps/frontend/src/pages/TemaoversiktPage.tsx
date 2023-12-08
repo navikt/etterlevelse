@@ -23,7 +23,7 @@ export const TemaOversiktPage = () => {
   )
 }
 
-export const TemaPanels = () => {
+export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
   const [num] = useState<{ [t: string]: number }>({})
   const update = useForceUpdate()
 
@@ -38,7 +38,7 @@ export const TemaPanels = () => {
   return (
     <div>
       <div>
-        <Heading size="medium">Forstå kravene</Heading>
+        <Heading size={subContent ? 'small' : 'medium'} level={subContent ? '2' : '1'}>Forstå kravene</Heading>
         <BodyLong>
           Totalt {kravAntall} krav fordelt på {temaListe.length} temaer
         </BodyLong>
