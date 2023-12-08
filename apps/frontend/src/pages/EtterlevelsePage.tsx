@@ -11,7 +11,7 @@ import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsi
 import { getKravByKravNumberAndVersion } from '../api/KravApi'
 import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { user } from '../services/User'
 
@@ -45,7 +45,7 @@ export const EtterlevelsePage = () => {
       ampli.logEvent('sidevisning', {
         side: 'Etterlevelse side',
         sidetittel: `Etterlevelse: K${etterlevelse.kravNummer.toString()}.${etterlevelse.kravVersjon.toString()} ${krav?.navn}`,
-        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+        ...userRoleEventProp
       })
     }
   }, [etterlevelse])

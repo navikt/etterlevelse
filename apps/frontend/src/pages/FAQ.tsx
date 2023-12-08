@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { Melding, MeldingType } from '../constants'
 import { getMeldingByType, mapMeldingToFormValue } from '../api/MeldingApi'
 import { Markdown } from '../components/common/Markdown'
@@ -27,7 +27,7 @@ export const FAQ = () => {
   ampli.logEvent('sidevisning', {
     side: 'FAQ side',
     sidetittel: 'Om Støtte til etterlevelse',
-    role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+    ...userRoleEventProp
   })
 
   return (

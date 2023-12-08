@@ -4,7 +4,7 @@ import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { KravId, KravMedPrioriteringOgEtterlevelseQuery } from '../api/KravApi'
 import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus, PageResponse } from '../constants'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
@@ -82,7 +82,7 @@ export const EtterlevelseDokumentasjonPage = () => {
         sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`,
         section: `K${kravId.kravNummer}.${kravId.kravVersjon}`,
         temaKey: temaData.shortName.toString(),
-        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+        ...userRoleEventProp
       })
     }
   }, [etterlevelseDokumentasjon])

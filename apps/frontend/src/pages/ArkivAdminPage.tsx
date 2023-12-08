@@ -10,7 +10,7 @@ import {
 } from '../api/ArkiveringApi'
 
 import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../constants'
-import { ampli } from '../services/Amplitude'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { BodyShort, Button, Heading, Link, Pagination, Select, SortState, Spacer, Table, TextField } from '@navikt/ds-react'
 import { UpdateMessage } from './EtterlevelseAdminPage'
 import { handleSort } from '../util/handleTableSort'
@@ -70,7 +70,7 @@ export const ArkivAdminPage = () => {
       ampli.logEvent('sidevisning', {
         side: 'Etterlevelse arkivering admin side',
         sidetittel: 'Administrere arkivering',
-        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+        ...userRoleEventProp
       })
     })()
   }, [])

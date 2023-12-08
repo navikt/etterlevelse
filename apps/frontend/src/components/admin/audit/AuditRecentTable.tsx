@@ -8,7 +8,7 @@ import { intl } from '../../../util/intl/intl'
 import { getAudits } from '../../../api/AuditApi'
 import * as _ from 'lodash'
 import { JsonView } from 'react-json-view-lite'
-import { ampli } from '../../../services/Amplitude'
+import { ampli, userRoleEventProp } from '../../../services/Amplitude'
 import { BodyShort, Button, Heading, Label, Modal, Pagination, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
 import { user } from '../../../services/User'
 
@@ -40,7 +40,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
     ampli.logEvent('sidevisning', {
       side: 'Varsel side for admin',
       sidetittel: 'Log side for varslinger',
-      role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+      ...userRoleEventProp
     })
   }, [])
 

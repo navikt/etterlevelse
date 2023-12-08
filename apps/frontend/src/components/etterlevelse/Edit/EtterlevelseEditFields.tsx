@@ -13,7 +13,7 @@ import _ from 'lodash'
 import { DateField } from '../../common/Inputs'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
 import { Alert, BodyShort, Button, Checkbox, Label, Modal } from '@navikt/ds-react'
-import { ampli } from '../../../services/Amplitude'
+import { ampli, userRoleEventProp } from '../../../services/Amplitude'
 import { user } from '../../../services/User'
 
 type EditProps = {
@@ -169,7 +169,7 @@ export const EtterlevelseEditFields = ({
                           ampli.logEvent('knapp klikket', {
                             tekst: 'Lagre og fortsett',
                             pagePath: location.pathname,
-                            role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                            ...userRoleEventProp
                           })
                           submitForm()
                         }}
@@ -190,7 +190,7 @@ export const EtterlevelseEditFields = ({
                           ampli.logEvent('knapp klikket', {
                             tekst: 'Sett krav til ferdig utfylt',
                             pagePath: location.pathname,
-                            role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                            ...userRoleEventProp
                           })
                           submitForm()
                         }}
@@ -212,7 +212,7 @@ export const EtterlevelseEditFields = ({
                         ampli.logEvent('knapp klikket', {
                           tekst: 'Avbryt uten endring i etterlevelse',
                           pagePath: location.pathname,
-                          role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                          ...userRoleEventProp
                         })
                         close()
                       } else {
@@ -243,7 +243,7 @@ export const EtterlevelseEditFields = ({
                         ampli.logEvent('knapp klikket', {
                           context: 'Avbryt med endring i etterlevelse',
                           pagePath: location.pathname,
-                          role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                          ...userRoleEventProp
                         })
                         close()
                       }}

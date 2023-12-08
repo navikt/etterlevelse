@@ -9,7 +9,7 @@ import { etterlevelseName } from './EtterlevelsePage'
 import { user } from '../services/User'
 import { maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { Loader } from '@navikt/ds-react'
 
 export const EtterlevelseListPage = () => {
@@ -17,7 +17,7 @@ export const EtterlevelseListPage = () => {
 
   useEffect(() => {
     if (!loading) {
-      ampli.logEvent('sidevisning', { side: 'Dokumentasjons liste for etterlevelse', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
+      ampli.logEvent('sidevisning', { side: 'Dokumentasjons liste for etterlevelse', ...userRoleEventProp })
     }
   }, [loading])
 

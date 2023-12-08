@@ -12,7 +12,7 @@ import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
 import { Helmet } from 'react-helmet'
 import { Option } from 'baseui/select'
-import { ampli } from '../services/Amplitude'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { getFilterType } from './EtterlevelseDokumentasjonPage'
 
 import { getAllKravPriority } from '../api/KravPriorityApi'
@@ -98,7 +98,7 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
         side: 'Tema side for dokumentasjon',
         sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`,
         section: `${temaData.shortName}`,
-        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+        ...userRoleEventProp
       })
     }
   }, [etterlevelseDokumentasjon])

@@ -15,7 +15,7 @@ import ExpiredAlert from '../components/krav/ExpiredAlert'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import Etterlevelser from '../components/krav/Etterlevelser'
-import { ampli } from '../services/Amplitude'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { Markdown } from '../components/common/Markdown'
 import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { BodyLong, BodyShort, Button, Heading, Spacer, Tabs } from '@navikt/ds-react'
@@ -109,7 +109,7 @@ export const KravPage = () => {
         side: 'Krav side',
         sidetittel: `${kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} ${krav.navn}`,
         section: kravTema?.shortName.toString(),
-        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+        ...userRoleEventProp
       })
     }
   }, [krav, kravTema])

@@ -8,7 +8,7 @@ import { gql, useQuery } from '@apollo/client'
 import { Code, codelist, ListName, TemaCode } from '../services/Codelist'
 import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
-import { ampli } from '../services/Amplitude'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { getNewestKravVersjon } from '../components/etterlevelseDokumentasjon/common/utils'
 import { user } from '../services/User'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
@@ -105,7 +105,7 @@ export const DokumentasjonPage = () => {
       ampli.logEvent('sidevisning', {
         side: 'Etterlevelse Dokumentasjon Page',
         sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title}`,
-        role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+        ...userRoleEventProp
       })
     }
   }, [etterlevelseDokumentasjon])

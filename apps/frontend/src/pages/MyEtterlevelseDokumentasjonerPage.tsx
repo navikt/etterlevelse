@@ -23,7 +23,7 @@ import { borderWidth } from '../components/common/Style'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import BehandlingSok from '../components/etterlevelseDokumentasjon/tabs/BehandlingSok'
 import { Loader } from '@navikt/ds-react'
@@ -42,7 +42,7 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
   ampli.logEvent('sidevisning', {
     side: 'Side for Dokumentasjoner',
     sidetittel: 'Dokumentere etterlevelse',
-    role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+    ...userRoleEventProp
   })
 
   return (

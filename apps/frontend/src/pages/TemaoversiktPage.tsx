@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ampli } from '../services/Amplitude'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { useForceUpdate } from '../util/hooks'
 import { ListName, TemaCode, codelist } from '../services/Codelist'
 import { BodyLong, Heading, LinkPanel, Loader, Spacer, Tag } from '@navikt/ds-react'
@@ -9,7 +9,7 @@ import { PageLayout } from '../components/scaffold/Page'
 
 export const TemaOversiktPage = () => {
   useEffect(() => {
-    ampli.logEvent('sidevisning', { side: 'Tema side', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
+    ampli.logEvent('sidevisning', { side: 'Tema side', ...userRoleEventProp })
   }, [])
 
   return (

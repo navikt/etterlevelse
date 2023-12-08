@@ -4,7 +4,7 @@ import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import moment from 'moment'
 import { codelist, ListName } from '../services/Codelist'
 import { kravStatus } from './KravPage'
-import { ampli } from '../services/Amplitude'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { BodyShort, Heading, Link, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
 import { handleSort } from '../util/handleTableSort'
 import { user } from '../services/User'
@@ -51,7 +51,7 @@ export const KravTablePage = () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
       setTableContent(mappedKraver)
-      ampli.logEvent('sidevisning', { side: 'Krav admin side', sidetittel: 'Administrere Krav', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
+      ampli.logEvent('sidevisning', { side: 'Krav admin side', sidetittel: 'Administrere Krav', ...userRoleEventProp })
     })()
   }, [])
 

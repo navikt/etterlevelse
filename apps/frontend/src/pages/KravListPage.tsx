@@ -10,7 +10,7 @@ import { TemaList } from '../components/kravList/TemaList'
 import StatusView from '../components/common/StatusTag'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { BodyLong, BodyShort, Button, Heading, Label, LinkPanel, Skeleton, Spacer, Tabs } from '@navikt/ds-react'
 import { PlusIcon } from '@navikt/aksel-icons'
 import { PageLayout } from '../components/scaffold/Page'
@@ -29,7 +29,7 @@ export const sortKrav = (kravene: KravQL[]) => {
 }
 
 export const KravListPage = () => {
-  ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav', role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
+  ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav', ...userRoleEventProp })
 
   return (
     <PageLayout

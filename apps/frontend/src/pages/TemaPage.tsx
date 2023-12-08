@@ -21,7 +21,7 @@ import { margin } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
-import { ampli } from '../services/Amplitude'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { BodyShort, Detail, Heading, Label, LinkPanel } from '@navikt/ds-react'
 import { lovdataBase } from '../components/Lov'
 import { user } from '../services/User'
@@ -75,7 +75,7 @@ const TemaView = ({ tema }: { tema: TemaCode }) => {
   const [kravList, setKravList] = useState<Krav[]>([])
 
   useEffect(() => {
-    ampli.logEvent('sidevisning', { side: 'Tema side', sidetittel: tema.shortName, role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER' })
+    ampli.logEvent('sidevisning', { side: 'Tema side', sidetittel: tema.shortName, ...userRoleEventProp })
   }, [])
 
   const breadcrumbPaths: breadcrumbPaths[] = [

@@ -27,7 +27,7 @@ import { AllInfo } from '../krav/ViewKrav'
 import { FileTextIcon } from '@navikt/aksel-icons'
 import EditNotatfelt from '../etterlevelseMetadata/EditNotatfelt'
 import EtterlevelseViewFields from './EtterlevelseViewFields'
-import { ampli } from '../../services/Amplitude'
+import { ampli, userRoleEventProp } from '../../services/Amplitude'
 
 type EttlevelseKravViewProps = {
   temaName?: string
@@ -402,7 +402,7 @@ export const EtterlevelseKravView = ({
                   ampli.logEvent('knapp klikket', {
                     tekst: 'Til nest krav som ikke er ferdig utfylt i dette temaet',
                     pagePath: location.pathname,
-                    role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                    ...userRoleEventProp
                   })
                 }}
               >
@@ -417,7 +417,7 @@ export const EtterlevelseKravView = ({
                   ampli.logEvent('knapp klikket', {
                     tekst: 'Til temaoversikten',
                     pagePath: location.pathname,
-                    role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+                    ...userRoleEventProp
                   })
                 }}
               >
