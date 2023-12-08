@@ -58,7 +58,7 @@ export const MainPage = () => {
               )}
               <div className="mt-8 flex justify-end">
                 <div className="mr-4">
-                  <EditEtterlevelseDokumentasjonModal />
+                  <EditEtterlevelseDokumentasjonModal variant={data?.etterlevelseDokumentasjoner.content.length ? 'secondary' : 'primary'} />
                 </div>
                 <Link href="/dokumentasjoner">
                   <Button as="a" variant="tertiary">

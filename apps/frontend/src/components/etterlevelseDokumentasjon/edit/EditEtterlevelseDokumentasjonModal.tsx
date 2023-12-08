@@ -23,6 +23,7 @@ type EditEtterlevelseDokumentasjonModalProps = {
   etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
   setEtterlevelseDokumentasjon?: (e: EtterlevelseDokumentasjonQL) => void
   isEditButton?: boolean
+  variant?: 'secondary' | 'primary'
 }
 
 export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokumentasjonModalProps) => {
@@ -84,7 +85,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
       <Button
         onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)}
         size={props.isEditButton ? 'small' : 'medium'}
-        variant={props.isEditButton ? 'secondary' : 'primary'}
+        variant={props.variant ? props.variant : props.isEditButton ? 'secondary' : 'primary'}
         className="whitespace-nowrap"
       >
         {props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Nytt etterlevelsesdokument'}
