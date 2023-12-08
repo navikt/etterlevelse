@@ -6,14 +6,14 @@ import { behandlingsKatalogLink, datajegerSlackLink, documentationLink, githubRe
 
 export const Footer = () => {
   const [showButtonToTop, setShowButtonToTop] = React.useState(false)
-  const [pageScroll, setPageScroll] = React.useState(window.pageYOffset)
+  const [pageScroll, setPageScroll] = React.useState(window.scrollY)
 
   React.useEffect(() => {
     const checkScrollTop = () => {
-      setPageScroll(window.pageYOffset)
-      if (!showButtonToTop && window.pageYOffset > 100) {
+      setPageScroll(window.scrollY)
+      if (!showButtonToTop && window.scrollY > 100) {
         setShowButtonToTop(true)
-      } else if (showButtonToTop && window.pageYOffset <= 100) {
+      } else if (showButtonToTop && window.scrollY <= 100) {
         setShowButtonToTop(false)
       }
     }
@@ -24,8 +24,8 @@ export const Footer = () => {
   }, [pageScroll])
 
   return (
-    <div className="bg-purple-400 text-white px-12 py-7 w-full">
-      <Button
+    <div className="bg-purple-400 text-white px-12 py-7 w-full mt-auto">
+      {showButtonToTop && <Button
         className="text-white"
         size="xsmall"
         icon={<ArrowUpIcon aria-label="" aria-hidden />}
@@ -33,7 +33,7 @@ export const Footer = () => {
         variant="tertiary-neutral"
       >
         Til toppen
-      </Button>
+      </Button>}
       <div className="flex mt-11">
         <div className=" flex flex-col">
           <BodyShort className="text-2xl mb-5 flex">

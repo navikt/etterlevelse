@@ -31,7 +31,7 @@ const Main = (props: any) => {
               <title>Etterlevelse</title>
             </Helmet>
 
-            <div className="flex flex-col w-full items-center bg-white">
+            <div className="flex flex-col w-full items-center min-h-screen bg-white">
               <Header />
               <AppRoutes />
               <Footer />
