@@ -2,6 +2,7 @@ import { ArrowUpIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Link, Spacer } from '@navikt/ds-react'
 import * as React from 'react'
 import { etterlevelseLogoWhiteIcon } from '../Images'
+import { behandlingsKatalogLink, datajegerSlackLink, documentationLink, githubRepo, statusPageLink, teamInfoLink } from '../../util/config'
 
 export const Footer = () => {
   const [showButtonToTop, setShowButtonToTop] = React.useState(false)
@@ -53,9 +54,9 @@ export const Footer = () => {
           <BodyShort>
             Nyttige lenker
           </BodyShort>
-          <Link className="text-white" href="#">Status på etterlevelse i NAV</Link>
-          <Link className="text-white" href="#">Om etterlevelse på Navet</Link>
-          <Link className="text-white" href="#">Behandlingskatalogen</Link>
+          <Link className="text-white" href={statusPageLink}>Status på etterlevelse i NAV</Link>
+          <Link className="text-white" href="/omstottetiletterlevelse">Om etterlevelse på Navet</Link>
+          <Link className="text-white" href={behandlingsKatalogLink}>Behandlingskatalogen</Link>
           <Link className="text-white" href="#">Veileder for å skrive etterlevelseskrav</Link>
         </div>
         <Spacer />
@@ -63,16 +64,16 @@ export const Footer = () => {
           <BodyShort>
             Om nettstedet
           </BodyShort>
-          <Link className="text-white" href="#">Hva er Støtte til etterlevelse?</Link>
+          <Link className="text-white" href={documentationLink}>Hva er Støtte til etterlevelse?</Link>
         </div>
         <Spacer />
         <div className="flex flex-col gap-4">
           <BodyShort>
             Finn oss
           </BodyShort>
-          <Link className="text-white" href="#">Slack</Link>
-          <Link className="text-white" href="#">Github</Link>
-          <Link className="text-white" href="#">Teamkatalogen</Link>
+          <Link className="text-white" href={datajegerSlackLink}>Slack</Link>
+          <Link className="text-white" href={githubRepo}>Github</Link>
+          <Link className="text-white" href={teamInfoLink}>Teamkatalogen</Link>
         </div>
       </div>
     </div>
@@ -89,12 +90,8 @@ export const Footer = () => {
     //     >
     //       <div className="w-full min-h-[100px] flex items-center">
     //         <div className="w-full flex justify-around items-center">
-    //           <ExternalLink href={datajegerSlackLink} className="text-white" openOnSamePage>
-    //             #etterlevelse på Slack
-    //           </ExternalLink>
-    //           <ExternalLink href={githubRepo} openOnSamePage className="text-white">
-    //             Github
-    //           </ExternalLink>
+    //          
+   
     //           <ExternalLink href={documentationLink} openOnSamePage className="text-white">
     //             Dokumentasjon
     //           </ExternalLink>

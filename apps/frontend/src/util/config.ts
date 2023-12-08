@@ -8,7 +8,10 @@ export const slackUserLink = (userId: string) => `slack://user?team=${navSlackTe
 export const datajegerSlackLink = slackLink(etterlevelseSlackChannelId)
 export const githubRepo = 'https://github.com/navikt/etterlevelse'
 export const documentationLink = 'https://navikt.github.io/naka/etterlevelse'
+export const teamInfoLink = 'https://teamkatalog.nav.no/team/264cebfa-ad46-4af9-8867-592f99f491e6'
 export const markdownLink = 'https://guides.github.com/features/mastering-markdown/'
+export const behandlingsKatalogLink = 'https://behandlingskatalog.intern.nav.no/'
+export const statusPageLink = 'https://metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse'
 
 export const teamKatPersonLink = (navIdent: string) => `${env.teamKatBaseUrl}resource/${navIdent}`
 export const personImageLink = (navIdent: string) => `/api/team/resource/${navIdent}/photo`
