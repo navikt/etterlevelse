@@ -1,5 +1,7 @@
-import { Button, Link, Spacer } from '@navikt/ds-react'
+import { ArrowUpIcon } from '@navikt/aksel-icons'
+import { BodyShort, Button, Link, Spacer } from '@navikt/ds-react'
 import * as React from 'react'
+import { etterlevelseLogoWhiteIcon } from '../Images'
 
 export const Footer = () => {
   const [showButtonToTop, setShowButtonToTop] = React.useState(false)
@@ -21,28 +23,56 @@ export const Footer = () => {
   }, [pageScroll])
 
   return (
-    <div className="bg-purple-400 text-white">
-      <Button onClick={() => window.scrollTo(0, 0)} variant="tertiary">
+    <div className="bg-purple-400 text-white px-12 py-7 w-full">
+      <Button
+        className="text-white"
+        size="xsmall"
+        icon={<ArrowUpIcon aria-label="" aria-hidden />}
+        onClick={() => window.scrollTo(0, 0)}
+        variant="tertiary-neutral"
+      >
         Til toppen
       </Button>
-      <div className="flex">
-        <div className="flex-1">Støtte til etterlevelse 2023 NAV Arbeids- og velferdsetaten</div>
-        <div className="flex-1">
-          Nyttige lenker
-          <Link href="#">Status på etterlevelse i NAV</Link>
-          <Link href="#">Om etterlevelse på Navet</Link>
-          <Link href="#">Behandlingskatalogen</Link>
-          <Link href="#">Veileder for å skrive etterlevelseskrav</Link>
+      <div className="flex mt-11">
+        <div className=" flex flex-col">
+          <BodyShort className="text-2xl mb-5 flex">
+            <div className="mr-2.5">
+              <img src={etterlevelseLogoWhiteIcon} alt="Etterlevlese logo" aria-hidden aria-label="" />
+            </div>
+            Støtte til etterlevelse
+          </BodyShort>
+          <BodyShort>
+            2023 NAV
+          </BodyShort>
+          <BodyShort>
+            Arbeids- og velferdsetaten
+          </BodyShort>
         </div>
-        <div className="flex-1">
-          Om nettstedet
-          <Link href="#">Hva er Støtte til etterlevelse?</Link>
+        <Spacer />
+        <div className="flex flex-col gap-4">
+          <BodyShort>
+            Nyttige lenker
+          </BodyShort>
+          <Link className="text-white" href="#">Status på etterlevelse i NAV</Link>
+          <Link className="text-white" href="#">Om etterlevelse på Navet</Link>
+          <Link className="text-white" href="#">Behandlingskatalogen</Link>
+          <Link className="text-white" href="#">Veileder for å skrive etterlevelseskrav</Link>
         </div>
-        <div className="flex-1">
-          Finn oss
-          <Link href="#">Slack</Link>
-          <Link href="#">Github</Link>
-          <Link href="#">Teamkatalogen</Link>
+        <Spacer />
+        <div className="flex flex-col gap-4">
+          <BodyShort>
+            Om nettstedet
+          </BodyShort>
+          <Link className="text-white" href="#">Hva er Støtte til etterlevelse?</Link>
+        </div>
+        <Spacer />
+        <div className="flex flex-col gap-4">
+          <BodyShort>
+            Finn oss
+          </BodyShort>
+          <Link className="text-white" href="#">Slack</Link>
+          <Link className="text-white" href="#">Github</Link>
+          <Link className="text-white" href="#">Teamkatalogen</Link>
         </div>
       </div>
     </div>
