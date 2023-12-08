@@ -106,7 +106,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
             {({ values, submitForm }) => {
               return (
                 <Form>
-                  <TextAreaField rows={3} noPlaceholder label="Skriv inn tittel på etterlevelsesdokumentet" name="title" />
+                  <TextAreaField rows={2} noPlaceholder label="Skriv inn tittel på etterlevelsesdokumentet" name="title" />
 
                   {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
 
