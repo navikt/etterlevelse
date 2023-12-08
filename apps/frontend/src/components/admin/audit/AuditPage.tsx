@@ -11,6 +11,7 @@ import { intl } from '../../../util/intl/intl'
 import { Helmet } from 'react-helmet'
 import { BodyLong, Heading, TextField } from '@navikt/ds-react'
 import CustomizedBreadcrumbs from '../../common/CustomizedBreadcrumbs'
+import { PageLayout } from '../../scaffold/Page'
 
 const format = (id: string) => _.trim(id, '"')
 
@@ -51,14 +52,10 @@ export const AuditPage = () => {
   useEffect(() => lookupVersion(idSearch), [idSearch])
 
   return (
-    <div role="main" id="content" className="w-full">
-      <div className="flex-1 justify-start flex">
-        <CustomizedBreadcrumbs currentPage="Versjonering" />
-      </div>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Versjonering</title>
-      </Helmet>
+    <PageLayout
+      pageTitle="Versjonering"
+      currentPage="Versjonering" 
+    >
       <Heading size="medium" level="1">
         {intl.audit}
       </Heading>
@@ -78,6 +75,6 @@ export const AuditPage = () => {
       {error && <BodyLong>{_.escape(error)}</BodyLong>}
       {idInput && <AuditView auditLog={auditLog} auditId={params.auditId} loading={loading} viewId={lookupVersion} />}
       <AuditRecentTable show={!idInput} />
-    </div>
+    </PageLayout>
   )
 }
