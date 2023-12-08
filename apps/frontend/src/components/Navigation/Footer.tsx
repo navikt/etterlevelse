@@ -2,7 +2,7 @@ import { ArrowUpIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Link, Spacer } from '@navikt/ds-react'
 import * as React from 'react'
 import { etterlevelseLogoWhiteIcon } from '../Images'
-import { behandlingsKatalogLink, datajegerSlackLink, documentationLink, githubRepo, statusPageLink, teamInfoLink } from '../../util/config'
+import { VeilederEtterlevelseskrav, behandlingsKatalogLink, datajegerSlackLink, documentationLink, githubRepo, statusPageLink, teamInfoLink } from '../../util/config'
 
 export const Footer = () => {
   const [showButtonToTop, setShowButtonToTop] = React.useState(false)
@@ -57,7 +57,7 @@ export const Footer = () => {
           <Link className="text-white" href={statusPageLink}>Status på etterlevelse i NAV</Link>
           <Link className="text-white" href="/omstottetiletterlevelse">Om etterlevelse på Navet</Link>
           <Link className="text-white" href={behandlingsKatalogLink}>Behandlingskatalogen</Link>
-          <Link className="text-white" href="#">Veileder for å skrive etterlevelseskrav</Link>
+          <Link className="text-white" href={VeilederEtterlevelseskrav}>Veileder for å skrive etterlevelseskrav</Link>
         </div>
         <Spacer />
         <div className="flex flex-col gap-4">
