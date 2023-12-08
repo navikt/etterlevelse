@@ -73,6 +73,7 @@ import notesIcon from '../resources/icons/notes.svg'
 import notesWithContentIcon from '../resources/icons/notes-with-content.svg'
 import saveArchiveIcon from '../resources/icons/save-archive-icon.svg'
 import outlineInfoIcon from '../resources/icons/outline-info-icon.svg'
+import etterlevelseLogoWhiteIcon from '../resources/icons/etterlevelse-logo-white.svg'
 
 import React from 'react'
 import { theme } from '../util'
@@ -139,6 +140,7 @@ export {
   notesIcon,
   notesWithContentIcon,
   saveArchiveIcon,
+  etterlevelseLogoWhiteIcon
 }
 
 export const temaBilder: { [id: string]: string } = {

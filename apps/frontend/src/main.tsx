@@ -11,6 +11,7 @@ import { codelist } from './services/Codelist'
 import { useAwait, useAwaitUser } from './util/hooks'
 import { useNetworkStatus } from './util/network'
 import { customTheme } from './util/theme'
+import { Footer } from './components/Navigation/Footer'
 
 const engine = new Styletron()
 
@@ -30,9 +31,10 @@ const Main = (props: any) => {
               <title>Etterlevelse</title>
             </Helmet>
 
-            <div className="flex flex-col w-full items-center bg-white">
+            <div className="flex flex-col w-full items-center min-h-screen bg-white">
               <Header />
               <AppRoutes />
+              <Footer />
             </div>
           </BrowserRouter>
           <ErrorModal />
