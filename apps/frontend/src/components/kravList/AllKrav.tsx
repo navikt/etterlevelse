@@ -125,10 +125,10 @@ export const AllKrav = () => {
       <div className="ml-3 min-w-fit">
         <Select
           key={'krav_filter_' + kravFilter}
-          size='small'
+          size="small"
           label={`Filter ${kravFilter}`}
           hideLabel
-          placeholder='tema'
+          placeholder="tema"
           value={filterValue}
           onChange={(params) => {
             setFilterValue(params.currentTarget.value)
