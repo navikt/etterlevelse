@@ -184,7 +184,7 @@ export const DokumentasjonPage = () => {
           </Heading>
           <div className="flex items-center my-5">
             <ExpansionCard aria-label="tittel på etterlevelsesdokument" className="w-full">
-              <ExpansionCard.Header>
+              <ExpansionCard.Header className="border-b border-solid border-gray-500">
                 <ExpansionCard.Title as="h4" size="small">
                   E{etterlevelseNummer.toString()} {title}
                 </ExpansionCard.Title>
