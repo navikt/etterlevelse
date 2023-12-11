@@ -173,12 +173,10 @@ export const DokumentasjonPage = () => {
     return filterKrav(kravPriority, krav, tema)
   }
 
+  const { etterlevelseNummer, title, behandlerPersonopplysninger, behandlingIds, behandlinger, teams, irrelevansFor } = etterlevelseDokumentasjon
+
   return (
-    <PageLayout
-      pageTitle={'E' + etterlevelseDokumentasjon.etterlevelseNummer.toString() + ' ' + etterlevelseDokumentasjon.title}
-      currentPage="Temaoversikt"
-      breadcrumbPaths={breadcrumbPaths}
-    >
+    <PageLayout pageTitle={'E' + etterlevelseNummer.toString() + ' ' + title} currentPage="Temaoversikt" breadcrumbPaths={breadcrumbPaths}>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Heading level="1" size="medium">
@@ -188,26 +186,22 @@ export const DokumentasjonPage = () => {
             <ExpansionCard aria-label="tittel på etterlevelsesdokument" className="w-full">
               <ExpansionCard.Header>
                 <ExpansionCard.Title as="h4" size="small">
-                  {/* <div className="flex gap-2 items-center">
-                <Heading level="2" size="small"> */}
-                  E{etterlevelseDokumentasjon.etterlevelseNummer.toString()} {etterlevelseDokumentasjon.title}
-                  {/* </Heading>
-              </div> */}
+                  E{etterlevelseNummer.toString()} {title}
                 </ExpansionCard.Title>
               </ExpansionCard.Header>
               <ExpansionCard.Content>
-                {etterlevelseDokumentasjon.behandlerPersonopplysninger && (
+                {behandlerPersonopplysninger && (
                   <div className="flex gap-2 flex-wrap items-center mb-2.5">
                     <BodyShort size="small">Behandling:</BodyShort>
-                    {etterlevelseDokumentasjon.behandlingIds?.length >= 1 && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
-                      etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => (
+                    {behandlingIds?.length >= 1 && behandlerPersonopplysninger ? (
+                      behandlingIds.map((behandlingId, index) => (
                         <div key={'behandling_link_' + index}>
-                          {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger[index].navn ? (
+                          {behandlinger && behandlinger[index].navn ? (
                             <ExternalLink className="text-medium" href={`${env.pollyBaseUrl}process/${behandlingId}`}>
-                              {etterlevelseDokumentasjon.behandlinger?.length > 0 ? `${etterlevelseDokumentasjon.behandlinger[index].navn}` : 'Ingen data'}
+                              {behandlinger?.length > 0 ? `${behandlinger[index].navn}` : 'Ingen data'}
                             </ExternalLink>
                           ) : (
-                            <BodyShort>{etterlevelseDokumentasjon.behandlinger ? etterlevelseDokumentasjon.behandlinger[index].navn : 'Ingen data'}</BodyShort>
+                            <BodyShort>{behandlinger ? behandlinger[index].navn : 'Ingen data'}</BodyShort>
                           )}
                         </div>
                       ))
@@ -216,16 +210,16 @@ export const DokumentasjonPage = () => {
                     )}
                   </div>
                 )}
-                {etterlevelseDokumentasjon.teams.length > 0 ? <Teams teams={etterlevelseDokumentasjon.teams} link /> : <BodyShort size="small">Team er ikke angitt</BodyShort>}
+                {teams.length > 0 ? <Teams teams={teams} link /> : <BodyShort size="small">Team er ikke angitt</BodyShort>}
                 <div className="flex items-center gap-2">
                   <BodyShort size="small">Egenskaper:</BodyShort>
-                  {etterlevelseDokumentasjon.irrelevansFor.length === options.length && (
+                  {irrelevansFor.length === options.length && (
                     <div className="flex items-center gap-1">
                       <ExclamationmarkTriangleFillIcon area-label="" aria-hidden className="text-2xl text-icon-warning" />
                       <Label size="small">Ingen egenskaper er oppgitt</Label>
                     </div>
                   )}
-                  {!etterlevelseDokumentasjon.irrelevansFor.length ? getRelevans() : getRelevans(etterlevelseDokumentasjon.irrelevansFor)}
+                  {!irrelevansFor.length ? getRelevans() : getRelevans(irrelevansFor)}
                 </div>
               </ExpansionCard.Content>
             </ExpansionCard>
