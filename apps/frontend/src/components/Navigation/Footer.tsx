@@ -56,7 +56,7 @@ export const Footer = () => {
               Nyttige lenker
             </BodyShort>
             <Link className="text-white" href={statusPageLink}>Status på etterlevelse i NAV</Link>
-            <Link className="text-white" href="/omstottetiletterlevelse">Om etterlevelse på Navet</Link>
+            <Link className="text-white" href={VeilederEtterlevelseskrav}>Om etterlevelse på Navet</Link>
             <Link className="text-white" href={behandlingsKatalogLink}>Behandlingskatalogen</Link>
             <Link className="text-white" href={VeilederEtterlevelseskrav}>Veileder for å skrive etterlevelseskrav</Link>
           </div>
