@@ -1,35 +1,34 @@
-import React, { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { useParams } from 'react-router-dom'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { theme } from '../util/theme'
-import { EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, KravPrioritering, KravQL, KravStatus, PageResponse } from '../constants'
 import { gql, useQuery } from '@apollo/client'
-import { Code, codelist, ListName, TemaCode } from '../services/Codelist'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { Block } from 'baseui/block'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, KravPrioritering, KravQL, PageResponse } from '../constants'
+import { Code, ListName, TemaCode, codelist } from '../services/Codelist'
+import { theme } from '../util/theme'
 
-import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { getNewestKravVersjon } from '../components/etterlevelseDokumentasjon/common/utils'
-import { user } from '../services/User'
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
+import { Accordion, BodyShort, Button, ExpansionCard, Heading, Label, Link, Loader, Tag } from '@navikt/ds-react'
+import moment from 'moment'
+import { hotjar } from 'react-hotjar'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
-import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
-import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
-import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import { BodyShort, Label, Loader, Accordion, Link, Tag, Heading, Detail, Button } from '@navikt/ds-react'
-import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
-import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
 import { getAllKravPriority } from '../api/KravPriorityApi'
-import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
-import { getNumberOfDaysBetween } from '../util/checkAge'
-import moment from 'moment'
-import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import { ExternalLink } from '../components/common/RouteLink'
-import { env } from '../util/env'
 import { Teams } from '../components/common/TeamName'
-import { Helmet } from 'react-helmet'
-import { hotjar } from 'react-hotjar'
+import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
+import { getNewestKravVersjon } from '../components/etterlevelseDokumentasjon/common/utils'
+import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
+import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
+import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
+import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { PageLayout } from '../components/scaffold/Page'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
+import { user } from '../services/User'
+import { getNumberOfDaysBetween } from '../util/checkAge'
+import { env } from '../util/env'
+import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
@@ -105,7 +104,7 @@ export const DokumentasjonPage = () => {
       ampli.logEvent('sidevisning', {
         side: 'Etterlevelse Dokumentasjon Page',
         sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title}`,
-        ...userRoleEventProp
+        ...userRoleEventProp,
       })
     }
   }, [etterlevelseDokumentasjon])
@@ -173,59 +172,59 @@ export const DokumentasjonPage = () => {
     return filterKrav(kravPriority, krav, tema)
   }
 
+  const { etterlevelseNummer, title, behandlerPersonopplysninger, behandlingIds, behandlinger, teams, irrelevansFor } = etterlevelseDokumentasjon
+
   return (
-    <PageLayout
-      pageTitle={'E' + etterlevelseDokumentasjon.etterlevelseNummer.toString() + ' ' + etterlevelseDokumentasjon.title}
-      currentPage="Temaoversikt"    
-      breadcrumbPaths={breadcrumbPaths}
-    >
+    <PageLayout pageTitle={'E' + etterlevelseNummer.toString() + ' ' + title} currentPage="Temaoversikt" breadcrumbPaths={breadcrumbPaths}>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Heading level="1" size="medium">
             Temaoversikt
           </Heading>
-          <div className="flex gap-2 items-center">
-            <Heading level="2" size="small">
-              E{etterlevelseDokumentasjon.etterlevelseNummer.toString()} {etterlevelseDokumentasjon.title}
-            </Heading>
-          </div>
-          {etterlevelseDokumentasjon.behandlerPersonopplysninger && (
-            <div className="flex gap-2 flex-wrap items-center">
-              <BodyShort size="small">Behandling:</BodyShort>
-              {etterlevelseDokumentasjon.behandlingIds && etterlevelseDokumentasjon.behandlingIds.length >= 1 && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
-                etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => {
-                  return (
-                    <div key={'behandling_link_' + index}>
-                      {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger[index].navn ? (
-                        <ExternalLink className="text-medium" href={`${env.pollyBaseUrl}process/${behandlingId}`}>
-                          {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger.length > 0
-                            ? `${etterlevelseDokumentasjon.behandlinger[index].navn}`
-                            : 'Ingen data'}
-                        </ExternalLink>
-                      ) : (
-                        <BodyShort>{etterlevelseDokumentasjon.behandlinger ? etterlevelseDokumentasjon.behandlinger[index].navn : 'Ingen data'}</BodyShort>
-                      )}
+          <div className="flex items-center my-5">
+            <ExpansionCard aria-label="tittel på etterlevelsesdokument" className="w-full">
+              <ExpansionCard.Header>
+                <ExpansionCard.Title as="h4" size="small">
+                  E{etterlevelseNummer.toString()} {title}
+                </ExpansionCard.Title>
+              </ExpansionCard.Header>
+              <ExpansionCard.Content>
+                {behandlerPersonopplysninger && (
+                  <div className="flex gap-2 flex-wrap items-center mb-2.5">
+                    <BodyShort size="small">Behandling:</BodyShort>
+                    {behandlingIds?.length >= 1 && behandlerPersonopplysninger ? (
+                      behandlingIds.map((behandlingId, index) => (
+                        <div key={'behandling_link_' + index}>
+                          {behandlinger && behandlinger[index].navn ? (
+                            <ExternalLink className="text-medium" href={`${env.pollyBaseUrl}process/${behandlingId}`}>
+                              {behandlinger?.length > 0 ? `${behandlinger[index].navn}` : 'Ingen data'}
+                            </ExternalLink>
+                          ) : (
+                            <BodyShort>{behandlinger ? behandlinger[index].navn : 'Ingen data'}</BodyShort>
+                          )}
+                        </div>
+                      ))
+                    ) : (
+                      <BodyShort>Husk å legge til behandling fra behandlingskatalogen</BodyShort>
+                    )}
+                  </div>
+                )}
+                {teams.length > 0 ? <Teams teams={teams} link /> : <BodyShort size="small">Team er ikke angitt</BodyShort>}
+                <div className="flex items-center gap-2">
+                  <BodyShort size="small">Egenskaper:</BodyShort>
+                  {irrelevansFor.length === options.length && (
+                    <div className="flex items-center gap-1">
+                      <ExclamationmarkTriangleFillIcon area-label="" aria-hidden className="text-2xl text-icon-warning" />
+                      <Label size="small">Ingen egenskaper er oppgitt</Label>
                     </div>
-                  )
-                })
-              ) : (
-                <BodyShort>Husk å legge til behandling fra behandlingskatalogen</BodyShort>
-              )}
-            </div>
-          )}
-          {etterlevelseDokumentasjon.teams.length > 0 ? <Teams teams={etterlevelseDokumentasjon.teams} link /> : <BodyShort size="small">Team er ikke angitt</BodyShort>}
-          <div className="flex items-center gap-2">
-            <BodyShort size="small">Egenskaper:</BodyShort>
-            {etterlevelseDokumentasjon.irrelevansFor.length === options.length && (
-              <div className="flex items-center gap-1">
-                <ExclamationmarkTriangleFillIcon area-label="" aria-hidden className="text-2xl text-icon-warning" />
-                <Label size="small">Ingen egenskaper er oppgitt</Label>
-              </div>
-            )}
-            {!etterlevelseDokumentasjon.irrelevansFor.length ? getRelevans() : getRelevans(etterlevelseDokumentasjon.irrelevansFor)}
+                  )}
+                  {!irrelevansFor.length ? getRelevans() : getRelevans(irrelevansFor)}
+                </div>
+              </ExpansionCard.Content>
+            </ExpansionCard>
+            <EditEtterlevelseDokumentasjonModal etterlevelseDokumentasjon={etterlevelseDokumentasjon} setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon} isEditButton />
           </div>
         </div>
-        <EditEtterlevelseDokumentasjonModal etterlevelseDokumentasjon={etterlevelseDokumentasjon} setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon} isEditButton />
       </div>
       <div className="pt-4 flex flex-col gap-4">
         {/* <div className="navds-alert navds-alert--info navds-alert--medium">

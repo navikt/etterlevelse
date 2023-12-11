@@ -81,7 +81,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   }
 
   return (
-    <div>
+    <div className="ml-5">
       <Button
         onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)}
         size={props.isEditButton ? 'small' : 'medium'}
@@ -250,11 +250,12 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                     value && p.push(value)
                                   }}
                                   styles={{
-                                    control: (base) => ({
-                                      ...base,
-                                      cursor: 'text',
-                                      height: '48px',
-                                    } as CSSObjectWithLabel),
+                                    control: (base) =>
+                                      ({
+                                        ...base,
+                                        cursor: 'text',
+                                        height: '48px',
+                                      }) as CSSObjectWithLabel,
                                   }}
                                 />
                               </div>
@@ -295,11 +296,12 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                     value && p.push(value)
                                   }}
                                   styles={{
-                                    control: (base) => ({
-                                      ...base,
-                                      cursor: 'text',
-                                      height: '48px',
-                                    } as CSSObjectWithLabel),
+                                    control: (base) =>
+                                      ({
+                                        ...base,
+                                        cursor: 'text',
+                                        height: '48px',
+                                      }) as CSSObjectWithLabel,
                                   }}
                                 />
                               </div>
