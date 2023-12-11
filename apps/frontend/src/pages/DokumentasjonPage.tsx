@@ -1,20 +1,16 @@
 import { gql, useQuery } from '@apollo/client'
-import { Block } from 'baseui/block'
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, KravPrioritering, KravQL, PageResponse } from '../constants'
-import { Code, ListName, TemaCode, codelist } from '../services/Codelist'
-import { theme } from '../util/theme'
-
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
 import { Accordion, BodyShort, Button, ExpansionCard, Heading, Label, Link, Loader, Tag } from '@navikt/ds-react'
+import { Block } from 'baseui/block'
 import moment from 'moment'
+import React, { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
+import { useParams } from 'react-router-dom'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getAllKravPriority } from '../api/KravPriorityApi'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { ExternalLink } from '../components/common/RouteLink'
 import { Teams } from '../components/common/TeamName'
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
@@ -24,10 +20,13 @@ import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
 import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { PageLayout } from '../components/scaffold/Page'
+import { EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, KravPrioritering, KravQL, PageResponse } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
+import { Code, ListName, TemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 import { getNumberOfDaysBetween } from '../util/checkAge'
 import { env } from '../util/env'
+import { theme } from '../util/theme'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 
 export const DokumentasjonPage = () => {
@@ -118,6 +117,8 @@ export const DokumentasjonPage = () => {
   })
 
   const getRelevans = (irrelevans?: Code[]) => {
+    const farge = ['alt1', 'alt2', 'alt3'] as const
+
     if (irrelevans?.length === options.length) {
       return <BodyShort size="small">For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved dokumentasjonen.</BodyShort>
     }
@@ -129,7 +130,7 @@ export const DokumentasjonPage = () => {
         <div className="flex flex-wrap gap-2">
           {relevans.map((r, index) => (
             <div key={r.value} className="flex items-center gap-1">
-              <Tag variant="info" size="small">
+              <Tag variant={farge[index]} size="small">
                 <BodyShort size="small">{r.label}</BodyShort>
               </Tag>
             </div>
@@ -141,7 +142,7 @@ export const DokumentasjonPage = () => {
       <div className="flex flex-wrap gap-2">
         {options.map((o, index) => (
           <div key={o.value} className="flex items-center gap-1">
-            <Tag variant="info" size="small">
+            <Tag variant={farge[index]} size="small">
               <BodyShort size="small">{o.label}</BodyShort>
             </Tag>
           </div>
@@ -183,7 +184,7 @@ export const DokumentasjonPage = () => {
           </Heading>
           <div className="flex items-center my-5">
             <ExpansionCard aria-label="tittel på etterlevelsesdokument" className="w-full">
-              <ExpansionCard.Header>
+              <ExpansionCard.Header className="border-b border-solid border-gray-500">
                 <ExpansionCard.Title as="h4" size="small">
                   E{etterlevelseNummer.toString()} {title}
                 </ExpansionCard.Title>
