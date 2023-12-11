@@ -16,7 +16,7 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import { BodyShort, Label, Loader, Accordion, Link, Tag, Heading, Detail, Button } from '@navikt/ds-react'
+import { BodyShort, Label, Loader, Accordion, Link, Tag, Heading, Detail, Button, ExpansionCard } from '@navikt/ds-react'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
 import { getAllKravPriority } from '../api/KravPriorityApi'
@@ -184,46 +184,54 @@ export const DokumentasjonPage = () => {
           <Heading level="1" size="medium">
             Temaoversikt
           </Heading>
-          <div className="flex gap-2 items-center">
-            <Heading level="2" size="small">
-              E{etterlevelseDokumentasjon.etterlevelseNummer.toString()} {etterlevelseDokumentasjon.title}
-            </Heading>
-          </div>
-          {etterlevelseDokumentasjon.behandlerPersonopplysninger && (
-            <div className="flex gap-2 flex-wrap items-center">
-              <BodyShort size="small">Behandling:</BodyShort>
-              {etterlevelseDokumentasjon.behandlingIds?.length >= 1 && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
-                etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => (
-                  <div key={'behandling_link_' + index}>
-                    {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger[index].navn ? (
-                      <ExternalLink className="text-medium" href={`${env.pollyBaseUrl}process/${behandlingId}`}>
-                        {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger.length > 0
-                          ? `${etterlevelseDokumentasjon.behandlinger[index].navn}`
-                          : 'Ingen data'}
-                      </ExternalLink>
+          <div className="flex items-center">
+            <ExpansionCard aria-label="tittel på etterlevelsesdokument">
+              <ExpansionCard.Header>
+                <ExpansionCard.Title as="h4" size="small">
+                  {/* <div className="flex gap-2 items-center">
+                <Heading level="2" size="small"> */}
+                  E{etterlevelseDokumentasjon.etterlevelseNummer.toString()} {etterlevelseDokumentasjon.title}
+                  {/* </Heading>
+              </div> */}
+                </ExpansionCard.Title>
+              </ExpansionCard.Header>
+              <ExpansionCard.Content>
+                {etterlevelseDokumentasjon.behandlerPersonopplysninger && (
+                  <div className="flex gap-2 flex-wrap items-center">
+                    <BodyShort size="small">Behandling:</BodyShort>
+                    {etterlevelseDokumentasjon.behandlingIds?.length >= 1 && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
+                      etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => (
+                        <div key={'behandling_link_' + index}>
+                          {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger[index].navn ? (
+                            <ExternalLink className="text-medium" href={`${env.pollyBaseUrl}process/${behandlingId}`}>
+                              {etterlevelseDokumentasjon.behandlinger?.length > 0 ? `${etterlevelseDokumentasjon.behandlinger[index].navn}` : 'Ingen data'}
+                            </ExternalLink>
+                          ) : (
+                            <BodyShort>{etterlevelseDokumentasjon.behandlinger ? etterlevelseDokumentasjon.behandlinger[index].navn : 'Ingen data'}</BodyShort>
+                          )}
+                        </div>
+                      ))
                     ) : (
-                      <BodyShort>{etterlevelseDokumentasjon.behandlinger ? etterlevelseDokumentasjon.behandlinger[index].navn : 'Ingen data'}</BodyShort>
+                      <BodyShort>Husk å legge til behandling fra behandlingskatalogen</BodyShort>
                     )}
                   </div>
-                ))
-              ) : (
-                <BodyShort>Husk å legge til behandling fra behandlingskatalogen</BodyShort>
-              )}
-            </div>
-          )}
-          {etterlevelseDokumentasjon.teams.length > 0 ? <Teams teams={etterlevelseDokumentasjon.teams} link /> : <BodyShort size="small">Team er ikke angitt</BodyShort>}
-          <div className="flex items-center gap-2">
-            <BodyShort size="small">Egenskaper:</BodyShort>
-            {etterlevelseDokumentasjon.irrelevansFor.length === options.length && (
-              <div className="flex items-center gap-1">
-                <ExclamationmarkTriangleFillIcon area-label="" aria-hidden className="text-2xl text-icon-warning" />
-                <Label size="small">Ingen egenskaper er oppgitt</Label>
-              </div>
-            )}
-            {!etterlevelseDokumentasjon.irrelevansFor.length ? getRelevans() : getRelevans(etterlevelseDokumentasjon.irrelevansFor)}
+                )}
+                {etterlevelseDokumentasjon.teams.length > 0 ? <Teams teams={etterlevelseDokumentasjon.teams} link /> : <BodyShort size="small">Team er ikke angitt</BodyShort>}
+                <div className="flex items-center gap-2">
+                  <BodyShort size="small">Egenskaper:</BodyShort>
+                  {etterlevelseDokumentasjon.irrelevansFor.length === options.length && (
+                    <div className="flex items-center gap-1">
+                      <ExclamationmarkTriangleFillIcon area-label="" aria-hidden className="text-2xl text-icon-warning" />
+                      <Label size="small">Ingen egenskaper er oppgitt</Label>
+                    </div>
+                  )}
+                  {!etterlevelseDokumentasjon.irrelevansFor.length ? getRelevans() : getRelevans(etterlevelseDokumentasjon.irrelevansFor)}
+                </div>
+              </ExpansionCard.Content>
+            </ExpansionCard>
+            <EditEtterlevelseDokumentasjonModal etterlevelseDokumentasjon={etterlevelseDokumentasjon} setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon} isEditButton />
           </div>
         </div>
-        <EditEtterlevelseDokumentasjonModal etterlevelseDokumentasjon={etterlevelseDokumentasjon} setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon} isEditButton />
       </div>
       <div className="pt-4 flex flex-col gap-4">
         {/* <div className="navds-alert navds-alert--info navds-alert--medium">

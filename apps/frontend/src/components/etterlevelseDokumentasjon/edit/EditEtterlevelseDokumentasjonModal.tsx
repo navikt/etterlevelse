@@ -81,7 +81,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   }
 
   return (
-    <div>
+    <div className="ml-5">
       <Button
         onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)}
         size={props.isEditButton ? 'small' : 'medium'}
