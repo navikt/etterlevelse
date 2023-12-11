@@ -105,7 +105,7 @@ export const DokumentasjonPage = () => {
       ampli.logEvent('sidevisning', {
         side: 'Etterlevelse Dokumentasjon Page',
         sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title}`,
-        ...userRoleEventProp
+        ...userRoleEventProp,
       })
     }
   }, [etterlevelseDokumentasjon])
@@ -176,7 +176,7 @@ export const DokumentasjonPage = () => {
   return (
     <PageLayout
       pageTitle={'E' + etterlevelseDokumentasjon.etterlevelseNummer.toString() + ' ' + etterlevelseDokumentasjon.title}
-      currentPage="Temaoversikt"    
+      currentPage="Temaoversikt"
       breadcrumbPaths={breadcrumbPaths}
     >
       <div className="flex flex-col gap-4">
@@ -184,8 +184,8 @@ export const DokumentasjonPage = () => {
           <Heading level="1" size="medium">
             Temaoversikt
           </Heading>
-          <div className="flex items-center">
-            <ExpansionCard aria-label="tittel på etterlevelsesdokument">
+          <div className="flex items-center my-5">
+            <ExpansionCard aria-label="tittel på etterlevelsesdokument" className="w-full">
               <ExpansionCard.Header>
                 <ExpansionCard.Title as="h4" size="small">
                   {/* <div className="flex gap-2 items-center">
@@ -197,7 +197,7 @@ export const DokumentasjonPage = () => {
               </ExpansionCard.Header>
               <ExpansionCard.Content>
                 {etterlevelseDokumentasjon.behandlerPersonopplysninger && (
-                  <div className="flex gap-2 flex-wrap items-center">
+                  <div className="flex gap-2 flex-wrap items-center mb-2.5">
                     <BodyShort size="small">Behandling:</BodyShort>
                     {etterlevelseDokumentasjon.behandlingIds?.length >= 1 && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
                       etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => (
