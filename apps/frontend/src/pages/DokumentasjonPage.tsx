@@ -117,7 +117,7 @@ export const DokumentasjonPage = () => {
   })
 
   const getRelevans = (irrelevans?: Code[]) => {
-    const farge = ['alt1', 'alt2', 'alt3'] as const
+    const fargeForFemAlternativ = ['alt1', 'alt2', 'alt3', 'alt1', 'alt2'] as const
 
     if (irrelevans?.length === options.length) {
       return <BodyShort size="small">For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved dokumentasjonen.</BodyShort>
@@ -130,7 +130,7 @@ export const DokumentasjonPage = () => {
         <div className="flex flex-wrap gap-2">
           {relevans.map((r, index) => (
             <div key={r.value} className="flex items-center gap-1">
-              <Tag variant={farge[index]} size="small">
+              <Tag variant={fargeForFemAlternativ[index]} size="small">
                 <BodyShort size="small">{r.label}</BodyShort>
               </Tag>
             </div>
@@ -142,7 +142,7 @@ export const DokumentasjonPage = () => {
       <div className="flex flex-wrap gap-2">
         {options.map((o, index) => (
           <div key={o.value} className="flex items-center gap-1">
-            <Tag variant={farge[index]} size="small">
+            <Tag variant={fargeForFemAlternativ[index]} size="small">
               <BodyShort size="small">{o.label}</BodyShort>
             </Tag>
           </div>
