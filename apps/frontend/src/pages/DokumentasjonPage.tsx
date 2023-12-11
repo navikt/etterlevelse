@@ -192,22 +192,20 @@ export const DokumentasjonPage = () => {
           {etterlevelseDokumentasjon.behandlerPersonopplysninger && (
             <div className="flex gap-2 flex-wrap items-center">
               <BodyShort size="small">Behandling:</BodyShort>
-              {etterlevelseDokumentasjon.behandlingIds && etterlevelseDokumentasjon.behandlingIds.length >= 1 && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
-                etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => {
-                  return (
-                    <div key={'behandling_link_' + index}>
-                      {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger[index].navn ? (
-                        <ExternalLink className="text-medium" href={`${env.pollyBaseUrl}process/${behandlingId}`}>
-                          {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger.length > 0
-                            ? `${etterlevelseDokumentasjon.behandlinger[index].navn}`
-                            : 'Ingen data'}
-                        </ExternalLink>
-                      ) : (
-                        <BodyShort>{etterlevelseDokumentasjon.behandlinger ? etterlevelseDokumentasjon.behandlinger[index].navn : 'Ingen data'}</BodyShort>
-                      )}
-                    </div>
-                  )
-                })
+              {etterlevelseDokumentasjon.behandlingIds?.length >= 1 && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
+                etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => (
+                  <div key={'behandling_link_' + index}>
+                    {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger[index].navn ? (
+                      <ExternalLink className="text-medium" href={`${env.pollyBaseUrl}process/${behandlingId}`}>
+                        {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger.length > 0
+                          ? `${etterlevelseDokumentasjon.behandlinger[index].navn}`
+                          : 'Ingen data'}
+                      </ExternalLink>
+                    ) : (
+                      <BodyShort>{etterlevelseDokumentasjon.behandlinger ? etterlevelseDokumentasjon.behandlinger[index].navn : 'Ingen data'}</BodyShort>
+                    )}
+                  </div>
+                ))
               ) : (
                 <BodyShort>Husk å legge til behandling fra behandlingskatalogen</BodyShort>
               )}
