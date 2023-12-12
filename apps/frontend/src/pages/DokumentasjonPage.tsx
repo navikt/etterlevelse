@@ -3,7 +3,7 @@ import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
 import { Accordion, BodyShort, Button, ExpansionCard, Heading, Label, Link, Loader, Tag } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import moment from 'moment'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 import { useParams } from 'react-router-dom'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
@@ -87,17 +87,17 @@ export const DokumentasjonPage = () => {
     return [relevanteStatusListe, utgaattStatusListe]
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     hotjar.initialize(148751, 6)
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     const [relevanteStatusListe, utgaattStatusListe] = filterData(relevanteData)
     setRelevanteStats(relevanteStatusListe)
     setUtgaattStats(utgaattStatusListe)
   }, [relevanteData])
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTimeout(() => refetchRelevanteData(), 200)
     if (etterlevelseDokumentasjon) {
       ampli.logEvent('sidevisning', {
