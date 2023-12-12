@@ -73,6 +73,20 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
           return true
         },
       }),
+      versjonEndringer: yup.string().test({
+        name: 'versjonEndringerCheck',
+        message: errorMessage,
+        test: function (versjonEndringer) {
+          const { parent} = this
+          if(parent.status===KravStatus.AKTIV) {
+             if(!newKrav && krav.kravVersjon > 1) {
+               return  versjonEndringer ? true : false
+             }
+          }
+          return true
+        },
+
+      }),
       regelverk: yup.array().test({
         name: 'regelverkCheck',
         message: errorMessage,
@@ -271,14 +285,17 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     {errors.regelverk && <ErrorMessageModal msg={errors.regelverk} fullWidth={true} />}
 
                     {!newKrav && krav.kravVersjon > 1 && (
-                      <TextAreaField
-                        label="Endringer siden siste versjon"
-                        name="versjonEndringer"
-                        height="250px"
-                        markdown
-                        shortenLinks
-                        tooltip={'Beskrivelse av hva som er nytt siden siste versjon.'}
-                      />
+                      <>
+                        <TextAreaField
+                          label="Endringer siden siste versjon"
+                          name="versjonEndringer"
+                          height="250px"
+                          markdown
+                          shortenLinks
+                          tooltip={'Beskrivelse av hva som er nytt siden siste versjon.'}
+                        />
+                        <Error fieldName={'versjonEndringer'} fullWidth />
+                      </>
                     )}
 
                     <div className="mt-20">
