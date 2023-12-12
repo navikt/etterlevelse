@@ -3,7 +3,7 @@ import React from 'react'
 import moment from 'moment'
 import { DotTags } from '../common/DotTag'
 import { ListName } from '../../services/Codelist'
-import { CustomLabel, LabelAboveContent } from '../common/PropertyLabel'
+import { LabelAboveContent } from '../common/PropertyLabel'
 import { ExternalLink } from '../common/RouteLink'
 import { slackLink, slackUserLink, termUrl } from '../../util/config'
 import { user } from '../../services/User'
@@ -11,7 +11,6 @@ import { LovViewList } from '../Lov'
 import { SuksesskriterieCard } from './Suksesskriterie'
 import { Markdown } from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
-import SidePanel from './SidePanel'
 import { BodyShort, Label } from '@navikt/ds-react'
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => <div className="mb-4">{children}</div>
@@ -57,11 +56,13 @@ export const AllInfo = ({
 
   return (
     <div>
-      <LabelWrapper>
-        <LabelAboveContent header={header} title="Kilder">
-          <DotTags items={krav.dokumentasjon} markdown inColumn />
-        </LabelAboveContent>
-      </LabelWrapper>
+      {krav.dokumentasjon.length >0 && (
+        <LabelWrapper>
+          <LabelAboveContent header={header} title="Kilder">
+            <DotTags items={krav.dokumentasjon} markdown inColumn />
+          </LabelAboveContent>
+        </LabelWrapper>
+      )}
 
       <LabelWrapper>
         <LabelAboveContent header={header} title="Begreper">
