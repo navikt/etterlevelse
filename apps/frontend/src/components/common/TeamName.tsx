@@ -1,12 +1,26 @@
+import { BodyShort, Link } from '@navikt/ds-react'
 import { useTeam } from '../../api/TeamApi'
 import { teamKatTeamLink } from '../../util/config'
-import { BodyShort, Detail, Link } from '@navikt/ds-react'
 
-export const TeamName = (props: { id: string; link?: boolean; big?: boolean }) => {
-  const [name] = useTeam()(props.id)
+interface IPropsTeamName {
+  id: string
+  link?: boolean
+  big?: boolean
+}
 
-  return props.link ? (
-    <Link className={props.big ? '' : 'text-medium'} rel="noopener noreferrer" target={'_blank'} href={teamKatTeamLink(props.id)}>
+interface IPropsTeams {
+  teams: string[]
+  link?: boolean
+  list?: boolean
+  big?: boolean
+}
+
+export const TeamName = (props: IPropsTeamName) => {
+  const { id, link, big } = props
+  const [name] = useTeam()(id)
+
+  return link ? (
+    <Link className={big ? '' : 'text-medium'} rel="noopener noreferrer" target={'_blank'} href={teamKatTeamLink(id)}>
       {name} (åpnes i ny fane)
     </Link>
   ) : (
@@ -14,11 +28,15 @@ export const TeamName = (props: { id: string; link?: boolean; big?: boolean }) =
   )
 }
 
-export const Teams = (props: { teams: string[]; link?: boolean; list?: boolean; big?: boolean }) => (
-  <div className="flex flex-wrap gap-2 items-center">
-    <BodyShort size="small">Team:</BodyShort>
-    {props.teams.map((t, idx) => (
-      <TeamName key={`team_${idx}`} id={t} link={props.link} big={props.big} />
-    ))}
-  </div>
-)
+export const Teams = (props: IPropsTeams) => {
+  const { teams, link, big } = props
+
+  return (
+    <div className="flex flex-wrap gap-2 items-center">
+      <BodyShort size="small">Team:</BodyShort>
+      {teams.map((team, index) => (
+        <TeamName key={`team_${index}`} id={team} link={link} big={big} />
+      ))}
+    </div>
+  )
+}
