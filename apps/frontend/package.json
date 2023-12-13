@@ -62,6 +62,13 @@
     "format": "prettier --write \"./src\"",
     "prettier": "prettier --write \"./src\""
   },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --list-different",
+      "eslint --max-warnings 0",
+      "bash -c 'npm run type-check'"
+    ]
+  },
   "eslintConfig": {
     "extends": "react-app",
     "rules": {
