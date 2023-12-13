@@ -1,3 +1,4 @@
+import React from 'react'
 import { gql, useQuery } from '@apollo/client'
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
 import { Accordion, BodyShort, Button, ExpansionCard, Heading, Label, Link, Loader, Tag } from '@navikt/ds-react'
