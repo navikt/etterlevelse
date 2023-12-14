@@ -211,7 +211,7 @@ export const DokumentasjonPage = () => {
                   </div>
                 )}
                 <div className="mb-2.5">{teams.length > 0 ? <Teams teams={teams} link /> : <BodyShort size="small">Team er ikke angitt</BodyShort>}</div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-start gap-2">
                   <BodyShort size="small">Egenskaper:</BodyShort>
                   {irrelevansFor.length === options.length && (
                     <div className="flex items-center gap-1">
