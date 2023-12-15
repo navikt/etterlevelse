@@ -137,9 +137,14 @@ const ForstaKravene = () => (
 const StatusIOrganisasjonen = () => (
   <div className="w-full ml-2.5">
     <LinkPanel
-      href="/dokumentasjoner"
+      href="https://metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse"
       onClick={() => {
-        ampli.logEvent('navigere', { kilde: 'forside-panel', app: 'etterlevelse', til: '/dokumentasjoner', fra: '/' })
+        ampli.logEvent('navigere', {
+          kilde: 'forside-panel',
+          app: 'etterlevelse',
+          til: 'https://metabase.intern.nav.no/dashboard/117-dashboard-for-etterlevelse',
+          fra: '/',
+        })
       }}
     >
       <LinkPanel.Title>Status i organisasjonen</LinkPanel.Title>
