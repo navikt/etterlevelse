@@ -1,10 +1,10 @@
 import axios from 'axios'
+import { useEffect, useState } from 'react'
+import * as yup from 'yup'
 import { EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse } from '../constants'
 import { env } from '../util/env'
-import { useEffect, useState } from 'react'
-import { getVirkemiddel } from './VirkemiddelApi'
-import * as yup from 'yup'
 import { behandlingName } from './BehandlingApi'
+import { getVirkemiddel } from './VirkemiddelApi'
 
 export const etterlevelseDokumentasjonName = (etterlevelseDokumentasjon?: EtterlevelseDokumentasjon) =>
   etterlevelseDokumentasjon ? 'E' + etterlevelseDokumentasjon.etterlevelseNummer + ' ' + etterlevelseDokumentasjon.title : ''

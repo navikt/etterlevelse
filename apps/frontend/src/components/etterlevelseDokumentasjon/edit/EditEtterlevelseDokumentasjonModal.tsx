@@ -104,14 +104,13 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
             validateOnChange={false}
             validateOnBlur={false}
           >
-            {({ values, submitForm }) => {
-              return (
-                <Form>
-                  <TextAreaField rows={2} noPlaceholder label="Skriv inn tittel på etterlevelsesdokumentet" name="title" />
+            {({ values, submitForm }) => (
+              <Form>
+                <TextAreaField rows={2} noPlaceholder label="Skriv inn tittel på etterlevelsesdokumentet" name="title" />
 
-                  {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
+                {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
 
-                  {/* {values.knyttetTilVirkemiddel ? (
+                {/* {values.knyttetTilVirkemiddel ? (
                     <FieldWrapper>
                       <Field name="virkemiddelId">
                         {(fp: FieldProps) => {
@@ -175,163 +174,148 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                     </FieldWrapper>
                   ) : ( */}
 
-                  <FieldArray name="irrelevansFor">
-                    {(p: FieldArrayRenderProps) => {
-                      return (
-                        <div className="h-full pt-5 w-[calc(100% - 16px)]">
-                          <CheckboxGroup
-                            legend="Hvilke egenskaper gjelder for etterlevelsen?"
-                            description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
-                            value={selectedFilter}
-                            onChange={(selected) => {
-                              setSelectedFilter(selected)
+                <FieldArray name="irrelevansFor">
+                  {(p: FieldArrayRenderProps) => (
+                    <div className="h-full pt-5 w-[calc(100% - 16px)]">
+                      <CheckboxGroup
+                        legend="Hvilke egenskaper gjelder for etterlevelsen?"
+                        description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
+                        value={selectedFilter}
+                        onChange={(selected) => {
+                          setSelectedFilter(selected)
 
-                              const irrelevansListe = relevansOptions.filter((v, index) => !selected.includes(index))
-                              p.form.setFieldValue(
-                                'irrelevansFor',
-                                irrelevansListe.map((il) => codelist.getCode(ListName.RELEVANS, il.value)),
-                              )
-                              // selected.forEach((value) => {
-                              //   const i = parseInt(value)
-                              //   if (!selectedFilter.includes(i)) {
-                              //     setSelectedFilter([...selectedFilter, i])
-                              //     p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === relevansOptions[i].value))
-                              //   } else {
-                              //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
-                              //     p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
-                              //   }
-                              // })
-                            }}
-                          >
-                            {relevansOptions.map((r, i) => {
-                              return (
-                                <Checkbox key={'relevans_' + r.value} value={i} description={r.description}>
-                                  {r.label}
-                                </Checkbox>
-                              )
-                            })}
-                          </CheckboxGroup>
+                          const irrelevansListe = relevansOptions.filter((v, index) => !selected.includes(index))
+                          p.form.setFieldValue(
+                            'irrelevansFor',
+                            irrelevansListe.map((il) => codelist.getCode(ListName.RELEVANS, il.value)),
+                          )
+                          // selected.forEach((value) => {
+                          //   const i = parseInt(value)
+                          //   if (!selectedFilter.includes(i)) {
+                          //     setSelectedFilter([...selectedFilter, i])
+                          //     p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === relevansOptions[i].value))
+                          //   } else {
+                          //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
+                          //     p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
+                          //   }
+                          // })
+                        }}
+                      >
+                        {relevansOptions.map((r, i) => (
+                          <Checkbox key={'relevans_' + r.value} value={i} description={r.description}>
+                            {r.label}
+                          </Checkbox>
+                        ))}
+                      </CheckboxGroup>
+                    </div>
+                  )}
+                </FieldArray>
+
+                {/* DONT REMOVE */}
+                {/* )} */}
+                <div className="mt-2.5">
+                  <BoolField
+                    label="Behandler løsningen du dokumenterer etterlevelse for personopplysninger?"
+                    name="behandlerPersonopplysninger"
+                    tooltip="Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å opprette etterlevelse og legge til behandling etterpå."
+                  />
+                </div>
+
+                {values.behandlerPersonopplysninger && (
+                  <FieldWrapper>
+                    <FieldArray name="behandlinger">
+                      {(p: FieldArrayRenderProps) => (
+                        <div className="mb-4">
+                          <LabelWithDescription
+                            label={'Legg til behandlinger fra Behandlingskatalogen'}
+                            description="Siden løsningen behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Du kan knytte én eller flere behandlinger til etterlevelsesdokumentet."
+                          />
+                          <div className="w-full">
+                            <AsyncSelect
+                              aria-label="Søk etter behandlinger"
+                              placeholder="Søk etter behandlinger"
+                              components={{ DropdownIndicator }}
+                              noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
+                              controlShouldRenderValue={false}
+                              loadingMessage={() => 'Søker...'}
+                              isClearable={false}
+                              loadOptions={searchBehandlingOptions}
+                              onChange={(value) => {
+                                value && p.push(value)
+                              }}
+                              styles={{
+                                control: (base) =>
+                                  ({
+                                    ...base,
+                                    cursor: 'text',
+                                    height: '48px',
+                                  }) as CSSObjectWithLabel,
+                              }}
+                            />
+                          </div>
+                          <RenderTagList list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} />
                         </div>
-                      )
-                    }}
-                  </FieldArray>
+                      )}
+                    </FieldArray>
+                  </FieldWrapper>
+                )}
 
-                  {/* DONT REMOVE */}
-                  {/* )} */}
-                  <div className="mt-2.5">
-                    <BoolField
-                      label="Behandler løsningen du dokumenterer etterlevelse for personopplysninger?"
-                      name="behandlerPersonopplysninger"
-                      tooltip="Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å opprette etterlevelse og legge til behandling etterpå."
-                    />
-                  </div>
+                <div className="mt-2.5">
+                  <BoolField
+                    label="Er etterlevelsesdokumentet knyttet til et team i Teamkatalogen?"
+                    name="knytteTilTeam"
+                    tooltip="Når du legger til et team vil medlemmene i det teamet kunne se dette dokumentet under «Mine dokumentasjoner». Dette er ikke nødvendig for å opprette etterlevelsesdokumentet, men anbefales."
+                  />
+                </div>
 
-                  {values.behandlerPersonopplysninger && (
-                    <FieldWrapper>
-                      <FieldArray name="behandlinger">
-                        {(p: FieldArrayRenderProps) => {
-                          return (
-                            <div className="mb-4">
-                              <LabelWithDescription
-                                label={'Legg til behandlinger fra Behandlingskatalogen'}
-                                description="Siden løsningen behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Du kan knytte én eller flere behandlinger til etterlevelsesdokumentet."
-                              />
-                              <div className="w-full">
-                                <AsyncSelect
-                                  aria-label="Søk etter behandlinger"
-                                  placeholder="Søk etter behandlinger"
-                                  components={{ DropdownIndicator }}
-                                  noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
-                                  controlShouldRenderValue={false}
-                                  loadingMessage={() => 'Søker...'}
-                                  isClearable={false}
-                                  loadOptions={searchBehandlingOptions}
-                                  onChange={(value) => {
-                                    value && p.push(value)
-                                  }}
-                                  styles={{
-                                    control: (base) =>
-                                      ({
-                                        ...base,
-                                        cursor: 'text',
-                                        height: '48px',
-                                      }) as CSSObjectWithLabel,
-                                  }}
-                                />
-                              </div>
-                              <RenderTagList list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} />
-                            </div>
-                          )
-                        }}
-                      </FieldArray>
-                    </FieldWrapper>
-                  )}
-
-                  <div className="mt-2.5">
-                    <BoolField
-                      label="Er etterlevelsesdokumentet knyttet til et team i Teamkatalogen?"
-                      name="knytteTilTeam"
-                      tooltip="Når du legger til et team vil medlemmene i det teamet kunne se dette dokumentet under «Mine dokumentasjoner». Dette er ikke nødvendig for å opprette etterlevelsesdokumentet, men anbefales."
-                    />
-                  </div>
-
-                  {values.knytteTilTeam && (
-                    <FieldWrapper>
-                      <FieldArray name="teamsData">
-                        {(p: FieldArrayRenderProps) => {
-                          return (
-                            <div>
-                              <LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />
-                              <div className="w-full">
-                                <AsyncSelect
-                                  aria-label="Søk etter team"
-                                  placeholder="Søk etter team"
-                                  components={{ DropdownIndicator }}
-                                  noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
-                                  controlShouldRenderValue={false}
-                                  loadingMessage={() => 'Søker...'}
-                                  isClearable={false}
-                                  loadOptions={useSearchTeamOptions}
-                                  onChange={(value) => {
-                                    value && p.push(value)
-                                  }}
-                                  styles={{
-                                    control: (base) =>
-                                      ({
-                                        ...base,
-                                        cursor: 'text',
-                                        height: '48px',
-                                      }) as CSSObjectWithLabel,
-                                  }}
-                                />
-                              </div>
-                              <RenderTagList list={p.form.values.teamsData.map((t: Team) => t.name)} onRemove={p.remove} />
-                            </div>
-                          )
-                        }}
-                      </FieldArray>
-                    </FieldWrapper>
-                  )}
-                  <div className="my-5">
-                    <Error fieldName={'title'} fullWidth />
-                  </div>
-                  <div className="flex justify-end">
-                    <Button type="button" variant="secondary" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
-                      Avbryt
-                    </Button>
-                    <Button
-                      type="button"
-                      onClick={() => {
-                        submitForm()
-                      }}
-                      className="ml-2.5"
-                    >
-                      {isEditButton ? 'Lagre' : 'Opprett'}
-                    </Button>
-                  </div>
-                </Form>
-              )
-            }}
+                {values.knytteTilTeam && (
+                  <FieldWrapper>
+                    <FieldArray name="teamsData">
+                      {(p: FieldArrayRenderProps) => (
+                        <div>
+                          <LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />
+                          <div className="w-full">
+                            <AsyncSelect
+                              aria-label="Søk etter team"
+                              placeholder="Søk etter team"
+                              components={{ DropdownIndicator }}
+                              noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
+                              controlShouldRenderValue={false}
+                              loadingMessage={() => 'Søker...'}
+                              isClearable={false}
+                              loadOptions={useSearchTeamOptions}
+                              onChange={(value) => {
+                                value && p.push(value)
+                              }}
+                              styles={{
+                                control: (base) =>
+                                  ({
+                                    ...base,
+                                    cursor: 'text',
+                                    height: '48px',
+                                  }) as CSSObjectWithLabel,
+                              }}
+                            />
+                          </div>
+                          <RenderTagList list={p.form.values.teamsData.map((t: Team) => t.name)} onRemove={p.remove} />
+                        </div>
+                      )}
+                    </FieldArray>
+                  </FieldWrapper>
+                )}
+                <div className="my-5">
+                  <Error fieldName="title" fullWidth />
+                </div>
+                <div className="flex justify-end">
+                  <Button type="button" variant="secondary" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
+                    Avbryt
+                  </Button>
+                  <Button type="button" onClick={() => submitForm()} className="ml-2.5">
+                    {isEditButton ? 'Lagre' : 'Opprett'}
+                  </Button>
+                </div>
+              </Form>
+            )}
           </Formik>
         </Modal.Body>
       </Modal>
