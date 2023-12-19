@@ -1,4 +1,9 @@
+import { Button, Checkbox, CheckboxGroup, Modal } from '@navikt/ds-react'
+import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { CSSObjectWithLabel } from 'react-select'
+import AsyncSelect from 'react-select/async'
 import { searchBehandlingOptions } from '../../../api/BehandlingApi'
 import {
   createEtterlevelseDokumentasjon,
@@ -6,18 +11,13 @@ import {
   etterlevelseDokumentasjonSchema,
   updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
-import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../../../constants'
-import { Code, codelist, ListName } from '../../../services/Codelist'
-import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
-import { BoolField, FieldWrapper, InputField, TextAreaField } from '../../common/Inputs'
-import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { useSearchTeamOptions } from '../../../api/TeamApi'
+import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../../../constants'
+import { Code, ListName, codelist } from '../../../services/Codelist'
+import { BoolField, FieldWrapper, TextAreaField } from '../../common/Inputs'
+import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { RenderTagList } from '../../common/TagList'
-import { useNavigate } from 'react-router-dom'
-import { Button, Checkbox, CheckboxGroup, Modal } from '@navikt/ds-react'
-import AsyncSelect from 'react-select/async'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
-import { CSSObjectWithLabel } from 'react-select'
 
 type EditEtterlevelseDokumentasjonModalProps = {
   etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
@@ -27,6 +27,7 @@ type EditEtterlevelseDokumentasjonModalProps = {
 }
 
 export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokumentasjonModalProps) => {
+  const { etterlevelseDokumentasjon, setEtterlevelseDokumentasjon, isEditButton, variant } = props
   const relevansOptions = codelist.getParsedOptions(ListName.RELEVANS)
   const [selectedFilter, setSelectedFilter] = useState<number[]>(relevansOptions.map((r, i) => i))
   const [isEtterlevelseDokumentasjonerModalOpen, setIsEtterlevelseDokumntasjonerModalOpen] = useState<boolean>(false)
@@ -34,8 +35,8 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.irrelevansFor.length) {
-      const irrelevans = props.etterlevelseDokumentasjon.irrelevansFor.map((ir: Code) => relevansOptions.findIndex((o) => o.value === ir.code))
+    if (etterlevelseDokumentasjon?.irrelevansFor.length) {
+      const irrelevans = etterlevelseDokumentasjon.irrelevansFor.map((ir: Code) => relevansOptions.findIndex((o) => o.value === ir.code))
       setSelectedFilter(
         relevansOptions
           .map((r, i) => {
@@ -51,30 +52,28 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
       )
     }
 
-    if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.virkemiddel && props.etterlevelseDokumentasjon.virkemiddel.navn) {
-      setSelectedVirkemiddel(props.etterlevelseDokumentasjon.virkemiddel)
+    if (etterlevelseDokumentasjon?.virkemiddel?.navn) {
+      setSelectedVirkemiddel(etterlevelseDokumentasjon.virkemiddel)
     }
-  }, [props.etterlevelseDokumentasjon])
+  }, [etterlevelseDokumentasjon])
 
   const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
     if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
       await createEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
-        if (props.setEtterlevelseDokumentasjon) {
-          props.setEtterlevelseDokumentasjon(response)
+        if (setEtterlevelseDokumentasjon) {
+          setEtterlevelseDokumentasjon(response)
         }
         navigate(0)
       })
     } else {
       await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
-        const mutatedBehandlinger =
-          response.behandlinger &&
-          response.behandlinger.map((b) => {
-            return { ...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn }
-          })
-        if (props.setEtterlevelseDokumentasjon) {
-          props.setEtterlevelseDokumentasjon({ ...response, behandlinger: mutatedBehandlinger, virkemiddel: selectedVirkemiddel })
+        const mutatedBehandlinger = response.behandlinger?.map((b) => {
+          return { ...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn }
+        })
+        if (setEtterlevelseDokumentasjon) {
+          setEtterlevelseDokumentasjon({ ...response, behandlinger: mutatedBehandlinger, virkemiddel: selectedVirkemiddel })
         }
       })
     }
@@ -84,21 +83,21 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
     <div className="ml-5">
       <Button
         onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)}
-        size={props.isEditButton ? 'small' : 'medium'}
-        variant={props.variant ? props.variant : props.isEditButton ? 'secondary' : 'primary'}
+        size={isEditButton ? 'small' : 'medium'}
+        variant={variant ? variant : isEditButton ? 'secondary' : 'primary'}
         className="whitespace-nowrap"
       >
-        {props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Nytt etterlevelsesdokument'}
+        {isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Nytt etterlevelsesdokument'}
       </Button>
 
       <Modal
-        header={{ heading: props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Opprett nytt etterlevelsesdokument' }}
+        header={{ heading: isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Opprett nytt etterlevelsesdokument' }}
         open={!!isEtterlevelseDokumentasjonerModalOpen}
         onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}
       >
         <Modal.Body>
           <Formik
-            initialValues={etterlevelseDokumentasjonMapToFormVal(props.etterlevelseDokumentasjon ? props.etterlevelseDokumentasjon : {})}
+            initialValues={etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon ? etterlevelseDokumentasjon : {})}
             onSubmit={submit}
             validationSchema={etterlevelseDokumentasjonSchema()}
             validateOnChange={false}
@@ -186,7 +185,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                             onChange={(selected) => {
                               setSelectedFilter(selected)
 
-                              const irrelevansListe = relevansOptions.filter((v, i) => !selected.includes(i))
+                              const irrelevansListe = relevansOptions.filter((v, index) => !selected.includes(index))
                               p.form.setFieldValue(
                                 'irrelevansFor',
                                 irrelevansListe.map((il) => codelist.getCode(ListName.RELEVANS, il.value)),
@@ -324,7 +323,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       }}
                       className="ml-2.5"
                     >
-                      {props.isEditButton ? 'Lagre' : 'Opprett'}
+                      {isEditButton ? 'Lagre' : 'Opprett'}
                     </Button>
                   </div>
                 </Form>
