@@ -33,7 +33,7 @@
         <!-- transitive versions -->
         <commons-compress.version>1.25.0</commons-compress.version>
         <commons-io.version>2.15.1</commons-io.version>
-        <guava.version>32.1.3-jre</guava.version>
+        <guava.version>33.0.0-jre</guava.version>
         <jna.version>5.14.0</jna.version>
         <jetbrains.annotation.version>24.1.0</jetbrains.annotation.version>
         <stax2-api.version>4.2.2</stax2-api.version>
