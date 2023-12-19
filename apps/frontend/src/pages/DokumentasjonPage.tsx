@@ -201,12 +201,12 @@ export const DokumentasjonPage = () => {
                               {behandlinger?.length > 0 ? `${behandlinger[index].navn}` : 'Ingen data'}
                             </ExternalLink>
                           ) : (
-                            <BodyShort>{behandlinger ? behandlinger[index].navn : 'Ingen data'}</BodyShort>
+                            <BodyShort size="small">{behandlinger ? behandlinger[index].navn : 'Ingen data'}</BodyShort>
                           )}
                         </div>
                       ))
                     ) : (
-                      <BodyShort>Husk å legge til behandling fra behandlingskatalogen</BodyShort>
+                      <BodyShort size="small">Husk å legge til behandling fra behandlingskatalogen</BodyShort>
                     )}
                   </div>
                 )}
