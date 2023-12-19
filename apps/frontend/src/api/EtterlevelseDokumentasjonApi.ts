@@ -121,7 +121,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon:
 
 export const etterlevelseDokumentasjonSchema = () =>
   yup.object({
-    title: yup.string().required('Etterlevelsedokumentasjon trenger en tittel'),
+    title: yup.string().required('Etterlevelsesdokumentasjon trenger en tittel'),
     virkemiddelId: yup.string().test({
       name: 'addedVirkemiddelCheck',
       message: 'Hvis ditt system/produkt er tilknyttet et virkemiddel må det legges til.',
