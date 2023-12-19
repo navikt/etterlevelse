@@ -16,6 +16,7 @@ import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../.
 import { Code, ListName, codelist } from '../../../services/Codelist'
 import { BoolField, FieldWrapper, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
+import { Error } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 
@@ -311,7 +312,9 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       </FieldArray>
                     </FieldWrapper>
                   )}
-
+                  <div className="my-5">
+                    <Error fieldName={'title'} fullWidth />
+                  </div>
                   <div className="flex justify-end">
                     <Button type="button" variant="secondary" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
                       Avbryt
