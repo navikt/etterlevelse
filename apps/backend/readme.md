@@ -2,10 +2,12 @@
 
 #### Requirements
 
- * JDK 17
+ * OpenJDK 17
  * Docker
  * Maven
-  
+
+For å bygge lokalt i Windows må man ha Docker desktop. Husk å legge til brukeren din i gruppen docker-users.
+
 #### Build 
 `mvn clean package`
 
