@@ -63,7 +63,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         
-      - uses: nais/deploy/actions/deploy@v1
+      - uses: nais/deploy/actions/deploy@v2
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
@@ -72,7 +72,7 @@ jobs:
           ENVIRONMENT: dev-gcp:teamdatajegerne:etterlevelse-backend
 
       - name: deploy alerts to dev-gcp
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
@@ -86,7 +86,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         
-      - uses: nais/deploy/actions/deploy@v1
+      - uses: nais/deploy/actions/deploy@v2
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
@@ -95,7 +95,7 @@ jobs:
           ENVIRONMENT: prod-gcp:teamdatajegerne:etterlevelse-backend
           
       - name: deploy alerts to prod-gcp
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
