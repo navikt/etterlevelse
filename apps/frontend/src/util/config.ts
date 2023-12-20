@@ -13,6 +13,7 @@ export const markdownLink = 'https://guides.github.com/features/mastering-markdo
 export const behandlingsKatalogLink = 'https://behandlingskatalog.intern.nav.no/'
 export const statusPageLink = 'https://metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse'
 export const VeilederEtterlevelseskrav = 'https://navno.sharepoint.com/:w:/s/SttteforetterlevelseDIR/ERm9VrgVX4REo-ksMNyrlEUBK9RROHbqPhJXPq_h5wxgPA?e=kLeUO5'
+export const omEtterlevelsePaNavet = 'https://navno.sharepoint.com/sites/intranett-utvikling/SitePages/Etterlevelseskrav.aspx'
 
 export const teamKatPersonLink = (navIdent: string) => `${env.teamKatBaseUrl}resource/${navIdent}`
 export const personImageLink = (navIdent: string) => `/api/team/resource/${navIdent}/photo`
