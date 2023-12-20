@@ -65,7 +65,9 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
         if (setEtterlevelseDokumentasjon) {
           setEtterlevelseDokumentasjon(response)
         }
-        navigate(0)
+        if (response.id) {
+          navigate('/dokumentasjon/' + response.id)
+        }
       })
     } else {
       await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
