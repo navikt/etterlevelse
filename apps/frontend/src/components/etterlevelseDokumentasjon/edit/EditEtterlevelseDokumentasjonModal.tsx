@@ -215,9 +215,9 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                 {/* )} */}
                 <div className="mt-2.5">
                   <BoolField
-                    label="Behandler løsningen du dokumenterer etterlevelse for personopplysninger?"
+                    label="Ønsker du å legge til eksisterende behandling(er) nå?"
                     name="behandlerPersonopplysninger"
-                    tooltip="Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å opprette etterlevelse og legge til behandling etterpå."
+                    tooltip="Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å legge til behandling senere."
                   />
                 </div>
 
@@ -228,7 +228,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                         <div className="mb-4">
                           <LabelWithDescription
                             label={'Legg til behandlinger fra Behandlingskatalogen'}
-                            description="Siden løsningen behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Du kan knytte én eller flere behandlinger til etterlevelsesdokumentet."
                           />
                           <div className="w-full">
                             <AsyncSelect
