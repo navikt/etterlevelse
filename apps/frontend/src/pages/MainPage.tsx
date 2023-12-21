@@ -59,7 +59,18 @@ export const MainPage = () => {
                   <EditEtterlevelseDokumentasjonModal variant={data?.etterlevelseDokumentasjoner.content.length ? 'secondary' : 'primary'} />
                 </div>
                 <Link href="/dokumentasjoner">
-                  <Button as="a" variant="tertiary">
+                  <Button
+                    as="a"
+                    variant="tertiary"
+                    onClick={() =>
+                      ampli.logEvent('navigere', {
+                        app: 'etterlevelse',
+                        kilde: 'forside-panel',
+                        til: '/dokumentasjoner',
+                        fra: '/',
+                      })
+                    }
+                  >
                     Alle etterlevelsesdokumenter
                   </Button>
                 </Link>
@@ -105,7 +116,18 @@ const EtterlevelseDokumentasjonList = ({ etterlevelseDokumentasjoner }: { etterl
       <div className="mt-6 flex flex-col gap-2">
         {sortedEtterlevelseDokumentasjoner.map((etterlevelseDokumentasjon, index) => {
           return (
-            <LinkPanel href={'/dokumentasjon/' + etterlevelseDokumentasjon.id} key={etterlevelseDokumentasjon.title + '_' + index}>
+            <LinkPanel
+              href={'/dokumentasjon/' + etterlevelseDokumentasjon.id}
+              onClick={() =>
+                ampli.logEvent('navigere', {
+                  app: 'etterlevelse',
+                  kilde: 'forside-panel',
+                  til: `'/dokumentasjon/' + ${etterlevelseDokumentasjon.id}`,
+                  fra: '/',
+                })
+              }
+              key={etterlevelseDokumentasjon.title + '_' + index}
+            >
               <LinkPanel.Title className="text-xl">
                 E{etterlevelseDokumentasjon.etterlevelseNummer} {etterlevelseDokumentasjon.title}
               </LinkPanel.Title>

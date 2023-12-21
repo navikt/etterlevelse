@@ -13,6 +13,7 @@ import {
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { useSearchTeamOptions } from '../../../api/TeamApi'
 import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../../../constants'
+import { ampli } from '../../../services/Amplitude'
 import { Code, ListName, codelist } from '../../../services/Codelist'
 import { BoolField, FieldWrapper, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
@@ -85,7 +86,14 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   return (
     <div className="ml-5">
       <Button
-        onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)}
+        onClick={() => {
+          if (!isEditButton) {
+            ampli.logEvent('knapp klikket', {
+              tekst: 'Nytt etterlevelsesdokument fra forsiden',
+            })
+          }
+          setIsEtterlevelseDokumntasjonerModalOpen(true)
+        }}
         size={isEditButton ? 'small' : 'medium'}
         variant={variant ? variant : isEditButton ? 'secondary' : 'primary'}
         className="whitespace-nowrap"
@@ -228,9 +236,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                     <FieldArray name="behandlinger">
                       {(p: FieldArrayRenderProps) => (
                         <div className="mb-4">
-                          <LabelWithDescription
-                            label={'Legg til behandlinger fra Behandlingskatalogen'}
-                          />
+                          <LabelWithDescription label={'Legg til behandlinger fra Behandlingskatalogen'} />
                           <div className="w-full">
                             <AsyncSelect
                               aria-label="Søk etter behandlinger"
@@ -308,10 +314,30 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                   <Error fieldName="title" fullWidth />
                 </div>
                 <div className="flex justify-end">
-                  <Button type="button" variant="secondary" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => {
+                      ampli.logEvent('knapp trykket', {
+                        tekst: 'Avbryt opprett etterlevelsesdokument',
+                      })
+                      setIsEtterlevelseDokumntasjonerModalOpen(false)
+                    }}
+                  >
                     Avbryt
                   </Button>
-                  <Button type="button" onClick={() => submitForm()} className="ml-2.5">
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      if (!isEditButton) {
+                        ampli.logEvent('knapp trykket', {
+                          tekst: 'Opprett etterlevelsesdokument',
+                        })
+                      }
+                      submitForm()
+                    }}
+                    className="ml-2.5"
+                  >
                     {isEditButton ? 'Lagre' : 'Opprett'}
                   </Button>
                 </div>
