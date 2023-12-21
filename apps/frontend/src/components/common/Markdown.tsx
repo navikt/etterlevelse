@@ -1,12 +1,12 @@
+import { BodyLong, BodyShort, Heading, Link, List } from '@navikt/ds-react'
 import ReactMarkdown from 'react-markdown'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
-import { ExternalLink } from './RouteLink'
-import { markdownLink } from '../../util/config'
-import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
+import remarkGfm from 'remark-gfm'
+import { markdownLink } from '../../util/config'
 import { ettlevColors } from '../../util/theme'
-import { BodyLong, BodyShort, Heading, Link, List } from '@navikt/ds-react'
+import { ExternalLink } from './RouteLink'
 
 export const Markdown = ({
   vertical,
@@ -106,7 +106,7 @@ export const Markdown = ({
           </List.Item>
         )
       } else {
-        return <List.Item className="break-all">{children}</List.Item>
+        return <List.Item>{children}</List.Item>
       }
     },
     ul: (ulProps: any) => {

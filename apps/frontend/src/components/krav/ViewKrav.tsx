@@ -56,7 +56,7 @@ export const AllInfo = ({
 
   return (
     <div>
-      {krav.dokumentasjon.length >0 && (
+      {krav.dokumentasjon.length > 0 && (
         <LabelWrapper>
           <LabelAboveContent header={header} title="Kilder">
             <DotTags items={krav.dokumentasjon} markdown inColumn />
