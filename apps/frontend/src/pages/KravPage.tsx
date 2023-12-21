@@ -1,29 +1,29 @@
-import { useParams } from 'react-router-dom'
-import { deleteKrav, getKravByKravNummer, KravId as KravIdQueryVariables, KravIdParams, kravMapToFormVal } from '../api/KravApi'
-import React, { useEffect, useRef, useState } from 'react'
-import { Krav, KravId, KravQL, KravStatus, KravVersjon } from '../constants'
-import { AllInfo, ViewKrav } from '../components/krav/ViewKrav'
-import { EditKrav } from '../components/krav/EditKrav'
-import { user } from '../services/User'
-import { FormikProps } from 'formik'
-import { DeleteItem } from '../components/DeleteItem'
 import { useQuery } from '@apollo/client'
-import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
-import { useLocationState, useQueryParam } from '../util/hooks'
 import { gql } from '@apollo/client/core'
-import ExpiredAlert from '../components/krav/ExpiredAlert'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import Etterlevelser from '../components/krav/Etterlevelser'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { Markdown } from '../components/common/Markdown'
 import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { BodyLong, BodyShort, Button, Heading, Spacer, Tabs } from '@navikt/ds-react'
+import { FormikProps } from 'formik'
+import React, { useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { KravIdParams, KravId as KravIdQueryVariables, deleteKrav, getKravByKravNummer, kravMapToFormVal } from '../api/KravApi'
+import { DeleteItem } from '../components/DeleteItem'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { Markdown } from '../components/common/Markdown'
 import StatusTag from '../components/common/StatusTag'
+import { EditKrav } from '../components/krav/EditKrav'
+import Etterlevelser from '../components/krav/Etterlevelser'
+import ExpiredAlert from '../components/krav/ExpiredAlert'
+import { AllInfo, ViewKrav } from '../components/krav/ViewKrav'
+import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
 import { PageLayout } from '../components/scaffold/Page'
+import { Krav, KravId, KravQL, KravStatus, KravVersjon } from '../constants'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
+import { ListName, TemaCode, codelist } from '../services/Codelist'
+import { user } from '../services/User'
+import { useLocationState, useQueryParam } from '../util/hooks'
 
-export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) : string => `K${it.kravNummer}.${it.kravVersjon}`
+export const kravNumView = (it: { kravVersjon: number; kravNummer: number }): string => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav): string => `${kravNumView(krav)} ${krav.navn}`
 
 export const kravStatus = (status: KravStatus | string) => {
@@ -109,7 +109,7 @@ export const KravPage = () => {
         side: 'Krav side',
         sidetittel: `${kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} ${krav.navn}`,
         section: kravTema?.shortName.toString(),
-        ...userRoleEventProp
+        ...userRoleEventProp,
       })
     }
   }, [krav, kravTema])
@@ -131,7 +131,7 @@ export const KravPage = () => {
   }, [params.id])
 
   const hasKravExpired = () => {
-    if (krav && krav.status === KravStatus.UTGAATT && alleKravVersjoner.length === 1) {
+    if (krav?.status === KravStatus.UTGAATT && alleKravVersjoner.length === 1) {
       return true
     } else {
       return krav ? krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString()) : false
@@ -172,13 +172,12 @@ export const KravPage = () => {
   useEffect(() => {
     // hent krav på ny ved avbryt ny versjon
     if (!edit && !krav?.id && krav?.nyKravVersjon) reloadKrav()
-  }, [edit])
 
   return (
     <PageLayout
       key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon}
-      pageTitle={ kravNumView({ kravNummer: krav?.kravNummer || 0, kravVersjon: krav?.kravVersjon || 0}) + ' ' + krav?.navn}
-      currentPage={kravNumView({ kravNummer: krav?.kravNummer || 0, kravVersjon: krav?.kravVersjon || 0})}
+      pageTitle={kravNumView({ kravNummer: krav?.kravNummer || 0, kravVersjon: krav?.kravVersjon || 0 }) + ' ' + krav?.navn}
+      currentPage={kravNumView({ kravNummer: krav?.kravNummer || 0, kravVersjon: krav?.kravVersjon || 0 })}
       breadcrumbPaths={getBreadcrumPaths()}
     >
       {kravLoading && <LoadingSkeleton header="Krav" />}
@@ -188,7 +187,7 @@ export const KravPage = () => {
             <div className="w-full">
               <BodyShort>{krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}</BodyShort>
               <Heading className="mb-3" size="medium" level="1">
-                {krav && krav?.navn ? krav.navn : 'Ny'}{' '}
+                {krav?.navn ? krav.navn : 'Ny'}{' '}
               </Heading>
               {krav && <StatusTag status={krav.status} />}
 
@@ -241,9 +240,11 @@ export const KravPage = () => {
               {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
                 <div>
                   <div className="flex flex-1">
-                    <Button type="button" size="small" variant="primary" onClick={() => setEdit(!edit)}>
-                      Rediger krav
-                    </Button>
+                    {!hasKravExpired() && (
+                      <Button type="button" size="small" variant="primary" onClick={() => setEdit(!edit)}>
+                        Rediger krav
+                      </Button>
+                    )}
 
                     {krav.status === KravStatus.AKTIV && (
                       <Button type="button" className="ml-4" size="small" onClick={newVersion} variant="secondary">
