@@ -169,7 +169,7 @@ export const EtterlevelseEditFields = ({
                           ampli.logEvent('knapp klikket', {
                             tekst: 'Lagre og fortsett',
                             pagePath: location.pathname,
-                            ...userRoleEventProp
+                            ...userRoleEventProp,
                           })
                           submitForm()
                         }}
@@ -190,7 +190,7 @@ export const EtterlevelseEditFields = ({
                           ampli.logEvent('knapp klikket', {
                             tekst: 'Sett krav til ferdig utfylt',
                             pagePath: location.pathname,
-                            ...userRoleEventProp
+                            ...userRoleEventProp,
                           })
                           submitForm()
                         }}
@@ -212,7 +212,7 @@ export const EtterlevelseEditFields = ({
                         ampli.logEvent('knapp klikket', {
                           tekst: 'Avbryt uten endring i etterlevelse',
                           pagePath: location.pathname,
-                          ...userRoleEventProp
+                          ...userRoleEventProp,
                         })
                         close()
                       } else {
@@ -242,8 +242,9 @@ export const EtterlevelseEditFields = ({
                       onClick={() => {
                         ampli.logEvent('knapp klikket', {
                           context: 'Avbryt med endring i etterlevelse',
+                          tekst: 'Avbryt med endring i etterlevelse',
                           pagePath: location.pathname,
-                          ...userRoleEventProp
+                          ...userRoleEventProp,
                         })
                         close()
                       }}
@@ -251,7 +252,17 @@ export const EtterlevelseEditFields = ({
                     >
                       Ja, jeg vil avbryte
                     </Button>
-                    <Button onClick={() => setIsAvbryModalOpen(false)} type="button" variant="secondary">
+                    <Button
+                      onClick={() => {
+                        ampli.logEvent('knapp klikket', {
+                          tekst: 'Nei, jeg vil fortsette',
+                          pagePath: location.pathname,
+                        })
+                        setIsAvbryModalOpen(false)
+                      }}
+                      type="button"
+                      variant="secondary"
+                    >
                       Nei, jeg vil fortsette
                     </Button>
                   </Modal.Footer>
