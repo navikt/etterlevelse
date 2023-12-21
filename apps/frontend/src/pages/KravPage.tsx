@@ -172,6 +172,7 @@ export const KravPage = () => {
   useEffect(() => {
     // hent krav på ny ved avbryt ny versjon
     if (!edit && !krav?.id && krav?.nyKravVersjon) reloadKrav()
+  }, [edit])
 
   return (
     <PageLayout
