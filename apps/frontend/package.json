@@ -68,7 +68,7 @@
     "*.{js,jsx,ts,tsx}": [
       "prettier --list-different",
       "eslint --max-warnings 0",
-      "bash -c 'npm run type-check'"
+      "bash -c 'yarn run type-check'"
     ]
   },
   "eslintConfig": {
