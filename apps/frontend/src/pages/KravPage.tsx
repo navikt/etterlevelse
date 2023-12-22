@@ -72,7 +72,7 @@ export const KravPage = () => {
 
   const { state, navigate, changeState } = useLocationState<LocationState>()
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
-  const [tab, setTab] = useState<Section>(!!tilbakemeldingId ? 'tilbakemeldinger' : state?.tab || 'krav')
+  const [tab, setTab] = useState<Section>(tilbakemeldingId ? 'tilbakemeldinger' : state?.tab || 'krav')
 
   const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{ kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' }])
   const [kravTema, setKravTema] = useState<TemaCode>()

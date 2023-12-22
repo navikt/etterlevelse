@@ -65,7 +65,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
 
     setIsLoading(true)
     if (etterlevelseDokumentasjonId && !isCreateNew) {
-      ;(async () => {
+      (async () => {
         await getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then(async (etterlevelseDokumentasjon) => {
           if (etterlevelseDokumentasjon.virkemiddelId) {
             await getVirkemiddel(etterlevelseDokumentasjon.virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))

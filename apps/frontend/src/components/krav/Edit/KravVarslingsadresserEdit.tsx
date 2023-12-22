@@ -81,7 +81,7 @@ export const VarslingsadresserTagList = ({ varslingsadresser, remove }: { varsli
   const [slackUsers, setSlackUsers] = useState<SlackUser[]>([])
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       const loadedChannels: SlackChannel[] = []
       const loadedUsers: SlackUser[] = []
       const channels = await Promise.all(

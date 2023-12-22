@@ -47,7 +47,7 @@ export const KravTablePage = () => {
     .slice((page - 1) * rowsPerPage, page * rowsPerPage)
 
   useEffect(() => {
-    ; (async () => {
+     (async () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
       setTableContent(mappedKraver)

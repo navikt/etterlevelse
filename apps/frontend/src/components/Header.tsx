@@ -194,7 +194,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }, [])
 
   React.useEffect(() => {
-    ;(async () => {
+    (async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])

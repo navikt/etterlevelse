@@ -10,7 +10,7 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
   const [kravData, setKravData] = useState<Krav>()
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       const krav = await getKravByKravNumberAndVersion(etterlevelse.kravNummer, etterlevelse.kravVersjon)
       if (krav) {
         setKravData(krav)

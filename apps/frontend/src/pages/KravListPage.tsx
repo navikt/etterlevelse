@@ -97,7 +97,7 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; 
                     <BodyShort size="small" className="break-words">
                       {tema && tema.shortName ? tema.shortName : ''}
                     </BodyShort>
-                    <BodyShort size="small">{!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
+                    <BodyShort size="small">{k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
                   </div>
                 </LinkPanel.Title>
               </LinkPanel>

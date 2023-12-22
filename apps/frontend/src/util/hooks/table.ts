@@ -114,7 +114,7 @@ export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: T
           if (showLast && isInitialSort) {
             ordered = [...ordered.filter((p) => !showLast(p)), ...ordered.filter(showLast)]
           }
-          for (let key in filterValues) {
+          for (const key in filterValues) {
             if (filterValues.hasOwnProperty(key) && !!filterValues[key]) {
               ordered = filterData(key, ordered)
             }

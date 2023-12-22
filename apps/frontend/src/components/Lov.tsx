@@ -24,9 +24,9 @@ export const LovView = (props: { regelverk?: Regelverk; openOnSamePage?: boolean
   const { spesifisering, lov } = props.regelverk
   const lovCode = lov?.code
 
-  let lovDisplay = lov && codelist.getShortname(ListName.LOV, lovCode)
+  const lovDisplay = lov && codelist.getShortname(ListName.LOV, lovCode)
 
-  let descriptionText = codelist.valid(ListName.LOV, lovCode) ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering, props.openOnSamePage) : spesifisering
+  const descriptionText = codelist.valid(ListName.LOV, lovCode) ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering, props.openOnSamePage) : spesifisering
 
   return <span>{descriptionText}</span>
 }

@@ -27,7 +27,7 @@ export const BehandlingSok = () => {
     fetchMore,
   } = useQuery<{ etterlevelseDokumentasjoner: PageResponse<EtterlevelseDokumentasjonQL> }, Variables>(query, {
     variables: { behandlingId: selectedBehandling ? selectedBehandling.id : behandlingUUID ? behandlingUUID : '' },
-    skip: !!!selectedBehandling && !!!behandlingUUID,
+    skip: !selectedBehandling && !behandlingUUID,
   })
   const etterlevelseDokumentasjoner = data?.etterlevelseDokumentasjoner || emptyPage
   const loading = !data && gqlLoading

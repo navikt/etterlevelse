@@ -112,7 +112,7 @@ export const Button = (props: ButtonProps) => {
           },
         }
 
-  let overrides: Override<any> = boxShadow
+  const overrides: Override<any> = boxShadow
   overrides.style = _.merge(overrides.style, props.kind === 'outline' ? outlineOverride : {})
   overrides.style = _.merge(overrides.style, props.kind === 'underline-hover' ? underlineOverride : {})
   overrides.style = _.merge(overrides.style, props.kind === 'secondary' ? buttonBorderStyle : {})

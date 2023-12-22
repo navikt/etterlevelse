@@ -223,7 +223,7 @@ const HeadCell = <T, K extends keyof T>(props: HeadProps<T, K>) => {
       }}
       style={{ marginLeft: 'auto', justifySelf: 'flex-end' }}
     >
-      <FontAwesomeIcon size="sm" icon={faFilter} color={!!inputFilter ? theme.colors.negative400 : theme.colors.primary200} />
+      <FontAwesomeIcon size="sm" icon={faFilter} color={inputFilter ? theme.colors.negative400 : theme.colors.primary200} />
     </span>
   )
 

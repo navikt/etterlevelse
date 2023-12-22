@@ -65,7 +65,7 @@ export const EditVirkemidler = () => {
                   placeholder={'Virkemidler'}
                   onInputChange={(event) => setSearch(event.currentTarget.value)}
                   onChange={(params) => {
-                    let virkemiddel = params.value.length ? params.value[0] : undefined
+                    const virkemiddel = params.value.length ? params.value[0] : undefined
                     virkemiddel && p.push(virkemiddel)
                   }}
                   error={!!p.form.errors.begreper && !!p.form.submitCount}

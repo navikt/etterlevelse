@@ -14,7 +14,7 @@ export const FAQ = () => {
   const [melding, setMelding] = useState<Melding>()
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       const response = await getMeldingByType(MeldingType.OM_ETTERLEVELSE)
       if (response.numberOfElements > 0) {
         setMelding(response.content[0])

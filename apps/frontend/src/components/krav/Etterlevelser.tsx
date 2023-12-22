@@ -115,7 +115,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
       {productAreas.length > 0 && (
         <Accordion>
           {productAreas.map((t) => {
-            let productAreaEtterlevelser = filteredEtterlevelse?.filter(
+            const productAreaEtterlevelser = filteredEtterlevelse?.filter(
               (e) => e.etterlevelseDokumentasjon.teamsData && t && e.etterlevelseDokumentasjon.teamsData.filter((team) => team.productAreaId === t.productAreaId).length > 0,
             )
 

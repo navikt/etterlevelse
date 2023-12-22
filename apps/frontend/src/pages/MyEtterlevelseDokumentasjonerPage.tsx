@@ -436,7 +436,7 @@ export const EtterlevelseDokumentasjonerPanels = ({ etterlevelseDokumentasjoner,
               </>
             }
             beskrivelse={ed.title}
-            rightBeskrivelse={!!ed.sistEndretEtterlevelse ? `Sist endret: ${moment(ed.sistEndretEtterlevelse).format('ll')}` : ''}
+            rightBeskrivelse={ed.sistEndretEtterlevelse ? `Sist endret: ${moment(ed.sistEndretEtterlevelse).format('ll')}` : ''}
           />
         </Block>
       ))}

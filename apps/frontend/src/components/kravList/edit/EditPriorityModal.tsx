@@ -45,7 +45,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
                 </ParagraphMedium>
               }
               beskrivelse={<LabelSmall $style={{ fontSize: '18px', lineHeight: '28px' }}>{k.navn}</LabelSmall>}
-              rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
+              rightBeskrivelse={k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
               statusText={<StatusView status={k.status} />}
               overrides={{
                 Block: {
@@ -111,7 +111,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
   const submit = () => {
     setLoading(true)
     setIsFormDirty(false)
-    let updateKravPriorityPromise: Promise<any>[] = []
+    const updateKravPriorityPromise: Promise<any>[] = []
     const kravMedPrioriteting = setPriority([...kravElements])
     kravMedPrioriteting.forEach((kmp) => {
       if (kmp.kravPriorityUID) {

@@ -27,7 +27,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
 
   useEffect(() => {
     if (showUsage && selectedCode) {
-      ;(async () => {
+      (async () => {
         setUsage(undefined)
         const usage = await getCodelistUsage(selectedCode.list, selectedCode.code)
         setUsage(usage)

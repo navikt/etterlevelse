@@ -19,7 +19,7 @@ export const TemaList = () => {
   }, [])
 
   const fetchKrav = () => {
-    ;(async () => {
+    (async () => {
       const kraver = await getAllKrav()
       const allKravPriority = await getAllKravPriority()
 
@@ -91,7 +91,7 @@ const getKravTemaRowsWithLabel = (kraver: Krav[], tema: string) => {
               <StatusView status={k.status} />
             </div>
             <div className="w-44">
-              <BodyShort size="small">{!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
+              <BodyShort size="small">{k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
             </div>
           </LinkPanel.Title>
         </LinkPanel>

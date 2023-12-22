@@ -45,7 +45,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   }, [])
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       props.show && setAudits(await getAudits(page - 1, limit, table))
     })()
   }, [page, limit, props.show, table])

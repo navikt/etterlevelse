@@ -92,7 +92,7 @@ class CodelistService {
   }
 
   getShortname(list: ListName, codeName: string) {
-    let code = this.getCode(list, codeName)
+    const code = this.getCode(list, codeName)
     return code ? code.shortName : codeName
   }
 
@@ -101,7 +101,7 @@ class CodelistService {
   }
 
   getDescription(list: ListName, codeName: string) {
-    let code = this.getCode(list, codeName)
+    const code = this.getCode(list, codeName)
     return code ? code.description : codeName
   }
 
@@ -137,7 +137,7 @@ class CodelistService {
   }
 
   getParsedOptionsFilterOutSelected(listName: ListName, currentSelected: string[]): { value: string; label: string }[] {
-    let parsedOptions = this.getParsedOptions(listName)
+    const parsedOptions = this.getParsedOptions(listName)
     return !currentSelected ? parsedOptions : parsedOptions.filter((option) => (currentSelected.includes(option.value) ? null : option.value))
   }
 

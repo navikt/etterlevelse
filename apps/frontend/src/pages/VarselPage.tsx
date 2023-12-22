@@ -46,7 +46,7 @@ const VarselTabs = () => {
   const [melding, setMelding] = useState<Melding>()
 
   useEffect(() => {
-    ; (async () => {
+     (async () => {
       setLoading(true)
       if (tab !== 'utsendtMelding') {
         ampli.logEvent('sidevisning', { side: 'Varsel side for admin', sidetittel: 'Opprett varsel melding for ' + tab })
