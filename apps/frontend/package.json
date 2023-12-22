@@ -61,7 +61,7 @@
     "lint:fix": "eslint --fix .",
     "format": "prettier --write \"./src\"",
     "prettier": "prettier --write \"./src\"",
-    "prepare": "husky install"
+    "prepare": "cd ../../ && husky install"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
