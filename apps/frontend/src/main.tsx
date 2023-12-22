@@ -12,6 +12,7 @@ import { useAwait, useAwaitUser } from './util/hooks'
 import { useNetworkStatus } from './util/network'
 import { customTheme } from './util/theme'
 import { Footer } from './components/Navigation/Footer'
+import { ampli } from './services/Amplitude'
 
 const engine = new Styletron()
 
