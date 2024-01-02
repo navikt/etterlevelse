@@ -1,9 +1,8 @@
 import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { Behandling, PageResponse } from '../constants'
 import { env } from '../util/env'
 import { useSearch } from '../util/hooks'
-import { useEffect, useState } from 'react'
-import { updateBehandlingNameWithNumber } from '../components/etterlevelseDokumentasjon/common/utils'
 
 export const getBehandling = async (id: string) => {
   return (await axios.get<Behandling>(`${env.backendBaseUrl}/behandling/${id}`)).data

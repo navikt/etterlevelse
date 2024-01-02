@@ -1,6 +1,6 @@
-import { KravQL, PageResponse } from '../constants'
 import { gql, useQuery } from '@apollo/client'
 import { QueryHookOptions } from '@apollo/client/react/types/types'
+import { KravQL, PageResponse } from '../constants'
 
 const kravtableQuery = gql`
   query getKravByFilter(

@@ -1,16 +1,15 @@
-import { useEffect, useState } from 'react'
+import { BodyShort, Button, Heading, Label, Modal, Pagination, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
+import * as _ from 'lodash'
 import moment from 'moment'
+import { useEffect, useState } from 'react'
+import { JsonView } from 'react-json-view-lite'
+import { getAudits } from '../../../api/AuditApi'
+import { PageResponse, emptyPage } from '../../../constants'
+import { ampli, userRoleEventProp } from '../../../services/Amplitude'
+import { intl } from '../../../util/intl/intl'
 import { AuditButton } from './AuditButton'
 import { AuditActionIcon } from './AuditComponents'
-import { emptyPage, PageResponse } from '../../../constants'
 import { AuditItem, ObjectType } from './AuditTypes'
-import { intl } from '../../../util/intl/intl'
-import { getAudits } from '../../../api/AuditApi'
-import * as _ from 'lodash'
-import { JsonView } from 'react-json-view-lite'
-import { ampli, userRoleEventProp } from '../../../services/Amplitude'
-import { BodyShort, Button, Heading, Label, Modal, Pagination, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
-import { user } from '../../../services/User'
 
 const CodeView = ({ audit }: { audit: AuditItem }) => {
   const [modalOpen, setModalOpen] = useState(false)
@@ -40,7 +39,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
     ampli.logEvent('sidevisning', {
       side: 'Varsel side for admin',
       sidetittel: 'Log side for varslinger',
-      ...userRoleEventProp
+      ...userRoleEventProp,
     })
   }, [])
 

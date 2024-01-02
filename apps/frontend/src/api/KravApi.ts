@@ -1,9 +1,8 @@
+import { gql } from '@apollo/client'
 import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { emptyPage, Krav, KravQL, KravStatus, Or, PageResponse } from '../constants'
 import { env } from '../util/env'
-import { useEffect, useState } from 'react'
-import { useDebouncedState } from '../util/hooks'
-import { gql } from '@apollo/client'
 
 export const getAllKrav = async () => {
   const PAGE_SIZE = 100
@@ -109,7 +108,7 @@ export const useKrav = (params: KravId | KravIdParams, onlyLoadOnce?: boolean) =
   const isCreateNew = params.id === 'ny'
   const [data, setData] = useState<Krav | undefined>(isCreateNew ? kravMapToFormVal({}) : undefined)
 
-  let load = () => {
+  const load = () => {
     if (data && onlyLoadOnce) return
     params?.id && !isCreateNew && getKrav(params.id).then(setData)
     params?.kravNummer && getKravByKravNumberAndVersion(params.kravNummer, params.kravVersjon).then(setData)

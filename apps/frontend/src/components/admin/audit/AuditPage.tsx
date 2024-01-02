@@ -52,10 +52,7 @@ export const AuditPage = () => {
   useEffect(() => lookupVersion(idSearch), [idSearch])
 
   return (
-    <PageLayout
-      pageTitle="Versjonering"
-      currentPage="Versjonering" 
-    >
+    <PageLayout pageTitle="Versjonering" currentPage="Versjonering">
       <Heading size="medium" level="1">
         {intl.audit}
       </Heading>
