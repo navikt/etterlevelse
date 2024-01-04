@@ -13,7 +13,7 @@ export const PrivateRoute = ({ component, adminPage, kraveierPage }: PrivateRout
   const [isLoading, setIsLoading] = useState(true)
 
   React.useEffect(() => {
-    let timeOut = setTimeout(() => {
+    const timeOut = setTimeout(() => {
       setIsLoading(false)
     }, 1000)
 
