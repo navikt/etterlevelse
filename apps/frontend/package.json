@@ -66,6 +66,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
+      "prettier --write",
       "prettier --list-different",
       "eslint --max-warnings 0",
       "bash -c 'yarn run type-check'"
