@@ -1,5 +1,5 @@
-import { default as React, ReactNode } from 'react'
-import { BodyShort, Heading, Label } from '@navikt/ds-react'
+import { Heading, Label } from '@navikt/ds-react'
+import { ReactNode } from 'react'
 
 type DataTextProps = {
   label?: string

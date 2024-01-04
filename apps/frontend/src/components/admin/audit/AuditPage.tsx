@@ -1,17 +1,15 @@
+import { BodyLong, Heading, TextField } from '@navikt/ds-react'
+import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import _ from 'lodash'
-import { AuditLog } from './AuditTypes'
 import { getAuditLog } from '../../../api/AuditApi'
-import { AuditView } from './AuditView'
-import { AuditRecentTable } from './AuditRecentTable'
-import { AuditLabel } from './AuditComponents'
 import { useDebouncedState } from '../../../util/hooks'
 import { intl } from '../../../util/intl/intl'
-import { Helmet } from 'react-helmet'
-import { BodyLong, Heading, TextField } from '@navikt/ds-react'
-import CustomizedBreadcrumbs from '../../common/CustomizedBreadcrumbs'
 import { PageLayout } from '../../scaffold/Page'
+import { AuditLabel } from './AuditComponents'
+import { AuditRecentTable } from './AuditRecentTable'
+import { AuditLog } from './AuditTypes'
+import { AuditView } from './AuditView'
 
 const format = (id: string) => _.trim(id, '"')
 

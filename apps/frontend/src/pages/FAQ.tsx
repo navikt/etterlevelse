@@ -1,14 +1,12 @@
+import { BodyLong, Detail, Heading } from '@navikt/ds-react'
+import moment from 'moment'
 import { useEffect, useState } from 'react'
-import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { Helmet } from 'react-helmet'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { Melding, MeldingType } from '../constants'
 import { getMeldingByType, mapMeldingToFormValue } from '../api/MeldingApi'
 import { Markdown } from '../components/common/Markdown'
-import moment from 'moment'
-import { user } from '../services/User'
-import { BodyLong, Detail, Heading } from '@navikt/ds-react'
 import { PageLayout } from '../components/scaffold/Page'
+import { Melding, MeldingType } from '../constants'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
+import { user } from '../services/User'
 
 export const FAQ = () => {
   const [melding, setMelding] = useState<Melding>()

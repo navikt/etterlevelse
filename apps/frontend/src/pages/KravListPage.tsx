@@ -1,19 +1,17 @@
-import { useEffect, useState } from 'react'
-import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { user } from '../services/User'
+import { PlusIcon } from '@navikt/aksel-icons'
+import { BodyLong, BodyShort, Button, Heading, Label, LinkPanel, Skeleton, Spacer, Tabs } from '@navikt/ds-react'
 import moment from 'moment'
-import { Krav, KravQL } from '../constants'
-import { codelist, ListName } from '../services/Codelist'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import StatusView from '../components/common/StatusTag'
 import { AllKrav } from '../components/kravList/AllKrav'
 import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
 import { TemaList } from '../components/kravList/TemaList'
-import StatusView from '../components/common/StatusTag'
-import { useNavigate, useParams } from 'react-router-dom'
-import { Helmet } from 'react-helmet'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { BodyLong, BodyShort, Button, Heading, Label, LinkPanel, Skeleton, Spacer, Tabs } from '@navikt/ds-react'
-import { PlusIcon } from '@navikt/aksel-icons'
 import { PageLayout } from '../components/scaffold/Page'
+import { Krav, KravQL } from '../constants'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
+import { ListName, codelist } from '../services/Codelist'
+import { user } from '../services/User'
 
 type Section = 'siste' | 'alle' | 'tema'
 
@@ -32,10 +30,7 @@ export const KravListPage = () => {
   ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav', ...userRoleEventProp })
 
   return (
-    <PageLayout
-      pageTitle="Forvalte og opprette krav"
-      currentPage="Forvalte og opprette krav"
-    >
+    <PageLayout pageTitle="Forvalte og opprette krav" currentPage="Forvalte og opprette krav">
       <div className="pb-52 w-full">
         <div className="w-full flex justify-center">
           <div className="w-full">

@@ -1,14 +1,10 @@
-import { Block } from 'baseui/block'
-import { LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
+import { BodyLong, BodyShort, Label } from '@navikt/ds-react'
 import moment from 'moment'
 import { Tilbakemelding, TilbakemeldingMelding, TilbakemeldingRolle } from '../../../constants'
-import { theme } from '../../../util'
-import { ettlevColors } from '../../../util/theme'
 import { PersonName } from '../../common/PersonName'
 import { Portrait } from '../../common/Portrait'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
-import { BodyLong, BodyShort, Label } from '@navikt/ds-react'
 
 export const ResponseMelding = (props: {
   m: TilbakemeldingMelding

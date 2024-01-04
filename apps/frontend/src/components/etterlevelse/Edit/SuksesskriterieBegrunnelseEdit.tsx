@@ -1,16 +1,13 @@
-import { Block } from 'baseui/block'
-import { FormControl } from 'baseui/form-control'
+import { BodyShort, Box, Heading, Label, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React from 'react'
 import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
 import { useDebouncedState } from '../../../util/hooks'
-import { theme } from '../../../util/theme'
 import { FieldWrapper } from '../../common/Inputs'
-import TextEditor from '../../common/TextEditor/TextEditor'
+import { Markdown } from '../../common/Markdown'
 import { Error } from '../../common/ModalSchema'
 import { LabelAboveContent } from '../../common/PropertyLabel'
-import { Markdown } from '../../common/Markdown'
-import { BodyShort, Box, Heading, Label, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
+import TextEditor from '../../common/TextEditor/TextEditor'
 
 export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[], suksessKriterie: Suksesskriterie) => {
   const sb = suksesskriterieBegrunnelser.find((item) => {

@@ -1,8 +1,8 @@
 import { Block } from 'baseui/block'
-import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, theme } from '../../util/theme'
-import React, { Children } from 'react'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from '../common/CustomizedBreadcrumbs'
+import React from 'react'
 import { Helmet } from 'react-helmet'
+import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, theme } from '../../util/theme'
+import CustomizedBreadcrumbs, { breadcrumbPaths } from '../common/CustomizedBreadcrumbs'
 
 const padding = ['16px', '16px', '16px', '20px', '40px', '80px']
 

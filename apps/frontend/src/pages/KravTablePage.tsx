@@ -1,14 +1,13 @@
-import { useEffect, useState } from 'react'
-import { Krav } from '../constants'
-import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
-import moment from 'moment'
-import { codelist, ListName } from '../services/Codelist'
-import { kravStatus } from './KravPage'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { BodyShort, Heading, Link, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
-import { handleSort } from '../util/handleTableSort'
-import { user } from '../services/User'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
+import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import { PageLayout } from '../components/scaffold/Page'
+import { Krav } from '../constants'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
+import { ListName, codelist } from '../services/Codelist'
+import { handleSort } from '../util/handleTableSort'
+import { kravStatus } from './KravPage'
 
 export const KravTablePage = () => {
   const [tableContent, setTableContent] = useState<Krav[]>([])

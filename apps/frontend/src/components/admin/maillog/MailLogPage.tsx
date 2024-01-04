@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import { intl } from '../../../util/intl/intl'
-import axios from 'axios'
-import { env } from '../../../util/env'
-import { PageResponse } from '../../../constants'
-import moment from 'moment'
-import { Markdown } from '../../common/Markdown'
-import { Helmet } from 'react-helmet'
 import { BodyShort, Box, Heading, Pagination, Select, Spacer } from '@navikt/ds-react'
+import axios from 'axios'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
+import { PageResponse } from '../../../constants'
+import { env } from '../../../util/env'
+import { intl } from '../../../util/intl/intl'
+import { Markdown } from '../../common/Markdown'
 
 interface MailLog {
   time: string

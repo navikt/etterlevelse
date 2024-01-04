@@ -1,18 +1,15 @@
+import { PlusIcon } from '@navikt/aksel-icons'
+import { Button, Heading, Loader, Select } from '@navikt/ds-react'
 import * as React from 'react'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-
-import { useAwait, useForceUpdate } from '../../../util/hooks'
-import { Code, codelist, CodeListFormValues } from '../../../services/Codelist'
 import { createCodelist } from '../../../api/CodelistApi'
+import { Code, CodeListFormValues, codelist } from '../../../services/Codelist'
 import { user } from '../../../services/User'
-import CreateCodeListModal from './ModalCreateCodeList'
-import CodeListTable from './CodeListStyledTable'
-import { Helmet } from 'react-helmet'
-import { Button, Heading, Loader, Select } from '@navikt/ds-react'
-import { PlusIcon } from '@navikt/aksel-icons'
-import CustomizedBreadcrumbs from '../../common/CustomizedBreadcrumbs'
+import { useAwait, useForceUpdate } from '../../../util/hooks'
 import { PageLayout } from '../../scaffold/Page'
+import CodeListTable from './CodeListStyledTable'
+import CreateCodeListModal from './ModalCreateCodeList'
 
 const CodeListPage = () => {
   const params = useParams<{ listname?: string }>()

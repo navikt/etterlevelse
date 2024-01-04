@@ -1,11 +1,11 @@
+import { Accordion, BodyShort, Label, LinkPanel, Loader, Select, Spacer } from '@navikt/ds-react'
 import _ from 'lodash'
 import moment from 'moment'
 import { useState } from 'react'
 import { EtterlevelseQL, EtterlevelseStatus, KravQL, SuksesskriterieStatus } from '../../constants'
 import { ettlevColors } from '../../util/theme'
-import { InfoBlock } from '../common/InfoBlock'
 import { sadFolderIcon } from '../Images'
-import { Accordion, BodyShort, Heading, Label, LinkPanel, Loader, Select, Spacer } from '@navikt/ds-react'
+import { InfoBlock } from '../common/InfoBlock'
 import EtterlevelseModal from '../etterlevelse/EtterlevelseModal'
 
 const etterlevelseFilter = [

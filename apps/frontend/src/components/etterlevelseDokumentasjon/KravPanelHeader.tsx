@@ -1,13 +1,12 @@
 import { Block } from 'baseui/block'
+import { Option } from 'baseui/select'
 import { Responsive } from 'baseui/theme'
 import { LabelSmall, ParagraphXSmall } from 'baseui/typography'
+import { useNavigate } from 'react-router-dom'
 import { Krav, KravEtterlevelseData } from '../../constants'
+import { kravRelevansOptions, sortingOptions } from '../../pages/EtterlevelseDokumentasjonTemaPage'
 import { ettlevColors } from '../../util/theme'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { Option } from 'baseui/select'
-import { kravRelevansOptions, sortingOptions } from '../../pages/EtterlevelseDokumentasjonTemaPage'
-import { useNavigate } from 'react-router-dom'
-import { BodyShort, Heading, Label } from '@navikt/ds-react'
 
 export const KravPanelHeader = (props: { title: string; kravData: KravEtterlevelseData[] | Krav[] }) => {
   let antallSuksesskriterier = 0

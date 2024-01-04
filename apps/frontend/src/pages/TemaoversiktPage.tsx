@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { useForceUpdate } from '../util/hooks'
-import { ListName, TemaCode, codelist } from '../services/Codelist'
 import { BodyLong, Heading, LinkPanel, Loader, Spacer, Tag } from '@navikt/ds-react'
-import { useKravCounter } from './TemaPage'
-import { user } from '../services/User'
+import { useEffect, useState } from 'react'
 import { PageLayout } from '../components/scaffold/Page'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
+import { ListName, TemaCode, codelist } from '../services/Codelist'
+import { useForceUpdate } from '../util/hooks'
+import { useKravCounter } from './TemaPage'
 
 export const TemaOversiktPage = () => {
   useEffect(() => {

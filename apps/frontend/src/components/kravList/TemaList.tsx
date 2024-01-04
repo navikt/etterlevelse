@@ -1,14 +1,14 @@
-import { codelist, ListName } from '../../services/Codelist'
+import { Accordion, BodyLong, BodyShort, Button, Label, LinkPanel, Spacer } from '@navikt/ds-react'
+import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { getAllKrav } from '../../api/KravApi'
-import { Krav, KravStatus } from '../../constants'
-import { KravPanelHeader } from '../etterlevelseDokumentasjon/KravPanelHeader'
-import StatusView from '../common/StatusTag'
-import moment from 'moment'
-import { EditPriorityModal } from './edit/EditPriorityModal'
-import { sortKraverByPriority } from '../../util/sort'
 import { getAllKravPriority } from '../../api/KravPriorityApi'
-import { Accordion, BodyLong, BodyShort, Button, Label, LinkPanel, Spacer } from '@navikt/ds-react'
+import { Krav, KravStatus } from '../../constants'
+import { codelist, ListName } from '../../services/Codelist'
+import { sortKraverByPriority } from '../../util/sort'
+import StatusView from '../common/StatusTag'
+import { KravPanelHeader } from '../etterlevelseDokumentasjon/KravPanelHeader'
+import { EditPriorityModal } from './edit/EditPriorityModal'
 
 export const TemaList = () => {
   const [allActiveKrav, setAllActiveKrav] = useState<Krav[]>([])

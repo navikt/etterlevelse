@@ -1,16 +1,13 @@
-import { useLocation, useNavigate } from 'react-router-dom'
-import React from 'react'
-import { AuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
-import { Block } from 'baseui/block'
-import { AuditButton } from '../admin/audit/AuditButton'
-import { KIND } from 'baseui/button'
-import { ListName } from '../../services/Codelist'
-import CustomizedLink from './CustomizedLink'
+import { Link } from '@navikt/ds-react'
 import _ from 'lodash'
+import React from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { ListName } from '../../services/Codelist'
 import { user } from '../../services/User'
 import { loginUrl } from '../Header'
-import { ettlevColors } from '../../util/theme'
-import { Link } from '@navikt/ds-react'
+import { AuditButton } from '../admin/audit/AuditButton'
+import { AuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
+import CustomizedLink from './CustomizedLink'
 
 type RouteLinkProps = {
   href?: string

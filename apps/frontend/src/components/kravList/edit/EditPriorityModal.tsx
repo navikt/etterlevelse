@@ -111,7 +111,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
   const submit = () => {
     setLoading(true)
     setIsFormDirty(false)
-    let updateKravPriorityPromise: Promise<any>[] = []
+    const updateKravPriorityPromise: Promise<any>[] = []
     const kravMedPrioriteting = setPriority([...kravElements])
     kravMedPrioriteting.forEach((kmp) => {
       if (kmp.kravPriorityUID) {

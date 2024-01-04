@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Button, Modal } from '@navikt/ds-react'
-import { TrashIcon } from '@navikt/aksel-icons'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string; buttonLabel?: string; buttonSize?: 'small' | 'medium' | 'xsmall' }) => {
   const [open, setOpen] = useState(false)

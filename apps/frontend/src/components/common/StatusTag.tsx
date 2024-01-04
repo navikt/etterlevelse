@@ -1,6 +1,6 @@
+import { Detail, Tag } from '@navikt/ds-react'
 import { KravStatus } from '../../constants'
 import { kravStatus } from '../../pages/KravPage'
-import { BodyShort, Detail, Tag } from '@navikt/ds-react'
 
 interface StatusViewProps {
   status: KravStatus | string

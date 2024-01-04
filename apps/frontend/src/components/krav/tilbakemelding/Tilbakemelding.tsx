@@ -1,32 +1,32 @@
-import { Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
+import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
+import { Accordion, Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Label, Loader, Modal, Select, Spacer, Textarea } from '@navikt/ds-react'
+import * as _ from 'lodash'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
-  tilbakemeldingNewMelding,
   TilbakemeldingNewMeldingRequest,
+  tilbakemeldingNewMelding,
   tilbakemeldingslettMelding,
   updateTilbakemeldingStatusOgEndretKrav,
   useTilbakemeldinger,
 } from '../../../api/TilbakemeldingApi'
-import React, { useEffect, useState } from 'react'
-import moment from 'moment'
+import { Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
 import { user } from '../../../services/User'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { useQueryParam, useRefs } from '../../../util/hooks'
 import { ettlevColors } from '../../../util/theme'
+import { LoginButton } from '../../Header'
 import { mailboxPoppingIcon } from '../../Images'
 import { InfoBlock } from '../../common/InfoBlock'
-import { Portrait } from '../../common/Portrait'
 import { PersonName } from '../../common/PersonName'
-import * as _ from 'lodash'
-import { LoginButton } from '../../Header'
+import { Portrait } from '../../common/Portrait'
 import StatusView from '../../common/StatusTag'
+import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
 import ResponseMelding from './ResponseMelding'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
 import NyTilbakemeldingModal from './edit/NyTilbakemeldingModal'
 import { getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, tilbakemeldingStatusToText } from './utils'
-import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
-import { Accordion, Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Label, Loader, Modal, Select, Spacer, Textarea } from '@navikt/ds-react'
-import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 
 const DEFAULT_COUNT_SIZE = 5
 

@@ -1,14 +1,13 @@
-import { Block } from 'baseui/block'
-import React, { useState } from 'react'
-import { env } from '../../util/env'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginZero } from '../common/Style'
-import { ModalBody, ModalHeader } from 'baseui/modal'
-import { codelist, ListName } from '../../services/Codelist'
+import { Button, Loader, Modal, Select } from '@navikt/ds-react'
 import axios from 'axios'
-import { ettlevColors } from '../../util/theme'
+import { Block } from 'baseui/block'
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { ParagraphMedium } from 'baseui/typography'
-import { Button, Loader, Modal, Select } from '@navikt/ds-react'
+import { useState } from 'react'
+import { ListName, codelist } from '../../services/Codelist'
+import { env } from '../../util/env'
+import { ettlevColors } from '../../util/theme'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginZero } from '../common/Style'
 
 type ExportEtterlevelseModalProps = {
   etterlevelseDokumentasjonId: string

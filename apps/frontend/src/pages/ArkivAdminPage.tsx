@@ -1,3 +1,4 @@
+import { BodyShort, Button, Heading, Link, Pagination, Select, SortState, Spacer, Table, TextField } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import {
@@ -8,14 +9,11 @@ import {
   getEtterlevelseArkiv,
   updateAsAdminEtterlevelseArkiv,
 } from '../api/ArkiveringApi'
-
+import { PageLayout } from '../components/scaffold/Page'
 import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { BodyShort, Button, Heading, Link, Pagination, Select, SortState, Spacer, Table, TextField } from '@navikt/ds-react'
-import { UpdateMessage } from './EtterlevelseAdminPage'
 import { handleSort } from '../util/handleTableSort'
-import { user } from '../services/User'
-import { PageLayout } from '../components/scaffold/Page'
+import { UpdateMessage } from './EtterlevelseAdminPage'
 
 export const ArkivAdminPage = () => {
   const [arkiveringId, setArkiveringId] = useState<string>('')

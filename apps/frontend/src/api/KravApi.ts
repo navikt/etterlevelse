@@ -1,9 +1,8 @@
+import { gql } from '@apollo/client'
 import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { emptyPage, Krav, KravQL, KravStatus, Or, PageResponse } from '../constants'
 import { env } from '../util/env'
-import { useEffect, useState } from 'react'
-import { useDebouncedState } from '../util/hooks'
-import { gql } from '@apollo/client'
 
 export const getAllKrav = async () => {
   const PAGE_SIZE = 100
