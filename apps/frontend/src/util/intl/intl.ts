@@ -54,7 +54,7 @@ export const useLang = () => {
   const update = useForceUpdate()
   useEffect(() => {
     intl.setLanguage(lang)
-    let momentlocale = moment.locale(lang)
+    const momentlocale = moment.locale(lang)
     if (lang !== momentlocale) console.warn('moment locale missing', lang)
     localStorageAvailable && localStorage.setItem('tcat-lang', lang)
     update()
@@ -65,7 +65,7 @@ export const useLang = () => {
 
 function storageAvailable() {
   try {
-    let key = 'ptab'
+    const key = 'ptab'
     localStorage.setItem(key, key)
     localStorage.removeItem(key)
     return true
