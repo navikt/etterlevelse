@@ -1,4 +1,4 @@
-import amplitude from 'amplitude-js'
+import * as amplitude from '@amplitude/analytics-browser'
 import { env } from '../util/env'
 import { user } from './User'
 
@@ -8,15 +8,16 @@ const AmplitudeConfig = {
   includeUtm: true,
   includeReferrer: true,
   trackingOptions: {
-    city: false,
-    ip_address: false,
+    ipAddress: false,
   },
   platform: window.location.toString(),
 }
 
-export const instance = amplitude.getInstance()
+export const instance = amplitude
 instance.init(env.amplitudeApiKey!, undefined, AmplitudeConfig)
-instance.setUserId(null)
+instance.setUserId(undefined)
 export const ampli = instance
 
-export const userRoleEventProp = {role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER'}
+export const userRoleEventProp = {
+  role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+}
