@@ -207,7 +207,7 @@ export const useKravCounter = (variables: { lover: string[] }, options?: QueryHo
 }
 
 const query = gql`
-  query countKrav($lover: [String!]) {
+  query countKrav($lover: [string!]) {
     krav(filter: { lover: $lover, gjeldendeKrav: true }) {
       numberOfElements
       content {

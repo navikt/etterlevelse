@@ -144,8 +144,8 @@ const query = gql`
     $pageSize: NonNegativeInt
     $mineEtterlevelseDokumentasjoner: Boolean
     $sistRedigert: NonNegativeInt
-    $sok: String
-    $behandlingId: String
+    $sok: string
+    $behandlingId: string
   ) {
     etterlevelseDokumentasjoner: etterlevelseDokumentasjon(
       filter: { mineEtterlevelseDokumentasjoner: $mineEtterlevelseDokumentasjoner, sistRedigert: $sistRedigert, sok: $sok, behandlingId: $behandlingId }

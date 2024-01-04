@@ -11,13 +11,13 @@ import { ParagraphMedium } from 'baseui/typography'
 import { Button, Loader, Modal, Select } from '@navikt/ds-react'
 
 type ExportEtterlevelseModalProps = {
-  etterlevelseDokumentasjonId: String
+  etterlevelseDokumentasjonId: string
 }
 
 export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => {
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [errorMessage, setErrorMessage] = useState<String>('')
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const [valgtTema, setValgtTema] = useState<string>('')
 
   return (

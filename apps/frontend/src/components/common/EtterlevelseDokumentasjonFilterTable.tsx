@@ -8,7 +8,7 @@ import { EtterlevelseDokumentasjonFilter } from '../../api/EtterlevelseDokumenta
 import { Loader } from '@navikt/ds-react'
 
 const query = gql`
-  query getEtterlevelsedokumentasjon($relevans: [String!]) {
+  query getEtterlevelsedokumentasjon($relevans: [string!]) {
     etterlevelseDokumentasjon(filter: { relevans: $relevans }) {
       content {
         id

@@ -4,12 +4,12 @@ import { QueryHookOptions } from '@apollo/client/react/types/types'
 
 const kravtableQuery = gql`
   query getKravByFilter(
-    $relevans: [String!]
+    $relevans: [string!]
     $nummer: Int
-    $underavdeling: String
-    $lov: String
-    $status: [String!]
-    $lover: [String!]
+    $underavdeling: string
+    $lov: string
+    $status: [string!]
+    $lover: [string!]
     $sistRedigert: NonNegativeInt
     $gjeldendeKrav: Boolean
     $pageSize: NonNegativeInt

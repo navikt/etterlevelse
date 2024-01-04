@@ -273,7 +273,7 @@ export const kravFullQuery = gql`
 `
 
 export const etterlevelseDokumentasjonKravQuery = gql`
-  query getKravByFilter($etterlevelseDokumentasjonId: String, $lover: [String!], $gjeldendeKrav: Boolean, $etterlevelseDokumentasjonIrrevantKrav: Boolean, $status: [String!]) {
+  query getKravByFilter($etterlevelseDokumentasjonId: string, $lover: [string!], $gjeldendeKrav: Boolean, $etterlevelseDokumentasjonIrrevantKrav: Boolean, $status: [string!]) {
     krav(
       filter: {
         etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
@@ -334,7 +334,7 @@ export const etterlevelseDokumentasjonKravQuery = gql`
 `
 
 export const KravMedPrioriteringOgEtterlevelseQuery = gql`
-  query getKravByFilter($etterlevelseDokumentasjonId: String, $lover: [String!], $gjeldendeKrav: Boolean, $etterlevelseDokumentasjonIrrevantKrav: Boolean, $status: [String!]) {
+  query getKravByFilter($etterlevelseDokumentasjonId: string, $lover: [string!], $gjeldendeKrav: Boolean, $etterlevelseDokumentasjonIrrevantKrav: Boolean, $status: [string!]) {
     krav(
       filter: {
         etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId

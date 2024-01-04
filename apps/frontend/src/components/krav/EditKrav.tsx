@@ -42,7 +42,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
   const [stickyFooterStyle, setStickyFooterStyle] = React.useState(true)
   const [showErrorModal, setShowErrorModal] = React.useState(false)
   const [errorModalMessage, setErrorModalMessage] = React.useState('')
-  const [varselMeldingActive, setVarselMeldingActive] = React.useState<String[]>(krav.varselMelding ? ['VarselMelding'] : [])
+  const [varselMeldingActive, setVarselMeldingActive] = React.useState<string[]>(krav.varselMelding ? ['VarselMelding'] : [])
   const [UtgaattKravMessage, setUtgaattKravMessage] = React.useState<boolean>(false)
   const [aktivKravMessage, setAktivKravMessage] = React.useState<boolean>(false)
 
