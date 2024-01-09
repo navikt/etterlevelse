@@ -115,7 +115,7 @@ export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: T
             ordered = [...ordered.filter((p) => !showLast(p)), ...ordered.filter(showLast)]
           }
           for (const key in filterValues) {
-            if (filterValues.hasOwnProperty(key) && !!filterValues[key]) {
+            if (Object.prototype.hasOwnProperty.call(filterValues, key) && !!filterValues[key]) {
               ordered = filterData(key, ordered)
             }
           }

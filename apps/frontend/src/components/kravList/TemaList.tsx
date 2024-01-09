@@ -19,7 +19,7 @@ export const TemaList = () => {
   }, [])
 
   const fetchKrav = () => {
-    ;(async () => {
+    (async () => {
       const kraver = await getAllKrav()
       const allKravPriority = await getAllKravPriority()
 

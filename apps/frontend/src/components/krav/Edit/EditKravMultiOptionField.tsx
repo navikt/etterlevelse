@@ -3,7 +3,7 @@ import { FieldArray, FieldArrayRenderProps } from 'formik'
 import _ from 'lodash'
 import { ReactNode } from 'react'
 import { Or } from '../../../constants'
-import { Code, codelist, ListName } from '../../../services/Codelist'
+import { ICode, codelist, ListName } from '../../../services/Codelist'
 import { ettlevColors } from '../../../util/theme'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
@@ -50,7 +50,7 @@ export const EditKravMultiOptionField = (
     <FieldWrapper marginBottom={props.marginBottom}>
       <FieldArray name={props.name}>
         {(p: FieldArrayRenderProps) => {
-          const selectedIds = (p.form.values[props.name] as any[]).map((v) => (props.listName ? (v as Code).code : v))
+          const selectedIds = (p.form.values[props.name] as any[]).map((v) => (props.listName ? (v as ICode).code : v))
           return (
             <div>
               <LabelWithTooltip label={props.label} tooltip={props.tooltip} />

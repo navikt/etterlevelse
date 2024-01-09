@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { createCodelist } from '../../../api/CodelistApi'
-import { Code, CodeListFormValues, codelist } from '../../../services/Codelist'
+import { ICode, ICodeListFormValues, codelist } from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import { useAwait, useForceUpdate } from '../../../util/hooks'
 import { PageLayout } from '../../scaffold/Page'
@@ -24,10 +24,10 @@ const CodeListPage = () => {
   const lists = codelist.lists?.codelist
   const currentCodelist = lists && listname ? lists[listname] : undefined
 
-  const handleCreateCodelist = async (values: CodeListFormValues) => {
+  const handleCreateCodelist = async (values: ICodeListFormValues) => {
     setLoading(true)
     try {
-      await createCodelist({ ...values } as Code)
+      await createCodelist({ ...values } as ICode)
       await codelist.refreshCodeLists()
       setCreateCodeListModal(false)
     } catch (error: any) {

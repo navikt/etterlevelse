@@ -87,7 +87,7 @@ export const useSearchVirkemiddel = () => {
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       await getAllVirkemiddel().then((res) => {
         setFullResult(res)
         setSearchResult(res)
@@ -96,7 +96,7 @@ export const useSearchVirkemiddel = () => {
   }, [])
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       if (search && search.length > 2) {
         setLoading(true)
 
@@ -124,7 +124,7 @@ export const useVirkemiddelFilter = () => {
   }
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       setLoading(true)
       let allVirkemiddel = await getAllVirkemiddel()
       setTotalDataLenght(allVirkemiddel.length)

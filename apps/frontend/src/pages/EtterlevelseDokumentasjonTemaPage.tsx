@@ -84,7 +84,7 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
   const [kravRelevans, setKravRelevans] = useState<readonly Option[]>(params.filter ? kravRelevansOptions.filter((kro) => kro.id === params.filter) : [kravRelevansOptions[0]])
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       setAllKravPriority(await getAllKravPriority())
     })()
   }, [])

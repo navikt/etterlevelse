@@ -14,7 +14,7 @@ import {
 import { useSearchTeamOptions } from '../../../api/TeamApi'
 import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
-import { Code, ListName, codelist } from '../../../services/Codelist'
+import { ICode, ListName, codelist } from '../../../services/Codelist'
 import { BoolField, FieldWrapper, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { Error } from '../../common/ModalSchema'
@@ -38,7 +38,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
 
   useEffect(() => {
     if (etterlevelseDokumentasjon?.irrelevansFor.length) {
-      const irrelevans = etterlevelseDokumentasjon.irrelevansFor.map((ir: Code) => relevansOptions.findIndex((o) => o.value === ir.code))
+      const irrelevans = etterlevelseDokumentasjon.irrelevansFor.map((ir: ICode) => relevansOptions.findIndex((o) => o.value === ir.code))
       setSelectedFilter(
         relevansOptions
           .map((r, i) => {
@@ -203,7 +203,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                           //   const i = parseInt(value)
                           //   if (!selectedFilter.includes(i)) {
                           //     setSelectedFilter([...selectedFilter, i])
-                          //     p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === relevansOptions[i].value))
+                          //     p.remove(p.form.values.irrelevansFor.findIndex((ir: ICode) => ir.code === relevansOptions[i].value))
                           //   } else {
                           //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
                           //     p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))

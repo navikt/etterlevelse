@@ -22,7 +22,7 @@ import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModa
 import { PageLayout } from '../components/scaffold/Page'
 import { EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, KravPrioritering, KravQL, PageResponse } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { Code, ListName, TemaCode, codelist } from '../services/Codelist'
+import { ICode, ListName, TemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 import { getNumberOfDaysBetween } from '../util/checkAge'
 import { env } from '../util/env'
@@ -116,7 +116,7 @@ export const DokumentasjonPage = () => {
     }
   })
 
-  const getRelevans = (irrelevans?: Code[]) => {
+  const getRelevans = (irrelevans?: ICode[]) => {
     const fargeForFemAlternativ = ['alt1', 'alt2', 'alt3', 'alt1', 'alt2'] as const
 
     if (irrelevans?.length === options.length) {
@@ -124,7 +124,7 @@ export const DokumentasjonPage = () => {
     }
 
     if (irrelevans) {
-      const relevans = options.filter((n) => !irrelevans.map((ir: Code) => ir.code).includes(n.value))
+      const relevans = options.filter((n) => !irrelevans.map((ir: ICode) => ir.code).includes(n.value))
 
       return (
         <div className="flex flex-wrap gap-2">

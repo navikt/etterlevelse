@@ -61,7 +61,7 @@ export const ArkivAdminPage = () => {
   ]
 
   useEffect(() => {
-    ; (async () => {
+    (async () => {
       const arkivering = await getAllArkivering()
       const mappedArkivering = arkivering.map((a) => arkiveringMapToFormVal(a))
       setTableContent(mappedArkivering)
@@ -74,7 +74,7 @@ export const ArkivAdminPage = () => {
   }, [])
 
   useEffect(() => {
-    ; (async () => {
+    (async () => {
       const arkivering = await getAllArkivering()
       const mappedArkivering = arkivering.map((a) => arkiveringMapToFormVal(a))
       setTableContent(mappedArkivering)
@@ -96,7 +96,7 @@ export const ArkivAdminPage = () => {
         <TextField label="Oppdatere arkivering status" placeholder="Arkiverings UID" onChange={(e) => setArkiveringId(e.target.value)} className="flex-1 mr-3" />
         <Select label="Velg status" className="flex-1 mr-3" value={arkiveringsStatus} onChange={(e) => setArkiveringsStatus(e.target.value as EtterlevelseArkivStatus)}>
           {options.map((o, i) => {
-            ; <option value="">Velg status</option>
+            <option value="">Velg status</option>
             return (
               <option key={i + '_' + o.label} value={o.id}>
                 {o.label}

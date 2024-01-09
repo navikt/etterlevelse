@@ -3,13 +3,13 @@ import React, { useState } from 'react'
 import { user } from '../services/User'
 import { Loader } from '@navikt/ds-react'
 
-interface PrivateRouteProps {
+interface IPrivateRouteProps {
   component: JSX.Element
   adminPage?: boolean
   kraveierPage?: boolean
 }
 
-export const PrivateRoute = ({ component, adminPage, kraveierPage }: PrivateRouteProps) => {
+export const PrivateRoute = ({ component, adminPage, kraveierPage }: IPrivateRouteProps) => {
   const [isLoading, setIsLoading] = useState(true)
 
   React.useEffect(() => {

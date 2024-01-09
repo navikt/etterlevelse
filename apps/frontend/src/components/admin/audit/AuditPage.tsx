@@ -22,7 +22,7 @@ export const AuditPage = () => {
   const [idSearch, setIdInput, idInput] = useDebouncedState(params.id || '', 400)
 
   const lookupVersion = (id?: string) => {
-    ;(async () => {
+    (async () => {
       if (id === auditLog?.id) {
         return
       }

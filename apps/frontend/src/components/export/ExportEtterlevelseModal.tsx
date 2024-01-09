@@ -88,7 +88,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                 <Button
                   variant="secondary"
                   onClick={() => {
-                    ;(async () => {
+                    (async () => {
                       setIsLoading(true)
                       setErrorMessage('')
                       const exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}`
@@ -112,7 +112,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                   variant="primary"
                   disabled={valgtTema == ''}
                   onClick={() => {
-                    ;(async () => {
+                    (async () => {
                       setIsLoading(true)
                       setErrorMessage('')
                       const exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}&temakode=${valgtTema}`

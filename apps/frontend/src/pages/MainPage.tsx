@@ -132,7 +132,7 @@ const EtterlevelseDokumentasjonList = ({ etterlevelseDokumentasjoner }: { etterl
                 E{etterlevelseDokumentasjon.etterlevelseNummer} {etterlevelseDokumentasjon.title}
               </LinkPanel.Title>
               <LinkPanel.Description>
-                {!!etterlevelseDokumentasjon.sistEndretEtterlevelse ? `Sist endret: ${moment(etterlevelseDokumentasjon.sistEndretEtterlevelse).format('ll')}` : ''}
+                {etterlevelseDokumentasjon.sistEndretEtterlevelse !== undefined && etterlevelseDokumentasjon.sistEndretEtterlevelse !== '' ? `Sist endret: ${moment(etterlevelseDokumentasjon.sistEndretEtterlevelse).format('ll')}` : ''}
               </LinkPanel.Description>
             </LinkPanel>
           )

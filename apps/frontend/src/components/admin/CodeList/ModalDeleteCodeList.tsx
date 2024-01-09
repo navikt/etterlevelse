@@ -1,12 +1,12 @@
-import { CodeListFormValues } from '../../../services/Codelist'
+import { ICodeListFormValues } from '../../../services/Codelist'
 import { BodyShort, Button, Modal } from '@navikt/ds-react'
 
 type ModalDeleteProps = {
   title: string
-  initialValues: CodeListFormValues
+  initialValues: ICodeListFormValues
   isOpen: boolean
   errorOnDelete: any | undefined
-  submit: (code: CodeListFormValues) => void
+  submit: (code: ICodeListFormValues) => void
   onClose: () => void
 }
 

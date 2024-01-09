@@ -1,4 +1,4 @@
-import { Code, LovCode } from './services/Codelist'
+import { ICode, LovCode } from './services/Codelist'
 import { Group } from './services/User'
 import * as React from 'react'
 
@@ -182,9 +182,9 @@ export interface Krav extends DomainObject {
   rettskilder: string[]
   tagger: string[]
   regelverk: Regelverk[]
-  avdeling?: Code
-  underavdeling?: Code
-  relevansFor: Code[]
+  avdeling?: ICode
+  underavdeling?: ICode
+  relevansFor: ICode[]
   status: KravStatus
   suksesskriterier: Suksesskriterie[]
   tema?: string
@@ -197,7 +197,7 @@ export interface Virkemiddel extends DomainObject {
   id: string
   navn: string
   regelverk: Regelverk[]
-  virkemiddelType?: Code
+  virkemiddelType?: ICode
   livsSituasjon: string
 }
 
@@ -298,7 +298,7 @@ export interface EtterlevelseDokumentasjon {
   title: string
   behandlingIds: string[]
   virkemiddelId: string
-  irrelevansFor: Code[]
+  irrelevansFor: ICode[]
   etterlevelseNummer: number
   teams: string[]
   //data field for frontend only
@@ -318,7 +318,7 @@ export interface EtterlevelseDokumentasjonStats {
 }
 
 export interface LovStats {
-  lovCode: Code
+  lovCode: ICode
   relevantKrav: KravQL[]
   irrelevantKrav: KravQL[]
   utgaattKrav: KravQL[]

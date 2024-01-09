@@ -1,6 +1,6 @@
 import { Block } from 'baseui/block'
 import { Field, FieldProps } from 'formik'
-import { codelist, CodeListFormValues, ListName, LovCodeData, LovCodeRelevans, lovCodeRelevansToOptions, TemaCodeData } from '../../../services/Codelist'
+import { codelist, ICodeListFormValues, ListName, ILovCodeData, LovCodeRelevans, lovCodeRelevansToOptions, ITemaCodeData } from '../../../services/Codelist'
 import { OptionList } from '../../common/Inputs'
 import { temaBilder } from '../../Images'
 import { theme } from '../../../util'
@@ -15,10 +15,10 @@ export const LovCodeDataForm = () => {
         <Label className="mr-4 w-1/4">Lovkode data</Label>
       </div>
       <Field name="data">
-        {({ field, form }: FieldProps<LovCodeData, CodeListFormValues>) => {
+        {({ field, form }: FieldProps<ILovCodeData, ICodeListFormValues>) => {
           const data = field.value
 
-          const set = (val: Partial<LovCodeData>) => {
+          const set = (val: Partial<ILovCodeData>) => {
             form.setFieldValue('data', { ...data, ...val })
           }
 
@@ -79,10 +79,10 @@ export const TemaCodeDataForm = () => {
         <Label className="mr-4 w-1/4">Temakode data</Label>
       </div>
       <Field name="data">
-        {({ field, form }: FieldProps<TemaCodeData, CodeListFormValues>) => {
+        {({ field, form }: FieldProps<ITemaCodeData, ICodeListFormValues>) => {
           const data = field.value
 
-          const set = (val: Partial<TemaCodeData>) => {
+          const set = (val: Partial<ITemaCodeData>) => {
             form.setFieldValue('data', { ...data, ...val })
           }
           return (

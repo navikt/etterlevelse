@@ -89,7 +89,7 @@ export const EtterlevelseKravView = ({
   )
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       etterlevelseDokumentasjonId &&
         kravId.kravNummer &&
         getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(etterlevelseDokumentasjonId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
