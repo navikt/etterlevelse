@@ -125,7 +125,6 @@
     "react-localization": "^1.0.19",
     "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
-    "tailwindcss": "^3.3.3",
-    "@stylistic/eslint-plugin-js": "1.5.3"
+    "tailwindcss": "^3.3.3"
   }
 }

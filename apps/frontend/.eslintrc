@@ -11,8 +11,6 @@
       "plugin:react-hooks/recommended",
       "plugin:@typescript-eslint/recommended",
       "plugin:import/warnings",
-      "plugin:@typescript-eslint/stylistic",
-      "@stylistic/eslint-plugin"
     ], 
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
