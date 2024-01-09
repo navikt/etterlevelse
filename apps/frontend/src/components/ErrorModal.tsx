@@ -1,6 +1,6 @@
 import { Button, Modal } from '@navikt/ds-react'
 
-const ErrorModal = (props: { isOpen: boolean; submit: Function; errorMessage: string }) => {
+const ErrorModal = (props: { isOpen: boolean; submit: React.Dispatch<React.SetStateAction<boolean>>; errorMessage: string }) => {
   return (
     <Modal open={props.isOpen} header={{ heading: 'Feilmelding' }}>
       <Modal.Body>{props.errorMessage}</Modal.Body>

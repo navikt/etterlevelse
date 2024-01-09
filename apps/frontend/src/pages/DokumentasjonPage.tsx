@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getAllKravPriority } from '../api/KravPriorityApi'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { ExternalLink } from '../components/common/RouteLink'
 import { Teams } from '../components/common/TeamName'
@@ -159,7 +159,7 @@ export const DokumentasjonPage = () => {
 
   if (!etterlevelseDokumentasjon) return <LoadingSkeleton header="Dokumentasjon" />
 
-  const breadcrumbPaths: breadcrumbPaths[] = [
+  const breadcrumbPaths: IBreadcrumbPaths[] = [
     {
       pathName: 'Dokumenter etterlevelse',
       href: '/dokumentasjoner',

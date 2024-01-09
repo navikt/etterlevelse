@@ -6,7 +6,7 @@ import { ListName } from '../../services/Codelist'
 import { user } from '../../services/User'
 import { loginUrl } from '../Header'
 import { AuditButton } from '../admin/audit/AuditButton'
-import { AuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
+import { IAuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
 import CustomizedLink from './CustomizedLink'
 
 type RouteLinkProps = {
@@ -63,7 +63,7 @@ export default RouteLink
 type ObjectLinkProps = {
   id?: string
   type: NavigableItem
-  audit?: AuditItem
+  audit?: IAuditItem
   withHistory?: boolean
   children?: any
   disable?: boolean
@@ -73,7 +73,7 @@ type ObjectLinkProps = {
   noNewTabLabel?: boolean
 }
 
-export const urlForObject = (type: NavigableItem | string, id: string, audit?: AuditItem) => {
+export const urlForObject = (type: NavigableItem | string, id: string, audit?: IAuditItem) => {
   switch (type) {
     case ObjectType.Krav:
       return `/krav/${id}`

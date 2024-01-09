@@ -5,21 +5,21 @@ import { AuditActionIcon, AuditLabel } from './AuditComponents'
 import { Differ, Viewer } from 'json-diff-kit'
 import { useRefs } from '../../../util/hooks'
 import { intl } from '../../../util/intl/intl'
-import { AuditAction, AuditItem, AuditLog } from './AuditTypes'
+import { AuditAction, IAuditItem, IAuditLog } from './AuditTypes'
 import { ObjectLink } from '../../common/RouteLink'
 import { Box, Button, Label, Loader, Modal, Tooltip } from '@navikt/ds-react'
 import { ArrowRightLeftIcon, XMarkIcon } from '@navikt/aksel-icons'
 
 type AuditViewProps = {
-  auditLog?: AuditLog
+  auditLog?: IAuditLog
   auditId?: string
   loading: boolean
   viewId: (id: string) => void
 }
 
 type ComparisonViewProps = {
-  auditLog: AuditLog
-  audit: AuditItem
+  auditLog: IAuditLog
+  audit: IAuditItem
   index: number
 }
 

@@ -1,6 +1,6 @@
 import { ListName } from '../../../services/Codelist'
 
-export interface AuditItem {
+export interface IAuditItem {
   action: AuditAction
   id: string
   table: ObjectType
@@ -10,9 +10,9 @@ export interface AuditItem {
   data: object
 }
 
-export interface AuditLog {
+export interface IAuditLog {
   id: string
-  audits: AuditItem[]
+  audits: IAuditItem[]
 }
 
 export enum AuditAction {

@@ -15,7 +15,7 @@ import _ from 'lodash'
 
 export type ButtonKind = (typeof KIND)[keyof typeof KIND] | 'outline' | 'underline-hover'
 
-interface ButtonProps {
+interface IButtonProps {
   kind?: ButtonKind
   type?: 'submit' | 'reset' | 'button'
   size?: (typeof SIZE)[keyof typeof SIZE]
@@ -36,12 +36,12 @@ interface ButtonProps {
   notBold?: boolean
 }
 
-interface TooltipProps {
+interface ITooltipProps {
   tooltip?: string
   children: React.ReactElement
 }
 
-const Tooltip = (props: TooltipProps) =>
+const Tooltip = (props: ITooltipProps) =>
   props.tooltip ? (
     <StatefulTooltip content={props.tooltip} placement={PLACEMENT.top} focusLock={false}>
       {props.children}
@@ -86,7 +86,7 @@ export const primaryFocusBorder = {
   },
 }
 
-export const Button = (props: ButtonProps) => {
+export const Button = (props: IButtonProps) => {
   const baseuiKind = props.kind === 'outline' ? KIND.secondary : props.kind === 'underline-hover' ? KIND.tertiary : props.kind
 
   const boxShadow =

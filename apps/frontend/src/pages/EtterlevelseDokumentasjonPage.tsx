@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { KravId, KravMedPrioriteringOgEtterlevelseQuery } from '../api/KravApi'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
 import { PageLayout } from '../components/scaffold/Page'
 import { EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus, IPageResponse } from '../constants'
@@ -85,7 +85,7 @@ export const EtterlevelseDokumentasjonPage = () => {
     }
   }, [etterlevelseDokumentasjon])
 
-  const breadcrumbPaths: breadcrumbPaths[] = [
+  const breadcrumbPaths: IBreadcrumbPaths[] = [
     {
       pathName: 'Dokumenter etterlevelse',
       href: '/dokumentasjoner',

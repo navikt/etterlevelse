@@ -8,7 +8,7 @@ import { intl } from '../../../util/intl/intl'
 import { PageLayout } from '../../scaffold/Page'
 import { AuditLabel } from './AuditComponents'
 import { AuditRecentTable } from './AuditRecentTable'
-import { AuditLog } from './AuditTypes'
+import { IAuditLog } from './AuditTypes'
 import { AuditView } from './AuditView'
 
 const format = (id: string) => _.trim(id, '"')
@@ -18,7 +18,7 @@ export const AuditPage = () => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
-  const [auditLog, setAuditLog] = useState<AuditLog>()
+  const [auditLog, setAuditLog] = useState<IAuditLog>()
   const [idSearch, setIdInput, idInput] = useDebouncedState(params.id || '', 400)
 
   const lookupVersion = (id?: string) => {

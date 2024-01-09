@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom'
 import { KravFilters } from '../api/KravGraphQLApi'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { lovdataBase } from '../components/Lov'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
 import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
@@ -84,7 +84,7 @@ const TemaView = ({ tema }: { tema: TemaCode }) => {
     })
   }, [])
 
-  const breadcrumbPaths: breadcrumbPaths[] = [
+  const breadcrumbPaths: IBreadcrumbPaths[] = [
     {
       pathName: 'Forstå kravene',
       href: '/tema',

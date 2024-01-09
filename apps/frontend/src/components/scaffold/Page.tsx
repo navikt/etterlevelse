@@ -2,7 +2,7 @@ import { Block } from 'baseui/block'
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, theme } from '../../util/theme'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from '../common/CustomizedBreadcrumbs'
+import CustomizedBreadcrumbs, { IBreadcrumbPaths } from '../common/CustomizedBreadcrumbs'
 
 const padding = ['16px', '16px', '16px', '20px', '40px', '80px']
 
@@ -19,7 +19,7 @@ export const PageLayout = ({
   fullWidth?: boolean
   noPadding?: boolean
   currentPage?: string
-  breadcrumbPaths?: breadcrumbPaths[]
+  breadcrumbPaths?: IBreadcrumbPaths[]
 }) => {
 
   return (
@@ -66,7 +66,7 @@ export const Page = ({
   children: React.ReactNode
   hideBackBtn?: boolean
   currentPage?: string
-  breadcrumbPaths?: breadcrumbPaths[]
+  breadcrumbPaths?: IBreadcrumbPaths[]
 }) => {
   return (
     <Block id="content" width="100%" overrides={{ Block: { props: { role: 'main' } } }} backgroundColor={backgroundColor} paddingBottom={'200px'}>
@@ -144,7 +144,7 @@ export const Layout2 = (props: {
   childrenBackgroundColor?: string
   children: React.ReactNode
   currentPage?: string
-  breadcrumbPaths?: breadcrumbPaths[]
+  breadcrumbPaths?: IBreadcrumbPaths[]
 }) => {
   // const history = useHistory()
   // const location = useLocation()

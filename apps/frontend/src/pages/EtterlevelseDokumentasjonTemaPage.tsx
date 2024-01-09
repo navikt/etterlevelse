@@ -9,7 +9,7 @@ import { useLocation, useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { etterlevelseDokumentasjonKravQuery } from '../api/KravApi'
 import { getAllKravPriority } from '../api/KravPriorityApi'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { KravPanelHeaderWithSorting } from '../components/etterlevelseDokumentasjon/KravPanelHeader'
 import { getMainHeader } from '../components/etterlevelseDokumentasjon/common/utils'
 import { KravList } from '../components/etterlevelseDokumentasjonTema/KravList'
@@ -148,7 +148,7 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
     ])
   }, [relevantKravData, allKravPriority, irrelevanteKraverGraphQLResponse])
 
-  const breadcrumbPaths: breadcrumbPaths[] = [
+  const breadcrumbPaths: IBreadcrumbPaths[] = [
     {
       pathName: 'Dokumenter etterlevelse',
       href: '/dokumentasjoner',

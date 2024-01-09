@@ -3,7 +3,7 @@ import { intl } from '../../../util/intl/intl'
 import { Button, ButtonProps, Link, Tooltip } from '@navikt/ds-react'
 import { ClockDashedIcon } from '@navikt/aksel-icons'
 
-interface AuditButtonProps extends ButtonProps {
+interface IAuditButtonProps extends ButtonProps {
   id: string
   fontColor?: string
   auditId?: string
@@ -11,7 +11,7 @@ interface AuditButtonProps extends ButtonProps {
   marginRight?: boolean
 }
 
-export const AuditButton = (props: AuditButtonProps) => {
+export const AuditButton = (props: IAuditButtonProps) => {
   const { id, auditId, marginLeft, marginRight, ...restProps } = props
   return user.isAdmin() ? (
     <Link className={`${marginLeft ? 'ml-2' : ''} ${marginRight ? 'mr-2' : ''}`} href={`/admin/audit/${props.id}` + (props.auditId ? `/${props.auditId}` : '')}>

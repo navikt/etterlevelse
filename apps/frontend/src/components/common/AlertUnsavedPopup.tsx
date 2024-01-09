@@ -8,8 +8,8 @@ type AlertUnsavedPopupProps = {
   isActive: boolean
   isModalOpen: boolean
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
-  onClose: Function
-  onSubmit: Function
+  onClose: () => void
+  onSubmit: () => void
 }
 
 export const AlertUnsavedPopup = ({ isActive, isModalOpen, setIsModalOpen, onClose, onSubmit }: AlertUnsavedPopupProps) => {

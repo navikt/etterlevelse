@@ -10,19 +10,19 @@ export const CustomizedTab = (props: TabProps) => {
   return <Tab {...props}>{props.children}</Tab>
 }
 
-interface TabsContent {
+interface ITabsContent {
   title?: string
   key?: string
   content?: ReactNode
 }
 
-interface CustomizedTabsProps {
+interface ICustomizedTabsProps {
   fontColor?: string
   activeColor?: string
   tabBackground?: string
   backgroundColor?: string
   small?: boolean
-  tabs?: TabsContent[]
+  tabs?: ITabsContent[]
 
   children?: ReactNode
   activeKey?: React.Key
@@ -36,7 +36,7 @@ interface CustomizedTabsProps {
   uid?: string
 }
 
-export const CustomizedTabs = (props: CustomizedTabsProps) => {
+export const CustomizedTabs = (props: ICustomizedTabsProps) => {
   const [activeKeyInternal, setActiveKeyInternal] = useState<React.Key>(0)
   const { tabBackground, tabs, overrides, ...restProps } = props
   let { fontColor, activeColor } = props
@@ -83,7 +83,7 @@ export const CustomizedTabs = (props: CustomizedTabsProps) => {
       }}
       activeKey={props.activeKey || activeKeyInternal}
     >
-      {tabs?.map((tab: TabsContent, index: number) => {
+      {tabs?.map((tab: ITabsContent, index: number) => {
         return (
           <CustomizedTab
             title={tab.title}

@@ -2,13 +2,13 @@ import { Detail, Tag } from '@navikt/ds-react'
 import { KravStatus } from '../../constants'
 import { kravStatus } from '../../pages/KravPage'
 
-interface StatusViewProps {
+interface IStatusViewProps {
   status: KravStatus | string
   variant?: any
   icon?: React.ReactNode
 }
 
-export const StatusView = ({ status, variant, icon }: StatusViewProps) => {
+export const StatusView = ({ status, variant, icon }: IStatusViewProps) => {
   const getStatusDisplay = (variant: any) => {
     return (
       <Tag variant={variant} className="h-fit">

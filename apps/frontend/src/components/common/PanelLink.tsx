@@ -9,7 +9,7 @@ import { arrowRightIcon, navChevronRightIcon } from '../Images'
 import * as _ from 'lodash'
 import Button from './Button'
 
-interface PanelProps {
+interface IPanelProps {
   href: string
   title: string | React.ReactNode
   rightTitle?: string
@@ -27,7 +27,7 @@ interface PanelProps {
   hideChevron?: boolean
 }
 
-interface PanelButtonProps {
+interface IPanelButtonProps {
   onClick: () => void
   title: string | React.ReactNode
   rightTitle?: string
@@ -61,7 +61,7 @@ export const PanelLink = ({
   useTitleUnderLine,
   useDescriptionUnderline,
   hideChevron,
-}: PanelProps) => {
+}: IPanelProps) => {
   return (
     <RouteLink
       href={href}
@@ -106,7 +106,7 @@ export const PanelButton = ({
   useTitleUnderLine,
   useDescriptionUnderline,
   hideChevron,
-}: PanelButtonProps) => {
+}: IPanelButtonProps) => {
   return (
     <Button
       notBold
@@ -158,7 +158,7 @@ export const PanelExternalLink = ({
   useTitleUnderLine,
   useDescriptionUnderline,
   hideChevron,
-}: PanelProps) => {
+}: IPanelProps) => {
   return (
     <ExternalLink href={href}>
       <SimplePanel

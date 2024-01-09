@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
 import { getKravByKravNumberAndVersion } from '../api/KravApi'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import CustomizedBreadcrumbs, { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
 import { IEtterlevelse, IKrav } from '../constants'
@@ -49,8 +49,8 @@ export const EtterlevelsePage = () => {
     }
   }, [etterlevelse])
 
-  const getBreadcrumPaths = (): breadcrumbPaths[] => {
-    const breadcrumbPaths: breadcrumbPaths[] = []
+  const getBreadcrumPaths = (): IBreadcrumbPaths[] => {
+    const breadcrumbPaths: IBreadcrumbPaths[] = []
 
     breadcrumbPaths.push({
       pathName: 'Forstå kravene',

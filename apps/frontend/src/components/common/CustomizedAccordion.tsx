@@ -12,14 +12,14 @@ export const CustomizedAccordion = (props: Partial<AccordionProps>) => {
   return <Accordion {...props} overrides={{}} />
 }
 
-interface CustomizedPanelProps {
+interface ICustomizedPanelProps {
   HeaderBackgroundColor?: string
   HeaderActiveBackgroundColor?: string
   noUnderLine?: boolean
   toggleIcon?: { expanded: React.ReactElement<any, any>; unexpanded: React.ReactElement<any, any> }
 }
 
-type CustomProps = CustomizedPanelProps & PanelProps
+type CustomProps = ICustomizedPanelProps & PanelProps
 
 export const CustomizedPanel = (props: CustomProps) => {
   const { expanded } = props

@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { KravIdParams, KravId as KravIdQueryVariables, deleteKrav, getKravByKravNummer, kravMapToFormVal } from '../api/KravApi'
 import { DeleteItem } from '../components/DeleteItem'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
 import StatusTag from '../components/common/StatusTag'
@@ -153,7 +153,7 @@ export const KravPage = () => {
   }
 
   const getBreadcrumPaths = () => {
-    const breadcrumbPaths: breadcrumbPaths[] = [
+    const breadcrumbPaths: IBreadcrumbPaths[] = [
       {
         pathName: 'Forstå kravene',
         href: '/tema',

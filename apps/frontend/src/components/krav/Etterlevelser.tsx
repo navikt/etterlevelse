@@ -124,17 +124,18 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                 <Accordion.Header>{t ? (t.productAreaName ? t.productAreaName : t.productAreaId) : ''}</Accordion.Header>
                 <Accordion.Content>
                   <div className="flex flex-col gap-2">
-                    {productAreaEtterlevelser.map((e) => (
+                    {productAreaEtterlevelser.map((e, i) => (
                       <LinkPanel
+                        key={e.kravNummer + '_' + i}
                         href={modalVersion ? undefined : `/etterlevelse/${e.id}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={
                           modalVersion
                             ? () => {
-                                setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
-                                setIsModalOpen(true)
-                              }
+                              setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
+                              setIsModalOpen(true)
+                            }
                             : undefined
                         }
                       >
