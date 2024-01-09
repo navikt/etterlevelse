@@ -380,11 +380,11 @@ export const etterlevelseDokumentasjonKravQuery = gql`
 
 export const KravMedPrioriteringOgEtterlevelseQuery = gql`
   query getKravByFilter(
-    $etterlevelseDokumentasjonId: string
-    $lover: [string!]
+    $etterlevelseDokumentasjonId: String
+    $lover: [String!]
     $gjeldendeKrav: Boolean
     $etterlevelseDokumentasjonIrrevantKrav: Boolean
-    $status: [string!]
+    $status: [String!]
   ) {
     krav(
       filter: {
