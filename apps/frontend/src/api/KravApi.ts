@@ -378,8 +378,7 @@ export const etterlevelseDokumentasjonKravQuery = gql`
   }
 `
 
-// eslint-enable-next-line @typescript-eslint/ban-types
-
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const KravMedPrioriteringOgEtterlevelseQuery = gql`
   query getKravByFilter(
     $etterlevelseDokumentasjonId: String
@@ -417,6 +416,7 @@ export const KravMedPrioriteringOgEtterlevelseQuery = gql`
     }
   }
 `
+// eslint-enable-next-line @typescript-eslint/ban-types
 
 export const statsQuery = gql`
   query getBehandlingStats($behandlingId: ID) {
