@@ -11,14 +11,21 @@ export const getAllArkivering = async () => {
   } else {
     let allEtterlevelseArkiv: EtterlevelseArkiv[] = [...firstPage.content]
     for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
-      allEtterlevelseArkiv = [...allEtterlevelseArkiv, ...(await getArkiveringPage(currentPage, PAGE_SIZE)).content]
+      allEtterlevelseArkiv = [
+        ...allEtterlevelseArkiv,
+        ...(await getArkiveringPage(currentPage, PAGE_SIZE)).content,
+      ]
     }
     return allEtterlevelseArkiv
   }
 }
 
 export const getArkiveringPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (
+    await axios.get<PageResponse<EtterlevelseArkiv>>(
+      `${env.backendBaseUrl}/etterlevelsearkiv?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    )
+  ).data
 }
 
 export const getEtterlevelseArkiv = async (id: string) => {
@@ -26,19 +33,37 @@ export const getEtterlevelseArkiv = async (id: string) => {
 }
 
 export const getEtterlevelseArkivByWebsak = async (websakNummer: string) => {
-  return (await axios.get<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/websaknummer/${websakNummer}`)).data
+  return (
+    await axios.get<PageResponse<EtterlevelseArkiv>>(
+      `${env.backendBaseUrl}/etterlevelsearkiv/websaknummer/${websakNummer}`
+    )
+  ).data
 }
 
 export const getEtterlevelseArkivByStatus = async (status: EtterlevelseArkivStatus) => {
-  return (await axios.get<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/status/${status}`)).data
+  return (
+    await axios.get<PageResponse<EtterlevelseArkiv>>(
+      `${env.backendBaseUrl}/etterlevelsearkiv/status/${status}`
+    )
+  ).data
 }
 
 export const getEtterlevelseArkivArkivert = async () => {
-  return (await axios.get<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`)).data
+  return (
+    await axios.get<PageResponse<EtterlevelseArkiv>>(
+      `${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`
+    )
+  ).data
 }
 
-export const getEtterlevelseArkivByEtterlevelseDokumentasjonId = async (etterlevelseDokumentasjonId: string) => {
-  return (await axios.get<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/etterlevelsedokumentasjon/${etterlevelseDokumentasjonId}`)).data
+export const getEtterlevelseArkivByEtterlevelseDokumentasjonId = async (
+  etterlevelseDokumentasjonId: string
+) => {
+  return (
+    await axios.get<PageResponse<EtterlevelseArkiv>>(
+      `${env.backendBaseUrl}/etterlevelsearkiv/etterlevelsedokumentasjon/${etterlevelseDokumentasjonId}`
+    )
+  ).data
 }
 
 export const createEtterlevelseArkiv = async (etterlevelseArkiv: EtterlevelseArkiv) => {
@@ -47,21 +72,37 @@ export const createEtterlevelseArkiv = async (etterlevelseArkiv: EtterlevelseArk
 }
 
 export const deleteEtterlevelseArkiv = async (id: string) => {
-  return (await axios.delete<EtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/${id}`)).data
+  return (await axios.delete<EtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/${id}`))
+    .data
 }
 
 export const updateEtterlevelseArkiv = async (etterlevelseArkiv: EtterlevelseArkiv) => {
   const dto = etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv)
-  return (await axios.put<EtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/${etterlevelseArkiv.id}`, dto)).data
+  return (
+    await axios.put<EtterlevelseArkiv>(
+      `${env.backendBaseUrl}/etterlevelsearkiv/${etterlevelseArkiv.id}`,
+      dto
+    )
+  ).data
 }
 
 export const updateAsAdminEtterlevelseArkiv = async (etterlevelseArkiv: EtterlevelseArkiv) => {
   const dto = etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv)
-  return (await axios.put<EtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/admin/update/${etterlevelseArkiv.id}`, dto)).data
+  return (
+    await axios.put<EtterlevelseArkiv>(
+      `${env.backendBaseUrl}/etterlevelsearkiv/admin/update/${etterlevelseArkiv.id}`,
+      dto
+    )
+  ).data
 }
 
 export const updateToArkivert = async (failedToArchiveEtterlevelseNr: string[]) => {
-  return (await axios.put<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`, { failedToArchiveEtterlevelseNr })).data
+  return (
+    await axios.put<PageResponse<EtterlevelseArkiv>>(
+      `${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`,
+      { failedToArchiveEtterlevelseNr }
+    )
+  ).data
 }
 
 function etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv: EtterlevelseArkiv) {
@@ -73,7 +114,9 @@ function etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv: Etterlevelse
   return dto
 }
 
-export const useArkiveringByEtterlevelseDokumentasjonId = (etterlevelseDokumentasjonId?: string) => {
+export const useArkiveringByEtterlevelseDokumentasjonId = (
+  etterlevelseDokumentasjonId?: string
+) => {
   const [data, setData] = useState<EtterlevelseArkiv | undefined>(undefined)
 
   useEffect(() => {
@@ -88,15 +131,20 @@ export const useArkiveringByEtterlevelseDokumentasjonId = (etterlevelseDokumenta
         })
         .catch((e) => {
           setData(arkiveringMapToFormVal({ id: '' }))
-          console.log("couldn't find arkivering with etterlevelse dokumentasjon id = ", e)
+          console.error("couldn't find arkivering with etterlevelse dokumentasjon id = ", e)
         })
     }
   }, [etterlevelseDokumentasjonId])
 
-  return [data, setData] as [EtterlevelseArkiv | undefined, (etterlevelseArkiv: EtterlevelseArkiv | undefined) => void]
+  return [data, setData] as [
+    EtterlevelseArkiv | undefined,
+    (etterlevelseArkiv: EtterlevelseArkiv | undefined) => void,
+  ]
 }
 
-export const arkiveringMapToFormVal = (arkivering: Partial<EtterlevelseArkiv>): EtterlevelseArkiv => ({
+export const arkiveringMapToFormVal = (
+  arkivering: Partial<EtterlevelseArkiv>
+): EtterlevelseArkiv => ({
   id: arkivering.id || '',
   behandlingId: arkivering.behandlingId || '',
   etterlevelseDokumentasjonId: arkivering.etterlevelseDokumentasjonId || '',
