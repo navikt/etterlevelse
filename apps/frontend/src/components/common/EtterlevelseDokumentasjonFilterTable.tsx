@@ -1,14 +1,14 @@
-import { Cell, Row, Table } from './Table'
-import RouteLink from './RouteLink'
 import { gql, useQuery } from '@apollo/client'
-import { EtterlevelseDokumentasjon, PageResponse } from '../../constants'
-import { DotTags } from './DotTag'
-import { ListName } from '../../services/Codelist'
-import { EtterlevelseDokumentasjonFilter } from '../../api/EtterlevelseDokumentasjonApi'
 import { Loader } from '@navikt/ds-react'
+import { EtterlevelseDokumentasjonFilter } from '../../api/EtterlevelseDokumentasjonApi'
+import { EtterlevelseDokumentasjon, PageResponse } from '../../constants'
+import { ListName } from '../../services/Codelist'
+import { DotTags } from './DotTag'
+import RouteLink from './RouteLink'
+import { Cell, Row, Table } from './Table'
 
 const query = gql`
-  query getEtterlevelsedokumentasjon($relevans: [string!]) {
+  query getEtterlevelsedokumentasjon($relevans: [String!]) {
     etterlevelseDokumentasjon(filter: { relevans: $relevans }) {
       content {
         id

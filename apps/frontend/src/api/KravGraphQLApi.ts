@@ -4,12 +4,12 @@ import { KravQL, PageResponse } from '../constants'
 
 const kravtableQuery = gql`
   query getKravByFilter(
-    $relevans: [string!]
+    $relevans: [String!]
     $nummer: Int
-    $underavdeling: string
-    $lov: string
-    $status: [string!]
-    $lover: [string!]
+    $underavdeling: String
+    $lov: String
+    $status: [String!]
+    $lover: [String!]
     $sistRedigert: NonNegativeInt
     $gjeldendeKrav: Boolean
     $pageSize: NonNegativeInt
