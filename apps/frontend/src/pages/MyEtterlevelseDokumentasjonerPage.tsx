@@ -345,12 +345,12 @@ const Alle = () => {
   const lastMer = () => {
     fetchMore({
       variables: {
-        pageNumber: data!.etterlevelseDokumentasjoner.pageNumber + 1,
+        pageNumber: data ? data.etterlevelseDokumentasjoner.pageNumber + 1 : 0,
         pageSize,
       },
       updateQuery: (p, o) => {
         const oldData = p.etterlevelseDokumentasjoner
-        const newData = o.fetchMoreResult!.etterlevelseDokumentasjoner
+        const newData = o.fetchMoreResult?.etterlevelseDokumentasjoner
         return {
           etterlevelseDokumentasjoner: {
             ...oldData,
@@ -538,7 +538,7 @@ export const EtterlevelseDokumentasjonerPanels = ({
             }
             beskrivelse={ed.title}
             rightBeskrivelse={
-              !!ed.sistEndretEtterlevelse
+              ed.sistEndretEtterlevelse !== undefined && ed.sistEndretEtterlevelse !== ''
                 ? `Sist endret: ${moment(ed.sistEndretEtterlevelse).format('ll')}`
                 : ''
             }
