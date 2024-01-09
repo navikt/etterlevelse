@@ -378,6 +378,7 @@ export const etterlevelseDokumentasjonKravQuery = gql`
   }
 `
 
+// eslint-enable-next-line @typescript-eslint/ban-types
 export const KravMedPrioriteringOgEtterlevelseQuery = gql`
   query getKravByFilter(
     $etterlevelseDokumentasjonId: String
