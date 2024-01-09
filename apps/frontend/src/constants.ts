@@ -433,6 +433,5 @@ export type EtterlevelseDokumentasjonQL = IEtterlevelseDokumentasjon & {
 export type VarslingsadresseQL = IVarslingsadresse & {
   slackChannel?: ISlackChannel
   slackUser?: ISlackUser
-}
-
+} 
 export type Replace<T, K> = Omit<T, keyof K> & K

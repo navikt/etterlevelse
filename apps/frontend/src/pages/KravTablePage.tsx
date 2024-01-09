@@ -86,7 +86,7 @@ export const KravTablePage = () => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {sortedData.map((krav: Krav) => {
+              {sortedData.map((krav: IKrav) => {
                 return (
                   <Table.Row key={krav.id}>
                     <Table.HeaderCell className="w-[6%] text-end" scope="row">
