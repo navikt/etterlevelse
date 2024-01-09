@@ -1,4 +1,4 @@
-import { Behandling, EtterlevelseDokumentasjon, EtterlevelseStatus } from '../../../constants'
+import { IBehandling, IEtterlevelseDokumentasjon, EtterlevelseStatus } from '../../../constants'
 import { ReactNode } from 'react'
 import { Block, Responsive } from 'baseui/block'
 import { Helmet } from 'react-helmet'
@@ -14,7 +14,7 @@ import { warningAlert } from '../../Images'
 
 export const responsiveDisplayEtterlevelseDokumentasjonPage: Responsive<any> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
-const getBehandlingLinks = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
+const getBehandlingLinks = (etterlevelseDokumentasjon: IEtterlevelseDokumentasjon) => {
   return (
     <Block>
       {etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => {
@@ -38,7 +38,7 @@ const getBehandlingLinks = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon
   )
 }
 
-export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon, setEtterlevelseDokumentasjon?: (e: EtterlevelseDokumentasjon) => void, helmet?: ReactNode) => (
+export const getMainHeader = (etterlevelseDokumentasjon: IEtterlevelseDokumentasjon, setEtterlevelseDokumentasjon?: (e: IEtterlevelseDokumentasjon) => void, helmet?: ReactNode) => (
   <Block display={responsiveDisplayEtterlevelseDokumentasjonPage} justifyContent="space-between" marginBottom="32px" marginTop="38px">
     {helmet ? (
       helmet
@@ -175,7 +175,7 @@ export const getEtterlevelseStatus = (status?: EtterlevelseStatus, frist?: strin
   }
 }
 
-export const updateBehandlingNameWithNumber = (behandlinger: Behandling[]) => {
+export const updateBehandlingNameWithNumber = (behandlinger: IBehandling[]) => {
   return behandlinger.map((b) => {
     return { ...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn }
   })

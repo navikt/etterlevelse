@@ -16,7 +16,7 @@ import { KravList } from '../components/etterlevelseDokumentasjonTema/KravList'
 import { SecondaryHeader } from '../components/etterlevelseDokumentasjonTema/SecondaryHeader'
 import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 import { Layout2 } from '../components/scaffold/Page'
-import { Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravEtterlevelseData, IKravPrioritering, KravQL, KravStatus, IPageResponse } from '../constants'
+import { IEtterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravEtterlevelseData, IKravPrioritering, KravQL, KravStatus, IPageResponse } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { ListName, TemaCode, codelist } from '../services/Codelist'
 import { ettlevColors } from '../util/theme'
@@ -33,7 +33,7 @@ export const kravRelevansOptions = [
   { label: 'Utgåtte krav', id: KRAV_FILTER_TYPE.UTGAATE_KRAV },
 ]
 
-export const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
+export const mapEtterlevelseData = (etterlevelse?: IEtterlevelse) => ({
   etterlevelseId: etterlevelse?.id,
   etterleves: !!etterlevelse?.etterleves,
   frist: etterlevelse?.fristForFerdigstillelse,

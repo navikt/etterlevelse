@@ -1,4 +1,4 @@
-import { AdresseType, Begrep, IKrav, KravQL, IKravVersjon } from '../../constants'
+import { AdresseType, IBegrep, IKrav, KravQL, IKravVersjon } from '../../constants'
 import React from 'react'
 import moment from 'moment'
 import { DotTags } from '../common/DotTag'
@@ -172,7 +172,7 @@ export const AllInfo = ({
   )
 }
 
-const BegrepView = ({ begrep }: { begrep: Begrep }) => (
+const BegrepView = ({ begrep }: { begrep: IBegrep }) => (
   <div className="max-w-2xl">
     <BodyShort className="break-words">
       <ExternalLink href={termUrl(begrep.id)}>{begrep.navn}</ExternalLink>

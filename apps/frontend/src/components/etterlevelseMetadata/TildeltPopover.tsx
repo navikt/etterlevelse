@@ -1,4 +1,4 @@
-import { EtterlevelseMetadata } from '../../constants'
+import { IEtterlevelseMetadata } from '../../constants'
 import { StatefulPopover } from 'baseui/popover'
 import { Block } from 'baseui/block'
 import { Button as BaseButton } from 'baseui/button'
@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 type TildeltPopoverProps = {
-  etterlevelseMetadata: EtterlevelseMetadata
+  etterlevelseMetadata: IEtterlevelseMetadata
   setEtterlevelseMetadata: Function
   icon: IconDefinition
   iconColor?: string

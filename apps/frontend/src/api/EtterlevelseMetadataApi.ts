@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { EtterlevelseMetadata, IPageResponse } from '../constants'
+import { IEtterlevelseMetadata, IPageResponse } from '../constants'
 import { env } from '../util/env'
 import { KravId } from './KravApi'
 
@@ -10,7 +10,7 @@ export const getAllEtterlevelseMetadata = async () => {
   if (firstPage.pages === 1) {
     return firstPage.content.length > 0 ? [...firstPage.content] : []
   } else {
-    let allEtterlevelseMetadata: EtterlevelseMetadata[] = [...firstPage.content]
+    let allEtterlevelseMetadata: IEtterlevelseMetadata[] = [...firstPage.content]
     for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
       allEtterlevelseMetadata = [...allEtterlevelseMetadata, ...(await getEtterlevelseMetadataByPage(currentPage, PAGE_SIZE)).content]
     }
@@ -19,16 +19,16 @@ export const getAllEtterlevelseMetadata = async () => {
 }
 
 export const getEtterlevelseMetadataByPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<IPageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (await axios.get<IPageResponse<IEtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
 }
 
 export const getEtterlevelseMetadataByKravNummer = async (kravNummer: number | string) => {
-  return (await axios.get<IPageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/kravnummer/${kravNummer}`)).data
+  return (await axios.get<IPageResponse<IEtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/kravnummer/${kravNummer}`)).data
 }
 
 export const getEtterlevelseMetadataByKravNumberAndVersion = async (kravNummer: number | string, kravVersjon: number | string) => {
   return await axios
-    .get<IPageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/kravnummer/${kravNummer}/${kravVersjon}`)
+    .get<IPageResponse<IEtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/kravnummer/${kravNummer}/${kravVersjon}`)
     .then((resp) => {
       return resp.data
     })
@@ -43,31 +43,31 @@ export const getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndK
   kravVersjon: number,
 ) => {
   return (
-    await axios.get<IPageResponse<EtterlevelseMetadata>>(
+    await axios.get<IPageResponse<IEtterlevelseMetadata>>(
       `${env.backendBaseUrl}/etterlevelsemetadata/etterlevelseDokumentasjon/${etterlevelseDokumentasjonId}/${kravNummer}/${kravVersjon}`,
     )
   ).data
 }
 
 export const getEtterlevelseMetadataById = async (id: string) => {
-  return (await axios.get<EtterlevelseMetadata>(`${env.backendBaseUrl}/etterlevelsemetadata/${id}`)).data
+  return (await axios.get<IEtterlevelseMetadata>(`${env.backendBaseUrl}/etterlevelsemetadata/${id}`)).data
 }
 
 export const deleteEtterlevelseMetadata = async (id: string) => {
-  return (await axios.delete<EtterlevelseMetadata>(`${env.backendBaseUrl}/etterlevelsemetadata/${id}`)).data
+  return (await axios.delete<IEtterlevelseMetadata>(`${env.backendBaseUrl}/etterlevelsemetadata/${id}`)).data
 }
 
-export const createEtterlevelseMetadata = async (etterlevelseMetadata: EtterlevelseMetadata) => {
+export const createEtterlevelseMetadata = async (etterlevelseMetadata: IEtterlevelseMetadata) => {
   const dto = etterlevelseMetadataToEtterlevelseMetadataDto(etterlevelseMetadata)
-  return (await axios.post<EtterlevelseMetadata>(`${env.backendBaseUrl}/etterlevelsemetadata`, dto)).data
+  return (await axios.post<IEtterlevelseMetadata>(`${env.backendBaseUrl}/etterlevelsemetadata`, dto)).data
 }
 
-export const updateEtterlevelseMetadata = async (etterlevelseMetadata: EtterlevelseMetadata) => {
+export const updateEtterlevelseMetadata = async (etterlevelseMetadata: IEtterlevelseMetadata) => {
   const dto = etterlevelseMetadataToEtterlevelseMetadataDto(etterlevelseMetadata)
-  return (await axios.put<EtterlevelseMetadata>(`${env.backendBaseUrl}/etterlevelsemetadata/${etterlevelseMetadata.id}`, dto)).data
+  return (await axios.put<IEtterlevelseMetadata>(`${env.backendBaseUrl}/etterlevelsemetadata/${etterlevelseMetadata.id}`, dto)).data
 }
 
-function etterlevelseMetadataToEtterlevelseMetadataDto(etterlevelseMetadata: EtterlevelseMetadata): EtterlevelseMetadata {
+function etterlevelseMetadataToEtterlevelseMetadataDto(etterlevelseMetadata: IEtterlevelseMetadata): IEtterlevelseMetadata {
   const dto = {
     ...etterlevelseMetadata,
   } as any
@@ -78,7 +78,7 @@ function etterlevelseMetadataToEtterlevelseMetadataDto(etterlevelseMetadata: Ett
 
 export const useEtterlevelseMetadata = (id?: string, behandlingId?: string, kravId?: KravId) => {
   const isCreateNew = id === 'ny'
-  const [data, setData] = useState<EtterlevelseMetadata | undefined>(
+  const [data, setData] = useState<IEtterlevelseMetadata | undefined>(
     isCreateNew
       ? mapEtterlevelseMetadataToFormValue({
           behandlingId: behandlingId,
@@ -92,10 +92,10 @@ export const useEtterlevelseMetadata = (id?: string, behandlingId?: string, krav
     id && !isCreateNew && getEtterlevelseMetadataById(id).then(setData)
   }, [id])
 
-  return [data, setData] as [EtterlevelseMetadata | undefined, (em: EtterlevelseMetadata) => void]
+  return [data, setData] as [IEtterlevelseMetadata | undefined, (em: IEtterlevelseMetadata) => void]
 }
 
-export const mapEtterlevelseMetadataToFormValue = (etterlevelsemetaData: Partial<EtterlevelseMetadata>): EtterlevelseMetadata => {
+export const mapEtterlevelseMetadataToFormValue = (etterlevelsemetaData: Partial<IEtterlevelseMetadata>): IEtterlevelseMetadata => {
   return {
     id: etterlevelsemetaData.id || '',
     etterlevelseDokumentasjonId: etterlevelsemetaData.etterlevelseDokumentasjonId || '',

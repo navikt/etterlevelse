@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { getBehandling, useSearchBehandling } from '../../../api/BehandlingApi'
 import {
-  Behandling,
+  IBehandling,
   EtterlevelseDokumentasjonQL,
   IPageResponse,
   emptyPage,
@@ -30,7 +30,7 @@ export const BehandlingSok = () => {
     useSearchBehandling()
   const [searchParams, setSearchParams] = useSearchParams()
   const behandlingUUID = searchParams.get('behandlingId')
-  const [selectedBehandling, setSelectedBehandling] = useState<Behandling>()
+  const [selectedBehandling, setSelectedBehandling] = useState<IBehandling>()
   const {
     data,
     loading: gqlLoading,
@@ -127,7 +127,7 @@ export const BehandlingSok = () => {
           options={updateBehandlingNameWithNumber(behandlingSearchResult)}
           onChange={({ value }) => {
             if (value && value.length > 0) {
-              setSelectedBehandling(value[0] as Behandling)
+              setSelectedBehandling(value[0] as IBehandling)
               searchParams.set('behandlingId', value[0].id ? value[0].id.toString() : '')
               setSearchParams(searchParams)
             }

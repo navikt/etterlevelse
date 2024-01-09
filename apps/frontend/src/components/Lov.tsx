@@ -1,13 +1,13 @@
 import { codelist, ListName } from '../services/Codelist'
 import { env } from '../util/env'
-import { Regelverk } from '../constants'
+import { IRegelverk } from '../constants'
 import { Block } from 'baseui/block'
 import { Link } from '@navikt/ds-react'
 
 const reactProcessString = require('react-process-string')
 const processString = reactProcessString as (converters: { regex: RegExp; fn: (key: string, result: string[]) => JSX.Element | string }[]) => (input?: string) => JSX.Element[]
 
-export const LovViewList = (props: { regelverk: Regelverk[]; openOnSamePage?: boolean }) => {
+export const LovViewList = (props: { regelverk: IRegelverk[]; openOnSamePage?: boolean }) => {
   return (
     <Block display="flex" flexDirection="column" $style={{ wordBreak: 'break-all' }}>
       {props.regelverk.map((r, i) => (
@@ -19,7 +19,7 @@ export const LovViewList = (props: { regelverk: Regelverk[]; openOnSamePage?: bo
   )
 }
 
-export const LovView = (props: { regelverk?: Regelverk; openOnSamePage?: boolean }) => {
+export const LovView = (props: { regelverk?: IRegelverk; openOnSamePage?: boolean }) => {
   if (!props.regelverk) return null
   const { spesifisering, lov } = props.regelverk
   const lovCode = lov?.code

@@ -1,7 +1,7 @@
 import { Block } from 'baseui/block'
 import { ModalBody, ModalHeader } from 'baseui/modal'
 import React, { useEffect, useState } from 'react'
-import { Virkemiddel } from '../../../constants'
+import { IVirkemiddel } from '../../../constants'
 import { codelist, ListName } from '../../../services/Codelist'
 import Button from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
@@ -24,8 +24,8 @@ const errorMessage = 'Feltet er påkrevd'
 type EditVirkemiddelModalProps = {
   isOpen: boolean
   setIsOpen: (b: boolean) => void
-  virkemiddel?: Virkemiddel
-  setVirkemiddel?: (v: Virkemiddel) => void
+  virkemiddel?: IVirkemiddel
+  setVirkemiddel?: (v: IVirkemiddel) => void
   isEdit?: boolean
   refetchData?: () => void
 }
@@ -45,7 +45,7 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
     }
   }, [props.virkemiddel])
 
-  const submit = async (virkemiddel: Virkemiddel) => {
+  const submit = async (virkemiddel: IVirkemiddel) => {
     if (!virkemiddel.id || virkemiddel.id === 'ny') {
       await createVirkemiddel(virkemiddel).then((response) => {
         props.setIsOpen(false)

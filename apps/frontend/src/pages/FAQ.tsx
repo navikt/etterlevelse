@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react'
 import { getMeldingByType, mapMeldingToFormValue } from '../api/MeldingApi'
 import { Markdown } from '../components/common/Markdown'
 import { PageLayout } from '../components/scaffold/Page'
-import { Melding, MeldingType } from '../constants'
+import { IMelding, MeldingType } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { user } from '../services/User'
 
 export const FAQ = () => {
-  const [melding, setMelding] = useState<Melding>()
+  const [melding, setMelding] = useState<IMelding>()
 
   useEffect(() => {
     (async () => {

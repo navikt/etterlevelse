@@ -1,7 +1,7 @@
 import { BodyShort, Box, Heading, Label, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React from 'react'
-import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
+import { EtterlevelseStatus, ISuksesskriterie, ISuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
 import { useDebouncedState } from '../../../util/hooks'
 import { FieldWrapper } from '../../common/Inputs'
 import { Markdown } from '../../common/Markdown'
@@ -9,7 +9,7 @@ import { Error } from '../../common/ModalSchema'
 import { LabelAboveContent } from '../../common/PropertyLabel'
 import TextEditor from '../../common/TextEditor/TextEditor'
 
-export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[], suksessKriterie: Suksesskriterie) => {
+export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[], suksessKriterie: ISuksesskriterie) => {
   const sb = suksesskriterieBegrunnelser.find((item) => {
     return item.suksesskriterieId === suksessKriterie.id
   })
@@ -37,7 +37,7 @@ export const getLabelForSuksessKriterie = (suksessKriterieStatus?: Suksesskriter
   }
 }
 
-export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit }: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean }) => {
+export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit }: { suksesskriterie: ISuksesskriterie[]; disableEdit: boolean }) => {
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterieBegrunnelser'}>{(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} />}</FieldArray>
@@ -45,8 +45,8 @@ export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit }
   )
 }
 
-const KriterieBegrunnelseList = ({ props, suksesskriterie, disableEdit }: { props: FieldArrayRenderProps; suksesskriterie: Suksesskriterie[]; disableEdit: boolean }) => {
-  const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
+const KriterieBegrunnelseList = ({ props, suksesskriterie, disableEdit }: { props: FieldArrayRenderProps; suksesskriterie: ISuksesskriterie[]; disableEdit: boolean }) => {
+  const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as ISuksesskriterieBegrunnelse[]
 
   return (
     <div>
@@ -80,11 +80,11 @@ const KriterieBegrunnelse = ({
   props,
   totalSuksesskriterie,
 }: {
-  suksesskriterie: Suksesskriterie
+  suksesskriterie: ISuksesskriterie
   index: number
-  suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
+  suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
   disableEdit: boolean
-  update: (s: SuksesskriterieBegrunnelse) => void
+  update: (s: ISuksesskriterieBegrunnelse) => void
   status: string
   props: FieldArrayRenderProps
   totalSuksesskriterie: number

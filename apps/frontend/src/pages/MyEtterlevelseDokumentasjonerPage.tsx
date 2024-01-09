@@ -28,7 +28,7 @@ import { PanelLink } from '../components/common/PanelLink'
 import { borderWidth } from '../components/common/Style'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import BehandlingSok from '../components/etterlevelseDokumentasjon/tabs/BehandlingSok'
-import { EtterlevelseDokumentasjonQL, IPageResponse, Team, emptyPage } from '../constants'
+import { EtterlevelseDokumentasjonQL, IPageResponse, ITeam, emptyPage } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { user } from '../services/User'
 import { theme } from '../util'
@@ -42,7 +42,7 @@ interface IDokumentasjonCount {
   dokumentasjonCount?: number
 }
 
-type CustomTeamObject = IDokumentasjonCount & Team
+type CustomTeamObject = IDokumentasjonCount & ITeam
 
 export const tabMarginBottom = '48px'
 
@@ -129,7 +129,7 @@ const DokumentasjonTabs = () => {
 
   const [sortedTeams, setSortedTeams] = React.useState<CustomTeamObject[]>([])
 
-  const sortTeams = (unSortedTeams: Team[]) => {
+  const sortTeams = (unSortedTeams: ITeam[]) => {
     return unSortedTeams
       .map((t) => {
         const teamDokumentasjoner = etterlevelseDokumentasjoner.content.filter(

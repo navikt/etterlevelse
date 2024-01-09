@@ -1,9 +1,9 @@
 import moment from 'moment'
-import { TilbakemeldingMelding } from '../../../../constants'
+import { ITilbakemeldingMelding } from '../../../../constants'
 import { PersonName } from '../../../common/PersonName'
 import { BodyShort } from '@navikt/ds-react'
 
-export const EndretInfo = (props: { melding: TilbakemeldingMelding }) => {
+export const EndretInfo = (props: { melding: ITilbakemeldingMelding }) => {
   if (!props.melding.endretAvIdent) return null
   return (
     <div className="justify-end flex w-full">

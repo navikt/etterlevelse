@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { IPageResponse, ProductArea, SlackChannel, SlackUser, Team, TeamResource } from '../constants'
+import { IPageResponse, IProductArea, ISlackChannel, ISlackUser, ITeam, ITeamResource } from '../constants'
 import { env } from '../util/env'
 import { useForceUpdate, useSearch } from '../util/hooks'
 import { Option } from 'baseui/select'
@@ -7,21 +7,21 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { user } from '../services/User'
 
 export const getResourceById = async (resourceId: string) => {
-  return (await axios.get<TeamResource>(`${env.backendBaseUrl}/team/resource/${resourceId}`)).data
+  return (await axios.get<ITeamResource>(`${env.backendBaseUrl}/team/resource/${resourceId}`)).data
 }
 
 export const searchResourceByName = async (resourceName: string) => {
-  return (await axios.get<IPageResponse<TeamResource>>(`${env.backendBaseUrl}/team/resource/search/${resourceName}`)).data.content
+  return (await axios.get<IPageResponse<ITeamResource>>(`${env.backendBaseUrl}/team/resource/search/${resourceName}`)).data.content
 }
 
 export const getTeam = async (teamId: string) => {
-  const data = (await axios.get<Team>(`${env.backendBaseUrl}/team/${teamId}`)).data
+  const data = (await axios.get<ITeam>(`${env.backendBaseUrl}/team/${teamId}`)).data
   data.members = data.members.sort((a, b) => (a.name || '').localeCompare(b.name || ''))
   return data
 }
 
 export const getTeams = async (teamIds: string[]) => {
-  const data: Team[] = []
+  const data: ITeam[] = []
   teamIds.forEach(async (id) => {
     await getTeam(id).then((response) => data.push(response))
   })
@@ -29,52 +29,52 @@ export const getTeams = async (teamIds: string[]) => {
 }
 
 export const getAllTeams = async () => {
-  return (await axios.get<IPageResponse<Team>>(`${env.backendBaseUrl}/team`)).data.content
+  return (await axios.get<IPageResponse<ITeam>>(`${env.backendBaseUrl}/team`)).data.content
 }
 
 export const myTeams = async () => {
-  return (await axios.get<IPageResponse<Team>>(`${env.backendBaseUrl}/team?myTeams=true`)).data.content
+  return (await axios.get<IPageResponse<ITeam>>(`${env.backendBaseUrl}/team?myTeams=true`)).data.content
 }
 
 export const myProductArea = async () => {
-  return (await axios.get<IPageResponse<ProductArea>>(`${env.backendBaseUrl}/team/productarea?myProductAreas=true`)).data.content
+  return (await axios.get<IPageResponse<IProductArea>>(`${env.backendBaseUrl}/team/productarea?myProductAreas=true`)).data.content
 }
 
 export const searchTeam = async (teamSearch: string) => {
-  return (await axios.get<IPageResponse<Team>>(`${env.backendBaseUrl}/team/search/${teamSearch}`)).data.content
+  return (await axios.get<IPageResponse<ITeam>>(`${env.backendBaseUrl}/team/search/${teamSearch}`)).data.content
 }
 
 export const getSlackChannelById = async (id: string) => {
-  return (await axios.get<SlackChannel>(`${env.backendBaseUrl}/team/slack/channel/${id}`)).data
+  return (await axios.get<ISlackChannel>(`${env.backendBaseUrl}/team/slack/channel/${id}`)).data
 }
 
 export const getSlackUserByEmail = async (id: string) => {
-  return (await axios.get<SlackUser>(`${env.backendBaseUrl}/team/slack/user/email/${id}`)).data
+  return (await axios.get<ISlackUser>(`${env.backendBaseUrl}/team/slack/user/email/${id}`)).data
 }
 
 export const getSlackUserById = async (id: string) => {
-  return (await axios.get<SlackUser>(`${env.backendBaseUrl}/team/slack/user/id/${id}`)).data
+  return (await axios.get<ISlackUser>(`${env.backendBaseUrl}/team/slack/user/id/${id}`)).data
 }
 
 export const searchSlackChannel = async (name: string) => {
-  return (await axios.get<IPageResponse<SlackChannel>>(`${env.backendBaseUrl}/team/slack/channel/search/${name}`)).data.content
+  return (await axios.get<IPageResponse<ISlackChannel>>(`${env.backendBaseUrl}/team/slack/channel/search/${name}`)).data.content
 }
 
-export const mapTeamResourceToOption = (teamResource: TeamResource) => ({ id: teamResource.navIdent, label: teamResource.fullName })
+export const mapTeamResourceToOption = (teamResource: ITeamResource) => ({ id: teamResource.navIdent, label: teamResource.fullName })
 
 // Overly complicated async fetch of people and teams
 
 const people: Map<string, { f: boolean; v: string }> = new Map<string, { f: boolean; v: string }>()
-const teams: Map<string, { f: boolean; v: Team }> = new Map<string, { f: boolean; v: Team }>()
+const teams: Map<string, { f: boolean; v: ITeam }> = new Map<string, { f: boolean; v: ITeam }>()
 const psubs: Map<string, Function[]> = new Map<string, Function[]>()
 const tsubs: Map<string, Function[]> = new Map<string, Function[]>()
 
-const addPerson = (person: TeamResource) => {
+const addPerson = (person: ITeamResource) => {
   people.set(person.navIdent, { f: true, v: person.fullName })
   psubs.get(person.navIdent)?.forEach((f) => f())
   psubs.delete(person.navIdent)
 }
-const addTeam = (team: Team) => {
+const addTeam = (team: ITeam) => {
   teams.set(team.id, { f: true, v: team })
   tsubs.get(team.id)?.forEach((f) => f())
   tsubs.delete(team.id)
@@ -127,13 +127,13 @@ export const useTeam = () => {
       tSubscribe(id, update)
     }
     const team = teams.get(id)?.v
-    return [team?.name || id, team] as [string, Team | undefined]
+    return [team?.name || id, team] as [string, ITeam | undefined]
   }
 }
 
 export const useMyTeams = () => {
   const [productAreas] = useMyProductAreas()
-  const [data, setData] = useState<Team[]>([])
+  const [data, setData] = useState<ITeam[]>([])
   const [loading, setLoading] = useState(true)
 
   const ident = user.getIdent()
@@ -167,11 +167,11 @@ export const useMyTeams = () => {
     !ident && setLoading(false)
   }, [ident, productAreas])
 
-  return [data, loading] as [Team[], boolean]
+  return [data, loading] as [ITeam[], boolean]
 }
 
 export const useMyProductAreas = () => {
-  const [data, setData] = useState<ProductArea[]>([])
+  const [data, setData] = useState<IProductArea[]>([])
   const [loading, setLoading] = useState(true)
   const ident = user.getIdent()
 
@@ -190,7 +190,7 @@ export const useMyProductAreas = () => {
     !ident && setLoading(false)
   }, [ident])
 
-  return [data, loading] as [ProductArea[], boolean]
+  return [data, loading] as [IProductArea[], boolean]
 }
 
 export type SearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]

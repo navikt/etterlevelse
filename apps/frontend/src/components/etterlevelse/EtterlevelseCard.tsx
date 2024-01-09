@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { getKravByKravNumberAndVersion } from '../../api/KravApi'
-import { Etterlevelse, IKrav } from '../../constants'
+import { IEtterlevelse, IKrav } from '../../constants'
 
 import EtterlevelseModal from './EtterlevelseModal'
 import { Button } from '@navikt/ds-react'
 
-export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
+export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: IEtterlevelse }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [kravData, setKravData] = useState<IKrav>()
 

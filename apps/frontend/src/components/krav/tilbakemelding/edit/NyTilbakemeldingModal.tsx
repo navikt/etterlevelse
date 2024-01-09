@@ -3,7 +3,7 @@ import { faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
 import { createNewTilbakemelding, CreateTilbakemeldingRequest } from '../../../../api/TilbakemeldingApi'
-import { AdresseType, IKrav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingType, Varslingsadresse } from '../../../../constants'
+import { AdresseType, IKrav, ITilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingType, IVarslingsadresse } from '../../../../constants'
 import { TextAreaField } from '../../../common/Inputs'
 import { AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList } from '../../Edit/KravVarslingsadresserEdit'
 import * as yup from 'yup'
@@ -15,7 +15,7 @@ import { EnvelopeClosedIcon, PersonCircleIcon } from '@navikt/aksel-icons'
 
 type NyTilbakemeldingModalProps = {
   open?: boolean
-  close: (add?: Tilbakemelding) => void
+  close: (add?: ITilbakemelding) => void
   krav: IKrav
 }
 
@@ -34,7 +34,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
   const [error, setError] = useState()
   const [adresseType, setAdresseType] = useState<AdresseType>()
   const [showNotification, setShowNotification] = useState<AdresseType>()
-  const [newTilbakeMelding, setNewTilbakeMelding] = useState<Tilbakemelding>()
+  const [newTilbakeMelding, setNewTilbakeMelding] = useState<ITilbakemelding>()
 
   const submit = (request: CreateTilbakemeldingRequest) => {
     createNewTilbakemelding(request)
@@ -55,7 +55,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
         validateOnChange={false}
       >
         {({ isSubmitting, setFieldValue, values, submitForm, errors }) => {
-          const setVarslingsadresse = (v?: Varslingsadresse) => {
+          const setVarslingsadresse = (v?: IVarslingsadresse) => {
             setFieldValue('varslingsadresse', v)
             setAdresseType(undefined)
           }
@@ -188,7 +188,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
 
 const required = 'Påkrevd'
 
-const varslingsadresseSchema: yup.ObjectSchema<Varslingsadresse> = yup.object({
+const varslingsadresseSchema: yup.ObjectSchema<IVarslingsadresse> = yup.object({
   adresse: yup.string().required('Det er påkrevd å ha minst en varslingsadresse'),
   type: yup.mixed<AdresseType>().oneOf(Object.values(AdresseType)).required('Det er påkrevd å ha minst en varslingsadresse'),
 })

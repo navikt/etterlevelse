@@ -6,7 +6,7 @@ import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
 import { etterlevelseDokumentasjonName, searchEtterlevelsedokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
 import { getKravByKravNumberAndVersion, searchKrav, searchKravByNumber } from '../../api/KravApi'
-import { Behandling, EtterlevelseDokumentasjon, IKrav, KravStatus } from '../../constants'
+import { IBehandling, IEtterlevelseDokumentasjon, IKrav, KravStatus } from '../../constants'
 import { kravName } from '../../pages/KravPage'
 import { ObjectType } from '../admin/audit/AuditTypes'
 
@@ -19,14 +19,14 @@ const kravMap = (t: IKrav) => ({
   url: `krav/${t.id}`,
 })
 
-const behandlingMap = (t: Behandling): SearchItem => ({
+const behandlingMap = (t: IBehandling): SearchItem => ({
   value: t.id,
   label: behandlingName(t),
   tag: ObjectType.Behandling,
   url: `dokumentasjoner/behandlingsok?behandlingId=${t.id}`,
 })
 
-const EtterlevelseDokumentasjonMap = (t: EtterlevelseDokumentasjon): SearchItem => ({
+const EtterlevelseDokumentasjonMap = (t: IEtterlevelseDokumentasjon): SearchItem => ({
   value: t.id,
   label: etterlevelseDokumentasjonName(t),
   tag: 'Dokumentasjon',

@@ -1,16 +1,16 @@
 import { BodyLong, BodyShort, Label } from '@navikt/ds-react'
 import moment from 'moment'
-import { Tilbakemelding, TilbakemeldingMelding, TilbakemeldingRolle } from '../../../constants'
+import { ITilbakemelding, ITilbakemeldingMelding, TilbakemeldingRolle } from '../../../constants'
 import { PersonName } from '../../common/PersonName'
 import { Portrait } from '../../common/Portrait'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
 
 export const ResponseMelding = (props: {
-  m: TilbakemeldingMelding
-  tilbakemelding: Tilbakemelding
-  oppdater: (t: Tilbakemelding) => void
-  remove: (t: Tilbakemelding) => void
+  m: ITilbakemeldingMelding
+  tilbakemelding: ITilbakemelding
+  oppdater: (t: ITilbakemelding) => void
+  remove: (t: ITilbakemelding) => void
 }) => {
   const { m, tilbakemelding, oppdater, remove } = props
   const kraveier = m.rolle === TilbakemeldingRolle.KRAVEIER

@@ -5,13 +5,13 @@ import { ParagraphMedium } from 'baseui/typography'
 import { Button } from 'baseui/button'
 import { Block } from 'baseui/block'
 import { buttonContentStyle } from '../../common/Button'
-import { Virkemiddel } from '../../../constants'
+import { IVirkemiddel } from '../../../constants'
 import { deleteVirkemiddel } from '../../../api/VirkemiddelApi'
 
 type ModalDeleteProps = {
   isOpen: boolean
   setIsOpen: (b: boolean) => void
-  virkemiddel?: Virkemiddel
+  virkemiddel?: IVirkemiddel
   refetchData: () => void
 }
 

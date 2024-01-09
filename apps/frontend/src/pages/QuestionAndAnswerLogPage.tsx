@@ -5,7 +5,7 @@ import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
 import { PersonName } from '../components/common/PersonName'
 import { getMelderInfo } from '../components/krav/tilbakemelding/Tilbakemelding'
-import { IKrav, IPageResponse, Tilbakemelding, TilbakemeldingMeldingStatus } from '../constants'
+import { IKrav, IPageResponse, ITilbakemelding, TilbakemeldingMeldingStatus } from '../constants'
 import { codelist, ListName } from '../services/Codelist'
 import { ampli } from '../services/Amplitude'
 import { BodyShort, Heading, Link, Loader, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
@@ -20,7 +20,7 @@ type SporsmaalOgSvarKrav = {
   tema?: string
 }
 
-type KravMessage = Tilbakemelding & SporsmaalOgSvarKrav
+type KravMessage = ITilbakemelding & SporsmaalOgSvarKrav
 
 export const QuestionAndAnswerLogPage = () => {
   const [tableContent, setTableContent] = useState<IKrav[]>([])
@@ -71,7 +71,7 @@ export const QuestionAndAnswerLogPage = () => {
   useEffect(() => {
     setIsLoading(true)
     const kravMessages: KravMessage[] = []
-    const tilbakeMeldinger: Tilbakemelding[] = []
+    const tilbakeMeldinger: ITilbakemelding[] = []
 
     const getTilbakeMeldingerPromise: Promise<any>[] = []
     tableContent.forEach((k) => {
@@ -79,7 +79,7 @@ export const QuestionAndAnswerLogPage = () => {
     })
 
     try {
-      Promise.all(getTilbakeMeldingerPromise).then((res: IPageResponse<Tilbakemelding>[]) => {
+      Promise.all(getTilbakeMeldingerPromise).then((res: IPageResponse<ITilbakemelding>[]) => {
         res.forEach((t) => {
           if (t.content) {
             tilbakeMeldinger.push(...t.content)

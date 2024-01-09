@@ -12,7 +12,7 @@ import {
   updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { useSearchTeamOptions } from '../../../api/TeamApi'
-import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../../../constants'
+import { IBehandling, EtterlevelseDokumentasjonQL, ITeam, IVirkemiddel } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
 import { ICode, ListName, codelist } from '../../../services/Codelist'
 import { BoolField, FieldWrapper, TextAreaField } from '../../common/Inputs'
@@ -33,7 +33,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const relevansOptions = codelist.getParsedOptions(ListName.RELEVANS)
   const [selectedFilter, setSelectedFilter] = useState<number[]>(relevansOptions.map((r, i) => i))
   const [isEtterlevelseDokumentasjonerModalOpen, setIsEtterlevelseDokumntasjonerModalOpen] = useState<boolean>(false)
-  const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
+  const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<IVirkemiddel>()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -260,7 +260,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                               }}
                             />
                           </div>
-                          <RenderTagList list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} />
+                          <RenderTagList list={p.form.values.behandlinger.map((b: IBehandling) => b.navn)} onRemove={p.remove} />
                         </div>
                       )}
                     </FieldArray>
@@ -304,7 +304,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                               }}
                             />
                           </div>
-                          <RenderTagList list={p.form.values.teamsData.map((t: Team) => t.name)} onRemove={p.remove} />
+                          <RenderTagList list={p.form.values.teamsData.map((t: ITeam) => t.name)} onRemove={p.remove} />
                         </div>
                       )}
                     </FieldArray>

@@ -6,13 +6,13 @@ import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from '../components/common/Markdown'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import { PageLayout } from '../components/scaffold/Page'
-import { AlertType, EtterlevelseDokumentasjonQL, Melding, MeldingStatus, MeldingType, IPageResponse } from '../constants'
+import { AlertType, EtterlevelseDokumentasjonQL, IMelding, MeldingStatus, MeldingType, IPageResponse } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { user } from '../services/User'
 import { Variables, query } from './MyEtterlevelseDokumentasjonerPage'
 
 export const MainPage = () => {
-  const [forsideVarsel, setForsideVarsle] = useState<Melding>()
+  const [forsideVarsel, setForsideVarsle] = useState<IMelding>()
 
   const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<{ etterlevelseDokumentasjoner: IPageResponse<EtterlevelseDokumentasjonQL> }, Variables>(query, {
     variables: { sistRedigert: 4 },

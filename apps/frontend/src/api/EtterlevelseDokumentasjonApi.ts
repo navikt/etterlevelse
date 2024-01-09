@@ -1,16 +1,16 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import * as yup from 'yup'
-import { EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, IPageResponse } from '../constants'
+import { IEtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, IPageResponse } from '../constants'
 import { env } from '../util/env'
 import { behandlingName } from './BehandlingApi'
 import { getVirkemiddel } from './VirkemiddelApi'
 
-export const etterlevelseDokumentasjonName = (etterlevelseDokumentasjon?: EtterlevelseDokumentasjon) =>
+export const etterlevelseDokumentasjonName = (etterlevelseDokumentasjon?: IEtterlevelseDokumentasjon) =>
   etterlevelseDokumentasjon ? 'E' + etterlevelseDokumentasjon.etterlevelseNummer + ' ' + etterlevelseDokumentasjon.title : ''
 
 export const getEtterlevelseDokumentasjon = async (id: string) => {
-  return (await axios.get<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`)).data
+  return (await axios.get<IEtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`)).data
 }
 
 export const getAllEtterlevelseDokumentasjon = async () => {
@@ -19,7 +19,7 @@ export const getAllEtterlevelseDokumentasjon = async () => {
   if (firstPage.pages === 1) {
     return firstPage.content.length > 0 ? [...firstPage.content] : []
   } else {
-    let allEtterlevelseDokumentasjon: EtterlevelseDokumentasjon[] = [...firstPage.content]
+    let allEtterlevelseDokumentasjon: IEtterlevelseDokumentasjon[] = [...firstPage.content]
     for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
       allEtterlevelseDokumentasjon = [...allEtterlevelseDokumentasjon, ...(await getEtterlevelseDokumentasjonPage(currentPage, PAGE_SIZE)).content]
     }
@@ -28,31 +28,31 @@ export const getAllEtterlevelseDokumentasjon = async () => {
 }
 
 export const getEtterlevelseDokumentasjonPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<IPageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
 }
 
 export const searchEtterlevelsedokumentasjon = async (searchParam: string) => {
-  return (await axios.get<IPageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/${searchParam}`)).data.content
+  return (await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/${searchParam}`)).data.content
 }
 
 export const searchEtterlevelsedokumentasjonByBehandlingId = async (behandlingId: string) => {
-  return (await axios.get<IPageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/behandling/${behandlingId}`)).data.content
+  return (await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/behandling/${behandlingId}`)).data.content
 }
 export const searchEtterlevelsedokumentasjonByVirkemiddelId = async (virkemiddelId: string) => {
-  return (await axios.get<IPageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/virkemiddel/${virkemiddelId}`)).data.content
+  return (await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/virkemiddel/${virkemiddelId}`)).data.content
 }
 export const updateEtterlevelseDokumentasjon = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
   const dto = etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon)
-  return (await axios.put<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjon.id}`, dto)).data
+  return (await axios.put<IEtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjon.id}`, dto)).data
 }
 
 export const createEtterlevelseDokumentasjon = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
   const dto = etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon)
-  return (await axios.post<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon`, dto)).data
+  return (await axios.post<IEtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon`, dto)).data
 }
 
 export const deleteEtterlevelseDokumentasjon = async (etterlevelseDokumentasjonId: string) => {
-  return (await axios.delete<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjonId}`)).data
+  return (await axios.delete<IEtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjonId}`)).data
 }
 
 export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: string) => {
@@ -87,7 +87,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
   return [data, setData, isLoading] as [EtterlevelseDokumentasjonQL | undefined, (e: EtterlevelseDokumentasjonQL) => void, boolean]
 }
 
-export const etterlevelseDokumentasjonToDto = (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL): EtterlevelseDokumentasjon => {
+export const etterlevelseDokumentasjonToDto = (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL): IEtterlevelseDokumentasjon => {
   const dto = {
     ...etterlevelseDokumentasjon,
     behandlingIds: etterlevelseDokumentasjon.behandlinger?.map((b) => b.id),

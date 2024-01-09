@@ -11,7 +11,7 @@ import {
   updateTilbakemeldingStatusOgEndretKrav,
   useTilbakemeldinger,
 } from '../../../api/TilbakemeldingApi'
-import { IKrav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
+import { IKrav, ITilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
 import { user } from '../../../services/User'
 import { useQueryParam, useRefs } from '../../../util/hooks'
 import { ettlevColors } from '../../../util/theme'
@@ -183,7 +183,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: IKrav; hasKra
   )
 }
 
-const getStatus = (tilbakemelding: Tilbakemelding) => {
+const getStatus = (tilbakemelding: ITilbakemelding) => {
   let status = TilbakemeldingMeldingStatus.UBESVART
 
   if (tilbakemelding.status) {
@@ -197,7 +197,7 @@ const getStatus = (tilbakemelding: Tilbakemelding) => {
   return status
 }
 
-export const getMelderInfo = (tilbakemelding: Tilbakemelding) => {
+export const getMelderInfo = (tilbakemelding: ITilbakemelding) => {
   const sistMelding = tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1]
   const status = getStatus(tilbakemelding)
   const melder = user.getIdent() === tilbakemelding.melderIdent
@@ -211,12 +211,12 @@ export const getMelderInfo = (tilbakemelding: Tilbakemelding) => {
 }
 
 type TilbakemeldingSvarProps = {
-  tilbakemelding: Tilbakemelding
+  tilbakemelding: ITilbakemelding
   setFocusNummer: (fn: string | undefined) => void
-  close: (t: Tilbakemelding) => void
+  close: (t: ITilbakemelding) => void
   ubesvartOgKraveier: boolean
-  remove: (t: Tilbakemelding) => void
-  replace: (t: Tilbakemelding) => void
+  remove: (t: ITilbakemelding) => void
+  replace: (t: ITilbakemelding) => void
 }
 
 const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgKraveier, remove, replace }: TilbakemeldingSvarProps) => {

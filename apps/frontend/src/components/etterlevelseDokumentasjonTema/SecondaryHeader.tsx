@@ -6,11 +6,11 @@ import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../u
 import CustomizedModal from '../common/CustomizedModal'
 import { getTemaMainHeader } from '../../pages/TemaPage'
 import { useState } from 'react'
-import { EtterlevelseDokumentasjon } from '../../constants'
+import { IEtterlevelseDokumentasjon } from '../../constants'
 import { LovCode, TemaCode } from '../../services/Codelist'
 
 type SecondaryHeaderProps = {
-  etterlevelseDokumentasjon: EtterlevelseDokumentasjon | undefined
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon | undefined
   temaData: TemaCode | undefined
   lovListe: LovCode[]
 }

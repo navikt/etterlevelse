@@ -1,4 +1,4 @@
-import { Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus } from '../../../constants'
+import { IEtterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus } from '../../../constants'
 import { Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import { mapEtterlevelseToFormValue } from '../../../api/EtterlevelseApi'
 import React, { useEffect } from 'react'
@@ -18,15 +18,15 @@ import { user } from '../../../services/User'
 
 type EditProps = {
   krav: KravQL
-  etterlevelse: Etterlevelse
-  submit: (etterlevelse: Etterlevelse) => Promise<void>
+  etterlevelse: IEtterlevelse
+  submit: (etterlevelse: IEtterlevelse) => Promise<void>
   formRef?: React.RefObject<any>
   varsleMelding?: string
   disableEdit: boolean
-  close: (k?: Etterlevelse | undefined) => void
+  close: (k?: IEtterlevelse | undefined) => void
   navigatePath: string
-  editedEtterlevelse?: Etterlevelse
-  tidligereEtterlevelser?: Etterlevelse[]
+  editedEtterlevelse?: IEtterlevelse
+  tidligereEtterlevelser?: IEtterlevelse[]
   kravFilter: KRAV_FILTER_TYPE
 }
 
@@ -79,7 +79,7 @@ export const EtterlevelseEditFields = ({
         validateOnChange={false}
         validateOnBlur={false}
       >
-        {({ values, isSubmitting, submitForm, errors, setFieldError, dirty }: FormikProps<Etterlevelse>) => (
+        {({ values, isSubmitting, submitForm, errors, setFieldError, dirty }: FormikProps<IEtterlevelse>) => (
           <div className="flex flex-col">
             <Form>
               <div>

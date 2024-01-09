@@ -7,7 +7,7 @@ import { theme } from '../../../util'
 import { LabelSmall } from 'baseui/typography'
 import { LovView } from '../../Lov'
 import { RenderTagList } from '../../common/TagList'
-import { Regelverk } from '../../../constants'
+import { IRegelverk } from '../../../constants'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import Select, { CSSObjectWithLabel } from 'react-select'
 import { Button, TextField } from '@navikt/ds-react'
@@ -91,7 +91,7 @@ export const RegelverkEdit = ({ forVirkemiddel }: RegelverkEditProps) => {
                 )}
               </div>
               <RenderTagList
-                list={p.form.values.regelverk.map((r: Regelverk) => (
+                list={p.form.values.regelverk.map((r: IRegelverk) => (
                   <LovView regelverk={r} />
                 ))}
                 onRemove={p.remove}

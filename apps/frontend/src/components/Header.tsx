@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { Location, useLocation } from 'react-router-dom'
 import { writeLog } from '../api/LogApi'
 import { getMeldingByType } from '../api/MeldingApi'
-import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
+import { AlertType, IMelding, MeldingStatus, MeldingType } from '../constants'
 import { ampli } from '../services/Amplitude'
 import { user } from '../services/User'
 import { useQueryParam } from '../util/hooks'
@@ -176,7 +176,7 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
 let sourceReported = false
 
 const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
-  const [systemVarsel, setSystemVarsel] = useState<Melding>()
+  const [systemVarsel, setSystemVarsel] = useState<IMelding>()
   const location = useLocation()
   const source = useQueryParam('source')
   if (!sourceReported) {

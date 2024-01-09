@@ -20,7 +20,7 @@ import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
 import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { PageLayout } from '../components/scaffold/Page'
-import { EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, IKravPrioritering, KravQL, IPageResponse } from '../constants'
+import { IEtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, IKravPrioritering, KravQL, IPageResponse } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { ICode, ListName, TemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
@@ -47,7 +47,7 @@ export const DokumentasjonPage = () => {
     data: relevanteData,
     refetch: refetchRelevanteData,
     loading,
-  } = useQuery<{ etterlevelseDokumentasjon: IPageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
+  } = useQuery<{ etterlevelseDokumentasjon: IPageResponse<{ stats: IEtterlevelseDokumentasjonStats }> }>(statsQuery, {
     variables,
     skip: !params.id,
   })
@@ -60,7 +60,7 @@ export const DokumentasjonPage = () => {
     unfilteredData:
       | {
           etterlevelseDokumentasjon: IPageResponse<{
-            stats: EtterlevelseDokumentasjonStats
+            stats: IEtterlevelseDokumentasjonStats
           }>
         }
       | undefined,

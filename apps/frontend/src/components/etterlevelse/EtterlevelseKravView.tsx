@@ -13,7 +13,7 @@ import {
   updateEtterlevelseMetadata,
 } from '../../api/EtterlevelseMetadataApi'
 import { getKravByKravNummer, KravId } from '../../api/KravApi'
-import { Behandling, Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, IKrav, KRAV_FILTER_TYPE, KravQL, KravStatus, IKravVersjon, Team } from '../../constants'
+import { IBehandling, IEtterlevelse, IEtterlevelseMetadata, EtterlevelseStatus, IKrav, KRAV_FILTER_TYPE, KravQL, KravStatus, IKravVersjon, ITeam } from '../../constants'
 import { query } from '../../pages/KravPage'
 import { ampli, userRoleEventProp } from '../../services/Amplitude'
 import { user } from '../../services/User'
@@ -31,17 +31,17 @@ import EtterlevelseViewFields from './EtterlevelseViewFields'
 
 type EttlevelseKravViewProps = {
   temaName?: string
-  etterlevelse: Etterlevelse
+  etterlevelse: IEtterlevelse
   kravId: KravId
   formRef?: React.Ref<any>
   etterlevelseDokumentasjonTitle?: string
   etterlevelseDokumentasjonId?: string
   etterlevelseNummer?: number
-  behandlinger: Behandling[] | undefined
-  teams: Team[] | undefined
+  behandlinger: IBehandling[] | undefined
+  teams: ITeam[] | undefined
   varsleMelding?: string
   navigatePath: string
-  tidligereEtterlevelser: Etterlevelse[] | undefined
+  tidligereEtterlevelser: IEtterlevelse[] | undefined
   kravFilter: KRAV_FILTER_TYPE
   nextKravToDocument: string
 }
@@ -71,15 +71,15 @@ export const EtterlevelseKravView = ({
   const [krav, setKrav] = useState<KravQL>()
   const [nyereKrav, setNyereKrav] = React.useState<IKrav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
-  const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
-  const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
+  const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<IEtterlevelse>()
+  const etterlevelseFormRef: React.Ref<FormikProps<IEtterlevelse> | undefined> = useRef()
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
   const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<IKravVersjon[]>([{ kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' }])
   const [isNavigationModalOpen, setIsNavigationModalOpen] = useState<boolean>(false)
   const location = useLocation()
   const navigate = useNavigate()
 
-  const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
+  const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<IEtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
       id: 'ny',
       etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
@@ -121,7 +121,7 @@ export const EtterlevelseKravView = ({
     return currentPath[0] + '/krav' + nextKravPath
   }
 
-  const submit = async (etterlevelse: Etterlevelse) => {
+  const submit = async (etterlevelse: IEtterlevelse) => {
     const mutatedEtterlevelse = {
       ...etterlevelse,
       fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE ? '' : etterlevelse.fristForFerdigstillelse,

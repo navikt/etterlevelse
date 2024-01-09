@@ -1,7 +1,7 @@
 import { Block } from 'baseui/block'
 import React, { useState } from 'react'
 import moment from 'moment'
-import { Virkemiddel } from '../../constants'
+import { IVirkemiddel } from '../../constants'
 import { SkeletonPanel } from '../common/LoadingSkeleton'
 import { Cell, Row, Table } from '../common/Table'
 import Button from '../common/Button'
@@ -15,19 +15,19 @@ import DeleteVirkemiddeltModal from '../virkemiddel/edit/DeleteVirkemiddelModal'
 import { LovView } from '../Lov'
 
 type VirkmiddelTableProps = {
-  virkemidler: Virkemiddel[]
+  virkemidler: IVirkemiddel[]
   loading: boolean
   refetchData: () => void
 }
 
-const virkemiddelSorting: ColumnCompares<Virkemiddel> = {
+const virkemiddelSorting: ColumnCompares<IVirkemiddel> = {
   navn: (a, b) => (a.navn || '').localeCompare(b.navn || ''),
   virkemiddelType: (a, b) => (a.virkemiddelType?.shortName || '').localeCompare(b.virkemiddelType?.shortName || ''),
   changeStamp: (a, b) => (a.changeStamp.lastModifiedDate || '').localeCompare(b.changeStamp.lastModifiedDate || ''),
 }
 
 export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: VirkmiddelTableProps) => {
-  const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
+  const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<IVirkemiddel>()
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
   if (loading) return <SkeletonPanel count={5} />

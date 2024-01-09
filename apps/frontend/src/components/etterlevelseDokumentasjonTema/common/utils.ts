@@ -1,4 +1,4 @@
-import { Etterlevelse, EtterlevelseStatus, IKravPrioritering, KravQL, SuksesskriterieBegrunnelse } from '../../../constants'
+import { IEtterlevelse, EtterlevelseStatus, IKravPrioritering, KravQL, ISuksesskriterieBegrunnelse } from '../../../constants'
 import _ from 'lodash'
 import { sortKraverByPriority } from '../../../util/sort'
 import { mapEtterlevelseData } from '../../../pages/EtterlevelseDokumentasjonTemaPage'
@@ -45,8 +45,8 @@ export const filterKrav = (allKravPriority: IKravPrioritering[], kravList?: Krav
 
 export const toKravId = (it: { kravVersjon: number; kravNummer: number }) => ({ kravNummer: it.kravNummer, kravVersjon: it.kravVersjon })
 
-export const syncEtterlevelseKriterieBegrunnelseWithKrav = (etterlevelse: Etterlevelse, krav?: KravQL) => {
-  const suksesskriterieBegrunnelse: SuksesskriterieBegrunnelse[] = []
+export const syncEtterlevelseKriterieBegrunnelseWithKrav = (etterlevelse: IEtterlevelse, krav?: KravQL) => {
+  const suksesskriterieBegrunnelse: ISuksesskriterieBegrunnelse[] = []
 
   krav?.suksesskriterier.forEach((k) => {
     suksesskriterieBegrunnelse.push(etterlevelse.suksesskriterieBegrunnelser.filter((e) => e.suksesskriterieId === k.id)[0])

@@ -4,7 +4,7 @@ import React from 'react'
 import { FieldArray } from 'formik'
 import { Error } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
-import { Begrep } from '../../../constants'
+import { IBegrep } from '../../../constants'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import AsyncSelect from 'react-select/async'
 import { CSSObjectWithLabel, DropdownIndicatorProps, components } from 'react-select'
@@ -47,7 +47,7 @@ export const EditBegreper = () => {
                 }}
               />
 
-              <RenderTagList list={p.form.values.begreper.map((b: Begrep) => b.navn)} onRemove={p.remove} />
+              <RenderTagList list={p.form.values.begreper.map((b: IBegrep) => b.navn)} onRemove={p.remove} />
             </div>
           )
         }}

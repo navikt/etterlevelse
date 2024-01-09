@@ -3,7 +3,7 @@ import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { KravId } from '../../api/KravApi'
-import { EtterlevelseDokumentasjon } from '../../constants'
+import { IEtterlevelseDokumentasjon } from '../../constants'
 import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
 import { getTemaMainHeader } from '../../pages/TemaPage'
 import { LovCode, TemaCode } from '../../services/Codelist'
@@ -17,7 +17,7 @@ type EtterlevelseSecondaryHeaderProps = {
   tab: string
   setTab: React.Dispatch<React.SetStateAction<Section>>
   setNavigatePath: (state: string) => void
-  etterlevelseDokumentasjon: EtterlevelseDokumentasjon | undefined
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon | undefined
   temaData: TemaCode | undefined
   kravId: KravId | undefined
   lovListe: LovCode[]

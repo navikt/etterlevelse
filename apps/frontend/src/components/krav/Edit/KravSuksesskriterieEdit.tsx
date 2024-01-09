@@ -1,7 +1,7 @@
 import { FieldWrapper } from '../../common/Inputs'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React, { useEffect, useState } from 'react'
-import { KravStatus, Suksesskriterie } from '../../../constants'
+import { KravStatus, ISuksesskriterie } from '../../../constants'
 import * as _ from 'lodash'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import TextEditor from '../../common/TextEditor/TextEditor'
@@ -25,13 +25,13 @@ export const KravSuksesskriterierEdit = ({ setIsFormDirty, newVersion }: KravSuk
   )
 }
 
-const nextId = (suksesskriterier: Suksesskriterie[]) => {
+const nextId = (suksesskriterier: ISuksesskriterie[]) => {
   const max = _.max(suksesskriterier.map((s) => s.id)) || 0
   return max + 1
 }
 
 const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderProps; setIsFormDirty?: (v: boolean) => void; newVersion: boolean }) => {
-  const suksesskriterier = p.form.values.suksesskriterier as Suksesskriterie[]
+  const suksesskriterier = p.form.values.suksesskriterier as ISuksesskriterie[]
 
   if (!suksesskriterier.length) {
     p.push({ id: nextId(suksesskriterier), navn: '', beskrivelse: '' })
@@ -123,9 +123,9 @@ const Kriterie = ({
   setIsFormDirty,
   newVersion,
 }: {
-  s: Suksesskriterie
+  s: ISuksesskriterie
   nummer: number
-  update: (s: Suksesskriterie) => void
+  update: (s: ISuksesskriterie) => void
   remove: () => void
   dragHandleProps?: DraggableProvidedDragHandleProps
   isDragging: boolean

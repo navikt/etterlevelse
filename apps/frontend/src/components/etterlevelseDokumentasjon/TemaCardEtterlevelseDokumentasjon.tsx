@@ -1,5 +1,5 @@
 import { codelist, TemaCode } from '../../services/Codelist'
-import { EtterlevelseDokumentasjon, KRAV_FILTER_TYPE } from '../../constants'
+import { IEtterlevelseDokumentasjon, KRAV_FILTER_TYPE } from '../../constants'
 import { PanelLinkCard, PanelLinkCardOverrides } from '../common/PanelLink'
 import { ettlevColors, theme } from '../../util/theme'
 import { cardWidth, useKravCounter } from '../../pages/TemaPage'
@@ -15,7 +15,7 @@ type TemaCardEtterlevelseDokumentasjonProps = {
   tema: TemaCode
   stats: any[]
   utgaattStats: any[]
-  etterlevelseDokumentasjon: EtterlevelseDokumentasjon
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   irrelevant?: boolean
 }
 export const TemaCardEtterlevelseDokumentasjon = (props: TemaCardEtterlevelseDokumentasjonProps) => {

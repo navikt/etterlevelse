@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import EditMelding from '../components/varslinger/EditMelding'
-import { Melding, MeldingType } from '../constants'
+import { IMelding, MeldingType } from '../constants'
 import { getMeldingByType, mapMeldingToFormValue } from '../api/MeldingApi'
 import { ObjectType } from '../components/admin/audit/AuditTypes'
 import { AuditRecentTable } from '../components/admin/audit/AuditRecentTable'
@@ -43,7 +43,7 @@ const VarselTabs = () => {
 
   const [tab, setTab] = useState<Section>(params.tab || 'utsendtMelding')
   const [isLoading, setLoading] = useState<boolean>(false)
-  const [melding, setMelding] = useState<Melding>()
+  const [melding, setMelding] = useState<IMelding>()
 
   useEffect(() => {
     (async () => {
