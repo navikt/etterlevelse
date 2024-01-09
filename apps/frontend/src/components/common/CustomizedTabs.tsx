@@ -38,7 +38,8 @@ interface CustomizedTabsProps {
 
 export const CustomizedTabs = (props: CustomizedTabsProps) => {
   const [activeKeyInternal, setActiveKeyInternal] = useState<React.Key>(0)
-  let { fontColor, activeColor, tabBackground, tabs, overrides, ...restProps } = props
+  const { tabBackground, tabs, overrides, ...restProps } = props
+  let { fontColor, activeColor } = props
   fontColor = fontColor || 'black'
   activeColor = activeColor || fontColor
 
