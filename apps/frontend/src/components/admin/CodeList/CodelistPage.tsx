@@ -57,10 +57,7 @@ const CodeListPage = () => {
   }
 
   return (
-    <PageLayout
-      pageTitle={listname ? listname : 'Velg kodeverk'}
-      currentPage="Administrering av kodeverk"
-    >
+    <PageLayout pageTitle={listname ? listname : 'Velg kodeverk'} currentPage="Administrering av kodeverk">
       <Heading size="medium" level="1">
         Administrering av kodeverk
       </Heading>

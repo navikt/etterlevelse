@@ -39,7 +39,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
     ampli.logEvent('sidevisning', {
       side: 'Varsel side for admin',
       sidetittel: 'Log side for varslinger',
-      ...userRoleEventProp
+      ...userRoleEventProp,
     })
   }, [])
 
