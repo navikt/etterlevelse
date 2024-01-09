@@ -108,7 +108,7 @@ export const useKrav = (params: KravId | KravIdParams, onlyLoadOnce?: boolean) =
   const isCreateNew = params.id === 'ny'
   const [data, setData] = useState<Krav | undefined>(isCreateNew ? kravMapToFormVal({}) : undefined)
 
-  let load = () => {
+  const load = () => {
     if (data && onlyLoadOnce) return
     params?.id && !isCreateNew && getKrav(params.id).then(setData)
     params?.kravNummer && getKravByKravNumberAndVersion(params.kravNummer, params.kravVersjon).then(setData)
