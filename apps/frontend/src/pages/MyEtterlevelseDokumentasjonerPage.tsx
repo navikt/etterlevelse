@@ -559,6 +559,7 @@ export type Variables = {
   behandlingId?: string
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const query = gql`
   query getEtterlevelseDokumentasjoner(
     $pageNumber: NonNegativeInt
@@ -596,3 +597,4 @@ export const query = gql`
     }
   }
 `
+// eslint-enable-next-line @typescript-eslint/ban-types

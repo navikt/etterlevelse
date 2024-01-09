@@ -7,6 +7,7 @@ import { DotTags } from './DotTag'
 import RouteLink from './RouteLink'
 import { Cell, Row, Table } from './Table'
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const query = gql`
   query getEtterlevelsedokumentasjon($relevans: [String!]) {
     etterlevelseDokumentasjon(filter: { relevans: $relevans }) {
@@ -22,6 +23,8 @@ const query = gql`
     }
   }
 `
+// eslint-enable-next-line @typescript-eslint/ban-types
+
 export const EtterlevelseDokumentasjonFilterTable = (props: {
   filter: EtterlevelseDokumentasjonFilter
   emptyText?: string

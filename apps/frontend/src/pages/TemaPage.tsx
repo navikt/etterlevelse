@@ -30,7 +30,7 @@ export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
 
   const code = codelist.getCode(ListName.TEMA, tema)
-  if (!code) return <>'invalid code'</>
+  if (!code) return <>`&apos;`invalid code`&apos;`</>
   return <TemaView tema={code} />
 }
 
@@ -255,6 +255,7 @@ export const useKravCounter = (
   })
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const query = gql`
   query countKrav($lover: [String!]) {
     krav(filter: { lover: $lover, gjeldendeKrav: true }) {
@@ -271,3 +272,4 @@ const query = gql`
     }
   }
 `
+// eslint-enable-next-line @typescript-eslint/ban-types

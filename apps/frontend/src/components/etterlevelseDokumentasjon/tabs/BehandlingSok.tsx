@@ -185,6 +185,7 @@ export const BehandlingSok = () => {
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const query = gql`
   query getEtterlevelseDokumentasjoner(
     $pageNumber: NonNegativeInt
@@ -227,5 +228,6 @@ const query = gql`
     }
   }
 `
+// eslint-enable-next-line @typescript-eslint/ban-types
 
 export default BehandlingSok

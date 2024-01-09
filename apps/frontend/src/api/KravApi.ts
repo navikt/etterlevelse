@@ -311,6 +311,7 @@ export const kravFullQuery = gql`
   }
 `
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const etterlevelseDokumentasjonKravQuery = gql`
   query getKravByFilter(
     $etterlevelseDokumentasjonId: String
@@ -378,7 +379,6 @@ export const etterlevelseDokumentasjonKravQuery = gql`
   }
 `
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export const KravMedPrioriteringOgEtterlevelseQuery = gql`
   query getKravByFilter(
     $etterlevelseDokumentasjonId: String
