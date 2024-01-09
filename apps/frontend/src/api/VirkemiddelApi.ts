@@ -71,7 +71,7 @@ export const useVirkemiddel = (id: string, onlyLoadOnce?: boolean) => {
   const isCreateNew = id === 'ny'
   const [data, setData] = useState<Virkemiddel | undefined>(isCreateNew ? virkemiddelMapToFormVal({}) : undefined)
 
-  let load = () => {
+  const load = () => {
     if (data && onlyLoadOnce) return
     id && !isCreateNew && getVirkemiddel(id).then(setData)
   }
