@@ -1,23 +1,33 @@
+import { gql, useQuery } from '@apollo/client'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { Loader } from '@navikt/ds-react'
+import { Block } from 'baseui/block'
+import { TYPE } from 'baseui/select'
+import { LabelLarge, LabelSmall } from 'baseui/typography'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Behandling, EtterlevelseDokumentasjonQL, PageResponse, emptyPage } from '../../../constants'
-import { EtterlevelseDokumentasjonerPanels, Variables, tabMarginBottom } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
-import { gql, useQuery } from '@apollo/client'
-import { Block } from 'baseui/block'
-import { LabelLarge, LabelSmall } from 'baseui/typography'
-import { theme } from '../../../util'
-import Button from '../../common/Button'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { getBehandling, useSearchBehandling } from '../../../api/BehandlingApi'
-import CustomizedSelect from '../../common/CustomizedSelect'
+import {
+  Behandling,
+  EtterlevelseDokumentasjonQL,
+  PageResponse,
+  emptyPage,
+} from '../../../constants'
+import {
+  EtterlevelseDokumentasjonerPanels,
+  Variables,
+  tabMarginBottom,
+} from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { theme } from '../../../util'
 import { intl } from '../../../util/intl/intl'
-import { TYPE } from 'baseui/select'
+import Button from '../../common/Button'
+import CustomizedSelect from '../../common/CustomizedSelect'
 import { updateBehandlingNameWithNumber } from '../common/utils'
-import { Loader } from '@navikt/ds-react'
 
 export const BehandlingSok = () => {
   const pageSize = 20
-  const [behandlingSearchResult, setBehandlingSearchResult, loadingBehandlingSearchResult] = useSearchBehandling()
+  const [behandlingSearchResult, setBehandlingSearchResult, loadingBehandlingSearchResult] =
+    useSearchBehandling()
   const [searchParams, setSearchParams] = useSearchParams()
   const behandlingUUID = searchParams.get('behandlingId')
   const [selectedBehandling, setSelectedBehandling] = useState<Behandling>()
@@ -25,8 +35,17 @@ export const BehandlingSok = () => {
     data,
     loading: gqlLoading,
     fetchMore,
-  } = useQuery<{ etterlevelseDokumentasjoner: PageResponse<EtterlevelseDokumentasjonQL> }, Variables>(query, {
-    variables: { behandlingId: selectedBehandling ? selectedBehandling.id : behandlingUUID ? behandlingUUID : '' },
+  } = useQuery<
+    { etterlevelseDokumentasjoner: PageResponse<EtterlevelseDokumentasjonQL> },
+    Variables
+  >(query, {
+    variables: {
+      behandlingId: selectedBehandling
+        ? selectedBehandling.id
+        : behandlingUUID
+          ? behandlingUUID
+          : '',
+    },
     skip: !!!selectedBehandling && !!!behandlingUUID,
   })
   const etterlevelseDokumentasjoner = data?.etterlevelseDokumentasjoner || emptyPage
@@ -60,22 +79,42 @@ export const BehandlingSok = () => {
   }, [behandlingUUID])
 
   const getEtterlevelseDokumentasjonerWithoutDuplicates = () => {
-    return etterlevelseDokumentasjoner.content.filter((value, index, self) => index === self.findIndex((etterlevelseDokumentasjon) => etterlevelseDokumentasjon.id === value.id))
+    return etterlevelseDokumentasjoner.content.filter(
+      (value, index, self) =>
+        index ===
+        self.findIndex((etterlevelseDokumentasjon) => etterlevelseDokumentasjon.id === value.id)
+    )
   }
 
   const getBehandlingData = () => {
-    const behandlinger = etterlevelseDokumentasjoner.content && etterlevelseDokumentasjoner.content.length ? etterlevelseDokumentasjoner.content[0].behandlinger : []
+    const behandlinger =
+      etterlevelseDokumentasjoner.content && etterlevelseDokumentasjoner.content.length
+        ? etterlevelseDokumentasjoner.content[0].behandlinger
+        : []
     if (!!behandlinger && behandlinger.length) {
-      const behandling = behandlinger.filter((value) => value.id === selectedBehandling?.id || value.id === behandlingUUID)[0]
+      const behandling = behandlinger.filter(
+        (value) => value.id === selectedBehandling?.id || value.id === behandlingUUID
+      )[0]
       return 'Dokumentasjoner med B' + behandling.nummer + ' ' + behandling.navn + ' som behandling'
     } else if (selectedBehandling && !(!!behandlinger && behandlinger.length)) {
-      return 'Fant ingen dokumentasjoner med "B' + selectedBehandling.nummer + ' ' + selectedBehandling.navn + '" som behandling'
+      return (
+        'Fant ingen dokumentasjoner med "B' +
+        selectedBehandling.nummer +
+        ' ' +
+        selectedBehandling.navn +
+        '" som behandling'
+      )
     }
   }
 
   return (
     <Block marginBottom={tabMarginBottom}>
-      <Block maxWidth="600px" marginBottom={theme.sizing.scale1000} display={'flex'} flexDirection={'column'}>
+      <Block
+        maxWidth="600px"
+        marginBottom={theme.sizing.scale1000}
+        display={'flex'}
+        flexDirection={'column'}
+      >
         <CustomizedSelect
           placeholder="Søk behandlinger"
           aria-label="Søk behandlinger"
@@ -108,7 +147,10 @@ export const BehandlingSok = () => {
         <LabelLarge>{getBehandlingData()}</LabelLarge>
       </Block>
 
-      <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={getEtterlevelseDokumentasjonerWithoutDuplicates()} loading={loading} />
+      <EtterlevelseDokumentasjonerPanels
+        etterlevelseDokumentasjoner={getEtterlevelseDokumentasjonerWithoutDuplicates()}
+        loading={loading}
+      />
 
       {!loading && etterlevelseDokumentasjoner.totalElements !== 0 && (
         <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
@@ -118,7 +160,11 @@ export const BehandlingSok = () => {
               icon={faPlus}
               kind={'secondary'}
               size="compact"
-              disabled={gqlLoading || etterlevelseDokumentasjoner.numberOfElements >= etterlevelseDokumentasjoner.totalElements}
+              disabled={
+                gqlLoading ||
+                etterlevelseDokumentasjoner.numberOfElements >=
+                  etterlevelseDokumentasjoner.totalElements
+              }
             >
               Vis mer
             </Button>
@@ -130,7 +176,8 @@ export const BehandlingSok = () => {
             )}
           </Block>
           <LabelSmall marginRight={theme.sizing.scale400}>
-            Viser {etterlevelseDokumentasjoner.numberOfElements}/{etterlevelseDokumentasjoner.totalElements}
+            Viser {etterlevelseDokumentasjoner.numberOfElements}/
+            {etterlevelseDokumentasjoner.totalElements}
           </LabelSmall>
         </Block>
       )}

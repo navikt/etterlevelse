@@ -70,11 +70,18 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], noHeader?: b
 
 const TemaView = ({ tema }: { tema: TemaCode }) => {
   const lover = codelist.getCodesForTema(tema.code)
-  const { data, loading } = useKravCounter({ lover: lover.map((c) => c.code) }, { skip: !lover.length })
+  const { data, loading } = useKravCounter(
+    { lover: lover.map((c) => c.code) },
+    { skip: !lover.length }
+  )
   const [kravList, setKravList] = useState<Krav[]>([])
 
   useEffect(() => {
-    ampli.logEvent('sidevisning', { side: 'Tema side', sidetittel: tema.shortName, ...userRoleEventProp })
+    ampli.logEvent('sidevisning', {
+      side: 'Tema side',
+      sidetittel: tema.shortName,
+      ...userRoleEventProp,
+    })
   }, [])
 
   const breadcrumbPaths: breadcrumbPaths[] = [
@@ -86,11 +93,13 @@ const TemaView = ({ tema }: { tema: TemaCode }) => {
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
-      ; (async () => {
+      ;(async () => {
         const allKravPriority = await getAllKravPriority()
         const kraver = _.cloneDeep(data.krav.content)
         kraver.map((k) => {
-          const priority = allKravPriority.filter((kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon)
+          const priority = allKravPriority.filter(
+            (kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon
+          )
           k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
           return k
         })
@@ -100,7 +109,11 @@ const TemaView = ({ tema }: { tema: TemaCode }) => {
   }, [data])
 
   return (
-    <PageLayout pageTitle={tema.shortName} breadcrumbPaths={breadcrumbPaths} currentPage={tema.shortName}>
+    <PageLayout
+      pageTitle={tema.shortName}
+      breadcrumbPaths={breadcrumbPaths}
+      currentPage={tema.shortName}
+    >
       {getTemaMainHeader(tema, lover)}
       <div className="mt-6">
         <Label>{loading ? '?' : data?.krav.numberOfElements || 0} krav</Label>
@@ -108,7 +121,10 @@ const TemaView = ({ tema }: { tema: TemaCode }) => {
         {!loading && kravList && (
           <div className="grid gap-2 lg:grid-cols-2">
             {kravList.map((k, index) => (
-              <LinkPanel href={`/krav/${k.kravNummer}/${k.kravVersjon}`} key={k.kravNummer + '.' + k.kravVersjon + '_' + index}>
+              <LinkPanel
+                href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
+                key={k.kravNummer + '.' + k.kravVersjon + '_' + index}
+              >
                 <Detail weight="semibold">{kravNumView(k)}</Detail>
                 <BodyShort>{k.navn}</BodyShort>
               </LinkPanel>
@@ -125,18 +141,33 @@ export const cardHeight = '220px'
 export const cardMaxheight = '250px'
 const headerBgOverlap = '47px'
 
-
-export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans: string[]; setNum: (tema: string, num: number) => void }) => {
+export const TemaCard = ({
+  tema,
+  relevans,
+  setNum,
+}: {
+  tema: TemaCode
+  relevans: string[]
+  setNum: (tema: string, num: number) => void
+}) => {
   const lover = codelist.getCodesForTema(tema.code)
-  const { data, loading } = useKravCounter({ lover: [...lover.map((l) => l.code)] }, { skip: !lover.length })
-  const krav = data?.krav.content.filter((k) => !relevans.length || k.relevansFor.map((r) => r.code).some((r) => relevans.includes(r))) || []
+  const { data, loading } = useKravCounter(
+    { lover: [...lover.map((l) => l.code)] },
+    { skip: !lover.length }
+  )
+  const krav =
+    data?.krav.content.filter(
+      (k) => !relevans.length || k.relevansFor.map((r) => r.code).some((r) => relevans.includes(r))
+    ) || []
   useEffect(() => setNum(tema.code, krav.length), [krav.length])
 
   const overrides: PanelLinkCardOverrides = {
     Root: {
       Block: {
         style: {
-          maskImage: loading ? `linear-gradient(${ettlevColors.black} 0%, transparent 70% 100%)` : undefined,
+          maskImage: loading
+            ? `linear-gradient(${ettlevColors.black} 0%, transparent 70% 100%)`
+            : undefined,
         },
       },
     },
@@ -173,7 +204,12 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
           <LabelSmall $style={{ fontSize: '16px' }}>Krav og veiledning til</LabelSmall>
           {lover.map((l) => {
             return (
-              <ParagraphXSmall $style={{ fontSize: '16px', lineHeight: '24px' }} marginTop="0px" marginBottom="0px" key={l.shortName}>
+              <ParagraphXSmall
+                $style={{ fontSize: '16px', lineHeight: '24px' }}
+                marginTop="0px"
+                marginBottom="0px"
+                key={l.shortName}
+              >
                 {l.shortName}
               </ParagraphXSmall>
             )
@@ -183,12 +219,23 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
     >
       <Block display={'flex'} flexDirection={'column'} height={cardHeight}>
         <SimpleTag active>
-          <Block display={'flex'} alignItems={'center'} justifyContent={'center'} {...margin('8px', '16px')}>
+          <Block
+            display={'flex'}
+            alignItems={'center'}
+            justifyContent={'center'}
+            {...margin('8px', '16px')}
+          >
             {/* <img src={gavelIcon} width={'35px'} height={'35px'} aria-hidden alt={'Hammer ikon'} /> */}
-            <LabelSmall color={ettlevColors.navOransje} $style={{ fontSize: '20px', lineHeight: '18px' }} marginRight="4px">
+            <LabelSmall
+              color={ettlevColors.navOransje}
+              $style={{ fontSize: '20px', lineHeight: '18px' }}
+              marginRight="4px"
+            >
               {krav?.length || 0}
             </LabelSmall>
-            <ParagraphXSmall $style={{ lineHeight: '18px', marginTop: '0px', marginBottom: '0px' }}>krav</ParagraphXSmall>
+            <ParagraphXSmall $style={{ lineHeight: '18px', marginTop: '0px', marginBottom: '0px' }}>
+              krav
+            </ParagraphXSmall>
           </Block>
         </SimpleTag>
 
@@ -198,7 +245,10 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
   )
 }
 
-export const useKravCounter = (variables: { lover: string[] }, options?: QueryHookOptions<any, { lover?: string[] }>) => {
+export const useKravCounter = (
+  variables: { lover: string[] },
+  options?: QueryHookOptions<any, { lover?: string[] }>
+) => {
   return useQuery<{ krav: PageResponse<KravQL> }, KravFilters>(query, {
     ...(options || {}),
     variables,

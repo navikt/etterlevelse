@@ -81,7 +81,10 @@ export type KravFilters = {
   pageSize?: number
 }
 
-export const useKravFilter = (variables: KravFilters, options?: QueryHookOptions<any, KravFilters>) => {
+export const useKravFilter = (
+  variables: KravFilters,
+  options?: QueryHookOptions<any, KravFilters>
+) => {
   return useQuery<{ krav: PageResponse<KravQL> }, KravFilters>(kravtableQuery, {
     ...(options || {}),
     variables,

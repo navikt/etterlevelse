@@ -22,8 +22,13 @@ const query = gql`
     }
   }
 `
-export const EtterlevelseDokumentasjonFilterTable = (props: { filter: EtterlevelseDokumentasjonFilter; emptyText?: string }) => {
-  const { data, loading } = useQuery<{ etterlevelseDokumentasjon: PageResponse<EtterlevelseDokumentasjon> }>(query, { variables: props.filter })
+export const EtterlevelseDokumentasjonFilterTable = (props: {
+  filter: EtterlevelseDokumentasjonFilter
+  emptyText?: string
+}) => {
+  const { data, loading } = useQuery<{
+    etterlevelseDokumentasjon: PageResponse<EtterlevelseDokumentasjon>
+  }>(query, { variables: props.filter })
 
   return loading && !data ? (
     <Loader size={'large'} />
@@ -51,10 +56,16 @@ export const EtterlevelseDokumentasjonFilterTable = (props: { filter: Etterlevel
             <Row key={i}>
               <Cell small>E{etterlevelseDokumentasjon.etterlevelseNummer}</Cell>
               <Cell>
-                <RouteLink href={`/dokumentasjon/${etterlevelseDokumentasjon.id}`}>{etterlevelseDokumentasjon.title}</RouteLink>
+                <RouteLink href={`/dokumentasjon/${etterlevelseDokumentasjon.id}`}>
+                  {etterlevelseDokumentasjon.title}
+                </RouteLink>
               </Cell>
               <Cell>
-                <DotTags list={ListName.RELEVANS} codes={etterlevelseDokumentasjon.irrelevansFor} linkCodelist />
+                <DotTags
+                  list={ListName.RELEVANS}
+                  codes={etterlevelseDokumentasjon.irrelevansFor}
+                  linkCodelist
+                />
               </Cell>
             </Row>
           )
