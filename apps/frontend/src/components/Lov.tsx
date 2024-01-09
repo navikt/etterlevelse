@@ -4,6 +4,8 @@ import { IRegelverk } from '../constants'
 import { Block } from 'baseui/block'
 import { Link } from '@navikt/ds-react'
 
+
+// unsure how to refactor code
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const reactProcessString = require('react-process-string')
 const processString = reactProcessString as (converters: { regex: RegExp; fn: (key: string, result: string[]) => JSX.Element | string }[]) => (input?: string) => JSX.Element[]

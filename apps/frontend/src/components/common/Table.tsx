@@ -216,6 +216,9 @@ const HeadCell = <T, K extends keyof T>(props: HeadProps<T, K>) => {
   }
   const filterConf = tableProps.config?.filter ? tableProps.config.filter[column] : undefined
   const filterButton = filterConf && (
+
+    // will delete/refactor this file so no need to fix code bellow for now
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <span
       onClick={(e) => {
         setShowFilter(true)
@@ -223,7 +226,7 @@ const HeadCell = <T, K extends keyof T>(props: HeadProps<T, K>) => {
       }}
       style={{ marginLeft: 'auto', justifySelf: 'flex-end' }}
     >
-      <FontAwesomeIcon size="sm" icon={faFilter} color={!!inputFilter ? theme.colors.negative400 : theme.colors.primary200} />
+      <FontAwesomeIcon size="sm" icon={faFilter} color={inputFilter ? theme.colors.negative400 : theme.colors.primary200} />
     </span>
   )
 
