@@ -21,7 +21,7 @@ import { Loader } from '@navikt/ds-react'
 
 export const kravListPriorityModal = () => document.querySelector('#krav-list-edit-priority-modal')
 
-export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dispatch<React.SetStateAction<boolean>>; kravListe: IKrav[]; tema: string; refresh: Function }) => {
+export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dispatch<React.SetStateAction<boolean>>; kravListe: IKrav[]; tema: string; refresh: () => void }) => {
   const { isOpen, setIsOpen, kravListe, tema, refresh } = props
   const [items, setItems] = React.useState<ReactElement[]>([])
   const [kravElements, setKravElements] = React.useState<IKrav[]>(kravListe)
@@ -33,9 +33,9 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
 
   useEffect(() => {
     setItems(
-      kravListe.map((k) => {
+      kravListe.map((k,i) => {
         return (
-          <CustomPanelDivider fullWidth>
+          <CustomPanelDivider key={k.kravNummer + '_' + i} fullWidth>
             <SimplePanel
               key={`${k.navn}_${k.kravNummer}`}
               hideChevron
@@ -45,7 +45,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
                 </ParagraphMedium>
               }
               beskrivelse={<LabelSmall $style={{ fontSize: '18px', lineHeight: '28px' }}>{k.navn}</LabelSmall>}
-              rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
+              rightBeskrivelse={k.changeStamp.lastModifiedDate !== undefined && k.changeStamp.lastModifiedDate !== '' ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
               statusText={<StatusView status={k.status} />}
               overrides={{
                 Block: {

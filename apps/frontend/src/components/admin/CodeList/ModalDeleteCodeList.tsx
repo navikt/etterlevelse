@@ -15,7 +15,7 @@ const DeleteCodeListModal = ({ title, initialValues, isOpen, errorOnDelete, subm
     <Modal onClose={onClose} open={isOpen} header={{ heading: title }}>
       <Modal.Body>
         <BodyShort>
-          Bekreft sletting av kode "{initialValues.code}" fra "{initialValues.list}".
+          Bekreft sletting av kode &quot;{initialValues.code}&quot; fra &quot;{initialValues.list}&quot;.
         </BodyShort>
       </Modal.Body>
 

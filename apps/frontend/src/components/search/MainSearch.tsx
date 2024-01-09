@@ -132,7 +132,6 @@ const MainSearch = () => {
       <AsyncSelect
         aria-label="Søk etter krav, dokumentasjon eller behandling"
         placeholder="Søk etter krav, dokumentasjon eller behandling"
-        autoFocus={location.pathname === '/'}
         components={{ Option, DropdownIndicator }}
         controlShouldRenderValue={false}
         loadingMessage={() => 'Søker...'}

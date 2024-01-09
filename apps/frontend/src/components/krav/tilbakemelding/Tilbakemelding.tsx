@@ -5,7 +5,7 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
-  TilbakemeldingNewMeldingRequest,
+  ITilbakemeldingNewMeldingRequest,
   tilbakemeldingNewMelding,
   tilbakemeldingslettMelding,
   updateTilbakemeldingStatusOgEndretKrav,
@@ -234,7 +234,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
     if (response) {
       setFocusNummer(tilbakemelding.id)
 
-      const req: TilbakemeldingNewMeldingRequest = {
+      const req: ITilbakemeldingNewMeldingRequest = {
         tilbakemeldingId: tilbakemelding.id,
         rolle: replyRole,
         melding: response,

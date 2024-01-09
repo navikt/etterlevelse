@@ -91,7 +91,7 @@ const getKravTemaRowsWithLabel = (kraver: IKrav[], tema: string) => {
               <StatusView status={k.status} />
             </div>
             <div className="w-44">
-              <BodyShort size="small">{!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
+              <BodyShort size="small">{k.changeStamp.lastModifiedDate !== undefined && k.changeStamp.lastModifiedDate !== '' ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
             </div>
           </LinkPanel.Title>
         </LinkPanel>
@@ -100,7 +100,7 @@ const getKravTemaRowsWithLabel = (kraver: IKrav[], tema: string) => {
   })
 }
 
-const KravTemaList = (props: { activeKraver: IKrav[]; tema: string; refresh: Function; draftKrav: IKrav[] }) => {
+const KravTemaList = (props: { activeKraver: IKrav[]; tema: string; refresh: () => void; draftKrav: IKrav[] }) => {
   const [isEditPriorityModalOpen, setIsEditPriorityModalOpen] = React.useState(false)
 
   return (

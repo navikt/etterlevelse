@@ -5,7 +5,7 @@ import { AlertType, IMelding, MeldingStatus } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
 import { Button, Heading, Loader } from '@navikt/ds-react'
 
-export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: { melding: IMelding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
+export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: { melding: IMelding | undefined; setMelding: React.Dispatch<React.SetStateAction<IMelding | undefined>>; isLoading: boolean; maxChar?: number }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
 
   const initialNumberOfRows = 1
@@ -59,7 +59,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
                   disabled={disableEdit}
                   onClick={() => {
                     deleteMelding(melding.id).then(() => {
-                      setMelding('')
+                      setMelding(undefined)
                     })
                   }}
                 >

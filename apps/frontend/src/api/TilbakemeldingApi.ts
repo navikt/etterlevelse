@@ -12,11 +12,11 @@ export const getTilbakemeldingForKravByKravNummer = async (kravNummer: number) =
   return (await axios.get<IPageResponse<ITilbakemelding>>(`${env.backendBaseUrl}/tilbakemelding/${kravNummer}`)).data
 }
 
-export const createNewTilbakemelding = async (request: CreateTilbakemeldingRequest) => {
+export const createNewTilbakemelding = async (request: ICreateTilbakemeldingRequest) => {
   return (await axios.post<ITilbakemelding>(`${env.backendBaseUrl}/tilbakemelding`, request)).data
 }
 
-export const tilbakemeldingNewMelding = async (request: TilbakemeldingNewMeldingRequest) => {
+export const tilbakemeldingNewMelding = async (request: ITilbakemeldingNewMeldingRequest) => {
   return (await axios.post<ITilbakemelding>(`${env.backendBaseUrl}/tilbakemelding/melding`, request)).data
 }
 
@@ -77,7 +77,7 @@ export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => 
   return [data, loading, add, replace, remove] as [ITilbakemelding[], boolean, (t: ITilbakemelding) => void, (t: ITilbakemelding) => void, (t: ITilbakemelding) => void]
 }
 
-export interface CreateTilbakemeldingRequest {
+export interface ICreateTilbakemeldingRequest {
   kravNummer: number
   kravVersjon: number
   type: TilbakemeldingType
@@ -87,7 +87,7 @@ export interface CreateTilbakemeldingRequest {
   endretKrav: boolean
 }
 
-export interface TilbakemeldingNewMeldingRequest {
+export interface ITilbakemeldingNewMeldingRequest {
   tilbakemeldingId: string
   melding: string
   rolle: TilbakemeldingRolle

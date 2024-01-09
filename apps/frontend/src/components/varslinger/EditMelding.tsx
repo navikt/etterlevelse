@@ -18,7 +18,7 @@ export const getAlertTypeText = (type: AlertType) => {
   }
 }
 
-export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { melding: IMelding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
+export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { melding: IMelding | undefined; setMelding: React.Dispatch<React.SetStateAction<IMelding | undefined>>; isLoading: boolean; maxChar?: number }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
   const [meldingAlertType, setMeldingAlertType] = useState<string>(AlertType.WARNING)
 
@@ -105,7 +105,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                   disabled={disableEdit}
                   onClick={() => {
                     deleteMelding(melding.id).then(() => {
-                      setMelding('')
+                      setMelding(undefined)
                     })
                   }}
                 >

@@ -166,7 +166,7 @@ export const MultiInputField = (props: {
   tooltip?: string
   maxInputWidth?: string
   marginBottom?: boolean
-  setErrors?: Function
+  setErrors?: () => void
 }) => {
   const [val, setVal] = useState('')
   const [linkName, setLinkName] = useState('')

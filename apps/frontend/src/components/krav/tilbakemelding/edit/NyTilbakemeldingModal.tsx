@@ -2,7 +2,7 @@ import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
-import { createNewTilbakemelding, CreateTilbakemeldingRequest } from '../../../../api/TilbakemeldingApi'
+import { createNewTilbakemelding, ICreateTilbakemeldingRequest } from '../../../../api/TilbakemeldingApi'
 import { AdresseType, IKrav, ITilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingType, IVarslingsadresse } from '../../../../constants'
 import { TextAreaField } from '../../../common/Inputs'
 import { AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList } from '../../Edit/KravVarslingsadresserEdit'
@@ -36,7 +36,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
   const [showNotification, setShowNotification] = useState<AdresseType>()
   const [newTilbakeMelding, setNewTilbakeMelding] = useState<ITilbakemelding>()
 
-  const submit = (request: CreateTilbakemeldingRequest) => {
+  const submit = (request: ICreateTilbakemeldingRequest) => {
     createNewTilbakemelding(request)
       .then((t) => {
         setShowNotification(request.varslingsadresse.type)
@@ -49,7 +49,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
     <Modal className="max-w-xl w-full" open={open} onClose={() => close()}>
       <Formik
         onSubmit={submit}
-        initialValues={newTilbakemelding(krav) as CreateTilbakemeldingRequest}
+        initialValues={newTilbakemelding(krav) as ICreateTilbakemeldingRequest}
         validationSchema={createTilbakemeldingSchema}
         validateOnBlur={false}
         validateOnChange={false}
@@ -193,7 +193,7 @@ const varslingsadresseSchema: yup.ObjectSchema<IVarslingsadresse> = yup.object({
   type: yup.mixed<AdresseType>().oneOf(Object.values(AdresseType)).required('Det er påkrevd å ha minst en varslingsadresse'),
 })
 
-const createTilbakemeldingSchema: yup.ObjectSchema<CreateTilbakemeldingRequest> = yup.object({
+const createTilbakemeldingSchema: yup.ObjectSchema<ICreateTilbakemeldingRequest> = yup.object({
   kravNummer: yup.number().required(required),
   kravVersjon: yup.number().required(required),
   foersteMelding: yup.string().required(required),
@@ -203,7 +203,7 @@ const createTilbakemeldingSchema: yup.ObjectSchema<CreateTilbakemeldingRequest> 
   varslingsadresse: varslingsadresseSchema.required('Det er påkrevd å ha minst en varslingsadresse'),
 })
 
-const newTilbakemelding = (krav: IKrav): Partial<CreateTilbakemeldingRequest> => ({
+const newTilbakemelding = (krav: IKrav): Partial<ICreateTilbakemeldingRequest> => ({
   kravNummer: krav.kravNummer,
   kravVersjon: krav.kravVersjon,
   foersteMelding: '',

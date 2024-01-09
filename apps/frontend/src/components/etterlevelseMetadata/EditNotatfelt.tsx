@@ -9,7 +9,7 @@ import { FileTextIcon } from '@navikt/aksel-icons'
 
 type EditNotatfeltProps = {
   isOpen: boolean
-  setIsNotatfeltOpen: Function
+  setIsNotatfeltOpen: React.Dispatch<React.SetStateAction<boolean>>
   etterlevelseMetadata: IEtterlevelseMetadata
   setEtterlevelseMetadata: React.Dispatch<React.SetStateAction<IEtterlevelseMetadata>>
   formRef?: React.RefObject<any>

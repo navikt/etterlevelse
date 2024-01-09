@@ -66,8 +66,8 @@ export const mapTeamResourceToOption = (teamResource: ITeamResource) => ({ id: t
 
 const people: Map<string, { f: boolean; v: string }> = new Map<string, { f: boolean; v: string }>()
 const teams: Map<string, { f: boolean; v: ITeam }> = new Map<string, { f: boolean; v: ITeam }>()
-const psubs: Map<string, Function[]> = new Map<string, Function[]>()
-const tsubs: Map<string, Function[]> = new Map<string, Function[]>()
+const psubs: Map<string, (() => void)[]> = new Map<string, (() => void)[]>()
+const tsubs: Map<string, (() => void)[]> = new Map<string, (() => void)[]>()
 
 const addPerson = (person: ITeamResource) => {
   people.set(person.navIdent, { f: true, v: person.fullName })

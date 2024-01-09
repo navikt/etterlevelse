@@ -130,8 +130,8 @@ const PreviewImages = (props: { set: (key: string) => void }) => {
   return (
     <Block display="flex" flexDirection="column" height="80vh" overflow={'scrollY'}>
       {Object.keys(temaBilder).map((key) => (
-        <Button type="button" kind="tertiary" onClick={() => props.set(key)}>
-          <Block key={key} marginBottom={theme.sizing.scale600}>
+        <Button key={key} type="button" kind="tertiary" onClick={() => props.set(key)}>
+          <Block marginBottom={theme.sizing.scale600}>
             <Block>{key}</Block>
             <Block>
               <img src={temaBilder[key]} alt={'preview' + key} width={'400px'} />

@@ -92,7 +92,7 @@ export const RegelverkEdit = ({ forVirkemiddel }: RegelverkEditProps) => {
               </div>
               <RenderTagList
                 list={p.form.values.regelverk.map((r: IRegelverk) => (
-                  <LovView regelverk={r} />
+                  <LovView regelverk={r}  key={r.lov.code}/>
                 ))}
                 onRemove={p.remove}
               />

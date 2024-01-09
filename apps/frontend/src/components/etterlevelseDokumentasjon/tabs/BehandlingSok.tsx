@@ -46,7 +46,7 @@ export const BehandlingSok = () => {
           ? behandlingUUID
           : '',
     },
-    skip: !!!selectedBehandling && !!!behandlingUUID,
+    skip: selectedBehandling === undefined && (behandlingUUID === null || behandlingUUID === ''),
   })
   const etterlevelseDokumentasjoner = data?.etterlevelseDokumentasjoner || emptyPage
   const loading = !data && gqlLoading

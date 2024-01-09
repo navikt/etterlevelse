@@ -31,7 +31,7 @@ type EditKravProps = {
   close: (k?: IKrav) => void
   formRef: React.Ref<any>
   isOpen: boolean | undefined
-  setIsOpen: Function
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean | undefined>>
   newVersion?: boolean
   newKrav?: boolean
   alleKravVersjoner: IKravVersjon[]
