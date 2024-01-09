@@ -17,7 +17,7 @@ const etterlevelseFilter = [
 
 export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolean; krav: KravQL; modalVersion?: boolean }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const [openEtterlse, setOpenEtterlevelse] = useState<EtterlevelseQL>()
+  const [openEtterlevelse, setOpenEtterlevelse] = useState<EtterlevelseQL>()
   const [filter, setFilter] = useState<string>('ALLE')
 
   const etterlevelser = (krav.etterlevelser || [])
@@ -115,50 +115,47 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
       {productAreas.length > 0 && (
         <Accordion>
           {productAreas.map((t) => {
-            let productAreaEtterlevelser = filteredEtterlevelse?.filter(
+            const productAreaEtterlevelser = filteredEtterlevelse?.filter(
               (e) => e.etterlevelseDokumentasjon.teamsData && t && e.etterlevelseDokumentasjon.teamsData.filter((team) => team.productAreaId === t.productAreaId).length > 0,
             )
 
-            const antall = productAreaEtterlevelser.length
             return (
               <Accordion.Item key={t && t.productAreaId}>
                 <Accordion.Header>{t ? (t.productAreaName ? t.productAreaName : t.productAreaId) : ''}</Accordion.Header>
                 <Accordion.Content>
                   <div className="flex flex-col gap-2">
-                    {productAreaEtterlevelser.map((e, i) => {
-                      return (
-                        <LinkPanel
-                          href={modalVersion ? undefined : `/etterlevelse/${e.id}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={
-                            modalVersion
-                              ? () => {
-                                  setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
-                                  setIsModalOpen(true)
-                                }
-                              : undefined
-                          }
-                        >
-                          <LinkPanel.Title className="flex items-center">
-                            <div>
-                              <BodyShort>
-                                <strong>E{e.etterlevelseDokumentasjon.etterlevelseNummer}</strong>: {e.etterlevelseDokumentasjon.title}
-                              </BodyShort>
-                            </div>
-                            <Spacer />
-                            <div className="w-44">
-                              <BodyShort>
-                                {!!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length
-                                  ? e.etterlevelseDokumentasjon.teamsData.map((t) => (t.name ? t.name : t.id)).join(', ')
-                                  : 'Ingen team'}
-                              </BodyShort>
-                              <BodyShort>{`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}</BodyShort>
-                            </div>
-                          </LinkPanel.Title>
-                        </LinkPanel>
-                      )
-                    })}
+                    {productAreaEtterlevelser.map((e) => (
+                      <LinkPanel
+                        href={modalVersion ? undefined : `/etterlevelse/${e.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={
+                          modalVersion
+                            ? () => {
+                                setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
+                                setIsModalOpen(true)
+                              }
+                            : undefined
+                        }
+                      >
+                        <LinkPanel.Title className="flex items-center">
+                          <div>
+                            <BodyShort>
+                              <strong>E{e.etterlevelseDokumentasjon.etterlevelseNummer}</strong>: {e.etterlevelseDokumentasjon.title}
+                            </BodyShort>
+                          </div>
+                          <Spacer />
+                          <div className="w-44">
+                            <BodyShort>
+                              {!!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length
+                                ? e.etterlevelseDokumentasjon.teamsData.map((t) => (t.name ? t.name : t.id)).join(', ')
+                                : 'Ingen team'}
+                            </BodyShort>
+                            <BodyShort>{`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}</BodyShort>
+                          </div>
+                        </LinkPanel.Title>
+                      </LinkPanel>
+                    ))}
                   </div>
                 </Accordion.Content>
               </Accordion.Item>
@@ -173,7 +170,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
         </div>
       )}
 
-      {modalVersion && openEtterlse && krav && <EtterlevelseModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} etterlevelse={openEtterlse} kravData={krav} />}
+      {modalVersion && openEtterlevelse && krav && <EtterlevelseModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} etterlevelse={openEtterlevelse} kravData={krav} />}
     </div>
   )
 }
