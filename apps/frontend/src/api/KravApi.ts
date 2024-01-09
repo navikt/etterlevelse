@@ -19,7 +19,11 @@ export const getAllKrav = async () => {
 }
 
 export const getKravPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (
+    await axios.get<PageResponse<Krav>>(
+      `${env.backendBaseUrl}/krav?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    )
+  ).data
 }
 
 export const getKrav = async (id: string) => {
@@ -31,14 +35,19 @@ export const deleteKrav = async (id: string) => {
 }
 
 export const searchKrav = async (name: string) => {
-  return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/search/${name}`)).data.content
+  return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/search/${name}`)).data
+    .content
 }
 
 export const searchKravByNumber = async (number: string) => {
-  return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/search/number/${number}`)).data.content
+  return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/search/number/${number}`))
+    .data.content
 }
 
-export const getKravByKravNumberAndVersion = async (kravNummer: number | string, kravVersjon: number | string) => {
+export const getKravByKravNumberAndVersion = async (
+  kravNummer: number | string,
+  kravVersjon: number | string
+) => {
   return await axios
     .get<Krav>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}/${kravVersjon}`)
     .then((resp) => {
@@ -50,7 +59,9 @@ export const getKravByKravNumberAndVersion = async (kravNummer: number | string,
 }
 
 export const getKravByKravNummer = async (kravNummer: number | string) => {
-  return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}`)).data
+  return (
+    await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}`)
+  ).data
 }
 
 export const createKrav = async (krav: KravQL) => {
@@ -98,7 +109,12 @@ export const useKravPage = (pageSize: number) => {
   const prevPage = () => setPage(Math.max(0, page - 1))
   const nextPage = () => setPage(Math.min(data?.pages ? data.pages - 1 : 0, page + 1))
 
-  return [data, prevPage, nextPage, loading] as [PageResponse<Krav>, () => void, () => void, boolean]
+  return [data, prevPage, nextPage, loading] as [
+    PageResponse<Krav>,
+    () => void,
+    () => void,
+    boolean,
+  ]
 }
 
 export type KravIdParams = Or<{ id?: string }, { kravNummer: string; kravVersjon: string }>
@@ -111,7 +127,8 @@ export const useKrav = (params: KravId | KravIdParams, onlyLoadOnce?: boolean) =
   const load = () => {
     if (data && onlyLoadOnce) return
     params?.id && !isCreateNew && getKrav(params.id).then(setData)
-    params?.kravNummer && getKravByKravNumberAndVersion(params.kravNummer, params.kravVersjon).then(setData)
+    params?.kravNummer &&
+      getKravByKravNumberAndVersion(params.kravNummer, params.kravVersjon).then(setData)
   }
   useEffect(load, [params])
 
@@ -129,16 +146,29 @@ export const useSearchKrav = async (searchParams: string) => {
       if (searchParams.length > 3) {
         if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
           const kravNummerMedVersjon = kravNumber.split('.')
-          const kravRes = await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1])
+          const kravRes = await getKravByKravNumberAndVersion(
+            kravNummerMedVersjon[0],
+            kravNummerMedVersjon[1]
+          )
           if (kravRes && kravRes.status === KravStatus.AKTIV) {
-            return [{ value: kravRes.id, label: 'K' + kravRes.kravNummer + '.' + kravRes.kravVersjon + ' ' + kravRes.navn, ...kravRes }]
+            return [
+              {
+                value: kravRes.id,
+                label: 'K' + kravRes.kravNummer + '.' + kravRes.kravVersjon + ' ' + kravRes.navn,
+                ...kravRes,
+              },
+            ]
           }
         } else {
           const kravRes = await searchKrav(kravNumber)
           return kravRes
             .filter((k) => k.status === KravStatus.AKTIV)
             .map((k) => {
-              return { value: k.id, label: 'K' + k.kravNummer + '.' + k.kravVersjon + ' ' + k.navn, ...k }
+              return {
+                value: k.id,
+                label: 'K' + k.kravNummer + '.' + k.kravVersjon + ' ' + k.navn,
+                ...k,
+              }
             })
         }
       }
@@ -147,7 +177,11 @@ export const useSearchKrav = async (searchParams: string) => {
       return kravRes
         .filter((k) => k.status === KravStatus.AKTIV)
         .map((k) => {
-          return { value: k.id, label: 'K' + k.kravNummer + '.' + k.kravVersjon + ' ' + k.navn, ...k }
+          return {
+            value: k.id,
+            label: 'K' + k.kravNummer + '.' + k.kravVersjon + ' ' + k.navn,
+            ...k,
+          }
         })
     }
   }
@@ -181,7 +215,13 @@ export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   status: krav.status || KravStatus.UTKAST,
   suksesskriterier: krav.suksesskriterier || [],
   nyKravVersjon: krav.nyKravVersjon || false,
-  tema: (krav.regelverk && krav.regelverk?.length > 0 && krav.regelverk[0].lov && krav.regelverk[0].lov.data && krav.regelverk[0].lov.data.tema) || '',
+  tema:
+    (krav.regelverk &&
+      krav.regelverk?.length > 0 &&
+      krav.regelverk[0].lov &&
+      krav.regelverk[0].lov.data &&
+      krav.regelverk[0].lov.data.tema) ||
+    '',
   kravRelasjoner: krav.kravRelasjoner || [],
   // not used
   begrepIder: [],
@@ -272,7 +312,13 @@ export const kravFullQuery = gql`
 `
 
 export const etterlevelseDokumentasjonKravQuery = gql`
-  query getKravByFilter($etterlevelseDokumentasjonId: string, $lover: [string!], $gjeldendeKrav: Boolean, $etterlevelseDokumentasjonIrrevantKrav: Boolean, $status: [string!]) {
+  query getKravByFilter(
+    $etterlevelseDokumentasjonId: String
+    $lover: [String!]
+    $gjeldendeKrav: Boolean
+    $etterlevelseDokumentasjonIrrevantKrav: Boolean
+    $status: [String!]
+  ) {
     krav(
       filter: {
         etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
@@ -333,7 +379,13 @@ export const etterlevelseDokumentasjonKravQuery = gql`
 `
 
 export const KravMedPrioriteringOgEtterlevelseQuery = gql`
-  query getKravByFilter($etterlevelseDokumentasjonId: string, $lover: [string!], $gjeldendeKrav: Boolean, $etterlevelseDokumentasjonIrrevantKrav: Boolean, $status: [string!]) {
+  query getKravByFilter(
+    $etterlevelseDokumentasjonId: string
+    $lover: [string!]
+    $gjeldendeKrav: Boolean
+    $etterlevelseDokumentasjonIrrevantKrav: Boolean
+    $status: [string!]
+  ) {
     krav(
       filter: {
         etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
