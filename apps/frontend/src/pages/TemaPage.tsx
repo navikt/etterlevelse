@@ -18,7 +18,7 @@ import { ExternalLink, urlForObject } from '../components/common/RouteLink'
 import { SimpleTag } from '../components/common/SimpleTag'
 import { margin } from '../components/common/Style'
 import { PageLayout } from '../components/scaffold/Page'
-import { Krav, KravQL, PageResponse } from '../constants'
+import { IKrav, KravQL, IPageResponse } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { ListName, LovCode, TemaCode, codelist } from '../services/Codelist'
 import { theme } from '../util'
@@ -74,7 +74,7 @@ const TemaView = ({ tema }: { tema: TemaCode }) => {
     { lover: lover.map((c) => c.code) },
     { skip: !lover.length }
   )
-  const [kravList, setKravList] = useState<Krav[]>([])
+  const [kravList, setKravList] = useState<IKrav[]>([])
 
   useEffect(() => {
     ampli.logEvent('sidevisning', {
@@ -249,7 +249,7 @@ export const useKravCounter = (
   variables: { lover: string[] },
   options?: QueryHookOptions<any, { lover?: string[] }>
 ) => {
-  return useQuery<{ krav: PageResponse<KravQL> }, KravFilters>(query, {
+  return useQuery<{ krav: IPageResponse<KravQL> }, KravFilters>(query, {
     ...(options || {}),
     variables,
   })

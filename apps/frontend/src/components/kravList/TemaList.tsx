@@ -3,7 +3,7 @@ import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { getAllKrav } from '../../api/KravApi'
 import { getAllKravPriority } from '../../api/KravPriorityApi'
-import { Krav, KravStatus } from '../../constants'
+import { IKrav, KravStatus } from '../../constants'
 import { codelist, ListName } from '../../services/Codelist'
 import { sortKraverByPriority } from '../../util/sort'
 import StatusView from '../common/StatusTag'
@@ -11,8 +11,8 @@ import { KravPanelHeader } from '../etterlevelseDokumentasjon/KravPanelHeader'
 import { EditPriorityModal } from './edit/EditPriorityModal'
 
 export const TemaList = () => {
-  const [allActiveKrav, setAllActiveKrav] = useState<Krav[]>([])
-  const [allDraftKrav, setAllDraftKrav] = useState<Krav[]>([])
+  const [allActiveKrav, setAllActiveKrav] = useState<IKrav[]>([])
+  const [allDraftKrav, setAllDraftKrav] = useState<IKrav[]>([])
 
   useEffect(() => {
     fetchKrav()
@@ -72,7 +72,7 @@ export const TemaList = () => {
   )
 }
 
-const getKravTemaRowsWithLabel = (kraver: Krav[], tema: string) => {
+const getKravTemaRowsWithLabel = (kraver: IKrav[], tema: string) => {
   return kraver.map((k, index) => {
     return (
       <div key={`${k.navn}_${k.kravNummer}_${tema}_${index}`}>
@@ -100,7 +100,7 @@ const getKravTemaRowsWithLabel = (kraver: Krav[], tema: string) => {
   })
 }
 
-const KravTemaList = (props: { activeKraver: Krav[]; tema: string; refresh: Function; draftKrav: Krav[] }) => {
+const KravTemaList = (props: { activeKraver: IKrav[]; tema: string; refresh: Function; draftKrav: IKrav[] }) => {
   const [isEditPriorityModalOpen, setIsEditPriorityModalOpen] = React.useState(false)
 
   return (

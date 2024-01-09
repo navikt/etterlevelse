@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { UserInfo } from '../constants'
+import { IUserInfo } from '../constants'
 import { getUserInfo } from '../api/UserApi'
 import { updateUser } from '../util/hooks'
 
@@ -12,7 +12,7 @@ export enum Group {
 
 class UserService {
   private loaded = false
-  private userInfo: UserInfo = { loggedIn: false, groups: [] }
+  private userInfo: IUserInfo = { loggedIn: false, groups: [] }
   private currentGroups = [Group.READ]
   private error?: string
   private readonly promise: Promise<any>
@@ -30,7 +30,7 @@ class UserService {
       })
   }
 
-  handleGetResponse = (response: AxiosResponse<UserInfo>) => {
+  handleGetResponse = (response: AxiosResponse<IUserInfo>) => {
     if (typeof response.data === 'object' && response.data !== null) {
       const groups = response.data.groups.indexOf(Group.ADMIN) >= 0 ? (Object.keys(Group) as Group[]) : response.data.groups
       this.userInfo = { ...response.data, groups }

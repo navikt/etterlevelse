@@ -1,15 +1,15 @@
 import axios from 'axios'
-import { PageResponse, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse } from '../constants'
+import { IPageResponse, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse } from '../constants'
 import { env } from '../util/env'
 import { useEffect, useState } from 'react'
 import moment from 'moment'
 
 export const getTilbakemeldingForKrav = async (kravNummer: number, kravVersjon: number) => {
-  return (await axios.get<PageResponse<Tilbakemelding>>(`${env.backendBaseUrl}/tilbakemelding/${kravNummer}/${kravVersjon}`)).data
+  return (await axios.get<IPageResponse<Tilbakemelding>>(`${env.backendBaseUrl}/tilbakemelding/${kravNummer}/${kravVersjon}`)).data
 }
 
 export const getTilbakemeldingForKravByKravNummer = async (kravNummer: number) => {
-  return (await axios.get<PageResponse<Tilbakemelding>>(`${env.backendBaseUrl}/tilbakemelding/${kravNummer}`)).data
+  return (await axios.get<IPageResponse<Tilbakemelding>>(`${env.backendBaseUrl}/tilbakemelding/${kravNummer}`)).data
 }
 
 export const createNewTilbakemelding = async (request: CreateTilbakemeldingRequest) => {

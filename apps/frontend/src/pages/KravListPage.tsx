@@ -8,7 +8,7 @@ import { AllKrav } from '../components/kravList/AllKrav'
 import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
 import { TemaList } from '../components/kravList/TemaList'
 import { PageLayout } from '../components/scaffold/Page'
-import { Krav, KravQL } from '../constants'
+import { IKrav, KravQL } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { ListName, codelist } from '../services/Codelist'
 import { user } from '../services/User'
@@ -64,7 +64,7 @@ export const KravListPage = () => {
   )
 }
 
-export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; loading?: boolean }) => {
+export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | IKrav[]; loading?: boolean }) => {
   if (loading) return <Skeleton variant="rectangle" />
   return (
     <div className="mb-2.5 flex flex-col gap-2">

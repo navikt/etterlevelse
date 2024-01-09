@@ -6,7 +6,7 @@ import { KravId, KravMedPrioriteringOgEtterlevelseQuery } from '../api/KravApi'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
 import { PageLayout } from '../components/scaffold/Page'
-import { EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus, PageResponse } from '../constants'
+import { EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus, IPageResponse } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { ListName, TemaCode, codelist } from '../services/Codelist'
 import { sortKraverByPriority } from '../util/sort'
@@ -29,7 +29,7 @@ export const EtterlevelseDokumentasjonPage = () => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const lover = codelist.getCodesForTema(params.tema)
 
-  const { data, loading } = useQuery<{ krav: PageResponse<KravQL> }>(KravMedPrioriteringOgEtterlevelseQuery, {
+  const { data, loading } = useQuery<{ krav: IPageResponse<KravQL> }>(KravMedPrioriteringOgEtterlevelseQuery, {
     variables: {
       etterlevelseDokumentasjonId: params.id,
       lover: lover.map((l) => l.code),

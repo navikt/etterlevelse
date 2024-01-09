@@ -1,5 +1,5 @@
 import React from 'react'
-import { Etterlevelse, Krav, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
+import { Etterlevelse, IKrav, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
 import { mapEtterlevelseToFormValue, updateEtterlevelse } from '../../../api/EtterlevelseApi'
 import { FieldArray, FieldArrayRenderProps, Form, Formik, FormikProps } from 'formik'
 import { Card } from 'baseui/card'
@@ -17,7 +17,7 @@ import { Error } from '../../common/ModalSchema'
 
 type EditBegrunnelseProps = {
   etterlevelse: Etterlevelse
-  krav: Krav
+  krav: IKrav
   close: (k?: Etterlevelse) => void
   formRef?: React.Ref<any>
 }

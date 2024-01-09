@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { emptyPage, PageResponse, Virkemiddel } from '../constants'
+import { emptyPage, IPageResponse, Virkemiddel } from '../constants'
 import { env } from '../util/env'
 import { useEffect, useState } from 'react'
 import { useDebouncedState } from '../util/hooks'
@@ -19,7 +19,7 @@ export const getAllVirkemiddel = async () => {
 }
 
 export const getVirkemiddelPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<PageResponse<Virkemiddel>>(`${env.backendBaseUrl}/virkemiddel?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (await axios.get<IPageResponse<Virkemiddel>>(`${env.backendBaseUrl}/virkemiddel?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
 }
 
 export const getVirkemiddel = async (id: string) => {
@@ -31,11 +31,11 @@ export const deleteVirkemiddel = async (id: string) => {
 }
 
 export const getVirkemiddelByVirkemiddelType = async (code: string) => {
-  return (await axios.get<PageResponse<Virkemiddel>>(`${env.backendBaseUrl}/virkemiddel/virkemiddeltype/${code}`)).data.content
+  return (await axios.get<IPageResponse<Virkemiddel>>(`${env.backendBaseUrl}/virkemiddel/virkemiddeltype/${code}`)).data.content
 }
 
 export const searchVirkemiddel = async (name: string) => {
-  return (await axios.get<PageResponse<Virkemiddel>>(`${env.backendBaseUrl}/virkemiddel/search/${name}`)).data.content
+  return (await axios.get<IPageResponse<Virkemiddel>>(`${env.backendBaseUrl}/virkemiddel/search/${name}`)).data.content
 }
 
 export const createVirkemiddel = async (virkemiddel: Virkemiddel) => {
@@ -49,7 +49,7 @@ export const updateVirkemiddel = async (virkemiddel: Virkemiddel) => {
 }
 
 export const useVirkemiddelPage = (pageSize: number) => {
-  const [data, setData] = useState<PageResponse<Virkemiddel>>(emptyPage)
+  const [data, setData] = useState<IPageResponse<Virkemiddel>>(emptyPage)
   const [page, setPage] = useState<number>(0)
   const [loading, setLoading] = useState(true)
 
@@ -64,7 +64,7 @@ export const useVirkemiddelPage = (pageSize: number) => {
   const prevPage = () => setPage(Math.max(0, page - 1))
   const nextPage = () => setPage(Math.min(data?.pages ? data.pages - 1 : 0, page + 1))
 
-  return [data, prevPage, nextPage, loading] as [PageResponse<Virkemiddel>, () => void, () => void, boolean]
+  return [data, prevPage, nextPage, loading] as [IPageResponse<Virkemiddel>, () => void, () => void, boolean]
 }
 
 export const useVirkemiddel = (id: string, onlyLoadOnce?: boolean) => {

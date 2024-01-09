@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { Behandling, PageResponse } from '../constants'
+import { Behandling, IPageResponse } from '../constants'
 import { env } from '../util/env'
 import { useSearch } from '../util/hooks'
 
@@ -9,11 +9,11 @@ export const getBehandling = async (id: string) => {
 }
 
 export const getBehandlinger = async () => {
-  return (await axios.get<PageResponse<Behandling>>(`${env.backendBaseUrl}/behandling?myBehandlinger=true`)).data.content
+  return (await axios.get<IPageResponse<Behandling>>(`${env.backendBaseUrl}/behandling?myBehandlinger=true`)).data.content
 }
 
 export const searchBehandling = async (name: string) => {
-  return (await axios.get<PageResponse<Behandling>>(`${env.backendBaseUrl}/behandling/search/${name}`)).data.content
+  return (await axios.get<IPageResponse<Behandling>>(`${env.backendBaseUrl}/behandling/search/${name}`)).data.content
 }
 
 export const useBehandling = (id?: string) => {

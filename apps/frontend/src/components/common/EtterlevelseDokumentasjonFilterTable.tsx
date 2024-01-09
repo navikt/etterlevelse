@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client'
 import { Loader } from '@navikt/ds-react'
 import { EtterlevelseDokumentasjonFilter } from '../../api/EtterlevelseDokumentasjonApi'
-import { EtterlevelseDokumentasjon, PageResponse } from '../../constants'
+import { EtterlevelseDokumentasjon, IPageResponse } from '../../constants'
 import { ListName } from '../../services/Codelist'
 import { DotTags } from './DotTag'
 import RouteLink from './RouteLink'
@@ -30,7 +30,7 @@ export const EtterlevelseDokumentasjonFilterTable = (props: {
   emptyText?: string
 }) => {
   const { data, loading } = useQuery<{
-    etterlevelseDokumentasjon: PageResponse<EtterlevelseDokumentasjon>
+    etterlevelseDokumentasjon: IPageResponse<EtterlevelseDokumentasjon>
   }>(query, { variables: props.filter })
 
   return loading && !data ? (

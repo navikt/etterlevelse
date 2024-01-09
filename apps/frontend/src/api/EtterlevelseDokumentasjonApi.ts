@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import * as yup from 'yup'
-import { EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse } from '../constants'
+import { EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, IPageResponse } from '../constants'
 import { env } from '../util/env'
 import { behandlingName } from './BehandlingApi'
 import { getVirkemiddel } from './VirkemiddelApi'
@@ -28,18 +28,18 @@ export const getAllEtterlevelseDokumentasjon = async () => {
 }
 
 export const getEtterlevelseDokumentasjonPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<PageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (await axios.get<IPageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
 }
 
 export const searchEtterlevelsedokumentasjon = async (searchParam: string) => {
-  return (await axios.get<PageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/${searchParam}`)).data.content
+  return (await axios.get<IPageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/${searchParam}`)).data.content
 }
 
 export const searchEtterlevelsedokumentasjonByBehandlingId = async (behandlingId: string) => {
-  return (await axios.get<PageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/behandling/${behandlingId}`)).data.content
+  return (await axios.get<IPageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/behandling/${behandlingId}`)).data.content
 }
 export const searchEtterlevelsedokumentasjonByVirkemiddelId = async (virkemiddelId: string) => {
-  return (await axios.get<PageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/virkemiddel/${virkemiddelId}`)).data.content
+  return (await axios.get<IPageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/virkemiddel/${virkemiddelId}`)).data.content
 }
 export const updateEtterlevelseDokumentasjon = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
   const dto = etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon)

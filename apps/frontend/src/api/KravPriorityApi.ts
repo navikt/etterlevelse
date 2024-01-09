@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { KravPrioritering, KravQL, PageResponse } from '../constants'
+import { IKravPrioritering, KravQL, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
 export const getAllKravPriority = async () => {
@@ -8,7 +8,7 @@ export const getAllKravPriority = async () => {
   if (firstPage.pages === 1) {
     return firstPage.content.length > 0 ? [...firstPage.content] : []
   } else {
-    let allKravPrioritering: KravPrioritering[] = [...firstPage.content]
+    let allKravPrioritering: IKravPrioritering[] = [...firstPage.content]
     for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
       allKravPrioritering = [...allKravPrioritering, ...(await getKravPriorityPage(currentPage, PAGE_SIZE)).content]
     }
@@ -17,16 +17,16 @@ export const getAllKravPriority = async () => {
 }
 
 export const getKravPriorityPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<PageResponse<KravPrioritering>>(`${env.backendBaseUrl}/kravprioritering?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (await axios.get<IPageResponse<IKravPrioritering>>(`${env.backendBaseUrl}/kravprioritering?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
 }
 
 export const getKravPriority = async (id: string) => {
-  return (await axios.get<KravPrioritering>(`${env.backendBaseUrl}/kravprioritering/${id}`)).data
+  return (await axios.get<IKravPrioritering>(`${env.backendBaseUrl}/kravprioritering/${id}`)).data
 }
 
 export const getKravPriorityByKravNumberAndVersion = async (kravNummer: number | string, kravVersjon: number | string) => {
   return await axios
-    .get<KravPrioritering>(`${env.backendBaseUrl}/kravprioritering/kravnummer/${kravNummer}/${kravVersjon}`)
+    .get<IKravPrioritering>(`${env.backendBaseUrl}/kravprioritering/kravnummer/${kravNummer}/${kravVersjon}`)
     .then((resp) => {
       return resp.data
     })
@@ -37,7 +37,7 @@ export const getKravPriorityByKravNumberAndVersion = async (kravNummer: number |
 
 export const getKravPriorityByTemaCode = async (temaCode: string) => {
   return await axios
-    .get<KravPrioritering>(`${env.backendBaseUrl}/kravprioritering/tema/${temaCode}`)
+    .get<IKravPrioritering>(`${env.backendBaseUrl}/kravprioritering/tema/${temaCode}`)
     .then((resp) => {
       return resp.data
     })
@@ -47,20 +47,20 @@ export const getKravPriorityByTemaCode = async (temaCode: string) => {
 }
 
 export const getKravPriorityByKravNummer = async (kravNummer: number | string) => {
-  return (await axios.get<PageResponse<KravPrioritering>>(`${env.backendBaseUrl}/kravprioritering/kravnummer/${kravNummer}`)).data
+  return (await axios.get<IPageResponse<IKravPrioritering>>(`${env.backendBaseUrl}/kravprioritering/kravnummer/${kravNummer}`)).data
 }
 
-export const createKravPriority = async (kravPrioritering: KravPrioritering) => {
+export const createKravPriority = async (kravPrioritering: IKravPrioritering) => {
   const dto = kravPrioriteringToDto(kravPrioritering)
-  return (await axios.post<KravPrioritering>(`${env.backendBaseUrl}/kravprioritering`, dto)).data
+  return (await axios.post<IKravPrioritering>(`${env.backendBaseUrl}/kravprioritering`, dto)).data
 }
 
-export const updateKravPriority = async (kravPrioritering: KravPrioritering) => {
+export const updateKravPriority = async (kravPrioritering: IKravPrioritering) => {
   const dto = kravPrioriteringToDto(kravPrioritering)
-  return (await axios.put<KravPrioritering>(`${env.backendBaseUrl}/kravprioritering/${kravPrioritering.id}`, dto)).data
+  return (await axios.put<IKravPrioritering>(`${env.backendBaseUrl}/kravprioritering/${kravPrioritering.id}`, dto)).data
 }
 
-function kravPrioriteringToDto(kravPrioriteringToDto: KravPrioritering): KravPrioritering {
+function kravPrioriteringToDto(kravPrioriteringToDto: IKravPrioritering): IKravPrioritering {
   const dto = {
     ...kravPrioriteringToDto,
   } as any
@@ -69,7 +69,7 @@ function kravPrioriteringToDto(kravPrioriteringToDto: KravPrioritering): KravPri
   return dto
 }
 
-export const kravMapToKravPrioriting = (krav: Partial<KravQL>): KravPrioritering => ({
+export const kravMapToKravPrioriting = (krav: Partial<KravQL>): IKravPrioritering => ({
   id: krav.kravPriorityUID || '',
   kravNummer: krav.kravNummer || 0,
   kravVersjon: krav.kravVersjon || 0,

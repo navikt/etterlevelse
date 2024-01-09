@@ -1,8 +1,8 @@
-import { KravStatus, KravVersjon } from '../../constants'
+import { KravStatus, IKravVersjon } from '../../constants'
 import { kravStatus } from '../../pages/KravPage'
 import { Alert, BodyLong, Link } from '@navikt/ds-react'
 
-const ExpiredAlert = ({ alleKravVersjoner, statusName }: { alleKravVersjoner: KravVersjon[]; statusName?: KravStatus }) => (
+const ExpiredAlert = ({ alleKravVersjoner, statusName }: { alleKravVersjoner: IKravVersjon[]; statusName?: KravStatus }) => (
   <Alert variant={'warning'} className={'w-fit'}>
     <BodyLong className={'ml-3'}>
       Dette er et {statusName ? `${kravStatus(statusName).toLocaleLowerCase()} krav` : 'utgått krav'}.

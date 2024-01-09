@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { emptyPage, Krav, KravQL, KravStatus, Or, PageResponse } from '../constants'
+import { emptyPage, IKrav, KravQL, KravStatus, Or, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
 export const getAllKrav = async () => {
@@ -10,7 +10,7 @@ export const getAllKrav = async () => {
   if (firstPage.pages === 1) {
     return firstPage.content.length > 0 ? [...firstPage.content] : []
   } else {
-    let allKrav: Krav[] = [...firstPage.content]
+    let allKrav: IKrav[] = [...firstPage.content]
     for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
       allKrav = [...allKrav, ...(await getKravPage(currentPage, PAGE_SIZE)).content]
     }
@@ -20,27 +20,27 @@ export const getAllKrav = async () => {
 
 export const getKravPage = async (pageNumber: number, pageSize: number) => {
   return (
-    await axios.get<PageResponse<Krav>>(
+    await axios.get<IPageResponse<IKrav>>(
       `${env.backendBaseUrl}/krav?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
   ).data
 }
 
 export const getKrav = async (id: string) => {
-  return (await axios.get<Krav>(`${env.backendBaseUrl}/krav/${id}`)).data
+  return (await axios.get<IKrav>(`${env.backendBaseUrl}/krav/${id}`)).data
 }
 
 export const deleteKrav = async (id: string) => {
-  return (await axios.delete<Krav>(`${env.backendBaseUrl}/krav/${id}`)).data
+  return (await axios.delete<IKrav>(`${env.backendBaseUrl}/krav/${id}`)).data
 }
 
 export const searchKrav = async (name: string) => {
-  return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/search/${name}`)).data
+  return (await axios.get<IPageResponse<IKrav>>(`${env.backendBaseUrl}/krav/search/${name}`)).data
     .content
 }
 
 export const searchKravByNumber = async (number: string) => {
-  return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/search/number/${number}`))
+  return (await axios.get<IPageResponse<IKrav>>(`${env.backendBaseUrl}/krav/search/number/${number}`))
     .data.content
 }
 
@@ -49,7 +49,7 @@ export const getKravByKravNumberAndVersion = async (
   kravVersjon: number | string
 ) => {
   return await axios
-    .get<Krav>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}/${kravVersjon}`)
+    .get<IKrav>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}/${kravVersjon}`)
     .then((resp) => {
       return resp.data
     })
@@ -60,21 +60,21 @@ export const getKravByKravNumberAndVersion = async (
 
 export const getKravByKravNummer = async (kravNummer: number | string) => {
   return (
-    await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}`)
+    await axios.get<IPageResponse<IKrav>>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}`)
   ).data
 }
 
 export const createKrav = async (krav: KravQL) => {
   const dto = kravToKravDto(krav)
-  return (await axios.post<Krav>(`${env.backendBaseUrl}/krav`, dto)).data
+  return (await axios.post<IKrav>(`${env.backendBaseUrl}/krav`, dto)).data
 }
 
 export const updateKrav = async (krav: KravQL) => {
   const dto = kravToKravDto(krav)
-  return (await axios.put<Krav>(`${env.backendBaseUrl}/krav/${krav.id}`, dto)).data
+  return (await axios.put<IKrav>(`${env.backendBaseUrl}/krav/${krav.id}`, dto)).data
 }
 
-function kravToKravDto(krav: KravQL): Krav {
+function kravToKravDto(krav: KravQL): IKrav {
   const dto = {
     ...krav,
     avdeling: krav.avdeling?.code,
@@ -94,7 +94,7 @@ function kravToKravDto(krav: KravQL): Krav {
 }
 
 export const useKravPage = (pageSize: number) => {
-  const [data, setData] = useState<PageResponse<Krav>>(emptyPage)
+  const [data, setData] = useState<IPageResponse<IKrav>>(emptyPage)
   const [page, setPage] = useState<number>(0)
   const [loading, setLoading] = useState(true)
 
@@ -110,7 +110,7 @@ export const useKravPage = (pageSize: number) => {
   const nextPage = () => setPage(Math.min(data?.pages ? data.pages - 1 : 0, page + 1))
 
   return [data, prevPage, nextPage, loading] as [
-    PageResponse<Krav>,
+    IPageResponse<IKrav>,
     () => void,
     () => void,
     boolean,
@@ -122,7 +122,7 @@ export type KravId = Or<{ id?: string }, { kravNummer: number; kravVersjon: numb
 
 export const useKrav = (params: KravId | KravIdParams, onlyLoadOnce?: boolean) => {
   const isCreateNew = params.id === 'ny'
-  const [data, setData] = useState<Krav | undefined>(isCreateNew ? kravMapToFormVal({}) : undefined)
+  const [data, setData] = useState<IKrav | undefined>(isCreateNew ? kravMapToFormVal({}) : undefined)
 
   const load = () => {
     if (data && onlyLoadOnce) return
@@ -132,7 +132,7 @@ export const useKrav = (params: KravId | KravIdParams, onlyLoadOnce?: boolean) =
   }
   useEffect(load, [params])
 
-  return [data, setData, load] as [Krav | undefined, (k?: Krav) => void, () => void]
+  return [data, setData, load] as [IKrav | undefined, (k?: IKrav) => void, () => void]
 }
 
 export const useSearchKrav = async (searchParams: string) => {

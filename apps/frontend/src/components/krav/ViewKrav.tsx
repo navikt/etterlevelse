@@ -1,4 +1,4 @@
-import { AdresseType, Begrep, Krav, KravQL, KravVersjon } from '../../constants'
+import { AdresseType, Begrep, IKrav, KravQL, IKravVersjon } from '../../constants'
 import React from 'react'
 import moment from 'moment'
 import { DotTags } from '../common/DotTag'
@@ -46,7 +46,7 @@ export const AllInfo = ({
   header,
 }: {
   krav: KravQL
-  alleKravVersjoner: KravVersjon[]
+  alleKravVersjoner: IKravVersjon[]
   noLastModifiedDate?: boolean
   header?: boolean
 }) => {
@@ -182,7 +182,7 @@ const BegrepView = ({ begrep }: { begrep: Begrep }) => (
   </div>
 )
 
-const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<Krav> }) => (
+const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<IKrav> }) => (
   <div className="max-w-2xl">
     <BodyShort className="break-words">
       <ExternalLink href={`/krav/${kravRelasjon.id}`}>{`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}</ExternalLink> - {kravRelasjon.navn}

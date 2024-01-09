@@ -1,5 +1,5 @@
 import CustomizedModal from '../../common/CustomizedModal'
-import { Krav } from '../../../constants'
+import { IKrav } from '../../../constants'
 import Button from '../../common/Button'
 import React, { ReactElement, useEffect } from 'react'
 import { FieldArray, Form, Formik } from 'formik'
@@ -21,10 +21,10 @@ import { Loader } from '@navikt/ds-react'
 
 export const kravListPriorityModal = () => document.querySelector('#krav-list-edit-priority-modal')
 
-export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dispatch<React.SetStateAction<boolean>>; kravListe: Krav[]; tema: string; refresh: Function }) => {
+export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dispatch<React.SetStateAction<boolean>>; kravListe: IKrav[]; tema: string; refresh: Function }) => {
   const { isOpen, setIsOpen, kravListe, tema, refresh } = props
   const [items, setItems] = React.useState<ReactElement[]>([])
-  const [kravElements, setKravElements] = React.useState<Krav[]>(kravListe)
+  const [kravElements, setKravElements] = React.useState<IKrav[]>(kravListe)
   const [loading, setLoading] = React.useState(false)
   const [stickyFooterStyle, setStickyFooterStyle] = React.useState(false)
 
@@ -82,7 +82,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
     return () => kravListPriorityModal()?.removeEventListener('scroll', listener)
   }, [isOpen])
 
-  const setPriority = (kravListe: Krav[]) => {
+  const setPriority = (kravListe: IKrav[]) => {
     const pattern = new RegExp(tema.substr(0, 3).toUpperCase() + '[0-9]+')
 
     return kravListe.map((k, i) => {

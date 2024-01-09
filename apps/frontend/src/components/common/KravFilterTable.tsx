@@ -4,7 +4,7 @@ import { ICode, codelistCompareField, codelistsCompareField } from '../../servic
 import RouteLink from './RouteLink'
 import { kravNumView, kravStatus } from '../../pages/KravPage'
 import React from 'react'
-import { KravQL, PageResponse } from '../../constants'
+import { KravQL, IPageResponse } from '../../constants'
 import { QueryResult } from '@apollo/client'
 import { Notification } from 'baseui/notification'
 import { Loader } from '@navikt/ds-react'
@@ -18,7 +18,7 @@ type KravFilterTableProps = {
 type KravTableProps = {
   emptyText?: string
   exclude?: (keyof KravQL)[]
-  queryResult: QueryResult<{ krav: PageResponse<KravQL> }, KravFilters>
+  queryResult: QueryResult<{ krav: IPageResponse<KravQL> }, KravFilters>
 }
 
 export const KravFilterTable = (props: KravFilterTableProps) => {

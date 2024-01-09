@@ -8,7 +8,7 @@ import { getKravByKravNumberAndVersion } from '../api/KravApi'
 import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
-import { Etterlevelse, Krav } from '../constants'
+import { Etterlevelse, IKrav } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { ListName, TemaCode, codelist } from '../services/Codelist'
 import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
@@ -24,7 +24,7 @@ export const EtterlevelsePage = () => {
   const params = useParams<{ id?: string }>()
   const [etterlevelse] = useEtterlevelse(params.id)
   const [edit] = useState(etterlevelse && !etterlevelse.id)
-  const [krav, setKrav] = useState<Krav>()
+  const [krav, setKrav] = useState<IKrav>()
   const [kravTema, setKravTema] = useState<TemaCode>()
 
   const loading = !edit && !etterlevelse

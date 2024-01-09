@@ -1,4 +1,4 @@
-import { AdresseType, Krav, SlackChannel, SlackUser, TeamResource, Varslingsadresse, VarslingsadresseQL } from '../../../constants'
+import { AdresseType, IKrav, SlackChannel, SlackUser, TeamResource, Varslingsadresse, VarslingsadresseQL } from '../../../constants'
 import { getSlackChannelById, getSlackUserByEmail, getSlackUserById, usePersonSearch, useSlackChannelSearch } from '../../../api/TeamApi'
 import React, { ReactNode, useEffect, useState } from 'react'
 import * as yup from 'yup'
@@ -24,7 +24,7 @@ export const KravVarslingsadresserEdit = () => {
     <FieldWrapper>
       <FieldArray name="varslingsadresser">
         {(p: FieldArrayRenderProps) => {
-          const varslingsadresser = (p.form.values as Krav).varslingsadresser
+          const varslingsadresser = (p.form.values as IKrav).varslingsadresser
           const push = (v: Varslingsadresse) => {
             if (!varslingsadresser.find((v2) => v2.adresse === v.adresse)) p.push(v)
           }
@@ -47,15 +47,15 @@ export const KravVarslingsadresserEdit = () => {
               </div>
 
               <AddModal largeHeight title="Legg til Slack kanal" isOpen={addSlackChannel} close={() => setAddSlackChannel(false)}>
-                <SlackChannelSearch added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddSlackChannel(false)} />
+                <SlackChannelSearch added={(p.form.values as IKrav).varslingsadresser} add={push} close={() => setAddSlackChannel(false)} />
               </AddModal>
 
               <AddModal largeHeight title="Legg til Slack bruker" isOpen={addSlackUser} close={() => setAddSlackUser(false)}>
-                <SlackUserSearch added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddSlackUser(false)} />
+                <SlackUserSearch added={(p.form.values as IKrav).varslingsadresser} add={push} close={() => setAddSlackUser(false)} />
               </AddModal>
 
               <AddModal title="Legg til Epost adresse" isOpen={addEmail} close={() => setAddEmail(false)}>
-                <AddEmail added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddEmail(false)} />
+                <AddEmail added={(p.form.values as IKrav).varslingsadresser} add={push} close={() => setAddEmail(false)} />
               </AddModal>
             </div>
           )

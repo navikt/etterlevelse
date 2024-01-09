@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { PageResponse, ProductArea, SlackChannel, SlackUser, Team, TeamResource } from '../constants'
+import { IPageResponse, ProductArea, SlackChannel, SlackUser, Team, TeamResource } from '../constants'
 import { env } from '../util/env'
 import { useForceUpdate, useSearch } from '../util/hooks'
 import { Option } from 'baseui/select'
@@ -11,7 +11,7 @@ export const getResourceById = async (resourceId: string) => {
 }
 
 export const searchResourceByName = async (resourceName: string) => {
-  return (await axios.get<PageResponse<TeamResource>>(`${env.backendBaseUrl}/team/resource/search/${resourceName}`)).data.content
+  return (await axios.get<IPageResponse<TeamResource>>(`${env.backendBaseUrl}/team/resource/search/${resourceName}`)).data.content
 }
 
 export const getTeam = async (teamId: string) => {
@@ -29,19 +29,19 @@ export const getTeams = async (teamIds: string[]) => {
 }
 
 export const getAllTeams = async () => {
-  return (await axios.get<PageResponse<Team>>(`${env.backendBaseUrl}/team`)).data.content
+  return (await axios.get<IPageResponse<Team>>(`${env.backendBaseUrl}/team`)).data.content
 }
 
 export const myTeams = async () => {
-  return (await axios.get<PageResponse<Team>>(`${env.backendBaseUrl}/team?myTeams=true`)).data.content
+  return (await axios.get<IPageResponse<Team>>(`${env.backendBaseUrl}/team?myTeams=true`)).data.content
 }
 
 export const myProductArea = async () => {
-  return (await axios.get<PageResponse<ProductArea>>(`${env.backendBaseUrl}/team/productarea?myProductAreas=true`)).data.content
+  return (await axios.get<IPageResponse<ProductArea>>(`${env.backendBaseUrl}/team/productarea?myProductAreas=true`)).data.content
 }
 
 export const searchTeam = async (teamSearch: string) => {
-  return (await axios.get<PageResponse<Team>>(`${env.backendBaseUrl}/team/search/${teamSearch}`)).data.content
+  return (await axios.get<IPageResponse<Team>>(`${env.backendBaseUrl}/team/search/${teamSearch}`)).data.content
 }
 
 export const getSlackChannelById = async (id: string) => {
@@ -57,7 +57,7 @@ export const getSlackUserById = async (id: string) => {
 }
 
 export const searchSlackChannel = async (name: string) => {
-  return (await axios.get<PageResponse<SlackChannel>>(`${env.backendBaseUrl}/team/slack/channel/search/${name}`)).data.content
+  return (await axios.get<IPageResponse<SlackChannel>>(`${env.backendBaseUrl}/team/slack/channel/search/${name}`)).data.content
 }
 
 export const mapTeamResourceToOption = (teamResource: TeamResource) => ({ id: teamResource.navIdent, label: teamResource.fullName })

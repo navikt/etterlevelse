@@ -17,14 +17,14 @@ import ExpiredAlert from '../components/krav/ExpiredAlert'
 import { AllInfo, ViewKrav } from '../components/krav/ViewKrav'
 import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
 import { PageLayout } from '../components/scaffold/Page'
-import { Krav, KravId, KravQL, KravStatus, KravVersjon } from '../constants'
+import { IKrav, IKravId, KravQL, KravStatus, IKravVersjon } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { ListName, TemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 import { useLocationState, useQueryParam } from '../util/hooks'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }): string => `K${it.kravNummer}.${it.kravVersjon}`
-export const kravName = (krav: Krav): string => `${kravNumView(krav)} ${krav.navn}`
+export const kravName = (krav: IKrav): string => `${kravNumView(krav)} ${krav.navn}`
 
 export const kravStatus = (status: KravStatus | string) => {
   if (!status) return ''
@@ -59,7 +59,7 @@ const getQueryVariableFromParams = (params: Readonly<Partial<KravIdParams>>) => 
 export const KravPage = () => {
   const params = useParams<KravIdParams>()
   const [krav, setKrav] = useState<KravQL | undefined>()
-  const [kravId, setKravId] = useState<KravId>()
+  const [kravId, setKravId] = useState<IKravId>()
   const {
     loading: kravLoading,
     data: kravQuery,
@@ -74,7 +74,7 @@ export const KravPage = () => {
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
   const [tab, setTab] = useState<Section>(tilbakemeldingId !== undefined && tilbakemeldingId !== '' ? 'tilbakemeldinger' : state?.tab || 'krav')
 
-  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{ kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' }])
+  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<IKravVersjon[]>([{ kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' }])
   const [kravTema, setKravTema] = useState<TemaCode>()
   const [newVersionWarning, setNewVersionWarning] = useState<boolean>(false)
   const [newKrav, setNewKrav] = useState<boolean>(false)

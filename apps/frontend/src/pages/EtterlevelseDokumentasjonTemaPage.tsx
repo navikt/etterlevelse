@@ -16,7 +16,7 @@ import { KravList } from '../components/etterlevelseDokumentasjonTema/KravList'
 import { SecondaryHeader } from '../components/etterlevelseDokumentasjonTema/SecondaryHeader'
 import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 import { Layout2 } from '../components/scaffold/Page'
-import { Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravEtterlevelseData, KravPrioritering, KravQL, KravStatus, PageResponse } from '../constants'
+import { Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravEtterlevelseData, IKravPrioritering, KravQL, KravStatus, IPageResponse } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { ListName, TemaCode, codelist } from '../services/Codelist'
 import { ettlevColors } from '../util/theme'
@@ -55,23 +55,23 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
   const lovListe = codelist.getCodesForTema(temaData?.code)
   const lover = lovListe.map((c) => c.code)
   const variables = { etterlevelseDokumentasjonId: params.id, lover: lover, gjeldendeKrav: true, etterlevelseDokumentasjonIrelevantKrav: false, status: KravStatus.AKTIV }
-  const [allKravPriority, setAllKravPriority] = useState<KravPrioritering[]>([])
+  const [allKravPriority, setAllKravPriority] = useState<IKravPrioritering[]>([])
   const location = useLocation()
   const [temaPageUrl] = useState<string>(location.pathname)
 
-  const { data: relevanteKraverGraphQLResponse, loading: relevanteKraverGraphQLLoading } = useQuery<{ krav: PageResponse<KravQL> }>(etterlevelseDokumentasjonKravQuery, {
+  const { data: relevanteKraverGraphQLResponse, loading: relevanteKraverGraphQLLoading } = useQuery<{ krav: IPageResponse<KravQL> }>(etterlevelseDokumentasjonKravQuery, {
     variables,
     skip: !params.id || !lover.length,
     fetchPolicy: 'no-cache',
   })
 
-  const { data: irrelevanteKraverGraphQLResponse, loading: irrelevanteKraverGraphQLLoading } = useQuery<{ krav: PageResponse<KravQL> }>(etterlevelseDokumentasjonKravQuery, {
+  const { data: irrelevanteKraverGraphQLResponse, loading: irrelevanteKraverGraphQLLoading } = useQuery<{ krav: IPageResponse<KravQL> }>(etterlevelseDokumentasjonKravQuery, {
     variables: { ...variables, etterlevelseDokumentasjonIrrevantKrav: true },
     skip: !params.id || !lover.length,
     fetchPolicy: 'no-cache',
   })
 
-  const { data: utgaateKraverGraphQLResponse, loading: utgaateKraverGraphQLLoading } = useQuery<{ krav: PageResponse<KravQL> }>(etterlevelseDokumentasjonKravQuery, {
+  const { data: utgaateKraverGraphQLResponse, loading: utgaateKraverGraphQLLoading } = useQuery<{ krav: IPageResponse<KravQL> }>(etterlevelseDokumentasjonKravQuery, {
     variables: { ...variables, gjeldendeKrav: false, status: KravStatus.UTGAATT },
     fetchPolicy: 'no-cache',
   })

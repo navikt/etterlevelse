@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { env } from '../util/env'
-import { AlertType, Melding, MeldingStatus, MeldingType, PageResponse } from '../constants'
+import { AlertType, Melding, MeldingStatus, MeldingType, IPageResponse } from '../constants'
 
 export const getAllMelding = async () => {
   const PAGE_SIZE = 100
@@ -17,7 +17,7 @@ export const getAllMelding = async () => {
 }
 
 export const getMeldingPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<PageResponse<Melding>>(`${env.backendBaseUrl}/melding?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (await axios.get<IPageResponse<Melding>>(`${env.backendBaseUrl}/melding?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
 }
 
 export const getMelding = async (id: string) => {
@@ -25,11 +25,11 @@ export const getMelding = async (id: string) => {
 }
 
 export const getMeldingByType = async (meldingType: MeldingType) => {
-  return (await axios.get<PageResponse<Melding>>(`${env.backendBaseUrl}/melding/type/${meldingType}`)).data
+  return (await axios.get<IPageResponse<Melding>>(`${env.backendBaseUrl}/melding/type/${meldingType}`)).data
 }
 
 export const getMeldingByStatus = async (meldingStatus: MeldingStatus) => {
-  return (await axios.get<PageResponse<Melding>>(`${env.backendBaseUrl}/melding/status/${meldingStatus}`)).data
+  return (await axios.get<IPageResponse<Melding>>(`${env.backendBaseUrl}/melding/status/${meldingStatus}`)).data
 }
 
 export const deleteMelding = async (id: string) => {

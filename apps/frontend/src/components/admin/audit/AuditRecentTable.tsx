@@ -4,7 +4,7 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { JsonView } from 'react-json-view-lite'
 import { getAudits } from '../../../api/AuditApi'
-import { PageResponse, emptyPage } from '../../../constants'
+import { IPageResponse, emptyPage } from '../../../constants'
 import { ampli, userRoleEventProp } from '../../../services/Amplitude'
 import { intl } from '../../../util/intl/intl'
 import { AuditButton } from './AuditButton'
@@ -30,7 +30,7 @@ const CodeView = ({ audit }: { audit: AuditItem }) => {
 }
 
 export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType }) => {
-  const [audits, setAudits] = useState<PageResponse<AuditItem>>(emptyPage)
+  const [audits, setAudits] = useState<IPageResponse<AuditItem>>(emptyPage)
   const [limit, setLimit] = useState(20)
   const [table, setTable] = useState<ObjectType | undefined>(props.tableType)
   const [page, setPage] = useState(1)

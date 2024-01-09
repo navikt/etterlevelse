@@ -3,7 +3,7 @@ import axios from 'axios'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { PageResponse } from '../../../constants'
+import { IPageResponse } from '../../../constants'
 import { env } from '../../../util/env'
 import { intl } from '../../../util/intl/intl'
 import { Markdown } from '../../common/Markdown'
@@ -16,11 +16,11 @@ interface MailLog {
 }
 
 const getMailLog = async (start: number, count: number) => {
-  return (await axios.get<PageResponse<MailLog>>(`${env.backendBaseUrl}/audit/maillog?pageNumber=${start}&pageSize=${count}`)).data
+  return (await axios.get<IPageResponse<MailLog>>(`${env.backendBaseUrl}/audit/maillog?pageNumber=${start}&pageSize=${count}`)).data
 }
 
 export const MailLogPage = () => {
-  const [log, setLog] = useState<PageResponse<MailLog>>({ content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 })
+  const [log, setLog] = useState<IPageResponse<MailLog>>({ content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 })
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
 

@@ -11,7 +11,7 @@ import {
   updateTilbakemeldingStatusOgEndretKrav,
   useTilbakemeldinger,
 } from '../../../api/TilbakemeldingApi'
-import { Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
+import { IKrav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
 import { user } from '../../../services/User'
 import { useQueryParam, useRefs } from '../../../util/hooks'
 import { ettlevColors } from '../../../util/theme'
@@ -30,7 +30,7 @@ import { getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, til
 
 const DEFAULT_COUNT_SIZE = 5
 
-export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKravExpired: boolean }) => {
+export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: IKrav; hasKravExpired: boolean }) => {
   const [tilbakemeldinger, loading, add, replace, remove] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)

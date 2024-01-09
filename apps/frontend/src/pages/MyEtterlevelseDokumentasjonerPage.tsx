@@ -28,7 +28,7 @@ import { PanelLink } from '../components/common/PanelLink'
 import { borderWidth } from '../components/common/Style'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import BehandlingSok from '../components/etterlevelseDokumentasjon/tabs/BehandlingSok'
-import { EtterlevelseDokumentasjonQL, PageResponse, Team, emptyPage } from '../constants'
+import { EtterlevelseDokumentasjonQL, IPageResponse, Team, emptyPage } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { user } from '../services/User'
 import { theme } from '../util'
@@ -116,7 +116,7 @@ const DokumentasjonTabs = () => {
   const [doneLoading, setDoneLoading] = useState(false)
   const [variables, setVariables] = useState<Variables>({})
   const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<
-    { etterlevelseDokumentasjoner: PageResponse<EtterlevelseDokumentasjonQL> },
+    { etterlevelseDokumentasjoner: IPageResponse<EtterlevelseDokumentasjonQL> },
     Variables
   >(query, {
     variables,
@@ -333,7 +333,7 @@ const Alle = () => {
     loading: gqlLoading,
     fetchMore,
   } = useQuery<
-    { etterlevelseDokumentasjoner: PageResponse<EtterlevelseDokumentasjonQL> },
+    { etterlevelseDokumentasjoner: IPageResponse<EtterlevelseDokumentasjonQL> },
     Variables
   >(query, {
     variables: { pageNumber, pageSize, sok },

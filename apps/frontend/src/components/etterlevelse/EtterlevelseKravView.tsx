@@ -13,7 +13,7 @@ import {
   updateEtterlevelseMetadata,
 } from '../../api/EtterlevelseMetadataApi'
 import { getKravByKravNummer, KravId } from '../../api/KravApi'
-import { Behandling, Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL, KravStatus, KravVersjon, Team } from '../../constants'
+import { Behandling, Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, IKrav, KRAV_FILTER_TYPE, KravQL, KravStatus, IKravVersjon, Team } from '../../constants'
 import { query } from '../../pages/KravPage'
 import { ampli, userRoleEventProp } from '../../services/Amplitude'
 import { user } from '../../services/User'
@@ -69,12 +69,12 @@ export const EtterlevelseKravView = ({
   })
   const etterlevelserLoading = loading
   const [krav, setKrav] = useState<KravQL>()
-  const [nyereKrav, setNyereKrav] = React.useState<Krav>()
+  const [nyereKrav, setNyereKrav] = React.useState<IKrav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
   const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
-  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{ kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' }])
+  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<IKravVersjon[]>([{ kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' }])
   const [isNavigationModalOpen, setIsNavigationModalOpen] = useState<boolean>(false)
   const location = useLocation()
   const navigate = useNavigate()

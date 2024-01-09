@@ -6,13 +6,13 @@ import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
 import { etterlevelseDokumentasjonName, searchEtterlevelsedokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
 import { getKravByKravNumberAndVersion, searchKrav, searchKravByNumber } from '../../api/KravApi'
-import { Behandling, EtterlevelseDokumentasjon, Krav, KravStatus } from '../../constants'
+import { Behandling, EtterlevelseDokumentasjon, IKrav, KravStatus } from '../../constants'
 import { kravName } from '../../pages/KravPage'
 import { ObjectType } from '../admin/audit/AuditTypes'
 
 type SearchItem = { value: string; label: string; tag: string; url: string }
 
-const kravMap = (t: Krav) => ({
+const kravMap = (t: IKrav) => ({
   value: t.id,
   label: kravName(t),
   tag: ObjectType.Krav as string,

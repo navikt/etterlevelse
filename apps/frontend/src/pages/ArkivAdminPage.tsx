@@ -10,7 +10,7 @@ import {
   updateAsAdminEtterlevelseArkiv,
 } from '../api/ArkiveringApi'
 import { PageLayout } from '../components/scaffold/Page'
-import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../constants'
+import { IEtterlevelseArkiv, EtterlevelseArkivStatus } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { handleSort } from '../util/handleTableSort'
 import { UpdateMessage } from './EtterlevelseAdminPage'
@@ -22,7 +22,7 @@ export const ArkivAdminPage = () => {
   const [deleteMessage, setDeleteMessage] = useState<string>('')
   const [arkiveringsStatus, setArkiveringsStatus] = useState<EtterlevelseArkivStatus>()
   const [reloadTable, setReloadTable] = useState(false)
-  const [tableContent, setTableContent] = useState<EtterlevelseArkiv[]>([])
+  const [tableContent, setTableContent] = useState<IEtterlevelseArkiv[]>([])
 
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
@@ -30,7 +30,7 @@ export const ArkivAdminPage = () => {
 
   let sortedData = tableContent
 
-  const comparator = (a: EtterlevelseArkiv, b: EtterlevelseArkiv, orderBy: string) => {
+  const comparator = (a: IEtterlevelseArkiv, b: IEtterlevelseArkiv, orderBy: string) => {
     switch (orderBy) {
       case 'status':
         return (a.status || '').localeCompare(b.status || '')
@@ -175,7 +175,7 @@ export const ArkivAdminPage = () => {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {sortedData.map((arkivering: EtterlevelseArkiv) => {
+                {sortedData.map((arkivering: IEtterlevelseArkiv) => {
                   return (
                     <Table.Row key={arkivering.id}>
                       <Table.HeaderCell scope="row">{arkivering.id}</Table.HeaderCell>

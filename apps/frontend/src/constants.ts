@@ -21,7 +21,7 @@ export enum TilbakemeldingMeldingStatus {
   MIDLERTIDLIG_SVAR = 'MIDLERTIDLIG_SVAR',
 }
 
-export interface EtterlevelseArkiv extends DomainObject {
+export interface IEtterlevelseArkiv extends IDomainObject {
   id: string
   behandlingId: string
   etterlevelseDokumentasjonId: string
@@ -113,7 +113,7 @@ export enum SuksesskriterieStatus {
   IKKE_RELEVANT = 'IKKE_RELEVANT',
   IKKE_OPPFYLT = 'IKKE_OPPFYLT',
 }
-export interface UserInfo {
+export interface IUserInfo {
   loggedIn: boolean
   groups: Group[]
   ident?: string
@@ -121,7 +121,7 @@ export interface UserInfo {
   email?: string
 }
 
-export interface PageResponse<T> {
+export interface IPageResponse<T> {
   pageNumber: number
   pageSize: number
   pages: number
@@ -130,18 +130,18 @@ export interface PageResponse<T> {
   content: T[]
 }
 
-export interface ChangeStamp {
+export interface IChangeStamp {
   lastModifiedBy: string
   lastModifiedDate: string
   createdDate?: string
 }
 
-export interface DomainObject {
-  changeStamp: ChangeStamp
+export interface IDomainObject {
+  changeStamp: IChangeStamp
   version: number
 }
 
-export interface KravPrioritering extends DomainObject {
+export interface IKravPrioritering extends IDomainObject {
   id: string
 
   kravVersjon: number
@@ -149,18 +149,18 @@ export interface KravPrioritering extends DomainObject {
   prioriteringsId: string
 }
 
-export interface KravId {
+export interface IKravId {
   id: string
   kravVersjon: number
 }
 
-export interface KravVersjon {
+export interface IKravVersjon {
   kravNummer: string | number
   kravVersjon: string | number
   kravStatus: string
 }
 
-export interface Krav extends DomainObject {
+export interface IKrav extends IDomainObject {
   id: string
 
   kravNummer: number
@@ -193,7 +193,7 @@ export interface Krav extends DomainObject {
   aktivertDato: string
 }
 
-export interface Virkemiddel extends DomainObject {
+export interface Virkemiddel extends IDomainObject {
   id: string
   navn: string
   regelverk: Regelverk[]
@@ -201,7 +201,7 @@ export interface Virkemiddel extends DomainObject {
   livsSituasjon: string
 }
 
-export interface EtterlevelseMetadata extends DomainObject {
+export interface EtterlevelseMetadata extends IDomainObject {
   id: string
   kravNummer: number
   kravVersjon: number
@@ -239,7 +239,7 @@ export interface SlackUser {
   name?: string
 }
 
-export interface Etterlevelse extends DomainObject {
+export interface Etterlevelse extends IDomainObject {
   id: string
   behandlingId: string
   etterlevelseDokumentasjonId: string
@@ -260,14 +260,14 @@ export type KravEtterlevelseData = {
   status: KravStatus
   etterlevelseId?: string
   etterleves: boolean
-  changeStamp: ChangeStamp
+  changeStamp: IChangeStamp
   frist?: string
   varselMelding?: string
   prioriteringsId?: string
   etterlevelseStatus?: EtterlevelseStatus
   suksesskriterier: Suksesskriterie[]
   gammelVersjon?: boolean
-  etterlevelseChangeStamp?: ChangeStamp
+  etterlevelseChangeStamp?: IChangeStamp
   isIrrelevant?: boolean
   aktivertDato: string
 }
@@ -293,7 +293,7 @@ export interface Behandling {
 
 export interface EtterlevelseDokumentasjon {
   id: string
-  changeStamp: ChangeStamp
+  changeStamp: IChangeStamp
   version: number
   title: string
   behandlingIds: string[]
@@ -345,7 +345,7 @@ export interface TilbakemeldingMelding {
   endretAvIdent?: string
 }
 
-export interface Melding extends DomainObject {
+export interface Melding extends IDomainObject {
   id: string
   melding: string
   secondaryTittel: string
@@ -404,13 +404,13 @@ export interface Begrep {
 }
 
 export type KravQL = Replace<
-  Krav,
+  IKrav,
   {
     etterlevelser: EtterlevelseQL[]
     varslingsadresser: VarslingsadresseQL[]
     begreper: Begrep[]
     virkemidler: Virkemiddel[]
-    kravRelasjoner: Krav[]
+    kravRelasjoner: IKrav[]
     prioriteringsId: string
   }
 >

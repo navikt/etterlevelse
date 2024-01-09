@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { getKravByKravNumberAndVersion } from '../../api/KravApi'
-import { Etterlevelse, Krav } from '../../constants'
+import { Etterlevelse, IKrav } from '../../constants'
 
 import EtterlevelseModal from './EtterlevelseModal'
 import { Button } from '@navikt/ds-react'
 
 export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [kravData, setKravData] = useState<Krav>()
+  const [kravData, setKravData] = useState<IKrav>()
 
   useEffect(() => {
     (async () => {

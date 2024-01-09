@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { EtterlevelseArkiv, EtterlevelseArkivStatus, PageResponse } from '../constants'
+import { IEtterlevelseArkiv, EtterlevelseArkivStatus, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
 export const getAllArkivering = async () => {
@@ -9,7 +9,7 @@ export const getAllArkivering = async () => {
   if (firstPage.pages === 1) {
     return firstPage.content.length > 0 ? [...firstPage.content] : []
   } else {
-    let allEtterlevelseArkiv: EtterlevelseArkiv[] = [...firstPage.content]
+    let allEtterlevelseArkiv: IEtterlevelseArkiv[] = [...firstPage.content]
     for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
       allEtterlevelseArkiv = [
         ...allEtterlevelseArkiv,
@@ -22,19 +22,19 @@ export const getAllArkivering = async () => {
 
 export const getArkiveringPage = async (pageNumber: number, pageSize: number) => {
   return (
-    await axios.get<PageResponse<EtterlevelseArkiv>>(
+    await axios.get<IPageResponse<IEtterlevelseArkiv>>(
       `${env.backendBaseUrl}/etterlevelsearkiv?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
   ).data
 }
 
 export const getEtterlevelseArkiv = async (id: string) => {
-  return (await axios.get<EtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/${id}`)).data
+  return (await axios.get<IEtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/${id}`)).data
 }
 
 export const getEtterlevelseArkivByWebsak = async (websakNummer: string) => {
   return (
-    await axios.get<PageResponse<EtterlevelseArkiv>>(
+    await axios.get<IPageResponse<IEtterlevelseArkiv>>(
       `${env.backendBaseUrl}/etterlevelsearkiv/websaknummer/${websakNummer}`
     )
   ).data
@@ -42,7 +42,7 @@ export const getEtterlevelseArkivByWebsak = async (websakNummer: string) => {
 
 export const getEtterlevelseArkivByStatus = async (status: EtterlevelseArkivStatus) => {
   return (
-    await axios.get<PageResponse<EtterlevelseArkiv>>(
+    await axios.get<IPageResponse<IEtterlevelseArkiv>>(
       `${env.backendBaseUrl}/etterlevelsearkiv/status/${status}`
     )
   ).data
@@ -50,7 +50,7 @@ export const getEtterlevelseArkivByStatus = async (status: EtterlevelseArkivStat
 
 export const getEtterlevelseArkivArkivert = async () => {
   return (
-    await axios.get<PageResponse<EtterlevelseArkiv>>(
+    await axios.get<IPageResponse<IEtterlevelseArkiv>>(
       `${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`
     )
   ).data
@@ -60,36 +60,36 @@ export const getEtterlevelseArkivByEtterlevelseDokumentasjonId = async (
   etterlevelseDokumentasjonId: string
 ) => {
   return (
-    await axios.get<PageResponse<EtterlevelseArkiv>>(
+    await axios.get<IPageResponse<IEtterlevelseArkiv>>(
       `${env.backendBaseUrl}/etterlevelsearkiv/etterlevelsedokumentasjon/${etterlevelseDokumentasjonId}`
     )
   ).data
 }
 
-export const createEtterlevelseArkiv = async (etterlevelseArkiv: EtterlevelseArkiv) => {
+export const createEtterlevelseArkiv = async (etterlevelseArkiv: IEtterlevelseArkiv) => {
   const dto = etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv)
-  return (await axios.post<EtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv`, dto)).data
+  return (await axios.post<IEtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv`, dto)).data
 }
 
 export const deleteEtterlevelseArkiv = async (id: string) => {
-  return (await axios.delete<EtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/${id}`))
+  return (await axios.delete<IEtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/${id}`))
     .data
 }
 
-export const updateEtterlevelseArkiv = async (etterlevelseArkiv: EtterlevelseArkiv) => {
+export const updateEtterlevelseArkiv = async (etterlevelseArkiv: IEtterlevelseArkiv) => {
   const dto = etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv)
   return (
-    await axios.put<EtterlevelseArkiv>(
+    await axios.put<IEtterlevelseArkiv>(
       `${env.backendBaseUrl}/etterlevelsearkiv/${etterlevelseArkiv.id}`,
       dto
     )
   ).data
 }
 
-export const updateAsAdminEtterlevelseArkiv = async (etterlevelseArkiv: EtterlevelseArkiv) => {
+export const updateAsAdminEtterlevelseArkiv = async (etterlevelseArkiv: IEtterlevelseArkiv) => {
   const dto = etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv)
   return (
-    await axios.put<EtterlevelseArkiv>(
+    await axios.put<IEtterlevelseArkiv>(
       `${env.backendBaseUrl}/etterlevelsearkiv/admin/update/${etterlevelseArkiv.id}`,
       dto
     )
@@ -98,14 +98,14 @@ export const updateAsAdminEtterlevelseArkiv = async (etterlevelseArkiv: Etterlev
 
 export const updateToArkivert = async (failedToArchiveEtterlevelseNr: string[]) => {
   return (
-    await axios.put<PageResponse<EtterlevelseArkiv>>(
+    await axios.put<IPageResponse<IEtterlevelseArkiv>>(
       `${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`,
       { failedToArchiveEtterlevelseNr }
     )
   ).data
 }
 
-function etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv: EtterlevelseArkiv) {
+function etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv: IEtterlevelseArkiv) {
   const dto = {
     ...etterlevelseArkiv,
   } as any
@@ -117,7 +117,7 @@ function etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv: Etterlevelse
 export const useArkiveringByEtterlevelseDokumentasjonId = (
   etterlevelseDokumentasjonId?: string
 ) => {
-  const [data, setData] = useState<EtterlevelseArkiv | undefined>(undefined)
+  const [data, setData] = useState<IEtterlevelseArkiv | undefined>(undefined)
 
   useEffect(() => {
     if (etterlevelseDokumentasjonId !== undefined && etterlevelseDokumentasjonId !== '') {
@@ -137,14 +137,14 @@ export const useArkiveringByEtterlevelseDokumentasjonId = (
   }, [etterlevelseDokumentasjonId])
 
   return [data, setData] as [
-    EtterlevelseArkiv | undefined,
-    (etterlevelseArkiv: EtterlevelseArkiv | undefined) => void,
+    IEtterlevelseArkiv | undefined,
+    (etterlevelseArkiv: IEtterlevelseArkiv | undefined) => void,
   ]
 }
 
 export const arkiveringMapToFormVal = (
-  arkivering: Partial<EtterlevelseArkiv>
-): EtterlevelseArkiv => ({
+  arkivering: Partial<IEtterlevelseArkiv>
+): IEtterlevelseArkiv => ({
   id: arkivering.id || '',
   behandlingId: arkivering.behandlingId || '',
   etterlevelseDokumentasjonId: arkivering.etterlevelseDokumentasjonId || '',

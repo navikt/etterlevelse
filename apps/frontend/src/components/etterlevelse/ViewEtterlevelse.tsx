@@ -2,7 +2,7 @@ import { CheckmarkIcon } from '@navikt/aksel-icons'
 import { BodyShort, Box, Heading, Label, Link, Loader, ReadMore, Tag } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEtterlevelseDokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
-import { Etterlevelse, EtterlevelseStatus, Krav, SuksesskriterieStatus } from '../../constants'
+import { Etterlevelse, EtterlevelseStatus, IKrav, SuksesskriterieStatus } from '../../constants'
 import { Markdown } from '../common/Markdown'
 import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
 
@@ -16,7 +16,7 @@ const getHeaderText = (status: EtterlevelseStatus) => {
       return 'Kravet etterleves av:'
   }
 }
-export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: { etterlevelse: Etterlevelse; loading?: boolean; krav: Krav; modalVersion?: boolean }) => {
+export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: { etterlevelse: Etterlevelse; loading?: boolean; krav: IKrav; modalVersion?: boolean }) => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(etterlevelse.etterlevelseDokumentasjonId)
 
   return (

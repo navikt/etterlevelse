@@ -20,7 +20,7 @@ import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
 import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { PageLayout } from '../components/scaffold/Page'
-import { EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, KravPrioritering, KravQL, PageResponse } from '../constants'
+import { EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, IKravPrioritering, KravQL, IPageResponse } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { ICode, ListName, TemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
@@ -37,7 +37,7 @@ export const DokumentasjonPage = () => {
   const variables = { etterlevelseDokumentasjonId: params.id }
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByEtterlevelseDokumentasjonId(params.id)
-  const [kravPriority, setKravPriority] = useState<KravPrioritering[]>([])
+  const [kravPriority, setKravPriority] = useState<IKravPrioritering[]>([])
 
   useEffect(() => {
     getAllKravPriority().then((priority) => setKravPriority(priority))
@@ -47,7 +47,7 @@ export const DokumentasjonPage = () => {
     data: relevanteData,
     refetch: refetchRelevanteData,
     loading,
-  } = useQuery<{ etterlevelseDokumentasjon: PageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
+  } = useQuery<{ etterlevelseDokumentasjon: IPageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
     variables,
     skip: !params.id,
   })
@@ -59,7 +59,7 @@ export const DokumentasjonPage = () => {
   const filterData = (
     unfilteredData:
       | {
-          etterlevelseDokumentasjon: PageResponse<{
+          etterlevelseDokumentasjon: IPageResponse<{
             stats: EtterlevelseDokumentasjonStats
           }>
         }

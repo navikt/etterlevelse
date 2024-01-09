@@ -3,21 +3,21 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import { PageLayout } from '../components/scaffold/Page'
-import { Krav } from '../constants'
+import { IKrav } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { ListName, codelist } from '../services/Codelist'
 import { handleSort } from '../util/handleTableSort'
 import { kravStatus } from './KravPage'
 
 export const KravTablePage = () => {
-  const [tableContent, setTableContent] = useState<Krav[]>([])
+  const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
 
   let sortedData = tableContent
 
-  const comparator = (a: Krav, b: Krav, orderBy: string) => {
+  const comparator = (a: IKrav, b: IKrav, orderBy: string) => {
     switch (orderBy) {
       case 'kravNummer':
         return a.kravNummer - b.kravNummer

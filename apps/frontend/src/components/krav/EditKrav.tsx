@@ -1,4 +1,4 @@
-import { Krav, KravQL, KravStatus, KravVersjon } from '../../constants'
+import { IKrav, KravQL, KravStatus, IKravVersjon } from '../../constants'
 import { Form, Formik } from 'formik'
 import {
   createKrav,
@@ -28,13 +28,13 @@ import { Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal } fro
 
 type EditKravProps = {
   krav: KravQL
-  close: (k?: Krav) => void
+  close: (k?: IKrav) => void
   formRef: React.Ref<any>
   isOpen: boolean | undefined
   setIsOpen: Function
   newVersion?: boolean
   newKrav?: boolean
-  alleKravVersjoner: KravVersjon[]
+  alleKravVersjoner: IKravVersjon[]
 }
 
 const maxInputWidth = '400px'

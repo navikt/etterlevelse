@@ -10,7 +10,7 @@ import { getBehandling, useSearchBehandling } from '../../../api/BehandlingApi'
 import {
   Behandling,
   EtterlevelseDokumentasjonQL,
-  PageResponse,
+  IPageResponse,
   emptyPage,
 } from '../../../constants'
 import {
@@ -36,7 +36,7 @@ export const BehandlingSok = () => {
     loading: gqlLoading,
     fetchMore,
   } = useQuery<
-    { etterlevelseDokumentasjoner: PageResponse<EtterlevelseDokumentasjonQL> },
+    { etterlevelseDokumentasjoner: IPageResponse<EtterlevelseDokumentasjonQL> },
     Variables
   >(query, {
     variables: {

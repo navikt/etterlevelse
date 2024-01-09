@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Begrep, PageResponse } from '../constants'
+import { Begrep, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
 export const getBegrep = async (begrepId: string) => {
@@ -7,7 +7,7 @@ export const getBegrep = async (begrepId: string) => {
 }
 
 export const searchBegrep = async (begrepSearch: string) => {
-  return (await axios.get<PageResponse<Begrep>>(`${env.backendBaseUrl}/begrep/search/${begrepSearch}`)).data.content
+  return (await axios.get<IPageResponse<Begrep>>(`${env.backendBaseUrl}/begrep/search/${begrepSearch}`)).data.content
 }
 
 export const mapBegrepToOption = (begrep: Begrep) => ({ id: begrep.id, label: begrep.navn + ' - ' + begrep.beskrivelse })

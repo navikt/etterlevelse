@@ -3,7 +3,7 @@ import { faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
 import { createNewTilbakemelding, CreateTilbakemeldingRequest } from '../../../../api/TilbakemeldingApi'
-import { AdresseType, Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingType, Varslingsadresse } from '../../../../constants'
+import { AdresseType, IKrav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingType, Varslingsadresse } from '../../../../constants'
 import { TextAreaField } from '../../../common/Inputs'
 import { AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList } from '../../Edit/KravVarslingsadresserEdit'
 import * as yup from 'yup'
@@ -16,7 +16,7 @@ import { EnvelopeClosedIcon, PersonCircleIcon } from '@navikt/aksel-icons'
 type NyTilbakemeldingModalProps = {
   open?: boolean
   close: (add?: Tilbakemelding) => void
-  krav: Krav
+  krav: IKrav
 }
 
 const getMessageType = (type: AdresseType | undefined) => {
@@ -203,7 +203,7 @@ const createTilbakemeldingSchema: yup.ObjectSchema<CreateTilbakemeldingRequest> 
   varslingsadresse: varslingsadresseSchema.required('Det er påkrevd å ha minst en varslingsadresse'),
 })
 
-const newTilbakemelding = (krav: Krav): Partial<CreateTilbakemeldingRequest> => ({
+const newTilbakemelding = (krav: IKrav): Partial<CreateTilbakemeldingRequest> => ({
   kravNummer: krav.kravNummer,
   kravVersjon: krav.kravVersjon,
   foersteMelding: '',

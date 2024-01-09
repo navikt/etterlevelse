@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { EtterlevelseMetadata, PageResponse } from '../constants'
+import { EtterlevelseMetadata, IPageResponse } from '../constants'
 import { env } from '../util/env'
 import { KravId } from './KravApi'
 
@@ -19,16 +19,16 @@ export const getAllEtterlevelseMetadata = async () => {
 }
 
 export const getEtterlevelseMetadataByPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<PageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (await axios.get<IPageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
 }
 
 export const getEtterlevelseMetadataByKravNummer = async (kravNummer: number | string) => {
-  return (await axios.get<PageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/kravnummer/${kravNummer}`)).data
+  return (await axios.get<IPageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/kravnummer/${kravNummer}`)).data
 }
 
 export const getEtterlevelseMetadataByKravNumberAndVersion = async (kravNummer: number | string, kravVersjon: number | string) => {
   return await axios
-    .get<PageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/kravnummer/${kravNummer}/${kravVersjon}`)
+    .get<IPageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/kravnummer/${kravNummer}/${kravVersjon}`)
     .then((resp) => {
       return resp.data
     })
@@ -43,7 +43,7 @@ export const getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndK
   kravVersjon: number,
 ) => {
   return (
-    await axios.get<PageResponse<EtterlevelseMetadata>>(
+    await axios.get<IPageResponse<EtterlevelseMetadata>>(
       `${env.backendBaseUrl}/etterlevelsemetadata/etterlevelseDokumentasjon/${etterlevelseDokumentasjonId}/${kravNummer}/${kravVersjon}`,
     )
   ).data
