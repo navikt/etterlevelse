@@ -2,6 +2,7 @@ import { gql, useQuery } from '@apollo/client'
 import { QueryHookOptions } from '@apollo/client/react/types/types'
 import { KravQL, PageResponse } from '../constants'
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const kravtableQuery = gql`
   query getKravByFilter(
     $relevans: [String!]
@@ -66,6 +67,7 @@ const kravtableQuery = gql`
     }
   }
 `
+// eslint-enable-next-line @typescript-eslint/ban-types
 
 export type KravFilters = {
   relevans?: string[]
