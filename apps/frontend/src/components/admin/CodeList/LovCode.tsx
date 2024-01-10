@@ -1,10 +1,14 @@
 import { Label, Select, TextField, Textarea } from '@navikt/ds-react'
-import { Block } from 'baseui/block'
 import { Field, FieldProps } from 'formik'
-import { ICodeListFormValues, ILovCodeData, ITemaCodeData, ListName, codelist, lovCodeRelevansToOptions } from '../../../services/Codelist'
-import { theme } from '../../../util'
+import {
+  ICodeListFormValues,
+  ILovCodeData,
+  ITemaCodeData,
+  ListName,
+  codelist,
+  lovCodeRelevansToOptions,
+} from '../../../services/Codelist'
 import { temaBilder } from '../../Images'
-import Button from '../../common/Button'
 import { OptionList } from '../../common/Inputs'
 import { Error } from '../../common/ModalSchema'
 
@@ -31,7 +35,13 @@ export const LovCodeDataForm = () => {
             <>
               <div className="flex w-full mt-4 items-center">
                 <Label className="mr-4 w-1/4">Lov ID:</Label>
-                <TextField value={data.lovId} onChange={(e) => set({ lovId: e.target.value })} className="w-full" label="Lov ID" hideLabel />
+                <TextField
+                  value={data.lovId}
+                  onChange={(e) => set({ lovId: e.target.value })}
+                  className="w-full"
+                  label="Lov ID"
+                  hideLabel
+                />
               </div>
 
               <div className="flex w-full mt-4 items-center">
@@ -46,7 +56,12 @@ export const LovCodeDataForm = () => {
 
               <div className="flex w-full mt-4 items-center">
                 <Label className="mr-4 w-1/4">Tema:</Label>
-                <OptionList listName={ListName.TEMA} value={codelist.getCode(ListName.TEMA, data.tema)?.code} onChange={(val) => set({ tema: val.code })} label={'tema'} />
+                <OptionList
+                  listName={ListName.TEMA}
+                  value={codelist.getCode(ListName.TEMA, data.tema)?.code}
+                  onChange={(val) => set({ tema: val.code })}
+                  label={'tema'}
+                />
               </div>
 
               <div className="flex w-full mt-4 items-center">
@@ -114,7 +129,9 @@ export const TemaCodeDataForm = () => {
                   className="w-full"
                   hideLabel
                   value={data.shortDesciption}
-                  onChange={(str) => set({ shortDesciption: (str.target as HTMLTextAreaElement).value })}
+                  onChange={(str) =>
+                    set({ shortDesciption: (str.target as HTMLTextAreaElement).value })
+                  }
                 />
               </div>
               <Error fieldName="data.shortDesciption" />
@@ -123,22 +140,5 @@ export const TemaCodeDataForm = () => {
         }}
       </Field>
     </div>
-  )
-}
-
-const PreviewImages = (props: { set: (key: string) => void }) => {
-  return (
-    <Block display="flex" flexDirection="column" height="80vh" overflow={'scrollY'}>
-      {Object.keys(temaBilder).map((key) => (
-        <Button key={key} type="button" kind="tertiary" onClick={() => props.set(key)}>
-          <Block marginBottom={theme.sizing.scale600}>
-            <Block>{key}</Block>
-            <Block>
-              <img src={temaBilder[key]} alt={'preview' + key} width={'400px'} />
-            </Block>
-          </Block>
-        </Button>
-      ))}
-    </Block>
   )
 }

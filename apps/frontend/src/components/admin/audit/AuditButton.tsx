@@ -12,11 +12,14 @@ interface IAuditButtonProps extends ButtonProps {
 }
 
 export const AuditButton = (props: IAuditButtonProps) => {
-  const { id, auditId, marginLeft, marginRight, ...restProps } = props
+  const { id, auditId, marginLeft, marginRight, children, ...restProps } = props
   return user.isAdmin() ? (
-    <Link className={`${marginLeft ? 'ml-2' : ''} ${marginRight ? 'mr-2' : ''}`} href={`/admin/audit/${props.id}` + (props.auditId ? `/${props.auditId}` : '')}>
-      {props.children ? (
-        props.children
+    <Link
+      className={`${marginLeft ? 'ml-2' : ''} ${marginRight ? 'mr-2' : ''}`}
+      href={`/admin/audit/${id}` + (auditId ? `/${auditId}` : '')}
+    >
+      {children ? (
+        children
       ) : (
         <>
           <Tooltip content={intl.version}>

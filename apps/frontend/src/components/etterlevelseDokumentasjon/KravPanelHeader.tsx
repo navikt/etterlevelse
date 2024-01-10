@@ -1,6 +1,5 @@
 import { Block } from 'baseui/block'
 import { Option } from 'baseui/select'
-import { Responsive } from 'baseui/theme'
 import { LabelSmall, ParagraphXSmall } from 'baseui/typography'
 import { useNavigate } from 'react-router-dom'
 import { IKrav, KravEtterlevelseData } from '../../constants'
@@ -8,7 +7,10 @@ import { kravRelevansOptions, sortingOptions } from '../../pages/EtterlevelseDok
 import { ettlevColors } from '../../util/theme'
 import CustomizedSelect from '../common/CustomizedSelect'
 
-export const KravPanelHeader = (props: { title: string; kravData: KravEtterlevelseData[] | IKrav[] }) => {
+export const KravPanelHeader = (props: {
+  title: string
+  kravData: KravEtterlevelseData[] | IKrav[]
+}) => {
   let antallSuksesskriterier = 0
 
   props.kravData.forEach((k) => {
@@ -49,8 +51,6 @@ export const KravPanelHeaderWithSorting = (props: {
     antallSuksesskriterier += k.suksesskriterier.length
   })
 
-  const responsiveAlignment: Responsive<any> = ['flex-start', 'flex-start', 'flex-start', 'flex-end', 'flex-end', 'flex-end']
-
   return (
     <Block display="flex" width="100%">
       <Block display="flex" justifyContent="center" alignItems="center">
@@ -86,13 +86,26 @@ export const KravPanelHeaderWithSorting = (props: {
       <Block display="flex" justifyContent="flex-end" flex="1" marginRight="26px">
         <Block>
           <Block display="flex" justifyContent="flex-end" alignItems="baseline" flex="1">
-            <LabelSmall marginRight="4px" $style={{ color: ettlevColors.navOransje, fontSize: '32px', lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>
+            <LabelSmall
+              marginRight="4px"
+              $style={{
+                color: ettlevColors.navOransje,
+                fontSize: '32px',
+                lineHeight: '21px',
+                marginTop: '0px',
+                marginBottom: '0px',
+              }}
+            >
               {props.kravData.length}
             </LabelSmall>
-            <ParagraphXSmall $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>krav</ParagraphXSmall>
+            <ParagraphXSmall $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>
+              krav
+            </ParagraphXSmall>
           </Block>
           <Block display="flex" justifyContent="flex-end" flex="1">
-            <ParagraphXSmall $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>{antallSuksesskriterier} suksesskriterier</ParagraphXSmall>
+            <ParagraphXSmall $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>
+              {antallSuksesskriterier} suksesskriterier
+            </ParagraphXSmall>
           </Block>
         </Block>
       </Block>

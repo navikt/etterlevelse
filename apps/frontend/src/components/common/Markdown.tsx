@@ -72,7 +72,8 @@ export const Markdown = ({
     },
     href: (linkProps: any) => {
       const { children, href, node } = linkProps
-      const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
+      const content =
+        shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
       return (
         <Link href={href} target="_blank" rel="noopener noreferrer">
           {content} (åpnes i ny fane)
@@ -81,7 +82,8 @@ export const Markdown = ({
     },
     a: (linkProps: any) => {
       const { children, href, node } = linkProps
-      const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
+      const content =
+        shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
 
       return (
         <Link href={href} target="_blank" rel="noopener noreferrer">
@@ -90,9 +92,13 @@ export const Markdown = ({
       )
     },
     code: (codeProps: any) => {
-      const { node, inline, className, children, ...props } = codeProps
+      const { className, children, ...props } = codeProps
       return (
-        <code className={className} {...props} style={{ whiteSpace: 'normal', color: fontColor ? fontColor : ettlevColors.green800 }}>
+        <code
+          className={className}
+          {...props}
+          style={{ whiteSpace: 'normal', color: fontColor ? fontColor : ettlevColors.green800 }}
+        >
           {children}
         </code>
       )
@@ -119,12 +125,14 @@ export const Markdown = ({
     },
   }
 
-  const sources: string[] = sourcesOrig || (source ? [source.replaceAll('\n\n', '\n\n &nbsp; \n\n').replaceAll('\n', '\n\n')] : [''])
+  const sources: string[] =
+    sourcesOrig ||
+    (source ? [source.replaceAll('\n\n', '\n\n &nbsp; \n\n').replaceAll('\n', '\n\n')] : [''])
   const htmlPlugins = escapeHtml ? [] : [rehypeRaw]
   return (
     <div>
       <ReactMarkdown components={renderers} remarkPlugins={[remarkGfm]} rehypePlugins={htmlPlugins}>
-         {sources.join(vertical ? '\n\n' : ', ')}  
+        {sources.join(vertical ? '\n\n' : ', ')}
       </ReactMarkdown>
     </div>
   )
@@ -151,6 +159,7 @@ export const MarkdownEditor = (props: MarkdownEditorProps) => {
 
 export const MarkdownInfo = () => (
   <div>
-    Feltet bruker <ExternalLink href={markdownLink}>Markdown</ExternalLink>, se her for mer informasjon om formatet
+    Feltet bruker <ExternalLink href={markdownLink}>Markdown</ExternalLink>, se her for mer
+    informasjon om formatet
   </div>
 )

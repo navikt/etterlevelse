@@ -20,7 +20,7 @@ type RouteLinkProps = {
 } & any
 
 const RouteLink = (props: RouteLinkProps) => {
-  const { hideUnderline, plain, requireLogin, style, fontColor, ariaLabel, ...restprops } = props
+  const { hideUnderline, plain, requireLogin, fontColor, ariaLabel, ...restprops } = props
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -43,7 +43,8 @@ const RouteLink = (props: RouteLinkProps) => {
 
   const mergedStyle = _.merge(customStyle, props.style)
 
-  const href = !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(location, restprops.href)
+  const href =
+    !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(location, restprops.href)
 
   return (
     <CustomizedLink
@@ -73,7 +74,7 @@ type ObjectLinkProps = {
   noNewTabLabel?: boolean
 }
 
-export const urlForObject = (type: NavigableItem | string, id: string, audit?: IAuditItem) => {
+export const urlForObject = (type: NavigableItem | string, id: string) => {
   switch (type) {
     case ObjectType.Krav:
       return `/krav/${id}`
@@ -109,7 +110,7 @@ export const ObjectLink = (props: ObjectLinkProps) => {
     link = props.children
   } else
     link = (
-      <ExternalLink noNewTabLabel={props.noNewTabLabel} href={urlForObject(props.type, props.id, props.audit)}>
+      <ExternalLink noNewTabLabel={props.noNewTabLabel} href={urlForObject(props.type, props.id)}>
         {props.children}
       </ExternalLink>
     )
@@ -140,7 +141,13 @@ export const ExternalLink = ({
   noNewTabLabel?: boolean
 }) => {
   return (
-    <Link className={className} href={href} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer" aria-label={label}>
+    <Link
+      className={className}
+      href={href}
+      target={openOnSamePage ? '_self' : '_blank'}
+      rel="noopener noreferrer"
+      aria-label={label}
+    >
       {children} {!openOnSamePage && !noNewTabLabel && ' (åpnes i ny fane)'}
     </Link>
   )
