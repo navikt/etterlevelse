@@ -20,7 +20,7 @@ const Brand = () => (
   </StyledLink>
 )
 
-const MenuItem = (props: { to: string; text: string; icon: string; setShowMenu: Function }) => (
+const MenuItem = (props: { to: string; text: string; icon: string; setShowMenu: React.Dispatch<React.SetStateAction<boolean>> }) => (
   <Block
     display={'flex'}
     alignItems={'center'}
@@ -88,7 +88,6 @@ const BurgerMenu = () => {
       {showMenu && (
         <Drawer
           isOpen={showMenu}
-          autoFocus
           onClose={() => setShowMenu(false)}
           anchor={ANCHOR.top}
           overrides={{

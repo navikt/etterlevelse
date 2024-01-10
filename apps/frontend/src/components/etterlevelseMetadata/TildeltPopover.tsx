@@ -14,7 +14,7 @@ import { borderColor, borderStyle, borderWidth } from '../common/Style'
 
 type TildeltPopoverProps = {
   etterlevelseMetadata: IEtterlevelseMetadata
-  setEtterlevelseMetadata: Function
+  setEtterlevelseMetadata: React.Dispatch<React.SetStateAction<IEtterlevelseMetadata>>
   icon: IconDefinition
   iconColor?: string
 }
@@ -87,7 +87,6 @@ export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata,
         </Block>
       )}
       returnFocus
-      autoFocus
       showArrow={true}
       placement={PLACEMENT.bottom}
     >
