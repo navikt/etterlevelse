@@ -6,13 +6,13 @@ import React, { useEffect } from 'react'
 import * as yup from 'yup'
 import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
 import {
-  createKrav,
-  getKravByKravNumberAndVersion,
-  kravMapToFormVal,
-  updateKrav,
+    createKrav,
+    getKravByKravNumberAndVersion,
+    kravMapToFormVal,
+    updateKrav,
 } from '../../api/KravApi'
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../../constants'
-import { ListName, codelist } from '../../services/Codelist'
+import { EListName, codelist } from '../../services/Codelist'
 import { user } from '../../services/User'
 import { env } from '../../util/env'
 import ErrorModal from '../ErrorModal'
@@ -26,7 +26,7 @@ import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
 import { RegelverkEdit } from './Edit/RegelverkEdit'
 import { ErrorMessageModal } from './ErrorMessageModal'
 
-type EditKravProps = {
+type TEditKravProps = {
   krav: TKravQL
   close: (k?: IKrav) => void
   formRef: React.Ref<any>
@@ -51,7 +51,7 @@ export const EditKrav = ({
   newVersion,
   newKrav,
   alleKravVersjoner,
-}: EditKravProps) => {
+}: TEditKravProps) => {
   const [stickyHeader, setStickyHeader] = React.useState(false)
   const [stickyFooterStyle, setStickyFooterStyle] = React.useState(true)
   const [showErrorModal, setShowErrorModal] = React.useState(false)
@@ -151,8 +151,8 @@ export const EditKrav = ({
 
   const submit = async (krav: TKravQL) => {
     setIsFormDirty(false)
-    const regelverk = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov.code)
-    const underavdeling = codelist.getCode(ListName.UNDERAVDELING, regelverk?.data?.underavdeling)
+    const regelverk = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
+    const underavdeling = codelist.getCode(EListName.UNDERAVDELING, regelverk?.data?.underavdeling)
 
     const mutatedKrav = {
       ...krav,
@@ -383,7 +383,7 @@ export const EditKrav = ({
                         marginBottom
                         name="relevansFor"
                         label="Legg til relevante kategorier"
-                        listName={ListName.RELEVANS}
+                        listName={EListName.RELEVANS}
                         tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}
                       />
                       {errors.relevansFor && (

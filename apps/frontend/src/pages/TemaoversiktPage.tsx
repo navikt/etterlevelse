@@ -2,7 +2,7 @@ import { BodyLong, Heading, LinkPanel, Loader, Spacer, Tag } from '@navikt/ds-re
 import { useEffect, useState } from 'react'
 import { PageLayout } from '../components/scaffold/Page'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { ListName, TTemaCode, codelist } from '../services/Codelist'
+import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import { useForceUpdate } from '../util/hooks'
 import { useKravCounter } from './TemaPage'
 
@@ -33,7 +33,7 @@ export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
 
   const kravAntall = Object.values(num).reduce((p, c) => p + c, 0)
   const temaListe = codelist
-    .getCodes(ListName.TEMA)
+    .getCodes(EListName.TEMA)
     .sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
 
   return (

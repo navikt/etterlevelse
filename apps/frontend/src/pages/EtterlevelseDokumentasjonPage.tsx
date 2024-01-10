@@ -2,19 +2,19 @@ import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
-import { KravId, KravMedPrioriteringOgEtterlevelseQuery } from '../api/KravApi'
+import { KravMedPrioriteringOgEtterlevelseQuery, TKravId } from '../api/KravApi'
 import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
 import { PageLayout } from '../components/scaffold/Page'
 import {
-  EEtterlevelseStatus,
-  EKravFilterType,
-  EKravStatus,
-  IPageResponse,
-  TKravQL,
+    EEtterlevelseStatus,
+    EKravFilterType,
+    EKravStatus,
+    IPageResponse,
+    TKravQL,
 } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { ListName, TTemaCode, codelist } from '../services/Codelist'
+import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import { sortKraverByPriority } from '../util/sort'
 
 export type TSection = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
@@ -38,7 +38,7 @@ export const EtterlevelseDokumentasjonPage = () => {
     filter: string
   }>()
   const temaData: TTemaCode | undefined = codelist.getCode(
-    ListName.TEMA,
+    EListName.TEMA,
     params.tema?.replace('i', '')
   )
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
@@ -58,7 +58,7 @@ export const EtterlevelseDokumentasjonPage = () => {
   )
 
   const [nextKravToDocument, setNextKravToDocument] = useState<string>('')
-  const [kravId, setKravId] = useState<KravId | undefined>()
+  const [kravId, setKravId] = useState<TKravId | undefined>()
 
   useEffect(() => {
     if (data && !loading) {

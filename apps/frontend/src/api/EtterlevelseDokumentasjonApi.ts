@@ -212,6 +212,6 @@ export const etterlevelseDokumentasjonSchema = () =>
   })
 //graphql
 
-export type EtterlevelseDokumentasjonFilter = {
+export type TEtterlevelseDokumentasjonFilter = {
   relevans?: string[]
 }

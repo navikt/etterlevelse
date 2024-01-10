@@ -285,7 +285,7 @@ export const getMelderInfo = (tilbakemelding: ITilbakemelding) => {
   return { status, ubesvartOgKraveier, rolle, melder, melderOrKraveier, sistMelding, kanSkrive }
 }
 
-type TilbakemeldingSvarProps = {
+type TTilbakemeldingSvarProps = {
   tilbakemelding: ITilbakemelding
   setFocusNummer: (fn: string | undefined) => void
   close: (t: ITilbakemelding) => void
@@ -301,7 +301,7 @@ const TilbakemeldingSvar = ({
   ubesvartOgKraveier,
   remove,
   replace,
-}: TilbakemeldingSvarProps) => {
+}: TTilbakemeldingSvarProps) => {
   const melderInfo = getMelderInfo(tilbakemelding)
   const [response, setResponse] = useState('')
   const [replyRole] = useState(melderInfo.rolle)

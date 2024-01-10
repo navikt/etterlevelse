@@ -220,7 +220,7 @@ export const useMyProductAreas = () => {
   return [data, loading] as [IProductArea[], boolean]
 }
 
-export type SearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]
+export type TSearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]
 
 export const usePersonSearch = async (searchParam: string) => {
   if (searchParam && searchParam.replace(/ /g, '').length > 2) {

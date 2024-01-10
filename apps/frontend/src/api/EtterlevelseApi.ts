@@ -2,15 +2,15 @@ import axios from 'axios'
 import queryString from 'query-string'
 import { useEffect, useState } from 'react'
 import {
-  EEtterlevelseStatus,
-  ESuksesskriterieStatus,
-  IEtterlevelse,
-  IKrav,
-  IPageResponse,
-  emptyPage,
+    EEtterlevelseStatus,
+    ESuksesskriterieStatus,
+    IEtterlevelse,
+    IKrav,
+    IPageResponse,
+    emptyPage,
 } from '../constants'
 import { env } from '../util/env'
-import { KravId } from './KravApi'
+import { TKravId } from './KravApi'
 
 export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) => {
   return (
@@ -103,7 +103,7 @@ export const useEtterlevelsePage = (pageSize: number) => {
   ]
 }
 
-export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: KravId) => {
+export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: TKravId) => {
   const isCreateNew = id === 'ny'
   const [data, setData] = useState<IEtterlevelse | undefined>(
     isCreateNew

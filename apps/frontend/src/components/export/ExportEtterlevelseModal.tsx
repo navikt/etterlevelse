@@ -4,16 +4,16 @@ import { Block } from 'baseui/block'
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { ParagraphMedium } from 'baseui/typography'
 import { useState } from 'react'
-import { ListName, codelist } from '../../services/Codelist'
+import { EListName, codelist } from '../../services/Codelist'
 import { env } from '../../util/env'
 import { ettlevColors } from '../../util/theme'
 import { borderColor, borderRadius, borderStyle, borderWidth, marginZero } from '../common/Style'
 
-type ExportEtterlevelseModalProps = {
+type TExportEtterlevelseModalProps = {
   etterlevelseDokumentasjonId: string
 }
 
-export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => {
+export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) => {
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -44,7 +44,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                 <option key="" value="">
                   Velg tema
                 </option>
-                {codelist.getParsedOptions(ListName.TEMA).map((opt) => (
+                {codelist.getParsedOptions(EListName.TEMA).map((opt) => (
                   <option key={`option_${opt.value}`} value={opt.value}>
                     {opt.label}
                   </option>

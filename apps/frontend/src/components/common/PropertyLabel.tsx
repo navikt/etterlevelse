@@ -5,7 +5,7 @@ import { Markdown } from './Markdown'
 
 const empty = (arg: any) => !arg || (Array.isArray(arg) && !arg.length)
 
-type LabelProps = {
+type TLabelProps = {
   title: string
   hide?: boolean
   header?: boolean
@@ -14,7 +14,7 @@ type LabelProps = {
   fullWidth?: boolean
 } & TOr<{ children: React.ReactNode }, { markdown: string | string[]; vertical?: boolean }>
 
-export const CustomLabel = (props: LabelProps) => {
+export const CustomLabel = (props: TLabelProps) => {
   if (props.hide || (empty(props.children) && empty(props.markdown))) return null
   return (
     <DataText label={props.title} header={props.header} labelWidth={props.labelWidth}>
@@ -32,7 +32,7 @@ export const CustomLabel = (props: LabelProps) => {
   )
 }
 
-export const LabelAboveContent = (props: LabelProps) => {
+export const LabelAboveContent = (props: TLabelProps) => {
   if (props.hide || (empty(props.children) && empty(props.markdown))) return null
   return (
     <DataText

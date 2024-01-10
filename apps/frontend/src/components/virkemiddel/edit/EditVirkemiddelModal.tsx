@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import * as yup from 'yup'
 import { createVirkemiddel, updateVirkemiddel, virkemiddelMapToFormVal } from '../../../api/VirkemiddelApi'
 import { IVirkemiddel } from '../../../constants'
-import { ListName, codelist } from '../../../services/Codelist'
+import { EListName, codelist } from '../../../services/Codelist'
 import { intl } from '../../../util/intl/intl'
 import { ettlevColors } from '../../../util/theme'
 import Button from '../../common/Button'
@@ -21,7 +21,7 @@ import { ErrorMessageModal } from '../../krav/ErrorMessageModal'
 
 const errorMessage = 'Feltet er påkrevd'
 
-type EditVirkemiddelModalProps = {
+type TEditVirkemiddelModalProps = {
   isOpen: boolean
   setIsOpen: (b: boolean) => void
   virkemiddel?: IVirkemiddel
@@ -30,8 +30,8 @@ type EditVirkemiddelModalProps = {
   refetchData?: () => void
 }
 
-export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
-  const virkemiddelTypeOptions = codelist.getParsedOptions(ListName.VIRKEMIDDELTYPE)
+export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
+  const virkemiddelTypeOptions = codelist.getParsedOptions(EListName.VIRKEMIDDELTYPE)
   const [valgtVirkemiddeltype, setValgtVirkemiddeltype] = useState<Value>([])
 
   useEffect(() => {

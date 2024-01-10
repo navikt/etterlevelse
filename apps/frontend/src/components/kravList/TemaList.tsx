@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { getAllKrav } from '../../api/KravApi'
 import { getAllKravPriority } from '../../api/KravPriorityApi'
 import { EKravStatus, IKrav } from '../../constants'
-import { ListName, codelist } from '../../services/Codelist'
+import { EListName, codelist } from '../../services/Codelist'
 import { sortKraverByPriority } from '../../util/sort'
 import StatusView from '../common/StatusTag'
 import { KravPanelHeader } from '../etterlevelseDokumentasjon/KravPanelHeader'
@@ -40,7 +40,7 @@ export const TemaList = () => {
   return (
     <>
       <Accordion>
-        {codelist.getCodes(ListName.TEMA).map((t) => {
+        {codelist.getCodes(EListName.TEMA).map((t) => {
           const activeKraver = allActiveKrav?.filter((k) => {
             return k.regelverk.map((r) => r.lov.data && r.lov.data.tema).includes(t.code)
           })

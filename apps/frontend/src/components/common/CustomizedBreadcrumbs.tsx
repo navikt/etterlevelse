@@ -12,9 +12,9 @@ interface IProps {
   fontColor?: string
 }
 
-type CustomizedProps = IProps
+type TCustomizedProps = IProps
 
-const CustomizedBreadcrumbs = (props: CustomizedProps) => {
+const CustomizedBreadcrumbs = (props: TCustomizedProps) => {
   const getName = (pathName: string) => (pathName.length > 25 ? pathName.substring(0, 25) + '...' : pathName)
   const linkColor = /^\/(lov|etterlevelse)\//.test(window.location.pathname) ? 'text-white' : 'text-text-default'
 

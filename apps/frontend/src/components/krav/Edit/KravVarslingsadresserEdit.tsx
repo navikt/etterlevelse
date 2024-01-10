@@ -216,13 +216,13 @@ export const VarslingsadresserTagList = ({
   )
 }
 
-type AddVarslingsadresseProps = {
+type TAddVarslingsadresseProps = {
   add: (v: IVarslingsadresse) => void
   added?: IVarslingsadresse[]
   close?: () => void
 }
 
-export const SlackChannelSearch = ({ add, close }: AddVarslingsadresseProps) => {
+export const SlackChannelSearch = ({ add, close }: TAddVarslingsadresseProps) => {
   return (
     <AsyncSelect
       aria-label="Søk etter slack-kanal"
@@ -254,7 +254,7 @@ export const SlackChannelSearch = ({ add, close }: AddVarslingsadresseProps) => 
   )
 }
 
-export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
+export const SlackUserSearch = ({ add, close }: TAddVarslingsadresseProps) => {
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
 
@@ -329,7 +329,7 @@ const emailValidator = yup
   .email()
   .matches(/.+@nav.no/i)
 
-export const AddEmail = ({ added, add: doAdd, close }: AddVarslingsadresseProps) => {
+export const AddEmail = ({ added, add: doAdd, close }: TAddVarslingsadresseProps) => {
   const [val, setVal] = useState('')
   const [error, setError] = useState('')
 

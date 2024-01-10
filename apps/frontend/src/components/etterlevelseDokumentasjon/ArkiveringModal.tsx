@@ -7,7 +7,7 @@ import { createEtterlevelseArkiv, updateEtterlevelseArkiv } from '../../api/Arki
 import { EEtterlevelseArkivStatus, IEtterlevelseArkiv } from '../../constants'
 import { user } from '../../services/User'
 
-type ArkiveringModalProps = {
+type TArkiveringModalProps = {
   arkivModal: boolean
   setArkivModal: React.Dispatch<React.SetStateAction<boolean>>
   etterlevelseDokumentasjonId: string
@@ -21,7 +21,7 @@ export const ArkiveringModal = ({
   etterlevelseDokumentasjonId,
   etterlevelseArkiv,
   setEtterlevelseArkiv,
-}: ArkiveringModalProps) => {
+}: TArkiveringModalProps) => {
   const [isArchivingCancelled, setIsArchivingCancelled] = useState<boolean>(false)
 
   const getStatustext = (etterlevelseArkivStatus: EEtterlevelseArkivStatus) => {

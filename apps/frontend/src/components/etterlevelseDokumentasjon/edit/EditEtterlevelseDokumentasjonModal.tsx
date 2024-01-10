@@ -6,22 +6,22 @@ import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { searchBehandlingOptions } from '../../../api/BehandlingApi'
 import {
-  createEtterlevelseDokumentasjon,
-  etterlevelseDokumentasjonMapToFormVal,
-  etterlevelseDokumentasjonSchema,
-  updateEtterlevelseDokumentasjon,
+    createEtterlevelseDokumentasjon,
+    etterlevelseDokumentasjonMapToFormVal,
+    etterlevelseDokumentasjonSchema,
+    updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { useSearchTeamOptions } from '../../../api/TeamApi'
 import { IBehandling, ITeam, IVirkemiddel, TEtterlevelseDokumentasjonQL } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
-import { ICode, ListName, codelist } from '../../../services/Codelist'
+import { EListName, ICode, codelist } from '../../../services/Codelist'
 import { BoolField, FieldWrapper, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { Error } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 
-type EditEtterlevelseDokumentasjonModalProps = {
+type TEditEtterlevelseDokumentasjonModalProps = {
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
   setEtterlevelseDokumentasjon?: (e: TEtterlevelseDokumentasjonQL) => void
   isEditButton?: boolean
@@ -29,10 +29,10 @@ type EditEtterlevelseDokumentasjonModalProps = {
 }
 
 export const EditEtterlevelseDokumentasjonModal = (
-  props: EditEtterlevelseDokumentasjonModalProps
+  props: TEditEtterlevelseDokumentasjonModalProps
 ) => {
   const { etterlevelseDokumentasjon, setEtterlevelseDokumentasjon, isEditButton, variant } = props
-  const relevansOptions = codelist.getParsedOptions(ListName.RELEVANS)
+  const relevansOptions = codelist.getParsedOptions(EListName.RELEVANS)
   const [selectedFilter, setSelectedFilter] = useState<number[]>(relevansOptions.map((r, i) => i))
   const [isEtterlevelseDokumentasjonerModalOpen, setIsEtterlevelseDokumntasjonerModalOpen] =
     useState<boolean>(false)
@@ -223,7 +223,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                           p.form.setFieldValue(
                             'irrelevansFor',
                             irrelevansListe.map((il) =>
-                              codelist.getCode(ListName.RELEVANS, il.value)
+                              codelist.getCode(EListName.RELEVANS, il.value)
                             )
                           )
                           // selected.forEach((value) => {

@@ -73,73 +73,73 @@ import paragrafIcon from '../resources/icons/paragraf-ikon.svg'
 import paragrafIconBgSmall from '../resources/icons/paragrafIconBg-small.svg'
 import saveArchiveIcon from '../resources/icons/save-archive-icon.svg'
 import warningAlert from '../resources/icons/warning-alert.svg'
-import { codelist, ListName, TLovCode, TTemaCode } from '../services/Codelist'
+import { codelist, EListName, TLovCode, TTemaCode } from '../services/Codelist'
 
 import { theme } from '../util'
 
 export {
-  angleIcon,
-  arkCheckIcon,
-  arkPennIcon,
-  arrowRightIcon,
-  avatarPlaceholder,
-  bamseIcon,
-  barChart,
-  bokEtterlevelseIcon,
-  checkboxChecked,
-  checkboxUnchecked,
-  checkboxUncheckedHover,
-  checkmarkIcon,
-  chevronLeft,
-  circlePencilIcon,
-  clearSearchIcon,
-  crossIcon,
-  deleteIcon,
-  deleteIconGreen600,
-  editIcon,
-  editSecondaryIcon,
-  ellipse80,
-  etterlevelseLogoWhiteIcon,
-  exitIcon,
-  externalLinkIcon,
-  eyeSlash,
-  filterIcon,
-  gavelIcon,
-  gavelIconBg,
-  grafIcon,
-  grafIconBg,
-  grafIconBgSmall,
-  handWithLeaf,
-  husIcon,
-  illustration,
-  informationIcon,
-  lawBook,
-  logo,
-  mailboxPoppingIcon,
-  navChevronDownIcon,
-  navChevronRightIcon,
-  navImage,
-  notesIcon,
-  notesWithContentIcon,
-  outlineInfoIcon,
-  page2Icon,
-  pageIcon,
-  paperPenIconBg,
-  paperPenIconBgSmall,
-  paragrafIcon,
-  paragrafIconBg,
-  paragrafIconBgSmall,
-  pencilFill,
-  plusIcon,
-  questionmarkFocusIcon,
-  questionmarkHoverIcon,
-  questionmarkIcon,
-  sadFolderIcon,
-  saveArchiveIcon,
-  searchIcon,
-  sokButtonIcon,
-  stepper,
-  warningAlert,
+    angleIcon,
+    arkCheckIcon,
+    arkPennIcon,
+    arrowRightIcon,
+    avatarPlaceholder,
+    bamseIcon,
+    barChart,
+    bokEtterlevelseIcon,
+    checkboxChecked,
+    checkboxUnchecked,
+    checkboxUncheckedHover,
+    checkmarkIcon,
+    chevronLeft,
+    circlePencilIcon,
+    clearSearchIcon,
+    crossIcon,
+    deleteIcon,
+    deleteIconGreen600,
+    editIcon,
+    editSecondaryIcon,
+    ellipse80,
+    etterlevelseLogoWhiteIcon,
+    exitIcon,
+    externalLinkIcon,
+    eyeSlash,
+    filterIcon,
+    gavelIcon,
+    gavelIconBg,
+    grafIcon,
+    grafIconBg,
+    grafIconBgSmall,
+    handWithLeaf,
+    husIcon,
+    illustration,
+    informationIcon,
+    lawBook,
+    logo,
+    mailboxPoppingIcon,
+    navChevronDownIcon,
+    navChevronRightIcon,
+    navImage,
+    notesIcon,
+    notesWithContentIcon,
+    outlineInfoIcon,
+    page2Icon,
+    pageIcon,
+    paperPenIconBg,
+    paperPenIconBgSmall,
+    paragrafIcon,
+    paragrafIconBg,
+    paragrafIconBgSmall,
+    pencilFill,
+    plusIcon,
+    questionmarkFocusIcon,
+    questionmarkHoverIcon,
+    questionmarkIcon,
+    sadFolderIcon,
+    saveArchiveIcon,
+    searchIcon,
+    sokButtonIcon,
+    stepper,
+    warningAlert
 }
 
 export const temaBilder: { [id: string]: string } = {
@@ -159,12 +159,12 @@ export const temaBilder: { [id: string]: string } = {
 const bildeForLov = (code: TLovCode) => bildeForTema(code.data?.tema)
 
 const bildeForTema = (code?: string) => {
-  const temaCode = codelist.getCode(ListName.TEMA, code)
+  const temaCode = codelist.getCode(EListName.TEMA, code)
   const imageCode = temaCode?.data?.image
   return imageCode ? temaBilder[imageCode] || bookImage : bookImage
 }
 
-export const LovBilde = (props: { code: TLovCode } & BildeProps) => (
+export const LovBilde = (props: { code: TLovCode } & TBildeProps) => (
   <Bilde
     {...props}
     src={bildeForLov(props.code)}
@@ -172,7 +172,7 @@ export const LovBilde = (props: { code: TLovCode } & BildeProps) => (
   />
 )
 
-export const TemaBilde = (props: { code: TTemaCode } & BildeProps) => (
+export const TemaBilde = (props: { code: TTemaCode } & TBildeProps) => (
   <Bilde
     {...props}
     src={bildeForTema(props.code.code)}
@@ -180,13 +180,13 @@ export const TemaBilde = (props: { code: TTemaCode } & BildeProps) => (
   />
 )
 
-type BildeProps = {
+type TBildeProps = {
   width?: string
   height?: string
   ellipse?: boolean
 }
 
-const Bilde = (props: { src: string; alt: string } & BildeProps) => (
+const Bilde = (props: { src: string; alt: string } & TBildeProps) => (
   <img
     src={props.src}
     width={props.width}

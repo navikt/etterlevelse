@@ -194,7 +194,7 @@ const UserInfoView = () => {
   )
 }
 
-type MenuItem = {
+type TMenuItem = {
   label: React.ReactNode
   href?: string
   disabled?: boolean
@@ -202,7 +202,7 @@ type MenuItem = {
 }
 
 const Menu = (props: {
-  pages: MenuItem[][]
+  pages: TMenuItem[][]
   title: React.ReactNode
   icon?: React.ReactNode
   kind?: 'secondary' | 'tertiary'
@@ -213,9 +213,9 @@ const Menu = (props: {
     ? props.pages
         .filter((p) => p.length)
         .reduce((previousValue, currentValue) => [
-          ...((previousValue as MenuItem[]) || []),
+          ...((previousValue as TMenuItem[]) || []),
           { label: <Dropdown.Menu.Divider /> },
-          ...(currentValue as MenuItem[]),
+          ...(currentValue as TMenuItem[]),
         ])
     : []
 

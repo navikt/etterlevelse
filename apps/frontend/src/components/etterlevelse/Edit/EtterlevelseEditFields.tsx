@@ -21,7 +21,7 @@ import { ampli, userRoleEventProp } from '../../../services/Amplitude'
 import { DateField } from '../../common/Inputs'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
 
-type EditProps = {
+type TEditProps = {
   krav: TKravQL
   etterlevelse: IEtterlevelse
   submit: (etterlevelse: IEtterlevelse) => Promise<void>
@@ -46,7 +46,7 @@ export const EtterlevelseEditFields = ({
   editedEtterlevelse,
   tidligereEtterlevelser,
   kravFilter,
-}: EditProps) => {
+}: TEditProps) => {
   const [etterlevelseStatus] = React.useState<string>(
     editedEtterlevelse
       ? editedEtterlevelse.status

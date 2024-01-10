@@ -1,7 +1,7 @@
 import { Link } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import { IRegelverk } from '../constants'
-import { codelist, ListName } from '../services/Codelist'
+import { codelist, EListName } from '../services/Codelist'
 import { env } from '../util/env'
 
 // unsure how to refactor code
@@ -27,15 +27,15 @@ export const LovView = (props: { regelverk?: IRegelverk; openOnSamePage?: boolea
   const { spesifisering, lov } = props.regelverk
   const lovCode = lov?.code
 
-  const lovDisplay = lov && codelist.getShortname(ListName.LOV, lovCode)
+  const lovDisplay = lov && codelist.getShortname(EListName.LOV, lovCode)
 
-  const descriptionText = codelist.valid(ListName.LOV, lovCode) ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering, props.openOnSamePage) : spesifisering
+  const descriptionText = codelist.valid(EListName.LOV, lovCode) ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering, props.openOnSamePage) : spesifisering
 
   return <span>{descriptionText}</span>
 }
 
 const findLovId = (nationalLaw: string) => {
-  const lov = codelist.getCode(ListName.LOV, nationalLaw)
+  const lov = codelist.getCode(EListName.LOV, nationalLaw)
   return lov?.data?.lovId || lov?.description || ''
 }
 

@@ -69,7 +69,7 @@ const kravtableQuery = gql`
 `
 // eslint-enable-next-line @typescript-eslint/ban-types
 
-export type KravFilters = {
+export type TKravFilters = {
   relevans?: string[]
   nummer?: number
   etterlevelseDokumentasjonId?: string
@@ -84,10 +84,10 @@ export type KravFilters = {
 }
 
 export const useKravFilter = (
-  variables: KravFilters,
-  options?: QueryHookOptions<any, KravFilters>
+  variables: TKravFilters,
+  options?: QueryHookOptions<any, TKravFilters>
 ) => {
-  return useQuery<{ krav: IPageResponse<TKravQL> }, KravFilters>(kravtableQuery, {
+  return useQuery<{ krav: IPageResponse<TKravQL> }, TKravFilters>(kravtableQuery, {
     ...(options || {}),
     variables,
   })

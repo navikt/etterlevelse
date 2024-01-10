@@ -8,7 +8,7 @@ import { ettlevColors } from '../../../util/theme'
 import { borderColor, borderStyle, borderWidth } from '../Style'
 import './customStyle.css'
 
-type TextEditorProps = {
+type TTextEditorProps = {
   initialValue: string
   setValue: (v: string) => void
   shortenLinks?: boolean
@@ -21,7 +21,7 @@ type TextEditorProps = {
   setIsFormDirty?: (v: boolean) => void
 }
 
-const TextEditor = (props: TextEditorProps) => {
+const TextEditor = (props: TTextEditorProps) => {
   const [val, setVal] = useDebouncedState(props.initialValue, 500, props.setValue)
 
   const CustomDraftToMarkdown = (data: RawDraftContentState) => {

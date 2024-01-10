@@ -7,7 +7,7 @@ import { IEtterlevelseMetadata } from '../../constants'
 import { useDebouncedState } from '../../util/hooks'
 import TextEditor from '../common/TextEditor/TextEditor'
 
-type EditNotatfeltProps = {
+type TEditNotatfeltProps = {
   isOpen: boolean
   setIsNotatfeltOpen: React.Dispatch<React.SetStateAction<boolean>>
   etterlevelseMetadata: IEtterlevelseMetadata
@@ -15,7 +15,7 @@ type EditNotatfeltProps = {
   formRef?: React.RefObject<any>
 }
 
-export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata, setEtterlevelseMetadata, formRef }: EditNotatfeltProps) => {
+export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata, setEtterlevelseMetadata, formRef }: TEditNotatfeltProps) => {
   const debounceDelay = 500
   const [notater, setNotater] = useDebouncedState(etterlevelseMetadata.notater || '', debounceDelay)
 

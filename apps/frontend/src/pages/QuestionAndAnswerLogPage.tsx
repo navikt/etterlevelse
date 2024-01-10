@@ -18,7 +18,7 @@ import { getMelderInfo } from '../components/krav/tilbakemelding/Tilbakemelding'
 import { PageLayout } from '../components/scaffold/Page'
 import { ETilbakemeldingMeldingStatus, IKrav, IPageResponse, ITilbakemelding } from '../constants'
 import { ampli } from '../services/Amplitude'
-import { ListName, codelist } from '../services/Codelist'
+import { EListName, codelist } from '../services/Codelist'
 import { handleSort } from '../util/handleTableSort'
 
 type TSporsmaalOgSvarKrav = {
@@ -182,7 +182,7 @@ export const QuestionAndAnswerLogPage = () => {
                         </Link>
                       </Table.DataCell>
                       <Table.DataCell>
-                        {codelist.getCode(ListName.TEMA, message.tema)?.shortName}
+                        {codelist.getCode(EListName.TEMA, message.tema)?.shortName}
                       </Table.DataCell>
                       <Table.DataCell>{message.melderNavn}</Table.DataCell>
                       <Table.DataCell>

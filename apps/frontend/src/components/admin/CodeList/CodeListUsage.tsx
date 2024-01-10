@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { replaceCodelistUsage } from '../../../api/CodelistApi'
 import { ICodeUsage, codelist } from '../../../services/Codelist'
 import { ObjectLink } from '../../common/RouteLink'
-import { ObjectType } from '../audit/AuditTypes'
+import { EObjectType } from '../audit/AuditTypes'
 
 const UsageTable = (props: { usage: ICodeUsage }) => {
   const { usage } = props
@@ -33,7 +33,7 @@ const UsageTable = (props: { usage: ICodeUsage }) => {
               {krav && (
                 <Table.DataCell>
                   {kr && (
-                    <ObjectLink id={kr.id} type={ObjectType.Krav} withHistory={true}>
+                    <ObjectLink id={kr.id} type={EObjectType.Krav} withHistory={true}>
                       {kr.number} {kr.name}
                     </ObjectLink>
                   )}
@@ -42,7 +42,7 @@ const UsageTable = (props: { usage: ICodeUsage }) => {
               {etterlevelseDokumentasjoner && (
                 <Table.DataCell>
                   {ed && (
-                    <ObjectLink id={ed.id} type={ObjectType.EtterlevelseDokumentasjon} withHistory={true}>
+                    <ObjectLink id={ed.id} type={EObjectType.EtterlevelseDokumentasjon} withHistory={true}>
                       {ed.number} {ed.name}
                     </ObjectLink>
                   )}
@@ -51,7 +51,7 @@ const UsageTable = (props: { usage: ICodeUsage }) => {
               {codelist && (
                 <Table.DataCell>
                   {cl && (
-                    <ObjectLink id={cl.list} type={ObjectType.Codelist} withHistory={true}>
+                    <ObjectLink id={cl.list} type={EObjectType.Codelist} withHistory={true}>
                       {cl.list} - {cl.code}
                     </ObjectLink>
                   )}

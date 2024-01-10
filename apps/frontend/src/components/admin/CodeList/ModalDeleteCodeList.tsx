@@ -1,7 +1,7 @@
 import { BodyShort, Button, Modal } from '@navikt/ds-react'
 import { ICodeListFormValues } from '../../../services/Codelist'
 
-type ModalDeleteProps = {
+type TModalDeleteProps = {
   title: string
   initialValues: ICodeListFormValues
   isOpen: boolean
@@ -10,7 +10,7 @@ type ModalDeleteProps = {
   onClose: () => void
 }
 
-const DeleteCodeListModal = ({ title, initialValues, isOpen, errorOnDelete, submit, onClose }: ModalDeleteProps) => {
+const DeleteCodeListModal = ({ title, initialValues, isOpen, errorOnDelete, submit, onClose }: TModalDeleteProps) => {
   return (
     <Modal onClose={onClose} open={isOpen} header={{ heading: title }}>
       <Modal.Body>

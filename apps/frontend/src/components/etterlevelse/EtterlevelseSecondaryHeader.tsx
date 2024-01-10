@@ -2,7 +2,7 @@ import { Block } from 'baseui/block'
 import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { KravId } from '../../api/KravApi'
+import { TKravId } from '../../api/KravApi'
 import { IEtterlevelseDokumentasjon } from '../../constants'
 import { TSection } from '../../pages/EtterlevelseDokumentasjonPage'
 import { getTemaMainHeader } from '../../pages/TemaPage'
@@ -19,7 +19,7 @@ type EtterlevelseSecondaryHeaderProps = {
   setNavigatePath: (state: string) => void
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon | undefined
   temaData: TTemaCode | undefined
-  kravId: KravId | undefined
+  kravId: TKravId | undefined
   lovListe: TLovCode[]
 }
 export const EtterlevelseSecondaryHeader = ({

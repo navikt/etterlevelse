@@ -5,7 +5,7 @@ import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import { PageLayout } from '../components/scaffold/Page'
 import { IKrav } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { ListName, codelist } from '../services/Codelist'
+import { EListName, codelist } from '../services/Codelist'
 import { handleSort } from '../util/handleTableSort'
 import { kravStatus } from './KravPage'
 
@@ -26,7 +26,7 @@ export const KravTablePage = () => {
       case 'avdeling':
         return (a.underavdeling?.shortName || '').localeCompare(b.underavdeling?.shortName || '')
       case 'tema':
-        return (codelist.getCode(ListName.TEMA, a.tema)?.shortName || '').localeCompare(codelist.getCode(ListName.TEMA, b.tema)?.shortName || '')
+        return (codelist.getCode(EListName.TEMA, a.tema)?.shortName || '').localeCompare(codelist.getCode(EListName.TEMA, b.tema)?.shortName || '')
       case 'status':
         return (a.status || '').localeCompare(b.status || '')
       case 'changeStamp':
@@ -98,7 +98,7 @@ export const KravTablePage = () => {
                     <Table.DataCell>{krav.underavdeling && krav.underavdeling.shortName}</Table.DataCell>
                     <Table.DataCell>
                       {' '}
-                      <Link href={`/tema/${krav.tema}`}>{codelist.getCode(ListName.TEMA, krav.tema)?.shortName}</Link>
+                      <Link href={`/tema/${krav.tema}`}>{codelist.getCode(EListName.TEMA, krav.tema)?.shortName}</Link>
                     </Table.DataCell>
                     <Table.DataCell>{kravStatus(krav.status)}</Table.DataCell>
                     <Table.DataCell className="w-[10%] text-end">{moment(krav.changeStamp.lastModifiedDate).format('ll')}</Table.DataCell>

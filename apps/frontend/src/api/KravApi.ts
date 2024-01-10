@@ -118,10 +118,10 @@ export const useKravPage = (pageSize: number) => {
   ]
 }
 
-export type KravIdParams = TOr<{ id?: string }, { kravNummer: string; kravVersjon: string }>
-export type KravId = TOr<{ id?: string }, { kravNummer: number; kravVersjon: number }>
+export type TKravIdParams = TOr<{ id?: string }, { kravNummer: string; kravVersjon: string }>
+export type TKravId = TOr<{ id?: string }, { kravNummer: number; kravVersjon: number }>
 
-export const useKrav = (params: KravId | KravIdParams, onlyLoadOnce?: boolean) => {
+export const useKrav = (params: TKravId | TKravIdParams, onlyLoadOnce?: boolean) => {
   const isCreateNew = params.id === 'ny'
   const [data, setData] = useState<IKrav | undefined>(
     isCreateNew ? kravMapToFormVal({}) : undefined

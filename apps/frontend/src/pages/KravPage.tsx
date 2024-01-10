@@ -6,8 +6,8 @@ import { FormikProps } from 'formik'
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
-  KravIdParams,
-  KravId as KravIdQueryVariables,
+  TKravId as KravIdQueryVariables,
+  TKravIdParams,
   deleteKrav,
   getKravByKravNummer,
   kravMapToFormVal,
@@ -25,7 +25,7 @@ import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemeldi
 import { PageLayout } from '../components/scaffold/Page'
 import { EKravStatus, IKrav, IKravId, IKravVersjon, TKravQL } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { ListName, TTemaCode, codelist } from '../services/Codelist'
+import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 import { useLocationState, useQueryParam } from '../util/hooks'
 
@@ -50,7 +50,7 @@ export const kravStatus = (status: EKravStatus | string) => {
 type TSection = 'krav' | 'etterlevelser' | 'tilbakemeldinger'
 type TLocationState = { tab: TSection; avdelingOpen?: string }
 
-const getQueryVariableFromParams = (params: Readonly<Partial<KravIdParams>>) => {
+const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) => {
   if (params.id) {
     return { id: params.id }
   } else if (params.kravNummer && params.kravVersjon) {
@@ -64,7 +64,7 @@ const getQueryVariableFromParams = (params: Readonly<Partial<KravIdParams>>) => 
 }
 
 export const KravPage = () => {
-  const params = useParams<KravIdParams>()
+  const params = useParams<TKravIdParams>()
   const [krav, setKrav] = useState<TKravQL | undefined>()
   const [kravId, setKravId] = useState<IKravId>()
   const {
@@ -109,9 +109,9 @@ export const KravPage = () => {
           }
         }
       })
-      const lovData = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov?.code)
+      const lovData = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov?.code)
       if (lovData?.data) {
-        setKravTema(codelist.getCode(ListName.TEMA, lovData.data.tema))
+        setKravTema(codelist.getCode(EListName.TEMA, lovData.data.tema))
       }
     }
   }, [krav])

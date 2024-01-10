@@ -39,7 +39,7 @@ import {
   VarslingsadresserTagList,
 } from '../../Edit/KravVarslingsadresserEdit'
 
-type NyTilbakemeldingModalProps = {
+type TNyTilbakemeldingModalProps = {
   open?: boolean
   close: (add?: ITilbakemelding) => void
   krav: IKrav
@@ -56,7 +56,7 @@ const getMessageType = (type: EAdresseType | undefined) => {
   }
 }
 
-export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingModalProps) => {
+export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingModalProps) => {
   const [error, setError] = useState()
   const [adresseType, setAdresseType] = useState<EAdresseType>()
   const [showNotification, setShowNotification] = useState<EAdresseType>()

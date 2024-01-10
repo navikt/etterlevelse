@@ -10,13 +10,13 @@ import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
 import { IEtterlevelse, IKrav } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { ListName, TTemaCode, codelist } from '../services/Codelist'
+import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import {
-  ettlevColors,
-  maxPageWidth,
-  pageWidth,
-  responsivePaddingSmall,
-  responsiveWidthSmall,
+    ettlevColors,
+    maxPageWidth,
+    pageWidth,
+    responsivePaddingSmall,
+    responsiveWidthSmall,
 } from '../util/theme'
 import { kravNumView } from './KravPage'
 
@@ -41,9 +41,9 @@ export const EtterlevelsePage = () => {
         (res) => {
           if (res) {
             setKrav(res)
-            const lovData = codelist.getCode(ListName.LOV, res.regelverk[0]?.lov?.code)
+            const lovData = codelist.getCode(EListName.LOV, res.regelverk[0]?.lov?.code)
             if (lovData?.data) {
-              setKravTema(codelist.getCode(ListName.TEMA, lovData.data.tema))
+              setKravTema(codelist.getCode(EListName.TEMA, lovData.data.tema))
             }
           }
         }

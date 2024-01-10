@@ -1,7 +1,7 @@
 import { Heading, Label } from '@navikt/ds-react'
 import { ReactNode } from 'react'
 
-type DataTextProps = {
+type TDataTextProps = {
   label?: string
   text?: false | string | string[]
   children?: ReactNode
@@ -12,7 +12,7 @@ type DataTextProps = {
   fullWidth?: boolean
 }
 
-const DataText = (props: DataTextProps) => {
+const DataText = (props: TDataTextProps) => {
   if (props.hideComponent) return null
 
   let labelWidth = 'w-48'

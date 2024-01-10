@@ -1,12 +1,12 @@
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { ICodeListFormValues, ListName, LovCodeRelevans, codeListSchema } from '../../../services/Codelist'
+import { EListName, ELovCodeRelevans, ICodeListFormValues, codeListSchema } from '../../../services/Codelist'
 import { MarkdownInfo } from '../../common/Markdown'
 import { Error } from '../../common/ModalSchema'
 import { LovCodeDataForm } from './LovCode'
 
 import { BodyShort, Button, Label, Modal, TextField, Textarea } from '@navikt/ds-react'
 
-type ModalCreateProps = {
+type TModalCreateProps = {
   title: string
   list: string
   isOpen: boolean
@@ -15,7 +15,7 @@ type ModalCreateProps = {
   onClose: () => void
 }
 
-const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, submit }: ModalCreateProps) => {
+const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, submit }: TModalCreateProps) => {
   return (
     <Modal className="w-full max-w-2xl px-8" open={isOpen} onClose={() => onClose()} header={{ heading: title }}>
       <div>
@@ -31,7 +31,7 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
               shortName: '',
               description: '',
               data: {
-                relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL,
+                relevantFor: ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL,
               },
             } as ICodeListFormValues
           }
@@ -57,9 +57,9 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
                   <Field name="description" render={({ field }: FieldProps) => <Textarea {...field} className="w-full" label="Description" minRows={10} hideLabel />} />
                 </div>
                 <Error fieldName="description" />
-                {(list === ListName.LOV || list === ListName.TEMA) && <MarkdownInfo />}
+                {(list === EListName.LOV || list === EListName.TEMA) && <MarkdownInfo />}
 
-                {list === ListName.LOV && <LovCodeDataForm />}
+                {list === EListName.LOV && <LovCodeDataForm />}
                 {/* {list === ListName.TEMA && <TemaCodeDataForm />} */}
               </Modal.Body>
               <Modal.Footer>

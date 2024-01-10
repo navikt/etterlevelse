@@ -2,14 +2,14 @@ import { Link } from '@navikt/ds-react'
 import _ from 'lodash'
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { ListName } from '../../services/Codelist'
+import { EListName } from '../../services/Codelist'
 import { user } from '../../services/User'
 import { loginUrl } from '../Header'
 import { AuditButton } from '../admin/audit/AuditButton'
-import { IAuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
+import { EObjectType, IAuditItem, TNavigableItem } from '../admin/audit/AuditTypes'
 import CustomizedLink from './CustomizedLink'
 
-type RouteLinkProps = {
+type TRouteLinkProps = {
   href?: string
   hideUnderline?: boolean
   plain?: boolean
@@ -19,7 +19,7 @@ type RouteLinkProps = {
   openinnewtab: boolean
 } & any
 
-const RouteLink = (props: RouteLinkProps) => {
+const RouteLink = (props: TRouteLinkProps) => {
   const { hideUnderline, plain, requireLogin, fontColor, ariaLabel, ...restprops } = props
   const navigate = useNavigate()
   const location = useLocation()
@@ -61,9 +61,9 @@ const RouteLink = (props: RouteLinkProps) => {
 
 export default RouteLink
 
-type ObjectLinkProps = {
+type TObjectLinkProps = {
   id?: string
-  type: NavigableItem
+  type: TNavigableItem
   audit?: IAuditItem
   withHistory?: boolean
   children?: any
@@ -74,35 +74,35 @@ type ObjectLinkProps = {
   noNewTabLabel?: boolean
 }
 
-export const urlForObject = (type: NavigableItem | string, id: string) => {
+export const urlForObject = (type: TNavigableItem | string, id: string) => {
   switch (type) {
-    case ObjectType.Krav:
+    case EObjectType.Krav:
       return `/krav/${id}`
-    case ObjectType.Etterlevelse:
+    case EObjectType.Etterlevelse:
       return `/etterlevelse/${id}`
-    case ObjectType.EtterlevelseDokumentasjon:
+    case EObjectType.EtterlevelseDokumentasjon:
       return `/dokumentasjon/${id}`
-    case ObjectType.BehandlingData:
-    case ObjectType.Behandling:
+    case EObjectType.BehandlingData:
+    case EObjectType.Behandling:
       return `/behandling/${id}`
-    case ListName.RELEVANS:
+    case EListName.RELEVANS:
       return `/relevans/${id}`
-    case ListName.UNDERAVDELING:
+    case EListName.UNDERAVDELING:
       return `/underavdeling/${id}`
-    case ListName.LOV:
+    case EListName.LOV:
       return `/lov/${id}` // will probably never be used
-    case ListName.TEMA:
+    case EListName.TEMA:
       return `/tema/${id}`
-    case ObjectType.Codelist:
+    case EObjectType.Codelist:
       return `/admin/codelist/${id}`
-    case ObjectType.Melding:
+    case EObjectType.Melding:
       return '/admin/varsel'
   }
   console.warn("couldn't find object type" + type)
   return ''
 }
 
-export const ObjectLink = (props: ObjectLinkProps) => {
+export const ObjectLink = (props: TObjectLinkProps) => {
   if (!props.id) return null
   let link
 

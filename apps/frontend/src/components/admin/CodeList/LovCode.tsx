@@ -1,12 +1,12 @@
 import { Label, Select, TextField, Textarea } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
 import {
-  ICodeListFormValues,
-  ILovCodeData,
-  ITemaCodeData,
-  ListName,
-  codelist,
-  lovCodeRelevansToOptions,
+    EListName,
+    ICodeListFormValues,
+    ILovCodeData,
+    ITemaCodeData,
+    codelist,
+    lovCodeRelevansToOptions,
 } from '../../../services/Codelist'
 import { temaBilder } from '../../Images'
 import { OptionList } from '../../common/Inputs'
@@ -47,8 +47,8 @@ export const LovCodeDataForm = () => {
               <div className="flex w-full mt-4 items-center">
                 <Label className="mr-1.5 w-1/4">Underavdeling:</Label>
                 <OptionList
-                  listName={ListName.UNDERAVDELING}
-                  value={codelist.getCode(ListName.UNDERAVDELING, data.underavdeling)?.code}
+                  listName={EListName.UNDERAVDELING}
+                  value={codelist.getCode(EListName.UNDERAVDELING, data.underavdeling)?.code}
                   onChange={(val) => set({ underavdeling: val.code })}
                   label={'underavdeling'}
                 />
@@ -57,8 +57,8 @@ export const LovCodeDataForm = () => {
               <div className="flex w-full mt-4 items-center">
                 <Label className="mr-4 w-1/4">Tema:</Label>
                 <OptionList
-                  listName={ListName.TEMA}
-                  value={codelist.getCode(ListName.TEMA, data.tema)?.code}
+                  listName={EListName.TEMA}
+                  value={codelist.getCode(EListName.TEMA, data.tema)?.code}
                   onChange={(val) => set({ tema: val.code })}
                   label={'tema'}
                 />

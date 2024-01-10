@@ -1,11 +1,11 @@
 import { BodyShort, Button, Label, Modal, TextField, Textarea } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
-import { ICodeListFormValues, ListName, codeListSchema } from '../../../services/Codelist'
+import { EListName, ICodeListFormValues, codeListSchema } from '../../../services/Codelist'
 import { MarkdownInfo } from '../../common/Markdown'
 import { Error } from '../../common/ModalSchema'
 import { LovCodeDataForm } from './LovCode'
 
-type ModalUpdateProps = {
+type TModalUpdateProps = {
   title: string
   initialValues: ICodeListFormValues
   isOpen: boolean
@@ -14,7 +14,7 @@ type ModalUpdateProps = {
   submit: (process: ICodeListFormValues) => Promise<void>
 }
 
-const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onClose, submit }: ModalUpdateProps) => {
+const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onClose, submit }: TModalUpdateProps) => {
   return (
     <Modal className="px-8 w-full max-w-2xl" onClose={onClose} open={isOpen} header={{ heading: title }}>
       <div>
@@ -40,9 +40,9 @@ const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onCl
                   <Field name="description">{({ field }: FieldProps) => <Textarea label="description" hideLabel className="w-full" {...field} minRows={10} />}</Field>
                 </div>
                 <Error fieldName="description" />
-                {(initialValues.list === ListName.LOV || initialValues.list === ListName.TEMA) && <MarkdownInfo />}
+                {(initialValues.list === EListName.LOV || initialValues.list === EListName.TEMA) && <MarkdownInfo />}
 
-                {initialValues.list === ListName.LOV && <LovCodeDataForm />}
+                {initialValues.list === EListName.LOV && <LovCodeDataForm />}
                 {/* {initialValues.list === ListName.TEMA && <TemaCodeDataForm />} */}
               </Modal.Body>
               <Modal.Footer>

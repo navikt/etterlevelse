@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { IEtterlevelseMetadata, IPageResponse } from '../constants'
 import { env } from '../util/env'
-import { KravId } from './KravApi'
+import { TKravId } from './KravApi'
 
 export const getAllEtterlevelseMetadata = async () => {
   const PAGE_SIZE = 100
@@ -76,7 +76,7 @@ function etterlevelseMetadataToEtterlevelseMetadataDto(etterlevelseMetadata: IEt
   return dto
 }
 
-export const useEtterlevelseMetadata = (id?: string, behandlingId?: string, kravId?: KravId) => {
+export const useEtterlevelseMetadata = (id?: string, behandlingId?: string, kravId?: TKravId) => {
   const isCreateNew = id === 'ny'
   const [data, setData] = useState<IEtterlevelseMetadata | undefined>(
     isCreateNew

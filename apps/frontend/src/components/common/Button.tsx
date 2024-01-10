@@ -13,10 +13,10 @@ import { ettlevColors } from '../../util/theme'
 import { ExternalLink } from './RouteLink'
 import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
 
-export type ButtonKind = (typeof KIND)[keyof typeof KIND] | 'outline' | 'underline-hover'
+export type TButtonKind = (typeof KIND)[keyof typeof KIND] | 'outline' | 'underline-hover'
 
 interface IButtonProps {
-  kind?: ButtonKind
+  kind?: TButtonKind
   type?: 'submit' | 'reset' | 'button'
   size?: (typeof SIZE)[keyof typeof SIZE]
   shape?: (typeof SHAPE)[keyof typeof SHAPE]
@@ -168,7 +168,7 @@ export const ExternalButton = ({
   underlineHover?: boolean
   size?: (typeof SIZE)[keyof typeof SIZE]
   openOnSamePage?: boolean
-  kind?: ButtonKind
+  kind?: TButtonKind
 }) => {
   const underlineStyle = underlineHover ? 'underline-hover' : 'outline'
   const actualSize = size || 'compact'

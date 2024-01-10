@@ -27,7 +27,7 @@ import {
   mapEtterlevelseMetadataToFormValue,
   updateEtterlevelseMetadata,
 } from '../../api/EtterlevelseMetadataApi'
-import { KravId, getKravByKravNummer } from '../../api/KravApi'
+import { TKravId, getKravByKravNummer } from '../../api/KravApi'
 import {
   EEtterlevelseStatus,
   EKravFilterType,
@@ -55,10 +55,10 @@ import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import EtterlevelseViewFields from './EtterlevelseViewFields'
 
-type EttlevelseKravViewProps = {
+type TEttlevelseKravViewProps = {
   temaName?: string
   etterlevelse: IEtterlevelse
-  kravId: KravId
+  kravId: TKravId
   formRef?: React.Ref<any>
   etterlevelseDokumentasjonTitle?: string
   etterlevelseDokumentasjonId?: string
@@ -85,8 +85,8 @@ export const EtterlevelseKravView = ({
   tidligereEtterlevelser,
   kravFilter,
   nextKravToDocument,
-}: EttlevelseKravViewProps) => {
-  const { data, loading } = useQuery<{ kravById: TKravQL }, KravId>(query, {
+}: TEttlevelseKravViewProps) => {
+  const { data, loading } = useQuery<{ kravById: TKravQL }, TKravId>(query, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
     fetchPolicy: 'no-cache',

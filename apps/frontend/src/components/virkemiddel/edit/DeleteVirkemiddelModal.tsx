@@ -7,14 +7,14 @@ import { deleteVirkemiddel } from '../../../api/VirkemiddelApi'
 import { IVirkemiddel } from '../../../constants'
 import { buttonContentStyle } from '../../common/Button'
 
-type ModalDeleteProps = {
+type TModalDeleteProps = {
   isOpen: boolean
   setIsOpen: (b: boolean) => void
   virkemiddel?: IVirkemiddel
   refetchData: () => void
 }
 
-const DeleteVirkemiddeltModal = ({ isOpen, setIsOpen, virkemiddel, refetchData }: ModalDeleteProps) => {
+const DeleteVirkemiddeltModal = ({ isOpen, setIsOpen, virkemiddel, refetchData }: TModalDeleteProps) => {
   const [errorOnDelete, setErrorOnDelete] = useState('')
 
   const submit = async (id?: string) => {

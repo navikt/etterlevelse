@@ -5,9 +5,9 @@ import { useKravFilter } from '../../api/KravGraphQLApi'
 import { EKravListFilter, EKravStatus, TKravQL, TOption, emptyPage } from '../../constants'
 import { KravPanels, sortKrav } from '../../pages/KravListPage'
 import { kravStatus } from '../../pages/KravPage'
-import { ListName, codelist } from '../../services/Codelist'
+import { EListName, codelist } from '../../services/Codelist'
 
-type KravFilter = {
+type TKravFilter = {
   status: TOption[]
   relevans: TOption[]
   tema: TOption[]
@@ -17,15 +17,15 @@ type KravFilter = {
 export const AllKrav = () => {
   const pageSize = 20
   const [sorting] = useState('sist')
-  const [filter, setFilter] = useState<KravFilter>({
+  const [filter, setFilter] = useState<TKravFilter>({
     status: [{ label: 'Alle statuser', id: 'alle' }],
     relevans: [{ label: 'Alle relevans', id: 'alle' }],
     tema: [{ label: 'Alle tema', id: 'alle' }],
     lover: [{ label: 'Alle lover', id: 'alle' }],
   })
 
-  const relevans = codelist.getCodes(ListName.RELEVANS)
-  const lover = codelist.getCodes(ListName.LOV)
+  const relevans = codelist.getCodes(EListName.RELEVANS)
+  const lover = codelist.getCodes(EListName.LOV)
 
   const {
     data,

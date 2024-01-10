@@ -2,13 +2,13 @@ import { Modal, ModalProps, SIZE } from 'baseui/modal'
 import _ from 'lodash'
 import { maxPageWidth } from '../../util/theme'
 
-type CustomModalProps = {
+type TCustomModalProps = {
   closeIconColor?: string
   closeIconHoverColor?: string
   disableCloseIcon?: boolean
 }
 
-const CuztomizedModal = (props: CustomModalProps & ModalProps) => {
+const CuztomizedModal = (props: TCustomModalProps & ModalProps) => {
   const { closeIconColor, closeIconHoverColor, disableCloseIcon, ...otherProps } = props
 
   const customOverrides = {

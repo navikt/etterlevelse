@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getMeldingByType, mapMeldingToFormValue } from '../api/MeldingApi'
 import { AuditRecentTable } from '../components/admin/audit/AuditRecentTable'
-import { ObjectType } from '../components/admin/audit/AuditTypes'
+import { EObjectType } from '../components/admin/audit/AuditTypes'
 import { PageLayout } from '../components/scaffold/Page'
 import EditMelding from '../components/varslinger/EditMelding'
 import EditOmEtterlevelse from '../components/varslinger/EditOmEtterlevelse'
@@ -94,7 +94,7 @@ const VarselTabs = () => {
         />
       </Tabs.List>
       <Tabs.Panel value="utsendtMelding">
-        <AuditRecentTable show={true} tableType={ObjectType.Melding} />
+        <AuditRecentTable show={true} tableType={EObjectType.Melding} />
       </Tabs.Panel>
       <Tabs.Panel value={EMeldingType.SYSTEM}>
         <EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} />

@@ -5,22 +5,22 @@ import { FieldArray } from 'formik'
 import { useState } from 'react'
 import Select, { CSSObjectWithLabel } from 'react-select'
 import { IRegelverk } from '../../../constants'
-import { codelist, ListName } from '../../../services/Codelist'
+import { EListName, codelist } from '../../../services/Codelist'
 import { theme } from '../../../util'
+import { LovView } from '../../Lov'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { RenderTagList } from '../../common/TagList'
-import { LovView } from '../../Lov'
 
-type RegelverkEditProps = {
+type TRegelverkEditProps = {
   forVirkemiddel?: boolean
 }
 
-export const RegelverkEdit = ({ forVirkemiddel }: RegelverkEditProps) => {
+export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
   const [lov, setLov] = useState({ value: '', label: '', description: '' })
   const [text, setText] = useState('')
 
-  const regelverkObject = () => ({ lov: codelist.getCode(ListName.LOV, lov.value as string)!, spesifisering: text })
+  const regelverkObject = () => ({ lov: codelist.getCode(EListName.LOV, lov.value as string)!, spesifisering: text })
 
   const options = codelist.getParsedOptionsForLov(forVirkemiddel)
 

@@ -7,20 +7,20 @@ import { LabelSmall, ParagraphXSmall } from 'baseui/typography'
 import * as _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { KravFilters } from '../api/KravGraphQLApi'
+import { TKravFilters } from '../api/KravGraphQLApi'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { lovdataBase } from '../components/Lov'
 import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
-import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
+import { PanelLinkCard, TPanelLinkCardOverrides } from '../components/common/PanelLink'
 import { ExternalLink, urlForObject } from '../components/common/RouteLink'
 import { SimpleTag } from '../components/common/SimpleTag'
 import { margin } from '../components/common/Style'
 import { PageLayout } from '../components/scaffold/Page'
 import { IKrav, IPageResponse, TKravQL } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { ListName, TLovCode, TTemaCode, codelist } from '../services/Codelist'
+import { EListName, TLovCode, TTemaCode, codelist } from '../services/Codelist'
 import { theme } from '../util'
 import { sortKraverByPriority } from '../util/sort'
 import { ettlevColors } from '../util/theme'
@@ -29,7 +29,7 @@ import { kravNumView } from './KravPage'
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
 
-  const code = codelist.getCode(ListName.TEMA, tema)
+  const code = codelist.getCode(EListName.TEMA, tema)
   if (!code) return <>`&apos;`invalid code`&apos;`</>
   return <TemaView tema={code} />
 }
@@ -52,7 +52,7 @@ export const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?:
         </Heading>
         {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code, index) => (
           <BodyShort key={code + '_' + index} size="large" spacing>
-            {codelist.getCode(ListName.UNDERAVDELING, code)?.shortName}
+            {codelist.getCode(EListName.UNDERAVDELING, code)?.shortName}
           </BodyShort>
         ))}
         <Heading level="2" size="small" spacing>
@@ -161,7 +161,7 @@ export const TemaCard = ({
     ) || []
   useEffect(() => setNum(tema.code, krav.length), [krav.length])
 
-  const overrides: PanelLinkCardOverrides = {
+  const overrides: TPanelLinkCardOverrides = {
     Root: {
       Block: {
         style: {
@@ -197,7 +197,7 @@ export const TemaCard = ({
       overrides={overrides}
       maxHeight={cardMaxheight}
       verticalMargin={theme.sizing.scale400}
-      href={loading ? undefined : urlForObject(ListName.TEMA, tema.code)}
+      href={loading ? undefined : urlForObject(EListName.TEMA, tema.code)}
       tittel={tema.shortName + (loading ? ' - Laster...' : '')}
       ComplimentaryContent={
         <Block paddingLeft="16px" paddingBottom="16px">
@@ -249,7 +249,7 @@ export const useKravCounter = (
   variables: { lover: string[] },
   options?: QueryHookOptions<any, { lover?: string[] }>
 ) => {
-  return useQuery<{ krav: IPageResponse<TKravQL> }, KravFilters>(query, {
+  return useQuery<{ krav: IPageResponse<TKravQL> }, TKravFilters>(query, {
     ...(options || {}),
     variables,
   })

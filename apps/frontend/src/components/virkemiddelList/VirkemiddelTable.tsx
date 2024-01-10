@@ -6,7 +6,7 @@ import { SIZE as ButtonSize } from 'baseui/button/constants'
 import moment from 'moment'
 import { useState } from 'react'
 import { IVirkemiddel } from '../../constants'
-import { ColumnCompares } from '../../util/hooks'
+import { TColumnCompares } from '../../util/hooks'
 import { LovView } from '../Lov'
 import Button from '../common/Button'
 import { SkeletonPanel } from '../common/LoadingSkeleton'
@@ -14,19 +14,19 @@ import { Cell, Row, Table } from '../common/Table'
 import DeleteVirkemiddeltModal from '../virkemiddel/edit/DeleteVirkemiddelModal'
 import { EditVirkemiddelModal } from '../virkemiddel/edit/EditVirkemiddelModal'
 
-type VirkmiddelTableProps = {
+type TVirkmiddelTableProps = {
   virkemidler: IVirkemiddel[]
   loading: boolean
   refetchData: () => void
 }
 
-const virkemiddelSorting: ColumnCompares<IVirkemiddel> = {
+const virkemiddelSorting: TColumnCompares<IVirkemiddel> = {
   navn: (a, b) => (a.navn || '').localeCompare(b.navn || ''),
   virkemiddelType: (a, b) => (a.virkemiddelType?.shortName || '').localeCompare(b.virkemiddelType?.shortName || ''),
   changeStamp: (a, b) => (a.changeStamp.lastModifiedDate || '').localeCompare(b.changeStamp.lastModifiedDate || ''),
 }
 
-export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: VirkmiddelTableProps) => {
+export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: TVirkmiddelTableProps) => {
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<IVirkemiddel>()
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)

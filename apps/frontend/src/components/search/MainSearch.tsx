@@ -11,25 +11,25 @@ import {
 import { getKravByKravNumberAndVersion, searchKrav, searchKravByNumber } from '../../api/KravApi'
 import { EKravStatus, IBehandling, IEtterlevelseDokumentasjon, IKrav } from '../../constants'
 import { kravName } from '../../pages/KravPage'
-import { ObjectType } from '../admin/audit/AuditTypes'
+import { EObjectType } from '../admin/audit/AuditTypes'
 
-type SearchItem = { value: string; label: string; tag: string; url: string }
+type TSearchItem = { value: string; label: string; tag: string; url: string }
 
 const kravMap = (t: IKrav) => ({
   value: t.id,
   label: kravName(t),
-  tag: ObjectType.Krav as string,
+  tag: EObjectType.Krav as string,
   url: `krav/${t.id}`,
 })
 
-const behandlingMap = (t: IBehandling): SearchItem => ({
+const behandlingMap = (t: IBehandling): TSearchItem => ({
   value: t.id,
   label: behandlingName(t),
-  tag: ObjectType.Behandling,
+  tag: EObjectType.Behandling,
   url: `dokumentasjoner/behandlingsok?behandlingId=${t.id}`,
 })
 
-const EtterlevelseDokumentasjonMap = (t: IEtterlevelseDokumentasjon): SearchItem => ({
+const EtterlevelseDokumentasjonMap = (t: IEtterlevelseDokumentasjon): TSearchItem => ({
   value: t.id,
   label: etterlevelseDokumentasjonName(t),
   tag: 'Dokumentasjon',
@@ -37,8 +37,8 @@ const EtterlevelseDokumentasjonMap = (t: IEtterlevelseDokumentasjon): SearchItem
 })
 
 const kravSearch = async (searchParam: string) => {
-  let result: SearchItem[] = []
-  const add = (items: SearchItem[]) => {
+  let result: TSearchItem[] = []
+  const add = (items: TSearchItem[]) => {
     result = [...result, ...items]
     result = result.filter(
       (item, index, self) =>
@@ -80,7 +80,7 @@ const kravSearch = async (searchParam: string) => {
         {
           value: searchResult[0].id,
           label: kravName(searchResult[0]),
-          tag: ObjectType.Krav,
+          tag: EObjectType.Krav,
           url: `krav/${searchResult[0].id}`,
         },
       ]
@@ -99,7 +99,7 @@ const useMainSearch = async (searchParam: string) => {
     ])
     return [
       {
-        label: ObjectType.Krav,
+        label: EObjectType.Krav,
         options: result[0],
       },
       {
@@ -107,7 +107,7 @@ const useMainSearch = async (searchParam: string) => {
         options: result[1],
       },
       {
-        label: ObjectType.Behandling,
+        label: EObjectType.Behandling,
         options: result[2],
       },
     ]
@@ -115,7 +115,7 @@ const useMainSearch = async (searchParam: string) => {
   return []
 }
 
-const Option = (properties: OptionProps<SearchItem>) => {
+const Option = (properties: OptionProps<TSearchItem>) => {
   return (
     <components.Option {...properties}>
       <div className="flex justify-between">
@@ -125,7 +125,7 @@ const Option = (properties: OptionProps<SearchItem>) => {
   )
 }
 
-const DropdownIndicator = (props: DropdownIndicatorProps<SearchItem>) => {
+const DropdownIndicator = (props: DropdownIndicatorProps<TSearchItem>) => {
   return (
     <components.DropdownIndicator {...props}>
       <MagnifyingGlassIcon title="Søk" aria-label="Søk" />

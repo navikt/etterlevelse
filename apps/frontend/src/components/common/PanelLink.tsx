@@ -196,7 +196,7 @@ export const PanelExternalLink = ({
   )
 }
 
-export type PanelLinkCardOverrides = {
+export type TPanelLinkCardOverrides = {
   Root?: BlockOverrides
   Header?: BlockOverrides
   Content?: BlockOverrides
@@ -238,7 +238,7 @@ export const PanelLinkCard = ({
   width?: Responsive<Scale>
   maxWidth?: string
   verticalMargin?: string
-  overrides?: PanelLinkCardOverrides
+  overrides?: TPanelLinkCardOverrides
   flexContent?: boolean
   hideArrow?: boolean
   marginRight?: Responsive<Scale>

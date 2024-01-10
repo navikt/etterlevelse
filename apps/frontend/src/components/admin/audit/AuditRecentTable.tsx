@@ -9,7 +9,7 @@ import { ampli, userRoleEventProp } from '../../../services/Amplitude'
 import { intl } from '../../../util/intl/intl'
 import { AuditButton } from './AuditButton'
 import { AuditActionIcon } from './AuditComponents'
-import { IAuditItem, ObjectType } from './AuditTypes'
+import { EObjectType, IAuditItem } from './AuditTypes'
 
 const CodeView = ({ audit }: { audit: IAuditItem }) => {
   const [modalOpen, setModalOpen] = useState(false)
@@ -29,10 +29,10 @@ const CodeView = ({ audit }: { audit: IAuditItem }) => {
   )
 }
 
-export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType }) => {
+export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType }) => {
   const [audits, setAudits] = useState<IPageResponse<IAuditItem>>(emptyPage)
   const [limit, setLimit] = useState(20)
-  const [table, setTable] = useState<ObjectType | undefined>(props.tableType)
+  const [table, setTable] = useState<EObjectType | undefined>(props.tableType)
   const [page, setPage] = useState(1)
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
     return null
   }
 
-  const tableOptions = Object.keys(ObjectType).map((ot) => ({ id: ot, label: ot }))
+  const tableOptions = Object.keys(EObjectType).map((ot) => ({ id: ot, label: ot }))
 
   return (
     <div>
@@ -86,9 +86,9 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
               hideLabel
               onChange={(e) => {
                 if (e.target.value === 'Codelist') {
-                  setTable(e.target.value.toUpperCase() as ObjectType)
+                  setTable(e.target.value.toUpperCase() as EObjectType)
                 } else {
-                  setTable(e.target.value as ObjectType)
+                  setTable(e.target.value as EObjectType)
                 }
               }}
             >

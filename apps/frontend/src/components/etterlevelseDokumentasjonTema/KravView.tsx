@@ -1,10 +1,10 @@
 import { Loader } from '@navikt/ds-react'
 import React, { useEffect, useState } from 'react'
 import {
-  getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
-  mapEtterlevelseToFormValue,
+    getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
+    mapEtterlevelseToFormValue,
 } from '../../api/EtterlevelseApi'
-import { KravId, getKravByKravNumberAndVersion } from '../../api/KravApi'
+import { TKravId, getKravByKravNumberAndVersion } from '../../api/KravApi'
 import { EKravFilterType, IBehandling, IEtterlevelse, ITeam } from '../../constants'
 import { TSection } from '../../pages/EtterlevelseDokumentasjonPage'
 import { EtterlevelseKravView } from '../etterlevelse/EtterlevelseKravView'
@@ -12,7 +12,7 @@ import { toKravId } from './common/utils'
 
 export const KravView = (props: {
   temaName?: string
-  kravId: KravId
+  kravId: TKravId
   etterlevelseDokumentasjonTitle: string
   etterlevelseDokumentasjonId: string
   etterlevelseNummer: number

@@ -3,19 +3,19 @@ import { BodyLong, Button, SortState, Table, Tooltip } from '@navikt/ds-react'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { deleteCodelist, getCodelistUsage, updateCodelist } from '../../../api/CodelistApi'
-import { ICode, ICodeListFormValues, ICodeUsage, LovCodeRelevans } from '../../../services/Codelist'
+import { ELovCodeRelevans, ICode, ICodeListFormValues, ICodeUsage } from '../../../services/Codelist'
 import { handleSort } from '../../../util/handleTableSort'
 import { AuditButton } from '../audit/AuditButton'
 import { Usage } from './CodeListUsage'
 import DeleteCodeListModal from './ModalDeleteCodeList'
 import UpdateCodeListModal from './ModalUpdateCodeList'
 
-type TableCodelistProps = {
+type TTableCodelistProps = {
   tableData: ICode[]
   refresh: () => void
 }
 
-const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
+const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
   const [selectedCode, setSelectedCode] = React.useState<ICode>()
   const [showUsage, setShowUsage] = React.useState(false)
   const [showEditModal, setShowEditModal] = React.useState(false)
@@ -159,8 +159,8 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
             data: selectedCode.data
               ? selectedCode.data.relevantFor
                 ? selectedCode.data
-                : { ...selectedCode.data, relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL }
-              : { relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL },
+                : { ...selectedCode.data, relevantFor: ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL }
+              : { relevantFor: ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL },
           }}
           isOpen={showEditModal}
           onClose={() => {

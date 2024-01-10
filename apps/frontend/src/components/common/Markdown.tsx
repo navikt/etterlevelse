@@ -138,7 +138,7 @@ export const Markdown = ({
   )
 }
 
-type MarkdownEditorProps = {
+type TMarkdownEditorProps = {
   initialValue: string
   setValue: (v: string) => void
   shortenLinks?: boolean
@@ -146,7 +146,7 @@ type MarkdownEditorProps = {
   height?: string
 }
 
-export const MarkdownEditor = (props: MarkdownEditorProps) => {
+export const MarkdownEditor = (props: TMarkdownEditorProps) => {
   return (
     <MdEditor
       style={{ height: props.height || '500px' }}

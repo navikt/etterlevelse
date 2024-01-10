@@ -1,14 +1,14 @@
 import {
-  Button,
-  DatePicker,
-  Detail,
-  Label,
-  Radio,
-  RadioGroup,
-  Select,
-  TextField,
-  Textarea,
-  useDatepicker,
+    Button,
+    DatePicker,
+    Detail,
+    Label,
+    Radio,
+    RadioGroup,
+    Select,
+    TextField,
+    Textarea,
+    useDatepicker,
 } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import { FormControl } from 'baseui/form-control'
@@ -16,9 +16,9 @@ import { Value } from 'baseui/select'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
 import * as _ from 'lodash'
 import React, { ReactNode, useState } from 'react'
-import { SearchType } from '../../api/TeamApi'
+import { TSearchType } from '../../api/TeamApi'
 import { TOr } from '../../constants'
-import { ListName, codelist } from '../../services/Codelist'
+import { EListName, codelist } from '../../services/Codelist'
 import CustomizedSelect from '../common/CustomizedSelect'
 import LabelWithTooltip from '../common/LabelWithTooltip'
 import { MarkdownInfo } from './Markdown'
@@ -302,7 +302,7 @@ export const OptionField = (
     clearable?: boolean
     caption?: ReactNode
     tooltip?: string
-  } & TOr<{ options: Value }, { listName: ListName }>
+  } & TOr<{ options: Value }, { listName: EListName }>
 ) => {
   return (
     <FieldWrapper>
@@ -328,7 +328,7 @@ export const OptionField = (
 export const OptionList = (
   props: { label: string; value?: string; onChange: (val?: any) => void } & TOr<
     { options: Value },
-    { listName: ListName }
+    { listName: EListName }
   >
 ) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
@@ -359,7 +359,7 @@ export const OptionList = (
 export const MultiSearchField = (props: {
   label: string
   name: string
-  search: SearchType
+  search: TSearchType
   itemLabel?: (id: string) => string
 }) => {
   const [results, setSearch, loading] = props.search
@@ -407,7 +407,7 @@ export const MultiSearchField = (props: {
 export const SearchField = (props: {
   label: string
   name: string
-  search: SearchType
+  search: TSearchType
   itemLabel?: (id: string) => string
 }) => {
   const [results, setSearch, loading] = props.search

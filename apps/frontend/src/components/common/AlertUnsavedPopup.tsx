@@ -4,7 +4,7 @@ import Button from './Button'
 import CustomizedModal from './CustomizedModal'
 import { borderRadius, marginAll } from './Style'
 
-type AlertUnsavedPopupProps = {
+type TAlertUnsavedPopupProps = {
   isModalOpen: boolean
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
   onClose: () => void
@@ -16,7 +16,7 @@ export const AlertUnsavedPopup = ({
   setIsModalOpen,
   onClose,
   onSubmit,
-}: AlertUnsavedPopupProps) => {
+}: TAlertUnsavedPopupProps) => {
   return (
     <CustomizedModal
       onClose={() => setIsModalOpen(false)}

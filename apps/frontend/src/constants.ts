@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { ICode, TLovCode } from './services/Codelist'
-import { Group } from './services/User'
+import { EGroup } from './services/User'
 
 export type TRecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[]
@@ -119,7 +119,7 @@ export enum ESuksesskriterieStatus {
 }
 export interface IUserInfo {
   loggedIn: boolean
-  groups: Group[]
+  groups: EGroup[]
   ident?: string
   name?: string
   email?: string

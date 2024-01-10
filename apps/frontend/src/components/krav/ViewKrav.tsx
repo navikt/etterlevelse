@@ -2,7 +2,7 @@ import { BodyShort, Label } from '@navikt/ds-react'
 import moment from 'moment'
 import React from 'react'
 import { EAdresseType, IBegrep, IKrav, IKravVersjon, TKravQL } from '../../constants'
-import { ListName } from '../../services/Codelist'
+import { EListName } from '../../services/Codelist'
 import { user } from '../../services/User'
 import { slackLink, slackUserLink, termUrl } from '../../util/config'
 import { LovViewList } from '../Lov'
@@ -92,7 +92,7 @@ export const AllInfo = ({
 
       <LabelWrapper>
         <LabelAboveContent header={header} title="Kravet er relevant for">
-          <DotTags list={ListName.RELEVANS} codes={krav.relevansFor} inColumn />
+          <DotTags list={EListName.RELEVANS} codes={krav.relevansFor} inColumn />
         </LabelAboveContent>
       </LabelWrapper>
 

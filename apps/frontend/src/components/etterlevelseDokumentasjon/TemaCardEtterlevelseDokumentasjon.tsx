@@ -8,7 +8,7 @@ import { cardWidth, useKravCounter } from '../../pages/TemaPage'
 import { TTemaCode, codelist } from '../../services/Codelist'
 import { getNumberOfDaysBetween } from '../../util/checkAge'
 import { ettlevColors, theme } from '../../util/theme'
-import { PanelLinkCard, PanelLinkCardOverrides } from '../common/PanelLink'
+import { PanelLinkCard, TPanelLinkCardOverrides } from '../common/PanelLink'
 import { HeaderContent } from './HeaderContent'
 
 type TemaCardEtterlevelseDokumentasjonProps = {
@@ -67,7 +67,7 @@ export const TemaCardEtterlevelseDokumentasjon = (
     }
   }
 
-  const overrides: PanelLinkCardOverrides = {
+  const overrides: TPanelLinkCardOverrides = {
     Header: {
       Block: {
         style: {

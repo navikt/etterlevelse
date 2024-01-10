@@ -53,14 +53,14 @@ export function useAwait<T>(p: Promise<T>, setLoading?: Dispatch<SetStateAction<
   }, [])
 }
 
-type Refs<T> = { [id: string]: RefObject<T> }
+type TRefs<T> = { [id: string]: RefObject<T> }
 
 export function useRefs<T>(ids: string[]) {
-  const refs: Refs<T> =
+  const refs: TRefs<T> =
     ids.reduce((acc, value) => {
       acc[value] = React.createRef()
       return acc
-    }, {} as Refs<T>) || {}
+    }, {} as TRefs<T>) || {}
 
   return refs
 }

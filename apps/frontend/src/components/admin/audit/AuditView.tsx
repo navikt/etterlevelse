@@ -8,22 +8,22 @@ import { useRefs } from '../../../util/hooks'
 import { intl } from '../../../util/intl/intl'
 import { ObjectLink } from '../../common/RouteLink'
 import { AuditActionIcon, AuditLabel } from './AuditComponents'
-import { AuditAction, IAuditItem, IAuditLog } from './AuditTypes'
+import { EAuditAction, IAuditItem, IAuditLog } from './AuditTypes'
 
-type AuditViewProps = {
+type TAuditViewProps = {
   auditLog?: IAuditLog
   auditId?: string
   loading: boolean
   viewId: (id: string) => void
 }
 
-type ComparisonViewProps = {
+type TComparisonViewProps = {
   auditLog: IAuditLog
   audit: IAuditItem
   index: number
 }
 
-const ComparisonView = (props: ComparisonViewProps) => {
+const ComparisonView = (props: TComparisonViewProps) => {
   const { auditLog, audit, index } = props
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -59,7 +59,7 @@ const ComparisonView = (props: ComparisonViewProps) => {
   )
 }
 
-export const AuditView = (props: AuditViewProps) => {
+export const AuditView = (props: TAuditViewProps) => {
   const { auditLog, auditId, loading, viewId } = props
   const refs = useRefs<HTMLDivElement>(auditLog?.audits.map((al) => al.id) || [])
   const [openAll, setOpenAll] = useState(false)
@@ -90,7 +90,7 @@ export const AuditView = (props: AuditViewProps) => {
               <Button variant="tertiary" className="mr-2" onClick={() => setOpenAll(!openAll)}>
                 {openAll ? 'Lukke' : 'Åpne'} alle
               </Button>
-              {newestAudit?.action !== AuditAction.DELETE && (
+              {newestAudit?.action !== EAuditAction.DELETE && (
                 <ObjectLink
                   id={newestAudit!.tableId}
                   type={newestAudit!.table}

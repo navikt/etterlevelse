@@ -1,8 +1,8 @@
 import { gql, useQuery } from '@apollo/client'
 import { Loader } from '@navikt/ds-react'
-import { EtterlevelseDokumentasjonFilter } from '../../api/EtterlevelseDokumentasjonApi'
+import { TEtterlevelseDokumentasjonFilter } from '../../api/EtterlevelseDokumentasjonApi'
 import { IEtterlevelseDokumentasjon, IPageResponse } from '../../constants'
-import { ListName } from '../../services/Codelist'
+import { EListName } from '../../services/Codelist'
 import { DotTags } from './DotTag'
 import RouteLink from './RouteLink'
 import { Cell, Row, Table } from './Table'
@@ -26,7 +26,7 @@ const query = gql`
 // eslint-enable-next-line @typescript-eslint/ban-types
 
 export const EtterlevelseDokumentasjonFilterTable = (props: {
-  filter: EtterlevelseDokumentasjonFilter
+  filter: TEtterlevelseDokumentasjonFilter
   emptyText?: string
 }) => {
   const { data, loading } = useQuery<{
@@ -65,7 +65,7 @@ export const EtterlevelseDokumentasjonFilterTable = (props: {
               </Cell>
               <Cell>
                 <DotTags
-                  list={ListName.RELEVANS}
+                  list={EListName.RELEVANS}
                   codes={etterlevelseDokumentasjon.irrelevansFor}
                   linkCodelist
                 />

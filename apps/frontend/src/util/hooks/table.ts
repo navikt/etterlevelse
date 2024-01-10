@@ -4,27 +4,27 @@ import { useEffect, useState } from 'react'
 
 //WILL DELETE THIS FILE, USING AKSEL TABLE INSTEAD
 
-export type TableConfig<T, K extends keyof T> = {
-  sorting?: ColumnCompares<T>
+export type TTableConfig<T, K extends keyof T> = {
+  sorting?: TColumnCompares<T>
   useDefaultStringCompare?: boolean
   initialSortColumn?: K
   showLast?: (p: T) => boolean
-  filter?: Filters<T>
+  filter?: TFilters<T>
   pageSizes?: number[]
   defaultPageSize?: number
   exclude?: (keyof T)[]
 }
-export type Filters<T> = {
+export type TFilters<T> = {
   [P in keyof T]?:
     | { type: 'search' }
     | { type: 'select'; mapping: (v: T) => Option | Value; options?: (items: T[]) => Value }
     | { type: 'searchMapped'; searchMapping: (v: T) => string }
 }
 
-export type TableState<T, K extends keyof T> = {
+export type TTableState<T, K extends keyof T> = {
   sortColumn?: K
   sortDirection?: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC
-  direction: ColumnDirection<T>
+  direction: TColumnDirection<T>
   data: Array<T>
   sort: (column: K) => void
   filterValues: Record<K, string | undefined>
@@ -38,13 +38,13 @@ export type TableState<T, K extends keyof T> = {
   pageEnd: number
 }
 
-type Compare<T> = (a: T, b: T) => number
+type TCompare<T> = (a: T, b: T) => number
 
-export type ColumnCompares<T> = {
-  [P in keyof T]?: Compare<T>
+export type TColumnCompares<T> = {
+  [P in keyof T]?: TCompare<T>
 }
 
-export type ColumnDirection<T> = {
+export type TColumnDirection<T> = {
   [P in keyof T]-?: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC | null
 }
 
@@ -53,7 +53,7 @@ const newSort = <T, K extends keyof T>(newColumn?: K, columnPrevious?: K, direct
   return { newDirection, newColumn }
 }
 
-const getSortFunction = <T, K extends keyof T>(sortColumn: K, useDefaultStringCompare: boolean, sorting?: ColumnCompares<T>): Compare<T> | undefined => {
+const getSortFunction = <T, K extends keyof T>(sortColumn: K, useDefaultStringCompare: boolean, sorting?: TColumnCompares<T>): TCompare<T> | undefined => {
   if (!sorting || !sorting[sortColumn]) {
     if (useDefaultStringCompare) {
       return (a, b) => ((a[sortColumn] as any as string) || '').localeCompare((b[sortColumn] as any as string) || '')
@@ -64,13 +64,13 @@ const getSortFunction = <T, K extends keyof T>(sortColumn: K, useDefaultStringCo
   return sorting[sortColumn]
 }
 
-const toDirection = <T, K extends keyof T>(direction: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC, column?: K): ColumnDirection<T> => {
+const toDirection = <T, K extends keyof T>(direction: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC, column?: K): TColumnDirection<T> => {
   const newDirection: any = {}
   newDirection[column] = direction
   return newDirection
 }
 
-export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: TableConfig<T, K>) => {
+export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: TTableConfig<T, K>) => {
   const { sorting, useDefaultStringCompare, showLast } = config || {}
   const initialSort = newSort<T, K>(config?.initialSortColumn)
 
@@ -79,7 +79,7 @@ export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: T
   const [isInitialSort, setIsInitialSort] = useState(true)
   const [sortDirection, setSortDirection] = useState(initialSort.newDirection)
   const [sortColumn, setSortColumn] = useState(initialSort.newColumn)
-  const [direction, setDirection] = useState<ColumnDirection<T>>(toDirection(initialSort.newDirection, initialSort.newColumn))
+  const [direction, setDirection] = useState<TColumnDirection<T>>(toDirection(initialSort.newDirection, initialSort.newColumn))
   const [filterValues, setFilterValues] = useState<Record<K, string | undefined>>({} as Record<K, string>)
   const [limit, setLimit] = useState(config?.defaultPageSize || 100)
   const [page, setPage] = useState(1)
@@ -162,7 +162,7 @@ export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: T
     setPage(nextPage)
   }
 
-  const state: TableState<T, K> = {
+  const state: TTableState<T, K> = {
     data,
     direction,
     sortColumn,

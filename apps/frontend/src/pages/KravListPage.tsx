@@ -20,10 +20,10 @@ import { TemaList } from '../components/kravList/TemaList'
 import { PageLayout } from '../components/scaffold/Page'
 import { IKrav, TKravQL } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { ListName, codelist } from '../services/Codelist'
+import { EListName, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 
-type Section = 'siste' | 'alle' | 'tema'
+type TSection = 'siste' | 'alle' | 'tema'
 
 export const sortKrav = (kravene: TKravQL[]) => {
   return [...kravene].sort((a, b) => {
@@ -96,8 +96,8 @@ export const KravPanels = ({
     <div className="mb-2.5 flex flex-col gap-2">
       {kravene &&
         kravene.map((k) => {
-          const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
-          const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
+          const lov = codelist.getCode(EListName.LOV, k.regelverk[0]?.lov?.code)
+          const tema = codelist.getCode(EListName.TEMA, lov?.data?.tema)
           return (
             <div className="mb-0" key={k.id}>
               <LinkPanel href={`/krav/${k.kravNummer}/${k.kravVersjon}`}>
@@ -140,7 +140,7 @@ const KravTabs = () => {
   const [tab, setTab] = useState<string>(params.tab || 'siste')
 
   useEffect(() => {
-    setTab((params.tab as Section) || 'siste')
+    setTab((params.tab as TSection) || 'siste')
   }, [params])
 
   return (

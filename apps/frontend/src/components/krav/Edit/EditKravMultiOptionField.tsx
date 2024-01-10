@@ -3,7 +3,7 @@ import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { ReactNode } from 'react'
 import Select, { CSSObjectWithLabel } from 'react-select'
 import { TOr } from '../../../constants'
-import { ICode, ListName, codelist } from '../../../services/Codelist'
+import { EListName, ICode, codelist } from '../../../services/Codelist'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 
@@ -16,7 +16,7 @@ export const EditKravMultiOptionField = (
     marginBottom?: boolean
   } & TOr<
     { options: { value: string; label: string; description: string }[] },
-    { listName: ListName }
+    { listName: EListName }
   >
 ) => {
   const options = props.options || codelist.getParsedOptions(props.listName)

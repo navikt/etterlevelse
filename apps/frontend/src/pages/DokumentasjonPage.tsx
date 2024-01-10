@@ -1,15 +1,15 @@
 import { gql, useQuery } from '@apollo/client'
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
 import {
-  Accordion,
-  BodyShort,
-  Button,
-  ExpansionCard,
-  Heading,
-  Label,
-  Link,
-  Loader,
-  Tag,
+    Accordion,
+    BodyShort,
+    Button,
+    ExpansionCard,
+    Heading,
+    Label,
+    Link,
+    Loader,
+    Tag,
 } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import moment from 'moment'
@@ -31,15 +31,15 @@ import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/u
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { PageLayout } from '../components/scaffold/Page'
 import {
-  EEtterlevelseStatus,
-  EKravFilterType,
-  IEtterlevelseDokumentasjonStats,
-  IKravPrioritering,
-  IPageResponse,
-  TKravQL,
+    EEtterlevelseStatus,
+    EKravFilterType,
+    IEtterlevelseDokumentasjonStats,
+    IKravPrioritering,
+    IPageResponse,
+    TKravQL,
 } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { ICode, ListName, TTemaCode, codelist } from '../services/Codelist'
+import { EListName, ICode, TTemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 import { getNumberOfDaysBetween } from '../util/checkAge'
 import { env } from '../util/env'
@@ -48,9 +48,9 @@ import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
-  const options = codelist.getParsedOptions(ListName.RELEVANS)
+  const options = codelist.getParsedOptions(EListName.RELEVANS)
   const temaListe = codelist
-    .getCodes(ListName.TEMA)
+    .getCodes(EListName.TEMA)
     .sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
   const [openAccordions, setOpenAccordions] = useState<boolean[]>(temaListe.map(() => false))
   const variables = { etterlevelseDokumentasjonId: params.id }

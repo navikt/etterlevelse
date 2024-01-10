@@ -19,9 +19,9 @@ interface ICustomizedPanelProps {
   toggleIcon?: { expanded: React.ReactElement<any, any>; unexpanded: React.ReactElement<any, any> }
 }
 
-type CustomProps = ICustomizedPanelProps & PanelProps
+type TCustomProps = ICustomizedPanelProps & PanelProps
 
-export const CustomizedPanel = (props: CustomProps) => {
+export const CustomizedPanel = (props: TCustomProps) => {
   const { expanded } = props
 
   const customOverrides: PanelOverrides = {

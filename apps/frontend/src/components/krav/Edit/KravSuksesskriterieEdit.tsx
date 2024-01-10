@@ -18,7 +18,7 @@ import { Error } from '../../common/ModalSchema'
 import TextEditor from '../../common/TextEditor/TextEditor'
 import { kravModal } from '../EditKrav'
 
-type KravSuksesskriterieEditProps = {
+type TKravSuksesskriterieEditProps = {
   setIsFormDirty?: (v: boolean) => void
   newVersion: boolean
 }
@@ -26,7 +26,7 @@ type KravSuksesskriterieEditProps = {
 export const KravSuksesskriterierEdit = ({
   setIsFormDirty,
   newVersion,
-}: KravSuksesskriterieEditProps) => {
+}: TKravSuksesskriterieEditProps) => {
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterier'}>

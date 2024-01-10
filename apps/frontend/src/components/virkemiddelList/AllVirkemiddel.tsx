@@ -6,7 +6,7 @@ import { HeadingXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
 import { useEffect, useState } from 'react'
 import { useVirkemiddelFilter } from '../../api/VirkemiddelApi'
 import { EVirkemiddelListFilter } from '../../constants'
-import { ListName, codelist } from '../../services/Codelist'
+import { EListName, codelist } from '../../services/Codelist'
 import { useDebouncedState } from '../../util/hooks'
 import { ettlevColors } from '../../util/theme'
 import { clearSearchIcon, searchIcon } from '../Images'
@@ -16,12 +16,12 @@ import { borderColor, borderWidth } from '../common/Style'
 import { EditVirkemiddelModal } from '../virkemiddel/edit/EditVirkemiddelModal'
 import { VirkemiddelTable } from './VirkemiddelTable'
 
-type VirkemiddelFilter = {
+type TVirkemiddelFilter = {
   virkemiddelType: Option[]
   sort: Option[]
 }
 
-type AllVirkemiddelProps = {
+type TAllVirkemiddelProps = {
   isCreateModalOpen: boolean
   setIsCreateModalOpen: (b: boolean) => void
 }
@@ -32,19 +32,19 @@ const selectorMarginTop: Responsive<Scale> = ['10px', '10px', '10px', '0px', '0p
 export const AllVirkemiddel = ({
   isCreateModalOpen,
   setIsCreateModalOpen,
-}: AllVirkemiddelProps) => {
+}: TAllVirkemiddelProps) => {
   const getSortDateOptions = [
     { label: 'sorter på navn', id: 'navn' },
     { label: 'nyest-eldst', id: 'DESC' },
     { label: 'eldst-nyest', id: 'ASC' },
   ]
-  const [filter, setFilter] = useState<VirkemiddelFilter>({
+  const [filter, setFilter] = useState<TVirkemiddelFilter>({
     virkemiddelType: [{ label: 'Alle virkemiddel typer', id: 'alle' }],
     sort: [getSortDateOptions[0]],
   })
   const [sok, setSok] = useDebouncedState('', 300)
   const [hover, setHover] = useState(false)
-  const virkemiddelTyper = codelist.getCodes(ListName.VIRKEMIDDELTYPE)
+  const virkemiddelTyper = codelist.getCodes(EListName.VIRKEMIDDELTYPE)
   const getOptions = (label: string, options: any[]) => [{ label: label, id: 'alle' }, ...options]
 
   const [data, totalDataLength, setVirkemiddelTypeFilter, loading, refetchData] =

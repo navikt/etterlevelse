@@ -18,17 +18,17 @@ export const langsArray: ILang[] = Object.keys(langs).map((lang) => langs[lang])
 // Controls starting language as well as fallback language if a text is missing in chosen language
 const defaultLang = langs.nb
 
-type IIntl = LocalizedStringsMethods & IStrings
+type TIntl = LocalizedStringsMethods & IStrings
 
 interface ILocalizedStringsFactory {
-  new <T>(props: GlobalStrings<T>, options?: { customLanguageInterface: () => string }): IIntl
+  new <T>(props: GlobalStrings<T>, options?: { customLanguageInterface: () => string }): TIntl
 }
 
 const strings: IIntlLangs = {}
 
 Object.keys(langs).forEach((lang) => (strings[lang] = langs[lang].texts))
 
-export const intl: IIntl = new (LocalizedStrings as ILocalizedStringsFactory)(strings as any, { customLanguageInterface: () => defaultLang.langCode })
+export const intl: TIntl = new (LocalizedStrings as ILocalizedStringsFactory)(strings as any, { customLanguageInterface: () => defaultLang.langCode })
 
 interface IIntlLangs {
   [lang: string]: IStrings
