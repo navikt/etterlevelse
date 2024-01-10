@@ -48,12 +48,12 @@ export const AllKrav = () => {
   const lastMer = () => {
     fetchMore({
       variables: {
-        pageNumber: data!.krav.pageNumber + 1,
+        pageNumber: data && data.krav.pageNumber + 1,
         pageSize,
       },
       updateQuery: (p, o) => {
         const oldData = p.krav
-        const newData = o.fetchMoreResult!.krav
+        const newData = o.fetchMoreResult && o.fetchMoreResult.krav
         return {
           krav: {
             ...oldData,

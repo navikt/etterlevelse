@@ -202,7 +202,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
                 <Form>
                   <FieldWrapper>
                     <FieldArray name={'krav'}>
-                      {(p) => (
+                      {() => (
                         <List
                           items={items}
                           onChange={({ oldIndex, newIndex }) => {

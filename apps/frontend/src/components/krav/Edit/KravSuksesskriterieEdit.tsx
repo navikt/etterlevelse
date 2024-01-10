@@ -40,7 +40,7 @@ const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderPr
   return (
     <div className="flex flex-col">
       <DragDropContext
-        onDragEnd={(result, provided) => {
+        onDragEnd={(result) => {
           if (!result.destination) {
             return
           }

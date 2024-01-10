@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
 import { BodyShort } from '@navikt/ds-react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { CSSObjectWithLabel, DropdownIndicatorProps, OptionProps, components } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
@@ -124,7 +124,6 @@ const DropdownIndicator = (props: DropdownIndicatorProps<SearchItem>) => {
 }
 
 const MainSearch = () => {
-  const location = useLocation()
   const navigate = useNavigate()
 
   return (

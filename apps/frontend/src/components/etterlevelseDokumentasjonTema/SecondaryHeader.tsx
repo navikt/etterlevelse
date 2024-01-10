@@ -1,7 +1,6 @@
 import { Block } from 'baseui/block'
 import { HeadingXXLarge } from 'baseui/typography'
 import { useState } from 'react'
-import { IEtterlevelseDokumentasjon } from '../../constants'
 import { getTemaMainHeader } from '../../pages/TemaPage'
 import { LovCode, TemaCode } from '../../services/Codelist'
 import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
@@ -10,11 +9,10 @@ import CustomizedModal from '../common/CustomizedModal'
 import { borderRadius, marginAll } from '../common/Style'
 
 type SecondaryHeaderProps = {
-  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon | undefined
   temaData: TemaCode | undefined
   lovListe: LovCode[]
 }
-export const SecondaryHeader = ({ etterlevelseDokumentasjon, temaData, lovListe }: SecondaryHeaderProps) => {
+export const SecondaryHeader = ({ temaData, lovListe }: SecondaryHeaderProps) => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
 
   return (

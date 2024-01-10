@@ -1,37 +1,11 @@
 import { Detail } from '@navikt/ds-react'
-import { SelectOverrides } from 'baseui/select'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { ReactNode } from 'react'
 import Select, { CSSObjectWithLabel } from 'react-select'
 import { Or } from '../../../constants'
 import { ICode, ListName, codelist } from '../../../services/Codelist'
-import { ettlevColors } from '../../../util/theme'
-import { navChevronDownIcon } from '../../Images'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { borderWidth } from '../../common/Style'
-
-const customOverrides: SelectOverrides = {
-  ControlContainer: {
-    style: {
-      ...borderWidth('1px'),
-      ':hover': {
-        backgroundColor: ettlevColors.green50,
-      },
-    },
-  },
-  SelectArrow: {
-    component: ({ $isOpen }: { $isOpen: boolean }) =>
-      $isOpen ? <img src={navChevronDownIcon} alt="Chevron opp" style={{ transform: 'rotate(180deg)' }} /> : <img src={navChevronDownIcon} alt="Chevron ned" />,
-  },
-  DropdownListItem: {
-    style: {
-      fontSize: '18px',
-      marginTop: '4px',
-      marginBottom: '4px',
-    },
-  },
-}
 
 export const EditKravMultiOptionField = (
   props: {

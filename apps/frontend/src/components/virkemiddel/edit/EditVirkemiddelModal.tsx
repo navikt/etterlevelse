@@ -79,7 +79,7 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
             validateOnBlur={false}
             onSubmit={submit}
           >
-            {({ values, submitForm, errors }) => {
+            {({ submitForm, errors }) => {
               return (
                 <Form>
                   <InputField label={'Navn'} name={'navn'} />

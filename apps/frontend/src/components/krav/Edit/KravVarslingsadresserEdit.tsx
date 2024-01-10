@@ -121,7 +121,7 @@ export const VarslingsadresserTagList = ({ varslingsadresser, remove }: { varsli
 
   return (
     <RenderTagList
-      list={varslingsadresser.map((v, i) => {
+      list={varslingsadresser.map((v) => {
         if (v.type === AdresseType.SLACK) {
           const channel = slackChannels.find((c) => c.id === v.adresse)
           return channel ? slackChannelView(channel) : `Slack: ${v.adresse}`
@@ -142,7 +142,7 @@ type AddVarslingsadresseProps = {
   close?: () => void
 }
 
-export const SlackChannelSearch = ({ added, add, close }: AddVarslingsadresseProps) => {
+export const SlackChannelSearch = ({ add, close }: AddVarslingsadresseProps) => {
   return (
     <AsyncSelect
       aria-label="Søk etter slack-kanal"
@@ -182,7 +182,7 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
         close && close()
       })
       .catch((e) => {
-        setError('Fant ikke slack for bruker')
+        setError('Fant ikke slack for bruker, error: ' + e.toString() )
         setLoadingSlackId(false)
       })
   }

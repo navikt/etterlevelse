@@ -8,15 +8,15 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { getBehandling, useSearchBehandling } from '../../../api/BehandlingApi'
 import {
-    EtterlevelseDokumentasjonQL,
-    IBehandling,
-    IPageResponse,
-    emptyPage,
+  EtterlevelseDokumentasjonQL,
+  IBehandling,
+  IPageResponse,
+  emptyPage,
 } from '../../../constants'
 import {
-    EtterlevelseDokumentasjonerPanels,
-    Variables,
-    tabMarginBottom,
+  EtterlevelseDokumentasjonerPanels,
+  Variables,
+  tabMarginBottom,
 } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { theme } from '../../../util'
 import { intl } from '../../../util/intl/intl'
@@ -54,12 +54,12 @@ export const BehandlingSok = () => {
   const lastMer = () => {
     fetchMore({
       variables: {
-        pageNumber: data!.etterlevelseDokumentasjoner.pageNumber + 1,
+        pageNumber: data && data.etterlevelseDokumentasjoner.pageNumber + 1,
         pageSize,
       },
       updateQuery: (p, o) => {
         const oldData = p.etterlevelseDokumentasjoner
-        const newData = o.fetchMoreResult!.etterlevelseDokumentasjoner
+        const newData = o.fetchMoreResult && o.fetchMoreResult.etterlevelseDokumentasjoner
         return {
           etterlevelseDokumentasjoner: {
             ...oldData,
@@ -163,7 +163,7 @@ export const BehandlingSok = () => {
               disabled={
                 gqlLoading ||
                 etterlevelseDokumentasjoner.numberOfElements >=
-                  etterlevelseDokumentasjoner.totalElements
+                etterlevelseDokumentasjoner.totalElements
               }
             >
               Vis mer
