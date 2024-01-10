@@ -3,7 +3,7 @@ import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { getAllKrav } from '../../api/KravApi'
 import { getAllKravPriority } from '../../api/KravPriorityApi'
-import { IKrav, KravStatus } from '../../constants'
+import { EKravStatus, IKrav } from '../../constants'
 import { ListName, codelist } from '../../services/Codelist'
 import { sortKraverByPriority } from '../../util/sort'
 import StatusView from '../common/StatusTag'
@@ -19,19 +19,21 @@ export const TemaList = () => {
   }, [])
 
   const fetchKrav = () => {
-    (async () => {
+    ;(async () => {
       const kraver = await getAllKrav()
       const allKravPriority = await getAllKravPriority()
 
       kraver.map((k) => {
-        const priority = allKravPriority.filter((kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon)
+        const priority = allKravPriority.filter(
+          (kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon
+        )
         k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
         k.kravPriorityUID = priority.length ? priority[0].id : ''
         return k
       })
 
-      setAllActiveKrav(kraver.filter((k) => k.status === KravStatus.AKTIV))
-      setAllDraftKrav(kraver.filter((k) => k.status === KravStatus.UTKAST))
+      setAllActiveKrav(kraver.filter((k) => k.status === EKravStatus.AKTIV))
+      setAllDraftKrav(kraver.filter((k) => k.status === EKravStatus.UTKAST))
     })()
   }
 
@@ -51,7 +53,12 @@ export const TemaList = () => {
                 <KravPanelHeader title={t.shortName} kravData={[...activeKraver, ...draftKraver]} />
               </Accordion.Header>
               <Accordion.Content>
-                <KravTemaList activeKraver={sortKraverByPriority(activeKraver, t.shortName)} tema={t.shortName} refresh={fetchKrav} draftKrav={draftKraver} />
+                <KravTemaList
+                  activeKraver={sortKraverByPriority(activeKraver, t.shortName)}
+                  tema={t.shortName}
+                  refresh={fetchKrav}
+                  draftKrav={draftKraver}
+                />
               </Accordion.Content>
             </Accordion.Item>
           ) : (
@@ -91,7 +98,12 @@ const getKravTemaRowsWithLabel = (kraver: IKrav[], tema: string) => {
               <StatusView status={k.status} />
             </div>
             <div className="w-44">
-              <BodyShort size="small">{k.changeStamp.lastModifiedDate !== undefined && k.changeStamp.lastModifiedDate !== '' ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
+              <BodyShort size="small">
+                {k.changeStamp.lastModifiedDate !== undefined &&
+                k.changeStamp.lastModifiedDate !== ''
+                  ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}`
+                  : ''}
+              </BodyShort>
             </div>
           </LinkPanel.Title>
         </LinkPanel>
@@ -100,7 +112,12 @@ const getKravTemaRowsWithLabel = (kraver: IKrav[], tema: string) => {
   })
 }
 
-const KravTemaList = (props: { activeKraver: IKrav[]; tema: string; refresh: () => void; draftKrav: IKrav[] }) => {
+const KravTemaList = (props: {
+  activeKraver: IKrav[]
+  tema: string
+  refresh: () => void
+  draftKrav: IKrav[]
+}) => {
   const [isEditPriorityModalOpen, setIsEditPriorityModalOpen] = React.useState(false)
 
   return (

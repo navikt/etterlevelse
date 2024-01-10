@@ -1,8 +1,16 @@
 import { Alert, BodyShort, Box, Heading, Label, ReadMore } from '@navikt/ds-react'
-import { EtterlevelseStatus, IEtterlevelse, ISuksesskriterie, ISuksesskriterieBegrunnelse } from '../../constants'
+import {
+  EEtterlevelseStatus,
+  IEtterlevelse,
+  ISuksesskriterie,
+  ISuksesskriterieBegrunnelse,
+} from '../../constants'
 import { Markdown } from '../common/Markdown'
 import { LabelAboveContent } from '../common/PropertyLabel'
-import { getLabelForSuksessKriterie, getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
+import {
+  getLabelForSuksessKriterie,
+  getSuksesskriterieBegrunnelse,
+} from './Edit/SuksesskriterieBegrunnelseEdit'
 import EtterlevelseCard from './EtterlevelseCard'
 
 export const EtterlevelseViewFields = ({
@@ -16,7 +24,8 @@ export const EtterlevelseViewFields = ({
 }) => {
   return (
     <div>
-      {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
+      {(etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT ||
+        etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
         <div className={'mb-12'}>
           <Alert className="mb-1" size="small" variant="info">
             Dette kravet er dokumentert som ikke relevant 20.05.2022, og senere blitt bortfiltrert
@@ -62,10 +71,19 @@ const KriterieBegrunnelse = ({
   suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
   totalSuksesskriterie: number
 }) => {
-  const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
+  const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(
+    suksesskriterieBegrunnelser,
+    suksesskriterie
+  )
 
   return (
-    <Box className="mb-4" borderColor="border-alt-1" padding="8" borderWidth="3" borderRadius="medium">
+    <Box
+      className="mb-4"
+      borderColor="border-alt-1"
+      padding="8"
+      borderWidth="3"
+      borderRadius="medium"
+    >
       <div className="flex w-full">
         <BodyShort className="min-w-fit">
           Suksesskriterium {index + 1} av {totalSuksesskriterie}
@@ -94,7 +112,11 @@ const KriterieBegrunnelse = ({
         )}
 
         <div className="w-full mt-8 ">
-          <LabelAboveContent fullWidth title={getLabelForSuksessKriterie(suksesskriterieBegrunnelse.suksesskriterieStatus)} markdown={suksesskriterieBegrunnelse.begrunnelse} />
+          <LabelAboveContent
+            fullWidth
+            title={getLabelForSuksessKriterie(suksesskriterieBegrunnelse.suksesskriterieStatus)}
+            markdown={suksesskriterieBegrunnelse.begrunnelse}
+          />
         </div>
       </div>
     </Box>

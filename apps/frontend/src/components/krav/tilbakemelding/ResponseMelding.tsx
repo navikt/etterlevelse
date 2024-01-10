@@ -1,6 +1,6 @@
 import { BodyLong, BodyShort, Label } from '@navikt/ds-react'
 import moment from 'moment'
-import { ITilbakemelding, ITilbakemeldingMelding, TilbakemeldingRolle } from '../../../constants'
+import { ETilbakemeldingRolle, ITilbakemelding, ITilbakemeldingMelding } from '../../../constants'
 import { PersonName } from '../../common/PersonName'
 import { Portrait } from '../../common/Portrait'
 import EndretInfo from './edit/EndreInfo'
@@ -13,8 +13,9 @@ export const ResponseMelding = (props: {
   remove: (t: ITilbakemelding) => void
 }) => {
   const { m, tilbakemelding, oppdater, remove } = props
-  const kraveier = m.rolle === TilbakemeldingRolle.KRAVEIER
-  const sisteMelding = m.meldingNr === tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1].meldingNr
+  const kraveier = m.rolle === ETilbakemeldingRolle.KRAVEIER
+  const sisteMelding =
+    m.meldingNr === tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1].meldingNr
 
   return (
     <div className="flex flex-col mb-4 p-2">
@@ -31,7 +32,14 @@ export const ResponseMelding = (props: {
         </div>
       </div>
       <div className="flex items-center mt-4 pl-12">
-        {sisteMelding && <MeldingKnapper melding={m} tilbakemeldingId={tilbakemelding.id} oppdater={oppdater} remove={remove} />}
+        {sisteMelding && (
+          <MeldingKnapper
+            melding={m}
+            tilbakemeldingId={tilbakemelding.id}
+            oppdater={oppdater}
+            remove={remove}
+          />
+        )}
         <EndretInfo melding={m} />
       </div>
     </div>

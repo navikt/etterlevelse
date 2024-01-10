@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { IKravPrioritering, IPageResponse, KravQL } from '../constants'
+import { IKravPrioritering, IPageResponse, TKravQL } from '../constants'
 import { env } from '../util/env'
 
 export const getAllKravPriority = async () => {
@@ -10,23 +10,35 @@ export const getAllKravPriority = async () => {
   } else {
     let allKravPrioritering: IKravPrioritering[] = [...firstPage.content]
     for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
-      allKravPrioritering = [...allKravPrioritering, ...(await getKravPriorityPage(currentPage, PAGE_SIZE)).content]
+      allKravPrioritering = [
+        ...allKravPrioritering,
+        ...(await getKravPriorityPage(currentPage, PAGE_SIZE)).content,
+      ]
     }
     return allKravPrioritering
   }
 }
 
 export const getKravPriorityPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<IPageResponse<IKravPrioritering>>(`${env.backendBaseUrl}/kravprioritering?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (
+    await axios.get<IPageResponse<IKravPrioritering>>(
+      `${env.backendBaseUrl}/kravprioritering?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    )
+  ).data
 }
 
 export const getKravPriority = async (id: string) => {
   return (await axios.get<IKravPrioritering>(`${env.backendBaseUrl}/kravprioritering/${id}`)).data
 }
 
-export const getKravPriorityByKravNumberAndVersion = async (kravNummer: number | string, kravVersjon: number | string) => {
+export const getKravPriorityByKravNumberAndVersion = async (
+  kravNummer: number | string,
+  kravVersjon: number | string
+) => {
   return await axios
-    .get<IKravPrioritering>(`${env.backendBaseUrl}/kravprioritering/kravnummer/${kravNummer}/${kravVersjon}`)
+    .get<IKravPrioritering>(
+      `${env.backendBaseUrl}/kravprioritering/kravnummer/${kravNummer}/${kravVersjon}`
+    )
     .then((resp) => {
       return resp.data
     })
@@ -47,7 +59,11 @@ export const getKravPriorityByTemaCode = async (temaCode: string) => {
 }
 
 export const getKravPriorityByKravNummer = async (kravNummer: number | string) => {
-  return (await axios.get<IPageResponse<IKravPrioritering>>(`${env.backendBaseUrl}/kravprioritering/kravnummer/${kravNummer}`)).data
+  return (
+    await axios.get<IPageResponse<IKravPrioritering>>(
+      `${env.backendBaseUrl}/kravprioritering/kravnummer/${kravNummer}`
+    )
+  ).data
 }
 
 export const createKravPriority = async (kravPrioritering: IKravPrioritering) => {
@@ -57,7 +73,12 @@ export const createKravPriority = async (kravPrioritering: IKravPrioritering) =>
 
 export const updateKravPriority = async (kravPrioritering: IKravPrioritering) => {
   const dto = kravPrioriteringToDto(kravPrioritering)
-  return (await axios.put<IKravPrioritering>(`${env.backendBaseUrl}/kravprioritering/${kravPrioritering.id}`, dto)).data
+  return (
+    await axios.put<IKravPrioritering>(
+      `${env.backendBaseUrl}/kravprioritering/${kravPrioritering.id}`,
+      dto
+    )
+  ).data
 }
 
 function kravPrioriteringToDto(kravPrioriteringToDto: IKravPrioritering): IKravPrioritering {
@@ -69,7 +90,7 @@ function kravPrioriteringToDto(kravPrioriteringToDto: IKravPrioritering): IKravP
   return dto
 }
 
-export const kravMapToKravPrioriting = (krav: Partial<KravQL>): IKravPrioritering => ({
+export const kravMapToKravPrioriting = (krav: Partial<TKravQL>): IKravPrioritering => ({
   id: krav.kravPriorityUID || '',
   kravNummer: krav.kravNummer || 0,
   kravVersjon: krav.kravVersjon || 0,

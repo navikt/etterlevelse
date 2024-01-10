@@ -1,5 +1,5 @@
 import React from 'react'
-import { Or } from '../../constants'
+import { TOr } from '../../constants'
 import DataText from './DataText'
 import { Markdown } from './Markdown'
 
@@ -12,14 +12,19 @@ type LabelProps = {
   p1?: boolean
   labelWidth?: string
   fullWidth?: boolean
-} & Or<{ children: React.ReactNode }, { markdown: string | string[]; vertical?: boolean }>
+} & TOr<{ children: React.ReactNode }, { markdown: string | string[]; vertical?: boolean }>
 
 export const CustomLabel = (props: LabelProps) => {
   if (props.hide || (empty(props.children) && empty(props.markdown))) return null
   return (
     <DataText label={props.title} header={props.header} labelWidth={props.labelWidth}>
       {props.markdown ? (
-        <Markdown p1={props.p1} sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks />
+        <Markdown
+          p1={props.p1}
+          sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]}
+          vertical={props.vertical}
+          shortenLinks
+        />
       ) : (
         props.children
       )}
@@ -30,9 +35,20 @@ export const CustomLabel = (props: LabelProps) => {
 export const LabelAboveContent = (props: LabelProps) => {
   if (props.hide || (empty(props.children) && empty(props.markdown))) return null
   return (
-    <DataText fullWidth={props.fullWidth} notFlexed label={props.title} header={props.header} labelWidth={props.labelWidth}>
+    <DataText
+      fullWidth={props.fullWidth}
+      notFlexed
+      label={props.title}
+      header={props.header}
+      labelWidth={props.labelWidth}
+    >
       {props.markdown ? (
-        <Markdown p1={props.p1} sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks />
+        <Markdown
+          p1={props.p1}
+          sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]}
+          vertical={props.vertical}
+          shortenLinks
+        />
       ) : (
         props.children
       )}

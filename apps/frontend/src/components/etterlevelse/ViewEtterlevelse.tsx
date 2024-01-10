@@ -2,22 +2,34 @@ import { CheckmarkIcon } from '@navikt/aksel-icons'
 import { BodyShort, Box, Heading, Label, Link, Loader, ReadMore, Tag } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEtterlevelseDokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
-import { EtterlevelseStatus, IEtterlevelse, IKrav, SuksesskriterieStatus } from '../../constants'
+import { EEtterlevelseStatus, ESuksesskriterieStatus, IEtterlevelse, IKrav } from '../../constants'
 import { Markdown } from '../common/Markdown'
 import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
 
-const getHeaderText = (status: EtterlevelseStatus) => {
+const getHeaderText = (status: EEtterlevelseStatus) => {
   switch (status) {
-    case EtterlevelseStatus.IKKE_RELEVANT:
+    case EEtterlevelseStatus.IKKE_RELEVANT:
       return 'Kravet er ikke relevant for:'
-    case EtterlevelseStatus.OPPFYLLES_SENERE:
+    case EEtterlevelseStatus.OPPFYLLES_SENERE:
       return 'Kravet skal oppfylles senere av:'
     default:
       return 'Kravet etterleves av:'
   }
 }
-export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: { etterlevelse: IEtterlevelse; loading?: boolean; krav: IKrav; modalVersion?: boolean }) => {
-  const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(etterlevelse.etterlevelseDokumentasjonId)
+export const ViewEtterlevelse = ({
+  etterlevelse,
+  loading,
+  krav,
+  modalVersion,
+}: {
+  etterlevelse: IEtterlevelse
+  loading?: boolean
+  krav: IKrav
+  modalVersion?: boolean
+}) => {
+  const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
+    etterlevelse.etterlevelseDokumentasjonId
+  )
 
   return (
     <div className="w-full mt-12">
@@ -31,7 +43,9 @@ export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: 
             {!modalVersion && (
               <div className="flex content-center">
                 <li />
-                <Link href={`/dokumentasjon/${etterlevelseDokumentasjon.id}`}>Gå til etterlevelse dokumentasjon</Link>
+                <Link href={`/dokumentasjon/${etterlevelseDokumentasjon.id}`}>
+                  Gå til etterlevelse dokumentasjon
+                </Link>
               </div>
             )}
             {!modalVersion && (
@@ -55,13 +69,22 @@ export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: 
       <div className="mt-9 w-fit">
         <Tag
           size="small"
-          variant={etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? 'success' : 'warning'}
+          variant={
+            etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
+            etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT
+              ? 'success'
+              : 'warning'
+          }
         >
-          Status: {etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? 'Ferdig utfylt' : 'Under utfylling'}
+          Status:{' '}
+          {etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
+          etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT
+            ? 'Ferdig utfylt'
+            : 'Under utfylling'}
         </Tag>
       </div>
 
-      {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT && (
+      {etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT && (
         <div className="my-8">
           <Heading size="medium">Hvorfor er ikke kravet relevant?</Heading>
           <BodyShort>
@@ -69,7 +92,7 @@ export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: 
           </BodyShort>
         </div>
       )}
-      {etterlevelse.status === EtterlevelseStatus.OPPFYLLES_SENERE && (
+      {etterlevelse.status === EEtterlevelseStatus.OPPFYLLES_SENERE && (
         <div className="my-8">
           <Heading size="medium">Oppfylles innen</Heading>
           <BodyShort>{moment(etterlevelse.fristForFerdigstillelse).format('ll')}</BodyShort>
@@ -79,7 +102,10 @@ export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: 
         {etterlevelse &&
           !loading &&
           krav.suksesskriterier.map((s, i) => {
-            const suksessbeskrivelseBegrunnelse = getSuksesskriterieBegrunnelse(etterlevelse.suksesskriterieBegrunnelser, s)
+            const suksessbeskrivelseBegrunnelse = getSuksesskriterieBegrunnelse(
+              etterlevelse.suksesskriterieBegrunnelser,
+              s
+            )
             return (
               <div key={s.id} className="mb-5">
                 <Box className="bg-white" padding="4">
@@ -89,13 +115,20 @@ export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: 
                         Suksesskriterium {i + 1} av {krav.suksesskriterier.length}
                       </BodyShort>
                     </div>
-                    {(!suksessbeskrivelseBegrunnelse.behovForBegrunnelse || suksessbeskrivelseBegrunnelse.begrunnelse) && (
+                    {(!suksessbeskrivelseBegrunnelse.behovForBegrunnelse ||
+                      suksessbeskrivelseBegrunnelse.begrunnelse) && (
                       <div className="flex justify-end">
                         <BodyShort size="small" className="flex items-center">
-                          {suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.OPPFYLT && <CheckmarkIcon aria-label="" aria-hidden color="#06893A" />}
-                          {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT
+                          {suksessbeskrivelseBegrunnelse.suksesskriterieStatus ===
+                            ESuksesskriterieStatus.OPPFYLT && (
+                            <CheckmarkIcon aria-label="" aria-hidden color="#06893A" />
+                          )}
+                          {etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT ||
+                          suksessbeskrivelseBegrunnelse.suksesskriterieStatus ===
+                            ESuksesskriterieStatus.IKKE_RELEVANT
                             ? 'Ikke Relevant'
-                            : suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT
+                            : suksessbeskrivelseBegrunnelse.suksesskriterieStatus ===
+                                ESuksesskriterieStatus.IKKE_OPPFYLT
                               ? 'Ikke oppfylt'
                               : 'Oppfylt'}
                         </BodyShort>
@@ -110,17 +143,21 @@ export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: 
 
                   <div className="w-full h-[1px] mt-4 mb-6 bg-gray-400" />
 
-                  {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse || suksessbeskrivelseBegrunnelse.begrunnelse ? (
+                  {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse ||
+                  suksessbeskrivelseBegrunnelse.begrunnelse ? (
                     <div>
                       <Label>
-                        {suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT
+                        {suksessbeskrivelseBegrunnelse.suksesskriterieStatus ===
+                        ESuksesskriterieStatus.IKKE_RELEVANT
                           ? 'Hvorfor er ikke kriteriet relevant?'
-                          : suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT
+                          : suksessbeskrivelseBegrunnelse.suksesskriterieStatus ===
+                              ESuksesskriterieStatus.IKKE_OPPFYLT
                             ? 'Hvorfor er kriteriet ikke oppfylt?'
                             : 'Hvordan er kriteriet oppfylt?'}
                       </Label>
                       <div className="mb-12">
-                        {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse && !suksessbeskrivelseBegrunnelse.begrunnelse ? (
+                        {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse &&
+                        !suksessbeskrivelseBegrunnelse.begrunnelse ? (
                           <BodyShort>Kriteriet har ikke behov for begrunnelse</BodyShort>
                         ) : (
                           <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse} />
@@ -129,7 +166,11 @@ export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: 
                     </div>
                   ) : (
                     <div className="mb-12">
-                      <BodyShort>{etterlevelse.status === EtterlevelseStatus.OPPFYLLES_SENERE ? 'Oppfyles senere' : 'Mangler utfylling'}</BodyShort>
+                      <BodyShort>
+                        {etterlevelse.status === EEtterlevelseStatus.OPPFYLLES_SENERE
+                          ? 'Oppfyles senere'
+                          : 'Mangler utfylling'}
+                      </BodyShort>
                     </div>
                   )}
                 </Box>
@@ -139,7 +180,8 @@ export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: 
       </div>
 
       <BodyShort size="small">
-        Sist endret: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
+        Sist endret: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av{' '}
+        {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
       </BodyShort>
     </div>
   )

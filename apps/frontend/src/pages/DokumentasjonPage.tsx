@@ -1,6 +1,16 @@
 import { gql, useQuery } from '@apollo/client'
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import { Accordion, BodyShort, Button, ExpansionCard, Heading, Label, Link, Loader, Tag } from '@navikt/ds-react'
+import {
+  Accordion,
+  BodyShort,
+  Button,
+  ExpansionCard,
+  Heading,
+  Label,
+  Link,
+  Loader,
+  Tag,
+} from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
@@ -20,9 +30,16 @@ import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
 import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { PageLayout } from '../components/scaffold/Page'
-import { EtterlevelseStatus, IEtterlevelseDokumentasjonStats, IKravPrioritering, IPageResponse, KRAV_FILTER_TYPE, KravQL } from '../constants'
+import {
+  EEtterlevelseStatus,
+  EKravFilterType,
+  IEtterlevelseDokumentasjonStats,
+  IKravPrioritering,
+  IPageResponse,
+  TKravQL,
+} from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { ICode, ListName, TemaCode, codelist } from '../services/Codelist'
+import { ICode, ListName, TTemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 import { getNumberOfDaysBetween } from '../util/checkAge'
 import { env } from '../util/env'
@@ -32,11 +49,17 @@ import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
   const options = codelist.getParsedOptions(ListName.RELEVANS)
-  const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
+  const temaListe = codelist
+    .getCodes(ListName.TEMA)
+    .sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
   const [openAccordions, setOpenAccordions] = useState<boolean[]>(temaListe.map(() => false))
   const variables = { etterlevelseDokumentasjonId: params.id }
-  const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
-  const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByEtterlevelseDokumentasjonId(params.id)
+  const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
+    params.id
+  )
+  const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByEtterlevelseDokumentasjonId(
+    params.id
+  )
   const [kravPriority, setKravPriority] = useState<IKravPrioritering[]>([])
 
   useEffect(() => {
@@ -47,13 +70,15 @@ export const DokumentasjonPage = () => {
     data: relevanteData,
     refetch: refetchRelevanteData,
     loading,
-  } = useQuery<{ etterlevelseDokumentasjon: IPageResponse<{ stats: IEtterlevelseDokumentasjonStats }> }>(statsQuery, {
+  } = useQuery<{
+    etterlevelseDokumentasjon: IPageResponse<{ stats: IEtterlevelseDokumentasjonStats }>
+  }>(statsQuery, {
     variables,
     skip: !params.id,
   })
 
-  const [relevanteStats, setRelevanteStats] = useState<KravQL[]>([])
-  const [utgaattStats, setUtgaattStats] = useState<KravQL[]>([])
+  const [relevanteStats, setRelevanteStats] = useState<TKravQL[]>([])
+  const [utgaattStats, setUtgaattStats] = useState<TKravQL[]>([])
   const [arkivModal, setArkivModal] = useState<boolean>(false)
 
   const filterData = (
@@ -63,10 +88,10 @@ export const DokumentasjonPage = () => {
             stats: IEtterlevelseDokumentasjonStats
           }>
         }
-      | undefined,
+      | undefined
   ) => {
-    const relevanteStatusListe: KravQL[] = []
-    const utgaattStatusListe: KravQL[] = []
+    const relevanteStatusListe: TKravQL[] = []
+    const utgaattStatusListe: TKravQL[] = []
 
     unfilteredData?.etterlevelseDokumentasjon.content.forEach(({ stats }) => {
       relevanteStatusListe.push(...stats.relevantKrav)
@@ -102,7 +127,9 @@ export const DokumentasjonPage = () => {
     if (etterlevelseDokumentasjon) {
       ampli.logEvent('sidevisning', {
         side: 'Etterlevelse Dokumentasjon Page',
-        sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title}`,
+        sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${
+          etterlevelseDokumentasjon.title
+        }`,
         ...userRoleEventProp,
       })
     }
@@ -110,7 +137,7 @@ export const DokumentasjonPage = () => {
 
   let antallFylttKrav = 0
 
-  getNewestKravVersjon(relevanteStats).forEach((k: KravQL) => {
+  getNewestKravVersjon(relevanteStats).forEach((k: TKravQL) => {
     if (k.etterlevelser.length && isFerdigUtfylt(k.etterlevelser[0].status)) {
       antallFylttKrav += 1
     }
@@ -120,11 +147,18 @@ export const DokumentasjonPage = () => {
     const fargeForFemAlternativ = ['alt1', 'alt2', 'alt3', 'alt1', 'alt2'] as const
 
     if (irrelevans?.length === options.length) {
-      return <BodyShort size="small">For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved dokumentasjonen.</BodyShort>
+      return (
+        <BodyShort size="small">
+          For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved
+          dokumentasjonen.
+        </BodyShort>
+      )
     }
 
     if (irrelevans) {
-      const relevans = options.filter((n) => !irrelevans.map((ir: ICode) => ir.code).includes(n.value))
+      const relevans = options.filter(
+        (n) => !irrelevans.map((ir: ICode) => ir.code).includes(n.value)
+      )
 
       return (
         <div className="flex flex-wrap gap-2">
@@ -166,17 +200,31 @@ export const DokumentasjonPage = () => {
     },
   ]
 
-  const getKravForTema = (tema: TemaCode) => {
+  const getKravForTema = (tema: TTemaCode) => {
     const lover = codelist.getCodesForTema(tema.code)
     const lovCodes = lover.map((c) => c.code)
-    const krav = relevanteStats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lovCodes.includes(r)))
+    const krav = relevanteStats.filter((k) =>
+      k.regelverk.map((r: any) => r.lov.code).some((r: any) => lovCodes.includes(r))
+    )
     return filterKrav(kravPriority, krav, tema)
   }
 
-  const { etterlevelseNummer, title, behandlerPersonopplysninger, behandlingIds, behandlinger, teams, irrelevansFor } = etterlevelseDokumentasjon
+  const {
+    etterlevelseNummer,
+    title,
+    behandlerPersonopplysninger,
+    behandlingIds,
+    behandlinger,
+    teams,
+    irrelevansFor,
+  } = etterlevelseDokumentasjon
 
   return (
-    <PageLayout pageTitle={'E' + etterlevelseNummer.toString() + ' ' + title} currentPage="Temaoversikt" breadcrumbPaths={breadcrumbPaths}>
+    <PageLayout
+      pageTitle={'E' + etterlevelseNummer.toString() + ' ' + title}
+      currentPage="Temaoversikt"
+      breadcrumbPaths={breadcrumbPaths}
+    >
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Heading level="1" size="medium">
@@ -197,25 +245,44 @@ export const DokumentasjonPage = () => {
                       behandlingIds.map((behandlingId, index) => (
                         <div key={'behandling_link_' + index}>
                           {behandlinger && behandlinger[index].navn ? (
-                            <ExternalLink className="text-medium" href={`${env.pollyBaseUrl}process/${behandlingId}`}>
-                              {behandlinger?.length > 0 ? `${behandlinger[index].navn}` : 'Ingen data'}
+                            <ExternalLink
+                              className="text-medium"
+                              href={`${env.pollyBaseUrl}process/${behandlingId}`}
+                            >
+                              {behandlinger?.length > 0
+                                ? `${behandlinger[index].navn}`
+                                : 'Ingen data'}
                             </ExternalLink>
                           ) : (
-                            <BodyShort size="small">{behandlinger ? behandlinger[index].navn : 'Ingen data'}</BodyShort>
+                            <BodyShort size="small">
+                              {behandlinger ? behandlinger[index].navn : 'Ingen data'}
+                            </BodyShort>
                           )}
                         </div>
                       ))
                     ) : (
-                      <BodyShort size="small">Husk å legge til behandling fra behandlingskatalogen</BodyShort>
+                      <BodyShort size="small">
+                        Husk å legge til behandling fra behandlingskatalogen
+                      </BodyShort>
                     )}
                   </div>
                 )}
-                <div className="mb-2.5">{teams.length > 0 ? <Teams teams={teams} link /> : <BodyShort size="small">Team er ikke angitt</BodyShort>}</div>
+                <div className="mb-2.5">
+                  {teams.length > 0 ? (
+                    <Teams teams={teams} link />
+                  ) : (
+                    <BodyShort size="small">Team er ikke angitt</BodyShort>
+                  )}
+                </div>
                 <div className="flex items-start gap-2">
                   <BodyShort size="small">Egenskaper:</BodyShort>
                   {irrelevansFor.length === options.length && (
                     <div className="flex items-center gap-1">
-                      <ExclamationmarkTriangleFillIcon area-label="" aria-hidden className="text-2xl text-icon-warning" />
+                      <ExclamationmarkTriangleFillIcon
+                        area-label=""
+                        aria-hidden
+                        className="text-2xl text-icon-warning"
+                      />
                       <Label size="small">Ingen egenskaper er oppgitt</Label>
                     </div>
                   )}
@@ -223,7 +290,11 @@ export const DokumentasjonPage = () => {
                 </div>
               </ExpansionCard.Content>
             </ExpansionCard>
-            <EditEtterlevelseDokumentasjonModal etterlevelseDokumentasjon={etterlevelseDokumentasjon} setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon} isEditButton />
+            <EditEtterlevelseDokumentasjonModal
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+              isEditButton
+            />
           </div>
         </div>
       </div>
@@ -252,23 +323,37 @@ export const DokumentasjonPage = () => {
         </div> */}
         <div className="flex items-center w-full">
           <div className="flex items-center w-full gap-4">
-            <Button variant="tertiary" size="xsmall" onClick={() => setOpenAccordions(temaListe.map(() => true))}>
+            <Button
+              variant="tertiary"
+              size="xsmall"
+              onClick={() => setOpenAccordions(temaListe.map(() => true))}
+            >
               Åpne alle tema
             </Button>
-            <Button variant="tertiary" size="xsmall" onClick={() => setOpenAccordions(temaListe.map(() => false))}>
+            <Button
+              variant="tertiary"
+              size="xsmall"
+              onClick={() => setOpenAccordions(temaListe.map(() => false))}
+            >
               Lukk alle tema
             </Button>
           </div>
 
           <div className="flex justify-end w-full items-center">
             <BodyShort size="medium">
-              Totalt {getNewestKravVersjon(relevanteStats).length} krav, {antallFylttKrav} ferdig utfylt
+              Totalt {getNewestKravVersjon(relevanteStats).length} krav, {antallFylttKrav} ferdig
+              utfylt
             </BodyShort>
           </div>
         </div>
 
         {loading ? (
-          <Block display="flex" width="100%" justifyContent="center" marginTop={theme.sizing.scale550}>
+          <Block
+            display="flex"
+            width="100%"
+            justifyContent="center"
+            marginTop={theme.sizing.scale550}
+          >
             <Loader size={'large'} />
           </Block>
         ) : (
@@ -278,24 +363,39 @@ export const DokumentasjonPage = () => {
               .map((tema, index) => {
                 const kravliste = getKravForTema(tema)
                 const utfylteKrav = kravliste.filter(
-                  (krav) => krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT,
+                  (krav) =>
+                    krav.etterlevelseStatus === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
+                    krav.etterlevelseStatus === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
                 )
                 return (
-                  <Accordion.Item key={`${tema.shortName}_panel`} className="flex flex-col gap-2" open={openAccordions[index]}>
+                  <Accordion.Item
+                    key={`${tema.shortName}_panel`}
+                    className="flex flex-col gap-2"
+                    open={openAccordions[index]}
+                  >
                     <Accordion.Header id={tema.code} onClick={() => toggleAccordion(index)}>
                       <div className="flex gap-4">
                         <span>
-                          {tema.shortName} ({utfylteKrav.length} av {kravliste.length} krav er ferdig utfylt)
+                          {tema.shortName} ({utfylteKrav.length} av {kravliste.length} krav er
+                          ferdig utfylt)
                         </span>
                         {kravliste.find(
-                          (krav) => krav.kravVersjon === 1 && krav.etterlevelseStatus === undefined && getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) < 30,
+                          (krav) =>
+                            krav.kravVersjon === 1 &&
+                            krav.etterlevelseStatus === undefined &&
+                            getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) <
+                              30
                         ) && <Tag variant="warning">Nytt krav</Tag>}
                         {kravliste.find(
                           (krav) =>
                             krav.kravVersjon > 1 &&
                             krav.etterlevelseStatus === undefined &&
-                            utgaattStats.filter((kl) => kl.kravNummer === krav.kravNummer && kl.etterlevelser.length > 0).length > 0 &&
-                            getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) < 30,
+                            utgaattStats.filter(
+                              (kl) =>
+                                kl.kravNummer === krav.kravNummer && kl.etterlevelser.length > 0
+                            ).length > 0 &&
+                            getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) <
+                              30
                         ) && <Tag variant="warning">Ny versjon</Tag>}
                       </div>
                     </Accordion.Header>
@@ -311,7 +411,7 @@ export const DokumentasjonPage = () => {
                             <KravCard
                               key={`krav_${idx}`}
                               krav={krav}
-                              kravFilter={KRAV_FILTER_TYPE.RELEVANTE_KRAV}
+                              kravFilter={EKravFilterType.RELEVANTE_KRAV}
                               etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                               temaCode={tema.code}
                             />

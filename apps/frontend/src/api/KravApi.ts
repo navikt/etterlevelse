@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { IKrav, IPageResponse, KravQL, KravStatus, Or, emptyPage } from '../constants'
+import { EKravStatus, IKrav, IPageResponse, TKravQL, TOr, emptyPage } from '../constants'
 import { env } from '../util/env'
 
 export const getAllKrav = async () => {
@@ -40,8 +40,9 @@ export const searchKrav = async (name: string) => {
 }
 
 export const searchKravByNumber = async (number: string) => {
-  return (await axios.get<IPageResponse<IKrav>>(`${env.backendBaseUrl}/krav/search/number/${number}`))
-    .data.content
+  return (
+    await axios.get<IPageResponse<IKrav>>(`${env.backendBaseUrl}/krav/search/number/${number}`)
+  ).data.content
 }
 
 export const getKravByKravNumberAndVersion = async (
@@ -64,17 +65,17 @@ export const getKravByKravNummer = async (kravNummer: number | string) => {
   ).data
 }
 
-export const createKrav = async (krav: KravQL) => {
+export const createKrav = async (krav: TKravQL) => {
   const dto = kravToKravDto(krav)
   return (await axios.post<IKrav>(`${env.backendBaseUrl}/krav`, dto)).data
 }
 
-export const updateKrav = async (krav: KravQL) => {
+export const updateKrav = async (krav: TKravQL) => {
   const dto = kravToKravDto(krav)
   return (await axios.put<IKrav>(`${env.backendBaseUrl}/krav/${krav.id}`, dto)).data
 }
 
-function kravToKravDto(krav: KravQL): IKrav {
+function kravToKravDto(krav: TKravQL): IKrav {
   const dto = {
     ...krav,
     avdeling: krav.avdeling?.code,
@@ -117,12 +118,14 @@ export const useKravPage = (pageSize: number) => {
   ]
 }
 
-export type KravIdParams = Or<{ id?: string }, { kravNummer: string; kravVersjon: string }>
-export type KravId = Or<{ id?: string }, { kravNummer: number; kravVersjon: number }>
+export type KravIdParams = TOr<{ id?: string }, { kravNummer: string; kravVersjon: string }>
+export type KravId = TOr<{ id?: string }, { kravNummer: number; kravVersjon: number }>
 
 export const useKrav = (params: KravId | KravIdParams, onlyLoadOnce?: boolean) => {
   const isCreateNew = params.id === 'ny'
-  const [data, setData] = useState<IKrav | undefined>(isCreateNew ? kravMapToFormVal({}) : undefined)
+  const [data, setData] = useState<IKrav | undefined>(
+    isCreateNew ? kravMapToFormVal({}) : undefined
+  )
 
   const load = () => {
     if (data && onlyLoadOnce) return
@@ -150,7 +153,7 @@ export const useSearchKrav = async (searchParams: string) => {
             kravNummerMedVersjon[0],
             kravNummerMedVersjon[1]
           )
-          if (kravRes && kravRes.status === KravStatus.AKTIV) {
+          if (kravRes && kravRes.status === EKravStatus.AKTIV) {
             return [
               {
                 value: kravRes.id,
@@ -162,7 +165,7 @@ export const useSearchKrav = async (searchParams: string) => {
         } else {
           const kravRes = await searchKrav(kravNumber)
           return kravRes
-            .filter((k) => k.status === KravStatus.AKTIV)
+            .filter((k) => k.status === EKravStatus.AKTIV)
             .map((k) => {
               return {
                 value: k.id,
@@ -175,7 +178,7 @@ export const useSearchKrav = async (searchParams: string) => {
     } else {
       const kravRes = await searchKrav(searchParams)
       return kravRes
-        .filter((k) => k.status === KravStatus.AKTIV)
+        .filter((k) => k.status === EKravStatus.AKTIV)
         .map((k) => {
           return {
             value: k.id,
@@ -188,7 +191,7 @@ export const useSearchKrav = async (searchParams: string) => {
   return []
 }
 
-export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
+export const kravMapToFormVal = (krav: Partial<TKravQL>): TKravQL => ({
   id: krav.id || '',
   navn: krav.navn || '',
   kravNummer: krav.kravNummer || 0,
@@ -212,7 +215,7 @@ export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   avdeling: krav.avdeling,
   underavdeling: krav.underavdeling,
   relevansFor: krav.relevansFor || [],
-  status: krav.status || KravStatus.UTKAST,
+  status: krav.status || EKravStatus.UTKAST,
   suksesskriterier: krav.suksesskriterier || [],
   nyKravVersjon: krav.nyKravVersjon || false,
   tema:

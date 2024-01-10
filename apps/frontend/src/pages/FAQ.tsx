@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { getMeldingByType, mapMeldingToFormValue } from '../api/MeldingApi'
 import { Markdown } from '../components/common/Markdown'
 import { PageLayout } from '../components/scaffold/Page'
-import { IMelding, MeldingType } from '../constants'
+import { EMeldingType, IMelding } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { user } from '../services/User'
 
@@ -12,12 +12,12 @@ export const FAQ = () => {
   const [melding, setMelding] = useState<IMelding>()
 
   useEffect(() => {
-    (async () => {
-      const response = await getMeldingByType(MeldingType.OM_ETTERLEVELSE)
+    ;(async () => {
+      const response = await getMeldingByType(EMeldingType.OM_ETTERLEVELSE)
       if (response.numberOfElements > 0) {
         setMelding(response.content[0])
       } else {
-        setMelding(mapMeldingToFormValue({ meldingType: MeldingType.OM_ETTERLEVELSE }))
+        setMelding(mapMeldingToFormValue({ meldingType: EMeldingType.OM_ETTERLEVELSE }))
       }
     })()
   }, [])
@@ -25,14 +25,11 @@ export const FAQ = () => {
   ampli.logEvent('sidevisning', {
     side: 'FAQ side',
     sidetittel: 'Om Støtte til etterlevelse',
-    ...userRoleEventProp
+    ...userRoleEventProp,
   })
 
   return (
-    <PageLayout
-      pageTitle="Om Støtte til etterlevelse"
-      currentPage="Om Støtte til etterlevelse"
-    >
+    <PageLayout pageTitle="Om Støtte til etterlevelse" currentPage="Om Støtte til etterlevelse">
       <div className="flex justify-center w-full">
         <div>
           <div className="max-w-4xl">
@@ -52,7 +49,8 @@ export const FAQ = () => {
             <div className="mt-20">
               {user.isAdmin() && melding && (
                 <Detail>
-                  Sist endret: {moment(melding.changeStamp.lastModifiedDate).format('ll')} av {melding.changeStamp.lastModifiedBy.split('-')[1]}
+                  Sist endret: {moment(melding.changeStamp.lastModifiedDate).format('ll')} av{' '}
+                  {melding.changeStamp.lastModifiedBy.split('-')[1]}
                 </Detail>
               )}
             </div>

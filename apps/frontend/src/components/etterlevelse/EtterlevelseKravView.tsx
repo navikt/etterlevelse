@@ -29,16 +29,16 @@ import {
 } from '../../api/EtterlevelseMetadataApi'
 import { KravId, getKravByKravNummer } from '../../api/KravApi'
 import {
-  EtterlevelseStatus,
+  EEtterlevelseStatus,
+  EKravFilterType,
+  EKravStatus,
   IBehandling,
   IEtterlevelse,
   IEtterlevelseMetadata,
   IKrav,
   IKravVersjon,
   ITeam,
-  KRAV_FILTER_TYPE,
-  KravQL,
-  KravStatus,
+  TKravQL,
 } from '../../constants'
 import { query } from '../../pages/KravPage'
 import { ampli, userRoleEventProp } from '../../services/Amplitude'
@@ -68,7 +68,7 @@ type EttlevelseKravViewProps = {
   varsleMelding?: string
   navigatePath: string
   tidligereEtterlevelser: IEtterlevelse[] | undefined
-  kravFilter: KRAV_FILTER_TYPE
+  kravFilter: EKravFilterType
   nextKravToDocument: string
 }
 
@@ -86,13 +86,13 @@ export const EtterlevelseKravView = ({
   kravFilter,
   nextKravToDocument,
 }: EttlevelseKravViewProps) => {
-  const { data, loading } = useQuery<{ kravById: KravQL }, KravId>(query, {
+  const { data, loading } = useQuery<{ kravById: TKravQL }, KravId>(query, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
     fetchPolicy: 'no-cache',
   })
   const etterlevelserLoading = loading
-  const [krav, setKrav] = useState<KravQL>()
+  const [krav, setKrav] = useState<TKravQL>()
   const [nyereKrav, setNyereKrav] = React.useState<IKrav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<IEtterlevelse>()
@@ -148,7 +148,7 @@ export const EtterlevelseKravView = ({
     const mutatedEtterlevelse = {
       ...etterlevelse,
       fristForFerdigstillelse:
-        etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE
+        etterlevelse.status !== EEtterlevelseStatus.OPPFYLLES_SENERE
           ? ''
           : etterlevelse.fristForFerdigstillelse,
       suksesskriterieBegrunnelser: syncEtterlevelseKriterieBegrunnelseWithKrav(etterlevelse, krav),
@@ -200,7 +200,7 @@ export const EtterlevelseKravView = ({
             })
             .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
 
-          const filteredVersjoner = alleVersjoner.filter((k) => k.kravStatus !== KravStatus.UTKAST)
+          const filteredVersjoner = alleVersjoner.filter((k) => k.kravStatus !== EKravStatus.UTKAST)
 
           if (filteredVersjoner.length) {
             setAlleKravVersjoner(filteredVersjoner)
@@ -208,7 +208,7 @@ export const EtterlevelseKravView = ({
 
           const krav = resp.content.filter((k) => k.kravVersjon === data.kravById.kravVersjon + 1)
 
-          if (krav.length && krav[0].status === KravStatus.AKTIV) setNyereKrav(krav[0])
+          if (krav.length && krav[0].status === EKravStatus.AKTIV) setNyereKrav(krav[0])
         }
       })
     }
@@ -241,13 +241,13 @@ export const EtterlevelseKravView = ({
                 </div>
               )}
 
-              {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+              {kravFilter === EKravFilterType.BORTFILTTERTE_KRAV && (
                 <BodyShort>
                   <strong>Kravet er bortfiltrert og derfor ikke relevant.</strong>
                 </BodyShort>
               )}
 
-              {kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV && (
+              {kravFilter === EKravFilterType.UTGAATE_KRAV && (
                 <BodyShort>
                   <strong>Kravet er utgått.</strong> Dere skal ikke dokumentere ny etterlevelse på
                   dette kravet.
@@ -269,7 +269,7 @@ export const EtterlevelseKravView = ({
                       <BodyShort>Opprettet {moment(krav.aktivertDato).format('ll')}</BodyShort>
                     )}
                   </div>
-                  {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
+                  {kravFilter === EKravFilterType.RELEVANTE_KRAV && (
                     <div className="flex items-center gap-2">
                       <BodyShort size="small">
                         {etterlevelseMetadata &&
@@ -341,7 +341,7 @@ export const EtterlevelseKravView = ({
                 </Tabs.List>
                 <Tabs.Panel value="dokumentasjon">
                   <div className="mt-2">
-                    {kravFilter !== KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+                    {kravFilter !== EKravFilterType.BORTFILTTERTE_KRAV && (
                       <EtterlevelseEditFields
                         kravFilter={kravFilter}
                         krav={krav}
@@ -361,7 +361,7 @@ export const EtterlevelseKravView = ({
                         tidligereEtterlevelser={tidligereEtterlevelser}
                       />
                     )}
-                    {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+                    {kravFilter === EKravFilterType.BORTFILTTERTE_KRAV && (
                       <EtterlevelseViewFields
                         etterlevelse={etterlevelse}
                         suksesskriterie={krav.suksesskriterier}

@@ -18,9 +18,9 @@ import { ExternalLink, urlForObject } from '../components/common/RouteLink'
 import { SimpleTag } from '../components/common/SimpleTag'
 import { margin } from '../components/common/Style'
 import { PageLayout } from '../components/scaffold/Page'
-import { IKrav, IPageResponse, KravQL } from '../constants'
+import { IKrav, IPageResponse, TKravQL } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { ListName, LovCode, TemaCode, codelist } from '../services/Codelist'
+import { ListName, TLovCode, TTemaCode, codelist } from '../services/Codelist'
 import { theme } from '../util'
 import { sortKraverByPriority } from '../util/sort'
 import { ettlevColors } from '../util/theme'
@@ -34,7 +34,7 @@ export const TemaPage = () => {
   return <TemaView tema={code} />
 }
 
-export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], noHeader?: boolean) => {
+export const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?: boolean) => {
   return (
     <div className="lg:grid lg:grid-flow-col lg:gap-2">
       <div>
@@ -68,7 +68,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], noHeader?: b
   )
 }
 
-const TemaView = ({ tema }: { tema: TemaCode }) => {
+const TemaView = ({ tema }: { tema: TTemaCode }) => {
   const lover = codelist.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter(
     { lover: lover.map((c) => c.code) },
@@ -93,7 +93,7 @@ const TemaView = ({ tema }: { tema: TemaCode }) => {
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
-      (async () => {
+      ;(async () => {
         const allKravPriority = await getAllKravPriority()
         const kraver = _.cloneDeep(data.krav.content)
         kraver.map((k) => {
@@ -146,7 +146,7 @@ export const TemaCard = ({
   relevans,
   setNum,
 }: {
-  tema: TemaCode
+  tema: TTemaCode
   relevans: string[]
   setNum: (tema: string, num: number) => void
 }) => {
@@ -249,7 +249,7 @@ export const useKravCounter = (
   variables: { lover: string[] },
   options?: QueryHookOptions<any, { lover?: string[] }>
 ) => {
-  return useQuery<{ krav: IPageResponse<KravQL> }, KravFilters>(query, {
+  return useQuery<{ krav: IPageResponse<TKravQL> }, KravFilters>(query, {
     ...(options || {}),
     variables,
   })

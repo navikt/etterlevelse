@@ -1,25 +1,40 @@
 import { Button, Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 import React, { useEffect, useState } from 'react'
-import { createMelding, deleteMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
-import { AlertType, IMelding, MeldingStatus, MeldingType } from '../../constants'
+import {
+  createMelding,
+  deleteMelding,
+  mapMeldingToFormValue,
+  updateMelding,
+} from '../../api/MeldingApi'
+import { EAlertType, EMeldingStatus, EMeldingType, IMelding } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
 
-export const getAlertTypeText = (type: AlertType) => {
+export const getAlertTypeText = (type: EAlertType) => {
   if (!type) return ''
   switch (type) {
-    case AlertType.INFO:
+    case EAlertType.INFO:
       return 'Informasjon'
-    case AlertType.WARNING:
+    case EAlertType.WARNING:
       return 'Varsel'
     default:
       return type
   }
 }
 
-export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { melding: IMelding | undefined; setMelding: React.Dispatch<React.SetStateAction<IMelding | undefined>>; isLoading: boolean; maxChar?: number }) => {
+export const EditMelding = ({
+  melding,
+  setMelding,
+  isLoading,
+  maxChar,
+}: {
+  melding: IMelding | undefined
+  setMelding: React.Dispatch<React.SetStateAction<IMelding | undefined>>
+  isLoading: boolean
+  maxChar?: number
+}) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
-  const [meldingAlertType, setMeldingAlertType] = useState<string>(AlertType.WARNING)
+  const [meldingAlertType, setMeldingAlertType] = useState<string>(EAlertType.WARNING)
 
   useEffect(() => {
     if (!isLoading && melding) {
@@ -60,7 +75,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
             <div>
               <div className="mb-6">
                 <Heading className="my-4" size="small" level="2">
-                  {melding.meldingType === MeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'}
+                  {melding.meldingType === EMeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'}
                 </Heading>
                 <Field name="alertType">
                   {(p: FieldProps<string>) => (
@@ -75,7 +90,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                           setMeldingAlertType(event)
                         }}
                       >
-                        {Object.values(AlertType).map((id) => {
+                        {Object.values(EAlertType).map((id) => {
                           return (
                             <Radio value={id} key={id}>
                               <div className="hover:underline">{getAlertTypeText(id)}</div>
@@ -93,7 +108,9 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                 maxCharacter={maxChar}
                 markdown
                 height="200px"
-                label={melding.meldingType === MeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'}
+                label={
+                  melding.meldingType === EMeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'
+                }
                 noPlaceholder
                 name="melding"
               />
@@ -111,14 +128,14 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                   Slett
                 </Button>
                 <div className="flex justify-end w-full">
-                  {melding.meldingStatus === MeldingStatus.ACTIVE && (
+                  {melding.meldingStatus === EMeldingStatus.ACTIVE && (
                     <Button
                       type="button"
                       className="mx-6"
                       variant="secondary"
                       disabled={disableEdit}
                       onClick={() => {
-                        values.meldingStatus = MeldingStatus.DEACTIVE
+                        values.meldingStatus = EMeldingStatus.DEACTIVE
                         submitForm()
                       }}
                     >
@@ -130,7 +147,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                     variant="primary"
                     disabled={disableEdit}
                     onClick={() => {
-                      values.meldingStatus = MeldingStatus.ACTIVE
+                      values.meldingStatus = EMeldingStatus.ACTIVE
                       submitForm()
                     }}
                   >

@@ -2,16 +2,16 @@ import { PlusIcon } from '@navikt/aksel-icons'
 import { Alert, BodyShort, Button, Label, Loader, Select } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { useKravFilter } from '../../api/KravGraphQLApi'
-import { KravListFilter, KravQL, KravStatus, Option, emptyPage } from '../../constants'
+import { EKravListFilter, EKravStatus, TKravQL, TOption, emptyPage } from '../../constants'
 import { KravPanels, sortKrav } from '../../pages/KravListPage'
 import { kravStatus } from '../../pages/KravPage'
 import { ListName, codelist } from '../../services/Codelist'
 
 type KravFilter = {
-  status: Option[]
-  relevans: Option[]
-  tema: Option[]
-  lover: Option[]
+  status: TOption[]
+  relevans: TOption[]
+  tema: TOption[]
+  lover: TOption[]
 }
 
 export const AllKrav = () => {
@@ -34,15 +34,24 @@ export const AllKrav = () => {
     error,
     refetch,
   } = useKravFilter({
-    relevans: filter.relevans[0]?.id === 'alle' ? undefined : filter.relevans.map((r) => (r.id ? r.id.toString() : '')),
-    lover: filter.lover[0].id === 'alle' ? undefined : filter.lover.map((l) => (l.id ? l.id.toString() : '')),
-    status: filter.status[0]?.id === 'alle' ? undefined : filter.status.map((s) => (s.id ? s.id?.toString() : '')),
+    relevans:
+      filter.relevans[0]?.id === 'alle'
+        ? undefined
+        : filter.relevans.map((r) => (r.id ? r.id.toString() : '')),
+    lover:
+      filter.lover[0].id === 'alle'
+        ? undefined
+        : filter.lover.map((l) => (l.id ? l.id.toString() : '')),
+    status:
+      filter.status[0]?.id === 'alle'
+        ? undefined
+        : filter.status.map((s) => (s.id ? s.id?.toString() : '')),
     pageNumber: 0,
     pageSize,
   })
 
   const [filterValue, setFilterValue] = useState<string>()
-  const [sortedKravList, setSortedKravList] = useState<KravQL[]>([])
+  const [sortedKravList, setSortedKravList] = useState<TKravQL[]>([])
 
   const loading = !data && gqlLoading
   const lastMer = () => {
@@ -69,7 +78,9 @@ export const AllKrav = () => {
   useEffect(() => {
     let sortedData = [...kravene.content]
     if (sorting === 'sist') {
-      sortedData.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0))
+      sortedData.sort((a, b) =>
+        a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
+      )
     } else {
       sortedData = sortKrav(sortedData)
     }
@@ -79,7 +90,9 @@ export const AllKrav = () => {
   useEffect(() => {
     let sortedData = [...kravene.content]
     if (sorting === 'sist') {
-      sortedData.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0))
+      sortedData.sort((a, b) =>
+        a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
+      )
     } else {
       sortedData = sortKrav(sortedData)
     }
@@ -90,18 +103,18 @@ export const AllKrav = () => {
     refetch()
   }, [filter])
 
-  const updateFilter = (value: any, type: KravListFilter) => {
+  const updateFilter = (value: any, type: EKravListFilter) => {
     const newFilterValue = { ...filter }
-    if (type === KravListFilter.RELEVANS) {
+    if (type === EKravListFilter.RELEVANS) {
       newFilterValue.relevans = value
     }
-    if (type === KravListFilter.LOVER) {
+    if (type === EKravListFilter.LOVER) {
       newFilterValue.lover = value
     }
-    if (type === KravListFilter.STATUS) {
+    if (type === EKravListFilter.STATUS) {
       newFilterValue.status = value
     }
-    if (type === KravListFilter.TEMAER) {
+    if (type === EKravListFilter.TEMAER) {
       newFilterValue.tema = value
     }
     setFilter(newFilterValue)
@@ -116,11 +129,11 @@ export const AllKrav = () => {
       'Alle lover',
       lover.map((l) => {
         return { label: l.shortName, id: l.code }
-      }),
+      })
     )
   }
 
-  const getSelector = (kravFilter: KravListFilter, options: any[]) => {
+  const getSelector = (kravFilter: EKravListFilter, options: any[]) => {
     return (
       <div className="ml-3 min-w-fit">
         <Select
@@ -139,7 +152,7 @@ export const AllKrav = () => {
                   label: options.filter((o) => o.id === params.currentTarget.value)[0].label,
                 },
               ],
-              kravFilter,
+              kravFilter
             )
           }}
           className={'flex'}
@@ -171,21 +184,21 @@ export const AllKrav = () => {
             <div className={'flex items-center justify-end w-full'}>
               <Label size={'small'}>Filter</Label>
               {getSelector(
-                KravListFilter.RELEVANS,
+                EKravListFilter.RELEVANS,
                 getOptions(
                   'Alle relevans',
                   relevans?.map((r) => {
                     return { label: r.shortName, id: r.code }
-                  }),
-                ),
+                  })
+                )
               )}
-              {getSelector(KravListFilter.LOVER, getLovOptions())}
+              {getSelector(EKravListFilter.LOVER, getLovOptions())}
               {getSelector(
-                KravListFilter.STATUS,
+                EKravListFilter.STATUS,
                 getOptions(
                   'Alle statuser',
-                  Object.values(KravStatus).map((id) => ({ id, label: kravStatus(id) })),
-                ),
+                  Object.values(EKravStatus).map((id) => ({ id, label: kravStatus(id) }))
+                )
               )}
             </div>
           </div>

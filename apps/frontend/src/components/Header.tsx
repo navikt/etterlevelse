@@ -15,7 +15,7 @@ import { useState } from 'react'
 import { Location, useLocation } from 'react-router-dom'
 import { writeLog } from '../api/LogApi'
 import { getMeldingByType } from '../api/MeldingApi'
-import { AlertType, IMelding, MeldingStatus, MeldingType } from '../constants'
+import { EAlertType, EMeldingStatus, EMeldingType, IMelding } from '../constants'
 import { ampli } from '../services/Amplitude'
 import { user } from '../services/User'
 import { useQueryParam } from '../util/hooks'
@@ -283,7 +283,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
 
   React.useEffect(() => {
     ;(async () => {
-      await getMeldingByType(MeldingType.SYSTEM).then((r) => {
+      await getMeldingByType(EMeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])
         }
@@ -325,7 +325,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           <MainSearch />
         </div>
       </div>
-      {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
+      {systemVarsel && systemVarsel.meldingStatus === EMeldingStatus.ACTIVE && (
         <div className="w-full flex justify-center">
           <div
             className={`flex 
@@ -345,11 +345,11 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           >
             <div className="flex gap-2">
               <img
-                src={systemVarsel.alertType === AlertType.INFO ? informationIcon : warningAlert}
+                src={systemVarsel.alertType === EAlertType.INFO ? informationIcon : warningAlert}
                 width="20px"
                 height="20px"
                 alt={
-                  systemVarsel.alertType === AlertType.INFO ? 'information icon' : 'warning icon'
+                  systemVarsel.alertType === EAlertType.INFO ? 'information icon' : 'warning icon'
                 }
               />
               <Markdown source={systemVarsel.melding} />

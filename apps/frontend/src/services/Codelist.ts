@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios'
 import * as yup from 'yup'
 import { getAllCodelists } from '../api/CodelistApi'
-import { Replace } from '../constants'
+import { TReplace } from '../constants'
 
 export enum ListName {
   AVDELING = 'AVDELING',
@@ -58,24 +58,26 @@ class CodelistService {
   }
 
   // overloads
-  getCodes(list: ListName.LOV): LovCode[]
-  getCodes(list: ListName.TEMA): TemaCode[]
+  getCodes(list: ListName.LOV): TLovCode[]
+  getCodes(list: ListName.TEMA): TTemaCode[]
   getCodes(list: ListName): ICode[]
 
   getCodes(list: ListName): ICode[] {
-    return this.lists && this.lists.codelist[list] ? this.lists.codelist[list].sort((c1, c2) => c1.shortName.localeCompare(c2.shortName)) : []
+    return this.lists && this.lists.codelist[list]
+      ? this.lists.codelist[list].sort((c1, c2) => c1.shortName.localeCompare(c2.shortName))
+      : []
   }
 
   // overloads
-  getCode(list: ListName.LOV, codeName?: string): LovCode | undefined
-  getCode(list: ListName.TEMA, codeName?: string): TemaCode | undefined
+  getCode(list: ListName.LOV, codeName?: string): TLovCode | undefined
+  getCode(list: ListName.TEMA, codeName?: string): TTemaCode | undefined
   getCode(list: ListName, codeName?: string): ICode | undefined
 
   getCode(list: ListName, codeName?: string): ICode | undefined {
     return this.getCodes(list).find((c) => c.code === codeName)
   }
 
-  getCodesForTema(codeName?: string): LovCode[] {
+  getCodesForTema(codeName?: string): TLovCode[] {
     return this.getCodes(ListName.LOV).filter((c) => c.data?.tema === codeName)
   }
 
@@ -117,7 +119,9 @@ class CodelistService {
     })
   }
 
-  getParsedOptionsForLov(forVirkemiddel?: boolean): { value: string; label: string; description: string }[] {
+  getParsedOptionsForLov(
+    forVirkemiddel?: boolean
+  ): { value: string; label: string; description: string }[] {
     const lovList = this.getCodes(ListName.LOV)
     let filteredLovList = []
 
@@ -127,7 +131,7 @@ class CodelistService {
       filteredLovList = filterLovCodeListForRelevans(lovList, LovCodeRelevans.KRAV)
     }
 
-    return filteredLovList.map((code: LovCode) => {
+    return filteredLovList.map((code: TLovCode) => {
       return { value: code.code, label: code.shortName, description: code.description }
     })
   }
@@ -136,9 +140,16 @@ class CodelistService {
     return selected.map((code) => ({ id: code, label: this.getShortname(listName, code) }))
   }
 
-  getParsedOptionsFilterOutSelected(listName: ListName, currentSelected: string[]): { value: string; label: string }[] {
+  getParsedOptionsFilterOutSelected(
+    listName: ListName,
+    currentSelected: string[]
+  ): { value: string; label: string }[] {
     const parsedOptions = this.getParsedOptions(listName)
-    return !currentSelected ? parsedOptions : parsedOptions.filter((option) => (currentSelected.includes(option.value) ? null : option.value))
+    return !currentSelected
+      ? parsedOptions
+      : parsedOptions.filter((option) =>
+          currentSelected.includes(option.value) ? null : option.value
+        )
   }
 
   isForskrift(nationalLawCode?: string) {
@@ -149,7 +160,7 @@ class CodelistService {
     return Object.keys(ListName).map((key) => ({ id: key, label: key }))
   }
 
-  gjelderForLov(tema: TemaCode, lov: LovCode) {
+  gjelderForLov(tema: TTemaCode, lov: TLovCode) {
     return !!this.getCodesForTema(tema.code).filter((l) => l.code === lov.code).length
   }
 }
@@ -164,8 +175,8 @@ export interface IList {
   [name: string]: ICode[]
 }
 
-export type LovCode = Replace<ICode, { data?: ILovCodeData }>
-export type TemaCode = Replace<ICode, { data?: ITemaCodeData }>
+export type TLovCode = TReplace<ICode, { data?: ILovCodeData }>
+export type TTemaCode = TReplace<ICode, { data?: ITemaCodeData }>
 
 export interface ICode {
   list: ListName
@@ -228,7 +239,8 @@ export const codeListSchema: yup.ObjectSchema<ICodeListFormValues> = yup.object(
 })
 
 export const codelistCompareField = (field: string) => {
-  return (a: any, b: any) => codelistCompare((a[field] as ICode) || undefined, (b[field] as ICode) || undefined)
+  return (a: any, b: any) =>
+    codelistCompare((a[field] as ICode) || undefined, (b[field] as ICode) || undefined)
 }
 
 export const codelistsCompareField = <T>(ext: (o: T) => ICode[], exclude?: string) => {
@@ -259,13 +271,19 @@ export const lovCodeRelevansToOptions = () => {
   })
 }
 
-export const filterLovCodeListForRelevans = (codeList: LovCode[], relevantFor: LovCodeRelevans) => {
-  return codeList.filter((code: LovCode) => {
+export const filterLovCodeListForRelevans = (
+  codeList: TLovCode[],
+  relevantFor: LovCodeRelevans
+) => {
+  return codeList.filter((code: TLovCode) => {
     if (code.data) {
       //for old data
       if (!code.data.relevantFor) {
         return true
-      } else if (code.data.relevantFor === LovCodeRelevans.KRAV_OG_VIRKEMIDDEL || code.data.relevantFor === relevantFor) {
+      } else if (
+        code.data.relevantFor === LovCodeRelevans.KRAV_OG_VIRKEMIDDEL ||
+        code.data.relevantFor === relevantFor
+      ) {
         return true
       }
     }

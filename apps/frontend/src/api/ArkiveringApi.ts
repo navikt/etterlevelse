@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { EtterlevelseArkivStatus, IEtterlevelseArkiv, IPageResponse } from '../constants'
+import { EEtterlevelseArkivStatus, IEtterlevelseArkiv, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
 export const getAllArkivering = async () => {
@@ -40,7 +40,7 @@ export const getEtterlevelseArkivByWebsak = async (websakNummer: string) => {
   ).data
 }
 
-export const getEtterlevelseArkivByStatus = async (status: EtterlevelseArkivStatus) => {
+export const getEtterlevelseArkivByStatus = async (status: EEtterlevelseArkivStatus) => {
   return (
     await axios.get<IPageResponse<IEtterlevelseArkiv>>(
       `${env.backendBaseUrl}/etterlevelsearkiv/status/${status}`
@@ -148,7 +148,7 @@ export const arkiveringMapToFormVal = (
   id: arkivering.id || '',
   behandlingId: arkivering.behandlingId || '',
   etterlevelseDokumentasjonId: arkivering.etterlevelseDokumentasjonId || '',
-  status: arkivering.status || EtterlevelseArkivStatus.IKKE_ARKIVER,
+  status: arkivering.status || EEtterlevelseArkivStatus.IKKE_ARKIVER,
   arkiveringDato: arkivering.arkiveringDato || '',
   arkivertAv: arkivering.arkivertAv || '',
   tilArkiveringDato: arkivering.tilArkiveringDato || '',
@@ -158,17 +158,17 @@ export const arkiveringMapToFormVal = (
   version: arkivering.version || -1,
 })
 
-export const arkiveringStatusToString = (status: EtterlevelseArkivStatus): string => {
+export const arkiveringStatusToString = (status: EEtterlevelseArkivStatus): string => {
   switch (status) {
-    case EtterlevelseArkivStatus.TIL_ARKIVERING:
+    case EEtterlevelseArkivStatus.TIL_ARKIVERING:
       return 'Til arkivering'
-    case EtterlevelseArkivStatus.BEHANDLER_ARKIVERING:
+    case EEtterlevelseArkivStatus.BEHANDLER_ARKIVERING:
       return 'Behandler arkivering'
-    case EtterlevelseArkivStatus.ERROR:
+    case EEtterlevelseArkivStatus.ERROR:
       return 'Error'
-    case EtterlevelseArkivStatus.ARKIVERT:
+    case EEtterlevelseArkivStatus.ARKIVERT:
       return 'Arkivert'
-    case EtterlevelseArkivStatus.IKKE_ARKIVER:
+    case EEtterlevelseArkivStatus.IKKE_ARKIVER:
       return 'Ikke arkiver'
   }
 }

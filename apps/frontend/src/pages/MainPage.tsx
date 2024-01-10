@@ -6,15 +6,25 @@ import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from '../components/common/Markdown'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import { PageLayout } from '../components/scaffold/Page'
-import { AlertType, EtterlevelseDokumentasjonQL, IMelding, IPageResponse, MeldingStatus, MeldingType } from '../constants'
+import {
+  EAlertType,
+  EMeldingStatus,
+  EMeldingType,
+  IMelding,
+  IPageResponse,
+  TEtterlevelseDokumentasjonQL,
+} from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { user } from '../services/User'
-import { Variables, query } from './MyEtterlevelseDokumentasjonerPage'
+import { TVariables, query } from './MyEtterlevelseDokumentasjonerPage'
 
 export const MainPage = () => {
   const [forsideVarsel, setForsideVarsle] = useState<IMelding>()
 
-  const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<{ etterlevelseDokumentasjoner: IPageResponse<EtterlevelseDokumentasjonQL> }, Variables>(query, {
+  const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<
+    { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
+    TVariables
+  >(query, {
     variables: { sistRedigert: 4 },
     skip: !user.isLoggedIn(),
   })
@@ -22,7 +32,7 @@ export const MainPage = () => {
   useEffect(() => {
     ampli.logEvent('sidevisning', { side: 'Hovedside', ...userRoleEventProp })
     ;(async () => {
-      await getMeldingByType(MeldingType.FORSIDE).then((r) => {
+      await getMeldingByType(EMeldingType.FORSIDE).then((r) => {
         if (r.numberOfElements > 0) {
           setForsideVarsle(r.content[0])
         }
@@ -48,15 +58,24 @@ export const MainPage = () => {
                     Etterlevelse i NAV
                   </Heading>
                   <span>
-                    For å dokumentere etterlevelse må du opprette et etterlevelsesdokument. Du vil da se hvilke krav som gjelder for din løsning og kan dokumentere hvordan
+                    For å dokumentere etterlevelse må du opprette et etterlevelsesdokument. Du vil
+                    da se hvilke krav som gjelder for din løsning og kan dokumentere hvordan
                     løsningen etterlever kravene.
                   </span>
                 </div>
               )}
-              {data?.etterlevelseDokumentasjoner.content.length && <EtterlevelseDokumentasjonList etterlevelseDokumentasjoner={data?.etterlevelseDokumentasjoner.content} />}
+              {data?.etterlevelseDokumentasjoner.content.length && (
+                <EtterlevelseDokumentasjonList
+                  etterlevelseDokumentasjoner={data?.etterlevelseDokumentasjoner.content}
+                />
+              )}
               <div className="mt-8 flex justify-end">
                 <div className="mr-4">
-                  <EditEtterlevelseDokumentasjonModal variant={data?.etterlevelseDokumentasjoner.content.length ? 'secondary' : 'primary'} />
+                  <EditEtterlevelseDokumentasjonModal
+                    variant={
+                      data?.etterlevelseDokumentasjoner.content.length ? 'secondary' : 'primary'
+                    }
+                  />
                 </div>
                 <Link href="/dokumentasjoner">
                   <Button
@@ -86,9 +105,9 @@ export const MainPage = () => {
             <ForstaKravene />
             <StatusIOrganisasjonen />
           </div>
-          {forsideVarsel?.meldingStatus === MeldingStatus.ACTIVE && (
+          {forsideVarsel?.meldingStatus === EMeldingStatus.ACTIVE && (
             <div className="mt-16 mb-32" id="forsideVarselMelding">
-              {forsideVarsel.alertType === AlertType.INFO ? (
+              {forsideVarsel.alertType === EAlertType.INFO ? (
                 <div className="border-solid border-1 mt-16 p-8 bg-surface-info-subtle border-surface-info">
                   <Markdown source={forsideVarsel.melding} />
                 </div>
@@ -105,8 +124,15 @@ export const MainPage = () => {
   )
 }
 
-const EtterlevelseDokumentasjonList = ({ etterlevelseDokumentasjoner }: { etterlevelseDokumentasjoner: EtterlevelseDokumentasjonQL[] }) => {
-  const sortedEtterlevelseDokumentasjoner = [...etterlevelseDokumentasjoner].sort((a, b) => moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf())
+const EtterlevelseDokumentasjonList = ({
+  etterlevelseDokumentasjoner,
+}: {
+  etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]
+}) => {
+  const sortedEtterlevelseDokumentasjoner = [...etterlevelseDokumentasjoner].sort(
+    (a, b) =>
+      moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf()
+  )
 
   return (
     <div>
@@ -132,7 +158,12 @@ const EtterlevelseDokumentasjonList = ({ etterlevelseDokumentasjoner }: { etterl
                 E{etterlevelseDokumentasjon.etterlevelseNummer} {etterlevelseDokumentasjon.title}
               </LinkPanel.Title>
               <LinkPanel.Description>
-                {etterlevelseDokumentasjon.sistEndretEtterlevelse !== undefined && etterlevelseDokumentasjon.sistEndretEtterlevelse !== '' ? `Sist endret: ${moment(etterlevelseDokumentasjon.sistEndretEtterlevelse).format('ll')}` : ''}
+                {etterlevelseDokumentasjon.sistEndretEtterlevelse !== undefined &&
+                etterlevelseDokumentasjon.sistEndretEtterlevelse !== ''
+                  ? `Sist endret: ${moment(etterlevelseDokumentasjon.sistEndretEtterlevelse).format(
+                      'll'
+                    )}`
+                  : ''}
               </LinkPanel.Description>
             </LinkPanel>
           )
@@ -147,11 +178,19 @@ const ForstaKravene = () => (
     <LinkPanel
       href="/tema"
       onClick={() => {
-        ampli.logEvent('navigere', { kilde: 'forside-panel', app: 'etterlevelse', til: '/tema', fra: '/' })
+        ampli.logEvent('navigere', {
+          kilde: 'forside-panel',
+          app: 'etterlevelse',
+          til: '/tema',
+          fra: '/',
+        })
       }}
     >
       <LinkPanel.Title>Forstå kravene</LinkPanel.Title>
-      <LinkPanel.Description>Få oversikt over krav til etterlevelse, og bli trygg på at du kjenner til alle relevante krav for det du lager</LinkPanel.Description>
+      <LinkPanel.Description>
+        Få oversikt over krav til etterlevelse, og bli trygg på at du kjenner til alle relevante
+        krav for det du lager
+      </LinkPanel.Description>
     </LinkPanel>
   </div>
 )
@@ -170,7 +209,9 @@ const StatusIOrganisasjonen = () => (
       }}
     >
       <LinkPanel.Title>Status i organisasjonen</LinkPanel.Title>
-      <LinkPanel.Description>Følg med på status og se hvor godt NAV sine områder dokumenterer på kravene</LinkPanel.Description>
+      <LinkPanel.Description>
+        Følg med på status og se hvor godt NAV sine områder dokumenterer på kravene
+      </LinkPanel.Description>
     </LinkPanel>
   </div>
 )

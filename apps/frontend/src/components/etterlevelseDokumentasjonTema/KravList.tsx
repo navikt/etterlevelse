@@ -2,33 +2,59 @@ import { Block } from 'baseui/block'
 import { Option } from 'baseui/select'
 import _ from 'lodash'
 import { ReactElement } from 'react'
-import { EtterlevelseDokumentasjonQL, KRAV_FILTER_TYPE, KravEtterlevelseData } from '../../constants'
+import {
+  EKravFilterType,
+  TEtterlevelseDokumentasjonQL,
+  TKravEtterlevelseData,
+} from '../../constants'
 import { user } from '../../services/User'
 import { CustomPanelDivider } from '../common/CustomizedAccordion'
 import { KravCard } from './KravCard'
 
 type KravListProps = {
-  kravList: KravEtterlevelseData[]
+  kravList: TKravEtterlevelseData[]
   EmptyMessage?: ReactElement
   sortingAvailable?: boolean
   noStatus?: boolean
   sorting: readonly Option[]
   sortingOptions: Option[]
-  etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   noVarsling?: boolean
-  kravFilter: KRAV_FILTER_TYPE
+  kravFilter: EKravFilterType
 }
 
-export const KravList = ({ kravList, EmptyMessage, sortingAvailable, noStatus, sorting, sortingOptions, etterlevelseDokumentasjon, noVarsling, kravFilter }: KravListProps) => {
+export const KravList = ({
+  kravList,
+  EmptyMessage,
+  sortingAvailable,
+  noStatus,
+  sorting,
+  sortingOptions,
+  etterlevelseDokumentasjon,
+  noVarsling,
+  kravFilter,
+}: KravListProps) => {
   if (kravList.length) {
     let sortedKravList = _.cloneDeep(kravList)
     if (sortingAvailable && sorting[0].id === sortingOptions[1].id) {
       sortedKravList.sort((a, b) => {
-        if (a.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] === user.getIdent() && b.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] === user.getIdent()) {
-          return a.etterlevelseChangeStamp.lastModifiedDate < b.etterlevelseChangeStamp.lastModifiedDate ? 1 : -1
-        } else if (a.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] === user.getIdent() && b.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] !== user.getIdent()) {
+        if (
+          a.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] === user.getIdent() &&
+          b.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] === user.getIdent()
+        ) {
+          return a.etterlevelseChangeStamp.lastModifiedDate <
+            b.etterlevelseChangeStamp.lastModifiedDate
+            ? 1
+            : -1
+        } else if (
+          a.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] === user.getIdent() &&
+          b.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] !== user.getIdent()
+        ) {
           return -1
-        } else if (a.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] !== user.getIdent() && b.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] === user.getIdent()) {
+        } else if (
+          a.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] !== user.getIdent() &&
+          b.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] === user.getIdent()
+        ) {
           return 1
         } else {
           return 0

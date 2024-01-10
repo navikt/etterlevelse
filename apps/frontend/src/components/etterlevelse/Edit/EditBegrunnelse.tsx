@@ -6,7 +6,13 @@ import { FieldArray, FieldArrayRenderProps, Form, Formik, FormikProps } from 'fo
 import React from 'react'
 import * as yup from 'yup'
 import { mapEtterlevelseToFormValue, updateEtterlevelse } from '../../../api/EtterlevelseApi'
-import { IEtterlevelse, IKrav, ISuksesskriterie, ISuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
+import {
+  ESuksesskriterieStatus,
+  IEtterlevelse,
+  IKrav,
+  ISuksesskriterie,
+  ISuksesskriterieBegrunnelse,
+} from '../../../constants'
 import { theme } from '../../../util'
 import { useDebouncedState } from '../../../util/hooks'
 import { ettlevColors } from '../../../util/theme'
@@ -26,7 +32,9 @@ const etterlevelseSchema = () =>
   yup.object({
     suksesskriterieBegrunnelser: yup.array().of(
       yup.object({
-        suksesskriterieId: yup.number().required('Begrunnelse må være knyttet til et suksesskriterie'),
+        suksesskriterieId: yup
+          .number()
+          .required('Begrunnelse må være knyttet til et suksesskriterie'),
         begrunnelse: yup.string().test({
           name: 'begrunnelseCheck',
           message: 'Suksesskriterium må ha en begrunnelse',
@@ -38,7 +46,7 @@ const etterlevelseSchema = () =>
             return false
           },
         }),
-      }),
+      })
     ),
   })
 
@@ -59,7 +67,9 @@ const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: EditBegrunnelse
       {({ values, isSubmitting, submitForm }: FormikProps<IEtterlevelse>) => (
         <Form>
           <FieldWrapper>
-            <FieldArray name={'suksesskriterieBegrunnelser'}>{(p) => <BegrunnelseList props={p} suksesskriterier={krav.suksesskriterier} />}</FieldArray>
+            <FieldArray name={'suksesskriterieBegrunnelser'}>
+              {(p) => <BegrunnelseList props={p} suksesskriterier={krav.suksesskriterier} />}
+            </FieldArray>
           </FieldWrapper>
         </Form>
       )}
@@ -67,8 +77,15 @@ const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: EditBegrunnelse
   )
 }
 
-const BegrunnelseList = ({ props, suksesskriterier }: { props: FieldArrayRenderProps; suksesskriterier: ISuksesskriterie[] }) => {
-  const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as ISuksesskriterieBegrunnelse[]
+const BegrunnelseList = ({
+  props,
+  suksesskriterier,
+}: {
+  props: FieldArrayRenderProps
+  suksesskriterier: ISuksesskriterie[]
+}) => {
+  const suksesskriterieBegrunnelser = props.form.values
+    .suksesskriterieBegrunnelser as ISuksesskriterieBegrunnelse[]
 
   return (
     <Block>
@@ -102,12 +119,18 @@ const Begrunnelse = ({
   suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
   update: (s: ISuksesskriterieBegrunnelse) => void
 }) => {
-  const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
+  const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(
+    suksesskriterieBegrunnelser,
+    suksesskriterie
+  )
   const begrunnelseIndex = suksesskriterieBegrunnelser.findIndex((item) => {
     return item.suksesskriterieId === suksesskriterie.id
   })
   const debounceDelay = 400
-  const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
+  const [begrunnelse, setBegrunnelse] = useDebouncedState(
+    suksesskriterieBegrunnelse.begrunnelse || '',
+    debounceDelay
+  )
 
   React.useEffect(() => {
     update({
@@ -124,12 +147,14 @@ const Begrunnelse = ({
         <LabelSmall $style={{ color: ettlevColors.green600 }}>
           Suksesskriterium {index + 1} av {kriterieLength}
         </LabelSmall>
-        <LabelSmall $style={{ fontSize: '21px', lineHeight: '30px' }}>{suksesskriterie.navn}</LabelSmall>
+        <LabelSmall $style={{ fontSize: '21px', lineHeight: '30px' }}>
+          {suksesskriterie.navn}
+        </LabelSmall>
         <LabelSmall $style={{ lineHeight: '22px' }} marginTop="16px">
           Hvordan er kriteriet oppfylt?
         </LabelSmall>
 
-        {suksesskriterieBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.OPPFYLT && (
+        {suksesskriterieBegrunnelse.suksesskriterieStatus === ESuksesskriterieStatus.OPPFYLT && (
           <Block>
             <FormControl>
               <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
@@ -137,7 +162,10 @@ const Begrunnelse = ({
           </Block>
         )}
 
-        <Error fieldName={`suksesskriterieBegrunnelser[${begrunnelseIndex}].begrunnelse`} fullWidth={true} />
+        <Error
+          fieldName={`suksesskriterieBegrunnelser[${begrunnelseIndex}].begrunnelse`}
+          fullWidth={true}
+        />
       </Card>
     </Block>
   )

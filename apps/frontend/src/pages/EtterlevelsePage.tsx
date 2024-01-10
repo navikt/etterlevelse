@@ -10,8 +10,14 @@ import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
 import { IEtterlevelse, IKrav } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { ListName, TemaCode, codelist } from '../services/Codelist'
-import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
+import { ListName, TTemaCode, codelist } from '../services/Codelist'
+import {
+  ettlevColors,
+  maxPageWidth,
+  pageWidth,
+  responsivePaddingSmall,
+  responsiveWidthSmall,
+} from '../util/theme'
 import { kravNumView } from './KravPage'
 
 export const etterlevelseName = (etterlevelse: IEtterlevelse) => `${kravNumView(etterlevelse)}`
@@ -25,26 +31,28 @@ export const EtterlevelsePage = () => {
   const [etterlevelse] = useEtterlevelse(params.id)
   const [edit] = useState(etterlevelse && !etterlevelse.id)
   const [krav, setKrav] = useState<IKrav>()
-  const [kravTema, setKravTema] = useState<TemaCode>()
+  const [kravTema, setKravTema] = useState<TTemaCode>()
 
   const loading = !edit && !etterlevelse
 
   useEffect(() => {
     etterlevelse &&
-      getKravByKravNumberAndVersion(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then((res) => {
-        if (res) {
-          setKrav(res)
-          const lovData = codelist.getCode(ListName.LOV, res.regelverk[0]?.lov?.code)
-          if (lovData?.data) {
-            setKravTema(codelist.getCode(ListName.TEMA, lovData.data.tema))
+      getKravByKravNumberAndVersion(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(
+        (res) => {
+          if (res) {
+            setKrav(res)
+            const lovData = codelist.getCode(ListName.LOV, res.regelverk[0]?.lov?.code)
+            if (lovData?.data) {
+              setKravTema(codelist.getCode(ListName.TEMA, lovData.data.tema))
+            }
           }
         }
-      })
+      )
     if (etterlevelse) {
       ampli.logEvent('sidevisning', {
         side: 'Etterlevelse side',
         sidetittel: `Etterlevelse: K${etterlevelse.kravNummer.toString()}.${etterlevelse.kravVersjon.toString()} ${krav?.navn}`,
-        ...userRoleEventProp
+        ...userRoleEventProp,
       })
     }
   }, [etterlevelse])
@@ -76,13 +84,35 @@ export const EtterlevelsePage = () => {
     <Block width="100%" id="content" overrides={{ Block: { props: { role: 'main' } } }}>
       {loading && <LoadingSkeleton header="Etterlevelse" />}
       {!loading && (
-        <Block backgroundColor={ettlevColors.green800} display="flex" width="100%" justifyContent="center" paddingBottom="32px">
+        <Block
+          backgroundColor={ettlevColors.green800}
+          display="flex"
+          width="100%"
+          justifyContent="center"
+          paddingBottom="32px"
+        >
           <Helmet>
             <meta charSet="utf-8" />
-            <title>Etterlevelse: {etterlevelse?.kravNummer ? 'K' + etterlevelse.kravNummer.toString() + '.' + etterlevelse.kravVersjon.toString() + ' ' + krav?.navn : ''} </title>
+            <title>
+              Etterlevelse:{' '}
+              {etterlevelse?.kravNummer
+                ? 'K' +
+                  etterlevelse.kravNummer.toString() +
+                  '.' +
+                  etterlevelse.kravVersjon.toString() +
+                  ' ' +
+                  krav?.navn
+                : ''}{' '}
+            </title>
           </Helmet>
           <Block maxWidth={maxPageWidth} width="100%">
-            <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} display="flex" flexDirection="column" justifyContent="center">
+            <Block
+              paddingLeft={responsivePaddingSmall}
+              paddingRight={responsivePaddingSmall}
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+            >
               <Block display="flex" width="100%" justifyContent="center" marginTop="24px">
                 <Block display="flex" alignItems="center" width="100%">
                   <Block flex="1" display="flex" justifyContent="flex-start">
@@ -97,7 +127,11 @@ export const EtterlevelsePage = () => {
                         Tilbake
                       </Button>
                     </RouteLink> */}
-                    <CustomizedBreadcrumbs fontColor={ettlevColors.grey25} currentPage="Etterlevelse" paths={getBreadcrumPaths()} />
+                    <CustomizedBreadcrumbs
+                      fontColor={ettlevColors.grey25}
+                      currentPage="Etterlevelse"
+                      paths={getBreadcrumPaths()}
+                    />
                   </Block>
 
                   {/*
@@ -132,7 +166,13 @@ export const EtterlevelsePage = () => {
               </Block>
             </Block>
 
-            <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
+            <Block
+              paddingLeft={responsivePaddingSmall}
+              paddingRight={responsivePaddingSmall}
+              width={responsiveWidthSmall}
+              display="flex"
+              justifyContent="center"
+            >
               <Block maxWidth={pageWidth} width="100%">
                 <HeadingXXLarge marginTop="0px" $style={{ color: ettlevColors.grey25 }}>
                   Etterlevelse
@@ -153,9 +193,17 @@ export const EtterlevelsePage = () => {
         </Block>
       )}
 
-      <Block display="flex" width={responsiveWidthSmall} justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
+      <Block
+        display="flex"
+        width={responsiveWidthSmall}
+        justifyContent="center"
+        paddingLeft={responsivePaddingSmall}
+        paddingRight={responsivePaddingSmall}
+      >
         <Block maxWidth={pageWidth} width="100%">
-          {etterlevelse && !loading && krav && <ViewEtterlevelse etterlevelse={etterlevelse} loading={loading} krav={krav} />}
+          {etterlevelse && !loading && krav && (
+            <ViewEtterlevelse etterlevelse={etterlevelse} loading={loading} krav={krav} />
+          )}
         </Block>
       </Block>
     </Block>

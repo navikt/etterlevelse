@@ -8,14 +8,14 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { getBehandling, useSearchBehandling } from '../../../api/BehandlingApi'
 import {
-  EtterlevelseDokumentasjonQL,
   IBehandling,
   IPageResponse,
+  TEtterlevelseDokumentasjonQL,
   emptyPage,
 } from '../../../constants'
 import {
   EtterlevelseDokumentasjonerPanels,
-  Variables,
+  TVariables,
   tabMarginBottom,
 } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { theme } from '../../../util'
@@ -36,8 +36,8 @@ export const BehandlingSok = () => {
     loading: gqlLoading,
     fetchMore,
   } = useQuery<
-    { etterlevelseDokumentasjoner: IPageResponse<EtterlevelseDokumentasjonQL> },
-    Variables
+    { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
+    TVariables
   >(query, {
     variables: {
       behandlingId: selectedBehandling
@@ -163,7 +163,7 @@ export const BehandlingSok = () => {
               disabled={
                 gqlLoading ||
                 etterlevelseDokumentasjoner.numberOfElements >=
-                etterlevelseDokumentasjoner.totalElements
+                  etterlevelseDokumentasjoner.totalElements
               }
             >
               Vis mer

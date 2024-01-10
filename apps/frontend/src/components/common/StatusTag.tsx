@@ -1,9 +1,9 @@
 import { Detail, Tag } from '@navikt/ds-react'
-import { KravStatus } from '../../constants'
+import { EKravStatus } from '../../constants'
 import { kravStatus } from '../../pages/KravPage'
 
 interface IStatusViewProps {
-  status: KravStatus | string
+  status: EKravStatus | string
   variant?: any
   icon?: React.ReactNode
 }
@@ -22,11 +22,11 @@ export const StatusView = ({ status, variant, icon }: IStatusViewProps) => {
 
   if (variant) {
     return getStatusDisplay(variant)
-  } else if (status === KravStatus.UTKAST) {
+  } else if (status === EKravStatus.UTKAST) {
     return getStatusDisplay('neutral')
-  } else if (status === KravStatus.AKTIV) {
+  } else if (status === EKravStatus.AKTIV) {
     return getStatusDisplay('success')
-  } else if (status === KravStatus.UTGAATT) {
+  } else if (status === EKravStatus.UTGAATT) {
     return getStatusDisplay('error')
   } else {
     return getStatusDisplay('neutral')

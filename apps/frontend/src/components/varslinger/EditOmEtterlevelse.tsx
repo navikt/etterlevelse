@@ -1,17 +1,32 @@
 import { Button, Heading, Loader } from '@navikt/ds-react'
 import { Formik, FormikProps } from 'formik'
 import React, { useState } from 'react'
-import { createMelding, deleteMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
-import { AlertType, IMelding, MeldingStatus } from '../../constants'
+import {
+  createMelding,
+  deleteMelding,
+  mapMeldingToFormValue,
+  updateMelding,
+} from '../../api/MeldingApi'
+import { EAlertType, EMeldingStatus, IMelding } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
 
-export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: { melding: IMelding | undefined; setMelding: React.Dispatch<React.SetStateAction<IMelding | undefined>>; isLoading: boolean; maxChar?: number }) => {
+export const EditOmEtterlevelse = ({
+  melding,
+  setMelding,
+  isLoading,
+  maxChar,
+}: {
+  melding: IMelding | undefined
+  setMelding: React.Dispatch<React.SetStateAction<IMelding | undefined>>
+  isLoading: boolean
+  maxChar?: number
+}) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
 
   const initialNumberOfRows = 1
 
   const submit = async (melding: IMelding) => {
-    const newMelding = { ...melding, alertType: AlertType.INFO }
+    const newMelding = { ...melding, alertType: EAlertType.INFO }
     setDisableEdit(true)
     if (melding.id) {
       await updateMelding(newMelding).then((m) => {
@@ -47,10 +62,28 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
               </Heading>
               {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
 
-              <TextAreaField maxCharacter={maxChar} height="200px" label={'Innledende tekst'} noPlaceholder name="melding" />
-              <TextAreaField rows={initialNumberOfRows} label={'Overskrift'} name={'secondaryTittel'} noPlaceholder />
+              <TextAreaField
+                maxCharacter={maxChar}
+                height="200px"
+                label={'Innledende tekst'}
+                noPlaceholder
+                name="melding"
+              />
+              <TextAreaField
+                rows={initialNumberOfRows}
+                label={'Overskrift'}
+                name={'secondaryTittel'}
+                noPlaceholder
+              />
 
-              <TextAreaField maxCharacter={maxChar} markdown height="200px" label={'Innhold'} noPlaceholder name="secondaryMelding" />
+              <TextAreaField
+                maxCharacter={maxChar}
+                markdown
+                height="200px"
+                label={'Innhold'}
+                noPlaceholder
+                name="secondaryMelding"
+              />
 
               <div className="flex w-full">
                 <Button
@@ -70,7 +103,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
                     type="button"
                     disabled={disableEdit}
                     onClick={() => {
-                      values.meldingStatus = MeldingStatus.ACTIVE
+                      values.meldingStatus = EMeldingStatus.ACTIVE
                       submitForm()
                     }}
                   >

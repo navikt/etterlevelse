@@ -2,14 +2,14 @@ import { Block } from 'baseui/block'
 import { Option } from 'baseui/select'
 import { LabelSmall, ParagraphXSmall } from 'baseui/typography'
 import { useNavigate } from 'react-router-dom'
-import { IKrav, KravEtterlevelseData } from '../../constants'
+import { IKrav, TKravEtterlevelseData } from '../../constants'
 import { kravRelevansOptions, sortingOptions } from '../../pages/EtterlevelseDokumentasjonTemaPage'
 import { ettlevColors } from '../../util/theme'
 import CustomizedSelect from '../common/CustomizedSelect'
 
 export const KravPanelHeader = (props: {
   title: string
-  kravData: KravEtterlevelseData[] | IKrav[]
+  kravData: TKravEtterlevelseData[] | IKrav[]
 }) => {
   let antallSuksesskriterier = 0
 
@@ -40,7 +40,7 @@ export const KravPanelHeader = (props: {
 export const KravPanelHeaderWithSorting = (props: {
   kravRelevans: readonly Option[]
   setKravRelevans: React.Dispatch<React.SetStateAction<readonly Option[]>>
-  kravData: KravEtterlevelseData[] | IKrav[]
+  kravData: TKravEtterlevelseData[] | IKrav[]
   sorting: readonly Option[]
   setSorting: React.Dispatch<React.SetStateAction<readonly Option[]>>
   temaPageUrl: string

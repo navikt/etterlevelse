@@ -5,7 +5,7 @@ import { Option } from 'baseui/select'
 import { HeadingXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
 import { useEffect, useState } from 'react'
 import { useVirkemiddelFilter } from '../../api/VirkemiddelApi'
-import { VirkemiddelListFilter } from '../../constants'
+import { EVirkemiddelListFilter } from '../../constants'
 import { ListName, codelist } from '../../services/Codelist'
 import { useDebouncedState } from '../../util/hooks'
 import { ettlevColors } from '../../util/theme'
@@ -29,7 +29,10 @@ type AllVirkemiddelProps = {
 const selectorMarginLeft: Responsive<Scale> = ['0px', '0px', '0px', '12px', '12px', '12px']
 const selectorMarginTop: Responsive<Scale> = ['10px', '10px', '10px', '0px', '0px', '0px']
 
-export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllVirkemiddelProps) => {
+export const AllVirkemiddel = ({
+  isCreateModalOpen,
+  setIsCreateModalOpen,
+}: AllVirkemiddelProps) => {
   const getSortDateOptions = [
     { label: 'sorter på navn', id: 'navn' },
     { label: 'nyest-eldst', id: 'DESC' },
@@ -44,13 +47,15 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
   const virkemiddelTyper = codelist.getCodes(ListName.VIRKEMIDDELTYPE)
   const getOptions = (label: string, options: any[]) => [{ label: label, id: 'alle' }, ...options]
 
-  const [data, totalDataLength, setVirkemiddelTypeFilter, loading, refetchData] = useVirkemiddelFilter()
+  const [data, totalDataLength, setVirkemiddelTypeFilter, loading, refetchData] =
+    useVirkemiddelFilter()
 
-  const filteredVirkemiddel = sok && sok.length > 2 ? data.filter((v) => v.navn.includes(sok)) : data
+  const filteredVirkemiddel =
+    sok && sok.length > 2 ? data.filter((v) => v.navn.includes(sok)) : data
 
-  const updateFilter = (value: any, type: VirkemiddelListFilter) => {
+  const updateFilter = (value: any, type: EVirkemiddelListFilter) => {
     const newFilterValue = { ...filter }
-    if (type === VirkemiddelListFilter.VIRKEMIDDELTYPE) {
+    if (type === EVirkemiddelListFilter.VIRKEMIDDELTYPE) {
       newFilterValue.virkemiddelType = value
     }
     setFilter(newFilterValue)
@@ -61,7 +66,12 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
   }, [filter])
 
   //must be run in function to not affect other selectors others overrides
-  const getSelector = (filterId: string | undefined, virkemiddelFilter: VirkemiddelListFilter, options: any[], value: Option[]) => {
+  const getSelector = (
+    filterId: string | undefined,
+    virkemiddelFilter: EVirkemiddelListFilter,
+    options: any[],
+    value: Option[]
+  ) => {
     return (
       <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
         <CustomizedSelect
@@ -101,7 +111,13 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
           </HeadingXLarge>
         </Block>
         <Block display="flex" justifyContent="center" alignContent="center" width="100%">
-          <Block display="flex" justifyContent="flex-start" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+          <Block
+            display="flex"
+            justifyContent="flex-start"
+            width="100%"
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+          >
             <StatefulInput
               size="compact"
               placeholder="Søk"
@@ -130,7 +146,12 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
                     overrides: {
                       Svg: {
                         component: (props: any) => (
-                          <Button notBold size="compact" kind="tertiary" onClick={() => props.onClick()}>
+                          <Button
+                            notBold
+                            size="compact"
+                            kind="tertiary"
+                            onClick={() => props.onClick()}
+                          >
                             <img src={clearSearchIcon} alt="tøm" />
                           </Button>
                         ),
@@ -143,31 +164,44 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
             />
           </Block>
           <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
-            <Block display={['block', 'block', 'block', 'block', 'flex', 'flex']} alignItems="center" justifyContent="flex-end" width="100%">
+            <Block
+              display={['block', 'block', 'block', 'block', 'flex', 'flex']}
+              alignItems="center"
+              justifyContent="flex-end"
+              width="100%"
+            >
               <LabelSmall>Filter</LabelSmall>
               {getSelector(
                 filter.virkemiddelType[0].id?.toString(),
-                VirkemiddelListFilter.VIRKEMIDDELTYPE,
+                EVirkemiddelListFilter.VIRKEMIDDELTYPE,
                 getOptions(
                   'Alle virkemiddel typer',
                   virkemiddelTyper?.map((r) => {
                     return { label: r.shortName, id: r.code }
-                  }),
+                  })
                 ),
-                filter.virkemiddelType,
+                filter.virkemiddelType
               )}
             </Block>
           </Block>
         </Block>
       </Block>
-      <VirkemiddelTable virkemidler={filteredVirkemiddel} loading={loading} refetchData={refetchData} />
+      <VirkemiddelTable
+        virkemidler={filteredVirkemiddel}
+        loading={loading}
+        refetchData={refetchData}
+      />
       {filteredVirkemiddel.length === 0 && (
         <Block width="100%" display="flex" justifyContent="center">
           <ParagraphMedium>Fant ingen virkemiddel</ParagraphMedium>
         </Block>
       )}
 
-      <EditVirkemiddelModal isOpen={isCreateModalOpen} setIsOpen={setIsCreateModalOpen} refetchData={refetchData} />
+      <EditVirkemiddelModal
+        isOpen={isCreateModalOpen}
+        setIsOpen={setIsCreateModalOpen}
+        refetchData={refetchData}
+      />
     </Block>
   )
 }

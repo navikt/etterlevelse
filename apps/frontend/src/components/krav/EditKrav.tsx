@@ -6,12 +6,12 @@ import React, { useEffect } from 'react'
 import * as yup from 'yup'
 import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
 import {
-    createKrav,
-    getKravByKravNumberAndVersion,
-    kravMapToFormVal,
-    updateKrav,
+  createKrav,
+  getKravByKravNumberAndVersion,
+  kravMapToFormVal,
+  updateKrav,
 } from '../../api/KravApi'
-import { IKrav, IKravVersjon, KravQL, KravStatus } from '../../constants'
+import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../../constants'
 import { ListName, codelist } from '../../services/Codelist'
 import { user } from '../../services/User'
 import { env } from '../../util/env'
@@ -27,7 +27,7 @@ import { RegelverkEdit } from './Edit/RegelverkEdit'
 import { ErrorMessageModal } from './ErrorMessageModal'
 
 type EditKravProps = {
-  krav: KravQL
+  krav: TKravQL
   close: (k?: IKrav) => void
   formRef: React.Ref<any>
   isOpen: boolean | undefined
@@ -72,7 +72,7 @@ export const EditKrav = ({
         message: errorMessage,
         test: function (suksesskriterier) {
           const { parent } = this
-          if (parent.status === KravStatus.AKTIV) {
+          if (parent.status === EKravStatus.AKTIV) {
             return suksesskriterier &&
               suksesskriterier.length > 0 &&
               suksesskriterier.every((s) => s.navn)
@@ -87,7 +87,7 @@ export const EditKrav = ({
         message: errorMessage,
         test: function (hensikt) {
           const { parent } = this
-          if (parent.status === KravStatus.AKTIV) {
+          if (parent.status === EKravStatus.AKTIV) {
             return hensikt ? true : false
           }
           return true
@@ -98,7 +98,7 @@ export const EditKrav = ({
         message: errorMessage,
         test: function (versjonEndringer) {
           const { parent } = this
-          if (parent.status === KravStatus.AKTIV) {
+          if (parent.status === EKravStatus.AKTIV) {
             if (!newKrav && krav.kravVersjon > 1) {
               return versjonEndringer ? true : false
             }
@@ -111,7 +111,7 @@ export const EditKrav = ({
         message: errorMessage,
         test: function (regelverk) {
           const { parent } = this
-          if (parent.status === KravStatus.AKTIV) {
+          if (parent.status === EKravStatus.AKTIV) {
             return regelverk && regelverk.length > 0 ? true : false
           }
           return true
@@ -122,7 +122,7 @@ export const EditKrav = ({
         message: errorMessage,
         test: function (varslingsadresser) {
           const { parent } = this
-          if (parent.status === KravStatus.AKTIV) {
+          if (parent.status === EKravStatus.AKTIV) {
             return varslingsadresser && varslingsadresser.length > 0 ? true : false
           }
           return true
@@ -135,10 +135,10 @@ export const EditKrav = ({
         test: function (status) {
           const { parent } = this
           const nyesteAktivKravVersjon = alleKravVersjoner.filter(
-            (k) => k.kravStatus === KravStatus.AKTIV
+            (k) => k.kravStatus === EKravStatus.AKTIV
           )
           if (
-            status === KravStatus.UTGAATT &&
+            status === EKravStatus.UTGAATT &&
             nyesteAktivKravVersjon.length >= 1 &&
             parent.kravVersjon > nyesteAktivKravVersjon[0].kravVersjon
           ) {
@@ -149,7 +149,7 @@ export const EditKrav = ({
       }),
     })
 
-  const submit = async (krav: KravQL) => {
+  const submit = async (krav: TKravQL) => {
     setIsFormDirty(false)
     const regelverk = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov.code)
     const underavdeling = codelist.getCode(ListName.UNDERAVDELING, regelverk?.data?.underavdeling)
@@ -164,7 +164,7 @@ export const EditKrav = ({
       krav.kravNummer,
       krav.kravVersjon
     )
-    if (etterlevelser.totalElements > 0 && krav.status === KravStatus.UTKAST && !newVersion) {
+    if (etterlevelser.totalElements > 0 && krav.status === EKravStatus.UTKAST && !newVersion) {
       setErrorModalMessage(
         'Kravet kan ikke settes til «Utkast» når det er tilknyttet dokumentasjon av etterlevelse'
       )
@@ -431,7 +431,7 @@ export const EditKrav = ({
 
                   <div className="flex w-full">
                     <div className="flex w-full">
-                      {krav.status === KravStatus.AKTIV && !newVersion && (
+                      {krav.status === EKravStatus.AKTIV && !newVersion && (
                         <div className="mr-2">
                           <Button
                             variant="secondary"
@@ -446,7 +446,7 @@ export const EditKrav = ({
                         </div>
                       )}
 
-                      {user.isAdmin() && krav.status === KravStatus.UTGAATT && !newVersion && (
+                      {user.isAdmin() && krav.status === EKravStatus.UTGAATT && !newVersion && (
                         <div className="mr-2">
                           <Button
                             variant="secondary"
@@ -466,7 +466,7 @@ export const EditKrav = ({
                           <Button
                             variant="secondary"
                             onClick={() => {
-                              values.status = KravStatus.UTKAST
+                              values.status = EKravStatus.UTKAST
                               submitForm()
                             }}
                             disabled={isSubmitting}
@@ -498,7 +498,7 @@ export const EditKrav = ({
                             type="button"
                             variant="primary"
                             onClick={() => {
-                              values.status = KravStatus.UTGAATT
+                              values.status = EKravStatus.UTGAATT
                               submitForm()
                               setUtgaattKravMessage(false)
                             }}
@@ -530,15 +530,15 @@ export const EditKrav = ({
                                 updateKrav(
                                   kravMapToFormVal({
                                     ...newVersionOfKrav,
-                                    status: KravStatus.UTKAST,
-                                  }) as KravQL
+                                    status: EKravStatus.UTKAST,
+                                  }) as TKravQL
                                 ).then(() => {
-                                  values.status = KravStatus.AKTIV
+                                  values.status = EKravStatus.AKTIV
                                   submitForm()
                                   setAktivKravMessage(false)
                                 })
                               } else {
-                                values.status = KravStatus.AKTIV
+                                values.status = EKravStatus.AKTIV
                                 submitForm()
                                 setAktivKravMessage(false)
                               }
@@ -574,7 +574,7 @@ export const EditKrav = ({
                         variant="primary"
                         onClick={() => {
                           if (newVersion) {
-                            values.status = KravStatus.UTKAST
+                            values.status = EKravStatus.UTKAST
                           } else {
                             values.status = krav.status
                           }
@@ -582,18 +582,18 @@ export const EditKrav = ({
                         }}
                         disabled={isSubmitting}
                       >
-                        {newVersion || krav.status !== KravStatus.AKTIV
+                        {newVersion || krav.status !== EKravStatus.AKTIV
                           ? 'Lagre'
                           : 'Publiser endringer'}
                       </Button>
 
-                      {(newVersion || krav.status === KravStatus.UTKAST) && (
+                      {(newVersion || krav.status === EKravStatus.UTKAST) && (
                         <Button
                           type="button"
                           className="ml-4"
                           variant="primary"
                           onClick={() => {
-                            values.status = KravStatus.AKTIV
+                            values.status = EKravStatus.AKTIV
                             submitForm()
                           }}
                           disabled={isSubmitting}

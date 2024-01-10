@@ -1,5 +1,15 @@
 import { PlusIcon } from '@navikt/aksel-icons'
-import { BodyLong, BodyShort, Button, Heading, Label, LinkPanel, Skeleton, Spacer, Tabs } from '@navikt/ds-react'
+import {
+  BodyLong,
+  BodyShort,
+  Button,
+  Heading,
+  Label,
+  LinkPanel,
+  Skeleton,
+  Spacer,
+  Tabs,
+} from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -8,14 +18,14 @@ import { AllKrav } from '../components/kravList/AllKrav'
 import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
 import { TemaList } from '../components/kravList/TemaList'
 import { PageLayout } from '../components/scaffold/Page'
-import { IKrav, KravQL } from '../constants'
+import { IKrav, TKravQL } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { ListName, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 
 type Section = 'siste' | 'alle' | 'tema'
 
-export const sortKrav = (kravene: KravQL[]) => {
+export const sortKrav = (kravene: TKravQL[]) => {
   return [...kravene].sort((a, b) => {
     if (a.navn.toLocaleLowerCase() === b.navn.toLocaleLowerCase()) {
       return b.kravVersjon - a.kravVersjon
@@ -27,7 +37,11 @@ export const sortKrav = (kravene: KravQL[]) => {
 }
 
 export const KravListPage = () => {
-  ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav', ...userRoleEventProp })
+  ampli.logEvent('sidevisning', {
+    side: 'Kraveier side',
+    sidetittel: 'Forvalte og opprette krav',
+    ...userRoleEventProp,
+  })
 
   return (
     <PageLayout pageTitle="Forvalte og opprette krav" currentPage="Forvalte og opprette krav">
@@ -42,7 +56,13 @@ export const KravListPage = () => {
 
                 <div className="flex justify-end">
                   {user.isKraveier() && (
-                    <Button iconPosition="left" icon={<PlusIcon area-label="" aria-hidden />} size="medium" as="a" href="/krav/ny">
+                    <Button
+                      iconPosition="left"
+                      icon={<PlusIcon area-label="" aria-hidden />}
+                      size="medium"
+                      as="a"
+                      href="/krav/ny"
+                    >
                       Nytt krav
                     </Button>
                   )}
@@ -64,7 +84,13 @@ export const KravListPage = () => {
   )
 }
 
-export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | IKrav[]; loading?: boolean }) => {
+export const KravPanels = ({
+  kravene,
+  loading,
+}: {
+  kravene?: TKravQL[] | IKrav[]
+  loading?: boolean
+}) => {
   if (loading) return <Skeleton variant="rectangle" />
   return (
     <div className="mb-2.5 flex flex-col gap-2">
@@ -92,7 +118,12 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | IKrav[];
                     <BodyShort size="small" className="break-words">
                       {tema && tema.shortName ? tema.shortName : ''}
                     </BodyShort>
-                    <BodyShort size="small">{k.changeStamp.lastModifiedDate !== undefined && k.changeStamp.lastModifiedDate !== '' ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
+                    <BodyShort size="small">
+                      {k.changeStamp.lastModifiedDate !== undefined &&
+                      k.changeStamp.lastModifiedDate !== ''
+                        ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}`
+                        : ''}
+                    </BodyShort>
                   </div>
                 </LinkPanel.Title>
               </LinkPanel>

@@ -7,15 +7,18 @@ import { ObjectType } from '../components/admin/audit/AuditTypes'
 import { PageLayout } from '../components/scaffold/Page'
 import EditMelding from '../components/varslinger/EditMelding'
 import EditOmEtterlevelse from '../components/varslinger/EditOmEtterlevelse'
-import { IMelding, MeldingType } from '../constants'
+import { EMeldingType, IMelding } from '../constants'
 import { ampli } from '../services/Amplitude'
 
-type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE | MeldingType.OM_ETTERLEVELSE
+type TSection =
+  | 'utsendtMelding'
+  | EMeldingType.SYSTEM
+  | EMeldingType.FORSIDE
+  | EMeldingType.OM_ETTERLEVELSE
 
 export const VarselPage = () => {
   return (
     <PageLayout pageTitle="Varslinger" currentPage="Varslinger">
-
       <Heading className="mt-2" size="medium" level="1">
         Varslinger
       </Heading>
@@ -30,26 +33,29 @@ export const VarselPage = () => {
 const getMeldingType = (tabName: string) => {
   switch (tabName) {
     case 'FORSIDE':
-      return MeldingType.FORSIDE
+      return EMeldingType.FORSIDE
     case 'OM_ETTERLEVELSE':
-      return MeldingType.OM_ETTERLEVELSE
+      return EMeldingType.OM_ETTERLEVELSE
     default:
-      return MeldingType.SYSTEM
+      return EMeldingType.SYSTEM
   }
 }
 
 const VarselTabs = () => {
-  const params = useParams<{ tab?: Section }>()
+  const params = useParams<{ tab?: TSection }>()
 
-  const [tab, setTab] = useState<Section>(params.tab || 'utsendtMelding')
+  const [tab, setTab] = useState<TSection>(params.tab || 'utsendtMelding')
   const [isLoading, setLoading] = useState<boolean>(false)
   const [melding, setMelding] = useState<IMelding>()
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       setLoading(true)
       if (tab !== 'utsendtMelding') {
-        ampli.logEvent('sidevisning', { side: 'Varsel side for admin', sidetittel: 'Opprett varsel melding for ' + tab })
+        ampli.logEvent('sidevisning', {
+          side: 'Varsel side for admin',
+          sidetittel: 'Opprett varsel melding for ' + tab,
+        })
         const response = await getMeldingByType(getMeldingType(tab))
         if (response.numberOfElements > 0) {
           setMelding(response.content[0])
@@ -66,38 +72,48 @@ const VarselTabs = () => {
       <Tabs.List>
         <Tabs.Tab value="utsendtMelding" label="Utsendte meldinger" />
         <Tabs.Tab
-          value={MeldingType.SYSTEM}
+          value={EMeldingType.SYSTEM}
           label="Systemmelding"
           onClick={() => {
-            setTab(MeldingType.SYSTEM)
+            setTab(EMeldingType.SYSTEM)
           }}
         />
         <Tabs.Tab
-          value={MeldingType.FORSIDE}
+          value={EMeldingType.FORSIDE}
           label="Informasjon på forsiden"
           onClick={() => {
-            setTab(MeldingType.FORSIDE)
+            setTab(EMeldingType.FORSIDE)
           }}
         />
         <Tabs.Tab
-          value={MeldingType.OM_ETTERLEVELSE}
+          value={EMeldingType.OM_ETTERLEVELSE}
           label="Om etterlevelse"
           onClick={() => {
-            setTab(MeldingType.OM_ETTERLEVELSE)
+            setTab(EMeldingType.OM_ETTERLEVELSE)
           }}
         />
       </Tabs.List>
       <Tabs.Panel value="utsendtMelding">
         <AuditRecentTable show={true} tableType={ObjectType.Melding} />
       </Tabs.Panel>
-      <Tabs.Panel value={MeldingType.SYSTEM}>
+      <Tabs.Panel value={EMeldingType.SYSTEM}>
         <EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} />
       </Tabs.Panel>
-      <Tabs.Panel value={MeldingType.FORSIDE}>
-        <EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} maxChar={500} />
+      <Tabs.Panel value={EMeldingType.FORSIDE}>
+        <EditMelding
+          melding={melding}
+          setMelding={setMelding}
+          isLoading={isLoading}
+          maxChar={500}
+        />
       </Tabs.Panel>
-      <Tabs.Panel value={MeldingType.OM_ETTERLEVELSE}>
-        <EditOmEtterlevelse melding={melding} setMelding={setMelding} isLoading={isLoading} maxChar={500} />
+      <Tabs.Panel value={EMeldingType.OM_ETTERLEVELSE}>
+        <EditOmEtterlevelse
+          melding={melding}
+          setMelding={setMelding}
+          isLoading={isLoading}
+          maxChar={500}
+        />
       </Tabs.Panel>
     </Tabs>
   )

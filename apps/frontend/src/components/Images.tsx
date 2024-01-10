@@ -73,21 +73,73 @@ import paragrafIcon from '../resources/icons/paragraf-ikon.svg'
 import paragrafIconBgSmall from '../resources/icons/paragrafIconBg-small.svg'
 import saveArchiveIcon from '../resources/icons/save-archive-icon.svg'
 import warningAlert from '../resources/icons/warning-alert.svg'
-import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
+import { codelist, ListName, TLovCode, TTemaCode } from '../services/Codelist'
 
 import { theme } from '../util'
 
 export {
-    angleIcon, arkCheckIcon, arkPennIcon, arrowRightIcon, avatarPlaceholder, bamseIcon, barChart, bokEtterlevelseIcon, checkboxChecked,
-    checkboxUnchecked,
-    checkboxUncheckedHover, checkmarkIcon, chevronLeft, circlePencilIcon, clearSearchIcon, crossIcon, deleteIcon,
-    deleteIconGreen600,
-    editIcon,
-    editSecondaryIcon,
-    ellipse80, etterlevelseLogoWhiteIcon, exitIcon, externalLinkIcon,
-    eyeSlash, filterIcon, gavelIcon, gavelIconBg, grafIcon, grafIconBg, grafIconBgSmall, handWithLeaf, husIcon, illustration, informationIcon, lawBook, logo, mailboxPoppingIcon, navChevronDownIcon, navChevronRightIcon, navImage, notesIcon,
-    notesWithContentIcon, outlineInfoIcon, page2Icon, pageIcon, paperPenIconBg,
-    paperPenIconBgSmall, paragrafIcon, paragrafIconBg, paragrafIconBgSmall, pencilFill, plusIcon, questionmarkFocusIcon, questionmarkHoverIcon, questionmarkIcon, sadFolderIcon, saveArchiveIcon, searchIcon, sokButtonIcon, stepper, warningAlert
+  angleIcon,
+  arkCheckIcon,
+  arkPennIcon,
+  arrowRightIcon,
+  avatarPlaceholder,
+  bamseIcon,
+  barChart,
+  bokEtterlevelseIcon,
+  checkboxChecked,
+  checkboxUnchecked,
+  checkboxUncheckedHover,
+  checkmarkIcon,
+  chevronLeft,
+  circlePencilIcon,
+  clearSearchIcon,
+  crossIcon,
+  deleteIcon,
+  deleteIconGreen600,
+  editIcon,
+  editSecondaryIcon,
+  ellipse80,
+  etterlevelseLogoWhiteIcon,
+  exitIcon,
+  externalLinkIcon,
+  eyeSlash,
+  filterIcon,
+  gavelIcon,
+  gavelIconBg,
+  grafIcon,
+  grafIconBg,
+  grafIconBgSmall,
+  handWithLeaf,
+  husIcon,
+  illustration,
+  informationIcon,
+  lawBook,
+  logo,
+  mailboxPoppingIcon,
+  navChevronDownIcon,
+  navChevronRightIcon,
+  navImage,
+  notesIcon,
+  notesWithContentIcon,
+  outlineInfoIcon,
+  page2Icon,
+  pageIcon,
+  paperPenIconBg,
+  paperPenIconBgSmall,
+  paragrafIcon,
+  paragrafIconBg,
+  paragrafIconBgSmall,
+  pencilFill,
+  plusIcon,
+  questionmarkFocusIcon,
+  questionmarkHoverIcon,
+  questionmarkIcon,
+  sadFolderIcon,
+  saveArchiveIcon,
+  searchIcon,
+  sokButtonIcon,
+  stepper,
+  warningAlert,
 }
 
 export const temaBilder: { [id: string]: string } = {
@@ -104,7 +156,7 @@ export const temaBilder: { [id: string]: string } = {
   GUARDIAN: guardianImage,
 }
 
-const bildeForLov = (code: LovCode) => bildeForTema(code.data?.tema)
+const bildeForLov = (code: TLovCode) => bildeForTema(code.data?.tema)
 
 const bildeForTema = (code?: string) => {
   const temaCode = codelist.getCode(ListName.TEMA, code)
@@ -112,9 +164,21 @@ const bildeForTema = (code?: string) => {
   return imageCode ? temaBilder[imageCode] || bookImage : bookImage
 }
 
-export const LovBilde = (props: { code: LovCode } & BildeProps) => <Bilde {...props} src={bildeForLov(props.code)} alt={`Lov illustrasjon: ${props.code.shortName}`} />
+export const LovBilde = (props: { code: TLovCode } & BildeProps) => (
+  <Bilde
+    {...props}
+    src={bildeForLov(props.code)}
+    alt={`Lov illustrasjon: ${props.code.shortName}`}
+  />
+)
 
-export const TemaBilde = (props: { code: TemaCode } & BildeProps) => <Bilde {...props} src={bildeForTema(props.code.code)} alt={`Tema illustrasjon: ${props.code.shortName}`} />
+export const TemaBilde = (props: { code: TTemaCode } & BildeProps) => (
+  <Bilde
+    {...props}
+    src={bildeForTema(props.code.code)}
+    alt={`Tema illustrasjon: ${props.code.shortName}`}
+  />
+)
 
 type BildeProps = {
   width?: string

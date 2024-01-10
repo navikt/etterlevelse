@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { AlertType, IMelding, IPageResponse, MeldingStatus, MeldingType } from '../constants'
+import { EAlertType, EMeldingStatus, EMeldingType, IMelding, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
 export const getAllMelding = async () => {
@@ -17,19 +17,29 @@ export const getAllMelding = async () => {
 }
 
 export const getMeldingPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<IPageResponse<IMelding>>(`${env.backendBaseUrl}/melding?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (
+    await axios.get<IPageResponse<IMelding>>(
+      `${env.backendBaseUrl}/melding?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    )
+  ).data
 }
 
 export const getMelding = async (id: string) => {
   return (await axios.get<IMelding>(`${env.backendBaseUrl}/melding/${id}`)).data
 }
 
-export const getMeldingByType = async (meldingType: MeldingType) => {
-  return (await axios.get<IPageResponse<IMelding>>(`${env.backendBaseUrl}/melding/type/${meldingType}`)).data
+export const getMeldingByType = async (meldingType: EMeldingType) => {
+  return (
+    await axios.get<IPageResponse<IMelding>>(`${env.backendBaseUrl}/melding/type/${meldingType}`)
+  ).data
 }
 
-export const getMeldingByStatus = async (meldingStatus: MeldingStatus) => {
-  return (await axios.get<IPageResponse<IMelding>>(`${env.backendBaseUrl}/melding/status/${meldingStatus}`)).data
+export const getMeldingByStatus = async (meldingStatus: EMeldingStatus) => {
+  return (
+    await axios.get<IPageResponse<IMelding>>(
+      `${env.backendBaseUrl}/melding/status/${meldingStatus}`
+    )
+  ).data
 }
 
 export const deleteMelding = async (id: string) => {
@@ -60,31 +70,31 @@ export const mapMeldingToFormValue = (melding: Partial<IMelding>): IMelding => {
     id: melding.id || '',
     changeStamp: melding.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
     version: -1,
-    meldingStatus: melding.meldingStatus || MeldingStatus.DEACTIVE,
-    meldingType: melding.meldingType || MeldingType.FORSIDE,
+    meldingStatus: melding.meldingStatus || EMeldingStatus.DEACTIVE,
+    meldingType: melding.meldingType || EMeldingType.FORSIDE,
     melding: melding.melding || '',
     secondaryTittel: melding.secondaryTittel || '',
     secondaryMelding: melding.secondaryMelding || '',
-    alertType: melding.alertType || AlertType.WARNING,
+    alertType: melding.alertType || EAlertType.WARNING,
   }
 }
 
-export const meldingStatusToString = (status: MeldingStatus): string => {
+export const meldingStatusToString = (status: EMeldingStatus): string => {
   switch (status) {
-    case MeldingStatus.ACTIVE:
+    case EMeldingStatus.ACTIVE:
       return 'Synlig/Aktiv'
-    case MeldingStatus.DEACTIVE:
+    case EMeldingStatus.DEACTIVE:
       return 'Skjult/Deaktivert'
   }
 }
 
-export const meldingTypeToString = (status: MeldingType): string => {
+export const meldingTypeToString = (status: EMeldingType): string => {
   switch (status) {
-    case MeldingType.FORSIDE:
+    case EMeldingType.FORSIDE:
       return 'Forside melding'
-    case MeldingType.SYSTEM:
+    case EMeldingType.SYSTEM:
       return 'System melding'
-    case MeldingType.OM_ETTERLEVELSE:
+    case EMeldingType.OM_ETTERLEVELSE:
       return 'Om etterlevelse melding'
   }
 }

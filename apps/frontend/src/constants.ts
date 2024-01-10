@@ -1,21 +1,25 @@
 import * as React from 'react'
-import { ICode, LovCode } from './services/Codelist'
+import { ICode, TLovCode } from './services/Codelist'
 import { Group } from './services/User'
 
-export type RecursivePartial<T> = {
-  [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P]
+export type TRecursivePartial<T> = {
+  [P in keyof T]?: T[P] extends (infer U)[]
+    ? TRecursivePartial<U>[]
+    : T[P] extends object
+      ? TRecursivePartial<T[P]>
+      : T[P]
 }
 
-type Not<T> = { [key in keyof T]?: never }
+type TNot<T> = { [key in keyof T]?: never }
 
-export type Or<T, U> = (T & Not<U>) | (U & Not<T>)
+export type TOr<T, U> = (T & TNot<U>) | (U & TNot<T>)
 
-export type Option = Readonly<{
+export type TOption = Readonly<{
   id?: string | number
   label?: React.ReactNode
 }>
 
-export enum TilbakemeldingMeldingStatus {
+export enum ETilbakemeldingMeldingStatus {
   UBESVART = 'UBESVART',
   BESVART = 'BESVART',
   MIDLERTIDLIG_SVAR = 'MIDLERTIDLIG_SVAR',
@@ -25,7 +29,7 @@ export interface IEtterlevelseArkiv extends IDomainObject {
   id: string
   behandlingId: string
   etterlevelseDokumentasjonId: string
-  status: EtterlevelseArkivStatus
+  status: EEtterlevelseArkivStatus
   arkiveringDato: string
   arkivertAv: string
   tilArkiveringDato: string
@@ -33,40 +37,40 @@ export interface IEtterlevelseArkiv extends IDomainObject {
   webSakNummer: string
 }
 
-export enum KRAV_FILTER_TYPE {
+export enum EKravFilterType {
   RELEVANTE_KRAV = 'RELEVANTE_KRAV',
   BORTFILTTERTE_KRAV = 'BORTFILTERTE_KRAV',
   UTGAATE_KRAV = 'UTGAATE_KRAV',
 }
 
-export enum AlertType {
+export enum EAlertType {
   INFO = 'INFO',
   WARNING = 'WARNING',
 }
 
-export enum MeldingType {
+export enum EMeldingType {
   SYSTEM = 'SYSTEM',
   FORSIDE = 'FORSIDE',
   OM_ETTERLEVELSE = 'OM_ETTERLEVELSE',
 }
 
-export enum MeldingStatus {
+export enum EMeldingStatus {
   ACTIVE = 'ACTIVE',
   DEACTIVE = 'DEACTIVE',
 }
 
-export enum TilbakemeldingRolle {
+export enum ETilbakemeldingRolle {
   KRAVEIER = 'KRAVEIER',
   MELDER = 'MELDER',
 }
 
-export enum TilbakemeldingType {
+export enum ETilbakemeldingType {
   GOD = 'GOD',
   UKLAR = 'UKLAR',
   ANNET = 'ANNET',
 }
 
-export enum EtterlevelseStatus {
+export enum EEtterlevelseStatus {
   UNDER_REDIGERING = 'UNDER_REDIGERING',
   FERDIG = 'FERDIG',
   OPPFYLLES_SENERE = 'OPPFYLLES_SENERE',
@@ -75,25 +79,25 @@ export enum EtterlevelseStatus {
   IKKE_RELEVANT_FERDIG_DOKUMENTERT = 'IKKE_RELEVANT_FERDIG_DOKUMENTERT',
 }
 
-export enum KravStatus {
+export enum EKravStatus {
   UTKAST = 'UTKAST',
   AKTIV = 'AKTIV',
   UTGAATT = 'UTGAATT',
 }
 
-export enum KravListFilter {
+export enum EKravListFilter {
   RELEVANS = 'RELEVANS',
   LOVER = 'LOVER',
   TEMAER = 'TEMAER',
   STATUS = 'STATUS',
 }
 
-export enum VirkemiddelListFilter {
+export enum EVirkemiddelListFilter {
   VIRKEMIDDELTYPE = 'VIRKEMIDDELTYPE',
   SORTDATE = 'SORTDATE',
 }
 
-export enum EtterlevelseArkivStatus {
+export enum EEtterlevelseArkivStatus {
   TIL_ARKIVERING = 'TIL_ARKIVERING',
   BEHANDLER_ARKIVERING = 'BEHANDLER_ARKIVERING',
   ARKIVERT = 'ARKIVERT',
@@ -101,13 +105,13 @@ export enum EtterlevelseArkivStatus {
   ERROR = 'ERROR',
 }
 
-export enum AdresseType {
+export enum EAdresseType {
   EPOST = 'EPOST',
   SLACK = 'SLACK',
   SLACK_USER = 'SLACK_USER',
 }
 
-export enum SuksesskriterieStatus {
+export enum ESuksesskriterieStatus {
   UNDER_ARBEID = 'UNDER_ARBEID',
   OPPFYLT = 'OPPFYLT',
   IKKE_RELEVANT = 'IKKE_RELEVANT',
@@ -185,7 +189,7 @@ export interface IKrav extends IDomainObject {
   avdeling?: ICode
   underavdeling?: ICode
   relevansFor: ICode[]
-  status: KravStatus
+  status: EKravStatus
   suksesskriterier: ISuksesskriterie[]
   tema?: string
   nyKravVersjon: boolean
@@ -219,13 +223,13 @@ export interface ISuksesskriterie {
 }
 
 export interface IRegelverk {
-  lov: LovCode
+  lov: TLovCode
   spesifisering?: string
 }
 
 export interface IVarslingsadresse {
   adresse: string
-  type: AdresseType
+  type: EAdresseType
 }
 
 export interface ISlackChannel {
@@ -249,22 +253,22 @@ export interface IEtterlevelse extends IDomainObject {
   statusBegrunnelse: string
   dokumentasjon: string[]
   fristForFerdigstillelse: string
-  status: EtterlevelseStatus
+  status: EEtterlevelseStatus
   suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
 }
 
-export type KravEtterlevelseData = {
+export type TKravEtterlevelseData = {
   kravNummer: number
   kravVersjon: number
   navn: string
-  status: KravStatus
+  status: EKravStatus
   etterlevelseId?: string
   etterleves: boolean
   changeStamp: IChangeStamp
   frist?: string
   varselMelding?: string
   prioriteringsId?: string
-  etterlevelseStatus?: EtterlevelseStatus
+  etterlevelseStatus?: EEtterlevelseStatus
   suksesskriterier: ISuksesskriterie[]
   gammelVersjon?: boolean
   etterlevelseChangeStamp?: IChangeStamp
@@ -276,7 +280,7 @@ export interface ISuksesskriterieBegrunnelse {
   suksesskriterieId: number
   begrunnelse: string
   behovForBegrunnelse: boolean
-  suksesskriterieStatus?: SuksesskriterieStatus
+  suksesskriterieStatus?: ESuksesskriterieStatus
 }
 
 export interface IBehandling {
@@ -311,34 +315,34 @@ export interface IEtterlevelseDokumentasjon {
 }
 
 export interface IEtterlevelseDokumentasjonStats {
-  relevantKrav: KravQL[]
-  irrelevantKrav: KravQL[]
-  utgaattKrav: KravQL[]
+  relevantKrav: TKravQL[]
+  irrelevantKrav: TKravQL[]
+  utgaattKrav: TKravQL[]
   lovStats: ILovStats[]
 }
 
 export interface ILovStats {
   lovCode: ICode
-  relevantKrav: KravQL[]
-  irrelevantKrav: KravQL[]
-  utgaattKrav: KravQL[]
+  relevantKrav: TKravQL[]
+  irrelevantKrav: TKravQL[]
+  utgaattKrav: TKravQL[]
 }
 
 export interface ITilbakemelding {
   id: string
   kravNummer: number
   kravVersjon: number
-  type: TilbakemeldingType
+  type: ETilbakemeldingType
   melderIdent: string
   meldinger: ITilbakemeldingMelding[]
-  status: TilbakemeldingMeldingStatus
+  status: ETilbakemeldingMeldingStatus
   endretKrav: boolean
 }
 
 export interface ITilbakemeldingMelding {
   meldingNr: number
   fraIdent: string
-  rolle: TilbakemeldingRolle
+  rolle: ETilbakemeldingRolle
   tid: string
   innhold: string
   endretTid?: string
@@ -350,12 +354,19 @@ export interface IMelding extends IDomainObject {
   melding: string
   secondaryTittel: string
   secondaryMelding: string
-  meldingType: MeldingType
-  meldingStatus: MeldingStatus
-  alertType: AlertType
+  meldingType: EMeldingType
+  meldingStatus: EMeldingStatus
+  alertType: EAlertType
 }
 
-export const emptyPage = { content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 }
+export const emptyPage = {
+  content: [],
+  numberOfElements: 0,
+  pageNumber: 0,
+  pages: 0,
+  pageSize: 1,
+  totalElements: 0,
+}
 
 export interface ITeamResource {
   navIdent: string
@@ -403,11 +414,11 @@ export interface IBegrep {
   beskrivelse: string
 }
 
-export type KravQL = Replace<
+export type TKravQL = TReplace<
   IKrav,
   {
-    etterlevelser: EtterlevelseQL[]
-    varslingsadresser: VarslingsadresseQL[]
+    etterlevelser: TEtterlevelseQL[]
+    varslingsadresser: TVarslingsadresseQL[]
     begreper: IBegrep[]
     virkemidler: IVirkemiddel[]
     kravRelasjoner: IKrav[]
@@ -415,23 +426,23 @@ export type KravQL = Replace<
   }
 >
 
-export type EtterlevelseQL = IEtterlevelse & {
-  etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL
+export type TEtterlevelseQL = IEtterlevelse & {
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 }
 
-export type BehandlingQL = IBehandling & {
+export type TBehandlingQL = IBehandling & {
   teamsData: ITeam[]
 }
 
-export type EtterlevelseDokumentasjonQL = IEtterlevelseDokumentasjon & {
+export type TEtterlevelseDokumentasjonQL = IEtterlevelseDokumentasjon & {
   etterlevelser?: IEtterlevelse[]
   sistEndretEtterlevelse?: string
   sistEndretDokumentasjon?: string
   stats?: IEtterlevelseDokumentasjonStats
 }
 
-export type VarslingsadresseQL = IVarslingsadresse & {
+export type TVarslingsadresseQL = IVarslingsadresse & {
   slackChannel?: ISlackChannel
   slackUser?: ISlackUser
-} 
-export type Replace<T, K> = Omit<T, keyof K> & K
+}
+export type TReplace<T, K> = Omit<T, keyof K> & K

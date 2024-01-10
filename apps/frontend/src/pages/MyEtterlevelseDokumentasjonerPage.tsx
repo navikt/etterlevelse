@@ -5,13 +5,13 @@ import { Loader } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import { StatefulInput } from 'baseui/input'
 import {
-    HeadingLarge,
-    HeadingXLarge,
-    HeadingXXLarge,
-    LabelLarge,
-    LabelSmall,
-    LabelXSmall,
-    ParagraphSmall,
+  HeadingLarge,
+  HeadingXLarge,
+  HeadingXXLarge,
+  LabelLarge,
+  LabelSmall,
+  LabelXSmall,
+  ParagraphSmall,
 } from 'baseui/typography'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
@@ -28,7 +28,7 @@ import { PanelLink } from '../components/common/PanelLink'
 import { borderWidth } from '../components/common/Style'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import BehandlingSok from '../components/etterlevelseDokumentasjon/tabs/BehandlingSok'
-import { EtterlevelseDokumentasjonQL, IPageResponse, ITeam, emptyPage } from '../constants'
+import { IPageResponse, ITeam, TEtterlevelseDokumentasjonQL, emptyPage } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { user } from '../services/User'
 import { theme } from '../util'
@@ -36,13 +36,13 @@ import { env } from '../util/env'
 import { useDebouncedState } from '../util/hooks'
 import { ettlevColors, maxPageWidth } from '../util/theme'
 
-type Section = 'mine' | 'siste' | 'alle' | 'behandlingsok'
+type TSection = 'mine' | 'siste' | 'alle' | 'behandlingsok'
 
 interface IDokumentasjonCount {
   dokumentasjonCount?: number
 }
 
-type CustomTeamObject = IDokumentasjonCount & ITeam
+type TCustomTeamObject = IDokumentasjonCount & ITeam
 
 export const tabMarginBottom = '48px'
 
@@ -110,14 +110,14 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
 }
 
 const DokumentasjonTabs = () => {
-  const params = useParams<{ tab?: Section }>()
+  const params = useParams<{ tab?: TSection }>()
   const navigate = useNavigate()
-  const [tab, setTab] = useState<Section>(params.tab || 'mine')
+  const [tab, setTab] = useState<TSection>(params.tab || 'mine')
   const [doneLoading, setDoneLoading] = useState(false)
-  const [variables, setVariables] = useState<Variables>({})
+  const [variables, setVariables] = useState<TVariables>({})
   const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<
-    { etterlevelseDokumentasjoner: IPageResponse<EtterlevelseDokumentasjonQL> },
-    Variables
+    { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
+    TVariables
   >(query, {
     variables,
   })
@@ -127,7 +127,7 @@ const DokumentasjonTabs = () => {
   const etterlevelseDokumentasjoner = data?.etterlevelseDokumentasjoner || emptyPage
   const loading = teamsLoading || etterlevelseDokumentasjonLoading
 
-  const [sortedTeams, setSortedTeams] = React.useState<CustomTeamObject[]>([])
+  const [sortedTeams, setSortedTeams] = React.useState<TCustomTeamObject[]>([])
 
   const sortTeams = (unSortedTeams: ITeam[]) => {
     return unSortedTeams
@@ -186,7 +186,7 @@ const DokumentasjonTabs = () => {
       small
       backgroundColor={ettlevColors.grey25}
       activeKey={tab}
-      onChange={(args) => setTab(args.activeKey as Section)}
+      onChange={(args) => setTab(args.activeKey as TSection)}
       tabs={[
         {
           key: 'mine',
@@ -229,8 +229,8 @@ const MineEtterlevelseDokumentasjoner = ({
   teams,
   loading,
 }: {
-  etterlevelseDokumentasjoner: EtterlevelseDokumentasjonQL[]
-  teams: CustomTeamObject[]
+  etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]
+  teams: TCustomTeamObject[]
   loading: boolean
 }) => {
   if (loading)
@@ -308,7 +308,7 @@ const SisteEtterlevelseDokumentasjoner = ({
   etterlevelseDokumentasjoner,
   loading,
 }: {
-  etterlevelseDokumentasjoner: EtterlevelseDokumentasjonQL[]
+  etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]
   loading: boolean
 }) => {
   if (!etterlevelseDokumentasjoner.length && !loading)
@@ -333,8 +333,8 @@ const Alle = () => {
     loading: gqlLoading,
     fetchMore,
   } = useQuery<
-    { etterlevelseDokumentasjoner: IPageResponse<EtterlevelseDokumentasjonQL> },
-    Variables
+    { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
+    TVariables
   >(query, {
     variables: { pageNumber, pageSize, sok },
     skip: tooShort,
@@ -510,7 +510,7 @@ export const EtterlevelseDokumentasjonerPanels = ({
   etterlevelseDokumentasjoner,
   loading,
 }: {
-  etterlevelseDokumentasjoner: EtterlevelseDokumentasjonQL[]
+  etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]
   loading?: boolean
 }) => {
   if (loading) return <SkeletonPanel count={5} />
@@ -549,7 +549,7 @@ export const EtterlevelseDokumentasjonerPanels = ({
   )
 }
 
-export type Variables = {
+export type TVariables = {
   pageNumber?: number
   pageSize?: number
   sistRedigert?: number

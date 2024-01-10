@@ -1,28 +1,57 @@
 import axios from 'axios'
 import queryString from 'query-string'
 import { useEffect, useState } from 'react'
-import { EtterlevelseStatus, IEtterlevelse, IKrav, IPageResponse, SuksesskriterieStatus, emptyPage } from '../constants'
+import {
+  EEtterlevelseStatus,
+  ESuksesskriterieStatus,
+  IEtterlevelse,
+  IKrav,
+  IPageResponse,
+  emptyPage,
+} from '../constants'
 import { env } from '../util/env'
 import { KravId } from './KravApi'
 
 export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<IPageResponse<IEtterlevelse>>(`${env.backendBaseUrl}/etterlevelse?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (
+    await axios.get<IPageResponse<IEtterlevelse>>(
+      `${env.backendBaseUrl}/etterlevelse?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    )
+  ).data
 }
 
 export const getEtterlevelseFor = async (query: { behandling: string }) => {
-  return (await axios.get<IPageResponse<IEtterlevelse>>(`${env.backendBaseUrl}/etterlevelse?${queryString.stringify(query)}`)).data.content
+  return (
+    await axios.get<IPageResponse<IEtterlevelse>>(
+      `${env.backendBaseUrl}/etterlevelse?${queryString.stringify(query)}`
+    )
+  ).data.content
 }
 
 export const getEtterlevelse = async (id: string) => {
   return (await axios.get<IEtterlevelse>(`${env.backendBaseUrl}/etterlevelse/${id}`)).data
 }
 
-export const getEtterlevelserByKravNumberKravVersion = async (kravNummer: number, kravVersjon: number) => {
-  return (await axios.get<IPageResponse<IEtterlevelse>>(`${env.backendBaseUrl}/etterlevelse/kravnummer/${kravNummer}/${kravVersjon}`)).data
+export const getEtterlevelserByKravNumberKravVersion = async (
+  kravNummer: number,
+  kravVersjon: number
+) => {
+  return (
+    await axios.get<IPageResponse<IEtterlevelse>>(
+      `${env.backendBaseUrl}/etterlevelse/kravnummer/${kravNummer}/${kravVersjon}`
+    )
+  ).data
 }
 
-export const getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber = async (etterlevelseDokumentasjonId: string, kravNummer: number) => {
-  return (await axios.get<IPageResponse<IEtterlevelse>>(`${env.backendBaseUrl}/etterlevelse/etterlevelseDokumentasjon/${etterlevelseDokumentasjonId}/${kravNummer}`)).data
+export const getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber = async (
+  etterlevelseDokumentasjonId: string,
+  kravNummer: number
+) => {
+  return (
+    await axios.get<IPageResponse<IEtterlevelse>>(
+      `${env.backendBaseUrl}/etterlevelse/etterlevelseDokumentasjon/${etterlevelseDokumentasjonId}/${kravNummer}`
+    )
+  ).data
 }
 
 export const deleteEtterlevelse = async (id: string) => {
@@ -36,7 +65,9 @@ export const createEtterlevelse = async (etterlevelse: IEtterlevelse) => {
 
 export const updateEtterlevelse = async (etterlevelse: IEtterlevelse) => {
   const dto = etterlevelseToEtterlevelseDto(etterlevelse)
-  return (await axios.put<IEtterlevelse>(`${env.backendBaseUrl}/etterlevelse/${etterlevelse.id}`, dto)).data
+  return (
+    await axios.put<IEtterlevelse>(`${env.backendBaseUrl}/etterlevelse/${etterlevelse.id}`, dto)
+  ).data
 }
 
 function etterlevelseToEtterlevelseDto(etterlevelse: IEtterlevelse) {
@@ -64,7 +95,12 @@ export const useEtterlevelsePage = (pageSize: number) => {
   const prevPage = () => setPage(Math.max(0, page - 1))
   const nextPage = () => setPage(Math.min(data?.pages ? data.pages - 1 : 0, page + 1))
 
-  return [data, prevPage, nextPage, loading] as [IPageResponse<IEtterlevelse>, () => void, () => void, boolean]
+  return [data, prevPage, nextPage, loading] as [
+    IPageResponse<IEtterlevelse>,
+    () => void,
+    () => void,
+    boolean,
+  ]
 }
 
 export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: KravId) => {
@@ -76,7 +112,7 @@ export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: Kra
           kravVersjon: kravId?.kravVersjon,
           kravNummer: kravId?.kravNummer,
         })
-      : undefined,
+      : undefined
   )
 
   useEffect(() => {
@@ -86,7 +122,10 @@ export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: Kra
   return [data, setData] as [IEtterlevelse | undefined, (k: IEtterlevelse) => void]
 }
 
-export const mapEtterlevelseToFormValue = (etterlevelse: Partial<IEtterlevelse>, krav?: IKrav): IEtterlevelse => {
+export const mapEtterlevelseToFormValue = (
+  etterlevelse: Partial<IEtterlevelse>,
+  krav?: IKrav
+): IEtterlevelse => {
   const suksesskriterieBegrunnelser = etterlevelse.suksesskriterieBegrunnelser || []
 
   if (krav) {
@@ -105,7 +144,7 @@ export const mapEtterlevelseToFormValue = (etterlevelse: Partial<IEtterlevelse>,
           suksesskriterieId: s.id,
           behovForBegrunnelse: s.behovForBegrunnelse,
           begrunnelse: '',
-          suksesskriterieStatus: SuksesskriterieStatus.UNDER_ARBEID,
+          suksesskriterieStatus: ESuksesskriterieStatus.UNDER_ARBEID,
         })
       })
     }
@@ -124,6 +163,6 @@ export const mapEtterlevelseToFormValue = (etterlevelse: Partial<IEtterlevelse>,
     statusBegrunnelse: etterlevelse.statusBegrunnelse || '',
     dokumentasjon: etterlevelse.dokumentasjon || [],
     fristForFerdigstillelse: etterlevelse.fristForFerdigstillelse || '',
-    status: etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,
+    status: etterlevelse.status || EEtterlevelseStatus.UNDER_REDIGERING,
   }
 }

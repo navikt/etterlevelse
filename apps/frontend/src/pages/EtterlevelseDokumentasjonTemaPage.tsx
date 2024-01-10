@@ -16,7 +16,7 @@
 // import { SecondaryHeader } from '../components/etterlevelseDokumentasjonTema/SecondaryHeader'
 // import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 // import { Layout2 } from '../components/scaffold/Page'
-import { EtterlevelseStatus, IEtterlevelse, KRAV_FILTER_TYPE } from '../constants'
+import { EEtterlevelseStatus, EKravFilterType, IEtterlevelse } from '../constants'
 //import { IKravPrioritering, IPageResponse, , KravEtterlevelseData, KravQL, KravStatus} from '../constants'
 // import { ampli, userRoleEventProp } from '../services/Amplitude'
 // import { ListName, TemaCode, codelist } from '../services/Codelist'
@@ -29,9 +29,9 @@ export const sortingOptions = [
 ]
 
 export const kravRelevansOptions = [
-  { label: 'Krav som skal etterleves', id: KRAV_FILTER_TYPE.RELEVANTE_KRAV },
-  { label: 'Bortfiltrerte krav', id: KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV },
-  { label: 'Utgåtte krav', id: KRAV_FILTER_TYPE.UTGAATE_KRAV },
+  { label: 'Krav som skal etterleves', id: EKravFilterType.RELEVANTE_KRAV },
+  { label: 'Bortfiltrerte krav', id: EKravFilterType.BORTFILTTERTE_KRAV },
+  { label: 'Utgåtte krav', id: EKravFilterType.UTGAATE_KRAV },
 ]
 
 export const mapEtterlevelseData = (etterlevelse?: IEtterlevelse) => ({
@@ -43,8 +43,12 @@ export const mapEtterlevelseData = (etterlevelse?: IEtterlevelse) => ({
   gammelVersjon: false,
 })
 
-export const isFerdigUtfylt = (status: EtterlevelseStatus | undefined) => {
-  return status === EtterlevelseStatus.FERDIG_DOKUMENTERT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT || status === EtterlevelseStatus.OPPFYLLES_SENERE
+export const isFerdigUtfylt = (status: EEtterlevelseStatus | undefined) => {
+  return (
+    status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
+    status === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ||
+    status === EEtterlevelseStatus.OPPFYLLES_SENERE
+  )
 }
 
 //UNUSED COMPONENT

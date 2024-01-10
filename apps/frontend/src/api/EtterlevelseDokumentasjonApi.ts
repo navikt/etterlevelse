@@ -1,16 +1,28 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import * as yup from 'yup'
-import { EtterlevelseDokumentasjonQL, IEtterlevelseDokumentasjon, IPageResponse } from '../constants'
+import {
+  IEtterlevelseDokumentasjon,
+  IPageResponse,
+  TEtterlevelseDokumentasjonQL,
+} from '../constants'
 import { env } from '../util/env'
 import { behandlingName } from './BehandlingApi'
 import { getVirkemiddel } from './VirkemiddelApi'
 
-export const etterlevelseDokumentasjonName = (etterlevelseDokumentasjon?: IEtterlevelseDokumentasjon) =>
-  etterlevelseDokumentasjon ? 'E' + etterlevelseDokumentasjon.etterlevelseNummer + ' ' + etterlevelseDokumentasjon.title : ''
+export const etterlevelseDokumentasjonName = (
+  etterlevelseDokumentasjon?: IEtterlevelseDokumentasjon
+) =>
+  etterlevelseDokumentasjon
+    ? 'E' + etterlevelseDokumentasjon.etterlevelseNummer + ' ' + etterlevelseDokumentasjon.title
+    : ''
 
 export const getEtterlevelseDokumentasjon = async (id: string) => {
-  return (await axios.get<IEtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`)).data
+  return (
+    await axios.get<IEtterlevelseDokumentasjon>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`
+    )
+  ).data
 }
 
 export const getAllEtterlevelseDokumentasjon = async () => {
@@ -21,43 +33,82 @@ export const getAllEtterlevelseDokumentasjon = async () => {
   } else {
     let allEtterlevelseDokumentasjon: IEtterlevelseDokumentasjon[] = [...firstPage.content]
     for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
-      allEtterlevelseDokumentasjon = [...allEtterlevelseDokumentasjon, ...(await getEtterlevelseDokumentasjonPage(currentPage, PAGE_SIZE)).content]
+      allEtterlevelseDokumentasjon = [
+        ...allEtterlevelseDokumentasjon,
+        ...(await getEtterlevelseDokumentasjonPage(currentPage, PAGE_SIZE)).content,
+      ]
     }
     return allEtterlevelseDokumentasjon
   }
 }
 
 export const getEtterlevelseDokumentasjonPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (
+    await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    )
+  ).data
 }
 
 export const searchEtterlevelsedokumentasjon = async (searchParam: string) => {
-  return (await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/${searchParam}`)).data.content
+  return (
+    await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon/search/${searchParam}`
+    )
+  ).data.content
 }
 
 export const searchEtterlevelsedokumentasjonByBehandlingId = async (behandlingId: string) => {
-  return (await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/behandling/${behandlingId}`)).data.content
+  return (
+    await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon/search/behandling/${behandlingId}`
+    )
+  ).data.content
 }
 export const searchEtterlevelsedokumentasjonByVirkemiddelId = async (virkemiddelId: string) => {
-  return (await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/virkemiddel/${virkemiddelId}`)).data.content
+  return (
+    await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon/search/virkemiddel/${virkemiddelId}`
+    )
+  ).data.content
 }
-export const updateEtterlevelseDokumentasjon = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
+export const updateEtterlevelseDokumentasjon = async (
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+) => {
   const dto = etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon)
-  return (await axios.put<IEtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjon.id}`, dto)).data
+  return (
+    await axios.put<IEtterlevelseDokumentasjon>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjon.id}`,
+      dto
+    )
+  ).data
 }
 
-export const createEtterlevelseDokumentasjon = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
+export const createEtterlevelseDokumentasjon = async (
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+) => {
   const dto = etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon)
-  return (await axios.post<IEtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon`, dto)).data
+  return (
+    await axios.post<IEtterlevelseDokumentasjon>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon`,
+      dto
+    )
+  ).data
 }
 
 export const deleteEtterlevelseDokumentasjon = async (etterlevelseDokumentasjonId: string) => {
-  return (await axios.delete<IEtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjonId}`)).data
+  return (
+    await axios.delete<IEtterlevelseDokumentasjon>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjonId}`
+    )
+  ).data
 }
 
 export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: string) => {
   const isCreateNew = etterlevelseDokumentasjonId === 'ny'
-  const [data, setData] = useState<EtterlevelseDokumentasjonQL | undefined>(isCreateNew ? etterlevelseDokumentasjonMapToFormVal({}) : undefined)
+  const [data, setData] = useState<TEtterlevelseDokumentasjonQL | undefined>(
+    isCreateNew ? etterlevelseDokumentasjonMapToFormVal({}) : undefined
+  )
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
@@ -65,29 +116,43 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
 
     setIsLoading(true)
     if (etterlevelseDokumentasjonId && !isCreateNew) {
-      (async () => {
-        await getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then(async (etterlevelseDokumentasjon) => {
-          if (etterlevelseDokumentasjon.virkemiddelId) {
-            await getVirkemiddel(etterlevelseDokumentasjon.virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
-          }
-          const behandlinger = etterlevelseDokumentasjon.behandlinger
-          if (behandlinger && behandlinger.length > 0) {
-            behandlinger.map((b) => {
-              b.navn = behandlingName(b)
-              return b
+      ;(async () => {
+        await getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then(
+          async (etterlevelseDokumentasjon) => {
+            if (etterlevelseDokumentasjon.virkemiddelId) {
+              await getVirkemiddel(etterlevelseDokumentasjon.virkemiddelId).then(
+                (virkemiddelResponse) => (virkmiddel = virkemiddelResponse)
+              )
+            }
+            const behandlinger = etterlevelseDokumentasjon.behandlinger
+            if (behandlinger && behandlinger.length > 0) {
+              behandlinger.map((b) => {
+                b.navn = behandlingName(b)
+                return b
+              })
+            }
+            setData({
+              ...etterlevelseDokumentasjon,
+              behandlinger: behandlinger,
+              virkemiddel: virkmiddel,
             })
+            setIsLoading(false)
           }
-          setData({ ...etterlevelseDokumentasjon, behandlinger: behandlinger, virkemiddel: virkmiddel })
-          setIsLoading(false)
-        })
+        )
       })()
     }
   }, [etterlevelseDokumentasjonId])
 
-  return [data, setData, isLoading] as [EtterlevelseDokumentasjonQL | undefined, (e: EtterlevelseDokumentasjonQL) => void, boolean]
+  return [data, setData, isLoading] as [
+    TEtterlevelseDokumentasjonQL | undefined,
+    (e: TEtterlevelseDokumentasjonQL) => void,
+    boolean,
+  ]
 }
 
-export const etterlevelseDokumentasjonToDto = (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL): IEtterlevelseDokumentasjon => {
+export const etterlevelseDokumentasjonToDto = (
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+): IEtterlevelseDokumentasjon => {
   const dto = {
     ...etterlevelseDokumentasjon,
     behandlingIds: etterlevelseDokumentasjon.behandlinger?.map((b) => b.id),
@@ -101,13 +166,21 @@ export const etterlevelseDokumentasjonToDto = (etterlevelseDokumentasjon: Etterl
   return dto
 }
 
-export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon: Partial<EtterlevelseDokumentasjonQL>): EtterlevelseDokumentasjonQL => ({
+export const etterlevelseDokumentasjonMapToFormVal = (
+  etterlevelseDokumentasjon: Partial<TEtterlevelseDokumentasjonQL>
+): TEtterlevelseDokumentasjonQL => ({
   id: etterlevelseDokumentasjon.id || '',
-  changeStamp: etterlevelseDokumentasjon.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
+  changeStamp: etterlevelseDokumentasjon.changeStamp || {
+    lastModifiedDate: '',
+    lastModifiedBy: '',
+  },
   version: -1,
   title: etterlevelseDokumentasjon.title || '',
   behandlingIds: etterlevelseDokumentasjon.behandlingIds || [],
-  behandlerPersonopplysninger: etterlevelseDokumentasjon.behandlerPersonopplysninger !== undefined ? etterlevelseDokumentasjon.behandlerPersonopplysninger : true,
+  behandlerPersonopplysninger:
+    etterlevelseDokumentasjon.behandlerPersonopplysninger !== undefined
+      ? etterlevelseDokumentasjon.behandlerPersonopplysninger
+      : true,
   irrelevansFor: etterlevelseDokumentasjon.irrelevansFor || [],
   etterlevelseNummer: etterlevelseDokumentasjon.etterlevelseNummer || 0,
   teams: etterlevelseDokumentasjon.teams || [],
@@ -116,7 +189,10 @@ export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon:
   virkemiddelId: etterlevelseDokumentasjon.virkemiddelId || '',
   // knyttetTilVirkemiddel: etterlevelseDokumentasjon.knyttetTilVirkemiddel !== undefined ? etterlevelseDokumentasjon.knyttetTilVirkemiddel : false,
   knyttetTilVirkemiddel: false,
-  knytteTilTeam: etterlevelseDokumentasjon.knytteTilTeam !== undefined ? etterlevelseDokumentasjon.knytteTilTeam : true,
+  knytteTilTeam:
+    etterlevelseDokumentasjon.knytteTilTeam !== undefined
+      ? etterlevelseDokumentasjon.knytteTilTeam
+      : true,
 })
 
 export const etterlevelseDokumentasjonSchema = () =>
