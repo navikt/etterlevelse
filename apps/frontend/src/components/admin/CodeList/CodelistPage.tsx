@@ -57,7 +57,10 @@ const CodeListPage = () => {
   }
 
   return (
-    <PageLayout pageTitle={listname ? listname : 'Velg kodeverk'} currentPage="Administrering av kodeverk">
+    <PageLayout
+      pageTitle={listname ? listname : 'Velg kodeverk'}
+      currentPage="Administrering av kodeverk"
+    >
       <Heading size="medium" level="1">
         Administrering av kodeverk
       </Heading>
@@ -65,7 +68,12 @@ const CodeListPage = () => {
         <Loader size="large" />
       ) : (
         <div className="flex justify-between w-full">
-          <Select label="Velg kodeverk" hideLabel className="w-full max-w-xl" onChange={(e) => setListname(e.target.value)}>
+          <Select
+            label="Velg kodeverk"
+            hideLabel
+            className="w-full max-w-xl"
+            onChange={(e) => setListname(e.target.value)}
+          >
             <option value="">Velg kodeverk</option>
             {codelist.makeIdLabelForAllCodeLists().map((c, i) => {
               return (
@@ -76,7 +84,11 @@ const CodeListPage = () => {
             })}
           </Select>
           {listname && (
-            <Button icon={<PlusIcon area-label="" aria-hidden />} variant="tertiary" onClick={() => setCreateCodeListModal(!createCodeListModal)}>
+            <Button
+              icon={<PlusIcon area-label="" aria-hidden />}
+              variant="tertiary"
+              onClick={() => setCreateCodeListModal(!createCodeListModal)}
+            >
               Opprett ny kode
             </Button>
           )}
@@ -88,18 +100,19 @@ const CodeListPage = () => {
           <CodeListTable tableData={currentCodelist || []} refresh={update} />
         </div>
       )}
-
-      <CreateCodeListModal
-        title="Ny kode"
-        list={listname!}
-        isOpen={createCodeListModal}
-        errorOnCreate={errorOnResponse}
-        onClose={() => {
-          setCreateCodeListModal(false)
-          setErrorOnResponse(null)
-        }}
-        submit={handleCreateCodelist}
-      />
+      {listname && (
+        <CreateCodeListModal
+          title="Ny kode"
+          list={listname}
+          isOpen={createCodeListModal}
+          errorOnCreate={errorOnResponse}
+          onClose={() => {
+            setCreateCodeListModal(false)
+            setErrorOnResponse(null)
+          }}
+          submit={handleCreateCodelist}
+        />
+      )}
     </PageLayout>
   )
 }

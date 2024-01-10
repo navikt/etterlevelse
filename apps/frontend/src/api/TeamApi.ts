@@ -1,7 +1,14 @@
 import axios from 'axios'
 import { Option } from 'baseui/select'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { IPageResponse, IProductArea, ISlackChannel, ISlackUser, ITeam, ITeamResource } from '../constants'
+import {
+  IPageResponse,
+  IProductArea,
+  ISlackChannel,
+  ISlackUser,
+  ITeam,
+  ITeamResource,
+} from '../constants'
 import { user } from '../services/User'
 import { env } from '../util/env'
 import { useForceUpdate, useSearch } from '../util/hooks'
@@ -11,7 +18,11 @@ export const getResourceById = async (resourceId: string) => {
 }
 
 export const searchResourceByName = async (resourceName: string) => {
-  return (await axios.get<IPageResponse<ITeamResource>>(`${env.backendBaseUrl}/team/resource/search/${resourceName}`)).data.content
+  return (
+    await axios.get<IPageResponse<ITeamResource>>(
+      `${env.backendBaseUrl}/team/resource/search/${resourceName}`
+    )
+  ).data.content
 }
 
 export const getTeam = async (teamId: string) => {
@@ -33,15 +44,21 @@ export const getAllTeams = async () => {
 }
 
 export const myTeams = async () => {
-  return (await axios.get<IPageResponse<ITeam>>(`${env.backendBaseUrl}/team?myTeams=true`)).data.content
+  return (await axios.get<IPageResponse<ITeam>>(`${env.backendBaseUrl}/team?myTeams=true`)).data
+    .content
 }
 
 export const myProductArea = async () => {
-  return (await axios.get<IPageResponse<IProductArea>>(`${env.backendBaseUrl}/team/productarea?myProductAreas=true`)).data.content
+  return (
+    await axios.get<IPageResponse<IProductArea>>(
+      `${env.backendBaseUrl}/team/productarea?myProductAreas=true`
+    )
+  ).data.content
 }
 
 export const searchTeam = async (teamSearch: string) => {
-  return (await axios.get<IPageResponse<ITeam>>(`${env.backendBaseUrl}/team/search/${teamSearch}`)).data.content
+  return (await axios.get<IPageResponse<ITeam>>(`${env.backendBaseUrl}/team/search/${teamSearch}`))
+    .data.content
 }
 
 export const getSlackChannelById = async (id: string) => {
@@ -57,10 +74,17 @@ export const getSlackUserById = async (id: string) => {
 }
 
 export const searchSlackChannel = async (name: string) => {
-  return (await axios.get<IPageResponse<ISlackChannel>>(`${env.backendBaseUrl}/team/slack/channel/search/${name}`)).data.content
+  return (
+    await axios.get<IPageResponse<ISlackChannel>>(
+      `${env.backendBaseUrl}/team/slack/channel/search/${name}`
+    )
+  ).data.content
 }
 
-export const mapTeamResourceToOption = (teamResource: ITeamResource) => ({ id: teamResource.navIdent, label: teamResource.fullName })
+export const mapTeamResourceToOption = (teamResource: ITeamResource) => ({
+  id: teamResource.navIdent,
+  label: teamResource.fullName,
+})
 
 // Overly complicated async fetch of people and teams
 
@@ -85,7 +109,8 @@ const pSubscribe = (id: string, done: () => void) => {
   psubs.has(id) ? psubs.set(id, [...psubs.get(id)!, done]) : psubs.set(id, [done])
 }
 const tSubscribe = (id: string, done: () => void) => {
-  !teams.has(id) && teams.set(id, { f: false, v: { id, name: id, description: '', members: [], tags: [] } })
+  !teams.has(id) &&
+    teams.set(id, { f: false, v: { id, name: id, description: '', members: [], tags: [] } })
   tsubs.has(id) ? tsubs.set(id, [...tsubs.get(id)!, done]) : tsubs.set(id, [done])
 }
 
@@ -96,7 +121,7 @@ export const usePersonName = () => {
       if (!people.has(id))
         getResourceById(id)
           .then((p) => addPerson(p))
-          .catch((e) => console.debug('err fetching person', e))
+          .catch((e) => console.error('err fetching person', e))
       pSubscribe(id, update)
     }
     return people.get(id)?.v || id
@@ -123,7 +148,7 @@ export const useTeam = () => {
       if (!teams.has(id))
         getTeam(id)
           .then((t) => addTeam(t))
-          .catch((e) => console.debug('err fetching team', e))
+          .catch((e) => console.error('err fetching team', e))
       tSubscribe(id, update)
     }
     const team = teams.get(id)?.v
@@ -144,7 +169,9 @@ export const useMyTeams = () => {
         .then((r) => {
           if (r.length === 0) {
             getAllTeams().then((response) => {
-              const teamList = productAreas.map((pa) => response.filter((t) => pa.id === t.productAreaId)).flat()
+              const teamList = productAreas
+                .map((pa) => response.filter((t) => pa.id === t.productAreaId))
+                .flat()
               const uniqueValuesSet = new Set()
 
               const uniqueFilteredTeamList = teamList.filter((t) => {
@@ -218,4 +245,5 @@ export const useSlackChannelSearch = async (searchParam: string) => {
 /**
  * Will not work unless the people have been loaded already (by using usePersonName hook etc)
  */
-export const personIdentSort = (a: string, b: string) => (people.get(a)?.v || '').localeCompare(people.get(b)?.v || '')
+export const personIdentSort = (a: string, b: string) =>
+  (people.get(a)?.v || '').localeCompare(people.get(b)?.v || '')
