@@ -127,7 +127,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
         setIsOpen(false)
       })
     } catch (error: any) {
-      console.log(error)
+      console.error(error)
     }
   }
 

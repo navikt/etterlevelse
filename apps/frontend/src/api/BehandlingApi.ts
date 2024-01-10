@@ -25,7 +25,7 @@ export const useBehandling = (id?: string) => {
         .then(setData)
         .catch((e) => {
           setData(undefined)
-          console.log("couldn't find behandling", e)
+          console.error("couldn't find behandling", e)
         })
   }, [id])
 
