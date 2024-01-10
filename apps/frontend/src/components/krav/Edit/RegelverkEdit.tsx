@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
-import { codelist, ListName } from '../../../services/Codelist'
-import { FieldWrapper } from '../../common/Inputs'
-import { FieldArray } from 'formik'
-import { Block } from 'baseui/block'
-import { theme } from '../../../util'
-import { LabelSmall } from 'baseui/typography'
-import { LovView } from '../../Lov'
-import { RenderTagList } from '../../common/TagList'
-import { Regelverk } from '../../../constants'
-import LabelWithTooltip from '../../common/LabelWithTooltip'
-import Select, { CSSObjectWithLabel } from 'react-select'
 import { Button, TextField } from '@navikt/ds-react'
+import { Block } from 'baseui/block'
+import { LabelSmall } from 'baseui/typography'
+import { FieldArray } from 'formik'
+import { useState } from 'react'
+import Select, { CSSObjectWithLabel } from 'react-select'
+import { IRegelverk } from '../../../constants'
+import { codelist, ListName } from '../../../services/Codelist'
+import { theme } from '../../../util'
+import { FieldWrapper } from '../../common/Inputs'
+import LabelWithTooltip from '../../common/LabelWithTooltip'
+import { RenderTagList } from '../../common/TagList'
+import { LovView } from '../../Lov'
 
 type RegelverkEditProps = {
   forVirkemiddel?: boolean
@@ -91,8 +91,8 @@ export const RegelverkEdit = ({ forVirkemiddel }: RegelverkEditProps) => {
                 )}
               </div>
               <RenderTagList
-                list={p.form.values.regelverk.map((r: Regelverk) => (
-                  <LovView regelverk={r} />
+                list={p.form.values.regelverk.map((r: IRegelverk) => (
+                  <LovView regelverk={r}  key={r.lov.code}/>
                 ))}
                 onRemove={p.remove}
               />

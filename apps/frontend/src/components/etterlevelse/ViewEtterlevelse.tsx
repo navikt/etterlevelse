@@ -1,13 +1,10 @@
-import { Etterlevelse, EtterlevelseStatus, Krav, SuksesskriterieStatus } from '../../constants'
-import { useRef, useState } from 'react'
-import moment from 'moment'
-import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
-import { FormikProps } from 'formik'
-import { useNavigate } from 'react-router-dom'
-import { Markdown } from '../common/Markdown'
-import { BodyShort, Box, Heading, Label, Link, Loader, ReadMore, Tag } from '@navikt/ds-react'
-import { useEtterlevelseDokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
 import { CheckmarkIcon } from '@navikt/aksel-icons'
+import { BodyShort, Box, Heading, Label, Link, Loader, ReadMore, Tag } from '@navikt/ds-react'
+import moment from 'moment'
+import { useEtterlevelseDokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
+import { EtterlevelseStatus, IEtterlevelse, IKrav, SuksesskriterieStatus } from '../../constants'
+import { Markdown } from '../common/Markdown'
+import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
 
 const getHeaderText = (status: EtterlevelseStatus) => {
   switch (status) {
@@ -19,7 +16,7 @@ const getHeaderText = (status: EtterlevelseStatus) => {
       return 'Kravet etterleves av:'
   }
 }
-export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: { etterlevelse: Etterlevelse; loading?: boolean; krav: Krav; modalVersion?: boolean }) => {
+export const ViewEtterlevelse = ({ etterlevelse, loading, krav, modalVersion }: { etterlevelse: IEtterlevelse; loading?: boolean; krav: IKrav; modalVersion?: boolean }) => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(etterlevelse.etterlevelseDokumentasjonId)
 
   return (

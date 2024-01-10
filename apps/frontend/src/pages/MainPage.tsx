@@ -6,15 +6,15 @@ import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from '../components/common/Markdown'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import { PageLayout } from '../components/scaffold/Page'
-import { AlertType, EtterlevelseDokumentasjonQL, Melding, MeldingStatus, MeldingType, PageResponse } from '../constants'
+import { AlertType, EtterlevelseDokumentasjonQL, IMelding, IPageResponse, MeldingStatus, MeldingType } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { user } from '../services/User'
 import { Variables, query } from './MyEtterlevelseDokumentasjonerPage'
 
 export const MainPage = () => {
-  const [forsideVarsel, setForsideVarsle] = useState<Melding>()
+  const [forsideVarsel, setForsideVarsle] = useState<IMelding>()
 
-  const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<{ etterlevelseDokumentasjoner: PageResponse<EtterlevelseDokumentasjonQL> }, Variables>(query, {
+  const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<{ etterlevelseDokumentasjoner: IPageResponse<EtterlevelseDokumentasjonQL> }, Variables>(query, {
     variables: { sistRedigert: 4 },
     skip: !user.isLoggedIn(),
   })
@@ -132,7 +132,7 @@ const EtterlevelseDokumentasjonList = ({ etterlevelseDokumentasjoner }: { etterl
                 E{etterlevelseDokumentasjon.etterlevelseNummer} {etterlevelseDokumentasjon.title}
               </LinkPanel.Title>
               <LinkPanel.Description>
-                {!!etterlevelseDokumentasjon.sistEndretEtterlevelse ? `Sist endret: ${moment(etterlevelseDokumentasjon.sistEndretEtterlevelse).format('ll')}` : ''}
+                {etterlevelseDokumentasjon.sistEndretEtterlevelse !== undefined && etterlevelseDokumentasjon.sistEndretEtterlevelse !== '' ? `Sist endret: ${moment(etterlevelseDokumentasjon.sistEndretEtterlevelse).format('ll')}` : ''}
               </LinkPanel.Description>
             </LinkPanel>
           )

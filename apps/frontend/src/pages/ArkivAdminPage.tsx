@@ -1,21 +1,19 @@
+import { BodyShort, Button, Heading, Link, Pagination, Select, SortState, Spacer, Table, TextField } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import {
-  arkiveringMapToFormVal,
-  arkiveringStatusToString,
-  deleteEtterlevelseArkiv,
-  getAllArkivering,
-  getEtterlevelseArkiv,
-  updateAsAdminEtterlevelseArkiv,
+    arkiveringMapToFormVal,
+    arkiveringStatusToString,
+    deleteEtterlevelseArkiv,
+    getAllArkivering,
+    getEtterlevelseArkiv,
+    updateAsAdminEtterlevelseArkiv,
 } from '../api/ArkiveringApi'
-
-import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../constants'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { BodyShort, Button, Heading, Link, Pagination, Select, SortState, Spacer, Table, TextField } from '@navikt/ds-react'
-import { UpdateMessage } from './EtterlevelseAdminPage'
-import { handleSort } from '../util/handleTableSort'
-import { user } from '../services/User'
 import { PageLayout } from '../components/scaffold/Page'
+import { EtterlevelseArkivStatus, IEtterlevelseArkiv } from '../constants'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
+import { handleSort } from '../util/handleTableSort'
+import { UpdateMessage } from './EtterlevelseAdminPage'
 
 export const ArkivAdminPage = () => {
   const [arkiveringId, setArkiveringId] = useState<string>('')
@@ -24,7 +22,7 @@ export const ArkivAdminPage = () => {
   const [deleteMessage, setDeleteMessage] = useState<string>('')
   const [arkiveringsStatus, setArkiveringsStatus] = useState<EtterlevelseArkivStatus>()
   const [reloadTable, setReloadTable] = useState(false)
-  const [tableContent, setTableContent] = useState<EtterlevelseArkiv[]>([])
+  const [tableContent, setTableContent] = useState<IEtterlevelseArkiv[]>([])
 
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
@@ -32,7 +30,7 @@ export const ArkivAdminPage = () => {
 
   let sortedData = tableContent
 
-  const comparator = (a: EtterlevelseArkiv, b: EtterlevelseArkiv, orderBy: string) => {
+  const comparator = (a: IEtterlevelseArkiv, b: IEtterlevelseArkiv, orderBy: string) => {
     switch (orderBy) {
       case 'status':
         return (a.status || '').localeCompare(b.status || '')
@@ -63,7 +61,7 @@ export const ArkivAdminPage = () => {
   ]
 
   useEffect(() => {
-    ; (async () => {
+    (async () => {
       const arkivering = await getAllArkivering()
       const mappedArkivering = arkivering.map((a) => arkiveringMapToFormVal(a))
       setTableContent(mappedArkivering)
@@ -76,7 +74,7 @@ export const ArkivAdminPage = () => {
   }, [])
 
   useEffect(() => {
-    ; (async () => {
+    (async () => {
       const arkivering = await getAllArkivering()
       const mappedArkivering = arkivering.map((a) => arkiveringMapToFormVal(a))
       setTableContent(mappedArkivering)
@@ -98,7 +96,7 @@ export const ArkivAdminPage = () => {
         <TextField label="Oppdatere arkivering status" placeholder="Arkiverings UID" onChange={(e) => setArkiveringId(e.target.value)} className="flex-1 mr-3" />
         <Select label="Velg status" className="flex-1 mr-3" value={arkiveringsStatus} onChange={(e) => setArkiveringsStatus(e.target.value as EtterlevelseArkivStatus)}>
           {options.map((o, i) => {
-            ; <option value="">Velg status</option>
+            <option value="">Velg status</option>
             return (
               <option key={i + '_' + o.label} value={o.id}>
                 {o.label}
@@ -177,7 +175,7 @@ export const ArkivAdminPage = () => {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {sortedData.map((arkivering: EtterlevelseArkiv) => {
+                {sortedData.map((arkivering: IEtterlevelseArkiv) => {
                   return (
                     <Table.Row key={arkivering.id}>
                       <Table.HeaderCell scope="row">{arkivering.id}</Table.HeaderCell>

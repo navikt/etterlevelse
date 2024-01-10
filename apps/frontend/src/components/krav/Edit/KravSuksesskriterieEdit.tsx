@@ -1,16 +1,16 @@
-import { FieldWrapper } from '../../common/Inputs'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import React, { useEffect, useState } from 'react'
-import { KravStatus, Suksesskriterie } from '../../../constants'
-import * as _ from 'lodash'
-import LabelWithTooltip from '../../common/LabelWithTooltip'
-import TextEditor from '../../common/TextEditor/TextEditor'
-import { useDebouncedState } from '../../../util/hooks'
-import { DragDropContext, Draggable, DraggableProvidedDragHandleProps, DraggingStyle, Droppable } from 'react-beautiful-dnd'
-import { kravModal } from '../EditKrav'
-import { Error } from '../../common/ModalSchema'
-import { Box, Button, Radio, RadioGroup, TextField, Tooltip } from '@navikt/ds-react'
 import { DragVerticalIcon, PlusIcon, TrashIcon } from '@navikt/aksel-icons'
+import { Box, Button, Radio, RadioGroup, TextField, Tooltip } from '@navikt/ds-react'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
+import * as _ from 'lodash'
+import { useEffect, useState } from 'react'
+import { DragDropContext, Draggable, DraggableProvidedDragHandleProps, DraggingStyle, Droppable } from 'react-beautiful-dnd'
+import { ISuksesskriterie, KravStatus } from '../../../constants'
+import { useDebouncedState } from '../../../util/hooks'
+import { FieldWrapper } from '../../common/Inputs'
+import LabelWithTooltip from '../../common/LabelWithTooltip'
+import { Error } from '../../common/ModalSchema'
+import TextEditor from '../../common/TextEditor/TextEditor'
+import { kravModal } from '../EditKrav'
 
 type KravSuksesskriterieEditProps = {
   setIsFormDirty?: (v: boolean) => void
@@ -25,13 +25,13 @@ export const KravSuksesskriterierEdit = ({ setIsFormDirty, newVersion }: KravSuk
   )
 }
 
-const nextId = (suksesskriterier: Suksesskriterie[]) => {
+const nextId = (suksesskriterier: ISuksesskriterie[]) => {
   const max = _.max(suksesskriterier.map((s) => s.id)) || 0
   return max + 1
 }
 
 const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderProps; setIsFormDirty?: (v: boolean) => void; newVersion: boolean }) => {
-  const suksesskriterier = p.form.values.suksesskriterier as Suksesskriterie[]
+  const suksesskriterier = p.form.values.suksesskriterier as ISuksesskriterie[]
 
   if (!suksesskriterier.length) {
     p.push({ id: nextId(suksesskriterier), navn: '', beskrivelse: '' })
@@ -40,7 +40,7 @@ const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderPr
   return (
     <div className="flex flex-col">
       <DragDropContext
-        onDragEnd={(result, provided) => {
+        onDragEnd={(result) => {
           if (!result.destination) {
             return
           }
@@ -123,9 +123,9 @@ const Kriterie = ({
   setIsFormDirty,
   newVersion,
 }: {
-  s: Suksesskriterie
+  s: ISuksesskriterie
   nummer: number
-  update: (s: Suksesskriterie) => void
+  update: (s: ISuksesskriterie) => void
   remove: () => void
   dragHandleProps?: DraggableProvidedDragHandleProps
   isDragging: boolean

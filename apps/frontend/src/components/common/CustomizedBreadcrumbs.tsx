@@ -1,18 +1,18 @@
-import { BodyShort, Link } from '@navikt/ds-react'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
+import { BodyShort, Link } from '@navikt/ds-react'
 
-export interface breadcrumbPaths {
+export interface IBreadcrumbPaths {
   href: string
   pathName: string
 }
 
-interface Props {
-  paths?: breadcrumbPaths[]
+interface IProps {
+  paths?: IBreadcrumbPaths[]
   currentPage?: string
   fontColor?: string
 }
 
-type CustomizedProps = Props
+type CustomizedProps = IProps
 
 const CustomizedBreadcrumbs = (props: CustomizedProps) => {
   const getName = (pathName: string) => (pathName.length > 25 ? pathName.substring(0, 25) + '...' : pathName)

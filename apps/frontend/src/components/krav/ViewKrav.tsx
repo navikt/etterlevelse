@@ -1,17 +1,17 @@
-import { AdresseType, Begrep, Krav, KravQL, KravVersjon } from '../../constants'
-import React from 'react'
+import { BodyShort, Label } from '@navikt/ds-react'
 import moment from 'moment'
-import { DotTags } from '../common/DotTag'
+import React from 'react'
+import { AdresseType, IBegrep, IKrav, IKravVersjon, KravQL } from '../../constants'
 import { ListName } from '../../services/Codelist'
+import { user } from '../../services/User'
+import { slackLink, slackUserLink, termUrl } from '../../util/config'
+import { LovViewList } from '../Lov'
+import { DotTags } from '../common/DotTag'
+import { Markdown } from '../common/Markdown'
 import { LabelAboveContent } from '../common/PropertyLabel'
 import { ExternalLink } from '../common/RouteLink'
-import { slackLink, slackUserLink, termUrl } from '../../util/config'
-import { user } from '../../services/User'
-import { LovViewList } from '../Lov'
-import { SuksesskriterieCard } from './Suksesskriterie'
-import { Markdown } from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
-import { BodyShort, Label } from '@navikt/ds-react'
+import { SuksesskriterieCard } from './Suksesskriterie'
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => <div className="mb-4">{children}</div>
 
@@ -46,7 +46,7 @@ export const AllInfo = ({
   header,
 }: {
   krav: KravQL
-  alleKravVersjoner: KravVersjon[]
+  alleKravVersjoner: IKravVersjon[]
   noLastModifiedDate?: boolean
   header?: boolean
 }) => {
@@ -172,7 +172,7 @@ export const AllInfo = ({
   )
 }
 
-const BegrepView = ({ begrep }: { begrep: Begrep }) => (
+const BegrepView = ({ begrep }: { begrep: IBegrep }) => (
   <div className="max-w-2xl">
     <BodyShort className="break-words">
       <ExternalLink href={termUrl(begrep.id)}>{begrep.navn}</ExternalLink>
@@ -182,7 +182,7 @@ const BegrepView = ({ begrep }: { begrep: Begrep }) => (
   </div>
 )
 
-const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<Krav> }) => (
+const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<IKrav> }) => (
   <div className="max-w-2xl">
     <BodyShort className="break-words">
       <ExternalLink href={`/krav/${kravRelasjon.id}`}>{`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}</ExternalLink> - {kravRelasjon.navn}

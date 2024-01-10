@@ -1,33 +1,32 @@
-import * as React from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { ObjectType } from '../admin/audit/AuditTypes'
-import { Behandling, EtterlevelseDokumentasjon, Krav, KravStatus } from '../../constants'
-import { kravName } from '../../pages/KravPage'
-import { getKravByKravNumberAndVersion, searchKrav, searchKravByNumber } from '../../api/KravApi'
-import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
-import { etterlevelseDokumentasjonName, searchEtterlevelsedokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
+import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
+import { BodyShort } from '@navikt/ds-react'
+import { useNavigate } from 'react-router-dom'
 import { CSSObjectWithLabel, DropdownIndicatorProps, OptionProps, components } from 'react-select'
 import AsyncSelect from 'react-select/async'
-import { BodyShort } from '@navikt/ds-react'
-import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
+import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
+import { etterlevelseDokumentasjonName, searchEtterlevelsedokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
+import { getKravByKravNumberAndVersion, searchKrav, searchKravByNumber } from '../../api/KravApi'
+import { IBehandling, IEtterlevelseDokumentasjon, IKrav, KravStatus } from '../../constants'
+import { kravName } from '../../pages/KravPage'
+import { ObjectType } from '../admin/audit/AuditTypes'
 
 type SearchItem = { value: string; label: string; tag: string; url: string }
 
-const kravMap = (t: Krav) => ({
+const kravMap = (t: IKrav) => ({
   value: t.id,
   label: kravName(t),
   tag: ObjectType.Krav as string,
   url: `krav/${t.id}`,
 })
 
-const behandlingMap = (t: Behandling): SearchItem => ({
+const behandlingMap = (t: IBehandling): SearchItem => ({
   value: t.id,
   label: behandlingName(t),
   tag: ObjectType.Behandling,
   url: `dokumentasjoner/behandlingsok?behandlingId=${t.id}`,
 })
 
-const EtterlevelseDokumentasjonMap = (t: EtterlevelseDokumentasjon): SearchItem => ({
+const EtterlevelseDokumentasjonMap = (t: IEtterlevelseDokumentasjon): SearchItem => ({
   value: t.id,
   label: etterlevelseDokumentasjonName(t),
   tag: 'Dokumentasjon',
@@ -125,7 +124,6 @@ const DropdownIndicator = (props: DropdownIndicatorProps<SearchItem>) => {
 }
 
 const MainSearch = () => {
-  const location = useLocation()
   const navigate = useNavigate()
 
   return (
@@ -133,7 +131,6 @@ const MainSearch = () => {
       <AsyncSelect
         aria-label="Søk etter krav, dokumentasjon eller behandling"
         placeholder="Søk etter krav, dokumentasjon eller behandling"
-        autoFocus={location.pathname === '/'}
         components={{ Option, DropdownIndicator }}
         controlShouldRenderValue={false}
         loadingMessage={() => 'Søker...'}

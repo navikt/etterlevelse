@@ -1,16 +1,16 @@
+import { Loader } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import { HeadingXLarge, LabelSmall } from 'baseui/typography'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
+import { Helmet } from 'react-helmet'
 import { useEtterlevelsePage } from '../api/EtterlevelseApi'
 import Button from '../components/common/Button'
-import { theme } from '../util'
 import RouteLink from '../components/common/RouteLink'
-import { etterlevelseName } from './EtterlevelsePage'
-import { user } from '../services/User'
-import { maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
-import { Helmet } from 'react-helmet'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { Loader } from '@navikt/ds-react'
+import { user } from '../services/User'
+import { theme } from '../util'
+import { maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
+import { etterlevelseName } from './EtterlevelsePage'
 
 export const EtterlevelseListPage = () => {
   const [etterlevelse, prev, next, loading] = useEtterlevelsePage(20)

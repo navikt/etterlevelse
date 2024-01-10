@@ -1,8 +1,8 @@
 import { Alert, BodyShort, Box, Heading, Label, ReadMore } from '@navikt/ds-react'
-import { Etterlevelse, EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../constants'
-import { getLabelForSuksessKriterie, getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
+import { EtterlevelseStatus, IEtterlevelse, ISuksesskriterie, ISuksesskriterieBegrunnelse } from '../../constants'
 import { Markdown } from '../common/Markdown'
 import { LabelAboveContent } from '../common/PropertyLabel'
+import { getLabelForSuksessKriterie, getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
 import EtterlevelseCard from './EtterlevelseCard'
 
 export const EtterlevelseViewFields = ({
@@ -10,9 +10,9 @@ export const EtterlevelseViewFields = ({
   suksesskriterie,
   tidligereEtterlevelser,
 }: {
-  etterlevelse: Etterlevelse
-  suksesskriterie: Suksesskriterie[]
-  tidligereEtterlevelser?: Etterlevelse[]
+  etterlevelse: IEtterlevelse
+  suksesskriterie: ISuksesskriterie[]
+  tidligereEtterlevelser?: IEtterlevelse[]
 }) => {
   return (
     <div>
@@ -57,9 +57,9 @@ const KriterieBegrunnelse = ({
   suksesskriterieBegrunnelser,
   totalSuksesskriterie,
 }: {
-  suksesskriterie: Suksesskriterie
+  suksesskriterie: ISuksesskriterie
   index: number
-  suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
+  suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
   totalSuksesskriterie: number
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)

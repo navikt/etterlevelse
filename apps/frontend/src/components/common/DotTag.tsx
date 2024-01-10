@@ -1,9 +1,9 @@
-import React, { ReactNode } from 'react'
-import { ExternalLink, urlForObject } from './RouteLink'
-import { Markdown } from './Markdown'
-import { Code, codelist, ListName } from '../../services/Codelist'
-import { NavigableItem } from '../admin/audit/AuditTypes'
 import { BodyShort } from '@navikt/ds-react'
+import React, { ReactNode } from 'react'
+import { ICode, ListName, codelist } from '../../services/Codelist'
+import { NavigableItem } from '../admin/audit/AuditTypes'
+import { Markdown } from './Markdown'
+import { ExternalLink, urlForObject } from './RouteLink'
 
 const Content = (props: { item: ReactNode | string; list?: ListName; linkCodelist?: boolean; markdown?: boolean }) => {
   const { item, list, linkCodelist, markdown } = props
@@ -19,7 +19,7 @@ const Content = (props: { item: ReactNode | string; list?: ListName; linkCodelis
 
 type DotTagsParams = {
   items?: ReactNode[]
-  codes?: Code[]
+  codes?: ICode[]
   commaSeparator?: boolean
   linkCodelist?: boolean
   markdown?: boolean

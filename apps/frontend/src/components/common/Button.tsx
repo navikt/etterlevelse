@@ -1,21 +1,21 @@
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Block } from 'baseui/block'
+import { Button as BaseUIButton, KIND, SHAPE, SIZE } from 'baseui/button'
+import { Override } from 'baseui/overrides'
+import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
+import _ from 'lodash'
 import * as React from 'react'
 import { ReactNode } from 'react'
-import { Button as BaseUIButton, KIND, SHAPE, SIZE } from 'baseui/button'
-import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { theme } from '../../util'
-import { Override } from 'baseui/overrides'
 import { StyleObject } from 'styletron-react'
-import { Block } from 'baseui/block'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
+import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
 import { ExternalLink } from './RouteLink'
-import _ from 'lodash'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
 
 export type ButtonKind = (typeof KIND)[keyof typeof KIND] | 'outline' | 'underline-hover'
 
-interface ButtonProps {
+interface IButtonProps {
   kind?: ButtonKind
   type?: 'submit' | 'reset' | 'button'
   size?: (typeof SIZE)[keyof typeof SIZE]
@@ -36,12 +36,12 @@ interface ButtonProps {
   notBold?: boolean
 }
 
-interface TooltipProps {
+interface ITooltipProps {
   tooltip?: string
   children: React.ReactElement
 }
 
-const Tooltip = (props: TooltipProps) =>
+const Tooltip = (props: ITooltipProps) =>
   props.tooltip ? (
     <StatefulTooltip content={props.tooltip} placement={PLACEMENT.top} focusLock={false}>
       {props.children}
@@ -86,7 +86,7 @@ export const primaryFocusBorder = {
   },
 }
 
-export const Button = (props: ButtonProps) => {
+export const Button = (props: IButtonProps) => {
   const baseuiKind = props.kind === 'outline' ? KIND.secondary : props.kind === 'underline-hover' ? KIND.tertiary : props.kind
 
   const boxShadow =
@@ -112,7 +112,7 @@ export const Button = (props: ButtonProps) => {
           },
         }
 
-  let overrides: Override<any> = boxShadow
+  const overrides: Override<any> = boxShadow
   overrides.style = _.merge(overrides.style, props.kind === 'outline' ? outlineOverride : {})
   overrides.style = _.merge(overrides.style, props.kind === 'underline-hover' ? underlineOverride : {})
   overrides.style = _.merge(overrides.style, props.kind === 'secondary' ? buttonBorderStyle : {})

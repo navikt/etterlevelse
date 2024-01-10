@@ -1,17 +1,17 @@
+import { FileTextIcon } from '@navikt/aksel-icons'
+import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react'
 import { Form, Formik, FormikProps } from 'formik'
-import { EtterlevelseMetadata } from '../../constants'
+import React from 'react'
+import { createEtterlevelseMetadata, updateEtterlevelseMetadata } from '../../api/EtterlevelseMetadataApi'
+import { IEtterlevelseMetadata } from '../../constants'
 import { useDebouncedState } from '../../util/hooks'
 import TextEditor from '../common/TextEditor/TextEditor'
-import { createEtterlevelseMetadata, updateEtterlevelseMetadata } from '../../api/EtterlevelseMetadataApi'
-import React from 'react'
-import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react'
-import { FileTextIcon } from '@navikt/aksel-icons'
 
 type EditNotatfeltProps = {
   isOpen: boolean
-  setIsNotatfeltOpen: Function
-  etterlevelseMetadata: EtterlevelseMetadata
-  setEtterlevelseMetadata: React.Dispatch<React.SetStateAction<EtterlevelseMetadata>>
+  setIsNotatfeltOpen: React.Dispatch<React.SetStateAction<boolean>>
+  etterlevelseMetadata: IEtterlevelseMetadata
+  setEtterlevelseMetadata: React.Dispatch<React.SetStateAction<IEtterlevelseMetadata>>
   formRef?: React.RefObject<any>
 }
 
@@ -19,7 +19,7 @@ export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata
   const debounceDelay = 500
   const [notater, setNotater] = useDebouncedState(etterlevelseMetadata.notater || '', debounceDelay)
 
-  const submit = (values: EtterlevelseMetadata) => {
+  const submit = (values: IEtterlevelseMetadata) => {
     if (etterlevelseMetadata.id === 'ny') {
       createEtterlevelseMetadata({ ...values, notater: notater }).then((resp) => {
         setEtterlevelseMetadata(resp)
@@ -58,7 +58,7 @@ export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata
           validateOnBlur={false}
           initialValues={etterlevelseMetadata}
         >
-          {({ errors }: FormikProps<EtterlevelseMetadata>) => (
+          {({ errors }: FormikProps<IEtterlevelseMetadata>) => (
             <Form>
               <div>
                 <BodyShort className="mb-6">Notatet er kun for internt bruk, og ikke en del av dokumentasjonen</BodyShort>

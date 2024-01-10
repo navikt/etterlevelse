@@ -1,25 +1,25 @@
+import { faChevronDown, faFilter, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { withStyle } from 'baseui'
+import { Block } from 'baseui/block'
+import { KIND } from 'baseui/button'
+import { StatefulMenu } from 'baseui/menu'
+import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
+import { Pagination } from 'baseui/pagination'
+import { PLACEMENT, StatefulPopover } from 'baseui/popover'
 import { SORT_DIRECTION, SortableHeadCell, StyledBody, StyledCell, StyledHead, StyledHeadCell, StyledRow, StyledTable } from 'baseui/table'
+import { LabelMedium } from 'baseui/typography'
+import * as _ from 'lodash'
 import * as React from 'react'
 import { ReactNode, useContext, useState } from 'react'
-import { withStyle } from 'baseui'
 import { StyleObject } from 'styletron-standard'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faFilter, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons'
-import { Block } from 'baseui/block'
-import { LabelMedium } from 'baseui/typography'
-import { TableConfig, TableState, useTable } from '../../util/hooks'
 import { theme } from '../../util'
-import { borderRadius, paddingAll } from './Style'
+import { TableConfig, TableState, useTable } from '../../util/hooks'
 import { intl } from '../../util/intl/intl'
-import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
-import * as _ from 'lodash'
-import { PLACEMENT, StatefulPopover } from 'baseui/popover'
-import { StatefulMenu } from 'baseui/menu'
-import Button from './Button'
-import { KIND } from 'baseui/button'
-import { Pagination } from 'baseui/pagination'
 import CustomizedInput from '../common/CustomizedInput'
+import Button from './Button'
 import { CustomizedStatefulSelect } from './CustomizedSelect'
+import { borderRadius, paddingAll } from './Style'
 
 // Use this for entire app, or recreate maybe, added here as I needed it for audit
 
@@ -216,6 +216,9 @@ const HeadCell = <T, K extends keyof T>(props: HeadProps<T, K>) => {
   }
   const filterConf = tableProps.config?.filter ? tableProps.config.filter[column] : undefined
   const filterButton = filterConf && (
+
+    // will delete/refactor this file so no need to fix code bellow for now
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <span
       onClick={(e) => {
         setShowFilter(true)
@@ -223,8 +226,9 @@ const HeadCell = <T, K extends keyof T>(props: HeadProps<T, K>) => {
       }}
       style={{ marginLeft: 'auto', justifySelf: 'flex-end' }}
     >
-      <FontAwesomeIcon size="sm" icon={faFilter} color={!!inputFilter ? theme.colors.negative400 : theme.colors.primary200} />
+      <FontAwesomeIcon size="sm" icon={faFilter} color={inputFilter ? theme.colors.negative400 : theme.colors.primary200} />
     </span>
+    // eslint-enable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
   )
 
   const filterBody = () => {

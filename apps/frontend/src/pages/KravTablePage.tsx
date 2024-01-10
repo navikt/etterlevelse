@@ -1,24 +1,23 @@
-import { useEffect, useState } from 'react'
-import { Krav } from '../constants'
-import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
-import moment from 'moment'
-import { codelist, ListName } from '../services/Codelist'
-import { kravStatus } from './KravPage'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { BodyShort, Heading, Link, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
-import { handleSort } from '../util/handleTableSort'
-import { user } from '../services/User'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
+import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import { PageLayout } from '../components/scaffold/Page'
+import { IKrav } from '../constants'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
+import { ListName, codelist } from '../services/Codelist'
+import { handleSort } from '../util/handleTableSort'
+import { kravStatus } from './KravPage'
 
 export const KravTablePage = () => {
-  const [tableContent, setTableContent] = useState<Krav[]>([])
+  const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
 
   let sortedData = tableContent
 
-  const comparator = (a: Krav, b: Krav, orderBy: string) => {
+  const comparator = (a: IKrav, b: IKrav, orderBy: string) => {
     switch (orderBy) {
       case 'kravNummer':
         return a.kravNummer - b.kravNummer
@@ -47,7 +46,7 @@ export const KravTablePage = () => {
     .slice((page - 1) * rowsPerPage, page * rowsPerPage)
 
   useEffect(() => {
-    ; (async () => {
+    (async () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
       setTableContent(mappedKraver)
@@ -87,7 +86,7 @@ export const KravTablePage = () => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {sortedData.map((krav: Krav) => {
+              {sortedData.map((krav: IKrav) => {
                 return (
                   <Table.Row key={krav.id}>
                     <Table.HeaderCell className="w-[6%] text-end" scope="row">

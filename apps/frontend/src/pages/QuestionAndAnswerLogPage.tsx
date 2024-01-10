@@ -1,16 +1,15 @@
+import { BodyShort, Heading, Link, Loader, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
 import moment from 'moment'
-import * as React from 'react'
 import { ReactNode, useEffect, useState } from 'react'
 import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
 import { PersonName } from '../components/common/PersonName'
 import { getMelderInfo } from '../components/krav/tilbakemelding/Tilbakemelding'
-import { Krav, PageResponse, Tilbakemelding, TilbakemeldingMeldingStatus } from '../constants'
-import { codelist, ListName } from '../services/Codelist'
-import { ampli } from '../services/Amplitude'
-import { BodyShort, Heading, Link, Loader, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
-import { handleSort } from '../util/handleTableSort'
 import { PageLayout } from '../components/scaffold/Page'
+import { IKrav, IPageResponse, ITilbakemelding, TilbakemeldingMeldingStatus } from '../constants'
+import { ampli } from '../services/Amplitude'
+import { ListName, codelist } from '../services/Codelist'
+import { handleSort } from '../util/handleTableSort'
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string
@@ -20,10 +19,10 @@ type SporsmaalOgSvarKrav = {
   tema?: string
 }
 
-type KravMessage = Tilbakemelding & SporsmaalOgSvarKrav
+type KravMessage = ITilbakemelding & SporsmaalOgSvarKrav
 
 export const QuestionAndAnswerLogPage = () => {
-  const [tableContent, setTableContent] = useState<Krav[]>([])
+  const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [kravMessages, setKravMessages] = useState<KravMessage[]>([])
   const [isloading, setIsLoading] = useState<boolean>(false)
 
@@ -60,7 +59,7 @@ export const QuestionAndAnswerLogPage = () => {
     .slice((page - 1) * rowsPerPage, page * rowsPerPage)
 
   useEffect(() => {
-    ; (async () => {
+    (async () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
       setTableContent([...mappedKraver])
@@ -71,7 +70,7 @@ export const QuestionAndAnswerLogPage = () => {
   useEffect(() => {
     setIsLoading(true)
     const kravMessages: KravMessage[] = []
-    const tilbakeMeldinger: Tilbakemelding[] = []
+    const tilbakeMeldinger: ITilbakemelding[] = []
 
     const getTilbakeMeldingerPromise: Promise<any>[] = []
     tableContent.forEach((k) => {
@@ -79,7 +78,7 @@ export const QuestionAndAnswerLogPage = () => {
     })
 
     try {
-      Promise.all(getTilbakeMeldingerPromise).then((res: PageResponse<Tilbakemelding>[]) => {
+      Promise.all(getTilbakeMeldingerPromise).then((res: IPageResponse<ITilbakemelding>[]) => {
         res.forEach((t) => {
           if (t.content) {
             tilbakeMeldinger.push(...t.content)
@@ -102,7 +101,7 @@ export const QuestionAndAnswerLogPage = () => {
         setKravMessages(kravMessages)
       })
     } catch (e: any) {
-      console.log(e)
+      console.error(e)
     }
     setIsLoading(false)
   }, [tableContent])

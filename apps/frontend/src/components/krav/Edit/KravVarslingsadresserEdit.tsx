@@ -1,19 +1,19 @@
-import { AdresseType, Krav, SlackChannel, SlackUser, TeamResource, Varslingsadresse, VarslingsadresseQL } from '../../../constants'
-import { getSlackChannelById, getSlackUserByEmail, getSlackUserById, usePersonSearch, useSlackChannelSearch } from '../../../api/TeamApi'
-import React, { ReactNode, useEffect, useState } from 'react'
-import * as yup from 'yup'
-import { user } from '../../../services/User'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { FieldWrapper } from '../../common/Inputs'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
-import { RenderTagList } from '../../common/TagList'
-import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { Alert, Button, Loader, Modal, TextField } from '@navikt/ds-react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { EnvelopeClosedIcon, PersonIcon, PlusIcon } from '@navikt/aksel-icons'
-import AsyncSelect from 'react-select/async'
-import { DropdownIndicator } from './KravBegreperEdit'
+import { Alert, Button, Loader, Modal, TextField } from '@navikt/ds-react'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { CSSObjectWithLabel } from 'react-select'
+import AsyncSelect from 'react-select/async'
+import * as yup from 'yup'
+import { getSlackChannelById, getSlackUserByEmail, getSlackUserById, usePersonSearch, useSlackChannelSearch } from '../../../api/TeamApi'
+import { AdresseType, IKrav, ISlackChannel, ISlackUser, ITeamResource, IVarslingsadresse, VarslingsadresseQL } from '../../../constants'
+import { user } from '../../../services/User'
+import { FieldWrapper } from '../../common/Inputs'
+import LabelWithTooltip from '../../common/LabelWithTooltip'
+import { RenderTagList } from '../../common/TagList'
+import { DropdownIndicator } from './KravBegreperEdit'
 
 export const KravVarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -24,8 +24,8 @@ export const KravVarslingsadresserEdit = () => {
     <FieldWrapper>
       <FieldArray name="varslingsadresser">
         {(p: FieldArrayRenderProps) => {
-          const varslingsadresser = (p.form.values as Krav).varslingsadresser
-          const push = (v: Varslingsadresse) => {
+          const varslingsadresser = (p.form.values as IKrav).varslingsadresser
+          const push = (v: IVarslingsadresse) => {
             if (!varslingsadresser.find((v2) => v2.adresse === v.adresse)) p.push(v)
           }
           return (
@@ -47,15 +47,15 @@ export const KravVarslingsadresserEdit = () => {
               </div>
 
               <AddModal largeHeight title="Legg til Slack kanal" isOpen={addSlackChannel} close={() => setAddSlackChannel(false)}>
-                <SlackChannelSearch added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddSlackChannel(false)} />
+                <SlackChannelSearch added={(p.form.values as IKrav).varslingsadresser} add={push} close={() => setAddSlackChannel(false)} />
               </AddModal>
 
               <AddModal largeHeight title="Legg til Slack bruker" isOpen={addSlackUser} close={() => setAddSlackUser(false)}>
-                <SlackUserSearch added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddSlackUser(false)} />
+                <SlackUserSearch added={(p.form.values as IKrav).varslingsadresser} add={push} close={() => setAddSlackUser(false)} />
               </AddModal>
 
               <AddModal title="Legg til Epost adresse" isOpen={addEmail} close={() => setAddEmail(false)}>
-                <AddEmail added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddEmail(false)} />
+                <AddEmail added={(p.form.values as IKrav).varslingsadresser} add={push} close={() => setAddEmail(false)} />
               </AddModal>
             </div>
           )
@@ -76,14 +76,14 @@ const AddModal = ({ isOpen, close, title, children, largeHeight }: { isOpen: boo
   </Modal>
 )
 
-export const VarslingsadresserTagList = ({ varslingsadresser, remove }: { varslingsadresser: Varslingsadresse[]; remove: (i: number) => void }) => {
-  const [slackChannels, setSlackChannels] = useState<SlackChannel[]>([])
-  const [slackUsers, setSlackUsers] = useState<SlackUser[]>([])
+export const VarslingsadresserTagList = ({ varslingsadresser, remove }: { varslingsadresser: IVarslingsadresse[]; remove: (i: number) => void }) => {
+  const [slackChannels, setSlackChannels] = useState<ISlackChannel[]>([])
+  const [slackUsers, setSlackUsers] = useState<ISlackUser[]>([])
 
   useEffect(() => {
-    ;(async () => {
-      const loadedChannels: SlackChannel[] = []
-      const loadedUsers: SlackUser[] = []
+    (async () => {
+      const loadedChannels: ISlackChannel[] = []
+      const loadedUsers: ISlackUser[] = []
       const channels = await Promise.all(
         varslingsadresser
           .filter((va) => va.type === AdresseType.SLACK)
@@ -121,7 +121,7 @@ export const VarslingsadresserTagList = ({ varslingsadresser, remove }: { varsli
 
   return (
     <RenderTagList
-      list={varslingsadresser.map((v, i) => {
+      list={varslingsadresser.map((v) => {
         if (v.type === AdresseType.SLACK) {
           const channel = slackChannels.find((c) => c.id === v.adresse)
           return channel ? slackChannelView(channel) : `Slack: ${v.adresse}`
@@ -137,12 +137,12 @@ export const VarslingsadresserTagList = ({ varslingsadresser, remove }: { varsli
 }
 
 type AddVarslingsadresseProps = {
-  add: (v: Varslingsadresse) => void
-  added?: Varslingsadresse[]
+  add: (v: IVarslingsadresse) => void
+  added?: IVarslingsadresse[]
   close?: () => void
 }
 
-export const SlackChannelSearch = ({ added, add, close }: AddVarslingsadresseProps) => {
+export const SlackChannelSearch = ({ add, close }: AddVarslingsadresseProps) => {
   return (
     <AsyncSelect
       aria-label="Søk etter slack-kanal"
@@ -154,7 +154,7 @@ export const SlackChannelSearch = ({ added, add, close }: AddVarslingsadressePro
       components={{ DropdownIndicator }}
       loadOptions={useSlackChannelSearch}
       onChange={(slackKanal) => {
-        const channel = slackKanal as SlackChannel
+        const channel = slackKanal as ISlackChannel
         if (channel) add({ type: AdresseType.SLACK, adresse: channel.id })
         close && close()
       }}
@@ -182,7 +182,7 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
         close && close()
       })
       .catch((e) => {
-        setError('Fant ikke slack for bruker')
+        setError('Fant ikke slack for bruker, error: ' + e.toString() )
         setLoadingSlackId(false)
       })
   }
@@ -203,7 +203,7 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
             onFocus={() => setError('')}
             onBlur={() => setError('')}
             onChange={(person) => {
-              const resource = person as TeamResource
+              const resource = person as ITeamResource
               if (resource) {
                 setLoadingSlackId(true)
                 addEmail(resource.email)
@@ -288,4 +288,4 @@ export const AddEmail = ({ added, add: doAdd, close }: AddVarslingsadresseProps)
   )
 }
 
-export const slackChannelView = (channel: SlackChannel, long?: boolean) => `Slack: #${channel.name} ${long ? channel.numMembers : ''}`
+export const slackChannelView = (channel: ISlackChannel, long?: boolean) => `Slack: #${channel.name} ${long ? channel.numMembers : ''}`

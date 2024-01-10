@@ -4,20 +4,20 @@ import { Helmet } from 'react-helmet'
 import { BrowserRouter } from 'react-router-dom'
 import { Client as Styletron } from 'styletron-engine-atomic'
 import { Provider as StyletronProvider } from 'styletron-react'
+import AppRoutes from './AppRoutes'
 import { apolloClient } from './api/ApolloClient'
 import Header from './components/Header'
-import AppRoutes from './AppRoutes'
+import { Footer } from './components/Navigation/Footer'
 import { codelist } from './services/Codelist'
 import { useAwait, useAwaitUser } from './util/hooks'
 import { useNetworkStatus } from './util/network'
 import { customTheme } from './util/theme'
-import { Footer } from './components/Navigation/Footer'
 
 const engine = new Styletron()
 
 // ampli.logEvent('sidevisning', { sidetittel: 'Etterlevelse' })
 
-const Main = (props: any) => {
+const Main = () => {
   useAwaitUser()
   useAwait(codelist.wait())
 

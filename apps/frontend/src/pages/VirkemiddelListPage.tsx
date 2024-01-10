@@ -1,15 +1,15 @@
 import { Block } from 'baseui/block'
 import { HeadingXXLarge } from 'baseui/typography'
-import React, { useState } from 'react'
+import { useState } from 'react'
+import { Helmet } from 'react-helmet'
+import { plusIcon } from '../components/Images'
+import Button from '../components/common/Button'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
+import { AllVirkemiddel } from '../components/virkemiddelList/AllVirkemiddel'
+import { ampli } from '../services/Amplitude'
 import { user } from '../services/User'
 import { theme } from '../util'
 import { ettlevColors, maxPageWidth, responsivePaddingLarge } from '../util/theme'
-import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
-import { AllVirkemiddel } from '../components/virkemiddelList/AllVirkemiddel'
-import Button from '../components/common/Button'
-import { plusIcon } from '../components/Images'
 
 export const VirkemiddelListPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)

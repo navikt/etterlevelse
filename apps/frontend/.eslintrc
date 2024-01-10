@@ -10,8 +10,7 @@
       "plugin:react/recommended",
       "plugin:react-hooks/recommended",
       "plugin:@typescript-eslint/recommended",
-      "plugin:import/warnings",
-    ], 
+    ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
       "ecmaFeatures": {
@@ -40,6 +39,6 @@
       "react/prop-types": "off",
       "react/jsx-uses-react": "off",
       "react/react-in-jsx-scope": "off",
-      "no-console": "warn"
+      "no-console":["warn", { "allow": ["warn", "error"] }]
     }
   }

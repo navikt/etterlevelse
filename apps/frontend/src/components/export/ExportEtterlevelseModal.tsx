@@ -1,23 +1,22 @@
-import { Block } from 'baseui/block'
-import React, { useState } from 'react'
-import { env } from '../../util/env'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginZero } from '../common/Style'
-import { ModalBody, ModalHeader } from 'baseui/modal'
-import { codelist, ListName } from '../../services/Codelist'
+import { Button, Loader, Modal, Select } from '@navikt/ds-react'
 import axios from 'axios'
-import { ettlevColors } from '../../util/theme'
+import { Block } from 'baseui/block'
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { ParagraphMedium } from 'baseui/typography'
-import { Button, Loader, Modal, Select } from '@navikt/ds-react'
+import { useState } from 'react'
+import { ListName, codelist } from '../../services/Codelist'
+import { env } from '../../util/env'
+import { ettlevColors } from '../../util/theme'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginZero } from '../common/Style'
 
 type ExportEtterlevelseModalProps = {
-  etterlevelseDokumentasjonId: String
+  etterlevelseDokumentasjonId: string
 }
 
 export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => {
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [errorMessage, setErrorMessage] = useState<String>('')
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const [valgtTema, setValgtTema] = useState<string>('')
 
   return (
@@ -89,7 +88,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                 <Button
                   variant="secondary"
                   onClick={() => {
-                    ;(async () => {
+                    (async () => {
                       setIsLoading(true)
                       setErrorMessage('')
                       const exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}`
@@ -113,7 +112,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                   variant="primary"
                   disabled={valgtTema == ''}
                   onClick={() => {
-                    ;(async () => {
+                    (async () => {
                       setIsLoading(true)
                       setErrorMessage('')
                       const exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}&temakode=${valgtTema}`

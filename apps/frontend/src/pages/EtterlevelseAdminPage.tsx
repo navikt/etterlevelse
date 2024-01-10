@@ -1,8 +1,6 @@
-import { useState } from 'react'
-import { Helmet } from 'react-helmet'
-import { deleteEtterlevelse } from '../api/EtterlevelseApi'
 import { BodyShort, Button, Heading, TextField } from '@navikt/ds-react'
-import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
+import { useState } from 'react'
+import { deleteEtterlevelse } from '../api/EtterlevelseApi'
 import { PageLayout } from '../components/scaffold/Page'
 
 export const EtterlevelseAdminPage = () => {

@@ -1,36 +1,36 @@
-import { Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
-import {
-  tilbakemeldingNewMelding,
-  TilbakemeldingNewMeldingRequest,
-  tilbakemeldingslettMelding,
-  updateTilbakemeldingStatusOgEndretKrav,
-  useTilbakemeldinger,
-} from '../../../api/TilbakemeldingApi'
-import React, { useEffect, useState } from 'react'
+import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
+import { Accordion, Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Label, Loader, Modal, Select, Spacer, Textarea } from '@navikt/ds-react'
+import * as _ from 'lodash'
 import moment from 'moment'
-import { user } from '../../../services/User'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import {
+    ITilbakemeldingNewMeldingRequest,
+    tilbakemeldingNewMelding,
+    tilbakemeldingslettMelding,
+    updateTilbakemeldingStatusOgEndretKrav,
+    useTilbakemeldinger,
+} from '../../../api/TilbakemeldingApi'
+import { IKrav, ITilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
+import { user } from '../../../services/User'
 import { useQueryParam, useRefs } from '../../../util/hooks'
 import { ettlevColors } from '../../../util/theme'
+import { LoginButton } from '../../Header'
 import { mailboxPoppingIcon } from '../../Images'
 import { InfoBlock } from '../../common/InfoBlock'
-import { Portrait } from '../../common/Portrait'
 import { PersonName } from '../../common/PersonName'
-import * as _ from 'lodash'
-import { LoginButton } from '../../Header'
+import { Portrait } from '../../common/Portrait'
 import StatusView from '../../common/StatusTag'
+import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
 import ResponseMelding from './ResponseMelding'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
 import NyTilbakemeldingModal from './edit/NyTilbakemeldingModal'
 import { getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, tilbakemeldingStatusToText } from './utils'
-import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
-import { Accordion, Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Label, Loader, Modal, Select, Spacer, Textarea } from '@navikt/ds-react'
-import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 
 const DEFAULT_COUNT_SIZE = 5
 
-export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKravExpired: boolean }) => {
+export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: IKrav; hasKravExpired: boolean }) => {
   const [tilbakemeldinger, loading, add, replace, remove] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
@@ -183,7 +183,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
   )
 }
 
-const getStatus = (tilbakemelding: Tilbakemelding) => {
+const getStatus = (tilbakemelding: ITilbakemelding) => {
   let status = TilbakemeldingMeldingStatus.UBESVART
 
   if (tilbakemelding.status) {
@@ -197,7 +197,7 @@ const getStatus = (tilbakemelding: Tilbakemelding) => {
   return status
 }
 
-export const getMelderInfo = (tilbakemelding: Tilbakemelding) => {
+export const getMelderInfo = (tilbakemelding: ITilbakemelding) => {
   const sistMelding = tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1]
   const status = getStatus(tilbakemelding)
   const melder = user.getIdent() === tilbakemelding.melderIdent
@@ -211,12 +211,12 @@ export const getMelderInfo = (tilbakemelding: Tilbakemelding) => {
 }
 
 type TilbakemeldingSvarProps = {
-  tilbakemelding: Tilbakemelding
+  tilbakemelding: ITilbakemelding
   setFocusNummer: (fn: string | undefined) => void
-  close: (t: Tilbakemelding) => void
+  close: (t: ITilbakemelding) => void
   ubesvartOgKraveier: boolean
-  remove: (t: Tilbakemelding) => void
-  replace: (t: Tilbakemelding) => void
+  remove: (t: ITilbakemelding) => void
+  replace: (t: ITilbakemelding) => void
 }
 
 const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgKraveier, remove, replace }: TilbakemeldingSvarProps) => {
@@ -234,7 +234,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
     if (response) {
       setFocusNummer(tilbakemelding.id)
 
-      const req: TilbakemeldingNewMeldingRequest = {
+      const req: ITilbakemeldingNewMeldingRequest = {
         tilbakemeldingId: tilbakemelding.id,
         rolle: replyRole,
         melding: response,

@@ -1,10 +1,9 @@
+import { Button, Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 import React, { useEffect, useState } from 'react'
 import { createMelding, deleteMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
-import { AlertType, Melding, MeldingStatus, MeldingType } from '../../constants'
+import { AlertType, IMelding, MeldingStatus, MeldingType } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
-import { Button, Heading, Radio, RadioGroup } from '@navikt/ds-react'
-import { Loader } from '@navikt/ds-react'
 
 export const getAlertTypeText = (type: AlertType) => {
   if (!type) return ''
@@ -18,7 +17,7 @@ export const getAlertTypeText = (type: AlertType) => {
   }
 }
 
-export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
+export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { melding: IMelding | undefined; setMelding: React.Dispatch<React.SetStateAction<IMelding | undefined>>; isLoading: boolean; maxChar?: number }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
   const [meldingAlertType, setMeldingAlertType] = useState<string>(AlertType.WARNING)
 
@@ -28,7 +27,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
     }
   }, [isLoading])
 
-  const submit = async (melding: Melding) => {
+  const submit = async (melding: IMelding) => {
     setDisableEdit(true)
     if (melding.id) {
       await updateMelding(melding).then((m) => {
@@ -57,7 +56,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
     <div>
       {melding && (
         <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
-          {({ values, submitForm }: FormikProps<Melding>) => (
+          {({ values, submitForm }: FormikProps<IMelding>) => (
             <div>
               <div className="mb-6">
                 <Heading className="my-4" size="small" level="2">
@@ -105,7 +104,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                   disabled={disableEdit}
                   onClick={() => {
                     deleteMelding(melding.id).then(() => {
-                      setMelding('')
+                      setMelding(undefined)
                     })
                   }}
                 >

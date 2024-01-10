@@ -9,7 +9,7 @@ type CustomModalProps = {
 }
 
 const CuztomizedModal = (props: CustomModalProps & ModalProps) => {
-  const { overrides, closeIconColor, closeIconHoverColor, disableCloseIcon, ...otherProps } = props
+  const { closeIconColor, closeIconHoverColor, disableCloseIcon, ...otherProps } = props
 
   const customOverrides = {
     Dialog: {
@@ -39,6 +39,8 @@ const CuztomizedModal = (props: CustomModalProps & ModalProps) => {
 
   const mergedOverrides = _.merge(customOverrides, props.overrides)
 
-  return <Modal {...otherProps} size={props.size ? props.size : SIZE.full} overrides={mergedOverrides} />
+  return (
+    <Modal {...otherProps} size={props.size ? props.size : SIZE.full} overrides={mergedOverrides} />
+  )
 }
 export default CuztomizedModal

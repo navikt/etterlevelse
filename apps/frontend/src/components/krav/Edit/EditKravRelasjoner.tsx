@@ -1,13 +1,12 @@
-import { FieldWrapper } from '../../common/Inputs'
-import React from 'react'
-import { FieldArray } from 'formik'
-import { Error } from '../../common/ModalSchema'
-import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { useSearchKrav } from '../../../api/KravApi'
 import { Chips } from '@navikt/ds-react'
-import AsyncSelect from 'react-select/async'
-import { DropdownIndicator } from './KravBegreperEdit'
+import { FieldArray } from 'formik'
 import { CSSObjectWithLabel } from 'react-select'
+import AsyncSelect from 'react-select/async'
+import { useSearchKrav } from '../../../api/KravApi'
+import { FieldWrapper } from '../../common/Inputs'
+import LabelWithTooltip from '../../common/LabelWithTooltip'
+import { Error } from '../../common/ModalSchema'
+import { DropdownIndicator } from './KravBegreperEdit'
 
 export const EditKravRelasjoner = () => {
   return (

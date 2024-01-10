@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+// EXPECTED AND SHOULD CRASH APPLICATION IF VALUES ARE NOT DEFINED
+
 export const env = {
   backendBaseUrl: process.env.REACT_APP_BACKEND_ENDPOINT!,
   amplitudeEndpoint: process.env.REACT_APP_AMPLITUDE_ENDPOINT!,

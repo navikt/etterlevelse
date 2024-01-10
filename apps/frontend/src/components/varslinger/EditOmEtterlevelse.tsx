@@ -1,16 +1,16 @@
+import { Button, Heading, Loader } from '@navikt/ds-react'
 import { Formik, FormikProps } from 'formik'
 import React, { useState } from 'react'
 import { createMelding, deleteMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
-import { AlertType, Melding, MeldingStatus } from '../../constants'
+import { AlertType, IMelding, MeldingStatus } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
-import { Button, Heading, Loader } from '@navikt/ds-react'
 
-export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
+export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: { melding: IMelding | undefined; setMelding: React.Dispatch<React.SetStateAction<IMelding | undefined>>; isLoading: boolean; maxChar?: number }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
 
   const initialNumberOfRows = 1
 
-  const submit = async (melding: Melding) => {
+  const submit = async (melding: IMelding) => {
     const newMelding = { ...melding, alertType: AlertType.INFO }
     setDisableEdit(true)
     if (melding.id) {
@@ -40,7 +40,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
     <div>
       {melding && (
         <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
-          {({ values, submitForm }: FormikProps<Melding>) => (
+          {({ values, submitForm }: FormikProps<IMelding>) => (
             <div>
               <Heading size="small" level="2" className="my-4">
                 Om støtte til etterlevelse
@@ -59,7 +59,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
                   disabled={disableEdit}
                   onClick={() => {
                     deleteMelding(melding.id).then(() => {
-                      setMelding('')
+                      setMelding(undefined)
                     })
                   }}
                 >

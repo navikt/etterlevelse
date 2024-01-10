@@ -1,5 +1,5 @@
-import { ModalLabel } from '../common/ModalSchema'
-import { Alert } from '@navikt/ds-react'
+import { Alert } from '@navikt/ds-react';
+import { ModalLabel } from '../common/ModalSchema';
 
 export const ErrorMessageModal = (props: { msg: any; fullWidth?: boolean }) => (
   <div className="flex w-full mt-1">

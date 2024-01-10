@@ -1,24 +1,24 @@
-import React from 'react'
-import { Etterlevelse, Krav, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
-import { mapEtterlevelseToFormValue, updateEtterlevelse } from '../../../api/EtterlevelseApi'
-import { FieldArray, FieldArrayRenderProps, Form, Formik, FormikProps } from 'formik'
-import { Card } from 'baseui/card'
 import { Block } from 'baseui/block'
-import { theme } from '../../../util'
-import { ettlevColors } from '../../../util/theme'
-import { getSuksesskriterieBegrunnelse } from './SuksesskriterieBegrunnelseEdit'
-import * as yup from 'yup'
-import { FieldWrapper } from '../../common/Inputs'
-import { useDebouncedState } from '../../../util/hooks'
-import { LabelSmall } from 'baseui/typography'
+import { Card } from 'baseui/card'
 import { FormControl } from 'baseui/form-control'
-import TextEditor from '../../common/TextEditor/TextEditor'
+import { LabelSmall } from 'baseui/typography'
+import { FieldArray, FieldArrayRenderProps, Form, Formik, FormikProps } from 'formik'
+import React from 'react'
+import * as yup from 'yup'
+import { mapEtterlevelseToFormValue, updateEtterlevelse } from '../../../api/EtterlevelseApi'
+import { IEtterlevelse, IKrav, ISuksesskriterie, ISuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
+import { theme } from '../../../util'
+import { useDebouncedState } from '../../../util/hooks'
+import { ettlevColors } from '../../../util/theme'
+import { FieldWrapper } from '../../common/Inputs'
 import { Error } from '../../common/ModalSchema'
+import TextEditor from '../../common/TextEditor/TextEditor'
+import { getSuksesskriterieBegrunnelse } from './SuksesskriterieBegrunnelseEdit'
 
 type EditBegrunnelseProps = {
-  etterlevelse: Etterlevelse
-  krav: Krav
-  close: (k?: Etterlevelse) => void
+  etterlevelse: IEtterlevelse
+  krav: IKrav
+  close: (k?: IEtterlevelse) => void
   formRef?: React.Ref<any>
 }
 
@@ -43,7 +43,7 @@ const etterlevelseSchema = () =>
   })
 
 const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: EditBegrunnelseProps) => {
-  const submit = async (etterlevelse: Etterlevelse) => {
+  const submit = async (etterlevelse: IEtterlevelse) => {
     close(await updateEtterlevelse(etterlevelse))
   }
 
@@ -56,7 +56,7 @@ const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: EditBegrunnelse
       validateOnChange={false}
       validateOnBlur={false}
     >
-      {({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
+      {({ values, isSubmitting, submitForm }: FormikProps<IEtterlevelse>) => (
         <Form>
           <FieldWrapper>
             <FieldArray name={'suksesskriterieBegrunnelser'}>{(p) => <BegrunnelseList props={p} suksesskriterier={krav.suksesskriterier} />}</FieldArray>
@@ -67,8 +67,8 @@ const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: EditBegrunnelse
   )
 }
 
-const BegrunnelseList = ({ props, suksesskriterier }: { props: FieldArrayRenderProps; suksesskriterier: Suksesskriterie[] }) => {
-  const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
+const BegrunnelseList = ({ props, suksesskriterier }: { props: FieldArrayRenderProps; suksesskriterier: ISuksesskriterie[] }) => {
+  const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as ISuksesskriterieBegrunnelse[]
 
   return (
     <Block>
@@ -96,11 +96,11 @@ const Begrunnelse = ({
   kriterieLength,
   update,
 }: {
-  suksesskriterie: Suksesskriterie
+  suksesskriterie: ISuksesskriterie
   index: number
   kriterieLength: number
-  suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
-  update: (s: SuksesskriterieBegrunnelse) => void
+  suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
+  update: (s: ISuksesskriterieBegrunnelse) => void
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const begrunnelseIndex = suksesskriterieBegrunnelser.findIndex((item) => {

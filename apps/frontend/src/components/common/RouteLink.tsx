@@ -1,16 +1,13 @@
-import { useLocation, useNavigate } from 'react-router-dom'
-import React from 'react'
-import { AuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
-import { Block } from 'baseui/block'
-import { AuditButton } from '../admin/audit/AuditButton'
-import { KIND } from 'baseui/button'
-import { ListName } from '../../services/Codelist'
-import CustomizedLink from './CustomizedLink'
+import { Link } from '@navikt/ds-react'
 import _ from 'lodash'
+import React from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { ListName } from '../../services/Codelist'
 import { user } from '../../services/User'
 import { loginUrl } from '../Header'
-import { ettlevColors } from '../../util/theme'
-import { Link } from '@navikt/ds-react'
+import { AuditButton } from '../admin/audit/AuditButton'
+import { IAuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
+import CustomizedLink from './CustomizedLink'
 
 type RouteLinkProps = {
   href?: string
@@ -23,7 +20,7 @@ type RouteLinkProps = {
 } & any
 
 const RouteLink = (props: RouteLinkProps) => {
-  const { hideUnderline, plain, requireLogin, style, fontColor, ariaLabel, ...restprops } = props
+  const { hideUnderline, plain, requireLogin, fontColor, ariaLabel, ...restprops } = props
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -46,7 +43,8 @@ const RouteLink = (props: RouteLinkProps) => {
 
   const mergedStyle = _.merge(customStyle, props.style)
 
-  const href = !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(location, restprops.href)
+  const href =
+    !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(location, restprops.href)
 
   return (
     <CustomizedLink
@@ -66,7 +64,7 @@ export default RouteLink
 type ObjectLinkProps = {
   id?: string
   type: NavigableItem
-  audit?: AuditItem
+  audit?: IAuditItem
   withHistory?: boolean
   children?: any
   disable?: boolean
@@ -76,7 +74,7 @@ type ObjectLinkProps = {
   noNewTabLabel?: boolean
 }
 
-export const urlForObject = (type: NavigableItem | string, id: string, audit?: AuditItem) => {
+export const urlForObject = (type: NavigableItem | string, id: string) => {
   switch (type) {
     case ObjectType.Krav:
       return `/krav/${id}`
@@ -112,7 +110,7 @@ export const ObjectLink = (props: ObjectLinkProps) => {
     link = props.children
   } else
     link = (
-      <ExternalLink noNewTabLabel={props.noNewTabLabel} href={urlForObject(props.type, props.id, props.audit)}>
+      <ExternalLink noNewTabLabel={props.noNewTabLabel} href={urlForObject(props.type, props.id)}>
         {props.children}
       </ExternalLink>
     )
@@ -143,7 +141,13 @@ export const ExternalLink = ({
   noNewTabLabel?: boolean
 }) => {
   return (
-    <Link className={className} href={href} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer" aria-label={label}>
+    <Link
+      className={className}
+      href={href}
+      target={openOnSamePage ? '_self' : '_blank'}
+      rel="noopener noreferrer"
+      aria-label={label}
+    >
       {children} {!openOnSamePage && !noNewTabLabel && ' (åpnes i ny fane)'}
     </Link>
   )

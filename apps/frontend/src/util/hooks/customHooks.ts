@@ -44,7 +44,7 @@ export function useAwait<T>(p: Promise<T>, setLoading?: Dispatch<SetStateAction<
   const update = useForceUpdate()
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       setLoading && setLoading(true)
       await p
       update()
@@ -105,7 +105,7 @@ export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => 
   }
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       if (search && search.match(/[a-zA-Z]\d/) && search.length > 3) {
         beginSearch()
       } else if (search && search.length > 2 && !search.match(/[a-zA-Z]\d/)) {

@@ -1,18 +1,17 @@
-import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
-
-import { CodeListFormValues, codeListSchema, ListName } from '../../../services/Codelist'
-import { Error } from '../../common/ModalSchema'
-import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
-import { MarkdownInfo } from '../../common/Markdown'
 import { BodyShort, Button, Label, Modal, TextField, Textarea } from '@navikt/ds-react'
+import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
+import { ICodeListFormValues, ListName, codeListSchema } from '../../../services/Codelist'
+import { MarkdownInfo } from '../../common/Markdown'
+import { Error } from '../../common/ModalSchema'
+import { LovCodeDataForm } from './LovCode'
 
 type ModalUpdateProps = {
   title: string
-  initialValues: CodeListFormValues
+  initialValues: ICodeListFormValues
   isOpen: boolean
   errorOnUpdate: any | undefined
   onClose: () => void
-  submit: (process: CodeListFormValues) => Promise<void>
+  submit: (process: ICodeListFormValues) => Promise<void>
 }
 
 const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onClose, submit }: ModalUpdateProps) => {
@@ -27,7 +26,7 @@ const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onCl
           initialValues={{ ...initialValues }}
           validationSchema={codeListSchema}
         >
-          {(formik: FormikProps<CodeListFormValues>) => (
+          {(formik: FormikProps<ICodeListFormValues>) => (
             <Form>
               <Modal.Body>
                 <div className="flex w-full mt-4 items-center">

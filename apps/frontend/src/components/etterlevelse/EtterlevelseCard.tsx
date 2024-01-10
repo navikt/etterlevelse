@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import { getKravByKravNumberAndVersion } from '../../api/KravApi'
-import { Etterlevelse, Krav } from '../../constants'
+import { IEtterlevelse, IKrav } from '../../constants'
 
-import EtterlevelseModal from './EtterlevelseModal'
 import { Button } from '@navikt/ds-react'
+import EtterlevelseModal from './EtterlevelseModal'
 
-export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
+export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: IEtterlevelse }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [kravData, setKravData] = useState<Krav>()
+  const [kravData, setKravData] = useState<IKrav>()
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       const krav = await getKravByKravNumberAndVersion(etterlevelse.kravNummer, etterlevelse.kravVersjon)
       if (krav) {
         setKravData(krav)

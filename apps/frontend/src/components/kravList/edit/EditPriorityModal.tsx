@@ -1,30 +1,40 @@
-import CustomizedModal from '../../common/CustomizedModal'
-import { Krav } from '../../../constants'
-import Button from '../../common/Button'
-import React, { ReactElement, useEffect } from 'react'
-import { FieldArray, Form, Formik } from 'formik'
-import { FieldWrapper } from '../../common/Inputs'
-import { arrayMove, List } from 'baseui/dnd-list'
-import { CustomPanelDivider } from '../../common/CustomizedAccordion'
-import { SimplePanel } from '../../common/PanelLink'
+import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Loader } from '@navikt/ds-react'
+import { Block } from 'baseui/block'
+import { List, arrayMove } from 'baseui/dnd-list'
 import { HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
+import { FieldArray, Form, Formik } from 'formik'
 import moment from 'moment'
+import React, { ReactElement, useEffect } from 'react'
+import {
+  createKravPriority,
+  kravMapToKravPrioriting,
+  updateKravPriority,
+} from '../../../api/KravPriorityApi'
+import { IKrav } from '../../../constants'
+import { ettlevColors, responsivePaddingSmall } from '../../../util/theme'
+import AlertUnsavedPopup from '../../common/AlertUnsavedPopup'
+import Button from '../../common/Button'
+import { CustomPanelDivider } from '../../common/CustomizedAccordion'
+import CustomizedModal from '../../common/CustomizedModal'
+import { FieldWrapper } from '../../common/Inputs'
+import { SimplePanel } from '../../common/PanelLink'
 import StatusView from '../../common/StatusTag'
 import { borderRadius, borderStyle, paddingZero } from '../../common/Style'
-import { Block } from 'baseui/block'
-import { ettlevColors, responsivePaddingSmall } from '../../../util/theme'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
-import { createKravPriority, kravMapToKravPrioriting, updateKravPriority } from '../../../api/KravPriorityApi'
-import AlertUnsavedPopup from '../../common/AlertUnsavedPopup'
-import { Loader } from '@navikt/ds-react'
 
 export const kravListPriorityModal = () => document.querySelector('#krav-list-edit-priority-modal')
 
-export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dispatch<React.SetStateAction<boolean>>; kravListe: Krav[]; tema: string; refresh: Function }) => {
+export const EditPriorityModal = (props: {
+  isOpen: boolean
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  kravListe: IKrav[]
+  tema: string
+  refresh: () => void
+}) => {
   const { isOpen, setIsOpen, kravListe, tema, refresh } = props
   const [items, setItems] = React.useState<ReactElement[]>([])
-  const [kravElements, setKravElements] = React.useState<Krav[]>(kravListe)
+  const [kravElements, setKravElements] = React.useState<IKrav[]>(kravListe)
   const [loading, setLoading] = React.useState(false)
   const [stickyFooterStyle, setStickyFooterStyle] = React.useState(false)
 
@@ -33,19 +43,33 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
 
   useEffect(() => {
     setItems(
-      kravListe.map((k) => {
+      kravListe.map((k, i) => {
         return (
-          <CustomPanelDivider fullWidth>
+          <CustomPanelDivider key={k.kravNummer + '_' + i} fullWidth>
             <SimplePanel
               key={`${k.navn}_${k.kravNummer}`}
               hideChevron
               title={
-                <ParagraphMedium $style={{ fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px' }}>
+                <ParagraphMedium
+                  $style={{
+                    fontSize: '14px',
+                    marginBottom: '0px',
+                    marginTop: '0px',
+                    lineHeight: '15px',
+                  }}
+                >
                   K{k.kravNummer}.{k.kravVersjon}
                 </ParagraphMedium>
               }
-              beskrivelse={<LabelSmall $style={{ fontSize: '18px', lineHeight: '28px' }}>{k.navn}</LabelSmall>}
-              rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
+              beskrivelse={
+                <LabelSmall $style={{ fontSize: '18px', lineHeight: '28px' }}>{k.navn}</LabelSmall>
+              }
+              rightBeskrivelse={
+                k.changeStamp.lastModifiedDate !== undefined &&
+                k.changeStamp.lastModifiedDate !== ''
+                  ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}`
+                  : ''
+              }
               statusText={<StatusView status={k.status} />}
               overrides={{
                 Block: {
@@ -59,7 +83,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
             />
           </CustomPanelDivider>
         )
-      }),
+      })
     )
   }, [kravListe])
 
@@ -70,8 +94,12 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
     }
 
     const listener = (event: any) => {
-      const buttonPosition = document.querySelector('.krav-list-button-container')?.clientHeight || 0
-      if (event.target.scrollTop <= event.target.scrollHeight - event.target.clientHeight - buttonPosition) {
+      const buttonPosition =
+        document.querySelector('.krav-list-button-container')?.clientHeight || 0
+      if (
+        event.target.scrollTop <=
+        event.target.scrollHeight - event.target.clientHeight - buttonPosition
+      ) {
         setStickyFooterStyle(true)
       } else {
         setStickyFooterStyle(false)
@@ -82,7 +110,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
     return () => kravListPriorityModal()?.removeEventListener('scroll', listener)
   }, [isOpen])
 
-  const setPriority = (kravListe: Krav[]) => {
+  const setPriority = (kravListe: IKrav[]) => {
     const pattern = new RegExp(tema.substr(0, 3).toUpperCase() + '[0-9]+')
 
     return kravListe.map((k, i) => {
@@ -96,7 +124,10 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
         if (k.prioriteringsId?.match(pattern)) {
           return {
             ...k,
-            prioriteringsId: k.prioriteringsId.replace(pattern, tema.substr(0, 3).toUpperCase() + index),
+            prioriteringsId: k.prioriteringsId.replace(
+              pattern,
+              tema.substr(0, 3).toUpperCase() + index
+            ),
           }
         } else {
           return {
@@ -111,13 +142,17 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
   const submit = () => {
     setLoading(true)
     setIsFormDirty(false)
-    let updateKravPriorityPromise: Promise<any>[] = []
+    const updateKravPriorityPromise: Promise<any>[] = []
     const kravMedPrioriteting = setPriority([...kravElements])
     kravMedPrioriteting.forEach((kmp) => {
       if (kmp.kravPriorityUID) {
-        updateKravPriorityPromise.push((async () => await updateKravPriority(kravMapToKravPrioriting(kmp)))())
+        updateKravPriorityPromise.push(
+          (async () => await updateKravPriority(kravMapToKravPrioriting(kmp)))()
+        )
       } else {
-        updateKravPriorityPromise.push((async () => await createKravPriority(kravMapToKravPrioriting(kmp)))())
+        updateKravPriorityPromise.push(
+          (async () => await createKravPriority(kravMapToKravPrioriting(kmp)))()
+        )
       }
     })
     try {
@@ -127,7 +162,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
         setIsOpen(false)
       })
     } catch (error: any) {
-      console.log(error)
+      console.error(error)
     }
   }
 
@@ -138,7 +173,12 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
 
   return (
     <>
-      <AlertUnsavedPopup isActive={isFormDirty} isModalOpen={isAlertModalOpen} setIsModalOpen={setIsAlertModalOpen} onClose={() => close()} onSubmit={() => submit()} />
+      <AlertUnsavedPopup
+        isModalOpen={isAlertModalOpen}
+        setIsModalOpen={setIsAlertModalOpen}
+        onClose={() => close()}
+        onSubmit={() => submit()}
+      />
       <Formik
         initialValues={{
           krav: kravElements,
@@ -183,14 +223,34 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
               paddingRight={responsivePaddingSmall}
               marginBottom="54px"
             >
-              <HeadingXXLarge $style={{ lineHeight: '48px', color: ettlevColors.white }}>Justere rekkefølgen på krav</HeadingXXLarge>
+              <HeadingXXLarge $style={{ lineHeight: '48px', color: ettlevColors.white }}>
+                Justere rekkefølgen på krav
+              </HeadingXXLarge>
             </Block>
-            <Block display="flex" justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
+            <Block
+              display="flex"
+              justifyContent="center"
+              paddingLeft={responsivePaddingSmall}
+              paddingRight={responsivePaddingSmall}
+            >
               <Block display="flex" justifyContent="flex-start" flex="1">
-                <HeadingXLarge $style={{ lineHeight: '24px', color: ettlevColors.green600, marginTop: '0px', marginBottom: '0px' }}>{tema}</HeadingXLarge>
+                <HeadingXLarge
+                  $style={{
+                    lineHeight: '24px',
+                    color: ettlevColors.green600,
+                    marginTop: '0px',
+                    marginBottom: '0px',
+                  }}
+                >
+                  {tema}
+                </HeadingXLarge>
               </Block>
               <Block display="flex" justifyContent="flex-end" flex="1">
-                <ParagraphMedium $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}>Klikk og dra kravene i ønsket rekkefølge</ParagraphMedium>
+                <ParagraphMedium
+                  $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}
+                >
+                  Klikk og dra kravene i ønsket rekkefølge
+                </ParagraphMedium>
               </Block>
             </Block>
             <Block>
@@ -202,7 +262,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
                 <Form>
                   <FieldWrapper>
                     <FieldArray name={'krav'}>
-                      {(p) => (
+                      {() => (
                         <List
                           items={items}
                           onChange={({ oldIndex, newIndex }) => {
@@ -262,7 +322,13 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
               >
                 Avbryt
               </Button>
-              <Button type="button" size="compact" onClick={p.submitForm} disabled={loading} marginLeft>
+              <Button
+                type="button"
+                size="compact"
+                onClick={p.submitForm}
+                disabled={loading}
+                marginLeft
+              >
                 Lagre
               </Button>
             </Block>
@@ -282,7 +348,11 @@ const CustomDragHandle = (isDragged: boolean) => {
         marginRight: '1em',
       }}
     >
-      <FontAwesomeIcon icon={faGripVertical} aria-label={'Dra og slipp håndtak'} color={isDragged ? ettlevColors.green800 : ettlevColors.grey200} />
+      <FontAwesomeIcon
+        icon={faGripVertical}
+        aria-label={'Dra og slipp håndtak'}
+        color={isDragged ? ettlevColors.green800 : ettlevColors.grey200}
+      />
     </Block>
   )
 }

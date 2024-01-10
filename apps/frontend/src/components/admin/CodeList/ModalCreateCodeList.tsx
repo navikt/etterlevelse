@@ -1,8 +1,8 @@
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { CodeListFormValues, codeListSchema, ListName, LovCodeRelevans } from '../../../services/Codelist'
-import { Error } from '../../common/ModalSchema'
-import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
+import { ICodeListFormValues, ListName, LovCodeRelevans, codeListSchema } from '../../../services/Codelist'
 import { MarkdownInfo } from '../../common/Markdown'
+import { Error } from '../../common/ModalSchema'
+import { LovCodeDataForm } from './LovCode'
 
 import { BodyShort, Button, Label, Modal, TextField, Textarea } from '@navikt/ds-react'
 
@@ -11,7 +11,7 @@ type ModalCreateProps = {
   list: string
   isOpen: boolean
   errorOnCreate: any | undefined
-  submit: (code: CodeListFormValues) => Promise<void>
+  submit: (code: ICodeListFormValues) => Promise<void>
   onClose: () => void
 }
 
@@ -33,7 +33,7 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
               data: {
                 relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL,
               },
-            } as CodeListFormValues
+            } as ICodeListFormValues
           }
           validationSchema={codeListSchema}
         >

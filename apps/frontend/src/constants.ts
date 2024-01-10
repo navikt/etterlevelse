@@ -1,6 +1,6 @@
-import { Code, LovCode } from './services/Codelist'
-import { Group } from './services/User'
 import * as React from 'react'
+import { ICode, LovCode } from './services/Codelist'
+import { Group } from './services/User'
 
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P]
@@ -21,7 +21,7 @@ export enum TilbakemeldingMeldingStatus {
   MIDLERTIDLIG_SVAR = 'MIDLERTIDLIG_SVAR',
 }
 
-export interface EtterlevelseArkiv extends DomainObject {
+export interface IEtterlevelseArkiv extends IDomainObject {
   id: string
   behandlingId: string
   etterlevelseDokumentasjonId: string
@@ -113,7 +113,7 @@ export enum SuksesskriterieStatus {
   IKKE_RELEVANT = 'IKKE_RELEVANT',
   IKKE_OPPFYLT = 'IKKE_OPPFYLT',
 }
-export interface UserInfo {
+export interface IUserInfo {
   loggedIn: boolean
   groups: Group[]
   ident?: string
@@ -121,7 +121,7 @@ export interface UserInfo {
   email?: string
 }
 
-export interface PageResponse<T> {
+export interface IPageResponse<T> {
   pageNumber: number
   pageSize: number
   pages: number
@@ -130,18 +130,18 @@ export interface PageResponse<T> {
   content: T[]
 }
 
-export interface ChangeStamp {
+export interface IChangeStamp {
   lastModifiedBy: string
   lastModifiedDate: string
   createdDate?: string
 }
 
-export interface DomainObject {
-  changeStamp: ChangeStamp
+export interface IDomainObject {
+  changeStamp: IChangeStamp
   version: number
 }
 
-export interface KravPrioritering extends DomainObject {
+export interface IKravPrioritering extends IDomainObject {
   id: string
 
   kravVersjon: number
@@ -149,18 +149,18 @@ export interface KravPrioritering extends DomainObject {
   prioriteringsId: string
 }
 
-export interface KravId {
+export interface IKravId {
   id: string
   kravVersjon: number
 }
 
-export interface KravVersjon {
+export interface IKravVersjon {
   kravNummer: string | number
   kravVersjon: string | number
   kravStatus: string
 }
 
-export interface Krav extends DomainObject {
+export interface IKrav extends IDomainObject {
   id: string
 
   kravNummer: number
@@ -178,30 +178,30 @@ export interface Krav extends DomainObject {
   kravPriorityUID?: string
   begrepIder: string[]
   virkemiddelIder: string[]
-  varslingsadresser: Varslingsadresse[]
+  varslingsadresser: IVarslingsadresse[]
   rettskilder: string[]
   tagger: string[]
-  regelverk: Regelverk[]
-  avdeling?: Code
-  underavdeling?: Code
-  relevansFor: Code[]
+  regelverk: IRegelverk[]
+  avdeling?: ICode
+  underavdeling?: ICode
+  relevansFor: ICode[]
   status: KravStatus
-  suksesskriterier: Suksesskriterie[]
+  suksesskriterier: ISuksesskriterie[]
   tema?: string
   nyKravVersjon: boolean
   kravIdRelasjoner: string[]
   aktivertDato: string
 }
 
-export interface Virkemiddel extends DomainObject {
+export interface IVirkemiddel extends IDomainObject {
   id: string
   navn: string
-  regelverk: Regelverk[]
-  virkemiddelType?: Code
+  regelverk: IRegelverk[]
+  virkemiddelType?: ICode
   livsSituasjon: string
 }
 
-export interface EtterlevelseMetadata extends DomainObject {
+export interface IEtterlevelseMetadata extends IDomainObject {
   id: string
   kravNummer: number
   kravVersjon: number
@@ -211,35 +211,35 @@ export interface EtterlevelseMetadata extends DomainObject {
   notater?: string
 }
 
-export interface Suksesskriterie {
+export interface ISuksesskriterie {
   id: number
   navn: string
   beskrivelse?: string
   behovForBegrunnelse: boolean
 }
 
-export interface Regelverk {
+export interface IRegelverk {
   lov: LovCode
   spesifisering?: string
 }
 
-export interface Varslingsadresse {
+export interface IVarslingsadresse {
   adresse: string
   type: AdresseType
 }
 
-export interface SlackChannel {
+export interface ISlackChannel {
   id: string
   name?: string
   numMembers?: number
 }
 
-export interface SlackUser {
+export interface ISlackUser {
   id: string
   name?: string
 }
 
-export interface Etterlevelse extends DomainObject {
+export interface IEtterlevelse extends IDomainObject {
   id: string
   behandlingId: string
   etterlevelseDokumentasjonId: string
@@ -250,7 +250,7 @@ export interface Etterlevelse extends DomainObject {
   dokumentasjon: string[]
   fristForFerdigstillelse: string
   status: EtterlevelseStatus
-  suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
+  suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
 }
 
 export type KravEtterlevelseData = {
@@ -260,82 +260,82 @@ export type KravEtterlevelseData = {
   status: KravStatus
   etterlevelseId?: string
   etterleves: boolean
-  changeStamp: ChangeStamp
+  changeStamp: IChangeStamp
   frist?: string
   varselMelding?: string
   prioriteringsId?: string
   etterlevelseStatus?: EtterlevelseStatus
-  suksesskriterier: Suksesskriterie[]
+  suksesskriterier: ISuksesskriterie[]
   gammelVersjon?: boolean
-  etterlevelseChangeStamp?: ChangeStamp
+  etterlevelseChangeStamp?: IChangeStamp
   isIrrelevant?: boolean
   aktivertDato: string
 }
 
-export interface SuksesskriterieBegrunnelse {
+export interface ISuksesskriterieBegrunnelse {
   suksesskriterieId: number
   begrunnelse: string
   behovForBegrunnelse: boolean
   suksesskriterieStatus?: SuksesskriterieStatus
 }
 
-export interface Behandling {
+export interface IBehandling {
   id: string
   navn: string
   nummer: number
-  overordnetFormaal: ExternalCode
+  overordnetFormaal: IExternalCode
   formaal?: string
-  avdeling?: ExternalCode
-  linjer: ExternalCode[]
-  systemer: ExternalCode[]
+  avdeling?: IExternalCode
+  linjer: IExternalCode[]
+  systemer: IExternalCode[]
   teams: string[]
 }
 
-export interface EtterlevelseDokumentasjon {
+export interface IEtterlevelseDokumentasjon {
   id: string
-  changeStamp: ChangeStamp
+  changeStamp: IChangeStamp
   version: number
   title: string
   behandlingIds: string[]
   virkemiddelId: string
-  irrelevansFor: Code[]
+  irrelevansFor: ICode[]
   etterlevelseNummer: number
   teams: string[]
   //data field for frontend only
-  teamsData?: Team[]
-  behandlinger?: Behandling[]
+  teamsData?: ITeam[]
+  behandlinger?: IBehandling[]
   behandlerPersonopplysninger: boolean
-  virkemiddel?: Virkemiddel
+  virkemiddel?: IVirkemiddel
   knyttetTilVirkemiddel: boolean
   knytteTilTeam: boolean
 }
 
-export interface EtterlevelseDokumentasjonStats {
+export interface IEtterlevelseDokumentasjonStats {
   relevantKrav: KravQL[]
   irrelevantKrav: KravQL[]
   utgaattKrav: KravQL[]
-  lovStats: LovStats[]
+  lovStats: ILovStats[]
 }
 
-export interface LovStats {
-  lovCode: Code
+export interface ILovStats {
+  lovCode: ICode
   relevantKrav: KravQL[]
   irrelevantKrav: KravQL[]
   utgaattKrav: KravQL[]
 }
 
-export interface Tilbakemelding {
+export interface ITilbakemelding {
   id: string
   kravNummer: number
   kravVersjon: number
   type: TilbakemeldingType
   melderIdent: string
-  meldinger: TilbakemeldingMelding[]
+  meldinger: ITilbakemeldingMelding[]
   status: TilbakemeldingMeldingStatus
   endretKrav: boolean
 }
 
-export interface TilbakemeldingMelding {
+export interface ITilbakemeldingMelding {
   meldingNr: number
   fraIdent: string
   rolle: TilbakemeldingRolle
@@ -345,7 +345,7 @@ export interface TilbakemeldingMelding {
   endretAvIdent?: string
 }
 
-export interface Melding extends DomainObject {
+export interface IMelding extends IDomainObject {
   id: string
   melding: string
   secondaryTittel: string
@@ -357,7 +357,7 @@ export interface Melding extends DomainObject {
 
 export const emptyPage = { content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 }
 
-export interface TeamResource {
+export interface ITeamResource {
   navIdent: string
   givenName: string
   familyName: string
@@ -366,7 +366,7 @@ export interface TeamResource {
   resourceType: string
 }
 
-export interface Team {
+export interface ITeam {
   id: string
   name: string
   description: string
@@ -374,65 +374,64 @@ export interface Team {
   productAreaName?: string
   slackChannel?: string
   tags: string[]
-  members: Member[]
+  members: IMember[]
 }
 
-export interface ProductArea {
+export interface IProductArea {
   id: string
   name: string
   description: string
   tags: string[]
-  members: Member[]
+  members: IMember[]
 }
 
-export interface Member {
+export interface IMember {
   name?: string
   email?: string
 }
 
-export interface ExternalCode {
+export interface IExternalCode {
   list: string
   code: string
   shortName: string
   description: string
 }
 
-export interface Begrep {
+export interface IBegrep {
   id: string
   navn: string
   beskrivelse: string
 }
 
 export type KravQL = Replace<
-  Krav,
+  IKrav,
   {
     etterlevelser: EtterlevelseQL[]
     varslingsadresser: VarslingsadresseQL[]
-    begreper: Begrep[]
-    virkemidler: Virkemiddel[]
-    kravRelasjoner: Krav[]
+    begreper: IBegrep[]
+    virkemidler: IVirkemiddel[]
+    kravRelasjoner: IKrav[]
     prioriteringsId: string
   }
 >
 
-export type EtterlevelseQL = Etterlevelse & {
+export type EtterlevelseQL = IEtterlevelse & {
   etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL
 }
 
-export type BehandlingQL = Behandling & {
-  teamsData: Team[]
+export type BehandlingQL = IBehandling & {
+  teamsData: ITeam[]
 }
 
-export type EtterlevelseDokumentasjonQL = EtterlevelseDokumentasjon & {
-  etterlevelser?: Etterlevelse[]
+export type EtterlevelseDokumentasjonQL = IEtterlevelseDokumentasjon & {
+  etterlevelser?: IEtterlevelse[]
   sistEndretEtterlevelse?: string
   sistEndretDokumentasjon?: string
-  stats?: EtterlevelseDokumentasjonStats
+  stats?: IEtterlevelseDokumentasjonStats
 }
 
-export type VarslingsadresseQL = Varslingsadresse & {
-  slackChannel?: SlackChannel
-  slackUser?: SlackUser
-}
-
+export type VarslingsadresseQL = IVarslingsadresse & {
+  slackChannel?: ISlackChannel
+  slackUser?: ISlackUser
+} 
 export type Replace<T, K> = Omit<T, keyof K> & K

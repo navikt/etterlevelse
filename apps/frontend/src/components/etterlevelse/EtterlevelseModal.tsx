@@ -1,7 +1,7 @@
 import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react'
-import { Etterlevelse, Krav } from '../../constants'
-import { ViewEtterlevelse } from './ViewEtterlevelse'
+import { IEtterlevelse, IKrav } from '../../constants'
 import { kravNumView } from '../../pages/KravPage'
+import { ViewEtterlevelse } from './ViewEtterlevelse'
 
 export const EtterlevelseModal = ({
   isModalOpen,
@@ -11,8 +11,8 @@ export const EtterlevelseModal = ({
 }: {
   isModalOpen: boolean
   setIsModalOpen: (state: boolean) => void
-  etterlevelse: Etterlevelse
-  kravData: Krav
+  etterlevelse: IEtterlevelse
+  kravData: IKrav
 }) => {
   return (
     <Modal className="w-full max-w-4xl" onClose={() => setIsModalOpen(false)} open={isModalOpen}>

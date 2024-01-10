@@ -1,8 +1,8 @@
+import { Alert, Label, Loader } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { emptyPage, KravQL } from '../../constants'
 import { useKravFilter } from '../../api/KravGraphQLApi'
+import { KravQL, emptyPage } from '../../constants'
 import { KravPanels, sortKrav } from '../../pages/KravListPage'
-import { Alert, Heading, Label, Loader } from '@navikt/ds-react'
 
 export const SistRedigertKrav = () => {
   const [sorting] = useState('sist')

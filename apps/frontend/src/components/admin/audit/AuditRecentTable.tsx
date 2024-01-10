@@ -4,14 +4,14 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { JsonView } from 'react-json-view-lite'
 import { getAudits } from '../../../api/AuditApi'
-import { PageResponse, emptyPage } from '../../../constants'
+import { IPageResponse, emptyPage } from '../../../constants'
 import { ampli, userRoleEventProp } from '../../../services/Amplitude'
 import { intl } from '../../../util/intl/intl'
 import { AuditButton } from './AuditButton'
 import { AuditActionIcon } from './AuditComponents'
-import { AuditItem, ObjectType } from './AuditTypes'
+import { IAuditItem, ObjectType } from './AuditTypes'
 
-const CodeView = ({ audit }: { audit: AuditItem }) => {
+const CodeView = ({ audit }: { audit: IAuditItem }) => {
   const [modalOpen, setModalOpen] = useState(false)
 
   return (
@@ -30,7 +30,7 @@ const CodeView = ({ audit }: { audit: AuditItem }) => {
 }
 
 export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType }) => {
-  const [audits, setAudits] = useState<PageResponse<AuditItem>>(emptyPage)
+  const [audits, setAudits] = useState<IPageResponse<IAuditItem>>(emptyPage)
   const [limit, setLimit] = useState(20)
   const [table, setTable] = useState<ObjectType | undefined>(props.tableType)
   const [page, setPage] = useState(1)
@@ -44,7 +44,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   }, [])
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       props.show && setAudits(await getAudits(page - 1, limit, table))
     })()
   }, [page, limit, props.show, table])
@@ -114,7 +114,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {audits.content.map((audit: AuditItem, index) => {
+          {audits.content.map((audit: IAuditItem, index) => {
             const length = window.innerWidth > 1000 ? (window.innerWidth > 1200 ? 40 : 30) : 20
             const rowNum = audits.pageNumber * audits.pageSize + index + 1
             return (

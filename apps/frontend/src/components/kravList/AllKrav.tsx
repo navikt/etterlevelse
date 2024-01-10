@@ -1,11 +1,11 @@
+import { PlusIcon } from '@navikt/aksel-icons'
+import { Alert, BodyShort, Button, Label, Loader, Select } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { codelist, ListName } from '../../services/Codelist'
 import { useKravFilter } from '../../api/KravGraphQLApi'
-import { emptyPage, KravListFilter, KravQL, KravStatus, Option } from '../../constants'
+import { KravListFilter, KravQL, KravStatus, Option, emptyPage } from '../../constants'
 import { KravPanels, sortKrav } from '../../pages/KravListPage'
 import { kravStatus } from '../../pages/KravPage'
-import { Alert, BodyShort, Button, Heading, Label, Loader, Select } from '@navikt/ds-react'
-import { PlusIcon } from '@navikt/aksel-icons'
+import { ListName, codelist } from '../../services/Codelist'
 
 type KravFilter = {
   status: Option[]
@@ -48,12 +48,12 @@ export const AllKrav = () => {
   const lastMer = () => {
     fetchMore({
       variables: {
-        pageNumber: data!.krav.pageNumber + 1,
+        pageNumber: data && data.krav.pageNumber + 1,
         pageSize,
       },
       updateQuery: (p, o) => {
         const oldData = p.krav
-        const newData = o.fetchMoreResult!.krav
+        const newData = o.fetchMoreResult && o.fetchMoreResult.krav
         return {
           krav: {
             ...oldData,

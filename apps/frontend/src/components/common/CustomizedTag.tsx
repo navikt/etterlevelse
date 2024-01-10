@@ -1,7 +1,6 @@
-import * as React from 'react'
 import { Tag, TagProps, VARIANT } from 'baseui/tag'
-import { marginZero } from './Style'
 import { ettlevColors } from '../../util/theme'
+import { marginZero } from './Style'
 
 const CustomizedTag = (props: TagProps) => {
   return (

@@ -1,25 +1,25 @@
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Accordion, AccordionProps, Panel, PanelOverrides, PanelProps } from 'baseui/accordion'
-import { ettlevColors, theme } from '../../util/theme'
 import { Block } from 'baseui/block'
 import { HeadingLarge } from 'baseui/typography'
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import * as React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { borderColor, borderRadius, borderStyle, borderWidth, paddingAll } from './Style'
 import _ from 'lodash'
+import * as React from 'react'
+import { ettlevColors, theme } from '../../util/theme'
+import { borderColor, borderRadius, borderStyle, borderWidth, paddingAll } from './Style'
 
 export const CustomizedAccordion = (props: Partial<AccordionProps>) => {
   return <Accordion {...props} overrides={{}} />
 }
 
-interface CustomizedPanelProps {
+interface ICustomizedPanelProps {
   HeaderBackgroundColor?: string
   HeaderActiveBackgroundColor?: string
   noUnderLine?: boolean
   toggleIcon?: { expanded: React.ReactElement<any, any>; unexpanded: React.ReactElement<any, any> }
 }
 
-type CustomProps = CustomizedPanelProps & PanelProps
+type CustomProps = ICustomizedPanelProps & PanelProps
 
 export const CustomizedPanel = (props: CustomProps) => {
   const { expanded } = props

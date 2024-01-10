@@ -1,17 +1,15 @@
+import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { KravId, KravMedPrioriteringOgEtterlevelseQuery } from '../api/KravApi'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { Helmet } from 'react-helmet'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus, PageResponse } from '../constants'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
+import { KravId, KravMedPrioriteringOgEtterlevelseQuery } from '../api/KravApi'
+import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
-import { useQuery } from '@apollo/client'
-import { sortKraverByPriority } from '../util/sort'
-import { user } from '../services/User'
 import { PageLayout } from '../components/scaffold/Page'
+import { EtterlevelseStatus, IPageResponse, KRAV_FILTER_TYPE, KravQL, KravStatus } from '../constants'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
+import { ListName, TemaCode, codelist } from '../services/Codelist'
+import { sortKraverByPriority } from '../util/sort'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
@@ -31,7 +29,7 @@ export const EtterlevelseDokumentasjonPage = () => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const lover = codelist.getCodesForTema(params.tema)
 
-  const { data, loading } = useQuery<{ krav: PageResponse<KravQL> }>(KravMedPrioriteringOgEtterlevelseQuery, {
+  const { data, loading } = useQuery<{ krav: IPageResponse<KravQL> }>(KravMedPrioriteringOgEtterlevelseQuery, {
     variables: {
       etterlevelseDokumentasjonId: params.id,
       lover: lover.map((l) => l.code),
@@ -87,7 +85,7 @@ export const EtterlevelseDokumentasjonPage = () => {
     }
   }, [etterlevelseDokumentasjon])
 
-  const breadcrumbPaths: breadcrumbPaths[] = [
+  const breadcrumbPaths: IBreadcrumbPaths[] = [
     {
       pathName: 'Dokumenter etterlevelse',
       href: '/dokumentasjoner',

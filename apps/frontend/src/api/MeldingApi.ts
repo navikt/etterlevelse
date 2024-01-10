@@ -1,6 +1,6 @@
 import axios from 'axios'
+import { AlertType, IMelding, IPageResponse, MeldingStatus, MeldingType } from '../constants'
 import { env } from '../util/env'
-import { AlertType, Melding, MeldingStatus, MeldingType, PageResponse } from '../constants'
 
 export const getAllMelding = async () => {
   const PAGE_SIZE = 100
@@ -8,7 +8,7 @@ export const getAllMelding = async () => {
   if (firstPage.pages === 1) {
     return firstPage.content.length > 0 ? [...firstPage.content] : []
   } else {
-    let allMelding: Melding[] = [...firstPage.content]
+    let allMelding: IMelding[] = [...firstPage.content]
     for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
       allMelding = [...allMelding, ...(await getMeldingPage(currentPage, PAGE_SIZE)).content]
     }
@@ -17,36 +17,36 @@ export const getAllMelding = async () => {
 }
 
 export const getMeldingPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<PageResponse<Melding>>(`${env.backendBaseUrl}/melding?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (await axios.get<IPageResponse<IMelding>>(`${env.backendBaseUrl}/melding?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
 }
 
 export const getMelding = async (id: string) => {
-  return (await axios.get<Melding>(`${env.backendBaseUrl}/melding/${id}`)).data
+  return (await axios.get<IMelding>(`${env.backendBaseUrl}/melding/${id}`)).data
 }
 
 export const getMeldingByType = async (meldingType: MeldingType) => {
-  return (await axios.get<PageResponse<Melding>>(`${env.backendBaseUrl}/melding/type/${meldingType}`)).data
+  return (await axios.get<IPageResponse<IMelding>>(`${env.backendBaseUrl}/melding/type/${meldingType}`)).data
 }
 
 export const getMeldingByStatus = async (meldingStatus: MeldingStatus) => {
-  return (await axios.get<PageResponse<Melding>>(`${env.backendBaseUrl}/melding/status/${meldingStatus}`)).data
+  return (await axios.get<IPageResponse<IMelding>>(`${env.backendBaseUrl}/melding/status/${meldingStatus}`)).data
 }
 
 export const deleteMelding = async (id: string) => {
-  return (await axios.delete<Melding>(`${env.backendBaseUrl}/melding/${id}`)).data
+  return (await axios.delete<IMelding>(`${env.backendBaseUrl}/melding/${id}`)).data
 }
 
-export const createMelding = async (melding: Melding) => {
+export const createMelding = async (melding: IMelding) => {
   const dto = MeldingToMeldingDto(melding)
-  return (await axios.post<Melding>(`${env.backendBaseUrl}/melding`, dto)).data
+  return (await axios.post<IMelding>(`${env.backendBaseUrl}/melding`, dto)).data
 }
 
-export const updateMelding = async (melding: Melding) => {
+export const updateMelding = async (melding: IMelding) => {
   const dto = MeldingToMeldingDto(melding)
-  return (await axios.put<Melding>(`${env.backendBaseUrl}/melding/${melding.id}`, dto)).data
+  return (await axios.put<IMelding>(`${env.backendBaseUrl}/melding/${melding.id}`, dto)).data
 }
 
-function MeldingToMeldingDto(melding: Melding): Melding {
+function MeldingToMeldingDto(melding: IMelding): IMelding {
   const dto = {
     ...melding,
   } as any
@@ -55,7 +55,7 @@ function MeldingToMeldingDto(melding: Melding): Melding {
   return dto
 }
 
-export const mapMeldingToFormValue = (melding: Partial<Melding>): Melding => {
+export const mapMeldingToFormValue = (melding: Partial<IMelding>): IMelding => {
   return {
     id: melding.id || '',
     changeStamp: melding.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },

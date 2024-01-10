@@ -1,19 +1,19 @@
-import { Navigate } from 'react-router-dom'
-import React, { useState } from 'react'
-import { user } from '../services/User'
 import { Loader } from '@navikt/ds-react'
+import React, { useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import { user } from '../services/User'
 
-interface PrivateRouteProps {
+interface IPrivateRouteProps {
   component: JSX.Element
   adminPage?: boolean
   kraveierPage?: boolean
 }
 
-export const PrivateRoute = ({ component, adminPage, kraveierPage }: PrivateRouteProps) => {
+export const PrivateRoute = ({ component, adminPage, kraveierPage }: IPrivateRouteProps) => {
   const [isLoading, setIsLoading] = useState(true)
 
   React.useEffect(() => {
-    let timeOut = setTimeout(() => {
+    const timeOut = setTimeout(() => {
       setIsLoading(false)
     }, 1000)
 

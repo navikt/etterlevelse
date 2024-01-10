@@ -1,18 +1,17 @@
-import { FieldWrapper } from '../../common/Inputs'
-import React from 'react'
-import { FieldArray } from 'formik'
-import { intl } from '../../../util/intl/intl'
-import { TYPE } from 'baseui/select'
-import { FormControl } from 'baseui/form-control'
-import { Error } from '../../common/ModalSchema'
-import { RenderTagList } from '../../common/TagList'
 import { Block } from 'baseui/block'
-import LabelWithTooltip from '../../common/LabelWithTooltip'
+import { FormControl } from 'baseui/form-control'
+import { TYPE } from 'baseui/select'
+import { FieldArray } from 'formik'
+import { useSearchVirkemiddel } from '../../../api/VirkemiddelApi'
+import { IVirkemiddel } from '../../../constants'
+import { intl } from '../../../util/intl/intl'
 import { searchIcon } from '../../Images'
 import CustomizedSelect from '../../common/CustomizedSelect'
+import { FieldWrapper } from '../../common/Inputs'
+import LabelWithTooltip from '../../common/LabelWithTooltip'
+import { Error } from '../../common/ModalSchema'
 import { borderWidth } from '../../common/Style'
-import { useSearchVirkemiddel } from '../../../api/VirkemiddelApi'
-import { Virkemiddel } from '../../../constants'
+import { RenderTagList } from '../../common/TagList'
 
 export const EditVirkemidler = () => {
   const [result, setSearch, loading] = useSearchVirkemiddel()
@@ -65,13 +64,13 @@ export const EditVirkemidler = () => {
                   placeholder={'Virkemidler'}
                   onInputChange={(event) => setSearch(event.currentTarget.value)}
                   onChange={(params) => {
-                    let virkemiddel = params.value.length ? params.value[0] : undefined
+                    const virkemiddel = params.value.length ? params.value[0] : undefined
                     virkemiddel && p.push(virkemiddel)
                   }}
                   error={!!p.form.errors.begreper && !!p.form.submitCount}
                   isLoading={loading}
                 />
-                <RenderTagList list={p.form.values.virkemidler.map((v: Virkemiddel) => v.navn)} onRemove={p.remove} />
+                <RenderTagList list={p.form.values.virkemidler.map((v: IVirkemiddel) => v.navn)} onRemove={p.remove} />
               </Block>
             </FormControl>
           )

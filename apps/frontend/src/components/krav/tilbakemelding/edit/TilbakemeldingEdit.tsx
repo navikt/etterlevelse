@@ -1,7 +1,7 @@
+import { Alert, Button, Textarea } from '@navikt/ds-react'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { tilbakemeldingEditMelding } from '../../../../api/TilbakemeldingApi'
-import { Tilbakemelding, TilbakemeldingMelding } from '../../../../constants'
-import { Alert, Button, Textarea } from '@navikt/ds-react'
+import { ITilbakemelding, ITilbakemeldingMelding } from '../../../../constants'
 
 export const TilbakemeldingEdit = ({
   tilbakemeldingId,
@@ -10,8 +10,8 @@ export const TilbakemeldingEdit = ({
   setEditModal,
 }: {
   tilbakemeldingId: string
-  melding: TilbakemeldingMelding
-  close: (t: Tilbakemelding) => void
+  melding: ITilbakemeldingMelding
+  close: (t: ITilbakemelding) => void
   setEditModal: Dispatch<SetStateAction<boolean>>
 }) => {
   const [response, setResponse] = useState(melding.innhold)

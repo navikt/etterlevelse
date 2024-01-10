@@ -1,6 +1,6 @@
-import axios from 'axios'
-import React, { useState } from 'react'
 import { Button, Modal } from '@navikt/ds-react'
+import axios from 'axios'
+import { useState } from 'react'
 
 let done = false
 
@@ -12,7 +12,7 @@ const init = (onErr: (e: any) => void) => {
     },
     (err) => {
       if (err?.response?.status !== 404) {
-        console.log('axios error', err)
+        console.error('axios error', err)
         onErr(err)
       }
       return Promise.reject(err)

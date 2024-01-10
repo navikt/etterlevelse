@@ -1,12 +1,12 @@
+import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import { codelist, CodeUsage } from '../../../services/Codelist'
+import { replaceCodelistUsage } from '../../../api/CodelistApi'
+import { ICodeUsage, codelist } from '../../../services/Codelist'
 import { ObjectLink } from '../../common/RouteLink'
 import { ObjectType } from '../audit/AuditTypes'
-import { replaceCodelistUsage } from '../../../api/CodelistApi'
-import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
 
-const UsageTable = (props: { usage: CodeUsage }) => {
+const UsageTable = (props: { usage: ICodeUsage }) => {
   const { usage } = props
   const krav = !!usage.krav.length
   const etterlevelseDokumentasjoner = !!usage.etterlevelseDokumentasjoner.length
@@ -65,7 +65,7 @@ const UsageTable = (props: { usage: CodeUsage }) => {
   )
 }
 
-export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
+export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
   const [showReplace, setShowReplace] = useState(false)
   const [newValue, setNewValue] = useState<string>()
   const ref = React.createRef<HTMLDivElement>()

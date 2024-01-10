@@ -1,20 +1,20 @@
-import { Behandling, EtterlevelseDokumentasjon, EtterlevelseStatus } from '../../../constants'
-import { ReactNode } from 'react'
 import { Block, Responsive } from 'baseui/block'
-import { Helmet } from 'react-helmet'
 import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
-import { ettlevColors } from '../../../util/theme'
-import { Teams } from '../../common/TeamName'
-import { env } from '../../../util/env'
-import { ExternalLink } from '../../common/RouteLink'
 import moment from 'moment'
-import EditEtterlevelseDokumentasjonModal from '../edit/EditEtterlevelseDokumentasjonModal'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../../common/Style'
+import { ReactNode } from 'react'
+import { Helmet } from 'react-helmet'
+import { EtterlevelseStatus, IBehandling, IEtterlevelseDokumentasjon } from '../../../constants'
+import { env } from '../../../util/env'
+import { ettlevColors } from '../../../util/theme'
 import { warningAlert } from '../../Images'
+import { ExternalLink } from '../../common/RouteLink'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../../common/Style'
+import { Teams } from '../../common/TeamName'
+import EditEtterlevelseDokumentasjonModal from '../edit/EditEtterlevelseDokumentasjonModal'
 
 export const responsiveDisplayEtterlevelseDokumentasjonPage: Responsive<any> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
-const getBehandlingLinks = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
+const getBehandlingLinks = (etterlevelseDokumentasjon: IEtterlevelseDokumentasjon) => {
   return (
     <Block>
       {etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => {
@@ -38,7 +38,7 @@ const getBehandlingLinks = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon
   )
 }
 
-export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon, setEtterlevelseDokumentasjon?: (e: EtterlevelseDokumentasjon) => void, helmet?: ReactNode) => (
+export const getMainHeader = (etterlevelseDokumentasjon: IEtterlevelseDokumentasjon, setEtterlevelseDokumentasjon?: (e: IEtterlevelseDokumentasjon) => void, helmet?: ReactNode) => (
   <Block display={responsiveDisplayEtterlevelseDokumentasjonPage} justifyContent="space-between" marginBottom="32px" marginTop="38px">
     {helmet ? (
       helmet
@@ -175,7 +175,7 @@ export const getEtterlevelseStatus = (status?: EtterlevelseStatus, frist?: strin
   }
 }
 
-export const updateBehandlingNameWithNumber = (behandlinger: Behandling[]) => {
+export const updateBehandlingNameWithNumber = (behandlinger: IBehandling[]) => {
   return behandlinger.map((b) => {
     return { ...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn }
   })

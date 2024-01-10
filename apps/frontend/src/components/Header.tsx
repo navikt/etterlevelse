@@ -1,24 +1,36 @@
+import {
+  BarChartIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  DocPencilIcon,
+  HouseIcon,
+  InformationIcon,
+  MenuHamburgerIcon,
+  PersonIcon,
+  ReceiptIcon,
+} from '@navikt/aksel-icons'
+import { Button, Dropdown, InternalHeader, Label, Link, Spacer, Switch } from '@navikt/ds-react'
 import * as React from 'react'
 import { useState } from 'react'
-import { Location, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Location, useLocation } from 'react-router-dom'
+import { writeLog } from '../api/LogApi'
+import { getMeldingByType } from '../api/MeldingApi'
+import { AlertType, IMelding, MeldingStatus, MeldingType } from '../constants'
+import { ampli } from '../services/Amplitude'
+import { user } from '../services/User'
 import { useQueryParam } from '../util/hooks'
 import { intl } from '../util/intl/intl'
-import { user } from '../services/User'
-import { writeLog } from '../api/LogApi'
-import MainSearch from './search/MainSearch'
 import { informationIcon, warningAlert } from './Images'
+import { Markdown } from './common/Markdown'
 import { Portrait } from './common/Portrait'
 import SkipToContent from './common/SkipToContent/SkipToContent'
-import { AlertType, Melding, MeldingStatus, MeldingType, UserInfo } from '../constants'
-import { getMeldingByType } from '../api/MeldingApi'
-import { Markdown } from './common/Markdown'
-import { ampli } from '../services/Amplitude'
-import { BarChartIcon, ChevronDownIcon, ChevronUpIcon, DocPencilIcon, HouseIcon, InformationIcon, MenuHamburgerIcon, PersonIcon, ReceiptIcon } from '@navikt/aksel-icons'
-import { Button, Dropdown, InternalHeader, Label, Link, Spacer, Switch } from '@navikt/ds-react'
-import { getUserInfo } from '../api/UserApi'
+import MainSearch from './search/MainSearch'
 
 export const loginUrl = (location: Location, path?: string) => {
-  const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
+  const frontpage = window.location.href.substr(
+    0,
+    window.location.href.length - location.pathname.length
+  )
 
   return `/login?redirect_uri=${frontpage}${path || ''}`
 }
@@ -27,7 +39,12 @@ export const LoginHeaderButton = () => {
   // updates window.location on navigation
   const location = useLocation()
   return (
-    <InternalHeader.Button as={Link} href={loginUrl(location, location.pathname)} className="text-white" underline={false}>
+    <InternalHeader.Button
+      as={Link}
+      href={loginUrl(location, location.pathname)}
+      className="text-white"
+      underline={false}
+    >
       Logg inn
     </InternalHeader.Button>
   )
@@ -37,7 +54,12 @@ export const LoginButton = () => {
   // updates window.location on navigation
   const location = useLocation()
   return (
-    <Button as={Link} href={loginUrl(location, location.pathname)} className="text-white" underline={false}>
+    <Button
+      as={Link}
+      href={loginUrl(location, location.pathname)}
+      className="text-white"
+      underline={false}
+    >
       Logg inn
     </Button>
   )
@@ -52,13 +74,24 @@ const LoggedInHeader = () => {
         size={'xsmall'}
         variant="tertiary"
         onClick={() => setViewRoller(!viewRoller)}
-        icon={viewRoller ? <ChevronUpIcon area-label="" aria-hidden /> : <ChevronDownIcon area-label="" aria-hidden />}
+        icon={
+          viewRoller ? (
+            <ChevronUpIcon area-label="" aria-hidden />
+          ) : (
+            <ChevronDownIcon area-label="" aria-hidden />
+          )
+        }
       >
         Endre aktive roller
       </Button>
       <div className={`mt-2 ${viewRoller ? 'block' : 'hidden'}`}>
         {user.getAvailableGroups().map((g) => (
-          <Switch size="small" key={g.group} checked={user.hasGroup(g.group)} onChange={(e) => user.toggleGroup(g.group, (e.target as HTMLInputElement).checked)}>
+          <Switch
+            size="small"
+            key={g.group}
+            checked={user.hasGroup(g.group)}
+            onChange={(e) => user.toggleGroup(g.group, (e.target as HTMLInputElement).checked)}
+          >
             {g.name}
           </Switch>
         ))}
@@ -88,7 +121,11 @@ const LoggedInHeader = () => {
 
   return (
     <div className="flex items-center justify-center">
-      <Menu pages={[[{ label: <UserInfoView /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={<PersonIcon area-label="" aria-hidden />} />
+      <Menu
+        pages={[[{ label: <UserInfoView /> }], kravPages, adminPages, [{ label: roller }]]}
+        title={user.getIdent()}
+        icon={<PersonIcon area-label="" aria-hidden />}
+      />
 
       <div className="w-3" />
 
@@ -96,10 +133,34 @@ const LoggedInHeader = () => {
         icon={<MenuHamburgerIcon area-label="" aria-hidden />}
         pages={[
           [{ label: 'Forsiden', href: '/', icon: <HouseIcon area-label="" aria-hidden /> }],
-          [{ label: 'Dokumentere etterlevelse', href: '/dokumentasjoner', icon: <DocPencilIcon area-label="" aria-hidden /> }],
-          [{ label: 'Status i organisasjonen', href: '//metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse', icon: <BarChartIcon area-label="" aria-hidden /> }],
-          [{ label: 'Forstå kravene', href: '/tema', icon: <ReceiptIcon area-label="" aria-hidden /> }],
-          [{ label: 'Mer om etterlevelse i NAV', href: '/omstottetiletterlevelse', icon: <InformationIcon area-label="" aria-hidden /> }],
+          [
+            {
+              label: 'Dokumentere etterlevelse',
+              href: '/dokumentasjoner',
+              icon: <DocPencilIcon area-label="" aria-hidden />,
+            },
+          ],
+          [
+            {
+              label: 'Status i organisasjonen',
+              href: '//metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse',
+              icon: <BarChartIcon area-label="" aria-hidden />,
+            },
+          ],
+          [
+            {
+              label: 'Forstå kravene',
+              href: '/tema',
+              icon: <ReceiptIcon area-label="" aria-hidden />,
+            },
+          ],
+          [
+            {
+              label: 'Mer om etterlevelse i NAV',
+              href: '/omstottetiletterlevelse',
+              icon: <InformationIcon area-label="" aria-hidden />,
+            },
+          ],
         ]}
         title={'Meny'}
       />
@@ -108,15 +169,23 @@ const LoggedInHeader = () => {
 }
 
 const UserInfoView = () => {
-  const location = useLocation()
-  const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
-  const path = location.pathname
+  // const location = useLocation()
+  // const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
+  // const path = location.pathname
   return (
     <div className="flex mb-4">
       <Portrait ident={user.getIdent()} size={'48px'} />
       <div className="flex flex-col ml-6">
         <Label>{user.getName()}</Label>
-        <Label size="small">{user.isAdmin() ? 'Admin' : user.isKraveier() ? 'Kraveier' : user.canWrite() ? 'Etterlever' : 'Gjest'}</Label>
+        <Label size="small">
+          {user.isAdmin()
+            ? 'Admin'
+            : user.isKraveier()
+              ? 'Kraveier'
+              : user.canWrite()
+                ? 'Etterlever'
+                : 'Gjest'}
+        </Label>
       </div>
       {/* <div className="flex self-end ml-6">
         <Link href={`/logout?redirect_uri=${frontpage}${path}`}>Logg ut</Link>
@@ -125,15 +194,29 @@ const UserInfoView = () => {
   )
 }
 
-type MenuItem = { label: React.ReactNode; href?: string; disabled?: boolean; icon?: React.ReactNode }
+type MenuItem = {
+  label: React.ReactNode
+  href?: string
+  disabled?: boolean
+  icon?: React.ReactNode
+}
 
-const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React.ReactNode; kind?: 'secondary' | 'tertiary' }) => {
+const Menu = (props: {
+  pages: MenuItem[][]
+  title: React.ReactNode
+  icon?: React.ReactNode
+  kind?: 'secondary' | 'tertiary'
+}) => {
   const pathname = window.location.pathname
 
   const allPages = props.pages.length
     ? props.pages
         .filter((p) => p.length)
-        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
+        .reduce((previousValue, currentValue) => [
+          ...((previousValue as MenuItem[]) || []),
+          { label: <Dropdown.Menu.Divider /> },
+          ...(currentValue as MenuItem[]),
+        ])
     : []
 
   return (
@@ -150,7 +233,12 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
                   as={Link}
                   href={p.href}
                   onClick={() => {
-                    ampli.logEvent('navigere', { kilde: 'header', app: 'etterlevelse', til: p.href, fra: pathname })
+                    ampli.logEvent('navigere', {
+                      kilde: 'header',
+                      app: 'etterlevelse',
+                      til: p.href,
+                      fra: pathname,
+                    })
                   }}
                   underline={false}
                 >
@@ -177,7 +265,7 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
 let sourceReported = false
 
 const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
-  const [systemVarsel, setSystemVarsel] = useState<Melding>()
+  const [systemVarsel, setSystemVarsel] = useState<IMelding>()
   const location = useLocation()
   const source = useQueryParam('source')
   if (!sourceReported) {
@@ -212,7 +300,10 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             <InternalHeader.Title href="/">Støtte til etterlevelse</InternalHeader.Title>
             <Spacer />
             {!props.noSearchBar && (
-              <div className="hidden lg:flex w-full max-w-xl justify-center items-center" role="search">
+              <div
+                className="hidden lg:flex w-full max-w-xl justify-center items-center"
+                role="search"
+              >
                 <MainSearch />
               </div>
             )}
@@ -226,7 +317,10 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           </div>
         </InternalHeader>
       </div>
-      <div className="flex lg:hidden bg-icon-default py-1 px-1 w-full justify-center items-center" role="search">
+      <div
+        className="flex lg:hidden bg-icon-default py-1 px-1 w-full justify-center items-center"
+        role="search"
+      >
         <div className=" max-w-xl w-full ">
           <MainSearch />
         </div>
@@ -241,7 +335,11 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           border-b 
           border-t 
           w-full
-          ${systemVarsel.alertType === 'INFO' ? 'bg-surface-info-subtle border-surface-info' : 'bg-surface-warning-subtle border-surface-warning'}`}
+          ${
+            systemVarsel.alertType === 'INFO'
+              ? 'bg-surface-info-subtle border-surface-info'
+              : 'bg-surface-warning-subtle border-surface-warning'
+          }`}
             aria-label="Systemvarsel"
             role="complementary"
           >
@@ -250,7 +348,9 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
                 src={systemVarsel.alertType === AlertType.INFO ? informationIcon : warningAlert}
                 width="20px"
                 height="20px"
-                alt={systemVarsel.alertType === AlertType.INFO ? 'information icon' : 'warning icon'}
+                alt={
+                  systemVarsel.alertType === AlertType.INFO ? 'information icon' : 'warning icon'
+                }
               />
               <Markdown source={systemVarsel.melding} />
             </div>

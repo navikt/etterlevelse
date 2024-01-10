@@ -1,7 +1,7 @@
 import { BaseInputOverrides } from 'baseui/input'
 import { StatefulTextarea, StatefulTextareaProps, Textarea, TextareaProps } from 'baseui/textarea'
-import { ettlevColors } from '../../util/theme'
 import _ from 'lodash'
+import { ettlevColors } from '../../util/theme'
 
 const customOverrides: BaseInputOverrides = {
   InputContainer: {

@@ -1,14 +1,14 @@
-import { createTheme, lightThemePrimitives } from 'baseui'
-import { colors } from 'baseui/tokens'
-import { Theme, ThemePrimitives } from 'baseui/theme'
-import { RecursivePartial } from '../constants'
 import '@fontsource/source-sans-pro/200.css'
 import '@fontsource/source-sans-pro/300.css'
 import '@fontsource/source-sans-pro/400.css'
 import '@fontsource/source-sans-pro/600.css'
 import '@fontsource/source-sans-pro/700.css'
 import '@fontsource/source-sans-pro/900.css'
+import { createTheme, lightThemePrimitives } from 'baseui'
 import { Responsive, Scale } from 'baseui/block'
+import { Theme, ThemePrimitives } from 'baseui/theme'
+import { colors } from 'baseui/tokens'
+import { RecursivePartial } from '../constants'
 
 // etterlevelse colors
 export const ettlevColors = {

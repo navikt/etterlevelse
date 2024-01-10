@@ -1,32 +1,31 @@
-import { Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus } from '../../../constants'
 import { Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
-import { mapEtterlevelseToFormValue } from '../../../api/EtterlevelseApi'
 import React, { useEffect } from 'react'
+import { mapEtterlevelseToFormValue } from '../../../api/EtterlevelseApi'
+import { EtterlevelseStatus, IEtterlevelse, KRAV_FILTER_TYPE, KravQL, KravStatus } from '../../../constants'
 
-import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
+import _ from 'lodash'
 import moment from 'moment'
 import { useLocation, useNavigate } from 'react-router-dom'
 import EtterlevelseCard from '../EtterlevelseCard'
+import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
 import { etterlevelseSchema } from './etterlevelseSchema'
-import _ from 'lodash'
 
-import { DateField } from '../../common/Inputs'
-import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
 import { Alert, BodyShort, Button, Checkbox, Label, Modal } from '@navikt/ds-react'
 import { ampli, userRoleEventProp } from '../../../services/Amplitude'
-import { user } from '../../../services/User'
+import { DateField } from '../../common/Inputs'
+import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
 
 type EditProps = {
   krav: KravQL
-  etterlevelse: Etterlevelse
-  submit: (etterlevelse: Etterlevelse) => Promise<void>
+  etterlevelse: IEtterlevelse
+  submit: (etterlevelse: IEtterlevelse) => Promise<void>
   formRef?: React.RefObject<any>
   varsleMelding?: string
   disableEdit: boolean
-  close: (k?: Etterlevelse | undefined) => void
+  close: (k?: IEtterlevelse | undefined) => void
   navigatePath: string
-  editedEtterlevelse?: Etterlevelse
-  tidligereEtterlevelser?: Etterlevelse[]
+  editedEtterlevelse?: IEtterlevelse
+  tidligereEtterlevelser?: IEtterlevelse[]
   kravFilter: KRAV_FILTER_TYPE
 }
 
@@ -79,7 +78,7 @@ export const EtterlevelseEditFields = ({
         validateOnChange={false}
         validateOnBlur={false}
       >
-        {({ values, isSubmitting, submitForm, errors, setFieldError, dirty }: FormikProps<Etterlevelse>) => (
+        {({ values, isSubmitting, submitForm, errors, setFieldError, dirty }: FormikProps<IEtterlevelse>) => (
           <div className="flex flex-col">
             <Form>
               <div>

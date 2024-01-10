@@ -1,11 +1,11 @@
-import { EtterlevelseDokumentasjonQL, KRAV_FILTER_TYPE, KravEtterlevelseData } from '../../constants'
-import _ from 'lodash'
-import { user } from '../../services/User'
 import { Block } from 'baseui/block'
+import { Option } from 'baseui/select'
+import _ from 'lodash'
+import { ReactElement } from 'react'
+import { EtterlevelseDokumentasjonQL, KRAV_FILTER_TYPE, KravEtterlevelseData } from '../../constants'
+import { user } from '../../services/User'
 import { CustomPanelDivider } from '../common/CustomizedAccordion'
 import { KravCard } from './KravCard'
-import React, { ReactElement } from 'react'
-import { Option } from 'baseui/select'
 
 type KravListProps = {
   kravList: KravEtterlevelseData[]

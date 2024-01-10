@@ -1,22 +1,22 @@
 import { Block } from 'baseui/block'
+import { FormControl } from 'baseui/form-control'
 import { ModalBody, ModalHeader } from 'baseui/modal'
-import React, { useEffect, useState } from 'react'
-import { Virkemiddel } from '../../../constants'
-import { codelist, ListName } from '../../../services/Codelist'
+import { Value } from 'baseui/select'
+import { Field, FieldProps, Form, Formik } from 'formik'
+import { useEffect, useState } from 'react'
+import * as yup from 'yup'
+import { createVirkemiddel, updateVirkemiddel, virkemiddelMapToFormVal } from '../../../api/VirkemiddelApi'
+import { IVirkemiddel } from '../../../constants'
+import { ListName, codelist } from '../../../services/Codelist'
+import { intl } from '../../../util/intl/intl'
+import { ettlevColors } from '../../../util/theme'
 import Button from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { createVirkemiddel, updateVirkemiddel, virkemiddelMapToFormVal } from '../../../api/VirkemiddelApi'
-import { FieldWrapper, InputField } from '../../common/Inputs'
-import { FormControl } from 'baseui/form-control'
-import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedSelect from '../../common/CustomizedSelect'
-import { intl } from '../../../util/intl/intl'
-import { Value } from 'baseui/select'
-import { RegelverkEdit } from '../../krav/Edit/RegelverkEdit'
+import { FieldWrapper, InputField } from '../../common/Inputs'
+import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { borderColor, borderWidth } from '../../common/Style'
-import { ettlevColors } from '../../../util/theme'
-import * as yup from 'yup'
+import { RegelverkEdit } from '../../krav/Edit/RegelverkEdit'
 import { ErrorMessageModal } from '../../krav/ErrorMessageModal'
 
 const errorMessage = 'Feltet er påkrevd'
@@ -24,8 +24,8 @@ const errorMessage = 'Feltet er påkrevd'
 type EditVirkemiddelModalProps = {
   isOpen: boolean
   setIsOpen: (b: boolean) => void
-  virkemiddel?: Virkemiddel
-  setVirkemiddel?: (v: Virkemiddel) => void
+  virkemiddel?: IVirkemiddel
+  setVirkemiddel?: (v: IVirkemiddel) => void
   isEdit?: boolean
   refetchData?: () => void
 }
@@ -45,7 +45,7 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
     }
   }, [props.virkemiddel])
 
-  const submit = async (virkemiddel: Virkemiddel) => {
+  const submit = async (virkemiddel: IVirkemiddel) => {
     if (!virkemiddel.id || virkemiddel.id === 'ny') {
       await createVirkemiddel(virkemiddel).then((response) => {
         props.setIsOpen(false)
@@ -79,7 +79,7 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
             validateOnBlur={false}
             onSubmit={submit}
           >
-            {({ values, submitForm, errors }) => {
+            {({ submitForm, errors }) => {
               return (
                 <Form>
                   <InputField label={'Navn'} name={'navn'} />

@@ -1,23 +1,23 @@
 import { Block } from 'baseui/block'
-import Button from '../common/Button'
-import { borderRadius, marginAll, paddingAll } from '../common/Style'
 import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
-import { angleIcon, page2Icon } from '../Images'
-import CustomizedModal from '../common/CustomizedModal'
-import { getTemaMainHeader } from '../../pages/TemaPage'
 import React, { useState } from 'react'
-import { EtterlevelseDokumentasjon } from '../../constants'
-import { LovCode, TemaCode } from '../../services/Codelist'
-import { KravId } from '../../api/KravApi'
 import { useParams } from 'react-router-dom'
+import { KravId } from '../../api/KravApi'
+import { IEtterlevelseDokumentasjon } from '../../constants'
 import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
+import { getTemaMainHeader } from '../../pages/TemaPage'
+import { LovCode, TemaCode } from '../../services/Codelist'
+import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
+import { angleIcon } from '../Images'
+import Button from '../common/Button'
+import CustomizedModal from '../common/CustomizedModal'
+import { borderRadius, marginAll, paddingAll } from '../common/Style'
 
 type EtterlevelseSecondaryHeaderProps = {
   tab: string
   setTab: React.Dispatch<React.SetStateAction<Section>>
   setNavigatePath: (state: string) => void
-  etterlevelseDokumentasjon: EtterlevelseDokumentasjon | undefined
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon | undefined
   temaData: TemaCode | undefined
   kravId: KravId | undefined
   lovListe: LovCode[]

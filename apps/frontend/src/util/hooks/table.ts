@@ -1,6 +1,8 @@
+import { Option, Value } from 'baseui/select'
 import { SORT_DIRECTION } from 'baseui/table'
 import { useEffect, useState } from 'react'
-import { Option, Value } from 'baseui/select'
+
+//WILL DELETE THIS FILE, USING AKSEL TABLE INSTEAD
 
 export type TableConfig<T, K extends keyof T> = {
   sorting?: ColumnCompares<T>
@@ -114,8 +116,8 @@ export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: T
           if (showLast && isInitialSort) {
             ordered = [...ordered.filter((p) => !showLast(p)), ...ordered.filter(showLast)]
           }
-          for (let key in filterValues) {
-            if (filterValues.hasOwnProperty(key) && !!filterValues[key]) {
+          for (const key in filterValues) {
+            if (Object.prototype.hasOwnProperty.call(filterValues, key) && !!filterValues[key]) {
               ordered = filterData(key, ordered)
             }
           }

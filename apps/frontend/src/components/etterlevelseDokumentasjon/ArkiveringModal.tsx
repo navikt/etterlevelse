@@ -1,18 +1,18 @@
-import { ModalBody, ModalHeader } from 'baseui/modal'
-import { Block } from 'baseui/block'
-import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../../constants'
-import { createEtterlevelseArkiv, updateEtterlevelseArkiv } from '../../api/ArkiveringApi'
-import React, { useState } from 'react'
-import moment from 'moment'
 import { BodyLong, Button, Modal } from '@navikt/ds-react'
+import { Block } from 'baseui/block'
+import { ModalBody, ModalHeader } from 'baseui/modal'
+import moment from 'moment'
+import React, { useState } from 'react'
+import { createEtterlevelseArkiv, updateEtterlevelseArkiv } from '../../api/ArkiveringApi'
+import { EtterlevelseArkivStatus, IEtterlevelseArkiv } from '../../constants'
 import { user } from '../../services/User'
 
 type ArkiveringModalProps = {
   arkivModal: boolean
   setArkivModal: React.Dispatch<React.SetStateAction<boolean>>
   etterlevelseDokumentasjonId: string
-  etterlevelseArkiv?: EtterlevelseArkiv
-  setEtterlevelseArkiv: (etterlevelseArkiv: EtterlevelseArkiv | undefined) => void
+  etterlevelseArkiv?: IEtterlevelseArkiv
+  setEtterlevelseArkiv: (etterlevelseArkiv: IEtterlevelseArkiv | undefined) => void
 }
 
 export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumentasjonId, etterlevelseArkiv, setEtterlevelseArkiv }: ArkiveringModalProps) => {
@@ -88,7 +88,7 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
                           : EtterlevelseArkivStatus.TIL_ARKIVERING,
                     }).then(setEtterlevelseArkiv)
                   } else {
-                    await createEtterlevelseArkiv(newEtterlevelseArkivering as EtterlevelseArkiv).then(setEtterlevelseArkiv)
+                    await createEtterlevelseArkiv(newEtterlevelseArkivering as IEtterlevelseArkiv).then(setEtterlevelseArkiv)
                   }
                 })()
 

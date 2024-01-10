@@ -6,15 +6,15 @@ import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { searchBehandlingOptions } from '../../../api/BehandlingApi'
 import {
-  createEtterlevelseDokumentasjon,
-  etterlevelseDokumentasjonMapToFormVal,
-  etterlevelseDokumentasjonSchema,
-  updateEtterlevelseDokumentasjon,
+    createEtterlevelseDokumentasjon,
+    etterlevelseDokumentasjonMapToFormVal,
+    etterlevelseDokumentasjonSchema,
+    updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { useSearchTeamOptions } from '../../../api/TeamApi'
-import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../../../constants'
+import { EtterlevelseDokumentasjonQL, IBehandling, ITeam, IVirkemiddel } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
-import { Code, ListName, codelist } from '../../../services/Codelist'
+import { ICode, ListName, codelist } from '../../../services/Codelist'
 import { BoolField, FieldWrapper, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { Error } from '../../common/ModalSchema'
@@ -33,12 +33,12 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const relevansOptions = codelist.getParsedOptions(ListName.RELEVANS)
   const [selectedFilter, setSelectedFilter] = useState<number[]>(relevansOptions.map((r, i) => i))
   const [isEtterlevelseDokumentasjonerModalOpen, setIsEtterlevelseDokumntasjonerModalOpen] = useState<boolean>(false)
-  const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
+  const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<IVirkemiddel>()
   const navigate = useNavigate()
 
   useEffect(() => {
     if (etterlevelseDokumentasjon?.irrelevansFor.length) {
-      const irrelevans = etterlevelseDokumentasjon.irrelevansFor.map((ir: Code) => relevansOptions.findIndex((o) => o.value === ir.code))
+      const irrelevans = etterlevelseDokumentasjon.irrelevansFor.map((ir: ICode) => relevansOptions.findIndex((o) => o.value === ir.code))
       setSelectedFilter(
         relevansOptions
           .map((r, i) => {
@@ -203,7 +203,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                           //   const i = parseInt(value)
                           //   if (!selectedFilter.includes(i)) {
                           //     setSelectedFilter([...selectedFilter, i])
-                          //     p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === relevansOptions[i].value))
+                          //     p.remove(p.form.values.irrelevansFor.findIndex((ir: ICode) => ir.code === relevansOptions[i].value))
                           //   } else {
                           //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
                           //     p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
@@ -260,7 +260,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                               }}
                             />
                           </div>
-                          <RenderTagList list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} />
+                          <RenderTagList list={p.form.values.behandlinger.map((b: IBehandling) => b.navn)} onRemove={p.remove} />
                         </div>
                       )}
                     </FieldArray>
@@ -304,7 +304,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                               }}
                             />
                           </div>
-                          <RenderTagList list={p.form.values.teamsData.map((t: Team) => t.name)} onRemove={p.remove} />
+                          <RenderTagList list={p.form.values.teamsData.map((t: ITeam) => t.name)} onRemove={p.remove} />
                         </div>
                       )}
                     </FieldArray>

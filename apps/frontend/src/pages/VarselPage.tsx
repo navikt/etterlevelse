@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import EditMelding from '../components/varslinger/EditMelding'
-import { Melding, MeldingType } from '../constants'
-import { getMeldingByType, mapMeldingToFormValue } from '../api/MeldingApi'
-import { ObjectType } from '../components/admin/audit/AuditTypes'
-import { AuditRecentTable } from '../components/admin/audit/AuditRecentTable'
-import { ampli } from '../services/Amplitude'
-import EditOmEtterlevelse from '../components/varslinger/EditOmEtterlevelse'
 import { Heading, Tabs } from '@navikt/ds-react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { getMeldingByType, mapMeldingToFormValue } from '../api/MeldingApi'
+import { AuditRecentTable } from '../components/admin/audit/AuditRecentTable'
+import { ObjectType } from '../components/admin/audit/AuditTypes'
 import { PageLayout } from '../components/scaffold/Page'
+import EditMelding from '../components/varslinger/EditMelding'
+import EditOmEtterlevelse from '../components/varslinger/EditOmEtterlevelse'
+import { IMelding, MeldingType } from '../constants'
+import { ampli } from '../services/Amplitude'
 
 type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE | MeldingType.OM_ETTERLEVELSE
 
@@ -43,10 +43,10 @@ const VarselTabs = () => {
 
   const [tab, setTab] = useState<Section>(params.tab || 'utsendtMelding')
   const [isLoading, setLoading] = useState<boolean>(false)
-  const [melding, setMelding] = useState<Melding>()
+  const [melding, setMelding] = useState<IMelding>()
 
   useEffect(() => {
-    ; (async () => {
+    (async () => {
       setLoading(true)
       if (tab !== 'utsendtMelding') {
         ampli.logEvent('sidevisning', { side: 'Varsel side for admin', sidetittel: 'Opprett varsel melding for ' + tab })

@@ -1,12 +1,11 @@
-import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
-import { Behandling, Etterlevelse, KRAV_FILTER_TYPE, Team } from '../../constants'
-import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, mapEtterlevelseToFormValue } from '../../api/EtterlevelseApi'
-import React, { useEffect, useState } from 'react'
-
-import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
-import { toKravId } from './common/utils'
-import { EtterlevelseKravView } from '../etterlevelse/EtterlevelseKravView'
 import { Loader } from '@navikt/ds-react'
+import React, { useEffect, useState } from 'react'
+import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, mapEtterlevelseToFormValue } from '../../api/EtterlevelseApi'
+import { KravId, getKravByKravNumberAndVersion } from '../../api/KravApi'
+import { IBehandling, IEtterlevelse, ITeam, KRAV_FILTER_TYPE } from '../../constants'
+import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
+import { EtterlevelseKravView } from '../etterlevelse/EtterlevelseKravView'
+import { toKravId } from './common/utils'
 
 export const KravView = (props: {
   temaName?: string
@@ -14,8 +13,8 @@ export const KravView = (props: {
   etterlevelseDokumentasjonTitle: string
   etterlevelseDokumentasjonId: string
   etterlevelseNummer: number
-  behandlinger: Behandling[] | undefined
-  teams: Team[] | undefined
+  behandlinger: IBehandling[] | undefined
+  teams: ITeam[] | undefined
   navigatePath: string
   setNavigatePath: (state: string) => void
   tab: Section
@@ -25,11 +24,11 @@ export const KravView = (props: {
 }) => {
   const [varsleMelding, setVarsleMelding] = useState('')
 
-  const [etterlevelse, setEtterlevelse] = useState<Etterlevelse>()
+  const [etterlevelse, setEtterlevelse] = useState<IEtterlevelse>()
   const [loadingEtterlevelseData, setLoadingEtterlevelseData] = useState<boolean>(false)
-  const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
+  const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<IEtterlevelse[]>()
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       setLoadingEtterlevelseData(true)
       if (props.kravId.kravNummer && props.kravId.kravVersjon) {
         const krav = await getKravByKravNumberAndVersion(props.kravId.kravNummer, props.kravId.kravVersjon)

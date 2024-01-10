@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getAllKravPriority } from '../api/KravPriorityApi'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { ExternalLink } from '../components/common/RouteLink'
 import { Teams } from '../components/common/TeamName'
@@ -20,9 +20,9 @@ import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
 import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { PageLayout } from '../components/scaffold/Page'
-import { EtterlevelseDokumentasjonStats, EtterlevelseStatus, KRAV_FILTER_TYPE, KravPrioritering, KravQL, PageResponse } from '../constants'
+import { EtterlevelseStatus, IEtterlevelseDokumentasjonStats, IKravPrioritering, IPageResponse, KRAV_FILTER_TYPE, KravQL } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { Code, ListName, TemaCode, codelist } from '../services/Codelist'
+import { ICode, ListName, TemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 import { getNumberOfDaysBetween } from '../util/checkAge'
 import { env } from '../util/env'
@@ -37,7 +37,7 @@ export const DokumentasjonPage = () => {
   const variables = { etterlevelseDokumentasjonId: params.id }
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByEtterlevelseDokumentasjonId(params.id)
-  const [kravPriority, setKravPriority] = useState<KravPrioritering[]>([])
+  const [kravPriority, setKravPriority] = useState<IKravPrioritering[]>([])
 
   useEffect(() => {
     getAllKravPriority().then((priority) => setKravPriority(priority))
@@ -47,7 +47,7 @@ export const DokumentasjonPage = () => {
     data: relevanteData,
     refetch: refetchRelevanteData,
     loading,
-  } = useQuery<{ etterlevelseDokumentasjon: PageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
+  } = useQuery<{ etterlevelseDokumentasjon: IPageResponse<{ stats: IEtterlevelseDokumentasjonStats }> }>(statsQuery, {
     variables,
     skip: !params.id,
   })
@@ -59,8 +59,8 @@ export const DokumentasjonPage = () => {
   const filterData = (
     unfilteredData:
       | {
-          etterlevelseDokumentasjon: PageResponse<{
-            stats: EtterlevelseDokumentasjonStats
+          etterlevelseDokumentasjon: IPageResponse<{
+            stats: IEtterlevelseDokumentasjonStats
           }>
         }
       | undefined,
@@ -116,7 +116,7 @@ export const DokumentasjonPage = () => {
     }
   })
 
-  const getRelevans = (irrelevans?: Code[]) => {
+  const getRelevans = (irrelevans?: ICode[]) => {
     const fargeForFemAlternativ = ['alt1', 'alt2', 'alt3', 'alt1', 'alt2'] as const
 
     if (irrelevans?.length === options.length) {
@@ -124,7 +124,7 @@ export const DokumentasjonPage = () => {
     }
 
     if (irrelevans) {
-      const relevans = options.filter((n) => !irrelevans.map((ir: Code) => ir.code).includes(n.value))
+      const relevans = options.filter((n) => !irrelevans.map((ir: ICode) => ir.code).includes(n.value))
 
       return (
         <div className="flex flex-wrap gap-2">
@@ -159,7 +159,7 @@ export const DokumentasjonPage = () => {
 
   if (!etterlevelseDokumentasjon) return <LoadingSkeleton header="Dokumentasjon" />
 
-  const breadcrumbPaths: breadcrumbPaths[] = [
+  const breadcrumbPaths: IBreadcrumbPaths[] = [
     {
       pathName: 'Dokumenter etterlevelse',
       href: '/dokumentasjoner',

@@ -1,21 +1,20 @@
 import { Block } from 'baseui/block'
 import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
+import { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
-import { useEffect, useState } from 'react'
-import { Etterlevelse, Krav } from '../constants'
-import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { kravNumView } from './KravPage'
-import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 import { getKravByKravNumberAndVersion } from '../api/KravApi'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { Helmet } from 'react-helmet'
+import CustomizedBreadcrumbs, { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
+import { IEtterlevelse, IKrav } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { user } from '../services/User'
+import { ListName, TemaCode, codelist } from '../services/Codelist'
+import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
+import { kravNumView } from './KravPage'
 
-export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
+export const etterlevelseName = (etterlevelse: IEtterlevelse) => `${kravNumView(etterlevelse)}`
 
 export const kravLink = (kravNummer: string) => {
   return kravNummer.replace('.', '/').replace('K', '/krav/')
@@ -25,7 +24,7 @@ export const EtterlevelsePage = () => {
   const params = useParams<{ id?: string }>()
   const [etterlevelse] = useEtterlevelse(params.id)
   const [edit] = useState(etterlevelse && !etterlevelse.id)
-  const [krav, setKrav] = useState<Krav>()
+  const [krav, setKrav] = useState<IKrav>()
   const [kravTema, setKravTema] = useState<TemaCode>()
 
   const loading = !edit && !etterlevelse
@@ -50,8 +49,8 @@ export const EtterlevelsePage = () => {
     }
   }, [etterlevelse])
 
-  const getBreadcrumPaths = (): breadcrumbPaths[] => {
-    const breadcrumbPaths: breadcrumbPaths[] = []
+  const getBreadcrumPaths = (): IBreadcrumbPaths[] => {
+    const breadcrumbPaths: IBreadcrumbPaths[] = []
 
     breadcrumbPaths.push({
       pathName: 'Forstå kravene',

@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { intl } from '../../../util/intl/intl'
-import axios from 'axios'
-import { env } from '../../../util/env'
-import { PageResponse } from '../../../constants'
-import moment from 'moment'
-import { Markdown } from '../../common/Markdown'
-import { Helmet } from 'react-helmet'
 import { BodyShort, Box, Heading, Pagination, Select, Spacer } from '@navikt/ds-react'
+import axios from 'axios'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
+import { IPageResponse } from '../../../constants'
+import { env } from '../../../util/env'
+import { intl } from '../../../util/intl/intl'
+import { Markdown } from '../../common/Markdown'
 
-interface MailLog {
+interface IMailLog {
   time: string
   to: string
   subject: string
@@ -16,11 +16,11 @@ interface MailLog {
 }
 
 const getMailLog = async (start: number, count: number) => {
-  return (await axios.get<PageResponse<MailLog>>(`${env.backendBaseUrl}/audit/maillog?pageNumber=${start}&pageSize=${count}`)).data
+  return (await axios.get<IPageResponse<IMailLog>>(`${env.backendBaseUrl}/audit/maillog?pageNumber=${start}&pageSize=${count}`)).data
 }
 
 export const MailLogPage = () => {
-  const [log, setLog] = useState<PageResponse<MailLog>>({ content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 })
+  const [log, setLog] = useState<IPageResponse<IMailLog>>({ content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 })
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
 

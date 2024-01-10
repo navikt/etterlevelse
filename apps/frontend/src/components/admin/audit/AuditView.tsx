@@ -1,25 +1,25 @@
-import moment from 'moment'
-import { JsonView } from 'react-json-view-lite'
-import { useEffect, useState } from 'react'
-import { AuditActionIcon, AuditLabel } from './AuditComponents'
+import { ArrowRightLeftIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { Box, Button, Label, Loader, Modal, Tooltip } from '@navikt/ds-react'
 import { Differ, Viewer } from 'json-diff-kit'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
+import { JsonView } from 'react-json-view-lite'
 import { useRefs } from '../../../util/hooks'
 import { intl } from '../../../util/intl/intl'
-import { AuditAction, AuditItem, AuditLog } from './AuditTypes'
 import { ObjectLink } from '../../common/RouteLink'
-import { Box, Button, Label, Loader, Modal, Tooltip } from '@navikt/ds-react'
-import { ArrowRightLeftIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { AuditActionIcon, AuditLabel } from './AuditComponents'
+import { AuditAction, IAuditItem, IAuditLog } from './AuditTypes'
 
 type AuditViewProps = {
-  auditLog?: AuditLog
+  auditLog?: IAuditLog
   auditId?: string
   loading: boolean
   viewId: (id: string) => void
 }
 
 type ComparisonViewProps = {
-  auditLog: AuditLog
-  audit: AuditItem
+  auditLog: IAuditLog
+  audit: IAuditItem
   index: number
 }
 
@@ -29,12 +29,26 @@ const ComparisonView = (props: ComparisonViewProps) => {
 
   return (
     <div>
-      <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant="tertiary" icon={<ArrowRightLeftIcon title="se forskjell" />} />
-      <Modal key={audit.id} open={modalOpen} onClose={() => setModalOpen(false)} width="75%" className="h-3/4 overflow-y-scroll">
+      <Button
+        key={audit.id}
+        onClick={() => setModalOpen(!modalOpen)}
+        variant="tertiary"
+        icon={<ArrowRightLeftIcon title="se forskjell" />}
+      />
+      <Modal
+        key={audit.id}
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        width="75%"
+        className="h-3/4 overflow-y-scroll"
+      >
         <Modal.Header />
         <Modal.Body>
           <Viewer
-            diff={new Differ().diff(auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {}, audit.data)}
+            diff={new Differ().diff(
+              auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {},
+              audit.data
+            )}
             highlightInlineDiff={true}
             lineNumbers={true}
             indent={4}
@@ -77,12 +91,21 @@ export const AuditView = (props: AuditViewProps) => {
                 {openAll ? 'Lukke' : 'Åpne'} alle
               </Button>
               {newestAudit?.action !== AuditAction.DELETE && (
-                <ObjectLink id={newestAudit!.tableId} type={newestAudit!.table} noNewTabLabel audit={newestAudit}>
+                <ObjectLink
+                  id={newestAudit!.tableId}
+                  type={newestAudit!.table}
+                  noNewTabLabel
+                  audit={newestAudit}
+                >
                   <Button variant="tertiary">Vis bruk (åpnes i ny fane)</Button>
                 </ObjectLink>
               )}
               <Tooltip content="Lukk" placement="top">
-                <Button variant="tertiary" onClick={() => viewId('')} icon={<XMarkIcon title="Lukk" />} />
+                <Button
+                  variant="tertiary"
+                  onClick={() => viewId('')}
+                  icon={<XMarkIcon title="Lukk" />}
+                />
               </Tooltip>
             </div>
           </div>
