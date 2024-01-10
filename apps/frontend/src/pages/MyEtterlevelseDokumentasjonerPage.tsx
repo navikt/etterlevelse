@@ -5,13 +5,13 @@ import { Loader } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import { StatefulInput } from 'baseui/input'
 import {
-  HeadingLarge,
-  HeadingXLarge,
-  HeadingXXLarge,
-  LabelLarge,
-  LabelSmall,
-  LabelXSmall,
-  ParagraphSmall,
+    HeadingLarge,
+    HeadingXLarge,
+    HeadingXXLarge,
+    LabelLarge,
+    LabelSmall,
+    LabelXSmall,
+    ParagraphSmall,
 } from 'baseui/typography'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'

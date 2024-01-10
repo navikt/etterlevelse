@@ -2,15 +2,15 @@ import { BodyShort, Button, Heading, Link, Pagination, Select, SortState, Spacer
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import {
-  arkiveringMapToFormVal,
-  arkiveringStatusToString,
-  deleteEtterlevelseArkiv,
-  getAllArkivering,
-  getEtterlevelseArkiv,
-  updateAsAdminEtterlevelseArkiv,
+    arkiveringMapToFormVal,
+    arkiveringStatusToString,
+    deleteEtterlevelseArkiv,
+    getAllArkivering,
+    getEtterlevelseArkiv,
+    updateAsAdminEtterlevelseArkiv,
 } from '../api/ArkiveringApi'
 import { PageLayout } from '../components/scaffold/Page'
-import { IEtterlevelseArkiv, EtterlevelseArkivStatus } from '../constants'
+import { EtterlevelseArkivStatus, IEtterlevelseArkiv } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { handleSort } from '../util/handleTableSort'
 import { UpdateMessage } from './EtterlevelseAdminPage'

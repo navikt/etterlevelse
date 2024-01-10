@@ -2,7 +2,7 @@ import { CheckmarkIcon } from '@navikt/aksel-icons'
 import { BodyShort, Box, Heading, Label, Link, Loader, ReadMore, Tag } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEtterlevelseDokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
-import { IEtterlevelse, EtterlevelseStatus, IKrav, SuksesskriterieStatus } from '../../constants'
+import { EtterlevelseStatus, IEtterlevelse, IKrav, SuksesskriterieStatus } from '../../constants'
 import { Markdown } from '../common/Markdown'
 import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
 

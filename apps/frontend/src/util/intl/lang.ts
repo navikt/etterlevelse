@@ -1,5 +1,5 @@
-import { IStrings } from './langdef'
 import MdEditor from 'react-markdown-editor-lite'
+import { IStrings } from './langdef'
 
 export const no: IStrings = {
   CREATE: 'Opprett',

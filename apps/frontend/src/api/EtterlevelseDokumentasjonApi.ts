@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import * as yup from 'yup'
-import { IEtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, IPageResponse } from '../constants'
+import { EtterlevelseDokumentasjonQL, IEtterlevelseDokumentasjon, IPageResponse } from '../constants'
 import { env } from '../util/env'
 import { behandlingName } from './BehandlingApi'
 import { getVirkemiddel } from './VirkemiddelApi'

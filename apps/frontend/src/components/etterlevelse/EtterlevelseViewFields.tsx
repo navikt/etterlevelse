@@ -1,8 +1,8 @@
 import { Alert, BodyShort, Box, Heading, Label, ReadMore } from '@navikt/ds-react'
-import { IEtterlevelse, EtterlevelseStatus, ISuksesskriterie, ISuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../constants'
-import { getLabelForSuksessKriterie, getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
+import { EtterlevelseStatus, IEtterlevelse, ISuksesskriterie, ISuksesskriterieBegrunnelse } from '../../constants'
 import { Markdown } from '../common/Markdown'
 import { LabelAboveContent } from '../common/PropertyLabel'
+import { getLabelForSuksessKriterie, getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
 import EtterlevelseCard from './EtterlevelseCard'
 
 export const EtterlevelseViewFields = ({

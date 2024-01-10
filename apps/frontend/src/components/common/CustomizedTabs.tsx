@@ -1,10 +1,10 @@
+import { FILL, ORIENTATION, Tab, TabProps, Tabs, TabsOverrides } from 'baseui/tabs-motion'
+import _ from 'lodash'
 import * as React from 'react'
 import { ReactNode, useState } from 'react'
-import { FILL, ORIENTATION, Tab, TabProps, Tabs, TabsOverrides } from 'baseui/tabs-motion'
-import { borderColor, borderStyle, borderWidth, marginZero, paddingZero } from './Style'
 import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
-import _ from 'lodash'
+import { borderColor, borderStyle, borderWidth, marginZero, paddingZero } from './Style'
 
 export const CustomizedTab = (props: TabProps) => {
   return <Tab {...props}>{props.children}</Tab>

@@ -1,6 +1,6 @@
-import { KravStatus, IKravVersjon } from '../../constants'
-import { kravStatus } from '../../pages/KravPage'
-import { Alert, BodyLong, Link } from '@navikt/ds-react'
+import { Alert, BodyLong, Link } from '@navikt/ds-react';
+import { IKravVersjon, KravStatus } from '../../constants';
+import { kravStatus } from '../../pages/KravPage';
 
 const ExpiredAlert = ({ alleKravVersjoner, statusName }: { alleKravVersjoner: IKravVersjon[]; statusName?: KravStatus }) => (
   <Alert variant={'warning'} className={'w-fit'}>

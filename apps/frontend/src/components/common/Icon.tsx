@@ -1,5 +1,4 @@
-import { Block } from 'baseui/block'
-import React from 'react'
+import { Block } from 'baseui/block';
 
 export const IconInCircle = (props: { icon: string; alt: string; size: string; backgroundColor: string }) => (
   <Block

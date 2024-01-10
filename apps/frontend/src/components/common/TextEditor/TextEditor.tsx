@@ -1,13 +1,12 @@
-import React from 'react'
 import { convertToRaw, RawDraftContentState } from 'draft-js'
-import { Editor } from 'react-draft-wysiwyg'
-import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
-import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-import './customStyle.css'
-import { ettlevColors } from '../../../util/theme'
-import { useDebouncedState } from '../../../util/hooks'
 import { FormikErrors } from 'formik'
+import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
+import { Editor } from 'react-draft-wysiwyg'
+import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import { useDebouncedState } from '../../../util/hooks'
+import { ettlevColors } from '../../../util/theme'
 import { borderColor, borderStyle, borderWidth } from '../Style'
+import './customStyle.css'
 
 type TextEditorProps = {
   initialValue: string

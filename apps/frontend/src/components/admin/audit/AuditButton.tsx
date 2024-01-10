@@ -1,7 +1,7 @@
+import { ClockDashedIcon } from '@navikt/aksel-icons'
+import { Button, ButtonProps, Link, Tooltip } from '@navikt/ds-react'
 import { user } from '../../../services/User'
 import { intl } from '../../../util/intl/intl'
-import { Button, ButtonProps, Link, Tooltip } from '@navikt/ds-react'
-import { ClockDashedIcon } from '@navikt/aksel-icons'
 
 interface IAuditButtonProps extends ButtonProps {
   id: string

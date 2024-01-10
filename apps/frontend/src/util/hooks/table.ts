@@ -1,6 +1,8 @@
+import { Option, Value } from 'baseui/select'
 import { SORT_DIRECTION } from 'baseui/table'
 import { useEffect, useState } from 'react'
-import { Option, Value } from 'baseui/select'
+
+//WILL DELETE THIS FILE, USING AKSEL TABLE INSTEAD
 
 export type TableConfig<T, K extends keyof T> = {
   sorting?: ColumnCompares<T>

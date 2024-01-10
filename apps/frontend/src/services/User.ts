@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
-import { IUserInfo } from '../constants'
 import { getUserInfo } from '../api/UserApi'
+import { IUserInfo } from '../constants'
 import { updateUser } from '../util/hooks'
 
 export enum Group {

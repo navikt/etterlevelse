@@ -2,14 +2,14 @@ import { ArrowUpIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Link, Spacer } from '@navikt/ds-react'
 import * as React from 'react'
 import {
-  VeilederEtterlevelseskrav,
-  behandlingsKatalogLink,
-  datajegerSlackLink,
-  documentationLink,
-  githubRepo,
-  omEtterlevelsePaNavet,
-  statusPageLink,
-  teamInfoLink,
+    VeilederEtterlevelseskrav,
+    behandlingsKatalogLink,
+    datajegerSlackLink,
+    documentationLink,
+    githubRepo,
+    omEtterlevelsePaNavet,
+    statusPageLink,
+    teamInfoLink,
 } from '../../util/config'
 import { etterlevelseLogoWhiteIcon } from '../Images'
 

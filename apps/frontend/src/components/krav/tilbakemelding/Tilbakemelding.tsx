@@ -5,11 +5,11 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
-  ITilbakemeldingNewMeldingRequest,
-  tilbakemeldingNewMelding,
-  tilbakemeldingslettMelding,
-  updateTilbakemeldingStatusOgEndretKrav,
-  useTilbakemeldinger,
+    ITilbakemeldingNewMeldingRequest,
+    tilbakemeldingNewMelding,
+    tilbakemeldingslettMelding,
+    updateTilbakemeldingStatusOgEndretKrav,
+    useTilbakemeldinger,
 } from '../../../api/TilbakemeldingApi'
 import { IKrav, ITilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
 import { user } from '../../../services/User'

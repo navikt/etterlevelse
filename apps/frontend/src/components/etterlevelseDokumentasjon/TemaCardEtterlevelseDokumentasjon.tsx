@@ -1,15 +1,15 @@
-import { codelist, TemaCode } from '../../services/Codelist'
-import { IEtterlevelseDokumentasjon, KRAV_FILTER_TYPE } from '../../constants'
-import { PanelLinkCard, PanelLinkCardOverrides } from '../common/PanelLink'
-import { ettlevColors, theme } from '../../util/theme'
-import { cardWidth, useKravCounter } from '../../pages/TemaPage'
 import { Block } from 'baseui/block'
-import { ParagraphXSmall } from 'baseui/typography'
 import { ProgressBar, SIZE } from 'baseui/progress-bar'
-import { HeaderContent } from './HeaderContent'
-import { isFerdigUtfylt } from '../../pages/EtterlevelseDokumentasjonTemaPage'
+import { ParagraphXSmall } from 'baseui/typography'
 import moment from 'moment'
+import { IEtterlevelseDokumentasjon, KRAV_FILTER_TYPE } from '../../constants'
+import { isFerdigUtfylt } from '../../pages/EtterlevelseDokumentasjonTemaPage'
+import { cardWidth, useKravCounter } from '../../pages/TemaPage'
+import { codelist, TemaCode } from '../../services/Codelist'
 import { getNumberOfDaysBetween } from '../../util/checkAge'
+import { ettlevColors, theme } from '../../util/theme'
+import { PanelLinkCard, PanelLinkCardOverrides } from '../common/PanelLink'
+import { HeaderContent } from './HeaderContent'
 
 type TemaCardEtterlevelseDokumentasjonProps = {
   tema: TemaCode

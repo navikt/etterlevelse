@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { emptyPage, IKrav, KravQL, KravStatus, Or, IPageResponse } from '../constants'
+import { IKrav, IPageResponse, KravQL, KravStatus, Or, emptyPage } from '../constants'
 import { env } from '../util/env'
 
 export const getAllKrav = async () => {

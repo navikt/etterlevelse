@@ -1,12 +1,11 @@
-import * as React from 'react'
-import { useState } from 'react'
+import { Block } from 'baseui/block'
+import { Button } from 'baseui/button'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
 import { ParagraphMedium } from 'baseui/typography'
-import { Button } from 'baseui/button'
-import { Block } from 'baseui/block'
-import { buttonContentStyle } from '../../common/Button'
-import { IVirkemiddel } from '../../../constants'
+import { useState } from 'react'
 import { deleteVirkemiddel } from '../../../api/VirkemiddelApi'
+import { IVirkemiddel } from '../../../constants'
+import { buttonContentStyle } from '../../common/Button'
 
 type ModalDeleteProps = {
   isOpen: boolean

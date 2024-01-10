@@ -1,30 +1,30 @@
-import { IKrav, KravQL, KravStatus, IKravVersjon } from '../../constants'
+import { Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal } from '@navikt/ds-react'
+import axios from 'axios'
 import { Form, Formik } from 'formik'
-import {
-  createKrav,
-  getKravByKravNumberAndVersion,
-  kravMapToFormVal,
-  updateKrav,
-} from '../../api/KravApi'
+import _ from 'lodash'
 import React, { useEffect } from 'react'
 import * as yup from 'yup'
-import { codelist, ListName } from '../../services/Codelist'
-import { InputField, MultiInputField, TextAreaField } from '../common/Inputs'
-import axios from 'axios'
+import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
+import {
+    createKrav,
+    getKravByKravNumberAndVersion,
+    kravMapToFormVal,
+    updateKrav,
+} from '../../api/KravApi'
+import { IKrav, IKravVersjon, KravQL, KravStatus } from '../../constants'
+import { ListName, codelist } from '../../services/Codelist'
+import { user } from '../../services/User'
 import { env } from '../../util/env'
+import ErrorModal from '../ErrorModal'
+import { InputField, MultiInputField, TextAreaField } from '../common/Inputs'
+import { Error } from '../common/ModalSchema'
+import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
+import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
+import { EditBegreper } from './Edit/KravBegreperEdit'
+import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
 import { RegelverkEdit } from './Edit/RegelverkEdit'
-import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
-import { EditBegreper } from './Edit/KravBegreperEdit'
-import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
-import ErrorModal from '../ErrorModal'
-import { Error } from '../common/ModalSchema'
 import { ErrorMessageModal } from './ErrorMessageModal'
-import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
-import { user } from '../../services/User'
-import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
-import _ from 'lodash'
-import { Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal } from '@navikt/ds-react'
 
 type EditKravProps = {
   krav: KravQL

@@ -7,13 +7,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { createEtterlevelse, getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, updateEtterlevelse } from '../../api/EtterlevelseApi'
 import {
-  createEtterlevelseMetadata,
-  getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion,
-  mapEtterlevelseMetadataToFormValue,
-  updateEtterlevelseMetadata,
+    createEtterlevelseMetadata,
+    getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion,
+    mapEtterlevelseMetadataToFormValue,
+    updateEtterlevelseMetadata,
 } from '../../api/EtterlevelseMetadataApi'
-import { getKravByKravNummer, KravId } from '../../api/KravApi'
-import { IBehandling, IEtterlevelse, IEtterlevelseMetadata, EtterlevelseStatus, IKrav, KRAV_FILTER_TYPE, KravQL, KravStatus, IKravVersjon, ITeam } from '../../constants'
+import { KravId, getKravByKravNummer } from '../../api/KravApi'
+import { EtterlevelseStatus, IBehandling, IEtterlevelse, IEtterlevelseMetadata, IKrav, IKravVersjon, ITeam, KRAV_FILTER_TYPE, KravQL, KravStatus } from '../../constants'
 import { query } from '../../pages/KravPage'
 import { ampli, userRoleEventProp } from '../../services/Amplitude'
 import { user } from '../../services/User'
@@ -24,8 +24,8 @@ import { TeamName } from '../common/TeamName'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import EditNotatfelt from '../etterlevelseMetadata/EditNotatfelt'
 import Etterlevelser from '../krav/Etterlevelser'
-import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
 import { AllInfo } from '../krav/ViewKrav'
+import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import EtterlevelseViewFields from './EtterlevelseViewFields'
 

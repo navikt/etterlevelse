@@ -1,7 +1,7 @@
 import React from 'react'
+import { Or } from '../../constants'
 import DataText from './DataText'
 import { Markdown } from './Markdown'
-import { Or } from '../../constants'
 
 const empty = (arg: any) => !arg || (Array.isArray(arg) && !arg.length)
 

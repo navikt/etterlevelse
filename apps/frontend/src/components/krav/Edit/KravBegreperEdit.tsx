@@ -1,14 +1,13 @@
-import { FieldWrapper } from '../../common/Inputs'
-import { useBegrepSearch } from '../../../api/BegrepApi'
-import React from 'react'
+import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
 import { FieldArray } from 'formik'
+import { CSSObjectWithLabel, DropdownIndicatorProps, components } from 'react-select'
+import AsyncSelect from 'react-select/async'
+import { useBegrepSearch } from '../../../api/BegrepApi'
+import { IBegrep } from '../../../constants'
+import { FieldWrapper } from '../../common/Inputs'
+import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { Error } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
-import { IBegrep } from '../../../constants'
-import LabelWithTooltip from '../../common/LabelWithTooltip'
-import AsyncSelect from 'react-select/async'
-import { CSSObjectWithLabel, DropdownIndicatorProps, components } from 'react-select'
-import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
 
 export const DropdownIndicator = (props: DropdownIndicatorProps) => {
   return (

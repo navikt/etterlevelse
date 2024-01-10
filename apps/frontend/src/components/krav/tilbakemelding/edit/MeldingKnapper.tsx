@@ -1,4 +1,5 @@
-import { ParagraphMedium, ParagraphSmall } from 'baseui/typography'
+import { DocPencilIcon, TrashIcon } from '@navikt/aksel-icons'
+import { BodyShort, Button, Modal } from '@navikt/ds-react'
 import moment from 'moment'
 import { useState } from 'react'
 import { tilbakemeldingslettMelding } from '../../../../api/TilbakemeldingApi'
@@ -6,8 +7,6 @@ import { ITilbakemelding, ITilbakemeldingMelding } from '../../../../constants'
 import { user } from '../../../../services/User'
 import { PersonName } from '../../../common/PersonName'
 import TilbakemeldingEdit from './TilbakemeldingEdit'
-import { BodyShort, Button, Modal } from '@navikt/ds-react'
-import { DocPencilIcon, TrashIcon } from '@navikt/aksel-icons'
 
 export const MeldingKnapper = (props: {
   melding: ITilbakemeldingMelding

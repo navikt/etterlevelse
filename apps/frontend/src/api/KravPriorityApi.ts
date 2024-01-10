@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { IKravPrioritering, KravQL, IPageResponse } from '../constants'
+import { IKravPrioritering, IPageResponse, KravQL } from '../constants'
 import { env } from '../util/env'
 
 export const getAllKravPriority = async () => {

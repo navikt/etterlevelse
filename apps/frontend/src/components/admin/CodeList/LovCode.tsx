@@ -1,12 +1,12 @@
+import { Label, Select, TextField, Textarea } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import { Field, FieldProps } from 'formik'
-import { codelist, ICodeListFormValues, ListName, ILovCodeData, LovCodeRelevans, lovCodeRelevansToOptions, ITemaCodeData } from '../../../services/Codelist'
-import { OptionList } from '../../common/Inputs'
-import { temaBilder } from '../../Images'
+import { ICodeListFormValues, ILovCodeData, ITemaCodeData, ListName, codelist, lovCodeRelevansToOptions } from '../../../services/Codelist'
 import { theme } from '../../../util'
+import { temaBilder } from '../../Images'
 import Button from '../../common/Button'
+import { OptionList } from '../../common/Inputs'
 import { Error } from '../../common/ModalSchema'
-import { Label, Select, TextField, Textarea } from '@navikt/ds-react'
 
 export const LovCodeDataForm = () => {
   return (

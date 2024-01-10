@@ -1,6 +1,6 @@
-import { Box, Heading, Label } from '@navikt/ds-react'
-import { ISuksesskriterie } from '../../constants'
-import { Markdown } from '../common/Markdown'
+import { Box, Heading, Label } from '@navikt/ds-react';
+import { ISuksesskriterie } from '../../constants';
+import { Markdown } from '../common/Markdown';
 
 export const SuksesskriterieCard = (props: { suksesskriterie: ISuksesskriterie; num: number; totalt: number; fullWidth?: boolean }) => {
   const { suksesskriterie, num, totalt } = props

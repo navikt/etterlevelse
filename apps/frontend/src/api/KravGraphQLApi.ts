@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 import { QueryHookOptions } from '@apollo/client/react/types/types'
-import { KravQL, IPageResponse } from '../constants'
+import { IPageResponse, KravQL } from '../constants'
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const kravtableQuery = gql`

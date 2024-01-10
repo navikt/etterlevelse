@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { env } from '../util/env'
 import { IAllCodelists, ICategoryUsage, ICode, ICodeUsage, ListName } from '../services/Codelist'
+import { env } from '../util/env'
 
 // refresh will force backend to re-read codelists from db, due to caching and multibackend
 export const getAllCodelists = async (refresh?: boolean) => await axios.get<IAllCodelists>(`${env.backendBaseUrl}/codelist?refresh=${refresh ? 'true' : 'false'}`)

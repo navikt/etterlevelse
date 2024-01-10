@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
-import { getAllCodelists } from '../api/CodelistApi'
 import * as yup from 'yup'
+import { getAllCodelists } from '../api/CodelistApi'
 import { Replace } from '../constants'
 
 export enum ListName {

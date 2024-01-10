@@ -1,5 +1,5 @@
-import { ICodeListFormValues } from '../../../services/Codelist'
 import { BodyShort, Button, Modal } from '@navikt/ds-react'
+import { ICodeListFormValues } from '../../../services/Codelist'
 
 type ModalDeleteProps = {
   title: string

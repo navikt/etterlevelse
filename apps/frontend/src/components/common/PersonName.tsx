@@ -1,7 +1,6 @@
-import { usePersonName } from '../../api/TeamApi'
-import React from 'react'
-import { teamKatPersonLink } from '../../util/config'
 import { Link } from '@navikt/ds-react'
+import { usePersonName } from '../../api/TeamApi'
+import { teamKatPersonLink } from '../../util/config'
 
 export const PersonName = (props: { ident: string; link?: boolean; kraveier?: boolean }) => {
   const name = usePersonName()(props.ident)

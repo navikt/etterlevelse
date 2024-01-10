@@ -1,6 +1,6 @@
+import moment from 'moment'
 import { EtterlevelseStatus } from '../../constants'
 import { ettlevColors } from '../../util/theme'
-import moment from 'moment'
 
 export const getEtterlevelseStatus = (status?: EtterlevelseStatus, frist?: string) => {
   switch (status) {

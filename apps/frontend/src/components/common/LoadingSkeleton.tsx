@@ -1,6 +1,5 @@
-import React from 'react'
-import * as _ from 'lodash'
 import { Heading, Skeleton } from '@navikt/ds-react'
+import * as _ from 'lodash'
 
 export const LoadingSkeleton = (props: { header: string }) => (
   <div className="w-full">

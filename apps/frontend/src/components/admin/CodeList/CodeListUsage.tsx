@@ -1,10 +1,10 @@
+import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import { codelist, ICodeUsage } from '../../../services/Codelist'
+import { replaceCodelistUsage } from '../../../api/CodelistApi'
+import { ICodeUsage, codelist } from '../../../services/Codelist'
 import { ObjectLink } from '../../common/RouteLink'
 import { ObjectType } from '../audit/AuditTypes'
-import { replaceCodelistUsage } from '../../../api/CodelistApi'
-import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
 
 const UsageTable = (props: { usage: ICodeUsage }) => {
   const { usage } = props

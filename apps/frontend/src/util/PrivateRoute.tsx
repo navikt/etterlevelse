@@ -1,7 +1,7 @@
-import { Navigate } from 'react-router-dom'
-import React, { useState } from 'react'
-import { user } from '../services/User'
 import { Loader } from '@navikt/ds-react'
+import React, { useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import { user } from '../services/User'
 
 interface IPrivateRouteProps {
   component: JSX.Element

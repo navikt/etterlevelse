@@ -1,6 +1,6 @@
+import * as React from 'react'
 import { ICode, LovCode } from './services/Codelist'
 import { Group } from './services/User'
-import * as React from 'react'
 
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P]

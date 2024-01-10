@@ -1,10 +1,9 @@
 import { Block } from 'baseui/block'
 import { Tag } from 'baseui/tag'
-import { ettlevColors } from '../../util/theme'
-import { borderColor } from '../common/Style'
 import { LabelSmall, ParagraphXSmall } from 'baseui/typography'
-import React from 'react'
+import { ettlevColors } from '../../util/theme'
 import { warningAlert } from '../Images'
+import { borderColor } from '../common/Style'
 
 export const HeaderContent = (props: { kravLength: number; documentedLength: number; nyttKravCounter: number; nyttKravVersjonCounter: number }) => (
   <Block marginBottom="33px" display="flex" alignItems="center">

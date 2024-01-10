@@ -1,8 +1,8 @@
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { ICodeListFormValues, codeListSchema, ListName, LovCodeRelevans } from '../../../services/Codelist'
-import { Error } from '../../common/ModalSchema'
-import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
+import { ICodeListFormValues, ListName, LovCodeRelevans, codeListSchema } from '../../../services/Codelist'
 import { MarkdownInfo } from '../../common/Markdown'
+import { Error } from '../../common/ModalSchema'
+import { LovCodeDataForm } from './LovCode'
 
 import { BodyShort, Button, Label, Modal, TextField, Textarea } from '@navikt/ds-react'
 

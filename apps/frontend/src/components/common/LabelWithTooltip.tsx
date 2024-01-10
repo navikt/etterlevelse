@@ -1,6 +1,6 @@
 
-import { BodyShort, Button, Label, Tooltip } from '@navikt/ds-react'
-import { InformationSquareIcon, QuestionmarkDiamondIcon } from '@navikt/aksel-icons'
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Label, Tooltip } from '@navikt/ds-react';
 
 const LabelWithToolTip = (props: { label?: string; tooltip?: string; fontColor?: string; noMarginBottom?: boolean }) => {
   return (

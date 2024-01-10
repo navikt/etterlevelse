@@ -1,16 +1,16 @@
-import { IEtterlevelseMetadata } from '../../constants'
-import { StatefulPopover } from 'baseui/popover'
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Block } from 'baseui/block'
 import { Button as BaseButton } from 'baseui/button'
+import { StatefulPopover } from 'baseui/popover'
 import { PLACEMENT } from 'baseui/tooltip'
-import Button from '../common/Button'
+import { LabelSmall } from 'baseui/typography'
 import { createEtterlevelseMetadata, updateEtterlevelseMetadata } from '../../api/EtterlevelseMetadataApi'
+import { IEtterlevelseMetadata } from '../../constants'
 import { user } from '../../services/User'
 import { ettlevColors } from '../../util/theme'
-import { LabelSmall } from 'baseui/typography'
+import Button from '../common/Button'
 import { borderColor, borderStyle, borderWidth } from '../common/Style'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 type TildeltPopoverProps = {
   etterlevelseMetadata: IEtterlevelseMetadata

@@ -1,7 +1,7 @@
 import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { emptyPage, IPageResponse, IVirkemiddel } from '../constants'
 import { env } from '../util/env'
-import { useEffect, useState } from 'react'
 import { useDebouncedState } from '../util/hooks'
 
 export const getAllVirkemiddel = async () => {

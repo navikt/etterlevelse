@@ -1,10 +1,10 @@
-import LocalizedStrings, { GlobalStrings, LocalizedStringsMethods } from 'react-localization'
-import * as React from 'react'
-import { useEffect } from 'react'
-import { useForceUpdate } from '../hooks'
-import { en, no } from './lang'
 import * as moment from 'moment'
 import 'moment/locale/nb'
+import * as React from 'react'
+import { useEffect } from 'react'
+import LocalizedStrings, { GlobalStrings, LocalizedStringsMethods } from 'react-localization'
+import { useForceUpdate } from '../hooks'
+import { en, no } from './lang'
 import { IStrings } from './langdef'
 
 // Remember import moment locales up top

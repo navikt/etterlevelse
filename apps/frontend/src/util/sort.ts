@@ -1,5 +1,5 @@
-import { intl } from './intl/intl'
 import { IKrav } from '../constants'
+import { intl } from './intl/intl'
 
 const start = (prefix: string) => (text: string) => {
   const startIndex = text.indexOf(prefix.toLowerCase())

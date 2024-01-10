@@ -1,10 +1,9 @@
+import { Button, Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 import React, { useEffect, useState } from 'react'
 import { createMelding, deleteMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
 import { AlertType, IMelding, MeldingStatus, MeldingType } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
-import { Button, Heading, Radio, RadioGroup } from '@navikt/ds-react'
-import { Loader } from '@navikt/ds-react'
 
 export const getAlertTypeText = (type: AlertType) => {
   if (!type) return ''

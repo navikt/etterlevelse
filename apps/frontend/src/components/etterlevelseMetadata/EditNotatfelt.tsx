@@ -1,11 +1,11 @@
+import { FileTextIcon } from '@navikt/aksel-icons'
+import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react'
 import { Form, Formik, FormikProps } from 'formik'
+import React from 'react'
+import { createEtterlevelseMetadata, updateEtterlevelseMetadata } from '../../api/EtterlevelseMetadataApi'
 import { IEtterlevelseMetadata } from '../../constants'
 import { useDebouncedState } from '../../util/hooks'
 import TextEditor from '../common/TextEditor/TextEditor'
-import { createEtterlevelseMetadata, updateEtterlevelseMetadata } from '../../api/EtterlevelseMetadataApi'
-import React from 'react'
-import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react'
-import { FileTextIcon } from '@navikt/aksel-icons'
 
 type EditNotatfeltProps = {
   isOpen: boolean

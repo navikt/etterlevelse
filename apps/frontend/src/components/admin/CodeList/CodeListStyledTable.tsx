@@ -1,14 +1,14 @@
+import { DocPencilIcon, GlassesIcon, TrashIcon } from '@navikt/aksel-icons'
+import { BodyLong, Button, SortState, Table, Tooltip } from '@navikt/ds-react'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import UpdateCodeListModal from './ModalUpdateCodeList'
-import DeleteCodeListModal from './ModalDeleteCodeList'
-import { Usage } from './CodeListUsage'
-import { AuditButton } from '../audit/AuditButton'
-import { ICode, ICodeListFormValues, ICodeUsage, LovCodeRelevans } from '../../../services/Codelist'
 import { deleteCodelist, getCodelistUsage, updateCodelist } from '../../../api/CodelistApi'
-import { BodyLong, Button, SortState, Table, Tooltip } from '@navikt/ds-react'
+import { ICode, ICodeListFormValues, ICodeUsage, LovCodeRelevans } from '../../../services/Codelist'
 import { handleSort } from '../../../util/handleTableSort'
-import { DocPencilIcon, GlassesIcon, TrashIcon } from '@navikt/aksel-icons'
+import { AuditButton } from '../audit/AuditButton'
+import { Usage } from './CodeListUsage'
+import DeleteCodeListModal from './ModalDeleteCodeList'
+import UpdateCodeListModal from './ModalUpdateCodeList'
 
 type TableCodelistProps = {
   tableData: ICode[]

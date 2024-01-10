@@ -1,13 +1,12 @@
+import { QueryResult } from '@apollo/client'
+import { Loader } from '@navikt/ds-react'
+import { Notification } from 'baseui/notification'
 import { KravFilters, useKravFilter } from '../../api/KravGraphQLApi'
-import { Cell, Table } from './Table'
+import { IPageResponse, KravQL } from '../../constants'
+import { kravNumView, kravStatus } from '../../pages/KravPage'
 import { ICode, codelistCompareField, codelistsCompareField } from '../../services/Codelist'
 import RouteLink from './RouteLink'
-import { kravNumView, kravStatus } from '../../pages/KravPage'
-import React from 'react'
-import { KravQL, IPageResponse } from '../../constants'
-import { QueryResult } from '@apollo/client'
-import { Notification } from 'baseui/notification'
-import { Loader } from '@navikt/ds-react'
+import { Cell, Table } from './Table'
 
 type KravFilterTableProps = {
   emptyText?: string

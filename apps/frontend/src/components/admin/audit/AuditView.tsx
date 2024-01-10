@@ -1,14 +1,14 @@
-import moment from 'moment'
-import { JsonView } from 'react-json-view-lite'
-import { useEffect, useState } from 'react'
-import { AuditActionIcon, AuditLabel } from './AuditComponents'
+import { ArrowRightLeftIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { Box, Button, Label, Loader, Modal, Tooltip } from '@navikt/ds-react'
 import { Differ, Viewer } from 'json-diff-kit'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
+import { JsonView } from 'react-json-view-lite'
 import { useRefs } from '../../../util/hooks'
 import { intl } from '../../../util/intl/intl'
-import { AuditAction, IAuditItem, IAuditLog } from './AuditTypes'
 import { ObjectLink } from '../../common/RouteLink'
-import { Box, Button, Label, Loader, Modal, Tooltip } from '@navikt/ds-react'
-import { ArrowRightLeftIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { AuditActionIcon, AuditLabel } from './AuditComponents'
+import { AuditAction, IAuditItem, IAuditLog } from './AuditTypes'
 
 type AuditViewProps = {
   auditLog?: IAuditLog

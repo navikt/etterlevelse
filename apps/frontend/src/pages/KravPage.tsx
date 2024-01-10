@@ -17,7 +17,7 @@ import ExpiredAlert from '../components/krav/ExpiredAlert'
 import { AllInfo, ViewKrav } from '../components/krav/ViewKrav'
 import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
 import { PageLayout } from '../components/scaffold/Page'
-import { IKrav, IKravId, KravQL, KravStatus, IKravVersjon } from '../constants'
+import { IKrav, IKravId, IKravVersjon, KravQL, KravStatus } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { ListName, TemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
@@ -282,8 +282,8 @@ export const KravPage = () => {
               } else {
                 reloadKrav()
               }
-            } else if (krav.nyKravVersjon) {
-              setKrav({ ...krav, id: kravId!.id, kravVersjon: kravId!.kravVersjon })
+            } else if (krav.nyKravVersjon && kravId) {
+              setKrav({ ...krav, id: kravId.id, kravVersjon: kravId.kravVersjon })
             }
             setEdit(false)
             setNewVersionWarning(false)

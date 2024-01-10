@@ -1,9 +1,9 @@
+import { Button, Heading, Loader } from '@navikt/ds-react'
 import { Formik, FormikProps } from 'formik'
 import React, { useState } from 'react'
 import { createMelding, deleteMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
 import { AlertType, IMelding, MeldingStatus } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
-import { Button, Heading, Loader } from '@navikt/ds-react'
 
 export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: { melding: IMelding | undefined; setMelding: React.Dispatch<React.SetStateAction<IMelding | undefined>>; isLoading: boolean; maxChar?: number }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)

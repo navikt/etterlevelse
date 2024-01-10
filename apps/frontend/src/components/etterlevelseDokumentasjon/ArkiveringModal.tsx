@@ -1,10 +1,10 @@
-import { ModalBody, ModalHeader } from 'baseui/modal'
-import { Block } from 'baseui/block'
-import { IEtterlevelseArkiv, EtterlevelseArkivStatus } from '../../constants'
-import { createEtterlevelseArkiv, updateEtterlevelseArkiv } from '../../api/ArkiveringApi'
-import React, { useState } from 'react'
-import moment from 'moment'
 import { BodyLong, Button, Modal } from '@navikt/ds-react'
+import { Block } from 'baseui/block'
+import { ModalBody, ModalHeader } from 'baseui/modal'
+import moment from 'moment'
+import React, { useState } from 'react'
+import { createEtterlevelseArkiv, updateEtterlevelseArkiv } from '../../api/ArkiveringApi'
+import { EtterlevelseArkivStatus, IEtterlevelseArkiv } from '../../constants'
 import { user } from '../../services/User'
 
 type ArkiveringModalProps = {

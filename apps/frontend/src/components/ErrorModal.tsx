@@ -1,4 +1,4 @@
-import { Button, Modal } from '@navikt/ds-react'
+import { Button, Modal } from '@navikt/ds-react';
 
 const ErrorModal = (props: { isOpen: boolean; submit: React.Dispatch<React.SetStateAction<boolean>>; errorMessage: string }) => {
   return (

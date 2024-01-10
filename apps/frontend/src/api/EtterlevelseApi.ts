@@ -1,7 +1,7 @@
 import axios from 'axios'
 import queryString from 'query-string'
 import { useEffect, useState } from 'react'
-import { emptyPage, IEtterlevelse, EtterlevelseStatus, IKrav, IPageResponse, SuksesskriterieStatus } from '../constants'
+import { EtterlevelseStatus, IEtterlevelse, IKrav, IPageResponse, SuksesskriterieStatus, emptyPage } from '../constants'
 import { env } from '../util/env'
 import { KravId } from './KravApi'
 

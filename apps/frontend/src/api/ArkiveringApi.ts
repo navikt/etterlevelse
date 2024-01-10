@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { IEtterlevelseArkiv, EtterlevelseArkivStatus, IPageResponse } from '../constants'
+import { EtterlevelseArkivStatus, IEtterlevelseArkiv, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
 export const getAllArkivering = async () => {

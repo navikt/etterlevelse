@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-import RouteLink, { ExternalLink } from './RouteLink'
 import { Block, BlockOverrides, Responsive, Scale } from 'baseui/block'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll, paddingZero } from './Style'
+import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall } from 'baseui/typography'
+import * as _ from 'lodash'
+import React, { useState } from 'react'
 import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
-import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall } from 'baseui/typography'
 import { arrowRightIcon, navChevronRightIcon } from '../Images'
-import * as _ from 'lodash'
 import Button from './Button'
+import RouteLink, { ExternalLink } from './RouteLink'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll, paddingZero } from './Style'
 
 interface IPanelProps {
   href: string

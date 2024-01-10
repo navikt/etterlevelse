@@ -69,7 +69,7 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | IKrav[];
   return (
     <div className="mb-2.5 flex flex-col gap-2">
       {kravene &&
-        kravene.map((k, index) => {
+        kravene.map((k) => {
           const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
           const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
           return (

@@ -8,15 +8,15 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { getBehandling, useSearchBehandling } from '../../../api/BehandlingApi'
 import {
-  IBehandling,
-  EtterlevelseDokumentasjonQL,
-  IPageResponse,
-  emptyPage,
+    EtterlevelseDokumentasjonQL,
+    IBehandling,
+    IPageResponse,
+    emptyPage,
 } from '../../../constants'
 import {
-  EtterlevelseDokumentasjonerPanels,
-  Variables,
-  tabMarginBottom,
+    EtterlevelseDokumentasjonerPanels,
+    Variables,
+    tabMarginBottom,
 } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { theme } from '../../../util'
 import { intl } from '../../../util/intl/intl'

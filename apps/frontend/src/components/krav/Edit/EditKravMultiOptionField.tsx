@@ -1,17 +1,15 @@
-import { Select as SelectBase, SelectOverrides, Value } from 'baseui/select'
+import { Detail } from '@navikt/ds-react'
+import { SelectOverrides } from 'baseui/select'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
-import _ from 'lodash'
 import { ReactNode } from 'react'
+import Select, { CSSObjectWithLabel } from 'react-select'
 import { Or } from '../../../constants'
-import { ICode, codelist, ListName } from '../../../services/Codelist'
+import { ICode, ListName, codelist } from '../../../services/Codelist'
 import { ettlevColors } from '../../../util/theme'
+import { navChevronDownIcon } from '../../Images'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { borderWidth } from '../../common/Style'
-import { RenderTagList } from '../../common/TagList'
-import { navChevronDownIcon } from '../../Images'
-import { Detail } from '@navikt/ds-react'
-import Select, { CSSObjectWithLabel } from 'react-select'
 
 const customOverrides: SelectOverrides = {
   ControlContainer: {

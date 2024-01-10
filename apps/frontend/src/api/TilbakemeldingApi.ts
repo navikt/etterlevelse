@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { IPageResponse, ITilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle, TilbakemeldingType, IVarslingsadresse } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
 import moment from 'moment'
+import { useEffect, useState } from 'react'
+import { IPageResponse, ITilbakemelding, IVarslingsadresse, TilbakemeldingMeldingStatus, TilbakemeldingRolle, TilbakemeldingType } from '../constants'
+import { env } from '../util/env'
 
 export const getTilbakemeldingForKrav = async (kravNummer: number, kravVersjon: number) => {
   return (await axios.get<IPageResponse<ITilbakemelding>>(`${env.backendBaseUrl}/tilbakemelding/${kravNummer}/${kravVersjon}`)).data

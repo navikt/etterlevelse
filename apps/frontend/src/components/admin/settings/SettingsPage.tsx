@@ -1,15 +1,15 @@
-import React, { FormEvent, useState } from 'react'
 import { Block } from 'baseui/block'
 import { Spinner } from 'baseui/spinner'
 import { HeadingMedium, LabelMedium } from 'baseui/typography'
-import { getSettings, ISettings, writeSettings } from './SettingsApi'
-import { intl } from '../../../util/intl/intl'
-import { theme } from '../../../util'
-import Button from '../../common/Button'
-import { Markdown } from '../../common/Markdown'
-import { CustomizedStatefulTextarea } from '../../common/CustomizedTextarea'
-import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
+import React, { FormEvent, useState } from 'react'
 import { Helmet } from 'react-helmet'
+import { theme } from '../../../util'
+import { intl } from '../../../util/intl/intl'
+import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
+import Button from '../../common/Button'
+import { CustomizedStatefulTextarea } from '../../common/CustomizedTextarea'
+import { Markdown } from '../../common/Markdown'
+import { ISettings, getSettings, writeSettings } from './SettingsApi'
 
 export const SettingsPage = () => {
   const [loading, setLoading] = React.useState<boolean>(true)

@@ -1,7 +1,7 @@
+import { BodyShort, Heading } from '@navikt/ds-react'
+import React from 'react'
 import { ettlevColors } from '../../util/theme'
 import { IconInCircle } from './Icon'
-import React from 'react'
-import { BodyShort, Heading } from '@navikt/ds-react'
 
 export const InfoBlock = (props: { icon: string; alt: string; text: string; color: string }) => (
   <div>

@@ -1,16 +1,15 @@
+import { BodyShort, Heading, Link, Loader, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
 import moment from 'moment'
-import * as React from 'react'
 import { ReactNode, useEffect, useState } from 'react'
 import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
 import { PersonName } from '../components/common/PersonName'
 import { getMelderInfo } from '../components/krav/tilbakemelding/Tilbakemelding'
-import { IKrav, IPageResponse, ITilbakemelding, TilbakemeldingMeldingStatus } from '../constants'
-import { codelist, ListName } from '../services/Codelist'
-import { ampli } from '../services/Amplitude'
-import { BodyShort, Heading, Link, Loader, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
-import { handleSort } from '../util/handleTableSort'
 import { PageLayout } from '../components/scaffold/Page'
+import { IKrav, IPageResponse, ITilbakemelding, TilbakemeldingMeldingStatus } from '../constants'
+import { ampli } from '../services/Amplitude'
+import { ListName, codelist } from '../services/Codelist'
+import { handleSort } from '../util/handleTableSort'
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string
@@ -102,7 +101,7 @@ export const QuestionAndAnswerLogPage = () => {
         setKravMessages(kravMessages)
       })
     } catch (e: any) {
-      console.log(e)
+      console.error(e)
     }
     setIsLoading(false)
   }, [tableContent])

@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { IPageResponse, IProductArea, ISlackChannel, ISlackUser, ITeam, ITeamResource } from '../constants'
-import { env } from '../util/env'
-import { useForceUpdate, useSearch } from '../util/hooks'
 import { Option } from 'baseui/select'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { IPageResponse, IProductArea, ISlackChannel, ISlackUser, ITeam, ITeamResource } from '../constants'
 import { user } from '../services/User'
+import { env } from '../util/env'
+import { useForceUpdate, useSearch } from '../util/hooks'
 
 export const getResourceById = async (resourceId: string) => {
   return (await axios.get<ITeamResource>(`${env.backendBaseUrl}/team/resource/${resourceId}`)).data

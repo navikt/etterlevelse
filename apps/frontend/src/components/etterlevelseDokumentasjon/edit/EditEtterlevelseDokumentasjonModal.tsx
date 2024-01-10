@@ -6,13 +6,13 @@ import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { searchBehandlingOptions } from '../../../api/BehandlingApi'
 import {
-  createEtterlevelseDokumentasjon,
-  etterlevelseDokumentasjonMapToFormVal,
-  etterlevelseDokumentasjonSchema,
-  updateEtterlevelseDokumentasjon,
+    createEtterlevelseDokumentasjon,
+    etterlevelseDokumentasjonMapToFormVal,
+    etterlevelseDokumentasjonSchema,
+    updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { useSearchTeamOptions } from '../../../api/TeamApi'
-import { IBehandling, EtterlevelseDokumentasjonQL, ITeam, IVirkemiddel } from '../../../constants'
+import { EtterlevelseDokumentasjonQL, IBehandling, ITeam, IVirkemiddel } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
 import { ICode, ListName, codelist } from '../../../services/Codelist'
 import { BoolField, FieldWrapper, TextAreaField } from '../../common/Inputs'

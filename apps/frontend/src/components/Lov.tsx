@@ -1,13 +1,13 @@
+import { Link } from '@navikt/ds-react'
+import { Block } from 'baseui/block'
+import { IRegelverk } from '../constants'
 import { codelist, ListName } from '../services/Codelist'
 import { env } from '../util/env'
-import { IRegelverk } from '../constants'
-import { Block } from 'baseui/block'
-import { Link } from '@navikt/ds-react'
-
 
 // unsure how to refactor code
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const reactProcessString = require('react-process-string')
+// eslint-enable-next-line @typescript-eslint/no-var-requires
 const processString = reactProcessString as (converters: { regex: RegExp; fn: (key: string, result: string[]) => JSX.Element | string }[]) => (input?: string) => JSX.Element[]
 
 export const LovViewList = (props: { regelverk: IRegelverk[]; openOnSamePage?: boolean }) => {

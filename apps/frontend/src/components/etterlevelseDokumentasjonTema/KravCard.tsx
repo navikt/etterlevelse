@@ -1,13 +1,13 @@
-import { IEtterlevelseMetadata, KRAV_FILTER_TYPE, KravEtterlevelseData } from '../../constants'
-import { useEffect, useState } from 'react'
-import { getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
-import StatusView from '../common/StatusTag'
-import moment from 'moment'
-import { warningAlert } from '../Images'
-import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '../../api/EtterlevelseApi'
-import { getNumberOfDaysBetween } from '../../util/checkAge'
-import { getEtterlevelseStatus, getStatusLabelColor } from '../etterlevelseDokumentasjon/common/utils'
 import { BodyShort, Detail, LinkPanel } from '@navikt/ds-react'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
+import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '../../api/EtterlevelseApi'
+import { getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
+import { IEtterlevelseMetadata, KRAV_FILTER_TYPE, KravEtterlevelseData } from '../../constants'
+import { getNumberOfDaysBetween } from '../../util/checkAge'
+import { warningAlert } from '../Images'
+import StatusView from '../common/StatusTag'
+import { getEtterlevelseStatus, getStatusLabelColor } from '../etterlevelseDokumentasjon/common/utils'
 
 export const KravCard = (props: {
   krav: KravEtterlevelseData

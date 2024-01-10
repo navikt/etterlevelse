@@ -1,10 +1,9 @@
-import * as React from 'react'
+import { Heading } from '@navikt/ds-react'
 import { useLocation } from 'react-router-dom'
-import { intl } from '../util/intl/intl'
+import { PageLayout } from '../components/scaffold/Page'
 import notFound from '../resources/notfound.svg'
 import { ampli } from '../services/Amplitude'
-import { Heading } from '@navikt/ds-react'
-import { PageLayout } from '../components/scaffold/Page'
+import { intl } from '../util/intl/intl'
 
 const NotFound = () => {
   const location = useLocation()
