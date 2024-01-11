@@ -93,6 +93,7 @@ export const KravPage = () => {
   const [newKrav, setNewKrav] = useState<boolean>(false)
 
   const redigerKravButtonShouldNotBeVisibleOnUtkast = krav?.status !== EKravStatus.UTKAST
+  const slettKravButtonShouldNotBeVisibleOnUtgatt = krav?.status !== EKravStatus.UTGAATT
 
   React.useEffect(() => {
     if (krav) {
@@ -292,7 +293,8 @@ export const KravPage = () => {
                     )}
                     <Spacer />
                   </div>
-                  {(user.isAdmin() || krav.status !== EKravStatus.AKTIV) && (
+                  {((slettKravButtonShouldNotBeVisibleOnUtgatt && user.isAdmin()) ||
+                    krav.status === EKravStatus.AKTIV) && (
                     <div className="mt-2.5 flex">
                       <DeleteItem
                         buttonLabel="Slett krav"
