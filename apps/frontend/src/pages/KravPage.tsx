@@ -92,6 +92,8 @@ export const KravPage = () => {
   const [newVersionWarning, setNewVersionWarning] = useState<boolean>(false)
   const [newKrav, setNewKrav] = useState<boolean>(false)
 
+  const redigerKravButtonShouldNotBeVisibleOnUtkast = krav?.status !== EKravStatus.UTKAST
+
   React.useEffect(() => {
     if (krav) {
       getKravByKravNummer(krav.kravNummer).then((resp) => {
@@ -266,7 +268,7 @@ export const KravPage = () => {
               {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
                 <div>
                   <div className="flex flex-1">
-                    {!hasKravExpired() && (
+                    {redigerKravButtonShouldNotBeVisibleOnUtkast && !hasKravExpired() && (
                       <Button
                         type="button"
                         size="small"
