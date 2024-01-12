@@ -18,9 +18,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "baseUrl": "."
+
   },
   "include": [
     "src",
-  ]
+  ],
 }
