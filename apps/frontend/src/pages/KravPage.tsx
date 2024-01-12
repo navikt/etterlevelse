@@ -4,7 +4,6 @@ import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { BodyLong, BodyShort, Button, Heading, Spacer, Tabs } from '@navikt/ds-react'
 import { FormikProps } from 'formik'
 import React, { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import {
   TKravId as KravIdQueryVariables,
   TKravIdParams,
@@ -28,6 +27,7 @@ import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 import { useLocationState, useQueryParam } from '../util/hooks'
+import { useParams } from 'react-router-dom'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }): string =>
   `K${it.kravNummer}.${it.kravVersjon}`
