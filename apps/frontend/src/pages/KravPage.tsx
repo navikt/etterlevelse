@@ -10,7 +10,6 @@ import {
   getKravByKravNummer,
   kravMapToFormVal,
 } from '../api/KravApi'
-import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
 import StatusTag from '../components/common/StatusTag'
@@ -28,6 +27,7 @@ import { useParams } from 'react-router-dom'
 import { PageLayout } from '../components/scaffold/Page'
 import { FormikProps } from 'formik'
 import { DeleteItem } from '../components/DeleteItem'
+import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }): string =>
   `K${it.kravNummer}.${it.kravVersjon}`
