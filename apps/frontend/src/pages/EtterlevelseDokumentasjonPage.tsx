@@ -1,61 +1,82 @@
+import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { KravId, KravMedPrioriteringOgEtterlevelseQuery } from '../api/KravApi'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { Helmet } from 'react-helmet'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus, PageResponse } from '../constants'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
+import { KravMedPrioriteringOgEtterlevelseQuery, TKravId } from '../api/KravApi'
+import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
-import { useQuery } from '@apollo/client'
-import { sortKraverByPriority } from '../util/sort'
-import { user } from '../services/User'
 import { PageLayout } from '../components/scaffold/Page'
+import {
+  EEtterlevelseStatus,
+  EKravFilterType,
+  EKravStatus,
+  IPageResponse,
+  TKravQL,
+} from '../constants'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
+import { EListName, TTemaCode, codelist } from '../services/Codelist'
+import { sortKraverByPriority } from '../util/sort'
 
-export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
+export type TSection = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
-export const getFilterType = (id: string | number | undefined): KRAV_FILTER_TYPE => {
+export const getFilterType = (id: string | number | undefined): EKravFilterType => {
   if (id === 'RELEVANTE_KRAV') {
-    return KRAV_FILTER_TYPE.RELEVANTE_KRAV
+    return EKravFilterType.RELEVANTE_KRAV
   } else if (id === 'BORTFILTTERTE_KRAV') {
-    return KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV
+    return EKravFilterType.BORTFILTTERTE_KRAV
   } else {
-    return KRAV_FILTER_TYPE.UTGAATE_KRAV
+    return EKravFilterType.UTGAATE_KRAV
   }
 }
 
 export const EtterlevelseDokumentasjonPage = () => {
-  const params = useParams<{ id: string; tema: string; kravNummer: string; kravVersjon: string; filter: string }>()
-  const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema?.replace('i', ''))
+  const params = useParams<{
+    id: string
+    tema: string
+    kravNummer: string
+    kravVersjon: string
+    filter: string
+  }>()
+  const temaData: TTemaCode | undefined = codelist.getCode(
+    EListName.TEMA,
+    params.tema?.replace('i', '')
+  )
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const lover = codelist.getCodesForTema(params.tema)
 
-  const { data, loading } = useQuery<{ krav: PageResponse<KravQL> }>(KravMedPrioriteringOgEtterlevelseQuery, {
-    variables: {
-      etterlevelseDokumentasjonId: params.id,
-      lover: lover.map((l) => l.code),
-      status: KravStatus.AKTIV,
-    },
-    skip: !params.tema || !params.id,
-    fetchPolicy: 'no-cache',
-  })
+  const { data, loading } = useQuery<{ krav: IPageResponse<TKravQL> }>(
+    KravMedPrioriteringOgEtterlevelseQuery,
+    {
+      variables: {
+        etterlevelseDokumentasjonId: params.id,
+        lover: lover.map((l) => l.code),
+        status: EKravStatus.AKTIV,
+      },
+      skip: !params.tema || !params.id,
+      fetchPolicy: 'no-cache',
+    }
+  )
 
   const [nextKravToDocument, setNextKravToDocument] = useState<string>('')
-  const [kravId, setKravId] = useState<KravId | undefined>()
+  const [kravId, setKravId] = useState<TKravId | undefined>()
 
   useEffect(() => {
     if (data && !loading) {
-      const kravPriorityList = sortKraverByPriority<KravQL>(data?.krav.content, temaData?.shortName || '')
-      const currentKravIndex = kravPriorityList.findIndex((k) => k.kravNummer === kravId?.kravNummer)
+      const kravPriorityList = sortKraverByPriority<TKravQL>(
+        data?.krav.content,
+        temaData?.shortName || ''
+      )
+      const currentKravIndex = kravPriorityList.findIndex(
+        (k) => k.kravNummer === kravId?.kravNummer
+      )
       if (currentKravIndex !== null && kravPriorityList.length - 1 !== currentKravIndex) {
         const nextKravIndex = kravPriorityList.findIndex(
           (k, i) =>
             i > currentKravIndex &&
             (k.etterlevelser.length === 0 ||
               (k.etterlevelser.length > 0 &&
-                k.etterlevelser[0].status !== EtterlevelseStatus.FERDIG_DOKUMENTERT &&
-                k.etterlevelser[0].status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)),
+                k.etterlevelser[0].status !== EEtterlevelseStatus.FERDIG_DOKUMENTERT &&
+                k.etterlevelser[0].status !== EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT))
         )
         const nextKrav = kravPriorityList[nextKravIndex]
         if (nextKrav) {
@@ -67,7 +88,7 @@ export const EtterlevelseDokumentasjonPage = () => {
 
   const [navigatePath, setNavigatePath] = useState<string>('')
 
-  const [tab, setTab] = useState<Section>('dokumentasjon')
+  const [tab, setTab] = useState<TSection>('dokumentasjon')
 
   useEffect(() => {
     if (params.kravNummer && params.kravVersjon) {
@@ -82,12 +103,12 @@ export const EtterlevelseDokumentasjonPage = () => {
         sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`,
         section: `K${kravId.kravNummer}.${kravId.kravVersjon}`,
         temaKey: temaData.shortName.toString(),
-        ...userRoleEventProp
+        ...userRoleEventProp,
       })
     }
   }, [etterlevelseDokumentasjon])
 
-  const breadcrumbPaths: breadcrumbPaths[] = [
+  const breadcrumbPaths: IBreadcrumbPaths[] = [
     {
       pathName: 'Dokumenter etterlevelse',
       href: '/dokumentasjoner',

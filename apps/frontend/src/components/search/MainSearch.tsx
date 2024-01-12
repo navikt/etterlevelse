@@ -1,33 +1,35 @@
-import * as React from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { ObjectType } from '../admin/audit/AuditTypes'
-import { Behandling, EtterlevelseDokumentasjon, Krav, KravStatus } from '../../constants'
-import { kravName } from '../../pages/KravPage'
-import { getKravByKravNumberAndVersion, searchKrav, searchKravByNumber } from '../../api/KravApi'
-import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
-import { etterlevelseDokumentasjonName, searchEtterlevelsedokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
+import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
+import { BodyShort } from '@navikt/ds-react'
+import { useNavigate } from 'react-router-dom'
 import { CSSObjectWithLabel, DropdownIndicatorProps, OptionProps, components } from 'react-select'
 import AsyncSelect from 'react-select/async'
-import { BodyShort } from '@navikt/ds-react'
-import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
+import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
+import {
+  etterlevelseDokumentasjonName,
+  searchEtterlevelsedokumentasjon,
+} from '../../api/EtterlevelseDokumentasjonApi'
+import { getKravByKravNumberAndVersion, searchKrav, searchKravByNumber } from '../../api/KravApi'
+import { EKravStatus, IBehandling, IEtterlevelseDokumentasjon, IKrav } from '../../constants'
+import { kravName } from '../../pages/KravPage'
+import { EObjectType } from '../admin/audit/AuditTypes'
 
-type SearchItem = { value: string; label: string; tag: string; url: string }
+type TSearchItem = { value: string; label: string; tag: string; url: string }
 
-const kravMap = (t: Krav) => ({
+const kravMap = (t: IKrav) => ({
   value: t.id,
   label: kravName(t),
-  tag: ObjectType.Krav as string,
+  tag: EObjectType.Krav as string,
   url: `krav/${t.id}`,
 })
 
-const behandlingMap = (t: Behandling): SearchItem => ({
+const behandlingMap = (t: IBehandling): TSearchItem => ({
   value: t.id,
   label: behandlingName(t),
-  tag: ObjectType.Behandling,
+  tag: EObjectType.Behandling,
   url: `dokumentasjoner/behandlingsok?behandlingId=${t.id}`,
 })
 
-const EtterlevelseDokumentasjonMap = (t: EtterlevelseDokumentasjon): SearchItem => ({
+const EtterlevelseDokumentasjonMap = (t: IEtterlevelseDokumentasjon): TSearchItem => ({
   value: t.id,
   label: etterlevelseDokumentasjonName(t),
   tag: 'Dokumentasjon',
@@ -35,13 +37,18 @@ const EtterlevelseDokumentasjonMap = (t: EtterlevelseDokumentasjon): SearchItem 
 })
 
 const kravSearch = async (searchParam: string) => {
-  let result: SearchItem[] = []
-  const add = (items: SearchItem[]) => {
+  let result: TSearchItem[] = []
+  const add = (items: TSearchItem[]) => {
     result = [...result, ...items]
-    result = result.filter((item, index, self) => index === self.findIndex((searchItem) => searchItem.value === item.value))
+    result = result.filter(
+      (item, index, self) =>
+        index === self.findIndex((searchItem) => searchItem.value === item.value)
+    )
   }
 
-  result.push(...(await searchKrav(searchParam)).filter((k) => k.status !== KravStatus.UTGAATT).map(kravMap))
+  result.push(
+    ...(await searchKrav(searchParam)).filter((k) => k.status !== EKravStatus.UTGAATT).map(kravMap)
+  )
 
   let kravNumber = searchParam
   if (kravNumber[0].toLowerCase() === 'k') {
@@ -51,7 +58,7 @@ const kravSearch = async (searchParam: string) => {
   if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 === 0) {
     add(
       (await searchKravByNumber(Number.parseFloat(kravNumber).toString()))
-        .filter((k) => k.status !== KravStatus.UTGAATT)
+        .filter((k) => k.status !== EKravStatus.UTGAATT)
         .sort((a, b) => {
           if (a.kravNummer === b.kravNummer) {
             return b.kravVersjon - a.kravVersjon
@@ -59,19 +66,21 @@ const kravSearch = async (searchParam: string) => {
             return b.kravNummer - a.kravNummer
           }
         })
-        .map(kravMap),
+        .map(kravMap)
     )
   }
 
   if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
     const kravNummerMedVersjon = kravNumber.split('.')
-    const searchResult = [await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1])].filter((k) => k && k.status !== KravStatus.UTGAATT)
+    const searchResult = [
+      await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1]),
+    ].filter((k) => k && k.status !== EKravStatus.UTGAATT)
     if (typeof searchResult[0] !== 'undefined') {
       const mappedResult = [
         {
           value: searchResult[0].id,
           label: kravName(searchResult[0]),
-          tag: ObjectType.Krav,
+          tag: EObjectType.Krav,
           url: `krav/${searchResult[0].id}`,
         },
       ]
@@ -90,7 +99,7 @@ const useMainSearch = async (searchParam: string) => {
     ])
     return [
       {
-        label: ObjectType.Krav,
+        label: EObjectType.Krav,
         options: result[0],
       },
       {
@@ -98,7 +107,7 @@ const useMainSearch = async (searchParam: string) => {
         options: result[1],
       },
       {
-        label: ObjectType.Behandling,
+        label: EObjectType.Behandling,
         options: result[2],
       },
     ]
@@ -106,7 +115,7 @@ const useMainSearch = async (searchParam: string) => {
   return []
 }
 
-const Option = (properties: OptionProps<SearchItem>) => {
+const Option = (properties: OptionProps<TSearchItem>) => {
   return (
     <components.Option {...properties}>
       <div className="flex justify-between">
@@ -116,7 +125,7 @@ const Option = (properties: OptionProps<SearchItem>) => {
   )
 }
 
-const DropdownIndicator = (props: DropdownIndicatorProps<SearchItem>) => {
+const DropdownIndicator = (props: DropdownIndicatorProps<TSearchItem>) => {
   return (
     <components.DropdownIndicator {...props}>
       <MagnifyingGlassIcon title="Søk" aria-label="Søk" />
@@ -125,7 +134,6 @@ const DropdownIndicator = (props: DropdownIndicatorProps<SearchItem>) => {
 }
 
 const MainSearch = () => {
-  const location = useLocation()
   const navigate = useNavigate()
 
   return (
@@ -133,36 +141,41 @@ const MainSearch = () => {
       <AsyncSelect
         aria-label="Søk etter krav, dokumentasjon eller behandling"
         placeholder="Søk etter krav, dokumentasjon eller behandling"
-        autoFocus={location.pathname === '/'}
         components={{ Option, DropdownIndicator }}
         controlShouldRenderValue={false}
         loadingMessage={() => 'Søker...'}
-        noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
+        noOptionsMessage={({ inputValue }) =>
+          inputValue.length < 3
+            ? 'Skriv minst tre tegn for å søke'
+            : `Fant ingen resultater for "${inputValue}"`
+        }
         isClearable={false}
         loadOptions={useMainSearch}
         onChange={(selectedOption) => selectedOption && navigate([selectedOption].flat()[0].url)}
         styles={{
           // Removes default focus-border so it can be replaced with focus from DesignSystem
-          control: (base) => ({
-            ...base,
-            boxShadow: 'none',
-            border: 0,
-            cursor: 'text',
-            div: { div: { color: 'var(--a-text-default)' } },
-          } as CSSObjectWithLabel),
-          groupHeading: (base) => ({
-            ...base,
-            color: 'black',
-            fontSize: 'var(--a-font-size-large)',
-            fontWeight: 'var(--a-font-weight-bold)',
-            letterSpacing: 0,
-            lineHeight: 'var(--a-font-line-height-large)',
-            maring: 0,
-          } as CSSObjectWithLabel),
+          control: (base) =>
+            ({
+              ...base,
+              boxShadow: 'none',
+              border: 0,
+              cursor: 'text',
+              div: { div: { color: 'var(--a-text-default)' } },
+            }) as CSSObjectWithLabel,
+          groupHeading: (base) =>
+            ({
+              ...base,
+              color: 'black',
+              fontSize: 'var(--a-font-size-large)',
+              fontWeight: 'var(--a-font-weight-bold)',
+              letterSpacing: 0,
+              lineHeight: 'var(--a-font-line-height-large)',
+              maring: 0,
+            }) as CSSObjectWithLabel,
           // Make border and size of input box to be identical with those from DesignSystem
-          valueContainer: (base) => ({ ...base, color: 'black' } as CSSObjectWithLabel),
+          valueContainer: (base) => ({ ...base, color: 'black' }) as CSSObjectWithLabel,
           // Remove separator
-          indicatorSeparator: (base) => ({ ...base, display: 'none' } as CSSObjectWithLabel),
+          indicatorSeparator: (base) => ({ ...base, display: 'none' }) as CSSObjectWithLabel,
         }}
       />
     </div>

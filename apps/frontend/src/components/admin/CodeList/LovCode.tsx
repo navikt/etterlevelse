@@ -1,12 +1,16 @@
-import { Block } from 'baseui/block'
-import { Field, FieldProps } from 'formik'
-import { codelist, CodeListFormValues, ListName, LovCodeData, LovCodeRelevans, lovCodeRelevansToOptions, TemaCodeData } from '../../../services/Codelist'
-import { OptionList } from '../../common/Inputs'
-import { temaBilder } from '../../Images'
-import { theme } from '../../../util'
-import Button from '../../common/Button'
-import { Error } from '../../common/ModalSchema'
 import { Label, Select, TextField, Textarea } from '@navikt/ds-react'
+import { Field, FieldProps } from 'formik'
+import {
+  EListName,
+  ICodeListFormValues,
+  ILovCodeData,
+  ITemaCodeData,
+  codelist,
+  lovCodeRelevansToOptions,
+} from '../../../services/Codelist'
+import { temaBilder } from '../../Images'
+import { OptionList } from '../../common/Inputs'
+import { Error } from '../../common/ModalSchema'
 
 export const LovCodeDataForm = () => {
   return (
@@ -15,10 +19,10 @@ export const LovCodeDataForm = () => {
         <Label className="mr-4 w-1/4">Lovkode data</Label>
       </div>
       <Field name="data">
-        {({ field, form }: FieldProps<LovCodeData, CodeListFormValues>) => {
+        {({ field, form }: FieldProps<ILovCodeData, ICodeListFormValues>) => {
           const data = field.value
 
-          const set = (val: Partial<LovCodeData>) => {
+          const set = (val: Partial<ILovCodeData>) => {
             form.setFieldValue('data', { ...data, ...val })
           }
 
@@ -31,14 +35,20 @@ export const LovCodeDataForm = () => {
             <>
               <div className="flex w-full mt-4 items-center">
                 <Label className="mr-4 w-1/4">Lov ID:</Label>
-                <TextField value={data.lovId} onChange={(e) => set({ lovId: e.target.value })} className="w-full" label="Lov ID" hideLabel />
+                <TextField
+                  value={data.lovId}
+                  onChange={(e) => set({ lovId: e.target.value })}
+                  className="w-full"
+                  label="Lov ID"
+                  hideLabel
+                />
               </div>
 
               <div className="flex w-full mt-4 items-center">
                 <Label className="mr-1.5 w-1/4">Underavdeling:</Label>
                 <OptionList
-                  listName={ListName.UNDERAVDELING}
-                  value={codelist.getCode(ListName.UNDERAVDELING, data.underavdeling)?.code}
+                  listName={EListName.UNDERAVDELING}
+                  value={codelist.getCode(EListName.UNDERAVDELING, data.underavdeling)?.code}
                   onChange={(val) => set({ underavdeling: val.code })}
                   label={'underavdeling'}
                 />
@@ -46,7 +56,12 @@ export const LovCodeDataForm = () => {
 
               <div className="flex w-full mt-4 items-center">
                 <Label className="mr-4 w-1/4">Tema:</Label>
-                <OptionList listName={ListName.TEMA} value={codelist.getCode(ListName.TEMA, data.tema)?.code} onChange={(val) => set({ tema: val.code })} label={'tema'} />
+                <OptionList
+                  listName={EListName.TEMA}
+                  value={codelist.getCode(EListName.TEMA, data.tema)?.code}
+                  onChange={(val) => set({ tema: val.code })}
+                  label={'tema'}
+                />
               </div>
 
               <div className="flex w-full mt-4 items-center">
@@ -79,10 +94,10 @@ export const TemaCodeDataForm = () => {
         <Label className="mr-4 w-1/4">Temakode data</Label>
       </div>
       <Field name="data">
-        {({ field, form }: FieldProps<TemaCodeData, CodeListFormValues>) => {
+        {({ field, form }: FieldProps<ITemaCodeData, ICodeListFormValues>) => {
           const data = field.value
 
-          const set = (val: Partial<TemaCodeData>) => {
+          const set = (val: Partial<ITemaCodeData>) => {
             form.setFieldValue('data', { ...data, ...val })
           }
           return (
@@ -114,7 +129,9 @@ export const TemaCodeDataForm = () => {
                   className="w-full"
                   hideLabel
                   value={data.shortDesciption}
-                  onChange={(str) => set({ shortDesciption: (str.target as HTMLTextAreaElement).value })}
+                  onChange={(str) =>
+                    set({ shortDesciption: (str.target as HTMLTextAreaElement).value })
+                  }
                 />
               </div>
               <Error fieldName="data.shortDesciption" />
@@ -123,22 +140,5 @@ export const TemaCodeDataForm = () => {
         }}
       </Field>
     </div>
-  )
-}
-
-const PreviewImages = (props: { set: (key: string) => void }) => {
-  return (
-    <Block display="flex" flexDirection="column" height="80vh" overflow={'scrollY'}>
-      {Object.keys(temaBilder).map((key) => (
-        <Button type="button" kind="tertiary" onClick={() => props.set(key)}>
-          <Block key={key} marginBottom={theme.sizing.scale600}>
-            <Block>{key}</Block>
-            <Block>
-              <img src={temaBilder[key]} alt={'preview' + key} width={'400px'} />
-            </Block>
-          </Block>
-        </Button>
-      ))}
-    </Block>
   )
 }

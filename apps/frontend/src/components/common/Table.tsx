@@ -1,42 +1,57 @@
-import { SORT_DIRECTION, SortableHeadCell, StyledBody, StyledCell, StyledHead, StyledHeadCell, StyledRow, StyledTable } from 'baseui/table'
+import {
+  faChevronDown,
+  faFilter,
+  faSort,
+  faSortDown,
+  faSortUp,
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { withStyle } from 'baseui'
+import { Block } from 'baseui/block'
+import { KIND } from 'baseui/button'
+import { StatefulMenu } from 'baseui/menu'
+import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
+import { Pagination } from 'baseui/pagination'
+import { PLACEMENT, StatefulPopover } from 'baseui/popover'
+import {
+  SORT_DIRECTION,
+  SortableHeadCell,
+  StyledBody,
+  StyledCell,
+  StyledHead,
+  StyledHeadCell,
+  StyledRow,
+  StyledTable,
+} from 'baseui/table'
+import { LabelMedium } from 'baseui/typography'
+import * as _ from 'lodash'
 import * as React from 'react'
 import { ReactNode, useContext, useState } from 'react'
-import { withStyle } from 'baseui'
 import { StyleObject } from 'styletron-standard'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faFilter, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons'
-import { Block } from 'baseui/block'
-import { LabelMedium } from 'baseui/typography'
-import { TableConfig, TableState, useTable } from '../../util/hooks'
 import { theme } from '../../util'
-import { borderRadius, paddingAll } from './Style'
+import { TTableConfig, TTableState, useTable } from '../../util/hooks'
 import { intl } from '../../util/intl/intl'
-import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
-import * as _ from 'lodash'
-import { PLACEMENT, StatefulPopover } from 'baseui/popover'
-import { StatefulMenu } from 'baseui/menu'
-import Button from './Button'
-import { KIND } from 'baseui/button'
-import { Pagination } from 'baseui/pagination'
 import CustomizedInput from '../common/CustomizedInput'
+import Button from './Button'
 import { CustomizedStatefulSelect } from './CustomizedSelect'
+import { borderRadius, paddingAll } from './Style'
 
 // Use this for entire app, or recreate maybe, added here as I needed it for audit
 
-type TableProps<T, K extends keyof T> = {
+type TTableProps<T, K extends keyof T> = {
   data: T[]
-  config?: TableConfig<T, K>
+  config?: TTableConfig<T, K>
   backgroundColor?: string
   width?: string
   hoverColor?: string
   emptyText: string
-  headers: HeadProps<T, K>[]
-  render?: (state: TableState<T, K>) => ReactNode
+  headers: THeadProps<T, K>[]
+  render?: (state: TTableState<T, K>) => ReactNode
   renderRow?: (row: T) => ReactNode[]
-  tableState?: TableState<T, K>
+  tableState?: TTableState<T, K>
 }
 
-type HeadProps<T, K extends keyof T> = {
+type THeadProps<T, K extends keyof T> = {
   title?: string
   column?: K
   $style?: any
@@ -44,7 +59,7 @@ type HeadProps<T, K extends keyof T> = {
   hide?: boolean
 }
 
-type RowProps = {
+type TRowProps = {
   inactiveRow?: boolean
   selectedRow?: boolean
   infoRow?: boolean
@@ -83,17 +98,24 @@ const tableStyle = {
   ...paddingAll(theme.sizing.scale600),
 }
 
-type TableContextType<T, K extends keyof T> = TableProps<T, K> & { tableState: TableState<T, K> }
-const createTableContext = _.once(<T, K extends keyof T>() => React.createContext<TableContextType<T, K>>({} as TableContextType<T, K>))
+type TTableContextType<T, K extends keyof T> = TTableProps<T, K> & { tableState: TTableState<T, K> }
+const createTableContext = _.once(<T, K extends keyof T>() =>
+  React.createContext<TTableContextType<T, K>>({} as TTableContextType<T, K>)
+)
 const useTableContext = <T, K extends keyof T>() => useContext(createTableContext<T, K>())
 
-export const Table = <T, K extends keyof T>(props: TableProps<T, K>) => {
+export const Table = <T, K extends keyof T>(props: TTableProps<T, K>) => {
   const table = useTable<T, K>(props.data, props.config)
   const TableContext = createTableContext<T, K>()
 
-  const StyleTable = withStyle(StyledTable, { ...tableStyle, backgroundColor: props.backgroundColor, width: props.width || tableStyle.width })
+  const StyleTable = withStyle(StyledTable, {
+    ...tableStyle,
+    backgroundColor: props.backgroundColor,
+    width: props.width || tableStyle.width,
+  })
 
-  const show = (col?: K) => !col || !props.config?.exclude || !((props.config?.exclude || [])?.indexOf(col) >= 0)
+  const show = (col?: K) =>
+    !col || !props.config?.exclude || !((props.config?.exclude || [])?.indexOf(col) >= 0)
   const columnState = props.headers.map((h) => show(h.column))
   const colFilter = (o: any, i: number) => columnState[i]
 
@@ -148,7 +170,10 @@ export const Table = <T, K extends keyof T>(props: TableProps<T, K>) => {
             placement={PLACEMENT.bottom}
           >
             <Block>
-              <Button kind={KIND.tertiary} iconEnd={faChevronDown}>{`${table.limit} ${intl.rows}`}</Button>
+              <Button
+                kind={KIND.tertiary}
+                iconEnd={faChevronDown}
+              >{`${table.limit} ${intl.rows}`}</Button>
             </Block>
           </StatefulPopover>
           <Block>
@@ -166,7 +191,7 @@ export const Table = <T, K extends keyof T>(props: TableProps<T, K>) => {
   )
 }
 
-export const Row = (props: RowProps) => {
+export const Row = (props: TRowProps) => {
   const tableProps = useTableContext()
   const styleProps: StyleObject = {
     borderBottomWidth: '1px',
@@ -178,7 +203,8 @@ export const Row = (props: RowProps) => {
     borderLeftWidth: props.infoRow || props.selectedRow ? theme.sizing.scale300 : '0',
     borderLeftStyle: 'solid',
     ':hover': {
-      backgroundColor: tableProps.hoverColor || (props.infoRow ? theme.colors.mono100 : theme.colors.primary50),
+      backgroundColor:
+        tableProps.hoverColor || (props.infoRow ? theme.colors.mono100 : theme.colors.primary50),
     },
     ...props.$style,
   }
@@ -186,7 +212,11 @@ export const Row = (props: RowProps) => {
   return <StyleRow>{props.children}</StyleRow>
 }
 
-const SortDirectionIcon = ({ direction }: { direction: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC | null }) => {
+const SortDirectionIcon = ({
+  direction,
+}: {
+  direction: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC | null
+}) => {
   switch (direction) {
     case SORT_DIRECTION.ASC:
       return <FontAwesomeIcon icon={faSortDown} />
@@ -199,7 +229,7 @@ const SortDirectionIcon = ({ direction }: { direction: typeof SORT_DIRECTION.ASC
 
 const PlainHeadCell = withStyle(StyledHeadCell, headerCellOverride.HeadCell.style)
 
-const HeadCell = <T, K extends keyof T>(props: HeadProps<T, K>) => {
+const HeadCell = <T, K extends keyof T>(props: THeadProps<T, K>) => {
   const { title, column, small } = props
   const tableProps = useTableContext<T, K>()
   const { direction, sort, data } = tableProps.tableState || {}
@@ -216,6 +246,8 @@ const HeadCell = <T, K extends keyof T>(props: HeadProps<T, K>) => {
   }
   const filterConf = tableProps.config?.filter ? tableProps.config.filter[column] : undefined
   const filterButton = filterConf && (
+    // will delete/refactor this file so no need to fix code bellow for now
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <span
       onClick={(e) => {
         setShowFilter(true)
@@ -223,8 +255,13 @@ const HeadCell = <T, K extends keyof T>(props: HeadProps<T, K>) => {
       }}
       style={{ marginLeft: 'auto', justifySelf: 'flex-end' }}
     >
-      <FontAwesomeIcon size="sm" icon={faFilter} color={!!inputFilter ? theme.colors.negative400 : theme.colors.primary200} />
+      <FontAwesomeIcon
+        size="sm"
+        icon={faFilter}
+        color={inputFilter ? theme.colors.negative400 : theme.colors.primary200}
+      />
     </span>
+    // eslint-enable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
   )
 
   const filterBody = () => {
@@ -250,7 +287,7 @@ const HeadCell = <T, K extends keyof T>(props: HeadProps<T, K>) => {
             .map(filterConf.mapping)
             .flatMap((o) => (Array.isArray(o) ? o : [o]))
             .filter((o) => !!o.id),
-          (o) => o.id,
+          (o) => o.id
         )
       return (
         <CustomizedStatefulSelect

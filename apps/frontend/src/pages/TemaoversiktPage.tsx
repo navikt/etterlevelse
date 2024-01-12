@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { useForceUpdate } from '../util/hooks'
-import { ListName, TemaCode, codelist } from '../services/Codelist'
 import { BodyLong, Heading, LinkPanel, Loader, Spacer, Tag } from '@navikt/ds-react'
-import { useKravCounter } from './TemaPage'
-import { user } from '../services/User'
+import { useEffect, useState } from 'react'
 import { PageLayout } from '../components/scaffold/Page'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
+import { EListName, TTemaCode, codelist } from '../services/Codelist'
+import { useForceUpdate } from '../util/hooks'
+import { useKravCounter } from './TemaPage'
 
 export const TemaOversiktPage = () => {
   useEffect(() => {
@@ -33,12 +32,16 @@ export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
   }
 
   const kravAntall = Object.values(num).reduce((p, c) => p + c, 0)
-  const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
+  const temaListe = codelist
+    .getCodes(EListName.TEMA)
+    .sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
 
   return (
     <div>
       <div>
-        <Heading size={subContent ? 'medium' : 'large'} level={subContent ? '2' : '1'}>Forstå kravene</Heading>
+        <Heading size={subContent ? 'medium' : 'large'} level={subContent ? '2' : '1'}>
+          Forstå kravene
+        </Heading>
         <BodyLong>
           Totalt {kravAntall} krav fordelt på {temaListe.length} temaer
         </BodyLong>
@@ -52,9 +55,20 @@ export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
   )
 }
 
-export const TemaPanel = ({ tema, setNum, subContent }: { tema: TemaCode; setNum: (tema: string, num: number) => void, subContent?:boolean }) => {
+export const TemaPanel = ({
+  tema,
+  setNum,
+  subContent,
+}: {
+  tema: TTemaCode
+  setNum: (tema: string, num: number) => void
+  subContent?: boolean
+}) => {
   const lover = codelist.getCodesForTema(tema.code)
-  const { data, loading } = useKravCounter({ lover: [...lover.map((l) => l.code)] }, { skip: !lover.length })
+  const { data, loading } = useKravCounter(
+    { lover: [...lover.map((l) => l.code)] },
+    { skip: !lover.length }
+  )
   const krav = data?.krav.content || []
   useEffect(() => setNum(tema.code, krav.length), [])
 
@@ -66,12 +80,16 @@ export const TemaPanel = ({ tema, setNum, subContent }: { tema: TemaCode; setNum
     <LinkPanel className="mb-2" key={tema.code} href={'/tema/' + tema.code}>
       <div className="w-full flex items-center ">
         <div>
-          <LinkPanel.Title className={`flex ${subContent ? ' text-xl' : ''}`}>{tema.shortName}</LinkPanel.Title>
+          <LinkPanel.Title className={`flex ${subContent ? ' text-xl' : ''}`}>
+            {tema.shortName}
+          </LinkPanel.Title>
           <LinkPanel.Description className="lg:flex items-center gap-2">
             {lover.map((l, i) => (
               <div key={l.code} className="flex items-center gap-2">
                 {l.shortName}
-                {i < lover.length - 1 && <span className="hidden lg:block h-2 w-2 rotate-45 rounded-[1px] bg-red-200"></span>}
+                {i < lover.length - 1 && (
+                  <span className="hidden lg:block h-2 w-2 rotate-45 rounded-[1px] bg-red-200"></span>
+                )}
               </div>
             ))}
           </LinkPanel.Description>

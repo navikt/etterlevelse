@@ -1,14 +1,14 @@
-import { createTheme, lightThemePrimitives } from 'baseui'
-import { colors } from 'baseui/tokens'
-import { Theme, ThemePrimitives } from 'baseui/theme'
-import { RecursivePartial } from '../constants'
 import '@fontsource/source-sans-pro/200.css'
 import '@fontsource/source-sans-pro/300.css'
 import '@fontsource/source-sans-pro/400.css'
 import '@fontsource/source-sans-pro/600.css'
 import '@fontsource/source-sans-pro/700.css'
 import '@fontsource/source-sans-pro/900.css'
+import { createTheme, lightThemePrimitives } from 'baseui'
 import { Responsive, Scale } from 'baseui/block'
+import { Theme, ThemePrimitives } from 'baseui/theme'
+import { colors } from 'baseui/tokens'
+import { TRecursivePartial } from '../constants'
 
 // etterlevelse colors
 export const ettlevColors = {
@@ -69,7 +69,7 @@ export const searchResultColor = {
   underavdelingBackground: '#99C2E8',
 }
 
-const overrides: RecursivePartial<Theme> = {
+const overrides: TRecursivePartial<Theme> = {
   colors: {
     //Focus outline color
     accent: ettlevColors.focusOutline,
@@ -155,10 +155,38 @@ export const theme = createTheme(primitives, overrides)
 export const pageWidth = '820px'
 export const maxPageWidth = '1276px'
 
-export const responsivePaddingSmall: Responsive<Scale> = ['16px', '16px', '16px', '32px', '32px', '32px']
-export const responsivePaddingLarge: Responsive<Scale> = ['16px', '16px', '16px', '100px', '100px', '100px']
-export const responsivePaddingExtraLarge: Responsive<Scale> = ['16px', '16px', '16px', '200px', '200px', '200px']
-export const responsivePaddingInnerPage: Responsive<Scale> = ['16px', '16px', '16px', '16px', '16px', '200px']
+export const responsivePaddingSmall: Responsive<Scale> = [
+  '16px',
+  '16px',
+  '16px',
+  '32px',
+  '32px',
+  '32px',
+]
+export const responsivePaddingLarge: Responsive<Scale> = [
+  '16px',
+  '16px',
+  '16px',
+  '100px',
+  '100px',
+  '100px',
+]
+export const responsivePaddingExtraLarge: Responsive<Scale> = [
+  '16px',
+  '16px',
+  '16px',
+  '200px',
+  '200px',
+  '200px',
+]
+export const responsivePaddingInnerPage: Responsive<Scale> = [
+  '16px',
+  '16px',
+  '16px',
+  '16px',
+  '16px',
+  '200px',
+]
 
 export const responsiveWidthSmall: Responsive<Scale> = [
   'calc(100% - 32px)',
@@ -212,6 +240,6 @@ const ResponsiveTheme = Object.keys(breakpoints).reduce(
   {
     breakpoints,
     mediaQuery: {},
-  },
+  }
 )
 export const customTheme = { ...theme, ...ResponsiveTheme }

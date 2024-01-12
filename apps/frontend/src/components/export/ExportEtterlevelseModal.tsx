@@ -1,23 +1,22 @@
-import { Block } from 'baseui/block'
-import React, { useState } from 'react'
-import { env } from '../../util/env'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginZero } from '../common/Style'
-import { ModalBody, ModalHeader } from 'baseui/modal'
-import { codelist, ListName } from '../../services/Codelist'
+import { Button, Loader, Modal, Select } from '@navikt/ds-react'
 import axios from 'axios'
-import { ettlevColors } from '../../util/theme'
+import { Block } from 'baseui/block'
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { ParagraphMedium } from 'baseui/typography'
-import { Button, Loader, Modal, Select } from '@navikt/ds-react'
+import { useState } from 'react'
+import { EListName, codelist } from '../../services/Codelist'
+import { env } from '../../util/env'
+import { ettlevColors } from '../../util/theme'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginZero } from '../common/Style'
 
-type ExportEtterlevelseModalProps = {
-  etterlevelseDokumentasjonId: String
+type TExportEtterlevelseModalProps = {
+  etterlevelseDokumentasjonId: string
 }
 
-export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => {
+export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) => {
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [errorMessage, setErrorMessage] = useState<String>('')
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const [valgtTema, setValgtTema] = useState<string>('')
 
   return (
@@ -41,11 +40,15 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
             </Block>
           ) : (
             <div className="flex flex-col gap-4">
-              <Select label="Velg et tema for eksportering" onChange={(ev) => setValgtTema(ev.currentTarget.value)} value={valgtTema}>
+              <Select
+                label="Velg et tema for eksportering"
+                onChange={(ev) => setValgtTema(ev.currentTarget.value)}
+                value={valgtTema}
+              >
                 <option key="" value="">
                   Velg tema
                 </option>
-                {codelist.getParsedOptions(ListName.TEMA).map((opt) => (
+                {codelist.getParsedOptions(EListName.TEMA).map((opt) => (
                   <option key={`option_${opt.value}`} value={opt.value}>
                     {opt.label}
                   </option>
@@ -69,7 +72,11 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                     kind={NKIND.negative}
                   >
                     <Block display="flex" justifyContent="center">
-                      <ParagraphMedium marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
+                      <ParagraphMedium
+                        marginBottom="0px"
+                        marginTop="0px"
+                        $style={{ lineHeight: '18px' }}
+                      >
                         {errorMessage}
                       </ParagraphMedium>
                     </Block>

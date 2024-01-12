@@ -1,20 +1,20 @@
-import React, { FormEvent, useState } from 'react'
 import { Block } from 'baseui/block'
 import { Spinner } from 'baseui/spinner'
 import { HeadingMedium, LabelMedium } from 'baseui/typography'
-import { getSettings, Settings, writeSettings } from './SettingsApi'
-import { intl } from '../../../util/intl/intl'
-import { theme } from '../../../util'
-import Button from '../../common/Button'
-import { Markdown } from '../../common/Markdown'
-import { CustomizedStatefulTextarea } from '../../common/CustomizedTextarea'
-import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
+import React, { FormEvent, useState } from 'react'
 import { Helmet } from 'react-helmet'
+import { theme } from '../../../util'
+import { intl } from '../../../util/intl/intl'
+import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
+import Button from '../../common/Button'
+import { CustomizedStatefulTextarea } from '../../common/CustomizedTextarea'
+import { Markdown } from '../../common/Markdown'
+import { ISettings, getSettings, writeSettings } from './SettingsApi'
 
 export const SettingsPage = () => {
   const [loading, setLoading] = React.useState<boolean>(true)
   const [error, setError] = useState()
-  const [settings, setSettings] = useState<Settings>()
+  const [settings, setSettings] = useState<ISettings>()
 
   const load = async () => {
     setLoading(true)
@@ -35,7 +35,11 @@ export const SettingsPage = () => {
   }
 
   return (
-    <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
+    <Block
+      width={responsiveWidthSmall}
+      paddingLeft={responsivePaddingSmall}
+      paddingRight={responsivePaddingSmall}
+    >
       <Helmet>
         <meta charSet="utf-8" />
         <title>Innstillinger</title>
@@ -45,7 +49,10 @@ export const SettingsPage = () => {
       {(error || !settings) && error}
       {!loading && !(error || !settings) && (
         <Block>
-          <FrontpageMessage message={settings?.frontpageMessage} setMessage={(frontpageMessage) => setSettings({ ...settings, frontpageMessage })} />
+          <FrontpageMessage
+            message={settings?.frontpageMessage}
+            setMessage={(frontpageMessage) => setSettings({ ...settings, frontpageMessage })}
+          />
 
           <Block display="flex" justifyContent="flex-end" marginTop={theme.sizing.scale800}>
             <Button type="button" kind="secondary" marginRight onClick={load}>
@@ -71,7 +78,9 @@ const FrontpageMessage = (props: { message?: string; setMessage: (message: strin
             <CustomizedStatefulTextarea
               initialState={{ value: props.message }}
               rows={20}
-              onChange={(event: any) => props.setMessage((event as FormEvent<HTMLInputElement>).currentTarget.value)}
+              onChange={(event: any) =>
+                props.setMessage((event as FormEvent<HTMLInputElement>).currentTarget.value)
+              }
             />
           </Block>
           <Block width="50%">

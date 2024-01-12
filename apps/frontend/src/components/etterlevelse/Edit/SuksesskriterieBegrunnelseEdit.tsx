@@ -1,18 +1,23 @@
-import { Block } from 'baseui/block'
-import { FormControl } from 'baseui/form-control'
+import { BodyShort, Box, Heading, Label, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React from 'react'
-import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
+import {
+  EEtterlevelseStatus,
+  ESuksesskriterieStatus,
+  ISuksesskriterie,
+  ISuksesskriterieBegrunnelse,
+} from '../../../constants'
 import { useDebouncedState } from '../../../util/hooks'
-import { theme } from '../../../util/theme'
 import { FieldWrapper } from '../../common/Inputs'
-import TextEditor from '../../common/TextEditor/TextEditor'
+import { Markdown } from '../../common/Markdown'
 import { Error } from '../../common/ModalSchema'
 import { LabelAboveContent } from '../../common/PropertyLabel'
-import { Markdown } from '../../common/Markdown'
-import { BodyShort, Box, Heading, Label, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
+import TextEditor from '../../common/TextEditor/TextEditor'
 
-export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[], suksessKriterie: Suksesskriterie) => {
+export const getSuksesskriterieBegrunnelse = (
+  suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[],
+  suksessKriterie: ISuksesskriterie
+) => {
   const sb = suksesskriterieBegrunnelser.find((item) => {
     return item.suksesskriterieId === suksessKriterie.id
   })
@@ -28,28 +33,51 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
   }
 }
 
-export const getLabelForSuksessKriterie = (suksessKriterieStatus?: SuksesskriterieStatus) => {
-  if (suksessKriterieStatus === SuksesskriterieStatus.UNDER_ARBEID) {
+export const getLabelForSuksessKriterie = (suksessKriterieStatus?: ESuksesskriterieStatus) => {
+  if (suksessKriterieStatus === ESuksesskriterieStatus.UNDER_ARBEID) {
     return 'Hva er oppfylt og hva er under arbeid?'
-  } else if (suksessKriterieStatus === SuksesskriterieStatus.OPPFYLT) {
+  } else if (suksessKriterieStatus === ESuksesskriterieStatus.OPPFYLT) {
     return 'Hvordan oppfylles kriteriet?'
-  } else if (suksessKriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT) {
+  } else if (suksessKriterieStatus === ESuksesskriterieStatus.IKKE_OPPFYLT) {
     return 'Hvorfor er ikke kriteriet oppfylt?'
   } else {
     return 'Hvorfor er ikke kriteriet relevant?'
   }
 }
 
-export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit }: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean }) => {
+export const SuksesskriterierBegrunnelseEdit = ({
+  suksesskriterie,
+  disableEdit,
+}: {
+  suksesskriterie: ISuksesskriterie[]
+  disableEdit: boolean
+}) => {
   return (
     <FieldWrapper>
-      <FieldArray name={'suksesskriterieBegrunnelser'}>{(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} />}</FieldArray>
+      <FieldArray name={'suksesskriterieBegrunnelser'}>
+        {(p) => (
+          <KriterieBegrunnelseList
+            props={p}
+            disableEdit={disableEdit}
+            suksesskriterie={suksesskriterie}
+          />
+        )}
+      </FieldArray>
     </FieldWrapper>
   )
 }
 
-const KriterieBegrunnelseList = ({ props, suksesskriterie, disableEdit }: { props: FieldArrayRenderProps; suksesskriterie: Suksesskriterie[]; disableEdit: boolean }) => {
-  const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
+const KriterieBegrunnelseList = ({
+  props,
+  suksesskriterie,
+  disableEdit,
+}: {
+  props: FieldArrayRenderProps
+  suksesskriterie: ISuksesskriterie[]
+  disableEdit: boolean
+}) => {
+  const suksesskriterieBegrunnelser = props.form.values
+    .suksesskriterieBegrunnelser as ISuksesskriterieBegrunnelse[]
 
   return (
     <div>
@@ -83,19 +111,27 @@ const KriterieBegrunnelse = ({
   props,
   totalSuksesskriterie,
 }: {
-  suksesskriterie: Suksesskriterie
+  suksesskriterie: ISuksesskriterie
   index: number
-  suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
+  suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
   disableEdit: boolean
-  update: (s: SuksesskriterieBegrunnelse) => void
+  update: (s: ISuksesskriterieBegrunnelse) => void
   status: string
   props: FieldArrayRenderProps
   totalSuksesskriterie: number
 }) => {
-  const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
+  const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(
+    suksesskriterieBegrunnelser,
+    suksesskriterie
+  )
   const debounceDelay = 500
-  const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
-  const [suksessKriterieStatus, setSuksessKriterieStatus] = React.useState<SuksesskriterieStatus | undefined>(suksesskriterieBegrunnelse.suksesskriterieStatus)
+  const [begrunnelse, setBegrunnelse] = useDebouncedState(
+    suksesskriterieBegrunnelse.begrunnelse || '',
+    debounceDelay
+  )
+  const [suksessKriterieStatus, setSuksessKriterieStatus] = React.useState<
+    ESuksesskriterieStatus | undefined
+  >(suksesskriterieBegrunnelse.suksesskriterieStatus)
 
   React.useEffect(() => {
     update({
@@ -107,7 +143,10 @@ const KriterieBegrunnelse = ({
   }, [begrunnelse, suksessKriterieStatus])
 
   const getBorderColor = () => {
-    if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+    if (
+      status === EEtterlevelseStatus.FERDIG ||
+      status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
+    ) {
       if (!begrunnelse && suksesskriterie.behovForBegrunnelse) {
         return 'border-danger'
       } else {
@@ -119,7 +158,13 @@ const KriterieBegrunnelse = ({
   }
 
   return (
-    <Box className="mb-4" borderColor={getBorderColor()} padding="8" borderWidth="3" borderRadius="medium">
+    <Box
+      className="mb-4"
+      borderColor={getBorderColor()}
+      padding="8"
+      borderWidth="3"
+      borderRadius="medium"
+    >
       <BodyShort>
         Suksesskriterium {index + 1} av {totalSuksesskriterie}
       </BodyShort>
@@ -139,22 +184,32 @@ const KriterieBegrunnelse = ({
           <RadioGroup
             value={suksessKriterieStatus}
             legend="Oppgi status på suksesskriteriet"
-            onChange={(val) => setSuksessKriterieStatus(val as SuksesskriterieStatus)}
+            onChange={(val) => setSuksessKriterieStatus(val as ESuksesskriterieStatus)}
             name={'suksesskriterieStatus' + suksesskriterie.id}
           >
-            <Radio value={SuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</Radio>
-            <Radio value={SuksesskriterieStatus.OPPFYLT}>Oppfylt</Radio>
-            <Radio value={SuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</Radio>
-            <Radio value={SuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</Radio>
+            <Radio value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</Radio>
+            <Radio value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</Radio>
+            <Radio value={ESuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</Radio>
+            <Radio value={ESuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</Radio>
           </RadioGroup>
         </div>
         {!disableEdit && suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
           <div className="w-full mt-4">
             <Label>{getLabelForSuksessKriterie(suksessKriterieStatus)}</Label>
-            <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%" />
+            <TextEditor
+              initialValue={begrunnelse}
+              setValue={setBegrunnelse}
+              height={'188px'}
+              errors={props.form.errors}
+              simple
+              width="100%"
+            />
 
             <div className="mt-1">
-              <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
+              <Error
+                fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`}
+                fullWidth={true}
+              />
             </div>
           </div>
         )}
@@ -166,13 +221,24 @@ const KriterieBegrunnelse = ({
         )}
         {disableEdit && (
           <div className="w-full mt-4">
-            <LabelAboveContent fullWidth title={getLabelForSuksessKriterie()} markdown={begrunnelse} />
+            <LabelAboveContent
+              fullWidth
+              title={getLabelForSuksessKriterie()}
+              markdown={begrunnelse}
+            />
           </div>
         )}
       </div>
-      <Error fieldName={`suksesskriterieBegrunnelser[${index}].suksesskriterieStatus`} fullWidth={true} />
+      <Error
+        fieldName={`suksesskriterieBegrunnelser[${index}].suksesskriterieStatus`}
+        fullWidth={true}
+      />
 
-      <div className="mt-2">{suksesskriterieBegrunnelse.behovForBegrunnelse && begrunnelse.length > 0 && <Error fieldName={'status'} fullWidth={true} />}</div>
+      <div className="mt-2">
+        {suksesskriterieBegrunnelse.behovForBegrunnelse && begrunnelse.length > 0 && (
+          <Error fieldName={'status'} fullWidth={true} />
+        )}
+      </div>
     </Box>
   )
 }

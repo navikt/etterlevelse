@@ -1,27 +1,27 @@
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Accordion, AccordionProps, Panel, PanelOverrides, PanelProps } from 'baseui/accordion'
-import { ettlevColors, theme } from '../../util/theme'
 import { Block } from 'baseui/block'
 import { HeadingLarge } from 'baseui/typography'
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import * as React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { borderColor, borderRadius, borderStyle, borderWidth, paddingAll } from './Style'
 import _ from 'lodash'
+import * as React from 'react'
+import { ettlevColors, theme } from '../../util/theme'
+import { borderColor, borderRadius, borderStyle, borderWidth, paddingAll } from './Style'
 
 export const CustomizedAccordion = (props: Partial<AccordionProps>) => {
   return <Accordion {...props} overrides={{}} />
 }
 
-interface CustomizedPanelProps {
+interface ICustomizedPanelProps {
   HeaderBackgroundColor?: string
   HeaderActiveBackgroundColor?: string
   noUnderLine?: boolean
   toggleIcon?: { expanded: React.ReactElement<any, any>; unexpanded: React.ReactElement<any, any> }
 }
 
-type CustomProps = CustomizedPanelProps & PanelProps
+type TCustomProps = ICustomizedPanelProps & PanelProps
 
-export const CustomizedPanel = (props: CustomProps) => {
+export const CustomizedPanel = (props: TCustomProps) => {
   const { expanded } = props
 
   const customOverrides: PanelOverrides = {
@@ -30,7 +30,11 @@ export const CustomizedPanel = (props: CustomProps) => {
         if (props.toggleIcon) {
           return expanded ? props.toggleIcon.expanded : props.toggleIcon.unexpanded
         } else {
-          return expanded ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />
+          return expanded ? (
+            <FontAwesomeIcon icon={faChevronUp} />
+          ) : (
+            <FontAwesomeIcon icon={faChevronDown} />
+          )
         }
       },
     },
@@ -92,7 +96,11 @@ export const CustomizedPanel = (props: CustomProps) => {
     } else {
       return (
         <Block>
-          <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
+          <HeadingLarge
+            marginTop={theme.sizing.scale100}
+            marginBottom={theme.sizing.scale100}
+            color={ettlevColors.green600}
+          >
             {props.title}
           </HeadingLarge>
         </Block>

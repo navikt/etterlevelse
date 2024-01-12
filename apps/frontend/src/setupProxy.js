@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { createProxyMiddleware } = require('http-proxy-middleware')
 
 // Used in local development server only
@@ -15,7 +16,7 @@ module.exports = function (app) {
       },
       target,
       headers,
-    }),
+    })
   )
 
   app.use('/login', createProxyMiddleware({ target, headers }))

@@ -1,6 +1,6 @@
-import { ErrorMessage } from 'formik'
-import { Alert, Label, Tooltip } from '@navikt/ds-react'
 import { ExclamationmarkIcon } from '@navikt/aksel-icons'
+import { Alert, Label, Tooltip } from '@navikt/ds-react'
+import { ErrorMessage } from 'formik'
 
 export const Error = (props: { fieldName: string; fullWidth?: boolean }) => (
   <ErrorMessage name={props.fieldName}>

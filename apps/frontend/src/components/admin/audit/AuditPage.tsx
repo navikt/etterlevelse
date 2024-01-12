@@ -1,17 +1,15 @@
+import { BodyLong, Heading, TextField } from '@navikt/ds-react'
+import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import _ from 'lodash'
-import { AuditLog } from './AuditTypes'
 import { getAuditLog } from '../../../api/AuditApi'
-import { AuditView } from './AuditView'
-import { AuditRecentTable } from './AuditRecentTable'
-import { AuditLabel } from './AuditComponents'
 import { useDebouncedState } from '../../../util/hooks'
 import { intl } from '../../../util/intl/intl'
-import { Helmet } from 'react-helmet'
-import { BodyLong, Heading, TextField } from '@navikt/ds-react'
-import CustomizedBreadcrumbs from '../../common/CustomizedBreadcrumbs'
 import { PageLayout } from '../../scaffold/Page'
+import { AuditLabel } from './AuditComponents'
+import { AuditRecentTable } from './AuditRecentTable'
+import { IAuditLog } from './AuditTypes'
+import { AuditView } from './AuditView'
 
 const format = (id: string) => _.trim(id, '"')
 
@@ -20,7 +18,7 @@ export const AuditPage = () => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
-  const [auditLog, setAuditLog] = useState<AuditLog>()
+  const [auditLog, setAuditLog] = useState<IAuditLog>()
   const [idSearch, setIdInput, idInput] = useDebouncedState(params.id || '', 400)
 
   const lookupVersion = (id?: string) => {
@@ -70,7 +68,14 @@ export const AuditPage = () => {
       </div>
 
       {error && <BodyLong>{_.escape(error)}</BodyLong>}
-      {idInput && <AuditView auditLog={auditLog} auditId={params.auditId} loading={loading} viewId={lookupVersion} />}
+      {idInput && (
+        <AuditView
+          auditLog={auditLog}
+          auditId={params.auditId}
+          loading={loading}
+          viewId={lookupVersion}
+        />
+      )}
       <AuditRecentTable show={!idInput} />
     </PageLayout>
   )

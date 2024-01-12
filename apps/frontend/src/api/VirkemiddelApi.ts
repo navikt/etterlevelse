@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { emptyPage, PageResponse, Virkemiddel } from '../constants'
-import { env } from '../util/env'
 import { useEffect, useState } from 'react'
+import { emptyPage, IPageResponse, IVirkemiddel } from '../constants'
+import { env } from '../util/env'
 import { useDebouncedState } from '../util/hooks'
 
 export const getAllVirkemiddel = async () => {
@@ -10,46 +10,60 @@ export const getAllVirkemiddel = async () => {
   if (firstPage.pages === 1) {
     return firstPage.content.length > 0 ? [...firstPage.content] : []
   } else {
-    let allVirkemiddel: Virkemiddel[] = [...firstPage.content]
+    let allVirkemiddel: IVirkemiddel[] = [...firstPage.content]
     for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
-      allVirkemiddel = [...allVirkemiddel, ...(await getVirkemiddelPage(currentPage, PAGE_SIZE)).content]
+      allVirkemiddel = [
+        ...allVirkemiddel,
+        ...(await getVirkemiddelPage(currentPage, PAGE_SIZE)).content,
+      ]
     }
     return allVirkemiddel
   }
 }
 
 export const getVirkemiddelPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<PageResponse<Virkemiddel>>(`${env.backendBaseUrl}/virkemiddel?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (
+    await axios.get<IPageResponse<IVirkemiddel>>(
+      `${env.backendBaseUrl}/virkemiddel?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    )
+  ).data
 }
 
 export const getVirkemiddel = async (id: string) => {
-  return (await axios.get<Virkemiddel>(`${env.backendBaseUrl}/virkemiddel/${id}`)).data
+  return (await axios.get<IVirkemiddel>(`${env.backendBaseUrl}/virkemiddel/${id}`)).data
 }
 
 export const deleteVirkemiddel = async (id: string) => {
-  return (await axios.delete<Virkemiddel>(`${env.backendBaseUrl}/virkemiddel/${id}`)).data
+  return (await axios.delete<IVirkemiddel>(`${env.backendBaseUrl}/virkemiddel/${id}`)).data
 }
 
 export const getVirkemiddelByVirkemiddelType = async (code: string) => {
-  return (await axios.get<PageResponse<Virkemiddel>>(`${env.backendBaseUrl}/virkemiddel/virkemiddeltype/${code}`)).data.content
+  return (
+    await axios.get<IPageResponse<IVirkemiddel>>(
+      `${env.backendBaseUrl}/virkemiddel/virkemiddeltype/${code}`
+    )
+  ).data.content
 }
 
 export const searchVirkemiddel = async (name: string) => {
-  return (await axios.get<PageResponse<Virkemiddel>>(`${env.backendBaseUrl}/virkemiddel/search/${name}`)).data.content
+  return (
+    await axios.get<IPageResponse<IVirkemiddel>>(`${env.backendBaseUrl}/virkemiddel/search/${name}`)
+  ).data.content
 }
 
-export const createVirkemiddel = async (virkemiddel: Virkemiddel) => {
+export const createVirkemiddel = async (virkemiddel: IVirkemiddel) => {
   const dto = virkemiddelToVirkemiddelDto(virkemiddel)
-  return (await axios.post<Virkemiddel>(`${env.backendBaseUrl}/virkemiddel`, dto)).data
+  return (await axios.post<IVirkemiddel>(`${env.backendBaseUrl}/virkemiddel`, dto)).data
 }
 
-export const updateVirkemiddel = async (virkemiddel: Virkemiddel) => {
+export const updateVirkemiddel = async (virkemiddel: IVirkemiddel) => {
   const dto = virkemiddelToVirkemiddelDto(virkemiddel)
-  return (await axios.put<Virkemiddel>(`${env.backendBaseUrl}/virkemiddel/${virkemiddel.id}`, dto)).data
+  return (await axios.put<IVirkemiddel>(`${env.backendBaseUrl}/virkemiddel/${virkemiddel.id}`, dto))
+    .data
 }
 
 export const useVirkemiddelPage = (pageSize: number) => {
-  const [data, setData] = useState<PageResponse<Virkemiddel>>(emptyPage)
+  const [data, setData] = useState<IPageResponse<IVirkemiddel>>(emptyPage)
   const [page, setPage] = useState<number>(0)
   const [loading, setLoading] = useState(true)
 
@@ -64,12 +78,19 @@ export const useVirkemiddelPage = (pageSize: number) => {
   const prevPage = () => setPage(Math.max(0, page - 1))
   const nextPage = () => setPage(Math.min(data?.pages ? data.pages - 1 : 0, page + 1))
 
-  return [data, prevPage, nextPage, loading] as [PageResponse<Virkemiddel>, () => void, () => void, boolean]
+  return [data, prevPage, nextPage, loading] as [
+    IPageResponse<IVirkemiddel>,
+    () => void,
+    () => void,
+    boolean,
+  ]
 }
 
 export const useVirkemiddel = (id: string, onlyLoadOnce?: boolean) => {
   const isCreateNew = id === 'ny'
-  const [data, setData] = useState<Virkemiddel | undefined>(isCreateNew ? virkemiddelMapToFormVal({}) : undefined)
+  const [data, setData] = useState<IVirkemiddel | undefined>(
+    isCreateNew ? virkemiddelMapToFormVal({}) : undefined
+  )
 
   const load = () => {
     if (data && onlyLoadOnce) return
@@ -77,13 +98,13 @@ export const useVirkemiddel = (id: string, onlyLoadOnce?: boolean) => {
   }
   useEffect(load, [id])
 
-  return [data, setData, load] as [Virkemiddel | undefined, (v?: Virkemiddel) => void, () => void]
+  return [data, setData, load] as [IVirkemiddel | undefined, (v?: IVirkemiddel) => void, () => void]
 }
 
 export const useSearchVirkemiddel = () => {
   const [search, setSearch] = useDebouncedState<string>('', 200)
-  const [searchResult, setSearchResult] = useState<Virkemiddel[]>([])
-  const [fullResult, setFullResult] = useState<Virkemiddel[]>([])
+  const [searchResult, setSearchResult] = useState<IVirkemiddel[]>([])
+  const [fullResult, setFullResult] = useState<IVirkemiddel[]>([])
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
@@ -109,11 +130,15 @@ export const useSearchVirkemiddel = () => {
     })()
   }, [search])
 
-  return [searchResult, setSearch, loading] as [Virkemiddel[], React.Dispatch<React.SetStateAction<string>>, boolean]
+  return [searchResult, setSearch, loading] as [
+    IVirkemiddel[],
+    React.Dispatch<React.SetStateAction<string>>,
+    boolean,
+  ]
 }
 
 export const useVirkemiddelFilter = () => {
-  const [data, setData] = useState<Virkemiddel[]>([])
+  const [data, setData] = useState<IVirkemiddel[]>([])
   const [totalDataLength, setTotalDataLenght] = useState<number>(0)
   const [virkemiddelTypeFilter, setVirkemiddelTypeFilter] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
@@ -130,7 +155,9 @@ export const useVirkemiddelFilter = () => {
       setTotalDataLenght(allVirkemiddel.length)
 
       if (virkemiddelTypeFilter && virkemiddelTypeFilter !== 'alle') {
-        allVirkemiddel = allVirkemiddel.filter((v) => v.virkemiddelType?.code === virkemiddelTypeFilter)
+        allVirkemiddel = allVirkemiddel.filter(
+          (v) => v.virkemiddelType?.code === virkemiddelTypeFilter
+        )
       }
 
       setData(allVirkemiddel)
@@ -138,10 +165,16 @@ export const useVirkemiddelFilter = () => {
     })()
   }, [virkemiddelTypeFilter, refetch])
 
-  return [data, totalDataLength, setVirkemiddelTypeFilter, loading, refetchData] as [Virkemiddel[], number, React.Dispatch<React.SetStateAction<string>>, boolean, () => void]
+  return [data, totalDataLength, setVirkemiddelTypeFilter, loading, refetchData] as [
+    IVirkemiddel[],
+    number,
+    React.Dispatch<React.SetStateAction<string>>,
+    boolean,
+    () => void,
+  ]
 }
 
-export const virkemiddelToVirkemiddelDto = (virkemiddel: Virkemiddel): Virkemiddel => {
+export const virkemiddelToVirkemiddelDto = (virkemiddel: IVirkemiddel): IVirkemiddel => {
   const dto = {
     ...virkemiddel,
     regelverk: virkemiddel.regelverk.map((r) => ({ ...r, lov: r.lov.code })),
@@ -151,7 +184,7 @@ export const virkemiddelToVirkemiddelDto = (virkemiddel: Virkemiddel): Virkemidd
   return dto
 }
 
-export const virkemiddelMapToFormVal = (virkemiddel: Partial<Virkemiddel>): Virkemiddel => {
+export const virkemiddelMapToFormVal = (virkemiddel: Partial<IVirkemiddel>): IVirkemiddel => {
   return {
     id: virkemiddel.id || '',
     navn: virkemiddel.navn || '',

@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react'
 import { getKravByKravNumberAndVersion } from '../../api/KravApi'
-import { Etterlevelse, Krav } from '../../constants'
+import { IEtterlevelse, IKrav } from '../../constants'
 
-import EtterlevelseModal from './EtterlevelseModal'
 import { Button } from '@navikt/ds-react'
+import EtterlevelseModal from './EtterlevelseModal'
 
-export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
+export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: IEtterlevelse }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [kravData, setKravData] = useState<Krav>()
+  const [kravData, setKravData] = useState<IKrav>()
 
   useEffect(() => {
     ;(async () => {
-      const krav = await getKravByKravNumberAndVersion(etterlevelse.kravNummer, etterlevelse.kravVersjon)
+      const krav = await getKravByKravNumberAndVersion(
+        etterlevelse.kravNummer,
+        etterlevelse.kravVersjon
+      )
       if (krav) {
         setKravData(krav)
       }
@@ -23,7 +26,14 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
       <Button type="button" variant="tertiary" onClick={() => setIsModalOpen(true)}>
         Se dokumentasjon på forrige versjon
       </Button>
-      {kravData && <EtterlevelseModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} etterlevelse={etterlevelse} kravData={kravData} />}
+      {kravData && (
+        <EtterlevelseModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          etterlevelse={etterlevelse}
+          kravData={kravData}
+        />
+      )}
     </div>
   )
 }

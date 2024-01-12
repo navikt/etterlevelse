@@ -1,25 +1,29 @@
+import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import { codelist, CodeUsage } from '../../../services/Codelist'
-import { ObjectLink } from '../../common/RouteLink'
-import { ObjectType } from '../audit/AuditTypes'
 import { replaceCodelistUsage } from '../../../api/CodelistApi'
-import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
+import { ICodeUsage, codelist } from '../../../services/Codelist'
+import { ObjectLink } from '../../common/RouteLink'
+import { EObjectType } from '../audit/AuditTypes'
 
-const UsageTable = (props: { usage: CodeUsage }) => {
+const UsageTable = (props: { usage: ICodeUsage }) => {
   const { usage } = props
   const krav = !!usage.krav.length
   const etterlevelseDokumentasjoner = !!usage.etterlevelseDokumentasjoner.length
   const codelist = !!usage.codelist.length
 
-  const rows = usage ? Math.max(usage.krav.length, usage.etterlevelseDokumentasjoner.length, usage.codelist.length) : -1
+  const rows = usage
+    ? Math.max(usage.krav.length, usage.etterlevelseDokumentasjoner.length, usage.codelist.length)
+    : -1
 
   return (
     <Table>
       <Table.Header>
         <Table.Row>
           {krav && <Table.ColumnHeader>Krav</Table.ColumnHeader>}
-          {etterlevelseDokumentasjoner && <Table.ColumnHeader>Etterlevelse Dokumentasjoner</Table.ColumnHeader>}
+          {etterlevelseDokumentasjoner && (
+            <Table.ColumnHeader>Etterlevelse Dokumentasjoner</Table.ColumnHeader>
+          )}
           {codelist && <Table.ColumnHeader>Codelist</Table.ColumnHeader>}
         </Table.Row>
       </Table.Header>
@@ -33,7 +37,7 @@ const UsageTable = (props: { usage: CodeUsage }) => {
               {krav && (
                 <Table.DataCell>
                   {kr && (
-                    <ObjectLink id={kr.id} type={ObjectType.Krav} withHistory={true}>
+                    <ObjectLink id={kr.id} type={EObjectType.Krav} withHistory={true}>
                       {kr.number} {kr.name}
                     </ObjectLink>
                   )}
@@ -42,7 +46,11 @@ const UsageTable = (props: { usage: CodeUsage }) => {
               {etterlevelseDokumentasjoner && (
                 <Table.DataCell>
                   {ed && (
-                    <ObjectLink id={ed.id} type={ObjectType.EtterlevelseDokumentasjon} withHistory={true}>
+                    <ObjectLink
+                      id={ed.id}
+                      type={EObjectType.EtterlevelseDokumentasjon}
+                      withHistory={true}
+                    >
                       {ed.number} {ed.name}
                     </ObjectLink>
                   )}
@@ -51,7 +59,7 @@ const UsageTable = (props: { usage: CodeUsage }) => {
               {codelist && (
                 <Table.DataCell>
                   {cl && (
-                    <ObjectLink id={cl.list} type={ObjectType.Codelist} withHistory={true}>
+                    <ObjectLink id={cl.list} type={EObjectType.Codelist} withHistory={true}>
                       {cl.list} - {cl.code}
                     </ObjectLink>
                   )}
@@ -65,7 +73,7 @@ const UsageTable = (props: { usage: CodeUsage }) => {
   )
 }
 
-export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
+export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
   const [showReplace, setShowReplace] = useState(false)
   const [newValue, setNewValue] = useState<string>()
   const ref = React.createRef<HTMLDivElement>()
@@ -96,7 +104,13 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
 
       {showReplace && usage && usage.listName && (
         <div className="flex m-4 justify-end">
-          <Select label="Velg ny verdi" hideLabel value={newValue} className="mr-4" onChange={(e) => setNewValue(e.target.value)}>
+          <Select
+            label="Velg ny verdi"
+            hideLabel
+            value={newValue}
+            className="mr-4"
+            onChange={(e) => setNewValue(e.target.value)}
+          >
             <option value="">Ny verdi</option>
             {codelist.getParsedOptions(usage.listName).map((c, i) => (
               <option key={i + '_' + c.label} value={c.value}>

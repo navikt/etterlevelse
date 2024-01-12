@@ -1,17 +1,28 @@
-import { BodyShort, Button, Heading, Label, Modal, Pagination, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
+import {
+  BodyShort,
+  Button,
+  Heading,
+  Label,
+  Modal,
+  Pagination,
+  Select,
+  Spacer,
+  Table,
+  Tooltip,
+} from '@navikt/ds-react'
 import * as _ from 'lodash'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { JsonView } from 'react-json-view-lite'
 import { getAudits } from '../../../api/AuditApi'
-import { PageResponse, emptyPage } from '../../../constants'
+import { IPageResponse, emptyPage } from '../../../constants'
 import { ampli, userRoleEventProp } from '../../../services/Amplitude'
 import { intl } from '../../../util/intl/intl'
 import { AuditButton } from './AuditButton'
 import { AuditActionIcon } from './AuditComponents'
-import { AuditItem, ObjectType } from './AuditTypes'
+import { EObjectType, IAuditItem } from './AuditTypes'
 
-const CodeView = ({ audit }: { audit: AuditItem }) => {
+const CodeView = ({ audit }: { audit: IAuditItem }) => {
   const [modalOpen, setModalOpen] = useState(false)
 
   return (
@@ -19,7 +30,12 @@ const CodeView = ({ audit }: { audit: AuditItem }) => {
       <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant="tertiary">
         Vis data
       </Button>
-      <Modal key={audit.id} open={modalOpen} onClose={() => setModalOpen(false)} className="max-h-[75%] overflow-y-scroll">
+      <Modal
+        key={audit.id}
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        className="max-h-[75%] overflow-y-scroll"
+      >
         <Modal.Header>Data visning</Modal.Header>
         <Modal.Body>
           <JsonView data={audit.data} />
@@ -29,10 +45,10 @@ const CodeView = ({ audit }: { audit: AuditItem }) => {
   )
 }
 
-export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType }) => {
-  const [audits, setAudits] = useState<PageResponse<AuditItem>>(emptyPage)
+export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType }) => {
+  const [audits, setAudits] = useState<IPageResponse<IAuditItem>>(emptyPage)
   const [limit, setLimit] = useState(20)
-  const [table, setTable] = useState<ObjectType | undefined>(props.tableType)
+  const [table, setTable] = useState<EObjectType | undefined>(props.tableType)
   const [page, setPage] = useState(1)
 
   useEffect(() => {
@@ -70,7 +86,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
     return null
   }
 
-  const tableOptions = Object.keys(ObjectType).map((ot) => ({ id: ot, label: ot }))
+  const tableOptions = Object.keys(EObjectType).map((ot) => ({ id: ot, label: ot }))
 
   return (
     <div>
@@ -86,9 +102,9 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
               hideLabel
               onChange={(e) => {
                 if (e.target.value === 'Codelist') {
-                  setTable(e.target.value.toUpperCase() as ObjectType)
+                  setTable(e.target.value.toUpperCase() as EObjectType)
                 } else {
-                  setTable(e.target.value as ObjectType)
+                  setTable(e.target.value as EObjectType)
                 }
               }}
             >
@@ -114,7 +130,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {audits.content.map((audit: AuditItem, index) => {
+          {audits.content.map((audit: IAuditItem, index) => {
             const length = window.innerWidth > 1000 ? (window.innerWidth > 1200 ? 40 : 30) : 20
             const rowNum = audits.pageNumber * audits.pageSize + index + 1
             return (
@@ -165,7 +181,13 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
         </Select>
         <Spacer />
         <div>
-          <Pagination page={page} onPageChange={(page) => handlePageChange(page)} count={audits.pages} prevNextTexts size="small" />
+          <Pagination
+            page={page}
+            onPageChange={(page) => handlePageChange(page)}
+            count={audits.pages}
+            prevNextTexts
+            size="small"
+          />
         </div>
         <Spacer />
         <BodyShort>Totalt antall rader: {audits.totalElements}</BodyShort>

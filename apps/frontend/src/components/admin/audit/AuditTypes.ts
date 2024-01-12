@@ -1,27 +1,27 @@
-import { ListName } from '../../../services/Codelist'
+import { EListName } from '../../../services/Codelist'
 
-export interface AuditItem {
-  action: AuditAction
+export interface IAuditItem {
+  action: EAuditAction
   id: string
-  table: ObjectType
+  table: EObjectType
   tableId: string
   time: string
   user: string
   data: object
 }
 
-export interface AuditLog {
+export interface IAuditLog {
   id: string
-  audits: AuditItem[]
+  audits: IAuditItem[]
 }
 
-export enum AuditAction {
+export enum EAuditAction {
   CREATE = 'CREATE',
   UPDATE = 'UPDATE',
   DELETE = 'DELETE',
 }
 
-export enum ObjectType {
+export enum EObjectType {
   Codelist = 'CODELIST',
   Krav = 'Krav',
   Etterlevelse = 'Etterlevelse',
@@ -33,4 +33,9 @@ export enum ObjectType {
   EtterlevelseMetadata = 'EtterlevelseMetadata',
 }
 
-export type NavigableItem = ObjectType | ListName.RELEVANS | ListName.UNDERAVDELING | ListName.TEMA | ListName.LOV
+export type TNavigableItem =
+  | EObjectType
+  | EListName.RELEVANS
+  | EListName.UNDERAVDELING
+  | EListName.TEMA
+  | EListName.LOV

@@ -1,7 +1,7 @@
+import { Alert, Button, Textarea } from '@navikt/ds-react'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { tilbakemeldingEditMelding } from '../../../../api/TilbakemeldingApi'
-import { Tilbakemelding, TilbakemeldingMelding } from '../../../../constants'
-import { Alert, Button, Textarea } from '@navikt/ds-react'
+import { ITilbakemelding, ITilbakemeldingMelding } from '../../../../constants'
 
 export const TilbakemeldingEdit = ({
   tilbakemeldingId,
@@ -10,8 +10,8 @@ export const TilbakemeldingEdit = ({
   setEditModal,
 }: {
   tilbakemeldingId: string
-  melding: TilbakemeldingMelding
-  close: (t: Tilbakemelding) => void
+  melding: ITilbakemeldingMelding
+  close: (t: ITilbakemelding) => void
   setEditModal: Dispatch<SetStateAction<boolean>>
 }) => {
   const [response, setResponse] = useState(melding.innhold)
@@ -30,7 +30,14 @@ export const TilbakemeldingEdit = ({
 
   return (
     <div className="items-end">
-      <Textarea label="Rediger melding" hideLabel minRows={15} onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)} value={response} disabled={loading} />
+      <Textarea
+        label="Rediger melding"
+        hideLabel
+        minRows={15}
+        onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)}
+        value={response}
+        disabled={loading}
+      />
       <div className="mt-2.5 flex justify-end">
         <Button variant="secondary" onClick={() => setEditModal(false)}>
           Avbryt

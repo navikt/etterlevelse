@@ -1,7 +1,8 @@
 import { gql, useQuery } from '@apollo/client'
 import { QueryHookOptions } from '@apollo/client/react/types/types'
-import { KravQL, PageResponse } from '../constants'
+import { IPageResponse, TKravQL } from '../constants'
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const kravtableQuery = gql`
   query getKravByFilter(
     $relevans: [String!]
@@ -66,8 +67,9 @@ const kravtableQuery = gql`
     }
   }
 `
+// eslint-enable-next-line @typescript-eslint/ban-types
 
-export type KravFilters = {
+export type TKravFilters = {
   relevans?: string[]
   nummer?: number
   etterlevelseDokumentasjonId?: string
@@ -81,8 +83,11 @@ export type KravFilters = {
   pageSize?: number
 }
 
-export const useKravFilter = (variables: KravFilters, options?: QueryHookOptions<any, KravFilters>) => {
-  return useQuery<{ krav: PageResponse<KravQL> }, KravFilters>(kravtableQuery, {
+export const useKravFilter = (
+  variables: TKravFilters,
+  options?: QueryHookOptions<any, TKravFilters>
+) => {
+  return useQuery<{ krav: IPageResponse<TKravQL> }, TKravFilters>(kravtableQuery, {
     ...(options || {}),
     variables,
   })

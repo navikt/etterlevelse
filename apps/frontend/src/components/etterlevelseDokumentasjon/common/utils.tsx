@@ -1,34 +1,52 @@
-import { Behandling, EtterlevelseDokumentasjon, EtterlevelseStatus } from '../../../constants'
-import { ReactNode } from 'react'
 import { Block, Responsive } from 'baseui/block'
-import { Helmet } from 'react-helmet'
 import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
-import { ettlevColors } from '../../../util/theme'
-import { Teams } from '../../common/TeamName'
-import { env } from '../../../util/env'
-import { ExternalLink } from '../../common/RouteLink'
 import moment from 'moment'
-import EditEtterlevelseDokumentasjonModal from '../edit/EditEtterlevelseDokumentasjonModal'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../../common/Style'
+import { ReactNode } from 'react'
+import { Helmet } from 'react-helmet'
+import { EEtterlevelseStatus, IBehandling, IEtterlevelseDokumentasjon } from '../../../constants'
+import { env } from '../../../util/env'
+import { ettlevColors } from '../../../util/theme'
 import { warningAlert } from '../../Images'
+import { ExternalLink } from '../../common/RouteLink'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../../common/Style'
+import { Teams } from '../../common/TeamName'
+import EditEtterlevelseDokumentasjonModal from '../edit/EditEtterlevelseDokumentasjonModal'
 
-export const responsiveDisplayEtterlevelseDokumentasjonPage: Responsive<any> = ['block', 'block', 'block', 'block', 'flex', 'flex']
+export const responsiveDisplayEtterlevelseDokumentasjonPage: Responsive<any> = [
+  'block',
+  'block',
+  'block',
+  'block',
+  'flex',
+  'flex',
+]
 
-const getBehandlingLinks = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
+const getBehandlingLinks = (etterlevelseDokumentasjon: IEtterlevelseDokumentasjon) => {
   return (
     <Block>
       {etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => {
         return (
           <Block key={'behandling_link_' + index}>
-            {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger[index].navn ? (
+            {etterlevelseDokumentasjon.behandlinger &&
+            etterlevelseDokumentasjon.behandlinger[index].navn ? (
               <ExternalLink href={`${env.pollyBaseUrl}process/${behandlingId}`}>
-                {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger.length > 0
+                {etterlevelseDokumentasjon.behandlinger &&
+                etterlevelseDokumentasjon.behandlinger.length > 0
                   ? `${etterlevelseDokumentasjon.behandlinger[index].navn}`
                   : 'Ingen data'}
               </ExternalLink>
             ) : (
-              <Block $style={{ fontSize: '18px', lineHeight: '22px', fontFamily: 'Source Sans Pro', fontWeight: 'normal' }}>
-                {etterlevelseDokumentasjon.behandlinger ? etterlevelseDokumentasjon.behandlinger[index].navn : 'Ingen data'}
+              <Block
+                $style={{
+                  fontSize: '18px',
+                  lineHeight: '22px',
+                  fontFamily: 'Source Sans Pro',
+                  fontWeight: 'normal',
+                }}
+              >
+                {etterlevelseDokumentasjon.behandlinger
+                  ? etterlevelseDokumentasjon.behandlinger[index].navn
+                  : 'Ingen data'}
               </Block>
             )}
           </Block>
@@ -38,54 +56,101 @@ const getBehandlingLinks = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon
   )
 }
 
-export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon, setEtterlevelseDokumentasjon?: (e: EtterlevelseDokumentasjon) => void, helmet?: ReactNode) => (
-  <Block display={responsiveDisplayEtterlevelseDokumentasjonPage} justifyContent="space-between" marginBottom="32px" marginTop="38px">
+export const getMainHeader = (
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon,
+  setEtterlevelseDokumentasjon?: (e: IEtterlevelseDokumentasjon) => void,
+  helmet?: ReactNode
+) => (
+  <Block
+    display={responsiveDisplayEtterlevelseDokumentasjonPage}
+    justifyContent="space-between"
+    marginBottom="32px"
+    marginTop="38px"
+  >
     {helmet ? (
       helmet
     ) : (
       <Helmet>
         <meta charSet="utf-8" />
         <title>
-          E{etterlevelseDokumentasjon.etterlevelseNummer.toString()} {etterlevelseDokumentasjon.title}
+          E{etterlevelseDokumentasjon.etterlevelseNummer.toString()}{' '}
+          {etterlevelseDokumentasjon.title}
         </title>
       </Helmet>
     )}
     <Block width="100%">
       <Block display="flex">
         <Block>
-          <LabelSmall color={ettlevColors.green600}>E{etterlevelseDokumentasjon.etterlevelseNummer.toString()}</LabelSmall>
+          <LabelSmall color={ettlevColors.green600}>
+            E{etterlevelseDokumentasjon.etterlevelseNummer.toString()}
+          </LabelSmall>
           <HeadingXXLarge marginTop="0" color={ettlevColors.green800}>
             {etterlevelseDokumentasjon.title}
           </HeadingXXLarge>
         </Block>
         {setEtterlevelseDokumentasjon !== undefined && (
-          <Block display="flex" flex="1" justifyContent="flex-end" $style={{ whiteSpace: 'nowrap' }}>
-            <EditEtterlevelseDokumentasjonModal etterlevelseDokumentasjon={etterlevelseDokumentasjon} setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon} isEditButton />
+          <Block
+            display="flex"
+            flex="1"
+            justifyContent="flex-end"
+            $style={{ whiteSpace: 'nowrap' }}
+          >
+            <EditEtterlevelseDokumentasjonModal
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+              isEditButton
+            />
           </Block>
         )}
       </Block>
 
-      {etterlevelseDokumentasjon.knyttetTilVirkemiddel && etterlevelseDokumentasjon.virkemiddelId && (
-        <Block display="flex" alignItems="center">
-          <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Virkmiddel:</LabelSmall>
-          <Block
-            $style={{
-              fontFamily: 'Source Sans Pro',
-              fontWeight: 500,
-            }}
-          >
-            {etterlevelseDokumentasjon.virkemiddel?.navn}
+      {etterlevelseDokumentasjon.knyttetTilVirkemiddel &&
+        etterlevelseDokumentasjon.virkemiddelId && (
+          <Block display="flex" alignItems="center">
+            <LabelSmall
+              $style={{
+                lineHeight: '22px',
+                marginRight: '10px',
+                fontSize: '16px',
+                color: ettlevColors.green600,
+              }}
+            >
+              Virkmiddel:
+            </LabelSmall>
+            <Block
+              $style={{
+                fontFamily: 'Source Sans Pro',
+                fontWeight: 500,
+              }}
+            >
+              {etterlevelseDokumentasjon.virkemiddel?.navn}
+            </Block>
           </Block>
-        </Block>
-      )}
+        )}
       {etterlevelseDokumentasjon.behandlerPersonopplysninger && (
         <Block
           display="flex"
-          alignItems={etterlevelseDokumentasjon.behandlingIds && etterlevelseDokumentasjon.behandlingIds.length >= 1 ? 'flex-start' : 'center'}
+          alignItems={
+            etterlevelseDokumentasjon.behandlingIds &&
+            etterlevelseDokumentasjon.behandlingIds.length >= 1
+              ? 'flex-start'
+              : 'center'
+          }
           marginTop={etterlevelseDokumentasjon.virkemiddelId ? '8px' : '0px'}
         >
-          <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Behandling:</LabelSmall>
-          {etterlevelseDokumentasjon.behandlingIds && etterlevelseDokumentasjon.behandlingIds.length >= 1 && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
+          <LabelSmall
+            $style={{
+              lineHeight: '22px',
+              marginRight: '10px',
+              fontSize: '16px',
+              color: ettlevColors.green600,
+            }}
+          >
+            Behandling:
+          </LabelSmall>
+          {etterlevelseDokumentasjon.behandlingIds &&
+          etterlevelseDokumentasjon.behandlingIds.length >= 1 &&
+          etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
             getBehandlingLinks(etterlevelseDokumentasjon)
           ) : (
             <Block
@@ -125,7 +190,16 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
       )}
       <Block display="flex" alignItems="center" width="100%" marginTop={'8px'}>
         <Block display={'flex'} width="100%" alignItems="center">
-          <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Team: </LabelSmall>
+          <LabelSmall
+            $style={{
+              lineHeight: '22px',
+              marginRight: '10px',
+              fontSize: '16px',
+              color: ettlevColors.green600,
+            }}
+          >
+            Team:{' '}
+          </LabelSmall>
           {etterlevelseDokumentasjon.teams.length > 0 ? (
             <Teams teams={etterlevelseDokumentasjon.teams} link />
           ) : (
@@ -147,24 +221,26 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
 export const getNewestKravVersjon = (list: any[]) => {
   let relevanteStatusListe = [...list]
 
-  relevanteStatusListe = relevanteStatusListe.filter((value, index, self) => index === self.findIndex((k) => k.kravNummer === value.kravNummer))
+  relevanteStatusListe = relevanteStatusListe.filter(
+    (value, index, self) => index === self.findIndex((k) => k.kravNummer === value.kravNummer)
+  )
 
   return relevanteStatusListe
 }
 
-export const getEtterlevelseStatus = (status?: EtterlevelseStatus, frist?: string) => {
+export const getEtterlevelseStatus = (status?: EEtterlevelseStatus, frist?: string) => {
   switch (status) {
-    case EtterlevelseStatus.UNDER_REDIGERING:
+    case EEtterlevelseStatus.UNDER_REDIGERING:
       return 'Under arbeid'
-    case EtterlevelseStatus.FERDIG:
+    case EEtterlevelseStatus.FERDIG:
       return 'Under arbeid'
-    case EtterlevelseStatus.IKKE_RELEVANT:
+    case EEtterlevelseStatus.IKKE_RELEVANT:
       return 'Ikke relevant'
-    case EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
+    case EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
       return 'Ferdig utfylt'
-    case EtterlevelseStatus.FERDIG_DOKUMENTERT:
+    case EEtterlevelseStatus.FERDIG_DOKUMENTERT:
       return 'Ferdig utfylt'
-    case EtterlevelseStatus.OPPFYLLES_SENERE:
+    case EEtterlevelseStatus.OPPFYLLES_SENERE:
       if (frist) {
         return 'Utsatt til ' + moment(frist).format('ll')
       } else {
@@ -175,25 +251,25 @@ export const getEtterlevelseStatus = (status?: EtterlevelseStatus, frist?: strin
   }
 }
 
-export const updateBehandlingNameWithNumber = (behandlinger: Behandling[]) => {
+export const updateBehandlingNameWithNumber = (behandlinger: IBehandling[]) => {
   return behandlinger.map((b) => {
     return { ...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn }
   })
 }
 
-export const getStatusLabelColor = (status: EtterlevelseStatus) => {
+export const getStatusLabelColor = (status: EEtterlevelseStatus) => {
   switch (status) {
-    case EtterlevelseStatus.UNDER_REDIGERING:
+    case EEtterlevelseStatus.UNDER_REDIGERING:
       return 'info'
-    case EtterlevelseStatus.FERDIG:
+    case EEtterlevelseStatus.FERDIG:
       return 'info'
-    case EtterlevelseStatus.IKKE_RELEVANT:
+    case EEtterlevelseStatus.IKKE_RELEVANT:
       return 'neutral'
-    case EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
+    case EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
       return 'success'
-    case EtterlevelseStatus.FERDIG_DOKUMENTERT:
+    case EEtterlevelseStatus.FERDIG_DOKUMENTERT:
       return 'success'
-    case EtterlevelseStatus.OPPFYLLES_SENERE:
+    case EEtterlevelseStatus.OPPFYLLES_SENERE:
       return 'warning'
     default:
       return 'neutral'

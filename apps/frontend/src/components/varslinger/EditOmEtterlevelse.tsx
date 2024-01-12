@@ -1,17 +1,32 @@
+import { Button, Heading, Loader } from '@navikt/ds-react'
 import { Formik, FormikProps } from 'formik'
 import React, { useState } from 'react'
-import { createMelding, deleteMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
-import { AlertType, Melding, MeldingStatus } from '../../constants'
+import {
+  createMelding,
+  deleteMelding,
+  mapMeldingToFormValue,
+  updateMelding,
+} from '../../api/MeldingApi'
+import { EAlertType, EMeldingStatus, IMelding } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
-import { Button, Heading, Loader } from '@navikt/ds-react'
 
-export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
+export const EditOmEtterlevelse = ({
+  melding,
+  setMelding,
+  isLoading,
+  maxChar,
+}: {
+  melding: IMelding | undefined
+  setMelding: React.Dispatch<React.SetStateAction<IMelding | undefined>>
+  isLoading: boolean
+  maxChar?: number
+}) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
 
   const initialNumberOfRows = 1
 
-  const submit = async (melding: Melding) => {
-    const newMelding = { ...melding, alertType: AlertType.INFO }
+  const submit = async (melding: IMelding) => {
+    const newMelding = { ...melding, alertType: EAlertType.INFO }
     setDisableEdit(true)
     if (melding.id) {
       await updateMelding(newMelding).then((m) => {
@@ -40,17 +55,35 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
     <div>
       {melding && (
         <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
-          {({ values, submitForm }: FormikProps<Melding>) => (
+          {({ values, submitForm }: FormikProps<IMelding>) => (
             <div>
               <Heading size="small" level="2" className="my-4">
                 Om støtte til etterlevelse
               </Heading>
               {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
 
-              <TextAreaField maxCharacter={maxChar} height="200px" label={'Innledende tekst'} noPlaceholder name="melding" />
-              <TextAreaField rows={initialNumberOfRows} label={'Overskrift'} name={'secondaryTittel'} noPlaceholder />
+              <TextAreaField
+                maxCharacter={maxChar}
+                height="200px"
+                label={'Innledende tekst'}
+                noPlaceholder
+                name="melding"
+              />
+              <TextAreaField
+                rows={initialNumberOfRows}
+                label={'Overskrift'}
+                name={'secondaryTittel'}
+                noPlaceholder
+              />
 
-              <TextAreaField maxCharacter={maxChar} markdown height="200px" label={'Innhold'} noPlaceholder name="secondaryMelding" />
+              <TextAreaField
+                maxCharacter={maxChar}
+                markdown
+                height="200px"
+                label={'Innhold'}
+                noPlaceholder
+                name="secondaryMelding"
+              />
 
               <div className="flex w-full">
                 <Button
@@ -59,7 +92,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
                   disabled={disableEdit}
                   onClick={() => {
                     deleteMelding(melding.id).then(() => {
-                      setMelding('')
+                      setMelding(undefined)
                     })
                   }}
                 >
@@ -70,7 +103,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
                     type="button"
                     disabled={disableEdit}
                     onClick={() => {
-                      values.meldingStatus = MeldingStatus.ACTIVE
+                      values.meldingStatus = EMeldingStatus.ACTIVE
                       submitForm()
                     }}
                   >

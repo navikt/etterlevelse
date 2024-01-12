@@ -20,7 +20,12 @@ export const TeamName = (props: IPropsTeamName) => {
   const [name] = useTeam()(id)
 
   return link ? (
-    <Link className={big ? '' : 'text-medium'} rel="noopener noreferrer" target={'_blank'} href={teamKatTeamLink(id)}>
+    <Link
+      className={big ? '' : 'text-medium'}
+      rel="noopener noreferrer"
+      target={'_blank'}
+      href={teamKatTeamLink(id)}
+    >
       {name} (åpnes i ny fane)
     </Link>
   ) : (

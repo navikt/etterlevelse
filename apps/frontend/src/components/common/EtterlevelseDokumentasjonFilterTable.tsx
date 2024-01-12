@@ -1,12 +1,13 @@
-import { Cell, Row, Table } from './Table'
-import RouteLink from './RouteLink'
 import { gql, useQuery } from '@apollo/client'
-import { EtterlevelseDokumentasjon, PageResponse } from '../../constants'
-import { DotTags } from './DotTag'
-import { ListName } from '../../services/Codelist'
-import { EtterlevelseDokumentasjonFilter } from '../../api/EtterlevelseDokumentasjonApi'
 import { Loader } from '@navikt/ds-react'
+import { TEtterlevelseDokumentasjonFilter } from '../../api/EtterlevelseDokumentasjonApi'
+import { IEtterlevelseDokumentasjon, IPageResponse } from '../../constants'
+import { EListName } from '../../services/Codelist'
+import { DotTags } from './DotTag'
+import RouteLink from './RouteLink'
+import { Cell, Row, Table } from './Table'
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const query = gql`
   query getEtterlevelsedokumentasjon($relevans: [String!]) {
     etterlevelseDokumentasjon(filter: { relevans: $relevans }) {
@@ -22,8 +23,15 @@ const query = gql`
     }
   }
 `
-export const EtterlevelseDokumentasjonFilterTable = (props: { filter: EtterlevelseDokumentasjonFilter; emptyText?: string }) => {
-  const { data, loading } = useQuery<{ etterlevelseDokumentasjon: PageResponse<EtterlevelseDokumentasjon> }>(query, { variables: props.filter })
+// eslint-enable-next-line @typescript-eslint/ban-types
+
+export const EtterlevelseDokumentasjonFilterTable = (props: {
+  filter: TEtterlevelseDokumentasjonFilter
+  emptyText?: string
+}) => {
+  const { data, loading } = useQuery<{
+    etterlevelseDokumentasjon: IPageResponse<IEtterlevelseDokumentasjon>
+  }>(query, { variables: props.filter })
 
   return loading && !data ? (
     <Loader size={'large'} />
@@ -51,10 +59,16 @@ export const EtterlevelseDokumentasjonFilterTable = (props: { filter: Etterlevel
             <Row key={i}>
               <Cell small>E{etterlevelseDokumentasjon.etterlevelseNummer}</Cell>
               <Cell>
-                <RouteLink href={`/dokumentasjon/${etterlevelseDokumentasjon.id}`}>{etterlevelseDokumentasjon.title}</RouteLink>
+                <RouteLink href={`/dokumentasjon/${etterlevelseDokumentasjon.id}`}>
+                  {etterlevelseDokumentasjon.title}
+                </RouteLink>
               </Cell>
               <Cell>
-                <DotTags list={ListName.RELEVANS} codes={etterlevelseDokumentasjon.irrelevansFor} linkCodelist />
+                <DotTags
+                  list={EListName.RELEVANS}
+                  codes={etterlevelseDokumentasjon.irrelevansFor}
+                  linkCodelist
+                />
               </Cell>
             </Row>
           )

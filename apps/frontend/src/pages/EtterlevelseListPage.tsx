@@ -1,29 +1,48 @@
+import { Loader } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import { HeadingXLarge, LabelSmall } from 'baseui/typography'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
+import { Helmet } from 'react-helmet'
 import { useEtterlevelsePage } from '../api/EtterlevelseApi'
 import Button from '../components/common/Button'
-import { theme } from '../util'
 import RouteLink from '../components/common/RouteLink'
-import { etterlevelseName } from './EtterlevelsePage'
-import { user } from '../services/User'
-import { maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
-import { Helmet } from 'react-helmet'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { Loader } from '@navikt/ds-react'
+import { user } from '../services/User'
+import { theme } from '../util'
+import {
+  maxPageWidth,
+  pageWidth,
+  responsivePaddingSmall,
+  responsiveWidthSmall,
+} from '../util/theme'
+import { etterlevelseName } from './EtterlevelsePage'
 
 export const EtterlevelseListPage = () => {
   const [etterlevelse, prev, next, loading] = useEtterlevelsePage(20)
 
   useEffect(() => {
     if (!loading) {
-      ampli.logEvent('sidevisning', { side: 'Dokumentasjons liste for etterlevelse', ...userRoleEventProp })
+      ampli.logEvent('sidevisning', {
+        side: 'Dokumentasjons liste for etterlevelse',
+        ...userRoleEventProp,
+      })
     }
   }, [loading])
 
   return (
-    <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
-      <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
+    <Block
+      id="content"
+      overrides={{ Block: { props: { role: 'main' } } }}
+      maxWidth={maxPageWidth}
+      width="100%"
+    >
+      <Block
+        paddingLeft={responsivePaddingSmall}
+        paddingRight={responsivePaddingSmall}
+        width={responsiveWidthSmall}
+        display="flex"
+        justifyContent="center"
+      >
         <Block minWidth={pageWidth}>
           <Block display="flex" justifyContent="space-between" alignItems="center">
             <Helmet>
@@ -59,7 +78,11 @@ export const EtterlevelseListPage = () => {
             <Button onClick={prev} size="compact" disabled={etterlevelse.pageNumber === 0}>
               Forrige
             </Button>
-            <Button onClick={next} size="compact" disabled={etterlevelse.pageNumber >= etterlevelse.pages - 1}>
+            <Button
+              onClick={next}
+              size="compact"
+              disabled={etterlevelse.pageNumber >= etterlevelse.pages - 1}
+            >
               Neste
             </Button>
           </Block>

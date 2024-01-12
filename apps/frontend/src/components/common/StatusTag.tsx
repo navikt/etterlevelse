@@ -1,14 +1,14 @@
-import { KravStatus } from '../../constants'
+import { Detail, Tag } from '@navikt/ds-react'
+import { EKravStatus } from '../../constants'
 import { kravStatus } from '../../pages/KravPage'
-import { BodyShort, Detail, Tag } from '@navikt/ds-react'
 
-interface StatusViewProps {
-  status: KravStatus | string
+interface IStatusViewProps {
+  status: EKravStatus | string
   variant?: any
   icon?: React.ReactNode
 }
 
-export const StatusView = ({ status, variant, icon }: StatusViewProps) => {
+export const StatusView = ({ status, variant, icon }: IStatusViewProps) => {
   const getStatusDisplay = (variant: any) => {
     return (
       <Tag variant={variant} className="h-fit">
@@ -22,11 +22,11 @@ export const StatusView = ({ status, variant, icon }: StatusViewProps) => {
 
   if (variant) {
     return getStatusDisplay(variant)
-  } else if (status === KravStatus.UTKAST) {
+  } else if (status === EKravStatus.UTKAST) {
     return getStatusDisplay('neutral')
-  } else if (status === KravStatus.AKTIV) {
+  } else if (status === EKravStatus.AKTIV) {
     return getStatusDisplay('success')
-  } else if (status === KravStatus.UTGAATT) {
+  } else if (status === EKravStatus.UTGAATT) {
     return getStatusDisplay('error')
   } else {
     return getStatusDisplay('neutral')

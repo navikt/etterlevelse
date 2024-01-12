@@ -1,33 +1,42 @@
-import React, { ReactNode } from 'react'
-import { ExternalLink, urlForObject } from './RouteLink'
-import { Markdown } from './Markdown'
-import { Code, codelist, ListName } from '../../services/Codelist'
-import { NavigableItem } from '../admin/audit/AuditTypes'
 import { BodyShort } from '@navikt/ds-react'
+import React, { ReactNode } from 'react'
+import { EListName, ICode, codelist } from '../../services/Codelist'
+import { TNavigableItem } from '../admin/audit/AuditTypes'
+import { Markdown } from './Markdown'
+import { ExternalLink, urlForObject } from './RouteLink'
 
-const Content = (props: { item: ReactNode | string; list?: ListName; linkCodelist?: boolean; markdown?: boolean }) => {
+const Content = (props: {
+  item: ReactNode | string
+  list?: EListName
+  linkCodelist?: boolean
+  markdown?: boolean
+}) => {
   const { item, list, linkCodelist, markdown } = props
   if (list) {
     const itemString = item as string
     if (linkCodelist)
-      return <ExternalLink href={urlForObject(list as ListName & NavigableItem, itemString)}>{codelist.getShortname(list as ListName & NavigableItem, itemString)}</ExternalLink>
+      return (
+        <ExternalLink href={urlForObject(list as EListName & TNavigableItem, itemString)}>
+          {codelist.getShortname(list as EListName & TNavigableItem, itemString)}
+        </ExternalLink>
+      )
     return <>{codelist.getShortname(list, itemString)}</>
   }
   if (markdown) return <Markdown source={item as string} />
   return <>{item}</>
 }
 
-type DotTagsParams = {
+type TDotTagsParams = {
   items?: ReactNode[]
-  codes?: Code[]
+  codes?: ICode[]
   commaSeparator?: boolean
   linkCodelist?: boolean
   markdown?: boolean
-  list?: ListName
+  list?: EListName
   inColumn?: boolean
 }
 
-export const DotTags = (props: DotTagsParams) => {
+export const DotTags = (props: TDotTagsParams) => {
   const { commaSeparator } = props
   const items = props.items || props.codes?.map((c) => c.code) || []
 
@@ -49,7 +58,12 @@ export const DotTags = (props: DotTagsParams) => {
   return (
     <div className={`${props.inColumn ? 'block' : 'flex'} flex-wrap`}>
       {items.map((item, i) => (
-        <div className={`${props.inColumn ? 'mb-1.5' : 'mb-0'} ${i < items.length && !commaSeparator ? 'mb-1.5' : 'mb-0'}`} key={i}>
+        <div
+          className={`${props.inColumn ? 'mb-1.5' : 'mb-0'} ${
+            i < items.length && !commaSeparator ? 'mb-1.5' : 'mb-0'
+          }`}
+          key={i}
+        >
           {!props.markdown && (
             <BodyShort className={'break-words'}>
               <Content {...props} item={item} />{' '}

@@ -1,37 +1,69 @@
-import { Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
+import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 import {
+  Accordion,
+  Alert,
+  BodyLong,
+  BodyShort,
+  Button,
+  Checkbox,
+  Heading,
+  Label,
+  Loader,
+  Modal,
+  Select,
+  Spacer,
+  Textarea,
+} from '@navikt/ds-react'
+import * as _ from 'lodash'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import {
+  ITilbakemeldingNewMeldingRequest,
   tilbakemeldingNewMelding,
-  TilbakemeldingNewMeldingRequest,
   tilbakemeldingslettMelding,
   updateTilbakemeldingStatusOgEndretKrav,
   useTilbakemeldinger,
 } from '../../../api/TilbakemeldingApi'
-import React, { useEffect, useState } from 'react'
-import moment from 'moment'
+import {
+  ETilbakemeldingMeldingStatus,
+  ETilbakemeldingRolle,
+  IKrav,
+  ITilbakemelding,
+} from '../../../constants'
 import { user } from '../../../services/User'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { useQueryParam, useRefs } from '../../../util/hooks'
 import { ettlevColors } from '../../../util/theme'
+import { LoginButton } from '../../Header'
 import { mailboxPoppingIcon } from '../../Images'
 import { InfoBlock } from '../../common/InfoBlock'
-import { Portrait } from '../../common/Portrait'
 import { PersonName } from '../../common/PersonName'
-import * as _ from 'lodash'
-import { LoginButton } from '../../Header'
+import { Portrait } from '../../common/Portrait'
 import StatusView from '../../common/StatusTag'
+import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
 import ResponseMelding from './ResponseMelding'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
 import NyTilbakemeldingModal from './edit/NyTilbakemeldingModal'
-import { getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, tilbakemeldingStatusToText } from './utils'
-import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
-import { Accordion, Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Label, Loader, Modal, Select, Spacer, Textarea } from '@navikt/ds-react'
-import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
+import {
+  getParsedOptionsforTilbakeMelding,
+  getTilbakeMeldingStatusToOption,
+  tilbakemeldingStatusToText,
+} from './utils'
 
 const DEFAULT_COUNT_SIZE = 5
 
-export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKravExpired: boolean }) => {
-  const [tilbakemeldinger, loading, add, replace, remove] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
+export const Tilbakemeldinger = ({
+  krav,
+  hasKravExpired,
+}: {
+  krav: IKrav
+  hasKravExpired: boolean
+}) => {
+  const [tilbakemeldinger, loading, add, replace, remove] = useTilbakemeldinger(
+    krav.kravNummer,
+    krav.kravVersjon
+  )
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
   const [count, setCount] = useState(DEFAULT_COUNT_SIZE)
@@ -45,7 +77,10 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
 
   const setFocus = (id: string) => {
     setFocusNr(id)
-    if (location.pathname.split('/')[1] === 'krav') navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}?tilbakemeldingId=${id}`, { replace: true })
+    if (location.pathname.split('/')[1] === 'krav')
+      navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}?tilbakemeldingId=${id}`, {
+        replace: true,
+      })
   }
 
   return (
@@ -62,7 +97,9 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                   <Accordion.Header onClick={() => setFocus(focused ? '' : t.id)}>
                     <div className="w-full p-2 flex">
                       <div>
-                        {t.endretKrav && <ShowWarningMessage warningMessage="Spørsmålet har ført til at innholdet i kravet er endret" />}
+                        {t.endretKrav && (
+                          <ShowWarningMessage warningMessage="Spørsmålet har ført til at innholdet i kravet er endret" />
+                        )}
                         <div className={`flex w-full ${t.endretKrav ? 'mt-2' : ''}`}>
                           <Portrait ident={t.melderIdent} />
                           <div className="flex flex-col w-full ml-2.5">
@@ -71,7 +108,9 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                                 <PersonName ident={t.melderIdent} />
                               </Label>
                               <div className="flex ml-6">
-                                <BodyShort>Sendt: {moment(t.meldinger[0].tid).format('lll')}</BodyShort>
+                                <BodyShort>
+                                  Sendt: {moment(t.meldinger[0].tid).format('lll')}
+                                </BodyShort>
                                 <BodyShort className="ml-3.5">
                                   Kravversjon: K{t.kravNummer}.{t.kravVersjon}
                                 </BodyShort>
@@ -79,7 +118,12 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                             </div>
                             {!focused && (
                               <div className="flex w-full">
-                                <BodyShort className="mr-7 mt-1 w-full">{_.truncate(t.meldinger[0].innhold, { length: 80, separator: /[.,] +/ })}</BodyShort>
+                                <BodyShort className="mr-7 mt-1 w-full">
+                                  {_.truncate(t.meldinger[0].innhold, {
+                                    length: 80,
+                                    separator: /[.,] +/,
+                                  })}
+                                </BodyShort>
                               </div>
                             )}
                           </div>
@@ -98,7 +142,15 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                       </div>
                     )}
                     <div className="flex w-full items-center mt-4">
-                      {focused && t.meldinger.length === 1 && <MeldingKnapper marginLeft melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace} remove={remove} />}
+                      {focused && t.meldinger.length === 1 && (
+                        <MeldingKnapper
+                          marginLeft
+                          melding={t.meldinger[0]}
+                          tilbakemeldingId={t.id}
+                          oppdater={replace}
+                          remove={remove}
+                        />
+                      )}
 
                       {focused && <EndretInfo melding={t.meldinger[0]} />}
                     </div>
@@ -107,7 +159,13 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                     {focused && (
                       <div className="flex flex-col mt-4">
                         {t.meldinger.slice(1).map((m) => (
-                          <ResponseMelding key={m.meldingNr} m={m} tilbakemelding={t} oppdater={replace} remove={remove} />
+                          <ResponseMelding
+                            key={m.meldingNr}
+                            m={m}
+                            tilbakemelding={t}
+                            oppdater={replace}
+                            remove={remove}
+                          />
                         ))}
                       </div>
                     )}
@@ -147,7 +205,12 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
       )}
 
       {!loading && !tilbakemeldinger.length && (
-        <InfoBlock icon={mailboxPoppingIcon} alt={'Åpen mailboks icon'} text={'Det har ikke kommet inn noen tilbakemeldinger'} color={ettlevColors.red50} />
+        <InfoBlock
+          icon={mailboxPoppingIcon}
+          alt={'Åpen mailboks icon'}
+          text={'Det har ikke kommet inn noen tilbakemeldinger'}
+          color={ettlevColors.red50}
+        />
       )}
 
       {!hasKravExpired && (
@@ -158,14 +221,20 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
             </Heading>
             {user.isLoggedIn() ? (
               <BodyLong className="max-w-xl">
-                Her kan du stille kraveier et spørsmål dersom det er uklarheter vedrørende hvordan kravet skal forstås. Spørsmål og svar fra kraveier blir synlig for alle på denne
+                Her kan du stille kraveier et spørsmål dersom det er uklarheter vedrørende hvordan
+                kravet skal forstås. Spørsmål og svar fra kraveier blir synlig for alle på denne
                 siden.
               </BodyLong>
             ) : (
-              <BodyShort>Du må være innlogget for å stille kraveier et spørsmål, og for å se tidligere spørsmål og svar.</BodyShort>
+              <BodyShort>
+                Du må være innlogget for å stille kraveier et spørsmål, og for å se tidligere
+                spørsmål og svar.
+              </BodyShort>
             )}
 
-            {user.canWrite() && <Button onClick={() => setAddTilbakemelding(true)}>Still et spørsmål</Button>}
+            {user.canWrite() && (
+              <Button onClick={() => setAddTilbakemelding(true)}>Still et spørsmål</Button>
+            )}
             {!user.isLoggedIn() && <LoginButton />}
           </div>
 
@@ -183,50 +252,65 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
   )
 }
 
-const getStatus = (tilbakemelding: Tilbakemelding) => {
-  let status = TilbakemeldingMeldingStatus.UBESVART
+const getStatus = (tilbakemelding: ITilbakemelding) => {
+  let status = ETilbakemeldingMeldingStatus.UBESVART
 
   if (tilbakemelding.status) {
     status = tilbakemelding.status
   } else {
-    if (tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1].rolle === TilbakemeldingRolle.KRAVEIER) {
-      status = TilbakemeldingMeldingStatus.BESVART
+    if (
+      tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1].rolle ===
+      ETilbakemeldingRolle.KRAVEIER
+    ) {
+      status = ETilbakemeldingMeldingStatus.BESVART
     }
   }
 
   return status
 }
 
-export const getMelderInfo = (tilbakemelding: Tilbakemelding) => {
+export const getMelderInfo = (tilbakemelding: ITilbakemelding) => {
   const sistMelding = tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1]
   const status = getStatus(tilbakemelding)
   const melder = user.getIdent() === tilbakemelding.melderIdent
-  const rolle = tilbakemelding?.melderIdent === user.getIdent() ? TilbakemeldingRolle.MELDER : TilbakemeldingRolle.KRAVEIER
+  const rolle =
+    tilbakemelding?.melderIdent === user.getIdent()
+      ? ETilbakemeldingRolle.MELDER
+      : ETilbakemeldingRolle.KRAVEIER
   const melderOrKraveier = melder || user.isKraveier()
-  const ubesvartOgKraveier = status === TilbakemeldingMeldingStatus.UBESVART && user.isKraveier()
+  const ubesvartOgKraveier = status === ETilbakemeldingMeldingStatus.UBESVART && user.isKraveier()
   const kanSkrive =
-    (status === TilbakemeldingMeldingStatus.UBESVART && rolle === TilbakemeldingRolle.KRAVEIER) ||
-    (status !== TilbakemeldingMeldingStatus.UBESVART && rolle === TilbakemeldingRolle.MELDER)
+    (status === ETilbakemeldingMeldingStatus.UBESVART && rolle === ETilbakemeldingRolle.KRAVEIER) ||
+    (status !== ETilbakemeldingMeldingStatus.UBESVART && rolle === ETilbakemeldingRolle.MELDER)
   return { status, ubesvartOgKraveier, rolle, melder, melderOrKraveier, sistMelding, kanSkrive }
 }
 
-type TilbakemeldingSvarProps = {
-  tilbakemelding: Tilbakemelding
+type TTilbakemeldingSvarProps = {
+  tilbakemelding: ITilbakemelding
   setFocusNummer: (fn: string | undefined) => void
-  close: (t: Tilbakemelding) => void
+  close: (t: ITilbakemelding) => void
   ubesvartOgKraveier: boolean
-  remove: (t: Tilbakemelding) => void
-  replace: (t: Tilbakemelding) => void
+  remove: (t: ITilbakemelding) => void
+  replace: (t: ITilbakemelding) => void
 }
 
-const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgKraveier, remove, replace }: TilbakemeldingSvarProps) => {
+const TilbakemeldingSvar = ({
+  tilbakemelding,
+  setFocusNummer,
+  close,
+  ubesvartOgKraveier,
+  remove,
+  replace,
+}: TTilbakemeldingSvarProps) => {
   const melderInfo = getMelderInfo(tilbakemelding)
   const [response, setResponse] = useState('')
   const [replyRole] = useState(melderInfo.rolle)
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
-  const [tilbakeMeldingStatus, setTilbakemeldingStatus] = useState<TilbakemeldingMeldingStatus>(tilbakemelding.status || TilbakemeldingMeldingStatus.UBESVART)
+  const [tilbakeMeldingStatus, setTilbakemeldingStatus] = useState<ETilbakemeldingMeldingStatus>(
+    tilbakemelding.status || ETilbakemeldingMeldingStatus.UBESVART
+  )
   const [isEndretKrav, setIsEndretKrav] = useState<boolean>(tilbakemelding.endretKrav || false)
   const [isUpdatingStatus, setIsUpdatingStatus] = useState<boolean>(false)
 
@@ -234,7 +318,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
     if (response) {
       setFocusNummer(tilbakemelding.id)
 
-      const req: TilbakemeldingNewMeldingRequest = {
+      const req: ITilbakemeldingNewMeldingRequest = {
         tilbakemeldingId: tilbakemelding.id,
         rolle: replyRole,
         melding: response,
@@ -279,7 +363,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
               hideLabel
               value={getTilbakeMeldingStatusToOption(tilbakeMeldingStatus)[0].id}
               onChange={(e) => {
-                setTilbakemeldingStatus(e.target.value as TilbakemeldingMeldingStatus)
+                setTilbakemeldingStatus(e.target.value as ETilbakemeldingMeldingStatus)
               }}
             >
               {getParsedOptionsforTilbakeMelding().map((o, i) => (
@@ -322,7 +406,10 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
               <Button
                 className="ml-2.5"
                 onClick={() =>
-                  tilbakemeldingslettMelding({ tilbakemeldingId: tilbakemelding.id, meldingNr: 1 }).then((t) => {
+                  tilbakemeldingslettMelding({
+                    tilbakemeldingId: tilbakemelding.id,
+                    meldingNr: 1,
+                  }).then((t) => {
                     remove({ ...t, meldinger: [] })
                     setDeleteModal(false)
                   })
@@ -336,7 +423,11 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
       </div>
       <div className="flex mt-2 w-full">
         {user.isAdmin() && (
-          <Button icon={<TrashIcon aria-label="" aria-hidden />} variant="secondary" onClick={() => setDeleteModal(true)}>
+          <Button
+            icon={<TrashIcon aria-label="" aria-hidden />}
+            variant="secondary"
+            onClick={() => setDeleteModal(true)}
+          >
             Slett hele samtalen
           </Button>
         )}

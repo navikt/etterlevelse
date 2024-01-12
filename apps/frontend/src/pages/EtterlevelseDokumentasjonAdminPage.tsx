@@ -1,17 +1,18 @@
-import { Helmet } from 'react-helmet'
-import { deleteEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
-import { useState } from 'react'
-import { UpdateMessage } from './EtterlevelseAdminPage'
-import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { Button, Heading, TextField } from '@navikt/ds-react'
+import { useState } from 'react'
+import { deleteEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { PageLayout } from '../components/scaffold/Page'
+import { UpdateMessage } from './EtterlevelseAdminPage'
 
 export const EtterlevelseDokumentasjonAdminPage = () => {
   const [etterlevelseDokumentasjonId, setEtterlevelseDokumentasjonId] = useState('')
   const [updateMessage, setUpdateMessage] = useState('')
 
   return (
-    <PageLayout pageTitle="dministrere Etterlevelse Dokumentasjon" currentPage="Administrere Etterlevelse Dokumentasjon">
+    <PageLayout
+      pageTitle="dministrere Etterlevelse Dokumentasjon"
+      currentPage="Administrere Etterlevelse Dokumentasjon"
+    >
       <Heading size="medium" level="1">
         Administrere Etterlevelse Dokumentasjon
       </Heading>
@@ -31,7 +32,9 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
               setUpdateMessage('')
               deleteEtterlevelseDokumentasjon(etterlevelseDokumentasjonId)
                 .then(() => {
-                  setUpdateMessage('Sletting vellykket for etterlevelses med uid: ' + etterlevelseDokumentasjonId)
+                  setUpdateMessage(
+                    'Sletting vellykket for etterlevelses med uid: ' + etterlevelseDokumentasjonId
+                  )
                   setEtterlevelseDokumentasjonId('')
                 })
                 .catch((e) => {

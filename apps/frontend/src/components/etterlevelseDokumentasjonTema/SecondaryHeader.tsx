@@ -1,20 +1,18 @@
 import { Block } from 'baseui/block'
-import Button from '../common/Button'
-import { borderRadius, marginAll } from '../common/Style'
 import { HeadingXXLarge } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
-import CustomizedModal from '../common/CustomizedModal'
-import { getTemaMainHeader } from '../../pages/TemaPage'
 import { useState } from 'react'
-import { EtterlevelseDokumentasjon } from '../../constants'
-import { LovCode, TemaCode } from '../../services/Codelist'
+import { getTemaMainHeader } from '../../pages/TemaPage'
+import { TLovCode, TTemaCode } from '../../services/Codelist'
+import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
+import Button from '../common/Button'
+import CustomizedModal from '../common/CustomizedModal'
+import { borderRadius, marginAll } from '../common/Style'
 
-type SecondaryHeaderProps = {
-  etterlevelseDokumentasjon: EtterlevelseDokumentasjon | undefined
-  temaData: TemaCode | undefined
-  lovListe: LovCode[]
+type TSecondaryHeaderProps = {
+  temaData: TTemaCode | undefined
+  lovListe: TLovCode[]
 }
-export const SecondaryHeader = ({ etterlevelseDokumentasjon, temaData, lovListe }: SecondaryHeaderProps) => {
+export const SecondaryHeader = ({ temaData, lovListe }: TSecondaryHeaderProps) => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
 
   return (
@@ -67,7 +65,12 @@ export const SecondaryHeader = ({ etterlevelseDokumentasjon, temaData, lovListe 
                 {temaData?.shortName}
               </HeadingXXLarge>
             </Block>
-            <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
+            <Block
+              marginBottom="55px"
+              marginTop="40px"
+              paddingLeft={responsivePaddingExtraLarge}
+              paddingRight={responsivePaddingExtraLarge}
+            >
               <Block>{getTemaMainHeader(temaData, lovListe, true)}</Block>
               <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                 <Button onClick={() => setIsTemaModalOpen(false)}>Lukk visning</Button>

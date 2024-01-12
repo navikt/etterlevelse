@@ -1,22 +1,22 @@
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Block } from 'baseui/block'
+import { Button as BaseUIButton, KIND, SHAPE, SIZE } from 'baseui/button'
+import { Override } from 'baseui/overrides'
+import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
+import _ from 'lodash'
 import * as React from 'react'
 import { ReactNode } from 'react'
-import { Button as BaseUIButton, KIND, SHAPE, SIZE } from 'baseui/button'
-import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { theme } from '../../util'
-import { Override } from 'baseui/overrides'
 import { StyleObject } from 'styletron-react'
-import { Block } from 'baseui/block'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
+import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
 import { ExternalLink } from './RouteLink'
-import _ from 'lodash'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
 
-export type ButtonKind = (typeof KIND)[keyof typeof KIND] | 'outline' | 'underline-hover'
+export type TButtonKind = (typeof KIND)[keyof typeof KIND] | 'outline' | 'underline-hover'
 
-interface ButtonProps {
-  kind?: ButtonKind
+interface IButtonProps {
+  kind?: TButtonKind
   type?: 'submit' | 'reset' | 'button'
   size?: (typeof SIZE)[keyof typeof SIZE]
   shape?: (typeof SHAPE)[keyof typeof SHAPE]
@@ -36,12 +36,12 @@ interface ButtonProps {
   notBold?: boolean
 }
 
-interface TooltipProps {
+interface ITooltipProps {
   tooltip?: string
   children: React.ReactElement
 }
 
-const Tooltip = (props: TooltipProps) =>
+const Tooltip = (props: ITooltipProps) =>
   props.tooltip ? (
     <StatefulTooltip content={props.tooltip} placement={PLACEMENT.top} focusLock={false}>
       {props.children}
@@ -86,19 +86,32 @@ export const primaryFocusBorder = {
   },
 }
 
-export const Button = (props: ButtonProps) => {
-  const baseuiKind = props.kind === 'outline' ? KIND.secondary : props.kind === 'underline-hover' ? KIND.tertiary : props.kind
+export const Button = (props: IButtonProps) => {
+  const baseuiKind =
+    props.kind === 'outline'
+      ? KIND.secondary
+      : props.kind === 'underline-hover'
+        ? KIND.tertiary
+        : props.kind
 
   const boxShadow =
     !props.kind || props.kind === 'primary' || props.kind === 'secondary'
       ? {
           style: {
             ...buttonContentStyle,
-            boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
-            ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
-            ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
+            boxShadow:
+              '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
+            ':hover': {
+              boxShadow:
+                '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
+            },
+            ':active': {
+              boxShadow:
+                '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)',
+            },
             ':focus': {
-              boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
+              boxShadow:
+                '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
               outlineWidth: '3px',
               outlineStyle: 'solid',
               outlineColor: ettlevColors.focusOutline,
@@ -112,12 +125,18 @@ export const Button = (props: ButtonProps) => {
           },
         }
 
-  let overrides: Override<any> = boxShadow
+  const overrides: Override<any> = boxShadow
   overrides.style = _.merge(overrides.style, props.kind === 'outline' ? outlineOverride : {})
-  overrides.style = _.merge(overrides.style, props.kind === 'underline-hover' ? underlineOverride : {})
+  overrides.style = _.merge(
+    overrides.style,
+    props.kind === 'underline-hover' ? underlineOverride : {}
+  )
   overrides.style = _.merge(overrides.style, props.kind === 'secondary' ? buttonBorderStyle : {})
   overrides.style = _.merge(overrides.style, props.hidePadding ? paddingAll('0') : {})
-  overrides.style = _.merge(overrides.style, props.inline ? { paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100 } : {})
+  overrides.style = _.merge(
+    overrides.style,
+    props.inline ? { paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100 } : {}
+  )
   overrides.style = _.merge(overrides.style, props.$style || {})
 
   return (
@@ -135,9 +154,21 @@ export const Button = (props: ButtonProps) => {
           type={props.type}
           aria-label={props.label}
         >
-          {props.icon && <FontAwesomeIcon icon={props.icon} style={{ marginRight: props.children ? '.5rem' : undefined }} fixedWidth />}
+          {props.icon && (
+            <FontAwesomeIcon
+              icon={props.icon}
+              style={{ marginRight: props.children ? '.5rem' : undefined }}
+              fixedWidth
+            />
+          )}
           {props.notBold ? props.children : <strong>{props.children}</strong>}
-          {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{ marginLeft: props.children ? '.5rem' : undefined }} fixedWidth />}
+          {props.iconEnd && (
+            <FontAwesomeIcon
+              icon={props.iconEnd}
+              style={{ marginLeft: props.children ? '.5rem' : undefined }}
+              fixedWidth
+            />
+          )}
         </BaseUIButton>
       </Tooltip>
       <Block display="inline" marginRight={props.marginRight ? theme.sizing.scale600 : 0} />
@@ -168,7 +199,7 @@ export const ExternalButton = ({
   underlineHover?: boolean
   size?: (typeof SIZE)[keyof typeof SIZE]
   openOnSamePage?: boolean
-  kind?: ButtonKind
+  kind?: TButtonKind
 }) => {
   const underlineStyle = underlineHover ? 'underline-hover' : 'outline'
   const actualSize = size || 'compact'

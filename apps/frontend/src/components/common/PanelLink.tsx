@@ -1,15 +1,30 @@
-import React, { useState } from 'react'
-import RouteLink, { ExternalLink } from './RouteLink'
 import { Block, BlockOverrides, Responsive, Scale } from 'baseui/block'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll, paddingZero } from './Style'
+import {
+  HeadingXLarge,
+  LabelLarge,
+  LabelSmall,
+  ParagraphMedium,
+  ParagraphSmall,
+  ParagraphXSmall,
+} from 'baseui/typography'
+import * as _ from 'lodash'
+import React, { useState } from 'react'
 import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
-import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall } from 'baseui/typography'
 import { arrowRightIcon, navChevronRightIcon } from '../Images'
-import * as _ from 'lodash'
 import Button from './Button'
+import RouteLink, { ExternalLink } from './RouteLink'
+import {
+  borderColor,
+  borderRadius,
+  borderStyle,
+  borderWidth,
+  padding,
+  paddingAll,
+  paddingZero,
+} from './Style'
 
-interface PanelProps {
+interface IPanelProps {
   href: string
   title: string | React.ReactNode
   rightTitle?: string
@@ -27,7 +42,7 @@ interface PanelProps {
   hideChevron?: boolean
 }
 
-interface PanelButtonProps {
+interface IPanelButtonProps {
   onClick: () => void
   title: string | React.ReactNode
   rightTitle?: string
@@ -61,7 +76,7 @@ export const PanelLink = ({
   useTitleUnderLine,
   useDescriptionUnderline,
   hideChevron,
-}: PanelProps) => {
+}: IPanelProps) => {
   return (
     <RouteLink
       href={href}
@@ -106,7 +121,7 @@ export const PanelButton = ({
   useTitleUnderLine,
   useDescriptionUnderline,
   hideChevron,
-}: PanelButtonProps) => {
+}: IPanelButtonProps) => {
   return (
     <Button
       notBold
@@ -158,7 +173,7 @@ export const PanelExternalLink = ({
   useTitleUnderLine,
   useDescriptionUnderline,
   hideChevron,
-}: PanelProps) => {
+}: IPanelProps) => {
   return (
     <ExternalLink href={href}>
       <SimplePanel
@@ -181,7 +196,11 @@ export const PanelExternalLink = ({
   )
 }
 
-export type PanelLinkCardOverrides = { Root?: BlockOverrides; Header?: BlockOverrides; Content?: BlockOverrides }
+export type TPanelLinkCardOverrides = {
+  Root?: BlockOverrides
+  Header?: BlockOverrides
+  Content?: BlockOverrides
+}
 
 export const PanelLinkCard = ({
   href,
@@ -190,7 +209,6 @@ export const PanelLinkCard = ({
   titleColor,
   beskrivelse,
   headerContent,
-  footerContent,
   children,
   icon,
   requireLogin,
@@ -212,7 +230,6 @@ export const PanelLinkCard = ({
   titleColor?: string
   beskrivelse?: string
   headerContent?: React.ReactNode
-  footerContent?: React.ReactNode
   children?: React.ReactNode
   icon?: string
   requireLogin?: boolean
@@ -221,7 +238,7 @@ export const PanelLinkCard = ({
   width?: Responsive<Scale>
   maxWidth?: string
   verticalMargin?: string
-  overrides?: PanelLinkCardOverrides
+  overrides?: TPanelLinkCardOverrides
   flexContent?: boolean
   hideArrow?: boolean
   marginRight?: Responsive<Scale>
@@ -268,7 +285,7 @@ export const PanelLinkCard = ({
         },
       },
     },
-    overrides?.Header,
+    overrides?.Header
   )
 
   const contentOverrides = _.merge(
@@ -279,12 +296,24 @@ export const PanelLinkCard = ({
         },
       },
     },
-    overrides?.Content,
+    overrides?.Content
   )
 
   return (
-    <Block onClick={() => onClick && onClick()} width={width} maxWidth={maxWidth} overrides={rootOverrides} marginRight={marginRight} height="inherit">
-      <RouteLink href={href} hideUnderline requireLogin={requireLogin} openinnewtab={(!!openinnewtab).toString()}>
+    <Block
+      onClick={() => onClick && onClick()}
+      width={width}
+      maxWidth={maxWidth}
+      overrides={rootOverrides}
+      marginRight={marginRight}
+      height="inherit"
+    >
+      <RouteLink
+        href={href}
+        hideUnderline
+        requireLogin={requireLogin}
+        openinnewtab={(!!openinnewtab).toString()}
+      >
         <Block
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
@@ -297,15 +326,28 @@ export const PanelLinkCard = ({
         >
           <Block overrides={headerOverrides} display="block" marginBottom={theme.sizing.scale600}>
             {icon && (
-              <Block display={'flex'} justifyContent={'center'} marginTop={theme.sizing.scale600} marginRight={theme.sizing.scale850}>
+              <Block
+                display={'flex'}
+                justifyContent={'center'}
+                marginTop={theme.sizing.scale600}
+                marginRight={theme.sizing.scale850}
+              >
                 <img src={icon} alt={''} aria-hidden />
               </Block>
             )}
 
-            <Block display="flex" alignItems="flex-end" height={headerContent ? '60%' : ''} marginRight={'auto'}>
+            <Block
+              display="flex"
+              alignItems="flex-end"
+              height={headerContent ? '60%' : ''}
+              marginRight={'auto'}
+            >
               <HeadingXLarge
                 marginBottom={theme.sizing.scale700}
-                $style={{ textDecoration: href && hover ? '3px underline ' : undefined, color: titleColor ? titleColor : undefined }}
+                $style={{
+                  textDecoration: href && hover ? '3px underline ' : undefined,
+                  color: titleColor ? titleColor : undefined,
+                }}
               >
                 {tittel}
               </HeadingXLarge>
@@ -320,7 +362,12 @@ export const PanelLinkCard = ({
               height: height ? '100%' : undefined,
             }}
           >
-            <Block height={height} maxHeight={maxHeight} overrides={contentOverrides} width={flexContent ? '100%' : undefined}>
+            <Block
+              height={height}
+              maxHeight={maxHeight}
+              overrides={contentOverrides}
+              width={flexContent ? '100%' : undefined}
+            >
               {beskrivelse && (
                 <Block>
                   <ParagraphMedium marginTop={0}>{beskrivelse}</ParagraphMedium>
@@ -335,7 +382,14 @@ export const PanelLinkCard = ({
             <Block display="flex" width="100%" height="100%">
               {ComplimentaryContent && <Block minWidth="70%">{ComplimentaryContent}</Block>}
               {!hideArrow && (
-                <Block width="100%" justifyContent="flex-end" alignSelf="flex-end" display="flex" padding={paddingSize} paddingLeft={flexContent ? '0px' : undefined}>
+                <Block
+                  width="100%"
+                  justifyContent="flex-end"
+                  alignSelf="flex-end"
+                  display="flex"
+                  padding={paddingSize}
+                  paddingLeft={flexContent ? '0px' : undefined}
+                >
                   <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'} />
                 </Block>
               )}
@@ -347,13 +401,37 @@ export const PanelLinkCard = ({
   )
 }
 
-export const Chevron = ({ hover, icon, distance, size, marginLeft }: { hover: boolean; icon: string; distance: string; size?: string; marginLeft?: string }) => (
+export const Chevron = ({
+  hover,
+  icon,
+  distance,
+  size,
+  marginLeft,
+}: {
+  hover: boolean
+  icon: string
+  distance: string
+  size?: string
+  marginLeft?: string
+}) => (
   <Block
-    marginLeft={hover ? `calc(${theme.sizing.scale600} + ${distance})` : marginLeft ? marginLeft : theme.sizing.scale600}
+    marginLeft={
+      hover
+        ? `calc(${theme.sizing.scale600} + ${distance})`
+        : marginLeft
+          ? marginLeft
+          : theme.sizing.scale600
+    }
     alignSelf={'center'}
     marginRight={hover ? '-' + distance : 0}
   >
-    <img src={icon} aria-hidden alt={'Chevron høyre ikon'} width={size ? size : '24px'} height={size ? size : '24px'} />
+    <img
+      src={icon}
+      aria-hidden
+      alt={'Chevron høyre ikon'}
+      width={size ? size : '24px'}
+      height={size ? size : '24px'}
+    />
   </Block>
 )
 
@@ -422,7 +500,12 @@ export const SimplePanel = ({
   const mergedOverrides = _.merge(customOverrides, overrides)
 
   return (
-    <Block display={responsiveDisplay} overrides={mergedOverrides} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+    <Block
+      display={responsiveDisplay}
+      overrides={mergedOverrides}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
       <div className="flex gap-2">
         {panelIcon && (
           <Block display="flex" marginLeft="27px" alignItems="center">
@@ -445,7 +528,11 @@ export const SimplePanel = ({
               textDecoration: useTitleUnderLine && hover ? 'underline' : 'none',
             }}
           >
-            {title instanceof String ? <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge> : title}
+            {title instanceof String ? (
+              <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge>
+            ) : (
+              title
+            )}
           </Block>
           <Block
             $style={{
@@ -465,17 +552,34 @@ export const SimplePanel = ({
 
       <Block display="flex">
         {statusText && (
-          <Block minWidth="100px" display="flex" flexDirection="row-reverse" marginRight="20px" alignItems="center">
+          <Block
+            minWidth="100px"
+            display="flex"
+            flexDirection="row-reverse"
+            marginRight="20px"
+            alignItems="center"
+          >
             {statusText instanceof String ? <LabelSmall>{statusText}</LabelSmall> : statusText}
           </Block>
         )}
         <Block display="flex" width="100%">
           {(rightTitle || rightBeskrivelse) && (
             <Block display="flex">
-              <Block minWidth="175px" maxWidth="175px" display="flex" flexDirection={flip ? 'column-reverse' : 'column'} justifyContent="center" $style={{ textAlign: 'left' }}>
+              <Block
+                minWidth="175px"
+                maxWidth="175px"
+                display="flex"
+                flexDirection={flip ? 'column-reverse' : 'column'}
+                justifyContent="center"
+                $style={{ textAlign: 'left' }}
+              >
                 {rightTitle && <LabelSmall $style={{ fontSize: '14px' }}>{rightTitle}</LabelSmall>}
                 {rightBeskrivelse && (
-                  <ParagraphXSmall marginBottom="0px" marginTop="0px" $style={{ lineHeight: '15px' }}>
+                  <ParagraphXSmall
+                    marginBottom="0px"
+                    marginTop="0px"
+                    $style={{ lineHeight: '15px' }}
+                  >
                     {rightBeskrivelse}
                   </ParagraphXSmall>
                 )}

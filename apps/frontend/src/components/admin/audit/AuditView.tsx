@@ -1,40 +1,54 @@
-import moment from 'moment'
-import { JsonView } from 'react-json-view-lite'
-import { useEffect, useState } from 'react'
-import { AuditActionIcon, AuditLabel } from './AuditComponents'
+import { ArrowRightLeftIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { Box, Button, Label, Loader, Modal, Tooltip } from '@navikt/ds-react'
 import { Differ, Viewer } from 'json-diff-kit'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
+import { JsonView } from 'react-json-view-lite'
 import { useRefs } from '../../../util/hooks'
 import { intl } from '../../../util/intl/intl'
-import { AuditAction, AuditItem, AuditLog } from './AuditTypes'
 import { ObjectLink } from '../../common/RouteLink'
-import { Box, Button, Label, Loader, Modal, Tooltip } from '@navikt/ds-react'
-import { ArrowRightLeftIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { AuditActionIcon, AuditLabel } from './AuditComponents'
+import { EAuditAction, IAuditItem, IAuditLog } from './AuditTypes'
 
-type AuditViewProps = {
-  auditLog?: AuditLog
+type TAuditViewProps = {
+  auditLog?: IAuditLog
   auditId?: string
   loading: boolean
   viewId: (id: string) => void
 }
 
-type ComparisonViewProps = {
-  auditLog: AuditLog
-  audit: AuditItem
+type TComparisonViewProps = {
+  auditLog: IAuditLog
+  audit: IAuditItem
   index: number
 }
 
-const ComparisonView = (props: ComparisonViewProps) => {
+const ComparisonView = (props: TComparisonViewProps) => {
   const { auditLog, audit, index } = props
   const [modalOpen, setModalOpen] = useState(false)
 
   return (
     <div>
-      <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant="tertiary" icon={<ArrowRightLeftIcon title="se forskjell" />} />
-      <Modal key={audit.id} open={modalOpen} onClose={() => setModalOpen(false)} width="75%" className="h-3/4 overflow-y-scroll">
+      <Button
+        key={audit.id}
+        onClick={() => setModalOpen(!modalOpen)}
+        variant="tertiary"
+        icon={<ArrowRightLeftIcon title="se forskjell" />}
+      />
+      <Modal
+        key={audit.id}
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        width="75%"
+        className="h-3/4 overflow-y-scroll"
+      >
         <Modal.Header />
         <Modal.Body>
           <Viewer
-            diff={new Differ().diff(auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {}, audit.data)}
+            diff={new Differ().diff(
+              auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {},
+              audit.data
+            )}
             highlightInlineDiff={true}
             lineNumbers={true}
             indent={4}
@@ -45,7 +59,7 @@ const ComparisonView = (props: ComparisonViewProps) => {
   )
 }
 
-export const AuditView = (props: AuditViewProps) => {
+export const AuditView = (props: TAuditViewProps) => {
   const { auditLog, auditId, loading, viewId } = props
   const refs = useRefs<HTMLDivElement>(auditLog?.audits.map((al) => al.id) || [])
   const [openAll, setOpenAll] = useState(false)
@@ -76,13 +90,22 @@ export const AuditView = (props: AuditViewProps) => {
               <Button variant="tertiary" className="mr-2" onClick={() => setOpenAll(!openAll)}>
                 {openAll ? 'Lukke' : 'Åpne'} alle
               </Button>
-              {newestAudit?.action !== AuditAction.DELETE && (
-                <ObjectLink id={newestAudit!.tableId} type={newestAudit!.table} noNewTabLabel audit={newestAudit}>
+              {newestAudit?.action !== EAuditAction.DELETE && (
+                <ObjectLink
+                  id={newestAudit!.tableId}
+                  type={newestAudit!.table}
+                  noNewTabLabel
+                  audit={newestAudit}
+                >
                   <Button variant="tertiary">Vis bruk (åpnes i ny fane)</Button>
                 </ObjectLink>
               )}
               <Tooltip content="Lukk" placement="top">
-                <Button variant="tertiary" onClick={() => viewId('')} icon={<XMarkIcon title="Lukk" />} />
+                <Button
+                  variant="tertiary"
+                  onClick={() => viewId('')}
+                  icon={<XMarkIcon title="Lukk" />}
+                />
               </Tooltip>
             </div>
           </div>

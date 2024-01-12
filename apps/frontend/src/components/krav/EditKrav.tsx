@@ -1,35 +1,40 @@
-import { Krav, KravQL, KravStatus, KravVersjon } from '../../constants'
+import { Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal } from '@navikt/ds-react'
+import axios from 'axios'
 import { Form, Formik } from 'formik'
-import { createKrav, getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav } from '../../api/KravApi'
+import _ from 'lodash'
 import React, { useEffect } from 'react'
 import * as yup from 'yup'
-import { codelist, ListName } from '../../services/Codelist'
-import { InputField, MultiInputField, TextAreaField } from '../common/Inputs'
-import axios from 'axios'
+import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
+import {
+  createKrav,
+  getKravByKravNumberAndVersion,
+  kravMapToFormVal,
+  updateKrav,
+} from '../../api/KravApi'
+import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../../constants'
+import { EListName, codelist } from '../../services/Codelist'
+import { user } from '../../services/User'
 import { env } from '../../util/env'
+import ErrorModal from '../ErrorModal'
+import { InputField, MultiInputField, TextAreaField } from '../common/Inputs'
+import { Error } from '../common/ModalSchema'
+import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
+import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
+import { EditBegreper } from './Edit/KravBegreperEdit'
+import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
 import { RegelverkEdit } from './Edit/RegelverkEdit'
-import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
-import { EditBegreper } from './Edit/KravBegreperEdit'
-import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
-import ErrorModal from '../ErrorModal'
-import { Error } from '../common/ModalSchema'
 import { ErrorMessageModal } from './ErrorMessageModal'
-import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
-import { user } from '../../services/User'
-import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
-import _ from 'lodash'
-import { Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal } from '@navikt/ds-react'
 
-type EditKravProps = {
-  krav: KravQL
-  close: (k?: Krav) => void
+type TEditKravProps = {
+  krav: TKravQL
+  close: (k?: IKrav) => void
   formRef: React.Ref<any>
   isOpen: boolean | undefined
-  setIsOpen: Function
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean | undefined>>
   newVersion?: boolean
   newKrav?: boolean
-  alleKravVersjoner: KravVersjon[]
+  alleKravVersjoner: IKravVersjon[]
 }
 
 const maxInputWidth = '400px'
@@ -37,12 +42,23 @@ const modalWidth = '1276px'
 
 export const kravModal = () => document.querySelector('#krav-modal')
 
-export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, newKrav, alleKravVersjoner }: EditKravProps) => {
+export const EditKrav = ({
+  krav,
+  close,
+  formRef,
+  isOpen,
+  setIsOpen,
+  newVersion,
+  newKrav,
+  alleKravVersjoner,
+}: TEditKravProps) => {
   const [stickyHeader, setStickyHeader] = React.useState(false)
   const [stickyFooterStyle, setStickyFooterStyle] = React.useState(true)
   const [showErrorModal, setShowErrorModal] = React.useState(false)
   const [errorModalMessage, setErrorModalMessage] = React.useState('')
-  const [varselMeldingActive, setVarselMeldingActive] = React.useState<String[]>(krav.varselMelding ? ['VarselMelding'] : [])
+  const [varselMeldingActive, setVarselMeldingActive] = React.useState<string[]>(
+    krav.varselMelding ? ['VarselMelding'] : []
+  )
   const [UtgaattKravMessage, setUtgaattKravMessage] = React.useState<boolean>(false)
   const [aktivKravMessage, setAktivKravMessage] = React.useState<boolean>(false)
 
@@ -56,8 +72,12 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
         message: errorMessage,
         test: function (suksesskriterier) {
           const { parent } = this
-          if (parent.status === KravStatus.AKTIV) {
-            return suksesskriterier && suksesskriterier.length > 0 && suksesskriterier.every((s) => s.navn) ? true : false
+          if (parent.status === EKravStatus.AKTIV) {
+            return suksesskriterier &&
+              suksesskriterier.length > 0 &&
+              suksesskriterier.every((s) => s.navn)
+              ? true
+              : false
           }
           return true
         },
@@ -67,7 +87,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
         message: errorMessage,
         test: function (hensikt) {
           const { parent } = this
-          if (parent.status === KravStatus.AKTIV) {
+          if (parent.status === EKravStatus.AKTIV) {
             return hensikt ? true : false
           }
           return true
@@ -77,22 +97,21 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
         name: 'versjonEndringerCheck',
         message: errorMessage,
         test: function (versjonEndringer) {
-          const { parent} = this
-          if(parent.status===KravStatus.AKTIV) {
-             if(!newKrav && krav.kravVersjon > 1) {
-               return  versjonEndringer ? true : false
-             }
+          const { parent } = this
+          if (parent.status === EKravStatus.AKTIV) {
+            if (!newKrav && krav.kravVersjon > 1) {
+              return versjonEndringer ? true : false
+            }
           }
           return true
         },
-
       }),
       regelverk: yup.array().test({
         name: 'regelverkCheck',
         message: errorMessage,
         test: function (regelverk) {
           const { parent } = this
-          if (parent.status === KravStatus.AKTIV) {
+          if (parent.status === EKravStatus.AKTIV) {
             return regelverk && regelverk.length > 0 ? true : false
           }
           return true
@@ -103,7 +122,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
         message: errorMessage,
         test: function (varslingsadresser) {
           const { parent } = this
-          if (parent.status === KravStatus.AKTIV) {
+          if (parent.status === EKravStatus.AKTIV) {
             return varslingsadresser && varslingsadresser.length > 0 ? true : false
           }
           return true
@@ -111,11 +130,18 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
       }),
       status: yup.string().test({
         name: 'statusCheck',
-        message: 'Det er ikke lov å sette versjonen til utgått. Det eksistere en aktiv versjon som er lavere enn denne versjonen',
+        message:
+          'Det er ikke lov å sette versjonen til utgått. Det eksistere en aktiv versjon som er lavere enn denne versjonen',
         test: function (status) {
           const { parent } = this
-          const nyesteAktivKravVersjon = alleKravVersjoner.filter((k) => k.kravStatus === KravStatus.AKTIV)
-          if (status === KravStatus.UTGAATT && nyesteAktivKravVersjon.length >= 1 && parent.kravVersjon > nyesteAktivKravVersjon[0].kravVersjon) {
+          const nyesteAktivKravVersjon = alleKravVersjoner.filter(
+            (k) => k.kravStatus === EKravStatus.AKTIV
+          )
+          if (
+            status === EKravStatus.UTGAATT &&
+            nyesteAktivKravVersjon.length >= 1 &&
+            parent.kravVersjon > nyesteAktivKravVersjon[0].kravVersjon
+          ) {
             return false
           }
           return true
@@ -123,10 +149,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
       }),
     })
 
-  const submit = async (krav: KravQL) => {
+  const submit = async (krav: TKravQL) => {
     setIsFormDirty(false)
-    const regelverk = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov.code)
-    const underavdeling = codelist.getCode(ListName.UNDERAVDELING, regelverk?.data?.underavdeling)
+    const regelverk = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
+    const underavdeling = codelist.getCode(EListName.UNDERAVDELING, regelverk?.data?.underavdeling)
 
     const mutatedKrav = {
       ...krav,
@@ -134,9 +160,14 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
       varselMelding: varselMeldingActive ? krav.varselMelding : undefined,
     }
 
-    const etterlevelser = await getEtterlevelserByKravNumberKravVersion(krav.kravNummer, krav.kravVersjon)
-    if (etterlevelser.totalElements > 0 && krav.status === KravStatus.UTKAST && !newVersion) {
-      setErrorModalMessage('Kravet kan ikke settes til «Utkast» når det er tilknyttet dokumentasjon av etterlevelse')
+    const etterlevelser = await getEtterlevelserByKravNumberKravVersion(
+      krav.kravNummer,
+      krav.kravVersjon
+    )
+    if (etterlevelser.totalElements > 0 && krav.status === EKravStatus.UTKAST && !newVersion) {
+      setErrorModalMessage(
+        'Kravet kan ikke settes til «Utkast» når det er tilknyttet dokumentasjon av etterlevelse'
+      )
       setShowErrorModal(true)
     } else if (krav.id) {
       close(await updateKrav(mutatedKrav))
@@ -179,11 +210,23 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
       >
         <Formik
           onSubmit={submit}
-          initialValues={!newKrav && newVersion ? kravMapToFormVal({ ...krav, versjonEndringer: '' }) : kravMapToFormVal(krav)}
+          initialValues={
+            !newKrav && newVersion
+              ? kravMapToFormVal({ ...krav, versjonEndringer: '' })
+              : kravMapToFormVal(krav)
+          }
           validationSchema={kravSchema()}
           innerRef={formRef}
         >
-          {({ values, errors, isSubmitting, submitForm, setErrors, initialValues }) => (
+          {({
+            values,
+            errors,
+            isSubmitting,
+            handleReset,
+            submitForm,
+            setErrors,
+            initialValues,
+          }) => (
             <Form
               onChange={() => {
                 if (
@@ -198,7 +241,11 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                 }
               }}
             >
-              <div className={`pt-6 ${!stickyHeader ? 'pb-12' : 'pb-5'} px-24 sticky top-0 ${!stickyHeader ? 'block' : 'flex'} z-30 bg-green-800`}>
+              <div
+                className={`pt-6 ${!stickyHeader ? 'pb-12' : 'pb-5'} px-24 sticky top-0 ${
+                  !stickyHeader ? 'block' : 'flex'
+                } z-30 bg-green-800`}
+              >
                 {stickyHeader && (
                   <div className="flex w-full justify-start">
                     <BodyShort className="text-white">{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</BodyShort>
@@ -217,8 +264,11 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         <Heading spacing size="small" level="4">
                           Sikker på at du vil opprette en ny versjon?
                         </Heading>
-                        Ny versjon av kravet skal opprettes når det er <strong>vesentlige endringer</strong> i kravet som gjør at <strong>teamene må revurdere</strong> sin
-                        besvarelse av kravet. Ved alle mindre justeringer, endre i det aktive kravet, og da slipper teamene å revurdere sin besvarelse.
+                        Ny versjon av kravet skal opprettes når det er{' '}
+                        <strong>vesentlige endringer</strong> i kravet som gjør at{' '}
+                        <strong>teamene må revurdere</strong> sin besvarelse av kravet. Ved alle
+                        mindre justeringer, endre i det aktive kravet, og da slipper teamene å
+                        revurdere sin besvarelse.
                       </Alert>
                     )}
                   </div>
@@ -226,7 +276,12 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
               </div>
               <div>
                 <div className="title_container py-16 px-24">
-                  <InputField marginBottom label="Krav-tittel" name="navn" description="Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting." />
+                  <InputField
+                    marginBottom
+                    label="Krav-tittel"
+                    name="navn"
+                    description="Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting."
+                  />
                   <div className="mb-14">
                     <CheckboxGroup
                       legend="Send varselmelding"
@@ -235,12 +290,20 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         setVarselMeldingActive(value)
                       }}
                     >
-                      <Checkbox value="VarselMelding">Gi kravet en varselmelding (eks. for kommende krav)</Checkbox>
+                      <Checkbox value="VarselMelding">
+                        Gi kravet en varselmelding (eks. for kommende krav)
+                      </Checkbox>
                     </CheckboxGroup>
 
                     {varselMeldingActive.length > 0 && (
                       <div className="w-full ml-8 mt-6">
-                        <TextAreaField label="Forklaring til etterlevere" name="varselMelding" maxCharacter={100} rows={2} noPlaceholder />
+                        <TextAreaField
+                          label="Forklaring til etterlevere"
+                          name="varselMelding"
+                          maxCharacter={100}
+                          rows={2}
+                          noPlaceholder
+                        />
                       </div>
                     )}
                   </div>
@@ -251,7 +314,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     markdown
                     shortenLinks
                     onImageUpload={onImageUpload(krav.id)}
-                    tooltip={'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'}
+                    tooltip={
+                      'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'
+                    }
                   />
                   <Error fieldName={'hensikt'} fullWidth />
                 </div>
@@ -261,7 +326,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     <Heading level="3" size="medium" className="mb-8">
                       Suksesskriterier
                     </Heading>
-                    <KravSuksesskriterierEdit setIsFormDirty={setIsFormDirty} newVersion={!!newVersion} />
+                    <KravSuksesskriterierEdit
+                      setIsFormDirty={setIsFormDirty}
+                      newVersion={!!newVersion}
+                    />
 
                     <div className="mb-8">
                       <Heading level="3" size="medium">
@@ -277,12 +345,18 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       link
                       label="Lenke eller websaknr"
                       tooltip="Lenke til dokumentasjon"
-                      linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller WebSak.'}
+                      linkTooltip={
+                        'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller WebSak.'
+                      }
                       setErrors={() => setErrors({ dokumentasjon: 'Må ha navn på kilde.' })}
                     />
-                    {errors.dokumentasjon && <ErrorMessageModal msg={errors.dokumentasjon} fullWidth={true} />}
+                    {errors.dokumentasjon && (
+                      <ErrorMessageModal msg={errors.dokumentasjon} fullWidth={true} />
+                    )}
                     <RegelverkEdit />
-                    {errors.regelverk && <ErrorMessageModal msg={errors.regelverk} fullWidth={true} />}
+                    {errors.regelverk && (
+                      <ErrorMessageModal msg={errors.regelverk} fullWidth={true} />
+                    )}
 
                     {!newKrav && krav.kravVersjon > 1 && (
                       <>
@@ -309,10 +383,12 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         marginBottom
                         name="relevansFor"
                         label="Legg til relevante kategorier"
-                        listName={ListName.RELEVANS}
+                        listName={EListName.RELEVANS}
                         tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}
                       />
-                      {errors.relevansFor && <ErrorMessageModal msg={errors.relevansFor} fullWidth={true} />}
+                      {errors.relevansFor && (
+                        <ErrorMessageModal msg={errors.relevansFor} fullWidth={true} />
+                      )}
                     </div>
 
                     <div className="w-full mb-20 max-w-md">
@@ -330,7 +406,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     </div>
 
                     <KravVarslingsadresserEdit />
-                    {errors.varslingsadresser && <ErrorMessageModal msg={errors.varslingsadresser} fullWidth={true} />}
+                    {errors.varslingsadresser && (
+                      <ErrorMessageModal msg={errors.varslingsadresser} fullWidth={true} />
+                    )}
                     <div className="w-full">
                       {Object.keys(errors).length > 0 && !errors.dokumentasjon && (
                         <div className="flex w-full my-12">
@@ -353,7 +431,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
                   <div className="flex w-full">
                     <div className="flex w-full">
-                      {krav.status === KravStatus.AKTIV && !newVersion && (
+                      {krav.status === EKravStatus.AKTIV && !newVersion && (
                         <div className="mr-2">
                           <Button
                             variant="secondary"
@@ -368,7 +446,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         </div>
                       )}
 
-                      {user.isAdmin() && krav.status === KravStatus.UTGAATT && !newVersion && (
+                      {user.isAdmin() && krav.status === EKravStatus.UTGAATT && !newVersion && (
                         <div className="mr-2">
                           <Button
                             variant="secondary"
@@ -388,7 +466,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                           <Button
                             variant="secondary"
                             onClick={() => {
-                              values.status = KravStatus.UTKAST
+                              values.status = EKravStatus.UTKAST
                               submitForm()
                             }}
                             disabled={isSubmitting}
@@ -408,14 +486,19 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       >
                         <Modal.Body>Denne handligen kan ikke reverseres</Modal.Body>
                         <Modal.Footer>
-                          <Button type="button" className="mr-4" variant="secondary" onClick={() => setUtgaattKravMessage(false)}>
+                          <Button
+                            type="button"
+                            className="mr-4"
+                            variant="secondary"
+                            onClick={() => setUtgaattKravMessage(false)}
+                          >
                             Nei, avbryt handlingen
                           </Button>
                           <Button
                             type="button"
                             variant="primary"
                             onClick={() => {
-                              values.status = KravStatus.UTGAATT
+                              values.status = EKravStatus.UTGAATT
                               submitForm()
                               setUtgaattKravMessage(false)
                             }}
@@ -439,20 +522,23 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                             type="button"
                             variant="primary"
                             onClick={async () => {
-                              const newVersionOfKrav = await getKravByKravNumberAndVersion(krav.kravNummer, krav.kravVersjon + 1)
+                              const newVersionOfKrav = await getKravByKravNumberAndVersion(
+                                krav.kravNummer,
+                                krav.kravVersjon + 1
+                              )
                               if (newVersionOfKrav) {
                                 updateKrav(
                                   kravMapToFormVal({
                                     ...newVersionOfKrav,
-                                    status: KravStatus.UTKAST,
-                                  }) as KravQL,
+                                    status: EKravStatus.UTKAST,
+                                  }) as TKravQL
                                 ).then(() => {
-                                  values.status = KravStatus.AKTIV
+                                  values.status = EKravStatus.AKTIV
                                   submitForm()
                                   setAktivKravMessage(false)
                                 })
                               } else {
-                                values.status = KravStatus.AKTIV
+                                values.status = EKravStatus.AKTIV
                                 submitForm()
                                 setAktivKravMessage(false)
                               }
@@ -460,7 +546,11 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                           >
                             Ja, sett til aktiv
                           </Button>
-                          <Button type="button" variant="secondary" onClick={() => setAktivKravMessage(false)}>
+                          <Button
+                            type="button"
+                            variant="secondary"
+                            onClick={() => setAktivKravMessage(false)}
+                          >
                             Nei, avbryt handlingen
                           </Button>
                         </Modal.Footer>
@@ -473,6 +563,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         type="button"
                         onClick={() => {
                           setIsOpen(false)
+                          handleReset()
                         }}
                       >
                         Avbryt
@@ -483,7 +574,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         variant="primary"
                         onClick={() => {
                           if (newVersion) {
-                            values.status = KravStatus.UTKAST
+                            values.status = EKravStatus.UTKAST
                           } else {
                             values.status = krav.status
                           }
@@ -491,16 +582,18 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         }}
                         disabled={isSubmitting}
                       >
-                        {newVersion || krav.status !== KravStatus.AKTIV ? 'Lagre' : 'Publiser endringer'}
+                        {newVersion || krav.status !== EKravStatus.AKTIV
+                          ? 'Lagre'
+                          : 'Publiser endringer'}
                       </Button>
 
-                      {(newVersion || krav.status === KravStatus.UTKAST) && (
+                      {(newVersion || krav.status === EKravStatus.UTKAST) && (
                         <Button
                           type="button"
                           className="ml-4"
                           variant="primary"
                           onClick={() => {
-                            values.status = KravStatus.AKTIV
+                            values.status = EKravStatus.AKTIV
                             submitForm()
                           }}
                           disabled={isSubmitting}
@@ -513,10 +606,20 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                 </div>
 
                 <div className="px-24 py-12">
-                  <TextAreaField label="Notater (Kun synlig for kraveier)" name="notat" height="250px" markdown tooltip={'Kraveiers notater'} />
+                  <TextAreaField
+                    label="Notater (Kun synlig for kraveier)"
+                    name="notat"
+                    height="250px"
+                    markdown
+                    tooltip={'Kraveiers notater'}
+                  />
                 </div>
               </div>
-              <ErrorModal isOpen={showErrorModal} errorMessage={errorModalMessage} submit={setShowErrorModal} />
+              <ErrorModal
+                isOpen={showErrorModal}
+                errorMessage={errorModalMessage}
+                submit={setShowErrorModal}
+              />
             </Form>
           )}
         </Formik>
@@ -529,7 +632,9 @@ const onImageUpload = (kravId: string) => async (file: File) => {
   const config = { headers: { 'content-type': 'multipart/form-data' } }
   const formData = new FormData()
   formData.append('file', file)
-  const id = (await axios.post<string[]>(`${env.backendBaseUrl}/krav/${kravId}/files`, formData, config)).data[0]
+  const id = (
+    await axios.post<string[]>(`${env.backendBaseUrl}/krav/${kravId}/files`, formData, config)
+  ).data[0]
 
   return `/api/krav/${kravId}/files/${id}`
 }

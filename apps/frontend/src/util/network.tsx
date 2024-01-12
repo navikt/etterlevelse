@@ -1,6 +1,6 @@
-import axios from 'axios'
-import React, { useState } from 'react'
 import { Button, Modal } from '@navikt/ds-react'
+import axios from 'axios'
+import { useState } from 'react'
 
 let done = false
 
@@ -12,11 +12,11 @@ const init = (onErr: (e: any) => void) => {
     },
     (err) => {
       if (err?.response?.status !== 404) {
-        console.log('axios error', err)
+        console.error('axios error', err)
         onErr(err)
       }
       return Promise.reject(err)
-    },
+    }
   )
 }
 
@@ -29,8 +29,14 @@ export const useNetworkStatus = () => {
   }
 
   return (
-    <Modal open={!!error} onClose={clear} header={{ heading: error?.message ? error?.message : 'Nettverksfeil' }}>
-      <Modal.Body>{error?.response?.data?.message ? error?.response?.data?.message : error?.toString()}</Modal.Body>
+    <Modal
+      open={!!error}
+      onClose={clear}
+      header={{ heading: error?.message ? error?.message : 'Nettverksfeil' }}
+    >
+      <Modal.Body>
+        {error?.response?.data?.message ? error?.response?.data?.message : error?.toString()}
+      </Modal.Body>
       <Modal.Footer>
         <Button onClick={clear}>Lukk</Button>
       </Modal.Footer>

@@ -2,7 +2,11 @@ import React, { Dispatch, RefObject, SetStateAction, useEffect, useState } from 
 import { useLocation, useNavigate } from 'react-router-dom'
 import { user } from '../../services/User'
 
-export function useDebouncedState<T>(initialValue: T, delay: number, passThrough?: (val: T) => void): [T, Dispatch<SetStateAction<T>>, T] {
+export function useDebouncedState<T>(
+  initialValue: T,
+  delay: number,
+  passThrough?: (val: T) => void
+): [T, Dispatch<SetStateAction<T>>, T] {
   const [value, setValue] = useState<T>(initialValue)
   const [debouncedValue, setDebouncedValue] = useState<T>(value)
 
@@ -53,14 +57,14 @@ export function useAwait<T>(p: Promise<T>, setLoading?: Dispatch<SetStateAction<
   }, [])
 }
 
-type Refs<T> = { [id: string]: RefObject<T> }
+type TRefs<T> = { [id: string]: RefObject<T> }
 
 export function useRefs<T>(ids: string[]) {
-  const refs: Refs<T> =
+  const refs: TRefs<T> =
     ids.reduce((acc, value) => {
       acc[value] = React.createRef()
       return acc
-    }, {} as Refs<T>) || {}
+    }, {} as TRefs<T>) || {}
 
   return refs
 }
@@ -86,7 +90,7 @@ export function useLocationState<T>() {
           ...(location.state as Partial<T>),
           ...newState,
         },
-      },
+      }
     )
   }
 
@@ -116,5 +120,10 @@ export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => 
     })()
   }, [search])
 
-  return [searchResult, setSearch, loading, search] as [T[], React.Dispatch<React.SetStateAction<string>>, boolean, string]
+  return [searchResult, setSearch, loading, search] as [
+    T[],
+    React.Dispatch<React.SetStateAction<string>>,
+    boolean,
+    string,
+  ]
 }

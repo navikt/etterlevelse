@@ -1,23 +1,31 @@
-import { useEffect, useState } from 'react'
-import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { user } from '../services/User'
+import { PlusIcon } from '@navikt/aksel-icons'
+import {
+  BodyLong,
+  BodyShort,
+  Button,
+  Heading,
+  Label,
+  LinkPanel,
+  Skeleton,
+  Spacer,
+  Tabs,
+} from '@navikt/ds-react'
 import moment from 'moment'
-import { Krav, KravQL } from '../constants'
-import { codelist, ListName } from '../services/Codelist'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import StatusView from '../components/common/StatusTag'
 import { AllKrav } from '../components/kravList/AllKrav'
 import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
 import { TemaList } from '../components/kravList/TemaList'
-import StatusView from '../components/common/StatusTag'
-import { useNavigate, useParams } from 'react-router-dom'
-import { Helmet } from 'react-helmet'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { BodyLong, BodyShort, Button, Heading, Label, LinkPanel, Skeleton, Spacer, Tabs } from '@navikt/ds-react'
-import { PlusIcon } from '@navikt/aksel-icons'
 import { PageLayout } from '../components/scaffold/Page'
+import { IKrav, TKravQL } from '../constants'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
+import { EListName, codelist } from '../services/Codelist'
+import { user } from '../services/User'
 
-type Section = 'siste' | 'alle' | 'tema'
+type TSection = 'siste' | 'alle' | 'tema'
 
-export const sortKrav = (kravene: KravQL[]) => {
+export const sortKrav = (kravene: TKravQL[]) => {
   return [...kravene].sort((a, b) => {
     if (a.navn.toLocaleLowerCase() === b.navn.toLocaleLowerCase()) {
       return b.kravVersjon - a.kravVersjon
@@ -29,13 +37,14 @@ export const sortKrav = (kravene: KravQL[]) => {
 }
 
 export const KravListPage = () => {
-  ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav', ...userRoleEventProp })
+  ampli.logEvent('sidevisning', {
+    side: 'Kraveier side',
+    sidetittel: 'Forvalte og opprette krav',
+    ...userRoleEventProp,
+  })
 
   return (
-    <PageLayout
-      pageTitle="Forvalte og opprette krav"
-      currentPage="Forvalte og opprette krav"
-    >
+    <PageLayout pageTitle="Forvalte og opprette krav" currentPage="Forvalte og opprette krav">
       <div className="pb-52 w-full">
         <div className="w-full flex justify-center">
           <div className="w-full">
@@ -47,7 +56,13 @@ export const KravListPage = () => {
 
                 <div className="flex justify-end">
                   {user.isKraveier() && (
-                    <Button iconPosition="left" icon={<PlusIcon area-label="" aria-hidden />} size="medium" as="a" href="/krav/ny">
+                    <Button
+                      iconPosition="left"
+                      icon={<PlusIcon area-label="" aria-hidden />}
+                      size="medium"
+                      as="a"
+                      href="/krav/ny"
+                    >
                       Nytt krav
                     </Button>
                   )}
@@ -69,14 +84,20 @@ export const KravListPage = () => {
   )
 }
 
-export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; loading?: boolean }) => {
+export const KravPanels = ({
+  kravene,
+  loading,
+}: {
+  kravene?: TKravQL[] | IKrav[]
+  loading?: boolean
+}) => {
   if (loading) return <Skeleton variant="rectangle" />
   return (
     <div className="mb-2.5 flex flex-col gap-2">
       {kravene &&
-        kravene.map((k, index) => {
-          const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
-          const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
+        kravene.map((k) => {
+          const lov = codelist.getCode(EListName.LOV, k.regelverk[0]?.lov?.code)
+          const tema = codelist.getCode(EListName.TEMA, lov?.data?.tema)
           return (
             <div className="mb-0" key={k.id}>
               <LinkPanel href={`/krav/${k.kravNummer}/${k.kravVersjon}`}>
@@ -97,7 +118,12 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; 
                     <BodyShort size="small" className="break-words">
                       {tema && tema.shortName ? tema.shortName : ''}
                     </BodyShort>
-                    <BodyShort size="small">{!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}</BodyShort>
+                    <BodyShort size="small">
+                      {k.changeStamp.lastModifiedDate !== undefined &&
+                      k.changeStamp.lastModifiedDate !== ''
+                        ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}`
+                        : ''}
+                    </BodyShort>
                   </div>
                 </LinkPanel.Title>
               </LinkPanel>
@@ -114,7 +140,7 @@ const KravTabs = () => {
   const [tab, setTab] = useState<string>(params.tab || 'siste')
 
   useEffect(() => {
-    setTab((params.tab as Section) || 'siste')
+    setTab((params.tab as TSection) || 'siste')
   }, [params])
 
   return (

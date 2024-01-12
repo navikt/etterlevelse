@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { createCodelist } from '../../../api/CodelistApi'
-import { Code, CodeListFormValues, codelist } from '../../../services/Codelist'
+import { ICode, ICodeListFormValues, codelist } from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import { useAwait, useForceUpdate } from '../../../util/hooks'
 import { PageLayout } from '../../scaffold/Page'
@@ -24,10 +24,10 @@ const CodeListPage = () => {
   const lists = codelist.lists?.codelist
   const currentCodelist = lists && listname ? lists[listname] : undefined
 
-  const handleCreateCodelist = async (values: CodeListFormValues) => {
+  const handleCreateCodelist = async (values: ICodeListFormValues) => {
     setLoading(true)
     try {
-      await createCodelist({ ...values } as Code)
+      await createCodelist({ ...values } as ICode)
       await codelist.refreshCodeLists()
       setCreateCodeListModal(false)
     } catch (error: any) {
@@ -57,7 +57,10 @@ const CodeListPage = () => {
   }
 
   return (
-    <PageLayout pageTitle={listname ? listname : 'Velg kodeverk'} currentPage="Administrering av kodeverk">
+    <PageLayout
+      pageTitle={listname ? listname : 'Velg kodeverk'}
+      currentPage="Administrering av kodeverk"
+    >
       <Heading size="medium" level="1">
         Administrering av kodeverk
       </Heading>
@@ -65,7 +68,12 @@ const CodeListPage = () => {
         <Loader size="large" />
       ) : (
         <div className="flex justify-between w-full">
-          <Select label="Velg kodeverk" hideLabel className="w-full max-w-xl" onChange={(e) => setListname(e.target.value)}>
+          <Select
+            label="Velg kodeverk"
+            hideLabel
+            className="w-full max-w-xl"
+            onChange={(e) => setListname(e.target.value)}
+          >
             <option value="">Velg kodeverk</option>
             {codelist.makeIdLabelForAllCodeLists().map((c, i) => {
               return (
@@ -76,7 +84,11 @@ const CodeListPage = () => {
             })}
           </Select>
           {listname && (
-            <Button icon={<PlusIcon area-label="" aria-hidden />} variant="tertiary" onClick={() => setCreateCodeListModal(!createCodeListModal)}>
+            <Button
+              icon={<PlusIcon area-label="" aria-hidden />}
+              variant="tertiary"
+              onClick={() => setCreateCodeListModal(!createCodeListModal)}
+            >
               Opprett ny kode
             </Button>
           )}
@@ -88,18 +100,19 @@ const CodeListPage = () => {
           <CodeListTable tableData={currentCodelist || []} refresh={update} />
         </div>
       )}
-
-      <CreateCodeListModal
-        title="Ny kode"
-        list={listname!}
-        isOpen={createCodeListModal}
-        errorOnCreate={errorOnResponse}
-        onClose={() => {
-          setCreateCodeListModal(false)
-          setErrorOnResponse(null)
-        }}
-        submit={handleCreateCodelist}
-      />
+      {listname && (
+        <CreateCodeListModal
+          title="Ny kode"
+          list={listname}
+          isOpen={createCodeListModal}
+          errorOnCreate={errorOnResponse}
+          onClose={() => {
+            setCreateCodeListModal(false)
+            setErrorOnResponse(null)
+          }}
+          submit={handleCreateCodelist}
+        />
+      )}
     </PageLayout>
   )
 }

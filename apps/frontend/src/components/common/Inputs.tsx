@@ -1,30 +1,57 @@
-import { Or } from '../../constants'
-import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
-import { FormControl } from 'baseui/form-control'
-import React, { ReactNode, useState } from 'react'
+import {
+  Button,
+  DatePicker,
+  Detail,
+  Label,
+  Radio,
+  RadioGroup,
+  Select,
+  TextField,
+  Textarea,
+  useDatepicker,
+} from '@navikt/ds-react'
 import { Block } from 'baseui/block'
-import { RenderTagList } from './TagList'
+import { FormControl } from 'baseui/form-control'
 import { Value } from 'baseui/select'
-import { Code, codelist, ListName } from '../../services/Codelist'
-import { SearchType } from '../../api/TeamApi'
+import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
 import * as _ from 'lodash'
-import LabelWithTooltip from '../common/LabelWithTooltip'
+import React, { ReactNode, useState } from 'react'
+import { TSearchType } from '../../api/TeamApi'
+import { TOr } from '../../constants'
+import { EListName, codelist } from '../../services/Codelist'
 import CustomizedSelect from '../common/CustomizedSelect'
-import TextEditor from './TextEditor/TextEditor'
-import { Error } from './ModalSchema'
+import LabelWithTooltip from '../common/LabelWithTooltip'
 import { MarkdownInfo } from './Markdown'
-import { DatePicker, Button, Detail, Label, Select, TextField, Textarea, useDatepicker, RadioGroup, Radio } from '@navikt/ds-react'
+import { Error } from './ModalSchema'
+import { RenderTagList } from './TagList'
+import TextEditor from './TextEditor/TextEditor'
 
-export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode; marginBottom?: boolean }) => {
+export const FieldWrapper = ({
+  children,
+  marginBottom,
+}: {
+  children: React.ReactNode
+  marginBottom?: boolean
+}) => {
   return <div className={`${marginBottom ? 'mb-6' : ''}`}>{children}</div>
 }
 
-export const InputField = (props: { label: string; name: string; description?: string; marginBottom?: boolean; disablePlaceHolder?: boolean }) => (
+export const InputField = (props: {
+  label: string
+  name: string
+  description?: string
+  marginBottom?: boolean
+  disablePlaceHolder?: boolean
+}) => (
   <FieldWrapper marginBottom={props.marginBottom}>
     <Field name={props.name}>
       {(p: FieldProps) => (
         <div className="w-full">
-          <TextField label={props.label} {...p.field} placeholder={!props.disablePlaceHolder ? props.label : undefined} />
+          <TextField
+            label={props.label}
+            {...p.field}
+            placeholder={!props.disablePlaceHolder ? props.label : undefined}
+          />
           <Error fieldName={props.name} fullWidth />
         </div>
       )}
@@ -78,7 +105,9 @@ export const TextAreaField = (props: {
                 label={props.label}
                 maxLength={props.maxCharacter ? props.maxCharacter : undefined}
                 {...p.field}
-                placeholder={props.noPlaceholder ? '' : props.placeholder ? props.placeholder : props.label}
+                placeholder={
+                  props.noPlaceholder ? '' : props.placeholder ? props.placeholder : props.label
+                }
                 onChange={(v) => {
                   if (props.setIsFormDirty) {
                     props.setIsFormDirty(true)
@@ -99,7 +128,12 @@ const YES = 'YES',
   UNCLARIFIED = 'UNCLARIFIED'
 const boolToRadio = (bool?: boolean) => (bool === undefined ? UNCLARIFIED : bool ? YES : NO)
 const radioToBool = (radio: string) => (radio === UNCLARIFIED ? undefined : radio === YES)
-export const BoolField = (props: { label: string; name: string; nullable?: boolean; tooltip?: string }) => (
+export const BoolField = (props: {
+  label: string
+  name: string
+  nullable?: boolean
+  tooltip?: string
+}) => (
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) => (
@@ -123,7 +157,13 @@ export const BoolField = (props: { label: string; name: string; nullable?: boole
   </FieldWrapper>
 )
 
-export const DateField = (props: { label: string; name: string; caption?: ReactNode; tooltip?: string; error?: boolean }) => {
+export const DateField = (props: {
+  label: string
+  name: string
+  caption?: ReactNode
+  tooltip?: string
+  error?: boolean
+}) => {
   const { datepickerProps, inputProps } = useDatepicker({})
 
   return (
@@ -166,7 +206,7 @@ export const MultiInputField = (props: {
   tooltip?: string
   maxInputWidth?: string
   marginBottom?: boolean
-  setErrors?: Function
+  setErrors?: () => void
 }) => {
   const [val, setVal] = useState('')
   const [linkName, setLinkName] = useState('')
@@ -205,12 +245,26 @@ export const MultiInputField = (props: {
             <div>
               <div className="flex w-full items-end">
                 {props.link && (
-                  <div className={`w-full ${props.maxInputWidth ? 'max-w-[' + props.maxInputWidth + ']' : undefined}`}>
+                  <div
+                    className={`w-full ${
+                      props.maxInputWidth ? 'max-w-[' + props.maxInputWidth + ']' : undefined
+                    }`}
+                  >
                     <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
-                    <TextField label={props.label} hideLabel onKeyDown={onKey} value={linkName} onChange={(e) => setLinkName((e.target as HTMLInputElement).value)} />
+                    <TextField
+                      label={props.label}
+                      hideLabel
+                      onKeyDown={onKey}
+                      value={linkName}
+                      onChange={(e) => setLinkName((e.target as HTMLInputElement).value)}
+                    />
                   </div>
                 )}
-                <div className={`w-full ${props.link ? 'ml-3' : undefined} ${!props.link ? 'max-w-[' + props.maxInputWidth + ']' : undefined}`}>
+                <div
+                  className={`w-full ${props.link ? 'ml-3' : undefined} ${
+                    !props.link ? 'max-w-[' + props.maxInputWidth + ']' : undefined
+                  }`}
+                >
                   <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
                   <TextField
                     label={props.label}
@@ -229,7 +283,10 @@ export const MultiInputField = (props: {
                   </Button>
                 </div>
               </div>
-              <RenderTagList list={(p.form.values[props.name] as string[]).map(linkNameFor)} onRemove={p.remove} />
+              <RenderTagList
+                list={(p.form.values[props.name] as string[]).map(linkNameFor)}
+                onRemove={p.remove}
+              />
             </div>
           )
         }}
@@ -239,14 +296,28 @@ export const MultiInputField = (props: {
 }
 
 export const OptionField = (
-  props: { label: string; name: string; clearable?: boolean; caption?: ReactNode; tooltip?: string } & Or<{ options: Value }, { listName: ListName }>,
+  props: {
+    label: string
+    name: string
+    clearable?: boolean
+    caption?: ReactNode
+    tooltip?: string
+  } & TOr<{ options: Value }, { listName: EListName }>
 ) => {
   return (
     <FieldWrapper>
       <Field name={props.name}>
         {(p: FieldProps<string>) => (
-          <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
-            <OptionList {...props} onChange={(val) => p.form.setFieldValue(props.name, val)} value={p.field.value} />
+          <FormControl
+            label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />}
+            error={p.meta.touched && p.meta.error}
+            caption={props.caption}
+          >
+            <OptionList
+              {...props}
+              onChange={(val) => p.form.setFieldValue(props.name, val)}
+              value={p.field.value}
+            />
           </FormControl>
         )}
       </Field>
@@ -254,7 +325,12 @@ export const OptionField = (
   )
 }
 
-export const OptionList = (props: { label: string; value?: string; onChange: (val?: any) => void } & Or<{ options: Value }, { listName: ListName }>) => {
+export const OptionList = (
+  props: { label: string; value?: string; onChange: (val?: any) => void } & TOr<
+    { options: Value },
+    { listName: EListName }
+  >
+) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
     <Select
@@ -280,14 +356,22 @@ export const OptionList = (props: { label: string; value?: string; onChange: (va
   )
 }
 
-export const MultiSearchField = (props: { label: string; name: string; search: SearchType; itemLabel?: (id: string) => string }) => {
+export const MultiSearchField = (props: {
+  label: string
+  name: string
+  search: TSearchType
+  itemLabel?: (id: string) => string
+}) => {
   const [results, setSearch, loading] = props.search
 
   return (
     <FieldWrapper>
       <FieldArray name={props.name}>
         {(p: FieldArrayRenderProps) => (
-          <FormControl label={props.label} error={p.form.touched[props.name] && <>{p.form.errors[props.name]}</>}>
+          <FormControl
+            label={props.label}
+            error={p.form.touched[props.name] && <>{p.form.errors[props.name]}</>}
+          >
             <Block>
               <Block display="flex">
                 <CustomizedSelect
@@ -296,7 +380,9 @@ export const MultiSearchField = (props: { label: string; name: string; search: S
                   filterOptions={(o) => o}
                   searchable
                   noResultsMsg="Ingen resultat"
-                  options={results.filter((o) => (p.form.values[props.name] as any[]).indexOf(o.id) < 0)}
+                  options={results.filter(
+                    (o) => (p.form.values[props.name] as any[]).indexOf(o.id) < 0
+                  )}
                   onChange={({ value }) => {
                     value.length && p.push(value[0].id)
                   }}
@@ -304,7 +390,12 @@ export const MultiSearchField = (props: { label: string; name: string; search: S
                   isLoading={loading}
                 />
               </Block>
-              <RenderTagList list={(p.form.values[props.name] as string[]).map((v) => (props.itemLabel ? props.itemLabel(v) : v))} onRemove={p.remove} />
+              <RenderTagList
+                list={(p.form.values[props.name] as string[]).map((v) =>
+                  props.itemLabel ? props.itemLabel(v) : v
+                )}
+                onRemove={p.remove}
+              />
             </Block>
           </FormControl>
         )}
@@ -313,7 +404,12 @@ export const MultiSearchField = (props: { label: string; name: string; search: S
   )
 }
 
-export const SearchField = (props: { label: string; name: string; search: SearchType; itemLabel?: (id: string) => string }) => {
+export const SearchField = (props: {
+  label: string
+  name: string
+  search: TSearchType
+  itemLabel?: (id: string) => string
+}) => {
   const [results, setSearch, loading] = props.search
 
   return (
@@ -328,7 +424,12 @@ export const SearchField = (props: { label: string; name: string; search: Search
               searchable
               noResultsMsg="Ingen resultat"
               options={results}
-              value={[{ id: p.field.value, label: props.itemLabel ? props.itemLabel(p.field.value) : p.field.value }]}
+              value={[
+                {
+                  id: p.field.value,
+                  label: props.itemLabel ? props.itemLabel(p.field.value) : p.field.value,
+                },
+              ]}
               onChange={({ value }) => {
                 p.form.setFieldValue(props.name, value.length ? (value[0].id as string) : '')
               }}

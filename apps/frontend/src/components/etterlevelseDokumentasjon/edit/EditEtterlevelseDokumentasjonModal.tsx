@@ -12,45 +12,50 @@ import {
   updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { useSearchTeamOptions } from '../../../api/TeamApi'
-import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../../../constants'
+import { IBehandling, ITeam, IVirkemiddel, TEtterlevelseDokumentasjonQL } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
-import { Code, ListName, codelist } from '../../../services/Codelist'
+import { EListName, ICode, codelist } from '../../../services/Codelist'
 import { BoolField, FieldWrapper, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { Error } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 
-type EditEtterlevelseDokumentasjonModalProps = {
-  etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
-  setEtterlevelseDokumentasjon?: (e: EtterlevelseDokumentasjonQL) => void
+type TEditEtterlevelseDokumentasjonModalProps = {
+  etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
+  setEtterlevelseDokumentasjon?: (e: TEtterlevelseDokumentasjonQL) => void
   isEditButton?: boolean
   variant?: 'secondary' | 'primary'
 }
 
-export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokumentasjonModalProps) => {
+export const EditEtterlevelseDokumentasjonModal = (
+  props: TEditEtterlevelseDokumentasjonModalProps
+) => {
   const { etterlevelseDokumentasjon, setEtterlevelseDokumentasjon, isEditButton, variant } = props
-  const relevansOptions = codelist.getParsedOptions(ListName.RELEVANS)
+  const relevansOptions = codelist.getParsedOptions(EListName.RELEVANS)
   const [selectedFilter, setSelectedFilter] = useState<number[]>(relevansOptions.map((r, i) => i))
-  const [isEtterlevelseDokumentasjonerModalOpen, setIsEtterlevelseDokumntasjonerModalOpen] = useState<boolean>(false)
-  const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
+  const [isEtterlevelseDokumentasjonerModalOpen, setIsEtterlevelseDokumntasjonerModalOpen] =
+    useState<boolean>(false)
+  const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<IVirkemiddel>()
   const navigate = useNavigate()
 
   useEffect(() => {
     if (etterlevelseDokumentasjon?.irrelevansFor.length) {
-      const irrelevans = etterlevelseDokumentasjon.irrelevansFor.map((ir: Code) => relevansOptions.findIndex((o) => o.value === ir.code))
+      const irrelevans = etterlevelseDokumentasjon.irrelevansFor.map((ir: ICode) =>
+        relevansOptions.findIndex((o) => o.value === ir.code)
+      )
       setSelectedFilter(
         relevansOptions
           .map((r, i) => {
             return i
           })
-          .filter((n) => !irrelevans.includes(n)),
+          .filter((n) => !irrelevans.includes(n))
       )
     } else {
       setSelectedFilter(
         relevansOptions.map((r, i) => {
           return i
-        }),
+        })
       )
     }
 
@@ -59,7 +64,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
     }
   }, [etterlevelseDokumentasjon])
 
-  const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
+  const submit = async (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL) => {
     if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
       await createEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
@@ -74,10 +79,17 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
       await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
         const mutatedBehandlinger = response.behandlinger?.map((b) => {
-          return { ...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn }
+          return {
+            ...b,
+            navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn,
+          }
         })
         if (setEtterlevelseDokumentasjon) {
-          setEtterlevelseDokumentasjon({ ...response, behandlinger: mutatedBehandlinger, virkemiddel: selectedVirkemiddel })
+          setEtterlevelseDokumentasjon({
+            ...response,
+            behandlinger: mutatedBehandlinger,
+            virkemiddel: selectedVirkemiddel,
+          })
         }
       })
     }
@@ -102,13 +114,19 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
       </Button>
 
       <Modal
-        header={{ heading: isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Opprett nytt etterlevelsesdokument' }}
+        header={{
+          heading: isEditButton
+            ? 'Rediger etterlevelsesdokumentet'
+            : 'Opprett nytt etterlevelsesdokument',
+        }}
         open={!!isEtterlevelseDokumentasjonerModalOpen}
         onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}
       >
         <Modal.Body>
           <Formik
-            initialValues={etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon ? etterlevelseDokumentasjon : {})}
+            initialValues={etterlevelseDokumentasjonMapToFormVal(
+              etterlevelseDokumentasjon ? etterlevelseDokumentasjon : {}
+            )}
             onSubmit={submit}
             validationSchema={etterlevelseDokumentasjonSchema()}
             validateOnChange={false}
@@ -116,7 +134,12 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
           >
             {({ values, submitForm }) => (
               <Form>
-                <TextAreaField rows={2} noPlaceholder label="Skriv inn tittel på etterlevelsesdokumentet" name="title" />
+                <TextAreaField
+                  rows={2}
+                  noPlaceholder
+                  label="Skriv inn tittel på etterlevelsesdokumentet"
+                  name="title"
+                />
 
                 {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
 
@@ -194,16 +217,20 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                         onChange={(selected) => {
                           setSelectedFilter(selected)
 
-                          const irrelevansListe = relevansOptions.filter((v, index) => !selected.includes(index))
+                          const irrelevansListe = relevansOptions.filter(
+                            (v, index) => !selected.includes(index)
+                          )
                           p.form.setFieldValue(
                             'irrelevansFor',
-                            irrelevansListe.map((il) => codelist.getCode(ListName.RELEVANS, il.value)),
+                            irrelevansListe.map((il) =>
+                              codelist.getCode(EListName.RELEVANS, il.value)
+                            )
                           )
                           // selected.forEach((value) => {
                           //   const i = parseInt(value)
                           //   if (!selectedFilter.includes(i)) {
                           //     setSelectedFilter([...selectedFilter, i])
-                          //     p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === relevansOptions[i].value))
+                          //     p.remove(p.form.values.irrelevansFor.findIndex((ir: ICode) => ir.code === relevansOptions[i].value))
                           //   } else {
                           //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
                           //     p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
@@ -212,7 +239,11 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                         }}
                       >
                         {relevansOptions.map((r, i) => (
-                          <Checkbox key={'relevans_' + r.value} value={i} description={r.description}>
+                          <Checkbox
+                            key={'relevans_' + r.value}
+                            value={i}
+                            description={r.description}
+                          >
                             {r.label}
                           </Checkbox>
                         ))}
@@ -236,13 +267,19 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                     <FieldArray name="behandlinger">
                       {(p: FieldArrayRenderProps) => (
                         <div className="mb-4">
-                          <LabelWithDescription label={'Legg til behandlinger fra Behandlingskatalogen'} />
+                          <LabelWithDescription
+                            label={'Legg til behandlinger fra Behandlingskatalogen'}
+                          />
                           <div className="w-full">
                             <AsyncSelect
                               aria-label="Søk etter behandlinger"
                               placeholder="Søk etter behandlinger"
                               components={{ DropdownIndicator }}
-                              noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
+                              noOptionsMessage={({ inputValue }) =>
+                                inputValue.length < 3
+                                  ? 'Skriv minst tre tegn for å søke'
+                                  : `Fant ingen resultater for "${inputValue}"`
+                              }
                               controlShouldRenderValue={false}
                               loadingMessage={() => 'Søker...'}
                               isClearable={false}
@@ -260,7 +297,10 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                               }}
                             />
                           </div>
-                          <RenderTagList list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} />
+                          <RenderTagList
+                            list={p.form.values.behandlinger.map((b: IBehandling) => b.navn)}
+                            onRemove={p.remove}
+                          />
                         </div>
                       )}
                     </FieldArray>
@@ -286,7 +326,11 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                               aria-label="Søk etter team"
                               placeholder="Søk etter team"
                               components={{ DropdownIndicator }}
-                              noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
+                              noOptionsMessage={({ inputValue }) =>
+                                inputValue.length < 3
+                                  ? 'Skriv minst tre tegn for å søke'
+                                  : `Fant ingen resultater for "${inputValue}"`
+                              }
                               controlShouldRenderValue={false}
                               loadingMessage={() => 'Søker...'}
                               isClearable={false}
@@ -304,7 +348,10 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                               }}
                             />
                           </div>
-                          <RenderTagList list={p.form.values.teamsData.map((t: Team) => t.name)} onRemove={p.remove} />
+                          <RenderTagList
+                            list={p.form.values.teamsData.map((t: ITeam) => t.name)}
+                            onRemove={p.remove}
+                          />
                         </div>
                       )}
                     </FieldArray>

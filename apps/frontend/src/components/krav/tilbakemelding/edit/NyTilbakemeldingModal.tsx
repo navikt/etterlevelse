@@ -1,42 +1,68 @@
 import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { EnvelopeClosedIcon, PersonCircleIcon } from '@navikt/aksel-icons'
+import {
+  Accordion,
+  Alert,
+  BodyLong,
+  BodyShort,
+  Box,
+  Button,
+  Heading,
+  Label,
+  Modal,
+  Tooltip,
+} from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
-import { createNewTilbakemelding, CreateTilbakemeldingRequest } from '../../../../api/TilbakemeldingApi'
-import { AdresseType, Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingType, Varslingsadresse } from '../../../../constants'
-import { TextAreaField } from '../../../common/Inputs'
-import { AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList } from '../../Edit/KravVarslingsadresserEdit'
 import * as yup from 'yup'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  ICreateTilbakemeldingRequest,
+  createNewTilbakemelding,
+} from '../../../../api/TilbakemeldingApi'
+import {
+  EAdresseType,
+  ETilbakemeldingMeldingStatus,
+  ETilbakemeldingType,
+  IKrav,
+  ITilbakemelding,
+  IVarslingsadresse,
+} from '../../../../constants'
+import { TextAreaField } from '../../../common/Inputs'
 import { Markdown } from '../../../common/Markdown'
 import { Error } from '../../../common/ModalSchema'
-import { Accordion, Alert, BodyLong, BodyShort, Box, Button, Heading, Label, Modal, Tooltip } from '@navikt/ds-react'
-import { EnvelopeClosedIcon, PersonCircleIcon } from '@navikt/aksel-icons'
+import {
+  AddEmail,
+  SlackChannelSearch,
+  SlackUserSearch,
+  VarslingsadresserTagList,
+} from '../../Edit/KravVarslingsadresserEdit'
 
-type NyTilbakemeldingModalProps = {
+type TNyTilbakemeldingModalProps = {
   open?: boolean
-  close: (add?: Tilbakemelding) => void
-  krav: Krav
+  close: (add?: ITilbakemelding) => void
+  krav: IKrav
 }
 
-const getMessageType = (type: AdresseType | undefined) => {
+const getMessageType = (type: EAdresseType | undefined) => {
   switch (type) {
-    case AdresseType.EPOST:
+    case EAdresseType.EPOST:
       return 'din epost'
-    case AdresseType.SLACK:
+    case EAdresseType.SLACK:
       return 'slack kanal'
-    case AdresseType.SLACK_USER:
+    case EAdresseType.SLACK_USER:
       return 'din slack bruker'
   }
 }
 
-export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingModalProps) => {
+export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingModalProps) => {
   const [error, setError] = useState()
-  const [adresseType, setAdresseType] = useState<AdresseType>()
-  const [showNotification, setShowNotification] = useState<AdresseType>()
-  const [newTilbakeMelding, setNewTilbakeMelding] = useState<Tilbakemelding>()
+  const [adresseType, setAdresseType] = useState<EAdresseType>()
+  const [showNotification, setShowNotification] = useState<EAdresseType>()
+  const [newTilbakeMelding, setNewTilbakeMelding] = useState<ITilbakemelding>()
 
-  const submit = (request: CreateTilbakemeldingRequest) => {
+  const submit = (request: ICreateTilbakemeldingRequest) => {
     createNewTilbakemelding(request)
       .then((t) => {
         setShowNotification(request.varslingsadresse.type)
@@ -49,13 +75,13 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
     <Modal className="max-w-xl w-full" open={open} onClose={() => close()}>
       <Formik
         onSubmit={submit}
-        initialValues={newTilbakemelding(krav) as CreateTilbakemeldingRequest}
+        initialValues={newTilbakemelding(krav) as ICreateTilbakemeldingRequest}
         validationSchema={createTilbakemeldingSchema}
         validateOnBlur={false}
         validateOnChange={false}
       >
         {({ isSubmitting, setFieldValue, values, submitForm, errors }) => {
-          const setVarslingsadresse = (v?: Varslingsadresse) => {
+          const setVarslingsadresse = (v?: IVarslingsadresse) => {
             setFieldValue('varslingsadresse', v)
             setAdresseType(undefined)
           }
@@ -71,7 +97,9 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                       <FontAwesomeIcon icon={faThumbsUp} size="lg" />
                       <Heading size="large">Spørsmålet er sendt til kraveier!</Heading>
                     </div>
-                    <BodyLong className="mt-4">Du får varsel på {getMessageType(showNotification)} når spørsmålet er besvart.</BodyLong>
+                    <BodyLong className="mt-4">
+                      Du får varsel på {getMessageType(showNotification)} når spørsmålet er besvart.
+                    </BodyLong>
                   </Box>
                 ) : (
                   <div>
@@ -95,7 +123,12 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                       })}
                     </Accordion>
 
-                    <TextAreaField tooltip="Skriv ditt spørsmål i tekstfeltet" label="Ditt spørsmål" name="foersteMelding" placeholder="Skriv her.." />
+                    <TextAreaField
+                      tooltip="Skriv ditt spørsmål i tekstfeltet"
+                      label="Ditt spørsmål"
+                      name="foersteMelding"
+                      placeholder="Skriv her.."
+                    />
                     {errors.foersteMelding && <Error fieldName="foersteMelding" fullWidth />}
 
                     {/* <OptionField label="Type" name="type" clearable={false} options={Object.values(TilbakemeldingType).map((o) => ({ id: o, label: typeText(o) }))} /> */}
@@ -107,35 +140,47 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                           </Tooltip>
                           <div>
                             <div className="flex flex-col mt-4">
-                              {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse} />}
-                              {adresseType !== AdresseType.SLACK && !values.varslingsadresse && (
-                                <Button type="button" variant="secondary" icon={<FontAwesomeIcon icon={faSlackHash} />} onClick={() => setAdresseType(AdresseType.SLACK)}>
+                              {adresseType === EAdresseType.SLACK && (
+                                <SlackChannelSearch add={setVarslingsadresse} />
+                              )}
+                              {adresseType !== EAdresseType.SLACK && !values.varslingsadresse && (
+                                <Button
+                                  type="button"
+                                  variant="secondary"
+                                  icon={<FontAwesomeIcon icon={faSlackHash} />}
+                                  onClick={() => setAdresseType(EAdresseType.SLACK)}
+                                >
                                   Slack-kanal
                                 </Button>
                               )}
                               <div className="mt-2.5">
-                                {adresseType === AdresseType.SLACK_USER && <SlackUserSearch add={setVarslingsadresse} />}
-                                {adresseType !== AdresseType.SLACK_USER && !values.varslingsadresse && (
-                                  <Button
-                                    type="button"
-                                    variant="secondary"
-                                    className="ml-2.5"
-                                    icon={<PersonCircleIcon aria-label="" aria-hidden />}
-                                    onClick={() => setAdresseType(AdresseType.SLACK_USER)}
-                                  >
-                                    Slack-bruker
-                                  </Button>
+                                {adresseType === EAdresseType.SLACK_USER && (
+                                  <SlackUserSearch add={setVarslingsadresse} />
                                 )}
+                                {adresseType !== EAdresseType.SLACK_USER &&
+                                  !values.varslingsadresse && (
+                                    <Button
+                                      type="button"
+                                      variant="secondary"
+                                      className="ml-2.5"
+                                      icon={<PersonCircleIcon aria-label="" aria-hidden />}
+                                      onClick={() => setAdresseType(EAdresseType.SLACK_USER)}
+                                    >
+                                      Slack-bruker
+                                    </Button>
+                                  )}
                               </div>
                               <div className="mt-2.5">
-                                {adresseType === AdresseType.EPOST && <AddEmail add={setVarslingsadresse} />}
-                                {adresseType !== AdresseType.EPOST && !values.varslingsadresse && (
+                                {adresseType === EAdresseType.EPOST && (
+                                  <AddEmail add={setVarslingsadresse} />
+                                )}
+                                {adresseType !== EAdresseType.EPOST && !values.varslingsadresse && (
                                   <Button
                                     type="button"
                                     variant="secondary"
                                     className="ml-2.5"
                                     icon={<EnvelopeClosedIcon aria-label="" aria-hidden />}
-                                    onClick={() => setAdresseType(AdresseType.EPOST)}
+                                    onClick={() => setAdresseType(EAdresseType.EPOST)}
                                   >
                                     Epost
                                   </Button>
@@ -144,7 +189,12 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                             </div>
                             {p.meta.error && <Alert variant="error">{p.meta.error}</Alert>}
 
-                            {values.varslingsadresse && <VarslingsadresserTagList varslingsadresser={[values.varslingsadresse]} remove={() => setVarslingsadresse(undefined)} />}
+                            {values.varslingsadresse && (
+                              <VarslingsadresserTagList
+                                varslingsadresser={[values.varslingsadresse]}
+                                remove={() => setVarslingsadresse(undefined)}
+                              />
+                            )}
                           </div>
                         </div>
                       )}
@@ -188,28 +238,39 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
 
 const required = 'Påkrevd'
 
-const varslingsadresseSchema: yup.ObjectSchema<Varslingsadresse> = yup.object({
+const varslingsadresseSchema: yup.ObjectSchema<IVarslingsadresse> = yup.object({
   adresse: yup.string().required('Det er påkrevd å ha minst en varslingsadresse'),
-  type: yup.mixed<AdresseType>().oneOf(Object.values(AdresseType)).required('Det er påkrevd å ha minst en varslingsadresse'),
+  type: yup
+    .mixed<EAdresseType>()
+    .oneOf(Object.values(EAdresseType))
+    .required('Det er påkrevd å ha minst en varslingsadresse'),
 })
 
-const createTilbakemeldingSchema: yup.ObjectSchema<CreateTilbakemeldingRequest> = yup.object({
+const createTilbakemeldingSchema: yup.ObjectSchema<ICreateTilbakemeldingRequest> = yup.object({
   kravNummer: yup.number().required(required),
   kravVersjon: yup.number().required(required),
   foersteMelding: yup.string().required(required),
-  type: yup.mixed<TilbakemeldingType>().oneOf(Object.values(TilbakemeldingType)).required(required),
-  status: yup.mixed<TilbakemeldingMeldingStatus>().oneOf(Object.values(TilbakemeldingMeldingStatus)).required(required),
+  type: yup
+    .mixed<ETilbakemeldingType>()
+    .oneOf(Object.values(ETilbakemeldingType))
+    .required(required),
+  status: yup
+    .mixed<ETilbakemeldingMeldingStatus>()
+    .oneOf(Object.values(ETilbakemeldingMeldingStatus))
+    .required(required),
   endretKrav: yup.boolean().required(required),
-  varslingsadresse: varslingsadresseSchema.required('Det er påkrevd å ha minst en varslingsadresse'),
+  varslingsadresse: varslingsadresseSchema.required(
+    'Det er påkrevd å ha minst en varslingsadresse'
+  ),
 })
 
-const newTilbakemelding = (krav: Krav): Partial<CreateTilbakemeldingRequest> => ({
+const newTilbakemelding = (krav: IKrav): Partial<ICreateTilbakemeldingRequest> => ({
   kravNummer: krav.kravNummer,
   kravVersjon: krav.kravVersjon,
   foersteMelding: '',
-  type: TilbakemeldingType.UKLAR,
+  type: ETilbakemeldingType.UKLAR,
   varslingsadresse: undefined,
-  status: TilbakemeldingMeldingStatus.UBESVART,
+  status: ETilbakemeldingMeldingStatus.UBESVART,
   endretKrav: false,
 })
 

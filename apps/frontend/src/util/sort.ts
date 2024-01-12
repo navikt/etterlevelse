@@ -1,12 +1,16 @@
+import { IKrav } from '../constants'
 import { intl } from './intl/intl'
-import { Krav } from '../constants'
 
 const start = (prefix: string) => (text: string) => {
   const startIndex = text.indexOf(prefix.toLowerCase())
   return startIndex < 0 ? Number.MAX_VALUE : startIndex
 }
 
-export const prefixBiasedSort: (prefix: string, a: string, b: string) => number = (prefix, a, b) => {
+export const prefixBiasedSort: (prefix: string, a: string, b: string) => number = (
+  prefix,
+  a,
+  b
+) => {
   const comp = start(prefix)
   const aLower = a.toLowerCase()
   const bLower = b.toLowerCase()
@@ -14,7 +18,7 @@ export const prefixBiasedSort: (prefix: string, a: string, b: string) => number 
   return c1 === 0 ? aLower.localeCompare(bLower, intl.getLanguage()) : c1
 }
 
-export const sortKraverByPriority = <T extends Krav>(kraver: T[], tema: string) => {
+export const sortKraverByPriority = <T extends IKrav>(kraver: T[], tema: string) => {
   const newKravList = [...kraver]
   const pattern = new RegExp(tema.substr(0, 3).toUpperCase() + '[0-9]+')
 

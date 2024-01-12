@@ -10,7 +10,6 @@
       "plugin:react/recommended",
       "plugin:react-hooks/recommended",
       "plugin:@typescript-eslint/recommended",
-      "plugin:import/warnings",
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -25,13 +24,28 @@
       "@typescript-eslint/ban-ts-ignore": "off",
       "@typescript-eslint/ban-ts-comment": "off",
       "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-extra-semi": "off",
       "@typescript-eslint/naming-convention": [
         "error",
         {
+          "selector": "typeAlias",
+          "format": ["PascalCase"],
+          "custom": {
+            "regex": "^T[A-Z]",
+            "match": true
+          }
+        }, {
           "selector": "interface",
           "format": ["PascalCase"],
           "custom": {
             "regex": "^I[A-Z]",
+            "match": true
+          }
+        }, {
+          "selector": "enum",
+          "format": ["PascalCase"],
+          "custom": {
+            "regex": "^E[A-Z]",
             "match": true
           }
         }
@@ -40,6 +54,6 @@
       "react/prop-types": "off",
       "react/jsx-uses-react": "off",
       "react/react-in-jsx-scope": "off",
-      "no-console": "warn"
+      "no-console":["warn", { "allow": ["warn", "error"] }]
     }
   }

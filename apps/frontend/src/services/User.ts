@@ -1,9 +1,9 @@
 import { AxiosResponse } from 'axios'
-import { UserInfo } from '../constants'
 import { getUserInfo } from '../api/UserApi'
+import { IUserInfo } from '../constants'
 import { updateUser } from '../util/hooks'
 
-export enum Group {
+export enum EGroup {
   READ = 'READ',
   WRITE = 'WRITE',
   KRAVEIER = 'KRAVEIER',
@@ -12,8 +12,8 @@ export enum Group {
 
 class UserService {
   private loaded = false
-  private userInfo: UserInfo = { loggedIn: false, groups: [] }
-  private currentGroups = [Group.READ]
+  private userInfo: IUserInfo = { loggedIn: false, groups: [] }
+  private currentGroups = [EGroup.READ]
   private error?: string
   private readonly promise: Promise<any>
 
@@ -30,9 +30,12 @@ class UserService {
       })
   }
 
-  handleGetResponse = (response: AxiosResponse<UserInfo>) => {
+  handleGetResponse = (response: AxiosResponse<IUserInfo>) => {
     if (typeof response.data === 'object' && response.data !== null) {
-      const groups = response.data.groups.indexOf(Group.ADMIN) >= 0 ? (Object.keys(Group) as Group[]) : response.data.groups
+      const groups =
+        response.data.groups.indexOf(EGroup.ADMIN) >= 0
+          ? (Object.keys(EGroup) as EGroup[])
+          : response.data.groups
       this.userInfo = { ...response.data, groups }
       this.currentGroups = this.userInfo.groups
     } else {
@@ -57,11 +60,13 @@ class UserService {
     return this.userInfo.name ?? ''
   }
 
-  public getAvailableGroups(): { name: string; group: Group }[] {
-    return this.userInfo.groups.filter((g) => g !== Group.READ).map((group) => ({ name: nameFor(group), group }))
+  public getAvailableGroups(): { name: string; group: EGroup }[] {
+    return this.userInfo.groups
+      .filter((g) => g !== EGroup.READ)
+      .map((group) => ({ name: nameFor(group), group }))
   }
 
-  public toggleGroup(group: Group, active: boolean) {
+  public toggleGroup(group: EGroup, active: boolean) {
     if (active && !this.hasGroup(group) && this.userInfo.groups.indexOf(group) >= 0) {
       this.currentGroups = [...this.currentGroups, group]
       updateUser()
@@ -80,15 +85,15 @@ class UserService {
   }
 
   public canWrite(): boolean {
-    return this.hasGroup(Group.WRITE)
+    return this.hasGroup(EGroup.WRITE)
   }
 
   public isAdmin(): boolean {
-    return this.hasGroup(Group.ADMIN)
+    return this.hasGroup(EGroup.ADMIN)
   }
 
   public isKraveier(): boolean {
-    return this.hasGroup(Group.KRAVEIER)
+    return this.hasGroup(EGroup.KRAVEIER)
   }
 
   async wait() {
@@ -102,15 +107,15 @@ class UserService {
 
 export const user = new UserService()
 
-const nameFor = (group: Group) => {
+const nameFor = (group: EGroup) => {
   switch (group) {
-    case Group.READ:
+    case EGroup.READ:
       return 'Les'
-    case Group.WRITE:
+    case EGroup.WRITE:
       return 'Skriv'
-    case Group.ADMIN:
+    case EGroup.ADMIN:
       return 'Admin'
-    case Group.KRAVEIER:
+    case EGroup.KRAVEIER:
       return 'Kraveier'
   }
 }

@@ -1,33 +1,38 @@
-import { Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus } from '../../../constants'
 import { Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
-import { mapEtterlevelseToFormValue } from '../../../api/EtterlevelseApi'
 import React, { useEffect } from 'react'
+import { mapEtterlevelseToFormValue } from '../../../api/EtterlevelseApi'
+import {
+  EEtterlevelseStatus,
+  EKravFilterType,
+  EKravStatus,
+  IEtterlevelse,
+  TKravQL,
+} from '../../../constants'
 
-import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
+import _ from 'lodash'
 import moment from 'moment'
 import { useLocation, useNavigate } from 'react-router-dom'
 import EtterlevelseCard from '../EtterlevelseCard'
+import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
 import { etterlevelseSchema } from './etterlevelseSchema'
-import _ from 'lodash'
 
-import { DateField } from '../../common/Inputs'
-import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
 import { Alert, BodyShort, Button, Checkbox, Label, Modal } from '@navikt/ds-react'
 import { ampli, userRoleEventProp } from '../../../services/Amplitude'
-import { user } from '../../../services/User'
+import { DateField } from '../../common/Inputs'
+import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
 
-type EditProps = {
-  krav: KravQL
-  etterlevelse: Etterlevelse
-  submit: (etterlevelse: Etterlevelse) => Promise<void>
+type TEditProps = {
+  krav: TKravQL
+  etterlevelse: IEtterlevelse
+  submit: (etterlevelse: IEtterlevelse) => Promise<void>
   formRef?: React.RefObject<any>
   varsleMelding?: string
   disableEdit: boolean
-  close: (k?: Etterlevelse | undefined) => void
+  close: (k?: IEtterlevelse | undefined) => void
   navigatePath: string
-  editedEtterlevelse?: Etterlevelse
-  tidligereEtterlevelser?: Etterlevelse[]
-  kravFilter: KRAV_FILTER_TYPE
+  editedEtterlevelse?: IEtterlevelse
+  tidligereEtterlevelser?: IEtterlevelse[]
+  kravFilter: EKravFilterType
 }
 
 export const EtterlevelseEditFields = ({
@@ -41,9 +46,15 @@ export const EtterlevelseEditFields = ({
   editedEtterlevelse,
   tidligereEtterlevelser,
   kravFilter,
-}: EditProps) => {
-  const [etterlevelseStatus] = React.useState<string>(editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
-  const [isOppfylesSenere, setOppfylesSenere] = React.useState<boolean>(etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE)
+}: TEditProps) => {
+  const [etterlevelseStatus] = React.useState<string>(
+    editedEtterlevelse
+      ? editedEtterlevelse.status
+      : etterlevelse.status || EEtterlevelseStatus.UNDER_REDIGERING
+  )
+  const [isOppfylesSenere, setOppfylesSenere] = React.useState<boolean>(
+    etterlevelseStatus === EEtterlevelseStatus.OPPFYLLES_SENERE
+  )
   const [isAvbrytModalOpen, setIsAvbryModalOpen] = React.useState<boolean>(false)
   const location = useLocation()
 
@@ -52,8 +63,8 @@ export const EtterlevelseEditFields = ({
     if (navigatePath) {
       if (
         _.isEqualWith(mapEtterlevelseToFormValue(etterlevelse, krav), formRef?.current.values) ||
-        kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV ||
-        kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV
+        kravFilter === EKravFilterType.UTGAATE_KRAV ||
+        kravFilter === EKravFilterType.BORTFILTTERTE_KRAV
       ) {
         navigate(navigatePath)
       }
@@ -64,13 +75,22 @@ export const EtterlevelseEditFields = ({
     <div className="w-full">
       <Formik
         onSubmit={submit}
-        initialValues={editedEtterlevelse ? mapEtterlevelseToFormValue(editedEtterlevelse, krav) : mapEtterlevelseToFormValue(etterlevelse, krav)}
+        initialValues={
+          editedEtterlevelse
+            ? mapEtterlevelseToFormValue(editedEtterlevelse, krav)
+            : mapEtterlevelseToFormValue(etterlevelse, krav)
+        }
         validate={(value) => {
           const mutatedEtterlevelse = value
-          value.suksesskriterieBegrunnelser = syncEtterlevelseKriterieBegrunnelseWithKrav(value, krav)
+          value.suksesskriterieBegrunnelser = syncEtterlevelseKriterieBegrunnelseWithKrav(
+            value,
+            krav
+          )
 
           try {
-            validateYupSchema(mutatedEtterlevelse, etterlevelseSchema(), true, { status: value.status })
+            validateYupSchema(mutatedEtterlevelse, etterlevelseSchema(), true, {
+              status: value.status,
+            })
           } catch (err) {
             return yupToFormErrors(err)
           }
@@ -79,11 +99,19 @@ export const EtterlevelseEditFields = ({
         validateOnChange={false}
         validateOnBlur={false}
       >
-        {({ values, isSubmitting, submitForm, errors, setFieldError, dirty }: FormikProps<Etterlevelse>) => (
+        {({
+          values,
+          isSubmitting,
+          submitForm,
+          errors,
+          setFieldError,
+          dirty,
+        }: FormikProps<IEtterlevelse>) => (
           <div className="flex flex-col">
             <Form>
               <div>
-                {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
+                {(etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT ||
+                  etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
                   <div className={'mb-12'}>
                     <Alert className="mb-1" size="small" variant="info">
                       Dette kravet er dokumentert som ikke relevant 20.05.2022
@@ -100,7 +128,10 @@ export const EtterlevelseEditFields = ({
                   )}
                 </div>
 
-                <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} />
+                <SuksesskriterierBegrunnelseEdit
+                  disableEdit={disableEdit}
+                  suksesskriterie={krav.suksesskriterier}
+                />
 
                 <div className="w-full my-6">
                   {Object.keys(errors).length > 0 && (
@@ -113,14 +144,14 @@ export const EtterlevelseEditFields = ({
             </Form>
 
             <div className="w-full border-t border-border-divider pt-5">
-              {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
+              {kravFilter === EKravFilterType.RELEVANTE_KRAV && (
                 <div className="w-full flex flex-col min-w-fit mb-4">
                   <Checkbox
                     checked={isOppfylesSenere}
                     onChange={() => {
                       setOppfylesSenere(!isOppfylesSenere)
                     }}
-                    key={EtterlevelseStatus.OPPFYLLES_SENERE}
+                    key={EEtterlevelseStatus.OPPFYLLES_SENERE}
                   >
                     Kravet skal etterleves senere
                   </Checkbox>
@@ -128,7 +159,11 @@ export const EtterlevelseEditFields = ({
                   {isOppfylesSenere && (
                     <div className="w-full">
                       <div className="w-full max-w-[170px]">
-                        <DateField error={!!errors.fristForFerdigstillelse} label="Dato" name="fristForFerdigstillelse" />
+                        <DateField
+                          error={!!errors.fristForFerdigstillelse}
+                          label="Dato"
+                          name="fristForFerdigstillelse"
+                        />
                       </div>
                       {errors.fristForFerdigstillelse && (
                         <Alert variant="error" size="small">
@@ -142,7 +177,7 @@ export const EtterlevelseEditFields = ({
 
               <div className="w-full justify-end">
                 <div className="flex w-full pb-3 justify-end">
-                  {kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV && (
+                  {kravFilter === EKravFilterType.UTGAATE_KRAV && (
                     <Button
                       type="button"
                       disabled={isSubmitting || disableEdit}
@@ -153,7 +188,7 @@ export const EtterlevelseEditFields = ({
                       Lagre endringer
                     </Button>
                   )}
-                  {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
+                  {kravFilter === EKravFilterType.RELEVANTE_KRAV && (
                     <div className="flex">
                       <Button
                         className="mr-6"
@@ -161,10 +196,13 @@ export const EtterlevelseEditFields = ({
                         variant="secondary"
                         disabled={isSubmitting || disableEdit}
                         onClick={() => {
-                          if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || !isOppfylesSenere) {
-                            values.status = EtterlevelseStatus.UNDER_REDIGERING
+                          if (
+                            values.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
+                            !isOppfylesSenere
+                          ) {
+                            values.status = EEtterlevelseStatus.UNDER_REDIGERING
                           } else if (isOppfylesSenere) {
-                            values.status = EtterlevelseStatus.OPPFYLLES_SENERE
+                            values.status = EEtterlevelseStatus.OPPFYLLES_SENERE
                           }
                           ampli.logEvent('knapp klikket', {
                             tekst: 'Lagre og fortsett',
@@ -181,10 +219,13 @@ export const EtterlevelseEditFields = ({
                         disabled={disableEdit || isOppfylesSenere}
                         type="button"
                         onClick={() => {
-                          values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
+                          values.status = EEtterlevelseStatus.FERDIG_DOKUMENTERT
                           values.suksesskriterieBegrunnelser.forEach((skb, index) => {
                             if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
-                              setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
+                              setFieldError(
+                                `suksesskriterieBegrunnelser[${index}]`,
+                                'Du må fylle ut dokumentasjonen'
+                              )
                             }
                           })
                           ampli.logEvent('knapp klikket', {
@@ -204,7 +245,7 @@ export const EtterlevelseEditFields = ({
 
                 <div className="pb-6 flex justify-end w-full">
                   <Button
-                    disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit}
+                    disabled={krav.status === EKravStatus.UTGAATT ? false : disableEdit}
                     type="button"
                     variant="tertiary"
                     onClick={() => {
@@ -223,20 +264,30 @@ export const EtterlevelseEditFields = ({
                       // close()
                     }}
                   >
-                    {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt'}
+                    {krav.status === EKravStatus.UTGAATT ? 'Lukk' : 'Avbryt'}
                   </Button>
                 </div>
 
-                {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
-                  <div className="pb-6 flex justify-end w-full">
-                    <BodyShort>
-                      Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
-                    </BodyShort>
-                  </div>
-                )}
+                {etterlevelse.changeStamp.lastModifiedDate &&
+                  etterlevelse.changeStamp.lastModifiedBy && (
+                    <div className="pb-6 flex justify-end w-full">
+                      <BodyShort>
+                        Sist utfylt:{' '}
+                        {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av{' '}
+                        {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
+                      </BodyShort>
+                    </div>
+                  )}
 
-                <Modal onClose={() => setIsAvbryModalOpen(false)} header={{ heading: 'Avbryt dokumentering' }} open={isAvbrytModalOpen}>
-                  <Modal.Body>Er du sikker på at du vil avbryte dokumentering? Endringer du har gjort blir ikke lagret og du blir sendt til teamoversikten.</Modal.Body>
+                <Modal
+                  onClose={() => setIsAvbryModalOpen(false)}
+                  header={{ heading: 'Avbryt dokumentering' }}
+                  open={isAvbrytModalOpen}
+                >
+                  <Modal.Body>
+                    Er du sikker på at du vil avbryte dokumentering? Endringer du har gjort blir
+                    ikke lagret og du blir sendt til teamoversikten.
+                  </Modal.Body>
                   <Modal.Footer>
                     <Button
                       onClick={() => {

@@ -1,28 +1,28 @@
+import { FILL, ORIENTATION, Tab, TabProps, Tabs, TabsOverrides } from 'baseui/tabs-motion'
+import _ from 'lodash'
 import * as React from 'react'
 import { ReactNode, useState } from 'react'
-import { FILL, ORIENTATION, Tab, TabProps, Tabs, TabsOverrides } from 'baseui/tabs-motion'
-import { borderColor, borderStyle, borderWidth, marginZero, paddingZero } from './Style'
 import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
-import _ from 'lodash'
+import { borderColor, borderStyle, borderWidth, marginZero, paddingZero } from './Style'
 
 export const CustomizedTab = (props: TabProps) => {
   return <Tab {...props}>{props.children}</Tab>
 }
 
-interface TabsContent {
+interface ITabsContent {
   title?: string
   key?: string
   content?: ReactNode
 }
 
-interface CustomizedTabsProps {
+interface ICustomizedTabsProps {
   fontColor?: string
   activeColor?: string
   tabBackground?: string
   backgroundColor?: string
   small?: boolean
-  tabs?: TabsContent[]
+  tabs?: ITabsContent[]
 
   children?: ReactNode
   activeKey?: React.Key
@@ -36,9 +36,10 @@ interface CustomizedTabsProps {
   uid?: string
 }
 
-export const CustomizedTabs = (props: CustomizedTabsProps) => {
+export const CustomizedTabs = (props: ICustomizedTabsProps) => {
   const [activeKeyInternal, setActiveKeyInternal] = useState<React.Key>(0)
-  let { fontColor, activeColor, tabBackground, tabs, overrides, ...restProps } = props
+  const { tabBackground, tabs, overrides, ...restProps } = props
+  let { fontColor, activeColor } = props
   fontColor = fontColor || 'black'
   activeColor = activeColor || fontColor
 
@@ -82,7 +83,7 @@ export const CustomizedTabs = (props: CustomizedTabsProps) => {
       }}
       activeKey={props.activeKey || activeKeyInternal}
     >
-      {tabs?.map((tab: TabsContent, index: number) => {
+      {tabs?.map((tab: ITabsContent, index: number) => {
         return (
           <CustomizedTab
             title={tab.title}

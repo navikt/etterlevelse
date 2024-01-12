@@ -1,40 +1,48 @@
-import { HeadingLarge, HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, LabelXSmall, ParagraphSmall } from 'baseui/typography'
-import { Block } from 'baseui/block'
-import React, { useEffect, useState } from 'react'
-import { useMyTeams } from '../api/TeamApi'
-import { theme } from '../util'
-import Button, { ExternalButton } from '../components/common/Button'
-import { emptyPage, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
-import { StatefulInput } from 'baseui/input'
 import { gql, useQuery } from '@apollo/client'
-import { ettlevColors, maxPageWidth } from '../util/theme'
-import CustomizedTabs from '../components/common/CustomizedTabs'
-import { PanelLink } from '../components/common/PanelLink'
-import { arkPennIcon, bamseIcon, clearSearchIcon, searchIcon } from '../components/Images'
-import { env } from '../util/env'
-import { InfoBlock2 } from '../components/common/InfoBlock'
-import moment from 'moment'
-import { useDebouncedState } from '../util/hooks'
-import { SkeletonPanel } from '../components/common/LoadingSkeleton'
-import { user } from '../services/User'
-import { useNavigate, useParams } from 'react-router-dom'
 import { faExternalLinkAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { borderWidth } from '../components/common/Style'
-import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Loader } from '@navikt/ds-react'
+import { Block } from 'baseui/block'
+import { StatefulInput } from 'baseui/input'
+import {
+  HeadingLarge,
+  HeadingXLarge,
+  HeadingXXLarge,
+  LabelLarge,
+  LabelSmall,
+  LabelXSmall,
+  ParagraphSmall,
+} from 'baseui/typography'
+import moment from 'moment'
+import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useMyTeams } from '../api/TeamApi'
+import { arkPennIcon, bamseIcon, clearSearchIcon, searchIcon } from '../components/Images'
+import Button, { ExternalButton } from '../components/common/Button'
+import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
+import CustomizedTabs from '../components/common/CustomizedTabs'
+import { InfoBlock2 } from '../components/common/InfoBlock'
+import { SkeletonPanel } from '../components/common/LoadingSkeleton'
+import { PanelLink } from '../components/common/PanelLink'
+import { borderWidth } from '../components/common/Style'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import BehandlingSok from '../components/etterlevelseDokumentasjon/tabs/BehandlingSok'
-import { Loader } from '@navikt/ds-react'
+import { IPageResponse, ITeam, TEtterlevelseDokumentasjonQL, emptyPage } from '../constants'
+import { ampli, userRoleEventProp } from '../services/Amplitude'
+import { user } from '../services/User'
+import { theme } from '../util'
+import { env } from '../util/env'
+import { useDebouncedState } from '../util/hooks'
+import { ettlevColors, maxPageWidth } from '../util/theme'
 
-type Section = 'mine' | 'siste' | 'alle' | 'behandlingsok'
+type TSection = 'mine' | 'siste' | 'alle' | 'behandlingsok'
 
-interface dokumentasjonCount {
+interface IDokumentasjonCount {
   dokumentasjonCount?: number
 }
 
-type CustomTeamObject = dokumentasjonCount & Team
+type TCustomTeamObject = IDokumentasjonCount & ITeam
 
 export const tabMarginBottom = '48px'
 
@@ -42,16 +50,26 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
   ampli.logEvent('sidevisning', {
     side: 'Side for Dokumentasjoner',
     sidetittel: 'Dokumentere etterlevelse',
-    ...userRoleEventProp
+    ...userRoleEventProp,
   })
 
   return (
-    <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
+    <Block
+      width="100%"
+      paddingBottom={'200px'}
+      id="content"
+      overrides={{ Block: { props: { role: 'main' } } }}
+    >
       <Helmet>
         <meta charSet="utf-8" />
         <title>Dokumentere etterlevelse</title>
       </Helmet>
-      <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
+      <Block
+        width="100%"
+        backgroundColor={ettlevColors.grey50}
+        display={'flex'}
+        justifyContent={'center'}
+      >
         <Block maxWidth={maxPageWidth} width="100%">
           <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
             {/* <RouteLink hideUnderline>
@@ -92,12 +110,15 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
 }
 
 const DokumentasjonTabs = () => {
-  const params = useParams<{ tab?: Section }>()
+  const params = useParams<{ tab?: TSection }>()
   const navigate = useNavigate()
-  const [tab, setTab] = useState<Section>(params.tab || 'mine')
+  const [tab, setTab] = useState<TSection>(params.tab || 'mine')
   const [doneLoading, setDoneLoading] = useState(false)
-  const [variables, setVariables] = useState<Variables>({})
-  const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<{ etterlevelseDokumentasjoner: PageResponse<EtterlevelseDokumentasjonQL> }, Variables>(query, {
+  const [variables, setVariables] = useState<TVariables>({})
+  const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<
+    { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
+    TVariables
+  >(query, {
     variables,
   })
 
@@ -106,12 +127,14 @@ const DokumentasjonTabs = () => {
   const etterlevelseDokumentasjoner = data?.etterlevelseDokumentasjoner || emptyPage
   const loading = teamsLoading || etterlevelseDokumentasjonLoading
 
-  const [sortedTeams, setSortedTeams] = React.useState<CustomTeamObject[]>([])
+  const [sortedTeams, setSortedTeams] = React.useState<TCustomTeamObject[]>([])
 
-  const sortTeams = (unSortedTeams: Team[]) => {
+  const sortTeams = (unSortedTeams: ITeam[]) => {
     return unSortedTeams
       .map((t) => {
-        const teamDokumentasjoner = etterlevelseDokumentasjoner.content.filter((e) => e.teamsData?.find((t2) => t2.id === t.id))
+        const teamDokumentasjoner = etterlevelseDokumentasjoner.content.filter(
+          (e) => e.teamsData?.find((t2) => t2.id === t.id)
+        )
 
         return {
           ...t,
@@ -163,17 +186,28 @@ const DokumentasjonTabs = () => {
       small
       backgroundColor={ettlevColors.grey25}
       activeKey={tab}
-      onChange={(args) => setTab(args.activeKey as Section)}
+      onChange={(args) => setTab(args.activeKey as TSection)}
       tabs={[
         {
           key: 'mine',
           title: 'Mine dokumentasjoner',
-          content: <MineEtterlevelseDokumentasjoner teams={sortedTeams} etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content} loading={loading} />,
+          content: (
+            <MineEtterlevelseDokumentasjoner
+              teams={sortedTeams}
+              etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content}
+              loading={loading}
+            />
+          ),
         },
         {
           key: 'siste',
           title: 'Mine sist dokumenterte',
-          content: <SisteEtterlevelseDokumentasjoner etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content} loading={loading} />,
+          content: (
+            <SisteEtterlevelseDokumentasjoner
+              etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content}
+              loading={loading}
+            />
+          ),
         },
         {
           key: 'alle',
@@ -195,8 +229,8 @@ const MineEtterlevelseDokumentasjoner = ({
   teams,
   loading,
 }: {
-  etterlevelseDokumentasjoner: EtterlevelseDokumentasjonQL[]
-  teams: CustomTeamObject[]
+  etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]
+  teams: TCustomTeamObject[]
   loading: boolean
 }) => {
   if (loading)
@@ -209,12 +243,20 @@ const MineEtterlevelseDokumentasjoner = ({
     )
   return (
     <Block marginBottom={tabMarginBottom}>
-      {!etterlevelseDokumentasjoner.length && !teams.length && <ParagraphSmall>Du er ikke medlem av team med registrerte dokumentasjoner</ParagraphSmall>}
+      {!etterlevelseDokumentasjoner.length && !teams.length && (
+        <ParagraphSmall>Du er ikke medlem av team med registrerte dokumentasjoner</ParagraphSmall>
+      )}
 
       {teams.map((t) => {
         const teamDokumentasjoner = etterlevelseDokumentasjoner
           .filter((e) => e.teamsData?.find((t2) => t2.id === t.id))
-          .filter((value, index, self) => index === self.findIndex((etterlevelseDokumentasjon) => etterlevelseDokumentasjon.id === value.id))
+          .filter(
+            (value, index, self) =>
+              index ===
+              self.findIndex(
+                (etterlevelseDokumentasjon) => etterlevelseDokumentasjon.id === value.id
+              )
+          )
         return (
           <Block key={t.id} marginBottom={theme.sizing.scale900}>
             <Block display={'flex'} justifyContent={'space-between'}>
@@ -223,7 +265,10 @@ const MineEtterlevelseDokumentasjoner = ({
                   {t.name}
                 </HeadingXLarge>
                 <ParagraphSmall marginTop={0}>
-                  Teamet skal etterleve krav i <span style={{ fontWeight: 700 }}>{teamDokumentasjoner.length} dokumentasjoner</span>
+                  Teamet skal etterleve krav i{' '}
+                  <span style={{ fontWeight: 700 }}>
+                    {teamDokumentasjoner.length} dokumentasjoner
+                  </span>
                 </ParagraphSmall>
               </Block>
               {/* <Block alignSelf={'flex-end'} marginBottom={theme.sizing.scale400}>
@@ -243,7 +288,9 @@ const MineEtterlevelseDokumentasjoner = ({
           icon={bamseIcon}
           alt={'Bamseikon'}
           title={'Savner du teamet ditt?'}
-          beskrivelse={'Legg til teamet i teamkatalogen, så henter vi dokumentasjoner som skal etterleve krav'}
+          beskrivelse={
+            'Legg til teamet i teamkatalogen, så henter vi dokumentasjoner som skal etterleve krav'
+          }
           backgroundColor={ettlevColors.grey25}
         >
           <Block marginTop={theme.sizing.scale600}>
@@ -257,10 +304,22 @@ const MineEtterlevelseDokumentasjoner = ({
   )
 }
 
-const SisteEtterlevelseDokumentasjoner = ({ etterlevelseDokumentasjoner, loading }: { etterlevelseDokumentasjoner: EtterlevelseDokumentasjonQL[]; loading: boolean }) => {
-  if (!etterlevelseDokumentasjoner.length && !loading) return <ParagraphSmall>Du har ikke dokumentert etterlevelse på krav</ParagraphSmall>
-  const sorted = [...etterlevelseDokumentasjoner].sort((a, b) => moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf())
-  return <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={sorted} loading={loading} />
+const SisteEtterlevelseDokumentasjoner = ({
+  etterlevelseDokumentasjoner,
+  loading,
+}: {
+  etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]
+  loading: boolean
+}) => {
+  if (!etterlevelseDokumentasjoner.length && !loading)
+    return <ParagraphSmall>Du har ikke dokumentert etterlevelse på krav</ParagraphSmall>
+  const sorted = [...etterlevelseDokumentasjoner].sort(
+    (a, b) =>
+      moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf()
+  )
+  return (
+    <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={sorted} loading={loading} />
+  )
 }
 
 const Alle = () => {
@@ -273,7 +332,10 @@ const Alle = () => {
     data,
     loading: gqlLoading,
     fetchMore,
-  } = useQuery<{ etterlevelseDokumentasjoner: PageResponse<EtterlevelseDokumentasjonQL> }, Variables>(query, {
+  } = useQuery<
+    { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
+    TVariables
+  >(query, {
     variables: { pageNumber, pageSize, sok },
     skip: tooShort,
   })
@@ -283,12 +345,12 @@ const Alle = () => {
   const lastMer = () => {
     fetchMore({
       variables: {
-        pageNumber: data!.etterlevelseDokumentasjoner.pageNumber + 1,
+        pageNumber: data ? data.etterlevelseDokumentasjoner.pageNumber + 1 : 0,
         pageSize,
       },
       updateQuery: (p, o) => {
         const oldData = p.etterlevelseDokumentasjoner
-        const newData = o.fetchMoreResult!.etterlevelseDokumentasjoner
+        const newData = o.fetchMoreResult?.etterlevelseDokumentasjoner
         return {
           etterlevelseDokumentasjoner: {
             ...oldData,
@@ -306,7 +368,11 @@ const Alle = () => {
   }, [sok])
 
   const getEtterlevelseDokumentasjonerWithoutDuplicates = () => {
-    return etterlevelseDokumentasjoner.content.filter((value, index, self) => index === self.findIndex((etterlevelseDokumentasjon) => etterlevelseDokumentasjon.id === value.id))
+    return etterlevelseDokumentasjoner.content.filter(
+      (value, index, self) =>
+        index ===
+        self.findIndex((etterlevelseDokumentasjon) => etterlevelseDokumentasjon.id === value.id)
+    )
   }
 
   return (
@@ -348,7 +414,12 @@ const Alle = () => {
                 overrides: {
                   Svg: {
                     component: (props: any) => (
-                      <Button notBold size="compact" kind="tertiary" onClick={() => props.onClick()}>
+                      <Button
+                        notBold
+                        size="compact"
+                        kind="tertiary"
+                        onClick={() => props.onClick()}
+                      >
                         <img src={clearSearchIcon} alt="tøm" />
                       </Button>
                     ),
@@ -362,7 +433,11 @@ const Alle = () => {
           // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
         />
         {tooShort && (
-          <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>
+          <LabelSmall
+            color={ettlevColors.error400}
+            alignSelf={'flex-end'}
+            marginTop={theme.sizing.scale200}
+          >
             Minimum 3 tegn
           </LabelSmall>
         )}
@@ -387,17 +462,28 @@ const Alle = () => {
             </Block>
           )}
 
-          <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={getEtterlevelseDokumentasjonerWithoutDuplicates()} loading={loading} />
+          <EtterlevelseDokumentasjonerPanels
+            etterlevelseDokumentasjoner={getEtterlevelseDokumentasjonerWithoutDuplicates()}
+            loading={loading}
+          />
 
           {!loading && etterlevelseDokumentasjoner.totalElements !== 0 && (
-            <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
+            <Block
+              display={'flex'}
+              justifyContent={'space-between'}
+              marginTop={theme.sizing.scale1000}
+            >
               <Block display="flex" alignItems="center">
                 <Button
                   onClick={lastMer}
                   icon={faPlus}
                   kind={'secondary'}
                   size="compact"
-                  disabled={gqlLoading || etterlevelseDokumentasjoner.numberOfElements >= etterlevelseDokumentasjoner.totalElements}
+                  disabled={
+                    gqlLoading ||
+                    etterlevelseDokumentasjoner.numberOfElements >=
+                      etterlevelseDokumentasjoner.totalElements
+                  }
                 >
                   Vis mer
                 </Button>
@@ -409,7 +495,8 @@ const Alle = () => {
                 )}
               </Block>
               <LabelSmall marginRight={theme.sizing.scale400}>
-                Viser {etterlevelseDokumentasjoner.numberOfElements}/{etterlevelseDokumentasjoner.totalElements}
+                Viser {etterlevelseDokumentasjoner.numberOfElements}/
+                {etterlevelseDokumentasjoner.totalElements}
               </LabelSmall>
             </Block>
           )}
@@ -419,7 +506,13 @@ const Alle = () => {
   )
 }
 
-export const EtterlevelseDokumentasjonerPanels = ({ etterlevelseDokumentasjoner, loading }: { etterlevelseDokumentasjoner: EtterlevelseDokumentasjonQL[]; loading?: boolean }) => {
+export const EtterlevelseDokumentasjonerPanels = ({
+  etterlevelseDokumentasjoner,
+  loading,
+}: {
+  etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]
+  loading?: boolean
+}) => {
   if (loading) return <SkeletonPanel count={5} />
   return (
     <Block marginBottom={tabMarginBottom}>
@@ -428,7 +521,15 @@ export const EtterlevelseDokumentasjonerPanels = ({ etterlevelseDokumentasjoner,
           <PanelLink
             useTitleUnderLine
             useDescriptionUnderline
-            panelIcon={<img src={arkPennIcon} width="33px" height="33px" aria-hidden alt={'Dokumenter ikon'} />}
+            panelIcon={
+              <img
+                src={arkPennIcon}
+                width="33px"
+                height="33px"
+                aria-hidden
+                alt={'Dokumenter ikon'}
+              />
+            }
             href={`/dokumentasjon/${ed.id}`}
             title={
               <>
@@ -436,7 +537,11 @@ export const EtterlevelseDokumentasjonerPanels = ({ etterlevelseDokumentasjoner,
               </>
             }
             beskrivelse={ed.title}
-            rightBeskrivelse={!!ed.sistEndretEtterlevelse ? `Sist endret: ${moment(ed.sistEndretEtterlevelse).format('ll')}` : ''}
+            rightBeskrivelse={
+              ed.sistEndretEtterlevelse !== undefined && ed.sistEndretEtterlevelse !== ''
+                ? `Sist endret: ${moment(ed.sistEndretEtterlevelse).format('ll')}`
+                : ''
+            }
           />
         </Block>
       ))}
@@ -444,7 +549,7 @@ export const EtterlevelseDokumentasjonerPanels = ({ etterlevelseDokumentasjoner,
   )
 }
 
-export type Variables = {
+export type TVariables = {
   pageNumber?: number
   pageSize?: number
   sistRedigert?: number
@@ -454,6 +559,7 @@ export type Variables = {
   behandlingId?: string
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const query = gql`
   query getEtterlevelseDokumentasjoner(
     $pageNumber: NonNegativeInt
@@ -464,7 +570,12 @@ export const query = gql`
     $behandlingId: String
   ) {
     etterlevelseDokumentasjoner: etterlevelseDokumentasjon(
-      filter: { mineEtterlevelseDokumentasjoner: $mineEtterlevelseDokumentasjoner, sistRedigert: $sistRedigert, sok: $sok, behandlingId: $behandlingId }
+      filter: {
+        mineEtterlevelseDokumentasjoner: $mineEtterlevelseDokumentasjoner
+        sistRedigert: $sistRedigert
+        sok: $sok
+        behandlingId: $behandlingId
+      }
       pageNumber: $pageNumber
       pageSize: $pageSize
     ) {
@@ -486,3 +597,4 @@ export const query = gql`
     }
   }
 `
+// eslint-enable-next-line @typescript-eslint/ban-types

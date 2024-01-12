@@ -1,23 +1,34 @@
-import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
-
-import { CodeListFormValues, codeListSchema, ListName } from '../../../services/Codelist'
-import { Error } from '../../common/ModalSchema'
-import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
-import { MarkdownInfo } from '../../common/Markdown'
 import { BodyShort, Button, Label, Modal, TextField, Textarea } from '@navikt/ds-react'
+import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
+import { EListName, ICodeListFormValues, codeListSchema } from '../../../services/Codelist'
+import { MarkdownInfo } from '../../common/Markdown'
+import { Error } from '../../common/ModalSchema'
+import { LovCodeDataForm } from './LovCode'
 
-type ModalUpdateProps = {
+type TModalUpdateProps = {
   title: string
-  initialValues: CodeListFormValues
+  initialValues: ICodeListFormValues
   isOpen: boolean
   errorOnUpdate: any | undefined
   onClose: () => void
-  submit: (process: CodeListFormValues) => Promise<void>
+  submit: (process: ICodeListFormValues) => Promise<void>
 }
 
-const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onClose, submit }: ModalUpdateProps) => {
+const UpdateCodeListModal = ({
+  title,
+  initialValues,
+  errorOnUpdate,
+  isOpen,
+  onClose,
+  submit,
+}: TModalUpdateProps) => {
   return (
-    <Modal className="px-8 w-full max-w-2xl" onClose={onClose} open={isOpen} header={{ heading: title }}>
+    <Modal
+      className="px-8 w-full max-w-2xl"
+      onClose={onClose}
+      open={isOpen}
+      header={{ heading: title }}
+    >
       <div>
         <Formik
           onSubmit={(values) => {
@@ -27,29 +38,51 @@ const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onCl
           initialValues={{ ...initialValues }}
           validationSchema={codeListSchema}
         >
-          {(formik: FormikProps<CodeListFormValues>) => (
+          {(formik: FormikProps<ICodeListFormValues>) => (
             <Form>
               <Modal.Body>
                 <div className="flex w-full mt-4 items-center">
                   <Label className="mr-4 w-1/4">Short name:</Label>
-                  <Field name="shortName">{({ field }: FieldProps) => <TextField className="w-full" label="shortName" hideLabel {...field} />}</Field>
+                  <Field name="shortName">
+                    {({ field }: FieldProps) => (
+                      <TextField className="w-full" label="shortName" hideLabel {...field} />
+                    )}
+                  </Field>
                 </div>
                 <Error fieldName="shortName" />
 
                 <div className="flex w-full mt-4 items-center">
                   <Label className="mr-4 w-1/4">Description:</Label>
-                  <Field name="description">{({ field }: FieldProps) => <Textarea label="description" hideLabel className="w-full" {...field} minRows={10} />}</Field>
+                  <Field name="description">
+                    {({ field }: FieldProps) => (
+                      <Textarea
+                        label="description"
+                        hideLabel
+                        className="w-full"
+                        {...field}
+                        minRows={10}
+                      />
+                    )}
+                  </Field>
                 </div>
                 <Error fieldName="description" />
-                {(initialValues.list === ListName.LOV || initialValues.list === ListName.TEMA) && <MarkdownInfo />}
+                {(initialValues.list === EListName.LOV ||
+                  initialValues.list === EListName.TEMA) && <MarkdownInfo />}
 
-                {initialValues.list === ListName.LOV && <LovCodeDataForm />}
+                {initialValues.list === EListName.LOV && <LovCodeDataForm />}
                 {/* {initialValues.list === ListName.TEMA && <TemaCodeDataForm />} */}
               </Modal.Body>
               <Modal.Footer>
                 <div className="flex justify-end">
-                  <div className="mr-auto">{errorOnUpdate && <BodyShort>{errorOnUpdate}</BodyShort>}</div>
-                  <Button type="button" variant="secondary" className="mr-4" onClick={() => onClose()}>
+                  <div className="mr-auto">
+                    {errorOnUpdate && <BodyShort>{errorOnUpdate}</BodyShort>}
+                  </div>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className="mr-4"
+                    onClick={() => onClose()}
+                  >
                     Avbryt
                   </Button>
                   <Button type="button" onClick={formik.submitForm}>

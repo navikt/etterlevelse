@@ -1,12 +1,12 @@
+import { Alert, Label, Loader } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { emptyPage, KravQL } from '../../constants'
 import { useKravFilter } from '../../api/KravGraphQLApi'
+import { TKravQL, emptyPage } from '../../constants'
 import { KravPanels, sortKrav } from '../../pages/KravListPage'
-import { Alert, Heading, Label, Loader } from '@navikt/ds-react'
 
 export const SistRedigertKrav = () => {
   const [sorting] = useState('sist')
-  const [sortedKravList, setSortedKravList] = useState<KravQL[]>([])
+  const [sortedKravList, setSortedKravList] = useState<TKravQL[]>([])
   const res = useKravFilter({
     sistRedigert: 10,
     gjeldendeKrav: false,
@@ -21,7 +21,9 @@ export const SistRedigertKrav = () => {
   useEffect(() => {
     let sortedData = [...kravene.content]
     if (sorting === 'sist') {
-      sortedData.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0))
+      sortedData.sort((a, b) =>
+        a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
+      )
     } else {
       sortedData = sortKrav(sortedData)
     }
@@ -31,7 +33,9 @@ export const SistRedigertKrav = () => {
   useEffect(() => {
     let sortedData = [...kravene.content]
     if (sorting === 'sist') {
-      sortedData.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0))
+      sortedData.sort((a, b) =>
+        a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
+      )
     } else {
       sortedData = sortKrav(sortedData)
     }
@@ -50,7 +54,9 @@ export const SistRedigertKrav = () => {
         </div>
       </div>
       <KravPanels kravene={sortedKravList} loading={loading} />
-      {sortedKravList.length === 0 && <div className={'w-full flex justify-center'}>Fant ingen krav</div>}
+      {sortedKravList.length === 0 && (
+        <div className={'w-full flex justify-center'}>Fant ingen krav</div>
+      )}
     </div>
   )
 }

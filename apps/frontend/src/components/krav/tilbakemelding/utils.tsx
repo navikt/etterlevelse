@@ -1,12 +1,12 @@
-import { TilbakemeldingMeldingStatus } from '../../../constants'
+import { ETilbakemeldingMeldingStatus } from '../../../constants'
 
-export const tilbakemeldingStatusToText = (status: TilbakemeldingMeldingStatus) => {
+export const tilbakemeldingStatusToText = (status: ETilbakemeldingMeldingStatus) => {
   switch (status) {
-    case TilbakemeldingMeldingStatus.BESVART:
+    case ETilbakemeldingMeldingStatus.BESVART:
       return 'Besvart'
-    case TilbakemeldingMeldingStatus.UBESVART:
+    case ETilbakemeldingMeldingStatus.UBESVART:
       return 'Ubesvart'
-    case TilbakemeldingMeldingStatus.MIDLERTIDLIG_SVAR:
+    case ETilbakemeldingMeldingStatus.MIDLERTIDLIG_SVAR:
       return 'Midlertidlig svar'
     default:
       return ''
@@ -14,7 +14,7 @@ export const tilbakemeldingStatusToText = (status: TilbakemeldingMeldingStatus) 
 }
 
 export const getParsedOptionsforTilbakeMelding = () => {
-  return Object.values(TilbakemeldingMeldingStatus).map((s: TilbakemeldingMeldingStatus) => {
+  return Object.values(ETilbakemeldingMeldingStatus).map((s: ETilbakemeldingMeldingStatus) => {
     return {
       id: s,
       label: tilbakemeldingStatusToText(s),
@@ -22,7 +22,7 @@ export const getParsedOptionsforTilbakeMelding = () => {
   })
 }
 
-export const getTilbakeMeldingStatusToOption = (status: TilbakemeldingMeldingStatus) => {
+export const getTilbakeMeldingStatusToOption = (status: ETilbakemeldingMeldingStatus) => {
   return [
     {
       id: status,

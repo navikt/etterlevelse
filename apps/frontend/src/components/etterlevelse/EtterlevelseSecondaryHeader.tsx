@@ -1,28 +1,36 @@
 import { Block } from 'baseui/block'
-import Button from '../common/Button'
-import { borderRadius, marginAll, paddingAll } from '../common/Style'
 import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
-import { angleIcon, page2Icon } from '../Images'
-import CustomizedModal from '../common/CustomizedModal'
-import { getTemaMainHeader } from '../../pages/TemaPage'
 import React, { useState } from 'react'
-import { EtterlevelseDokumentasjon } from '../../constants'
-import { LovCode, TemaCode } from '../../services/Codelist'
-import { KravId } from '../../api/KravApi'
 import { useParams } from 'react-router-dom'
-import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
+import { TKravId } from '../../api/KravApi'
+import { IEtterlevelseDokumentasjon } from '../../constants'
+import { TSection } from '../../pages/EtterlevelseDokumentasjonPage'
+import { getTemaMainHeader } from '../../pages/TemaPage'
+import { TLovCode, TTemaCode } from '../../services/Codelist'
+import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
+import { angleIcon } from '../Images'
+import Button from '../common/Button'
+import CustomizedModal from '../common/CustomizedModal'
+import { borderRadius, marginAll, paddingAll } from '../common/Style'
 
-type EtterlevelseSecondaryHeaderProps = {
+type TEtterlevelseSecondaryHeaderProps = {
   tab: string
-  setTab: React.Dispatch<React.SetStateAction<Section>>
+  setTab: React.Dispatch<React.SetStateAction<TSection>>
   setNavigatePath: (state: string) => void
-  etterlevelseDokumentasjon: EtterlevelseDokumentasjon | undefined
-  temaData: TemaCode | undefined
-  kravId: KravId | undefined
-  lovListe: LovCode[]
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon | undefined
+  temaData: TTemaCode | undefined
+  kravId: TKravId | undefined
+  lovListe: TLovCode[]
 }
-export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, etterlevelseDokumentasjon, temaData, lovListe, kravId }: EtterlevelseSecondaryHeaderProps) => {
+export const EtterlevelseSecondaryHeader = ({
+  tab,
+  setTab,
+  setNavigatePath,
+  etterlevelseDokumentasjon,
+  temaData,
+  lovListe,
+  kravId,
+}: TEtterlevelseSecondaryHeaderProps) => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
   const params = useParams<{ filter?: string }>()
 
@@ -102,10 +110,27 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, ette
         </Button>
       </Block>
 
-      <Block marginTop="0px" marginBottom="56px" display="flex" width="calc(100% - 35px)" alignItems="center" justifyContent="center" marginLeft="35px">
+      <Block
+        marginTop="0px"
+        marginBottom="56px"
+        display="flex"
+        width="calc(100% - 35px)"
+        alignItems="center"
+        justifyContent="center"
+        marginLeft="35px"
+      >
         <Block display="flex" flex="1">
           <img src={angleIcon} alt="angle icon" />{' '}
-          <LabelSmall marginLeft="12px" $style={{ fontSize: '24px', fontWeight: 900, lineHeight: '32px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
+          <LabelSmall
+            marginLeft="12px"
+            $style={{
+              fontSize: '24px',
+              fontWeight: 900,
+              lineHeight: '32px',
+              color: ettlevColors.green600,
+              whiteSpace: 'nowrap',
+            }}
+          >
             K{kravId?.kravNummer}.{kravId?.kravVersjon}
           </LabelSmall>
         </Block>
@@ -157,7 +182,12 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, ette
                 {temaData?.shortName}
               </HeadingXXLarge>
             </Block>
-            <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
+            <Block
+              marginBottom="55px"
+              marginTop="40px"
+              paddingLeft={responsivePaddingExtraLarge}
+              paddingRight={responsivePaddingExtraLarge}
+            >
               <Block>{getTemaMainHeader(temaData, lovListe, true)}</Block>
               <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                 <Button onClick={() => setIsTemaModalOpen(false)}>Lukk visning</Button>

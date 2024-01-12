@@ -1,21 +1,25 @@
-import * as React from 'react'
-import { useState } from 'react'
+import { Block } from 'baseui/block'
+import { Button } from 'baseui/button'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
 import { ParagraphMedium } from 'baseui/typography'
-import { Button } from 'baseui/button'
-import { Block } from 'baseui/block'
-import { buttonContentStyle } from '../../common/Button'
-import { Virkemiddel } from '../../../constants'
+import { useState } from 'react'
 import { deleteVirkemiddel } from '../../../api/VirkemiddelApi'
+import { IVirkemiddel } from '../../../constants'
+import { buttonContentStyle } from '../../common/Button'
 
-type ModalDeleteProps = {
+type TModalDeleteProps = {
   isOpen: boolean
   setIsOpen: (b: boolean) => void
-  virkemiddel?: Virkemiddel
+  virkemiddel?: IVirkemiddel
   refetchData: () => void
 }
 
-const DeleteVirkemiddeltModal = ({ isOpen, setIsOpen, virkemiddel, refetchData }: ModalDeleteProps) => {
+const DeleteVirkemiddeltModal = ({
+  isOpen,
+  setIsOpen,
+  virkemiddel,
+  refetchData,
+}: TModalDeleteProps) => {
   const [errorOnDelete, setErrorOnDelete] = useState('')
 
   const submit = async (id?: string) => {
@@ -32,7 +36,13 @@ const DeleteVirkemiddeltModal = ({ isOpen, setIsOpen, virkemiddel, refetchData }
   }
 
   return (
-    <Modal closeable={false} onClose={() => setIsOpen(false)} isOpen={isOpen} autoFocus animate size="default">
+    <Modal
+      closeable={false}
+      onClose={() => setIsOpen(false)}
+      isOpen={isOpen}
+      animate
+      size="default"
+    >
       <ModalHeader>Bekreft sletting.</ModalHeader>
       <ModalBody>
         <ParagraphMedium> Bekreft sletting av {virkemiddel?.navn}.</ParagraphMedium>

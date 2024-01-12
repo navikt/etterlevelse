@@ -1,37 +1,56 @@
-import { FieldWrapper } from '../../common/Inputs'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import React, { useEffect, useState } from 'react'
-import { KravStatus, Suksesskriterie } from '../../../constants'
-import * as _ from 'lodash'
-import LabelWithTooltip from '../../common/LabelWithTooltip'
-import TextEditor from '../../common/TextEditor/TextEditor'
-import { useDebouncedState } from '../../../util/hooks'
-import { DragDropContext, Draggable, DraggableProvidedDragHandleProps, DraggingStyle, Droppable } from 'react-beautiful-dnd'
-import { kravModal } from '../EditKrav'
-import { Error } from '../../common/ModalSchema'
-import { Box, Button, Radio, RadioGroup, TextField, Tooltip } from '@navikt/ds-react'
 import { DragVerticalIcon, PlusIcon, TrashIcon } from '@navikt/aksel-icons'
+import { Box, Button, Radio, RadioGroup, TextField, Tooltip } from '@navikt/ds-react'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
+import * as _ from 'lodash'
+import { useEffect, useState } from 'react'
+import {
+  DragDropContext,
+  Draggable,
+  DraggableProvidedDragHandleProps,
+  DraggingStyle,
+  Droppable,
+} from 'react-beautiful-dnd'
+import { EKravStatus, ISuksesskriterie } from '../../../constants'
+import { useDebouncedState } from '../../../util/hooks'
+import { FieldWrapper } from '../../common/Inputs'
+import LabelWithTooltip from '../../common/LabelWithTooltip'
+import { Error } from '../../common/ModalSchema'
+import TextEditor from '../../common/TextEditor/TextEditor'
+import { kravModal } from '../EditKrav'
 
-type KravSuksesskriterieEditProps = {
+type TKravSuksesskriterieEditProps = {
   setIsFormDirty?: (v: boolean) => void
   newVersion: boolean
 }
 
-export const KravSuksesskriterierEdit = ({ setIsFormDirty, newVersion }: KravSuksesskriterieEditProps) => {
+export const KravSuksesskriterierEdit = ({
+  setIsFormDirty,
+  newVersion,
+}: TKravSuksesskriterieEditProps) => {
   return (
     <FieldWrapper>
-      <FieldArray name={'suksesskriterier'}>{(p) => <KriterieList p={p} setIsFormDirty={setIsFormDirty} newVersion={newVersion} />}</FieldArray>
+      <FieldArray name={'suksesskriterier'}>
+        {(p) => <KriterieList p={p} setIsFormDirty={setIsFormDirty} newVersion={newVersion} />}
+      </FieldArray>
     </FieldWrapper>
   )
 }
 
-const nextId = (suksesskriterier: Suksesskriterie[]) => {
+const nextId = (suksesskriterier: ISuksesskriterie[]) => {
   const max = _.max(suksesskriterier.map((s) => s.id)) || 0
   return max + 1
 }
 
-const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderProps; setIsFormDirty?: (v: boolean) => void; newVersion: boolean }) => {
-  const suksesskriterier = p.form.values.suksesskriterier as Suksesskriterie[]
+const KriterieList = ({
+  p,
+  setIsFormDirty,
+  newVersion,
+}: {
+  p: FieldArrayRenderProps
+  setIsFormDirty?: (v: boolean) => void
+  newVersion: boolean
+}) => {
+  const suksesskriterier = p.form.values.suksesskriterier as ISuksesskriterie[]
 
   if (!suksesskriterier.length) {
     p.push({ id: nextId(suksesskriterier), navn: '', beskrivelse: '' })
@@ -40,7 +59,7 @@ const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderPr
   return (
     <div className="flex flex-col">
       <DragDropContext
-        onDragEnd={(result, provided) => {
+        onDragEnd={(result) => {
           if (!result.destination) {
             return
           }
@@ -79,7 +98,9 @@ const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderPr
                           remove={() => {
                             p.remove(i)
                           }}
-                          dragHandleProps={dprov.dragHandleProps ? dprov.dragHandleProps : undefined}
+                          dragHandleProps={
+                            dprov.dragHandleProps ? dprov.dragHandleProps : undefined
+                          }
                           isDragging={dsnap.isDragging}
                           p={p}
                           setIsFormDirty={setIsFormDirty}
@@ -95,14 +116,21 @@ const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderPr
           )}
         </Droppable>
       </DragDropContext>
-      {(p.form.values.status !== KravStatus.AKTIV || newVersion) && (
+      {(p.form.values.status !== EKravStatus.AKTIV || newVersion) && (
         <div className="my-4 ml-2.5 self-end">
           <Button
             type="button"
             icon={<PlusIcon aria-label="" aria-hidden />}
             variant="secondary"
             disabled={suksesskriterier.length >= 15}
-            onClick={() => p.push({ id: nextId(suksesskriterier), navn: '', beskrivelse: '', behovForBegrunnelse: 'true' })}
+            onClick={() =>
+              p.push({
+                id: nextId(suksesskriterier),
+                navn: '',
+                beskrivelse: '',
+                behovForBegrunnelse: 'true',
+              })
+            }
           >
             Suksesskriterie
           </Button>
@@ -123,9 +151,9 @@ const Kriterie = ({
   setIsFormDirty,
   newVersion,
 }: {
-  s: Suksesskriterie
+  s: ISuksesskriterie
   nummer: number
-  update: (s: Suksesskriterie) => void
+  update: (s: ISuksesskriterie) => void
   remove: () => void
   dragHandleProps?: DraggableProvidedDragHandleProps
   isDragging: boolean
@@ -136,19 +164,36 @@ const Kriterie = ({
   const debounceDelay = 500
   const [navn, setNavn, navnInput] = useDebouncedState(s.navn, debounceDelay)
   const [beskrivelse, setBeskrivelse] = useDebouncedState(s.beskrivelse || '', debounceDelay)
-  const [behovForBegrunnelse, setBehovForBegrunnelse] = useState<string>(s.behovForBegrunnelse === undefined ? 'true' : s.behovForBegrunnelse.toString())
+  const [behovForBegrunnelse, setBehovForBegrunnelse] = useState<string>(
+    s.behovForBegrunnelse === undefined ? 'true' : s.behovForBegrunnelse.toString()
+  )
 
   useEffect(() => {
-    update({ id: s.id, navn, beskrivelse, behovForBegrunnelse: behovForBegrunnelse === 'true' ? true : false })
+    update({
+      id: s.id,
+      navn,
+      beskrivelse,
+      behovForBegrunnelse: behovForBegrunnelse === 'true' ? true : false,
+    })
   }, [navn, beskrivelse, behovForBegrunnelse])
 
   return (
-    <Box padding="4" className="mb-4" background={isDragging ? 'surface-danger-subtle' : 'surface-subtle'} borderColor="border-on-inverted">
+    <Box
+      padding="4"
+      className="mb-4"
+      background={isDragging ? 'surface-danger-subtle' : 'surface-subtle'}
+      borderColor="border-on-inverted"
+    >
       <div className="relative pt-1">
         <div className="flex items-center absolute right-0 top-0">
-          {(p.form.values.status !== KravStatus.AKTIV || newVersion) && (
+          {(p.form.values.status !== EKravStatus.AKTIV || newVersion) && (
             <Tooltip content="Fjern suksesskriterie">
-              <Button variant="secondary" type={'button'} icon={<TrashIcon arial-label="Fjern suksesskriterie" />} onClick={remove} />
+              <Button
+                variant="secondary"
+                type={'button'}
+                icon={<TrashIcon arial-label="Fjern suksesskriterie" />}
+                onClick={remove}
+              />
             </Tooltip>
           )}
 
@@ -160,16 +205,32 @@ const Kriterie = ({
         <div>
           <LabelWithTooltip
             label={`Suksesskriterium ${nummer}`}
-            tooltip={'Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'}
+            tooltip={
+              'Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'
+            }
           />
-          <TextField label={`Suksesskriterium ${nummer}`} hideLabel value={navnInput} onChange={(e) => setNavn((e.target as HTMLInputElement).value)} placeholder={'Navn'} />
+          <TextField
+            label={`Suksesskriterium ${nummer}`}
+            hideLabel
+            value={navnInput}
+            onChange={(e) => setNavn((e.target as HTMLInputElement).value)}
+            placeholder={'Navn'}
+          />
           <Error fieldName={'suksesskriterier'} fullWidth />
         </div>
 
         <div>
-          <LabelWithTooltip label={'Beskrivelse av suksesskriteriet'} tooltip={'Nærmere detaljer rundt oppnåelse av suksesskriteriet.'} />
+          <LabelWithTooltip
+            label={'Beskrivelse av suksesskriteriet'}
+            tooltip={'Nærmere detaljer rundt oppnåelse av suksesskriteriet.'}
+          />
           {/* <MarkdownEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} /> */}
-          <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} setIsFormDirty={setIsFormDirty} />
+          <TextEditor
+            initialValue={beskrivelse}
+            setValue={setBeskrivelse}
+            height={'250px'}
+            setIsFormDirty={setIsFormDirty}
+          />
         </div>
 
         <div className="flex flex-1 mt-1">

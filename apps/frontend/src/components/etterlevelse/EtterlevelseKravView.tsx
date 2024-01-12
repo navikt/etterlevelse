@@ -1,48 +1,74 @@
-import { Behandling, Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL, KravStatus, KravVersjon, Team } from '../../constants'
-import { FormikProps } from 'formik'
-import { createEtterlevelse, getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, updateEtterlevelse } from '../../api/EtterlevelseApi'
-import React, { useEffect, useRef, useState } from 'react'
-import { getKravByKravNumberAndVersion, getKravByKravNummer, KravId } from '../../api/KravApi'
-import { query } from '../../pages/KravPage'
-import { user } from '../../services/User'
 import { useQuery } from '@apollo/client'
-import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
-import Etterlevelser from '../krav/Etterlevelser'
-import { Markdown } from '../common/Markdown'
+import { FileTextIcon } from '@navikt/aksel-icons'
+import {
+  Alert,
+  BodyShort,
+  Button,
+  Heading,
+  Label,
+  Link,
+  Modal,
+  ReadMore,
+  Tabs,
+  Tag,
+} from '@navikt/ds-react'
+import { FormikProps } from 'formik'
+import moment from 'moment'
+import React, { useEffect, useRef, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import {
+  createEtterlevelse,
+  getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
+  updateEtterlevelse,
+} from '../../api/EtterlevelseApi'
 import {
   createEtterlevelseMetadata,
   getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion,
   mapEtterlevelseMetadataToFormValue,
   updateEtterlevelseMetadata,
 } from '../../api/EtterlevelseMetadataApi'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
-import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
-import moment from 'moment'
-import { Alert, BodyLong, BodyShort, Button, Detail, Heading, Label, Link, Modal, ReadMore, Tabs, Tag } from '@navikt/ds-react'
+import { TKravId, getKravByKravNummer } from '../../api/KravApi'
+import {
+  EEtterlevelseStatus,
+  EKravFilterType,
+  EKravStatus,
+  IBehandling,
+  IEtterlevelse,
+  IEtterlevelseMetadata,
+  IKrav,
+  IKravVersjon,
+  ITeam,
+  TKravQL,
+} from '../../constants'
+import { query } from '../../pages/KravPage'
+import { ampli, userRoleEventProp } from '../../services/Amplitude'
+import { user } from '../../services/User'
 import { behandlingLink } from '../../util/config'
+import { Markdown } from '../common/Markdown'
 import { ExternalLink } from '../common/RouteLink'
 import { TeamName } from '../common/TeamName'
-import { AllInfo } from '../krav/ViewKrav'
-import { FileTextIcon } from '@navikt/aksel-icons'
+import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import EditNotatfelt from '../etterlevelseMetadata/EditNotatfelt'
+import Etterlevelser from '../krav/Etterlevelser'
+import { AllInfo } from '../krav/ViewKrav'
+import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
+import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import EtterlevelseViewFields from './EtterlevelseViewFields'
-import { ampli, userRoleEventProp } from '../../services/Amplitude'
 
-type EttlevelseKravViewProps = {
+type TEttlevelseKravViewProps = {
   temaName?: string
-  etterlevelse: Etterlevelse
-  kravId: KravId
+  etterlevelse: IEtterlevelse
+  kravId: TKravId
   formRef?: React.Ref<any>
   etterlevelseDokumentasjonTitle?: string
   etterlevelseDokumentasjonId?: string
   etterlevelseNummer?: number
-  behandlinger: Behandling[] | undefined
-  teams: Team[] | undefined
+  behandlinger: IBehandling[] | undefined
+  teams: ITeam[] | undefined
   varsleMelding?: string
   navigatePath: string
-  tidligereEtterlevelser: Etterlevelse[] | undefined
-  kravFilter: KRAV_FILTER_TYPE
+  tidligereEtterlevelser: IEtterlevelse[] | undefined
+  kravFilter: EKravFilterType
   nextKravToDocument: string
 }
 
@@ -51,48 +77,52 @@ export const EtterlevelseKravView = ({
   kravId,
   etterlevelse,
   varsleMelding,
-  formRef,
   etterlevelseDokumentasjonTitle,
   etterlevelseDokumentasjonId,
-  etterlevelseNummer,
   behandlinger,
   teams,
   navigatePath,
   tidligereEtterlevelser,
   kravFilter,
   nextKravToDocument,
-}: EttlevelseKravViewProps) => {
-  const { data, loading } = useQuery<{ kravById: KravQL }, KravId>(query, {
+}: TEttlevelseKravViewProps) => {
+  const { data, loading } = useQuery<{ kravById: TKravQL }, TKravId>(query, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
     fetchPolicy: 'no-cache',
   })
   const etterlevelserLoading = loading
-  const [krav, setKrav] = useState<KravQL>()
-  const [nyereKrav, setNyereKrav] = React.useState<Krav>()
+  const [krav, setKrav] = useState<TKravQL>()
+  const [nyereKrav, setNyereKrav] = React.useState<IKrav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
-  const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
-  const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
+  const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<IEtterlevelse>()
+  const etterlevelseFormRef: React.Ref<FormikProps<IEtterlevelse> | undefined> = useRef()
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
-  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{ kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' }])
+  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<IKravVersjon[]>([
+    { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
+  ])
   const [isNavigationModalOpen, setIsNavigationModalOpen] = useState<boolean>(false)
   const location = useLocation()
   const navigate = useNavigate()
 
-  const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
+  const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<IEtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
       id: 'ny',
       etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
       kravNummer: kravId.kravNummer,
       kravVersjon: kravId.kravVersjon,
-    }),
+    })
   )
 
   useEffect(() => {
     ;(async () => {
       etterlevelseDokumentasjonId &&
         kravId.kravNummer &&
-        getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(etterlevelseDokumentasjonId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
+        getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(
+          etterlevelseDokumentasjonId,
+          kravId.kravNummer,
+          kravId.kravVersjon
+        ).then((resp) => {
           if (resp.content.length) {
             setEtterlevelseMetadata(resp.content[0])
           } else {
@@ -102,38 +132,37 @@ export const EtterlevelseKravView = ({
                 etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
                 kravNummer: kravId.kravNummer,
                 kravVersjon: kravId.kravVersjon,
-              }),
+              })
             )
           }
         })
     })()
   }, [])
 
-  //Navigate to same component does not work
-  //Work around for redirecting to same component
-  const redirectOnSameComponent = (nextKravPath: string) => {
-    const currentPath = location.pathname.split('/krav')
-    window.location.href = currentPath[0] + '/krav' + nextKravPath
-  }
-
   const getNextKravUrl = (nextKravPath: string): string => {
     const currentPath = location.pathname.split('/krav')
     return currentPath[0] + '/krav' + nextKravPath
   }
 
-  const submit = async (etterlevelse: Etterlevelse) => {
+  const submit = async (etterlevelse: IEtterlevelse) => {
     const mutatedEtterlevelse = {
       ...etterlevelse,
-      fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE ? '' : etterlevelse.fristForFerdigstillelse,
+      fristForFerdigstillelse:
+        etterlevelse.status !== EEtterlevelseStatus.OPPFYLLES_SENERE
+          ? ''
+          : etterlevelse.fristForFerdigstillelse,
       suksesskriterieBegrunnelser: syncEtterlevelseKriterieBegrunnelseWithKrav(etterlevelse, krav),
     }
 
     //double check if etterlevelse already exist before submitting
     let existingEtterlevelseId = ''
     if (etterlevelseDokumentasjonId && krav) {
-      const etterlevelseList = (await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(etterlevelseDokumentasjonId, krav.kravNummer)).content.filter(
-        (e) => e.kravVersjon === krav.kravVersjon,
-      )
+      const etterlevelseList = (
+        await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(
+          etterlevelseDokumentasjonId,
+          krav.kravNummer
+        )
+      ).content.filter((e) => e.kravVersjon === krav.kravVersjon)
       if (etterlevelseList.length) {
         existingEtterlevelseId = etterlevelseList[0].id
         mutatedEtterlevelse.id = etterlevelseList[0].id
@@ -171,7 +200,7 @@ export const EtterlevelseKravView = ({
             })
             .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
 
-          const filteredVersjoner = alleVersjoner.filter((k) => k.kravStatus !== KravStatus.UTKAST)
+          const filteredVersjoner = alleVersjoner.filter((k) => k.kravStatus !== EKravStatus.UTKAST)
 
           if (filteredVersjoner.length) {
             setAlleKravVersjoner(filteredVersjoner)
@@ -179,7 +208,7 @@ export const EtterlevelseKravView = ({
 
           const krav = resp.content.filter((k) => k.kravVersjon === data.kravById.kravVersjon + 1)
 
-          if (krav.length && krav[0].status === KravStatus.AKTIV) setNyereKrav(krav[0])
+          if (krav.length && krav[0].status === EKravStatus.AKTIV) setNyereKrav(krav[0])
         }
       })
     }
@@ -212,15 +241,16 @@ export const EtterlevelseKravView = ({
                 </div>
               )}
 
-              {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+              {kravFilter === EKravFilterType.BORTFILTTERTE_KRAV && (
                 <BodyShort>
                   <strong>Kravet er bortfiltrert og derfor ikke relevant.</strong>
                 </BodyShort>
               )}
 
-              {kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV && (
+              {kravFilter === EKravFilterType.UTGAATE_KRAV && (
                 <BodyShort>
-                  <strong>Kravet er utgått.</strong> Dere skal ikke dokumentere ny etterlevelse på dette kravet.
+                  <strong>Kravet er utgått.</strong> Dere skal ikke dokumentere ny etterlevelse på
+                  dette kravet.
                 </BodyShort>
               )}
             </div>
@@ -230,13 +260,21 @@ export const EtterlevelseKravView = ({
               <div>
                 <div className="flex items-center justify-between">
                   <div>
-                    {krav.aktivertDato !== null && krav.kravVersjon > 1 && <Tag variant="warning">Ny versjon {moment(krav.aktivertDato).format('ll')}</Tag>}
-                    {krav.aktivertDato !== null && krav.kravVersjon === 1 && <BodyShort>Opprettet {moment(krav.aktivertDato).format('ll')}</BodyShort>}
+                    {krav.aktivertDato !== null && krav.kravVersjon > 1 && (
+                      <Tag variant="warning">
+                        Ny versjon {moment(krav.aktivertDato).format('ll')}
+                      </Tag>
+                    )}
+                    {krav.aktivertDato !== null && krav.kravVersjon === 1 && (
+                      <BodyShort>Opprettet {moment(krav.aktivertDato).format('ll')}</BodyShort>
+                    )}
                   </div>
-                  {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
+                  {kravFilter === EKravFilterType.RELEVANTE_KRAV && (
                     <div className="flex items-center gap-2">
                       <BodyShort size="small">
-                        {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1
+                        {etterlevelseMetadata &&
+                        etterlevelseMetadata.tildeltMed &&
+                        etterlevelseMetadata.tildeltMed.length >= 1
                           ? 'Tildelt ' + etterlevelseMetadata.tildeltMed[0]
                           : 'Ikke tildelt'}
                       </BodyShort>
@@ -245,7 +283,11 @@ export const EtterlevelseKravView = ({
                         size="small"
                         onClick={() => {
                           const ident = user.getName()
-                          if (etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] && etterlevelseMetadata.id !== 'ny') {
+                          if (
+                            etterlevelseMetadata.tildeltMed &&
+                            user.getName() === etterlevelseMetadata.tildeltMed[0] &&
+                            etterlevelseMetadata.id !== 'ny'
+                          ) {
                             updateEtterlevelseMetadata({
                               ...etterlevelseMetadata,
                               tildeltMed: [],
@@ -269,7 +311,10 @@ export const EtterlevelseKravView = ({
                           }
                         }}
                       >
-                        {etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] ? 'Fjern meg selv' : 'Tildel meg selv'}
+                        {etterlevelseMetadata.tildeltMed &&
+                        user.getName() === etterlevelseMetadata.tildeltMed[0]
+                          ? 'Fjern meg selv'
+                          : 'Tildel meg selv'}
                       </Button>
                     </div>
                   )}
@@ -296,7 +341,7 @@ export const EtterlevelseKravView = ({
                 </Tabs.List>
                 <Tabs.Panel value="dokumentasjon">
                   <div className="mt-2">
-                    {kravFilter !== KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+                    {kravFilter !== EKravFilterType.BORTFILTTERTE_KRAV && (
                       <EtterlevelseEditFields
                         kravFilter={kravFilter}
                         krav={krav}
@@ -306,15 +351,22 @@ export const EtterlevelseKravView = ({
                         varsleMelding={varsleMelding}
                         disableEdit={disableEdit}
                         close={() => {
-                          setTimeout(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`), 1)
+                          setTimeout(
+                            () => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`),
+                            1
+                          )
                         }}
                         navigatePath={navigatePath}
                         editedEtterlevelse={editedEtterlevelse}
                         tidligereEtterlevelser={tidligereEtterlevelser}
                       />
                     )}
-                    {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
-                      <EtterlevelseViewFields etterlevelse={etterlevelse} suksesskriterie={krav.suksesskriterier} tidligereEtterlevelser={tidligereEtterlevelser} />
+                    {kravFilter === EKravFilterType.BORTFILTTERTE_KRAV && (
+                      <EtterlevelseViewFields
+                        etterlevelse={etterlevelse}
+                        suksesskriterie={krav.suksesskriterier}
+                        tidligereEtterlevelser={tidligereEtterlevelser}
+                      />
                     )}
                   </div>
                 </Tabs.Panel>
@@ -334,7 +386,11 @@ export const EtterlevelseKravView = ({
               <Tabs defaultValue="mer" size="small">
                 <Tabs.List>
                   <Tabs.Tab className="whitespace-nowrap" value="mer" label="Mer om kravet" />
-                  <Tabs.Tab className="whitespace-nowrap" value="dokument" label="Om etterlevelsen" />
+                  <Tabs.Tab
+                    className="whitespace-nowrap"
+                    value="dokument"
+                    label="Om etterlevelsen"
+                  />
                   <Tabs.Tab value="notat" label="Notat" />
                 </Tabs.List>
                 <Tabs.Panel value="mer">
@@ -358,7 +414,9 @@ export const EtterlevelseKravView = ({
                     </div>
                     <div className="flex flex-col">
                       <Label size="medium">Team</Label>
-                      {teams?.map((team, index) => <TeamName key={'team_' + index} id={team.id} big link />)}
+                      {teams?.map((team, index) => (
+                        <TeamName key={'team_' + index} id={team.id} big link />
+                      ))}
                     </div>
                   </div>
                 </Tabs.Panel>
@@ -369,7 +427,11 @@ export const EtterlevelseKravView = ({
                         <FileTextIcon fontSize="1.5rem" area-label="" aria-hidden />
                         Notat
                       </Label>
-                      <Button variant="secondary" size="xsmall" onClick={() => setIsNotatModalOpen(true)}>
+                      <Button
+                        variant="secondary"
+                        size="xsmall"
+                        onClick={() => setIsNotatModalOpen(true)}
+                      >
                         Rediger
                       </Button>
                     </div>
@@ -390,9 +452,15 @@ export const EtterlevelseKravView = ({
             </div>
           </div>
 
-          <Modal open={isNavigationModalOpen} onClose={() => setIsNavigationModalOpen(false)} header={{ heading: 'Hvor ønsker du å gå?' }}>
+          <Modal
+            open={isNavigationModalOpen}
+            onClose={() => setIsNavigationModalOpen(false)}
+            header={{ heading: 'Hvor ønsker du å gå?' }}
+          >
             <Modal.Body>
-              <BodyShort>Vi undersøker i en periode hvordan man ønsker å navigere seg mellom krav og temaer.</BodyShort>
+              <BodyShort>
+                Vi undersøker i en periode hvordan man ønsker å navigere seg mellom krav og temaer.
+              </BodyShort>
               <BodyShort>Trykk på knappen som passer best for deg.</BodyShort>
             </Modal.Body>
             <Modal.Footer>
@@ -402,7 +470,7 @@ export const EtterlevelseKravView = ({
                   ampli.logEvent('knapp klikket', {
                     tekst: 'Til nest krav som ikke er ferdig utfylt i dette temaet',
                     pagePath: location.pathname,
-                    ...userRoleEventProp
+                    ...userRoleEventProp,
                   })
                 }}
               >
@@ -417,7 +485,7 @@ export const EtterlevelseKravView = ({
                   ampli.logEvent('knapp klikket', {
                     tekst: 'Til temaoversikten',
                     pagePath: location.pathname,
-                    ...userRoleEventProp
+                    ...userRoleEventProp,
                   })
                 }}
               >

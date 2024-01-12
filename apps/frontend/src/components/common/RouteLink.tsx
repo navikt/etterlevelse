@@ -1,18 +1,15 @@
-import { useLocation, useNavigate } from 'react-router-dom'
-import React from 'react'
-import { AuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
-import { Block } from 'baseui/block'
-import { AuditButton } from '../admin/audit/AuditButton'
-import { KIND } from 'baseui/button'
-import { ListName } from '../../services/Codelist'
-import CustomizedLink from './CustomizedLink'
+import { Link } from '@navikt/ds-react'
 import _ from 'lodash'
+import React from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { EListName } from '../../services/Codelist'
 import { user } from '../../services/User'
 import { loginUrl } from '../Header'
-import { ettlevColors } from '../../util/theme'
-import { Link } from '@navikt/ds-react'
+import { AuditButton } from '../admin/audit/AuditButton'
+import { EObjectType, IAuditItem, TNavigableItem } from '../admin/audit/AuditTypes'
+import CustomizedLink from './CustomizedLink'
 
-type RouteLinkProps = {
+type TRouteLinkProps = {
   href?: string
   hideUnderline?: boolean
   plain?: boolean
@@ -22,8 +19,8 @@ type RouteLinkProps = {
   openinnewtab: boolean
 } & any
 
-const RouteLink = (props: RouteLinkProps) => {
-  const { hideUnderline, plain, requireLogin, style, fontColor, ariaLabel, ...restprops } = props
+const RouteLink = (props: TRouteLinkProps) => {
+  const { hideUnderline, plain, requireLogin, fontColor, ariaLabel, ...restprops } = props
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -46,7 +43,8 @@ const RouteLink = (props: RouteLinkProps) => {
 
   const mergedStyle = _.merge(customStyle, props.style)
 
-  const href = !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(location, restprops.href)
+  const href =
+    !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(location, restprops.href)
 
   return (
     <CustomizedLink
@@ -63,10 +61,10 @@ const RouteLink = (props: RouteLinkProps) => {
 
 export default RouteLink
 
-type ObjectLinkProps = {
+type TObjectLinkProps = {
   id?: string
-  type: NavigableItem
-  audit?: AuditItem
+  type: TNavigableItem
+  audit?: IAuditItem
   withHistory?: boolean
   children?: any
   disable?: boolean
@@ -76,35 +74,35 @@ type ObjectLinkProps = {
   noNewTabLabel?: boolean
 }
 
-export const urlForObject = (type: NavigableItem | string, id: string, audit?: AuditItem) => {
+export const urlForObject = (type: TNavigableItem | string, id: string) => {
   switch (type) {
-    case ObjectType.Krav:
+    case EObjectType.Krav:
       return `/krav/${id}`
-    case ObjectType.Etterlevelse:
+    case EObjectType.Etterlevelse:
       return `/etterlevelse/${id}`
-    case ObjectType.EtterlevelseDokumentasjon:
+    case EObjectType.EtterlevelseDokumentasjon:
       return `/dokumentasjon/${id}`
-    case ObjectType.BehandlingData:
-    case ObjectType.Behandling:
+    case EObjectType.BehandlingData:
+    case EObjectType.Behandling:
       return `/behandling/${id}`
-    case ListName.RELEVANS:
+    case EListName.RELEVANS:
       return `/relevans/${id}`
-    case ListName.UNDERAVDELING:
+    case EListName.UNDERAVDELING:
       return `/underavdeling/${id}`
-    case ListName.LOV:
+    case EListName.LOV:
       return `/lov/${id}` // will probably never be used
-    case ListName.TEMA:
+    case EListName.TEMA:
       return `/tema/${id}`
-    case ObjectType.Codelist:
+    case EObjectType.Codelist:
       return `/admin/codelist/${id}`
-    case ObjectType.Melding:
+    case EObjectType.Melding:
       return '/admin/varsel'
   }
   console.warn("couldn't find object type" + type)
   return ''
 }
 
-export const ObjectLink = (props: ObjectLinkProps) => {
+export const ObjectLink = (props: TObjectLinkProps) => {
   if (!props.id) return null
   let link
 
@@ -112,7 +110,7 @@ export const ObjectLink = (props: ObjectLinkProps) => {
     link = props.children
   } else
     link = (
-      <ExternalLink noNewTabLabel={props.noNewTabLabel} href={urlForObject(props.type, props.id, props.audit)}>
+      <ExternalLink noNewTabLabel={props.noNewTabLabel} href={urlForObject(props.type, props.id)}>
         {props.children}
       </ExternalLink>
     )
@@ -143,7 +141,13 @@ export const ExternalLink = ({
   noNewTabLabel?: boolean
 }) => {
   return (
-    <Link className={className} href={href} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer" aria-label={label}>
+    <Link
+      className={className}
+      href={href}
+      target={openOnSamePage ? '_self' : '_blank'}
+      rel="noopener noreferrer"
+      aria-label={label}
+    >
       {children} {!openOnSamePage && !noNewTabLabel && ' (åpnes i ny fane)'}
     </Link>
   )

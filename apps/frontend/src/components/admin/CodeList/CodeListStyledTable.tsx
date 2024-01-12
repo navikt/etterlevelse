@@ -1,27 +1,32 @@
+import { DocPencilIcon, GlassesIcon, TrashIcon } from '@navikt/aksel-icons'
+import { BodyLong, Button, SortState, Table, Tooltip } from '@navikt/ds-react'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import UpdateCodeListModal from './ModalUpdateCodeList'
-import DeleteCodeListModal from './ModalDeleteCodeList'
-import { Usage } from './CodeListUsage'
-import { AuditButton } from '../audit/AuditButton'
-import { Code, CodeListFormValues, CodeUsage, LovCodeRelevans } from '../../../services/Codelist'
 import { deleteCodelist, getCodelistUsage, updateCodelist } from '../../../api/CodelistApi'
-import { BodyLong, Button, SortState, Table, Tooltip } from '@navikt/ds-react'
+import {
+  ELovCodeRelevans,
+  ICode,
+  ICodeListFormValues,
+  ICodeUsage,
+} from '../../../services/Codelist'
 import { handleSort } from '../../../util/handleTableSort'
-import { DocPencilIcon, GlassesIcon, TrashIcon } from '@navikt/aksel-icons'
+import { AuditButton } from '../audit/AuditButton'
+import { Usage } from './CodeListUsage'
+import DeleteCodeListModal from './ModalDeleteCodeList'
+import UpdateCodeListModal from './ModalUpdateCodeList'
 
-type TableCodelistProps = {
-  tableData: Code[]
+type TTableCodelistProps = {
+  tableData: ICode[]
   refresh: () => void
 }
 
-const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
-  const [selectedCode, setSelectedCode] = React.useState<Code>()
+const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
+  const [selectedCode, setSelectedCode] = React.useState<ICode>()
   const [showUsage, setShowUsage] = React.useState(false)
   const [showEditModal, setShowEditModal] = React.useState(false)
   const [showDeleteModal, setShowDeleteModal] = React.useState(false)
   const [errorOnResponse, setErrorOnResponse] = React.useState(null)
-  const [usage, setUsage] = useState<CodeUsage>()
+  const [usage, setUsage] = useState<ICodeUsage>()
 
   const [sort, setSort] = useState<SortState>()
 
@@ -36,9 +41,9 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
   }, [showUsage, selectedCode])
   useEffect(() => setShowUsage(false), [tableData])
 
-  const handleEditCodelist = async (values: CodeListFormValues) => {
+  const handleEditCodelist = async (values: ICodeListFormValues) => {
     try {
-      await updateCodelist({ ...values } as Code)
+      await updateCodelist({ ...values } as ICode)
       refresh()
       setShowEditModal(false)
     } catch (error: any) {
@@ -60,7 +65,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
 
   let sortedData = tableData
 
-  const comparator = (a: Code, b: Code, orderBy: string) => {
+  const comparator = (a: ICode, b: ICode, orderBy: string) => {
     switch (orderBy) {
       case 'code':
         return a.code.localeCompare(b.code)
@@ -73,18 +78,25 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
 
   sortedData = sortedData.sort((a, b) => {
     if (sort) {
-      return sort.direction === 'ascending' ? comparator(b, a, sort.orderBy) : comparator(a, b, sort.orderBy)
+      return sort.direction === 'ascending'
+        ? comparator(b, a, sort.orderBy)
+        : comparator(a, b, sort.orderBy)
     }
     return 1
   })
 
   return (
     <>
-      <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>
+      <Table
+        size="large"
+        zebraStripes
+        sort={sort}
+        onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
+      >
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader sortKey="code" className="w-[15%]" sortable>
-              Code
+              ICode
             </Table.ColumnHeader>
             <Table.ColumnHeader sortKey="navn" className="w-[25%]" sortable>
               Navn
@@ -94,7 +106,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {sortedData.map((code: Code, i) => {
+          {sortedData.map((code: ICode, i) => {
             return (
               <Table.Row key={i + '_' + code.shortName}>
                 <Table.DataCell className="w-[15%] break-all" scope="row">
@@ -104,7 +116,9 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
                 <Table.DataCell className="w-1/2 break-all">
                   <div>
                     <BodyLong>{code.description}</BodyLong>
-                    <div className="break-words text-icon-warning">{code.data && JSON.stringify(code.data, null, 1)}</div>
+                    <div className="break-words text-icon-warning">
+                      {code.data && JSON.stringify(code.data, null, 1)}
+                    </div>
                   </div>
                 </Table.DataCell>
                 <Table.DataCell>
@@ -159,8 +173,8 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
             data: selectedCode.data
               ? selectedCode.data.relevantFor
                 ? selectedCode.data
-                : { ...selectedCode.data, relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL }
-              : { relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL },
+                : { ...selectedCode.data, relevantFor: ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL }
+              : { relevantFor: ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL },
           }}
           isOpen={showEditModal}
           onClose={() => {

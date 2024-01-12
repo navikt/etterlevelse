@@ -1,15 +1,14 @@
-import React from 'react'
 import { convertToRaw, RawDraftContentState } from 'draft-js'
-import { Editor } from 'react-draft-wysiwyg'
-import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
-import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-import './customStyle.css'
-import { ettlevColors } from '../../../util/theme'
-import { useDebouncedState } from '../../../util/hooks'
 import { FormikErrors } from 'formik'
+import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
+import { Editor } from 'react-draft-wysiwyg'
+import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import { useDebouncedState } from '../../../util/hooks'
+import { ettlevColors } from '../../../util/theme'
 import { borderColor, borderStyle, borderWidth } from '../Style'
+import './customStyle.css'
 
-type TextEditorProps = {
+type TTextEditorProps = {
   initialValue: string
   setValue: (v: string) => void
   shortenLinks?: boolean
@@ -22,7 +21,7 @@ type TextEditorProps = {
   setIsFormDirty?: (v: boolean) => void
 }
 
-const TextEditor = (props: TextEditorProps) => {
+const TextEditor = (props: TTextEditorProps) => {
   const [val, setVal] = useDebouncedState(props.initialValue, 500, props.setValue)
 
   const CustomDraftToMarkdown = (data: RawDraftContentState) => {
@@ -71,37 +70,37 @@ const TextEditor = (props: TextEditorProps) => {
 
   //--------ADD nessesary roles to toolbar options and editor------------
 
-  let editorToolbar = document.getElementsByClassName('rdw-editor-toolbar')
+  const editorToolbar = document.getElementsByClassName('rdw-editor-toolbar')
 
   for (let i = 0; i < editorToolbar.length; i++) {
     editorToolbar[i].setAttribute('role', 'toolbar')
   }
 
-  let editorTextArea = document.getElementsByClassName('rdw-editor-wrapper')
+  const editorTextArea = document.getElementsByClassName('rdw-editor-wrapper')
 
   for (let i = 0; i < editorTextArea.length; i++) {
     editorTextArea[i].setAttribute('aria-label', '')
   }
 
-  let toolbarOptionWrapper = document.getElementsByClassName('rdw-option-wrapper')
+  const toolbarOptionWrapper = document.getElementsByClassName('rdw-option-wrapper')
 
   for (let i = 0; i < toolbarOptionWrapper.length; i++) {
     toolbarOptionWrapper[i].setAttribute('role', 'option')
   }
 
-  let toolbarInlineWrapper = document.getElementsByClassName('rdw-inline-wrapper')
+  const toolbarInlineWrapper = document.getElementsByClassName('rdw-inline-wrapper')
 
   for (let i = 0; i < toolbarInlineWrapper.length; i++) {
     toolbarInlineWrapper[i].setAttribute('role', 'listbox')
   }
 
-  let toolbarListWrapper = document.getElementsByClassName('rdw-list-wrapper')
+  const toolbarListWrapper = document.getElementsByClassName('rdw-list-wrapper')
 
   for (let i = 0; i < toolbarListWrapper.length; i++) {
     toolbarListWrapper[i].setAttribute('role', 'listbox')
   }
 
-  let toolbarLinkWrapper = document.getElementsByClassName('rdw-link-wrapper')
+  const toolbarLinkWrapper = document.getElementsByClassName('rdw-link-wrapper')
 
   for (let i = 0; i < toolbarLinkWrapper.length; i++) {
     toolbarLinkWrapper[i].setAttribute('role', 'listbox')
@@ -112,7 +111,11 @@ const TextEditor = (props: TextEditorProps) => {
     <div
       style={{
         backgroundColor: ettlevColors.white,
-        ...borderColor(props.errors && props.name && props.errors[props.name] ? ettlevColors.red600 : ettlevColors.textAreaBorder),
+        ...borderColor(
+          props.errors && props.name && props.errors[props.name]
+            ? ettlevColors.red600
+            : ettlevColors.textAreaBorder
+        ),
         ...borderWidth('2px'),
         ...borderStyle('solid'),
         width: props.width || undefined,
@@ -122,9 +125,13 @@ const TextEditor = (props: TextEditorProps) => {
         editorStyle={{
           padding: '10px',
           minHeight: props.height || '500px',
-          backgroundColor: props.errors && props.name && props.errors[props.name] ? ettlevColors.red50 : undefined,
+          backgroundColor:
+            props.errors && props.name && props.errors[props.name] ? ettlevColors.red50 : undefined,
         }}
-        toolbarStyle={{ backgroundColor: ettlevColors.white, borderBottom: `1px solid ${ettlevColors.textAreaBorder}` }}
+        toolbarStyle={{
+          backgroundColor: ettlevColors.white,
+          borderBottom: `1px solid ${ettlevColors.textAreaBorder}`,
+        }}
         onEditorStateChange={(data) => {
           setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
           if (props.setIsFormDirty) {
@@ -137,7 +144,9 @@ const TextEditor = (props: TextEditorProps) => {
         }}
         tabIndex={0}
         toolbar={{
-          options: props.simple ? ['inline', 'list', 'link'] : ['inline', 'blockType', 'list', 'link', 'history'],
+          options: props.simple
+            ? ['inline', 'list', 'link']
+            : ['inline', 'blockType', 'list', 'link', 'history'],
           blockType: {},
           inline: { options: ['bold'] },
           // old toolbar

@@ -1,31 +1,40 @@
-import { AdresseType, Begrep, Krav, KravQL, KravVersjon } from '../../constants'
-import React from 'react'
+import { BodyShort, Label } from '@navikt/ds-react'
 import moment from 'moment'
+import React from 'react'
+import { EAdresseType, IBegrep, IKrav, IKravVersjon, TKravQL } from '../../constants'
+import { EListName } from '../../services/Codelist'
+import { user } from '../../services/User'
+import { slackLink, slackUserLink, termUrl } from '../../util/config'
+import { LovViewList } from '../Lov'
 import { DotTags } from '../common/DotTag'
-import { ListName } from '../../services/Codelist'
+import { Markdown } from '../common/Markdown'
 import { LabelAboveContent } from '../common/PropertyLabel'
 import { ExternalLink } from '../common/RouteLink'
-import { slackLink, slackUserLink, termUrl } from '../../util/config'
-import { user } from '../../services/User'
-import { LovViewList } from '../Lov'
 import { SuksesskriterieCard } from './Suksesskriterie'
-import { Markdown } from '../common/Markdown'
-import ExpiredAlert from './ExpiredAlert'
-import { BodyShort, Label } from '@navikt/ds-react'
 
-const LabelWrapper = ({ children }: { children: React.ReactNode }) => <div className="mb-4">{children}</div>
+const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
+  <div className="mb-4">{children}</div>
+)
 
-export const ViewKrav = ({ krav }: { krav: KravQL }) => {
+export const ViewKrav = ({ krav }: { krav: TKravQL }) => {
   return (
     <div>
       <div className="w-full">
         {krav.suksesskriterier.map((s, i) => (
-          <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length} />
+          <SuksesskriterieCard
+            key={s.id}
+            suksesskriterie={s}
+            num={i + 1}
+            totalt={krav.suksesskriterier.length}
+          />
         ))}
         {/* {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />} */}
 
         <BodyShort size="small" className="mt-6">
-          Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')} {user.isAdmin() || user.isKraveier() ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1] : ''}
+          Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')}{' '}
+          {user.isAdmin() || user.isKraveier()
+            ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1]
+            : ''}
         </BodyShort>
 
         {
@@ -45,15 +54,11 @@ export const AllInfo = ({
   noLastModifiedDate,
   header,
 }: {
-  krav: KravQL
-  alleKravVersjoner: KravVersjon[]
+  krav: TKravQL
+  alleKravVersjoner: IKravVersjon[]
   noLastModifiedDate?: boolean
   header?: boolean
 }) => {
-  const hasKravExpired = () => {
-    return krav && krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString())
-  }
-
   return (
     <div>
       {krav.dokumentasjon.length > 0 && (
@@ -82,7 +87,7 @@ export const AllInfo = ({
 
       <LabelWrapper>
         <LabelAboveContent header={header} title="Kravet er relevant for">
-          <DotTags list={ListName.RELEVANS} codes={krav.relevansFor} inColumn />
+          <DotTags list={EListName.RELEVANS} codes={krav.relevansFor} inColumn />
         </LabelAboveContent>
       </LabelWrapper>
 
@@ -93,7 +98,9 @@ export const AllInfo = ({
               if (k.kravVersjon && parseInt(k.kravVersjon.toString()) < krav.kravVersjon) {
                 return (
                   <BodyShort key={'kravVersjon_list_' + i} className={'break-words'}>
-                    <ExternalLink href={'/krav/' + k.kravNummer + '/' + k.kravVersjon}>{`K${k.kravNummer}.${k.kravVersjon}`}</ExternalLink>
+                    <ExternalLink
+                      href={'/krav/' + k.kravNummer + '/' + k.kravVersjon}
+                    >{`K${k.kravNummer}.${k.kravVersjon}`}</ExternalLink>
                   </BodyShort>
                 )
               }
@@ -107,12 +114,6 @@ export const AllInfo = ({
             )}
           </LabelAboveContent>
         </LabelWrapper>
-      )}
-
-      {hasKravExpired() && (
-        <div className="my-8">
-          <ExpiredAlert alleKravVersjoner={alleKravVersjoner} statusName={krav.status} />
-        </div>
       )}
 
       {krav.regelverk.length && (
@@ -133,18 +134,22 @@ export const AllInfo = ({
         <LabelWrapper>
           <LabelAboveContent header={header} title="Varslingsadresser">
             {krav.varslingsadresser.map((va, i) => {
-              if (va.type === AdresseType.SLACK)
+              if (va.type === EAdresseType.SLACK)
                 return (
                   <div className="flex mb-2" key={'kravVarsling_list_SLACK_' + i}>
                     <div className="mr-1">Slack:</div>
-                    <ExternalLink href={slackLink(va.adresse)}>{`#${va.slackChannel?.name || va.adresse}`}</ExternalLink>
+                    <ExternalLink href={slackLink(va.adresse)}>{`#${
+                      va.slackChannel?.name || va.adresse
+                    }`}</ExternalLink>
                   </div>
                 )
-              if (va.type === AdresseType.SLACK_USER)
+              if (va.type === EAdresseType.SLACK_USER)
                 return (
                   <div className="flex mb-2" key={'kravVarsling_list_SLACK_USER_' + i}>
                     <div className="mr-1">Slack:</div>
-                    <ExternalLink href={slackUserLink(va.adresse)}>{`${va.slackUser?.name || va.adresse}`}</ExternalLink>
+                    <ExternalLink href={slackUserLink(va.adresse)}>{`${
+                      va.slackUser?.name || va.adresse
+                    }`}</ExternalLink>
                   </div>
                 )
               return (
@@ -164,7 +169,9 @@ export const AllInfo = ({
         <div>
           <BodyShort size="small">
             Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')}{' '}
-            {user.isAdmin() || user.isKraveier() ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1] : ''}
+            {user.isAdmin() || user.isKraveier()
+              ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1]
+              : ''}
           </BodyShort>
         </div>
       )}
@@ -172,7 +179,7 @@ export const AllInfo = ({
   )
 }
 
-const BegrepView = ({ begrep }: { begrep: Begrep }) => (
+const BegrepView = ({ begrep }: { begrep: IBegrep }) => (
   <div className="max-w-2xl">
     <BodyShort className="break-words">
       <ExternalLink href={termUrl(begrep.id)}>{begrep.navn}</ExternalLink>
@@ -182,10 +189,13 @@ const BegrepView = ({ begrep }: { begrep: Begrep }) => (
   </div>
 )
 
-const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<Krav> }) => (
+const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<IKrav> }) => (
   <div className="max-w-2xl">
     <BodyShort className="break-words">
-      <ExternalLink href={`/krav/${kravRelasjon.id}`}>{`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}</ExternalLink> - {kravRelasjon.navn}
+      <ExternalLink
+        href={`/krav/${kravRelasjon.id}`}
+      >{`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}</ExternalLink>{' '}
+      - {kravRelasjon.navn}
     </BodyShort>
   </div>
 )

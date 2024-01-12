@@ -1,21 +1,29 @@
-import { CodeListFormValues } from '../../../services/Codelist'
 import { BodyShort, Button, Modal } from '@navikt/ds-react'
+import { ICodeListFormValues } from '../../../services/Codelist'
 
-type ModalDeleteProps = {
+type TModalDeleteProps = {
   title: string
-  initialValues: CodeListFormValues
+  initialValues: ICodeListFormValues
   isOpen: boolean
   errorOnDelete: any | undefined
-  submit: (code: CodeListFormValues) => void
+  submit: (code: ICodeListFormValues) => void
   onClose: () => void
 }
 
-const DeleteCodeListModal = ({ title, initialValues, isOpen, errorOnDelete, submit, onClose }: ModalDeleteProps) => {
+const DeleteCodeListModal = ({
+  title,
+  initialValues,
+  isOpen,
+  errorOnDelete,
+  submit,
+  onClose,
+}: TModalDeleteProps) => {
   return (
     <Modal onClose={onClose} open={isOpen} header={{ heading: title }}>
       <Modal.Body>
         <BodyShort>
-          Bekreft sletting av kode "{initialValues.code}" fra "{initialValues.list}".
+          Bekreft sletting av kode &quot;{initialValues.code}&quot; fra &quot;{initialValues.list}
+          &quot;.
         </BodyShort>
       </Modal.Body>
 
@@ -25,7 +33,9 @@ const DeleteCodeListModal = ({ title, initialValues, isOpen, errorOnDelete, subm
           <Button variant="secondary" onClick={() => onClose()} className="mr-4">
             Avbryt
           </Button>
-          <Button onClick={() => submit({ list: initialValues.list, code: initialValues.code })}>Slett</Button>
+          <Button onClick={() => submit({ list: initialValues.list, code: initialValues.code })}>
+            Slett
+          </Button>
         </div>
       </Modal.Footer>
     </Modal>

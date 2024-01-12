@@ -1,8 +1,6 @@
-import { useState } from 'react'
-import { Helmet } from 'react-helmet'
-import { deleteEtterlevelse } from '../api/EtterlevelseApi'
 import { BodyShort, Button, Heading, TextField } from '@navikt/ds-react'
-import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
+import { useState } from 'react'
+import { deleteEtterlevelse } from '../api/EtterlevelseApi'
 import { PageLayout } from '../components/scaffold/Page'
 
 export const EtterlevelseAdminPage = () => {
@@ -30,7 +28,9 @@ export const EtterlevelseAdminPage = () => {
               setUpdateMessage('')
               deleteEtterlevelse(etterlevelseId)
                 .then(() => {
-                  setUpdateMessage('Sletting vellykket for etterlevelses med uid: ' + etterlevelseId)
+                  setUpdateMessage(
+                    'Sletting vellykket for etterlevelses med uid: ' + etterlevelseId
+                  )
                   setEtterlevelseId('')
                 })
                 .catch((e) => {
@@ -48,6 +48,20 @@ export const EtterlevelseAdminPage = () => {
 }
 
 export const UpdateMessage = ({ message }: { message?: string }) => {
-  return <div>{message ? <div>{message.match('error') ? <BodyShort className="text-nav-red">{message}</BodyShort> : <BodyShort>{message}</BodyShort>}</div> : <div />}</div>
+  return (
+    <div>
+      {message ? (
+        <div>
+          {message.match('error') ? (
+            <BodyShort className="text-nav-red">{message}</BodyShort>
+          ) : (
+            <BodyShort>{message}</BodyShort>
+          )}
+        </div>
+      ) : (
+        <div />
+      )}
+    </div>
+  )
 }
 export default EtterlevelseAdminPage
