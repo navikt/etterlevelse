@@ -48,15 +48,14 @@ export const Footer = () => {
         )}
         <div className="flex mt-11">
           <div className=" flex flex-col">
-            <BodyShort className="text-2xl mb-5 flex">
-              <div className="mr-2.5">
-                <img
-                  src={etterlevelseLogoWhiteIcon}
-                  alt="Etterlevlese logo"
-                  aria-hidden
-                  aria-label=""
-                />
-              </div>
+            <BodyShort className="text-2xl mb-5 flex items-baseline">
+              <img
+                className="mr-2.5"
+                src={etterlevelseLogoWhiteIcon}
+                alt="Etterlevlese logo"
+                aria-hidden
+                aria-label=""
+              />
               Støtte til etterlevelse
             </BodyShort>
             <BodyShort>2023 NAV</BodyShort>
