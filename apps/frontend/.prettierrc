@@ -5,6 +5,7 @@
   "semi": false,
   "singleQuote": true,
   "importOrder": ["^components/(.*)$", "^[./]"],
+  "importOrderSeparation": false,
   "importOrderSortSpecifiers": true,
   "plugins": ["@trivago/prettier-plugin-sort-imports"]
 }
