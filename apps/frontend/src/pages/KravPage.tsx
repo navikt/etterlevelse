@@ -4,7 +4,6 @@ import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { BodyLong, BodyShort, Button, Heading, Spacer, Tabs } from '@navikt/ds-react'
 import { FormikProps } from 'formik'
 import React, { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import {
   TKravId as KravIdQueryVariables,
   TKravIdParams,
@@ -16,7 +15,6 @@ import { DeleteItem } from '../components/DeleteItem'
 import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
-import StatusTag from '../components/common/StatusTag'
 import { EditKrav } from '../components/krav/EditKrav'
 import Etterlevelser from '../components/krav/Etterlevelser'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
@@ -28,6 +26,8 @@ import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 import { useLocationState, useQueryParam } from '../util/hooks'
+import { useParams } from 'react-router-dom'
+import StatusTag from '../components/common/StatusTag'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }): string =>
   `K${it.kravNummer}.${it.kravVersjon}`
