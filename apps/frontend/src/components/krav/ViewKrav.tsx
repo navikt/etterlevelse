@@ -10,7 +10,6 @@ import { DotTags } from '../common/DotTag'
 import { Markdown } from '../common/Markdown'
 import { LabelAboveContent } from '../common/PropertyLabel'
 import { ExternalLink } from '../common/RouteLink'
-import ExpiredAlert from './ExpiredAlert'
 import { SuksesskriterieCard } from './Suksesskriterie'
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -60,10 +59,6 @@ export const AllInfo = ({
   noLastModifiedDate?: boolean
   header?: boolean
 }) => {
-  const hasKravExpired = () => {
-    return krav && krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString())
-  }
-
   return (
     <div>
       {krav.dokumentasjon.length > 0 && (
@@ -119,12 +114,6 @@ export const AllInfo = ({
             )}
           </LabelAboveContent>
         </LabelWrapper>
-      )}
-
-      {hasKravExpired() && (
-        <div className="my-8">
-          <ExpiredAlert alleKravVersjoner={alleKravVersjoner} statusName={krav.status} />
-        </div>
       )}
 
       {krav.regelverk.length && (

@@ -11,8 +11,7 @@ const ExpiredAlert = ({
 }) => (
   <Alert variant={'warning'} className={'w-fit'}>
     <BodyLong className={'ml-3'}>
-      Dette er et{' '}
-      {statusName ? `${kravStatus(statusName).toLocaleLowerCase()} krav` : 'utgått krav'}.
+      Dette er et {statusName ? `${kravStatus(statusName).toLocaleLowerCase()} ` : 'utgått krav'}.
       {alleKravVersjoner.length > 1 ? (
         <>
           {' '}
