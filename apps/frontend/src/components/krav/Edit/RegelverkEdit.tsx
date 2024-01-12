@@ -20,7 +20,10 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
   const [lov, setLov] = useState({ value: '', label: '', description: '' })
   const [text, setText] = useState('')
 
-  const regelverkObject = () => ({ lov: codelist.getCode(EListName.LOV, lov.value as string)!, spesifisering: text })
+  const regelverkObject = () => ({
+    lov: codelist.getCode(EListName.LOV, lov.value as string)!,
+    spesifisering: text,
+  })
 
   const options = codelist.getParsedOptionsForLov(forVirkemiddel)
 
@@ -42,7 +45,9 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
                   <div className="w-full max-w-[400px] mr-2.5">
                     <LabelWithTooltip
                       label={'Regelverk'}
-                      tooltip={'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'}
+                      tooltip={
+                        'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'
+                      }
                     />
                     <Select
                       options={options}
@@ -55,19 +60,24 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
                         }
                       }}
                       styles={{
-                        control: (baseStyles) => ({
-                          ...baseStyles,
-                          height: '48px',
-                        } as CSSObjectWithLabel),
-                        menu: (baseStyles) => ({
-                          ...baseStyles,
-                          zIndex: 2,
-                        } as CSSObjectWithLabel),
+                        control: (baseStyles) =>
+                          ({
+                            ...baseStyles,
+                            height: '48px',
+                          }) as CSSObjectWithLabel,
+                        menu: (baseStyles) =>
+                          ({
+                            ...baseStyles,
+                            zIndex: 2,
+                          }) as CSSObjectWithLabel,
                       }}
                     />
                   </div>
                   <div className="w-full">
-                    <LabelWithTooltip label="Paragraf, kapittel eller artikkel i regelverk" tooltip="Legg til paragraf, kapittel eller artikkel fra regelverk du har valgt." />
+                    <LabelWithTooltip
+                      label="Paragraf, kapittel eller artikkel i regelverk"
+                      tooltip="Legg til paragraf, kapittel eller artikkel fra regelverk du har valgt."
+                    />
                     <TextField
                       label="Paragraf, kapittel eller artikkel i regelverk"
                       hideLabel
@@ -92,7 +102,7 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
               </div>
               <RenderTagList
                 list={p.form.values.regelverk.map((r: IRegelverk) => (
-                  <LovView regelverk={r}  key={r.lov.code}/>
+                  <LovView regelverk={r} key={r.lov.code} />
                 ))}
                 onRemove={p.remove}
               />

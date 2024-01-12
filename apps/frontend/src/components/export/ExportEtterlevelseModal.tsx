@@ -40,7 +40,11 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
             </Block>
           ) : (
             <div className="flex flex-col gap-4">
-              <Select label="Velg et tema for eksportering" onChange={(ev) => setValgtTema(ev.currentTarget.value)} value={valgtTema}>
+              <Select
+                label="Velg et tema for eksportering"
+                onChange={(ev) => setValgtTema(ev.currentTarget.value)}
+                value={valgtTema}
+              >
                 <option key="" value="">
                   Velg tema
                 </option>
@@ -68,7 +72,11 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                     kind={NKIND.negative}
                   >
                     <Block display="flex" justifyContent="center">
-                      <ParagraphMedium marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
+                      <ParagraphMedium
+                        marginBottom="0px"
+                        marginTop="0px"
+                        $style={{ lineHeight: '18px' }}
+                      >
                         {errorMessage}
                       </ParagraphMedium>
                     </Block>
@@ -88,7 +96,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                 <Button
                   variant="secondary"
                   onClick={() => {
-                    (async () => {
+                    ;(async () => {
                       setIsLoading(true)
                       setErrorMessage('')
                       const exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}`
@@ -112,7 +120,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                   variant="primary"
                   disabled={valgtTema == ''}
                   onClick={() => {
-                    (async () => {
+                    ;(async () => {
                       setIsLoading(true)
                       setErrorMessage('')
                       const exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}&temakode=${valgtTema}`

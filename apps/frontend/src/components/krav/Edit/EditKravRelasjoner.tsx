@@ -15,12 +15,19 @@ export const EditKravRelasjoner = () => {
         {(p) => {
           return (
             <div>
-              <LabelWithTooltip label={'Relasjoner til andre krav'} tooltip={'Legg ved lenke til relasjoner til andre krav'} />
+              <LabelWithTooltip
+                label={'Relasjoner til andre krav'}
+                tooltip={'Legg ved lenke til relasjoner til andre krav'}
+              />
               <AsyncSelect
                 aria-label="Søk etter krav"
                 placeholder="Søk etter krav"
                 components={{ DropdownIndicator }}
-                noOptionsMessage={({ inputValue }) => (inputValue.length < 3 ? 'Skriv minst tre tegn for å søke' : `Fant ingen resultater for "${inputValue}"`)}
+                noOptionsMessage={({ inputValue }) =>
+                  inputValue.length < 3
+                    ? 'Skriv minst tre tegn for å søke'
+                    : `Fant ingen resultater for "${inputValue}"`
+                }
                 controlShouldRenderValue={false}
                 loadingMessage={() => 'Søker...'}
                 isClearable={false}
@@ -29,11 +36,12 @@ export const EditKravRelasjoner = () => {
                   krav && p.push(krav)
                 }}
                 styles={{
-                  control: (base) => ({
-                    ...base,
-                    cursor: 'text',
-                    height: '48px',
-                  } as CSSObjectWithLabel),
+                  control: (base) =>
+                    ({
+                      ...base,
+                      cursor: 'text',
+                      height: '48px',
+                    }) as CSSObjectWithLabel,
                 }}
               />
 

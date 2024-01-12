@@ -2,12 +2,12 @@ import axios from 'axios'
 import queryString from 'query-string'
 import { useEffect, useState } from 'react'
 import {
-    EEtterlevelseStatus,
-    ESuksesskriterieStatus,
-    IEtterlevelse,
-    IKrav,
-    IPageResponse,
-    emptyPage,
+  EEtterlevelseStatus,
+  ESuksesskriterieStatus,
+  IEtterlevelse,
+  IKrav,
+  IPageResponse,
+  emptyPage,
 } from '../constants'
 import { env } from '../util/env'
 import { TKravId } from './KravApi'

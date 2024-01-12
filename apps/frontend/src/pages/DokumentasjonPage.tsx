@@ -1,15 +1,15 @@
 import { gql, useQuery } from '@apollo/client'
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
 import {
-    Accordion,
-    BodyShort,
-    Button,
-    ExpansionCard,
-    Heading,
-    Label,
-    Link,
-    Loader,
-    Tag,
+  Accordion,
+  BodyShort,
+  Button,
+  ExpansionCard,
+  Heading,
+  Label,
+  Link,
+  Loader,
+  Tag,
 } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import moment from 'moment'
@@ -31,12 +31,12 @@ import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/u
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { PageLayout } from '../components/scaffold/Page'
 import {
-    EEtterlevelseStatus,
-    EKravFilterType,
-    IEtterlevelseDokumentasjonStats,
-    IKravPrioritering,
-    IPageResponse,
-    TKravQL,
+  EEtterlevelseStatus,
+  EKravFilterType,
+  IEtterlevelseDokumentasjonStats,
+  IKravPrioritering,
+  IPageResponse,
+  TKravQL,
 } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, ICode, TTemaCode, codelist } from '../services/Codelist'

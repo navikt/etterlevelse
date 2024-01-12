@@ -6,7 +6,12 @@ import { ettlevColors } from '../../util/theme'
 import { checkmarkIcon } from '../Images'
 import { borderColor, borderWidth, padding } from './Style'
 
-export const SimpleTag = (props: { onClick?: () => void; active?: boolean; activeIcon?: boolean; children: React.ReactNode }) => {
+export const SimpleTag = (props: {
+  onClick?: () => void
+  active?: boolean
+  activeIcon?: boolean
+  children: React.ReactNode
+}) => {
   const backgroundColor = props.active ? ettlevColors.green50 : ettlevColors.white
   return (
     <Tag

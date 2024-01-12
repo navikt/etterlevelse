@@ -87,18 +87,31 @@ export const primaryFocusBorder = {
 }
 
 export const Button = (props: IButtonProps) => {
-  const baseuiKind = props.kind === 'outline' ? KIND.secondary : props.kind === 'underline-hover' ? KIND.tertiary : props.kind
+  const baseuiKind =
+    props.kind === 'outline'
+      ? KIND.secondary
+      : props.kind === 'underline-hover'
+        ? KIND.tertiary
+        : props.kind
 
   const boxShadow =
     !props.kind || props.kind === 'primary' || props.kind === 'secondary'
       ? {
           style: {
             ...buttonContentStyle,
-            boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
-            ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
-            ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
+            boxShadow:
+              '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
+            ':hover': {
+              boxShadow:
+                '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
+            },
+            ':active': {
+              boxShadow:
+                '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)',
+            },
             ':focus': {
-              boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
+              boxShadow:
+                '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
               outlineWidth: '3px',
               outlineStyle: 'solid',
               outlineColor: ettlevColors.focusOutline,
@@ -114,10 +127,16 @@ export const Button = (props: IButtonProps) => {
 
   const overrides: Override<any> = boxShadow
   overrides.style = _.merge(overrides.style, props.kind === 'outline' ? outlineOverride : {})
-  overrides.style = _.merge(overrides.style, props.kind === 'underline-hover' ? underlineOverride : {})
+  overrides.style = _.merge(
+    overrides.style,
+    props.kind === 'underline-hover' ? underlineOverride : {}
+  )
   overrides.style = _.merge(overrides.style, props.kind === 'secondary' ? buttonBorderStyle : {})
   overrides.style = _.merge(overrides.style, props.hidePadding ? paddingAll('0') : {})
-  overrides.style = _.merge(overrides.style, props.inline ? { paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100 } : {})
+  overrides.style = _.merge(
+    overrides.style,
+    props.inline ? { paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100 } : {}
+  )
   overrides.style = _.merge(overrides.style, props.$style || {})
 
   return (
@@ -135,9 +154,21 @@ export const Button = (props: IButtonProps) => {
           type={props.type}
           aria-label={props.label}
         >
-          {props.icon && <FontAwesomeIcon icon={props.icon} style={{ marginRight: props.children ? '.5rem' : undefined }} fixedWidth />}
+          {props.icon && (
+            <FontAwesomeIcon
+              icon={props.icon}
+              style={{ marginRight: props.children ? '.5rem' : undefined }}
+              fixedWidth
+            />
+          )}
           {props.notBold ? props.children : <strong>{props.children}</strong>}
-          {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{ marginLeft: props.children ? '.5rem' : undefined }} fixedWidth />}
+          {props.iconEnd && (
+            <FontAwesomeIcon
+              icon={props.iconEnd}
+              style={{ marginLeft: props.children ? '.5rem' : undefined }}
+              fixedWidth
+            />
+          )}
         </BaseUIButton>
       </Tooltip>
       <Block display="inline" marginRight={props.marginRight ? theme.sizing.scale600 : 0} />

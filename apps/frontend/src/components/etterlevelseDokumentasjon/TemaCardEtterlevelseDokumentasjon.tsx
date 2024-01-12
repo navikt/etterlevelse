@@ -11,7 +11,7 @@ import { ettlevColors, theme } from '../../util/theme'
 import { PanelLinkCard, TPanelLinkCardOverrides } from '../common/PanelLink'
 import { HeaderContent } from './HeaderContent'
 
-type TemaCardEtterlevelseDokumentasjonProps = {
+type TTemaCardEtterlevelseDokumentasjonProps = {
   tema: TTemaCode
   stats: any[]
   utgaattStats: any[]
@@ -19,7 +19,7 @@ type TemaCardEtterlevelseDokumentasjonProps = {
   irrelevant?: boolean
 }
 export const TemaCardEtterlevelseDokumentasjon = (
-  props: TemaCardEtterlevelseDokumentasjonProps
+  props: TTemaCardEtterlevelseDokumentasjonProps
 ) => {
   const today = new Date()
   const { tema, stats, etterlevelseDokumentasjon, irrelevant, utgaattStats } = props

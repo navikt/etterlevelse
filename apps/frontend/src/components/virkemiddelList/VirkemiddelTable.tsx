@@ -22,8 +22,10 @@ type TVirkmiddelTableProps = {
 
 const virkemiddelSorting: TColumnCompares<IVirkemiddel> = {
   navn: (a, b) => (a.navn || '').localeCompare(b.navn || ''),
-  virkemiddelType: (a, b) => (a.virkemiddelType?.shortName || '').localeCompare(b.virkemiddelType?.shortName || ''),
-  changeStamp: (a, b) => (a.changeStamp.lastModifiedDate || '').localeCompare(b.changeStamp.lastModifiedDate || ''),
+  virkemiddelType: (a, b) =>
+    (a.virkemiddelType?.shortName || '').localeCompare(b.virkemiddelType?.shortName || ''),
+  changeStamp: (a, b) =>
+    (a.changeStamp.lastModifiedDate || '').localeCompare(b.changeStamp.lastModifiedDate || ''),
 }
 
 export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: TVirkmiddelTableProps) => {
@@ -51,60 +53,78 @@ export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: TVirkmid
           { title: '', small: true },
         ]}
         render={(table) =>
-          table.data.slice((table.page - 1) * table.limit, (table.page - 1) * table.limit + table.limit).map((virkemiddel, index) => (
-            <Row key={index}>
-              <Cell $style={{ wordBreak: 'break-word' }}>{virkemiddel.navn}</Cell>
-              <Cell>
-                <Block display="flex" flexDirection="column" width="100%">
-                  <Block>{virkemiddel.virkemiddelType && virkemiddel.virkemiddelType.shortName}</Block>
-                </Block>
-              </Cell>
-              <Cell>
-                <Block>
-                  {virkemiddel.regelverk.map((r, i) => {
-                    return (
-                      <Block key={r + '_' + i} marginBottom={i === virkemiddel.regelverk.length - 1 ? undefined : '8px'}>
-                        <LovView regelverk={r} />
-                      </Block>
-                    )
-                  })}
-                </Block>
-              </Cell>
-              <Cell>{moment(virkemiddel.changeStamp.lastModifiedDate).format('ll')}</Cell>
-              <Cell small>
-                <Block display="flex" justifyContent="flex-end" width="100%">
-                  <Button
-                    tooltip={'Rediger'}
-                    size={ButtonSize.compact}
-                    kind={KIND.tertiary}
-                    onClick={() => {
-                      setSelectedVirkemiddel(virkemiddel)
-                      setIsEditModalOpen(true)
-                    }}
-                    label={'Rediger'}
-                  >
-                    <FontAwesomeIcon icon={faEdit} />
-                  </Button>
-                  <Button
-                    tooltip={'Slett'}
-                    size={ButtonSize.compact}
-                    kind={KIND.tertiary}
-                    onClick={() => {
-                      setSelectedVirkemiddel(virkemiddel)
-                      setIsDeleteModalOpen(true)
-                    }}
-                    label={'Slett'}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </Button>
-                </Block>
-              </Cell>
-            </Row>
-          ))
+          table.data
+            .slice((table.page - 1) * table.limit, (table.page - 1) * table.limit + table.limit)
+            .map((virkemiddel, index) => (
+              <Row key={index}>
+                <Cell $style={{ wordBreak: 'break-word' }}>{virkemiddel.navn}</Cell>
+                <Cell>
+                  <Block display="flex" flexDirection="column" width="100%">
+                    <Block>
+                      {virkemiddel.virkemiddelType && virkemiddel.virkemiddelType.shortName}
+                    </Block>
+                  </Block>
+                </Cell>
+                <Cell>
+                  <Block>
+                    {virkemiddel.regelverk.map((r, i) => {
+                      return (
+                        <Block
+                          key={r + '_' + i}
+                          marginBottom={i === virkemiddel.regelverk.length - 1 ? undefined : '8px'}
+                        >
+                          <LovView regelverk={r} />
+                        </Block>
+                      )
+                    })}
+                  </Block>
+                </Cell>
+                <Cell>{moment(virkemiddel.changeStamp.lastModifiedDate).format('ll')}</Cell>
+                <Cell small>
+                  <Block display="flex" justifyContent="flex-end" width="100%">
+                    <Button
+                      tooltip={'Rediger'}
+                      size={ButtonSize.compact}
+                      kind={KIND.tertiary}
+                      onClick={() => {
+                        setSelectedVirkemiddel(virkemiddel)
+                        setIsEditModalOpen(true)
+                      }}
+                      label={'Rediger'}
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                    </Button>
+                    <Button
+                      tooltip={'Slett'}
+                      size={ButtonSize.compact}
+                      kind={KIND.tertiary}
+                      onClick={() => {
+                        setSelectedVirkemiddel(virkemiddel)
+                        setIsDeleteModalOpen(true)
+                      }}
+                      label={'Slett'}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                  </Block>
+                </Cell>
+              </Row>
+            ))
         }
       />
-      <EditVirkemiddelModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpen} virkemiddel={selectedVirkemiddel} isEdit={true} refetchData={refetchData} />
-      <DeleteVirkemiddeltModal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} virkemiddel={selectedVirkemiddel} refetchData={refetchData} />
+      <EditVirkemiddelModal
+        isOpen={isEditModalOpen}
+        setIsOpen={setIsEditModalOpen}
+        virkemiddel={selectedVirkemiddel}
+        isEdit={true}
+        refetchData={refetchData}
+      />
+      <DeleteVirkemiddeltModal
+        isOpen={isDeleteModalOpen}
+        setIsOpen={setIsDeleteModalOpen}
+        virkemiddel={selectedVirkemiddel}
+        refetchData={refetchData}
+      />
     </>
   )
 }

@@ -5,12 +5,21 @@ import { TNavigableItem } from '../admin/audit/AuditTypes'
 import { Markdown } from './Markdown'
 import { ExternalLink, urlForObject } from './RouteLink'
 
-const Content = (props: { item: ReactNode | string; list?: EListName; linkCodelist?: boolean; markdown?: boolean }) => {
+const Content = (props: {
+  item: ReactNode | string
+  list?: EListName
+  linkCodelist?: boolean
+  markdown?: boolean
+}) => {
   const { item, list, linkCodelist, markdown } = props
   if (list) {
     const itemString = item as string
     if (linkCodelist)
-      return <ExternalLink href={urlForObject(list as EListName & TNavigableItem, itemString)}>{codelist.getShortname(list as EListName & TNavigableItem, itemString)}</ExternalLink>
+      return (
+        <ExternalLink href={urlForObject(list as EListName & TNavigableItem, itemString)}>
+          {codelist.getShortname(list as EListName & TNavigableItem, itemString)}
+        </ExternalLink>
+      )
     return <>{codelist.getShortname(list, itemString)}</>
   }
   if (markdown) return <Markdown source={item as string} />
@@ -49,7 +58,12 @@ export const DotTags = (props: TDotTagsParams) => {
   return (
     <div className={`${props.inColumn ? 'block' : 'flex'} flex-wrap`}>
       {items.map((item, i) => (
-        <div className={`${props.inColumn ? 'mb-1.5' : 'mb-0'} ${i < items.length && !commaSeparator ? 'mb-1.5' : 'mb-0'}`} key={i}>
+        <div
+          className={`${props.inColumn ? 'mb-1.5' : 'mb-0'} ${
+            i < items.length && !commaSeparator ? 'mb-1.5' : 'mb-0'
+          }`}
+          key={i}
+        >
           {!props.markdown && (
             <BodyShort className={'break-words'}>
               <Content {...props} item={item} />{' '}

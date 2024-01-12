@@ -1,14 +1,14 @@
 import {
-    Button,
-    DatePicker,
-    Detail,
-    Label,
-    Radio,
-    RadioGroup,
-    Select,
-    TextField,
-    Textarea,
-    useDatepicker,
+  Button,
+  DatePicker,
+  Detail,
+  Label,
+  Radio,
+  RadioGroup,
+  Select,
+  TextField,
+  Textarea,
+  useDatepicker,
 } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import { FormControl } from 'baseui/form-control'

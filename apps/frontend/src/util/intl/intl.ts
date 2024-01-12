@@ -28,7 +28,9 @@ const strings: IIntlLangs = {}
 
 Object.keys(langs).forEach((lang) => (strings[lang] = langs[lang].texts))
 
-export const intl: TIntl = new (LocalizedStrings as ILocalizedStringsFactory)(strings as any, { customLanguageInterface: () => defaultLang.langCode })
+export const intl: TIntl = new (LocalizedStrings as ILocalizedStringsFactory)(strings as any, {
+  customLanguageInterface: () => defaultLang.langCode,
+})
 
 interface IIntlLangs {
   [lang: string]: IStrings
@@ -50,7 +52,9 @@ interface ILangs {
 const localStorageAvailable = storageAvailable()
 
 export const useLang = () => {
-  const [lang, setLang] = React.useState<string>(((localStorageAvailable && localStorage.getItem('tcat-lang')) as string) || defaultLang.langCode)
+  const [lang, setLang] = React.useState<string>(
+    ((localStorageAvailable && localStorage.getItem('tcat-lang')) as string) || defaultLang.langCode
+  )
   const update = useForceUpdate()
   useEffect(() => {
     intl.setLanguage(lang)

@@ -1,14 +1,23 @@
-import { Button, Modal } from '@navikt/ds-react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Button, Modal } from '@navikt/ds-react'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string; buttonLabel?: string; buttonSize?: 'small' | 'medium' | 'xsmall' }) => {
+export const DeleteItem = (props: {
+  fun: () => Promise<any>
+  redirect: string
+  buttonLabel?: string
+  buttonSize?: 'small' | 'medium' | 'xsmall'
+}) => {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
 
   return (
     <>
-      <Button variant="danger" onClick={() => setOpen(true)} size={props.buttonSize ? props.buttonSize : undefined}>
+      <Button
+        variant="danger"
+        onClick={() => setOpen(true)}
+        size={props.buttonSize ? props.buttonSize : undefined}
+      >
         {props.buttonLabel ? props.buttonLabel : 'Slett'}
       </Button>
       <Modal open={open} onClose={() => setOpen(false)} header={{ heading: 'Bekreft slett' }}>

@@ -24,10 +24,21 @@ export const MeldingKnapper = (props: {
   return (
     <div>
       <div className={`${props.marginLeft ? 'ml-10' : undefined} w-1/2 flex`}>
-        <Button variant="tertiary" size="xsmall" icon={<DocPencilIcon aria-label="" aria-hidden />} onClick={() => setEditModal(true)}>
+        <Button
+          variant="tertiary"
+          size="xsmall"
+          icon={<DocPencilIcon aria-label="" aria-hidden />}
+          onClick={() => setEditModal(true)}
+        >
           Rediger
         </Button>
-        <Button className="ml-2.5" variant="tertiary" size="xsmall" icon={<TrashIcon aria-label="" aria-hidden />} onClick={() => setDeleteModal(true)}>
+        <Button
+          className="ml-2.5"
+          variant="tertiary"
+          size="xsmall"
+          icon={<TrashIcon aria-label="" aria-hidden />}
+          onClick={() => setDeleteModal(true)}
+        >
           Slett
         </Button>
       </div>

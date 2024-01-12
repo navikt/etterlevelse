@@ -136,7 +136,10 @@ class CodelistService {
     })
   }
 
-  getParsedOptionsForList(listName: EListName, selected: string[]): { id: string; label: string }[] {
+  getParsedOptionsForList(
+    listName: EListName,
+    selected: string[]
+  ): { id: string; label: string }[] {
     return selected.map((code) => ({ id: code, label: this.getShortname(listName, code) }))
   }
 

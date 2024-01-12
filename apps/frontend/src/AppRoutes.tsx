@@ -46,14 +46,30 @@ const AppRoutes = (): JSX.Element => {
     <Routes>
       <Route path="/" element={<MainPage />} caseSensitive={true} />
 
-      <Route path="/kravliste/:tab" element={<PrivateRoute component={<KravListPage />} kraveierPage />} caseSensitive={true} />
-      <Route path="/kravliste/" element={<PrivateRoute component={<KravListPage />} kraveierPage />} caseSensitive={true} />
+      <Route
+        path="/kravliste/:tab"
+        element={<PrivateRoute component={<KravListPage />} kraveierPage />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/kravliste/"
+        element={<PrivateRoute component={<KravListPage />} kraveierPage />}
+        caseSensitive={true}
+      />
       <Route path="/krav/:id" element={<KravPage />} caseSensitive={true} />
       <Route path="/krav/:kravNummer/:kravVersjon" element={<KravPage />} caseSensitive={true} />
 
-      <Route path="/virkemiddelliste/" element={<PrivateRoute component={<VirkemiddelListPage />} kraveierPage />} caseSensitive={true} />
+      <Route
+        path="/virkemiddelliste/"
+        element={<PrivateRoute component={<VirkemiddelListPage />} kraveierPage />}
+        caseSensitive={true}
+      />
 
-      <Route path="/etterlevelse" element={<PrivateRoute component={<EtterlevelseListPage />} adminPage />} caseSensitive={true} />
+      <Route
+        path="/etterlevelse"
+        element={<PrivateRoute component={<EtterlevelseListPage />} adminPage />}
+        caseSensitive={true}
+      />
       <Route path="/etterlevelse/:id" element={<EtterlevelsePage />} caseSensitive={true} />
 
       <Route
@@ -61,39 +77,135 @@ const AppRoutes = (): JSX.Element => {
         element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />}
         caseSensitive={true}
       />
-      <Route path="/behandling/:id/:tema/" element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
-      <Route path="/behandling/:id/:tema/:filter" element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
-      <Route path="/behandling/:id" element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
-      <Route path="/behandling/" element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
+      <Route
+        path="/behandling/:id/:tema/"
+        element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/behandling/:id/:tema/:filter"
+        element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/behandling/:id"
+        element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/behandling/"
+        element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />}
+        caseSensitive={true}
+      />
 
-      <Route path="/behandlinger/:tab" element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
-      <Route path="/behandlinger/" element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
+      <Route
+        path="/behandlinger/:tab"
+        element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/behandlinger/"
+        element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />}
+        caseSensitive={true}
+      />
 
-      <Route path="/dokumentasjon/:id/:tema/:filter/krav/:kravNummer/:kravVersjon" element={<PrivateRoute component={<EtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
+      <Route
+        path="/dokumentasjon/:id/:tema/:filter/krav/:kravNummer/:kravVersjon"
+        element={<PrivateRoute component={<EtterlevelseDokumentasjonPage />} />}
+        caseSensitive={true}
+      />
       {/*
         <Route path="/dokumentasjon/:id/:tema/" element={<PrivateRoute component={<EtterlevelseDokumentasjonTemaPage />} />} caseSensitive={true} />
         <Route path="/dokumentasjon/:id/:tema/:filter" element={<PrivateRoute component={<EtterlevelseDokumentasjonTemaPage />} />} caseSensitive={true} />
         */}
-      <Route path="/dokumentasjoner/:tab" element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} />} caseSensitive={true} />
-      <Route path="/dokumentasjoner/" element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} />} caseSensitive={true} />
-      <Route path="/dokumentasjon/:id" element={<PrivateRoute component={<DokumentasjonPage />} />} caseSensitive={true} />
-      <Route path="/dokumentasjon/" element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} />} caseSensitive={true} />
+      <Route
+        path="/dokumentasjoner/:tab"
+        element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/dokumentasjoner/"
+        element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/dokumentasjon/:id"
+        element={<PrivateRoute component={<DokumentasjonPage />} />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/dokumentasjon/"
+        element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} />}
+        caseSensitive={true}
+      />
 
-      <Route path="/admin/codelist/:listname" element={<PrivateRoute component={<CodeListPage />} adminPage />} caseSensitive={true} />
-      <Route path="/admin/codelist/" element={<PrivateRoute component={<CodeListPage />} adminPage />} caseSensitive={true} />
+      <Route
+        path="/admin/codelist/:listname"
+        element={<PrivateRoute component={<CodeListPage />} adminPage />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/admin/codelist/"
+        element={<PrivateRoute component={<CodeListPage />} adminPage />}
+        caseSensitive={true}
+      />
 
-      <Route path="/admin/audit/:id/:auditId" element={<PrivateRoute component={<AuditPage />} adminPage />} caseSensitive={true} />
-      <Route path="/admin/audit/:id/" element={<PrivateRoute component={<AuditPage />} adminPage />} caseSensitive={true} />
-      <Route path="/admin/audit/" element={<PrivateRoute component={<AuditPage />} adminPage />} caseSensitive={true} />
+      <Route
+        path="/admin/audit/:id/:auditId"
+        element={<PrivateRoute component={<AuditPage />} adminPage />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/admin/audit/:id/"
+        element={<PrivateRoute component={<AuditPage />} adminPage />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/admin/audit/"
+        element={<PrivateRoute component={<AuditPage />} adminPage />}
+        caseSensitive={true}
+      />
 
-      <Route path="/admin/settings" element={<PrivateRoute component={<SettingsPage />} adminPage />} caseSensitive={true} />
-      <Route path="/admin/maillog" element={<PrivateRoute component={<MailLogPage />} adminPage />} caseSensitive={true} />
-      <Route path="/admin/krav" element={<PrivateRoute component={<KravTablePage />} adminPage />} caseSensitive={true} />
-      <Route path="/admin/dokumentasjon" element={<PrivateRoute component={<EtterlevelseDokumentasjonAdminPage />} adminPage />} caseSensitive={true} />
-      <Route path="/admin/etterlevelse" element={<PrivateRoute component={<EtterlevelseAdminPage />} adminPage />} caseSensitive={true} />
-      <Route path="/admin/arkiv" element={<PrivateRoute component={<ArkivAdminPage />} adminPage />} caseSensitive={true} />
-      <Route path="/admin/messageslog" element={<PrivateRoute component={<QuestionAndAnswerLogPage />} adminPage />} caseSensitive={true} />
-      <Route path="/admin/varsel" element={<PrivateRoute component={<VarselPage />} adminPage />} caseSensitive={true} />
+      <Route
+        path="/admin/settings"
+        element={<PrivateRoute component={<SettingsPage />} adminPage />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/admin/maillog"
+        element={<PrivateRoute component={<MailLogPage />} adminPage />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/admin/krav"
+        element={<PrivateRoute component={<KravTablePage />} adminPage />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/admin/dokumentasjon"
+        element={<PrivateRoute component={<EtterlevelseDokumentasjonAdminPage />} adminPage />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/admin/etterlevelse"
+        element={<PrivateRoute component={<EtterlevelseAdminPage />} adminPage />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/admin/arkiv"
+        element={<PrivateRoute component={<ArkivAdminPage />} adminPage />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/admin/messageslog"
+        element={<PrivateRoute component={<QuestionAndAnswerLogPage />} adminPage />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/admin/varsel"
+        element={<PrivateRoute component={<VarselPage />} adminPage />}
+        caseSensitive={true}
+      />
 
       <Route path="/tema/:tema" element={<TemaPage />} caseSensitive={true} />
       <Route path="/tema/" element={<TemaOversiktPage />} caseSensitive={true} />

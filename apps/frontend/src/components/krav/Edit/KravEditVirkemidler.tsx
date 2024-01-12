@@ -21,7 +21,14 @@ export const EditVirkemidler = () => {
       <FieldArray name="virkemidler">
         {(p) => {
           return (
-            <FormControl label={<LabelWithTooltip label={'Legg til relevante virkemiddel'} tooltip={'Velg vikemiddel(er) som er relevant for kravet i nedtrekksmenyen. \n'} />}>
+            <FormControl
+              label={
+                <LabelWithTooltip
+                  label={'Legg til relevante virkemiddel'}
+                  tooltip={'Velg vikemiddel(er) som er relevant for kravet i nedtrekksmenyen. \n'}
+                />
+              }
+            >
               <Block>
                 <CustomizedSelect
                   overrides={{
@@ -70,7 +77,10 @@ export const EditVirkemidler = () => {
                   error={!!p.form.errors.begreper && !!p.form.submitCount}
                   isLoading={loading}
                 />
-                <RenderTagList list={p.form.values.virkemidler.map((v: IVirkemiddel) => v.navn)} onRemove={p.remove} />
+                <RenderTagList
+                  list={p.form.values.virkemidler.map((v: IVirkemiddel) => v.navn)}
+                  onRemove={p.remove}
+                />
               </Block>
             </FormControl>
           )

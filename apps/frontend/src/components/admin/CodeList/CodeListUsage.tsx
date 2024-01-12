@@ -12,14 +12,18 @@ const UsageTable = (props: { usage: ICodeUsage }) => {
   const etterlevelseDokumentasjoner = !!usage.etterlevelseDokumentasjoner.length
   const codelist = !!usage.codelist.length
 
-  const rows = usage ? Math.max(usage.krav.length, usage.etterlevelseDokumentasjoner.length, usage.codelist.length) : -1
+  const rows = usage
+    ? Math.max(usage.krav.length, usage.etterlevelseDokumentasjoner.length, usage.codelist.length)
+    : -1
 
   return (
     <Table>
       <Table.Header>
         <Table.Row>
           {krav && <Table.ColumnHeader>Krav</Table.ColumnHeader>}
-          {etterlevelseDokumentasjoner && <Table.ColumnHeader>Etterlevelse Dokumentasjoner</Table.ColumnHeader>}
+          {etterlevelseDokumentasjoner && (
+            <Table.ColumnHeader>Etterlevelse Dokumentasjoner</Table.ColumnHeader>
+          )}
           {codelist && <Table.ColumnHeader>Codelist</Table.ColumnHeader>}
         </Table.Row>
       </Table.Header>
@@ -42,7 +46,11 @@ const UsageTable = (props: { usage: ICodeUsage }) => {
               {etterlevelseDokumentasjoner && (
                 <Table.DataCell>
                   {ed && (
-                    <ObjectLink id={ed.id} type={EObjectType.EtterlevelseDokumentasjon} withHistory={true}>
+                    <ObjectLink
+                      id={ed.id}
+                      type={EObjectType.EtterlevelseDokumentasjon}
+                      withHistory={true}
+                    >
                       {ed.number} {ed.name}
                     </ObjectLink>
                   )}
@@ -96,7 +104,13 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
 
       {showReplace && usage && usage.listName && (
         <div className="flex m-4 justify-end">
-          <Select label="Velg ny verdi" hideLabel value={newValue} className="mr-4" onChange={(e) => setNewValue(e.target.value)}>
+          <Select
+            label="Velg ny verdi"
+            hideLabel
+            value={newValue}
+            className="mr-4"
+            onChange={(e) => setNewValue(e.target.value)}
+          >
             <option value="">Ny verdi</option>
             {codelist.getParsedOptions(usage.listName).map((c, i) => (
               <option key={i + '_' + c.label} value={c.value}>

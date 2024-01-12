@@ -13,17 +13,34 @@ import { ettlevColors, maxPageWidth, responsivePaddingLarge } from '../util/them
 
 export const VirkemiddelListPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
-  ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette virkemiddel' })
+  ampli.logEvent('sidevisning', {
+    side: 'Kraveier side',
+    sidetittel: 'Forvalte og opprette virkemiddel',
+  })
 
   return (
-    <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
+    <Block
+      width="100%"
+      paddingBottom={'200px'}
+      id="content"
+      overrides={{ Block: { props: { role: 'main' } } }}
+    >
       <Helmet>
         <meta charSet="utf-8" />
         <title>Forvalte og opprette virkemiddel</title>
       </Helmet>
-      <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
+      <Block
+        width="100%"
+        backgroundColor={ettlevColors.grey50}
+        display={'flex'}
+        justifyContent={'center'}
+      >
         <Block maxWidth={maxPageWidth} width="100%">
-          <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
+          <Block
+            paddingLeft={responsivePaddingLarge}
+            paddingRight={responsivePaddingLarge}
+            paddingTop={theme.sizing.scale800}
+          >
             <CustomizedBreadcrumbs currentPage="Forvalte og opprette virkemiddel" />
             <Block display="flex">
               <Block flex="1">
@@ -32,7 +49,11 @@ export const VirkemiddelListPage = () => {
               <Block display="flex" justifyContent="flex-end">
                 {user.isKraveier() && (
                   <Block>
-                    <Button onClick={() => setIsCreateModalOpen(true)} startEnhancer={<img src={plusIcon} alt="plus icon" />} size="compact">
+                    <Button
+                      onClick={() => setIsCreateModalOpen(true)}
+                      startEnhancer={<img src={plusIcon} alt="plus icon" />}
+                      size="compact"
+                    >
                       Nytt virkemiddel
                     </Button>
                   </Block>
@@ -45,8 +66,15 @@ export const VirkemiddelListPage = () => {
 
       <Block display={'flex'} justifyContent="center" width="100%">
         <Block maxWidth={maxPageWidth} width="100%">
-          <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
-            <AllVirkemiddel isCreateModalOpen={isCreateModalOpen} setIsCreateModalOpen={setIsCreateModalOpen} />
+          <Block
+            paddingLeft={responsivePaddingLarge}
+            paddingRight={responsivePaddingLarge}
+            paddingTop={theme.sizing.scale800}
+          >
+            <AllVirkemiddel
+              isCreateModalOpen={isCreateModalOpen}
+              setIsCreateModalOpen={setIsCreateModalOpen}
+            />
           </Block>
         </Block>
       </Block>

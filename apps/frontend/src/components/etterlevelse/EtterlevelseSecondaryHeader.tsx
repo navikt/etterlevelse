@@ -13,7 +13,7 @@ import Button from '../common/Button'
 import CustomizedModal from '../common/CustomizedModal'
 import { borderRadius, marginAll, paddingAll } from '../common/Style'
 
-type EtterlevelseSecondaryHeaderProps = {
+type TEtterlevelseSecondaryHeaderProps = {
   tab: string
   setTab: React.Dispatch<React.SetStateAction<TSection>>
   setNavigatePath: (state: string) => void
@@ -30,7 +30,7 @@ export const EtterlevelseSecondaryHeader = ({
   temaData,
   lovListe,
   kravId,
-}: EtterlevelseSecondaryHeaderProps) => {
+}: TEtterlevelseSecondaryHeaderProps) => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
   const params = useParams<{ filter?: string }>()
 

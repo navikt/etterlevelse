@@ -6,10 +6,10 @@ import React, { useEffect } from 'react'
 import * as yup from 'yup'
 import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
 import {
-    createKrav,
-    getKravByKravNumberAndVersion,
-    kravMapToFormVal,
-    updateKrav,
+  createKrav,
+  getKravByKravNumberAndVersion,
+  kravMapToFormVal,
+  updateKrav,
 } from '../../api/KravApi'
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../../constants'
 import { EListName, codelist } from '../../services/Codelist'

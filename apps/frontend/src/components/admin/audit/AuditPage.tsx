@@ -22,7 +22,7 @@ export const AuditPage = () => {
   const [idSearch, setIdInput, idInput] = useDebouncedState(params.id || '', 400)
 
   const lookupVersion = (id?: string) => {
-    (async () => {
+    ;(async () => {
       if (id === auditLog?.id) {
         return
       }
@@ -68,7 +68,14 @@ export const AuditPage = () => {
       </div>
 
       {error && <BodyLong>{_.escape(error)}</BodyLong>}
-      {idInput && <AuditView auditLog={auditLog} auditId={params.auditId} loading={loading} viewId={lookupVersion} />}
+      {idInput && (
+        <AuditView
+          auditLog={auditLog}
+          auditId={params.auditId}
+          loading={loading}
+          viewId={lookupVersion}
+        />
+      )}
       <AuditRecentTable show={!idInput} />
     </PageLayout>
   )

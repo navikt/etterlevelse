@@ -11,7 +11,7 @@ import { user } from '../../services/User'
 import { CustomPanelDivider } from '../common/CustomizedAccordion'
 import { KravCard } from './KravCard'
 
-type KravListProps = {
+type TKravListProps = {
   kravList: TKravEtterlevelseData[]
   EmptyMessage?: ReactElement
   sortingAvailable?: boolean
@@ -33,7 +33,7 @@ export const KravList = ({
   etterlevelseDokumentasjon,
   noVarsling,
   kravFilter,
-}: KravListProps) => {
+}: TKravListProps) => {
   if (kravList.length) {
     let sortedKravList = _.cloneDeep(kravList)
     if (sortingAvailable && sorting[0].id === sortingOptions[1].id) {

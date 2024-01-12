@@ -48,15 +48,29 @@ export type TColumnDirection<T> = {
   [P in keyof T]-?: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC | null
 }
 
-const newSort = <T, K extends keyof T>(newColumn?: K, columnPrevious?: K, directionPrevious?: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC) => {
-  const newDirection = columnPrevious && newColumn === columnPrevious && directionPrevious === SORT_DIRECTION.ASC ? SORT_DIRECTION.DESC : SORT_DIRECTION.ASC
+const newSort = <T, K extends keyof T>(
+  newColumn?: K,
+  columnPrevious?: K,
+  directionPrevious?: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC
+) => {
+  const newDirection =
+    columnPrevious && newColumn === columnPrevious && directionPrevious === SORT_DIRECTION.ASC
+      ? SORT_DIRECTION.DESC
+      : SORT_DIRECTION.ASC
   return { newDirection, newColumn }
 }
 
-const getSortFunction = <T, K extends keyof T>(sortColumn: K, useDefaultStringCompare: boolean, sorting?: TColumnCompares<T>): TCompare<T> | undefined => {
+const getSortFunction = <T, K extends keyof T>(
+  sortColumn: K,
+  useDefaultStringCompare: boolean,
+  sorting?: TColumnCompares<T>
+): TCompare<T> | undefined => {
   if (!sorting || !sorting[sortColumn]) {
     if (useDefaultStringCompare) {
-      return (a, b) => ((a[sortColumn] as any as string) || '').localeCompare((b[sortColumn] as any as string) || '')
+      return (a, b) =>
+        ((a[sortColumn] as any as string) || '').localeCompare(
+          (b[sortColumn] as any as string) || ''
+        )
     } else {
       return undefined
     }
@@ -64,13 +78,19 @@ const getSortFunction = <T, K extends keyof T>(sortColumn: K, useDefaultStringCo
   return sorting[sortColumn]
 }
 
-const toDirection = <T, K extends keyof T>(direction: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC, column?: K): TColumnDirection<T> => {
+const toDirection = <T, K extends keyof T>(
+  direction: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC,
+  column?: K
+): TColumnDirection<T> => {
   const newDirection: any = {}
   newDirection[column] = direction
   return newDirection
 }
 
-export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: TTableConfig<T, K>) => {
+export const useTable = <T, K extends keyof T>(
+  initialData: Array<T>,
+  config?: TTableConfig<T, K>
+) => {
   const { sorting, useDefaultStringCompare, showLast } = config || {}
   const initialSort = newSort<T, K>(config?.initialSortColumn)
 
@@ -79,8 +99,12 @@ export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: T
   const [isInitialSort, setIsInitialSort] = useState(true)
   const [sortDirection, setSortDirection] = useState(initialSort.newDirection)
   const [sortColumn, setSortColumn] = useState(initialSort.newColumn)
-  const [direction, setDirection] = useState<TColumnDirection<T>>(toDirection(initialSort.newDirection, initialSort.newColumn))
-  const [filterValues, setFilterValues] = useState<Record<K, string | undefined>>({} as Record<K, string>)
+  const [direction, setDirection] = useState<TColumnDirection<T>>(
+    toDirection(initialSort.newDirection, initialSort.newColumn)
+  )
+  const [filterValues, setFilterValues] = useState<Record<K, string | undefined>>(
+    {} as Record<K, string>
+  )
   const [limit, setLimit] = useState(config?.defaultPageSize || 100)
   const [page, setPage] = useState(1)
 
@@ -92,9 +116,19 @@ export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: T
       if (!filter) return ordered
       switch (filter.type) {
         case 'search':
-          return ordered.filter((v) => ((v[key] as any as string) || '').toLowerCase().indexOf(filterValues[key]!.toLowerCase()) >= 0)
+          return ordered.filter(
+            (v) =>
+              ((v[key] as any as string) || '')
+                .toLowerCase()
+                .indexOf(filterValues[key]!.toLowerCase()) >= 0
+          )
         case 'searchMapped':
-          return ordered.filter((v) => (filter.searchMapping(v).toLowerCase() || '').indexOf(filterValues[key]!.toLowerCase()) >= 0)
+          return ordered.filter(
+            (v) =>
+              (filter.searchMapping(v).toLowerCase() || '').indexOf(
+                filterValues[key]!.toLowerCase()
+              ) >= 0
+          )
         case 'select':
           ordered = ordered.filter((v) => {
             const mapped = filter.mapping(v)

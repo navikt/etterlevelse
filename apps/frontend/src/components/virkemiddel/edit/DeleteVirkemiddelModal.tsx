@@ -14,7 +14,12 @@ type TModalDeleteProps = {
   refetchData: () => void
 }
 
-const DeleteVirkemiddeltModal = ({ isOpen, setIsOpen, virkemiddel, refetchData }: TModalDeleteProps) => {
+const DeleteVirkemiddeltModal = ({
+  isOpen,
+  setIsOpen,
+  virkemiddel,
+  refetchData,
+}: TModalDeleteProps) => {
   const [errorOnDelete, setErrorOnDelete] = useState('')
 
   const submit = async (id?: string) => {
@@ -31,7 +36,13 @@ const DeleteVirkemiddeltModal = ({ isOpen, setIsOpen, virkemiddel, refetchData }
   }
 
   return (
-    <Modal closeable={false} onClose={() => setIsOpen(false)} isOpen={isOpen} animate size="default">
+    <Modal
+      closeable={false}
+      onClose={() => setIsOpen(false)}
+      isOpen={isOpen}
+      animate
+      size="default"
+    >
       <ModalHeader>Bekreft sletting.</ModalHeader>
       <ModalBody>
         <ParagraphMedium> Bekreft sletting av {virkemiddel?.navn}.</ParagraphMedium>

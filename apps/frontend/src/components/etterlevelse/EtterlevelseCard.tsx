@@ -10,8 +10,11 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: IEtterlevelse
   const [kravData, setKravData] = useState<IKrav>()
 
   useEffect(() => {
-    (async () => {
-      const krav = await getKravByKravNumberAndVersion(etterlevelse.kravNummer, etterlevelse.kravVersjon)
+    ;(async () => {
+      const krav = await getKravByKravNumberAndVersion(
+        etterlevelse.kravNummer,
+        etterlevelse.kravVersjon
+      )
       if (krav) {
         setKravData(krav)
       }
@@ -23,7 +26,14 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: IEtterlevelse
       <Button type="button" variant="tertiary" onClick={() => setIsModalOpen(true)}>
         Se dokumentasjon på forrige versjon
       </Button>
-      {kravData && <EtterlevelseModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} etterlevelse={etterlevelse} kravData={kravData} />}
+      {kravData && (
+        <EtterlevelseModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          etterlevelse={etterlevelse}
+          kravData={kravData}
+        />
+      )}
     </div>
   )
 }

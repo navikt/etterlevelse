@@ -1,12 +1,12 @@
 import { Label, Select, TextField, Textarea } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
 import {
-    EListName,
-    ICodeListFormValues,
-    ILovCodeData,
-    ITemaCodeData,
-    codelist,
-    lovCodeRelevansToOptions,
+  EListName,
+  ICodeListFormValues,
+  ILovCodeData,
+  ITemaCodeData,
+  codelist,
+  lovCodeRelevansToOptions,
 } from '../../../services/Codelist'
 import { temaBilder } from '../../Images'
 import { OptionList } from '../../common/Inputs'

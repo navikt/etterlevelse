@@ -30,7 +30,11 @@ export const CustomizedPanel = (props: TCustomProps) => {
         if (props.toggleIcon) {
           return expanded ? props.toggleIcon.expanded : props.toggleIcon.unexpanded
         } else {
-          return expanded ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />
+          return expanded ? (
+            <FontAwesomeIcon icon={faChevronUp} />
+          ) : (
+            <FontAwesomeIcon icon={faChevronDown} />
+          )
         }
       },
     },
@@ -92,7 +96,11 @@ export const CustomizedPanel = (props: TCustomProps) => {
     } else {
       return (
         <Block>
-          <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
+          <HeadingLarge
+            marginTop={theme.sizing.scale100}
+            marginBottom={theme.sizing.scale100}
+            color={ettlevColors.green600}
+          >
             {props.title}
           </HeadingLarge>
         </Block>

@@ -2,7 +2,11 @@ import React, { Dispatch, RefObject, SetStateAction, useEffect, useState } from 
 import { useLocation, useNavigate } from 'react-router-dom'
 import { user } from '../../services/User'
 
-export function useDebouncedState<T>(initialValue: T, delay: number, passThrough?: (val: T) => void): [T, Dispatch<SetStateAction<T>>, T] {
+export function useDebouncedState<T>(
+  initialValue: T,
+  delay: number,
+  passThrough?: (val: T) => void
+): [T, Dispatch<SetStateAction<T>>, T] {
   const [value, setValue] = useState<T>(initialValue)
   const [debouncedValue, setDebouncedValue] = useState<T>(value)
 
@@ -44,7 +48,7 @@ export function useAwait<T>(p: Promise<T>, setLoading?: Dispatch<SetStateAction<
   const update = useForceUpdate()
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       setLoading && setLoading(true)
       await p
       update()
@@ -86,7 +90,7 @@ export function useLocationState<T>() {
           ...(location.state as Partial<T>),
           ...newState,
         },
-      },
+      }
     )
   }
 
@@ -105,7 +109,7 @@ export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => 
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       if (search && search.match(/[a-zA-Z]\d/) && search.length > 3) {
         beginSearch()
       } else if (search && search.length > 2 && !search.match(/[a-zA-Z]\d/)) {
@@ -116,5 +120,10 @@ export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => 
     })()
   }, [search])
 
-  return [searchResult, setSearch, loading, search] as [T[], React.Dispatch<React.SetStateAction<string>>, boolean, string]
+  return [searchResult, setSearch, loading, search] as [
+    T[],
+    React.Dispatch<React.SetStateAction<string>>,
+    boolean,
+    string,
+  ]
 }

@@ -35,7 +35,11 @@ export const SettingsPage = () => {
   }
 
   return (
-    <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
+    <Block
+      width={responsiveWidthSmall}
+      paddingLeft={responsivePaddingSmall}
+      paddingRight={responsivePaddingSmall}
+    >
       <Helmet>
         <meta charSet="utf-8" />
         <title>Innstillinger</title>
@@ -45,7 +49,10 @@ export const SettingsPage = () => {
       {(error || !settings) && error}
       {!loading && !(error || !settings) && (
         <Block>
-          <FrontpageMessage message={settings?.frontpageMessage} setMessage={(frontpageMessage) => setSettings({ ...settings, frontpageMessage })} />
+          <FrontpageMessage
+            message={settings?.frontpageMessage}
+            setMessage={(frontpageMessage) => setSettings({ ...settings, frontpageMessage })}
+          />
 
           <Block display="flex" justifyContent="flex-end" marginTop={theme.sizing.scale800}>
             <Button type="button" kind="secondary" marginRight onClick={load}>
@@ -71,7 +78,9 @@ const FrontpageMessage = (props: { message?: string; setMessage: (message: strin
             <CustomizedStatefulTextarea
               initialState={{ value: props.message }}
               rows={20}
-              onChange={(event: any) => props.setMessage((event as FormEvent<HTMLInputElement>).currentTarget.value)}
+              onChange={(event: any) =>
+                props.setMessage((event as FormEvent<HTMLInputElement>).currentTarget.value)
+              }
             />
           </Block>
           <Block width="50%">

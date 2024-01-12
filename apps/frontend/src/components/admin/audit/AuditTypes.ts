@@ -33,4 +33,9 @@ export enum EObjectType {
   EtterlevelseMetadata = 'EtterlevelseMetadata',
 }
 
-export type TNavigableItem = EObjectType | EListName.RELEVANS | EListName.UNDERAVDELING | EListName.TEMA | EListName.LOV
+export type TNavigableItem =
+  | EObjectType
+  | EListName.RELEVANS
+  | EListName.UNDERAVDELING
+  | EListName.TEMA
+  | EListName.LOV

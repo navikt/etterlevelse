@@ -32,7 +32,10 @@ class UserService {
 
   handleGetResponse = (response: AxiosResponse<IUserInfo>) => {
     if (typeof response.data === 'object' && response.data !== null) {
-      const groups = response.data.groups.indexOf(EGroup.ADMIN) >= 0 ? (Object.keys(EGroup) as EGroup[]) : response.data.groups
+      const groups =
+        response.data.groups.indexOf(EGroup.ADMIN) >= 0
+          ? (Object.keys(EGroup) as EGroup[])
+          : response.data.groups
       this.userInfo = { ...response.data, groups }
       this.currentGroups = this.userInfo.groups
     } else {
@@ -58,7 +61,9 @@ class UserService {
   }
 
   public getAvailableGroups(): { name: string; group: EGroup }[] {
-    return this.userInfo.groups.filter((g) => g !== EGroup.READ).map((group) => ({ name: nameFor(group), group }))
+    return this.userInfo.groups
+      .filter((g) => g !== EGroup.READ)
+      .map((group) => ({ name: nameFor(group), group }))
   }
 
   public toggleGroup(group: EGroup, active: boolean) {

@@ -30,7 +30,14 @@ export const TilbakemeldingEdit = ({
 
   return (
     <div className="items-end">
-      <Textarea label="Rediger melding" hideLabel minRows={15} onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)} value={response} disabled={loading} />
+      <Textarea
+        label="Rediger melding"
+        hideLabel
+        minRows={15}
+        onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)}
+        value={response}
+        disabled={loading}
+      />
       <div className="mt-2.5 flex justify-end">
         <Button variant="secondary" onClick={() => setEditModal(false)}>
           Avbryt

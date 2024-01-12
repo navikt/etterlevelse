@@ -3,7 +3,12 @@ import { BodyLong, Button, SortState, Table, Tooltip } from '@navikt/ds-react'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { deleteCodelist, getCodelistUsage, updateCodelist } from '../../../api/CodelistApi'
-import { ELovCodeRelevans, ICode, ICodeListFormValues, ICodeUsage } from '../../../services/Codelist'
+import {
+  ELovCodeRelevans,
+  ICode,
+  ICodeListFormValues,
+  ICodeUsage,
+} from '../../../services/Codelist'
 import { handleSort } from '../../../util/handleTableSort'
 import { AuditButton } from '../audit/AuditButton'
 import { Usage } from './CodeListUsage'
@@ -27,7 +32,7 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
 
   useEffect(() => {
     if (showUsage && selectedCode) {
-      (async () => {
+      ;(async () => {
         setUsage(undefined)
         const usage = await getCodelistUsage(selectedCode.list, selectedCode.code)
         setUsage(usage)
@@ -73,14 +78,21 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
 
   sortedData = sortedData.sort((a, b) => {
     if (sort) {
-      return sort.direction === 'ascending' ? comparator(b, a, sort.orderBy) : comparator(a, b, sort.orderBy)
+      return sort.direction === 'ascending'
+        ? comparator(b, a, sort.orderBy)
+        : comparator(a, b, sort.orderBy)
     }
     return 1
   })
 
   return (
     <>
-      <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>
+      <Table
+        size="large"
+        zebraStripes
+        sort={sort}
+        onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
+      >
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader sortKey="code" className="w-[15%]" sortable>
@@ -104,7 +116,9 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
                 <Table.DataCell className="w-1/2 break-all">
                   <div>
                     <BodyLong>{code.description}</BodyLong>
-                    <div className="break-words text-icon-warning">{code.data && JSON.stringify(code.data, null, 1)}</div>
+                    <div className="break-words text-icon-warning">
+                      {code.data && JSON.stringify(code.data, null, 1)}
+                    </div>
                   </div>
                 </Table.DataCell>
                 <Table.DataCell>

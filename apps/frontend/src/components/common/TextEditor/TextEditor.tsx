@@ -111,7 +111,11 @@ const TextEditor = (props: TTextEditorProps) => {
     <div
       style={{
         backgroundColor: ettlevColors.white,
-        ...borderColor(props.errors && props.name && props.errors[props.name] ? ettlevColors.red600 : ettlevColors.textAreaBorder),
+        ...borderColor(
+          props.errors && props.name && props.errors[props.name]
+            ? ettlevColors.red600
+            : ettlevColors.textAreaBorder
+        ),
         ...borderWidth('2px'),
         ...borderStyle('solid'),
         width: props.width || undefined,
@@ -121,9 +125,13 @@ const TextEditor = (props: TTextEditorProps) => {
         editorStyle={{
           padding: '10px',
           minHeight: props.height || '500px',
-          backgroundColor: props.errors && props.name && props.errors[props.name] ? ettlevColors.red50 : undefined,
+          backgroundColor:
+            props.errors && props.name && props.errors[props.name] ? ettlevColors.red50 : undefined,
         }}
-        toolbarStyle={{ backgroundColor: ettlevColors.white, borderBottom: `1px solid ${ettlevColors.textAreaBorder}` }}
+        toolbarStyle={{
+          backgroundColor: ettlevColors.white,
+          borderBottom: `1px solid ${ettlevColors.textAreaBorder}`,
+        }}
         onEditorStateChange={(data) => {
           setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
           if (props.setIsFormDirty) {
@@ -136,7 +144,9 @@ const TextEditor = (props: TTextEditorProps) => {
         }}
         tabIndex={0}
         toolbar={{
-          options: props.simple ? ['inline', 'list', 'link'] : ['inline', 'blockType', 'list', 'link', 'history'],
+          options: props.simple
+            ? ['inline', 'list', 'link']
+            : ['inline', 'blockType', 'list', 'link', 'history'],
           blockType: {},
           inline: { options: ['bold'] },
           // old toolbar

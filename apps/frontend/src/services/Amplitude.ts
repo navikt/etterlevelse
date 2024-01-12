@@ -19,4 +19,6 @@ instance.init(env.amplitudeApiKey, undefined, AmplitudeConfig)
 instance.setUserId(null)
 export const ampli = instance
 
-export const userRoleEventProp = {role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER'}
+export const userRoleEventProp = {
+  role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
+}

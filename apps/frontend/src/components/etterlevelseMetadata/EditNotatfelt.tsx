@@ -2,7 +2,10 @@ import { FileTextIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react'
 import { Form, Formik, FormikProps } from 'formik'
 import React from 'react'
-import { createEtterlevelseMetadata, updateEtterlevelseMetadata } from '../../api/EtterlevelseMetadataApi'
+import {
+  createEtterlevelseMetadata,
+  updateEtterlevelseMetadata,
+} from '../../api/EtterlevelseMetadataApi'
 import { IEtterlevelseMetadata } from '../../constants'
 import { useDebouncedState } from '../../util/hooks'
 import TextEditor from '../common/TextEditor/TextEditor'
@@ -15,7 +18,13 @@ type TEditNotatfeltProps = {
   formRef?: React.RefObject<any>
 }
 
-export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata, setEtterlevelseMetadata, formRef }: TEditNotatfeltProps) => {
+export const EditNotatfelt = ({
+  isOpen,
+  setIsNotatfeltOpen,
+  etterlevelseMetadata,
+  setEtterlevelseMetadata,
+  formRef,
+}: TEditNotatfeltProps) => {
   const debounceDelay = 500
   const [notater, setNotater] = useDebouncedState(etterlevelseMetadata.notater || '', debounceDelay)
 
@@ -61,9 +70,17 @@ export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata
           {({ errors }: FormikProps<IEtterlevelseMetadata>) => (
             <Form>
               <div>
-                <BodyShort className="mb-6">Notatet er kun for internt bruk, og ikke en del av dokumentasjonen</BodyShort>
+                <BodyShort className="mb-6">
+                  Notatet er kun for internt bruk, og ikke en del av dokumentasjonen
+                </BodyShort>
 
-                <TextEditor initialValue={notater} setValue={setNotater} height={'350px'} errors={errors} simple />
+                <TextEditor
+                  initialValue={notater}
+                  setValue={setNotater}
+                  height={'350px'}
+                  errors={errors}
+                  simple
+                />
 
                 <div className="w-full flex justify-end mt-6">
                   <Button

@@ -8,7 +8,9 @@ import { env } from '../util/env'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const reactProcessString = require('react-process-string')
 // eslint-enable-next-line @typescript-eslint/no-var-requires
-const processString = reactProcessString as (converters: { regex: RegExp; fn: (key: string, result: string[]) => JSX.Element | string }[]) => (input?: string) => JSX.Element[]
+const processString = reactProcessString as (
+  converters: { regex: RegExp; fn: (key: string, result: string[]) => JSX.Element | string }[]
+) => (input?: string) => JSX.Element[]
 
 export const LovViewList = (props: { regelverk: IRegelverk[]; openOnSamePage?: boolean }) => {
   return (
@@ -29,7 +31,9 @@ export const LovView = (props: { regelverk?: IRegelverk; openOnSamePage?: boolea
 
   const lovDisplay = lov && codelist.getShortname(EListName.LOV, lovCode)
 
-  const descriptionText = codelist.valid(EListName.LOV, lovCode) ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering, props.openOnSamePage) : spesifisering
+  const descriptionText = codelist.valid(EListName.LOV, lovCode)
+    ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering, props.openOnSamePage)
+    : spesifisering
 
   return <span>{descriptionText}</span>
 }
@@ -63,7 +67,12 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
       // triple '§§§' is hidden, used as a trick in combination with rule 1 above
       regex: /(.*) §(§§)?(§)?\s*(\d+(-\d+)?) ?([aA-zZ]?)( *\([0-9]*\))*/g,
       fn: (key: string, result: string[]) => (
-        <Link key={key} href={`${lovdataBase(law)}/§${result[4]}${result[6]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
+        <Link
+          key={key}
+          href={`${lovdataBase(law)}/§${result[4]}${result[6]}`}
+          target={openOnSamePage ? '_self' : '_blank'}
+          rel="noopener noreferrer"
+        >
           {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]}
           {result[6]} {result[7]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
         </Link>
@@ -72,16 +81,28 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
     {
       regex: /(.*) kap(ittel)?\s*(\d+) ?([aA-zZ]?)( *\([0-9]*\))*/gi,
       fn: (key: string, result: string[]) => (
-        <Link key={key} href={`${lovdataBase(law)}/KAPITTEL_${result[3]}${result[4]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
-          {result[1]} Kapittel {result[3]} {result[4]} {result[5]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
+        <Link
+          key={key}
+          href={`${lovdataBase(law)}/KAPITTEL_${result[3]}${result[4]}`}
+          target={openOnSamePage ? '_self' : '_blank'}
+          rel="noopener noreferrer"
+        >
+          {result[1]} Kapittel {result[3]} {result[4]} {result[5]}{' '}
+          {openOnSamePage ? '' : ' (åpnes i ny fane)'}
         </Link>
       ),
     },
     {
       regex: /(.*) art(ikkel)?\s*(\d+) ?([aA-zZ]?)( *\([0-9]*\))*/gi,
       fn: (key: string, result: string[]) => (
-        <Link key={key} href={`${lovdataBase(law)}/ARTIKKEL_${result[3]}${result[4]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
-          {result[1]} Artikkel {result[3]} {result[4]} {result[5]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
+        <Link
+          key={key}
+          href={`${lovdataBase(law)}/ARTIKKEL_${result[3]}${result[4]}`}
+          target={openOnSamePage ? '_self' : '_blank'}
+          rel="noopener noreferrer"
+        >
+          {result[1]} Artikkel {result[3]} {result[4]} {result[5]}{' '}
+          {openOnSamePage ? '' : ' (åpnes i ny fane)'}
         </Link>
       ),
     },

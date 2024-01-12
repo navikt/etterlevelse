@@ -1,4 +1,13 @@
-import { BodyShort, Heading, Link, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
+import {
+  BodyShort,
+  Heading,
+  Link,
+  Pagination,
+  Select,
+  SortState,
+  Spacer,
+  Table,
+} from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
@@ -26,11 +35,15 @@ export const KravTablePage = () => {
       case 'avdeling':
         return (a.underavdeling?.shortName || '').localeCompare(b.underavdeling?.shortName || '')
       case 'tema':
-        return (codelist.getCode(EListName.TEMA, a.tema)?.shortName || '').localeCompare(codelist.getCode(EListName.TEMA, b.tema)?.shortName || '')
+        return (codelist.getCode(EListName.TEMA, a.tema)?.shortName || '').localeCompare(
+          codelist.getCode(EListName.TEMA, b.tema)?.shortName || ''
+        )
       case 'status':
         return (a.status || '').localeCompare(b.status || '')
       case 'changeStamp':
-        return (a.changeStamp.lastModifiedDate || '').localeCompare(b.changeStamp.lastModifiedDate || '')
+        return (a.changeStamp.lastModifiedDate || '').localeCompare(
+          b.changeStamp.lastModifiedDate || ''
+        )
       default:
         return 0
     }
@@ -39,18 +52,24 @@ export const KravTablePage = () => {
   sortedData = sortedData
     .sort((a, b) => {
       if (sort) {
-        return sort.direction === 'ascending' ? comparator(b, a, sort.orderBy) : comparator(a, b, sort.orderBy)
+        return sort.direction === 'ascending'
+          ? comparator(b, a, sort.orderBy)
+          : comparator(a, b, sort.orderBy)
       }
       return 1
     })
     .slice((page - 1) * rowsPerPage, page * rowsPerPage)
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
       setTableContent(mappedKraver)
-      ampli.logEvent('sidevisning', { side: 'Krav admin side', sidetittel: 'Administrere Krav', ...userRoleEventProp })
+      ampli.logEvent('sidevisning', {
+        side: 'Krav admin side',
+        sidetittel: 'Administrere Krav',
+        ...userRoleEventProp,
+      })
     })()
   }, [])
 
@@ -62,7 +81,12 @@ export const KravTablePage = () => {
 
       {tableContent.length && (
         <div className="w-full">
-          <Table size="large" zebraStripes sort={sort} onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}>
+          <Table
+            size="large"
+            zebraStripes
+            sort={sort}
+            onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
+          >
             <Table.Header>
               <Table.Row>
                 <Table.ColumnHeader className="w-[6%]" sortKey="kravNummer" sortable>
@@ -95,20 +119,31 @@ export const KravTablePage = () => {
                     <Table.DataCell className="w-[25%]">
                       <Link href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</Link>
                     </Table.DataCell>
-                    <Table.DataCell>{krav.underavdeling && krav.underavdeling.shortName}</Table.DataCell>
+                    <Table.DataCell>
+                      {krav.underavdeling && krav.underavdeling.shortName}
+                    </Table.DataCell>
                     <Table.DataCell>
                       {' '}
-                      <Link href={`/tema/${krav.tema}`}>{codelist.getCode(EListName.TEMA, krav.tema)?.shortName}</Link>
+                      <Link href={`/tema/${krav.tema}`}>
+                        {codelist.getCode(EListName.TEMA, krav.tema)?.shortName}
+                      </Link>
                     </Table.DataCell>
                     <Table.DataCell>{kravStatus(krav.status)}</Table.DataCell>
-                    <Table.DataCell className="w-[10%] text-end">{moment(krav.changeStamp.lastModifiedDate).format('ll')}</Table.DataCell>
+                    <Table.DataCell className="w-[10%] text-end">
+                      {moment(krav.changeStamp.lastModifiedDate).format('ll')}
+                    </Table.DataCell>
                   </Table.Row>
                 )
               })}
             </Table.Body>
           </Table>
           <div className="flex w-full justify-center items-center mt-3">
-            <Select label="Antall rader:" value={rowsPerPage} onChange={(e) => setRowsPerPage(parseInt(e.target.value))} size="small">
+            <Select
+              label="Antall rader:"
+              value={rowsPerPage}
+              onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+              size="small"
+            >
               <option value="5">5</option>
               <option value="10">10</option>
               <option value="20">20</option>
@@ -117,7 +152,13 @@ export const KravTablePage = () => {
             </Select>
             <Spacer />
             <div>
-              <Pagination page={page} onPageChange={setPage} count={Math.ceil(tableContent.length / rowsPerPage)} prevNextTexts size="small" />
+              <Pagination
+                page={page}
+                onPageChange={setPage}
+                count={Math.ceil(tableContent.length / rowsPerPage)}
+                prevNextTexts
+                size="small"
+              />
             </div>
             <Spacer />
             <BodyShort>Totalt antall rader: {tableContent.length}</BodyShort>

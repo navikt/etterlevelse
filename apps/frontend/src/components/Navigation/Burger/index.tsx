@@ -20,7 +20,12 @@ const Brand = () => (
   </StyledLink>
 )
 
-const MenuItem = (props: { to: string; text: string; icon: string; setShowMenu: React.Dispatch<React.SetStateAction<boolean>> }) => (
+const MenuItem = (props: {
+  to: string
+  text: string
+  icon: string
+  setShowMenu: React.Dispatch<React.SetStateAction<boolean>>
+}) => (
   <Block
     display={'flex'}
     alignItems={'center'}
@@ -49,7 +54,10 @@ const LoginButton = (props: { location: string }) => {
   const [useCss] = useStyletron()
   const linkCss = useCss({ textDecoration: 'none', color: 'white' })
   return (
-    <StyledLink href={`${env.backendBaseUrl}/login?redirect_uri=${props.location}`} className={linkCss}>
+    <StyledLink
+      href={`${env.backendBaseUrl}/login?redirect_uri=${props.location}`}
+      className={linkCss}
+    >
       <Button kind="secondary">Logg inn</Button>
     </StyledLink>
   )
@@ -59,7 +67,10 @@ const SignOutButton = (props: { location: string }) => {
   const [useCss] = useStyletron()
   const linkCss = useCss({ textDecoration: 'none', color: 'white' })
   return (
-    <StyledLink href={`${env.backendBaseUrl}/logout?redirect_uri=${props.location}`} className={linkCss}>
+    <StyledLink
+      href={`${env.backendBaseUrl}/logout?redirect_uri=${props.location}`}
+      className={linkCss}
+    >
       <Button kind="secondary" startEnhancer={<img src={exitIcon} alt="exit icon" />}>
         Logg ut
       </Button>
@@ -107,8 +118,18 @@ const BurgerMenu = () => {
           }}
         >
           <Block display="flex" flexDirection="column" height="100%">
-            <Block width="100%" display="flex" justifyContent="flex-end" marginBottom={theme.sizing.scale1600}>
-              <Button kind="secondary" size="compact" onClick={() => setShowMenu(false)} icon={faTimes}>
+            <Block
+              width="100%"
+              display="flex"
+              justifyContent="flex-end"
+              marginBottom={theme.sizing.scale1600}
+            >
+              <Button
+                kind="secondary"
+                size="compact"
+                onClick={() => setShowMenu(false)}
+                icon={faTimes}
+              >
                 Meny
               </Button>
             </Block>
@@ -116,14 +137,48 @@ const BurgerMenu = () => {
             <Brand />
 
             <Block display="flex" flexDirection="column">
-              <Block $style={{ borderTopWidth: '1px', borderTopStyle: 'solid', borderTopColor: ettlevColors.grey100, paddingTop: '6px', paddingBottom: '6px' }}>
+              <Block
+                $style={{
+                  borderTopWidth: '1px',
+                  borderTopStyle: 'solid',
+                  borderTopColor: ettlevColors.grey100,
+                  paddingTop: '6px',
+                  paddingBottom: '6px',
+                }}
+              >
                 <MenuItem to="/" text="forsiden" icon={husIcon} setShowMenu={setShowMenu} />
               </Block>
-              <Block $style={{ borderTopWidth: '1px', borderTopStyle: 'solid', borderTopColor: ettlevColors.grey100, paddingTop: '6px', paddingBottom: '6px' }}>
-                <MenuItem to="/behandlinger" text="Dokumentere etterlevelse" icon={arkPennIcon} setShowMenu={setShowMenu} />
+              <Block
+                $style={{
+                  borderTopWidth: '1px',
+                  borderTopStyle: 'solid',
+                  borderTopColor: ettlevColors.grey100,
+                  paddingTop: '6px',
+                  paddingBottom: '6px',
+                }}
+              >
+                <MenuItem
+                  to="/behandlinger"
+                  text="Dokumentere etterlevelse"
+                  icon={arkPennIcon}
+                  setShowMenu={setShowMenu}
+                />
               </Block>
-              <Block $style={{ borderTopWidth: '1px', borderTopStyle: 'solid', borderTopColor: ettlevColors.grey100, paddingTop: '6px', paddingBottom: '6px' }}>
-                <MenuItem to="/status" text="Status i organisasjonen" icon={grafIcon} setShowMenu={setShowMenu} />
+              <Block
+                $style={{
+                  borderTopWidth: '1px',
+                  borderTopStyle: 'solid',
+                  borderTopColor: ettlevColors.grey100,
+                  paddingTop: '6px',
+                  paddingBottom: '6px',
+                }}
+              >
+                <MenuItem
+                  to="/status"
+                  text="Status i organisasjonen"
+                  icon={grafIcon}
+                  setShowMenu={setShowMenu}
+                />
               </Block>
               <Block
                 $style={{
@@ -137,7 +192,12 @@ const BurgerMenu = () => {
                   paddingBottom: '6px',
                 }}
               >
-                <MenuItem to="/tema" text="Forstå kravene" icon={paragrafIcon} setShowMenu={setShowMenu} />
+                <MenuItem
+                  to="/tema"
+                  text="Forstå kravene"
+                  icon={paragrafIcon}
+                  setShowMenu={setShowMenu}
+                />
               </Block>
             </Block>
             {/* <Block>
@@ -149,7 +209,14 @@ const BurgerMenu = () => {
               )}
             </Block> */}
 
-            <Block display="flex" flexDirection="column" width="100%" height="100%" marginBottom={theme.sizing.scale1600} justifyContent="flex-end">
+            <Block
+              display="flex"
+              flexDirection="column"
+              width="100%"
+              height="100%"
+              marginBottom={theme.sizing.scale1600}
+              justifyContent="flex-end"
+            >
               {!user.isLoggedIn() && <LoginButton location={url} />}
 
               {user.isLoggedIn() && (

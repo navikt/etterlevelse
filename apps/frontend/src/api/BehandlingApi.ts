@@ -9,11 +9,17 @@ export const getBehandling = async (id: string) => {
 }
 
 export const getBehandlinger = async () => {
-  return (await axios.get<IPageResponse<IBehandling>>(`${env.backendBaseUrl}/behandling?myBehandlinger=true`)).data.content
+  return (
+    await axios.get<IPageResponse<IBehandling>>(
+      `${env.backendBaseUrl}/behandling?myBehandlinger=true`
+    )
+  ).data.content
 }
 
 export const searchBehandling = async (name: string) => {
-  return (await axios.get<IPageResponse<IBehandling>>(`${env.backendBaseUrl}/behandling/search/${name}`)).data.content
+  return (
+    await axios.get<IPageResponse<IBehandling>>(`${env.backendBaseUrl}/behandling/search/${name}`)
+  ).data.content
 }
 
 export const useBehandling = (id?: string) => {
@@ -56,7 +62,11 @@ export const searchBehandlingOptions = async (searchParam: string) => {
     const behandlinger = await searchBehandling(searchParam)
     if (behandlinger && behandlinger.length) {
       return behandlinger.map((b) => {
-        return { value: b.id, label: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn, ...b }
+        return {
+          value: b.id,
+          label: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn,
+          ...b,
+        }
       })
     }
   }

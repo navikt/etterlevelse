@@ -1,4 +1,10 @@
-import { faChevronDown, faFilter, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons'
+import {
+  faChevronDown,
+  faFilter,
+  faSort,
+  faSortDown,
+  faSortUp,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { withStyle } from 'baseui'
 import { Block } from 'baseui/block'
@@ -7,7 +13,16 @@ import { StatefulMenu } from 'baseui/menu'
 import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
 import { Pagination } from 'baseui/pagination'
 import { PLACEMENT, StatefulPopover } from 'baseui/popover'
-import { SORT_DIRECTION, SortableHeadCell, StyledBody, StyledCell, StyledHead, StyledHeadCell, StyledRow, StyledTable } from 'baseui/table'
+import {
+  SORT_DIRECTION,
+  SortableHeadCell,
+  StyledBody,
+  StyledCell,
+  StyledHead,
+  StyledHeadCell,
+  StyledRow,
+  StyledTable,
+} from 'baseui/table'
 import { LabelMedium } from 'baseui/typography'
 import * as _ from 'lodash'
 import * as React from 'react'
@@ -84,16 +99,23 @@ const tableStyle = {
 }
 
 type TTableContextType<T, K extends keyof T> = TTableProps<T, K> & { tableState: TTableState<T, K> }
-const createTableContext = _.once(<T, K extends keyof T>() => React.createContext<TTableContextType<T, K>>({} as TTableContextType<T, K>))
+const createTableContext = _.once(<T, K extends keyof T>() =>
+  React.createContext<TTableContextType<T, K>>({} as TTableContextType<T, K>)
+)
 const useTableContext = <T, K extends keyof T>() => useContext(createTableContext<T, K>())
 
 export const Table = <T, K extends keyof T>(props: TTableProps<T, K>) => {
   const table = useTable<T, K>(props.data, props.config)
   const TableContext = createTableContext<T, K>()
 
-  const StyleTable = withStyle(StyledTable, { ...tableStyle, backgroundColor: props.backgroundColor, width: props.width || tableStyle.width })
+  const StyleTable = withStyle(StyledTable, {
+    ...tableStyle,
+    backgroundColor: props.backgroundColor,
+    width: props.width || tableStyle.width,
+  })
 
-  const show = (col?: K) => !col || !props.config?.exclude || !((props.config?.exclude || [])?.indexOf(col) >= 0)
+  const show = (col?: K) =>
+    !col || !props.config?.exclude || !((props.config?.exclude || [])?.indexOf(col) >= 0)
   const columnState = props.headers.map((h) => show(h.column))
   const colFilter = (o: any, i: number) => columnState[i]
 
@@ -148,7 +170,10 @@ export const Table = <T, K extends keyof T>(props: TTableProps<T, K>) => {
             placement={PLACEMENT.bottom}
           >
             <Block>
-              <Button kind={KIND.tertiary} iconEnd={faChevronDown}>{`${table.limit} ${intl.rows}`}</Button>
+              <Button
+                kind={KIND.tertiary}
+                iconEnd={faChevronDown}
+              >{`${table.limit} ${intl.rows}`}</Button>
             </Block>
           </StatefulPopover>
           <Block>
@@ -178,7 +203,8 @@ export const Row = (props: TRowProps) => {
     borderLeftWidth: props.infoRow || props.selectedRow ? theme.sizing.scale300 : '0',
     borderLeftStyle: 'solid',
     ':hover': {
-      backgroundColor: tableProps.hoverColor || (props.infoRow ? theme.colors.mono100 : theme.colors.primary50),
+      backgroundColor:
+        tableProps.hoverColor || (props.infoRow ? theme.colors.mono100 : theme.colors.primary50),
     },
     ...props.$style,
   }
@@ -186,7 +212,11 @@ export const Row = (props: TRowProps) => {
   return <StyleRow>{props.children}</StyleRow>
 }
 
-const SortDirectionIcon = ({ direction }: { direction: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC | null }) => {
+const SortDirectionIcon = ({
+  direction,
+}: {
+  direction: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC | null
+}) => {
   switch (direction) {
     case SORT_DIRECTION.ASC:
       return <FontAwesomeIcon icon={faSortDown} />
@@ -216,7 +246,6 @@ const HeadCell = <T, K extends keyof T>(props: THeadProps<T, K>) => {
   }
   const filterConf = tableProps.config?.filter ? tableProps.config.filter[column] : undefined
   const filterButton = filterConf && (
-
     // will delete/refactor this file so no need to fix code bellow for now
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <span
@@ -226,7 +255,11 @@ const HeadCell = <T, K extends keyof T>(props: THeadProps<T, K>) => {
       }}
       style={{ marginLeft: 'auto', justifySelf: 'flex-end' }}
     >
-      <FontAwesomeIcon size="sm" icon={faFilter} color={inputFilter ? theme.colors.negative400 : theme.colors.primary200} />
+      <FontAwesomeIcon
+        size="sm"
+        icon={faFilter}
+        color={inputFilter ? theme.colors.negative400 : theme.colors.primary200}
+      />
     </span>
     // eslint-enable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
   )
@@ -254,7 +287,7 @@ const HeadCell = <T, K extends keyof T>(props: THeadProps<T, K>) => {
             .map(filterConf.mapping)
             .flatMap((o) => (Array.isArray(o) ? o : [o]))
             .filter((o) => !!o.id),
-          (o) => o.id,
+          (o) => o.id
         )
       return (
         <CustomizedStatefulSelect

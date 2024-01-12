@@ -21,7 +21,7 @@ import { Error } from '../../common/ModalSchema'
 import TextEditor from '../../common/TextEditor/TextEditor'
 import { getSuksesskriterieBegrunnelse } from './SuksesskriterieBegrunnelseEdit'
 
-type EditBegrunnelseProps = {
+type TEditBegrunnelseProps = {
   etterlevelse: IEtterlevelse
   krav: IKrav
   close: (k?: IEtterlevelse) => void
@@ -50,7 +50,7 @@ const etterlevelseSchema = () =>
     ),
   })
 
-const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: EditBegrunnelseProps) => {
+const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: TEditBegrunnelseProps) => {
   const submit = async (etterlevelse: IEtterlevelse) => {
     close(await updateEtterlevelse(etterlevelse))
   }

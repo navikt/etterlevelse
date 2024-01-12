@@ -7,11 +7,11 @@ import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
 import { PageLayout } from '../components/scaffold/Page'
 import {
-    EEtterlevelseStatus,
-    EKravFilterType,
-    EKravStatus,
-    IPageResponse,
-    TKravQL,
+  EEtterlevelseStatus,
+  EKravFilterType,
+  EKravStatus,
+  IPageResponse,
+  TKravQL,
 } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'

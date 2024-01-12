@@ -7,14 +7,26 @@ export const InfoBlock = (props: { icon: string; alt: string; text: string; colo
   <div>
     <div className="w-full flex justify-center items-center">
       <div className="flex flex-col items-center p-5">
-        <IconInCircle icon={props.icon} alt={props.alt} backgroundColor={props.color} size={'64px'} />
+        <IconInCircle
+          icon={props.icon}
+          alt={props.alt}
+          backgroundColor={props.color}
+          size={'64px'}
+        />
         <BodyShort>{props.text}</BodyShort>
       </div>
     </div>
   </div>
 )
 
-export const InfoBlock2 = (props: { icon: string; alt: string; title: string; beskrivelse?: string; backgroundColor?: string; children?: React.ReactNode }) => (
+export const InfoBlock2 = (props: {
+  icon: string
+  alt: string
+  title: string
+  beskrivelse?: string
+  backgroundColor?: string
+  children?: React.ReactNode
+}) => (
   <div
     style={{
       width: '100%',

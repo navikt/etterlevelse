@@ -9,7 +9,10 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
   const [updateMessage, setUpdateMessage] = useState('')
 
   return (
-    <PageLayout pageTitle="dministrere Etterlevelse Dokumentasjon" currentPage="Administrere Etterlevelse Dokumentasjon">
+    <PageLayout
+      pageTitle="dministrere Etterlevelse Dokumentasjon"
+      currentPage="Administrere Etterlevelse Dokumentasjon"
+    >
       <Heading size="medium" level="1">
         Administrere Etterlevelse Dokumentasjon
       </Heading>
@@ -29,7 +32,9 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
               setUpdateMessage('')
               deleteEtterlevelseDokumentasjon(etterlevelseDokumentasjonId)
                 .then(() => {
-                  setUpdateMessage('Sletting vellykket for etterlevelses med uid: ' + etterlevelseDokumentasjonId)
+                  setUpdateMessage(
+                    'Sletting vellykket for etterlevelses med uid: ' + etterlevelseDokumentasjonId
+                  )
                   setEtterlevelseDokumentasjonId('')
                 })
                 .catch((e) => {

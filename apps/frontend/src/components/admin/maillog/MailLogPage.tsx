@@ -16,11 +16,22 @@ interface IMailLog {
 }
 
 const getMailLog = async (start: number, count: number) => {
-  return (await axios.get<IPageResponse<IMailLog>>(`${env.backendBaseUrl}/audit/maillog?pageNumber=${start}&pageSize=${count}`)).data
+  return (
+    await axios.get<IPageResponse<IMailLog>>(
+      `${env.backendBaseUrl}/audit/maillog?pageNumber=${start}&pageSize=${count}`
+    )
+  ).data
 }
 
 export const MailLogPage = () => {
-  const [log, setLog] = useState<IPageResponse<IMailLog>>({ content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 })
+  const [log, setLog] = useState<IPageResponse<IMailLog>>({
+    content: [],
+    numberOfElements: 0,
+    pageNumber: 0,
+    pages: 0,
+    pageSize: 1,
+    totalElements: 0,
+  })
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
 
@@ -54,7 +65,13 @@ export const MailLogPage = () => {
               #{rowNum} Tid: {moment(l.time).format('lll')} Til: {l.to}
             </BodyShort>
             <BodyShort className="mb-3">Emne: {l.subject}</BodyShort>
-            <Box className="px-2" borderWidth="2" borderColor="border-subtle" borderRadius="large" background="surface-default">
+            <Box
+              className="px-2"
+              borderWidth="2"
+              borderColor="border-subtle"
+              borderRadius="large"
+              background="surface-default"
+            >
               <Markdown source={html} escapeHtml={false} />
             </Box>
           </div>
@@ -62,7 +79,12 @@ export const MailLogPage = () => {
       })}
 
       <div className="flex w-full justify-center items-center mt-3">
-        <Select label="Antall rader:" value={rowsPerPage} onChange={(e) => setRowsPerPage(parseInt(e.target.value))} size="small">
+        <Select
+          label="Antall rader:"
+          value={rowsPerPage}
+          onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+          size="small"
+        >
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="20">20</option>
@@ -71,7 +93,13 @@ export const MailLogPage = () => {
         </Select>
         <Spacer />
         <div>
-          <Pagination page={page} onPageChange={setPage} count={log.pages ? log.pages : 1} prevNextTexts size="small" />
+          <Pagination
+            page={page}
+            onPageChange={setPage}
+            count={log.pages ? log.pages : 1}
+            prevNextTexts
+            size="small"
+          />
         </div>
         <Spacer />
         <BodyShort>Totalt antall rader: {log.totalElements}</BodyShort>

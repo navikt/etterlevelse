@@ -1,4 +1,10 @@
-import { Select, SelectOverrides, SelectProps, StatefulSelect, StatefulSelectProps } from 'baseui/select'
+import {
+  Select,
+  SelectOverrides,
+  SelectProps,
+  StatefulSelect,
+  StatefulSelectProps,
+} from 'baseui/select'
 import _ from 'lodash'
 import { ettlevColors } from '../../util/theme'
 import { navChevronDownIcon } from '../Images'
@@ -15,7 +21,11 @@ const customOverrides: SelectOverrides = {
   },
   SelectArrow: {
     component: ({ $isOpen }: { $isOpen: boolean }) =>
-      $isOpen ? <img src={navChevronDownIcon} alt="Chevron opp" style={{ transform: 'rotate(180deg)' }} /> : <img src={navChevronDownIcon} alt="Chevron ned" />,
+      $isOpen ? (
+        <img src={navChevronDownIcon} alt="Chevron opp" style={{ transform: 'rotate(180deg)' }} />
+      ) : (
+        <img src={navChevronDownIcon} alt="Chevron ned" />
+      ),
   },
   DropdownListItem: {
     style: {

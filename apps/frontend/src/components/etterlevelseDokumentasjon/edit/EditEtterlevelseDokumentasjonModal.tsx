@@ -6,10 +6,10 @@ import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { searchBehandlingOptions } from '../../../api/BehandlingApi'
 import {
-    createEtterlevelseDokumentasjon,
-    etterlevelseDokumentasjonMapToFormVal,
-    etterlevelseDokumentasjonSchema,
-    updateEtterlevelseDokumentasjon,
+  createEtterlevelseDokumentasjon,
+  etterlevelseDokumentasjonMapToFormVal,
+  etterlevelseDokumentasjonSchema,
+  updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { useSearchTeamOptions } from '../../../api/TeamApi'
 import { IBehandling, ITeam, IVirkemiddel, TEtterlevelseDokumentasjonQL } from '../../../constants'

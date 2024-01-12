@@ -1,4 +1,15 @@
-import { BodyShort, Button, Heading, Label, Modal, Pagination, Select, Spacer, Table, Tooltip } from '@navikt/ds-react'
+import {
+  BodyShort,
+  Button,
+  Heading,
+  Label,
+  Modal,
+  Pagination,
+  Select,
+  Spacer,
+  Table,
+  Tooltip,
+} from '@navikt/ds-react'
 import * as _ from 'lodash'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
@@ -19,7 +30,12 @@ const CodeView = ({ audit }: { audit: IAuditItem }) => {
       <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant="tertiary">
         Vis data
       </Button>
-      <Modal key={audit.id} open={modalOpen} onClose={() => setModalOpen(false)} className="max-h-[75%] overflow-y-scroll">
+      <Modal
+        key={audit.id}
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        className="max-h-[75%] overflow-y-scroll"
+      >
         <Modal.Header>Data visning</Modal.Header>
         <Modal.Body>
           <JsonView data={audit.data} />
@@ -44,7 +60,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
   }, [])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       props.show && setAudits(await getAudits(page - 1, limit, table))
     })()
   }, [page, limit, props.show, table])
@@ -165,7 +181,13 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
         </Select>
         <Spacer />
         <div>
-          <Pagination page={page} onPageChange={(page) => handlePageChange(page)} count={audits.pages} prevNextTexts size="small" />
+          <Pagination
+            page={page}
+            onPageChange={(page) => handlePageChange(page)}
+            count={audits.pages}
+            prevNextTexts
+            size="small"
+          />
         </div>
         <Spacer />
         <BodyShort>Totalt antall rader: {audits.totalElements}</BodyShort>

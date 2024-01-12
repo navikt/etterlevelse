@@ -8,11 +8,11 @@ import Button from '../common/Button'
 import CustomizedModal from '../common/CustomizedModal'
 import { borderRadius, marginAll } from '../common/Style'
 
-type SecondaryHeaderProps = {
+type TSecondaryHeaderProps = {
   temaData: TTemaCode | undefined
   lovListe: TLovCode[]
 }
-export const SecondaryHeader = ({ temaData, lovListe }: SecondaryHeaderProps) => {
+export const SecondaryHeader = ({ temaData, lovListe }: TSecondaryHeaderProps) => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
 
   return (

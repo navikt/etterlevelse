@@ -1,6 +1,12 @@
-import { Chips } from '@navikt/ds-react';
+import { Chips } from '@navikt/ds-react'
 
-export const RenderTagList = ({ list, onRemove }: { list: string[]; onRemove: (i: number) => void }) => {
+export const RenderTagList = ({
+  list,
+  onRemove,
+}: {
+  list: string[]
+  onRemove: (i: number) => void
+}) => {
   return (
     <Chips className="mt-2">
       {list && list.length > 0

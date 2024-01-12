@@ -1,6 +1,11 @@
-import { Block } from 'baseui/block';
+import { Block } from 'baseui/block'
 
-export const IconInCircle = (props: { icon: string; alt: string; size: string; backgroundColor: string }) => (
+export const IconInCircle = (props: {
+  icon: string
+  alt: string
+  size: string
+  backgroundColor: string
+}) => (
   <Block
     $style={{
       backgroundColor: props.backgroundColor,

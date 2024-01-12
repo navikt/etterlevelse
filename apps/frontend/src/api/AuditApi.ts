@@ -1,6 +1,11 @@
 import axios from 'axios'
 import moment from 'moment'
-import { EAuditAction, EObjectType, IAuditItem, IAuditLog } from '../components/admin/audit/AuditTypes'
+import {
+  EAuditAction,
+  EObjectType,
+  IAuditItem,
+  IAuditLog,
+} from '../components/admin/audit/AuditTypes'
 import { IPageResponse } from '../constants'
 import { env } from '../util/env'
 
@@ -11,13 +16,26 @@ export const getAuditLog = async (id: string) => {
 }
 
 export const getAudits = async (page: number, count: number, table?: EObjectType) => {
-  return (await axios.get<IPageResponse<IAuditItem>>(`${env.backendBaseUrl}/audit?pageNumber=${page}&pageSize=${count}` + (table ? `&table=${table}` : ''))).data
+  return (
+    await axios.get<IPageResponse<IAuditItem>>(
+      `${env.backendBaseUrl}/audit?pageNumber=${page}&pageSize=${count}` +
+        (table ? `&table=${table}` : '')
+    )
+  ).data
 }
 
-export const getEvents = async (page: number, count: number, table: EObjectType, tableId?: string, action?: EAuditAction) => {
+export const getEvents = async (
+  page: number,
+  count: number,
+  table: EObjectType,
+  tableId?: string,
+  action?: EAuditAction
+) => {
   return (
     await axios.get<IPageResponse<Event>>(
-      `${env.backendBaseUrl}/event?pageNumber=${page}&pageSize=${count}&table=${table}` + (tableId ? `&tableId=${tableId}` : '') + (action ? `&action=${action}` : ''),
+      `${env.backendBaseUrl}/event?pageNumber=${page}&pageSize=${count}&table=${table}` +
+        (tableId ? `&tableId=${tableId}` : '') +
+        (action ? `&action=${action}` : '')
     )
   ).data
 }

@@ -12,11 +12,11 @@ import { IEtterlevelse, IKrav } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import {
-    ettlevColors,
-    maxPageWidth,
-    pageWidth,
-    responsivePaddingSmall,
-    responsiveWidthSmall,
+  ettlevColors,
+  maxPageWidth,
+  pageWidth,
+  responsivePaddingSmall,
+  responsiveWidthSmall,
 } from '../util/theme'
 import { kravNumView } from './KravPage'
 

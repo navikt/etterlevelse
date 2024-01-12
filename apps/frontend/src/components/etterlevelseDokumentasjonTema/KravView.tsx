@@ -1,8 +1,8 @@
 import { Loader } from '@navikt/ds-react'
 import React, { useEffect, useState } from 'react'
 import {
-    getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
-    mapEtterlevelseToFormValue,
+  getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
+  mapEtterlevelseToFormValue,
 } from '../../api/EtterlevelseApi'
 import { TKravId, getKravByKravNumberAndVersion } from '../../api/KravApi'
 import { EKravFilterType, IBehandling, IEtterlevelse, ITeam } from '../../constants'
