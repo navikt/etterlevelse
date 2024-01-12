@@ -21,13 +21,13 @@ import Etterlevelser from '../components/krav/Etterlevelser'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
 import { AllInfo, ViewKrav } from '../components/krav/ViewKrav'
 import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
-import { PageLayout } from '../components/scaffold/Page'
 import { EKravStatus, IKrav, IKravId, IKravVersjon, TKravQL } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 import { useLocationState, useQueryParam } from '../util/hooks'
 import { useParams } from 'react-router-dom'
+import { PageLayout } from '../components/scaffold/Page'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }): string =>
   `K${it.kravNummer}.${it.kravVersjon}`
