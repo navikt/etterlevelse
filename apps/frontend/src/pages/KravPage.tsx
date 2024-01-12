@@ -92,6 +92,8 @@ export const KravPage = () => {
   const [newVersionWarning, setNewVersionWarning] = useState<boolean>(false)
   const [newKrav, setNewKrav] = useState<boolean>(false)
 
+  const slettKravButtonShouldOnlyBeVisibleOnUtkast = krav?.status === EKravStatus.UTKAST
+
   React.useEffect(() => {
     if (krav) {
       getKravByKravNummer(krav.kravNummer).then((resp) => {
@@ -290,7 +292,7 @@ export const KravPage = () => {
                     )}
                     <Spacer />
                   </div>
-                  {(user.isAdmin() || krav.status !== EKravStatus.AKTIV) && (
+                  {(slettKravButtonShouldOnlyBeVisibleOnUtkast || user.isAdmin()) && (
                     <div className="mt-2.5 flex">
                       <DeleteItem
                         buttonLabel="Slett krav"
