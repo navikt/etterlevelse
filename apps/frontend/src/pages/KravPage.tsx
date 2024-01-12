@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client'
 import { gql } from '@apollo/client/core'
 import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { BodyLong, BodyShort, Button, Heading, Spacer, Tabs } from '@navikt/ds-react'
-import { FormikProps } from 'formik'
 import React, { useEffect, useRef, useState } from 'react'
 import {
   TKravId as KravIdQueryVariables,
@@ -28,6 +27,7 @@ import { user } from '../services/User'
 import { useLocationState, useQueryParam } from '../util/hooks'
 import { useParams } from 'react-router-dom'
 import { PageLayout } from '../components/scaffold/Page'
+import { FormikProps } from 'formik'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }): string =>
   `K${it.kravNummer}.${it.kravVersjon}`
