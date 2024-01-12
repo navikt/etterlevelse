@@ -292,7 +292,7 @@ export const KravPage = () => {
                     )}
                     <Spacer />
                   </div>
-                  {slettKravButtonShouldOnlyBeVisibleOnUtkast && user.isAdmin() && (
+                  {(slettKravButtonShouldOnlyBeVisibleOnUtkast || user.isAdmin()) && (
                     <div className="mt-2.5 flex">
                       <DeleteItem
                         buttonLabel="Slett krav"
