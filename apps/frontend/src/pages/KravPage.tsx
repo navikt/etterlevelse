@@ -5,7 +5,6 @@ import { BodyLong, BodyShort, Button, Heading, Spacer, Tabs } from '@navikt/ds-r
 import { FormikProps } from 'formik'
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-
 import {
   TKravId as KravIdQueryVariables,
   TKravIdParams,
