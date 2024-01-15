@@ -13,6 +13,7 @@ export const PrivateRoute = ({ component, adminPage, kraveierPage }: IPrivateRou
   const [isLoading, setIsLoading] = useState(true)
 
   React.useEffect(() => {
+    console.debug('TRIGGER PRIVATE ROUTE')
     const timeOut = setTimeout(() => {
       setIsLoading(false)
     }, 1000)

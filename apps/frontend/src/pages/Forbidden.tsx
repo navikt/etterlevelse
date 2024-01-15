@@ -13,6 +13,7 @@ const Forbidden = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
+    console.debug('TRIGGER USER CHECK')
     setTimeout(() => {
       if (user.isLoggedIn()) {
         if (params.role === 'admin' && user.isAdmin()) {
