@@ -110,6 +110,7 @@
     "@types/react": "^18.2.23",
     "@types/react-beautiful-dnd": "^13.1.5",
     "@types/react-dom": "^18.2.8",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/react-helmet": "^6.1.7",
     "@types/react-router-dom": "^5.3.3",
     "@types/styletron-engine-atomic": "^1.1.3",
