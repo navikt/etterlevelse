@@ -64,11 +64,12 @@ export const MainPage = () => {
                   </span>
                 </div>
               )}
-              {data?.etterlevelseDokumentasjoner.content.length && (
-                <EtterlevelseDokumentasjonList
-                  etterlevelseDokumentasjoner={data?.etterlevelseDokumentasjoner.content}
-                />
-              )}
+              {data?.etterlevelseDokumentasjoner.content.length &&
+                data?.etterlevelseDokumentasjoner.content.length > 0 && (
+                  <EtterlevelseDokumentasjonList
+                    etterlevelseDokumentasjoner={data?.etterlevelseDokumentasjoner.content}
+                  />
+                )}
               <div className="mt-8 flex justify-end">
                 <div className="mr-4">
                   <EditEtterlevelseDokumentasjonModal
