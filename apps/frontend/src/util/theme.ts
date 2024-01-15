@@ -13,7 +13,6 @@ import { TRecursivePartial } from '../constants'
 // etterlevelse colors
 export const ettlevColors = {
   green800: '#102723',
-  green700: '#102723',
   green600: '#14483F',
   green400: '#057967',
   green100: '#CCD9D7',

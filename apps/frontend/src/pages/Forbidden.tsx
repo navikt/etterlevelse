@@ -1,4 +1,5 @@
 import { Heading } from '@navikt/ds-react'
+import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { PageLayout } from '../components/scaffold/Page'
 import notFound from '../resources/notfound.svg'
@@ -11,15 +12,17 @@ const Forbidden = () => {
 
   const navigate = useNavigate()
 
-  setTimeout(() => {
-    if (user.isLoggedIn()) {
-      if (params.role === 'admin' && user.isAdmin()) {
-        navigate(-1)
-      } else if (params.role === 'kraveier' && (user.isKraveier() || user.isAdmin())) {
-        navigate(-1)
+  useEffect(() => {
+    setTimeout(() => {
+      if (user.isLoggedIn()) {
+        if (params.role === 'admin' && user.isAdmin()) {
+          navigate(-1)
+        } else if (params.role === 'kraveier' && (user.isKraveier() || user.isAdmin())) {
+          navigate(-1)
+        }
       }
-    }
-  }, 1000)
+    }, 1000)
+  }, [user])
 
   ampli.logEvent('sidevisning', { side: 'Forbidden', sidetittel: '403 forbidden' })
 
