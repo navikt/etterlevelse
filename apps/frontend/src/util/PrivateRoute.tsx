@@ -21,28 +21,24 @@ export const PrivateRoute = ({ component, adminPage, kraveierPage }: IPrivateRou
     return () => clearTimeout(timeOut)
   }, [])
 
-  if (isLoading) {
+  if (isLoading && !user.isLoggedIn()) {
     return <Loader size="large" />
-  }
-
-  if (user.isLoggedIn()) {
+  } else {
     if (adminPage) {
       if (user.isAdmin()) {
         return component
       } else {
-        return <Navigate to={{ pathname: '/forbidden', search: '?role=admin' }} />
+        return <Navigate to={{ pathname: '/forbidden' }} />
       }
     } else if (kraveierPage) {
       if (user.isKraveier() || user.isAdmin()) {
         return component
       } else {
-        return <Navigate to={{ pathname: '/forbidden', search: '?role=kraveier' }} />
+        return <Navigate to={{ pathname: '/forbidden' }} />
       }
     } else {
       return component
     }
-  } else {
-    return <Navigate to={{ pathname: '/forbidden' }} />
   }
 }
 
