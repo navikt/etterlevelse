@@ -74,44 +74,44 @@ const AppRoutes = (): JSX.Element => {
 
       <Route
         path="/behandling/:id/:tema/:filter/krav/:kravNummer/:kravVersjon"
-        element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />}
+        element={<RedirectToEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
       <Route
         path="/behandling/:id/:tema/"
-        element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />}
+        element={<RedirectToEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
       <Route
         path="/behandling/:id/:tema/:filter"
-        element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />}
+        element={<RedirectToEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
       <Route
         path="/behandling/:id"
-        element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />}
+        element={<RedirectToEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
       <Route
         path="/behandling/"
-        element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />}
+        element={<RedirectToEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
 
       <Route
         path="/behandlinger/:tab"
-        element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />}
+        element={<RedirectToEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
       <Route
         path="/behandlinger/"
-        element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />}
+        element={<RedirectToEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
 
       <Route
         path="/dokumentasjon/:id/:tema/:filter/krav/:kravNummer/:kravVersjon"
-        element={<PrivateRoute component={<EtterlevelseDokumentasjonPage />} />}
+        element={<EtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
       {/*
@@ -120,7 +120,7 @@ const AppRoutes = (): JSX.Element => {
         */}
       <Route
         path="/dokumentasjoner/:tab"
-        element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} />}
+        element={<MyEtterlevelseDokumentasjonerPage />}
         caseSensitive={true}
       />
       <Route
@@ -128,14 +128,10 @@ const AppRoutes = (): JSX.Element => {
         element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} />}
         caseSensitive={true}
       />
-      <Route
-        path="/dokumentasjon/:id"
-        element={<PrivateRoute component={<DokumentasjonPage />} />}
-        caseSensitive={true}
-      />
+      <Route path="/dokumentasjon/:id" element={<DokumentasjonPage />} caseSensitive={true} />
       <Route
         path="/dokumentasjon/"
-        element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} />}
+        element={<MyEtterlevelseDokumentasjonerPage />}
         caseSensitive={true}
       />
 
