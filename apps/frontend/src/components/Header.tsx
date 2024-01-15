@@ -274,7 +274,6 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    console.debug('TRIGGER LOGIN')
     setTimeout(() => {
       if (!user.isLoggedIn()) {
         window.location.href = loginUrl(location, location.pathname)
