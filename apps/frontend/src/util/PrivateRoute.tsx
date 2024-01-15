@@ -36,8 +36,6 @@ export const PrivateRoute = ({ component, adminPage, kraveierPage }: IPrivateRou
       } else {
         return <Navigate to={{ pathname: '/forbidden' }} />
       }
-    } else {
-      return component
     }
   }
 }
