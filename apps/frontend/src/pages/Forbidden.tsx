@@ -19,7 +19,7 @@ const Forbidden = () => {
         navigate(-1)
       }
     }
-  }, 500)
+  }, 1000)
 
   ampli.logEvent('sidevisning', { side: 'Forbidden', sidetittel: '403 forbidden' })
 
