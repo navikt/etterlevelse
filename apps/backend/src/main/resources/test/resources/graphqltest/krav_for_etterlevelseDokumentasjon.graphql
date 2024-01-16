@@ -1,0 +1,11 @@
+query getKrav($etterlevelseDokumentasjonId: String) {
+    krav(filter: {etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId}) {
+        content{
+            id
+            navn
+            etterlevelser (onlyForEtterlevelseDokumentasjon: true) {
+                id
+            }
+        }
+    }
+}
