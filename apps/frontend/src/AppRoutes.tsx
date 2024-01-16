@@ -125,7 +125,7 @@ const AppRoutes = (): JSX.Element => {
       />
       <Route
         path="/dokumentasjoner/"
-        element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} />}
+        element={<MyEtterlevelseDokumentasjonerPage />}
         caseSensitive={true}
       />
       <Route path="/dokumentasjon/:id" element={<DokumentasjonPage />} caseSensitive={true} />
