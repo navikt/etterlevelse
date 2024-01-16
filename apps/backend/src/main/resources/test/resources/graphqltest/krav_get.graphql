@@ -1,0 +1,28 @@
+query getKrav($nummer: Int!, $versjon: Int!) {
+    kravById(nummer: $nummer, versjon: $versjon){
+        id
+        navn
+        changeStamp {
+            lastModifiedBy
+            lastModifiedDate
+        }
+        etterlevelser {
+            id
+            statusBegrunnelse
+            etterlevelseDokumentasjonId
+            etterlevelseDokumentasjon {
+                title
+                etterlevelseNummer
+            }
+        }
+        varslingsadresser {
+            adresse
+            type
+            slackChannel {
+                id
+                name
+                numMembers
+            }
+        }
+    }
+}
