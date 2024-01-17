@@ -49,12 +49,18 @@ export const MineEtterlevelseDokumentasjoner = ({
                   <Heading size="small" level="2">
                     {t.name}
                   </Heading>
-                  <BodyShort className="mb-2">
-                    Teamet skal etterleve krav i{' '}
-                    <span style={{ fontWeight: 700 }}>
-                      {teamDokumentasjoner.length} dokumentasjoner
-                    </span>
-                  </BodyShort>
+                  {etterlevelseDokumentasjoner.length > 0 && (
+                    <BodyShort className="mb-2">
+                      Teamet skal etterleve krav i{' '}
+                      <span style={{ fontWeight: 700 }}>
+                        {teamDokumentasjoner.length} dokumentasjoner
+                      </span>
+                    </BodyShort>
+                  )}
+
+                  {!etterlevelseDokumentasjoner.length && (
+                    <BodyShort>Teamet har ikke registrert noe etterlevelsesdokument</BodyShort>
+                  )}
                 </div>
                 {/* <Block alignSelf={'flex-end'} marginBottom={theme.sizing.scale400}>
                   <ExternalButton href={`${env.pollyBaseUrl}process/team/${t.id}`} underlineHover size={'mini'}>
