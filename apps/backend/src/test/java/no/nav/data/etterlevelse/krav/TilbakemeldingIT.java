@@ -78,7 +78,7 @@ class TilbakemeldingIT extends IntegrationTestBase {
         );
 
         UUID tilbakemeldingId = resp.getBody().getId();
-        Tilbakemelding tilbakemelding = storageService.get(tilbakemeldingId, Tilbakemelding.class);
+        Tilbakemelding tilbakemelding = tilbakemeldingStorageService.get(tilbakemeldingId);
         assertThat(tilbakemelding.getMelder().getIdent()).isEqualTo("A123456");
         assertThat(tilbakemelding.getMeldinger()).hasSize(1);
         assertThat(tilbakemelding.getLastMelding().getMeldingNr()).isOne();
@@ -102,7 +102,7 @@ class TilbakemeldingIT extends IntegrationTestBase {
                 .withRequestBody(matchingJsonPath("$.channel", equalTo("user1Channel")))
         );
 
-        Tilbakemelding tilbakemelding = storageService.get(tilbakemeldingId, Tilbakemelding.class);
+        Tilbakemelding tilbakemelding = tilbakemeldingStorageService.get(tilbakemeldingId);
         assertThat(tilbakemelding.getMeldinger()).hasSize(2);
         assertThat(tilbakemelding.getLastMelding().getMeldingNr()).isEqualTo(2);
     }
@@ -137,7 +137,7 @@ class TilbakemeldingIT extends IntegrationTestBase {
     }
 
     private Krav createKrav() {
-        return storageService.save(Krav.builder()
+        return kravStorageService.save(Krav.builder()
                 .kravNummer(50)
                 .varslingsadresser(List.of(Varslingsadresse.builder()
                         .type(AdresseType.SLACK)

@@ -17,7 +17,6 @@ import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
-import no.nav.data.etterlevelse.kravprioritering.KravPrioriteringService;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -34,7 +33,6 @@ public class QueryResolver implements GraphQLQueryResolver {
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
-    private final KravPrioriteringService kravPrioriteringService;
 
     public KravResponse kravById(UUID id, Integer nummer, Integer versjon) {
         if (id != null) {

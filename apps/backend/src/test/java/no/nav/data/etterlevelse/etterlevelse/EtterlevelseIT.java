@@ -34,7 +34,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
     @Test
     void getEtterlevelse() {
-        var etterlevelse = storageService.save(Etterlevelse.builder().build());
+        var etterlevelse = etterlevelseStorageService.save(Etterlevelse.builder().build());
 
         var resp = restTemplate.getForEntity("/etterlevelse/{id}", EtterlevelseResponse.class, etterlevelse.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -44,7 +44,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
     @Test
     void getEtterlevelseByNummer() {
-        var etterlevelse = storageService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).build());
+        var etterlevelse = etterlevelseStorageService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).build());
 
         var resp = restTemplate.getForEntity("/etterlevelse/kravnummer/{nummer}/{versjon}", EtterlevelsePage.class, etterlevelse.getKravNummer(), etterlevelse.getKravVersjon());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -64,8 +64,8 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
         @Test
         void getAllEtterlevelse() {
-            storageService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).build());
-            storageService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(2).build());
+            etterlevelseStorageService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).build());
+            etterlevelseStorageService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(2).build());
 
             var resp = restTemplate.getForEntity("/etterlevelse?pageSize=1", EtterlevelsePage.class);
             assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -83,12 +83,12 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
         @Test
         void getEtterlevelseByEtterlevelseDokumentasjonIdAndKravId_fetchEtterlevelseWithEtterlevelseDokumentasjonIdAndKravNummer_OneEtterlevelse(){
-            storageService.save(Etterlevelse.builder()
+            etterlevelseStorageService.save(Etterlevelse.builder()
                     .etterlevelseDokumentasjonId("ed1")
                     .kravNummer(50)
                     .kravVersjon(1)
                     .build());
-            storageService.save(Etterlevelse.builder()
+            etterlevelseStorageService.save(Etterlevelse.builder()
                     .etterlevelseDokumentasjonId("ed2")
                     .kravNummer(50)
                     .kravVersjon(2)
@@ -102,17 +102,17 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
         @Test
         void getEtterlevelseByEtterlevelseDokumentasjonsIdAndKravId_fetchEtterlevelseWithEtterlevelseDokumentasjonsIdAndKravNummer_TwoEtterlevelse(){
-            storageService.save(Etterlevelse.builder()
+            etterlevelseStorageService.save(Etterlevelse.builder()
                     .etterlevelseDokumentasjonId("ed1")
                     .kravNummer(50)
                     .kravVersjon(1)
                     .build());
-            storageService.save(Etterlevelse.builder()
+            etterlevelseStorageService.save(Etterlevelse.builder()
                     .etterlevelseDokumentasjonId("ed2")
                     .kravNummer(50)
                     .kravVersjon(2)
                     .build());
-            storageService.save(Etterlevelse.builder()
+            etterlevelseStorageService.save(Etterlevelse.builder()
                     .etterlevelseDokumentasjonId("ed1")
                     .kravNummer(50)
                     .kravVersjon(3)
@@ -125,8 +125,8 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
         @Test
         void getByEtterlevelseDokumentasjon() {
-            var ed1 = storageService.save(Etterlevelse.builder().etterlevelseDokumentasjonId("ed1").build());
-            storageService.save(Etterlevelse.builder().etterlevelseDokumentasjonId("ed2").build());
+            var ed1 = etterlevelseStorageService.save(Etterlevelse.builder().etterlevelseDokumentasjonId("ed1").build());
+            etterlevelseStorageService.save(Etterlevelse.builder().etterlevelseDokumentasjonId("ed2").build());
 
             var resp = restTemplate.getForEntity("/etterlevelse?etterlevelseDokumentasjon={etterlevelseDokumentasjon}", EtterlevelsePage.class, "ed1");
             assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -142,7 +142,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
         @Test
         void createEtterlevelse() {
-            var krav = storageService.save(Krav.builder().kravNummer(50).status(KravStatus.AKTIV).build());
+            var krav = kravStorageService.save(Krav.builder().kravNummer(50).status(KravStatus.AKTIV).build());
             var req = EtterlevelseRequest.builder()
                     .kravNummer(krav.getKravNummer())
                     .kravVersjon(krav.getKravVersjon())
@@ -198,7 +198,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
         @ParameterizedTest
         @EnumSource(value = KravStatus.class, names = {"UTKAST", "UTGAATT"})
         void wrongKravStatus(KravStatus status) {
-            var krav = storageService.save(Krav.builder().kravNummer(50).status(status).build());
+            var krav = kravStorageService.save(Krav.builder().kravNummer(50).status(status).build());
             var req = EtterlevelseRequest.builder()
                     .kravNummer(krav.getKravNummer())
                     .kravVersjon(krav.getKravVersjon())
@@ -215,8 +215,8 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
     @Test
     void updateEtterlevelse() {
-        var krav = storageService.save(Krav.builder().kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
-        var etterlevelse = storageService.save(Etterlevelse.builder().etterlevelseDokumentasjonId("ed1").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
+        var krav = kravStorageService.save(Krav.builder().kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
+        var etterlevelse = etterlevelseStorageService.save(Etterlevelse.builder().etterlevelseDokumentasjonId("ed1").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
         var req = EtterlevelseRequest.builder()
                 .etterlevelseDokumentasjonId("ed2")
                 .kravNummer(krav.getKravNummer())
@@ -232,9 +232,9 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
     @Test
     void deleteEtterlevelse() {
-        var krav = storageService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).build());
+        var krav = etterlevelseStorageService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).build());
         restTemplate.delete("/etterlevelse/{id}", krav.getId());
 
-        assertThat(storageService.getAll(Etterlevelse.class)).isEmpty();
+        assertThat(etterlevelseStorageService.getAll(Etterlevelse.class)).isEmpty();
     }
 }

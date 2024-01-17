@@ -1,7 +1,6 @@
 package no.nav.data.integration.behandling;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.behandling.dto.BkatProcess;
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BehandlingService {

@@ -90,26 +90,25 @@ public class CodeUsageService {
         });
     }
 
-    @SuppressWarnings({"ResultOfMethodCallIgnored"})
     public CodeUsage replaceUsage(ListName listName, String oldCode, String newCode) {
         var usage = findCodeUsage(listName, oldCode);
         if (usage.isInUse()) {
             switch (listName) {
                 case RELEVANS -> {
-                    usage.getKrav().forEach(gs -> gs.asType(k -> replaceAll(k.getRelevansFor(), oldCode, newCode), Krav.class));
-                    usage.getEtterlevelseDokumentasjoner().forEach(gs -> gs.asType(ed -> replaceAll(ed.getIrrelevansFor(), oldCode, newCode), EtterlevelseDokumentasjon.class));
+                    usage.getKrav().forEach(gs -> gs.consumeDomainObject(k -> replaceAll(k.getRelevansFor(), oldCode, newCode)));
+                    usage.getEtterlevelseDokumentasjoner().forEach(gs -> gs.consumeDomainObject(ed -> replaceAll(ed.getIrrelevansFor(), oldCode, newCode)));
                 }
-                case AVDELING -> usage.getKrav().forEach(gs -> gs.asType(k -> k.setAvdeling(newCode), Krav.class));
+                case AVDELING -> usage.getKrav().forEach(gs -> gs.consumeDomainObject(k -> k.setAvdeling(newCode)));
                 case UNDERAVDELING -> {
-                    usage.getKrav().forEach(gs -> gs.asType(k -> k.setUnderavdeling(newCode), Krav.class));
+                    usage.getKrav().forEach(gs -> gs.consumeDomainObject(k -> k.setUnderavdeling(newCode)));
                     usage.getCodelist().forEach(c -> codelistService.replaceDataField(c, "underavdeling", oldCode, newCode));
                 }
                 case LOV ->
-                        usage.getKrav().forEach(gs -> gs.asType(k -> replaceLov(oldCode, newCode, k.getRegelverk()), Krav.class));
+                        usage.getKrav().forEach(gs -> gs.consumeDomainObject(k -> replaceLov(oldCode, newCode, k.getRegelverk())));
                 case TEMA ->
                         usage.getCodelist().forEach(c -> codelistService.replaceDataField(c, "tema", oldCode, newCode));
                 case VIRKEMIDDELTYPE ->
-                        usage.getVirkemidler().forEach(gs -> gs.asType(v -> v.setVirkemiddelType(newCode), Virkemiddel.class));
+                        usage.getVirkemidler().forEach(gs -> gs.consumeDomainObject(v -> v.setVirkemiddelType(newCode)));
             }
         }
         if (!usage.getCodelist().isEmpty()) {
@@ -124,7 +123,7 @@ public class CodeUsageService {
                 .forEach(lb -> lb.setLov(newCode));
     }
 
-    private List<GenericStorage> findKrav(ListName listName, String code) {
+    private List<GenericStorage<Krav>> findKrav(ListName listName, String code) {
         return switch (listName) {
             case RELEVANS -> kravRepo.findByRelevans(code);
             case AVDELING -> kravRepo.findByAvdeling(code);
@@ -134,14 +133,14 @@ public class CodeUsageService {
         };
     }
 
-    private List<GenericStorage> findVirkemiddel(ListName listName, String code) {
+    private List<GenericStorage<Virkemiddel>> findVirkemiddel(ListName listName, String code) {
         return switch (listName) {
             case VIRKEMIDDELTYPE -> virkemiddelRepo.findByVirkemiddelType(code);
             case TEMA, RELEVANS, AVDELING, UNDERAVDELING, LOV -> List.of();
         };
     }
 
-    private List<GenericStorage> findEtterlevelseDokumentasjoner(ListName listName, String code) {
+    private List<GenericStorage<EtterlevelseDokumentasjon>> findEtterlevelseDokumentasjoner(ListName listName, String code) {
         return switch (listName) {
             case RELEVANS -> etterlevelseDokumentasjonRepo.findByIrrelevans(List.of(code));
             case AVDELING, UNDERAVDELING, LOV, TEMA, VIRKEMIDDELTYPE -> List.of();

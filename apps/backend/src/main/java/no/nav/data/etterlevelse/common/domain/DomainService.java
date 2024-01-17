@@ -17,8 +17,6 @@ import no.nav.data.etterlevelse.melding.domain.MeldingRepo;
 import no.nav.data.etterlevelse.virkemiddel.domain.VirkemiddelRepo;
 import no.nav.data.integration.begrep.BegrepService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -27,7 +25,7 @@ import java.util.UUID;
 public class DomainService<T extends DomainObject> {
 
     @Autowired
-    protected StorageService storage;
+    protected StorageService<T> storage;
     @Autowired
     protected KravRepo kravRepo;
     @Autowired
@@ -45,25 +43,19 @@ public class DomainService<T extends DomainObject> {
     @Autowired
     protected VirkemiddelRepo virkemiddelRepo;
 
-    protected final Class<T> type;
-
     public T get(UUID uuid) {
-        return storage.get(uuid, type);
-    }
-
-    public Page<T> getAll(Pageable pageable) {
-        return storage.getAll(type, pageable);
+        return storage.get(uuid);
     }
 
     protected <R extends KravId & Validated> Optional<Krav> validateKravNummer(Validator<R> validator) {
         Integer kravNummer = validator.getItem().getKravNummer();
         Integer kravVersjon = validator.getItem().getKravVersjon();
         if (kravNummer != null && kravVersjon != null) {
-            var krav = kravRepo.findByKravNummer(kravNummer, kravVersjon);
+            Optional<GenericStorage<Krav>> krav = kravRepo.findByKravNummer(kravNummer, kravVersjon);
             if (krav.isEmpty()) {
                 validator.addError(Fields.kravNummer, Validator.DOES_NOT_EXIST, "KravNummer %d KravVersjon %d does not exist".formatted(kravNummer, kravVersjon));
             } else {
-                return krav.map(GenericStorage::toKrav);
+                return krav.map(GenericStorage::getDomainObjectData);
             }
         }
         return Optional.empty();

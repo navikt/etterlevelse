@@ -9,32 +9,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import no.nav.data.common.auditing.domain.Auditable;
-import no.nav.data.common.security.azure.support.MailLog;
 import no.nav.data.common.utils.JsonUtils;
-import no.nav.data.common.utils.StreamUtils;
-import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
-import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
-import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
-import no.nav.data.etterlevelse.krav.domain.Krav;
-import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
-import no.nav.data.etterlevelse.melding.domain.Melding;
-import no.nav.data.etterlevelse.virkemiddel.domain.Virkemiddel;
 import org.hibernate.annotations.Type;
 import org.springframework.util.Assert;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
-
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -42,7 +33,7 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 @NoArgsConstructor
 @Entity
 @Table(name = "GENERIC_STORAGE")
-public class GenericStorage extends Auditable {
+public class GenericStorage<T extends DomainObject> extends Auditable {
 
     @Id
     @Column(name = "ID")
@@ -58,82 +49,48 @@ public class GenericStorage extends Auditable {
 
     @Transient
     @JsonIgnore
-    private transient DomainObject domainObjectCache;
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private transient T domainObjectCache;
 
-    public GenericStorage generateId() {
+    public GenericStorage<T> generateId() {
         Assert.isTrue(id == null, "id already set");
         id = UUID.randomUUID();
         return this;
     }
 
-    public <T extends DomainObject> GenericStorage setDomainObjectData(T object) {
+    /**
+     * Merk: Endrer også input domainObject ved å sette id
+     */
+    public GenericStorage<T> setDomainObjectData(T domainObject) {
+        // TODO: Setter IKKE changeStamp på this fra domainObject. Må sjekkes at dette er riktig oppførsel.
         Assert.isTrue(id != null, "id not set");
-        Assert.isTrue(type == null || object.type().equals(type), "cannot change object type");
-        object.setId(id);
-        type = object.type();
-        data = JsonUtils.toJsonNode(object);
-        domainObjectCache = object;
+        domainObject.setId(id);
+        type = domainObject.type();
+        data = JsonUtils.toJsonNode(domainObject);
+        domainObjectCache = domainObject;
         return this;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends DomainObject> T getDomainObjectData(Class<T> clazz) {
-        validateType(clazz);
+    public T getDomainObjectData() {
+        Class<T> clazz = TypeRegistration.classFrom(type);
         if (domainObjectCache == null) {
             domainObjectCache = JsonUtils.toObject(data, clazz);
         }
         domainObjectCache.setChangeStamp(new ChangeStamp(getCreatedBy(), getCreatedDate(), getLastModifiedBy(), getLastModifiedDate()));
         domainObjectCache.setVersion(getVersion());
-        return (T) domainObjectCache;
+        return domainObjectCache;
     }
 
-    public <T extends DomainObject> void validateType(Class<T> clazz) {
-        Assert.isTrue(type.equals(TypeRegistration.typeOf(clazz)), "Incorrect type");
+    public static <T extends DomainObject> List<T> convertToDomaionObject(List<GenericStorage<T>> collection) {
+        return convert(collection, GenericStorage::getDomainObjectData);
     }
-
-    public MailLog toMailLog() {
-        return getDomainObjectData(MailLog.class);
-    }
-
-    public static <T extends DomainObject> List<T> getOfType(Collection<GenericStorage> storages, Class<T> type) {
-        return convert(StreamUtils.filter(storages, r -> r.getType().equals(TypeRegistration.typeOf(type))), gs -> gs.getDomainObjectData(type));
-    }
-
-    public static <T extends DomainObject> List<T> to(List<GenericStorage> collection, Class<T> type) {
-        return convert(collection, item -> item.getDomainObjectData(type));
-    }
-
-    public Krav toKrav() {
-        return getDomainObjectData(Krav.class);
-    }
-
-    public KravPrioritering toKravPrioritering() {
-        return getDomainObjectData(KravPrioritering.class);
-    }
-
-    public Etterlevelse toEtterlevelse() {
-        return getDomainObjectData(Etterlevelse.class);
-    }
-
-    public EtterlevelseMetadata toEtterlevelseMetadata() {
-        return getDomainObjectData(EtterlevelseMetadata.class);
-    }
-
-    public Melding toMelding() {
-        return getDomainObjectData(Melding.class);
-    }
-
-    public EtterlevelseArkiv toEtterlevelseArkiv() {return getDomainObjectData(EtterlevelseArkiv.class); }
-
-    public EtterlevelseDokumentasjon toEtterlevelseDokumentasjon() {return getDomainObjectData(EtterlevelseDokumentasjon.class); }
-
-    public Virkemiddel toVirkemiddel() {return getDomainObjectData(Virkemiddel.class);}
-
+    
     /**
-     * Edit object and update data on entity
+     * Kaller en funksjon med dette objectets T og oppdaterer dette objektet med resultatet
      */
-    public <T extends DomainObject> void asType(Consumer<T> consumer, Class<T> type) {
-        var object = getDomainObjectData(type);
+    public void consumeDomainObject(Consumer<T> consumer) {
+        T object = getDomainObjectData();
         consumer.accept(object);
         setDomainObjectData(object);
     }

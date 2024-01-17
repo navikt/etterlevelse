@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.DomainObject;
-import no.nav.data.common.storage.domain.TypeRegistration;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import org.apache.commons.lang3.EnumUtils;
@@ -28,7 +27,6 @@ import java.util.regex.Pattern;
 
 import static no.nav.data.common.utils.StreamUtils.nullToEmptyList;
 import static no.nav.data.common.utils.StreamUtils.safeStream;
-import static no.nav.data.common.utils.StringUtils.isUUID;
 
 @Slf4j
 public class Validator<T extends Validated> {
@@ -77,15 +75,16 @@ public class Validator<T extends Validated> {
         this.item = item;
     }
 
-    public static <R extends RequestElement> Validator<R> validate(R item, StorageService storage) {
+    // TODO: (farjam) Denne hører ikke hjemme her. 
+    public static <R extends RequestElement> Validator<R> validate(R item, StorageService<?> storage) {
         Validator<R> validator = validate(item);
         UUID uuid = item.getIdAsUUID();
-        String typeOfRequest = TypeRegistration.typeOfRequest(item);
-        validator.domainItem = uuid != null && storage.exists(uuid, typeOfRequest) ? storage.get(uuid, typeOfRequest) : null;
+        validator.domainItem = uuid != null && storage.exists(uuid) ? storage.get(uuid) : null;
         validator.validateRepositoryValues(item, validator.domainItem != null);
         return validator;
     }
 
+    // TODO: (farjam) Denne hører ikke hjemme her. 
     public static <R extends Validated> Validator<R> validate(R item) {
         item.format();
         RequestElement requestElement = item instanceof RequestElement re ? re : null;
@@ -100,18 +99,6 @@ public class Validator<T extends Validated> {
     @SuppressWarnings("unchecked")
     public <D extends DomainObject> D getDomainItem() {
         return (D) domainItem;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <D extends DomainObject> D getDomainItem(Class<D> type) {
-        return (D) domainItem;
-    }
-
-    public void checkExists(String id, StorageService storage, Class<? extends DomainObject> aClass) {
-        if (isUUID(id) && !storage.exists(UUID.fromString(id), aClass)) {
-            String type = TypeRegistration.typeOf(aClass);
-            addError(type, Validator.DOES_NOT_EXIST, type + " " + id + " does not exist");
-        }
     }
 
     public boolean checkBlank(String fieldName, String fieldValue) {

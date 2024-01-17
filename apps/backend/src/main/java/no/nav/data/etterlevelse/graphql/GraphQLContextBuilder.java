@@ -20,7 +20,7 @@ public class GraphQLContextBuilder implements GraphQLServletContextBuilder {
 
     @Override
     public GraphQLKickstartContext build(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        Map<Object, Object> map = new HashMap();
+        Map<Object, Object> map = new HashMap<>();
         map.put(HttpServletRequest.class, httpServletRequest);
         map.put(HttpServletResponse.class, httpServletResponse);
         return GraphQLKickstartContext.of(dataLoaderReg.create(), map);

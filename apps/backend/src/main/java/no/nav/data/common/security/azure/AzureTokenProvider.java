@@ -86,8 +86,6 @@ public class AzureTokenProvider implements TokenProvider {
         MetricUtils.register("accessTokenCache", accessTokenCache);
     }
 
-    // buildClient has omitted it's generic type...
-    @SuppressWarnings("unchecked")
     GraphServiceClient<Request> getGraphClient(String accessToken) {
         return GraphServiceClient.builder()
                 .authenticationProvider(url -> CompletableFuture.completedFuture(accessToken))

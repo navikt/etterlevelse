@@ -27,6 +27,9 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -44,26 +47,25 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
     private final EtterlevelseDokumentasjonToDoc etterlevelseDokumentasjonToDoc;
 
     public EtterlevelseArkivService(EtterlevelseArkivRepo repo, EtterlevelseDokumentasjonService etterlevelseDokumentasjonService, EtterlevelseDokumentasjonToDoc etterlevelseDokumentasjonToDoc) {
-        super(EtterlevelseArkiv.class);
         this.repo = repo;
         this.etterlevelseDokumentasjonService = etterlevelseDokumentasjonService;
         this.etterlevelseDokumentasjonToDoc = etterlevelseDokumentasjonToDoc;
     }
 
     public Page<EtterlevelseArkiv> getAll(PageParameters pageParameters) {
-        return repo.findAll(pageParameters.createPage()).map(GenericStorage::toEtterlevelseArkiv);
+        return repo.findAll(pageParameters.createPage()).map(GenericStorage::getDomainObjectData);
     }
 
     public List<EtterlevelseArkiv> getByWebsakNummer(String websakNummer) {
-        return GenericStorage.to(repo.findByWebsakNummer(websakNummer), EtterlevelseArkiv.class);
+        return convertToDomaionObject(repo.findByWebsakNummer(websakNummer));
     }
 
     public List<EtterlevelseArkiv> getByStatus(String status) {
-        return GenericStorage.to(repo.findByStatus(status), EtterlevelseArkiv.class);
+        return convertToDomaionObject(repo.findByStatus(status));
     }
 
     public List<EtterlevelseArkiv> getByEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId) {
-        return GenericStorage.to(repo.findByEtterlevelseDokumentsjonId(etterlevelseDokumentasjonId), EtterlevelseArkiv.class);
+        return convertToDomaionObject(repo.findByEtterlevelseDokumentsjonId(etterlevelseDokumentasjonId));
     }
 
     public byte[] getEtterlevelserArchiveZip(List<EtterlevelseArkiv> etterlevelseArkivList) throws IOException {
@@ -214,13 +216,13 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
     }
 
     public EtterlevelseArkiv save(EtterlevelseArkivRequest request) {
-        var etterlevelseArkiv = request.isUpdate() ? storage.get(request.getIdAsUUID(), EtterlevelseArkiv.class) : new EtterlevelseArkiv();
+        var etterlevelseArkiv = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new EtterlevelseArkiv();
         etterlevelseArkiv.convert(request);
 
         return storage.save(etterlevelseArkiv);
     }
 
     public EtterlevelseArkiv delete(UUID id) {
-        return storage.delete(id, EtterlevelseArkiv.class);
+        return storage.delete(id);
     }
 }

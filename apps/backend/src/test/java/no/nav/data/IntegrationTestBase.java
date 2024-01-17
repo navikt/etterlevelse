@@ -7,10 +7,17 @@ import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
+import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
+import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
+import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravImage;
+import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
+import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.integration.behandling.BehandlingService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,12 +48,24 @@ public abstract class IntegrationTestBase {
 
     @Autowired
     protected TestRestTemplate restTemplate;
-    @Autowired
+    @Autowired // FIXME: Fjern
     protected GenericStorageRepository repository;
     @Autowired
     protected AuditVersionRepository auditVersionRepository;
     @Autowired
-    protected StorageService storageService;
+    protected StorageService<Krav> kravStorageService;
+    @Autowired
+    protected StorageService<KravImage> kravImageStorageService;
+    @Autowired
+    protected StorageService<Etterlevelse> etterlevelseStorageService;
+    @Autowired
+    protected StorageService<EtterlevelseArkiv> etterlevelseArkivStorageService;
+    @Autowired
+    protected StorageService<EtterlevelseMetadata> etterlevelseMetadataStorageService;
+    @Autowired
+    protected StorageService<Melding> meldingStorageService;
+    @Autowired
+    protected StorageService<Tilbakemelding> tilbakemeldingStorageService;
     @Autowired
     protected JdbcTemplate jdbcTemplate;
     @Autowired

@@ -8,21 +8,20 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-public interface GenericStorageRepository extends JpaRepository<GenericStorage, UUID> {
+public interface GenericStorageRepository<T extends DomainObject> extends JpaRepository<GenericStorage<T>, UUID> {
 
-    boolean existsByIdAndType(UUID id, String type);
+    boolean existsById(UUID id);
 
-    Optional<GenericStorage> findByType(String type);
+    // TODO: (farjam) W-h-a-a-a-a-t-?-?-?
+    List<GenericStorage<T>> findAllByType(String type);
 
-    List<GenericStorage> findAllByType(String type);
-
-    Page<GenericStorage> findAllByType(String type, Pageable pageable);
+    // TODO: (farjam) W-h-a-a-a-a-t-?-?-?
+    Page<GenericStorage<T>> findAllByType(String type, Pageable pageable);
 
     @Query(value = "select * from generic_storage where data ->> 'name' ilike ?1 and type = ?2", nativeQuery = true)
-    List<GenericStorage> findByNameAndType(String name, String type);
+    List<GenericStorage<T>> findByNameAndType(String name, String type);
 
     long countByType(String type);
 

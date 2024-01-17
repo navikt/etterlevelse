@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import no.nav.data.common.rest.ChangeStampResponse;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.UUID;
-import java.util.stream.Stream;
 
+// TODO: Dette må gjøres om til abstract class. Se https://trello.com/c/mbKtuSCW/322-domainobject-interface-%E2%86%92-abstract-class
 public interface DomainObject {
 
     UUID getId();
@@ -44,7 +43,4 @@ public interface DomainObject {
                 .build();
     }
 
-    static <T extends DomainObject> T max(T obj1, T obj2) {
-        return Stream.of(obj1, obj2).max(Comparator.comparing(o -> o.getChangeStamp().getCreatedDate())).orElse(null);
-    }
 }

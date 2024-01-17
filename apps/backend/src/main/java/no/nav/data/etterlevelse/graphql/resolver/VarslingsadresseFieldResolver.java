@@ -2,7 +2,6 @@ package no.nav.data.etterlevelse.graphql.resolver;
 
 import graphql.kickstart.tools.GraphQLResolver;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.SlackChannel;
 import no.nav.data.etterlevelse.varsel.domain.SlackUser;
@@ -10,7 +9,6 @@ import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.slack.SlackClient;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class VarslingsadresseFieldResolver implements GraphQLResolver<Varslingsadresse> {

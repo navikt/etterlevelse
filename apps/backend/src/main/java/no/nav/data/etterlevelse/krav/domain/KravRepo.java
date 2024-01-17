@@ -12,36 +12,36 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface KravRepo extends JpaRepository<GenericStorage, UUID>, KravRepoCustom {
+public interface KravRepo extends JpaRepository<GenericStorage<Krav>, UUID>, KravRepoCustom {
 
     @Override
     @Query(value = "select * from generic_storage where type = 'Krav' order by data -> 'kravNummer', data -> 'kravVersjon'",
             countQuery = "select count(1) from generic_storage where type = 'Krav'",
             nativeQuery = true)
-    Page<GenericStorage> findAll(Pageable pageable);
+    Page<GenericStorage<Krav>> findAll(Pageable pageable);
 
     @Query(value = "select * from generic_storage where type = 'Krav' and data ->> 'status' <> 'UTKAST' order by data -> 'kravNummer', data -> 'kravVersjon'",
             countQuery = "select count(1) from generic_storage where type = 'Krav' and data ->> 'status' <> 'UTKAST'",
             nativeQuery = true)
-    Page<GenericStorage> findAllNonUtkast(Pageable pageable);
+    Page<GenericStorage<Krav>> findAllNonUtkast(Pageable pageable);
 
     @Query(value = "select * from generic_storage where data ->> 'avdeling' = ?1 and type = 'Krav'", nativeQuery = true)
-    List<GenericStorage> findByAvdeling(String code);
+    List<GenericStorage<Krav>> findByAvdeling(String code);
 
     @Query(value = "select * from generic_storage where data ->> 'underavdeling' = ?1 and type = 'Krav'", nativeQuery = true)
-    List<GenericStorage> findByUnderavdeling(String code);
+    List<GenericStorage<Krav>> findByUnderavdeling(String code);
 
     @Query(value = "select * from generic_storage where data ->> 'navn' ilike %?1% and type = 'Krav'", nativeQuery = true)
-    List<GenericStorage> findByNameContaining(String name);
+    List<GenericStorage<Krav>> findByNameContaining(String name);
 
     @Query(value = "select * from generic_storage where data ->> 'kravNummer' ilike %?1% and type = 'Krav'", nativeQuery = true)
-    List<GenericStorage> findByNumberContaining(String number);
+    List<GenericStorage<Krav>> findByNumberContaining(String number);
 
     @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and type = 'Krav'", nativeQuery = true)
-    List<GenericStorage> findByKravNummer(int nummer);
+    List<GenericStorage<Krav>> findByKravNummer(int nummer);
 
     @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and data -> 'kravVersjon' = to_jsonb(?2) and type = 'Krav'", nativeQuery = true)
-    Optional<GenericStorage> findByKravNummer(int nummer, int versjon);
+    Optional<GenericStorage<Krav>> findByKravNummer(int nummer, int versjon);
 
     @Query(value = "select nextval('krav_nummer')", nativeQuery = true)
     int nextKravNummer();
@@ -50,7 +50,7 @@ public interface KravRepo extends JpaRepository<GenericStorage, UUID>, KravRepoC
     int nextKravVersjon(Integer kravNummer);
 
     @Query(value = "select * from generic_storage where data ->> 'kravId' = cast(?1 as text) and id = ?2 and type = 'KravImage'", nativeQuery = true)
-    GenericStorage findKravImage(UUID kravId, UUID fileId);
+    GenericStorage<KravImage> findKravImage(UUID kravId, UUID fileId);
 
     @Modifying(clearAutomatically = true)
     @Transactional

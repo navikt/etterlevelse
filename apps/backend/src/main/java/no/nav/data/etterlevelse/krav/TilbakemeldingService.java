@@ -19,13 +19,15 @@ import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.slack.SlackClient;
 import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import org.apache.commons.lang3.NotImplementedException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
-import static no.nav.data.common.storage.domain.GenericStorage.to;
+import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
 import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.url;
 
 @Slf4j
@@ -41,7 +43,6 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
 
     public TilbakemeldingService(TeamcatResourceClient resourceClient, EmailService emailService, SlackClient slackClient,
             UrlGenerator urlGenerator, TilbakemeldingRepo tilbakemeldingRepo) {
-        super(Tilbakemelding.class);
         this.urlGenerator = urlGenerator;
         this.resourceClient = resourceClient;
         this.emailService = emailService;
@@ -50,11 +51,11 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
     }
 
     public List<Tilbakemelding> getForKravByNumberAndVersion(int kravNummer, int kravVersjon) {
-        return to(tilbakemeldingRepo.findByKravNummerAndVersion(kravNummer, kravVersjon), Tilbakemelding.class);
+        return convertToDomaionObject(tilbakemeldingRepo.findByKravNummerAndVersion(kravNummer, kravVersjon));
     }
 
     public List<Tilbakemelding> getForKravByNumber(int kravNummer) {
-        return to(tilbakemeldingRepo.findByKravNummer(kravNummer), Tilbakemelding.class);
+        return convertToDomaionObject(tilbakemeldingRepo.findByKravNummer(kravNummer));
     }
 
     @Transactional
@@ -117,8 +118,12 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
         return storage.save(tilbakemelding);
     }
 
+    public Page<Tilbakemelding> getAll(Pageable pageable) {
+        return storage.getAll(Tilbakemelding.class, pageable);
+    }
+
     private void varsle(Tilbakemelding tilbakemelding, Melding melding,boolean isEdit) {
-        var krav = kravRepo.findByKravNummer(tilbakemelding.getKravNummer(), tilbakemelding.getKravVersjon()).orElseThrow().toKrav();
+        var krav = kravRepo.findByKravNummer(tilbakemelding.getKravNummer(), tilbakemelding.getKravVersjon()).orElseThrow().getDomainObjectData();
         var sender = resourceClient.getResource(melding.getFraIdent()).orElseThrow();
         var recipients = tilbakemelding.getRecipientsForMelding(krav, melding);
 

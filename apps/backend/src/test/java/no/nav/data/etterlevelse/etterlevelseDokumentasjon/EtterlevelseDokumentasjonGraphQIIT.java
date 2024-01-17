@@ -49,22 +49,22 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
 
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of("INNSYN"));
 
-            storageService.save(Krav.builder()
+            kravStorageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                      .status(KravStatus.AKTIV)
                     .relevansFor(List.of("SAK"))
                     .build());
-            storageService.save(Krav.builder()
+            kravStorageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(1)
                     .status(KravStatus.AKTIV)
                     .relevansFor(List.of("SAK"))
                     .build());
 
-            storageService.save(Etterlevelse.builder()
+            etterlevelseStorageService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
                     .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
                     .build());
-            storageService.save(Etterlevelse.builder()
+            etterlevelseStorageService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
                     .build());
 

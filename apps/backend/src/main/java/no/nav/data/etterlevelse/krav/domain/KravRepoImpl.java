@@ -27,33 +27,33 @@ import static no.nav.data.common.utils.StreamUtils.exists;
 public class KravRepoImpl implements KravRepoCustom {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final GenericStorageRepository repository;
+    private final GenericStorageRepository<Krav> repository;
 
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
 
     @Override
-    public List<GenericStorage> findByRelevans(String code) {
+    public List<GenericStorage<Krav>> findByRelevans(String code) {
         return findBy(KravFilter.builder().relevans(List.of(code)).build());
     }
 
     @Override
-    public List<GenericStorage> findByVirkemiddelIder(String virkemiddelId){
+    public List<GenericStorage<Krav>> findByVirkemiddelIder(String virkemiddelId){
         var query = "select id from generic_storage where type = 'Krav' and data->'virkemiddelIder' ??| array[ :virkemiddelId ]";
         var par = new MapSqlParameterSource();
 
         par.addValue("virkemiddelId", List.of(virkemiddelId));
 
-        List<GenericStorage> kravList = fetch(jdbcTemplate.queryForList(query, par));
+        List<GenericStorage<Krav>> kravList = fetch(jdbcTemplate.queryForList(query, par));
         return kravList;
     }
 
     @Override
-    public List<GenericStorage> findByLov(String lov) {
+    public List<GenericStorage<Krav>> findByLov(String lov) {
         return findBy(KravFilter.builder().lov(lov).build());
     }
 
     @Override
-    public List<GenericStorage> findBy(KravFilter filter) {
+    public List<GenericStorage<Krav>> findBy(KravFilter filter) {
         var query = "select id from generic_storage krav where type = 'Krav' ";
         var par = new MapSqlParameterSource();
 
@@ -142,28 +142,28 @@ public class KravRepoImpl implements KravRepoCustom {
                     .addValue("user_id", SecurityUtils.getCurrentIdent() + "%");
         }
 
-        List<GenericStorage> kravList = fetch(jdbcTemplate.queryForList(query, par));
-        List<GenericStorage> filtered = StreamUtils.filter(kravList, krav -> filterStateAndStatus(kravList, krav, filter, kravIdSafeList));
+        List<GenericStorage<Krav>> kravList = fetch(jdbcTemplate.queryForList(query, par));
+        List<GenericStorage<Krav>> filtered = StreamUtils.filter(kravList, krav -> filterStateAndStatus(kravList, krav, filter, kravIdSafeList));
         sort(filter, filtered);
         return filtered;
     }
 
-    private void sort(KravFilter filter, List<GenericStorage> filtered) {
+    private void sort(KravFilter filter, List<GenericStorage<Krav>> filtered) {
         if (filter.getSistRedigert() != null) {
-            Comparator<GenericStorage> comparator = comparing(gs -> gs.toKrav().getChangeStamp().getLastModifiedDate());
+            Comparator<GenericStorage<Krav>> comparator = comparing(gs -> gs.getDomainObjectData().getChangeStamp().getLastModifiedDate());
             filtered.sort(comparator.reversed());
         }
     }
 
-    private List<GenericStorage> fetch(List<Map<String, Object>> resp) {
+    private List<GenericStorage<Krav>> fetch(List<Map<String, Object>> resp) {
         return repository.findAllById(convert(resp, i -> (UUID) i.values().iterator().next()));
     }
 
     /**
      * true = keep
      */
-    private boolean filterStateAndStatus(List<GenericStorage> all, GenericStorage test, KravFilter filter, List<String> kravIdSafeList) {
-        Krav krav = test.toKrav();
+    private boolean filterStateAndStatus(List<GenericStorage<Krav>> all, GenericStorage<Krav> test, KravFilter filter, List<String> kravIdSafeList) {
+        Krav krav = test.getDomainObjectData();
 
         if (krav.getStatus() == KravStatus.UTKAST && !SecurityUtils.isKravEier()) {
             return false;
@@ -175,12 +175,12 @@ public class KravRepoImpl implements KravRepoCustom {
 
         // Filtrering for krav relevant for etterlevelseDokumentasjon
         if (filter.getEtterlevelseDokumentasjonId() != null) {
-            var succeeded = exists(all, k2 -> k2.toKrav().supersedes(krav));
+            var succeeded = exists(all, k2 -> k2.getDomainObjectData().supersedes(krav));
             return !succeeded && krav.getStatus().kanEtterleves();
         }
 
         if (filter.isGjeldendeKrav()) {
-            return !exists(all, k2 -> k2.toKrav().supersedes(krav));
+            return !exists(all, k2 -> k2.getDomainObjectData().supersedes(krav));
         }
 
         return true;

@@ -125,12 +125,6 @@ public class WebSecurityConfig {
         }
     }
 
-    private void allowPost(HttpSecurity http, String... paths) throws Exception {
-        for (String path: paths) {
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST, path).permitAll());
-        }
-    }
-
     private void addFilters(HttpSecurity http) {
         // In lightweight mvc tests where authfilter isnt initialized
         if (aadAuthFilter != null) {

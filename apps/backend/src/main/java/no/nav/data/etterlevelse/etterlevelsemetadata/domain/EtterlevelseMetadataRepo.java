@@ -9,25 +9,25 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface EtterlevelseMetadataRepo extends JpaRepository<GenericStorage, UUID> {
+public interface EtterlevelseMetadataRepo extends JpaRepository<GenericStorage<EtterlevelseMetadata>, UUID> {
     @Override
     @Query(value = "select * from generic_storage where type = 'EtterlevelseMetadata' order by data -> 'kravNummer', data -> 'kravVersjon'",
             countQuery = "select count(1) from generic_storage where type = 'EtterlevelseMetadata'",
             nativeQuery = true)
-    Page<GenericStorage> findAll(Pageable pageable);
+    Page<GenericStorage<EtterlevelseMetadata>> findAll(Pageable pageable);
 
     @Query(value = "select * from generic_storage where type = 'EtterlevelseMetadata' and data -> 'kravNummer' = to_jsonb(?1)", nativeQuery = true)
-    List<GenericStorage> findByKravNummer(int nummer);
+    List<GenericStorage<EtterlevelseMetadata>> findByKravNummer(int nummer);
 
     @Query(value = "select * from generic_storage where type = 'EtterlevelseMetadata' and data -> 'kravNummer' = to_jsonb(?1) and data -> 'kravVersjon' = to_jsonb(?2)", nativeQuery = true)
-    List<GenericStorage> findByKravNummerOgKravVersjon(int nummer, int versjon);
+    List<GenericStorage<EtterlevelseMetadata>> findByKravNummerOgKravVersjon(int nummer, int versjon);
 
     @Query(value = "select * from generic_storage where type = 'EtterlevelseMetadata' and data ->> 'etterlevelseDokumentasjonId' = ?1", nativeQuery = true)
-    List<GenericStorage> findByEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId);
+    List<GenericStorage<EtterlevelseMetadata>> findByEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId);
 
     @Query(value = "select * from generic_storage where type = 'EtterlevelseMetadata' and data ->> 'etterlevelseDokumentasjonId' = ?1 and data -> 'kravNummer' = to_jsonb(?2) and data -> 'kravVersjon' = to_jsonb(?3)", nativeQuery = true)
-    List<GenericStorage> findByEtterlevelseDokumentasjonAndKrav(String etterlevelseDokumentasjonId, int nummer, int versjon);
+    List<GenericStorage<EtterlevelseMetadata>> findByEtterlevelseDokumentasjonAndKrav(String etterlevelseDokumentasjonId, int nummer, int versjon);
 
     @Query(value = "select * from generic_storage where type = 'EtterlevelseMetadata' and data ->> 'etterlevelseDokumentasjonId' = ?1 and data -> 'kravNummer' = to_jsonb(?2)", nativeQuery = true)
-    List<GenericStorage> findByEtterlevelseDokumentasjonAndKravNummer(String behandlingId, int nummer);
+    List<GenericStorage<EtterlevelseMetadata>> findByEtterlevelseDokumentasjonAndKravNummer(String behandlingId, int nummer);
 }

@@ -3,7 +3,6 @@ package no.nav.data.etterlevelse.graphql.resolver;
 import graphql.kickstart.tools.GraphQLResolver;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.graphql.DataLoaderReg;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class EtterlevelseFieldResolver implements GraphQLResolver<EtterlevelseResponse> {

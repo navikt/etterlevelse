@@ -29,7 +29,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,7 +46,7 @@ public class KravIT extends IntegrationTestBase {
 
     @Test
     void getKrav() {
-        var krav = storageService.save(Krav.builder().navn("Krav 1").kravNummer(50).build());
+        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).build());
 
         var resp = restTemplate.getForEntity("/krav/{id}", KravResponse.class, krav.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -57,7 +56,7 @@ public class KravIT extends IntegrationTestBase {
 
     @Test
     void getKravByNummer() {
-        var krav = storageService.save(Krav.builder().navn("Krav 1").kravNummer(50).build());
+        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).build());
 
         var resp = restTemplate.getForEntity("/krav/kravnummer/{nummer}/{versjon}", KravResponse.class, krav.getKravNummer(), krav.getKravVersjon());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -67,8 +66,8 @@ public class KravIT extends IntegrationTestBase {
 
     @Test
     void getAllKrav() {
-        storageService.save(Krav.builder().navn("Krav 1").kravNummer(50).build());
-        storageService.save(Krav.builder().navn("Krav 1").kravNummer(50).kravVersjon(2).build());
+        kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).build());
+        kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).kravVersjon(2).build());
 
         var resp = restTemplate.getForEntity("/krav?pageSize=1", KravPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -159,7 +158,7 @@ public class KravIT extends IntegrationTestBase {
 
     @Test
     void createKravVersjon() {
-        var kravOne = storageService.save(Krav.builder().kravNummer(50).kravVersjon(2).build());
+        var kravOne = kravStorageService.save(Krav.builder().kravNummer(50).kravVersjon(2).build());
         var req = KravRequest.builder()
                 .navn("Krav 2")
                 .kravNummer(kravOne.getKravNummer())
@@ -190,7 +189,7 @@ public class KravIT extends IntegrationTestBase {
 
     @Test
     void updateKrav() {
-        var krav = storageService.save(Krav.builder().navn("Krav 1").kravNummer(50).kravVersjon(1).build());
+        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).kravVersjon(1).build());
         var req = KravRequest.builder()
                 .navn("Krav 2")
                 .id(krav.getId().toString())
@@ -204,16 +203,16 @@ public class KravIT extends IntegrationTestBase {
 
     @Test
     void deleteKrav() {
-        var krav = storageService.save(Krav.builder().navn("Krav 1").kravNummer(50).kravVersjon(1).build());
+        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).kravVersjon(1).build());
         restTemplate.delete("/krav/{id}", krav.getId());
 
-        assertThat(storageService.getAll(Krav.class)).isEmpty();
+        assertThat(kravStorageService.getAll(Krav.class)).isEmpty();
     }
 
     @SneakyThrows
     @Test
     void uploadImages() {
-        var krav = storageService.save(Krav.builder().navn("Krav 1").build());
+        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").build());
 
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -240,12 +239,12 @@ public class KravIT extends IntegrationTestBase {
         assertThat(imageResized.getBody()).isNotNull();
 
         krav.setHensikt(id1);
-        storageService.save(krav);
+        kravStorageService.save(krav);
 
         jdbcTemplate.update("update generic_storage set last_modified_date = now() - interval '65 minute' where type = 'KravImage'");
-        assertThat(storageService.getAll(KravImage.class)).hasSize(2);
+        assertThat(kravImageStorageService.getAll(KravImage.class)).hasSize(2);
         kravService.cleanupImages();
-        assertThat(storageService.getAll(KravImage.class)).hasSize(1);
+        assertThat(kravImageStorageService.getAll(KravImage.class)).hasSize(1);
     }
 
     private void addImage(LinkedMultiValueMap<String, Object> body, final String name, byte[] content) {

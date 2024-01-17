@@ -7,12 +7,12 @@ import java.util.List;
 
 public interface KravRepoCustom {
 
-    List<GenericStorage> findByRelevans(String code);
+    List<GenericStorage<Krav>> findByRelevans(String code);
 
-    List<GenericStorage> findByVirkemiddelIder(String virkemiddelId);
+    List<GenericStorage<Krav>> findByVirkemiddelIder(String virkemiddelId);
 
-    List<GenericStorage> findBy(KravFilter filter);
+    List<GenericStorage<Krav>> findBy(KravFilter filter);
 
-    List<GenericStorage> findByLov(String lov);
+    List<GenericStorage<Krav>> findByLov(String lov);
 
 }

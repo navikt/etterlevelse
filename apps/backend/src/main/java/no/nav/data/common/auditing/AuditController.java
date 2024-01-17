@@ -37,10 +37,10 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 public class AuditController {
 
     private final AuditVersionRepository repository;
-    private final StorageService storage;
+    private final StorageService<MailLog> storage;
     private final MailLogRepository mailLogRepository;
 
-    public AuditController(AuditVersionRepository repository, StorageService storage, MailLogRepository mailLogRepository) {
+    public AuditController(AuditVersionRepository repository, StorageService<MailLog> storage, MailLogRepository mailLogRepository) {
         this.repository = repository;
         this.storage = storage;
         this.mailLogRepository = mailLogRepository;
@@ -76,7 +76,7 @@ public class AuditController {
     public ResponseEntity<RestResponsePage<MailLogResponse>> getAllMailLog(PageParameters paging) {
         log.info("Received request for MailLog {}", paging);
         Pageable pageable = paging.createSortedPageByFieldDescending("LAST_MODIFIED_DATE");
-        var page = mailLogRepository.findAll(pageable).map(GenericStorage::toMailLog).map(MailLog::toResponse);
+        var page = mailLogRepository.findAll(pageable).map(GenericStorage::getDomainObjectData).map(MailLog::toResponse);
         return new ResponseEntity<>(new RestResponsePage<>(page), HttpStatus.OK);
     }
 
@@ -85,7 +85,7 @@ public class AuditController {
     @GetMapping("/maillog/{id}")
     public ResponseEntity<MailLogResponse> findMailLog(@PathVariable UUID id) {
         log.info("Received request for MailLog with the id={}", id);
-        return new ResponseEntity<>(storage.get(id, MailLog.class).toResponse(), HttpStatus.OK);
+        return new ResponseEntity<>(storage.get(id).toResponse(), HttpStatus.OK);
     }
 
     @Operation(summary = "Get mail log for user")
@@ -94,15 +94,13 @@ public class AuditController {
     public ResponseEntity<RestResponsePage<MailLogResponse>> getMailLogForUser(@PathVariable String user) {
         log.info("Received request for MailLog for user {}", user);
         var list = mailLogRepository.findByTo(user);
-        return new ResponseEntity<>(new RestResponsePage<>(convert(list, gs -> gs.toMailLog().toResponse())), HttpStatus.OK);
+        return new ResponseEntity<>(new RestResponsePage<MailLogResponse>(convert(list, gs -> gs.getDomainObjectData().toResponse())), HttpStatus.OK);
     }
 
     static class AuditLogPage extends RestResponsePage<AuditResponse> {
-
     }
 
     static class MailLogPage extends RestResponsePage<MailLogResponse> {
-
     }
 
 }
