@@ -9,9 +9,6 @@ import {
   TVariables,
   query,
 } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
-import { user } from '../../../services/User'
-import { ettlevColors } from '../../../util/theme'
-import CustomizedTabs from '../../common/CustomizedTabs'
 import { AlleEtterlevelsesDokumentasjoner } from './AlleEtterlevelsesDokumentasjoner'
 import BehandlingSok from './BehandlingSok'
 import { MineEtterlevelseDokumentasjoner } from './MineEtterlevelseDokumentasjoner'
@@ -83,69 +80,43 @@ export const DokumentasjonTabs = () => {
   }, [tab])
 
   useEffect(() => {
-    // Move away from non-functional pages if user isn't logged in
-    if (tab !== 'alle' && user.isLoaded() && !user.isLoggedIn()) setTab('alle')
-  }, [user.isLoaded()])
-
-  useEffect(() => {
     setSortedTeams(sortTeams(teams))
   }, [teams])
+
   return (
-    <>
-      <Tabs
-        defaultValue={tab}
-        onChange={(args) => {
-          setTab(args as TSection)
-          navigate(`/dokumentasjoner/${args}`)
-        }}
-      >
-        <Tabs.List>
-          <Tabs.Tab value="mine" label="Mine dokumentasjoner" />
-          <Tabs.Tab value="siste" label="Mine siste dokumentasjoner" />
-          <Tabs.Tab value="alle" label="Alle" />
-          <Tabs.Tab value="behandlingsok" label="Søk med behandling" />
-        </Tabs.List>
-      </Tabs>
-      <CustomizedTabs
-        fontColor={ettlevColors.green800}
-        small
-        backgroundColor={ettlevColors.grey25}
-        activeKey={tab}
-        onChange={(args) => setTab(args.activeKey as TSection)}
-        tabs={[
-          {
-            key: 'mine',
-            title: 'Mine dokumentasjoner',
-            content: (
-              <MineEtterlevelseDokumentasjoner
-                teams={sortedTeams}
-                etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content}
-                loading={loading}
-              />
-            ),
-          },
-          {
-            key: 'siste',
-            title: 'Mine sist dokumenterte',
-            content: (
-              <SisteEtterlevelseDokumentasjoner
-                etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content}
-                loading={loading}
-              />
-            ),
-          },
-          {
-            key: 'alle',
-            title: 'Alle',
-            content: <AlleEtterlevelsesDokumentasjoner />,
-          },
-          {
-            key: 'behandlingsok',
-            title: 'Søk med behandling',
-            content: <BehandlingSok />,
-          },
-        ]}
-      />
-    </>
+    <Tabs
+      defaultValue={tab}
+      value={tab}
+      onChange={(args) => {
+        setTab(args as TSection)
+        navigate(`/dokumentasjoner/${args}`)
+      }}
+    >
+      <Tabs.List>
+        <Tabs.Tab value="mine" label="Mine dokumentasjoner" />
+        <Tabs.Tab value="siste" label="Mine siste dokumentasjoner" />
+        <Tabs.Tab value="alle" label="Alle" />
+        <Tabs.Tab value="behandlingsok" label="Søk med behandling" />
+      </Tabs.List>
+      <Tabs.Panel value="mine">
+        <MineEtterlevelseDokumentasjoner
+          teams={sortedTeams}
+          etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content}
+          loading={loading}
+        />
+      </Tabs.Panel>
+      <Tabs.Panel value="siste">
+        <SisteEtterlevelseDokumentasjoner
+          etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content}
+          loading={loading}
+        />
+      </Tabs.Panel>
+      <Tabs.Panel value="alle">
+        <AlleEtterlevelsesDokumentasjoner />
+      </Tabs.Panel>
+      <Tabs.Panel value="behandlingsok">
+        <BehandlingSok />
+      </Tabs.Panel>
+    </Tabs>
   )
 }
