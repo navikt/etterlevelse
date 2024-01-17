@@ -7,17 +7,14 @@ import { HeadingLarge, LabelLarge, LabelSmall, LabelXSmall } from 'baseui/typogr
 import { useEffect, useState } from 'react'
 import { IPageResponse, TEtterlevelseDokumentasjonQL, emptyPage } from '../../../constants'
 import { query } from '../../../pages/KravPage'
-import {
-  EtterlevelseDokumentasjonerPanels,
-  TVariables,
-  tabMarginBottom,
-} from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { TVariables, tabMarginBottom } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { theme } from '../../../util'
 import { useDebouncedState } from '../../../util/hooks'
 import { ettlevColors } from '../../../util/theme'
 import { clearSearchIcon, searchIcon } from '../../Images'
 import Button from '../../common/Button'
 import { borderWidth } from '../../common/Style'
+import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 
 export const AlleEtterlevelsesDokumentasjoner = () => {
   const [hover, setHover] = useState(false)
@@ -159,7 +156,7 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
             </Block>
           )}
 
-          <EtterlevelseDokumentasjonerPanels
+          <EtterlevelseDokumentasjonsPanels
             etterlevelseDokumentasjoner={getEtterlevelseDokumentasjonerWithoutDuplicates()}
             loading={loading}
           />

@@ -1,7 +1,7 @@
 import { ParagraphSmall } from 'baseui/typography'
 import moment from 'moment'
 import { TEtterlevelseDokumentasjonQL } from '../../../constants'
-import { EtterlevelseDokumentasjonerPanels } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 
 export const SisteEtterlevelseDokumentasjoner = ({
   etterlevelseDokumentasjoner,
@@ -16,7 +16,5 @@ export const SisteEtterlevelseDokumentasjoner = ({
     (a, b) =>
       moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf()
   )
-  return (
-    <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={sorted} loading={loading} />
-  )
+  return <EtterlevelseDokumentasjonsPanels etterlevelseDokumentasjoner={sorted} loading={loading} />
 }

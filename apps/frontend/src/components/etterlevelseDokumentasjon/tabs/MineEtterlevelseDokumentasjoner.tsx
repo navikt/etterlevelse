@@ -1,14 +1,12 @@
 import { BodyShort, Heading, Link } from '@navikt/ds-react'
 import { ParagraphSmall } from 'baseui/typography'
 import { TEtterlevelseDokumentasjonQL } from '../../../constants'
-import {
-  EtterlevelseDokumentasjonerPanels,
-  TCustomTeamObject,
-} from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { TCustomTeamObject } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { env } from '../../../util/env'
 import { ettlevColors } from '../../../util/theme'
 import { bamseIcon } from '../../Images'
 import { InfoBlock2 } from '../../common/InfoBlock'
+import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 
 export const MineEtterlevelseDokumentasjoner = ({
   etterlevelseDokumentasjoner,
@@ -22,9 +20,9 @@ export const MineEtterlevelseDokumentasjoner = ({
   <div className="my-5">
     {loading && (
       <div>
-        <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={[]} loading />
+        <EtterlevelseDokumentasjonsPanels etterlevelseDokumentasjoner={[]} loading />
         <div className="h-16" />
-        <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={[]} loading />
+        <EtterlevelseDokumentasjonsPanels etterlevelseDokumentasjoner={[]} loading />
       </div>
     )}
 
@@ -65,9 +63,7 @@ export const MineEtterlevelseDokumentasjoner = ({
                 </Block> */}
               </div>
 
-              <EtterlevelseDokumentasjonerPanels
-                etterlevelseDokumentasjoner={teamDokumentasjoner}
-              />
+              <EtterlevelseDokumentasjonsPanels etterlevelseDokumentasjoner={teamDokumentasjoner} />
             </div>
           )
         })}

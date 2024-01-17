@@ -13,15 +13,12 @@ import {
   TEtterlevelseDokumentasjonQL,
   emptyPage,
 } from '../../../constants'
-import {
-  EtterlevelseDokumentasjonerPanels,
-  TVariables,
-  tabMarginBottom,
-} from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { TVariables, tabMarginBottom } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { theme } from '../../../util'
 import { intl } from '../../../util/intl/intl'
 import Button from '../../common/Button'
 import CustomizedSelect from '../../common/CustomizedSelect'
+import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 import { updateBehandlingNameWithNumber } from '../common/utils'
 
 export const BehandlingSok = () => {
@@ -147,7 +144,7 @@ export const BehandlingSok = () => {
         <LabelLarge>{getBehandlingData()}</LabelLarge>
       </Block>
 
-      <EtterlevelseDokumentasjonerPanels
+      <EtterlevelseDokumentasjonsPanels
         etterlevelseDokumentasjoner={getEtterlevelseDokumentasjonerWithoutDuplicates()}
         loading={loading}
       />
