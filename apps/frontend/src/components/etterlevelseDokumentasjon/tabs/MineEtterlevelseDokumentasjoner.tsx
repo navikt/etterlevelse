@@ -1,18 +1,13 @@
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Block } from 'baseui/block'
-import { HeadingXLarge, ParagraphSmall } from 'baseui/typography'
+import { BodyShort, Heading, Link } from '@navikt/ds-react'
+import { ParagraphSmall } from 'baseui/typography'
 import { TEtterlevelseDokumentasjonQL } from '../../../constants'
 import {
   EtterlevelseDokumentasjonerPanels,
   TCustomTeamObject,
-  tabMarginBottom,
 } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
-import { theme } from '../../../util'
 import { env } from '../../../util/env'
 import { ettlevColors } from '../../../util/theme'
 import { bamseIcon } from '../../Images'
-import { ExternalButton } from '../../common/Button'
 import { InfoBlock2 } from '../../common/InfoBlock'
 
 export const MineEtterlevelseDokumentasjoner = ({
@@ -23,74 +18,76 @@ export const MineEtterlevelseDokumentasjoner = ({
   etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]
   teams: TCustomTeamObject[]
   loading: boolean
-}) => {
-  if (loading)
-    return (
-      <>
+}) => (
+  <div className="my-5">
+    {loading && (
+      <div>
         <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={[]} loading />
-        <Block height={'60px'} />
+        <div className="h-16" />
         <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={[]} loading />
-      </>
-    )
-  return (
-    <Block marginBottom={tabMarginBottom}>
-      {!etterlevelseDokumentasjoner.length && !teams.length && (
-        <ParagraphSmall>Du er ikke medlem av team med registrerte dokumentasjoner</ParagraphSmall>
-      )}
+      </div>
+    )}
 
-      {teams.map((t) => {
-        const teamDokumentasjoner = etterlevelseDokumentasjoner
-          .filter((e) => e.teamsData?.find((t2) => t2.id === t.id))
-          .filter(
-            (value, index, self) =>
-              index ===
-              self.findIndex(
-                (etterlevelseDokumentasjon) => etterlevelseDokumentasjon.id === value.id
-              )
-          )
-        return (
-          <Block key={t.id} marginBottom={theme.sizing.scale900}>
-            <Block display={'flex'} justifyContent={'space-between'}>
-              <Block>
-                <HeadingXLarge marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
-                  {t.name}
-                </HeadingXLarge>
-                <ParagraphSmall marginTop={0}>
-                  Teamet skal etterleve krav i{' '}
-                  <span style={{ fontWeight: 700 }}>
-                    {teamDokumentasjoner.length} dokumentasjoner
-                  </span>
-                </ParagraphSmall>
-              </Block>
-              {/* <Block alignSelf={'flex-end'} marginBottom={theme.sizing.scale400}>
+    {!loading && (
+      <div>
+        {!etterlevelseDokumentasjoner.length && !teams.length && (
+          <ParagraphSmall>Du er ikke medlem av team med registrerte dokumentasjoner</ParagraphSmall>
+        )}
+
+        {teams.map((t) => {
+          const teamDokumentasjoner = etterlevelseDokumentasjoner
+            .filter((e) => e.teamsData?.find((t2) => t2.id === t.id))
+            .filter(
+              (value, index, self) =>
+                index ===
+                self.findIndex(
+                  (etterlevelseDokumentasjon) => etterlevelseDokumentasjon.id === value.id
+                )
+            )
+          return (
+            <div key={t.id} className="mb-8">
+              <div className="flex justify-between">
+                <div>
+                  <Heading size="small" level="2">
+                    {t.name}
+                  </Heading>
+                  <BodyShort className="mb-2">
+                    Teamet skal etterleve krav i{' '}
+                    <span style={{ fontWeight: 700 }}>
+                      {teamDokumentasjoner.length} dokumentasjoner
+                    </span>
+                  </BodyShort>
+                </div>
+                {/* <Block alignSelf={'flex-end'} marginBottom={theme.sizing.scale400}>
                   <ExternalButton href={`${env.pollyBaseUrl}process/team/${t.id}`} underlineHover size={'mini'}>
                     Legg til behandling <FontAwesomeIcon icon={faExternalLinkAlt} />
                   </ExternalButton>
                 </Block> */}
-            </Block>
+              </div>
 
-            <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={teamDokumentasjoner} />
-          </Block>
-        )
-      })}
+              <EtterlevelseDokumentasjonerPanels
+                etterlevelseDokumentasjoner={teamDokumentasjoner}
+              />
+            </div>
+          )
+        })}
 
-      <Block maxWidth={'800px'} marginTop={'200px'}>
-        <InfoBlock2
-          icon={bamseIcon}
-          alt={'Bamseikon'}
-          title={'Savner du teamet ditt?'}
-          beskrivelse={
-            'Legg til teamet i teamkatalogen, så henter vi dokumentasjoner som skal etterleve krav'
-          }
-          backgroundColor={ettlevColors.grey25}
-        >
-          <Block marginTop={theme.sizing.scale600}>
-            <ExternalButton href={`${env.teamKatBaseUrl}`}>
-              Teamkatalogen <FontAwesomeIcon icon={faExternalLinkAlt} />
-            </ExternalButton>
-          </Block>
-        </InfoBlock2>
-      </Block>
-    </Block>
-  )
-}
+        <div className="max-w-[800px] mt-48">
+          <InfoBlock2
+            icon={bamseIcon}
+            alt={'Bamseikon'}
+            title={'Savner du teamet ditt?'}
+            beskrivelse={
+              'Legg til teamet i teamkatalogen, så henter vi dokumentasjoner som skal etterleve krav'
+            }
+            backgroundColor={ettlevColors.grey25}
+          >
+            <div className="mt-4">
+              <Link href={`${env.teamKatBaseUrl}`}>Teamkatalogen (åpnes i ny fane)</Link>
+            </div>
+          </InfoBlock2>
+        </div>
+      </div>
+    )}
+  </div>
+)
