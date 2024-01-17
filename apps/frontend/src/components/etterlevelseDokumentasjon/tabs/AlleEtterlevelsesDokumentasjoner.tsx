@@ -1,20 +1,13 @@
 import { useQuery } from '@apollo/client'
 import { PlusIcon } from '@navikt/aksel-icons'
-import { Button, Heading, Label, Loader } from '@navikt/ds-react'
-import { Block } from 'baseui/block'
-import { StatefulInput } from 'baseui/input'
+import { Button, Heading, Label, Loader, Search } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { IPageResponse, TEtterlevelseDokumentasjonQL, emptyPage } from '../../../constants'
 import { TVariables, query } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
-import { theme } from '../../../util'
 import { useDebouncedState } from '../../../util/hooks'
-import { ettlevColors } from '../../../util/theme'
-import { clearSearchIcon, searchIcon } from '../../Images'
-import { borderWidth } from '../../common/Style'
 import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 
 export const AlleEtterlevelsesDokumentasjoner = () => {
-  const [hover, setHover] = useState(false)
   const pageSize = 20
   const [pageNumber, setPage] = useState(0)
   const [sok, setSok] = useDebouncedState('', 300)
@@ -68,58 +61,16 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
 
   return (
     <div className="my-5">
-      <Label>Søk i alle dokumentasjoner</Label>
-      <Block
-        maxWidth="600px"
-        marginBottom={theme.sizing.scale1000}
-        display={'flex'}
-        flexDirection={'column'}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-      >
-        <StatefulInput
-          size="compact"
+      <div className="max-w-[600px] mb-10 flex flex-col">
+        <Search
+          label="Søk i alle dokumentasjoner"
+          variant="primary"
           placeholder="Søk"
-          aria-label={'Søk'}
-          onChange={(e) => setSok((e.target as HTMLInputElement).value)}
-          clearable
-          overrides={{
-            Root: { style: { paddingLeft: 0, paddingRight: 0, ...borderWidth('1px') } },
-            Input: {
-              style: {
-                backgroundColor: hover ? ettlevColors.green50 : undefined,
-              },
-            },
-            StartEnhancer: {
-              style: {
-                backgroundColor: hover ? ettlevColors.green50 : undefined,
-              },
-            },
-            ClearIconContainer: {
-              style: {
-                backgroundColor: hover ? ettlevColors.green50 : undefined,
-              },
-            },
-            ClearIcon: {
-              props: {
-                overrides: {
-                  Svg: {
-                    component: (props: any) => (
-                      <Button variant="tertiary" onClick={() => props.onClick()}>
-                        <img src={clearSearchIcon} alt="tøm" />
-                      </Button>
-                    ),
-                  },
-                },
-              },
-            },
-            // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
-          }}
-          startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
+          onChange={(inputValue) => setSok(inputValue)}
+          clearButton
         />
         {tooShort && <Label>Minimum 3 tegn</Label>}
-      </Block>
+      </div>
 
       {!tooShort && (
         <>

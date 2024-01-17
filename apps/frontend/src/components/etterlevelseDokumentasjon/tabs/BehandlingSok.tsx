@@ -1,11 +1,11 @@
 import { gql, useQuery } from '@apollo/client'
 import { PlusIcon } from '@navikt/aksel-icons'
 import { Button, Label, Loader } from '@navikt/ds-react'
-import { Block } from 'baseui/block'
-import { TYPE } from 'baseui/select'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { getBehandling, useSearchBehandling } from '../../../api/BehandlingApi'
+import { CSSObjectWithLabel } from 'react-select'
+import AsyncSelect from 'react-select/async'
+import { getBehandling, searchBehandlingOptions } from '../../../api/BehandlingApi'
 import {
   IBehandling,
   IPageResponse,
@@ -13,16 +13,11 @@ import {
   emptyPage,
 } from '../../../constants'
 import { TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
-import { theme } from '../../../util'
-import { intl } from '../../../util/intl/intl'
-import CustomizedSelect from '../../common/CustomizedSelect'
+import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
-import { updateBehandlingNameWithNumber } from '../common/utils'
 
 export const BehandlingSok = () => {
   const pageSize = 20
-  const [behandlingSearchResult, setBehandlingSearchResult, loadingBehandlingSearchResult] =
-    useSearchBehandling()
   const [searchParams, setSearchParams] = useSearchParams()
   const behandlingUUID = searchParams.get('behandlingId')
   const [selectedBehandling, setSelectedBehandling] = useState<IBehandling>()
@@ -104,32 +99,36 @@ export const BehandlingSok = () => {
 
   return (
     <div className="my-5">
-      <Block
-        maxWidth="600px"
-        marginBottom={theme.sizing.scale1000}
-        display={'flex'}
-        flexDirection={'column'}
-      >
-        <CustomizedSelect
-          placeholder="Søk behandlinger"
-          aria-label="Søk behandlinger"
-          noResultsMsg={intl.emptyTable}
-          maxDropdownHeight="350px"
-          searchable={true}
-          type={TYPE.search}
-          labelKey="navn"
-          onInputChange={(event) => setBehandlingSearchResult(event.currentTarget.value)}
-          options={updateBehandlingNameWithNumber(behandlingSearchResult)}
-          onChange={({ value }) => {
-            if (value && value.length > 0) {
-              setSelectedBehandling(value[0] as IBehandling)
-              searchParams.set('behandlingId', value[0].id ? value[0].id.toString() : '')
-              setSearchParams(searchParams)
+      <div className="max-w-[600px] mb-10 flex flex-col">
+        <AsyncSelect
+          aria-label="Søk etter behandlinger"
+          placeholder="Søk etter behandlinger"
+          components={{ DropdownIndicator }}
+          noOptionsMessage={({ inputValue }) =>
+            inputValue.length < 3
+              ? 'Skriv minst tre tegn for å søke'
+              : `Fant ingen resultater for "${inputValue}"`
+          }
+          controlShouldRenderValue={false}
+          loadingMessage={() => 'Søker...'}
+          isClearable={false}
+          loadOptions={searchBehandlingOptions}
+          onChange={(value) => {
+            if (value) {
+              setSelectedBehandling(value as IBehandling)
             }
           }}
-          isLoading={loadingBehandlingSearchResult}
+          styles={{
+            control: (base) =>
+              ({
+                ...base,
+                cursor: 'text',
+                height: '48px',
+              }) as CSSObjectWithLabel,
+          }}
         />
-      </Block>
+      </div>
+
       {loading && (
         <div>
           <div className="ml-2.5 mt-2.5">
