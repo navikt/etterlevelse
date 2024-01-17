@@ -32,7 +32,7 @@ import { user } from '../services/User'
 import { theme } from '../util'
 import { env } from '../util/env'
 import { useDebouncedState } from '../util/hooks'
-import { ettlevColors, maxPageWidth } from '../util/theme'
+import { ettlevColors } from '../util/theme'
 
 type TSection = 'mine' | 'siste' | 'alle' | 'behandlingsok'
 
@@ -69,22 +69,15 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      <Block
-        display={'flex'}
-        justifyContent="center"
-        width="100%"
-        $style={{
-          background: `linear-gradient(top, ${ettlevColors.grey50} 80px, ${ettlevColors.grey25} 0%)`,
-        }}
-      >
-        <Block maxWidth={maxPageWidth} width="100%">
-          <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
-            <DokumentasjonTabs />
-          </Block>
-        </Block>
-      </Block>
+        <div className="flex justify-center w-full">
+          <div className="w-full">
+            <div className="pt-6">
+              <DokumentasjonTabs />
+            </div>
+          </div>
+        </div>
+      </div>
     </PageLayout>
   )
 }
