@@ -115,7 +115,13 @@ export const BehandlingSok = () => {
           loadOptions={searchBehandlingOptions}
           onChange={(value) => {
             if (value) {
-              setSelectedBehandling(value as IBehandling)
+              const behandlingData = value as IBehandling
+              setSelectedBehandling(behandlingData)
+              searchParams.set(
+                'behandlingId',
+                behandlingData.id ? behandlingData.id.toString() : ''
+              )
+              setSearchParams(searchParams)
             }
           }}
           styles={{
