@@ -1,18 +1,16 @@
 import { useQuery } from '@apollo/client'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { Loader } from '@navikt/ds-react'
+import { PlusIcon } from '@navikt/aksel-icons'
+import { Button, Heading, Label, Loader } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import { StatefulInput } from 'baseui/input'
-import { HeadingLarge, LabelLarge, LabelSmall, LabelXSmall } from 'baseui/typography'
 import { useEffect, useState } from 'react'
 import { IPageResponse, TEtterlevelseDokumentasjonQL, emptyPage } from '../../../constants'
 import { query } from '../../../pages/KravPage'
-import { TVariables, tabMarginBottom } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { theme } from '../../../util'
 import { useDebouncedState } from '../../../util/hooks'
 import { ettlevColors } from '../../../util/theme'
 import { clearSearchIcon, searchIcon } from '../../Images'
-import Button from '../../common/Button'
 import { borderWidth } from '../../common/Style'
 import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 
@@ -70,8 +68,8 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
   }
 
   return (
-    <Block marginBottom={tabMarginBottom}>
-      <LabelLarge marginBottom={theme.sizing.scale200}>Søk i alle dokumentasjoner</LabelLarge>
+    <div className="my-5">
+      <Label>Søk i alle dokumentasjoner</Label>
       <Block
         maxWidth="600px"
         marginBottom={theme.sizing.scale1000}
@@ -108,12 +106,7 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
                 overrides: {
                   Svg: {
                     component: (props: any) => (
-                      <Button
-                        notBold
-                        size="compact"
-                        kind="tertiary"
-                        onClick={() => props.onClick()}
-                      >
+                      <Button variant="tertiary" onClick={() => props.onClick()}>
                         <img src={clearSearchIcon} alt="tøm" />
                       </Button>
                     ),
@@ -126,34 +119,26 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
           // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
         />
-        {tooShort && (
-          <LabelSmall
-            color={ettlevColors.error400}
-            alignSelf={'flex-end'}
-            marginTop={theme.sizing.scale200}
-          >
-            Minimum 3 tegn
-          </LabelSmall>
-        )}
+        {tooShort && <Label>Minimum 3 tegn</Label>}
       </Block>
 
       {!tooShort && (
         <>
           {loading && (
-            <Block>
-              <Block marginLeft={theme.sizing.scale400} marginTop={theme.sizing.scale400}>
+            <div>
+              <div className="mx-2.5">
                 <Loader size="large" />
-              </Block>
-            </Block>
+              </div>
+            </div>
           )}
 
           {!loading && !!sok && (
-            <Block>
-              <HeadingLarge color={ettlevColors.green600}>
+            <div>
+              <Heading size="small" level="2">
                 {etterlevelseDokumentasjoner.totalElements} treff: “{sok}”
-              </HeadingLarge>
-              {!etterlevelseDokumentasjoner.totalElements && <LabelXSmall>Ingen treff</LabelXSmall>}
-            </Block>
+              </Heading>
+              {!etterlevelseDokumentasjoner.totalElements && <Label>Ingen treff</Label>}
+            </div>
           )}
 
           <EtterlevelseDokumentasjonsPanels
@@ -162,17 +147,12 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
           />
 
           {!loading && etterlevelseDokumentasjoner.totalElements !== 0 && (
-            <Block
-              display={'flex'}
-              justifyContent={'space-between'}
-              marginTop={theme.sizing.scale1000}
-            >
-              <Block display="flex" alignItems="center">
+            <div className="flex justify-between mt-10">
+              <div className="flex items-center">
                 <Button
                   onClick={lastMer}
-                  icon={faPlus}
-                  kind={'secondary'}
-                  size="compact"
+                  icon={<PlusIcon title="" aria-label="" aria-hidden />}
+                  variant={'secondary'}
                   disabled={
                     gqlLoading ||
                     etterlevelseDokumentasjoner.numberOfElements >=
@@ -183,19 +163,19 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
                 </Button>
 
                 {gqlLoading && (
-                  <Block marginLeft={theme.sizing.scale400}>
+                  <div className="ml-2.5">
                     <Loader size="large" />
-                  </Block>
+                  </div>
                 )}
-              </Block>
-              <LabelSmall marginRight={theme.sizing.scale400}>
+              </div>
+              <Label className="mr-2.5">
                 Viser {etterlevelseDokumentasjoner.numberOfElements}/
                 {etterlevelseDokumentasjoner.totalElements}
-              </LabelSmall>
-            </Block>
+              </Label>
+            </div>
           )}
         </>
       )}
-    </Block>
+    </div>
   )
 }
