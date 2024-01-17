@@ -1,9 +1,8 @@
 import { gql, useQuery } from '@apollo/client'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { Loader } from '@navikt/ds-react'
+import { PlusIcon } from '@navikt/aksel-icons'
+import { Button, Label, Loader } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import { TYPE } from 'baseui/select'
-import { LabelLarge, LabelSmall } from 'baseui/typography'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { getBehandling, useSearchBehandling } from '../../../api/BehandlingApi'
@@ -13,10 +12,9 @@ import {
   TEtterlevelseDokumentasjonQL,
   emptyPage,
 } from '../../../constants'
-import { TVariables, tabMarginBottom } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { theme } from '../../../util'
 import { intl } from '../../../util/intl/intl'
-import Button from '../../common/Button'
 import CustomizedSelect from '../../common/CustomizedSelect'
 import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 import { updateBehandlingNameWithNumber } from '../common/utils'
@@ -105,7 +103,7 @@ export const BehandlingSok = () => {
   }
 
   return (
-    <Block marginBottom={tabMarginBottom}>
+    <div className="my-5">
       <Block
         maxWidth="600px"
         marginBottom={theme.sizing.scale1000}
@@ -133,16 +131,16 @@ export const BehandlingSok = () => {
         />
       </Block>
       {loading && (
-        <Block>
-          <Block marginLeft={theme.sizing.scale400} marginTop={theme.sizing.scale400}>
+        <div>
+          <div className="ml-2.5 mt-2.5">
             <Loader size="large" />
-          </Block>
-        </Block>
+          </div>
+        </div>
       )}
 
-      <Block marginBottom={theme.sizing.scale600}>
-        <LabelLarge>{getBehandlingData()}</LabelLarge>
-      </Block>
+      <div className="mb-4">
+        <Label>{getBehandlingData()}</Label>
+      </div>
 
       <EtterlevelseDokumentasjonsPanels
         etterlevelseDokumentasjoner={getEtterlevelseDokumentasjonerWithoutDuplicates()}
@@ -150,13 +148,12 @@ export const BehandlingSok = () => {
       />
 
       {!loading && etterlevelseDokumentasjoner.totalElements !== 0 && (
-        <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
-          <Block display="flex" alignItems="center">
+        <div className="flex justify-between mt-10">
+          <div className="flex items-center">
             <Button
               onClick={lastMer}
-              icon={faPlus}
-              kind={'secondary'}
-              size="compact"
+              icon={<PlusIcon title="" aria-label="" aria-hidden />}
+              variant={'secondary'}
               disabled={
                 gqlLoading ||
                 etterlevelseDokumentasjoner.numberOfElements >=
@@ -167,18 +164,18 @@ export const BehandlingSok = () => {
             </Button>
 
             {gqlLoading && (
-              <Block marginLeft={theme.sizing.scale400}>
+              <div className="ml-2.5">
                 <Loader size="large" />
-              </Block>
+              </div>
             )}
-          </Block>
-          <LabelSmall marginRight={theme.sizing.scale400}>
+          </div>
+          <Label className="mr-2.5">
             Viser {etterlevelseDokumentasjoner.numberOfElements}/
             {etterlevelseDokumentasjoner.totalElements}
-          </LabelSmall>
-        </Block>
+          </Label>
+        </div>
       )}
-    </Block>
+    </div>
   )
 }
 
