@@ -4,6 +4,7 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from '../components/common/Markdown'
+import { EtterlevelseDokumentasjonsPanel } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonsPanel'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import { PageLayout } from '../components/scaffold/Page'
 import {
@@ -141,34 +142,20 @@ const EtterlevelseDokumentasjonList = ({
         Mine sist dokumenterte
       </Heading>
       <div className="mt-6 flex flex-col gap-2">
-        {sortedEtterlevelseDokumentasjoner.map((etterlevelseDokumentasjon, index) => {
-          return (
-            <LinkPanel
-              href={'/dokumentasjon/' + etterlevelseDokumentasjon.id}
-              onClick={() =>
-                ampli.logEvent('navigere', {
-                  app: 'etterlevelse',
-                  kilde: 'forside-panel',
-                  til: `'/dokumentasjon/' + ${etterlevelseDokumentasjon.id}`,
-                  fra: '/',
-                })
-              }
-              key={etterlevelseDokumentasjon.title + '_' + index}
-            >
-              <LinkPanel.Title className="text-xl">
-                E{etterlevelseDokumentasjon.etterlevelseNummer} {etterlevelseDokumentasjon.title}
-              </LinkPanel.Title>
-              <LinkPanel.Description>
-                {etterlevelseDokumentasjon.sistEndretEtterlevelse !== undefined &&
-                etterlevelseDokumentasjon.sistEndretEtterlevelse !== ''
-                  ? `Sist endret: ${moment(etterlevelseDokumentasjon.sistEndretEtterlevelse).format(
-                      'll'
-                    )}`
-                  : ''}
-              </LinkPanel.Description>
-            </LinkPanel>
-          )
-        })}
+        {sortedEtterlevelseDokumentasjoner.map((etterlevelseDokumentasjon, index) => (
+          <EtterlevelseDokumentasjonsPanel
+            key={etterlevelseDokumentasjon.title + '_' + index}
+            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+            onClick={() =>
+              ampli.logEvent('navigere', {
+                app: 'etterlevelse',
+                kilde: 'forside-panel',
+                til: `'/dokumentasjon/' + ${etterlevelseDokumentasjon.id}`,
+                fra: '/',
+              })
+            }
+          />
+        ))}
       </div>
     </div>
   )
