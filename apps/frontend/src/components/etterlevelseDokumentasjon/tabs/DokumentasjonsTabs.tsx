@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client'
+import { Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMyTeams } from '../../../api/TeamApi'
@@ -90,45 +91,61 @@ export const DokumentasjonTabs = () => {
     setSortedTeams(sortTeams(teams))
   }, [teams])
   return (
-    <CustomizedTabs
-      fontColor={ettlevColors.green800}
-      small
-      backgroundColor={ettlevColors.grey25}
-      activeKey={tab}
-      onChange={(args) => setTab(args.activeKey as TSection)}
-      tabs={[
-        {
-          key: 'mine',
-          title: 'Mine dokumentasjoner',
-          content: (
-            <MineEtterlevelseDokumentasjoner
-              teams={sortedTeams}
-              etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content}
-              loading={loading}
-            />
-          ),
-        },
-        {
-          key: 'siste',
-          title: 'Mine sist dokumenterte',
-          content: (
-            <SisteEtterlevelseDokumentasjoner
-              etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content}
-              loading={loading}
-            />
-          ),
-        },
-        {
-          key: 'alle',
-          title: 'Alle',
-          content: <AlleEtterlevelsesDokumentasjoner />,
-        },
-        {
-          key: 'behandlingsok',
-          title: 'Søk med behandling',
-          content: <BehandlingSok />,
-        },
-      ]}
-    />
+    <>
+      <Tabs
+        defaultValue={tab}
+        onChange={(args) => {
+          setTab(args as TSection)
+          navigate(`/dokumentasjoner/${args}`)
+        }}
+      >
+        <Tabs.List>
+          <Tabs.Tab value="mine" label="Mine dokumentasjoner" />
+          <Tabs.Tab value="siste" label="Mine siste dokumentasjoner" />
+          <Tabs.Tab value="alle" label="Alle" />
+          <Tabs.Tab value="behandlingsok" label="Søk med behandling" />
+        </Tabs.List>
+      </Tabs>
+      <CustomizedTabs
+        fontColor={ettlevColors.green800}
+        small
+        backgroundColor={ettlevColors.grey25}
+        activeKey={tab}
+        onChange={(args) => setTab(args.activeKey as TSection)}
+        tabs={[
+          {
+            key: 'mine',
+            title: 'Mine dokumentasjoner',
+            content: (
+              <MineEtterlevelseDokumentasjoner
+                teams={sortedTeams}
+                etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content}
+                loading={loading}
+              />
+            ),
+          },
+          {
+            key: 'siste',
+            title: 'Mine sist dokumenterte',
+            content: (
+              <SisteEtterlevelseDokumentasjoner
+                etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content}
+                loading={loading}
+              />
+            ),
+          },
+          {
+            key: 'alle',
+            title: 'Alle',
+            content: <AlleEtterlevelsesDokumentasjoner />,
+          },
+          {
+            key: 'behandlingsok',
+            title: 'Søk med behandling',
+            content: <BehandlingSok />,
+          },
+        ]}
+      />
+    </>
   )
 }
