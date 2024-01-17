@@ -1,13 +1,12 @@
 import { gql, useQuery } from '@apollo/client'
 import { faExternalLinkAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Loader } from '@navikt/ds-react'
+import { Button, Heading, Loader } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import { StatefulInput } from 'baseui/input'
 import {
   HeadingLarge,
   HeadingXLarge,
-  HeadingXXLarge,
   LabelLarge,
   LabelSmall,
   LabelXSmall,
@@ -15,12 +14,10 @@ import {
 } from 'baseui/typography'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMyTeams } from '../api/TeamApi'
 import { arkPennIcon, bamseIcon, clearSearchIcon, searchIcon } from '../components/Images'
-import Button, { ExternalButton } from '../components/common/Button'
-import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
+import { ExternalButton } from '../components/common/Button'
 import CustomizedTabs from '../components/common/CustomizedTabs'
 import { InfoBlock2 } from '../components/common/InfoBlock'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
@@ -28,6 +25,7 @@ import { PanelLink } from '../components/common/PanelLink'
 import { borderWidth } from '../components/common/Style'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import BehandlingSok from '../components/etterlevelseDokumentasjon/tabs/BehandlingSok'
+import { PageLayout } from '../components/scaffold/Page'
 import { IPageResponse, ITeam, TEtterlevelseDokumentasjonQL, emptyPage } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { user } from '../services/User'
@@ -54,42 +52,24 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
   })
 
   return (
-    <Block
-      width="100%"
-      paddingBottom={'200px'}
-      id="content"
-      overrides={{ Block: { props: { role: 'main' } } }}
-    >
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Dokumentere etterlevelse</title>
-      </Helmet>
-      <Block
-        width="100%"
-        backgroundColor={ettlevColors.grey50}
-        display={'flex'}
-        justifyContent={'center'}
-      >
-        <Block maxWidth={maxPageWidth} width="100%">
-          <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
-            {/* <RouteLink hideUnderline>
-            <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{ transform: 'rotate(180deg)' }} />} size="compact" kind="tertiary">
-              {' '}
-              Tilbake
-            </Button>
-          </RouteLink> */}
-            <CustomizedBreadcrumbs currentPage="Dokumentere etterlevelse" />
-            <Block display="flex">
-              <Block flex="1">
-                <HeadingXXLarge marginTop="0">Dokumentere etterlevelse</HeadingXXLarge>
-              </Block>
-              <Block display="flex" justifyContent="flex-end">
-                <EditEtterlevelseDokumentasjonModal />
-              </Block>
-            </Block>
-          </Block>
-        </Block>
-      </Block>
+    <PageLayout pageTitle="Dokumentere etterlevelse" currentPage="Dokumentere etterlevelse">
+      <div className="pb-52 w-full">
+        <div className="w-full flex justify-center">
+          <div className="w-full">
+            <div>
+              <div className="flex">
+                <div className="flex-1">
+                  <Heading size="medium">Dokumentere etterlevelse</Heading>
+                </div>
+
+                <div className="flex justify-end">
+                  <EditEtterlevelseDokumentasjonModal />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <Block
         display={'flex'}
@@ -105,7 +85,7 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
           </Block>
         </Block>
       </Block>
-    </Block>
+    </PageLayout>
   )
 }
 
