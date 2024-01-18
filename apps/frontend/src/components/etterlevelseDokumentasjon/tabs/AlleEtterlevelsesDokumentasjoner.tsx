@@ -64,7 +64,7 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
       <div className="max-w-[600px] mb-10 flex flex-col">
         <Search
           label="Søk i alle dokumentasjoner"
-          variant="primary"
+          variant="secondary"
           placeholder="Søk"
           onChange={(inputValue) => setSok(inputValue)}
           clearButton
