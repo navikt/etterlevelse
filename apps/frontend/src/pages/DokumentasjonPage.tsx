@@ -1,18 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import {
-  Accordion,
-  BodyShort,
-  Button,
-  ExpansionCard,
-  Heading,
-  Label,
-  Link,
-  Loader,
-  Tag,
-} from '@navikt/ds-react'
-import { Block } from 'baseui/block'
-import moment from 'moment'
+import { BodyShort, Button, ExpansionCard, Heading, Label, Loader, Tag } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 import { useParams } from 'react-router-dom'
@@ -24,26 +12,21 @@ import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { ExternalLink } from '../components/common/RouteLink'
 import { Teams } from '../components/common/TeamName'
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
+import { KravAccordionList } from '../components/etterlevelseDokumentasjon/KravAccordionList'
 import { getNewestKravVersjon } from '../components/etterlevelseDokumentasjon/common/utils'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
-import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
-import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { PageLayout } from '../components/scaffold/Page'
 import {
-  EEtterlevelseStatus,
-  EKravFilterType,
   IEtterlevelseDokumentasjonStats,
   IKravPrioritering,
   IPageResponse,
   TKravQL,
 } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, ICode, TTemaCode, codelist } from '../services/Codelist'
+import { EListName, ICode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
-import { getNumberOfDaysBetween } from '../util/checkAge'
 import { env } from '../util/env'
-import { theme } from '../util/theme'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 
 export const DokumentasjonPage = () => {
@@ -185,12 +168,6 @@ export const DokumentasjonPage = () => {
     )
   }
 
-  const toggleAccordion = (index: number) => {
-    const newState = [...openAccordions]
-    newState[index] = !openAccordions[index]
-    setOpenAccordions(newState)
-  }
-
   if (!etterlevelseDokumentasjon) return <LoadingSkeleton header="Dokumentasjon" />
 
   const breadcrumbPaths: IBreadcrumbPaths[] = [
@@ -199,15 +176,6 @@ export const DokumentasjonPage = () => {
       href: '/dokumentasjoner',
     },
   ]
-
-  const getKravForTema = (tema: TTemaCode) => {
-    const lover = codelist.getCodesForTema(tema.code)
-    const lovCodes = lover.map((c) => c.code)
-    const krav = relevanteStats.filter((k) =>
-      k.regelverk.map((r: any) => r.lov.code).some((r: any) => lovCodes.includes(r))
-    )
-    return filterKrav(kravPriority, krav, tema)
-  }
 
   const {
     etterlevelseNummer,
@@ -348,95 +316,33 @@ export const DokumentasjonPage = () => {
         </div>
 
         {loading ? (
-          <Block
-            display="flex"
-            width="100%"
-            justifyContent="center"
-            marginTop={theme.sizing.scale550}
-          >
+          <div className="flex w-full justify-center mt-3.5">
             <Loader size={'large'} />
-          </Block>
+          </div>
         ) : (
-          <Accordion indent={false}>
-            {temaListe
-              .filter((tema) => getKravForTema(tema).length > 0)
-              .map((tema, index) => {
-                const kravliste = getKravForTema(tema)
-                const utfylteKrav = kravliste.filter(
-                  (krav) =>
-                    krav.etterlevelseStatus === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
-                    krav.etterlevelseStatus === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
-                )
-                return (
-                  <Accordion.Item
-                    key={`${tema.shortName}_panel`}
-                    className="flex flex-col gap-2"
-                    open={openAccordions[index]}
-                  >
-                    <Accordion.Header id={tema.code} onClick={() => toggleAccordion(index)}>
-                      <div className="flex gap-4">
-                        <span>
-                          {tema.shortName} ({utfylteKrav.length} av {kravliste.length} krav er
-                          ferdig utfylt)
-                        </span>
-                        {kravliste.find(
-                          (krav) =>
-                            krav.kravVersjon === 1 &&
-                            krav.etterlevelseStatus === undefined &&
-                            getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) <
-                              30
-                        ) && <Tag variant="warning">Nytt krav</Tag>}
-                        {kravliste.find(
-                          (krav) =>
-                            krav.kravVersjon > 1 &&
-                            krav.etterlevelseStatus === undefined &&
-                            utgaattStats.filter(
-                              (kl) =>
-                                kl.kravNummer === krav.kravNummer && kl.etterlevelser.length > 0
-                            ).length > 0 &&
-                            getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) <
-                              30
-                        ) && <Tag variant="warning">Ny versjon</Tag>}
-                      </div>
-                    </Accordion.Header>
-                    <Accordion.Content>
-                      <div className="flex flex-col gap-6">
-                        <div>
-                          <Link href={`/tema/${tema.code}`} target="_blank">
-                            Lær mer om {tema.shortName} (åpnes i ny fane)
-                          </Link>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                          {kravliste.map((krav, idx) => (
-                            <KravCard
-                              key={`krav_${idx}`}
-                              krav={krav}
-                              kravFilter={EKravFilterType.RELEVANTE_KRAV}
-                              etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                              temaCode={tema.code}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </Accordion.Content>
-                  </Accordion.Item>
-                )
-              })}
-          </Accordion>
+          <KravAccordionList
+            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+            relevanteStats={relevanteStats}
+            utgaattStats={utgaattStats}
+            temaListe={temaListe}
+            kravPriority={kravPriority}
+            openAccordions={openAccordions}
+            setOpenAccordions={setOpenAccordions}
+          />
         )}
         {/*
         DISABLED TEMPORARY
         {irrelevanteStats.length > 0 && (
           <>
-            <Block>
+            <div>
               <H3>Tema dere har filtrert bort</H3>
               <ParagraphMedium maxWidth={'574px'}>Dere har filtrert bort tema med krav som dere må kjenne til og selv vurdere om dere skal etterleve.</ParagraphMedium>
-            </Block>
-            <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
+            </div>
+            <div display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
               {temaListe.map((tema) => (
                 <TemaCardBehandling tema={tema} stats={irrelevanteStats} behandling={behandling} key={`${tema.shortName}_panel`} irrelevant={true}/>
               ))}
-            </Block>
+            </div>
           </>
         )} */}
         <div className="w-full flex justify-end items-center">
