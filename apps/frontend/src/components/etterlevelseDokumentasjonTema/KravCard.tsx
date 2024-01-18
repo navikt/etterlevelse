@@ -6,7 +6,12 @@ import {
   getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion,
   mapEtterlevelseMetadataToFormValue,
 } from '../../api/EtterlevelseMetadataApi'
-import { EKravFilterType, IEtterlevelseMetadata, TKravEtterlevelseData } from '../../constants'
+import {
+  EEtterlevelseStatus,
+  EKravFilterType,
+  IEtterlevelseMetadata,
+  TKravEtterlevelseData,
+} from '../../constants'
 import { getNumberOfDaysBetween } from '../../util/checkAge'
 import { warningAlert } from '../Images'
 import StatusView from '../common/StatusTag'
@@ -15,31 +20,40 @@ import {
   getStatusLabelColor,
 } from '../etterlevelseDokumentasjon/common/utils'
 
-export const KravCard = (props: {
+interface IProps {
   krav: TKravEtterlevelseData
   noStatus?: boolean
   etterlevelseDokumentasjonId: string
   noVarsling?: boolean
   kravFilter: EKravFilterType
   temaCode?: string
-}) => {
+}
+
+export const KravCard = (props: IProps) => {
+  const { noVarsling, krav, kravFilter, temaCode, etterlevelseDokumentasjonId } = props
+
+  const isIngenEtterlevelse = krav.etterlevelseStatus === undefined
+  const isOppfyllesSenereEtterlevelse =
+    krav.etterlevelseStatus === EEtterlevelseStatus.OPPFYLLES_SENERE
+  const isVarslingStatus = !noVarsling && (isIngenEtterlevelse || isOppfyllesSenereEtterlevelse)
+
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
   const [kravAge, setKravAge] = useState<number>(0)
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<IEtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
       id: 'ny',
-      etterlevelseDokumentasjonId: props.etterlevelseDokumentasjonId,
-      kravNummer: props.krav.kravNummer,
-      kravVersjon: props.krav.kravVersjon,
+      etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
+      kravNummer: krav.kravNummer,
+      kravVersjon: krav.kravVersjon,
     })
   )
 
   const getEtterlevelseMetaData = () => {
     getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(
-      props.etterlevelseDokumentasjonId,
-      props.krav.kravNummer,
-      props.krav.kravVersjon
+      etterlevelseDokumentasjonId,
+      krav.kravNummer,
+      krav.kravVersjon
     ).then((resp) => {
       if (resp.content.length) {
         setEtterlevelseMetadata(resp.content[0])
@@ -47,9 +61,9 @@ export const KravCard = (props: {
         setEtterlevelseMetadata(
           mapEtterlevelseMetadataToFormValue({
             id: 'ny',
-            etterlevelseDokumentasjonId: props.etterlevelseDokumentasjonId,
-            kravNummer: props.krav.kravNummer,
-            kravVersjon: props.krav.kravVersjon,
+            etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
+            kravNummer: krav.kravNummer,
+            kravVersjon: krav.kravVersjon,
           })
         )
       }
@@ -58,15 +72,15 @@ export const KravCard = (props: {
 
   useEffect(() => {
     const today = new Date()
-    setKravAge(getNumberOfDaysBetween(props.krav.aktivertDato, today))
+    setKravAge(getNumberOfDaysBetween(krav.aktivertDato, today))
     ;(async () => {
       getEtterlevelseMetaData()
-      if (props.krav.kravVersjon > 1 && props.krav.etterlevelseStatus === undefined) {
+      if (krav.kravVersjon > 1 && isIngenEtterlevelse) {
         setNyVersionFlag(
           (
             await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(
-              props.etterlevelseDokumentasjonId,
-              props.krav.kravNummer
+              etterlevelseDokumentasjonId,
+              krav.kravNummer
             )
           ).content.length >= 1
         )
@@ -76,34 +90,32 @@ export const KravCard = (props: {
 
   return (
     <LinkPanel
-      href={`/dokumentasjon/${props.etterlevelseDokumentasjonId}/${props.temaCode}/RELEVANTE_KRAV/krav/${props.krav.kravNummer}/${props.krav.kravVersjon}/`}
+      href={`/dokumentasjon/${etterlevelseDokumentasjonId}/${temaCode}/RELEVANTE_KRAV/krav/${krav.kravNummer}/${krav.kravVersjon}/`}
     >
       <div className="md:flex justify-between">
         <div className="self-start">
           <div className="flex items-center">
             <Detail weight="semibold">
-              K{props.krav.kravNummer}.{props.krav.kravVersjon}
+              K{krav.kravNummer}.{krav.kravVersjon}
             </Detail>
             <div className="ml-4">
-              {!props.noVarsling &&
-                props.krav.kravVersjon === 1 &&
-                props.krav.etterlevelseStatus === undefined &&
-                kravAge < 30 && <ShowWarningMessage warningMessage="Nytt krav" />}
-              {!props.noVarsling &&
-                props.krav.etterlevelseStatus === undefined &&
+              {isVarslingStatus && krav.kravVersjon === 1 && kravAge < 30 && (
+                <ShowWarningMessage warningMessage="Nytt krav" />
+              )}
+              {isVarslingStatus &&
                 nyVersionFlag &&
-                props.kravFilter === EKravFilterType.RELEVANTE_KRAV &&
+                kravFilter === EKravFilterType.RELEVANTE_KRAV &&
                 kravAge < 30 && <ShowWarningMessage warningMessage="Ny versjon" />}
             </div>
           </div>
-          <BodyShort>{props.krav.navn}</BodyShort>
+          <BodyShort>{krav.navn}</BodyShort>
           <div className="flex gap-2">
-            {!props.krav.isIrrelevant && (
+            {!krav.isIrrelevant && (
               <div className="md:flex w-full gap-2">
-                {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (
+                {krav.etterlevelseChangeStamp?.lastModifiedDate && (
                   <Detail className="whitespace-nowrap">
                     {'Sist utfylt: ' +
-                      moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
+                      moment(krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
                   </Detail>
                 )}
                 {etterlevelseMetadata &&
@@ -120,23 +132,19 @@ export const KravCard = (props: {
             )}
           </div>
         </div>
-        {props.kravFilter === EKravFilterType.RELEVANTE_KRAV &&
-          props.krav &&
-          props.krav.etterlevelseStatus && (
-            <div className="self-center">
-              <StatusView
-                status={getEtterlevelseStatus(props.krav.etterlevelseStatus, props.krav.frist)}
-                variant={getStatusLabelColor(props.krav.etterlevelseStatus)}
-              />
-            </div>
-          )}
-
-        {props.kravFilter !== EKravFilterType.RELEVANTE_KRAV && (
+        {kravFilter === EKravFilterType.RELEVANTE_KRAV && krav && krav.etterlevelseStatus && (
           <div className="self-center">
             <StatusView
-              status={
-                props.kravFilter === EKravFilterType.BORTFILTTERTE_KRAV ? 'Bortfiltrert' : 'Utgått'
-              }
+              status={getEtterlevelseStatus(krav.etterlevelseStatus, krav.frist)}
+              variant={getStatusLabelColor(krav.etterlevelseStatus)}
+            />
+          </div>
+        )}
+
+        {kravFilter !== EKravFilterType.RELEVANTE_KRAV && (
+          <div className="self-center">
+            <StatusView
+              status={kravFilter === EKravFilterType.BORTFILTTERTE_KRAV ? 'Bortfiltrert' : 'Utgått'}
             />
           </div>
         )}
@@ -145,11 +153,9 @@ export const KravCard = (props: {
   )
 }
 
-export const ShowWarningMessage = ({ warningMessage }: { warningMessage: string }) => {
-  return (
-    <div className="flex items-center gap-2">
-      <img src={warningAlert} width="18px" height="18px" alt="warning icon" />
-      <Detail className="whitespace-nowrap">{warningMessage}</Detail>
-    </div>
-  )
-}
+export const ShowWarningMessage = ({ warningMessage }: { warningMessage: string }) => (
+  <div className="flex items-center gap-2">
+    <img src={warningAlert} width="18px" height="18px" alt="warning icon" />
+    <Detail className="whitespace-nowrap">{warningMessage}</Detail>
+  </div>
+)
