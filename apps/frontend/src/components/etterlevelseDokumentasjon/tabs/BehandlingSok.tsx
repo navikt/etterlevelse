@@ -1,33 +1,23 @@
 import { gql, useQuery } from '@apollo/client'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { Loader } from '@navikt/ds-react'
-import { Block } from 'baseui/block'
-import { TYPE } from 'baseui/select'
-import { LabelLarge, LabelSmall } from 'baseui/typography'
+import { PlusIcon } from '@navikt/aksel-icons'
+import { Button, Label, Loader } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { getBehandling, useSearchBehandling } from '../../../api/BehandlingApi'
+import { CSSObjectWithLabel } from 'react-select'
+import AsyncSelect from 'react-select/async'
+import { getBehandling, searchBehandlingOptions } from '../../../api/BehandlingApi'
 import {
   IBehandling,
   IPageResponse,
   TEtterlevelseDokumentasjonQL,
   emptyPage,
 } from '../../../constants'
-import {
-  EtterlevelseDokumentasjonerPanels,
-  TVariables,
-  tabMarginBottom,
-} from '../../../pages/MyEtterlevelseDokumentasjonerPage'
-import { theme } from '../../../util'
-import { intl } from '../../../util/intl/intl'
-import Button from '../../common/Button'
-import CustomizedSelect from '../../common/CustomizedSelect'
-import { updateBehandlingNameWithNumber } from '../common/utils'
+import { TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
+import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 
 export const BehandlingSok = () => {
   const pageSize = 20
-  const [behandlingSearchResult, setBehandlingSearchResult, loadingBehandlingSearchResult] =
-    useSearchBehandling()
   const [searchParams, setSearchParams] = useSearchParams()
   const behandlingUUID = searchParams.get('behandlingId')
   const [selectedBehandling, setSelectedBehandling] = useState<IBehandling>()
@@ -108,58 +98,67 @@ export const BehandlingSok = () => {
   }
 
   return (
-    <Block marginBottom={tabMarginBottom}>
-      <Block
-        maxWidth="600px"
-        marginBottom={theme.sizing.scale1000}
-        display={'flex'}
-        flexDirection={'column'}
-      >
-        <CustomizedSelect
-          placeholder="Søk behandlinger"
-          aria-label="Søk behandlinger"
-          noResultsMsg={intl.emptyTable}
-          maxDropdownHeight="350px"
-          searchable={true}
-          type={TYPE.search}
-          labelKey="navn"
-          onInputChange={(event) => setBehandlingSearchResult(event.currentTarget.value)}
-          options={updateBehandlingNameWithNumber(behandlingSearchResult)}
-          onChange={({ value }) => {
-            if (value && value.length > 0) {
-              setSelectedBehandling(value[0] as IBehandling)
-              searchParams.set('behandlingId', value[0].id ? value[0].id.toString() : '')
+    <div className="my-5">
+      <div className="max-w-[600px] mb-10 flex flex-col">
+        <AsyncSelect
+          aria-label="Søk etter behandlinger"
+          placeholder="Søk etter behandlinger"
+          components={{ DropdownIndicator }}
+          noOptionsMessage={({ inputValue }) =>
+            inputValue.length < 3
+              ? 'Skriv minst tre tegn for å søke'
+              : `Fant ingen resultater for "${inputValue}"`
+          }
+          controlShouldRenderValue={false}
+          loadingMessage={() => 'Søker...'}
+          isClearable={false}
+          loadOptions={searchBehandlingOptions}
+          onChange={(value) => {
+            if (value) {
+              const behandlingData = value as IBehandling
+              setSelectedBehandling(behandlingData)
+              searchParams.set(
+                'behandlingId',
+                behandlingData.id ? behandlingData.id.toString() : ''
+              )
               setSearchParams(searchParams)
             }
           }}
-          isLoading={loadingBehandlingSearchResult}
+          styles={{
+            control: (base) =>
+              ({
+                ...base,
+                cursor: 'text',
+                height: '48px',
+              }) as CSSObjectWithLabel,
+          }}
         />
-      </Block>
+      </div>
+
       {loading && (
-        <Block>
-          <Block marginLeft={theme.sizing.scale400} marginTop={theme.sizing.scale400}>
+        <div>
+          <div className="ml-2.5 mt-2.5">
             <Loader size="large" />
-          </Block>
-        </Block>
+          </div>
+        </div>
       )}
 
-      <Block marginBottom={theme.sizing.scale600}>
-        <LabelLarge>{getBehandlingData()}</LabelLarge>
-      </Block>
+      <div className="mb-4">
+        <Label>{getBehandlingData()}</Label>
+      </div>
 
-      <EtterlevelseDokumentasjonerPanels
+      <EtterlevelseDokumentasjonsPanels
         etterlevelseDokumentasjoner={getEtterlevelseDokumentasjonerWithoutDuplicates()}
         loading={loading}
       />
 
       {!loading && etterlevelseDokumentasjoner.totalElements !== 0 && (
-        <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
-          <Block display="flex" alignItems="center">
+        <div className="flex justify-between mt-10">
+          <div className="flex items-center">
             <Button
               onClick={lastMer}
-              icon={faPlus}
-              kind={'secondary'}
-              size="compact"
+              icon={<PlusIcon title="" aria-label="" aria-hidden />}
+              variant={'secondary'}
               disabled={
                 gqlLoading ||
                 etterlevelseDokumentasjoner.numberOfElements >=
@@ -170,18 +169,18 @@ export const BehandlingSok = () => {
             </Button>
 
             {gqlLoading && (
-              <Block marginLeft={theme.sizing.scale400}>
+              <div className="ml-2.5">
                 <Loader size="large" />
-              </Block>
+              </div>
             )}
-          </Block>
-          <LabelSmall marginRight={theme.sizing.scale400}>
+          </div>
+          <Label className="mr-2.5">
             Viser {etterlevelseDokumentasjoner.numberOfElements}/
             {etterlevelseDokumentasjoner.totalElements}
-          </LabelSmall>
-        </Block>
+          </Label>
+        </div>
       )}
-    </Block>
+    </div>
   )
 }
 

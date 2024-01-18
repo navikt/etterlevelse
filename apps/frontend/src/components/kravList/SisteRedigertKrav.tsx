@@ -42,20 +42,26 @@ export const SistRedigertKrav = () => {
     setSortedKravList(sortedData)
   }, [sorting])
 
-  return loading && !data?.krav?.numberOfElements ? (
-    <Loader size={'large'} />
-  ) : error ? (
-    <Alert variant={'error'}>{JSON.stringify(error, null, 2)}</Alert>
-  ) : (
+  return (
     <div>
-      <div className={'justify-center content-center w-full my-5'}>
-        <div className={'flex justify-start w-full'}>
-          <Label className="my-0">{sortedKravList.length ? sortedKravList.length : 0} Krav</Label>
+      {loading && data && data.krav?.numberOfElements === 0 && <Loader size={'large'} />}
+
+      {error && <Alert variant={'error'}>{JSON.stringify(error, null, 2)}</Alert>}
+
+      {!loading && !error && data && data.krav.numberOfElements > 0 && (
+        <div>
+          <div className={'justify-center content-center w-full my-5'}>
+            <div className={'flex justify-start w-full'}>
+              <Label className="my-0">
+                {sortedKravList.length ? sortedKravList.length : 0} Krav
+              </Label>
+            </div>
+          </div>
+          <KravPanels kravene={sortedKravList} loading={loading} />
+          {sortedKravList.length === 0 && (
+            <div className={'w-full flex justify-center'}>Fant ingen krav</div>
+          )}
         </div>
-      </div>
-      <KravPanels kravene={sortedKravList} loading={loading} />
-      {sortedKravList.length === 0 && (
-        <div className={'w-full flex justify-center'}>Fant ingen krav</div>
       )}
     </div>
   )
