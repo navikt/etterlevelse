@@ -3,7 +3,6 @@ import {
   BodyLong,
   BodyShort,
   Button,
-  Heading,
   Label,
   LinkPanel,
   Skeleton,
@@ -17,6 +16,7 @@ import StatusView from '../components/common/StatusTag'
 import { AllKrav } from '../components/kravList/AllKrav'
 import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
 import { TemaList } from '../components/kravList/TemaList'
+import { ListPageHeader } from '../components/scaffold/ListPageHeader'
 import { PageLayout } from '../components/scaffold/Page'
 import { IKrav, TKravQL } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
@@ -46,31 +46,19 @@ export const KravListPage = () => {
   return (
     <PageLayout pageTitle="Forvalte og opprette krav" currentPage="Forvalte og opprette krav">
       <div className="pb-52 w-full">
-        <div className="w-full flex justify-center">
-          <div className="w-full">
-            <div>
-              <div className="flex">
-                <div className="flex-1">
-                  <Heading size="medium">Forvalte og opprette krav</Heading>
-                </div>
-
-                <div className="flex justify-end">
-                  {user.isKraveier() && (
-                    <Button
-                      iconPosition="left"
-                      icon={<PlusIcon area-label="" aria-hidden />}
-                      size="medium"
-                      as="a"
-                      href="/krav/ny"
-                    >
-                      Nytt krav
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ListPageHeader headingText="Forvalte og opprette krav">
+          {user.isKraveier() && (
+            <Button
+              iconPosition="left"
+              icon={<PlusIcon area-label="" aria-hidden />}
+              size="medium"
+              as="a"
+              href="/krav/ny"
+            >
+              Nytt krav
+            </Button>
+          )}
+        </ListPageHeader>
 
         <div className="flex justify-center w-full">
           <div className="w-full">

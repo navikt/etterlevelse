@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
-import { Heading } from '@navikt/ds-react'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import { DokumentasjonTabs } from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonsTabs'
+import { ListPageHeader } from '../components/scaffold/ListPageHeader'
 import { PageLayout } from '../components/scaffold/Page'
 import { ITeam } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
@@ -24,21 +24,9 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
   return (
     <PageLayout pageTitle="Dokumentere etterlevelse" currentPage="Dokumentere etterlevelse">
       <div className="pb-52 w-full">
-        <div className="w-full flex justify-center">
-          <div className="w-full">
-            <div>
-              <div className="flex">
-                <div className="flex-1">
-                  <Heading size="medium">Dokumentere etterlevelse</Heading>
-                </div>
-
-                <div className="flex justify-end">
-                  <EditEtterlevelseDokumentasjonModal />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ListPageHeader headingText="Dokumentere etterlevelse">
+          <EditEtterlevelseDokumentasjonModal />
+        </ListPageHeader>
 
         <div className="flex justify-center w-full">
           <div className="w-full">
