@@ -43,7 +43,9 @@ export const InfoBlock2 = (props: {
     </div>
 
     <div className="flex flex-col p-5">
-      <Heading size="large">{props.title}</Heading>
+      <Heading size="small" level="2">
+        {props.title}
+      </Heading>
       <BodyShort className="max-w-sm">{props.beskrivelse}</BodyShort>
       {props.children}
     </div>
