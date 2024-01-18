@@ -58,8 +58,7 @@ export const KravCard = (props: {
 
   useEffect(() => {
     const today = new Date()
-    const kravActivatedDate = moment(props.krav.aktivertDato).toDate()
-    setKravAge(getNumberOfDaysBetween(kravActivatedDate, today))
+    setKravAge(getNumberOfDaysBetween(props.krav.aktivertDato, today))
     ;(async () => {
       getEtterlevelseMetaData()
       if (props.krav.kravVersjon > 1 && props.krav.etterlevelseStatus === undefined) {
