@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, ExpansionCard, Heading, Label, Loader, Tag } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
@@ -23,6 +23,7 @@ import {
   IPageResponse,
   TKravQL,
 } from '../constants'
+import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDokumentasjonQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, ICode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
@@ -55,7 +56,7 @@ export const DokumentasjonPage = () => {
     loading,
   } = useQuery<{
     etterlevelseDokumentasjon: IPageResponse<{ stats: IEtterlevelseDokumentasjonStats }>
-  }>(statsQuery, {
+  }>(getEtterlevelseDokumentasjonStatsQuery, {
     variables,
     skip: !params.id,
   })
@@ -364,98 +365,3 @@ export const DokumentasjonPage = () => {
     </PageLayout>
   )
 }
-
-export const statsQuery = gql`
-  query getEtterlevelseDokumentasjonStats($etterlevelseDokumentasjonId: ID) {
-    etterlevelseDokumentasjon(filter: { id: $etterlevelseDokumentasjonId }) {
-      content {
-        stats {
-          relevantKrav {
-            kravNummer
-            kravVersjon
-            navn
-            status
-            aktivertDato
-            etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
-              status
-              etterlevelseDokumentasjonId
-              fristForFerdigstillelse
-              changeStamp {
-                lastModifiedBy
-                lastModifiedDate
-                createdDate
-              }
-            }
-            regelverk {
-              lov {
-                code
-                shortName
-              }
-            }
-            changeStamp {
-              lastModifiedBy
-              lastModifiedDate
-              createdDate
-            }
-          }
-          irrelevantKrav {
-            kravNummer
-            kravVersjon
-            navn
-            status
-            aktivertDato
-            etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
-              status
-              etterlevelseDokumentasjonId
-              fristForFerdigstillelse
-              changeStamp {
-                lastModifiedBy
-                lastModifiedDate
-                createdDate
-              }
-            }
-            regelverk {
-              lov {
-                code
-                shortName
-              }
-            }
-            changeStamp {
-              lastModifiedBy
-              lastModifiedDate
-              createdDate
-            }
-          }
-          utgaattKrav {
-            kravNummer
-            kravVersjon
-            navn
-            status
-            aktivertDato
-            etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
-              behandlingId
-              status
-              etterlevelseDokumentasjonId
-              changeStamp {
-                lastModifiedBy
-                lastModifiedDate
-                createdDate
-              }
-            }
-            regelverk {
-              lov {
-                code
-                shortName
-              }
-            }
-            changeStamp {
-              lastModifiedBy
-              lastModifiedDate
-              createdDate
-            }
-          }
-        }
-      }
-    }
-  }
-`

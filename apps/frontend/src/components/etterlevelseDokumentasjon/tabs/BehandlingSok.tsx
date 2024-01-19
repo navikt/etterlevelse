@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { PlusIcon } from '@navikt/aksel-icons'
 import { Button, Label, Loader } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
@@ -13,6 +13,7 @@ import {
   emptyPage,
 } from '../../../constants'
 import { TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { getEtterlevelseDokumentasjonByBehandlingId } from '../../../query/EtterlevelseDokumentasjonQuery'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 
@@ -28,7 +29,7 @@ export const BehandlingSok = () => {
   } = useQuery<
     { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
     TVariables
-  >(query, {
+  >(getEtterlevelseDokumentasjonByBehandlingId, {
     variables: {
       behandlingId: selectedBehandling
         ? selectedBehandling.id
@@ -183,50 +184,4 @@ export const BehandlingSok = () => {
     </div>
   )
 }
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-const query = gql`
-  query getEtterlevelseDokumentasjoner(
-    $pageNumber: NonNegativeInt
-    $pageSize: NonNegativeInt
-    $mineEtterlevelseDokumentasjoner: Boolean
-    $sistRedigert: NonNegativeInt
-    $sok: String
-    $behandlingId: String
-  ) {
-    etterlevelseDokumentasjoner: etterlevelseDokumentasjon(
-      filter: {
-        mineEtterlevelseDokumentasjoner: $mineEtterlevelseDokumentasjoner
-        sistRedigert: $sistRedigert
-        sok: $sok
-        behandlingId: $behandlingId
-      }
-      pageNumber: $pageNumber
-      pageSize: $pageSize
-    ) {
-      pageNumber
-      pageSize
-      pages
-      numberOfElements
-      totalElements
-      content {
-        id
-        title
-        etterlevelseNummer
-        sistEndretEtterlevelse
-        teamsData {
-          id
-          name
-        }
-        behandlinger {
-          id
-          navn
-          nummer
-        }
-      }
-    }
-  }
-`
-// eslint-enable-next-line @typescript-eslint/ban-types
-
 export default BehandlingSok

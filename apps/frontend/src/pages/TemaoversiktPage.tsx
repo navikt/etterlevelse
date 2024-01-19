@@ -1,10 +1,10 @@
 import { BodyLong, Heading, LinkPanel, Loader, Spacer, Tag } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { PageLayout } from '../components/scaffold/Page'
+import { useKravCounter } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import { useForceUpdate } from '../util/hooks'
-import { useKravCounter } from './TemaPage'
 
 export const TemaOversiktPage = () => {
   useEffect(() => {

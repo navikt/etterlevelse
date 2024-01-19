@@ -1,4 +1,4 @@
-import { convertToRaw, RawDraftContentState } from 'draft-js'
+import { RawDraftContentState, convertToRaw } from 'draft-js'
 import { FormikErrors } from 'formik'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
 import { Editor } from 'react-draft-wysiwyg'

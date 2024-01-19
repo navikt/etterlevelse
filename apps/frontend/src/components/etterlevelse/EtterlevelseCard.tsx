@@ -1,8 +1,7 @@
+import { Button } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { getKravByKravNumberAndVersion } from '../../api/KravApi'
 import { IEtterlevelse, IKrav } from '../../constants'
-
-import { Button } from '@navikt/ds-react'
 import EtterlevelseModal from './EtterlevelseModal'
 
 export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: IEtterlevelse }) => {

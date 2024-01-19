@@ -40,7 +40,7 @@ import {
   ITeam,
   TKravQL,
 } from '../../constants'
-import { query } from '../../pages/KravPage'
+import { getKravWithEtterlevelseQuery } from '../../query/KravQuery'
 import { ampli, userRoleEventProp } from '../../services/Amplitude'
 import { user } from '../../services/User'
 import { behandlingLink } from '../../util/config'
@@ -86,7 +86,7 @@ export const EtterlevelseKravView = ({
   kravFilter,
   nextKravToDocument,
 }: TEttlevelseKravViewProps) => {
-  const { data, loading } = useQuery<{ kravById: TKravQL }, TKravId>(query, {
+  const { data, loading } = useQuery<{ kravById: TKravQL }, TKravId>(getKravWithEtterlevelseQuery, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
     fetchPolicy: 'no-cache',

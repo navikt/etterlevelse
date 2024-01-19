@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
-import { KravMedPrioriteringOgEtterlevelseQuery, TKravId } from '../api/KravApi'
+import { TKravId } from '../api/KravApi'
 import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
 import { PageLayout } from '../components/scaffold/Page'
@@ -13,6 +13,7 @@ import {
   IPageResponse,
   TKravQL,
 } from '../constants'
+import { getKravMedPrioriteringOgEtterlevelseQuery } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import { sortKraverByPriority } from '../util/sort'
@@ -45,7 +46,7 @@ export const EtterlevelseDokumentasjonPage = () => {
   const lover = codelist.getCodesForTema(params.tema)
 
   const { data, loading } = useQuery<{ krav: IPageResponse<TKravQL> }>(
-    KravMedPrioriteringOgEtterlevelseQuery,
+    getKravMedPrioriteringOgEtterlevelseQuery,
     {
       variables: {
         etterlevelseDokumentasjonId: params.id,

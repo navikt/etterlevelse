@@ -1,29 +1,12 @@
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { Loader } from '@navikt/ds-react'
 import { TEtterlevelseDokumentasjonFilter } from '../../api/EtterlevelseDokumentasjonApi'
 import { IEtterlevelseDokumentasjon, IPageResponse } from '../../constants'
+import { getEtterlevelseDokumentasjonByRelevansQuery } from '../../query/EtterlevelseDokumentasjonQuery'
 import { EListName } from '../../services/Codelist'
 import { DotTags } from './DotTag'
 import RouteLink from './RouteLink'
 import { Cell, Row, Table } from './Table'
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-const query = gql`
-  query getEtterlevelsedokumentasjon($relevans: [String!]) {
-    etterlevelseDokumentasjon(filter: { relevans: $relevans }) {
-      content {
-        id
-        title
-        etterlevelseNummer
-        irrelevansFor {
-          code
-          shortName
-        }
-      }
-    }
-  }
-`
-// eslint-enable-next-line @typescript-eslint/ban-types
 
 export const EtterlevelseDokumentasjonFilterTable = (props: {
   filter: TEtterlevelseDokumentasjonFilter
@@ -31,7 +14,7 @@ export const EtterlevelseDokumentasjonFilterTable = (props: {
 }) => {
   const { data, loading } = useQuery<{
     etterlevelseDokumentasjon: IPageResponse<IEtterlevelseDokumentasjon>
-  }>(query, { variables: props.filter })
+  }>(getEtterlevelseDokumentasjonByRelevansQuery, { variables: props.filter })
 
   return loading && !data ? (
     <Loader size={'large'} />
