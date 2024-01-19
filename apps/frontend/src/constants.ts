@@ -43,6 +43,20 @@ export enum EKravFilterType {
   UTGAATE_KRAV = 'UTGAATE_KRAV',
 }
 
+export type TKravFilters = {
+  relevans?: string[]
+  nummer?: number
+  etterlevelseDokumentasjonId?: string
+  underavdeling?: string
+  lov?: string
+  status?: string[]
+  lover?: string[]
+  gjeldendeKrav?: boolean
+  sistRedigert?: number
+  pageNumber?: number
+  pageSize?: number
+}
+
 export enum EAlertType {
   INFO = 'INFO',
   WARNING = 'WARNING',
