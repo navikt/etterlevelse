@@ -20,7 +20,7 @@ export const EtterlevelseDokumentasjonFilterTable = (props: {
     <Loader size={'large'} />
   ) : (
     <Table
-      data={data!.etterlevelseDokumentasjon.content}
+      data={data && data.etterlevelseDokumentasjon ? data.etterlevelseDokumentasjon.content : []}
       emptyText={props.emptyText || 'etterlevelseDokumentasjoner'}
       headers={[
         { title: 'Etterlevelsenummer', column: 'etterlevelseNummer', small: true },
