@@ -15,7 +15,7 @@ import {
   IPageResponse,
   TEtterlevelseDokumentasjonQL,
 } from '../constants'
-import { getEtterlevelseDokumentasjonList } from '../query/EtterlevelseDokumentasjonQuery'
+import { getEtterlevelseDokumentasjonListQuery } from '../query/EtterlevelseDokumentasjonQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { user } from '../services/User'
 import { TVariables } from './MyEtterlevelseDokumentasjonerPage'
@@ -26,7 +26,7 @@ export const MainPage = () => {
   const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<
     { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
     TVariables
-  >(getEtterlevelseDokumentasjonList, {
+  >(getEtterlevelseDokumentasjonListQuery, {
     variables: { sistRedigert: 4 },
     skip: !user.isLoggedIn(),
   })

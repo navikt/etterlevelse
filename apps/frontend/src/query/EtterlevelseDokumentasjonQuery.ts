@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export const getEtterlevelseDokumentasjonList = gql`
+export const getEtterlevelseDokumentasjonListQuery = gql`
   query getEtterlevelseDokumentasjoner(
     $pageNumber: NonNegativeInt
     $pageSize: NonNegativeInt
@@ -55,7 +55,7 @@ export const getEtterlevelseDokumentasjonByRelevansQuery = gql`
   }
 `
 
-export const getEtterlevelseDokumentasjonByBehandlingId = gql`
+export const getEtterlevelseDokumentasjonByBehandlingIdQuery = gql`
   query getEtterlevelseDokumentasjoner(
     $pageNumber: NonNegativeInt
     $pageSize: NonNegativeInt

@@ -4,7 +4,7 @@ import { Button, Heading, Label, Loader, Search } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { IPageResponse, TEtterlevelseDokumentasjonQL, emptyPage } from '../../../constants'
 import { TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
-import { getEtterlevelseDokumentasjonList } from '../../../query/EtterlevelseDokumentasjonQuery'
+import { getEtterlevelseDokumentasjonListQuery } from '../../../query/EtterlevelseDokumentasjonQuery'
 import { useDebouncedState } from '../../../util/hooks'
 import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 
@@ -20,7 +20,7 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
   } = useQuery<
     { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
     TVariables
-  >(getEtterlevelseDokumentasjonList, {
+  >(getEtterlevelseDokumentasjonListQuery, {
     variables: { pageNumber, pageSize, sok },
     skip: tooShort,
   })

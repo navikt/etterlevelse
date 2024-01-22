@@ -13,7 +13,7 @@ import {
   emptyPage,
 } from '../../../constants'
 import { TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
-import { getEtterlevelseDokumentasjonByBehandlingId } from '../../../query/EtterlevelseDokumentasjonQuery'
+import { getEtterlevelseDokumentasjonByBehandlingIdQuery } from '../../../query/EtterlevelseDokumentasjonQuery'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 
@@ -29,7 +29,7 @@ export const BehandlingSok = () => {
   } = useQuery<
     { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
     TVariables
-  >(getEtterlevelseDokumentasjonByBehandlingId, {
+  >(getEtterlevelseDokumentasjonByBehandlingIdQuery, {
     variables: {
       behandlingId: selectedBehandling
         ? selectedBehandling.id
