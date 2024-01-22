@@ -2,8 +2,7 @@ import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
 import { BodyShort, ExpansionCard, Label, Tag } from '@navikt/ds-react'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
 import { EListName, ICode, codelist } from '../../services/Codelist'
-import { env } from '../../util/env'
-import { ExternalLink } from '../common/RouteLink'
+import { BehandlingList } from '../behandling/BehandlingList'
 import { Teams } from '../common/TeamName'
 
 interface IProps {
@@ -82,38 +81,15 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
         </ExpansionCard.Header>
         <ExpansionCard.Content>
           {behandlerPersonopplysninger && (
-            <div className="flex gap-2 flex-wrap items-center mb-2.5">
-              <BodyShort size="small">Behandling:</BodyShort>
-              {behandlingIds?.length >= 1 && behandlerPersonopplysninger ? (
-                behandlingIds.map((behandlingId, index) => (
-                  <div key={'behandling_link_' + index}>
-                    {behandlinger && behandlinger[index].navn ? (
-                      <ExternalLink
-                        className="text-medium"
-                        href={`${env.pollyBaseUrl}process/${behandlingId}`}
-                      >
-                        {behandlinger?.length > 0 ? `${behandlinger[index].navn}` : 'Ingen data'}
-                      </ExternalLink>
-                    ) : (
-                      <BodyShort size="small">
-                        {behandlinger ? behandlinger[index].navn : 'Ingen data'}
-                      </BodyShort>
-                    )}
-                  </div>
-                ))
-              ) : (
-                <BodyShort size="small">
-                  Husk å legge til behandling fra behandlingskatalogen
-                </BodyShort>
-              )}
-            </div>
+            <BehandlingList
+              behandlingIds={behandlingIds}
+              behandlerPersonopplysninger={behandlerPersonopplysninger}
+              behandlinger={behandlinger}
+            />
           )}
           <div className="mb-2.5">
-            {teams.length > 0 ? (
-              <Teams teams={teams} link />
-            ) : (
-              <BodyShort size="small">Team er ikke angitt</BodyShort>
-            )}
+            {teams.length > 0 && <Teams teams={teams} link />}
+            {teams.length === 0 && <BodyShort size="small">Team er ikke angitt</BodyShort>}
           </div>
           <div className="flex items-start gap-2">
             <BodyShort size="small">Egenskaper:</BodyShort>
