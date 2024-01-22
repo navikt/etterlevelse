@@ -41,9 +41,12 @@ export const sortKraverByPriority = <T extends IKrav>(kraver: T[], tema: string)
       return -1
     } else if (!a.prioriteringsId && b.prioriteringsId) {
       return 1
+    } else if (!a.prioriteringsId && !b.prioriteringsId) {
+      return b.kravNummer - a.kravNummer
     } else if (a.prioriteringsId && b.prioriteringsId) {
       return getPriorityId(a.prioriteringsId) - getPriorityId(b.prioriteringsId)
+    } else {
+      return -1
     }
-    return -1
   })
 }
