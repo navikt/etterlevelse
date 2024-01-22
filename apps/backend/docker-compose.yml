@@ -4,6 +4,7 @@ services:
     image: postgres:12
     restart: always
     environment:
+      - POSTGRES_DB=etterlevelsedb
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
     volumes:

@@ -18,9 +18,9 @@ spring:
 
 DB_DATABASE: etterlevelsedb
 DB_HOST: localhost
-DB_PASSWORD: secret
-DB_PORT: 5432
-DB_USERNAME: etterlevelse
+DB_PASSWORD: password
+DB_PORT: 5433
+DB_USERNAME: postgres
 
 AZURE_APP_CLIENT_ID: 7a183a3e-f25a-4257-8f53-cb7151b3f6d1
 AZURE_APP_CLIENT_SECRET: secret

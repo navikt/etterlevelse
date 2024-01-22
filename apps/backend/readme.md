@@ -8,6 +8,9 @@
 
 For å bygge lokalt i Windows må man ha Docker desktop. Husk å legge til brukeren din i gruppen docker-users.
 
+- run: `docker compose up -d`
+- run `LocalAppStarter` under src/test/java/no/nav/data
+
 #### Build 
 `mvn clean package`
 
