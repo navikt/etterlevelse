@@ -153,6 +153,7 @@ export const EtterlevelseKravView = ({
           : etterlevelse.fristForFerdigstillelse,
       suksesskriterieBegrunnelser: syncEtterlevelseKriterieBegrunnelseWithKrav(etterlevelse, krav),
     }
+    setEditedEtterlevelse(mutatedEtterlevelse)
 
     //double check if etterlevelse already exist before submitting
     let existingEtterlevelseId = ''
