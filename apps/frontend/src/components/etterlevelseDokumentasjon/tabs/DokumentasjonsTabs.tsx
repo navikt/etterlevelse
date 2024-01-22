@@ -4,11 +4,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMyTeams } from '../../../api/TeamApi'
 import { IPageResponse, ITeam, TEtterlevelseDokumentasjonQL, emptyPage } from '../../../constants'
-import {
-  TCustomTeamObject,
-  TVariables,
-  query,
-} from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { TCustomTeamObject, TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { getEtterlevelseDokumentasjonListQuery } from '../../../query/EtterlevelseDokumentasjonQuery'
 import { AlleEtterlevelsesDokumentasjoner } from './AlleEtterlevelsesDokumentasjoner'
 import BehandlingSok from './BehandlingSok'
 import { MineEtterlevelseDokumentasjoner } from './MineEtterlevelseDokumentasjoner'
@@ -25,7 +22,7 @@ export const DokumentasjonTabs = () => {
   const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<
     { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
     TVariables
-  >(query, {
+  >(getEtterlevelseDokumentasjonListQuery, {
     variables,
   })
 

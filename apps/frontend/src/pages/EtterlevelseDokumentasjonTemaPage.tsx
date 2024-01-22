@@ -17,6 +17,7 @@
 // import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 // import { Layout2 } from '../components/scaffold/Page'
 import { EEtterlevelseStatus, EKravFilterType, IEtterlevelse } from '../constants'
+
 //import { IKravPrioritering, IPageResponse, , KravEtterlevelseData, KravQL, KravStatus} from '../constants'
 // import { ampli, userRoleEventProp } from '../services/Amplitude'
 // import { ListName, TemaCode, codelist } from '../services/Codelist'

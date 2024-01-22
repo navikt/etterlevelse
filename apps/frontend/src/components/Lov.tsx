@@ -1,7 +1,7 @@
 import { Link } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import { IRegelverk } from '../constants'
-import { codelist, EListName } from '../services/Codelist'
+import { EListName, codelist } from '../services/Codelist'
 import { env } from '../util/env'
 
 // unsure how to refactor code

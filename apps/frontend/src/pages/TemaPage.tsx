@@ -1,13 +1,9 @@
-import { useQuery } from '@apollo/client'
-import { gql } from '@apollo/client/core'
-import { QueryHookOptions } from '@apollo/client/react/types/types'
 import { BodyShort, Detail, Heading, Label, LinkPanel } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import { LabelSmall, ParagraphXSmall } from 'baseui/typography'
 import * as _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { TKravFilters } from '../api/KravGraphQLApi'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { lovdataBase } from '../components/Lov'
 import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
@@ -18,7 +14,8 @@ import { ExternalLink, urlForObject } from '../components/common/RouteLink'
 import { SimpleTag } from '../components/common/SimpleTag'
 import { margin } from '../components/common/Style'
 import { PageLayout } from '../components/scaffold/Page'
-import { IKrav, IPageResponse, TKravQL } from '../constants'
+import { IKrav } from '../constants'
+import { useKravCounter } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TLovCode, TTemaCode, codelist } from '../services/Codelist'
 import { theme } from '../util'
@@ -244,32 +241,3 @@ export const TemaCard = ({
     </PanelLinkCard>
   )
 }
-
-export const useKravCounter = (
-  variables: { lover: string[] },
-  options?: QueryHookOptions<any, { lover?: string[] }>
-) => {
-  return useQuery<{ krav: IPageResponse<TKravQL> }, TKravFilters>(query, {
-    ...(options || {}),
-    variables,
-  })
-}
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-const query = gql`
-  query countKrav($lover: [String!]) {
-    krav(filter: { lover: $lover, gjeldendeKrav: true }) {
-      numberOfElements
-      content {
-        id
-        kravNummer
-        kravVersjon
-        navn
-        relevansFor {
-          code
-        }
-      }
-    }
-  }
-`
-// eslint-enable-next-line @typescript-eslint/ban-types

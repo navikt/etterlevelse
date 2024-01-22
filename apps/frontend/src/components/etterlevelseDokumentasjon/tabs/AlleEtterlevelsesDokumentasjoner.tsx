@@ -3,7 +3,8 @@ import { PlusIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Label, Loader, Search } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { IPageResponse, TEtterlevelseDokumentasjonQL, emptyPage } from '../../../constants'
-import { TVariables, query } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { getEtterlevelseDokumentasjonListQuery } from '../../../query/EtterlevelseDokumentasjonQuery'
 import { useDebouncedState } from '../../../util/hooks'
 import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 
@@ -19,7 +20,7 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
   } = useQuery<
     { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
     TVariables
-  >(query, {
+  >(getEtterlevelseDokumentasjonListQuery, {
     variables: { pageNumber, pageSize, sok },
     skip: tooShort,
   })

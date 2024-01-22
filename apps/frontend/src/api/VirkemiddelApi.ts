@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { emptyPage, IPageResponse, IVirkemiddel } from '../constants'
+import { IPageResponse, IVirkemiddel, emptyPage } from '../constants'
 import { env } from '../util/env'
 import { useDebouncedState } from '../util/hooks'
 

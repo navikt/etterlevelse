@@ -1,6 +1,5 @@
-import { gql, useQuery } from '@apollo/client'
-import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, ExpansionCard, Heading, Label, Loader, Tag } from '@navikt/ds-react'
+import { useQuery } from '@apollo/client'
+import { BodyShort, Button, Heading, Loader } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 import { useParams } from 'react-router-dom'
@@ -9,9 +8,8 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { ExternalLink } from '../components/common/RouteLink'
-import { Teams } from '../components/common/TeamName'
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
+import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
 import { KravAccordionList } from '../components/etterlevelseDokumentasjon/KravAccordionList'
 import { getNewestKravVersjon } from '../components/etterlevelseDokumentasjon/common/utils'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
@@ -23,15 +21,14 @@ import {
   IPageResponse,
   TKravQL,
 } from '../constants'
+import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDokumentasjonQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, ICode, codelist } from '../services/Codelist'
+import { EListName, codelist } from '../services/Codelist'
 import { user } from '../services/User'
-import { env } from '../util/env'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
-  const options = codelist.getParsedOptions(EListName.RELEVANS)
   const temaListe = codelist
     .getCodes(EListName.TEMA)
     .sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
@@ -55,7 +52,7 @@ export const DokumentasjonPage = () => {
     loading,
   } = useQuery<{
     etterlevelseDokumentasjon: IPageResponse<{ stats: IEtterlevelseDokumentasjonStats }>
-  }>(statsQuery, {
+  }>(getEtterlevelseDokumentasjonStatsQuery, {
     variables,
     skip: !params.id,
   })
@@ -126,48 +123,6 @@ export const DokumentasjonPage = () => {
     }
   })
 
-  const getRelevans = (irrelevans?: ICode[]) => {
-    const fargeForFemAlternativ = ['alt1', 'alt2', 'alt3', 'alt1', 'alt2'] as const
-
-    if (irrelevans?.length === options.length) {
-      return (
-        <BodyShort size="small">
-          For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved
-          dokumentasjonen.
-        </BodyShort>
-      )
-    }
-
-    if (irrelevans) {
-      const relevans = options.filter(
-        (n) => !irrelevans.map((ir: ICode) => ir.code).includes(n.value)
-      )
-
-      return (
-        <div className="flex flex-wrap gap-2">
-          {relevans.map((r, index) => (
-            <div key={r.value} className="flex items-center gap-1">
-              <Tag variant={fargeForFemAlternativ[index]} size="small">
-                <BodyShort size="small">{r.label}</BodyShort>
-              </Tag>
-            </div>
-          ))}
-        </div>
-      )
-    }
-    return (
-      <div className="flex flex-wrap gap-2">
-        {options.map((o, index) => (
-          <div key={o.value} className="flex items-center gap-1">
-            <Tag variant={fargeForFemAlternativ[index]} size="small">
-              <BodyShort size="small">{o.label}</BodyShort>
-            </Tag>
-          </div>
-        ))}
-      </div>
-    )
-  }
-
   if (!etterlevelseDokumentasjon) return <LoadingSkeleton header="Dokumentasjon" />
 
   const breadcrumbPaths: IBreadcrumbPaths[] = [
@@ -177,15 +132,7 @@ export const DokumentasjonPage = () => {
     },
   ]
 
-  const {
-    etterlevelseNummer,
-    title,
-    behandlerPersonopplysninger,
-    behandlingIds,
-    behandlinger,
-    teams,
-    irrelevansFor,
-  } = etterlevelseDokumentasjon
+  const { etterlevelseNummer, title } = etterlevelseDokumentasjon
 
   return (
     <PageLayout
@@ -199,65 +146,9 @@ export const DokumentasjonPage = () => {
             Temaoversikt
           </Heading>
           <div className="flex items-center my-5">
-            <ExpansionCard aria-label="tittel på etterlevelsesdokument" className="w-full">
-              <ExpansionCard.Header className="border-b border-solid border-gray-500">
-                <ExpansionCard.Title as="h4" size="small">
-                  E{etterlevelseNummer.toString()} {title}
-                </ExpansionCard.Title>
-              </ExpansionCard.Header>
-              <ExpansionCard.Content>
-                {behandlerPersonopplysninger && (
-                  <div className="flex gap-2 flex-wrap items-center mb-2.5">
-                    <BodyShort size="small">Behandling:</BodyShort>
-                    {behandlingIds?.length >= 1 && behandlerPersonopplysninger ? (
-                      behandlingIds.map((behandlingId, index) => (
-                        <div key={'behandling_link_' + index}>
-                          {behandlinger && behandlinger[index].navn ? (
-                            <ExternalLink
-                              className="text-medium"
-                              href={`${env.pollyBaseUrl}process/${behandlingId}`}
-                            >
-                              {behandlinger?.length > 0
-                                ? `${behandlinger[index].navn}`
-                                : 'Ingen data'}
-                            </ExternalLink>
-                          ) : (
-                            <BodyShort size="small">
-                              {behandlinger ? behandlinger[index].navn : 'Ingen data'}
-                            </BodyShort>
-                          )}
-                        </div>
-                      ))
-                    ) : (
-                      <BodyShort size="small">
-                        Husk å legge til behandling fra behandlingskatalogen
-                      </BodyShort>
-                    )}
-                  </div>
-                )}
-                <div className="mb-2.5">
-                  {teams.length > 0 ? (
-                    <Teams teams={teams} link />
-                  ) : (
-                    <BodyShort size="small">Team er ikke angitt</BodyShort>
-                  )}
-                </div>
-                <div className="flex items-start gap-2">
-                  <BodyShort size="small">Egenskaper:</BodyShort>
-                  {irrelevansFor.length === options.length && (
-                    <div className="flex items-center gap-1">
-                      <ExclamationmarkTriangleFillIcon
-                        area-label=""
-                        aria-hidden
-                        className="text-2xl text-icon-warning"
-                      />
-                      <Label size="small">Ingen egenskaper er oppgitt</Label>
-                    </div>
-                  )}
-                  {!irrelevansFor.length ? getRelevans() : getRelevans(irrelevansFor)}
-                </div>
-              </ExpansionCard.Content>
-            </ExpansionCard>
+            <EtterlevelseDokumentasjonExpansionCard
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+            />
             <EditEtterlevelseDokumentasjonModal
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
@@ -315,11 +206,13 @@ export const DokumentasjonPage = () => {
           </div>
         </div>
 
-        {loading ? (
+        {loading && (
           <div className="flex w-full justify-center mt-3.5">
             <Loader size={'large'} />
           </div>
-        ) : (
+        )}
+
+        {!loading && (
           <KravAccordionList
             etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
             relevanteStats={relevanteStats}
@@ -330,6 +223,7 @@ export const DokumentasjonPage = () => {
             setOpenAccordions={setOpenAccordions}
           />
         )}
+
         {/*
         DISABLED TEMPORARY
         {irrelevanteStats.length > 0 && (
@@ -364,98 +258,3 @@ export const DokumentasjonPage = () => {
     </PageLayout>
   )
 }
-
-export const statsQuery = gql`
-  query getEtterlevelseDokumentasjonStats($etterlevelseDokumentasjonId: ID) {
-    etterlevelseDokumentasjon(filter: { id: $etterlevelseDokumentasjonId }) {
-      content {
-        stats {
-          relevantKrav {
-            kravNummer
-            kravVersjon
-            navn
-            status
-            aktivertDato
-            etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
-              status
-              etterlevelseDokumentasjonId
-              fristForFerdigstillelse
-              changeStamp {
-                lastModifiedBy
-                lastModifiedDate
-                createdDate
-              }
-            }
-            regelverk {
-              lov {
-                code
-                shortName
-              }
-            }
-            changeStamp {
-              lastModifiedBy
-              lastModifiedDate
-              createdDate
-            }
-          }
-          irrelevantKrav {
-            kravNummer
-            kravVersjon
-            navn
-            status
-            aktivertDato
-            etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
-              status
-              etterlevelseDokumentasjonId
-              fristForFerdigstillelse
-              changeStamp {
-                lastModifiedBy
-                lastModifiedDate
-                createdDate
-              }
-            }
-            regelverk {
-              lov {
-                code
-                shortName
-              }
-            }
-            changeStamp {
-              lastModifiedBy
-              lastModifiedDate
-              createdDate
-            }
-          }
-          utgaattKrav {
-            kravNummer
-            kravVersjon
-            navn
-            status
-            aktivertDato
-            etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
-              behandlingId
-              status
-              etterlevelseDokumentasjonId
-              changeStamp {
-                lastModifiedBy
-                lastModifiedDate
-                createdDate
-              }
-            }
-            regelverk {
-              lov {
-                code
-                shortName
-              }
-            }
-            changeStamp {
-              lastModifiedBy
-              lastModifiedDate
-              createdDate
-            }
-          }
-        }
-      }
-    }
-  }
-`
