@@ -75,7 +75,7 @@ export const KravCard = (props: IProps) => {
     setKravAge(getNumberOfDaysBetween(krav.aktivertDato, today))
     ;(async () => {
       getEtterlevelseMetaData()
-      if (krav.kravVersjon > 1 && isIngenEtterlevelse) {
+      if (krav.kravVersjon > 1 && (isIngenEtterlevelse || isOppfyllesSenereEtterlevelse)) {
         setNyVersionFlag(
           (
             await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(
