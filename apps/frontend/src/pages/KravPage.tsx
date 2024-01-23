@@ -1,5 +1,4 @@
 import { useQuery } from '@apollo/client'
-import { gql } from '@apollo/client/core'
 import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { BodyLong, BodyShort, Button, Heading, Spacer, Tabs } from '@navikt/ds-react'
 import { FormikProps } from 'formik'
@@ -24,6 +23,7 @@ import { AllInfo, ViewKrav } from '../components/krav/ViewKrav'
 import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
 import { PageLayout } from '../components/scaffold/Page'
 import { EKravStatus, IKrav, IKravId, IKravVersjon, TKravQL } from '../constants'
+import { getKravWithEtterlevelseQuery } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
@@ -71,7 +71,7 @@ export const KravPage = () => {
     loading: kravLoading,
     data: kravQuery,
     refetch: reloadKrav,
-  } = useQuery<{ kravById: TKravQL }, KravIdQueryVariables>(query, {
+  } = useQuery<{ kravById: TKravQL }, KravIdQueryVariables>(getKravWithEtterlevelseQuery, {
     variables: getQueryVariableFromParams(params),
     skip: (!params.id || params.id === 'ny') && !params.kravNummer,
     fetchPolicy: 'no-cache',
@@ -337,113 +337,3 @@ export const KravPage = () => {
     </PageLayout>
   )
 }
-
-export const query = gql`
-  query getKravWithEtterlevelse($id: ID, $kravNummer: Int, $kravVersjon: Int) {
-    kravById(id: $id, nummer: $kravNummer, versjon: $kravVersjon) {
-      id
-      kravNummer
-      kravVersjon
-      changeStamp {
-        lastModifiedBy
-        lastModifiedDate
-      }
-      navn
-      beskrivelse
-      hensikt
-      notat
-      varselMelding
-      utdypendeBeskrivelse
-      versjonEndringer
-      aktivertDato
-      dokumentasjon
-      implementasjoner
-      begrepIder
-      begreper {
-        id
-        navn
-        beskrivelse
-      }
-      virkemidler {
-        id
-        navn
-      }
-      virkemiddelIder
-      varslingsadresser {
-        adresse
-        type
-        slackChannel {
-          id
-          name
-          numMembers
-        }
-        slackUser {
-          id
-          name
-        }
-      }
-      rettskilder
-      regelverk {
-        lov {
-          code
-          shortName
-        }
-        spesifisering
-      }
-      tagger
-
-      avdeling {
-        code
-        shortName
-      }
-      underavdeling {
-        code
-        shortName
-      }
-      relevansFor {
-        code
-        shortName
-      }
-      status
-
-      suksesskriterier {
-        id
-        navn
-        beskrivelse
-        behovForBegrunnelse
-      }
-
-      kravIdRelasjoner
-      kravRelasjoner {
-        id
-        kravNummer
-        kravVersjon
-        navn
-      }
-      etterlevelser {
-        id
-        etterlevelseDokumentasjon {
-          id
-          etterlevelseNummer
-          title
-          teamsData {
-            id
-            name
-            productAreaId
-            productAreaName
-          }
-        }
-        changeStamp {
-          lastModifiedDate
-          lastModifiedBy
-        }
-        status
-        suksesskriterieBegrunnelser {
-          suksesskriterieId
-          begrunnelse
-          suksesskriterieStatus
-        }
-      }
-    }
-  }
-`

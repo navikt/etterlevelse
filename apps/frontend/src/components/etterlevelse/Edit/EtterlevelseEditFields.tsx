@@ -1,5 +1,9 @@
+import { Alert, BodyShort, Button, Checkbox, Label, Modal } from '@navikt/ds-react'
 import { Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
+import _ from 'lodash'
+import moment from 'moment'
 import React, { useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { mapEtterlevelseToFormValue } from '../../../api/EtterlevelseApi'
 import {
   EEtterlevelseStatus,
@@ -8,18 +12,12 @@ import {
   IEtterlevelse,
   TKravQL,
 } from '../../../constants'
-
-import _ from 'lodash'
-import moment from 'moment'
-import { useLocation, useNavigate } from 'react-router-dom'
-import EtterlevelseCard from '../EtterlevelseCard'
-import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
-import { etterlevelseSchema } from './etterlevelseSchema'
-
-import { Alert, BodyShort, Button, Checkbox, Label, Modal } from '@navikt/ds-react'
 import { ampli, userRoleEventProp } from '../../../services/Amplitude'
 import { DateField } from '../../common/Inputs'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
+import EtterlevelseCard from '../EtterlevelseCard'
+import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
+import { etterlevelseSchema } from './etterlevelseSchema'
 
 type TEditProps = {
   krav: TKravQL

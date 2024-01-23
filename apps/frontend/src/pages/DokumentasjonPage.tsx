@@ -1,18 +1,5 @@
-import { gql, useQuery } from '@apollo/client'
-import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import {
-  Accordion,
-  BodyShort,
-  Button,
-  ExpansionCard,
-  Heading,
-  Label,
-  Link,
-  Loader,
-  Tag,
-} from '@navikt/ds-react'
-import { Block } from 'baseui/block'
-import moment from 'moment'
+import { useQuery } from '@apollo/client'
+import { BodyShort, Button, Heading, Loader } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 import { useParams } from 'react-router-dom'
@@ -21,34 +8,27 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { ExternalLink } from '../components/common/RouteLink'
-import { Teams } from '../components/common/TeamName'
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
+import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
+import { KravAccordionList } from '../components/etterlevelseDokumentasjon/KravAccordionList'
 import { getNewestKravVersjon } from '../components/etterlevelseDokumentasjon/common/utils'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
-import { KravCard } from '../components/etterlevelseDokumentasjonTema/KravCard'
-import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { PageLayout } from '../components/scaffold/Page'
 import {
-  EEtterlevelseStatus,
-  EKravFilterType,
   IEtterlevelseDokumentasjonStats,
   IKravPrioritering,
   IPageResponse,
   TKravQL,
 } from '../constants'
+import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDokumentasjonQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, ICode, TTemaCode, codelist } from '../services/Codelist'
+import { EListName, codelist } from '../services/Codelist'
 import { user } from '../services/User'
-import { getNumberOfDaysBetween } from '../util/checkAge'
-import { env } from '../util/env'
-import { theme } from '../util/theme'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
-  const options = codelist.getParsedOptions(EListName.RELEVANS)
   const temaListe = codelist
     .getCodes(EListName.TEMA)
     .sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
@@ -72,7 +52,7 @@ export const DokumentasjonPage = () => {
     loading,
   } = useQuery<{
     etterlevelseDokumentasjon: IPageResponse<{ stats: IEtterlevelseDokumentasjonStats }>
-  }>(statsQuery, {
+  }>(getEtterlevelseDokumentasjonStatsQuery, {
     variables,
     skip: !params.id,
   })
@@ -143,54 +123,6 @@ export const DokumentasjonPage = () => {
     }
   })
 
-  const getRelevans = (irrelevans?: ICode[]) => {
-    const fargeForFemAlternativ = ['alt1', 'alt2', 'alt3', 'alt1', 'alt2'] as const
-
-    if (irrelevans?.length === options.length) {
-      return (
-        <BodyShort size="small">
-          For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved
-          dokumentasjonen.
-        </BodyShort>
-      )
-    }
-
-    if (irrelevans) {
-      const relevans = options.filter(
-        (n) => !irrelevans.map((ir: ICode) => ir.code).includes(n.value)
-      )
-
-      return (
-        <div className="flex flex-wrap gap-2">
-          {relevans.map((r, index) => (
-            <div key={r.value} className="flex items-center gap-1">
-              <Tag variant={fargeForFemAlternativ[index]} size="small">
-                <BodyShort size="small">{r.label}</BodyShort>
-              </Tag>
-            </div>
-          ))}
-        </div>
-      )
-    }
-    return (
-      <div className="flex flex-wrap gap-2">
-        {options.map((o, index) => (
-          <div key={o.value} className="flex items-center gap-1">
-            <Tag variant={fargeForFemAlternativ[index]} size="small">
-              <BodyShort size="small">{o.label}</BodyShort>
-            </Tag>
-          </div>
-        ))}
-      </div>
-    )
-  }
-
-  const toggleAccordion = (index: number) => {
-    const newState = [...openAccordions]
-    newState[index] = !openAccordions[index]
-    setOpenAccordions(newState)
-  }
-
   if (!etterlevelseDokumentasjon) return <LoadingSkeleton header="Dokumentasjon" />
 
   const breadcrumbPaths: IBreadcrumbPaths[] = [
@@ -200,24 +132,7 @@ export const DokumentasjonPage = () => {
     },
   ]
 
-  const getKravForTema = (tema: TTemaCode) => {
-    const lover = codelist.getCodesForTema(tema.code)
-    const lovCodes = lover.map((c) => c.code)
-    const krav = relevanteStats.filter((k) =>
-      k.regelverk.map((r: any) => r.lov.code).some((r: any) => lovCodes.includes(r))
-    )
-    return filterKrav(kravPriority, krav, tema)
-  }
-
-  const {
-    etterlevelseNummer,
-    title,
-    behandlerPersonopplysninger,
-    behandlingIds,
-    behandlinger,
-    teams,
-    irrelevansFor,
-  } = etterlevelseDokumentasjon
+  const { etterlevelseNummer, title } = etterlevelseDokumentasjon
 
   return (
     <PageLayout
@@ -231,65 +146,9 @@ export const DokumentasjonPage = () => {
             Temaoversikt
           </Heading>
           <div className="flex items-center my-5">
-            <ExpansionCard aria-label="tittel på etterlevelsesdokument" className="w-full">
-              <ExpansionCard.Header className="border-b border-solid border-gray-500">
-                <ExpansionCard.Title as="h4" size="small">
-                  E{etterlevelseNummer.toString()} {title}
-                </ExpansionCard.Title>
-              </ExpansionCard.Header>
-              <ExpansionCard.Content>
-                {behandlerPersonopplysninger && (
-                  <div className="flex gap-2 flex-wrap items-center mb-2.5">
-                    <BodyShort size="small">Behandling:</BodyShort>
-                    {behandlingIds?.length >= 1 && behandlerPersonopplysninger ? (
-                      behandlingIds.map((behandlingId, index) => (
-                        <div key={'behandling_link_' + index}>
-                          {behandlinger && behandlinger[index].navn ? (
-                            <ExternalLink
-                              className="text-medium"
-                              href={`${env.pollyBaseUrl}process/${behandlingId}`}
-                            >
-                              {behandlinger?.length > 0
-                                ? `${behandlinger[index].navn}`
-                                : 'Ingen data'}
-                            </ExternalLink>
-                          ) : (
-                            <BodyShort size="small">
-                              {behandlinger ? behandlinger[index].navn : 'Ingen data'}
-                            </BodyShort>
-                          )}
-                        </div>
-                      ))
-                    ) : (
-                      <BodyShort size="small">
-                        Husk å legge til behandling fra behandlingskatalogen
-                      </BodyShort>
-                    )}
-                  </div>
-                )}
-                <div className="mb-2.5">
-                  {teams.length > 0 ? (
-                    <Teams teams={teams} link />
-                  ) : (
-                    <BodyShort size="small">Team er ikke angitt</BodyShort>
-                  )}
-                </div>
-                <div className="flex items-start gap-2">
-                  <BodyShort size="small">Egenskaper:</BodyShort>
-                  {irrelevansFor.length === options.length && (
-                    <div className="flex items-center gap-1">
-                      <ExclamationmarkTriangleFillIcon
-                        area-label=""
-                        aria-hidden
-                        className="text-2xl text-icon-warning"
-                      />
-                      <Label size="small">Ingen egenskaper er oppgitt</Label>
-                    </div>
-                  )}
-                  {!irrelevansFor.length ? getRelevans() : getRelevans(irrelevansFor)}
-                </div>
-              </ExpansionCard.Content>
-            </ExpansionCard>
+            <EtterlevelseDokumentasjonExpansionCard
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+            />
             <EditEtterlevelseDokumentasjonModal
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
@@ -347,96 +206,37 @@ export const DokumentasjonPage = () => {
           </div>
         </div>
 
-        {loading ? (
-          <Block
-            display="flex"
-            width="100%"
-            justifyContent="center"
-            marginTop={theme.sizing.scale550}
-          >
+        {loading && (
+          <div className="flex w-full justify-center mt-3.5">
             <Loader size={'large'} />
-          </Block>
-        ) : (
-          <Accordion indent={false}>
-            {temaListe
-              .filter((tema) => getKravForTema(tema).length > 0)
-              .map((tema, index) => {
-                const kravliste = getKravForTema(tema)
-                const utfylteKrav = kravliste.filter(
-                  (krav) =>
-                    krav.etterlevelseStatus === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
-                    krav.etterlevelseStatus === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
-                )
-                return (
-                  <Accordion.Item
-                    key={`${tema.shortName}_panel`}
-                    className="flex flex-col gap-2"
-                    open={openAccordions[index]}
-                  >
-                    <Accordion.Header id={tema.code} onClick={() => toggleAccordion(index)}>
-                      <div className="flex gap-4">
-                        <span>
-                          {tema.shortName} ({utfylteKrav.length} av {kravliste.length} krav er
-                          ferdig utfylt)
-                        </span>
-                        {kravliste.find(
-                          (krav) =>
-                            krav.kravVersjon === 1 &&
-                            krav.etterlevelseStatus === undefined &&
-                            getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) <
-                              30
-                        ) && <Tag variant="warning">Nytt krav</Tag>}
-                        {kravliste.find(
-                          (krav) =>
-                            krav.kravVersjon > 1 &&
-                            krav.etterlevelseStatus === undefined &&
-                            utgaattStats.filter(
-                              (kl) =>
-                                kl.kravNummer === krav.kravNummer && kl.etterlevelser.length > 0
-                            ).length > 0 &&
-                            getNumberOfDaysBetween(moment(krav.aktivertDato).toDate(), new Date()) <
-                              30
-                        ) && <Tag variant="warning">Ny versjon</Tag>}
-                      </div>
-                    </Accordion.Header>
-                    <Accordion.Content>
-                      <div className="flex flex-col gap-6">
-                        <div>
-                          <Link href={`/tema/${tema.code}`} target="_blank">
-                            Lær mer om {tema.shortName} (åpnes i ny fane)
-                          </Link>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                          {kravliste.map((krav, idx) => (
-                            <KravCard
-                              key={`krav_${idx}`}
-                              krav={krav}
-                              kravFilter={EKravFilterType.RELEVANTE_KRAV}
-                              etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                              temaCode={tema.code}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </Accordion.Content>
-                  </Accordion.Item>
-                )
-              })}
-          </Accordion>
+          </div>
         )}
+
+        {!loading && (
+          <KravAccordionList
+            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+            relevanteStats={relevanteStats}
+            utgaattStats={utgaattStats}
+            temaListe={temaListe}
+            kravPriority={kravPriority}
+            openAccordions={openAccordions}
+            setOpenAccordions={setOpenAccordions}
+          />
+        )}
+
         {/*
         DISABLED TEMPORARY
         {irrelevanteStats.length > 0 && (
           <>
-            <Block>
+            <div>
               <H3>Tema dere har filtrert bort</H3>
               <ParagraphMedium maxWidth={'574px'}>Dere har filtrert bort tema med krav som dere må kjenne til og selv vurdere om dere skal etterleve.</ParagraphMedium>
-            </Block>
-            <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
+            </div>
+            <div display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
               {temaListe.map((tema) => (
                 <TemaCardBehandling tema={tema} stats={irrelevanteStats} behandling={behandling} key={`${tema.shortName}_panel`} irrelevant={true}/>
               ))}
-            </Block>
+            </div>
           </>
         )} */}
         <div className="w-full flex justify-end items-center">
@@ -458,98 +258,3 @@ export const DokumentasjonPage = () => {
     </PageLayout>
   )
 }
-
-export const statsQuery = gql`
-  query getEtterlevelseDokumentasjonStats($etterlevelseDokumentasjonId: ID) {
-    etterlevelseDokumentasjon(filter: { id: $etterlevelseDokumentasjonId }) {
-      content {
-        stats {
-          relevantKrav {
-            kravNummer
-            kravVersjon
-            navn
-            status
-            aktivertDato
-            etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
-              status
-              etterlevelseDokumentasjonId
-              fristForFerdigstillelse
-              changeStamp {
-                lastModifiedBy
-                lastModifiedDate
-                createdDate
-              }
-            }
-            regelverk {
-              lov {
-                code
-                shortName
-              }
-            }
-            changeStamp {
-              lastModifiedBy
-              lastModifiedDate
-              createdDate
-            }
-          }
-          irrelevantKrav {
-            kravNummer
-            kravVersjon
-            navn
-            status
-            aktivertDato
-            etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
-              status
-              etterlevelseDokumentasjonId
-              fristForFerdigstillelse
-              changeStamp {
-                lastModifiedBy
-                lastModifiedDate
-                createdDate
-              }
-            }
-            regelverk {
-              lov {
-                code
-                shortName
-              }
-            }
-            changeStamp {
-              lastModifiedBy
-              lastModifiedDate
-              createdDate
-            }
-          }
-          utgaattKrav {
-            kravNummer
-            kravVersjon
-            navn
-            status
-            aktivertDato
-            etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
-              behandlingId
-              status
-              etterlevelseDokumentasjonId
-              changeStamp {
-                lastModifiedBy
-                lastModifiedDate
-                createdDate
-              }
-            }
-            regelverk {
-              lov {
-                code
-                shortName
-              }
-            }
-            changeStamp {
-              lastModifiedBy
-              lastModifiedDate
-              createdDate
-            }
-          }
-        }
-      }
-    }
-  }
-`

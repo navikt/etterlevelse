@@ -1,10 +1,10 @@
 import { PlusIcon } from '@navikt/aksel-icons'
 import { Alert, BodyShort, Button, Label, Loader, Select } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { useKravFilter } from '../../api/KravGraphQLApi'
 import { EKravListFilter, EKravStatus, TKravQL, TOption, emptyPage } from '../../constants'
 import { KravPanels, sortKrav } from '../../pages/KravListPage'
 import { kravStatus } from '../../pages/KravPage'
+import { useKravFilter } from '../../query/KravQuery'
 import { EListName, codelist } from '../../services/Codelist'
 
 type TKravFilter = {

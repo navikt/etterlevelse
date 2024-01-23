@@ -1,3 +1,4 @@
+import { BodyShort, Button, Label, Modal, TextField, Textarea } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import {
   EListName,
@@ -8,8 +9,6 @@ import {
 import { MarkdownInfo } from '../../common/Markdown'
 import { Error } from '../../common/ModalSchema'
 import { LovCodeDataForm } from './LovCode'
-
-import { BodyShort, Button, Label, Modal, TextField, Textarea } from '@navikt/ds-react'
 
 type TModalCreateProps = {
   title: string

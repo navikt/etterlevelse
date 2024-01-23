@@ -1,10 +1,10 @@
 import { Block } from 'baseui/block'
 import { ProgressBar, SIZE } from 'baseui/progress-bar'
 import { ParagraphXSmall } from 'baseui/typography'
-import moment from 'moment'
 import { EKravFilterType, IEtterlevelseDokumentasjon } from '../../constants'
 import { isFerdigUtfylt } from '../../pages/EtterlevelseDokumentasjonTemaPage'
-import { cardWidth, useKravCounter } from '../../pages/TemaPage'
+import { cardWidth } from '../../pages/TemaPage'
+import { useKravCounter } from '../../query/KravQuery'
 import { TTemaCode, codelist } from '../../services/Codelist'
 import { getNumberOfDaysBetween } from '../../util/checkAge'
 import { ettlevColors, theme } from '../../util/theme'
@@ -40,8 +40,7 @@ export const TemaCardEtterlevelseDokumentasjon = (
   let underArbeid = 0
 
   krav.forEach((k) => {
-    const kravActivatedDate = moment(k.aktivertDato).toDate()
-    const kravAge = getNumberOfDaysBetween(kravActivatedDate, today)
+    const kravAge = getNumberOfDaysBetween(k.aktivertDato, today)
     if (k.etterlevelser.length === 0 && k.kravVersjon === 1 && kravAge < 30) {
       nyttKravCounter += 1
     }
