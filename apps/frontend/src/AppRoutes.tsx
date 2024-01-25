@@ -11,7 +11,6 @@ import { DokumentasjonPage } from './pages/DokumentasjonPage'
 import EtterlevelseAdminPage from './pages/EtterlevelseAdminPage'
 import EtterlevelseDokumentasjonAdminPage from './pages/EtterlevelseDokumentasjonAdminPage'
 import { EtterlevelseDokumentasjonPage } from './pages/EtterlevelseDokumentasjonPage'
-import { EtterlevelseListPage } from './pages/EtterlevelseListPage'
 import { EtterlevelsePage } from './pages/EtterlevelsePage'
 import { FAQ } from './pages/FAQ'
 import Forbidden from './pages/Forbidden'
@@ -65,11 +64,6 @@ const AppRoutes = (): JSX.Element => {
         caseSensitive={true}
       />
 
-      <Route
-        path="/etterlevelse"
-        element={<PrivateRoute component={<EtterlevelseListPage />} adminPage />}
-        caseSensitive={true}
-      />
       <Route path="/etterlevelse/:id" element={<EtterlevelsePage />} caseSensitive={true} />
 
       <Route
