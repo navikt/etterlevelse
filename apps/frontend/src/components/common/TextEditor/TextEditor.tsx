@@ -18,6 +18,7 @@ type TTextEditorProps = {
   name?: string
   simple?: boolean
   width?: string
+  maxWidth?: string
   setIsFormDirty?: (v: boolean) => void
 }
 
@@ -119,6 +120,7 @@ const TextEditor = (props: TTextEditorProps) => {
         ...borderWidth('2px'),
         ...borderStyle('solid'),
         width: props.width || undefined,
+        maxWidth: props.maxWidth || undefined,
       }}
     >
       <Editor

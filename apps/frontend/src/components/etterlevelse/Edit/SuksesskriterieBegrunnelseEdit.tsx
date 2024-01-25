@@ -202,6 +202,7 @@ const KriterieBegrunnelse = ({
               height={'188px'}
               errors={props.form.errors}
               simple
+              maxWidth="790px"
               width="100%"
             />
 

@@ -75,7 +75,7 @@ export const Markdown = ({
       const content =
         shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
       return (
-        <Link href={href} target="_blank" rel="noopener noreferrer">
+        <Link className="break-all" href={href} target="_blank" rel="noopener noreferrer">
           {content} (åpnes i ny fane)
         </Link>
       )
@@ -86,7 +86,7 @@ export const Markdown = ({
         shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
 
       return (
-        <Link href={href} target="_blank" rel="noopener noreferrer">
+        <Link className="break-all" href={href} target="_blank" rel="noopener noreferrer">
           {content} (åpnes i ny fane)
         </Link>
       )
