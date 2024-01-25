@@ -4,7 +4,6 @@ import { PageLayout } from '../components/scaffold/Page'
 import { useKravCounter } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'
-import { useForceUpdate } from '../util/hooks'
 
 export const TemaOversiktPage = () => {
   useEffect(() => {
@@ -23,15 +22,21 @@ export const TemaOversiktPage = () => {
 }
 
 export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
-  const [num] = useState<{ [t: string]: number }>({})
-  const update = useForceUpdate()
+  const [num] = useState<{ [t: string]: number[] }>({})
+  const [kravAntall, setKravAntall] = useState<number>(0)
 
-  const updateNum = (tema: string, temaNum: number) => {
+  const updateNum = (tema: string, temaNum: number[]) => {
     num[tema] = temaNum
-    update()
+
+    const kravNummerArray: number[] = []
+    Object.keys(num).forEach((key) => kravNummerArray.push(...num[key]))
+    setKravAntall(
+      kravNummerArray.filter(
+        (value, index, self) => index === self.findIndex((kravNummer) => kravNummer === value)
+      ).length
+    )
   }
 
-  const kravAntall = Object.values(num).reduce((p, c) => p + c, 0)
   const temaListe = codelist
     .getCodes(EListName.TEMA)
     .sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
@@ -61,7 +66,7 @@ export const TemaPanel = ({
   subContent,
 }: {
   tema: TTemaCode
-  setNum: (tema: string, num: number) => void
+  setNum: (tema: string, num: number[]) => void
   subContent?: boolean
 }) => {
   const lover = codelist.getCodesForTema(tema.code)
@@ -70,7 +75,14 @@ export const TemaPanel = ({
     { skip: !lover.length }
   )
   const krav = data?.krav.content || []
-  useEffect(() => setNum(tema.code, krav.length), [])
+  useEffect(
+    () =>
+      setNum(
+        tema.code,
+        krav.map((k) => k.kravNummer)
+      ),
+    [data]
+  )
 
   if (loading) {
     return <Loader size="large" />
