@@ -14,7 +14,7 @@ type TVirkemiddelOption = {
 }
 
 type TVirkemiddelFilter = {
-  virkemiddelType: TVirkemiddelOption[]
+  virkemiddelType: TVirkemiddelOption
   sort: TVirkemiddelOption[]
 }
 
@@ -33,7 +33,7 @@ export const AllVirkemiddel = ({
     { label: 'eldst-nyest', value: 'ASC' },
   ]
   const [filter, setFilter] = useState<TVirkemiddelFilter>({
-    virkemiddelType: [{ label: 'Alle virkemiddel typer', value: 'alle' }],
+    virkemiddelType: { label: 'Alle virkemiddel typer', value: 'alle' },
     sort: [getSortDateOptions[0]],
   })
   const [sok, setSok] = useDebouncedState('', 300)
@@ -49,7 +49,7 @@ export const AllVirkemiddel = ({
   const filteredVirkemiddel =
     sok && sok.length > 2 ? data.filter((v) => v.navn.includes(sok)) : data
 
-  const updateFilter = (value: any, type: EVirkemiddelListFilter) => {
+  const updateFilter = (value: { value: string; label: string }, type: EVirkemiddelListFilter) => {
     const newFilterValue = { ...filter }
     if (type === EVirkemiddelListFilter.VIRKEMIDDELTYPE) {
       newFilterValue.virkemiddelType = value
@@ -58,7 +58,7 @@ export const AllVirkemiddel = ({
   }
 
   useEffect(() => {
-    setVirkemiddelTypeFilter(filter.virkemiddelType[0].value?.toString() || '')
+    setVirkemiddelTypeFilter(filter.virkemiddelType.value?.toString() || '')
   }, [filter])
 
   return (
@@ -84,7 +84,6 @@ export const AllVirkemiddel = ({
                 <div>
                   <Label>Filter</Label>
                   <Select
-                    isMulti
                     options={getOptions(
                       'Alle virkemiddel typer',
                       virkemiddelTyper?.map((r) => {
@@ -92,9 +91,11 @@ export const AllVirkemiddel = ({
                       })
                     )}
                     value={filter.virkemiddelType}
-                    onChange={(params) =>
-                      updateFilter(params, EVirkemiddelListFilter.VIRKEMIDDELTYPE)
-                    }
+                    onChange={(params) => {
+                      if (params) {
+                        updateFilter(params, EVirkemiddelListFilter.VIRKEMIDDELTYPE)
+                      }
+                    }}
                     styles={{
                       control: (baseStyles) =>
                         ({
