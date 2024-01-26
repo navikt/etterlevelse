@@ -146,7 +146,7 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
                     </Button>
 
                     <Button
-                      marginLeft={true}
+                      className="ml-2"
                       type="button"
                       onClick={() => {
                         submitForm()

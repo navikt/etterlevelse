@@ -1,11 +1,7 @@
-import { Block } from 'baseui/block'
-import { Button } from 'baseui/button'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
-import { ParagraphMedium } from 'baseui/typography'
+import { BodyShort, Button, Modal } from '@navikt/ds-react'
 import { useState } from 'react'
 import { deleteVirkemiddel } from '../../../api/VirkemiddelApi'
 import { IVirkemiddel } from '../../../constants'
-import { buttonContentStyle } from '../../common/Button'
 
 type TModalDeleteProps = {
   isOpen: boolean
@@ -37,48 +33,26 @@ const DeleteVirkemiddeltModal = ({
 
   return (
     <Modal
-      closeable={false}
       onClose={() => setIsOpen(false)}
-      isOpen={isOpen}
-      animate
-      size="default"
+      open={isOpen}
+      header={{ heading: 'Bekreft sletting.' }}
+      width="medium"
     >
-      <ModalHeader>Bekreft sletting.</ModalHeader>
-      <ModalBody>
-        <ParagraphMedium> Bekreft sletting av {virkemiddel?.navn}.</ParagraphMedium>
-      </ModalBody>
+      <Modal.Body>
+        <BodyShort> Bekreft sletting av {virkemiddel?.navn}.</BodyShort>
+      </Modal.Body>
 
-      <ModalFooter>
-        <Block display="flex" justifyContent="flex-end">
-          <Block marginRight="auto">{errorOnDelete && <p>{errorOnDelete}</p>}</Block>
-          <Button
-            kind="secondary"
-            onClick={() => setIsOpen(false)}
-            overrides={{
-              BaseButton: {
-                style: {
-                  marginRight: '1rem',
-                  ...buttonContentStyle,
-                },
-              },
-            }}
-          >
-            <strong>Avbryt</strong>
+      <Modal.Footer>
+        <div className="flex justify-end">
+          <div className="mr-auto">{errorOnDelete && <p>{errorOnDelete}</p>}</div>
+          <Button variant="secondary" type="button" onClick={() => setIsOpen(false)}>
+            Avbryt
           </Button>
-          <Button
-            onClick={() => submit(virkemiddel?.id)}
-            overrides={{
-              BaseButton: {
-                style: {
-                  ...buttonContentStyle,
-                },
-              },
-            }}
-          >
-            <strong>Slett</strong>
+          <Button type="button" onClick={() => submit(virkemiddel?.id)}>
+            Slett
           </Button>
-        </Block>
-      </ModalFooter>
+        </div>
+      </Modal.Footer>
     </Modal>
   )
 }
