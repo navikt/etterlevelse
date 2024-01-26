@@ -33,16 +33,10 @@ export const VirkemiddelListPage = () => {
           )}
         </ListPageHeader>
 
-        <div className="flex justify-center w-full">
-          <div className="w-full">
-            <div className="pt-6">
-              <AllVirkemiddel
-                isCreateModalOpen={isCreateModalOpen}
-                setIsCreateModalOpen={setIsCreateModalOpen}
-              />
-            </div>
-          </div>
-        </div>
+        <AllVirkemiddel
+          isCreateModalOpen={isCreateModalOpen}
+          setIsCreateModalOpen={setIsCreateModalOpen}
+        />
       </div>
     </PageLayout>
   )

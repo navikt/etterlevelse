@@ -1,6 +1,4 @@
-import { Label, Loader, Search } from '@navikt/ds-react'
-import { Block } from 'baseui/block'
-import { ParagraphMedium } from 'baseui/typography'
+import { BodyShort, Label, Loader, Search } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import Select, { CSSObjectWithLabel } from 'react-select'
 import { useVirkemiddelFilter } from '../../api/VirkemiddelApi'
@@ -64,7 +62,7 @@ export const AllVirkemiddel = ({
   }, [filter])
 
   return (
-    <div>
+    <div className="w-full pt-6">
       {loading && <Loader size="large" />}
 
       {!loading && (
@@ -109,15 +107,17 @@ export const AllVirkemiddel = ({
               </div>
             </div>
           </div>
+
           <VirkemiddelTable
             virkemidler={filteredVirkemiddel}
             loading={loading}
             refetchData={refetchData}
           />
+
           {filteredVirkemiddel.length === 0 && (
-            <Block width="100%" display="flex" justifyContent="center">
-              <ParagraphMedium>Fant ingen virkemiddel</ParagraphMedium>
-            </Block>
+            <div className="w-full flex justify-center">
+              <BodyShort>Fant ingen virkemiddel</BodyShort>
+            </div>
           )}
 
           <EditVirkemiddelModal
