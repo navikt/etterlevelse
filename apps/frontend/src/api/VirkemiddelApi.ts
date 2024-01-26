@@ -193,5 +193,5 @@ export const virkemiddelMapToFormVal = (virkemiddel: Partial<IVirkemiddel>): IVi
     regelverk: virkemiddel.regelverk || [],
     virkemiddelType: virkemiddel.virkemiddelType?.code,
     livsSituasjon: virkemiddel.livsSituasjon || '',
-  } as any
+  } as IVirkemiddel
 }
