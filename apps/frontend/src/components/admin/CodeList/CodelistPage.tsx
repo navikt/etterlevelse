@@ -9,7 +9,7 @@ import { user } from '../../../services/User'
 import { useAwait, useForceUpdate } from '../../../util/hooks'
 import { PageLayout } from '../../scaffold/Page'
 import CodeListTable from './CodeListStyledTable'
-import CreateCodeListModal from './ModalCreateCodeList'
+import ModalCreateCodeList from './ModalCreateCodeList'
 
 const CodeListPage = () => {
   const params = useParams<{ listname?: string }>()
@@ -101,7 +101,7 @@ const CodeListPage = () => {
         </div>
       )}
       {listname && (
-        <CreateCodeListModal
+        <ModalCreateCodeList
           title="Ny kode"
           list={listname}
           isOpen={createCodeListModal}
