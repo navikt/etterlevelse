@@ -155,13 +155,15 @@ export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: TVirkmid
             <BodyShort>Totalt antall rader: {virkemidler.length}</BodyShort>
           </div>
 
-          <EditVirkemiddelModal
-            isOpen={isEditModalOpen}
-            setIsOpen={setIsEditModalOpen}
-            virkemiddel={selectedVirkemiddel}
-            isEdit={true}
-            refetchData={refetchData}
-          />
+          {isEditModalOpen && selectedVirkemiddel && (
+            <EditVirkemiddelModal
+              isOpen={isEditModalOpen}
+              setIsOpen={setIsEditModalOpen}
+              virkemiddel={selectedVirkemiddel}
+              isEdit={true}
+              refetchData={refetchData}
+            />
+          )}
           <DeleteVirkemiddeltModal
             isOpen={isDeleteModalOpen}
             setIsOpen={setIsDeleteModalOpen}

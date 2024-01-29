@@ -81,83 +81,73 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
             validateOnBlur={false}
             onSubmit={submit}
           >
-            {({ submitForm, errors }) => {
-              return (
-                <Form>
-                  <InputField label={'Navn'} name={'navn'} />
-                  <FieldWrapper>
-                    <Field name="virkemiddelType">
-                      {(fp: FieldProps) => {
-                        return (
-                          <FormControl
-                            label={
-                              <LabelWithTooltip
-                                label="Legg til virkemiddeltype"
-                                tooltip="Søk og legg til virkemiddeltype fra kodeverket"
-                              />
-                            }
-                          >
-                            <div className="w-full max-w-[400px]">
-                              <Select
-                                options={virkemiddelTypeOptions}
-                                placeholder="Velg virkemiddeltype"
-                                aria-label="Velg virkemiddeltype"
-                                value={valgtVirkemiddeltype}
-                                onChange={(value) => {
-                                  if (value) {
-                                    setValgtVirkemiddeltype(value)
-                                    fp.form.setFieldValue('virkemiddelType', value.value)
-                                  }
-                                }}
-                                styles={{
-                                  control: (baseStyles) =>
-                                    ({
-                                      ...baseStyles,
-                                      height: '48px',
-                                    }) as CSSObjectWithLabel,
-                                  menu: (baseStyles) =>
-                                    ({
-                                      ...baseStyles,
-                                      zIndex: 2,
-                                    }) as CSSObjectWithLabel,
-                                }}
-                              />
-                            </div>
-                          </FormControl>
-                        )
-                      }}
-                    </Field>
-                    {errors.virkemiddelType && (
-                      <ErrorMessageModal msg={errors.virkemiddelType} fullWidth={true} />
+            {({ submitForm, errors }) => (
+              <Form>
+                <InputField label={'Navn'} name={'navn'} />
+                <FieldWrapper>
+                  <Field name="virkemiddelType">
+                    {(fp: FieldProps) => (
+                      <FormControl
+                        label={
+                          <LabelWithTooltip
+                            label="Legg til virkemiddeltype"
+                            tooltip="Søk og legg til virkemiddeltype fra kodeverket"
+                          />
+                        }
+                      >
+                        <div className="w-full max-w-[400px]">
+                          <Select
+                            options={virkemiddelTypeOptions}
+                            placeholder="Velg virkemiddeltype"
+                            aria-label="Velg virkemiddeltype"
+                            value={valgtVirkemiddeltype}
+                            onChange={(value) => {
+                              if (value) {
+                                setValgtVirkemiddeltype(value)
+                                fp.form.setFieldValue('virkemiddelType', value.value)
+                              }
+                            }}
+                            styles={{
+                              control: (baseStyles) =>
+                                ({
+                                  ...baseStyles,
+                                  height: '48px',
+                                }) as CSSObjectWithLabel,
+                              menu: (baseStyles) =>
+                                ({
+                                  ...baseStyles,
+                                  zIndex: 2,
+                                }) as CSSObjectWithLabel,
+                            }}
+                          />
+                        </div>
+                      </FormControl>
                     )}
-                  </FieldWrapper>
-
-                  <RegelverkEdit forVirkemiddel />
-                  {errors.regelverk && (
-                    <ErrorMessageModal msg={errors.regelverk} fullWidth={true} />
+                  </Field>
+                  {errors.virkemiddelType && (
+                    <ErrorMessageModal msg={errors.virkemiddelType} fullWidth={true} />
                   )}
-                  <div className="flex justify-end">
-                    <Button
-                      variant="secondary"
-                      type="button"
-                      onClick={() => props.setIsOpen(false)}
-                    >
-                      Avbryt
-                    </Button>
+                </FieldWrapper>
 
-                    <Button
-                      className="ml-2"
-                      type="button"
-                      onClick={() => {
-                        submitForm()
-                      }}
-                    >
-                      {props.isEdit ? 'Lagre' : 'Opprett'}
-                    </Button>
-                  </div>
-                </Form>
-              )
-            }}
+                <RegelverkEdit forVirkemiddel />
+                {errors.regelverk && <ErrorMessageModal msg={errors.regelverk} fullWidth={true} />}
+                <div className="flex justify-end">
+                  <Button variant="secondary" type="button" onClick={() => props.setIsOpen(false)}>
+                    Avbryt
+                  </Button>
+
+                  <Button
+                    className="ml-2"
+                    type="button"
+                    onClick={() => {
+                      submitForm()
+                    }}
+                  >
+                    {props.isEdit ? 'Lagre' : 'Opprett'}
+                  </Button>
+                </div>
+              </Form>
+            )}
           </Formik>
         </Modal.Body>
       </Modal>
