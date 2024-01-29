@@ -146,19 +146,17 @@ type TMarkdownEditorProps = {
   height?: string
 }
 
-export const MarkdownEditor = (props: TMarkdownEditorProps) => {
-  return (
-    <MdEditor
-      style={{ height: props.height || '500px' }}
-      defaultValue={props.initialValue}
-      renderHTML={(txt) => <Markdown source={txt} shortenLinks={props.shortenLinks} />}
-      onImageUpload={props.onImageUpload}
-    />
-  )
-}
+export const MarkdownEditor = (props: TMarkdownEditorProps) => (
+  <MdEditor
+    style={{ height: props.height || '500px' }}
+    defaultValue={props.initialValue}
+    renderHTML={(txt) => <Markdown source={txt} shortenLinks={props.shortenLinks} />}
+    onImageUpload={props.onImageUpload}
+  />
+)
 
 export const MarkdownInfo = () => (
-  <div>
+  <div className="mt-4">
     Feltet bruker <ExternalLink href={markdownLink}>Markdown</ExternalLink>, se her for mer
     informasjon om formatet
   </div>
