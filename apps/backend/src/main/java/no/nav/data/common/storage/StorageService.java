@@ -46,8 +46,6 @@ public class StorageService<T extends DomainObject> {
         GenericStorage<T> storage = object.getId() != null ? (GenericStorage<T>) getStorage(object.getId()) : new GenericStorage<T>().generateId();
         storage.setDomainObjectData(object);
         GenericStorage<T> saved = repository.save(storage);
-        // flush to update changestamp and versions
-        // TODO: (farjam) flush() medfører IKKE det kommentaren over sier. changestamp og version oppdateres først i linjen under den igjen (saved.getDomainObjectData)
         repository.flush();
         return saved.getDomainObjectData();
     }
@@ -83,27 +81,19 @@ public class StorageService<T extends DomainObject> {
         return storage.getDomainObjectData();
     }
 
-    // TODO: (farjam) Really????
-    // Skal ikke ha slikt. Erstattes med metoder for kun de typene vi trenger dette for.
-    // F.eks. getAllMailTasks() etc.
+    // TODO: getAll(...) 
+    // Metodene er kilder til feil (kan potensielt returnere veldig mye data). De bør derfor fjernes og evt. erstattes av 
+    // metoder kun for de typene vi trenger dette for (f.eks. findAllMailTasks)
+
     public List<T> getAll(Class<T> type) {
         return convert(repository.findAllByType(TypeRegistration.typeOf(type)), GenericStorage::getDomainObjectData);
     }
 
-    // TODO: (farjam) Really????
-    // Skal ikke ha slikt. Erstattes med metoder for kun de typene vi trenger dette for. Dog ikke like ille som den over.
-    // F.eks. getAllMailTasks() etc.
     public Page<T> getAll(Class<T> type, Pageable pageable) {
         return repository.findAllByType(TypeRegistration.typeOf(type), pageable).map(GenericStorage::getDomainObjectData);
     }
 
-    // TODO: (farjam) Fjern type
-    public List<T> getAllById(Class<T> type, List<UUID> ids) {
-        List<GenericStorage<T>> allById = repository.findAllById(ids);
-        return convert(allById, GenericStorage::getDomainObjectData);
-    }
-
-    public List<T> findByNameAndType(String name, Class<? extends DomainObject> type) {
+    public List<T> findByNameAndType(String name, Class<T> type) {
          return convert(repository.findByNameAndType(name, type.getSimpleName()), GenericStorage::getDomainObjectData);
     }
 }

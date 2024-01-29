@@ -28,7 +28,7 @@ public class MdcExecutor extends ThreadPoolExecutor {
         super.execute(wrap(command, parentContext));
     }
 
-    // FIXME: Denne skal fjernes. Se ListenableFutureCallback for hvordan dette kalles erstattes.
+    // TODO: Denne skal fjernes. Se ListenableFutureCallback for hvordan dette kalles erstattes.
     @Deprecated(forRemoval = true)
     public static <T> ListenableFutureCallback<? super T> wrap(Consumer<T> onSuccessCallback, Consumer<Throwable> onErrorCallback) {
         var parentContext = MDC.getCopyOfContextMap();

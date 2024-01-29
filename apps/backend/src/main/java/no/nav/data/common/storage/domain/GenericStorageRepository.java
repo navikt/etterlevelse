@@ -14,10 +14,12 @@ public interface GenericStorageRepository<T extends DomainObject> extends JpaRep
 
     boolean existsById(UUID id);
 
-    // TODO: (farjam) W-h-a-a-a-a-t-?-?-?
+    // TODO: findAllByType(...) 
+    // Metodene er kilder til feil (kan potensielt returnere veldig mye data). De bør derfor fjernes og evt. erstattes av 
+    // metoder kun for de typene vi trenger dette for (f.eks. findAllMailTasks)
+    
     List<GenericStorage<T>> findAllByType(String type);
 
-    // TODO: (farjam) W-h-a-a-a-a-t-?-?-?
     Page<GenericStorage<T>> findAllByType(String type, Pageable pageable);
 
     @Query(value = "select * from generic_storage where data ->> 'name' ilike ?1 and type = ?2", nativeQuery = true)

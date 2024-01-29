@@ -75,7 +75,7 @@ public class Validator<T extends Validated> {
         this.item = item;
     }
 
-    // TODO: (farjam) Denne hører ikke hjemme her. 
+    // TODO: Det skal ikke være en avhengighet til StorageService fra denne klassen
     public static <R extends RequestElement> Validator<R> validate(R item, StorageService<?> storage) {
         Validator<R> validator = validate(item);
         UUID uuid = item.getIdAsUUID();
@@ -84,7 +84,6 @@ public class Validator<T extends Validated> {
         return validator;
     }
 
-    // TODO: (farjam) Denne hører ikke hjemme her. 
     public static <R extends Validated> Validator<R> validate(R item) {
         item.format();
         RequestElement requestElement = item instanceof RequestElement re ? re : null;

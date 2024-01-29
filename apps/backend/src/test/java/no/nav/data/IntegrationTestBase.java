@@ -1,6 +1,5 @@
 package no.nav.data;
 
-import lombok.extern.slf4j.Slf4j;
 import no.nav.data.IntegrationTestBase.Initializer;
 import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
@@ -33,7 +32,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-@Slf4j
 @ActiveProfiles("test")
 @ExtendWith(WiremockExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {AppStarter.class, TestConfig.class})
@@ -48,8 +46,8 @@ public abstract class IntegrationTestBase {
 
     @Autowired
     protected TestRestTemplate restTemplate;
-    @Autowired // FIXME: Fjern
-    protected GenericStorageRepository repository;
+    @Autowired
+    protected GenericStorageRepository<?> repository;
     @Autowired
     protected AuditVersionRepository auditVersionRepository;
     @Autowired
