@@ -36,7 +36,6 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
             p.push(regelverkObject())
             setLov({ value: '', label: '', description: '' })
             setText('')
-            // controlRef.current?.focus()
           }
           return (
             <div>
