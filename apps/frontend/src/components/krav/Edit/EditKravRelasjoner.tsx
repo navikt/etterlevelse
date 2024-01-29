@@ -56,7 +56,7 @@ export const EditKravRelasjoner = () => {
           )
         }}
       </FieldArray>
-      <Error fieldName="kravRelasjoner" fullWidth />
+      <Error fieldName="kravRelasjoner" />
     </FieldWrapper>
   )
 }

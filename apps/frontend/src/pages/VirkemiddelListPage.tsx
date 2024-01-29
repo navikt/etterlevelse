@@ -1,15 +1,11 @@
-import { Block } from 'baseui/block'
-import { HeadingXXLarge } from 'baseui/typography'
+import { PlusIcon } from '@navikt/aksel-icons'
+import { Button } from '@navikt/ds-react'
 import { useState } from 'react'
-import { Helmet } from 'react-helmet'
-import { plusIcon } from '../components/Images'
-import Button from '../components/common/Button'
-import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
+import { ListPageHeader } from '../components/scaffold/ListPageHeader'
+import { PageLayout } from '../components/scaffold/Page'
 import { AllVirkemiddel } from '../components/virkemiddelList/AllVirkemiddel'
 import { ampli } from '../services/Amplitude'
 import { user } from '../services/User'
-import { theme } from '../util'
-import { ettlevColors, maxPageWidth, responsivePaddingLarge } from '../util/theme'
 
 export const VirkemiddelListPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
@@ -19,65 +15,29 @@ export const VirkemiddelListPage = () => {
   })
 
   return (
-    <Block
-      width="100%"
-      paddingBottom={'200px'}
-      id="content"
-      overrides={{ Block: { props: { role: 'main' } } }}
+    <PageLayout
+      pageTitle="Forvalte og opprette virkemiddel"
+      currentPage="Forvalte og opprette virkemiddel"
     >
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Forvalte og opprette virkemiddel</title>
-      </Helmet>
-      <Block
-        width="100%"
-        backgroundColor={ettlevColors.grey50}
-        display={'flex'}
-        justifyContent={'center'}
-      >
-        <Block maxWidth={maxPageWidth} width="100%">
-          <Block
-            paddingLeft={responsivePaddingLarge}
-            paddingRight={responsivePaddingLarge}
-            paddingTop={theme.sizing.scale800}
-          >
-            <CustomizedBreadcrumbs currentPage="Forvalte og opprette virkemiddel" />
-            <Block display="flex">
-              <Block flex="1">
-                <HeadingXXLarge marginTop="0">Forvalte og opprette virkemiddel</HeadingXXLarge>
-              </Block>
-              <Block display="flex" justifyContent="flex-end">
-                {user.isKraveier() && (
-                  <Block>
-                    <Button
-                      onClick={() => setIsCreateModalOpen(true)}
-                      startEnhancer={<img src={plusIcon} alt="plus icon" />}
-                      size="compact"
-                    >
-                      Nytt virkemiddel
-                    </Button>
-                  </Block>
-                )}
-              </Block>
-            </Block>
-          </Block>
-        </Block>
-      </Block>
+      <div className="pb-52 w-full">
+        <ListPageHeader headingText="Forvalte og opprette virkemiddel">
+          {user.isKraveier() && (
+            <Button
+              iconPosition="left"
+              icon={<PlusIcon area-label="" aria-hidden />}
+              size="medium"
+              onClick={() => setIsCreateModalOpen(true)}
+            >
+              Nytt virkemiddel
+            </Button>
+          )}
+        </ListPageHeader>
 
-      <Block display={'flex'} justifyContent="center" width="100%">
-        <Block maxWidth={maxPageWidth} width="100%">
-          <Block
-            paddingLeft={responsivePaddingLarge}
-            paddingRight={responsivePaddingLarge}
-            paddingTop={theme.sizing.scale800}
-          >
-            <AllVirkemiddel
-              isCreateModalOpen={isCreateModalOpen}
-              setIsCreateModalOpen={setIsCreateModalOpen}
-            />
-          </Block>
-        </Block>
-      </Block>
-    </Block>
+        <AllVirkemiddel
+          isCreateModalOpen={isCreateModalOpen}
+          setIsCreateModalOpen={setIsCreateModalOpen}
+        />
+      </div>
+    </PageLayout>
   )
 }

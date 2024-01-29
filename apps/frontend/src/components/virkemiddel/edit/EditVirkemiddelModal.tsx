@@ -1,9 +1,8 @@
-import { Block } from 'baseui/block'
+import { Button, Modal } from '@navikt/ds-react'
 import { FormControl } from 'baseui/form-control'
-import { ModalBody, ModalHeader } from 'baseui/modal'
-import { Value } from 'baseui/select'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
+import Select, { CSSObjectWithLabel } from 'react-select'
 import * as yup from 'yup'
 import {
   createVirkemiddel,
@@ -12,16 +11,10 @@ import {
 } from '../../../api/VirkemiddelApi'
 import { IVirkemiddel } from '../../../constants'
 import { EListName, codelist } from '../../../services/Codelist'
-import { intl } from '../../../util/intl/intl'
-import { ettlevColors } from '../../../util/theme'
-import Button from '../../common/Button'
-import CustomizedModal from '../../common/CustomizedModal'
-import CustomizedSelect from '../../common/CustomizedSelect'
 import { FieldWrapper, InputField } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { borderColor, borderWidth } from '../../common/Style'
+import { Error } from '../../common/ModalSchema'
 import { RegelverkEdit } from '../../krav/Edit/RegelverkEdit'
-import { ErrorMessageModal } from '../../krav/ErrorMessageModal'
 
 const errorMessage = 'Feltet er påkrevd'
 
@@ -36,16 +29,17 @@ type TEditVirkemiddelModalProps = {
 
 export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
   const virkemiddelTypeOptions = codelist.getParsedOptions(EListName.VIRKEMIDDELTYPE)
-  const [valgtVirkemiddeltype, setValgtVirkemiddeltype] = useState<Value>([])
+  const [valgtVirkemiddeltype, setValgtVirkemiddeltype] = useState<{
+    value: string
+    label: string
+  }>({ value: '', label: '' })
 
   useEffect(() => {
     if (props.virkemiddel && props.virkemiddel.virkemiddelType) {
-      setValgtVirkemiddeltype([
-        {
-          id: props.virkemiddel.virkemiddelType.code,
-          label: props.virkemiddel.virkemiddelType.shortName,
-        },
-      ])
+      setValgtVirkemiddeltype({
+        value: props.virkemiddel.virkemiddelType.code,
+        label: props.virkemiddel.virkemiddelType.shortName,
+      })
     }
   }, [props.virkemiddel])
 
@@ -72,16 +66,14 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
   }
 
   return (
-    <Block>
-      <CustomizedModal
-        size="default"
-        isOpen={!!props.isOpen}
+    <div>
+      <Modal
+        width="1000px"
+        open={!!props.isOpen}
         onClose={() => props.setIsOpen(false)}
+        header={{ heading: props.isEdit ? 'Rediger virkemiddel' : 'Opprett nytt virkemiddel' }}
       >
-        <ModalHeader>
-          {props.isEdit ? 'Rediger virkemiddel' : 'Opprett nytt virkemiddel'}
-        </ModalHeader>
-        <ModalBody>
+        <Modal.Body>
           <Formik
             validationSchema={createVirkemiddelSchema()}
             initialValues={virkemiddelMapToFormVal(props.virkemiddel ? props.virkemiddel : {})}
@@ -89,90 +81,76 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
             validateOnBlur={false}
             onSubmit={submit}
           >
-            {({ submitForm, errors }) => {
-              return (
-                <Form>
-                  <InputField label={'Navn'} name={'navn'} />
-                  <FieldWrapper>
-                    <Field name="virkemiddelType">
-                      {(fp: FieldProps) => {
-                        return (
-                          <FormControl
-                            label={
-                              <LabelWithTooltip
-                                label="Legg til virkemiddeltype"
-                                tooltip="Søk og legg til virkemiddeltype fra kodeverket"
-                              />
-                            }
-                          >
-                            <Block width="100%" maxWidth="400px">
-                              <CustomizedSelect
-                                overrides={{
-                                  ControlContainer: {
-                                    style: {
-                                      backgroundColor: fp.form.errors.virkemiddelType
-                                        ? ettlevColors.error50
-                                        : ettlevColors.white,
-                                      ...borderColor(
-                                        fp.form.errors.virkemiddelType
-                                          ? ettlevColors.red600
-                                          : ettlevColors.grey200
-                                      ),
-                                      ...borderWidth('2px'),
-                                    },
-                                  },
-                                }}
-                                noResultsMsg={intl.emptyTable}
-                                maxDropdownHeight="350px"
-                                searchable={true}
-                                options={virkemiddelTypeOptions}
-                                placeholder={'Velg virkemiddeltype'}
-                                aria-label={'Velg virkemiddeltype'}
-                                value={valgtVirkemiddeltype}
-                                onChange={({ value }) => {
-                                  setValgtVirkemiddeltype(value)
-                                  fp.form.setFieldValue(
-                                    'virkemiddelType',
-                                    value && value.length ? value[0].id : undefined
-                                  )
-                                }}
-                              />
-                            </Block>
-                          </FormControl>
-                        )
-                      }}
-                    </Field>
-                    {errors.virkemiddelType && (
-                      <ErrorMessageModal msg={errors.virkemiddelType} fullWidth={true} />
+            {({ submitForm }) => (
+              <Form>
+                <InputField label={'Navn'} name={'navn'} />
+                <FieldWrapper>
+                  <Field name="virkemiddelType">
+                    {(fp: FieldProps) => (
+                      <FormControl
+                        label={
+                          <LabelWithTooltip
+                            label="Legg til virkemiddeltype"
+                            tooltip="Søk og legg til virkemiddeltype fra kodeverket"
+                          />
+                        }
+                      >
+                        <div className="w-full max-w-[400px]">
+                          <Select
+                            options={virkemiddelTypeOptions}
+                            placeholder="Velg virkemiddeltype"
+                            aria-label="Velg virkemiddeltype"
+                            value={valgtVirkemiddeltype}
+                            onChange={(value) => {
+                              if (value) {
+                                setValgtVirkemiddeltype(value)
+                                fp.form.setFieldValue('virkemiddelType', value.value)
+                              }
+                            }}
+                            styles={{
+                              control: (baseStyles) =>
+                                ({
+                                  ...baseStyles,
+                                  height: '48px',
+                                }) as CSSObjectWithLabel,
+                              menu: (baseStyles) =>
+                                ({
+                                  ...baseStyles,
+                                  zIndex: 2,
+                                }) as CSSObjectWithLabel,
+                            }}
+                          />
+                        </div>
+                      </FormControl>
                     )}
-                  </FieldWrapper>
+                  </Field>
 
-                  <RegelverkEdit forVirkemiddel />
-                  {errors.regelverk && (
-                    <ErrorMessageModal msg={errors.regelverk} fullWidth={true} />
-                  )}
-                  <Block display="flex" justifyContent="flex-end">
-                    <Button kind="secondary" type="button" onClick={() => props.setIsOpen(false)}>
-                      Avbryt
-                    </Button>
+                  <Error fieldName="virkemiddelType" />
+                </FieldWrapper>
 
-                    <Button
-                      marginLeft={true}
-                      type="button"
-                      onClick={() => {
-                        submitForm()
-                      }}
-                    >
-                      {props.isEdit ? 'Lagre' : 'Opprett'}
-                    </Button>
-                  </Block>
-                </Form>
-              )
-            }}
+                <RegelverkEdit forVirkemiddel />
+                <Error fieldName="regelverk" />
+                <div className="flex justify-end">
+                  <Button variant="secondary" type="button" onClick={() => props.setIsOpen(false)}>
+                    Avbryt
+                  </Button>
+
+                  <Button
+                    className="ml-2"
+                    type="button"
+                    onClick={() => {
+                      submitForm()
+                    }}
+                  >
+                    {props.isEdit ? 'Lagre' : 'Opprett'}
+                  </Button>
+                </div>
+              </Form>
+            )}
           </Formik>
-        </ModalBody>
-      </CustomizedModal>
-    </Block>
+        </Modal.Body>
+      </Modal>
+    </div>
   )
 }
 

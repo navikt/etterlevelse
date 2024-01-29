@@ -216,7 +216,7 @@ const Kriterie = ({
             onChange={(e) => setNavn((e.target as HTMLInputElement).value)}
             placeholder={'Navn'}
           />
-          <Error fieldName={'suksesskriterier'} fullWidth />
+          <Error fieldName={'suksesskriterier'} />
         </div>
 
         <div>

@@ -62,7 +62,7 @@ export const EditBegreper = () => {
           )
         }}
       </FieldArray>
-      <Error fieldName="begreper" fullWidth />
+      <Error fieldName="begreper" />
     </FieldWrapper>
   )
 }

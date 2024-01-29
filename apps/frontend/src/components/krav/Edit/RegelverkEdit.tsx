@@ -5,7 +5,7 @@ import { FieldArray } from 'formik'
 import { useState } from 'react'
 import Select, { CSSObjectWithLabel } from 'react-select'
 import { IRegelverk } from '../../../constants'
-import { EListName, codelist } from '../../../services/Codelist'
+import { EListName, TLovCode, codelist } from '../../../services/Codelist'
 import { theme } from '../../../util'
 import { LovView } from '../../Lov'
 import { FieldWrapper } from '../../common/Inputs'
@@ -21,7 +21,7 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
   const [text, setText] = useState('')
 
   const regelverkObject = () => ({
-    lov: codelist.getCode(EListName.LOV, lov.value as string)!,
+    lov: codelist.getCode(EListName.LOV, lov.value as string) as TLovCode,
     spesifisering: text,
   })
 
@@ -36,7 +36,6 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
             p.push(regelverkObject())
             setLov({ value: '', label: '', description: '' })
             setText('')
-            // controlRef.current?.focus()
           }
           return (
             <div>

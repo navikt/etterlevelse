@@ -1,24 +1,21 @@
-import { Loader } from '@navikt/ds-react'
-import { Block, Responsive, Scale } from 'baseui/block'
-import { StatefulInput } from 'baseui/input'
-import { Option } from 'baseui/select'
-import { HeadingXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
+import { BodyShort, Label, Loader, Search } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
+import Select, { CSSObjectWithLabel } from 'react-select'
 import { useVirkemiddelFilter } from '../../api/VirkemiddelApi'
 import { EVirkemiddelListFilter } from '../../constants'
 import { EListName, codelist } from '../../services/Codelist'
 import { useDebouncedState } from '../../util/hooks'
-import { ettlevColors } from '../../util/theme'
-import { clearSearchIcon, searchIcon } from '../Images'
-import Button from '../common/Button'
-import CustomizedSelect from '../common/CustomizedSelect'
-import { borderColor, borderWidth } from '../common/Style'
 import { EditVirkemiddelModal } from '../virkemiddel/edit/EditVirkemiddelModal'
 import { VirkemiddelTable } from './VirkemiddelTable'
 
+type TVirkemiddelOption = {
+  value: string
+  label: string
+}
+
 type TVirkemiddelFilter = {
-  virkemiddelType: Option[]
-  sort: Option[]
+  virkemiddelType: TVirkemiddelOption
+  sort: TVirkemiddelOption[]
 }
 
 type TAllVirkemiddelProps = {
@@ -26,26 +23,25 @@ type TAllVirkemiddelProps = {
   setIsCreateModalOpen: (b: boolean) => void
 }
 
-const selectorMarginLeft: Responsive<Scale> = ['0px', '0px', '0px', '12px', '12px', '12px']
-const selectorMarginTop: Responsive<Scale> = ['10px', '10px', '10px', '0px', '0px', '0px']
-
 export const AllVirkemiddel = ({
   isCreateModalOpen,
   setIsCreateModalOpen,
 }: TAllVirkemiddelProps) => {
   const getSortDateOptions = [
-    { label: 'sorter på navn', id: 'navn' },
-    { label: 'nyest-eldst', id: 'DESC' },
-    { label: 'eldst-nyest', id: 'ASC' },
+    { label: 'sorter på navn', value: 'navn' },
+    { label: 'nyest-eldst', value: 'DESC' },
+    { label: 'eldst-nyest', value: 'ASC' },
   ]
   const [filter, setFilter] = useState<TVirkemiddelFilter>({
-    virkemiddelType: [{ label: 'Alle virkemiddel typer', id: 'alle' }],
+    virkemiddelType: { label: 'Alle virkemiddel typer', value: 'alle' },
     sort: [getSortDateOptions[0]],
   })
   const [sok, setSok] = useDebouncedState('', 300)
-  const [hover, setHover] = useState(false)
   const virkemiddelTyper = codelist.getCodes(EListName.VIRKEMIDDELTYPE)
-  const getOptions = (label: string, options: any[]) => [{ label: label, id: 'alle' }, ...options]
+  const getOptions = (label: string, options: any[]) => [
+    { label: label, value: 'alle' },
+    ...options,
+  ]
 
   const [data, totalDataLength, setVirkemiddelTypeFilter, loading, refetchData] =
     useVirkemiddelFilter()
@@ -53,7 +49,7 @@ export const AllVirkemiddel = ({
   const filteredVirkemiddel =
     sok && sok.length > 2 ? data.filter((v) => v.navn.includes(sok)) : data
 
-  const updateFilter = (value: any, type: EVirkemiddelListFilter) => {
+  const updateFilter = (value: { value: string; label: string }, type: EVirkemiddelListFilter) => {
     const newFilterValue = { ...filter }
     if (type === EVirkemiddelListFilter.VIRKEMIDDELTYPE) {
       newFilterValue.virkemiddelType = value
@@ -62,146 +58,76 @@ export const AllVirkemiddel = ({
   }
 
   useEffect(() => {
-    setVirkemiddelTypeFilter(filter.virkemiddelType[0].id?.toString() || '')
+    setVirkemiddelTypeFilter(filter.virkemiddelType.value?.toString() || '')
   }, [filter])
 
-  //must be run in function to not affect other selectors others overrides
-  const getSelector = (
-    filterId: string | undefined,
-    virkemiddelFilter: EVirkemiddelListFilter,
-    options: any[],
-    value: Option[]
-  ) => {
-    return (
-      <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
-        <CustomizedSelect
-          key={'virkemiddel_filter_' + virkemiddelFilter}
-          clearable={false}
-          size="compact"
-          placeholder="tema"
-          options={options}
-          overrides={{
-            Root: {
-              style: {
-                minWidth: '200px',
-              },
-            },
-            ControlContainer: {
-              style: {
-                backgroundColor: filterId === 'alle' ? ettlevColors.white : ettlevColors.green50,
-                ...borderColor(filterId === 'alle' ? ettlevColors.grey200 : ettlevColors.green800),
-              },
-            },
-          }}
-          value={value}
-          onChange={(params) => updateFilter(params.value, virkemiddelFilter)}
-        />
-      </Block>
-    )
-  }
+  return (
+    <div className="w-full pt-6">
+      {loading && <Loader size="large" />}
 
-  return loading ? (
-    <Loader size="large" />
-  ) : (
-    <Block>
-      <Block width="100%" justifyContent="center" marginTop="20px" marginBottom="20px">
-        <Block display="flex" justifyContent="flex-start" width="100%" marginBottom="6px">
-          <HeadingXLarge marginTop="0px" marginBottom="0px">
-            {totalDataLength} Virkemiddel
-          </HeadingXLarge>
-        </Block>
-        <Block display="flex" justifyContent="center" alignContent="center" width="100%">
-          <Block
-            display="flex"
-            justifyContent="flex-start"
-            width="100%"
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}
-          >
-            <StatefulInput
-              size="compact"
-              placeholder="Søk"
-              aria-label={'Søk'}
-              onChange={(e) => setSok((e.target as HTMLInputElement).value)}
-              clearable
-              overrides={{
-                Root: { style: { paddingLeft: 0, paddingRight: 0, ...borderWidth('1px') } },
-                Input: {
-                  style: {
-                    backgroundColor: hover ? ettlevColors.green50 : undefined,
-                  },
-                },
-                StartEnhancer: {
-                  style: {
-                    backgroundColor: hover ? ettlevColors.green50 : undefined,
-                  },
-                },
-                ClearIconContainer: {
-                  style: {
-                    backgroundColor: hover ? ettlevColors.green50 : undefined,
-                  },
-                },
-                ClearIcon: {
-                  props: {
-                    overrides: {
-                      Svg: {
-                        component: (props: any) => (
-                          <Button
-                            notBold
-                            size="compact"
-                            kind="tertiary"
-                            onClick={() => props.onClick()}
-                          >
-                            <img src={clearSearchIcon} alt="tøm" />
-                          </Button>
-                        ),
-                      },
-                    },
-                  },
-                },
-              }}
-              startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-            />
-          </Block>
-          <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
-            <Block
-              display={['block', 'block', 'block', 'block', 'flex', 'flex']}
-              alignItems="center"
-              justifyContent="flex-end"
-              width="100%"
-            >
-              <LabelSmall>Filter</LabelSmall>
-              {getSelector(
-                filter.virkemiddelType[0].id?.toString(),
-                EVirkemiddelListFilter.VIRKEMIDDELTYPE,
-                getOptions(
-                  'Alle virkemiddel typer',
-                  virkemiddelTyper?.map((r) => {
-                    return { label: r.shortName, id: r.code }
-                  })
-                ),
-                filter.virkemiddelType
-              )}
-            </Block>
-          </Block>
-        </Block>
-      </Block>
-      <VirkemiddelTable
-        virkemidler={filteredVirkemiddel}
-        loading={loading}
-        refetchData={refetchData}
-      />
-      {filteredVirkemiddel.length === 0 && (
-        <Block width="100%" display="flex" justifyContent="center">
-          <ParagraphMedium>Fant ingen virkemiddel</ParagraphMedium>
-        </Block>
+      {!loading && (
+        <div>
+          <div className="w-full justify-center my-5">
+            <div className="flex w-full mb-2.5">
+              <div className="w-full">
+                <Label>{totalDataLength} Virkemiddel</Label>
+                <Search
+                  label="Søk i virkemiddel"
+                  variant="secondary"
+                  placeholder="Søk"
+                  onChange={(inputValue) => setSok(inputValue)}
+                  clearButton
+                />
+              </div>
+
+              <div className="flex justify-end w-full">
+                <div>
+                  <Label>Filter</Label>
+                  <Select
+                    options={getOptions(
+                      'Alle virkemiddel typer',
+                      virkemiddelTyper?.map((r) => {
+                        return { label: r.shortName, value: r.code }
+                      })
+                    )}
+                    value={filter.virkemiddelType}
+                    onChange={(params) => {
+                      if (params) {
+                        updateFilter(params, EVirkemiddelListFilter.VIRKEMIDDELTYPE)
+                      }
+                    }}
+                    styles={{
+                      control: (baseStyles) =>
+                        ({
+                          ...baseStyles,
+                          minHeight: '48px',
+                        }) as CSSObjectWithLabel,
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <VirkemiddelTable
+            virkemidler={filteredVirkemiddel}
+            loading={loading}
+            refetchData={refetchData}
+          />
+
+          {filteredVirkemiddel.length === 0 && (
+            <div className="w-full flex justify-center">
+              <BodyShort>Fant ingen virkemiddel</BodyShort>
+            </div>
+          )}
+
+          <EditVirkemiddelModal
+            isOpen={isCreateModalOpen}
+            setIsOpen={setIsCreateModalOpen}
+            refetchData={refetchData}
+          />
+        </div>
       )}
-
-      <EditVirkemiddelModal
-        isOpen={isCreateModalOpen}
-        setIsOpen={setIsCreateModalOpen}
-        refetchData={refetchData}
-      />
-    </Block>
+    </div>
   )
 }

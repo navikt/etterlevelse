@@ -52,7 +52,7 @@ export const InputField = (props: {
             {...p.field}
             placeholder={!props.disablePlaceHolder ? props.label : undefined}
           />
-          <Error fieldName={props.name} fullWidth />
+          <Error fieldName={props.name} />
         </div>
       )}
     </Field>
@@ -150,7 +150,7 @@ export const BoolField = (props: {
             <Radio value={NO}>Nei</Radio>
             {props.nullable && <Radio value={UNCLARIFIED}>Uavklart</Radio>}
           </RadioGroup>
-          <Error fieldName={props.name} fullWidth />
+          <Error fieldName={props.name} />
         </div>
       )}
     </Field>

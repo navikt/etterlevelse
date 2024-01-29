@@ -358,7 +358,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                   </FieldWrapper>
                 )}
                 <div className="my-5">
-                  <Error fieldName="title" fullWidth />
+                  <Error fieldName="title" />
                 </div>
                 <div className="flex justify-end">
                   <Button
