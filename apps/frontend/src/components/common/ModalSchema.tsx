@@ -2,11 +2,10 @@ import { ExclamationmarkIcon } from '@navikt/aksel-icons'
 import { Alert, Label, Tooltip } from '@navikt/ds-react'
 import { ErrorMessage } from 'formik'
 
-export const Error = (props: { fieldName: string; fullWidth?: boolean }) => (
+export const Error = (props: { fieldName: string }) => (
   <ErrorMessage name={props.fieldName}>
     {(msg) => (
       <div className="flex w-full mt-1">
-        {!props.fullWidth && <ModalLabel />}
         <div className="w-full">
           <Alert className="w-auto" variant="error">
             {msg}

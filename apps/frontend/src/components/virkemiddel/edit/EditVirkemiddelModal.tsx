@@ -13,8 +13,8 @@ import { IVirkemiddel } from '../../../constants'
 import { EListName, codelist } from '../../../services/Codelist'
 import { FieldWrapper, InputField } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
+import { Error } from '../../common/ModalSchema'
 import { RegelverkEdit } from '../../krav/Edit/RegelverkEdit'
-import { ErrorMessageModal } from '../../krav/ErrorMessageModal'
 
 const errorMessage = 'Feltet er påkrevd'
 
@@ -81,7 +81,7 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
             validateOnBlur={false}
             onSubmit={submit}
           >
-            {({ submitForm, errors }) => (
+            {({ submitForm }) => (
               <Form>
                 <InputField label={'Navn'} name={'navn'} />
                 <FieldWrapper>
@@ -124,13 +124,12 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
                       </FormControl>
                     )}
                   </Field>
-                  {errors.virkemiddelType && (
-                    <ErrorMessageModal msg={errors.virkemiddelType} fullWidth={true} />
-                  )}
+
+                  <Error fieldName="virkemiddelType" />
                 </FieldWrapper>
 
                 <RegelverkEdit forVirkemiddel />
-                {errors.regelverk && <ErrorMessageModal msg={errors.regelverk} fullWidth={true} />}
+                <Error fieldName="regelverk" />
                 <div className="flex justify-end">
                   <Button variant="secondary" type="button" onClick={() => props.setIsOpen(false)}>
                     Avbryt

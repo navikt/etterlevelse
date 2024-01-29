@@ -102,8 +102,8 @@ export const TemaCodeDataForm = () => {
           }
           return (
             <>
-              <div className="flex w-full mt-4 items-center">
-                <Label className="mr-4 w-1/4">Bilde:</Label>
+              <div className="w-full mt-4">
+                <Label className="mr-4 w-1/4">Bilde</Label>
                 <Select
                   className="w-full"
                   label="Bilde"
@@ -122,18 +122,14 @@ export const TemaCodeDataForm = () => {
                   ))}
                 </Select>
               </div>
-              <div className="flex w-full mt-4 items-center">
-                <Label className="mr-4 w-1/4">Short Desciption:</Label>
-                <Textarea
-                  label="Short Desciption"
-                  className="w-full"
-                  hideLabel
-                  value={data.shortDesciption}
-                  onChange={(str) =>
-                    set({ shortDesciption: (str.target as HTMLTextAreaElement).value })
-                  }
-                />
-              </div>
+              <Textarea
+                label="Kort beskrivelse"
+                className="w-full mt-4"
+                value={data.shortDesciption}
+                onChange={(str) =>
+                  set({ shortDesciption: (str.target as HTMLTextAreaElement).value })
+                }
+              />
               <Error fieldName="data.shortDesciption" />
             </>
           )

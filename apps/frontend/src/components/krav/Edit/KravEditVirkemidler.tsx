@@ -86,7 +86,7 @@ export const EditVirkemidler = () => {
           )
         }}
       </FieldArray>
-      <Error fieldName="virkemidler" fullWidth />
+      <Error fieldName="virkemidler" />
     </FieldWrapper>
   )
 }

@@ -24,7 +24,6 @@ import { EditBegreper } from './Edit/KravBegreperEdit'
 import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
 import { RegelverkEdit } from './Edit/RegelverkEdit'
-import { ErrorMessageModal } from './ErrorMessageModal'
 
 type TEditKravProps = {
   krav: TKravQL
@@ -318,7 +317,7 @@ export const EditKrav = ({
                       'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'
                     }
                   />
-                  <Error fieldName={'hensikt'} fullWidth />
+                  <Error fieldName="hensikt" />
                 </div>
 
                 <div className="flex w-full justify-center">
@@ -350,13 +349,10 @@ export const EditKrav = ({
                       }
                       setErrors={() => setErrors({ dokumentasjon: 'Må ha navn på kilde.' })}
                     />
-                    {errors.dokumentasjon && (
-                      <ErrorMessageModal msg={errors.dokumentasjon} fullWidth={true} />
-                    )}
+
+                    <Error fieldName="dokumentasjon" />
                     <RegelverkEdit />
-                    {errors.regelverk && (
-                      <ErrorMessageModal msg={errors.regelverk} fullWidth={true} />
-                    )}
+                    <Error fieldName="regelverk" />
 
                     {!newKrav && krav.kravVersjon > 1 && (
                       <>
@@ -368,7 +364,7 @@ export const EditKrav = ({
                           shortenLinks
                           tooltip={'Beskrivelse av hva som er nytt siden siste versjon.'}
                         />
-                        <Error fieldName={'versjonEndringer'} fullWidth />
+                        <Error fieldName={'versjonEndringer'} />
                       </>
                     )}
 
@@ -386,9 +382,8 @@ export const EditKrav = ({
                         listName={EListName.RELEVANS}
                         tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}
                       />
-                      {errors.relevansFor && (
-                        <ErrorMessageModal msg={errors.relevansFor} fullWidth={true} />
-                      )}
+
+                      <Error fieldName="relevansFor" />
                     </div>
 
                     <div className="w-full mb-20 max-w-md">
@@ -406,9 +401,9 @@ export const EditKrav = ({
                     </div>
 
                     <KravVarslingsadresserEdit />
-                    {errors.varslingsadresser && (
-                      <ErrorMessageModal msg={errors.varslingsadresser} fullWidth={true} />
-                    )}
+
+                    <Error fieldName="varslingsadresser" />
+
                     <div className="w-full">
                       {Object.keys(errors).length > 0 && !errors.dokumentasjon && (
                         <div className="flex w-full my-12">
@@ -425,7 +420,7 @@ export const EditKrav = ({
                 <div className="button_container sticky bottom-0 flex flex-col py-4 px-24 bg-gray-50 z-10">
                   {errors.status && (
                     <div className="mb-3">
-                      <Error fieldName="status" fullWidth />
+                      <Error fieldName="status" />
                     </div>
                   )}
 
