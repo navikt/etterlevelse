@@ -45,7 +45,12 @@ const DeleteVirkemiddeltModal = ({
       <Modal.Footer>
         <div className="flex justify-end">
           <div className="mr-auto">{errorOnDelete && <p>{errorOnDelete}</p>}</div>
-          <Button variant="secondary" type="button" onClick={() => setIsOpen(false)}>
+          <Button
+            variant="secondary"
+            type="button"
+            className="mr-2"
+            onClick={() => setIsOpen(false)}
+          >
             Avbryt
           </Button>
           <Button type="button" onClick={() => submit(virkemiddel?.id)}>
