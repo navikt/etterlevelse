@@ -20,7 +20,7 @@ import { kravModal } from '../EditKrav'
 
 type TKravSuksesskriterieEditProps = {
   setIsFormDirty?: (v: boolean) => void
-  newVersion: boolean
+  newVersion?: boolean
 }
 
 export const KravSuksesskriterierEdit = ({
@@ -48,7 +48,7 @@ const KriterieList = ({
 }: {
   p: FieldArrayRenderProps
   setIsFormDirty?: (v: boolean) => void
-  newVersion: boolean
+  newVersion?: boolean
 }) => {
   const suksesskriterier = p.form.values.suksesskriterier as ISuksesskriterie[]
 
@@ -159,7 +159,7 @@ const Kriterie = ({
   isDragging: boolean
   p: FieldArrayRenderProps
   setIsFormDirty?: (v: boolean) => void
-  newVersion: boolean
+  newVersion?: boolean
 }) => {
   const debounceDelay = 500
   const [navn, setNavn, navnInput] = useDebouncedState(s.navn, debounceDelay)

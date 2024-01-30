@@ -30,7 +30,15 @@ const activeStatusValueValidation = (status: EKravStatus, check: boolean) => {
 
 export const kravCreateValidation = () =>
   yup.object({
-    navn: yup.string().required('Du må oppgi et tittel til suksesskriterie'),
+    navn: yup.string().required('Du må oppgi et navn til kravet'),
+    hensikt: yup.string().test({
+      name: 'hensiktCheck',
+      message: EYupErrorMessage.PAAKREVD,
+      test: function (hensikt) {
+        const { parent } = this
+        activeStatusValueValidation(parent.status, hensikt ? true : false)
+      },
+    }),
     suksesskriterier: yup.array().test({
       name: 'suksesskriterierCheck',
       message: EYupErrorMessage.PAAKREVD,
@@ -40,14 +48,6 @@ export const kravCreateValidation = () =>
           parent.status,
           checkIfAllSuksesskriterieHasName(suksesskriterier as ISuksesskriterie[])
         )
-      },
-    }),
-    hensikt: yup.string().test({
-      name: 'hensiktCheck',
-      message: EYupErrorMessage.PAAKREVD,
-      test: function (hensikt) {
-        const { parent } = this
-        activeStatusValueValidation(parent.status, hensikt ? true : false)
       },
     }),
     regelverk: yup.array().test({
