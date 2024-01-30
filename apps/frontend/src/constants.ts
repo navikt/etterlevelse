@@ -25,6 +25,10 @@ export enum ETilbakemeldingMeldingStatus {
   MIDLERTIDLIG_SVAR = 'MIDLERTIDLIG_SVAR',
 }
 
+export enum EYupErrorMessage {
+  PAAKREVD = 'Feltet er påkrevd',
+}
+
 export interface IEtterlevelseArkiv extends IDomainObject {
   id: string
   behandlingId: string
