@@ -190,9 +190,11 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   // knyttetTilVirkemiddel: etterlevelseDokumentasjon.knyttetTilVirkemiddel !== undefined ? etterlevelseDokumentasjon.knyttetTilVirkemiddel : false,
   knyttetTilVirkemiddel: false,
   knytteTilTeam:
-    etterlevelseDokumentasjon.knytteTilTeam !== undefined
-      ? etterlevelseDokumentasjon.knytteTilTeam
-      : true,
+    etterlevelseDokumentasjon.teams && etterlevelseDokumentasjon.teams.length > 0
+      ? true
+      : etterlevelseDokumentasjon.knytteTilTeam !== undefined
+        ? etterlevelseDokumentasjon.knytteTilTeam
+        : true,
 })
 
 export const etterlevelseDokumentasjonSchema = () =>
