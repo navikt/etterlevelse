@@ -1,19 +1,9 @@
 import { ExclamationmarkIcon } from '@navikt/aksel-icons'
-import { Alert, Label, Tooltip } from '@navikt/ds-react'
+import { Label, Tooltip } from '@navikt/ds-react'
 import { ErrorMessage } from 'formik'
 
 export const Error = (props: { fieldName: string }) => (
-  <ErrorMessage name={props.fieldName}>
-    {(msg) => (
-      <div className="flex w-full mt-1">
-        <div className="w-full">
-          <Alert className="w-auto" variant="error">
-            {msg}
-          </Alert>
-        </div>
-      </div>
-    )}
-  </ErrorMessage>
+  <ErrorMessage name={props.fieldName}>{(msg: string) => msg}</ErrorMessage>
 )
 
 export const ModalLabel = (props: { label?: any; tooltip?: string; fullwidth?: boolean }) => {

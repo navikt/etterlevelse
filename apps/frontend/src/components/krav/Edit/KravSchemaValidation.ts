@@ -7,21 +7,27 @@ import {
   IVarslingsadresse,
 } from '../../../constants'
 
-const checkIfAllSuksesskriterieHasName = (suksesskriterier: ISuksesskriterie[]) => {
+const checkIfHensiktHasValue = (hensikt: string): boolean => {
+  return hensikt ? true : false
+}
+
+const checkIfAllSuksesskriterieHasName = (suksesskriterier: ISuksesskriterie[]): boolean => {
   return suksesskriterier.length > 0 && suksesskriterier.every((s) => s.navn)
 }
 
-const checkIfRegelverkIsEmpty = (regelverk: IRegelverk[]) => {
-  return regelverk.length > 0 ? true : false
+const checkIfRegelverkIsEmpty = (regelverk: IRegelverk[]): boolean => {
+  const regelverkCheck = regelverk.length > 0 ? true : false
+
+  return regelverkCheck
 }
 
-const checkIfVarslingsAddresserIsEmpty = (varslingsadressers: IVarslingsadresse[]) => {
+const checkIfVarslingsAddresserIsEmpty = (varslingsadressers: IVarslingsadresse[]): boolean => {
   return varslingsadressers.length > 0 ? true : false
 }
 
-const isKravActiveStatus = (status: EKravStatus) => status === EKravStatus.AKTIV
+const isKravActiveStatus = (status: EKravStatus): boolean => status === EKravStatus.AKTIV
 
-const activeStatusValueValidation = (status: EKravStatus, check: boolean) => {
+const activeStatusValueValidation = (status: EKravStatus, check: boolean): boolean => {
   if (isKravActiveStatus(status)) {
     return check
   }
@@ -36,7 +42,7 @@ export const kravCreateValidation = () =>
       message: EYupErrorMessage.PAAKREVD,
       test: function (hensikt) {
         const { parent } = this
-        activeStatusValueValidation(parent.status, hensikt ? true : false)
+        return activeStatusValueValidation(parent.status, checkIfHensiktHasValue(hensikt as string))
       },
     }),
     suksesskriterier: yup.array().test({
@@ -44,9 +50,9 @@ export const kravCreateValidation = () =>
       message: EYupErrorMessage.PAAKREVD,
       test: function (suksesskriterier) {
         const { parent } = this
-        activeStatusValueValidation(
+        return activeStatusValueValidation(
           parent.status,
-          checkIfAllSuksesskriterieHasName(suksesskriterier as ISuksesskriterie[])
+          !!checkIfAllSuksesskriterieHasName(suksesskriterier as ISuksesskriterie[])
         )
       },
     }),
@@ -55,9 +61,9 @@ export const kravCreateValidation = () =>
       message: EYupErrorMessage.PAAKREVD,
       test: function (regelverk) {
         const { parent } = this
-        activeStatusValueValidation(
+        return activeStatusValueValidation(
           parent.status,
-          checkIfRegelverkIsEmpty(regelverk as IRegelverk[])
+          !!checkIfRegelverkIsEmpty(regelverk as IRegelverk[])
         )
       },
     }),
@@ -66,9 +72,9 @@ export const kravCreateValidation = () =>
       message: EYupErrorMessage.PAAKREVD,
       test: function (varslingsadresser) {
         const { parent } = this
-        activeStatusValueValidation(
+        return activeStatusValueValidation(
           parent.status,
-          checkIfVarslingsAddresserIsEmpty(varslingsadresser as IVarslingsadresse[])
+          !!checkIfVarslingsAddresserIsEmpty(varslingsadresser as IVarslingsadresse[])
         )
       },
     }),

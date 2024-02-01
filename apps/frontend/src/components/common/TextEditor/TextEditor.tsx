@@ -5,6 +5,7 @@ import { Editor } from 'react-draft-wysiwyg'
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import { useDebouncedState } from '../../../util/hooks'
 import { ettlevColors } from '../../../util/theme'
+import { Error } from '../ModalSchema'
 import { borderColor, borderStyle, borderWidth } from '../Style'
 import './customStyle.css'
 
@@ -109,58 +110,74 @@ const TextEditor = (props: TTextEditorProps) => {
   //--------------------------
 
   return (
-    <div
-      style={{
-        backgroundColor: ettlevColors.white,
-        ...borderColor(
-          props.errors && props.name && props.errors[props.name]
-            ? ettlevColors.red600
-            : ettlevColors.textAreaBorder
-        ),
-        ...borderWidth('2px'),
-        ...borderStyle('solid'),
-        width: props.width || undefined,
-        maxWidth: props.maxWidth || undefined,
-      }}
-    >
-      <Editor
-        editorStyle={{
-          padding: '10px',
-          minHeight: props.height || '500px',
-          backgroundColor:
-            props.errors && props.name && props.errors[props.name] ? ettlevColors.red50 : undefined,
-        }}
-        toolbarStyle={{
+    <div>
+      <div
+        style={{
           backgroundColor: ettlevColors.white,
-          borderBottom: `1px solid ${ettlevColors.textAreaBorder}`,
+          ...borderColor(
+            props.errors && props.name && props.errors[props.name]
+              ? ettlevColors.red600
+              : ettlevColors.textAreaBorder
+          ),
+          ...borderWidth('2px'),
+          ...borderStyle('solid'),
+          width: props.width || undefined,
+          maxWidth: props.maxWidth || undefined,
         }}
-        onEditorStateChange={(data) => {
-          setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
-          if (props.setIsFormDirty) {
-            props.setIsFormDirty(true)
-          }
-        }}
-        initialContentState={CustomMarkdownToDraft(val)}
-        localization={{
-          translations: translations,
-        }}
-        tabIndex={0}
-        toolbar={{
-          options: props.simple
-            ? ['inline', 'list', 'link']
-            : ['inline', 'blockType', 'list', 'link', 'history'],
-          blockType: {},
-          inline: { options: ['bold'] },
-          // old toolbar
-          // inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
-          list: { options: ['unordered', 'ordered'] },
-          link: {
-            defaultTargetOption: '_blank',
-            options: ['link'],
-          },
-          //image: { alt: { present: true, mandatory: true }, },
-        }}
-      />
+      >
+        <Editor
+          editorStyle={{
+            padding: '10px',
+            minHeight: props.height || '500px',
+            backgroundColor:
+              props.errors && props.name && props.errors[props.name]
+                ? ettlevColors.red50
+                : undefined,
+          }}
+          toolbarStyle={{
+            backgroundColor: ettlevColors.white,
+            borderBottom: `1px solid ${ettlevColors.textAreaBorder}`,
+          }}
+          onEditorStateChange={(data) => {
+            setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
+            if (props.setIsFormDirty) {
+              props.setIsFormDirty(true)
+            }
+          }}
+          initialContentState={CustomMarkdownToDraft(val)}
+          localization={{
+            translations: translations,
+          }}
+          tabIndex={0}
+          toolbar={{
+            options: props.simple
+              ? ['inline', 'list', 'link']
+              : ['inline', 'blockType', 'list', 'link', 'history'],
+            blockType: {},
+            inline: { options: ['bold'] },
+            // old toolbar
+            // inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
+            list: { options: ['unordered', 'ordered'] },
+            link: {
+              defaultTargetOption: '_blank',
+              options: ['link'],
+            },
+            //image: { alt: { present: true, mandatory: true }, },
+          }}
+        />
+      </div>
+      {props.errors && props.name && props.errors[props.name] && (
+        <div
+          className="navds-form-field__error"
+          id="textField-error-rm"
+          aria-relevant="additions removals"
+          aria-live="polite"
+        >
+          <p className="navds-error-message navds-error-message::before navds-label">
+            <Error fieldName={props.name as string} />
+          </p>
+        </div>
+      )}
     </div>
   )
 }

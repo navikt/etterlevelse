@@ -42,22 +42,27 @@ export const InputField = (props: {
   description?: string
   marginBottom?: boolean
   disablePlaceHolder?: boolean
-}) => (
-  <FieldWrapper marginBottom={props.marginBottom}>
-    <Field name={props.name}>
-      {(p: FieldProps) => (
-        <div className="w-full">
-          <TextField
-            label={props.label}
-            {...p.field}
-            placeholder={!props.disablePlaceHolder ? props.label : undefined}
-          />
-          <Error fieldName={props.name} />
-        </div>
-      )}
-    </Field>
-  </FieldWrapper>
-)
+}) => {
+  const { name, label, disablePlaceHolder, marginBottom } = props
+  console.log('name', name)
+
+  return (
+    <FieldWrapper marginBottom={marginBottom}>
+      <Field name={name}>
+        {(p: FieldProps) => (
+          <div className="w-full">
+            <TextField
+              label={label}
+              {...p.field}
+              placeholder={!disablePlaceHolder ? label : undefined}
+              error={p.form.errors[name] ? <Error fieldName={name} /> : undefined}
+            />
+          </div>
+        )}
+      </Field>
+    </FieldWrapper>
+  )
+}
 
 export const TextAreaField = (props: {
   height?: string

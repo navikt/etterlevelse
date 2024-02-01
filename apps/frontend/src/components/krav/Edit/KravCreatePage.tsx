@@ -43,6 +43,8 @@ export const KravCreatePage = () => {
       underavdeling: underavdeling,
     }
 
+    console.log('mutatedKRAV')
+
     // createKrav(mutatedKrav).then((krav) => {
     //   setLoading(false)
     //   navigate('/krav/' + krav.id)
@@ -69,6 +71,8 @@ export const KravCreatePage = () => {
           onSubmit={submit}
           initialValues={kravMapToFormVal({})}
           validationSchema={kravCreateValidation()}
+          validateOnChange={false}
+          validateOnBlur={false}
         >
           {({
             values,
@@ -124,7 +128,6 @@ export const KravCreatePage = () => {
                       'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'
                     }
                   />
-                  <Error fieldName="hensikt" />
                 </div>
 
                 <div className="flex w-full justify-center">
