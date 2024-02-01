@@ -2,8 +2,26 @@ import { ExclamationmarkIcon } from '@navikt/aksel-icons'
 import { Label, Tooltip } from '@navikt/ds-react'
 import { ErrorMessage } from 'formik'
 
-export const Error = (props: { fieldName: string }) => (
-  <ErrorMessage name={props.fieldName}>{(msg: string) => msg}</ErrorMessage>
+export const Error = (props: { fieldName: string; akselStyling?: boolean }) => (
+  <div>
+    {!props.akselStyling && (
+      <ErrorMessage name={props.fieldName}>{(msg: string) => msg}</ErrorMessage>
+    )}
+
+    {props.akselStyling && (
+      <div
+        className="navds-form-field__error pt-2"
+        id="textField-error-rm"
+        aria-relevant="additions removals"
+        aria-live="polite"
+      >
+        <p className="navds-error-message navds-label flex gap-2">
+          <p>•</p>
+          <ErrorMessage name={props.fieldName}>{(msg: string) => msg}</ErrorMessage>
+        </p>
+      </div>
+    )}
+  </div>
 )
 
 export const ModalLabel = (props: { label?: any; tooltip?: string; fullwidth?: boolean }) => {

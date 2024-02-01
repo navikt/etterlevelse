@@ -6,7 +6,7 @@ import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.cs
 import { useDebouncedState } from '../../../util/hooks'
 import { ettlevColors } from '../../../util/theme'
 import { Error } from '../ModalSchema'
-import { borderColor, borderStyle, borderWidth } from '../Style'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../Style'
 import './customStyle.css'
 
 type TTextEditorProps = {
@@ -116,11 +116,12 @@ const TextEditor = (props: TTextEditorProps) => {
           backgroundColor: ettlevColors.white,
           ...borderColor(
             props.errors && props.name && props.errors[props.name]
-              ? ettlevColors.red600
+              ? ettlevColors.red500
               : ettlevColors.textAreaBorder
           ),
-          ...borderWidth('2px'),
+          ...borderWidth(props.errors && props.name && props.errors[props.name] ? '2px' : '1px'),
           ...borderStyle('solid'),
+          ...borderRadius('4px'),
           width: props.width || undefined,
           maxWidth: props.maxWidth || undefined,
         }}
@@ -129,10 +130,6 @@ const TextEditor = (props: TTextEditorProps) => {
           editorStyle={{
             padding: '10px',
             minHeight: props.height || '500px',
-            backgroundColor:
-              props.errors && props.name && props.errors[props.name]
-                ? ettlevColors.red50
-                : undefined,
           }}
           toolbarStyle={{
             backgroundColor: ettlevColors.white,
@@ -167,16 +164,7 @@ const TextEditor = (props: TTextEditorProps) => {
         />
       </div>
       {props.errors && props.name && props.errors[props.name] && (
-        <div
-          className="navds-form-field__error"
-          id="textField-error-rm"
-          aria-relevant="additions removals"
-          aria-live="polite"
-        >
-          <p className="navds-error-message navds-error-message::before navds-label">
-            <Error fieldName={props.name as string} />
-          </p>
-        </div>
+        <Error fieldName={props.name as string} akselStyling />
       )}
     </div>
   )

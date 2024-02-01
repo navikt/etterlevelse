@@ -44,8 +44,6 @@ export const InputField = (props: {
   disablePlaceHolder?: boolean
 }) => {
   const { name, label, disablePlaceHolder, marginBottom } = props
-  console.log('name', name)
-
   return (
     <FieldWrapper marginBottom={marginBottom}>
       <Field name={name}>
