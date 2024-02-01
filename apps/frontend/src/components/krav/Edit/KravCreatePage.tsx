@@ -74,26 +74,14 @@ export const KravCreatePage = () => {
           validateOnChange={false}
           validateOnBlur={false}
         >
-          {({
-            values,
-            errors,
-            isSubmitting,
-            handleReset,
-            submitForm,
-            setErrors,
-          }) => (
+          {({ values, errors, isSubmitting, handleReset, submitForm, setErrors }) => (
             <Form>
               <Heading className="mb-6" level="1" size="medium">
                 Opprett nytt krav
               </Heading>
 
               <div>
-                <InputField
-                  marginBottom
-                  label="Krav tittel"
-                  name="navn"
-                  description="Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting."
-                />
+                <InputField marginBottom label="Krav tittel" name="navn" />
                 <div className="mb-14">
                   <CheckboxGroup
                     legend="Send varselmelding"
@@ -118,15 +106,7 @@ export const KravCreatePage = () => {
                     </div>
                   )}
 
-                  <TextAreaField
-                    label="Hensikt"
-                    name="hensikt"
-                    height="250px"
-                    markdown
-                    tooltip={
-                      'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'
-                    }
-                  />
+                  <TextAreaField label="Hensikt" name="hensikt" height="250px" markdown />
                 </div>
 
                 <div className="flex w-full justify-center">
@@ -263,7 +243,6 @@ export const KravCreatePage = () => {
                     name="notat"
                     height="250px"
                     markdown
-                    tooltip={'Kraveiers notater'}
                   />
                 </div>
               </div>

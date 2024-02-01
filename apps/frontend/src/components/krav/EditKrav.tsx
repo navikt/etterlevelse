@@ -1,5 +1,4 @@
 import { Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal } from '@navikt/ds-react'
-import axios from 'axios'
 import { Form, Formik } from 'formik'
 import _ from 'lodash'
 import React, { useEffect } from 'react'
@@ -14,7 +13,6 @@ import {
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../../constants'
 import { EListName, codelist } from '../../services/Codelist'
 import { user } from '../../services/User'
-import { env } from '../../util/env'
 import ErrorModal from '../ErrorModal'
 import { InputField, MultiInputField, TextAreaField } from '../common/Inputs'
 import { Error } from '../common/ModalSchema'
@@ -38,6 +36,7 @@ type TEditKravProps = {
 
 const maxInputWidth = '400px'
 const modalWidth = '1276px'
+const errorMessage = 'Feltet er påkrevd'
 
 export const kravModal = () => document.querySelector('#krav-modal')
 
@@ -275,12 +274,7 @@ export const EditKrav = ({
               </div>
               <div>
                 <div className="title_container py-16 px-24">
-                  <InputField
-                    marginBottom
-                    label="Krav-tittel"
-                    name="navn"
-                    description="Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting."
-                  />
+                  <InputField marginBottom label="Krav-tittel" name="navn" />
                   <div className="mb-14">
                     <CheckboxGroup
                       legend="Send varselmelding"
@@ -306,17 +300,7 @@ export const EditKrav = ({
                       </div>
                     )}
                   </div>
-                  <TextAreaField
-                    label="Hensikt"
-                    name="hensikt"
-                    height="250px"
-                    markdown
-                    shortenLinks
-                    onImageUpload={onImageUpload(krav.id)}
-                    tooltip={
-                      'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'
-                    }
-                  />
+                  <TextAreaField label="Hensikt" name="hensikt" height="250px" markdown />
                   <Error fieldName="hensikt" />
                 </div>
 
@@ -361,8 +345,6 @@ export const EditKrav = ({
                           name="versjonEndringer"
                           height="250px"
                           markdown
-                          shortenLinks
-                          tooltip={'Beskrivelse av hva som er nytt siden siste versjon.'}
                         />
                         <Error fieldName={'versjonEndringer'} />
                       </>
@@ -606,7 +588,6 @@ export const EditKrav = ({
                     name="notat"
                     height="250px"
                     markdown
-                    tooltip={'Kraveiers notater'}
                   />
                 </div>
               </div>
@@ -622,16 +603,3 @@ export const EditKrav = ({
     </div>
   )
 }
-
-const onImageUpload = (kravId: string) => async (file: File) => {
-  const config = { headers: { 'content-type': 'multipart/form-data' } }
-  const formData = new FormData()
-  formData.append('file', file)
-  const id = (
-    await axios.post<string[]>(`${env.backendBaseUrl}/krav/${kravId}/files`, formData, config)
-  ).data[0]
-
-  return `/api/krav/${kravId}/files/${id}`
-}
-
-const errorMessage = 'Feltet er påkrevd'

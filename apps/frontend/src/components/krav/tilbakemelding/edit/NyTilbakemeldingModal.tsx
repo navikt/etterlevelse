@@ -124,7 +124,6 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
                     </Accordion>
 
                     <TextAreaField
-                      tooltip="Skriv ditt spørsmål i tekstfeltet"
                       label="Ditt spørsmål"
                       name="foersteMelding"
                       placeholder="Skriv her.."
