@@ -21,16 +21,25 @@ import { kravModal } from '../EditKrav'
 type TKravSuksesskriterieEditProps = {
   setIsFormDirty?: (v: boolean) => void
   newVersion?: boolean
+  newKrav?: boolean
 }
 
 export const KravSuksesskriterierEdit = ({
   setIsFormDirty,
   newVersion,
+  newKrav,
 }: TKravSuksesskriterieEditProps) => {
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterier'}>
-        {(p) => <KriterieList p={p} setIsFormDirty={setIsFormDirty} newVersion={newVersion} />}
+        {(p) => (
+          <KriterieList
+            p={p}
+            setIsFormDirty={setIsFormDirty}
+            newVersion={newVersion}
+            newKrav={newKrav}
+          />
+        )}
       </FieldArray>
     </FieldWrapper>
   )
@@ -45,12 +54,35 @@ const KriterieList = ({
   p,
   setIsFormDirty,
   newVersion,
+  newKrav,
 }: {
   p: FieldArrayRenderProps
   setIsFormDirty?: (v: boolean) => void
   newVersion?: boolean
+  newKrav?: boolean
 }) => {
   const suksesskriterier = p.form.values.suksesskriterier as ISuksesskriterie[]
+
+  const AddSuksessKriterieButton = () => (
+    <div className="my-4 ml-2.5 self-end">
+      <Button
+        type="button"
+        icon={<PlusIcon aria-label="" aria-hidden />}
+        variant="secondary"
+        disabled={suksesskriterier.length >= 15}
+        onClick={() =>
+          p.push({
+            id: nextId(suksesskriterier),
+            navn: '',
+            beskrivelse: '',
+            behovForBegrunnelse: 'true',
+          })
+        }
+      >
+        Suksesskriterie
+      </Button>
+    </div>
+  )
 
   return (
     <div className="flex flex-col">
@@ -112,25 +144,11 @@ const KriterieList = ({
           )}
         </Droppable>
       </DragDropContext>
-      {(p.form.values.status !== EKravStatus.AKTIV || newVersion) && (
-        <div className="my-4 ml-2.5 self-end">
-          <Button
-            type="button"
-            icon={<PlusIcon aria-label="" aria-hidden />}
-            variant="secondary"
-            disabled={suksesskriterier.length >= 15}
-            onClick={() =>
-              p.push({
-                id: nextId(suksesskriterier),
-                navn: '',
-                beskrivelse: '',
-                behovForBegrunnelse: 'true',
-              })
-            }
-          >
-            Suksesskriterie
-          </Button>
-        </div>
+
+      {newKrav && <AddSuksessKriterieButton />}
+
+      {!newKrav && (p.form.values.status !== EKravStatus.AKTIV || newVersion) && (
+        <AddSuksessKriterieButton />
       )}
     </div>
   )
@@ -211,8 +229,12 @@ const Kriterie = ({
             value={navnInput}
             onChange={(e) => setNavn((e.target as HTMLInputElement).value)}
             placeholder={'Navn'}
+            error={
+              p.form.errors && p.form.errors['suksesskriterier'] ? (
+                <Error fieldName={'suksesskriterier'} />
+              ) : undefined
+            }
           />
-          <Error fieldName={'suksesskriterier'} />
         </div>
 
         <div>

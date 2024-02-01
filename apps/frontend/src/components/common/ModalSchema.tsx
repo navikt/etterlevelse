@@ -8,7 +8,7 @@ interface IPropsError {
 }
 
 export const Error = ({ fieldName, akselStyling }: IPropsError) => (
-  <div>
+  <>
     {!akselStyling && <ErrorMessage name={fieldName}>{(msg: string) => msg}</ErrorMessage>}
 
     {akselStyling && (
@@ -19,12 +19,12 @@ export const Error = ({ fieldName, akselStyling }: IPropsError) => (
         aria-live="polite"
       >
         <p className="navds-error-message navds-label flex gap-2">
-          <p>•</p>
+          <span>•</span>
           <ErrorMessage name={fieldName}>{(msg: string) => msg}</ErrorMessage>
         </p>
       </div>
     )}
-  </div>
+  </>
 )
 
 interface IPropsModalLabel {

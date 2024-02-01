@@ -119,6 +119,7 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
                 minRows={rows ? rows : 8}
                 label={label}
                 maxLength={maxCharacter ? maxCharacter : undefined}
+                error={p.form.errors[name] ? <Error fieldName={name} /> : undefined}
                 {...p.field}
                 placeholder={noPlaceholder ? '' : placeholder ? placeholder : label}
                 onChange={(v) => {

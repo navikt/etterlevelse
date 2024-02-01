@@ -47,7 +47,7 @@ export const kravCreateValidation = () =>
     }),
     suksesskriterier: yup.array().test({
       name: 'suksesskriterierCheck',
-      message: EYupErrorMessage.PAAKREVD,
+      message: 'Alle sukesskriterie må ha en tittel',
       test: function (suksesskriterier) {
         const { parent } = this
         return activeStatusValueValidation(
