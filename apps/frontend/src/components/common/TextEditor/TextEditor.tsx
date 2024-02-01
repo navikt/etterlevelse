@@ -12,8 +12,6 @@ import './customStyle.css'
 type TTextEditorProps = {
   initialValue: string
   setValue: (v: string) => void
-  shortenLinks?: boolean
-  onImageUpload?: (file: File) => Promise<string>
   height?: string
   errors?: FormikErrors<any>
   name?: string
@@ -24,7 +22,10 @@ type TTextEditorProps = {
 }
 
 const TextEditor = (props: TTextEditorProps) => {
-  const [val, setVal] = useDebouncedState(props.initialValue, 500, props.setValue)
+  const { initialValue, setValue, height, errors, name, simple, width, maxWidth, setIsFormDirty } =
+    props
+
+  const [val, setVal] = useDebouncedState(initialValue, 500, setValue)
 
   const CustomDraftToMarkdown = (data: RawDraftContentState) => {
     return draftToMarkdown(data, {
@@ -115,21 +116,19 @@ const TextEditor = (props: TTextEditorProps) => {
         style={{
           backgroundColor: ettlevColors.white,
           ...borderColor(
-            props.errors && props.name && props.errors[props.name]
-              ? ettlevColors.red500
-              : ettlevColors.textAreaBorder
+            errors && name && errors[name] ? ettlevColors.red500 : ettlevColors.textAreaBorder
           ),
-          ...borderWidth(props.errors && props.name && props.errors[props.name] ? '2px' : '1px'),
+          ...borderWidth(errors && name && errors[name] ? '2px' : '1px'),
           ...borderStyle('solid'),
           ...borderRadius('4px'),
-          width: props.width || undefined,
-          maxWidth: props.maxWidth || undefined,
+          width: width || undefined,
+          maxWidth: maxWidth || undefined,
         }}
       >
         <Editor
           editorStyle={{
             padding: '10px',
-            minHeight: props.height || '500px',
+            minHeight: height || '500px',
           }}
           toolbarStyle={{
             backgroundColor: ettlevColors.white,
@@ -137,8 +136,8 @@ const TextEditor = (props: TTextEditorProps) => {
           }}
           onEditorStateChange={(data) => {
             setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
-            if (props.setIsFormDirty) {
-              props.setIsFormDirty(true)
+            if (setIsFormDirty) {
+              setIsFormDirty(true)
             }
           }}
           initialContentState={CustomMarkdownToDraft(val)}
@@ -147,7 +146,7 @@ const TextEditor = (props: TTextEditorProps) => {
           }}
           tabIndex={0}
           toolbar={{
-            options: props.simple
+            options: simple
               ? ['inline', 'list', 'link']
               : ['inline', 'blockType', 'list', 'link', 'history'],
             blockType: {},
@@ -163,9 +162,7 @@ const TextEditor = (props: TTextEditorProps) => {
           }}
         />
       </div>
-      {props.errors && props.name && props.errors[props.name] && (
-        <Error fieldName={props.name as string} akselStyling />
-      )}
+      {errors && name && errors[name] && <Error fieldName={name as string} akselStyling />}
     </div>
   )
 }

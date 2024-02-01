@@ -92,8 +92,6 @@ export const TextAreaField = (props: {
                   height={props.height}
                   initialValue={p.field.value}
                   setValue={(v) => p.form.setFieldValue(props.name, v)}
-                  onImageUpload={props.onImageUpload}
-                  shortenLinks={props.shortenLinks}
                   errors={p.form.errors}
                   name={props.name}
                   setIsFormDirty={props.setIsFormDirty}
