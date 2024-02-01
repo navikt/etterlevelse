@@ -43,7 +43,7 @@ export const KravCreatePage = () => {
       underavdeling: underavdeling,
     }
 
-    console.log('mutatedKRAV')
+    console.log(mutatedKrav)
 
     // createKrav(mutatedKrav).then((krav) => {
     //   setLoading(false)
@@ -81,7 +81,6 @@ export const KravCreatePage = () => {
             handleReset,
             submitForm,
             setErrors,
-            initialValues,
           }) => (
             <Form>
               <Heading className="mb-6" level="1" size="medium">
