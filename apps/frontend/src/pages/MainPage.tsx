@@ -82,7 +82,6 @@ export const MainPage = () => {
                 </div>
                 <Link href="/dokumentasjoner">
                   <Button
-                    as="a"
                     variant="tertiary"
                     onClick={() =>
                       ampli.logEvent('navigere', {

@@ -52,10 +52,6 @@ const KriterieList = ({
 }) => {
   const suksesskriterier = p.form.values.suksesskriterier as ISuksesskriterie[]
 
-  if (!suksesskriterier.length) {
-    p.push({ id: nextId(suksesskriterier), navn: '', beskrivelse: '' })
-  }
-
   return (
     <div className="flex flex-col">
       <DragDropContext
