@@ -14,7 +14,7 @@ import { EKravStatus, ISuksesskriterie } from '../../../constants'
 import { useDebouncedState } from '../../../util/hooks'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
 import TextEditor from '../../common/TextEditor/TextEditor'
 import { kravModal } from '../EditKrav'
 
@@ -231,7 +231,7 @@ const Kriterie = ({
             placeholder={'Navn'}
             error={
               p.form.errors && p.form.errors['suksesskriterier'] ? (
-                <Error fieldName={'suksesskriterier'} />
+                <FormError fieldName={'suksesskriterier'} />
               ) : undefined
             }
           />

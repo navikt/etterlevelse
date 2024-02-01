@@ -2,7 +2,7 @@ import { BodyShort, Button, Modal, TextField, Textarea } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 import { EListName, ICodeListFormValues, codeListSchema } from '../../../services/Codelist'
 import { MarkdownInfo } from '../../common/Markdown'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
 import { LovCodeDataForm } from './LovCode'
 
 type TModalUpdateProps = {
@@ -42,7 +42,7 @@ const UpdateCodeListModal = ({
             <Field name="shortName">
               {({ field }: FieldProps) => <TextField className="w-full" label="Navn" {...field} />}
             </Field>
-            <Error fieldName="shortName" />
+            <FormError fieldName="shortName" />
 
             <Field name="description">
               {({ field }: FieldProps) => (
@@ -50,7 +50,7 @@ const UpdateCodeListModal = ({
               )}
             </Field>
 
-            <Error fieldName="description" />
+            <FormError fieldName="description" />
             {(initialValues.list === EListName.LOV || initialValues.list === EListName.TEMA) && (
               <MarkdownInfo />
             )}

@@ -5,7 +5,7 @@ import { Editor } from 'react-draft-wysiwyg'
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import { useDebouncedState } from '../../../util/hooks'
 import { ettlevColors } from '../../../util/theme'
-import { Error } from '../ModalSchema'
+import { FormError } from '../ModalSchema'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '../Style'
 import './customStyle.css'
 
@@ -161,7 +161,9 @@ const TextEditor = (props: TTextEditorProps) => {
           }}
         />
       </div>
-      {errors && name && errors[name] && <Error fieldName={name as string} akselStyling />}
+      {errors && name && errors[name] && (
+        <FormError fieldName={name as string} akselStyling={true} />
+      )}
     </div>
   )
 }

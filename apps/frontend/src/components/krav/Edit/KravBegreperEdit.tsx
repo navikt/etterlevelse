@@ -6,7 +6,7 @@ import { useBegrepSearch } from '../../../api/BegrepApi'
 import { IBegrep } from '../../../constants'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 
 export const DropdownIndicator = (props: DropdownIndicatorProps) => {
@@ -62,7 +62,7 @@ export const EditBegreper = () => {
           )
         }}
       </FieldArray>
-      <Error fieldName="begreper" />
+      <FormError fieldName="begreper" />
     </FieldWrapper>
   )
 }

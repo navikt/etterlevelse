@@ -5,7 +5,7 @@ import AsyncSelect from 'react-select/async'
 import { useSearchKrav } from '../../../api/KravApi'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
 import { DropdownIndicator } from './KravBegreperEdit'
 
 export const EditKravRelasjoner = () => {
@@ -56,7 +56,7 @@ export const EditKravRelasjoner = () => {
           )
         }}
       </FieldArray>
-      <Error fieldName="kravRelasjoner" />
+      <FormError fieldName="kravRelasjoner" />
     </FieldWrapper>
   )
 }

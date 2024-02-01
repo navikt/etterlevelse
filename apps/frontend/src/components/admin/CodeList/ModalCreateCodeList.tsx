@@ -7,7 +7,7 @@ import {
   codeListSchema,
 } from '../../../services/Codelist'
 import { MarkdownInfo } from '../../common/Markdown'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
 import { LovCodeDataForm } from './LovCode'
 
 type TModalCreateProps = {
@@ -61,7 +61,7 @@ const ModalCreateCodeList = ({
                   <TextField {...field} className="w-full" label="Kode" />
                 )}
               />
-              <Error fieldName="code" />
+              <FormError fieldName="code" />
 
               <Field
                 name="shortName"
@@ -69,7 +69,7 @@ const ModalCreateCodeList = ({
                   <TextField {...field} className="w-full mt-4" label="Navn" />
                 )}
               />
-              <Error fieldName="shortName" />
+              <FormError fieldName="shortName" />
 
               <Field
                 name="description"
@@ -78,7 +78,7 @@ const ModalCreateCodeList = ({
                 )}
               />
 
-              <Error fieldName="description" />
+              <FormError fieldName="description" />
               {(list === EListName.LOV || list === EListName.TEMA) && <MarkdownInfo />}
 
               {list === EListName.LOV && <LovCodeDataForm />}

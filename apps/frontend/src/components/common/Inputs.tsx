@@ -22,7 +22,7 @@ import { EListName, codelist } from '../../services/Codelist'
 import CustomizedSelect from '../common/CustomizedSelect'
 import LabelWithTooltip from '../common/LabelWithTooltip'
 import { MarkdownInfo } from './Markdown'
-import { Error } from './ModalSchema'
+import { Error, FormError } from './ModalSchema'
 import { RenderTagList } from './TagList'
 import TextEditor from './TextEditor/TextEditor'
 
@@ -54,7 +54,7 @@ export const InputField = (props: IPropsInputField) => {
               label={label}
               {...p.field}
               placeholder={!disablePlaceHolder ? label : undefined}
-              error={p.form.errors[name] ? <Error fieldName={name} /> : undefined}
+              error={p.form.errors[name] ? <FormError fieldName={name} /> : undefined}
             />
           </div>
         )}
@@ -119,7 +119,7 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
                 minRows={rows ? rows : 8}
                 label={label}
                 maxLength={maxCharacter ? maxCharacter : undefined}
-                error={p.form.errors[name] ? <Error fieldName={name} /> : undefined}
+                error={p.form.errors[name] ? <FormError fieldName={name} /> : undefined}
                 {...p.field}
                 placeholder={noPlaceholder ? '' : placeholder ? placeholder : label}
                 onChange={(v) => {
@@ -170,7 +170,7 @@ export const BoolField = (props: IPropsBoolField) => {
               <Radio value={NO}>Nei</Radio>
               {nullable && <Radio value={UNCLARIFIED}>Uavklart</Radio>}
             </RadioGroup>
-            <Error fieldName={name} />
+            <FormError fieldName={name} />
           </div>
         )}
       </Field>
@@ -227,22 +227,14 @@ interface IPropsMultiInputField {
   maxInputWidth?: string
   marginBottom?: boolean
   setErrors?: () => void
+  removeErrors?: () => void
 }
 
 export const MultiInputField = (props: IPropsMultiInputField) => {
-  const {
-    label,
-    name,
-    link,
-    linkLabel,
-    linkTooltip,
-    tooltip,
-    maxInputWidth,
-    marginBottom,
-    setErrors,
-  } = props
-  const [val, setVal] = useState('')
-  const [linkName, setLinkName] = useState('')
+  const { label, name, link, linkLabel, linkTooltip, tooltip, maxInputWidth, marginBottom } = props
+  const [val, setVal] = useState<string>('')
+  const [linkName, setLinkName] = useState<string>('')
+  const [error, setError] = useState<string>('')
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   return (
@@ -253,19 +245,21 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
             if (link) {
               if (linkName && val) {
                 p.push(`[${linkName}](${val})`)
+                setError('')
               } else if (linkName && !val) {
                 p.push(linkName)
+                setError('')
               } else if (!linkName && !val) {
                 return
               } else {
-                setErrors && setErrors()
+                setError('Må ha navn på kilde.')
                 return
               }
             } else {
               if (val) {
                 p.push(val)
               } else {
-                setErrors && setErrors()
+                setError('Må ha navn på kilde.')
                 return
               }
             }
@@ -285,6 +279,7 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
                   >
                     <LabelWithTooltip label={linkLabel} tooltip={linkTooltip} />
                     <TextField
+                      className={`${error !== '' ? 'border-2 rounded-md border-[#c30000]' : undefined}`}
                       label={label}
                       hideLabel
                       onKeyDown={onKey}
@@ -316,6 +311,9 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
                   </Button>
                 </div>
               </div>
+
+              {error && <Error message={error} />}
+
               <RenderTagList
                 list={(p.form.values[name] as string[]).map(linkNameFor)}
                 onRemove={p.remove}

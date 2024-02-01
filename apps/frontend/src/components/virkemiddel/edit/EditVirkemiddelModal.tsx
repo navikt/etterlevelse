@@ -13,7 +13,7 @@ import { IVirkemiddel } from '../../../constants'
 import { EListName, codelist } from '../../../services/Codelist'
 import { FieldWrapper, InputField } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
 import { RegelverkEdit } from '../../krav/Edit/RegelverkEdit'
 
 const errorMessage = 'Feltet er påkrevd'
@@ -125,11 +125,11 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
                     )}
                   </Field>
 
-                  <Error fieldName="virkemiddelType" />
+                  <FormError fieldName="virkemiddelType" />
                 </FieldWrapper>
 
                 <RegelverkEdit forVirkemiddel />
-                <Error fieldName="regelverk" />
+                <FormError fieldName="regelverk" />
                 <div className="flex justify-end">
                   <Button variant="secondary" type="button" onClick={() => props.setIsOpen(false)}>
                     Avbryt

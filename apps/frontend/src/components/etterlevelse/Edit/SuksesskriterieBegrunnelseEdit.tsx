@@ -10,7 +10,7 @@ import {
 import { useDebouncedState } from '../../../util/hooks'
 import { FieldWrapper } from '../../common/Inputs'
 import { Markdown } from '../../common/Markdown'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
 import { LabelAboveContent } from '../../common/PropertyLabel'
 import TextEditor from '../../common/TextEditor/TextEditor'
 
@@ -207,7 +207,7 @@ const KriterieBegrunnelse = ({
             />
 
             <div className="mt-1">
-              <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} />
+              <FormError fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} />
             </div>
           </div>
         )}
@@ -227,11 +227,11 @@ const KriterieBegrunnelse = ({
           </div>
         )}
       </div>
-      <Error fieldName={`suksesskriterieBegrunnelser[${index}].suksesskriterieStatus`} />
+      <FormError fieldName={`suksesskriterieBegrunnelser[${index}].suksesskriterieStatus`} />
 
       <div className="mt-2">
         {suksesskriterieBegrunnelse.behovForBegrunnelse && begrunnelse.length > 0 && (
-          <Error fieldName={'status'} />
+          <FormError fieldName={'status'} />
         )}
       </div>
     </Box>

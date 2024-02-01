@@ -15,7 +15,7 @@ import { EListName, codelist } from '../../services/Codelist'
 import { user } from '../../services/User'
 import ErrorModal from '../ErrorModal'
 import { InputField, MultiInputField, TextAreaField } from '../common/Inputs'
-import { Error } from '../common/ModalSchema'
+import { FormError } from '../common/ModalSchema'
 import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
 import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
 import { EditBegreper } from './Edit/KravBegreperEdit'
@@ -301,7 +301,7 @@ export const EditKrav = ({
                     )}
                   </div>
                   <TextAreaField label="Hensikt" name="hensikt" height="250px" markdown />
-                  <Error fieldName="hensikt" />
+                  <FormError fieldName="hensikt" />
                 </div>
 
                 <div className="flex w-full justify-center">
@@ -334,9 +334,9 @@ export const EditKrav = ({
                       setErrors={() => setErrors({ dokumentasjon: 'Må ha navn på kilde.' })}
                     />
 
-                    <Error fieldName="dokumentasjon" />
+                    <FormError fieldName="dokumentasjon" />
                     <RegelverkEdit />
-                    <Error fieldName="regelverk" />
+                    <FormError fieldName="regelverk" />
 
                     {!newKrav && krav.kravVersjon > 1 && (
                       <>
@@ -346,7 +346,7 @@ export const EditKrav = ({
                           height="250px"
                           markdown
                         />
-                        <Error fieldName={'versjonEndringer'} />
+                        <FormError fieldName={'versjonEndringer'} />
                       </>
                     )}
 
@@ -365,7 +365,7 @@ export const EditKrav = ({
                         tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}
                       />
 
-                      <Error fieldName="relevansFor" />
+                      <FormError fieldName="relevansFor" />
                     </div>
 
                     <div className="w-full mb-20 max-w-md">
@@ -384,7 +384,7 @@ export const EditKrav = ({
 
                     <KravVarslingsadresserEdit />
 
-                    <Error fieldName="varslingsadresser" />
+                    <FormError fieldName="varslingsadresser" />
 
                     <div className="w-full">
                       {Object.keys(errors).length > 0 && !errors.dokumentasjon && (
@@ -402,7 +402,7 @@ export const EditKrav = ({
                 <div className="button_container sticky bottom-0 flex flex-col py-4 px-24 bg-gray-50 z-10">
                   {errors.status && (
                     <div className="mb-3">
-                      <Error fieldName="status" />
+                      <FormError fieldName="status" />
                     </div>
                   )}
 
