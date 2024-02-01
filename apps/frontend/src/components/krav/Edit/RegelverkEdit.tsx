@@ -7,9 +7,12 @@ import Select, { CSSObjectWithLabel } from 'react-select'
 import { IRegelverk } from '../../../constants'
 import { EListName, TLovCode, codelist } from '../../../services/Codelist'
 import { theme } from '../../../util'
+import { ettlevColors } from '../../../util/theme'
 import { LovView } from '../../Lov'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
+import { FormError } from '../../common/ModalSchema'
+import { borderWidth } from '../../common/Style'
 import { RenderTagList } from '../../common/TagList'
 
 type TRegelverkEditProps = {
@@ -33,10 +36,14 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
         {(p) => {
           const add = () => {
             if (!text || !lov) return
+            if (lov.value === '') return
             p.push(regelverkObject())
             setLov({ value: '', label: '', description: '' })
             setText('')
           }
+
+          const hasError = !!p.form.errors['regelverk']
+
           return (
             <div>
               <div>
@@ -63,6 +70,10 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
                           ({
                             ...baseStyles,
                             height: '48px',
+                            borderColor: hasError
+                              ? ettlevColors.red500
+                              : ettlevColors.textAreaBorder,
+                            ...borderWidth(hasError ? '2px' : '1px'),
                           }) as CSSObjectWithLabel,
                         menu: (baseStyles) =>
                           ({
@@ -99,6 +110,8 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
                   </Block>
                 )}
               </div>
+              <FormError fieldName="regelverk" akselStyling />
+
               <RenderTagList
                 list={p.form.values.regelverk.map((r: IRegelverk) => (
                   <LovView regelverk={r} key={r.lov.code} />

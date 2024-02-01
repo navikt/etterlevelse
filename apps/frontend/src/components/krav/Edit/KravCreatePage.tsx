@@ -2,13 +2,13 @@ import { Alert, Button, Checkbox, CheckboxGroup, Heading, Loader } from '@navikt
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { kravMapToFormVal } from '../../../api/KravApi'
+import { createKrav, kravMapToFormVal } from '../../../api/KravApi'
 import { EKravStatus, TKravQL } from '../../../constants'
 import { EListName, codelist } from '../../../services/Codelist'
 import ErrorModal from '../../ErrorModal'
 import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
 import { InputField, MultiInputField, TextAreaField } from '../../common/Inputs'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
 import { PageLayout } from '../../scaffold/Page'
 import { EditKravMultiOptionField } from './EditKravMultiOptionField'
 import { EditKravRelasjoner } from './EditKravRelasjoner'
@@ -43,12 +43,12 @@ export const KravCreatePage = () => {
       underavdeling: underavdeling,
     }
 
-    console.log(mutatedKrav)
-
-    // createKrav(mutatedKrav).then((krav) => {
-    //   setLoading(false)
-    //   navigate('/krav/' + krav.id)
-    // })
+    createKrav(mutatedKrav)
+      .then((krav) => {
+        setLoading(false)
+        navigate('/krav/' + krav.id)
+      })
+      .catch((e) => setErrorModalMessage(e))
   }
 
   return (
@@ -74,7 +74,7 @@ export const KravCreatePage = () => {
           validateOnChange={false}
           validateOnBlur={false}
         >
-          {({ values, errors, isSubmitting, handleReset, submitForm, setErrors }) => (
+          {({ values, errors, isSubmitting, handleReset, submitForm }) => (
             <Form>
               <Heading className="mb-6" level="1" size="medium">
                 Opprett nytt krav
@@ -83,28 +83,30 @@ export const KravCreatePage = () => {
               <div>
                 <InputField marginBottom label="Krav tittel" name="navn" />
                 <div className="mb-14">
-                  <CheckboxGroup
-                    legend="Send varselmelding"
-                    onChange={(value) => {
-                      setVarselMeldingActive(value)
-                    }}
-                  >
-                    <Checkbox value="VarselMelding">
-                      Gi kravet en varselmelding (eks. for kommende krav)
-                    </Checkbox>
-                  </CheckboxGroup>
+                  <div className="mb-2.5">
+                    <CheckboxGroup
+                      legend="Send varselmelding"
+                      onChange={(value) => {
+                        setVarselMeldingActive(value)
+                      }}
+                    >
+                      <Checkbox value="VarselMelding">
+                        Gi kravet en varselmelding (eks. for kommende krav)
+                      </Checkbox>
+                    </CheckboxGroup>
 
-                  {varselMeldingActive.length > 0 && (
-                    <div className="w-full ml-8 mt-6">
-                      <TextAreaField
-                        label="Forklaring til etterlevere"
-                        name="varselMelding"
-                        maxCharacter={100}
-                        rows={2}
-                        noPlaceholder
-                      />
-                    </div>
-                  )}
+                    {varselMeldingActive.length > 0 && (
+                      <div className="w-full ml-8 mt-6">
+                        <TextAreaField
+                          label="Forklaring til etterlevere"
+                          name="varselMelding"
+                          maxCharacter={100}
+                          rows={2}
+                          noPlaceholder
+                        />
+                      </div>
+                    )}
+                  </div>
 
                   <TextAreaField label="Hensikt" name="hensikt" height="250px" markdown />
                 </div>
@@ -114,7 +116,7 @@ export const KravCreatePage = () => {
                     <Heading level="3" size="medium" className="mb-8">
                       Suksesskriterier
                     </Heading>
-                    <KravSuksesskriterierEdit />
+                    <KravSuksesskriterierEdit newKrav={true} />
 
                     <div className="mb-8">
                       <Heading level="3" size="medium">
@@ -133,12 +135,9 @@ export const KravCreatePage = () => {
                       linkTooltip={
                         'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller WebSak.'
                       }
-                      setErrors={() => setErrors({ dokumentasjon: 'Må ha navn på kilde.' })}
                     />
 
-                    <Error fieldName="dokumentasjon" />
                     <RegelverkEdit />
-                    <Error fieldName="regelverk" />
 
                     <div className="mt-20">
                       <Heading level="3" size="medium">
@@ -155,7 +154,7 @@ export const KravCreatePage = () => {
                         tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}
                       />
 
-                      <Error fieldName="relevansFor" />
+                      <FormError fieldName="relevansFor" akselStyling={true} />
                     </div>
 
                     <div className="w-full mb-20 max-w-md">
@@ -174,7 +173,7 @@ export const KravCreatePage = () => {
 
                     <KravVarslingsadresserEdit />
 
-                    <Error fieldName="varslingsadresser" />
+                    <FormError fieldName="varslingsadresser" akselStyling={true} />
 
                     <div className="w-full">
                       {Object.keys(errors).length > 0 && !errors.dokumentasjon && (
@@ -192,7 +191,7 @@ export const KravCreatePage = () => {
                 <div className="button_container flex flex-col py-4  bg-gray-50 z-10">
                   {errors.status && (
                     <div className="mb-3">
-                      <Error fieldName="status" />
+                      <FormError fieldName="status" />
                     </div>
                   )}
 
@@ -214,6 +213,7 @@ export const KravCreatePage = () => {
                         className="ml-4"
                         variant="primary"
                         onClick={() => {
+                          values.status = EKravStatus.UTKAST
                           submitForm()
                         }}
                         disabled={isSubmitting}

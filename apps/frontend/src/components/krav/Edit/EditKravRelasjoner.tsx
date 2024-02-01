@@ -3,6 +3,7 @@ import { FieldArray } from 'formik'
 import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { useSearchKrav } from '../../../api/KravApi'
+import { ettlevColors } from '../../../util/theme'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { FormError } from '../../common/ModalSchema'
@@ -41,6 +42,7 @@ export const EditKravRelasjoner = () => {
                       ...base,
                       cursor: 'text',
                       height: '48px',
+                      borderColor: ettlevColors.textAreaBorder,
                     }) as CSSObjectWithLabel,
                 }}
               />

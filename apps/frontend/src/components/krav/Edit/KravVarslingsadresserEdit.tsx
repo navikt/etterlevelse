@@ -24,8 +24,10 @@ import {
   TVarslingsadresseQL,
 } from '../../../constants'
 import { user } from '../../../services/User'
+import { ettlevColors } from '../../../util/theme'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
+import { Error } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from './KravBegreperEdit'
 
@@ -248,6 +250,7 @@ export const SlackChannelSearch = ({ add, close }: TAddVarslingsadresseProps) =>
             ...base,
             cursor: 'text',
             height: '48px',
+            borderColor: ettlevColors.textAreaBorder,
           }) as CSSObjectWithLabel,
       }}
     />
@@ -304,6 +307,7 @@ export const SlackUserSearch = ({ add, close }: TAddVarslingsadresseProps) => {
                   ...base,
                   cursor: 'text',
                   height: '48px',
+                  borderColor: ettlevColors.textAreaBorder,
                 }) as CSSObjectWithLabel,
             }}
           />
@@ -350,7 +354,7 @@ export const AddEmail = ({ added, add: doAdd, close }: TAddVarslingsadresseProps
   const onKey = (e: React.KeyboardEvent) => e.key === 'Enter' && add()
   return (
     <div className="flex flex-col">
-      <div className="flex">
+      <div className="flex w-full">
         <TextField
           label="epost"
           hideLabel
@@ -359,6 +363,7 @@ export const AddEmail = ({ added, add: doAdd, close }: TAddVarslingsadresseProps
           onFocus={() => setError('')}
           onChange={(e) => setVal((e.target as HTMLInputElement).value)}
           onBlur={() => add()}
+          className={`w-full ${error ? 'border-2 rounded-md border-[#c30000]' : ''}`}
         />
         <div className="flex justify-between ml-2.5">
           <Button type="button" onClick={() => add(user.getEmail())}>
@@ -369,11 +374,7 @@ export const AddEmail = ({ added, add: doAdd, close }: TAddVarslingsadresseProps
           </Button>
         </div>
       </div>
-      {error && (
-        <Alert variant="error" className="mt-2.5">
-          {error}
-        </Alert>
-      )}
+      {error && <Error message={error} />}
     </div>
   )
 }
