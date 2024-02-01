@@ -53,8 +53,8 @@ const TextEditor = (props: TTextEditorProps) => {
     })
   }
 
-  const CustomMarkdownToDraft = (data: string) => {
-    return markdownToDraft(data, {
+  const CustomMarkdownToDraft = (data: string) =>
+    markdownToDraft(data, {
       blockEntities: {
         image: (item: any) => {
           return {
@@ -69,7 +69,6 @@ const TextEditor = (props: TTextEditorProps) => {
       },
       preserveNewlines: true,
     })
-  }
 
   //--------ADD nessesary roles to toolbar options and editor------------
 

@@ -2,13 +2,16 @@ import { ExclamationmarkIcon } from '@navikt/aksel-icons'
 import { Label, Tooltip } from '@navikt/ds-react'
 import { ErrorMessage } from 'formik'
 
-export const Error = (props: { fieldName: string; akselStyling?: boolean }) => (
-  <div>
-    {!props.akselStyling && (
-      <ErrorMessage name={props.fieldName}>{(msg: string) => msg}</ErrorMessage>
-    )}
+interface IPropsError {
+  fieldName: string
+  akselStyling?: boolean
+}
 
-    {props.akselStyling && (
+export const Error = ({ fieldName, akselStyling }: IPropsError) => (
+  <div>
+    {!akselStyling && <ErrorMessage name={fieldName}>{(msg: string) => msg}</ErrorMessage>}
+
+    {akselStyling && (
       <div
         className="navds-form-field__error pt-2"
         id="textField-error-rm"
@@ -17,30 +20,34 @@ export const Error = (props: { fieldName: string; akselStyling?: boolean }) => (
       >
         <p className="navds-error-message navds-label flex gap-2">
           <p>•</p>
-          <ErrorMessage name={props.fieldName}>{(msg: string) => msg}</ErrorMessage>
+          <ErrorMessage name={fieldName}>{(msg: string) => msg}</ErrorMessage>
         </p>
       </div>
     )}
   </div>
 )
 
-export const ModalLabel = (props: { label?: any; tooltip?: string; fullwidth?: boolean }) => {
-  return (
-    <div className={`self-center pr-4 ${props.fullwidth ? 'w-full' : 'w-1/4'}`}>
-      {props.tooltip ? (
-        <Tooltip content={props.tooltip}>
-          <Label className="flex w-full justify-center">
-            <div className="flex">
-              <div>{props.label}</div>
-              <div>
-                <ExclamationmarkIcon area-label="" aria-hidden className="ml-2 self-center" />
-              </div>
-            </div>
-          </Label>
-        </Tooltip>
-      ) : (
-        <Label>{props.label}</Label>
-      )}
-    </div>
-  )
+interface IPropsModalLabel {
+  label?: any
+  tooltip?: string
+  fullwidth?: boolean
 }
+
+export const ModalLabel = ({ label, tooltip, fullwidth }: IPropsModalLabel) => (
+  <div className={`self-center pr-4 ${fullwidth ? 'w-full' : 'w-1/4'}`}>
+    {tooltip ? (
+      <Tooltip content={tooltip}>
+        <Label className="flex w-full justify-center">
+          <div className="flex">
+            <div>{label}</div>
+            <div>
+              <ExclamationmarkIcon area-label="" aria-hidden className="ml-2 self-center" />
+            </div>
+          </div>
+        </Label>
+      </Tooltip>
+    ) : (
+      <Label>{label}</Label>
+    )}
+  </div>
+)
