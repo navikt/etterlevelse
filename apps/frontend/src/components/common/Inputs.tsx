@@ -333,12 +333,14 @@ interface IListname {
   listName: EListName
 }
 
-type TPropsOptionField = {
+interface IPropsOptionField {
   label: string
   name: string
   caption?: ReactNode
   tooltip?: string
-} & TOr<IOptions, IListname>
+}
+
+type TPropsOptionField = IPropsOptionField & TOr<IOptions, IListname>
 
 export const OptionField = (props: TPropsOptionField) => {
   const { label, name, caption, tooltip } = props
@@ -364,11 +366,13 @@ export const OptionField = (props: TPropsOptionField) => {
   )
 }
 
-type TPropsOptionList = {
+interface IPropsOptionList {
   label: string
   value?: string
   onChange: (val?: any) => void
-} & TOr<IOptions, IListname>
+}
+
+type TPropsOptionList = IPropsOptionList & TOr<IOptions, IListname>
 
 export const OptionList = (props: TPropsOptionList) => {
   const { label, value, onChange, options, listName } = props
