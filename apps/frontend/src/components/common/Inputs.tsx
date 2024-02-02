@@ -326,12 +326,19 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
   )
 }
 
+interface IOptions {
+  options: Value
+}
+interface IListname {
+  listName: EListName
+}
+
 type TPropsOptionField = {
   label: string
   name: string
   caption?: ReactNode
   tooltip?: string
-} & TOr<{ options: Value }, { listName: EListName }>
+} & TOr<IOptions, IListname>
 
 export const OptionField = (props: TPropsOptionField) => {
   const { label, name, caption, tooltip } = props
@@ -361,7 +368,7 @@ type TPropsOptionList = {
   label: string
   value?: string
   onChange: (val?: any) => void
-} & TOr<{ options: Value }, { listName: EListName }>
+} & TOr<IOptions, IListname>
 
 export const OptionList = (props: TPropsOptionList) => {
   const { label, value, onChange, options, listName } = props
