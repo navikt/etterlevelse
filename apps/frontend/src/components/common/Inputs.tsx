@@ -40,7 +40,7 @@ interface IMarginBottom {
   marginBottom?: boolean
 }
 
-interface IMarginBottom {
+interface ICaption {
   caption?: ReactNode
 }
 
@@ -103,7 +103,7 @@ export const InputField = (props: IPropsInputField) => {
   )
 }
 
-interface IPropsTextAreaField extends TLabelName, IMarginBottom, IMarginBottom {
+interface IPropsTextAreaField extends TLabelName, IMarginBottom, ICaption {
   height?: string
   markdown?: boolean
   noPlaceholder?: boolean
@@ -353,7 +353,7 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
   )
 }
 
-type TPropsOptionField = TLabelName & IMarginBottom & ITooltip & TOptionORListname
+type TPropsOptionField = TLabelName & IMarginBottom & ICaption & ITooltip & TOptionORListname
 
 export const OptionField = (props: TPropsOptionField) => {
   const { label, name, caption, tooltip } = props
