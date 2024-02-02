@@ -26,19 +26,59 @@ import { Error, FormError } from './ModalSchema'
 import { RenderTagList } from './TagList'
 import TextEditor from './TextEditor/TextEditor'
 
-interface IPropsFieldWrapper {
-  children: React.ReactNode
+interface ILabel {
+  label: string
+}
+
+interface IName {
+  name: string
+}
+
+type TLabelName = IName & ILabel
+
+interface IMarginBottom {
   marginBottom?: boolean
+}
+
+interface IMarginBottom {
+  caption?: ReactNode
+}
+
+interface ITooltip {
+  tooltip?: string
+}
+
+interface IOptions {
+  options: Value
+}
+
+interface IListname {
+  listName: EListName
+}
+
+interface ISearchItemLabel {
+  search: TSearchType
+  itemLabel?: (id: string) => string
+}
+
+interface IPropsOptionList extends ILabel {
+  value?: string
+  onChange: (val?: any) => void
+}
+
+type TOptionORListname = TOr<IOptions, IListname>
+
+type TLabelNameSearchItemLabel = TLabelName & ISearchItemLabel
+
+interface IPropsFieldWrapper extends IMarginBottom {
+  children: React.ReactNode
 }
 
 export const FieldWrapper = ({ children, marginBottom }: IPropsFieldWrapper) => (
   <div className={`${marginBottom ? 'mb-6' : ''}`}>{children}</div>
 )
 
-interface IPropsInputField {
-  label: string
-  name: string
-  marginBottom?: boolean
+interface IPropsInputField extends TLabelName, IMarginBottom {
   disablePlaceHolder?: boolean
 }
 
@@ -63,13 +103,9 @@ export const InputField = (props: IPropsInputField) => {
   )
 }
 
-interface IPropsTextAreaField {
+interface IPropsTextAreaField extends TLabelName, IMarginBottom, IMarginBottom {
   height?: string
-  marginBottom?: boolean
-  label: string
-  name: string
   markdown?: boolean
-  caption?: ReactNode
   noPlaceholder?: boolean
   placeholder?: string
   maxCharacter?: number
@@ -137,11 +173,8 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
   )
 }
 
-interface IPropsBoolField {
-  label: string
-  name: string
+interface IPropsBoolField extends TLabelName, ITooltip {
   nullable?: boolean
-  tooltip?: string
 }
 
 const YES = 'YES',
@@ -178,11 +211,9 @@ export const BoolField = (props: IPropsBoolField) => {
   )
 }
 
-interface IPropsDateField {
-  name: string
-}
+type TPropsDateField = IName
 
-export const DateField = (props: IPropsDateField) => {
+export const DateField = (props: TPropsDateField) => {
   const { name } = props
 
   const { datepickerProps, inputProps } = useDatepicker({})
@@ -217,15 +248,11 @@ const linkNameFor = (t: string) => {
   return t
 }
 
-interface IPropsMultiInputField {
-  label: string
-  name: string
+interface IPropsMultiInputField extends TLabelName, IMarginBottom, ITooltip {
   link?: boolean
   linkLabel?: string
   linkTooltip?: string
-  tooltip?: string
   maxInputWidth?: string
-  marginBottom?: boolean
   setErrors?: () => void
   removeErrors?: () => void
 }
@@ -326,21 +353,7 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
   )
 }
 
-interface IOptions {
-  options: Value
-}
-interface IListname {
-  listName: EListName
-}
-
-interface IPropsOptionField {
-  label: string
-  name: string
-  caption?: ReactNode
-  tooltip?: string
-}
-
-type TPropsOptionField = IPropsOptionField & TOr<IOptions, IListname>
+type TPropsOptionField = TLabelName & IMarginBottom & ITooltip & TOptionORListname
 
 export const OptionField = (props: TPropsOptionField) => {
   const { label, name, caption, tooltip } = props
@@ -366,13 +379,7 @@ export const OptionField = (props: TPropsOptionField) => {
   )
 }
 
-interface IPropsOptionList {
-  label: string
-  value?: string
-  onChange: (val?: any) => void
-}
-
-type TPropsOptionList = IPropsOptionList & TOr<IOptions, IListname>
+type TPropsOptionList = IPropsOptionList & TOptionORListname
 
 export const OptionList = (props: TPropsOptionList) => {
   const { label, value, onChange, options, listName } = props
@@ -400,14 +407,9 @@ export const OptionList = (props: TPropsOptionList) => {
   )
 }
 
-interface IPropsMultiSearchField {
-  label: string
-  name: string
-  search: TSearchType
-  itemLabel?: (id: string) => string
-}
+type TPropsMultiSearchField = TLabelNameSearchItemLabel
 
-export const MultiSearchField = (props: IPropsMultiSearchField) => {
+export const MultiSearchField = (props: TPropsMultiSearchField) => {
   const { label, name, search, itemLabel } = props
   const [results, setSearch, loading] = search
 
@@ -444,14 +446,9 @@ export const MultiSearchField = (props: IPropsMultiSearchField) => {
   )
 }
 
-interface IPropsSearchField {
-  label: string
-  name: string
-  search: TSearchType
-  itemLabel?: (id: string) => string
-}
+type TPropsSearchField = TLabelNameSearchItemLabel
 
-export const SearchField = (props: IPropsSearchField) => {
+export const SearchField = (props: TPropsSearchField) => {
   const { label, name, search, itemLabel } = props
   const [results, setSearch, loading] = search
 
