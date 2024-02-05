@@ -10,7 +10,7 @@ import {
   kravMapToFormVal,
   updateKrav,
 } from '../../api/KravApi'
-import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../../constants'
+import { EKravStatus, EYupErrorMessage, IKrav, IKravVersjon, TKravQL } from '../../constants'
 import { EListName, codelist } from '../../services/Codelist'
 import { user } from '../../services/User'
 import ErrorModal from '../ErrorModal'
@@ -36,7 +36,6 @@ type TEditKravProps = {
 
 const maxInputWidth = '400px'
 const modalWidth = '1276px'
-const errorMessage = 'Feltet er påkrevd'
 
 export const kravModal = () => document.querySelector('#krav-modal')
 
@@ -67,7 +66,7 @@ export const EditKrav = ({
       navn: yup.string().required('Du må oppgi et navn til kravet'),
       suksesskriterier: yup.array().test({
         name: 'suksesskriterierCheck',
-        message: errorMessage,
+        message: EYupErrorMessage.PAAKREVD,
         test: function (suksesskriterier) {
           const { parent } = this
           if (parent.status === EKravStatus.AKTIV) {
@@ -82,7 +81,7 @@ export const EditKrav = ({
       }),
       hensikt: yup.string().test({
         name: 'hensiktCheck',
-        message: errorMessage,
+        message: EYupErrorMessage.PAAKREVD,
         test: function (hensikt) {
           const { parent } = this
           if (parent.status === EKravStatus.AKTIV) {
@@ -93,7 +92,7 @@ export const EditKrav = ({
       }),
       versjonEndringer: yup.string().test({
         name: 'versjonEndringerCheck',
-        message: errorMessage,
+        message: EYupErrorMessage.PAAKREVD,
         test: function (versjonEndringer) {
           const { parent } = this
           if (parent.status === EKravStatus.AKTIV) {
@@ -106,7 +105,7 @@ export const EditKrav = ({
       }),
       regelverk: yup.array().test({
         name: 'regelverkCheck',
-        message: errorMessage,
+        message: EYupErrorMessage.PAAKREVD,
         test: function (regelverk) {
           const { parent } = this
           if (parent.status === EKravStatus.AKTIV) {
@@ -117,7 +116,7 @@ export const EditKrav = ({
       }),
       varslingsadresser: yup.array().test({
         name: 'varslingsadresserCheck',
-        message: errorMessage,
+        message: EYupErrorMessage.PAAKREVD,
         test: function (varslingsadresser) {
           const { parent } = this
           if (parent.status === EKravStatus.AKTIV) {

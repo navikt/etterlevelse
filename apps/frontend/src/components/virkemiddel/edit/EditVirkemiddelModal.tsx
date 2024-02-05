@@ -9,14 +9,12 @@ import {
   updateVirkemiddel,
   virkemiddelMapToFormVal,
 } from '../../../api/VirkemiddelApi'
-import { IVirkemiddel } from '../../../constants'
+import { EYupErrorMessage, IVirkemiddel } from '../../../constants'
 import { EListName, codelist } from '../../../services/Codelist'
 import { FieldWrapper, InputField } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { FormError } from '../../common/ModalSchema'
 import { RegelverkEdit } from '../../krav/Edit/RegelverkEdit'
-
-const errorMessage = 'Feltet er påkrevd'
 
 type TEditVirkemiddelModalProps = {
   isOpen: boolean
@@ -156,13 +154,13 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
 
 const createVirkemiddelSchema = () =>
   yup.object({
-    navn: yup.string().required(errorMessage),
+    navn: yup.string().required(EYupErrorMessage.PAAKREVD),
     regelverk: yup.array().test({
       name: 'regelverkCheck',
-      message: errorMessage,
+      message: EYupErrorMessage.PAAKREVD,
       test: function (regelverk) {
         return regelverk && regelverk.length > 0 ? true : false
       },
     }),
-    virkemiddelType: yup.string().required(errorMessage),
+    virkemiddelType: yup.string().required(EYupErrorMessage.PAAKREVD),
   })
