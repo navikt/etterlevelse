@@ -53,7 +53,7 @@ export const KravListPage = () => {
               icon={<PlusIcon area-label="" aria-hidden />}
               size="medium"
               as="a"
-              href="/krav/ny"
+              href="/kravliste/opprett"
             >
               Nytt krav
             </Button>
