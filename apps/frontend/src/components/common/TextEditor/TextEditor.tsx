@@ -109,15 +109,15 @@ const TextEditor = (props: TTextEditorProps) => {
   }
   //--------------------------
 
+  const hasError = errors && name && errors[name]
+
   return (
     <div>
       <div
         style={{
           backgroundColor: ettlevColors.white,
-          ...borderColor(
-            errors && name && errors[name] ? ettlevColors.red500 : ettlevColors.textAreaBorder
-          ),
-          ...borderWidth(errors && name && errors[name] ? '2px' : '1px'),
+          ...borderColor(hasError ? ettlevColors.red500 : ettlevColors.textAreaBorder),
+          ...borderWidth(hasError ? '2px' : '1px'),
           ...borderStyle('solid'),
           ...borderRadius('4px'),
           width: width || undefined,
@@ -161,9 +161,7 @@ const TextEditor = (props: TTextEditorProps) => {
           }}
         />
       </div>
-      {errors && name && errors[name] && (
-        <FormError fieldName={name as string} akselStyling={true} />
-      )}
+      {errors && name && errors[name] && <FormError fieldName={name as string} akselStyling />}
     </div>
   )
 }

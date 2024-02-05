@@ -58,7 +58,7 @@ export const EditKravRelasjoner = () => {
           )
         }}
       </FieldArray>
-      <FormError fieldName="kravRelasjoner" />
+      <FormError fieldName="kravRelasjoner" akselStyling />
     </FieldWrapper>
   )
 }

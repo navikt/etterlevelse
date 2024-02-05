@@ -124,13 +124,13 @@ export const TemaCodeDataForm = () => {
               </div>
               <Textarea
                 label="Kort beskrivelse"
-                className="w-full mt-4"
+                className={'w-full mt-4'}
                 value={data.shortDesciption}
                 onChange={(str) =>
                   set({ shortDesciption: (str.target as HTMLTextAreaElement).value })
                 }
               />
-              <FormError fieldName="data.shortDesciption" />
+              <FormError fieldName="data.shortDesciption" akselStyling />
             </>
           )
         }}

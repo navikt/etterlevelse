@@ -230,9 +230,8 @@ const Kriterie = ({
             onChange={(e) => setNavn((e.target as HTMLInputElement).value)}
             placeholder={'Navn'}
             error={
-              p.form.errors && p.form.errors['suksesskriterier'] ? (
-                <FormError fieldName={'suksesskriterier'} />
-              ) : undefined
+              p.form.errors &&
+              p.form.errors['suksesskriterier'] && <FormError fieldName={'suksesskriterier'} />
             }
           />
         </div>

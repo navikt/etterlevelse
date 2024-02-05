@@ -52,33 +52,46 @@ const ModalCreateCodeList = ({
         }
         validationSchema={codeListSchema}
       >
-        {({ submitForm }) => (
+        {({ errors, submitForm }) => (
           <Form>
             <Modal.Body>
               <Field
                 name="code"
                 render={({ field }: FieldProps) => (
-                  <TextField {...field} className="w-full" label="Kode" />
+                  <TextField
+                    {...field}
+                    className="w-full"
+                    label="Kode"
+                    error={errors.code && <FormError fieldName="code" />}
+                  />
                 )}
               />
-              <FormError fieldName="code" />
 
               <Field
                 name="shortName"
                 render={({ field }: FieldProps) => (
-                  <TextField {...field} className="w-full mt-4" label="Navn" />
+                  <TextField
+                    {...field}
+                    className="w-full mt-4"
+                    label="Navn"
+                    error={errors.shortName && <FormError fieldName="shortName" />}
+                  />
                 )}
               />
-              <FormError fieldName="shortName" />
 
               <Field
                 name="description"
                 render={({ field }: FieldProps) => (
-                  <Textarea {...field} className="w-full mt-4" label="Beskrivelse" minRows={10} />
+                  <Textarea
+                    {...field}
+                    className="w-full mt-4"
+                    label="Beskrivelse"
+                    minRows={10}
+                    error={errors.description && <FormError fieldName="description" />}
+                  />
                 )}
               />
 
-              <FormError fieldName="description" />
               {(list === EListName.LOV || list === EListName.TEMA) && <MarkdownInfo />}
 
               {list === EListName.LOV && <LovCodeDataForm />}

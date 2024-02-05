@@ -31,7 +31,6 @@ import {
 } from '../../../../constants'
 import { TextAreaField } from '../../../common/Inputs'
 import { Markdown } from '../../../common/Markdown'
-import { FormError } from '../../../common/ModalSchema'
 import {
   AddEmail,
   SlackChannelSearch,
@@ -128,7 +127,6 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
                       name="foersteMelding"
                       placeholder="Skriv her.."
                     />
-                    <FormError fieldName="foersteMelding" />
 
                     {/* <OptionField label="Type" name="type" clearable={false} options={Object.values(TilbakemeldingType).map((o) => ({ id: o, label: typeText(o) }))} /> */}
                     <Field name="varslingsadresse.adresse">

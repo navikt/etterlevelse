@@ -198,12 +198,12 @@ export const BoolField = (props: IPropsBoolField) => {
               onChange={(value) => {
                 p.form.setFieldValue(name, radioToBool(value))
               }}
+              error={p.form.errors[name] && <FormError fieldName={name} />}
             >
               <Radio value={YES}>Ja</Radio>
               <Radio value={NO}>Nei</Radio>
               {nullable && <Radio value={UNCLARIFIED}>Uavklart</Radio>}
             </RadioGroup>
-            <FormError fieldName={name} />
           </div>
         )}
       </Field>

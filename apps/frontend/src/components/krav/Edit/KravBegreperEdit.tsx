@@ -64,7 +64,7 @@ export const EditBegreper = () => {
           )
         }}
       </FieldArray>
-      <FormError fieldName="begreper" akselStyling={true} />
+      <FormError fieldName="begreper" akselStyling />
     </FieldWrapper>
   )
 }

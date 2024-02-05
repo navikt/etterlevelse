@@ -40,17 +40,28 @@ const UpdateCodeListModal = ({
         <Form>
           <Modal.Body>
             <Field name="shortName">
-              {({ field }: FieldProps) => <TextField className="w-full" label="Navn" {...field} />}
-            </Field>
-            <FormError fieldName="shortName" />
-
-            <Field name="description">
               {({ field }: FieldProps) => (
-                <Textarea className="w-full mt-4" label="Beskrivelse" {...field} minRows={10} />
+                <TextField
+                  className="w-full"
+                  label="Navn"
+                  {...field}
+                  error={formik.errors.shortName && <FormError fieldName="shortName" />}
+                />
               )}
             </Field>
 
-            <FormError fieldName="description" />
+            <Field name="description">
+              {({ field }: FieldProps) => (
+                <Textarea
+                  className="w-full mt-4"
+                  label="Beskrivelse"
+                  {...field}
+                  minRows={10}
+                  error={formik.errors.description && <FormError fieldName="description" />}
+                />
+              )}
+            </Field>
+
             {(initialValues.list === EListName.LOV || initialValues.list === EListName.TEMA) && (
               <MarkdownInfo />
             )}

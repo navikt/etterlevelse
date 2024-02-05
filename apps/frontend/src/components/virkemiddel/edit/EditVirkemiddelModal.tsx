@@ -11,9 +11,11 @@ import {
 } from '../../../api/VirkemiddelApi'
 import { EYupErrorMessage, IVirkemiddel } from '../../../constants'
 import { EListName, codelist } from '../../../services/Codelist'
+import { ettlevColors } from '../../../util/theme'
 import { FieldWrapper, InputField } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { FormError } from '../../common/ModalSchema'
+import { borderWidth } from '../../common/Style'
 import { RegelverkEdit } from '../../krav/Edit/RegelverkEdit'
 
 type TEditVirkemiddelModalProps = {
@@ -110,6 +112,10 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
                                 ({
                                   ...baseStyles,
                                   height: '48px',
+                                  borderColor: fp.form.errors.virkemiddelType
+                                    ? ettlevColors.red500
+                                    : ettlevColors.textAreaBorder,
+                                  ...borderWidth(fp.form.errors.virkemiddelType ? '2px' : '1px'),
                                 }) as CSSObjectWithLabel,
                               menu: (baseStyles) =>
                                 ({

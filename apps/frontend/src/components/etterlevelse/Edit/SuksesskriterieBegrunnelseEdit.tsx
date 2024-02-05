@@ -209,7 +209,10 @@ const KriterieBegrunnelse = ({
             />
 
             <div className="mt-1">
-              <FormError fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} />
+              <FormError
+                fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`}
+                akselStyling
+              />
             </div>
           </div>
         )}
@@ -229,11 +232,14 @@ const KriterieBegrunnelse = ({
           </div>
         )}
       </div>
-      <FormError fieldName={`suksesskriterieBegrunnelser[${index}].suksesskriterieStatus`} />
+      <FormError
+        fieldName={`suksesskriterieBegrunnelser[${index}].suksesskriterieStatus`}
+        akselStyling
+      />
 
       <div className="mt-2">
         {suksesskriterieBegrunnelse.behovForBegrunnelse && begrunnelse.length > 0 && (
-          <FormError fieldName={'status'} />
+          <FormError fieldName={'status'} akselStyling />
         )}
       </div>
     </Box>
