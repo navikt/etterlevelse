@@ -69,7 +69,7 @@ export const kravCreateValidation = () =>
     }),
     varslingsadresser: yup.array().test({
       name: 'varslingsadresserCheck',
-      message: EYupErrorMessage.PAAKREVD,
+      message: 'Påkrevd minst en varslingsadresse',
       test: function (varslingsadresser) {
         const { parent } = this
         return activeStatusValueValidation(
