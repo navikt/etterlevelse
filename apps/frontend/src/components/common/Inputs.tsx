@@ -92,8 +92,8 @@ export const InputField = (props: IPropsInputField) => {
   const { name, label, disablePlaceHolder, marginBottom } = props
 
   return (
-    <FieldWrapper marginBottom={marginBottom}>
-      <Field name={name} id={name}>
+    <FieldWrapper marginBottom={marginBottom} id={name}>
+      <Field name={name}>
         {(p: FieldProps) => (
           <div className="w-full">
             <TextField
