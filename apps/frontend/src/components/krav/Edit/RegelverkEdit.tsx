@@ -1,17 +1,14 @@
-import { Button, TextField } from '@navikt/ds-react'
-import { Block } from 'baseui/block'
-import { LabelSmall } from 'baseui/typography'
+import { Button, Label, TextField } from '@navikt/ds-react'
 import { FieldArray } from 'formik'
 import { useState } from 'react'
 import Select, { CSSObjectWithLabel } from 'react-select'
 import { IRegelverk } from '../../../constants'
 import { EListName, TLovCode, codelist } from '../../../services/Codelist'
-import { theme } from '../../../util'
 import { ettlevColors } from '../../../util/theme'
 import { LovView } from '../../Lov'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { FormError } from '../../common/ModalSchema'
+import { Error, FormError } from '../../common/ModalSchema'
 import { borderWidth } from '../../common/Style'
 import { RenderTagList } from '../../common/TagList'
 
@@ -22,6 +19,7 @@ type TRegelverkEditProps = {
 export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
   const [lov, setLov] = useState({ value: '', label: '', description: '' })
   const [text, setText] = useState('')
+  const [error, setError] = useState('')
 
   const regelverkObject = () => ({
     lov: codelist.getCode(EListName.LOV, lov.value as string) as TLovCode,
@@ -36,13 +34,17 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
         {(p) => {
           const add = () => {
             if (!text || !lov) return
-            if (lov.value === '') return
+            if (lov.value === '') {
+              setError('Du må velge minst et regelverk')
+              return
+            }
+            setError('')
             p.push(regelverkObject())
             setLov({ value: '', label: '', description: '' })
             setText('')
           }
 
-          const hasError = !!p.form.errors['regelverk']
+          const hasError = !!p.form.errors['regelverk'] || error !== ''
 
           return (
             <div>
@@ -103,14 +105,15 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
                     </Button>
                   </div>
                 </div>
+                {error && <Error message={error} />}
+                {!error && <FormError fieldName="regelverk" akselStyling />}
                 {!!lov && text && (
-                  <Block display="flex" alignItems="center" marginTop={theme.sizing.scale400}>
-                    <LabelSmall marginRight={theme.sizing.scale800}>Forhåndsvisning: </LabelSmall>
+                  <div className="flex items-center mt-2.5">
+                    <Label className="mr-6">Forhåndsvisning: </Label>
                     <LovView regelverk={regelverkObject()} />
-                  </Block>
+                  </div>
                 )}
               </div>
-              <FormError fieldName="regelverk" akselStyling />
 
               <RenderTagList
                 list={p.form.values.regelverk.map((r: IRegelverk) => (

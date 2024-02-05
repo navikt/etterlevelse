@@ -279,14 +279,14 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
               } else if (!linkName && !val) {
                 return
               } else {
-                setError('Må ha navn på kilde.')
+                setError('Må ha navn på kilde')
                 return
               }
             } else {
               if (val) {
                 p.push(val)
               } else {
-                setError('Må ha navn på kilde.')
+                setError('Må ha navn på kilde')
                 return
               }
             }

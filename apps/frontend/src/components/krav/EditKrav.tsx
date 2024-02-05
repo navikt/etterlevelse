@@ -330,7 +330,7 @@ export const EditKrav = ({
                       linkTooltip={
                         'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller WebSak.'
                       }
-                      setErrors={() => setErrors({ dokumentasjon: 'Må ha navn på kilde.' })}
+                      setErrors={() => setErrors({ dokumentasjon: 'Må ha navn på kilde' })}
                     />
 
                     <FormError fieldName="dokumentasjon" />
