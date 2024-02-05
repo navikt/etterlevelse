@@ -475,7 +475,7 @@ export const EtterlevelseKravView = ({
                   })
                 }}
               >
-                <Button as="a" variant="secondary">
+                <Button variant="secondary">
                   Til neste krav som ikke er ferdig utfylt i dette temaet
                 </Button>
               </Link>
@@ -490,9 +490,7 @@ export const EtterlevelseKravView = ({
                   })
                 }}
               >
-                <Button as="a" variant="secondary">
-                  Til temaoversikten
-                </Button>
+                <Button variant="secondary">Til temaoversikten</Button>
               </Link>
             </Modal.Footer>
           </Modal>

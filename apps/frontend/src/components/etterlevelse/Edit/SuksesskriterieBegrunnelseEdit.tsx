@@ -1,6 +1,6 @@
 import { BodyShort, Box, Heading, Label, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
-import React from 'react'
+import { useEffect, useState } from 'react'
 import {
   EEtterlevelseStatus,
   ESuksesskriterieStatus,
@@ -10,7 +10,7 @@ import {
 import { useDebouncedState } from '../../../util/hooks'
 import { FieldWrapper } from '../../common/Inputs'
 import { Markdown } from '../../common/Markdown'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
 import { LabelAboveContent } from '../../common/PropertyLabel'
 import TextEditor from '../../common/TextEditor/TextEditor'
 
@@ -45,60 +45,71 @@ export const getLabelForSuksessKriterie = (suksessKriterieStatus?: ESuksesskrite
   }
 }
 
+interface IPropsSuksesskriterierBegrunnelseEdit {
+  suksesskriterie: ISuksesskriterie[]
+  disableEdit: boolean
+}
+
 export const SuksesskriterierBegrunnelseEdit = ({
   suksesskriterie,
   disableEdit,
-}: {
+}: IPropsSuksesskriterierBegrunnelseEdit) => (
+  <FieldWrapper>
+    <FieldArray name={'suksesskriterieBegrunnelser'}>
+      {(p) => (
+        <KriterieBegrunnelseList
+          props={p}
+          disableEdit={disableEdit}
+          suksesskriterie={suksesskriterie}
+        />
+      )}
+    </FieldArray>
+  </FieldWrapper>
+)
+
+interface IPropsKriterieBegrunnelseList {
+  props: FieldArrayRenderProps
   suksesskriterie: ISuksesskriterie[]
   disableEdit: boolean
-}) => {
-  return (
-    <FieldWrapper>
-      <FieldArray name={'suksesskriterieBegrunnelser'}>
-        {(p) => (
-          <KriterieBegrunnelseList
-            props={p}
-            disableEdit={disableEdit}
-            suksesskriterie={suksesskriterie}
-          />
-        )}
-      </FieldArray>
-    </FieldWrapper>
-  )
 }
 
 const KriterieBegrunnelseList = ({
   props,
   suksesskriterie,
   disableEdit,
-}: {
-  props: FieldArrayRenderProps
-  suksesskriterie: ISuksesskriterie[]
-  disableEdit: boolean
-}) => {
+}: IPropsKriterieBegrunnelseList) => {
   const suksesskriterieBegrunnelser = props.form.values
     .suksesskriterieBegrunnelser as ISuksesskriterieBegrunnelse[]
 
   return (
     <div>
-      {suksesskriterie.map((s, i) => {
-        return (
-          <div key={s.navn + '_' + i}>
-            <KriterieBegrunnelse
-              status={props.form.values.status}
-              disableEdit={disableEdit}
-              suksesskriterie={s}
-              index={i}
-              suksesskriterieBegrunnelser={suksesskriterieBegrunnelser}
-              update={(updated) => props.replace(i, updated)}
-              props={props}
-              totalSuksesskriterie={suksesskriterie.length}
-            />
-          </div>
-        )
-      })}
+      {suksesskriterie.map((s, i) => (
+        <div key={s.navn + '_' + i}>
+          <KriterieBegrunnelse
+            status={props.form.values.status}
+            disableEdit={disableEdit}
+            suksesskriterie={s}
+            index={i}
+            suksesskriterieBegrunnelser={suksesskriterieBegrunnelser}
+            update={(updated) => props.replace(i, updated)}
+            props={props}
+            totalSuksesskriterie={suksesskriterie.length}
+          />
+        </div>
+      ))}
     </div>
   )
+}
+
+interface IPropsKriterieBegrunnelse {
+  suksesskriterie: ISuksesskriterie
+  index: number
+  suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
+  disableEdit: boolean
+  update: (s: ISuksesskriterieBegrunnelse) => void
+  status: string
+  props: FieldArrayRenderProps
+  totalSuksesskriterie: number
 }
 
 const KriterieBegrunnelse = ({
@@ -110,16 +121,7 @@ const KriterieBegrunnelse = ({
   status,
   props,
   totalSuksesskriterie,
-}: {
-  suksesskriterie: ISuksesskriterie
-  index: number
-  suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
-  disableEdit: boolean
-  update: (s: ISuksesskriterieBegrunnelse) => void
-  status: string
-  props: FieldArrayRenderProps
-  totalSuksesskriterie: number
-}) => {
+}: IPropsKriterieBegrunnelse) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(
     suksesskriterieBegrunnelser,
     suksesskriterie
@@ -129,11 +131,11 @@ const KriterieBegrunnelse = ({
     suksesskriterieBegrunnelse.begrunnelse || '',
     debounceDelay
   )
-  const [suksessKriterieStatus, setSuksessKriterieStatus] = React.useState<
+  const [suksessKriterieStatus, setSuksessKriterieStatus] = useState<
     ESuksesskriterieStatus | undefined
   >(suksesskriterieBegrunnelse.suksesskriterieStatus)
 
-  React.useEffect(() => {
+  useEffect(() => {
     update({
       suksesskriterieId: suksesskriterie.id,
       begrunnelse: begrunnelse,
@@ -207,7 +209,10 @@ const KriterieBegrunnelse = ({
             />
 
             <div className="mt-1">
-              <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} />
+              <FormError
+                fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`}
+                akselStyling
+              />
             </div>
           </div>
         )}
@@ -227,11 +232,14 @@ const KriterieBegrunnelse = ({
           </div>
         )}
       </div>
-      <Error fieldName={`suksesskriterieBegrunnelser[${index}].suksesskriterieStatus`} />
+      <FormError
+        fieldName={`suksesskriterieBegrunnelser[${index}].suksesskriterieStatus`}
+        akselStyling
+      />
 
       <div className="mt-2">
         {suksesskriterieBegrunnelse.behovForBegrunnelse && begrunnelse.length > 0 && (
-          <Error fieldName={'status'} />
+          <FormError fieldName={'status'} akselStyling />
         )}
       </div>
     </Box>

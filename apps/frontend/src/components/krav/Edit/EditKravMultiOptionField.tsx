@@ -4,6 +4,7 @@ import { ReactNode } from 'react'
 import Select, { CSSObjectWithLabel } from 'react-select'
 import { TOr } from '../../../constants'
 import { EListName, ICode, codelist } from '../../../services/Codelist'
+import { ettlevColors } from '../../../util/theme'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 
@@ -58,6 +59,7 @@ export const EditKravMultiOptionField = (
                     ({
                       ...baseStyles,
                       minHeight: '48px',
+                      borderColor: ettlevColors.textAreaBorder,
                     }) as CSSObjectWithLabel,
                 }}
               />

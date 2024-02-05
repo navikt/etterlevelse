@@ -14,23 +14,32 @@ import { EKravStatus, ISuksesskriterie } from '../../../constants'
 import { useDebouncedState } from '../../../util/hooks'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
 import TextEditor from '../../common/TextEditor/TextEditor'
 import { kravModal } from '../EditKrav'
 
 type TKravSuksesskriterieEditProps = {
   setIsFormDirty?: (v: boolean) => void
-  newVersion: boolean
+  newVersion?: boolean
+  newKrav?: boolean
 }
 
 export const KravSuksesskriterierEdit = ({
   setIsFormDirty,
   newVersion,
+  newKrav,
 }: TKravSuksesskriterieEditProps) => {
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterier'}>
-        {(p) => <KriterieList p={p} setIsFormDirty={setIsFormDirty} newVersion={newVersion} />}
+        {(p) => (
+          <KriterieList
+            p={p}
+            setIsFormDirty={setIsFormDirty}
+            newVersion={newVersion}
+            newKrav={newKrav}
+          />
+        )}
       </FieldArray>
     </FieldWrapper>
   )
@@ -45,16 +54,35 @@ const KriterieList = ({
   p,
   setIsFormDirty,
   newVersion,
+  newKrav,
 }: {
   p: FieldArrayRenderProps
   setIsFormDirty?: (v: boolean) => void
-  newVersion: boolean
+  newVersion?: boolean
+  newKrav?: boolean
 }) => {
   const suksesskriterier = p.form.values.suksesskriterier as ISuksesskriterie[]
 
-  if (!suksesskriterier.length) {
-    p.push({ id: nextId(suksesskriterier), navn: '', beskrivelse: '' })
-  }
+  const AddSuksessKriterieButton = () => (
+    <div className="my-4 ml-2.5 self-end">
+      <Button
+        type="button"
+        icon={<PlusIcon aria-label="" aria-hidden />}
+        variant="secondary"
+        disabled={suksesskriterier.length >= 15}
+        onClick={() =>
+          p.push({
+            id: nextId(suksesskriterier),
+            navn: '',
+            beskrivelse: '',
+            behovForBegrunnelse: 'true',
+          })
+        }
+      >
+        Suksesskriterie
+      </Button>
+    </div>
+  )
 
   return (
     <div className="flex flex-col">
@@ -116,25 +144,11 @@ const KriterieList = ({
           )}
         </Droppable>
       </DragDropContext>
-      {(p.form.values.status !== EKravStatus.AKTIV || newVersion) && (
-        <div className="my-4 ml-2.5 self-end">
-          <Button
-            type="button"
-            icon={<PlusIcon aria-label="" aria-hidden />}
-            variant="secondary"
-            disabled={suksesskriterier.length >= 15}
-            onClick={() =>
-              p.push({
-                id: nextId(suksesskriterier),
-                navn: '',
-                beskrivelse: '',
-                behovForBegrunnelse: 'true',
-              })
-            }
-          >
-            Suksesskriterie
-          </Button>
-        </div>
+
+      {newKrav && <AddSuksessKriterieButton />}
+
+      {!newKrav && (p.form.values.status !== EKravStatus.AKTIV || newVersion) && (
+        <AddSuksessKriterieButton />
       )}
     </div>
   )
@@ -159,7 +173,7 @@ const Kriterie = ({
   isDragging: boolean
   p: FieldArrayRenderProps
   setIsFormDirty?: (v: boolean) => void
-  newVersion: boolean
+  newVersion?: boolean
 }) => {
   const debounceDelay = 500
   const [navn, setNavn, navnInput] = useDebouncedState(s.navn, debounceDelay)
@@ -215,8 +229,11 @@ const Kriterie = ({
             value={navnInput}
             onChange={(e) => setNavn((e.target as HTMLInputElement).value)}
             placeholder={'Navn'}
+            error={
+              p.form.errors &&
+              p.form.errors['suksesskriterier'] && <FormError fieldName={'suksesskriterier'} />
+            }
           />
-          <Error fieldName={'suksesskriterier'} />
         </div>
 
         <div>

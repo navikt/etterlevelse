@@ -10,7 +10,7 @@ import {
 } from '../../../services/Codelist'
 import { temaBilder } from '../../Images'
 import { OptionList } from '../../common/Inputs'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
 
 export const LovCodeDataForm = () => (
   <div className="flex w-full mt-4 items-center flex-col">
@@ -124,13 +124,13 @@ export const TemaCodeDataForm = () => {
               </div>
               <Textarea
                 label="Kort beskrivelse"
-                className="w-full mt-4"
+                className={'w-full mt-4'}
                 value={data.shortDesciption}
                 onChange={(str) =>
                   set({ shortDesciption: (str.target as HTMLTextAreaElement).value })
                 }
               />
-              <Error fieldName="data.shortDesciption" />
+              <FormError fieldName="data.shortDesciption" akselStyling />
             </>
           )
         }}

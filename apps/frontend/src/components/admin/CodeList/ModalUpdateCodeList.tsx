@@ -2,7 +2,7 @@ import { BodyShort, Button, Modal, TextField, Textarea } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 import { EListName, ICodeListFormValues, codeListSchema } from '../../../services/Codelist'
 import { MarkdownInfo } from '../../common/Markdown'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
 import { LovCodeDataForm } from './LovCode'
 
 type TModalUpdateProps = {
@@ -40,17 +40,28 @@ const UpdateCodeListModal = ({
         <Form>
           <Modal.Body>
             <Field name="shortName">
-              {({ field }: FieldProps) => <TextField className="w-full" label="Navn" {...field} />}
-            </Field>
-            <Error fieldName="shortName" />
-
-            <Field name="description">
               {({ field }: FieldProps) => (
-                <Textarea className="w-full mt-4" label="Beskrivelse" {...field} minRows={10} />
+                <TextField
+                  className="w-full"
+                  label="Navn"
+                  {...field}
+                  error={formik.errors.shortName && <FormError fieldName="shortName" />}
+                />
               )}
             </Field>
 
-            <Error fieldName="description" />
+            <Field name="description">
+              {({ field }: FieldProps) => (
+                <Textarea
+                  className="w-full mt-4"
+                  label="Beskrivelse"
+                  {...field}
+                  minRows={10}
+                  error={formik.errors.description && <FormError fieldName="description" />}
+                />
+              )}
+            </Field>
+
             {(initialValues.list === EListName.LOV || initialValues.list === EListName.TEMA) && (
               <MarkdownInfo />
             )}

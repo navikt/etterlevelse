@@ -9,7 +9,7 @@ import { searchIcon } from '../../Images'
 import CustomizedSelect from '../../common/CustomizedSelect'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
 import { borderWidth } from '../../common/Style'
 import { RenderTagList } from '../../common/TagList'
 
@@ -86,7 +86,7 @@ export const EditVirkemidler = () => {
           )
         }}
       </FieldArray>
-      <Error fieldName="virkemidler" />
+      <FormError fieldName="virkemidler" />
     </FieldWrapper>
   )
 }

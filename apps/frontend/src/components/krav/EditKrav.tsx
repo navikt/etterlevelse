@@ -1,5 +1,4 @@
 import { Alert, BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal } from '@navikt/ds-react'
-import axios from 'axios'
 import { Form, Formik } from 'formik'
 import _ from 'lodash'
 import React, { useEffect } from 'react'
@@ -11,13 +10,12 @@ import {
   kravMapToFormVal,
   updateKrav,
 } from '../../api/KravApi'
-import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../../constants'
+import { EKravStatus, EYupErrorMessage, IKrav, IKravVersjon, TKravQL } from '../../constants'
 import { EListName, codelist } from '../../services/Codelist'
 import { user } from '../../services/User'
-import { env } from '../../util/env'
 import ErrorModal from '../ErrorModal'
 import { InputField, MultiInputField, TextAreaField } from '../common/Inputs'
-import { Error } from '../common/ModalSchema'
+import { FormError } from '../common/ModalSchema'
 import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
 import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
 import { EditBegreper } from './Edit/KravBegreperEdit'
@@ -68,7 +66,7 @@ export const EditKrav = ({
       navn: yup.string().required('Du må oppgi et navn til kravet'),
       suksesskriterier: yup.array().test({
         name: 'suksesskriterierCheck',
-        message: errorMessage,
+        message: EYupErrorMessage.PAAKREVD,
         test: function (suksesskriterier) {
           const { parent } = this
           if (parent.status === EKravStatus.AKTIV) {
@@ -83,7 +81,7 @@ export const EditKrav = ({
       }),
       hensikt: yup.string().test({
         name: 'hensiktCheck',
-        message: errorMessage,
+        message: EYupErrorMessage.PAAKREVD,
         test: function (hensikt) {
           const { parent } = this
           if (parent.status === EKravStatus.AKTIV) {
@@ -94,7 +92,7 @@ export const EditKrav = ({
       }),
       versjonEndringer: yup.string().test({
         name: 'versjonEndringerCheck',
-        message: errorMessage,
+        message: EYupErrorMessage.PAAKREVD,
         test: function (versjonEndringer) {
           const { parent } = this
           if (parent.status === EKravStatus.AKTIV) {
@@ -107,7 +105,7 @@ export const EditKrav = ({
       }),
       regelverk: yup.array().test({
         name: 'regelverkCheck',
-        message: errorMessage,
+        message: EYupErrorMessage.PAAKREVD,
         test: function (regelverk) {
           const { parent } = this
           if (parent.status === EKravStatus.AKTIV) {
@@ -118,7 +116,7 @@ export const EditKrav = ({
       }),
       varslingsadresser: yup.array().test({
         name: 'varslingsadresserCheck',
-        message: errorMessage,
+        message: EYupErrorMessage.PAAKREVD,
         test: function (varslingsadresser) {
           const { parent } = this
           if (parent.status === EKravStatus.AKTIV) {
@@ -275,12 +273,7 @@ export const EditKrav = ({
               </div>
               <div>
                 <div className="title_container py-16 px-24">
-                  <InputField
-                    marginBottom
-                    label="Krav-tittel"
-                    name="navn"
-                    description="Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting."
-                  />
+                  <InputField marginBottom label="Krav-tittel" name="navn" />
                   <div className="mb-14">
                     <CheckboxGroup
                       legend="Send varselmelding"
@@ -306,18 +299,8 @@ export const EditKrav = ({
                       </div>
                     )}
                   </div>
-                  <TextAreaField
-                    label="Hensikt"
-                    name="hensikt"
-                    height="250px"
-                    markdown
-                    shortenLinks
-                    onImageUpload={onImageUpload(krav.id)}
-                    tooltip={
-                      'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'
-                    }
-                  />
-                  <Error fieldName="hensikt" />
+                  <TextAreaField label="Hensikt" name="hensikt" height="250px" markdown />
+                  <FormError fieldName="hensikt" />
                 </div>
 
                 <div className="flex w-full justify-center">
@@ -347,12 +330,12 @@ export const EditKrav = ({
                       linkTooltip={
                         'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller WebSak.'
                       }
-                      setErrors={() => setErrors({ dokumentasjon: 'Må ha navn på kilde.' })}
+                      setErrors={() => setErrors({ dokumentasjon: 'Må ha navn på kilde' })}
                     />
 
-                    <Error fieldName="dokumentasjon" />
+                    <FormError fieldName="dokumentasjon" />
                     <RegelverkEdit />
-                    <Error fieldName="regelverk" />
+                    <FormError fieldName="regelverk" />
 
                     {!newKrav && krav.kravVersjon > 1 && (
                       <>
@@ -361,10 +344,8 @@ export const EditKrav = ({
                           name="versjonEndringer"
                           height="250px"
                           markdown
-                          shortenLinks
-                          tooltip={'Beskrivelse av hva som er nytt siden siste versjon.'}
                         />
-                        <Error fieldName={'versjonEndringer'} />
+                        <FormError fieldName={'versjonEndringer'} />
                       </>
                     )}
 
@@ -383,7 +364,7 @@ export const EditKrav = ({
                         tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}
                       />
 
-                      <Error fieldName="relevansFor" />
+                      <FormError fieldName="relevansFor" />
                     </div>
 
                     <div className="w-full mb-20 max-w-md">
@@ -402,7 +383,7 @@ export const EditKrav = ({
 
                     <KravVarslingsadresserEdit />
 
-                    <Error fieldName="varslingsadresser" />
+                    <FormError fieldName="varslingsadresser" />
 
                     <div className="w-full">
                       {Object.keys(errors).length > 0 && !errors.dokumentasjon && (
@@ -420,7 +401,7 @@ export const EditKrav = ({
                 <div className="button_container sticky bottom-0 flex flex-col py-4 px-24 bg-gray-50 z-10">
                   {errors.status && (
                     <div className="mb-3">
-                      <Error fieldName="status" />
+                      <FormError fieldName="status" />
                     </div>
                   )}
 
@@ -606,7 +587,6 @@ export const EditKrav = ({
                     name="notat"
                     height="250px"
                     markdown
-                    tooltip={'Kraveiers notater'}
                   />
                 </div>
               </div>
@@ -622,16 +602,3 @@ export const EditKrav = ({
     </div>
   )
 }
-
-const onImageUpload = (kravId: string) => async (file: File) => {
-  const config = { headers: { 'content-type': 'multipart/form-data' } }
-  const formData = new FormData()
-  formData.append('file', file)
-  const id = (
-    await axios.post<string[]>(`${env.backendBaseUrl}/krav/${kravId}/files`, formData, config)
-  ).data[0]
-
-  return `/api/krav/${kravId}/files/${id}`
-}
-
-const errorMessage = 'Feltet er påkrevd'

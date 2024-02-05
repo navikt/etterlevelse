@@ -5,14 +5,13 @@ import { Editor } from 'react-draft-wysiwyg'
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import { useDebouncedState } from '../../../util/hooks'
 import { ettlevColors } from '../../../util/theme'
-import { borderColor, borderStyle, borderWidth } from '../Style'
+import { FormError } from '../ModalSchema'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../Style'
 import './customStyle.css'
 
 type TTextEditorProps = {
   initialValue: string
   setValue: (v: string) => void
-  shortenLinks?: boolean
-  onImageUpload?: (file: File) => Promise<string>
   height?: string
   errors?: FormikErrors<any>
   name?: string
@@ -23,7 +22,10 @@ type TTextEditorProps = {
 }
 
 const TextEditor = (props: TTextEditorProps) => {
-  const [val, setVal] = useDebouncedState(props.initialValue, 500, props.setValue)
+  const { initialValue, setValue, height, errors, name, simple, width, maxWidth, setIsFormDirty } =
+    props
+
+  const [val, setVal] = useDebouncedState(initialValue, 500, setValue)
 
   const CustomDraftToMarkdown = (data: RawDraftContentState) => {
     return draftToMarkdown(data, {
@@ -51,8 +53,8 @@ const TextEditor = (props: TTextEditorProps) => {
     })
   }
 
-  const CustomMarkdownToDraft = (data: string) => {
-    return markdownToDraft(data, {
+  const CustomMarkdownToDraft = (data: string) =>
+    markdownToDraft(data, {
       blockEntities: {
         image: (item: any) => {
           return {
@@ -67,7 +69,6 @@ const TextEditor = (props: TTextEditorProps) => {
       },
       preserveNewlines: true,
     })
-  }
 
   //--------ADD nessesary roles to toolbar options and editor------------
 
@@ -108,59 +109,59 @@ const TextEditor = (props: TTextEditorProps) => {
   }
   //--------------------------
 
+  const hasError = errors && name && errors[name]
+
   return (
-    <div
-      style={{
-        backgroundColor: ettlevColors.white,
-        ...borderColor(
-          props.errors && props.name && props.errors[props.name]
-            ? ettlevColors.red600
-            : ettlevColors.textAreaBorder
-        ),
-        ...borderWidth('2px'),
-        ...borderStyle('solid'),
-        width: props.width || undefined,
-        maxWidth: props.maxWidth || undefined,
-      }}
-    >
-      <Editor
-        editorStyle={{
-          padding: '10px',
-          minHeight: props.height || '500px',
-          backgroundColor:
-            props.errors && props.name && props.errors[props.name] ? ettlevColors.red50 : undefined,
-        }}
-        toolbarStyle={{
+    <div>
+      <div
+        style={{
           backgroundColor: ettlevColors.white,
-          borderBottom: `1px solid ${ettlevColors.textAreaBorder}`,
+          ...borderColor(hasError ? ettlevColors.red500 : ettlevColors.textAreaBorder),
+          ...borderWidth(hasError ? '2px' : '1px'),
+          ...borderStyle('solid'),
+          ...borderRadius('4px'),
+          width: width || undefined,
+          maxWidth: maxWidth || undefined,
         }}
-        onEditorStateChange={(data) => {
-          setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
-          if (props.setIsFormDirty) {
-            props.setIsFormDirty(true)
-          }
-        }}
-        initialContentState={CustomMarkdownToDraft(val)}
-        localization={{
-          translations: translations,
-        }}
-        tabIndex={0}
-        toolbar={{
-          options: props.simple
-            ? ['inline', 'list', 'link']
-            : ['inline', 'blockType', 'list', 'link', 'history'],
-          blockType: {},
-          inline: { options: ['bold'] },
-          // old toolbar
-          // inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
-          list: { options: ['unordered', 'ordered'] },
-          link: {
-            defaultTargetOption: '_blank',
-            options: ['link'],
-          },
-          //image: { alt: { present: true, mandatory: true }, },
-        }}
-      />
+      >
+        <Editor
+          editorStyle={{
+            padding: '10px',
+            minHeight: height || '500px',
+          }}
+          toolbarStyle={{
+            backgroundColor: ettlevColors.white,
+            borderBottom: `1px solid ${ettlevColors.textAreaBorder}`,
+          }}
+          onEditorStateChange={(data) => {
+            setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
+            if (setIsFormDirty) {
+              setIsFormDirty(true)
+            }
+          }}
+          initialContentState={CustomMarkdownToDraft(val)}
+          localization={{
+            translations: translations,
+          }}
+          tabIndex={0}
+          toolbar={{
+            options: simple
+              ? ['inline', 'list', 'link']
+              : ['inline', 'blockType', 'list', 'link', 'history'],
+            blockType: {},
+            inline: { options: ['bold'] },
+            // old toolbar
+            // inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
+            list: { options: ['unordered', 'ordered'] },
+            link: {
+              defaultTargetOption: '_blank',
+              options: ['link'],
+            },
+            //image: { alt: { present: true, mandatory: true }, },
+          }}
+        />
+      </div>
+      {errors && name && errors[name] && <FormError fieldName={name as string} akselStyling />}
     </div>
   )
 }

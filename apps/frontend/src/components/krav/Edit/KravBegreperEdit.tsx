@@ -4,9 +4,10 @@ import { CSSObjectWithLabel, DropdownIndicatorProps, components } from 'react-se
 import AsyncSelect from 'react-select/async'
 import { useBegrepSearch } from '../../../api/BegrepApi'
 import { IBegrep } from '../../../constants'
+import { ettlevColors } from '../../../util/theme'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 
 export const DropdownIndicator = (props: DropdownIndicatorProps) => {
@@ -50,6 +51,7 @@ export const EditBegreper = () => {
                       ...base,
                       cursor: 'text',
                       height: '48px',
+                      borderColor: ettlevColors.textAreaBorder,
                     }) as CSSObjectWithLabel,
                 }}
               />
@@ -62,7 +64,7 @@ export const EditBegreper = () => {
           )
         }}
       </FieldArray>
-      <Error fieldName="begreper" />
+      <FormError fieldName="begreper" akselStyling />
     </FieldWrapper>
   )
 }

@@ -17,7 +17,7 @@ import { ampli } from '../../../services/Amplitude'
 import { EListName, ICode, codelist } from '../../../services/Codelist'
 import { BoolField, FieldWrapper, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 
@@ -358,7 +358,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                   </FieldWrapper>
                 )}
                 <div className="my-5">
-                  <Error fieldName="title" />
+                  <FormError fieldName="title" akselStyling />
                 </div>
                 <div className="flex justify-end">
                   <Button

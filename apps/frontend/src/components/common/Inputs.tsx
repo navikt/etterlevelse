@@ -22,95 +22,151 @@ import { EListName, codelist } from '../../services/Codelist'
 import CustomizedSelect from '../common/CustomizedSelect'
 import LabelWithTooltip from '../common/LabelWithTooltip'
 import { MarkdownInfo } from './Markdown'
-import { Error } from './ModalSchema'
+import { Error, FormError } from './ModalSchema'
 import { RenderTagList } from './TagList'
 import TextEditor from './TextEditor/TextEditor'
 
-export const FieldWrapper = ({
-  children,
-  marginBottom,
-}: {
-  children: React.ReactNode
-  marginBottom?: boolean
-}) => {
-  return <div className={`${marginBottom ? 'mb-6' : ''}`}>{children}</div>
+interface ILabel {
+  label: string
 }
 
-export const InputField = (props: {
-  label: string
+interface IName {
   name: string
-  description?: string
+}
+
+type TLabelName = IName & ILabel
+
+interface IMarginBottom {
   marginBottom?: boolean
-  disablePlaceHolder?: boolean
-}) => (
-  <FieldWrapper marginBottom={props.marginBottom}>
-    <Field name={props.name}>
-      {(p: FieldProps) => (
-        <div className="w-full">
-          <TextField
-            label={props.label}
-            {...p.field}
-            placeholder={!props.disablePlaceHolder ? props.label : undefined}
-          />
-          <Error fieldName={props.name} />
-        </div>
-      )}
-    </Field>
-  </FieldWrapper>
+}
+
+interface IID {
+  id?: string
+}
+
+interface ICaption {
+  caption?: ReactNode
+}
+
+interface ITooltip {
+  tooltip?: string
+}
+
+interface IOptions {
+  options: Value
+}
+
+interface IListname {
+  listName: EListName
+}
+
+interface ISearchItemLabel {
+  search: TSearchType
+  itemLabel?: (id: string) => string
+}
+
+interface IPropsOptionList extends ILabel {
+  value?: string
+  onChange: (val?: any) => void
+}
+
+type TOptionORListname = TOr<IOptions, IListname>
+
+type TLabelNameSearchItemLabel = TLabelName & ISearchItemLabel
+
+interface IPropsFieldWrapper extends IMarginBottom, IID {
+  children: React.ReactNode
+}
+
+export const FieldWrapper = ({ children, marginBottom, id }: IPropsFieldWrapper) => (
+  <div className={`${marginBottom ? 'mb-6' : ''}`} id={id}>
+    {children}
+  </div>
 )
 
-export const TextAreaField = (props: {
+interface IPropsInputField extends TLabelName, IMarginBottom {
+  disablePlaceHolder?: boolean
+}
+
+export const InputField = (props: IPropsInputField) => {
+  const { name, label, disablePlaceHolder, marginBottom } = props
+
+  return (
+    <FieldWrapper marginBottom={marginBottom}>
+      <Field name={name} id={name}>
+        {(p: FieldProps) => (
+          <div className="w-full">
+            <TextField
+              label={label}
+              {...p.field}
+              placeholder={!disablePlaceHolder ? label : undefined}
+              error={p.form.errors[name] ? <FormError fieldName={name} /> : undefined}
+            />
+          </div>
+        )}
+      </Field>
+    </FieldWrapper>
+  )
+}
+
+interface IPropsTextAreaField extends TLabelName, IMarginBottom, ICaption {
   height?: string
-  marginBottom?: boolean
-  label: string
-  name: string
   markdown?: boolean
-  shortenLinks?: boolean
-  onImageUpload?: (file: File) => Promise<string>
-  caption?: ReactNode
-  tooltip?: string
   noPlaceholder?: boolean
   placeholder?: string
   maxCharacter?: number
   rows?: number
   setIsFormDirty?: (v: boolean) => void
-}) => {
+}
+
+export const TextAreaField = (props: IPropsTextAreaField) => {
+  const {
+    height,
+    marginBottom,
+    label,
+    name,
+    markdown,
+    caption,
+    noPlaceholder,
+    placeholder,
+    maxCharacter,
+    rows,
+    setIsFormDirty,
+  } = props
+
   return (
-    <FieldWrapper marginBottom={props.marginBottom}>
-      <Field name={props.name}>
+    <FieldWrapper marginBottom={marginBottom} id={name}>
+      <Field name={name}>
         {(p: FieldProps) => (
           <div>
-            {props.markdown && (
+            {markdown && (
               <div>
-                <Label>{props.label}</Label>
-                <Detail>{props.caption}</Detail>
+                <Label>{label}</Label>
+                <Detail>{caption}</Detail>
                 <MarkdownInfo />
                 <TextEditor
-                  height={props.height}
+                  height={height}
                   initialValue={p.field.value}
-                  setValue={(v) => p.form.setFieldValue(props.name, v)}
-                  onImageUpload={props.onImageUpload}
-                  shortenLinks={props.shortenLinks}
+                  setValue={(v) => p.form.setFieldValue(name, v)}
                   errors={p.form.errors}
-                  name={props.name}
-                  setIsFormDirty={props.setIsFormDirty}
+                  name={name}
+                  setIsFormDirty={setIsFormDirty}
                 />
-                {/* <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
-                onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} /> */}
+                {/* <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(name, v)}
+                onImageUpload={onImageUpload} shortenLinks={shortenLinks} /> */}
               </div>
             )}
-            {!props.markdown && (
+            {!markdown && (
               <Textarea
-                minRows={props.rows ? props.rows : 8}
-                label={props.label}
-                maxLength={props.maxCharacter ? props.maxCharacter : undefined}
+                minRows={rows ? rows : 8}
+                label={label}
+                maxLength={maxCharacter ? maxCharacter : undefined}
+                error={p.form.errors[name] ? <FormError fieldName={name} /> : undefined}
                 {...p.field}
-                placeholder={
-                  props.noPlaceholder ? '' : props.placeholder ? props.placeholder : props.label
-                }
+                placeholder={noPlaceholder ? '' : placeholder ? placeholder : label}
                 onChange={(v) => {
-                  if (props.setIsFormDirty) {
-                    props.setIsFormDirty(true)
+                  if (setIsFormDirty) {
+                    setIsFormDirty(true)
                   }
                   p.field.onChange(v)
                 }}
@@ -123,52 +179,54 @@ export const TextAreaField = (props: {
   )
 }
 
+interface IPropsBoolField extends TLabelName, ITooltip {
+  nullable?: boolean
+}
+
 const YES = 'YES',
   NO = 'NO',
   UNCLARIFIED = 'UNCLARIFIED'
 const boolToRadio = (bool?: boolean) => (bool === undefined ? UNCLARIFIED : bool ? YES : NO)
 const radioToBool = (radio: string) => (radio === UNCLARIFIED ? undefined : radio === YES)
-export const BoolField = (props: {
-  label: string
-  name: string
-  nullable?: boolean
-  tooltip?: string
-}) => (
-  <FieldWrapper>
-    <Field name={props.name}>
-      {(p: FieldProps) => (
-        <div>
-          <RadioGroup
-            legend={props.label}
-            description={props.tooltip}
-            value={boolToRadio(p.field.value)}
-            onChange={(value) => {
-              p.form.setFieldValue(props.name, radioToBool(value))
-            }}
-          >
-            <Radio value={YES}>Ja</Radio>
-            <Radio value={NO}>Nei</Radio>
-            {props.nullable && <Radio value={UNCLARIFIED}>Uavklart</Radio>}
-          </RadioGroup>
-          <Error fieldName={props.name} />
-        </div>
-      )}
-    </Field>
-  </FieldWrapper>
-)
 
-export const DateField = (props: {
-  label: string
-  name: string
-  caption?: ReactNode
-  tooltip?: string
-  error?: boolean
-}) => {
+export const BoolField = (props: IPropsBoolField) => {
+  const { label, name, nullable, tooltip } = props
+
+  return (
+    <FieldWrapper>
+      <Field name={name}>
+        {(p: FieldProps) => (
+          <div>
+            <RadioGroup
+              legend={label}
+              description={tooltip}
+              value={boolToRadio(p.field.value)}
+              onChange={(value) => {
+                p.form.setFieldValue(name, radioToBool(value))
+              }}
+              error={p.form.errors[name] && <FormError fieldName={name} />}
+            >
+              <Radio value={YES}>Ja</Radio>
+              <Radio value={NO}>Nei</Radio>
+              {nullable && <Radio value={UNCLARIFIED}>Uavklart</Radio>}
+            </RadioGroup>
+          </div>
+        )}
+      </Field>
+    </FieldWrapper>
+  )
+}
+
+type TPropsDateField = IName
+
+export const DateField = (props: TPropsDateField) => {
+  const { name } = props
+
   const { datepickerProps, inputProps } = useDatepicker({})
 
   return (
     <FieldWrapper>
-      <Field name={props.name}>
+      <Field name={name}>
         {(p: FieldProps) => (
           <DatePicker
             {...datepickerProps}
@@ -177,8 +235,8 @@ export const DateField = (props: {
               if (dateSingle) {
                 const newDate = dateSingle.setDate(dateSingle.getDate() + 1)
                 const formatedDate = new Date(newDate)
-                p.form.setFieldValue(props.name, formatedDate.toISOString().split('T')[0])
-              } else p.form.setFieldValue(props.name, undefined)
+                p.form.setFieldValue(name, formatedDate.toISOString().split('T')[0])
+              } else p.form.setFieldValue(name, undefined)
             }}
           >
             <DatePicker.Input {...inputProps} label="Velg dato" />
@@ -196,43 +254,45 @@ const linkNameFor = (t: string) => {
   return t
 }
 
-export const MultiInputField = (props: {
-  label: string
-  name: string
+interface IPropsMultiInputField extends TLabelName, IMarginBottom, ITooltip {
   link?: boolean
   linkLabel?: string
   linkTooltip?: string
-  caption?: ReactNode
-  tooltip?: string
   maxInputWidth?: string
-  marginBottom?: boolean
   setErrors?: () => void
-}) => {
-  const [val, setVal] = useState('')
-  const [linkName, setLinkName] = useState('')
+  removeErrors?: () => void
+}
+
+export const MultiInputField = (props: IPropsMultiInputField) => {
+  const { label, name, link, linkLabel, linkTooltip, tooltip, maxInputWidth, marginBottom } = props
+  const [val, setVal] = useState<string>('')
+  const [linkName, setLinkName] = useState<string>('')
+  const [error, setError] = useState<string>('')
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   return (
-    <FieldWrapper marginBottom={props.marginBottom}>
-      <FieldArray name={props.name}>
+    <FieldWrapper marginBottom={marginBottom}>
+      <FieldArray name={name}>
         {(p: FieldArrayRenderProps) => {
           const add = () => {
-            if (props.link) {
+            if (link) {
               if (linkName && val) {
                 p.push(`[${linkName}](${val})`)
+                setError('')
               } else if (linkName && !val) {
                 p.push(linkName)
+                setError('')
               } else if (!linkName && !val) {
                 return
               } else {
-                props.setErrors && props.setErrors()
+                setError('Må ha navn på kilde')
                 return
               }
             } else {
               if (val) {
                 p.push(val)
               } else {
-                props.setErrors && props.setErrors()
+                setError('Må ha navn på kilde')
                 return
               }
             }
@@ -244,15 +304,16 @@ export const MultiInputField = (props: {
           return (
             <div>
               <div className="flex w-full items-end">
-                {props.link && (
+                {link && (
                   <div
                     className={`w-full ${
-                      props.maxInputWidth ? 'max-w-[' + props.maxInputWidth + ']' : undefined
+                      maxInputWidth ? 'max-w-[' + maxInputWidth + ']' : undefined
                     }`}
                   >
-                    <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
+                    <LabelWithTooltip label={linkLabel} tooltip={linkTooltip} />
                     <TextField
-                      label={props.label}
+                      className={`${error !== '' ? 'border-2 rounded-md border-[#c30000]' : undefined}`}
+                      label={label}
                       hideLabel
                       onKeyDown={onKey}
                       value={linkName}
@@ -261,19 +322,19 @@ export const MultiInputField = (props: {
                   </div>
                 )}
                 <div
-                  className={`w-full ${props.link ? 'ml-3' : undefined} ${
-                    !props.link ? 'max-w-[' + props.maxInputWidth + ']' : undefined
+                  className={`w-full ${link ? 'ml-3' : undefined} ${
+                    !link ? 'max-w-[' + maxInputWidth + ']' : undefined
                   }`}
                 >
-                  <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
+                  <LabelWithTooltip label={label} tooltip={tooltip} />
                   <TextField
-                    label={props.label}
+                    label={label}
                     hideLabel
                     onKeyDown={onKey}
                     value={val}
                     ref={inputRef}
                     onChange={(e) => setVal((e.target as HTMLInputElement).value)}
-                    onBlur={!props.link ? add : undefined}
+                    onBlur={!link ? add : undefined}
                   />
                 </div>
 
@@ -283,8 +344,11 @@ export const MultiInputField = (props: {
                   </Button>
                 </div>
               </div>
+
+              {error && <Error message={error} />}
+
               <RenderTagList
-                list={(p.form.values[props.name] as string[]).map(linkNameFor)}
+                list={(p.form.values[name] as string[]).map(linkNameFor)}
                 onRemove={p.remove}
               />
             </div>
@@ -295,27 +359,23 @@ export const MultiInputField = (props: {
   )
 }
 
-export const OptionField = (
-  props: {
-    label: string
-    name: string
-    clearable?: boolean
-    caption?: ReactNode
-    tooltip?: string
-  } & TOr<{ options: Value }, { listName: EListName }>
-) => {
+type TPropsOptionField = TLabelName & IMarginBottom & ICaption & ITooltip & TOptionORListname
+
+export const OptionField = (props: TPropsOptionField) => {
+  const { label, name, caption, tooltip } = props
+
   return (
     <FieldWrapper>
-      <Field name={props.name}>
+      <Field name={name}>
         {(p: FieldProps<string>) => (
           <FormControl
-            label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />}
+            label={<LabelWithTooltip label={label} tooltip={tooltip} />}
             error={p.meta.touched && p.meta.error}
-            caption={props.caption}
+            caption={caption}
           >
             <OptionList
               {...props}
-              onChange={(val) => p.form.setFieldValue(props.name, val)}
+              onChange={(val) => p.form.setFieldValue(name, val)}
               value={p.field.value}
             />
           </FormControl>
@@ -325,64 +385,54 @@ export const OptionField = (
   )
 }
 
-export const OptionList = (
-  props: { label: string; value?: string; onChange: (val?: any) => void } & TOr<
-    { options: Value },
-    { listName: EListName }
-  >
-) => {
-  const options: Value = props.options || codelist.getParsedOptions(props.listName)
+type TPropsOptionList = IPropsOptionList & TOptionORListname
+
+export const OptionList = (props: TPropsOptionList) => {
+  const { label, value, onChange, options, listName } = props
+  const optionsList: Value = options || codelist.getParsedOptions(listName)
+
   return (
     <Select
-      label={props.label}
+      label={label}
       hideLabel
       className="w-full"
-      value={props.value}
+      value={value}
       onChange={(e) => {
         const val = e.target.value
-        const toSet = props.listName && val ? codelist.getCode(props.listName, val) : val
-        return props.onChange(toSet)
+        const toSet = listName && val ? codelist.getCode(listName, val) : val
+        return onChange(toSet)
       }}
     >
-      <option value="">Velg {props.label}</option>
-      {options.map((c, i) => {
-        return (
-          <option key={i + '_' + c.label} value={c.id}>
-            {c.label}
-          </option>
-        )
-      })}
+      <option value="">Velg {label}</option>
+      {optionsList.map((c, i) => (
+        <option key={i + '_' + c.label} value={c.id}>
+          {c.label}
+        </option>
+      ))}
     </Select>
   )
 }
 
-export const MultiSearchField = (props: {
-  label: string
-  name: string
-  search: TSearchType
-  itemLabel?: (id: string) => string
-}) => {
-  const [results, setSearch, loading] = props.search
+type TPropsMultiSearchField = TLabelNameSearchItemLabel
+
+export const MultiSearchField = (props: TPropsMultiSearchField) => {
+  const { label, name, search, itemLabel } = props
+  const [results, setSearch, loading] = search
 
   return (
     <FieldWrapper>
-      <FieldArray name={props.name}>
+      <FieldArray name={name}>
         {(p: FieldArrayRenderProps) => (
-          <FormControl
-            label={props.label}
-            error={p.form.touched[props.name] && <>{p.form.errors[props.name]}</>}
-          >
+          <FormControl label={label} error={p.form.touched[name] && <>{p.form.errors[name]}</>}>
             <Block>
               <Block display="flex">
                 <CustomizedSelect
-                  placeholder={'Søk ' + _.lowerFirst(props.label)}
+                  placeholder={'Søk ' + _.lowerFirst(label)}
                   maxDropdownHeight="400px"
                   filterOptions={(o) => o}
                   searchable
                   noResultsMsg="Ingen resultat"
-                  options={results.filter(
-                    (o) => (p.form.values[props.name] as any[]).indexOf(o.id) < 0
-                  )}
+                  options={results.filter((o) => (p.form.values[name] as any[]).indexOf(o.id) < 0)}
                   onChange={({ value }) => {
                     value.length && p.push(value[0].id)
                   }}
@@ -391,9 +441,7 @@ export const MultiSearchField = (props: {
                 />
               </Block>
               <RenderTagList
-                list={(p.form.values[props.name] as string[]).map((v) =>
-                  props.itemLabel ? props.itemLabel(v) : v
-                )}
+                list={(p.form.values[name] as string[]).map((v) => (itemLabel ? itemLabel(v) : v))}
                 onRemove={p.remove}
               />
             </Block>
@@ -404,34 +452,32 @@ export const MultiSearchField = (props: {
   )
 }
 
-export const SearchField = (props: {
-  label: string
-  name: string
-  search: TSearchType
-  itemLabel?: (id: string) => string
-}) => {
-  const [results, setSearch, loading] = props.search
+type TPropsSearchField = TLabelNameSearchItemLabel
+
+export const SearchField = (props: TPropsSearchField) => {
+  const { label, name, search, itemLabel } = props
+  const [results, setSearch, loading] = search
 
   return (
     <FieldWrapper>
-      <Field name={props.name}>
+      <Field name={name}>
         {(p: FieldProps<string>) => (
-          <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
+          <FormControl label={label} error={p.meta.touched && p.meta.error}>
             <CustomizedSelect
-              placeholder={'Søk ' + _.lowerFirst(props.label)}
+              placeholder={'Søk ' + _.lowerFirst(label)}
               maxDropdownHeight="400px"
-              filterOptions={(o) => o}
+              filterOptions={(option) => option}
               searchable
               noResultsMsg="Ingen resultat"
               options={results}
               value={[
                 {
                   id: p.field.value,
-                  label: props.itemLabel ? props.itemLabel(p.field.value) : p.field.value,
+                  label: itemLabel ? itemLabel(p.field.value) : p.field.value,
                 },
               ]}
               onChange={({ value }) => {
-                p.form.setFieldValue(props.name, value.length ? (value[0].id as string) : '')
+                p.form.setFieldValue(name, value.length ? (value[0].id as string) : '')
               }}
               onInputChange={(event) => setSearch(event.currentTarget.value)}
               isLoading={loading}

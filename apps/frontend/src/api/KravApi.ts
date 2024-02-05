@@ -215,7 +215,9 @@ export const kravMapToFormVal = (krav: Partial<TKravQL>): TKravQL => ({
   underavdeling: krav.underavdeling,
   relevansFor: krav.relevansFor || [],
   status: krav.status || EKravStatus.UTKAST,
-  suksesskriterier: krav.suksesskriterier || [],
+  suksesskriterier: krav.suksesskriterier || [
+    { id: 0, navn: '', beskrivelse: '', behovForBegrunnelse: true },
+  ],
   nyKravVersjon: krav.nyKravVersjon || false,
   tema:
     (krav.regelverk &&

@@ -157,11 +157,7 @@ export const EtterlevelseEditFields = ({
                   {isOppfylesSenere && (
                     <div className="w-full">
                       <div className="w-full max-w-[170px]">
-                        <DateField
-                          error={!!errors.fristForFerdigstillelse}
-                          label="Dato"
-                          name="fristForFerdigstillelse"
-                        />
+                        <DateField name="fristForFerdigstillelse" />
                       </div>
                       {errors.fristForFerdigstillelse && (
                         <Alert variant="error" size="small">

@@ -9,14 +9,14 @@ import {
   updateVirkemiddel,
   virkemiddelMapToFormVal,
 } from '../../../api/VirkemiddelApi'
-import { IVirkemiddel } from '../../../constants'
+import { EYupErrorMessage, IVirkemiddel } from '../../../constants'
 import { EListName, codelist } from '../../../services/Codelist'
+import { ettlevColors } from '../../../util/theme'
 import { FieldWrapper, InputField } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { Error } from '../../common/ModalSchema'
+import { FormError } from '../../common/ModalSchema'
+import { borderWidth } from '../../common/Style'
 import { RegelverkEdit } from '../../krav/Edit/RegelverkEdit'
-
-const errorMessage = 'Feltet er påkrevd'
 
 type TEditVirkemiddelModalProps = {
   isOpen: boolean
@@ -112,6 +112,10 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
                                 ({
                                   ...baseStyles,
                                   height: '48px',
+                                  borderColor: fp.form.errors.virkemiddelType
+                                    ? ettlevColors.red500
+                                    : ettlevColors.textAreaBorder,
+                                  ...borderWidth(fp.form.errors.virkemiddelType ? '2px' : '1px'),
                                 }) as CSSObjectWithLabel,
                               menu: (baseStyles) =>
                                 ({
@@ -125,11 +129,10 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
                     )}
                   </Field>
 
-                  <Error fieldName="virkemiddelType" />
+                  <FormError fieldName="virkemiddelType" akselStyling />
                 </FieldWrapper>
 
                 <RegelverkEdit forVirkemiddel />
-                <Error fieldName="regelverk" />
                 <div className="flex justify-end">
                   <Button variant="secondary" type="button" onClick={() => props.setIsOpen(false)}>
                     Avbryt
@@ -156,13 +159,13 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
 
 const createVirkemiddelSchema = () =>
   yup.object({
-    navn: yup.string().required(errorMessage),
+    navn: yup.string().required(EYupErrorMessage.PAAKREVD),
     regelverk: yup.array().test({
       name: 'regelverkCheck',
-      message: errorMessage,
+      message: EYupErrorMessage.PAAKREVD,
       test: function (regelverk) {
         return regelverk && regelverk.length > 0 ? true : false
       },
     }),
-    virkemiddelType: yup.string().required(errorMessage),
+    virkemiddelType: yup.string().required(EYupErrorMessage.PAAKREVD),
   })
