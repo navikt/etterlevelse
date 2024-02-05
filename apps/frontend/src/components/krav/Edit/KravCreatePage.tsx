@@ -153,8 +153,6 @@ export const KravCreatePage = () => {
                         listName={EListName.RELEVANS}
                         tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}
                       />
-
-                      <FormError fieldName="relevansFor" akselStyling />
                     </div>
 
                     <div className="w-full mb-20 max-w-md">
