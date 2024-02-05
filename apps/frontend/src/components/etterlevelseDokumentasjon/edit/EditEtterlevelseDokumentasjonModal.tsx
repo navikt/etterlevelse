@@ -358,7 +358,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                   </FieldWrapper>
                 )}
                 <div className="my-5">
-                  <FormError fieldName="title" />
+                  <FormError fieldName="title" akselStyling={true} />
                 </div>
                 <div className="flex justify-end">
                   <Button
