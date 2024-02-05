@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { createKrav, kravMapToFormVal } from '../../../api/KravApi'
 import { EKravStatus, TKravQL } from '../../../constants'
 import { EListName, codelist } from '../../../services/Codelist'
+import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
 import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
 import { InputField, MultiInputField, TextAreaField } from '../../common/Inputs'
@@ -60,7 +61,7 @@ export const KravCreatePage = () => {
       {loading && (
         <div className="w-full flex items-center flex-col">
           <Heading level="1" size="medium">
-            Jobber med å opprette ny krav. Du vil bli sendt til ny krav side når det er fullført
+            Oppretter nytt krav. Du vil bli sendt til kravet når det er opprettet
           </Heading>
           <Loader size="3xlarge" />
         </div>
@@ -116,7 +117,9 @@ export const KravCreatePage = () => {
                     <Heading level="3" size="medium" className="mb-8">
                       Suksesskriterier
                     </Heading>
-                    <KravSuksesskriterierEdit newKrav={true} />
+                    <div id="suksesskriterier">
+                      <KravSuksesskriterierEdit newKrav={true} />
+                    </div>
 
                     <div className="mb-8">
                       <Heading level="3" size="medium">
@@ -168,8 +171,9 @@ export const KravCreatePage = () => {
                         Egenskaper
                       </Heading>
                     </div>
-
-                    <KravVarslingsadresserEdit />
+                    <div id="varslingsadresser">
+                      <KravVarslingsadresserEdit />
+                    </div>
 
                     <FormError fieldName="varslingsadresser" akselStyling />
 
@@ -241,6 +245,7 @@ export const KravCreatePage = () => {
                 errorMessage={errorModalMessage}
                 submit={setShowErrorModal}
               />
+              <ScrollToFieldError />
             </Form>
           )}
         </Formik>

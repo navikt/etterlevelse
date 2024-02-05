@@ -29,7 +29,7 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
   const options = codelist.getParsedOptionsForLov(forVirkemiddel)
 
   return (
-    <FieldWrapper marginBottom>
+    <FieldWrapper marginBottom id="regelverk">
       <FieldArray name="regelverk">
         {(p) => {
           const add = () => {

@@ -40,6 +40,10 @@ interface IMarginBottom {
   marginBottom?: boolean
 }
 
+interface IID {
+  id?: string
+}
+
 interface ICaption {
   caption?: ReactNode
 }
@@ -70,12 +74,14 @@ type TOptionORListname = TOr<IOptions, IListname>
 
 type TLabelNameSearchItemLabel = TLabelName & ISearchItemLabel
 
-interface IPropsFieldWrapper extends IMarginBottom {
+interface IPropsFieldWrapper extends IMarginBottom, IID {
   children: React.ReactNode
 }
 
-export const FieldWrapper = ({ children, marginBottom }: IPropsFieldWrapper) => (
-  <div className={`${marginBottom ? 'mb-6' : ''}`}>{children}</div>
+export const FieldWrapper = ({ children, marginBottom, id }: IPropsFieldWrapper) => (
+  <div className={`${marginBottom ? 'mb-6' : ''}`} id={id}>
+    {children}
+  </div>
 )
 
 interface IPropsInputField extends TLabelName, IMarginBottom {
@@ -87,7 +93,7 @@ export const InputField = (props: IPropsInputField) => {
 
   return (
     <FieldWrapper marginBottom={marginBottom}>
-      <Field name={name}>
+      <Field name={name} id={name}>
         {(p: FieldProps) => (
           <div className="w-full">
             <TextField
@@ -129,7 +135,7 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
   } = props
 
   return (
-    <FieldWrapper marginBottom={marginBottom}>
+    <FieldWrapper marginBottom={marginBottom} id={name}>
       <Field name={name}>
         {(p: FieldProps) => (
           <div>
