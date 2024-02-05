@@ -123,11 +123,10 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
                     )}
                   </Field>
 
-                  <FormError fieldName="virkemiddelType" />
+                  <FormError fieldName="virkemiddelType" akselStyling />
                 </FieldWrapper>
 
                 <RegelverkEdit forVirkemiddel />
-                <FormError fieldName="regelverk" />
                 <div className="flex justify-end">
                   <Button variant="secondary" type="button" onClick={() => props.setIsOpen(false)}>
                     Avbryt

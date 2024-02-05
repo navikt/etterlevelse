@@ -154,7 +154,7 @@ export const KravCreatePage = () => {
                         tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}
                       />
 
-                      <FormError fieldName="relevansFor" akselStyling={true} />
+                      <FormError fieldName="relevansFor" akselStyling />
                     </div>
 
                     <div className="w-full mb-20 max-w-md">
@@ -173,28 +173,20 @@ export const KravCreatePage = () => {
 
                     <KravVarslingsadresserEdit />
 
-                    <FormError fieldName="varslingsadresser" akselStyling={true} />
+                    <FormError fieldName="varslingsadresser" akselStyling />
 
                     <div className="w-full">
                       {Object.keys(errors).length > 0 && !errors.dokumentasjon && (
                         <div className="flex w-full my-12">
-                          <div className="w-full bg-red-300">
-                            <Alert variant="warning" role="status">
-                              Du må fylle ut alle obligatoriske felter
-                            </Alert>
-                          </div>
+                          <Alert className="w-full" variant="warning" role="status">
+                            Du må fylle ut alle obligatoriske felter
+                          </Alert>
                         </div>
                       )}
                     </div>
                   </div>
                 </div>
                 <div className="button_container flex flex-col py-4  bg-gray-50 z-10">
-                  {errors.status && (
-                    <div className="mb-3">
-                      <FormError fieldName="status" />
-                    </div>
-                  )}
-
                   <div className="flex w-full">
                     <div className="flex w-full justify-end">
                       <Button
