@@ -7,6 +7,7 @@ import { AuditPage } from './components/admin/audit/AuditPage'
 import { MailLogPage } from './components/admin/maillog/MailLogPage'
 import { SettingsPage } from './components/admin/settings/SettingsPage'
 import { KravCreatePage } from './components/krav/Edit/KravCreatePage'
+import { KravEditPage } from './components/krav/Edit/KravEditPage'
 import ArkivAdminPage from './pages/ArkivAdminPage'
 import { DokumentasjonPage } from './pages/DokumentasjonPage'
 import EtterlevelseAdminPage from './pages/EtterlevelseAdminPage'
@@ -62,9 +63,15 @@ const AppRoutes = (): JSX.Element => {
         element={<PrivateRoute component={<KravCreatePage />} kraveierPage />}
         caseSensitive={true}
       />
-      
+
       <Route path="/krav/:id" element={<KravPage />} caseSensitive={true} />
       <Route path="/krav/:kravNummer/:kravVersjon" element={<KravPage />} caseSensitive={true} />
+
+      <Route
+        path="/krav/oppdater/:mode/:id"
+        element={<PrivateRoute component={<KravEditPage />} kraveierPage />}
+        caseSensitive={true}
+      />
 
       <Route
         path="/virkemiddelliste/"
