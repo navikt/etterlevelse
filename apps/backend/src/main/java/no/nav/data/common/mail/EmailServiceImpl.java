@@ -9,12 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailServiceImpl implements EmailService {
 
-    private final StorageService storage;
+    private final StorageService<MailTask> storage;
     private final EmailProvider emailProvider;
     private final SecurityProperties securityProperties;
 
-    public EmailServiceImpl(StorageService storage, EmailProvider emailProvider,
-            SecurityProperties securityProperties) {
+    public EmailServiceImpl(StorageService<MailTask> storage, EmailProvider emailProvider, SecurityProperties securityProperties) {
         this.storage = storage;
         this.emailProvider = emailProvider;
         this.securityProperties = securityProperties;

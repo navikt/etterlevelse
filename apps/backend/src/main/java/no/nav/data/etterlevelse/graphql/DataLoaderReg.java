@@ -1,7 +1,6 @@
 package no.nav.data.etterlevelse.graphql;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
@@ -32,7 +31,6 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.common.utils.StreamUtils.filter;
 import static no.nav.data.common.utils.StreamUtils.toMap;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class DataLoaderReg {

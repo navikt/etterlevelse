@@ -10,16 +10,15 @@ import no.nav.data.integration.team.domain.ProductArea;
 import no.nav.data.integration.team.domain.Team;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.LinkedHashSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 

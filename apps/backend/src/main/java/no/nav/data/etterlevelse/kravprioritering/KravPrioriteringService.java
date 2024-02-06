@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
+
 @Service
 public class KravPrioriteringService extends DomainService<KravPrioritering> {
 
@@ -27,33 +29,32 @@ public class KravPrioriteringService extends DomainService<KravPrioritering> {
     private final KravService kravService;
 
     public KravPrioriteringService(KravPrioriteringRepo repo, KravService kravService) {
-        super(KravPrioritering.class);
         this.repo = repo;
         this.kravService = kravService;
     }
 
     public Page<KravPrioritering> getAll(PageParameters pageParameters) {
-        return repo.findAll(pageParameters.createPage()).map(GenericStorage::toKravPrioritering);
+        return repo.findAll(pageParameters.createPage()).map(GenericStorage::getDomainObjectData);
     }
 
     public List<KravPrioritering> getByKravNummer(int kravNummer) {
-        return GenericStorage.to(repo.findByKravNummer(kravNummer), KravPrioritering.class);
+        return convertToDomaionObject(repo.findByKravNummer(kravNummer));
     }
 
     public List<KravPrioritering> getByKravNummer(int kravNummer, @Nullable Integer kravVersjon) {
         if (kravVersjon == null) {
             return getByKravNummer(kravNummer);
         }
-        return GenericStorage.to(repo.findByKravNummer(kravNummer, kravVersjon), KravPrioritering.class);
+        return convertToDomaionObject(repo.findByKravNummer(kravNummer, kravVersjon));
     }
 
     public List<KravPrioritering> getByTema(String tema) {
-        return GenericStorage.to(repo.findByTema(tema.substring(0, 3)), KravPrioritering.class);
+        return convertToDomaionObject(repo.findByTema(tema.substring(0, 3)));
     }
 
     public List<KravPrioriteringResponse> getByFilter(KravPrioriteringFilter filter) {
         if (!StringUtils.isBlank(filter.getId())) {
-            KravPrioritering kravPrioritering = storage.get(UUID.fromString(filter.getId()), KravPrioritering.class);
+            KravPrioritering kravPrioritering = storage.get(UUID.fromString(filter.getId()));
             if (kravPrioritering != null) {
                 KravPrioriteringResponse kravPrioriteringResponse = kravPrioritering.toResponse();
                 setKravStatus(kravPrioriteringResponse);
@@ -61,16 +62,16 @@ public class KravPrioriteringService extends DomainService<KravPrioritering> {
             }
             return List.of();
         } else if (filter.getKravNummer() != null) {
-            List<KravPrioriteringResponse> kravPrioriteringList = GenericStorage.to(repo.findByKravNummer(filter.getKravNummer()), KravPrioritering.class).stream().map(KravPrioritering::toResponse).toList();
+            List<KravPrioriteringResponse> kravPrioriteringList = convertToDomaionObject(repo.findByKravNummer(filter.getKravNummer())).stream().map(KravPrioritering::toResponse).toList();
             kravPrioriteringList.forEach(this::setKravStatus);
             return filterForKravStatus(kravPrioriteringList, filter);
         } else if(filter.getTemaCode() != null) {
-            List<KravPrioriteringResponse> kravPrioriteringerResp = GenericStorage.to(repo.findByTema(filter.getTemaCode().substring(0, 3)), KravPrioritering.class).stream().map(KravPrioritering::toResponse).toList();
+            List<KravPrioriteringResponse> kravPrioriteringerResp = convertToDomaionObject(repo.findByTema(filter.getTemaCode().substring(0, 3))).stream().map(KravPrioritering::toResponse).toList();
             kravPrioriteringerResp.forEach(this::setKravStatus);
             return filterForKravStatus(kravPrioriteringerResp, filter);
         }
 
-        List<KravPrioriteringResponse> kravPrioriteringer = GenericStorage.to(repo.getAll(),KravPrioritering.class).stream().map(KravPrioritering::toResponse).toList();
+        List<KravPrioriteringResponse> kravPrioriteringer = convertToDomaionObject(repo.getAll()).stream().map(KravPrioritering::toResponse).toList();
         kravPrioriteringer.forEach(this::setKravStatus);
 
         return filterForKravStatus(kravPrioriteringer, filter);
@@ -94,14 +95,14 @@ public class KravPrioriteringService extends DomainService<KravPrioritering> {
 
     public KravPrioritering save(KravPrioriteringRequest request) {
 
-        var kravprioritering = request.isUpdate() ? storage.get(request.getIdAsUUID(), KravPrioritering.class) : new KravPrioritering();
+        var kravprioritering = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new KravPrioritering();
         kravprioritering.convert(request);
 
         return storage.save(kravprioritering);
     }
 
     public KravPrioritering delete(UUID id) {
-        return storage.delete(id, KravPrioritering.class);
+        return storage.delete(id);
     }
 
 }

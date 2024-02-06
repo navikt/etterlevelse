@@ -8,21 +8,22 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-public interface GenericStorageRepository extends JpaRepository<GenericStorage, UUID> {
+public interface GenericStorageRepository<T extends DomainObject> extends JpaRepository<GenericStorage<T>, UUID> {
 
-    boolean existsByIdAndType(UUID id, String type);
+    boolean existsById(UUID id);
 
-    Optional<GenericStorage> findByType(String type);
+    // TODO: findAllByType(...) 
+    // Metodene er kilder til feil (kan potensielt returnere veldig mye data). De bør derfor fjernes og evt. erstattes av 
+    // metoder kun for de typene vi trenger dette for (f.eks. findAllMailTasks)
+    
+    List<GenericStorage<T>> findAllByType(String type);
 
-    List<GenericStorage> findAllByType(String type);
-
-    Page<GenericStorage> findAllByType(String type, Pageable pageable);
+    Page<GenericStorage<T>> findAllByType(String type, Pageable pageable);
 
     @Query(value = "select * from generic_storage where data ->> 'name' ilike ?1 and type = ?2", nativeQuery = true)
-    List<GenericStorage> findByNameAndType(String name, String type);
+    List<GenericStorage<T>> findByNameAndType(String name, String type);
 
     long countByType(String type);
 

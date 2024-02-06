@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
 import static no.nav.data.common.utils.StreamUtils.groupBy;
 
 
@@ -28,35 +29,34 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
     private final EtterlevelseRepo repo;
 
     public EtterlevelseService(EtterlevelseRepo repo) {
-        super(Etterlevelse.class);
         this.repo = repo;
     }
 
     Page<Etterlevelse> getAll(PageParameters pageParameters) {
-        return repo.findAll(pageParameters.createPage()).map(GenericStorage::toEtterlevelse);
+        return repo.findAll(pageParameters.createPage()).map(GenericStorage::getDomainObjectData);
     }
 
     public List<Etterlevelse> getByKravNummer(int kravNummer) {
-        return GenericStorage.to(repo.findByKravNummer(kravNummer), Etterlevelse.class);
+        return convertToDomaionObject(repo.findByKravNummer(kravNummer));
     }
 
     public List<Etterlevelse> getByKravNummer(int kravNummer, @Nullable Integer kravVersjon) {
         if (kravVersjon == null) {
             return getByKravNummer(kravNummer);
         }
-        return GenericStorage.to(repo.findByKravNummer(kravNummer, kravVersjon), Etterlevelse.class);
+        return convertToDomaionObject(repo.findByKravNummer(kravNummer, kravVersjon));
     }
 
     public List<Etterlevelse> getByEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId) {
-        return GenericStorage.to(repo.findByEtterlevelseDokumensjon(etterlevelseDokumentasjonId), Etterlevelse.class);
+        return convertToDomaionObject(repo.findByEtterlevelseDokumensjon(etterlevelseDokumentasjonId));
     }
 
     public List<Etterlevelse> getByEtterlevelseDokumentasjonIdAndKravNummer(String etterlevelseDokumentasjonId, int kravNummer) {
-        return GenericStorage.to(repo.findByEtterlevelseDokumentasjonIdAndKravNummer(etterlevelseDokumentasjonId, kravNummer), Etterlevelse.class);
+        return convertToDomaionObject(repo.findByEtterlevelseDokumentasjonIdAndKravNummer(etterlevelseDokumentasjonId, kravNummer));
     }
 
     public Map<String, List<Etterlevelse>> getByEtterlevelseDokumentasjoner(Collection<String> etterlevelseDokumentasjonIds) {
-        return groupBy(GenericStorage.to(repo.findByEtterlevelseDokumentasjoner(new ArrayList<>(etterlevelseDokumentasjonIds)), Etterlevelse.class), Etterlevelse::getEtterlevelseDokumentasjonId);
+        return groupBy(convertToDomaionObject(repo.findByEtterlevelseDokumentasjoner(new ArrayList<>(etterlevelseDokumentasjonIds))), Etterlevelse::getEtterlevelseDokumentasjonId);
     }
 
     public Etterlevelse save(EtterlevelseRequest request) {
@@ -64,19 +64,19 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
                 .addValidations(this::validateKrav)
                 .ifErrorsThrowValidationException();
 
-        var etterlevelse = request.isUpdate() ? storage.get(request.getIdAsUUID(), Etterlevelse.class) : new Etterlevelse();
+        var etterlevelse = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Etterlevelse();
         etterlevelse.convert(request);
 
         return storage.save(etterlevelse);
     }
 
     public Etterlevelse delete(UUID id) {
-        return storage.delete(id, Etterlevelse.class);
+        return storage.delete(id);
     }
 
     public Page<Etterlevelse> getAllEtterlevelseStatistics(Pageable page) {
-        Page<GenericStorage> all = etterlevelseRepo.findAll(page);
-        return all.map(GenericStorage::toEtterlevelse);
+        Page<GenericStorage<Etterlevelse>> all = etterlevelseRepo.findAll(page);
+        return all.map(GenericStorage::getDomainObjectData);
     }
 
     private void validateKrav(Validator<EtterlevelseRequest> validator) {

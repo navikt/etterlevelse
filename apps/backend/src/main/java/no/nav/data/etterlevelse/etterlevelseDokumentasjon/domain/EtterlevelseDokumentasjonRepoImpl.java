@@ -1,7 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
@@ -16,15 +15,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
-@Slf4j
 @RequiredArgsConstructor
 public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentasjonRepoCustom {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final GenericStorageRepository repository;
+    private final GenericStorageRepository<EtterlevelseDokumentasjon> repository;
 
     @Override
-    public List<GenericStorage> findByIrrelevans(List<String> codes) {
+    public List<GenericStorage<EtterlevelseDokumentasjon>> findByIrrelevans(List<String> codes) {
         var query = "select id from generic_storage where type = 'EtterlevelseDokumentasjon' and data -> 'irrelevansFor' ??| array[ :irrelevans ] ";
         var par = new MapSqlParameterSource();
         par.addValue("irrelevans", codes);
@@ -32,7 +30,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
     }
 
     @Override
-    public List<GenericStorage> getEtterlevelseDokumentasjonerForTeam(List<String> teamIds) {
+    public List<GenericStorage<EtterlevelseDokumentasjon>> getEtterlevelseDokumentasjonerForTeam(List<String> teamIds) {
         var query = "select id from generic_storage where type = 'EtterlevelseDokumentasjon' and data -> 'teams' ??| array[ :teamIds ] ";
         var par = new MapSqlParameterSource();
         par.addValue("teamIds", teamIds);
@@ -40,7 +38,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
     }
 
     @Override
-    public List<GenericStorage> findByBehandlingIds(List<String> ids){
+    public List<GenericStorage<EtterlevelseDokumentasjon>> findByBehandlingIds(List<String> ids){
         var query = "select * from generic_storage where type = 'EtterlevelseDokumentasjon' and data -> 'behandlingIds' ??| array[ :behandlingIds ]";
         var par = new MapSqlParameterSource();
         par.addValue("behandlingIds", ids);
@@ -48,7 +46,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
     }
 
     @Override
-    public List<GenericStorage> findBy(EtterlevelseDokumentasjonFilter filter) {
+    public List<GenericStorage<EtterlevelseDokumentasjon>> findBy(EtterlevelseDokumentasjonFilter filter) {
         var query = "select id from generic_storage where type = 'EtterlevelseDokumentasjon' ";
         var par = new MapSqlParameterSource();
 
@@ -106,7 +104,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
         return fetch(jdbcTemplate.queryForList(query, par));
     }
 
-    private List<GenericStorage> fetch(List<Map<String, Object>> resp) {
+    private List<GenericStorage<EtterlevelseDokumentasjon>> fetch(List<Map<String, Object>> resp) {
         List<UUID> ids = resp.stream().map(i -> ((UUID) i.values().iterator().next())).collect(Collectors.toList());
         return repository.findAllById(ids);
     }

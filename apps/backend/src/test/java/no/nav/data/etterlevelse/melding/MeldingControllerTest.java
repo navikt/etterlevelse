@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.melding;
 
-import lombok.extern.slf4j.Slf4j;
 import no.nav.data.IntegrationTestBase;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.etterlevelse.melding.domain.MeldingStatus;
@@ -15,13 +14,12 @@ import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Slf4j
 class MeldingControllerTest extends IntegrationTestBase {
 
     @Test
     void getAllMelding_createTwoMeldingRequest_getTwo() {
-        storageService.save(Melding.builder().build());
-        storageService.save(Melding.builder().build());
+        meldingStorageService.save(Melding.builder().build());
+        meldingStorageService.save(Melding.builder().build());
 
         var resp = restTemplate.getForEntity("/melding", MeldingController.MeldingPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -32,8 +30,8 @@ class MeldingControllerTest extends IntegrationTestBase {
 
     @Test
     void getById_createTwoMeldingRequest_getOne() {
-        var m1 = storageService.save(Melding.builder().meldingType(MeldingType.SYSTEM).meldingStatus(MeldingStatus.ACTIVE).melding("test melding").build());
-        storageService.save(Melding.builder().meldingStatus(MeldingStatus.DEACTIVE).build());
+        var m1 = meldingStorageService.save(Melding.builder().meldingType(MeldingType.SYSTEM).meldingStatus(MeldingStatus.ACTIVE).melding("test melding").build());
+        meldingStorageService.save(Melding.builder().meldingStatus(MeldingStatus.DEACTIVE).build());
 
         var resp = restTemplate.getForEntity("/melding/{id}", MeldingResponse.class, m1.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -47,7 +45,7 @@ class MeldingControllerTest extends IntegrationTestBase {
 
     @Test
     void getById_createMeldingRequest_getNone() {
-        storageService.save(Melding.builder().meldingStatus(MeldingStatus.DEACTIVE).build());
+        meldingStorageService.save(Melding.builder().meldingStatus(MeldingStatus.DEACTIVE).build());
 
         var resp = restTemplate.getForEntity("/melding/{id}", MeldingResponse.class,"test" );
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -55,9 +53,9 @@ class MeldingControllerTest extends IntegrationTestBase {
 
     @Test
     void getByMeldingType_createThreeMelding_getTwo() {
-        storageService.save(Melding.builder().meldingType(MeldingType.SYSTEM).build());
-        storageService.save(Melding.builder().meldingType(MeldingType.SYSTEM).build());
-        storageService.save(Melding.builder().meldingType(MeldingType.FORSIDE).build());
+        meldingStorageService.save(Melding.builder().meldingType(MeldingType.SYSTEM).build());
+        meldingStorageService.save(Melding.builder().meldingType(MeldingType.SYSTEM).build());
+        meldingStorageService.save(Melding.builder().meldingType(MeldingType.FORSIDE).build());
 
         var resp = restTemplate.getForEntity("/melding/type/{meldingType}", MeldingController.MeldingPage.class, MeldingType.SYSTEM.toString());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -68,9 +66,9 @@ class MeldingControllerTest extends IntegrationTestBase {
 
     @Test
     void getByMeldingType_createThreeMelding_getNone() {
-        storageService.save(Melding.builder().meldingType(MeldingType.FORSIDE).build());
-        storageService.save(Melding.builder().meldingType(MeldingType.FORSIDE).build());
-        storageService.save(Melding.builder().meldingType(MeldingType.FORSIDE).build());
+        meldingStorageService.save(Melding.builder().meldingType(MeldingType.FORSIDE).build());
+        meldingStorageService.save(Melding.builder().meldingType(MeldingType.FORSIDE).build());
+        meldingStorageService.save(Melding.builder().meldingType(MeldingType.FORSIDE).build());
 
         var resp = restTemplate.getForEntity("/melding/type/{meldingType}", MeldingController.MeldingPage.class, MeldingType.SYSTEM.toString());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -80,9 +78,9 @@ class MeldingControllerTest extends IntegrationTestBase {
 
     @Test
     void getByMeldingStatus_createThreeMeldingStatus_getTwo() {
-        storageService.save(Melding.builder().meldingStatus(MeldingStatus.ACTIVE).build());
-        storageService.save(Melding.builder().meldingStatus(MeldingStatus.ACTIVE).build());
-        storageService.save(Melding.builder().meldingStatus(MeldingStatus.DEACTIVE).build());
+        meldingStorageService.save(Melding.builder().meldingStatus(MeldingStatus.ACTIVE).build());
+        meldingStorageService.save(Melding.builder().meldingStatus(MeldingStatus.ACTIVE).build());
+        meldingStorageService.save(Melding.builder().meldingStatus(MeldingStatus.DEACTIVE).build());
 
         var resp = restTemplate.getForEntity("/melding/status/{meldingStatus}", MeldingController.MeldingPage.class, MeldingStatus.ACTIVE.toString());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -92,9 +90,9 @@ class MeldingControllerTest extends IntegrationTestBase {
 
     @Test
     void getByMeldingStatus_createThreeMeldingStatus_getNone() {
-        storageService.save(Melding.builder().meldingStatus(MeldingStatus.DEACTIVE).build());
-        storageService.save(Melding.builder().meldingStatus(MeldingStatus.DEACTIVE).build());
-        storageService.save(Melding.builder().meldingStatus(MeldingStatus.DEACTIVE).build());
+        meldingStorageService.save(Melding.builder().meldingStatus(MeldingStatus.DEACTIVE).build());
+        meldingStorageService.save(Melding.builder().meldingStatus(MeldingStatus.DEACTIVE).build());
+        meldingStorageService.save(Melding.builder().meldingStatus(MeldingStatus.DEACTIVE).build());
 
         var resp = restTemplate.getForEntity("/melding/status/{meldingStatus}", MeldingController.MeldingPage.class, MeldingStatus.ACTIVE.toString());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -117,7 +115,7 @@ class MeldingControllerTest extends IntegrationTestBase {
 
     @Test
     void updateMelding_updateOneMelding_success() {
-        var melding = storageService.save(Melding.builder().melding("Test update").meldingType(MeldingType.FORSIDE).meldingStatus(MeldingStatus.DEACTIVE).build());
+        var melding = meldingStorageService.save(Melding.builder().melding("Test update").meldingType(MeldingType.FORSIDE).meldingStatus(MeldingStatus.DEACTIVE).build());
         var req = MeldingRequest.builder().id(melding.getId().toString()).melding("Test melding").meldingType(MeldingType.SYSTEM).meldingStatus(MeldingStatus.ACTIVE).build();
 
         var resp = restTemplate.exchange("/melding/{id}", HttpMethod.PUT, new HttpEntity<>(req), MeldingResponse.class, melding.getId());

@@ -2,7 +2,7 @@ package no.nav.data.etterlevelse.krav;
 
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
-import no.nav.data.common.auditing.domain.AuditVersionRepository;
+import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -13,6 +13,7 @@ import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -33,64 +34,62 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 @Service
 public class KravService extends DomainService<Krav> {
 
-    private final AuditVersionRepository auditRepo;
+    @Autowired
+    protected StorageService<KravImage> imageStorage;
 
-    public KravService(AuditVersionRepository auditRepo) {
-        super(Krav.class);
-        this.auditRepo = auditRepo;
+    public KravService() {
     }
 
-    @Override
     public Page<Krav> getAll(Pageable page) {
-        Page<GenericStorage> all;
+        Page<GenericStorage<Krav>> all;
         if (isKravEier()) {
             all = kravRepo.findAll(page);
         } else {
             all = kravRepo.findAllNonUtkast(page);
         }
-        return all.map(GenericStorage::toKrav);
+        return all.map(GenericStorage::getDomainObjectData);
     }
 
     public Page<Krav> getAllKravStatistics(Pageable page) {
-        Page<GenericStorage> all = kravRepo.findAll(page);
+        Page<GenericStorage<Krav>> all = kravRepo.findAll(page);
 
-        return all.map(GenericStorage::toKrav);
+        return all.map(GenericStorage::getDomainObjectData);
     }
 
     public List<Krav> getByFilter(KravFilter filter) {
-        return convert(kravRepo.findBy(filter), GenericStorage::toKrav);
+        return convert(kravRepo.findBy(filter), GenericStorage::getDomainObjectData);
     }
 
     public List<Krav> findByVirkmiddelId(String virkemiddelId) {
-        return convert(kravRepo.findByVirkemiddelIder(virkemiddelId), GenericStorage::toKrav);
+        return convert(kravRepo.findByVirkemiddelIder(virkemiddelId), GenericStorage::getDomainObjectData);
     }
 
     public List<Krav> getByKravNummer(int kravNummer) {
-        return GenericStorage.to(kravRepo.findByKravNummer(kravNummer), Krav.class);
+        return convert(kravRepo.findByKravNummer(kravNummer), GenericStorage::getDomainObjectData);
     }
 
     public Optional<Krav> getByKravNummer(int kravNummer, int kravVersjon) {
         return kravRepo.findByKravNummer(kravNummer, kravVersjon)
-                .map(GenericStorage::toKrav);
+                .map(GenericStorage::getDomainObjectData);
     }
 
     public List<Krav> search(String name) {
-        List<GenericStorage> byNameContaining = new ArrayList<>(kravRepo.findByNameContaining(name));
+        List<GenericStorage<Krav>> byNameContaining = new ArrayList<>(kravRepo.findByNameContaining(name));
         if (StringUtils.isNumeric(name)) {
             byNameContaining.addAll(kravRepo.findByKravNummer(Integer.parseInt(name)));
         }
         if (!isKravEier()) {
-            byNameContaining.removeIf(gs -> gs.toKrav().getStatus().erUtkast());
+            byNameContaining.removeIf(gs -> gs.getDomainObjectData().getStatus().erUtkast());
         }
-        return convert(byNameContaining, GenericStorage::toKrav);
+        return convert(byNameContaining, GenericStorage::getDomainObjectData);
     }
 
     public List<Krav> searchByNumber(String number) {
-        List<GenericStorage> byNumberContaining = new ArrayList<>(kravRepo.findByNumberContaining(number));
+        List<GenericStorage<Krav>> byNumberContaining = new ArrayList<>(kravRepo.findByNumberContaining(number));
         if (!isKravEier()) {
-            byNumberContaining.removeIf(gs -> gs.toKrav().getStatus().erUtkast());
+            byNumberContaining.removeIf(gs -> gs.getDomainObjectData().getStatus().erUtkast());
         }
-        return convert(byNumberContaining, GenericStorage::toKrav);
+        return convert(byNumberContaining, GenericStorage::getDomainObjectData);
     }
 
     public Krav save(KravRequest request) {
@@ -101,7 +100,7 @@ public class KravService extends DomainService<Krav> {
                 .addValidations(this::validateBegreper)
                 .ifErrorsThrowValidationException();
 
-        var krav = request.isUpdate() ? storage.get(request.getIdAsUUID(), Krav.class) : new Krav();
+        var krav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
 
         krav.convert(request);
 
@@ -121,7 +120,7 @@ public class KravService extends DomainService<Krav> {
         }
 
         if (krav.getId() != null) {
-            var previousKrav = storage.get(krav.getId(), Krav.class);
+            var previousKrav = storage.get(krav.getId());
             if (Objects.nonNull(previousKrav) && previousKrav.getStatus() != KravStatus.AKTIV && krav.getStatus() == KravStatus.AKTIV) {
                 krav.setAktivertDato(LocalDateTime.now());
             }
@@ -133,7 +132,7 @@ public class KravService extends DomainService<Krav> {
     }
 
     public Krav delete(UUID id) {
-        return storage.delete(id, Krav.class);
+        return storage.delete(id);
     }
 
     public List<Krav> findForEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId) {
@@ -153,11 +152,11 @@ public class KravService extends DomainService<Krav> {
     }
 
     public List<KravImage> saveImages(List<KravImage> images) {
-        return GenericStorage.to(storage.saveAll(images), KravImage.class);
+        return convert(imageStorage.saveAll(images), GenericStorage::getDomainObjectData);
     }
 
     public KravImage getImage(UUID kravId, UUID fileId) {
-        return kravRepo.findKravImage(kravId, fileId).getDomainObjectData(KravImage.class);
+        return kravRepo.findKravImage(kravId, fileId).getDomainObjectData();
     }
 
     private void validateName(Validator<KravRequest> validator) {
@@ -165,7 +164,7 @@ public class KravService extends DomainService<Krav> {
         if (name == null) {
             return;
         }
-        var items = filter(storage.findByNameAndType(name, validator.getItem().getRequestType()), t -> !t.getId().equals(validator.getItem().getIdAsUUID()));
+        var items = filter(storage.findByNameAndType(name, Krav.class), t -> !t.getId().equals(validator.getItem().getIdAsUUID()));
         if (!items.isEmpty()) {
             validator.addError(Fields.navn, Validator.ALREADY_EXISTS, "name '%s' already in use".formatted(name));
         }
@@ -187,7 +186,7 @@ public class KravService extends DomainService<Krav> {
         if (!req.isUpdate()) {
             return;
         }
-        Krav oldKrav = validator.getDomainItem(Krav.class);
+        Krav oldKrav = validator.<Krav>getDomainItem();
         if (req.getStatus() == KravStatus.UTKAST && oldKrav.getStatus() != KravStatus.UTKAST) {
             var etterlevelser = etterlevelseRepo.findByKravNummer(oldKrav.getKravNummer(), oldKrav.getKravVersjon());
             if (!etterlevelser.isEmpty()) {
@@ -197,7 +196,7 @@ public class KravService extends DomainService<Krav> {
     }
 
     private void validateBegreper(Validator<KravRequest> validator) {
-        var existingBegreper = Optional.ofNullable(validator.getDomainItem(Krav.class)).map(Krav::getBegrepIder).orElse(List.of());
+        var existingBegreper = Optional.ofNullable(validator.<Krav>getDomainItem()).map(Krav::getBegrepIder).orElse(List.of());
         validator.getItem().getBegrepIder().stream()
                 .filter(b -> !existingBegreper.contains(b))
                 .filter(b -> begrepService.getBegrep(b).isEmpty())

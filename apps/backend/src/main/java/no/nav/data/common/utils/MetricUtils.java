@@ -7,7 +7,6 @@ import io.prometheus.client.Gauge;
 import io.prometheus.client.SimpleCollector;
 import io.prometheus.client.Summary;
 import io.prometheus.client.cache.caffeine.CacheMetricsCollector;
-import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.TechnicalException;
 import org.springframework.util.ReflectionUtils;
 
@@ -22,7 +21,6 @@ import static java.util.Objects.requireNonNull;
 /**
  * Helper to create metrics - avoid registring metrics multiple times during test - instantiate labels up front to initialize them in prometheus/grafana
  */
-@Slf4j
 public final class MetricUtils {
 
     private static final Map<String, SimpleCollector<?>> collectors = new ConcurrentHashMap<>();

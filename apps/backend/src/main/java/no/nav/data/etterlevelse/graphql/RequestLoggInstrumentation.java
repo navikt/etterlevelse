@@ -5,6 +5,7 @@ import graphql.GraphQLError;
 import graphql.execution.instrumentation.InstrumentationContext;
 import graphql.execution.instrumentation.SimpleInstrumentation;
 import graphql.execution.instrumentation.SimpleInstrumentationContext;
+import graphql.execution.instrumentation.SimplePerformantInstrumentation;
 import graphql.execution.instrumentation.parameters.InstrumentationExecutionParameters;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RequestLoggInstrumentation extends SimpleInstrumentation {
+public class RequestLoggInstrumentation extends SimplePerformantInstrumentation {
 
     @Override
     public InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters) {

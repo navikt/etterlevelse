@@ -5,6 +5,7 @@ import com.microsoft.graph.requests.GraphServiceClient;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.mail.EmailProvider;
 import no.nav.data.common.mail.MailTask;
+import no.nav.data.common.security.azure.support.MailLog;
 import no.nav.data.common.storage.StorageService;
 import okhttp3.Request;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,9 @@ import static no.nav.data.common.security.azure.support.MailMessage.compose;
 public class AzureAdService implements EmailProvider {
 
     private final AzureTokenProvider azureTokenProvider;
-    private final StorageService storage;
+    private final StorageService<MailLog> storage;
 
-    public AzureAdService(AzureTokenProvider azureTokenProvider, StorageService storage) {
+    public AzureAdService(AzureTokenProvider azureTokenProvider, StorageService<MailLog> storage) {
         this.azureTokenProvider = azureTokenProvider;
         this.storage = storage;
     }

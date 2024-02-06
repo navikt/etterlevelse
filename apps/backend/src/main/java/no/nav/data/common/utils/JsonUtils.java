@@ -48,7 +48,7 @@ public final class JsonUtils {
         }
     }
 
-    public static Map toMap(Object object) {
+    public static Map<String, Object> toMap(Object object) {
         return objectMapper.convertValue(object, MAP_TYPE_REFERENCE);
     }
 

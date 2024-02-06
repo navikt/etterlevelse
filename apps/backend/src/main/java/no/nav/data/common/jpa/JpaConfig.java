@@ -39,7 +39,7 @@ public class JpaConfig {
 
     @Bean
     @DependsOn("initAudit")
-    public ApplicationRunner migrate(StorageService storage) {
+    public ApplicationRunner migrate(StorageService<?> storage) {
         return (args) -> wrapAsync(() -> {
             log.debug("Running migrations");
         }, "Database migration")

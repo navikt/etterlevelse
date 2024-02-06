@@ -7,12 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface TilbakemeldingRepo extends JpaRepository<GenericStorage, UUID> {
+public interface TilbakemeldingRepo extends JpaRepository<GenericStorage<Tilbakemelding>, UUID> {
 
     @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and type = 'Tilbakemelding'", nativeQuery = true)
-    List<GenericStorage> findByKravNummer(int nummer);
+    List<GenericStorage<Tilbakemelding>> findByKravNummer(int nummer);
 
     @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and data -> 'kravVersjon' = to_jsonb(?2) and type = 'Tilbakemelding'", nativeQuery = true)
-    List<GenericStorage> findByKravNummerAndVersion(int nummer, int versjon);
+    List<GenericStorage<Tilbakemelding>> findByKravNummerAndVersion(int nummer, int versjon);
 
 }

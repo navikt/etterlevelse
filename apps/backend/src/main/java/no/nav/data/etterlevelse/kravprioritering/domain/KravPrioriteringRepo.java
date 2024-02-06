@@ -11,25 +11,25 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface KravPrioriteringRepo extends JpaRepository<GenericStorage, UUID> {
+public interface KravPrioriteringRepo extends JpaRepository<GenericStorage<KravPrioritering>, UUID> {
 
     @Override
     @Query(value = "select * from generic_storage where type = 'KravPrioritering' order by data -> 'kravNummer', data -> 'kravVersjon'",
             countQuery = "select count(1) from generic_storage where type = 'KravPrioritering'",
             nativeQuery = true)
-    Page<GenericStorage> findAll(Pageable pageable);
+    Page<GenericStorage<KravPrioritering>> findAll(Pageable pageable);
 
     @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and type = 'KravPrioritering'", nativeQuery = true)
-    List<GenericStorage> findByKravNummer(int nummer);
+    List<GenericStorage<KravPrioritering>> findByKravNummer(int nummer);
 
     @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and data -> 'kravVersjon' = to_jsonb(?2) and type = 'KravPrioritering'", nativeQuery = true)
-    List<GenericStorage> findByKravNummer(int nummer, int versjon);
+    List<GenericStorage<KravPrioritering>> findByKravNummer(int nummer, int versjon);
 
     @Query(value = "select * from generic_storage where data ->> 'prioriteringsId' ilike %?1% and type = 'KravPrioritering'", nativeQuery = true)
-    List<GenericStorage> findByTema(String tema);
+    List<GenericStorage<KravPrioritering>> findByTema(String tema);
 
     @Query(value = "select * from generic_storage where type = 'KravPrioritering'", nativeQuery = true)
-    List<GenericStorage> getAll();
+    List<GenericStorage<KravPrioritering>> getAll();
 
     @Modifying(clearAutomatically = true)
     @Transactional

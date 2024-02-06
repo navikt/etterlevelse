@@ -6,12 +6,12 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokume
 import java.util.List;
 
 public interface EtterlevelseDokumentasjonRepoCustom {
-    List<GenericStorage> findBy(EtterlevelseDokumentasjonFilter filter);
+    List<GenericStorage<EtterlevelseDokumentasjon>> findBy(EtterlevelseDokumentasjonFilter filter);
 
-    List<GenericStorage> findByIrrelevans(List<String> codes);
+    List<GenericStorage<EtterlevelseDokumentasjon>> findByIrrelevans(List<String> codes);
 
-    List<GenericStorage> getEtterlevelseDokumentasjonerForTeam(List<String> teamId);
+    List<GenericStorage<EtterlevelseDokumentasjon>> getEtterlevelseDokumentasjonerForTeam(List<String> teamId);
 
-    List<GenericStorage> findByBehandlingIds(List<String> ids);
+    List<GenericStorage<EtterlevelseDokumentasjon>> findByBehandlingIds(List<String> ids);
 
 }

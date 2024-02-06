@@ -27,3 +27,8 @@ yarn-debug.log*
 yarn-error.log*
 package-lock.json
 yarn.lock
+
+#Eclipse
+.classpath
+.project
+.settings

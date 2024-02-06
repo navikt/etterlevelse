@@ -55,13 +55,13 @@ class KravGraphQlIT extends GraphQLTestBase {
 
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of(""));
 
-        var krav = storageService.save(Krav.builder()
+        var krav = kravStorageService.save(Krav.builder()
                 .navn("Krav 1").kravNummer(50).kravVersjon(1)
                 .relevansFor(List.of("SAK"))
                 .varslingsadresser(List.of(new Varslingsadresse("xyz", AdresseType.SLACK), new Varslingsadresse("notfound", AdresseType.SLACK)))
                 .status(KravStatus.AKTIV)
                 .build());
-        storageService.save(Etterlevelse.builder()
+        etterlevelseStorageService.save(Etterlevelse.builder()
                 .kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon())
                 .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString())
                 .build());
@@ -86,12 +86,12 @@ class KravGraphQlIT extends GraphQLTestBase {
         @Test
         @SneakyThrows
         void kravFilter() {
-            var krav = storageService.save(Krav.builder()
+            var krav = kravStorageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                     .relevansFor(List.of("SAK"))
                     .status(KravStatus.AKTIV)
                     .build());
-            storageService.save(Krav.builder()
+            kravStorageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(1)
                     .relevansFor(List.of("INNSYN"))
                     .status(KravStatus.AKTIV)
@@ -113,44 +113,44 @@ class KravGraphQlIT extends GraphQLTestBase {
 
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of("INNSYN"));
 
-            storageService.save(Krav.builder()
+            kravStorageService.save(Krav.builder()
                     .navn("gammel versjon av krav 50").kravNummer(50).kravVersjon(1)
                     .relevansFor(EtterlevelseDokumentasjonRelevans)
                     .status(KravStatus.AKTIV)
                     .build());
 
-            var krav50RelevansMatch = storageService.save(Krav.builder()
+            var krav50RelevansMatch = kravStorageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(2)
                     .relevansFor(EtterlevelseDokumentasjonRelevans)
                     .status(KravStatus.AKTIV)
                     .build());
-            var krav51MedEtterlevelse = storageService.save(Krav.builder()
+            var krav51MedEtterlevelse = kravStorageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(1)
                     .relevansFor(List.of("INNSYN"))
                     .status(KravStatus.AKTIV)
                     .build());
-            var krav51NyesteVersjon = storageService.save(Krav.builder()
+            var krav51NyesteVersjon = kravStorageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(2)
                     .relevansFor(List.of("INNSYN", "SAK"))
                     .status(KravStatus.AKTIV)
                     .build());
-            storageService.save(Krav.builder()
+            kravStorageService.save(Krav.builder()
                     .navn("Irrelevant").kravNummer(52).kravVersjon(1)
                     .relevansFor(List.of("INNSYN"))
                     .status(KravStatus.AKTIV)
                     .build());
-            storageService.save(Krav.builder()
+            kravStorageService.save(Krav.builder()
                     .navn("UTKAST").kravNummer(53).kravVersjon(1)
                     .status(KravStatus.UTKAST)
                     .relevansFor(EtterlevelseDokumentasjonRelevans)
                     .build());
-            storageService.save(Krav.builder()
+            kravStorageService.save(Krav.builder()
                     .navn("UTGÅTT").kravNummer(54).kravVersjon(1)
                     .status(KravStatus.UTGAATT)
                     .relevansFor(EtterlevelseDokumentasjonRelevans)
                     .build());
 
-            storageService.save(Etterlevelse.builder()
+            etterlevelseStorageService.save(Etterlevelse.builder()
                     .kravNummer(51).kravVersjon(1)
                     .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
                     .build());
@@ -173,17 +173,17 @@ class KravGraphQlIT extends GraphQLTestBase {
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of(""));
 
 
-            var krav = storageService.save(Krav.builder()
+            var krav = kravStorageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                     .relevansFor(List.of("SAK"))
                     .status(KravStatus.AKTIV)
                     .build());
-            var krav2 = storageService.save(Krav.builder()
+            var krav2 = kravStorageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(1)
                     .relevansFor(List.of("INNSYN"))
                     .status(KravStatus.AKTIV)
                     .build());
-            storageService.save(Etterlevelse.builder()
+            etterlevelseStorageService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
                     .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
                     .build());
@@ -202,11 +202,11 @@ class KravGraphQlIT extends GraphQLTestBase {
         @Test
         @SneakyThrows
         void kravForUnderleverandor() {
-            var krav = storageService.save(Krav.builder()
+            var krav = kravStorageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                     .underavdeling("AVD1")
                     .build());
-            storageService.save(Krav.builder()
+            kravStorageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(1)
                     .underavdeling("AVD2")
                     .build());
@@ -223,11 +223,11 @@ class KravGraphQlIT extends GraphQLTestBase {
         @Test
         @SneakyThrows
         void kravForLov() {
-            var krav = storageService.save(Krav.builder()
+            var krav = kravStorageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                     .regelverk(List.of(Regelverk.builder().lov("ARKIV").build()))
                     .build());
-            storageService.save(Krav.builder()
+            kravStorageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(1)
                     .regelverk(List.of(Regelverk.builder().lov("PERSON").build()))
                     .build());
@@ -244,11 +244,11 @@ class KravGraphQlIT extends GraphQLTestBase {
         @Test
         @SneakyThrows
         void kravForLover() {
-            var krav = storageService.save(Krav.builder()
+            var krav = kravStorageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                     .regelverk(List.of(Regelverk.builder().lov("ARKIV").build()))
                     .build());
-            storageService.save(Krav.builder()
+            kravStorageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(1)
                     .regelverk(List.of(Regelverk.builder().lov("PERSON").build()))
                     .build());
@@ -265,12 +265,12 @@ class KravGraphQlIT extends GraphQLTestBase {
         @Test
         @SneakyThrows
         void kravGjeldende() {
-            var krav = storageService.save(Krav.builder()
+            var krav = kravStorageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                     .underavdeling("AVD1")
                     .status(KravStatus.AKTIV)
                     .build());
-            storageService.save(Krav.builder()
+            kravStorageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(1)
                     .underavdeling("AVD2")
                     .status(KravStatus.UTGAATT)
@@ -291,15 +291,15 @@ class KravGraphQlIT extends GraphQLTestBase {
 
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of("INNSYN"));
 
-            storageService.save(Krav.builder()
+            kravStorageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                     .relevansFor(List.of("SAK"))
                     .build());
-            storageService.save(Etterlevelse.builder()
+            etterlevelseStorageService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
                     .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
                     .build());
-            storageService.save(Etterlevelse.builder()
+            etterlevelseStorageService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
                     .build());
 
@@ -317,7 +317,7 @@ class KravGraphQlIT extends GraphQLTestBase {
     @SneakyThrows
     void kravPaged() {
         for (int i = 0; i < 10; i++) {
-            storageService.save(Krav.builder()
+            kravStorageService.save(Krav.builder()
                     .navn("Krav " + i).kravNummer(50 + i).kravVersjon(1)
                     .relevansFor(List.of("SAK"))
                     .build());

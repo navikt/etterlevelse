@@ -9,17 +9,17 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface MeldingRepo extends JpaRepository<GenericStorage, UUID> {
+public interface MeldingRepo extends JpaRepository<GenericStorage<Melding>, UUID> {
 
     @Override
     @Query(value = "select * from generic_storage where type = 'Melding'",
             countQuery = "select count(1) from generic_storage where type = 'Melding'",
             nativeQuery = true)
-    Page<GenericStorage> findAll(Pageable pageable);
+    Page<GenericStorage<Melding>> findAll(Pageable pageable);
 
     @Query(value = "select * from generic_storage where type = 'Melding' and data ->> 'meldingType' = ?1", nativeQuery = true)
-    List<GenericStorage> findByMeldingtype(String meldingType);
+    List<GenericStorage<Melding>> findByMeldingtype(String meldingType);
 
     @Query(value = "select * from generic_storage where type = 'Melding' and data ->> 'meldingStatus' = ?1", nativeQuery = true)
-    List<GenericStorage> findByMeldingStatus(String meldingStatus);
+    List<GenericStorage<Melding>> findByMeldingStatus(String meldingStatus);
 }

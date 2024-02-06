@@ -29,14 +29,12 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
     private final KravService kravService;
 
     public VirkemiddelService(EtterlevelseDokumentasjonService etterlevelseDokumentasjonService, KravService kravService) {
-        super(Virkemiddel.class);
-
         this.etterlevelseDokumentasjonService = etterlevelseDokumentasjonService;
         this.kravService = kravService;
     }
 
     private void validateVirkemiddelIsNotInUse(UUID virkemiddelId) {
-        Virkemiddel virkemiddel = storage.get(virkemiddelId, Virkemiddel.class);
+        Virkemiddel virkemiddel = storage.get(virkemiddelId);
         List<String> etterlevelseDokumentasjonList = etterlevelseDokumentasjonService.getByVirkemiddelId(List.of(virkemiddelId.toString())).stream().map((e)-> 'E' + e.getEtterlevelseNummer().toString()).toList();
         List<String> kravList = kravService.findByVirkmiddelId(virkemiddelId.toString()).stream()
                 .map((k) -> 'K' + k.getKravNummer().toString() + "." + k.getKravVersjon().toString()).toList();
@@ -46,19 +44,19 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
             throw new VirkemiddelNotErasableException(String.format("The virkemiddel %s is in use and cannot be erased. \n Currently in use at: %s", virkemiddel.getNavn(), joinedList.toString()));
         }
     }
-    @Override
+
     public Page<Virkemiddel> getAll(Pageable page) {
-        return virkemiddelRepo.findAll(page).map(GenericStorage::toVirkemiddel);
+        return virkemiddelRepo.findAll(page).map(GenericStorage::getDomainObjectData);
     }
 
     public List<Virkemiddel> search(String name) {
-        List<GenericStorage> byNameContaining = new ArrayList<>(virkemiddelRepo.findByNameContaining(name));
+        List<GenericStorage<Virkemiddel>> byNameContaining = new ArrayList<>(virkemiddelRepo.findByNameContaining(name));
 
-        return convert(byNameContaining, GenericStorage::toVirkemiddel);
+        return convert(byNameContaining, GenericStorage::getDomainObjectData);
     }
 
     public List<Virkemiddel> getByVirkemiddelType(String code) {
-        return convert(virkemiddelRepo.findByVirkemiddelType(code), GenericStorage::toVirkemiddel);
+        return convert(virkemiddelRepo.findByVirkemiddelType(code), GenericStorage::getDomainObjectData);
     }
 
     public Virkemiddel save(VirkemiddelRequest request) {
@@ -66,7 +64,7 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
                 .addValidations(this::validateName)
                 .ifErrorsThrowValidationException();
 
-        var virkemiddel = request.isUpdate() ? storage.get(request.getIdAsUUID(), Virkemiddel.class) : new Virkemiddel();
+        var virkemiddel = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Virkemiddel();
 
         virkemiddel.convert(request);
 
@@ -75,7 +73,7 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
 
     public Virkemiddel delete(UUID id) {
         validateVirkemiddelIsNotInUse(id);
-        return storage.delete(id, Virkemiddel.class);
+        return storage.delete(id);
     }
 
     private void validateName(Validator<VirkemiddelRequest> validator) {
@@ -83,7 +81,7 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
         if (name == null) {
             return;
         }
-        var items = filter(storage.findByNameAndType(name, validator.getItem().getRequestType()), t -> !t.getId().equals(validator.getItem().getIdAsUUID()));
+        var items = filter(storage.findByNameAndType(name, Virkemiddel.class), t -> !t.getId().equals(validator.getItem().getIdAsUUID()));
         if (!items.isEmpty()) {
             validator.addError(VirkemiddelRequest.Fields.navn, Validator.ALREADY_EXISTS, "name '%s' already in use".formatted(name));
         }

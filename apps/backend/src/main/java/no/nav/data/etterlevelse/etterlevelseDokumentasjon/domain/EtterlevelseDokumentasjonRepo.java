@@ -10,17 +10,17 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface EtterlevelseDokumentasjonRepo  extends JpaRepository<GenericStorage, UUID>, EtterlevelseDokumentasjonRepoCustom {
+public interface EtterlevelseDokumentasjonRepo  extends JpaRepository<GenericStorage<EtterlevelseDokumentasjon>, UUID>, EtterlevelseDokumentasjonRepoCustom {
 
 
     @Override
     @Query(value = "select * from generic_storage where type = 'EtterlevelseDokumentasjon'",
             countQuery = "select count(1) from generic_storage where type = 'EtterlevelseDokumentasjon'",
             nativeQuery = true)
-    Page<GenericStorage> findAll(Pageable pageable);
+    Page<GenericStorage<EtterlevelseDokumentasjon>> findAll(Pageable pageable);
 
     @Query(value = "select * from generic_storage where data ->> 'virkemiddelId' in ?1 and type = 'EtterlevelseDokumentasjon'", nativeQuery = true)
-    List<GenericStorage> findByVirkemiddelIds(List<String> ids);
+    List<GenericStorage<EtterlevelseDokumentasjon>> findByVirkemiddelIds(List<String> ids);
 
     @Query(value = """
             select 
@@ -32,14 +32,14 @@ public interface EtterlevelseDokumentasjonRepo  extends JpaRepository<GenericSto
     List<KravId> findKravIdsForEtterlevelseDokumentasjon(String etterlevelseDokId);
 
     @Query(value = "select * from generic_storage where data ->> 'title' ilike %?1% or data ->> 'etterlevelseNummer' ilike %?1%  and type = 'EtterlevelseDokumentasjon'", nativeQuery = true)
-    List<GenericStorage> searchEtterlevelseDokumentasjon(String searchParam);
+    List<GenericStorage<EtterlevelseDokumentasjon>> searchEtterlevelseDokumentasjon(String searchParam);
 
     @Query(value = "SELECT nextVal('etterlevelse_nummer')",nativeQuery = true)
     int nextEtterlevelseDokumentasjonNummer();
 
     @Query(value = "select * from generic_storage where type = 'EtterlevelseDokumentasjon'", nativeQuery = true )
-    List<GenericStorage> getAllEtterlevelseDokumentasjoner();
+    List<GenericStorage<EtterlevelseDokumentasjon>> getAllEtterlevelseDokumentasjoner();
 
     @Query(value = "select * from generic_storage where type = 'EtterlevelseDokumentasjon' and data->> 'title' not ilike '%fant ikke behandling%' and data->'behandlingIds' != '[]'", nativeQuery = true)
-    List<GenericStorage> getAllEtterlevelseDokumentasjonWithValidBehandling();
+    List<GenericStorage<EtterlevelseDokumentasjon>> getAllEtterlevelseDokumentasjonWithValidBehandling();
 }

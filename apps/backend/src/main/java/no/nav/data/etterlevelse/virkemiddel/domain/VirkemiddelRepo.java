@@ -9,17 +9,17 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface VirkemiddelRepo extends JpaRepository<GenericStorage, UUID> {
+public interface VirkemiddelRepo extends JpaRepository<GenericStorage<Virkemiddel>, UUID> {
 
     @Override
     @Query(value = "select * from generic_storage where type = 'Virkemiddel' order by data -> 'navn'",
             countQuery = "select count(1) from generic_storage where type = 'Virkemiddel'",
             nativeQuery = true)
-    Page<GenericStorage> findAll(Pageable pageable);
+    Page<GenericStorage<Virkemiddel>> findAll(Pageable pageable);
 
     @Query(value = "select * from generic_storage where data ->> 'navn' ilike %?1% and type = 'Virkemiddel'", nativeQuery = true)
-    List<GenericStorage> findByNameContaining(String name);
+    List<GenericStorage<Virkemiddel>> findByNameContaining(String name);
 
     @Query(value = "select * from generic_storage where data ->> 'virkemiddelType' = ?1 and type = 'Virkemiddel'", nativeQuery = true)
-    List<GenericStorage> findByVirkemiddelType(String code);
+    List<GenericStorage<Virkemiddel>> findByVirkemiddelType(String code);
 }

@@ -240,7 +240,7 @@ public class SlackClient {
     private <T extends Response> T checkResponse(ResponseEntity<T> response) {
         Assert.notNull(response.getBody(), "empty body");
         Assert.isTrue(response.getBody().isOk(), "Not ok error: " + response.getBody().getError());
-        return (T) response.getBody();
+        return response.getBody();
     }
 
     private List<Block> splitLongBlocks(List<Block> blocks) {

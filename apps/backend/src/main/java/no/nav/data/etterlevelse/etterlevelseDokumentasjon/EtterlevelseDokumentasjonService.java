@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 
-import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -15,6 +14,7 @@ import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
@@ -23,41 +23,39 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
 import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Service
 public class EtterlevelseDokumentasjonService extends DomainService<EtterlevelseDokumentasjon> {
 
-    private final AuditVersionRepository auditRepo;
     private final BehandlingService behandlingService;
     private final TeamcatTeamClient teamcatTeamClient;
 
-    public EtterlevelseDokumentasjonService(AuditVersionRepository auditRepo, BehandlingService behandlingService, TeamcatTeamClient teamcatTeamClient) {
-        super(EtterlevelseDokumentasjon.class);
-        this.auditRepo = auditRepo;
+    public EtterlevelseDokumentasjonService(BehandlingService behandlingService, TeamcatTeamClient teamcatTeamClient) {
         this.behandlingService = behandlingService;
         this.teamcatTeamClient = teamcatTeamClient;
     }
 
     public Page<EtterlevelseDokumentasjon> getAll(PageParameters pageParameters) {
-        return etterlevelseDokumentasjonRepo.findAll(pageParameters.createPage()).map(GenericStorage::toEtterlevelseDokumentasjon);
+        return etterlevelseDokumentasjonRepo.findAll(pageParameters.createPage()).map(GenericStorage::getDomainObjectData);
     }
 
     public List<EtterlevelseDokumentasjon> getEtterlevelseDokumentasjonerByTeam(String teamId) {
-        return GenericStorage.to(etterlevelseDokumentasjonRepo.getEtterlevelseDokumentasjonerForTeam(List.of(teamId)),EtterlevelseDokumentasjon.class);
+        return convertToDomaionObject(etterlevelseDokumentasjonRepo.getEtterlevelseDokumentasjonerForTeam(List.of(teamId)));
     }
 
     public List<EtterlevelseDokumentasjon> searchEtterlevelseDokumentasjon(String searchParam) {
         if(searchParam.toLowerCase().matches("e[0-9]+(.*)")) {
-            return GenericStorage.to(etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjon(searchParam.substring(1)), EtterlevelseDokumentasjon.class);
+            return convertToDomaionObject(etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjon(searchParam.substring(1)));
         } else {
-            return GenericStorage.to(etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjon(searchParam),EtterlevelseDokumentasjon.class );
+            return convertToDomaionObject(etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjon(searchParam));
         }
     }
 
     public List<EtterlevelseDokumentasjon> getByFilter(EtterlevelseDokumentasjonFilter filter) {
         if (!StringUtils.isBlank(filter.getId())) {
-            EtterlevelseDokumentasjon etterlevelseDokumentasjon = storage.get(UUID.fromString(filter.getId()), EtterlevelseDokumentasjon.class);
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = storage.get(UUID.fromString(filter.getId()));
             if (etterlevelseDokumentasjon != null) {
                 return List.of(etterlevelseDokumentasjon);
             }
@@ -79,12 +77,12 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         if (filter.getVirkemiddelId() != null && !filter.getVirkemiddelId().isEmpty()) {
             return getByVirkemiddelId(List.of(filter.getVirkemiddelId()));
         }
-        return GenericStorage.to(etterlevelseDokumentasjonRepo.findBy(filter),EtterlevelseDokumentasjon.class);
+        return convertToDomaionObject(etterlevelseDokumentasjonRepo.findBy(filter));
     }
 
     public EtterlevelseDokumentasjon save(EtterlevelseDokumentasjonRequest request) {
 
-        var etterlevelseDokumentasjon = request.isUpdate() ? storage.get(request.getIdAsUUID(), EtterlevelseDokumentasjon.class) : new EtterlevelseDokumentasjon();
+        var etterlevelseDokumentasjon = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new EtterlevelseDokumentasjon();
 
         etterlevelseDokumentasjon.convert(request);
 
@@ -96,15 +94,15 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     }
 
     public EtterlevelseDokumentasjon delete(UUID id) {
-        return storage.delete(id, EtterlevelseDokumentasjon.class);
+        return storage.delete(id);
     }
 
     public List<EtterlevelseDokumentasjon> getByBehandlingId(List<String> ids) {
-        return GenericStorage.to(etterlevelseDokumentasjonRepo.findByBehandlingIds(ids), EtterlevelseDokumentasjon.class);
+        return convertToDomaionObject(etterlevelseDokumentasjonRepo.findByBehandlingIds(ids));
     }
 
     public List<EtterlevelseDokumentasjon> getByVirkemiddelId(List<String>ids) {
-        return GenericStorage.to(etterlevelseDokumentasjonRepo.findByVirkemiddelIds(ids), EtterlevelseDokumentasjon.class);
+        return convertToDomaionObject(etterlevelseDokumentasjonRepo.findByVirkemiddelIds(ids));
     }
 
     public EtterlevelseDokumentasjonResponse getEtterlevelseDokumentasjonWithTeamAndBehandlingData(UUID uuid) {
@@ -113,7 +111,11 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     }
 
     public List<EtterlevelseDokumentasjon> getAllWithValidBehandling(){
-        return GenericStorage.to(etterlevelseDokumentasjonRepo.getAllEtterlevelseDokumentasjonWithValidBehandling() ,EtterlevelseDokumentasjon.class);
+        return convertToDomaionObject(etterlevelseDokumentasjonRepo.getAllEtterlevelseDokumentasjonWithValidBehandling());
+    }
+
+    public Page<EtterlevelseDokumentasjon> getAll(Pageable pageable) {
+        return storage.getAll(EtterlevelseDokumentasjon.class, pageable);
     }
 
     public EtterlevelseDokumentasjonResponse addBehandlingAndTeamsData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse){
