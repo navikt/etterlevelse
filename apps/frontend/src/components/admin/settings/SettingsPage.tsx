@@ -1,7 +1,8 @@
+import { Label } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
 import { Spinner } from 'baseui/spinner'
-import { HeadingMedium, LabelMedium } from 'baseui/typography'
-import React, { FormEvent, useState } from 'react'
+import { HeadingMedium } from 'baseui/typography'
+import { FormEvent, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { theme } from '../../../util'
 import { intl } from '../../../util/intl/intl'
@@ -12,7 +13,7 @@ import { Markdown } from '../../common/Markdown'
 import { ISettings, getSettings, writeSettings } from './SettingsApi'
 
 export const SettingsPage = () => {
-  const [loading, setLoading] = React.useState<boolean>(true)
+  const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState()
   const [settings, setSettings] = useState<ISettings>()
 
@@ -40,21 +41,23 @@ export const SettingsPage = () => {
       paddingLeft={responsivePaddingSmall}
       paddingRight={responsivePaddingSmall}
     >
+      {/* TODO USIKKER */}
       <Helmet>
         <meta charSet="utf-8" />
         <title>Innstillinger</title>
       </Helmet>
+      {/* TODO USIKKER */}
       <HeadingMedium>{intl.settings}</HeadingMedium>
       {loading && <Spinner $color={ettlevColors.green400} $size={40} />}
       {(error || !settings) && error}
       {!loading && !(error || !settings) && (
-        <Block>
+        <div>
           <FrontpageMessage
             message={settings?.frontpageMessage}
             setMessage={(frontpageMessage) => setSettings({ ...settings, frontpageMessage })}
           />
 
-          <Block display="flex" justifyContent="flex-end" marginTop={theme.sizing.scale800}>
+          <Block className="flex justify-end" marginTop={theme.sizing.scale800}>
             <Button type="button" kind="secondary" marginRight onClick={load}>
               {intl.abort}
             </Button>
@@ -62,32 +65,35 @@ export const SettingsPage = () => {
               {intl.save}
             </Button>
           </Block>
-        </Block>
+        </div>
       )}
     </Block>
   )
 }
 
-const FrontpageMessage = (props: { message?: string; setMessage: (message: string) => void }) => {
-  return (
-    <Block width="100%">
-      <Block alignItems="center" marginTop="1rem">
-        <LabelMedium marginRight="1rem">Forsidemelding</LabelMedium>
-        <Block width="100%" display="flex">
-          <Block width="50%" marginRight="1rem">
-            <CustomizedStatefulTextarea
-              initialState={{ value: props.message }}
-              rows={20}
-              onChange={(event: any) =>
-                props.setMessage((event as FormEvent<HTMLInputElement>).currentTarget.value)
-              }
-            />
-          </Block>
-          <Block width="50%">
-            <Markdown source={props.message || ''} escapeHtml={false} />
-          </Block>
-        </Block>
-      </Block>
-    </Block>
-  )
+interface IPropsFrontpageMessage {
+  message?: string
+  setMessage: (message: string) => void
 }
+
+const FrontpageMessage = ({ message, setMessage }: IPropsFrontpageMessage) => (
+  <div className="w-full">
+    <div className="items-center mt-4">
+      <Label className="mr-4">Forsidemelding</Label>
+      <div className="flex w-full">
+        <div className="w-2/4 mr-4">
+          <CustomizedStatefulTextarea
+            initialState={{ value: message }}
+            rows={20}
+            onChange={(event: any) =>
+              setMessage((event as FormEvent<HTMLInputElement>).currentTarget.value)
+            }
+          />
+        </div>
+        <div className="w-2/4">
+          <Markdown source={message || ''} escapeHtml={false} />
+        </div>
+      </div>
+    </div>
+  </div>
+)

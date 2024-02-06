@@ -1,4 +1,3 @@
-import { Block } from 'baseui/block'
 import { ModalHeader } from 'baseui/modal'
 import Button from './Button'
 import CustomizedModal from './CustomizedModal'
@@ -16,68 +15,60 @@ export const AlertUnsavedPopup = ({
   setIsModalOpen,
   onClose,
   onSubmit,
-}: TAlertUnsavedPopupProps) => {
-  return (
-    <CustomizedModal
-      onClose={() => setIsModalOpen(false)}
-      isOpen={isModalOpen}
-      size="default"
-      overrides={{
-        Root: {
-          style: {
-            zIndex: 100,
-          },
+}: TAlertUnsavedPopupProps) => (
+  <CustomizedModal
+    onClose={() => setIsModalOpen(false)}
+    isOpen={isModalOpen}
+    size="default"
+    overrides={{
+      Root: {
+        style: {
+          zIndex: 100,
         },
-        Dialog: {
-          style: {
-            ...borderRadius('0px'),
-            ...marginAll('0px'),
-            maxWidth: '500px',
-            width: '100%',
-          },
+      },
+      Dialog: {
+        style: {
+          ...borderRadius('0px'),
+          ...marginAll('0px'),
+          maxWidth: '500px',
+          width: '100%',
         },
-      }}
-    >
-      <Block width="100%">
-        <ModalHeader>
-          Er du sikkert på at du vil forlate redigerings siden uten å lagre?
-        </ModalHeader>
-        <Block
-          paddingBottom="32px"
-          paddingLeft="24px"
-          paddingRight="32px"
-          display="flex"
-          justifyContent="flex-end"
+      },
+    }}
+  >
+    <div className="w-full">
+      {/* TODO USIKKER */}
+      <ModalHeader>Er du sikkert på at du vil forlate redigerings siden uten å lagre?</ModalHeader>
+      <div className="flex justify-end pb-8 pl-6 pr-8">
+        <Button
+          onClick={() => {
+            onSubmit()
+            setIsModalOpen(false)
+          }}
         >
-          <Button
-            onClick={() => {
-              onSubmit()
-              setIsModalOpen(false)
-            }}
-          >
-            Lagre og fortsett
-          </Button>
-          <Button
-            marginLeft
-            onClick={() => {
-              onClose()
-              setIsModalOpen(false)
-            }}
-          >
-            Fortsett uten å lagre
-          </Button>
-          <Button
-            marginLeft
-            kind="secondary"
-            onClick={() => {
-              setIsModalOpen(false)
-            }}
-          >
-            Avbryt
-          </Button>
-        </Block>
-      </Block>
-    </CustomizedModal>
-  )
-}
+          Lagre og fortsett
+        </Button>
+        <Button
+          marginLeft
+          onClick={() => {
+            onClose()
+            setIsModalOpen(false)
+          }}
+        >
+          Fortsett uten å lagre
+        </Button>
+        <Button
+          marginLeft
+          kind="secondary"
+          onClick={() => {
+            setIsModalOpen(false)
+          }}
+        >
+          Avbryt
+        </Button>
+      </div>
+    </div>
+  </CustomizedModal>
+)
+
 export default AlertUnsavedPopup

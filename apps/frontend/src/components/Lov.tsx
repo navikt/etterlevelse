@@ -1,5 +1,4 @@
 import { Link } from '@navikt/ds-react'
-import { Block } from 'baseui/block'
 import { IRegelverk } from '../constants'
 import { EListName, codelist } from '../services/Codelist'
 import { env } from '../util/env'
@@ -13,13 +12,13 @@ const processString = reactProcessString as (
 ) => (input?: string) => JSX.Element[]
 
 export const LovViewList = (props: { regelverk: IRegelverk[]; openOnSamePage?: boolean }) => (
-  <Block display="flex" flexDirection="column" $style={{ wordBreak: 'break-all' }}>
+  <div className="flex flex-col break-all">
     {props.regelverk.map((r, i) => (
-      <Block key={i} marginBottom="8px">
+      <div className="mb-2" key={i}>
         <LovView regelverk={r} openOnSamePage={props.openOnSamePage} />
-      </Block>
+      </div>
     ))}
-  </Block>
+  </div>
 )
 
 export const LovView = (props: { regelverk?: IRegelverk; openOnSamePage?: boolean }) => {

@@ -122,14 +122,14 @@ const Visualization = (props: TVisualizationProps) => {
             flexDirection={leftLegend ? 'row-reverse' : 'row'}
           >
             {!!data.length && (
-              <Block>
+              <div>
                 {type === 'pie' && (
                   <PieChart data={data} radius={size} hover={hover} setHover={setHover} />
                 )}
                 {type === 'bar' && (
                   <BarChart data={data} size={size} hover={hover} setHover={setHover} />
                 )}
-              </Block>
+              </div>
             )}
             {!data.length && <Block width={size * 2 + 'px'} height={size * 2 + 'px'} />}
             <Block marginLeft={theme.sizing.scale200} marginRight={theme.sizing.scale200}>

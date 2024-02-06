@@ -1,6 +1,7 @@
 import { Button, Loader, Modal, Select } from '@navikt/ds-react'
 import axios from 'axios'
-import { Block } from 'baseui/block'
+
+/* TODO USIKKER */
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { ParagraphMedium } from 'baseui/typography'
 import { useState } from 'react'
@@ -35,9 +36,9 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
       >
         <Modal.Body>
           {isLoading ? (
-            <Block display="flex" justifyContent="center" width="100%">
+            <div className="flex justify-center w-full">
               <Loader size="large" />
-            </Block>
+            </div>
           ) : (
             <div className="flex flex-col gap-4">
               <Select
@@ -55,7 +56,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                 ))}
               </Select>
               {errorMessage && (
-                <Block width="100%" marginTop="16px">
+                <div className="w-full mt-4">
                   <Notification
                     overrides={{
                       Body: {
@@ -71,7 +72,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                     }}
                     kind={NKIND.negative}
                   >
-                    <Block display="flex" justifyContent="center">
+                    <div className="flex justify-center">
                       <ParagraphMedium
                         marginBottom="0px"
                         marginTop="0px"
@@ -79,9 +80,9 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                       >
                         {errorMessage}
                       </ParagraphMedium>
-                    </Block>
+                    </div>
                   </Notification>
-                </Block>
+                </div>
               )}
               <div className="flex gap-2">
                 <Button

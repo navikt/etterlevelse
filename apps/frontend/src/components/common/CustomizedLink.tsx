@@ -8,6 +8,7 @@ const CustomizedLink = (props: LinkProps) => {
   }
 
   const mergedStyle = _.merge(customStyle, style)
+  /* TODO USIKKER */
 
   return (
     <StyledLink {...restProps} style={mergedStyle}>

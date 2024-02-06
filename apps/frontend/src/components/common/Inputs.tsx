@@ -10,7 +10,8 @@ import {
   Textarea,
   useDatepicker,
 } from '@navikt/ds-react'
-import { Block } from 'baseui/block'
+
+/* TODO USIKKER */
 import { FormControl } from 'baseui/form-control'
 import { Value } from 'baseui/select'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
@@ -418,8 +419,8 @@ export const MultiSearchField = (props: TPropsMultiSearchField) => {
       <FieldArray name={name}>
         {(p: FieldArrayRenderProps) => (
           <FormControl label={label} error={p.form.touched[name] && <>{p.form.errors[name]}</>}>
-            <Block>
-              <Block display="flex">
+            <div>
+              <div className="flex">
                 <CustomizedSelect
                   placeholder={'Søk ' + _.lowerFirst(label)}
                   maxDropdownHeight="400px"
@@ -433,12 +434,12 @@ export const MultiSearchField = (props: TPropsMultiSearchField) => {
                   onInputChange={(event) => setSearch(event.currentTarget.value)}
                   isLoading={loading}
                 />
-              </Block>
+              </div>
               <RenderTagList
                 list={(p.form.values[name] as string[]).map((v) => (itemLabel ? itemLabel(v) : v))}
                 onRemove={p.remove}
               />
-            </Block>
+            </div>
           </FormControl>
         )}
       </FieldArray>

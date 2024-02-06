@@ -1,4 +1,4 @@
-import { Block } from 'baseui/block'
+/* TODO USIKKER */
 import { Option } from 'baseui/select'
 import _ from 'lodash'
 import { ReactElement } from 'react'
@@ -35,7 +35,7 @@ export const KravList = ({
   kravFilter,
 }: TKravListProps) => {
   if (kravList.length) {
-    let sortedKravList = _.cloneDeep(kravList)
+    let sortedKravList: TKravEtterlevelseData[] = _.cloneDeep(kravList)
     if (sortingAvailable && sorting[0].id === sortingOptions[1].id) {
       sortedKravList.sort((a, b) => {
         if (
@@ -65,30 +65,26 @@ export const KravList = ({
     }
 
     return (
-      <Block $style={{ backgroundColor: 'white' }}>
+      <div className="bg-white">
         {etterlevelseDokumentasjon &&
-          sortedKravList.map((k) => {
-            return (
-              <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
-                <KravCard
-                  krav={k}
-                  key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`}
-                  noStatus={noStatus}
-                  etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                  noVarsling={noVarsling}
-                  kravFilter={kravFilter}
-                />
-              </CustomPanelDivider>
-            )
-          })}
-      </Block>
+          sortedKravList.map((k) => (
+            <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
+              <KravCard
+                krav={k}
+                key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`}
+                noStatus={noStatus}
+                etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                noVarsling={noVarsling}
+                kravFilter={kravFilter}
+              />
+            </CustomPanelDivider>
+          ))}
+      </div>
     )
   } else {
     return (
       <CustomPanelDivider>
-        <Block display="flex" width="100%" marginLeft="24px">
-          {EmptyMessage}
-        </Block>
+        <div className="flex w-full ml-6">{EmptyMessage}</div>
       </CustomPanelDivider>
     )
   }

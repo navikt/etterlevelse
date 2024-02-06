@@ -1,5 +1,6 @@
 import { BodyLong, Button, Modal } from '@navikt/ds-react'
-import { Block } from 'baseui/block'
+
+/* TODO USIKKER */
 import { ModalBody, ModalHeader } from 'baseui/modal'
 import moment from 'moment'
 import React, { useState } from 'react'
@@ -29,26 +30,26 @@ export const ArkiveringModal = ({
       case EEtterlevelseArkivStatus.TIL_ARKIVERING:
         return (
           <>
-            <Block>Bestilt: {moment(etterlevelseArkiv?.tilArkiveringDato).format('lll')}</Block>
-            <Block>
+            <div>Bestilt: {moment(etterlevelseArkiv?.tilArkiveringDato).format('lll')}</div>
+            <div>
               Arkivert av:{' '}
               {etterlevelseArkiv && etterlevelseArkiv.arkivertAv
                 ? etterlevelseArkiv.arkivertAv.split('-')[1]
                 : ''}
-            </Block>
+            </div>
           </>
         )
       case EEtterlevelseArkivStatus.ARKIVERT:
         return (
           <>
-            <Block>Sist arkivert: {moment(etterlevelseArkiv?.arkiveringDato).format('lll')}</Block>
+            <div>Sist arkivert: {moment(etterlevelseArkiv?.arkiveringDato).format('lll')}</div>
 
-            <Block>
+            <div>
               Arkivert av:{' '}
               {etterlevelseArkiv && etterlevelseArkiv.arkivertAv
                 ? etterlevelseArkiv.arkivertAv.split('-')[1]
                 : ''}
-            </Block>
+            </div>
           </>
         )
       case EEtterlevelseArkivStatus.BEHANDLER_ARKIVERING:
@@ -87,17 +88,11 @@ export const ArkiveringModal = ({
               grunnlaget for risikovurderinger og rapportering.
             </BodyLong>
           )}
-        <Block>{etterlevelseArkiv ? getStatustext(etterlevelseArkiv.status) : ''}</Block>
+        <div>{etterlevelseArkiv ? getStatustext(etterlevelseArkiv.status) : ''}</div>
         {isArchivingCancelled && etterlevelseArkiv?.arkiveringAvbruttDato && (
-          <Block>
-            Avbrutt dato: {moment(etterlevelseArkiv?.arkiveringAvbruttDato).format('lll')}
-          </Block>
+          <div>Avbrutt dato: {moment(etterlevelseArkiv?.arkiveringAvbruttDato).format('lll')}</div>
         )}
-        <Block
-          marginTop="16px"
-          display="flex"
-          $style={{ justifyContent: 'flex-end', paddingTop: '16px' }}
-        >
+        <div className="flex mt-4 justify-end pt-4">
           {etterlevelseArkiv &&
             etterlevelseArkiv.status !== EEtterlevelseArkivStatus.BEHANDLER_ARKIVERING &&
             etterlevelseArkiv.status !== EEtterlevelseArkivStatus.ERROR && (
@@ -161,7 +156,7 @@ export const ArkiveringModal = ({
                 Lukk
               </Button>
             )}
-        </Block>
+        </div>
       </ModalBody>
     </Modal>
   )

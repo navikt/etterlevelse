@@ -1,3 +1,4 @@
+/* TODO USIKKER */
 import { Block, Responsive } from 'baseui/block'
 import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
 import moment from 'moment'
@@ -21,51 +22,51 @@ export const responsiveDisplayEtterlevelseDokumentasjonPage: Responsive<any> = [
   'flex',
 ]
 
-const getBehandlingLinks = (etterlevelseDokumentasjon: IEtterlevelseDokumentasjon) => {
-  return (
-    <Block>
-      {etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => {
-        return (
-          <Block key={'behandling_link_' + index}>
+const getBehandlingLinks = (etterlevelseDokumentasjon: IEtterlevelseDokumentasjon) => (
+  <div>
+    {etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => (
+      <div key={'behandling_link_' + index}>
+        {etterlevelseDokumentasjon.behandlinger &&
+        etterlevelseDokumentasjon.behandlinger[index].navn ? (
+          <ExternalLink href={`${env.pollyBaseUrl}process/${behandlingId}`}>
             {etterlevelseDokumentasjon.behandlinger &&
-            etterlevelseDokumentasjon.behandlinger[index].navn ? (
-              <ExternalLink href={`${env.pollyBaseUrl}process/${behandlingId}`}>
-                {etterlevelseDokumentasjon.behandlinger &&
-                etterlevelseDokumentasjon.behandlinger.length > 0
-                  ? `${etterlevelseDokumentasjon.behandlinger[index].navn}`
-                  : 'Ingen data'}
-              </ExternalLink>
-            ) : (
-              <Block
-                $style={{
-                  fontSize: '18px',
-                  lineHeight: '22px',
-                  fontFamily: 'Source Sans Pro',
-                  fontWeight: 'normal',
-                }}
-              >
-                {etterlevelseDokumentasjon.behandlinger
-                  ? etterlevelseDokumentasjon.behandlinger[index].navn
-                  : 'Ingen data'}
-              </Block>
-            )}
+            etterlevelseDokumentasjon.behandlinger.length > 0
+              ? `${etterlevelseDokumentasjon.behandlinger[index].navn}`
+              : 'Ingen data'}
+          </ExternalLink>
+        ) : (
+          <Block
+            $style={{
+              fontSize: '18px',
+              lineHeight: '22px',
+              fontFamily: 'Source Sans Pro',
+              fontWeight: 'normal',
+            }}
+          >
+            {etterlevelseDokumentasjon.behandlinger
+              ? etterlevelseDokumentasjon.behandlinger[index].navn
+              : 'Ingen data'}
           </Block>
-        )
-      })}
-    </Block>
-  )
+        )}
+      </div>
+    ))}
+  </div>
+)
+
+interface IPropsGetMainHeader {
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+  setEtterlevelseDokumentasjon?: (e: IEtterlevelseDokumentasjon) => void
+  helmet?: ReactNode
 }
 
-export const getMainHeader = (
-  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon,
-  setEtterlevelseDokumentasjon?: (e: IEtterlevelseDokumentasjon) => void,
-  helmet?: ReactNode
-) => (
+export const getMainHeader = ({
+  etterlevelseDokumentasjon,
+  setEtterlevelseDokumentasjon,
+  helmet,
+}: IPropsGetMainHeader) => (
   <Block
+    className="justify-between mt-9 mb-8"
     display={responsiveDisplayEtterlevelseDokumentasjonPage}
-    justifyContent="space-between"
-    marginBottom="32px"
-    marginTop="38px"
   >
     {helmet ? (
       helmet
@@ -78,23 +79,18 @@ export const getMainHeader = (
         </title>
       </Helmet>
     )}
-    <Block width="100%">
-      <Block display="flex">
-        <Block>
+    <div className="w-full">
+      <div className="flex">
+        <div>
           <LabelSmall color={ettlevColors.green600}>
             E{etterlevelseDokumentasjon.etterlevelseNummer.toString()}
           </LabelSmall>
           <HeadingXXLarge marginTop="0" color={ettlevColors.green800}>
             {etterlevelseDokumentasjon.title}
           </HeadingXXLarge>
-        </Block>
+        </div>
         {setEtterlevelseDokumentasjon !== undefined && (
-          <Block
-            display="flex"
-            flex="1"
-            justifyContent="flex-end"
-            $style={{ whiteSpace: 'nowrap' }}
-          >
+          <Block className="flex flex-1 justify-end" $style={{ whiteSpace: 'nowrap' }}>
             <EditEtterlevelseDokumentasjonModal
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
@@ -102,11 +98,11 @@ export const getMainHeader = (
             />
           </Block>
         )}
-      </Block>
+      </div>
 
       {etterlevelseDokumentasjon.knyttetTilVirkemiddel &&
         etterlevelseDokumentasjon.virkemiddelId && (
-          <Block display="flex" alignItems="center">
+          <div className="flex items-center">
             <LabelSmall
               $style={{
                 lineHeight: '22px',
@@ -125,11 +121,11 @@ export const getMainHeader = (
             >
               {etterlevelseDokumentasjon.virkemiddel?.navn}
             </Block>
-          </Block>
+          </div>
         )}
       {etterlevelseDokumentasjon.behandlerPersonopplysninger && (
         <Block
-          display="flex"
+          className="flex"
           alignItems={
             etterlevelseDokumentasjon.behandlingIds &&
             etterlevelseDokumentasjon.behandlingIds.length >= 1
@@ -154,9 +150,7 @@ export const getMainHeader = (
             getBehandlingLinks(etterlevelseDokumentasjon)
           ) : (
             <Block
-              justifyContent="center"
-              display="flex"
-              alignItems="center"
+              className="flex justify-center items-center"
               overrides={{
                 Block: {
                   style: {
@@ -188,8 +182,8 @@ export const getMainHeader = (
           )}
         </Block>
       )}
-      <Block display="flex" alignItems="center" width="100%" marginTop={'8px'}>
-        <Block display={'flex'} width="100%" alignItems="center">
+      <div className="flex items-center w-full mt-2">
+        <div className="flex w-full items-center">
           <LabelSmall
             $style={{
               lineHeight: '22px',
@@ -212,13 +206,13 @@ export const getMainHeader = (
               Team er ikke angitt
             </Block>
           )}
-        </Block>
-      </Block>
-    </Block>
+        </div>
+      </div>
+    </div>
   </Block>
 )
 
-export const getNewestKravVersjon = (list: any[]) => {
+export const getNewestKravVersjon = (list: any[]): any[] => {
   let relevanteStatusListe = [...list]
 
   relevanteStatusListe = relevanteStatusListe.filter(
@@ -228,7 +222,12 @@ export const getNewestKravVersjon = (list: any[]) => {
   return relevanteStatusListe
 }
 
-export const getEtterlevelseStatus = (status?: EEtterlevelseStatus, frist?: string) => {
+interface IPropsGetEtterlevelseStatus {
+  status?: EEtterlevelseStatus
+  frist?: string
+}
+
+export const getEtterlevelseStatus = ({ status, frist }: IPropsGetEtterlevelseStatus): string => {
   switch (status) {
     case EEtterlevelseStatus.UNDER_REDIGERING:
       return 'Under arbeid'
@@ -251,13 +250,13 @@ export const getEtterlevelseStatus = (status?: EEtterlevelseStatus, frist?: stri
   }
 }
 
-export const updateBehandlingNameWithNumber = (behandlinger: IBehandling[]) => {
+export const updateBehandlingNameWithNumber = (behandlinger: IBehandling[]): IBehandling[] => {
   return behandlinger.map((b) => {
     return { ...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn }
   })
 }
 
-export const getStatusLabelColor = (status: EEtterlevelseStatus) => {
+export const getStatusLabelColor = (status: EEtterlevelseStatus): string => {
   switch (status) {
     case EEtterlevelseStatus.UNDER_REDIGERING:
       return 'info'

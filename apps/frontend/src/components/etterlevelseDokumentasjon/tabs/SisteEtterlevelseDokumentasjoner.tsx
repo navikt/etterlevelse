@@ -1,4 +1,6 @@
 import { Loader } from '@navikt/ds-react'
+
+/* TODO USIKKER */
 import { ParagraphSmall } from 'baseui/typography'
 import moment from 'moment'
 import { TEtterlevelseDokumentasjonQL } from '../../../constants'
@@ -13,7 +15,7 @@ export const SisteEtterlevelseDokumentasjoner = ({
   etterlevelseDokumentasjoner,
   loading,
 }: ISisteEtterlevelseDokumentasjoner) => {
-  const sorted = [...etterlevelseDokumentasjoner].sort(
+  const sorted: TEtterlevelseDokumentasjonQL[] = [...etterlevelseDokumentasjoner].sort(
     (a, b) =>
       moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf()
   )

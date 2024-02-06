@@ -1,3 +1,4 @@
+/* TODO USIKKER */
 import { Block } from 'baseui/block'
 import { ProgressBar, SIZE } from 'baseui/progress-bar'
 import { ParagraphXSmall } from 'baseui/typography'
@@ -18,6 +19,7 @@ type TTemaCardEtterlevelseDokumentasjonProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   irrelevant?: boolean
 }
+
 export const TemaCardEtterlevelseDokumentasjon = (
   props: TTemaCardEtterlevelseDokumentasjonProps
 ) => {
@@ -114,20 +116,20 @@ export const TemaCardEtterlevelseDokumentasjon = (
       hideArrow
       titleColor={ettlevColors.green600}
     >
-      <Block display="flex" width="100%">
+      <div className="flex w-full">
         {krav.length > 0 ? (
-          <Block marginTop={theme.sizing.scale650} width={'100%'}>
-            <Block display="flex" flex={1}>
+          <Block className="w-full" marginTop={theme.sizing.scale650}>
+            <div className="flex flex-1">
               <ParagraphXSmall marginTop="0px" marginBottom="2px">
                 Ferdig utfylt:
               </ParagraphXSmall>
-              <Block display="flex" flex={1} justifyContent="flex-end">
+              <div className="flex flex-1 justify-end">
                 <ParagraphXSmall marginTop="0px" marginBottom="2px">
                   {utfylt} av {krav.length} krav
                 </ParagraphXSmall>
-              </Block>
-            </Block>
-            <Block>
+              </div>
+            </div>
+            <div>
               <ProgressBar
                 value={utfylt}
                 successValue={krav.length}
@@ -146,7 +148,7 @@ export const TemaCardEtterlevelseDokumentasjon = (
                   },
                 }}
               />
-            </Block>
+            </div>
           </Block>
         ) : (
           <ParagraphXSmall
@@ -157,7 +159,7 @@ export const TemaCardEtterlevelseDokumentasjon = (
             Tema inneholder {data?.krav.numberOfElements} krav dere har filtrert bort
           </ParagraphXSmall>
         )}
-      </Block>
+      </div>
     </PanelLinkCard>
   )
 }

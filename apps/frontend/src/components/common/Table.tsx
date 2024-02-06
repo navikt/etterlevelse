@@ -6,6 +6,7 @@ import {
   faSortUp,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Label } from '@navikt/ds-react'
 import { withStyle } from 'baseui'
 import { Block } from 'baseui/block'
 import { KIND } from 'baseui/button'
@@ -151,7 +152,7 @@ export const Table = <T, K extends keyof T>(props: TTableProps<T, K>) => {
       </StyleTable>
 
       {!!props.config?.pageSizes && (
-        <Block display="flex" justifyContent="space-between" marginTop="1rem" alignItems="center">
+        <div className="flex justify-between mt-4 items-center">
           <StatefulPopover
             content={({ close }) => (
               <StatefulMenu
@@ -169,23 +170,23 @@ export const Table = <T, K extends keyof T>(props: TTableProps<T, K>) => {
             )}
             placement={PLACEMENT.bottom}
           >
-            <Block>
+            <div>
               <Button
                 kind={KIND.tertiary}
                 iconEnd={faChevronDown}
               >{`${table.limit} ${intl.rows}`}</Button>
-            </Block>
+            </div>
           </StatefulPopover>
-          <Block>
-            <LabelMedium>Totalt antall rader: {table.data.length}</LabelMedium>
-          </Block>
+          <div>
+            <Label>Totalt antall rader: {table.data.length}</Label>
+          </div>
           <Pagination
             currentPage={table.page}
             numPages={table.numPages}
             onPageChange={({ nextPage }) => table.setPage(nextPage)}
             labels={{ nextButton: intl.nextButton, preposition: 'av', prevButton: intl.prevButton }}
           />
-        </Block>
+        </div>
       )}
     </TableContext.Provider>
   )
@@ -307,12 +308,13 @@ const HeadCell = <T, K extends keyof T>(props: THeadProps<T, K>) => {
         overrides={{
           SortableLabel: {
             component: () => (
-              <Block width="100%" display="flex">
+              <div className="flex w-full">
                 <SortDirectionIcon direction={direction[column]} />
-                <Block marginRight={theme.sizing.scale200} display="inline" />
+                {/* TODO USIKKER */}
+                <Block className="inline" marginRight={theme.sizing.scale200} />
                 {title}
                 {filterButton}
-              </Block>
+              </div>
             ),
           },
           HeadCell: { style: { ...headerCellOverride.HeadCell.style, ...styleOverride } },

@@ -1,4 +1,4 @@
-import { Block } from 'baseui/block'
+/* TODO USIKKER */
 import { Option } from 'baseui/select'
 import { LabelSmall, ParagraphXSmall } from 'baseui/typography'
 import { useNavigate } from 'react-router-dom'
@@ -7,28 +7,31 @@ import { kravRelevansOptions, sortingOptions } from '../../pages/EtterlevelseDok
 import { ettlevColors } from '../../util/theme'
 import CustomizedSelect from '../common/CustomizedSelect'
 
-export const KravPanelHeader = (props: {
+interface IPropsKravPanelHeader {
   title: string
   kravData: TKravEtterlevelseData[] | IKrav[]
-}) => {
+}
+
+export const KravPanelHeader = (props: IPropsKravPanelHeader) => {
+  const { title, kravData } = props
   let antallSuksesskriterier = 0
 
-  props.kravData.forEach((k) => {
+  kravData.forEach((k) => {
     antallSuksesskriterier += k.suksesskriterier.length
   })
 
   return (
-    <div className={'flex w-full'}>
-      <div className={'flex justify-center items-center'}>
-        <span>{props.title}</span>
+    <div className="flex w-full">
+      <div className="flex justify-center items-center">
+        <span>{title}</span>
       </div>
-      <div className={'flex justify-end flex-1 mr-6'}>
+      <div className="flex justify-end flex-1 mr-6">
         <div>
-          <div className={'flex justify-end align-baseline flex-1'}>
-            <span className={'mr-1'}>{props.kravData.length}</span>
+          <div className="flex justify-end align-baseline flex-1">
+            <span className="mr-1">{kravData.length}</span>
             <span>krav</span>
           </div>
-          <div className={'flex justify-end flex-1'}>
+          <div className="flex justify-end flex-1">
             <span>{antallSuksesskriterier} suksesskriterier</span>
           </div>
         </div>
@@ -37,55 +40,58 @@ export const KravPanelHeader = (props: {
   )
 }
 
-export const KravPanelHeaderWithSorting = (props: {
+interface IPropsKravPanelHeaderWithSorting {
   kravRelevans: readonly Option[]
   setKravRelevans: React.Dispatch<React.SetStateAction<readonly Option[]>>
   kravData: TKravEtterlevelseData[] | IKrav[]
   sorting: readonly Option[]
   setSorting: React.Dispatch<React.SetStateAction<readonly Option[]>>
   temaPageUrl: string
-}) => {
+}
+
+export const KravPanelHeaderWithSorting = (props: IPropsKravPanelHeaderWithSorting) => {
+  const { kravRelevans, setKravRelevans, kravData, sorting, setSorting, temaPageUrl } = props
   const navigate = useNavigate()
   let antallSuksesskriterier = 0
-  props.kravData.forEach((k) => {
+  kravData.forEach((k) => {
     antallSuksesskriterier += k.suksesskriterier.length
   })
 
   return (
-    <Block display="flex" width="100%">
-      <Block display="flex" justifyContent="center" alignItems="center">
+    <div className="flex w-full">
+      <div className="flex justify-center items-center">
         <LabelSmall $style={{ fontSize: '16px', lineHeight: '18px' }}>Vis:</LabelSmall>
-        <Block paddingLeft="20px" paddingRight="16px" width="290px">
+        <div className="w-72 pl-5 pr-4">
           <CustomizedSelect
             size="default"
             clearable={false}
             searchable={false}
             options={kravRelevansOptions}
-            value={props.kravRelevans}
+            value={kravRelevans}
             onChange={(params) => {
-              props.setKravRelevans(params.value)
+              setKravRelevans(params.value)
 
-              const newTemaPageUrl = props.temaPageUrl.split('/')
+              const newTemaPageUrl = temaPageUrl.split('/')
               newTemaPageUrl.pop()
 
               navigate(`${newTemaPageUrl.join('/')}/${params.value[0].id}`)
             }}
           />
-        </Block>
-        <Block paddingRight="20px" width="290px">
+        </div>
+        <div className="w-72 pr-5">
           <CustomizedSelect
             size="default"
             searchable={false}
             clearable={false}
             options={sortingOptions}
-            value={props.sorting}
-            onChange={(params) => props.setSorting(params.value)}
+            value={sorting}
+            onChange={(params) => setSorting(params.value)}
           />
-        </Block>
-      </Block>
-      <Block display="flex" justifyContent="flex-end" flex="1" marginRight="26px">
-        <Block>
-          <Block display="flex" justifyContent="flex-end" alignItems="baseline" flex="1">
+        </div>
+      </div>
+      <div className="flex justify-end flex-1 mr-6">
+        <div>
+          <div className="flex justify-end items-baseline flex-1">
             <LabelSmall
               marginRight="4px"
               $style={{
@@ -96,20 +102,20 @@ export const KravPanelHeaderWithSorting = (props: {
                 marginBottom: '0px',
               }}
             >
-              {props.kravData.length}
+              {kravData.length}
             </LabelSmall>
             <ParagraphXSmall $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>
               krav
             </ParagraphXSmall>
-          </Block>
-          <Block display="flex" justifyContent="flex-end" flex="1">
+          </div>
+          <div className="flex justify-end flex-1">
             <ParagraphXSmall $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>
               {antallSuksesskriterier} suksesskriterier
             </ParagraphXSmall>
-          </Block>
-        </Block>
-      </Block>
-    </Block>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 

@@ -1,3 +1,4 @@
+/* TODO USIKKER */
 import { Block } from 'baseui/block'
 import { HeadingXXLarge } from 'baseui/typography'
 import { useState } from 'react'
@@ -16,9 +17,9 @@ export const SecondaryHeader = ({ temaData, lovListe }: TSecondaryHeaderProps) =
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
 
   return (
-    <Block width="100%">
+    <div className="w-full">
       <div className="pt-4 pb-10">
-        <Block display="flex" justifyContent="flex-end" width="100%">
+        <div className="flex justify-end w-full">
           <Button
             size="compact"
             $style={{
@@ -35,7 +36,7 @@ export const SecondaryHeader = ({ temaData, lovListe }: TSecondaryHeaderProps) =
           >
             Om {temaData?.shortName.toLocaleLowerCase()}, og ansvarlig for tema
           </Button>
-        </Block>
+        </div>
       </div>
       {temaData && (
         <CustomizedModal
@@ -53,7 +54,7 @@ export const SecondaryHeader = ({ temaData, lovListe }: TSecondaryHeaderProps) =
             },
           }}
         >
-          <Block width="100%">
+          <div className="w-full">
             <Block
               paddingTop="120px"
               paddingBottom="40px"
@@ -71,14 +72,14 @@ export const SecondaryHeader = ({ temaData, lovListe }: TSecondaryHeaderProps) =
               paddingLeft={responsivePaddingExtraLarge}
               paddingRight={responsivePaddingExtraLarge}
             >
-              <Block>{getTemaMainHeader(temaData, lovListe, true)}</Block>
-              <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
+              <div>{getTemaMainHeader(temaData, lovListe, true)}</div>
+              <div className="flex justify-end w-full mt-9">
                 <Button onClick={() => setIsTemaModalOpen(false)}>Lukk visning</Button>
-              </Block>
+              </div>
             </Block>
-          </Block>
+          </div>
         </CustomizedModal>
       )}
-    </Block>
+    </div>
   )
 }

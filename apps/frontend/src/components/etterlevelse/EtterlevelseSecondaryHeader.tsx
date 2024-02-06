@@ -1,7 +1,6 @@
 import { Block } from 'baseui/block'
 import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { TKravId } from '../../api/KravApi'
 import { IEtterlevelseDokumentasjon } from '../../constants'
 import { TSection } from '../../pages/EtterlevelseDokumentasjonPage'
@@ -32,10 +31,9 @@ export const EtterlevelseSecondaryHeader = ({
   kravId,
 }: TEtterlevelseSecondaryHeaderProps) => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
-  const params = useParams<{ filter?: string }>()
 
   return (
-    <Block width="100%">
+    <div className="w-full">
       <Block marginTop="19px" width="fit-content">
         <Button
           kind="tertiary"
@@ -55,6 +53,7 @@ export const EtterlevelseSecondaryHeader = ({
             },
           }}
         >
+          {/* TODO USIKKER */}
           <LabelSmall
             $style={{
               fontSize: '18px',
@@ -72,7 +71,7 @@ export const EtterlevelseSecondaryHeader = ({
         </Button>
       </Block>
 
-      <Block marginTop="8px">
+      <div className="mt-2">
         <img src={angleIcon} alt="angle icon" />{' '}
         <Button
           kind="tertiary"
@@ -92,6 +91,7 @@ export const EtterlevelseSecondaryHeader = ({
             },
           }}
         >
+          {/* TODO USIKKER */}
           <LabelSmall
             marginLeft="12px"
             $style={{
@@ -108,7 +108,7 @@ export const EtterlevelseSecondaryHeader = ({
             {temaData?.shortName}
           </LabelSmall>
         </Button>
-      </Block>
+      </div>
 
       <Block
         marginTop="0px"
@@ -119,7 +119,7 @@ export const EtterlevelseSecondaryHeader = ({
         justifyContent="center"
         marginLeft="35px"
       >
-        <Block display="flex" flex="1">
+        <div className="flex flex-1">
           <img src={angleIcon} alt="angle icon" />{' '}
           <LabelSmall
             marginLeft="12px"
@@ -133,9 +133,9 @@ export const EtterlevelseSecondaryHeader = ({
           >
             K{kravId?.kravNummer}.{kravId?.kravVersjon}
           </LabelSmall>
-        </Block>
+        </div>
 
-        <Block display="flex" justifyContent="flex-end" width="100%">
+        <div className="flex justify-end w-full">
           <Button
             $style={{
               fontSize: '18px',
@@ -151,7 +151,7 @@ export const EtterlevelseSecondaryHeader = ({
           >
             Om {temaData?.shortName.toLocaleLowerCase()} og ansvarlig for tema
           </Button>
-        </Block>
+        </div>
       </Block>
 
       {temaData && (
@@ -170,7 +170,8 @@ export const EtterlevelseSecondaryHeader = ({
             },
           }}
         >
-          <Block width="100%">
+          <div className="w-full">
+            {/* TODO USIKKER */}
             <Block
               paddingTop="120px"
               paddingBottom="40px"
@@ -188,14 +189,14 @@ export const EtterlevelseSecondaryHeader = ({
               paddingLeft={responsivePaddingExtraLarge}
               paddingRight={responsivePaddingExtraLarge}
             >
-              <Block>{getTemaMainHeader(temaData, lovListe, true)}</Block>
+              <div>{getTemaMainHeader(temaData, lovListe, true)}</div>
               <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                 <Button onClick={() => setIsTemaModalOpen(false)}>Lukk visning</Button>
               </Block>
             </Block>
-          </Block>
+          </div>
         </CustomizedModal>
       )}
-    </Block>
+    </div>
   )
 }

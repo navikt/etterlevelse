@@ -2,6 +2,8 @@ import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Loader } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
+
+/* TODO USIKKER */
 import { List, arrayMove } from 'baseui/dnd-list'
 import { HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
 import { FieldArray, Form, Formik } from 'formik'
@@ -25,13 +27,15 @@ import { borderRadius, borderStyle, paddingZero } from '../../common/Style'
 
 export const kravListPriorityModal = () => document.querySelector('#krav-list-edit-priority-modal')
 
-export const EditPriorityModal = (props: {
+interface IPropsEditPriorityModal {
   isOpen: boolean
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
   kravListe: IKrav[]
   tema: string
   refresh: () => void
-}) => {
+}
+
+export const EditPriorityModal = (props: IPropsEditPriorityModal) => {
   const { isOpen, setIsOpen, kravListe, tema, refresh } = props
   const [items, setItems] = React.useState<ReactElement[]>([])
   const [kravElements, setKravElements] = React.useState<IKrav[]>(kravListe)
@@ -43,47 +47,44 @@ export const EditPriorityModal = (props: {
 
   useEffect(() => {
     setItems(
-      kravListe.map((k, i) => {
-        return (
-          <CustomPanelDivider key={k.kravNummer + '_' + i} fullWidth>
-            <SimplePanel
-              key={`${k.navn}_${k.kravNummer}`}
-              hideChevron
-              title={
-                <ParagraphMedium
-                  $style={{
-                    fontSize: '14px',
-                    marginBottom: '0px',
-                    marginTop: '0px',
-                    lineHeight: '15px',
-                  }}
-                >
-                  K{k.kravNummer}.{k.kravVersjon}
-                </ParagraphMedium>
-              }
-              beskrivelse={
-                <LabelSmall $style={{ fontSize: '18px', lineHeight: '28px' }}>{k.navn}</LabelSmall>
-              }
-              rightBeskrivelse={
-                k.changeStamp.lastModifiedDate !== undefined &&
-                k.changeStamp.lastModifiedDate !== ''
-                  ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}`
-                  : ''
-              }
-              statusText={<StatusView status={k.status} />}
-              overrides={{
-                Block: {
-                  style: {
-                    width: '97%',
-                    ':hover': { boxShadow: 'none', boxSizing: 'content-box' },
-                    ...borderStyle('hidden'),
-                  },
+      kravListe.map((k, i) => (
+        <CustomPanelDivider key={k.kravNummer + '_' + i} fullWidth>
+          <SimplePanel
+            key={`${k.navn}_${k.kravNummer}`}
+            hideChevron
+            title={
+              <ParagraphMedium
+                $style={{
+                  fontSize: '14px',
+                  marginBottom: '0px',
+                  marginTop: '0px',
+                  lineHeight: '15px',
+                }}
+              >
+                K{k.kravNummer}.{k.kravVersjon}
+              </ParagraphMedium>
+            }
+            beskrivelse={
+              <LabelSmall $style={{ fontSize: '18px', lineHeight: '28px' }}>{k.navn}</LabelSmall>
+            }
+            rightBeskrivelse={
+              k.changeStamp.lastModifiedDate !== undefined && k.changeStamp.lastModifiedDate !== ''
+                ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}`
+                : ''
+            }
+            statusText={<StatusView status={k.status} />}
+            overrides={{
+              Block: {
+                style: {
+                  width: '97%',
+                  ':hover': { boxShadow: 'none', boxSizing: 'content-box' },
+                  ...borderStyle('hidden'),
                 },
-              }}
-            />
-          </CustomPanelDivider>
-        )
-      })
+              },
+            }}
+          />
+        </CustomPanelDivider>
+      ))
     )
   }, [kravListe])
 
@@ -216,24 +217,21 @@ export const EditPriorityModal = (props: {
             }}
           >
             <Block
+              className="mb-14 pt-6 pb-12"
               backgroundColor={ettlevColors.green800}
-              paddingTop="23px"
-              paddingBottom="48px"
               paddingLeft={responsivePaddingSmall}
               paddingRight={responsivePaddingSmall}
-              marginBottom="54px"
             >
               <HeadingXXLarge $style={{ lineHeight: '48px', color: ettlevColors.white }}>
                 Justere rekkefølgen på krav
               </HeadingXXLarge>
             </Block>
             <Block
-              display="flex"
-              justifyContent="center"
+              className="flex justify-center"
               paddingLeft={responsivePaddingSmall}
               paddingRight={responsivePaddingSmall}
             >
-              <Block display="flex" justifyContent="flex-start" flex="1">
+              <div className="flex justify-start flex-1">
                 <HeadingXLarge
                   $style={{
                     lineHeight: '24px',
@@ -244,24 +242,24 @@ export const EditPriorityModal = (props: {
                 >
                   {tema}
                 </HeadingXLarge>
-              </Block>
-              <Block display="flex" justifyContent="flex-end" flex="1">
+              </div>
+              <div className="flex justify-end flex-1">
                 <ParagraphMedium
                   $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}
                 >
                   Klikk og dra kravene i ønsket rekkefølge
                 </ParagraphMedium>
-              </Block>
+              </div>
             </Block>
-            <Block>
+            <div>
               {loading ? (
-                <Block display="flex" justifyContent="center">
+                <div className="flex justify-center">
                   <Loader size="large" />
-                </Block>
+                </div>
               ) : (
                 <Form>
                   <FieldWrapper>
-                    <FieldArray name={'krav'}>
+                    <FieldArray name="krav">
                       {() => (
                         <List
                           items={items}
@@ -293,22 +291,16 @@ export const EditPriorityModal = (props: {
                   </FieldWrapper>
                 </Form>
               )}
-            </Block>
+            </div>
             <Block
-              paddingBottom="23px"
-              display="flex"
-              justifyContent="flex-end"
               position="sticky"
-              bottom={0}
-              paddingTop="16px"
               paddingLeft={responsivePaddingSmall}
               paddingRight={responsivePaddingSmall}
-              backgroundColor={ettlevColors.white}
               $style={{
                 boxShadow: stickyFooterStyle ? '0px -4px 4px rgba(0, 0, 0, 0.12)' : '',
                 zIndex: 3,
               }}
-              className="krav-list-button-container"
+              className="flex justify-end bottom-0 pt-4 pb-6 krav-list-button-container bg-white"
             >
               <Button
                 type="button"
@@ -339,20 +331,12 @@ export const EditPriorityModal = (props: {
   )
 }
 
-const CustomDragHandle = (isDragged: boolean) => {
-  return (
-    <Block
-      $style={{
-        display: 'flex',
-        alignItems: 'center',
-        marginRight: '1em',
-      }}
-    >
-      <FontAwesomeIcon
-        icon={faGripVertical}
-        aria-label={'Dra og slipp håndtak'}
-        color={isDragged ? ettlevColors.green800 : ettlevColors.grey200}
-      />
-    </Block>
-  )
-}
+const CustomDragHandle = (isDragged: boolean) => (
+  <div className="flex items-center mr-4">
+    <FontAwesomeIcon
+      icon={faGripVertical}
+      aria-label="Dra og slipp håndtak"
+      color={isDragged ? ettlevColors.green800 : ettlevColors.grey200}
+    />
+  </div>
+)

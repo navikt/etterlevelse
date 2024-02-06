@@ -1,3 +1,4 @@
+/* TODO USIKKER */
 import { Block, BlockOverrides, Responsive, Scale } from 'baseui/block'
 import {
   HeadingXLarge,
@@ -202,6 +203,29 @@ export type TPanelLinkCardOverrides = {
   Content?: BlockOverrides
 }
 
+interface IPropsPanelLinkCard {
+  href?: string
+  onClick?: () => void
+  tittel: string
+  titleColor?: string
+  beskrivelse?: string
+  headerContent?: React.ReactNode
+  children?: React.ReactNode
+  icon?: string
+  requireLogin?: boolean
+  height?: Responsive<Scale>
+  maxHeight?: string
+  width?: Responsive<Scale>
+  maxWidth?: string
+  verticalMargin?: string
+  overrides?: TPanelLinkCardOverrides
+  flexContent?: boolean
+  hideArrow?: boolean
+  marginRight?: Responsive<Scale>
+  ComplimentaryContent?: React.ReactNode
+  openinnewtab?: boolean
+}
+
 export const PanelLinkCard = ({
   href,
   onClick,
@@ -223,28 +247,7 @@ export const PanelLinkCard = ({
   marginRight,
   ComplimentaryContent,
   openinnewtab,
-}: {
-  href?: string
-  onClick?: () => void
-  tittel: string
-  titleColor?: string
-  beskrivelse?: string
-  headerContent?: React.ReactNode
-  children?: React.ReactNode
-  icon?: string
-  requireLogin?: boolean
-  height?: Responsive<Scale>
-  maxHeight?: string
-  width?: Responsive<Scale>
-  maxWidth?: string
-  verticalMargin?: string
-  overrides?: TPanelLinkCardOverrides
-  flexContent?: boolean
-  hideArrow?: boolean
-  marginRight?: Responsive<Scale>
-  ComplimentaryContent?: React.ReactNode
-  openinnewtab?: boolean
-}) => {
+}: IPropsPanelLinkCard) => {
   const [hover, setHover] = useState(false)
 
   const rootBaseOverrides: BlockOverrides = {
@@ -379,7 +382,7 @@ export const PanelLinkCard = ({
           </Block>
 
           {(ComplimentaryContent || !hideArrow) && (
-            <Block display="flex" width="100%" height="100%">
+            <div className="flex w-full h-full">
               {ComplimentaryContent && <Block minWidth="70%">{ComplimentaryContent}</Block>}
               {!hideArrow && (
                 <Block
@@ -393,7 +396,7 @@ export const PanelLinkCard = ({
                   <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'} />
                 </Block>
               )}
-            </Block>
+            </div>
           )}
         </Block>
       </RouteLink>
@@ -401,19 +404,15 @@ export const PanelLinkCard = ({
   )
 }
 
-export const Chevron = ({
-  hover,
-  icon,
-  distance,
-  size,
-  marginLeft,
-}: {
+interface IPropsChevron {
   hover: boolean
   icon: string
   distance: string
   size?: string
   marginLeft?: string
-}) => (
+}
+
+export const Chevron = ({ hover, icon, distance, size, marginLeft }: IPropsChevron) => (
   <Block
     marginLeft={
       hover
@@ -435,6 +434,24 @@ export const Chevron = ({
   </Block>
 )
 
+interface IPropsSimplePanel {
+  button?: boolean
+  title: string | React.ReactNode
+  rightTitle?: string
+  beskrivelse?: string | React.ReactNode
+  rightBeskrivelse?: string
+  flip?: boolean
+  square?: boolean
+  hideBorderBottom?: boolean
+  useUnderline?: boolean
+  statusText?: string | React.ReactNode
+  panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
+  overrides?: BlockOverrides
+  useTitleUnderLine?: boolean
+  useDescriptionUnderline?: boolean
+  hideChevron?: boolean
+}
+
 export const SimplePanel = ({
   button,
   title,
@@ -451,23 +468,7 @@ export const SimplePanel = ({
   square,
   hideBorderBottom,
   useUnderline,
-}: {
-  button?: boolean
-  title: string | React.ReactNode
-  rightTitle?: string
-  beskrivelse?: string | React.ReactNode
-  rightBeskrivelse?: string
-  flip?: boolean
-  square?: boolean
-  hideBorderBottom?: boolean
-  useUnderline?: boolean
-  statusText?: string | React.ReactNode
-  panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
-  overrides?: BlockOverrides
-  useTitleUnderLine?: boolean
-  useDescriptionUnderline?: boolean
-  hideChevron?: boolean
-}) => {
+}: IPropsSimplePanel) => {
   const [hover, setHover] = useState(false)
   const responsiveDisplay: Responsive<any> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -550,7 +551,7 @@ export const SimplePanel = ({
         </Block>
       </div>
 
-      <Block display="flex">
+      <div className="flex">
         {statusText && (
           <Block
             minWidth="100px"
@@ -562,9 +563,9 @@ export const SimplePanel = ({
             {statusText instanceof String ? <LabelSmall>{statusText}</LabelSmall> : statusText}
           </Block>
         )}
-        <Block display="flex" width="100%">
+        <div className="flex w-full">
           {(rightTitle || rightBeskrivelse) && (
-            <Block display="flex">
+            <div className="flex">
               <Block
                 minWidth="175px"
                 maxWidth="175px"
@@ -584,11 +585,11 @@ export const SimplePanel = ({
                   </ParagraphXSmall>
                 )}
               </Block>
-            </Block>
+            </div>
           )}
           {!hideChevron && <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'} />}
-        </Block>
-      </Block>
+        </div>
+      </div>
     </Block>
   )
 }

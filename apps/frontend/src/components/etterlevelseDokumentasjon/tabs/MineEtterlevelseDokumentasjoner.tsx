@@ -1,3 +1,4 @@
+/* TODO USIKKER */
 import { BodyShort, Heading, Link } from '@navikt/ds-react'
 import { ParagraphSmall } from 'baseui/typography'
 import { TEtterlevelseDokumentasjonQL } from '../../../constants'
@@ -8,15 +9,17 @@ import { bamseIcon } from '../../Images'
 import { InfoBlock2 } from '../../common/InfoBlock'
 import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 
+interface IPropsMineEtterlevelseDokumentasjoner {
+  etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]
+  teams: TCustomTeamObject[]
+  loading: boolean
+}
+
 export const MineEtterlevelseDokumentasjoner = ({
   etterlevelseDokumentasjoner,
   teams,
   loading,
-}: {
-  etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]
-  teams: TCustomTeamObject[]
-  loading: boolean
-}) => (
+}: IPropsMineEtterlevelseDokumentasjoner) => (
   <div className="my-5">
     {loading && (
       <div>

@@ -95,7 +95,9 @@ export const CustomizedPanel = (props: TCustomProps) => {
       return props.title
     } else {
       return (
-        <Block>
+        <div>
+          {/* TODO USIKKER */}
+
           <HeadingLarge
             marginTop={theme.sizing.scale100}
             marginBottom={theme.sizing.scale100}
@@ -103,7 +105,7 @@ export const CustomizedPanel = (props: TCustomProps) => {
           >
             {props.title}
           </HeadingLarge>
-        </Block>
+        </div>
       )
     }
   }
@@ -113,6 +115,8 @@ export const CustomizedPanel = (props: TCustomProps) => {
 
 export const CustomPanelDivider = (props: { children: React.ReactNode; fullWidth?: boolean }) => (
   <Block backgroundColor={ettlevColors.white} $style={{ ...borderRadius('4px') }}>
+    {/* TODO USIKKER */}
+
     <Block
       width={props.fullWidth ? '100%' : 'calc(100% - 48px)'}
       backgroundColor={ettlevColors.grey100}

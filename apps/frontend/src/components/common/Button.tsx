@@ -143,6 +143,7 @@ export const Button = (props: IButtonProps) => {
     <>
       <Block display="inline" marginLeft={props.marginLeft ? theme.sizing.scale400 : 0} />
       <Tooltip tooltip={props.tooltip}>
+        {/* TODO USIKKER */}
         <BaseUIButton
           kind={baseuiKind}
           size={props.size}
@@ -171,6 +172,7 @@ export const Button = (props: IButtonProps) => {
           )}
         </BaseUIButton>
       </Tooltip>
+      {/* TODO USIKKER */}
       <Block display="inline" marginRight={props.marginRight ? theme.sizing.scale600 : 0} />
     </>
   )
@@ -186,6 +188,15 @@ export const buttonBorderStyle = {
   ...borderRadius('4px'),
 }
 
+interface IPropsExternalButton {
+  href: string
+  children: React.ReactNode
+  underlineHover?: boolean
+  size?: (typeof SIZE)[keyof typeof SIZE]
+  openOnSamePage?: boolean
+  kind?: TButtonKind
+}
+
 export const ExternalButton = ({
   href,
   children,
@@ -193,14 +204,7 @@ export const ExternalButton = ({
   size,
   openOnSamePage,
   kind,
-}: {
-  href: string
-  children: React.ReactNode
-  underlineHover?: boolean
-  size?: (typeof SIZE)[keyof typeof SIZE]
-  openOnSamePage?: boolean
-  kind?: TButtonKind
-}) => {
+}: IPropsExternalButton) => {
   const underlineStyle = underlineHover ? 'underline-hover' : 'outline'
   const actualSize = size || 'compact'
   return (

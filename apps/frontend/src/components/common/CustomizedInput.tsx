@@ -3,6 +3,8 @@ import _ from 'lodash'
 import { ettlevColors } from '../../util/theme'
 
 export const CustomizedInput = (props: InputProps) => {
+  /* TODO USIKKER */
+
   const customOverrides: InputOverrides = {
     InputContainer: {
       style: {
