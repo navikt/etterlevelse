@@ -23,8 +23,36 @@ const kravBreadCrumbPath: IBreadcrumbPaths = {
 const maxInputWidth = '400px'
 const modalWidth = '1276px'
 
+const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) => {
+  console.log('getQueryVariableFromParams', params)
+
+  if (params.id) {
+    console.log('params.id', params.id)
+
+    return { id: params.id }
+  } else if (params.kravNummer && params.kravVersjon) {
+    return {
+      kravNummer: parseInt(params.kravNummer),
+      kravVersjon: parseInt(params.kravVersjon),
+    }
+  } else {
+    return undefined
+  }
+}
+
 export const KravEditPage = () => {
   const params = useParams<TKravIdParams>()
+  const {
+    loading: kravLoading,
+    data: kravQuery,
+    refetch: reloadKrav,
+  } = useQuery<{ kravById: TKravQL }, KravIdQueryVariables>(getKravWithEtterlevelseQuery, {
+    variables: getQueryVariableFromParams(params),
+    skip: (!params.id || params.id === 'ny') && !params.kravNummer,
+    fetchPolicy: 'no-cache',
+  })
+  console.log('params', params)
+
   const [krav, setKrav] = useState<TKravQL | undefined>()
   const [newKrav, setNewKrav] = useState<boolean>(false)
   const formRef = useRef<FormikProps<any>>()
@@ -174,29 +202,6 @@ export const KravEditPage = () => {
   //   return breadcrumbPaths
   // }
 
-  const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) => {
-    if (params.id) {
-      return { id: params.id }
-    } else if (params.kravNummer && params.kravVersjon) {
-      return {
-        kravNummer: parseInt(params.kravNummer),
-        kravVersjon: parseInt(params.kravVersjon),
-      }
-    } else {
-      return undefined
-    }
-  }
-
-  const {
-    loading: kravLoading,
-    data: kravQuery,
-    refetch: reloadKrav,
-  } = useQuery<{ kravById: TKravQL }, KravIdQueryVariables>(getKravWithEtterlevelseQuery, {
-    variables: getQueryVariableFromParams(params),
-    skip: (!params.id || params.id === 'ny') && !params.kravNummer,
-    fetchPolicy: 'no-cache',
-  })
-
   // const newVersion = () => {
   //   if (!krav) return
   //   setKravId({ id: krav.id, kravVersjon: krav.kravVersjon })
@@ -237,8 +242,12 @@ export const KravEditPage = () => {
   }, [krav])
 
   useEffect(() => {
+    console.log('kravQuery efw', kravQuery)
+
     if (kravQuery?.kravById) setKrav(kravQuery.kravById)
   }, [kravQuery])
+
+  console.log('kravQuery', kravQuery)
 
   useEffect(() => {
     if (params.id === 'ny') {

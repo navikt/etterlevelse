@@ -95,6 +95,8 @@ export const KravPage = () => {
   const slettKravButtonShouldOnlyBeVisibleOnUtkast = krav?.status === EKravStatus.UTKAST
 
   React.useEffect(() => {
+    console.log('krav', krav)
+
     if (krav) {
       getKravByKravNummer(krav.kravNummer).then((resp) => {
         if (resp.content.length) {
@@ -135,6 +137,8 @@ export const KravPage = () => {
   useEffect(() => {
     if (tab !== state?.tab) changeState({ tab })
   }, [tab])
+
+  console.log('kravQuery', kravQuery)
 
   useEffect(() => {
     if (kravQuery?.kravById) setKrav(kravQuery.kravById)
