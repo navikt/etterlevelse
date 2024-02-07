@@ -9,19 +9,14 @@ import {
   Loader,
   Modal,
 } from '@navikt/ds-react'
-import { Formik } from 'formik'
+import { Formik, FormikProps } from 'formik'
 import _ from 'lodash'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Form, useParams } from 'react-router-dom'
 import * as yup from 'yup'
 import { getEtterlevelserByKravNumberKravVersion } from '../../../api/EtterlevelseApi'
-import {
-  createKrav,
-  getKravByKravNumberAndVersion,
-  kravMapToFormVal,
-  updateKrav,
-} from '../../../api/KravApi'
-import { EKravStatus, EYupErrorMessage, IKrav, IKravVersjon, TKravQL } from '../../../constants'
+import { getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav } from '../../../api/KravApi'
+import { EKravStatus, EYupErrorMessage, IKravVersjon, TKravQL } from '../../../constants'
 import { kravNumView } from '../../../pages/KravPage'
 import { getKravWithEtterlevelseQuery } from '../../../query/KravQuery'
 import { EListName, TTemaCode, codelist } from '../../../services/Codelist'
@@ -38,31 +33,18 @@ import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
 import { RegelverkEdit } from './RegelverkEdit'
 
-type TEditKravProps = {
-  krav: TKravQL
-  close: (k?: IKrav) => void
-  formRef: React.Ref<any>
-  isOpen: boolean | undefined
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean | undefined>>
-  newVersion?: boolean
-  newKrav?: boolean
-  alleKravVersjoner: IKravVersjon[]
-}
-
 const maxInputWidth = '400px'
 const modalWidth = '1276px'
 
-export const KravEditPage = ({
-  close,
-  formRef,
-  isOpen,
-  setIsOpen,
-  newVersion,
-  newKrav,
-  alleKravVersjoner,
-}: TEditKravProps) => {
+export const KravEditPage = () => {
   const params = useParams()
-  const [krav, setKrav] = useState<TKravQL>()
+  const [krav, setKrav] = useState<TKravQL | undefined>()
+  const [newKrav, setNewKrav] = useState<boolean>(false)
+  const formRef = useRef<FormikProps<any>>()
+  const [newVersion, setNewVersion] = useState<boolean>(false)
+  const [alleKravVersjoner, setAlleKravVersjoner] = useState<IKravVersjon[]>([
+    { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
+  ])
 
   const [stickyHeader, setStickyHeader] = useState(false)
   const [kravTema, setKravTema] = useState<TTemaCode>()
@@ -97,10 +79,8 @@ export const KravEditPage = ({
       )
       setShowErrorModal(true)
     } else if (krav.id) {
-      close(await updateKrav(mutatedKrav))
       setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
     } else {
-      close(await createKrav(mutatedKrav))
       setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
     }
   }
@@ -583,7 +563,6 @@ export const KravEditPage = ({
                           variant="secondary"
                           type="button"
                           onClick={() => {
-                            setIsOpen(false)
                             handleReset()
                           }}
                         >
