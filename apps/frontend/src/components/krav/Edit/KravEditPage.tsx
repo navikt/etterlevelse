@@ -197,13 +197,13 @@ export const KravEditPage = () => {
     fetchPolicy: 'no-cache',
   })
 
-  const newVersion = () => {
-    if (!krav) return
-    setKravId({ id: krav.id, kravVersjon: krav.kravVersjon })
-    setKrav({ ...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true })
-    setEdit(true)
-    setNewVersionWarning(true)
-  }
+  // const newVersion = () => {
+  //   if (!krav) return
+  //   setKravId({ id: krav.id, kravVersjon: krav.kravVersjon })
+  //   setKrav({ ...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true })
+  //   setEdit(true)
+  //   setNewVersionWarning(true)
+  // }
 
   useEffect(() => {
     // hent krav på ny ved avbryt ny versjon
