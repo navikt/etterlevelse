@@ -3,21 +3,34 @@ import { Loader } from '@navikt/ds-react'
 import { Formik, FormikProps } from 'formik'
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { getKravByKravNummer, kravMapToFormVal } from '../../../api/KravApi'
-import { EKravStatus, IKravVersjon, TKravQL } from '../../../constants'
+import {
+  TKravId as KravIdQueryVariables,
+  TKravIdParams,
+  getKravByKravNummer,
+  kravMapToFormVal,
+} from '../../../api/KravApi'
+import { EKravStatus, IKravId, IKravVersjon, TKravQL } from '../../../constants'
 import { getKravWithEtterlevelseQuery } from '../../../query/KravQuery'
 import { EListName, TTemaCode, codelist } from '../../../services/Codelist'
+import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
 import { PageLayout } from '../../scaffold/Page'
+
+const kravBreadCrumbPath: IBreadcrumbPaths = {
+  href: '/krav/redigering',
+  pathName: 'Forvalte og opprette krav',
+}
 
 const maxInputWidth = '400px'
 const modalWidth = '1276px'
 
 export const KravEditPage = () => {
-  const params = useParams()
+  const params = useParams<TKravIdParams>()
   const [krav, setKrav] = useState<TKravQL | undefined>()
   const [newKrav, setNewKrav] = useState<boolean>(false)
   const formRef = useRef<FormikProps<any>>()
-  const [newVersion, setNewVersion] = useState<boolean>(false)
+  const [edit, setEdit] = useState(krav && !krav.id)
+  const [kravId, setKravId] = useState<IKravId>()
+  const [newVersionWarning, setNewVersionWarning] = useState<boolean>(false)
   const [alleKravVersjoner, setAlleKravVersjoner] = useState<IKravVersjon[]>([
     { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
   ])
@@ -161,16 +174,45 @@ export const KravEditPage = () => {
   //   return breadcrumbPaths
   // }
 
-  const { loading: kravLoading, data: kravQuery } = useQuery<{ kravById: TKravQL }>(
-    getKravWithEtterlevelseQuery,
-    {
-      variables: { id: params.id },
-      skip: (!params.id || params.id === 'ny') && !params.kravNummer,
-      fetchPolicy: 'no-cache',
+  const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) => {
+    if (params.id) {
+      return { id: params.id }
+    } else if (params.kravNummer && params.kravVersjon) {
+      return {
+        kravNummer: parseInt(params.kravNummer),
+        kravVersjon: parseInt(params.kravVersjon),
+      }
+    } else {
+      return undefined
     }
-  )
+  }
+
+  const {
+    loading: kravLoading,
+    data: kravQuery,
+    refetch: reloadKrav,
+  } = useQuery<{ kravById: TKravQL }, KravIdQueryVariables>(getKravWithEtterlevelseQuery, {
+    variables: getQueryVariableFromParams(params),
+    skip: (!params.id || params.id === 'ny') && !params.kravNummer,
+    fetchPolicy: 'no-cache',
+  })
+
+  const newVersion = () => {
+    if (!krav) return
+    setKravId({ id: krav.id, kravVersjon: krav.kravVersjon })
+    setKrav({ ...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true })
+    setEdit(true)
+    setNewVersionWarning(true)
+  }
 
   useEffect(() => {
+    // hent krav på ny ved avbryt ny versjon
+    if (!edit && !krav?.id && krav?.nyKravVersjon) reloadKrav()
+  }, [edit])
+
+  useEffect(() => {
+    console.log('krav', krav)
+
     if (krav) {
       getKravByKravNummer(krav.kravNummer).then((resp) => {
         if (resp.content.length) {
@@ -216,7 +258,12 @@ export const KravEditPage = () => {
   // }, [krav])
 
   return [
-    <PageLayout key="1">
+    <PageLayout
+      pageTitle="Opprett ny krav"
+      currentPage="Opprett ny krav"
+      breadcrumbPaths={[kravBreadCrumbPath]}
+      key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon}
+    >
       {kravLoading && (
         <div className="w-full flex items-center flex-col">
           <Loader size="3xlarge" />{' '}
@@ -226,7 +273,7 @@ export const KravEditPage = () => {
       <div>
         <Formik
           initialValues={
-            !newKrav && newVersion
+            !newKrav && newVersionWarning
               ? kravMapToFormVal({ ...krav, versjonEndringer: '' })
               : kravMapToFormVal(krav as TKravQL)
           }
