@@ -1,8 +1,12 @@
+import { useQuery } from '@apollo/client'
+import { Loader } from '@navikt/ds-react'
 import { FormikProps } from 'formik'
 import { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { IKravVersjon, TKravQL } from '../../../constants'
+import { getKravWithEtterlevelseQuery } from '../../../query/KravQuery'
 import { TTemaCode } from '../../../services/Codelist'
+import { PageLayout } from '../../scaffold/Page'
 
 const maxInputWidth = '400px'
 const modalWidth = '1276px'
@@ -141,14 +145,14 @@ export const KravEditPage = () => {
   //     }),
   //   })
 
-  // const { loading: kravLoading, data: kravQuery } = useQuery<{ kravById: TKravQL }>(
-  //   getKravWithEtterlevelseQuery,
-  //   {
-  //     variables: { id: params.id },
-  //     skip: (!params.id || params.id === 'ny') && !params.kravNummer,
-  //     fetchPolicy: 'no-cache',
-  //   }
-  // )
+  const { loading: kravLoading, data: kravQuery } = useQuery<{ kravById: TKravQL }>(
+    getKravWithEtterlevelseQuery,
+    {
+      variables: { id: params.id },
+      skip: (!params.id || params.id === 'ny') && !params.kravNummer,
+      fetchPolicy: 'no-cache',
+    }
+  )
 
   // const getBreadcrumPaths = () => {
   //   const breadcrumbPaths: IBreadcrumbPaths[] = [
@@ -181,7 +185,13 @@ export const KravEditPage = () => {
   // }, [krav])
 
   return [
-    <div>HEEHEHEH</div>,
+    <PageLayout key="1">
+      {kravLoading && (
+        <div className="w-full flex items-center flex-col">
+          <Loader size="3xlarge" />{' '}
+        </div>
+      )}
+    </PageLayout>,
     // <PageLayout
     //   key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon}
     //   pageTitle={
@@ -195,11 +205,6 @@ export const KravEditPage = () => {
     //   })}
     //   breadcrumbPaths={getBreadcrumPaths()}
     // >
-    //   {kravLoading && (
-    //     <div className="w-full flex items-center flex-col">
-    //       <Loader size="3xlarge" />
-    //     </div>
-    //   )}
     //   {!kravLoading && (
     //     <div>
     //       <Formik
