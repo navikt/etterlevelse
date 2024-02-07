@@ -1,11 +1,12 @@
 import { useQuery } from '@apollo/client'
 import { Loader } from '@navikt/ds-react'
-import { FormikProps } from 'formik'
-import { useRef, useState } from 'react'
+import { Formik, FormikProps } from 'formik'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { IKravVersjon, TKravQL } from '../../../constants'
+import { getKravByKravNummer, kravMapToFormVal } from '../../../api/KravApi'
+import { EKravStatus, IKravVersjon, TKravQL } from '../../../constants'
 import { getKravWithEtterlevelseQuery } from '../../../query/KravQuery'
-import { TTemaCode } from '../../../services/Codelist'
+import { EListName, TTemaCode, codelist } from '../../../services/Codelist'
 import { PageLayout } from '../../scaffold/Page'
 
 const maxInputWidth = '400px'
@@ -33,32 +34,30 @@ export const KravEditPage = () => {
   const [UtgaattKravMessage, setUtgaattKravMessage] = useState<boolean>(false)
   const [aktivKravMessage, setAktivKravMessage] = useState<boolean>(false)
 
-  // const submit = async (krav: TKravQL) => {
-  //   setIsFormDirty(false)
-  //   const regelverk = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
-  //   const underavdeling = codelist.getCode(EListName.UNDERAVDELING, regelverk?.data?.underavdeling)
-
-  //   const mutatedKrav = {
-  //     ...krav,
-  //     underavdeling: underavdeling,
-  //     varselMelding: varselMeldingActive ? krav.varselMelding : undefined,
-  //   }
-
-  //   const etterlevelser = await getEtterlevelserByKravNumberKravVersion(
-  //     krav.kravNummer,
-  //     krav.kravVersjon
-  //   )
-  //   if (etterlevelser.totalElements > 0 && krav.status === EKravStatus.UTKAST && !newVersion) {
-  //     setErrorModalMessage(
-  //       'Kravet kan ikke settes til «Utkast» når det er tilknyttet dokumentasjon av etterlevelse'
-  //     )
-  //     setShowErrorModal(true)
-  //   } else if (krav.id) {
-  //     setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
-  //   } else {
-  //     setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
-  //   }
-  // }
+  const submit = async (krav: TKravQL) => {
+    //   setIsFormDirty(false)
+    //   const regelverk = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
+    //   const underavdeling = codelist.getCode(EListName.UNDERAVDELING, regelverk?.data?.underavdeling)
+    //   const mutatedKrav = {
+    //     ...krav,
+    //     underavdeling: underavdeling,
+    //     varselMelding: varselMeldingActive ? krav.varselMelding : undefined,
+    //   }
+    //   const etterlevelser = await getEtterlevelserByKravNumberKravVersion(
+    //     krav.kravNummer,
+    //     krav.kravVersjon
+    //   )
+    //   if (etterlevelser.totalElements > 0 && krav.status === EKravStatus.UTKAST && !newVersion) {
+    //     setErrorModalMessage(
+    //       'Kravet kan ikke settes til «Utkast» når det er tilknyttet dokumentasjon av etterlevelse'
+    //     )
+    //     setShowErrorModal(true)
+    //   } else if (krav.id) {
+    //     setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
+    //   } else {
+    //     setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
+    //   }
+  }
 
   // const kravSchema = () =>
   //   yup.object({
@@ -145,15 +144,6 @@ export const KravEditPage = () => {
   //     }),
   //   })
 
-  const { loading: kravLoading, data: kravQuery } = useQuery<{ kravById: TKravQL }>(
-    getKravWithEtterlevelseQuery,
-    {
-      variables: { id: params.id },
-      skip: (!params.id || params.id === 'ny') && !params.kravNummer,
-      fetchPolicy: 'no-cache',
-    }
-  )
-
   // const getBreadcrumPaths = () => {
   //   const breadcrumbPaths: IBreadcrumbPaths[] = [
   //     {
@@ -171,9 +161,50 @@ export const KravEditPage = () => {
   //   return breadcrumbPaths
   // }
 
-  // useEffect(() => {
-  //   if (kravQuery?.kravById) setKrav(kravQuery.kravById)
-  // }, [kravQuery])
+  const { loading: kravLoading, data: kravQuery } = useQuery<{ kravById: TKravQL }>(
+    getKravWithEtterlevelseQuery,
+    {
+      variables: { id: params.id },
+      skip: (!params.id || params.id === 'ny') && !params.kravNummer,
+      fetchPolicy: 'no-cache',
+    }
+  )
+
+  useEffect(() => {
+    if (krav) {
+      getKravByKravNummer(krav.kravNummer).then((resp) => {
+        if (resp.content.length) {
+          const alleVersjoner = resp.content
+            .map((k) => {
+              return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer, kravStatus: k.status }
+            })
+            .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
+
+          const filteredVersjoner = alleVersjoner.filter((k) => k.kravStatus !== EKravStatus.UTKAST)
+
+          if (filteredVersjoner.length) {
+            setAlleKravVersjoner(filteredVersjoner)
+          }
+        }
+      })
+      const lovData = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov?.code)
+      if (lovData?.data) {
+        setKravTema(codelist.getCode(EListName.TEMA, lovData.data.tema))
+      }
+    }
+  }, [krav])
+
+  useEffect(() => {
+    if (kravQuery?.kravById) setKrav(kravQuery.kravById)
+  }, [kravQuery])
+
+  useEffect(() => {
+    if (params.id === 'ny') {
+      setKrav(kravMapToFormVal({}) as TKravQL)
+      // setEdit(true)
+      setNewKrav(true)
+    }
+  }, [params.id])
 
   // useEffect(() => {
   //   if (krav) {
@@ -191,6 +222,19 @@ export const KravEditPage = () => {
           <Loader size="3xlarge" />{' '}
         </div>
       )}
+
+      <div>
+        <Formik
+          initialValues={
+            !newKrav && newVersion
+              ? kravMapToFormVal({ ...krav, versjonEndringer: '' })
+              : kravMapToFormVal(krav as TKravQL)
+          }
+          onSubmit={submit}
+        >
+          TEST
+        </Formik>
+      </div>
     </PageLayout>,
     // <PageLayout
     //   key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon}
