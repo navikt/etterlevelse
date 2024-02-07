@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version>
+        <version>3.1.8</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>no.nav.data</groupId>
@@ -18,8 +18,7 @@
         <java.version>17</java.version>
 
         <springdoc-openapi-starter-webmvc-ui.version>2.3.0</springdoc-openapi-starter-webmvc-ui.version>
-        <hypersistence-utils-hibernate-60.version>3.7.0</hypersistence-utils-hibernate-60.version>
-        <simpleclient.version>0.16.0</simpleclient.version>
+        <hypersistence-utils-hibernate-63.version>3.7.0</hypersistence-utils-hibernate-63.version>
         <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
         <shedlock.version>5.10.2</shedlock.version>
         <commons-collections4.version>4.4</commons-collections4.version>
@@ -36,12 +35,13 @@
         <guava.version>33.0.0-jre</guava.version>
         <jna.version>5.14.0</jna.version>
         <jetbrains.annotation.version>24.1.0</jetbrains.annotation.version>
-        <stax2-api.version>4.2.2</stax2-api.version>
 
         <!-- Test -->
         <testcontainers.version>1.19.4</testcontainers.version>
         <wiremock.version>2.27.2</wiremock.version>
         <docx4j.version>11.4.9</docx4j.version>
+        
+        
     </properties>
 
     <dependencies>
@@ -80,6 +80,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
+        
         <!-- Jwt parsing and verifying -->
         <dependency>
             <groupId>com.auth0</groupId>
@@ -164,7 +165,6 @@
         <dependency>
             <groupId>com.graphql-java</groupId>
             <artifactId>graphql-java</artifactId>
-            <version>21.3</version>
         </dependency>
 
         <!-- Security -->
@@ -205,9 +205,10 @@
         </dependency>
         <dependency>
             <groupId>io.hypersistence</groupId>
-            <artifactId>hypersistence-utils-hibernate-60</artifactId>
-            <version>${hypersistence-utils-hibernate-60.version}</version>
+            <artifactId>hypersistence-utils-hibernate-63</artifactId>
+            <version>${hypersistence-utils-hibernate-63.version}</version>
         </dependency>
+
         <dependency>
             <groupId>net.javacrumbs.shedlock</groupId>
             <artifactId>shedlock-spring</artifactId>
@@ -271,17 +272,14 @@
         <dependency>
             <groupId>io.prometheus</groupId>
             <artifactId>simpleclient_hibernate</artifactId>
-            <version>${simpleclient.version}</version>
         </dependency>
         <dependency>
             <groupId>io.prometheus</groupId>
             <artifactId>simpleclient_hotspot</artifactId>
-            <version>${simpleclient.version}</version>
         </dependency>
         <dependency>
             <groupId>io.prometheus</groupId>
             <artifactId>simpleclient_caffeine</artifactId>
-            <version>${simpleclient.version}</version>
         </dependency>
 
         <!-- Util -->
@@ -339,13 +337,11 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
-            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -403,7 +399,6 @@
             <dependency>
                 <groupId>org.codehaus.woodstox</groupId>
                 <artifactId>stax2-api</artifactId>
-                <version>${stax2-api.version}</version>
             </dependency>
 
             <dependency>
