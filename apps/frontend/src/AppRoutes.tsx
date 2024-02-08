@@ -65,7 +65,7 @@ const AppRoutes = (): JSX.Element => {
       />
 
       <Route path="/krav/:id" element={<KravPage />} caseSensitive={true} />
-      <Route path="/krav/:kravNummer/:kravVersjon" element={<KravPage />} caseSensitive={true} />
+      <Route path="/krav/s:kravNummer/:kravVersjon" element={<KravPage />} caseSensitive={true} />
 
       <Route
         path="/krav/redigering/:id"
