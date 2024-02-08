@@ -26,7 +26,7 @@
         <graphql.version>21.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
 
-        <microsoft-graph.version>5.80.0</microsoft-graph.version>
+        <microsoft-graph.version>6.1.0</microsoft-graph.version>
         <msal4j.version>1.14.2</msal4j.version>
 
         <!-- transitive versions -->
