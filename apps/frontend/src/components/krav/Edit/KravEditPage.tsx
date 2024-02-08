@@ -207,23 +207,6 @@ export const KravEditPage = () => {
   //     }),
   //   })
 
-  // const getBreadcrumPaths = () => {
-  //   const breadcrumbPaths: IBreadcrumbPaths[] = [
-  //     {
-  //       pathName: 'Forstå kravene',
-  //       href: '/tema',
-  //     },
-  //   ]
-
-  //   if (kravTema?.shortName) {
-  //     breadcrumbPaths.push({
-  //       pathName: kravTema.shortName.toString(),
-  //       href: '/tema/' + kravTema.code,
-  //     })
-  //   }
-  //   return breadcrumbPaths
-  // }
-
   // const newVersion = () => {
   //   if (!krav) return
   //   setKravId({ id: krav.id, kravVersjon: krav.kravVersjon })
@@ -292,8 +275,8 @@ export const KravEditPage = () => {
     <>
       {krav && (
         <PageLayout
-          pageTitle="Opprett ny krav"
-          currentPage="Opprett ny krav"
+          pageTitle="Rediger krav"
+          currentPage="Rediger krav"
           breadcrumbPaths={[kravBreadCrumbPath]}
           key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon}
         >
@@ -335,27 +318,17 @@ export const KravEditPage = () => {
                     }
                   }}
                 >
-                  <div
-                    className={`pt-6 ${!stickyHeader ? 'pb-12' : 'pb-5'} px-24 sticky top-0 ${
-                      !stickyHeader ? 'block' : 'flex'
-                    } z-30 bg-green-800`}
-                  >
-                    {stickyHeader && (
-                      <div className="flex w-full justify-start">
-                        <BodyShort className="text-white">{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</BodyShort>
-                      </div>
-                    )}
-                    {!stickyHeader && (
+                  <div             >
+                    {(
                       <div className="w-full">
-                        <Heading level="1" size="medium" className="text-white">
+                        <Heading level="1" size="medium" >
                           {newVersionWarning
                             ? 'Ny versjon'
                             : newKrav
                               ? 'Nytt krav'
-                              : 'Rediger kravside'}
-                          :{' '}
+                              : 'Rediger krav'}
                         </Heading>
-                        <Heading level="2" size="small" className="text-white">
+                        <Heading level="2" size="small">
                           {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}{' '}
                         </Heading>
                         {newVersionWarning && (
