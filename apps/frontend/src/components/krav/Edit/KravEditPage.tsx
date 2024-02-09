@@ -475,7 +475,7 @@ export const KravEditPage = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="button_container sticky bottom-0 flex flex-col py-4 px-24 bg-gray-50 z-10">
+                    <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-bg-default">
                       {errors.status && (
                         <div className="mb-3">
                           <FormError fieldName="status" />
