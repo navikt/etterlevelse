@@ -228,37 +228,35 @@ export const KravEditPage = () => {
                       </div>
                     }
                   </div>
-                  <div>
-                    <div className="title_container py-16 px-24">
-                      <InputField marginBottom label="Krav-tittel" name="navn" />
-                      <div className="mb-14">
-                        <CheckboxGroup
-                          legend="Send varselmelding"
-                          value={varselMeldingActive}
-                          onChange={(value) => {
-                            setVarselMeldingActive(value)
-                          }}
-                        >
-                          <Checkbox value="VarselMelding">
-                            Gi kravet en varselmelding (eks. for kommende krav)
-                          </Checkbox>
-                        </CheckboxGroup>
+                  <div className="mt-5">
+                    <InputField marginBottom label="Krav-tittel" name="navn" />
+                    <div className="mb-14">
+                      <CheckboxGroup
+                        legend="Send varselmelding"
+                        value={varselMeldingActive}
+                        onChange={(value) => {
+                          setVarselMeldingActive(value)
+                        }}
+                      >
+                        <Checkbox value="VarselMelding">
+                          Gi kravet en varselmelding (eks. for kommende krav)
+                        </Checkbox>
+                      </CheckboxGroup>
 
-                        {varselMeldingActive.length > 0 && (
-                          <div className="w-full ml-8 mt-6">
-                            <TextAreaField
-                              label="Forklaring til etterlevere"
-                              name="varselMelding"
-                              maxCharacter={100}
-                              rows={2}
-                              noPlaceholder
-                            />
-                          </div>
-                        )}
-                      </div>
-                      <TextAreaField label="Hensikt" name="hensikt" height="250px" markdown />
-                      <FormError fieldName="hensikt" />
+                      {varselMeldingActive.length > 0 && (
+                        <div className="w-full ml-8 mt-6">
+                          <TextAreaField
+                            label="Forklaring til etterlevere"
+                            name="varselMelding"
+                            maxCharacter={100}
+                            rows={2}
+                            noPlaceholder
+                          />
+                        </div>
+                      )}
                     </div>
+                    <TextAreaField label="Hensikt" name="hensikt" height="250px" markdown />
+                    <FormError fieldName="hensikt" />
 
                     <div className="flex w-full justify-center">
                       <div className="w-full px-24 mb-2.5">
@@ -542,7 +540,6 @@ export const KravEditPage = () => {
                         </div>
                       </div>
                     </div>
-
                     <div className="px-24 py-12">
                       <TextAreaField
                         label="Notater (Kun synlig for kraveier)"
