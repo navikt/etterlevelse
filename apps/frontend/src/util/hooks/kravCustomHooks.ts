@@ -15,11 +15,7 @@ export interface IKravDataProps {
   >
 }
 
-export function GetKrav(params: Readonly<Partial<TKravIdParams>>): IKravDataProps | undefined {
-  return GetKravData(params)
-}
-
-function GetKravData(params: Readonly<Partial<TKravIdParams>>) {
+export function GetKravData(params: Readonly<Partial<TKravIdParams>>) {
   const {
     loading: kravLoading,
     data: kravQuery,
