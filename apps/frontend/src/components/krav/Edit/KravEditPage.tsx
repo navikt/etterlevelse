@@ -201,78 +201,72 @@ export const KravEditPage = () => {
                   }}
                 >
                   <div>
-                    {
-                      <div className="w-full">
-                        <Heading level="1" size="medium">
-                          {newVersionWarning
-                            ? 'Ny versjon'
-                            : newKrav
-                              ? 'Nytt krav'
-                              : 'Rediger krav'}
-                        </Heading>
-                        <Heading level="2" size="small">
-                          {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}{' '}
-                        </Heading>
-                        {newVersionWarning && (
-                          <Alert variant="warning">
-                            <Heading spacing size="small" level="4">
-                              Sikker på at du vil opprette en ny versjon?
-                            </Heading>
-                            Ny versjon av kravet skal opprettes når det er{' '}
-                            <strong>vesentlige endringer</strong> i kravet som gjør at{' '}
-                            <strong>teamene må revurdere</strong> sin besvarelse av kravet. Ved alle
-                            mindre justeringer, endre i det aktive kravet, og da slipper teamene å
-                            revurdere sin besvarelse.
-                          </Alert>
-                        )}
-                      </div>
-                    }
-                  </div>
-                  <div className="mt-5">
-                    <InputField marginBottom label="Krav-tittel" name="navn" />
-                    <div className="mb-14">
-                      <CheckboxGroup
-                        legend="Send varselmelding"
-                        value={varselMeldingActive}
-                        onChange={(value) => {
-                          setVarselMeldingActive(value)
-                        }}
-                      >
-                        <Checkbox value="VarselMelding">
-                          Gi kravet en varselmelding (eks. for kommende krav)
-                        </Checkbox>
-                      </CheckboxGroup>
-
-                      {varselMeldingActive.length > 0 && (
-                        <div className="w-full ml-8 mt-6">
-                          <TextAreaField
-                            label="Forklaring til etterlevere"
-                            name="varselMelding"
-                            maxCharacter={100}
-                            rows={2}
-                            noPlaceholder
-                          />
-                        </div>
+                    <div className="w-full">
+                      <Heading level="1" size="medium">
+                        {newVersionWarning ? 'Ny versjon' : newKrav ? 'Nytt krav' : 'Rediger krav'}
+                      </Heading>
+                      <Heading level="2" size="small">
+                        {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}{' '}
+                      </Heading>
+                      {newVersionWarning && (
+                        <Alert variant="warning">
+                          <Heading spacing size="small" level="4">
+                            Sikker på at du vil opprette en ny versjon?
+                          </Heading>
+                          Ny versjon av kravet skal opprettes når det er{' '}
+                          <strong>vesentlige endringer</strong> i kravet som gjør at{' '}
+                          <strong>teamene må revurdere</strong> sin besvarelse av kravet. Ved alle
+                          mindre justeringer, endre i det aktive kravet, og da slipper teamene å
+                          revurdere sin besvarelse.
+                        </Alert>
                       )}
                     </div>
-                    <TextAreaField label="Hensikt" name="hensikt" height="250px" markdown />
-                    <FormError fieldName="hensikt" />
+                    <div className="mt-5 mb-10">
+                      <InputField marginBottom label="Krav-tittel" name="navn" />
+                      <div className="mb-10">
+                        <CheckboxGroup
+                          legend="Send varselmelding"
+                          value={varselMeldingActive}
+                          onChange={(value) => {
+                            setVarselMeldingActive(value)
+                          }}
+                        >
+                          <Checkbox value="VarselMelding">
+                            Gi kravet en varselmelding (eks. for kommende krav)
+                          </Checkbox>
+                        </CheckboxGroup>
+
+                        {varselMeldingActive.length > 0 && (
+                          <div className="w-full ml-8 mt-6">
+                            <TextAreaField
+                              label="Forklaring til etterlevere"
+                              name="varselMelding"
+                              maxCharacter={100}
+                              rows={2}
+                              noPlaceholder
+                            />
+                          </div>
+                        )}
+                      </div>
+                      <TextAreaField label="Hensikt" name="hensikt" height="250px" markdown />
+                      <FormError fieldName="hensikt" />
+                    </div>
 
                     <div className="flex w-full justify-center">
-                      <div className="w-full px-24 mb-2.5">
-                        <Heading level="3" size="medium" className="mb-8">
-                          Suksesskriterier
-                        </Heading>
-                        <KravSuksesskriterierEdit
-                          setIsFormDirty={setIsFormDirty}
-                          newVersion={!!newVersionWarning}
-                        />
-
-                        <div className="mb-8">
-                          <Heading level="3" size="medium">
-                            Dokumentasjon
+                      <div className="w-full mb-2.5">
+                        <div className="mb-10">
+                          <Heading level="3" size="medium" className="mb-2">
+                            Suksesskriterier
                           </Heading>
+                          <KravSuksesskriterierEdit
+                            setIsFormDirty={setIsFormDirty}
+                            newVersion={!!newVersionWarning}
+                          />
                         </div>
+
+                        <Heading level="3" size="medium" className="mb-2">
+                          Dokumentasjon
+                        </Heading>
 
                         <MultiInputField
                           marginBottom
@@ -540,7 +534,7 @@ export const KravEditPage = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="px-24 py-12">
+                    <div className="py-12">
                       <TextAreaField
                         label="Notater (Kun synlig for kraveier)"
                         name="notat"
