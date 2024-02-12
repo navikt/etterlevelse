@@ -206,12 +206,10 @@ export const KravEditPage = () => {
 
   const close = (k: IKrav): void => {
     if (k) {
-      if (k.id !== krav?.id) {
-        navigate(`/krav/${k.kravNummer}/${k.kravVersjon}`)
-      } else {
-        reloadKrav
-      }
+      navigate(`/krav/${k.kravNummer}/${k.kravVersjon}`)
     } else if (krav?.nyKravVersjon && kravId) {
+      console.log('krav?.nyKravVersjon && kravId')
+
       setKrav({ ...krav, id: kravId.id, kravVersjon: kravId.kravVersjon })
     }
     setEdit(false)
