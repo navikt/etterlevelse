@@ -12,10 +12,10 @@ import {
   kravMapToFormVal,
   updateKrav,
 } from '../../../api/KravApi'
+import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi'
 import { EKravStatus, IKravId, IKravVersjon, TKravQL } from '../../../constants'
 import { EListName, TTemaCode, codelist } from '../../../services/Codelist'
 import { user } from '../../../services/User'
-import { GetKravData, IKravDataProps } from '../../../util/hooks/kravCustomHooks'
 import ErrorModal from '../../ErrorModal'
 import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
 import { InputField, MultiInputField, TextAreaField } from '../../common/Inputs'
@@ -34,13 +34,12 @@ const kravBreadCrumbPath: IBreadcrumbPaths = {
 }
 
 const maxInputWidth = '400px'
-const modalWidth = '1276px'
 
 export const KravEditPage = () => {
   const params: Readonly<Partial<TKravIdParams>> = useParams<TKravIdParams>()
   const kravData: IKravDataProps | undefined = GetKravData(params)
 
-  const kravQuery: { kravById: TKravQL } | undefined = kravData?.kravQuery
+  const kravQuery: TKravById | undefined = kravData?.kravQuery
   const kravLoading: boolean | undefined = kravData?.kravLoading
   const reloadKrav:
     | Promise<

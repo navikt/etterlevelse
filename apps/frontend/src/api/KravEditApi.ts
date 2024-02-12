@@ -1,12 +1,14 @@
 import { ApolloQueryResult, useQuery } from '@apollo/client'
-import { TKravId as KravIdQueryVariables, TKravIdParams } from '../../api/KravApi'
-import { TKravQL } from '../../constants'
-import { getKravWithEtterlevelseQuery } from '../../query/KravQuery'
+import { TKravQL } from '../constants'
+import { getKravWithEtterlevelseQuery } from '../query/KravQuery'
+import { TKravId as KravIdQueryVariables, TKravIdParams } from './KravApi'
+
+export type TKravById = {
+  kravById: TKravQL
+}
 
 export interface IKravDataProps {
-  kravQuery: {
-    kravById: TKravQL
-  }
+  kravQuery: TKravById
   kravLoading: boolean
   reloadKrav: Promise<
     ApolloQueryResult<{
