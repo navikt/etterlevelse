@@ -15,7 +15,7 @@ export interface IKravDataProps {
   >
 }
 
-export function GetKravData(params: Readonly<Partial<TKravIdParams>>) {
+export function GetKravData(params: Readonly<Partial<TKravIdParams>>): IKravDataProps | undefined {
   const {
     loading: kravLoading,
     data: kravQuery,
@@ -35,7 +35,20 @@ export function GetKravData(params: Readonly<Partial<TKravIdParams>>) {
   }
 }
 
-function getQueryVariableFromParams(params: Readonly<Partial<TKravIdParams>>) {
+interface IPropsID {
+  id: string
+}
+
+interface IPropsKravNummerVersjon {
+  kravNummer: number
+  kravVersjon: number
+}
+
+type TPropsGetQueryVariableFromParams = IPropsID | IPropsKravNummerVersjon | undefined
+
+function getQueryVariableFromParams(
+  params: Readonly<Partial<TKravIdParams>>
+): TPropsGetQueryVariableFromParams {
   if (params.id) {
     return { id: params.id }
   } else if (params.kravNummer && params.kravVersjon) {
