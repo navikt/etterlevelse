@@ -7,15 +7,18 @@ import { useParams } from 'react-router-dom'
 import { getEtterlevelserByKravNumberKravVersion } from '../../../api/EtterlevelseApi'
 import {
   TKravIdParams,
+  createKrav,
   getKravByKravNumberAndVersion,
   getKravByKravNummer,
   kravMapToFormVal,
   updateKrav,
 } from '../../../api/KravApi'
 import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi'
-import { EKravStatus, IKravId, IKravVersjon, TKravQL } from '../../../constants'
+import { EKravStatus, IKrav, IKravId, IKravVersjon, TKravQL } from '../../../constants'
+import { TSection } from '../../../pages/EtterlevelseDokumentasjonPage'
 import { EListName, TTemaCode, codelist } from '../../../services/Codelist'
 import { user } from '../../../services/User'
+import { useLocationState } from '../../../util/hooks'
 import ErrorModal from '../../ErrorModal'
 import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
 import { InputField, MultiInputField, TextAreaField } from '../../common/Inputs'
@@ -27,6 +30,8 @@ import { EditBegreper } from './KravBegreperEdit'
 import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
 import { RegelverkEdit } from './RegelverkEdit'
+
+type TLocationState = { tab: TSection; avdelingOpen?: string }
 
 const kravBreadCrumbPath: IBreadcrumbPaths = {
   href: '/krav/redigering',
@@ -49,6 +54,7 @@ export const KravEditPage = () => {
       >
     | undefined = kravData?.reloadKrav
 
+  const { navigate } = useLocationState<TLocationState>()
   const [krav, setKrav] = useState<TKravQL | undefined>()
   const [newKrav, setNewKrav] = useState<boolean>(false)
   const [edit, setEdit] = useState(krav && !krav.id)
@@ -88,8 +94,10 @@ export const KravEditPage = () => {
       )
       setShowErrorModal(true)
     } else if (krav.id) {
+      close(await updateKrav(mutatedKrav))
       setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
     } else {
+      close(await createKrav(mutatedKrav))
       setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
     }
   }
@@ -100,6 +108,21 @@ export const KravEditPage = () => {
     setKrav({ ...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true })
     setEdit(true)
     setNewVersionWarning(true)
+  }
+
+  const close = (k: IKrav): void => {
+    if (k) {
+      if (k.id !== krav?.id) {
+        navigate(`/krav/${k.kravNummer}/${k.kravVersjon}`)
+      } else {
+        reloadKrav
+      }
+    } else if (krav?.nyKravVersjon && kravId) {
+      setKrav({ ...krav, id: kravId.id, kravVersjon: kravId.kravVersjon })
+    }
+    setEdit(false)
+    setNewVersionWarning(false)
+    setNewKrav(false)
   }
 
   useEffect(() => {
