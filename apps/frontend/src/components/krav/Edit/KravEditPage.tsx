@@ -20,12 +20,13 @@ import { user } from '../../../services/User'
 import { useLocationState } from '../../../util/hooks'
 import ErrorModal from '../../ErrorModal'
 import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
-import { InputField, MultiInputField, TextAreaField } from '../../common/Inputs'
+import { InputField, TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 import { PageLayout } from '../../scaffold/Page'
 import { EditKravMultiOptionField } from './EditKravMultiOptionField'
 import { EditKravRelasjoner } from './EditKravRelasjoner'
 import { EditBegreper } from './KravBegreperEdit'
+import { KravEditDokumentasjon } from './KravEditDokumentasjon'
 import { kravSchema } from './KravEditPageValidation'
 import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
@@ -245,25 +246,10 @@ export const KravEditPage = () => {
                           <KravSuksesskriterierEdit newVersion={!!newVersionWarning} />
                         </div>
 
-                        <Heading level="3" size="medium" className="mb-2">
-                          Dokumentasjon
-                        </Heading>
-
-                        <MultiInputField
-                          marginBottom
+                        <KravEditDokumentasjon
                           maxInputWidth={maxInputWidth}
-                          linkLabel="Navn på kilde"
-                          name="dokumentasjon"
-                          link
-                          label="Lenke eller websaknr"
-                          tooltip="Lenke til dokumentasjon"
-                          linkTooltip={
-                            'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller WebSak.'
-                          }
-                          setErrors={() => setErrors({ dokumentasjon: 'Må ha navn på kilde' })}
+                          setErrors={setErrors}
                         />
-
-                        <FormError fieldName="dokumentasjon" />
 
                         <RegelverkEdit />
 
