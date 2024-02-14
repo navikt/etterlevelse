@@ -76,8 +76,6 @@ export const KravEditPage = () => {
   const [aktivKravMessage, setAktivKravMessage] = useState<boolean>(false)
 
   const submit = async (krav: TKravQL) => {
-    console.log('sumbit')
-
     setIsFormDirty(false)
     const regelverk = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
     const underavdeling = codelist.getCode(EListName.UNDERAVDELING, regelverk?.data?.underavdeling)
@@ -116,8 +114,6 @@ export const KravEditPage = () => {
     if (k) {
       navigate(`/krav/${k.kravNummer}/${k.kravVersjon}`)
     } else if (krav?.nyKravVersjon && kravId) {
-      console.log('krav?.nyKravVersjon && kravId')
-
       setKrav({ ...krav, id: kravId.id, kravVersjon: kravId.kravVersjon })
     }
     setEdit(false)
