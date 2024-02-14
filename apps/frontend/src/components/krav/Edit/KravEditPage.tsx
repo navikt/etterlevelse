@@ -261,7 +261,7 @@ export const KravEditPage = () => {
                               height="250px"
                               markdown
                             />
-                            <FormError fieldName={'versjonEndringer'} />
+                            <FormError fieldName="versjonEndringer" />
                           </>
                         )}
 
@@ -277,9 +277,7 @@ export const KravEditPage = () => {
                             name="relevansFor"
                             label="Legg til relevante kategorier"
                             listName={EListName.RELEVANS}
-                            tooltip={
-                              'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'
-                            }
+                            tooltip="Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n"
                           />
 
                           <FormError fieldName="relevansFor" />
@@ -329,11 +327,9 @@ export const KravEditPage = () => {
                             <div className="mr-2">
                               <Button
                                 variant="secondary"
-                                onClick={() => {
-                                  setUtgaattKravMessage(true)
-                                }}
+                                onClick={() => setUtgaattKravMessage(true)}
                                 disabled={isSubmitting}
-                                type={'button'}
+                                type="button"
                               >
                                 Sett kravet til utgått
                               </Button>
@@ -346,11 +342,9 @@ export const KravEditPage = () => {
                               <div className="mr-2">
                                 <Button
                                   variant="secondary"
-                                  onClick={() => {
-                                    setAktivKravMessage(true)
-                                  }}
+                                  onClick={() => setAktivKravMessage(true)}
                                   disabled={isSubmitting}
-                                  type={'button'}
+                                  type="button"
                                 >
                                   Sett versjonen til aktiv
                                 </Button>
