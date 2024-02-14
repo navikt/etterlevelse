@@ -26,39 +26,34 @@ export const KravSuksesskriterierEdit = ({
   setIsFormDirty,
   newVersion,
   newKrav,
-}: TKravSuksesskriterieEditProps) => {
-  return (
-    <FieldWrapper>
-      <FieldArray name={'suksesskriterier'}>
-        {(p) => (
-          <KriterieList
-            p={p}
-            setIsFormDirty={setIsFormDirty}
-            newVersion={newVersion}
-            newKrav={newKrav}
-          />
-        )}
-      </FieldArray>
-    </FieldWrapper>
-  )
-}
+}: TKravSuksesskriterieEditProps) => (
+  <FieldWrapper>
+    <FieldArray name={'suksesskriterier'}>
+      {(p) => (
+        <KriterieList
+          p={p}
+          setIsFormDirty={setIsFormDirty}
+          newVersion={newVersion}
+          newKrav={newKrav}
+        />
+      )}
+    </FieldArray>
+  </FieldWrapper>
+)
 
-const nextId = (suksesskriterier: ISuksesskriterie[]) => {
+const nextId = (suksesskriterier: ISuksesskriterie[]): number => {
   const max = _.max(suksesskriterier.map((s) => s.id)) || 0
   return max + 1
 }
 
-const KriterieList = ({
-  p,
-  setIsFormDirty,
-  newVersion,
-  newKrav,
-}: {
+interface IPropsKriterieList {
   p: FieldArrayRenderProps
   setIsFormDirty?: (v: boolean) => void
   newVersion?: boolean
   newKrav?: boolean
-}) => {
+}
+
+const KriterieList = ({ p, setIsFormDirty, newVersion, newKrav }: IPropsKriterieList) => {
   const suksesskriterier = p.form.values.suksesskriterier as ISuksesskriterie[]
 
   const AddSuksessKriterieButton = () => (
@@ -105,27 +100,23 @@ const KriterieList = ({
             >
               {suksesskriterier.map((s, i) => (
                 <Draggable key={s.id} draggableId={`${s.id}`} index={i}>
-                  {(dprov, dsnap) => {
-                    return (
-                      <div {...dprov.draggableProps} ref={dprov.innerRef}>
-                        <Kriterie
-                          s={s}
-                          nummer={i + 1}
-                          update={(updated) => p.replace(i, updated)}
-                          remove={() => {
-                            p.remove(i)
-                          }}
-                          dragHandleProps={
-                            dprov.dragHandleProps ? dprov.dragHandleProps : undefined
-                          }
-                          isDragging={dsnap.isDragging}
-                          p={p}
-                          setIsFormDirty={setIsFormDirty}
-                          newVersion={newVersion}
-                        />
-                      </div>
-                    )
-                  }}
+                  {(dprov, dsnap) => (
+                    <div {...dprov.draggableProps} ref={dprov.innerRef}>
+                      <Kriterie
+                        s={s}
+                        nummer={i + 1}
+                        update={(updated) => p.replace(i, updated)}
+                        remove={() => {
+                          p.remove(i)
+                        }}
+                        dragHandleProps={dprov.dragHandleProps ? dprov.dragHandleProps : undefined}
+                        isDragging={dsnap.isDragging}
+                        p={p}
+                        setIsFormDirty={setIsFormDirty}
+                        newVersion={newVersion}
+                      />
+                    </div>
+                  )}
                 </Draggable>
               ))}
               {provided.placeholder}
@@ -143,6 +134,18 @@ const KriterieList = ({
   )
 }
 
+interface IPropsKriterie {
+  s: ISuksesskriterie
+  nummer: number
+  update: (s: ISuksesskriterie) => void
+  remove: () => void
+  dragHandleProps?: DraggableProvidedDragHandleProps
+  isDragging: boolean
+  p: FieldArrayRenderProps
+  setIsFormDirty?: (v: boolean) => void
+  newVersion?: boolean
+}
+
 const Kriterie = ({
   s,
   nummer,
@@ -153,17 +156,7 @@ const Kriterie = ({
   p,
   setIsFormDirty,
   newVersion,
-}: {
-  s: ISuksesskriterie
-  nummer: number
-  update: (s: ISuksesskriterie) => void
-  remove: () => void
-  dragHandleProps?: DraggableProvidedDragHandleProps
-  isDragging: boolean
-  p: FieldArrayRenderProps
-  setIsFormDirty?: (v: boolean) => void
-  newVersion?: boolean
-}) => {
+}: IPropsKriterie) => {
   const debounceDelay = 500
   const [navn, setNavn, navnInput] = useDebouncedState(s.navn, debounceDelay)
   const [beskrivelse, setBeskrivelse] = useDebouncedState(s.beskrivelse || '', debounceDelay)
@@ -201,40 +194,38 @@ const Kriterie = ({
           )}
 
           <div className="ml-10" {...dragHandleProps}>
-            <DragVerticalIcon aria-label={'Dra og slipp håndtak'} />
+            <DragVerticalIcon aria-label="Dra og slipp håndtak" />
           </div>
         </div>
 
         <div>
           <LabelWithTooltip
             label={`Suksesskriterium ${nummer}`}
-            tooltip={
-              'Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'
-            }
+            tooltip="Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers."
           />
           <TextField
             label={`Suksesskriterium ${nummer}`}
             hideLabel
             value={navnInput}
             onChange={(e) => setNavn((e.target as HTMLInputElement).value)}
-            placeholder={'Navn'}
+            placeholder="Navn"
             error={
               p.form.errors &&
-              p.form.errors['suksesskriterier'] && <FormError fieldName={'suksesskriterier'} />
+              p.form.errors['suksesskriterier'] && <FormError fieldName="suksesskriterier" />
             }
           />
         </div>
 
         <div>
           <LabelWithTooltip
-            label={'Beskrivelse av suksesskriteriet'}
-            tooltip={'Nærmere detaljer rundt oppnåelse av suksesskriteriet.'}
+            label="Beskrivelse av suksesskriteriet"
+            tooltip="Nærmere detaljer rundt oppnåelse av suksesskriteriet."
           />
           {/* <MarkdownEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} /> */}
           <TextEditor
             initialValue={beskrivelse}
             setValue={setBeskrivelse}
-            height={'250px'}
+            height="250px"
             setIsFormDirty={setIsFormDirty}
           />
         </div>
