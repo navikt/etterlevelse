@@ -503,6 +503,7 @@ export const KravEditPage = () => {
                             type="button"
                             onClick={() => {
                               handleReset()
+                              navigate('/kravliste')
                             }}
                           >
                             Avbryt
