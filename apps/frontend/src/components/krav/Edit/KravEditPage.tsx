@@ -75,7 +75,7 @@ export const KravEditPage = () => {
   const [UtgaattKravMessage, setUtgaattKravMessage] = useState<boolean>(false)
   const [aktivKravMessage, setAktivKravMessage] = useState<boolean>(false)
 
-  const submit = async (krav: TKravQL) => {
+  const submit = async (krav: TKravQL): Promise<void> => {
     const regelverk = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
     const underavdeling = codelist.getCode(EListName.UNDERAVDELING, regelverk?.data?.underavdeling)
     const mutatedKrav = {
@@ -101,7 +101,7 @@ export const KravEditPage = () => {
     }
   }
 
-  const newVersion = () => {
+  const newVersion = (): void => {
     if (!krav) return
     setKravId({ id: krav.id, kravVersjon: krav.kravVersjon })
     setKrav({ ...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true })
