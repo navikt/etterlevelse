@@ -31,6 +31,7 @@ import { kravSchema } from './KravEditPageValidation'
 import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
 import { RegelverkEdit } from './RegelverkEdit'
+import { KravEditSettKravTilUtgattModal } from './components/KravEditSettKravTilUtgattModal'
 
 type TLocationState = { tab: TSection; avdelingOpen?: string }
 
@@ -367,36 +368,12 @@ export const KravEditPage = () => {
                             </div>
                           )}
 
-                          <Modal
-                            header={{
-                              closeButton: false,
-                              heading: 'Sikker på at du vil sette kravet til utgått?',
-                            }}
-                            open={UtgaattKravMessage}
-                          >
-                            <Modal.Body>Denne handligen kan ikke reverseres</Modal.Body>
-                            <Modal.Footer>
-                              <Button
-                                type="button"
-                                className="mr-4"
-                                variant="secondary"
-                                onClick={() => setUtgaattKravMessage(false)}
-                              >
-                                Nei, avbryt handlingen
-                              </Button>
-                              <Button
-                                type="button"
-                                variant="primary"
-                                onClick={() => {
-                                  values.status = EKravStatus.UTGAATT
-                                  submitForm()
-                                  setUtgaattKravMessage(false)
-                                }}
-                              >
-                                Ja, sett til utgått
-                              </Button>
-                            </Modal.Footer>
-                          </Modal>
+                          <KravEditSettKravTilUtgattModal
+                            utgaattKravMessage={UtgaattKravMessage}
+                            setUtgaattKravMessage={setUtgaattKravMessage}
+                            values={values}
+                            submitForm={submitForm}
+                          />
 
                           <Modal
                             header={{
