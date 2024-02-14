@@ -7,7 +7,6 @@ import {
   DragDropContext,
   Draggable,
   DraggableProvidedDragHandleProps,
-  DraggingStyle,
   Droppable,
 } from 'react-beautiful-dnd'
 import { EKravStatus, ISuksesskriterie } from '../../../constants'
@@ -16,7 +15,6 @@ import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { FormError } from '../../common/ModalSchema'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import { kravModal } from '../EditKrav'
 
 type TKravSuksesskriterieEditProps = {
   setIsFormDirty?: (v: boolean) => void
@@ -108,15 +106,6 @@ const KriterieList = ({
               {suksesskriterier.map((s, i) => (
                 <Draggable key={s.id} draggableId={`${s.id}`} index={i}>
                   {(dprov, dsnap) => {
-                    if (dsnap.isDragging) {
-                      // Adjust location due to modal displacements
-                      const style = dprov.draggableProps.style as DraggingStyle
-                      const offset = { x: 115, y: 15 - (kravModal()?.scrollTop || 0) }
-                      const x = style.left - offset.x
-                      const y = style.top - offset.y
-                      style.left = x
-                      style.top = y
-                    }
                     return (
                       <div {...dprov.draggableProps} ref={dprov.innerRef}>
                         <Kriterie
