@@ -273,7 +273,10 @@ export const KravPage = () => {
                         type="button"
                         size="small"
                         variant="primary"
-                        onClick={() => setEdit(!edit)}
+                        onClick={() => {
+                          setEdit(!edit)
+                          navigate(`/krav/redigering/${krav.kravNummer}/${krav.kravVersjon}/`)
+                        }}
                       >
                         Rediger krav
                       </Button>
