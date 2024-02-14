@@ -1,5 +1,5 @@
 import { ApolloQueryResult } from '@apollo/client'
-import { Alert, Button, Checkbox, CheckboxGroup, Heading, Loader, Modal } from '@navikt/ds-react'
+import { Alert, Button, Checkbox, CheckboxGroup, Heading, Loader } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -7,7 +7,6 @@ import { getEtterlevelserByKravNumberKravVersion } from '../../../api/Etterlevel
 import {
   TKravIdParams,
   createKrav,
-  getKravByKravNumberAndVersion,
   getKravByKravNummer,
   kravMapToFormVal,
   updateKrav,
@@ -32,6 +31,7 @@ import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
 import { RegelverkEdit } from './RegelverkEdit'
 import { KravEditSettKravTilUtgattModal } from './components/KravEditSettKravTilUtgattModal'
+import { KravEditSettVersjonTilAktivModal } from './components/KravEditSettVersjonTilAktivModal'
 
 type TLocationState = { tab: TSection; avdelingOpen?: string }
 
@@ -375,55 +375,15 @@ export const KravEditPage = () => {
                             submitForm={submitForm}
                           />
 
-                          <Modal
-                            header={{
-                              closeButton: false,
-                              heading: 'Sikker på at du vil sette versjonen til aktiv?',
-                            }}
-                            open={aktivKravMessage}
-                            onClose={() => setAktivKravMessage(false)}
-                          >
-                            <Modal.Body>
-                              Kravet har en nyere versjon som settes til utkast
-                            </Modal.Body>
-                            <Modal.Footer>
-                              <Button
-                                type="button"
-                                variant="primary"
-                                onClick={async () => {
-                                  const newVersionOfKrav = await getKravByKravNumberAndVersion(
-                                    krav.kravNummer,
-                                    krav.kravVersjon + 1
-                                  )
-                                  if (newVersionOfKrav) {
-                                    updateKrav(
-                                      kravMapToFormVal({
-                                        ...newVersionOfKrav,
-                                        status: EKravStatus.UTKAST,
-                                      }) as TKravQL
-                                    ).then(() => {
-                                      values.status = EKravStatus.AKTIV
-                                      submitForm()
-                                      setAktivKravMessage(false)
-                                    })
-                                  } else {
-                                    values.status = EKravStatus.AKTIV
-                                    submitForm()
-                                    setAktivKravMessage(false)
-                                  }
-                                }}
-                              >
-                                Ja, sett til aktiv
-                              </Button>
-                              <Button
-                                type="button"
-                                variant="secondary"
-                                onClick={() => setAktivKravMessage(false)}
-                              >
-                                Nei, avbryt handlingen
-                              </Button>
-                            </Modal.Footer>
-                          </Modal>
+                          <KravEditSettVersjonTilAktivModal
+                            aktivKravMessage={aktivKravMessage}
+                            setAktivKravMessage={setAktivKravMessage}
+                            krav={krav}
+                            updateKrav={updateKrav}
+                            kravMapToFormVal={kravMapToFormVal}
+                            values={values}
+                            submitForm={submitForm}
+                          />
                         </div>
                         <div className="flex w-full justify-end">
                           <Button
