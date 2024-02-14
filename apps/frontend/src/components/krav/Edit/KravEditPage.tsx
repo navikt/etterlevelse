@@ -35,7 +35,7 @@ import { RegelverkEdit } from './RegelverkEdit'
 type TLocationState = { tab: TSection; avdelingOpen?: string }
 
 const kravBreadCrumbPath: IBreadcrumbPaths = {
-  href: '/krav/redigering',
+  href: '/kravliste',
   pathName: 'Forvalte og opprette krav',
 }
 
