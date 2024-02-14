@@ -1,8 +1,8 @@
 import { Heading } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
-import { TKravQL } from '../../../constants'
-import { MultiInputField } from '../../common/Inputs'
-import { FormError } from '../../common/ModalSchema'
+import { TKravQL } from '../../../../constants'
+import { MultiInputField } from '../../../common/Inputs'
+import { FormError } from '../../../common/ModalSchema'
 
 interface IPropsKravEditDokumentasjon {
   maxInputWidth: string
