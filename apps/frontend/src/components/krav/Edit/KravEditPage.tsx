@@ -475,7 +475,11 @@ export const KravEditPage = () => {
                             type="button"
                             onClick={() => {
                               handleReset()
-                              navigate('/kravliste')
+                              if (krav.kravNummer && krav.kravVersjon) {
+                                navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
+                              } else {
+                                navigate('/kravliste')
+                              }
                             }}
                           >
                             Avbryt
