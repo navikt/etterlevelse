@@ -1,8 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { BodyLong, BodyShort, Button, Heading, Spacer, Tabs } from '@navikt/ds-react'
-import { FormikProps } from 'formik'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
   TKravId as KravIdQueryVariables,
@@ -16,13 +15,12 @@ import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
 import StatusTag from '../components/common/StatusTag'
-import { EditKrav } from '../components/krav/EditKrav'
 import Etterlevelser from '../components/krav/Etterlevelser'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
 import { AllInfo, ViewKrav } from '../components/krav/ViewKrav'
 import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
 import { PageLayout } from '../components/scaffold/Page'
-import { EKravStatus, IKrav, IKravId, IKravVersjon, TKravQL } from '../constants'
+import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../constants'
 import { getKravWithEtterlevelseQuery } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'
@@ -66,7 +64,6 @@ const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) =>
 export const KravPage = () => {
   const params = useParams<TKravIdParams>()
   const [krav, setKrav] = useState<TKravQL | undefined>()
-  const [kravId, setKravId] = useState<IKravId>()
   const {
     loading: kravLoading,
     data: kravQuery,
@@ -89,8 +86,6 @@ export const KravPage = () => {
     { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
   ])
   const [kravTema, setKravTema] = useState<TTemaCode>()
-  const [newVersionWarning, setNewVersionWarning] = useState<boolean>(false)
-  const [newKrav, setNewKrav] = useState<boolean>(false)
 
   const slettKravButtonShouldOnlyBeVisibleOnUtkast = krav?.status === EKravStatus.UTKAST
 
@@ -144,7 +139,6 @@ export const KravPage = () => {
     if (params.id === 'ny') {
       setKrav(kravMapToFormVal({}) as TKravQL)
       setEdit(true)
-      setNewKrav(true)
     }
   }, [params.id])
 
@@ -160,14 +154,11 @@ export const KravPage = () => {
   const etterlevelserLoading = kravLoading
 
   const [edit, setEdit] = useState(krav && !krav.id)
-  const formRef = useRef<FormikProps<any>>()
 
   const newVersion = () => {
     if (!krav) return
-    setKravId({ id: krav.id, kravVersjon: krav.kravVersjon })
     setKrav({ ...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true })
     setEdit(true)
-    setNewVersionWarning(true)
   }
 
   const getBreadcrumPaths = () => {
@@ -310,32 +301,6 @@ export const KravPage = () => {
             </div>
           </div>
         </div>
-      )}
-
-      {krav && (
-        <EditKrav
-          isOpen={edit}
-          setIsOpen={setEdit}
-          krav={krav}
-          formRef={formRef}
-          newVersion={newVersionWarning}
-          newKrav={newKrav}
-          alleKravVersjoner={alleKravVersjoner}
-          close={(k) => {
-            if (k) {
-              if (k.id !== krav.id) {
-                navigate(`/krav/${k.kravNummer}/${k.kravVersjon}`)
-              } else {
-                reloadKrav()
-              }
-            } else if (krav.nyKravVersjon && kravId) {
-              setKrav({ ...krav, id: kravId.id, kravVersjon: kravId.kravVersjon })
-            }
-            setEdit(false)
-            setNewVersionWarning(false)
-            setNewKrav(false)
-          }}
-        />
       )}
     </PageLayout>
   )

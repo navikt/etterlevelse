@@ -1,7 +1,6 @@
 import { ApolloQueryResult } from '@apollo/client'
 import { Alert, Button, Checkbox, CheckboxGroup, Heading, Loader, Modal } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
-import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getEtterlevelserByKravNumberKravVersion } from '../../../api/EtterlevelseApi'
@@ -65,7 +64,6 @@ export const KravEditPage = () => {
     { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
   ])
 
-  const [isFormDirty, setIsFormDirty] = useState<boolean>(false)
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [errorModalMessage, setErrorModalMessage] = useState('')
   const [varselMeldingActive, setVarselMeldingActive] = useState<string[]>(
@@ -76,7 +74,6 @@ export const KravEditPage = () => {
   const [aktivKravMessage, setAktivKravMessage] = useState<boolean>(false)
 
   const submit = async (krav: TKravQL) => {
-    setIsFormDirty(false)
     const regelverk = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
     const underavdeling = codelist.getCode(EListName.UNDERAVDELING, regelverk?.data?.underavdeling)
     const mutatedKrav = {
@@ -186,29 +183,8 @@ export const KravEditPage = () => {
               onSubmit={submit}
               validationSchema={kravSchema({ newKrav, krav, alleKravVersjoner })}
             >
-              {({
-                values,
-                errors,
-                isSubmitting,
-                handleReset,
-                submitForm,
-                setErrors,
-                initialValues,
-              }) => (
-                <Form
-                  onChange={() => {
-                    if (
-                      !_.isEqual(initialValues, {
-                        ...values,
-                        suksesskriterier: values.suksesskriterier.map((s) => {
-                          return { ...s, __typename: 'Suksesskriterie' }
-                        }),
-                      })
-                    ) {
-                      setIsFormDirty(true)
-                    }
-                  }}
-                >
+              {({ values, errors, isSubmitting, handleReset, submitForm, setErrors }) => (
+                <Form>
                   <div>
                     <div className="w-full">
                       <Heading level="1" size="medium">
@@ -231,7 +207,7 @@ export const KravEditPage = () => {
                       )}
                     </div>
                     <div className="mt-5 mb-10">
-                      <InputField marginBottom label="Krav-tittel" name="navn" />
+                      <InputField marginBottom label="Krav navn" name="navn" />
                       <div className="mb-10">
                         <CheckboxGroup
                           legend="Send varselmelding"
@@ -258,7 +234,6 @@ export const KravEditPage = () => {
                         )}
                       </div>
                       <TextAreaField label="Hensikt" name="hensikt" height="250px" markdown />
-                      <FormError fieldName="hensikt" />
                     </div>
 
                     <div className="flex w-full justify-center">
@@ -267,10 +242,7 @@ export const KravEditPage = () => {
                           <Heading level="3" size="medium" className="mb-2">
                             Suksesskriterier
                           </Heading>
-                          <KravSuksesskriterierEdit
-                            setIsFormDirty={setIsFormDirty}
-                            newVersion={!!newVersionWarning}
-                          />
+                          <KravSuksesskriterierEdit newVersion={!!newVersionWarning} />
                         </div>
 
                         <Heading level="3" size="medium" className="mb-2">
@@ -292,8 +264,8 @@ export const KravEditPage = () => {
                         />
 
                         <FormError fieldName="dokumentasjon" />
+
                         <RegelverkEdit />
-                        <FormError fieldName="regelverk" />
 
                         {!newKrav && krav.kravVersjon > 1 && (
                           <>
@@ -343,7 +315,7 @@ export const KravEditPage = () => {
 
                         <KravVarslingsadresserEdit />
 
-                        <FormError fieldName="varslingsadresser" />
+                        <FormError fieldName="varslingsadresser" akselStyling />
 
                         <div className="w-full">
                           {Object.keys(errors).length > 0 && !errors.dokumentasjon && (
