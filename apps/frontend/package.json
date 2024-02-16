@@ -61,14 +61,14 @@
     "format": "prettier --write \"./src\"",
     "prettier": "prettier --write \"./src\"",
     "prepare": "cd ../../ && husky apps/frontend/.husky",
-    "type-check": "tsc --project tsconfig.json"
+    "type-check": "tsc --project tsconfig.json",
+    "playwright": "playwright test"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "prettier --list-different --write",
       "eslint --max-warnings 0",
-      "bash -c 'yarn run type-check'",
-      "playwright test"
+      "bash -c 'yarn run type-check'"
     ]
   },
   "eslintConfig": {
