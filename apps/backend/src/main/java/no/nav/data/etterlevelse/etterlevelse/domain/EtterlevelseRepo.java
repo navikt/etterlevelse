@@ -1,9 +1,11 @@
 package no.nav.data.etterlevelse.etterlevelse.domain;
 
+import jakarta.transaction.Transactional;
 import no.nav.data.common.storage.domain.GenericStorage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -32,4 +34,8 @@ public interface EtterlevelseRepo extends JpaRepository<GenericStorage<Etterleve
     @Query(value = "select * from generic_storage where data ->> 'etterlevelseDokumentasjonId' = ?1 and data-> 'kravNummer' = to_jsonb(?2) and type = 'Etterlevelse'", nativeQuery = true)
     List<GenericStorage<Etterlevelse>> findByEtterlevelseDokumentasjonIdAndKravNummer(String etterlevelseDokumentasjonId, int nummer);
 
+    @Modifying
+    @Transactional
+    @Query(value = "delete from generic_storage where data ->> 'etterlevelseDokumentasjonId' = ?1 and type = 'Etterlevelse'", nativeQuery = true)
+    List<GenericStorage<Etterlevelse>> deleteByEtterlevelseDokumentasjonId(String etterlevelseDokumentasjonId);
 }

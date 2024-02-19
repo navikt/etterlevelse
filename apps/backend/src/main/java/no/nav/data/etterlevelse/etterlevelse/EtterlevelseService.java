@@ -70,6 +70,10 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
         return storage.save(etterlevelse);
     }
 
+    public List<Etterlevelse> deleteByEtterlevelseDokumentasjonId(String etterlevelseDokumentasjonId) {
+        return convertToDomaionObject(etterlevelseRepo.deleteByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId));
+    }
+
     public Etterlevelse delete(UUID id) {
         return storage.delete(id);
     }
