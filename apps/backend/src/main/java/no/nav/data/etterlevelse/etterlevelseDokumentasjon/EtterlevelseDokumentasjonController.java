@@ -132,4 +132,8 @@ public class EtterlevelseDokumentasjonController {
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.deleteEtterlevelseDokumentasjonAndAllChildren(id);
         return ResponseEntity.ok(etterlevelseDokumentasjon.toResponse());
     }
+
+    static class EtterlevelseDokumentasjonPage extends RestResponsePage<EtterlevelseDokumentasjonResponse> {
+
+    }
 }

@@ -35,6 +35,6 @@ public interface EtterlevelseMetadataRepo extends JpaRepository<GenericStorage<E
 
     @Modifying
     @Transactional
-    @Query(value = "delete from generic_storage where type = 'EtterlevelseMetadata' and data ->> 'etterlevelseDokumentasjonId' = ?1", nativeQuery = true)
+    @Query(value = "delete from generic_storage where type = 'EtterlevelseMetadata' and data ->> 'etterlevelseDokumentasjonId' = ?1 returning *", nativeQuery = true)
     List<GenericStorage<EtterlevelseMetadata>> deleteByEtterlevelseDokumentasjonId(String etterlevelseDokumentasjonId);
 }
