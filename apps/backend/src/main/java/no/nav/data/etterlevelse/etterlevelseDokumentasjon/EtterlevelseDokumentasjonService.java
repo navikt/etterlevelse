@@ -43,11 +43,11 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     private final EtterlevelseArkivService etterlevelseArkivService;
     private final TeamcatTeamClient teamcatTeamClient;
 
-    public EtterlevelseDokumentasjonService(BehandlingService behandlingService, EtterlevelseMetadataService etterlevelseMetadataService, EtterlevelseService etterlevelseService, EtterlevelseArkivService etterlevelseArkivService, TeamcatTeamClient teamcatTeamClient) {
+    public EtterlevelseDokumentasjonService(BehandlingService behandlingService, EtterlevelseMetadataService etterlevelseMetadataService, EtterlevelseService etterlevelseService, EtterlevelseArkivService etterlevelseArkivService, EtterlevelseArkivService etterlevelseArkivService1, TeamcatTeamClient teamcatTeamClient) {
         this.behandlingService = behandlingService;
         this.etterlevelseMetadataService = etterlevelseMetadataService;
         this.etterlevelseService = etterlevelseService;
-        this.etterlevelseArkivService = etterlevelseArkivService;
+        this.etterlevelseArkivService = etterlevelseArkivService1;
         this.teamcatTeamClient = teamcatTeamClient;
     }
 

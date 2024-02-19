@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 
 import no.nav.data.IntegrationTestBase;
+import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
@@ -52,6 +53,10 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
         etterlevelseStorageService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).build());
         etterlevelseStorageService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_2.getId().toString()).build());
 
+        etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).build());
+        etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).build());
+        etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_2.getId().toString()).build());
+
         etterlevelseMetadataStorageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).kravNummer(200).build());
         etterlevelseMetadataStorageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).kravNummer(200).build());
         etterlevelseMetadataStorageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_2.getId().toString()).kravNummer(200).build());
@@ -61,6 +66,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
         assertThat(etterlevelseDokumentasjonStorageService.getAll(EtterlevelseDokumentasjon.class)).isNotNull();
         assertThat(etterlevelseStorageService.getAll(Etterlevelse.class)).isNotNull();
         assertThat(etterlevelseMetadataStorageService.getAll(EtterlevelseMetadata.class)).isNotNull();
+        assertThat(etterlevelseArkivStorageService.getAll(EtterlevelseArkiv.class)).isNotNull();
 
     }
 
