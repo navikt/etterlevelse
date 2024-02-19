@@ -35,7 +35,7 @@ public interface EtterlevelseRepo extends JpaRepository<GenericStorage<Etterleve
     List<GenericStorage<Etterlevelse>> findByEtterlevelseDokumentasjonIdAndKravNummer(String etterlevelseDokumentasjonId, int nummer);
 
     @Modifying
-    @Transactional
+    @Transactional(Transactional.TxType.REQUIRED)
     @Query(value = "delete from generic_storage where data ->> 'etterlevelseDokumentasjonId' = ?1 and type = 'Etterlevelse' returning *", nativeQuery = true)
     List<GenericStorage<Etterlevelse>> deleteByEtterlevelseDokumentasjonId(String etterlevelseDokumentasjonId);
 }
