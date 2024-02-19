@@ -27,9 +27,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -39,6 +36,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
 
 @Service
 public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
@@ -220,6 +219,10 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         etterlevelseArkiv.convert(request);
 
         return storage.save(etterlevelseArkiv);
+    }
+
+    public List<EtterlevelseArkiv> deleteByEtterlevelseDokumentsjonId(String etterlevelseDokumentasjonId){
+        return convertToDomaionObject(repo.deleteByEtterlevelseDokumentsjonId(etterlevelseDokumentasjonId));
     }
 
     public EtterlevelseArkiv delete(UUID id) {
