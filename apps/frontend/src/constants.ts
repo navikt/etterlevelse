@@ -19,6 +19,10 @@ export type TOption = Readonly<{
   label?: React.ReactNode
 }>
 
+export enum EKrav {
+  KRAV = 'Forvalte og opprette krav',
+}
+
 export enum ETilbakemeldingMeldingStatus {
   UBESVART = 'UBESVART',
   BESVART = 'BESVART',

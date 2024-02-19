@@ -15,7 +15,7 @@ import { useState } from 'react'
 import { Location, useLocation } from 'react-router-dom'
 import { writeLog } from '../api/LogApi'
 import { getMeldingByType } from '../api/MeldingApi'
-import { EAlertType, EMeldingStatus, EMeldingType, IMelding } from '../constants'
+import { EAlertType, EKrav, EMeldingStatus, EMeldingType, IMelding } from '../constants'
 import { ampli } from '../services/Amplitude'
 import { user } from '../services/User'
 import { useQueryParam } from '../util/hooks'
@@ -101,7 +101,7 @@ const LoggedInHeader = () => {
 
   const kravPages = user.isKraveier()
     ? [
-        { label: 'Forvalte og opprette krav', href: '/kravliste' },
+        { label: EKrav.KRAV, href: '/kravliste' },
         //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
       ]
     : []

@@ -12,7 +12,7 @@ import {
   updateKrav,
 } from '../../../api/KravApi'
 import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi'
-import { EKravStatus, IKrav, IKravId, IKravVersjon, TKravQL } from '../../../constants'
+import { EKrav, EKravStatus, IKrav, IKravId, IKravVersjon, TKravQL } from '../../../constants'
 import { TSection } from '../../../pages/EtterlevelseDokumentasjonPage'
 import { EListName, codelist } from '../../../services/Codelist'
 import { user } from '../../../services/User'
@@ -37,7 +37,7 @@ type TLocationState = { tab: TSection; avdelingOpen?: string }
 
 const kravBreadCrumbPath: IBreadcrumbPaths = {
   href: '/kravliste',
-  pathName: 'Forvalte og opprette krav',
+  pathName: EKrav.KRAV,
 }
 
 const maxInputWidth = '400px'
