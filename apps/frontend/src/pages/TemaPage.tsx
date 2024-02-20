@@ -116,7 +116,7 @@ const TemaView = ({ tema }: { tema: TTemaCode }) => {
         <Label>{loading ? '?' : data?.krav.numberOfElements || 0} krav</Label>
         {loading && <SkeletonPanel count={10} />}
         {!loading && kravList && (
-          <div className="grid gap-2 lg:grid-cols-2">
+          <div className="grid gap-2 ">
             {kravList.map((k, index) => (
               <LinkPanel
                 href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
