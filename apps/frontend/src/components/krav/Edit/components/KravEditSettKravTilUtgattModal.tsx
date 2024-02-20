@@ -20,6 +20,7 @@ export const KravEditSettKravTilUtgattModal = ({
       heading: 'Sikker på at du vil sette kravet til utgått?',
     }}
     open={utgaattKravMessage}
+    onClose={() => setUtgaattKravMessage(false)}
   >
     <Modal.Body>Denne handligen kan ikke reverseres</Modal.Body>
     <Modal.Footer>

@@ -35,8 +35,8 @@ const CodeView = ({ audit }: { audit: IAuditItem }) => {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         className="max-h-[75%] overflow-y-scroll"
+        header={{heading: "Data visning"}}
       >
-        <Modal.Header>Data visning</Modal.Header>
         <Modal.Body>
           <JsonView data={audit.data} />
         </Modal.Body>

@@ -67,6 +67,7 @@ export const ArkiveringModal = ({
         setIsArchivingCancelled(false)
         setArkivModal(false)
       }}
+      aria-label="Arkiverings modal"
     >
       <ModalHeader>
         {etterlevelseArkiv && etterlevelseArkiv.status === EEtterlevelseArkivStatus.TIL_ARKIVERING

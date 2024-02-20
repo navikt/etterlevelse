@@ -47,6 +47,7 @@ export const EditNotatfelt = ({
       onClose={() => {
         setIsNotatfeltOpen(false)
       }}
+      aria-label="Notat"
     >
       <Modal.Header>
         <div className="flex items-center">

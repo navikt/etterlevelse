@@ -71,7 +71,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
   }
 
   return (
-    <Modal className="max-w-xl w-full" open={open} onClose={() => close()}>
+    <Modal className="max-w-xl w-full" open={open} onClose={() => close()} header={{heading: "Spørsmål til kraveier"}}>
       <Formik
         onSubmit={submit}
         initialValues={newTilbakemelding(krav) as ICreateTilbakemeldingRequest}
@@ -86,9 +86,6 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
           }
           return (
             <Form>
-              <Modal.Header>
-                <Heading size="large">Spørsmål til kraveier</Heading>
-              </Modal.Header>
               <Modal.Body>
                 {showNotification ? (
                   <Box className="mb-9" padding="8">

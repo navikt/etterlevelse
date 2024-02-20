@@ -15,7 +15,7 @@ export const EtterlevelseModal = ({
   kravData: IKrav
 }) => {
   return (
-    <Modal className="w-full max-w-4xl" onClose={() => setIsModalOpen(false)} open={isModalOpen}>
+    <Modal className="w-full max-w-4xl" onClose={() => setIsModalOpen(false)} open={isModalOpen} aria-label="Etterlevelse Modal">
       <Modal.Header className="w-full">
         <BodyShort>{kravNumView(kravData)}</BodyShort>
         <Heading size="medium" level="1">

@@ -41,8 +41,8 @@ const ComparisonView = (props: TComparisonViewProps) => {
         onClose={() => setModalOpen(false)}
         width="75%"
         className="h-3/4 overflow-y-scroll"
+        header={{heading: "Sammenligning"}}
       >
-        <Modal.Header />
         <Modal.Body>
           <Viewer
             diff={new Differ().diff(

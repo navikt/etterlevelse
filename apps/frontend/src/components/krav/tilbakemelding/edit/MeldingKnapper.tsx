@@ -44,8 +44,7 @@ export const MeldingKnapper = (props: {
       </div>
 
       {deleteModal && (
-        <Modal open onClose={() => setDeleteModal(false)}>
-          <Modal.Header>Er du sikker på at du vil slette meldingen?</Modal.Header>
+        <Modal open onClose={() => setDeleteModal(false)} header={{heading: "Er du sikker på at du vil slette meldingen?"}}>
           <Modal.Body>
             {meldingNr === 1 && <BodyShort>Hele meldingstråden vil bli slettet.</BodyShort>}
             <BodyShort className="flex">
@@ -80,8 +79,7 @@ export const MeldingKnapper = (props: {
       )}
 
       {editModal && (
-        <Modal open={editModal} onClose={() => setEditModal(false)} className="w-2/3">
-          <Modal.Header>Rediger melding</Modal.Header>
+        <Modal open={editModal} onClose={() => setEditModal(false)} className="w-2/3" header={{heading: "Rediger melding"}}>
           <Modal.Body>
             <BodyShort className="flex">
               {moment(melding.tid).format('ll')}{' '}
