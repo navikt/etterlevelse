@@ -53,6 +53,7 @@ public class EtterlevelseArkivController {
     private final EtterlevelseService etterlevelseService;
 
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+    private final EtterlevelseArkivToDocService etterlevelseArkivToDocService;
 
     @Operation(summary = "Get all etterlevelsearkiv")
     @ApiResponse(description = "Ok")
@@ -109,7 +110,7 @@ public class EtterlevelseArkivController {
 
         List<EtterlevelseArkiv> etterlevelseArkivList = etterlevelseArkivService.setStatusToBehandler_arkivering();
 
-        byte[] etterlevelserArchiveZip = etterlevelseArkivService.getEtterlevelserArchiveZip(etterlevelseArkivList);
+        byte[] etterlevelserArchiveZip = etterlevelseArkivToDocService.getEtterlevelserArchiveZip(etterlevelseArkivList);
 
         response.setContentType("application/zip");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=archive.zip");

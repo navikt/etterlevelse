@@ -129,7 +129,11 @@ public class EtterlevelseDokumentasjonController {
     @DeleteMapping("/{id}")
     public ResponseEntity<EtterlevelseDokumentasjonResponse> deleteEtterlevelseById(@PathVariable UUID id) {
         log.info("Delete Etterlevelse Dokumentasjon By Id={}", id);
-        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.delete(id);
+        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.deleteEtterlevelseDokumentasjonAndAllChildren(id);
         return ResponseEntity.ok(etterlevelseDokumentasjon.toResponse());
+    }
+
+    static class EtterlevelseDokumentasjonPage extends RestResponsePage<EtterlevelseDokumentasjonResponse> {
+
     }
 }

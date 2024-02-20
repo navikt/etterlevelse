@@ -11,6 +11,7 @@ import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.etterlevelse.krav.domain.Krav;
@@ -60,6 +61,8 @@ public abstract class IntegrationTestBase {
     protected StorageService<EtterlevelseArkiv> etterlevelseArkivStorageService;
     @Autowired
     protected StorageService<EtterlevelseMetadata> etterlevelseMetadataStorageService;
+    @Autowired
+    protected StorageService<EtterlevelseDokumentasjon> etterlevelseDokumentasjonStorageService;
     @Autowired
     protected StorageService<Melding> meldingStorageService;
     @Autowired

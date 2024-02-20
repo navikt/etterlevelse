@@ -62,6 +62,10 @@ public class EtterlevelseMetadataService extends DomainService<EtterlevelseMetad
         return storage.save(etterlevelseMetadata);
     }
 
+    public List<EtterlevelseMetadata> deleteByEtterlevelseDokumentasjonId(String etterlevelseDokumentasjonId){
+        return convertToDomaionObject(etterlevelseMetadataRepo.deleteByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId));
+    }
+
     public EtterlevelseMetadata delete(UUID id) {
         return storage.delete(id);
     }
