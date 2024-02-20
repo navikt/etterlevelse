@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
@@ -107,6 +108,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return storage.save(etterlevelseDokumentasjon);
     }
 
+    @Transactional(Transactional.TxType.REQUIRED)
     public EtterlevelseDokumentasjon deleteEtterlevelseDokumentasjonAndAllChildren(UUID id) {
         log.info("deleting etterlevelse metadata connected to etterlevelse dokumentasjon with id={}", id);
         List<EtterlevelseMetadata> etterlevelseMetadataer = etterlevelseMetadataService.deleteByEtterlevelseDokumentasjonId(id.toString());
