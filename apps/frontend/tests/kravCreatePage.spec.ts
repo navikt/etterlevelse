@@ -11,28 +11,31 @@ const mockUserinfo = {
 }
 
 const mockKrav = {
-  kravNavn: 'Krav navn',
+  kravTittel: 'Krav tittel',
+  kravSuksesskriteriumNavn: 'Suksesskriterium navn',
 }
 
 test.describe('KravCreatePage', () => {
   test('Opprette krav', async ({ page }) => {
-    await page.route('https://etterlevelse.intern.dev.nav.no/', async (route) => {
+    await page.route('http://localhost:3000/', async (route) => {
       const json = [mockUserinfo]
       await route.fulfill({ json })
     })
 
-    await page.goto('https://etterlevelse.intern.dev.nav.no/')
+    await page.goto('http://localhost:3000/')
     await page.getByText('Logg inn').click()
     await page.getByPlaceholder('someone@example.com').fill(mockUserinfo.email)
     await page.getByText('Next').click()
 
-    await page.goto('https://etterlevelse.intern.dev.nav.no/')
+    await page.goto('http://localhost:3000/')
     await page.getByText(mockUserinfo.ident).click()
     await page.getByText(EKrav.KRAV).click()
-    await page.goto('https://etterlevelse.intern.dev.nav.no/kravliste')
+
+    await page.goto('http://localhost:3000/kravliste')
     await page.getByText('Nytt krav').click()
 
-    await page.goto('https://etterlevelse.intern.dev.nav.no/kravliste/opprett')
-    await page.getByPlaceholder('Krav navn').fill(mockKrav.kravNavn)
+    await page.goto('http://localhost:3000/kravliste/opprett')
+    await page.getByPlaceholder('Krav tittel').fill(mockKrav.kravTittel)
+    await page.getByPlaceholder('Navn').fill(mockKrav.kravSuksesskriteriumNavn)
   })
 })
