@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelse;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
@@ -24,6 +25,7 @@ import static no.nav.data.common.utils.StreamUtils.groupBy;
 
 
 @Service
+@Slf4j
 public class EtterlevelseService extends DomainService<Etterlevelse> {
 
     private final EtterlevelseRepo repo;
@@ -70,9 +72,13 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
         return storage.save(etterlevelse);
     }
 
-    public List<Etterlevelse> deleteByEtterlevelseDokumentasjonId(String etterlevelseDokumentasjonId) {
-        return convertToDomaionObject(etterlevelseRepo.deleteByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId));
+    public void deleteByEtterlevelseDokumentasjonId(String etterlevelseDokumentasjonId) {
+        List<Etterlevelse> etterlevelser = convertToDomaionObject(etterlevelseRepo.findByEtterlevelseDokumensjon(etterlevelseDokumentasjonId));
+        etterlevelser.forEach(e -> log.info("deleting etterlevelse with id={}, connected to etterlevelse dokumentasjon with id={}", e.getId(), etterlevelseDokumentasjonId));
+        storage.deleteAll(etterlevelser);
+        //return convertToDomaionObject(etterlevelseRepo.deleteByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId));
     }
+
 
     public Etterlevelse delete(UUID id) {
         return storage.delete(id);

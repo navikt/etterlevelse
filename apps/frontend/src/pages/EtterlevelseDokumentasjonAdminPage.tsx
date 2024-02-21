@@ -1,4 +1,4 @@
-import { Button, Heading, TextField } from '@navikt/ds-react'
+import { Box, Button, Heading, TextField } from '@navikt/ds-react'
 import { useState } from 'react'
 import { deleteEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { PageLayout } from '../components/scaffold/Page'
@@ -17,7 +17,11 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
         Administrere Etterlevelse Dokumentasjon
       </Heading>
 
-      <div className="mt-5">
+      <div className="mt-5 w-full">
+        <Box className="mb-2.5" padding="4" background="surface-warning-subtle">
+          OBS! Når et etterlevelses dokument blir slettet vil alle dataene( etterlevelser,
+          etterlevelses metadataer, og etterlevelse arkiv) koblet til den også bli slettet.
+        </Box>
         <div className="flex items-end">
           <TextField
             label="Slett etterlevelse dokumentasjon med uid"

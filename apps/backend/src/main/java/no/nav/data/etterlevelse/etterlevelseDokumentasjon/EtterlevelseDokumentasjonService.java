@@ -5,16 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
-import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
-import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
-import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.team.domain.Team;
@@ -111,16 +108,13 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     @Transactional(Transactional.TxType.REQUIRED)
     public EtterlevelseDokumentasjon deleteEtterlevelseDokumentasjonAndAllChildren(UUID id) {
         log.info("deleting etterlevelse metadata connected to etterlevelse dokumentasjon with id={}", id);
-        List<EtterlevelseMetadata> etterlevelseMetadataer = etterlevelseMetadataService.deleteByEtterlevelseDokumentasjonId(id.toString());
-        etterlevelseMetadataer.forEach(em -> log.info("deleting etterlevelse metadata with id={}, connected to etterlevelse dokumentasjon with id={}", em.getId(), id));
+        etterlevelseMetadataService.deleteByEtterlevelseDokumentasjonId(id.toString());
 
         log.info("deleting etterlevelse arkiv connected to etterlevelse dokumentasjon with id={}", id);
-        List<EtterlevelseArkiv> etterlevelseArkiver = etterlevelseArkivService.deleteByEtterlevelseDokumentsjonId(id.toString());
-        etterlevelseArkiver.forEach(ea -> log.info("deleting etterlevelse arkiv with id={}, connected to etterlevelse dokumentasjon with id={}", ea.getId(), id));
+        etterlevelseArkivService.deleteByEtterlevelseDokumentsjonId(id.toString());
 
         log.info("deleting etterlevelse connected to etterlevelse dokumentasjon with id={}", id);
-        List<Etterlevelse> etterlevelser = etterlevelseService.deleteByEtterlevelseDokumentasjonId(id.toString());
-        etterlevelser.forEach(e -> log.info("deleting etterlevelse with id={}, connected to etterlevelse dokumentasjon with id={}", e.getId(), id));
+        etterlevelseService.deleteByEtterlevelseDokumentasjonId(id.toString());
 
         return delete(id);
     }

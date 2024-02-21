@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelsemetadata;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -16,6 +17,7 @@ import java.util.UUID;
 import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
 
 @Service
+@Slf4j
 public class EtterlevelseMetadataService extends DomainService<EtterlevelseMetadata> {
 
     private final EtterlevelseMetadataRepo repo;
@@ -62,8 +64,11 @@ public class EtterlevelseMetadataService extends DomainService<EtterlevelseMetad
         return storage.save(etterlevelseMetadata);
     }
 
-    public List<EtterlevelseMetadata> deleteByEtterlevelseDokumentasjonId(String etterlevelseDokumentasjonId){
-        return convertToDomaionObject(etterlevelseMetadataRepo.deleteByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId));
+    public void deleteByEtterlevelseDokumentasjonId(String etterlevelseDokumentasjonId){
+        List<EtterlevelseMetadata> etterlevelseMetadataer = convertToDomaionObject(etterlevelseMetadataRepo.findByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId));
+        etterlevelseMetadataer.forEach(em -> log.info("deleting etterlevelse metadata with id={}, connected to etterlevelse dokumentasjon with id={}", em.getId(), id));
+        storage.deleteAll(etterlevelseMetadataer);
+        //return convertToDomaionObject(etterlevelseMetadataRepo.deleteByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId));
     }
 
     public EtterlevelseMetadata delete(UUID id) {

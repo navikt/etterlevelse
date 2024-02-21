@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.arkivering;
 
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
@@ -19,6 +20,7 @@ import java.util.UUID;
 import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
 
 @Service
+@Slf4j
 public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
     private final EtterlevelseArkivRepo repo;
 
@@ -109,8 +111,12 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         return storage.save(etterlevelseArkiv);
     }
 
-    public List<EtterlevelseArkiv> deleteByEtterlevelseDokumentsjonId(String etterlevelseDokumentasjonId){
-        return convertToDomaionObject(repo.deleteByEtterlevelseDokumentsjonId(etterlevelseDokumentasjonId));
+    public void  deleteByEtterlevelseDokumentsjonId(String etterlevelseDokumentasjonId){
+        List<EtterlevelseArkiv> etterlevelseArkiver = convertToDomaionObject(repo.findByEtterlevelseDokumentsjonId(etterlevelseDokumentasjonId));
+        etterlevelseArkiver.forEach(ea -> log.info("deleting etterlevelse arkiv with id={}, connected to etterlevelse dokumentasjon with id={}", ea.getId(), etterlevelseDokumentasjonId));
+        storage.deleteAll(etterlevelseArkiver);
+
+        //return convertToDomaionObject(repo.deleteByEtterlevelseDokumentsjonId(etterlevelseDokumentasjonId));
     }
 
     public EtterlevelseArkiv delete(UUID id) {

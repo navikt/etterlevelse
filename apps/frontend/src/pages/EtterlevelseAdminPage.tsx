@@ -16,7 +16,7 @@ export const EtterlevelseAdminPage = () => {
       <div className="mt-5">
         <div className="flex items-end">
           <TextField
-            label="Slette etterlevelses dokumentasjon ved uid"
+            label="Slette etterlevelse ved uid"
             placeholder="Etterlevelse UID"
             onChange={(e) => setEtterlevelseId(e.target.value)}
             className="w-full mr-3"
