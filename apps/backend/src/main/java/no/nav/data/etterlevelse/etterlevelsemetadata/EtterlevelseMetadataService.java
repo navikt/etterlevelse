@@ -68,7 +68,6 @@ public class EtterlevelseMetadataService extends DomainService<EtterlevelseMetad
         List<EtterlevelseMetadata> etterlevelseMetadataer = convertToDomaionObject(etterlevelseMetadataRepo.findByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId));
         etterlevelseMetadataer.forEach(em -> log.info("deleting etterlevelse metadata with id={}, connected to etterlevelse dokumentasjon with id={}", em.getId(), etterlevelseDokumentasjonId));
         storage.deleteAll(etterlevelseMetadataer);
-        //return convertToDomaionObject(etterlevelseMetadataRepo.deleteByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId));
     }
 
     public EtterlevelseMetadata delete(UUID id) {

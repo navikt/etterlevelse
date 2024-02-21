@@ -29,11 +29,6 @@ public interface EtterlevelseArkivRepo extends JpaRepository<GenericStorage<Ette
 
     @Modifying(clearAutomatically = true)
     @Transactional(Transactional.TxType.REQUIRED)
-    @Query(value = "delete from generic_storage where data ->> 'etterlevelseDokumentasjonId' = ?1 and type = 'EtterlevelseArkiv' returning *", nativeQuery = true)
-    List<GenericStorage<EtterlevelseArkiv>> deleteByEtterlevelseDokumentsjonId(String etterlevelseDokumentasjonId);
-
-    @Modifying(clearAutomatically = true)
-    @Transactional(Transactional.TxType.REQUIRED)
     @Query(value = "update generic_storage set DATA = jsonb_set(DATA, '{arkiveringDato}', to_jsonb(?2) , false ) where data -> 'status' = to_jsonb(?1) and type = 'EtterlevelseArkiv' returning *", nativeQuery = true)
     List<GenericStorage<EtterlevelseArkiv>> updateArkiveringDato(String status, String arkiveringDato);
 }

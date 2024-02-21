@@ -76,7 +76,6 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
         List<Etterlevelse> etterlevelser = convertToDomaionObject(etterlevelseRepo.findByEtterlevelseDokumensjon(etterlevelseDokumentasjonId));
         etterlevelser.forEach(e -> log.info("deleting etterlevelse with id={}, connected to etterlevelse dokumentasjon with id={}", e.getId(), etterlevelseDokumentasjonId));
         storage.deleteAll(etterlevelser);
-        //return convertToDomaionObject(etterlevelseRepo.deleteByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId));
     }
 
 

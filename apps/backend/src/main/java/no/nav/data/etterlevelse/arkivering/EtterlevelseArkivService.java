@@ -115,8 +115,6 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         List<EtterlevelseArkiv> etterlevelseArkiver = convertToDomaionObject(repo.findByEtterlevelseDokumentsjonId(etterlevelseDokumentasjonId));
         etterlevelseArkiver.forEach(ea -> log.info("deleting etterlevelse arkiv with id={}, connected to etterlevelse dokumentasjon with id={}", ea.getId(), etterlevelseDokumentasjonId));
         storage.deleteAll(etterlevelseArkiver);
-
-        //return convertToDomaionObject(repo.deleteByEtterlevelseDokumentsjonId(etterlevelseDokumentasjonId));
     }
 
     public EtterlevelseArkiv delete(UUID id) {
