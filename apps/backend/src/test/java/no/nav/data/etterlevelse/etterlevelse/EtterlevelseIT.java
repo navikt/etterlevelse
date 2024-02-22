@@ -10,6 +10,7 @@ import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
+import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -236,5 +237,21 @@ public class EtterlevelseIT extends IntegrationTestBase {
         restTemplate.delete("/etterlevelse/{id}", krav.getId());
 
         assertThat(etterlevelseStorageService.getAll(Etterlevelse.class)).isEmpty();
+    }
+
+
+    @Test
+    void deleteKravOnEtterlevelseEndpoint() {
+        etterlevelseStorageService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).build());
+
+        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).build());
+
+        restTemplate.delete("/etterlevelse/{id}", krav.getId());
+
+
+        var resp = restTemplate.getForEntity("/krav/{id}", KravResponse.class, krav.getId());
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        KravResponse kravResp = resp.getBody();
+        assertThat(kravResp.getKravNummer()).isEqualTo(51);
     }
 }

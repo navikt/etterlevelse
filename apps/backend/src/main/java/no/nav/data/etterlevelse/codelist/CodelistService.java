@@ -19,6 +19,8 @@ import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.Collection;
@@ -116,6 +118,8 @@ public class CodelistService implements InitializingBean {
         return codelist;
     }
 
+
+    @Transactional(propagation = Propagation.REQUIRED)
     public void delete(ListName name, String code) {
         Optional<Codelist> toDelete = codelistRepository.findByListAndCode(name, code);
         if (toDelete.isEmpty()) {

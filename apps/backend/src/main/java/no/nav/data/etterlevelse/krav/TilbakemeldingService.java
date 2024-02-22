@@ -22,6 +22,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -88,7 +89,7 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
         return storage.save(tilbakemelding);
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public Tilbakemelding deleteMelding(UUID tilbakemeldingId, int meldingNr) {
         var tilbakemelding = get(tilbakemeldingId);
         var melding = tilbakemelding.finnMelding(meldingNr);

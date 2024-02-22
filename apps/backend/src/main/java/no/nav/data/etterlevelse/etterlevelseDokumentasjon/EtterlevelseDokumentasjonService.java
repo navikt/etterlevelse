@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
@@ -21,6 +20,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.ArrayList;
@@ -105,7 +106,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return storage.save(etterlevelseDokumentasjon);
     }
 
-    @Transactional(Transactional.TxType.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon deleteEtterlevelseDokumentasjonAndAllChildren(UUID id) {
         log.info("deleting etterlevelse metadata connected to etterlevelse dokumentasjon with id={}", id);
         etterlevelseMetadataService.deleteByEtterlevelseDokumentasjonId(id.toString());
@@ -119,6 +120,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return delete(id);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon delete(UUID id) {
         return storage.delete(id);
     }

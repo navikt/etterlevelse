@@ -11,6 +11,8 @@ import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -117,6 +119,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         storage.deleteAll(etterlevelseArkiver);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseArkiv delete(UUID id) {
         return storage.delete(id);
     }

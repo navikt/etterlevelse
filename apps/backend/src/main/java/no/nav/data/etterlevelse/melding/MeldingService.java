@@ -8,6 +8,8 @@ import no.nav.data.etterlevelse.melding.domain.MeldingRepo;
 import no.nav.data.etterlevelse.melding.dto.MeldingRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -41,6 +43,7 @@ public class MeldingService extends DomainService<Melding> {
         return storage.save(melding);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public Melding delete(UUID id) {
         return storage.delete(id);
     }

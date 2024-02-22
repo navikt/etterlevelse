@@ -15,6 +15,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -101,6 +103,7 @@ public class KravPrioriteringService extends DomainService<KravPrioritering> {
         return storage.save(kravprioritering);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public KravPrioritering delete(UUID id) {
         return storage.delete(id);
     }
