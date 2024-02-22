@@ -274,11 +274,13 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    setTimeout(() => {
-      if (!user.isLoggedIn()) {
-        window.location.href = loginUrl(location, location.pathname)
-      }
-    }, 500)
+    if (process.env.NODE_ENV === 'test') {
+      setTimeout(() => {
+        if (!user.isLoggedIn()) {
+          window.location.href = loginUrl(location, location.pathname)
+        }
+      }, 500)
+    }
   }, [])
 
   React.useEffect(() => {
@@ -297,7 +299,9 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
         <SkipToContent />
         <InternalHeader className="w-full justify-center items-center">
           <div className="max-w-7xl flex w-full">
-            <InternalHeader.Title href="/">Støtte til etterlevelse</InternalHeader.Title>
+            <InternalHeader.Title id="Støtte til etterlevelse" href="/">
+              Støtte til etterlevelse
+            </InternalHeader.Title>
             <Spacer />
             {!props.noSearchBar && (
               <div

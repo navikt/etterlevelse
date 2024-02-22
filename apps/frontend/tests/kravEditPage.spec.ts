@@ -1,8 +1,9 @@
 import { test } from '@playwright/test'
-import { EKrav } from '../src/constants'
-import { EGroup } from '../src/services/User'
+import { AxiosResponse } from 'axios'
+import { EKrav, IUserInfo } from '../src/constants'
+import { EGroup, user } from '../src/services/User'
 
-const mockUserinfo = {
+const mockUserinfo: IUserInfo = {
   loggedIn: true,
   ident: 'G000000',
   name: 'Donald Duck',
@@ -10,9 +11,12 @@ const mockUserinfo = {
   groups: [EGroup.ADMIN, EGroup.WRITE, EGroup.READ],
 }
 
-const mockKrav = {
-  kravTittel: 'Krav tittel',
-  kravSuksesskriteriumNavn: 'Suksesskriterium navn',
+const axiosUserInfoMock: AxiosResponse<IUserInfo> = {
+  data: mockUserinfo,
+  status: 200,
+  statusText: 'Success',
+  headers: {},
+  config: {} as any,
 }
 
 const mockKrav2 = {
@@ -88,27 +92,27 @@ const mockKrav2 = {
 }
 
 test.describe('KravEditPage', () => {
+  test.beforeAll(() => {
+    user.handleGetResponse(axiosUserInfoMock)
+  })
+
   test('Rediger krav', async ({ page }) => {
-    await page.route('https://etterlevelse.intern.dev.nav.no/', async (route) => {
-      const json = [mockUserinfo]
-      await route.fulfill({ json })
-    })
+    // await page.route('http://localhost:3000/', async (route) => {
+    //   const json = [mockUserinfo]
+    //   await route.fulfill({ json })
+    // })
 
-    await page.goto('https://etterlevelse.intern.dev.nav.no/')
-    await page.getByText('Logg inn').click()
-    await page.getByPlaceholder('someone@example.com').fill(mockUserinfo.email)
-    await page.getByText('Next').click()
+    await page.goto('http://localhost:3000/')
+    console.log('user', user)
 
-    await page.goto('https://etterlevelse.intern.dev.nav.no/')
-    await page.getByText(mockUserinfo.ident).click()
+    await page.getByText('Forstå krav').click()
+    await page.getByText(user.getIdent()).click()
     await page.getByText(EKrav.KRAV).click()
 
-    await page.goto('https://etterlevelse.intern.dev.nav.no/kravliste')
+    await page.goto('http://localhost:3000/kravliste')
 
-    await page.goto(
-      'https://etterlevelse.intern.dev.nav.no/krav/redigering/6d52e400-69af-4f50-9d2c-cc3302d8211c'
-    )
-    await page.goto('https://etterlevelse.intern.dev.nav.no/krav/redigering/249/1/')
+    await page.goto('http://localhost:3000/krav/redigering/6d52e400-69af-4f50-9d2c-cc3302d8211c')
+    await page.goto('http://localhost:3000/krav/redigering/249/1/')
     await page.getByPlaceholder('Krav tittel').fill(mockKrav2.data.kravById.navn)
     mockKrav2.data.kravById.suksesskriterier.map(async (suksesskriterie) => {
       await page.getByPlaceholder('Navn').fill(suksesskriterie.navn)
