@@ -28,7 +28,7 @@ export const KravSuksesskriterierEdit = ({
   newKrav,
 }: TKravSuksesskriterieEditProps) => (
   <FieldWrapper>
-    <FieldArray name={'suksesskriterier'}>
+    <FieldArray name="suksesskriterier">
       {(p) => (
         <KriterieList
           p={p}
@@ -208,7 +208,7 @@ const Kriterie = ({
             hideLabel
             value={navnInput}
             onChange={(e) => setNavn((e.target as HTMLInputElement).value)}
-            placeholder="Navn"
+            placeholder={`Suksesskriterium ${nummer}`}
             error={
               p.form.errors &&
               p.form.errors['suksesskriterier'] && <FormError fieldName="suksesskriterier" />

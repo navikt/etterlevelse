@@ -21,7 +21,7 @@ import { RegelverkEdit } from './RegelverkEdit'
 
 const kravBreadCrumbPath: IBreadcrumbPaths = {
   href: '/kravliste',
-  pathName: 'Forvalte og opprette krav',
+  pathName: EKrav.KRAV,
 }
 
 export const KravCreatePage = () => {
