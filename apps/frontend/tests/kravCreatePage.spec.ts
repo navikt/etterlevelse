@@ -208,12 +208,18 @@ test.describe('KravCreatePage', () => {
     mockKrav.data.kravById.suksesskriterier.map(async (suksesskriterie, index) => {
       await page.getByLabel(`Suksesskriterium ${index}`).fill(suksesskriterie.navn)
       await page.getByPlaceholder(`Suksesskriterium ${index}`).fill(suksesskriterie.beskrivelse)
-      !suksesskriterie.behovForBegrunnelse
-        ? await page
-            .getByText('Velg type besvarelse:')
-            .selectOption('Bekreftelse med tekstlig begrunnelse')
-        : await page.getByText('Velg type besvarelse:').selectOption('Kun bekreftelse')
+      await page
+        .getByText('Velg type besvarelse:')
+        .selectOption(['Bekreftelse med tekstlig begrunnelse', 'Kun bekreftelse'])
+
+      expect(page.getByText('Velg type besvarelse:')).toContainEqual(
+        suksesskriterie.behovForBegrunnelse
+      )
     })
     await page.getByText('Suksesskriterie').click()
+    mockKrav.data.kravById.dokumentasjon.map(async (item) => {
+      await page.getByLabel('Lenke eller websaknr').fill(item)
+      await page.getByText('Legg til').click()
+    })
   })
 })

@@ -135,9 +135,7 @@ export const KravCreatePage = () => {
                       link
                       label="Lenke eller websaknr"
                       tooltip="Lenke til dokumentasjon"
-                      linkTooltip={
-                        'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller WebSak.'
-                      }
+                      linkTooltip="Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller WebSak."
                     />
 
                     <RegelverkEdit />
