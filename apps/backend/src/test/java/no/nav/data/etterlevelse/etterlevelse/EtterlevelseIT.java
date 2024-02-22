@@ -252,6 +252,6 @@ public class EtterlevelseIT extends IntegrationTestBase {
         var resp = restTemplate.getForEntity("/krav/{id}", KravResponse.class, krav.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         KravResponse kravResp = resp.getBody();
-        assertThat(kravResp.getKravNummer()).isEqualTo(51);
+        assertThat(kravResp.getKravNummer()).isEqualTo(50);
     }
 }
