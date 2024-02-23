@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { getEtterlevelserByKravNumberKravVersion } from '../../../api/EtterlevelseApi'
 import {
   TKravIdParams,
-  createKrav,
   getKravByKravNummer,
   kravMapToFormVal,
   updateKrav,
@@ -55,7 +54,6 @@ export const KravEditPage = () => {
   const navigate = useNavigate()
   const [krav, setKrav] = useState<TKravQL | undefined>()
   const [newKrav, setNewKrav] = useState<boolean>(false)
-  const [edit, setEdit] = useState(krav && !krav.id)
   const [kravId, setKravId] = useState<IKravId>()
   const [newVersionWarning, setNewVersionWarning] = useState<boolean>(false)
   const [alleKravVersjoner, setAlleKravVersjoner] = useState<IKravVersjon[]>([
@@ -83,7 +81,7 @@ export const KravEditPage = () => {
       krav.kravNummer,
       krav.kravVersjon
     )
-    if (etterlevelser.totalElements > 0 && krav.status === EKravStatus.UTKAST && !newVersion) {
+    if (etterlevelser.totalElements > 0 && krav.status === EKravStatus.UTKAST) {
       setErrorModalMessage(
         'Kravet kan ikke settes til «Utkast» når det er tilknyttet dokumentasjon av etterlevelse'
       )
@@ -91,18 +89,7 @@ export const KravEditPage = () => {
     } else if (krav.id) {
       close(await updateKrav(mutatedKrav))
       setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
-    } else {
-      close(await createKrav(mutatedKrav))
-      setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
     }
-  }
-
-  const newVersion = (): void => {
-    if (!krav) return
-    setKravId({ id: krav.id, kravVersjon: krav.kravVersjon })
-    setKrav({ ...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true })
-    setEdit(true)
-    setNewVersionWarning(true)
   }
 
   const close = (k: IKrav): void => {
@@ -111,18 +98,9 @@ export const KravEditPage = () => {
     } else if (krav?.nyKravVersjon && kravId) {
       setKrav({ ...krav, id: kravId.id, kravVersjon: kravId.kravVersjon })
     }
-    setEdit(false)
     setNewVersionWarning(false)
     setNewKrav(false)
   }
-
-  useEffect(() => {
-    // hent krav på ny ved avbryt ny versjon
-    if (!edit && !krav?.id && krav?.nyKravVersjon) {
-      reloadKrav
-      navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
-    }
-  }, [edit])
 
   useEffect(() => {
     if (krav) {
@@ -147,14 +125,6 @@ export const KravEditPage = () => {
   useEffect(() => {
     if (kravQuery?.kravById) setKrav(kravQuery.kravById)
   }, [kravQuery])
-
-  useEffect(() => {
-    if (params.id === 'ny') {
-      setKrav(kravMapToFormVal({}) as TKravQL)
-      setEdit(true)
-      setNewKrav(true)
-    }
-  }, [params.id])
 
   return (
     <>
