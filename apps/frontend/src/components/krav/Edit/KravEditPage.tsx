@@ -2,7 +2,7 @@ import { ApolloQueryResult } from '@apollo/client'
 import { Alert, Button, Checkbox, CheckboxGroup, Heading, Loader } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { getEtterlevelserByKravNumberKravVersion } from '../../../api/EtterlevelseApi'
 import {
   TKravIdParams,
@@ -13,10 +13,8 @@ import {
 } from '../../../api/KravApi'
 import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi'
 import { EKravStatus, IKrav, IKravId, IKravVersjon, TKravQL } from '../../../constants'
-import { TSection } from '../../../pages/EtterlevelseDokumentasjonPage'
 import { EListName, codelist } from '../../../services/Codelist'
 import { user } from '../../../services/User'
-import { useLocationState } from '../../../util/hooks'
 import ErrorModal from '../../ErrorModal'
 import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
 import { InputField, TextAreaField } from '../../common/Inputs'
@@ -32,8 +30,6 @@ import { RegelverkEdit } from './RegelverkEdit'
 import { KravEditDokumentasjon } from './components/KravEditDokumentasjon'
 import { KravEditSettKravTilUtgattModal } from './components/KravEditSettKravTilUtgattModal'
 import { KravEditSettVersjonTilAktivModal } from './components/KravEditSettVersjonTilAktivModal'
-
-type TLocationState = { tab: TSection; avdelingOpen?: string }
 
 const kravBreadCrumbPath: IBreadcrumbPaths = {
   href: '/kravliste',
@@ -56,7 +52,7 @@ export const KravEditPage = () => {
       >
     | undefined = kravData?.reloadKrav
 
-  const { navigate } = useLocationState<TLocationState>()
+  const navigate = useNavigate()
   const [krav, setKrav] = useState<TKravQL | undefined>()
   const [newKrav, setNewKrav] = useState<boolean>(false)
   const [edit, setEdit] = useState(krav && !krav.id)
