@@ -8,6 +8,7 @@ import { MailLogPage } from './components/admin/maillog/MailLogPage'
 import { SettingsPage } from './components/admin/settings/SettingsPage'
 import { KravCreatePage } from './components/krav/Edit/KravCreatePage'
 import { KravEditPage } from './components/krav/Edit/KravEditPage'
+import { KravNyVersjonPage } from './components/krav/Edit/KravNyVersjonPage'
 import ArkivAdminPage from './pages/ArkivAdminPage'
 import { DokumentasjonPage } from './pages/DokumentasjonPage'
 import EtterlevelseAdminPage from './pages/EtterlevelseAdminPage'
@@ -74,7 +75,7 @@ const AppRoutes = (): JSX.Element => {
       />
       <Route
         path="/krav/ny-versjon/:id"
-        element={<PrivateRoute component={<KravEditPage />} kraveierPage />}
+        element={<PrivateRoute component={<KravNyVersjonPage />} kraveierPage />}
         caseSensitive={true}
       />
 
