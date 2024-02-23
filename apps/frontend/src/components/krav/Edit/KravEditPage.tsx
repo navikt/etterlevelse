@@ -13,6 +13,7 @@ import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../../../constants'
 import { EListName, codelist } from '../../../services/Codelist'
 import { user } from '../../../services/User'
+import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
 import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
 import { InputField, TextAreaField } from '../../common/Inputs'
@@ -69,9 +70,7 @@ export const KravEditPage = () => {
       krav.kravVersjon
     )
     if (etterlevelser.totalElements > 0 && krav.status === EKravStatus.UTKAST) {
-      setErrorModalMessage(
-        'Kravet kan ikke settes til «Utkast» når det er tilknyttet dokumentasjon av etterlevelse'
-      )
+      setErrorModalMessage('Kravet kan ikke settes til «Utkast» når det er tilknyttet etterlevelse')
       setShowErrorModal(true)
     } else if (krav.id) {
       close(await updateKrav(mutatedKrav))
@@ -110,7 +109,7 @@ export const KravEditPage = () => {
   }, [kravQuery])
 
   return (
-    <div>
+    <>
       {krav && (
         <PageLayout
           pageTitle="Rediger krav"
@@ -129,6 +128,8 @@ export const KravEditPage = () => {
               initialValues={kravMapToFormVal(krav as TKravQL)}
               onSubmit={submit}
               validationSchema={kravEditValidation({ alleKravVersjoner })}
+              validateOnChange={false}
+              validateOnBlur={false}
             >
               {({ values, errors, isSubmitting, submitForm, setErrors }) => (
                 <Form>
@@ -173,7 +174,7 @@ export const KravEditPage = () => {
 
                     <div className="flex w-full justify-center">
                       <div className="w-full mb-2.5">
-                        <div className="mb-10">
+                        <div className="mb-10" id="suksesskriterier">
                           <Heading level="3" size="medium" className="mb-2">
                             Suksesskriterier
                           </Heading>
@@ -188,15 +189,14 @@ export const KravEditPage = () => {
                         <RegelverkEdit />
 
                         {krav.kravVersjon > 1 && (
-                          <>
+                          <div className="w-full" id="versjonEndringer">
                             <TextAreaField
                               label="Endringer siden siste versjon"
                               name="versjonEndringer"
                               height="250px"
                               markdown
                             />
-                            <FormError fieldName="versjonEndringer" />
-                          </>
+                          </div>
                         )}
 
                         <div className="mt-20">
@@ -231,7 +231,9 @@ export const KravEditPage = () => {
                           </Heading>
                         </div>
 
-                        <KravVarslingsadresserEdit />
+                        <div id="varslingsadresser">
+                          <KravVarslingsadresserEdit />
+                        </div>
 
                         <FormError fieldName="varslingsadresser" akselStyling />
 
@@ -375,12 +377,13 @@ export const KravEditPage = () => {
                     errorMessage={errorModalMessage}
                     submit={setShowErrorModal}
                   />
+                  <ScrollToFieldError />
                 </Form>
               )}
             </Formik>
           </div>
         </PageLayout>
       )}
-    </div>
+    </>
   )
 }
