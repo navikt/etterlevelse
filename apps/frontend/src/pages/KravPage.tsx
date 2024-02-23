@@ -8,7 +8,6 @@ import {
   TKravIdParams,
   deleteKrav,
   getKravByKravNummer,
-  kravMapToFormVal,
 } from '../api/KravApi'
 import { DeleteItem } from '../components/DeleteItem'
 import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
@@ -64,11 +63,10 @@ const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) =>
 export const KravPage = () => {
   const params = useParams<TKravIdParams>()
   const [krav, setKrav] = useState<TKravQL | undefined>()
-  const {
-    loading: kravLoading,
-    data: kravQuery,
-    refetch: reloadKrav,
-  } = useQuery<{ kravById: TKravQL }, KravIdQueryVariables>(getKravWithEtterlevelseQuery, {
+  const { loading: kravLoading, data: kravQuery } = useQuery<
+    { kravById: TKravQL },
+    KravIdQueryVariables
+  >(getKravWithEtterlevelseQuery, {
     variables: getQueryVariableFromParams(params),
     skip: (!params.id || params.id === 'ny') && !params.kravNummer,
     fetchPolicy: 'no-cache',
@@ -135,13 +133,6 @@ export const KravPage = () => {
     if (kravQuery?.kravById) setKrav(kravQuery.kravById)
   }, [kravQuery])
 
-  useEffect(() => {
-    if (params.id === 'ny') {
-      setKrav(kravMapToFormVal({}) as TKravQL)
-      setEdit(true)
-    }
-  }, [params.id])
-
   const hasKravExpired = () => {
     if (krav?.status === EKravStatus.UTGAATT && alleKravVersjoner.length === 1) {
       return true
@@ -152,14 +143,6 @@ export const KravPage = () => {
 
   // todo split loading krav and subelements?
   const etterlevelserLoading = kravLoading
-
-  const [edit, setEdit] = useState(krav && !krav.id)
-
-  const newVersion = () => {
-    if (!krav) return
-    setKrav({ ...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true })
-    setEdit(true)
-  }
 
   const getBreadcrumPaths = () => {
     const breadcrumbPaths: IBreadcrumbPaths[] = [
@@ -178,22 +161,20 @@ export const KravPage = () => {
     return breadcrumbPaths
   }
 
-  useEffect(() => {
-    // hent krav på ny ved avbryt ny versjon
-    if (!edit && !krav?.id && krav?.nyKravVersjon) reloadKrav()
-  }, [edit])
-
   return (
     <PageLayout
       key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon}
       pageTitle={
-        kravNumView({ kravNummer: krav?.kravNummer || 0, kravVersjon: krav?.kravVersjon || 0 }) +
+        kravNumView({
+          kravNummer: krav?.kravNummer ? krav.kravNummer : 0,
+          kravVersjon: krav?.kravVersjon ? krav.kravVersjon : 0,
+        }) +
         ' ' +
         krav?.navn
       }
       currentPage={kravNumView({
-        kravNummer: krav?.kravNummer || 0,
-        kravVersjon: krav?.kravVersjon || 0,
+        kravNummer: krav?.kravNummer ? krav.kravNummer : 0,
+        kravVersjon: krav?.kravVersjon ? krav.kravVersjon : 0,
       })}
       breadcrumbPaths={getBreadcrumPaths()}
     >
@@ -265,8 +246,7 @@ export const KravPage = () => {
                         size="small"
                         variant="primary"
                         onClick={() => {
-                          setEdit(!edit)
-                          navigate(`/krav/redigering/${krav.kravNummer}/${krav.kravVersjon}/`)
+                          navigate(`/krav/redigering/${krav.id}`)
                         }}
                       >
                         Rediger krav
@@ -278,7 +258,9 @@ export const KravPage = () => {
                         type="button"
                         className="ml-4"
                         size="small"
-                        onClick={newVersion}
+                        onClick={() => {
+                          navigate(`/krav/ny-versjon/${krav.id}`)
+                        }}
                         variant="secondary"
                       >
                         Ny versjon av krav
