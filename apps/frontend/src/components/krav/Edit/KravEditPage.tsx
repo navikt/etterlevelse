@@ -185,7 +185,7 @@ export const KravEditPage = () => {
               onSubmit={submit}
               validationSchema={kravSchema({ newKrav, krav, alleKravVersjoner })}
             >
-              {({ values, errors, isSubmitting, handleReset, submitForm, setErrors }) => (
+              {({ values, errors, isSubmitting, submitForm, setErrors }) => (
                 <Form>
                   <div>
                     <div className="w-full">
@@ -391,7 +391,6 @@ export const KravEditPage = () => {
                             variant="secondary"
                             type="button"
                             onClick={() => {
-                              handleReset()
                               if (krav.kravNummer && krav.kravVersjon) {
                                 navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
                               } else {
