@@ -1,21 +1,16 @@
-import { ApolloQueryResult } from '@apollo/client'
 import { Alert, Button, Checkbox, CheckboxGroup, Heading, Loader } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getEtterlevelserByKravNumberKravVersion } from '../../../api/EtterlevelseApi'
 import {
   TKravIdParams,
   createKrav,
   getKravByKravNummer,
   kravMapToFormVal,
-  updateKrav,
 } from '../../../api/KravApi'
 import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi'
-import { EKravStatus, IKrav, IKravId, IKravVersjon, TKravQL } from '../../../constants'
+import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../../../constants'
 import { EListName, codelist } from '../../../services/Codelist'
-import { user } from '../../../services/User'
-import ErrorModal from '../../ErrorModal'
 import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
 import { InputField, TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
@@ -28,8 +23,6 @@ import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
 import { RegelverkEdit } from './RegelverkEdit'
 import { KravEditDokumentasjon } from './components/KravEditDokumentasjon'
-import { KravEditSettKravTilUtgattModal } from './components/KravEditSettKravTilUtgattModal'
-import { KravEditSettVersjonTilAktivModal } from './components/KravEditSettVersjonTilAktivModal'
 
 const kravBreadCrumbPath: IBreadcrumbPaths = {
   href: '/kravliste',
@@ -44,32 +37,15 @@ export const KravNyVersjonPage = () => {
 
   const kravQuery: TKravById | undefined = kravData?.kravQuery
   const kravLoading: boolean | undefined = kravData?.kravLoading
-  const reloadKrav:
-    | Promise<
-        ApolloQueryResult<{
-          kravById: TKravQL
-        }>
-      >
-    | undefined = kravData?.reloadKrav
 
   const navigate = useNavigate()
   const [krav, setKrav] = useState<TKravQL | undefined>()
-  const [newKrav, setNewKrav] = useState<boolean>(false)
-  const [edit, setEdit] = useState(krav && !krav.id)
-  const [kravId, setKravId] = useState<IKravId>()
-  const [newVersionWarning, setNewVersionWarning] = useState<boolean>(false)
   const [alleKravVersjoner, setAlleKravVersjoner] = useState<IKravVersjon[]>([
     { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
   ])
-
-  const [showErrorModal, setShowErrorModal] = useState(false)
-  const [errorModalMessage, setErrorModalMessage] = useState('')
   const [varselMeldingActive, setVarselMeldingActive] = useState<string[]>(
     krav?.varselMelding ? ['VarselMelding'] : []
   )
-
-  const [UtgaattKravMessage, setUtgaattKravMessage] = useState<boolean>(false)
-  const [aktivKravMessage, setAktivKravMessage] = useState<boolean>(false)
 
   const submit = async (krav: TKravQL): Promise<void> => {
     const regelverk = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
@@ -79,50 +55,15 @@ export const KravNyVersjonPage = () => {
       underavdeling: underavdeling,
       varselMelding: varselMeldingActive ? krav.varselMelding : undefined,
     }
-    const etterlevelser = await getEtterlevelserByKravNumberKravVersion(
-      krav.kravNummer,
-      krav.kravVersjon
-    )
-    if (etterlevelser.totalElements > 0 && krav.status === EKravStatus.UTKAST && !newVersion) {
-      setErrorModalMessage(
-        'Kravet kan ikke settes til «Utkast» når det er tilknyttet dokumentasjon av etterlevelse'
-      )
-      setShowErrorModal(true)
-    } else if (krav.id) {
-      close(await updateKrav(mutatedKrav))
-      setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
-    } else {
-      close(await createKrav(mutatedKrav))
-      setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
-    }
-  }
-
-  const newVersion = (): void => {
-    if (!krav) return
-    setKravId({ id: krav.id, kravVersjon: krav.kravVersjon })
-    setKrav({ ...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true })
-    setEdit(true)
-    setNewVersionWarning(true)
+    close(await createKrav(mutatedKrav))
+    setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
   }
 
   const close = (k: IKrav): void => {
     if (k) {
       navigate(`/krav/${k.kravNummer}/${k.kravVersjon}`)
-    } else if (krav?.nyKravVersjon && kravId) {
-      setKrav({ ...krav, id: kravId.id, kravVersjon: kravId.kravVersjon })
     }
-    setEdit(false)
-    setNewVersionWarning(false)
-    setNewKrav(false)
   }
-
-  useEffect(() => {
-    // hent krav på ny ved avbryt ny versjon
-    if (!edit && !krav?.id && krav?.nyKravVersjon) {
-      reloadKrav
-      navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
-    }
-  }, [edit])
 
   useEffect(() => {
     if (krav) {
@@ -145,16 +86,15 @@ export const KravNyVersjonPage = () => {
   }, [krav])
 
   useEffect(() => {
-    if (kravQuery?.kravById) setKrav(kravQuery.kravById)
+    if (kravQuery?.kravById)
+      setKrav({
+        ...kravQuery.kravById,
+        id: '',
+        kravVersjon: kravQuery.kravById.kravVersjon + 1,
+        nyKravVersjon: true,
+        status: EKravStatus.UTKAST,
+      })
   }, [kravQuery])
-
-  useEffect(() => {
-    if (params.id === 'ny') {
-      setKrav(kravMapToFormVal({}) as TKravQL)
-      setEdit(true)
-      setNewKrav(true)
-    }
-  }, [params.id])
 
   return (
     <>
@@ -173,11 +113,7 @@ export const KravNyVersjonPage = () => {
 
           <div>
             <Formik
-              initialValues={
-                !newKrav && newVersionWarning
-                  ? kravMapToFormVal({ ...krav, versjonEndringer: '' })
-                  : kravMapToFormVal(krav as TKravQL)
-              }
+              initialValues={kravMapToFormVal({ ...krav, versjonEndringer: '' })}
               onSubmit={submit}
               validationSchema={kravEditValidation({ alleKravVersjoner })}
             >
@@ -186,23 +122,21 @@ export const KravNyVersjonPage = () => {
                   <div>
                     <div className="w-full">
                       <Heading level="1" size="medium">
-                        {newVersionWarning ? 'Ny versjon' : newKrav ? 'Nytt krav' : 'Rediger krav'}
+                        Ny versjon
                       </Heading>
                       <Heading level="2" size="small">
                         {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}{' '}
                       </Heading>
-                      {newVersionWarning && (
-                        <Alert variant="warning">
-                          <Heading spacing size="small" level="4">
-                            Sikker på at du vil opprette en ny versjon?
-                          </Heading>
-                          Ny versjon av kravet skal opprettes når det er{' '}
-                          <strong>vesentlige endringer</strong> i kravet som gjør at{' '}
-                          <strong>teamene må revurdere</strong> sin besvarelse av kravet. Ved alle
-                          mindre justeringer, endre i det aktive kravet, og da slipper teamene å
-                          revurdere sin besvarelse.
-                        </Alert>
-                      )}
+                      <Alert variant="warning">
+                        <Heading spacing size="small" level="4">
+                          Sikker på at du vil opprette en ny versjon?
+                        </Heading>
+                        Ny versjon av kravet skal opprettes når det er{' '}
+                        <strong>vesentlige endringer</strong> i kravet som gjør at{' '}
+                        <strong>teamene må revurdere</strong> sin besvarelse av kravet. Ved alle
+                        mindre justeringer, endre i det aktive kravet, og da slipper teamene å
+                        revurdere sin besvarelse.
+                      </Alert>
                     </div>
                     <div className="mt-5 mb-10">
                       <InputField marginBottom label="Krav navn" name="navn" />
@@ -240,7 +174,7 @@ export const KravNyVersjonPage = () => {
                           <Heading level="3" size="medium" className="mb-2">
                             Suksesskriterier
                           </Heading>
-                          <KravSuksesskriterierEdit newVersion={!!newVersionWarning} />
+                          <KravSuksesskriterierEdit newVersion={true} />
                         </div>
 
                         <KravEditDokumentasjon
@@ -250,17 +184,13 @@ export const KravNyVersjonPage = () => {
 
                         <RegelverkEdit />
 
-                        {!newKrav && krav.kravVersjon > 1 && (
-                          <>
-                            <TextAreaField
-                              label="Endringer siden siste versjon"
-                              name="versjonEndringer"
-                              height="250px"
-                              markdown
-                            />
-                            <FormError fieldName="versjonEndringer" />
-                          </>
-                        )}
+                        <TextAreaField
+                          label="Endringer siden siste versjon"
+                          name="versjonEndringer"
+                          height="250px"
+                          markdown
+                        />
+                        <FormError fieldName="versjonEndringer" />
 
                         <div className="mt-20">
                           <Heading level="3" size="medium">
@@ -319,68 +249,6 @@ export const KravNyVersjonPage = () => {
                       )}
 
                       <div className="flex w-full">
-                        <div className="flex w-full">
-                          {krav.status === EKravStatus.AKTIV && !newVersionWarning && (
-                            <div className="mr-2">
-                              <Button
-                                variant="secondary"
-                                onClick={() => setUtgaattKravMessage(true)}
-                                disabled={isSubmitting}
-                                type="button"
-                              >
-                                Sett kravet til utgått
-                              </Button>
-                            </div>
-                          )}
-
-                          {user.isAdmin() &&
-                            krav.status === EKravStatus.UTGAATT &&
-                            !newVersionWarning && (
-                              <div className="mr-2">
-                                <Button
-                                  variant="secondary"
-                                  onClick={() => setAktivKravMessage(true)}
-                                  disabled={isSubmitting}
-                                  type="button"
-                                >
-                                  Sett versjonen til aktiv
-                                </Button>
-                              </div>
-                            )}
-
-                          {user.isAdmin() && !newVersionWarning && (
-                            <div className="mr-2">
-                              <Button
-                                variant="secondary"
-                                onClick={() => {
-                                  values.status = EKravStatus.UTKAST
-                                  submitForm()
-                                }}
-                                disabled={isSubmitting}
-                                type="button"
-                              >
-                                Sett kravet til utkast
-                              </Button>
-                            </div>
-                          )}
-
-                          <KravEditSettKravTilUtgattModal
-                            utgaattKravMessage={UtgaattKravMessage}
-                            setUtgaattKravMessage={setUtgaattKravMessage}
-                            values={values}
-                            submitForm={submitForm}
-                          />
-
-                          <KravEditSettVersjonTilAktivModal
-                            aktivKravMessage={aktivKravMessage}
-                            setAktivKravMessage={setAktivKravMessage}
-                            krav={krav}
-                            updateKrav={updateKrav}
-                            kravMapToFormVal={kravMapToFormVal}
-                            values={values}
-                            submitForm={submitForm}
-                          />
-                        </div>
                         <div className="flex w-full justify-end">
                           <Button
                             className="ml-4"
@@ -401,34 +269,26 @@ export const KravNyVersjonPage = () => {
                             className="ml-4"
                             variant="primary"
                             onClick={() => {
-                              if (newVersionWarning) {
-                                values.status = EKravStatus.UTKAST
-                              } else {
-                                values.status = krav.status
-                              }
+                              values.status = EKravStatus.UTKAST
                               submitForm()
                             }}
                             disabled={isSubmitting}
                           >
-                            {newVersionWarning || krav.status !== EKravStatus.AKTIV
-                              ? 'Lagre'
-                              : 'Publiser endringer'}
+                            Lagre
                           </Button>
 
-                          {(newVersionWarning || krav.status === EKravStatus.UTKAST) && (
-                            <Button
-                              type="button"
-                              className="ml-4"
-                              variant="primary"
-                              onClick={() => {
-                                values.status = EKravStatus.AKTIV
-                                submitForm()
-                              }}
-                              disabled={isSubmitting}
-                            >
-                              Publiser og gjør aktiv
-                            </Button>
-                          )}
+                          <Button
+                            type="button"
+                            className="ml-4"
+                            variant="primary"
+                            onClick={() => {
+                              values.status = EKravStatus.AKTIV
+                              submitForm()
+                            }}
+                            disabled={isSubmitting}
+                          >
+                            Publiser og gjør aktiv
+                          </Button>
                         </div>
                       </div>
                     </div>
@@ -441,11 +301,6 @@ export const KravNyVersjonPage = () => {
                       />
                     </div>
                   </div>
-                  <ErrorModal
-                    isOpen={showErrorModal}
-                    errorMessage={errorModalMessage}
-                    submit={setShowErrorModal}
-                  />
                 </Form>
               )}
             </Formik>
