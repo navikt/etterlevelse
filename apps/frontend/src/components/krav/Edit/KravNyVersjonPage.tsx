@@ -232,7 +232,7 @@ export const KravNyVersjonPage = () => {
                             type="button"
                             onClick={() => {
                               if (krav.kravNummer && krav.kravVersjon) {
-                                navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
+                                navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon - 1}`)
                               } else {
                                 navigate('/kravliste')
                               }

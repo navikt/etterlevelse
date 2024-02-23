@@ -119,7 +119,7 @@ export const kravNewVersionValidation = () =>
     suksesskriterier: suksesskriterierCheck,
     regelverk: regelverkCheck,
     varslingsadresser: varslingsadresserCheck,
-    versjonEndring: versjonEndringCheck,
+    versjonEndringer: versjonEndringCheck,
   })
 
 export const kravEditValidation = ({ alleKravVersjoner }: IPropsKravSchema) =>
