@@ -8,7 +8,7 @@ import { EListName, codelist } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
 import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
-import { InputField, MultiInputField, TextAreaField } from '../../common/Inputs'
+import { InputField, TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 import { PageLayout } from '../../scaffold/Page'
 import { EditKravMultiOptionField } from './EditKravMultiOptionField'
@@ -18,6 +18,7 @@ import { kravCreateValidation } from './KravSchemaValidation'
 import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
 import { RegelverkEdit } from './RegelverkEdit'
+import { KravEditDokumentasjon } from './components/KravEditDokumentasjon'
 
 const kravBreadCrumbPath: IBreadcrumbPaths = {
   href: '/kravliste',
@@ -121,24 +122,7 @@ export const KravCreatePage = () => {
                       <KravSuksesskriterierEdit newKrav={true} />
                     </div>
 
-                    <div className="mb-8">
-                      <Heading level="3" size="medium">
-                        Dokumentasjon
-                      </Heading>
-                    </div>
-
-                    <MultiInputField
-                      marginBottom
-                      maxInputWidth={maxInputWidth}
-                      linkLabel="Navn på kilde"
-                      name="dokumentasjon"
-                      link
-                      label="Lenke eller websaknr"
-                      tooltip="Lenke til dokumentasjon"
-                      linkTooltip={
-                        'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller WebSak.'
-                      }
-                    />
+                    <KravEditDokumentasjon maxInputWidth={maxInputWidth} />
 
                     <RegelverkEdit />
 

@@ -92,7 +92,7 @@ export const KravNyVersjonPage = () => {
               validateOnChange={false}
               validateOnBlur={false}
             >
-              {({ values, errors, isSubmitting, submitForm, setErrors }) => (
+              {({ values, errors, isSubmitting, submitForm }) => (
                 <Form>
                   <div>
                     <div className="w-full">
@@ -152,10 +152,7 @@ export const KravNyVersjonPage = () => {
                           <KravSuksesskriterierEdit newVersion={true} />
                         </div>
 
-                        <KravEditDokumentasjon
-                          maxInputWidth={maxInputWidth}
-                          setErrors={setErrors}
-                        />
+                        <KravEditDokumentasjon maxInputWidth={maxInputWidth} />
 
                         <RegelverkEdit />
                         <div id="versjonEndringer" className="w-full">
@@ -181,8 +178,6 @@ export const KravNyVersjonPage = () => {
                             listName={EListName.RELEVANS}
                             tooltip="Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n"
                           />
-
-                          <FormError fieldName="relevansFor" />
                         </div>
 
                         <div className="w-full mb-20 max-w-md">
