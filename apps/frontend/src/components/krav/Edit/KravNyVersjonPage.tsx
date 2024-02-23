@@ -23,7 +23,7 @@ import { PageLayout } from '../../scaffold/Page'
 import { EditKravMultiOptionField } from './EditKravMultiOptionField'
 import { EditKravRelasjoner } from './EditKravRelasjoner'
 import { EditBegreper } from './KravBegreperEdit'
-import { kravSchema } from './KravEditPageValidation'
+import { kravEditValidation } from './KravSchemaValidation'
 import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
 import { RegelverkEdit } from './RegelverkEdit'
@@ -179,7 +179,7 @@ export const KravNyVersjonPage = () => {
                   : kravMapToFormVal(krav as TKravQL)
               }
               onSubmit={submit}
-              validationSchema={kravSchema({ newKrav, krav, alleKravVersjoner })}
+              validationSchema={kravEditValidation({ alleKravVersjoner })}
             >
               {({ values, errors, isSubmitting, submitForm, setErrors }) => (
                 <Form>
