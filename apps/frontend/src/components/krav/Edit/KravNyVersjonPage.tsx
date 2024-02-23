@@ -6,6 +6,7 @@ import { TKravIdParams, createKrav, kravMapToFormVal } from '../../../api/KravAp
 import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi'
 import { EKravStatus, IKrav, TKravQL } from '../../../constants'
 import { EListName, codelist } from '../../../services/Codelist'
+import { ScrollToFieldError } from '../../../util/formikUtils'
 import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
 import { InputField, TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
@@ -165,7 +166,6 @@ export const KravNyVersjonPage = () => {
                             markdown
                           />
                         </div>
-                        <FormError fieldName="versjonEndringer" />
 
                         <div className="mt-20">
                           <Heading level="3" size="medium">
@@ -277,6 +277,7 @@ export const KravNyVersjonPage = () => {
                       />
                     </div>
                   </div>
+                  <ScrollToFieldError />
                 </Form>
               )}
             </Formik>
