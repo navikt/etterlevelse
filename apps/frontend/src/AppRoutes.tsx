@@ -73,8 +73,8 @@ const AppRoutes = (): JSX.Element => {
         caseSensitive={true}
       />
       <Route
-        path="/krav/redigering/:kravNummer/:kravVersjon"
-        element={<KravEditPage />}
+        path="/krav/ny-versjon/:id"
+        element={<PrivateRoute component={<KravEditPage />} kraveierPage />}
         caseSensitive={true}
       />
 
