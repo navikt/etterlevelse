@@ -91,6 +91,18 @@ const varslingsadresserCheck = yup.array().test({
   },
 })
 
+const versjonEndringCheck = yup.string().test({
+  name: 'versjonEndringerCheck',
+  message: EYupErrorMessage.PAAKREVD,
+  test: function (versjonEndringer) {
+    const { parent } = this
+    return activeStatusValueValidation(
+      parent.status,
+      checkIfVersjonEndringIsEmpty(versjonEndringer as string, parent.kravVersjon)
+    )
+  },
+})
+
 export const kravCreateValidation = () =>
   yup.object({
     navn: yup.string().required('Du må oppgi et navn til kravet'),
@@ -100,6 +112,16 @@ export const kravCreateValidation = () =>
     varslingsadresser: varslingsadresserCheck,
   })
 
+export const kravNewVersionValidation = () =>
+  yup.object({
+    navn: yup.string().required('Du må oppgi et navn til kravet'),
+    hensikt: hensiktCheck,
+    suksesskriterier: suksesskriterierCheck,
+    regelverk: regelverkCheck,
+    varslingsadresser: varslingsadresserCheck,
+    versjonEndring: versjonEndringCheck,
+  })
+
 export const kravEditValidation = ({ alleKravVersjoner }: IPropsKravSchema) =>
   yup.object({
     navn: yup.string().required('Du må oppgi et navn til kravet'),
@@ -107,18 +129,7 @@ export const kravEditValidation = ({ alleKravVersjoner }: IPropsKravSchema) =>
     suksesskriterier: suksesskriterierCheck,
     regelverk: regelverkCheck,
     varslingsadresser: varslingsadresserCheck,
-
-    versjonEndringer: yup.string().test({
-      name: 'versjonEndringerCheck',
-      message: EYupErrorMessage.PAAKREVD,
-      test: function (versjonEndringer) {
-        const { parent } = this
-        return activeStatusValueValidation(
-          parent.status,
-          checkIfVersjonEndringIsEmpty(versjonEndringer as string, parent.kravVersjon)
-        )
-      },
-    }),
+    versjonEndringer: versjonEndringCheck,
 
     status: yup.string().test({
       name: 'statusCheck',

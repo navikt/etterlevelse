@@ -2,14 +2,9 @@ import { Alert, Button, Checkbox, CheckboxGroup, Heading, Loader } from '@navikt
 import { Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import {
-  TKravIdParams,
-  createKrav,
-  getKravByKravNummer,
-  kravMapToFormVal,
-} from '../../../api/KravApi'
+import { TKravIdParams, createKrav, kravMapToFormVal } from '../../../api/KravApi'
 import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi'
-import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../../../constants'
+import { EKravStatus, IKrav, TKravQL } from '../../../constants'
 import { EListName, codelist } from '../../../services/Codelist'
 import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
 import { InputField, TextAreaField } from '../../common/Inputs'
@@ -18,7 +13,7 @@ import { PageLayout } from '../../scaffold/Page'
 import { EditKravMultiOptionField } from './EditKravMultiOptionField'
 import { EditKravRelasjoner } from './EditKravRelasjoner'
 import { EditBegreper } from './KravBegreperEdit'
-import { kravEditValidation } from './KravSchemaValidation'
+import { kravNewVersionValidation } from './KravSchemaValidation'
 import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
 import { RegelverkEdit } from './RegelverkEdit'
@@ -40,9 +35,6 @@ export const KravNyVersjonPage = () => {
 
   const navigate = useNavigate()
   const [krav, setKrav] = useState<TKravQL | undefined>()
-  const [alleKravVersjoner, setAlleKravVersjoner] = useState<IKravVersjon[]>([
-    { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
-  ])
   const [varselMeldingActive, setVarselMeldingActive] = useState<string[]>(
     krav?.varselMelding ? ['VarselMelding'] : []
   )
@@ -64,26 +56,6 @@ export const KravNyVersjonPage = () => {
       navigate(`/krav/${k.kravNummer}/${k.kravVersjon}`)
     }
   }
-
-  useEffect(() => {
-    if (krav) {
-      getKravByKravNummer(krav.kravNummer).then((resp) => {
-        if (resp.content.length) {
-          const alleVersjoner = resp.content
-            .map((k) => {
-              return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer, kravStatus: k.status }
-            })
-            .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
-
-          const filteredVersjoner = alleVersjoner.filter((k) => k.kravStatus !== EKravStatus.UTKAST)
-
-          if (filteredVersjoner.length) {
-            setAlleKravVersjoner(filteredVersjoner)
-          }
-        }
-      })
-    }
-  }, [krav])
 
   useEffect(() => {
     if (kravQuery?.kravById)
@@ -115,7 +87,9 @@ export const KravNyVersjonPage = () => {
             <Formik
               initialValues={kravMapToFormVal({ ...krav, versjonEndringer: '' })}
               onSubmit={submit}
-              validationSchema={kravEditValidation({ alleKravVersjoner })}
+              validationSchema={kravNewVersionValidation()}
+              validateOnChange={false}
+              validateOnBlur={false}
             >
               {({ values, errors, isSubmitting, submitForm, setErrors }) => (
                 <Form>
@@ -170,7 +144,7 @@ export const KravNyVersjonPage = () => {
 
                     <div className="flex w-full justify-center">
                       <div className="w-full mb-2.5">
-                        <div className="mb-10">
+                        <div className="mb-10" id="suksesskriterier">
                           <Heading level="3" size="medium" className="mb-2">
                             Suksesskriterier
                           </Heading>
@@ -183,13 +157,14 @@ export const KravNyVersjonPage = () => {
                         />
 
                         <RegelverkEdit />
-
-                        <TextAreaField
-                          label="Endringer siden siste versjon"
-                          name="versjonEndringer"
-                          height="250px"
-                          markdown
-                        />
+                        <div id="versjonEndringer" className="w-full">
+                          <TextAreaField
+                            label="Endringer siden siste versjon"
+                            name="versjonEndringer"
+                            height="250px"
+                            markdown
+                          />
+                        </div>
                         <FormError fieldName="versjonEndringer" />
 
                         <div className="mt-20">
@@ -223,8 +198,9 @@ export const KravNyVersjonPage = () => {
                             Egenskaper
                           </Heading>
                         </div>
-
-                        <KravVarslingsadresserEdit />
+                        <div id="varslingsadresser" className="w-full">
+                          <KravVarslingsadresserEdit />
+                        </div>
 
                         <FormError fieldName="varslingsadresser" akselStyling />
 
