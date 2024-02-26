@@ -3,7 +3,7 @@ import { Button, Modal } from '@navikt/ds-react'
 interface IPropsKravEditSettModal {
   status: string
   open: boolean
-  setKravMessage: (value: React.SetStateAction<boolean>) => void
+  setKravMessage: () => void
   avbrytHandling: string
   brukerBeskjed: string
   children: React.ReactElement<'Button'>
@@ -23,12 +23,12 @@ export const KravEditSettModal = ({
       heading: `Sikker på at du vil sette kravet til ${status}`,
     }}
     open={open}
-    onClose={() => setKravMessage}
+    onClose={() => setKravMessage()}
   >
     <Modal.Body>{brukerBeskjed}</Modal.Body>
     <Modal.Footer>
       {children}
-      <Button type="button" variant="secondary" onClick={() => setKravMessage}>
+      <Button type="button" variant="secondary" onClick={() => setKravMessage()}>
         {avbrytHandling}
       </Button>
     </Modal.Footer>
