@@ -1,11 +1,11 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import no.nav.data.common.storage.domain.ChangeStamp;
+import lombok.experimental.SuperBuilder;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
@@ -15,19 +15,15 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokume
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 
 import java.util.List;
-import java.util.UUID;
 
 import static java.util.List.copyOf;
 
 @Data
-@Builder
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EtterlevelseDokumentasjon implements DomainObject {
-
-    private UUID id;
-    private ChangeStamp changeStamp;
-    private Integer version;
+public class EtterlevelseDokumentasjon extends DomainObject {
 
     private Integer etterlevelseNummer;
 

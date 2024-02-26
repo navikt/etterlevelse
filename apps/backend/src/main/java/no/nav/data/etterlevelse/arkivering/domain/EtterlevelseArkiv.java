@@ -1,26 +1,24 @@
 package no.nav.data.etterlevelse.arkivering.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import no.nav.data.common.storage.domain.ChangeStamp;
+import lombok.experimental.SuperBuilder;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivResponse;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
-@Builder
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EtterlevelseArkiv implements DomainObject {
-    private UUID id;
-    private ChangeStamp changeStamp;
-    private Integer version;
+public class EtterlevelseArkiv extends DomainObject {
+
     private String etterlevelseDokumentasjonId;
     private String behandlingId;
     private EtterlevelseArkivStatus status;

@@ -2,7 +2,6 @@ package no.nav.data.common.storage.domain;
 
 import no.nav.data.common.mail.MailTask;
 import no.nav.data.common.security.azure.support.MailLog;
-import no.nav.data.common.validator.RequestElement;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
@@ -22,9 +21,10 @@ import java.util.Set;
 
 public final class TypeRegistration {
 
-    private static final Map<Class<?>, String> classToType = new HashMap<>();
-    private static final Map<String, Class<?>> typeToClass = new HashMap<>();
+    private static final Map<Class<? extends DomainObject>, String> classToType = new HashMap<>();
+    private static final Map<String, Class<? extends DomainObject>> typeToClass = new HashMap<>();
     private static final Set<String> auditedTypes = new HashSet<>();
+
 
     static {
         addDomainClass(Krav.class, true);
@@ -44,6 +44,7 @@ public final class TypeRegistration {
 
     private TypeRegistration() {
     }
+
     private static void addDomainClass(Class<? extends DomainObject> aClass, boolean audited) {
         String typeName = aClass.getSimpleName();
         classToType.put(aClass, typeName);
@@ -57,18 +58,14 @@ public final class TypeRegistration {
         return auditedTypes.contains(type);
     }
 
-    public static String typeOf(Class<?> clazz) {
+    public static String typeOf(Class<? extends DomainObject> clazz) {
         String typeString = classToType.get(clazz);
         Assert.notNull(typeString, "Class %s is not a registered type".formatted(clazz));
         return typeString;
     }
 
-    public static String typeOfRequest(RequestElement request) {
-        return request.getRequestType();
-    }
-
     @SuppressWarnings("unchecked")
-    public static <T> Class<T> classFrom(String type) {
+    public static <T extends DomainObject> Class<T> classFrom(String type) {
         Class<?> aClass = typeToClass.get(type);
         return (Class<T>) aClass;
     }

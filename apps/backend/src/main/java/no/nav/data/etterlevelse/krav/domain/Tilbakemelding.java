@@ -3,10 +3,11 @@ package no.nav.data.etterlevelse.krav.domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.security.SecurityUtils;
-import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.krav.dto.CreateTilbakemeldingRequest;
@@ -18,20 +19,16 @@ import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.common.utils.StreamUtils.tryFind;
 
 @Data
-@Builder
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Tilbakemelding implements DomainObject, KravId {
-
-    private UUID id;
-    private ChangeStamp changeStamp;
-    private Integer version;
+public class Tilbakemelding extends DomainObject implements KravId {
 
     private Integer kravNummer;
     private Integer kravVersjon;
@@ -49,10 +46,8 @@ public class Tilbakemelding implements DomainObject, KravId {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Melder {
-
         private String ident;
         private Varslingsadresse varslingsadresse;
-
     }
 
     @Data
@@ -60,7 +55,6 @@ public class Tilbakemelding implements DomainObject, KravId {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Melding {
-
         private int meldingNr;
         private String fraIdent;
         private Rolle rolle;

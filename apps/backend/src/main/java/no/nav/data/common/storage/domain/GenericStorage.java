@@ -41,6 +41,7 @@ public class GenericStorage<T extends DomainObject> extends Auditable {
 
     @NotNull
     @Column(name = "TYPE", nullable = false, updatable = false)
+    // Type er getSimpleName() av (sub-) klassen til domeneobjektet. 
     private String type;
 
     @Type(value = JsonBinaryType.class)
@@ -56,6 +57,7 @@ public class GenericStorage<T extends DomainObject> extends Auditable {
     public GenericStorage<T> generateId() {
         Assert.isTrue(id == null, "id already set");
         id = UUID.randomUUID();
+        // TODO: Setter IKKE id på domainObjectCache. Må sjekke at dette er riktig oppførsel
         return this;
     }
 

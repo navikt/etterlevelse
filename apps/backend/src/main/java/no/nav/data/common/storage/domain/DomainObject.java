@@ -1,45 +1,36 @@
 package no.nav.data.common.storage.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import no.nav.data.common.rest.ChangeStampResponse;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-// TODO: Dette må gjøres om til abstract class. Se https://trello.com/c/mbKtuSCW/322-domainobject-interface-%E2%86%92-abstract-class
-public interface DomainObject {
+@Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+public abstract class DomainObject {
 
-    UUID getId();
+    protected UUID id;
+    protected Integer version;
+    protected ChangeStamp changeStamp;
 
-    void setId(UUID id);
-
-    @JsonIgnore
-    default Integer getVersion() {
-        return -1;
-    }
-
-    @JsonIgnore
-    default void setVersion(Integer version) {
-    }
-
-    @JsonIgnore
-    ChangeStamp getChangeStamp();
-
-    @JsonIgnore
-    void setChangeStamp(ChangeStamp changeStamp);
-
-    default String type() {
+    public String type() {
         return TypeRegistration.typeOf(getClass());
     }
 
-    default ChangeStampResponse convertChangeStampResponse() {
-        if (getChangeStamp() == null) {
+    public ChangeStampResponse convertChangeStampResponse() {
+        if (changeStamp == null) {
             return null;
         }
         return ChangeStampResponse.builder()
-                .createdDate(getChangeStamp().getCreatedDate() == null ? LocalDateTime.now() : getChangeStamp().getCreatedDate() )
-                .lastModifiedBy(getChangeStamp().getLastModifiedBy())
-                .lastModifiedDate(getChangeStamp().getLastModifiedDate() == null ? LocalDateTime.now() : getChangeStamp().getLastModifiedDate())
+                .createdDate(changeStamp.getCreatedDate() == null ? LocalDateTime.now() : changeStamp.getCreatedDate())
+                .lastModifiedBy(changeStamp.getLastModifiedBy())
+                .lastModifiedDate(changeStamp.getLastModifiedDate() == null ? LocalDateTime.now() : changeStamp.getLastModifiedDate())
                 .build();
     }
 
