@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { getEtterlevelserByKravNumberKravVersion } from '../../../api/EtterlevelseApi'
 import {
   TKravIdParams,
+  getKravByKravNumberAndVersion,
   getKravByKravNummer,
   kravMapToFormVal,
   updateKrav,
@@ -317,7 +318,42 @@ export const KravEditPage = () => {
                             </Button>
                           </KravEditStatusModal>
 
-                          <KravEditStatusModal></KravEditStatusModal>
+                          <KravEditStatusModal
+                            status="aktiv"
+                            open={aktivKravMessage}
+                            brukerBeskjed="Kravet har en nyere versjon som settes til utkast"
+                            setKravMessage={() => setAktivKravMessage(false)}
+                            avbrytHandling=" Nei, avbryt handlingen"
+                          >
+                            <Button
+                              type="button"
+                              variant="primary"
+                              onClick={async () => {
+                                const newVersionOfKrav = await getKravByKravNumberAndVersion(
+                                  krav.kravNummer,
+                                  krav.kravVersjon + 1
+                                )
+                                if (newVersionOfKrav) {
+                                  updateKrav(
+                                    kravMapToFormVal({
+                                      ...newVersionOfKrav,
+                                      status: EKravStatus.UTKAST,
+                                    }) as TKravQL
+                                  ).then(() => {
+                                    values.status = EKravStatus.AKTIV
+                                    submitForm()
+                                    setAktivKravMessage(false)
+                                  })
+                                } else {
+                                  values.status = EKravStatus.AKTIV
+                                  submitForm()
+                                  setAktivKravMessage(false)
+                                }
+                              }}
+                            >
+                              Ja, sett til aktiv
+                            </Button>
+                          </KravEditStatusModal>
 
                           <KravEditSettVersjonTilAktivModal
                             aktivKravMessage={aktivKravMessage}
