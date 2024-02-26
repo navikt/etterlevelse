@@ -176,7 +176,7 @@ export const KravEditPage = () => {
                             </div>
                           )}
 
-                          {user.isAdmin() && (
+                          {user.isAdmin() && values.status !== EKravStatus.UTKAST && (
                             <div className="mr-2">
                               <Button
                                 variant="secondary"
