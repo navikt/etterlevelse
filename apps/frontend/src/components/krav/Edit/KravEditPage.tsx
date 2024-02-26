@@ -27,7 +27,6 @@ import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
 import { RegelverkEdit } from './RegelverkEdit'
 import { KravEditDokumentasjon } from './components/KravEditDokumentasjon'
-import { KravEditSettKravTilUtgattModal } from './components/KravEditSettKravTilUtgattModal'
 import { KravEditSettModal } from './components/KravEditSettModal'
 import { KravEditSettVersjonTilAktivModal } from './components/KravEditSettVersjonTilAktivModal'
 
@@ -296,13 +295,6 @@ export const KravEditPage = () => {
                               </Button>
                             </div>
                           )}
-
-                          <KravEditSettKravTilUtgattModal
-                            utgaattKravMessage={utgaattKravMessage}
-                            setUtgaattKravMessage={setUtgaattKravMessage}
-                            values={values}
-                            submitForm={submitForm}
-                          />
 
                           <KravEditSettModal
                             status="utgått"

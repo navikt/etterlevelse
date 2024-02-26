@@ -1,4 +1,5 @@
 import { Button, Modal } from '@navikt/ds-react'
+import { ReactNode } from 'react'
 
 interface IPropsKravEditSettModal {
   status: string
@@ -6,7 +7,7 @@ interface IPropsKravEditSettModal {
   setKravMessage: () => void
   avbrytHandling: string
   brukerBeskjed: string
-  children: React.ReactElement<'Button'>
+  children: ReactNode
 }
 
 export const KravEditSettModal = ({
