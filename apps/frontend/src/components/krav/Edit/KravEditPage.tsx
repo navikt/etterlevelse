@@ -28,7 +28,6 @@ import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
 import { RegelverkEdit } from './RegelverkEdit'
 import { KravEditDokumentasjon } from './components/KravEditDokumentasjon'
-import { KravEditSettVersjonTilAktivModal } from './components/KravEditSettVersjonTilAktivModal'
 import { KravEditStatusModal } from './components/KravEditStatusModal'
 
 const kravBreadCrumbPath: IBreadcrumbPaths = {
@@ -354,16 +353,6 @@ export const KravEditPage = () => {
                               Ja, sett til aktiv
                             </Button>
                           </KravEditStatusModal>
-
-                          <KravEditSettVersjonTilAktivModal
-                            aktivKravMessage={aktivKravMessage}
-                            setAktivKravMessage={setAktivKravMessage}
-                            krav={krav}
-                            updateKrav={updateKrav}
-                            kravMapToFormVal={kravMapToFormVal}
-                            values={values}
-                            submitForm={submitForm}
-                          />
                         </div>
                         <div className="flex w-full justify-end">
                           <Button
