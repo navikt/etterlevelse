@@ -1,7 +1,7 @@
 import { Button, Modal } from '@navikt/ds-react'
 import { ReactNode } from 'react'
 
-interface IPropsKravEditSettModal {
+interface IPropsKravEditStatusModal {
   status: string
   open: boolean
   setKravMessage: () => void
@@ -10,14 +10,14 @@ interface IPropsKravEditSettModal {
   children: ReactNode
 }
 
-export const KravEditSettModal = ({
+export const KravEditStatusModal = ({
   status,
   open,
   setKravMessage,
   avbrytHandling,
   brukerBeskjed,
   children,
-}: IPropsKravEditSettModal) => (
+}: IPropsKravEditStatusModal) => (
   <Modal
     header={{
       closeButton: false,
