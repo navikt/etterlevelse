@@ -1,4 +1,4 @@
-import { Alert, Button, Checkbox, CheckboxGroup, Heading, Loader } from '@navikt/ds-react'
+import { Button, Heading, Loader } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -8,16 +8,10 @@ import { EListName, codelist } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
 import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
-import { InputField, MultiInputField, TextAreaField } from '../../common/Inputs'
-import { FormError } from '../../common/ModalSchema'
+import { TextAreaField } from '../../common/Inputs'
 import { PageLayout } from '../../scaffold/Page'
-import { EditKravMultiOptionField } from './EditKravMultiOptionField'
-import { EditKravRelasjoner } from './EditKravRelasjoner'
-import { EditBegreper } from './KravBegreperEdit'
 import { kravCreateValidation } from './KravSchemaValidation'
-import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
-import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
-import { RegelverkEdit } from './RegelverkEdit'
+import { KravFormFields } from './components/KravFormFields'
 
 const kravBreadCrumbPath: IBreadcrumbPaths = {
   href: '/kravliste',
@@ -29,8 +23,6 @@ export const KravCreatePage = () => {
   const [varselMeldingActive, setVarselMeldingActive] = useState<string[]>([])
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [errorModalMessage, setErrorModalMessage] = useState('')
-
-  const maxInputWidth = '400px'
 
   const navigate = useNavigate()
 
@@ -82,112 +74,14 @@ export const KravCreatePage = () => {
               </Heading>
 
               <div>
-                <InputField marginBottom label="Krav tittel" name="navn" />
-                <div className="mb-14">
-                  <div className="mb-2.5">
-                    <CheckboxGroup
-                      legend="Send varselmelding"
-                      onChange={(value) => {
-                        setVarselMeldingActive(value)
-                      }}
-                    >
-                      <Checkbox value="VarselMelding">
-                        Gi kravet en varselmelding (eks. for kommende krav)
-                      </Checkbox>
-                    </CheckboxGroup>
+                <KravFormFields
+                  mode="create"
+                  kravVersjon={values.kravVersjon}
+                  errors={errors}
+                  varselMeldingActive={varselMeldingActive}
+                  setVarselMeldingActive={setVarselMeldingActive}
+                />
 
-                    {varselMeldingActive.length > 0 && (
-                      <div className="w-full ml-8 mt-6">
-                        <TextAreaField
-                          label="Forklaring til etterlevere"
-                          name="varselMelding"
-                          maxCharacter={100}
-                          rows={2}
-                          noPlaceholder
-                        />
-                      </div>
-                    )}
-                  </div>
-
-                  <TextAreaField label="Hensikt" name="hensikt" height="250px" markdown />
-                </div>
-
-                <div className="flex w-full justify-center">
-                  <div className="w-full  mb-2.5">
-                    <Heading level="3" size="medium" className="mb-8">
-                      Suksesskriterier
-                    </Heading>
-                    <div id="suksesskriterier">
-                      <KravSuksesskriterierEdit newKrav={true} />
-                    </div>
-
-                    <div className="mb-8">
-                      <Heading level="3" size="medium">
-                        Dokumentasjon
-                      </Heading>
-                    </div>
-
-                    <MultiInputField
-                      marginBottom
-                      maxInputWidth={maxInputWidth}
-                      linkLabel="Navn på kilde"
-                      name="dokumentasjon"
-                      link
-                      label="Lenke eller websaknr"
-                      tooltip="Lenke til dokumentasjon"
-                      linkTooltip={
-                        'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller WebSak.'
-                      }
-                    />
-
-                    <RegelverkEdit />
-
-                    <div className="mt-20">
-                      <Heading level="3" size="medium">
-                        Gruppering
-                      </Heading>
-                    </div>
-
-                    <div className="w-full max-w-md">
-                      <EditKravMultiOptionField
-                        marginBottom
-                        name="relevansFor"
-                        label="Legg til relevante kategorier"
-                        listName={EListName.RELEVANS}
-                        tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}
-                      />
-                    </div>
-
-                    <div className="w-full mb-20 max-w-md">
-                      <EditBegreper />
-                    </div>
-
-                    <div className="w-full mb-20 max-w-md">
-                      <EditKravRelasjoner />
-                    </div>
-
-                    <div className="mb-8">
-                      <Heading level="3" size="medium">
-                        Egenskaper
-                      </Heading>
-                    </div>
-                    <div id="varslingsadresser">
-                      <KravVarslingsadresserEdit />
-                    </div>
-
-                    <FormError fieldName="varslingsadresser" akselStyling />
-
-                    <div className="w-full">
-                      {Object.keys(errors).length > 0 && !errors.dokumentasjon && (
-                        <div className="flex w-full my-12">
-                          <Alert className="w-full" variant="warning" role="status">
-                            Du må fylle ut alle obligatoriske felter
-                          </Alert>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
                 <div className="button_container flex flex-col py-4 px-4 sticky mt-5 bottom-0 border-t-2 z-10 bg-bg-default">
                   <div className="flex w-full">
                     <div className="flex w-full justify-end">
