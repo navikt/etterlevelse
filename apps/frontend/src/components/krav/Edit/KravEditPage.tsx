@@ -1,4 +1,4 @@
-import { Alert, Button, Checkbox, CheckboxGroup, Heading, Loader } from '@navikt/ds-react'
+import { Button, Heading, Loader } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -17,25 +17,17 @@ import { user } from '../../../services/User'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
 import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
-import { InputField, TextAreaField } from '../../common/Inputs'
+import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 import { PageLayout } from '../../scaffold/Page'
-import { EditKravMultiOptionField } from './EditKravMultiOptionField'
-import { EditKravRelasjoner } from './EditKravRelasjoner'
-import { EditBegreper } from './KravBegreperEdit'
 import { kravEditValidation } from './KravSchemaValidation'
-import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
-import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
-import { RegelverkEdit } from './RegelverkEdit'
-import { KravEditDokumentasjon } from './components/KravEditDokumentasjon'
 import { KravEditStatusModal } from './components/KravEditStatusModal'
+import { KravFormFields } from './components/KravFormFields'
 
 const kravBreadCrumbPath: IBreadcrumbPaths = {
   href: '/kravliste',
   pathName: 'Forvalte og opprette krav',
 }
-
-const maxInputWidth = '400px'
 
 export const KravEditPage = () => {
   const params: Readonly<Partial<TKravIdParams>> = useParams<TKravIdParams>()
@@ -142,109 +134,13 @@ export const KravEditPage = () => {
                         {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}{' '}
                       </Heading>
                     </div>
-                    <div className="mt-5 mb-10">
-                      <InputField marginBottom label="Krav navn" name="navn" />
-                      <div className="mb-10">
-                        <CheckboxGroup
-                          legend="Send varselmelding"
-                          value={varselMeldingActive}
-                          onChange={(value) => {
-                            setVarselMeldingActive(value)
-                          }}
-                        >
-                          <Checkbox value="VarselMelding">
-                            Gi kravet en varselmelding (eks. for kommende krav)
-                          </Checkbox>
-                        </CheckboxGroup>
-
-                        {varselMeldingActive.length > 0 && (
-                          <div className="w-full ml-8 mt-6">
-                            <TextAreaField
-                              label="Forklaring til etterlevere"
-                              name="varselMelding"
-                              maxCharacter={100}
-                              rows={2}
-                              noPlaceholder
-                            />
-                          </div>
-                        )}
-                      </div>
-                      <TextAreaField label="Hensikt" name="hensikt" height="250px" markdown />
-                    </div>
-
-                    <div className="flex w-full justify-center">
-                      <div className="w-full mb-2.5">
-                        <div className="mb-10" id="suksesskriterier">
-                          <Heading level="3" size="medium" className="mb-2">
-                            Suksesskriterier
-                          </Heading>
-                          <KravSuksesskriterierEdit />
-                        </div>
-
-                        <KravEditDokumentasjon maxInputWidth={maxInputWidth} />
-
-                        <RegelverkEdit />
-
-                        {krav.kravVersjon > 1 && (
-                          <div className="w-full" id="versjonEndringer">
-                            <TextAreaField
-                              label="Endringer siden siste versjon"
-                              name="versjonEndringer"
-                              height="250px"
-                              markdown
-                            />
-                          </div>
-                        )}
-
-                        <div className="mt-20">
-                          <Heading level="3" size="medium">
-                            Gruppering
-                          </Heading>
-                        </div>
-
-                        <div className="w-full max-w-md">
-                          <EditKravMultiOptionField
-                            marginBottom
-                            name="relevansFor"
-                            label="Legg til relevante kategorier"
-                            listName={EListName.RELEVANS}
-                            tooltip="Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n"
-                          />
-                        </div>
-
-                        <div className="w-full mb-20 max-w-md">
-                          <EditBegreper />
-                        </div>
-
-                        <div className="w-full mb-20 max-w-md">
-                          <EditKravRelasjoner />
-                        </div>
-
-                        <div className="mb-8">
-                          <Heading level="3" size="medium">
-                            Egenskaper
-                          </Heading>
-                        </div>
-
-                        <div id="varslingsadresser">
-                          <KravVarslingsadresserEdit />
-                        </div>
-
-                        <FormError fieldName="varslingsadresser" akselStyling />
-
-                        <div className="w-full">
-                          {Object.keys(errors).length > 0 && !errors.dokumentasjon && (
-                            <div className="flex w-full my-12">
-                              <div className="w-full bg-red-300">
-                                <Alert variant="warning" role="status">
-                                  Du må fylle ut alle obligatoriske felter
-                                </Alert>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                    <KravFormFields
+                      mode="edit"
+                      kravVersjon={values.kravVersjon}
+                      errors={errors}
+                      varselMeldingActive={varselMeldingActive}
+                      setVarselMeldingActive={setVarselMeldingActive}
+                    />
                     <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-bg-default">
                       {errors.status && (
                         <div className="mb-3">
