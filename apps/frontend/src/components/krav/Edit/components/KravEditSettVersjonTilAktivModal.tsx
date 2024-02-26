@@ -20,48 +20,48 @@ export const KravEditSettVersjonTilAktivModal = ({
   kravMapToFormVal,
   values,
   submitForm,
-}: IPropsKravEditSettVersjonTilAktivModal) => (
-  <Modal
-    header={{
-      closeButton: false,
-      heading: 'Sikker på at du vil sette versjonen til aktiv?',
-    }}
-    open={aktivKravMessage}
-    onClose={() => setAktivKravMessage(false)}
-  >
-    <Modal.Body>Kravet har en nyere versjon som settes til utkast</Modal.Body>
-    <Modal.Footer>
-      <Button
-        type="button"
-        variant="primary"
-        onClick={async () => {
-          const newVersionOfKrav = await getKravByKravNumberAndVersion(
-            krav.kravNummer,
-            krav.kravVersjon + 1
-          )
-          if (newVersionOfKrav) {
-            updateKrav(
-              kravMapToFormVal({
-                ...newVersionOfKrav,
-                status: EKravStatus.UTKAST,
-              }) as TKravQL
-            ).then(() => {
-              values.status = EKravStatus.AKTIV
-              submitForm()
-              setAktivKravMessage(false)
-            })
-          } else {
-            values.status = EKravStatus.AKTIV
-            submitForm()
-            setAktivKravMessage(false)
-          }
-        }}
-      >
-        Ja, sett til aktiv
-      </Button>
-      <Button type="button" variant="secondary" onClick={() => setAktivKravMessage(false)}>
-        Nei, avbryt handlingen
-      </Button>
-    </Modal.Footer>
-  </Modal>
-)
+}: IPropsKravEditSettVersjonTilAktivModal) => {
+  const submit = async (): Promise<void> => {
+    const newVersionOfKrav = await getKravByKravNumberAndVersion(
+      krav.kravNummer,
+      krav.kravVersjon + 1
+    )
+    if (newVersionOfKrav) {
+      updateKrav(
+        kravMapToFormVal({
+          ...newVersionOfKrav,
+          status: EKravStatus.UTKAST,
+        }) as TKravQL
+      ).then(() => {
+        values.status = EKravStatus.AKTIV
+        submitForm()
+        setAktivKravMessage(false)
+      })
+    } else {
+      values.status = EKravStatus.AKTIV
+      submitForm()
+      setAktivKravMessage(false)
+    }
+  }
+
+  return (
+    <Modal
+      header={{
+        closeButton: false,
+        heading: 'Sikker på at du vil sette versjonen til aktiv?',
+      }}
+      open={aktivKravMessage}
+      onClose={() => setAktivKravMessage(false)}
+    >
+      <Modal.Body>Kravet har en nyere versjon som settes til utkast</Modal.Body>
+      <Modal.Footer>
+        <Button type="button" variant="primary" onClick={async () => submit()}>
+          Ja, sett til aktiv
+        </Button>
+        <Button type="button" variant="secondary" onClick={() => setAktivKravMessage(false)}>
+          Nei, avbryt handlingen
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  )
+}

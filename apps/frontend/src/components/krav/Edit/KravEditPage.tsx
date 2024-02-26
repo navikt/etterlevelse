@@ -28,6 +28,7 @@ import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
 import { RegelverkEdit } from './RegelverkEdit'
 import { KravEditDokumentasjon } from './components/KravEditDokumentasjon'
 import { KravEditSettKravTilUtgattModal } from './components/KravEditSettKravTilUtgattModal'
+import { KravEditSettModal } from './components/KravEditSettModal'
 import { KravEditSettVersjonTilAktivModal } from './components/KravEditSettVersjonTilAktivModal'
 
 const kravBreadCrumbPath: IBreadcrumbPaths = {
@@ -302,6 +303,27 @@ export const KravEditPage = () => {
                             values={values}
                             submitForm={submitForm}
                           />
+
+                          <KravEditSettModal
+                            status="utgått"
+                            open={utgaattKravMessage}
+                            brukerBeskjed="Denne handligen kan ikke reverseres"
+                            setKravMessage={() => setUtgaattKravMessage(false)}
+                            avbrytHandling="Nei, avbryt handlingen"
+                          >
+                            <Button
+                              type="button"
+                              className="mr-4"
+                              variant="primary"
+                              onClick={() => {
+                                values.status = EKravStatus.UTGAATT
+                                submitForm()
+                                setUtgaattKravMessage(false)
+                              }}
+                            >
+                              Ja, sett til utgått
+                            </Button>
+                          </KravEditSettModal>
 
                           <KravEditSettVersjonTilAktivModal
                             aktivKravMessage={aktivKravMessage}
