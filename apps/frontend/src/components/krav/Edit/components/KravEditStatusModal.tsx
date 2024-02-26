@@ -21,7 +21,7 @@ export const KravEditStatusModal = ({
   <Modal
     header={{
       closeButton: false,
-      heading: `Sikker på at du vil sette kravet til ${status}`,
+      heading: `Sikker på at du vil sette kravet til ${status}?`,
     }}
     open={open}
     onClose={() => setKravMessage()}
