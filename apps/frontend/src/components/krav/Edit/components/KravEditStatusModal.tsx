@@ -2,10 +2,9 @@ import { Button, Modal } from '@navikt/ds-react'
 import { ReactNode } from 'react'
 
 interface IPropsKravEditStatusModal {
-  status: string
+  status: 'aktiv' | 'utgått'
   open: boolean
   setKravMessage: () => void
-  avbrytHandling: string
   brukerBeskjed: string
   children: ReactNode
 }
@@ -14,7 +13,6 @@ export const KravEditStatusModal = ({
   status,
   open,
   setKravMessage,
-  avbrytHandling,
   brukerBeskjed,
   children,
 }: IPropsKravEditStatusModal) => (
@@ -30,7 +28,7 @@ export const KravEditStatusModal = ({
     <Modal.Footer>
       {children}
       <Button type="button" variant="secondary" onClick={() => setKravMessage()}>
-        {avbrytHandling}
+        Nei, avbryt handlingen
       </Button>
     </Modal.Footer>
   </Modal>

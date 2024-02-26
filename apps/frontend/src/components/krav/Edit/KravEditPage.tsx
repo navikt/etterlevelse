@@ -197,7 +197,6 @@ export const KravEditPage = () => {
                             open={utgaattKravMessage}
                             brukerBeskjed="Denne handligen kan ikke reverseres"
                             setKravMessage={() => setUtgaattKravMessage(false)}
-                            avbrytHandling="Nei, avbryt handlingen"
                           >
                             <Button
                               type="button"
@@ -218,7 +217,6 @@ export const KravEditPage = () => {
                             open={aktivKravMessage}
                             brukerBeskjed="Kravet har en nyere versjon som settes til utkast"
                             setKravMessage={() => setAktivKravMessage(false)}
-                            avbrytHandling=" Nei, avbryt handlingen"
                           >
                             <Button
                               type="button"
