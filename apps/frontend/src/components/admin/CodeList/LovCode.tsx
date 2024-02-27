@@ -24,11 +24,6 @@ export const LovCodeDataForm = () => (
           form.setFieldValue('data', { ...data, ...val })
         }
 
-        // Migrate old
-        if (!data.lovId && form.values.description) {
-          set({ lovId: form.values.description })
-        }
-
         return (
           <>
             <TextField
