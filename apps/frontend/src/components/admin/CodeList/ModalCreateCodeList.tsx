@@ -31,7 +31,7 @@ const ModalCreateCodeList = ({
     className="w-full max-w-2xl px-8"
     open={isOpen}
     onClose={() => onClose()}
-    header={{ heading: title }}
+    header={{ heading: title, closeButton: false }}
   >
     <div>
       <Formik

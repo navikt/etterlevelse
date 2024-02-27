@@ -19,7 +19,7 @@ const DeleteCodeListModal = ({
   onClose,
 }: TModalDeleteProps) => {
   return (
-    <Modal onClose={onClose} open={isOpen} header={{ heading: title }}>
+    <Modal onClose={onClose} open={isOpen} header={{ heading: title, closeButton: false }}>
       <Modal.Body>
         <BodyShort>
           Bekreft sletting av kode &quot;{initialValues.code}&quot; fra &quot;{initialValues.list}

@@ -20,7 +20,11 @@ export const DeleteItem = (props: {
       >
         {props.buttonLabel ? props.buttonLabel : 'Slett'}
       </Button>
-      <Modal open={open} onClose={() => setOpen(false)} header={{ heading: 'Bekreft slett' }}>
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        header={{ heading: 'Bekreft slett', closeButton: false }}
+      >
         <Modal.Body>Er du sikker på at du vil slette?</Modal.Body>
         <Modal.Footer>
           <Button onClick={() => setOpen(false)} size={'small'} variant={'secondary'}>
