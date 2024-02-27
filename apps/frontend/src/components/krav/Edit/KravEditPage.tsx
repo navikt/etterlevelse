@@ -322,7 +322,7 @@ export const KravEditPage = () => {
                             open={aktivKravMessage}
                             brukerBeskjed="Kravet har en nyere versjon som settes til utkast"
                             setKravMessage={() => setAktivKravMessage(false)}
-                            avbrytHandling=" Nei, avbryt handlingen"
+                            avbrytHandling="Nei, avbryt handlingen"
                           >
                             <Button
                               type="button"
