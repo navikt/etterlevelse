@@ -7,7 +7,6 @@ import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi
 import { EKravStatus, IKrav, TKravQL } from '../../../constants'
 import { EListName, codelist } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
-import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
 import { InputField, TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 import { PageLayout } from '../../scaffold/Page'
@@ -18,12 +17,8 @@ import { kravNewVersionValidation } from './KravSchemaValidation'
 import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
 import { RegelverkEdit } from './RegelverkEdit'
+import { kravBreadCrumbPath } from './components/KravBreadCrumbPath'
 import { KravDokumentasjon } from './components/KravDokumentasjon'
-
-const kravBreadCrumbPath: IBreadcrumbPaths = {
-  href: '/kravliste',
-  pathName: 'Forvalte og opprette krav',
-}
 
 const maxInputWidth = '400px'
 
