@@ -1,11 +1,11 @@
 import { Heading } from '@navikt/ds-react'
 import { MultiInputField } from '../../../common/Inputs'
 
-interface IPropsKravEditDokumentasjon {
+interface IPropsKravDokumentasjon {
   maxInputWidth: string
 }
 
-export const KravEditDokumentasjon = ({ maxInputWidth }: IPropsKravEditDokumentasjon) => (
+export const KravDokumentasjon = ({ maxInputWidth }: IPropsKravDokumentasjon) => (
   <>
     <Heading level="3" size="medium" className="mb-2">
       Dokumentasjon

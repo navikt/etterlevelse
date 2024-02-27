@@ -113,7 +113,6 @@ export const KravNyVersjonPage = () => {
                       varselMeldingActive={varselMeldingActive}
                       setVarselMeldingActive={setVarselMeldingActive}
                     />
-
                     <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-bg-default">
                       {errors.status && (
                         <div className="mb-3">

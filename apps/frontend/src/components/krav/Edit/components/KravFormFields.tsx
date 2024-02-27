@@ -10,7 +10,7 @@ import { EditBegreper } from '../KravBegreperEdit'
 import { KravSuksesskriterierEdit } from '../KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from '../KravVarslingsadresserEdit'
 import { RegelverkEdit } from '../RegelverkEdit'
-import { KravEditDokumentasjon } from './KravEditDokumentasjon'
+import { KravDokumentasjon } from './KravDokumentasjon'
 
 interface IProps {
   mode: 'create' | 'edit'
@@ -65,7 +65,7 @@ export const KravFormFields = (props: IProps) => {
             <KravSuksesskriterierEdit />
           </div>
 
-          <KravEditDokumentasjon maxInputWidth={maxInputWidth} />
+          <KravDokumentasjon maxInputWidth={maxInputWidth} />
 
           <RegelverkEdit />
 
