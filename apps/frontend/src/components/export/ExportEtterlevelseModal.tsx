@@ -31,7 +31,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
           setValgtTema('')
           setIsExportModalOpen(false)
         }}
-        header={{ heading: 'Eksporter etterlevelse' }}
+        header={{ heading: 'Eksporter etterlevelse', closeButton: false }}
       >
         <Modal.Body>
           {isLoading ? (
@@ -45,9 +45,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                 onChange={(ev) => setValgtTema(ev.currentTarget.value)}
                 value={valgtTema}
               >
-                <option key="" value="">
-                  Velg tema
-                </option>
+                <option key="" value=""></option>
                 {codelist.getParsedOptions(EListName.TEMA).map((opt) => (
                   <option key={`option_${opt.value}`} value={opt.value}>
                     {opt.label}
