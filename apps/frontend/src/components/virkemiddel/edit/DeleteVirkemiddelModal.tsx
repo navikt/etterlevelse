@@ -35,7 +35,7 @@ const DeleteVirkemiddeltModal = ({
     <Modal
       onClose={() => setIsOpen(false)}
       open={isOpen}
-      header={{ heading: 'Bekreft sletting.' }}
+      header={{ heading: 'Bekreft sletting.', closeButton: false }}
       width="medium"
     >
       <Modal.Body>

@@ -49,7 +49,7 @@ export const EditNotatfelt = ({
       }}
       aria-label="Notat"
     >
-      <Modal.Header>
+      <Modal.Header closeButton={false}>
         <div className="flex items-center">
           <FileTextIcon aria-label="" aria-hidden width="24px" height="26px" />
           <Heading level="2" size="small">

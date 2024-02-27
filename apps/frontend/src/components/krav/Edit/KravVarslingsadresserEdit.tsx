@@ -142,7 +142,12 @@ const AddModal = ({
   children: ReactNode
   largeHeight?: boolean
 }) => (
-  <Modal open={isOpen} onClose={close} header={{ heading: title }} width="medium">
+  <Modal
+    open={isOpen}
+    onClose={close}
+    header={{ heading: title, closeButton: false }}
+    width="medium"
+  >
     <Modal.Body className={`${largeHeight ? 'min-h-[300px]' : undefined}`}>{children}</Modal.Body>
     <Modal.Footer>
       <Button variant="secondary" type="button" onClick={close}>

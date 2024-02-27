@@ -71,7 +71,10 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
         width="1000px"
         open={!!props.isOpen}
         onClose={() => props.setIsOpen(false)}
-        header={{ heading: props.isEdit ? 'Rediger virkemiddel' : 'Opprett nytt virkemiddel' }}
+        header={{
+          heading: props.isEdit ? 'Rediger virkemiddel' : 'Opprett nytt virkemiddel',
+          closeButton: false,
+        }}
       >
         <Modal.Body>
           <Formik

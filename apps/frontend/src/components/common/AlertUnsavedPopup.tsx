@@ -1,8 +1,4 @@
-import { Block } from 'baseui/block'
-import { ModalHeader } from 'baseui/modal'
-import Button from './Button'
-import CustomizedModal from './CustomizedModal'
-import { borderRadius, marginAll } from './Style'
+import { Button, Modal } from '@navikt/ds-react'
 
 type TAlertUnsavedPopupProps = {
   isModalOpen: boolean
@@ -18,37 +14,16 @@ export const AlertUnsavedPopup = ({
   onSubmit,
 }: TAlertUnsavedPopupProps) => {
   return (
-    <CustomizedModal
-      onClose={() => setIsModalOpen(false)}
-      isOpen={isModalOpen}
-      size="default"
-      overrides={{
-        Root: {
-          style: {
-            zIndex: 100,
-          },
-        },
-        Dialog: {
-          style: {
-            ...borderRadius('0px'),
-            ...marginAll('0px'),
-            maxWidth: '500px',
-            width: '100%',
-          },
-        },
-      }}
-    >
-      <Block width="100%">
-        <ModalHeader>
-          Er du sikkert på at du vil forlate redigerings siden uten å lagre?
-        </ModalHeader>
-        <Block
-          paddingBottom="32px"
-          paddingLeft="24px"
-          paddingRight="32px"
-          display="flex"
-          justifyContent="flex-end"
-        >
+    <>
+      <Modal
+        onClose={() => setIsModalOpen(false)}
+        open={isModalOpen}
+        header={{
+          heading: 'Er du sikkert på at du vil forlate redigerings siden uten å lagre?',
+          closeButton: false,
+        }}
+      >
+        <Modal.Body>
           <Button
             onClick={() => {
               onSubmit()
@@ -58,7 +33,7 @@ export const AlertUnsavedPopup = ({
             Lagre og fortsett
           </Button>
           <Button
-            marginLeft
+            className="ml-2.5"
             onClick={() => {
               onClose()
               setIsModalOpen(false)
@@ -67,17 +42,17 @@ export const AlertUnsavedPopup = ({
             Fortsett uten å lagre
           </Button>
           <Button
-            marginLeft
-            kind="secondary"
+            className="ml-2.5"
+            variant="secondary"
             onClick={() => {
               setIsModalOpen(false)
             }}
           >
             Avbryt
           </Button>
-        </Block>
-      </Block>
-    </CustomizedModal>
+        </Modal.Body>
+      </Modal>
+    </>
   )
 }
 export default AlertUnsavedPopup

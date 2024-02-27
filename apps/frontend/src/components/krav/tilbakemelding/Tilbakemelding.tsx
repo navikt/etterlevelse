@@ -388,7 +388,14 @@ const TilbakemeldingSvar = ({
           />
         )}
         {deleteModal && (
-          <Modal open={deleteModal} onClose={() => setDeleteModal(false)} header={{heading: "Er du sikker på at du vil slette hele meldingen?"}}>
+          <Modal
+            open={deleteModal}
+            onClose={() => setDeleteModal(false)}
+            header={{
+              heading: 'Er du sikker på at du vil slette hele meldingen?',
+              closeButton: false,
+            }}
+          >
             <Modal.Body>
               <BodyShort className="flex">
                 {moment(tilbakemelding.meldinger[0].tid).format('ll')}

@@ -32,7 +32,7 @@ export const useNetworkStatus = () => {
     <Modal
       open={!!error}
       onClose={clear}
-      header={{ heading: error?.message ? error?.message : 'Nettverksfeil' }}
+      header={{ heading: error?.message ? error?.message : 'Nettverksfeil', closeButton: false }}
     >
       <Modal.Body>
         {error?.response?.data?.message ? error?.response?.data?.message : error?.toString()}

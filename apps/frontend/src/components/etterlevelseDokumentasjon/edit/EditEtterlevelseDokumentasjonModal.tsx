@@ -118,6 +118,7 @@ export const EditEtterlevelseDokumentasjonModal = (
           heading: isEditButton
             ? 'Rediger etterlevelsesdokumentet'
             : 'Opprett nytt etterlevelsesdokument',
+          closeButton: false,
         }}
         open={!!isEtterlevelseDokumentasjonerModalOpen}
         onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}
