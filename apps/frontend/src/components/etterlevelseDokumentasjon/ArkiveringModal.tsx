@@ -1,6 +1,6 @@
 import { BodyLong, Button, Modal } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
-import { ModalBody, ModalHeader } from 'baseui/modal'
+import { ModalBody } from 'baseui/modal'
 import moment from 'moment'
 import React, { useState } from 'react'
 import { createEtterlevelseArkiv, updateEtterlevelseArkiv } from '../../api/ArkiveringApi'
@@ -60,6 +60,9 @@ export const ArkiveringModal = ({
     }
   }
 
+  const isStatusTilArkivering =
+    etterlevelseArkiv && etterlevelseArkiv.status === EEtterlevelseArkivStatus.TIL_ARKIVERING
+
   return (
     <Modal
       open={arkivModal}
@@ -68,12 +71,11 @@ export const ArkiveringModal = ({
         setArkivModal(false)
       }}
       aria-label="Arkiverings modal"
+      header={{
+        heading: isStatusTilArkivering ? 'Arkivering bestilt' : 'Arkivér i Websak',
+        closeButton: false,
+      }}
     >
-      <ModalHeader>
-        {etterlevelseArkiv && etterlevelseArkiv.status === EEtterlevelseArkivStatus.TIL_ARKIVERING
-          ? 'Arkivering bestilt'
-          : 'Arkivér i Websak'}
-      </ModalHeader>
       <ModalBody>
         <BodyLong className="mb-4">
           Arkiveringen skjer puljevis hver dag klokka 12.00 og 00.00. Etter disse tidspunktene vil
@@ -88,17 +90,22 @@ export const ArkiveringModal = ({
               grunnlaget for risikovurderinger og rapportering.
             </BodyLong>
           )}
-        <Block>{etterlevelseArkiv ? getStatustext(etterlevelseArkiv.status) : ''}</Block>
+        <div>{etterlevelseArkiv ? getStatustext(etterlevelseArkiv.status) : ''}</div>
         {isArchivingCancelled && etterlevelseArkiv?.arkiveringAvbruttDato && (
-          <Block>
-            Avbrutt dato: {moment(etterlevelseArkiv?.arkiveringAvbruttDato).format('lll')}
-          </Block>
+          <div>Avbrutt dato: {moment(etterlevelseArkiv?.arkiveringAvbruttDato).format('lll')}</div>
         )}
-        <Block
-          marginTop="16px"
-          display="flex"
-          $style={{ justifyContent: 'flex-end', paddingTop: '16px' }}
-        >
+        <div className="flex justify-end pt-4 mt-4">
+          <Button
+            className="mr-2.5"
+            type="button"
+            variant="secondary"
+            onClick={() => {
+              setIsArchivingCancelled(false)
+              setArkivModal(false)
+            }}
+          >
+            Lukk
+          </Button>
           {etterlevelseArkiv &&
             etterlevelseArkiv.status !== EEtterlevelseArkivStatus.BEHANDLER_ARKIVERING &&
             etterlevelseArkiv.status !== EEtterlevelseArkivStatus.ERROR && (
@@ -150,19 +157,7 @@ export const ArkiveringModal = ({
                   : 'Arkivér i WebSak'}
               </Button>
             )}
-          {etterlevelseArkiv &&
-            etterlevelseArkiv.status === EEtterlevelseArkivStatus.TIL_ARKIVERING && (
-              <Button
-                onClick={() => {
-                  setIsArchivingCancelled(false)
-                  setArkivModal(false)
-                }}
-                variant="primary"
-              >
-                Lukk
-              </Button>
-            )}
-        </Block>
+        </div>
       </ModalBody>
     </Modal>
   )
