@@ -27,7 +27,7 @@ import { kravEditValidation } from './KravSchemaValidation'
 import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
 import { RegelverkEdit } from './RegelverkEdit'
-import { KravEditDokumentasjon } from './components/KravEditDokumentasjon'
+import { KravDokumentasjon } from './components/KravDokumentasjon'
 import { KravEditStatusModal } from './components/KravEditStatusModal'
 
 const kravBreadCrumbPath: IBreadcrumbPaths = {
@@ -181,7 +181,7 @@ export const KravEditPage = () => {
                           <KravSuksesskriterierEdit />
                         </div>
 
-                        <KravEditDokumentasjon maxInputWidth={maxInputWidth} />
+                        <KravDokumentasjon maxInputWidth={maxInputWidth} />
 
                         <RegelverkEdit />
 

@@ -18,7 +18,7 @@ import { kravNewVersionValidation } from './KravSchemaValidation'
 import { KravSuksesskriterierEdit } from './KravSuksesskriterieEdit'
 import { KravVarslingsadresserEdit } from './KravVarslingsadresserEdit'
 import { RegelverkEdit } from './RegelverkEdit'
-import { KravEditDokumentasjon } from './components/KravEditDokumentasjon'
+import { KravDokumentasjon } from './components/KravDokumentasjon'
 
 const kravBreadCrumbPath: IBreadcrumbPaths = {
   href: '/kravliste',
@@ -152,7 +152,7 @@ export const KravNyVersjonPage = () => {
                           <KravSuksesskriterierEdit newVersion={true} />
                         </div>
 
-                        <KravEditDokumentasjon maxInputWidth={maxInputWidth} />
+                        <KravDokumentasjon maxInputWidth={maxInputWidth} />
 
                         <RegelverkEdit />
                         <div id="versjonEndringer" className="w-full">
