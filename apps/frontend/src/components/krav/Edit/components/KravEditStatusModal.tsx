@@ -28,10 +28,10 @@ export const KravEditStatusModal = ({
   >
     <Modal.Body>{brukerBeskjed}</Modal.Body>
     <Modal.Footer>
-      {children}
       <Button type="button" variant="secondary" onClick={() => setKravMessage()}>
         {avbrytHandling}
       </Button>
+      {children}
     </Modal.Footer>
   </Modal>
 )
