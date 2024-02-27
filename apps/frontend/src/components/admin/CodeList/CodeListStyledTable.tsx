@@ -4,6 +4,7 @@ import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { deleteCodelist, getCodelistUsage, updateCodelist } from '../../../api/CodelistApi'
 import {
+  EListName,
   ELovCodeRelevans,
   ICode,
   ICodeListFormValues,
@@ -85,6 +86,31 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
     return 1
   })
 
+  const getInitailValues = (selectedCode: ICode) => {
+    const list = selectedCode.list
+
+    const initialValues: ICodeListFormValues = {
+      list: selectedCode.list ?? '',
+      code: selectedCode.code ?? '',
+      shortName: selectedCode.shortName ?? '',
+      description: selectedCode.description ?? '',
+    }
+
+    if (selectedCode.data) {
+      initialValues.data = selectedCode.data
+      if (list === EListName.LOV) {
+        initialValues.data = {
+          ...selectedCode.data,
+          relevantFor: selectedCode.data.relevantFor
+            ? selectedCode.data.relevantFor
+            : ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL,
+        }
+      }
+    }
+
+    return initialValues
+  }
+
   return (
     <>
       <Table
@@ -165,17 +191,7 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
       {showEditModal && selectedCode && (
         <UpdateCodeListModal
           title="Rediger kode"
-          initialValues={{
-            list: selectedCode.list ?? '',
-            code: selectedCode.code ?? '',
-            shortName: selectedCode.shortName ?? '',
-            description: selectedCode.description ?? '',
-            data: selectedCode.data
-              ? selectedCode.data.relevantFor
-                ? selectedCode.data
-                : { ...selectedCode.data, relevantFor: ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL }
-              : { relevantFor: ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL },
-          }}
+          initialValues={getInitailValues(selectedCode)}
           isOpen={showEditModal}
           onClose={() => {
             setShowEditModal(!showEditModal)

@@ -100,7 +100,7 @@ const CodeListPage = () => {
           <CodeListTable tableData={currentCodelist || []} refresh={update} />
         </div>
       )}
-      {listname && (
+      {listname && createCodeListModal && (
         <ModalCreateCodeList
           title="Ny kode"
           list={listname}
