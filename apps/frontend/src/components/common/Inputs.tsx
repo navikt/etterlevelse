@@ -18,7 +18,7 @@ import * as _ from 'lodash'
 import React, { ReactNode, useState } from 'react'
 import { TSearchType } from '../../api/TeamApi'
 import { TOr } from '../../constants'
-import { EListName, codelist } from '../../services/Codelist'
+import { EListName, ICode, codelist } from '../../services/Codelist'
 import CustomizedSelect from '../common/CustomizedSelect'
 import LabelWithTooltip from '../common/LabelWithTooltip'
 import { MarkdownInfo } from './Markdown'
@@ -397,15 +397,15 @@ export const OptionList = (props: TPropsOptionList) => {
       hideLabel
       className="w-full"
       value={value}
-      onChange={(e) => {
+      onChange={async (e) => {
         const val = e.target.value
-        const toSet = listName && val ? codelist.getCode(listName, val) : val
+        const toSet = listName && val ? ((await codelist.getCode(listName, val)) as ICode) : val
         return onChange(toSet)
       }}
     >
       <option value="">Velg {label}</option>
       {optionsList.map((c, i) => (
-        <option key={i + '_' + c.label} value={c.id}>
+        <option key={i + '_' + c.label} value={c.value}>
           {c.label}
         </option>
       ))}

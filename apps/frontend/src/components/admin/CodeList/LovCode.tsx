@@ -5,7 +5,6 @@ import {
   ICodeListFormValues,
   ILovCodeData,
   ITemaCodeData,
-  codelist,
   lovCodeRelevansToOptions,
 } from '../../../services/Codelist'
 import { temaBilder } from '../../Images'
@@ -44,7 +43,7 @@ export const LovCodeDataForm = () => (
               <div className="mt-1.5">
                 <OptionList
                   listName={EListName.UNDERAVDELING}
-                  value={codelist.getCode(EListName.UNDERAVDELING, data.underavdeling)?.code}
+                  value={data.underavdeling as string}
                   onChange={(val) => set({ underavdeling: val.code })}
                   label="underavdeling"
                 />
@@ -56,7 +55,7 @@ export const LovCodeDataForm = () => (
               <div className="mt-1.5">
                 <OptionList
                   listName={EListName.TEMA}
-                  value={codelist.getCode(EListName.TEMA, data.tema)?.code}
+                  value={data.tema as string}
                   onChange={(val) => set({ tema: val.code })}
                   label="tema"
                 />

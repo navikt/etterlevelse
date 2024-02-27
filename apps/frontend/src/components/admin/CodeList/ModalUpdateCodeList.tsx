@@ -29,6 +29,8 @@ const UpdateCodeListModal = ({
     header={{ heading: title, closeButton: false }}
   >
     <Formik
+      validateOnBlur={false}
+      validateOnMount={false}
       onSubmit={(values) => {
         submit(values)
         onClose()

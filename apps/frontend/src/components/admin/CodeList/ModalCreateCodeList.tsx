@@ -35,6 +35,8 @@ const ModalCreateCodeList = ({
   >
     <div>
       <Formik
+        validateOnBlur={false}
+        validateOnMount={false}
         onSubmit={(values) => {
           submit(values)
           onClose()
