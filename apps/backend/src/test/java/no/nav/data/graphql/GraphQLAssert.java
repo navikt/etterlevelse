@@ -2,14 +2,12 @@ package no.nav.data.graphql;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.AbstractAssert;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.function.Consumer;
 
-@Slf4j
 public class GraphQLAssert extends AbstractAssert<GraphQLAssert, GraphQLResponse> {
 
     private final String queryName;

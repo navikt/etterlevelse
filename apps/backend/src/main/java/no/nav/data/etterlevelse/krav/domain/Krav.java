@@ -1,37 +1,33 @@
 package no.nav.data.etterlevelse.krav.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import no.nav.data.common.security.SecurityUtils;
-import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
-import no.nav.data.etterlevelse.krav.domain.dto.KravIdStatus;
+import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
-@Builder
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Krav implements DomainObject, KravIdStatus {
-
-    private UUID id;
-    private ChangeStamp changeStamp;
-    private Integer version;
+public class Krav extends DomainObject implements KravId {
 
     private Integer kravNummer;
     @Default
@@ -139,4 +135,12 @@ public class Krav implements DomainObject, KravIdStatus {
     public InstanceId convertToInstanceId() {
         return new InstanceId(id.toString(), navn, "K" + kravNummer + "." + kravVersjon);
     }
+    
+    public boolean supersedes(Krav other) {
+        return other.getKravNummer().equals(getKravNummer()) && (
+                getStatus().supersedes(other.getStatus())
+                        || (!other.getStatus().supersedes(getStatus()) && other.getKravVersjon() < getKravVersjon())
+        );
+    }
+
 }

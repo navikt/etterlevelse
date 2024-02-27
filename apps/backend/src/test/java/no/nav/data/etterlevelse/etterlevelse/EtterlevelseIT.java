@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.etterlevelse;
 
-import lombok.extern.slf4j.Slf4j;
 import no.nav.data.IntegrationTestBase;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseController.EtterlevelsePage;
@@ -25,7 +24,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Slf4j
 public class EtterlevelseIT extends IntegrationTestBase {
 
     @BeforeEach

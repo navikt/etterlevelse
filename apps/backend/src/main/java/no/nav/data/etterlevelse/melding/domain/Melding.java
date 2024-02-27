@@ -1,30 +1,27 @@
 package no.nav.data.etterlevelse.melding.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import no.nav.data.common.storage.domain.ChangeStamp;
+import lombok.experimental.SuperBuilder;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.etterlevelse.melding.dto.MeldingRequest;
 import no.nav.data.etterlevelse.melding.dto.MeldingResponse;
 
-import java.util.UUID;
-
 @Data
-@Builder
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Melding implements DomainObject {
-    private UUID id;
-    private ChangeStamp changeStamp;
+public class Melding extends DomainObject {
+
     private String melding;
     private String secondaryTittel;
     private String secondaryMelding;
     private MeldingType meldingType;
     private MeldingStatus meldingStatus;
     private AlertType alertType;
-    private Integer version;
 
     public Melding convert(MeldingRequest request) {
         melding = request.getMelding();
