@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
 import { getKravByKravNumberAndVersion } from '../api/KravApi'
-import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
 import { PageLayout } from '../components/scaffold/Page'
-import { IEtterlevelse, IKrav } from '../constants'
+import { IBreadCrumbPath, IEtterlevelse, IKrav } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import { kravNumView } from './KravPage'
+import { temaBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const etterlevelseName = (etterlevelse: IEtterlevelse) => `${kravNumView(etterlevelse)}`
 
@@ -62,13 +62,8 @@ export const EtterlevelsePage = () => {
     }
   }, [etterlevelse])
 
-  const getBreadcrumPaths = (): IBreadcrumbPaths[] => {
-    const breadcrumbPaths: IBreadcrumbPaths[] = []
-
-    breadcrumbPaths.push({
-      pathName: 'Forstå kravene',
-      href: '/tema',
-    })
+  const getBreadcrumPaths = (): IBreadCrumbPath[] => {
+    const breadcrumbPaths: IBreadCrumbPath[] = [temaBreadCrumbPath]
 
     if (kravTema && kravTema.shortName) {
       breadcrumbPaths.push({

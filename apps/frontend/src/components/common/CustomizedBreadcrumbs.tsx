@@ -1,13 +1,9 @@
 import { ChevronRightIcon } from '@navikt/aksel-icons'
 import { BodyShort, Link } from '@navikt/ds-react'
-
-export interface IBreadcrumbPaths {
-  href: string
-  pathName: string
-}
+import { IBreadCrumbPath } from '../../constants'
 
 interface IProps {
-  paths?: IBreadcrumbPaths[]
+  paths?: IBreadCrumbPath[]
   currentPage?: string
   fontColor?: string
 }

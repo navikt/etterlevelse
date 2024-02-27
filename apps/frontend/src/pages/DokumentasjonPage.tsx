@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getAllKravPriority } from '../api/KravPriorityApi'
-import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
 import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
@@ -16,6 +15,7 @@ import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokume
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { PageLayout } from '../components/scaffold/Page'
 import {
+  IBreadCrumbPath,
   IEtterlevelseDokumentasjonStats,
   IKravPrioritering,
   IPageResponse,
@@ -26,6 +26,7 @@ import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
+import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
@@ -125,12 +126,7 @@ export const DokumentasjonPage = () => {
 
   if (!etterlevelseDokumentasjon) return <LoadingSkeleton header="Dokumentasjon" />
 
-  const breadcrumbPaths: IBreadcrumbPaths[] = [
-    {
-      pathName: 'Dokumenter etterlevelse',
-      href: '/dokumentasjoner',
-    },
-  ]
+  const breadcrumbPaths: IBreadCrumbPath[] = [dokumentasjonerBreadCrumbPath]
 
   const { etterlevelseNummer, title } = etterlevelseDokumentasjon
 

@@ -10,7 +10,6 @@ import {
   getKravByKravNummer,
 } from '../api/KravApi'
 import { DeleteItem } from '../components/DeleteItem'
-import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
 import StatusTag from '../components/common/StatusTag'
@@ -19,12 +18,13 @@ import ExpiredAlert from '../components/krav/ExpiredAlert'
 import { AllInfo, ViewKrav } from '../components/krav/ViewKrav'
 import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
 import { PageLayout } from '../components/scaffold/Page'
-import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../constants'
+import { EKravStatus, IBreadCrumbPath, IKrav, IKravVersjon, TKravQL } from '../constants'
 import { getKravWithEtterlevelseQuery } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 import { useLocationState, useQueryParam } from '../util/hooks'
+import { temaBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }): string =>
   `K${it.kravNummer}.${it.kravVersjon}`
@@ -145,12 +145,7 @@ export const KravPage = () => {
   const etterlevelserLoading = kravLoading
 
   const getBreadcrumPaths = () => {
-    const breadcrumbPaths: IBreadcrumbPaths[] = [
-      {
-        pathName: 'Forstå kravene',
-        href: '/tema',
-      },
-    ]
+    const breadcrumbPaths: IBreadCrumbPath[] = [temaBreadCrumbPath]
 
     if (kravTema?.shortName) {
       breadcrumbPaths.push({

@@ -4,19 +4,14 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { createKrav, kravMapToFormVal } from '../../../api/KravApi'
 import { EKravStatus, TKravQL } from '../../../constants'
+import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
 import { EListName, codelist } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
-import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
 import { TextAreaField } from '../../common/Inputs'
 import { PageLayout } from '../../scaffold/Page'
 import { kravCreateValidation } from './KravSchemaValidation'
 import { KravFormFields } from './components/KravFormFields'
-
-const kravBreadCrumbPath: IBreadcrumbPaths = {
-  href: '/kravliste',
-  pathName: 'Forvalte og opprette krav',
-}
 
 export const KravCreatePage = () => {
   const [loading, setLoading] = useState(false)

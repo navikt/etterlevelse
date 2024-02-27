@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { lovdataBase } from '../components/Lov'
-import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
 import { PanelLinkCard, TPanelLinkCardOverrides } from '../components/common/PanelLink'
@@ -22,6 +21,7 @@ import { theme } from '../util'
 import { sortKraverByPriority } from '../util/sort'
 import { ettlevColors } from '../util/theme'
 import { kravNumView } from './KravPage'
+import { temaBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
@@ -81,13 +81,6 @@ const TemaView = ({ tema }: { tema: TTemaCode }) => {
     })
   }, [])
 
-  const breadcrumbPaths: IBreadcrumbPaths[] = [
-    {
-      pathName: 'Forstå kravene',
-      href: '/tema',
-    },
-  ]
-
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
       ;(async () => {
@@ -108,7 +101,7 @@ const TemaView = ({ tema }: { tema: TTemaCode }) => {
   return (
     <PageLayout
       pageTitle={tema.shortName}
-      breadcrumbPaths={breadcrumbPaths}
+      breadcrumbPaths={[temaBreadCrumbPath]}
       currentPage={tema.shortName}
     >
       {getTemaMainHeader(tema, lover)}

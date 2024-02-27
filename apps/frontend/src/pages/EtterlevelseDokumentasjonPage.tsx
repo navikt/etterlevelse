@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { TKravId } from '../api/KravApi'
-import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
 import { PageLayout } from '../components/scaffold/Page'
 import {
   EEtterlevelseStatus,
   EKravFilterType,
   EKravStatus,
+  IBreadCrumbPath,
   IPageResponse,
   TKravQL,
 } from '../constants'
@@ -17,6 +17,7 @@ import { getKravMedPrioriteringOgEtterlevelseQuery } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import { sortKraverByPriority } from '../util/sort'
+import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export type TSection = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
@@ -109,11 +110,8 @@ export const EtterlevelseDokumentasjonPage = () => {
     }
   }, [etterlevelseDokumentasjon])
 
-  const breadcrumbPaths: IBreadcrumbPaths[] = [
-    {
-      pathName: 'Dokumenter etterlevelse',
-      href: '/dokumentasjoner',
-    },
+  const breadcrumbPaths: IBreadCrumbPath[] = [
+    dokumentasjonerBreadCrumbPath,
     {
       pathName: 'Temaoversikt',
       href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,

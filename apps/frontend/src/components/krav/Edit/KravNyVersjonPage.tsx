@@ -5,19 +5,14 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { TKravIdParams, createKrav, kravMapToFormVal } from '../../../api/KravApi'
 import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi'
 import { EKravStatus, IKrav, TKravQL } from '../../../constants'
+import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
 import { EListName, codelist } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
-import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
 import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 import { PageLayout } from '../../scaffold/Page'
 import { kravNewVersionValidation } from './KravSchemaValidation'
 import { KravFormFields } from './components/KravFormFields'
-
-const kravBreadCrumbPath: IBreadcrumbPaths = {
-  href: '/kravliste',
-  pathName: 'Forvalte og opprette krav',
-}
 
 export const KravNyVersjonPage = () => {
   const params: Readonly<Partial<TKravIdParams>> = useParams<TKravIdParams>()

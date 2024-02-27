@@ -165,10 +165,14 @@ export interface IDomainObject {
 
 export interface IKravPrioritering extends IDomainObject {
   id: string
-
   kravVersjon: number
   kravNummer: number
   prioriteringsId: string
+}
+
+export interface IBreadCrumbPath {
+  href: string
+  pathName: string
 }
 
 export interface IKravId {

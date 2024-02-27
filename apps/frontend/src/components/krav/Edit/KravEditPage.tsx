@@ -12,22 +12,17 @@ import {
 } from '../../../api/KravApi'
 import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi'
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../../../constants'
+import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
 import { EListName, codelist } from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
-import { IBreadcrumbPaths } from '../../common/CustomizedBreadcrumbs'
 import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 import { PageLayout } from '../../scaffold/Page'
 import { kravEditValidation } from './KravSchemaValidation'
 import { KravEditStatusModal } from './components/KravEditStatusModal'
 import { KravFormFields } from './components/KravFormFields'
-
-const kravBreadCrumbPath: IBreadcrumbPaths = {
-  href: '/kravliste',
-  pathName: 'Forvalte og opprette krav',
-}
 
 export const KravEditPage = () => {
   const params: Readonly<Partial<TKravIdParams>> = useParams<TKravIdParams>()
