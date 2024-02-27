@@ -1,4 +1,4 @@
-import { Button, Heading, Loader } from '@navikt/ds-react'
+import { Box, Button, Heading, Loader } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -102,7 +102,32 @@ export const KravEditPage = () => {
 
   return (
     <>
-      {krav && (
+      {krav && krav.status === EKravStatus.UTGAATT && !user.isAdmin() && (
+        <PageLayout
+          pageTitle="Rediger krav"
+          currentPage="Rediger krav"
+          breadcrumbPaths={[kravBreadCrumbPath]}
+          key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon}
+        >
+          <Box padding="4" background="surface-warning-subtle">
+            Det er ikke lov å redigere på et utgått krav.
+          </Box>
+          <Button
+            className="mt-4"
+            variant="secondary"
+            type="button"
+            onClick={() => {
+              if (krav.kravNummer && krav.kravVersjon) {
+                navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
+              }
+            }}
+          >
+            Gå tilbake
+          </Button>
+        </PageLayout>
+      )}
+
+      {krav && (krav.status !== EKravStatus.UTGAATT || user.isAdmin()) && (
         <PageLayout
           pageTitle="Rediger krav"
           currentPage="Rediger krav"

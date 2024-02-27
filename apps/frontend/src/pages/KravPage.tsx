@@ -240,7 +240,7 @@ export const KravPage = () => {
               {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
                 <div>
                   <div className="flex flex-1">
-                    {!hasKravExpired() && (
+                    {(!hasKravExpired() || user.isAdmin()) && (
                       <Button
                         type="button"
                         size="small"
