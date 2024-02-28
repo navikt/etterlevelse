@@ -29,8 +29,8 @@ const UpdateCodeListModal = ({
     header={{ heading: title, closeButton: initialValues.list === EListName.LOV ? true : false }}
   >
     <Formik
+      validateOnChange={false}
       validateOnBlur={false}
-      validateOnMount={false}
       onSubmit={(values) => {
         submit(values)
         onClose()

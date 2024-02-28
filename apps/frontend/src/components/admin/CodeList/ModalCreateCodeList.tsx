@@ -4,6 +4,7 @@ import {
   EListName,
   ELovCodeRelevans,
   ICodeListFormValues,
+  ILovCodeData,
   codeListSchema,
 } from '../../../services/Codelist'
 import { MarkdownInfo } from '../../common/Markdown'
@@ -39,8 +40,9 @@ const ModalCreateCodeList = ({
       initialValues.data = {}
       if (list === EListName.LOV) {
         initialValues.data = {
+          lovId: '',
           relevantFor: ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL,
-        }
+        } as ILovCodeData
       }
     }
 
@@ -56,8 +58,8 @@ const ModalCreateCodeList = ({
     >
       <div>
         <Formik
+          validateOnChange={false}
           validateOnBlur={false}
-          validateOnMount={false}
           onSubmit={(values) => {
             submit(values)
             onClose()
