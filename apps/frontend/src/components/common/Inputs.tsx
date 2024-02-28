@@ -68,6 +68,7 @@ interface ISearchItemLabel {
 interface IPropsOptionList extends ILabel {
   value?: string
   onChange: (val?: any) => void
+  error?: string | ReactNode
 }
 
 type TOptionORListname = TOr<IOptions, IListname>
@@ -362,23 +363,18 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
 type TPropsOptionField = TLabelName & IMarginBottom & ICaption & ITooltip & TOptionORListname
 
 export const OptionField = (props: TPropsOptionField) => {
-  const { label, name, caption, tooltip } = props
+  const { name } = props
 
   return (
     <FieldWrapper>
       <Field name={name}>
         {(p: FieldProps<string>) => (
-          <FormControl
-            label={<LabelWithTooltip label={label} tooltip={tooltip} />}
+          <OptionList
+            {...props}
             error={p.meta.touched && p.meta.error}
-            caption={caption}
-          >
-            <OptionList
-              {...props}
-              onChange={(val) => p.form.setFieldValue(name, val)}
-              value={p.field.value}
-            />
-          </FormControl>
+            onChange={(val) => p.form.setFieldValue(name, val)}
+            value={p.field.value}
+          />
         )}
       </Field>
     </FieldWrapper>
@@ -388,7 +384,7 @@ export const OptionField = (props: TPropsOptionField) => {
 type TPropsOptionList = IPropsOptionList & TOptionORListname
 
 export const OptionList = (props: TPropsOptionList) => {
-  const { label, value, onChange, options, listName } = props
+  const { label, value, onChange, options, listName, error } = props
   const optionsList: Value = options || codelist.getParsedOptions(listName)
 
   return (
@@ -397,6 +393,7 @@ export const OptionList = (props: TPropsOptionList) => {
       hideLabel
       className="w-full"
       value={value}
+      error={error}
       onChange={async (e) => {
         const val = e.target.value
         const toSet = listName && val ? ((await codelist.getCode(listName, val)) as ICode) : val

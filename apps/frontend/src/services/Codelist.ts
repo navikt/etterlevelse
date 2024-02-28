@@ -229,7 +229,25 @@ export interface ITemaCodeData {
   shortDesciption?: string
 }
 
+const containsLovCodeDataCheck = (data?: string, list?: string): boolean => {
+  if (list === EListName.LOV) {
+    return data ? true : false
+  }
+  return true
+}
+
 const required = 'Påkrevd'
+
+const lovCodeListDataCheck = (testName: string) =>
+  yup.string().test({
+    name: testName,
+    message: required,
+    test: function (data) {
+      const { options } = this
+      return containsLovCodeDataCheck(data, options.context?.list)
+    },
+  })
+
 export const codeListSchema: yup.ObjectSchema<ICodeListFormValues> = yup.object({
   list: yup.string().required(required),
   code: yup.string().required(required),
@@ -237,17 +255,9 @@ export const codeListSchema: yup.ObjectSchema<ICodeListFormValues> = yup.object(
   description: yup.string().required(required),
   data: yup.object().shape({
     shortDesciption: yup.string().max(200, 'Kort beskrivelse må være mindre enn 200 tegn'),
-    lovId: yup.string().test({
-      name: 'lovIdCheck',
-      message: required,
-      test: function (lovId) {
-        const { options } = this
-        if (options.context?.list === EListName.LOV) {
-          return lovId ? true : false
-        }
-        return true
-      },
-    }),
+    lovId: lovCodeListDataCheck('lovIdCheck'),
+    underavdeling: lovCodeListDataCheck('underavdelingCheck'),
+    tema: lovCodeListDataCheck('temaCheck'),
   }),
 })
 

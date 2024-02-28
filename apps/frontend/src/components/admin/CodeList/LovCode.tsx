@@ -31,7 +31,11 @@ export const LovCodeDataForm = () => (
               onChange={(e) => set({ lovId: e.target.value })}
               className="w-full mt-4"
               label="Lov ID"
-              error={codeListDataErrors && codeListDataErrors.lovId ? <FormError fieldName="data.lovId"/> : undefined}
+              error={
+                codeListDataErrors && codeListDataErrors.lovId ? (
+                  <FormError fieldName="data.lovId" />
+                ) : undefined
+              }
             />
 
             <div className="w-full mt-4">
@@ -42,6 +46,11 @@ export const LovCodeDataForm = () => (
                   value={data.underavdeling as string}
                   onChange={(val) => set({ underavdeling: val.code })}
                   label="underavdeling"
+                  error={
+                    codeListDataErrors && codeListDataErrors.underavdeling ? (
+                      <FormError fieldName="data.underavdeling" />
+                    ) : undefined
+                  }
                 />
               </div>
             </div>
@@ -54,6 +63,11 @@ export const LovCodeDataForm = () => (
                   value={data.tema as string}
                   onChange={(val) => set({ tema: val.code })}
                   label="tema"
+                  error={
+                    codeListDataErrors && codeListDataErrors.tema ? (
+                      <FormError fieldName="data.tema" />
+                    ) : undefined
+                  }
                 />
               </div>
             </div>

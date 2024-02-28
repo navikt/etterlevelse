@@ -41,6 +41,8 @@ const ModalCreateCodeList = ({
       if (list === EListName.LOV) {
         initialValues.data = {
           lovId: '',
+          underavdeling: '',
+          tema: '',
           relevantFor: ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL,
         } as ILovCodeData
       }
@@ -110,7 +112,7 @@ const ModalCreateCodeList = ({
                 {(list === EListName.LOV || list === EListName.TEMA) && <MarkdownInfo />}
 
                 {list === EListName.LOV && <LovCodeDataForm />}
-                {/* {list === ListName.TEMA && <TemaCodeDataForm />} */}
+                {/* {list === EListName.TEMA && <TemaCodeDataForm />} */}
               </Modal.Body>
               <Modal.Footer>
                 <div className="flex justify-end">
