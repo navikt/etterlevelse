@@ -23,6 +23,7 @@ import { PageLayout } from '../../scaffold/Page'
 import { kravEditValidation } from './KravSchemaValidation'
 import { KravEditStatusModal } from './components/KravEditStatusModal'
 import { KravFormFields } from './components/KravFormFields'
+import { KravStandardButtons } from './components/KravStandardButtons'
 
 export const KravEditPage = () => {
   const params: Readonly<Partial<TKravIdParams>> = useParams<TKravIdParams>()
@@ -268,7 +269,7 @@ export const KravEditPage = () => {
                             </Button>
                           </KravEditStatusModal>
                         </div>
-                        <div className="flex w-full justify-end">
+                        {/* <div className="flex w-full justify-end">
                           <Button
                             className="ml-4"
                             variant="secondary"
@@ -310,7 +311,27 @@ export const KravEditPage = () => {
                               Publiser og gjør aktiv
                             </Button>
                           )}
-                        </div>
+                        </div> */}
+
+                        <KravStandardButtons
+                          submitCancelButton={() => {
+                            if (krav.kravNummer && krav.kravVersjon) {
+                              navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
+                            } else {
+                              navigate('/kravliste')
+                            }
+                          }}
+                          submitSaveButton={() => {
+                            values.status = krav.status
+                            submitForm()
+                          }}
+                          kravStatus={krav.status}
+                          submitAktivButton={() => {
+                            values.status = EKravStatus.AKTIV
+                            submitForm()
+                          }}
+                          isSubmitting={isSubmitting}
+                        />
                       </div>
                     </div>
                     <div className="py-12">
