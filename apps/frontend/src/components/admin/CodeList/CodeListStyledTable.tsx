@@ -9,6 +9,8 @@ import {
   ICode,
   ICodeListFormValues,
   ICodeUsage,
+  ILovCodeData,
+  ITemaCodeData,
 } from '../../../services/Codelist'
 import { handleSort } from '../../../util/handleTableSort'
 import { AuditButton } from '../audit/AuditButton'
@@ -99,10 +101,11 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
     if (selectedCode.data && (list === EListName.LOV || list === EListName.TEMA)) {
       initialValues.data = selectedCode.data
       if (list === EListName.LOV) {
+        const codeListData = selectedCode.data as ILovCodeData
         initialValues.data = {
           ...selectedCode.data,
-          relevantFor: selectedCode.data.relevantFor
-            ? selectedCode.data.relevantFor
+          relevantFor: codeListData.relevantFor
+            ? codeListData.relevantFor
             : ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL,
         }
       }

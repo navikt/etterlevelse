@@ -19,7 +19,7 @@ export const LovCodeDataForm = () => (
     <Field name="data">
       {({ field, form }: FieldProps<ILovCodeData, ICodeListFormValues>) => {
         const data = field.value
-
+        const codeListDataErrors = form.errors.data as ILovCodeData
         const set = (val: Partial<ILovCodeData>) => {
           form.setFieldValue('data', { ...data, ...val })
         }
@@ -31,6 +31,7 @@ export const LovCodeDataForm = () => (
               onChange={(e) => set({ lovId: e.target.value })}
               className="w-full mt-4"
               label="Lov ID"
+              error={codeListDataErrors && codeListDataErrors.lovId ? <FormError fieldName="data.lovId"/> : undefined}
             />
 
             <div className="w-full mt-4">

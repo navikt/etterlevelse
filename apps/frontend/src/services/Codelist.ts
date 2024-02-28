@@ -195,9 +195,8 @@ export interface ICodeListFormValues {
   code: string
   shortName?: string
   description?: string
-  data?: any
+  data?: ILovCodeData | ITemaCodeData
 }
-
 export interface ICodeUsage {
   listName: EListName
   code: string
@@ -238,6 +237,17 @@ export const codeListSchema: yup.ObjectSchema<ICodeListFormValues> = yup.object(
   description: yup.string().required(required),
   data: yup.object().shape({
     shortDesciption: yup.string().max(200, 'Kort beskrivelse må være mindre enn 200 tegn'),
+    lovId: yup.string().test({
+      name: 'lovIdCheck',
+      message: required,
+      test: function (lovId) {
+        const { options } = this
+        if (options.context?.list === EListName.LOV) {
+          return lovId ? true : false
+        }
+        return true
+      },
+    }),
   }),
 })
 
