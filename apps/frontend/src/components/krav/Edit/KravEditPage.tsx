@@ -197,7 +197,7 @@ export const KravEditPage = () => {
                             </div>
                           )}
 
-                          {user.isAdmin() && values.status !== EKravStatus.UTKAST && (
+                          {user.isAdmin() && krav.status !== EKravStatus.UTKAST && (
                             <div className="mr-2">
                               <Button
                                 variant="secondary"
@@ -269,49 +269,6 @@ export const KravEditPage = () => {
                             </Button>
                           </KravEditStatusModal>
                         </div>
-                        {/* <div className="flex w-full justify-end">
-                          <Button
-                            className="ml-4"
-                            variant="secondary"
-                            type="button"
-                            onClick={() => {
-                              if (krav.kravNummer && krav.kravVersjon) {
-                                navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
-                              } else {
-                                navigate('/kravliste')
-                              }
-                            }}
-                          >
-                            Avbryt
-                          </Button>
-
-                          <Button
-                            className="ml-4"
-                            variant="primary"
-                            onClick={() => {
-                              values.status = krav.status
-                              submitForm()
-                            }}
-                            disabled={isSubmitting}
-                          >
-                            {krav.status !== EKravStatus.AKTIV ? 'Lagre' : 'Publiser endringer'}
-                          </Button>
-
-                          {krav.status === EKravStatus.UTKAST && (
-                            <Button
-                              type="button"
-                              className="ml-4"
-                              variant="primary"
-                              onClick={() => {
-                                values.status = EKravStatus.AKTIV
-                                submitForm()
-                              }}
-                              disabled={isSubmitting}
-                            >
-                              Publiser og gjør aktiv
-                            </Button>
-                          )}
-                        </div> */}
 
                         <KravStandardButtons
                           submitCancelButton={() => {

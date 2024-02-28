@@ -4,6 +4,7 @@ import { EKravStatus } from '../../../../constants'
 interface IPropsKravStandardButtons {
   submitCancelButton: () => void
   submitSaveButton: () => void
+  createMode?: boolean
   kravStatus: EKravStatus
   submitAktivButton: () => void
   isSubmitting: boolean
@@ -12,29 +13,34 @@ interface IPropsKravStandardButtons {
 export const KravStandardButtons = ({
   submitCancelButton,
   submitSaveButton,
+  createMode,
   kravStatus,
   submitAktivButton,
   isSubmitting,
-}: IPropsKravStandardButtons) => (
-  <div className="flex w-full justify-end">
-    <Button className="ml-4" variant="secondary" type="button" onClick={submitCancelButton}>
-      Avbryt
-    </Button>
+}: IPropsKravStandardButtons) => {
+  const isButtonActive: boolean = createMode || kravStatus !== EKravStatus.AKTIV
 
-    <Button className="ml-4" variant="primary" onClick={submitSaveButton} disabled={isSubmitting}>
-      {kravStatus !== EKravStatus.AKTIV ? 'Lagre' : 'Publiser endringer'}
-    </Button>
-
-    {kravStatus !== EKravStatus.AKTIV && (
-      <Button
-        type="button"
-        className="ml-4"
-        variant="primary"
-        onClick={submitAktivButton}
-        disabled={isSubmitting}
-      >
-        Publiser og gjør aktiv
+  return (
+    <div className="flex w-full justify-end">
+      <Button className="ml-4" variant="secondary" type="button" onClick={submitCancelButton}>
+        Avbryt
       </Button>
-    )}
-  </div>
-)
+
+      <Button className="ml-4" variant="primary" onClick={submitSaveButton} disabled={isSubmitting}>
+        {isButtonActive ? 'Lagre' : 'Publiser endringer'}
+      </Button>
+
+      {isButtonActive && (
+        <Button
+          type="button"
+          className="ml-4"
+          variant="primary"
+          onClick={submitAktivButton}
+          disabled={isSubmitting}
+        >
+          Publiser og gjør aktiv
+        </Button>
+      )}
+    </div>
+  )
+}

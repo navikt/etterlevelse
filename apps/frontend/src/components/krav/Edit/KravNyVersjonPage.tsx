@@ -1,4 +1,4 @@
-import { Alert, Button, Heading, Loader } from '@navikt/ds-react'
+import { Alert, Heading, Loader } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -13,6 +13,7 @@ import { FormError } from '../../common/ModalSchema'
 import { PageLayout } from '../../scaffold/Page'
 import { kravNewVersionValidation } from './KravSchemaValidation'
 import { KravFormFields } from './components/KravFormFields'
+import { KravStandardButtons } from './components/KravStandardButtons'
 
 export const KravNyVersjonPage = () => {
   const params: Readonly<Partial<TKravIdParams>> = useParams<TKravIdParams>()
@@ -117,47 +118,22 @@ export const KravNyVersjonPage = () => {
                       )}
 
                       <div className="flex w-full">
-                        <div className="flex w-full justify-end">
-                          <Button
-                            className="ml-4"
-                            variant="secondary"
-                            type="button"
-                            onClick={() => {
-                              if (krav.kravNummer && krav.kravVersjon) {
-                                navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon - 1}`)
-                              } else {
-                                navigate('/kravliste')
-                              }
-                            }}
-                          >
-                            Avbryt
-                          </Button>
-
-                          <Button
-                            className="ml-4"
-                            variant="primary"
-                            onClick={() => {
-                              values.status = EKravStatus.UTKAST
-                              submitForm()
-                            }}
-                            disabled={isSubmitting}
-                          >
-                            Lagre
-                          </Button>
-
-                          <Button
-                            type="button"
-                            className="ml-4"
-                            variant="primary"
-                            onClick={() => {
-                              values.status = EKravStatus.AKTIV
-                              submitForm()
-                            }}
-                            disabled={isSubmitting}
-                          >
-                            Publiser og gjør aktiv
-                          </Button>
-                        </div>
+                        <KravStandardButtons
+                          submitCancelButton={() => {
+                            navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon - 1}`)
+                          }}
+                          submitSaveButton={() => {
+                            values.status = EKravStatus.UTKAST
+                            submitForm()
+                          }}
+                          createMode
+                          kravStatus={values.status}
+                          submitAktivButton={() => {
+                            values.status = EKravStatus.AKTIV
+                            submitForm()
+                          }}
+                          isSubmitting={isSubmitting}
+                        />
                       </div>
                     </div>
                     <div className="py-12">
