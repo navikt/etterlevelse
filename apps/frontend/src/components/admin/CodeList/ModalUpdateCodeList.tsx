@@ -26,7 +26,7 @@ const UpdateCodeListModal = ({
     className="px-8 w-full max-w-2xl"
     onClose={onClose}
     open={isOpen}
-    header={{ heading: title, closeButton: false }}
+    header={{ heading: title, closeButton: initialValues.list === EListName.LOV ? true : false }}
   >
     <Formik
       validateOnBlur={false}

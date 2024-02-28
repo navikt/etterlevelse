@@ -96,7 +96,7 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
       description: selectedCode.description ?? '',
     }
 
-    if (selectedCode.data) {
+    if (selectedCode.data && (list === EListName.LOV || list === EListName.TEMA)) {
       initialValues.data = selectedCode.data
       if (list === EListName.LOV) {
         initialValues.data = {
