@@ -18,7 +18,6 @@
     "@types/markdown-draft-js": "^2.2.5",
     "@types/react-draft-wysiwyg": "^1.13.5",
     "amplitude-js": "^8.21.9",
-    "array-move": "^4.0.0",
     "axios": "^1.5.1",
     "baseui": "^13.0.0",
     "core-js": "^3.32.2",
