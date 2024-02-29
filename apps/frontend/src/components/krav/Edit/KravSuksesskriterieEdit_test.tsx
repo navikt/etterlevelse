@@ -126,6 +126,7 @@ const Kriterie = ({
   const [behovForBegrunnelse, setBehovForBegrunnelse] = useState<string>(
     s.behovForBegrunnelse === undefined ? 'true' : s.behovForBegrunnelse.toString()
   )
+  const [plassering, setPlassering] = useState<string>((index + 1).toString())
 
   const nummer = index + 1
 
@@ -134,6 +135,10 @@ const Kriterie = ({
     p.remove(index)
     p.insert(newIndex, suksesskriterieToMove)
   }
+
+  useEffect(() => {
+    setPlassering((index + 1).toString())
+  }, [index])
 
   useEffect(() => {
     update({
@@ -215,7 +220,27 @@ const Kriterie = ({
                     }
                   />
                   <Dropdown.Menu>
-                    <TextField label="" hideLabel defaultValue={index + 1} htmlSize={2} />
+                    <TextField
+                      label="Angi ønsket plassering"
+                      value={plassering}
+                      onChange={(event) => setPlassering(event.target.value)}
+                      error={parseInt(plassering) ? undefined : 'Skriv et tall større enn 0'}
+                    />
+                    <Dropdown.Menu.List>
+                      <Dropdown.Menu.List.Item
+                        as={Button}
+                        type="button"
+                        variant="primary"
+                        onClick={() => {
+                          const newIndex = parseInt(plassering)
+                          if (newIndex) {
+                            updateIndex(newIndex - 1)
+                          }
+                        }}
+                      >
+                        Bytt plassering
+                      </Dropdown.Menu.List.Item>
+                    </Dropdown.Menu.List>
                   </Dropdown.Menu>
                 </Dropdown>
               </Tooltip>
