@@ -1,5 +1,5 @@
-import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Box, Button, Radio, RadioGroup, TextField, Tooltip } from '@navikt/ds-react'
+import { ArrowsSquarepathIcon, PlusIcon, TrashIcon } from '@navikt/aksel-icons'
+import { Box, Button, Dropdown, Radio, RadioGroup, TextField, Tooltip } from '@navikt/ds-react'
 import { ArrowDown, ArrowUp } from 'baseui/icon'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import * as _ from 'lodash'
@@ -79,7 +79,7 @@ const KriterieList = ({ p, setIsFormDirty, newVersion, newKrav }: IPropsKriterie
           key={s.id}
           s={s}
           index={i}
-          arrayLength={suksesskriterier.length - 1}
+          arrayLength={suksesskriterier.length}
           update={(updated) => p.replace(i, updated)}
           remove={() => {
             p.remove(i)
@@ -149,12 +149,12 @@ const Kriterie = ({
       <div className="relative pt-1">
         <div className="flex items-center absolute right-0 top-0">
           {(p.form.values.status !== EKravStatus.AKTIV || newVersion) && (
-            <Tooltip content="Fjern suksesskriterie">
+            <Tooltip content="Fjern suksesskriterium">
               <Button
                 variant="secondary"
                 type={'button'}
                 icon={
-                  <TrashIcon title="Fjern suksesskriterie" arial-label="Fjern suksesskriterie" />
+                  <TrashIcon title="Fjern suksesskriterium" arial-label="Fjern suksesskriterium" />
                 }
                 onClick={remove}
               />
@@ -163,7 +163,7 @@ const Kriterie = ({
 
           <div className="ml-10 flex">
             {index !== 0 && (
-              <Tooltip content="flytt suksesskriterie opp">
+              <Tooltip content="Flytt suksesskriterium opp">
                 <Button
                   className="mr-2.5"
                   type="button"
@@ -174,16 +174,17 @@ const Kriterie = ({
                   icon={
                     <ArrowUp
                       size="24px"
-                      title="flytt suksesskriterie opp"
-                      aria-label="flytt suksesskriterie opp"
+                      title="Flytt suksesskriterium opp"
+                      aria-label="Flytt suksesskriterium opp"
                     />
                   }
                 />
               </Tooltip>
             )}
-            {index !== arrayLength && (
-              <Tooltip content="flytt suksesskriterie ned">
+            {index !== arrayLength - 1 && (
+              <Tooltip content="Flytt suksesskriterium ned">
                 <Button
+                  className="mr-2.5"
                   type="button"
                   variant="secondary"
                   onClick={() => {
@@ -192,11 +193,31 @@ const Kriterie = ({
                   icon={
                     <ArrowDown
                       size="24px"
-                      title="flytt suksesskriterie ned"
-                      aria-label="flytt suksesskriterie ned"
+                      title="Flytt suksesskriterium ned"
+                      aria-label="Flytt suksesskriterium ned"
                     />
                   }
                 />
+              </Tooltip>
+            )}
+            {arrayLength !== 1 && (
+              <Tooltip content="Endre suksesskriterium rekkefølge">
+                <Dropdown>
+                  <Button
+                    as={Dropdown.Toggle}
+                    type="button"
+                    variant="secondary"
+                    icon={
+                      <ArrowsSquarepathIcon
+                        title="Endre suksesskriterium rekkefølge"
+                        aria-label="Endre suksesskriterium rekkefølge"
+                      />
+                    }
+                  />
+                  <Dropdown.Menu>
+                    <TextField label="" hideLabel defaultValue={index + 1} htmlSize={2} />
+                  </Dropdown.Menu>
+                </Dropdown>
               </Tooltip>
             )}
           </div>
