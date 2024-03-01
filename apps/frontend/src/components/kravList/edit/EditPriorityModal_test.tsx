@@ -1,12 +1,8 @@
-import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { BodyShort, Box, Label, Loader } from '@navikt/ds-react'
+import { Loader } from '@navikt/ds-react'
 import { Block } from 'baseui/block'
-import { List, arrayMove } from 'baseui/dnd-list'
-import { HeadingXLarge, HeadingXXLarge, ParagraphMedium } from 'baseui/typography'
-import { FieldArray, Form, Formik } from 'formik'
-import moment from 'moment'
-import React, { ReactElement, useEffect } from 'react'
+import { HeadingXLarge, HeadingXXLarge } from 'baseui/typography'
+import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
+import React, { useEffect } from 'react'
 import {
   createKravPriority,
   kravMapToKravPrioriting,
@@ -18,10 +14,31 @@ import AlertUnsavedPopup from '../../common/AlertUnsavedPopup'
 import Button from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
 import { FieldWrapper } from '../../common/Inputs'
-import StatusView from '../../common/StatusTag'
-import { borderRadius, paddingZero } from '../../common/Style'
+import { borderRadius } from '../../common/Style'
+import { KravPriorityPanel } from './components/KravPriorityPanel'
 
 export const kravListPriorityModal = () => document.querySelector('#krav-list-edit-priority-modal')
+
+interface IKravPriorityPanelsProps {
+  kravListe: IKrav[]
+  setKravElements: React.Dispatch<React.SetStateAction<IKrav[]>>
+  p: FieldArrayRenderProps
+}
+const KravPriorityPanels = (props: IKravPriorityPanelsProps) => {
+  const { kravListe, setKravElements, p } = props
+  return kravListe.map((k, i) => {
+    return (
+      <KravPriorityPanel
+        key={`${k.navn}_${k.kravNummer}`}
+        krav={k}
+        setKravElements={setKravElements}
+        index={i}
+        arrayLength={kravListe.length}
+        p={p}
+      />
+    )
+  })
+}
 
 export const EditPriorityModal = (props: {
   isOpen: boolean
@@ -31,44 +48,12 @@ export const EditPriorityModal = (props: {
   refresh: () => void
 }) => {
   const { isOpen, setIsOpen, kravListe, tema, refresh } = props
-  const [items, setItems] = React.useState<ReactElement[]>([])
   const [kravElements, setKravElements] = React.useState<IKrav[]>(kravListe)
   const [loading, setLoading] = React.useState(false)
   const [stickyFooterStyle, setStickyFooterStyle] = React.useState(false)
 
   const [isFormDirty, setIsFormDirty] = React.useState(false)
   const [isAlertModalOpen, setIsAlertModalOpen] = React.useState(false)
-
-  useEffect(() => {
-    setItems(
-      kravListe.map((k, i) => {
-        return (
-          <Box className="w-full flex " key={`${k.navn}_${k.kravNummer}`} padding="2">
-            <div className="w-10 flex justify-center items-center">
-              <BodyShort>{i + 1}.</BodyShort>
-            </div>
-            <div className="max-w-lg w-full">
-              <BodyShort>
-                K{k.kravNummer}.{k.kravVersjon}
-              </BodyShort>
-              <Label>{k.navn}</Label>
-            </div>
-            <div className="flex flex-col items-end w-full justify-center max-w-md">
-              <div className="flex items-center">
-                <StatusView status={k.status} />
-                <div className="w-44 ml-2.5">
-                  <BodyShort size="small">
-                    {`Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}`}
-                  </BodyShort>
-                </div>
-              </div>
-            </div>
-            <div>4</div>
-          </Box>
-        )
-      })
-    )
-  }, [kravListe])
 
   useEffect(() => {
     if (!isOpen) {
@@ -228,13 +213,6 @@ export const EditPriorityModal = (props: {
                   {tema}
                 </HeadingXLarge>
               </Block>
-              <Block display="flex" justifyContent="flex-end" flex="1">
-                <ParagraphMedium
-                  $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}
-                >
-                  Klikk og dra kravene i ønsket rekkefølge
-                </ParagraphMedium>
-              </Block>
             </Block>
             <Block>
               {loading ? (
@@ -245,31 +223,11 @@ export const EditPriorityModal = (props: {
                 <Form>
                   <FieldWrapper>
                     <FieldArray name={'krav'}>
-                      {() => (
-                        <List
-                          items={items}
-                          onChange={({ oldIndex, newIndex }) => {
-                            setItems(arrayMove(items, oldIndex, newIndex))
-                            setKravElements(arrayMove(kravElements, oldIndex, newIndex))
-                            setIsFormDirty(true)
-                          }}
-                          overrides={{
-                            DragHandle: ({ $isDragged }) => {
-                              return CustomDragHandle($isDragged)
-                            },
-                            Root: {
-                              style: {
-                                ...paddingZero,
-                              },
-                            },
-                            Item: {
-                              style: {
-                                ...paddingZero,
-                                flexDirection: 'row-reverse',
-                                zIndex: 10,
-                              },
-                            },
-                          }}
+                      {(p) => (
+                        <KravPriorityPanels
+                          kravListe={kravElements}
+                          setKravElements={setKravElements}
+                          p={p}
                         />
                       )}
                     </FieldArray>
@@ -319,23 +277,5 @@ export const EditPriorityModal = (props: {
         )}
       </Formik>
     </>
-  )
-}
-
-const CustomDragHandle = (isDragged: boolean) => {
-  return (
-    <Block
-      $style={{
-        display: 'flex',
-        alignItems: 'center',
-        marginRight: '1em',
-      }}
-    >
-      <FontAwesomeIcon
-        icon={faGripVertical}
-        aria-label={'Dra og slipp håndtak'}
-        color={isDragged ? ettlevColors.green800 : ettlevColors.grey200}
-      />
-    </Block>
   )
 }

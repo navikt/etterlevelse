@@ -1,6 +1,5 @@
-import { ArrowsSquarepathIcon, PlusIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Box, Button, Dropdown, Radio, RadioGroup, TextField, Tooltip } from '@navikt/ds-react'
-import { ArrowDown, ArrowUp } from 'baseui/icon'
+import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
+import { Box, Button, Radio, RadioGroup, TextField, Tooltip } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import * as _ from 'lodash'
 import { useEffect, useState } from 'react'
@@ -9,6 +8,7 @@ import { useDebouncedState } from '../../../util/hooks'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { FormError } from '../../common/ModalSchema'
+import { RearrangeButtons } from '../../common/RearrangeButtons'
 import TextEditor from '../../common/TextEditor/TextEditor'
 
 type TKravSuksesskriterieEditProps = {
@@ -166,86 +166,15 @@ const Kriterie = ({
             </Tooltip>
           )}
 
-          <div className="ml-10 flex">
-            {index !== 0 && (
-              <Tooltip content="Flytt suksesskriterium opp">
-                <Button
-                  className="mr-2.5"
-                  type="button"
-                  variant="secondary"
-                  onClick={() => {
-                    updateIndex(index - 1)
-                  }}
-                  icon={
-                    <ArrowUp
-                      size="24px"
-                      title="Flytt suksesskriterium opp"
-                      aria-label="Flytt suksesskriterium opp"
-                    />
-                  }
-                />
-              </Tooltip>
-            )}
-            {index !== arrayLength - 1 && (
-              <Tooltip content="Flytt suksesskriterium ned">
-                <Button
-                  className="mr-2.5"
-                  type="button"
-                  variant="secondary"
-                  onClick={() => {
-                    updateIndex(index + 1)
-                  }}
-                  icon={
-                    <ArrowDown
-                      size="24px"
-                      title="Flytt suksesskriterium ned"
-                      aria-label="Flytt suksesskriterium ned"
-                    />
-                  }
-                />
-              </Tooltip>
-            )}
-            {arrayLength !== 1 && (
-              <Tooltip content="Endre suksesskriterium rekkefølge">
-                <Dropdown>
-                  <Button
-                    as={Dropdown.Toggle}
-                    type="button"
-                    variant="secondary"
-                    icon={
-                      <ArrowsSquarepathIcon
-                        title="Endre suksesskriterium rekkefølge"
-                        aria-label="Endre suksesskriterium rekkefølge"
-                      />
-                    }
-                  />
-                  <Dropdown.Menu>
-                    <TextField
-                      label="Angi ønsket plassering"
-                      value={plassering}
-                      onChange={(event) => setPlassering(event.target.value)}
-                      error={parseInt(plassering) ? undefined : 'Skriv et tall større enn 0'}
-                    />
-                    <Dropdown.Menu.List>
-                      <Dropdown.Menu.List.Item
-                        as={Button}
-                        type="button"
-                        variant="primary"
-                        onClick={() => {
-                          const newIndex = parseInt(plassering)
-                          if (newIndex) {
-                            updateIndex(newIndex - 1)
-                          }
-                        }}
-                      >
-                        Bytt plassering
-                      </Dropdown.Menu.List.Item>
-                    </Dropdown.Menu.List>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Tooltip>
-            )}
-          </div>
+          <RearrangeButtons
+            label="suksesskriterium"
+            plassering={plassering}
+            setPlassering={setPlassering}
+            index={index}
+            arrayLength={arrayLength}
+            updateIndex={updateIndex}
+            marginLeft
+          />
         </div>
 
         <div>
