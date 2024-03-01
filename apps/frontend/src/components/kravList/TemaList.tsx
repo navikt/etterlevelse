@@ -125,7 +125,7 @@ const KravTemaList = (props: {
 
       <div className={'w-full flex flex-row-reverse pt-5'}>
         <Button variant="secondary" size="medium" onClick={() => setIsEditPriorityModalOpen(true)}>
-          Justere rekkefølgen på krav
+          Endre rekkefølge på krav
         </Button>
       </div>
 

@@ -134,7 +134,7 @@ export const EditPriorityModal = (props: {
                 close()
               }
             }}
-            header={{ heading: 'Justere rekkefølgen på krav' }}
+            header={{ heading: 'Endre rekkefølge på krav' }}
           >
             <Modal.Body>
               <Label>{tema}</Label>
