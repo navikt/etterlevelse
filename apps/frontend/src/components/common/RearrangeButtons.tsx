@@ -1,11 +1,10 @@
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons'
 import { Button, Dropdown, TextField, Tooltip } from '@navikt/ds-react'
 import { ArrowDown, ArrowUp } from 'baseui/icon'
+import { useEffect, useState } from 'react'
 
 interface IProps {
   label: string
-  plassering: string
-  setPlassering: React.Dispatch<React.SetStateAction<string>>
   index: number
   arrayLength: number
   updateIndex: (newIndex: number) => void
@@ -13,7 +12,13 @@ interface IProps {
 }
 
 export const RearrangeButtons = (props: IProps) => {
-  const { label, plassering, setPlassering, index, arrayLength, updateIndex, marginLeft } = props
+  const { label, index, arrayLength, updateIndex, marginLeft } = props
+  const [plassering, setPlassering] = useState<string>((index + 1).toString())
+
+  useEffect(() => {
+    setPlassering((index + 1).toString())
+  }, [index])
+
   return (
     <div className={`flex ${marginLeft ? 'ml-10' : ''}`}>
       {index !== 0 && (

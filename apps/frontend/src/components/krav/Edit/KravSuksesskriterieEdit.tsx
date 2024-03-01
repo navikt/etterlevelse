@@ -126,7 +126,6 @@ const Kriterie = ({
   const [behovForBegrunnelse, setBehovForBegrunnelse] = useState<string>(
     s.behovForBegrunnelse === undefined ? 'true' : s.behovForBegrunnelse.toString()
   )
-  const [plassering, setPlassering] = useState<string>((index + 1).toString())
 
   const nummer = index + 1
 
@@ -135,10 +134,6 @@ const Kriterie = ({
     p.remove(index)
     p.insert(newIndex, suksesskriterieToMove)
   }
-
-  useEffect(() => {
-    setPlassering((index + 1).toString())
-  }, [index])
 
   useEffect(() => {
     update({
@@ -168,8 +163,6 @@ const Kriterie = ({
 
           <RearrangeButtons
             label="suksesskriterium"
-            plassering={plassering}
-            setPlassering={setPlassering}
             index={index}
             arrayLength={arrayLength}
             updateIndex={updateIndex}

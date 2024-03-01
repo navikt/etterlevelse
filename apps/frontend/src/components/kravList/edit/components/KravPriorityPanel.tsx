@@ -1,7 +1,6 @@
 import { BodyShort, Box, Label } from '@navikt/ds-react'
 import { FieldArrayRenderProps } from 'formik'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
 import { IKrav } from '../../../../constants'
 import { RearrangeButtons } from '../../../common/RearrangeButtons'
 import StatusView from '../../../common/StatusTag'
@@ -15,12 +14,6 @@ interface IProps {
 
 export const KravPriorityPanel = (props: IProps) => {
   const { krav, index, arrayLength, p } = props
-
-  const [plassering, setPlassering] = useState<string>((index + 1).toString())
-
-  useEffect(() => {
-    setPlassering((index + 1).toString())
-  }, [index])
 
   const updateIndex = (newIndex: number) => {
     const suksesskriterieToMove = p.form.values.krav[index]
@@ -53,8 +46,6 @@ export const KravPriorityPanel = (props: IProps) => {
         <div className="flex flex-1 justify-end items-center ">
           <RearrangeButtons
             label="krav"
-            plassering={plassering}
-            setPlassering={setPlassering}
             index={index}
             arrayLength={arrayLength}
             updateIndex={updateIndex}
