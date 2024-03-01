@@ -153,7 +153,7 @@ export const EditPriorityModal = (props: {
         }}
         onSubmit={() => submit()}
       >
-        {(p) => (
+        {({ submitForm }) => (
           <CustomizedModal
             isOpen={isOpen}
             onClose={() => {
@@ -266,7 +266,7 @@ export const EditPriorityModal = (props: {
               <Button
                 type="button"
                 size="compact"
-                onClick={p.submitForm}
+                onClick={submitForm}
                 disabled={loading}
                 marginLeft
               >
