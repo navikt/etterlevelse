@@ -8,7 +8,7 @@ import { EListName, codelist } from '../../services/Codelist'
 import { sortKraverByPriority } from '../../util/sort'
 import StatusView from '../common/StatusTag'
 import { KravPanelHeader } from '../etterlevelseDokumentasjon/KravPanelHeader'
-import { EditPriorityModal } from './edit/EditPriorityModal_test'
+import { EditPriorityModal } from './edit/EditPriorityModal'
 
 export const TemaList = () => {
   const [allActiveKrav, setAllActiveKrav] = useState<IKrav[]>([])
