@@ -43,7 +43,7 @@ export const EditPriorityModal = (props: {
     setItems(
       kravListe.map((k, i) => {
         return (
-          <Box className="w-full flex " key={`${k.navn}_${k.kravNummer}`}>
+          <Box className="w-full flex " key={`${k.navn}_${k.kravNummer}`} padding="2">
             <div className="w-10 flex justify-center items-center">
               <BodyShort>{i + 1}.</BodyShort>
             </div>
@@ -56,12 +56,9 @@ export const EditPriorityModal = (props: {
             <div className="flex flex-col items-end w-full justify-center max-w-md">
               <div className="flex items-center">
                 <StatusView status={k.status} />
-                <div className="ml-2.5 w-45">
-                  <BodyShort>
-                    {k.changeStamp.lastModifiedDate !== undefined &&
-                    k.changeStamp.lastModifiedDate !== ''
-                      ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}`
-                      : ''}
+                <div className="w-44 ml-2.5">
+                  <BodyShort size="small">
+                    {`Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}`}
                   </BodyShort>
                 </div>
               </div>
