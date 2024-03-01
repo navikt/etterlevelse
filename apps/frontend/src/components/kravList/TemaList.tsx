@@ -8,7 +8,7 @@ import { EListName, codelist } from '../../services/Codelist'
 import { sortKraverByPriority } from '../../util/sort'
 import StatusView from '../common/StatusTag'
 import { KravPanelHeader } from '../etterlevelseDokumentasjon/KravPanelHeader'
-import { EditPriorityModal } from './edit/EditPriorityModal'
+import { EditPriorityModal } from './edit/EditPriorityModal_test'
 
 export const TemaList = () => {
   const [allActiveKrav, setAllActiveKrav] = useState<IKrav[]>([])
@@ -38,44 +38,42 @@ export const TemaList = () => {
   }
 
   return (
-    <>
-      <Accordion>
-        {codelist.getCodes(EListName.TEMA).map((t) => {
-          const activeKraver = allActiveKrav?.filter((k) => {
-            return k.regelverk.map((r) => r.lov.data && r.lov.data.tema).includes(t.code)
-          })
-          const draftKraver = allDraftKrav?.filter((k) => {
-            return k.regelverk.map((r) => r.lov.data && r.lov.data.tema).includes(t.code)
-          })
-          return activeKraver && activeKraver.length > 0 ? (
-            <Accordion.Item>
-              <Accordion.Header key={`${t.code}_krav_list`}>
-                <KravPanelHeader title={t.shortName} kravData={[...activeKraver, ...draftKraver]} />
-              </Accordion.Header>
-              <Accordion.Content>
-                <KravTemaList
-                  activeKraver={sortKraverByPriority(activeKraver, t.shortName)}
-                  tema={t.shortName}
-                  refresh={fetchKrav}
-                  draftKrav={draftKraver}
-                />
-              </Accordion.Content>
-            </Accordion.Item>
-          ) : (
-            <Accordion.Item>
-              <Accordion.Header key={`${t.code}_krav_list`}>
-                <KravPanelHeader title={t.shortName} kravData={[]} />
-              </Accordion.Header>
-              <Accordion.Content>
-                <div className="flex w-full ml-6">
-                  <BodyShort size="small">Ingen krav</BodyShort>
-                </div>
-              </Accordion.Content>
-            </Accordion.Item>
-          )
-        })}
-      </Accordion>
-    </>
+    <Accordion>
+      {codelist.getCodes(EListName.TEMA).map((t) => {
+        const activeKraver = allActiveKrav?.filter((k) => {
+          return k.regelverk.map((r) => r.lov.data && r.lov.data.tema).includes(t.code)
+        })
+        const draftKraver = allDraftKrav?.filter((k) => {
+          return k.regelverk.map((r) => r.lov.data && r.lov.data.tema).includes(t.code)
+        })
+        return activeKraver && activeKraver.length > 0 ? (
+          <Accordion.Item>
+            <Accordion.Header key={`${t.code}_krav_list`}>
+              <KravPanelHeader title={t.shortName} kravData={[...activeKraver, ...draftKraver]} />
+            </Accordion.Header>
+            <Accordion.Content>
+              <KravTemaList
+                activeKraver={sortKraverByPriority(activeKraver, t.shortName)}
+                tema={t.shortName}
+                refresh={fetchKrav}
+                draftKrav={draftKraver}
+              />
+            </Accordion.Content>
+          </Accordion.Item>
+        ) : (
+          <Accordion.Item>
+            <Accordion.Header key={`${t.code}_krav_list`}>
+              <KravPanelHeader title={t.shortName} kravData={[]} />
+            </Accordion.Header>
+            <Accordion.Content>
+              <div className="flex w-full ml-6">
+                <BodyShort size="small">Ingen krav</BodyShort>
+              </div>
+            </Accordion.Content>
+          </Accordion.Item>
+        )
+      })}
+    </Accordion>
   )
 }
 
