@@ -51,7 +51,7 @@ export const EditPriorityModal = (props: {
       if (!k.prioriteringsId) {
         return {
           ...k,
-          prioriteringsId: tema.substr(0, 3).toUpperCase() + index,
+          prioriteringsId: tema.substring(0, 3).toUpperCase() + index,
         }
       } else {
         if (k.prioriteringsId?.match(pattern)) {
@@ -59,13 +59,13 @@ export const EditPriorityModal = (props: {
             ...k,
             prioriteringsId: k.prioriteringsId.replace(
               pattern,
-              tema.substr(0, 3).toUpperCase() + index
+              tema.substring(0, 3).toUpperCase() + index
             ),
           }
         } else {
           return {
             ...k,
-            prioriteringsId: k.prioriteringsId.concat(tema.substr(0, 3).toUpperCase() + index),
+            prioriteringsId: k.prioriteringsId.concat(tema.substring(0, 3).toUpperCase() + index),
           }
         }
       }
