@@ -47,7 +47,7 @@ export const KravPriorityPanel = (props: IProps) => {
           </div>
         </div>
       </div>
-      <div>
+      <div className="flex justify-center items-center">
         <RearrangeButtons
           label="krav"
           plassering={plassering}
