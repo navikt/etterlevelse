@@ -122,11 +122,12 @@ export const EditPriorityModal = (props: {
           <Modal.Body>
             <Label>{tema}</Label>
             <div>
-              {loading ? (
+              {loading && (
                 <div className="flex justify-center">
                   <Loader size="large" />
                 </div>
-              ) : (
+              )}
+              {!loading && kravListe && (
                 <Form>
                   <FieldWrapper>
                     <FieldArray name={'krav'}>{(p) => <KravPriorityPanels p={p} />}</FieldArray>
@@ -136,7 +137,13 @@ export const EditPriorityModal = (props: {
             </div>
 
             <Modal.Footer className="button_container border-t-2 z-10 bg-bg-default">
-              <Button type="button" onClick={() => submitForm()} disabled={loading}>
+              <Button
+                type="button"
+                onClick={() => {
+                  submitForm()
+                }}
+                disabled={loading}
+              >
                 Lagre
               </Button>
               <Button

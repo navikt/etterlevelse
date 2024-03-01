@@ -117,11 +117,12 @@ const KravTemaList = (props: {
   draftKrav: IKrav[]
 }) => {
   const [isEditPriorityModalOpen, setIsEditPriorityModalOpen] = React.useState(false)
+  const { activeKraver, tema, refresh, draftKrav } = props
 
   return (
     <div className="flex flex-col gap-2">
-      {getKravTemaRowsWithLabel(props.draftKrav, props.tema)}
-      {getKravTemaRowsWithLabel(props.activeKraver, props.tema)}
+      {getKravTemaRowsWithLabel(draftKrav, tema)}
+      {getKravTemaRowsWithLabel(activeKraver, tema)}
 
       <div className={'w-full flex flex-row-reverse pt-5'}>
         <Button variant="secondary" size="medium" onClick={() => setIsEditPriorityModalOpen(true)}>
@@ -129,13 +130,15 @@ const KravTemaList = (props: {
         </Button>
       </div>
 
-      <EditPriorityModal
-        tema={props.tema}
-        isOpen={isEditPriorityModalOpen}
-        setIsOpen={setIsEditPriorityModalOpen}
-        kravListe={props.activeKraver}
-        refresh={props.refresh}
-      ></EditPriorityModal>
+      {activeKraver && isEditPriorityModalOpen && (
+        <EditPriorityModal
+          tema={tema}
+          isOpen={isEditPriorityModalOpen}
+          setIsOpen={setIsEditPriorityModalOpen}
+          kravListe={activeKraver}
+          refresh={refresh}
+        />
+      )}
     </div>
   )
 }
