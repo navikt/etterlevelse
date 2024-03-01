@@ -224,7 +224,7 @@ export const EditPriorityModal = (props: {
               marginBottom="54px"
             >
               <HeadingXXLarge $style={{ lineHeight: '48px', color: ettlevColors.white }}>
-                Justere rekkefølgen på krav
+                Endre rekkefølge på krav
               </HeadingXXLarge>
             </Block>
             <Block
