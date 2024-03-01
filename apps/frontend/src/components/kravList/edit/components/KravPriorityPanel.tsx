@@ -8,14 +8,13 @@ import StatusView from '../../../common/StatusTag'
 
 interface IProps {
   krav: IKrav
-  setKravElements: React.Dispatch<React.SetStateAction<IKrav[]>>
   index: number
   arrayLength: number
   p: FieldArrayRenderProps
 }
 
 export const KravPriorityPanel = (props: IProps) => {
-  const { krav, setKravElements, index, arrayLength, p } = props
+  const { krav, index, arrayLength, p } = props
 
   const [plassering, setPlassering] = useState<string>((index + 1).toString())
 
@@ -23,7 +22,6 @@ export const KravPriorityPanel = (props: IProps) => {
     const suksesskriterieToMove = p.form.values.krav[index]
     p.remove(index)
     p.insert(newIndex, suksesskriterieToMove)
-    setKravElements(p.form.values.krav)
   }
 
   return (

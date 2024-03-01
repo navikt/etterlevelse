@@ -7,25 +7,24 @@ import {
   updateKravPriority,
 } from '../../../api/KravPriorityApi'
 import { IKrav } from '../../../constants'
-import AlertUnsavedPopup from '../../common/AlertUnsavedPopup'
 import { FieldWrapper } from '../../common/Inputs'
 import { KravPriorityPanel } from './components/KravPriorityPanel'
 
 export const kravListPriorityModal = () => document.querySelector('#krav-list-edit-priority-modal')
 
 interface IKravPriorityPanelsProps {
-  kravListe: IKrav[]
-  setKravElements: React.Dispatch<React.SetStateAction<IKrav[]>>
   p: FieldArrayRenderProps
 }
 const KravPriorityPanels = (props: IKravPriorityPanelsProps) => {
-  const { kravListe, setKravElements, p } = props
+  const { p } = props
+
+  const kravListe = p.form.values.krav as IKrav[]
+
   return kravListe.map((k, i) => {
     return (
       <KravPriorityPanel
         key={`${k.navn}_${k.kravNummer}`}
         krav={k}
-        setKravElements={setKravElements}
         index={i}
         arrayLength={kravListe.length}
         p={p}
@@ -42,11 +41,7 @@ export const EditPriorityModal = (props: {
   refresh: () => void
 }) => {
   const { isOpen, setIsOpen, kravListe, tema, refresh } = props
-  const [kravElements, setKravElements] = React.useState<IKrav[]>(kravListe)
   const [loading, setLoading] = React.useState(false)
-
-  const [isFormDirty, setIsFormDirty] = React.useState(false)
-  const [isAlertModalOpen, setIsAlertModalOpen] = React.useState(false)
 
   const setPriority = (kravListe: IKrav[]) => {
     const pattern = new RegExp(tema.substr(0, 3).toUpperCase() + '[0-9]+')
@@ -77,11 +72,10 @@ export const EditPriorityModal = (props: {
     })
   }
 
-  const submit = () => {
+  const submit = ({ krav }: { krav: IKrav[] }) => {
     setLoading(true)
-    setIsFormDirty(false)
     const updateKravPriorityPromise: Promise<any>[] = []
-    const kravMedPrioriteting = setPriority([...kravElements])
+    const kravMedPrioriteting = setPriority([...krav])
     kravMedPrioriteting.forEach((kmp) => {
       if (kmp.kravPriorityUID) {
         updateKravPriorityPromise.push(
@@ -105,82 +99,63 @@ export const EditPriorityModal = (props: {
   }
 
   const close = () => {
-    setIsFormDirty(false)
     setIsOpen(false)
   }
 
   return (
-    <>
-      <AlertUnsavedPopup
-        isModalOpen={isAlertModalOpen}
-        setIsModalOpen={setIsAlertModalOpen}
-        onClose={() => close()}
-        onSubmit={() => submit()}
-      />
-      <Formik
-        initialValues={{
-          krav: kravElements,
-        }}
-        onSubmit={() => submit()}
-      >
-        {({ submitForm }) => (
-          <Modal
-            open={isOpen}
-            width={'1280px'}
-            onClose={() => {
-              if (isFormDirty) {
-                setIsAlertModalOpen(true)
-              } else {
-                close()
-              }
-            }}
-            header={{ heading: 'Endre rekkefølge på krav' }}
-          >
-            <Modal.Body>
-              <Label>{tema}</Label>
-              <div>
-                {loading ? (
-                  <div className="flex justify-center">
-                    <Loader size="large" />
-                  </div>
-                ) : (
-                  <Form>
-                    <FieldWrapper>
-                      <FieldArray name={'krav'}>
-                        {(p) => (
-                          <KravPriorityPanels
-                            kravListe={kravElements}
-                            setKravElements={setKravElements}
-                            p={p}
-                          />
-                        )}
-                      </FieldArray>
-                    </FieldWrapper>
-                  </Form>
-                )}
-              </div>
+    <Formik
+      initialValues={{
+        krav: kravListe,
+      }}
+      onSubmit={submit}
+    >
+      {({ submitForm, handleReset }) => (
+        <Modal
+          open={isOpen}
+          width={'1280px'}
+          onClose={() => {
+            handleReset()
+            close()
+          }}
+          header={{ heading: 'Endre rekkefølge på krav' }}
+        >
+          <Modal.Body>
+            <Label>{tema}</Label>
+            <div>
+              {loading ? (
+                <div className="flex justify-center">
+                  <Loader size="large" />
+                </div>
+              ) : (
+                <Form>
+                  <FieldWrapper>
+                    <FieldArray name={'krav'}>{(p) => <KravPriorityPanels p={p} />}</FieldArray>
+                  </FieldWrapper>
+                </Form>
+              )}
+            </div>
 
-              <Modal.Footer className="button_container border-t-2 z-10 bg-bg-default">
-                <Button type="button" onClick={() => submitForm()} disabled={loading}>
-                  Lagre
-                </Button>
-                <Button
-                  className="ml-2.5"
-                  type="button"
-                  variant="secondary"
-                  onClick={() => {
-                    refresh()
-                    close()
-                  }}
-                  disabled={loading}
-                >
-                  Avbryt
-                </Button>
-              </Modal.Footer>
-            </Modal.Body>
-          </Modal>
-        )}
-      </Formik>
-    </>
+            <Modal.Footer className="button_container border-t-2 z-10 bg-bg-default">
+              <Button type="button" onClick={() => submitForm()} disabled={loading}>
+                Lagre
+              </Button>
+              <Button
+                className="ml-2.5"
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  refresh()
+                  handleReset()
+                  close()
+                }}
+                disabled={loading}
+              >
+                Avbryt
+              </Button>
+            </Modal.Footer>
+          </Modal.Body>
+        </Modal>
+      )}
+    </Formik>
   )
 }
