@@ -21,6 +21,7 @@
     "axios": "^1.5.1",
     "baseui": "^13.0.0",
     "core-js": "^3.32.2",
+    "depcheck": "^1.4.7",
     "draft-js": "^0.11.7",
     "formik": "^2.4.5",
     "graphql": "^16.8.1",
@@ -63,7 +64,8 @@
     "prettier": "prettier --write \"./src\"",
     "prepare": "cd ../../ && husky apps/frontend/.husky",
     "type-check": "tsc --project tsconfig.json",
-    "find-deadcode": "ts-prune | grep -v '(used in module)'"
+    "find-deadcode": "ts-prune | grep -v '(used in module)'",
+    "depcheck": "depcheck"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
