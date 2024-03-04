@@ -1,5 +1,5 @@
 import { Button, Label, TextField } from '@navikt/ds-react'
-import { FieldArray } from 'formik'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { useState } from 'react'
 import Select, { CSSObjectWithLabel } from 'react-select'
 import { IRegelverk } from '../../../constants'
@@ -31,7 +31,7 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
   return (
     <FieldWrapper marginBottom id="regelverk">
       <FieldArray name="regelverk">
-        {(p) => {
+        {(fieldArrayRenderProps: FieldArrayRenderProps) => {
           const add = () => {
             if (!text || !lov) return
             if (lov.value === '') {
@@ -39,12 +39,12 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
               return
             }
             setError('')
-            p.push(regelverkObject())
+            fieldArrayRenderProps.push(regelverkObject())
             setLov({ value: '', label: '', description: '' })
             setText('')
           }
 
-          const hasError = !!p.form.errors['regelverk'] || error !== ''
+          const hasError = !!fieldArrayRenderProps.form.errors['regelverk'] || error !== ''
 
           return (
             <div>
@@ -116,10 +116,10 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
               </div>
 
               <RenderTagList
-                list={p.form.values.regelverk.map((r: IRegelverk) => (
-                  <LovView regelverk={r} key={r.lov.code} />
+                list={fieldArrayRenderProps.form.values.regelverk.map((regelverk: IRegelverk) => (
+                  <LovView regelverk={regelverk} key={regelverk.lov.code} />
                 ))}
-                onRemove={p.remove}
+                onRemove={fieldArrayRenderProps.remove}
               />
             </div>
           )

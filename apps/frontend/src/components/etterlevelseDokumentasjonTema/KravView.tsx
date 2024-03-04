@@ -21,7 +21,7 @@ export const KravView = (props: {
   navigatePath: string
   setNavigatePath: (state: string) => void
   tab: TSection
-  setTab: (s: TSection) => void
+  setTab: (section: TSection) => void
   kravFilter: EKravFilterType
   nextKravToDocument: string
 }) => {

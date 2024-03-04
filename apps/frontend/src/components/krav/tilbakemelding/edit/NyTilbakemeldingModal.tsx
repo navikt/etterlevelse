@@ -105,19 +105,19 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
                 ) : (
                   <div>
                     <Accordion>
-                      {krav.suksesskriterier.map((s, i) => {
+                      {krav.suksesskriterier.map((suksesskriterium, index) => {
                         return (
-                          <Accordion.Item key={s.id}>
+                          <Accordion.Item key={suksesskriterium.id}>
                             <Accordion.Header>
                               <div>
                                 <BodyShort>
-                                  Suksesskriterium {i + 1} av {krav.suksesskriterier.length}
+                                  Suksesskriterium {index + 1} av {krav.suksesskriterier.length}
                                 </BodyShort>
-                                <Label>{s.navn}</Label>
+                                <Label>{suksesskriterium.navn}</Label>
                               </div>
                             </Accordion.Header>
                             <Accordion.Content>
-                              <Markdown source={s.beskrivelse} />
+                              <Markdown source={suksesskriterium.beskrivelse} />
                             </Accordion.Content>
                           </Accordion.Item>
                         )
@@ -132,7 +132,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
 
                     {/* <OptionField label="Type" name="type" clearable={false} options={Object.values(TilbakemeldingType).map((o) => ({ id: o, label: typeText(o) }))} /> */}
                     <Field name="varslingsadresse.adresse">
-                      {(p: FieldProps) => (
+                      {(fieldProps: FieldProps) => (
                         <div>
                           <Tooltip content="Velg hvilken adresse du vil varsles på når kraveier svarer på spørsmålet">
                             <Label>Din varslingsadresse</Label>
@@ -186,7 +186,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
                                 )}
                               </div>
                             </div>
-                            {p.meta.error && <Alert variant="error">{p.meta.error}</Alert>}
+                            {fieldProps.meta.error && <Alert variant="error">{fieldProps.meta.error}</Alert>}
 
                             {values.varslingsadresse && (
                               <VarslingsadresserTagList

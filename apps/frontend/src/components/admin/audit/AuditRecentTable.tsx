@@ -109,9 +109,9 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
               }}
             >
               <option value="">Velg type for versjonering</option>
-              {tableOptions.map((to, i) => (
-                <option key={i + '_' + to.label} value={to.id}>
-                  {to.label}
+              {tableOptions.map((tableOption, index) => (
+                <option key={index + '_' + tableOption.label} value={tableOption.id}>
+                  {tableOption.label}
                 </option>
               ))}
             </Select>

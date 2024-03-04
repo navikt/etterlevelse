@@ -32,9 +32,9 @@ export const MineEtterlevelseDokumentasjoner = ({
           <ParagraphSmall>Du er ikke medlem av team med registrerte dokumentasjoner</ParagraphSmall>
         )}
 
-        {teams.map((t) => {
+        {teams.map((team) => {
           const teamDokumentasjoner = etterlevelseDokumentasjoner
-            .filter((e) => e.teamsData?.find((t2) => t2.id === t.id))
+            .filter((e) => e.teamsData?.find((t2) => t2.id === team.id))
             .filter(
               (value, index, self) =>
                 index ===
@@ -43,11 +43,11 @@ export const MineEtterlevelseDokumentasjoner = ({
                 )
             )
           return (
-            <div key={t.id} className="mb-8">
+            <div key={team.id} className="mb-8">
               <div className="flex justify-between">
                 <div>
                   <Heading size="small" level="2">
-                    {t.name}
+                    {team.name}
                   </Heading>
                   {etterlevelseDokumentasjoner.length > 0 && (
                     <BodyShort className="mb-2">

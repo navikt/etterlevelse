@@ -25,9 +25,9 @@ export const EditKravMultiOptionField = (
   return (
     <FieldWrapper marginBottom={props.marginBottom}>
       <FieldArray name={props.name}>
-        {(p: FieldArrayRenderProps) => {
-          const selectedIds = (p.form.values[props.name] as any[]).map((v) =>
-            props.listName ? (v as ICode).code : v
+        {(fieldArrayRenderProps: FieldArrayRenderProps) => {
+          const selectedIds = (fieldArrayRenderProps.form.values[props.name] as any[]).map((value) =>
+            props.listName ? (value as ICode).code : value
           )
           return (
             <div>
@@ -36,22 +36,22 @@ export const EditKravMultiOptionField = (
               <Select
                 isMulti
                 options={options}
-                value={selectedIds.map((v) => options.find((o) => o.value === v))}
+                value={selectedIds.map((value) => options.find((option) => option.value === value))}
                 onChange={(value) => {
                   if (value.length) {
                     if (props.listName) {
-                      p.form.setFieldValue(
+                      fieldArrayRenderProps.form.setFieldValue(
                         props.name,
-                        value.map((v) => codelist.getCode(props.listName, v?.value))
+                        value.map((value) => codelist.getCode(props.listName, value?.value))
                       )
                     } else {
-                      p.form.setFieldValue(
+                      fieldArrayRenderProps.form.setFieldValue(
                         props.name,
-                        value.map((v) => v?.value)
+                        value.map((value) => value?.value)
                       )
                     }
                   } else {
-                    p.form.setFieldValue(props.name, [])
+                    fieldArrayRenderProps.form.setFieldValue(props.name, [])
                   }
                 }}
                 styles={{

@@ -77,12 +77,12 @@ export const KravEditPage = () => {
       getKravByKravNummer(krav.kravNummer).then((resp) => {
         if (resp.content.length) {
           const alleVersjoner = resp.content
-            .map((k) => {
-              return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer, kravStatus: k.status }
+            .map((krav) => {
+              return { kravVersjon: krav.kravVersjon, kravNummer: krav.kravNummer, kravStatus: krav.status }
             })
             .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
 
-          const filteredVersjoner = alleVersjoner.filter((k) => k.kravStatus !== EKravStatus.UTKAST)
+          const filteredVersjoner = alleVersjoner.filter((krav) => krav.kravStatus !== EKravStatus.UTKAST)
 
           if (filteredVersjoner.length) {
             setAlleKravVersjoner(filteredVersjoner)

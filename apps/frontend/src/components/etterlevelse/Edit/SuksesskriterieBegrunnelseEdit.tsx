@@ -56,11 +56,11 @@ export const SuksesskriterierBegrunnelseEdit = ({
 }: IPropsSuksesskriterierBegrunnelseEdit) => (
   <FieldWrapper>
     <FieldArray name={'suksesskriterieBegrunnelser'}>
-      {(p) => (
+      {(feildArrayRenderProps : FieldArrayRenderProps) => (
         <KriterieBegrunnelseList
-          props={p}
+          fieldArrayRenderProps={feildArrayRenderProps}
           disableEdit={disableEdit}
-          suksesskriterie={suksesskriterie}
+          suksesskriterier={suksesskriterie}
         />
       )}
     </FieldArray>
@@ -68,32 +68,32 @@ export const SuksesskriterierBegrunnelseEdit = ({
 )
 
 interface IPropsKriterieBegrunnelseList {
-  props: FieldArrayRenderProps
-  suksesskriterie: ISuksesskriterie[]
+  fieldArrayRenderProps: FieldArrayRenderProps
+  suksesskriterier: ISuksesskriterie[]
   disableEdit: boolean
 }
 
 const KriterieBegrunnelseList = ({
-  props,
-  suksesskriterie,
+  fieldArrayRenderProps,
+  suksesskriterier,
   disableEdit,
 }: IPropsKriterieBegrunnelseList) => {
-  const suksesskriterieBegrunnelser = props.form.values
+  const suksesskriterieBegrunnelser = fieldArrayRenderProps.form.values
     .suksesskriterieBegrunnelser as ISuksesskriterieBegrunnelse[]
 
   return (
     <div>
-      {suksesskriterie.map((s, i) => (
-        <div key={s.navn + '_' + i}>
+      {suksesskriterier.map((suksesskriterium, index) => (
+        <div key={suksesskriterium.navn + '_' + index}>
           <KriterieBegrunnelse
-            status={props.form.values.status}
+            status={fieldArrayRenderProps.form.values.status}
             disableEdit={disableEdit}
-            suksesskriterie={s}
-            index={i}
+            suksesskriterie={suksesskriterium}
+            index={index}
             suksesskriterieBegrunnelser={suksesskriterieBegrunnelser}
-            update={(updated) => props.replace(i, updated)}
-            props={props}
-            totalSuksesskriterie={suksesskriterie.length}
+            update={(updated) => fieldArrayRenderProps.replace(index, updated)}
+            feildArrayRenderProps={fieldArrayRenderProps}
+            totalSuksesskriterie={suksesskriterier.length}
           />
         </div>
       ))}
@@ -106,9 +106,9 @@ interface IPropsKriterieBegrunnelse {
   index: number
   suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
   disableEdit: boolean
-  update: (s: ISuksesskriterieBegrunnelse) => void
+  update: (suksesskriterium: ISuksesskriterieBegrunnelse) => void
   status: string
-  props: FieldArrayRenderProps
+  feildArrayRenderProps: FieldArrayRenderProps
   totalSuksesskriterie: number
 }
 
@@ -119,7 +119,7 @@ const KriterieBegrunnelse = ({
   disableEdit,
   update,
   status,
-  props,
+  feildArrayRenderProps,
   totalSuksesskriterie,
 }: IPropsKriterieBegrunnelse) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(
@@ -202,7 +202,7 @@ const KriterieBegrunnelse = ({
               initialValue={begrunnelse}
               setValue={setBegrunnelse}
               height={'188px'}
-              errors={props.form.errors}
+              errors={feildArrayRenderProps.form.errors}
               simple
               maxWidth="790px"
               width="100%"

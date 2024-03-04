@@ -44,13 +44,13 @@ export function useAwaitUser() {
   updateUser = useForceUpdate()
 }
 
-export function useAwait<T>(p: Promise<T>, setLoading?: Dispatch<SetStateAction<boolean>>) {
+export function useAwait<T>(promise: Promise<T>, setLoading?: Dispatch<SetStateAction<boolean>>) {
   const update = useForceUpdate()
 
   useEffect(() => {
     ;(async () => {
       setLoading && setLoading(true)
-      await p
+      await promise
       update()
       setLoading && setLoading(false)
     })()

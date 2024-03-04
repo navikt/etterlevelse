@@ -67,12 +67,12 @@ export const KravList = ({
     return (
       <Block $style={{ backgroundColor: 'white' }}>
         {etterlevelseDokumentasjon &&
-          sortedKravList.map((k) => {
+          sortedKravList.map((krav) => {
             return (
-              <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
+              <CustomPanelDivider key={`${krav.navn}_${krav.kravNummer}_${krav.kravVersjon}`}>
                 <KravCard
-                  krav={k}
-                  key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`}
+                  krav={krav}
+                  key={`${krav.navn}_${krav.kravNummer}_${krav.kravVersjon}_card`}
                   noStatus={noStatus}
                   etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                   noVarsling={noVarsling}

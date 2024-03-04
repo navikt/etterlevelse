@@ -12,11 +12,11 @@ const processString = reactProcessString as (
   converters: { regex: RegExp; fn: (key: string, result: string[]) => JSX.Element | string }[]
 ) => (input?: string) => JSX.Element[]
 
-export const LovViewList = (props: { regelverk: IRegelverk[]; openOnSamePage?: boolean }) => (
+export const LovViewList = (props: { regelverkListe: IRegelverk[]; openOnSamePage?: boolean }) => (
   <Block display="flex" flexDirection="column" $style={{ wordBreak: 'break-all' }}>
-    {props.regelverk.map((r, i) => (
-      <Block key={i} marginBottom="8px">
-        <LovView regelverk={r} openOnSamePage={props.openOnSamePage} />
+    {props.regelverkListe.map((regelverk, index) => (
+      <Block key={index} marginBottom="8px">
+        <LovView regelverk={regelverk} openOnSamePage={props.openOnSamePage} />
       </Block>
     ))}
   </Block>
@@ -59,7 +59,7 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
     {
       // Replace '§§ 10 og 4' > '§§ 10 og §§§ 4', so that our rewriter picks up the 2nd part
       regex: /(.*) §§\s*(\d+(-\d+)?)\s*og\s*(\d+(-\d+)?)/gi,
-      fn: (key: string, result: string[]) => `${result[1]} §§ ${result[2]} og §§§ ${result[4]}`,
+      fn: (_key: string, result: string[]) => `${result[1]} §§ ${result[2]} og §§§ ${result[4]}`,
     },
     {
       // triple '§§§' is hidden, used as a trick in combination with rule 1 above

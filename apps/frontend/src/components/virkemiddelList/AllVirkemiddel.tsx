@@ -86,8 +86,8 @@ export const AllVirkemiddel = ({
                   <Select
                     options={getOptions(
                       'Alle virkemiddel typer',
-                      virkemiddelTyper?.map((r) => {
-                        return { label: r.shortName, value: r.code }
+                      virkemiddelTyper?.map((regelverk) => {
+                        return { label: regelverk.shortName, value: regelverk.code }
                       })
                     )}
                     value={filter.virkemiddelType}

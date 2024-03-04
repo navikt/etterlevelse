@@ -42,7 +42,7 @@ interface IChartProps {
 
 export const Chart = (props: IChartProps) => {
   const { size, total, data, title, leftLegend } = props
-  const totSize = data.map((d) => d.size).reduce((a, b) => a + b, 0)
+  const totSize = data.map((chartData) => chartData.size).reduce((a, b) => a + b, 0)
   const totalFraction = total !== undefined ? total : totSize
 
   const colorsBase = [

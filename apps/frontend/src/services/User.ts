@@ -96,6 +96,10 @@ class UserService {
     return this.hasGroup(EGroup.KRAVEIER)
   }
 
+  public getError(): string {
+    return this.error || ''
+  }
+
   async wait() {
     await this.promise
   }

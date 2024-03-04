@@ -15,11 +15,11 @@ import EtterlevelseCard from './EtterlevelseCard'
 
 export const EtterlevelseViewFields = ({
   etterlevelse,
-  suksesskriterie,
+  suksesskriterier,
   tidligereEtterlevelser,
 }: {
   etterlevelse: IEtterlevelse
-  suksesskriterie: ISuksesskriterie[]
+  suksesskriterier: ISuksesskriterie[]
   tidligereEtterlevelser?: IEtterlevelse[]
 }) => {
   return (
@@ -44,14 +44,14 @@ export const EtterlevelseViewFields = ({
         )}
       </div>
 
-      {suksesskriterie.map((s, i) => {
+      {suksesskriterier.map((suksesskriterium, index) => {
         return (
-          <div key={s.navn + '_' + i}>
+          <div key={suksesskriterium.navn + '_' + index}>
             <KriterieBegrunnelse
-              suksesskriterie={s}
-              index={i}
+              suksesskriterie={suksesskriterium}
+              index={index}
               suksesskriterieBegrunnelser={etterlevelse.suksesskriterieBegrunnelser}
-              totalSuksesskriterie={suksesskriterie.length}
+              totalSuksesskriterie={suksesskriterier.length}
             />
           </div>
         )

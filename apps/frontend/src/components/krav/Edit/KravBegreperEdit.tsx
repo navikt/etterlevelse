@@ -1,5 +1,5 @@
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
-import { FieldArray } from 'formik'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { CSSObjectWithLabel, DropdownIndicatorProps, components } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { useBegrepSearch } from '../../../api/BegrepApi'
@@ -22,7 +22,7 @@ export const EditBegreper = () => {
   return (
     <FieldWrapper>
       <FieldArray name="begreper">
-        {(p) => {
+        {(fieldArrayRenderProps: FieldArrayRenderProps) => {
           return (
             <div>
               <LabelWithTooltip
@@ -43,7 +43,7 @@ export const EditBegreper = () => {
                 isClearable={false}
                 loadOptions={useBegrepSearch}
                 onChange={(begrep) => {
-                  begrep && p.push(begrep)
+                  begrep && fieldArrayRenderProps.push(begrep)
                 }}
                 styles={{
                   control: (base) =>
@@ -57,8 +57,8 @@ export const EditBegreper = () => {
               />
 
               <RenderTagList
-                list={p.form.values.begreper.map((b: IBegrep) => b.navn)}
-                onRemove={p.remove}
+                list={fieldArrayRenderProps.form.values.begreper.map((begrep: IBegrep) => begrep.navn)}
+                onRemove={fieldArrayRenderProps.remove}
               />
             </div>
           )

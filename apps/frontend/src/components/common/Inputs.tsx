@@ -95,13 +95,13 @@ export const InputField = (props: IPropsInputField) => {
   return (
     <FieldWrapper marginBottom={marginBottom} id={name}>
       <Field name={name}>
-        {(p: FieldProps) => (
+        {(fieldProps: FieldProps) => (
           <div className="w-full">
             <TextField
               label={label}
-              {...p.field}
+              {...fieldProps.field}
               placeholder={!disablePlaceHolder ? label : undefined}
-              error={p.form.errors[name] ? <FormError fieldName={name} /> : undefined}
+              error={fieldProps.form.errors[name] ? <FormError fieldName={name} /> : undefined}
             />
           </div>
         )}
@@ -138,7 +138,7 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
   return (
     <FieldWrapper marginBottom={marginBottom} id={name}>
       <Field name={name}>
-        {(p: FieldProps) => (
+        {(fieldProps: FieldProps) => (
           <div>
             {markdown && (
               <div>
@@ -147,9 +147,9 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
                 <MarkdownInfo />
                 <TextEditor
                   height={height}
-                  initialValue={p.field.value}
-                  setValue={(v) => p.form.setFieldValue(name, v)}
-                  errors={p.form.errors}
+                  initialValue={fieldProps.field.value}
+                  setValue={(v) => fieldProps.form.setFieldValue(name, v)}
+                  errors={fieldProps.form.errors}
                   name={name}
                   setIsFormDirty={setIsFormDirty}
                 />
@@ -162,14 +162,14 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
                 minRows={rows ? rows : 8}
                 label={label}
                 maxLength={maxCharacter ? maxCharacter : undefined}
-                error={p.form.errors[name] ? <FormError fieldName={name} /> : undefined}
-                {...p.field}
+                error={fieldProps.form.errors[name] ? <FormError fieldName={name} /> : undefined}
+                {...fieldProps.field}
                 placeholder={noPlaceholder ? '' : placeholder ? placeholder : label}
                 onChange={(v) => {
                   if (setIsFormDirty) {
                     setIsFormDirty(true)
                   }
-                  p.field.onChange(v)
+                  fieldProps.field.onChange(v)
                 }}
               />
             )}
@@ -196,16 +196,16 @@ export const BoolField = (props: IPropsBoolField) => {
   return (
     <FieldWrapper>
       <Field name={name}>
-        {(p: FieldProps) => (
+        {(fieldProps: FieldProps) => (
           <div>
             <RadioGroup
               legend={label}
               description={tooltip}
-              value={boolToRadio(p.field.value)}
+              value={boolToRadio(fieldProps.field.value)}
               onChange={(value) => {
-                p.form.setFieldValue(name, radioToBool(value))
+                fieldProps.form.setFieldValue(name, radioToBool(value))
               }}
-              error={p.form.errors[name] && <FormError fieldName={name} />}
+              error={fieldProps.form.errors[name] && <FormError fieldName={name} />}
             >
               <Radio value={YES}>Ja</Radio>
               <Radio value={NO}>Nei</Radio>
@@ -228,7 +228,7 @@ export const DateField = (props: TPropsDateField) => {
   return (
     <FieldWrapper>
       <Field name={name}>
-        {(p: FieldProps) => (
+        {(fieldProps: FieldProps) => (
           <DatePicker
             {...datepickerProps}
             onSelect={(date: any) => {
@@ -236,8 +236,8 @@ export const DateField = (props: TPropsDateField) => {
               if (dateSingle) {
                 const newDate = dateSingle.setDate(dateSingle.getDate() + 1)
                 const formatedDate = new Date(newDate)
-                p.form.setFieldValue(name, formatedDate.toISOString().split('T')[0])
-              } else p.form.setFieldValue(name, undefined)
+                fieldProps.form.setFieldValue(name, formatedDate.toISOString().split('T')[0])
+              } else fieldProps.form.setFieldValue(name, undefined)
             }}
           >
             <DatePicker.Input {...inputProps} label="Velg dato" />
@@ -274,14 +274,14 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
   return (
     <FieldWrapper marginBottom={marginBottom}>
       <FieldArray name={name}>
-        {(p: FieldArrayRenderProps) => {
+        {(fieldArrayRenderProps: FieldArrayRenderProps) => {
           const add = () => {
             if (link) {
               if (linkName && val) {
-                p.push(`[${linkName}](${val})`)
+                fieldArrayRenderProps.push(`[${linkName}](${val})`)
                 setError('')
               } else if (linkName && !val) {
-                p.push(linkName)
+                fieldArrayRenderProps.push(linkName)
                 setError('')
               } else if (!linkName && !val) {
                 return
@@ -291,7 +291,7 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
               }
             } else {
               if (val) {
-                p.push(val)
+                fieldArrayRenderProps.push(val)
               } else {
                 setError('Må ha navn på kilde')
                 return
@@ -300,7 +300,7 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
             setVal('')
             setLinkName('')
           }
-          const onKey = (e: React.KeyboardEvent) => e.key === 'Enter' && add()
+          const onKey = (event: React.KeyboardEvent) => event.key === 'Enter' && add()
 
           return (
             <div>
@@ -349,8 +349,8 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
               {error && <Error message={error} />}
 
               <RenderTagList
-                list={(p.form.values[name] as string[]).map(linkNameFor)}
-                onRemove={p.remove}
+                list={(fieldArrayRenderProps.form.values[name] as string[]).map(linkNameFor)}
+                onRemove={fieldArrayRenderProps.remove}
               />
             </div>
           )
@@ -368,12 +368,12 @@ export const OptionField = (props: TPropsOptionField) => {
   return (
     <FieldWrapper>
       <Field name={name}>
-        {(p: FieldProps<string>) => (
+        {(fieldProps: FieldProps<string>) => (
           <OptionList
             {...props}
-            error={p.meta.touched && p.meta.error}
-            onChange={(val) => p.form.setFieldValue(name, val)}
-            value={p.field.value}
+            error={fieldProps.meta.touched && fieldProps.meta.error}
+            onChange={(val) => fieldProps.form.setFieldValue(name, val)}
+            value={fieldProps.field.value}
           />
         )}
       </Field>
@@ -394,16 +394,16 @@ export const OptionList = (props: TPropsOptionList) => {
       className="w-full"
       value={value}
       error={error}
-      onChange={async (e) => {
-        const val = e.target.value
+      onChange={async (event) => {
+        const val = event.target.value
         const toSet = listName && val ? ((await codelist.getCode(listName, val)) as ICode) : val
         return onChange(toSet)
       }}
     >
       <option value="">Velg {label}</option>
-      {optionsList.map((c, i) => (
-        <option key={i + '_' + c.label} value={c.value}>
-          {c.label}
+      {optionsList.map((code, index) => (
+        <option key={index + '_' + code.label} value={code.value}>
+          {code.label}
         </option>
       ))}
     </Select>
@@ -419,27 +419,27 @@ export const MultiSearchField = (props: TPropsMultiSearchField) => {
   return (
     <FieldWrapper>
       <FieldArray name={name}>
-        {(p: FieldArrayRenderProps) => (
-          <FormControl label={label} error={p.form.touched[name] && <>{p.form.errors[name]}</>}>
+        {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+          <FormControl label={label} error={fieldArrayRenderProps.form.touched[name] && <>{fieldArrayRenderProps.form.errors[name]}</>}>
             <Block>
               <Block display="flex">
                 <CustomizedSelect
                   placeholder={'Søk ' + _.lowerFirst(label)}
                   maxDropdownHeight="400px"
-                  filterOptions={(o) => o}
+                  filterOptions={(option) => option}
                   searchable
                   noResultsMsg="Ingen resultat"
-                  options={results.filter((o) => (p.form.values[name] as any[]).indexOf(o.id) < 0)}
+                  options={results.filter((option) => (fieldArrayRenderProps.form.values[name] as any[]).indexOf(option.id) < 0)}
                   onChange={({ value }) => {
-                    value.length && p.push(value[0].id)
+                    value.length && fieldArrayRenderProps.push(value[0].id)
                   }}
                   onInputChange={(event) => setSearch(event.currentTarget.value)}
                   isLoading={loading}
                 />
               </Block>
               <RenderTagList
-                list={(p.form.values[name] as string[]).map((v) => (itemLabel ? itemLabel(v) : v))}
-                onRemove={p.remove}
+                list={(fieldArrayRenderProps.form.values[name] as string[]).map((value) => (itemLabel ? itemLabel(value) : value))}
+                onRemove={fieldArrayRenderProps.remove}
               />
             </Block>
           </FormControl>
@@ -458,8 +458,8 @@ export const SearchField = (props: TPropsSearchField) => {
   return (
     <FieldWrapper>
       <Field name={name}>
-        {(p: FieldProps<string>) => (
-          <FormControl label={label} error={p.meta.touched && p.meta.error}>
+        {(fieldProps: FieldProps<string>) => (
+          <FormControl label={label} error={fieldProps.meta.touched && fieldProps.meta.error}>
             <CustomizedSelect
               placeholder={'Søk ' + _.lowerFirst(label)}
               maxDropdownHeight="400px"
@@ -469,12 +469,12 @@ export const SearchField = (props: TPropsSearchField) => {
               options={results}
               value={[
                 {
-                  id: p.field.value,
-                  label: itemLabel ? itemLabel(p.field.value) : p.field.value,
+                  id: fieldProps.field.value,
+                  label: itemLabel ? itemLabel(fieldProps.field.value) : fieldProps.field.value,
                 },
               ]}
               onChange={({ value }) => {
-                p.form.setFieldValue(name, value.length ? (value[0].id as string) : '')
+                fieldProps.form.setFieldValue(name, value.length ? (value[0].id as string) : '')
               }}
               onInputChange={(event) => setSearch(event.currentTarget.value)}
               isLoading={loading}

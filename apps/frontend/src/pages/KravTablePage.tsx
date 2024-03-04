@@ -63,7 +63,7 @@ export const KravTablePage = () => {
   useEffect(() => {
     ;(async () => {
       const kraver = await getAllKrav()
-      const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
+      const mappedKraver = kraver.map((krav) => kravMapToFormVal(krav))
       setTableContent(mappedKraver)
       ampli.logEvent('sidevisning', {
         side: 'Krav admin side',

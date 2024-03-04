@@ -28,9 +28,9 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
     const fargeForFemAlternativ = ['alt1', 'alt2', 'alt3', 'alt1', 'alt2'] as const
     const ingenEgenskaper: boolean = irrelevans.length === relevansCodeList.length
 
-    const relevans = relevansCodeList.filter((n) => {
-      const hentIder: string[] = irrelevans.map((ir: ICode) => ir.code)
-      const isIdPresent: boolean = hentIder.includes(n.value)
+    const relevans = relevansCodeList.filter((relevans) => {
+      const hentIder: string[] = irrelevans.map((irrelevans: ICode) => irrelevans.code)
+      const isIdPresent: boolean = hentIder.includes(relevans.value)
 
       return !isIdPresent
     })
@@ -46,10 +46,10 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
 
         {irrelevans && (
           <div className="flex flex-wrap gap-2">
-            {relevans.map((r, index) => (
-              <div key={r.value} className="flex items-center gap-1">
+            {relevans.map((relevans, index) => (
+              <div key={relevans.value} className="flex items-center gap-1">
                 <Tag variant={fargeForFemAlternativ[index]} size="small">
-                  <BodyShort size="small">{r.label}</BodyShort>
+                  <BodyShort size="small">{relevans.label}</BodyShort>
                 </Tag>
               </div>
             ))}
@@ -58,10 +58,10 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
 
         {!irrelevans && (
           <div className="flex flex-wrap gap-2">
-            {relevansCodeList.map((o, index) => (
-              <div key={o.value} className="flex items-center gap-1">
+            {relevansCodeList.map((relevans, index) => (
+              <div key={relevans.value} className="flex items-center gap-1">
                 <Tag variant={fargeForFemAlternativ[index]} size="small">
-                  <BodyShort size="small">{o.label}</BodyShort>
+                  <BodyShort size="small">{relevans.label}</BodyShort>
                 </Tag>
               </div>
             ))}

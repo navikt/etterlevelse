@@ -83,33 +83,33 @@ export const KravPanels = ({
   return (
     <div className="mb-2.5 flex flex-col gap-2">
       {kravene &&
-        kravene.map((k) => {
-          const lov = codelist.getCode(EListName.LOV, k.regelverk[0]?.lov?.code)
+        kravene.map((krav) => {
+          const lov = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov?.code)
           const tema = codelist.getCode(EListName.TEMA, lov?.data?.tema)
           return (
-            <div className="mb-0" key={k.id}>
-              <LinkPanel href={`/krav/${k.kravNummer}/${k.kravVersjon}`}>
+            <div className="mb-0" key={krav.id}>
+              <LinkPanel href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>
                 <LinkPanel.Title className="flex items-center">
                   <div className="max-w-xl">
                     <BodyShort size="small">
-                      K{k.kravNummer}.{k.kravVersjon}
+                      K{krav.kravNummer}.{krav.kravVersjon}
                     </BodyShort>
                     <BodyLong>
-                      <Label>{k.navn}</Label>
+                      <Label>{krav.navn}</Label>
                     </BodyLong>
                   </div>
                   <Spacer />
                   <div className="mr-5">
-                    <StatusView status={k.status} />
+                    <StatusView status={krav.status} />
                   </div>
                   <div className="w-44">
                     <BodyShort size="small" className="break-words">
                       {tema && tema.shortName ? tema.shortName : ''}
                     </BodyShort>
                     <BodyShort size="small">
-                      {k.changeStamp.lastModifiedDate !== undefined &&
-                      k.changeStamp.lastModifiedDate !== ''
-                        ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}`
+                      {krav.changeStamp.lastModifiedDate !== undefined &&
+                      krav.changeStamp.lastModifiedDate !== ''
+                        ? `Sist endret: ${moment(krav.changeStamp.lastModifiedDate).format('ll')}`
                         : ''}
                     </BodyShort>
                   </div>

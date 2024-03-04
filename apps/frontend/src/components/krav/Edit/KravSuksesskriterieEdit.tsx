@@ -24,9 +24,9 @@ export const KravSuksesskriterierEdit = ({
 }: TKravSuksesskriterieEditProps) => (
   <FieldWrapper>
     <FieldArray name={'suksesskriterier'}>
-      {(p) => (
+      {(fieldArrayRenderProps: FieldArrayRenderProps) => (
         <KriterieList
-          p={p}
+          fieldArrayRenderProps={fieldArrayRenderProps}
           setIsFormDirty={setIsFormDirty}
           newVersion={newVersion}
           newKrav={newKrav}
@@ -37,19 +37,19 @@ export const KravSuksesskriterierEdit = ({
 )
 
 const nextId = (suksesskriterier: ISuksesskriterie[]): number => {
-  const max = _.max(suksesskriterier.map((s) => s.id)) || 0
+  const max = _.max(suksesskriterier.map((suksesskriterium) => suksesskriterium.id)) || 0
   return max + 1
 }
 
 interface IPropsKriterieList {
-  p: FieldArrayRenderProps
+  fieldArrayRenderProps: FieldArrayRenderProps
   setIsFormDirty?: (v: boolean) => void
   newVersion?: boolean
   newKrav?: boolean
 }
 
-const KriterieList = ({ p, setIsFormDirty, newVersion, newKrav }: IPropsKriterieList) => {
-  const suksesskriterier = p.form.values.suksesskriterier as ISuksesskriterie[]
+const KriterieList = ({ fieldArrayRenderProps, setIsFormDirty, newVersion, newKrav }: IPropsKriterieList) => {
+  const suksesskriterier = fieldArrayRenderProps.form.values.suksesskriterier as ISuksesskriterie[]
 
   const AddSuksessKriterieButton = () => (
     <div className="my-4 ml-2.5 self-end">
@@ -59,7 +59,7 @@ const KriterieList = ({ p, setIsFormDirty, newVersion, newKrav }: IPropsKriterie
         variant="secondary"
         disabled={suksesskriterier.length >= 15}
         onClick={() =>
-          p.push({
+          fieldArrayRenderProps.push({
             id: nextId(suksesskriterier),
             navn: '',
             beskrivelse: '',
@@ -74,17 +74,17 @@ const KriterieList = ({ p, setIsFormDirty, newVersion, newKrav }: IPropsKriterie
 
   return (
     <div className="flex flex-col">
-      {suksesskriterier.map((s, i) => (
+      {suksesskriterier.map((suksesskriterium, index) => (
         <Kriterie
-          key={s.id}
-          s={s}
-          index={i}
+          key={suksesskriterium.id}
+          suksesskriterium={suksesskriterium}
+          index={index}
           arrayLength={suksesskriterier.length}
-          update={(updated) => p.replace(i, updated)}
+          update={(updated) => fieldArrayRenderProps.replace(index, updated)}
           remove={() => {
-            p.remove(i)
+            fieldArrayRenderProps.remove(index)
           }}
-          p={p}
+          fieldArrayRenderProps={fieldArrayRenderProps}
           setIsFormDirty={setIsFormDirty}
           newVersion={newVersion}
         />
@@ -92,7 +92,7 @@ const KriterieList = ({ p, setIsFormDirty, newVersion, newKrav }: IPropsKriterie
 
       {newKrav && <AddSuksessKriterieButton />}
 
-      {!newKrav && (p.form.values.status !== EKravStatus.AKTIV || newVersion) && (
+      {!newKrav && (fieldArrayRenderProps.form.values.status !== EKravStatus.AKTIV || newVersion) && (
         <AddSuksessKriterieButton />
       )}
     </div>
@@ -100,44 +100,44 @@ const KriterieList = ({ p, setIsFormDirty, newVersion, newKrav }: IPropsKriterie
 }
 
 interface IPropsKriterie {
-  s: ISuksesskriterie
+  suksesskriterium: ISuksesskriterie
   index: number
   arrayLength: number
-  update: (s: ISuksesskriterie) => void
+  update: (suksesskriterium: ISuksesskriterie) => void
   remove: () => void
-  p: FieldArrayRenderProps
+  fieldArrayRenderProps: FieldArrayRenderProps
   setIsFormDirty?: (v: boolean) => void
   newVersion?: boolean
 }
 
 const Kriterie = ({
-  s,
+  suksesskriterium,
   index,
   arrayLength,
   update,
   remove,
-  p,
+  fieldArrayRenderProps,
   setIsFormDirty,
   newVersion,
 }: IPropsKriterie) => {
   const debounceDelay = 500
-  const [navn, setNavn, navnInput] = useDebouncedState(s.navn, debounceDelay)
-  const [beskrivelse, setBeskrivelse] = useDebouncedState(s.beskrivelse || '', debounceDelay)
+  const [navn, setNavn, navnInput] = useDebouncedState(suksesskriterium.navn, debounceDelay)
+  const [beskrivelse, setBeskrivelse] = useDebouncedState(suksesskriterium.beskrivelse || '', debounceDelay)
   const [behovForBegrunnelse, setBehovForBegrunnelse] = useState<string>(
-    s.behovForBegrunnelse === undefined ? 'true' : s.behovForBegrunnelse.toString()
+    suksesskriterium.behovForBegrunnelse === undefined ? 'true' : suksesskriterium.behovForBegrunnelse.toString()
   )
 
   const nummer = index + 1
 
   const updateIndex = (newIndex: number) => {
-    const suksesskriterieToMove = p.form.values.suksesskriterier[index]
-    p.remove(index)
-    p.insert(newIndex, suksesskriterieToMove)
+    const suksesskriterieToMove = fieldArrayRenderProps.form.values.suksesskriterier[index]
+    fieldArrayRenderProps.remove(index)
+    fieldArrayRenderProps.insert(newIndex, suksesskriterieToMove)
   }
 
   useEffect(() => {
     update({
-      id: s.id,
+      id: suksesskriterium.id,
       navn,
       beskrivelse,
       behovForBegrunnelse: behovForBegrunnelse === 'true' ? true : false,
@@ -148,7 +148,7 @@ const Kriterie = ({
     <Box padding="4" className="mb-4" background="surface-subtle" borderColor="border-on-inverted">
       <div className="relative pt-1">
         <div className="flex items-center absolute right-0 top-0">
-          {(p.form.values.status !== EKravStatus.AKTIV || newVersion) && (
+          {(fieldArrayRenderProps.form.values.status !== EKravStatus.AKTIV || newVersion) && (
             <Tooltip content="Fjern suksesskriterium">
               <Button
                 variant="secondary"
@@ -182,8 +182,8 @@ const Kriterie = ({
             onChange={(e) => setNavn((e.target as HTMLInputElement).value)}
             placeholder="Navn"
             error={
-              p.form.errors &&
-              p.form.errors['suksesskriterier'] && <FormError fieldName="suksesskriterier" />
+              fieldArrayRenderProps.form.errors &&
+              fieldArrayRenderProps.form.errors['suksesskriterier'] && <FormError fieldName="suksesskriterier" />
             }
           />
         </div>
@@ -207,7 +207,7 @@ const Kriterie = ({
             legend="Velg type besvarelse:"
             value={behovForBegrunnelse}
             onChange={(value) => {
-              p.form.setFieldValue('behovForBegrunnelse', value === 'true' ? true : false)
+              fieldArrayRenderProps.form.setFieldValue('behovForBegrunnelse', value === 'true' ? true : false)
               setBehovForBegrunnelse(value)
             }}
           >

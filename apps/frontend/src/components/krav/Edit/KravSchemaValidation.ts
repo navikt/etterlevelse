@@ -17,7 +17,7 @@ const checkIfHensiktHasValue = (hensikt: string): boolean => {
 }
 
 const checkIfAllSuksesskriterieHasName = (suksesskriterier: ISuksesskriterie[]): boolean => {
-  return suksesskriterier.length > 0 && suksesskriterier.every((s) => s.navn)
+  return suksesskriterier.length > 0 && suksesskriterier.every((suksesskriterium) => suksesskriterium.navn)
 }
 
 const checkIfRegelverkIsEmpty = (regelverk: IRegelverk[]): boolean => {

@@ -37,15 +37,15 @@ export const AllKrav = () => {
     relevans:
       filter.relevans[0]?.id === 'alle'
         ? undefined
-        : filter.relevans.map((r) => (r.id ? r.id.toString() : '')),
+        : filter.relevans.map((relevans) => (relevans.id ? relevans.id.toString() : '')),
     lover:
       filter.lover[0].id === 'alle'
         ? undefined
-        : filter.lover.map((l) => (l.id ? l.id.toString() : '')),
+        : filter.lover.map((lov) => (lov.id ? lov.id.toString() : '')),
     status:
       filter.status[0]?.id === 'alle'
         ? undefined
-        : filter.status.map((s) => (s.id ? s.id?.toString() : '')),
+        : filter.status.map((status) => (status.id ? status.id?.toString() : '')),
     pageNumber: 0,
     pageSize,
   })
@@ -127,8 +127,8 @@ export const AllKrav = () => {
   const getLovOptions = () => {
     return getOptions(
       'Alle lover',
-      lover.map((l) => {
-        return { label: l.shortName, id: l.code }
+      lover.map((lov) => {
+        return { label: lov.shortName, id: lov.code }
       })
     )
   }
@@ -157,9 +157,9 @@ export const AllKrav = () => {
           }}
           className={'flex'}
         >
-          {options.map((o) => (
-            <option value={o.id} key={kravFilter + '_' + o.id}>
-              {o.label}
+          {options.map((option) => (
+            <option value={option.id} key={kravFilter + '_' + option.id}>
+              {option.label}
             </option>
           ))}
         </Select>
@@ -187,8 +187,8 @@ export const AllKrav = () => {
                 EKravListFilter.RELEVANS,
                 getOptions(
                   'Alle relevans',
-                  relevans?.map((r) => {
-                    return { label: r.shortName, id: r.code }
+                  relevans?.map((relevans) => {
+                    return { label: relevans.shortName, id: relevans.code }
                   })
                 )
               )}

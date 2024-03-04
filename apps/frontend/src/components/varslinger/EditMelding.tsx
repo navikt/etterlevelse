@@ -78,7 +78,7 @@ export const EditMelding = ({
                   {melding.meldingType === EMeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'}
                 </Heading>
                 <Field name="alertType">
-                  {(p: FieldProps<string>) => (
+                  {(fieldProps: FieldProps<string>) => (
                     <Form>
                       <RadioGroup
                         className="mt-8"
@@ -86,7 +86,7 @@ export const EditMelding = ({
                         disabled={disableEdit}
                         value={meldingAlertType}
                         onChange={(event) => {
-                          p.form.setFieldValue('alertType', event)
+                          fieldProps.form.setFieldValue('alertType', event)
                           setMeldingAlertType(event)
                         }}
                       >

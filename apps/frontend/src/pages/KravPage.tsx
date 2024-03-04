@@ -92,8 +92,8 @@ export const KravPage = () => {
       getKravByKravNummer(krav.kravNummer).then((resp) => {
         if (resp.content.length) {
           const alleVersjoner = resp.content
-            .map((k) => {
-              return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer, kravStatus: k.status }
+            .map((krav) => {
+              return { kravVersjon: krav.kravVersjon, kravNummer: krav.kravNummer, kravStatus: krav.status }
             })
             .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
 
@@ -210,7 +210,7 @@ export const KravPage = () => {
             </div>
 
             <div className="w-full">
-              <Tabs defaultValue={tab} onChange={(s) => setTab(s as TSection)}>
+              <Tabs defaultValue={tab} onChange={(section) => setTab(section as TSection)}>
                 <Tabs.List>
                   <Tabs.Tab value="krav" label="Hvordan etterleve?" />
                   <Tabs.Tab value="etterlevelser" label="Eksempler på etterlevelse" />

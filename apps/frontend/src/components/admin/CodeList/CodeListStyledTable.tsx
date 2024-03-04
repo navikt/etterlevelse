@@ -10,7 +10,6 @@ import {
   ICodeListFormValues,
   ICodeUsage,
   ILovCodeData,
-  ITemaCodeData,
 } from '../../../services/Codelist'
 import { handleSort } from '../../../util/handleTableSort'
 import { AuditButton } from '../audit/AuditButton'
@@ -135,9 +134,9 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {sortedData.map((code: ICode, i) => {
+          {sortedData.map((code: ICode, index) => {
             return (
-              <Table.Row key={i + '_' + code.shortName}>
+              <Table.Row key={index + '_' + code.shortName}>
                 <Table.DataCell className="w-[15%] break-all" scope="row">
                   {code.code}
                 </Table.DataCell>

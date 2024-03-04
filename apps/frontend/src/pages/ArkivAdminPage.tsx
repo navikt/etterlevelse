@@ -76,7 +76,7 @@ export const ArkivAdminPage = () => {
   useEffect(() => {
     ;(async () => {
       const arkivering = await getAllArkivering()
-      const mappedArkivering = arkivering.map((a) => arkiveringMapToFormVal(a))
+      const mappedArkivering = arkivering.map((arkivering) => arkiveringMapToFormVal(arkivering))
       setTableContent(mappedArkivering)
       ampli.logEvent('sidevisning', {
         side: 'Etterlevelse arkivering admin side',
@@ -89,7 +89,7 @@ export const ArkivAdminPage = () => {
   useEffect(() => {
     ;(async () => {
       const arkivering = await getAllArkivering()
-      const mappedArkivering = arkivering.map((a) => arkiveringMapToFormVal(a))
+      const mappedArkivering = arkivering.map((arkivering) => arkiveringMapToFormVal(arkivering))
       setTableContent(mappedArkivering)
     })()
   }, [reloadTable])
@@ -115,11 +115,11 @@ export const ArkivAdminPage = () => {
           value={arkiveringsStatus}
           onChange={(e) => setArkiveringsStatus(e.target.value as EEtterlevelseArkivStatus)}
         >
-          {options.map((o, i) => {
+          {options.map((option, index) => {
             ;<option value="">Velg status</option>
             return (
-              <option key={i + '_' + o.label} value={o.id}>
-                {o.label}
+              <option key={index + '_' + option.label} value={option.id}>
+                {option.label}
               </option>
             )
           })}

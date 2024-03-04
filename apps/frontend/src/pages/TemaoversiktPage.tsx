@@ -71,7 +71,7 @@ export const TemaPanel = ({
 }) => {
   const lover = codelist.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter(
-    { lover: [...lover.map((l) => l.code)] },
+    { lover: [...lover.map((lov) => lov.code)] },
     { skip: !lover.length }
   )
   const krav = data?.krav.content || []
@@ -79,7 +79,7 @@ export const TemaPanel = ({
     () =>
       setNum(
         tema.code,
-        krav.map((k) => k.kravNummer)
+        krav.map((krav) => krav.kravNummer)
       ),
     [data]
   )
@@ -96,10 +96,10 @@ export const TemaPanel = ({
             {tema.shortName}
           </LinkPanel.Title>
           <LinkPanel.Description className="lg:flex items-center gap-2">
-            {lover.map((l, i) => (
-              <div key={l.code} className="flex items-center gap-2">
-                {l.shortName}
-                {i < lover.length - 1 && (
+            {lover.map((lov, index) => (
+              <div key={lov.code} className="flex items-center gap-2">
+                {lov.shortName}
+                {index < lover.length - 1 && (
                   <span className="hidden lg:block h-2 w-2 rotate-45 rounded-[1px] bg-red-200"></span>
                 )}
               </div>

@@ -38,17 +38,17 @@ type TDotTagsParams = {
 
 export const DotTags = (props: TDotTagsParams) => {
   const { commaSeparator } = props
-  const items = props.items || props.codes?.map((c) => c.code) || []
+  const items = props.items || props.codes?.map((code) => code.code) || []
 
   if (!items.length) return <>{'Ikke angitt'}</>
 
   if (commaSeparator) {
     return (
       <div className={'inline'}>
-        {items.map((item, i) => (
-          <React.Fragment key={i}>
+        {items.map((item, index) => (
+          <React.Fragment key={index}>
             <Content {...props} item={item} />
-            <span>{i < items.length - 1 ? ', ' : ''}</span>
+            <span>{index < items.length - 1 ? ', ' : ''}</span>
           </React.Fragment>
         ))}
       </div>
@@ -57,12 +57,12 @@ export const DotTags = (props: TDotTagsParams) => {
 
   return (
     <div className={`${props.inColumn ? 'block' : 'flex'} flex-wrap`}>
-      {items.map((item, i) => (
+      {items.map((item, index) => (
         <div
           className={`${props.inColumn ? 'mb-1.5' : 'mb-0'} ${
-            i < items.length && !commaSeparator ? 'mb-1.5' : 'mb-0'
+            index < items.length && !commaSeparator ? 'mb-1.5' : 'mb-0'
           }`}
-          key={i}
+          key={index}
         >
           {!props.markdown && (
             <BodyShort className={'break-words'}>

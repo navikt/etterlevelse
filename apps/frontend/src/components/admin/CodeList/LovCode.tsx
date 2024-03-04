@@ -124,9 +124,9 @@ export const TemaCodeDataForm = () => {
                   }}
                 >
                   <option value="">Velg bilde</option>
-                  {temaBildeOptions.map((t, i) => (
-                    <option key={i + '_' + t.label} value={t.id}>
-                      {t.label}
+                  {temaBildeOptions.map((tema, index) => (
+                    <option key={index + '_' + tema.label} value={tema.id}>
+                      {tema.label}
                     </option>
                   ))}
                 </Select>

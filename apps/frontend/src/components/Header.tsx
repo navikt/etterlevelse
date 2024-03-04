@@ -211,7 +211,7 @@ const Menu = (props: {
 
   const allPages = props.pages.length
     ? props.pages
-        .filter((p) => p.length)
+        .filter((page) => page.length)
         .reduce((previousValue, currentValue) => [
           ...((previousValue as TMenuItem[]) || []),
           { label: <Dropdown.Menu.Divider /> },
@@ -226,32 +226,32 @@ const Menu = (props: {
       </InternalHeader.Button>
       <Dropdown.Menu className="min-w-max h-auto">
         <Dropdown.Menu.List>
-          {allPages.map((p, i) => {
+          {allPages.map((page, index) => {
             const item =
-              !!p.href && !p.disabled ? (
+              !!page.href && !page.disabled ? (
                 <Dropdown.Menu.List.Item
                   as={Link}
-                  href={p.href}
+                  href={page.href}
                   onClick={() => {
                     ampli.logEvent('navigere', {
                       kilde: 'header',
                       app: 'etterlevelse',
-                      til: p.href,
+                      til: page.href,
                       fra: pathname,
                     })
                   }}
                   underline={false}
                 >
                   <div className="flex items-center">
-                    {p.icon && <div className="mr-2">{p.icon}</div>}
-                    {p.label}
+                    {page.icon && <div className="mr-2">{page.icon}</div>}
+                    {page.label}
                   </div>
                 </Dropdown.Menu.List.Item>
               ) : (
-                <Dropdown.Menu.GroupedList.Heading>{p.label}</Dropdown.Menu.GroupedList.Heading>
+                <Dropdown.Menu.GroupedList.Heading>{page.label}</Dropdown.Menu.GroupedList.Heading>
               )
             return (
-              <div key={i} className="my-1">
+              <div key={index} className="my-1">
                 {item}
               </div>
             )

@@ -1,7 +1,7 @@
 import { Block } from 'baseui/block'
 import { FormControl } from 'baseui/form-control'
 import { TYPE } from 'baseui/select'
-import { FieldArray } from 'formik'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { useSearchVirkemiddel } from '../../../api/VirkemiddelApi'
 import { IVirkemiddel } from '../../../constants'
 import { intl } from '../../../util/intl/intl'
@@ -19,7 +19,7 @@ export const EditVirkemidler = () => {
   return (
     <FieldWrapper>
       <FieldArray name="virkemidler">
-        {(p) => {
+        {(fieldArrayRenderProps: FieldArrayRenderProps) => {
           return (
             <FormControl
               label={
@@ -72,14 +72,14 @@ export const EditVirkemidler = () => {
                   onInputChange={(event) => setSearch(event.currentTarget.value)}
                   onChange={(params) => {
                     const virkemiddel = params.value.length ? params.value[0] : undefined
-                    virkemiddel && p.push(virkemiddel)
+                    virkemiddel && fieldArrayRenderProps.push(virkemiddel)
                   }}
-                  error={!!p.form.errors.begreper && !!p.form.submitCount}
+                  error={!!fieldArrayRenderProps.form.errors.begreper && !!fieldArrayRenderProps.form.submitCount}
                   isLoading={loading}
                 />
                 <RenderTagList
-                  list={p.form.values.virkemidler.map((v: IVirkemiddel) => v.navn)}
-                  onRemove={p.remove}
+                  list={fieldArrayRenderProps.form.values.virkemidler.map((virkemiddel: IVirkemiddel) => virkemiddel.navn)}
+                  onRemove={fieldArrayRenderProps.remove}
                 />
               </Block>
             </FormControl>

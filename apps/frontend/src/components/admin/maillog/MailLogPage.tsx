@@ -48,23 +48,23 @@ export const MailLogPage = () => {
       <Heading className="mt-4" size="large" level="1" spacing>
         {intl.mailLog}
       </Heading>
-      {log?.content.map((l, i) => {
-        let html = l.body
-        const bodyIdx = l.body.indexOf('<body>')
+      {log?.content.map((mailLog, index) => {
+        let html = mailLog.body
+        const bodyIdx = mailLog.body.indexOf('<body>')
         if (bodyIdx >= 0) {
-          html = html.substring(l.body.indexOf('<body>') + 6)
+          html = html.substring(mailLog.body.indexOf('<body>') + 6)
           html = html.substring(0, html.lastIndexOf('</body>'))
         }
         // some odd bug in html parser didnt like newlines inside <ul>
         html = html.replace(/\n/g, '')
-        const rowNum = log.pageNumber * log.pageSize + i + 1
+        const rowNum = log.pageNumber * log.pageSize + index + 1
 
         return (
-          <div key={i} className="mb-6">
+          <div key={index} className="mb-6">
             <BodyShort>
-              #{rowNum} Tid: {moment(l.time).format('lll')} Til: {l.to}
+              #{rowNum} Tid: {moment(mailLog.time).format('lll')} Til: {mailLog.to}
             </BodyShort>
-            <BodyShort className="mb-3">Emne: {l.subject}</BodyShort>
+            <BodyShort className="mb-3">Emne: {mailLog.subject}</BodyShort>
             <Box
               className="px-2"
               borderWidth="2"
