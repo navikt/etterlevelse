@@ -5,7 +5,7 @@ import { getAllKrav } from '../../api/KravApi'
 import { getAllKravPriority } from '../../api/KravPriorityApi'
 import { EKravStatus, IKrav } from '../../constants'
 import { EListName, codelist } from '../../services/Codelist'
-import { sortKraverByPriority } from '../../util/sort'
+import { sortKravListeByPriority } from '../../util/sort'
 import StatusView from '../common/StatusTag'
 import { KravPanelHeader } from '../etterlevelseDokumentasjon/KravPanelHeader'
 import { EditPriorityModal } from './edit/EditPriorityModal'
@@ -23,38 +23,47 @@ export const TemaList = () => {
       const kraver = await getAllKrav()
       const allKravPriority = await getAllKravPriority()
 
-      kraver.map((k) => {
+      kraver.map((krav) => {
         const priority = allKravPriority.filter(
-          (kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon
+          (kravPriority) =>
+            kravPriority.kravNummer === krav.kravNummer &&
+            kravPriority.kravVersjon === krav.kravVersjon
         )
-        k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
-        k.kravPriorityUID = priority.length ? priority[0].id : ''
-        return k
+        krav.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
+        krav.kravPriorityUID = priority.length ? priority[0].id : ''
+        return krav
       })
 
-      setAllActiveKrav(kraver.filter((k) => k.status === EKravStatus.AKTIV))
-      setAllDraftKrav(kraver.filter((k) => k.status === EKravStatus.UTKAST))
+      setAllActiveKrav(kraver.filter((krav) => krav.status === EKravStatus.AKTIV))
+      setAllDraftKrav(kraver.filter((krav) => krav.status === EKravStatus.UTKAST))
     })()
   }
 
   return (
     <Accordion>
-      {codelist.getCodes(EListName.TEMA).map((t) => {
+      {codelist.getCodes(EListName.TEMA).map((tema) => {
         const activeKraver = allActiveKrav?.filter((k) => {
-          return k.regelverk.map((r) => r.lov.data && r.lov.data.tema).includes(t.code)
+          return k.regelverk
+            .map((regelverk) => regelverk.lov.data && regelverk.lov.data.tema)
+            .includes(tema.code)
         })
         const draftKraver = allDraftKrav?.filter((k) => {
-          return k.regelverk.map((r) => r.lov.data && r.lov.data.tema).includes(t.code)
+          return k.regelverk
+            .map((regelverk) => regelverk.lov.data && regelverk.lov.data.tema)
+            .includes(tema.code)
         })
         return activeKraver && activeKraver.length > 0 ? (
           <Accordion.Item>
-            <Accordion.Header key={`${t.code}_krav_list`}>
-              <KravPanelHeader title={t.shortName} kravData={[...activeKraver, ...draftKraver]} />
+            <Accordion.Header key={`${tema.code}_krav_list`}>
+              <KravPanelHeader
+                title={tema.shortName}
+                kravData={[...activeKraver, ...draftKraver]}
+              />
             </Accordion.Header>
             <Accordion.Content>
               <KravTemaList
-                activeKraver={sortKraverByPriority(activeKraver, t.shortName)}
-                tema={t.shortName}
+                activeKraver={sortKravListeByPriority(activeKraver, tema.shortName)}
+                tema={tema.shortName}
                 refresh={fetchKrav}
                 draftKrav={draftKraver}
               />
@@ -62,8 +71,8 @@ export const TemaList = () => {
           </Accordion.Item>
         ) : (
           <Accordion.Item>
-            <Accordion.Header key={`${t.code}_krav_list`}>
-              <KravPanelHeader title={t.shortName} kravData={[]} />
+            <Accordion.Header key={`${tema.code}_krav_list`}>
+              <KravPanelHeader title={tema.shortName} kravData={[]} />
             </Accordion.Header>
             <Accordion.Content>
               <div className="flex w-full ml-6">
@@ -77,29 +86,29 @@ export const TemaList = () => {
   )
 }
 
-const getKravTemaRowsWithLabel = (kraver: IKrav[], tema: string) => {
-  return kraver.map((k, index) => {
+const getKravTemaRowsWithLabel = (kravListe: IKrav[], tema: string) => {
+  return kravListe.map((krav, index) => {
     return (
-      <div key={`${k.navn}_${k.kravNummer}_${tema}_${index}`}>
-        <LinkPanel href={`/krav/${k.kravNummer}/${k.kravVersjon}`}>
+      <div key={`${krav.navn}_${krav.kravNummer}_${tema}_${index}`}>
+        <LinkPanel href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>
           <LinkPanel.Title className="flex items-center">
             <div className="max-w-xl">
               <BodyShort size="small">
-                K{k.kravNummer}.{k.kravVersjon}
+                K{krav.kravNummer}.{krav.kravVersjon}
               </BodyShort>
               <BodyLong>
-                <Label>{k.navn}</Label>
+                <Label>{krav.navn}</Label>
               </BodyLong>
             </div>
             <Spacer />
             <div className="mr-5">
-              <StatusView status={k.status} />
+              <StatusView status={krav.status} />
             </div>
             <div className="w-44">
               <BodyShort size="small">
-                {k.changeStamp.lastModifiedDate !== undefined &&
-                k.changeStamp.lastModifiedDate !== ''
-                  ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}`
+                {krav.changeStamp.lastModifiedDate !== undefined &&
+                krav.changeStamp.lastModifiedDate !== ''
+                  ? `Sist endret: ${moment(krav.changeStamp.lastModifiedDate).format('ll')}`
                   : ''}
               </BodyShort>
             </div>

@@ -18,7 +18,7 @@ import { useKravCounter } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TLovCode, TTemaCode, codelist } from '../services/Codelist'
 import { theme } from '../util'
-import { sortKraverByPriority } from '../util/sort'
+import { sortKravListeByPriority } from '../util/sort'
 import { ettlevColors } from '../util/theme'
 import { kravNumView } from './KravPage'
 import { temaBreadCrumbPath } from './util/BreadCrumbPath'
@@ -85,15 +85,17 @@ const TemaView = ({ tema }: { tema: TTemaCode }) => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
       ;(async () => {
         const allKravPriority = await getAllKravPriority()
-        const kraver = _.cloneDeep(data.krav.content)
-        kraver.map((k) => {
+        const kravListe = _.cloneDeep(data.krav.content)
+        kravListe.map((krav) => {
           const priority = allKravPriority.filter(
-            (kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon
+            (kravPriority) =>
+              kravPriority.kravNummer === krav.kravNummer &&
+              kravPriority.kravVersjon === krav.kravVersjon
           )
-          k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
-          return k
+          krav.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
+          return krav
         })
-        setKravList(sortKraverByPriority(kraver, tema.shortName))
+        setKravList(sortKravListeByPriority(kravListe, tema.shortName))
       })()
     }
   }, [data])
@@ -110,13 +112,13 @@ const TemaView = ({ tema }: { tema: TTemaCode }) => {
         {loading && <SkeletonPanel count={10} />}
         {!loading && kravList && (
           <div className="grid gap-2 ">
-            {kravList.map((k, index) => (
+            {kravList.map((krav, index) => (
               <LinkPanel
-                href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
-                key={k.kravNummer + '.' + k.kravVersjon + '_' + index}
+                href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
+                key={krav.kravNummer + '.' + krav.kravVersjon + '_' + index}
               >
-                <Detail weight="semibold">{kravNumView(k)}</Detail>
-                <BodyShort>{k.navn}</BodyShort>
+                <Detail weight="semibold">{kravNumView(krav)}</Detail>
+                <BodyShort>{krav.navn}</BodyShort>
               </LinkPanel>
             ))}
           </div>
@@ -142,12 +144,12 @@ export const TemaCard = ({
 }) => {
   const lover = codelist.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter(
-    { lover: [...lover.map((l) => l.code)] },
+    { lover: [...lover.map((lov) => lov.code)] },
     { skip: !lover.length }
   )
   const krav =
     data?.krav.content.filter(
-      (k) => !relevans.length || k.relevansFor.map((r) => r.code).some((r) => relevans.includes(r))
+      (krav) => !relevans.length || krav.relevansFor.map((regelverk) => regelverk.code).some((regelverk) => relevans.includes(regelverk))
     ) || []
   useEffect(() => setNum(tema.code, krav.length), [krav.length])
 
@@ -192,15 +194,15 @@ export const TemaCard = ({
       ComplimentaryContent={
         <Block paddingLeft="16px" paddingBottom="16px">
           <LabelSmall $style={{ fontSize: '16px' }}>Krav og veiledning til</LabelSmall>
-          {lover.map((l) => {
+          {lover.map((lov) => {
             return (
               <ParagraphXSmall
                 $style={{ fontSize: '16px', lineHeight: '24px' }}
                 marginTop="0px"
                 marginBottom="0px"
-                key={l.shortName}
+                key={lov.shortName}
               >
-                {l.shortName}
+                {lov.shortName}
               </ParagraphXSmall>
             )
           })}

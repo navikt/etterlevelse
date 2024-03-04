@@ -39,10 +39,10 @@ export const KravVarslingsadresserEdit = () => {
   return (
     <FieldWrapper>
       <FieldArray name="varslingsadresser">
-        {(p: FieldArrayRenderProps) => {
-          const varslingsadresser = (p.form.values as IKrav).varslingsadresser
+        {(fieldArrayRenderProps: FieldArrayRenderProps) => {
+          const varslingsadresser = (fieldArrayRenderProps.form.values as IKrav).varslingsadresser
           const push = (v: IVarslingsadresse) => {
-            if (!varslingsadresser.find((v2) => v2.adresse === v.adresse)) p.push(v)
+            if (!varslingsadresser.find((v2) => v2.adresse === v.adresse)) fieldArrayRenderProps.push(v)
           }
           return (
             <div>
@@ -81,7 +81,7 @@ export const KravVarslingsadresserEdit = () => {
                     Legg til epost
                   </Button>
                 </div>
-                <VarslingsadresserTagList remove={p.remove} varslingsadresser={varslingsadresser} />
+                <VarslingsadresserTagList remove={fieldArrayRenderProps.remove} varslingsadresser={varslingsadresser} />
               </div>
 
               <AddModal
@@ -91,7 +91,7 @@ export const KravVarslingsadresserEdit = () => {
                 close={() => setAddSlackChannel(false)}
               >
                 <SlackChannelSearch
-                  added={(p.form.values as IKrav).varslingsadresser}
+                  added={(fieldArrayRenderProps.form.values as IKrav).varslingsadresser}
                   add={push}
                   close={() => setAddSlackChannel(false)}
                 />
@@ -104,7 +104,7 @@ export const KravVarslingsadresserEdit = () => {
                 close={() => setAddSlackUser(false)}
               >
                 <SlackUserSearch
-                  added={(p.form.values as IKrav).varslingsadresser}
+                  added={(fieldArrayRenderProps.form.values as IKrav).varslingsadresser}
                   add={push}
                   close={() => setAddSlackUser(false)}
                 />
@@ -116,7 +116,7 @@ export const KravVarslingsadresserEdit = () => {
                 close={() => setAddEmail(false)}
               >
                 <AddEmail
-                  added={(p.form.values as IKrav).varslingsadresser}
+                  added={(fieldArrayRenderProps.form.values as IKrav).varslingsadresser}
                   add={push}
                   close={() => setAddEmail(false)}
                 />

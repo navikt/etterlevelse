@@ -45,7 +45,7 @@ export const AllKrav = () => {
     status:
       filter.status[0]?.id === 'alle'
         ? undefined
-        : filter.status.map((s) => (s.id ? s.id?.toString() : '')),
+        : filter.status.map((status) => (status.id ? status.id?.toString() : '')),
     pageNumber: 0,
     pageSize,
   })

@@ -18,7 +18,7 @@ export const prefixBiasedSort: (prefix: string, a: string, b: string) => number 
   return c1 === 0 ? aLower.localeCompare(bLower, intl.getLanguage()) : c1
 }
 
-export const sortKraverByPriority = <T extends IKrav>(kraver: T[], tema: string) => {
+export const sortKravListeByPriority = <T extends IKrav>(kraver: T[], tema: string) => {
   const newKravList = [...kraver]
   const pattern = new RegExp(tema.substr(0, 3).toUpperCase() + '[0-9]+')
 

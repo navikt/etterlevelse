@@ -208,7 +208,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                   ) : ( */}
 
                 <FieldArray name="irrelevansFor">
-                  {(p: FieldArrayRenderProps) => (
+                  {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                     <div className="h-full pt-5 w-[calc(100% - 16px)]">
                       <CheckboxGroup
                         legend="Hvilke egenskaper gjelder for etterlevelsen?"
@@ -220,10 +220,10 @@ export const EditEtterlevelseDokumentasjonModal = (
                           const irrelevansListe = relevansOptions.filter(
                             (v, index) => !selected.includes(index)
                           )
-                          p.form.setFieldValue(
+                          fieldArrayRenderProps.form.setFieldValue(
                             'irrelevansFor',
-                            irrelevansListe.map((il) =>
-                              codelist.getCode(EListName.RELEVANS, il.value)
+                            irrelevansListe.map((irrelevans) =>
+                              codelist.getCode(EListName.RELEVANS, irrelevans.value)
                             )
                           )
                           // selected.forEach((value) => {
@@ -238,13 +238,13 @@ export const EditEtterlevelseDokumentasjonModal = (
                           // })
                         }}
                       >
-                        {relevansOptions.map((r, i) => (
+                        {relevansOptions.map((relevans, index) => (
                           <Checkbox
-                            key={'relevans_' + r.value}
-                            value={i}
-                            description={r.description}
+                            key={'relevans_' + relevans.value}
+                            value={index}
+                            description={relevans.description}
                           >
-                            {r.label}
+                            {relevans.label}
                           </Checkbox>
                         ))}
                       </CheckboxGroup>
@@ -265,7 +265,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                 {values.behandlerPersonopplysninger && (
                   <FieldWrapper>
                     <FieldArray name="behandlinger">
-                      {(p: FieldArrayRenderProps) => (
+                      {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                         <div className="mb-4">
                           <LabelWithDescription
                             label={'Legg til behandlinger fra Behandlingskatalogen'}
@@ -285,7 +285,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                               isClearable={false}
                               loadOptions={searchBehandlingOptions}
                               onChange={(value) => {
-                                value && p.push(value)
+                                value && fieldArrayRenderProps.push(value)
                               }}
                               styles={{
                                 control: (base) =>
@@ -298,8 +298,8 @@ export const EditEtterlevelseDokumentasjonModal = (
                             />
                           </div>
                           <RenderTagList
-                            list={p.form.values.behandlinger.map((b: IBehandling) => b.navn)}
-                            onRemove={p.remove}
+                            list={fieldArrayRenderProps.form.values.behandlinger.map((b: IBehandling) => b.navn)}
+                            onRemove={fieldArrayRenderProps.remove}
                           />
                         </div>
                       )}
@@ -318,7 +318,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                 {values.knytteTilTeam && (
                   <FieldWrapper>
                     <FieldArray name="teamsData">
-                      {(p: FieldArrayRenderProps) => (
+                      {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                         <div>
                           <LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />
                           <div className="w-full">
@@ -336,7 +336,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                               isClearable={false}
                               loadOptions={useSearchTeamOptions}
                               onChange={(value) => {
-                                value && p.push(value)
+                                value && fieldArrayRenderProps.push(value)
                               }}
                               styles={{
                                 control: (base) =>
@@ -349,8 +349,8 @@ export const EditEtterlevelseDokumentasjonModal = (
                             />
                           </div>
                           <RenderTagList
-                            list={p.form.values.teamsData.map((t: ITeam) => t.name)}
-                            onRemove={p.remove}
+                            list={fieldArrayRenderProps.form.values.teamsData.map((tema: ITeam) => tema.name)}
+                            onRemove={fieldArrayRenderProps.remove}
                           />
                         </div>
                       )}

@@ -120,8 +120,8 @@ export const usePersonName = () => {
     if (!people.get(id)?.f) {
       if (!people.has(id))
         getResourceById(id)
-          .then((p) => addPerson(p))
-          .catch((e) => console.error('err fetching person', e))
+          .then((person) => addPerson(person))
+          .catch((error) => console.error('err fetching person', error))
       pSubscribe(id, update)
     }
     return people.get(id)?.v || id
@@ -225,8 +225,8 @@ export type TSearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]
 export const usePersonSearch = async (searchParam: string) => {
   if (searchParam && searchParam.replace(/ /g, '').length > 2) {
     const searchResult = await searchResourceByName(searchParam)
-    return searchResult.map((p) => {
-      return { value: p.navIdent, label: p.fullName, ...p }
+    return searchResult.map((person) => {
+      return { value: person.navIdent, label: person.fullName, ...person }
     })
   }
   return []

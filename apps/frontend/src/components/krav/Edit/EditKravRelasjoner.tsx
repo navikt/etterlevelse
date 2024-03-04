@@ -1,5 +1,5 @@
 import { Chips } from '@navikt/ds-react'
-import { FieldArray } from 'formik'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { useSearchKrav } from '../../../api/KravApi'
@@ -13,7 +13,7 @@ export const EditKravRelasjoner = () => {
   return (
     <FieldWrapper>
       <FieldArray name="kravRelasjoner">
-        {(p) => {
+        {(fieldArrayRenderProps: FieldArrayRenderProps) => {
           return (
             <div>
               <LabelWithTooltip
@@ -34,7 +34,7 @@ export const EditKravRelasjoner = () => {
                 isClearable={false}
                 loadOptions={useSearchKrav}
                 onChange={(krav) => {
-                  krav && p.push(krav)
+                  krav && fieldArrayRenderProps.push(krav)
                 }}
                 styles={{
                   control: (base) =>
@@ -48,8 +48,8 @@ export const EditKravRelasjoner = () => {
               />
 
               <Chips className="mt-2.5">
-                {p.form.values.kravRelasjoner.map((kr: any, index: number) => (
-                  <Chips.Removable key={kr.id} variant="neutral" onDelete={() => p.remove(index)}>
+                {fieldArrayRenderProps.form.values.kravRelasjoner.map((kr: any, index: number) => (
+                  <Chips.Removable key={kr.id} variant="neutral" onDelete={() => fieldArrayRenderProps.remove(index)}>
                     {`K${kr.kravNummer}.${kr.kravVersjon}`}
                   </Chips.Removable>
                 ))}

@@ -365,7 +365,7 @@ export const EtterlevelseKravView = ({
                     {kravFilter === EKravFilterType.BORTFILTTERTE_KRAV && (
                       <EtterlevelseViewFields
                         etterlevelse={etterlevelse}
-                        suksesskriterie={krav.suksesskriterier}
+                        suksesskriterier={krav.suksesskriterier}
                         tidligereEtterlevelser={tidligereEtterlevelser}
                       />
                     )}

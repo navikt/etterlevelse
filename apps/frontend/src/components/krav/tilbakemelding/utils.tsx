@@ -14,10 +14,10 @@ export const tilbakemeldingStatusToText = (status: ETilbakemeldingMeldingStatus)
 }
 
 export const getParsedOptionsforTilbakeMelding = () => {
-  return Object.values(ETilbakemeldingMeldingStatus).map((s: ETilbakemeldingMeldingStatus) => {
+  return Object.values(ETilbakemeldingMeldingStatus).map((status: ETilbakemeldingMeldingStatus) => {
     return {
-      id: s,
-      label: tilbakemeldingStatusToText(s),
+      id: status,
+      label: tilbakemeldingStatusToText(status),
     }
   })
 }

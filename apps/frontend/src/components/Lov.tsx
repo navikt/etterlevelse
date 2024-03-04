@@ -12,11 +12,11 @@ const processString = reactProcessString as (
   converters: { regex: RegExp; fn: (key: string, result: string[]) => JSX.Element | string }[]
 ) => (input?: string) => JSX.Element[]
 
-export const LovViewList = (props: { regelverk: IRegelverk[]; openOnSamePage?: boolean }) => (
+export const LovViewList = (props: { regelverkListe: IRegelverk[]; openOnSamePage?: boolean }) => (
   <Block display="flex" flexDirection="column" $style={{ wordBreak: 'break-all' }}>
-    {props.regelverk.map((r, i) => (
+    {props.regelverkListe.map((regelverk, i) => (
       <Block key={i} marginBottom="8px">
-        <LovView regelverk={r} openOnSamePage={props.openOnSamePage} />
+        <LovView regelverk={regelverk} openOnSamePage={props.openOnSamePage} />
       </Block>
     ))}
   </Block>

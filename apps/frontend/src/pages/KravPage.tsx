@@ -210,7 +210,7 @@ export const KravPage = () => {
             </div>
 
             <div className="w-full">
-              <Tabs defaultValue={tab} onChange={(s) => setTab(s as TSection)}>
+              <Tabs defaultValue={tab} onChange={(section) => setTab(section as TSection)}>
                 <Tabs.List>
                   <Tabs.Tab value="krav" label="Hvordan etterleve?" />
                   <Tabs.Tab value="etterlevelser" label="Eksempler på etterlevelse" />

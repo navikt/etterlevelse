@@ -16,7 +16,7 @@ import {
 import { getKravMedPrioriteringOgEtterlevelseQuery } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'
-import { sortKraverByPriority } from '../util/sort'
+import { sortKravListeByPriority } from '../util/sort'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export type TSection = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
@@ -64,7 +64,7 @@ export const EtterlevelseDokumentasjonPage = () => {
 
   useEffect(() => {
     if (data && !loading) {
-      const kravPriorityList = sortKraverByPriority<TKravQL>(
+      const kravPriorityList = sortKravListeByPriority<TKravQL>(
         data?.krav.content,
         temaData?.shortName || ''
       )

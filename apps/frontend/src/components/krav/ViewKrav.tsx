@@ -20,11 +20,11 @@ export const ViewKrav = ({ krav }: { krav: TKravQL }) => {
   return (
     <div>
       <div className="w-full">
-        {krav.suksesskriterier.map((s, i) => (
+        {krav.suksesskriterier.map((suksesskriterium, index) => (
           <SuksesskriterieCard
-            key={s.id}
-            suksesskriterie={s}
-            num={i + 1}
+            key={suksesskriterium.id}
+            suksesskriterie={suksesskriterium}
+            num={index + 1}
             totalt={krav.suksesskriterier.length}
           />
         ))}
@@ -119,7 +119,7 @@ export const AllInfo = ({
       {krav.regelverk.length && (
         <LabelWrapper>
           <LabelAboveContent header={header} title="Regelverk">
-            <LovViewList regelverk={krav.regelverk} />
+            <LovViewList regelverkListe={krav.regelverk} />
           </LabelAboveContent>
         </LabelWrapper>
       )}

@@ -101,13 +101,13 @@ export const ViewEtterlevelse = ({
       <div className="mt-4">
         {etterlevelse &&
           !loading &&
-          krav.suksesskriterier.map((s, i) => {
+          krav.suksesskriterier.map((suksesskriterium, i) => {
             const suksessbeskrivelseBegrunnelse = getSuksesskriterieBegrunnelse(
               etterlevelse.suksesskriterieBegrunnelser,
-              s
+              suksesskriterium
             )
             return (
-              <div key={s.id} className="mb-5">
+              <div key={suksesskriterium.id} className="mb-5">
                 <Box className="bg-white" padding="4">
                   <div className="flex justify-center mt-8 mb-4">
                     <div className="flex flex-1">
@@ -135,10 +135,10 @@ export const ViewEtterlevelse = ({
                       </div>
                     )}
                   </div>
-                  <Label>{s.navn}</Label>
+                  <Label>{suksesskriterium.navn}</Label>
 
                   <ReadMore header="Utfyllende om kriteriet">
-                    <Markdown source={s.beskrivelse} />
+                    <Markdown source={suksesskriterium.beskrivelse} />
                   </ReadMore>
 
                   <div className="w-full h-[1px] mt-4 mb-6 bg-gray-400" />

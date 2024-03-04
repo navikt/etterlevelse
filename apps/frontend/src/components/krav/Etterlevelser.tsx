@@ -84,19 +84,19 @@ export const Etterlevelser = ({
         return (
           e.status === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ||
           e.suksesskriterieBegrunnelser.filter(
-            (s) => s.suksesskriterieStatus === ESuksesskriterieStatus.IKKE_RELEVANT
+            (suksesskriterium) => suksesskriterium.suksesskriterieStatus === ESuksesskriterieStatus.IKKE_RELEVANT
           ).length > 0
         )
       } else if (filter === ESuksesskriterieStatus.IKKE_OPPFYLT) {
         return (
           e.suksesskriterieBegrunnelser.filter(
-            (s) => s.suksesskriterieStatus === ESuksesskriterieStatus.IKKE_OPPFYLT
+            (suksesskriterium) => suksesskriterium.suksesskriterieStatus === ESuksesskriterieStatus.IKKE_OPPFYLT
           ).length > 0
         )
       } else if (filter === ESuksesskriterieStatus.OPPFYLT) {
         return (
           e.suksesskriterieBegrunnelser.filter(
-            (s) => s.suksesskriterieStatus === ESuksesskriterieStatus.OPPFYLT
+            (suksesskriterium) => suksesskriterium.suksesskriterieStatus === ESuksesskriterieStatus.OPPFYLT
           ).length > 0
         )
       } else {

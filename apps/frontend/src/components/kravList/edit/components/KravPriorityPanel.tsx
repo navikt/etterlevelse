@@ -9,16 +9,16 @@ interface IProps {
   krav: IKrav
   index: number
   arrayLength: number
-  p: FieldArrayRenderProps
+  fieldArrayRenderProps: FieldArrayRenderProps
 }
 
 export const KravPriorityPanel = (props: IProps) => {
-  const { krav, index, arrayLength, p } = props
+  const { krav, index, arrayLength, fieldArrayRenderProps } = props
 
   const updateIndex = (newIndex: number) => {
-    const suksesskriterieToMove = p.form.values.krav[index]
-    p.remove(index)
-    p.insert(newIndex, suksesskriterieToMove)
+    const suksesskriterieToMove = fieldArrayRenderProps.form.values.krav[index]
+    fieldArrayRenderProps.remove(index)
+    fieldArrayRenderProps.insert(newIndex, suksesskriterieToMove)
   }
 
   return (

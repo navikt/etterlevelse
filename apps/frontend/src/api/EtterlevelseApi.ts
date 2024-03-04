@@ -130,19 +130,19 @@ export const mapEtterlevelseToFormValue = (
 
   if (krav) {
     if (suksesskriterieBegrunnelser.length) {
-      krav.suksesskriterier.forEach((s) => {
-        suksesskriterieBegrunnelser.map((sb) => {
-          if (sb.suksesskriterieId === s.id) {
-            sb.behovForBegrunnelse = s.behovForBegrunnelse
+      krav.suksesskriterier.forEach((suksesskriterium) => {
+        suksesskriterieBegrunnelser.map((suksesskriteriumBegrunnelse) => {
+          if (suksesskriteriumBegrunnelse.suksesskriterieId === suksesskriterium.id) {
+            suksesskriteriumBegrunnelse.behovForBegrunnelse = suksesskriterium.behovForBegrunnelse
           }
-          return sb
+          return suksesskriteriumBegrunnelse
         })
       })
     } else {
-      krav.suksesskriterier.forEach((s) => {
+      krav.suksesskriterier.forEach((suksesskriterium) => {
         suksesskriterieBegrunnelser.push({
-          suksesskriterieId: s.id,
-          behovForBegrunnelse: s.behovForBegrunnelse,
+          suksesskriterieId: suksesskriterium.id,
+          behovForBegrunnelse: suksesskriterium.behovForBegrunnelse,
           begrunnelse: '',
           suksesskriterieStatus: ESuksesskriterieStatus.UNDER_ARBEID,
         })
