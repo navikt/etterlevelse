@@ -141,7 +141,7 @@ const KravTabs = () => {
     >
       <Tabs.List>
         <Tabs.Tab value="siste" label="Sist endret av meg" />
-        <Tabs.Tab value="tema" label="Endre rekkefølge på krav" />
+        <Tabs.Tab value="tema" label="Endre rekkefølge på krav (Temaoversikt)" />
         <Tabs.Tab value="alle" label="Alle krav" />
       </Tabs.List>
       <Tabs.Panel value="siste">
