@@ -10,7 +10,6 @@
       "plugin:react/recommended",
       "plugin:react-hooks/recommended",
       "plugin:@typescript-eslint/recommended",
-      "plugin:import/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -20,7 +19,7 @@
       "ecmaVersion": 15,
       "sourceType": "module"
     },
-    "plugins": ["react", "@typescript-eslint", "jsx-a11y", "testing-library", "import"],
+    "plugins": ["react", "@typescript-eslint", "jsx-a11y", "testing-library"],
     "rules": {
       "@typescript-eslint/ban-ts-ignore": "off",
       "@typescript-eslint/ban-ts-comment": "off",
@@ -56,6 +55,5 @@
       "react/jsx-uses-react": "off",
       "react/react-in-jsx-scope": "off",
       "no-console":["warn", { "allow": ["warn", "error", "debug"] }],
-      "import/no-unused-modules": [1, {"unusedExports": true}]
     }
   }
