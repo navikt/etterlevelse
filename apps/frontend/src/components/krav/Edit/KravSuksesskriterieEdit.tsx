@@ -74,15 +74,15 @@ const KriterieList = ({ fieldArrayRenderProps, setIsFormDirty, newVersion, newKr
 
   return (
     <div className="flex flex-col">
-      {suksesskriterier.map((suksesskriterium, i) => (
+      {suksesskriterier.map((suksesskriterium, index) => (
         <Kriterie
           key={suksesskriterium.id}
           suksesskriterium={suksesskriterium}
-          index={i}
+          index={index}
           arrayLength={suksesskriterier.length}
-          update={(updated) => fieldArrayRenderProps.replace(i, updated)}
+          update={(updated) => fieldArrayRenderProps.replace(index, updated)}
           remove={() => {
-            fieldArrayRenderProps.remove(i)
+            fieldArrayRenderProps.remove(index)
           }}
           fieldArrayRenderProps={fieldArrayRenderProps}
           setIsFormDirty={setIsFormDirty}
