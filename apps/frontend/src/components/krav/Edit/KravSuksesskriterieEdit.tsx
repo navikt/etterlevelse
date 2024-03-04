@@ -1,19 +1,14 @@
-import { DragVerticalIcon, PlusIcon, TrashIcon } from '@navikt/aksel-icons'
+import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Box, Button, Radio, RadioGroup, TextField, Tooltip } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import * as _ from 'lodash'
 import { useEffect, useState } from 'react'
-import {
-  DragDropContext,
-  Draggable,
-  DraggableProvidedDragHandleProps,
-  Droppable,
-} from 'react-beautiful-dnd'
 import { EKravStatus, ISuksesskriterie } from '../../../constants'
 import { useDebouncedState } from '../../../util/hooks'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { FormError } from '../../common/ModalSchema'
+import { RearrangeButtons } from '../../common/RearrangeButtons'
 import TextEditor from '../../common/TextEditor/TextEditor'
 
 type TKravSuksesskriterieEditProps = {
@@ -79,51 +74,21 @@ const KriterieList = ({ p, setIsFormDirty, newVersion, newKrav }: IPropsKriterie
 
   return (
     <div className="flex flex-col">
-      <DragDropContext
-        onDragEnd={(result) => {
-          if (!result.destination) {
-            return
-          }
-          const moved = p.form.values.suksesskriterier[result.source.index]
-          p.remove(result.source.index)
-          p.insert(result.destination.index, moved)
-        }}
-      >
-        <Droppable droppableId={'list'}>
-          {(provided, snapshot) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              style={{
-                backgroundColor: snapshot.isDraggingOver ? '#C5C5C5' : undefined,
-              }}
-            >
-              {suksesskriterier.map((s, i) => (
-                <Draggable key={s.id} draggableId={`${s.id}`} index={i}>
-                  {(dprov, dsnap) => (
-                    <div {...dprov.draggableProps} ref={dprov.innerRef}>
-                      <Kriterie
-                        s={s}
-                        nummer={i + 1}
-                        update={(updated) => p.replace(i, updated)}
-                        remove={() => {
-                          p.remove(i)
-                        }}
-                        dragHandleProps={dprov.dragHandleProps ? dprov.dragHandleProps : undefined}
-                        isDragging={dsnap.isDragging}
-                        p={p}
-                        setIsFormDirty={setIsFormDirty}
-                        newVersion={newVersion}
-                      />
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      {suksesskriterier.map((s, i) => (
+        <Kriterie
+          key={s.id}
+          s={s}
+          index={i}
+          arrayLength={suksesskriterier.length}
+          update={(updated) => p.replace(i, updated)}
+          remove={() => {
+            p.remove(i)
+          }}
+          p={p}
+          setIsFormDirty={setIsFormDirty}
+          newVersion={newVersion}
+        />
+      ))}
 
       {newKrav && <AddSuksessKriterieButton />}
 
@@ -136,11 +101,10 @@ const KriterieList = ({ p, setIsFormDirty, newVersion, newKrav }: IPropsKriterie
 
 interface IPropsKriterie {
   s: ISuksesskriterie
-  nummer: number
+  index: number
+  arrayLength: number
   update: (s: ISuksesskriterie) => void
   remove: () => void
-  dragHandleProps?: DraggableProvidedDragHandleProps
-  isDragging: boolean
   p: FieldArrayRenderProps
   setIsFormDirty?: (v: boolean) => void
   newVersion?: boolean
@@ -148,11 +112,10 @@ interface IPropsKriterie {
 
 const Kriterie = ({
   s,
-  nummer,
+  index,
+  arrayLength,
   update,
   remove,
-  dragHandleProps,
-  isDragging,
   p,
   setIsFormDirty,
   newVersion,
@@ -164,6 +127,14 @@ const Kriterie = ({
     s.behovForBegrunnelse === undefined ? 'true' : s.behovForBegrunnelse.toString()
   )
 
+  const nummer = index + 1
+
+  const updateIndex = (newIndex: number) => {
+    const suksesskriterieToMove = p.form.values.suksesskriterier[index]
+    p.remove(index)
+    p.insert(newIndex, suksesskriterieToMove)
+  }
+
   useEffect(() => {
     update({
       id: s.id,
@@ -174,28 +145,29 @@ const Kriterie = ({
   }, [navn, beskrivelse, behovForBegrunnelse])
 
   return (
-    <Box
-      padding="4"
-      className="mb-4"
-      background={isDragging ? 'surface-danger-subtle' : 'surface-subtle'}
-      borderColor="border-on-inverted"
-    >
+    <Box padding="4" className="mb-4" background="surface-subtle" borderColor="border-on-inverted">
       <div className="relative pt-1">
         <div className="flex items-center absolute right-0 top-0">
           {(p.form.values.status !== EKravStatus.AKTIV || newVersion) && (
-            <Tooltip content="Fjern suksesskriterie">
+            <Tooltip content="Fjern suksesskriterium">
               <Button
                 variant="secondary"
                 type={'button'}
-                icon={<TrashIcon arial-label="Fjern suksesskriterie" />}
+                icon={
+                  <TrashIcon title="Fjern suksesskriterium" arial-label="Fjern suksesskriterium" />
+                }
                 onClick={remove}
               />
             </Tooltip>
           )}
 
-          <div className="ml-10" {...dragHandleProps}>
-            <DragVerticalIcon aria-label="Dra og slipp håndtak" />
-          </div>
+          <RearrangeButtons
+            label="suksesskriterium"
+            index={index}
+            arrayLength={arrayLength}
+            updateIndex={updateIndex}
+            marginLeft
+          />
         </div>
 
         <div>
