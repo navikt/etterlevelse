@@ -10,7 +10,6 @@ import {
   ICodeListFormValues,
   ICodeUsage,
   ILovCodeData,
-  ITemaCodeData,
 } from '../../../services/Codelist'
 import { handleSort } from '../../../util/handleTableSort'
 import { AuditButton } from '../audit/AuditButton'

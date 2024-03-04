@@ -33,7 +33,9 @@ export const EditEtterlevelseDokumentasjonModal = (
 ) => {
   const { etterlevelseDokumentasjon, setEtterlevelseDokumentasjon, isEditButton, variant } = props
   const relevansOptions = codelist.getParsedOptions(EListName.RELEVANS)
-  const [selectedFilter, setSelectedFilter] = useState<number[]>(relevansOptions.map((r, i) => i))
+  const [selectedFilter, setSelectedFilter] = useState<number[]>(
+    relevansOptions.map((_relevans, index) => index)
+  )
   const [isEtterlevelseDokumentasjonerModalOpen, setIsEtterlevelseDokumntasjonerModalOpen] =
     useState<boolean>(false)
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<IVirkemiddel>()
@@ -41,20 +43,20 @@ export const EditEtterlevelseDokumentasjonModal = (
 
   useEffect(() => {
     if (etterlevelseDokumentasjon?.irrelevansFor.length) {
-      const irrelevans = etterlevelseDokumentasjon.irrelevansFor.map((ir: ICode) =>
-        relevansOptions.findIndex((o) => o.value === ir.code)
+      const irrelevans = etterlevelseDokumentasjon.irrelevansFor.map((irrelevans: ICode) =>
+        relevansOptions.findIndex((relevans) => relevans.value === irrelevans.code)
       )
       setSelectedFilter(
         relevansOptions
-          .map((r, i) => {
-            return i
+          .map((_relevans, index) => {
+            return index
           })
-          .filter((n) => !irrelevans.includes(n))
+          .filter((index) => !irrelevans.includes(index))
       )
     } else {
       setSelectedFilter(
-        relevansOptions.map((r, i) => {
-          return i
+        relevansOptions.map((_relevans, index) => {
+          return index
         })
       )
     }
@@ -218,7 +220,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                           setSelectedFilter(selected)
 
                           const irrelevansListe = relevansOptions.filter(
-                            (v, index) => !selected.includes(index)
+                            (_irrelevans, index) => !selected.includes(index)
                           )
                           fieldArrayRenderProps.form.setFieldValue(
                             'irrelevansFor',
@@ -298,7 +300,9 @@ export const EditEtterlevelseDokumentasjonModal = (
                             />
                           </div>
                           <RenderTagList
-                            list={fieldArrayRenderProps.form.values.behandlinger.map((b: IBehandling) => b.navn)}
+                            list={fieldArrayRenderProps.form.values.behandlinger.map(
+                              (b: IBehandling) => b.navn
+                            )}
                             onRemove={fieldArrayRenderProps.remove}
                           />
                         </div>
@@ -349,7 +353,9 @@ export const EditEtterlevelseDokumentasjonModal = (
                             />
                           </div>
                           <RenderTagList
-                            list={fieldArrayRenderProps.form.values.teamsData.map((tema: ITeam) => tema.name)}
+                            list={fieldArrayRenderProps.form.values.teamsData.map(
+                              (tema: ITeam) => tema.name
+                            )}
                             onRemove={fieldArrayRenderProps.remove}
                           />
                         </div>
