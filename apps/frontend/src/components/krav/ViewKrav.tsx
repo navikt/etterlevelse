@@ -71,16 +71,16 @@ export const AllInfo = ({
 
       <LabelWrapper>
         <LabelAboveContent header={header} title="Begreper">
-          {krav.begreper.map((b, i) => (
-            <BegrepView key={'begrep_' + i} begrep={b} />
+          {krav.begreper.map((begrep, index) => (
+            <BegrepView key={'begrep_' + index} begrep={begrep} />
           ))}
         </LabelAboveContent>
       </LabelWrapper>
 
       <LabelWrapper>
         <LabelAboveContent header={header} title="Relasjoner til andre krav">
-          {krav.kravRelasjoner.map((kr, i) => (
-            <KravRelasjonView key={'kravRelasjon' + i} kravRelasjon={kr} />
+          {krav.kravRelasjoner.map((kravRelasjon, index) => (
+            <KravRelasjonView key={'kravRelasjon' + index} kravRelasjon={kravRelasjon} />
           ))}
         </LabelAboveContent>
       </LabelWrapper>
@@ -94,13 +94,13 @@ export const AllInfo = ({
       {alleKravVersjoner.length !== 0 && krav.kravVersjon > 1 && (
         <LabelWrapper>
           <LabelAboveContent title={'Tidligere versjoner'} header={header}>
-            {alleKravVersjoner.map((k, i) => {
-              if (k.kravVersjon && parseInt(k.kravVersjon.toString()) < krav.kravVersjon) {
+            {alleKravVersjoner.map((kravRelasjon, index) => {
+              if (kravRelasjon.kravVersjon && parseInt(kravRelasjon.kravVersjon.toString()) < krav.kravVersjon) {
                 return (
-                  <BodyShort key={'kravVersjon_list_' + i} className={'break-words'}>
+                  <BodyShort key={'kravVersjon_list_' + index} className={'break-words'}>
                     <ExternalLink
-                      href={'/krav/' + k.kravNummer + '/' + k.kravVersjon}
-                    >{`K${k.kravNummer}.${k.kravVersjon}`}</ExternalLink>
+                      href={'/krav/' + kravRelasjon.kravNummer + '/' + kravRelasjon.kravVersjon}
+                    >{`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}</ExternalLink>
                   </BodyShort>
                 )
               }
@@ -133,30 +133,30 @@ export const AllInfo = ({
       {user.isKraveier() && (
         <LabelWrapper>
           <LabelAboveContent header={header} title="Varslingsadresser">
-            {krav.varslingsadresser.map((va, i) => {
-              if (va.type === EAdresseType.SLACK)
+            {krav.varslingsadresser.map((varslingsaddresse, index) => {
+              if (varslingsaddresse.type === EAdresseType.SLACK)
                 return (
-                  <div className="flex mb-2" key={'kravVarsling_list_SLACK_' + i}>
+                  <div className="flex mb-2" key={'kravVarsling_list_SLACK_' + index}>
                     <div className="mr-1">Slack:</div>
-                    <ExternalLink href={slackLink(va.adresse)}>{`#${
-                      va.slackChannel?.name || va.adresse
+                    <ExternalLink href={slackLink(varslingsaddresse.adresse)}>{`#${
+                      varslingsaddresse.slackChannel?.name || varslingsaddresse.adresse
                     }`}</ExternalLink>
                   </div>
                 )
-              if (va.type === EAdresseType.SLACK_USER)
+              if (varslingsaddresse.type === EAdresseType.SLACK_USER)
                 return (
-                  <div className="flex mb-2" key={'kravVarsling_list_SLACK_USER_' + i}>
+                  <div className="flex mb-2" key={'kravVarsling_list_SLACK_USER_' + index}>
                     <div className="mr-1">Slack:</div>
-                    <ExternalLink href={slackUserLink(va.adresse)}>{`${
-                      va.slackUser?.name || va.adresse
+                    <ExternalLink href={slackUserLink(varslingsaddresse.adresse)}>{`${
+                      varslingsaddresse.slackUser?.name || varslingsaddresse.adresse
                     }`}</ExternalLink>
                   </div>
                 )
               return (
-                <div className="flex mb-2" key={'kravVarsling_list_EMAIL_' + i}>
+                <div className="flex mb-2" key={'kravVarsling_list_EMAIL_' + index}>
                   <div className="mr-1">Epost:</div>
-                  <ExternalLink href={`mailto:${va.adresse}`} openOnSamePage>
-                    {va.adresse}
+                  <ExternalLink href={`mailto:${varslingsaddresse.adresse}`} openOnSamePage>
+                    {varslingsaddresse.adresse}
                   </ExternalLink>
                 </div>
               )

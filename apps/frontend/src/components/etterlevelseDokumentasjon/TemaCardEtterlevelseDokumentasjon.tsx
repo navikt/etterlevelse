@@ -24,14 +24,14 @@ export const TemaCardEtterlevelseDokumentasjon = (
   const today = new Date()
   const { tema, stats, etterlevelseDokumentasjon, irrelevant, utgaattStats } = props
   const lover = codelist.getCodesForTema(tema.code)
-  const lovcodes = lover.map((c) => c.code)
-  const krav = stats.filter((k) =>
-    k.regelverk.map((r: any) => r.lov.code).some((r: any) => lovcodes.includes(r))
+  const lovcodes = lover.map((lov) => lov.code)
+  const krav = stats.filter((krav) =>
+    krav.regelverk.map((regelverk: any) => regelverk.lov.code).some((lov: any) => lovcodes.includes(lov))
   )
-  const utgaattKrav = utgaattStats.filter((k) =>
-    k.regelverk.map((r: any) => r.lov.code).some((r: any) => lovcodes.includes(r))
+  const utgaattKrav = utgaattStats.filter((krav) =>
+    krav.regelverk.map((regelverk: any) => regelverk.lov.code).some((lov: any) => lovcodes.includes(lov))
   )
-  const { data } = useKravCounter({ lover: lover.map((c) => c.code) }, { skip: !lover.length })
+  const { data } = useKravCounter({ lover: lover.map((lov) => lov.code) }, { skip: !lover.length })
 
   let nyttKravCounter = 0
   let nyttKravVersjonCounter = 0
@@ -39,23 +39,23 @@ export const TemaCardEtterlevelseDokumentasjon = (
   let utfylt = 0
   let underArbeid = 0
 
-  krav.forEach((k) => {
-    const kravAge = getNumberOfDaysBetween(k.aktivertDato, today)
-    if (k.etterlevelser.length === 0 && k.kravVersjon === 1 && kravAge < 30) {
+  krav.forEach((krav) => {
+    const kravAge = getNumberOfDaysBetween(krav.aktivertDato, today)
+    if (krav.etterlevelser.length === 0 && krav.kravVersjon === 1 && kravAge < 30) {
       nyttKravCounter += 1
     }
     if (
-      k.etterlevelser.length === 0 &&
-      k.kravVersjon > 1 &&
-      utgaattKrav.filter((kl) => kl.kravNummer === k.kravNummer && kl.etterlevelser.length > 0)
+      krav.etterlevelser.length === 0 &&
+      krav.kravVersjon > 1 &&
+      utgaattKrav.filter((kl) => kl.kravNummer === krav.kravNummer && kl.etterlevelser.length > 0)
         .length > 0 &&
       kravAge < 30
     ) {
       nyttKravVersjonCounter += 1
     }
-    if (k.etterlevelser.length && isFerdigUtfylt(k.etterlevelser[0].status)) {
+    if (krav.etterlevelser.length && isFerdigUtfylt(krav.etterlevelser[0].status)) {
       utfylt += 1
-    } else if (k.etterlevelser.length && !isFerdigUtfylt(k.etterlevelser[0].status)) {
+    } else if (krav.etterlevelser.length && !isFerdigUtfylt(krav.etterlevelser[0].status)) {
       underArbeid += 1
     }
   })

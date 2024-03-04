@@ -78,7 +78,7 @@ export const EditVirkemidler = () => {
                   isLoading={loading}
                 />
                 <RenderTagList
-                  list={fieldArrayRenderProps.form.values.virkemidler.map((v: IVirkemiddel) => v.navn)}
+                  list={fieldArrayRenderProps.form.values.virkemidler.map((virkemiddel: IVirkemiddel) => virkemiddel.navn)}
                   onRemove={fieldArrayRenderProps.remove}
                 />
               </Block>

@@ -61,11 +61,11 @@ export const searchBehandlingOptions = async (searchParam: string) => {
   if (searchParam && searchParam.length > 2) {
     const behandlinger = await searchBehandling(searchParam)
     if (behandlinger && behandlinger.length) {
-      return behandlinger.map((b) => {
+      return behandlinger.map((behandling) => {
         return {
-          value: b.id,
-          label: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn,
-          ...b,
+          value: behandling.id,
+          label: 'B' + behandling.nummer + ' ' + behandling.overordnetFormaal.shortName + ': ' + behandling.navn,
+          ...behandling,
         }
       })
     }

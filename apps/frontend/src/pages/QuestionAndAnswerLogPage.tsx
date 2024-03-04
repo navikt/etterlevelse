@@ -75,7 +75,7 @@ export const QuestionAndAnswerLogPage = () => {
   useEffect(() => {
     ;(async () => {
       const kraver = await getAllKrav()
-      const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
+      const mappedKraver = kraver.map((krav) => kravMapToFormVal(krav))
       setTableContent([...mappedKraver])
       ampli.logEvent('sidevisning', {
         side: 'Log side for spørsmål og svar',

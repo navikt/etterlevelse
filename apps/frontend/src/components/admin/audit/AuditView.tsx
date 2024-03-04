@@ -61,7 +61,7 @@ const ComparisonView = (props: TComparisonViewProps) => {
 
 export const AuditView = (props: TAuditViewProps) => {
   const { auditLog, auditId, loading, viewId } = props
-  const refs = useRefs<HTMLDivElement>(auditLog?.audits.map((al) => al.id) || [])
+  const refs = useRefs<HTMLDivElement>(auditLog?.audits.map((auditLog) => auditLog.id) || [])
   const [openAll, setOpenAll] = useState(false)
 
   useEffect(() => {

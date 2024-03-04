@@ -14,8 +14,8 @@ const processString = reactProcessString as (
 
 export const LovViewList = (props: { regelverkListe: IRegelverk[]; openOnSamePage?: boolean }) => (
   <Block display="flex" flexDirection="column" $style={{ wordBreak: 'break-all' }}>
-    {props.regelverkListe.map((regelverk, i) => (
-      <Block key={i} marginBottom="8px">
+    {props.regelverkListe.map((regelverk, index) => (
+      <Block key={index} marginBottom="8px">
         <LovView regelverk={regelverk} openOnSamePage={props.openOnSamePage} />
       </Block>
     ))}

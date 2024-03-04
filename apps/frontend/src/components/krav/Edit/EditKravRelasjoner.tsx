@@ -48,9 +48,9 @@ export const EditKravRelasjoner = () => {
               />
 
               <Chips className="mt-2.5">
-                {fieldArrayRenderProps.form.values.kravRelasjoner.map((kr: any, index: number) => (
-                  <Chips.Removable key={kr.id} variant="neutral" onDelete={() => fieldArrayRenderProps.remove(index)}>
-                    {`K${kr.kravNummer}.${kr.kravVersjon}`}
+                {fieldArrayRenderProps.form.values.kravRelasjoner.map((kravRelasjon: any, index: number) => (
+                  <Chips.Removable key={kravRelasjon.id} variant="neutral" onDelete={() => fieldArrayRenderProps.remove(index)}>
+                    {`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}
                   </Chips.Removable>
                 ))}
               </Chips>

@@ -133,8 +133,8 @@ export const useSearchTeamOptions = async (searchParam: string) => {
   if (searchParam && searchParam.length > 2) {
     const teams = await searchTeam(searchParam)
     if (teams && teams.length) {
-      return teams.map((t) => {
-        return { value: t.id, label: t.name, ...t }
+      return teams.map((team) => {
+        return { value: team.id, label: team.name, ...team }
       })
     }
   }
@@ -166,30 +166,30 @@ export const useMyTeams = () => {
   useEffect(() => {
     ident &&
       myTeams()
-        .then((r) => {
-          if (r.length === 0) {
+        .then((teamListe) => {
+          if (teamListe.length === 0) {
             getAllTeams().then((response) => {
               const teamList = productAreas
-                .map((pa) => response.filter((t) => pa.id === t.productAreaId))
+                .map((productArea) => response.filter((team) => productArea.id === team.productAreaId))
                 .flat()
               const uniqueValuesSet = new Set()
 
-              const uniqueFilteredTeamList = teamList.filter((t) => {
-                const isPresentInSet = uniqueValuesSet.has(t.name)
-                uniqueValuesSet.add(t.name)
+              const uniqueFilteredTeamList = teamList.filter((team) => {
+                const isPresentInSet = uniqueValuesSet.has(team.name)
+                uniqueValuesSet.add(team.name)
                 return !isPresentInSet
               })
               setData(uniqueFilteredTeamList)
             })
           } else {
-            setData(r)
+            setData(teamListe)
           }
           setLoading(false)
         })
-        .catch((e) => {
+        .catch((error) => {
           setData([])
           setLoading(false)
-          console.error("couldn't find teams", e)
+          console.error("couldn't find teams", error)
         })
     !ident && setLoading(false)
   }, [ident, productAreas])
@@ -235,8 +235,8 @@ export const usePersonSearch = async (searchParam: string) => {
 export const useSlackChannelSearch = async (searchParam: string) => {
   if (searchParam && searchParam.replace(/ /g, '').length > 2) {
     const searchResult = await searchSlackChannel(searchParam)
-    return searchResult.map((sk) => {
-      return { value: sk.id, label: sk.name, ...sk }
+    return searchResult.map((slackChannel) => {
+      return { value: slackChannel.id, label: slackChannel.name, ...slackChannel }
     })
   }
   return []

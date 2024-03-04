@@ -47,7 +47,7 @@ export const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?:
         <Heading level="2" size="small" spacing>
           Ansvarlig for lovtolkning
         </Heading>
-        {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code, index) => (
+        {_.uniq(lover.map((lov) => lov.data?.underavdeling)).map((code, index) => (
           <BodyShort key={code + '_' + index} size="large" spacing>
             {codelist.getCode(EListName.UNDERAVDELING, code)?.shortName}
           </BodyShort>
@@ -55,9 +55,9 @@ export const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?:
         <Heading level="2" size="small" spacing>
           Lovdata
         </Heading>
-        {lover.map((l, index) => (
-          <div key={l.code + '_' + index} className="mb-1.5">
-            <ExternalLink href={lovdataBase(l.code)}>{l.shortName}</ExternalLink>
+        {lover.map((lov, index) => (
+          <div key={lov.code + '_' + index} className="mb-1.5">
+            <ExternalLink href={lovdataBase(lov.code)}>{lov.shortName}</ExternalLink>
           </div>
         ))}
       </div>
@@ -68,7 +68,7 @@ export const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?:
 const TemaView = ({ tema }: { tema: TTemaCode }) => {
   const lover = codelist.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter(
-    { lover: lover.map((c) => c.code) },
+    { lover: lover.map((lov) => lov.code) },
     { skip: !lover.length }
   )
   const [kravList, setKravList] = useState<IKrav[]>([])

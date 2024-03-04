@@ -102,22 +102,22 @@ export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => 
   const add = (r: ITilbakemelding) => {
     setData([r, ...data])
   }
-  const replace = (r: ITilbakemelding) => {
-    setData(data.map((t) => (t.id === r.id ? r : t)))
+  const replace = (newTilbakemelding: ITilbakemelding) => {
+    setData(data.map((tilbakemelding) => (tilbakemelding.id === newTilbakemelding.id ? newTilbakemelding : tilbakemelding)))
   }
-  const remove = (r: ITilbakemelding) => {
-    if (r.meldinger.length) {
+  const remove = (fjernTilbakemelding: ITilbakemelding) => {
+    if (fjernTilbakemelding.meldinger.length) {
       setData(
-        data.map((t) => {
-          if (t.id === r.id) {
-            return r
+        data.map((tilbakemelding) => {
+          if (tilbakemelding.id === fjernTilbakemelding.id) {
+            return fjernTilbakemelding
           } else {
-            return t
+            return tilbakemelding
           }
         })
       )
     } else {
-      setData(data.filter((t) => t.id !== r.id))
+      setData(data.filter((tilbakemelding) => tilbakemelding.id !== fjernTilbakemelding.id))
     }
   }
 

@@ -57,7 +57,7 @@ export const EditBegreper = () => {
               />
 
               <RenderTagList
-                list={fieldArrayRenderProps.form.values.begreper.map((b: IBegrep) => b.navn)}
+                list={fieldArrayRenderProps.form.values.begreper.map((begrep: IBegrep) => begrep.navn)}
                 onRemove={fieldArrayRenderProps.remove}
               />
             </div>

@@ -83,15 +83,15 @@ const KriterieBegrunnelseList = ({
 
   return (
     <div>
-      {suksesskriterier.map((suksesskriterium, i) => (
-        <div key={suksesskriterium.navn + '_' + i}>
+      {suksesskriterier.map((suksesskriterium, index) => (
+        <div key={suksesskriterium.navn + '_' + index}>
           <KriterieBegrunnelse
             status={fieldArrayRenderProps.form.values.status}
             disableEdit={disableEdit}
             suksesskriterie={suksesskriterium}
-            index={i}
+            index={index}
             suksesskriterieBegrunnelser={suksesskriterieBegrunnelser}
-            update={(updated) => fieldArrayRenderProps.replace(i, updated)}
+            update={(updated) => fieldArrayRenderProps.replace(index, updated)}
             feildArrayRenderProps={fieldArrayRenderProps}
             totalSuksesskriterie={suksesskriterier.length}
           />

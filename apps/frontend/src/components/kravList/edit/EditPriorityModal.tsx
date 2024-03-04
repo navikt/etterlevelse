@@ -20,12 +20,12 @@ const KravPriorityPanels = (props: IKravPriorityPanelsProps) => {
 
   const kravListe = fieldArrayRenderProps.form.values.krav as IKrav[]
 
-  return kravListe.map((k, i) => {
+  return kravListe.map((krav, index) => {
     return (
       <KravPriorityPanel
-        key={`${k.navn}_${k.kravNummer}`}
-        krav={k}
-        index={i}
+        key={`${krav.navn}_${krav.kravNummer}`}
+        krav={krav}
+        index={index}
         arrayLength={kravListe.length}
         fieldArrayRenderProps={fieldArrayRenderProps}
       />
@@ -46,26 +46,26 @@ export const EditPriorityModal = (props: {
   const setPriority = (kravListe: IKrav[]) => {
     const pattern = new RegExp(tema.substr(0, 3).toUpperCase() + '[0-9]+')
 
-    return kravListe.map((k, i) => {
-      const index: number = i + 1
-      if (!k.prioriteringsId) {
+    return kravListe.map((krav, index) => {
+      const number: number = index + 1
+      if (!krav.prioriteringsId) {
         return {
-          ...k,
-          prioriteringsId: tema.substring(0, 3).toUpperCase() + index,
+          ...krav,
+          prioriteringsId: tema.substring(0, 3).toUpperCase() + number,
         }
       } else {
-        if (k.prioriteringsId?.match(pattern)) {
+        if (krav.prioriteringsId?.match(pattern)) {
           return {
-            ...k,
-            prioriteringsId: k.prioriteringsId.replace(
+            ...krav,
+            prioriteringsId: krav.prioriteringsId.replace(
               pattern,
-              tema.substring(0, 3).toUpperCase() + index
+              tema.substring(0, 3).toUpperCase() + number
             ),
           }
         } else {
           return {
-            ...k,
-            prioriteringsId: k.prioriteringsId.concat(tema.substring(0, 3).toUpperCase() + index),
+            ...krav,
+            prioriteringsId: krav.prioriteringsId.concat(tema.substring(0, 3).toUpperCase() + number),
           }
         }
       }

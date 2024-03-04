@@ -177,7 +177,7 @@ export const useVirkemiddelFilter = () => {
 export const virkemiddelToVirkemiddelDto = (virkemiddel: IVirkemiddel): IVirkemiddel => {
   const dto = {
     ...virkemiddel,
-    regelverk: virkemiddel.regelverk.map((r) => ({ ...r, lov: r.lov.code })),
+    regelverk: virkemiddel.regelverk.map((regelverk) => ({ ...regelverk, lov: regelverk.lov.code })),
   } as any
   delete dto.changeStamp
   delete dto.version

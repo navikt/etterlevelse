@@ -101,7 +101,7 @@ export const ViewEtterlevelse = ({
       <div className="mt-4">
         {etterlevelse &&
           !loading &&
-          krav.suksesskriterier.map((suksesskriterium, i) => {
+          krav.suksesskriterier.map((suksesskriterium, index) => {
             const suksessbeskrivelseBegrunnelse = getSuksesskriterieBegrunnelse(
               etterlevelse.suksesskriterieBegrunnelser,
               suksesskriterium
@@ -112,7 +112,7 @@ export const ViewEtterlevelse = ({
                   <div className="flex justify-center mt-8 mb-4">
                     <div className="flex flex-1">
                       <BodyShort size="small">
-                        Suksesskriterium {i + 1} av {krav.suksesskriterier.length}
+                        Suksesskriterium {index + 1} av {krav.suksesskriterier.length}
                       </BodyShort>
                     </div>
                     {(!suksessbeskrivelseBegrunnelse.behovForBegrunnelse ||

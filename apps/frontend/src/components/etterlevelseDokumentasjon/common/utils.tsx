@@ -252,8 +252,8 @@ export const getEtterlevelseStatus = (status?: EEtterlevelseStatus, frist?: stri
 }
 
 export const updateBehandlingNameWithNumber = (behandlinger: IBehandling[]) => {
-  return behandlinger.map((b) => {
-    return { ...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn }
+  return behandlinger.map((behandling) => {
+    return { ...behandling, navn: 'B' + behandling.nummer + ' ' + behandling.overordnetFormaal.shortName + ': ' + behandling.navn }
   })
 }
 

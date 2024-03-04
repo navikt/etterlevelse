@@ -112,9 +112,9 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
             onChange={(e) => setNewValue(e.target.value)}
           >
             <option value="">Ny verdi</option>
-            {codelist.getParsedOptions(usage.listName).map((c, i) => (
-              <option key={i + '_' + c.label} value={c.value}>
-                {c.label}
+            {codelist.getParsedOptions(usage.listName).map((code, index) => (
+              <option key={index + '_' + code.label} value={code.value}>
+                {code.label}
               </option>
             ))}
           </Select>

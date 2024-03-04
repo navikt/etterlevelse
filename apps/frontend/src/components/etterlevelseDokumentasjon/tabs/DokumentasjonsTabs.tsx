@@ -35,13 +35,13 @@ export const DokumentasjonTabs = () => {
 
   const sortTeams = (unSortedTeams: ITeam[]) => {
     return unSortedTeams
-      .map((t) => {
+      .map((team) => {
         const teamDokumentasjoner = etterlevelseDokumentasjoner.content.filter((e) =>
-          e.teamsData?.find((t2) => t2.id === t.id)
+          e.teamsData?.find((t2) => t2.id === team.id)
         )
 
         return {
-          ...t,
+          ...team,
           etterlevelseDokumentasjonCount: teamDokumentasjoner.length,
         }
       })

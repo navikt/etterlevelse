@@ -51,7 +51,7 @@ export const EtterlevelseDokumentasjonPage = () => {
     {
       variables: {
         etterlevelseDokumentasjonId: params.id,
-        lover: lover.map((l) => l.code),
+        lover: lover.map((lov) => lov.code),
         status: EKravStatus.AKTIV,
       },
       skip: !params.tema || !params.id,

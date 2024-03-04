@@ -75,7 +75,7 @@ export const searchEtterlevelsedokumentasjonByVirkemiddelId = async (virkemiddel
 export const updateEtterlevelseDokumentasjon = async (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 ) => {
-  const dto = etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon)
+  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
   return (
     await axios.put<IEtterlevelseDokumentasjon>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjon.id}`,
@@ -87,7 +87,7 @@ export const updateEtterlevelseDokumentasjon = async (
 export const createEtterlevelseDokumentasjon = async (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 ) => {
-  const dto = etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon)
+  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
   return (
     await axios.post<IEtterlevelseDokumentasjon>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon`,
@@ -126,9 +126,9 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
             }
             const behandlinger = etterlevelseDokumentasjon.behandlinger
             if (behandlinger && behandlinger.length > 0) {
-              behandlinger.map((b) => {
-                b.navn = behandlingName(b)
-                return b
+              behandlinger.map((behandling) => {
+                behandling.navn = behandlingName(behandling)
+                return behandling
               })
             }
             setData({
@@ -150,20 +150,20 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
   ]
 }
 
-export const etterlevelseDokumentasjonToDto = (
+export const etterlevelseDokumentasjonToDomainToObject = (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 ): IEtterlevelseDokumentasjon => {
-  const dto = {
+  const domainToObject = {
     ...etterlevelseDokumentasjon,
-    behandlingIds: etterlevelseDokumentasjon.behandlinger?.map((b) => b.id),
-    irrelevansFor: etterlevelseDokumentasjon.irrelevansFor.map((c) => c.code),
-    teams: etterlevelseDokumentasjon.teamsData?.map((t) => t.id),
+    behandlingIds: etterlevelseDokumentasjon.behandlinger?.map((behandling) => behandling.id),
+    irrelevansFor: etterlevelseDokumentasjon.irrelevansFor.map((irrelevans) => irrelevans.code),
+    teams: etterlevelseDokumentasjon.teamsData?.map((team) => team.id),
   } as any
-  delete dto.changeStamp
-  delete dto.version
-  delete dto.teamsData
-  delete dto.behandlinger
-  return dto
+  delete domainToObject.changeStamp
+  delete domainToObject.version
+  delete domainToObject.teamsData
+  delete domainToObject.behandlinger
+  return domainToObject
 }
 
 export const etterlevelseDokumentasjonMapToFormVal = (

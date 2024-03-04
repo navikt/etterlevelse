@@ -80,10 +80,10 @@ export const EditEtterlevelseDokumentasjonModal = (
     } else {
       await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
-        const mutatedBehandlinger = response.behandlinger?.map((b) => {
+        const mutatedBehandlinger = response.behandlinger?.map((behandling) => {
           return {
-            ...b,
-            navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn,
+            ...behandling,
+            navn: 'B' + behandling.nummer + ' ' + behandling.overordnetFormaal.shortName + ': ' + behandling.navn,
           }
         })
         if (setEtterlevelseDokumentasjon) {
@@ -301,7 +301,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                           </div>
                           <RenderTagList
                             list={fieldArrayRenderProps.form.values.behandlinger.map(
-                              (b: IBehandling) => b.navn
+                              (behandling: IBehandling) => behandling.navn
                             )}
                             onRemove={fieldArrayRenderProps.remove}
                           />

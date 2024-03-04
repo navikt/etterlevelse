@@ -173,32 +173,32 @@ export const VarslingsadresserTagList = ({
       const loadedUsers: ISlackUser[] = []
       const channels = await Promise.all(
         varslingsadresser
-          .filter((va) => va.type === EAdresseType.SLACK)
-          .filter((va) => !slackChannels.find((sc) => sc.id === va.adresse))
-          .filter((va) => {
-            const vas = va as TVarslingsadresseQL
+          .filter((varslingaddresse) => varslingaddresse.type === EAdresseType.SLACK)
+          .filter((varslingaddresse) => !slackChannels.find((sc) => sc.id === varslingaddresse.adresse))
+          .filter((varslingaddresse) => {
+            const vas = varslingaddresse as TVarslingsadresseQL
             if (vas.slackChannel) {
               loadedChannels.push(vas.slackChannel)
               return false
             }
             return true
           })
-          .map((c) => getSlackChannelById(c.adresse))
+          .map((slackChannel) => getSlackChannelById(slackChannel.adresse))
       )
 
       const users = await Promise.all(
         varslingsadresser
-          .filter((va) => va.type === EAdresseType.SLACK_USER)
-          .filter((va) => !slackUsers.find((u) => u.id === va.adresse))
-          .filter((va) => {
-            const vas = va as TVarslingsadresseQL
+          .filter((varslingaddresse) => varslingaddresse.type === EAdresseType.SLACK_USER)
+          .filter((varslingaddresse) => !slackUsers.find((u) => u.id === varslingaddresse.adresse))
+          .filter((varslingaddresse) => {
+            const vas = varslingaddresse as TVarslingsadresseQL
             if (vas.slackUser) {
               loadedUsers.push(vas.slackUser)
               return false
             }
             return true
           })
-          .map((c) => getSlackUserById(c.adresse))
+          .map((slackChannel) => getSlackUserById(slackChannel.adresse))
       )
 
       setSlackChannels([...slackChannels, ...channels, ...loadedChannels])
@@ -208,15 +208,15 @@ export const VarslingsadresserTagList = ({
 
   return (
     <RenderTagList
-      list={varslingsadresser.map((v) => {
-        if (v.type === EAdresseType.SLACK) {
-          const channel = slackChannels.find((c) => c.id === v.adresse)
-          return channel ? slackChannelView(channel) : `Slack: ${v.adresse}`
-        } else if (v.type === EAdresseType.SLACK_USER) {
-          const user = slackUsers.find((u) => u.id === v.adresse)
-          return user ? `Slack: ${user.name}` : `Slack: ${v.adresse}`
+      list={varslingsadresser.map((varslingaddresse) => {
+        if (varslingaddresse.type === EAdresseType.SLACK) {
+          const channel = slackChannels.find((c) => c.id === varslingaddresse.adresse)
+          return channel ? slackChannelView(channel) : `Slack: ${varslingaddresse.adresse}`
+        } else if (varslingaddresse.type === EAdresseType.SLACK_USER) {
+          const user = slackUsers.find((u) => u.id === varslingaddresse.adresse)
+          return user ? `Slack: ${user.name}` : `Slack: ${varslingaddresse.adresse}`
         }
-        return 'Epost: ' + v.adresse
+        return 'Epost: ' + varslingaddresse.adresse
       })}
       onRemove={remove}
     />

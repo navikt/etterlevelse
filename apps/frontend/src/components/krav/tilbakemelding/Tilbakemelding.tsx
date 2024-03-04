@@ -70,7 +70,7 @@ export const Tilbakemeldinger = ({
   const location = useLocation()
   const navigate = useNavigate()
 
-  const refs = useRefs<HTMLDivElement>(tilbakemeldinger.map((t) => t.id))
+  const refs = useRefs<HTMLDivElement>(tilbakemeldinger.map((tilbakemelding) => tilbakemelding.id))
   useEffect(() => {
     !loading && focusNr && setTimeout(() => refs[focusNr]?.current?.scrollIntoView(), 100)
   }, [loading])
@@ -89,37 +89,38 @@ export const Tilbakemeldinger = ({
       {!loading && !!tilbakemeldinger.length && (
         <div className="flex flex-col">
           <Accordion>
-            {tilbakemeldinger.slice(0, count).map((t) => {
-              const focused = focusNr === t.id
-              const { status, ubesvartOgKraveier, melderOrKraveier } = getMelderInfo(t)
+            {tilbakemeldinger.slice(0, count).map((tilbakemelding) => {
+              const focused = focusNr === tilbakemelding.id
+              const { status, ubesvartOgKraveier, melderOrKraveier } = getMelderInfo(tilbakemelding)
               return (
-                <Accordion.Item key={t.id} open={t.id === focusNr}>
-                  <Accordion.Header onClick={() => setFocus(focused ? '' : t.id)}>
+                <Accordion.Item key={tilbakemelding.id} open={tilbakemelding.id === focusNr}>
+                  <Accordion.Header onClick={() => setFocus(focused ? '' : tilbakemelding.id)}>
                     <div className="w-full p-2 flex">
                       <div>
-                        {t.endretKrav && (
+                        {tilbakemelding.endretKrav && (
                           <ShowWarningMessage warningMessage="Spørsmålet har ført til at innholdet i kravet er endret" />
                         )}
-                        <div className={`flex w-full ${t.endretKrav ? 'mt-2' : ''}`}>
-                          <Portrait ident={t.melderIdent} />
+                        <div className={`flex w-full ${tilbakemelding.endretKrav ? 'mt-2' : ''}`}>
+                          <Portrait ident={tilbakemelding.melderIdent} />
                           <div className="flex flex-col w-full ml-2.5">
                             <div className="flex w-full items-center">
                               <Label>
-                                <PersonName ident={t.melderIdent} />
+                                <PersonName ident={tilbakemelding.melderIdent} />
                               </Label>
                               <div className="flex ml-6">
                                 <BodyShort>
-                                  Sendt: {moment(t.meldinger[0].tid).format('lll')}
+                                  Sendt: {moment(tilbakemelding.meldinger[0].tid).format('lll')}
                                 </BodyShort>
                                 <BodyShort className="ml-3.5">
-                                  Kravversjon: K{t.kravNummer}.{t.kravVersjon}
+                                  Kravversjon: K{tilbakemelding.kravNummer}.
+                                  {tilbakemelding.kravVersjon}
                                 </BodyShort>
                               </div>
                             </div>
                             {!focused && (
                               <div className="flex w-full">
                                 <BodyShort className="mr-7 mt-1 w-full">
-                                  {_.truncate(t.meldinger[0].innhold, {
+                                  {_.truncate(tilbakemelding.meldinger[0].innhold, {
                                     length: 80,
                                     separator: /[.,] +/,
                                   })}
@@ -138,31 +139,31 @@ export const Tilbakemeldinger = ({
                   <Accordion.Content>
                     {focused && (
                       <div className="flex w-full">
-                        <BodyLong>{t.meldinger[0].innhold}</BodyLong>
+                        <BodyLong>{tilbakemelding.meldinger[0].innhold}</BodyLong>
                       </div>
                     )}
                     <div className="flex w-full items-center mt-4">
-                      {focused && t.meldinger.length === 1 && (
+                      {focused && tilbakemelding.meldinger.length === 1 && (
                         <MeldingKnapper
                           marginLeft
-                          melding={t.meldinger[0]}
-                          tilbakemeldingId={t.id}
+                          melding={tilbakemelding.meldinger[0]}
+                          tilbakemeldingId={tilbakemelding.id}
                           oppdater={replace}
                           remove={remove}
                         />
                       )}
 
-                      {focused && <EndretInfo melding={t.meldinger[0]} />}
+                      {focused && <EndretInfo melding={tilbakemelding.meldinger[0]} />}
                     </div>
 
                     {/* meldingsliste */}
                     {focused && (
                       <div className="flex flex-col mt-4">
-                        {t.meldinger.slice(1).map((m) => (
+                        {tilbakemelding.meldinger.slice(1).map((melding) => (
                           <ResponseMelding
-                            key={m.meldingNr}
-                            m={m}
-                            tilbakemelding={t}
+                            key={melding.meldingNr}
+                            melding={melding}
+                            tilbakemelding={tilbakemelding}
                             oppdater={replace}
                             remove={remove}
                           />
@@ -173,7 +174,7 @@ export const Tilbakemeldinger = ({
                     {/* knapprad bunn */}
                     {melderOrKraveier && user.canWrite() && focused && (
                       <TilbakemeldingSvar
-                        tilbakemelding={t}
+                        tilbakemelding={tilbakemelding}
                         setFocusNummer={setFocusNr}
                         ubesvartOgKraveier={ubesvartOgKraveier}
                         close={(t) => {
@@ -366,9 +367,9 @@ const TilbakemeldingSvar = ({
                 setTilbakemeldingStatus(e.target.value as ETilbakemeldingMeldingStatus)
               }}
             >
-              {getParsedOptionsforTilbakeMelding().map((o, i) => (
-                <option key={i + '_' + o.label} value={o.id}>
-                  {o.label}
+              {getParsedOptionsforTilbakeMelding().map((option, index) => (
+                <option key={index + '_' + option.label} value={option.id}>
+                  {option.label}
                 </option>
               ))}
             </Select>

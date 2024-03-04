@@ -77,21 +77,21 @@ export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: TVirkmid
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {sortedData.map((virkemiddel: IVirkemiddel, i: number) => (
-                <Table.Row key={i + '_' + virkemiddel.id}>
+              {sortedData.map((virkemiddel: IVirkemiddel, index: number) => (
+                <Table.Row key={index + '_' + virkemiddel.id}>
                   <Table.DataCell className="w-[17%]" scope="row">
                     {virkemiddel.navn}
                   </Table.DataCell>
                   <Table.DataCell>{virkemiddel.virkemiddelType?.shortName}</Table.DataCell>
                   <Table.DataCell>
                     <div>
-                      {virkemiddel.regelverk.map((r, i) => {
+                      {virkemiddel.regelverk.map((regelverk, index) => {
                         return (
                           <div
-                            key={r + '_' + i}
-                            className={`${i === virkemiddel.regelverk.length - 1 ? undefined : 'mb-2'}`}
+                            key={regelverk + '_' + index}
+                            className={`${index === virkemiddel.regelverk.length - 1 ? undefined : 'mb-2'}`}
                           >
-                            <LovView regelverk={r} />
+                            <LovView regelverk={regelverk} />
                           </div>
                         )
                       })}

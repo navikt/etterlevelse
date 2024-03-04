@@ -65,32 +65,32 @@ export const getKravByKravNummer = async (kravNummer: number | string) => {
 }
 
 export const createKrav = async (krav: TKravQL) => {
-  const dto = kravToKravDto(krav)
-  return (await axios.post<IKrav>(`${env.backendBaseUrl}/krav`, dto)).data
+  const domainToObject = kravToKravDomainObject(krav)
+  return (await axios.post<IKrav>(`${env.backendBaseUrl}/krav`, domainToObject)).data
 }
 
 export const updateKrav = async (krav: TKravQL) => {
-  const dto = kravToKravDto(krav)
-  return (await axios.put<IKrav>(`${env.backendBaseUrl}/krav/${krav.id}`, dto)).data
+  const domainToObject = kravToKravDomainObject(krav)
+  return (await axios.put<IKrav>(`${env.backendBaseUrl}/krav/${krav.id}`, domainToObject)).data
 }
 
-function kravToKravDto(krav: TKravQL): IKrav {
-  const dto = {
+function kravToKravDomainObject(krav: TKravQL): IKrav {
+  const domainToObject = {
     ...krav,
     avdeling: krav.avdeling?.code,
     underavdeling: krav.underavdeling?.code,
-    relevansFor: krav.relevansFor.map((c) => c.code),
-    regelverk: krav.regelverk.map((r) => ({ ...r, lov: r.lov.code })),
-    begrepIder: krav.begreper.map((b) => b.id),
-    virkemiddelIder: krav.virkemidler.map((v) => v.id),
-    kravIdRelasjoner: krav.kravRelasjoner.map((k) => k.id),
+    relevansFor: krav.relevansFor.map((relevans) => relevans.code),
+    regelverk: krav.regelverk.map((regelverk) => ({ ...regelverk, lov: regelverk.lov.code })),
+    begrepIder: krav.begreper.map((begrep) => begrep.id),
+    virkemiddelIder: krav.virkemidler.map((virkemiddel) => virkemiddel.id),
+    kravIdRelasjoner: krav.kravRelasjoner.map((kravRelasjon) => kravRelasjon.id),
   } as any
-  delete dto.changeStamp
-  delete dto.version
-  delete dto.begreper
-  delete dto.virkemidler
-  delete dto.kravRelasjoner
-  return dto
+  delete domainToObject.changeStamp
+  delete domainToObject.version
+  delete domainToObject.begreper
+  delete domainToObject.virkemidler
+  delete domainToObject.kravRelasjoner
+  return domainToObject
 }
 
 export const useKravPage = (pageSize: number) => {
@@ -164,12 +164,12 @@ export const useSearchKrav = async (searchParams: string) => {
         } else {
           const kravRes = await searchKrav(kravNumber)
           return kravRes
-            .filter((k) => k.status === EKravStatus.AKTIV)
-            .map((k) => {
+            .filter((krav) => krav.status === EKravStatus.AKTIV)
+            .map((krav) => {
               return {
-                value: k.id,
-                label: 'K' + k.kravNummer + '.' + k.kravVersjon + ' ' + k.navn,
-                ...k,
+                value: krav.id,
+                label: 'K' + krav.kravNummer + '.' + krav.kravVersjon + ' ' + krav.navn,
+                ...krav,
               }
             })
         }
@@ -177,12 +177,12 @@ export const useSearchKrav = async (searchParams: string) => {
     } else {
       const kravRes = await searchKrav(searchParams)
       return kravRes
-        .filter((k) => k.status === EKravStatus.AKTIV)
-        .map((k) => {
+        .filter((krav) => krav.status === EKravStatus.AKTIV)
+        .map((krav) => {
           return {
-            value: k.id,
-            label: 'K' + k.kravNummer + '.' + k.kravVersjon + ' ' + k.navn,
-            ...k,
+            value: krav.id,
+            label: 'K' + krav.kravNummer + '.' + krav.kravVersjon + ' ' + krav.navn,
+            ...krav,
           }
         })
     }
