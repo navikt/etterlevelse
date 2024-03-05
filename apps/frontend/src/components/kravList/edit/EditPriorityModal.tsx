@@ -10,8 +10,6 @@ import { IKrav } from '../../../constants'
 import { FieldWrapper } from '../../common/Inputs'
 import { KravPriorityPanel } from './components/KravPriorityPanel'
 
-export const kravListPriorityModal = () => document.querySelector('#krav-list-edit-priority-modal')
-
 interface IKravPriorityPanelsProps {
   fieldArrayRenderProps: FieldArrayRenderProps
 }
@@ -65,7 +63,9 @@ export const EditPriorityModal = (props: {
         } else {
           return {
             ...krav,
-            prioriteringsId: krav.prioriteringsId.concat(tema.substring(0, 3).toUpperCase() + number),
+            prioriteringsId: krav.prioriteringsId.concat(
+              tema.substring(0, 3).toUpperCase() + number
+            ),
           }
         }
       }
@@ -130,7 +130,11 @@ export const EditPriorityModal = (props: {
               {!loading && kravListe && (
                 <Form>
                   <FieldWrapper>
-                    <FieldArray name={'krav'}>{(fieldArrayRenderProps: FieldArrayRenderProps) => <KravPriorityPanels fieldArrayRenderProps={fieldArrayRenderProps} />}</FieldArray>
+                    <FieldArray name={'krav'}>
+                      {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                        <KravPriorityPanels fieldArrayRenderProps={fieldArrayRenderProps} />
+                      )}
+                    </FieldArray>
                   </FieldWrapper>
                 </Form>
               )}
