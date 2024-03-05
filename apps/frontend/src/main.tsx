@@ -1,5 +1,4 @@
 import { ApolloProvider } from '@apollo/client'
-import { BaseProvider } from 'baseui'
 import { Helmet } from 'react-helmet'
 import { BrowserRouter } from 'react-router-dom'
 import { Client as Styletron } from 'styletron-engine-atomic'
@@ -11,7 +10,6 @@ import { Footer } from './components/Navigation/Footer'
 import { codelist } from './services/Codelist'
 import { useAwait, useAwaitUser } from './util/hooks'
 import { useNetworkStatus } from './util/network'
-import { customTheme } from './util/theme'
 
 const engine = new Styletron()
 
@@ -23,7 +21,6 @@ const Main = () => {
 
   return (
     <StyletronProvider value={engine}>
-      <BaseProvider theme={customTheme}>
         <ApolloProvider client={apolloClient}>
           <BrowserRouter window={window}>
             <Helmet>
@@ -39,7 +36,6 @@ const Main = () => {
           </BrowserRouter>
           <ErrorModal />
         </ApolloProvider>
-      </BaseProvider>
     </StyletronProvider>
   )
 }
