@@ -3,7 +3,7 @@ import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
 import moment from 'moment'
 import { ReactNode } from 'react'
 import { Helmet } from 'react-helmet'
-import { EEtterlevelseStatus, IBehandling, IEtterlevelseDokumentasjon } from '../../../constants'
+import { EEtterlevelseStatus, IEtterlevelseDokumentasjon } from '../../../constants'
 import { env } from '../../../util/env'
 import { ettlevColors } from '../../../util/theme'
 import { warningAlert } from '../../Images'
@@ -249,12 +249,6 @@ export const getEtterlevelseStatus = (status?: EEtterlevelseStatus, frist?: stri
     default:
       return ''
   }
-}
-
-export const updateBehandlingNameWithNumber = (behandlinger: IBehandling[]) => {
-  return behandlinger.map((behandling) => {
-    return { ...behandling, navn: 'B' + behandling.nummer + ' ' + behandling.overordnetFormaal.shortName + ': ' + behandling.navn }
-  })
 }
 
 export const getStatusLabelColor = (status: EEtterlevelseStatus) => {
