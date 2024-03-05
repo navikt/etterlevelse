@@ -7,7 +7,6 @@ import { user } from '../../services/User'
 import { loginUrl } from '../Header'
 import { AuditButton } from '../admin/audit/AuditButton'
 import { EObjectType, IAuditItem, TNavigableItem } from '../admin/audit/AuditTypes'
-import CustomizedLink from './CustomizedLink'
 
 type TRouteLinkProps = {
   href?: string
@@ -47,7 +46,7 @@ const RouteLink = (props: TRouteLinkProps) => {
     !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(location, restprops.href)
 
   return (
-    <CustomizedLink
+    <Link
       aria-label={ariaLabel}
       style={mergedStyle}
       {...restprops}
