@@ -1,9 +1,5 @@
-import * as moment from 'moment'
 import 'moment/locale/nb'
-import * as React from 'react'
-import { useEffect } from 'react'
 import LocalizedStrings, { GlobalStrings, LocalizedStringsMethods } from 'react-localization'
-import { useForceUpdate } from '../hooks'
 import { en, no } from './lang'
 import { IStrings } from './langdef'
 
@@ -45,35 +41,4 @@ export interface ILang {
 
 interface ILangs {
   [lang: string]: ILang
-}
-
-// hooks
-
-const localStorageAvailable = storageAvailable()
-
-export const useLang = () => {
-  const [lang, setLang] = React.useState<string>(
-    ((localStorageAvailable && localStorage.getItem('tcat-lang')) as string) || defaultLang.langCode
-  )
-  const update = useForceUpdate()
-  useEffect(() => {
-    intl.setLanguage(lang)
-    const momentlocale = moment.locale(lang)
-    if (lang !== momentlocale) console.warn('moment locale missing', lang)
-    localStorageAvailable && localStorage.setItem('tcat-lang', lang)
-    update()
-  }, [lang, update])
-
-  return setLang
-}
-
-function storageAvailable() {
-  try {
-    const key = 'ptab'
-    localStorage.setItem(key, key)
-    localStorage.removeItem(key)
-    return true
-  } catch (e) {
-    return false
-  }
 }
