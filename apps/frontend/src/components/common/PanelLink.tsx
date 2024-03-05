@@ -15,69 +15,6 @@ import { arrowRightIcon, navChevronRightIcon } from '../Images'
 import RouteLink from './RouteLink'
 import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
 
-interface IPanelProps {
-  href: string
-  title: string | React.ReactNode
-  rightTitle?: string
-  beskrivelse?: string | React.ReactNode
-  rightBeskrivelse?: string
-  flip?: boolean
-  square?: boolean
-  hideBorderBottom?: boolean
-  useUnderline?: boolean
-  statusText?: string | React.ReactNode
-  panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
-  overrides?: BlockOverrides
-  useTitleUnderLine?: boolean
-  useDescriptionUnderline?: boolean
-  hideChevron?: boolean
-}
-
-export const PanelLink = ({
-  href,
-  title,
-  rightTitle,
-  beskrivelse,
-  rightBeskrivelse,
-  panelIcon,
-  flip,
-  square,
-  hideBorderBottom,
-  useUnderline,
-  statusText,
-  overrides,
-  useTitleUnderLine,
-  useDescriptionUnderline,
-  hideChevron,
-}: IPanelProps) => {
-  return (
-    <RouteLink
-      href={href}
-      hideUnderline
-      $style={{
-        display: 'flex',
-      }}
-    >
-      <SimplePanel
-        title={title}
-        rightTitle={rightTitle}
-        beskrivelse={beskrivelse}
-        rightBeskrivelse={rightBeskrivelse}
-        panelIcon={panelIcon}
-        flip={flip}
-        square={square}
-        hideBorderBottom={hideBorderBottom}
-        useUnderline={useUnderline}
-        statusText={statusText}
-        overrides={overrides}
-        useTitleUnderLine={useTitleUnderLine}
-        useDescriptionUnderline={useDescriptionUnderline}
-        hideChevron={hideChevron}
-      />
-    </RouteLink>
-  )
-}
-
 export type TPanelLinkCardOverrides = {
   Root?: BlockOverrides
   Header?: BlockOverrides
