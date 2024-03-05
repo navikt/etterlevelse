@@ -1,5 +1,6 @@
 package no.nav.data.common.storage;
 
+import lombok.RequiredArgsConstructor;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.common.storage.domain.GenericStorage;
@@ -18,22 +19,20 @@ import java.util.UUID;
 import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Service
-@Transactional
+@RequiredArgsConstructor
 public class StorageService<T extends DomainObject> {
 
     private final GenericStorageRepository<T> repository;
 
-    public StorageService(GenericStorageRepository<T>repository) {
-        this.repository = repository;
-    }
-
     public T get(UUID uuid) {
+        if (uuid == null || !exists(uuid)) return null; 
         return getStorage(uuid).getDomainObjectData();
     }
 
     /**
      * Batch save, does not work for existing objects
      */
+    @Transactional
     public List<GenericStorage<T>> saveAll(Collection<T> objects) {
         Assert.isTrue(objects.stream().noneMatch(o -> o.getId() != null), "Cannot use saveAll on existing object");
         var storages = convert(objects, o -> new GenericStorage<T>().generateId().setDomainObjectData(o));
@@ -42,6 +41,7 @@ public class StorageService<T extends DomainObject> {
         return storageList;
     }
 
+    @Transactional
     public T save(T object) {
         GenericStorage<T> storage = object.getId() != null ? (GenericStorage<T>) getStorage(object.getId()) : new GenericStorage<T>().generateId();
         storage.setDomainObjectData(object);
@@ -50,6 +50,7 @@ public class StorageService<T extends DomainObject> {
         return saved.getDomainObjectData();
     }
 
+    @Transactional
     public void deleteAll(List<T> objects) {
         repository.deleteAll(convert(objects, DomainObject::getId));
     }
@@ -63,18 +64,13 @@ public class StorageService<T extends DomainObject> {
         return repository.existsById(uuid);
     }
 
-    /**
-     * Will not throw if object does not exist
-     */
-    public void softDelete(UUID id, Class<T> type) {
-        repository.deleteByIdAndType(id, TypeRegistration.typeOf(type));
-    }
-
+    @Transactional
     public T delete(T item) {
         repository.deleteById(item.getId());
         return item;
     }
 
+    @Transactional
     public T delete(UUID id) {
         var storage = getStorage(id);
         repository.delete(storage);

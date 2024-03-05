@@ -30,22 +30,22 @@ public class BehandlingStatistikk {
     private Integer antallUnderArbeid;
     private Integer antallFerdigDokumentert;
 
-public BehandligStatistikkResponse toResponse() {
-    return BehandligStatistikkResponse.builder()
-            .etterlevelseDokumentasjonsId(etterlevelseDokumentasjonsId)
-            .etterlevelseDokumentasjonTittel(etterlevelseDokumentasjonTittel)
-            .behandlingId(behandlingId)
-            .behandlingNavn(behandlingNavn)
-            .team(copyOf(team))
-            .teamId(copyOf(teamId))
-            .opprettetDato(opprettetDato)
-            .endretDato(endretDato)
-            .totalKrav(totalKrav)
-            .antallIkkeFiltrertKrav(antallIkkeFiltrertKrav)
-            .antallBortfiltrertKrav(antallBortfiltrertKrav)
-            .antallIkkePaabegynt(antallIkkePaabegynt)
-            .antallUnderArbeid(antallUnderArbeid)
-            .antallFerdigDokumentert(antallFerdigDokumentert)
-            .build();
-}
+    public BehandligStatistikkResponse toResponse() {
+        return BehandligStatistikkResponse.builder()
+                .etterlevelseDokumentasjonsId(etterlevelseDokumentasjonsId)
+                .etterlevelseDokumentasjonTittel(etterlevelseDokumentasjonTittel)
+                .behandlingId(behandlingId)
+                .behandlingNavn(behandlingNavn)
+                .team(copyOf(team))
+                .teamId(copyOf(teamId))
+                .opprettetDato(opprettetDato)
+                .endretDato(endretDato)
+                .totalKrav(totalKrav)
+                .antallIkkeFiltrertKrav(antallIkkeFiltrertKrav)
+                .antallBortfiltrertKrav(antallBortfiltrertKrav)
+                .antallIkkePaabegynt(antallIkkePaabegynt)
+                .antallUnderArbeid(antallUnderArbeid)
+                .antallFerdigDokumentert(antallFerdigDokumentert)
+                .build();
+    }
 }

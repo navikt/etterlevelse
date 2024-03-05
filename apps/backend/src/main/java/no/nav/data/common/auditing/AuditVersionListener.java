@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
@@ -41,7 +42,7 @@ public class AuditVersionListener {
 
     static {
         FilterProvider filters = new SimpleFilterProvider().addFilter("relationFilter", new RelationFilter());
-        var om = JsonUtils.createObjectMapper();
+        ObjectMapper om = JsonUtils.createObjectMapper();
         om.setVisibility(PropertyAccessor.ALL, Visibility.NONE);
         om.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
         wr = om.writer(filters);
@@ -68,7 +69,7 @@ public class AuditVersionListener {
 
     private void audit(Object entity, Action action) {
         Assert.isTrue(entity instanceof Auditable, "Invalid object");
-        if (entity instanceof GenericStorage gs && !isAudited((gs).getType())) {
+        if (entity instanceof GenericStorage gs && !isAudited(gs.getType())) {
             return;
         }
         AuditVersion auditVersion = convertAuditVersion(entity, action);
@@ -79,13 +80,11 @@ public class AuditVersionListener {
 
     public static AuditVersion convertAuditVersion(Object entity, Action action) {
         try {
-            String tableName;
+            String tableName = AuditVersion.tableNameFor(entity);
             int version;
             if (entity instanceof GenericStorage gs) {
-                tableName = gs.getType();
                 version = gs.getVersion() == null ? 0 : gs.getVersion() + 1;
             } else {
-                tableName = AuditVersion.tableName(((Auditable) entity).getClass());
                 version = -1;
             }
             String id = getIdForObject(entity);

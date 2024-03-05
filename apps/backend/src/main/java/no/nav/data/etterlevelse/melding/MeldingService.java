@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.melding;
 
+import lombok.RequiredArgsConstructor;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -17,13 +18,10 @@ import java.util.UUID;
 import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
 
 @Service
+@RequiredArgsConstructor
 public class MeldingService extends DomainService<Melding> {
 
     private final MeldingRepo repo;
-
-    public MeldingService(MeldingRepo repo) {
-        this.repo = repo;
-    }
 
     public Page<Melding> getAll(PageParameters pageParameters) {
         return repo.findAll(pageParameters.createPage()).map(GenericStorage::getDomainObjectData);
@@ -37,9 +35,10 @@ public class MeldingService extends DomainService<Melding> {
         return convertToDomaionObject(repo.findByMeldingStatus(meldingStatus));
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public Melding save(MeldingRequest request) {
         var melding = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Melding();
-        melding.convert(request);
+        melding.merge(request);
         return storage.save(melding);
     }
 

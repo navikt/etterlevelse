@@ -1,6 +1,6 @@
 package no.nav.data.graphql;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
 import no.nav.data.IntegrationTestBase;
@@ -11,17 +11,16 @@ import java.util.Map;
 
 public abstract class GraphQLTestBase extends IntegrationTestBase {
 
-    private final ObjectMapper om = JsonUtils.getObjectMapper();
-
     @Autowired
     protected GraphQLTestTemplate graphQLTestTemplate;
 
     protected ObjectNode vars() {
-        return om.createObjectNode();
+        ObjectReader or = JsonUtils.getObjectReader();
+        return or.getConfig().getNodeFactory().objectNode();
     }
 
     protected ObjectNode vars(Map<String, ?> map) {
-        var on = om.createObjectNode();
+        var on = vars();
         map.forEach((key, val) -> on.set(key, JsonUtils.toJsonNode(val)));
         return on;
     }

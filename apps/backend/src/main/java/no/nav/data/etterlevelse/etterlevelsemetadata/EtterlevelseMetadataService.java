@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelsemetadata;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
@@ -19,14 +20,11 @@ import java.util.UUID;
 import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class EtterlevelseMetadataService extends DomainService<EtterlevelseMetadata> {
 
     private final EtterlevelseMetadataRepo repo;
-
-    public EtterlevelseMetadataService(EtterlevelseMetadataRepo repo) {
-        this.repo = repo;
-    }
 
     public Page<EtterlevelseMetadata> getAll(PageParameters pageParameters){
         return repo.findAll(pageParameters.createPage()).map(GenericStorage::getDomainObjectData);
@@ -58,14 +56,16 @@ public class EtterlevelseMetadataService extends DomainService<EtterlevelseMetad
         return convertToDomaionObject(repo.findByEtterlevelseDokumentasjonAndKrav(etterlevelseDokumentasjonId, kravNummer, kravVersjon));
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseMetadata save(EtterlevelseMetadataRequest request) {
 
         var etterlevelseMetadata = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new EtterlevelseMetadata();
-        etterlevelseMetadata.convert(request);
+        etterlevelseMetadata.merge(request);
 
         return storage.save(etterlevelseMetadata);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteByEtterlevelseDokumentasjonId(String etterlevelseDokumentasjonId){
         List<EtterlevelseMetadata> etterlevelseMetadataer = convertToDomaionObject(etterlevelseMetadataRepo.findByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId));
         etterlevelseMetadataer.forEach(em -> log.info("deleting etterlevelse metadata with id={}, connected to etterlevelse dokumentasjon with id={}", em.getId(), etterlevelseDokumentasjonId));

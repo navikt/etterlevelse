@@ -126,7 +126,7 @@ public class EtterlevelseMetadataController {
         return ResponseEntity.ok(etterlevelseMetadata.toResponse());
     }
 
+    // Used only for unittests
     static class EtterlevelseMetadataPage extends RestResponsePage<EtterlevelseMetadataResponse> {
-
     }
 }

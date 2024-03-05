@@ -3,7 +3,6 @@ package no.nav.data.common.validator;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
-import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
@@ -75,11 +74,10 @@ public class Validator<T extends Validated> {
         this.item = item;
     }
 
-    // TODO: Det skal ikke være en avhengighet til StorageService fra denne klassen
-    public static <R extends RequestElement> Validator<R> validate(R item, StorageService<?> storage) {
+    public static <R extends RequestElement> Validator<R> validate(R item, Function<UUID, DomainObject> getDomainObjectForUuid) {
         Validator<R> validator = validate(item);
         UUID uuid = item.getIdAsUUID();
-        validator.domainItem = uuid != null && storage.exists(uuid) ? storage.get(uuid) : null;
+        validator.domainItem = getDomainObjectForUuid.apply(uuid);
         validator.validateRepositoryValues(item, validator.domainItem != null);
         return validator;
     }

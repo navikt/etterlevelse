@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.kravprioritering;
 
+import lombok.RequiredArgsConstructor;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -25,15 +26,11 @@ import java.util.UUID;
 import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
 
 @Service
+@RequiredArgsConstructor
 public class KravPrioriteringService extends DomainService<KravPrioritering> {
 
     private final KravPrioriteringRepo repo;
     private final KravService kravService;
-
-    public KravPrioriteringService(KravPrioriteringRepo repo, KravService kravService) {
-        this.repo = repo;
-        this.kravService = kravService;
-    }
 
     public Page<KravPrioritering> getAll(PageParameters pageParameters) {
         return repo.findAll(pageParameters.createPage()).map(GenericStorage::getDomainObjectData);
@@ -67,7 +64,7 @@ public class KravPrioriteringService extends DomainService<KravPrioritering> {
             List<KravPrioriteringResponse> kravPrioriteringList = convertToDomaionObject(repo.findByKravNummer(filter.getKravNummer())).stream().map(KravPrioritering::toResponse).toList();
             kravPrioriteringList.forEach(this::setKravStatus);
             return filterForKravStatus(kravPrioriteringList, filter);
-        } else if(filter.getTemaCode() != null) {
+        } else if (filter.getTemaCode() != null) {
             List<KravPrioriteringResponse> kravPrioriteringerResp = convertToDomaionObject(repo.findByTema(filter.getTemaCode().substring(0, 3))).stream().map(KravPrioritering::toResponse).toList();
             kravPrioriteringerResp.forEach(this::setKravStatus);
             return filterForKravStatus(kravPrioriteringerResp, filter);
@@ -80,7 +77,7 @@ public class KravPrioriteringService extends DomainService<KravPrioritering> {
     }
 
     private List<KravPrioriteringResponse> filterForKravStatus(List<KravPrioriteringResponse> kravPrioriteringResponse, KravPrioriteringFilter filter) {
-        if(filter.getKravStatus() != null) {
+        if (filter.getKravStatus() != null) {
             return kravPrioriteringResponse.stream().filter(kp-> kp.getKravStatus().equals(filter.getKravStatus())).toList();
         }
         return kravPrioriteringResponse;
@@ -88,17 +85,18 @@ public class KravPrioriteringService extends DomainService<KravPrioritering> {
 
     private void setKravStatus(KravPrioriteringResponse kravPrioriteringResponse) {
         Optional<Krav> krav = kravService.getByKravNummer(kravPrioriteringResponse.getKravNummer(), kravPrioriteringResponse.getKravVersjon());
-        if(krav.isPresent()) {
+        if (krav.isPresent()) {
             kravPrioriteringResponse.setKravStatus(krav.get().getStatus());
         } else {
             kravPrioriteringResponse.setKravStatus(KravStatus.UTGAATT);
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public KravPrioritering save(KravPrioriteringRequest request) {
 
         var kravprioritering = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new KravPrioritering();
-        kravprioritering.convert(request);
+        kravprioritering.merge(request);
 
         return storage.save(kravprioritering);
     }

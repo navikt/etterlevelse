@@ -23,7 +23,8 @@ public class Melding extends DomainObject {
     private MeldingStatus meldingStatus;
     private AlertType alertType;
 
-    public Melding convert(MeldingRequest request) {
+    // Updates all fields from the request except id, version and changestamp
+    public Melding merge(MeldingRequest request) {
         melding = request.getMelding();
         secondaryTittel = request.getSecondaryTittel();
         secondaryMelding = request.getSecondaryMelding();

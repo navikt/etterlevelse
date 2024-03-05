@@ -37,7 +37,8 @@ public class Etterlevelse extends DomainObject implements KravId {
     private EtterlevelseStatus status;
     private List<SuksesskriterieBegrunnelse> suksesskriterieBegrunnelser;
 
-    public Etterlevelse convert(EtterlevelseRequest request) {
+    // Updates all fields from the request except id, version and changestamp
+    public Etterlevelse merge(EtterlevelseRequest request) {
         behandlingId = request.getBehandlingId();
         etterlevelseDokumentasjonId = request.getEtterlevelseDokumentasjonId();
         kravNummer = request.getKravNummer();

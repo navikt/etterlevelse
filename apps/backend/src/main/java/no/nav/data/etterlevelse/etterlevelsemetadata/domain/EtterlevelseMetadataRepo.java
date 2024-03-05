@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface EtterlevelseMetadataRepo extends JpaRepository<GenericStorage<EtterlevelseMetadata>, UUID> {
-    @Override
+
     @Query(value = "select * from generic_storage where type = 'EtterlevelseMetadata' order by data -> 'kravNummer', data -> 'kravVersjon'",
             countQuery = "select count(1) from generic_storage where type = 'EtterlevelseMetadata'",
             nativeQuery = true)
