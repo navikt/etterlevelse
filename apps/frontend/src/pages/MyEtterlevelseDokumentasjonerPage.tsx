@@ -11,8 +11,6 @@ interface IDokumentasjonCount {
 
 export type TCustomTeamObject = IDokumentasjonCount & ITeam
 
-export const tabMarginBottom = '48px'
-
 export const MyEtterlevelseDokumentasjonerPage = () => {
   ampli.logEvent('sidevisning', {
     side: 'Side for Dokumentasjoner',
