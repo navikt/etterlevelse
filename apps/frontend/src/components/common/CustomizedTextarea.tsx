@@ -1,5 +1,5 @@
 import { BaseInputOverrides } from 'baseui/input'
-import { StatefulTextarea, StatefulTextareaProps, Textarea, TextareaProps } from 'baseui/textarea'
+import { StatefulTextarea, StatefulTextareaProps } from 'baseui/textarea'
 import _ from 'lodash'
 import { ettlevColors } from '../../util/theme'
 
@@ -20,10 +20,3 @@ export const CustomizedStatefulTextarea = (props: StatefulTextareaProps) => {
 
   return <StatefulTextarea {...props} overrides={overrides} />
 }
-
-export const CustomizedTextarea = (props: TextareaProps) => {
-  const overrides = _.merge(customOverrides, props.overrides)
-
-  return <Textarea {...props} overrides={overrides} />
-}
-export default CustomizedTextarea
