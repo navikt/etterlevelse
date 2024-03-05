@@ -73,17 +73,17 @@ public class KravPriorityListController {
         Optional<KravPriorityListResponse> kravPriorityList = service.getByTema(temacode).map(KravPriorityList::toResponse);
 
         if(kravPriorityList.isEmpty())  {
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
 
         int kravPriority = -1;
 
-        if(kravPriorityList.isPresent() && !kravPriorityList.get().getPriorityList().isEmpty()) {
+        if(!kravPriorityList.get().getPriorityList().isEmpty()) {
             kravPriority = kravPriorityList.get().getPriorityList().indexOf(kravnummer);
         }
 
         if(kravPriority < 0) {
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(kravPriority);
