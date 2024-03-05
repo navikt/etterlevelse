@@ -261,11 +261,6 @@ export const codeListSchema: yup.ObjectSchema<ICodeListFormValues> = yup.object(
   }),
 })
 
-export const codelistCompareField = (field: string) => {
-  return (a: any, b: any) =>
-    codelistCompare((a[field] as ICode) || undefined, (b[field] as ICode) || undefined)
-}
-
 export const codelistCompare = (a?: ICode, b?: ICode) => {
   return (a?.shortName || '').localeCompare(b?.shortName || '')
 }
