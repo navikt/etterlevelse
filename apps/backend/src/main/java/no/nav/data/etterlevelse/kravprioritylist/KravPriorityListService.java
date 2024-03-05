@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -26,13 +27,8 @@ public class KravPriorityListService extends DomainService<KravPriorityList>  {
         return repo.findAll(pageParameters.createPage()).map(GenericStorage::getDomainObjectData);
     }
 
-    public KravPriorityList getByTema(String tema) {
-        return repo.findByTema(tema).getDomainObjectData();
-    }
-
-    public Integer getPriorityForKravByTema(String tema, Integer kravNummer){
-        KravPriorityList kravPriorityList = getByTema(tema);
-        return kravPriorityList.getPriorityList().stream().toList().indexOf(kravNummer);
+    public Optional<KravPriorityList> getByTema(String tema) {
+        return repo.findByTema(tema).map(GenericStorage::getDomainObjectData);
     }
 
     public KravPriorityList save(KravPriorityListRequest request) {

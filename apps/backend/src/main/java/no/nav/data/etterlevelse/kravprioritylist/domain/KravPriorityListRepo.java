@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface KravPriorityListRepo extends JpaRepository<GenericStorage<KravPriorityList>, UUID> {
@@ -17,7 +18,7 @@ public interface KravPriorityListRepo extends JpaRepository<GenericStorage<KravP
     Page<GenericStorage<KravPriorityList>> findAll(Pageable page);
 
     @Query(value = "select * from generic_storage where data ->> 'temaId' ilike %?1% and type = 'KravPriorityList'", nativeQuery = true)
-    GenericStorage<KravPriorityList> findByTema(String tema);
+    Optional<GenericStorage<KravPriorityList>>findByTema(String tema);
 
 
 }

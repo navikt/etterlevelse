@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -52,8 +54,9 @@ public class KravPriorityListController {
 
         codelistService.validateListNameAndCode(ListName.TEMA.name(), temacode);
 
-        KravPriorityList kravPriorityList = service.getByTema(temacode);
-        return ResponseEntity.ok(kravPriorityList.toResponse());
+        Optional<KravPriorityListResponse> kravPriorityList = service.getByTema(temacode).map(KravPriorityList::toResponse);
+        return kravPriorityList.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+
     }
 
     @Operation(summary = "Get krav prioritery by tema code and krav nummer")
@@ -67,7 +70,14 @@ public class KravPriorityListController {
 
         codelistService.validateListNameAndCode(ListName.TEMA.name(), temacode);
 
-        Integer kravPriority = service.getPriorityForKravByTema(temacode, kravnummer);
+        Optional<KravPriorityListResponse> kravPriorityList = service.getByTema(temacode).map(KravPriorityList::toResponse);
+
+        if(kravPriorityList.isEmpty())  {
+            ResponseEntity.notFound().build();
+        }
+
+        Integer kravPriority = kravPriorityList.get().getPriorityList().indexOf(kravnummer);
+
         return ResponseEntity.ok(kravPriority);
     }
 }
