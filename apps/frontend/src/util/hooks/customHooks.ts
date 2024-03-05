@@ -29,14 +29,6 @@ export function useForceUpdate() {
   return () => setVal(val + 1)
 }
 
-export function useUpdateOnChange(value: any) {
-  const update = useForceUpdate()
-
-  useEffect(() => {
-    update()
-  }, [value])
-}
-
 export let updateUser: () => void
 
 export function useAwaitUser() {
