@@ -11,7 +11,6 @@
 // import { getAllKravPriority } from '../api/KravPriorityApi'
 // import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 // import { KravPanelHeaderWithSorting } from '../components/etterlevelseDokumentasjon/KravPanelHeader'
-// import { getMainHeader } from '../components/etterlevelseDokumentasjon/common/utils'
 // import { KravList } from '../components/etterlevelseDokumentasjonTema/KravList'
 // import { SecondaryHeader } from '../components/etterlevelseDokumentasjonTema/SecondaryHeader'
 // import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
@@ -181,16 +180,6 @@ export const isFerdigUtfylt = (status: EEtterlevelseStatus | undefined) => {
 //         <Layout2
 //           headerBackgroundColor="#F8F8F8"
 //           headerOverlap="31px"
-//           mainHeader={getMainHeader(
-//             etterlevelseDokumentasjon,
-//             undefined,
-//             <Helmet>
-//               <meta charSet="utf-8" />
-//               <title>
-//                 {temaData ? temaData.shortName : ''} E{etterlevelseDokumentasjon.etterlevelseNummer.toString()} {etterlevelseDokumentasjon.title.toString()}
-//               </title>
-//             </Helmet>,
-//           )}
 //           secondaryHeaderBackgroundColor={ettlevColors.green100}
 //           secondaryHeader={<SecondaryHeader etterlevelseDokumentasjon={etterlevelseDokumentasjon} lovListe={lovListe} temaData={temaData} />}
 //           childrenBackgroundColor={ettlevColors.grey25}
