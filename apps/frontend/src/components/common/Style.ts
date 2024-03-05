@@ -59,12 +59,3 @@ export const borderWidth = (r: string) => ({
   borderRightWidth: r,
   borderLeftWidth: r,
 })
-
-export const cardShadow = {
-  Root: {
-    style: {
-      ...hideBorder,
-      boxShadow: '0px 0px 6px 3px rgba(0,0,0,0.08);',
-    },
-  },
-}
