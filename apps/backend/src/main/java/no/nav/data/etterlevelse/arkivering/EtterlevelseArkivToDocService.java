@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.arkivering;
 
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import no.nav.data.common.utils.ZipUtils;
 import no.nav.data.etterlevelse.arkivering.domain.ArchiveFile;
@@ -30,15 +31,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class EtterlevelseArkivToDocService extends DomainService<EtterlevelseArkiv> {
 
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final EtterlevelseDokumentasjonToDoc etterlevelseDokumentasjonToDoc;
-
-    public EtterlevelseArkivToDocService(EtterlevelseDokumentasjonService etterlevelseDokumentasjonService, EtterlevelseDokumentasjonToDoc etterlevelseDokumentasjonToDoc) {
-        this.etterlevelseDokumentasjonService = etterlevelseDokumentasjonService;
-        this.etterlevelseDokumentasjonToDoc = etterlevelseDokumentasjonToDoc;
-    }
 
     public byte[] getEtterlevelserArchiveZip(List<EtterlevelseArkiv> etterlevelseArkivList) throws IOException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd'_'HH'-'mm'-'ss");

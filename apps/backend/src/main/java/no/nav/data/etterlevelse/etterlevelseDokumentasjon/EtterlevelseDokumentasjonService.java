@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
@@ -34,6 +35,7 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class EtterlevelseDokumentasjonService extends DomainService<EtterlevelseDokumentasjon> {
 
     private final BehandlingService behandlingService;
@@ -41,14 +43,6 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     private final EtterlevelseService etterlevelseService;
     private final EtterlevelseArkivService etterlevelseArkivService;
     private final TeamcatTeamClient teamcatTeamClient;
-
-    public EtterlevelseDokumentasjonService(BehandlingService behandlingService, EtterlevelseMetadataService etterlevelseMetadataService, EtterlevelseService etterlevelseService, EtterlevelseArkivService etterlevelseArkivService, EtterlevelseArkivService etterlevelseArkivService1, TeamcatTeamClient teamcatTeamClient) {
-        this.behandlingService = behandlingService;
-        this.etterlevelseMetadataService = etterlevelseMetadataService;
-        this.etterlevelseService = etterlevelseService;
-        this.etterlevelseArkivService = etterlevelseArkivService1;
-        this.teamcatTeamClient = teamcatTeamClient;
-    }
 
     public Page<EtterlevelseDokumentasjon> getAll(PageParameters pageParameters) {
         return etterlevelseDokumentasjonRepo.findAll(pageParameters.createPage()).map(GenericStorage::getDomainObjectData);
@@ -59,7 +53,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     }
 
     public List<EtterlevelseDokumentasjon> searchEtterlevelseDokumentasjon(String searchParam) {
-        if(searchParam.toLowerCase().matches("e[0-9]+(.*)")) {
+        if (searchParam.toLowerCase().matches("e[0-9]+(.*)")) {
             return convertToDomaionObject(etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjon(searchParam.substring(1)));
         } else {
             return convertToDomaionObject(etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjon(searchParam));
@@ -93,16 +87,13 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return convertToDomaionObject(etterlevelseDokumentasjonRepo.findBy(filter));
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon save(EtterlevelseDokumentasjonRequest request) {
-
-        var etterlevelseDokumentasjon = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new EtterlevelseDokumentasjon();
-
-        etterlevelseDokumentasjon.convert(request);
-
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new EtterlevelseDokumentasjon();
+        etterlevelseDokumentasjon.merge(request);
         if (!request.isUpdate()) {
             etterlevelseDokumentasjon.setEtterlevelseNummer(etterlevelseDokumentasjonRepo.nextEtterlevelseDokumentasjonNummer());
         }
-
         return storage.save(etterlevelseDokumentasjon);
     }
 
@@ -146,8 +137,9 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return storage.getAll(EtterlevelseDokumentasjon.class, pageable);
     }
 
-    public EtterlevelseDokumentasjonResponse addBehandlingAndTeamsData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse){
-        if(etterlevelseDokumentasjonResponse.getBehandlingIds() != null && !etterlevelseDokumentasjonResponse.getBehandlingIds().isEmpty()) {
+    // Does not update DB
+    public EtterlevelseDokumentasjonResponse addBehandlingAndTeamsData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+        if (etterlevelseDokumentasjonResponse.getBehandlingIds() != null && !etterlevelseDokumentasjonResponse.getBehandlingIds().isEmpty()) {
             List<Behandling> behandlingList = new ArrayList<>();
             etterlevelseDokumentasjonResponse.getBehandlingIds().forEach((behandlingId) -> {
                 try {
@@ -162,11 +154,11 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             });
             etterlevelseDokumentasjonResponse.setBehandlinger(behandlingList);
         }
-        if(etterlevelseDokumentasjonResponse.getTeams() != null && !etterlevelseDokumentasjonResponse.getTeams().isEmpty()){
+        if (etterlevelseDokumentasjonResponse.getTeams() != null && !etterlevelseDokumentasjonResponse.getTeams().isEmpty()) {
             List<TeamResponse> teamsData = new ArrayList<>();
             etterlevelseDokumentasjonResponse.getTeams().forEach((teamId) -> {
                 var teamData = teamcatTeamClient.getTeam(teamId);
-                if(teamData.isPresent()){
+                if (teamData.isPresent()) {
                     teamsData.add(teamData.get().toResponse());
                 } else {
                     var emptyTeamData = new TeamResponse();

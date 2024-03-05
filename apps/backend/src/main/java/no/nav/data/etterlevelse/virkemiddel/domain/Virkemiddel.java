@@ -31,7 +31,8 @@ public class Virkemiddel extends DomainObject {
     private List<Regelverk> regelverk;
     private String livsSituasjon;
 
-    public Virkemiddel convert(VirkemiddelRequest request) {
+    // Updates all fields from the request except id, version and changestamp
+    public Virkemiddel merge(VirkemiddelRequest request) {
         navn = request.getNavn();
         virkemiddelType = request.getVirkemiddelType();
         regelverk = StreamUtils.convert(request.getRegelverk(), Regelverk::convert);

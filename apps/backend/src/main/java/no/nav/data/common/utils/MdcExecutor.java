@@ -28,7 +28,8 @@ public class MdcExecutor extends ThreadPoolExecutor {
         super.execute(wrap(command, parentContext));
     }
 
-    // TODO: Denne skal fjernes. Se ListenableFutureCallback for hvordan dette kalles erstattes.
+    // TODO: Denne skal fjernes. Se ListenableFutureCallback for hvordan dette kallet erstattes. 
+    // Se https://trello.com/c/iSysbdus/356-fjerne-bruk-av-listenablefuturecallback
     @Deprecated(forRemoval = true)
     public static <T> ListenableFutureCallback<? super T> wrap(Consumer<T> onSuccessCallback, Consumer<Throwable> onErrorCallback) {
         var parentContext = MDC.getCopyOfContextMap();

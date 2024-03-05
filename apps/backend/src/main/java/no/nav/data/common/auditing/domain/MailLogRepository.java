@@ -13,8 +13,8 @@ import java.util.UUID;
 public interface MailLogRepository extends JpaRepository<GenericStorage<MailLog>, UUID> {
 
     @Query(value = "select * from generic_storage where type = 'MailLog' order by created_date desc",
-            countQuery = "select count(1) from generic_storage where type = 'MailLog'"
-            , nativeQuery = true)
+            countQuery = "select count(1) from generic_storage where type = 'MailLog'",
+            nativeQuery = true)
     Page<GenericStorage<MailLog>> findAll(Pageable pageable);
 
     @Query(value = "select * from generic_storage where type = 'MailLog' and data ->> 'to' = ?1 order by created_date desc", nativeQuery = true)

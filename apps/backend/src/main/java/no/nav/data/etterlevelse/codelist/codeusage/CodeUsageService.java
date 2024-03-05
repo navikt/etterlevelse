@@ -36,7 +36,6 @@ import static no.nav.data.common.utils.StreamUtils.safeStream;
 import static no.nav.data.etterlevelse.codelist.CodelistService.getCodelist;
 
 @Service
-@Transactional
 public class CodeUsageService {
 
     private final KravRepo kravRepo;
@@ -90,6 +89,7 @@ public class CodeUsageService {
         });
     }
 
+    @Transactional
     public CodeUsage replaceUsage(ListName listName, String oldCode, String newCode) {
         var usage = findCodeUsage(listName, oldCode);
         if (usage.isInUse()) {

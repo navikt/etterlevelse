@@ -20,6 +20,7 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 public class BehandlingService {
 
     private final BkatClient bkatClient;
+
     public Behandling getBehandling(String id) {
         BkatProcess process = bkatClient.getProcess(id);
         if (process == null) {

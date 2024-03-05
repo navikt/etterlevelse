@@ -22,8 +22,8 @@ public class KravPrioritering extends DomainObject implements KravId {
     private Integer kravVersjon;
     private String prioriteringsId;
 
-
-    public KravPrioritering convert(KravPrioriteringRequest request) {
+    // Updates all fields from the request except id, version and changestamp
+    public KravPrioritering merge(KravPrioriteringRequest request) {
         kravNummer = request.getKravNummer();
         kravVersjon = request.getKravVersjon();
         prioriteringsId = request.getPrioriteringsId();
