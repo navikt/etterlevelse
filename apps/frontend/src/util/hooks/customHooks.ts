@@ -68,8 +68,7 @@ export function useRefs<T>(ids: string[]) {
 
   return refs
 }
-
-export function useQuery() {
+function useQuery() {
   return new URLSearchParams(useLocation().search)
 }
 
