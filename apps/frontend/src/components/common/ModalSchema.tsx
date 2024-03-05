@@ -1,5 +1,3 @@
-import { ExclamationmarkIcon } from '@navikt/aksel-icons'
-import { Label, Tooltip } from '@navikt/ds-react'
 import { ErrorMessage } from 'formik'
 
 interface IPropsError {
@@ -42,30 +40,5 @@ export const Error = ({ message }: { message: string }) => (
       <span>•</span>
       {message}
     </p>
-  </div>
-)
-
-interface IPropsModalLabel {
-  label?: any
-  tooltip?: string
-  fullwidth?: boolean
-}
-
-export const ModalLabel = ({ label, tooltip, fullwidth }: IPropsModalLabel) => (
-  <div className={`self-center pr-4 ${fullwidth ? 'w-full' : 'w-1/4'}`}>
-    {tooltip ? (
-      <Tooltip content={tooltip}>
-        <Label className="flex w-full justify-center">
-          <div className="flex">
-            <div>{label}</div>
-            <div>
-              <ExclamationmarkIcon area-label="" aria-hidden className="ml-2 self-center" />
-            </div>
-          </div>
-        </Label>
-      </Tooltip>
-    ) : (
-      <Label>{label}</Label>
-    )}
   </div>
 )
