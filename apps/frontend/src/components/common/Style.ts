@@ -40,7 +40,7 @@ export const borderColor = (color?: string) => ({
   borderRightColor: color,
   borderBottomColor: color,
 })
-export const hideBorder = borderColor('transparent')
+
 export const borderRadius = (r: string) => ({
   borderBottomLeftRadius: r,
   borderBottomRightRadius: r,
