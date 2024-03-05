@@ -76,7 +76,15 @@ public class KravPriorityListController {
             ResponseEntity.notFound().build();
         }
 
-        Integer kravPriority = kravPriorityList.get().getPriorityList().indexOf(kravnummer);
+        int kravPriority = -1;
+
+        if(kravPriorityList.isPresent() && !kravPriorityList.get().getPriorityList().isEmpty()) {
+            kravPriority = kravPriorityList.get().getPriorityList().indexOf(kravnummer);
+        }
+
+        if(kravPriority < 0) {
+            ResponseEntity.notFound().build();
+        }
 
         return ResponseEntity.ok(kravPriority);
     }
