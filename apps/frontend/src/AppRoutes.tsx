@@ -5,7 +5,6 @@ import { searchEtterlevelsedokumentasjonByBehandlingId } from './api/Etterlevels
 import CodeListPage from './components/admin/CodeList/CodelistPage'
 import { AuditPage } from './components/admin/audit/AuditPage'
 import { MailLogPage } from './components/admin/maillog/MailLogPage'
-import { SettingsPage } from './components/admin/settings/SettingsPage'
 import { KravCreatePage } from './components/krav/Edit/KravCreatePage'
 import { KravEditPage } from './components/krav/Edit/KravEditPage'
 import { KravNyVersjonPage } from './components/krav/Edit/KravNyVersjonPage'

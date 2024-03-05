@@ -15,7 +15,7 @@ type TNot<T> = { [key in keyof T]?: never }
 export type TOr<T, U> = (T & TNot<U>) | (U & TNot<T>)
 
 export type TOption = Readonly<{
-  id?: string | number
+  value?: string | number
   label?: React.ReactNode
 }>
 
