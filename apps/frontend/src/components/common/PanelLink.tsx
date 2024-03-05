@@ -13,7 +13,7 @@ import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
 import { arrowRightIcon, navChevronRightIcon } from '../Images'
 import Button from './Button'
-import RouteLink, { ExternalLink } from './RouteLink'
+import RouteLink from './RouteLink'
 import {
   borderColor,
   borderRadius,
@@ -154,45 +154,6 @@ export const PanelButton = ({
         hideChevron={hideChevron}
       />
     </Button>
-  )
-}
-
-export const PanelExternalLink = ({
-  href,
-  title,
-  rightTitle,
-  beskrivelse,
-  rightBeskrivelse,
-  panelIcon,
-  flip,
-  square,
-  hideBorderBottom,
-  useUnderline,
-  statusText,
-  overrides,
-  useTitleUnderLine,
-  useDescriptionUnderline,
-  hideChevron,
-}: IPanelProps) => {
-  return (
-    <ExternalLink href={href}>
-      <SimplePanel
-        title={title}
-        rightTitle={rightTitle}
-        beskrivelse={beskrivelse}
-        rightBeskrivelse={rightBeskrivelse}
-        panelIcon={panelIcon}
-        flip={flip}
-        square={square}
-        hideBorderBottom={hideBorderBottom}
-        useUnderline={useUnderline}
-        statusText={statusText}
-        overrides={overrides}
-        useTitleUnderLine={useTitleUnderLine}
-        useDescriptionUnderline={useDescriptionUnderline}
-        hideChevron={hideChevron}
-      />
-    </ExternalLink>
   )
 }
 
