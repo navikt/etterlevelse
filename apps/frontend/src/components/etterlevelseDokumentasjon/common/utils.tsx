@@ -1,15 +1,5 @@
-import { Responsive } from 'baseui/block'
 import moment from 'moment'
 import { EEtterlevelseStatus } from '../../../constants'
-
-export const responsiveDisplayEtterlevelseDokumentasjonPage: Responsive<any> = [
-  'block',
-  'block',
-  'block',
-  'block',
-  'flex',
-  'flex',
-]
 
 export const getNewestKravVersjon = (list: any[]) => {
   let relevanteStatusListe = [...list]
