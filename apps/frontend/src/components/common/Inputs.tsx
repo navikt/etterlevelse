@@ -420,7 +420,14 @@ export const MultiSearchField = (props: TPropsMultiSearchField) => {
     <FieldWrapper>
       <FieldArray name={name}>
         {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-          <FormControl label={label} error={fieldArrayRenderProps.form.touched[name] && <>{fieldArrayRenderProps.form.errors[name]}</>}>
+          <FormControl
+            label={label}
+            error={
+              fieldArrayRenderProps.form.touched[name] && (
+                <>{fieldArrayRenderProps.form.errors[name]}</>
+              )
+            }
+          >
             <Block>
               <Block display="flex">
                 <CustomizedSelect
@@ -429,7 +436,10 @@ export const MultiSearchField = (props: TPropsMultiSearchField) => {
                   filterOptions={(option) => option}
                   searchable
                   noResultsMsg="Ingen resultat"
-                  options={results.filter((option) => (fieldArrayRenderProps.form.values[name] as any[]).indexOf(option.id) < 0)}
+                  options={results.filter(
+                    (option) =>
+                      (fieldArrayRenderProps.form.values[name] as any[]).indexOf(option.id) < 0
+                  )}
                   onChange={({ value }) => {
                     value.length && fieldArrayRenderProps.push(value[0].id)
                   }}
@@ -438,50 +448,15 @@ export const MultiSearchField = (props: TPropsMultiSearchField) => {
                 />
               </Block>
               <RenderTagList
-                list={(fieldArrayRenderProps.form.values[name] as string[]).map((value) => (itemLabel ? itemLabel(value) : value))}
+                list={(fieldArrayRenderProps.form.values[name] as string[]).map((value) =>
+                  itemLabel ? itemLabel(value) : value
+                )}
                 onRemove={fieldArrayRenderProps.remove}
               />
             </Block>
           </FormControl>
         )}
       </FieldArray>
-    </FieldWrapper>
-  )
-}
-
-type TPropsSearchField = TLabelNameSearchItemLabel
-
-export const SearchField = (props: TPropsSearchField) => {
-  const { label, name, search, itemLabel } = props
-  const [results, setSearch, loading] = search
-
-  return (
-    <FieldWrapper>
-      <Field name={name}>
-        {(fieldProps: FieldProps<string>) => (
-          <FormControl label={label} error={fieldProps.meta.touched && fieldProps.meta.error}>
-            <CustomizedSelect
-              placeholder={'Søk ' + _.lowerFirst(label)}
-              maxDropdownHeight="400px"
-              filterOptions={(option) => option}
-              searchable
-              noResultsMsg="Ingen resultat"
-              options={results}
-              value={[
-                {
-                  id: fieldProps.field.value,
-                  label: itemLabel ? itemLabel(fieldProps.field.value) : fieldProps.field.value,
-                },
-              ]}
-              onChange={({ value }) => {
-                fieldProps.form.setFieldValue(name, value.length ? (value[0].id as string) : '')
-              }}
-              onInputChange={(event) => setSearch(event.currentTarget.value)}
-              isLoading={loading}
-            />
-          </FormControl>
-        )}
-      </Field>
     </FieldWrapper>
   )
 }
