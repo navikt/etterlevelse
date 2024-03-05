@@ -178,11 +178,6 @@ const AppRoutes = (): JSX.Element => {
       />
 
       <Route
-        path="/admin/settings"
-        element={<PrivateRoute component={<SettingsPage />} adminPage />}
-        caseSensitive={true}
-      />
-      <Route
         path="/admin/maillog"
         element={<PrivateRoute component={<MailLogPage />} adminPage />}
         caseSensitive={true}

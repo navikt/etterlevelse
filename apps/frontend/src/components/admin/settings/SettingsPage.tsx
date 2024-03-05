@@ -1,6 +1,4 @@
-import { Block } from 'baseui/block'
-import { Spinner } from 'baseui/spinner'
-import { HeadingMedium, LabelMedium } from 'baseui/typography'
+
 import React, { FormEvent, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { theme } from '../../../util'
