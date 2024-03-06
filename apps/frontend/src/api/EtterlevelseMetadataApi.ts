@@ -63,12 +63,6 @@ export const getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndK
   ).data
 }
 
-export const getEtterlevelseMetadataById = async (id: string) => {
-  return (
-    await axios.get<IEtterlevelseMetadata>(`${env.backendBaseUrl}/etterlevelsemetadata/${id}`)
-  ).data
-}
-
 export const createEtterlevelseMetadata = async (etterlevelseMetadata: IEtterlevelseMetadata) => {
   const dto = etterlevelseMetadataToEtterlevelseMetadataDto(etterlevelseMetadata)
   return (
