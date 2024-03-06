@@ -32,14 +32,6 @@ export const getEtterlevelseArkiv = async (id: string) => {
   return (await axios.get<IEtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/${id}`)).data
 }
 
-export const getEtterlevelseArkivByWebsak = async (websakNummer: string) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelseArkiv>>(
-      `${env.backendBaseUrl}/etterlevelsearkiv/websaknummer/${websakNummer}`
-    )
-  ).data
-}
-
 export const getEtterlevelseArkivByEtterlevelseDokumentasjonId = async (
   etterlevelseDokumentasjonId: string
 ) => {
