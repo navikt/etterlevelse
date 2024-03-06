@@ -79,13 +79,6 @@ export const buttonContentStyle = {
   ...padding('10px', '12px'),
 }
 
-export const primaryFocusBorder = {
-  ':focus': {
-    outlineStyle: 'solid',
-    outlineWidth: '2px',
-  },
-}
-
 export const Button = (props: IButtonProps) => {
   const baseuiKind =
     props.kind === 'outline'
