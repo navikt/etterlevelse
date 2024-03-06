@@ -3,6 +3,7 @@ package no.nav.data.etterlevelse.kravprioritylist;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
@@ -11,15 +12,23 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
+import no.nav.data.etterlevelse.kravprioritylist.dto.KravPriorityListRequest;
 import no.nav.data.etterlevelse.kravprioritylist.dto.KravPriorityListResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -87,5 +96,45 @@ public class KravPriorityListController {
         }
 
         return ResponseEntity.ok(kravPriority);
+    }
+
+    @Operation(summary = "Get one krav priority list")
+    @ApiResponse(description = "ok")
+    @GetMapping("/{id}")
+    public ResponseEntity<KravPriorityListResponse> getById(@PathVariable UUID id) {
+        log.info("Get krav priority list id={}", id);
+        return ResponseEntity.ok(service.get(id).toResponse());
+    }
+
+    @Operation(summary = "Create krav prioritering")
+    @ApiResponse(description = "ok")
+    @PostMapping
+    public ResponseEntity<KravPriorityListResponse> createKravPriorityList(@RequestBody KravPriorityListRequest request) {
+        log.info("Create krav priority list");
+        var kravPriorityList = service.save(request);
+        return new ResponseEntity<>(kravPriorityList.toResponse(), HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Update krav prioritering")
+    @ApiResponse(description = "ok")
+    @PutMapping("/{id}")
+    public ResponseEntity<KravPriorityListResponse> updateKravPriorityList(@PathVariable UUID id,@Valid @RequestBody KravPriorityListRequest request) {
+        log.info("Update krav priority list id={}", id);
+
+        if (!Objects.equals(id, request.getIdAsUUID())) {
+            throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
+        }
+
+        var kravPriorityList = service.save(request);
+        return ResponseEntity.ok(kravPriorityList.toResponse());
+    }
+
+    @Operation(summary = "Delete krav prioritering")
+    @ApiResponse(description = "ok")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<KravPriorityListResponse> deleteKravPriorityList(@PathVariable UUID id) {
+        log.info("Delete krav priority list id={}", id);
+        var kravPriorityList = service.delete(id);
+        return ResponseEntity.ok(kravPriorityList.toResponse());
     }
 }
