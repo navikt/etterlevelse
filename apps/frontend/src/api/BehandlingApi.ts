@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
 import { IBehandling, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
@@ -19,22 +18,6 @@ export const searchBehandling = async (name: string) => {
   return (
     await axios.get<IPageResponse<IBehandling>>(`${env.backendBaseUrl}/behandling/search/${name}`)
   ).data.content
-}
-
-export const useBehandling = (id?: string) => {
-  const [data, setData] = useState<IBehandling | undefined>(undefined)
-
-  useEffect(() => {
-    id &&
-      getBehandling(id)
-        .then(setData)
-        .catch((e) => {
-          setData(undefined)
-          console.error("couldn't find behandling", e)
-        })
-  }, [id])
-
-  return [data, setData] as [IBehandling | undefined, (behandling: IBehandling | undefined) => void]
 }
 
 export const behandlingName = (behandling?: IBehandling) => {
