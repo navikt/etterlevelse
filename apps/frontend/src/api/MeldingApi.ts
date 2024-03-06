@@ -10,10 +10,6 @@ export const getMeldingPage = async (pageNumber: number, pageSize: number) => {
   ).data
 }
 
-export const getMelding = async (id: string) => {
-  return (await axios.get<IMelding>(`${env.backendBaseUrl}/melding/${id}`)).data
-}
-
 export const getMeldingByType = async (meldingType: EMeldingType) => {
   return (
     await axios.get<IPageResponse<IMelding>>(`${env.backendBaseUrl}/melding/type/${meldingType}`)
