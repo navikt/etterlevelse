@@ -4,12 +4,7 @@ export const marginZero = {
   marginTop: '0px',
   marginBottom: '0px',
 }
-export const marginAll = (marg: string) => ({
-  marginLeft: marg,
-  marginRight: marg,
-  marginTop: marg,
-  marginBottom: marg,
-})
+
 export const margin = (topBot: string, leftRight: string) => ({
   marginLeft: leftRight,
   marginRight: leftRight,
