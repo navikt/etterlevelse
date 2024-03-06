@@ -65,13 +65,7 @@ export const searchEtterlevelsedokumentasjonByBehandlingId = async (behandlingId
     )
   ).data.content
 }
-export const searchEtterlevelsedokumentasjonByVirkemiddelId = async (virkemiddelId: string) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(
-      `${env.backendBaseUrl}/etterlevelsedokumentasjon/search/virkemiddel/${virkemiddelId}`
-    )
-  ).data.content
-}
+
 export const updateEtterlevelseDokumentasjon = async (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 ) => {
