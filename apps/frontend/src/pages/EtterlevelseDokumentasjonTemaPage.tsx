@@ -10,7 +10,6 @@
 // import { etterlevelseDokumentasjonKravQuery } from '../api/KravApi'
 // import { getAllKravPriority } from '../api/KravPriorityApi'
 // import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-// import { KravPanelHeaderWithSorting } from '../components/etterlevelseDokumentasjon/KravPanelHeader'
 // import { KravList } from '../components/etterlevelseDokumentasjonTema/KravList'
 // import { SecondaryHeader } from '../components/etterlevelseDokumentasjonTema/SecondaryHeader'
 // import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
@@ -194,16 +193,6 @@ export const isFerdigUtfylt = (status: EEtterlevelseStatus | undefined) => {
 //                   borderRadius: '4px',
 //                 }}
 //               >
-//                 <Block display="flex" justifyContent="center" $style={{ paddingTop: '26px', paddingBottom: '22px', paddingLeft: '16px' }}>
-//                   <KravPanelHeaderWithSorting
-//                     kravRelevans={kravRelevans}
-//                     setKravRelevans={setKravRelevans}
-//                     kravData={getKravData(kravRelevans[0].id)}
-//                     sorting={sorting}
-//                     setSorting={setSorting}
-//                     temaPageUrl={temaPageUrl}
-//                   />
-//                 </Block>
 //                 {!relevanteKraverGraphQLLoading && !irrelevanteKraverGraphQLLoading && !utgaateKraverGraphQLLoading ? (
 //                   <KravList
 //                     kravList={getKravData(kravRelevans[0].id)}
