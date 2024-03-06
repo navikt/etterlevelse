@@ -35,22 +35,6 @@ export const getEtterlevelseMetadataByKravNummer = async (kravNummer: number | s
   ).data
 }
 
-export const getEtterlevelseMetadataByKravNumberAndVersion = async (
-  kravNummer: number | string,
-  kravVersjon: number | string
-) => {
-  return await axios
-    .get<IPageResponse<IEtterlevelseMetadata>>(
-      `${env.backendBaseUrl}/etterlevelsemetadata/kravnummer/${kravNummer}/${kravVersjon}`
-    )
-    .then((resp) => {
-      return resp.data
-    })
-    .catch(() => {
-      return undefined
-    })
-}
-
 export const getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion = async (
   etterlevelseDokumentasjonId: string,
   kravNummer: number,
