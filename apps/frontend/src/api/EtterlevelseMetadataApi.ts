@@ -2,23 +2,6 @@ import axios from 'axios'
 import { IEtterlevelseMetadata, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
-export const getAllEtterlevelseMetadata = async () => {
-  const PAGE_SIZE = 100
-  const firstPage = await getEtterlevelseMetadataByPage(0, PAGE_SIZE)
-  if (firstPage.pages === 1) {
-    return firstPage.content.length > 0 ? [...firstPage.content] : []
-  } else {
-    let allEtterlevelseMetadata: IEtterlevelseMetadata[] = [...firstPage.content]
-    for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
-      allEtterlevelseMetadata = [
-        ...allEtterlevelseMetadata,
-        ...(await getEtterlevelseMetadataByPage(currentPage, PAGE_SIZE)).content,
-      ]
-    }
-    return allEtterlevelseMetadata
-  }
-}
-
 export const getEtterlevelseMetadataByPage = async (pageNumber: number, pageSize: number) => {
   return (
     await axios.get<IPageResponse<IEtterlevelseMetadata>>(
