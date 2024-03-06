@@ -48,14 +48,6 @@ export const getEtterlevelseArkivByStatus = async (status: EEtterlevelseArkivSta
   ).data
 }
 
-export const getEtterlevelseArkivArkivert = async () => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelseArkiv>>(
-      `${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`
-    )
-  ).data
-}
-
 export const getEtterlevelseArkivByEtterlevelseDokumentasjonId = async (
   etterlevelseDokumentasjonId: string
 ) => {
