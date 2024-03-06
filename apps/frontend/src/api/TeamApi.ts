@@ -80,11 +80,6 @@ export const searchSlackChannel = async (name: string) => {
   ).data.content
 }
 
-export const mapTeamResourceToOption = (teamResource: ITeamResource) => ({
-  id: teamResource.navIdent,
-  label: teamResource.fullName,
-})
-
 // Overly complicated async fetch of people and teams
 
 const people: Map<string, { f: boolean; v: string }> = new Map<string, { f: boolean; v: string }>()
