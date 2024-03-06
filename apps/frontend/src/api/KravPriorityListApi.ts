@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { IKravPriorityList, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
@@ -64,6 +65,23 @@ export const updateKravPriorityList = async (kravPrioritering: IKravPriorityList
       dto
     )
   ).data
+}
+
+export const useKravPriorityList = (temaCode: string) => {
+  const [data, setData] = useState(kravPrioritingMapToFormValue({}))
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    setLoading(true)
+    getKravPriorityListByTemaCode(temaCode).then((response: IKravPriorityList | undefined) => {
+      if (response) {
+        setData(kravPrioritingMapToFormValue(response))
+      }
+    })
+    setLoading(false)
+  }, [temaCode])
+
+  return [data, loading] as [IKravPriorityList, boolean]
 }
 
 function kravPrioriteringToDto(kravPrioriteringToDto: IKravPriorityList): IKravPriorityList {
