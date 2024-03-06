@@ -165,14 +165,6 @@ export const responsivePaddingSmall: Responsive<Scale> = [
   '32px',
   '32px',
 ]
-export const responsivePaddingLarge: Responsive<Scale> = [
-  '16px',
-  '16px',
-  '16px',
-  '100px',
-  '100px',
-  '100px',
-]
 
 export const responsiveWidthSmall: Responsive<Scale> = [
   'calc(100% - 32px)',
