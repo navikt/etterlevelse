@@ -8,11 +8,6 @@ export const searchBegrep = async (begrepSearch: string) => {
   ).data.content
 }
 
-export const mapBegrepToOption = (begrep: IBegrep) => ({
-  id: begrep.id,
-  label: begrep.navn + ' - ' + begrep.beskrivelse,
-})
-
 export const useBegrepSearch = async (searchParam: string) => {
   if (searchParam && searchParam.replace(/ /g, '').length > 2) {
     const searchResult = await searchBegrep(searchParam)
