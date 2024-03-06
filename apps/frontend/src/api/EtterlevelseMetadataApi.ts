@@ -1,8 +1,6 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
 import { IEtterlevelseMetadata, IPageResponse } from '../constants'
 import { env } from '../util/env'
-import { TKravId } from './KravApi'
 
 export const getAllEtterlevelseMetadata = async () => {
   const PAGE_SIZE = 100
@@ -103,25 +101,6 @@ function etterlevelseMetadataToEtterlevelseMetadataDto(
   delete dto.changeStamp
   delete dto.version
   return dto
-}
-
-export const useEtterlevelseMetadata = (id?: string, behandlingId?: string, kravId?: TKravId) => {
-  const isCreateNew = id === 'ny'
-  const [data, setData] = useState<IEtterlevelseMetadata | undefined>(
-    isCreateNew
-      ? mapEtterlevelseMetadataToFormValue({
-          behandlingId: behandlingId,
-          kravVersjon: kravId?.kravVersjon,
-          kravNummer: kravId?.kravNummer,
-        })
-      : undefined
-  )
-
-  useEffect(() => {
-    id && !isCreateNew && getEtterlevelseMetadataById(id).then(setData)
-  }, [id])
-
-  return [data, setData] as [IEtterlevelseMetadata | undefined, (em: IEtterlevelseMetadata) => void]
 }
 
 export const mapEtterlevelseMetadataToFormValue = (
