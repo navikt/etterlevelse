@@ -29,5 +29,3 @@ export const KravPanelHeader = (props: {
     </div>
   )
 }
-
-export default KravPanelHeader
