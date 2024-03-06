@@ -2,20 +2,6 @@ import axios from 'axios'
 import { EAlertType, EMeldingStatus, EMeldingType, IMelding, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
-export const getAllMelding = async () => {
-  const PAGE_SIZE = 100
-  const firstPage = await getMeldingPage(0, PAGE_SIZE)
-  if (firstPage.pages === 1) {
-    return firstPage.content.length > 0 ? [...firstPage.content] : []
-  } else {
-    let allMelding: IMelding[] = [...firstPage.content]
-    for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
-      allMelding = [...allMelding, ...(await getMeldingPage(currentPage, PAGE_SIZE)).content]
-    }
-    return allMelding
-  }
-}
-
 export const getMeldingPage = async (pageNumber: number, pageSize: number) => {
   return (
     await axios.get<IPageResponse<IMelding>>(
