@@ -10,7 +10,6 @@ import { ReactNode } from 'react'
 import { StyleObject } from 'styletron-react'
 import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
-import { ExternalLink } from './RouteLink'
 import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
 
 export type TButtonKind = (typeof KIND)[keyof typeof KIND] | 'outline' | 'underline-hover'
@@ -177,30 +176,4 @@ export const buttonBorderStyle = {
   ...borderStyle('solid'),
   ...borderWidth('2px'),
   ...borderRadius('4px'),
-}
-
-export const ExternalButton = ({
-  href,
-  children,
-  underlineHover,
-  size,
-  openOnSamePage,
-  kind,
-}: {
-  href: string
-  children: React.ReactNode
-  underlineHover?: boolean
-  size?: (typeof SIZE)[keyof typeof SIZE]
-  openOnSamePage?: boolean
-  kind?: TButtonKind
-}) => {
-  const underlineStyle = underlineHover ? 'underline-hover' : 'outline'
-  const actualSize = size || 'compact'
-  return (
-    <ExternalLink href={href} openOnSamePage={openOnSamePage}>
-      <Button kind={kind ? kind : underlineStyle} size={actualSize}>
-        {children}
-      </Button>
-    </ExternalLink>
-  )
 }
