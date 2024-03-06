@@ -181,14 +181,6 @@ export const responsivePaddingExtraLarge: Responsive<Scale> = [
   '200px',
   '200px',
 ]
-export const responsivePaddingInnerPage: Responsive<Scale> = [
-  '16px',
-  '16px',
-  '16px',
-  '16px',
-  '16px',
-  '200px',
-]
 
 export const responsiveWidthSmall: Responsive<Scale> = [
   'calc(100% - 32px)',
