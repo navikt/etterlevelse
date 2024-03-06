@@ -110,16 +110,3 @@ export const CustomizedPanel = (props: TCustomProps) => {
 
   return <Panel {...props} overrides={overrides} title={getTitle()} />
 }
-
-export const CustomPanelDivider = (props: { children: React.ReactNode; fullWidth?: boolean }) => (
-  <Block backgroundColor={ettlevColors.white} $style={{ ...borderRadius('4px') }}>
-    <Block
-      width={props.fullWidth ? '100%' : 'calc(100% - 48px)'}
-      backgroundColor={ettlevColors.grey100}
-      height="1px"
-      marginLeft={props.fullWidth ? '0px' : theme.sizing.scale800}
-      marginRight={props.fullWidth ? '0px' : theme.sizing.scale800}
-    />
-    {props.children}
-  </Block>
-)
