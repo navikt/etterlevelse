@@ -40,14 +40,6 @@ export const getEtterlevelseArkivByWebsak = async (websakNummer: string) => {
   ).data
 }
 
-export const getEtterlevelseArkivByStatus = async (status: EEtterlevelseArkivStatus) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelseArkiv>>(
-      `${env.backendBaseUrl}/etterlevelsearkiv/status/${status}`
-    )
-  ).data
-}
-
 export const getEtterlevelseArkivByEtterlevelseDokumentasjonId = async (
   etterlevelseDokumentasjonId: string
 ) => {
