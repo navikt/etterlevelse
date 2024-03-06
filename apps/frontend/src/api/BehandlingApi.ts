@@ -6,14 +6,6 @@ export const getBehandling = async (id: string) => {
   return (await axios.get<IBehandling>(`${env.backendBaseUrl}/behandling/${id}`)).data
 }
 
-export const getBehandlinger = async () => {
-  return (
-    await axios.get<IPageResponse<IBehandling>>(
-      `${env.backendBaseUrl}/behandling?myBehandlinger=true`
-    )
-  ).data.content
-}
-
 export const searchBehandling = async (name: string) => {
   return (
     await axios.get<IPageResponse<IBehandling>>(`${env.backendBaseUrl}/behandling/search/${name}`)
