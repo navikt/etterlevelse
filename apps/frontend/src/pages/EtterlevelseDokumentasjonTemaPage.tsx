@@ -22,11 +22,6 @@ import { EEtterlevelseStatus, IEtterlevelse } from '../constants'
 // import { ettlevColors } from '../util/theme'
 // import { getFilterType } from './EtterlevelseDokumentasjonPage'
 
-export const sortingOptions = [
-  { label: 'Anbefalt rekkefølge', id: 'priority' },
-  { label: 'Sist endret av meg', id: 'lastModified' },
-]
-
 export const mapEtterlevelseData = (etterlevelse?: IEtterlevelse) => ({
   etterlevelseId: etterlevelse?.id,
   etterleves: !!etterlevelse?.etterleves,
