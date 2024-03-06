@@ -2,7 +2,6 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { IPageResponse, IVirkemiddel } from '../constants'
 import { env } from '../util/env'
-import { useDebouncedState } from '../util/hooks'
 import { emptyPage } from './util/EmpyPageConstant'
 
 export const getAllVirkemiddel = async () => {
@@ -100,42 +99,6 @@ export const useVirkemiddel = (id: string, onlyLoadOnce?: boolean) => {
   useEffect(load, [id])
 
   return [data, setData, load] as [IVirkemiddel | undefined, (v?: IVirkemiddel) => void, () => void]
-}
-
-export const useSearchVirkemiddel = () => {
-  const [search, setSearch] = useDebouncedState<string>('', 200)
-  const [searchResult, setSearchResult] = useState<IVirkemiddel[]>([])
-  const [fullResult, setFullResult] = useState<IVirkemiddel[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
-
-  useEffect(() => {
-    ;(async () => {
-      await getAllVirkemiddel().then((res) => {
-        setFullResult(res)
-        setSearchResult(res)
-      })
-    })()
-  }, [])
-
-  useEffect(() => {
-    ;(async () => {
-      if (search && search.length > 2) {
-        setLoading(true)
-
-        setSearchResult(fullResult.filter((v) => v.navn.toLocaleLowerCase().includes(search)))
-
-        setLoading(false)
-      } else {
-        setSearchResult(fullResult)
-      }
-    })()
-  }, [search])
-
-  return [searchResult, setSearch, loading] as [
-    IVirkemiddel[],
-    React.Dispatch<React.SetStateAction<string>>,
-    boolean,
-  ]
 }
 
 export const useVirkemiddelFilter = () => {
