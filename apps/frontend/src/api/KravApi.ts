@@ -121,23 +121,6 @@ export const useKravPage = (pageSize: number) => {
 export type TKravIdParams = TOr<{ id?: string }, { kravNummer: string; kravVersjon: string }>
 export type TKravId = TOr<{ id?: string }, { kravNummer: number; kravVersjon: number }>
 
-export const useKrav = (params: TKravId | TKravIdParams, onlyLoadOnce?: boolean) => {
-  const isCreateNew = params.id === 'ny'
-  const [data, setData] = useState<IKrav | undefined>(
-    isCreateNew ? kravMapToFormVal({}) : undefined
-  )
-
-  const load = () => {
-    if (data && onlyLoadOnce) return
-    params?.id && !isCreateNew && getKrav(params.id).then(setData)
-    params?.kravNummer &&
-      getKravByKravNumberAndVersion(params.kravNummer, params.kravVersjon).then(setData)
-  }
-  useEffect(load, [params])
-
-  return [data, setData, load] as [IKrav | undefined, (k?: IKrav) => void, () => void]
-}
-
 export const useSearchKrav = async (searchParams: string) => {
   if (searchParams && searchParams.length > 2) {
     if (searchParams.toLowerCase().match(/k\d{1,3}/)) {
