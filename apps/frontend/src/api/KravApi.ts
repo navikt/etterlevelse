@@ -1,8 +1,6 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
 import { EKravStatus, IKrav, IPageResponse, TKravQL, TOr } from '../constants'
 import { env } from '../util/env'
-import { emptyPage } from './util/EmpyPageConstant'
 
 export const getAllKrav = async () => {
   const PAGE_SIZE = 100
@@ -92,30 +90,6 @@ function kravToKravDomainObject(krav: TKravQL): IKrav {
   delete domainToObject.virkemidler
   delete domainToObject.kravRelasjoner
   return domainToObject
-}
-
-export const useKravPage = (pageSize: number) => {
-  const [data, setData] = useState<IPageResponse<IKrav>>(emptyPage)
-  const [page, setPage] = useState<number>(0)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    setLoading(true)
-    getKravPage(page, pageSize).then((r) => {
-      setData(r)
-      setLoading(false)
-    })
-  }, [page, pageSize])
-
-  const prevPage = () => setPage(Math.max(0, page - 1))
-  const nextPage = () => setPage(Math.min(data?.pages ? data.pages - 1 : 0, page + 1))
-
-  return [data, prevPage, nextPage, loading] as [
-    IPageResponse<IKrav>,
-    () => void,
-    () => void,
-    boolean,
-  ]
 }
 
 export type TKravIdParams = TOr<{ id?: string }, { kravNummer: string; kravVersjon: string }>
