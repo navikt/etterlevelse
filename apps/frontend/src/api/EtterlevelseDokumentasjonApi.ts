@@ -25,14 +25,6 @@ export const getEtterlevelseDokumentasjon = async (id: string) => {
   ).data
 }
 
-export const getEtterlevelseDokumentasjonPage = async (pageNumber: number, pageSize: number) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(
-      `${env.backendBaseUrl}/etterlevelsedokumentasjon?pageNumber=${pageNumber}&pageSize=${pageSize}`
-    )
-  ).data
-}
-
 export const searchEtterlevelsedokumentasjon = async (searchParam: string) => {
   return (
     await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(
