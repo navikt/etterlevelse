@@ -10,14 +10,6 @@ import {
 import { env } from '../util/env'
 import { TKravId } from './KravApi'
 
-export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelse>>(
-      `${env.backendBaseUrl}/etterlevelse?pageNumber=${pageNumber}&pageSize=${pageSize}`
-    )
-  ).data
-}
-
 export const getEtterlevelse = async (id: string) => {
   return (await axios.get<IEtterlevelse>(`${env.backendBaseUrl}/etterlevelse/${id}`)).data
 }
