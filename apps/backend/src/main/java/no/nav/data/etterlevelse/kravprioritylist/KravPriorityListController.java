@@ -57,9 +57,6 @@ public class KravPriorityListController {
     @GetMapping("/tema/{temacode}")
     public ResponseEntity<KravPriorityListResponse> getByTemaCode(@PathVariable String temacode) {
         log.info("Get krav prioritering for tema={}", temacode);
-        if(temacode.length() < 3) {
-            throw new ValidationException("Tema code must be more than 3 characters");
-        }
 
         codelistService.validateListNameAndCode(ListName.TEMA.name(), temacode);
 
@@ -73,9 +70,6 @@ public class KravPriorityListController {
     @GetMapping("/tema/{temacode}/{kravnummer}")
     public ResponseEntity<Integer> getByTemaCodeAndKravNummer(@PathVariable String temacode, @PathVariable Integer kravnummer) {
         log.info("Get krav prioritering for tema={}", temacode);
-        if(temacode.length() < 3) {
-            throw new ValidationException("Tema code must be more than 3 characters");
-        }
 
         codelistService.validateListNameAndCode(ListName.TEMA.name(), temacode);
 
