@@ -1,16 +1,12 @@
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Accordion, AccordionProps, Panel, PanelOverrides, PanelProps } from 'baseui/accordion'
+import { Panel, PanelOverrides, PanelProps } from 'baseui/accordion'
 import { Block } from 'baseui/block'
 import { HeadingLarge } from 'baseui/typography'
 import _ from 'lodash'
 import * as React from 'react'
 import { ettlevColors, theme } from '../../util/theme'
 import { borderColor, borderRadius, borderStyle, borderWidth, paddingAll } from './Style'
-
-export const CustomizedAccordion = (props: Partial<AccordionProps>) => {
-  return <Accordion {...props} overrides={{}} />
-}
 
 interface ICustomizedPanelProps {
   HeaderBackgroundColor?: string
