@@ -123,4 +123,3 @@ const TemaView = ({ tema }: { tema: TTemaCode }) => {
 
 export const cardWidth = '32%'
 export const cardHeight = '220px'
-export const cardMaxheight = '250px'
