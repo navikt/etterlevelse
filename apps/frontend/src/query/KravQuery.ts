@@ -105,6 +105,7 @@ const getKravByLovCodeQuery = gql`
   }
 `
 
+/* Jerry sa å ikke slette ubrukte Query */
 export const getKravFullQuery = gql`
   query getKrav($id: ID, $kravNummer: Int, $kravVersjon: Int) {
     kravById(id: $id, nummer: $kravNummer, versjon: $kravVersjon) {
@@ -184,6 +185,7 @@ export const getKravFullQuery = gql`
   }
 `
 
+/* Jerry sa å ikke slette ubrukte Query */
 export const getKravByEtterlevelseDokumentasjonQuery = gql`
   query getKravByFilter(
     $etterlevelseDokumentasjonId: String
