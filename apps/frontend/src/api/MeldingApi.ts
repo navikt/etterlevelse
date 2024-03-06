@@ -2,14 +2,6 @@ import axios from 'axios'
 import { EAlertType, EMeldingStatus, EMeldingType, IMelding, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
-export const getMeldingPage = async (pageNumber: number, pageSize: number) => {
-  return (
-    await axios.get<IPageResponse<IMelding>>(
-      `${env.backendBaseUrl}/melding?pageNumber=${pageNumber}&pageSize=${pageSize}`
-    )
-  ).data
-}
-
 export const getMeldingByType = async (meldingType: EMeldingType) => {
   return (
     await axios.get<IPageResponse<IMelding>>(`${env.backendBaseUrl}/melding/type/${meldingType}`)
