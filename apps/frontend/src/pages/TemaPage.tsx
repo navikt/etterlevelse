@@ -120,5 +120,3 @@ const TemaView = ({ tema }: { tema: TTemaCode }) => {
     </PageLayout>
   )
 }
-
-export const cardWidth = '32%'
