@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.kravprioritylist;
 
+import lombok.RequiredArgsConstructor;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -15,13 +16,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class KravPriorityListService extends DomainService<KravPriorityList>  {
 
     private final KravPriorityListRepo repo;
-
-    public KravPriorityListService(KravPriorityListRepo repo) {
-        this.repo = repo;
-    }
 
     public Page<KravPriorityList> getAll(PageParameters pageParameters) {
         return repo.findAll(pageParameters.createPage()).map(GenericStorage::getDomainObjectData);
