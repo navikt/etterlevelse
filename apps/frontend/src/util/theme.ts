@@ -216,15 +216,6 @@ export const responsiveWidthExtraLarge: Responsive<Scale> = [
   'calc(100% - 400px)',
 ]
 
-export const responsiveWidthInnerPage: Responsive<Scale> = [
-  'calc(100% - 32px)',
-  'calc(100% - 32px)',
-  'calc(100% - 32px)',
-  'calc(100% - 32px)',
-  'calc(100% - 32px)',
-  'calc(100% - 400px)',
-]
-
 const breakpoints: any = {
   xsmall: 375,
   small: 480,
