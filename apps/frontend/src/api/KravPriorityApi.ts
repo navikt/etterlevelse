@@ -31,22 +31,6 @@ export const getKravPriority = async (id: string) => {
   return (await axios.get<IKravPrioritering>(`${env.backendBaseUrl}/kravprioritering/${id}`)).data
 }
 
-export const getKravPriorityByKravNumberAndVersion = async (
-  kravNummer: number | string,
-  kravVersjon: number | string
-) => {
-  return await axios
-    .get<IKravPrioritering>(
-      `${env.backendBaseUrl}/kravprioritering/kravnummer/${kravNummer}/${kravVersjon}`
-    )
-    .then((resp) => {
-      return resp.data
-    })
-    .catch(() => {
-      return undefined
-    })
-}
-
 export const createKravPriority = async (kravPrioritering: IKravPrioritering) => {
   const dto = kravPrioriteringToDto(kravPrioritering)
   return (await axios.post<IKravPrioritering>(`${env.backendBaseUrl}/kravprioritering`, dto)).data
