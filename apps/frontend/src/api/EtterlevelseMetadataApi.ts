@@ -69,12 +69,6 @@ export const getEtterlevelseMetadataById = async (id: string) => {
   ).data
 }
 
-export const deleteEtterlevelseMetadata = async (id: string) => {
-  return (
-    await axios.delete<IEtterlevelseMetadata>(`${env.backendBaseUrl}/etterlevelsemetadata/${id}`)
-  ).data
-}
-
 export const createEtterlevelseMetadata = async (etterlevelseMetadata: IEtterlevelseMetadata) => {
   const dto = etterlevelseMetadataToEtterlevelseMetadataDto(etterlevelseMetadata)
   return (
