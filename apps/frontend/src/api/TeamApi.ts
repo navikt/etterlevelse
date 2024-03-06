@@ -1,6 +1,5 @@
 import axios from 'axios'
-import { Option } from 'baseui/select'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   IPageResponse,
   IProductArea,
@@ -220,8 +219,6 @@ export const useMyProductAreas = () => {
 
   return [data, loading] as [IProductArea[], boolean]
 }
-
-export type TSearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]
 
 export const usePersonSearch = async (searchParam: string) => {
   if (searchParam && searchParam.replace(/ /g, '').length > 2) {
