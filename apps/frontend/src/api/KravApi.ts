@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { EKravStatus, IKrav, IPageResponse, TKravQL, TOr, emptyPage } from '../constants'
+import { EKravStatus, IKrav, IPageResponse, TKravQL, TOr } from '../constants'
 import { env } from '../util/env'
+import { emptyPage } from './util/EmpyPageConstant'
 
 export const getAllKrav = async () => {
   const PAGE_SIZE = 100

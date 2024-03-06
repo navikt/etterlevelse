@@ -381,15 +381,6 @@ export interface IMelding extends IDomainObject {
   alertType: EAlertType
 }
 
-export const emptyPage = {
-  content: [],
-  numberOfElements: 0,
-  pageNumber: 0,
-  pages: 0,
-  pageSize: 1,
-  totalElements: 0,
-}
-
 export interface ITeamResource {
   navIdent: string
   givenName: string

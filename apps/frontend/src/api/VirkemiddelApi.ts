@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { IPageResponse, IVirkemiddel, emptyPage } from '../constants'
+import { IPageResponse, IVirkemiddel } from '../constants'
 import { env } from '../util/env'
 import { useDebouncedState } from '../util/hooks'
+import { emptyPage } from './util/EmpyPageConstant'
 
 export const getAllVirkemiddel = async () => {
   const PAGE_SIZE = 100
@@ -177,7 +178,10 @@ export const useVirkemiddelFilter = () => {
 export const virkemiddelToVirkemiddelDto = (virkemiddel: IVirkemiddel): IVirkemiddel => {
   const dto = {
     ...virkemiddel,
-    regelverk: virkemiddel.regelverk.map((regelverk) => ({ ...regelverk, lov: regelverk.lov.code })),
+    regelverk: virkemiddel.regelverk.map((regelverk) => ({
+      ...regelverk,
+      lov: regelverk.lov.code,
+    })),
   } as any
   delete dto.changeStamp
   delete dto.version

@@ -15,7 +15,8 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { JsonView } from 'react-json-view-lite'
 import { getAudits } from '../../../api/AuditApi'
-import { IPageResponse, emptyPage } from '../../../constants'
+import { emptyPage } from '../../../api/util/EmpyPageConstant'
+import { IPageResponse } from '../../../constants'
 import { ampli, userRoleEventProp } from '../../../services/Amplitude'
 import { intl } from '../../../util/intl/intl'
 import { AuditButton } from './AuditButton'
@@ -35,7 +36,7 @@ const CodeView = ({ audit }: { audit: IAuditItem }) => {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         className="max-h-[75%] overflow-y-scroll"
-        header={{heading: "Data visning"}}
+        header={{ heading: 'Data visning' }}
       >
         <Modal.Body>
           <JsonView data={audit.data} />
