@@ -59,17 +59,7 @@ import paperPenIconBg from '../resources/icons/with_bg/arkPennBg.svg'
 import gavelIconBg from '../resources/icons/with_bg/gavelBg.svg'
 import grafIconBg from '../resources/icons/with_bg/grafBg.svg'
 import paragrafIconBg from '../resources/icons/with_bg/paragrafBg.svg'
-import archive2Image from '../resources/img/archive2.png'
-import archiveImage from '../resources/img/archive.png'
-import bookImage from '../resources/img/book.png'
-import cameraImage from '../resources/img/camera.png'
-import guardianImage from '../resources/img/guardian.png'
-import hammerImage from '../resources/img/hammer.png'
-import keyboardImage from '../resources/img/keyboard.png'
-import moneyImage from '../resources/img/money.png'
 import navImage from '../resources/img/nav-logo-red.svg'
-import peopleImage from '../resources/img/people.png'
-import scalesImage from '../resources/img/scales.png'
 
 export {
   angleIcon,
@@ -134,18 +124,4 @@ export {
   sokButtonIcon,
   stepper,
   warningAlert,
-}
-
-export const temaBilder: { [id: string]: string } = {
-  ARCHIVE: archiveImage,
-  ARCHIVE2: archive2Image,
-  KEYBOARD: keyboardImage,
-  PEOPLE: peopleImage,
-  BOOK: bookImage,
-  SCALES: scalesImage,
-  HAMMER: hammerImage,
-  MONEY: moneyImage,
-  NAV: navImage,
-  CAMERA: cameraImage,
-  GUARDIAN: guardianImage,
 }
