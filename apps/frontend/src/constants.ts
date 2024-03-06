@@ -438,10 +438,6 @@ export type TEtterlevelseQL = IEtterlevelse & {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 }
 
-export type TBehandlingQL = IBehandling & {
-  teamsData: ITeam[]
-}
-
 export type TEtterlevelseDokumentasjonQL = IEtterlevelseDokumentasjon & {
   etterlevelser?: IEtterlevelse[]
   sistEndretEtterlevelse?: string
