@@ -87,14 +87,3 @@ export const meldingStatusToString = (status: EMeldingStatus): string => {
       return 'Skjult/Deaktivert'
   }
 }
-
-export const meldingTypeToString = (status: EMeldingType): string => {
-  switch (status) {
-    case EMeldingType.FORSIDE:
-      return 'Forside melding'
-    case EMeldingType.SYSTEM:
-      return 'System melding'
-    case EMeldingType.OM_ETTERLEVELSE:
-      return 'Om etterlevelse melding'
-  }
-}
