@@ -1,5 +1,4 @@
 import axios from 'axios'
-import queryString from 'query-string'
 import { useEffect, useState } from 'react'
 import {
   EEtterlevelseStatus,
@@ -17,14 +16,6 @@ export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) 
       `${env.backendBaseUrl}/etterlevelse?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
   ).data
-}
-
-export const getEtterlevelseFor = async (query: { behandling: string }) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelse>>(
-      `${env.backendBaseUrl}/etterlevelse?${queryString.stringify(query)}`
-    )
-  ).data.content
 }
 
 export const getEtterlevelse = async (id: string) => {
