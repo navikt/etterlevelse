@@ -47,17 +47,6 @@ export const getKravPriorityByKravNumberAndVersion = async (
     })
 }
 
-export const getKravPriorityByTemaCode = async (temaCode: string) => {
-  return await axios
-    .get<IKravPrioritering>(`${env.backendBaseUrl}/kravprioritering/tema/${temaCode}`)
-    .then((resp) => {
-      return resp.data
-    })
-    .catch(() => {
-      return undefined
-    })
-}
-
 export const getKravPriorityByKravNummer = async (kravNummer: number | string) => {
   return (
     await axios.get<IPageResponse<IKravPrioritering>>(
