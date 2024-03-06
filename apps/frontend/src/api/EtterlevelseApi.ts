@@ -10,7 +10,6 @@ import {
 } from '../constants'
 import { env } from '../util/env'
 import { TKravId } from './KravApi'
-import { emptyPage } from './util/EmpyPageConstant'
 
 export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) => {
   return (
@@ -77,30 +76,6 @@ function etterlevelseToEtterlevelseDto(etterlevelse: IEtterlevelse) {
   delete dto.changeStamp
   delete dto.version
   return dto
-}
-
-export const useEtterlevelsePage = (pageSize: number) => {
-  const [data, setData] = useState<IPageResponse<IEtterlevelse>>(emptyPage)
-  const [page, setPage] = useState<number>(0)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    setLoading(true)
-    getEtterlevelsePage(page, pageSize).then((r) => {
-      setData(r)
-      setLoading(false)
-    })
-  }, [page, pageSize])
-
-  const prevPage = () => setPage(Math.max(0, page - 1))
-  const nextPage = () => setPage(Math.min(data?.pages ? data.pages - 1 : 0, page + 1))
-
-  return [data, prevPage, nextPage, loading] as [
-    IPageResponse<IEtterlevelse>,
-    () => void,
-    () => void,
-    boolean,
-  ]
 }
 
 export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: TKravId) => {
