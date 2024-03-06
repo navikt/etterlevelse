@@ -141,8 +141,6 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
                   name={name}
                   setIsFormDirty={setIsFormDirty}
                 />
-                {/* <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(name, v)}
-                onImageUpload={onImageUpload} shortenLinks={shortenLinks} /> */}
               </div>
             )}
             {!markdown && (

@@ -48,7 +48,12 @@ interface IPropsKriterieList {
   newKrav?: boolean
 }
 
-const KriterieList = ({ fieldArrayRenderProps, setIsFormDirty, newVersion, newKrav }: IPropsKriterieList) => {
+const KriterieList = ({
+  fieldArrayRenderProps,
+  setIsFormDirty,
+  newVersion,
+  newKrav,
+}: IPropsKriterieList) => {
   const suksesskriterier = fieldArrayRenderProps.form.values.suksesskriterier as ISuksesskriterie[]
 
   const AddSuksessKriterieButton = () => (
@@ -92,9 +97,10 @@ const KriterieList = ({ fieldArrayRenderProps, setIsFormDirty, newVersion, newKr
 
       {newKrav && <AddSuksessKriterieButton />}
 
-      {!newKrav && (fieldArrayRenderProps.form.values.status !== EKravStatus.AKTIV || newVersion) && (
-        <AddSuksessKriterieButton />
-      )}
+      {!newKrav &&
+        (fieldArrayRenderProps.form.values.status !== EKravStatus.AKTIV || newVersion) && (
+          <AddSuksessKriterieButton />
+        )}
     </div>
   )
 }
@@ -122,9 +128,14 @@ const Kriterie = ({
 }: IPropsKriterie) => {
   const debounceDelay = 500
   const [navn, setNavn, navnInput] = useDebouncedState(suksesskriterium.navn, debounceDelay)
-  const [beskrivelse, setBeskrivelse] = useDebouncedState(suksesskriterium.beskrivelse || '', debounceDelay)
+  const [beskrivelse, setBeskrivelse] = useDebouncedState(
+    suksesskriterium.beskrivelse || '',
+    debounceDelay
+  )
   const [behovForBegrunnelse, setBehovForBegrunnelse] = useState<string>(
-    suksesskriterium.behovForBegrunnelse === undefined ? 'true' : suksesskriterium.behovForBegrunnelse.toString()
+    suksesskriterium.behovForBegrunnelse === undefined
+      ? 'true'
+      : suksesskriterium.behovForBegrunnelse.toString()
   )
 
   const nummer = index + 1
@@ -183,7 +194,9 @@ const Kriterie = ({
             placeholder="Navn"
             error={
               fieldArrayRenderProps.form.errors &&
-              fieldArrayRenderProps.form.errors['suksesskriterier'] && <FormError fieldName="suksesskriterier" />
+              fieldArrayRenderProps.form.errors['suksesskriterier'] && (
+                <FormError fieldName="suksesskriterier" />
+              )
             }
           />
         </div>
@@ -193,7 +206,6 @@ const Kriterie = ({
             label="Beskrivelse av suksesskriteriet"
             tooltip="Nærmere detaljer rundt oppnåelse av suksesskriteriet."
           />
-          {/* <MarkdownEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} /> */}
           <TextEditor
             initialValue={beskrivelse}
             setValue={setBeskrivelse}
@@ -207,7 +219,10 @@ const Kriterie = ({
             legend="Velg type besvarelse:"
             value={behovForBegrunnelse}
             onChange={(value) => {
-              fieldArrayRenderProps.form.setFieldValue('behovForBegrunnelse', value === 'true' ? true : false)
+              fieldArrayRenderProps.form.setFieldValue(
+                'behovForBegrunnelse',
+                value === 'true' ? true : false
+              )
               setBehovForBegrunnelse(value)
             }}
           >
