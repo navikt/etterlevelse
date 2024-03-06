@@ -27,10 +27,6 @@ export const getKravPriorityPage = async (pageNumber: number, pageSize: number) 
   ).data
 }
 
-export const getKravPriority = async (id: string) => {
-  return (await axios.get<IKravPrioritering>(`${env.backendBaseUrl}/kravprioritering/${id}`)).data
-}
-
 export const createKravPriority = async (kravPrioritering: IKravPrioritering) => {
   const dto = kravPrioriteringToDto(kravPrioritering)
   return (await axios.post<IKravPrioritering>(`${env.backendBaseUrl}/kravprioritering`, dto)).data
