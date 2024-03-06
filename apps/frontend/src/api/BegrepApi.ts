@@ -2,10 +2,6 @@ import axios from 'axios'
 import { IBegrep, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
-export const getBegrep = async (begrepId: string) => {
-  return (await axios.get<IBegrep>(`${env.backendBaseUrl}/begrep/${begrepId}`)).data
-}
-
 export const searchBegrep = async (begrepSearch: string) => {
   return (
     await axios.get<IPageResponse<IBegrep>>(`${env.backendBaseUrl}/begrep/search/${begrepSearch}`)
