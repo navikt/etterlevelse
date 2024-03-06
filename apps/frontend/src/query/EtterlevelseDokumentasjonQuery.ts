@@ -39,23 +39,6 @@ export const getEtterlevelseDokumentasjonListQuery = gql`
   }
 `
 
-/* Jerry sa å ikke slette ubrukte Query */
-export const getEtterlevelseDokumentasjonByRelevansQuery = gql`
-  query getEtterlevelsedokumentasjon($relevans: [String!]) {
-    etterlevelseDokumentasjon(filter: { relevans: $relevans }) {
-      content {
-        id
-        title
-        etterlevelseNummer
-        irrelevansFor {
-          code
-          shortName
-        }
-      }
-    }
-  }
-`
-
 export const getEtterlevelseDokumentasjonByBehandlingIdQuery = gql`
   query getEtterlevelseDokumentasjoner(
     $pageNumber: NonNegativeInt
