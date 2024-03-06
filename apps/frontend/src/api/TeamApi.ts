@@ -30,14 +30,6 @@ export const getTeam = async (teamId: string) => {
   return data
 }
 
-export const getTeams = async (teamIds: string[]) => {
-  const data: ITeam[] = []
-  teamIds.forEach(async (id) => {
-    await getTeam(id).then((response) => data.push(response))
-  })
-  return data
-}
-
 export const getAllTeams = async () => {
   return (await axios.get<IPageResponse<ITeam>>(`${env.backendBaseUrl}/team`)).data.content
 }
