@@ -170,6 +170,12 @@ export interface IKravPrioritering extends IDomainObject {
   prioriteringsId: string
 }
 
+export interface IKravPriorityList extends IDomainObject {
+  id: string
+  temaId: string
+  priorityList: number[]
+}
+
 export interface IBreadCrumbPath {
   href: string
   pathName: string
