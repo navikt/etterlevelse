@@ -45,12 +45,6 @@ export const getVirkemiddelByVirkemiddelType = async (code: string) => {
   ).data.content
 }
 
-export const searchVirkemiddel = async (name: string) => {
-  return (
-    await axios.get<IPageResponse<IVirkemiddel>>(`${env.backendBaseUrl}/virkemiddel/search/${name}`)
-  ).data.content
-}
-
 export const createVirkemiddel = async (virkemiddel: IVirkemiddel) => {
   const dto = virkemiddelToVirkemiddelDto(virkemiddel)
   return (await axios.post<IVirkemiddel>(`${env.backendBaseUrl}/virkemiddel`, dto)).data
