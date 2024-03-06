@@ -96,15 +96,6 @@ export const updateAsAdminEtterlevelseArkiv = async (etterlevelseArkiv: IEtterle
   ).data
 }
 
-export const updateToArkivert = async (failedToArchiveEtterlevelseNr: string[]) => {
-  return (
-    await axios.put<IPageResponse<IEtterlevelseArkiv>>(
-      `${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`,
-      { failedToArchiveEtterlevelseNr }
-    )
-  ).data
-}
-
 function etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv: IEtterlevelseArkiv) {
   const dto = {
     ...etterlevelseArkiv,
