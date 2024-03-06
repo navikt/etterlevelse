@@ -11,7 +11,7 @@ import {
 } from '../constants'
 import { user } from '../services/User'
 import { env } from '../util/env'
-import { useForceUpdate, useSearch } from '../util/hooks'
+import { useForceUpdate } from '../util/hooks'
 
 export const getResourceById = async (resourceId: string) => {
   return (await axios.get<ITeamResource>(`${env.backendBaseUrl}/team/resource/${resourceId}`)).data
@@ -127,7 +127,6 @@ export const usePersonName = () => {
     return people.get(id)?.v || id
   }
 }
-export const useSearchTeam = () => useSearch(searchTeam)
 
 export const useSearchTeamOptions = async (searchParam: string) => {
   if (searchParam && searchParam.length > 2) {
