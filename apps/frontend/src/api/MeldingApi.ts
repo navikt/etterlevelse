@@ -78,12 +78,3 @@ export const mapMeldingToFormValue = (melding: Partial<IMelding>): IMelding => {
     alertType: melding.alertType || EAlertType.WARNING,
   }
 }
-
-export const meldingStatusToString = (status: EMeldingStatus): string => {
-  switch (status) {
-    case EMeldingStatus.ACTIVE:
-      return 'Synlig/Aktiv'
-    case EMeldingStatus.DEACTIVE:
-      return 'Skjult/Deaktivert'
-  }
-}
