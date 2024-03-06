@@ -83,7 +83,13 @@ export const EditEtterlevelseDokumentasjonModal = (
         const mutatedBehandlinger = response.behandlinger?.map((behandling) => {
           return {
             ...behandling,
-            navn: 'B' + behandling.nummer + ' ' + behandling.overordnetFormaal.shortName + ': ' + behandling.navn,
+            navn:
+              'B' +
+              behandling.nummer +
+              ' ' +
+              behandling.overordnetFormaal.shortName +
+              ': ' +
+              behandling.navn,
           }
         })
         if (setEtterlevelseDokumentasjon) {
@@ -152,25 +158,6 @@ export const EditEtterlevelseDokumentasjonModal = (
                           return (
                             <FormControl label={<LabelWithTooltip label={'Legg til virkemiddel'} tooltip="Søk og legg til virkemiddel" />}>
                               <Block>
-                                <CustomizedSelect
-                                  labelKey={'navn'}
-                                  noResultsMsg={intl.emptyTable}
-                                  maxDropdownHeight="350px"
-                                  searchable={true}
-                                  type={TYPE.search}
-                                  options={virkemiddelSearchResult}
-                                  placeholder={'Søk virkemiddel'}
-                                  onInputChange={(event) => setVirkemiddelSearchResult(event.currentTarget.value)}
-                                  onChange={(params) => {
-                                    let virkemiddel = params.value.length ? params.value[0] : undefined
-                                    if (virkemiddel) {
-                                      fp.form.values['virkemiddelId'] = virkemiddel.id
-                                      setSelectedVirkemiddel(virkemiddel as Virkemiddel)
-                                    }
-                                  }}
-                                  isLoading={loadingVirkemiddelSearchResult}
-                                  overrides={selectCustomOverrides('virkemiddelId', fp)}
-                                />
                                 {selectedVirkemiddel && (
                                   <Tag
                                     variant={VARIANT.outlined}
