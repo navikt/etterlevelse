@@ -86,21 +86,6 @@ export const useVirkemiddelPage = (pageSize: number) => {
   ]
 }
 
-export const useVirkemiddel = (id: string, onlyLoadOnce?: boolean) => {
-  const isCreateNew = id === 'ny'
-  const [data, setData] = useState<IVirkemiddel | undefined>(
-    isCreateNew ? virkemiddelMapToFormVal({}) : undefined
-  )
-
-  const load = () => {
-    if (data && onlyLoadOnce) return
-    id && !isCreateNew && getVirkemiddel(id).then(setData)
-  }
-  useEffect(load, [id])
-
-  return [data, setData, load] as [IVirkemiddel | undefined, (v?: IVirkemiddel) => void, () => void]
-}
-
 export const useVirkemiddelFilter = () => {
   const [data, setData] = useState<IVirkemiddel[]>([])
   const [totalDataLength, setTotalDataLenght] = useState<number>(0)
