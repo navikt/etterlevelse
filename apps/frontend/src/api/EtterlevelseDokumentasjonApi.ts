@@ -213,7 +213,3 @@ export const etterlevelseDokumentasjonSchema = () =>
     }),
   })
 //graphql
-
-export type TEtterlevelseDokumentasjonFilter = {
-  relevans?: string[]
-}
