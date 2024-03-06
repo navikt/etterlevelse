@@ -24,10 +24,6 @@ export const getKravPage = async (pageNumber: number, pageSize: number) => {
   ).data
 }
 
-export const getKrav = async (id: string) => {
-  return (await axios.get<IKrav>(`${env.backendBaseUrl}/krav/${id}`)).data
-}
-
 export const deleteKrav = async (id: string) => {
   return (await axios.delete<IKrav>(`${env.backendBaseUrl}/krav/${id}`)).data
 }
