@@ -2,7 +2,6 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { IBehandling, IPageResponse } from '../constants'
 import { env } from '../util/env'
-import { useSearch } from '../util/hooks'
 
 export const getBehandling = async (id: string) => {
   return (await axios.get<IBehandling>(`${env.backendBaseUrl}/behandling/${id}`)).data
@@ -55,7 +54,6 @@ export const behandlingName = (behandling?: IBehandling) => {
 
   return behandlingName
 }
-export const useSearchBehandling = () => useSearch(searchBehandling)
 
 export const searchBehandlingOptions = async (searchParam: string) => {
   if (searchParam && searchParam.length > 2) {
@@ -64,7 +62,13 @@ export const searchBehandlingOptions = async (searchParam: string) => {
       return behandlinger.map((behandling) => {
         return {
           value: behandling.id,
-          label: 'B' + behandling.nummer + ' ' + behandling.overordnetFormaal.shortName + ': ' + behandling.navn,
+          label:
+            'B' +
+            behandling.nummer +
+            ' ' +
+            behandling.overordnetFormaal.shortName +
+            ': ' +
+            behandling.navn,
           ...behandling,
         }
       })
