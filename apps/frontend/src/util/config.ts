@@ -26,5 +26,4 @@ export const behandlingLink = (id: string) => `${env.pollyBaseUrl}process/${id}`
 export const termUrl = (termId: string) =>
   `https://navno.sharepoint.com/sites/begreper/SitePages/Begrep.aspx?bid=${termId}`
 
-export const navStartDate = '2006-07-01'
 export const maxDate = '9999-12-31'
