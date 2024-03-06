@@ -175,11 +175,6 @@ export interface IBreadCrumbPath {
   pathName: string
 }
 
-export interface IKravId {
-  id: string
-  kravVersjon: number
-}
-
 export interface IKravVersjon {
   kravNummer: string | number
   kravVersjon: string | number
