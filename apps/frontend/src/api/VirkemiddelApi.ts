@@ -2,7 +2,6 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { IPageResponse, IVirkemiddel } from '../constants'
 import { env } from '../util/env'
-import { emptyPage } from './util/EmpyPageConstant'
 
 export const getAllVirkemiddel = async () => {
   const PAGE_SIZE = 100
@@ -54,30 +53,6 @@ export const updateVirkemiddel = async (virkemiddel: IVirkemiddel) => {
   const dto = virkemiddelToVirkemiddelDto(virkemiddel)
   return (await axios.put<IVirkemiddel>(`${env.backendBaseUrl}/virkemiddel/${virkemiddel.id}`, dto))
     .data
-}
-
-export const useVirkemiddelPage = (pageSize: number) => {
-  const [data, setData] = useState<IPageResponse<IVirkemiddel>>(emptyPage)
-  const [page, setPage] = useState<number>(0)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    setLoading(true)
-    getVirkemiddelPage(page, pageSize).then((r) => {
-      setData(r)
-      setLoading(false)
-    })
-  }, [page, pageSize])
-
-  const prevPage = () => setPage(Math.max(0, page - 1))
-  const nextPage = () => setPage(Math.min(data?.pages ? data.pages - 1 : 0, page + 1))
-
-  return [data, prevPage, nextPage, loading] as [
-    IPageResponse<IVirkemiddel>,
-    () => void,
-    () => void,
-    boolean,
-  ]
 }
 
 export const useVirkemiddelFilter = () => {
