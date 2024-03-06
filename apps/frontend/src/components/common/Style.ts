@@ -5,13 +5,6 @@ export const marginZero = {
   marginBottom: '0px',
 }
 
-export const margin = (topBot: string, leftRight: string) => ({
-  marginLeft: leftRight,
-  marginRight: leftRight,
-  marginTop: topBot,
-  marginBottom: topBot,
-})
-
 export const padding = (topBot: string, leftRight: string) => ({
   paddingLeft: leftRight,
   paddingRight: leftRight,
