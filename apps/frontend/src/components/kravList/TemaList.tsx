@@ -53,7 +53,7 @@ export const TemaList = () => {
             .includes(tema.code)
         })
         return activeKraver && activeKraver.length > 0 ? (
-          <Accordion.Item>
+          <Accordion.Item key={tema.code}>
             <Accordion.Header key={`${tema.code}_krav_list`}>
               <KravPanelHeader
                 title={tema.shortName}
@@ -71,7 +71,7 @@ export const TemaList = () => {
             </Accordion.Content>
           </Accordion.Item>
         ) : (
-          <Accordion.Item>
+          <Accordion.Item key={tema.code}>
             <Accordion.Header key={`${tema.code}_krav_list`}>
               <KravPanelHeader title={tema.shortName} kravData={[]} />
             </Accordion.Header>
