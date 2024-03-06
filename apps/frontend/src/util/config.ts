@@ -25,5 +25,3 @@ export const teamKatTeamLink = (id: string) => `${env.teamKatBaseUrl}team/${id}`
 export const behandlingLink = (id: string) => `${env.pollyBaseUrl}process/${id}`
 export const termUrl = (termId: string) =>
   `https://navno.sharepoint.com/sites/begreper/SitePages/Begrep.aspx?bid=${termId}`
-
-export const maxDate = '9999-12-31'
