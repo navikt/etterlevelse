@@ -154,7 +154,6 @@ const overrides: TRecursivePartial<Theme> = {
 }
 
 export const theme = createTheme(primitives, overrides)
-export const pageWidth = '820px'
 
 export const responsivePaddingSmall: Responsive<Scale> = [
   '16px',
