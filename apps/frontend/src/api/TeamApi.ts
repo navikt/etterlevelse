@@ -170,7 +170,9 @@ export const useMyTeams = () => {
           if (teamListe.length === 0) {
             getAllTeams().then((response) => {
               const teamList = productAreas
-                .map((productArea) => response.filter((team) => productArea.id === team.productAreaId))
+                .map((productArea) =>
+                  response.filter((team) => productArea.id === team.productAreaId)
+                )
                 .flat()
               const uniqueValuesSet = new Set()
 
@@ -241,9 +243,3 @@ export const useSlackChannelSearch = async (searchParam: string) => {
   }
   return []
 }
-
-/**
- * Will not work unless the people have been loaded already (by using usePersonName hook etc)
- */
-export const personIdentSort = (a: string, b: string) =>
-  (people.get(a)?.v || '').localeCompare(people.get(b)?.v || '')
