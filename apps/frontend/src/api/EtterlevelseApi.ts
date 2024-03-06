@@ -10,7 +10,7 @@ import {
 } from '../constants'
 import { env } from '../util/env'
 import { TKravId } from './KravApi'
-import { emptyPage } from './util/EmpyPageConstant'
+import { emptyPage } from './util/EmptyPageConstant'
 
 export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) => {
   return (

@@ -1,7 +1,7 @@
 import { PlusIcon } from '@navikt/aksel-icons'
 import { Alert, BodyShort, Button, Label, Loader, Select } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { emptyPage } from '../../api/util/EmpyPageConstant'
+import { emptyPage } from '../../api/util/EmptyPageConstant'
 import { EKravListFilter, EKravStatus, TKravQL, TOption } from '../../constants'
 import { KravPanels, sortKrav } from '../../pages/KravListPage'
 import { kravStatus } from '../../pages/KravPage'
