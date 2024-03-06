@@ -16,14 +16,6 @@ export const getMeldingByType = async (meldingType: EMeldingType) => {
   ).data
 }
 
-export const getMeldingByStatus = async (meldingStatus: EMeldingStatus) => {
-  return (
-    await axios.get<IPageResponse<IMelding>>(
-      `${env.backendBaseUrl}/melding/status/${meldingStatus}`
-    )
-  ).data
-}
-
 export const deleteMelding = async (id: string) => {
   return (await axios.delete<IMelding>(`${env.backendBaseUrl}/melding/${id}`)).data
 }
