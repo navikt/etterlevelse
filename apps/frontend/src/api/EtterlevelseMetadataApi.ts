@@ -2,14 +2,6 @@ import axios from 'axios'
 import { IEtterlevelseMetadata, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
-export const getEtterlevelseMetadataByPage = async (pageNumber: number, pageSize: number) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelseMetadata>>(
-      `${env.backendBaseUrl}/etterlevelsemetadata?pageNumber=${pageNumber}&pageSize=${pageSize}`
-    )
-  ).data
-}
-
 export const getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion = async (
   etterlevelseDokumentasjonId: string,
   kravNummer: number,
