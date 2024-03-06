@@ -261,10 +261,6 @@ export const codeListSchema: yup.ObjectSchema<ICodeListFormValues> = yup.object(
   }),
 })
 
-export const codelistCompare = (a?: ICode, b?: ICode) => {
-  return (a?.shortName || '').localeCompare(b?.shortName || '')
-}
-
 export const lovCodeRelevansToText = (lovCodeRelevans: string) => {
   switch (lovCodeRelevans) {
     case ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL.toString():
