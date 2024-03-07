@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { IPageResponse, IVirkemiddel, emptyPage } from '../constants'
 import { env } from '../util/env'
-import { useDebouncedState } from '../util/hooks'
+import { useDebouncedState } from '../util/hooks/customHooks'
 
 export const getAllVirkemiddel = async () => {
   const PAGE_SIZE = 100
