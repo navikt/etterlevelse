@@ -122,13 +122,16 @@ export const AllKrav = () => {
 
   const kravene = data?.krav || emptyPage
 
-  const getOptions = (label: string, options: any[]) => [{ label: label, id: 'alle' }, ...options]
+  const getOptions = (label: string, options: any[]) => [
+    { label: label, value: 'alle' },
+    ...options,
+  ]
 
   const getLovOptions = () => {
     return getOptions(
       'Alle lover',
       lover.map((lov) => {
-        return { label: lov.shortName, id: lov.code }
+        return { label: lov.shortName, value: lov.code }
       })
     )
   }
@@ -148,8 +151,8 @@ export const AllKrav = () => {
             updateFilter(
               [
                 {
-                  id: params.currentTarget.value,
-                  label: options.filter((o) => o.id === params.currentTarget.value)[0].label,
+                  value: params.currentTarget.value,
+                  label: options.filter((o) => o.value === params.currentTarget.value)[0].label,
                 },
               ],
               kravFilter
@@ -158,7 +161,7 @@ export const AllKrav = () => {
           className={'flex'}
         >
           {options.map((option) => (
-            <option value={option.id} key={kravFilter + '_' + option.id}>
+            <option value={option.value} key={kravFilter + '_' + option.value}>
               {option.label}
             </option>
           ))}
@@ -188,7 +191,7 @@ export const AllKrav = () => {
                 getOptions(
                   'Alle relevans',
                   relevans?.map((relevans) => {
-                    return { label: relevans.shortName, id: relevans.code }
+                    return { label: relevans.shortName, value: relevans.code }
                   })
                 )
               )}
@@ -197,7 +200,7 @@ export const AllKrav = () => {
                 EKravListFilter.STATUS,
                 getOptions(
                   'Alle statuser',
-                  Object.values(EKravStatus).map((id) => ({ id, label: kravStatus(id) }))
+                  Object.values(EKravStatus).map((value) => ({ value, label: kravStatus(value) }))
                 )
               )}
             </div>
