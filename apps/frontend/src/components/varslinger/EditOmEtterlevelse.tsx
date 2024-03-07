@@ -85,7 +85,7 @@ export const EditOmEtterlevelse = ({
                 name="secondaryMelding"
               />
 
-              <div className="flex w-full">
+              <div className="flex w-full mt-2.5">
                 <Button
                   type="button"
                   variant="secondary"

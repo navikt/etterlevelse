@@ -1,5 +1,5 @@
 import { BodyShort, Heading, Link } from '@navikt/ds-react'
-import { ParagraphSmall } from 'baseui/typography'
+
 import { TEtterlevelseDokumentasjonQL } from '../../../constants'
 import { TCustomTeamObject } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { env } from '../../../util/env'
@@ -29,7 +29,7 @@ export const MineEtterlevelseDokumentasjoner = ({
     {!loading && (
       <div>
         {!etterlevelseDokumentasjoner.length && !teams.length && (
-          <ParagraphSmall>Du er ikke medlem av team med registrerte dokumentasjoner</ParagraphSmall>
+          <BodyShort>Du er ikke medlem av team med registrerte dokumentasjoner</BodyShort>
         )}
 
         {teams.map((team) => {

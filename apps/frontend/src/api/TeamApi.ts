@@ -1,6 +1,5 @@
 import axios from 'axios'
-import { Option } from 'baseui/select'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   IPageResponse,
   IProductArea,
@@ -11,7 +10,7 @@ import {
 } from '../constants'
 import { user } from '../services/User'
 import { env } from '../util/env'
-import { useForceUpdate, useSearch } from '../util/hooks'
+import { useForceUpdate, useSearch } from '../util/hooks/customHooks'
 
 export const getResourceById = async (resourceId: string) => {
   return (await axios.get<ITeamResource>(`${env.backendBaseUrl}/team/resource/${resourceId}`)).data
@@ -170,7 +169,9 @@ export const useMyTeams = () => {
           if (teamListe.length === 0) {
             getAllTeams().then((response) => {
               const teamList = productAreas
-                .map((productArea) => response.filter((team) => productArea.id === team.productAreaId))
+                .map((productArea) =>
+                  response.filter((team) => productArea.id === team.productAreaId)
+                )
                 .flat()
               const uniqueValuesSet = new Set()
 
@@ -219,8 +220,6 @@ export const useMyProductAreas = () => {
 
   return [data, loading] as [IProductArea[], boolean]
 }
-
-export type TSearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]
 
 export const usePersonSearch = async (searchParam: string) => {
   if (searchParam && searchParam.replace(/ /g, '').length > 2) {

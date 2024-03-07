@@ -1,24 +1,12 @@
-import { Block } from 'baseui/block'
-import { FormControl } from 'baseui/form-control'
-import { TYPE } from 'baseui/select'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import { useSearchVirkemiddel } from '../../../api/VirkemiddelApi'
-import { IVirkemiddel } from '../../../constants'
-import { intl } from '../../../util/intl/intl'
-import { searchIcon } from '../../Images'
-import CustomizedSelect from '../../common/CustomizedSelect'
 import { FieldWrapper } from '../../common/Inputs'
-import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { FormError } from '../../common/ModalSchema'
-import { borderWidth } from '../../common/Style'
-import { RenderTagList } from '../../common/TagList'
 
 export const EditVirkemidler = () => {
-  const [result, setSearch, loading] = useSearchVirkemiddel()
+  // const [result, setSearch, loading] = useSearchVirkemiddel()
 
   return (
     <FieldWrapper>
-      <FieldArray name="virkemidler">
+      {/* <FieldArray name="virkemidler">
         {(fieldArrayRenderProps: FieldArrayRenderProps) => {
           return (
             <FormControl
@@ -29,7 +17,7 @@ export const EditVirkemidler = () => {
                 />
               }
             >
-              <Block>
+              <div>
                 <CustomizedSelect
                   overrides={{
                     SearchIcon: {
@@ -81,11 +69,11 @@ export const EditVirkemidler = () => {
                   list={fieldArrayRenderProps.form.values.virkemidler.map((virkemiddel: IVirkemiddel) => virkemiddel.navn)}
                   onRemove={fieldArrayRenderProps.remove}
                 />
-              </Block>
+              </div>
             </FormControl>
           )
         }}
-      </FieldArray>
+      </FieldArray> */}
       <FormError fieldName="virkemidler" />
     </FieldWrapper>
   )

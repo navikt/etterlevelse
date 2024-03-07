@@ -1,5 +1,4 @@
-import { Loader } from '@navikt/ds-react'
-import { ParagraphSmall } from 'baseui/typography'
+import { BodyShort, Loader } from '@navikt/ds-react'
 import moment from 'moment'
 import { TEtterlevelseDokumentasjonQL } from '../../../constants'
 import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
@@ -21,7 +20,7 @@ export const SisteEtterlevelseDokumentasjoner = ({
     <div className="my-5">
       {loading && <Loader size="large" />}
       {!etterlevelseDokumentasjoner.length && !loading && (
-        <ParagraphSmall>Du har ikke dokumentert etterlevelse på krav</ParagraphSmall>
+        <BodyShort>Du har ikke dokumentert etterlevelse på krav</BodyShort>
       )}
       {etterlevelseDokumentasjoner.length > 0 && !loading && (
         <EtterlevelseDokumentasjonsPanels etterlevelseDokumentasjoner={sorted} loading={loading} />

@@ -7,7 +7,7 @@ import {
   updateEtterlevelseMetadata,
 } from '../../api/EtterlevelseMetadataApi'
 import { IEtterlevelseMetadata } from '../../constants'
-import { useDebouncedState } from '../../util/hooks'
+import { useDebouncedState } from '../../util/hooks/customHooks'
 import TextEditor from '../common/TextEditor/TextEditor'
 
 type TEditNotatfeltProps = {

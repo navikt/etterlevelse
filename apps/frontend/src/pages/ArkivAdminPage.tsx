@@ -66,11 +66,11 @@ export const ArkivAdminPage = () => {
     .slice((page - 1) * rowsPerPage, page * rowsPerPage)
 
   const options = [
-    { label: 'Ikke arkiver', id: EEtterlevelseArkivStatus.IKKE_ARKIVER },
-    { label: 'Error', id: EEtterlevelseArkivStatus.ERROR },
-    { label: 'Arkivert', id: EEtterlevelseArkivStatus.ARKIVERT },
-    { label: 'Behandler arkivering', id: EEtterlevelseArkivStatus.BEHANDLER_ARKIVERING },
-    { label: 'Til arkivering', id: EEtterlevelseArkivStatus.TIL_ARKIVERING },
+    { label: 'Ikke arkiver', value: EEtterlevelseArkivStatus.IKKE_ARKIVER },
+    { label: 'Error', value: EEtterlevelseArkivStatus.ERROR },
+    { label: 'Arkivert', value: EEtterlevelseArkivStatus.ARKIVERT },
+    { label: 'Behandler arkivering', value: EEtterlevelseArkivStatus.BEHANDLER_ARKIVERING },
+    { label: 'Til arkivering', value: EEtterlevelseArkivStatus.TIL_ARKIVERING },
   ]
 
   useEffect(() => {
@@ -106,6 +106,7 @@ export const ArkivAdminPage = () => {
         <TextField
           label="Oppdatere arkivering status"
           placeholder="Arkiverings UID"
+          value={arkiveringId}
           onChange={(e) => setArkiveringId(e.target.value)}
           className="flex-1 mr-3"
         />
@@ -118,7 +119,7 @@ export const ArkivAdminPage = () => {
           {options.map((option, index) => {
             ;<option value="">Velg status</option>
             return (
-              <option key={index + '_' + option.label} value={option.id}>
+              <option key={index + '_' + option.label} value={option.value}>
                 {option.label}
               </option>
             )

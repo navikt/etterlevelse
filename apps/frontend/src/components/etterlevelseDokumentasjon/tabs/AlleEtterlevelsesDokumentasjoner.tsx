@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { IPageResponse, TEtterlevelseDokumentasjonQL, emptyPage } from '../../../constants'
 import { TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { getEtterlevelseDokumentasjonListQuery } from '../../../query/EtterlevelseDokumentasjonQuery'
-import { useDebouncedState } from '../../../util/hooks'
+import { useDebouncedState } from '../../../util/hooks/customHooks'
 import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 
 export const AlleEtterlevelsesDokumentasjoner = () => {

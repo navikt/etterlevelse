@@ -70,8 +70,6 @@ import moneyImage from '../resources/img/money.png'
 import navImage from '../resources/img/nav-logo-red.svg'
 import peopleImage from '../resources/img/people.png'
 import scalesImage from '../resources/img/scales.png'
-import { EListName, TLovCode, TTemaCode, codelist } from '../services/Codelist'
-import { theme } from '../util'
 
 export {
   angleIcon,
@@ -151,47 +149,3 @@ export const temaBilder: { [id: string]: string } = {
   CAMERA: cameraImage,
   GUARDIAN: guardianImage,
 }
-
-const bildeForLov = (code: TLovCode) => bildeForTema(code.data?.tema)
-
-const bildeForTema = (code?: string) => {
-  const temaCode = codelist.getCode(EListName.TEMA, code)
-  const imageCode = temaCode?.data?.image
-  return imageCode ? temaBilder[imageCode] || bookImage : bookImage
-}
-
-export const LovBilde = (props: { code: TLovCode } & TBildeProps) => (
-  <Bilde
-    {...props}
-    src={bildeForLov(props.code)}
-    alt={`Lov illustrasjon: ${props.code.shortName}`}
-  />
-)
-
-export const TemaBilde = (props: { code: TTemaCode } & TBildeProps) => (
-  <Bilde
-    {...props}
-    src={bildeForTema(props.code.code)}
-    alt={`Tema illustrasjon: ${props.code.shortName}`}
-  />
-)
-
-type TBildeProps = {
-  width?: string
-  height?: string
-  ellipse?: boolean
-}
-
-const Bilde = (props: { src: string; alt: string } & TBildeProps) => (
-  <img
-    src={props.src}
-    width={props.width}
-    height={props.height}
-    style={{
-      objectFit: 'cover',
-      borderRadius: props.ellipse ? '15px' : undefined,
-      border: props.ellipse ? `2px solid ${theme.colors.mono600}` : undefined,
-    }}
-    alt={props.alt}
-  />
-)

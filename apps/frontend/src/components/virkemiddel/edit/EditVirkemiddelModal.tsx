@@ -1,5 +1,4 @@
 import { Button, Modal } from '@navikt/ds-react'
-import { FormControl } from 'baseui/form-control'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import Select, { CSSObjectWithLabel } from 'react-select'
@@ -90,45 +89,40 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
                 <FieldWrapper>
                   <Field name="virkemiddelType">
                     {(fp: FieldProps) => (
-                      <FormControl
-                        label={
-                          <LabelWithTooltip
-                            label="Legg til virkemiddeltype"
-                            tooltip="Søk og legg til virkemiddeltype fra kodeverket"
-                          />
-                        }
-                      >
-                        <div className="w-full max-w-[400px]">
-                          <Select
-                            options={virkemiddelTypeOptions}
-                            placeholder="Velg virkemiddeltype"
-                            aria-label="Velg virkemiddeltype"
-                            value={valgtVirkemiddeltype}
-                            onChange={(value) => {
-                              if (value) {
-                                setValgtVirkemiddeltype(value)
-                                fp.form.setFieldValue('virkemiddelType', value.value)
-                              }
-                            }}
-                            styles={{
-                              control: (baseStyles) =>
-                                ({
-                                  ...baseStyles,
-                                  height: '48px',
-                                  borderColor: fp.form.errors.virkemiddelType
-                                    ? ettlevColors.red500
-                                    : ettlevColors.textAreaBorder,
-                                  ...borderWidth(fp.form.errors.virkemiddelType ? '2px' : '1px'),
-                                }) as CSSObjectWithLabel,
-                              menu: (baseStyles) =>
-                                ({
-                                  ...baseStyles,
-                                  zIndex: 2,
-                                }) as CSSObjectWithLabel,
-                            }}
-                          />
-                        </div>
-                      </FormControl>
+                      <div className="w-full max-w-[400px]">
+                        <LabelWithTooltip
+                          label="Legg til virkemiddeltype"
+                          tooltip="Søk og legg til virkemiddeltype fra kodeverket"
+                        />
+                        <Select
+                          options={virkemiddelTypeOptions}
+                          placeholder="Velg virkemiddeltype"
+                          aria-label="Velg virkemiddeltype"
+                          value={valgtVirkemiddeltype}
+                          onChange={(value) => {
+                            if (value) {
+                              setValgtVirkemiddeltype(value)
+                              fp.form.setFieldValue('virkemiddelType', value.value)
+                            }
+                          }}
+                          styles={{
+                            control: (baseStyles) =>
+                              ({
+                                ...baseStyles,
+                                height: '48px',
+                                borderColor: fp.form.errors.virkemiddelType
+                                  ? ettlevColors.red500
+                                  : ettlevColors.textAreaBorder,
+                                ...borderWidth(fp.form.errors.virkemiddelType ? '2px' : '1px'),
+                              }) as CSSObjectWithLabel,
+                            menu: (baseStyles) =>
+                              ({
+                                ...baseStyles,
+                                zIndex: 2,
+                              }) as CSSObjectWithLabel,
+                          }}
+                        />
+                      </div>
                     )}
                   </Field>
 
