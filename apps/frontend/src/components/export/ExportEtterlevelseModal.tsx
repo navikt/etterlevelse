@@ -3,8 +3,6 @@ import axios from 'axios'
 import { useState } from 'react'
 import { EListName, codelist } from '../../services/Codelist'
 import { env } from '../../util/env'
-import { ettlevColors } from '../../util/theme'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginZero } from '../common/Style'
 
 type TExportEtterlevelseModalProps = {
   etterlevelseDokumentasjonId: string
