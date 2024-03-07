@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { IBehandling, IPageResponse } from '../constants'
 import { env } from '../util/env'
-import { useSearch } from '../util/hooks'
+import { useSearch } from '../util/hooks/customHooks'
 
 export const getBehandling = async (id: string) => {
   return (await axios.get<IBehandling>(`${env.backendBaseUrl}/behandling/${id}`)).data
