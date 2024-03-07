@@ -7,7 +7,7 @@ import {
   ISuksesskriterie,
   ISuksesskriterieBegrunnelse,
 } from '../../../constants'
-import { useDebouncedState } from '../../../util/hooks'
+import { useDebouncedState } from '../../../util/hooks/customHooks'
 import { FieldWrapper } from '../../common/Inputs'
 import { Markdown } from '../../common/Markdown'
 import { FormError } from '../../common/ModalSchema'
