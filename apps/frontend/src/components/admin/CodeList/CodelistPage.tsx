@@ -75,9 +75,9 @@ const CodeListPage = () => {
             onChange={(e) => setListname(e.target.value)}
           >
             <option value="">Velg kodeverk</option>
-            {codelist.makeIdLabelForAllCodeLists().map((codeLabel, index) => {
+            {codelist.makeValueLabelForAllCodeLists().map((codeLabel, index) => {
               return (
-                <option key={index + '_' + codeLabel.label} value={codeLabel.id}>
+                <option key={index + '_' + codeLabel.label} value={codeLabel.value}>
                   {codeLabel.label}
                 </option>
               )

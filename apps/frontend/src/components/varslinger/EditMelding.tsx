@@ -114,7 +114,7 @@ export const EditMelding = ({
                 noPlaceholder
                 name="melding"
               />
-              <div className="flex w-full">
+              <div className="flex w-full mt-2.5">
                 <Button
                   type="button"
                   variant="secondary"
