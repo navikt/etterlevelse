@@ -8,7 +8,7 @@ import { apolloClient } from './api/ApolloClient'
 import Header from './components/Header'
 import { Footer } from './components/Navigation/Footer'
 import { codelist } from './services/Codelist'
-import { useAwait, useAwaitUser } from './util/hooks'
+import { useAwait, useAwaitUser } from './util/hooks/customHooks'
 import { useNetworkStatus } from './util/network'
 
 const engine = new Styletron()
