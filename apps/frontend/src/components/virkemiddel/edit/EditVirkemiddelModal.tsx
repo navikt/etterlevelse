@@ -67,7 +67,7 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
   return (
     <div>
       <Modal
-        width="1000px"
+        width="6.25rem"
         open={!!props.isOpen}
         onClose={() => props.setIsOpen(false)}
         header={{
@@ -89,7 +89,7 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
                 <FieldWrapper>
                   <Field name="virkemiddelType">
                     {(fp: FieldProps) => (
-                      <div className="w-full max-w-[400px]">
+                      <div className="w-full max-w-[25rem]">
                         <LabelWithTooltip
                           label="Legg til virkemiddeltype"
                           tooltip="Søk og legg til virkemiddeltype fra kodeverket"
@@ -109,11 +109,13 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
                             control: (baseStyles) =>
                               ({
                                 ...baseStyles,
-                                height: '48px',
+                                height: '3rem',
                                 borderColor: fp.form.errors.virkemiddelType
                                   ? ettlevColors.red500
                                   : ettlevColors.textAreaBorder,
-                                ...borderWidth(fp.form.errors.virkemiddelType ? '2px' : '1px'),
+                                ...borderWidth(
+                                  fp.form.errors.virkemiddelType ? '0.125rem' : '0.063rem'
+                                ),
                               }) as CSSObjectWithLabel,
                             menu: (baseStyles) =>
                               ({

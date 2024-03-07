@@ -100,7 +100,7 @@ export const TemaPanel = ({
               <div key={lov.code} className="flex items-center gap-2">
                 {lov.shortName}
                 {index < lover.length - 1 && (
-                  <span className="hidden lg:block h-2 w-2 rotate-45 rounded-[1px] bg-red-200"></span>
+                  <span className="hidden lg:block h-2 w-2 rotate-45 rounded-[0.063rem] bg-red-200"></span>
                 )}
               </div>
             ))}

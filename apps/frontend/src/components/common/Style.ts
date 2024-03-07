@@ -1,8 +1,8 @@
 export const marginZero = {
-  marginLeft: '0px',
-  marginRight: '0px',
-  marginTop: '0px',
-  marginBottom: '0px',
+  marginLeft: '0rem',
+  marginRight: '0rem',
+  marginTop: '0rem',
+  marginBottom: '0rem',
 }
 export const marginAll = (marg: string) => ({
   marginLeft: marg,
@@ -17,10 +17,10 @@ export const margin = (topBot: string, leftRight: string) => ({
   marginBottom: topBot,
 })
 export const paddingZero = {
-  paddingLeft: '0px',
-  paddingRight: '0px',
-  paddingTop: '0px',
-  paddingBottom: '0px',
+  paddingLeft: '0rem',
+  paddingRight: '0rem',
+  paddingTop: '0rem',
+  paddingBottom: '0rem',
 }
 export const padding = (topBot: string, leftRight: string) => ({
   paddingLeft: leftRight,
@@ -64,7 +64,7 @@ export const cardShadow = {
   Root: {
     style: {
       ...hideBorder,
-      boxShadow: '0px 0px 6px 3px rgba(0,0,0,0.08);',
+      boxShadow: '0rem 0rem 0.375rem 0.188rem rgba(0,0,0,0.08);',
     },
   },
 }

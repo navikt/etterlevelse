@@ -100,7 +100,7 @@ export const AllVirkemiddel = ({
                       control: (baseStyles) =>
                         ({
                           ...baseStyles,
-                          minHeight: '48px',
+                          minHeight: '3rem',
                         }) as CSSObjectWithLabel,
                     }}
                   />

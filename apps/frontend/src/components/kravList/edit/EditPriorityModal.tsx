@@ -65,7 +65,9 @@ export const EditPriorityModal = (props: {
         } else {
           return {
             ...krav,
-            prioriteringsId: krav.prioriteringsId.concat(tema.substring(0, 3).toUpperCase() + number),
+            prioriteringsId: krav.prioriteringsId.concat(
+              tema.substring(0, 3).toUpperCase() + number
+            ),
           }
         }
       }
@@ -112,7 +114,7 @@ export const EditPriorityModal = (props: {
       {({ submitForm, handleReset }) => (
         <Modal
           open={isOpen}
-          width={'1280px'}
+          width="80rem"
           onClose={() => {
             handleReset()
             close()
@@ -130,7 +132,11 @@ export const EditPriorityModal = (props: {
               {!loading && kravListe && (
                 <Form>
                   <FieldWrapper>
-                    <FieldArray name={'krav'}>{(fieldArrayRenderProps: FieldArrayRenderProps) => <KravPriorityPanels fieldArrayRenderProps={fieldArrayRenderProps} />}</FieldArray>
+                    <FieldArray name={'krav'}>
+                      {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                        <KravPriorityPanels fieldArrayRenderProps={fieldArrayRenderProps} />
+                      )}
+                    </FieldArray>
                   </FieldWrapper>
                 </Form>
               )}

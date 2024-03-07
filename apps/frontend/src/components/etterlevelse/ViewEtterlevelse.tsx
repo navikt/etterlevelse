@@ -141,7 +141,7 @@ export const ViewEtterlevelse = ({
                     <Markdown source={suksesskriterium.beskrivelse} />
                   </ReadMore>
 
-                  <div className="w-full h-[1px] mt-4 mb-6 bg-gray-400" />
+                  <div className="w-full h-[0.063rem] mt-4 mb-6 bg-gray-400" />
 
                   {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse ||
                   suksessbeskrivelseBegrunnelse.begrunnelse ? (

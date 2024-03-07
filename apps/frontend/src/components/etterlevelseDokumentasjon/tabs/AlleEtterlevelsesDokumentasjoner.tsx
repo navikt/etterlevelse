@@ -62,7 +62,7 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
 
   return (
     <div className="my-5">
-      <div className="max-w-[600px] mb-10 flex flex-col">
+      <div className="max-w-[37.5rem] mb-10 flex flex-col">
         <Search
           label="Søk i alle dokumentasjoner"
           variant="secondary"

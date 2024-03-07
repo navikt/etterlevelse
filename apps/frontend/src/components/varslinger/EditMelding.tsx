@@ -107,7 +107,7 @@ export const EditMelding = ({
               <TextAreaField
                 maxCharacter={maxChar}
                 markdown
-                height="200px"
+                height="12.5rem"
                 label={
                   melding.meldingType === EMeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'
                 }

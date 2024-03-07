@@ -1,5 +1,4 @@
 import { BodyShort, Heading, Link } from '@navikt/ds-react'
-
 import { TEtterlevelseDokumentasjonQL } from '../../../constants'
 import { TCustomTeamObject } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { env } from '../../../util/env'
@@ -74,7 +73,7 @@ export const MineEtterlevelseDokumentasjoner = ({
           )
         })}
 
-        <div className="max-w-[800px] mt-48">
+        <div className="max-w-[50rem] mt-48">
           <InfoBlock2
             icon={bamseIcon}
             alt={'Bamseikon'}
