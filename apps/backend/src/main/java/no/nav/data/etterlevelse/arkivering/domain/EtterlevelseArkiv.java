@@ -28,10 +28,10 @@ public class EtterlevelseArkiv extends DomainObject {
     private LocalDateTime arkiveringAvbruttDato;
     private String webSakNummer;
 
-
-    public EtterlevelseArkiv convert(EtterlevelseArkivRequest request) {
-        behandlingId = request.getBehandlingId();
+    // Updates all fields from the request except id, version and changestamp
+    public EtterlevelseArkiv merge(EtterlevelseArkivRequest request) {
         etterlevelseDokumentasjonId = request.getEtterlevelseDokumentasjonId();
+        behandlingId = request.getBehandlingId();
         arkiveringDato = request.getArkiveringDato();
         arkivertAv = request.getArkivertAv();
         tilArkiveringDato = request.getTilArkiveringDato();

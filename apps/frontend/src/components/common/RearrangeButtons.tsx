@@ -57,8 +57,8 @@ export const RearrangeButtons = (props: IProps) => {
         </Tooltip>
       )}
       {arrayLength !== 1 && (
-        <Tooltip content={'Endre ' + label + ' rekkefølge'}>
-          <Dropdown>
+        <Dropdown>
+          <Tooltip content={'Endre ' + label + ' rekkefølge'}>
             <Button
               as={Dropdown.Toggle}
               type="button"
@@ -70,31 +70,31 @@ export const RearrangeButtons = (props: IProps) => {
                 />
               }
             />
-            <Dropdown.Menu>
-              <TextField
-                label="Angi ønsket plassering"
-                value={plassering}
-                onChange={(event) => setPlassering(event.target.value)}
-                error={parseInt(plassering) ? undefined : 'Skriv et tall større enn 0'}
-              />
-              <Dropdown.Menu.List>
-                <Dropdown.Menu.List.Item
-                  as={Button}
-                  type="button"
-                  variant="primary"
-                  onClick={() => {
-                    const newIndex = parseInt(plassering)
-                    if (newIndex) {
-                      updateIndex(newIndex - 1)
-                    }
-                  }}
-                >
-                  Bytt plassering
-                </Dropdown.Menu.List.Item>
-              </Dropdown.Menu.List>
-            </Dropdown.Menu>
-          </Dropdown>
-        </Tooltip>
+          </Tooltip>
+          <Dropdown.Menu>
+            <TextField
+              label="Angi ønsket plassering"
+              value={plassering}
+              onChange={(event) => setPlassering(event.target.value)}
+              error={parseInt(plassering) ? undefined : 'Skriv et tall større enn 0'}
+            />
+            <Dropdown.Menu.List>
+              <Dropdown.Menu.List.Item
+                as={Button}
+                type="button"
+                variant="primary"
+                onClick={() => {
+                  const newIndex = parseInt(plassering)
+                  if (newIndex) {
+                    updateIndex(newIndex - 1)
+                  }
+                }}
+              >
+                Bytt plassering
+              </Dropdown.Menu.List.Item>
+            </Dropdown.Menu.List>
+          </Dropdown.Menu>
+        </Dropdown>
       )}
     </div>
   )

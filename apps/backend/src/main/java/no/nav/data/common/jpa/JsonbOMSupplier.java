@@ -6,8 +6,10 @@ import no.nav.data.common.utils.JsonUtils;
 
 public class JsonbOMSupplier implements ObjectMapperSupplier {
 
+    private static final ObjectMapper objectMapper = JsonUtils.createObjectMapper();
+    
     @Override
     public ObjectMapper get() {
-        return JsonUtils.getObjectMapper();
+        return objectMapper;
     }
 }

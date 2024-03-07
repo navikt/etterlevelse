@@ -6,6 +6,11 @@ import {
   kravMapToKravPrioriting,
   updateKravPriority,
 } from '../../../api/KravPriorityApi'
+import {
+  createKravPriorityList,
+  updateKravPriorityList,
+  useKravPriorityList,
+} from '../../../api/KravPriorityListApi'
 import { IKrav } from '../../../constants'
 import { FieldWrapper } from '../../common/Inputs'
 import { KravPriorityPanel } from './components/KravPriorityPanel'
@@ -38,10 +43,13 @@ export const EditPriorityModal = (props: {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
   kravListe: IKrav[]
   tema: string
+  temaCode: string
   refresh: () => void
 }) => {
-  const { isOpen, setIsOpen, kravListe, tema, refresh } = props
+  const { isOpen, setIsOpen, kravListe, tema, temaCode, refresh } = props
   const [loading, setLoading] = React.useState(false)
+
+  const [kravPriorityList, kravPriorityLoading] = useKravPriorityList(temaCode)
 
   const setPriority = (kravListe: IKrav[]) => {
     const pattern = new RegExp(tema.substr(0, 3).toUpperCase() + '[0-9]+')
@@ -76,6 +84,29 @@ export const EditPriorityModal = (props: {
 
   const submit = ({ krav }: { krav: IKrav[] }) => {
     setLoading(true)
+
+    if (!kravPriorityLoading) {
+      if (kravPriorityList && kravPriorityList.id) {
+        ;(async () =>
+          await updateKravPriorityList({
+            id: kravPriorityList.id,
+            temaId: temaCode,
+            priorityList: krav.map((krav) => krav.kravNummer),
+            changeStamp: kravPriorityList.changeStamp,
+            version: kravPriorityList.version,
+          }))()
+      } else {
+        ;(async () =>
+          await createKravPriorityList({
+            id: '',
+            temaId: temaCode,
+            priorityList: krav.map((krav) => krav.kravNummer),
+            changeStamp: { lastModifiedDate: '', lastModifiedBy: '' },
+            version: -1,
+          }))()
+      }
+    }
+
     const updateKravPriorityPromise: Promise<any>[] = []
     const kravMedPrioriteting = setPriority([...krav])
     kravMedPrioriteting.forEach((kmp) => {

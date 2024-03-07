@@ -17,9 +17,9 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SuksesskriterieBegrunnelseRequest implements Validated {
+
     private int suksesskriterieId;
     private String begrunnelse;
-
     private SuksesskriterieStatus suksesskriterieStatus;
 
     @Override

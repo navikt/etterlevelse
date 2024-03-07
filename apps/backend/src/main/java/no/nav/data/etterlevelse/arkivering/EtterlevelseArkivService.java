@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.arkivering;
 
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
@@ -23,13 +24,9 @@ import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionO
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
     private final EtterlevelseArkivRepo repo;
-
-
-    public EtterlevelseArkivService(EtterlevelseArkivRepo repo) {
-        this.repo = repo;
-    }
 
     public Page<EtterlevelseArkiv> getAll(PageParameters pageParameters) {
         return repo.findAll(pageParameters.createPage()).map(GenericStorage::getDomainObjectData);
@@ -47,6 +44,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         return convertToDomaionObject(repo.findByEtterlevelseDokumentsjonId(etterlevelseDokumentasjonId));
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<EtterlevelseArkiv> setStatusToArkivert() {
         LocalDateTime arkiveringDato = LocalDateTime.now();
         List<EtterlevelseArkiv> tilArkivertStatus = getByStatus(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING.name());
@@ -69,6 +67,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         return arkivert;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<EtterlevelseArkiv> setStatusToBehandler_arkivering() {
         List<EtterlevelseArkiv> tilArkivering = getByStatus(EtterlevelseArkivStatus.TIL_ARKIVERING.name());
         List<EtterlevelseArkiv> behandlerArkivering = new ArrayList<>();
@@ -89,6 +88,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         return behandlerArkivering;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void setStatusWithEtterlevelseDokumentasjonId(EtterlevelseArkivStatus newStatus, String etterlevelseDokumentasjonId) {
         List<EtterlevelseArkiv> arkiveringTilNyStatus = getByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId);
         arkiveringTilNyStatus.forEach(e ->
@@ -106,14 +106,15 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         );
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseArkiv save(EtterlevelseArkivRequest request) {
         var etterlevelseArkiv = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new EtterlevelseArkiv();
-        etterlevelseArkiv.convert(request);
-
+        etterlevelseArkiv.merge(request);
         return storage.save(etterlevelseArkiv);
     }
 
-    public void  deleteByEtterlevelseDokumentsjonId(String etterlevelseDokumentasjonId){
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteByEtterlevelseDokumentsjonId(String etterlevelseDokumentasjonId) {
         List<EtterlevelseArkiv> etterlevelseArkiver = convertToDomaionObject(repo.findByEtterlevelseDokumentsjonId(etterlevelseDokumentasjonId));
         etterlevelseArkiver.forEach(ea -> log.info("deleting etterlevelse arkiv with id={}, connected to etterlevelse dokumentasjon with id={}", ea.getId(), etterlevelseDokumentasjonId));
         storage.deleteAll(etterlevelseArkiver);

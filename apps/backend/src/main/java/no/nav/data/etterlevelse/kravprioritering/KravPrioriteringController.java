@@ -41,7 +41,6 @@ import java.util.UUID;
 @Tag(name = "KravPrioritering", description = "prioriterings rekkefølge for krav")
 public class KravPrioriteringController {
 
-
     private final KravPrioriteringService service;
     private final CodelistService codelistService;
 
@@ -99,7 +98,7 @@ public class KravPrioriteringController {
                 .kravStatus(kravStatus)
                 .build();
         log.info("Get krav prioritering with filter={}", filter);
-        if(filter.getTemaCode() != null) {
+        if (filter.getTemaCode() != null) {
             codelistService.validateListNameAndCode(ListName.TEMA.name(), filter.getTemaCode());
         }
         return ResponseEntity.ok(new RestResponsePage<>(service.getByFilter(filter)));

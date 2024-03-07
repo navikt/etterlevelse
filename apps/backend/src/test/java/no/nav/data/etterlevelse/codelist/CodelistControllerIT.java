@@ -35,7 +35,6 @@ class CodelistControllerIT extends IntegrationTestBase {
 
     private static final ParameterizedTypeReference<List<CodelistResponse>> CODELIST_LIST_RESP = new ParameterizedTypeReference<>() {
     };
-    private static final String ERROR_IMMUTABLE_CODELIST = "%s is an immutable type of codelist. For amendments, please contact team #dataplatform";
 
     @Autowired
     protected TestRestTemplate restTemplate;
@@ -248,7 +247,7 @@ class CodelistControllerIT extends IntegrationTestBase {
 
             ResponseEntity<String> responseEntity = restTemplate.exchange("/codelist/RELEVANS/DELETE_CODE", HttpMethod.DELETE, HttpEntity.EMPTY, String.class);
 
-            assertThat(responseEntity.getStatusCodeValue()).isEqualTo(HttpStatus.CONFLICT.value());
+            assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
             assertThat(responseEntity.getBody()).contains("The code DELETE_CODE in list RELEVANS cannot be erased.");
             assertTrue(repository.findByListAndCode(ListName.RELEVANS, "DELETE_CODE").isPresent());
         }
