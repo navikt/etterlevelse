@@ -1,8 +1,5 @@
-import { Button, Loader, Modal, Select } from '@navikt/ds-react'
+import { BodyShort, Box, Button, Loader, Modal, Select } from '@navikt/ds-react'
 import axios from 'axios'
-import { Block } from 'baseui/block'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { ParagraphMedium } from 'baseui/typography'
 import { useState } from 'react'
 import { EListName, codelist } from '../../services/Codelist'
 import { env } from '../../util/env'
@@ -35,9 +32,9 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
       >
         <Modal.Body>
           {isLoading ? (
-            <Block display="flex" justifyContent="center" width="100%">
+            <div className="flex justify-center w-full">
               <Loader size="large" />
-            </Block>
+            </div>
           ) : (
             <div className="flex flex-col gap-4">
               <Select
@@ -53,33 +50,13 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                 ))}
               </Select>
               {errorMessage && (
-                <Block width="100%" marginTop="16px">
-                  <Notification
-                    overrides={{
-                      Body: {
-                        style: {
-                          width: 'auto',
-                          ...marginZero,
-                          ...borderStyle('solid'),
-                          ...borderWidth('1px'),
-                          ...borderColor(ettlevColors.red600),
-                          ...borderRadius('4px'),
-                        },
-                      },
-                    }}
-                    kind={NKIND.negative}
-                  >
-                    <Block display="flex" justifyContent="center">
-                      <ParagraphMedium
-                        marginBottom="0px"
-                        marginTop="0px"
-                        $style={{ lineHeight: '18px' }}
-                      >
-                        {errorMessage}
-                      </ParagraphMedium>
-                    </Block>
-                  </Notification>
-                </Block>
+                <div className="w-full mt-4">
+                  <Box className="mb-2.5" padding="4" background="surface-warning-subtle">
+                    <div className="flex justify-center">
+                      <BodyShort>{errorMessage}</BodyShort>
+                    </div>
+                  </Box>
+                </div>
               )}
               <div className="flex gap-2">
                 <Button
