@@ -148,7 +148,7 @@ type TMarkdownEditorProps = {
 
 export const MarkdownEditor = (props: TMarkdownEditorProps) => (
   <MdEditor
-    style={{ height: props.height || '500px' }}
+    style={{ height: props.height || '31.25rem' }}
     defaultValue={props.initialValue}
     renderHTML={(txt) => <Markdown source={txt} shortenLinks={props.shortenLinks} />}
     onImageUpload={props.onImageUpload}

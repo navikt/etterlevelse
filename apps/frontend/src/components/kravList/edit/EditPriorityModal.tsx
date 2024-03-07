@@ -145,7 +145,7 @@ export const EditPriorityModal = (props: {
       {({ submitForm, handleReset }) => (
         <Modal
           open={isOpen}
-          width={'1280px'}
+          width="80rem"
           onClose={() => {
             handleReset()
             close()

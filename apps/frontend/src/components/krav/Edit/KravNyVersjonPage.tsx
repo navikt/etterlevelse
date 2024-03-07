@@ -140,7 +140,7 @@ export const KravNyVersjonPage = () => {
                       <TextAreaField
                         label="Notater (Kun synlig for kraveier)"
                         name="notat"
-                        height="250px"
+                        height="15.625rem"
                         markdown
                       />
                     </div>

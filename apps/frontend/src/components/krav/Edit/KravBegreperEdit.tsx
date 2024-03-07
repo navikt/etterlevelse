@@ -50,14 +50,16 @@ export const EditBegreper = () => {
                     ({
                       ...base,
                       cursor: 'text',
-                      height: '48px',
+                      height: '3rem',
                       borderColor: ettlevColors.textAreaBorder,
                     }) as CSSObjectWithLabel,
                 }}
               />
 
               <RenderTagList
-                list={fieldArrayRenderProps.form.values.begreper.map((begrep: IBegrep) => begrep.navn)}
+                list={fieldArrayRenderProps.form.values.begreper.map(
+                  (begrep: IBegrep) => begrep.navn
+                )}
                 onRemove={fieldArrayRenderProps.remove}
               />
             </div>

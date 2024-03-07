@@ -78,11 +78,17 @@ export const KravEditPage = () => {
         if (resp.content.length) {
           const alleVersjoner = resp.content
             .map((krav) => {
-              return { kravVersjon: krav.kravVersjon, kravNummer: krav.kravNummer, kravStatus: krav.status }
+              return {
+                kravVersjon: krav.kravVersjon,
+                kravNummer: krav.kravNummer,
+                kravStatus: krav.status,
+              }
             })
             .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
 
-          const filteredVersjoner = alleVersjoner.filter((krav) => krav.kravStatus !== EKravStatus.UTKAST)
+          const filteredVersjoner = alleVersjoner.filter(
+            (krav) => krav.kravStatus !== EKravStatus.UTKAST
+          )
 
           if (filteredVersjoner.length) {
             setAlleKravVersjoner(filteredVersjoner)
@@ -295,7 +301,7 @@ export const KravEditPage = () => {
                       <TextAreaField
                         label="Notater (Kun synlig for kraveier)"
                         name="notat"
-                        height="250px"
+                        height="15.625rem"
                         markdown
                       />
                     </div>

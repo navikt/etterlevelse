@@ -41,18 +41,24 @@ export const EditKravRelasjoner = () => {
                     ({
                       ...base,
                       cursor: 'text',
-                      height: '48px',
+                      height: '3rem',
                       borderColor: ettlevColors.textAreaBorder,
                     }) as CSSObjectWithLabel,
                 }}
               />
 
               <Chips className="mt-2.5">
-                {fieldArrayRenderProps.form.values.kravRelasjoner.map((kravRelasjon: any, index: number) => (
-                  <Chips.Removable key={kravRelasjon.id} variant="neutral" onDelete={() => fieldArrayRenderProps.remove(index)}>
-                    {`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}
-                  </Chips.Removable>
-                ))}
+                {fieldArrayRenderProps.form.values.kravRelasjoner.map(
+                  (kravRelasjon: any, index: number) => (
+                    <Chips.Removable
+                      key={kravRelasjon.id}
+                      variant="neutral"
+                      onDelete={() => fieldArrayRenderProps.remove(index)}
+                    >
+                      {`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}
+                    </Chips.Removable>
+                  )
+                )}
               </Chips>
             </div>
           )

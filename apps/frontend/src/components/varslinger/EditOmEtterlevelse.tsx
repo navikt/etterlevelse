@@ -64,7 +64,7 @@ export const EditOmEtterlevelse = ({
 
               <TextAreaField
                 maxCharacter={maxChar}
-                height="200px"
+                height="12.5rem"
                 label={'Innledende tekst'}
                 noPlaceholder
                 name="melding"
@@ -79,7 +79,7 @@ export const EditOmEtterlevelse = ({
               <TextAreaField
                 maxCharacter={maxChar}
                 markdown
-                height="200px"
+                height="12.5rem"
                 label={'Innhold'}
                 noPlaceholder
                 name="secondaryMelding"

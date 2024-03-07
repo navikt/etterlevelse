@@ -117,21 +117,21 @@ const TextEditor = (props: TTextEditorProps) => {
         style={{
           backgroundColor: ettlevColors.white,
           ...borderColor(hasError ? ettlevColors.red500 : ettlevColors.textAreaBorder),
-          ...borderWidth(hasError ? '2px' : '1px'),
+          ...borderWidth(hasError ? '0.125rem' : '0.063rem'),
           ...borderStyle('solid'),
-          ...borderRadius('4px'),
+          ...borderRadius('0.25rem'),
           width: width || undefined,
           maxWidth: maxWidth || undefined,
         }}
       >
         <Editor
           editorStyle={{
-            padding: '10px',
-            minHeight: height || '500px',
+            padding: '0.625rem',
+            minHeight: height || '31.25rem',
           }}
           toolbarStyle={{
             backgroundColor: ettlevColors.white,
-            borderBottom: `1px solid ${ettlevColors.textAreaBorder}`,
+            borderBottom: `0.063rem solid ${ettlevColors.textAreaBorder}`,
           }}
           onEditorStateChange={(data) => {
             setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))

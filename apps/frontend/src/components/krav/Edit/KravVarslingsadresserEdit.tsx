@@ -42,7 +42,8 @@ export const KravVarslingsadresserEdit = () => {
         {(fieldArrayRenderProps: FieldArrayRenderProps) => {
           const varslingsadresser = (fieldArrayRenderProps.form.values as IKrav).varslingsadresser
           const push = (v: IVarslingsadresse) => {
-            if (!varslingsadresser.find((v2) => v2.adresse === v.adresse)) fieldArrayRenderProps.push(v)
+            if (!varslingsadresser.find((v2) => v2.adresse === v.adresse))
+              fieldArrayRenderProps.push(v)
           }
           return (
             <div>
@@ -81,7 +82,10 @@ export const KravVarslingsadresserEdit = () => {
                     Legg til epost
                   </Button>
                 </div>
-                <VarslingsadresserTagList remove={fieldArrayRenderProps.remove} varslingsadresser={varslingsadresser} />
+                <VarslingsadresserTagList
+                  remove={fieldArrayRenderProps.remove}
+                  varslingsadresser={varslingsadresser}
+                />
               </div>
 
               <AddModal
@@ -148,7 +152,9 @@ const AddModal = ({
     header={{ heading: title, closeButton: false }}
     width="medium"
   >
-    <Modal.Body className={`${largeHeight ? 'min-h-[300px]' : undefined}`}>{children}</Modal.Body>
+    <Modal.Body className={`${largeHeight ? 'min-h-[18.75rem]' : undefined}`}>
+      {children}
+    </Modal.Body>
     <Modal.Footer>
       <Button variant="secondary" type="button" onClick={close}>
         Avbryt
@@ -174,7 +180,9 @@ export const VarslingsadresserTagList = ({
       const channels = await Promise.all(
         varslingsadresser
           .filter((varslingaddresse) => varslingaddresse.type === EAdresseType.SLACK)
-          .filter((varslingaddresse) => !slackChannels.find((sc) => sc.id === varslingaddresse.adresse))
+          .filter(
+            (varslingaddresse) => !slackChannels.find((sc) => sc.id === varslingaddresse.adresse)
+          )
           .filter((varslingaddresse) => {
             const vas = varslingaddresse as TVarslingsadresseQL
             if (vas.slackChannel) {
@@ -254,7 +262,7 @@ export const SlackChannelSearch = ({ add, close }: TAddVarslingsadresseProps) =>
           ({
             ...base,
             cursor: 'text',
-            height: '48px',
+            height: '3rem',
             borderColor: ettlevColors.textAreaBorder,
           }) as CSSObjectWithLabel,
       }}
@@ -311,7 +319,7 @@ export const SlackUserSearch = ({ add, close }: TAddVarslingsadresseProps) => {
                 ({
                   ...base,
                   cursor: 'text',
-                  height: '48px',
+                  height: '3rem',
                   borderColor: ettlevColors.textAreaBorder,
                 }) as CSSObjectWithLabel,
             }}

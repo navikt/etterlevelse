@@ -50,7 +50,7 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
             <div>
               <div>
                 <div className="flex items-end">
-                  <div className="w-full max-w-[400px] mr-2.5">
+                  <div className="w-full max-w-[25rem] mr-2.5">
                     <LabelWithTooltip
                       label={'Regelverk'}
                       tooltip={
@@ -71,11 +71,11 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
                         control: (baseStyles) =>
                           ({
                             ...baseStyles,
-                            height: '48px',
+                            height: '3rem',
                             borderColor: hasError
                               ? ettlevColors.red500
                               : ettlevColors.textAreaBorder,
-                            ...borderWidth(hasError ? '2px' : '1px'),
+                            ...borderWidth(hasError ? '0.125rem' : '0.063rem'),
                           }) as CSSObjectWithLabel,
                         menu: (baseStyles) =>
                           ({
@@ -99,7 +99,7 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
                     />
                   </div>
 
-                  <div className="min-w-[107px] ml-2.5">
+                  <div className="min-w-[6.688rem] ml-2.5">
                     <Button type="button" onClick={add} variant="secondary">
                       Legg til
                     </Button>

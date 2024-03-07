@@ -326,7 +326,7 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
                   />
                 </div>
 
-                <div className="min-w-[107px] ml-2.5">
+                <div className="min-w-[6.688rem] ml-2.5">
                   <Button type="button" onClick={() => add()} variant="secondary">
                     Legg til
                   </Button>

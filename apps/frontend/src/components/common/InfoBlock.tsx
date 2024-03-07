@@ -7,12 +7,7 @@ export const InfoBlock = (props: { icon: string; alt: string; text: string; colo
   <div>
     <div className="w-full flex justify-center items-center">
       <div className="flex flex-col items-center p-5">
-        <IconInCircle
-          icon={props.icon}
-          alt={props.alt}
-          backgroundColor={props.color}
-          size={'64px'}
-        />
+        <IconInCircle icon={props.icon} alt={props.alt} backgroundColor={props.color} size="4rem" />
         <BodyShort>{props.text}</BodyShort>
       </div>
     </div>
@@ -31,15 +26,15 @@ export const InfoBlock2 = (props: {
     style={{
       width: '100%',
       display: 'flex',
-      borderWidth: '2px',
+      borderWidth: '0.125rem',
       borderStyle: 'solid',
       borderColor: ettlevColors.grey100,
-      borderRadius: '4px',
+      borderRadius: '0.25rem',
       backgroundColor: props.backgroundColor || ettlevColors.white,
     }}
   >
     <div className="self-center mx-6">
-      <img src={props.icon} alt={props.alt} width={'80px'} height={'80px'} />
+      <img src={props.icon} alt={props.alt} width="5rem" height="5rem" />
     </div>
 
     <div className="flex flex-col p-5">

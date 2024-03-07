@@ -26,8 +26,8 @@ export const EditKravMultiOptionField = (
     <FieldWrapper marginBottom={props.marginBottom}>
       <FieldArray name={props.name}>
         {(fieldArrayRenderProps: FieldArrayRenderProps) => {
-          const selectedIds = (fieldArrayRenderProps.form.values[props.name] as any[]).map((value) =>
-            props.listName ? (value as ICode).code : value
+          const selectedIds = (fieldArrayRenderProps.form.values[props.name] as any[]).map(
+            (value) => (props.listName ? (value as ICode).code : value)
           )
           return (
             <div>
@@ -58,7 +58,7 @@ export const EditKravMultiOptionField = (
                   control: (baseStyles) =>
                     ({
                       ...baseStyles,
-                      minHeight: '48px',
+                      minHeight: '3rem',
                       borderColor: ettlevColors.textAreaBorder,
                     }) as CSSObjectWithLabel,
                 }}

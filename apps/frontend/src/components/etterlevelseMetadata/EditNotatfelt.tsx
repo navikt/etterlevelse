@@ -51,7 +51,7 @@ export const EditNotatfelt = ({
     >
       <Modal.Header closeButton={false}>
         <div className="flex items-center">
-          <FileTextIcon aria-label="" aria-hidden width="24px" height="26px" />
+          <FileTextIcon aria-label="" aria-hidden width="1.5rem" height="1.625rem" />
           <Heading level="2" size="small">
             Notat
           </Heading>
@@ -78,7 +78,7 @@ export const EditNotatfelt = ({
                 <TextEditor
                   initialValue={notater}
                   setValue={setNotater}
-                  height={'350px'}
+                  height="21.875rem"
                   errors={errors}
                   simple
                 />
