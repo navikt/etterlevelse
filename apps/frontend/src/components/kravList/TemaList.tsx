@@ -53,7 +53,7 @@ export const TemaList = () => {
             .includes(tema.code)
         })
         return activeKraver && activeKraver.length > 0 ? (
-          <Accordion.Item>
+          <Accordion.Item key={tema.code}>
             <Accordion.Header key={`${tema.code}_krav_list`}>
               <KravPanelHeader
                 title={tema.shortName}
@@ -64,13 +64,14 @@ export const TemaList = () => {
               <KravTemaList
                 activeKraver={sortKravListeByPriority(activeKraver, tema.shortName)}
                 tema={tema.shortName}
+                temaCode={tema.code}
                 refresh={fetchKrav}
                 draftKrav={draftKraver}
               />
             </Accordion.Content>
           </Accordion.Item>
         ) : (
-          <Accordion.Item>
+          <Accordion.Item key={tema.code}>
             <Accordion.Header key={`${tema.code}_krav_list`}>
               <KravPanelHeader title={tema.shortName} kravData={[]} />
             </Accordion.Header>
@@ -122,11 +123,12 @@ const getKravTemaRowsWithLabel = (kravListe: IKrav[], tema: string) => {
 const KravTemaList = (props: {
   activeKraver: IKrav[]
   tema: string
+  temaCode: string
   refresh: () => void
   draftKrav: IKrav[]
 }) => {
   const [isEditPriorityModalOpen, setIsEditPriorityModalOpen] = React.useState(false)
-  const { activeKraver, tema, refresh, draftKrav } = props
+  const { activeKraver, tema, temaCode, refresh, draftKrav } = props
 
   return (
     <div className="flex flex-col gap-2">
@@ -142,6 +144,7 @@ const KravTemaList = (props: {
       {activeKraver && isEditPriorityModalOpen && (
         <EditPriorityModal
           tema={tema}
+          temaCode={temaCode}
           isOpen={isEditPriorityModalOpen}
           setIsOpen={setIsEditPriorityModalOpen}
           kravListe={activeKraver}

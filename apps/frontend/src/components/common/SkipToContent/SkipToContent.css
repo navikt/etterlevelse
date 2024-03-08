@@ -1,8 +1,8 @@
 .skip a {
-  padding: 6px;
+  padding: 0.375rem;
   position: absolute;
-  top: -40px;
-  left: 0px;
+  top: -2.5rem;
+  left: 0rem;
   background: white;
   /* -webkit-transition: top 1s ease-out;
     transition: top 1s ease-out;
@@ -11,8 +11,8 @@
 
 .skip a:focus {
   position: absolute;
-  left: 0px;
-  top: 0px;
+  left: 0rem;
+  top: 0rem;
   /* -webkit-transition: top .1s ease-in;
     transition: top .1s ease-in; */
 }

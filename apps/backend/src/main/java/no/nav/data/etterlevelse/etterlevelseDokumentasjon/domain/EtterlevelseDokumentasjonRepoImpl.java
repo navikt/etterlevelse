@@ -38,7 +38,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
     }
 
     @Override
-    public List<GenericStorage<EtterlevelseDokumentasjon>> findByBehandlingIds(List<String> ids){
+    public List<GenericStorage<EtterlevelseDokumentasjon>> findByBehandlingIds(List<String> ids) {
         var query = "select * from generic_storage where type = 'EtterlevelseDokumentasjon' and data -> 'behandlingIds' ??| array[ :behandlingIds ]";
         var par = new MapSqlParameterSource();
         par.addValue("behandlingIds", ids);

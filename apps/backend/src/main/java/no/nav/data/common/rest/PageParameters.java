@@ -21,6 +21,7 @@ public class PageParameters {
 
     @Schema(defaultValue = "0", minimum = "0")
     private int pageNumber = 0;
+
     @Schema(defaultValue = "20", minimum = "1", maximum = "250")
     private int pageSize = 20;
 

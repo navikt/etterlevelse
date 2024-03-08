@@ -15,7 +15,7 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { JsonView } from 'react-json-view-lite'
 import { getAudits } from '../../../api/AuditApi'
-import { emptyPage } from '../../../api/util/EmpyPageConstant'
+import { emptyPage } from '../../../api/util/EmptyPageConstant'
 import { IPageResponse } from '../../../constants'
 import { ampli, userRoleEventProp } from '../../../services/Amplitude'
 import { intl } from '../../../util/intl/intl'
@@ -87,7 +87,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
     return null
   }
 
-  const tableOptions = Object.keys(EObjectType).map((ot) => ({ id: ot, label: ot }))
+  const tableOptions = Object.keys(EObjectType).map((ot) => ({ value: ot, label: ot }))
 
   return (
     <div>
@@ -111,7 +111,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
             >
               <option value="">Velg type for versjonering</option>
               {tableOptions.map((tableOption, index) => (
-                <option key={index + '_' + tableOption.label} value={tableOption.id}>
+                <option key={index + '_' + tableOption.label} value={tableOption.value}>
                   {tableOption.label}
                 </option>
               ))}

@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.statistikk;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.domain.Action;
 import no.nav.data.common.auditing.domain.AuditVersion;
@@ -51,6 +52,7 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class StatistikkService {
     private final TilbakemeldingService tilbakemeldingService;
     private final BehandlingService behandlingService;
@@ -61,27 +63,11 @@ public class StatistikkService {
 
     private final AuditVersionRepository auditVersionRepository;
 
-    public StatistikkService(TilbakemeldingService tilbakemeldingService,
-                             BehandlingService behandlingService,
-                             KravService kravService,
-                             EtterlevelseService etterlevelseService,
-                             EtterlevelseDokumentasjonService etterlevelseDokumentasjonService,
-                             TeamcatTeamClient teamService,
-                             AuditVersionRepository auditVersionRepository) {
-        this.tilbakemeldingService = tilbakemeldingService;
-        this.behandlingService = behandlingService;
-        this.kravService = kravService;
-        this.etterlevelseService = etterlevelseService;
-        this.etterlevelseDokumentasjonService = etterlevelseDokumentasjonService;
-        this.teamService = teamService;
-        this.auditVersionRepository = auditVersionRepository;
-    }
-
-
     public int getAntallIkkeFiltrertKrav(List<Krav> aktivKravList, EtterlevelseDokumentasjon etterlevelseDokumentasjon, List<Etterlevelse> etterlevelseList) {
 
-        List<Krav> valgteKrav = aktivKravList.stream().filter(krav -> !new HashSet<>(etterlevelseDokumentasjon.getIrrelevansFor()).containsAll(krav.getRelevansFor()) || krav.getRelevansFor().isEmpty()
-        ).toList();
+        List<Krav> valgteKrav = aktivKravList.stream()
+                .filter(krav -> !new HashSet<>(etterlevelseDokumentasjon.getIrrelevansFor()).containsAll(krav.getRelevansFor()) || krav.getRelevansFor().isEmpty())
+                .toList();
 
         return valgteKrav.size() +
                 etterlevelseList.stream()
@@ -242,7 +228,7 @@ public class StatistikkService {
         String temaName = "Ingen";
         var krav = kravService.getByKravNummer(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon());
 
-        if(krav.isPresent()) {
+        if (krav.isPresent()) {
             var regelverkResponse = StreamUtils.convert(krav.get().getRegelverk(), Regelverk::toResponse);
             if (!regelverkResponse.isEmpty()) {
                 var temaData = CodelistService.getCodelist(ListName.TEMA, regelverkResponse.get(0).getLov().getData().get("tema").textValue());
@@ -251,9 +237,6 @@ public class StatistikkService {
                 }
             }
         }
-
-
-
 
         return EtterlevelseStatistikkResponse.builder()
                 .id(etterlevelse.getId())
@@ -332,7 +315,6 @@ public class StatistikkService {
                 harNyVersjon = true;
             }
         }
-
 
         return KravStatistikkResponse.builder()
                 .id(krav.getId())

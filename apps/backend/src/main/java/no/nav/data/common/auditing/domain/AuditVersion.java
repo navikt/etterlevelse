@@ -42,6 +42,7 @@ public class AuditVersion {
     @Column(name = "ACTION", nullable = false, updatable = false)
     private Action action;
 
+    // This is the type of the audited entity. See tableNameFor(...) to be slightly less confused.
     @Column(name = "TABLE_NAME", nullable = false, updatable = false)
     private String table;
 
@@ -89,8 +90,13 @@ public class AuditVersion {
                 .build();
     }
 
-    public static String tableName(Class<? extends Auditable> aClass) {
-        return aClass.getAnnotation(Table.class).name();
+    public static String tableNameFor(Object entity) {
+        if (entity instanceof GenericStorage gs) {
+            return gs.getType();
+        } else if (entity instanceof Auditable au) {
+            return au.getClass().getAnnotation(Table.class).name();
+        }
+        throw new IllegalArgumentException("Should not audit entities of type " + entity.getClass().getSimpleName());
     }
 
 }

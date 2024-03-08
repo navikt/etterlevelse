@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.krav;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import no.nav.data.common.storage.StorageService;
@@ -13,7 +14,6 @@ import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -34,13 +34,10 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class KravService extends DomainService<Krav> {
 
-    @Autowired
-    protected StorageService<KravImage> imageStorage;
-
-    public KravService() {
-    }
+    protected final StorageService<KravImage> imageStorage;
 
     public Page<Krav> getAll(Pageable page) {
         Page<GenericStorage<Krav>> all;
@@ -94,8 +91,9 @@ public class KravService extends DomainService<Krav> {
         return convert(byNumberContaining, GenericStorage::getDomainObjectData);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public Krav save(KravRequest request) {
-        Validator.validate(request, storage)
+        Validator.validate(request, storage::get)
                 .addValidations(this::validateName)
                 .addValidations(this::validateStatus)
                 .addValidations(this::validateKravNummerVersjon)
@@ -104,7 +102,7 @@ public class KravService extends DomainService<Krav> {
 
         var krav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
 
-        krav.convert(request);
+        krav.merge(request);
 
         if (request.isNyKravVersjon()) {
             krav.setKravNummer(request.getKravNummer());
@@ -154,6 +152,7 @@ public class KravService extends DomainService<Krav> {
         return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).virkemiddelId(virkemiddelId).etterlevelseDokumentasjonIrrevantKrav(true).build());
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<KravImage> saveImages(List<KravImage> images) {
         return convert(imageStorage.saveAll(images), GenericStorage::getDomainObjectData);
     }
@@ -208,6 +207,7 @@ public class KravService extends DomainService<Krav> {
 
     @SchedulerLock(name = "clean_krav_images", lockAtLeastFor = "PT5M")
     @Scheduled(initialDelayString = "PT5M", fixedRateString = "PT1H")
+    @Transactional(propagation = Propagation.REQUIRED)
     public void cleanupImages() {
         var deletes = kravRepo.cleanupImages();
         log.info("Deleted {} unused krav images", deletes);

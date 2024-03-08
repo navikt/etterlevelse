@@ -7,7 +7,7 @@ import {
   ISuksesskriterie,
   ISuksesskriterieBegrunnelse,
 } from '../../../constants'
-import { useDebouncedState } from '../../../util/hooks'
+import { useDebouncedState } from '../../../util/hooks/customHooks'
 import { FieldWrapper } from '../../common/Inputs'
 import { Markdown } from '../../common/Markdown'
 import { FormError } from '../../common/ModalSchema'
@@ -56,7 +56,7 @@ export const SuksesskriterierBegrunnelseEdit = ({
 }: IPropsSuksesskriterierBegrunnelseEdit) => (
   <FieldWrapper>
     <FieldArray name={'suksesskriterieBegrunnelser'}>
-      {(feildArrayRenderProps : FieldArrayRenderProps) => (
+      {(feildArrayRenderProps: FieldArrayRenderProps) => (
         <KriterieBegrunnelseList
           fieldArrayRenderProps={feildArrayRenderProps}
           disableEdit={disableEdit}
@@ -201,10 +201,10 @@ const KriterieBegrunnelse = ({
             <TextEditor
               initialValue={begrunnelse}
               setValue={setBegrunnelse}
-              height={'188px'}
+              height="11.75rem"
               errors={feildArrayRenderProps.form.errors}
               simple
-              maxWidth="790px"
+              maxWidth="49.375rem"
               width="100%"
             />
 

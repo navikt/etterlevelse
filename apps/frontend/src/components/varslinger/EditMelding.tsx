@@ -107,14 +107,14 @@ export const EditMelding = ({
               <TextAreaField
                 maxCharacter={maxChar}
                 markdown
-                height="200px"
+                height="12.5rem"
                 label={
                   melding.meldingType === EMeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'
                 }
                 noPlaceholder
                 name="melding"
               />
-              <div className="flex w-full">
+              <div className="flex w-full mt-2.5">
                 <Button
                   type="button"
                   variant="secondary"

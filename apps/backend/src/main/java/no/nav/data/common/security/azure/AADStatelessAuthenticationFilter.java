@@ -237,7 +237,7 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
                 new JWSVerificationKeySelector<>(jwsAlgorithm, keySource);
         jwtProcessor.setJWSKeySelector(keySelector);
 
-        jwtProcessor.setJWTClaimsSetVerifier(new DefaultJWTClaimsVerifier<>() {
+        jwtProcessor.setJWTClaimsSetVerifier(new DefaultJWTClaimsVerifier<>(null, null, null, null) {
             @Override
             public void verify(JWTClaimsSet claimsSet, SecurityContext ctx) throws BadJWTException {
                 super.verify(claimsSet, ctx);

@@ -4,7 +4,7 @@ import { FieldArray, FieldArrayRenderProps } from 'formik'
 import * as _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { EKravStatus, ISuksesskriterie } from '../../../constants'
-import { useDebouncedState } from '../../../util/hooks'
+import { useDebouncedState } from '../../../util/hooks/customHooks'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { FormError } from '../../common/ModalSchema'
@@ -209,7 +209,7 @@ const Kriterie = ({
           <TextEditor
             initialValue={beskrivelse}
             setValue={setBeskrivelse}
-            height="250px"
+            height="15.625rem"
             setIsFormDirty={setIsFormDirty}
           />
         </div>

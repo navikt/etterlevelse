@@ -36,10 +36,6 @@ export const ViewKrav = ({ krav }: { krav: TKravQL }) => {
             ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1]
             : ''}
         </BodyShort>
-
-        {
-          //deactivate side panel, waiting for feedback from design
-        }
       </div>
     </div>
   )

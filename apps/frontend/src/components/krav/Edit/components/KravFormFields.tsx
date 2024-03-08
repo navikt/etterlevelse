@@ -20,7 +20,7 @@ interface IProps {
   setVarselMeldingActive: React.Dispatch<React.SetStateAction<string[]>>
 }
 
-const maxInputWidth = '400px'
+const maxInputWidth = '25rem'
 
 export const KravFormFields = (props: IProps) => {
   const { mode, kravVersjon, errors, varselMeldingActive, setVarselMeldingActive } = props
@@ -53,7 +53,7 @@ export const KravFormFields = (props: IProps) => {
             </div>
           )}
         </div>
-        <TextAreaField label="Hensikt" name="hensikt" height="250px" markdown />
+        <TextAreaField label="Hensikt" name="hensikt" height="15.625rem" markdown />
       </div>
 
       <div className="flex w-full justify-center">
@@ -74,7 +74,7 @@ export const KravFormFields = (props: IProps) => {
               <TextAreaField
                 label="Endringer siden siste versjon"
                 name="versjonEndringer"
-                height="250px"
+                height="15.625rem"
                 markdown
               />
             </div>

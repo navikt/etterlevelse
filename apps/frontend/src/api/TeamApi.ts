@@ -10,7 +10,7 @@ import {
 } from '../constants'
 import { user } from '../services/User'
 import { env } from '../util/env'
-import { useForceUpdate } from '../util/hooks'
+import { useForceUpdate } from '../util/hooks/customHooks'
 
 export const getResourceById = async (resourceId: string) => {
   return (await axios.get<ITeamResource>(`${env.backendBaseUrl}/team/resource/${resourceId}`)).data

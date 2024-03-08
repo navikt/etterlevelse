@@ -4,7 +4,7 @@ import Select, { CSSObjectWithLabel } from 'react-select'
 import { useVirkemiddelFilter } from '../../api/VirkemiddelApi'
 import { EVirkemiddelListFilter } from '../../constants'
 import { EListName, codelist } from '../../services/Codelist'
-import { useDebouncedState } from '../../util/hooks'
+import { useDebouncedState } from '../../util/hooks/customHooks'
 import { EditVirkemiddelModal } from '../virkemiddel/edit/EditVirkemiddelModal'
 import { VirkemiddelTable } from './VirkemiddelTable'
 
@@ -100,7 +100,7 @@ export const AllVirkemiddel = ({
                       control: (baseStyles) =>
                         ({
                           ...baseStyles,
-                          minHeight: '48px',
+                          minHeight: '3rem',
                         }) as CSSObjectWithLabel,
                     }}
                   />
