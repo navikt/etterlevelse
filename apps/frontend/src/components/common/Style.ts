@@ -4,12 +4,6 @@ export const marginZero = {
   marginTop: '0rem',
   marginBottom: '0rem',
 }
-export const padding = (topBot: string, leftRight: string) => ({
-  paddingLeft: leftRight,
-  paddingRight: leftRight,
-  paddingTop: topBot,
-  paddingBottom: topBot,
-})
 
 export const borderColor = (color?: string) => ({
   borderLeftColor: color,
