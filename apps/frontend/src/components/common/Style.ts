@@ -10,12 +10,7 @@ export const padding = (topBot: string, leftRight: string) => ({
   paddingTop: topBot,
   paddingBottom: topBot,
 })
-export const paddingAll = (pad: string) => ({
-  paddingLeft: pad,
-  paddingRight: pad,
-  paddingTop: pad,
-  paddingBottom: pad,
-})
+
 export const borderColor = (color?: string) => ({
   borderLeftColor: color,
   borderTopColor: color,
