@@ -1,10 +1,3 @@
-export const marginZero = {
-  marginLeft: '0rem',
-  marginRight: '0rem',
-  marginTop: '0rem',
-  marginBottom: '0rem',
-}
-
 export const borderColor = (color?: string) => ({
   borderLeftColor: color,
   borderTopColor: color,
