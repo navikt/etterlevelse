@@ -1,8 +1,6 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
 import { EKravStatus, IKrav, IPageResponse, TKravQL, TOr } from '../constants'
 import { env } from '../util/env'
-import { emptyPage } from './util/EmptyPageConstant'
 
 export const getAllKrav = async () => {
   const PAGE_SIZE = 100
@@ -24,10 +22,6 @@ export const getKravPage = async (pageNumber: number, pageSize: number) => {
       `${env.backendBaseUrl}/krav?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
   ).data
-}
-
-export const getKrav = async (id: string) => {
-  return (await axios.get<IKrav>(`${env.backendBaseUrl}/krav/${id}`)).data
 }
 
 export const deleteKrav = async (id: string) => {
@@ -94,49 +88,8 @@ function kravToKravDomainObject(krav: TKravQL): IKrav {
   return domainToObject
 }
 
-export const useKravPage = (pageSize: number) => {
-  const [data, setData] = useState<IPageResponse<IKrav>>(emptyPage)
-  const [page, setPage] = useState<number>(0)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    setLoading(true)
-    getKravPage(page, pageSize).then((r) => {
-      setData(r)
-      setLoading(false)
-    })
-  }, [page, pageSize])
-
-  const prevPage = () => setPage(Math.max(0, page - 1))
-  const nextPage = () => setPage(Math.min(data?.pages ? data.pages - 1 : 0, page + 1))
-
-  return [data, prevPage, nextPage, loading] as [
-    IPageResponse<IKrav>,
-    () => void,
-    () => void,
-    boolean,
-  ]
-}
-
 export type TKravIdParams = TOr<{ id?: string }, { kravNummer: string; kravVersjon: string }>
 export type TKravId = TOr<{ id?: string }, { kravNummer: number; kravVersjon: number }>
-
-export const useKrav = (params: TKravId | TKravIdParams, onlyLoadOnce?: boolean) => {
-  const isCreateNew = params.id === 'ny'
-  const [data, setData] = useState<IKrav | undefined>(
-    isCreateNew ? kravMapToFormVal({}) : undefined
-  )
-
-  const load = () => {
-    if (data && onlyLoadOnce) return
-    params?.id && !isCreateNew && getKrav(params.id).then(setData)
-    params?.kravNummer &&
-      getKravByKravNumberAndVersion(params.kravNummer, params.kravVersjon).then(setData)
-  }
-  useEffect(load, [params])
-
-  return [data, setData, load] as [IKrav | undefined, (k?: IKrav) => void, () => void]
-}
 
 export const useSearchKrav = async (searchParams: string) => {
   if (searchParams && searchParams.length > 2) {

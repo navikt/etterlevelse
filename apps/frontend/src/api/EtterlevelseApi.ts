@@ -1,5 +1,4 @@
 import axios from 'axios'
-import queryString from 'query-string'
 import { useEffect, useState } from 'react'
 import {
   EEtterlevelseStatus,
@@ -10,23 +9,6 @@ import {
 } from '../constants'
 import { env } from '../util/env'
 import { TKravId } from './KravApi'
-import { emptyPage } from './util/EmptyPageConstant'
-
-export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelse>>(
-      `${env.backendBaseUrl}/etterlevelse?pageNumber=${pageNumber}&pageSize=${pageSize}`
-    )
-  ).data
-}
-
-export const getEtterlevelseFor = async (query: { behandling: string }) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelse>>(
-      `${env.backendBaseUrl}/etterlevelse?${queryString.stringify(query)}`
-    )
-  ).data.content
-}
 
 export const getEtterlevelse = async (id: string) => {
   return (await axios.get<IEtterlevelse>(`${env.backendBaseUrl}/etterlevelse/${id}`)).data
@@ -77,30 +59,6 @@ function etterlevelseToEtterlevelseDto(etterlevelse: IEtterlevelse) {
   delete dto.changeStamp
   delete dto.version
   return dto
-}
-
-export const useEtterlevelsePage = (pageSize: number) => {
-  const [data, setData] = useState<IPageResponse<IEtterlevelse>>(emptyPage)
-  const [page, setPage] = useState<number>(0)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    setLoading(true)
-    getEtterlevelsePage(page, pageSize).then((r) => {
-      setData(r)
-      setLoading(false)
-    })
-  }, [page, pageSize])
-
-  const prevPage = () => setPage(Math.max(0, page - 1))
-  const nextPage = () => setPage(Math.min(data?.pages ? data.pages - 1 : 0, page + 1))
-
-  return [data, prevPage, nextPage, loading] as [
-    IPageResponse<IEtterlevelse>,
-    () => void,
-    () => void,
-    boolean,
-  ]
 }
 
 export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: TKravId) => {

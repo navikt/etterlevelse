@@ -25,31 +25,6 @@ export const getEtterlevelseDokumentasjon = async (id: string) => {
   ).data
 }
 
-export const getAllEtterlevelseDokumentasjon = async () => {
-  const PAGE_SIZE = 100
-  const firstPage = await getEtterlevelseDokumentasjonPage(0, PAGE_SIZE)
-  if (firstPage.pages === 1) {
-    return firstPage.content.length > 0 ? [...firstPage.content] : []
-  } else {
-    let allEtterlevelseDokumentasjon: IEtterlevelseDokumentasjon[] = [...firstPage.content]
-    for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
-      allEtterlevelseDokumentasjon = [
-        ...allEtterlevelseDokumentasjon,
-        ...(await getEtterlevelseDokumentasjonPage(currentPage, PAGE_SIZE)).content,
-      ]
-    }
-    return allEtterlevelseDokumentasjon
-  }
-}
-
-export const getEtterlevelseDokumentasjonPage = async (pageNumber: number, pageSize: number) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(
-      `${env.backendBaseUrl}/etterlevelsedokumentasjon?pageNumber=${pageNumber}&pageSize=${pageSize}`
-    )
-  ).data
-}
-
 export const searchEtterlevelsedokumentasjon = async (searchParam: string) => {
   return (
     await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(
@@ -65,13 +40,7 @@ export const searchEtterlevelsedokumentasjonByBehandlingId = async (behandlingId
     )
   ).data.content
 }
-export const searchEtterlevelsedokumentasjonByVirkemiddelId = async (virkemiddelId: string) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(
-      `${env.backendBaseUrl}/etterlevelsedokumentasjon/search/virkemiddel/${virkemiddelId}`
-    )
-  ).data.content
-}
+
 export const updateEtterlevelseDokumentasjon = async (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 ) => {
@@ -213,7 +182,3 @@ export const etterlevelseDokumentasjonSchema = () =>
     }),
   })
 //graphql
-
-export type TEtterlevelseDokumentasjonFilter = {
-  relevans?: string[]
-}
