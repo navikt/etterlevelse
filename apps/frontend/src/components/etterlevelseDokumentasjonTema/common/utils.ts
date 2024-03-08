@@ -7,13 +7,11 @@ import {
   TKravQL,
 } from '../../../constants'
 import { mapEtterlevelseData } from '../../../pages/EtterlevelseDokumentasjonTemaPage'
-import { TTemaCode } from '../../../services/Codelist'
 import { sortKravListeByPriority } from '../../../util/sort'
 
 export const filterKrav = (
   allKravPriority: IKravPrioritering[],
   kravList?: TKravQL[],
-  temaData?: TTemaCode,
   filterFerdigDokumentert?: boolean
 ) => {
   const unfilteredkraver = kravList ? _.cloneDeep(kravList) : []
@@ -23,11 +21,11 @@ export const filterKrav = (
       (kravPriority) =>
         kravPriority.kravNummer === krav.kravNummer && kravPriority.kravVersjon === krav.kravVersjon
     )
-    krav.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
+    krav.prioriteringsId = priority.length ? priority[0].prioriteringsId : 0
     return krav
   })
 
-  const sortedKrav = sortKravListeByPriority<TKravQL>(unfilteredkraver, temaData?.shortName || '')
+  const sortedKrav = sortKravListeByPriority<TKravQL>(unfilteredkraver)
 
   const mapped = sortedKrav.map((krav) => {
     const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined

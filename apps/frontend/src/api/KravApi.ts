@@ -233,5 +233,5 @@ export const kravMapToFormVal = (krav: Partial<TKravQL>): TKravQL => ({
   etterlevelser: [],
   kravIdRelasjoner: [],
   aktivertDato: krav.aktivertDato || '',
-  prioriteringsId: '',
+  prioriteringsId: 0,
 })

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { IKravPrioritering, IPageResponse, TKravQL } from '../constants'
+import { IKravPrioritering, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
 export const getAllKravPriority = async () => {
@@ -89,12 +89,3 @@ function kravPrioriteringToDto(kravPrioriteringToDto: IKravPrioritering): IKravP
   delete dto.version
   return dto
 }
-
-export const kravMapToKravPrioriting = (krav: Partial<TKravQL>): IKravPrioritering => ({
-  id: krav.kravPriorityUID || '',
-  kravNummer: krav.kravNummer || 0,
-  kravVersjon: krav.kravVersjon || 0,
-  prioriteringsId: krav.prioriteringsId || '',
-  changeStamp: krav.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-  version: -1,
-})

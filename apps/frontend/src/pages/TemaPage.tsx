@@ -85,10 +85,10 @@ const TemaView = ({ tema }: { tema: TTemaCode }) => {
               kravPriority.kravNummer === krav.kravNummer &&
               kravPriority.kravVersjon === krav.kravVersjon
           )
-          krav.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
+          krav.prioriteringsId = priority.length ? priority[0].prioriteringsId : 0
           return krav
         })
-        setKravList(sortKravListeByPriority(kravListe, tema.shortName))
+        setKravList(sortKravListeByPriority(kravListe))
       })()
     }
   }, [data])

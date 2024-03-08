@@ -30,9 +30,11 @@ export const KravAccordionList = (props: IProps) => {
     const lover = codelist.getCodesForTema(tema.code)
     const lovCodes = lover.map((lov) => lov.code)
     const krav = relevanteStats.filter((relevans) =>
-      relevans.regelverk.map((regelverk: any) => regelverk.lov.code).some((lov: any) => lovCodes.includes(lov))
+      relevans.regelverk
+        .map((regelverk: any) => regelverk.lov.code)
+        .some((lov: any) => lovCodes.includes(lov))
     )
-    return filterKrav(kravPriority, krav, tema)
+    return filterKrav(kravPriority, krav)
   }
 
   const toggleAccordion = (index: number) => {

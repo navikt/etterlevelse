@@ -64,10 +64,7 @@ export const EtterlevelseDokumentasjonPage = () => {
 
   useEffect(() => {
     if (data && !loading) {
-      const kravPriorityList = sortKravListeByPriority<TKravQL>(
-        data?.krav.content,
-        temaData?.shortName || ''
-      )
+      const kravPriorityList = sortKravListeByPriority<TKravQL>(data?.krav.content)
       const currentKravIndex = kravPriorityList.findIndex(
         (k) => k.kravNummer === kravId?.kravNummer
       )
