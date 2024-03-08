@@ -14,7 +14,7 @@ import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter.Fields;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingResponse;
-import no.nav.data.etterlevelse.kravprioritering.KravPrioriteringService;
+import no.nav.data.etterlevelse.kravprioritylist.KravPriorityListService;
 import no.nav.data.etterlevelse.virkemiddel.VirkemiddelService;
 import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelResponse;
 import no.nav.data.integration.begrep.BegrepService;
@@ -37,7 +37,7 @@ public class KravFieldResolver implements GraphQLResolver<KravResponse> {
     private final BegrepService begrepService;
     private final VirkemiddelService virkemiddelService;
     private final KravService kravService;
-    private final KravPrioriteringService kravPrioriteringService;
+    private final KravPriorityListService kravPriorityListService;
 
     public List<EtterlevelseResponse> etterlevelser(KravResponse krav, boolean onlyForEtterlevelseDokumentasjon, UUID etterlevelseDokumentasjonId, DataFetchingEnvironment env) {
         Integer nummer = krav.getKravNummer();
@@ -66,12 +66,9 @@ public class KravFieldResolver implements GraphQLResolver<KravResponse> {
         return convert(krav.getBegrepIder(), begrep -> begrepService.getBegrep(begrep).orElse(null));
     }
 
-    public String prioriteringsId(KravResponse krav) {
-        var kravPrioritering = kravPrioriteringService.getByKravNummer(krav.getKravNummer(), krav.getKravVersjon());
-        if(!kravPrioritering.isEmpty()){
-            return kravPrioritering.get(0).getPrioriteringsId();
-        }
-        return "";
+    public int prioriteringsId(KravResponse krav, DataFetchingEnvironment env) {
+        var kravPrioritering = kravPriorityListService.getByTema(KravFilter.get(env, Fields.tema));
+        return kravPrioritering.map(kravPriorityList -> kravPriorityList.getPriorityList().indexOf(krav.getKravNummer()) + 1).orElse(0);
     }
 
     public List<KravResponse> kravRelasjoner(KravResponse krav){

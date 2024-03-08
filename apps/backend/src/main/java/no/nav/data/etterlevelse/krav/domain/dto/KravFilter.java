@@ -28,6 +28,7 @@ public class KravFilter {
     private boolean etterlevelseDokumentasjonIrrevantKrav;
     private String underavdeling;
     private String lov;
+    private String tema;
     private List<String> status;
     // any of
     private List<String> lover;
@@ -54,6 +55,7 @@ public class KravFilter {
                 && etterlevelseDokumentasjonId == null
                 && underavdeling == null
                 && lov == null
+                && tema == null
                 && getStatus().isEmpty()
                 && getLover().isEmpty()
                 && !gjeldendeKrav

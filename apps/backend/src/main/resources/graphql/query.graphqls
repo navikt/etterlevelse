@@ -20,6 +20,7 @@ input KravFilter {
     virkemiddelId: String
     underavdeling: String
     lov: String
+    tema: String
     status: [String!]
     """ en av """
     lover: [String!]
