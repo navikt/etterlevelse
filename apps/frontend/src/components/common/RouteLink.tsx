@@ -1,64 +1,8 @@
 import { Link } from '@navikt/ds-react'
-import _ from 'lodash'
 import React from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { EListName } from '../../services/Codelist'
-import { user } from '../../services/User'
-import { loginUrl } from '../Header'
 import { AuditButton } from '../admin/audit/AuditButton'
 import { EObjectType, IAuditItem, TNavigableItem } from '../admin/audit/AuditTypes'
-
-type TRouteLinkProps = {
-  href?: string
-  hideUnderline?: boolean
-  plain?: boolean
-  requireLogin?: boolean
-  fontColor?: string
-  ariaLabel?: string
-  openinnewtab: boolean
-} & any
-
-const RouteLink = (props: TRouteLinkProps) => {
-  const { hideUnderline, plain, requireLogin, fontColor, ariaLabel, ...restprops } = props
-  const navigate = useNavigate()
-  const location = useLocation()
-
-  const onClick = (e: Event) => {
-    if (requireLogin && !user.isLoggedIn()) return
-    e.preventDefault()
-    if (!props.href) {
-      navigate(-1)
-      restprops.onClick && restprops.onClick()
-    }
-    navigate(props.href)
-    restprops.onClick && restprops.onClick()
-  }
-
-  const customStyle = {
-    textDecoration: hideUnderline ? 'none' : undefined,
-    color: fontColor ? fontColor : plain ? 'inherit !important' : undefined,
-    fontWeight: 'normal',
-  }
-
-  const mergedStyle = _.merge(customStyle, props.style)
-
-  const href =
-    !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(location, restprops.href)
-
-  return (
-    <Link
-      aria-label={ariaLabel}
-      style={mergedStyle}
-      {...restprops}
-      href={href}
-      onClick={props.href && props.href.includes('https') ? undefined : onClick}
-      target={props.openinnewtab ? '_blank' : undefined}
-      rel={props.openinnewtab ? 'noreferrer noopener' : undefined}
-    />
-  )
-}
-
-export default RouteLink
 
 type TObjectLinkProps = {
   id?: string

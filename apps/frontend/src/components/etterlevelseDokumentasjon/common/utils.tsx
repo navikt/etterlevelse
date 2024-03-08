@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { EEtterlevelseStatus, IBehandling } from '../../../constants'
+import { EEtterlevelseStatus } from '../../../constants'
 
 export const getNewestKravVersjon = (list: any[]) => {
   let relevanteStatusListe = [...list]
@@ -32,21 +32,6 @@ export const getEtterlevelseStatus = (status?: EEtterlevelseStatus, frist?: stri
     default:
       return ''
   }
-}
-
-export const updateBehandlingNameWithNumber = (behandlinger: IBehandling[]) => {
-  return behandlinger.map((behandling) => {
-    return {
-      ...behandling,
-      navn:
-        'B' +
-        behandling.nummer +
-        ' ' +
-        behandling.overordnetFormaal.shortName +
-        ': ' +
-        behandling.navn,
-    }
-  })
 }
 
 export const getStatusLabelColor = (status: EEtterlevelseStatus) => {

@@ -206,7 +206,6 @@ const Kriterie = ({
             label="Beskrivelse av suksesskriteriet"
             tooltip="Nærmere detaljer rundt oppnåelse av suksesskriteriet."
           />
-          {/* <MarkdownEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} /> */}
           <TextEditor
             initialValue={beskrivelse}
             setValue={setBeskrivelse}

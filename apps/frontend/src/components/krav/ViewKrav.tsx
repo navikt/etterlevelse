@@ -36,13 +36,6 @@ export const ViewKrav = ({ krav }: { krav: TKravQL }) => {
             ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1]
             : ''}
         </BodyShort>
-
-        {
-          //deactivate side panel, waiting for feedback from design
-        }
-        {/* <div className={"block fixed right-0"}>
-        <SidePanel />
-      </div> */}
       </div>
     </div>
   )
@@ -95,7 +88,10 @@ export const AllInfo = ({
         <LabelWrapper>
           <LabelAboveContent title={'Tidligere versjoner'} header={header}>
             {alleKravVersjoner.map((kravRelasjon, index) => {
-              if (kravRelasjon.kravVersjon && parseInt(kravRelasjon.kravVersjon.toString()) < krav.kravVersjon) {
+              if (
+                kravRelasjon.kravVersjon &&
+                parseInt(kravRelasjon.kravVersjon.toString()) < krav.kravVersjon
+              ) {
                 return (
                   <BodyShort key={'kravVersjon_list_' + index} className={'break-words'}>
                     <ExternalLink

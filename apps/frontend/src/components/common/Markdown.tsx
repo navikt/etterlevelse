@@ -1,6 +1,5 @@
 import { BodyLong, BodyShort, Heading, Link, List } from '@navikt/ds-react'
 import ReactMarkdown from 'react-markdown'
-import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
@@ -137,23 +136,6 @@ export const Markdown = ({
     </div>
   )
 }
-
-type TMarkdownEditorProps = {
-  initialValue: string
-  setValue: (v: string) => void
-  shortenLinks?: boolean
-  onImageUpload?: (file: File) => Promise<string>
-  height?: string
-}
-
-export const MarkdownEditor = (props: TMarkdownEditorProps) => (
-  <MdEditor
-    style={{ height: props.height || '31.25rem' }}
-    defaultValue={props.initialValue}
-    renderHTML={(txt) => <Markdown source={txt} shortenLinks={props.shortenLinks} />}
-    onImageUpload={props.onImageUpload}
-  />
-)
 
 export const MarkdownInfo = () => (
   <div className="mt-4">

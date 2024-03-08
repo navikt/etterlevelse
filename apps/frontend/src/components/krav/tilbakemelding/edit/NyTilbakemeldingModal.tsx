@@ -129,8 +129,6 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
                       name="foersteMelding"
                       placeholder="Skriv her.."
                     />
-
-                    {/* <OptionField label="Type" name="type" clearable={false} options={Object.values(TilbakemeldingType).map((o) => ({ id: o, label: typeText(o) }))} /> */}
                     <Field name="varslingsadresse.adresse">
                       {(fieldProps: FieldProps) => (
                         <div>
@@ -186,7 +184,9 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
                                 )}
                               </div>
                             </div>
-                            {fieldProps.meta.error && <Alert variant="error">{fieldProps.meta.error}</Alert>}
+                            {fieldProps.meta.error && (
+                              <Alert variant="error">{fieldProps.meta.error}</Alert>
+                            )}
 
                             {values.varslingsadresse && (
                               <VarslingsadresserTagList

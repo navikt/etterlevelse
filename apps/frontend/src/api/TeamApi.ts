@@ -10,7 +10,7 @@ import {
 } from '../constants'
 import { user } from '../services/User'
 import { env } from '../util/env'
-import { useForceUpdate, useSearch } from '../util/hooks/customHooks'
+import { useForceUpdate } from '../util/hooks/customHooks'
 
 export const getResourceById = async (resourceId: string) => {
   return (await axios.get<ITeamResource>(`${env.backendBaseUrl}/team/resource/${resourceId}`)).data
@@ -27,14 +27,6 @@ export const searchResourceByName = async (resourceName: string) => {
 export const getTeam = async (teamId: string) => {
   const data = (await axios.get<ITeam>(`${env.backendBaseUrl}/team/${teamId}`)).data
   data.members = data.members.sort((a, b) => (a.name || '').localeCompare(b.name || ''))
-  return data
-}
-
-export const getTeams = async (teamIds: string[]) => {
-  const data: ITeam[] = []
-  teamIds.forEach(async (id) => {
-    await getTeam(id).then((response) => data.push(response))
-  })
   return data
 }
 
@@ -80,11 +72,6 @@ export const searchSlackChannel = async (name: string) => {
   ).data.content
 }
 
-export const mapTeamResourceToOption = (teamResource: ITeamResource) => ({
-  id: teamResource.navIdent,
-  label: teamResource.fullName,
-})
-
 // Overly complicated async fetch of people and teams
 
 const people: Map<string, { f: boolean; v: string }> = new Map<string, { f: boolean; v: string }>()
@@ -126,7 +113,6 @@ export const usePersonName = () => {
     return people.get(id)?.v || id
   }
 }
-export const useSearchTeam = () => useSearch(searchTeam)
 
 export const useSearchTeamOptions = async (searchParam: string) => {
   if (searchParam && searchParam.length > 2) {
@@ -240,9 +226,3 @@ export const useSlackChannelSearch = async (searchParam: string) => {
   }
   return []
 }
-
-/**
- * Will not work unless the people have been loaded already (by using usePersonName hook etc)
- */
-export const personIdentSort = (a: string, b: string) =>
-  (people.get(a)?.v || '').localeCompare(people.get(b)?.v || '')

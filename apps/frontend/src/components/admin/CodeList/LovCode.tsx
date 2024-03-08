@@ -1,13 +1,11 @@
-import { Label, Select, TextField, Textarea } from '@navikt/ds-react'
+import { Label, TextField } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
 import {
   EListName,
   ICodeListFormValues,
   ILovCodeData,
-  ITemaCodeData,
   lovCodeRelevansToOptions,
 } from '../../../services/Codelist'
-import { temaBilder } from '../../Images'
 import { OptionList } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 
@@ -89,61 +87,3 @@ export const LovCodeDataForm = () => (
     </Field>
   </div>
 )
-
-export const TemaCodeDataForm = () => {
-  const temaBildeOptions = Object.keys(temaBilder).map((id) => ({
-    id,
-    label: id,
-    bilde: temaBilder[id],
-  }))
-
-  return (
-    <div className="flex w-full mt-4 items-center flex-col">
-      <div className="flex w-full mt-4 items-center">
-        <Label className="mr-4 w-1/4">Temakode data</Label>
-      </div>
-      <Field name="data">
-        {({ field, form }: FieldProps<ITemaCodeData, ICodeListFormValues>) => {
-          const data = field.value
-
-          const set = (val: Partial<ITemaCodeData>) => {
-            form.setFieldValue('data', { ...data, ...val })
-          }
-          return (
-            <>
-              <div className="w-full mt-4">
-                <Label className="mr-4 w-1/4">Bilde</Label>
-                <Select
-                  className="w-full"
-                  label="Bilde"
-                  hideLabel
-                  value={data.image}
-                  onChange={(e) => {
-                    const image = e.target.value
-                    return set({ image })
-                  }}
-                >
-                  <option value="">Velg bilde</option>
-                  {temaBildeOptions.map((tema, index) => (
-                    <option key={index + '_' + tema.label} value={tema.id}>
-                      {tema.label}
-                    </option>
-                  ))}
-                </Select>
-              </div>
-              <Textarea
-                label="Kort beskrivelse"
-                className={'w-full mt-4'}
-                value={data.shortDesciption}
-                onChange={(str) =>
-                  set({ shortDesciption: (str.target as HTMLTextAreaElement).value })
-                }
-              />
-              <FormError fieldName="data.shortDesciption" akselStyling />
-            </>
-          )
-        }}
-      </Field>
-    </div>
-  )
-}

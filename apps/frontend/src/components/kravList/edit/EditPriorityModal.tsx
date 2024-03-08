@@ -15,8 +15,6 @@ import { IKrav } from '../../../constants'
 import { FieldWrapper } from '../../common/Inputs'
 import { KravPriorityPanel } from './components/KravPriorityPanel'
 
-export const kravListPriorityModal = () => document.querySelector('#krav-list-edit-priority-modal')
-
 interface IKravPriorityPanelsProps {
   fieldArrayRenderProps: FieldArrayRenderProps
 }

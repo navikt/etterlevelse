@@ -6,12 +6,8 @@ import { useSearchParams } from 'react-router-dom'
 import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { getBehandling, searchBehandlingOptions } from '../../../api/BehandlingApi'
-import {
-  IBehandling,
-  IPageResponse,
-  TEtterlevelseDokumentasjonQL,
-  emptyPage,
-} from '../../../constants'
+import { emptyPage } from '../../../api/util/EmptyPageConstant'
+import { IBehandling, IPageResponse, TEtterlevelseDokumentasjonQL } from '../../../constants'
 import { TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { getEtterlevelseDokumentasjonByBehandlingIdQuery } from '../../../query/EtterlevelseDokumentasjonQuery'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'

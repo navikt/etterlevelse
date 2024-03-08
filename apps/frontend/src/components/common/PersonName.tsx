@@ -17,9 +17,3 @@ export const PersonName = (props: { ident: string; link?: boolean; kraveier?: bo
     </div>
   )
 }
-
-export const StringPersonName = (ident: string, kraveier?: boolean) => {
-  const name = usePersonName()(ident)
-
-  return name + kraveier ? ' (Kraveier)' : ''
-}

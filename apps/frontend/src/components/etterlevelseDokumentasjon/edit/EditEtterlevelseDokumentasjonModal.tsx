@@ -156,14 +156,10 @@ export const EditEtterlevelseDokumentasjonModal = (
                       <Field name="virkemiddelId">
                         {(fp: FieldProps) => {
                           return (
-                            <FormControl label={<LabelWithTooltip label={'Legg til virkemiddel'} tooltip="Søk og legg til virkemiddel" />}>
-                              <Block>
-                                <CustomizedSelect
+                              <div>
+                              <LabelWithTooltip label={'Legg til virkemiddel'} tooltip="Søk og legg til virkemiddel" />
+                              <CustomizedSelect
                                   labelKey={'navn'}
-                                  noResultsMsg={intl.emptyTable}
-                                  maxDropdownHeight="350px"
-                                  searchable={true}
-                                  type={TYPE.search}
                                   options={virkemiddelSearchResult}
                                   placeholder={'Søk virkemiddel'}
                                   onInputChange={(event) => setVirkemiddelSearchResult(event.currentTarget.value)}
@@ -175,7 +171,6 @@ export const EditEtterlevelseDokumentasjonModal = (
                                     }
                                   }}
                                   isLoading={loadingVirkemiddelSearchResult}
-                                  overrides={selectCustomOverrides('virkemiddelId', fp)}
                                 />
                                 {selectedVirkemiddel && (
                                   <Tag
@@ -184,30 +179,11 @@ export const EditEtterlevelseDokumentasjonModal = (
                                       setSelectedVirkemiddel(undefined)
                                       fp.form.setFieldValue('virkemiddelId', '')
                                     }}
-                                    overrides={{
-                                      Text: {
-                                        style: {
-                                          fontSize: theme.sizing.scale650,
-                                          lineHeight: theme.sizing.scale750,
-                                          fontWeight: 400,
-                                        },
-                                      },
-                                      Root: {
-                                        style: {
-                                          ...borderWidth('1px'),
-                                          ':hover': {
-                                            backgroundColor: ettlevColors.green50,
-                                            borderColor: '#0B483F',
-                                          },
-                                        },
-                                      },
-                                    }}
                                   >
                                     {selectedVirkemiddel.navn}
                                   </Tag>
                                 )}
-                              </Block>
-                            </FormControl>
+                              </div>
                           )
                         }}
                       </Field>

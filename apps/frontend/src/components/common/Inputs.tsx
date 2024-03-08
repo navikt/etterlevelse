@@ -140,8 +140,6 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
                   name={name}
                   setIsFormDirty={setIsFormDirty}
                 />
-                {/* <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(name, v)}
-                onImageUpload={onImageUpload} shortenLinks={shortenLinks} /> */}
               </div>
             )}
             {!markdown && (
@@ -343,27 +341,6 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
           )
         }}
       </FieldArray>
-    </FieldWrapper>
-  )
-}
-
-type TPropsOptionField = TLabelName & IMarginBottom & ICaption & ITooltip & TOptionORListname
-
-export const OptionField = (props: TPropsOptionField) => {
-  const { name } = props
-
-  return (
-    <FieldWrapper>
-      <Field name={name}>
-        {(fieldProps: FieldProps<string>) => (
-          <OptionList
-            {...props}
-            error={fieldProps.meta.touched && fieldProps.meta.error}
-            onChange={(val) => fieldProps.form.setFieldValue(name, val)}
-            value={fieldProps.field.value}
-          />
-        )}
-      </Field>
     </FieldWrapper>
   )
 }

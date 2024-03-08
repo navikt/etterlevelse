@@ -61,11 +61,6 @@ export const MineEtterlevelseDokumentasjoner = ({
                     <BodyShort>Teamet har ikke registrert noe etterlevelsesdokument</BodyShort>
                   )}
                 </div>
-                {/* <Block alignSelf={'flex-end'} marginBottom={theme.sizing.scale400}>
-                  <ExternalButton href={`${env.pollyBaseUrl}process/team/${t.id}`} underlineHover size={'mini'}>
-                    Legg til behandling <FontAwesomeIcon icon={faExternalLinkAlt} />
-                  </ExternalButton>
-                </Block> */}
               </div>
 
               <EtterlevelseDokumentasjonsPanels etterlevelseDokumentasjoner={teamDokumentasjoner} />

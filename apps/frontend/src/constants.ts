@@ -181,11 +181,6 @@ export interface IBreadCrumbPath {
   pathName: string
 }
 
-export interface IKravId {
-  id: string
-  kravVersjon: number
-}
-
 export interface IKravVersjon {
   kravNummer: string | number
   kravVersjon: string | number
@@ -387,15 +382,6 @@ export interface IMelding extends IDomainObject {
   alertType: EAlertType
 }
 
-export const emptyPage = {
-  content: [],
-  numberOfElements: 0,
-  pageNumber: 0,
-  pages: 0,
-  pageSize: 1,
-  totalElements: 0,
-}
-
 export interface ITeamResource {
   navIdent: string
   givenName: string
@@ -456,10 +442,6 @@ export type TKravQL = TReplace<
 
 export type TEtterlevelseQL = IEtterlevelse & {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-}
-
-export type TBehandlingQL = IBehandling & {
-  teamsData: ITeam[]
 }
 
 export type TEtterlevelseDokumentasjonQL = IEtterlevelseDokumentasjon & {
