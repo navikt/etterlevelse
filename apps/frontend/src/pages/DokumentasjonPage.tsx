@@ -5,7 +5,6 @@ import { hotjar } from 'react-hotjar'
 import { useParams } from 'react-router-dom'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
-import { getAllKravPriority } from '../api/KravPriorityApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
 import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
@@ -17,7 +16,6 @@ import { PageLayout } from '../components/scaffold/Page'
 import {
   IBreadCrumbPath,
   IEtterlevelseDokumentasjonStats,
-  IKravPrioritering,
   IPageResponse,
   TKravQL,
 } from '../constants'
@@ -41,11 +39,6 @@ export const DokumentasjonPage = () => {
   const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByEtterlevelseDokumentasjonId(
     params.id
   )
-  const [kravPriority, setKravPriority] = useState<IKravPrioritering[]>([])
-
-  useEffect(() => {
-    getAllKravPriority().then((priority) => setKravPriority(priority))
-  }, [])
 
   const {
     data: relevanteData,
@@ -214,7 +207,6 @@ export const DokumentasjonPage = () => {
             relevanteStats={relevanteStats}
             utgaattStats={utgaattStats}
             temaListe={temaListe}
-            kravPriority={kravPriority}
             openAccordions={openAccordions}
             setOpenAccordions={setOpenAccordions}
           />
