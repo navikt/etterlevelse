@@ -198,7 +198,7 @@ export const EditEtterlevelseDokumentasjonModal = (
 
                 <FieldArray name="irrelevansFor">
                   {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                    <div className="h-full pt-5 w-[calc(100% - 16px)]">
+                    <div className="h-full pt-5 w-[calc(100% - 1rem)]">
                       <CheckboxGroup
                         legend="Hvilke egenskaper gjelder for etterlevelsen?"
                         description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
@@ -281,7 +281,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                                   ({
                                     ...base,
                                     cursor: 'text',
-                                    height: '48px',
+                                    height: '3rem',
                                   }) as CSSObjectWithLabel,
                               }}
                             />
@@ -334,7 +334,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                                   ({
                                     ...base,
                                     cursor: 'text',
-                                    height: '48px',
+                                    height: '3rem',
                                   }) as CSSObjectWithLabel,
                               }}
                             />

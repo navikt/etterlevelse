@@ -37,7 +37,6 @@ public class EtterlevelseDokumentasjonController {
 
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
-
     @Operation(summary = "Get All Etterlevelse Dokumentasjon")
     @ApiResponse(description = "ok")
     @GetMapping

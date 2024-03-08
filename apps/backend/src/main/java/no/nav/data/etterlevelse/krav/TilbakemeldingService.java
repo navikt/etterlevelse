@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.krav;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.mail.EmailService;
 import no.nav.data.common.mail.MailTask;
@@ -33,6 +34,7 @@ import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class TilbakemeldingService extends DomainService<Tilbakemelding> {
 
     private final TeamcatResourceClient resourceClient;
@@ -41,15 +43,6 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
     private final UrlGenerator urlGenerator;
 
     private final TilbakemeldingRepo tilbakemeldingRepo;
-
-    public TilbakemeldingService(TeamcatResourceClient resourceClient, EmailService emailService, SlackClient slackClient,
-            UrlGenerator urlGenerator, TilbakemeldingRepo tilbakemeldingRepo) {
-        this.urlGenerator = urlGenerator;
-        this.resourceClient = resourceClient;
-        this.emailService = emailService;
-        this.slackClient = slackClient;
-        this.tilbakemeldingRepo = tilbakemeldingRepo;
-    }
 
     public List<Tilbakemelding> getForKravByNumberAndVersion(int kravNummer, int kravVersjon) {
         return convertToDomaionObject(tilbakemeldingRepo.findByKravNummerAndVersion(kravNummer, kravVersjon));

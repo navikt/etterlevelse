@@ -159,8 +159,8 @@ class CodelistService {
     return nationalLawCode && nationalLawCode.startsWith(LOVDATA_FORSKRIFT_PREFIX)
   }
 
-  makeIdLabelForAllCodeLists() {
-    return Object.keys(EListName).map((key) => ({ id: key, label: key }))
+  makeValueLabelForAllCodeLists() {
+    return Object.keys(EListName).map((key) => ({ value: key, label: key }))
   }
 
   gjelderForLov(tema: TTemaCode, lov: TLovCode) {
@@ -274,7 +274,7 @@ export const lovCodeRelevansToText = (lovCodeRelevans: string) => {
 
 export const lovCodeRelevansToOptions = () => {
   return Object.keys(ELovCodeRelevans).map((key) => {
-    return { id: key, label: lovCodeRelevansToText(key) }
+    return { value: key, label: lovCodeRelevansToText(key) }
   })
 }
 

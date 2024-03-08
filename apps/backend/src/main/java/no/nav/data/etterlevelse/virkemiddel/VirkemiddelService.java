@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.virkemiddel;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
@@ -25,15 +26,11 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class VirkemiddelService extends DomainService<Virkemiddel> {
 
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final KravService kravService;
-
-    public VirkemiddelService(EtterlevelseDokumentasjonService etterlevelseDokumentasjonService, KravService kravService) {
-        this.etterlevelseDokumentasjonService = etterlevelseDokumentasjonService;
-        this.kravService = kravService;
-    }
 
     private void validateVirkemiddelIsNotInUse(UUID virkemiddelId) {
         Virkemiddel virkemiddel = storage.get(virkemiddelId);
@@ -61,14 +58,15 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
         return convert(virkemiddelRepo.findByVirkemiddelType(code), GenericStorage::getDomainObjectData);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public Virkemiddel save(VirkemiddelRequest request) {
-        Validator.validate(request, storage)
+        Validator.validate(request, storage::get)
                 .addValidations(this::validateName)
                 .ifErrorsThrowValidationException();
 
         var virkemiddel = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Virkemiddel();
 
-        virkemiddel.convert(request);
+        virkemiddel.merge(request);
 
         return storage.save(virkemiddel);
     }

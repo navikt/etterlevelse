@@ -23,7 +23,6 @@ public class SuksesskriterieRequest implements Validated {
     private String beskrivelse;
     private boolean behovForBegrunnelse;
 
-
     @Override
     public void format() {
         setNavn(trimToNull(navn));

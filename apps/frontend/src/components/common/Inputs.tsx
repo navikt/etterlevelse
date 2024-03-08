@@ -10,10 +10,9 @@ import {
   Textarea,
   useDatepicker,
 } from '@navikt/ds-react'
-import { Value } from 'baseui/select'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
 import React, { ReactNode, useState } from 'react'
-import { TOr } from '../../constants'
+import { TOption, TOr } from '../../constants'
 import { EListName, ICode, codelist } from '../../services/Codelist'
 import LabelWithTooltip from '../common/LabelWithTooltip'
 import { MarkdownInfo } from './Markdown'
@@ -48,7 +47,7 @@ interface ITooltip {
 }
 
 interface IOptions {
-  options: Value
+  options: TOption[]
 }
 
 interface IListname {
@@ -325,7 +324,7 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
                   />
                 </div>
 
-                <div className="min-w-[107px] ml-2.5">
+                <div className="min-w-[6.688rem] ml-2.5">
                   <Button type="button" onClick={() => add()} variant="secondary">
                     Legg til
                   </Button>
@@ -350,7 +349,7 @@ type TPropsOptionList = IPropsOptionList & TOptionORListname
 
 export const OptionList = (props: TPropsOptionList) => {
   const { label, value, onChange, options, listName, error } = props
-  const optionsList: Value = options || codelist.getParsedOptions(listName)
+  const optionsList: TOption[] = options || codelist.getParsedOptions(listName)
 
   return (
     <Select

@@ -20,7 +20,7 @@ public class Suksesskriterie {
     private boolean behovForBegrunnelse = true;
 
 
-    public static Suksesskriterie convert(SuksesskriterieRequest request) {
+    public static Suksesskriterie fromRequest(SuksesskriterieRequest request) {
         return Suksesskriterie.builder()
                 .id(request.getId())
                 .navn(request.getNavn())

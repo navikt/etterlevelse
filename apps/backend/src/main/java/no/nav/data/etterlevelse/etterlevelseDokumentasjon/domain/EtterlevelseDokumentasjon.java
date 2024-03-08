@@ -43,8 +43,8 @@ public class EtterlevelseDokumentasjon extends DomainObject {
         return CodelistService.getCodelistResponseList(ListName.RELEVANS, irrelevansFor);
     }
 
-
-    public void convert(EtterlevelseDokumentasjonRequest request) {
+    // Updates all fields from the request except id, version and changestamp
+    public void merge(EtterlevelseDokumentasjonRequest request) {
         etterlevelseNummer = request.getEtterlevelseNummer();
         title = request.getTitle();
         behandlingIds = copyOf(request.getBehandlingIds());

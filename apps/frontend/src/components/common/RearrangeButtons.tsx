@@ -1,6 +1,5 @@
-import { ArrowsSquarepathIcon } from '@navikt/aksel-icons'
+import { ArrowDownIcon, ArrowUpIcon, ArrowsSquarepathIcon } from '@navikt/aksel-icons'
 import { Button, Dropdown, TextField, Tooltip } from '@navikt/ds-react'
-import { ArrowDown, ArrowUp } from 'baseui/icon'
 import { useEffect, useState } from 'react'
 
 interface IProps {
@@ -31,8 +30,7 @@ export const RearrangeButtons = (props: IProps) => {
               updateIndex(index - 1)
             }}
             icon={
-              <ArrowUp
-                size="24px"
+              <ArrowUpIcon
                 title={'Flytt ' + label + ' opp'}
                 aria-label={'Flytt ' + label + ' opp'}
               />
@@ -50,8 +48,7 @@ export const RearrangeButtons = (props: IProps) => {
               updateIndex(index + 1)
             }}
             icon={
-              <ArrowDown
-                size="24px"
+              <ArrowDownIcon
                 title={'Flytt ' + label + ' ned'}
                 aria-label={'Flytt ' + label + ' ned'}
               />

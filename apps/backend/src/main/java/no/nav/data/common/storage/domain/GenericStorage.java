@@ -58,6 +58,7 @@ public class GenericStorage<T extends DomainObject> extends Auditable {
         Assert.isTrue(id == null, "id already set");
         id = UUID.randomUUID();
         // TODO: Setter IKKE id på domainObjectCache. Må sjekke at dette er riktig oppførsel
+        // Se https://trello.com/c/rP0Ln2zc/358-synkronisering-av-felles-felter-domainobject-vs-genericstorage
         return this;
     }
 
@@ -66,6 +67,7 @@ public class GenericStorage<T extends DomainObject> extends Auditable {
      */
     public GenericStorage<T> setDomainObjectData(T domainObject) {
         // TODO: Setter IKKE changeStamp på this fra domainObject. Må sjekkes at dette er riktig oppførsel.
+        // Se https://trello.com/c/rP0Ln2zc/358-synkronisering-av-felles-felter-domainobject-vs-genericstorage
         Assert.isTrue(id != null, "id not set");
         domainObject.setId(id);
         type = domainObject.type();

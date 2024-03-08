@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios'
 import { getUserInfo } from '../api/UserApi'
 import { IUserInfo } from '../constants'
-import { updateUser } from '../util/hooks'
+import { updateUser } from '../util/hooks/customHooks'
 
 export enum EGroup {
   READ = 'READ',

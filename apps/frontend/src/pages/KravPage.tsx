@@ -23,7 +23,7 @@ import { getKravWithEtterlevelseQuery } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
-import { useLocationState, useQueryParam } from '../util/hooks'
+import { useLocationState, useQueryParam } from '../util/hooks/customHooks'
 import { temaBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }): string =>

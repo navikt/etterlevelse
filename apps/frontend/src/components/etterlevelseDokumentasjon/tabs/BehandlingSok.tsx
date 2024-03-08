@@ -96,7 +96,7 @@ export const BehandlingSok = () => {
 
   return (
     <div className="my-5">
-      <div className="max-w-[600px] mb-10 flex flex-col">
+      <div className="max-w-[37.5rem] mb-10 flex flex-col">
         <AsyncSelect
           aria-label="Søk etter behandlinger"
           placeholder="Søk etter behandlinger"
@@ -126,7 +126,7 @@ export const BehandlingSok = () => {
               ({
                 ...base,
                 cursor: 'text',
-                height: '48px',
+                height: '3rem',
               }) as CSSObjectWithLabel,
           }}
         />
