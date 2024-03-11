@@ -2,7 +2,7 @@ import { BodyShort, Detail, Heading, Label, LinkPanel } from '@navikt/ds-react'
 import * as _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { getAllKravPriority } from '../api/KravPriorityApi'
+import { getKravPriorityListByTemaCode } from '../api/KravPriorityListApi'
 import { lovdataBase } from '../components/Lov'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
@@ -77,18 +77,14 @@ const TemaView = ({ tema }: { tema: TTemaCode }) => {
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
       ;(async () => {
-        const allKravPriority = await getAllKravPriority()
+        const kravPriorityList = await getKravPriorityListByTemaCode(tema.code)
         const kravListe = _.cloneDeep(data.krav.content)
         kravListe.map((krav) => {
-          const priority = allKravPriority.filter(
-            (kravPriority) =>
-              kravPriority.kravNummer === krav.kravNummer &&
-              kravPriority.kravVersjon === krav.kravVersjon
-          )
-          krav.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
+          const priority = kravPriorityList.priorityList.indexOf(krav.kravNummer) + 1
+          krav.prioriteringsId = priority
           return krav
         })
-        setKravList(sortKravListeByPriority(kravListe, tema.shortName))
+        setKravList(sortKravListeByPriority(kravListe))
       })()
     }
   }, [data])

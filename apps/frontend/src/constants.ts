@@ -167,7 +167,7 @@ export interface IKravPrioritering extends IDomainObject {
   id: string
   kravVersjon: number
   kravNummer: number
-  prioriteringsId: string
+  prioriteringsId: number
 }
 
 export interface IKravPriorityList extends IDomainObject {
@@ -201,8 +201,7 @@ export interface IKrav extends IDomainObject {
   implementasjoner: string
   notat?: string
   varselMelding?: string
-  prioriteringsId?: string
-  kravPriorityUID?: string
+  prioriteringsId?: number
   begrepIder: string[]
   virkemiddelIder: string[]
   varslingsadresser: IVarslingsadresse[]
@@ -290,7 +289,7 @@ export type TKravEtterlevelseData = {
   changeStamp: IChangeStamp
   frist?: string
   varselMelding?: string
-  prioriteringsId?: string
+  prioriteringsId?: number
   etterlevelseStatus?: EEtterlevelseStatus
   suksesskriterier: ISuksesskriterie[]
   gammelVersjon?: boolean
@@ -436,7 +435,7 @@ export type TKravQL = TReplace<
     begreper: IBegrep[]
     virkemidler: IVirkemiddel[]
     kravRelasjoner: IKrav[]
-    prioriteringsId: string
+    prioriteringsId: number
   }
 >
 

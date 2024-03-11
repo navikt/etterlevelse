@@ -79,13 +79,13 @@ public class KravPriorityListController {
             return ResponseEntity.notFound().build();
         }
 
-        int kravPriority = -1;
+        int kravPriority = 0;
 
         if(!kravPriorityList.get().getPriorityList().isEmpty()) {
-            kravPriority = kravPriorityList.get().getPriorityList().indexOf(kravnummer);
+            kravPriority = kravPriorityList.get().getPriorityList().indexOf(kravnummer) + 1;
         }
 
-        if(kravPriority < 0) {
+        if(kravPriority == 0) {
             return ResponseEntity.notFound().build();
         }
 

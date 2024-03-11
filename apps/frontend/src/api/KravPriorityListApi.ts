@@ -36,10 +36,10 @@ export const getKravPriorityListByTemaCode = async (temaCode: string) => {
   return await axios
     .get<IKravPriorityList>(`${env.backendBaseUrl}/kravprioritylist/tema/${temaCode}`)
     .then((resp) => {
-      return resp.data
+      return kravPrioritingMapToFormValue(resp.data)
     })
     .catch(() => {
-      return undefined
+      return kravPrioritingMapToFormValue({})
     })
 }
 
@@ -71,17 +71,21 @@ export const useKravPriorityList = (temaCode: string) => {
   const [data, setData] = useState(kravPrioritingMapToFormValue({}))
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
+  const fetchData = () => {
     setLoading(true)
     getKravPriorityListByTemaCode(temaCode).then((response: IKravPriorityList | undefined) => {
       if (response) {
-        setData(kravPrioritingMapToFormValue(response))
+        setData(response)
       }
     })
     setLoading(false)
+  }
+
+  useEffect(() => {
+    fetchData()
   }, [temaCode])
 
-  return [data, loading] as [IKravPriorityList, boolean]
+  return [data, loading, fetchData] as [IKravPriorityList, boolean, () => void]
 }
 
 function kravPrioriteringToDto(kravPrioriteringToDto: IKravPriorityList): IKravPriorityList {
