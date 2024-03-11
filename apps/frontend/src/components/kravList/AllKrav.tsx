@@ -51,7 +51,6 @@ export const AllKrav = () => {
     pageSize,
   })
 
-  const [filterValue, setFilterValue] = useState<string>()
   const [sortedKravList, setSortedKravList] = useState<TKravQL[]>([])
 
   const loading = !data && gqlLoading
@@ -137,7 +136,7 @@ export const AllKrav = () => {
     )
   }
 
-  const getSelector = (kravFilter: EKravListFilter, options: any[]) => {
+  const getSelector = (kravFilter: EKravListFilter, options: any[], value: string) => {
     return (
       <div className="ml-3 min-w-fit">
         <Select
@@ -146,9 +145,8 @@ export const AllKrav = () => {
           label={`Filter ${kravFilter}`}
           hideLabel
           //placeholder='tema'
-          value={filterValue}
+          value={value}
           onChange={(params) => {
-            setFilterValue(params.currentTarget.value)
             updateFilter(
               [
                 {
@@ -194,15 +192,17 @@ export const AllKrav = () => {
                   relevans?.map((relevans) => {
                     return { label: relevans.shortName, value: relevans.code }
                   })
-                )
+                ),
+                filter.relevans[0].value as string
               )}
-              {getSelector(EKravListFilter.LOVER, getLovOptions())}
+              {getSelector(EKravListFilter.LOVER, getLovOptions(), filter.lover[0].value as string)}
               {getSelector(
                 EKravListFilter.STATUS,
                 getOptions(
                   'Alle statuser',
                   Object.values(EKravStatus).map((value) => ({ value, label: kravStatus(value) }))
-                )
+                ),
+                filter.status[0].value as string
               )}
             </div>
           </div>
