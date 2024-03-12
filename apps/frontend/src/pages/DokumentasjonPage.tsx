@@ -138,11 +138,13 @@ export const DokumentasjonPage = () => {
             <EtterlevelseDokumentasjonExpansionCard
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             />
-            <EditEtterlevelseDokumentasjonModal
-              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-              setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-              isEditButton
-            />
+            {etterlevelseDokumentasjon && (
+              <EditEtterlevelseDokumentasjonModal
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+                isEditButton
+              />
+            )}
           </div>
         </div>
       </div>
