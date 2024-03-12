@@ -12,8 +12,7 @@ import no.nav.data.etterlevelse.codelist.domain.ListName;
 
 import java.util.List;
 
-import static no.nav.data.common.utils.StringUtils.formatList;
-import static no.nav.data.common.utils.StringUtils.formatListToUppercase;
+import static no.nav.data.common.utils.StringUtils.*;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
@@ -34,6 +33,8 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private List<String> irrelevansFor;
     private boolean knytteTilTeam;
     private List<String> teams;
+    @Schema(description = "Codelist AVDELING")
+    private String avdeling;
     @Override
     public void format() {
         setId(trimToNull(id));
@@ -42,6 +43,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         setVirkemiddelId(trimToNull(virkemiddelId));
         setIrrelevansFor(formatListToUppercase(irrelevansFor));
         setTeams(formatList(teams));
+        setAvdeling(toUpperCaseAndTrim(avdeling));
     }
 
     @Override
@@ -49,5 +51,6 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         validator.checkUUID(EtterlevelseDokumentasjonRequest.Fields.id, id);
         validator.checkId(this);
         validator.checkCodelists(EtterlevelseDokumentasjonRequest.Fields.irrelevansFor, irrelevansFor, ListName.RELEVANS);
+        validator.checkCodelist(Fields.avdeling, avdeling, ListName.AVDELING);
     }
 }
