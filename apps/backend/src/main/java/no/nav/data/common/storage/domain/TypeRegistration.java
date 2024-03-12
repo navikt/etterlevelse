@@ -9,7 +9,6 @@ import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
-import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.etterlevelse.virkemiddel.domain.Virkemiddel;
@@ -30,7 +29,6 @@ public final class TypeRegistration {
     static {
         addDomainClass(Krav.class, true);
         addDomainClass(KravPriorityList.class, true);
-        addDomainClass(KravPrioritering.class, true);
         addDomainClass(Etterlevelse.class, true);
         addDomainClass(EtterlevelseMetadata.class, true);
         addDomainClass(Melding.class, true);

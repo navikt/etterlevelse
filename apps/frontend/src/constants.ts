@@ -163,13 +163,6 @@ export interface IDomainObject {
   version: number
 }
 
-export interface IKravPrioritering extends IDomainObject {
-  id: string
-  kravVersjon: number
-  kravNummer: number
-  prioriteringsId: number
-}
-
 export interface IKravPriorityList extends IDomainObject {
   id: string
   temaId: string
