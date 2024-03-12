@@ -1,0 +1,1 @@
+DELETE FROM GENERIC_STORAGE WHERE type = 'KravPrioritering';
