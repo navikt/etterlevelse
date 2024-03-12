@@ -1,5 +1,5 @@
 import { Button, Checkbox, CheckboxGroup, Modal } from '@navikt/ds-react'
-import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
+import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CSSObjectWithLabel } from 'react-select'
@@ -14,8 +14,8 @@ import {
 import { useSearchTeamOptions } from '../../../api/TeamApi'
 import { IBehandling, ITeam, IVirkemiddel, TEtterlevelseDokumentasjonQL } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
-import { EListName, ICode, codelist } from '../../../services/Codelist'
-import { BoolField, FieldWrapper, TextAreaField } from '../../common/Inputs'
+import { EListName, ICode, ICodeListFormValues, codelist } from '../../../services/Codelist'
+import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { FormError } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
@@ -308,7 +308,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                   <FieldWrapper>
                     <FieldArray name="teamsData">
                       {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                        <div>
+                        <div className=" mb-4">
                           <LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />
                           <div className="w-full">
                             <AsyncSelect
@@ -348,6 +348,23 @@ export const EditEtterlevelseDokumentasjonModal = (
                     </FieldArray>
                   </FieldWrapper>
                 )}
+                <FieldWrapper>
+                  <Field name="avdeling">
+                    {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
+                      <div>
+                        <LabelWithDescription label="Avdeling" />
+                        <OptionList
+                          listName={EListName.AVDELING}
+                          label="Avdeling"
+                          value={fieldProps.field.value?.code}
+                          onChange={(value) => {
+                            fieldProps.form.setFieldValue('avdeling', value)
+                          }}
+                        />
+                      </div>
+                    )}
+                  </Field>
+                </FieldWrapper>
                 <div className="my-5">
                   <FormError fieldName="title" akselStyling />
                 </div>
