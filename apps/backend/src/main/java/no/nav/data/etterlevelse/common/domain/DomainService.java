@@ -12,7 +12,6 @@ import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
-import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioriteringRepo;
 import no.nav.data.etterlevelse.melding.domain.MeldingRepo;
 import no.nav.data.etterlevelse.virkemiddel.domain.VirkemiddelRepo;
 import no.nav.data.integration.begrep.BegrepService;
