@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
-import { searchBehandlingOptions } from '../../../api/BehandlingApi'
+import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
 import {
   createEtterlevelseDokumentasjon,
   etterlevelseDokumentasjonMapToFormVal,
@@ -121,26 +121,29 @@ export const EditEtterlevelseDokumentasjonModal = (
         {isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Nytt etterlevelsesdokument'}
       </Button>
 
-      <Modal
-        header={{
-          heading: isEditButton
-            ? 'Rediger etterlevelsesdokumentet'
-            : 'Opprett nytt etterlevelsesdokument',
-        }}
-        open={!!isEtterlevelseDokumentasjonerModalOpen}
-        onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}
+      <Formik
+        initialValues={etterlevelseDokumentasjonMapToFormVal(
+          etterlevelseDokumentasjon ? etterlevelseDokumentasjon : {}
+        )}
+        onSubmit={submit}
+        validationSchema={etterlevelseDokumentasjonSchema()}
+        validateOnChange={false}
+        validateOnBlur={false}
       >
-        <Modal.Body>
-          <Formik
-            initialValues={etterlevelseDokumentasjonMapToFormVal(
-              etterlevelseDokumentasjon ? etterlevelseDokumentasjon : {}
-            )}
-            onSubmit={submit}
-            validationSchema={etterlevelseDokumentasjonSchema()}
-            validateOnChange={false}
-            validateOnBlur={false}
+        {({ values, submitForm, handleReset }) => (
+          <Modal
+            header={{
+              heading: isEditButton
+                ? 'Rediger etterlevelsesdokumentet'
+                : 'Opprett nytt etterlevelsesdokument',
+            }}
+            open={!!isEtterlevelseDokumentasjonerModalOpen}
+            onClose={() => {
+              handleReset()
+              setIsEtterlevelseDokumntasjonerModalOpen(false)
+            }}
           >
-            {({ values, submitForm }) => (
+            <Modal.Body>
               <Form>
                 <TextAreaField
                   rows={2}
@@ -283,7 +286,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                           </div>
                           <RenderTagList
                             list={fieldArrayRenderProps.form.values.behandlinger.map(
-                              (behandling: IBehandling) => behandling.navn
+                              (behandling: IBehandling) => behandlingName(behandling)
                             )}
                             onRemove={fieldArrayRenderProps.remove}
                           />
@@ -356,6 +359,7 @@ export const EditEtterlevelseDokumentasjonModal = (
                       ampli.logEvent('knapp trykket', {
                         tekst: 'Avbryt opprett etterlevelsesdokument',
                       })
+                      handleReset()
                       setIsEtterlevelseDokumntasjonerModalOpen(false)
                     }}
                   >
@@ -377,10 +381,10 @@ export const EditEtterlevelseDokumentasjonModal = (
                   </Button>
                 </div>
               </Form>
-            )}
-          </Formik>
-        </Modal.Body>
-      </Modal>
+            </Modal.Body>
+          </Modal>
+        )}
+      </Formik>
     </div>
   )
 }
