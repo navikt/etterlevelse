@@ -101,7 +101,7 @@ export const MainPage = () => {
         </div>
       </div>
 
-      <div className="flex flex-col items-center w-full bg-no-repeat bg-contain xl:bg-cover bg-[left_4.5rem] bg-[url('/src/resources/icons/main-page-background-icon.svg')]">
+      <div className="flex flex-col items-center w-full">
         <div className="max-w-7xl w-full px-2">
           <div className="flex my-10">
             <ForstaKravene />
