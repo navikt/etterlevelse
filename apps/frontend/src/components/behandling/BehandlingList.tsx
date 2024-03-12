@@ -1,4 +1,5 @@
 import { BodyShort } from '@navikt/ds-react'
+import { behandlingName } from '../../api/BehandlingApi'
 import { IBehandling } from '../../constants'
 import { env } from '../../util/env'
 import { ExternalLink } from '../common/RouteLink'
@@ -24,14 +25,12 @@ export const BehandlingList = (props: IProps) => {
                 className="text-medium"
                 href={`${env.pollyBaseUrl}process/${behandlingId}`}
               >
-                {behandlinger?.length > 0 ? `${behandlinger[index].navn}` : 'Ingen data'}
+                {behandlinger?.length > 0 ? `${behandlingName(behandlinger[index])}` : 'Ingen data'}
               </ExternalLink>
             )}
 
             {behandlinger && !behandlinger[index].navn && (
-              <BodyShort size="small">
-                {behandlinger ? behandlinger[index].navn : 'Ingen data'}
-              </BodyShort>
+              <BodyShort size="small">Ingen data</BodyShort>
             )}
           </div>
         ))}

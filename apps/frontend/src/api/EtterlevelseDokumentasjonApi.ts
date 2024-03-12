@@ -7,7 +7,6 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '../constants'
 import { env } from '../util/env'
-import { behandlingName } from './BehandlingApi'
 import { getVirkemiddel } from './VirkemiddelApi'
 
 export const etterlevelseDokumentasjonName = (
@@ -93,16 +92,8 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
                 (virkemiddelResponse) => (virkmiddel = virkemiddelResponse)
               )
             }
-            const behandlinger = etterlevelseDokumentasjon.behandlinger
-            if (behandlinger && behandlinger.length > 0) {
-              behandlinger.map((behandling) => {
-                behandling.navn = behandlingName(behandling)
-                return behandling
-              })
-            }
             setData({
               ...etterlevelseDokumentasjon,
-              behandlinger: behandlinger,
               virkemiddel: virkmiddel,
             })
             setIsLoading(false)
