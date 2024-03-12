@@ -88,6 +88,17 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
             />
           )}
           <div className="mb-2.5">
+            {etterlevelseDokumentasjon.avdeling && (
+              <div className="flex items-start gap-2">
+                <BodyShort size="small">Avdeling:</BodyShort>
+                <BodyShort size="small">{etterlevelseDokumentasjon.avdeling.shortName}</BodyShort>
+              </div>
+            )}
+            {!etterlevelseDokumentasjon.avdeling && (
+              <BodyShort size="small">Avdeling er ikke angitt</BodyShort>
+            )}
+          </div>
+          <div className="mb-2.5">
             {teams.length > 0 && <Teams teams={teams} link />}
             {teams.length === 0 && <BodyShort size="small">Team er ikke angitt</BodyShort>}
           </div>
