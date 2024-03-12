@@ -320,6 +320,7 @@ export interface IEtterlevelseDokumentasjon {
   irrelevansFor: ICode[]
   etterlevelseNummer: number
   teams: string[]
+  avdeling?: ICode
   //data field for frontend only
   teamsData?: ITeam[]
   behandlinger?: IBehandling[]

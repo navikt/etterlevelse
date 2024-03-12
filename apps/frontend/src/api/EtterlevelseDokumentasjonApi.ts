@@ -118,6 +118,7 @@ export const etterlevelseDokumentasjonToDomainToObject = (
     behandlingIds: etterlevelseDokumentasjon.behandlinger?.map((behandling) => behandling.id),
     irrelevansFor: etterlevelseDokumentasjon.irrelevansFor.map((irrelevans) => irrelevans.code),
     teams: etterlevelseDokumentasjon.teamsData?.map((team) => team.id),
+    avdeling: etterlevelseDokumentasjon.avdeling?.code,
   } as any
   delete domainToObject.changeStamp
   delete domainToObject.version
@@ -144,6 +145,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   irrelevansFor: etterlevelseDokumentasjon.irrelevansFor || [],
   etterlevelseNummer: etterlevelseDokumentasjon.etterlevelseNummer || 0,
   teams: etterlevelseDokumentasjon.teams || [],
+  avdeling: etterlevelseDokumentasjon.avdeling,
   teamsData: etterlevelseDokumentasjon.teamsData || [],
   behandlinger: etterlevelseDokumentasjon.behandlinger || [],
   virkemiddelId: etterlevelseDokumentasjon.virkemiddelId || '',
