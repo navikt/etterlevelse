@@ -130,7 +130,7 @@ export const EditEtterlevelseDokumentasjonModal = (
         validateOnChange={false}
         validateOnBlur={false}
       >
-        {({ values, submitForm, handleReset }) => (
+        {({ values, submitForm, handleReset, setFieldValue }) => (
           <Modal
             header={{
               heading: isEditButton
@@ -273,6 +273,20 @@ export const EditEtterlevelseDokumentasjonModal = (
                               loadOptions={searchBehandlingOptions}
                               onChange={(value) => {
                                 value && fieldArrayRenderProps.push(value)
+                                if (
+                                  value &&
+                                  !values.avdeling &&
+                                  values.behandlinger?.length === 0
+                                ) {
+                                  const behandling = value as IBehandling
+                                  const newAvdeling = {
+                                    list: EListName.AVDELING,
+                                    shortName: behandling.avdeling?.shortName || '',
+                                    code: behandling.avdeling?.code || '',
+                                    description: behandling.avdeling?.description || '',
+                                  } as ICodeListFormValues
+                                  setFieldValue('avdeling', newAvdeling)
+                                }
                               }}
                               styles={{
                                 control: (base) =>
