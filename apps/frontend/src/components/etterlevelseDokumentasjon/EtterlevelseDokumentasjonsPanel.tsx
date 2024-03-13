@@ -16,7 +16,7 @@ export const EtterlevelseDokumentasjonsPanel = ({
       E{etterlevelseDokumentasjon.etterlevelseNummer} {etterlevelseDokumentasjon.title}
     </LinkPanel.Title>
     <LinkPanel.Description>
-      {etterlevelseDokumentasjon.sistEndretEtterlevelse !== undefined &&
+      {etterlevelseDokumentasjon.sistEndretEtterlevelse !== null &&
       etterlevelseDokumentasjon.sistEndretEtterlevelse !== ''
         ? `Sist endret: ${moment(etterlevelseDokumentasjon.sistEndretEtterlevelse).format('ll')}`
         : ''}
