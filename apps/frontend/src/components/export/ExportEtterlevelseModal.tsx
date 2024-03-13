@@ -1,4 +1,4 @@
-import { BodyShort, Box, Button, Loader, Modal, Select } from '@navikt/ds-react'
+import { BodyShort, Box, Button, Loader, Modal, Radio, RadioGroup, Select } from '@navikt/ds-react'
 import axios from 'axios'
 import { useState } from 'react'
 import { EListName, codelist } from '../../services/Codelist'
@@ -13,6 +13,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [valgtTema, setValgtTema] = useState<string>('')
+  const [onlyActiveKrav, setOnlyActiveKrav] = useState<boolean>(false)
 
   return (
     <div>
@@ -47,6 +48,14 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                   </option>
                 ))}
               </Select>
+              <RadioGroup
+                legend="Skal dokumentet ta med alle krav eller kun aktiv krav?"
+                value={onlyActiveKrav}
+                onChange={(val: boolean) => setOnlyActiveKrav(val)}
+              >
+                <Radio value={false}>Ta med alle</Radio>
+                <Radio value={true}>Kun aktiv krav</Radio>
+              </RadioGroup>
               {errorMessage && (
                 <div className="w-full mt-4">
                   <Box className="mb-2.5" padding="4" background="surface-warning-subtle">
@@ -72,7 +81,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                     ;(async () => {
                       setIsLoading(true)
                       setErrorMessage('')
-                      const exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}`
+                      const exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}&onlyActiveKrav=${onlyActiveKrav}`
 
                       axios
                         .get(exportUrl)
@@ -96,7 +105,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                     ;(async () => {
                       setIsLoading(true)
                       setErrorMessage('')
-                      const exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}&temakode=${valgtTema}`
+                      const exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}&temakode=${valgtTema}&onlyActiveKrav=${onlyActiveKrav}`
 
                       axios
                         .get(exportUrl)
