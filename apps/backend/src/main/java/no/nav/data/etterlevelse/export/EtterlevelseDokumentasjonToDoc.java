@@ -292,7 +292,7 @@ public class EtterlevelseDokumentasjonToDoc {
             }
 
 
-            if(!etterlevelse.getSuksesskriterieBegrunnelser().isEmpty()) {
+            if(etterlevelse.getSuksesskriterieBegrunnelser() != null && !etterlevelse.getSuksesskriterieBegrunnelser().isEmpty()) {
                 for (int s = 0; s < etterlevelse.getSuksesskriterieBegrunnelser().size(); s++) {
                     SuksesskriterieBegrunnelse suksesskriterieBegrunnelse = etterlevelse.getSuksesskriterieBegrunnelser().get(s);
 
