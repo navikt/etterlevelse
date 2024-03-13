@@ -39,7 +39,7 @@
         <!-- Test -->
         <testcontainers.version>1.19.7</testcontainers.version>
         <wiremock.version>2.27.2</wiremock.version>
-        <docx4j.version>11.4.9</docx4j.version>
+        <docx4j.version>11.4.11</docx4j.version>
         
         
     </properties>
@@ -252,6 +252,12 @@
             <groupId>com.vladsch.flexmark</groupId>
             <artifactId>flexmark-all</artifactId>
             <version>${flexmark.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.pdfbox</groupId>
+                    <artifactId>fontbox</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.vladsch.flexmark</groupId>
@@ -261,6 +267,14 @@
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.docx4j</groupId>
+                    <artifactId>docx4j-JAXB-ReferenceImpl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.xmlgraphics</groupId>
+                    <artifactId>xmlgraphics-commons</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
