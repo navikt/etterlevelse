@@ -187,6 +187,7 @@ public class EtterlevelseDokumentasjonToDoc {
                             EtterlevelseMedKravData.builder()
                                     .etterlevelseData(
                                             Etterlevelse.builder()
+                                                    .id(UUID.randomUUID())
                                                     .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId.toString())
                                                     .kravNummer(krav.getKravNummer())
                                                     .kravVersjon(krav.getKravVersjon())
@@ -212,6 +213,7 @@ public class EtterlevelseDokumentasjonToDoc {
                                   EtterlevelseMedKravData.builder()
                                           .etterlevelseData(
                                                   Etterlevelse.builder()
+                                                          .id(UUID.randomUUID())
                                                           .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId.toString())
                                                           .kravNummer(krav.getKravNummer())
                                                           .kravVersjon(currentTidligereVersjon)
