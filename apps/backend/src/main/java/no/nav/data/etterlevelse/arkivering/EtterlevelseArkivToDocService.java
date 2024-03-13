@@ -52,7 +52,7 @@ public class EtterlevelseArkivToDocService extends DomainService<EtterlevelseArk
             statuses.add(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT.name());
             archiveFiles.add(ArchiveFile.builder()
                     .fileName(formatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + ".docx")
-                    .file(etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjon.getId(), statuses, Collections.emptyList(), ""))
+                    .file(etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjon.getId(), statuses, Collections.emptyList(), false))
                     .build());
             archiveFiles.add(ArchiveFile.builder()
                     .fileName(xmlDateFormatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + ".xml")

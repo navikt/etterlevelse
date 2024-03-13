@@ -159,7 +159,8 @@ public class ExportController {
             @RequestParam(name = "etterlevelseId", required = false) UUID etterlevelseId,
             @RequestParam(name = "etterlevelseDokumentasjonId", required = false) UUID etterlevelseDokumentasjonId,
             @RequestParam(name = "statuskoder", required = false) List<String> statusKoder,
-            @RequestParam(name = "temakode", required = false) String temaKode
+            @RequestParam(name = "temakode", required = false) String temaKode,
+            @RequestParam(name = "onlyActiveKrav", required = false) boolean onlyActiveKrav
     ) {
         log.info("Exporting etterlevelse dokumentasjon to doc");
         String filename;
@@ -176,18 +177,31 @@ public class ExportController {
         } else if (etterlevelseDokumentasjonId != null) {
             log.info("Exporting list of etterlevelse for etterlevelse dokumentasjon with id " + etterlevelseDokumentasjonId + " to doc");
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
-            filename = formatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + ".docx";
+            filename = formatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer();
+            if(onlyActiveKrav) {
+                filename += "_aktive_krav";
+            }else {
+                filename += "_alle_krav";
+            }
+
+            filename += ".docx";
             List<String> lover;
 
             if(temaKode != null){
                 log.info("Exporting list of etterlevelse for etterlevelse dokumentasjon with id " + etterlevelseDokumentasjonId + " to doc filtered by tema");
-                filename = formatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + "filtert_med_tema_" + temaKode +".docx";
+                filename = formatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + "filtert_med_tema_" + temaKode;
+                if(onlyActiveKrav) {
+                    filename += "_aktive_krav";
+                }else {
+                    filename += "_alle_krav";
+                }
+                filename += ".docx";
                 codelistService.validateListNameAndCode(ListName.TEMA.name(), temaKode);
                 lover = codeUsageService.findCodeUsage(ListName.TEMA, temaKode).getCodelist().stream().map(Codelist::getCode).toList();
             } else {
                 lover = new ArrayList<>();
             }
-            doc = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjonId, statusKoder, lover, temaKode);
+            doc = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjonId, statusKoder, lover, onlyActiveKrav);
         } else {
             throw new ValidationException("No paramater given");
         }

@@ -19,6 +19,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDok
 import no.nav.data.etterlevelse.export.domain.EtterlevelseMedKravData;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
 import no.nav.data.integration.begrep.BegrepService;
@@ -149,7 +150,7 @@ public class EtterlevelseDokumentasjonToDoc {
         return doc.build();
     }
 
-    public byte[] generateDocFor(UUID etterlevelseDokumentasjonId, List<String> statusKoder, List<String> lover, String temaKode) {
+    public byte[] generateDocFor(UUID etterlevelseDokumentasjonId, List<String> statusKoder, List<String> lover, boolean onlyActiveKrav) {
 
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
 
@@ -158,21 +159,90 @@ public class EtterlevelseDokumentasjonToDoc {
 
         List<EtterlevelseMedKravData> etterlevelseMedKravData = getEtterlevelseByFilter(etterlevelseDokumentasjonId.toString(), statusKoder, lover);
 
-        if (etterlevelseMedKravData.isEmpty()) {
+        List<EtterlevelseMedKravData> filteredEtterlevelseMedKravData;
+
+        if(onlyActiveKrav) {
+            filteredEtterlevelseMedKravData = etterlevelseMedKravData.stream().filter((etterlevelse) ->
+                etterlevelse.getKravData().isPresent() && etterlevelse.getKravData().get().getStatus() == KravStatus.AKTIV
+            ).toList();
+        } else {
+            filteredEtterlevelseMedKravData = new ArrayList<>();
+
+            List<Krav> alleAktivKrav = kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjonId.toString())
+                    .stream().filter(k -> k.getStatus().equals(KravStatus.AKTIV) ).toList();
+
+            alleAktivKrav.forEach((krav) -> {
+                List<EtterlevelseMedKravData> etterlevelseMedKravNummer = etterlevelseMedKravData.stream()
+                        .filter((etterlevelse) -> etterlevelse.getEtterlevelseData().getKravNummer().equals(krav.getKravNummer()))
+                        .toList();
+
+                //Check if active krav has etterlevelse
+                List<EtterlevelseMedKravData> etterlevelseMedKravDataList = etterlevelseMedKravNummer.stream()
+                        .filter((etterlevelse) -> etterlevelse.getEtterlevelseData().getKravVersjon().equals(krav.getKravVersjon()))
+                        .toList();
+
+                //If no etterlevelse is found, create an empty etterlevelse for krav
+                if(etterlevelseMedKravDataList.isEmpty()) {
+                    filteredEtterlevelseMedKravData.add(
+                            EtterlevelseMedKravData.builder()
+                                    .etterlevelseData(
+                                            Etterlevelse.builder()
+                                                    .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId.toString())
+                                                    .kravNummer(krav.getKravNummer())
+                                                    .kravVersjon(krav.getKravVersjon())
+                                            .build())
+                                    .kravData(Optional.of(krav))
+                                    .build()
+                    );
+                }
+
+                //check if krav has earlier version
+                if(krav.getKravVersjon() > 1) {
+                  for(int tidligereVersjon = krav.getKravVersjon() - 1; tidligereVersjon > 0; tidligereVersjon-- ) {
+
+                      //check if krav with tidligereVersjon has etterlevelse
+                      int currentTidligereVersjon = tidligereVersjon;
+                      List<EtterlevelseMedKravData> etterleveseMedTidligereVersjon = etterlevelseMedKravNummer.stream()
+                              .filter((etterlevelse) -> etterlevelse.getEtterlevelseData().getKravVersjon().equals(currentTidligereVersjon))
+                              .toList();
+
+                      //If no etterlevelse is found for earlier version, create an empty etterlevelse for krav
+                      if(etterleveseMedTidligereVersjon.isEmpty()) {
+                          filteredEtterlevelseMedKravData.add(
+                                  EtterlevelseMedKravData.builder()
+                                          .etterlevelseData(
+                                                  Etterlevelse.builder()
+                                                          .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId.toString())
+                                                          .kravNummer(krav.getKravNummer())
+                                                          .kravVersjon(currentTidligereVersjon)
+                                                          .build())
+                                          .kravData(kravService.getByKravNummer(krav.getKravNummer(), currentTidligereVersjon))
+                                          .build()
+                          );
+                      }
+                  }
+                }
+
+            });
+
+            filteredEtterlevelseMedKravData.addAll(etterlevelseMedKravData);
+        }
+
+        if (filteredEtterlevelseMedKravData.isEmpty()) {
             throw new NotFoundException("No etterlevelser found for etterlevelse dokumentasjon with id " + etterlevelseDokumentasjonId);
         }
 
         var doc = new EtterlevelseDocumentBuilder();
         getEtterlevelseDokumentasjonData(etterlevelseDokumentasjon, doc);
 
-        doc.addHeading1("Dokumentet inneholder etterlevelse for " + etterlevelseMedKravData.size() + " krav");
+        doc.addHeading1("Dokumentet inneholder etterlevelse for " + filteredEtterlevelseMedKravData.size() + " krav");
 
-        doc.addTableOfContent(etterlevelseMedKravData, temaListe);
+        doc.addTableOfContent(filteredEtterlevelseMedKravData, temaListe);
 
         for (CodeUsage tema : temaListe) {
             List<String> regelverk = tema.getCodelist().stream().map(Codelist::getCode).toList();
 
-            List<EtterlevelseMedKravData> filteredDataByTema = doc.getSortedEtterlevelseMedKravData(etterlevelseMedKravData, regelverk);
+            List<EtterlevelseMedKravData> filteredDataByTema = doc.getSortedEtterlevelseMedKravData(filteredEtterlevelseMedKravData, regelverk);
 
             if (!filteredDataByTema.isEmpty()) {
                 doc.pageBreak();
@@ -220,7 +290,7 @@ public class EtterlevelseDokumentasjonToDoc {
             }
 
 
-            try {
+            if(!etterlevelse.getSuksesskriterieBegrunnelser().isEmpty()) {
                 for (int s = 0; s < etterlevelse.getSuksesskriterieBegrunnelser().size(); s++) {
                     SuksesskriterieBegrunnelse suksesskriterieBegrunnelse = etterlevelse.getSuksesskriterieBegrunnelser().get(s);
 
@@ -256,8 +326,27 @@ public class EtterlevelseDokumentasjonToDoc {
                     addText(" ");
                 }
 
-            } catch (NullPointerException e) {
-                log.error("Krav " + etterlevelse.getKravNummer() + "." + etterlevelse.getKravVersjon() + " has no suksesskriterietbegrunnelse");
+            } else {
+                if (krav.isPresent()) {
+                    List<Suksesskriterie> suksesskriterieList = krav.get().getSuksesskriterier();
+                    if (!suksesskriterieList.isEmpty()) {
+                        for (int s = 0; s < suksesskriterieList.size(); s++) {
+                            int suksesskriterieNumber = s +  1;
+
+                            var suksesskriteriumNavn = "SUKSESSKRITERIUM " + suksesskriterieNumber + " AV " + suksesskriterieList.size();
+
+                            Suksesskriterie suksesskriterie = suksesskriterieList.get(s);
+
+                            addHeading3(suksesskriteriumNavn + ": " + suksesskriterie.getNavn());
+                            addHeading4("Utfyllende om kriteriet");
+                            addMarkdownText("Ikke dokumentert");
+
+                            addHeading4("Status på suksesskriteriet");
+                            addText("Status: Ikke dokumentert");
+
+                        }
+                    }
+                }
             }
 
             if (krav.isPresent()) {
