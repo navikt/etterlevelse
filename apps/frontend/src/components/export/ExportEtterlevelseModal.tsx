@@ -41,7 +41,9 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                 onChange={(ev) => setValgtTema(ev.currentTarget.value)}
                 value={valgtTema}
               >
-                <option key="" value=""></option>
+                <option key="" value="">
+                  Alle tema
+                </option>
                 {codelist.getParsedOptions(EListName.TEMA).map((codeListOption) => (
                   <option key={`option_${codeListOption.value}`} value={codeListOption.value}>
                     {codeListOption.label}
