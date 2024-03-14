@@ -194,6 +194,8 @@ type EtterlevelseDokumentasjonStats {
 
 type EtterlevelseDokumentasjon {
     id: String!
+    changeStamp: ChangeStamp!
+    version: Int!
     title: String!
     etterlevelseNummer: Int!
     behandlingIds: [String!]!
