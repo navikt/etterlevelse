@@ -131,10 +131,21 @@ const EtterlevelseDokumentasjonList = ({
 }: {
   etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]
 }) => {
-  const sortedEtterlevelseDokumentasjoner = [...etterlevelseDokumentasjoner].sort(
-    (a, b) =>
-      moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf()
-  )
+  const sortedEtterlevelseDokumentasjoner = [...etterlevelseDokumentasjoner].sort((a, b) => {
+    if (a.sistEndretEtterlevelse === null && b.sistEndretEtterlevelse) {
+      return -1
+    }
+    if (b.sistEndretEtterlevelse === null && a.sistEndretEtterlevelse) {
+      return 1
+    }
+    if (a.sistEndretDokumentasjon === null && b.sistEndretEtterlevelse === null) {
+      return (
+        moment(b.changeStamp.createdDate).valueOf() - moment(a.changeStamp.createdDate).valueOf()
+      )
+    } else {
+      return moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf()
+    }
+  })
 
   return (
     <div>

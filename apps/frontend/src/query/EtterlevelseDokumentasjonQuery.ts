@@ -30,6 +30,9 @@ export const getEtterlevelseDokumentasjonListQuery = gql`
         title
         etterlevelseNummer
         sistEndretEtterlevelse
+        changeStamp {
+          createdDate
+        }
         teamsData {
           id
           name
