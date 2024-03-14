@@ -27,4 +27,5 @@ public class EtterlevelseArkivResponse {
     private LocalDateTime tilArkiveringDato;
     private LocalDateTime arkiveringAvbruttDato;
     private String webSakNummer;
+    private boolean onlyActiveKrav;
 }

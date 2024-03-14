@@ -179,9 +179,9 @@ public class ExportController {
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
             filename = formatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer();
             if(onlyActiveKrav) {
-                filename += "_aktive_krav";
+                filename += "_kun_gjeldende_krav_versjon";
             }else {
-                filename += "_alle_krav";
+                filename += "_alle_krav_versjoner";
             }
 
             filename += ".docx";

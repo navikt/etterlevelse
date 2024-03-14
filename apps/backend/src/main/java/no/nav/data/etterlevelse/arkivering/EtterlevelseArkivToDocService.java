@@ -47,16 +47,27 @@ public class EtterlevelseArkivToDocService extends DomainService<EtterlevelseArk
 
         for (EtterlevelseArkiv etterlevelseArkiv : etterlevelseArkivList) {
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelseArkiv.getEtterlevelseDokumentasjonId()));
+            String fileName = formatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer();
+            String xmlFileName = xmlDateFormatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer();
+
+            if(etterlevelseArkiv.isOnlyActiveKrav()) {
+                fileName += "_kun_gjeldende_krav_versjon";
+                xmlFileName += "_kun_gjeldende_krav_versjon";
+            }else {
+                fileName += "_alle_krav_versjoner";
+                xmlFileName += "_alle_krav_versjoner";
+            }
+
             ArrayList<String> statuses = new ArrayList<>();
             statuses.add(EtterlevelseStatus.FERDIG_DOKUMENTERT.name());
             statuses.add(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT.name());
             archiveFiles.add(ArchiveFile.builder()
-                    .fileName(formatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + ".docx")
-                    .file(etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjon.getId(), statuses, Collections.emptyList(), false))
+                    .fileName(fileName + ".docx")
+                    .file(etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjon.getId(), statuses, Collections.emptyList(), etterlevelseArkiv.isOnlyActiveKrav()))
                     .build());
             archiveFiles.add(ArchiveFile.builder()
-                    .fileName(xmlDateFormatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + ".xml")
-                    .file(createXml(date, formatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + ".docx", etterlevelseDokumentasjon, etterlevelseArkiv))
+                    .fileName(xmlFileName + ".xml")
+                    .file(createXml(date, fileName + ".docx", etterlevelseDokumentasjon, etterlevelseArkiv))
                     .build());
         }
         return zipUtils.zipOutputStream(archiveFiles);

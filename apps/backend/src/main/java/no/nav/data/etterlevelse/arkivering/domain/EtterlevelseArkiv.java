@@ -27,6 +27,7 @@ public class EtterlevelseArkiv extends DomainObject {
     private LocalDateTime tilArkiveringDato;
     private LocalDateTime arkiveringAvbruttDato;
     private String webSakNummer;
+    private boolean onlyActiveKrav;
 
     // Updates all fields from the request except id, version and changestamp
     public EtterlevelseArkiv merge(EtterlevelseArkivRequest request) {
@@ -38,6 +39,7 @@ public class EtterlevelseArkiv extends DomainObject {
         arkiveringAvbruttDato = request.getArkiveringAvbruttDato();
         webSakNummer = request.getWebSakNummer();
         status = request.getStatus();
+        onlyActiveKrav = request.isOnlyActiveKrav();
 
         return this;
     }
@@ -55,6 +57,7 @@ public class EtterlevelseArkiv extends DomainObject {
                 .arkiveringAvbruttDato(arkiveringAvbruttDato)
                 .webSakNummer(webSakNummer)
                 .status(status.name())
+                .onlyActiveKrav(onlyActiveKrav)
                 .build();
     }
 
