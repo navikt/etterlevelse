@@ -59,6 +59,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
                     .tilArkiveringDato(e.getTilArkiveringDato())
                     .arkiveringAvbruttDato(e.getArkiveringAvbruttDato())
                     .webSakNummer(e.getWebSakNummer())
+                    .onlyActiveKrav(e.isOnlyActiveKrav())
                     .update(true)
                     .build());
             arkivert.add(etterlevelseArkiv);
@@ -81,6 +82,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
                     .tilArkiveringDato(e.getTilArkiveringDato())
                     .arkiveringAvbruttDato(e.getArkiveringAvbruttDato())
                     .webSakNummer(e.getWebSakNummer())
+                    .onlyActiveKrav(e.isOnlyActiveKrav())
                     .update(true)
                     .build());
             behandlerArkivering.add(etterlevelseArkiv);
@@ -101,6 +103,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
                     .tilArkiveringDato(e.getTilArkiveringDato())
                     .arkiveringAvbruttDato(e.getArkiveringAvbruttDato())
                     .webSakNummer(e.getWebSakNummer())
+                    .onlyActiveKrav(e.isOnlyActiveKrav())
                     .update(true)
                     .build())
         );
