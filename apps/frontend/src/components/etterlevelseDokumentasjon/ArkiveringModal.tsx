@@ -1,4 +1,4 @@
-import { BodyLong, BodyShort, Button, Modal } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Button, Modal, Radio, RadioGroup } from '@navikt/ds-react'
 import moment from 'moment'
 import React, { useState } from 'react'
 import { createEtterlevelseArkiv, updateEtterlevelseArkiv } from '../../api/ArkiveringApi'
@@ -21,13 +21,16 @@ export const ArkiveringModal = ({
   setEtterlevelseArkiv,
 }: TArkiveringModalProps) => {
   const [isArchivingCancelled, setIsArchivingCancelled] = useState<boolean>(false)
+  const [onlyActiveKrav, setOnlyActiveKrav] = useState<boolean>(false)
 
   const getStatustext = (etterlevelseArkivStatus: EEtterlevelseArkivStatus) => {
     switch (etterlevelseArkivStatus) {
       case EEtterlevelseArkivStatus.TIL_ARKIVERING:
         return (
           <>
-            <BodyShort>Bestilt: {moment(etterlevelseArkiv?.tilArkiveringDato).format('lll')}</BodyShort>
+            <BodyShort>
+              Bestilt: {moment(etterlevelseArkiv?.tilArkiveringDato).format('lll')}
+            </BodyShort>
             <BodyShort>
               Arkivert av:{' '}
               {etterlevelseArkiv && etterlevelseArkiv.arkivertAv
@@ -39,7 +42,9 @@ export const ArkiveringModal = ({
       case EEtterlevelseArkivStatus.ARKIVERT:
         return (
           <>
-            <BodyShort>Sist arkivert: {moment(etterlevelseArkiv?.arkiveringDato).format('lll')}</BodyShort>
+            <BodyShort>
+              Sist arkivert: {moment(etterlevelseArkiv?.arkiveringDato).format('lll')}
+            </BodyShort>
 
             <BodyShort>
               Arkivert av:{' '}
@@ -92,6 +97,21 @@ export const ArkiveringModal = ({
         {isArchivingCancelled && etterlevelseArkiv?.arkiveringAvbruttDato && (
           <div>Avbrutt dato: {moment(etterlevelseArkiv?.arkiveringAvbruttDato).format('lll')}</div>
         )}
+        {etterlevelseArkiv &&
+          (etterlevelseArkiv.status === EEtterlevelseArkivStatus.ARKIVERT ||
+            etterlevelseArkiv.status === EEtterlevelseArkivStatus.IKKE_ARKIVER) && (
+            <div>
+              <RadioGroup
+                legend="Dokumentet skal inneholde"
+                hideLegend
+                value={onlyActiveKrav}
+                onChange={(val: boolean) => setOnlyActiveKrav(val)}
+              >
+                <Radio value={false}>Arkiver alle krav versjoner</Radio>
+                <Radio value={true}>Arkiver kun gjeldende versjon krav</Radio>
+              </RadioGroup>
+            </div>
+          )}
         <div className="flex justify-end pt-4 mt-4">
           <Button
             className="mr-2.5"
@@ -117,6 +137,7 @@ export const ArkiveringModal = ({
                       etterlevelseArkiv.status === EEtterlevelseArkivStatus.TIL_ARKIVERING
                         ? EEtterlevelseArkivStatus.IKKE_ARKIVER
                         : EEtterlevelseArkivStatus.TIL_ARKIVERING,
+                    onlyActiveKrav: onlyActiveKrav,
                   }
 
                   ;(async () => {
@@ -129,6 +150,7 @@ export const ArkiveringModal = ({
                           etterlevelseArkiv.status === EEtterlevelseArkivStatus.TIL_ARKIVERING
                             ? EEtterlevelseArkivStatus.IKKE_ARKIVER
                             : EEtterlevelseArkivStatus.TIL_ARKIVERING,
+                        onlyActiveKrav: onlyActiveKrav,
                       }).then(setEtterlevelseArkiv)
                     } else {
                       await createEtterlevelseArkiv(

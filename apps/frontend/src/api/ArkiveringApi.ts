@@ -121,6 +121,7 @@ export const arkiveringMapToFormVal = (
   tilArkiveringDato: arkivering.tilArkiveringDato || '',
   arkiveringAvbruttDato: arkivering.arkiveringAvbruttDato || '',
   webSakNummer: arkivering.webSakNummer || '',
+  onlyActiveKrav: arkivering.onlyActiveKrav || false,
   changeStamp: arkivering.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
   version: arkivering.version || -1,
 })

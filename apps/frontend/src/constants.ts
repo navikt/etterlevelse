@@ -39,6 +39,7 @@ export interface IEtterlevelseArkiv extends IDomainObject {
   tilArkiveringDato: string
   arkiveringAvbruttDato: string
   webSakNummer: string
+  onlyActiveKrav: boolean
 }
 
 export enum EKravFilterType {
