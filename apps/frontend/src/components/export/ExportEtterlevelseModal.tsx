@@ -49,12 +49,13 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                 ))}
               </Select>
               <RadioGroup
-                legend="Skal dokumentet ta med alle krav eller kun aktiv krav?"
+                legend="Dokumentet skal inneholde"
+                hideLegend
                 value={onlyActiveKrav}
                 onChange={(val: boolean) => setOnlyActiveKrav(val)}
               >
-                <Radio value={false}>Ta med alle</Radio>
-                <Radio value={true}>Kun aktiv krav</Radio>
+                <Radio value={false}>Eksporter alle krav versjoner</Radio>
+                <Radio value={true}>Eksporter kun gjeldende versjon krav</Radio>
               </RadioGroup>
               {errorMessage && (
                 <div className="w-full mt-4">
