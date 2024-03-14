@@ -2,6 +2,7 @@ package no.nav.data.etterlevelse.arkivering;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.utils.ZipUtils;
 import no.nav.data.etterlevelse.arkivering.domain.ArchiveFile;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class EtterlevelseArkivToDocService extends DomainService<EtterlevelseArkiv> {
 
@@ -61,13 +63,17 @@ public class EtterlevelseArkivToDocService extends DomainService<EtterlevelseArk
             ArrayList<String> statuses = new ArrayList<>();
             statuses.add(EtterlevelseStatus.FERDIG_DOKUMENTERT.name());
             statuses.add(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT.name());
+            log.info("Generating word and xml file for etterlevelse dokumentation: E" + etterlevelseDokumentasjon.getEtterlevelseNummer());
+            byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjon.getId(), statuses, Collections.emptyList(), etterlevelseArkiv.isOnlyActiveKrav());
+            byte[] xmlFile = createXml(date, fileName + ".docx", etterlevelseDokumentasjon, etterlevelseArkiv);
+            log.info("Adding generated word and xml file to zip file.");
             archiveFiles.add(ArchiveFile.builder()
                     .fileName(fileName + ".docx")
-                    .file(etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjon.getId(), statuses, Collections.emptyList(), etterlevelseArkiv.isOnlyActiveKrav()))
+                    .file(wordFile)
                     .build());
             archiveFiles.add(ArchiveFile.builder()
                     .fileName(xmlFileName + ".xml")
-                    .file(createXml(date, fileName + ".docx", etterlevelseDokumentasjon, etterlevelseArkiv))
+                    .file(xmlFile)
                     .build());
         }
         return zipUtils.zipOutputStream(archiveFiles);

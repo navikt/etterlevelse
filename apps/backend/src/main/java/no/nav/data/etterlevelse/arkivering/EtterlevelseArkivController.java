@@ -1,6 +1,8 @@
 package no.nav.data.etterlevelse.arkivering;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -103,7 +106,8 @@ public class EtterlevelseArkivController {
 
     @SneakyThrows
     @Operation(summary = "Export etterlevelse to archive")
-    @ApiResponse(description = "Ok")
+    @ApiResponse(description = "Doc fetched", content = @Content(schema = @Schema(implementation = byte[].class)))
+    @Transactional(readOnly = true)
     @GetMapping(value = "/export", produces = "application/zip")
     public void getExportArchive(HttpServletResponse response) {
         log.info("export etterlevelse to archive");
