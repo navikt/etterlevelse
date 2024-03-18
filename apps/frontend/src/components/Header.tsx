@@ -274,13 +274,11 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    if (process.env.NODE_ENV === 'test') {
-      setTimeout(() => {
-        if (!user.isLoggedIn()) {
-          window.location.href = loginUrl(location, location.pathname)
-        }
-      }, 500)
-    }
+    setTimeout(() => {
+      if (!user.isLoggedIn()) {
+        window.location.href = loginUrl(location, location.pathname)
+      }
+    }, 500)
   }, [])
 
   React.useEffect(() => {

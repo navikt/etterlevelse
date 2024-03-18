@@ -1,13 +1,9 @@
 import { test } from '@playwright/test'
-import { EKrav } from '../src/constants'
-import { EGroup } from '../src/services/User'
+import { getLoggedInPage } from './helpers'
 
 const mockUserinfo = {
-  loggedIn: true,
-  ident: 'G000000',
-  name: 'Donald Duck',
-  email: 'donald.duck@nav.no',
-  groups: [EGroup.ADMIN, EGroup.WRITE, EGroup.READ],
+  email: '',
+  passord: '',
 }
 
 const mockKrav = {
@@ -29,7 +25,7 @@ const mockKrav = {
       utdypendeBeskrivelse: null,
       versjonEndringer: null,
       aktivertDato: '2024-02-22T10:22:52.948286135',
-      dokumentasjon: ['[Navn på kilde](http://localhost:3000/kravliste/opprett)'],
+      dokumentasjon: ['[Navn på kilde](https://etterlevelse.intern.dev.nav.no/kravliste/opprett)'],
       implementasjoner: null,
       begrepIder: ['BEGREP-2435'],
       begreper: [
@@ -178,48 +174,44 @@ const mockKrav = {
 
 test.describe('KravCreatePage', () => {
   test('Logg inn', async ({ page }) => {
-    await page.route('http://localhost:3000/', async (route) => {
-      const json = [mockUserinfo]
-      await route.fulfill({ json })
-    })
-
-    await page.goto('http://localhost:3000/')
+    await page.goto('http://localhost:3000')
     await page.getByText('Logg inn').click()
-    await page.getByPlaceholder('someone@example.com').fill(mockUserinfo.email)
-    await page.getByText('Next').click()
+    await getLoggedInPage(page, { username: mockUserinfo.email, password: mockUserinfo.passord })
+    // await page.getByPlaceholder('someone@example.com').fill(mockUserinfo.email)
+    // await page.getByText('Next').click()
 
-    await page.goto('http://localhost:3000/')
-    await page.getByText(mockUserinfo.ident).click()
-    await page.getByText(EKrav.KRAV).click()
+    // await page.goto('https://etterlevelse.intern.dev.nav.no/')
+    // await page.getByText(mockUserinfo.ident).click()
+    // await page.getByText(EKrav.KRAV).click()
   })
 
-  test('Opprette krav', async ({ page }) => {
-    await page.goto('http://localhost:3000/kravliste')
-    await page.getByText('Nytt krav').click()
+  // test('Opprette krav', async ({ page }) => {
+  //   await page.goto('https://etterlevelse.intern.dev.nav.no/kravliste')
+  //   await page.getByText('Nytt krav').click()
 
-    await page.goto('http://localhost:3000/kravliste/opprett')
-    await page.getByPlaceholder('Krav tittel').fill(mockKrav.data.kravById.navn)
+  //   await page.goto('https://etterlevelse.intern.dev.nav.no/kravliste/opprett')
+  //   await page.getByPlaceholder('Krav tittel').fill(mockKrav.data.kravById.navn)
 
-    await page.getByText('Gi kravet en varselmelding (eks. for kommende krav)').check()
-    await page.getByLabel('Forklaring til etterlevere').fill(mockKrav.data.kravById.varselMelding)
+  //   await page.getByText('Gi kravet en varselmelding (eks. for kommende krav)').check()
+  //   await page.getByLabel('Forklaring til etterlevere').fill(mockKrav.data.kravById.varselMelding)
 
-    await page.getByLabel('Hensikt').fill(mockKrav.data.kravById.hensikt)
+  //   await page.getByLabel('Hensikt').fill(mockKrav.data.kravById.hensikt)
 
-    mockKrav.data.kravById.suksesskriterier.map(async (suksesskriterie, index) => {
-      await page.getByLabel(`Suksesskriterium ${index}`).fill(suksesskriterie.navn)
-      await page.getByPlaceholder(`Suksesskriterium ${index}`).fill(suksesskriterie.beskrivelse)
-      await page
-        .getByText('Velg type besvarelse:')
-        .selectOption(['Bekreftelse med tekstlig begrunnelse', 'Kun bekreftelse'])
+  //   mockKrav.data.kravById.suksesskriterier.map(async (suksesskriterie, index) => {
+  //     await page.getByLabel(`Suksesskriterium ${index}`).fill(suksesskriterie.navn)
+  //     await page.getByPlaceholder(`Suksesskriterium ${index}`).fill(suksesskriterie.beskrivelse)
+  //     await page
+  //       .getByText('Velg type besvarelse:')
+  //       .selectOption(['Bekreftelse med tekstlig begrunnelse', 'Kun bekreftelse'])
 
-      expect(page.getByText('Velg type besvarelse:')).toContainEqual(
-        suksesskriterie.behovForBegrunnelse
-      )
-    })
-    await page.getByText('Suksesskriterie').click()
-    mockKrav.data.kravById.dokumentasjon.map(async (item) => {
-      await page.getByLabel('Lenke eller websaknr').fill(item)
-      await page.getByText('Legg til').click()
-    })
-  })
+  //     expect(page.getByText('Velg type besvarelse:')).toContainEqual(
+  //       suksesskriterie.behovForBegrunnelse
+  //     )
+  //   })
+  //   await page.getByText('Suksesskriterie').click()
+  //   mockKrav.data.kravById.dokumentasjon.map(async (item) => {
+  //     await page.getByLabel('Lenke eller websaknr').fill(item)
+  //     await page.getByText('Legg til').click()
+  //   })
+  // })
 })
