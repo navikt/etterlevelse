@@ -71,9 +71,8 @@ public class EtterlevelseDokumentasjonToDoc {
                 try {
                     var behandling = behandlingService.getBehandling(behandlingId);
                     doc.addText("B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() + ": " + behandling.getNavn());
-                }
-               catch (WebClientResponseException.NotFound e) {
-                   doc.addText("Fant ikke behandling med ID: " + behandlingId);
+                } catch (WebClientResponseException.NotFound e) {
+                    doc.addText("Fant ikke behandling med ID: " + behandlingId);
                 }
 
             });
@@ -85,8 +84,7 @@ public class EtterlevelseDokumentasjonToDoc {
                 var team = teamService.getTeam(teamId);
                 if (team.isPresent()) {
                     doc.addMarkdownText("- [" + team.get().getName() + "](" + System.getenv("CLIENT_TEAMCAT_FRONTEND_URL") + "/team/" + team.get().getId() + ")");
-                }
-                else {
+                } else {
                     doc.addMarkdownText("- [Fant ikke team med ID: " + teamId + "](" + System.getenv("CLIENT_TEAMCAT_FRONTEND_URL") + "/team/" + teamId + ")");
                 }
 
@@ -149,7 +147,7 @@ public class EtterlevelseDokumentasjonToDoc {
         return doc.build();
     }
 
-    private void addUndocummentedEtterlevelseToList(List<EtterlevelseMedKravData> etterlevelseMedKravData, int kravNumber, int kravVersion , Optional<Krav> krav, String etterlevelseDokumentasjonId) {
+    private void addUndocummentedEtterlevelseToList(List<EtterlevelseMedKravData> etterlevelseMedKravData, int kravNumber, int kravVersion, Optional<Krav> krav, String etterlevelseDokumentasjonId) {
         etterlevelseMedKravData.add(
                 EtterlevelseMedKravData.builder()
                         .etterlevelseData(
@@ -173,26 +171,25 @@ public class EtterlevelseDokumentasjonToDoc {
 
         List<EtterlevelseMedKravData> etterlevelseMedKravData = getEtterlevelseByFilter(etterlevelseDokumentasjonId.toString(), statusKoder, lover);
 
-        List<EtterlevelseMedKravData> filteredEtterlevelseMedKravData = new ArrayList<>();;
-
+        List<EtterlevelseMedKravData> filteredEtterlevelseMedKravData = new ArrayList<>();
 
         List<Krav> alleAktivKrav = kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjonId.toString())
-                .stream().filter(k -> k.getStatus().equals(KravStatus.AKTIV) ).toList();
+                .stream().filter(k -> k.getStatus().equals(KravStatus.AKTIV)).toList();
 
-        if(onlyActiveKrav) {
+        if (onlyActiveKrav) {
             alleAktivKrav.forEach((krav) -> {
                 //Check if active krav has etterlevelse
                 List<EtterlevelseMedKravData> etterlevelseMedKravNummer = etterlevelseMedKravData.stream()
                         .filter((etterlevelse) -> etterlevelse.getEtterlevelseData().getKravNummer().equals(krav.getKravNummer())
-                         && etterlevelse.getEtterlevelseData().getKravVersjon().equals(krav.getKravVersjon())
+                                && etterlevelse.getEtterlevelseData().getKravVersjon().equals(krav.getKravVersjon())
                         ).toList();
 
 
                 //If no etterlevelse is found, create an empty etterlevelse for krav
-                if(etterlevelseMedKravNummer.isEmpty()) {
-                    addUndocummentedEtterlevelseToList(filteredEtterlevelseMedKravData, krav.getKravNummer(),krav.getKravVersjon(), Optional.of(krav), etterlevelseDokumentasjonId.toString());
+                if (etterlevelseMedKravNummer.isEmpty()) {
+                    addUndocummentedEtterlevelseToList(filteredEtterlevelseMedKravData, krav.getKravNummer(), krav.getKravVersjon(), Optional.of(krav), etterlevelseDokumentasjonId.toString());
                 } else {
-                  filteredEtterlevelseMedKravData.add(etterlevelseMedKravNummer.get(0));
+                    filteredEtterlevelseMedKravData.add(etterlevelseMedKravNummer.get(0));
                 }
             });
 
@@ -208,33 +205,31 @@ public class EtterlevelseDokumentasjonToDoc {
                         .toList();
 
                 //If no etterlevelse is found, create an empty etterlevelse for krav
-                if(etterlevelseMedKravDataList.isEmpty()) {
-                    addUndocummentedEtterlevelseToList(filteredEtterlevelseMedKravData,krav.getKravNummer(), krav.getKravVersjon(), Optional.of(krav), etterlevelseDokumentasjonId.toString());
+                if (etterlevelseMedKravDataList.isEmpty()) {
+                    addUndocummentedEtterlevelseToList(filteredEtterlevelseMedKravData, krav.getKravNummer(), krav.getKravVersjon(), Optional.of(krav), etterlevelseDokumentasjonId.toString());
                 }
 
                 //check if krav has earlier version
-                if(krav.getKravVersjon() > 1) {
-                  for(int tidligereVersjon = krav.getKravVersjon() - 1; tidligereVersjon > 0; tidligereVersjon-- ) {
-
-                      //check if krav with tidligereVersjon has etterlevelse
-                      int currentTidligereVersjon = tidligereVersjon;
-                      List<EtterlevelseMedKravData> etterleveseMedTidligereVersjon = etterlevelseMedKravNummer.stream()
-                              .filter((etterlevelse) -> etterlevelse.getEtterlevelseData().getKravVersjon().equals(currentTidligereVersjon))
-                              .toList();
-
-                      //If no etterlevelse is found for earlier version, create an empty etterlevelse for krav
-                      if(etterleveseMedTidligereVersjon.isEmpty()) {
-                          addUndocummentedEtterlevelseToList(filteredEtterlevelseMedKravData,
-                                  krav.getKravNummer(),
-                                  currentTidligereVersjon,
-                                  kravService.getByKravNummer(krav.getKravNummer(), currentTidligereVersjon),
-                                  etterlevelseDokumentasjonId.toString()
-                          );
-                      }
-                  }
+                if (krav.getKravVersjon() > 1) {
+                    for (int tidligereVersjon = krav.getKravVersjon() - 1; tidligereVersjon > 0; tidligereVersjon--) {
+                        //check if krav with tidligereVersjon has etterlevelse
+                        int currentTidligereVersjon = tidligereVersjon;
+                        List<EtterlevelseMedKravData> etterleveseMedTidligereVersjon = etterlevelseMedKravNummer.stream()
+                                .filter((etterlevelse) -> etterlevelse.getEtterlevelseData().getKravVersjon().equals(currentTidligereVersjon))
+                                .toList();
+                        //If no etterlevelse is found for earlier version, create an empty etterlevelse for krav
+                        if (etterleveseMedTidligereVersjon.isEmpty()) {
+                            addUndocummentedEtterlevelseToList(filteredEtterlevelseMedKravData,
+                                    krav.getKravNummer(),
+                                    currentTidligereVersjon,
+                                    kravService.getByKravNummer(krav.getKravNummer(), currentTidligereVersjon),
+                                    etterlevelseDokumentasjonId.toString()
+                            );
+                        }
+                    }
                 }
-
             });
+
             filteredEtterlevelseMedKravData.addAll(etterlevelseMedKravData);
         }
 
@@ -297,7 +292,7 @@ public class EtterlevelseDokumentasjonToDoc {
             }
 
 
-            if(etterlevelse.getSuksesskriterieBegrunnelser() != null && !etterlevelse.getSuksesskriterieBegrunnelser().isEmpty()) {
+            if (etterlevelse.getSuksesskriterieBegrunnelser() != null && !etterlevelse.getSuksesskriterieBegrunnelser().isEmpty()) {
                 for (int s = 0; s < etterlevelse.getSuksesskriterieBegrunnelser().size(); s++) {
                     SuksesskriterieBegrunnelse suksesskriterieBegrunnelse = etterlevelse.getSuksesskriterieBegrunnelser().get(s);
 
@@ -338,7 +333,7 @@ public class EtterlevelseDokumentasjonToDoc {
                     List<Suksesskriterie> suksesskriterieList = krav.get().getSuksesskriterier();
                     if (!suksesskriterieList.isEmpty()) {
                         for (int s = 0; s < suksesskriterieList.size(); s++) {
-                            int suksesskriterieNumber = s +  1;
+                            int suksesskriterieNumber = s + 1;
 
                             var suksesskriteriumNavn = "SUKSESSKRITERIUM " + suksesskriterieNumber + " AV " + suksesskriterieList.size();
 

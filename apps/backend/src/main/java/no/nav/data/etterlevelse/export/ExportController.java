@@ -135,7 +135,7 @@ public class ExportController {
                 throw new ValidationException("No paramater given");
             }
 
-            if(temaKode == null) {
+            if (temaKode == null) {
                 codelistService.validateListNameAndCodes(list.name(), code);
             }
 
@@ -171,7 +171,7 @@ public class ExportController {
 
         if (etterlevelseId != null) {
             Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
-            filename += etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId())).getEtterlevelseNummer() +".docx";
+            filename += etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId())).getEtterlevelseNummer() + ".docx";
             log.info("Exporting 1 etterlevelse to doc");
             doc = etterlevelseDokumentasjonToDoc.generateDocForEtterlevelse(etterlevelseId);
         } else if (etterlevelseDokumentasjonId != null) {
