@@ -49,14 +49,14 @@ public class EtterlevelseArkivToDocService extends DomainService<EtterlevelseArk
 
         for (EtterlevelseArkiv etterlevelseArkiv : etterlevelseArkivList) {
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelseArkiv.getEtterlevelseDokumentasjonId()));
-            String fileName = formatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer();
+            String wordFileName = formatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer();
             String xmlFileName = xmlDateFormatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer();
 
             if (etterlevelseArkiv.isOnlyActiveKrav()) {
-                fileName += "_kun_gjeldende_krav_versjon.docx";
+                wordFileName += "_kun_gjeldende_krav_versjon.docx";
                 xmlFileName += "_kun_gjeldende_krav_versjon.xml";
             } else {
-                fileName += "_alle_krav_versjoner.docx";
+                wordFileName += "_alle_krav_versjoner.docx";
                 xmlFileName += "_alle_krav_versjoner.xml";
             }
 
@@ -65,10 +65,10 @@ public class EtterlevelseArkivToDocService extends DomainService<EtterlevelseArk
             statuses.add(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT.name());
             log.info("Generating word and xml file for etterlevelse dokumentation: E" + etterlevelseDokumentasjon.getEtterlevelseNummer());
             byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjon.getId(), statuses, Collections.emptyList(), etterlevelseArkiv.isOnlyActiveKrav());
-            byte[] xmlFile = createXml(date, fileName, etterlevelseDokumentasjon, etterlevelseArkiv);
+            byte[] xmlFile = createXml(date, wordFileName, etterlevelseDokumentasjon, etterlevelseArkiv);
             log.info("Adding generated word and xml file to zip file.");
             archiveFiles.add(ArchiveFile.builder()
-                    .fileName(fileName)
+                    .fileName(wordFileName)
                     .file(wordFile)
                     .build());
             archiveFiles.add(ArchiveFile.builder()
