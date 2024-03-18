@@ -52,12 +52,12 @@ public class EtterlevelseArkivToDocService extends DomainService<EtterlevelseArk
             String fileName = formatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer();
             String xmlFileName = xmlDateFormatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer();
 
-            if(etterlevelseArkiv.isOnlyActiveKrav()) {
-                fileName += "_kun_gjeldende_krav_versjon";
-                xmlFileName += "_kun_gjeldende_krav_versjon";
-            }else {
-                fileName += "_alle_krav_versjoner";
-                xmlFileName += "_alle_krav_versjoner";
+            if (etterlevelseArkiv.isOnlyActiveKrav()) {
+                fileName += "_kun_gjeldende_krav_versjon.docx";
+                xmlFileName += "_kun_gjeldende_krav_versjon.xml";
+            } else {
+                fileName += "_alle_krav_versjoner.docx";
+                xmlFileName += "_alle_krav_versjoner.xml";
             }
 
             ArrayList<String> statuses = new ArrayList<>();
@@ -65,14 +65,14 @@ public class EtterlevelseArkivToDocService extends DomainService<EtterlevelseArk
             statuses.add(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT.name());
             log.info("Generating word and xml file for etterlevelse dokumentation: E" + etterlevelseDokumentasjon.getEtterlevelseNummer());
             byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjon.getId(), statuses, Collections.emptyList(), etterlevelseArkiv.isOnlyActiveKrav());
-            byte[] xmlFile = createXml(date, fileName + ".docx", etterlevelseDokumentasjon, etterlevelseArkiv);
+            byte[] xmlFile = createXml(date, fileName, etterlevelseDokumentasjon, etterlevelseArkiv);
             log.info("Adding generated word and xml file to zip file.");
             archiveFiles.add(ArchiveFile.builder()
-                    .fileName(fileName + ".docx")
+                    .fileName(fileName)
                     .file(wordFile)
                     .build());
             archiveFiles.add(ArchiveFile.builder()
-                    .fileName(xmlFileName + ".xml")
+                    .fileName(xmlFileName)
                     .file(xmlFile)
                     .build());
         }
