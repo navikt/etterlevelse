@@ -7,7 +7,6 @@ import no.nav.data.common.utils.ZipUtils;
 import no.nav.data.etterlevelse.arkivering.domain.ArchiveFile;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.common.domain.DomainService;
-import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.export.EtterlevelseDokumentasjonToDoc;
@@ -60,11 +59,8 @@ public class EtterlevelseArkivToDocService extends DomainService<EtterlevelseArk
                 xmlFileName += "_alle_krav_versjoner.xml";
             }
 
-            ArrayList<String> statuses = new ArrayList<>();
-            statuses.add(EtterlevelseStatus.FERDIG_DOKUMENTERT.name());
-            statuses.add(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT.name());
             log.info("Generating word and xml file for etterlevelse dokumentation: E" + etterlevelseDokumentasjon.getEtterlevelseNummer());
-            byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjon.getId(), statuses, Collections.emptyList(), etterlevelseArkiv.isOnlyActiveKrav());
+            byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjon.getId(), Collections.emptyList(), Collections.emptyList(), etterlevelseArkiv.isOnlyActiveKrav());
             byte[] xmlFile = createXml(date, wordFileName, etterlevelseDokumentasjon, etterlevelseArkiv);
             log.info("Adding generated word and xml file to zip file.");
             archiveFiles.add(ArchiveFile.builder()
