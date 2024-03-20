@@ -1,6 +1,7 @@
 package no.nav.data.common.security.azure;
 
-import com.azure.core.credential.AccessToken;
+import com.azure.identity.DeviceCodeCredential;
+import com.azure.identity.DeviceCodeCredentialBuilder;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.microsoft.aad.msal4j.AuthorizationCodeParameters;
@@ -33,15 +34,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
-import reactor.core.publisher.Mono;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -97,19 +95,12 @@ public class AzureTokenProvider implements TokenProvider {
 //                .logger(new GraphLogger())
 //                .buildClient();
 
+        final DeviceCodeCredential credential = new DeviceCodeCredentialBuilder()
+                .clientId(aadAuthProps.getClientId())
+                .challengeConsumer(url -> CompletableFuture.completedFuture(accessToken.accessToken()))
+                .build();
 
-        var test = CompletableFuture.completedFuture(accessToken).get();
-
-
-        LocalDate.ofInstant(test.expiresOnDate().toInstant(), test.expiresOnDate().getTimezoneOffset());
-
-
-        OffsetDateTime.of(LocalDate. test.expiresOnDate(),test.expiresOnDate().getTime(), test.expiresOnDate().getTimezoneOffset());
-        Mono<AccessToken> test2 = ;
-
-
-
-        return new GraphServiceClient(url -> test2);
+        return new GraphServiceClient(credential, accessToken.scopes());
 
     }
 
