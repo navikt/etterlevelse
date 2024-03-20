@@ -21,6 +21,8 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
+import no.nav.data.etterlevelse.kravprioritylist.KravPriorityListService;
+import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.integration.begrep.BegrepService;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
 import no.nav.data.integration.behandling.BehandlingService;
@@ -57,6 +59,8 @@ public class EtterlevelseDokumentasjonToDoc {
     private final CodeUsageService codeUsageService;
 
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+
+    private final KravPriorityListService kravPriorityListService;
 
     public void getEtterlevelseDokumentasjonData(EtterlevelseDokumentasjon etterlevelseDokumentasjon, EtterlevelseDocumentBuilder doc) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd'.' MMMM yyyy 'kl 'HH:mm");
@@ -244,14 +248,15 @@ public class EtterlevelseDokumentasjonToDoc {
         for (CodeUsage tema : temaListe) {
             List<String> regelverk = tema.getCodelist().stream().map(Codelist::getCode).toList();
 
-            List<EtterlevelseMedKravData> filteredDataByTema = doc.getSortedEtterlevelseMedKravData(filteredEtterlevelseMedKravData, regelverk);
+            List<EtterlevelseMedKravData> filteredDataByTema = doc.getEtterlevelseMedKravDataByTema(filteredEtterlevelseMedKravData, regelverk);
+            List<EtterlevelseMedKravData> sortedDataByPriority = doc.getSortedEtterlevelseMedKravDataByPriority(filteredDataByTema, tema.getCode());
 
-            if (!filteredDataByTema.isEmpty()) {
+            if (!sortedDataByPriority.isEmpty()) {
                 doc.pageBreak();
                 doc.addHeading1(tema.getShortName());
-                for (int i = 0; i < filteredDataByTema.size(); i++) {
-                    doc.generate(filteredDataByTema.get(i));
-                    if (i != filteredDataByTema.size() - 1) {
+                for (int i = 0; i < sortedDataByPriority.size(); i++) {
+                    doc.generate(sortedDataByPriority.get(i));
+                    if (i != sortedDataByPriority.size() - 1) {
                         doc.pageBreak();
                     }
                 }
@@ -457,19 +462,54 @@ public class EtterlevelseDokumentasjonToDoc {
             };
         }
 
-        private List<EtterlevelseMedKravData> getSortedEtterlevelseMedKravData(List<EtterlevelseMedKravData> etterlevelseMedKravData, List<String> lover) {
+        private List<EtterlevelseMedKravData> getEtterlevelseMedKravDataByTema(List<EtterlevelseMedKravData> etterlevelseMedKravData, List<String> lover) {
             return etterlevelseMedKravData.stream().filter(e -> {
                 if (e.getKravData().isPresent()) {
                     return e.getKravData().get().getRegelverk().stream().anyMatch(l -> lover.contains(l.getLov()));
                 }
                 return false;
-            }).sorted((a, b) -> {
-                if (a.getEtterlevelseData().getKravNummer().equals(b.getEtterlevelseData().getKravNummer())) {
-                    return b.getEtterlevelseData().getKravVersjon().compareTo(a.getEtterlevelseData().getKravVersjon());
-                } else {
-                    return a.getEtterlevelseData().getKravNummer().compareTo(b.getEtterlevelseData().getKravNummer());
-                }
             }).toList();
+        }
+
+        private List<EtterlevelseMedKravData> getSortedEtterlevelseMedKravDataByPriority(List<EtterlevelseMedKravData> etterlevelseMedKravData, String temaCode) {
+            Optional<KravPriorityList> kravPriorityList = kravPriorityListService.getByTema(temaCode);
+
+            List<EtterlevelseMedKravData> dataMedAktivStatus= etterlevelseMedKravData.stream().filter((e) -> {
+                if(e.getKravData().isPresent()) {
+                    return e.getKravData().get().getStatus() == KravStatus.AKTIV;
+                }
+                return false;
+            }).toList();
+
+            List<EtterlevelseMedKravData> dataMedUtgaatStatus= etterlevelseMedKravData.stream().filter((e) -> {
+                if(e.getKravData().isPresent()) {
+                    return e.getKravData().get().getStatus() != KravStatus.AKTIV;
+                }
+                return false;
+            }).toList();
+
+            List<EtterlevelseMedKravData> sortedDataByPriority = new ArrayList<>();
+
+            if(kravPriorityList.isPresent()) {
+                dataMedAktivStatus = dataMedAktivStatus.stream().sorted(kravPriorityList.get().comparator()).toList();
+
+                dataMedUtgaatStatus = dataMedUtgaatStatus.stream().sorted(kravPriorityList.get().comparator()).toList();
+            } else {
+                dataMedAktivStatus = dataMedAktivStatus.stream().sorted(Comparator.comparing(a -> a.getEtterlevelseData().getKravNummer())).toList();
+
+                dataMedUtgaatStatus = dataMedUtgaatStatus.stream().sorted((a, b) -> {
+                    if (a.getEtterlevelseData().getKravNummer().equals(b.getEtterlevelseData().getKravNummer())) {
+                        return b.getEtterlevelseData().getKravVersjon().compareTo(a.getEtterlevelseData().getKravVersjon());
+                    } else {
+                        return a.getEtterlevelseData().getKravNummer().compareTo(b.getEtterlevelseData().getKravNummer());
+                    }
+                }).toList();
+            }
+
+            sortedDataByPriority.addAll(dataMedAktivStatus);
+            sortedDataByPriority.addAll(dataMedUtgaatStatus);
+
+            return sortedDataByPriority;
         }
 
         public void addTableOfContent(List<EtterlevelseMedKravData> etterlevelseList, List<CodeUsage> temaListe) {
@@ -479,11 +519,12 @@ public class EtterlevelseDokumentasjonToDoc {
             for (CodeUsage tema : temaListe) {
                 List<String> lover = tema.getCodelist().stream().map(Codelist::getCode).toList();
 
-                List<EtterlevelseMedKravData> filteredDataByTema = getSortedEtterlevelseMedKravData(etterlevelseList, lover);
+                List<EtterlevelseMedKravData> filteredDataByTema = getEtterlevelseMedKravDataByTema(etterlevelseList, lover);
+                List<EtterlevelseMedKravData> sortedDataByPriority = getSortedEtterlevelseMedKravDataByPriority(filteredDataByTema, tema.getCode());
 
-                if (!filteredDataByTema.isEmpty()) {
+                if (!sortedDataByPriority.isEmpty()) {
                     addHeading3(tema.getShortName());
-                    for (EtterlevelseMedKravData etterlevelseMedKravData : filteredDataByTema) {
+                    for (EtterlevelseMedKravData etterlevelseMedKravData : sortedDataByPriority) {
                         Etterlevelse etterlevelse = etterlevelseMedKravData.getEtterlevelseData();
                         Optional<Krav> krav = etterlevelseMedKravData.getKravData();
                         var name = "K" + etterlevelse.getKravNummer() + "." + etterlevelse.getKravVersjon();
