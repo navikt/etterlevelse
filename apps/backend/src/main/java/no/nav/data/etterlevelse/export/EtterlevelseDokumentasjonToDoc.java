@@ -290,6 +290,8 @@ public class EtterlevelseDokumentasjonToDoc {
             addBookmark(header, etterlevelse.getId().toString());
 
             if (krav.isPresent()) {
+                addHeading3("Krav status");
+                addText(krav.get().getStatus().name());
                 addHeading3("Hensikten med kravet");
                 if (krav.get().getHensikt() != null && !krav.get().getHensikt().isEmpty()) {
                     addMarkdownText(krav.get().getHensikt());
