@@ -474,42 +474,13 @@ public class EtterlevelseDokumentasjonToDoc {
         private List<EtterlevelseMedKravData> getSortedEtterlevelseMedKravDataByPriority(List<EtterlevelseMedKravData> etterlevelseMedKravData, String temaCode) {
             Optional<KravPriorityList> kravPriorityList = kravPriorityListService.getByTema(temaCode);
 
-            List<EtterlevelseMedKravData> dataMedAktivStatus= etterlevelseMedKravData.stream().filter((e) -> {
-                if(e.getKravData().isPresent()) {
-                    return e.getKravData().get().getStatus() == KravStatus.AKTIV;
+            return kravPriorityList.map(priorityList -> etterlevelseMedKravData.stream().sorted(priorityList.comparator()).toList()).orElseGet(() -> etterlevelseMedKravData.stream().sorted((a, b) -> {
+                if (a.getEtterlevelseData().getKravNummer().equals(b.getEtterlevelseData().getKravNummer())) {
+                    return b.getEtterlevelseData().getKravVersjon().compareTo(a.getEtterlevelseData().getKravVersjon());
+                } else {
+                    return a.getEtterlevelseData().getKravNummer().compareTo(b.getEtterlevelseData().getKravNummer());
                 }
-                return false;
-            }).toList();
-
-            List<EtterlevelseMedKravData> dataMedUtgaatStatus= etterlevelseMedKravData.stream().filter((e) -> {
-                if(e.getKravData().isPresent()) {
-                    return e.getKravData().get().getStatus() != KravStatus.AKTIV;
-                }
-                return false;
-            }).toList();
-
-            List<EtterlevelseMedKravData> sortedDataByPriority = new ArrayList<>();
-
-            if(kravPriorityList.isPresent()) {
-                dataMedAktivStatus = dataMedAktivStatus.stream().sorted(kravPriorityList.get().comparator()).toList();
-
-                dataMedUtgaatStatus = dataMedUtgaatStatus.stream().sorted(kravPriorityList.get().comparator()).toList();
-            } else {
-                dataMedAktivStatus = dataMedAktivStatus.stream().sorted(Comparator.comparing(a -> a.getEtterlevelseData().getKravNummer())).toList();
-
-                dataMedUtgaatStatus = dataMedUtgaatStatus.stream().sorted((a, b) -> {
-                    if (a.getEtterlevelseData().getKravNummer().equals(b.getEtterlevelseData().getKravNummer())) {
-                        return b.getEtterlevelseData().getKravVersjon().compareTo(a.getEtterlevelseData().getKravVersjon());
-                    } else {
-                        return a.getEtterlevelseData().getKravNummer().compareTo(b.getEtterlevelseData().getKravNummer());
-                    }
-                }).toList();
-            }
-
-            sortedDataByPriority.addAll(dataMedAktivStatus);
-            sortedDataByPriority.addAll(dataMedUtgaatStatus);
-
-            return sortedDataByPriority;
+            }).toList());
         }
 
         public void addTableOfContent(List<EtterlevelseMedKravData> etterlevelseList, List<CodeUsage> temaListe) {
