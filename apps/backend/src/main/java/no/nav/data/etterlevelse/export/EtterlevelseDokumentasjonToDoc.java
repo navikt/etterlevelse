@@ -115,11 +115,11 @@ public class EtterlevelseDokumentasjonToDoc {
 
 
         if (!lover.isEmpty()) {
+            log.info("getting etterlevelse with lover: " + lover);
             List<EtterlevelseMedKravData> temaFilteredEtterlevelse = new ArrayList<>();
             etterlevelseMedKravData.forEach(etterlevelse -> {
                 if (etterlevelse.getKravData().isPresent()) {
-                    if (etterlevelse.getKravData().get().getRegelverk().stream().anyMatch(m -> lover.contains(m.getLov())
-                    )) {
+                    if (etterlevelse.getKravData().get().getRegelverk().stream().anyMatch(m -> lover.contains(m.getLov()))) {
                         temaFilteredEtterlevelse.add(etterlevelse);
                     }
                 }
