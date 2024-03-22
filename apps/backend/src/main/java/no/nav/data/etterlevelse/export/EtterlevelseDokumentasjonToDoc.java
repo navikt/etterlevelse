@@ -178,7 +178,7 @@ public class EtterlevelseDokumentasjonToDoc {
         List<Krav> alleAktivKrav = kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjonId.toString())
                 .stream().filter(k -> k.getStatus().equals(KravStatus.AKTIV)).toList();
 
-        if(!lover.isEmpty()) {
+        if (!lover.isEmpty()) {
             alleAktivKrav = alleAktivKrav.stream().filter(k -> k.getRegelverk().stream().anyMatch(l -> lover.contains(l.getLov()))).toList();
         }
 
@@ -488,13 +488,14 @@ public class EtterlevelseDokumentasjonToDoc {
         private List<EtterlevelseMedKravData> getSortedEtterlevelseMedKravDataByPriority(List<EtterlevelseMedKravData> etterlevelseMedKravData, String temaCode) {
             Optional<KravPriorityList> kravPriorityList = kravPriorityListService.getByTema(temaCode);
 
-            return kravPriorityList.map(priorityList -> etterlevelseMedKravData.stream().sorted(priorityList.comparator()).toList()).orElseGet(() -> etterlevelseMedKravData.stream().sorted((a, b) -> {
-                if (a.getEtterlevelseData().getKravNummer().equals(b.getEtterlevelseData().getKravNummer())) {
-                    return b.getEtterlevelseData().getKravVersjon().compareTo(a.getEtterlevelseData().getKravVersjon());
-                } else {
-                    return a.getEtterlevelseData().getKravNummer().compareTo(b.getEtterlevelseData().getKravNummer());
-                }
-            }).toList());
+            return kravPriorityList.map(priorityList -> etterlevelseMedKravData.stream().sorted(priorityList.comparator()).toList())
+                    .orElseGet(() -> etterlevelseMedKravData.stream().sorted((a, b) -> {
+                        if (a.getEtterlevelseData().getKravNummer().equals(b.getEtterlevelseData().getKravNummer())) {
+                            return b.getEtterlevelseData().getKravVersjon().compareTo(a.getEtterlevelseData().getKravVersjon());
+                        } else {
+                            return b.getEtterlevelseData().getKravNummer().compareTo(a.getEtterlevelseData().getKravNummer());
+                        }
+                    }).toList());
         }
 
         public void addTableOfContent(List<EtterlevelseMedKravData> etterlevelseList, List<CodeUsage> temaListe) {

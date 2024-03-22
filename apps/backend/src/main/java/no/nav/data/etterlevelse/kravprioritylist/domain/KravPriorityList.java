@@ -37,10 +37,10 @@ public class KravPriorityList extends DomainObject {
             int priorityIndexB = priorityList.indexOf(b.getEtterlevelseData().getKravNummer());
 
             if (priorityIndexA == -1) {
-                priorityIndexA = 5000 + a.getEtterlevelseData().getKravNummer();
+                priorityIndexA = 5000 - a.getEtterlevelseData().getKravNummer();
             }
             if (priorityIndexB == -1) {
-                priorityIndexB = 5000 + b.getEtterlevelseData().getKravNummer();
+                priorityIndexB = 5000 - b.getEtterlevelseData().getKravNummer();
             }
 
             if (priorityIndexA == priorityIndexB) {
