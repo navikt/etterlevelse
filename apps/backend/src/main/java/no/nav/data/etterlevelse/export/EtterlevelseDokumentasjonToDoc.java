@@ -291,7 +291,7 @@ public class EtterlevelseDokumentasjonToDoc {
 
             if (krav.isPresent()) {
                 addHeading3("Krav status");
-                addText(krav.get().getStatus().name());
+                addText(kravStatusText(krav.get().getStatus()));
                 addHeading3("Hensikten med kravet");
                 if (krav.get().getHensikt() != null && !krav.get().getHensikt().isEmpty()) {
                     addMarkdownText(krav.get().getHensikt());
@@ -461,6 +461,15 @@ public class EtterlevelseDokumentasjonToDoc {
                 case UNDER_ARBEID -> "Under arbeid";
                 case IKKE_RELEVANT -> "Ikke relevant";
                 case IKKE_OPPFYLT -> "Ikke oppfylt";
+            };
+        }
+
+        public String kravStatusText(KravStatus status) {
+            return switch (status) {
+                case AKTIV -> "Aktiv";
+                case UTKAST -> "Utkast";
+                case UTGAATT -> "Utgått";
+                case UNDER_ARBEID -> "Under arbeid";
             };
         }
 
