@@ -115,7 +115,6 @@ public class EtterlevelseDokumentasjonToDoc {
 
 
         if (!lover.isEmpty()) {
-            log.info("getting etterlevelse with lover: " + lover);
             List<EtterlevelseMedKravData> temaFilteredEtterlevelse = new ArrayList<>();
             etterlevelseMedKravData.forEach(etterlevelse -> {
                 if (etterlevelse.getKravData().isPresent()) {
@@ -124,7 +123,6 @@ public class EtterlevelseDokumentasjonToDoc {
                     }
                 }
             });
-
             return temaFilteredEtterlevelse;
         }
 
@@ -179,6 +177,11 @@ public class EtterlevelseDokumentasjonToDoc {
 
         List<Krav> alleAktivKrav = kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjonId.toString())
                 .stream().filter(k -> k.getStatus().equals(KravStatus.AKTIV)).toList();
+
+        if(!lover.isEmpty()) {
+            alleAktivKrav = alleAktivKrav.stream().filter(k -> k.getRegelverk().stream().anyMatch(l -> lover.contains(l.getLov()))).toList();
+        }
+
 
         if (onlyActiveKrav) {
             alleAktivKrav.forEach((krav) -> {
