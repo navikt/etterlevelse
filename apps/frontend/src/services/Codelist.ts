@@ -64,7 +64,7 @@ class CodelistService {
 
   getCodes(list: EListName): ICode[] {
     return this.lists && this.lists.codelist[list]
-      ? this.lists.codelist[list].sort((c1, c2) => c1.shortName.localeCompare(c2.shortName))
+      ? this.lists.codelist[list].sort((c1, c2) => c1.shortName.localeCompare(c2.shortName, 'nb'))
       : []
   }
 

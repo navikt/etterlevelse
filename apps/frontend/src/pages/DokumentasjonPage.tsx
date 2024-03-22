@@ -28,9 +28,7 @@ import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
-  const temaListe = codelist
-    .getCodes(EListName.TEMA)
-    .sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
+  const temaListe = codelist.getCodes(EListName.TEMA)
   const [openAccordions, setOpenAccordions] = useState<boolean[]>(temaListe.map(() => false))
   const variables = { etterlevelseDokumentasjonId: params.id }
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
