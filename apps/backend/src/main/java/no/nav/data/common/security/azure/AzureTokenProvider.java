@@ -1,7 +1,7 @@
 package no.nav.data.common.security.azure;
 
-import com.azure.identity.DeviceCodeCredential;
-import com.azure.identity.DeviceCodeCredentialBuilder;
+import com.azure.identity.UsernamePasswordCredential;
+import com.azure.identity.UsernamePasswordCredentialBuilder;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.microsoft.aad.msal4j.AuthorizationCodeParameters;
@@ -41,7 +41,6 @@ import java.net.URI;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 import static java.util.Objects.requireNonNull;
 import static no.nav.data.common.security.SecurityConstants.SESS_ID_LEN;
@@ -95,9 +94,8 @@ public class AzureTokenProvider implements TokenProvider {
 //                .logger(new GraphLogger())
 //                .buildClient();
 
-        final DeviceCodeCredential credential = new DeviceCodeCredentialBuilder()
-                .clientId(aadAuthProps.getClientId())
-                .challengeConsumer(url -> CompletableFuture.completedFuture(accessToken.accessToken()))
+        final UsernamePasswordCredential credential = new UsernamePasswordCredentialBuilder()
+                .clientId(aadAuthProps.getClientId()).username(aadAuthProps.getMailUser()).password(aadAuthProps.getMailPassword())
                 .build();
 
         return new GraphServiceClient(credential, accessToken.scopes());
