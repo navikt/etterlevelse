@@ -27,7 +27,7 @@
         <flexmark.version>0.64.8</flexmark.version>
 
         <microsoft-graph.version>5.80.0</microsoft-graph.version>
-        <msal4j.version>1.14.3</msal4j.version>
+        <msal4j.version>1.15.0</msal4j.version>
 
         <!-- transitive versions -->
         <commons-compress.version>1.26.1</commons-compress.version>
