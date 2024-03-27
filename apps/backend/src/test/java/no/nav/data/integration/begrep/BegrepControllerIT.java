@@ -4,15 +4,10 @@ import no.nav.data.IntegrationTestBase;
 import no.nav.data.integration.begrep.BegrepController.BegrepPage;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BegrepControllerIT extends IntegrationTestBase {
-
-    @Autowired
-    private TestRestTemplate restTemplate;
 
     @Test
     void getBegrep() {

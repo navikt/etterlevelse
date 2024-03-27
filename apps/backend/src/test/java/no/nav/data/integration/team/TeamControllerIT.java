@@ -6,16 +6,11 @@ import no.nav.data.integration.team.TeamController.TeamPage;
 import no.nav.data.integration.team.dto.ProductAreaResponse;
 import no.nav.data.integration.team.dto.TeamResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TeamControllerIT extends IntegrationTestBase {
-
-    @Autowired
-    private TestRestTemplate restTemplate;
 
     @Test
     void getTeams() {
