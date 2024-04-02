@@ -21,7 +21,7 @@ export const EtterlevelseModal = ({
       open={isModalOpen}
       aria-label="Etterlevelse Modal"
     >
-      <Modal.Header className="w-full" closeButton={false}>
+      <Modal.Header className="w-full">
         <BodyShort>{kravNumView(kravData)}</BodyShort>
         <Heading size="medium" level="1">
           {kravData.navn}

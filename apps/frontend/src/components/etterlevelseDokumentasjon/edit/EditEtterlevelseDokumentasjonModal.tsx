@@ -367,7 +367,10 @@ export const EditEtterlevelseDokumentasjonModal = (
                     <Field name="avdeling">
                       {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
                         <div>
-                          <LabelWithDescription label="Avdeling" />
+                          <LabelWithDescription
+                            label="Avdeling"
+                            description="Angi hvilken avdeling som er ansvarlig for etterlevelsen og som er risikoeier."
+                          />
                           <OptionList
                             listName={EListName.AVDELING}
                             label="Avdeling"

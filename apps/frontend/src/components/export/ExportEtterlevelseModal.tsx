@@ -22,6 +22,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
       </Button>
 
       <Modal
+        width="30rem"
         open={isExportModalOpen}
         onClose={() => {
           setValgtTema('')
@@ -68,7 +69,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                   </Box>
                 </div>
               )}
-              <div className="flex gap-2">
+              <div className="flex justify-end gap-2">
                 <Button
                   variant="tertiary"
                   onClick={() => {
@@ -79,52 +80,42 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                   Avbryt
                 </Button>
                 <Button
-                  variant="secondary"
-                  onClick={() => {
-                    ;(async () => {
-                      setIsLoading(true)
-                      setErrorMessage('')
-                      const exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}&onlyActiveKrav=${onlyActiveKrav}`
-
-                      axios
-                        .get(exportUrl)
-                        .then(() => {
-                          window.location.href = exportUrl
-                          setIsLoading(false)
-                        })
-                        .catch((e) => {
-                          setErrorMessage(e.response.data.message)
-                          setIsLoading(false)
-                        })
-                    })()
-                  }}
-                >
-                  Eksporter alle tema
-                </Button>
-                <Button
                   variant="primary"
-                  disabled={valgtTema == ''}
                   onClick={() => {
                     ;(async () => {
                       setIsLoading(true)
                       setErrorMessage('')
-                      const exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}&temakode=${valgtTema}&onlyActiveKrav=${onlyActiveKrav}`
-
-                      axios
-                        .get(exportUrl)
-                        .then(() => {
-                          window.location.href = exportUrl
-                          setIsLoading(false)
-                          setIsExportModalOpen(false)
-                        })
-                        .catch((e) => {
-                          setErrorMessage(e.response.data.message)
-                          setIsLoading(false)
-                        })
+                      let exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}`
+                      if (valgtTema !== '') {
+                        exportUrl += `&temakode=${valgtTema}&onlyActiveKrav=${onlyActiveKrav}`
+                        axios
+                          .get(exportUrl)
+                          .then(() => {
+                            window.location.href = exportUrl
+                            setIsLoading(false)
+                            setIsExportModalOpen(false)
+                          })
+                          .catch((e) => {
+                            setErrorMessage(e.response.data.message)
+                            setIsLoading(false)
+                          })
+                      } else {
+                        exportUrl += `&onlyActiveKrav=${onlyActiveKrav}`
+                        axios
+                          .get(exportUrl)
+                          .then(() => {
+                            window.location.href = exportUrl
+                            setIsLoading(false)
+                          })
+                          .catch((e) => {
+                            setErrorMessage(e.response.data.message)
+                            setIsLoading(false)
+                          })
+                      }
                     })()
                   }}
                 >
-                  Eksporter valgt tema
+                  Eksporter
                 </Button>
               </div>
             </div>
