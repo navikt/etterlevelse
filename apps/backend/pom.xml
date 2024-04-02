@@ -25,7 +25,7 @@
         <graphql-spring-boot-starter.version>15.1.0</graphql-spring-boot-starter.version>
         <graphql.version>21.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
-        <microsoft-graph.version>6.5.1</microsoft-graph.version>
+        <microsoft-graph.version>6.4.0</microsoft-graph.version>
         <msal4j.version>1.15.0</msal4j.version>
 
         <!-- transitive versions -->
@@ -39,8 +39,8 @@
         <testcontainers.version>1.19.7</testcontainers.version>
         <wiremock.version>2.27.2</wiremock.version>
         <docx4j.version>11.4.11</docx4j.version>
-        
-        
+
+
     </properties>
 
     <dependencies>
@@ -79,7 +79,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
-        
+
         <!-- Jwt parsing and verifying -->
         <dependency>
             <groupId>com.auth0</groupId>
