@@ -85,7 +85,7 @@ export const DokumentasjonPage = () => {
   }
 
   useEffect(() => {
-    hotjar.initialize(148751, 6)
+    hotjar.initialize({ id: 148751, sv: 6 })
   }, [])
 
   useEffect(() => {

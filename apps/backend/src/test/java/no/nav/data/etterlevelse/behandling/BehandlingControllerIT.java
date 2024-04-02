@@ -5,17 +5,12 @@ import no.nav.data.etterlevelse.common.domain.ExternalCode;
 import no.nav.data.integration.behandling.BehandlingController.BehandlingPage;
 import no.nav.data.integration.behandling.dto.Behandling;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class BehandlingControllerIT extends IntegrationTestBase {
-
-    @Autowired
-    private TestRestTemplate restTemplate;
 
     @Test
     void getBehandling() {

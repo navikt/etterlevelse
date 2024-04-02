@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.8</version>
+        <version>3.2.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>no.nav.data</groupId>
@@ -17,7 +17,7 @@
     <properties>
         <java.version>17</java.version>
 
-        <springdoc-openapi-starter-webmvc-ui.version>2.4.0</springdoc-openapi-starter-webmvc-ui.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.5.0</springdoc-openapi-starter-webmvc-ui.version>
         <hypersistence-utils-hibernate-63.version>3.7.3</hypersistence-utils-hibernate-63.version>
         <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
         <shedlock.version>5.12.0</shedlock.version>
@@ -39,8 +39,8 @@
         <testcontainers.version>1.19.7</testcontainers.version>
         <wiremock.version>2.27.2</wiremock.version>
         <docx4j.version>11.4.11</docx4j.version>
-        
-        
+
+
     </properties>
 
     <dependencies>
@@ -79,7 +79,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
-        
+
         <!-- Jwt parsing and verifying -->
         <dependency>
             <groupId>com.auth0</groupId>
