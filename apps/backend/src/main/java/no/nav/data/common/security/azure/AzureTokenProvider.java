@@ -87,11 +87,6 @@ public class AzureTokenProvider implements TokenProvider {
 
     GraphServiceClient getGraphClient(String accessToken) {
 
-//        return GraphServiceClient.builder()
-//                .authenticationProvider(url -> CompletableFuture.completedFuture(accessToken))
-//                .logger(new GraphLogger())
-//                .buildClient();
-
         BaseBearerTokenAuthenticationProvider authProvider = new BaseBearerTokenAuthenticationProvider(new CustomTokenProviderForEmailServiceUser(accessToken));
 
         return new GraphServiceClient(authProvider);
