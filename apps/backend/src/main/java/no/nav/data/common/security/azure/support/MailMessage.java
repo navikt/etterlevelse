@@ -14,19 +14,23 @@ public class MailMessage {
 
     public static Message compose(String to, String subject, String messageBody) {
         Message message = new Message();
-        message.toRecipients = List.of(recipient(to));
-        message.subject = subject;
-        message.body = new ItemBody();
-        message.body.contentType = BodyType.HTML;
-        message.body.content = messageBody;
+        ItemBody body = new ItemBody();
+        body.setContentType(BodyType.Html);
+        body.setContent(messageBody);
+
+        message.setToRecipients(List.of(recipient(to)));
+        message.setSubject(subject);
+        message.setBody(body);
 
         return message;
     }
 
     private static Recipient recipient(String to) {
         Recipient recipient = new Recipient();
-        recipient.emailAddress = new EmailAddress();
-        recipient.emailAddress.address = to;
+        EmailAddress emailAddress = new EmailAddress();
+        emailAddress.setAddress(to);
+
+        recipient.setEmailAddress(emailAddress);
 
         return recipient;
     }
