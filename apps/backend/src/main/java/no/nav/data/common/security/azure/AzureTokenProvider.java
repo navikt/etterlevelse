@@ -1,7 +1,5 @@
 package no.nav.data.common.security.azure;
 
-import com.azure.identity.UsernamePasswordCredential;
-import com.azure.identity.UsernamePasswordCredentialBuilder;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.microsoft.aad.msal4j.AuthorizationCodeParameters;
@@ -14,6 +12,7 @@ import com.microsoft.aad.msal4j.RefreshTokenParameters;
 import com.microsoft.aad.msal4j.ResponseMode;
 import com.microsoft.aad.msal4j.UserNamePasswordParameters;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
+import com.microsoft.kiota.authentication.BaseBearerTokenAuthenticationProvider;
 import com.nimbusds.oauth2.sdk.pkce.CodeChallengeMethod;
 import io.prometheus.client.Summary;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +22,7 @@ import no.nav.data.common.security.AuthService;
 import no.nav.data.common.security.Encryptor;
 import no.nav.data.common.security.TokenProvider;
 import no.nav.data.common.security.azure.support.AuthResultExpiry;
+import no.nav.data.common.security.azure.support.CustomEmailServiceUserTokenProvider;
 import no.nav.data.common.security.domain.Auth;
 import no.nav.data.common.security.dto.Credential;
 import no.nav.data.common.security.dto.OAuthState;
@@ -85,18 +85,16 @@ public class AzureTokenProvider implements TokenProvider {
         MetricUtils.register("accessTokenCache", accessTokenCache);
     }
 
-    GraphServiceClient getGraphClient(IAuthenticationResult accessToken) {
+    GraphServiceClient getGraphClient(String accessToken) {
 
 //        return GraphServiceClient.builder()
 //                .authenticationProvider(url -> CompletableFuture.completedFuture(accessToken))
 //                .logger(new GraphLogger())
 //                .buildClient();
 
-        final UsernamePasswordCredential credential = new UsernamePasswordCredentialBuilder()
-                .clientId(aadAuthProps.getClientId()).username(aadAuthProps.getMailUser()).password(aadAuthProps.getMailPassword())
-                .build();
+        BaseBearerTokenAuthenticationProvider authProvider = new BaseBearerTokenAuthenticationProvider(new CustomEmailServiceUserTokenProvider(accessToken));
 
-        return new GraphServiceClient(credential, accessToken.scopes());
+        return new GraphServiceClient(authProvider);
 
     }
 
@@ -184,9 +182,9 @@ public class AzureTokenProvider implements TokenProvider {
         return requireNonNull(accessTokenCache.get("refresh" + refreshToken + resource, cacheKey -> acquireTokenByRefreshToken(refreshToken, resource))).accessToken();
     }
 
-    public IAuthenticationResult getMailAccessToken() {
+    public String getMailAccessToken() {
         log.trace("Getting access token for mail");
-        return requireNonNull(accessTokenCache.get("mail", cacheKey -> acquireTokenForUser(Set.of("Mail.Send"), aadAuthProps.getMailUser(), aadAuthProps.getMailPassword())));
+        return requireNonNull(accessTokenCache.get("mail", cacheKey -> acquireTokenForUser(Set.of("Mail.Send"), aadAuthProps.getMailUser(), aadAuthProps.getMailPassword()))).accessToken();
     }
 
     private IAuthenticationResult acquireTokenByRefreshToken(String refreshToken, String resource) {
@@ -223,3 +221,4 @@ public class AzureTokenProvider implements TokenProvider {
     }
 
 }
+
