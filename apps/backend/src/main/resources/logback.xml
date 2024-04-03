@@ -15,6 +15,7 @@
     </appender>
 
     <logger name="no.nav" level="DEBUG"/>
+    <logger name="no.nav.data.common.security.azure.support.GraphLogger" level="INFO"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT_JSON"/>

@@ -1,7 +1,5 @@
 package no.nav.data.common.security.azure;
 
-import com.azure.identity.UsernamePasswordCredential;
-import com.azure.identity.UsernamePasswordCredentialBuilder;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.microsoft.aad.msal4j.AuthorizationCodeParameters;
@@ -13,7 +11,7 @@ import com.microsoft.aad.msal4j.PublicClientApplication;
 import com.microsoft.aad.msal4j.RefreshTokenParameters;
 import com.microsoft.aad.msal4j.ResponseMode;
 import com.microsoft.aad.msal4j.UserNamePasswordParameters;
-import com.microsoft.graph.serviceclient.GraphServiceClient;
+import com.microsoft.graph.requests.GraphServiceClient;
 import com.nimbusds.oauth2.sdk.pkce.CodeChallengeMethod;
 import io.prometheus.client.Summary;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +21,12 @@ import no.nav.data.common.security.AuthService;
 import no.nav.data.common.security.Encryptor;
 import no.nav.data.common.security.TokenProvider;
 import no.nav.data.common.security.azure.support.AuthResultExpiry;
+import no.nav.data.common.security.azure.support.GraphLogger;
 import no.nav.data.common.security.domain.Auth;
 import no.nav.data.common.security.dto.Credential;
 import no.nav.data.common.security.dto.OAuthState;
 import no.nav.data.common.utils.MetricUtils;
+import okhttp3.Request;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,6 +40,7 @@ import java.net.URI;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 import static java.util.Objects.requireNonNull;
 import static no.nav.data.common.security.SecurityConstants.SESS_ID_LEN;
@@ -85,19 +86,11 @@ public class AzureTokenProvider implements TokenProvider {
         MetricUtils.register("accessTokenCache", accessTokenCache);
     }
 
-    GraphServiceClient getGraphClient(IAuthenticationResult accessToken) {
-
-//        return GraphServiceClient.builder()
-//                .authenticationProvider(url -> CompletableFuture.completedFuture(accessToken))
-//                .logger(new GraphLogger())
-//                .buildClient();
-
-        final UsernamePasswordCredential credential = new UsernamePasswordCredentialBuilder()
-                .clientId(aadAuthProps.getClientId()).username(aadAuthProps.getMailUser()).password(aadAuthProps.getMailPassword())
-                .build();
-
-        return new GraphServiceClient(credential, accessToken.scopes());
-
+    GraphServiceClient<Request> getGraphClient(String accessToken) {
+        return GraphServiceClient.builder()
+                .authenticationProvider(url -> CompletableFuture.completedFuture(accessToken))
+                .logger(new GraphLogger())
+                .buildClient();
     }
 
     public String getConsumerToken(String resource) {
@@ -184,9 +177,9 @@ public class AzureTokenProvider implements TokenProvider {
         return requireNonNull(accessTokenCache.get("refresh" + refreshToken + resource, cacheKey -> acquireTokenByRefreshToken(refreshToken, resource))).accessToken();
     }
 
-    public IAuthenticationResult getMailAccessToken() {
+    public String getMailAccessToken() {
         log.trace("Getting access token for mail");
-        return requireNonNull(accessTokenCache.get("mail", cacheKey -> acquireTokenForUser(Set.of("Mail.Send"), aadAuthProps.getMailUser(), aadAuthProps.getMailPassword())));
+        return requireNonNull(accessTokenCache.get("mail", cacheKey -> acquireTokenForUser(Set.of("Mail.Send"), aadAuthProps.getMailUser(), aadAuthProps.getMailPassword()))).accessToken();
     }
 
     private IAuthenticationResult acquireTokenByRefreshToken(String refreshToken, String resource) {
