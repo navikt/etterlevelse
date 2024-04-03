@@ -25,7 +25,7 @@
         <graphql-spring-boot-starter.version>15.1.0</graphql-spring-boot-starter.version>
         <graphql.version>21.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
-        <microsoft-graph.version>6.5.1</microsoft-graph.version>
+        <microsoft-graph.version>5.80.0</microsoft-graph.version>
         <msal4j.version>1.15.0</msal4j.version>
 
         <!-- transitive versions -->
@@ -138,17 +138,6 @@
         <dependency>
             <groupId>com.microsoft.graph</groupId>
             <artifactId>microsoft-graph</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.azure</groupId>
-                    <artifactId>azure-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-identity</artifactId>
-            <version>1.11.4</version>
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
