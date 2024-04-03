@@ -12,6 +12,8 @@ import com.microsoft.aad.msal4j.RefreshTokenParameters;
 import com.microsoft.aad.msal4j.ResponseMode;
 import com.microsoft.aad.msal4j.UserNamePasswordParameters;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
+import com.microsoft.kiota.authentication.AccessTokenProvider;
+import com.microsoft.kiota.authentication.AllowedHostsValidator;
 import com.microsoft.kiota.authentication.BaseBearerTokenAuthenticationProvider;
 import com.nimbusds.oauth2.sdk.pkce.CodeChallengeMethod;
 import io.prometheus.client.Summary;
@@ -22,7 +24,6 @@ import no.nav.data.common.security.AuthService;
 import no.nav.data.common.security.Encryptor;
 import no.nav.data.common.security.TokenProvider;
 import no.nav.data.common.security.azure.support.AuthResultExpiry;
-import no.nav.data.common.security.azure.support.CustomTokenProviderForEmailServiceUser;
 import no.nav.data.common.security.domain.Auth;
 import no.nav.data.common.security.dto.Credential;
 import no.nav.data.common.security.dto.OAuthState;
@@ -30,6 +31,8 @@ import no.nav.data.common.utils.MetricUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
@@ -39,6 +42,7 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
 import java.time.Duration;
+import java.util.Map;
 import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
@@ -87,7 +91,20 @@ public class AzureTokenProvider implements TokenProvider {
 
     GraphServiceClient getGraphClient(String accessToken) {
 
-        BaseBearerTokenAuthenticationProvider authProvider = new BaseBearerTokenAuthenticationProvider(new CustomTokenProviderForEmailServiceUser(accessToken));
+        BaseBearerTokenAuthenticationProvider authProvider = new BaseBearerTokenAuthenticationProvider(
+                new AccessTokenProvider() {
+                    @NotNull
+                    @Override
+                    public String getAuthorizationToken(@NotNull URI uri, @Nullable Map<String, Object> additionalAuthenticationContext) {
+                        return accessToken;
+                    }
+                    @NotNull
+                    @Override
+                    public AllowedHostsValidator getAllowedHostsValidator() {
+                        return new AllowedHostsValidator();
+                    }
+                }
+        );
 
         return new GraphServiceClient(authProvider);
 
