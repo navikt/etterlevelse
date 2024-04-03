@@ -11,7 +11,8 @@ import com.microsoft.aad.msal4j.PublicClientApplication;
 import com.microsoft.aad.msal4j.RefreshTokenParameters;
 import com.microsoft.aad.msal4j.ResponseMode;
 import com.microsoft.aad.msal4j.UserNamePasswordParameters;
-import com.microsoft.graph.requests.GraphServiceClient;
+import com.microsoft.graph.serviceclient.GraphServiceClient;
+import com.microsoft.kiota.authentication.BaseBearerTokenAuthenticationProvider;
 import com.nimbusds.oauth2.sdk.pkce.CodeChallengeMethod;
 import io.prometheus.client.Summary;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +22,11 @@ import no.nav.data.common.security.AuthService;
 import no.nav.data.common.security.Encryptor;
 import no.nav.data.common.security.TokenProvider;
 import no.nav.data.common.security.azure.support.AuthResultExpiry;
-import no.nav.data.common.security.azure.support.GraphLogger;
+import no.nav.data.common.security.azure.support.CustomEmailServiceUserTokenProvider;
 import no.nav.data.common.security.domain.Auth;
 import no.nav.data.common.security.dto.Credential;
 import no.nav.data.common.security.dto.OAuthState;
 import no.nav.data.common.utils.MetricUtils;
-import okhttp3.Request;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,7 +40,6 @@ import java.net.URI;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 import static java.util.Objects.requireNonNull;
 import static no.nav.data.common.security.SecurityConstants.SESS_ID_LEN;
@@ -86,11 +85,17 @@ public class AzureTokenProvider implements TokenProvider {
         MetricUtils.register("accessTokenCache", accessTokenCache);
     }
 
-    GraphServiceClient<Request> getGraphClient(String accessToken) {
-        return GraphServiceClient.builder()
-                .authenticationProvider(url -> CompletableFuture.completedFuture(accessToken))
-                .logger(new GraphLogger())
-                .buildClient();
+    GraphServiceClient getGraphClient(String accessToken) {
+
+//        return GraphServiceClient.builder()
+//                .authenticationProvider(url -> CompletableFuture.completedFuture(accessToken))
+//                .logger(new GraphLogger())
+//                .buildClient();
+
+        BaseBearerTokenAuthenticationProvider authProvider = new BaseBearerTokenAuthenticationProvider(new CustomEmailServiceUserTokenProvider(accessToken));
+
+        return new GraphServiceClient(authProvider);
+
     }
 
     public String getConsumerToken(String resource) {
@@ -216,3 +221,4 @@ public class AzureTokenProvider implements TokenProvider {
     }
 
 }
+
