@@ -2,25 +2,26 @@ package no.nav.data.common.security.azure.support;
 
 import com.microsoft.kiota.authentication.AccessTokenProvider;
 import com.microsoft.kiota.authentication.AllowedHostsValidator;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
 import java.util.Map;
 
-public class CustomEmailServiceUserTokenProvider implements AccessTokenProvider {
+public class CustomTokenProviderForEmailServiceUser implements AccessTokenProvider {
 
-    private String accessToken;
+    private final String accessToken;
 
-    public CustomEmailServiceUserTokenProvider(String accessToken) {
+    public CustomTokenProviderForEmailServiceUser(String accessToken) {
         this.accessToken = accessToken;
     }
 
     @Override
-    public String getAuthorizationToken(URI uri, Map<String, Object> additionalAuthenticationContex) {
+    public @NotNull String getAuthorizationToken(@NotNull URI uri, Map<String, Object> additionalAuthenticationContex) {
         return accessToken;
     }
 
     @Override
-    public AllowedHostsValidator getAllowedHostsValidator() {
+    public @NotNull AllowedHostsValidator getAllowedHostsValidator() {
         // Handle allowed hosts validation logic here
         return new AllowedHostsValidator();
     }

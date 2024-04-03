@@ -22,7 +22,7 @@ import no.nav.data.common.security.AuthService;
 import no.nav.data.common.security.Encryptor;
 import no.nav.data.common.security.TokenProvider;
 import no.nav.data.common.security.azure.support.AuthResultExpiry;
-import no.nav.data.common.security.azure.support.CustomEmailServiceUserTokenProvider;
+import no.nav.data.common.security.azure.support.CustomTokenProviderForEmailServiceUser;
 import no.nav.data.common.security.domain.Auth;
 import no.nav.data.common.security.dto.Credential;
 import no.nav.data.common.security.dto.OAuthState;
@@ -92,7 +92,7 @@ public class AzureTokenProvider implements TokenProvider {
 //                .logger(new GraphLogger())
 //                .buildClient();
 
-        BaseBearerTokenAuthenticationProvider authProvider = new BaseBearerTokenAuthenticationProvider(new CustomEmailServiceUserTokenProvider(accessToken));
+        BaseBearerTokenAuthenticationProvider authProvider = new BaseBearerTokenAuthenticationProvider(new CustomTokenProviderForEmailServiceUser(accessToken));
 
         return new GraphServiceClient(authProvider);
 
