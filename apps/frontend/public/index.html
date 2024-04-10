@@ -12,7 +12,7 @@
       const getFaviconByEnv = (env) => {
         const favicon = document.getElementById("favicon");
         switch (env) {  
-          case 'etterlevelse.intern.dev.nav.no':
+          case 'etterlevelse.intern.dev.nav.no' || 'etterlevelse.ansatt.dev.nav.no':
             favicon.href = "%PUBLIC_URL%/faviconDev.svg"
             break;
           case 'localhost':
