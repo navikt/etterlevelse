@@ -7,7 +7,6 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '../constants'
 import { env } from '../util/env'
-import { behandlingName } from './BehandlingApi'
 import { getVirkemiddel } from './VirkemiddelApi'
 
 export const etterlevelseDokumentasjonName = (
@@ -21,31 +20,6 @@ export const getEtterlevelseDokumentasjon = async (id: string) => {
   return (
     await axios.get<IEtterlevelseDokumentasjon>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`
-    )
-  ).data
-}
-
-export const getAllEtterlevelseDokumentasjon = async () => {
-  const PAGE_SIZE = 100
-  const firstPage = await getEtterlevelseDokumentasjonPage(0, PAGE_SIZE)
-  if (firstPage.pages === 1) {
-    return firstPage.content.length > 0 ? [...firstPage.content] : []
-  } else {
-    let allEtterlevelseDokumentasjon: IEtterlevelseDokumentasjon[] = [...firstPage.content]
-    for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
-      allEtterlevelseDokumentasjon = [
-        ...allEtterlevelseDokumentasjon,
-        ...(await getEtterlevelseDokumentasjonPage(currentPage, PAGE_SIZE)).content,
-      ]
-    }
-    return allEtterlevelseDokumentasjon
-  }
-}
-
-export const getEtterlevelseDokumentasjonPage = async (pageNumber: number, pageSize: number) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(
-      `${env.backendBaseUrl}/etterlevelsedokumentasjon?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
   ).data
 }
@@ -65,13 +39,7 @@ export const searchEtterlevelsedokumentasjonByBehandlingId = async (behandlingId
     )
   ).data.content
 }
-export const searchEtterlevelsedokumentasjonByVirkemiddelId = async (virkemiddelId: string) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(
-      `${env.backendBaseUrl}/etterlevelsedokumentasjon/search/virkemiddel/${virkemiddelId}`
-    )
-  ).data.content
-}
+
 export const updateEtterlevelseDokumentasjon = async (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 ) => {
@@ -124,16 +92,8 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
                 (virkemiddelResponse) => (virkmiddel = virkemiddelResponse)
               )
             }
-            const behandlinger = etterlevelseDokumentasjon.behandlinger
-            if (behandlinger && behandlinger.length > 0) {
-              behandlinger.map((behandling) => {
-                behandling.navn = behandlingName(behandling)
-                return behandling
-              })
-            }
             setData({
               ...etterlevelseDokumentasjon,
-              behandlinger: behandlinger,
               virkemiddel: virkmiddel,
             })
             setIsLoading(false)
@@ -158,6 +118,7 @@ export const etterlevelseDokumentasjonToDomainToObject = (
     behandlingIds: etterlevelseDokumentasjon.behandlinger?.map((behandling) => behandling.id),
     irrelevansFor: etterlevelseDokumentasjon.irrelevansFor.map((irrelevans) => irrelevans.code),
     teams: etterlevelseDokumentasjon.teamsData?.map((team) => team.id),
+    avdeling: etterlevelseDokumentasjon.avdeling?.code,
   } as any
   delete domainToObject.changeStamp
   delete domainToObject.version
@@ -184,6 +145,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   irrelevansFor: etterlevelseDokumentasjon.irrelevansFor || [],
   etterlevelseNummer: etterlevelseDokumentasjon.etterlevelseNummer || 0,
   teams: etterlevelseDokumentasjon.teams || [],
+  avdeling: etterlevelseDokumentasjon.avdeling,
   teamsData: etterlevelseDokumentasjon.teamsData || [],
   behandlinger: etterlevelseDokumentasjon.behandlinger || [],
   virkemiddelId: etterlevelseDokumentasjon.virkemiddelId || '',
@@ -213,7 +175,3 @@ export const etterlevelseDokumentasjonSchema = () =>
     }),
   })
 //graphql
-
-export type TEtterlevelseDokumentasjonFilter = {
-  relevans?: string[]
-}

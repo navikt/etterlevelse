@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="no">
   <head>
     <meta charset="utf-8" />
@@ -10,19 +10,22 @@
 
     <script>
       const getFaviconByEnv = (env) => {
-        const favicon = document.getElementById("favicon");
-        switch (env) {  
+        const favicon = document.getElementById('favicon')
+        switch (env) {
+          case 'etterlevelse.ansatt.dev.nav.no':
+            favicon.href = '%PUBLIC_URL%/faviconDev.svg'
+            break
           case 'etterlevelse.intern.dev.nav.no':
-            favicon.href = "%PUBLIC_URL%/faviconDev.svg"
-            break;
+            favicon.href = '%PUBLIC_URL%/faviconDev.svg'
+            break
           case 'localhost':
-            favicon.href = "%PUBLIC_URL%/faviconLocal.svg"
-            break;
+            favicon.href = '%PUBLIC_URL%/faviconLocal.svg'
+            break
           default:
-          favicon.href = "%PUBLIC_URL%/faviconProd.svg"
+            favicon.href = '%PUBLIC_URL%/faviconProd.svg'
         }
-      };
-      getFaviconByEnv(location.hostname.toString());
+      }
+      getFaviconByEnv(location.hostname.toString())
     </script>
 
     <!--
@@ -42,7 +45,7 @@
     <title>Etterlevelse</title>
   </head>
 
-  <body style="margin: 0;background-color: #F1F1F1;">
+  <body style="margin: 0; background-color: #f1f1f1">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <!--

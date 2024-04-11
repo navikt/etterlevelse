@@ -6,12 +6,8 @@ import { useSearchParams } from 'react-router-dom'
 import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { getBehandling, searchBehandlingOptions } from '../../../api/BehandlingApi'
-import {
-  IBehandling,
-  IPageResponse,
-  TEtterlevelseDokumentasjonQL,
-  emptyPage,
-} from '../../../constants'
+import { emptyPage } from '../../../api/util/EmptyPageConstant'
+import { IBehandling, IPageResponse, TEtterlevelseDokumentasjonQL } from '../../../constants'
 import { TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { getEtterlevelseDokumentasjonByBehandlingIdQuery } from '../../../query/EtterlevelseDokumentasjonQuery'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
@@ -100,7 +96,7 @@ export const BehandlingSok = () => {
 
   return (
     <div className="my-5">
-      <div className="max-w-[600px] mb-10 flex flex-col">
+      <div className="max-w-[37.5rem] mb-10 flex flex-col">
         <AsyncSelect
           aria-label="Søk etter behandlinger"
           placeholder="Søk etter behandlinger"
@@ -130,7 +126,7 @@ export const BehandlingSok = () => {
               ({
                 ...base,
                 cursor: 'text',
-                height: '48px',
+                height: '3rem',
               }) as CSSObjectWithLabel,
           }}
         />

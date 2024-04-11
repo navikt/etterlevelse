@@ -18,7 +18,7 @@ import { getMeldingByType } from '../api/MeldingApi'
 import { EAlertType, EMeldingStatus, EMeldingType, IMelding } from '../constants'
 import { ampli } from '../services/Amplitude'
 import { user } from '../services/User'
-import { useQueryParam } from '../util/hooks'
+import { useQueryParam } from '../util/hooks/customHooks'
 import { intl } from '../util/intl/intl'
 import { informationIcon, warningAlert } from './Images'
 import { Markdown } from './common/Markdown'
@@ -174,7 +174,7 @@ const UserInfoView = () => {
   // const path = location.pathname
   return (
     <div className="flex mb-4">
-      <Portrait ident={user.getIdent()} size={'48px'} />
+      <Portrait ident={user.getIdent()} size={'3rem'} />
       <div className="flex flex-col ml-6">
         <Label>{user.getName()}</Label>
         <Label size="small">
@@ -346,8 +346,8 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             <div className="flex gap-2">
               <img
                 src={systemVarsel.alertType === EAlertType.INFO ? informationIcon : warningAlert}
-                width="20px"
-                height="20px"
+                width="1.25rem"
+                height="1.25rem"
                 alt={
                   systemVarsel.alertType === EAlertType.INFO ? 'information icon' : 'warning icon'
                 }

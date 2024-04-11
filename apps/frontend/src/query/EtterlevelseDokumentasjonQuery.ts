@@ -30,25 +30,12 @@ export const getEtterlevelseDokumentasjonListQuery = gql`
         title
         etterlevelseNummer
         sistEndretEtterlevelse
+        changeStamp {
+          createdDate
+        }
         teamsData {
           id
           name
-        }
-      }
-    }
-  }
-`
-
-export const getEtterlevelseDokumentasjonByRelevansQuery = gql`
-  query getEtterlevelsedokumentasjon($relevans: [String!]) {
-    etterlevelseDokumentasjon(filter: { relevans: $relevans }) {
-      content {
-        id
-        title
-        etterlevelseNummer
-        irrelevansFor {
-          code
-          shortName
         }
       }
     }

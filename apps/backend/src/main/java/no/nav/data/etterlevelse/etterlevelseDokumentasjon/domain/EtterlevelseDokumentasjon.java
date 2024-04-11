@@ -37,14 +37,15 @@ public class EtterlevelseDokumentasjon extends DomainObject {
     @Default
     private boolean knytteTilTeam = true;
     private List<String> teams;
+    private String avdeling;
     private List<String> irrelevansFor;
 
     public List<CodelistResponse> irrelevantForAsCodes() {
         return CodelistService.getCodelistResponseList(ListName.RELEVANS, irrelevansFor);
     }
 
-
-    public void convert(EtterlevelseDokumentasjonRequest request) {
+    // Updates all fields from the request except id, version and changestamp
+    public void merge(EtterlevelseDokumentasjonRequest request) {
         etterlevelseNummer = request.getEtterlevelseNummer();
         title = request.getTitle();
         behandlingIds = copyOf(request.getBehandlingIds());
@@ -54,6 +55,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
         behandlerPersonopplysninger = request.isBehandlerPersonopplysninger();
         knyttetTilVirkemiddel = request.isKnyttetTilVirkemiddel();
         knytteTilTeam = request.isKnytteTilTeam();
+        avdeling = request.getAvdeling();
     }
 
     public EtterlevelseDokumentasjonResponse toResponse() {
@@ -70,6 +72,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
                 .teams(teams != null ? copyOf(teams) : List.of())
                 .behandlerPersonopplysninger(behandlerPersonopplysninger)
                 .knyttetTilVirkemiddel(knyttetTilVirkemiddel)
+                .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, avdeling))
                 .build();
     }
 

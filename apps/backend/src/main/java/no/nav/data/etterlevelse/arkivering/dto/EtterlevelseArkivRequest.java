@@ -29,6 +29,7 @@ public class EtterlevelseArkivRequest implements RequestElement {
     private LocalDateTime arkiveringAvbruttDato;
     private String webSakNummer;
     private Boolean update;
+    private boolean onlyActiveKrav;
 
     @Override
     public void format() {

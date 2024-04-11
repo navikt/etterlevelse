@@ -1,16 +1,10 @@
 import { Button, Label, Loader, Modal } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import React from 'react'
-import {
-  createKravPriority,
-  kravMapToKravPrioriting,
-  updateKravPriority,
-} from '../../../api/KravPriorityApi'
-import { IKrav } from '../../../constants'
+import { createKravPriorityList, updateKravPriorityList } from '../../../api/KravPriorityListApi'
+import { IKrav, IKravPriorityList } from '../../../constants'
 import { FieldWrapper } from '../../common/Inputs'
 import { KravPriorityPanel } from './components/KravPriorityPanel'
-
-export const kravListPriorityModal = () => document.querySelector('#krav-list-edit-priority-modal')
 
 interface IKravPriorityPanelsProps {
   fieldArrayRenderProps: FieldArrayRenderProps
@@ -38,63 +32,46 @@ export const EditPriorityModal = (props: {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
   kravListe: IKrav[]
   tema: string
+  temaCode: string
+  kravPriorityList: IKravPriorityList
   refresh: () => void
 }) => {
-  const { isOpen, setIsOpen, kravListe, tema, refresh } = props
+  const { isOpen, setIsOpen, kravListe, tema, temaCode, kravPriorityList, refresh } = props
   const [loading, setLoading] = React.useState(false)
-
-  const setPriority = (kravListe: IKrav[]) => {
-    const pattern = new RegExp(tema.substr(0, 3).toUpperCase() + '[0-9]+')
-
-    return kravListe.map((krav, index) => {
-      const number: number = index + 1
-      if (!krav.prioriteringsId) {
-        return {
-          ...krav,
-          prioriteringsId: tema.substring(0, 3).toUpperCase() + number,
-        }
-      } else {
-        if (krav.prioriteringsId?.match(pattern)) {
-          return {
-            ...krav,
-            prioriteringsId: krav.prioriteringsId.replace(
-              pattern,
-              tema.substring(0, 3).toUpperCase() + number
-            ),
-          }
-        } else {
-          return {
-            ...krav,
-            prioriteringsId: krav.prioriteringsId.concat(tema.substring(0, 3).toUpperCase() + number),
-          }
-        }
-      }
-    })
-  }
 
   const submit = ({ krav }: { krav: IKrav[] }) => {
     setLoading(true)
-    const updateKravPriorityPromise: Promise<any>[] = []
-    const kravMedPrioriteting = setPriority([...krav])
-    kravMedPrioriteting.forEach((kmp) => {
-      if (kmp.kravPriorityUID) {
-        updateKravPriorityPromise.push(
-          (async () => await updateKravPriority(kravMapToKravPrioriting(kmp)))()
-        )
-      } else {
-        updateKravPriorityPromise.push(
-          (async () => await createKravPriority(kravMapToKravPrioriting(kmp)))()
-        )
-      }
-    })
-    try {
-      Promise.all(updateKravPriorityPromise).then(() => {
-        setLoading(false)
-        refresh()
-        setIsOpen(false)
-      })
-    } catch (error: any) {
-      console.error(error)
+
+    if (kravPriorityList.id) {
+      ;(async () =>
+        await updateKravPriorityList({
+          id: kravPriorityList.id,
+          temaId: temaCode,
+          priorityList: krav.map((krav) => krav.kravNummer),
+          changeStamp: kravPriorityList.changeStamp,
+          version: kravPriorityList.version,
+        }))()
+        .then(() => {
+          setLoading(false)
+          refresh()
+          setIsOpen(false)
+        })
+        .catch((error) => console.error(error))
+    } else {
+      ;(async () =>
+        await createKravPriorityList({
+          id: '',
+          temaId: temaCode,
+          priorityList: krav.map((krav) => krav.kravNummer),
+          changeStamp: { lastModifiedDate: '', lastModifiedBy: '' },
+          version: -1,
+        }))()
+        .then(() => {
+          setLoading(false)
+          refresh()
+          setIsOpen(false)
+        })
+        .catch((error) => console.error(error))
     }
   }
 
@@ -112,7 +89,7 @@ export const EditPriorityModal = (props: {
       {({ submitForm, handleReset }) => (
         <Modal
           open={isOpen}
-          width={'1280px'}
+          width="80rem"
           onClose={() => {
             handleReset()
             close()
@@ -130,7 +107,11 @@ export const EditPriorityModal = (props: {
               {!loading && kravListe && (
                 <Form>
                   <FieldWrapper>
-                    <FieldArray name={'krav'}>{(fieldArrayRenderProps: FieldArrayRenderProps) => <KravPriorityPanels fieldArrayRenderProps={fieldArrayRenderProps} />}</FieldArray>
+                    <FieldArray name={'krav'}>
+                      {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                        <KravPriorityPanels fieldArrayRenderProps={fieldArrayRenderProps} />
+                      )}
+                    </FieldArray>
                   </FieldWrapper>
                 </Form>
               )}

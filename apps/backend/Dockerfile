@@ -5,7 +5,7 @@ RUN java -Djarmode=layertools -jar application.jar extract
 
 FROM navikt/java:18
 
-ENV MAIN_CLASS=org.springframework.boot.loader.JarLauncher
+ENV MAIN_CLASS=org.springframework.boot.loader.launch.JarLauncher
 ENV JAVA_OPTS="-Xmx850m \
                -Djava.security.egd=file:/dev/./urandom"
 COPY run-java.sh /

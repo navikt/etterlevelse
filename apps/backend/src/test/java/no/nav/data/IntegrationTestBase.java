@@ -17,6 +17,7 @@ import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
+import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.integration.behandling.BehandlingService;
 import org.junit.jupiter.api.AfterEach;
@@ -53,6 +54,8 @@ public abstract class IntegrationTestBase {
     protected AuditVersionRepository auditVersionRepository;
     @Autowired
     protected StorageService<Krav> kravStorageService;
+    @Autowired
+    protected StorageService<KravPriorityList> kravPriorityListStorageService;
     @Autowired
     protected StorageService<KravImage> kravImageStorageService;
     @Autowired

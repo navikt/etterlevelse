@@ -84,19 +84,22 @@ export const Etterlevelser = ({
         return (
           e.status === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ||
           e.suksesskriterieBegrunnelser.filter(
-            (suksesskriterium) => suksesskriterium.suksesskriterieStatus === ESuksesskriterieStatus.IKKE_RELEVANT
+            (suksesskriterium) =>
+              suksesskriterium.suksesskriterieStatus === ESuksesskriterieStatus.IKKE_RELEVANT
           ).length > 0
         )
       } else if (filter === ESuksesskriterieStatus.IKKE_OPPFYLT) {
         return (
           e.suksesskriterieBegrunnelser.filter(
-            (suksesskriterium) => suksesskriterium.suksesskriterieStatus === ESuksesskriterieStatus.IKKE_OPPFYLT
+            (suksesskriterium) =>
+              suksesskriterium.suksesskriterieStatus === ESuksesskriterieStatus.IKKE_OPPFYLT
           ).length > 0
         )
       } else if (filter === ESuksesskriterieStatus.OPPFYLT) {
         return (
           e.suksesskriterieBegrunnelser.filter(
-            (suksesskriterium) => suksesskriterium.suksesskriterieStatus === ESuksesskriterieStatus.OPPFYLT
+            (suksesskriterium) =>
+              suksesskriterium.suksesskriterieStatus === ESuksesskriterieStatus.OPPFYLT
           ).length > 0
         )
       } else {
@@ -112,7 +115,11 @@ export const Etterlevelser = ({
 
   const productAreas = _.sortedUniqBy(
     filteredEtterlevelse
-      ?.map((etterlevelse) => etterlevelse.etterlevelseDokumentasjon.teamsData && etterlevelse.etterlevelseDokumentasjon.teamsData)
+      ?.map(
+        (etterlevelse) =>
+          etterlevelse.etterlevelseDokumentasjon.teamsData &&
+          etterlevelse.etterlevelseDokumentasjon.teamsData
+      )
       .flat()
       .sort((a, b) => (a?.productAreaName || '').localeCompare(b?.productAreaName || ''))
       .filter((team) => !!team) || [],
@@ -154,20 +161,24 @@ export const Etterlevelser = ({
 
       {productAreas.length > 0 && (
         <Accordion>
-          {productAreas.map((team) => {
+          {productAreas.map((poTeam) => {
             const productAreaEtterlevelser = filteredEtterlevelse?.filter(
               (etterlevelse) =>
                 etterlevelse.etterlevelseDokumentasjon.teamsData &&
-                team &&
+                poTeam &&
                 etterlevelse.etterlevelseDokumentasjon.teamsData.filter(
-                  (team) => team.productAreaId === team.productAreaId
+                  (team) => poTeam.productAreaId === team.productAreaId
                 ).length > 0
             )
 
             return (
-              <Accordion.Item key={team && team.productAreaId}>
+              <Accordion.Item key={poTeam && poTeam.productAreaId}>
                 <Accordion.Header>
-                  {team ? (team.productAreaName ? team.productAreaName : team.productAreaId) : ''}
+                  {poTeam
+                    ? poTeam.productAreaName
+                      ? poTeam.productAreaName
+                      : poTeam.productAreaId
+                    : ''}
                 </Accordion.Header>
                 <Accordion.Content>
                   <div className="flex flex-col gap-2">
@@ -182,7 +193,8 @@ export const Etterlevelser = ({
                             ? () => {
                                 setOpenEtterlevelse({
                                   ...etterlevelse,
-                                  etterlevelseDokumentasjonId: etterlevelse.etterlevelseDokumentasjon.id,
+                                  etterlevelseDokumentasjonId:
+                                    etterlevelse.etterlevelseDokumentasjon.id,
                                 })
                                 setIsModalOpen(true)
                               }
@@ -192,8 +204,10 @@ export const Etterlevelser = ({
                         <LinkPanel.Title className="flex items-center">
                           <div>
                             <BodyShort>
-                              <strong>E{etterlevelse.etterlevelseDokumentasjon.etterlevelseNummer}</strong>:{' '}
-                              {etterlevelse.etterlevelseDokumentasjon.title}
+                              <strong>
+                                E{etterlevelse.etterlevelseDokumentasjon.etterlevelseNummer}
+                              </strong>
+                              : {etterlevelse.etterlevelseDokumentasjon.title}
                             </BodyShort>
                           </div>
                           <Spacer />
@@ -206,9 +220,9 @@ export const Etterlevelser = ({
                                     .join(', ')
                                 : 'Ingen team'}
                             </BodyShort>
-                            <BodyShort>{`Utfylt: ${moment(etterlevelse.changeStamp.lastModifiedDate).format(
-                              'll'
-                            )}`}</BodyShort>
+                            <BodyShort>{`Utfylt: ${moment(
+                              etterlevelse.changeStamp.lastModifiedDate
+                            ).format('ll')}`}</BodyShort>
                           </div>
                         </LinkPanel.Title>
                       </LinkPanel>

@@ -61,7 +61,7 @@ public class WebSecurityConfig {
                     "/settings/**",
                     "/codelist/**",
                     "/krav/**",
-                    "/kravprioritering/**",
+                    "/kravprioritylist/**",
                     "/etterlevelse/**",
                     "/etterlevelsedokumentasjon/**",
                     "/behandling/**",
@@ -89,7 +89,7 @@ public class WebSecurityConfig {
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/tilbakemelding/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/tilbakemelding/status/**")).hasAnyRole(AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/export/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/kravprioritering/**")).hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/kravprioritylist/**")).hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/etterlevelse/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/behandling/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/etterlevelsedokumentasjon/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));

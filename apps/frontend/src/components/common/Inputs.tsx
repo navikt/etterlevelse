@@ -10,16 +10,10 @@ import {
   Textarea,
   useDatepicker,
 } from '@navikt/ds-react'
-import { Block } from 'baseui/block'
-import { FormControl } from 'baseui/form-control'
-import { Value } from 'baseui/select'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
-import * as _ from 'lodash'
 import React, { ReactNode, useState } from 'react'
-import { TSearchType } from '../../api/TeamApi'
-import { TOr } from '../../constants'
+import { TOption, TOr } from '../../constants'
 import { EListName, ICode, codelist } from '../../services/Codelist'
-import CustomizedSelect from '../common/CustomizedSelect'
 import LabelWithTooltip from '../common/LabelWithTooltip'
 import { MarkdownInfo } from './Markdown'
 import { Error, FormError } from './ModalSchema'
@@ -53,16 +47,11 @@ interface ITooltip {
 }
 
 interface IOptions {
-  options: Value
+  options: TOption[]
 }
 
 interface IListname {
   listName: EListName
-}
-
-interface ISearchItemLabel {
-  search: TSearchType
-  itemLabel?: (id: string) => string
 }
 
 interface IPropsOptionList extends ILabel {
@@ -72,8 +61,6 @@ interface IPropsOptionList extends ILabel {
 }
 
 type TOptionORListname = TOr<IOptions, IListname>
-
-type TLabelNameSearchItemLabel = TLabelName & ISearchItemLabel
 
 interface IPropsFieldWrapper extends IMarginBottom, IID {
   children: React.ReactNode
@@ -153,8 +140,6 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
                   name={name}
                   setIsFormDirty={setIsFormDirty}
                 />
-                {/* <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(name, v)}
-                onImageUpload={onImageUpload} shortenLinks={shortenLinks} /> */}
               </div>
             )}
             {!markdown && (
@@ -339,7 +324,7 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
                   />
                 </div>
 
-                <div className="min-w-[107px] ml-2.5">
+                <div className="min-w-[6.688rem] ml-2.5">
                   <Button type="button" onClick={() => add()} variant="secondary">
                     Legg til
                   </Button>
@@ -360,32 +345,11 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
   )
 }
 
-type TPropsOptionField = TLabelName & IMarginBottom & ICaption & ITooltip & TOptionORListname
-
-export const OptionField = (props: TPropsOptionField) => {
-  const { name } = props
-
-  return (
-    <FieldWrapper>
-      <Field name={name}>
-        {(fieldProps: FieldProps<string>) => (
-          <OptionList
-            {...props}
-            error={fieldProps.meta.touched && fieldProps.meta.error}
-            onChange={(val) => fieldProps.form.setFieldValue(name, val)}
-            value={fieldProps.field.value}
-          />
-        )}
-      </Field>
-    </FieldWrapper>
-  )
-}
-
 type TPropsOptionList = IPropsOptionList & TOptionORListname
 
 export const OptionList = (props: TPropsOptionList) => {
   const { label, value, onChange, options, listName, error } = props
-  const optionsList: Value = options || codelist.getParsedOptions(listName)
+  const optionsList: TOption[] = options || codelist.getParsedOptions(listName)
 
   return (
     <Select
@@ -407,81 +371,5 @@ export const OptionList = (props: TPropsOptionList) => {
         </option>
       ))}
     </Select>
-  )
-}
-
-type TPropsMultiSearchField = TLabelNameSearchItemLabel
-
-export const MultiSearchField = (props: TPropsMultiSearchField) => {
-  const { label, name, search, itemLabel } = props
-  const [results, setSearch, loading] = search
-
-  return (
-    <FieldWrapper>
-      <FieldArray name={name}>
-        {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-          <FormControl label={label} error={fieldArrayRenderProps.form.touched[name] && <>{fieldArrayRenderProps.form.errors[name]}</>}>
-            <Block>
-              <Block display="flex">
-                <CustomizedSelect
-                  placeholder={'Søk ' + _.lowerFirst(label)}
-                  maxDropdownHeight="400px"
-                  filterOptions={(option) => option}
-                  searchable
-                  noResultsMsg="Ingen resultat"
-                  options={results.filter((option) => (fieldArrayRenderProps.form.values[name] as any[]).indexOf(option.id) < 0)}
-                  onChange={({ value }) => {
-                    value.length && fieldArrayRenderProps.push(value[0].id)
-                  }}
-                  onInputChange={(event) => setSearch(event.currentTarget.value)}
-                  isLoading={loading}
-                />
-              </Block>
-              <RenderTagList
-                list={(fieldArrayRenderProps.form.values[name] as string[]).map((value) => (itemLabel ? itemLabel(value) : value))}
-                onRemove={fieldArrayRenderProps.remove}
-              />
-            </Block>
-          </FormControl>
-        )}
-      </FieldArray>
-    </FieldWrapper>
-  )
-}
-
-type TPropsSearchField = TLabelNameSearchItemLabel
-
-export const SearchField = (props: TPropsSearchField) => {
-  const { label, name, search, itemLabel } = props
-  const [results, setSearch, loading] = search
-
-  return (
-    <FieldWrapper>
-      <Field name={name}>
-        {(fieldProps: FieldProps<string>) => (
-          <FormControl label={label} error={fieldProps.meta.touched && fieldProps.meta.error}>
-            <CustomizedSelect
-              placeholder={'Søk ' + _.lowerFirst(label)}
-              maxDropdownHeight="400px"
-              filterOptions={(option) => option}
-              searchable
-              noResultsMsg="Ingen resultat"
-              options={results}
-              value={[
-                {
-                  id: fieldProps.field.value,
-                  label: itemLabel ? itemLabel(fieldProps.field.value) : fieldProps.field.value,
-                },
-              ]}
-              onChange={({ value }) => {
-                fieldProps.form.setFieldValue(name, value.length ? (value[0].id as string) : '')
-              }}
-              onInputChange={(event) => setSearch(event.currentTarget.value)}
-              isLoading={loading}
-            />
-          </FormControl>
-        )}
-      </Field>
-    </FieldWrapper>
   )
 }

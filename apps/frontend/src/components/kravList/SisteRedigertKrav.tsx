@@ -1,6 +1,7 @@
 import { Alert, Label, Loader } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { TKravQL, emptyPage } from '../../constants'
+import { emptyPage } from '../../api/util/EmptyPageConstant'
+import { TKravQL } from '../../constants'
 import { KravPanels, sortKrav } from '../../pages/KravListPage'
 import { useKravFilter } from '../../query/KravQuery'
 

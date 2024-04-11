@@ -6,10 +6,12 @@ import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.KravController.KravPage;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
+import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.krav.dto.RegelverkRequest;
@@ -207,6 +209,24 @@ public class KravIT extends IntegrationTestBase {
         restTemplate.delete("/krav/{id}", krav.getId());
 
         assertThat(kravStorageService.getAll(Krav.class)).isEmpty();
+    }
+
+    @Test
+    void deleteKravWithEtterlevelse() {
+        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).kravVersjon(1).build());
+        etterlevelseStorageService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).build());
+        restTemplate.delete("/krav/{id}", krav.getId());
+
+        assertThat(kravStorageService.getAll(Krav.class)).isNotEmpty();
+    }
+
+    @Test
+    void deleteKravWithTilbakemelding() {
+        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).kravVersjon(1).build());
+        tilbakemeldingStorageService.save(Tilbakemelding.builder().meldinger(List.of(Tilbakemelding.Melding.builder().build())).kravNummer(50).kravVersjon(1).build());
+        restTemplate.delete("/krav/{id}", krav.getId());
+
+        assertThat(kravStorageService.getAll(Krav.class)).isNotEmpty();
     }
 
     @SneakyThrows

@@ -3,8 +3,8 @@
 
 
 url for løsningen:
-- prod: https://etterlevelse.intern.nav.no/
-- dev: https://etterlevelse.intern.dev.nav.no/
+- prod: https://etterlevelse.ansatt.nav.no/
+- dev: https://etterlevelse.ansatt.dev.nav.no/
 
 
 Løsningen tar vare på versjoner av krav og etterlevelse dokumentasjon uten å slette data. Krav som ikke er aktive blir satt til utgått og etterlevelse dokumentasjon knyttet til de er bevart.

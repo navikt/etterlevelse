@@ -15,7 +15,7 @@ type TNot<T> = { [key in keyof T]?: never }
 export type TOr<T, U> = (T & TNot<U>) | (U & TNot<T>)
 
 export type TOption = Readonly<{
-  id?: string | number
+  value?: string | number
   label?: React.ReactNode
 }>
 
@@ -39,6 +39,7 @@ export interface IEtterlevelseArkiv extends IDomainObject {
   tilArkiveringDato: string
   arkiveringAvbruttDato: string
   webSakNummer: string
+  onlyActiveKrav: boolean
 }
 
 export enum EKravFilterType {
@@ -163,21 +164,15 @@ export interface IDomainObject {
   version: number
 }
 
-export interface IKravPrioritering extends IDomainObject {
+export interface IKravPriorityList extends IDomainObject {
   id: string
-  kravVersjon: number
-  kravNummer: number
-  prioriteringsId: string
+  temaId: string
+  priorityList: number[]
 }
 
 export interface IBreadCrumbPath {
   href: string
   pathName: string
-}
-
-export interface IKravId {
-  id: string
-  kravVersjon: number
 }
 
 export interface IKravVersjon {
@@ -200,8 +195,7 @@ export interface IKrav extends IDomainObject {
   implementasjoner: string
   notat?: string
   varselMelding?: string
-  prioriteringsId?: string
-  kravPriorityUID?: string
+  prioriteringsId?: number
   begrepIder: string[]
   virkemiddelIder: string[]
   varslingsadresser: IVarslingsadresse[]
@@ -289,7 +283,7 @@ export type TKravEtterlevelseData = {
   changeStamp: IChangeStamp
   frist?: string
   varselMelding?: string
-  prioriteringsId?: string
+  prioriteringsId?: number
   etterlevelseStatus?: EEtterlevelseStatus
   suksesskriterier: ISuksesskriterie[]
   gammelVersjon?: boolean
@@ -327,6 +321,7 @@ export interface IEtterlevelseDokumentasjon {
   irrelevansFor: ICode[]
   etterlevelseNummer: number
   teams: string[]
+  avdeling?: ICode
   //data field for frontend only
   teamsData?: ITeam[]
   behandlinger?: IBehandling[]
@@ -379,15 +374,6 @@ export interface IMelding extends IDomainObject {
   meldingType: EMeldingType
   meldingStatus: EMeldingStatus
   alertType: EAlertType
-}
-
-export const emptyPage = {
-  content: [],
-  numberOfElements: 0,
-  pageNumber: 0,
-  pages: 0,
-  pageSize: 1,
-  totalElements: 0,
 }
 
 export interface ITeamResource {
@@ -444,16 +430,12 @@ export type TKravQL = TReplace<
     begreper: IBegrep[]
     virkemidler: IVirkemiddel[]
     kravRelasjoner: IKrav[]
-    prioriteringsId: string
+    prioriteringsId: number
   }
 >
 
 export type TEtterlevelseQL = IEtterlevelse & {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-}
-
-export type TBehandlingQL = IBehandling & {
-  teamsData: ITeam[]
 }
 
 export type TEtterlevelseDokumentasjonQL = IEtterlevelseDokumentasjon & {

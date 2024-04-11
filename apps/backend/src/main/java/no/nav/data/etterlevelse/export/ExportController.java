@@ -135,7 +135,7 @@ public class ExportController {
                 throw new ValidationException("No paramater given");
             }
 
-            if(temaKode == null) {
+            if (temaKode == null) {
                 codelistService.validateListNameAndCodes(list.name(), code);
             }
 
@@ -159,37 +159,46 @@ public class ExportController {
             @RequestParam(name = "etterlevelseId", required = false) UUID etterlevelseId,
             @RequestParam(name = "etterlevelseDokumentasjonId", required = false) UUID etterlevelseDokumentasjonId,
             @RequestParam(name = "statuskoder", required = false) List<String> statusKoder,
-            @RequestParam(name = "temakode", required = false) String temaKode
+            @RequestParam(name = "temakode", required = false) String temaKode,
+            @RequestParam(name = "onlyActiveKrav", required = false) boolean onlyActiveKrav
     ) {
         log.info("Exporting etterlevelse dokumentasjon to doc");
-        String filename;
-        byte[] doc;
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd'_'HH'-'mm'-'ss");
         Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd'_'HH'-'mm'-'ss");
 
+        String filename = formatter.format(date) + "_Etterlevelse_E";
+        byte[] doc;
 
         if (etterlevelseId != null) {
             Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
-            filename = formatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId())).getEtterlevelseNummer() +".docx";
+            filename += etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId())).getEtterlevelseNummer() + ".docx";
             log.info("Exporting 1 etterlevelse to doc");
             doc = etterlevelseDokumentasjonToDoc.generateDocForEtterlevelse(etterlevelseId);
         } else if (etterlevelseDokumentasjonId != null) {
             log.info("Exporting list of etterlevelse for etterlevelse dokumentasjon with id " + etterlevelseDokumentasjonId + " to doc");
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
-            filename = formatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + ".docx";
             List<String> lover;
 
-            if(temaKode != null){
+            if (temaKode != null) {
                 log.info("Exporting list of etterlevelse for etterlevelse dokumentasjon with id " + etterlevelseDokumentasjonId + " to doc filtered by tema");
-                filename = formatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + "filtert_med_tema_" + temaKode +".docx";
+                filename += etterlevelseDokumentasjon.getEtterlevelseNummer() + "filtert_med_tema_" + temaKode;
+
                 codelistService.validateListNameAndCode(ListName.TEMA.name(), temaKode);
                 lover = codeUsageService.findCodeUsage(ListName.TEMA, temaKode).getCodelist().stream().map(Codelist::getCode).toList();
             } else {
                 lover = new ArrayList<>();
+                filename += etterlevelseDokumentasjon.getEtterlevelseNummer();
             }
-            doc = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjonId, statusKoder, lover, temaKode);
+
+            doc = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjonId, statusKoder, lover, onlyActiveKrav);
         } else {
             throw new ValidationException("No paramater given");
+        }
+
+        if (onlyActiveKrav) {
+            filename += "_kun_gjeldende_krav_versjon.docx";
+        } else {
+            filename += "_alle_krav_versjoner.docx";
         }
 
         response.setContentType(WORDPROCESSINGML_DOCUMENT);

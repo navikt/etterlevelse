@@ -2,8 +2,8 @@ import { Accordion, BodyLong, BodyShort, Button, Label, LinkPanel, Spacer } from
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { getAllKrav } from '../../api/KravApi'
-import { getAllKravPriority } from '../../api/KravPriorityApi'
-import { EKravStatus, IKrav } from '../../constants'
+import { useKravPriorityList } from '../../api/KravPriorityListApi'
+import { EKravStatus, IKrav, IKravPriorityList } from '../../constants'
 import { EListName, codelist } from '../../services/Codelist'
 import { sortKravListeByPriority } from '../../util/sort'
 import StatusView from '../common/StatusTag'
@@ -21,18 +21,6 @@ export const TemaList = () => {
   const fetchKrav = () => {
     ;(async () => {
       const kraver = await getAllKrav()
-      const allKravPriority = await getAllKravPriority()
-
-      kraver.map((krav) => {
-        const priority = allKravPriority.filter(
-          (kravPriority) =>
-            kravPriority.kravNummer === krav.kravNummer &&
-            kravPriority.kravVersjon === krav.kravVersjon
-        )
-        krav.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
-        krav.kravPriorityUID = priority.length ? priority[0].id : ''
-        return krav
-      })
 
       setAllActiveKrav(kraver.filter((krav) => krav.status === EKravStatus.AKTIV))
       setAllDraftKrav(kraver.filter((krav) => krav.status === EKravStatus.UTKAST))
@@ -53,7 +41,7 @@ export const TemaList = () => {
             .includes(tema.code)
         })
         return activeKraver && activeKraver.length > 0 ? (
-          <Accordion.Item>
+          <Accordion.Item key={tema.code}>
             <Accordion.Header key={`${tema.code}_krav_list`}>
               <KravPanelHeader
                 title={tema.shortName}
@@ -62,15 +50,15 @@ export const TemaList = () => {
             </Accordion.Header>
             <Accordion.Content>
               <KravTemaList
-                activeKraver={sortKravListeByPriority(activeKraver, tema.shortName)}
+                activeKravList={activeKraver}
                 tema={tema.shortName}
-                refresh={fetchKrav}
+                temaCode={tema.code}
                 draftKrav={draftKraver}
               />
             </Accordion.Content>
           </Accordion.Item>
         ) : (
-          <Accordion.Item>
+          <Accordion.Item key={tema.code}>
             <Accordion.Header key={`${tema.code}_krav_list`}>
               <KravPanelHeader title={tema.shortName} kravData={[]} />
             </Accordion.Header>
@@ -120,18 +108,33 @@ const getKravTemaRowsWithLabel = (kravListe: IKrav[], tema: string) => {
 }
 
 const KravTemaList = (props: {
-  activeKraver: IKrav[]
+  activeKravList: IKrav[]
   tema: string
-  refresh: () => void
+  temaCode: string
   draftKrav: IKrav[]
 }) => {
   const [isEditPriorityModalOpen, setIsEditPriorityModalOpen] = React.useState(false)
-  const { activeKraver, tema, refresh, draftKrav } = props
+  const { activeKravList, tema, temaCode, draftKrav } = props
+  const [kravPriorityList, kravPriorityLoading, refresh] = useKravPriorityList(temaCode)
+  const [activeKravSortedWithPriority, setActiveKravSortedWithPriority] = useState<IKrav[]>([])
+
+  const setPriorityToKravList = (kravList: IKrav[], priorityList: IKravPriorityList) => {
+    return kravList.map((krav) => {
+      const priorityForTema = priorityList.priorityList.indexOf(krav.kravNummer) + 1
+      krav.prioriteringsId = priorityForTema
+      return krav
+    })
+  }
+
+  useEffect(() => {
+    const activeKravListWithPriorityId = setPriorityToKravList(activeKravList, kravPriorityList)
+    setActiveKravSortedWithPriority(sortKravListeByPriority(activeKravListWithPriorityId))
+  }, [kravPriorityList])
 
   return (
     <div className="flex flex-col gap-2">
       {getKravTemaRowsWithLabel(draftKrav, tema)}
-      {getKravTemaRowsWithLabel(activeKraver, tema)}
+      {getKravTemaRowsWithLabel(activeKravSortedWithPriority, tema)}
 
       <div className={'w-full flex flex-row-reverse pt-5'}>
         <Button variant="secondary" size="medium" onClick={() => setIsEditPriorityModalOpen(true)}>
@@ -139,13 +142,15 @@ const KravTemaList = (props: {
         </Button>
       </div>
 
-      {activeKraver && isEditPriorityModalOpen && (
+      {activeKravSortedWithPriority && isEditPriorityModalOpen && !kravPriorityLoading && (
         <EditPriorityModal
           tema={tema}
+          temaCode={temaCode}
           isOpen={isEditPriorityModalOpen}
           setIsOpen={setIsEditPriorityModalOpen}
-          kravListe={activeKraver}
-          refresh={refresh}
+          kravListe={activeKravSortedWithPriority}
+          kravPriorityList={kravPriorityList}
+          refresh={() => refresh()}
         />
       )}
     </div>

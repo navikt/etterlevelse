@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelse;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
@@ -28,13 +29,10 @@ import static no.nav.data.common.utils.StreamUtils.groupBy;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class EtterlevelseService extends DomainService<Etterlevelse> {
 
     private final EtterlevelseRepo repo;
-
-    public EtterlevelseService(EtterlevelseRepo repo) {
-        this.repo = repo;
-    }
 
     Page<Etterlevelse> getAll(PageParameters pageParameters) {
         return repo.findAll(pageParameters.createPage()).map(GenericStorage::getDomainObjectData);
@@ -63,17 +61,19 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
         return groupBy(convertToDomaionObject(repo.findByEtterlevelseDokumentasjoner(new ArrayList<>(etterlevelseDokumentasjonIds))), Etterlevelse::getEtterlevelseDokumentasjonId);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public Etterlevelse save(EtterlevelseRequest request) {
-        Validator.validate(request, storage)
+        Validator.validate(request, storage::get)
                 .addValidations(this::validateKrav)
                 .ifErrorsThrowValidationException();
 
         var etterlevelse = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Etterlevelse();
-        etterlevelse.convert(request);
+        etterlevelse.merge(request);
 
         return storage.save(etterlevelse);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteByEtterlevelseDokumentasjonId(String etterlevelseDokumentasjonId) {
         List<Etterlevelse> etterlevelser = convertToDomaionObject(etterlevelseRepo.findByEtterlevelseDokumensjon(etterlevelseDokumentasjonId));
         etterlevelser.forEach(e -> log.info("deleting etterlevelse with id={}, connected to etterlevelse dokumentasjon with id={}", e.getId(), etterlevelseDokumentasjonId));

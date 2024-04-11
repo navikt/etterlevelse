@@ -32,6 +32,7 @@ public class TilbakemeldingResponse {
     private List<MeldingResponse> meldinger;
     private TilbakemeldingStatus status;
     private boolean endretKrav;
+
     @Data
     @Builder
     @NoArgsConstructor

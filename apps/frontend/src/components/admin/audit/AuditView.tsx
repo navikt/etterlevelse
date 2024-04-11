@@ -4,7 +4,7 @@ import { Differ, Viewer } from 'json-diff-kit'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { JsonView } from 'react-json-view-lite'
-import { useRefs } from '../../../util/hooks'
+import { useRefs } from '../../../util/hooks/customHooks'
 import { intl } from '../../../util/intl/intl'
 import { ObjectLink } from '../../common/RouteLink'
 import { AuditActionIcon, AuditLabel } from './AuditComponents'
@@ -41,7 +41,7 @@ const ComparisonView = (props: TComparisonViewProps) => {
         onClose={() => setModalOpen(false)}
         width="75%"
         className="h-3/4 overflow-y-scroll"
-        header={{heading: "Sammenligning"}}
+        header={{ heading: 'Sammenligning' }}
       >
         <Modal.Body>
           <Viewer

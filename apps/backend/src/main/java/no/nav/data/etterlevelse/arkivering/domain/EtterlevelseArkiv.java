@@ -27,17 +27,19 @@ public class EtterlevelseArkiv extends DomainObject {
     private LocalDateTime tilArkiveringDato;
     private LocalDateTime arkiveringAvbruttDato;
     private String webSakNummer;
+    private boolean onlyActiveKrav;
 
-
-    public EtterlevelseArkiv convert(EtterlevelseArkivRequest request) {
-        behandlingId = request.getBehandlingId();
+    // Updates all fields from the request except id, version and changestamp
+    public EtterlevelseArkiv merge(EtterlevelseArkivRequest request) {
         etterlevelseDokumentasjonId = request.getEtterlevelseDokumentasjonId();
+        behandlingId = request.getBehandlingId();
         arkiveringDato = request.getArkiveringDato();
         arkivertAv = request.getArkivertAv();
         tilArkiveringDato = request.getTilArkiveringDato();
         arkiveringAvbruttDato = request.getArkiveringAvbruttDato();
         webSakNummer = request.getWebSakNummer();
         status = request.getStatus();
+        onlyActiveKrav = request.isOnlyActiveKrav();
 
         return this;
     }
@@ -55,6 +57,7 @@ public class EtterlevelseArkiv extends DomainObject {
                 .arkiveringAvbruttDato(arkiveringAvbruttDato)
                 .webSakNummer(webSakNummer)
                 .status(status.name())
+                .onlyActiveKrav(onlyActiveKrav)
                 .build();
     }
 

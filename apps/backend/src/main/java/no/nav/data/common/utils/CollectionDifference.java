@@ -20,7 +20,4 @@ public class CollectionDifference<T> {
     private List<T> shared;
     private List<T> added;
 
-    public String changeString() {
-        return "removed=" + removed + ", added=" + added;
-    }
 }

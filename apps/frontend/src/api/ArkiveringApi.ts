@@ -32,30 +32,6 @@ export const getEtterlevelseArkiv = async (id: string) => {
   return (await axios.get<IEtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/${id}`)).data
 }
 
-export const getEtterlevelseArkivByWebsak = async (websakNummer: string) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelseArkiv>>(
-      `${env.backendBaseUrl}/etterlevelsearkiv/websaknummer/${websakNummer}`
-    )
-  ).data
-}
-
-export const getEtterlevelseArkivByStatus = async (status: EEtterlevelseArkivStatus) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelseArkiv>>(
-      `${env.backendBaseUrl}/etterlevelsearkiv/status/${status}`
-    )
-  ).data
-}
-
-export const getEtterlevelseArkivArkivert = async () => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelseArkiv>>(
-      `${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`
-    )
-  ).data
-}
-
 export const getEtterlevelseArkivByEtterlevelseDokumentasjonId = async (
   etterlevelseDokumentasjonId: string
 ) => {
@@ -92,15 +68,6 @@ export const updateAsAdminEtterlevelseArkiv = async (etterlevelseArkiv: IEtterle
     await axios.put<IEtterlevelseArkiv>(
       `${env.backendBaseUrl}/etterlevelsearkiv/admin/update/${etterlevelseArkiv.id}`,
       dto
-    )
-  ).data
-}
-
-export const updateToArkivert = async (failedToArchiveEtterlevelseNr: string[]) => {
-  return (
-    await axios.put<IPageResponse<IEtterlevelseArkiv>>(
-      `${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`,
-      { failedToArchiveEtterlevelseNr }
     )
   ).data
 }
@@ -154,6 +121,7 @@ export const arkiveringMapToFormVal = (
   tilArkiveringDato: arkivering.tilArkiveringDato || '',
   arkiveringAvbruttDato: arkivering.arkiveringAvbruttDato || '',
   webSakNummer: arkivering.webSakNummer || '',
+  onlyActiveKrav: arkivering.onlyActiveKrav || false,
   changeStamp: arkivering.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
   version: arkivering.version || -1,
 })

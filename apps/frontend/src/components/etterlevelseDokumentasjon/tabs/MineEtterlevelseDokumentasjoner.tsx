@@ -1,5 +1,4 @@
 import { BodyShort, Heading, Link } from '@navikt/ds-react'
-import { ParagraphSmall } from 'baseui/typography'
 import { TEtterlevelseDokumentasjonQL } from '../../../constants'
 import { TCustomTeamObject } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { env } from '../../../util/env'
@@ -29,7 +28,7 @@ export const MineEtterlevelseDokumentasjoner = ({
     {!loading && (
       <div>
         {!etterlevelseDokumentasjoner.length && !teams.length && (
-          <ParagraphSmall>Du er ikke medlem av team med registrerte dokumentasjoner</ParagraphSmall>
+          <BodyShort>Du er ikke medlem av team med registrerte dokumentasjoner</BodyShort>
         )}
 
         {teams.map((team) => {
@@ -62,11 +61,6 @@ export const MineEtterlevelseDokumentasjoner = ({
                     <BodyShort>Teamet har ikke registrert noe etterlevelsesdokument</BodyShort>
                   )}
                 </div>
-                {/* <Block alignSelf={'flex-end'} marginBottom={theme.sizing.scale400}>
-                  <ExternalButton href={`${env.pollyBaseUrl}process/team/${t.id}`} underlineHover size={'mini'}>
-                    Legg til behandling <FontAwesomeIcon icon={faExternalLinkAlt} />
-                  </ExternalButton>
-                </Block> */}
               </div>
 
               <EtterlevelseDokumentasjonsPanels etterlevelseDokumentasjoner={teamDokumentasjoner} />
@@ -74,7 +68,7 @@ export const MineEtterlevelseDokumentasjoner = ({
           )
         })}
 
-        <div className="max-w-[800px] mt-48">
+        <div className="max-w-[50rem] mt-48">
           <InfoBlock2
             icon={bamseIcon}
             alt={'Bamseikon'}

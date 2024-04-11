@@ -11,8 +11,11 @@ import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.ImageUtils;
+import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
+import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import org.springframework.data.domain.Page;
@@ -47,6 +50,8 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 public class KravController {
 
     private final KravService service;
+    private final EtterlevelseService etterlevelseService;
+    private final TilbakemeldingService tilbakemeldingService;
 
     @Operation(summary = "Get All Krav")
     @ApiResponse(description = "ok")
@@ -147,8 +152,17 @@ public class KravController {
     @DeleteMapping("/{id}")
     public ResponseEntity<KravResponse> deleteKravById(@PathVariable UUID id) {
         log.info("Delete Krav id={}", id);
-        var krav = service.delete(id);
-        return ResponseEntity.ok(krav.toResponse());
+        var krav = service.get(id);
+        List<Etterlevelse> etterlevelseList = etterlevelseService.getByKravNummer(krav.getKravNummer(), krav.getKravVersjon());
+        if (!etterlevelseList.isEmpty()) {
+            throw new ValidationException(String.format("Can not delete krav. Found %s etterlevelse connected to krav.", etterlevelseList.size()));
+        }
+        List<Tilbakemelding> tilbakemeldingList = tilbakemeldingService.getForKravByNumberAndVersion(krav.getKravNummer(), krav.getKravVersjon());
+        if (!tilbakemeldingList.isEmpty()) {
+            throw new ValidationException(String.format("Can not delete krav. Found %s tilbakemelding connected to krav.", tilbakemeldingList.size()));
+        }
+        var deletedKrav = service.delete(id);
+        return ResponseEntity.ok(deletedKrav.toResponse());
     }
 
     // Image

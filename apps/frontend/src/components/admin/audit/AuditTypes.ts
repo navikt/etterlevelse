@@ -24,6 +24,7 @@ export enum EAuditAction {
 export enum EObjectType {
   Codelist = 'CODELIST',
   Krav = 'Krav',
+  KravPriorityList = 'KravPriorityList',
   Etterlevelse = 'Etterlevelse',
   Behandling = 'Behandling',
   EtterlevelseDokumentasjon = 'EtterlevelseDokumentasjon',

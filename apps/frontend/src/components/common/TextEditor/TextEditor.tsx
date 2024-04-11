@@ -3,7 +3,7 @@ import { FormikErrors } from 'formik'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
 import { Editor } from 'react-draft-wysiwyg'
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-import { useDebouncedState } from '../../../util/hooks'
+import { useDebouncedState } from '../../../util/hooks/customHooks'
 import { ettlevColors } from '../../../util/theme'
 import { FormError } from '../ModalSchema'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '../Style'
@@ -117,21 +117,21 @@ const TextEditor = (props: TTextEditorProps) => {
         style={{
           backgroundColor: ettlevColors.white,
           ...borderColor(hasError ? ettlevColors.red500 : ettlevColors.textAreaBorder),
-          ...borderWidth(hasError ? '2px' : '1px'),
+          ...borderWidth(hasError ? '0.125rem' : '0.063rem'),
           ...borderStyle('solid'),
-          ...borderRadius('4px'),
+          ...borderRadius('0.25rem'),
           width: width || undefined,
           maxWidth: maxWidth || undefined,
         }}
       >
         <Editor
           editorStyle={{
-            padding: '10px',
-            minHeight: height || '500px',
+            padding: '0.625rem',
+            minHeight: height || '31.25rem',
           }}
           toolbarStyle={{
             backgroundColor: ettlevColors.white,
-            borderBottom: `1px solid ${ettlevColors.textAreaBorder}`,
+            borderBottom: `0.063rem solid ${ettlevColors.textAreaBorder}`,
           }}
           onEditorStateChange={(data) => {
             setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))

@@ -14,10 +14,6 @@ import { temaBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const etterlevelseName = (etterlevelse: IEtterlevelse) => `${kravNumView(etterlevelse)}`
 
-export const kravLink = (kravNummer: string) => {
-  return kravNummer.replace('.', '/').replace('K', '/krav/')
-}
-
 export const EtterlevelsePage = () => {
   const params = useParams<{ id?: string }>()
   const [etterlevelse] = useEtterlevelse(params.id)

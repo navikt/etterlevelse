@@ -28,7 +28,10 @@ public class EtterlevelseMetadata extends DomainObject implements KravId {
     private List<String> tildeltMed;
     private String notater;
 
-    public EtterlevelseMetadata convert(EtterlevelseMetadataRequest request) {
+    // Updates all fields from the request except id, version and changestamp
+    // TODO: behandlingId blir IKKE merget. Er dette riktig? Hvis ja: oppdater kommentaren over. Hvis nei: fiks
+    // Se https://trello.com/c/lJlryZIG/357-felter-blir-ignorert-ved-konvertering-av-request
+    public EtterlevelseMetadata merge(EtterlevelseMetadataRequest request) {
         kravNummer = request.getKravNummer();
         kravVersjon = request.getKravVersjon();
         etterlevelseDokumentasjonId = request.getEtterlevelseDokumentasjonId();

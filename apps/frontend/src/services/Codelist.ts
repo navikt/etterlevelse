@@ -64,7 +64,7 @@ class CodelistService {
 
   getCodes(list: EListName): ICode[] {
     return this.lists && this.lists.codelist[list]
-      ? this.lists.codelist[list].sort((c1, c2) => c1.shortName.localeCompare(c2.shortName))
+      ? this.lists.codelist[list].sort((c1, c2) => c1.shortName.localeCompare(c2.shortName, 'nb'))
       : []
   }
 
@@ -159,8 +159,8 @@ class CodelistService {
     return nationalLawCode && nationalLawCode.startsWith(LOVDATA_FORSKRIFT_PREFIX)
   }
 
-  makeIdLabelForAllCodeLists() {
-    return Object.keys(EListName).map((key) => ({ id: key, label: key }))
+  makeValueLabelForAllCodeLists() {
+    return Object.keys(EListName).map((key) => ({ value: key, label: key }))
   }
 
   gjelderForLov(tema: TTemaCode, lov: TLovCode) {
@@ -261,22 +261,6 @@ export const codeListSchema: yup.ObjectSchema<ICodeListFormValues> = yup.object(
   }),
 })
 
-export const codelistCompareField = (field: string) => {
-  return (a: any, b: any) =>
-    codelistCompare((a[field] as ICode) || undefined, (b[field] as ICode) || undefined)
-}
-
-export const codelistsCompareField = <T>(ext: (o: T) => ICode[], exclude?: string) => {
-  const getCode = (obj: any) => {
-    return (ext(obj) || []).filter((c) => c.code !== exclude)[0] || undefined
-  }
-  return (a: any, b: any) => codelistCompare(getCode(a), getCode(b))
-}
-
-export const codelistCompare = (a?: ICode, b?: ICode) => {
-  return (a?.shortName || '').localeCompare(b?.shortName || '')
-}
-
 export const lovCodeRelevansToText = (lovCodeRelevans: string) => {
   switch (lovCodeRelevans) {
     case ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL.toString():
@@ -290,7 +274,7 @@ export const lovCodeRelevansToText = (lovCodeRelevans: string) => {
 
 export const lovCodeRelevansToOptions = () => {
   return Object.keys(ELovCodeRelevans).map((key) => {
-    return { id: key, label: lovCodeRelevansToText(key) }
+    return { value: key, label: lovCodeRelevansToText(key) }
   })
 }
 

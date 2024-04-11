@@ -8,11 +8,11 @@ export const LoadingSkeleton = (props: { header: string }) => (
         <Heading level="1" size="medium" className="mr-2.5">
           {props.header}
         </Heading>
-        <Skeleton height="40px" width="400px" />
+        <Skeleton height="2.5rem" width="25rem" />
       </div>
       <div className="flex">
-        <Skeleton height="40px" width="40px" className="mr-2.5" />
-        <Skeleton height="40px" width="40px" />
+        <Skeleton height="2.5rem" width="2.5rem" className="mr-2.5" />
+        <Skeleton height="2.5rem" width="2.5rem" />
       </div>
     </div>
     <div className="max-w-xl">
@@ -25,7 +25,7 @@ export const SkeletonPanel = (props: { count: number }) => (
   <div>
     {_.range(props.count).map((index) => (
       <div key={index} className="mb-1.5">
-        <Skeleton variant="rectangle" width="100%" height="82px" />
+        <Skeleton variant="rectangle" width="100%" height="5.125rem" />
       </div>
     ))}
   </div>

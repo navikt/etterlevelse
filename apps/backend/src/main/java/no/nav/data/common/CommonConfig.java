@@ -20,10 +20,15 @@ import javax.sql.DataSource;
 @Configuration
 public class CommonConfig {
 
+    private static ObjectMapper omForHttpMessageConverter = JsonUtils.createObjectMapper();
+    
     @Primary
     @Bean
     public ObjectMapper objectMapper() {
-        return JsonUtils.getObjectMapper();
+        // ObjectMapper oppfører seg ikke-deterministisk hvis flere tråder bruker den samtidig, og der minst en av dem konfigurerer den.
+        // Dessuten kan forskjellige klienter konfigurere den på hver sin måte, noe som vil sabotere for andre.
+        // OM er kostbare å konstruere, men her skal vi ikke returnere en delt OM. 
+        return JsonUtils.createObjectMapper();
     }
 
     @Bean
@@ -44,7 +49,7 @@ public class CommonConfig {
     @Bean
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
         MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-        jsonConverter.setObjectMapper(objectMapper());
+        jsonConverter.setObjectMapper(omForHttpMessageConverter);
         return jsonConverter;
     }
 

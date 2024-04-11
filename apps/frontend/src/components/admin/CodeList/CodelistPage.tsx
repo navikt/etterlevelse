@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { createCodelist } from '../../../api/CodelistApi'
 import { ICode, ICodeListFormValues, codelist } from '../../../services/Codelist'
 import { user } from '../../../services/User'
-import { useAwait, useForceUpdate } from '../../../util/hooks'
+import { useAwait, useForceUpdate } from '../../../util/hooks/customHooks'
 import { PageLayout } from '../../scaffold/Page'
 import CodeListTable from './CodeListStyledTable'
 import ModalCreateCodeList from './ModalCreateCodeList'
@@ -75,9 +75,9 @@ const CodeListPage = () => {
             onChange={(e) => setListname(e.target.value)}
           >
             <option value="">Velg kodeverk</option>
-            {codelist.makeIdLabelForAllCodeLists().map((codeLabel, index) => {
+            {codelist.makeValueLabelForAllCodeLists().map((codeLabel, index) => {
               return (
-                <option key={index + '_' + codeLabel.label} value={codeLabel.id}>
+                <option key={index + '_' + codeLabel.label} value={codeLabel.value}>
                   {codeLabel.label}
                 </option>
               )

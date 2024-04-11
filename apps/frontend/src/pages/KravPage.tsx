@@ -23,7 +23,7 @@ import { getKravWithEtterlevelseQuery } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
-import { useLocationState, useQueryParam } from '../util/hooks'
+import { useLocationState, useQueryParam } from '../util/hooks/customHooks'
 import { temaBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }): string =>
@@ -93,7 +93,11 @@ export const KravPage = () => {
         if (resp.content.length) {
           const alleVersjoner = resp.content
             .map((krav) => {
-              return { kravVersjon: krav.kravVersjon, kravNummer: krav.kravNummer, kravStatus: krav.status }
+              return {
+                kravVersjon: krav.kravVersjon,
+                kravNummer: krav.kravNummer,
+                kravStatus: krav.status,
+              }
             })
             .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
 

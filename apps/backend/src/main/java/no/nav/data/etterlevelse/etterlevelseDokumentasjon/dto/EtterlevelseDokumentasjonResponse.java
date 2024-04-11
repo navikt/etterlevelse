@@ -37,4 +37,5 @@ public class EtterlevelseDokumentasjonResponse {
     private List<String> teams;
     private List<TeamResponse> teamsData;
     private List<Behandling> behandlinger;
+    private CodelistResponse avdeling;
 }

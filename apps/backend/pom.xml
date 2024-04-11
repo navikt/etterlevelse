@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.8</version>
+        <version>3.2.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>no.nav.data</groupId>
@@ -17,31 +17,30 @@
     <properties>
         <java.version>17</java.version>
 
-        <springdoc-openapi-starter-webmvc-ui.version>2.3.0</springdoc-openapi-starter-webmvc-ui.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.5.0</springdoc-openapi-starter-webmvc-ui.version>
         <hypersistence-utils-hibernate-63.version>3.7.3</hypersistence-utils-hibernate-63.version>
         <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
-        <shedlock.version>5.12.0</shedlock.version>
+        <shedlock.version>5.13.0</shedlock.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <graphql-spring-boot-starter.version>15.1.0</graphql-spring-boot-starter.version>
         <graphql.version>21.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
-
-        <microsoft-graph.version>5.80.0</microsoft-graph.version>
-        <msal4j.version>1.14.3</msal4j.version>
+        <microsoft-graph.version>6.5.1</microsoft-graph.version>
+        <msal4j.version>1.15.0</msal4j.version>
 
         <!-- transitive versions -->
-        <commons-compress.version>1.26.0</commons-compress.version>
-        <commons-io.version>2.15.1</commons-io.version>
-        <guava.version>33.0.0-jre</guava.version>
+        <commons-compress.version>1.26.1</commons-compress.version>
+        <commons-io.version>2.16.1</commons-io.version>
+        <guava.version>33.1.0-jre</guava.version>
         <jna.version>5.14.0</jna.version>
         <jetbrains.annotation.version>24.1.0</jetbrains.annotation.version>
 
         <!-- Test -->
-        <testcontainers.version>1.19.6</testcontainers.version>
+        <testcontainers.version>1.19.7</testcontainers.version>
         <wiremock.version>2.27.2</wiremock.version>
-        <docx4j.version>11.4.9</docx4j.version>
-        
-        
+        <docx4j.version>11.4.11</docx4j.version>
+
+
     </properties>
 
     <dependencies>
@@ -80,7 +79,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
-        
+
         <!-- Jwt parsing and verifying -->
         <dependency>
             <groupId>com.auth0</groupId>
@@ -110,16 +109,8 @@
                     <artifactId>graphql-java-extended-scalars</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.javassist</groupId>
-                    <artifactId>javassist</artifactId>
-                </exclusion>
-                <exclusion>
                     <groupId>org.antlr</groupId>
                     <artifactId>antlr4-runtime</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.graphql-java</groupId>
-                    <artifactId>graphql-java</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -133,38 +124,6 @@
             <groupId>com.graphql-java</groupId>
             <artifactId>graphql-java-extended-scalars</artifactId>
             <version>${graphql.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.graphql-java</groupId>
-                    <artifactId>graphql-java</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.graphql-java-kickstart</groupId>
-            <artifactId>playground-spring-boot-starter</artifactId>
-            <version>11.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.graphql-java-kickstart</groupId>
-            <artifactId>voyager-spring-boot-starter</artifactId>
-            <version>11.1.0</version>
-            <scope>runtime</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.graphql-java-kickstart</groupId>
-                    <artifactId>voyager-spring-boot-autoconfigure</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>3.30.2-GA</version>
-        </dependency>
-        <dependency>
-            <groupId>com.graphql-java</groupId>
-            <artifactId>graphql-java</artifactId>
         </dependency>
 
         <!-- Security -->
@@ -179,6 +138,11 @@
         <dependency>
             <groupId>com.microsoft.graph</groupId>
             <artifactId>microsoft-graph</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-identity</artifactId>
+            <version>1.11.4</version>
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
@@ -252,6 +216,12 @@
             <groupId>com.vladsch.flexmark</groupId>
             <artifactId>flexmark-all</artifactId>
             <version>${flexmark.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.pdfbox</groupId>
+                    <artifactId>fontbox</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.vladsch.flexmark</groupId>
@@ -261,6 +231,14 @@
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.docx4j</groupId>
+                    <artifactId>docx4j-JAXB-ReferenceImpl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.xmlgraphics</groupId>
+                    <artifactId>xmlgraphics-commons</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

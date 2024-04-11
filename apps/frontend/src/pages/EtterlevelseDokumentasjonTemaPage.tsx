@@ -10,30 +10,17 @@
 // import { etterlevelseDokumentasjonKravQuery } from '../api/KravApi'
 // import { getAllKravPriority } from '../api/KravPriorityApi'
 // import { IBreadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-// import { KravPanelHeaderWithSorting } from '../components/etterlevelseDokumentasjon/KravPanelHeader'
-// import { getMainHeader } from '../components/etterlevelseDokumentasjon/common/utils'
 // import { KravList } from '../components/etterlevelseDokumentasjonTema/KravList'
 // import { SecondaryHeader } from '../components/etterlevelseDokumentasjonTema/SecondaryHeader'
 // import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 // import { Layout2 } from '../components/scaffold/Page'
-import { EEtterlevelseStatus, EKravFilterType, IEtterlevelse } from '../constants'
+import { EEtterlevelseStatus, IEtterlevelse } from '../constants'
 
 //import { IKravPrioritering, IPageResponse, , KravEtterlevelseData, KravQL, KravStatus} from '../constants'
 // import { ampli, userRoleEventProp } from '../services/Amplitude'
 // import { ListName, TemaCode, codelist } from '../services/Codelist'
 // import { ettlevColors } from '../util/theme'
 // import { getFilterType } from './EtterlevelseDokumentasjonPage'
-
-export const sortingOptions = [
-  { label: 'Anbefalt rekkefølge', id: 'priority' },
-  { label: 'Sist endret av meg', id: 'lastModified' },
-]
-
-export const kravRelevansOptions = [
-  { label: 'Krav som skal etterleves', id: EKravFilterType.RELEVANTE_KRAV },
-  { label: 'Bortfiltrerte krav', id: EKravFilterType.BORTFILTTERTE_KRAV },
-  { label: 'Utgåtte krav', id: EKravFilterType.UTGAATE_KRAV },
-]
 
 export const mapEtterlevelseData = (etterlevelse?: IEtterlevelse) => ({
   etterlevelseId: etterlevelse?.id,
@@ -181,16 +168,6 @@ export const isFerdigUtfylt = (status: EEtterlevelseStatus | undefined) => {
 //         <Layout2
 //           headerBackgroundColor="#F8F8F8"
 //           headerOverlap="31px"
-//           mainHeader={getMainHeader(
-//             etterlevelseDokumentasjon,
-//             undefined,
-//             <Helmet>
-//               <meta charSet="utf-8" />
-//               <title>
-//                 {temaData ? temaData.shortName : ''} E{etterlevelseDokumentasjon.etterlevelseNummer.toString()} {etterlevelseDokumentasjon.title.toString()}
-//               </title>
-//             </Helmet>,
-//           )}
 //           secondaryHeaderBackgroundColor={ettlevColors.green100}
 //           secondaryHeader={<SecondaryHeader etterlevelseDokumentasjon={etterlevelseDokumentasjon} lovListe={lovListe} temaData={temaData} />}
 //           childrenBackgroundColor={ettlevColors.grey25}
@@ -205,16 +182,6 @@ export const isFerdigUtfylt = (status: EEtterlevelseStatus | undefined) => {
 //                   borderRadius: '4px',
 //                 }}
 //               >
-//                 <Block display="flex" justifyContent="center" $style={{ paddingTop: '26px', paddingBottom: '22px', paddingLeft: '16px' }}>
-//                   <KravPanelHeaderWithSorting
-//                     kravRelevans={kravRelevans}
-//                     setKravRelevans={setKravRelevans}
-//                     kravData={getKravData(kravRelevans[0].id)}
-//                     sorting={sorting}
-//                     setSorting={setSorting}
-//                     temaPageUrl={temaPageUrl}
-//                   />
-//                 </Block>
 //                 {!relevanteKraverGraphQLLoading && !irrelevanteKraverGraphQLLoading && !utgaateKraverGraphQLLoading ? (
 //                   <KravList
 //                     kravList={getKravData(kravRelevans[0].id)}

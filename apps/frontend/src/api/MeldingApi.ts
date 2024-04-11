@@ -2,43 +2,9 @@ import axios from 'axios'
 import { EAlertType, EMeldingStatus, EMeldingType, IMelding, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
-export const getAllMelding = async () => {
-  const PAGE_SIZE = 100
-  const firstPage = await getMeldingPage(0, PAGE_SIZE)
-  if (firstPage.pages === 1) {
-    return firstPage.content.length > 0 ? [...firstPage.content] : []
-  } else {
-    let allMelding: IMelding[] = [...firstPage.content]
-    for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
-      allMelding = [...allMelding, ...(await getMeldingPage(currentPage, PAGE_SIZE)).content]
-    }
-    return allMelding
-  }
-}
-
-export const getMeldingPage = async (pageNumber: number, pageSize: number) => {
-  return (
-    await axios.get<IPageResponse<IMelding>>(
-      `${env.backendBaseUrl}/melding?pageNumber=${pageNumber}&pageSize=${pageSize}`
-    )
-  ).data
-}
-
-export const getMelding = async (id: string) => {
-  return (await axios.get<IMelding>(`${env.backendBaseUrl}/melding/${id}`)).data
-}
-
 export const getMeldingByType = async (meldingType: EMeldingType) => {
   return (
     await axios.get<IPageResponse<IMelding>>(`${env.backendBaseUrl}/melding/type/${meldingType}`)
-  ).data
-}
-
-export const getMeldingByStatus = async (meldingStatus: EMeldingStatus) => {
-  return (
-    await axios.get<IPageResponse<IMelding>>(
-      `${env.backendBaseUrl}/melding/status/${meldingStatus}`
-    )
   ).data
 }
 
@@ -76,25 +42,5 @@ export const mapMeldingToFormValue = (melding: Partial<IMelding>): IMelding => {
     secondaryTittel: melding.secondaryTittel || '',
     secondaryMelding: melding.secondaryMelding || '',
     alertType: melding.alertType || EAlertType.WARNING,
-  }
-}
-
-export const meldingStatusToString = (status: EMeldingStatus): string => {
-  switch (status) {
-    case EMeldingStatus.ACTIVE:
-      return 'Synlig/Aktiv'
-    case EMeldingStatus.DEACTIVE:
-      return 'Skjult/Deaktivert'
-  }
-}
-
-export const meldingTypeToString = (status: EMeldingType): string => {
-  switch (status) {
-    case EMeldingType.FORSIDE:
-      return 'Forside melding'
-    case EMeldingType.SYSTEM:
-      return 'System melding'
-    case EMeldingType.OM_ETTERLEVELSE:
-      return 'Om etterlevelse melding'
   }
 }

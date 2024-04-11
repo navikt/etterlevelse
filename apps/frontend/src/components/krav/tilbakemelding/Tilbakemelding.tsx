@@ -32,7 +32,7 @@ import {
   ITilbakemelding,
 } from '../../../constants'
 import { user } from '../../../services/User'
-import { useQueryParam, useRefs } from '../../../util/hooks'
+import { useQueryParam, useRefs } from '../../../util/hooks/customHooks'
 import { ettlevColors } from '../../../util/theme'
 import { LoginButton } from '../../Header'
 import { mailboxPoppingIcon } from '../../Images'
