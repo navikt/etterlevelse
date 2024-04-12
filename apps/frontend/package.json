@@ -98,6 +98,7 @@
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/amplitude-js": "^8.16.3",
     "@types/lodash": "^4.14.199",
+    "@types/node": "^20.7.1",
     "@types/react": "^18.2.23",
     "@types/react-dom": "^18.2.8",
     "@types/react-helmet": "^6.1.7",
@@ -113,10 +114,12 @@
     "http-proxy-middleware": "3.0.0",
     "husky": "^9.0.6",
     "lint-staged": "^15.2.0",
+    "postcss": "^8.4.33",
     "prettier": "3.2.5",
     "react-helmet": "^6.1.0",
     "react-localization": "^1.0.19",
     "react-router-dom": "^6.16.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "tailwindcss": "^3.4.1"
   }
 }
