@@ -93,6 +93,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@craco/craco": "^7.1.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/amplitude-js": "^8.16.3",
