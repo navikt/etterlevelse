@@ -93,7 +93,11 @@ export const KravPage = () => {
         if (resp.content.length) {
           const alleVersjoner = resp.content
             .map((krav) => {
-              return { kravVersjon: krav.kravVersjon, kravNummer: krav.kravNummer, kravStatus: krav.status }
+              return {
+                kravVersjon: krav.kravVersjon,
+                kravNummer: krav.kravNummer,
+                kravStatus: krav.status,
+              }
             })
             .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
 

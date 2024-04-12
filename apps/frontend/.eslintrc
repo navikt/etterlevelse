@@ -19,7 +19,7 @@
       "ecmaVersion": 15,
       "sourceType": "module"
     },
-    "plugins": ["react", "@typescript-eslint", "jsx-a11y", "testing-library"],
+    "plugins": ["react", "@typescript-eslint", "jsx-a11y"],
     "rules": {
       "@typescript-eslint/ban-ts-ignore": "off",
       "@typescript-eslint/ban-ts-comment": "off",
@@ -55,5 +55,7 @@
       "react/jsx-uses-react": "off",
       "react/react-in-jsx-scope": "off",
       "no-console":["warn", { "allow": ["warn", "error", "debug"] }],
+      // no-extra-semi is added because there are places where the ; is necessary
+      "no-extra-semi": "off",
     }
   }
