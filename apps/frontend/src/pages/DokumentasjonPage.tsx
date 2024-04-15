@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import { BodyShort, Button, Heading, Loader } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
@@ -27,7 +27,7 @@ import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const DokumentasjonPage = () => {
-  const params = useParams<{ id?: string }>()
+  const params = useParams<{ id?: string; tema?: string }>()
   const temaListe = codelist.getCodes(EListName.TEMA)
   const [openAccordions, setOpenAccordions] = useState<boolean[]>(temaListe.map(() => false))
   const variables = { etterlevelseDokumentasjonId: params.id }
@@ -52,6 +52,7 @@ export const DokumentasjonPage = () => {
   const [relevanteStats, setRelevanteStats] = useState<TKravQL[]>([])
   const [utgaattStats, setUtgaattStats] = useState<TKravQL[]>([])
   const [arkivModal, setArkivModal] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   const filterData = (
     unfilteredData:
@@ -87,6 +88,16 @@ export const DokumentasjonPage = () => {
   useEffect(() => {
     hotjar.initialize({ id: 148751, sv: 6 })
   }, [])
+
+  useEffect(() => {
+    if (params.tema === 'ALLE') {
+      setOpenAccordions(temaListe.map(() => true))
+    } else if (!params.tema) {
+      setOpenAccordions(temaListe.map(() => false))
+    } else {
+      setOpenAccordions(temaListe.map((t) => (t.code === params.tema ? true : false)))
+    }
+  }, [temaListe])
 
   useEffect(() => {
     const [relevanteStatusListe, utgaattStatusListe] = filterData(relevanteData)
@@ -174,14 +185,20 @@ export const DokumentasjonPage = () => {
             <Button
               variant="tertiary"
               size="xsmall"
-              onClick={() => setOpenAccordions(temaListe.map(() => true))}
+              onClick={() => {
+                setOpenAccordions(temaListe.map(() => true))
+                navigate(`/dokumentasjon/${params.id}/ALLE`)
+              }}
             >
               Åpne alle tema
             </Button>
             <Button
               variant="tertiary"
               size="xsmall"
-              onClick={() => setOpenAccordions(temaListe.map(() => false))}
+              onClick={() => {
+                setOpenAccordions(temaListe.map(() => false))
+                navigate(`/dokumentasjon/${params.id}/`)
+              }}
             >
               Lukk alle tema
             </Button>
