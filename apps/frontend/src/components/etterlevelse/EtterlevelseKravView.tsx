@@ -47,6 +47,7 @@ import { behandlingLink } from '../../util/config'
 import { Markdown } from '../common/Markdown'
 import { ExternalLink } from '../common/RouteLink'
 import { TeamName } from '../common/TeamName'
+import { getEtterlevelseStatus } from '../etterlevelseDokumentasjon/common/utils'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import EditNotatfelt from '../etterlevelseMetadata/EditNotatfelt'
 import Etterlevelser from '../krav/Etterlevelser'
@@ -101,6 +102,7 @@ export const EtterlevelseKravView = ({
   const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<IKravVersjon[]>([
     { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
   ])
+  const [statusText, setStatustext] = useState<string>('')
   const [isNavigationModalOpen, setIsNavigationModalOpen] = useState<boolean>(false)
   const location = useLocation()
   const navigate = useNavigate()
@@ -171,16 +173,18 @@ export const EtterlevelseKravView = ({
     }
 
     if (etterlevelse.id || existingEtterlevelseId) {
-      await updateEtterlevelse(mutatedEtterlevelse).then(() => {
+      await updateEtterlevelse(mutatedEtterlevelse).then((res) => {
         if (nextKravToDocument !== '') {
+          setStatustext(res.status)
           setIsNavigationModalOpen(true)
         } else {
           navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
         }
       })
     } else {
-      await createEtterlevelse(mutatedEtterlevelse).then(() => {
+      await createEtterlevelse(mutatedEtterlevelse).then((res) => {
         if (nextKravToDocument !== '') {
+          setStatustext(res.status)
           setIsNavigationModalOpen(true)
         } else {
           navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
@@ -197,11 +201,17 @@ export const EtterlevelseKravView = ({
         if (resp.content.length) {
           const alleVersjoner = resp.content
             .map((krav) => {
-              return { kravVersjon: krav.kravVersjon, kravNummer: krav.kravNummer, kravStatus: krav.status }
+              return {
+                kravVersjon: krav.kravVersjon,
+                kravNummer: krav.kravNummer,
+                kravStatus: krav.status,
+              }
             })
             .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
 
-          const filteredVersjoner = alleVersjoner.filter((krav) => krav.kravStatus !== EKravStatus.UTKAST)
+          const filteredVersjoner = alleVersjoner.filter(
+            (krav) => krav.kravStatus !== EKravStatus.UTKAST
+          )
 
           if (filteredVersjoner.length) {
             setAlleKravVersjoner(filteredVersjoner)
@@ -456,42 +466,50 @@ export const EtterlevelseKravView = ({
           <Modal
             open={isNavigationModalOpen}
             onClose={() => setIsNavigationModalOpen(false)}
-            header={{ heading: 'Hvor ønsker du å gå?' }}
+            header={{ heading: 'Endringene er lagret' }}
           >
             <Modal.Body>
               <BodyShort>
-                Vi undersøker i en periode hvordan man ønsker å navigere seg mellom krav og temaer.
+                Status er satt til: {getEtterlevelseStatus(statusText as EEtterlevelseStatus)}
               </BodyShort>
-              <BodyShort>Trykk på knappen som passer best for deg.</BodyShort>
             </Modal.Body>
             <Modal.Footer>
-              <Link
-                href={getNextKravUrl(nextKravToDocument)}
-                onClick={() => {
-                  ampli.logEvent('knapp klikket', {
-                    tekst: 'Til nest krav som ikke er ferdig utfylt i dette temaet',
-                    pagePath: location.pathname,
-                    ...userRoleEventProp,
-                  })
-                }}
-              >
-                <Button variant="secondary">
-                  Til neste krav som ikke er ferdig utfylt i dette temaet
+              <div className="w-full flex flex-col gap-2">
+                <BodyShort>Hvor ønsker du å gå?</BodyShort>
+                <Link
+                  href={getNextKravUrl(nextKravToDocument)}
+                  onClick={() => {
+                    ampli.logEvent('knapp klikket', {
+                      tekst: 'Til nest krav som ikke er ferdig utfylt i dette temaet',
+                      pagePath: location.pathname,
+                      ...userRoleEventProp,
+                    })
+                  }}
+                >
+                  <Button variant="secondary">
+                    Til neste krav som ikke er ferdig utfylt i dette temaet
+                  </Button>
+                </Link>
+                <Button onClick={() => setIsNavigationModalOpen(false)} variant="secondary">
+                  Fortsett å redigere dokumentet
                 </Button>
-              </Link>
 
-              <Link
-                href={'/dokumentasjon/' + etterlevelseDokumentasjonId}
-                onClick={() => {
-                  ampli.logEvent('knapp klikket', {
-                    tekst: 'Til temaoversikten',
-                    pagePath: location.pathname,
-                    ...userRoleEventProp,
-                  })
-                }}
-              >
-                <Button variant="secondary">Til temaoversikten</Button>
-              </Link>
+                <Link
+                  href={'/dokumentasjon/' + etterlevelseDokumentasjonId}
+                  className="flex w-full"
+                  onClick={() => {
+                    ampli.logEvent('knapp klikket', {
+                      tekst: 'Til temaoversikten',
+                      pagePath: location.pathname,
+                      ...userRoleEventProp,
+                    })
+                  }}
+                >
+                  <Button className="flex w-full" variant="secondary">
+                    Til temaoversikten
+                  </Button>
+                </Link>
+              </div>
             </Modal.Footer>
           </Modal>
         </div>
