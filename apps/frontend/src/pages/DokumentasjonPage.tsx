@@ -95,7 +95,11 @@ export const DokumentasjonPage = () => {
     } else if (!params.tema) {
       setOpenAccordions(temaListe.map(() => false))
     } else {
-      setOpenAccordions(temaListe.map((t) => (t.code === params.tema ? true : false)))
+      setOpenAccordions(
+        temaListe.map((t) =>
+          t.code.toLocaleLowerCase() === params.tema?.toLocaleLowerCase() ? true : false
+        )
+      )
     }
   }, [temaListe])
 
