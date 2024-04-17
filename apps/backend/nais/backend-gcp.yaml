@@ -76,6 +76,8 @@ spec:
           permissions:
             roles:
               - "arkiv-admin"
+      externaL:
+        - host: a01apvw00047
     outbound:
       rules:
         - application: behandlingskatalog-backend
