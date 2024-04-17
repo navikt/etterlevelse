@@ -23,9 +23,9 @@
         <shedlock.version>5.13.0</shedlock.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <graphql-spring-boot-starter.version>15.1.0</graphql-spring-boot-starter.version>
-        <graphql.version>21.0</graphql.version>
+        <graphql.version>22.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
-        <microsoft-graph.version>6.5.1</microsoft-graph.version>
+        <microsoft-graph.version>6.6.0</microsoft-graph.version>
         <msal4j.version>1.15.0</msal4j.version>
 
         <!-- transitive versions -->
@@ -142,6 +142,30 @@
                 <exclusion>
                     <groupId>com.azure</groupId>
                     <artifactId>azure-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.microsoft.kiota</groupId>
+                    <artifactId>microsoft-kiota-serialization-json</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.microsoft.kiota</groupId>
+                    <artifactId>microsoft-kiota-serialization-form</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.microsoft.kiota</groupId>
+                    <artifactId>microsoft-kiota-serialization-multipart</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.microsoft.kiota</groupId>
+                    <artifactId>microsoft-kiota-serialization-text</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.microsoft.kiota</groupId>
+                    <artifactId>microsoft-kiota-authentication-azure</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.microsoft.kiota</groupId>
+                    <artifactId>microsoft-kiota-http-okHttp</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -360,6 +384,10 @@
                     <exclusion>
                         <groupId>com.azure</groupId>
                         <artifactId>azure-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.microsoft.kiota</groupId>
+                        <artifactId>microsoft-kiota-serialization-json</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
