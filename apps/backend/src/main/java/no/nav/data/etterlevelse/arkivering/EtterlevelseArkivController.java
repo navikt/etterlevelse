@@ -26,7 +26,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -107,7 +106,6 @@ public class EtterlevelseArkivController {
     @SneakyThrows
     @Operation(summary = "Export etterlevelse to archive")
     @ApiResponse(description = "Doc fetched", content = @Content(schema = @Schema(implementation = byte[].class)))
-    @Transactional(readOnly = true)
     @GetMapping(value = "/export", produces = "application/zip")
     public void getExportArchive(HttpServletResponse response) {
         log.info("export etterlevelse to archive");

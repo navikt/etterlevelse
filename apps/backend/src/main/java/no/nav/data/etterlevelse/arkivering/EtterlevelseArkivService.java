@@ -73,8 +73,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         List<EtterlevelseArkiv> tilArkivering = getByStatus(EtterlevelseArkivStatus.TIL_ARKIVERING.name());
         List<EtterlevelseArkiv> behandlerArkivering = new ArrayList<>();
         tilArkivering.forEach(e -> {
-
-            EtterlevelseArkivRequest etterlevelseArkivRequest= EtterlevelseArkivRequest.builder()
+            EtterlevelseArkiv etterlevelseArkiv = save(EtterlevelseArkivRequest.builder()
                     .id(e.getId().toString())
                     .behandlingId(e.getBehandlingId())
                     .etterlevelseDokumentasjonId(e.getEtterlevelseDokumentasjonId())
@@ -85,13 +84,9 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
                     .webSakNummer(e.getWebSakNummer())
                     .onlyActiveKrav(e.isOnlyActiveKrav())
                     .update(true)
-                    .build();
-
-            EtterlevelseArkiv etterlevelseArkiv = save(etterlevelseArkivRequest);
-
+                    .build());
             behandlerArkivering.add(etterlevelseArkiv);
         });
-
         return behandlerArkivering;
     }
 
