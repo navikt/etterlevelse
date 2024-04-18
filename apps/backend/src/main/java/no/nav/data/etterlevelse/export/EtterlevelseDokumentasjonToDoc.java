@@ -351,7 +351,7 @@ public class EtterlevelseDokumentasjonToDoc {
 
                             addHeading3(suksesskriteriumNavn + ": " + suksesskriterie.getNavn());
                             addHeading4("Utfyllende om kriteriet");
-                            addMarkdownText("Ikke dokumentert");
+                            addMarkdownText(suksesskriterie.getBeskrivelse());
 
                             addHeading4("Status på suksesskriteriet");
                             addText("Status: Ikke dokumentert");
