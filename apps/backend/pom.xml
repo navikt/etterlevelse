@@ -138,17 +138,6 @@
         <dependency>
             <groupId>com.microsoft.graph</groupId>
             <artifactId>microsoft-graph</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.azure</groupId>
-                    <artifactId>azure-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-identity</artifactId>
-            <version>1.12.0</version>
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
@@ -356,10 +345,6 @@
                     <exclusion>
                         <groupId>io.netty</groupId>
                         <artifactId>netty-tcnative-boringssl-static</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.azure</groupId>
-                        <artifactId>azure-core</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
