@@ -84,7 +84,7 @@ public class EtterlevelseArkivToDocService extends DomainService<EtterlevelseArk
     @SneakyThrows
     private byte[] createXml(Date date, String wordDocFileName, EtterlevelseDokumentasjon etterlevelseDokumentasjon, EtterlevelseArkiv etterlevelseArkiv) {
 
-        String creatorId = etterlevelseArkiv.getChangeStamp().getLastModifiedBy().split(" ")[0];
+        String creatorId = etterlevelseArkiv.getArkivertAv().split(" ")[0];
 
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
