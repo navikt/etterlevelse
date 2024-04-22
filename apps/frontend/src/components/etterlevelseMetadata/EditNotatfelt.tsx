@@ -43,6 +43,7 @@ export const EditNotatfelt = ({
 
   return (
     <Modal
+      className="w-full max-w-4xl"
       open={isOpen}
       onClose={() => {
         setIsNotatfeltOpen(false)
