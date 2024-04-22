@@ -27,7 +27,7 @@ export const MainPage = () => {
     { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
     TVariables
   >(getEtterlevelseDokumentasjonListQuery, {
-    variables: { sistRedigert: 4 },
+    variables: { sistRedigert: 2 },
     skip: !user.isLoggedIn(),
   })
 
@@ -54,7 +54,7 @@ export const MainPage = () => {
           </div>
           {!etterlevelseDokumentasjonLoading && (
             <div className="bg-white mt-8 p-8 shadow-md shadow-slate-900 shadow-[#00000040]">
-              {!data?.etterlevelseDokumentasjoner.content.length && (
+              {!data?.etterlevelseDokumentasjoner.content && (
                 <div>
                   <Heading size="medium" level="2">
                     Etterlevelse i NAV
@@ -66,8 +66,8 @@ export const MainPage = () => {
                   </span>
                 </div>
               )}
-              {data?.etterlevelseDokumentasjoner.content.length &&
-                data?.etterlevelseDokumentasjoner.content.length > 0 && (
+              {data?.etterlevelseDokumentasjoner.content &&
+                data?.etterlevelseDokumentasjoner.content.length !== 0 && (
                   <EtterlevelseDokumentasjonList
                     etterlevelseDokumentasjoner={data?.etterlevelseDokumentasjoner.content}
                   />
