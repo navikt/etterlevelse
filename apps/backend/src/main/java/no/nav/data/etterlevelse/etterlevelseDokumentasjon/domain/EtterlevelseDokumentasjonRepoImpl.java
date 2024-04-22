@@ -97,7 +97,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
                          limit :limit
                     ))
                     """;
-            par.addValue("limit", filter.getSistRedigert())
+            par.addValue("limit", filter.getSistRedigert() -1)
                     .addValue("user_id", SecurityUtils.getCurrentIdent() + "%");
         }
 
