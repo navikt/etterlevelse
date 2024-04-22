@@ -105,6 +105,7 @@ export const EtterlevelseKravView = ({
   ])
   const [statusText, setStatustext] = useState<string>('')
   const [isNavigationModalOpen, setIsNavigationModalOpen] = useState<boolean>(false)
+  const [hasNextKrav, setHasNextKrav] = useState<boolean>(true)
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -177,18 +178,24 @@ export const EtterlevelseKravView = ({
       await updateEtterlevelse(mutatedEtterlevelse).then((res) => {
         if (nextKravToDocument !== '') {
           setStatustext(res.status)
+          setHasNextKrav(true)
           setIsNavigationModalOpen(true)
         } else {
-          navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
+          setStatustext(res.status)
+          setHasNextKrav(false)
+          setIsNavigationModalOpen(true)
         }
       })
     } else {
       await createEtterlevelse(mutatedEtterlevelse).then((res) => {
         if (nextKravToDocument !== '') {
           setStatustext(res.status)
+          setHasNextKrav(true)
           setIsNavigationModalOpen(true)
         } else {
-          navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`)
+          setStatustext(res.status)
+          setHasNextKrav(false)
+          setIsNavigationModalOpen(true)
         }
       })
     }
@@ -477,20 +484,22 @@ export const EtterlevelseKravView = ({
             <Modal.Footer>
               <div className="w-full flex flex-col gap-2">
                 <BodyShort>Hvor ønsker du å gå?</BodyShort>
-                <Link
-                  href={getNextKravUrl(nextKravToDocument)}
-                  onClick={() => {
-                    ampli.logEvent('knapp klikket', {
-                      tekst: 'Til nest krav som ikke er ferdig utfylt i dette temaet',
-                      pagePath: location.pathname,
-                      ...userRoleEventProp,
-                    })
-                  }}
-                >
-                  <Button variant="secondary">
-                    Til neste krav som ikke er ferdig utfylt i dette temaet
-                  </Button>
-                </Link>
+                {hasNextKrav && (
+                  <Link
+                    href={getNextKravUrl(nextKravToDocument)}
+                    onClick={() => {
+                      ampli.logEvent('knapp klikket', {
+                        tekst: 'Til nest krav som ikke er ferdig utfylt i dette temaet',
+                        pagePath: location.pathname,
+                        ...userRoleEventProp,
+                      })
+                    }}
+                  >
+                    <Button variant="secondary">
+                      Til neste krav som ikke er ferdig utfylt i dette temaet
+                    </Button>
+                  </Link>
+                )}
                 <Button onClick={() => setIsNavigationModalOpen(false)} variant="secondary">
                   Fortsett å redigere dokumentet
                 </Button>
