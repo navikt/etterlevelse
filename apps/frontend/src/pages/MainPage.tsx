@@ -54,7 +54,7 @@ export const MainPage = () => {
           </div>
           {!etterlevelseDokumentasjonLoading && (
             <div className="bg-white mt-8 p-8 shadow-md shadow-slate-900 shadow-[#00000040]">
-              {!data?.etterlevelseDokumentasjoner.content && (
+              {!data?.etterlevelseDokumentasjoner.content.length && (
                 <div>
                   <Heading size="medium" level="2">
                     Etterlevelse i NAV
