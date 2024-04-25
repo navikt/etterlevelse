@@ -150,7 +150,13 @@ public class StatistikkService {
                     )
                     .toList();
 
-            String ansvarlig = CodelistService.getCodelist(ListName.AVDELING, etterlevelseDokumentasjon.getAvdeling()).getShortName();
+            String ansvarlig;
+
+            if(etterlevelseDokumentasjon.getAvdeling() != null && !etterlevelseDokumentasjon.getAvdeling().isEmpty()) {
+                ansvarlig = CodelistService.getCodelist(ListName.AVDELING, etterlevelseDokumentasjon.getAvdeling()).getShortName();
+            } else {
+                ansvarlig = "";
+            }
 
             int antallUnderArbeidSize = antallUnderArbeid.stream().filter(etterlevelseUnderArbeid ->
                     antallFerdigDokumentert.stream()
@@ -228,7 +234,14 @@ public class StatistikkService {
         }
 
         List<String> teamNames = etterlevelseDokumentasjon.getTeams().stream().map(t -> teamService.getTeam(t).isPresent() ? teamService.getTeam(t).get().getName() : "").toList();
-        String ansvarlig = CodelistService.getCodelistResponse(ListName.AVDELING, etterlevelseDokumentasjon.getAvdeling()).getShortName();
+        String ansvarlig;
+
+        if(etterlevelseDokumentasjon.getAvdeling() != null && !etterlevelseDokumentasjon.getAvdeling().isEmpty()) {
+            ansvarlig = CodelistService.getCodelist(ListName.AVDELING, etterlevelseDokumentasjon.getAvdeling()).getShortName();
+        } else {
+            ansvarlig = "";
+        }
+
         String temaName = "Ingen";
         var krav = kravService.getByKravNummer(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon());
 
