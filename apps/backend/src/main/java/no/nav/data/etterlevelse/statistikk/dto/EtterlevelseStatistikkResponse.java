@@ -24,6 +24,8 @@ public class EtterlevelseStatistikkResponse {
     private String etterlevelseDokumentasjonId;
     private String etterlevelseDokumentasjonTittel;
     private String etterlevelseDokumentasjonNummer;
+    private String ansvarligId;
+    private String ansvarlig;
     private Integer kravNummer;
     private Integer kravVersjon;
     private Boolean etterleves;

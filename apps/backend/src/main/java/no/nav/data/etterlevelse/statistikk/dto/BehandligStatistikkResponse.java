@@ -20,6 +20,8 @@ public class BehandligStatistikkResponse {
     private String etterlevelseDokumentasjonTittel;
     private String behandlingId;
     private String behandlingNavn;
+    private String ansvarligId;
+    private String ansvarlig;
     private List<String> team;
     private List<String> teamId;
     private LocalDateTime opprettetDato;

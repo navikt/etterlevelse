@@ -150,6 +150,8 @@ public class StatistikkService {
                     )
                     .toList();
 
+            String ansvarlig = CodelistService.getCodelist(ListName.AVDELING, etterlevelseDokumentasjon.getAvdeling()).getShortName();
+
             int antallUnderArbeidSize = antallUnderArbeid.stream().filter(etterlevelseUnderArbeid ->
                     antallFerdigDokumentert.stream()
                             .noneMatch(e -> e.getKravNummer().equals(etterlevelseUnderArbeid.getKravNummer())
@@ -177,6 +179,8 @@ public class StatistikkService {
                                     .etterlevelseDokumentasjonTittel("E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + " " + etterlevelseDokumentasjon.getTitle())
                                     .behandlingId(behandling.getId())
                                     .behandlingNavn(behandlingNavn)
+                                    .ansvarligId(etterlevelseDokumentasjon.getAvdeling())
+                                    .ansvarlig(ansvarlig)
                                     .totalKrav(aktivKravList.size())
                                     .antallIkkeFiltrertKrav(antallIkkeFiltrertKrav)
                                     .antallBortfiltrertKrav(aktivKravList.size() - antallIkkeFiltrertKrav)
@@ -224,7 +228,7 @@ public class StatistikkService {
         }
 
         List<String> teamNames = etterlevelseDokumentasjon.getTeams().stream().map(t -> teamService.getTeam(t).isPresent() ? teamService.getTeam(t).get().getName() : "").toList();
-
+        String ansvarlig = CodelistService.getCodelistResponse(ListName.AVDELING, etterlevelseDokumentasjon.getAvdeling()).getShortName();
         String temaName = "Ingen";
         var krav = kravService.getByKravNummer(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon());
 
@@ -243,6 +247,8 @@ public class StatistikkService {
                 .etterlevelseDokumentasjonId(etterlevelse.getEtterlevelseDokumentasjonId())
                 .etterlevelseDokumentasjonTittel(etterlevelseDokumentasjon.getTitle())
                 .etterlevelseDokumentasjonNummer("E" + etterlevelseDokumentasjon.getEtterlevelseNummer().toString())
+                .ansvarligId(etterlevelseDokumentasjon.getAvdeling())
+                .ansvarlig(ansvarlig)
                 .kravNummer(etterlevelse.getKravNummer())
                 .kravVersjon(etterlevelse.getKravVersjon())
                 .etterleves(etterlevelse.isEtterleves())

@@ -5,10 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.etterlevelse.statistikk.dto.BehandligStatistikkResponse;
-import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
 @Builder
@@ -19,6 +20,8 @@ public class BehandlingStatistikk {
     private String etterlevelseDokumentasjonTittel;
     private String behandlingId;
     private String behandlingNavn;
+    private String ansvarligId;
+    private String ansvarlig;
     private List<String> team;
     private List<String> teamId;
     private LocalDateTime opprettetDato;
@@ -36,6 +39,8 @@ public class BehandlingStatistikk {
                 .etterlevelseDokumentasjonTittel(etterlevelseDokumentasjonTittel)
                 .behandlingId(behandlingId)
                 .behandlingNavn(behandlingNavn)
+                .ansvarligId(ansvarligId)
+                .ansvarlig(ansvarlig)
                 .team(copyOf(team))
                 .teamId(copyOf(teamId))
                 .opprettetDato(opprettetDato)
