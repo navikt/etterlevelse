@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Button, Heading, Link, LinkPanel } from '@navikt/ds-react'
+import { Button, Heading, Link, LinkPanel, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { getMeldingByType } from '../api/MeldingApi'
@@ -52,6 +52,15 @@ export const MainPage = () => {
             </Heading>
             <span className="flex justify-center">Forstå og dokumentér</span>
           </div>
+          {etterlevelseDokumentasjonLoading && (
+            <div className="bg-white mt-8 p-8 shadow-md shadow-slate-900 shadow-[#00000040]">
+              <Heading as={Skeleton} size="large">
+                Card-title
+              </Heading>
+              <Skeleton variant="text" width="100%" />
+              <Skeleton variant="text" width="100%" />
+            </div>
+          )}
           {!etterlevelseDokumentasjonLoading && data?.etterlevelseDokumentasjoner.content && (
             <div className="bg-white mt-8 p-8 shadow-md shadow-slate-900 shadow-[#00000040]">
               {data?.etterlevelseDokumentasjoner.content.length === 0 && (
