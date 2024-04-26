@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { BodyShort, Button, Heading, Loader } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Loader, Select } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -14,6 +14,7 @@ import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokume
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { PageLayout } from '../components/scaffold/Page'
 import {
+  EEtterlevelseStatus,
   IBreadCrumbPath,
   IEtterlevelseDokumentasjonStats,
   IPageResponse,
@@ -52,7 +53,36 @@ export const DokumentasjonPage = () => {
   const [relevanteStats, setRelevanteStats] = useState<TKravQL[]>([])
   const [utgaattStats, setUtgaattStats] = useState<TKravQL[]>([])
   const [arkivModal, setArkivModal] = useState<boolean>(false)
+  const [statusFilter, setStatusFilter] = useState<string>('ALLE')
   const navigate = useNavigate()
+
+  const filterStatus = (dataToFilter: TKravQL[]): TKravQL[] => {
+    if (statusFilter === EEtterlevelseStatus.UNDER_REDIGERING) {
+      return dataToFilter.filter(
+        (krav) =>
+          krav.etterlevelser.length !== 0 &&
+          krav.etterlevelser[0].status !== EEtterlevelseStatus.FERDIG_DOKUMENTERT &&
+          krav.etterlevelser[0].status !== EEtterlevelseStatus.OPPFYLLES_SENERE
+      )
+    } else if (statusFilter === EEtterlevelseStatus.OPPFYLLES_SENERE) {
+      return dataToFilter.filter(
+        (krav) =>
+          krav.etterlevelser.length !== 0 &&
+          krav.etterlevelser[0].status === EEtterlevelseStatus.OPPFYLLES_SENERE
+      )
+    } else if (statusFilter === '') {
+      return dataToFilter.filter((krav) => krav.etterlevelser.length === 0)
+    } else if (statusFilter === EEtterlevelseStatus.FERDIG_DOKUMENTERT) {
+      return dataToFilter.filter(
+        (krav) =>
+          krav.etterlevelser.length !== 0 &&
+          (krav.etterlevelser[0].status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
+            krav.etterlevelser[0].status === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)
+      )
+    } else {
+      return dataToFilter
+    }
+  }
 
   const filterData = (
     unfilteredData:
@@ -63,8 +93,8 @@ export const DokumentasjonPage = () => {
         }
       | undefined
   ) => {
-    const relevanteStatusListe: TKravQL[] = []
-    const utgaattStatusListe: TKravQL[] = []
+    let relevanteStatusListe: TKravQL[] = []
+    let utgaattStatusListe: TKravQL[] = []
 
     unfilteredData?.etterlevelseDokumentasjon.content.forEach(({ stats }) => {
       relevanteStatusListe.push(...stats.relevantKrav)
@@ -81,7 +111,10 @@ export const DokumentasjonPage = () => {
       }
       return a.kravNummer - b.kravNummer
     })
-
+    if (statusFilter !== 'ALLE') {
+      relevanteStatusListe = filterStatus(relevanteStatusListe)
+      utgaattStatusListe = filterStatus(utgaattStatusListe)
+    }
     return [relevanteStatusListe, utgaattStatusListe]
   }
 
@@ -107,7 +140,7 @@ export const DokumentasjonPage = () => {
     const [relevanteStatusListe, utgaattStatusListe] = filterData(relevanteData)
     setRelevanteStats(relevanteStatusListe)
     setUtgaattStats(utgaattStatusListe)
-  }, [relevanteData])
+  }, [relevanteData, statusFilter])
 
   useEffect(() => {
     setTimeout(() => refetchRelevanteData(), 200)
@@ -210,10 +243,31 @@ export const DokumentasjonPage = () => {
 
           <div className="flex justify-end w-full items-center">
             <BodyShort size="medium">
-              Totalt {getNewestKravVersjon(relevanteStats).length} krav, {antallFylttKrav} ferdig
-              utfylt
+              Totalt {getNewestKravVersjon(relevanteStats).length} krav
+              {statusFilter === 'ALLE'
+                ? `, ${antallFylttKrav} ferdig
+              utfylt`
+                : ''}
             </BodyShort>
           </div>
+        </div>
+
+        <div className="flex items-center w-full gap-4">
+          <BodyShort>Filter:</BodyShort>
+          <Select
+            label="Velg status"
+            hideLabel
+            onChange={(event) => {
+              setStatusFilter(event.target.value)
+            }}
+          >
+            <option value="ALLE">Velg status</option>
+            <option value="ALLE">Alle</option>
+            <option value={EEtterlevelseStatus.UNDER_REDIGERING}>Under arbeid</option>
+            <option value={EEtterlevelseStatus.OPPFYLLES_SENERE}>Oppfylles senere</option>
+            <option value="">Ikke påbegynt</option>
+            <option value={EEtterlevelseStatus.FERDIG_DOKUMENTERT}>Ferdig utfylt</option>
+          </Select>
         </div>
 
         {loading && (
