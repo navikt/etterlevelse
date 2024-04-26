@@ -59,7 +59,7 @@ export const KravAccordionList = (props: IProps) => {
 
   return (
     <Accordion indent={false}>
-      {allKravPriority.length &&
+      {allKravPriority.length !== 0 &&
         temaListe.map((tema, index) => {
           const kravliste = getKravForTema(tema)
           const utfylteKrav = kravliste.filter(

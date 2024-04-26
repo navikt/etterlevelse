@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { BodyShort, Button, Heading, Loader, Select } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Loader, Select, TextField } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -54,6 +54,7 @@ export const DokumentasjonPage = () => {
   const [utgaattStats, setUtgaattStats] = useState<TKravQL[]>([])
   const [arkivModal, setArkivModal] = useState<boolean>(false)
   const [statusFilter, setStatusFilter] = useState<string>('ALLE')
+  const [searchKrav, setSearchKrav] = useState<string>('')
   const navigate = useNavigate()
 
   const filterStatus = (dataToFilter: TKravQL[]): TKravQL[] => {
@@ -115,6 +116,19 @@ export const DokumentasjonPage = () => {
       relevanteStatusListe = filterStatus(relevanteStatusListe)
       utgaattStatusListe = filterStatus(utgaattStatusListe)
     }
+    if (searchKrav !== '') {
+      relevanteStatusListe = relevanteStatusListe.filter((krav) => {
+        const kravName = 'K' + krav.kravNummer + '.' + krav.kravVersjon + ' ' + krav.navn
+
+        return kravName.toLowerCase().includes(searchKrav.toLowerCase())
+      })
+      utgaattStatusListe = utgaattStatusListe.filter((krav) => {
+        const kravName = 'K' + krav.kravNummer + '.' + krav.kravVersjon + ' ' + krav.navn
+
+        return kravName.toLowerCase().includes(searchKrav.toLowerCase())
+      })
+    }
+
     return [relevanteStatusListe, utgaattStatusListe]
   }
 
@@ -140,7 +154,7 @@ export const DokumentasjonPage = () => {
     const [relevanteStatusListe, utgaattStatusListe] = filterData(relevanteData)
     setRelevanteStats(relevanteStatusListe)
     setUtgaattStats(utgaattStatusListe)
-  }, [relevanteData, statusFilter])
+  }, [relevanteData, statusFilter, searchKrav])
 
   useEffect(() => {
     setTimeout(() => refetchRelevanteData(), 200)
@@ -254,6 +268,12 @@ export const DokumentasjonPage = () => {
 
         <div className="flex items-center w-full gap-4">
           <BodyShort>Filter:</BodyShort>
+          <TextField
+            label="Søk etter kravet"
+            hideLabel
+            placeholder="Søk etter krav"
+            onChange={(event) => setSearchKrav(event.target.value)}
+          />
           <Select
             label="Velg status"
             hideLabel
@@ -276,7 +296,7 @@ export const DokumentasjonPage = () => {
           </div>
         )}
 
-        {!loading && (
+        {!loading && (relevanteStats.length !== 0 || utgaattStats.length !== 0) && (
           <KravAccordionList
             etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
             relevanteStats={relevanteStats}
@@ -285,6 +305,12 @@ export const DokumentasjonPage = () => {
             openAccordions={openAccordions}
             setOpenAccordions={setOpenAccordions}
           />
+        )}
+
+        {!loading && relevanteStats.length === 0 && utgaattStats.length === 0 && (
+          <div className="flex w-full justify-center">
+            <BodyShort>Fant ingen krav</BodyShort>
+          </div>
         )}
 
         {/*
