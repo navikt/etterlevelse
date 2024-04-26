@@ -52,9 +52,9 @@ export const MainPage = () => {
             </Heading>
             <span className="flex justify-center">Forstå og dokumentér</span>
           </div>
-          {!etterlevelseDokumentasjonLoading && (
+          {!etterlevelseDokumentasjonLoading && data?.etterlevelseDokumentasjoner.content && (
             <div className="bg-white mt-8 p-8 shadow-md shadow-slate-900 shadow-[#00000040]">
-              {!data?.etterlevelseDokumentasjoner.content.length && (
+              {data?.etterlevelseDokumentasjoner.content.length === 0 && (
                 <div>
                   <Heading size="medium" level="2">
                     Etterlevelse i NAV
@@ -66,12 +66,11 @@ export const MainPage = () => {
                   </span>
                 </div>
               )}
-              {data?.etterlevelseDokumentasjoner.content &&
-                data?.etterlevelseDokumentasjoner.content.length !== 0 && (
-                  <EtterlevelseDokumentasjonList
-                    etterlevelseDokumentasjoner={data?.etterlevelseDokumentasjoner.content}
-                  />
-                )}
+              {data?.etterlevelseDokumentasjoner.content.length !== 0 && (
+                <EtterlevelseDokumentasjonList
+                  etterlevelseDokumentasjoner={data?.etterlevelseDokumentasjoner.content}
+                />
+              )}
               <div className="mt-8 flex justify-end">
                 <div className="mr-4">
                   <EditEtterlevelseDokumentasjonModal
