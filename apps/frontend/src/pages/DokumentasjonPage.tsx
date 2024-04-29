@@ -23,7 +23,6 @@ import {
 import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDokumentasjonQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, codelist } from '../services/Codelist'
-import { user } from '../services/User'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
@@ -330,11 +329,9 @@ export const DokumentasjonPage = () => {
         )} */}
         <div className="w-full flex justify-end items-center">
           <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
-          {user.isAdmin() && (
-            <Button variant="tertiary" size="small" onClick={() => setArkivModal(true)}>
-              Arkivér i WebSak
-            </Button>
-          )}
+          <Button variant="tertiary" size="small" onClick={() => setArkivModal(true)}>
+            Arkivér i WebSak
+          </Button>
           <ArkiveringModal
             arkivModal={arkivModal}
             setArkivModal={setArkivModal}
