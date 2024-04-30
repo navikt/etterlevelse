@@ -245,7 +245,7 @@ export const EtterlevelseKravView = ({
         <div className="flex flex-col gap-8">
           <div>
             <BodyShort size="small">
-              {temaName} / {krav.kravNummer}.{krav.kravVersjon}
+              {temaName} / K{krav.kravNummer}.{krav.kravVersjon}
             </BodyShort>
             <div>
               <Heading size="medium" level="1">
