@@ -27,7 +27,7 @@ export const MainPage = () => {
     { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
     TVariables
   >(getEtterlevelseDokumentasjonListQuery, {
-    variables: { sistRedigert: 2 },
+    variables: { sistRedigert: 20 },
     skip: !user.isLoggedIn(),
   })
 
@@ -161,7 +161,7 @@ const EtterlevelseDokumentasjonList = ({
         Mine sist dokumenterte
       </Heading>
       <div className="mt-6 flex flex-col gap-2">
-        {sortedEtterlevelseDokumentasjoner.map((etterlevelseDokumentasjon, index) => (
+        {sortedEtterlevelseDokumentasjoner.slice(0, 2).map((etterlevelseDokumentasjon, index) => (
           <EtterlevelseDokumentasjonsPanel
             key={etterlevelseDokumentasjon.title + '_' + index}
             etterlevelseDokumentasjon={etterlevelseDokumentasjon}
