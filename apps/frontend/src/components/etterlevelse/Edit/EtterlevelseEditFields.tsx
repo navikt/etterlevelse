@@ -171,8 +171,33 @@ export const EtterlevelseEditFields = ({
 
               <div className="w-full justify-end">
                 <div className="flex w-full pb-3 justify-end">
+                  <Button
+                    className="mr-6"
+                    disabled={krav.status === EKravStatus.UTGAATT ? false : disableEdit}
+                    type="button"
+                    variant="secondary"
+                    onClick={() => {
+                      if (!dirty) {
+                        ampli.logEvent('knapp klikket', {
+                          tekst: 'Avbryt uten endring i etterlevelse',
+                          pagePath: location.pathname,
+                          ...userRoleEventProp,
+                        })
+                        close()
+                      } else {
+                        setIsAvbryModalOpen(true)
+                      }
+
+                      // original logic for buttons, uncommet and use code above to test new logic.
+                      // close()
+                    }}
+                  >
+                    {krav.status === EKravStatus.UTGAATT ? 'Lukk' : 'Avbryt'}
+                  </Button>
+
                   {kravFilter === EKravFilterType.UTGAATE_KRAV && (
                     <Button
+                      className="mr-6"
                       type="button"
                       disabled={isSubmitting || disableEdit}
                       onClick={() => {
@@ -235,31 +260,6 @@ export const EtterlevelseEditFields = ({
                       </Button>
                     </div>
                   )}
-                </div>
-
-                <div className="pb-6 flex justify-end w-full">
-                  <Button
-                    disabled={krav.status === EKravStatus.UTGAATT ? false : disableEdit}
-                    type="button"
-                    variant="tertiary"
-                    onClick={() => {
-                      if (!dirty) {
-                        ampli.logEvent('knapp klikket', {
-                          tekst: 'Avbryt uten endring i etterlevelse',
-                          pagePath: location.pathname,
-                          ...userRoleEventProp,
-                        })
-                        close()
-                      } else {
-                        setIsAvbryModalOpen(true)
-                      }
-
-                      // original logic for buttons, uncommet and use code above to test new logic.
-                      // close()
-                    }}
-                  >
-                    {krav.status === EKravStatus.UTGAATT ? 'Lukk' : 'Avbryt'}
-                  </Button>
                 </div>
 
                 {etterlevelse.changeStamp.lastModifiedDate &&
