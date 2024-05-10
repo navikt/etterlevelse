@@ -349,7 +349,7 @@ export const DokumentasjonPage = () => {
           </div>
         </Tabs.Panel>
         <Tabs.Panel value="prioritertKravliste">
-          <div className="pt-4 flex flex-col gap-4">Prioritert lise</div>
+          <div className="pt-4 flex flex-col gap-4">Prioritert liste</div>
         </Tabs.Panel>
       </Tabs>
     </PageLayout>
