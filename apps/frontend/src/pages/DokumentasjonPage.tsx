@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { BodyShort, Button, Heading, Loader, Select, TextField } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Loader, Select, Tabs, TextField } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -207,8 +207,14 @@ export const DokumentasjonPage = () => {
           </div>
         </div>
       </div>
-      <div className="pt-4 flex flex-col gap-4">
-        {/* <div className="navds-alert navds-alert--info navds-alert--medium">
+      <Tabs defaultValue="alleKrav">
+        <Tabs.List>
+          <Tabs.Tab value="alleKrav" label="Alle Krav" />
+          <Tabs.Tab value="prioritertKravliste" label="Prioritert kravliste" />
+        </Tabs.List>
+        <Tabs.Panel value="alleKrav">
+          <div className="pt-4 flex flex-col gap-4">
+            {/* <div className="navds-alert navds-alert--info navds-alert--medium">
           <div className="flex flex-col gap-2">
             <p>Vi tester nytt oppsett med at tema og krav vises nå på samme side, slik at det forhåpentligvis blir lettere å navigere seg i.</p>
             <p>Kravene under hvert tema er vist i anbefalt rekkefølge hvis man leser de fra venstre til høyre.</p>
@@ -230,89 +236,89 @@ export const DokumentasjonPage = () => {
             </div>
           </div>
         </div> */}
-        <div className="flex items-center w-full">
-          <div className="flex items-center w-full gap-4">
-            <Button
-              variant="tertiary"
-              size="xsmall"
-              onClick={() => {
-                setOpenAccordions(temaListe.map(() => true))
-                navigate(`/dokumentasjon/${params.id}/ALLE`)
-              }}
-            >
-              Åpne alle tema
-            </Button>
-            <Button
-              variant="tertiary"
-              size="xsmall"
-              onClick={() => {
-                setOpenAccordions(temaListe.map(() => false))
-                navigate(`/dokumentasjon/${params.id}/`)
-              }}
-            >
-              Lukk alle tema
-            </Button>
-          </div>
+            <div className="flex items-center w-full">
+              <div className="flex items-center w-full gap-4">
+                <Button
+                  variant="tertiary"
+                  size="xsmall"
+                  onClick={() => {
+                    setOpenAccordions(temaListe.map(() => true))
+                    navigate(`/dokumentasjon/${params.id}/ALLE`)
+                  }}
+                >
+                  Åpne alle tema
+                </Button>
+                <Button
+                  variant="tertiary"
+                  size="xsmall"
+                  onClick={() => {
+                    setOpenAccordions(temaListe.map(() => false))
+                    navigate(`/dokumentasjon/${params.id}/`)
+                  }}
+                >
+                  Lukk alle tema
+                </Button>
+              </div>
 
-          <div className="flex justify-end w-full items-center">
-            <BodyShort size="medium">
-              Totalt {getNewestKravVersjon(relevanteStats).length} krav
-              {statusFilter === 'ALLE'
-                ? `, ${antallFylttKrav} ferdig
+              <div className="flex justify-end w-full items-center">
+                <BodyShort size="medium">
+                  Totalt {getNewestKravVersjon(relevanteStats).length} krav
+                  {statusFilter === 'ALLE'
+                    ? `, ${antallFylttKrav} ferdig
               utfylt`
-                : ''}
-            </BodyShort>
-          </div>
-        </div>
+                    : ''}
+                </BodyShort>
+              </div>
+            </div>
 
-        <div className="flex items-center w-full gap-4">
-          <BodyShort>Filter:</BodyShort>
-          <TextField
-            label="Søk etter kravet"
-            hideLabel
-            placeholder="Søk etter krav"
-            onChange={(event) => setSearchKrav(event.target.value)}
-          />
-          <Select
-            label="Velg status"
-            hideLabel
-            onChange={(event) => {
-              setStatusFilter(event.target.value)
-            }}
-          >
-            <option value="ALLE">Velg status</option>
-            <option value="ALLE">Alle</option>
-            <option value={EEtterlevelseStatus.UNDER_REDIGERING}>Under arbeid</option>
-            <option value={EEtterlevelseStatus.OPPFYLLES_SENERE}>Oppfylles senere</option>
-            <option value="">Ikke påbegynt</option>
-            <option value={EEtterlevelseStatus.FERDIG_DOKUMENTERT}>Ferdig utfylt</option>
-          </Select>
-        </div>
+            <div className="flex items-center w-full gap-4">
+              <BodyShort>Filter:</BodyShort>
+              <TextField
+                label="Søk etter kravet"
+                hideLabel
+                placeholder="Søk etter krav"
+                onChange={(event) => setSearchKrav(event.target.value)}
+              />
+              <Select
+                label="Velg status"
+                hideLabel
+                onChange={(event) => {
+                  setStatusFilter(event.target.value)
+                }}
+              >
+                <option value="ALLE">Velg status</option>
+                <option value="ALLE">Alle</option>
+                <option value={EEtterlevelseStatus.UNDER_REDIGERING}>Under arbeid</option>
+                <option value={EEtterlevelseStatus.OPPFYLLES_SENERE}>Oppfylles senere</option>
+                <option value="">Ikke påbegynt</option>
+                <option value={EEtterlevelseStatus.FERDIG_DOKUMENTERT}>Ferdig utfylt</option>
+              </Select>
+            </div>
 
-        {loading && (
-          <div className="flex w-full justify-center mt-3.5">
-            <Loader size={'large'} />
-          </div>
-        )}
+            {loading && (
+              <div className="flex w-full justify-center mt-3.5">
+                <Loader size={'large'} />
+              </div>
+            )}
 
-        {!loading && (relevanteStats.length !== 0 || utgaattStats.length !== 0) && (
-          <KravAccordionList
-            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-            relevanteStats={relevanteStats}
-            utgaattStats={utgaattStats}
-            temaListe={temaListe}
-            openAccordions={openAccordions}
-            setOpenAccordions={setOpenAccordions}
-          />
-        )}
+            {!loading && (relevanteStats.length !== 0 || utgaattStats.length !== 0) && (
+              <KravAccordionList
+                etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                relevanteStats={relevanteStats}
+                utgaattStats={utgaattStats}
+                temaListe={temaListe}
+                openAccordions={openAccordions}
+                setOpenAccordions={setOpenAccordions}
+              />
+            )}
 
-        {!loading && relevanteStats.length === 0 && utgaattStats.length === 0 && (
-          <div className="flex w-full justify-center">
-            <BodyShort>Fant ingen krav</BodyShort>
-          </div>
-        )}
+            {!loading && relevanteStats.length === 0 && utgaattStats.length === 0 && (
+              <div className="flex w-full justify-center">
+                <BodyShort>Fant ingen krav</BodyShort>
+              </div>
+            )}
 
-        {/*
+            {/*
         DISABLED TEMPORARY
         {irrelevanteStats.length > 0 && (
           <>
@@ -327,20 +333,25 @@ export const DokumentasjonPage = () => {
             </div>
           </>
         )} */}
-        <div className="w-full flex justify-end items-center">
-          <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
-          <Button variant="tertiary" size="small" onClick={() => setArkivModal(true)}>
-            Arkivér i WebSak
-          </Button>
-          <ArkiveringModal
-            arkivModal={arkivModal}
-            setArkivModal={setArkivModal}
-            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-            etterlevelseArkiv={etterlevelseArkiv}
-            setEtterlevelseArkiv={setEtterlevelseArkiv}
-          />
-        </div>
-      </div>
+            <div className="w-full flex justify-end items-center">
+              <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
+              <Button variant="tertiary" size="small" onClick={() => setArkivModal(true)}>
+                Arkivér i WebSak
+              </Button>
+              <ArkiveringModal
+                arkivModal={arkivModal}
+                setArkivModal={setArkivModal}
+                etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                etterlevelseArkiv={etterlevelseArkiv}
+                setEtterlevelseArkiv={setEtterlevelseArkiv}
+              />
+            </div>
+          </div>
+        </Tabs.Panel>
+        <Tabs.Panel value="prioritertKravliste">
+          <div className="pt-4 flex flex-col gap-4">Prioritert lise</div>
+        </Tabs.Panel>
+      </Tabs>
     </PageLayout>
   )
 }
