@@ -32,7 +32,31 @@ export const AccordionList = (props: IProps) => {
           )
           return (
             <Accordion.Item>
-              <Accordion.Header>HEADER</Accordion.Header>
+              <Accordion.Header>
+                <div className="flex gap-4">
+                  <span>
+                    {tema.shortName} ({utfylteKrav.length} av {kravliste.length} krav er ferdig
+                    utfylt)
+                  </span>
+                  {/* {kravliste.find(
+                    (krav) =>
+                      krav.kravVersjon === 1 &&
+                      (krav.etterlevelseStatus === undefined ||
+                        krav.etterlevelseStatus === EEtterlevelseStatus.OPPFYLLES_SENERE) &&
+                      getNumberOfDaysBetween(krav.aktivertDato, new Date()) < 30
+                  ) && <Tag variant="warning">Nytt krav</Tag>}
+                  {kravliste.find(
+                    (krav) =>
+                      krav.kravVersjon > 1 &&
+                      (krav.etterlevelseStatus === undefined ||
+                        krav.etterlevelseStatus === EEtterlevelseStatus.OPPFYLLES_SENERE) &&
+                      utgaattStats.filter(
+                        (kl) => kl.kravNummer === krav.kravNummer && kl.etterlevelser.length > 0
+                      ).length > 0 &&
+                      getNumberOfDaysBetween(krav.aktivertDato, new Date()) < 30
+                  ) && <Tag variant="warning">Ny versjon</Tag>} */}
+                </div>
+              </Accordion.Header>
               <Accordion.Content>
                 {/* legge inn Velg krav du jobber med nå [] Alle */}
                 <CheckboxGroup legend="Velg krav du jobber med nå">
