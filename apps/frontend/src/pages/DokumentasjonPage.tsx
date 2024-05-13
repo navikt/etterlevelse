@@ -8,6 +8,7 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
 import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
+import FocusList from '../components/etterlevelseDokumentasjon/FocusList'
 import { KravAccordionList } from '../components/etterlevelseDokumentasjon/KravAccordionList'
 import { getNewestKravVersjon } from '../components/etterlevelseDokumentasjon/common/utils'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
@@ -349,7 +350,9 @@ export const DokumentasjonPage = () => {
           </div>
         </Tabs.Panel>
         <Tabs.Panel value="prioritertKravliste">
-          <div className="pt-4 flex flex-col gap-4">Prioritert liste</div>
+          <div className="pt-4 flex flex-col gap-4">
+            <FocusList />
+          </div>
         </Tabs.Panel>
       </Tabs>
     </PageLayout>
