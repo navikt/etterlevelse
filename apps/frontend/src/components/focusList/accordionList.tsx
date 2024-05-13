@@ -60,12 +60,12 @@ export const AccordionList = (props: IProps) => {
                 </div>
               </Accordion.Header>
               <Accordion.Content>
-                {/* legge inn Velg krav du jobber med nå [] Alle */}
                 <CheckboxGroup legend="Velg krav du jobber med nå">
-                  <Checkbox value="ALLE Oleoleoleloelja">Alle</Checkbox>
+                  <Checkbox value="">Alle</Checkbox>
                 </CheckboxGroup>
-                {/* gjør denne diven til en gjenbrukbar sjekkliste komponent */}
-                <CheckList />
+                {kravForTema.map((krav, idx) => (
+                  <CheckList krav={krav} />
+                ))}
               </Accordion.Content>
             </Accordion.Item>
           )
