@@ -13,7 +13,7 @@ interface IProps {
 }
 
 export const FocusList = (props: IProps) => {
-  const { focusList, relevanteStats, temaListe } = props
+  const { focusList, relevanteStats, temaListe, utgaattStats } = props
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
 
   const submitForm = () => {
@@ -56,7 +56,11 @@ export const FocusList = (props: IProps) => {
       {!isEditMode && <div>Fokus liste</div>}
       {isEditMode && (
         <div>
-          <AccordionList temaListe={temaListe} kravliste={relevanteStats} />
+          <AccordionList
+            temaListe={temaListe}
+            kravliste={relevanteStats}
+            utgattKravliste={utgaattStats}
+          />
         </div>
       )}
     </div>
