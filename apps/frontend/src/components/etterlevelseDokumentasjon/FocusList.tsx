@@ -55,7 +55,7 @@ export const FocusList = (props: IProps) => {
       </div>
       {!isEditMode && <div>Fokus liste</div>}
       {isEditMode && (
-        <div>
+        <div className="mt-4">
           <AccordionList
             allKravPriority={allKravPriority}
             temaListe={temaListe}

@@ -15,7 +15,7 @@ export const AccordionList = (props: IProps) => {
   const { temaListe, kravliste, allKravPriority } = props
 
   return (
-    <Accordion>
+    <Accordion indent={false}>
       {allKravPriority.length !== 0 &&
         temaListe.map((tema) => {
           const kravForTema = getKravForTema({ tema, kravliste, allKravPriority })
@@ -25,7 +25,10 @@ export const AccordionList = (props: IProps) => {
               krav.etterlevelseStatus === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
           )
           return (
-            <Accordion.Item key={`${tema.code}`}>
+            <Accordion.Item
+              key={`${tema.code}`}
+              className={`flex flex-col gap-2 ${kravForTema.length > 0 ? '' : 'hidden'}`}
+            >
               <Accordion.Header>
                 <div className="flex gap-4">
                   <span>
