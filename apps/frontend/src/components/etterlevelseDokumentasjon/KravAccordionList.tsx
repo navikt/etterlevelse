@@ -1,11 +1,11 @@
 import { Accordion, Link, Tag } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { getAllKravPriorityList, kravPrioritingMapToFormValue } from '../../api/KravPriorityListApi'
+import { getAllKravPriorityList } from '../../api/KravPriorityListApi'
 import { EEtterlevelseStatus, EKravFilterType, IKravPriorityList, TKravQL } from '../../constants'
-import { TTemaCode, codelist } from '../../services/Codelist'
+import { TTemaCode } from '../../services/Codelist'
 import { getNumberOfDaysBetween } from '../../util/checkAge'
+import { getKravForTema } from '../../util/getKravForTema'
 import { KravCard } from '../etterlevelseDokumentasjonTema/KravCard'
-import { filterKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 
 interface IProps {
   etterlevelseDokumentasjonId: string
@@ -32,25 +32,6 @@ export const KravAccordionList = (props: IProps) => {
     getAllKravPriorityList().then((priority) => setAllKravPriority(priority))
   }, [])
 
-  const getKravForTema = (tema: TTemaCode) => {
-    const lover = codelist.getCodesForTema(tema.code)
-    const lovCodes = lover.map((lov) => lov.code)
-    const krav = relevanteStats.filter((relevans) =>
-      relevans.regelverk
-        .map((regelverk: any) => regelverk.lov.code)
-        .some((lov: any) => lovCodes.includes(lov))
-    )
-    const kravPriorityForTema = allKravPriority.filter(
-      (kravPriority) => kravPriority.temaId === tema.code
-    )[0]
-
-    const kravPriority = kravPriorityForTema
-      ? kravPriorityForTema
-      : kravPrioritingMapToFormValue({})
-
-    return filterKrav(kravPriority, krav)
-  }
-
   const toggleAccordion = (index: number) => {
     const newState = [...openAccordions]
     newState[index] = !openAccordions[index]
@@ -61,7 +42,7 @@ export const KravAccordionList = (props: IProps) => {
     <Accordion indent={false}>
       {allKravPriority.length !== 0 &&
         temaListe.map((tema, index) => {
-          const kravliste = getKravForTema(tema)
+          const kravliste = getKravForTema({ tema, kravliste: relevanteStats, allKravPriority })
           const utfylteKrav = kravliste.filter(
             (krav) =>
               krav.etterlevelseStatus === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||

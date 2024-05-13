@@ -1,16 +1,5 @@
 import { useQuery } from '@apollo/client'
-import {
-  Accordion,
-  BodyShort,
-  Button,
-  Checkbox,
-  CheckboxGroup,
-  Heading,
-  Loader,
-  Select,
-  Tabs,
-  TextField,
-} from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Loader, Select, Tabs, TextField } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -346,34 +335,6 @@ export const DokumentasjonPage = () => {
               utgaattStats={utgaattStats}
               temaListe={temaListe}
             />
-            {/* Gjør denne accordionen gjenbrukbar*/}
-            <Accordion>
-              <Accordion.Item>
-                <Accordion.Header>HEADER</Accordion.Header>
-                <Accordion.Content>
-                  {/* legge inn Velg krav du jobber med nå [] Alle */}
-                  <CheckboxGroup legend="Velg krav du jobber med nå">
-                    <Checkbox value="ALLE Oleoleoleloelja">Alle</Checkbox>
-                  </CheckboxGroup>
-                  {/* gjør denne diven til en gjenbrukbar sjekkliste komponent */}
-                  <div className="flex w-full flex-col">
-                    <div className="flex w-full items-center gap-8">
-                      <div>&#x20;</div>
-                      <div>
-                        <Checkbox value="">&#x20;</Checkbox>
-                      </div>
-                      <div>LISTENENE</div>
-                    </div>
-                    <div className="flex w-full items-center gap-8">
-                      <div>&#x20;</div>
-                      <CheckboxGroup legend="">
-                        <Checkbox value="">LISTENE ALT</Checkbox>
-                      </CheckboxGroup>
-                    </div>
-                  </div>
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion>
           </div>
         </Tabs.Panel>
       </Tabs>
