@@ -1,19 +1,19 @@
 import { Button } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { TKravQL } from '../../constants'
+import { IKravPriorityList, TKravQL } from '../../constants'
 import { TTemaCode } from '../../services/Codelist'
 import { AccordionList } from '../focusList/AccordionList'
 
 interface IProps {
   focusList: [string]
-
+  allKravPriority: IKravPriorityList[]
   relevanteStats: TKravQL[]
   utgaattStats: TKravQL[]
   temaListe: TTemaCode[]
 }
 
 export const FocusList = (props: IProps) => {
-  const { focusList, relevanteStats, temaListe, utgaattStats } = props
+  const { focusList, relevanteStats, temaListe, utgaattStats, allKravPriority } = props
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
 
   const submitForm = () => {
@@ -57,6 +57,7 @@ export const FocusList = (props: IProps) => {
       {isEditMode && (
         <div>
           <AccordionList
+            allKravPriority={allKravPriority}
             temaListe={temaListe}
             kravliste={relevanteStats}
             utgattKravliste={utgaattStats}

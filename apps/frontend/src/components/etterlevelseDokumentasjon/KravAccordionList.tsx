@@ -1,6 +1,4 @@
 import { Accordion, Link, Tag } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
-import { getAllKravPriorityList } from '../../api/KravPriorityListApi'
 import { EEtterlevelseStatus, EKravFilterType, IKravPriorityList, TKravQL } from '../../constants'
 import { TTemaCode } from '../../services/Codelist'
 import { getNumberOfDaysBetween } from '../../util/checkAge'
@@ -14,6 +12,7 @@ interface IProps {
   temaListe: TTemaCode[]
   openAccordions: boolean[]
   setOpenAccordions: React.Dispatch<React.SetStateAction<boolean[]>>
+  allKravPriority: IKravPriorityList[]
 }
 
 export const KravAccordionList = (props: IProps) => {
@@ -24,13 +23,8 @@ export const KravAccordionList = (props: IProps) => {
     temaListe,
     openAccordions,
     setOpenAccordions,
+    allKravPriority,
   } = props
-
-  const [allKravPriority, setAllKravPriority] = useState<IKravPriorityList[]>([])
-
-  useEffect(() => {
-    getAllKravPriorityList().then((priority) => setAllKravPriority(priority))
-  }, [])
 
   const toggleAccordion = (index: number) => {
     const newState = [...openAccordions]

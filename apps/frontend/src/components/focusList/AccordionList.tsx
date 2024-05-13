@@ -1,6 +1,4 @@
 import { Accordion, Checkbox, CheckboxGroup } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
-import { getAllKravPriorityList } from '../../api/KravPriorityListApi'
 import { EEtterlevelseStatus, IKravPriorityList, TKravQL } from '../../constants'
 import { TTemaCode } from '../../services/Codelist'
 import { getKravForTema } from '../../util/getKravForTema'
@@ -10,16 +8,11 @@ interface IProps {
   temaListe: TTemaCode[]
   kravliste: TKravQL[]
   utgattKravliste: TKravQL[]
+  allKravPriority: IKravPriorityList[]
 }
 
 export const AccordionList = (props: IProps) => {
-  const { temaListe, kravliste } = props
-
-  const [allKravPriority, setAllKravPriority] = useState<IKravPriorityList[]>([])
-
-  useEffect(() => {
-    getAllKravPriorityList().then((priority) => setAllKravPriority(priority))
-  }, [])
+  const { temaListe, kravliste, allKravPriority } = props
 
   return (
     <Accordion>
