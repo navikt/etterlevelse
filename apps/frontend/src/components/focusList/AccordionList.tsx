@@ -1,9 +1,8 @@
-import { Accordion, Checkbox, CheckboxGroup, Tag } from '@navikt/ds-react'
+import { Accordion, Checkbox, CheckboxGroup } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { getAllKravPriorityList } from '../../api/KravPriorityListApi'
 import { EEtterlevelseStatus, IKravPriorityList, TKravQL } from '../../constants'
 import { TTemaCode } from '../../services/Codelist'
-import { getNumberOfDaysBetween } from '../../util/checkAge'
 import { getKravForTema } from '../../util/getKravForTema'
 import { CheckList } from './CheckList'
 
@@ -14,7 +13,7 @@ interface IProps {
 }
 
 export const AccordionList = (props: IProps) => {
-  const { temaListe, kravliste, utgattKravliste } = props
+  const { temaListe, kravliste } = props
 
   const [allKravPriority, setAllKravPriority] = useState<IKravPriorityList[]>([])
 
@@ -40,23 +39,6 @@ export const AccordionList = (props: IProps) => {
                     {tema.shortName} ({utfylteKrav.length} av {kravForTema.length} krav er ferdig
                     utfylt)
                   </span>
-                  {kravForTema.find(
-                    (krav) =>
-                      krav.kravVersjon === 1 &&
-                      (krav.etterlevelseStatus === undefined ||
-                        krav.etterlevelseStatus === EEtterlevelseStatus.OPPFYLLES_SENERE) &&
-                      getNumberOfDaysBetween(krav.aktivertDato, new Date()) < 30
-                  ) && <Tag variant="warning">Nytt krav</Tag>}
-                  {kravForTema.find(
-                    (krav) =>
-                      krav.kravVersjon > 1 &&
-                      (krav.etterlevelseStatus === undefined ||
-                        krav.etterlevelseStatus === EEtterlevelseStatus.OPPFYLLES_SENERE) &&
-                      utgattKravliste.filter(
-                        (kl) => kl.kravNummer === krav.kravNummer && kl.etterlevelser.length > 0
-                      ).length > 0 &&
-                      getNumberOfDaysBetween(krav.aktivertDato, new Date()) < 30
-                  ) && <Tag variant="warning">Ny versjon</Tag>}
                 </div>
               </Accordion.Header>
               <Accordion.Content>
