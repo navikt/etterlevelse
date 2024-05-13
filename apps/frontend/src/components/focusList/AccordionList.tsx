@@ -33,7 +33,7 @@ export const AccordionList = (props: IProps) => {
               krav.etterlevelseStatus === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
           )
           return (
-            <Accordion.Item>
+            <Accordion.Item key={`${tema.code}`}>
               <Accordion.Header>
                 <div className="flex gap-4">
                   <span>
@@ -63,8 +63,8 @@ export const AccordionList = (props: IProps) => {
                 <CheckboxGroup legend="Velg krav du jobber med nå">
                   <Checkbox value="">Alle</Checkbox>
                 </CheckboxGroup>
-                {kravForTema.map((krav) => (
-                  <CheckList krav={krav} />
+                {kravForTema.map((krav, index) => (
+                  <CheckList krav={krav} key={`krav_${index}`} />
                 ))}
               </Accordion.Content>
             </Accordion.Item>
