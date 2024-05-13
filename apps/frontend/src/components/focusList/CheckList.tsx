@@ -18,7 +18,7 @@ export const CheckList = (props: IProps) => {
       <div className="flex w-full items-center gap-8 mb-4">
         <div>&#x20;</div>
         <div>
-          <Checkbox value="">&#x20;</Checkbox>
+          <Checkbox value={krav.kravNummer.toString()}>&#x20;</Checkbox>
         </div>
         <div>
           <div className="self-start">

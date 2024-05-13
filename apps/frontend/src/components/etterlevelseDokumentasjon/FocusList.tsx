@@ -5,7 +5,7 @@ import { TTemaCode } from '../../services/Codelist'
 import { AccordionList } from '../focusList/AccordionList'
 
 interface IProps {
-  focusList: [string]
+  focusList: string[]
   allKravPriority: IKravPriorityList[]
   relevanteStats: TKravQL[]
   utgaattStats: TKravQL[]
@@ -57,6 +57,7 @@ export const FocusList = (props: IProps) => {
       {isEditMode && (
         <div className="mt-4">
           <AccordionList
+            focusList={focusList}
             allKravPriority={allKravPriority}
             temaListe={temaListe}
             kravliste={relevanteStats}

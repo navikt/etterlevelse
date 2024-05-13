@@ -1,10 +1,12 @@
 import { Accordion, Checkbox, CheckboxGroup } from '@navikt/ds-react'
+import { useEffect, useState } from 'react'
 import { EEtterlevelseStatus, IKravPriorityList, TKravQL } from '../../constants'
 import { TTemaCode } from '../../services/Codelist'
 import { getKravForTema } from '../../util/getKravForTema'
 import { CheckList } from './CheckList'
 
 interface IProps {
+  focusList: string[]
   temaListe: TTemaCode[]
   kravliste: TKravQL[]
   utgattKravliste: TKravQL[]
@@ -12,7 +14,13 @@ interface IProps {
 }
 
 export const AccordionList = (props: IProps) => {
-  const { temaListe, kravliste, allKravPriority } = props
+  const { focusList, temaListe, kravliste, allKravPriority } = props
+
+  const [valgtKrav, setValgtKrav] = useState<any[]>(focusList)
+
+  useEffect(() => {
+    console.debug(valgtKrav)
+  }, [valgtKrav])
 
   return (
     <Accordion indent={false}>
@@ -38,12 +46,20 @@ export const AccordionList = (props: IProps) => {
                 </div>
               </Accordion.Header>
               <Accordion.Content>
-                <CheckboxGroup legend="Velg krav du jobber med nå">
-                  <Checkbox value="">Alle</Checkbox>
+                <CheckboxGroup
+                  legend="Velg krav du jobber med nå"
+                  onChange={(value) => {
+                    setValgtKrav(value.flat())
+                  }}
+                  value={valgtKrav}
+                >
+                  <Checkbox value={kravForTema.map((krav) => krav.kravNummer.toString())}>
+                    Alle
+                  </Checkbox>
+                  {kravForTema.map((krav, index) => (
+                    <CheckList krav={krav} key={`krav_${index}`} />
+                  ))}
                 </CheckboxGroup>
-                {kravForTema.map((krav, index) => (
-                  <CheckList krav={krav} key={`krav_${index}`} />
-                ))}
               </Accordion.Content>
             </Accordion.Item>
           )
