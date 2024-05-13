@@ -215,28 +215,6 @@ export const DokumentasjonPage = () => {
         </Tabs.List>
         <Tabs.Panel value="alleKrav">
           <div className="pt-4 flex flex-col gap-4">
-            {/* <div className="navds-alert navds-alert--info navds-alert--medium">
-          <div className="flex flex-col gap-2">
-            <p>Vi tester nytt oppsett med at tema og krav vises nå på samme side, slik at det forhåpentligvis blir lettere å navigere seg i.</p>
-            <p>Kravene under hvert tema er vist i anbefalt rekkefølge hvis man leser de fra venstre til høyre.</p>
-            <div>
-              <p>
-                Vi vil gjerne ha tilbakemeldinger på hvordan det fungerer.{' '}
-                <Link target="_blank" href="https://nav-it.slack.com/archives/C01V697SSR2">
-                  Skriv til oss i #etterlevelse på Slack (åpnes i ny fane)
-                </Link>
-                .
-              </p>
-              <p>
-                For dere som ikke bruker Slack,{' '}
-                <Link target="_blank" href="https://teamkatalog.nav.no/team/264cebfa-ad46-4af9-8867-592f99f491e6">
-                  kontakt oss via Teamkatalogen
-                </Link>
-                .
-              </p>
-            </div>
-          </div>
-        </div> */}
             <div className="flex items-center w-full">
               <div className="flex items-center w-full gap-4">
                 <Button
@@ -351,7 +329,12 @@ export const DokumentasjonPage = () => {
         </Tabs.Panel>
         <Tabs.Panel value="prioritertKravliste">
           <div className="pt-4 flex flex-col gap-4">
-            <FocusList />
+            <FocusList
+              focusList={['']}
+              relevanteStats={relevanteStats}
+              utgaattStats={utgaattStats}
+              temaListe={temaListe}
+            />
           </div>
         </Tabs.Panel>
       </Tabs>
