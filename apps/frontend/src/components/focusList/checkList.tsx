@@ -1,13 +1,13 @@
 import { BodyShort, Checkbox, Detail } from '@navikt/ds-react'
-import { EKravFilterType, TKravEtterlevelseData } from '../../constants'
+import { TKravEtterlevelseData } from '../../constants'
+import StatusView from '../common/StatusTag'
+import {
+  getEtterlevelseStatus,
+  getStatusLabelColor,
+} from '../etterlevelseDokumentasjon/common/utils'
 
 interface IProps {
   krav: TKravEtterlevelseData
-  noStatus?: boolean
-  etterlevelseDokumentasjonId: string
-  noVarsling?: boolean
-  kravFilter: EKravFilterType
-  temaCode?: string
 }
 
 export const CheckList = (props: IProps) => {
@@ -27,36 +27,17 @@ export const CheckList = (props: IProps) => {
                 <Detail weight="semibold">
                   K{krav.kravNummer}.{krav.kravVersjon}
                 </Detail>
-                {/* <div className="ml-4">
-                {isVarslingStatus && krav.kravVersjon === 1 && kravAge < 30 && (
-                  <ShowWarningMessage warningMessage="Nytt krav" />
-                )}
-                {isVarslingStatus &&
-                  nyVersionFlag &&
-                  kravFilter === EKravFilterType.RELEVANTE_KRAV &&
-                  kravAge < 30 && <ShowWarningMessage warningMessage="Ny versjon" />}
-              </div> */}
               </div>
               <BodyShort>{krav.navn}</BodyShort>
+            {krav && krav.etterlevelseStatus && (
+              <div className="self-center">
+                <StatusView
+                  status={getEtterlevelseStatus(krav.etterlevelseStatus, krav.frist)}
+                  variant={getStatusLabelColor(krav.etterlevelseStatus)}
+                />
+              </div>
+            )}
             </div>
-            {/* {kravFilter === EKravFilterType.RELEVANTE_KRAV && krav && krav.etterlevelseStatus && (
-            <div className="self-center">
-              <StatusView
-                status={getEtterlevelseStatus(krav.etterlevelseStatus, krav.frist)}
-                variant={getStatusLabelColor(krav.etterlevelseStatus)}
-              />
-            </div>
-          )}
-
-          {kravFilter !== EKravFilterType.RELEVANTE_KRAV && (
-            <div className="self-center">
-              <StatusView
-                status={
-                  kravFilter === EKravFilterType.BORTFILTTERTE_KRAV ? 'Bortfiltrert' : 'Utgått'
-                }
-              />
-            </div>
-          )} */}
           </div>
         </div>
       </div>

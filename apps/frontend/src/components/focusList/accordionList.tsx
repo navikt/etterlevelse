@@ -25,7 +25,7 @@ export const AccordionList = (props: IProps) => {
   return (
     <Accordion>
       {allKravPriority.length !== 0 &&
-        temaListe.map((tema, index) => {
+        temaListe.map((tema) => {
           const kravForTema = getKravForTema({ tema, kravliste, allKravPriority })
           const utfylteKrav = kravForTema.filter(
             (krav) =>
@@ -63,7 +63,7 @@ export const AccordionList = (props: IProps) => {
                 <CheckboxGroup legend="Velg krav du jobber med nå">
                   <Checkbox value="">Alle</Checkbox>
                 </CheckboxGroup>
-                {kravForTema.map((krav, idx) => (
+                {kravForTema.map((krav) => (
                   <CheckList krav={krav} />
                 ))}
               </Accordion.Content>
