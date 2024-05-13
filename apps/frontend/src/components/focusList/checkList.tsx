@@ -1,4 +1,4 @@
-import { BodyShort, Checkbox, CheckboxGroup, Detail } from '@navikt/ds-react'
+import { BodyShort, Checkbox, Detail } from '@navikt/ds-react'
 import { EKravFilterType, TKravEtterlevelseData } from '../../constants'
 
 interface IProps {
@@ -59,50 +59,6 @@ export const CheckList = (props: IProps) => {
           )} */}
           </div>
         </div>
-      </div>
-      <div className="flex w-full items-center gap-8">
-        <div>&#x20;</div>
-        <CheckboxGroup legend="">
-          <Checkbox value="">
-            <div className="md:flex justify-between">
-              <div className="self-start">
-                <div className="flex items-center">
-                  <Detail weight="semibold">
-                    K{krav.kravNummer}.{krav.kravVersjon}
-                  </Detail>
-                  {/* <div className="ml-4">
-                {isVarslingStatus && krav.kravVersjon === 1 && kravAge < 30 && (
-                  <ShowWarningMessage warningMessage="Nytt krav" />
-                )}
-                {isVarslingStatus &&
-                  nyVersionFlag &&
-                  kravFilter === EKravFilterType.RELEVANTE_KRAV &&
-                  kravAge < 30 && <ShowWarningMessage warningMessage="Ny versjon" />}
-              </div> */}
-                </div>
-                <BodyShort>{krav.navn}</BodyShort>
-              </div>
-              {/* {kravFilter === EKravFilterType.RELEVANTE_KRAV && krav && krav.etterlevelseStatus && (
-            <div className="self-center">
-              <StatusView
-                status={getEtterlevelseStatus(krav.etterlevelseStatus, krav.frist)}
-                variant={getStatusLabelColor(krav.etterlevelseStatus)}
-              />
-            </div>
-          )}
-
-          {kravFilter !== EKravFilterType.RELEVANTE_KRAV && (
-            <div className="self-center">
-              <StatusView
-                status={
-                  kravFilter === EKravFilterType.BORTFILTTERTE_KRAV ? 'Bortfiltrert' : 'Utgått'
-                }
-              />
-            </div>
-          )} */}
-            </div>
-          </Checkbox>
-        </CheckboxGroup>
       </div>
     </div>
   )
