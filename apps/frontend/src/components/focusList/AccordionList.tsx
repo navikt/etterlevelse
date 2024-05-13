@@ -5,7 +5,7 @@ import { EEtterlevelseStatus, IKravPriorityList, TKravQL } from '../../constants
 import { TTemaCode } from '../../services/Codelist'
 import { getNumberOfDaysBetween } from '../../util/checkAge'
 import { getKravForTema } from '../../util/getKravForTema'
-import { CheckList } from './aheckList'
+import { CheckList } from './CheckList'
 
 interface IProps {
   temaListe: TTemaCode[]

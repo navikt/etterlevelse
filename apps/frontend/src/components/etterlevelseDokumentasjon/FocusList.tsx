@@ -2,7 +2,7 @@ import { Button } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { TKravQL } from '../../constants'
 import { TTemaCode } from '../../services/Codelist'
-import { AccordionList } from '../focusList/bccordionList'
+import { AccordionList } from '../focusList/AccordionList'
 
 interface IProps {
   focusList: [string]
