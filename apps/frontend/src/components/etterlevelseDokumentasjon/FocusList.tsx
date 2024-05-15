@@ -34,24 +34,6 @@ export const FocusList = (props: IProps) => {
             Velg krav
           </Button>
         )}
-
-        {isEditMode && (
-          <div className="flex items-center gap-2">
-            <Button
-              type="button"
-              onClick={() => {
-                submitForm()
-                setIsEditMode(false)
-              }}
-            >
-              Lagre endringer
-            </Button>
-
-            <Button type="button" variant="secondary" onClick={() => setIsEditMode(false)}>
-              Avbryt
-            </Button>
-          </div>
-        )}
       </div>
       {!isEditMode && <div>Fokus liste</div>}
       {isEditMode && (
@@ -63,6 +45,23 @@ export const FocusList = (props: IProps) => {
             kravliste={relevanteStats}
             utgattKravliste={utgaattStats}
           />
+        </div>
+      )}
+      {isEditMode && (
+        <div className="border-border-subtle flex -mt-1 items-center gap-2 sticky bottom-0 border-black border-t-2 bg-bg-default z-10 py-4">
+          <Button
+            type="button"
+            onClick={() => {
+              submitForm()
+              setIsEditMode(false)
+            }}
+          >
+            Lagre
+          </Button>
+
+          <Button type="button" variant="secondary" onClick={() => setIsEditMode(false)}>
+            Avbryt
+          </Button>
         </div>
       )}
     </div>
