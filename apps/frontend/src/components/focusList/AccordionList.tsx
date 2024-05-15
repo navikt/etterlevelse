@@ -47,7 +47,7 @@ export const AccordionList = (props: IProps) => {
               </Accordion.Header>
               <Accordion.Content>
                 <CheckboxGroup
-                  legend="Velg krav du jobber med nå"
+                  legend="Velg krav du ønsker å prioritere"
                   onChange={(value) => {
                     setValgtKrav(value.flat())
                   }}
