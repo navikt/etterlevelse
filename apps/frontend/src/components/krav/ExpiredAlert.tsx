@@ -1,6 +1,5 @@
 import { Alert, BodyLong, Link } from '@navikt/ds-react'
 import { EKravStatus, IKravVersjon } from '../../constants'
-import { kravStatus } from '../../pages/KravPage'
 
 const ExpiredAlert = ({
   alleKravVersjoner,
@@ -11,7 +10,7 @@ const ExpiredAlert = ({
 }) => (
   <Alert variant={'warning'} className={'w-fit'}>
     <BodyLong className={'ml-3'}>
-      Dette er et {statusName ? `${kravStatus(statusName).toLocaleLowerCase()} ` : 'utgått krav'}.
+      {statusName == EKravStatus.UTGAATT && 'Dette er et utgått krav.'}
       {alleKravVersjoner.length > 1 ? (
         <>
           {' '}
