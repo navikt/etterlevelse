@@ -204,6 +204,7 @@ type EtterlevelseDokumentasjon {
     knyttetTilVirkemiddel: Boolean
     virkemiddelId: String
     irrelevansFor: [Code!]!
+    prioritertKravNummer: [String!]!
     knytteTilTeam: Boolean
     teams: [String!]!
     teamsData: [Team!]!

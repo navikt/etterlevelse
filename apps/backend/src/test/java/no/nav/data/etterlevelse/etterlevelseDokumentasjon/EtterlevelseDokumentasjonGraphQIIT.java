@@ -32,6 +32,7 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
                         .update(false)
                         .behandlerPersonopplysninger(true)
                         .behandlingIds(List.of(""))
+                        .prioritertKravNummer(List.of())
                         .build()
         );
     }

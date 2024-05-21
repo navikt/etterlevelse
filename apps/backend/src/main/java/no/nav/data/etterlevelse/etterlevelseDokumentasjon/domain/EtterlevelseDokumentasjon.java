@@ -39,6 +39,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
     private List<String> teams;
     private String avdeling;
     private List<String> irrelevansFor;
+    private List<String> prioritertKravNummer;
 
     public List<CodelistResponse> irrelevantForAsCodes() {
         return CodelistService.getCodelistResponseList(ListName.RELEVANS, irrelevansFor);
@@ -56,6 +57,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
         knyttetTilVirkemiddel = request.isKnyttetTilVirkemiddel();
         knytteTilTeam = request.isKnytteTilTeam();
         avdeling = request.getAvdeling();
+        prioritertKravNummer = copyOf(request.getPrioritertKravNummer());
     }
 
     public EtterlevelseDokumentasjonResponse toResponse() {
@@ -68,6 +70,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
                 .behandlingIds(behandlingIds != null ? copyOf(behandlingIds) : List.of())
                 .virkemiddelId(virkemiddelId)
                 .irrelevansFor(irrelevantForAsCodes())
+                .prioritertKravNummer(prioritertKravNummer != null ? copyOf(prioritertKravNummer) : List.of())
                 .knytteTilTeam(knytteTilTeam)
                 .teams(teams != null ? copyOf(teams) : List.of())
                 .behandlerPersonopplysninger(behandlerPersonopplysninger)
