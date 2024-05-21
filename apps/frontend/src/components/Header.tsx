@@ -346,8 +346,8 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             <div className="flex gap-2">
               <img
                 src={systemVarsel.alertType === EAlertType.INFO ? informationIcon : warningAlert}
-                width="1.25rem"
-                height="1.25rem"
+                width="18px"
+                height="18px"
                 alt={
                   systemVarsel.alertType === EAlertType.INFO ? 'information icon' : 'warning icon'
                 }
