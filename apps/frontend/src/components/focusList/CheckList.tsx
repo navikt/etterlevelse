@@ -16,7 +16,6 @@ export const CheckList = (props: IProps) => {
   return (
     <div className="flex w-full flex-col">
       <div className="flex w-full items-center gap-8 mb-4">
-        <div>&#x20;</div>
         <div>
           <Checkbox value={krav.kravNummer.toString()}>&#x20;</Checkbox>
         </div>

@@ -1,4 +1,4 @@
-import { Accordion, Checkbox, CheckboxGroup } from '@navikt/ds-react'
+import { Accordion, CheckboxGroup } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { EEtterlevelseStatus, IKravPriorityList, TKravQL } from '../../constants'
 import { TTemaCode } from '../../services/Codelist'
@@ -53,9 +53,6 @@ export const AccordionList = (props: IProps) => {
                   }}
                   value={valgtKrav}
                 >
-                  <Checkbox value={kravForTema.map((krav) => krav.kravNummer.toString())}>
-                    Alle
-                  </Checkbox>
                   {kravForTema.map((krav, index) => (
                     <CheckList krav={krav} key={`krav_${index}`} />
                   ))}
