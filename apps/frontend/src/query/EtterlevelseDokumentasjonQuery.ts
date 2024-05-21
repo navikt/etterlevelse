@@ -71,6 +71,7 @@ export const getEtterlevelseDokumentasjonByBehandlingIdQuery = gql`
         title
         etterlevelseNummer
         sistEndretEtterlevelse
+        prioritertKravNummer
         teamsData {
           id
           name

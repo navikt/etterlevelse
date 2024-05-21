@@ -143,6 +143,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (
       ? etterlevelseDokumentasjon.behandlerPersonopplysninger
       : true,
   irrelevansFor: etterlevelseDokumentasjon.irrelevansFor || [],
+  prioritertKravNummer: etterlevelseDokumentasjon.prioritertKravNummer || [],
   etterlevelseNummer: etterlevelseDokumentasjon.etterlevelseNummer || 0,
   teams: etterlevelseDokumentasjon.teams || [],
   avdeling: etterlevelseDokumentasjon.avdeling,

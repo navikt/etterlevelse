@@ -319,6 +319,7 @@ export interface IEtterlevelseDokumentasjon {
   behandlingIds: string[]
   virkemiddelId: string
   irrelevansFor: ICode[]
+  prioritertKravNummer: string[]
   etterlevelseNummer: number
   teams: string[]
   avdeling?: ICode
