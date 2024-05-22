@@ -34,7 +34,7 @@ export const InfoBlock2 = (props: {
     }}
   >
     <div className="self-center mx-6">
-      <img src={props.icon} alt={props.alt} width="5rem" height="5rem" />
+      <img src={props.icon} alt={props.alt} width="80px" height="80px" />
     </div>
 
     <div className="flex flex-col p-5">

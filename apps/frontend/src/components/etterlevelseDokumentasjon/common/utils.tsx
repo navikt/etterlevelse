@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { EEtterlevelseStatus } from '../../../constants'
+import { EEtterlevelseStatus, TKravQL } from '../../../constants'
 
 export const getNewestKravVersjon = (list: any[]) => {
   let relevanteStatusListe = [...list]
@@ -50,5 +50,33 @@ export const getStatusLabelColor = (status: EEtterlevelseStatus) => {
       return 'warning'
     default:
       return 'neutral'
+  }
+}
+
+export const filterStatus = (statusFilter: string, dataToFilter: TKravQL[]): TKravQL[] => {
+  if (statusFilter === EEtterlevelseStatus.UNDER_REDIGERING) {
+    return dataToFilter.filter(
+      (krav) =>
+        krav.etterlevelser.length !== 0 &&
+        krav.etterlevelser[0].status !== EEtterlevelseStatus.FERDIG_DOKUMENTERT &&
+        krav.etterlevelser[0].status !== EEtterlevelseStatus.OPPFYLLES_SENERE
+    )
+  } else if (statusFilter === EEtterlevelseStatus.OPPFYLLES_SENERE) {
+    return dataToFilter.filter(
+      (krav) =>
+        krav.etterlevelser.length !== 0 &&
+        krav.etterlevelser[0].status === EEtterlevelseStatus.OPPFYLLES_SENERE
+    )
+  } else if (statusFilter === '') {
+    return dataToFilter.filter((krav) => krav.etterlevelser.length === 0)
+  } else if (statusFilter === EEtterlevelseStatus.FERDIG_DOKUMENTERT) {
+    return dataToFilter.filter(
+      (krav) =>
+        krav.etterlevelser.length !== 0 &&
+        (krav.etterlevelser[0].status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
+          krav.etterlevelser[0].status === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)
+    )
+  } else {
+    return dataToFilter
   }
 }

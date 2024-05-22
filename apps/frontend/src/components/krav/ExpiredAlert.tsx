@@ -10,7 +10,9 @@ const ExpiredAlert = ({
 }) => (
   <Alert variant={'warning'} className={'w-fit'}>
     <BodyLong className={'ml-3'}>
-      {statusName == EKravStatus.UTGAATT && 'Dette er et utgått krav.'}
+      Dette er et{' '}
+      {statusName == EKravStatus.UTKAST && 'utkast.'}
+      {statusName == EKravStatus.UTGAATT && 'utgått krav.'}
       {alleKravVersjoner.length > 1 ? (
         <>
           {' '}
