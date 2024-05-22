@@ -69,7 +69,7 @@ export const FocusList = (props: IProps) => {
             />
           )}
 
-          <Button className="mb-4" type="button" onClick={() => setIsEditMode(true)}>
+          <Button className="mt-4" type="button" onClick={() => setIsEditMode(true)}>
             Velg krav
           </Button>
         </div>
@@ -101,7 +101,7 @@ export const FocusList = (props: IProps) => {
               </div>
               <div className="border-border-subtle flex -mt-1 items-center gap-2 sticky bottom-0 border-black border-t-2 bg-bg-default z-10 py-4">
                 <Button type="button" onClick={submitForm}>
-                  Lagre
+                  Lagre prioriterte krav
                 </Button>
 
                 <Button type="button" variant="secondary" onClick={() => setIsEditMode(false)}>
