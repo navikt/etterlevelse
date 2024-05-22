@@ -36,7 +36,17 @@ export const KravAccordionList = (props: IProps) => {
     <Accordion indent={false}>
       {allKravPriority.length !== 0 &&
         temaListe.map((tema, index) => {
-          const kravliste = getKravForTema({ tema, kravliste: relevanteStats, allKravPriority })
+          const relevantStatsKravnummer = relevanteStats.map((k) => k.kravNummer)
+
+          const filteredUtgaatKrav = utgaattStats.filter(
+            ({ kravNummer }) => !relevantStatsKravnummer.includes(kravNummer)
+          )
+
+          const kravliste = getKravForTema({
+            tema,
+            kravliste: [...relevanteStats, ...filteredUtgaatKrav],
+            allKravPriority,
+          })
           const utfylteKrav = kravliste.filter(
             (krav) =>
               krav.etterlevelseStatus === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||

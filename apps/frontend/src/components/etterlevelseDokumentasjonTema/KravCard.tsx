@@ -9,6 +9,7 @@ import {
 import {
   EEtterlevelseStatus,
   EKravFilterType,
+  EKravStatus,
   IEtterlevelseMetadata,
   TKravEtterlevelseData,
 } from '../../constants'
@@ -88,9 +89,14 @@ export const KravCard = (props: IProps) => {
     })()
   }, [])
 
+  const kravStatusFilter =
+    krav.status === EKravStatus.UTGAATT
+      ? EKravFilterType.UTGAATE_KRAV
+      : EKravFilterType.RELEVANTE_KRAV
+
   return (
     <LinkPanel
-      href={`/dokumentasjon/${etterlevelseDokumentasjonId}/${temaCode}/RELEVANTE_KRAV/krav/${krav.kravNummer}/${krav.kravVersjon}/`}
+      href={`/dokumentasjon/${etterlevelseDokumentasjonId}/${temaCode}/${kravStatusFilter}/krav/${krav.kravNummer}/${krav.kravVersjon}/`}
     >
       <div className="md:flex justify-between">
         <div className="self-start">
@@ -99,6 +105,9 @@ export const KravCard = (props: IProps) => {
               K{krav.kravNummer}.{krav.kravVersjon}
             </Detail>
             <div className="ml-4">
+              {krav.status === EKravStatus.UTGAATT && (
+                <ShowWarningMessage warningMessage="Utgått krav" />
+              )}
               {isVarslingStatus && krav.kravVersjon === 1 && kravAge < 30 && (
                 <ShowWarningMessage warningMessage="Nytt krav" />
               )}
