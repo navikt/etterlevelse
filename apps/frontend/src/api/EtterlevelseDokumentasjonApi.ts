@@ -115,9 +115,13 @@ export const etterlevelseDokumentasjonToDomainToObject = (
 ): IEtterlevelseDokumentasjon => {
   const domainToObject = {
     ...etterlevelseDokumentasjon,
-    behandlingIds: etterlevelseDokumentasjon.behandlinger?.map((behandling) => behandling.id),
+    behandlingIds: etterlevelseDokumentasjon.behandlinger
+      ? etterlevelseDokumentasjon.behandlinger.map((behandling) => behandling.id)
+      : [],
     irrelevansFor: etterlevelseDokumentasjon.irrelevansFor.map((irrelevans) => irrelevans.code),
-    teams: etterlevelseDokumentasjon.teamsData?.map((team) => team.id),
+    teams: etterlevelseDokumentasjon.teamsData
+      ? etterlevelseDokumentasjon.teamsData.map((team) => team.id)
+      : [],
     avdeling: etterlevelseDokumentasjon.avdeling?.code,
   } as any
   delete domainToObject.changeStamp

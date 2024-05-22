@@ -31,17 +31,16 @@ export const FocusList = (props: IProps) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
 
   const submit = async (value: TEtterlevelseDokumentasjonQL) => {
-    await getEtterlevelseDokumentasjon(value.id)
-      .then((resp) => {
-        const etterlevelseDokumentasjonWithFocusList: TEtterlevelseDokumentasjonQL = {
-          ...resp,
-          prioritertKravNummer: value.prioritertKravNummer,
-        }
-        updateEtterlevelseDokumentasjon(etterlevelseDokumentasjonWithFocusList).then((resp) =>
-          setEtterlevelseDokumentasjon(resp)
-        )
-      })
-      .catch((e) => console.debug(e))
+    const updatedEtterlevelseDokumentajson = await getEtterlevelseDokumentasjon(value.id)
+
+    const etterlevelseDokumentasjonWithFocusList: TEtterlevelseDokumentasjonQL = {
+      ...updatedEtterlevelseDokumentajson,
+      prioritertKravNummer: value.prioritertKravNummer,
+    }
+    setEtterlevelseDokumentasjon(etterlevelseDokumentasjonWithFocusList)
+    await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjonWithFocusList).catch((e) =>
+      console.debug(e)
+    )
   }
 
   return (
