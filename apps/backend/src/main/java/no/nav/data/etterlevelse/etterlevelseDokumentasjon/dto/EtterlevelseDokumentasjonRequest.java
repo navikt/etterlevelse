@@ -12,7 +12,9 @@ import no.nav.data.etterlevelse.codelist.domain.ListName;
 
 import java.util.List;
 
-import static no.nav.data.common.utils.StringUtils.*;
+import static no.nav.data.common.utils.StringUtils.formatList;
+import static no.nav.data.common.utils.StringUtils.formatListToUppercase;
+import static no.nav.data.common.utils.StringUtils.toUpperCaseAndTrim;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
@@ -31,6 +33,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private boolean knyttetTilVirkemiddel;
     @Schema(description = "Codelist RELEVANS")
     private List<String> irrelevansFor;
+    private List<String> prioritertKravNummer;
     private boolean knytteTilTeam;
     private List<String> teams;
     @Schema(description = "Codelist AVDELING")

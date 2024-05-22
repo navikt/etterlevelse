@@ -40,6 +40,7 @@ class KravGraphQlIT extends GraphQLTestBase {
                         .update(false)
                         .behandlerPersonopplysninger(true)
                         .behandlingIds(List.of(behandling.getId()))
+                        .prioritertKravNummer(List.of())
                         .build()
         );
     }
