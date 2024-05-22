@@ -9,6 +9,7 @@ import {
 import { IKravPriorityList, TEtterlevelseDokumentasjonQL, TKravQL } from '../../constants'
 import { TTemaCode } from '../../services/Codelist'
 import { AccordionList } from '../focusList/AccordionList'
+import KravList from './tabs/KravList'
 
 interface IProps {
   loading: boolean
@@ -45,21 +46,32 @@ export const FocusList = (props: IProps) => {
     )
   }
 
-  console.debug(loading)
-
   return (
     <div>
       {!isEditMode && (
         <div>
-          <Button className="mb-4" type="button" onClick={() => setIsEditMode(true)}>
-            Velg krav
-          </Button>
-
           {etterlevelseDokumentasjon.prioritertKravNummer.length === 0 && (
             <BodyShort>Ingen prioriterte krav i listen</BodyShort>
           )}
 
-          {etterlevelseDokumentasjon.prioritertKravNummer.length !== 0 && <div>testing</div>}
+          {etterlevelseDokumentasjon.prioritertKravNummer.length !== 0 && (
+            <KravList
+              temaListe={temaListe}
+              relevanteStats={relevanteStats.filter(({ kravNummer }) =>
+                etterlevelseDokumentasjon.prioritertKravNummer.includes(kravNummer.toString())
+              )}
+              utgaattStats={utgaattStats.filter(({ kravNummer }) =>
+                etterlevelseDokumentasjon.prioritertKravNummer.includes(kravNummer.toString())
+              )}
+              allKravPriority={allKravPriority}
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              loading={loading}
+            />
+          )}
+
+          <Button className="mb-4" type="button" onClick={() => setIsEditMode(true)}>
+            Velg krav
+          </Button>
         </div>
       )}
       {isEditMode && (
