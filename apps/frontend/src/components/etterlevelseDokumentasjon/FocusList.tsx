@@ -1,4 +1,4 @@
-import { Button } from '@navikt/ds-react'
+import { BodyShort, Button } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import { useState } from 'react'
 import {
@@ -11,6 +11,7 @@ import { TTemaCode } from '../../services/Codelist'
 import { AccordionList } from '../focusList/AccordionList'
 
 interface IProps {
+  loading: boolean
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   setEtterlevelseDokumentasjon: (e: TEtterlevelseDokumentasjonQL) => void
   allKravPriority: IKravPriorityList[]
@@ -27,6 +28,7 @@ export const FocusList = (props: IProps) => {
     temaListe,
     utgaattStats,
     allKravPriority,
+    loading,
   } = props
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
 
@@ -43,14 +45,21 @@ export const FocusList = (props: IProps) => {
     )
   }
 
+  console.debug(loading)
+
   return (
     <div>
       {!isEditMode && (
         <div>
-          <Button type="button" onClick={() => setIsEditMode(true)}>
+          <Button className="mb-4" type="button" onClick={() => setIsEditMode(true)}>
             Velg krav
           </Button>
-          Fokus liste
+
+          {etterlevelseDokumentasjon.prioritertKravNummer.length === 0 && (
+            <BodyShort>Ingen prioriterte krav i listen</BodyShort>
+          )}
+
+          {etterlevelseDokumentasjon.prioritertKravNummer.length !== 0 && <div>testing</div>}
         </div>
       )}
       {isEditMode && (
