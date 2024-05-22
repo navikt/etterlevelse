@@ -69,7 +69,12 @@ export const FocusList = (props: IProps) => {
             />
           )}
 
-          <Button className="mt-4" type="button" onClick={() => setIsEditMode(true)}>
+          <Button
+            className="mt-4"
+            type="button"
+            variant="secondary"
+            onClick={() => setIsEditMode(true)}
+          >
             Velg krav
           </Button>
         </div>
