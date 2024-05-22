@@ -19,6 +19,7 @@ import { getNewestKravVersjon } from '../common/utils'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  setEtterlevelseDokumentasjon: (e: TEtterlevelseDokumentasjonQL) => void
   temaListe: TTemaCode[]
   relevanteStats: TKravQL[]
   utgaattStats: TKravQL[]
@@ -26,7 +27,14 @@ interface IProps {
 }
 
 export const DokumentasjonPageTabs = (props: IProps) => {
-  const { etterlevelseDokumentasjon, temaListe, relevanteStats, utgaattStats, loading } = props
+  const {
+    etterlevelseDokumentasjon,
+    setEtterlevelseDokumentasjon,
+    temaListe,
+    relevanteStats,
+    utgaattStats,
+    loading,
+  } = props
 
   const params = useParams<{ id?: string; tema?: string }>()
 
@@ -248,7 +256,8 @@ export const DokumentasjonPageTabs = (props: IProps) => {
           <div className="pt-4 flex flex-col gap-4">
             <FocusList
               allKravPriority={allKravPriority}
-              focusList={['']}
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
               relevanteStats={relevanteStats}
               utgaattStats={utgaattStats}
               temaListe={temaListe}

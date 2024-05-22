@@ -129,6 +129,7 @@ export const DokumentasjonPage = () => {
       </div>
       <DokumentasjonPageTabs
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
         temaListe={temaListe}
         relevanteStats={relevanteStats}
         utgaattStats={utgaattStats}

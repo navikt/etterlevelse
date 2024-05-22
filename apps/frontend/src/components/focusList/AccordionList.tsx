@@ -1,12 +1,13 @@
 import { Accordion, CheckboxGroup } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { FieldArrayRenderProps } from 'formik'
+import { useState } from 'react'
 import { EEtterlevelseStatus, IKravPriorityList, TKravQL } from '../../constants'
 import { TTemaCode } from '../../services/Codelist'
 import { getKravForTema } from '../../util/getKravForTema'
 import { CheckList } from './CheckList'
 
 interface IProps {
-  focusList: string[]
+  fieldArrayRenderProps: FieldArrayRenderProps
   temaListe: TTemaCode[]
   kravliste: TKravQL[]
   utgattKravliste: TKravQL[]
@@ -14,13 +15,10 @@ interface IProps {
 }
 
 export const AccordionList = (props: IProps) => {
-  const { focusList, temaListe, kravliste, allKravPriority } = props
-
-  const [valgtKrav, setValgtKrav] = useState<any[]>(focusList)
-
-  useEffect(() => {
-    console.debug(valgtKrav)
-  }, [valgtKrav])
+  const { fieldArrayRenderProps, temaListe, kravliste, allKravPriority } = props
+  const [focusList, setFocusList] = useState(
+    fieldArrayRenderProps.form.values['prioritertKravNummer'] || []
+  )
 
   return (
     <Accordion indent={false}>
@@ -48,14 +46,17 @@ export const AccordionList = (props: IProps) => {
               <Accordion.Content>
                 <CheckboxGroup
                   legend="Velg krav du ønsker å prioritere"
-                  onChange={(value) => {
-                    setValgtKrav(value.flat())
+                  value={focusList}
+                  onChange={(values) => {
+                    setFocusList(values)
+                    fieldArrayRenderProps.form.setFieldValue('prioritertKravNummer', values)
                   }}
-                  value={valgtKrav}
                 >
-                  {kravForTema.map((krav, index) => (
-                    <CheckList krav={krav} key={`krav_${index}`} />
-                  ))}
+                  <div className="mt-4">
+                    {kravForTema.map((krav, index) => (
+                      <CheckList krav={krav} key={`krav_${index}`} />
+                    ))}
+                  </div>
                 </CheckboxGroup>
               </Accordion.Content>
             </Accordion.Item>
