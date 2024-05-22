@@ -4,12 +4,10 @@ import { useParams } from 'react-router-dom'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../../../api/ArkiveringApi'
 import { getAllKravPriorityList } from '../../../api/KravPriorityListApi'
 import { IKravPriorityList, TEtterlevelseDokumentasjonQL, TKravQL } from '../../../constants'
-import { isFerdigUtfylt } from '../../../pages/EtterlevelseDokumentasjonTemaPage'
 import { TTemaCode } from '../../../services/Codelist'
 import ExportEtterlevelseModal from '../../export/ExportEtterlevelseModal'
 import { ArkiveringModal } from '../ArkiveringModal'
 import FocusList from '../FocusList'
-import { getNewestKravVersjon } from '../common/utils'
 import KravList from './KravList'
 
 interface IProps {
@@ -44,14 +42,6 @@ export const DokumentasjonPageTabs = (props: IProps) => {
     getAllKravPriorityList().then((priority) => setAllKravPriority(priority))
   }, [])
 
-  let antallFylttKrav = 0
-
-  getNewestKravVersjon(relevanteStats).forEach((k: TKravQL) => {
-    if (k.etterlevelser.length && isFerdigUtfylt(k.etterlevelser[0].status)) {
-      antallFylttKrav += 1
-    }
-  })
-
   return (
     <div>
       <Tabs defaultValue="alleKrav">
@@ -65,7 +55,6 @@ export const DokumentasjonPageTabs = (props: IProps) => {
               temaListe={temaListe}
               relevanteStats={relevanteStats}
               utgaattStats={utgaattStats}
-              antallFylttKrav={antallFylttKrav}
               allKravPriority={allKravPriority}
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               loading={loading}

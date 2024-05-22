@@ -7,6 +7,7 @@ import {
   TEtterlevelseDokumentasjonQL,
   TKravQL,
 } from '../../../constants'
+import { isFerdigUtfylt } from '../../../pages/EtterlevelseDokumentasjonTemaPage'
 import { TTemaCode } from '../../../services/Codelist'
 import { KravAccordionList } from '../KravAccordionList'
 import { filterStatus, getNewestKravVersjon } from '../common/utils'
@@ -15,7 +16,6 @@ interface IProps {
   temaListe: TTemaCode[]
   relevanteStats: TKravQL[]
   utgaattStats: TKravQL[]
-  antallFylttKrav: number
   allKravPriority: IKravPriorityList[]
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   loading: boolean
@@ -29,7 +29,6 @@ export const KravList = (props: IProps) => {
     loading,
     relevanteStats,
     utgaattStats,
-    antallFylttKrav,
     allKravPriority,
     etterlevelseDokumentasjon,
   } = props
@@ -77,6 +76,14 @@ export const KravList = (props: IProps) => {
     setRelevantKravList(relevanteStatusListe)
     setUtgaattKravList(utgaattStatusListe)
   }, [relevanteStats, utgaattStats, searchKrav, statusFilter])
+
+  let antallFylttKrav = 0
+
+  getNewestKravVersjon(relevanteStats).forEach((k: TKravQL) => {
+    if (k.etterlevelser.length && isFerdigUtfylt(k.etterlevelser[0].status)) {
+      antallFylttKrav += 1
+    }
+  })
 
   return (
     <div className="flex flex-col gap-4">
@@ -157,11 +164,14 @@ export const KravList = (props: IProps) => {
         />
       )}
 
-      {!loading && relevanteStats.length === 0 && utgaattStats.length === 0 && (
-        <div className="flex w-full justify-center">
-          <BodyShort>Fant ingen krav</BodyShort>
-        </div>
-      )}
+      {!loading &&
+        (relevanteStats.length !== 0 || utgaattStats.length !== 0) &&
+        relevantKravList.length === 0 &&
+        utgaattKravList.length === 0 && (
+          <div className="flex w-full justify-center">
+            <BodyShort>Fant ingen krav</BodyShort>
+          </div>
+        )}
 
       {/*
         DISABLED TEMPORARY
