@@ -75,7 +75,7 @@ export const FocusList = (props: IProps) => {
             variant="secondary"
             onClick={() => setIsEditMode(true)}
           >
-            Velg krav
+            Rediger prioriterte krav
           </Button>
         </div>
       )}
