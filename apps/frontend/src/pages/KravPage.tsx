@@ -206,6 +206,16 @@ export const KravPage = () => {
       {krav && !kravLoading && (
         <div className="flex w-full">
           <div className="pr-14 w-full">
+            {krav.status === EKravStatus.UTGAATT && krav.beskrivelse && (
+              <div className="px-5 py-3 mb-5">
+                <Heading size="small" level="2">
+                  Begrunnelse for at kravet er utgått
+                </Heading>
+                <Markdown
+                  sources={Array.isArray(krav.beskrivelse) ? krav.beskrivelse : [krav.beskrivelse]}
+                />
+              </div>
+            )}
             <div className="bg-blue-50 px-5 py-3 mb-5">
               <Heading size="small" level="2">
                 Hensikten med kravet
