@@ -498,7 +498,7 @@ export const EtterlevelseKravView = ({
           <Modal
             open={isTabAlertActive}
             onClose={() => setIsTabAlertActive(false)}
-            header={{ heading: 'Endringene er ikke lagret' }}
+            header={{ heading: 'Varsel' }}
           >
             <Modal.Body>
               {!isSavingChanges && <div>Endringene som er gjort er ikke lagret.</div>}
