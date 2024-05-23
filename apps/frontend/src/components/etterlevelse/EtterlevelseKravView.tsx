@@ -7,6 +7,7 @@ import {
   Heading,
   Label,
   Link,
+  Loader,
   Modal,
   ReadMore,
   Tabs,
@@ -106,6 +107,10 @@ export const EtterlevelseKravView = ({
   const [statusText, setStatustext] = useState<string>('')
   const [isNavigationModalOpen, setIsNavigationModalOpen] = useState<boolean>(false)
   const [hasNextKrav, setHasNextKrav] = useState<boolean>(true)
+  const [currentTab, setCurrentTab] = useState<string>('dokumentasjon')
+  const [isTabAlertActive, setIsTabAlertActive] = useState<boolean>(false)
+  const [selectedTab, setSelectedTab] = useState<string>('dokumentasjon')
+  const [isSavingChanges, setIsSavingChanges] = useState<boolean>(false)
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -148,6 +153,15 @@ export const EtterlevelseKravView = ({
     return currentPath[0] + '/krav' + nextKravPath
   }
 
+  const activeAlertModalController = () => {
+    if (isTabAlertActive) {
+      setIsSavingChanges(false)
+      setIsTabAlertActive(false)
+    } else {
+      setIsNavigationModalOpen(true)
+    }
+  }
+
   const submit = async (etterlevelse: IEtterlevelse) => {
     const mutatedEtterlevelse = {
       ...etterlevelse,
@@ -179,11 +193,11 @@ export const EtterlevelseKravView = ({
         if (nextKravToDocument !== '') {
           setStatustext(res.status)
           setHasNextKrav(true)
-          setIsNavigationModalOpen(true)
+          activeAlertModalController()
         } else {
           setStatustext(res.status)
           setHasNextKrav(false)
-          setIsNavigationModalOpen(true)
+          activeAlertModalController()
         }
       })
     } else {
@@ -191,11 +205,11 @@ export const EtterlevelseKravView = ({
         if (nextKravToDocument !== '') {
           setStatustext(res.status)
           setHasNextKrav(true)
-          setIsNavigationModalOpen(true)
+          activeAlertModalController()
         } else {
           setStatustext(res.status)
           setHasNextKrav(false)
-          setIsNavigationModalOpen(true)
+          activeAlertModalController()
         }
       })
     }
@@ -352,7 +366,17 @@ export const EtterlevelseKravView = ({
                 </Heading>
                 <Markdown sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
               </div>
-              <Tabs defaultValue="dokumentasjon">
+              <Tabs
+                value={currentTab}
+                onChange={(tabValue) => {
+                  setSelectedTab(tabValue)
+                  if (etterlevelseFormRef.current?.dirty) {
+                    setIsTabAlertActive(true)
+                  } else {
+                    setCurrentTab(tabValue)
+                  }
+                }}
+              >
                 <Tabs.List>
                   <Tabs.Tab value="dokumentasjon" label="Dokumentasjon" />
                   <Tabs.Tab value="etterlevelser" label="Hvordan har andre gjort det?" />
@@ -472,7 +496,46 @@ export const EtterlevelseKravView = ({
           </div>
 
           <Modal
-            open={isNavigationModalOpen}
+            open={isTabAlertActive}
+            onClose={() => setIsTabAlertActive(false)}
+            header={{ heading: 'Endringene er ikke lagret' }}
+          >
+            <Modal.Body>
+              {!isSavingChanges && <div>Endringene som er gjort er ikke lagret.</div>}
+              {isSavingChanges && (
+                <div className="flex justify-center items-center w-full">
+                  <Loader size="2xlarge" title="lagrer endringer" />
+                </div>
+              )}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  setCurrentTab(selectedTab)
+                  setIsTabAlertActive(false)
+                }}
+              >
+                Fortsett uten å lagre
+              </Button>
+
+              <Button
+                type="button"
+                variant="primary"
+                onClick={async () => {
+                  setCurrentTab(selectedTab)
+                  setIsSavingChanges(true)
+                  etterlevelseFormRef.current?.submitForm()
+                }}
+              >
+                Lagre og fortsett
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          <Modal
+            open={isNavigationModalOpen && !isTabAlertActive}
             onClose={() => setIsNavigationModalOpen(false)}
             header={{ heading: 'Endringene er lagret' }}
           >
