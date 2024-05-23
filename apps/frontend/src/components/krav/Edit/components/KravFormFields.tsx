@@ -18,12 +18,20 @@ interface IProps {
   errors: FormikErrors<TKravQL>
   varselMeldingActive: string[]
   setVarselMeldingActive: React.Dispatch<React.SetStateAction<string[]>>
+  isEditingUtgaattKrav?: boolean
 }
 
 const maxInputWidth = '25rem'
 
 export const KravFormFields = (props: IProps) => {
-  const { mode, kravVersjon, errors, varselMeldingActive, setVarselMeldingActive } = props
+  const {
+    mode,
+    kravVersjon,
+    errors,
+    varselMeldingActive,
+    setVarselMeldingActive,
+    isEditingUtgaattKrav,
+  } = props
   return (
     <>
       <div className="mt-5 mb-10">
@@ -53,6 +61,16 @@ export const KravFormFields = (props: IProps) => {
             </div>
           )}
         </div>
+        {isEditingUtgaattKrav && (
+          <div className="mb-10">
+            <TextAreaField
+              label="Beskriv hvorfor kravet er utgått"
+              name="beskrivelse"
+              height="15.625rem"
+              markdown
+            />
+          </div>
+        )}
         <TextAreaField label="Hensikt" name="hensikt" height="15.625rem" markdown />
       </div>
 
