@@ -150,7 +150,7 @@ export const KravEditPage = () => {
               validateOnChange={false}
               validateOnBlur={false}
             >
-              {({ values, errors, isSubmitting, submitForm }) => (
+              {({ values, errors, isSubmitting, submitForm, initialValues }) => (
                 <Form>
                   <div>
                     <div className="w-full">
@@ -181,7 +181,10 @@ export const KravEditPage = () => {
                             <div className="mr-2">
                               <Button
                                 variant="secondary"
-                                onClick={() => setUtgaattKravMessage(true)}
+                                onClick={() => {
+                                  values.status = EKravStatus.UTGAATT
+                                  setUtgaattKravMessage(true)
+                                }}
                                 disabled={isSubmitting}
                                 type="button"
                               >
@@ -223,16 +226,29 @@ export const KravEditPage = () => {
                             status="utgått"
                             open={utgaattKravMessage}
                             brukerBeskjed="Denne handligen kan ikke reverseres"
-                            setKravMessage={() => setUtgaattKravMessage(false)}
+                            setKravMessage={() => {
+                              values.status = initialValues.status
+                              setUtgaattKravMessage(false)
+                            }}
+                            formComponent={
+                              <TextAreaField
+                                label="Beskriv hvorfor kravet er utgått"
+                                name="beskrivelse"
+                                height="15.625rem"
+                                markdown
+                              />
+                            }
                           >
                             <Button
                               type="button"
                               className="mr-4"
                               variant="primary"
                               onClick={() => {
-                                values.status = EKravStatus.UTGAATT
                                 submitForm()
-                                setUtgaattKravMessage(false)
+
+                                if (values.beskrivelse) {
+                                  setUtgaattKravMessage(false)
+                                }
                               }}
                             >
                               Ja, sett til utgått

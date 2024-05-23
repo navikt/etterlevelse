@@ -17,7 +17,10 @@ const checkIfHensiktHasValue = (hensikt: string): boolean => {
 }
 
 const checkIfAllSuksesskriterieHasName = (suksesskriterier: ISuksesskriterie[]): boolean => {
-  return suksesskriterier.length > 0 && suksesskriterier.every((suksesskriterium) => suksesskriterium.navn)
+  return (
+    suksesskriterier.length > 0 &&
+    suksesskriterier.every((suksesskriterium) => suksesskriterium.navn)
+  )
 }
 
 const checkIfRegelverkIsEmpty = (regelverk: IRegelverk[]): boolean => {
@@ -130,6 +133,20 @@ export const kravEditValidation = ({ alleKravVersjoner }: IPropsKravSchema) =>
     regelverk: regelverkCheck,
     varslingsadresser: varslingsadresserCheck,
     versjonEndringer: versjonEndringCheck,
+
+    beskrivelse: yup.string().test({
+      name: 'beskrivelseCheck',
+      message: 'Begrunn hvorfor kravet er utgått',
+      test: function (beskrivelse) {
+        const { parent } = this
+
+        if (parent.status === EKravStatus.UTGAATT) {
+          return beskrivelse ? true : false
+        }
+
+        return true
+      },
+    }),
 
     status: yup.string().test({
       name: 'statusCheck',

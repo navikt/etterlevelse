@@ -7,6 +7,7 @@ interface IPropsKravEditStatusModal {
   setKravMessage: () => void
   brukerBeskjed: string
   children: ReactNode
+  formComponent?: ReactNode
 }
 
 export const KravEditStatusModal = ({
@@ -15,6 +16,7 @@ export const KravEditStatusModal = ({
   setKravMessage,
   brukerBeskjed,
   children,
+  formComponent,
 }: IPropsKravEditStatusModal) => (
   <Modal
     header={{
@@ -24,7 +26,11 @@ export const KravEditStatusModal = ({
     open={open}
     onClose={() => setKravMessage()}
   >
-    <Modal.Body>{brukerBeskjed}</Modal.Body>
+    <Modal.Body>
+      {brukerBeskjed}
+
+      {formComponent && <div className="mt-4">{formComponent}</div>}
+    </Modal.Body>
     <Modal.Footer>
       <Button type="button" variant="secondary" onClick={() => setKravMessage()}>
         Nei, avbryt handlingen
