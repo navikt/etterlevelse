@@ -10,6 +10,7 @@ import {
 
 interface IPropsKravSchema {
   alleKravVersjoner: IKravVersjon[]
+  isEditingUtgaattKrav: boolean
 }
 
 const checkIfHensiktHasValue = (hensikt: string): boolean => {
@@ -125,7 +126,7 @@ export const kravNewVersionValidation = () =>
     versjonEndringer: versjonEndringCheck,
   })
 
-export const kravEditValidation = ({ alleKravVersjoner }: IPropsKravSchema) =>
+export const kravEditValidation = ({ alleKravVersjoner, isEditingUtgaattKrav }: IPropsKravSchema) =>
   yup.object({
     navn: yup.string().required('Du må oppgi et navn til kravet'),
     hensikt: hensiktCheck,
@@ -140,7 +141,7 @@ export const kravEditValidation = ({ alleKravVersjoner }: IPropsKravSchema) =>
       test: function (beskrivelse) {
         const { parent } = this
 
-        if (parent.status === EKravStatus.UTGAATT) {
+        if (parent.status === EKravStatus.UTGAATT && !isEditingUtgaattKrav) {
           return beskrivelse ? true : false
         }
 

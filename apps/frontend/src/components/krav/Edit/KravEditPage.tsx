@@ -33,6 +33,7 @@ export const KravEditPage = () => {
   const kravLoading: boolean | undefined = kravData?.kravLoading
   const navigate = useNavigate()
   const [krav, setKrav] = useState<TKravQL | undefined>()
+  const [isEditingUtgaattKrav, setIsEditingUtgaattKrav] = useState<boolean>(false)
   const [alleKravVersjoner, setAlleKravVersjoner] = useState<IKravVersjon[]>([
     { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
   ])
@@ -99,7 +100,10 @@ export const KravEditPage = () => {
   }, [krav])
 
   useEffect(() => {
-    if (kravQuery?.kravById) setKrav(kravQuery.kravById)
+    if (kravQuery?.kravById) {
+      setKrav(kravQuery.kravById)
+      setIsEditingUtgaattKrav(kravQuery.kravById.status === EKravStatus.UTGAATT ? true : false)
+    }
   }, [kravQuery])
 
   return (
@@ -146,7 +150,7 @@ export const KravEditPage = () => {
             <Formik
               initialValues={kravMapToFormVal(krav as TKravQL)}
               onSubmit={submit}
-              validationSchema={kravEditValidation({ alleKravVersjoner })}
+              validationSchema={kravEditValidation({ alleKravVersjoner, isEditingUtgaattKrav })}
               validateOnChange={false}
               validateOnBlur={false}
             >
