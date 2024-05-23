@@ -102,6 +102,7 @@ export const KravEditPage = () => {
   useEffect(() => {
     if (kravQuery?.kravById) {
       setKrav(kravQuery.kravById)
+
       setIsEditingUtgaattKrav(kravQuery.kravById.status === EKravStatus.UTGAATT ? true : false)
     }
   }, [kravQuery])
