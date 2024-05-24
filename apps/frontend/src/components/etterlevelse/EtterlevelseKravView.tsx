@@ -52,6 +52,7 @@ import { getEtterlevelseStatus } from '../etterlevelseDokumentasjon/common/utils
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import EditNotatfelt from '../etterlevelseMetadata/EditNotatfelt'
 import Etterlevelser from '../krav/Etterlevelser'
+import ExpiredAlert from '../krav/ExpiredAlert'
 import { AllInfo } from '../krav/ViewKrav'
 import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
@@ -279,13 +280,6 @@ export const EtterlevelseKravView = ({
                   <strong>Kravet er bortfiltrert og derfor ikke relevant.</strong>
                 </BodyShort>
               )}
-
-              {kravFilter === EKravFilterType.UTGAATE_KRAV && (
-                <BodyShort>
-                  <strong>Kravet er utgått.</strong> Dere skal ikke dokumentere ny etterlevelse på
-                  dette kravet.
-                </BodyShort>
-              )}
             </div>
           </div>
           <div className="w-full flex">
@@ -359,6 +353,28 @@ export const EtterlevelseKravView = ({
                   </ReadMore>
                 )}
               </div>
+
+              {kravFilter === EKravFilterType.UTGAATE_KRAV && (
+                <ExpiredAlert
+                  alleKravVersjoner={alleKravVersjoner}
+                  statusName={krav.status}
+                  description={
+                    krav.status === EKravStatus.UTGAATT &&
+                    krav.beskrivelse && (
+                      <div className="py-3 mb-5">
+                        <Heading size="small" level="2">
+                          Begrunnelse for at kravet er utgått
+                        </Heading>
+                        <Markdown
+                          sources={
+                            Array.isArray(krav.beskrivelse) ? krav.beskrivelse : [krav.beskrivelse]
+                          }
+                        />
+                      </div>
+                    )
+                  }
+                />
+              )}
 
               <div className="rounded bg-purple-50 p-8">
                 <Heading level="2" size="small">
