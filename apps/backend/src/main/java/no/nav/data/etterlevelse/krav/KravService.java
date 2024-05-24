@@ -190,9 +190,9 @@ public class KravService extends DomainService<Krav> {
         Krav oldKrav = validator.<Krav>getDomainItem();
         if (req.getStatus() == KravStatus.UTKAST && oldKrav.getStatus() != KravStatus.UTKAST) {
             var etterlevelser = etterlevelseRepo.findByKravNummer(oldKrav.getKravNummer(), oldKrav.getKravVersjon());
-//            if (!etterlevelser.isEmpty()) {
-//                validator.addError(Fields.status, "INVALID_STATUS", "Krav already contains %d etterlevelser, cannot change status to UTKAST".formatted(etterlevelser.size()));
-//            }
+            if (!etterlevelser.isEmpty()) {
+                validator.addError(Fields.status, "INVALID_STATUS", "Krav already contains %d etterlevelser, cannot change status to UTKAST".formatted(etterlevelser.size()));
+            }
         }
     }
 
