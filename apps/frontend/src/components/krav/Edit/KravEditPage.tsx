@@ -58,7 +58,7 @@ export const KravEditPage = () => {
       krav.kravNummer,
       krav.kravVersjon
     )
-    if (etterlevelser.totalElements > 0 && krav.status === EKravStatus.UTKAST) {
+    if (!user.isAdmin() && etterlevelser.totalElements > 0 && krav.status === EKravStatus.UTKAST) {
       setErrorModalMessage('Kravet kan ikke settes til «Utkast» når det er tilknyttet etterlevelse')
       setShowErrorModal(true)
     } else if (krav.id) {
