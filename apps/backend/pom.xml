@@ -29,7 +29,7 @@
         <msal4j.version>1.15.0</msal4j.version>
 
         <!-- transitive versions -->
-        <commons-compress.version>1.26.1</commons-compress.version>
+        <commons-compress.version>1.26.2</commons-compress.version>
         <commons-io.version>2.16.1</commons-io.version>
         <guava.version>33.2.0-jre</guava.version>
         <jna.version>5.14.0</jna.version>
