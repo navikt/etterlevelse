@@ -15,7 +15,7 @@ const ExpiredAlert = ({
     <BodyLong className="ml-3">
       Dette er et {statusName == EKravStatus.UTKAST && 'utkast.'}
       {statusName == EKravStatus.UTGAATT && 'utgått krav.'}
-      {alleKravVersjoner.length > 1 ? (
+      {alleKravVersjoner.length > 1 && (
         <>
           {' '}
           Gjeldende versjon:{' '}
@@ -25,8 +25,6 @@ const ExpiredAlert = ({
             K{alleKravVersjoner[0].kravNummer}.{alleKravVersjoner[0].kravVersjon}
           </Link>
         </>
-      ) : (
-        ''
       )}
     </BodyLong>
     {description && <div className="ml-3">{description}</div>}
