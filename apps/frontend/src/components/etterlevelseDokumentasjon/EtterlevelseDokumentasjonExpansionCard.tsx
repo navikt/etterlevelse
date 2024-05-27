@@ -69,7 +69,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
       <ExpansionCard aria-label="tittel på etterlevelsesdokument" className="w-full">
         <ExpansionCard.Header className="border-b border-solid border-gray-500">
           <ExpansionCard.Title as="h2" size="small">
-            Les mer om dokumentet
+            Les mer om dokumentetet
           </ExpansionCard.Title>
         </ExpansionCard.Header>
         <ExpansionCard.Content>
