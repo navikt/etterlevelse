@@ -105,13 +105,13 @@ export const DokumentasjonPage = () => {
   return (
     <PageLayout
       pageTitle={'E' + etterlevelseNummer.toString() + ' ' + title}
-      currentPage="Temaoversikt"
+      currentPage={'E' + etterlevelseNummer.toString() + ' ' + title}
       breadcrumbPaths={breadcrumbPaths}
     >
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Heading level="1" size="medium">
-            Temaoversikt
+            E{etterlevelseNummer.toString()} {title}
           </Heading>
           <div className="flex items-center my-5">
             <EtterlevelseDokumentasjonExpansionCard
@@ -127,6 +127,9 @@ export const DokumentasjonPage = () => {
           </div>
         </div>
       </div>
+      <Heading level="2" size="medium">
+        Temaoversikt
+      </Heading>
       <DokumentasjonPageTabs
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}

@@ -14,15 +14,8 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
 
   const relevansCodeList = codelist.getParsedOptions(EListName.RELEVANS)
 
-  const {
-    etterlevelseNummer,
-    title,
-    behandlerPersonopplysninger,
-    behandlingIds,
-    behandlinger,
-    teams,
-    irrelevansFor,
-  } = etterlevelseDokumentasjon
+  const { behandlerPersonopplysninger, behandlingIds, behandlinger, teams, irrelevansFor } =
+    etterlevelseDokumentasjon
 
   const getRelevans = (irrelevans: ICode[]) => {
     const fargeForFemAlternativ = ['alt1', 'alt2', 'alt3', 'alt1', 'alt2'] as const
@@ -75,8 +68,8 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
     <>
       <ExpansionCard aria-label="tittel på etterlevelsesdokument" className="w-full">
         <ExpansionCard.Header className="border-b border-solid border-gray-500">
-          <ExpansionCard.Title as="h4" size="small">
-            E{etterlevelseNummer.toString()} {title}
+          <ExpansionCard.Title as="h2" size="small">
+            Les mer om dokumentet
           </ExpansionCard.Title>
         </ExpansionCard.Header>
         <ExpansionCard.Content>
