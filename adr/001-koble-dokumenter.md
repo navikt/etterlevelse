@@ -35,9 +35,12 @@ Vi har dialog med produktområder, ResearchOps og personvernnettverket i fylkene
 Skal ha en demo 7. juni.
 
 ## Konsekvenser
+PLUSS
 + Etterlevere kan bruke den knappe tiden på de mest relevante kravene
 + Vi får bedre oversikt over hvordan aktiviteter henger sammen
 + Vi får bedre oversikt over aktiviteter som i dag er dokumentert utenfor løsning
 + Vi kan på sikt enklere digitalisere analyse av personvernkonsekvenser (PVK / DPIA)
+
+MINUS
 - Vi binder oss til en struktur som kan være vanskelig å endre senere
 - Mer ansvar på de som gjør fellesvurderinger: Om de gjøres feil har det konsekvenser for flere
