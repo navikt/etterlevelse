@@ -26,11 +26,12 @@ De som skal dokumentere etterlevelse med utgangspunkt i overordna dokumenter ska
 2. Kunne overstyre vurderinger om det er aktuelt
 3. Få varslinger dersom det er relevante endringer i det overordna dokumentet
 
-Vi kommer også senere til å se på muligheten for å koble etterlevelsesdokument sammen i en verdikejde.
+Vi kommer også senere til å se på muligheten for å koble etterlevelsesdokument sammen i en verdikjede.
 
 ## Status
 Under arbeid.
 Vi har dialog med produktområder, ResearchOps og personvernnettverket i fylkene for å forstå behovet bedre.
+
 Skal ha en demo 7. juni.
 
 ## Konsekvenser
