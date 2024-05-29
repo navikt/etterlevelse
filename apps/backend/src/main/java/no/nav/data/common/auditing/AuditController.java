@@ -88,10 +88,18 @@ public class AuditController {
         return new ResponseEntity<>(new RestResponsePage<>(convert(list, gs -> gs.getDomainObjectData().toResponse())), HttpStatus.OK);
     }
 
+    @Operation(summary = "Get audit log by table id and timestamp")
+    @ApiResponse(description = "Get audit log by table id and timestamp")
+    @GetMapping("/log/{tableId}/{timestamp}")
+    public ResponseEntity<List<AuditResponse>> getByTableIdAndTimestamp(@PathVariable String tableId, @PathVariable String timestamp) {
+        log.info("Received request for Audit log with table id {} and timestamp {}", tableId, timestamp);
+        var list = service.getByTableIdAndTimestamp(tableId, timestamp).stream().map(AuditVersion:: toResponse).toList();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
     static class AuditLogPage extends RestResponsePage<AuditResponse> {
     }
 
     static class MailLogPage extends RestResponsePage<MailLogResponse> {
     }
-
 }
