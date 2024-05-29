@@ -20,7 +20,7 @@ public class AuditVersionRepoImp implements AuditVersionRepoCustom {
 
     @Override
     public List<AuditVersion> findByTableIdAndTimeStamp(String tableId, String timestamps){
-        String query = "select * from audit_version where table_id = :tableId and time <= :timestamps::timestamp order by time desc limit 1";
+        String query = "select audit_id as id from audit_version where table_id = :tableId and time <= :timestamps::timestamp order by time desc limit 1";
         var par = new MapSqlParameterSource();
 
         par.addValue("tableId", tableId);
