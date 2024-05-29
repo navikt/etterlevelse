@@ -32,7 +32,7 @@ public interface AuditVersionRepository extends JpaRepository<AuditVersion, UUID
             + "where table_id = cast(?1 as text) order by time desc limit 1", nativeQuery = true)
     AuditMetadata lastAuditForObject(UUID uuid);
 
-    @Query(value = "select * from audit_version where table_id = ?1 and time <= ?2 ::timestamp order by time desc limit 1", nativeQuery = true)
+    @Query(value = "select * from audit_version where table_id = ?1 and time <= ?2 ?::timestamp order by time desc limit 1", nativeQuery = true)
     List<AuditVersion> findByTableIdAndTimeStamp(String tableId, String timeStamp);
 
 }
