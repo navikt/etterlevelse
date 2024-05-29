@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface AuditVersionRepository extends JpaRepository<AuditVersion, UUID> {
+public interface AuditVersionRepository extends JpaRepository<AuditVersion, UUID> , AuditVersionRepoCustom{
 
     Page<AuditVersion> findByTable(String table, Pageable pageable);
 
@@ -31,8 +31,5 @@ public interface AuditVersionRepository extends JpaRepository<AuditVersion, UUID
             + "from audit_version "
             + "where table_id = cast(?1 as text) order by time desc limit 1", nativeQuery = true)
     AuditMetadata lastAuditForObject(UUID uuid);
-
-    @Query(value = "select * from audit_version where table_id = ?1 and time <= ?2 ?::timestamp order by time desc limit 1", nativeQuery = true)
-    List<AuditVersion> findByTableIdAndTimeStamp(String tableId, String timeStamp);
 
 }
