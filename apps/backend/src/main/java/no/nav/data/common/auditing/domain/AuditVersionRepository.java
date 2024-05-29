@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface AuditVersionRepository extends JpaRepository<AuditVersion, UUID> , AuditVersionRepoCustom{
+public interface AuditVersionRepository extends JpaRepository<AuditVersion, UUID> {
 
     Page<AuditVersion> findByTable(String table, Pageable pageable);
 

@@ -13,12 +13,11 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Repository
 @RequiredArgsConstructor
-public class AuditVersionRepoImp implements AuditVersionRepoCustom {
+public class AuditVersionRepoImp  {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final AuditVersionRepository repository;
 
-    @Override
     public List<AuditVersion> findByTableIdAndTimeStamp(String tableId, String timestamps){
         String query = "select audit_id as id from audit_version where table_id = :tableId and time <= :timestamps::timestamp order by time desc limit 1";
         var par = new MapSqlParameterSource();

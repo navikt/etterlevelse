@@ -4,6 +4,7 @@ package no.nav.data.common.auditing;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.domain.AuditVersion;
+import no.nav.data.common.auditing.domain.AuditVersionRepoImp;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.auditing.domain.MailLogRepository;
 import no.nav.data.common.security.azure.support.MailLog;
@@ -22,6 +23,8 @@ import java.util.UUID;
 public class AuditVersionService {
 
     private final AuditVersionRepository repository;
+
+    private final AuditVersionRepoImp customRepo;
 
     private final StorageService<MailLog> storage;
 
@@ -55,6 +58,6 @@ public class AuditVersionService {
     }
 
     public List<AuditVersion> getByTableIdAndTimestamp(String tableId, String timestamp) {
-        return repository.findByTableIdAndTimeStamp(tableId, timestamp);
+        return customRepo.findByTableIdAndTimeStamp(tableId, timestamp);
     }
 }
