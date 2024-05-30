@@ -60,4 +60,9 @@ public class AuditVersionService {
     public List<AuditVersion> getByTableIdAndTimestamp(String tableId, String timestamp) {
         return customRepo.findLatestByTableIdAndTimeStamp(tableId, timestamp);
     }
+
+
+    public List<AuditVersion> findLatestEtterlevelseByEtterlevelseDokumentIdAndTimestamp(String etterlevelseDokumentasjonId, String timestamp) {
+        return customRepo.findLatestEtterlevelseByEtterlevelseDokumentIdAndTimestamp(etterlevelseDokumentasjonId, timestamp);
+    }
 }

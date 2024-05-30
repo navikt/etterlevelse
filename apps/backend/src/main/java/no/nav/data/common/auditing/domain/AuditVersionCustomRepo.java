@@ -27,29 +27,25 @@ public class AuditVersionCustomRepo {
         par.addValue("tableId", tableId);
         par.addValue("timestamps", timestamps);
 
-        List<AuditVersion> auditVersionList = fetch(jdbcTemplate.queryForList(query, par));
-        return auditVersionList;
+        return fetch(jdbcTemplate.queryForList(query, par));
     }
 
 
     @Transactional()
     public List<AuditVersion> findLatestEtterlevelseByEtterlevelseDokumentIdAndTimestamp(String dokumentasjonId, String timestamps) {
         String query = """
-                select *
-                from audit_version av
-                where av.table_name= 'Etterlevelse'
-                	and av.data -> 'data' ->> 'etterlevelseDokumentasjonId' = :dokumentasjonId
-                	and av.time <= :timestamps ::timestamp
-                	and not exists (
-                		select 1
-                		from audit_version av2
-                		where av2.audit_id != av.audit_id
-                			and av2.table_id = av.table_id
-                			and av2.time <= :timestamps ::timestamp
-                			and av2.time > av.time
-                    )
-                                
-                order by time desc;
+                With query as (
+                                   select * ,   RANK () OVER (
+                                        PARTITION BY table_id
+                                   		ORDER BY time DESC
+                                   	) table_rank
+                                   
+                                    from audit_version where 
+                                    table_name= 'Etterlevelse' and 
+                                    data -> 'data' ->> 'etterlevelseDokumentasjonId' = :dokumentasjonId and 
+                                    time <= :timestamps ::timestamp
+                                   )
+                                    Select * from query where table_rank = 1;             
                 """;
 
         var par = new MapSqlParameterSource();
@@ -57,8 +53,7 @@ public class AuditVersionCustomRepo {
         par.addValue("dokumentasjonId", dokumentasjonId);
         par.addValue("timestamps", timestamps);
 
-        List<AuditVersion> auditVersionList = fetch(jdbcTemplate.queryForList(query, par));
-        return auditVersionList;
+        return fetch(jdbcTemplate.queryForList(query, par));
 
     }
 

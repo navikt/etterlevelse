@@ -97,6 +97,15 @@ public class AuditController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @Operation(summary = "Get audit log for etterlevelse by etterlevelse document id and timestamp")
+    @ApiResponse(description = "Get audit log for etterlevelse by etterlevelse document id and timestamp")
+    @GetMapping("/log/etterlevelse/{etterlevelseDokumentasjonsId}/{timestamp}")
+    public ResponseEntity<List<AuditResponse>> getEtterlevelserByEtterlevelseDokumentasjonsIdAndTimestamp(@PathVariable String etterlevelseDokumentasjonsId, @PathVariable String timestamp) {
+        log.info("Received request for Audit log for etterlevelser with etterlevelse document id {} and timestamp {}", etterlevelseDokumentasjonsId, timestamp);
+        var list = service.findLatestEtterlevelseByEtterlevelseDokumentIdAndTimestamp(etterlevelseDokumentasjonsId, timestamp).stream().map(AuditVersion:: toResponse).toList();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
     static class AuditLogPage extends RestResponsePage<AuditResponse> {
     }
 
