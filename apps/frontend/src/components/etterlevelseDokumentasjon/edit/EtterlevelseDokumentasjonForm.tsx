@@ -91,7 +91,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
     >
       {({ values, submitForm, setFieldValue }) => (
         <Form>
-          <Heading size="medium" level="1">
+          <Heading size="medium" level="1" className="mb-2">
             {title}
           </Heading>
           <TextAreaField
