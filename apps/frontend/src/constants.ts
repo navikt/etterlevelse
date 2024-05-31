@@ -316,6 +316,7 @@ export interface IEtterlevelseDokumentasjon {
   changeStamp: IChangeStamp
   version: number
   title: string
+  beskrivelse: string
   behandlingIds: string[]
   virkemiddelId: string
   irrelevansFor: ICode[]
@@ -330,6 +331,7 @@ export interface IEtterlevelseDokumentasjon {
   virkemiddel?: IVirkemiddel
   knyttetTilVirkemiddel: boolean
   knytteTilTeam: boolean
+  varslingsadresser: IVarslingsadresse[]
 }
 
 export interface IEtterlevelseDokumentasjonStats {

@@ -141,6 +141,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   },
   version: -1,
   title: etterlevelseDokumentasjon.title || '',
+  beskrivelse: etterlevelseDokumentasjon.beskrivelse || '',
   behandlingIds: etterlevelseDokumentasjon.behandlingIds || [],
   behandlerPersonopplysninger:
     etterlevelseDokumentasjon.behandlerPersonopplysninger !== undefined
@@ -156,6 +157,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   virkemiddelId: etterlevelseDokumentasjon.virkemiddelId || '',
   // knyttetTilVirkemiddel: etterlevelseDokumentasjon.knyttetTilVirkemiddel !== undefined ? etterlevelseDokumentasjon.knyttetTilVirkemiddel : false,
   knyttetTilVirkemiddel: false,
+  varslingsadresser: etterlevelseDokumentasjon.varslingsadresser || [],
   knytteTilTeam:
     etterlevelseDokumentasjon.teams && etterlevelseDokumentasjon.teams.length > 0
       ? true
@@ -167,6 +169,13 @@ export const etterlevelseDokumentasjonMapToFormVal = (
 export const etterlevelseDokumentasjonSchema = () =>
   yup.object({
     title: yup.string().required('Etterlevelsesdokumentasjon trenger en tittel'),
+    varslingsadresser: yup.array().test({
+      name: 'varslingsadresserCheck',
+      message: 'Påkrevd minst en varslingsadresse',
+      test: function (varslingsadresser) {
+        return varslingsadresser && varslingsadresser.length > 0 ? true : false
+      },
+    }),
     virkemiddelId: yup.string().test({
       name: 'addedVirkemiddelCheck',
       message: 'Hvis ditt system/produkt er tilknyttet et virkemiddel må det legges til.',
