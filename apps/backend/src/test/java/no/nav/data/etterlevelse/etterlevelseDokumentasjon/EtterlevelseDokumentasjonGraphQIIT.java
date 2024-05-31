@@ -26,6 +26,7 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
                         .etterlevelseNummer(101)
                         .knyttetTilVirkemiddel(false)
                         .virkemiddelId("")
+                        .beskrivelse("")
                         .knytteTilTeam(false)
                         .teams(List.of(""))
                         .irrelevansFor(irrelevans)
@@ -33,6 +34,7 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
                         .behandlerPersonopplysninger(true)
                         .behandlingIds(List.of(""))
                         .prioritertKravNummer(List.of())
+                        .varslingsadresser(List.of())
                         .build()
         );
     }

@@ -32,6 +32,7 @@ class KravGraphQlIT extends GraphQLTestBase {
                 EtterlevelseDokumentasjonRequest.builder()
                         .title("test dokumentasjon")
                         .etterlevelseNummer(101)
+                        .beskrivelse("")
                         .knyttetTilVirkemiddel(false)
                         .virkemiddelId("")
                         .knytteTilTeam(false)
@@ -41,6 +42,7 @@ class KravGraphQlIT extends GraphQLTestBase {
                         .behandlerPersonopplysninger(true)
                         .behandlingIds(List.of(behandling.getId()))
                         .prioritertKravNummer(List.of())
+                        .varslingsadresser(List.of())
                         .build()
         );
     }
