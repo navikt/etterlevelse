@@ -1,5 +1,11 @@
+import EtterlevelseDokumentasjonForm from './EtterlevelseDokumentasjonForm'
+
 export const CreateEtterlevelseDokumentasjonPage = () => {
-  return <div>test</div>
+  return (
+    <div>
+      <EtterlevelseDokumentasjonForm title="Opprett nytt etterlevelsesdokument" />
+    </div>
+  )
 }
 
 export default CreateEtterlevelseDokumentasjonPage
