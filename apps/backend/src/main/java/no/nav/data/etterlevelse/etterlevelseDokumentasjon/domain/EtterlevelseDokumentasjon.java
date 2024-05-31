@@ -13,6 +13,7 @@ import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
+import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
 
     private String title;
     private List<String> behandlingIds;
+    private String beskrivelse;
     @Default
     private boolean behandlerPersonopplysninger = true;
     private String virkemiddelId;
@@ -40,6 +42,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
     private String avdeling;
     private List<String> irrelevansFor;
     private List<String> prioritertKravNummer;
+    private List<Varslingsadresse> varslingsadresser;
 
     public List<CodelistResponse> irrelevantForAsCodes() {
         return CodelistService.getCodelistResponseList(ListName.RELEVANS, irrelevansFor);
@@ -50,6 +53,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
         etterlevelseNummer = request.getEtterlevelseNummer();
         title = request.getTitle();
         behandlingIds = copyOf(request.getBehandlingIds());
+        beskrivelse = request.getBeskrivelse();
         virkemiddelId = request.getVirkemiddelId();
         irrelevansFor = copyOf(request.getIrrelevansFor());
         teams = copyOf(request.getTeams());
@@ -58,6 +62,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
         knytteTilTeam = request.isKnytteTilTeam();
         avdeling = request.getAvdeling();
         prioritertKravNummer = copyOf(request.getPrioritertKravNummer());
+        varslingsadresser = copyOf(request.getVarslingsadresser());
     }
 
     public EtterlevelseDokumentasjonResponse toResponse() {
@@ -67,6 +72,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
                 .version(version)
                 .etterlevelseNummer(etterlevelseNummer)
                 .title(title)
+                .beskrivelse(beskrivelse)
                 .behandlingIds(behandlingIds != null ? copyOf(behandlingIds) : List.of())
                 .virkemiddelId(virkemiddelId)
                 .irrelevansFor(irrelevantForAsCodes())
@@ -76,6 +82,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
                 .behandlerPersonopplysninger(behandlerPersonopplysninger)
                 .knyttetTilVirkemiddel(knyttetTilVirkemiddel)
                 .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, avdeling))
+                .varslingsadresser(varslingsadresser != null ? copyOf(varslingsadresser): List.of())
                 .build();
     }
 

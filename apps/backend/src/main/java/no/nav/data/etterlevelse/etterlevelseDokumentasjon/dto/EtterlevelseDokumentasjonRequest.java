@@ -9,9 +9,11 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;
 
+import static no.nav.data.common.utils.StreamUtils.copyOf;
 import static no.nav.data.common.utils.StringUtils.formatList;
 import static no.nav.data.common.utils.StringUtils.formatListToUppercase;
 import static no.nav.data.common.utils.StringUtils.toUpperCaseAndTrim;
@@ -28,6 +30,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private Integer etterlevelseNummer;
     private String title;
     private List<String> behandlingIds;
+    private String beskrivelse;
     private boolean behandlerPersonopplysninger;
     private String virkemiddelId;
     private boolean knyttetTilVirkemiddel;
@@ -38,14 +41,17 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private List<String> teams;
     @Schema(description = "Codelist AVDELING")
     private String avdeling;
+    private List<Varslingsadresse> varslingsadresser;
     @Override
     public void format() {
         setId(trimToNull(id));
         setTitle(trimToNull(title));
+        setBeskrivelse(trimToNull(beskrivelse));
         setBehandlingIds(formatList(behandlingIds));
         setVirkemiddelId(trimToNull(virkemiddelId));
         setIrrelevansFor(formatListToUppercase(irrelevansFor));
         setTeams(formatList(teams));
+        setVarslingsadresser(copyOf(varslingsadresser));
         setAvdeling(toUpperCaseAndTrim(avdeling));
     }
 
@@ -55,5 +61,6 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         validator.checkId(this);
         validator.checkCodelists(EtterlevelseDokumentasjonRequest.Fields.irrelevansFor, irrelevansFor, ListName.RELEVANS);
         validator.checkCodelist(Fields.avdeling, avdeling, ListName.AVDELING);
+        validator.validateType(Fields.varslingsadresser, varslingsadresser);
     }
 }
