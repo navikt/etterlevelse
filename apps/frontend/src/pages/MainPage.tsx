@@ -2,10 +2,10 @@ import { useQuery } from '@apollo/client'
 import { Button, Heading, Link, LinkPanel, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from '../components/common/Markdown'
 import { EtterlevelseDokumentasjonsPanel } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonsPanel'
-import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import { PageLayout } from '../components/scaffold/Page'
 import {
   EAlertType,
@@ -22,6 +22,7 @@ import { TVariables } from './MyEtterlevelseDokumentasjonerPage'
 
 export const MainPage = () => {
   const [forsideVarsel, setForsideVarsle] = useState<IMelding>()
+  const navigate = useNavigate()
 
   const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<
     { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
@@ -82,11 +83,21 @@ export const MainPage = () => {
               )}
               <div className="mt-8 flex justify-end">
                 <div className="mr-4">
-                  <EditEtterlevelseDokumentasjonModal
+                  <Button
+                    onClick={() => {
+                      ampli.logEvent('knapp klikket', {
+                        tekst: 'Nytt etterlevelsesdokument fra forsiden',
+                      })
+                      navigate('/dokumentasjon/create')
+                    }}
+                    size="medium"
                     variant={
                       data?.etterlevelseDokumentasjoner.content.length ? 'secondary' : 'primary'
                     }
-                  />
+                    className="whitespace-nowrap ml-5"
+                  >
+                    Nytt etterlevelsesdokument
+                  </Button>
                 </div>
                 <Link href="/dokumentasjoner">
                   <Button

@@ -1,4 +1,5 @@
-import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
+import { Button } from '@navikt/ds-react'
+import { useNavigate } from 'react-router-dom'
 import { DokumentasjonTabs } from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonsTabs'
 import { ListPageHeader } from '../components/scaffold/ListPageHeader'
 import { PageLayout } from '../components/scaffold/Page'
@@ -12,6 +13,7 @@ interface IDokumentasjonCount {
 export type TCustomTeamObject = IDokumentasjonCount & ITeam
 
 export const MyEtterlevelseDokumentasjonerPage = () => {
+  const navigate = useNavigate()
   ampli.logEvent('sidevisning', {
     side: 'Side for Dokumentasjoner',
     sidetittel: 'Dokumentere etterlevelse',
@@ -22,7 +24,16 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
     <PageLayout pageTitle="Dokumentere etterlevelse" currentPage="Dokumentere etterlevelse">
       <div className="pb-52 w-full">
         <ListPageHeader headingText="Dokumentere etterlevelse">
-          <EditEtterlevelseDokumentasjonModal />
+          <Button
+            onClick={() => {
+              navigate('/dokumentasjon/create')
+            }}
+            size="medium"
+            variant="primary"
+            className="whitespace-nowrap ml-5"
+          >
+            Nytt etterlevelsesdokument
+          </Button>
         </ListPageHeader>
 
         <div className="flex justify-center w-full">
