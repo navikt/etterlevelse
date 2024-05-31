@@ -1,10 +1,15 @@
+import { PageLayout } from '../../scaffold/Page'
 import EtterlevelseDokumentasjonForm from './EtterlevelseDokumentasjonForm'
 
 export const EditEtterlevelseDokumentasjonPage = () => {
   return (
-    <div>
+    <PageLayout
+      pageTitle="Opprett nytt etterlevelsesdokument"
+      currentPage="Opprett nytt etterlevelsesdokument"
+      breadcrumbPaths={[{ href: '/dokumentasjoner', pathName: 'Dokumentere etterlevelse' }]}
+    >
       <EtterlevelseDokumentasjonForm title="Rediger etterlevelsesdokumentet" />
-    </div>
+    </PageLayout>
   )
 }
 export default EditEtterlevelseDokumentasjonPage
