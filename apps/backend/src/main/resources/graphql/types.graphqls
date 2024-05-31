@@ -197,6 +197,7 @@ type EtterlevelseDokumentasjon {
     changeStamp: ChangeStamp!
     version: Int!
     title: String!
+    beskrivelse: String!
     etterlevelseNummer: Int!
     behandlingIds: [String!]!
     behandlinger: [Behandling!]!
@@ -212,6 +213,7 @@ type EtterlevelseDokumentasjon {
     sistEndretEtterlevelse: DateTime
     sistEndretDokumentasjon: DateTime
     stats: EtterlevelseDokumentasjonStats!
+    varslingsadresser: [Varslingsadresse!]!
 }
 
 type LovStats {
