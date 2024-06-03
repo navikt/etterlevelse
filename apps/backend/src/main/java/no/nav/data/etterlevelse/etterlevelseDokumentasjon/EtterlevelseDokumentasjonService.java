@@ -137,6 +137,10 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return storage.getAll(EtterlevelseDokumentasjon.class, pageable);
     }
 
+    public List<EtterlevelseDokumentasjon> findByKravRelevans(List<String> kravRelevans) {
+        return convertToDomaionObject(etterlevelseDokumentasjonRepo.findByKravRelevans(kravRelevans));
+    }
+
     // Does not update DB
     public EtterlevelseDokumentasjonResponse addBehandlingAndTeamsData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
         if (etterlevelseDokumentasjonResponse.getBehandlingIds() != null && !etterlevelseDokumentasjonResponse.getBehandlingIds().isEmpty()) {

@@ -39,9 +39,16 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
 
     @Override
     public List<GenericStorage<EtterlevelseDokumentasjon>> findByBehandlingIds(List<String> ids) {
-        var query = "select * from generic_storage where type = 'EtterlevelseDokumentasjon' and data -> 'behandlingIds' ??| array[ :behandlingIds ]";
+        var query = "select id from generic_storage where type = 'EtterlevelseDokumentasjon' and data -> 'behandlingIds' ??| array[ :behandlingIds ]";
         var par = new MapSqlParameterSource();
         par.addValue("behandlingIds", ids);
+        return fetch(jdbcTemplate.queryForList(query, par));
+    }
+
+    public List<GenericStorage<EtterlevelseDokumentasjon>> findByKravRelevans(List<String> kravRelevans) {
+        var query = "select id from generic_storage where type = 'EtterlevelseDokumentasjon' and not data -> 'irrelevansFor' @>  to_jsonb(array[ :kravRelevans ])";
+        var par = new MapSqlParameterSource();
+        par.addValue("kravRelevans", kravRelevans);
         return fetch(jdbcTemplate.queryForList(query, par));
     }
 

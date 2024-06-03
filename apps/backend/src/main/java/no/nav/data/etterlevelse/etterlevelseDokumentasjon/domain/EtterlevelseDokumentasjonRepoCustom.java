@@ -14,4 +14,6 @@ public interface EtterlevelseDokumentasjonRepoCustom {
 
     List<GenericStorage<EtterlevelseDokumentasjon>> findByBehandlingIds(List<String> ids);
 
+    List<GenericStorage<EtterlevelseDokumentasjon>> findByKravRelevans(List<String> kravRelevans);
+
 }

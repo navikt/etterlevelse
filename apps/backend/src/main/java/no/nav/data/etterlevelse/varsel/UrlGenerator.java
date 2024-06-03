@@ -21,4 +21,8 @@ public class UrlGenerator {
     public String tilbakemeldingUrl(Tilbakemelding tilbakemelding) {
         return "%s/krav/%d/%d?tilbakemeldingId=%s".formatted(baseUrl, tilbakemelding.getKravNummer(), tilbakemelding.getKravVersjon(), tilbakemelding.getId());
     }
+
+    public String etterlevelseDokumentasjonUrl(String etterlevelseDokumentasjonId) {
+        return "%s/dokumentasjon/%d".formatted(baseUrl, etterlevelseDokumentasjonId);
+    }
 }
