@@ -9,6 +9,8 @@ import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
+import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.domain.Krav;
@@ -49,6 +51,7 @@ public class KravService extends DomainService<Krav> {
 
     protected final StorageService<KravImage> imageStorage;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+    private final EtterlevelseService etterlevelseService;
     private final UrlGenerator urlGenerator;
     private final EmailService emailService;
     private final SlackClient slackClient;
@@ -266,6 +269,12 @@ public class KravService extends DomainService<Krav> {
         List<EtterlevelseDokumentasjon> etterlevelseDokumentasjonList = List.of();
 
         if(isNewVersion) {
+            List<String> etterlevelseDokumentasjonIds = etterlevelseService.getByKravNummer(krav.getKravNummer(), krav.getKravVersjon() -1 ).stream().map(Etterlevelse::getEtterlevelseDokumentasjonId).toList();
+            etterlevelseDokumentasjonIds.forEach(id -> {
+                var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(id));
+                etterlevelseDokumentasjonList.add(etterlevelseDokumentasjon);
+                    }
+            );
             return etterlevelseDokumentasjonList;
         } else {
             return etterlevelseDokumentasjonService.findByKravRelevans(krav.getRelevansFor());
