@@ -1,10 +1,11 @@
 import { useQuery } from '@apollo/client'
-import { Button, Heading } from '@navikt/ds-react'
+import { Button, Heading, Label } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { Markdown } from '../components/common/Markdown'
 import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
 import DokumentasjonPageTabs from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonPageTabs'
 import { PageLayout } from '../components/scaffold/Page'
@@ -113,6 +114,14 @@ export const DokumentasjonPage = () => {
           <Heading level="1" size="medium">
             E{etterlevelseNummer.toString()} {title}
           </Heading>
+
+          {etterlevelseDokumentasjon.beskrivelse && (
+            <div>
+              <Label>Beskrivelse</Label>
+              <Markdown sources={[etterlevelseDokumentasjon.beskrivelse]} />
+            </div>
+          )}
+
           <div className="flex items-center my-5">
             <EtterlevelseDokumentasjonExpansionCard
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}

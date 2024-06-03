@@ -1,8 +1,11 @@
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
 import { BodyShort, ExpansionCard, Label, Tag } from '@navikt/ds-react'
-import { TEtterlevelseDokumentasjonQL } from '../../constants'
+import { EAdresseType, TEtterlevelseDokumentasjonQL } from '../../constants'
 import { EListName, ICode, codelist } from '../../services/Codelist'
+import { slackLink, slackUserLink } from '../../util/config'
 import { BehandlingList } from '../behandling/BehandlingList'
+import { LabelAboveContent } from '../common/PropertyLabel'
+import { ExternalLink } from '../common/RouteLink'
 import { Teams } from '../common/TeamName'
 
 interface IProps {
@@ -108,6 +111,38 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
               </div>
             )}
             {getRelevans(irrelevansFor)}
+          </div>
+          <div className="mb-4">
+            <LabelAboveContent title="Varslingsadresser">
+              {etterlevelseDokumentasjon.varslingsadresser.map((varslingsaddresse, index) => {
+                if (varslingsaddresse.type === EAdresseType.SLACK)
+                  return (
+                    <div className="flex mb-2" key={'kravVarsling_list_SLACK_' + index}>
+                      <div className="mr-1">Slack:</div>
+                      <ExternalLink href={slackLink(varslingsaddresse.adresse)}>{`#${
+                        varslingsaddresse.slackChannel?.name || varslingsaddresse.adresse
+                      }`}</ExternalLink>
+                    </div>
+                  )
+                if (varslingsaddresse.type === EAdresseType.SLACK_USER)
+                  return (
+                    <div className="flex mb-2" key={'kravVarsling_list_SLACK_USER_' + index}>
+                      <div className="mr-1">Slack:</div>
+                      <ExternalLink href={slackUserLink(varslingsaddresse.adresse)}>{`${
+                        varslingsaddresse.slackUser?.name || varslingsaddresse.adresse
+                      }`}</ExternalLink>
+                    </div>
+                  )
+                return (
+                  <div className="flex mb-2" key={'kravVarsling_list_EMAIL_' + index}>
+                    <div className="mr-1">Epost:</div>
+                    <ExternalLink href={`mailto:${varslingsaddresse.adresse}`} openOnSamePage>
+                      {varslingsaddresse.adresse}
+                    </ExternalLink>
+                  </div>
+                )
+              })}
+            </LabelAboveContent>
           </div>
         </ExpansionCard.Content>
       </ExpansionCard>

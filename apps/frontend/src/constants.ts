@@ -441,12 +441,16 @@ export type TEtterlevelseQL = IEtterlevelse & {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 }
 
-export type TEtterlevelseDokumentasjonQL = IEtterlevelseDokumentasjon & {
-  etterlevelser?: IEtterlevelse[]
-  sistEndretEtterlevelse?: string
-  sistEndretDokumentasjon?: string
-  stats?: IEtterlevelseDokumentasjonStats
-}
+export type TEtterlevelseDokumentasjonQL = TReplace<
+  IEtterlevelseDokumentasjon,
+  {
+    varslingsadresser: TVarslingsadresseQL[]
+    etterlevelser?: IEtterlevelse[]
+    sistEndretEtterlevelse?: string
+    sistEndretDokumentasjon?: string
+    stats?: IEtterlevelseDokumentasjonStats
+  }
+>
 
 export type TVarslingsadresseQL = IVarslingsadresse & {
   slackChannel?: ISlackChannel
