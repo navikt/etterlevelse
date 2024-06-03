@@ -9,10 +9,11 @@ import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
-import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
@@ -47,6 +48,7 @@ import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.
 public class KravService extends DomainService<Krav> {
 
     protected final StorageService<KravImage> imageStorage;
+    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final UrlGenerator urlGenerator;
     private final EmailService emailService;
     private final SlackClient slackClient;
@@ -226,31 +228,47 @@ public class KravService extends DomainService<Krav> {
     }
 
     private void varsle(Krav krav, boolean isNewVersion) {
-        List<Varslingsadresse> recipients = List.of();
-
         String kravId = krav.kravId();
-
         var builder = Varsel.builder();
 
-        if(isNewVersion) {
-            builder.title("Det har kommet en ny versjon på krav K" + krav.getKravNummer().toString());
-        }  else {
-            builder.title("Det har kommet et nytt krav som er relevant for ditt Etterlevelses dokument. K" + krav.getKravNummer().toString() + "." + krav.getKravVersjon().toString() + " " + krav.getNavn());
-        }
 
-        var varsel = builder
-                .paragraph(new Varsel.Paragraph("Det har kommet nytt krav som gjelder for din Etterlevelses dokumentasjon. "
-                        , url(urlGenerator.etterlevelseDokumentasjonUrl("test"), kravId)))
-                .build();
+        List<EtterlevelseDokumentasjon> relevanteDokumentasjon = getDocumentForKrav(krav, isNewVersion);
 
-        // TODO consider schedule slack messages async (like email) to guard against slack downtime
-        for (Varslingsadresse recipient : recipients) {
-            switch (recipient.getType()) {
-                case EPOST -> emailService.scheduleMail(MailTask.builder().to(recipient.getAdresse()).subject(varsel.getTitle()).body(varsel.toHtml()).build());
-                case SLACK -> slackClient.sendMessageToChannel(recipient.getAdresse(), varsel.toSlack());
-                case SLACK_USER -> slackClient.sendMessageToUserId(recipient.getAdresse(), varsel.toSlack());
-                default -> throw new NotImplementedException("%s is not an implemented varsel type".formatted(recipient.getType()));
+        relevanteDokumentasjon.forEach(e -> {
+            if(!e.getVarslingsadresser().isEmpty()) {
+                List<Varslingsadresse> recipients = e.getVarslingsadresser();
+
+                if(isNewVersion) {
+                    builder.title("Det har kommet en ny versjon på krav K" + krav.getKravNummer().toString());
+                }  else {
+                    builder.title("Det har kommet et nytt krav som er relevant for ditt Etterlevelses dokument. K" + krav.getKravNummer().toString() + "." + krav.getKravVersjon().toString() + " " + krav.getNavn());
+                }
+
+                var varsel = builder
+                        .paragraph(new Varsel.Paragraph("Det har kommet nytt krav som gjelder for din Etterlevelses dokumentasjon. "
+                                , url(urlGenerator.etterlevelseDokumentasjonUrl("test"), kravId)))
+                        .build();
+
+                // TODO consider schedule slack messages async (like email) to guard against slack downtime
+                for (Varslingsadresse recipient : recipients) {
+                    switch (recipient.getType()) {
+                        case EPOST -> emailService.scheduleMail(MailTask.builder().to(recipient.getAdresse()).subject(varsel.getTitle()).body(varsel.toHtml()).build());
+                        case SLACK -> slackClient.sendMessageToChannel(recipient.getAdresse(), varsel.toSlack());
+                        case SLACK_USER -> slackClient.sendMessageToUserId(recipient.getAdresse(), varsel.toSlack());
+                        default -> throw new NotImplementedException("%s is not an implemented varsel type".formatted(recipient.getType()));
+                    }
+                }
             }
+        });
+    }
+
+    private List<EtterlevelseDokumentasjon> getDocumentForKrav(Krav krav, boolean isNewVersion) {
+        List<EtterlevelseDokumentasjon> etterlevelseDokumentasjonList = List.of();
+
+        if(isNewVersion) {
+            return etterlevelseDokumentasjonList;
+        } else {
+            return etterlevelseDokumentasjonService.findByKravRelevans(krav.getRelevansFor());
         }
     }
 }

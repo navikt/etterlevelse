@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -52,6 +53,15 @@ public class EtterlevelseDokumentasjonController {
     public ResponseEntity<EtterlevelseDokumentasjonResponse> getById(@PathVariable UUID id) {
         log.info("Get Etterlevelse Dokumentasjon By Id Id={}", id);
         return ResponseEntity.ok(etterlevelseDokumentasjonService.getEtterlevelseDokumentasjonWithTeamAndBehandlingData(id));
+    }
+
+    @Operation(summary = "Get All Etterlevelse Dokumentasjon by relevans")
+    @ApiResponse(description = "ok")
+    @GetMapping("/relevans")
+    public ResponseEntity<List<EtterlevelseDokumentasjonResponse>> getAllEtterlevelseDokumentasjonByRelevans(@RequestParam List<String> kravRelevans) {
+        log.info("get all etterlevelse dokumentasjon by relevans");
+        List<EtterlevelseDokumentasjon> etterlevelseDokumentasjoner = etterlevelseDokumentasjonService.findByKravRelevans(kravRelevans);
+        return ResponseEntity.ok(etterlevelseDokumentasjoner.stream().map(EtterlevelseDokumentasjon::toResponse).toList());
     }
 
     @Operation(summary = "Search Etterlevelse Dokumentasjon by BehandlingId")
