@@ -27,7 +27,11 @@ export const KravStandardButtons = ({
       </Button>
 
       <Button className="ml-4" variant="primary" onClick={submitSaveButton} disabled={isSubmitting}>
-        {isButtonActive ? 'Lagre' : 'Publiser endringer'}
+        {isButtonActive
+          ? kravStatus === EKravStatus.UTGAATT
+            ? 'Lagre'
+            : 'Lagre som utkast'
+          : 'Publiser endringer'}
       </Button>
 
       {isButtonActive && (

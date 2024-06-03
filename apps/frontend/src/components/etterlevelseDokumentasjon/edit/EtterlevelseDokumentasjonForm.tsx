@@ -15,6 +15,8 @@ import { useSearchTeamOptions } from '../../../api/TeamApi'
 import { IBehandling, ITeam, IVirkemiddel, TEtterlevelseDokumentasjonQL } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
 import { EListName, ICode, ICodeListFormValues, codelist } from '../../../services/Codelist'
+import { ScrollToFieldError } from '../../../util/formikUtils'
+import { VarslingsadresserEdit } from '../../VarslingsadresserEdit'
 import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { FormError } from '../../common/ModalSchema'
@@ -94,12 +96,17 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           <Heading size="medium" level="1" className="mb-2">
             {title}
           </Heading>
+
           <TextAreaField
             rows={2}
             noPlaceholder
             label="Skriv inn tittel på etterlevelsesdokumentet"
             name="title"
           />
+
+          <div className="mt-5">
+            <TextAreaField rows={5} noPlaceholder label="Beskrivelse" name="beskrivelse" />
+          </div>
 
           {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
 
@@ -327,37 +334,44 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
               )}
             </Field>
           </FieldWrapper>
-          <div className="my-5">
-            <FormError fieldName="title" akselStyling />
+
+          <div id="varslingsadresser" className="mt-5">
+            <VarslingsadresserEdit />
           </div>
-          <div className="flex justify-end">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => {
-                ampli.logEvent('knapp trykket', {
-                  tekst: 'Avbryt opprett etterlevelsesdokument',
-                })
-                navigate(-1)
-              }}
-            >
-              Avbryt
-            </Button>
-            <Button
-              type="button"
-              onClick={() => {
-                if (!isEditButton) {
+
+          <FormError fieldName="varslingsadresser" akselStyling />
+
+          <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-bg-default">
+            <div className="flex justify-end">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
                   ampli.logEvent('knapp trykket', {
-                    tekst: 'Opprett etterlevelsesdokument',
+                    tekst: 'Avbryt opprett etterlevelsesdokument',
                   })
-                }
-                submitForm()
-              }}
-              className="ml-2.5"
-            >
-              {isEditButton ? 'Lagre' : 'Opprett'}
-            </Button>
+                  navigate(-1)
+                }}
+              >
+                Avbryt
+              </Button>
+              <Button
+                type="button"
+                onClick={() => {
+                  if (!isEditButton) {
+                    ampli.logEvent('knapp trykket', {
+                      tekst: 'Opprett etterlevelsesdokument',
+                    })
+                  }
+                  submitForm()
+                }}
+                className="ml-2.5"
+              >
+                {isEditButton ? 'Lagre' : 'Opprett'}
+              </Button>
+            </div>
           </div>
+          <ScrollToFieldError />
         </Form>
       )}
     </Formik>
