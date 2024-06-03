@@ -4,7 +4,6 @@ import { EAdresseType, TEtterlevelseDokumentasjonQL } from '../../constants'
 import { EListName, ICode, codelist } from '../../services/Codelist'
 import { slackLink, slackUserLink } from '../../util/config'
 import { BehandlingList } from '../behandling/BehandlingList'
-import { LabelAboveContent } from '../common/PropertyLabel'
 import { ExternalLink } from '../common/RouteLink'
 import { Teams } from '../common/TeamName'
 
@@ -112,37 +111,59 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
             )}
             {getRelevans(irrelevansFor)}
           </div>
-          <div className="mb-4">
-            <LabelAboveContent title="Varslingsadresser">
+          <div className="flex items-start gap-2">
+            <BodyShort size="small" className="mt-[3px]">
+              Varslingsadresser:
+            </BodyShort>
+            <div>
               {etterlevelseDokumentasjon.varslingsadresser.map((varslingsaddresse, index) => {
                 if (varslingsaddresse.type === EAdresseType.SLACK)
                   return (
                     <div className="flex mb-2" key={'kravVarsling_list_SLACK_' + index}>
-                      <div className="mr-1">Slack:</div>
-                      <ExternalLink href={slackLink(varslingsaddresse.adresse)}>{`#${
+                      <BodyShort size="small" className="mr-1">
+                        Slack:
+                      </BodyShort>
+                      <ExternalLink
+                        className="text-medium"
+                        href={slackLink(varslingsaddresse.adresse)}
+                      >{`#${
                         varslingsaddresse.slackChannel?.name || varslingsaddresse.adresse
                       }`}</ExternalLink>
                     </div>
                   )
                 if (varslingsaddresse.type === EAdresseType.SLACK_USER)
                   return (
-                    <div className="flex mb-2" key={'kravVarsling_list_SLACK_USER_' + index}>
-                      <div className="mr-1">Slack:</div>
-                      <ExternalLink href={slackUserLink(varslingsaddresse.adresse)}>{`${
+                    <div
+                      className="flex items-center mb-2"
+                      key={'kravVarsling_list_SLACK_USER_' + index}
+                    >
+                      <BodyShort size="small" className="mr-1">
+                        Slack:
+                      </BodyShort>
+                      <ExternalLink
+                        className="text-medium"
+                        href={slackUserLink(varslingsaddresse.adresse)}
+                      >{`${
                         varslingsaddresse.slackUser?.name || varslingsaddresse.adresse
                       }`}</ExternalLink>
                     </div>
                   )
                 return (
                   <div className="flex mb-2" key={'kravVarsling_list_EMAIL_' + index}>
-                    <div className="mr-1">Epost:</div>
-                    <ExternalLink href={`mailto:${varslingsaddresse.adresse}`} openOnSamePage>
+                    <BodyShort size="small" className="mr-1">
+                      Epost:
+                    </BodyShort>
+                    <ExternalLink
+                      className="text-medium"
+                      href={`mailto:${varslingsaddresse.adresse}`}
+                      openOnSamePage
+                    >
                       {varslingsaddresse.adresse}
                     </ExternalLink>
                   </div>
                 )
               })}
-            </LabelAboveContent>
+            </div>
           </div>
         </ExpansionCard.Content>
       </ExpansionCard>
