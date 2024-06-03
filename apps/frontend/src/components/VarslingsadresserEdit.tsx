@@ -13,7 +13,7 @@ import {
   getSlackUserById,
   usePersonSearch,
   useSlackChannelSearch,
-} from '../../../api/TeamApi'
+} from '../api/TeamApi'
 import {
   EAdresseType,
   IKrav,
@@ -22,16 +22,16 @@ import {
   ITeamResource,
   IVarslingsadresse,
   TVarslingsadresseQL,
-} from '../../../constants'
-import { user } from '../../../services/User'
-import { ettlevColors } from '../../../util/theme'
-import { FieldWrapper } from '../../common/Inputs'
-import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { Error } from '../../common/ModalSchema'
-import { RenderTagList } from '../../common/TagList'
-import { DropdownIndicator } from './KravBegreperEdit'
+} from '../constants'
+import { user } from '../services/User'
+import { ettlevColors } from '../util/theme'
+import { FieldWrapper } from './common/Inputs'
+import LabelWithTooltip from './common/LabelWithTooltip'
+import { Error } from './common/ModalSchema'
+import { RenderTagList } from './common/TagList'
+import { DropdownIndicator } from './krav/Edit/KravBegreperEdit'
 
-export const KravVarslingsadresserEdit = () => {
+export const VarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
   const [addSlackUser, setAddSlackUser] = useState<boolean>(false)
   const [addEmail, setAddEmail] = useState<boolean>(false)

@@ -59,7 +59,9 @@ export const KravEditPage = () => {
       krav.kravVersjon
     )
     if (etterlevelser.totalElements > 0 && krav.status === EKravStatus.UTKAST) {
-      setErrorModalMessage('Kravet kan ikke settes til «Utkast» når det er tilknyttet etterlevelse')
+      setErrorModalMessage(
+        'Du kan ikke sette dette kravet til «Utkast» fordi det er minst én etterlevelse som bruker kravet i sin dokumentasjon.'
+      )
       setShowErrorModal(true)
     } else if (krav.id) {
       close(await updateKrav(mutatedKrav))

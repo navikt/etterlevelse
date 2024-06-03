@@ -2,13 +2,13 @@ import { Alert, Checkbox, CheckboxGroup, Heading } from '@navikt/ds-react'
 import { FormikErrors } from 'formik/dist/types'
 import { TKravQL } from '../../../../constants'
 import { EListName } from '../../../../services/Codelist'
+import { VarslingsadresserEdit } from '../../../VarslingsadresserEdit'
 import { InputField, TextAreaField } from '../../../common/Inputs'
 import { FormError } from '../../../common/ModalSchema'
 import { EditKravMultiOptionField } from '../EditKravMultiOptionField'
 import { EditKravRelasjoner } from '../EditKravRelasjoner'
 import { EditBegreper } from '../KravBegreperEdit'
 import { KravSuksesskriterierEdit } from '../KravSuksesskriterieEdit'
-import { KravVarslingsadresserEdit } from '../KravVarslingsadresserEdit'
 import { RegelverkEdit } from '../RegelverkEdit'
 import { KravEditDokumentasjon } from './KravEditDokumentasjon'
 
@@ -129,7 +129,7 @@ export const KravFormFields = (props: IProps) => {
           </div>
 
           <div id="varslingsadresser">
-            <KravVarslingsadresserEdit />
+            <VarslingsadresserEdit />
           </div>
 
           <FormError fieldName="varslingsadresser" akselStyling />

@@ -29,14 +29,14 @@ import {
   ITilbakemelding,
   IVarslingsadresse,
 } from '../../../../constants'
-import { TextAreaField } from '../../../common/Inputs'
-import { Markdown } from '../../../common/Markdown'
 import {
   AddEmail,
   SlackChannelSearch,
   SlackUserSearch,
   VarslingsadresserTagList,
-} from '../../Edit/KravVarslingsadresserEdit'
+} from '../../../VarslingsadresserEdit'
+import { TextAreaField } from '../../../common/Inputs'
+import { Markdown } from '../../../common/Markdown'
 
 type TNyTilbakemeldingModalProps = {
   open?: boolean

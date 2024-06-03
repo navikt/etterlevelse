@@ -1,12 +1,12 @@
 import { useQuery } from '@apollo/client'
-import { Heading } from '@navikt/ds-react'
+import { Button, Heading, Label } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { Markdown } from '../components/common/Markdown'
 import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
-import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import DokumentasjonPageTabs from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonPageTabs'
 import { PageLayout } from '../components/scaffold/Page'
 import {
@@ -24,6 +24,7 @@ export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string; tema?: string }>()
   const temaListe = codelist.getCodes(EListName.TEMA)
   const variables = { etterlevelseDokumentasjonId: params.id }
+  const navigate = useNavigate()
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
     params.id
   )
@@ -113,16 +114,29 @@ export const DokumentasjonPage = () => {
           <Heading level="1" size="medium">
             E{etterlevelseNummer.toString()} {title}
           </Heading>
+
+          {etterlevelseDokumentasjon.beskrivelse && (
+            <div>
+              <Label>Beskrivelse</Label>
+              <Markdown sources={[etterlevelseDokumentasjon.beskrivelse]} />
+            </div>
+          )}
+
           <div className="flex items-center my-5">
             <EtterlevelseDokumentasjonExpansionCard
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             />
             {etterlevelseDokumentasjon && (
-              <EditEtterlevelseDokumentasjonModal
-                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-                isEditButton
-              />
+              <Button
+                onClick={() => {
+                  navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
+                }}
+                size="small"
+                variant="secondary"
+                className="whitespace-nowrap ml-5"
+              >
+                Rediger etterlevelsesdokumentet
+              </Button>
             )}
           </div>
         </div>

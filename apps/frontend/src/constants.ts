@@ -316,6 +316,7 @@ export interface IEtterlevelseDokumentasjon {
   changeStamp: IChangeStamp
   version: number
   title: string
+  beskrivelse: string
   behandlingIds: string[]
   virkemiddelId: string
   irrelevansFor: ICode[]
@@ -330,6 +331,7 @@ export interface IEtterlevelseDokumentasjon {
   virkemiddel?: IVirkemiddel
   knyttetTilVirkemiddel: boolean
   knytteTilTeam: boolean
+  varslingsadresser: IVarslingsadresse[]
 }
 
 export interface IEtterlevelseDokumentasjonStats {
@@ -439,12 +441,16 @@ export type TEtterlevelseQL = IEtterlevelse & {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 }
 
-export type TEtterlevelseDokumentasjonQL = IEtterlevelseDokumentasjon & {
-  etterlevelser?: IEtterlevelse[]
-  sistEndretEtterlevelse?: string
-  sistEndretDokumentasjon?: string
-  stats?: IEtterlevelseDokumentasjonStats
-}
+export type TEtterlevelseDokumentasjonQL = TReplace<
+  IEtterlevelseDokumentasjon,
+  {
+    varslingsadresser: TVarslingsadresseQL[]
+    etterlevelser?: IEtterlevelse[]
+    sistEndretEtterlevelse?: string
+    sistEndretDokumentasjon?: string
+    stats?: IEtterlevelseDokumentasjonStats
+  }
+>
 
 export type TVarslingsadresseQL = IVarslingsadresse & {
   slackChannel?: ISlackChannel

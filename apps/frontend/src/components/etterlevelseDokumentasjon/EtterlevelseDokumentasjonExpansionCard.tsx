@@ -4,6 +4,7 @@ import { TEtterlevelseDokumentasjonQL } from '../../constants'
 import { EListName, ICode, codelist } from '../../services/Codelist'
 import { BehandlingList } from '../behandling/BehandlingList'
 import { Teams } from '../common/TeamName'
+import { VarslingsadresserView } from './VarslingsAddresseView'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -108,6 +109,18 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
               </div>
             )}
             {getRelevans(irrelevansFor)}
+          </div>
+          <div className="flex items-start gap-2">
+            <BodyShort size="small" className="mt-[3px]">
+              Varslingsadresser:
+            </BodyShort>
+            <div>
+              {etterlevelseDokumentasjon.varslingsadresser && (
+                <VarslingsadresserView
+                  varslingsadresser={etterlevelseDokumentasjon.varslingsadresser}
+                />
+              )}
+            </div>
           </div>
         </ExpansionCard.Content>
       </ExpansionCard>
