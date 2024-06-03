@@ -1,11 +1,10 @@
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
 import { BodyShort, ExpansionCard, Label, Tag } from '@navikt/ds-react'
-import { EAdresseType, TEtterlevelseDokumentasjonQL } from '../../constants'
+import { TEtterlevelseDokumentasjonQL } from '../../constants'
 import { EListName, ICode, codelist } from '../../services/Codelist'
-import { slackLink, slackUserLink } from '../../util/config'
 import { BehandlingList } from '../behandling/BehandlingList'
-import { ExternalLink } from '../common/RouteLink'
 import { Teams } from '../common/TeamName'
+import { VarslingsadresserView } from './VarslingsAddresseView'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -116,53 +115,11 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
               Varslingsadresser:
             </BodyShort>
             <div>
-              {etterlevelseDokumentasjon.varslingsadresser.map((varslingsaddresse, index) => {
-                if (varslingsaddresse.type === EAdresseType.SLACK)
-                  return (
-                    <div className="flex mb-2" key={'kravVarsling_list_SLACK_' + index}>
-                      <BodyShort size="small" className="mr-1">
-                        Slack:
-                      </BodyShort>
-                      <ExternalLink
-                        className="text-medium"
-                        href={slackLink(varslingsaddresse.adresse)}
-                      >{`#${
-                        varslingsaddresse.slackChannel?.name || varslingsaddresse.adresse
-                      }`}</ExternalLink>
-                    </div>
-                  )
-                if (varslingsaddresse.type === EAdresseType.SLACK_USER)
-                  return (
-                    <div
-                      className="flex items-center mb-2"
-                      key={'kravVarsling_list_SLACK_USER_' + index}
-                    >
-                      <BodyShort size="small" className="mr-1">
-                        Slack:
-                      </BodyShort>
-                      <ExternalLink
-                        className="text-medium"
-                        href={slackUserLink(varslingsaddresse.adresse)}
-                      >{`${
-                        varslingsaddresse.slackUser?.name || varslingsaddresse.adresse
-                      }`}</ExternalLink>
-                    </div>
-                  )
-                return (
-                  <div className="flex mb-2" key={'kravVarsling_list_EMAIL_' + index}>
-                    <BodyShort size="small" className="mr-1">
-                      Epost:
-                    </BodyShort>
-                    <ExternalLink
-                      className="text-medium"
-                      href={`mailto:${varslingsaddresse.adresse}`}
-                      openOnSamePage
-                    >
-                      {varslingsaddresse.adresse}
-                    </ExternalLink>
-                  </div>
-                )
-              })}
+              {etterlevelseDokumentasjon.varslingsadresser && (
+                <VarslingsadresserView
+                  varslingsadresser={etterlevelseDokumentasjon.varslingsadresser}
+                />
+              )}
             </div>
           </div>
         </ExpansionCard.Content>
