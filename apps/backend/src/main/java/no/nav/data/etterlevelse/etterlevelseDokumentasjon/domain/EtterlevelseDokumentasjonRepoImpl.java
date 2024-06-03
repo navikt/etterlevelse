@@ -58,7 +58,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
         var par = new MapSqlParameterSource();
 
         if (filter.getRelevans() != null && !filter.getRelevans().isEmpty()) {
-            query += " and NOT data -> 'irrelevansFor' ??| array[ :relevans ] ";
+            query += " and NOT data -> 'irrelevansFor' @>  to_jsonb(array[ :relevans ]) ";
             par.addValue("relevans", filter.getRelevans());
         }
 
