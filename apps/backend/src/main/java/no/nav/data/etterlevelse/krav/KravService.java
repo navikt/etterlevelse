@@ -130,7 +130,9 @@ public class KravService extends DomainService<Krav> {
 
 
         if (krav.getStatus() == KravStatus.AKTIV) {
+            varsle(krav, false);
             if (krav.getKravVersjon() > 1) {
+                varsle(krav, true);
                 int olderKravVersjon = krav.getKravVersjon() - 1;
                 kravRepo.updateKravToUtgaatt(krav.getKravNummer(), olderKravVersjon);
             }
@@ -231,8 +233,6 @@ public class KravService extends DomainService<Krav> {
     }
 
     private void varsle(Krav krav, boolean isNewVersion) {
-
-
         List<EtterlevelseDokumentasjon> relevanteDokumentasjon = getDocumentForKrav(krav, isNewVersion);
 
         relevanteDokumentasjon.forEach(e -> {
