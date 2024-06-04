@@ -251,7 +251,7 @@ public class KravService extends DomainService<Krav> {
 
                 var varsel = builder
                         .paragraph(new Varsel.Paragraph("Det har kommet nytt krav som gjelder for din Etterlevelses dokumentasjon. "
-                                , url(urlGenerator.etterlevelseDokumentasjonUrl("test"), kravId)))
+                                , url(urlGenerator.etterlevelseDokumentasjonUrl(e.getId().toString()), e.getId().toString())))
                         .build();
 
                 // TODO consider schedule slack messages async (like email) to guard against slack downtime
