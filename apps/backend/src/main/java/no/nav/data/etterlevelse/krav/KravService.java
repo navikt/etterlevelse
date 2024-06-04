@@ -240,16 +240,17 @@ public class KravService extends DomainService<Krav> {
         relevanteDokumentasjon.forEach(e -> {
             if(e.getVarslingsadresser() != null && !e.getVarslingsadresser().isEmpty()) {
                 List<Varslingsadresse> recipients = e.getVarslingsadresser();
+                String etterlevelseId = "E%s %s".formatted(e.getEtterlevelseNummer(), e.getTitle());
                 var builder = Varsel.builder();
                 if(isNewVersion) {
-                    builder.title("Det har kommet en ny versjon på krav K%s".formatted(krav.getKravNummer().toString()));
+                    builder.title("Det har kommet en ny versjon på krav K%d".formatted(krav.getKravNummer()));
                 }  else {
-                    builder.title("Det har kommet et nytt krav som er relevant for ditt Etterlevelses dokument. K%s.%s %s".formatted(krav.getKravNummer().toString(), krav.getKravVersjon().toString(), krav.getNavn()));
+                    builder.title("Det har kommet et nytt krav som er relevant for ditt Etterlevelses dokument. K%d.%d %s".formatted(krav.getKravNummer(), krav.getKravVersjon(), krav.getNavn()));
                 }
 
                 var varsel = builder
-                        .paragraph(new Varsel.Paragraph("Det har kommet nytt krav som gjelder for din Etterlevelses dokumentasjon. %%s"
-                                , url(urlGenerator.etterlevelseDokumentasjonUrl(e.getId().toString()), "E%s %s".formatted(e.getEtterlevelseNummer(), e.getTitle()))))
+                        .paragraph(new Varsel.Paragraph("Det har kommet nytt %s som gjelder for din Etterlevelses dokumentasjon, %%s".formatted("krav")
+                                , url(urlGenerator.etterlevelseDokumentasjonUrl(e.getId().toString()), etterlevelseId )))
                         .build();
 
                 // TODO consider schedule slack messages async (like email) to guard against slack downtime
