@@ -243,7 +243,7 @@ public class KravService extends DomainService<Krav> {
                 if(isNewVersion) {
                     builder.title("Det har kommet en ny versjon på krav K%d".formatted(krav.getKravNummer()));
                 }  else {
-                    builder.title("Det har kommet et nytt krav som er relevant for ditt Etterlevelses dokument. K%d.%d %s".formatted(krav.getKravNummer(), krav.getKravVersjon(), krav.getNavn()));
+                    builder.title("Det har kommet et nytt krav som er relevant for ditt Etterlevelses dokument. K%d.%d".formatted(krav.getKravNummer(), krav.getKravVersjon()));
                 }
 
                 var varsel = builder
