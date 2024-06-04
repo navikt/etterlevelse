@@ -243,14 +243,14 @@ public class KravService extends DomainService<Krav> {
                 List<Varslingsadresse> recipients = e.getVarslingsadresser();
 
                 if(isNewVersion) {
-                    builder.title("Det har kommet en ny versjon på krav K" + krav.getKravNummer().toString());
+                    builder.title("Det har kommet en ny versjon på krav K%s".formatted(krav.getKravNummer().toString()));
                 }  else {
-                    builder.title("Det har kommet et nytt krav som er relevant for ditt Etterlevelses dokument. K" + krav.getKravNummer().toString() + "." + krav.getKravVersjon().toString() + " " + krav.getNavn());
+                    builder.title("Det har kommet et nytt krav som er relevant for ditt Etterlevelses dokument. K%s.%s %s".formatted(krav.getKravNummer().toString(), krav.getKravVersjon().toString(), krav.getNavn()));
                 }
 
                 var varsel = builder
                         .paragraph(new Varsel.Paragraph("Det har kommet nytt krav som gjelder for din Etterlevelses dokumentasjon. "
-                                , url(urlGenerator.etterlevelseDokumentasjonUrl(e.getId().toString()), e.getId().toString())))
+                                , url(urlGenerator.etterlevelseDokumentasjonUrl(e.getId().toString()), "E%s".formatted(e.getEtterlevelseNummer()))))
                         .build();
 
                 // TODO consider schedule slack messages async (like email) to guard against slack downtime
