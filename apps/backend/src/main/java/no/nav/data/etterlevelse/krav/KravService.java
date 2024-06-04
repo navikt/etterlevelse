@@ -130,7 +130,9 @@ public class KravService extends DomainService<Krav> {
 
 
         if (krav.getStatus() == KravStatus.AKTIV) {
+            varsle(krav, false);
             if (krav.getKravVersjon() > 1) {
+                varsle(krav, true);
                 int olderKravVersjon = krav.getKravVersjon() - 1;
                 kravRepo.updateKravToUtgaatt(krav.getKravNummer(), olderKravVersjon);
             }
@@ -253,14 +255,14 @@ public class KravService extends DomainService<Krav> {
                         .build();
 
                 // TODO consider schedule slack messages async (like email) to guard against slack downtime
-                for (Varslingsadresse recipient : recipients) {
-                    switch (recipient.getType()) {
-                        case EPOST -> emailService.scheduleMail(MailTask.builder().to(recipient.getAdresse()).subject(varsel.getTitle()).body(varsel.toHtml()).build());
-                        case SLACK -> slackClient.sendMessageToChannel(recipient.getAdresse(), varsel.toSlack());
-                        case SLACK_USER -> slackClient.sendMessageToUserId(recipient.getAdresse(), varsel.toSlack());
-                        default -> throw new NotImplementedException("%s is not an implemented varsel type".formatted(recipient.getType()));
+                recipients.forEach(varslingsadresse ->  {
+                    switch (varslingsadresse.getType()) {
+                        case EPOST -> emailService.scheduleMail(MailTask.builder().to(varslingsadresse.getAdresse()).subject(varsel.getTitle()).body(varsel.toHtml()).build());
+                        case SLACK -> slackClient.sendMessageToChannel(varslingsadresse.getAdresse(), varsel.toSlack());
+                        case SLACK_USER -> slackClient.sendMessageToUserId(varslingsadresse.getAdresse(), varsel.toSlack());
+                        default -> throw new NotImplementedException("%s is not an implemented varsel type".formatted(varslingsadresse.getType()));
                     }
-                }
+                });
             }
         });
     }
