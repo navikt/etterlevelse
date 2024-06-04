@@ -233,7 +233,6 @@ public class KravService extends DomainService<Krav> {
     }
 
     private void varsle(Krav krav, boolean isNewVersion) {
-        var builder = Varsel.builder();
 
 
         List<EtterlevelseDokumentasjon> relevanteDokumentasjon = getDocumentForKrav(krav, isNewVersion);
@@ -241,7 +240,7 @@ public class KravService extends DomainService<Krav> {
         relevanteDokumentasjon.forEach(e -> {
             if(e.getVarslingsadresser() != null && !e.getVarslingsadresser().isEmpty()) {
                 List<Varslingsadresse> recipients = e.getVarslingsadresser();
-
+                var builder = Varsel.builder();
                 if(isNewVersion) {
                     builder.title("Det har kommet en ny versjon på krav K%s".formatted(krav.getKravNummer().toString()));
                 }  else {
@@ -249,8 +248,8 @@ public class KravService extends DomainService<Krav> {
                 }
 
                 var varsel = builder
-                        .paragraph(new Varsel.Paragraph("Det har kommet nytt krav som gjelder for din Etterlevelses dokumentasjon. "
-                                , url(urlGenerator.etterlevelseDokumentasjonUrl(e.getId().toString()), "E%s".formatted(e.getEtterlevelseNummer()))))
+                        .paragraph(new Varsel.Paragraph("Det har kommet nytt krav som gjelder for din Etterlevelses dokumentasjon. %%s"
+                                , url(urlGenerator.etterlevelseDokumentasjonUrl(e.getId().toString()), "E%s %s".formatted(e.getEtterlevelseNummer(), e.getTitle()))))
                         .build();
 
                 // TODO consider schedule slack messages async (like email) to guard against slack downtime
