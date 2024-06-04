@@ -130,9 +130,7 @@ public class KravService extends DomainService<Krav> {
 
 
         if (krav.getStatus() == KravStatus.AKTIV) {
-            varsle(krav, false);
             if (krav.getKravVersjon() > 1) {
-                varsle(krav, true);
                 int olderKravVersjon = krav.getKravVersjon() - 1;
                 kravRepo.updateKravToUtgaatt(krav.getKravNummer(), olderKravVersjon);
             }
@@ -249,7 +247,7 @@ public class KravService extends DomainService<Krav> {
                 }
 
                 var varsel = builder
-                        .paragraph(new Varsel.Paragraph("Det har kommet nytt %s som gjelder for din Etterlevelses dokumentasjon, %%s".formatted("krav")
+                        .paragraph(new Varsel.Paragraph("Det har kommet nytt krav som gjelder for din Etterlevelses dokumentasjon, %s"
                                 , url(urlGenerator.etterlevelseDokumentasjonUrl(e.getId().toString()), etterlevelseId )))
                         .build();
 
