@@ -240,7 +240,7 @@ public class KravService extends DomainService<Krav> {
         List<EtterlevelseDokumentasjon> relevanteDokumentasjon = getDocumentForKrav(krav, isNewVersion);
 
         relevanteDokumentasjon.forEach(e -> {
-            if(!e.getVarslingsadresser().isEmpty()) {
+            if(e.getVarslingsadresser() != null && !e.getVarslingsadresser().isEmpty()) {
                 List<Varslingsadresse> recipients = e.getVarslingsadresser();
 
                 if(isNewVersion) {
