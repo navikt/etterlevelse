@@ -223,8 +223,6 @@ public class SlackClient {
             var response = restTemplate.postForEntity(POST_MESSAGE, request, PostMessageResponse.class);
             checkResponse(response);
         } catch (Exception e) {
-            log.debug(e.toString());
-            log.error(e.toString());
             throw new TechnicalException("Failed to send message to channel " + channel, e);
         }
     }
