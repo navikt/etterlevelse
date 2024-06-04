@@ -161,6 +161,7 @@ public class SlackClient {
             return user.getUser();
         } catch (Exception e) {
             if (e.getMessage().contains("users_not_found")) {
+                log.debug("Couldn't find user for email {}", email);
                 return null;
             }
             throw new TechnicalException("Failed to get userId for " + email, e);
@@ -174,6 +175,7 @@ public class SlackClient {
             return user.getUser();
         } catch (Exception e) {
             if (e.getMessage().contains("users_not_found")) {
+                log.debug("Couldn't find user for id {}", id);
                 return null;
             }
             throw new TechnicalException("Failed to get user for id " + id, e);
