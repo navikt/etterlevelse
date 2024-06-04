@@ -200,8 +200,8 @@ public class SlackClient {
             List<List<Block>> partitions = ListUtils.partition(splitLongBlocks(blocks), MAX_BLOCKS_PER_MESSAGE);
             partitions.forEach(partition -> doSendMessageToChannel(channel, partition));
         } catch (Exception e) {
-            log.debug(e.getMessage());
-            log.error(e.getMessage());
+            log.debug(e.toString());
+            log.error(e.toString());
             throw new TechnicalException("Failed to send message to " + userId + " " + JsonUtils.toJson(blocks), e);
         }
     }
@@ -211,8 +211,8 @@ public class SlackClient {
             List<List<Block>> partitions = ListUtils.partition(splitLongBlocks(blocks), MAX_BLOCKS_PER_MESSAGE);
             partitions.forEach(partition -> doSendMessageToChannel(channel, partition));
         } catch (Exception e) {
-            log.debug(e.getMessage());
-            log.error(e.getMessage());
+            log.debug(e.toString());
+            log.error(e.toString());
             throw new TechnicalException("Failed to send message to " + channel + " " + JsonUtils.toJson(blocks), e);
         }
     }

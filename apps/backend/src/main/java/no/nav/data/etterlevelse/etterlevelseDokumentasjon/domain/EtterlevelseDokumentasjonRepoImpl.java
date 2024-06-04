@@ -48,7 +48,11 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
     public List<GenericStorage<EtterlevelseDokumentasjon>> findByKravRelevans(List<String> kravRelevans) {
         var query = "select id from generic_storage where type = 'EtterlevelseDokumentasjon' and not data -> 'irrelevansFor' @>  to_jsonb(array[ :kravRelevans ])";
         var par = new MapSqlParameterSource();
-        par.addValue("kravRelevans", kravRelevans);
+        if(kravRelevans.isEmpty()) {
+            par.addValue("kravRelevans", "");
+        } else {
+            par.addValue("kravRelevans", kravRelevans);
+        }
         return fetch(jdbcTemplate.queryForList(query, par));
     }
 
