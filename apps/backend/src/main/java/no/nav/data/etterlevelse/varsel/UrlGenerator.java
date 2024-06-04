@@ -23,6 +23,6 @@ public class UrlGenerator {
     }
 
     public String etterlevelseDokumentasjonUrl(String etterlevelseDokumentasjonId) {
-        return "%s/dokumentasjon/%d".formatted(baseUrl, etterlevelseDokumentasjonId);
+        return "%s/dokumentasjon/%s".formatted(baseUrl, etterlevelseDokumentasjonId);
     }
 }

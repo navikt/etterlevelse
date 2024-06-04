@@ -233,7 +233,6 @@ public class KravService extends DomainService<Krav> {
     }
 
     private void varsle(Krav krav, boolean isNewVersion) {
-        String kravId = krav.kravId();
         var builder = Varsel.builder();
 
 
