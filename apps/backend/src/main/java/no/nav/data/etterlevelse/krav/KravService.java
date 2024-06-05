@@ -141,9 +141,19 @@ public class KravService extends DomainService<Krav> {
             log.error("previousKrav status start: " + previousKrav.getStatus());
             if (previousKrav.getStatus() != KravStatus.AKTIV && krav.getStatus() == KravStatus.AKTIV) {
                 krav.setAktivertDato(LocalDateTime.now());
+
+
+                log.debug("TRIGGER NEW VARSLING");
+                log.error("TRIGGER NEW VARSLING");
+                log.debug("K" + krav.getKravNummer() + "." + krav.getKravVersjon());
+                log.error("K" + krav.getKravNummer() + "." + krav.getKravVersjon());
                 varsle(krav, krav.getKravVersjon() > 1);
             }
         } else if (krav.getStatus() == KravStatus.AKTIV) {
+
+            log.debug("new krav sett to active");
+            log.error("new krav sett to active");
+
             krav.setAktivertDato(LocalDateTime.now());
             varsle(krav, krav.getKravVersjon() > 1);
         }
