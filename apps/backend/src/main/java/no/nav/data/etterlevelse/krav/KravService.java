@@ -139,6 +139,8 @@ public class KravService extends DomainService<Krav> {
             Krav previousKrav = storage.get(krav.getId());
             log.debug("previousKrav status start: " + previousKrav.getStatus());
             log.error("previousKrav status start: " + previousKrav.getStatus());
+            log.debug("new krav status : " + krav.getStatus());
+            log.error("new krav status : " + krav.getStatus());
             if (previousKrav.getStatus() != KravStatus.AKTIV && krav.getStatus() == KravStatus.AKTIV) {
                 krav.setAktivertDato(LocalDateTime.now());
 
