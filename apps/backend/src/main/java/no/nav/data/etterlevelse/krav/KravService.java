@@ -147,6 +147,8 @@ public class KravService extends DomainService<Krav> {
         }
         log.debug("before varslng");
         log.error("before varslng");
+        log.debug("request status: " + request.getStatus() + " , oldkrav status: " + oldKrav.getStatus());
+        log.error("request status: " + request.getStatus() + " , oldkrav status: " + oldKrav.getStatus());
         if (request.getStatus() == KravStatus.AKTIV && oldKrav.getStatus() != KravStatus.AKTIV) {
             log.debug("varslng trigger");
             log.error("varslng trigger");
