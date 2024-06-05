@@ -121,8 +121,6 @@ public class KravService extends DomainService<Krav> {
         var krav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
 
         krav.merge(request);
-        log.debug("oldkrav status etter merge: " + oldKrav.getStatus());
-        log.error("oldkrav status etter merge: " + oldKrav.getStatus());
         if (request.isNyKravVersjon()) {
             krav.setKravNummer(request.getKravNummer());
             krav.setKravVersjon(kravRepo.nextKravVersjon(request.getKravNummer()));
