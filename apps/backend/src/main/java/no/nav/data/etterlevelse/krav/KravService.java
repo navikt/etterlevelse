@@ -117,9 +117,7 @@ public class KravService extends DomainService<Krav> {
                 .addValidations(this::validateBegreper)
                 .ifErrorsThrowValidationException();
 
-        var oldKrav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
-        log.debug("oldkrav status start: " + oldKrav.getStatus());
-        log.error("oldkrav status start: " + oldKrav.getStatus());
+
         var krav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
 
         krav.merge(request);
@@ -148,7 +146,9 @@ public class KravService extends DomainService<Krav> {
         } else if (krav.getStatus() == KravStatus.AKTIV) {
             krav.setAktivertDato(LocalDateTime.now());
         }
-
+        var oldKrav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
+        log.debug("oldkrav status start: " + oldKrav.getStatus());
+        log.error("oldkrav status start: " + oldKrav.getStatus());
         if (request.getStatus() == KravStatus.AKTIV && oldKrav.getStatus() != KravStatus.AKTIV) {
             if (request.isNyKravVersjon()) {
                 varsle(krav, true);
