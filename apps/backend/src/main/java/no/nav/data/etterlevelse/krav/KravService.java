@@ -119,7 +119,22 @@ public class KravService extends DomainService<Krav> {
 
         var krav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
 
+
+        if(request.isUpdate()) {
+            var testKrav = storage.get(request.getIdAsUUID());
+            log.debug("before megre storage krav status: " + testKrav.getStatus());
+
+            log.error("before megre storage krav status: " + testKrav.getStatus());
+        }
+
         krav.merge(request);
+
+        if(request.isUpdate()) {
+            var testKrav = storage.get(request.getIdAsUUID());
+            log.debug("after megre storage krav status: " + testKrav.getStatus());
+            log.error("before megre storage krav status: " + testKrav.getStatus());
+        }
+
         if (request.isNyKravVersjon()) {
             krav.setKravNummer(request.getKravNummer());
             krav.setKravVersjon(kravRepo.nextKravVersjon(request.getKravNummer()));
@@ -152,10 +167,6 @@ public class KravService extends DomainService<Krav> {
                 varsle(krav, krav.getKravVersjon() > 1);
             }
         } else if (krav.getStatus() == KravStatus.AKTIV) {
-
-            log.debug("new krav sett to active");
-            log.error("new krav sett to active");
-
             krav.setAktivertDato(LocalDateTime.now());
             varsle(krav, krav.getKravVersjon() > 1);
         }
