@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import no.nav.data.common.auditing.AuditVersionService;
+import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.mail.EmailService;
 import no.nav.data.common.mail.MailTask;
 import no.nav.data.common.storage.StorageService;
@@ -131,11 +132,6 @@ public class KravService extends DomainService<Krav> {
 
         krav.merge(request);
 
-        if(request.isUpdate()) {
-            var testKrav = storage.get(request.getIdAsUUID());
-            log.debug("after megre storage krav status: " + testKrav.getStatus());
-            log.error("after megre storage krav status: " + testKrav.getStatus());
-        }
 
         if (request.isNyKravVersjon()) {
             krav.setKravNummer(request.getKravNummer());
@@ -144,22 +140,15 @@ public class KravService extends DomainService<Krav> {
             krav.setKravNummer(kravRepo.nextKravNummer());
         }
 
-        if(request.isUpdate()) {
-            var testKrav = storage.get(request.getIdAsUUID());
-            log.debug("after version check storage krav status: " + testKrav.getStatus());
-            log.error("after version check storage krav status: " + testKrav.getStatus());
-        }
-
         if (krav.getId() != null) {
-            Krav previousKrav = storage.get(request.getIdAsUUID());
+            List<AuditVersion> kravAudits = auditVersionService.getByTableIdAndTimestamp(krav.getId().toString(), LocalDateTime.now().toString());
+            Krav previousKrav = kravAudits.get(0).getDomainObjectData(Krav.class);
             log.debug("previousKrav status start: " + previousKrav.getStatus());
             log.error("previousKrav status start: " + previousKrav.getStatus());
             log.debug("new krav status : " + krav.getStatus());
             log.error("new krav status : " + krav.getStatus());
             if (previousKrav.getStatus() != KravStatus.AKTIV && krav.getStatus() == KravStatus.AKTIV) {
                 krav.setAktivertDato(LocalDateTime.now());
-
-
                 log.debug("TRIGGER NEW VARSLING");
                 log.error("TRIGGER NEW VARSLING");
                 log.debug("K" + krav.getKravNummer() + "." + krav.getKravVersjon());
