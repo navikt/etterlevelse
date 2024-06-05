@@ -35,7 +35,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -137,27 +136,18 @@ public class KravService extends DomainService<Krav> {
         }
 
         if (krav.getId() != null) {
-            var previousKrav = storage.get(krav.getId());
-            if (Objects.nonNull(previousKrav) && previousKrav.getStatus() != KravStatus.AKTIV && krav.getStatus() == KravStatus.AKTIV) {
+            Krav previousKrav = storage.get(krav.getId());
+            log.debug("previousKrav status start: " + previousKrav.getStatus());
+            log.error("previousKrav status start: " + previousKrav.getStatus());
+            if (previousKrav.getStatus() != KravStatus.AKTIV && krav.getStatus() == KravStatus.AKTIV) {
                 krav.setAktivertDato(LocalDateTime.now());
+                varsle(krav, krav.getKravVersjon() > 1);
             }
         } else if (krav.getStatus() == KravStatus.AKTIV) {
             krav.setAktivertDato(LocalDateTime.now());
+            varsle(krav, krav.getKravVersjon() > 1);
         }
-        var oldKrav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
-        log.debug("oldkrav status start: " + oldKrav.getStatus());
-        log.error("oldkrav status start: " + oldKrav.getStatus());
-        if (request.getStatus() == KravStatus.AKTIV && oldKrav.getStatus() != KravStatus.AKTIV) {
-            if (request.isNyKravVersjon()) {
-                varsle(krav, true);
-            log.debug("trigger: ny versjon = true");
-            log.error("trigger: ny versjon = true");
-            } else {
-                varsle(krav, false);
-                log.debug("trigger: ny versjon = false");
-                log.error("trigger: ny versjon = false");
-            }
-        }
+
         return storage.save(krav);
     }
 
