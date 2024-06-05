@@ -132,7 +132,7 @@ public class KravService extends DomainService<Krav> {
         if(request.isUpdate()) {
             var testKrav = storage.get(request.getIdAsUUID());
             log.debug("after megre storage krav status: " + testKrav.getStatus());
-            log.error("before megre storage krav status: " + testKrav.getStatus());
+            log.error("after megre storage krav status: " + testKrav.getStatus());
         }
 
         if (request.isNyKravVersjon()) {
@@ -151,7 +151,7 @@ public class KravService extends DomainService<Krav> {
         }
 
         if (krav.getId() != null) {
-            Krav previousKrav = storage.get(krav.getId());
+            Krav previousKrav = storage.get(request.getIdAsUUID());
             log.debug("previousKrav status start: " + previousKrav.getStatus());
             log.error("previousKrav status start: " + previousKrav.getStatus());
             log.debug("new krav status : " + krav.getStatus());
