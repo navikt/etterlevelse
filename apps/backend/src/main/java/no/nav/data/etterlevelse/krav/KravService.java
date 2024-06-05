@@ -150,8 +150,12 @@ public class KravService extends DomainService<Krav> {
         if (request.getStatus() == KravStatus.AKTIV && oldKrav.getStatus() != KravStatus.AKTIV) {
             if (request.isNyKravVersjon()) {
                 varsle(krav, true);
+            log.debug("trigger: ny versjon = true");
+            log.error("trigger: ny versjon = true");
             } else {
                 varsle(krav, false);
+                log.debug("trigger: ny versjon = false");
+                log.error("trigger: ny versjon = false");
             }
         }
         return storage.save(krav);
