@@ -118,6 +118,8 @@ public class KravService extends DomainService<Krav> {
                 .ifErrorsThrowValidationException();
 
         var oldKrav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
+        log.debug("oldkrav status start: " + oldKrav.getStatus());
+        log.error("oldkrav status start: " + oldKrav.getStatus());
         var krav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
 
         krav.merge(request);
