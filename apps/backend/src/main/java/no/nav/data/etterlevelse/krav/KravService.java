@@ -144,6 +144,12 @@ public class KravService extends DomainService<Krav> {
             krav.setKravNummer(kravRepo.nextKravNummer());
         }
 
+        if(request.isUpdate()) {
+            var testKrav = storage.get(request.getIdAsUUID());
+            log.debug("after version check storage krav status: " + testKrav.getStatus());
+            log.error("after version check storage krav status: " + testKrav.getStatus());
+        }
+
         if (krav.getId() != null) {
             Krav previousKrav = storage.get(request.getIdAsUUID());
             log.debug("previousKrav status start: " + previousKrav.getStatus());
