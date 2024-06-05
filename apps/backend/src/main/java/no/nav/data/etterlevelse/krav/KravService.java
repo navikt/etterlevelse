@@ -3,6 +3,7 @@ package no.nav.data.etterlevelse.krav;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+import no.nav.data.common.auditing.AuditVersionService;
 import no.nav.data.common.mail.EmailService;
 import no.nav.data.common.mail.MailTask;
 import no.nav.data.common.storage.StorageService;
@@ -54,6 +55,7 @@ public class KravService extends DomainService<Krav> {
     private final UrlGenerator urlGenerator;
     private final EmailService emailService;
     private final SlackClient slackClient;
+    private final AuditVersionService auditVersionService;
 
     public Page<Krav> getAll(Pageable page) {
         Page<GenericStorage<Krav>> all;
@@ -142,14 +144,6 @@ public class KravService extends DomainService<Krav> {
             krav.setKravNummer(kravRepo.nextKravNummer());
         }
 
-
-        if (krav.getStatus() == KravStatus.AKTIV) {
-            if (krav.getKravVersjon() > 1) {
-                int olderKravVersjon = krav.getKravVersjon() - 1;
-                kravRepo.updateKravToUtgaatt(krav.getKravNummer(), olderKravVersjon);
-            }
-        }
-
         if (krav.getId() != null) {
             Krav previousKrav = storage.get(request.getIdAsUUID());
             log.debug("previousKrav status start: " + previousKrav.getStatus());
@@ -169,6 +163,13 @@ public class KravService extends DomainService<Krav> {
         } else if (krav.getStatus() == KravStatus.AKTIV) {
             krav.setAktivertDato(LocalDateTime.now());
             varsle(krav, krav.getKravVersjon() > 1);
+        }
+
+        if (krav.getStatus() == KravStatus.AKTIV) {
+            if (krav.getKravVersjon() > 1) {
+                int olderKravVersjon = krav.getKravVersjon() - 1;
+                kravRepo.updateKravToUtgaatt(krav.getKravNummer(), olderKravVersjon);
+            }
         }
 
         return storage.save(krav);
