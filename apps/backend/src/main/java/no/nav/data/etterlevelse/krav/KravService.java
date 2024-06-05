@@ -123,7 +123,8 @@ public class KravService extends DomainService<Krav> {
         var krav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
 
         krav.merge(request);
-
+        log.debug("oldkrav status etter merge: " + oldKrav.getStatus());
+        log.error("oldkrav status etter merge: " + oldKrav.getStatus());
         if (request.isNyKravVersjon()) {
             krav.setKravNummer(request.getKravNummer());
             krav.setKravVersjon(kravRepo.nextKravVersjon(request.getKravNummer()));
@@ -147,20 +148,11 @@ public class KravService extends DomainService<Krav> {
         } else if (krav.getStatus() == KravStatus.AKTIV) {
             krav.setAktivertDato(LocalDateTime.now());
         }
-        log.debug("before varslng");
-        log.error("before varslng");
-        log.debug("request status: " + request.getStatus() + " , oldkrav status: " + oldKrav.getStatus());
-        log.error("request status: " + request.getStatus() + " , oldkrav status: " + oldKrav.getStatus());
+
         if (request.getStatus() == KravStatus.AKTIV && oldKrav.getStatus() != KravStatus.AKTIV) {
-            log.debug("varslng trigger");
-            log.error("varslng trigger");
             if (request.isNyKravVersjon()) {
-                log.debug("ny versjon");
-                log.error("ny versjon");
                 varsle(krav, true);
             } else {
-                log.debug("nytt krav");
-                log.debug("nytt krav");
                 varsle(krav, false);
             }
         }
