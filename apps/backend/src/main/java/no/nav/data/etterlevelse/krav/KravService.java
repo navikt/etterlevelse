@@ -122,16 +122,7 @@ public class KravService extends DomainService<Krav> {
 
         var krav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
 
-
-        if(request.isUpdate()) {
-            var testKrav = storage.get(request.getIdAsUUID());
-            log.debug("before megre storage krav status: " + testKrav.getStatus());
-
-            log.error("before megre storage krav status: " + testKrav.getStatus());
-        }
-
         krav.merge(request);
-
 
         if (request.isNyKravVersjon()) {
             krav.setKravNummer(request.getKravNummer());
@@ -143,16 +134,8 @@ public class KravService extends DomainService<Krav> {
         if (krav.getId() != null) {
             List<AuditVersion> kravAudits = auditVersionService.getByTableIdAndTimestamp(krav.getId().toString(), LocalDateTime.now().toString());
             Krav previousKrav = kravAudits.get(0).getDomainObjectData(Krav.class);
-            log.debug("previousKrav status start: " + previousKrav.getStatus());
-            log.error("previousKrav status start: " + previousKrav.getStatus());
-            log.debug("new krav status : " + krav.getStatus());
-            log.error("new krav status : " + krav.getStatus());
             if (previousKrav.getStatus() != KravStatus.AKTIV && krav.getStatus() == KravStatus.AKTIV) {
                 krav.setAktivertDato(LocalDateTime.now());
-                log.debug("TRIGGER NEW VARSLING");
-                log.error("TRIGGER NEW VARSLING");
-                log.debug("K" + krav.getKravNummer() + "." + krav.getKravVersjon());
-                log.error("K" + krav.getKravNummer() + "." + krav.getKravVersjon());
                 varsle(krav, krav.getKravVersjon() > 1);
             }
         } else if (krav.getStatus() == KravStatus.AKTIV) {
