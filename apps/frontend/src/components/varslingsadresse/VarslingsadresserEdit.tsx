@@ -1,9 +1,9 @@
 import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { EnvelopeClosedIcon, PersonIcon, PlusIcon } from '@navikt/aksel-icons'
-import { Alert, Button, Loader, Modal, TextField } from '@navikt/ds-react'
+import { Alert, Button, Loader, TextField } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import * as yup from 'yup'
@@ -32,6 +32,7 @@ import { RenderTagList } from '../common/TagList'
 import { DropdownIndicator } from '../krav/Edit/KravBegreperEdit'
 import { AddEmailModal } from './AddEmailModal'
 import { AddSlackChannelModal } from './AddSlackChannelModal'
+import { AddSlackUserModal } from './AddSlackUserModal'
 
 export const VarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -96,18 +97,11 @@ export const VarslingsadresserEdit = () => {
                 doAdd={push}
               />
 
-              <AddModal
-                largeHeight
-                title="Legg til Slack bruker"
+              <AddSlackUserModal
                 isOpen={addSlackUser}
                 close={() => setAddSlackUser(false)}
-              >
-                <SlackUserSearch
-                  added={(fieldArrayRenderProps.form.values as IKrav).varslingsadresser}
-                  add={push}
-                  close={() => setAddSlackUser(false)}
-                />
-              </AddModal>
+                doAdd={push}
+              />
 
               <AddEmailModal
                 isOpen={addEmail}
@@ -122,36 +116,6 @@ export const VarslingsadresserEdit = () => {
     </FieldWrapper>
   )
 }
-
-const AddModal = ({
-  isOpen,
-  close,
-  title,
-  children,
-  largeHeight,
-}: {
-  isOpen: boolean
-  close: () => void
-  title: string
-  children: ReactNode
-  largeHeight?: boolean
-}) => (
-  <Modal
-    open={isOpen}
-    onClose={close}
-    header={{ heading: title, closeButton: false }}
-    width="medium"
-  >
-    <Modal.Body className={`${largeHeight ? 'min-h-[18.75rem]' : undefined}`}>
-      {children}
-    </Modal.Body>
-    <Modal.Footer>
-      <Button variant="secondary" type="button" onClick={close}>
-        Avbryt
-      </Button>
-    </Modal.Footer>
-  </Modal>
-)
 
 export const VarslingsadresserTagList = ({
   varslingsadresser,
