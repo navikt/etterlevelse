@@ -28,7 +28,7 @@ export const AddEmailModal = (props: IProps) => {
       doAdd({ type: EAdresseType.EPOST, adresse: toAdd })
       setVal('')
     }
-    close && close()
+    close()
   }
 
   const onKey = (e: React.KeyboardEvent) => e.key === 'Enter' && add()

@@ -31,6 +31,7 @@ import { Error } from '../common/ModalSchema'
 import { RenderTagList } from '../common/TagList'
 import { DropdownIndicator } from '../krav/Edit/KravBegreperEdit'
 import { AddEmailModal } from './AddEmailModal'
+import { AddSlackChannelModal } from './AddSlackChannelModal'
 
 export const VarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -89,18 +90,11 @@ export const VarslingsadresserEdit = () => {
                 />
               </div>
 
-              <AddModal
-                largeHeight
-                title="Legg til Slack kanal"
+              <AddSlackChannelModal
                 isOpen={addSlackChannel}
                 close={() => setAddSlackChannel(false)}
-              >
-                <SlackChannelSearch
-                  added={(fieldArrayRenderProps.form.values as IKrav).varslingsadresser}
-                  add={push}
-                  close={() => setAddSlackChannel(false)}
-                />
-              </AddModal>
+                doAdd={push}
+              />
 
               <AddModal
                 largeHeight
