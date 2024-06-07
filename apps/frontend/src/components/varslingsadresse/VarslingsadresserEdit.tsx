@@ -13,7 +13,7 @@ import {
   getSlackUserById,
   usePersonSearch,
   useSlackChannelSearch,
-} from '../api/TeamApi'
+} from '../../api/TeamApi'
 import {
   EAdresseType,
   IKrav,
@@ -22,14 +22,15 @@ import {
   ITeamResource,
   IVarslingsadresse,
   TVarslingsadresseQL,
-} from '../constants'
-import { user } from '../services/User'
-import { ettlevColors } from '../util/theme'
-import { FieldWrapper } from './common/Inputs'
-import LabelWithTooltip from './common/LabelWithTooltip'
-import { Error } from './common/ModalSchema'
-import { RenderTagList } from './common/TagList'
-import { DropdownIndicator } from './krav/Edit/KravBegreperEdit'
+} from '../../constants'
+import { user } from '../../services/User'
+import { ettlevColors } from '../../util/theme'
+import { FieldWrapper } from '../common/Inputs'
+import LabelWithTooltip from '../common/LabelWithTooltip'
+import { Error } from '../common/ModalSchema'
+import { RenderTagList } from '../common/TagList'
+import { DropdownIndicator } from '../krav/Edit/KravBegreperEdit'
+import { AddEmailModal } from './AddEmailModal'
 
 export const VarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -114,17 +115,12 @@ export const VarslingsadresserEdit = () => {
                 />
               </AddModal>
 
-              <AddModal
-                title="Legg til Epost adresse"
+              <AddEmailModal
                 isOpen={addEmail}
                 close={() => setAddEmail(false)}
-              >
-                <AddEmail
-                  added={(fieldArrayRenderProps.form.values as IKrav).varslingsadresser}
-                  add={push}
-                  close={() => setAddEmail(false)}
-                />
-              </AddModal>
+                added={(fieldArrayRenderProps.form.values as IKrav).varslingsadresser}
+                doAdd={push}
+              />
             </div>
           )
         }}
@@ -341,7 +337,7 @@ export const SlackUserSearch = ({ add, close }: TAddVarslingsadresseProps) => {
   )
 }
 
-const emailValidator = yup
+export const emailValidator = yup
   .string()
   .email()
   .matches(/.+@nav.no/i)

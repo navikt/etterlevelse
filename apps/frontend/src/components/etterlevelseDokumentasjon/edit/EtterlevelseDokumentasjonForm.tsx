@@ -16,12 +16,12 @@ import { IBehandling, ITeam, IVirkemiddel, TEtterlevelseDokumentasjonQL } from '
 import { ampli } from '../../../services/Amplitude'
 import { EListName, ICode, ICodeListFormValues, codelist } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
-import { VarslingsadresserEdit } from '../../VarslingsadresserEdit'
 import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { FormError } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
+import { VarslingsadresserEdit } from '../../varslingsadresse/VarslingsadresserEdit'
 
 type TEditEtterlevelseDokumentasjonModalProps = {
   title: string
