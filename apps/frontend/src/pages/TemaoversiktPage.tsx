@@ -95,7 +95,7 @@ export const TemaPanel = ({
           <LinkPanel.Title className={`flex ${subContent ? ' text-xl' : ''}`}>
             {tema.shortName}
           </LinkPanel.Title>
-          <LinkPanel.Description className="lg:flex items-center gap-2">
+          <LinkPanel.Description className="lg:flex items-center gap-2 flex-wrap">
             {lover.map((lov, index) => (
               <div key={lov.code} className="flex items-center gap-2">
                 {lov.shortName}
