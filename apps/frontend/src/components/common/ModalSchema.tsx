@@ -29,7 +29,7 @@ export const FormError = ({ fieldName, akselStyling }: IPropsError) => (
   </>
 )
 
-export const Error = ({ message }: { message: string }) => (
+export const Error = ({ message, noBulletPoint }: { message: string; noBulletPoint?: boolean }) => (
   <div
     className="navds-form-field__error pt-2"
     id="textField-error-rm"
@@ -37,7 +37,7 @@ export const Error = ({ message }: { message: string }) => (
     aria-live="polite"
   >
     <p className="navds-error-message navds-label flex gap-2">
-      <span>•</span>
+      {!noBulletPoint && <span>•</span>}
       {message}
     </p>
   </div>
