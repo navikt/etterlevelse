@@ -48,7 +48,7 @@ export const AddEmailModal = (props: IProps) => {
     >
       <Modal.Body className="min-h-[18.75rem]">
         <RadioGroup
-          legend="Hvem skal varsles på Epost"
+          legend="Hvem skal varsles på Epost?"
           value={radioValue}
           onChange={(val) => {
             if (val === 'meg') {

@@ -36,7 +36,7 @@ export const AddSlackChannelModal = (props: IProps) => {
     <Modal
       open={isOpen}
       onClose={close}
-      header={{ heading: 'Legg til Slack kanal', closeButton: false }}
+      header={{ heading: 'Legg til Slack-kanal', closeButton: false }}
       width="medium"
     >
       <Modal.Body className="min-h-[18.75rem]">

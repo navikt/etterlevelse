@@ -16,10 +16,17 @@ interface IProps {
 
 export const AddSlackUserModal = (props: IProps) => {
   const { isOpen, close, doAdd } = props
-  const [val, setVal] = useState<string>('')
+  const [val, setVal] = useState<string>(user.getEmail())
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
   const [radioValue, setRadioValue] = useState('meg')
+
+  const closeAndResetState = () => {
+    setVal(user.getEmail())
+    setError('')
+    setRadioValue('meg')
+    close()
+  }
 
   const addEmail = (email: string) => {
     setLoadingSlackId(true)
@@ -28,7 +35,7 @@ export const AddSlackUserModal = (props: IProps) => {
         doAdd({ type: EAdresseType.SLACK_USER, adresse: user.id })
         setLoadingSlackId(false)
         setError('')
-        close && close()
+        closeAndResetState()
       })
       .catch((e) => {
         setError('Fant ikke slack for bruker, error: ' + e.toString())
@@ -39,13 +46,13 @@ export const AddSlackUserModal = (props: IProps) => {
   return (
     <Modal
       open={isOpen}
-      onClose={close}
-      header={{ heading: 'Legg til Slack bruker', closeButton: false }}
+      onClose={closeAndResetState}
+      header={{ heading: 'Legg til Slack-bruker', closeButton: false }}
       width="medium"
     >
       <Modal.Body className="min-h-[31rem]">
         <RadioGroup
-          legend="Hvem skal varsles på Slack"
+          legend="Hvem skal varsles på Slack?"
           value={radioValue}
           onChange={(val) => {
             if (val === 'meg') {
@@ -67,7 +74,7 @@ export const AddSlackUserModal = (props: IProps) => {
             <div className="flex flex-col">
               <div className="flex w-full">
                 <div className="w-full">
-                  <Label>Søk etter Slack bruker</Label>
+                  <Label>Søk etter Slack-bruker</Label>
                   <Detail>Skriv minst tre tegn</Detail>
                   <AsyncSelect
                     aria-label="Søk etter slack-bruker"
@@ -78,7 +85,7 @@ export const AddSlackUserModal = (props: IProps) => {
                       } else if (inputValue.length >= 3) {
                         return `Fant ingen resultater for "${inputValue}"`
                       } else {
-                        return false
+                        return ''
                       }
                     }}
                     loadingMessage={() => 'Søker...'}
@@ -118,13 +125,10 @@ export const AddSlackUserModal = (props: IProps) => {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button type="button" onClick={() => addEmail(user.getEmail())}>
-          Legg til min Slack bruker
-        </Button>
         <Button type="button" onClick={() => addEmail(val)} className="ml-2.5">
           Legg til Slack bruker
         </Button>
-        <Button variant="secondary" type="button" onClick={close}>
+        <Button variant="secondary" type="button" onClick={closeAndResetState}>
           Avbryt
         </Button>
       </Modal.Footer>
