@@ -1,4 +1,4 @@
-import { BodyShort, Button, Modal } from '@navikt/ds-react'
+import { Button, Detail, Label, Modal } from '@navikt/ds-react'
 import { useState } from 'react'
 import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
@@ -19,7 +19,6 @@ export const AddSlackChannelModal = (props: IProps) => {
     type: EAdresseType.SLACK,
     adresse: '',
   })
-  const [channelName, setChannelName] = useState<string>('')
 
   const add = (value?: { type: EAdresseType; adresse: string }) => {
     const toAdd = value || val
@@ -40,17 +39,20 @@ export const AddSlackChannelModal = (props: IProps) => {
       width="medium"
     >
       <Modal.Body className="min-h-[18.75rem]">
-        {val.adresse && channelName && <BodyShort>valgt kanal: #{channelName}</BodyShort>}
-
+        <Label>Søk etter Slack-kanal</Label>
+        <Detail>Skriv minst tre tegn</Detail>
         <AsyncSelect
           aria-label="Søk etter slack-kanal"
-          placeholder="Søk etter slack-kanal"
-          noOptionsMessage={({ inputValue }) =>
-            inputValue.length < 3
-              ? 'Skriv minst tre tegn for å søke'
-              : `Fant ingen resultater for "${inputValue}"`
-          }
-          controlShouldRenderValue={false}
+          placeholder=""
+          noOptionsMessage={({ inputValue }) => {
+            if (inputValue.length < 3 && inputValue.length > 0) {
+              return 'Skriv minst tre tegn for å søke'
+            } else if (inputValue.length >= 3) {
+              return `Fant ingen resultater for "${inputValue}"`
+            } else {
+              return ''
+            }
+          }}
           loadingMessage={() => 'Søker...'}
           isClearable={false}
           components={{ DropdownIndicator }}
@@ -58,7 +60,6 @@ export const AddSlackChannelModal = (props: IProps) => {
           onChange={(slackKanal) => {
             const channel = slackKanal as ISlackChannel
             if (channel) {
-              setChannelName(channel.name || 'ingen navn')
               setVal({ type: EAdresseType.SLACK, adresse: channel.id })
             }
           }}
