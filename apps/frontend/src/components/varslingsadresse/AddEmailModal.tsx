@@ -39,7 +39,6 @@ export const AddEmailModal = (props: IProps) => {
     closeAndResetState()
   }
 
-  const onKey = (e: React.KeyboardEvent) => e.key === 'Enter' && add()
   return (
     <Modal
       open={isOpen}
@@ -73,7 +72,6 @@ export const AddEmailModal = (props: IProps) => {
             <TextField
               label=""
               hideLabel
-              onKeyDown={onKey}
               value={val}
               onFocus={() => setError('')}
               onChange={(e) => setVal((e.target as HTMLInputElement).value)}
