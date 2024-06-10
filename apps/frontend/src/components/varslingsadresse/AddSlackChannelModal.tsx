@@ -1,10 +1,11 @@
-import { Button, Detail, Label, Modal } from '@navikt/ds-react'
+import { Button, Modal } from '@navikt/ds-react'
 import { useState } from 'react'
 import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { useSlackChannelSearch } from '../../api/TeamApi'
 import { EAdresseType, ISlackChannel, IVarslingsadresse } from '../../constants'
 import { ettlevColors } from '../../util/theme'
+import { LabelWithDescription } from '../common/LabelWithTooltip'
 import { DropdownIndicator } from '../krav/Edit/KravBegreperEdit'
 
 interface IProps {
@@ -39,8 +40,7 @@ export const AddSlackChannelModal = (props: IProps) => {
       width="medium"
     >
       <Modal.Body className="min-h-[18.75rem]">
-        <Label>Søk etter Slack-kanal</Label>
-        <Detail>Skriv minst tre tegn</Detail>
+        <LabelWithDescription label="Søk etter Slack-kanal" description="Skriv minst tre tegn" />
         <AsyncSelect
           aria-label="Søk etter slack-kanal"
           placeholder=""

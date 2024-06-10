@@ -212,17 +212,22 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                   <div className="mb-4">
                     <LabelWithDescription
                       label={'Legg til behandlinger fra Behandlingskatalogen'}
+                      description="Skriv minst tre tegn for å søke"
                     />
                     <div className="w-full">
                       <AsyncSelect
                         aria-label="Søk etter behandlinger"
-                        placeholder="Søk etter behandlinger"
+                        placeholder=""
                         components={{ DropdownIndicator }}
-                        noOptionsMessage={({ inputValue }) =>
-                          inputValue.length < 3
-                            ? 'Skriv minst tre tegn for å søke'
-                            : `Fant ingen resultater for "${inputValue}"`
-                        }
+                        noOptionsMessage={({ inputValue }) => {
+                          if (inputValue.length < 3 && inputValue.length > 0) {
+                            return 'Skriv minst tre tegn for å søke'
+                          } else if (inputValue.length >= 3) {
+                            return `Fant ingen resultater for "${inputValue}"`
+                          } else {
+                            return ''
+                          }
+                        }}
                         controlShouldRenderValue={false}
                         loadingMessage={() => 'Søker...'}
                         isClearable={false}
@@ -279,13 +284,17 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                     <div className="w-full">
                       <AsyncSelect
                         aria-label="Søk etter team"
-                        placeholder="Søk etter team"
+                        placeholder=""
                         components={{ DropdownIndicator }}
-                        noOptionsMessage={({ inputValue }) =>
-                          inputValue.length < 3
-                            ? 'Skriv minst tre tegn for å søke'
-                            : `Fant ingen resultater for "${inputValue}"`
-                        }
+                        noOptionsMessage={({ inputValue }) => {
+                          if (inputValue.length < 3 && inputValue.length > 0) {
+                            return 'Skriv minst tre tegn for å søke'
+                          } else if (inputValue.length >= 3) {
+                            return `Fant ingen resultater for "${inputValue}"`
+                          } else {
+                            return ''
+                          }
+                        }}
                         controlShouldRenderValue={false}
                         loadingMessage={() => 'Søker...'}
                         isClearable={false}

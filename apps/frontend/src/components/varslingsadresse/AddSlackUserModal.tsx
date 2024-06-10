@@ -1,4 +1,4 @@
-import { Alert, Button, Detail, Label, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
+import { Alert, Button, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
 import { useState } from 'react'
 import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
@@ -6,6 +6,7 @@ import { getSlackUserByEmail, usePersonSearch } from '../../api/TeamApi'
 import { EAdresseType, ITeamResource, IVarslingsadresse } from '../../constants'
 import { user } from '../../services/User'
 import { ettlevColors } from '../../util/theme'
+import { LabelWithDescription } from '../common/LabelWithTooltip'
 import { DropdownIndicator } from '../krav/Edit/KravBegreperEdit'
 
 interface IProps {
@@ -74,8 +75,10 @@ export const AddSlackUserModal = (props: IProps) => {
             <div className="flex flex-col">
               <div className="flex w-full">
                 <div className="w-full">
-                  <Label>Søk etter Slack-bruker</Label>
-                  <Detail>Skriv minst tre tegn</Detail>
+                  <LabelWithDescription
+                    label="Søk etter Slack-bruker"
+                    description="Skriv minst tre tegn"
+                  />
                   <AsyncSelect
                     aria-label="Søk etter slack-bruker"
                     placeholder=""

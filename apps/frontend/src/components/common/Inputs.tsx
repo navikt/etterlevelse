@@ -364,7 +364,7 @@ export const OptionList = (props: TPropsOptionList) => {
         return onChange(toSet)
       }}
     >
-      <option value="">Velg {label}</option>
+      <option value=""> </option>
       {optionsList.map((code, index) => (
         <option key={index + '_' + code.label} value={code.value}>
           {code.label}
