@@ -46,7 +46,7 @@ export const AddEmailModal = (props: IProps) => {
       header={{ heading: 'Legg til Epost adresse', closeButton: false }}
       width="medium"
     >
-      <Modal.Body>
+      <Modal.Body className="min-h-[18.75rem]">
         <RadioGroup
           legend="Hvem skal varsles på Epost"
           value={radioValue}
