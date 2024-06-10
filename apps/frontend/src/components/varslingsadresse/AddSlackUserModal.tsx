@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Button, Loader, Modal } from '@navikt/ds-react'
+import { Alert, Button, Detail, Label, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
 import { useState } from 'react'
 import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
@@ -17,9 +17,9 @@ interface IProps {
 export const AddSlackUserModal = (props: IProps) => {
   const { isOpen, close, doAdd } = props
   const [val, setVal] = useState<string>('')
-  const [userName, setUserName] = useState<string>('')
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
+  const [radioValue, setRadioValue] = useState('meg')
 
   const addEmail = (email: string) => {
     setLoadingSlackId(true)
@@ -28,7 +28,6 @@ export const AddSlackUserModal = (props: IProps) => {
         doAdd({ type: EAdresseType.SLACK_USER, adresse: user.id })
         setLoadingSlackId(false)
         setError('')
-        setUserName('')
         close && close()
       })
       .catch((e) => {
@@ -44,54 +43,79 @@ export const AddSlackUserModal = (props: IProps) => {
       header={{ heading: 'Legg til Slack bruker', closeButton: false }}
       width="medium"
     >
-      <Modal.Body className="min-h-[18.75rem]">
-        {userName && <BodyShort>Valgt bruker: {userName}</BodyShort>}
-        <div className="flex flex-col">
-          <div className="flex w-full">
-            <div className="w-full">
-              <AsyncSelect
-                aria-label="Søk etter slack-bruker"
-                placeholder="Søk etter slack-bruker"
-                noOptionsMessage={({ inputValue }) =>
-                  inputValue.length < 3
-                    ? 'Skriv minst tre tegn for å søke'
-                    : `Fant ingen resultater for "${inputValue}"`
-                }
-                controlShouldRenderValue={false}
-                loadingMessage={() => 'Søker...'}
-                isClearable={false}
-                loadOptions={usePersonSearch}
-                components={{ DropdownIndicator }}
-                onFocus={() => setError('')}
-                onBlur={() => setError('')}
-                onChange={(person) => {
-                  const resource = person as ITeamResource
-                  if (resource) {
-                    setLoadingSlackId(true)
-                    setUserName(resource.fullName)
-                    setVal(resource.email)
-                    setLoadingSlackId(false)
-                  }
-                }}
-                styles={{
-                  control: (base) =>
-                    ({
-                      ...base,
-                      cursor: 'text',
-                      height: '3rem',
-                      borderColor: ettlevColors.textAreaBorder,
-                    }) as CSSObjectWithLabel,
-                }}
-              />
+      <Modal.Body className="min-h-[31rem]">
+        <RadioGroup
+          legend="Hvem skal varsles på Slack"
+          value={radioValue}
+          onChange={(val) => {
+            if (val === 'meg') {
+              setVal(user.getEmail())
+            } else {
+              setVal('')
+            }
+            setRadioValue(val)
+          }}
+          className="w-full"
+        >
+          <Radio value="meg">Meg ({user.getName()})</Radio>
+          <Radio value="slack" className="w-full">
+            Noen andre
+          </Radio>
+        </RadioGroup>
+        {radioValue === 'slack' && (
+          <div className="pl-8 w-full">
+            <div className="flex flex-col">
+              <div className="flex w-full">
+                <div className="w-full">
+                  <Label>Søk etter Slack bruker</Label>
+                  <Detail>Skriv minst tre tegn</Detail>
+                  <AsyncSelect
+                    aria-label="Søk etter slack-bruker"
+                    placeholder=""
+                    noOptionsMessage={({ inputValue }) => {
+                      if (inputValue.length < 3 && inputValue.length > 0) {
+                        return 'Skriv minst tre tegn for å søke'
+                      } else if (inputValue.length >= 3) {
+                        return `Fant ingen resultater for "${inputValue}"`
+                      } else {
+                        return false
+                      }
+                    }}
+                    loadingMessage={() => 'Søker...'}
+                    isClearable={false}
+                    loadOptions={usePersonSearch}
+                    components={{ DropdownIndicator }}
+                    onFocus={() => setError('')}
+                    onBlur={() => setError('')}
+                    onChange={(person) => {
+                      const resource = person as ITeamResource
+                      if (resource) {
+                        setLoadingSlackId(true)
+                        setVal(resource.email)
+                        setLoadingSlackId(false)
+                      }
+                    }}
+                    styles={{
+                      control: (base) =>
+                        ({
+                          ...base,
+                          cursor: 'text',
+                          height: '3rem',
+                          borderColor: ettlevColors.textAreaBorder,
+                        }) as CSSObjectWithLabel,
+                    }}
+                  />
+                </div>
+              </div>
+              {loadingSlackId && <Loader size="large" />}
+              {error && (
+                <Alert className="mt-2.5" variant="error">
+                  {error}
+                </Alert>
+              )}
             </div>
           </div>
-          {loadingSlackId && <Loader size="large" />}
-          {error && (
-            <Alert className="mt-2.5" variant="error">
-              {error}
-            </Alert>
-          )}
-        </div>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button type="button" onClick={() => addEmail(user.getEmail())}>
