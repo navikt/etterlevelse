@@ -26,7 +26,7 @@ import {
 import { user } from '../../services/User'
 import { ettlevColors } from '../../util/theme'
 import { FieldWrapper } from '../common/Inputs'
-import LabelWithTooltip from '../common/LabelWithTooltip'
+import { LabelWithDescription } from '../common/LabelWithTooltip'
 import { Error } from '../common/ModalSchema'
 import { RenderTagList } from '../common/TagList'
 import { DropdownIndicator } from '../krav/Edit/KravBegreperEdit'
@@ -50,11 +50,9 @@ export const VarslingsadresserEdit = () => {
           }
           return (
             <div>
-              <LabelWithTooltip
-                label={'Varslingsadresser'}
-                tooltip={
-                  'Angi varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger til kravet.'
-                }
+              <LabelWithDescription
+                label="Varslingsadresser"
+                description="Angi varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger til kravet."
               />
               <div>
                 <div className="mb-2.5">

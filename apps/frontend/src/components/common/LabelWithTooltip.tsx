@@ -33,7 +33,7 @@ export const LabelWithDescription = (props: {
   noMarginBottom?: boolean
 }) => {
   return (
-    <div className={`${props.noMarginBottom ? undefined : 'mb-1.5'}`}>
+    <div className={`${props.noMarginBottom ? undefined : 'mb-3'}`}>
       <div className={`${props.description ? 'mb-0.5' : undefined}`}>
         <Label>{props.label}</Label>
       </div>

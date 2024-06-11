@@ -141,7 +141,7 @@ export const DokumentasjonPage = () => {
           </div>
         </div>
       </div>
-      <Heading level="2" size="medium">
+      <Heading level="2" size="medium" spacing className="mt-3">
         Temaoversikt
       </Heading>
       <DokumentasjonPageTabs

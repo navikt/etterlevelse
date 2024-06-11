@@ -182,7 +182,7 @@ export const BoolField = (props: IPropsBoolField) => {
     <FieldWrapper>
       <Field name={name}>
         {(fieldProps: FieldProps) => (
-          <div>
+          <div className="my-3">
             <RadioGroup
               legend={label}
               description={tooltip}

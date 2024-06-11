@@ -93,7 +93,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
     >
       {({ values, submitForm, setFieldValue }) => (
         <Form>
-          <Heading size="medium" level="1" className="mb-2">
+          <Heading size="medium" level="1" spacing>
             {title}
           </Heading>
 
@@ -197,19 +197,18 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
 
           {/* DONT REMOVE */}
           {/* )} */}
-          <div className="mt-2.5">
-            <BoolField
-              label="Ønsker du å legge til eksisterende behandling(er) nå?"
-              name="behandlerPersonopplysninger"
-              tooltip="Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å legge til behandling senere."
-            />
-          </div>
+
+          <BoolField
+            label="Ønsker du å legge til eksisterende behandling(er) nå?"
+            name="behandlerPersonopplysninger"
+            tooltip="Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å legge til behandling senere."
+          />
 
           {values.behandlerPersonopplysninger && (
             <FieldWrapper>
               <FieldArray name="behandlinger">
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                  <div className="mb-4">
+                  <div className="my-3">
                     <LabelWithDescription
                       label={'Legg til behandlinger fra Behandlingskatalogen'}
                       description="Skriv minst tre tegn for å søke"
@@ -267,19 +266,17 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             </FieldWrapper>
           )}
 
-          <div className="mt-2.5">
-            <BoolField
-              label="Er etterlevelsesdokumentet knyttet til et team i Teamkatalogen?"
-              name="knytteTilTeam"
-              tooltip="Når du legger til et team vil medlemmene i det teamet kunne se dette dokumentet under «Mine dokumentasjoner». Dette er ikke nødvendig for å opprette etterlevelsesdokumentet, men anbefales."
-            />
-          </div>
+          <BoolField
+            label="Er etterlevelsesdokumentet knyttet til et team i Teamkatalogen?"
+            name="knytteTilTeam"
+            tooltip="Når du legger til et team vil medlemmene i det teamet kunne se dette dokumentet under «Mine dokumentasjoner». Dette er ikke nødvendig for å opprette etterlevelsesdokumentet, men anbefales."
+          />
 
           {values.knytteTilTeam && (
             <FieldWrapper>
               <FieldArray name="teamsData">
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                  <div className=" mb-4">
+                  <div className=" mb-3">
                     <LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />
                     <div className="w-full">
                       <AsyncSelect
@@ -344,7 +341,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             </Field>
           </FieldWrapper>
 
-          <div id="varslingsadresser" className="mt-5">
+          <div id="varslingsadresser" className="mt-3">
             <VarslingsadresserEdit />
           </div>
 
