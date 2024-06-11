@@ -76,7 +76,7 @@ export const AddSlackChannelModal = (props: IProps) => {
       </Modal.Body>
       <Modal.Footer>
         <Button type="button" onClick={() => add(val)} className="ml-2.5">
-          Legg til Slack kannal
+          Legg til Slack kanal
         </Button>
         <Button variant="secondary" type="button" onClick={close}>
           Avbryt
