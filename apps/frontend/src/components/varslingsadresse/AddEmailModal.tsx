@@ -18,13 +18,6 @@ export const AddEmailModal = (props: IProps) => {
   const [error, setError] = useState('')
   const [radioValue, setRadioValue] = useState('meg')
 
-  const closeAndResetState = () => {
-    setVal(user.getEmail())
-    setError('')
-    setRadioValue('meg')
-    close()
-  }
-
   const add = (adresse?: string) => {
     const toAdd = adresse || val
     if (!toAdd) return
@@ -36,13 +29,13 @@ export const AddEmailModal = (props: IProps) => {
       doAdd({ type: EAdresseType.EPOST, adresse: toAdd })
       setVal('')
     }
-    closeAndResetState()
+    close()
   }
 
   return (
     <Modal
       open={isOpen}
-      onClose={closeAndResetState}
+      onClose={close}
       header={{ heading: 'Legg til Epost adresse', closeButton: false }}
       width="medium"
     >
@@ -85,7 +78,7 @@ export const AddEmailModal = (props: IProps) => {
         <Button type="button" onClick={() => add(val)} className="ml-2.5">
           Legg til Epost
         </Button>
-        <Button variant="secondary" type="button" onClick={closeAndResetState}>
+        <Button variant="secondary" type="button" onClick={close}>
           Avbryt
         </Button>
       </Modal.Footer>

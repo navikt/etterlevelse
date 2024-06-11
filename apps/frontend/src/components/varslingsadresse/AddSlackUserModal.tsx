@@ -22,13 +22,6 @@ export const AddSlackUserModal = (props: IProps) => {
   const [loadingSlackId, setLoadingSlackId] = useState(false)
   const [radioValue, setRadioValue] = useState('meg')
 
-  const closeAndResetState = () => {
-    setVal(user.getEmail())
-    setError('')
-    setRadioValue('meg')
-    close()
-  }
-
   const addEmail = (email: string) => {
     setLoadingSlackId(true)
     getSlackUserByEmail(email)
@@ -36,7 +29,7 @@ export const AddSlackUserModal = (props: IProps) => {
         doAdd({ type: EAdresseType.SLACK_USER, adresse: user.id })
         setLoadingSlackId(false)
         setError('')
-        closeAndResetState()
+        close()
       })
       .catch((e) => {
         setError('Fant ikke slack for bruker, error: ' + e.toString())
@@ -47,7 +40,7 @@ export const AddSlackUserModal = (props: IProps) => {
   return (
     <Modal
       open={isOpen}
-      onClose={closeAndResetState}
+      onClose={close}
       header={{ heading: 'Legg til Slack-bruker', closeButton: false }}
       width="medium"
     >
@@ -131,7 +124,7 @@ export const AddSlackUserModal = (props: IProps) => {
         <Button type="button" onClick={() => addEmail(val)} className="ml-2.5">
           Legg til Slack bruker
         </Button>
-        <Button variant="secondary" type="button" onClick={closeAndResetState}>
+        <Button variant="secondary" type="button" onClick={close}>
           Avbryt
         </Button>
       </Modal.Footer>

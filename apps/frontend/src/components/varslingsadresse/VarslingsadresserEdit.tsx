@@ -89,24 +89,30 @@ export const VarslingsadresserEdit = () => {
                 />
               </div>
 
-              <AddSlackChannelModal
-                isOpen={addSlackChannel}
-                close={() => setAddSlackChannel(false)}
-                doAdd={push}
-              />
+              {addSlackChannel && (
+                <AddSlackChannelModal
+                  isOpen={addSlackChannel}
+                  close={() => setAddSlackChannel(false)}
+                  doAdd={push}
+                />
+              )}
 
-              <AddSlackUserModal
-                isOpen={addSlackUser}
-                close={() => setAddSlackUser(false)}
-                doAdd={push}
-              />
+              {addSlackUser && (
+                <AddSlackUserModal
+                  isOpen={addSlackUser}
+                  close={() => setAddSlackUser(false)}
+                  doAdd={push}
+                />
+              )}
 
-              <AddEmailModal
-                isOpen={addEmail}
-                close={() => setAddEmail(false)}
-                added={(fieldArrayRenderProps.form.values as IKrav).varslingsadresser}
-                doAdd={push}
-              />
+              {addEmail && (
+                <AddEmailModal
+                  isOpen={addEmail}
+                  close={() => setAddEmail(false)}
+                  added={(fieldArrayRenderProps.form.values as IKrav).varslingsadresser}
+                  doAdd={push}
+                />
+              )}
             </div>
           )
         }}
