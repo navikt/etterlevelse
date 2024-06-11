@@ -18,7 +18,7 @@ import { EListName, ICode, ICodeListFormValues, codelist } from '../../../servic
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
-import { FormError } from '../../common/ModalSchema'
+import { Error } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 import { VarslingsadresserEdit } from '../../varslingsadresse/VarslingsadresserEdit'
@@ -91,26 +91,28 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
       validateOnChange={false}
       validateOnBlur={false}
     >
-      {({ values, submitForm, setFieldValue }) => (
-        <Form>
-          <Heading size="medium" level="1" spacing>
-            {title}
-          </Heading>
+      {({ values, submitForm, setFieldValue, errors }) => {
+        console.debug(errors)
+        return (
+          <Form>
+            <Heading size="medium" level="1" spacing>
+              {title}
+            </Heading>
 
-          <TextAreaField
-            rows={2}
-            noPlaceholder
-            label="Skriv inn tittel på etterlevelsesdokumentet"
-            name="title"
-          />
+            <TextAreaField
+              rows={2}
+              noPlaceholder
+              label="Skriv inn tittel på etterlevelsesdokumentet"
+              name="title"
+            />
 
-          <div className="mt-5">
-            <TextAreaField rows={5} noPlaceholder label="Beskrivelse" name="beskrivelse" />
-          </div>
+            <div className="mt-5">
+              <TextAreaField rows={5} noPlaceholder label="Beskrivelse" name="beskrivelse" />
+            </div>
 
-          {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
+            {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
 
-          {/* {values.knyttetTilVirkemiddel ? (
+            {/* {values.knyttetTilVirkemiddel ? (
                     <FieldWrapper>
                       <Field name="virkemiddelId">
                         {(fp: FieldProps) => {
@@ -150,236 +152,236 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                     </FieldWrapper>
                   ) : ( */}
 
-          <FieldArray name="irrelevansFor">
-            {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-              <div className="h-full pt-5 w-[calc(100% - 1rem)]">
-                <CheckboxGroup
-                  legend="Hvilke egenskaper gjelder for etterlevelsen?"
-                  description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
-                  value={selectedFilter}
-                  onChange={(selected) => {
-                    setSelectedFilter(selected)
+            <FieldArray name="irrelevansFor">
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className="h-full pt-5 w-[calc(100% - 1rem)]">
+                  <CheckboxGroup
+                    legend="Hvilke egenskaper gjelder for etterlevelsen?"
+                    description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
+                    value={selectedFilter}
+                    onChange={(selected) => {
+                      setSelectedFilter(selected)
 
-                    const irrelevansListe = relevansOptions.filter(
-                      (_irrelevans, index) => !selected.includes(index)
-                    )
-                    fieldArrayRenderProps.form.setFieldValue(
-                      'irrelevansFor',
-                      irrelevansListe.map((irrelevans) =>
-                        codelist.getCode(EListName.RELEVANS, irrelevans.value)
+                      const irrelevansListe = relevansOptions.filter(
+                        (_irrelevans, index) => !selected.includes(index)
                       )
-                    )
-                    // selected.forEach((value) => {
-                    //   const i = parseInt(value)
-                    //   if (!selectedFilter.includes(i)) {
-                    //     setSelectedFilter([...selectedFilter, i])
-                    //     p.remove(p.form.values.irrelevansFor.findIndex((ir: ICode) => ir.code === relevansOptions[i].value))
-                    //   } else {
-                    //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
-                    //     p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
-                    //   }
-                    // })
-                  }}
-                >
-                  {relevansOptions.map((relevans, index) => (
-                    <Checkbox
-                      key={'relevans_' + relevans.value}
-                      value={index}
-                      description={relevans.description}
-                    >
-                      {relevans.label}
-                    </Checkbox>
-                  ))}
-                </CheckboxGroup>
-              </div>
-            )}
-          </FieldArray>
-
-          {/* DONT REMOVE */}
-          {/* )} */}
-
-          <BoolField
-            label="Ønsker du å legge til eksisterende behandling(er) nå?"
-            name="behandlerPersonopplysninger"
-            tooltip="Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å legge til behandling senere."
-          />
-
-          {values.behandlerPersonopplysninger && (
-            <FieldWrapper>
-              <FieldArray name="behandlinger">
-                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                  <div className="my-3">
-                    <LabelWithDescription
-                      label={'Legg til behandlinger fra Behandlingskatalogen'}
-                      description="Skriv minst tre tegn for å søke"
-                    />
-                    <div className="w-full">
-                      <AsyncSelect
-                        aria-label="Søk etter behandlinger"
-                        placeholder=""
-                        components={{ DropdownIndicator }}
-                        noOptionsMessage={({ inputValue }) => {
-                          if (inputValue.length < 3 && inputValue.length > 0) {
-                            return 'Skriv minst tre tegn for å søke'
-                          } else if (inputValue.length >= 3) {
-                            return `Fant ingen resultater for "${inputValue}"`
-                          } else {
-                            return ''
-                          }
-                        }}
-                        controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
-                        isClearable={false}
-                        loadOptions={searchBehandlingOptions}
-                        onChange={(value) => {
-                          value && fieldArrayRenderProps.push(value)
-                          if (value && !values.avdeling && values.behandlinger?.length === 0) {
-                            const behandling = value as IBehandling
-                            const newAvdeling = {
-                              list: EListName.AVDELING,
-                              shortName: behandling.avdeling?.shortName || '',
-                              code: behandling.avdeling?.code || '',
-                              description: behandling.avdeling?.description || '',
-                            } as ICodeListFormValues
-                            setFieldValue('avdeling', newAvdeling)
-                          }
-                        }}
-                        styles={{
-                          control: (base) =>
-                            ({
-                              ...base,
-                              cursor: 'text',
-                              height: '3rem',
-                            }) as CSSObjectWithLabel,
-                        }}
-                      />
-                    </div>
-                    <RenderTagList
-                      list={fieldArrayRenderProps.form.values.behandlinger.map(
-                        (behandling: IBehandling) => behandlingName(behandling)
-                      )}
-                      onRemove={fieldArrayRenderProps.remove}
-                    />
-                  </div>
-                )}
-              </FieldArray>
-            </FieldWrapper>
-          )}
-
-          <BoolField
-            label="Er etterlevelsesdokumentet knyttet til et team i Teamkatalogen?"
-            name="knytteTilTeam"
-            tooltip="Når du legger til et team vil medlemmene i det teamet kunne se dette dokumentet under «Mine dokumentasjoner». Dette er ikke nødvendig for å opprette etterlevelsesdokumentet, men anbefales."
-          />
-
-          {values.knytteTilTeam && (
-            <FieldWrapper>
-              <FieldArray name="teamsData">
-                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                  <div className=" mb-3">
-                    <LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />
-                    <div className="w-full">
-                      <AsyncSelect
-                        aria-label="Søk etter team"
-                        placeholder=""
-                        components={{ DropdownIndicator }}
-                        noOptionsMessage={({ inputValue }) => {
-                          if (inputValue.length < 3 && inputValue.length > 0) {
-                            return 'Skriv minst tre tegn for å søke'
-                          } else if (inputValue.length >= 3) {
-                            return `Fant ingen resultater for "${inputValue}"`
-                          } else {
-                            return ''
-                          }
-                        }}
-                        controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
-                        isClearable={false}
-                        loadOptions={useSearchTeamOptions}
-                        onChange={(value) => {
-                          value && fieldArrayRenderProps.push(value)
-                        }}
-                        styles={{
-                          control: (base) =>
-                            ({
-                              ...base,
-                              cursor: 'text',
-                              height: '3rem',
-                            }) as CSSObjectWithLabel,
-                        }}
-                      />
-                    </div>
-                    <RenderTagList
-                      list={fieldArrayRenderProps.form.values.teamsData.map(
-                        (tema: ITeam) => tema.name
-                      )}
-                      onRemove={fieldArrayRenderProps.remove}
-                    />
-                  </div>
-                )}
-              </FieldArray>
-            </FieldWrapper>
-          )}
-          <FieldWrapper>
-            <Field name="avdeling">
-              {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
-                <div>
-                  <LabelWithDescription
-                    label="Avdeling"
-                    description="Angi hvilken avdeling som er ansvarlig for etterlevelsen og som er risikoeier."
-                  />
-                  <OptionList
-                    listName={EListName.AVDELING}
-                    label="Avdeling"
-                    value={fieldProps.field.value?.code}
-                    onChange={(value) => {
-                      fieldProps.form.setFieldValue('avdeling', value)
+                      fieldArrayRenderProps.form.setFieldValue(
+                        'irrelevansFor',
+                        irrelevansListe.map((irrelevans) =>
+                          codelist.getCode(EListName.RELEVANS, irrelevans.value)
+                        )
+                      )
+                      // selected.forEach((value) => {
+                      //   const i = parseInt(value)
+                      //   if (!selectedFilter.includes(i)) {
+                      //     setSelectedFilter([...selectedFilter, i])
+                      //     p.remove(p.form.values.irrelevansFor.findIndex((ir: ICode) => ir.code === relevansOptions[i].value))
+                      //   } else {
+                      //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
+                      //     p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
+                      //   }
+                      // })
                     }}
-                  />
+                  >
+                    {relevansOptions.map((relevans, index) => (
+                      <Checkbox
+                        key={'relevans_' + relevans.value}
+                        value={index}
+                        description={relevans.description}
+                      >
+                        {relevans.label}
+                      </Checkbox>
+                    ))}
+                  </CheckboxGroup>
                 </div>
               )}
-            </Field>
-          </FieldWrapper>
+            </FieldArray>
 
-          <div id="varslingsadresser" className="mt-3">
-            <VarslingsadresserEdit />
-          </div>
+            {/* DONT REMOVE */}
+            {/* )} */}
 
-          <FormError fieldName="varslingsadresser" akselStyling />
+            <BoolField
+              label="Ønsker du å legge til eksisterende behandling(er) nå?"
+              name="behandlerPersonopplysninger"
+              tooltip="Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å legge til behandling senere."
+            />
 
-          <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-bg-default">
-            <div className="flex justify-end">
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => {
-                  ampli.logEvent('knapp trykket', {
-                    tekst: 'Avbryt opprett etterlevelsesdokument',
-                  })
-                  navigate(-1)
-                }}
-              >
-                Avbryt
-              </Button>
-              <Button
-                type="button"
-                onClick={() => {
-                  if (!isEditButton) {
-                    ampli.logEvent('knapp trykket', {
-                      tekst: 'Opprett etterlevelsesdokument',
-                    })
-                  }
-                  submitForm()
-                }}
-                className="ml-2.5"
-              >
-                {isEditButton ? 'Lagre' : 'Opprett'}
-              </Button>
+            {values.behandlerPersonopplysninger && (
+              <FieldWrapper>
+                <FieldArray name="behandlinger">
+                  {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                    <div className="my-3">
+                      <LabelWithDescription
+                        label={'Legg til behandlinger fra Behandlingskatalogen'}
+                        description="Skriv minst tre tegn for å søke"
+                      />
+                      <div className="w-full">
+                        <AsyncSelect
+                          aria-label="Søk etter behandlinger"
+                          placeholder=""
+                          components={{ DropdownIndicator }}
+                          noOptionsMessage={({ inputValue }) => {
+                            if (inputValue.length < 3 && inputValue.length > 0) {
+                              return 'Skriv minst tre tegn for å søke'
+                            } else if (inputValue.length >= 3) {
+                              return `Fant ingen resultater for "${inputValue}"`
+                            } else {
+                              return ''
+                            }
+                          }}
+                          controlShouldRenderValue={false}
+                          loadingMessage={() => 'Søker...'}
+                          isClearable={false}
+                          loadOptions={searchBehandlingOptions}
+                          onChange={(value) => {
+                            value && fieldArrayRenderProps.push(value)
+                            if (value && !values.avdeling && values.behandlinger?.length === 0) {
+                              const behandling = value as IBehandling
+                              const newAvdeling = {
+                                list: EListName.AVDELING,
+                                shortName: behandling.avdeling?.shortName || '',
+                                code: behandling.avdeling?.code || '',
+                                description: behandling.avdeling?.description || '',
+                              } as ICodeListFormValues
+                              setFieldValue('avdeling', newAvdeling)
+                            }
+                          }}
+                          styles={{
+                            control: (base) =>
+                              ({
+                                ...base,
+                                cursor: 'text',
+                                height: '3rem',
+                              }) as CSSObjectWithLabel,
+                          }}
+                        />
+                      </div>
+                      <RenderTagList
+                        list={fieldArrayRenderProps.form.values.behandlinger.map(
+                          (behandling: IBehandling) => behandlingName(behandling)
+                        )}
+                        onRemove={fieldArrayRenderProps.remove}
+                      />
+                    </div>
+                  )}
+                </FieldArray>
+              </FieldWrapper>
+            )}
+
+            <BoolField
+              label="Er etterlevelsesdokumentet knyttet til et team i Teamkatalogen?"
+              name="knytteTilTeam"
+              tooltip="Når du legger til et team vil medlemmene i det teamet kunne se dette dokumentet under «Mine dokumentasjoner». Dette er ikke nødvendig for å opprette etterlevelsesdokumentet, men anbefales."
+            />
+
+            {values.knytteTilTeam && (
+              <FieldWrapper>
+                <FieldArray name="teamsData">
+                  {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                    <div className=" mb-3">
+                      <LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />
+                      <div className="w-full">
+                        <AsyncSelect
+                          aria-label="Søk etter team"
+                          placeholder=""
+                          components={{ DropdownIndicator }}
+                          noOptionsMessage={({ inputValue }) => {
+                            if (inputValue.length < 3 && inputValue.length > 0) {
+                              return 'Skriv minst tre tegn for å søke'
+                            } else if (inputValue.length >= 3) {
+                              return `Fant ingen resultater for "${inputValue}"`
+                            } else {
+                              return ''
+                            }
+                          }}
+                          controlShouldRenderValue={false}
+                          loadingMessage={() => 'Søker...'}
+                          isClearable={false}
+                          loadOptions={useSearchTeamOptions}
+                          onChange={(value) => {
+                            value && fieldArrayRenderProps.push(value)
+                          }}
+                          styles={{
+                            control: (base) =>
+                              ({
+                                ...base,
+                                cursor: 'text',
+                                height: '3rem',
+                              }) as CSSObjectWithLabel,
+                          }}
+                        />
+                      </div>
+                      <RenderTagList
+                        list={fieldArrayRenderProps.form.values.teamsData.map(
+                          (tema: ITeam) => tema.name
+                        )}
+                        onRemove={fieldArrayRenderProps.remove}
+                      />
+                    </div>
+                  )}
+                </FieldArray>
+              </FieldWrapper>
+            )}
+            <FieldWrapper>
+              <Field name="avdeling">
+                {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
+                  <div>
+                    <LabelWithDescription
+                      label="Avdeling"
+                      description="Angi hvilken avdeling som er ansvarlig for etterlevelsen og som er risikoeier."
+                    />
+                    <OptionList
+                      listName={EListName.AVDELING}
+                      label="Avdeling"
+                      value={fieldProps.field.value?.code}
+                      onChange={(value) => {
+                        fieldProps.form.setFieldValue('avdeling', value)
+                      }}
+                    />
+                  </div>
+                )}
+              </Field>
+            </FieldWrapper>
+
+            <div id="varslingsadresser" className="mt-3">
+              <VarslingsadresserEdit />
+              {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
             </div>
-          </div>
-          <ScrollToFieldError />
-        </Form>
-      )}
+
+            <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-bg-default">
+              <div className="flex justify-end">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => {
+                    ampli.logEvent('knapp trykket', {
+                      tekst: 'Avbryt opprett etterlevelsesdokument',
+                    })
+                    navigate(-1)
+                  }}
+                >
+                  Avbryt
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    if (!isEditButton) {
+                      ampli.logEvent('knapp trykket', {
+                        tekst: 'Opprett etterlevelsesdokument',
+                      })
+                    }
+                    submitForm()
+                  }}
+                  className="ml-2.5"
+                >
+                  {isEditButton ? 'Lagre' : 'Opprett'}
+                </Button>
+              </div>
+            </div>
+            <ScrollToFieldError />
+          </Form>
+        )
+      }}
     </Formik>
   )
 }
