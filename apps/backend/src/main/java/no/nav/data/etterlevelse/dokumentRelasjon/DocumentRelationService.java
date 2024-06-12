@@ -1,5 +1,5 @@
 package no.nav.data.etterlevelse.dokumentRelasjon;
 
-public class DokumentRelasjonService {
+public class DocumentRelationService {
 
 }

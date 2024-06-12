@@ -17,7 +17,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class DokumentRelasjonRequest implements RequestElement {
+public class DocumentRelationRequest implements RequestElement {
     private String id;
 
     private RelationType relationType;

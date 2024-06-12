@@ -11,11 +11,11 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.auditing.domain.Auditable;
-import no.nav.data.etterlevelse.dokumentRelasjon.dto.DokumentRelasjonRequest;
-import no.nav.data.etterlevelse.dokumentRelasjon.dto.DokumentRelasjonResponse;
+import no.nav.data.etterlevelse.dokumentRelasjon.dto.DocumentRelationRequest;
+import no.nav.data.etterlevelse.dokumentRelasjon.dto.DocumentRelationResponse;
 import org.hibernate.annotations.Type;
 
 import java.util.UUID;
@@ -24,10 +24,10 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Entity
-@FieldNameConstants
 @Table(name = "DOCUMENT_RELATION")
-public class DokumentRelasjon extends Auditable {
+public class DocumentRelation extends Auditable {
 
     @Id
     @Column(name = "ID")
@@ -48,7 +48,7 @@ public class DokumentRelasjon extends Auditable {
     @Column(name = "DATA")
     private JsonNode data;
 
-    public DokumentRelasjon merge(DokumentRelasjonRequest request){
+    public DocumentRelation merge(DocumentRelationRequest request){
         relationType = request.getRelationType();
         from = request.getFrom();
         to = request.getTo();
@@ -56,8 +56,8 @@ public class DokumentRelasjon extends Auditable {
         return this;
     };
 
-    public DokumentRelasjonResponse toResponse() {
-        return DokumentRelasjonResponse.builder()
+    public DocumentRelationResponse toResponse() {
+        return DocumentRelationResponse.builder()
                 .id(id)
                 .relationType(relationType)
                 .from(from)
