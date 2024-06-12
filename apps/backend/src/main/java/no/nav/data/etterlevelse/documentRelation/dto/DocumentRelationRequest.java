@@ -22,9 +22,9 @@ public class DocumentRelationRequest implements RequestElement {
 
     private RelationType relationType;
 
-    private String from;
+    private String fromDocument;
 
-    private String to;
+    private String toDocument;
 
     private JsonNode data;
 
@@ -33,14 +33,14 @@ public class DocumentRelationRequest implements RequestElement {
     @Override
     public void format(){
         setId(trimToNull(id));
-        setFrom(trimToNull(from));
-        setTo(trimToNull(to));
+        setFromDocument(trimToNull(fromDocument));
+        setToDocument(trimToNull(toDocument));
     };
 
     @Override
     public void validateFieldValues(Validator<?>validator) {
         validator.checkUUID(Fields.id, id);
-        validator.checkUUID(Fields.from, from);
-        validator.checkUUID(Fields.to, to);
+        validator.checkUUID(Fields.fromDocument, fromDocument);
+        validator.checkUUID(Fields.toDocument, toDocument);
     };
 }

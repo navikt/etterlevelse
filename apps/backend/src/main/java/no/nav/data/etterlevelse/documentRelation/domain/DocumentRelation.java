@@ -31,18 +31,17 @@ public class DocumentRelation extends Auditable {
 
     @Id
     @Column(name = "ID")
-    @Builder.Default
-    private UUID id = UUID.randomUUID();
+    private UUID id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "RELATION_TYPE", nullable = false)
     private RelationType relationType;
 
-    @Column(name = "FROM", nullable = false)
-    private String from;
+    @Column(name = "FROM_DOCUMENT", nullable = false)
+    private String fromDocument;
 
-    @Column(name = "TO", nullable = false)
-    private String to;
+    @Column(name = "TO_DOCUMENT", nullable = false)
+    private String toDocument;
 
     @Type(value = JsonBinaryType.class)
     @Column(name = "DATA")
@@ -50,8 +49,8 @@ public class DocumentRelation extends Auditable {
 
     public DocumentRelation merge(DocumentRelationRequest request){
         relationType = request.getRelationType();
-        from = request.getFrom();
-        to = request.getTo();
+        fromDocument = request.getFromDocument();
+        toDocument = request.getToDocument();
         data = request.getData();
         return this;
     };
@@ -60,8 +59,8 @@ public class DocumentRelation extends Auditable {
         return DocumentRelationResponse.builder()
                 .id(id)
                 .relationType(relationType)
-                .from(from)
-                .to(to)
+                .fromDocument(fromDocument)
+                .toDocument(toDocument)
                 .data(data)
                 .build();
     };

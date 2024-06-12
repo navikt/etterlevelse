@@ -2,8 +2,8 @@ CREATE TABLE IF NOT EXISTS DOCUMENT_RELATION
 (
     ID                 UUID PRIMARY KEY,
     RELATION_TYPE      TEXT      NOT NULL,
-    FROM               TEXT      NOT NULL,
-    TO                 TEXT      NOT NULL,
+    FROM_DOCUMENT      TEXT      NOT NULL,
+    TO_DOCUMENT        TEXT      NOT NULL,
     DATA               JSONB     NULL,
     VERSION            INTEGER   NOT NULL,
     CREATED_BY         TEXT      NOT NULL,

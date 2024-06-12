@@ -22,7 +22,7 @@ public class DocumentRelationResponse {
     private ChangeStampResponse changeStamp;
     private Integer version;
     private RelationType relationType;
-    private String from;
-    private String to;
+    private String fromDocument;
+    private String toDocument;
     private JsonNode data;
 }

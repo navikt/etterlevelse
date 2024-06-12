@@ -6,12 +6,12 @@ import java.util.UUID;
 
 public interface DocumentRelationRepository extends JpaRepository<DocumentRelation, UUID> {
 
-    List<DocumentRelation> findByFrom(String from);
+    List<DocumentRelation> findByFromDocument(String from);
 
-    List<DocumentRelation> findByTo(String to);
+    List<DocumentRelation> findByToDocument(String to);
 
-    List<DocumentRelation> findByFromAndRelationType(String from, String relationType);
+    List<DocumentRelation> findByFromDocumentAndRelationType(String from, String relationType);
 
-    List<DocumentRelation> findByToAndRelationType(String to, String relationType);
+    List<DocumentRelation> findByToDocumentAndRelationType(String to, String relationType);
 
 }
