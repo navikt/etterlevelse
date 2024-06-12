@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.dokumentRelasjon.domain;
+package no.nav.data.etterlevelse.documentRelation.domain;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

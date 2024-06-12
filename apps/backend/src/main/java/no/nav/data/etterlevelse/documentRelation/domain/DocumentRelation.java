@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.dokumentRelasjon.domain;
+package no.nav.data.etterlevelse.documentRelation.domain;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
@@ -14,8 +14,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.auditing.domain.Auditable;
-import no.nav.data.etterlevelse.dokumentRelasjon.dto.DocumentRelationRequest;
-import no.nav.data.etterlevelse.dokumentRelasjon.dto.DocumentRelationResponse;
+import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
+import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationResponse;
 import org.hibernate.annotations.Type;
 
 import java.util.UUID;

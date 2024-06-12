@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.dokumentRelasjon.dto;
+package no.nav.data.etterlevelse.documentRelation.dto;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
-import no.nav.data.etterlevelse.dokumentRelasjon.domain.RelationType;
+import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
