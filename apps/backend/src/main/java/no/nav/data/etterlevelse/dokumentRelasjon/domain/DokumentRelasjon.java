@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.auditing.domain.Action;
 import no.nav.data.common.auditing.domain.Auditable;
+import no.nav.data.etterlevelse.dokumentRelasjon.dto.DokumentRelasjonRequest;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
@@ -38,4 +39,10 @@ public class DokumentRelasjon extends Auditable {
     @Column(name = "TO", nullable = false)
     private String to;
 
+    public DokumentRelasjon merge(DokumentRelasjonRequest request){
+        relationType = request.getRelationType();
+        from = request.getFrom();
+        to = request.getTo();
+        return this;
+    };
 }
