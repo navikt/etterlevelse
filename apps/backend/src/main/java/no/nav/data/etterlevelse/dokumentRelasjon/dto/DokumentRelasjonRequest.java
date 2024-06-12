@@ -1,10 +1,6 @@
 package no.nav.data.etterlevelse.dokumentRelasjon.dto;
 
-import io.micrometer.core.ipc.http.HttpSender;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +9,6 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.dokumentRelasjon.domain.RelationType;
-import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
@@ -30,6 +25,8 @@ public class DokumentRelasjonRequest implements RequestElement {
     private String from;
 
     private String to;
+
+    private JsonNode data;
 
     private Boolean update;
 

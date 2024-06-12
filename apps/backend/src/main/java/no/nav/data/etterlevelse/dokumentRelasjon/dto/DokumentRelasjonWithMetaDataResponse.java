@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.dokumentRelasjon.dto;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,4 +24,5 @@ public class DokumentRelasjonWithMetaDataResponse {
     private RelationType relationType;
     private EtterlevelseDokumentasjonResponse from;
     private EtterlevelseDokumentasjonResponse to;
+    private JsonNode data;
 }

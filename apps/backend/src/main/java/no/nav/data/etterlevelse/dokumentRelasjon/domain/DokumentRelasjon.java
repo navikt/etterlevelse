@@ -1,19 +1,23 @@
 package no.nav.data.etterlevelse.dokumentRelasjon.domain;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
-import no.nav.data.common.auditing.domain.Action;
 import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.etterlevelse.dokumentRelasjon.dto.DokumentRelasjonRequest;
 import no.nav.data.etterlevelse.dokumentRelasjon.dto.DokumentRelasjonResponse;
 import org.hibernate.annotations.Type;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -40,10 +44,15 @@ public class DokumentRelasjon extends Auditable {
     @Column(name = "TO", nullable = false)
     private String to;
 
+    @Type(value = JsonBinaryType.class)
+    @Column(name = "DATA")
+    private JsonNode data;
+
     public DokumentRelasjon merge(DokumentRelasjonRequest request){
         relationType = request.getRelationType();
         from = request.getFrom();
         to = request.getTo();
+        data = request.getData();
         return this;
     };
 
@@ -53,6 +62,7 @@ public class DokumentRelasjon extends Auditable {
                 .relationType(relationType)
                 .from(from)
                 .to(to)
+                .data(data)
                 .build();
     };
 }

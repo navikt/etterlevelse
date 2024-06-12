@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS DOCUMENT_RELATION
     RELATION_TYPE      TEXT      NOT NULL,
     FROM               TEXT      NOT NULL,
     TO                 TEXT      NOT NULL,
+    DATA               JSONB     NULL,
     VERSION            INTEGER   NOT NULL,
     CREATED_BY         TEXT      NOT NULL,
     CREATED_DATE       TIMESTAMP NOT NULL,
