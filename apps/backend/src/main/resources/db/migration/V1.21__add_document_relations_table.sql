@@ -1,7 +1,12 @@
 CREATE TABLE IF NOT EXISTS DOCUMENT_RELATION
 (
     ID                 UUID PRIMARY KEY,
-    TYPE               TEXT      NOT NULL,
+    RELATION_TYPE      TEXT      NOT NULL,
     FROM               TEXT      NOT NULL,
     TO                 TEXT      NOT NULL,
+    VERSION            INTEGER   NOT NULL,
+    CREATED_BY         TEXT      NOT NULL,
+    CREATED_DATE       TIMESTAMP NOT NULL,
+    LAST_MODIFIED_BY   TEXT      NOT NULL,
+    LAST_MODIFIED_DATE TIMESTAMP NOT NULL
 );
