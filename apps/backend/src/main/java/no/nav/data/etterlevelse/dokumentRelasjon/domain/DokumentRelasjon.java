@@ -10,6 +10,7 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.auditing.domain.Action;
 import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.etterlevelse.dokumentRelasjon.dto.DokumentRelasjonRequest;
+import no.nav.data.etterlevelse.dokumentRelasjon.dto.DokumentRelasjonResponse;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
@@ -44,5 +45,14 @@ public class DokumentRelasjon extends Auditable {
         from = request.getFrom();
         to = request.getTo();
         return this;
+    };
+
+    public DokumentRelasjonResponse toResponse() {
+        return DokumentRelasjonResponse.builder()
+                .id(id)
+                .relationType(relationType)
+                .from(from)
+                .to(to)
+                .build();
     };
 }
