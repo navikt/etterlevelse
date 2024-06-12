@@ -8,6 +8,7 @@ import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
+import no.nav.data.etterlevelse.dokumentRelasjon.domain.DokumentRelasjonRepository;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
@@ -52,6 +53,8 @@ public abstract class IntegrationTestBase {
     protected GenericStorageRepository<?> repository;
     @Autowired
     protected AuditVersionRepository auditVersionRepository;
+    @Autowired
+    protected DokumentRelasjonRepository dokumentRelasjonRepository;
     @Autowired
     protected StorageService<Krav> kravStorageService;
     @Autowired
