@@ -10,8 +10,8 @@ public interface DocumentRelationRepository extends JpaRepository<DocumentRelati
 
     List<DocumentRelation> findByToDocument(String to);
 
-    List<DocumentRelation> findByFromDocumentAndRelationType(String from, String relationType);
+    List<DocumentRelation> findByFromDocumentAndRelationType (String fromDocument, RelationType relationType);
 
-    List<DocumentRelation> findByToDocumentAndRelationType(String to, String relationType);
+    List<DocumentRelation> findByToDocumentAndRelationType(String toDocument, RelationType relationType);
 
 }

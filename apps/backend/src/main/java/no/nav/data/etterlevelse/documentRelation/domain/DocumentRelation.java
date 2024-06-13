@@ -30,8 +30,9 @@ import java.util.UUID;
 public class DocumentRelation extends Auditable {
 
     @Id
+    @Builder.Default
     @Column(name = "ID")
-    private UUID id;
+    private UUID id = UUID.randomUUID();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "RELATION_TYPE", nullable = false)
