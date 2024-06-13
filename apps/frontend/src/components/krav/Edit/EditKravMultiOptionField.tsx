@@ -34,6 +34,7 @@ export const EditKravMultiOptionField = (
               <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
               {props.caption && <Detail>{props.caption}</Detail>}
               <Select
+                aria-label={props.label}
                 isMulti
                 options={options}
                 value={selectedIds.map((value) => options.find((option) => option.value === value))}
