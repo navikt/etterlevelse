@@ -33,7 +33,10 @@ export const Footer = () => {
   }, [pageScroll])
 
   return (
-    <div className="bg-purple-400 text-white px-12 py-7 w-full mt-auto justify-center flex">
+    <div
+      className="bg-purple-400 text-white px-12 py-7 w-full mt-auto justify-center flex"
+      role="contentinfo"
+    >
       <div className="max-w-7xl w-full">
         {showButtonToTop && (
           <Button
