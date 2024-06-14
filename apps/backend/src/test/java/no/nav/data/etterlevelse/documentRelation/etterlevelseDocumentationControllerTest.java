@@ -1,10 +1,13 @@
 package no.nav.data.etterlevelse.documentRelation;
 
 import no.nav.data.IntegrationTestBase;
+import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationResponse;
+import no.nav.data.etterlevelse.krav.KravController;
+import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+
+import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -78,6 +83,40 @@ public class etterlevelseDocumentationControllerTest extends IntegrationTestBase
         assertThat(documentRelationResponse.getToDocument()).isEqualTo("newDocument");
     }
 
+    @Test
+    void getAllDocumentRelations() {
+        documentRelationService.save(DocumentRelationRequest
+                .builder()
+                .update(false)
+                .fromDocument("oldFromDocument")
+                .toDocument("toOldDocument")
+                .relationType(RelationType.BYGGER)
+                .build());
+
+        documentRelationService.save(DocumentRelationRequest
+                .builder()
+                .update(false)
+                .fromDocument("newFromDocument")
+                .toDocument("toNewDocument")
+                .relationType(RelationType.ARVER)
+                .build());
+
+
+        var resp = restTemplate.getForEntity("/documentrelation?pageSize=1", DocumentRelationController.DocumentRelationPage.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        DocumentRelationController.DocumentRelationPage documentRelationPage = resp.getBody();
+        Assertions.assertThat(documentRelationPage).isNotNull();
+        Assertions.assertThat(documentRelationPage.getNumberOfElements()).isOne();
+        Assertions.assertThat(documentRelationPage.getTotalElements()).isEqualTo(2L);
+
+        resp = restTemplate.getForEntity("/documentrelation?pageSize=2&pageNumber=1", DocumentRelationController.DocumentRelationPage.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        documentRelationPage = resp.getBody();
+        Assertions.assertThat(documentRelationPage).isNotNull();
+        Assertions.assertThat(documentRelationPage.getNumberOfElements()).isZero();
+
+    }
+
     private DocumentRelationRequest getDocumentRelationRequest() {
         return DocumentRelationRequest.builder()
                 .toDocument("toId")
@@ -85,6 +124,5 @@ public class etterlevelseDocumentationControllerTest extends IntegrationTestBase
                 .relationType(RelationType.ARVER)
                 .build();
     }
-
 
 }

@@ -91,4 +91,8 @@ public class DocumentRelationController {
         return ResponseEntity.ok(deletedKrav.toResponse());
     }
 
+
+    static class DocumentRelationPage extends RestResponsePage<DocumentRelationResponse> {
+
+    }
 }
