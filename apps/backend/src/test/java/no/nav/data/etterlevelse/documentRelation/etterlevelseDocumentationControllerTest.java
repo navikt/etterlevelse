@@ -6,6 +6,7 @@ import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationResponse;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -16,6 +17,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class etterlevelseDocumentationControllerTest extends IntegrationTestBase {
 
+    @BeforeEach
+    void setup(){
+        dokumentRelasjonRepository.deleteAll();
+    }
     @Test
     void createDocumentRelation() {
         var req = getDocumentRelationRequest();
