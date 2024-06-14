@@ -8,6 +8,7 @@ import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
+import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelationRepository;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
@@ -85,6 +86,8 @@ public abstract class IntegrationTestBase {
     protected EtterlevelseMetadataService etterlevelseMetadataService;
     @Autowired
     protected EtterlevelseArkivService etterlevelseArkivService;
+    @Autowired
+    protected DocumentRelationService documentRelationService;
 
     @BeforeEach
     void setUpBase() {
