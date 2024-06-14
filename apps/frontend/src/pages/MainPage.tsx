@@ -56,11 +56,11 @@ export const MainPage = () => {
           {forsideVarsel?.meldingStatus === EMeldingStatus.ACTIVE && (
             <div className="my-16" id="forsideVarselMelding">
               {forsideVarsel.alertType === EAlertType.INFO ? (
-                <Alert variant="info">
+                <Alert fullWidth variant="info">
                   <Markdown source={forsideVarsel.melding} />
                 </Alert>
               ) : (
-                <Alert variant="warning">
+                <Alert fullWidth variant="warning">
                   <Markdown source={forsideVarsel.melding} />
                 </Alert>
               )}
