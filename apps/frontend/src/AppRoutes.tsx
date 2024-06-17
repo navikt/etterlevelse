@@ -11,6 +11,7 @@ import { KravCreatePage } from './components/krav/Edit/KravCreatePage'
 import { KravEditPage } from './components/krav/Edit/KravEditPage'
 import { KravNyVersjonPage } from './components/krav/Edit/KravNyVersjonPage'
 import ArkivAdminPage from './pages/ArkivAdminPage'
+import DocumentRelationAdminPage from './pages/DocumentRelationAdminPage'
 import { DokumentasjonPage } from './pages/DokumentasjonPage'
 import EtterlevelseAdminPage from './pages/EtterlevelseAdminPage'
 import EtterlevelseDokumentasjonAdminPage from './pages/EtterlevelseDokumentasjonAdminPage'
@@ -224,6 +225,12 @@ const AppRoutes = (): JSX.Element => {
       <Route
         path="/admin/varsel"
         element={<PrivateRoute component={<VarselPage />} adminPage />}
+        caseSensitive={true}
+      />
+
+      <Route
+        path="/admin/dokumentrelasjon"
+        element={<PrivateRoute component={<DocumentRelationAdminPage />} adminPage />}
         caseSensitive={true}
       />
 

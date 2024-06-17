@@ -109,6 +109,7 @@ const LoggedInHeader = () => {
     ? [
         { label: 'Administrere krav', href: '/admin/krav' },
         { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
+        { label: 'Administrere dokument relasjon', href: '/admin/dokumentrelasjon' },
         { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
         { label: 'Administrere arkivering', href: '/admin/arkiv' },
         { label: intl.audit, href: '/admin/audit' },
