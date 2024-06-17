@@ -7,6 +7,7 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
 import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
+import GjenbrukModal from '../components/etterlevelseDokumentasjon/edit/GjenbrukModal'
 import DokumentasjonPageTabs from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonPageTabs'
 import { PageLayout } from '../components/scaffold/Page'
 import {
@@ -127,16 +128,22 @@ export const DokumentasjonPage = () => {
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             />
             {etterlevelseDokumentasjon && (
-              <Button
-                onClick={() => {
-                  navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
-                }}
-                size="small"
-                variant="secondary"
-                className="whitespace-nowrap ml-5"
-              >
-                Rediger etterlevelsesdokumentet
-              </Button>
+              <div className="gap-4 ml-5">
+                <Button
+                  onClick={() => {
+                    navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
+                  }}
+                  size="small"
+                  variant="secondary"
+                  className="whitespace-nowrap"
+                >
+                  Rediger etterlevelsesdokumentet
+                </Button>
+                <GjenbrukModal
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+                />
+              </div>
             )}
           </div>
         </div>

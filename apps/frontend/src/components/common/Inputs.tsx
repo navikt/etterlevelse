@@ -146,6 +146,7 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
               <Textarea
                 minRows={rows ? rows : 8}
                 label={label}
+                description={caption}
                 maxLength={maxCharacter ? maxCharacter : undefined}
                 error={fieldProps.form.errors[name] ? <FormError fieldName={name} /> : undefined}
                 {...fieldProps.field}
