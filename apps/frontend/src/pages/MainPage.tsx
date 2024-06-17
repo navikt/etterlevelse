@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Button, Heading, Link, LinkPanel, Skeleton } from '@navikt/ds-react'
+import { Alert, Button, Heading, Link, LinkPanel, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -53,6 +53,20 @@ export const MainPage = () => {
             </Heading>
             <span className="flex justify-center">Forstå og dokumentér</span>
           </div>
+          {forsideVarsel?.meldingStatus === EMeldingStatus.ACTIVE && (
+            <div className="my-16" id="forsideVarselMelding">
+              {forsideVarsel.alertType === EAlertType.INFO ? (
+                <Alert fullWidth variant="info">
+                  <Markdown source={forsideVarsel.melding} />
+                </Alert>
+              ) : (
+                <Alert fullWidth variant="warning">
+                  <Markdown source={forsideVarsel.melding} />
+                </Alert>
+              )}
+            </div>
+          )}
+
           {etterlevelseDokumentasjonLoading && (
             <div className="bg-white mt-8 p-8 shadow-md shadow-slate-900 shadow-[#00000040]">
               <Heading as={Skeleton} size="large">
@@ -62,6 +76,7 @@ export const MainPage = () => {
               <Skeleton variant="text" width="100%" />
             </div>
           )}
+
           {!etterlevelseDokumentasjonLoading && data?.etterlevelseDokumentasjoner.content && (
             <div className="bg-white mt-8 p-8 shadow-md shadow-slate-900 shadow-[#00000040]">
               {data?.etterlevelseDokumentasjoner.content.length === 0 && (
@@ -126,19 +141,6 @@ export const MainPage = () => {
             <ForstaKravene />
             <StatusIOrganisasjonen />
           </div>
-          {forsideVarsel?.meldingStatus === EMeldingStatus.ACTIVE && (
-            <div className="mt-16 mb-32" id="forsideVarselMelding">
-              {forsideVarsel.alertType === EAlertType.INFO ? (
-                <div className="border-solid border-1 mt-16 p-8 bg-surface-info-subtle border-surface-info">
-                  <Markdown source={forsideVarsel.melding} />
-                </div>
-              ) : (
-                <div className="border-solid border-1 mt-16 p-8 bg-surface-warning-subtle border-surface-warning">
-                  <Markdown source={forsideVarsel.melding} />
-                </div>
-              )}
-            </div>
-          )}
         </div>
       </div>
     </PageLayout>
