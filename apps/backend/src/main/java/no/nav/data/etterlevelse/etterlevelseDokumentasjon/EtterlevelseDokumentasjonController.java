@@ -12,6 +12,7 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -133,6 +134,16 @@ public class EtterlevelseDokumentasjonController {
         return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsData(etterlevelseDokumentasjon.toResponse()));
     }
 
+
+    @Operation(summary = "Create Etterlevelse Dokumentasjon with relation")
+    @ApiResponse(description = "Created Etterlevelse Dokumentasjon with relation")
+    @PutMapping("/{fromDocumentId}")
+    public ResponseEntity<EtterlevelseDokumentasjonResponse> createEtterlevelseDokumentasjonWithRelation(@PathVariable UUID fromDocumentId, @Valid @RequestBody EtterlevelseDokumentasjonWithRelationRequest request) {
+        log.debug("Create Etterlevelse Dokumentasjon with relation to id={}", fromDocumentId);
+
+        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.saveAndCreateRelation(fromDocumentId ,request);
+        return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsData(etterlevelseDokumentasjon.toResponse()));
+    }
 
     @ApiResponse(description = "Etterlevelse deleted")
     @DeleteMapping("/{id}")
