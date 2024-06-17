@@ -41,9 +41,11 @@ export const FAQ = () => {
           </div>
 
           <div className="max-w-xl">
-            <Heading level="2" size="small" className="mt-14 mb-6">
-              {melding?.secondaryTittel}
-            </Heading>
+            {melding?.secondaryTittel && (
+              <Heading level="2" size="small" className="mt-14 mb-6">
+                {melding?.secondaryTittel}
+              </Heading>
+            )}
             <Markdown source={melding?.secondaryMelding} />
 
             <div className="mt-20">

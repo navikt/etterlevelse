@@ -7,7 +7,7 @@ interface IPropsKravEditDokumentasjon {
 
 export const KravEditDokumentasjon = ({ maxInputWidth }: IPropsKravEditDokumentasjon) => (
   <>
-    <Heading level="3" size="medium" className="mb-2">
+    <Heading level="2" size="medium" className="mb-2">
       Dokumentasjon
     </Heading>
 

@@ -91,7 +91,7 @@ export const KravNyVersjonPage = () => {
                         {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}{' '}
                       </Heading>
                       <Alert variant="warning">
-                        <Heading spacing size="small" level="4">
+                        <Heading spacing size="small" level="3">
                           Sikker på at du vil opprette en ny versjon?
                         </Heading>
                         Ny versjon av kravet skal opprettes når det er{' '}
