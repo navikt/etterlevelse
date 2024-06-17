@@ -142,7 +142,7 @@ public class EtterlevelseDokumentasjonController {
         log.debug("Create Etterlevelse Dokumentasjon with relation to id={}", fromDocumentId);
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(fromDocumentId);
         if(!etterlevelseDokumentasjon.isTilgjengeligForGjenbruk()) {
-            throw new ValidationException(String.format("Cannot create relation with etterlevelse dokumentasjon with id %s, Etterlevelse dokumentasjo is not available for creating relations with", fromDocumentId.toString()));
+            throw new ValidationException(String.format("Cannot create relation with etterlevelse dokumentasjon with id %s, Etterlevelse dokumentasjo is not available for relations", fromDocumentId.toString()));
         }
 
         var newEtterlevelseDokumentasjon = etterlevelseDokumentasjonService.saveAndCreateRelation(fromDocumentId ,request);
