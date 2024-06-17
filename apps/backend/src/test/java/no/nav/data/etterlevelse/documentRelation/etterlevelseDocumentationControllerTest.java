@@ -1,12 +1,14 @@
 package no.nav.data.etterlevelse.documentRelation;
 
 import no.nav.data.IntegrationTestBase;
+import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -125,10 +127,21 @@ public class etterlevelseDocumentationControllerTest extends IntegrationTestBase
 
     @Test
     void deleteDocumentRelation() {
-        var documentRelation = documentRelationService.save(getDocumentRelationRequest());
-        restTemplate.delete("/documentrelation/{id}", documentRelation.getId());
+        var documentRelationToDelete = documentRelationService.save(getDocumentRelationRequest());
 
-        Assertions.assertThat(documentRelationService.getAll(Pageable.ofSize(3))).isEmpty();
+        var otherDocumentRelationToNotDelete = documentRelationService.save(DocumentRelationRequest
+                .builder()
+                .update(false)
+                .fromDocument("newFromDocument")
+                .toDocument("toNewDocument")
+                .relationType(RelationType.ARVER)
+                .build());
+
+        restTemplate.delete("/documentrelation/{id}", documentRelationToDelete.getId());
+
+        Page<DocumentRelation> resp = documentRelationService.getAll(Pageable.ofSize(1));
+        Assertions.assertThat(resp.getTotalElements()).isEqualTo(1L);
+        Assertions.assertThat(resp.getContent().get(0).getId()).isEqualTo(otherDocumentRelationToNotDelete.getId());
     }
 
     private DocumentRelationRequest getDocumentRelationRequest() {
