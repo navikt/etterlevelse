@@ -31,6 +31,9 @@ public class EtterlevelseDokumentasjon extends DomainObject {
     private String title;
     private List<String> behandlingIds;
     private String beskrivelse;
+    private String gjenbrukBeskrivelse;
+    @Default
+    private boolean tilgjengeligForGjenbruk = false;
     @Default
     private boolean behandlerPersonopplysninger = true;
     private String virkemiddelId;
@@ -54,6 +57,8 @@ public class EtterlevelseDokumentasjon extends DomainObject {
         title = request.getTitle();
         behandlingIds = copyOf(request.getBehandlingIds());
         beskrivelse = request.getBeskrivelse();
+        gjenbrukBeskrivelse = request.getGjenbrukBeskrivelse();
+        tilgjengeligForGjenbruk = request.isTilgjengeligForGjenbruk();
         virkemiddelId = request.getVirkemiddelId();
         irrelevansFor = copyOf(request.getIrrelevansFor());
         teams = copyOf(request.getTeams());
@@ -73,6 +78,8 @@ public class EtterlevelseDokumentasjon extends DomainObject {
                 .etterlevelseNummer(etterlevelseNummer)
                 .title(title)
                 .beskrivelse(beskrivelse)
+                .gjenbrukBeskrivelse(gjenbrukBeskrivelse)
+                .tilgjengeligForGjenbruk(tilgjengeligForGjenbruk)
                 .behandlingIds(behandlingIds != null ? copyOf(behandlingIds) : List.of())
                 .virkemiddelId(virkemiddelId)
                 .irrelevansFor(irrelevantForAsCodes())

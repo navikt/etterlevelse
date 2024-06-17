@@ -6,11 +6,14 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
 import no.nav.data.etterlevelse.common.domain.DomainService;
+import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
+import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
@@ -43,6 +46,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     private final EtterlevelseService etterlevelseService;
     private final EtterlevelseArkivService etterlevelseArkivService;
     private final TeamcatTeamClient teamcatTeamClient;
+    private final DocumentRelationService documentRelationService;
 
     public Page<EtterlevelseDokumentasjon> getAll(PageParameters pageParameters) {
         return etterlevelseDokumentasjonRepo.findAll(pageParameters.createPage()).map(GenericStorage::getDomainObjectData);
@@ -95,6 +99,27 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             etterlevelseDokumentasjon.setEtterlevelseNummer(etterlevelseDokumentasjonRepo.nextEtterlevelseDokumentasjonNummer());
         }
         return storage.save(etterlevelseDokumentasjon);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public EtterlevelseDokumentasjon saveAndCreateRelation(UUID fromDocumentID, EtterlevelseDokumentasjonWithRelationRequest request) {
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = new EtterlevelseDokumentasjon();
+        etterlevelseDokumentasjon.merge(request);
+        etterlevelseDokumentasjon.setEtterlevelseNummer(etterlevelseDokumentasjonRepo.nextEtterlevelseDokumentasjonNummer());
+        log.info("creating new Etterlevelse document with relation");
+        var newEtterlevelseDokumentasjon = storage.save(etterlevelseDokumentasjon);
+
+
+        var newDocumentRelation =  documentRelationService.save(
+                DocumentRelationRequest.builder()
+                .update(false)
+                .fromDocument(fromDocumentID.toString())
+                .toDocument(newEtterlevelseDokumentasjon.getId().toString())
+                .relationType(request.getRelationType())
+                .build());
+
+        log.info("Created new relation with fromId = {}, toId = {} with relation type = {}", newDocumentRelation.getFromDocument(), newDocumentRelation.getToDocument(), newDocumentRelation.getRelationType().name());
+        return newEtterlevelseDokumentasjon;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

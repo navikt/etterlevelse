@@ -31,6 +31,8 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private String title;
     private List<String> behandlingIds;
     private String beskrivelse;
+    private String gjenbrukBeskrivelse;
+    private boolean tilgjengeligForGjenbruk;
     private boolean behandlerPersonopplysninger;
     private String virkemiddelId;
     private boolean knyttetTilVirkemiddel;
@@ -47,6 +49,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         setId(trimToNull(id));
         setTitle(trimToNull(title));
         setBeskrivelse(trimToNull(beskrivelse));
+        setGjenbrukBeskrivelse(trimToNull(gjenbrukBeskrivelse));
         setBehandlingIds(formatList(behandlingIds));
         setVirkemiddelId(trimToNull(virkemiddelId));
         setIrrelevansFor(formatListToUppercase(irrelevansFor));

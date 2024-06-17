@@ -142,6 +142,8 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   version: -1,
   title: etterlevelseDokumentasjon.title || '',
   beskrivelse: etterlevelseDokumentasjon.beskrivelse || '',
+  gjenbrukBeskrivelse: etterlevelseDokumentasjon.gjenbrukBeskrivelse || '',
+  tilgjengeligForGjenbruk: etterlevelseDokumentasjon.tilgjengeligForGjenbruk || false,
   behandlingIds: etterlevelseDokumentasjon.behandlingIds || [],
   behandlerPersonopplysninger:
     etterlevelseDokumentasjon.behandlerPersonopplysninger !== undefined

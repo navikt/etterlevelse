@@ -317,6 +317,8 @@ export interface IEtterlevelseDokumentasjon {
   version: number
   title: string
   beskrivelse: string
+  tilgjengeligForGjenbruk: boolean
+  gjenbrukBeskrivelse: string
   behandlingIds: string[]
   virkemiddelId: string
   irrelevansFor: ICode[]
