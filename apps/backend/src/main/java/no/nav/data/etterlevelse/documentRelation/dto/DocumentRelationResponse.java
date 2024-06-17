@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.documentRelation.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 
 import java.util.UUID;
 @Data
@@ -25,4 +27,9 @@ public class DocumentRelationResponse {
     private String fromDocument;
     private String toDocument;
     private JsonNode data;
+
+    @JsonIgnore
+    private EtterlevelseDokumentasjonResponse fromDocumentWithData;
+    @JsonIgnore
+    private EtterlevelseDokumentasjonResponse toDocumentWithData;
 }

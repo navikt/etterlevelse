@@ -136,6 +136,12 @@ export enum ESuksesskriterieStatus {
   IKKE_RELEVANT = 'IKKE_RELEVANT',
   IKKE_OPPFYLT = 'IKKE_OPPFYLT',
 }
+
+export enum ERelationType {
+  ARVER = 'ARVER',
+  BYGGER = 'BYGGER',
+}
+
 export interface IUserInfo {
   loggedIn: boolean
   groups: EGroup[]
@@ -334,6 +340,24 @@ export interface IEtterlevelseDokumentasjon {
   knyttetTilVirkemiddel: boolean
   knytteTilTeam: boolean
   varslingsadresser: IVarslingsadresse[]
+}
+
+export interface IDocumentRelation {
+  id: string
+  changeStamp: IChangeStamp
+  version: number
+  RelationType: ERelationType
+  fromDocument: string
+  toDocument: string
+}
+
+export interface IDocumentRelationWithEtterlevelseDokumetajson extends IDocumentRelation {
+  fromDocumentWithData: IEtterlevelseDokumentasjon
+  toDocumentWithData: IEtterlevelseDokumentasjon
+}
+
+export interface IEtterlevelseDokumentasjonWithRelation extends IEtterlevelseDokumentasjon {
+  RelationType: ERelationType
 }
 
 export interface IEtterlevelseDokumentasjonStats {
