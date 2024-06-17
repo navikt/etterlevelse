@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.documentRelation;
 
 import lombok.RequiredArgsConstructor;
+import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelationRepository;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
@@ -22,7 +23,13 @@ public class DocumentRelationService {
 
 
     public DocumentRelation getById(UUID id){
-        return repository.getReferenceById(id);
+        var documentRelation = repository.findById(id);
+
+        if(documentRelation.isPresent()) {
+            return documentRelation.get();
+        } else {
+            throw new NotFoundException("Couldn't find GenericStorage with id " + id);
+        }
     }
 
     public Page<DocumentRelation> getAll(Pageable pageable) {

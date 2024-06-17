@@ -1,22 +1,15 @@
 package no.nav.data.etterlevelse.documentRelation;
 
 import no.nav.data.IntegrationTestBase;
-import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationResponse;
-import no.nav.data.etterlevelse.krav.KravController;
-import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-
-import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -117,9 +110,22 @@ public class etterlevelseDocumentationControllerTest extends IntegrationTestBase
 
     }
 
+    @Test
+    void getDocumentRelation() {
+        var documentRelation = documentRelationService.save(getDocumentRelationRequest());
+
+        var resp = restTemplate.getForEntity("/documentrelation/{id}", DocumentRelationResponse.class, documentRelation.getId());
+        Assertions.assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        DocumentRelationResponse documentRelationResp = resp.getBody();
+        Assertions.assertThat(documentRelationResp).isNotNull();
+        Assertions.assertThat(documentRelationResp.getId()).isEqualTo(documentRelation.getId());
+
+    }
+
     private DocumentRelationRequest getDocumentRelationRequest() {
         return DocumentRelationRequest.builder()
                 .toDocument("toId")
+                .update(false)
                 .fromDocument("fromId")
                 .relationType(RelationType.ARVER)
                 .build();

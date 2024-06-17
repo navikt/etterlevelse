@@ -49,8 +49,9 @@ public class DocumentRelationController {
     @ApiResponse(description = "ok")
     @GetMapping("/{id}")
     public ResponseEntity<DocumentRelationResponse> getById(@PathVariable UUID id) {
-        log.info("Get Krav id={}", id);
-        return ResponseEntity.ok(service.getById(id).toResponse());
+        log.info("Get Document relation id={}", id);
+        DocumentRelation documentRelation = service.getById(id);
+        return ResponseEntity.ok(documentRelation.toResponse());
     }
 
 

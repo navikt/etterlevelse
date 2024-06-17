@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = "data")
-@JsonPropertyOrder({"id", "from", "to", "relationType"})
+@JsonPropertyOrder({"id", "fromDocument", "toDocument", "relationType"})
 public class DocumentRelationResponse {
     private UUID id;
     private ChangeStampResponse changeStamp;
