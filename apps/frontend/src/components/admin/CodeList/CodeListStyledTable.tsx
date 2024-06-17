@@ -130,16 +130,14 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
               Navn
             </Table.ColumnHeader>
             <Table.ColumnHeader className="w-1/2 break-all">Beskrivelse</Table.ColumnHeader>
-            <Table.ColumnHeader></Table.ColumnHeader>
+            <Table.ColumnHeader aria-hidden></Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {sortedData.map((code: ICode, index) => {
             return (
               <Table.Row key={index + '_' + code.shortName}>
-                <Table.DataCell className="w-[15%] break-all" scope="row">
-                  {code.code}
-                </Table.DataCell>
+                <Table.DataCell className="w-[15%] break-all">{code.code}</Table.DataCell>
                 <Table.DataCell>{code.shortName}</Table.DataCell>
                 <Table.DataCell className="w-1/2 break-all">
                   <div>
