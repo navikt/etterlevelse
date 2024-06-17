@@ -7,6 +7,7 @@ import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -120,6 +121,14 @@ public class etterlevelseDocumentationControllerTest extends IntegrationTestBase
         Assertions.assertThat(documentRelationResp).isNotNull();
         Assertions.assertThat(documentRelationResp.getId()).isEqualTo(documentRelation.getId());
 
+    }
+
+    @Test
+    void deleteDocumentRelation() {
+        var documentRelation = documentRelationService.save(getDocumentRelationRequest());
+        restTemplate.delete("/documentrelation/{id}", documentRelation.getId());
+
+        Assertions.assertThat(documentRelationService.getAll(Pageable.ofSize(3))).isEmpty();
     }
 
     private DocumentRelationRequest getDocumentRelationRequest() {
