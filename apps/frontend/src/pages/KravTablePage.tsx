@@ -124,9 +124,11 @@ export const KravTablePage = () => {
                     </Table.DataCell>
                     <Table.DataCell>
                       {' '}
-                      <Link href={`/tema/${krav.tema}`}>
-                        {codelist.getCode(EListName.TEMA, krav.tema)?.shortName}
-                      </Link>
+                      {krav.tema && (
+                        <Link href={`/tema/${krav.tema}`}>
+                          {codelist.getCode(EListName.TEMA, krav.tema)?.shortName}
+                        </Link>
+                      )}
                     </Table.DataCell>
                     <Table.DataCell>{kravStatus(krav.status)}</Table.DataCell>
                     <Table.DataCell className="w-[10%] text-end">
