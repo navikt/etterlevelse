@@ -7,6 +7,7 @@ import { AuditPage } from './components/admin/audit/AuditPage'
 import { MailLogPage } from './components/admin/maillog/MailLogPage'
 import CreateEtterlevelseDokumentasjonPage from './components/etterlevelseDokumentasjon/edit/CreateEtterlevelseDokumentasjonPage'
 import { EditEtterlevelseDokumentasjonPage } from './components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonPage'
+import GjenbrukEtterlevelseDokumentasjonPage from './components/etterlevelseDokumentasjon/edit/GjenbrukEtterlevelseDokumentasjonPage'
 import { KravCreatePage } from './components/krav/Edit/KravCreatePage'
 import { KravEditPage } from './components/krav/Edit/KravEditPage'
 import { KravNyVersjonPage } from './components/krav/Edit/KravNyVersjonPage'
@@ -162,6 +163,12 @@ const AppRoutes = (): JSX.Element => {
       <Route
         path="/dokumentasjon/create"
         element={<CreateEtterlevelseDokumentasjonPage />}
+        caseSensitive={true}
+      />
+
+      <Route
+        path="/dokumentasjon/gjenbruk/:id"
+        element={<GjenbrukEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
 

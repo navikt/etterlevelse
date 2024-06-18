@@ -356,8 +356,8 @@ export interface IDocumentRelationWithEtterlevelseDokumetajson extends IDocument
   toDocumentWithData: IEtterlevelseDokumentasjon
 }
 
-export interface IEtterlevelseDokumentasjonWithRelation extends IEtterlevelseDokumentasjon {
-  RelationType: ERelationType
+export interface IEtterlevelseDokumentasjonWithRelation extends TEtterlevelseDokumentasjonQL {
+  relationType?: ERelationType
 }
 
 export interface IEtterlevelseDokumentasjonStats {

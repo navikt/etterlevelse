@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import * as yup from 'yup'
 import {
   IEtterlevelseDokumentasjon,
+  IEtterlevelseDokumentasjonWithRelation,
   IPageResponse,
   TEtterlevelseDokumentasjonQL,
 } from '../constants'
@@ -167,6 +168,18 @@ export const etterlevelseDokumentasjonMapToFormVal = (
         ? etterlevelseDokumentasjon.knytteTilTeam
         : true,
 })
+
+export const etterlevelseDokumentasjonWithRelationMapToFormVal = (
+  etterlevelseDokumentasjon: Partial<IEtterlevelseDokumentasjonWithRelation>
+): IEtterlevelseDokumentasjonWithRelation => {
+  const etterlevelseDokumentasjonWithOutRelation =
+    etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)
+
+  return {
+    ...etterlevelseDokumentasjonWithOutRelation,
+    relationType: etterlevelseDokumentasjon.relationType,
+  }
+}
 
 export const etterlevelseDokumentasjonSchema = () =>
   yup.object({

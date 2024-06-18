@@ -7,7 +7,7 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
 import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
-import GjenbrukModal from '../components/etterlevelseDokumentasjon/edit/GjenbrukModal'
+import TillatGjenbrukModal from '../components/etterlevelseDokumentasjon/edit/TillatGjenbrukModal'
 import DokumentasjonPageTabs from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonPageTabs'
 import { PageLayout } from '../components/scaffold/Page'
 import {
@@ -139,7 +139,7 @@ export const DokumentasjonPage = () => {
                 >
                   Rediger etterlevelsesdokumentet
                 </Button>
-                <GjenbrukModal
+                <TillatGjenbrukModal
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
                 />

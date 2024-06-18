@@ -15,7 +15,7 @@ interface IProps {
   setEtterlevelseDokumentasjon: (e: TEtterlevelseDokumentasjonQL) => void
 }
 
-export const GjenbrukModal = (props: IProps) => {
+export const TillatGjenbrukModal = (props: IProps) => {
   const { etterlevelseDokumentasjon, setEtterlevelseDokumentasjon } = props
 
   const [isOpen, setIsOpen] = useState(false)
@@ -34,7 +34,6 @@ export const GjenbrukModal = (props: IProps) => {
     await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjonWithGjenbrukData).catch((e) =>
       console.debug(e)
     )
-
     setIsOpen(false)
   }
 
@@ -64,7 +63,7 @@ export const GjenbrukModal = (props: IProps) => {
           validateOnChange={false}
           validateOnBlur={false}
         >
-          {({ values, setFieldValue, submitForm }) => (
+          {({ values, setFieldValue, submitForm, isSubmitting }) => (
             <Form>
               <Modal.Body>
                 <BodyLong className="mb-5">
@@ -81,12 +80,18 @@ export const GjenbrukModal = (props: IProps) => {
                 />
               </Modal.Body>
               <Modal.Footer>
-                <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
+                <Button
+                  type="button"
+                  disabled={isSubmitting}
+                  variant="secondary"
+                  onClick={() => setIsOpen(false)}
+                >
                   Avbryt
                 </Button>
                 <Button
                   type="button"
                   variant="primary"
+                  disabled={isSubmitting}
                   onClick={() => {
                     setFieldValue('tilgjengeligForGjenbruk', true)
                     submitForm()
@@ -98,6 +103,7 @@ export const GjenbrukModal = (props: IProps) => {
                   <Button
                     type="button"
                     variant="danger"
+                    disabled={isSubmitting}
                     onClick={() => {
                       setFieldValue('tilgjengeligForGjenbruk', false)
                       submitForm()
@@ -115,4 +121,4 @@ export const GjenbrukModal = (props: IProps) => {
   )
 }
 
-export default GjenbrukModal
+export default TillatGjenbrukModal
