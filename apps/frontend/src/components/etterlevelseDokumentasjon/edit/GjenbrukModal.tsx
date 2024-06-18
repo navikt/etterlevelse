@@ -24,15 +24,17 @@ export const GjenbrukModal = (props: IProps) => {
     const updatedEtterlevelseDokumentajson = await getEtterlevelseDokumentasjon(
       etterlevelseDokumentasjon.id
     )
-    const etterlevelseDokumentasjonWithFocusList: TEtterlevelseDokumentasjonQL = {
+    const etterlevelseDokumentasjonWithGjenbrukData: TEtterlevelseDokumentasjonQL = {
       ...updatedEtterlevelseDokumentajson,
       tilgjengeligForGjenbruk: etterlevelseDokumentasjon.tilgjengeligForGjenbruk,
       gjenbrukBeskrivelse: etterlevelseDokumentasjon.gjenbrukBeskrivelse,
     }
-    setEtterlevelseDokumentasjon(etterlevelseDokumentasjonWithFocusList)
-    await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjonWithFocusList).catch((e) =>
+
+    setEtterlevelseDokumentasjon(etterlevelseDokumentasjonWithGjenbrukData)
+    await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjonWithGjenbrukData).catch((e) =>
       console.debug(e)
     )
+
     setIsOpen(false)
   }
 
