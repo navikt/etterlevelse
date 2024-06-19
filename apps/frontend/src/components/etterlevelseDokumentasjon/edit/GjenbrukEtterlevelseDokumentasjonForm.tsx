@@ -241,19 +241,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
           </div>
 
           <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-bg-default">
-            <div className="flex justify-end">
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => {
-                  ampli.logEvent('knapp trykket', {
-                    tekst: 'Avbryt gjenbruk etterlevelsesdokument',
-                  })
-                  navigate(-1)
-                }}
-              >
-                Avbryt
-              </Button>
+            <div className="flex flex-row-reverse">
               <Button
                 type="button"
                 onClick={() => {
@@ -265,6 +253,18 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
                 className="ml-2.5"
               >
                 Opprett
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  ampli.logEvent('knapp trykket', {
+                    tekst: 'Avbryt gjenbruk etterlevelsesdokument',
+                  })
+                  navigate(-1)
+                }}
+              >
+                Avbryt
               </Button>
             </div>
           </div>
