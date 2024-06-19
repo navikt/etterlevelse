@@ -79,7 +79,7 @@ export const dokumentRelationTypeToString = (relasjonsType: ERelationType): stri
       return 'Arver fra'
     case ERelationType.BYGGER:
       return 'Bygger fra'
-    case ERelationType.KOPI:
-      return 'Kopi fra'
+    case ERelationType.ENGANGSKOPI:
+      return 'engangskopi fra'
   }
 }

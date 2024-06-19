@@ -1,5 +1,5 @@
 package no.nav.data.etterlevelse.documentRelation.domain;
 
 public enum RelationType {
-    ARVER, BYGGER, KOPI
+    ARVER, BYGGER, ENGANGSKOPI
 }

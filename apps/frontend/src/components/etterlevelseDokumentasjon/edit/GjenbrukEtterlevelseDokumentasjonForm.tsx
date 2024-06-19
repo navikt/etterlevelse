@@ -66,7 +66,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
                   <Radio value={ERelationType.ARVER}>
                     Beholde relasjonen, og arve endringer på svar etter hvert som de kommer
                   </Radio>
-                  <Radio value={ERelationType.KOPI}>
+                  <Radio value={ERelationType.ENGANGSKOPI}>
                     Lage en engangskopi som uavhengig dokument
                   </Radio>
                 </RadioGroup>

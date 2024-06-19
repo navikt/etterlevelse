@@ -110,7 +110,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         log.info("creating new Etterlevelse document with relation");
         var newEtterlevelseDokumentasjon = storage.save(etterlevelseDokumentasjon);
 
-       if(request.getRelationType() != RelationType.KOPI) {
+       if(request.getRelationType() != RelationType.ENGANGSKOPI) {
            var newDocumentRelation =  documentRelationService.save(
                    DocumentRelationRequest.builder()
                            .update(false)
