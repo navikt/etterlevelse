@@ -1,4 +1,5 @@
-import { BodyLong, Button, Modal } from '@navikt/ds-react'
+import { FilesIcon } from '@navikt/aksel-icons'
+import { Button, List, Modal } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
 import {
@@ -52,7 +53,11 @@ export const TillatGjenbrukModal = (props: IProps) => {
       <Modal
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        header={{ heading: 'Tilgjengeliggjør dette dokumentet for gjenbruk', closeButton: false }}
+        header={{
+          heading: 'Tilgjengeliggjør dette dokumentet til gjenbruk av andre',
+          icon: <FilesIcon title="header-ikon" />,
+          closeButton: false,
+        }}
       >
         <Formik
           initialValues={etterlevelseDokumentasjonMapToFormVal(
@@ -66,17 +71,20 @@ export const TillatGjenbrukModal = (props: IProps) => {
           {({ values, setFieldValue, submitForm, isSubmitting }) => (
             <Form>
               <Modal.Body>
-                <BodyLong className="mb-5">
-                  Kort beskrivelse av det som vil skje nå ved at du gjør dette. Når du gjør dette
-                  kan andre bygge sine egne vurderinger på dine. Det kan være lurt å sørge for at
-                  dokumentets navn gjør at folk kjenner den igjen og bla bla bla.
-                </BodyLong>
+                <List as="ul" className="mb-5">
+                  <List.Item>
+                    Når du gjør dokumentet tilgjengelig, kan andre gjenbruke det.
+                  </List.Item>
+                  <List.Item>
+                    De som gjenbruker dokumentet arver status og besvarelser på suksesskriterier.
+                  </List.Item>
+                </List>
                 <TextAreaField
                   name="gjenbrukBeskrivelse"
-                  label="Beskriv forutsetninger for gjenbruk av dette dokumentet. Dette vil andre lese ved at de oppretter bla bla bla barnedokument (valgfritt)"
+                  label="Beskriv forutsetningene for gjenbruk av dette dokumentet ."
                   rows={5}
                   noPlaceholder
-                  caption="Ikke gå inn i spesifikt krav, men skriv noe overordnet du :) "
+                  caption="Teksten blir vist for alle som skal gjenbruke dokumentet. Gi ikke kravspesifikk veiledning, da dette heller burde komme ved enkelte krav."
                 />
               </Modal.Body>
               <Modal.Footer>
