@@ -140,6 +140,7 @@ export enum ESuksesskriterieStatus {
 export enum ERelationType {
   ARVER = 'ARVER',
   BYGGER = 'BYGGER',
+  KOPI = 'KOPI',
 }
 
 export interface IUserInfo {

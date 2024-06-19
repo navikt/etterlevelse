@@ -67,7 +67,7 @@ interface IPropsFieldWrapper extends IMarginBottom, IID {
 }
 
 export const FieldWrapper = ({ children, marginBottom, id }: IPropsFieldWrapper) => (
-  <div className={`${marginBottom ? 'mb-6' : ''}`} id={id}>
+  <div className={`${marginBottom ? 'mb-5' : ''}`} id={id}>
     {children}
   </div>
 )
