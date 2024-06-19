@@ -90,14 +90,6 @@ export const TillatGjenbrukModal = (props: IProps) => {
               <Modal.Footer>
                 <Button
                   type="button"
-                  disabled={isSubmitting}
-                  variant="secondary"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Avbryt
-                </Button>
-                <Button
-                  type="button"
                   variant="primary"
                   disabled={isSubmitting}
                   onClick={() => {
@@ -106,6 +98,14 @@ export const TillatGjenbrukModal = (props: IProps) => {
                   }}
                 >
                   Bekreft gjenbruk
+                </Button>
+                <Button
+                  type="button"
+                  disabled={isSubmitting}
+                  variant="secondary"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Avbryt
                 </Button>
                 {values.tilgjengeligForGjenbruk && (
                   <Button
