@@ -65,6 +65,19 @@ export const createEtterlevelseDokumentasjon = async (
   ).data
 }
 
+export const createEtterlevelseDokumentasjonWithRelataion = async (
+  fromDocumentId: string,
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjonWithRelation
+) => {
+  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
+  return (
+    await axios.post<IEtterlevelseDokumentasjon>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon/relation/${fromDocumentId}`,
+      dto
+    )
+  ).data
+}
+
 export const deleteEtterlevelseDokumentasjon = async (etterlevelseDokumentasjonId: string) => {
   return (
     await axios.delete<IEtterlevelseDokumentasjon>(

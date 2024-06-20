@@ -137,7 +137,7 @@ public class EtterlevelseDokumentasjonController {
 
     @Operation(summary = "Create Etterlevelse Dokumentasjon with relation")
     @ApiResponse(description = "Created Etterlevelse Dokumentasjon with relation")
-    @PutMapping("/relation/{fromDocumentId}")
+    @PostMapping("/relation/{fromDocumentId}")
     public ResponseEntity<EtterlevelseDokumentasjonResponse> createEtterlevelseDokumentasjonWithRelation(@PathVariable UUID fromDocumentId, @Valid @RequestBody EtterlevelseDokumentasjonWithRelationRequest request) {
         log.debug("Create Etterlevelse Dokumentasjon with relation to id={}", fromDocumentId);
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(fromDocumentId);

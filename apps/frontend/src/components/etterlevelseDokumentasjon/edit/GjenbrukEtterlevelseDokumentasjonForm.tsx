@@ -5,6 +5,7 @@ import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
 import {
+  createEtterlevelseDokumentasjonWithRelataion,
   etterlevelseDokumentasjonSchema,
   etterlevelseDokumentasjonWithRelationMapToFormVal,
 } from '../../../api/EtterlevelseDokumentasjonApi'
@@ -37,7 +38,10 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
   const submit = async (
     etterlevelseDokumentasjonWithRelation: IEtterlevelseDokumentasjonWithRelation
   ) => {
-    console.debug(etterlevelseDokumentasjonWithRelation)
+    await createEtterlevelseDokumentasjonWithRelataion(
+      etterlevelseDokumentasjon.id,
+      etterlevelseDokumentasjonWithRelation
+    ).then((reps) => navigate(`/dokumentasjon/${reps.id}`))
   }
 
   return (
