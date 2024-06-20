@@ -13,6 +13,7 @@ import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,8 @@ import java.util.UUID;
 public class DocumentRelationController {
 
     private final DocumentRelationService service;
+    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+
 
     @Operation(summary = "Get All Document relation")
     @ApiResponse(description = "ok")
@@ -53,7 +56,14 @@ public class DocumentRelationController {
     @GetMapping("/{id}")
     public ResponseEntity<DocumentRelationResponse> getById(@PathVariable UUID id, @RequestParam(required = false) Boolean widthDocumentData) {
         log.info("Get Document relation id={}", id);
-        DocumentRelationResponse documentRelation = service.getById(id, widthDocumentData);
+        DocumentRelationResponse documentRelation = service.getById(id);
+        if(widthDocumentData){
+            var fromEtterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelation.getFromDocument()));
+            var toEtterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelation.getFromDocument()));
+            documentRelation.setFromDocumentWithData(fromEtterlevelseDokumentasjon.toResponse());
+            documentRelation.setToDocumentWithData(toEtterlevelseDokumentasjon.toResponse());
+        }
+
         return ResponseEntity.ok(documentRelation);
     }
 
@@ -64,9 +74,16 @@ public class DocumentRelationController {
         log.info("Get Document relation by from id={}", id);
         List<DocumentRelationResponse> documentRelationList;
         if(relationType != null) {
-             documentRelationList = service.findByFromDocumentAndRelationType(id.toString(), relationType, widthDocumentData);
+             documentRelationList = service.findByFromDocumentAndRelationType(id.toString(), relationType);
         } else {
-            documentRelationList = service.findByFromDocument(id.toString(), widthDocumentData);
+            documentRelationList = service.findByFromDocument(id.toString());
+        }
+
+        if(widthDocumentData) {
+            documentRelationList.forEach((documentRelationResponse) -> {
+                var etterlevelsesDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelationResponse.getFromDocument()));
+                documentRelationResponse.setToDocumentWithData(etterlevelsesDokumentasjon.toResponse());
+            });
         }
 
         return ResponseEntity.ok(documentRelationList);
@@ -79,10 +96,18 @@ public class DocumentRelationController {
         log.info("Get Document relation by to id={}", id);
         List<DocumentRelationResponse> documentRelationList;
         if(relationType != null) {
-            documentRelationList = service.findByToDocumentAndRelationType(id.toString(), relationType, widthDocumentData);
+            documentRelationList = service.findByToDocumentAndRelationType(id.toString(), relationType);
         } else {
-            documentRelationList = service.findByToDocument(id.toString(), widthDocumentData);
+            documentRelationList = service.findByToDocument(id.toString());
         }
+
+        if(widthDocumentData) {
+            documentRelationList.forEach((documentRelationResponse) -> {
+                var etterlevelsesDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelationResponse.getFromDocument()));
+                documentRelationResponse.setToDocumentWithData(etterlevelsesDokumentasjon.toResponse());
+            });
+        }
+
         return ResponseEntity.ok(documentRelationList);
     }
 
