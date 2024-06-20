@@ -24,7 +24,7 @@ export const getDocumentRelationByFromIdAndRelationType = async (
     url += `?relationType=${relationType}`
   }
 
-  return (await axios.get<IPageResponse<IDocumentRelation[]>>(url)).data
+  return (await axios.get<IDocumentRelation[]>(url)).data
 }
 
 export const getDocumentRelationByToIdAndRelationType = async (
@@ -37,7 +37,7 @@ export const getDocumentRelationByToIdAndRelationType = async (
     url += `?relationType=${relationType}`
   }
 
-  return (await axios.get<IPageResponse<IDocumentRelation[]>>(url)).data
+  return (await axios.get<IDocumentRelation[]>(url)).data
 }
 
 export const getAllDocumentRelation = async () => {

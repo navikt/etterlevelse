@@ -29,10 +29,11 @@ import { etterlevelseDokumentasjonWithRelationSchema } from './etterlevelseDokum
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  isInheritingFrom: boolean
 }
 
 export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
-  const { etterlevelseDokumentasjon } = props
+  const { etterlevelseDokumentasjon, isInheritingFrom } = props
   const navigate = useNavigate()
 
   const submit = async (
@@ -66,15 +67,20 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
                 <RadioGroup
                   legend="Hvordan ønsker du å gjenbruke dette dokumentet?"
                   onChange={(value) => fp.form.setFieldValue('relationType', value)}
+                  description={
+                    isInheritingFrom ? 'Kan ikke arve fra dette etterlevelsesdokumentet' : null
+                  }
                   error={
                     fp.form.errors['relationType'] ? (
                       <FormError fieldName="relationType" />
                     ) : undefined
                   }
                 >
-                  <Radio value={ERelationType.ARVER}>
-                    Beholde relasjonen, og arve endringer på svar etter hvert som de kommer
-                  </Radio>
+                  {!isInheritingFrom && (
+                    <Radio value={ERelationType.ARVER}>
+                      Beholde relasjonen, og arve endringer på svar etter hvert som de kommer
+                    </Radio>
+                  )}
                   <Radio value={ERelationType.ENGANGSKOPI}>
                     Lage en engangskopi som uavhengig dokument
                   </Radio>
