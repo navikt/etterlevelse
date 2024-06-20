@@ -7,7 +7,6 @@ import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
-import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
@@ -110,7 +109,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         log.info("creating new Etterlevelse document with relation");
         var newEtterlevelseDokumentasjon = storage.save(etterlevelseDokumentasjon);
 
-       if(request.getRelationType() != RelationType.ENGANGSKOPI) {
+
            var newDocumentRelation =  documentRelationService.save(
                    DocumentRelationRequest.builder()
                            .update(false)
@@ -120,7 +119,6 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
                            .build());
 
            log.info("Created new relation with fromId = {}, toId = {} with relation type = {}", newDocumentRelation.getFromDocument(), newDocumentRelation.getToDocument(), newDocumentRelation.getRelationType().name());
-       }
 
        return newEtterlevelseDokumentasjon;
     }
