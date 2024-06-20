@@ -55,7 +55,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
       validateOnBlur={false}
     >
       {({ values, setFieldValue, errors, submitForm }) => (
-        <Form>
+        <Form className="flex flex-col gap-3">
           <FieldWrapper marginBottom>
             <Field name="relationType">
               {(fp: FieldProps) => (
