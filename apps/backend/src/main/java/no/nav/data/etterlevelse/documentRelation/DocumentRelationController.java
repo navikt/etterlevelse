@@ -60,30 +60,30 @@ public class DocumentRelationController {
     @Operation(summary = "Get Document relation by from id")
     @ApiResponse(description = "ok")
     @GetMapping("/fromdocument/{id}")
-    public ResponseEntity<List<DocumentRelationResponse>> getByFromDocumentId(@PathVariable UUID id, @RequestParam(required = false) RelationType relationType) {
+    public ResponseEntity<List<DocumentRelationResponse>> getByFromDocumentId(@PathVariable UUID id, @RequestParam(required = false) RelationType relationType, @RequestParam(required = false) Boolean widthDocumentData) {
         log.info("Get Document relation by from id={}", id);
-        List<DocumentRelation> documentRelationList;
+        List<DocumentRelationResponse> documentRelationList;
         if(relationType != null) {
-             documentRelationList = service.findByFromDocumentAndRelationType(id.toString(), relationType);
+             documentRelationList = service.findByFromDocumentAndRelationType(id.toString(), relationType, widthDocumentData);
         } else {
-            documentRelationList = service.findByFromDocument(id.toString());
+            documentRelationList = service.findByFromDocument(id.toString(), widthDocumentData);
         }
 
-        return ResponseEntity.ok(documentRelationList.stream().map(DocumentRelation::toResponse).toList());
+        return ResponseEntity.ok(documentRelationList);
     }
 
     @Operation(summary = "Get Document relation by to id")
     @ApiResponse(description = "ok")
     @GetMapping("/todocument/{id}")
-    public ResponseEntity<List<DocumentRelationResponse>> getByToDocumentId(@PathVariable UUID id, @RequestParam(required = false) RelationType relationType) {
+    public ResponseEntity<List<DocumentRelationResponse>> getByToDocumentId(@PathVariable UUID id, @RequestParam(required = false) RelationType relationType, @RequestParam(required = false) Boolean widthDocumentData) {
         log.info("Get Document relation by to id={}", id);
-        List<DocumentRelation> documentRelationList;
+        List<DocumentRelationResponse> documentRelationList;
         if(relationType != null) {
-            documentRelationList = service.findByToDocumentAndRelationType(id.toString(), relationType);
+            documentRelationList = service.findByToDocumentAndRelationType(id.toString(), relationType, widthDocumentData);
         } else {
-            documentRelationList = service.findByToDocument(id.toString());
+            documentRelationList = service.findByToDocument(id.toString(), widthDocumentData);
         }
-        return ResponseEntity.ok(documentRelationList.stream().map(DocumentRelation::toResponse).toList());
+        return ResponseEntity.ok(documentRelationList);
     }
 
 
@@ -120,8 +120,8 @@ public class DocumentRelationController {
     @DeleteMapping("/{id}")
     public ResponseEntity<DocumentRelationResponse> deleteDocumentRelationById(@PathVariable UUID id) {
         log.info("Delete Document relation id={}", id);
-        var deletedKrav = service.deleteById(id);
-        return ResponseEntity.ok(deletedKrav.toResponse());
+        var deletedDocumentRelation = service.deleteById(id);
+        return ResponseEntity.ok(deletedDocumentRelation);
     }
 
 

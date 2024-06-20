@@ -45,21 +45,62 @@ public class DocumentRelationService {
         return repository.findAll(pageable);
     }
 
-    public List<DocumentRelation> findByFromDocument(String fromDocumentId) {
-        return repository.findByFromDocument(fromDocumentId);
+    public List<DocumentRelationResponse> findByFromDocument(String fromDocumentId, Boolean widthDocumentData) {
+        return repository.findByFromDocument(fromDocumentId).stream().map((documentRelation -> {
+
+            var documentRelationResponse = documentRelation.toResponse();
+
+            if(widthDocumentData) {
+                var etterlevelsesDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelationResponse.getFromDocument()));
+                documentRelationResponse.setToDocumentWithData(etterlevelsesDokumentasjon.toResponse());
+            }
+
+            return documentRelationResponse;
+        })).toList();
     }
 
-    public List<DocumentRelation> findByToDocument(String toDocumentId) {
-        return repository.findByToDocument(toDocumentId);
+    public List<DocumentRelationResponse> findByToDocument(String toDocumentId, Boolean widthDocumentData) {
+        return repository.findByToDocument(toDocumentId).stream().map((documentRelation -> {
+
+            var documentRelationResponse = documentRelation.toResponse();
+
+            if(widthDocumentData) {
+                var etterlevelsesDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelationResponse.getFromDocument()));
+                documentRelationResponse.setFromDocumentWithData(etterlevelsesDokumentasjon.toResponse());
+            }
+
+            return documentRelationResponse;
+        })).toList();
+
     }
 
 
-    public List<DocumentRelation> findByFromDocumentAndRelationType (String fromDocumentId, RelationType relationType){
-        return repository.findByFromDocumentAndRelationType(fromDocumentId, relationType);
+    public List<DocumentRelationResponse> findByFromDocumentAndRelationType (String fromDocumentId, RelationType relationType, Boolean widthDocumentData){
+        return repository.findByFromDocumentAndRelationType(fromDocumentId, relationType).stream().map((documentRelation -> {
+
+            var documentRelationResponse = documentRelation.toResponse();
+
+            if(widthDocumentData) {
+                var etterlevelsesDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelationResponse.getFromDocument()));
+                documentRelationResponse.setToDocumentWithData(etterlevelsesDokumentasjon.toResponse());
+            }
+
+            return documentRelationResponse;
+        })).toList();
     };
 
-    public List<DocumentRelation> findByToDocumentAndRelationType(String toDocumentId, RelationType relationType){
-        return repository.findByToDocumentAndRelationType(toDocumentId, relationType);
+    public List<DocumentRelationResponse> findByToDocumentAndRelationType(String toDocumentId, RelationType relationType, Boolean widthDocumentData){
+        return repository.findByToDocumentAndRelationType(toDocumentId, relationType).stream().map((documentRelation -> {
+
+            var documentRelationResponse = documentRelation.toResponse();
+
+            if(widthDocumentData) {
+                var etterlevelsesDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelationResponse.getFromDocument()));
+                documentRelationResponse.setFromDocumentWithData(etterlevelsesDokumentasjon.toResponse());
+            }
+
+            return documentRelationResponse;
+        })).toList();
     };
 
     public DocumentRelation findByFromDocumentAndToDocumentAndRelationType(String fromDocumentId, String toDocumentId, RelationType relationType) {
@@ -75,8 +116,8 @@ public class DocumentRelationService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public DocumentRelation deleteById(UUID id){
-        DocumentRelation documentRelation = getById(id);
+    public DocumentRelationResponse deleteById(UUID id){
+        DocumentRelationResponse documentRelation = getById(id, false);
         repository.deleteById(id);
         return documentRelation;
     }
