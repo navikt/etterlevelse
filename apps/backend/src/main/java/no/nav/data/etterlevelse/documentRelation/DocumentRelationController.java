@@ -51,10 +51,10 @@ public class DocumentRelationController {
     @Operation(summary = "Get One Document relation")
     @ApiResponse(description = "ok")
     @GetMapping("/{id}")
-    public ResponseEntity<DocumentRelationResponse> getById(@PathVariable UUID id) {
+    public ResponseEntity<DocumentRelationResponse> getById(@PathVariable UUID id, @RequestParam(required = false) Boolean widthDocumentData) {
         log.info("Get Document relation id={}", id);
-        DocumentRelation documentRelation = service.getById(id);
-        return ResponseEntity.ok(documentRelation.toResponse());
+        DocumentRelationResponse documentRelation = service.getById(id, widthDocumentData);
+        return ResponseEntity.ok(documentRelation);
     }
 
     @Operation(summary = "Get Document relation by from id")

@@ -6,6 +6,8 @@ import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelationRepository;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
+import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,13 +22,20 @@ import java.util.UUID;
 public class DocumentRelationService {
 
     private final DocumentRelationRepository repository;
+    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
-
-    public DocumentRelation getById(UUID id){
+    public DocumentRelationResponse getById(UUID id, Boolean widthDocumentData){
         var documentRelation = repository.findById(id);
 
         if(documentRelation.isPresent()) {
-            return documentRelation.get();
+            var resp = documentRelation.get().toResponse();
+            if (widthDocumentData) {
+                var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelation.get().getFromDocument()));
+
+                resp.setFromDocumentWithData(etterlevelseDokumentasjon.toResponse());
+            }
+
+            return resp;
         } else {
             throw new NotFoundException("Couldn't find GenericStorage with id " + id);
         }
