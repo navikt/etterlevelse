@@ -54,7 +54,7 @@ public class DocumentRelationController {
     @Operation(summary = "Get One Document relation")
     @ApiResponse(description = "ok")
     @GetMapping("/{id}")
-    public ResponseEntity<DocumentRelationResponse> getById(@PathVariable UUID id, @RequestParam(required = false) Boolean widthDocumentData) {
+    public ResponseEntity<DocumentRelationResponse> getById(@PathVariable UUID id, @RequestParam(required = false) boolean widthDocumentData) {
         log.info("Get Document relation id={}", id);
         DocumentRelationResponse documentRelation = service.getById(id);
         if(widthDocumentData){
@@ -70,7 +70,7 @@ public class DocumentRelationController {
     @Operation(summary = "Get Document relation by from id")
     @ApiResponse(description = "ok")
     @GetMapping("/fromdocument/{id}")
-    public ResponseEntity<List<DocumentRelationResponse>> getByFromDocumentId(@PathVariable UUID id, @RequestParam(required = false) RelationType relationType, @RequestParam(required = false) Boolean widthDocumentData) {
+    public ResponseEntity<List<DocumentRelationResponse>> getByFromDocumentId(@PathVariable UUID id, @RequestParam(required = false) RelationType relationType, @RequestParam(required = false) boolean widthDocumentData) {
         log.info("Get Document relation by from id={}", id);
         List<DocumentRelationResponse> documentRelationList;
         if(relationType != null) {
@@ -92,7 +92,7 @@ public class DocumentRelationController {
     @Operation(summary = "Get Document relation by to id")
     @ApiResponse(description = "ok")
     @GetMapping("/todocument/{id}")
-    public ResponseEntity<List<DocumentRelationResponse>> getByToDocumentId(@PathVariable UUID id, @RequestParam(required = false) RelationType relationType, @RequestParam(required = false) Boolean widthDocumentData) {
+    public ResponseEntity<List<DocumentRelationResponse>> getByToDocumentId(@PathVariable UUID id, @RequestParam(required = false) RelationType relationType, @RequestParam(required = false) boolean widthDocumentData) {
         log.info("Get Document relation by to id={}", id);
         List<DocumentRelationResponse> documentRelationList;
         if(relationType != null) {
