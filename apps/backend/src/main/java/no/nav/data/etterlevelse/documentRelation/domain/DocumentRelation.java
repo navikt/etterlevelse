@@ -14,6 +14,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.auditing.domain.Auditable;
+import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationResponse;
 import org.hibernate.annotations.Type;
@@ -59,6 +60,12 @@ public class DocumentRelation extends Auditable {
     public DocumentRelationResponse toResponse() {
         return DocumentRelationResponse.builder()
                 .id(id)
+                .version(version)
+                .changeStamp(ChangeStampResponse.builder()
+                        .createdDate(createdDate)
+                        .lastModifiedBy(lastModifiedBy)
+                        .lastModifiedDate(lastModifiedDate)
+                        .build())
                 .relationType(relationType)
                 .fromDocument(fromDocument)
                 .toDocument(toDocument)
