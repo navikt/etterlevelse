@@ -90,8 +90,8 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
             <TextAreaField
               rows={5}
               noPlaceholder
-              label="Beskrivelse"
-              name="Beskriv hva som dokumentet gjelder (og eventuelt ikke gjelder)"
+              label="Beskriv hva som dokumentet gjelder (og eventuelt ikke gjelder)"
+              name="beskrivelse"
               caption="Denne informasjon skal vises på dokumentside"
             />
           </div>
