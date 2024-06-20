@@ -10,6 +10,7 @@ import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
+import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationResponse;
 import org.springframework.data.domain.Page;
@@ -22,8 +23,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -52,6 +55,35 @@ public class DocumentRelationController {
         log.info("Get Document relation id={}", id);
         DocumentRelation documentRelation = service.getById(id);
         return ResponseEntity.ok(documentRelation.toResponse());
+    }
+
+    @Operation(summary = "Get Document relation by from id")
+    @ApiResponse(description = "ok")
+    @GetMapping("/fromdocument/{id}")
+    public ResponseEntity<List<DocumentRelationResponse>> getByFromDocumentId(@PathVariable UUID id, @RequestParam RelationType relationType) {
+        log.info("Get Document relation by from id={}", id);
+        List<DocumentRelation> documentRelationList;
+        if(relationType != null) {
+             documentRelationList = service.findByFromDocumentAndRelationType(id.toString(), relationType);
+        } else {
+            documentRelationList = service.findByFromDocument(id.toString());
+        }
+
+        return ResponseEntity.ok(documentRelationList.stream().map(DocumentRelation::toResponse).toList());
+    }
+
+    @Operation(summary = "Get Document relation by to id")
+    @ApiResponse(description = "ok")
+    @GetMapping("/todocument/{id}")
+    public ResponseEntity<List<DocumentRelationResponse>> getByToDocumentId(@PathVariable UUID id, @RequestParam RelationType relationType) {
+        log.info("Get Document relation by to id={}", id);
+        List<DocumentRelation> documentRelationList;
+        if(relationType != null) {
+            documentRelationList = service.findByToDocumentAndRelationType(id.toString(), relationType);
+        } else {
+            documentRelationList = service.findByToDocument(id.toString());
+        }
+        return ResponseEntity.ok(documentRelationList.stream().map(DocumentRelation::toResponse).toList());
     }
 
 
