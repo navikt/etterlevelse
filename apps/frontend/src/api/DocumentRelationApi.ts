@@ -14,6 +14,32 @@ export const getDocumentRelationPage = async (pageNumber: number, pageSize: numb
   ).data
 }
 
+export const getDocumentRelationByFromIdAndRelationType = async (
+  fromId: string,
+  relationType?: ERelationType
+) => {
+  let url = `${env.backendBaseUrl}/documentrelation/fromdocument/${fromId}`
+
+  if (relationType) {
+    url += `?relationType=${relationType}`
+  }
+
+  return (await axios.get<IPageResponse<IDocumentRelation[]>>(url)).data
+}
+
+export const getDocumentRelationByToIdAndRelationType = async (
+  fromId: string,
+  relationType?: ERelationType
+) => {
+  let url = `${env.backendBaseUrl}/documentrelation/todocument/${fromId}`
+
+  if (relationType) {
+    url += `?relationType=${relationType}`
+  }
+
+  return (await axios.get<IPageResponse<IDocumentRelation[]>>(url)).data
+}
+
 export const getAllDocumentRelation = async () => {
   const PAGE_SIZE = 100
   const firstPage = await getDocumentRelationPage(0, PAGE_SIZE)
