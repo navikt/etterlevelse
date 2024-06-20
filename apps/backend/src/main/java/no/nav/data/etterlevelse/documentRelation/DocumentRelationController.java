@@ -60,7 +60,7 @@ public class DocumentRelationController {
     @Operation(summary = "Get Document relation by from id")
     @ApiResponse(description = "ok")
     @GetMapping("/fromdocument/{id}")
-    public ResponseEntity<List<DocumentRelationResponse>> getByFromDocumentId(@PathVariable UUID id, @RequestParam RelationType relationType) {
+    public ResponseEntity<List<DocumentRelationResponse>> getByFromDocumentId(@PathVariable UUID id, @RequestParam(required = false) RelationType relationType) {
         log.info("Get Document relation by from id={}", id);
         List<DocumentRelation> documentRelationList;
         if(relationType != null) {
@@ -75,7 +75,7 @@ public class DocumentRelationController {
     @Operation(summary = "Get Document relation by to id")
     @ApiResponse(description = "ok")
     @GetMapping("/todocument/{id}")
-    public ResponseEntity<List<DocumentRelationResponse>> getByToDocumentId(@PathVariable UUID id, @RequestParam RelationType relationType) {
+    public ResponseEntity<List<DocumentRelationResponse>> getByToDocumentId(@PathVariable UUID id, @RequestParam(required = false) RelationType relationType) {
         log.info("Get Document relation by to id={}", id);
         List<DocumentRelation> documentRelationList;
         if(relationType != null) {
