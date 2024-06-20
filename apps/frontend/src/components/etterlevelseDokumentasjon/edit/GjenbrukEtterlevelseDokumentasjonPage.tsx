@@ -35,11 +35,11 @@ export const GjenbrukEtterlevelseDokumentasjonPage = () => {
 
           {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
             <div>
-              <Heading size="small" level="2" spacing>
+              <Heading size="small" level="2" spacing className="mt-5">
                 Forutsetninger for gjenbruk av dette dokumentet
               </Heading>
 
-              <BodyLong className="mb-5">{etterlevelseDokumentasjon.gjenbrukBeskrivelse}</BodyLong>
+              <BodyLong className="mb-8">{etterlevelseDokumentasjon.gjenbrukBeskrivelse}</BodyLong>
 
               <GjenbrukEtterlevelseDokumentasjonForm
                 etterlevelseDokumentasjon={etterlevelseDokumentasjon}
