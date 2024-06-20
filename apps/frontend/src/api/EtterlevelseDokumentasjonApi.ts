@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import * as yup from 'yup'
 import {
   IEtterlevelseDokumentasjon,
   IEtterlevelseDokumentasjonWithRelation,
@@ -194,26 +193,4 @@ export const etterlevelseDokumentasjonWithRelationMapToFormVal = (
   }
 }
 
-export const etterlevelseDokumentasjonSchema = () =>
-  yup.object({
-    title: yup.string().required('Etterlevelsesdokumentasjon trenger en tittel'),
-    varslingsadresser: yup.array().test({
-      name: 'varslingsadresserCheck',
-      message: 'Påkrevd minst en varslingsadresse',
-      test: function (varslingsadresser) {
-        return varslingsadresser && varslingsadresser.length > 0 ? true : false
-      },
-    }),
-    virkemiddelId: yup.string().test({
-      name: 'addedVirkemiddelCheck',
-      message: 'Hvis ditt system/produkt er tilknyttet et virkemiddel må det legges til.',
-      test: function (virkemiddelId) {
-        const { parent } = this
-        if (parent.knyttetTilVirkemiddel === true) {
-          return virkemiddelId ? true : false
-        }
-        return true
-      },
-    }),
-  })
 //graphql

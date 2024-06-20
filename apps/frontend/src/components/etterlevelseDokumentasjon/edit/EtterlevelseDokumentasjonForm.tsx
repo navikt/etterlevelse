@@ -8,7 +8,6 @@ import { behandlingName, searchBehandlingOptions } from '../../../api/Behandling
 import {
   createEtterlevelseDokumentasjon,
   etterlevelseDokumentasjonMapToFormVal,
-  etterlevelseDokumentasjonSchema,
   updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { useSearchTeamOptions } from '../../../api/TeamApi'
@@ -22,6 +21,7 @@ import { Error } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 import { VarslingsadresserEdit } from '../../varslingsadresse/VarslingsadresserEdit'
+import { etterlevelseDokumentasjonSchema } from './etterlevelseDokumentasjonSchema'
 
 type TEditEtterlevelseDokumentasjonModalProps = {
   title: string

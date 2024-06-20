@@ -6,7 +6,6 @@ import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
 import {
   createEtterlevelseDokumentasjonWithRelataion,
-  etterlevelseDokumentasjonSchema,
   etterlevelseDokumentasjonWithRelationMapToFormVal,
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { useSearchTeamOptions } from '../../../api/TeamApi'
@@ -22,10 +21,11 @@ import { EListName, ICode, ICodeListFormValues } from '../../../services/Codelis
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
-import { Error } from '../../common/ModalSchema'
+import { Error, FormError } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 import { VarslingsadresserEdit } from '../../varslingsadresse/VarslingsadresserEdit'
+import { etterlevelseDokumentasjonWithRelationSchema } from './etterlevelseDokumentasjonSchema'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -54,7 +54,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
         behandlerPersonopplysninger: etterlevelseDokumentasjon.behandlerPersonopplysninger,
       })}
       onSubmit={submit}
-      validationSchema={etterlevelseDokumentasjonSchema()}
+      validationSchema={etterlevelseDokumentasjonWithRelationSchema()}
       validateOnChange={false}
       validateOnBlur={false}
     >
@@ -66,6 +66,11 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
                 <RadioGroup
                   legend="Hvordan ønsker du å gjenbruke dette dokumentet?"
                   onChange={(value) => fp.form.setFieldValue('relationType', value)}
+                  error={
+                    fp.form.errors['relationType'] ? (
+                      <FormError fieldName="relationType" />
+                    ) : undefined
+                  }
                 >
                   <Radio value={ERelationType.ARVER}>
                     Beholde relasjonen, og arve endringer på svar etter hvert som de kommer

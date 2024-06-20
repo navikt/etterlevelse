@@ -4,12 +4,12 @@ import { Form, Formik } from 'formik'
 import { useState } from 'react'
 import {
   etterlevelseDokumentasjonMapToFormVal,
-  etterlevelseDokumentasjonSchema,
   getEtterlevelseDokumentasjon,
   updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { TEtterlevelseDokumentasjonQL } from '../../../constants'
 import { TextAreaField } from '../../common/Inputs'
+import { etterlevelseDokumentasjonSchema } from './etterlevelseDokumentasjonSchema'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
