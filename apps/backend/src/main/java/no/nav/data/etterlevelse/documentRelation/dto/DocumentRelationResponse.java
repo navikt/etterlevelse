@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.documentRelation.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
@@ -28,8 +27,6 @@ public class DocumentRelationResponse {
     private String toDocument;
     private JsonNode data;
 
-    @JsonIgnore
     private EtterlevelseDokumentasjonResponse fromDocumentWithData;
-    @JsonIgnore
     private EtterlevelseDokumentasjonResponse toDocumentWithData;
 }
