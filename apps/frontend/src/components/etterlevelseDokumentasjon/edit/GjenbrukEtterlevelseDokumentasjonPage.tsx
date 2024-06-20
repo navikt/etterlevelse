@@ -1,4 +1,4 @@
-import { BodyLong, Heading, Loader } from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, Loader } from '@navikt/ds-react'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../../../api/EtterlevelseDokumentasjonApi'
 import { PageLayout } from '../../scaffold/Page'
@@ -33,15 +33,27 @@ export const GjenbrukEtterlevelseDokumentasjonPage = () => {
             {etterlevelseDokumentasjon.title}
           </Heading>
 
-          <Heading size="small" level="2" spacing>
-            Forutsetninger for gjenbruk av dette dokumentet
-          </Heading>
+          {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
+            <div>
+              <Heading size="small" level="2" spacing>
+                Forutsetninger for gjenbruk av dette dokumentet
+              </Heading>
 
-          <BodyLong className="mb-5">{etterlevelseDokumentasjon.gjenbrukBeskrivelse}</BodyLong>
+              <BodyLong className="mb-5">{etterlevelseDokumentasjon.gjenbrukBeskrivelse}</BodyLong>
 
-          <GjenbrukEtterlevelseDokumentasjonForm
-            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          />
+              <GjenbrukEtterlevelseDokumentasjonForm
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              />
+            </div>
+          )}
+
+          {!etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
+            <div className="flex w-full justify-center">
+              <Alert variant="warning">
+                Denne etterlevelsesdokumentasjon er ikke tilgjengelig for gjenbruk
+              </Alert>
+            </div>
+          )}
         </PageLayout>
       )}
     </>
