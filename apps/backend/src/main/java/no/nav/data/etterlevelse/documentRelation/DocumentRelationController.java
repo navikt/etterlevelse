@@ -59,7 +59,7 @@ public class DocumentRelationController {
         DocumentRelationResponse documentRelation = service.getById(id);
         if(widthDocumentData){
             var fromEtterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelation.getFromDocument()));
-            var toEtterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelation.getFromDocument()));
+            var toEtterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelation.getToDocument()));
             documentRelation.setFromDocumentWithData(fromEtterlevelseDokumentasjon.toResponse());
             documentRelation.setToDocumentWithData(toEtterlevelseDokumentasjon.toResponse());
         }
@@ -81,8 +81,8 @@ public class DocumentRelationController {
 
         if(widthDocumentData) {
             documentRelationList.forEach((documentRelationResponse) -> {
-                var etterlevelsesDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelationResponse.getFromDocument()));
-                documentRelationResponse.setToDocumentWithData(etterlevelsesDokumentasjon.toResponse());
+                var toEtterlevelsesDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelationResponse.getToDocument()));
+                documentRelationResponse.setToDocumentWithData(toEtterlevelsesDokumentasjon.toResponse());
             });
         }
 
@@ -103,8 +103,8 @@ public class DocumentRelationController {
 
         if(widthDocumentData) {
             documentRelationList.forEach((documentRelationResponse) -> {
-                var etterlevelsesDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelationResponse.getFromDocument()));
-                documentRelationResponse.setToDocumentWithData(etterlevelsesDokumentasjon.toResponse());
+                var fromEtterlevelsesDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelationResponse.getFromDocument()));
+                documentRelationResponse.setFromDocumentWithData(fromEtterlevelsesDokumentasjon.toResponse());
             });
         }
 
