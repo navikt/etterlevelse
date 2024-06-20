@@ -76,7 +76,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         }
 
         if ((filter.getTeams() != null && !filter.getTeams().isEmpty()) || filter.isGetMineEtterlevelseDokumentasjoner()) {
-           return filter.getTeams().parallelStream().map(this::getEtterlevelseDokumentasjonerByTeam).flatMap(Collection::stream).toList();
+            return filter.getTeams().parallelStream().map(this::getEtterlevelseDokumentasjonerByTeam).flatMap(Collection::stream).toList();
         }
 
         if (filter.isSok()) {
@@ -110,17 +110,17 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         var newEtterlevelseDokumentasjon = storage.save(etterlevelseDokumentasjon);
 
 
-           var newDocumentRelation =  documentRelationService.save(
-                   DocumentRelationRequest.builder()
-                           .update(false)
-                           .fromDocument(fromDocumentID.toString())
-                           .toDocument(newEtterlevelseDokumentasjon.getId().toString())
-                           .relationType(request.getRelationType())
-                           .build());
+        var newDocumentRelation = documentRelationService.save(
+                DocumentRelationRequest.builder()
+                        .update(false)
+                        .fromDocument(fromDocumentID.toString())
+                        .toDocument(newEtterlevelseDokumentasjon.getId().toString())
+                        .relationType(request.getRelationType())
+                        .build());
 
-           log.info("Created new relation with fromId = {}, toId = {} with relation type = {}", newDocumentRelation.getFromDocument(), newDocumentRelation.getToDocument(), newDocumentRelation.getRelationType().name());
+        log.info("Created new relation with fromId = {}, toId = {} with relation type = {}", newDocumentRelation.getFromDocument(), newDocumentRelation.getToDocument(), newDocumentRelation.getRelationType().name());
 
-       return newEtterlevelseDokumentasjon;
+        return newEtterlevelseDokumentasjon;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -146,7 +146,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return convertToDomaionObject(etterlevelseDokumentasjonRepo.findByBehandlingIds(ids));
     }
 
-    public List<EtterlevelseDokumentasjon> getByVirkemiddelId(List<String>ids) {
+    public List<EtterlevelseDokumentasjon> getByVirkemiddelId(List<String> ids) {
         return convertToDomaionObject(etterlevelseDokumentasjonRepo.findByVirkemiddelIds(ids));
     }
 
@@ -155,7 +155,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return addBehandlingAndTeamsData(etterlevelseDokumentasjonResponse);
     }
 
-    public List<EtterlevelseDokumentasjon> getAllWithValidBehandling(){
+    public List<EtterlevelseDokumentasjon> getAllWithValidBehandling() {
         return convertToDomaionObject(etterlevelseDokumentasjonRepo.getAllEtterlevelseDokumentasjonWithValidBehandling());
     }
 
