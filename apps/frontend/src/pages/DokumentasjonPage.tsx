@@ -139,10 +139,24 @@ export const DokumentasjonPage = () => {
                 >
                   Rediger etterlevelsesdokumentet
                 </Button>
+
                 <TillatGjenbrukModal
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
                 />
+
+                {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
+                  <Button
+                    onClick={() => {
+                      navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
+                    }}
+                    size="small"
+                    variant="tertiary"
+                    className="whitespace-nowrap mt-3"
+                  >
+                    Gjenbruk dokumentet
+                  </Button>
+                )}
               </div>
             )}
           </div>
