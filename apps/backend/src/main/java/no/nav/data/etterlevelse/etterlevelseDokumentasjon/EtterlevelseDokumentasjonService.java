@@ -102,13 +102,14 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public EtterlevelseDokumentasjon saveAndCreateRelation(UUID fromDocumentID, EtterlevelseDokumentasjonWithRelationRequest request) {
+    public EtterlevelseDokumentasjon saveAndCreateRelationWithEtterlevelseCopy(UUID fromDocumentID, EtterlevelseDokumentasjonWithRelationRequest request) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = new EtterlevelseDokumentasjon();
         etterlevelseDokumentasjon.merge(request);
         etterlevelseDokumentasjon.setEtterlevelseNummer(etterlevelseDokumentasjonRepo.nextEtterlevelseDokumentasjonNummer());
         log.info("creating new Etterlevelse document with relation");
         var newEtterlevelseDokumentasjon = storage.save(etterlevelseDokumentasjon);
 
+        etterlevelseService.copyEtterlevelse(fromDocumentID.toString(), newEtterlevelseDokumentasjon.getId().toString());
 
         var newDocumentRelation = documentRelationService.save(
                 DocumentRelationRequest.builder()
