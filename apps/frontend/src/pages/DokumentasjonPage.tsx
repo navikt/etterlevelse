@@ -166,7 +166,7 @@ export const DokumentasjonPage = () => {
                   Rediger etterlevelsesdokumentet
                 </Button>
 
-                {dokumentRelasjon && (
+                {!dokumentRelasjon && (
                   <TillatGjenbrukModal
                     etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                     setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
