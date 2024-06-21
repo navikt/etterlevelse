@@ -163,7 +163,7 @@ export const DokumentasjonPage = () => {
                   variant="secondary"
                   className="whitespace-nowrap"
                 >
-                  Rediger etterlevelsesdokumentet
+                  Rediger dokumentegenskaper
                 </Button>
 
                 {!dokumentRelasjon && (
@@ -209,6 +209,7 @@ export const DokumentasjonPage = () => {
         relevanteStats={relevanteStats}
         utgaattStats={utgaattStats}
         loading={loading}
+        documentRelation={dokumentRelasjon}
       />
     </PageLayout>
   )
