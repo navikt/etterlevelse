@@ -1,9 +1,10 @@
-import { Alert, BodyLong, Heading, Loader } from '@navikt/ds-react'
+import { Alert, Heading, Loader } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getDocumentRelationByToIdAndRelationType } from '../../../api/DocumentRelationApi'
 import { useEtterlevelseDokumentasjon } from '../../../api/EtterlevelseDokumentasjonApi'
 import { ERelationType } from '../../../constants'
+import { Markdown } from '../../common/Markdown'
 import { PageLayout } from '../../scaffold/Page'
 import GjenbrukEtterlevelseDokumentasjonForm from './GjenbrukEtterlevelseDokumentasjonForm'
 
@@ -59,7 +60,9 @@ export const GjenbrukEtterlevelseDokumentasjonPage = () => {
                 Forutsetninger for gjenbruk av dette dokumentet
               </Heading>
 
-              <BodyLong className="mb-8">{etterlevelseDokumentasjon.gjenbrukBeskrivelse}</BodyLong>
+              <div className="mb-8">
+                <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />
+              </div>
 
               <GjenbrukEtterlevelseDokumentasjonForm
                 etterlevelseDokumentasjon={etterlevelseDokumentasjon}
