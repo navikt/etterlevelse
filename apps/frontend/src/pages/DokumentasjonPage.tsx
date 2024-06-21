@@ -166,10 +166,12 @@ export const DokumentasjonPage = () => {
                   Rediger etterlevelsesdokumentet
                 </Button>
 
-                <TillatGjenbrukModal
-                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                  setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-                />
+                {dokumentRelasjon && (
+                  <TillatGjenbrukModal
+                    etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                    setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+                  />
+                )}
 
                 {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
                   <Button
