@@ -53,7 +53,6 @@ export const DokumentasjonPageTabs = (props: IProps) => {
 
   useEffect(() => {
     if (documentRelation && documentRelation.fromDocumentWithData.prioritertKravNummer.length > 0) {
-      console.debug('TRIGGER')
       setTabValue('prioritertKravliste')
     }
   }, [documentRelation])
