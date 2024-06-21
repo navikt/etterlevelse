@@ -89,13 +89,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
             </Field>
           </FieldWrapper>
 
-          <TextAreaField
-            rows={2}
-            noPlaceholder
-            label="Navngi ditt nye dokument"
-            name="title"
-            caption="Husk at også andre kan gjenbruke samme dokument som du gjør nå, og da er det viktig å være tydelig"
-          />
+          <TextAreaField rows={2} noPlaceholder label="Navngi ditt nye dokument" name="title" />
 
           <div className="mt-5">
             <TextAreaField
@@ -103,7 +97,6 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
               noPlaceholder
               label="Beskriv hva som dokumentet gjelder (og eventuelt ikke gjelder)"
               name="beskrivelse"
-              caption="Denne informasjon skal vises på dokumentside"
             />
           </div>
 
