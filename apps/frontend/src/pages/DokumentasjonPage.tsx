@@ -163,7 +163,7 @@ export const DokumentasjonPage = () => {
                   variant="secondary"
                   className="whitespace-nowrap"
                 >
-                  Rediger dokumentegenskaper
+                  Endre dokumentegenskaper
                 </Button>
 
                 {!dokumentRelasjon && (
@@ -181,6 +181,7 @@ export const DokumentasjonPage = () => {
                     size="small"
                     variant="tertiary"
                     className="whitespace-nowrap mt-3"
+                    type="button"
                   >
                     Gjenbruk dokumentet
                   </Button>

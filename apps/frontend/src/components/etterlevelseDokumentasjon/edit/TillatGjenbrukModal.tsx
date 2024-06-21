@@ -47,7 +47,7 @@ export const TillatGjenbrukModal = (props: IProps) => {
         type="button"
         onClick={() => setIsOpen(true)}
       >
-        {etterlevelseDokumentasjon.gjenbrukBeskrivelse ? 'Tilpass gjenbruk' : 'Åpne for gjenbruk'}
+        {etterlevelseDokumentasjon.gjenbrukBeskrivelse ? 'Endre gjenbruk' : 'Åpne for gjenbruk'}
       </Button>
 
       {isOpen && (
