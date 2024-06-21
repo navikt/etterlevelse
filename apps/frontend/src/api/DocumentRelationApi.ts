@@ -1,5 +1,10 @@
 import axios from 'axios'
-import { ERelationType, IDocumentRelation, IPageResponse } from '../constants'
+import {
+  ERelationType,
+  IDocumentRelation,
+  IDocumentRelationWithEtterlevelseDokumetajson,
+  IPageResponse,
+} from '../constants'
 import { env } from '../util/env'
 
 export const getByDocumentRelation = async (id: string) => {
@@ -36,8 +41,39 @@ export const getDocumentRelationByToIdAndRelationType = async (
   if (relationType) {
     url += `?relationType=${relationType}`
   }
-
   return (await axios.get<IDocumentRelation[]>(url)).data
+}
+
+export const getDocumentRelationByToIdAndRelationTypeWithData = async (
+  toId: string,
+  relationType?: ERelationType
+) => {
+  let url = `${env.backendBaseUrl}/documentrelation/todocument/${toId}`
+
+  if (relationType) {
+    url += `?relationType=${relationType}`
+  }
+
+  const paramConnector = relationType ? '&' : '?'
+  const param = 'widthDocumentData=true'
+  const updatedUrl = url + paramConnector + param
+  return (await axios.get<IDocumentRelationWithEtterlevelseDokumetajson[]>(updatedUrl)).data
+}
+
+export const getDocumentRelationByFromIdAndRelationTypeWithData = async (
+  fromId: string,
+  relationType?: ERelationType
+) => {
+  let url = `${env.backendBaseUrl}/documentrelation/fromdocument/${fromId}`
+
+  if (relationType) {
+    url += `?relationType=${relationType}`
+  }
+
+  const paramConnector = relationType ? '&' : '?'
+  const param = 'widthDocumentData=true'
+  const updatedUrl = url + paramConnector + param
+  return (await axios.get<IDocumentRelationWithEtterlevelseDokumetajson[]>(updatedUrl)).data
 }
 
 export const getAllDocumentRelation = async () => {
