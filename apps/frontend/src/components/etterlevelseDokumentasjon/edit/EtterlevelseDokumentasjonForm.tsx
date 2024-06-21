@@ -5,13 +5,21 @@ import { useNavigate } from 'react-router-dom'
 import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
+import { getDocumentRelationByToIdAndRelationType } from '../../../api/DocumentRelationApi'
 import {
   createEtterlevelseDokumentasjon,
   etterlevelseDokumentasjonMapToFormVal,
   updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { useSearchTeamOptions } from '../../../api/TeamApi'
-import { IBehandling, ITeam, IVirkemiddel, TEtterlevelseDokumentasjonQL } from '../../../constants'
+import {
+  ERelationType,
+  IBehandling,
+  IDocumentRelation,
+  ITeam,
+  IVirkemiddel,
+  TEtterlevelseDokumentasjonQL,
+} from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
 import { EListName, ICode, ICodeListFormValues, codelist } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
@@ -37,6 +45,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
   )
 
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<IVirkemiddel>()
+  const [dokumentRelasjon, setDokumentRelasjon] = useState<IDocumentRelation>()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -62,6 +71,15 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
     if (etterlevelseDokumentasjon?.virkemiddel?.navn) {
       setSelectedVirkemiddel(etterlevelseDokumentasjon.virkemiddel)
     }
+
+    ;(async () => {
+      if (etterlevelseDokumentasjon) {
+        await getDocumentRelationByToIdAndRelationType(
+          etterlevelseDokumentasjon?.id,
+          ERelationType.ARVER
+        ).then((resp) => setDokumentRelasjon(resp[0]))
+      }
+    })()
   }, [etterlevelseDokumentasjon])
 
   const submit = async (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL) => {
@@ -150,50 +168,52 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                     </FieldWrapper>
                   ) : ( */}
 
-          <FieldArray name="irrelevansFor">
-            {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-              <div className="h-full pt-5 w-[calc(100% - 1rem)]">
-                <CheckboxGroup
-                  legend="Hvilke egenskaper gjelder for etterlevelsen?"
-                  description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
-                  value={selectedFilter}
-                  onChange={(selected) => {
-                    setSelectedFilter(selected)
+          {!dokumentRelasjon && (
+            <FieldArray name="irrelevansFor">
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className="h-full pt-5 w-[calc(100% - 1rem)]">
+                  <CheckboxGroup
+                    legend="Hvilke egenskaper gjelder for etterlevelsen?"
+                    description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
+                    value={selectedFilter}
+                    onChange={(selected) => {
+                      setSelectedFilter(selected)
 
-                    const irrelevansListe = relevansOptions.filter(
-                      (_irrelevans, index) => !selected.includes(index)
-                    )
-                    fieldArrayRenderProps.form.setFieldValue(
-                      'irrelevansFor',
-                      irrelevansListe.map((irrelevans) =>
-                        codelist.getCode(EListName.RELEVANS, irrelevans.value)
+                      const irrelevansListe = relevansOptions.filter(
+                        (_irrelevans, index) => !selected.includes(index)
                       )
-                    )
-                    // selected.forEach((value) => {
-                    //   const i = parseInt(value)
-                    //   if (!selectedFilter.includes(i)) {
-                    //     setSelectedFilter([...selectedFilter, i])
-                    //     p.remove(p.form.values.irrelevansFor.findIndex((ir: ICode) => ir.code === relevansOptions[i].value))
-                    //   } else {
-                    //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
-                    //     p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
-                    //   }
-                    // })
-                  }}
-                >
-                  {relevansOptions.map((relevans, index) => (
-                    <Checkbox
-                      key={'relevans_' + relevans.value}
-                      value={index}
-                      description={relevans.description}
-                    >
-                      {relevans.label}
-                    </Checkbox>
-                  ))}
-                </CheckboxGroup>
-              </div>
-            )}
-          </FieldArray>
+                      fieldArrayRenderProps.form.setFieldValue(
+                        'irrelevansFor',
+                        irrelevansListe.map((irrelevans) =>
+                          codelist.getCode(EListName.RELEVANS, irrelevans.value)
+                        )
+                      )
+                      // selected.forEach((value) => {
+                      //   const i = parseInt(value)
+                      //   if (!selectedFilter.includes(i)) {
+                      //     setSelectedFilter([...selectedFilter, i])
+                      //     p.remove(p.form.values.irrelevansFor.findIndex((ir: ICode) => ir.code === relevansOptions[i].value))
+                      //   } else {
+                      //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
+                      //     p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
+                      //   }
+                      // })
+                    }}
+                  >
+                    {relevansOptions.map((relevans, index) => (
+                      <Checkbox
+                        key={'relevans_' + relevans.value}
+                        value={index}
+                        description={relevans.description}
+                      >
+                        {relevans.label}
+                      </Checkbox>
+                    ))}
+                  </CheckboxGroup>
+                </div>
+              )}
+            </FieldArray>
+          )}
 
           {/* DONT REMOVE */}
           {/* )} */}
