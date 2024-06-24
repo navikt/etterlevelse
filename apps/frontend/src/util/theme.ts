@@ -36,7 +36,7 @@ export const ettlevColors = {
   navMorkGra: '#262626',
   navGra80: '#4f4f4f',
   navOransje: '#A86400',
-  focusOutline: '#0056B4',
+  focusOutline: '#01347D',
   navDypBla: '#004367',
   navLysBla: '#E5F0F7',
   lysBla: '#E6F1F8',
