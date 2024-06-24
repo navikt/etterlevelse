@@ -1,7 +1,7 @@
 import {
+  BodyShort,
   Button,
   DatePicker,
-  Detail,
   Label,
   Radio,
   RadioGroup,
@@ -130,7 +130,7 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
             {markdown && (
               <div>
                 <Label>{label}</Label>
-                <Detail>{caption}</Detail>
+                <BodyShort className="text-[var(--a-text-subtle)]">{caption}</BodyShort>
                 <MarkdownInfo />
                 <TextEditor
                   height={height}

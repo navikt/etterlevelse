@@ -123,7 +123,13 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           />
 
           <div className="mt-5">
-            <TextAreaField rows={5} noPlaceholder label="Beskrivelse" name="beskrivelse" />
+            <TextAreaField
+              height="150px"
+              noPlaceholder
+              label="Beskrivelse"
+              name="beskrivelse"
+              markdown
+            />
           </div>
 
           {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}

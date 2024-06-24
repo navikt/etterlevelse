@@ -83,7 +83,8 @@ export const TillatGjenbrukModal = (props: IProps) => {
                   <TextAreaField
                     name="gjenbrukBeskrivelse"
                     label="Beskriv forutsetningene for gjenbruk av dette dokumentet ."
-                    rows={5}
+                    height="150px"
+                    markdown
                     noPlaceholder
                     caption="Teksten blir vist for alle som skal gjenbruke dokumentet. Gi ikke kravspesifikk veiledning, da dette heller burde komme ved enkelte krav."
                   />

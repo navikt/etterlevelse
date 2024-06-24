@@ -138,8 +138,8 @@ export const Markdown = ({
 }
 
 export const MarkdownInfo = () => (
-  <div className="mt-4">
+  <BodyShort className="mt-4 text-[var(--a-text-subtle)]">
     Feltet bruker <ExternalLink href={markdownLink}>Markdown</ExternalLink>, se her for mer
     informasjon om formatet
-  </div>
+  </BodyShort>
 )
