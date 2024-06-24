@@ -190,7 +190,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             etterlevelseDokumentasjonResponse.getTeams().forEach((teamId) -> {
                 var teamData = teamcatTeamClient.getTeam(teamId);
                 if (teamData.isPresent()) {
-                    teamsData.add(teamData.get().toResponse());
+                    teamsData.add(teamData.get().toResponseWithMembers());
                 } else {
                     var emptyTeamData = new TeamResponse();
                     emptyTeamData.setId(teamId);
