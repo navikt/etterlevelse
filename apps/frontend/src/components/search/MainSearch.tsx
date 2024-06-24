@@ -153,12 +153,20 @@ const MainSearch = () => {
         loadOptions={useMainSearch}
         onChange={(selectedOption) => selectedOption && navigate([selectedOption].flat()[0].url)}
         styles={{
-          // Removes default focus-border so it can be replaced with focus from DesignSystem
+          // Updates default focus-border so it can be replaced with focus from DesignSystem
           control: (base) =>
             ({
               ...base,
               boxShadow: 'none',
-              border: 0,
+              color: 'var(--a-gray-900)',
+              border: '1px solid var(--a-gray-500)',
+              borderRadius: 'var(--a-border-radius-medium)',
+              ':focus-within': {
+                boxShadow: 'var(--a-shadow-focus)',
+                outline: 'none',
+              },
+              ':focus': { borderColor: 'var(--a-deepblue-600)' },
+              ':hover': { borderColor: 'var(--a-border-action)' },
               cursor: 'text',
               div: { div: { color: 'var(--a-text-default)' } },
             }) as CSSObjectWithLabel,

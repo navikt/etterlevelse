@@ -1,12 +1,11 @@
 import { Chips } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
-import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { useSearchKrav } from '../../../api/KravApi'
-import { ettlevColors } from '../../../util/theme'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { FormError } from '../../common/ModalSchema'
+import { selectOverrides } from '../../search/util'
 import { DropdownIndicator } from './KravBegreperEdit'
 
 export const EditKravRelasjoner = () => {
@@ -36,15 +35,7 @@ export const EditKravRelasjoner = () => {
                 onChange={(krav) => {
                   krav && fieldArrayRenderProps.push(krav)
                 }}
-                styles={{
-                  control: (base) =>
-                    ({
-                      ...base,
-                      cursor: 'text',
-                      height: '3rem',
-                      borderColor: ettlevColors.textAreaBorder,
-                    }) as CSSObjectWithLabel,
-                }}
+                styles={selectOverrides}
               />
 
               <Chips className="mt-2.5">

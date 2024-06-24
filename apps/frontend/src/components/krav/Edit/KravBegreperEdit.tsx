@@ -1,14 +1,14 @@
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
-import { CSSObjectWithLabel, DropdownIndicatorProps, components } from 'react-select'
+import { DropdownIndicatorProps, components } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { useBegrepSearch } from '../../../api/BegrepApi'
 import { IBegrep } from '../../../constants'
-import { ettlevColors } from '../../../util/theme'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { FormError } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
+import { selectOverrides } from '../../search/util'
 
 export const DropdownIndicator = (props: DropdownIndicatorProps) => {
   return (
@@ -45,15 +45,7 @@ export const EditBegreper = () => {
                 onChange={(begrep) => {
                   begrep && fieldArrayRenderProps.push(begrep)
                 }}
-                styles={{
-                  control: (base) =>
-                    ({
-                      ...base,
-                      cursor: 'text',
-                      height: '3rem',
-                      borderColor: ettlevColors.textAreaBorder,
-                    }) as CSSObjectWithLabel,
-                }}
+                styles={selectOverrides}
               />
 
               <RenderTagList

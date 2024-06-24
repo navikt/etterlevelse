@@ -2,7 +2,6 @@ import { Button, Checkbox, CheckboxGroup, Heading } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
 import { getDocumentRelationByToIdAndRelationType } from '../../../api/DocumentRelationApi'
@@ -28,6 +27,7 @@ import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTo
 import { Error } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
+import { selectOverrides } from '../../search/util'
 import { VarslingsadresserEdit } from '../../varslingsadresse/VarslingsadresserEdit'
 import { etterlevelseDokumentasjonSchema } from './etterlevelseDokumentasjonSchema'
 
@@ -264,14 +264,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                             setFieldValue('avdeling', newAvdeling)
                           }
                         }}
-                        styles={{
-                          control: (base) =>
-                            ({
-                              ...base,
-                              cursor: 'text',
-                              height: '3rem',
-                            }) as CSSObjectWithLabel,
-                        }}
+                        styles={selectOverrides}
                       />
                     </div>
                     <RenderTagList
@@ -319,14 +312,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                         onChange={(value) => {
                           value && fieldArrayRenderProps.push(value)
                         }}
-                        styles={{
-                          control: (base) =>
-                            ({
-                              ...base,
-                              cursor: 'text',
-                              height: '3rem',
-                            }) as CSSObjectWithLabel,
-                        }}
+                        styles={selectOverrides}
                       />
                     </div>
                     <RenderTagList
