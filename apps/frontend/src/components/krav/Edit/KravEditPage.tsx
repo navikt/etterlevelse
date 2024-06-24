@@ -18,7 +18,6 @@ import { user } from '../../../services/User'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
 import { TextAreaField } from '../../common/Inputs'
-import { FormError } from '../../common/ModalSchema'
 import { PageLayout } from '../../scaffold/Page'
 import { kravEditValidation } from './KravSchemaValidation'
 import { KravEditStatusModal } from './components/KravEditStatusModal'
@@ -177,13 +176,26 @@ export const KravEditPage = () => {
                       isEditingUtgaattKrav={isEditingUtgaattKrav}
                     />
                     <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-bg-default">
-                      {errors.status && (
-                        <div className="mb-3">
-                          <FormError fieldName="status" />
-                        </div>
-                      )}
-
-                      <div className="flex w-full">
+                      <div className="flex w-full flex-row-reverse">
+                        <KravStandardButtons
+                          submitCancelButton={() => {
+                            if (krav.kravNummer && krav.kravVersjon) {
+                              navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
+                            } else {
+                              navigate('/kravliste')
+                            }
+                          }}
+                          submitSaveButton={() => {
+                            values.status = krav.status
+                            submitForm()
+                          }}
+                          kravStatus={krav.status}
+                          submitAktivButton={() => {
+                            values.status = EKravStatus.AKTIV
+                            submitForm()
+                          }}
+                          isSubmitting={isSubmitting}
+                        />
                         <div className="flex w-full">
                           {krav.status === EKravStatus.AKTIV && (
                             <div className="mr-2">
@@ -299,26 +311,6 @@ export const KravEditPage = () => {
                             </Button>
                           </KravEditStatusModal>
                         </div>
-
-                        <KravStandardButtons
-                          submitCancelButton={() => {
-                            if (krav.kravNummer && krav.kravVersjon) {
-                              navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
-                            } else {
-                              navigate('/kravliste')
-                            }
-                          }}
-                          submitSaveButton={() => {
-                            values.status = krav.status
-                            submitForm()
-                          }}
-                          kravStatus={krav.status}
-                          submitAktivButton={() => {
-                            values.status = EKravStatus.AKTIV
-                            submitForm()
-                          }}
-                          isSubmitting={isSubmitting}
-                        />
                       </div>
                     </div>
                     <div className="py-12">

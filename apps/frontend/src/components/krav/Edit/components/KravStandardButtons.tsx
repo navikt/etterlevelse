@@ -21,7 +21,7 @@ export const KravStandardButtons = ({
   const isButtonActive: boolean = createMode || kravStatus !== EKravStatus.AKTIV
 
   return (
-    <div className="flex w-full">
+    <div className="flex w-full flex-row-reverse">
       {isButtonActive && (
         <Button
           type="button"
