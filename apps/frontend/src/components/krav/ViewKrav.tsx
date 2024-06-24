@@ -126,40 +126,38 @@ export const AllInfo = ({
         </LabelAboveContent>
       </LabelWrapper>
 
-      {user.isKraveier() && (
-        <LabelWrapper>
-          <LabelAboveContent header={header} title="Varslingsadresser">
-            {krav.varslingsadresser.map((varslingsaddresse, index) => {
-              if (varslingsaddresse.type === EAdresseType.SLACK)
-                return (
-                  <div className="flex mb-2" key={'kravVarsling_list_SLACK_' + index}>
-                    <div className="mr-1">Slack:</div>
-                    <ExternalLink href={slackLink(varslingsaddresse.adresse)}>{`#${
-                      varslingsaddresse.slackChannel?.name || varslingsaddresse.adresse
-                    }`}</ExternalLink>
-                  </div>
-                )
-              if (varslingsaddresse.type === EAdresseType.SLACK_USER)
-                return (
-                  <div className="flex mb-2" key={'kravVarsling_list_SLACK_USER_' + index}>
-                    <div className="mr-1">Slack:</div>
-                    <ExternalLink href={slackUserLink(varslingsaddresse.adresse)}>{`${
-                      varslingsaddresse.slackUser?.name || varslingsaddresse.adresse
-                    }`}</ExternalLink>
-                  </div>
-                )
+      <LabelWrapper>
+        <LabelAboveContent header={header} title="Varslingsadresser">
+          {krav.varslingsadresser.map((varslingsaddresse, index) => {
+            if (varslingsaddresse.type === EAdresseType.SLACK)
               return (
-                <div className="flex mb-2" key={'kravVarsling_list_EMAIL_' + index}>
-                  <div className="mr-1">Epost:</div>
-                  <ExternalLink href={`mailto:${varslingsaddresse.adresse}`} openOnSamePage>
-                    {varslingsaddresse.adresse}
-                  </ExternalLink>
+                <div className="flex mb-2" key={'kravVarsling_list_SLACK_' + index}>
+                  <div className="mr-1">Slack:</div>
+                  <ExternalLink href={slackLink(varslingsaddresse.adresse)}>{`#${
+                    varslingsaddresse.slackChannel?.name || varslingsaddresse.adresse
+                  }`}</ExternalLink>
                 </div>
               )
-            })}
-          </LabelAboveContent>
-        </LabelWrapper>
-      )}
+            if (varslingsaddresse.type === EAdresseType.SLACK_USER)
+              return (
+                <div className="flex mb-2" key={'kravVarsling_list_SLACK_USER_' + index}>
+                  <div className="mr-1">Slack:</div>
+                  <ExternalLink href={slackUserLink(varslingsaddresse.adresse)}>{`${
+                    varslingsaddresse.slackUser?.name || varslingsaddresse.adresse
+                  }`}</ExternalLink>
+                </div>
+              )
+            return (
+              <div className="flex mb-2" key={'kravVarsling_list_EMAIL_' + index}>
+                <div className="mr-1">Epost:</div>
+                <ExternalLink href={`mailto:${varslingsaddresse.adresse}`} openOnSamePage>
+                  {varslingsaddresse.adresse}
+                </ExternalLink>
+              </div>
+            )
+          })}
+        </LabelAboveContent>
+      </LabelWrapper>
 
       {!noLastModifiedDate && (
         <div>
