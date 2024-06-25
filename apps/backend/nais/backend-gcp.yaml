@@ -33,7 +33,6 @@ spec:
     min: 2
     max: 4
     cpuThresholdPercentage: 50
-    memoryThresholdPercentage: 90
   resources:
     limits:
       memory: 1Gi
