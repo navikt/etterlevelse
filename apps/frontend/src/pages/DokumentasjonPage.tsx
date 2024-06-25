@@ -22,6 +22,7 @@ import {
 import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDokumentasjonQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, codelist } from '../services/Codelist'
+import { user } from '../services/User'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const DokumentasjonPage = () => {
@@ -166,14 +167,14 @@ export const DokumentasjonPage = () => {
                   Endre dokumentegenskaper
                 </Button>
 
-                {!dokumentRelasjon && (
+                {!dokumentRelasjon && user.isAdmin() && (
                   <TillatGjenbrukModal
                     etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                     setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
                   />
                 )}
 
-                {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
+                {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
                   <Button
                     onClick={() => {
                       navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
