@@ -1,4 +1,4 @@
-import { Detail } from '@navikt/ds-react'
+import { BodyShort } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { ReactNode } from 'react'
 import Select, { CSSObjectWithLabel } from 'react-select'
@@ -32,8 +32,11 @@ export const EditKravMultiOptionField = (
           return (
             <div>
               <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
-              {props.caption && <Detail>{props.caption}</Detail>}
+              {props.caption && (
+                <BodyShort className="text-[var(--a-text-subtle)]">{props.caption}</BodyShort>
+              )}
               <Select
+                aria-label={props.label}
                 isMulti
                 options={options}
                 value={selectedIds.map((value) => options.find((option) => option.value === value))}

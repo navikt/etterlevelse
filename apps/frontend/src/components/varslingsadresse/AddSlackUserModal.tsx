@@ -1,13 +1,12 @@
 import { Alert, Button, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
 import { useState } from 'react'
-import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { getSlackUserByEmail, usePersonSearch } from '../../api/TeamApi'
 import { EAdresseType, ITeamResource, IVarslingsadresse } from '../../constants'
 import { user } from '../../services/User'
-import { ettlevColors } from '../../util/theme'
 import { LabelWithDescription } from '../common/LabelWithTooltip'
 import { DropdownIndicator } from '../krav/Edit/KravBegreperEdit'
+import { selectOverrides } from '../search/util'
 
 interface IProps {
   isOpen: boolean
@@ -98,15 +97,7 @@ export const AddSlackUserModal = (props: IProps) => {
                         setLoadingSlackId(false)
                       }
                     }}
-                    styles={{
-                      control: (base) =>
-                        ({
-                          ...base,
-                          cursor: 'text',
-                          height: '3rem',
-                          borderColor: ettlevColors.textAreaBorder,
-                        }) as CSSObjectWithLabel,
-                    }}
+                    styles={selectOverrides}
                   />
                 </div>
               </div>

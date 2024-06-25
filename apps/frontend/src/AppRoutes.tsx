@@ -7,10 +7,12 @@ import { AuditPage } from './components/admin/audit/AuditPage'
 import { MailLogPage } from './components/admin/maillog/MailLogPage'
 import CreateEtterlevelseDokumentasjonPage from './components/etterlevelseDokumentasjon/edit/CreateEtterlevelseDokumentasjonPage'
 import { EditEtterlevelseDokumentasjonPage } from './components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonPage'
+import GjenbrukEtterlevelseDokumentasjonPage from './components/etterlevelseDokumentasjon/edit/GjenbrukEtterlevelseDokumentasjonPage'
 import { KravCreatePage } from './components/krav/Edit/KravCreatePage'
 import { KravEditPage } from './components/krav/Edit/KravEditPage'
 import { KravNyVersjonPage } from './components/krav/Edit/KravNyVersjonPage'
 import ArkivAdminPage from './pages/ArkivAdminPage'
+import DocumentRelationAdminPage from './pages/DocumentRelationAdminPage'
 import { DokumentasjonPage } from './pages/DokumentasjonPage'
 import EtterlevelseAdminPage from './pages/EtterlevelseAdminPage'
 import EtterlevelseDokumentasjonAdminPage from './pages/EtterlevelseDokumentasjonAdminPage'
@@ -165,6 +167,12 @@ const AppRoutes = (): JSX.Element => {
       />
 
       <Route
+        path="/dokumentasjon/gjenbruk/:id"
+        element={<GjenbrukEtterlevelseDokumentasjonPage />}
+        caseSensitive={true}
+      />
+
+      <Route
         path="/admin/codelist/:listname"
         element={<PrivateRoute component={<CodeListPage />} adminPage />}
         caseSensitive={true}
@@ -224,6 +232,12 @@ const AppRoutes = (): JSX.Element => {
       <Route
         path="/admin/varsel"
         element={<PrivateRoute component={<VarselPage />} adminPage />}
+        caseSensitive={true}
+      />
+
+      <Route
+        path="/admin/dokumentrelasjon"
+        element={<PrivateRoute component={<DocumentRelationAdminPage />} adminPage />}
         caseSensitive={true}
       />
 

@@ -3,7 +3,12 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../../../api/ArkiveringApi'
 import { getAllKravPriorityList } from '../../../api/KravPriorityListApi'
-import { IKravPriorityList, TEtterlevelseDokumentasjonQL, TKravQL } from '../../../constants'
+import {
+  IDocumentRelationWithEtterlevelseDokumetajson,
+  IKravPriorityList,
+  TEtterlevelseDokumentasjonQL,
+  TKravQL,
+} from '../../../constants'
 import { TTemaCode } from '../../../services/Codelist'
 import ExportEtterlevelseModal from '../../export/ExportEtterlevelseModal'
 import { ArkiveringModal } from '../ArkiveringModal'
@@ -17,6 +22,7 @@ interface IProps {
   relevanteStats: TKravQL[]
   utgaattStats: TKravQL[]
   loading: boolean
+  documentRelation?: IDocumentRelationWithEtterlevelseDokumetajson
 }
 
 export const DokumentasjonPageTabs = (props: IProps) => {
@@ -27,6 +33,7 @@ export const DokumentasjonPageTabs = (props: IProps) => {
     relevanteStats,
     utgaattStats,
     loading,
+    documentRelation,
   } = props
 
   const params = useParams<{ id?: string; tema?: string }>()
@@ -38,13 +45,21 @@ export const DokumentasjonPageTabs = (props: IProps) => {
     params.id
   )
 
+  const [tabValue, setTabValue] = useState('alleKrav')
+
   useEffect(() => {
     getAllKravPriorityList().then((priority) => setAllKravPriority(priority))
   }, [])
 
+  useEffect(() => {
+    if (documentRelation && documentRelation.fromDocumentWithData.prioritertKravNummer.length > 0) {
+      setTabValue('prioritertKravliste')
+    }
+  }, [documentRelation])
+
   return (
     <div>
-      <Tabs defaultValue="alleKrav">
+      <Tabs defaultValue="alleKrav" value={tabValue} onChange={(newValue) => setTabValue(newValue)}>
         <Tabs.List>
           <Tabs.Tab value="alleKrav" label="Alle Krav" />
           <Tabs.Tab value="prioritertKravliste" label="Prioritert kravliste" />

@@ -1,7 +1,7 @@
 import {
+  BodyShort,
   Button,
   DatePicker,
-  Detail,
   Label,
   Radio,
   RadioGroup,
@@ -67,7 +67,7 @@ interface IPropsFieldWrapper extends IMarginBottom, IID {
 }
 
 export const FieldWrapper = ({ children, marginBottom, id }: IPropsFieldWrapper) => (
-  <div className={`${marginBottom ? 'mb-6' : ''}`} id={id}>
+  <div className={`${marginBottom ? 'mb-5' : ''}`} id={id}>
     {children}
   </div>
 )
@@ -130,7 +130,7 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
             {markdown && (
               <div>
                 <Label>{label}</Label>
-                <Detail>{caption}</Detail>
+                <BodyShort className="text-[var(--a-text-subtle)]">{caption}</BodyShort>
                 <MarkdownInfo />
                 <TextEditor
                   height={height}
@@ -146,6 +146,7 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
               <Textarea
                 minRows={rows ? rows : 8}
                 label={label}
+                description={caption}
                 maxLength={maxCharacter ? maxCharacter : undefined}
                 error={fieldProps.form.errors[name] ? <FormError fieldName={name} /> : undefined}
                 {...fieldProps.field}

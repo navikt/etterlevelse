@@ -24,6 +24,21 @@ export const searchResourceByName = async (resourceName: string) => {
   ).data.content
 }
 
+export const searchResourceByNameOptions = async (searchParam: string) => {
+  if (searchParam && searchParam.length > 2) {
+    const resources = await searchResourceByName(searchParam)
+    if (resources && resources.length) {
+      return resources.map((resource) => {
+        return {
+          value: resource.navIdent,
+          label: resource.fullName,
+        }
+      })
+    }
+  }
+  return []
+}
+
 export const getTeam = async (teamId: string) => {
   const data = (await axios.get<ITeam>(`${env.backendBaseUrl}/team/${teamId}`)).data
   data.members = data.members.sort((a, b) => (a.name || '').localeCompare(b.name || ''))

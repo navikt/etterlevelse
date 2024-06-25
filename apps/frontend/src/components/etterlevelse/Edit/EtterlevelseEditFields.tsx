@@ -170,29 +170,30 @@ export const EtterlevelseEditFields = ({
               )}
 
               <div className="w-full justify-end">
-                <div className="flex w-full pb-3 justify-end">
+                <div className="flex w-full pb-3 flex-row-reverse">
                   <Button
-                    className="mr-6"
-                    disabled={krav.status === EKravStatus.UTGAATT ? false : disableEdit}
+                    disabled={disableEdit || isOppfylesSenere}
                     type="button"
-                    variant="secondary"
                     onClick={() => {
-                      if (!dirty) {
-                        ampli.logEvent('knapp klikket', {
-                          tekst: 'Avbryt uten endring i etterlevelse',
-                          pagePath: location.pathname,
-                          ...userRoleEventProp,
-                        })
-                        close()
-                      } else {
-                        setIsAvbryModalOpen(true)
-                      }
-
-                      // original logic for buttons, uncommet and use code above to test new logic.
-                      // close()
+                      values.status = EEtterlevelseStatus.FERDIG_DOKUMENTERT
+                      values.suksesskriterieBegrunnelser.forEach((skb, index) => {
+                        if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
+                          setFieldError(
+                            `suksesskriterieBegrunnelser[${index}]`,
+                            'Du må fylle ut dokumentasjonen'
+                          )
+                        }
+                      })
+                      ampli.logEvent('knapp klikket', {
+                        tekst: 'Sett krav til ferdig utfylt',
+                        pagePath: location.pathname,
+                        ...userRoleEventProp,
+                      })
+                      submitForm()
                     }}
                   >
-                    {krav.status === EKravStatus.UTGAATT ? 'Lukk' : 'Avbryt'}
+                    {/* Sett krav til ferdig utfylt og fortsett til neste krav */}
+                    Ferdig utfylt
                   </Button>
 
                   {kravFilter === EKravFilterType.UTGAATE_KRAV && (
@@ -207,8 +208,9 @@ export const EtterlevelseEditFields = ({
                       Lagre endringer
                     </Button>
                   )}
+
                   {kravFilter === EKravFilterType.RELEVANTE_KRAV && (
-                    <div className="flex">
+                    <div className="flex flex-row-reverse">
                       <Button
                         className="mr-6"
                         type="button"
@@ -234,29 +236,29 @@ export const EtterlevelseEditFields = ({
                         {/* Lagre og fortsett til neste krav */}
                         Lagre og fortsett senere
                       </Button>
+
                       <Button
-                        disabled={disableEdit || isOppfylesSenere}
+                        className="mr-6"
+                        disabled={krav.status === EKravStatus.UTGAATT ? false : disableEdit}
                         type="button"
+                        variant="secondary"
                         onClick={() => {
-                          values.status = EEtterlevelseStatus.FERDIG_DOKUMENTERT
-                          values.suksesskriterieBegrunnelser.forEach((skb, index) => {
-                            if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
-                              setFieldError(
-                                `suksesskriterieBegrunnelser[${index}]`,
-                                'Du må fylle ut dokumentasjonen'
-                              )
-                            }
-                          })
-                          ampli.logEvent('knapp klikket', {
-                            tekst: 'Sett krav til ferdig utfylt',
-                            pagePath: location.pathname,
-                            ...userRoleEventProp,
-                          })
-                          submitForm()
+                          if (!dirty) {
+                            ampli.logEvent('knapp klikket', {
+                              tekst: 'Avbryt uten endring i etterlevelse',
+                              pagePath: location.pathname,
+                              ...userRoleEventProp,
+                            })
+                            close()
+                          } else {
+                            setIsAvbryModalOpen(true)
+                          }
+
+                          // original logic for buttons, uncommet and use code above to test new logic.
+                          // close()
                         }}
                       >
-                        {/* Sett krav til ferdig utfylt og fortsett til neste krav */}
-                        Ferdig utfylt
+                        {krav.status === EKravStatus.UTGAATT ? 'Lukk' : 'Avbryt'}
                       </Button>
                     </div>
                   )}

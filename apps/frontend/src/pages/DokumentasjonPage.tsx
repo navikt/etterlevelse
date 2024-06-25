@@ -1,16 +1,20 @@
 import { useQuery } from '@apollo/client'
-import { Button, Heading, Label } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Label, Link, ReadMore } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 import { useNavigate, useParams } from 'react-router-dom'
+import { getDocumentRelationByToIdAndRelationTypeWithData } from '../api/DocumentRelationApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
 import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
+import TillatGjenbrukModal from '../components/etterlevelseDokumentasjon/edit/TillatGjenbrukModal'
 import DokumentasjonPageTabs from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonPageTabs'
 import { PageLayout } from '../components/scaffold/Page'
 import {
+  ERelationType,
   IBreadCrumbPath,
+  IDocumentRelationWithEtterlevelseDokumetajson,
   IEtterlevelseDokumentasjonStats,
   IPageResponse,
   TKravQL,
@@ -18,6 +22,7 @@ import {
 import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDokumentasjonQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { EListName, codelist } from '../services/Codelist'
+import { user } from '../services/User'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const DokumentasjonPage = () => {
@@ -28,6 +33,9 @@ export const DokumentasjonPage = () => {
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
     params.id
   )
+
+  const [dokumentRelasjon, setDokumentRelasjon] =
+    useState<IDocumentRelationWithEtterlevelseDokumetajson>()
 
   const {
     data: relevanteData,
@@ -94,6 +102,14 @@ export const DokumentasjonPage = () => {
         }`,
         ...userRoleEventProp,
       })
+      ;(async () => {
+        await getDocumentRelationByToIdAndRelationTypeWithData(
+          etterlevelseDokumentasjon?.id,
+          ERelationType.ARVER
+        ).then((resp: IDocumentRelationWithEtterlevelseDokumetajson[]) => {
+          if (resp.length > 0) setDokumentRelasjon(resp[0])
+        })
+      })()
     }
   }, [etterlevelseDokumentasjon])
 
@@ -115,6 +131,18 @@ export const DokumentasjonPage = () => {
             E{etterlevelseNummer.toString()} {title}
           </Heading>
 
+          {dokumentRelasjon && (
+            <BodyShort className="my-5">
+              Dette dokumentet er et arv fra{' '}
+              <Link href={`/dokumentasjon/${dokumentRelasjon.fromDocumentWithData.id}`}>
+                E{dokumentRelasjon.fromDocumentWithData.etterlevelseNummer}{' '}
+                {dokumentRelasjon.fromDocumentWithData.title} av{' '}
+                {dokumentRelasjon.fromDocumentWithData.changeStamp.lastModifiedBy.split(' - ')[1]}
+              </Link>
+              .
+            </BodyShort>
+          )}
+
           {etterlevelseDokumentasjon.beskrivelse && (
             <div>
               <Label>Beskrivelse</Label>
@@ -127,16 +155,39 @@ export const DokumentasjonPage = () => {
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             />
             {etterlevelseDokumentasjon && (
-              <Button
-                onClick={() => {
-                  navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
-                }}
-                size="small"
-                variant="secondary"
-                className="whitespace-nowrap ml-5"
-              >
-                Rediger etterlevelsesdokumentet
-              </Button>
+              <div className="gap-4 ml-5">
+                <Button
+                  onClick={() => {
+                    navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
+                  }}
+                  size="small"
+                  variant="secondary"
+                  className="whitespace-nowrap"
+                >
+                  Endre dokumentegenskaper
+                </Button>
+
+                {!dokumentRelasjon && user.isAdmin() && (
+                  <TillatGjenbrukModal
+                    etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                    setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+                  />
+                )}
+
+                {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
+                  <Button
+                    onClick={() => {
+                      navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
+                    }}
+                    size="small"
+                    variant="tertiary"
+                    className="whitespace-nowrap mt-3"
+                    type="button"
+                  >
+                    Gjenbruk dokumentet
+                  </Button>
+                )}
+              </div>
             )}
           </div>
         </div>
@@ -144,6 +195,15 @@ export const DokumentasjonPage = () => {
       <Heading level="2" size="medium" spacing className="mt-3">
         Temaoversikt
       </Heading>
+
+      {dokumentRelasjon && (
+        <ReadMore header="Slik bruker du disse vurderingene" className="my-5">
+          Dokumenteieren har allerede besvart flere av suksesskriteriene for deg. Disse
+          suksesskriteriene er merket med &#34;ikke relevant&#34; eller &#34;oppfylt&#34;, og du kan
+          gjenbruke vurderingene. De øvrige suksesskriteriene må du ta stilling til. Noen av disse
+          inneholder veiledning til hvordan du skal svare ut spørsmålene.
+        </ReadMore>
+      )}
       <DokumentasjonPageTabs
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
@@ -151,6 +211,7 @@ export const DokumentasjonPage = () => {
         relevanteStats={relevanteStats}
         utgaattStats={utgaattStats}
         loading={loading}
+        documentRelation={dokumentRelasjon}
       />
     </PageLayout>
   )

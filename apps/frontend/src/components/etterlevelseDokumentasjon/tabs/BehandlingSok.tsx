@@ -3,7 +3,6 @@ import { PlusIcon } from '@navikt/aksel-icons'
 import { Button, Label, Loader } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { getBehandling, searchBehandlingOptions } from '../../../api/BehandlingApi'
 import { emptyPage } from '../../../api/util/EmptyPageConstant'
@@ -11,6 +10,7 @@ import { IBehandling, IPageResponse, TEtterlevelseDokumentasjonQL } from '../../
 import { TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { getEtterlevelseDokumentasjonByBehandlingIdQuery } from '../../../query/EtterlevelseDokumentasjonQuery'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
+import { selectOverrides } from '../../search/util'
 import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 
 export const BehandlingSok = () => {
@@ -121,14 +121,7 @@ export const BehandlingSok = () => {
               setSearchParams(searchParams)
             }
           }}
-          styles={{
-            control: (base) =>
-              ({
-                ...base,
-                cursor: 'text',
-                height: '3rem',
-              }) as CSSObjectWithLabel,
-          }}
+          styles={selectOverrides}
         />
       </div>
 

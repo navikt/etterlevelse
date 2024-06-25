@@ -1,12 +1,11 @@
 import { Button, Modal } from '@navikt/ds-react'
 import { useState } from 'react'
-import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { useSlackChannelSearch } from '../../api/TeamApi'
 import { EAdresseType, ISlackChannel, IVarslingsadresse } from '../../constants'
-import { ettlevColors } from '../../util/theme'
 import { LabelWithDescription } from '../common/LabelWithTooltip'
 import { DropdownIndicator } from '../krav/Edit/KravBegreperEdit'
+import { selectOverrides } from '../search/util'
 
 interface IProps {
   isOpen: boolean
@@ -63,15 +62,7 @@ export const AddSlackChannelModal = (props: IProps) => {
               setVal({ type: EAdresseType.SLACK, adresse: channel.id })
             }
           }}
-          styles={{
-            control: (base) =>
-              ({
-                ...base,
-                cursor: 'text',
-                height: '3rem',
-                borderColor: ettlevColors.textAreaBorder,
-              }) as CSSObjectWithLabel,
-          }}
+          styles={selectOverrides}
         />
       </Modal.Body>
       <Modal.Footer>

@@ -21,19 +21,7 @@ export const KravStandardButtons = ({
   const isButtonActive: boolean = createMode || kravStatus !== EKravStatus.AKTIV
 
   return (
-    <div className="flex w-full justify-end">
-      <Button className="ml-4" variant="secondary" type="button" onClick={submitCancelButton}>
-        Avbryt
-      </Button>
-
-      <Button className="ml-4" variant="primary" onClick={submitSaveButton} disabled={isSubmitting}>
-        {isButtonActive
-          ? kravStatus === EKravStatus.UTGAATT
-            ? 'Lagre'
-            : 'Lagre som utkast'
-          : 'Publiser endringer'}
-      </Button>
-
+    <div className="flex w-full flex-row-reverse">
       {isButtonActive && (
         <Button
           type="button"
@@ -45,6 +33,18 @@ export const KravStandardButtons = ({
           Publiser og gjør aktiv
         </Button>
       )}
+
+      <Button className="ml-4" variant="primary" onClick={submitSaveButton} disabled={isSubmitting}>
+        {isButtonActive
+          ? kravStatus === EKravStatus.UTGAATT
+            ? 'Lagre'
+            : 'Lagre som utkast'
+          : 'Publiser endringer'}
+      </Button>
+
+      <Button className="ml-4" variant="secondary" type="button" onClick={submitCancelButton}>
+        Avbryt
+      </Button>
     </div>
   )
 }

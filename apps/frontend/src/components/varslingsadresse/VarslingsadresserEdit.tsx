@@ -4,7 +4,6 @@ import { EnvelopeClosedIcon, PersonIcon, PlusIcon } from '@navikt/aksel-icons'
 import { Alert, Button, Loader, TextField } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React, { useEffect, useState } from 'react'
-import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import * as yup from 'yup'
 import {
@@ -24,12 +23,12 @@ import {
   TVarslingsadresseQL,
 } from '../../constants'
 import { user } from '../../services/User'
-import { ettlevColors } from '../../util/theme'
 import { FieldWrapper } from '../common/Inputs'
 import { LabelWithDescription } from '../common/LabelWithTooltip'
 import { Error } from '../common/ModalSchema'
 import { RenderTagList } from '../common/TagList'
 import { DropdownIndicator } from '../krav/Edit/KravBegreperEdit'
+import { selectOverrides } from '../search/util'
 import { AddEmailModal } from './AddEmailModal'
 import { AddSlackChannelModal } from './AddSlackChannelModal'
 import { AddSlackUserModal } from './AddSlackUserModal'
@@ -215,15 +214,7 @@ export const SlackChannelSearch = ({ add, close }: TAddVarslingsadresseProps) =>
         if (channel) add({ type: EAdresseType.SLACK, adresse: channel.id })
         close && close()
       }}
-      styles={{
-        control: (base) =>
-          ({
-            ...base,
-            cursor: 'text',
-            height: '3rem',
-            borderColor: ettlevColors.textAreaBorder,
-          }) as CSSObjectWithLabel,
-      }}
+      styles={selectOverrides}
     />
   )
 }
@@ -272,15 +263,7 @@ export const SlackUserSearch = ({ add, close }: TAddVarslingsadresseProps) => {
                 addEmail(resource.email)
               }
             }}
-            styles={{
-              control: (base) =>
-                ({
-                  ...base,
-                  cursor: 'text',
-                  height: '3rem',
-                  borderColor: ettlevColors.textAreaBorder,
-                }) as CSSObjectWithLabel,
-            }}
+            styles={selectOverrides}
           />
         </div>
         <div className="flex justify-end ml-2.5">

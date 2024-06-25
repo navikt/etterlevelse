@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import * as yup from 'yup'
 import {
   IEtterlevelseDokumentasjon,
+  IEtterlevelseDokumentasjonWithRelation,
   IPageResponse,
   TEtterlevelseDokumentasjonQL,
 } from '../constants'
@@ -59,6 +59,19 @@ export const createEtterlevelseDokumentasjon = async (
   return (
     await axios.post<IEtterlevelseDokumentasjon>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon`,
+      dto
+    )
+  ).data
+}
+
+export const createEtterlevelseDokumentasjonWithRelataion = async (
+  fromDocumentId: string,
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjonWithRelation
+) => {
+  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
+  return (
+    await axios.post<IEtterlevelseDokumentasjon>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon/relation/${fromDocumentId}`,
       dto
     )
   ).data
@@ -142,6 +155,8 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   version: -1,
   title: etterlevelseDokumentasjon.title || '',
   beskrivelse: etterlevelseDokumentasjon.beskrivelse || '',
+  gjenbrukBeskrivelse: etterlevelseDokumentasjon.gjenbrukBeskrivelse || '',
+  tilgjengeligForGjenbruk: etterlevelseDokumentasjon.tilgjengeligForGjenbruk || false,
   behandlingIds: etterlevelseDokumentasjon.behandlingIds || [],
   behandlerPersonopplysninger:
     etterlevelseDokumentasjon.behandlerPersonopplysninger !== undefined
@@ -166,26 +181,16 @@ export const etterlevelseDokumentasjonMapToFormVal = (
         : true,
 })
 
-export const etterlevelseDokumentasjonSchema = () =>
-  yup.object({
-    title: yup.string().required('Etterlevelsesdokumentasjon trenger en tittel'),
-    varslingsadresser: yup.array().test({
-      name: 'varslingsadresserCheck',
-      message: 'Påkrevd minst en varslingsadresse',
-      test: function (varslingsadresser) {
-        return varslingsadresser && varslingsadresser.length > 0 ? true : false
-      },
-    }),
-    virkemiddelId: yup.string().test({
-      name: 'addedVirkemiddelCheck',
-      message: 'Hvis ditt system/produkt er tilknyttet et virkemiddel må det legges til.',
-      test: function (virkemiddelId) {
-        const { parent } = this
-        if (parent.knyttetTilVirkemiddel === true) {
-          return virkemiddelId ? true : false
-        }
-        return true
-      },
-    }),
-  })
+export const etterlevelseDokumentasjonWithRelationMapToFormVal = (
+  etterlevelseDokumentasjon: Partial<IEtterlevelseDokumentasjonWithRelation>
+): IEtterlevelseDokumentasjonWithRelation => {
+  const etterlevelseDokumentasjonWithOutRelation =
+    etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)
+
+  return {
+    ...etterlevelseDokumentasjonWithOutRelation,
+    relationType: etterlevelseDokumentasjon.relationType,
+  }
+}
+
 //graphql

@@ -77,7 +77,7 @@ export const KravFormFields = (props: IProps) => {
       <div className="flex w-full justify-center">
         <div className="w-full mb-2.5">
           <div className="mb-10" id="suksesskriterier">
-            <Heading level="3" size="medium" className="mb-2">
+            <Heading level="2" size="medium" className="mb-2">
               Suksesskriterier
             </Heading>
             <KravSuksesskriterierEdit />
@@ -99,7 +99,7 @@ export const KravFormFields = (props: IProps) => {
           )}
 
           <div className="mt-20">
-            <Heading level="3" size="medium">
+            <Heading level="2" size="medium">
               Gruppering
             </Heading>
           </div>
@@ -123,7 +123,7 @@ export const KravFormFields = (props: IProps) => {
           </div>
 
           <div className="mb-8">
-            <Heading level="3" size="medium">
+            <Heading level="2" size="medium">
               Egenskaper
             </Heading>
           </div>

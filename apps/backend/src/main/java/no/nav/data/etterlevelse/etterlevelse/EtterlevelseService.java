@@ -8,8 +8,10 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
+import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest.Fields;
+import no.nav.data.etterlevelse.etterlevelse.dto.SuksesskriterieBegrunnelseRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
@@ -72,6 +74,38 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
 
         return storage.save(etterlevelse);
     }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void copyEtterlevelse(String fromDocumentId, String toDocumentId) {
+        var etterlevelseToCopy = getByEtterlevelseDokumentasjon(fromDocumentId);
+        etterlevelseToCopy.forEach(etterlevelse -> {
+            List<SuksesskriterieBegrunnelseRequest> suksesskriterieBegrunnelseRequestList = etterlevelse.getSuksesskriterieBegrunnelser().stream().map((skb) -> {
+                return SuksesskriterieBegrunnelseRequest.builder()
+                        .suksesskriterieId(skb.getSuksesskriterieId())
+                        .begrunnelse(skb.getBegrunnelse())
+                        .suksesskriterieStatus(skb.getSuksesskriterieStatus())
+                        .build();
+            }).toList();
+
+            var newEtterlevelse = new Etterlevelse();
+            newEtterlevelse.merge(
+                    EtterlevelseRequest.builder()
+                            .update(false)
+                            .etterlevelseDokumentasjonId(toDocumentId)
+                            .kravNummer(etterlevelse.getKravNummer())
+                            .kravVersjon(etterlevelse.getKravVersjon())
+                            .etterleves(etterlevelse.isEtterleves())
+                            .statusBegrunnelse(etterlevelse.getStatusBegrunnelse())
+                            .dokumentasjon(etterlevelse.getDokumentasjon())
+                            .fristForFerdigstillelse(etterlevelse.getFristForFerdigstillelse())
+                            .status(etterlevelse.getStatus())
+                            .suksesskriterieBegrunnelser(suksesskriterieBegrunnelseRequestList)
+                            .build());
+
+            storage.save(newEtterlevelse);
+        });
+    }
+
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteByEtterlevelseDokumentasjonId(String etterlevelseDokumentasjonId) {

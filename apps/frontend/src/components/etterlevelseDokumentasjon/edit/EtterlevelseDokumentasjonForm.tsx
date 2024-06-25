@@ -2,17 +2,23 @@ import { Button, Checkbox, CheckboxGroup, Heading } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CSSObjectWithLabel } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
+import { getDocumentRelationByToIdAndRelationType } from '../../../api/DocumentRelationApi'
 import {
   createEtterlevelseDokumentasjon,
   etterlevelseDokumentasjonMapToFormVal,
-  etterlevelseDokumentasjonSchema,
   updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { useSearchTeamOptions } from '../../../api/TeamApi'
-import { IBehandling, ITeam, IVirkemiddel, TEtterlevelseDokumentasjonQL } from '../../../constants'
+import {
+  ERelationType,
+  IBehandling,
+  IDocumentRelation,
+  ITeam,
+  IVirkemiddel,
+  TEtterlevelseDokumentasjonQL,
+} from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
 import { EListName, ICode, ICodeListFormValues, codelist } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
@@ -21,7 +27,9 @@ import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTo
 import { Error } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
+import { selectOverrides } from '../../search/util'
 import { VarslingsadresserEdit } from '../../varslingsadresse/VarslingsadresserEdit'
+import { etterlevelseDokumentasjonSchema } from './etterlevelseDokumentasjonSchema'
 
 type TEditEtterlevelseDokumentasjonModalProps = {
   title: string
@@ -37,6 +45,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
   )
 
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<IVirkemiddel>()
+  const [dokumentRelasjon, setDokumentRelasjon] = useState<IDocumentRelation>()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -62,6 +71,15 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
     if (etterlevelseDokumentasjon?.virkemiddel?.navn) {
       setSelectedVirkemiddel(etterlevelseDokumentasjon.virkemiddel)
     }
+
+    ;(async () => {
+      if (etterlevelseDokumentasjon) {
+        await getDocumentRelationByToIdAndRelationType(
+          etterlevelseDokumentasjon?.id,
+          ERelationType.ARVER
+        ).then((resp) => setDokumentRelasjon(resp[0]))
+      }
+    })()
   }, [etterlevelseDokumentasjon])
 
   const submit = async (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL) => {
@@ -105,7 +123,13 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           />
 
           <div className="mt-5">
-            <TextAreaField rows={5} noPlaceholder label="Beskrivelse" name="beskrivelse" />
+            <TextAreaField
+              height="150px"
+              noPlaceholder
+              label="Beskrivelse"
+              name="beskrivelse"
+              markdown
+            />
           </div>
 
           {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
@@ -150,50 +174,52 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                     </FieldWrapper>
                   ) : ( */}
 
-          <FieldArray name="irrelevansFor">
-            {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-              <div className="h-full pt-5 w-[calc(100% - 1rem)]">
-                <CheckboxGroup
-                  legend="Hvilke egenskaper gjelder for etterlevelsen?"
-                  description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
-                  value={selectedFilter}
-                  onChange={(selected) => {
-                    setSelectedFilter(selected)
+          {!dokumentRelasjon && (
+            <FieldArray name="irrelevansFor">
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className="h-full pt-5 w-[calc(100% - 1rem)]">
+                  <CheckboxGroup
+                    legend="Hvilke egenskaper gjelder for etterlevelsen?"
+                    description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
+                    value={selectedFilter}
+                    onChange={(selected) => {
+                      setSelectedFilter(selected)
 
-                    const irrelevansListe = relevansOptions.filter(
-                      (_irrelevans, index) => !selected.includes(index)
-                    )
-                    fieldArrayRenderProps.form.setFieldValue(
-                      'irrelevansFor',
-                      irrelevansListe.map((irrelevans) =>
-                        codelist.getCode(EListName.RELEVANS, irrelevans.value)
+                      const irrelevansListe = relevansOptions.filter(
+                        (_irrelevans, index) => !selected.includes(index)
                       )
-                    )
-                    // selected.forEach((value) => {
-                    //   const i = parseInt(value)
-                    //   if (!selectedFilter.includes(i)) {
-                    //     setSelectedFilter([...selectedFilter, i])
-                    //     p.remove(p.form.values.irrelevansFor.findIndex((ir: ICode) => ir.code === relevansOptions[i].value))
-                    //   } else {
-                    //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
-                    //     p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
-                    //   }
-                    // })
-                  }}
-                >
-                  {relevansOptions.map((relevans, index) => (
-                    <Checkbox
-                      key={'relevans_' + relevans.value}
-                      value={index}
-                      description={relevans.description}
-                    >
-                      {relevans.label}
-                    </Checkbox>
-                  ))}
-                </CheckboxGroup>
-              </div>
-            )}
-          </FieldArray>
+                      fieldArrayRenderProps.form.setFieldValue(
+                        'irrelevansFor',
+                        irrelevansListe.map((irrelevans) =>
+                          codelist.getCode(EListName.RELEVANS, irrelevans.value)
+                        )
+                      )
+                      // selected.forEach((value) => {
+                      //   const i = parseInt(value)
+                      //   if (!selectedFilter.includes(i)) {
+                      //     setSelectedFilter([...selectedFilter, i])
+                      //     p.remove(p.form.values.irrelevansFor.findIndex((ir: ICode) => ir.code === relevansOptions[i].value))
+                      //   } else {
+                      //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
+                      //     p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
+                      //   }
+                      // })
+                    }}
+                  >
+                    {relevansOptions.map((relevans, index) => (
+                      <Checkbox
+                        key={'relevans_' + relevans.value}
+                        value={index}
+                        description={relevans.description}
+                      >
+                        {relevans.label}
+                      </Checkbox>
+                    ))}
+                  </CheckboxGroup>
+                </div>
+              )}
+            </FieldArray>
+          )}
 
           {/* DONT REMOVE */}
           {/* )} */}
@@ -244,14 +270,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                             setFieldValue('avdeling', newAvdeling)
                           }
                         }}
-                        styles={{
-                          control: (base) =>
-                            ({
-                              ...base,
-                              cursor: 'text',
-                              height: '3rem',
-                            }) as CSSObjectWithLabel,
-                        }}
+                        styles={selectOverrides}
                       />
                     </div>
                     <RenderTagList
@@ -299,14 +318,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                         onChange={(value) => {
                           value && fieldArrayRenderProps.push(value)
                         }}
-                        styles={{
-                          control: (base) =>
-                            ({
-                              ...base,
-                              cursor: 'text',
-                              height: '3rem',
-                            }) as CSSObjectWithLabel,
-                        }}
+                        styles={selectOverrides}
                       />
                     </div>
                     <RenderTagList
@@ -323,7 +335,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           <FieldWrapper>
             <Field name="avdeling">
               {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
-                <div>
+                <div className="w-fit">
                   <LabelWithDescription
                     label="Avdeling"
                     description="Angi hvilken avdeling som er ansvarlig for etterlevelsen og som er risikoeier."
@@ -347,19 +359,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           </div>
 
           <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-bg-default">
-            <div className="flex justify-end">
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => {
-                  ampli.logEvent('knapp trykket', {
-                    tekst: 'Avbryt opprett etterlevelsesdokument',
-                  })
-                  navigate(-1)
-                }}
-              >
-                Avbryt
-              </Button>
+            <div className="flex flex-row-reverse">
               <Button
                 type="button"
                 onClick={() => {
@@ -373,6 +373,18 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                 className="ml-2.5"
               >
                 {isEditButton ? 'Lagre' : 'Opprett'}
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  ampli.logEvent('knapp trykket', {
+                    tekst: 'Avbryt opprett etterlevelsesdokument',
+                  })
+                  navigate(-1)
+                }}
+              >
+                Avbryt
               </Button>
             </div>
           </div>

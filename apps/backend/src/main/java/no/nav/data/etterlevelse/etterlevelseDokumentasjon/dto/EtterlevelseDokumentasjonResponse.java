@@ -29,6 +29,8 @@ public class EtterlevelseDokumentasjonResponse {
     private String title;
     private List<String> behandlingIds;
     private String beskrivelse;
+    private String gjenbrukBeskrivelse;
+    private boolean tilgjengeligForGjenbruk;
     private boolean behandlerPersonopplysninger;
     private String virkemiddelId;
     private boolean knyttetTilVirkemiddel;

@@ -1,6 +1,7 @@
 import { RawDraftContentState, convertToRaw } from 'draft-js'
 import { FormikErrors } from 'formik'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
+import { useState } from 'react'
 import { Editor } from 'react-draft-wysiwyg'
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import { useDebouncedState } from '../../../util/hooks/customHooks'
@@ -26,6 +27,7 @@ const TextEditor = (props: TTextEditorProps) => {
     props
 
   const [val, setVal] = useDebouncedState(initialValue, 500, setValue)
+  const [isFocused, setIsFocused] = useState(false)
 
   const CustomDraftToMarkdown = (data: RawDraftContentState) => {
     return draftToMarkdown(data, {
@@ -114,12 +116,14 @@ const TextEditor = (props: TTextEditorProps) => {
   return (
     <div>
       <div
+        className="focus:border-[var(--a-deepblue-600)]"
         style={{
           backgroundColor: ettlevColors.white,
           ...borderColor(hasError ? ettlevColors.red500 : ettlevColors.textAreaBorder),
           ...borderWidth(hasError ? '0.125rem' : '0.063rem'),
           ...borderStyle('solid'),
           ...borderRadius('0.25rem'),
+          outline: isFocused ? `0.2rem solid ${ettlevColors.focusOutline} ` : undefined,
           width: width || undefined,
           maxWidth: maxWidth || undefined,
         }}
@@ -142,6 +146,12 @@ const TextEditor = (props: TTextEditorProps) => {
           initialContentState={CustomMarkdownToDraft(val)}
           localization={{
             translations: translations,
+          }}
+          onFocus={() => {
+            setIsFocused(true)
+          }}
+          onBlur={() => {
+            setIsFocused(false)
           }}
           tabIndex={0}
           toolbar={{
