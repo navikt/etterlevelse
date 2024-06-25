@@ -31,14 +31,15 @@ spec:
   {{/each}}
   replicas:
     min: 2
-    max: 3
+    max: 4
     cpuThresholdPercentage: 50
+    memoryThresholdPercentage: 90
   resources:
     limits:
       memory: 1Gi
     requests:
       cpu: 250m
-      memory: 3Gi
+      memory: 1Gi
   liveness:
     path: internal/isAlive
     initialDelay: 10
