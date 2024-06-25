@@ -60,6 +60,12 @@ class UserService {
     return this.userInfo.name ?? ''
   }
 
+  public getFirstNameThenLastName(): string {
+    const splittedName = this.userInfo.name?.split(', ') ?? ''
+
+    return splittedName[1] + ' ' + splittedName[0]
+  }
+
   public getAvailableGroups(): { name: string; group: EGroup }[] {
     return this.userInfo.groups
       .filter((g) => g !== EGroup.READ)
