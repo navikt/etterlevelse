@@ -285,12 +285,6 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             </FieldWrapper>
           )}
 
-          <BoolField
-            label="Er etterlevelsesdokumentet knyttet til et team i Teamkatalogen?"
-            name="knytteTilTeam"
-            tooltip="Når du legger til et team vil medlemmene i det teamet kunne se dette dokumentet under «Mine dokumentasjoner». Dette er ikke nødvendig for å opprette etterlevelsesdokumentet, men anbefales."
-          />
-
           {values.knytteTilTeam && (
             <FieldWrapper>
               <FieldArray name="teamsData">
