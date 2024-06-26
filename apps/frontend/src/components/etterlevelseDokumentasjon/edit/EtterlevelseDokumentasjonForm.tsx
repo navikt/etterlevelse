@@ -285,47 +285,86 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             </FieldWrapper>
           )}
 
-          {values.knytteTilTeam && (
-            <FieldWrapper>
-              <FieldArray name="teamsData">
-                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                  <div className=" mb-3">
-                    <LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />
-                    <div className="w-full">
-                      <AsyncSelect
-                        aria-label="Søk etter team"
-                        placeholder=""
-                        components={{ DropdownIndicator }}
-                        noOptionsMessage={({ inputValue }) => {
-                          if (inputValue.length < 3 && inputValue.length > 0) {
-                            return 'Skriv minst tre tegn for å søke'
-                          } else if (inputValue.length >= 3) {
-                            return `Fant ingen resultater for "${inputValue}"`
-                          } else {
-                            return ''
-                          }
-                        }}
-                        controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
-                        isClearable={false}
-                        loadOptions={useSearchTeamOptions}
-                        onChange={(value) => {
-                          value && fieldArrayRenderProps.push(value)
-                        }}
-                        styles={selectOverrides}
-                      />
-                    </div>
-                    <RenderTagList
-                      list={fieldArrayRenderProps.form.values.teamsData.map(
-                        (tema: ITeam) => tema.name
-                      )}
-                      onRemove={fieldArrayRenderProps.remove}
+          <Heading level="2" size="small" spacing>
+            Hvem eier dokumentet?
+          </Heading>
+
+          <div className="flex gap-5">
+            <FieldArray name="teamsData">
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className="mb-3 flex-1">
+                  <LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />
+                  <div className="w-full">
+                    <AsyncSelect
+                      aria-label="Søk etter team"
+                      placeholder=""
+                      components={{ DropdownIndicator }}
+                      noOptionsMessage={({ inputValue }) => {
+                        if (inputValue.length < 3 && inputValue.length > 0) {
+                          return 'Skriv minst tre tegn for å søke'
+                        } else if (inputValue.length >= 3) {
+                          return `Fant ingen resultater for "${inputValue}"`
+                        } else {
+                          return ''
+                        }
+                      }}
+                      controlShouldRenderValue={false}
+                      loadingMessage={() => 'Søker...'}
+                      isClearable={false}
+                      loadOptions={useSearchTeamOptions}
+                      onChange={(value) => {
+                        value && fieldArrayRenderProps.push(value)
+                      }}
+                      styles={selectOverrides}
                     />
                   </div>
-                )}
-              </FieldArray>
-            </FieldWrapper>
-          )}
+                  <RenderTagList
+                    list={fieldArrayRenderProps.form.values.teamsData.map(
+                      (tema: ITeam) => tema.name
+                    )}
+                    onRemove={fieldArrayRenderProps.remove}
+                  />
+                </div>
+              )}
+            </FieldArray>
+            <FieldArray name="teamsData">
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className="mb-3 flex-1">
+                  <LabelWithTooltip label="Legg til person" tooltip="" />
+                  <div className="w-full">
+                    <AsyncSelect
+                      aria-label="Søk etter team"
+                      placeholder=""
+                      components={{ DropdownIndicator }}
+                      noOptionsMessage={({ inputValue }) => {
+                        if (inputValue.length < 3 && inputValue.length > 0) {
+                          return 'Skriv minst tre tegn for å søke'
+                        } else if (inputValue.length >= 3) {
+                          return `Fant ingen resultater for "${inputValue}"`
+                        } else {
+                          return ''
+                        }
+                      }}
+                      controlShouldRenderValue={false}
+                      loadingMessage={() => 'Søker...'}
+                      isClearable={false}
+                      loadOptions={useSearchTeamOptions}
+                      onChange={(value) => {
+                        value && fieldArrayRenderProps.push(value)
+                      }}
+                      styles={selectOverrides}
+                    />
+                  </div>
+                  <RenderTagList
+                    list={fieldArrayRenderProps.form.values.teamsData.map(
+                      (tema: ITeam) => tema.name
+                    )}
+                    onRemove={fieldArrayRenderProps.remove}
+                  />
+                </div>
+              )}
+            </FieldArray>
+          </div>
           <FieldWrapper>
             <Field name="avdeling">
               {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
