@@ -32,6 +32,7 @@ export const searchResourceByNameOptions = async (searchParam: string) => {
         return {
           value: resource.navIdent,
           label: resource.fullName,
+          ...resource,
         }
       })
     }

@@ -10,12 +10,13 @@ import {
   etterlevelseDokumentasjonMapToFormVal,
   updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
-import { useSearchTeamOptions } from '../../../api/TeamApi'
+import { searchResourceByNameOptions, useSearchTeamOptions } from '../../../api/TeamApi'
 import {
   ERelationType,
   IBehandling,
   IDocumentRelation,
   ITeam,
+  ITeamResource,
   IVirkemiddel,
   TEtterlevelseDokumentasjonQL,
 } from '../../../constants'
@@ -327,13 +328,13 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                 </div>
               )}
             </FieldArray>
-            <FieldArray name="teamsData">
+            <FieldArray name="resourcesData">
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className="mb-3 flex-1">
                   <LabelWithTooltip label="Legg til person" tooltip="" />
                   <div className="w-full">
                     <AsyncSelect
-                      aria-label="Søk etter team"
+                      aria-label="Søk etter person"
                       placeholder=""
                       components={{ DropdownIndicator }}
                       noOptionsMessage={({ inputValue }) => {
@@ -348,7 +349,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                       controlShouldRenderValue={false}
                       loadingMessage={() => 'Søker...'}
                       isClearable={false}
-                      loadOptions={useSearchTeamOptions}
+                      loadOptions={searchResourceByNameOptions}
                       onChange={(value) => {
                         value && fieldArrayRenderProps.push(value)
                       }}
@@ -356,8 +357,8 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                     />
                   </div>
                   <RenderTagList
-                    list={fieldArrayRenderProps.form.values.teamsData.map(
-                      (tema: ITeam) => tema.name
+                    list={fieldArrayRenderProps.form.values.resourcesData.map(
+                      (resource: ITeamResource) => resource.fullName
                     )}
                     onRemove={fieldArrayRenderProps.remove}
                   />
