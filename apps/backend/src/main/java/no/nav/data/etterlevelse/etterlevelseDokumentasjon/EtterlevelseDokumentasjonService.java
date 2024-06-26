@@ -18,7 +18,10 @@ import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.team.domain.Team;
+import no.nav.data.integration.team.dto.Resource;
+import no.nav.data.integration.team.dto.ResourceType;
 import no.nav.data.integration.team.dto.TeamResponse;
+import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -46,6 +49,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     private final EtterlevelseService etterlevelseService;
     private final EtterlevelseArkivService etterlevelseArkivService;
     private final TeamcatTeamClient teamcatTeamClient;
+    private final TeamcatResourceClient teamcatResourceClient;
     private final DocumentRelationService documentRelationService;
 
     public Page<EtterlevelseDokumentasjon> getAll(PageParameters pageParameters) {
@@ -153,7 +157,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
 
     public EtterlevelseDokumentasjonResponse getEtterlevelseDokumentasjonWithTeamAndBehandlingData(UUID uuid) {
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = get(uuid).toResponse();
-        return addBehandlingAndTeamsData(etterlevelseDokumentasjonResponse);
+        return addBehandlingAndTeamsDataAndResourceData(etterlevelseDokumentasjonResponse);
     }
 
     public List<EtterlevelseDokumentasjon> getAllWithValidBehandling() {
@@ -169,39 +173,70 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     }
 
     // Does not update DB
-    public EtterlevelseDokumentasjonResponse addBehandlingAndTeamsData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+    public EtterlevelseDokumentasjonResponse addBehandlingAndTeamsDataAndResourceData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
         if (etterlevelseDokumentasjonResponse.getBehandlingIds() != null && !etterlevelseDokumentasjonResponse.getBehandlingIds().isEmpty()) {
-            List<Behandling> behandlingList = new ArrayList<>();
-            etterlevelseDokumentasjonResponse.getBehandlingIds().forEach((behandlingId) -> {
-                try {
-                    var behandling = behandlingService.getBehandling(behandlingId);
-                    behandlingList.add(behandling);
-                } catch (WebClientResponseException.NotFound e) {
-                    var behandling = new Behandling();
-                    behandling.setId(behandlingId);
-                    behandling.setNavn("Fant ikke behandling med id: " + behandlingId);
-                    behandlingList.add(behandling);
-                }
-            });
-            etterlevelseDokumentasjonResponse.setBehandlinger(behandlingList);
+            addBehandlingData(etterlevelseDokumentasjonResponse);
         }
         if (etterlevelseDokumentasjonResponse.getTeams() != null && !etterlevelseDokumentasjonResponse.getTeams().isEmpty()) {
-            List<TeamResponse> teamsData = new ArrayList<>();
-            etterlevelseDokumentasjonResponse.getTeams().forEach((teamId) -> {
-                var teamData = teamcatTeamClient.getTeam(teamId);
-                if (teamData.isPresent()) {
-                    teamsData.add(teamData.get().toResponseWithMembers());
-                } else {
-                    var emptyTeamData = new TeamResponse();
-                    emptyTeamData.setId(teamId);
-                    emptyTeamData.setName("Fant ikke team med id: " + teamId);
-                    emptyTeamData.setDescription("Fant ikke team med id: " + teamId);
-                    teamsData.add(emptyTeamData);
-                }
-            });
-            etterlevelseDokumentasjonResponse.setTeamsData(teamsData);
+            addTeamsData(etterlevelseDokumentasjonResponse);
+        }
+        if (etterlevelseDokumentasjonResponse.getResources() != null && !etterlevelseDokumentasjonResponse.getResources().isEmpty()) {
+            addResourcesData(etterlevelseDokumentasjonResponse);
         }
         return etterlevelseDokumentasjonResponse;
+    }
+
+    public void addBehandlingData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+        List<Behandling> behandlingList = new ArrayList<>();
+        etterlevelseDokumentasjonResponse.getBehandlingIds().forEach((behandlingId) -> {
+            try {
+                var behandling = behandlingService.getBehandling(behandlingId);
+                behandlingList.add(behandling);
+            } catch (WebClientResponseException.NotFound e) {
+                var behandling = new Behandling();
+                behandling.setId(behandlingId);
+                behandling.setNavn("Fant ikke behandling med id: " + behandlingId);
+                behandlingList.add(behandling);
+            }
+        });
+        etterlevelseDokumentasjonResponse.setBehandlinger(behandlingList);
+    }
+
+    public void addTeamsData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+        List<TeamResponse> teamsData = new ArrayList<>();
+        etterlevelseDokumentasjonResponse.getTeams().forEach((teamId) -> {
+            var teamData = teamcatTeamClient.getTeam(teamId);
+            if (teamData.isPresent()) {
+                teamsData.add(teamData.get().toResponseWithMembers());
+            } else {
+                var emptyTeamData = new TeamResponse();
+                emptyTeamData.setId(teamId);
+                emptyTeamData.setName("Fant ikke team med id: " + teamId);
+                emptyTeamData.setDescription("Fant ikke team med id: " + teamId);
+                teamsData.add(emptyTeamData);
+            }
+        });
+        etterlevelseDokumentasjonResponse.setTeamsData(teamsData);
+    }
+
+    public void addResourcesData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+        List<Resource> resourcessData = new ArrayList<>();
+        etterlevelseDokumentasjonResponse.getResources().forEach((ident) -> {
+            var resourceData = teamcatResourceClient.getResource(ident);
+            if (resourceData.isPresent()) {
+                resourcessData.add(resourceData.get());
+            } else {
+                var emptyResourceData = new Resource();
+                emptyResourceData.setNavIdent(ident);
+                emptyResourceData.setGivenName("Fant ikke person med NAV ident: " + ident);
+                emptyResourceData.setFamilyName("Fant ikke person med NAV ident: " + ident);
+                emptyResourceData.setFullName("Fant ikke person med NAV ident: " + ident);
+                emptyResourceData.setEmail("Fant ikke person med NAV ident: " + ident);
+                emptyResourceData.setResourceType(ResourceType.INTERNAL);
+                resourcessData.add(emptyResourceData);
+            }
+        });
+        etterlevelseDokumentasjonResponse.setResourcesData(resourcessData);
     }
 
 }

@@ -209,6 +209,8 @@ type EtterlevelseDokumentasjon {
     knytteTilTeam: Boolean
     teams: [String!]!
     teamsData: [Team!]!
+    resources: [String!]!
+    resourcesData: [Resource!]!
     etterlevelser: [Etterlevelse!]!
     sistEndretEtterlevelse: DateTime
     sistEndretDokumentasjon: DateTime
@@ -232,6 +234,20 @@ type Team {
     productAreaName: String
     tags: [String!]
     members: [Member!]
+}
+
+type Resource {
+    navIdent: String!
+    givenName: String
+    familyName: String
+    fullName: String
+    email: String
+    resourceType: ResourceType
+}
+
+enum ResourceType {
+    INTERNAL,
+    EXTERNAL
 }
 
 type Member {

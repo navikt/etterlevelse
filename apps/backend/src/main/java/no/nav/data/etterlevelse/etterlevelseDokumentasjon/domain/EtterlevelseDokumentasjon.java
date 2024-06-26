@@ -42,6 +42,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
     @Default
     private boolean knytteTilTeam = true;
     private List<String> teams;
+    private List<String> resources;
     private String avdeling;
     private List<String> irrelevansFor;
     private List<String> prioritertKravNummer;
@@ -62,6 +63,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
         virkemiddelId = request.getVirkemiddelId();
         irrelevansFor = copyOf(request.getIrrelevansFor());
         teams = copyOf(request.getTeams());
+        resources = copyOf(request.getResources());
         behandlerPersonopplysninger = request.isBehandlerPersonopplysninger();
         knyttetTilVirkemiddel = request.isKnyttetTilVirkemiddel();
         knytteTilTeam = request.isKnytteTilTeam();
@@ -86,6 +88,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
                 .prioritertKravNummer(prioritertKravNummer != null ? copyOf(prioritertKravNummer) : List.of())
                 .knytteTilTeam(knytteTilTeam)
                 .teams(teams != null ? copyOf(teams) : List.of())
+                .resources(resources != null ? copyOf(resources) : List.of())
                 .behandlerPersonopplysninger(behandlerPersonopplysninger)
                 .knyttetTilVirkemiddel(knyttetTilVirkemiddel)
                 .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, avdeling))
