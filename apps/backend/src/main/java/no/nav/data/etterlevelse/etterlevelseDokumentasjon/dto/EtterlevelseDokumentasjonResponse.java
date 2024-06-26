@@ -10,6 +10,7 @@ import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.behandling.dto.Behandling;
+import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.TeamResponse;
 
 import java.util.List;
@@ -41,6 +42,8 @@ public class EtterlevelseDokumentasjonResponse {
     @Singular("team")
     private List<String> teams;
     private List<TeamResponse> teamsData;
+    private List<String> resources;
+    private List<Resource> resourcesData;
     private List<Behandling> behandlinger;
     private CodelistResponse avdeling;
     private List<Varslingsadresse> varslingsadresser;

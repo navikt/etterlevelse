@@ -332,9 +332,11 @@ export interface IEtterlevelseDokumentasjon {
   prioritertKravNummer: string[]
   etterlevelseNummer: number
   teams: string[]
+  resources: string[]
   avdeling?: ICode
   //data field for frontend only
   teamsData?: ITeam[]
+  resourcesData?: ITeamResource[]
   behandlinger?: IBehandling[]
   behandlerPersonopplysninger: boolean
   virkemiddel?: IVirkemiddel

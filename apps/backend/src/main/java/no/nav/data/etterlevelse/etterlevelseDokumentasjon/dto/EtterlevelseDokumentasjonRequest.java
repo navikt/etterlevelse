@@ -41,6 +41,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private List<String> prioritertKravNummer;
     private boolean knytteTilTeam;
     private List<String> teams;
+    private List<String> resources;
     @Schema(description = "Codelist AVDELING")
     private String avdeling;
     private List<Varslingsadresse> varslingsadresser;
@@ -54,6 +55,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         setVirkemiddelId(trimToNull(virkemiddelId));
         setIrrelevansFor(formatListToUppercase(irrelevansFor));
         setTeams(formatList(teams));
+        setResources(formatList(resources));
         setVarslingsadresser(copyOf(varslingsadresser));
         setAvdeling(toUpperCaseAndTrim(avdeling));
     }

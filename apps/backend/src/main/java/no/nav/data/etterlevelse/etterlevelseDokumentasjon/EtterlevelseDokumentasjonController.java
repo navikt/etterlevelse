@@ -131,7 +131,7 @@ public class EtterlevelseDokumentasjonController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.save(request);
-        return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsData(etterlevelseDokumentasjon.toResponse()));
+        return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceData(etterlevelseDokumentasjon.toResponse()));
     }
 
 
@@ -146,7 +146,7 @@ public class EtterlevelseDokumentasjonController {
         }
 
         var newEtterlevelseDokumentasjon = etterlevelseDokumentasjonService.saveAndCreateRelationWithEtterlevelseCopy(fromDocumentId ,request);
-        return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsData(newEtterlevelseDokumentasjon.toResponse()));
+        return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceData(newEtterlevelseDokumentasjon.toResponse()));
     }
 
     @ApiResponse(description = "Etterlevelse deleted")

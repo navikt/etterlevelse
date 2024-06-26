@@ -16,6 +16,7 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.integration.behandling.dto.Behandling;
+import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.TeamResponse;
 import org.dataloader.DataLoader;
 import org.springframework.stereotype.Component;
@@ -41,6 +42,11 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
     public CompletableFuture<List<TeamResponse>> teamsData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse, DataFetchingEnvironment env) {
         DataLoader<String, TeamResponse> loader = env.getDataLoader(DataLoaderReg.TEAM);
         return loader.loadMany(etterlevelseDokumentasjonResponse.getTeams());
+    }
+
+    public CompletableFuture<List<Resource>> resourcesData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse, DataFetchingEnvironment env) {
+        DataLoader<String, Resource> loader = env.getDataLoader(DataLoaderReg.RESOURCES);
+        return loader.loadMany(etterlevelseDokumentasjonResponse.getResources());
     }
 
     public CompletableFuture<List<Behandling>> behandlinger(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse, DataFetchingEnvironment env) {

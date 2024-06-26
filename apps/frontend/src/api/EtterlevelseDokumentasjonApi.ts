@@ -140,6 +140,7 @@ export const etterlevelseDokumentasjonToDomainToObject = (
   delete domainToObject.changeStamp
   delete domainToObject.version
   delete domainToObject.teamsData
+  delete domainToObject.resourcesData
   delete domainToObject.behandlinger
   return domainToObject
 }
@@ -166,8 +167,10 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   prioritertKravNummer: etterlevelseDokumentasjon.prioritertKravNummer || [],
   etterlevelseNummer: etterlevelseDokumentasjon.etterlevelseNummer || 0,
   teams: etterlevelseDokumentasjon.teams || [],
+  resources: etterlevelseDokumentasjon.resources || [],
   avdeling: etterlevelseDokumentasjon.avdeling,
   teamsData: etterlevelseDokumentasjon.teamsData || [],
+  resourcesData: etterlevelseDokumentasjon.resourcesData || [],
   behandlinger: etterlevelseDokumentasjon.behandlinger || [],
   virkemiddelId: etterlevelseDokumentasjon.virkemiddelId || '',
   // knyttetTilVirkemiddel: etterlevelseDokumentasjon.knyttetTilVirkemiddel !== undefined ? etterlevelseDokumentasjon.knyttetTilVirkemiddel : false,
