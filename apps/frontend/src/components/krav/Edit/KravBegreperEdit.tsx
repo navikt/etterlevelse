@@ -8,7 +8,7 @@ import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { FormError } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
-import { selectOverrides } from '../../search/util'
+import { noOptionMessage, selectOverrides } from '../../search/util'
 
 export const DropdownIndicator = (props: DropdownIndicatorProps) => {
   return (
@@ -33,11 +33,7 @@ export const EditBegreper = () => {
                 aria-label="Søk etter begrep"
                 placeholder="Søk etter begrep"
                 components={{ DropdownIndicator }}
-                noOptionsMessage={({ inputValue }) =>
-                  inputValue.length < 3
-                    ? 'Skriv minst tre tegn for å søke'
-                    : `Fant ingen resultater for "${inputValue}"`
-                }
+                noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                 controlShouldRenderValue={false}
                 loadingMessage={() => 'Søker...'}
                 isClearable={false}

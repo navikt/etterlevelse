@@ -5,7 +5,7 @@ import { useSearchKrav } from '../../../api/KravApi'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { FormError } from '../../common/ModalSchema'
-import { selectOverrides } from '../../search/util'
+import { noOptionMessage, selectOverrides } from '../../search/util'
 import { DropdownIndicator } from './KravBegreperEdit'
 
 export const EditKravRelasjoner = () => {
@@ -23,11 +23,7 @@ export const EditKravRelasjoner = () => {
                 aria-label="Søk etter krav"
                 placeholder="Søk etter krav"
                 components={{ DropdownIndicator }}
-                noOptionsMessage={({ inputValue }) =>
-                  inputValue.length < 3
-                    ? 'Skriv minst tre tegn for å søke'
-                    : `Fant ingen resultater for "${inputValue}"`
-                }
+                noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                 controlShouldRenderValue={false}
                 loadingMessage={() => 'Søker...'}
                 isClearable={false}

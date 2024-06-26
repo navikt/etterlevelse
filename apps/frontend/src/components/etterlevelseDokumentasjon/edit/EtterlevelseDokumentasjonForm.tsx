@@ -28,7 +28,7 @@ import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTo
 import { Error } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
-import { selectOverrides } from '../../search/util'
+import { noOptionMessage, selectOverrides } from '../../search/util'
 import { VarslingsadresserEdit } from '../../varslingsadresse/VarslingsadresserEdit'
 import { etterlevelseDokumentasjonSchema } from './etterlevelseDokumentasjonSchema'
 
@@ -238,22 +238,14 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                   <div className="my-3">
                     <LabelWithDescription
                       label={'Legg til behandlinger fra Behandlingskatalogen'}
-                      description="Skriv minst tre tegn for å søke"
+                      description="Skriv minst 3 tegn for å søke"
                     />
                     <div className="w-full">
                       <AsyncSelect
                         aria-label="Søk etter behandlinger"
                         placeholder=""
                         components={{ DropdownIndicator }}
-                        noOptionsMessage={({ inputValue }) => {
-                          if (inputValue.length < 3 && inputValue.length > 0) {
-                            return 'Skriv minst tre tegn for å søke'
-                          } else if (inputValue.length >= 3) {
-                            return `Fant ingen resultater for "${inputValue}"`
-                          } else {
-                            return ''
-                          }
-                        }}
+                        noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                         controlShouldRenderValue={false}
                         loadingMessage={() => 'Søker...'}
                         isClearable={false}
@@ -287,28 +279,20 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           )}
 
           <Heading level="2" size="small" spacing>
-            Hvem eier dokumentet?
+            Legg til minst 1 team eller 1 person
           </Heading>
 
           <div className="flex gap-5">
             <FieldArray name="teamsData">
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className="flex-1">
-                  <LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />
+                  <LabelWithTooltip label="Søk team fra Teamkatalogen" tooltip="" />
                   <div className="w-full">
                     <AsyncSelect
                       aria-label="Søk etter team"
                       placeholder=""
                       components={{ DropdownIndicator }}
-                      noOptionsMessage={({ inputValue }) => {
-                        if (inputValue.length < 3 && inputValue.length > 0) {
-                          return 'Skriv minst tre tegn for å søke'
-                        } else if (inputValue.length >= 3) {
-                          return `Fant ingen resultater for "${inputValue}"`
-                        } else {
-                          return ''
-                        }
-                      }}
+                      noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                       controlShouldRenderValue={false}
                       loadingMessage={() => 'Søker...'}
                       isClearable={false}
@@ -331,20 +315,14 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             <FieldArray name="resourcesData">
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className="flex-1">
-                  <LabelWithTooltip label="Legg til person" tooltip="" />
+                  <LabelWithTooltip label="Søk etter person" tooltip="" />
                   <div className="w-full">
                     <AsyncSelect
                       aria-label="Søk etter person"
                       placeholder=""
                       components={{ DropdownIndicator }}
                       noOptionsMessage={({ inputValue }) => {
-                        if (inputValue.length < 3 && inputValue.length > 0) {
-                          return 'Skriv minst tre tegn for å søke'
-                        } else if (inputValue.length >= 3) {
-                          return `Fant ingen resultater for "${inputValue}"`
-                        } else {
-                          return ''
-                        }
+                        return noOptionMessage(inputValue)
                       }}
                       controlShouldRenderValue={false}
                       loadingMessage={() => 'Søker...'}

@@ -6,7 +6,7 @@ import { EAdresseType, ITeamResource, IVarslingsadresse } from '../../constants'
 import { user } from '../../services/User'
 import { LabelWithDescription } from '../common/LabelWithTooltip'
 import { DropdownIndicator } from '../krav/Edit/KravBegreperEdit'
-import { selectOverrides } from '../search/util'
+import { noOptionMessage, selectOverrides } from '../search/util'
 
 interface IProps {
   isOpen: boolean
@@ -69,20 +69,12 @@ export const AddSlackUserModal = (props: IProps) => {
                 <div className="w-full">
                   <LabelWithDescription
                     label="Søk etter Slack-bruker"
-                    description="Skriv minst tre tegn"
+                    description="Skriv minst 3 tegn"
                   />
                   <AsyncSelect
                     aria-label="Søk etter slack-bruker"
                     placeholder=""
-                    noOptionsMessage={({ inputValue }) => {
-                      if (inputValue.length < 3 && inputValue.length > 0) {
-                        return 'Skriv minst tre tegn for å søke'
-                      } else if (inputValue.length >= 3) {
-                        return `Fant ingen resultater for "${inputValue}"`
-                      } else {
-                        return ''
-                      }
-                    }}
+                    noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                     loadingMessage={() => 'Søker...'}
                     isClearable={false}
                     loadOptions={usePersonSearch}

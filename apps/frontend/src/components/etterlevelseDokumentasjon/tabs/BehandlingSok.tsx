@@ -10,7 +10,7 @@ import { IBehandling, IPageResponse, TEtterlevelseDokumentasjonQL } from '../../
 import { TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { getEtterlevelseDokumentasjonByBehandlingIdQuery } from '../../../query/EtterlevelseDokumentasjonQuery'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
-import { selectOverrides } from '../../search/util'
+import { noOptionMessage, selectOverrides } from '../../search/util'
 import { EtterlevelseDokumentasjonsPanels } from '../EtterlevelseDokumentasjonsPanels'
 
 export const BehandlingSok = () => {
@@ -101,11 +101,7 @@ export const BehandlingSok = () => {
           aria-label="Søk etter behandlinger"
           placeholder="Søk etter behandlinger"
           components={{ DropdownIndicator }}
-          noOptionsMessage={({ inputValue }) =>
-            inputValue.length < 3
-              ? 'Skriv minst tre tegn for å søke'
-              : `Fant ingen resultater for "${inputValue}"`
-          }
+          noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
           controlShouldRenderValue={false}
           loadingMessage={() => 'Søker...'}
           isClearable={false}

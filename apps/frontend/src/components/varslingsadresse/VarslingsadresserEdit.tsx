@@ -28,7 +28,7 @@ import { LabelWithDescription } from '../common/LabelWithTooltip'
 import { Error } from '../common/ModalSchema'
 import { RenderTagList } from '../common/TagList'
 import { DropdownIndicator } from '../krav/Edit/KravBegreperEdit'
-import { selectOverrides } from '../search/util'
+import { noOptionMessage, selectOverrides } from '../search/util'
 import { AddEmailModal } from './AddEmailModal'
 import { AddSlackChannelModal } from './AddSlackChannelModal'
 import { AddSlackUserModal } from './AddSlackUserModal'
@@ -199,11 +199,7 @@ export const SlackChannelSearch = ({ add, close }: TAddVarslingsadresseProps) =>
     <AsyncSelect
       aria-label="Søk etter slack-kanal"
       placeholder="Søk etter slack-kanal"
-      noOptionsMessage={({ inputValue }) =>
-        inputValue.length < 3
-          ? 'Skriv minst tre tegn for å søke'
-          : `Fant ingen resultater for "${inputValue}"`
-      }
+      noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
       controlShouldRenderValue={false}
       loadingMessage={() => 'Søker...'}
       isClearable={false}
@@ -244,11 +240,7 @@ export const SlackUserSearch = ({ add, close }: TAddVarslingsadresseProps) => {
           <AsyncSelect
             aria-label="Søk etter slack-bruker"
             placeholder="Søk etter slack-bruker"
-            noOptionsMessage={({ inputValue }) =>
-              inputValue.length < 3
-                ? 'Skriv minst tre tegn for å søke'
-                : `Fant ingen resultater for "${inputValue}"`
-            }
+            noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
             controlShouldRenderValue={false}
             loadingMessage={() => 'Søker...'}
             isClearable={false}

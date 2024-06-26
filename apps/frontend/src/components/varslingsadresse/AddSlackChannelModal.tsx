@@ -5,7 +5,7 @@ import { useSlackChannelSearch } from '../../api/TeamApi'
 import { EAdresseType, ISlackChannel, IVarslingsadresse } from '../../constants'
 import { LabelWithDescription } from '../common/LabelWithTooltip'
 import { DropdownIndicator } from '../krav/Edit/KravBegreperEdit'
-import { selectOverrides } from '../search/util'
+import { noOptionMessage, selectOverrides } from '../search/util'
 
 interface IProps {
   isOpen: boolean
@@ -39,19 +39,11 @@ export const AddSlackChannelModal = (props: IProps) => {
       width="medium"
     >
       <Modal.Body className="min-h-[18.75rem]">
-        <LabelWithDescription label="Søk etter Slack-kanal" description="Skriv minst tre tegn" />
+        <LabelWithDescription label="Søk etter Slack-kanal" description="Skriv minst 3 tegn" />
         <AsyncSelect
           aria-label="Søk etter slack-kanal"
           placeholder=""
-          noOptionsMessage={({ inputValue }) => {
-            if (inputValue.length < 3 && inputValue.length > 0) {
-              return 'Skriv minst tre tegn for å søke'
-            } else if (inputValue.length >= 3) {
-              return `Fant ingen resultater for "${inputValue}"`
-            } else {
-              return ''
-            }
-          }}
+          noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
           loadingMessage={() => 'Søker...'}
           isClearable={false}
           components={{ DropdownIndicator }}

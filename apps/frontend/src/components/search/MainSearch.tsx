@@ -12,6 +12,7 @@ import { getKravByKravNumberAndVersion, searchKrav, searchKravByNumber } from '.
 import { EKravStatus, IBehandling, IEtterlevelseDokumentasjon, IKrav } from '../../constants'
 import { kravName } from '../../pages/KravPage'
 import { EObjectType } from '../admin/audit/AuditTypes'
+import { noOptionMessage } from './util'
 
 type TSearchItem = { value: string; label: string; tag: string; url: string }
 
@@ -144,11 +145,7 @@ const MainSearch = () => {
         components={{ Option, DropdownIndicator }}
         controlShouldRenderValue={false}
         loadingMessage={() => 'Søker...'}
-        noOptionsMessage={({ inputValue }) =>
-          inputValue.length < 3
-            ? 'Skriv minst tre tegn for å søke'
-            : `Fant ingen resultater for "${inputValue}"`
-        }
+        noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
         isClearable={false}
         loadOptions={useMainSearch}
         onChange={(selectedOption) => selectedOption && navigate([selectedOption].flat()[0].url)}
