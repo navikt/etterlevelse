@@ -54,16 +54,18 @@ export const MainPage = () => {
             <span className="flex justify-center">Forstå og dokumentér</span>
           </div>
           {forsideVarsel?.meldingStatus === EMeldingStatus.ACTIVE && (
-            <div className="my-16" id="forsideVarselMelding">
-              {forsideVarsel.alertType === EAlertType.INFO ? (
-                <Alert fullWidth variant="info">
-                  <Markdown source={forsideVarsel.melding} />
-                </Alert>
-              ) : (
-                <Alert fullWidth variant="warning">
-                  <Markdown source={forsideVarsel.melding} />
-                </Alert>
-              )}
+            <div className=" my-16 w-full justify-center flex">
+              <div className="w-fit" id="forsideVarselMelding">
+                {forsideVarsel.alertType === EAlertType.INFO ? (
+                  <Alert fullWidth variant="info">
+                    <Markdown source={forsideVarsel.melding} />
+                  </Alert>
+                ) : (
+                  <Alert fullWidth variant="warning">
+                    <Markdown source={forsideVarsel.melding} />
+                  </Alert>
+                )}
+              </div>
             </div>
           )}
 
