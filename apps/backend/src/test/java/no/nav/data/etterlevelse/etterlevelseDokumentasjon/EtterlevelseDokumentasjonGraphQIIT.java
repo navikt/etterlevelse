@@ -29,6 +29,7 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
                         .beskrivelse("")
                         .knytteTilTeam(false)
                         .teams(List.of(""))
+                        .resources(List.of(""))
                         .irrelevansFor(irrelevans)
                         .update(false)
                         .behandlerPersonopplysninger(true)
