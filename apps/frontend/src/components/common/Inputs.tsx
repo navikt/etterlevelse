@@ -30,6 +30,10 @@ interface IName {
 
 type TLabelName = IName & ILabel
 
+interface IMarginTop {
+  marginTop?: boolean
+}
+
 interface IMarginBottom {
   marginBottom?: boolean
 }
@@ -62,12 +66,12 @@ interface IPropsOptionList extends ILabel {
 
 type TOptionORListname = TOr<IOptions, IListname>
 
-interface IPropsFieldWrapper extends IMarginBottom, IID {
+interface IPropsFieldWrapper extends IMarginTop, IMarginBottom, IID {
   children: React.ReactNode
 }
 
-export const FieldWrapper = ({ children, marginBottom, id }: IPropsFieldWrapper) => (
-  <div className={`${marginBottom ? 'mb-5' : ''}`} id={id}>
+export const FieldWrapper = ({ children, marginTop, marginBottom, id }: IPropsFieldWrapper) => (
+  <div className={`${marginBottom ? 'mb-5' : ''} ${marginTop ? 'mt-5' : ''}`} id={id}>
     {children}
   </div>
 )

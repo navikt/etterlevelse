@@ -293,7 +293,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           <div className="flex gap-5">
             <FieldArray name="teamsData">
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className="mb-3 flex-1">
+                <div className="flex-1">
                   <LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />
                   <div className="w-full">
                     <AsyncSelect
@@ -330,7 +330,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             </FieldArray>
             <FieldArray name="resourcesData">
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className="mb-3 flex-1">
+                <div className="flex-1">
                   <LabelWithTooltip label="Legg til person" tooltip="" />
                   <div className="w-full">
                     <AsyncSelect
@@ -366,7 +366,10 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
               )}
             </FieldArray>
           </div>
-          <FieldWrapper>
+
+          {errors.teamsData && <Error message={errors.teamsData as string} />}
+
+          <FieldWrapper marginTop>
             <Field name="avdeling">
               {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
                 <div className="w-fit">
