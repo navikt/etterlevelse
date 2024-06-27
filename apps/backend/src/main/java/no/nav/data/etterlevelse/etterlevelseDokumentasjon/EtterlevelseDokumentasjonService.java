@@ -160,8 +160,8 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     public EtterlevelseDokumentasjonResponse getEtterlevelseDokumentasjonWithTeamAndBehandlingAndResourceData(UUID uuid) {
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = addBehandlingAndTeamsDataAndResourceData(get(uuid).toResponse());
 
-        boolean resourceIsEmpty = etterlevelseDokumentasjonResponse.getResources() != null && etterlevelseDokumentasjonResponse.getResources().isEmpty();
-        boolean teamIsEmpty = etterlevelseDokumentasjonResponse.getTeams() != null && etterlevelseDokumentasjonResponse.getTeams().isEmpty();
+        boolean resourceIsEmpty = etterlevelseDokumentasjonResponse.getResources() == null || etterlevelseDokumentasjonResponse.getResources().isEmpty();
+        boolean teamIsEmpty = etterlevelseDokumentasjonResponse.getTeams() == null || etterlevelseDokumentasjonResponse.getTeams().isEmpty();
 
         boolean resourceIsNotEmpty = etterlevelseDokumentasjonResponse.getResources() != null && !etterlevelseDokumentasjonResponse.getResources().isEmpty();
         boolean teamIsNotEmpty = etterlevelseDokumentasjonResponse.getTeams() != null && !etterlevelseDokumentasjonResponse.getTeams().isEmpty();
