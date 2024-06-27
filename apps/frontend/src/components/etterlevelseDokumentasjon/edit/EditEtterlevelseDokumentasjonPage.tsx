@@ -1,4 +1,4 @@
-import { Loader } from '@navikt/ds-react'
+import { Alert, Loader } from '@navikt/ds-react'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../../../api/EtterlevelseDokumentasjonApi'
 import { PageLayout } from '../../scaffold/Page'
@@ -28,11 +28,19 @@ export const EditEtterlevelseDokumentasjonPage = () => {
             },
           ]}
         >
-          <EtterlevelseDokumentasjonForm
-            title="Rediger etterlevelsesdokumentet"
-            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-            isEditButton
-          />
+          {etterlevelseDokumentasjon.hasCurrentUserAccess && (
+            <EtterlevelseDokumentasjonForm
+              title="Rediger etterlevelsesdokumentet"
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              isEditButton
+            />
+          )}
+
+          {!etterlevelseDokumentasjon.hasCurrentUserAccess && (
+            <div className="flex w-full justify-center">
+              <Alert variant="warning">Du har ikke tilgang til å redigere egenskaper.</Alert>
+            </div>
+          )}
         </PageLayout>
       )}
     </>
