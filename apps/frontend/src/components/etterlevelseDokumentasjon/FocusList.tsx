@@ -69,14 +69,16 @@ export const FocusList = (props: IProps) => {
             />
           )}
 
-          <Button
-            className="mt-4"
-            type="button"
-            variant="secondary"
-            onClick={() => setIsEditMode(true)}
-          >
-            Rediger prioriterte krav
-          </Button>
+          {etterlevelseDokumentasjon.hasCurrentUserAccess && (
+            <Button
+              className="mt-4"
+              type="button"
+              variant="secondary"
+              onClick={() => setIsEditMode(true)}
+            >
+              Rediger prioriterte krav
+            </Button>
+          )}
         </div>
       )}
       {isEditMode && (
