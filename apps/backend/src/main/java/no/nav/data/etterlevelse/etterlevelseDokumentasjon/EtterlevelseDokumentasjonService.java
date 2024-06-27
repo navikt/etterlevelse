@@ -164,13 +164,14 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(true);
         }
         else {
+            List<String> memeberList = new ArrayList<>();
+
             var currentUser = SecurityUtils.getCurrentIdent();
-            var members = etterlevelseDokumentasjonResponse.getResources();
+            memeberList.addAll(etterlevelseDokumentasjonResponse.getResources());
 
-            etterlevelseDokumentasjonResponse.getTeamsData().forEach((team) -> members.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList()));
+            etterlevelseDokumentasjonResponse.getTeamsData().forEach((team) -> memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList()));
 
-
-            if (members.contains(currentUser) || SecurityUtils.isAdmin()) {
+            if (memeberList.contains(currentUser) || SecurityUtils.isAdmin()) {
                 etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(true);
             } else {
                 etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(false);
