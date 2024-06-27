@@ -3,6 +3,7 @@ package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -18,6 +19,7 @@ import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.team.domain.Team;
+import no.nav.data.integration.team.dto.MemberResponse;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.ResourceType;
 import no.nav.data.integration.team.dto.TeamResponse;
@@ -155,9 +157,26 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return convertToDomaionObject(etterlevelseDokumentasjonRepo.findByVirkemiddelIds(ids));
     }
 
-    public EtterlevelseDokumentasjonResponse getEtterlevelseDokumentasjonWithTeamAndBehandlingData(UUID uuid) {
-        EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = get(uuid).toResponse();
-        return addBehandlingAndTeamsDataAndResourceData(etterlevelseDokumentasjonResponse);
+    public EtterlevelseDokumentasjonResponse getEtterlevelseDokumentasjonWithTeamAndBehandlingAndResourceData(UUID uuid) {
+        EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = addBehandlingAndTeamsDataAndResourceData(get(uuid).toResponse());
+
+        if(etterlevelseDokumentasjonResponse.getResources().isEmpty() && etterlevelseDokumentasjonResponse.getTeams().isEmpty()) {
+            etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(true);
+        }
+        else {
+            var currentUser = SecurityUtils.getCurrentIdent();
+            var members = etterlevelseDokumentasjonResponse.getResources();
+
+            etterlevelseDokumentasjonResponse.getTeamsData().forEach((team) -> members.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList()));
+
+
+            if (members.contains(currentUser) || SecurityUtils.isAdmin()) {
+                etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(true);
+            } else {
+                etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(false);
+            }
+        }
+        return etterlevelseDokumentasjonResponse;
     }
 
     public List<EtterlevelseDokumentasjon> getAllWithValidBehandling() {

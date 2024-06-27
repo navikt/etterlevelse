@@ -47,4 +47,5 @@ public class EtterlevelseDokumentasjonResponse {
     private List<Behandling> behandlinger;
     private CodelistResponse avdeling;
     private List<Varslingsadresse> varslingsadresser;
+    private boolean hasCurrentUserAccess;
 }

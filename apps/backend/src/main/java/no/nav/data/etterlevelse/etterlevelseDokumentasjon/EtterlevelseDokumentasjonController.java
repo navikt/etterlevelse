@@ -53,7 +53,7 @@ public class EtterlevelseDokumentasjonController {
     @GetMapping("/{id}")
     public ResponseEntity<EtterlevelseDokumentasjonResponse> getById(@PathVariable UUID id) {
         log.info("Get Etterlevelse Dokumentasjon By Id Id={}", id);
-        return ResponseEntity.ok(etterlevelseDokumentasjonService.getEtterlevelseDokumentasjonWithTeamAndBehandlingData(id));
+        return ResponseEntity.ok(etterlevelseDokumentasjonService.getEtterlevelseDokumentasjonWithTeamAndBehandlingAndResourceData(id));
     }
 
     @Operation(summary = "Get All Etterlevelse Dokumentasjon by relevans")
