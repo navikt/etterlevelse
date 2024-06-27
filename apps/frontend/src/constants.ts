@@ -343,6 +343,7 @@ export interface IEtterlevelseDokumentasjon {
   knyttetTilVirkemiddel: boolean
   knytteTilTeam: boolean
   varslingsadresser: IVarslingsadresse[]
+  hasCurrentUserAccess: boolean
 }
 
 export interface IDocumentRelation {

@@ -171,6 +171,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   avdeling: etterlevelseDokumentasjon.avdeling,
   teamsData: etterlevelseDokumentasjon.teamsData || [],
   resourcesData: etterlevelseDokumentasjon.resourcesData || [],
+  hasCurrentUserAccess: etterlevelseDokumentasjon.hasCurrentUserAccess || false,
   behandlinger: etterlevelseDokumentasjon.behandlinger || [],
   virkemiddelId: etterlevelseDokumentasjon.virkemiddelId || '',
   // knyttetTilVirkemiddel: etterlevelseDokumentasjon.knyttetTilVirkemiddel !== undefined ? etterlevelseDokumentasjon.knyttetTilVirkemiddel : false,
