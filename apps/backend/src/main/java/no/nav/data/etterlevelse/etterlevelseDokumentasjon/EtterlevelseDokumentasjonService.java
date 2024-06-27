@@ -175,20 +175,18 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             if(resourceIsNotEmpty) {
                 memeberList.addAll(etterlevelseDokumentasjonResponse.getResources());
             }
+
             if(teamIsNotEmpty) {
                 etterlevelseDokumentasjonResponse.getTeamsData().forEach((team) -> {
                     if (team.getMembers() != null && !team.getMembers().isEmpty()) {
                         memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList());
-
                     }
                 });
             }
 
-            if (memeberList.contains(currentUser) || SecurityUtils.isAdmin()) {
-                etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(true);
-            } else {
-                etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(false);
-            }
+            boolean currentUserHasAccess = memeberList.contains(currentUser) || SecurityUtils.isAdmin();
+
+            etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(currentUserHasAccess);
         }
         return etterlevelseDokumentasjonResponse;
     }
