@@ -177,7 +177,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             }
             if(teamIsNotEmpty) {
                 etterlevelseDokumentasjonResponse.getTeamsData().forEach((team) -> {
-                    if (team.getMembers() != null && !team.getMembers().isEmpty) {
+                    if (team.getMembers() != null && !team.getMembers().isEmpty()) {
                         memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList());
 
                     }
