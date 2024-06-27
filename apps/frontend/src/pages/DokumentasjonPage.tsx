@@ -156,22 +156,26 @@ export const DokumentasjonPage = () => {
             />
             {etterlevelseDokumentasjon && (
               <div className="gap-4 ml-5">
-                <Button
-                  onClick={() => {
-                    navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
-                  }}
-                  size="small"
-                  variant="secondary"
-                  className="whitespace-nowrap"
-                >
-                  Endre dokumentegenskaper
-                </Button>
+                {etterlevelseDokumentasjon.hasCurrentUserAccess && (
+                  <>
+                    <Button
+                      onClick={() => {
+                        navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
+                      }}
+                      size="small"
+                      variant="secondary"
+                      className="whitespace-nowrap"
+                    >
+                      Endre dokumentegenskaper
+                    </Button>
 
-                {!dokumentRelasjon && user.isAdmin() && (
-                  <TillatGjenbrukModal
-                    etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                    setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-                  />
+                    {!dokumentRelasjon && user.isAdmin() && (
+                      <TillatGjenbrukModal
+                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                        setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+                      />
+                    )}
+                  </>
                 )}
 
                 {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
