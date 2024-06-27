@@ -160,16 +160,29 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     public EtterlevelseDokumentasjonResponse getEtterlevelseDokumentasjonWithTeamAndBehandlingAndResourceData(UUID uuid) {
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = addBehandlingAndTeamsDataAndResourceData(get(uuid).toResponse());
 
-        if(etterlevelseDokumentasjonResponse.getResources().isEmpty() && etterlevelseDokumentasjonResponse.getTeams().isEmpty()) {
+        boolean resourceIsEmpty = etterlevelseDokumentasjonResponse.getResources() != null && etterlevelseDokumentasjonResponse.getResources().isEmpty();
+        boolean teamIsEmpty = etterlevelseDokumentasjonResponse.getTeams() != null && etterlevelseDokumentasjonResponse.getTeams().isEmpty();
+
+        boolean resourceIsNotEmpty = etterlevelseDokumentasjonResponse.getResources() != null && !etterlevelseDokumentasjonResponse.getResources().isEmpty();
+        boolean teamIsNotEmpty = etterlevelseDokumentasjonResponse.getTeams() != null && !etterlevelseDokumentasjonResponse.getTeams().isEmpty();
+
+        if(resourceIsEmpty && teamIsEmpty) {
             etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(true);
-        }
-        else {
+        } else {
             List<String> memeberList = new ArrayList<>();
 
             var currentUser = SecurityUtils.getCurrentIdent();
-            memeberList.addAll(etterlevelseDokumentasjonResponse.getResources());
+            if(resourceIsNotEmpty) {
+                memeberList.addAll(etterlevelseDokumentasjonResponse.getResources());
+            }
+            if(teamIsNotEmpty) {
+                etterlevelseDokumentasjonResponse.getTeamsData().forEach((team) -> {
+                    if (team.getMembers() != null && !team.getMembers().isEmpty) {
+                        memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList());
 
-            etterlevelseDokumentasjonResponse.getTeamsData().forEach((team) -> memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList()));
+                    }
+                });
+            }
 
             if (memeberList.contains(currentUser) || SecurityUtils.isAdmin()) {
                 etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(true);
