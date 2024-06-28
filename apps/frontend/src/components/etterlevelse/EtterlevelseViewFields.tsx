@@ -1,6 +1,7 @@
 import { Alert, BodyShort, Box, Heading, Label, ReadMore } from '@navikt/ds-react'
 import {
   EEtterlevelseStatus,
+  ESuksesskriterieStatus,
   IEtterlevelse,
   ISuksesskriterie,
   ISuksesskriterieBegrunnelse,
@@ -61,19 +62,36 @@ export const EtterlevelseViewFields = (props: IProps) => {
   )
 }
 
-const KriterieBegrunnelse = ({
-  suksesskriterie,
-  index,
-  suksesskriterieBegrunnelser,
-  totalSuksesskriterie,
-  isBortfiltrert,
-}: {
+export const getSuksesskriterieStatus = (status: ESuksesskriterieStatus) => {
+  switch (status) {
+    case ESuksesskriterieStatus.IKKE_OPPFYLT:
+      return 'Ikke oppfylt'
+    case ESuksesskriterieStatus.IKKE_RELEVANT:
+      return 'Ikke relevant'
+    case ESuksesskriterieStatus.OPPFYLT:
+      return 'Oppfylt'
+    default:
+      return 'Under arbeid'
+  }
+}
+
+interface IKriterieBegrunnelseProps {
   suksesskriterie: ISuksesskriterie
   index: number
   suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
   totalSuksesskriterie: number
   isBortfiltrert?: boolean
-}) => {
+}
+
+const KriterieBegrunnelse = (props: IKriterieBegrunnelseProps) => {
+  const {
+    suksesskriterie,
+    index,
+    suksesskriterieBegrunnelser,
+    totalSuksesskriterie,
+    isBortfiltrert,
+  } = props
+
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(
     suksesskriterieBegrunnelser,
     suksesskriterie
@@ -94,8 +112,10 @@ const KriterieBegrunnelse = ({
 
         <div className="flex w-full justify-end">
           {isBortfiltrert && <BodyShort className="text-text-danger">Bortfiltert</BodyShort>}
-          {!isBortfiltrert && (
-            <BodyShort>{suksesskriterieBegrunnelse.suksesskriterieStatus}</BodyShort>
+          {!isBortfiltrert && suksesskriterieBegrunnelse.suksesskriterieStatus && (
+            <BodyShort>
+              Status: {getSuksesskriterieStatus(suksesskriterieBegrunnelse.suksesskriterieStatus)}
+            </BodyShort>
           )}
         </div>
       </div>
@@ -117,13 +137,19 @@ const KriterieBegrunnelse = ({
           </div>
         )}
 
-        <div className="w-full mt-8 ">
-          <LabelAboveContent
-            fullWidth
-            title={getLabelForSuksessKriterie(suksesskriterieBegrunnelse.suksesskriterieStatus)}
-            markdown={suksesskriterieBegrunnelse.begrunnelse}
-          />
-        </div>
+        {suksesskriterie.behovForBegrunnelse && (
+          <div className="w-full mt-8 ">
+            <LabelAboveContent
+              fullWidth
+              title={getLabelForSuksessKriterie(suksesskriterieBegrunnelse.suksesskriterieStatus)}
+              markdown={
+                suksesskriterieBegrunnelse.begrunnelse
+                  ? suksesskriterieBegrunnelse.begrunnelse
+                  : 'Ingen begrunnelse'
+              }
+            />
+          </div>
+        )}
       </div>
     </Box>
   )
