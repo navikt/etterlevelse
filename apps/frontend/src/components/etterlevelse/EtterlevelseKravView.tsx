@@ -33,12 +33,11 @@ import {
   EEtterlevelseStatus,
   EKravFilterType,
   EKravStatus,
-  IBehandling,
   IEtterlevelse,
   IEtterlevelseMetadata,
   IKrav,
   IKravVersjon,
-  ITeam,
+  TEtterlevelseDokumentasjonQL,
   TKravQL,
 } from '../../constants'
 import { getKravWithEtterlevelseQuery } from '../../query/KravQuery'
@@ -58,16 +57,12 @@ import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import EtterlevelseViewFields from './EtterlevelseViewFields'
 
-type TEttlevelseKravViewProps = {
+interface IProps {
   temaName?: string
   etterlevelse: IEtterlevelse
   kravId: TKravId
   formRef?: React.Ref<any>
-  etterlevelseDokumentasjonTitle?: string
-  etterlevelseDokumentasjonId?: string
-  etterlevelseNummer?: number
-  behandlinger: IBehandling[] | undefined
-  teams: ITeam[] | undefined
+  etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
   varsleMelding?: string
   navigatePath: string
   tidligereEtterlevelser: IEtterlevelse[] | undefined
@@ -75,20 +70,19 @@ type TEttlevelseKravViewProps = {
   nextKravToDocument: string
 }
 
-export const EtterlevelseKravView = ({
-  temaName,
-  kravId,
-  etterlevelse,
-  varsleMelding,
-  etterlevelseDokumentasjonTitle,
-  etterlevelseDokumentasjonId,
-  behandlinger,
-  teams,
-  navigatePath,
-  tidligereEtterlevelser,
-  kravFilter,
-  nextKravToDocument,
-}: TEttlevelseKravViewProps) => {
+export const EtterlevelseKravView = (props: IProps) => {
+  const {
+    temaName,
+    kravId,
+    etterlevelse,
+    varsleMelding,
+    etterlevelseDokumentasjon,
+    navigatePath,
+    tidligereEtterlevelser,
+    kravFilter,
+    nextKravToDocument,
+  } = props
+
   const { data, loading } = useQuery<{ kravById: TKravQL }, TKravId>(getKravWithEtterlevelseQuery, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
@@ -118,7 +112,7 @@ export const EtterlevelseKravView = ({
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<IEtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
       id: 'ny',
-      etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
+      etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id,
       kravNummer: kravId.kravNummer,
       kravVersjon: kravId.kravVersjon,
     })
@@ -126,10 +120,10 @@ export const EtterlevelseKravView = ({
 
   useEffect(() => {
     ;(async () => {
-      etterlevelseDokumentasjonId &&
+      etterlevelseDokumentasjon?.id &&
         kravId.kravNummer &&
         getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(
-          etterlevelseDokumentasjonId,
+          etterlevelseDokumentasjon?.id,
           kravId.kravNummer,
           kravId.kravVersjon
         ).then((resp) => {
@@ -139,7 +133,7 @@ export const EtterlevelseKravView = ({
             setEtterlevelseMetadata(
               mapEtterlevelseMetadataToFormValue({
                 id: 'ny',
-                etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
+                etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id,
                 kravNummer: kravId.kravNummer,
                 kravVersjon: kravId.kravVersjon,
               })
@@ -176,10 +170,10 @@ export const EtterlevelseKravView = ({
 
     //double check if etterlevelse already exist before submitting
     let existingEtterlevelseId = ''
-    if (etterlevelseDokumentasjonId && krav) {
+    if (etterlevelseDokumentasjon && krav) {
       const etterlevelseList = (
         await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(
-          etterlevelseDokumentasjonId,
+          etterlevelseDokumentasjon.id,
           krav.kravNummer
         )
       ).content.filter((e) => e.kravVersjon === krav.kravVersjon)
@@ -411,7 +405,7 @@ export const EtterlevelseKravView = ({
                         disableEdit={disableEdit}
                         close={() => {
                           setTimeout(
-                            () => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}`),
+                            () => navigate(`/dokumentasjon/${etterlevelseDokumentasjon?.id}`),
                             1
                           )
                         }}
@@ -461,11 +455,11 @@ export const EtterlevelseKravView = ({
                   <div className="mt-2 p-4">
                     <div className="mb-4">
                       <Label size="medium">Tittel</Label>
-                      <BodyShort>{etterlevelseDokumentasjonTitle}</BodyShort>
+                      <BodyShort>{etterlevelseDokumentasjon?.title}</BodyShort>
                     </div>
                     <div className="mb-4">
                       <Label size="medium">Behandling</Label>
-                      {behandlinger?.map((behandling) => (
+                      {etterlevelseDokumentasjon?.behandlinger?.map((behandling) => (
                         <ExternalLink key={behandling.id} href={behandlingLink(behandling.id)}>
                           {behandling.navn}
                         </ExternalLink>
@@ -473,7 +467,7 @@ export const EtterlevelseKravView = ({
                     </div>
                     <div className="flex flex-col">
                       <Label size="medium">Team</Label>
-                      {teams?.map((team, index) => (
+                      {etterlevelseDokumentasjon?.teamsData?.map((team, index) => (
                         <TeamName key={'team_' + index} id={team.id} big link />
                       ))}
                     </div>
@@ -584,7 +578,7 @@ export const EtterlevelseKravView = ({
                 </Button>
 
                 <Link
-                  href={'/dokumentasjon/' + etterlevelseDokumentasjonId + '/' + params.tema}
+                  href={'/dokumentasjon/' + etterlevelseDokumentasjon?.id + '/' + params.tema}
                   className="flex w-full"
                   onClick={() => {
                     ampli.logEvent('knapp klikket', {

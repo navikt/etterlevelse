@@ -86,9 +86,7 @@ export const EtterlevelseDokumentasjonPage = () => {
     }
   }, [data, loading, temaData, kravId])
 
-  const [navigatePath, setNavigatePath] = useState<string>('')
-
-  const [tab, setTab] = useState<TSection>('dokumentasjon')
+  const [navigatePath] = useState<string>('')
 
   useEffect(() => {
     if (params.kravNummer && params.kravVersjon) {
@@ -128,16 +126,9 @@ export const EtterlevelseDokumentasjonPage = () => {
             <KravView
               nextKravToDocument={nextKravToDocument}
               temaName={temaData?.shortName}
-              etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-              etterlevelseDokumentasjonTitle={etterlevelseDokumentasjon.title}
-              etterlevelseNummer={etterlevelseDokumentasjon.etterlevelseNummer}
-              behandlinger={etterlevelseDokumentasjon.behandlinger}
-              teams={etterlevelseDokumentasjon.teamsData}
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               kravId={kravId}
               navigatePath={navigatePath}
-              setNavigatePath={setNavigatePath}
-              tab={tab}
-              setTab={setTab}
               kravFilter={getFilterType(params.filter)}
             />
           )}

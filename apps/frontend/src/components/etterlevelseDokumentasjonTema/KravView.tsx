@@ -5,26 +5,29 @@ import {
   mapEtterlevelseToFormValue,
 } from '../../api/EtterlevelseApi'
 import { TKravId, getKravByKravNumberAndVersion } from '../../api/KravApi'
-import { EKravFilterType, IBehandling, IEtterlevelse, ITeam } from '../../constants'
-import { TSection } from '../../pages/EtterlevelseDokumentasjonPage'
+import { EKravFilterType, IEtterlevelse, TEtterlevelseDokumentasjonQL } from '../../constants'
 import { EtterlevelseKravView } from '../etterlevelse/EtterlevelseKravView'
 import { toKravId } from './common/utils'
 
-export const KravView = (props: {
+interface IProps {
   temaName?: string
   kravId: TKravId
-  etterlevelseDokumentasjonTitle: string
-  etterlevelseDokumentasjonId: string
-  etterlevelseNummer: number
-  behandlinger: IBehandling[] | undefined
-  teams: ITeam[] | undefined
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   navigatePath: string
-  setNavigatePath: (state: string) => void
-  tab: TSection
-  setTab: (section: TSection) => void
   kravFilter: EKravFilterType
   nextKravToDocument: string
-}) => {
+}
+
+export const KravView = (props: IProps) => {
+  const {
+    temaName,
+    kravId,
+    etterlevelseDokumentasjon,
+    navigatePath,
+    kravFilter,
+    nextKravToDocument,
+  } = props
+
   const [varsleMelding, setVarsleMelding] = useState('')
 
   const [etterlevelse, setEtterlevelse] = useState<IEtterlevelse>()
@@ -33,20 +36,17 @@ export const KravView = (props: {
   useEffect(() => {
     ;(async () => {
       setLoadingEtterlevelseData(true)
-      if (props.kravId.kravNummer && props.kravId.kravVersjon) {
-        const krav = await getKravByKravNumberAndVersion(
-          props.kravId.kravNummer,
-          props.kravId.kravVersjon
-        )
+      if (kravId.kravNummer && kravId.kravVersjon) {
+        const krav = await getKravByKravNumberAndVersion(kravId.kravNummer, kravId.kravVersjon)
         if (krav) {
           setVarsleMelding(krav.varselMelding || '')
         }
 
-        if (props.etterlevelseDokumentasjonId) {
-          const kravVersjon = props.kravId.kravVersjon
+        if (etterlevelseDokumentasjon.id) {
+          const kravVersjon = kravId.kravVersjon
           const etterlevelser = await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(
-            props.etterlevelseDokumentasjonId,
-            props.kravId.kravNummer
+            etterlevelseDokumentasjon.id,
+            kravId.kravNummer
           )
           const etterlevelserList = etterlevelser.content.sort((a, b) =>
             a.kravVersjon > b.kravVersjon ? -1 : 1
@@ -62,9 +62,9 @@ export const KravView = (props: {
           } else {
             setEtterlevelse(
               mapEtterlevelseToFormValue({
-                etterlevelseDokumentasjonId: props.etterlevelseDokumentasjonId,
+                etterlevelseDokumentasjonId: etterlevelseDokumentasjon.id,
                 kravVersjon: kravVersjon,
-                kravNummer: props.kravId.kravNummer,
+                kravNummer: kravId.kravNummer,
               })
             )
           }
@@ -83,19 +83,15 @@ export const KravView = (props: {
       )}
       {!loadingEtterlevelseData && etterlevelse && (
         <EtterlevelseKravView
-          nextKravToDocument={props.nextKravToDocument}
-          temaName={props.temaName}
+          nextKravToDocument={nextKravToDocument}
+          temaName={temaName}
           tidligereEtterlevelser={tidligereEtterlevelser}
-          etterlevelseDokumentasjonTitle={props.etterlevelseDokumentasjonTitle}
-          etterlevelseDokumentasjonId={props.etterlevelseDokumentasjonId}
-          etterlevelseNummer={props.etterlevelseNummer}
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           kravId={toKravId(etterlevelse)}
           etterlevelse={etterlevelse}
-          behandlinger={props.behandlinger}
-          teams={props.teams}
           varsleMelding={varsleMelding}
-          navigatePath={props.navigatePath}
-          kravFilter={props.kravFilter}
+          navigatePath={navigatePath}
+          kravFilter={kravFilter}
         />
       )}
     </div>
