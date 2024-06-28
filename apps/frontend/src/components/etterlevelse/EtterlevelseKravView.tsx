@@ -393,35 +393,45 @@ export const EtterlevelseKravView = (props: IProps) => {
                   <Tabs.Tab value="tilbakemeldinger" label="Spørsmål og svar" />
                 </Tabs.List>
                 <Tabs.Panel value="dokumentasjon">
-                  <div className="mt-2">
-                    {kravFilter !== EKravFilterType.BORTFILTTERTE_KRAV && (
-                      <EtterlevelseEditFields
-                        kravFilter={kravFilter}
-                        krav={krav}
-                        etterlevelse={etterlevelse}
-                        submit={submit}
-                        formRef={etterlevelseFormRef}
-                        varsleMelding={varsleMelding}
-                        disableEdit={disableEdit}
-                        close={() => {
-                          setTimeout(
-                            () => navigate(`/dokumentasjon/${etterlevelseDokumentasjon?.id}`),
-                            1
-                          )
-                        }}
-                        navigatePath={navigatePath}
-                        editedEtterlevelse={editedEtterlevelse}
-                        tidligereEtterlevelser={tidligereEtterlevelser}
-                      />
-                    )}
-                    {kravFilter === EKravFilterType.BORTFILTTERTE_KRAV && (
-                      <EtterlevelseViewFields
-                        etterlevelse={etterlevelse}
-                        suksesskriterier={krav.suksesskriterier}
-                        tidligereEtterlevelser={tidligereEtterlevelser}
-                      />
-                    )}
-                  </div>
+                  {etterlevelseDokumentasjon?.hasCurrentUserAccess && (
+                    <div className="mt-2">
+                      {kravFilter !== EKravFilterType.BORTFILTTERTE_KRAV && (
+                        <EtterlevelseEditFields
+                          kravFilter={kravFilter}
+                          krav={krav}
+                          etterlevelse={etterlevelse}
+                          submit={submit}
+                          formRef={etterlevelseFormRef}
+                          varsleMelding={varsleMelding}
+                          disableEdit={disableEdit}
+                          close={() => {
+                            setTimeout(
+                              () => navigate(`/dokumentasjon/${etterlevelseDokumentasjon?.id}`),
+                              1
+                            )
+                          }}
+                          navigatePath={navigatePath}
+                          editedEtterlevelse={editedEtterlevelse}
+                          tidligereEtterlevelser={tidligereEtterlevelser}
+                        />
+                      )}
+                      {kravFilter === EKravFilterType.BORTFILTTERTE_KRAV && (
+                        <EtterlevelseViewFields
+                          etterlevelse={etterlevelse}
+                          suksesskriterier={krav.suksesskriterier}
+                          tidligereEtterlevelser={tidligereEtterlevelser}
+                          isBortfiltrert
+                        />
+                      )}
+                    </div>
+                  )}
+                  {!etterlevelseDokumentasjon?.hasCurrentUserAccess && (
+                    <EtterlevelseViewFields
+                      etterlevelse={etterlevelse}
+                      suksesskriterier={krav.suksesskriterier}
+                      tidligereEtterlevelser={tidligereEtterlevelser}
+                    />
+                  )}
                 </Tabs.Panel>
                 <Tabs.Panel value="etterlevelser">
                   <div className="mt-2">

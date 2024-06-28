@@ -13,15 +13,15 @@ import {
 } from './Edit/SuksesskriterieBegrunnelseEdit'
 import EtterlevelseCard from './EtterlevelseCard'
 
-export const EtterlevelseViewFields = ({
-  etterlevelse,
-  suksesskriterier,
-  tidligereEtterlevelser,
-}: {
+interface IProps {
   etterlevelse: IEtterlevelse
   suksesskriterier: ISuksesskriterie[]
   tidligereEtterlevelser?: IEtterlevelse[]
-}) => {
+  isBortfiltrert?: boolean
+}
+export const EtterlevelseViewFields = (props: IProps) => {
+  const { etterlevelse, suksesskriterier, tidligereEtterlevelser, isBortfiltrert } = props
+
   return (
     <div>
       {(etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT ||
@@ -36,7 +36,7 @@ export const EtterlevelseViewFields = ({
       )}
 
       <div className="flex w-full items-center mb-4">
-        <Label className="min-w-fit">Hvilke suksesskriterier er oppfylt?</Label>
+        <Label className="min-w-fit mt-3">Hvilke suksesskriterier er oppfylt?</Label>
         {tidligereEtterlevelser && tidligereEtterlevelser.length > 0 && (
           <div className="flex w-full justify-end">
             <EtterlevelseCard etterlevelse={tidligereEtterlevelser[0]} />
@@ -52,6 +52,7 @@ export const EtterlevelseViewFields = ({
               index={index}
               suksesskriterieBegrunnelser={etterlevelse.suksesskriterieBegrunnelser}
               totalSuksesskriterie={suksesskriterier.length}
+              isBortfiltrert={isBortfiltrert}
             />
           </div>
         )
@@ -65,11 +66,13 @@ const KriterieBegrunnelse = ({
   index,
   suksesskriterieBegrunnelser,
   totalSuksesskriterie,
+  isBortfiltrert,
 }: {
   suksesskriterie: ISuksesskriterie
   index: number
   suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
   totalSuksesskriterie: number
+  isBortfiltrert?: boolean
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(
     suksesskriterieBegrunnelser,
@@ -90,7 +93,10 @@ const KriterieBegrunnelse = ({
         </BodyShort>
 
         <div className="flex w-full justify-end">
-          <BodyShort className="text-text-danger">Bortfiltert</BodyShort>
+          {isBortfiltrert && <BodyShort className="text-text-danger">Bortfiltert</BodyShort>}
+          {!isBortfiltrert && (
+            <BodyShort>{suksesskriterieBegrunnelse.suksesskriterieStatus}</BodyShort>
+          )}
         </div>
       </div>
 
