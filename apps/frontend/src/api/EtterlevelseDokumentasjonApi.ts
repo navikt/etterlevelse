@@ -136,6 +136,9 @@ export const etterlevelseDokumentasjonToDomainToObject = (
       ? etterlevelseDokumentasjon.teamsData.map((team) => team.id)
       : [],
     avdeling: etterlevelseDokumentasjon.avdeling?.code,
+    resources: etterlevelseDokumentasjon.resourcesData
+      ? etterlevelseDokumentasjon.resourcesData.map((resource) => resource.navIdent)
+      : [],
   } as any
   delete domainToObject.changeStamp
   delete domainToObject.version
