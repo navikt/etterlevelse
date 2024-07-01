@@ -282,7 +282,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             Legg til minst 1 team eller 1 person
           </Heading>
 
-          <div className="flex gap-5">
+          <div id="teamsData" className="flex gap-5">
             <FieldArray name="teamsData">
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className="flex-1">
