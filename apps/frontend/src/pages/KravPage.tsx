@@ -189,7 +189,7 @@ export const KravPage = () => {
               {krav && <StatusTag status={krav.status} />}
 
               {krav?.varselMelding && (
-                <div className="w-fit flex justify-center items-center">
+                <div className="w-fit flex justify-center items-center mt-5">
                   <InformationSquareIcon fontSize="1.5rem" />
                   <BodyLong className="ml-1">{krav.varselMelding}</BodyLong>
                 </div>
