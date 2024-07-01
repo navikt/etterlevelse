@@ -213,11 +213,7 @@ export const KravPage = () => {
                       <Heading size="small" level="2">
                         Begrunnelse for at kravet er utgått
                       </Heading>
-                      <Markdown
-                        sources={
-                          Array.isArray(krav.beskrivelse) ? krav.beskrivelse : [krav.beskrivelse]
-                        }
-                      />
+                      <Markdown source={krav.beskrivelse} />
                     </div>
                   )
                 }
@@ -227,7 +223,7 @@ export const KravPage = () => {
               <Heading size="small" level="2">
                 Hensikten med kravet
               </Heading>
-              <Markdown sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
+              <Markdown source={krav.hensikt} />
             </div>
 
             <div className="w-full">

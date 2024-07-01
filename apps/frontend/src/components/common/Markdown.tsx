@@ -124,14 +124,21 @@ export const Markdown = ({
     },
   }
 
-  const sources: string[] =
-    sourcesOrig ||
-    (source ? [source.replaceAll('\n\n', '\n\n &nbsp; \n\n').replaceAll('\n', '\n\n')] : [''])
+  let sources: string[]
+
+  if (sourcesOrig) {
+    sources = sourcesOrig
+  } else if (source) {
+    sources = [source.replaceAll('\n\n', '\n\n &nbsp; \n\n').replaceAll('\n', '\n\n')]
+  } else {
+    sources = ['']
+  }
+
   const htmlPlugins = escapeHtml ? [] : [rehypeRaw]
   return (
     <div>
       <ReactMarkdown components={renderers} remarkPlugins={[remarkGfm]} rehypePlugins={htmlPlugins}>
-        {sources.join(vertical ? '\n\n' : ', ')}
+        {sources.join(vertical ? '&nbsp;&nbsp;\n\n  ' : ', ')}
       </ReactMarkdown>
     </div>
   )

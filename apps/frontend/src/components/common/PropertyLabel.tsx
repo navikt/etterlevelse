@@ -12,7 +12,7 @@ type TLabelProps = {
   p1?: boolean
   labelWidth?: string
   fullWidth?: boolean
-} & TOr<{ children: React.ReactNode }, { markdown: string | string[]; vertical?: boolean }>
+} & TOr<{ children: React.ReactNode }, { markdown: string; vertical?: boolean }>
 
 export const LabelAboveContent = (props: TLabelProps) => {
   if (props.hide || (empty(props.children) && empty(props.markdown))) return null
@@ -25,12 +25,7 @@ export const LabelAboveContent = (props: TLabelProps) => {
       labelWidth={props.labelWidth}
     >
       {props.markdown ? (
-        <Markdown
-          p1={props.p1}
-          sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]}
-          vertical={props.vertical}
-          shortenLinks
-        />
+        <Markdown p1={props.p1} source={props.markdown} vertical={props.vertical} shortenLinks />
       ) : (
         props.children
       )}

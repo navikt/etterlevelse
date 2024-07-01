@@ -146,7 +146,7 @@ export const DokumentasjonPage = () => {
           {etterlevelseDokumentasjon.beskrivelse && (
             <div>
               <Label>Beskrivelse</Label>
-              <Markdown sources={[etterlevelseDokumentasjon.beskrivelse]} />
+              <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
             </div>
           )}
 
