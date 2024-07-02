@@ -282,7 +282,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             Legg til minst 1 team eller 1 person
           </Heading>
 
-          <div id="teamsData" className="lg:flex block gap-5">
+          <div id="teamsData" className="flex flex-col lg:flex-row gap-5">
             <FieldArray name="teamsData">
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className="flex-1">
@@ -347,26 +347,29 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
 
           {errors.teamsData && <Error message={errors.teamsData as string} />}
 
-          <FieldWrapper marginTop>
-            <Field name="avdeling">
-              {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
-                <div className="w-fit">
-                  <LabelWithDescription
-                    label="Avdeling"
-                    description="Angi hvilken avdeling som er ansvarlig for etterlevelsen og som er risikoeier."
-                  />
-                  <OptionList
-                    listName={EListName.AVDELING}
-                    label="Avdeling"
-                    value={fieldProps.field.value?.code}
-                    onChange={(value) => {
-                      fieldProps.form.setFieldValue('avdeling', value)
-                    }}
-                  />
-                </div>
-              )}
-            </Field>
-          </FieldWrapper>
+          <div className="flex flex-col lg:flex-row gap-5">
+            <FieldWrapper marginTop full>
+              <Field name="avdeling">
+                {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
+                  <div>
+                    <LabelWithDescription
+                      label="Avdeling"
+                      description="Angi hvilken avdeling som er ansvarlig for etterlevelsen og som er risikoeier."
+                    />
+                    <OptionList
+                      listName={EListName.AVDELING}
+                      label="Avdeling"
+                      value={fieldProps.field.value?.code}
+                      onChange={(value) => {
+                        fieldProps.form.setFieldValue('avdeling', value)
+                      }}
+                    />
+                  </div>
+                )}
+              </Field>
+            </FieldWrapper>
+            <div className="flex-1" />
+          </div>
 
           <div id="varslingsadresser" className="mt-5">
             <VarslingsadresserEdit />

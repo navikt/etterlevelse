@@ -68,10 +68,20 @@ type TOptionORListname = TOr<IOptions, IListname>
 
 interface IPropsFieldWrapper extends IMarginTop, IMarginBottom, IID {
   children: React.ReactNode
+  full?: boolean
 }
 
-export const FieldWrapper = ({ children, marginTop, marginBottom, id }: IPropsFieldWrapper) => (
-  <div className={`${marginBottom ? 'mb-5' : ''} ${marginTop ? 'mt-5' : ''}`} id={id}>
+export const FieldWrapper = ({
+  children,
+  marginTop,
+  marginBottom,
+  id,
+  full,
+}: IPropsFieldWrapper) => (
+  <div
+    className={`${marginBottom ? 'mb-5' : ''} ${marginTop ? 'mt-5' : ''} ${full ? 'flex-1' : ''}`}
+    id={id}
+  >
     {children}
   </div>
 )
