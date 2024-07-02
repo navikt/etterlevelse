@@ -19,7 +19,7 @@ export const EtterlevelseDokumentasjonsPanel = ({
       {etterlevelseDokumentasjon.sistEndretEtterlevelse !== null &&
       etterlevelseDokumentasjon.sistEndretEtterlevelse !== ''
         ? `Sist endret: ${moment(etterlevelseDokumentasjon.sistEndretEtterlevelse).format('ll')}`
-        : 'Ikke på begynt'}
+        : 'Ikke påbegynt'}
     </LinkPanel.Description>
   </LinkPanel>
 )
