@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Alert, Button, Heading, LinkPanel, Skeleton } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, LinkPanel, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -18,6 +18,7 @@ import {
 import { getEtterlevelseDokumentasjonListQuery } from '../query/EtterlevelseDokumentasjonQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { user } from '../services/User'
+import { getNumberOfMonthsBetween } from '../util/checkAge'
 import { TVariables } from './MyEtterlevelseDokumentasjonerPage'
 
 export const MainPage = () => {
@@ -170,26 +171,53 @@ const EtterlevelseDokumentasjonList = ({
     }
   })
 
+  const today = new Date()
+
+  const filteredEtterlevelsesDokumentasjoner = sortedEtterlevelseDokumentasjoner
+    .slice(0, 2)
+    .filter((etterlevelseDokumentasjon) => {
+      let monthAge
+      if (etterlevelseDokumentasjon.sistEndretEtterlevelse) {
+        monthAge = getNumberOfMonthsBetween(etterlevelseDokumentasjon.sistEndretEtterlevelse, today)
+      } else {
+        monthAge = getNumberOfMonthsBetween(
+          etterlevelseDokumentasjon.changeStamp.createdDate || '',
+          today
+        )
+      }
+      return monthAge <= 6
+    })
+
   return (
     <div>
       <Heading size="medium" level="2">
         Mine sist dokumenterte
       </Heading>
       <div className="mt-6 flex flex-col gap-2">
-        {sortedEtterlevelseDokumentasjoner.slice(0, 2).map((etterlevelseDokumentasjon, index) => (
-          <EtterlevelseDokumentasjonsPanel
-            key={etterlevelseDokumentasjon.title + '_' + index}
-            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-            onClick={() =>
-              ampli.logEvent('navigere', {
-                app: 'etterlevelse',
-                kilde: 'forside-panel',
-                til: `'/dokumentasjon/' + ${etterlevelseDokumentasjon.id}`,
-                fra: '/',
-              })
-            }
-          />
-        ))}
+        {filteredEtterlevelsesDokumentasjoner.length !== 0 &&
+          filteredEtterlevelsesDokumentasjoner
+            .slice(0, 2)
+            .map((etterlevelseDokumentasjon, index) => (
+              <EtterlevelseDokumentasjonsPanel
+                key={etterlevelseDokumentasjon.title + '_' + index}
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                onClick={() =>
+                  ampli.logEvent('navigere', {
+                    app: 'etterlevelse',
+                    kilde: 'forside-panel',
+                    til: `'/dokumentasjon/' + ${etterlevelseDokumentasjon.id}`,
+                    fra: '/',
+                  })
+                }
+              />
+            ))}
+
+        {filteredEtterlevelsesDokumentasjoner.length === 0 && (
+          <BodyLong>
+            Ingen etterlevelsesdokument som har blitt opprettet eller endret av deg de siste 6
+            månedene.
+          </BodyLong>
+        )}
       </div>
     </div>
   )
