@@ -15,7 +15,6 @@ const teamsDataCheck = yup.array().test({
   message: 'Påkrevd minst 1 team eller 1 person',
   test: function (teamsData) {
     const { parent } = this
-    console.debug(parent.resourcesData)
     return (teamsData && teamsData.length > 0) ||
       (parent.resourcesData && parent.resourcesData.length > 0)
       ? true
