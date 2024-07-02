@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Alert, Button, Heading, Link, LinkPanel, Skeleton } from '@navikt/ds-react'
+import { Alert, Button, Heading, LinkPanel, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -116,21 +116,20 @@ export const MainPage = () => {
                     Nytt etterlevelsesdokument
                   </Button>
                 </div>
-                <Link href="/dokumentasjoner">
-                  <Button
-                    variant="tertiary"
-                    onClick={() =>
-                      ampli.logEvent('navigere', {
-                        app: 'etterlevelse',
-                        kilde: 'forside-panel',
-                        til: '/dokumentasjoner',
-                        fra: '/',
-                      })
-                    }
-                  >
-                    Alle etterlevelsesdokumenter
-                  </Button>
-                </Link>
+                <Button
+                  variant="tertiary"
+                  onClick={() => {
+                    ampli.logEvent('navigere', {
+                      app: 'etterlevelse',
+                      kilde: 'forside-panel',
+                      til: '/dokumentasjoner',
+                      fra: '/',
+                    })
+                    navigate('/dokumentasjoner')
+                  }}
+                >
+                  Alle etterlevelsesdokumenter
+                </Button>
               </div>
             </div>
           )}
