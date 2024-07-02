@@ -368,7 +368,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             </Field>
           </FieldWrapper>
 
-          <div id="varslingsadresser" className="mt-3">
+          <div id="varslingsadresser" className="mt-5">
             <VarslingsadresserEdit />
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
