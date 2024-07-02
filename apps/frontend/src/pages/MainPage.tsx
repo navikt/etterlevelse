@@ -118,6 +118,7 @@ export const MainPage = () => {
                 </div>
                 <Button
                   variant="tertiary"
+                  className="underline hover:no-underline"
                   onClick={() => {
                     ampli.logEvent('navigere', {
                       app: 'etterlevelse',
