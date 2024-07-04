@@ -83,10 +83,9 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
     })()
   }, [etterlevelseDokumentasjon])
 
-  const handleChange = (val: string[]) => console.log(val)
-
   const submit = async (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL) => {
     console.debug(selectedVirkemiddel)
+
     if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
       await createEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         if (response.id) {
@@ -381,7 +380,9 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           <div className="mt-5">
             <CheckboxGroup
               legend="Skal dette dokumentet kunne gjenbrukes av andre?"
-              onChange={handleChange}
+              onChange={(value: boolean[]) =>
+                setFieldValue('isForGjenbruk', value.length !== 0 ? true : false)
+              }
               description="Gjenbruk betyr at andre kan ta utgangspunkt i dine vurderinger. Gjenbruk tillates ikke før du har valgt dette på dokumentsiden."
             >
               Når du velger gjenbruk har du muligheten til å legge inn vurderinger og veiledning som
