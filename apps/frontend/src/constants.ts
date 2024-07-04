@@ -304,6 +304,8 @@ export interface ISuksesskriterieBegrunnelse {
   begrunnelse: string
   behovForBegrunnelse: boolean
   suksesskriterieStatus?: ESuksesskriterieStatus
+  veiledning: boolean
+  veiledningsTekst: string
 }
 
 export interface IBehandling {

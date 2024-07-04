@@ -103,6 +103,8 @@ export const mapEtterlevelseToFormValue = (
           behovForBegrunnelse: suksesskriterium.behovForBegrunnelse,
           begrunnelse: '',
           suksesskriterieStatus: ESuksesskriterieStatus.UNDER_ARBEID,
+          veiledning: false,
+          veiledningsTekst: '',
         })
       })
     }

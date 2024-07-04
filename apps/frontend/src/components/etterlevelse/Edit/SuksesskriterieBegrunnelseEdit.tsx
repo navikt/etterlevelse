@@ -142,6 +142,8 @@ const KriterieBegrunnelse = ({
       begrunnelse: begrunnelse,
       behovForBegrunnelse: suksesskriterie.behovForBegrunnelse,
       suksesskriterieStatus: suksessKriterieStatus,
+      veiledning: false,
+      veiledningsTekst: '',
     })
   }, [begrunnelse, suksessKriterieStatus])
 
