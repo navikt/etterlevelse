@@ -7,12 +7,13 @@ import {
   createEtterlevelseDokumentasjonWithRelataion,
   etterlevelseDokumentasjonWithRelationMapToFormVal,
 } from '../../../api/EtterlevelseDokumentasjonApi'
-import { useSearchTeamOptions } from '../../../api/TeamApi'
+import { searchResourceByNameOptions, useSearchTeamOptions } from '../../../api/TeamApi'
 import {
   ERelationType,
   IBehandling,
   IEtterlevelseDokumentasjonWithRelation,
   ITeam,
+  ITeamResource,
   TEtterlevelseDokumentasjonQL,
 } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
@@ -153,45 +154,70 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
             </FieldWrapper>
           )}
 
-          <BoolField
-            label="Er etterlevelsesdokumentet knyttet til et team i Teamkatalogen?"
-            name="knytteTilTeam"
-            tooltip="Når du legger til et team vil medlemmene i det teamet kunne se dette dokumentet under «Mine dokumentasjoner». Dette er ikke nødvendig for å opprette etterlevelsesdokumentet, men anbefales."
-          />
-
-          {values.knytteTilTeam && (
-            <FieldWrapper>
-              <FieldArray name="teamsData">
-                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                  <div className=" mb-3">
-                    <LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />
-                    <div className="w-full">
-                      <AsyncSelect
-                        aria-label="Søk etter team"
-                        placeholder=""
-                        components={{ DropdownIndicator }}
-                        noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
-                        controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
-                        isClearable={false}
-                        loadOptions={useSearchTeamOptions}
-                        onChange={(value) => {
-                          value && fieldArrayRenderProps.push(value)
-                        }}
-                        styles={selectOverrides}
-                      />
-                    </div>
-                    <RenderTagList
-                      list={fieldArrayRenderProps.form.values.teamsData.map(
-                        (tema: ITeam) => tema.name
-                      )}
-                      onRemove={fieldArrayRenderProps.remove}
+          <div id="teamsData" className="flex flex-col lg:flex-row gap-5">
+            <FieldArray name="teamsData">
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className="flex-1">
+                  <LabelWithTooltip label="Søk team fra Teamkatalogen" tooltip="" />
+                  <div className="w-full">
+                    <AsyncSelect
+                      aria-label="Søk etter team"
+                      placeholder=""
+                      components={{ DropdownIndicator }}
+                      noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+                      controlShouldRenderValue={false}
+                      loadingMessage={() => 'Søker...'}
+                      isClearable={false}
+                      loadOptions={useSearchTeamOptions}
+                      onChange={(value) => {
+                        value && fieldArrayRenderProps.push(value)
+                      }}
+                      styles={selectOverrides}
                     />
                   </div>
-                )}
-              </FieldArray>
-            </FieldWrapper>
-          )}
+                  <RenderTagList
+                    list={fieldArrayRenderProps.form.values.teamsData.map(
+                      (tema: ITeam) => tema.name
+                    )}
+                    onRemove={fieldArrayRenderProps.remove}
+                  />
+                </div>
+              )}
+            </FieldArray>
+            <FieldArray name="resourcesData">
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className="flex-1">
+                  <LabelWithTooltip label="Søk etter person" tooltip="" />
+                  <div className="w-full">
+                    <AsyncSelect
+                      aria-label="Søk etter person"
+                      placeholder=""
+                      components={{ DropdownIndicator }}
+                      noOptionsMessage={({ inputValue }) => {
+                        return noOptionMessage(inputValue)
+                      }}
+                      controlShouldRenderValue={false}
+                      loadingMessage={() => 'Søker...'}
+                      isClearable={false}
+                      loadOptions={searchResourceByNameOptions}
+                      onChange={(value) => {
+                        value && fieldArrayRenderProps.push(value)
+                      }}
+                      styles={selectOverrides}
+                    />
+                  </div>
+                  <RenderTagList
+                    list={fieldArrayRenderProps.form.values.resourcesData.map(
+                      (resource: ITeamResource) => resource.fullName
+                    )}
+                    onRemove={fieldArrayRenderProps.remove}
+                  />
+                </div>
+              )}
+            </FieldArray>
+          </div>
+
+          {errors.teamsData && <Error message={errors.teamsData as string} />}
           <FieldWrapper>
             <Field name="avdeling">
               {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (

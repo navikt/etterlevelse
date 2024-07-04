@@ -341,7 +341,7 @@ export interface IEtterlevelseDokumentasjon {
   behandlerPersonopplysninger: boolean
   virkemiddel?: IVirkemiddel
   knyttetTilVirkemiddel: boolean
-  knytteTilTeam: boolean
+  isForGjenbruk: boolean
   varslingsadresser: IVarslingsadresse[]
   hasCurrentUserAccess: boolean
 }
