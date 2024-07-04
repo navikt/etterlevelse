@@ -2,12 +2,14 @@ package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
+import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
@@ -103,6 +105,13 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         etterlevelseDokumentasjon.merge(request);
         if (!request.isUpdate()) {
             etterlevelseDokumentasjon.setEtterlevelseNummer(etterlevelseDokumentasjonRepo.nextEtterlevelseDokumentasjonNummer());
+        }
+        if (request.isUpdate() && !request.isForGjenbruk()) {
+            var documentRelations = documentRelationService.findByFromDocumentAndRelationType(request.getId(), RelationType.ARVER);
+
+            if (!documentRelations.isEmpty()) {
+                throw new ValidationException("Kan ikke slettes fordi etterlevelses dokument blir gjenbrukt " + documentRelations.size() + " ganger.");
+            }
         }
         return storage.save(etterlevelseDokumentasjon);
     }
