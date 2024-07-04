@@ -35,7 +35,7 @@ class KravGraphQlIT extends GraphQLTestBase {
                         .beskrivelse("")
                         .knyttetTilVirkemiddel(false)
                         .virkemiddelId("")
-                        .knytteTilTeam(false)
+                        .isForGjenbruk(false)
                         .teams(List.of(""))
                         .resources(List.of(""))
                         .irrelevansFor(irrelevans)
