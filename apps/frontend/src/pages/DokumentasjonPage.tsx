@@ -169,7 +169,7 @@ export const DokumentasjonPage = () => {
                       Endre dokumentegenskaper
                     </Button>
 
-                    {!dokumentRelasjon && user.isAdmin() && (
+                    {etterlevelseDokumentasjon.forGjenbruk && user.isAdmin() && (
                       <TillatGjenbrukModal
                         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                         setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
