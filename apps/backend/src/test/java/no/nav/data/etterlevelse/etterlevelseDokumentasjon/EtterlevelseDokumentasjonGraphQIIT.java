@@ -27,7 +27,7 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
                         .knyttetTilVirkemiddel(false)
                         .virkemiddelId("")
                         .beskrivelse("")
-                        .isForGjenbruk(false)
+                        .forGjenbruk(false)
                         .teams(List.of(""))
                         .resources(List.of(""))
                         .irrelevansFor(irrelevans)

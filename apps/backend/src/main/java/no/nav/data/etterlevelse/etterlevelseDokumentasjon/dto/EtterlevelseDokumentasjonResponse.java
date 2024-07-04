@@ -38,7 +38,7 @@ public class EtterlevelseDokumentasjonResponse {
     @Singular("relevansForSingle")
     private List<CodelistResponse> irrelevansFor;
     private List<String> prioritertKravNummer;
-    private boolean isForGjenbruk;
+    private boolean forGjenbruk;
     @Singular("team")
     private List<String> teams;
     private List<TeamResponse> teamsData;

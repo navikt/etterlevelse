@@ -39,7 +39,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     @Schema(description = "Codelist RELEVANS")
     private List<String> irrelevansFor;
     private List<String> prioritertKravNummer;
-    private boolean isForGjenbruk;
+    private boolean forGjenbruk;
     private List<String> teams;
     private List<String> resources;
 

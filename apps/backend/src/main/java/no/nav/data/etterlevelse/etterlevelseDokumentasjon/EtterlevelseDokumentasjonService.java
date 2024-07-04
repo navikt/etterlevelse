@@ -103,16 +103,18 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     public EtterlevelseDokumentasjon save(EtterlevelseDokumentasjonRequest request) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new EtterlevelseDokumentasjon();
         etterlevelseDokumentasjon.merge(request);
+
         if (!request.isUpdate()) {
             etterlevelseDokumentasjon.setEtterlevelseNummer(etterlevelseDokumentasjonRepo.nextEtterlevelseDokumentasjonNummer());
         }
-        if (request.isUpdate() && !request.isForGjenbruk()) {
-            var documentRelations = documentRelationService.findByFromDocumentAndRelationType(request.getId(), RelationType.ARVER);
 
+        if (request.isUpdate() && !etterlevelseDokumentasjon.isForGjenbruk()) {
+            var documentRelations = documentRelationService.findByFromDocumentAndRelationType(request.getId(), RelationType.ARVER);
             if (!documentRelations.isEmpty()) {
-                throw new ValidationException("Kan ikke slettes fordi etterlevelses dokument blir gjenbrukt " + documentRelations.size() + " ganger.");
+                throw new ValidationException("Kan ikke fjerne gjenbruk fordi etterlevelses dokument er arvet av " + documentRelations.size() + " etterlevelsesdokumentasjon.");
             }
         }
+
         return storage.save(etterlevelseDokumentasjon);
     }
 
