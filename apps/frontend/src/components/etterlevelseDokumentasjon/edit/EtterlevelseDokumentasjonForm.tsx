@@ -83,6 +83,8 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
     })()
   }, [etterlevelseDokumentasjon])
 
+  const handleChange = (val: string[]) => console.log(val)
+
   const submit = async (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL) => {
     console.debug(selectedVirkemiddel)
     if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
@@ -376,6 +378,16 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
 
+          <div className="mt-5">
+            <CheckboxGroup
+              legend="Skal dette dokumentet kunne gjenbrukes av andre?"
+              onChange={handleChange}
+              description="Gjenbruk betyr at andre kan ta utgangspunkt i dine vurderinger. Gjenbruk tillates ikke før du har valgt dette på dokumentsiden. "
+            >
+              <Checkbox value={true}>Ja, dette dokumentet skal gjenbrukes</Checkbox>
+            </CheckboxGroup>
+          </div>
+
           <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-bg-default">
             <div className="flex flex-row-reverse">
               <Button
@@ -406,6 +418,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
               </Button>
             </div>
           </div>
+
           <ScrollToFieldError />
         </Form>
       )}
