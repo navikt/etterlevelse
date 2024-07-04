@@ -22,6 +22,9 @@ public class SuksesskriterieBegrunnelseRequest implements Validated {
     private String begrunnelse;
     private SuksesskriterieStatus suksesskriterieStatus;
 
+    private boolean veiledning;
+    private String veiledningsTekst;
+
     @Override
     public void format() {
         setBegrunnelse(trimToNull(begrunnelse));

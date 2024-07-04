@@ -17,4 +17,7 @@ public class SuksesskriterieBegrunnelseResponse {
     private String begrunnelse;
 
     private SuksesskriterieStatus suksesskriterieStatus;
+
+    private boolean veiledning;
+    private String veiledningsTekst;
 }

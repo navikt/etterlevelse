@@ -8,7 +8,6 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
-import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest.Fields;
 import no.nav.data.etterlevelse.etterlevelse.dto.SuksesskriterieBegrunnelseRequest;
@@ -79,13 +78,13 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
     public void copyEtterlevelse(String fromDocumentId, String toDocumentId) {
         var etterlevelseToCopy = getByEtterlevelseDokumentasjon(fromDocumentId);
         etterlevelseToCopy.forEach(etterlevelse -> {
-            List<SuksesskriterieBegrunnelseRequest> suksesskriterieBegrunnelseRequestList = etterlevelse.getSuksesskriterieBegrunnelser().stream().map((skb) -> {
-                return SuksesskriterieBegrunnelseRequest.builder()
-                        .suksesskriterieId(skb.getSuksesskriterieId())
-                        .begrunnelse(skb.getBegrunnelse())
-                        .suksesskriterieStatus(skb.getSuksesskriterieStatus())
-                        .build();
-            }).toList();
+            List<SuksesskriterieBegrunnelseRequest> suksesskriterieBegrunnelseRequestList = etterlevelse.getSuksesskriterieBegrunnelser().stream().map((skb) -> SuksesskriterieBegrunnelseRequest.builder()
+                    .suksesskriterieId(skb.getSuksesskriterieId())
+                    .begrunnelse(skb.getBegrunnelse())
+                    .suksesskriterieStatus(skb.getSuksesskriterieStatus())
+                    .veiledning(false)
+                    .veiledningsTekst("")
+                    .build()).toList();
 
             var newEtterlevelse = new Etterlevelse();
             newEtterlevelse.merge(
