@@ -383,13 +383,8 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
               onChange={(value: boolean[]) =>
                 setFieldValue('isForGjenbruk', value.length !== 0 ? true : false)
               }
-              description="Gjenbruk betyr at andre kan ta utgangspunkt i dine vurderinger. Gjenbruk tillates ikke før du har valgt dette på dokumentsiden."
+              description="Velger du gjenbruk, får du mulighet til å legge inn vurderinger og veiledning. Du får velge selv når du vil tillate gjenbruk."
             >
-              Når du velger gjenbruk har du muligheten til å legge inn vurderinger og veiledning som
-              du senere kan åpne for gjenbruk. Ved å velge dette alternativet, gjør at du
-              tilgjengeliggjør muligheten til å kunne gjenbruke dette dokumentet ved en senere
-              anledning. Dette dokumentet vil ikke kunne bli gjenbrukt før du har valgt{' '}
-              <b>Endre gjenbruk</b> på dokumentsiden.
               <Checkbox value={true}>Ja, dette dokumentet skal gjenbrukes</Checkbox>
             </CheckboxGroup>
           </div>
