@@ -73,9 +73,17 @@ export const GjenbrukEtterlevelseDokumentasjonPage = () => {
 
           {!etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
             <div className="flex w-full justify-center">
-              <Alert variant="warning">
-                Denne etterlevelsesdokumentasjon er ikke tilgjengelig for gjenbruk
-              </Alert>
+              <div className="flex items-center flex-col gap-5">
+                <Alert variant="warning">
+                  Denne etterlevelsesdokumentasjon er ikke tilgjengelig for gjenbruk
+                </Alert>
+
+                <img
+                  src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExaW01emp2bzZ1OWZlOWlyOHY4YmxncXQ0ZG9jZ2x0dWg0bGw1eGdvOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/6Q2KA5ly49368/giphy.webp"
+                  alt="no no no"
+                  width="400px"
+                />
+              </div>
             </div>
           )}
         </PageLayout>
