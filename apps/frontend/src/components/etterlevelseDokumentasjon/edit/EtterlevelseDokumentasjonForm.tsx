@@ -381,7 +381,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             <CheckboxGroup
               legend="Skal dette dokumentet kunne gjenbrukes av andre?"
               onChange={(value: boolean[]) =>
-                setFieldValue('isForGjenbruk', value.length !== 0 ? true : false)
+                setFieldValue('forGjenbruk', value.length !== 0 ? true : false)
               }
               description="Velger du gjenbruk, får du mulighet til å legge inn vurderinger og veiledning. Du får velge selv når du vil tillate gjenbruk."
             >

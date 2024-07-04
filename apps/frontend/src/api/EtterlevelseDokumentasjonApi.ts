@@ -180,7 +180,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   // knyttetTilVirkemiddel: etterlevelseDokumentasjon.knyttetTilVirkemiddel !== undefined ? etterlevelseDokumentasjon.knyttetTilVirkemiddel : false,
   knyttetTilVirkemiddel: false,
   varslingsadresser: etterlevelseDokumentasjon.varslingsadresser || [],
-  isForGjenbruk: etterlevelseDokumentasjon.isForGjenbruk || false,
+  forGjenbruk: etterlevelseDokumentasjon.forGjenbruk || false,
 })
 
 export const etterlevelseDokumentasjonWithRelationMapToFormVal = (

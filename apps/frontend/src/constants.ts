@@ -343,7 +343,7 @@ export interface IEtterlevelseDokumentasjon {
   behandlerPersonopplysninger: boolean
   virkemiddel?: IVirkemiddel
   knyttetTilVirkemiddel: boolean
-  isForGjenbruk: boolean
+  forGjenbruk: boolean
   varslingsadresser: IVarslingsadresse[]
   hasCurrentUserAccess: boolean
 }
