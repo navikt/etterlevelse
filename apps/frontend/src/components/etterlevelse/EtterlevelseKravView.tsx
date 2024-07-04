@@ -389,7 +389,7 @@ export const EtterlevelseKravView = (props: IProps) => {
                   <Tabs.Tab value="tilbakemeldinger" label="Spørsmål og svar" />
                 </Tabs.List>
                 <Tabs.Panel value="dokumentasjon">
-                  {etterlevelseDokumentasjon?.hasCurrentUserAccess && (
+                  {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) && (
                     <div className="mt-2">
                       {kravFilter !== EKravFilterType.BORTFILTTERTE_KRAV && (
                         <EtterlevelseEditFields
@@ -421,7 +421,7 @@ export const EtterlevelseKravView = (props: IProps) => {
                       )}
                     </div>
                   )}
-                  {!etterlevelseDokumentasjon?.hasCurrentUserAccess && (
+                  {(!etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) && (
                     <EtterlevelseViewFields
                       etterlevelse={etterlevelse}
                       suksesskriterier={krav.suksesskriterier}

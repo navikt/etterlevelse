@@ -1,6 +1,7 @@
 import { Alert, Loader } from '@navikt/ds-react'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../../../api/EtterlevelseDokumentasjonApi'
+import { user } from '../../../services/User'
 import { PageLayout } from '../../scaffold/Page'
 import EtterlevelseDokumentasjonForm from './EtterlevelseDokumentasjonForm'
 
@@ -28,7 +29,7 @@ export const EditEtterlevelseDokumentasjonPage = () => {
             },
           ]}
         >
-          {etterlevelseDokumentasjon.hasCurrentUserAccess && (
+          {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
             <EtterlevelseDokumentasjonForm
               title="Rediger etterlevelsesdokumentet"
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -36,7 +37,7 @@ export const EditEtterlevelseDokumentasjonPage = () => {
             />
           )}
 
-          {!etterlevelseDokumentasjon.hasCurrentUserAccess && (
+          {(!etterlevelseDokumentasjon.hasCurrentUserAccess || !user.isAdmin()) && (
             <div className="flex w-full justify-center">
               <Alert variant="warning">Du har ikke tilgang til å redigere egenskaper.</Alert>
             </div>

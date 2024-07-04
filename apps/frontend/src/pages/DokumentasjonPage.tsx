@@ -156,7 +156,7 @@ export const DokumentasjonPage = () => {
             />
             {etterlevelseDokumentasjon && (
               <div className="gap-4 ml-5">
-                {etterlevelseDokumentasjon.hasCurrentUserAccess && (
+                {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
                   <>
                     <Button
                       onClick={() => {

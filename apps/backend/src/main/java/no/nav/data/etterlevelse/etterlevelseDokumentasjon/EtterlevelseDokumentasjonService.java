@@ -195,9 +195,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
                 });
             }
 
-            boolean currentUserHasAccess = memeberList.contains(currentUser) || SecurityUtils.isAdmin();
-
-            etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(currentUserHasAccess);
+            etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(memeberList.contains(currentUser));
         }
         return etterlevelseDokumentasjonResponse;
     }

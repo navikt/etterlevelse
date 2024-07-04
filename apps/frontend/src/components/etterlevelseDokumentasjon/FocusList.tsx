@@ -8,6 +8,7 @@ import {
 } from '../../api/EtterlevelseDokumentasjonApi'
 import { IKravPriorityList, TEtterlevelseDokumentasjonQL, TKravQL } from '../../constants'
 import { TTemaCode } from '../../services/Codelist'
+import { user } from '../../services/User'
 import { AccordionList } from '../focusList/AccordionList'
 import KravList from './tabs/KravList'
 
@@ -69,7 +70,7 @@ export const FocusList = (props: IProps) => {
             />
           )}
 
-          {etterlevelseDokumentasjon.hasCurrentUserAccess && (
+          {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
             <Button
               className="mt-4"
               type="button"
