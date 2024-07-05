@@ -377,18 +377,20 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
 
-          <div className="mt-5">
-            <CheckboxGroup
-              legend="Skal dette dokumentet kunne gjenbrukes av andre?"
-              onChange={(value: boolean[]) =>
-                setFieldValue('forGjenbruk', value.length !== 0 ? true : false)
-              }
-              value={[values.forGjenbruk]}
-              description="Velger du gjenbruk, får du mulighet til å legge inn vurderinger og veiledning. Du får velge selv når du vil tillate gjenbruk."
-            >
-              <Checkbox value={true}>Ja, dette dokumentet skal gjenbrukes</Checkbox>
-            </CheckboxGroup>
-          </div>
+          {!dokumentRelasjon && (
+            <div className="mt-5">
+              <CheckboxGroup
+                legend="Skal dette dokumentet kunne gjenbrukes av andre?"
+                onChange={(value: boolean[]) =>
+                  setFieldValue('forGjenbruk', value.length !== 0 ? true : false)
+                }
+                value={[values.forGjenbruk]}
+                description="Velger du gjenbruk, får du mulighet til å legge inn vurderinger og veiledning. Du får velge selv når du vil tillate gjenbruk."
+              >
+                <Checkbox value={true}>Ja, dette dokumentet skal gjenbrukes</Checkbox>
+              </CheckboxGroup>
+            </div>
+          )}
 
           <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-bg-default">
             <div className="flex flex-row-reverse">
