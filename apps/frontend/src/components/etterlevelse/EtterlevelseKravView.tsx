@@ -409,6 +409,7 @@ export const EtterlevelseKravView = (props: IProps) => {
                           navigatePath={navigatePath}
                           editedEtterlevelse={editedEtterlevelse}
                           tidligereEtterlevelser={tidligereEtterlevelser}
+                          forGjenbruk={etterlevelseDokumentasjon?.forGjenbruk}
                         />
                       )}
                       {kravFilter === EKravFilterType.BORTFILTTERTE_KRAV && (
@@ -421,7 +422,7 @@ export const EtterlevelseKravView = (props: IProps) => {
                       )}
                     </div>
                   )}
-                  {(!etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) && (
+                  {!etterlevelseDokumentasjon?.hasCurrentUserAccess && !user.isAdmin() && (
                     <EtterlevelseViewFields
                       etterlevelse={etterlevelse}
                       suksesskriterier={krav.suksesskriterier}

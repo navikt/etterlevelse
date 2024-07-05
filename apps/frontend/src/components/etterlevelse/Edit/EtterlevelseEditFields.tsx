@@ -31,6 +31,7 @@ type TEditProps = {
   editedEtterlevelse?: IEtterlevelse
   tidligereEtterlevelser?: IEtterlevelse[]
   kravFilter: EKravFilterType
+  forGjenbruk?: boolean
 }
 
 export const EtterlevelseEditFields = ({
@@ -44,6 +45,7 @@ export const EtterlevelseEditFields = ({
   editedEtterlevelse,
   tidligereEtterlevelser,
   kravFilter,
+  forGjenbruk,
 }: TEditProps) => {
   const [etterlevelseStatus] = React.useState<string>(
     editedEtterlevelse
@@ -129,6 +131,7 @@ export const EtterlevelseEditFields = ({
                 <SuksesskriterierBegrunnelseEdit
                   disableEdit={disableEdit}
                   suksesskriterie={krav.suksesskriterier}
+                  forGjenbruk={forGjenbruk}
                 />
 
                 <div className="w-full my-6">

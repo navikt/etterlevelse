@@ -1,4 +1,15 @@
-import { BodyShort, Box, Heading, Label, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
+import {
+  BodyShort,
+  Box,
+  Checkbox,
+  CheckboxGroup,
+  Heading,
+  Label,
+  Radio,
+  RadioGroup,
+  ReadMore,
+  Textarea,
+} from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { useEffect, useState } from 'react'
 import {
@@ -18,7 +29,7 @@ import TextEditor from '../../common/TextEditor/TextEditor'
 export const getSuksesskriterieBegrunnelse = (
   suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[],
   suksessKriterie: ISuksesskriterie
-) => {
+): ISuksesskriterieBegrunnelse => {
   const sb = suksesskriterieBegrunnelser.find((item) => {
     return item.suksesskriterieId === suksessKriterie.id
   })
@@ -28,6 +39,8 @@ export const getSuksesskriterieBegrunnelse = (
       begrunnelse: '',
       behovForBegrunnelse: suksessKriterie.behovForBegrunnelse,
       suksesskriterieStatus: undefined,
+      veiledning: false,
+      veiledningsTekst: '',
     }
   } else {
     return sb
@@ -49,11 +62,13 @@ export const getLabelForSuksessKriterie = (suksessKriterieStatus?: ESuksesskrite
 interface IPropsSuksesskriterierBegrunnelseEdit {
   suksesskriterie: ISuksesskriterie[]
   disableEdit: boolean
+  forGjenbruk?: boolean
 }
 
 export const SuksesskriterierBegrunnelseEdit = ({
   suksesskriterie,
   disableEdit,
+  forGjenbruk,
 }: IPropsSuksesskriterierBegrunnelseEdit) => (
   <FieldWrapper>
     <FieldArray name={'suksesskriterieBegrunnelser'}>
@@ -62,6 +77,7 @@ export const SuksesskriterierBegrunnelseEdit = ({
           fieldArrayRenderProps={feildArrayRenderProps}
           disableEdit={disableEdit}
           suksesskriterier={suksesskriterie}
+          forGjenbruk={forGjenbruk}
         />
       )}
     </FieldArray>
@@ -72,12 +88,14 @@ interface IPropsKriterieBegrunnelseList {
   fieldArrayRenderProps: FieldArrayRenderProps
   suksesskriterier: ISuksesskriterie[]
   disableEdit: boolean
+  forGjenbruk?: boolean
 }
 
 const KriterieBegrunnelseList = ({
   fieldArrayRenderProps,
   suksesskriterier,
   disableEdit,
+  forGjenbruk,
 }: IPropsKriterieBegrunnelseList) => {
   const suksesskriterieBegrunnelser = fieldArrayRenderProps.form.values
     .suksesskriterieBegrunnelser as ISuksesskriterieBegrunnelse[]
@@ -95,6 +113,7 @@ const KriterieBegrunnelseList = ({
             update={(updated) => fieldArrayRenderProps.replace(index, updated)}
             feildArrayRenderProps={fieldArrayRenderProps}
             totalSuksesskriterie={suksesskriterier.length}
+            forGjenbruk={forGjenbruk}
           />
         </div>
       ))}
@@ -111,6 +130,7 @@ interface IPropsKriterieBegrunnelse {
   status: string
   feildArrayRenderProps: FieldArrayRenderProps
   totalSuksesskriterie: number
+  forGjenbruk?: boolean
 }
 
 const KriterieBegrunnelse = ({
@@ -122,6 +142,7 @@ const KriterieBegrunnelse = ({
   status,
   feildArrayRenderProps,
   totalSuksesskriterie,
+  forGjenbruk,
 }: IPropsKriterieBegrunnelse) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(
     suksesskriterieBegrunnelser,
@@ -136,16 +157,21 @@ const KriterieBegrunnelse = ({
     ESuksesskriterieStatus | undefined
   >(suksesskriterieBegrunnelse.suksesskriterieStatus)
 
+  const [veiledning, setVeiledning] = useState(suksesskriterieBegrunnelse.veiledning)
+  const [veiledningTekst, setVeiledningTekst] = useState(
+    suksesskriterieBegrunnelse.veiledningsTekst
+  )
+
   useEffect(() => {
     update({
       suksesskriterieId: suksesskriterie.id,
       begrunnelse: begrunnelse,
       behovForBegrunnelse: suksesskriterie.behovForBegrunnelse,
       suksesskriterieStatus: suksessKriterieStatus,
-      veiledning: false,
-      veiledningsTekst: '',
+      veiledning: veiledning,
+      veiledningsTekst: veiledningTekst,
     })
-  }, [begrunnelse, suksessKriterieStatus])
+  }, [begrunnelse, suksessKriterieStatus, veiledning, veiledningTekst])
 
   const getBorderColor = () => {
     if (
@@ -193,6 +219,28 @@ const KriterieBegrunnelse = ({
           <Markdown source={suksesskriterie.beskrivelse} />
         </ReadMore>
       </div>
+
+      {forGjenbruk && (
+        <div className="my-5 flex flex-col gap-5">
+          <CheckboxGroup
+            legend="Skriv veiledning for gjenbruk"
+            hideLegend
+            value={veiledning ? [true] : []}
+            onChange={(value: boolean[]) => setVeiledning(value.length !== 0 ? true : false)}
+          >
+            <Checkbox value={true}>Skriv veiledning for gjenbruk</Checkbox>
+          </CheckboxGroup>
+          {veiledning && (
+            <div className="ml-8">
+              <Textarea
+                label="Skriv veiledning om dette suksesskriteriet til de som skal gjenbruke vurderingen din"
+                value={veiledningTekst}
+                onChange={(event) => setVeiledningTekst(event.target.value)}
+              />
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="w-full">
         <div className="min-w-fit">
