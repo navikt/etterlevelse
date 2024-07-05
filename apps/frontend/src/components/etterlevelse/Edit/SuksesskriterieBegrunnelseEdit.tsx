@@ -202,10 +202,12 @@ const KriterieBegrunnelse = ({
             onChange={(val) => setSuksessKriterieStatus(val as ESuksesskriterieStatus)}
             name={'suksesskriterieStatus' + suksesskriterie.id}
           >
-            <Radio value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</Radio>
-            <Radio value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</Radio>
-            <Radio value={ESuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</Radio>
-            <Radio value={ESuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</Radio>
+            <div className="block lg:flex lg:gap-6">
+              <Radio value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</Radio>
+              <Radio value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</Radio>
+              <Radio value={ESuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</Radio>
+              <Radio value={ESuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</Radio>
+            </div>
           </RadioGroup>
         </div>
         {!disableEdit && suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
