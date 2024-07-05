@@ -143,56 +143,64 @@ export const DokumentasjonPage = () => {
             </BodyShort>
           )}
 
-          {etterlevelseDokumentasjon.beskrivelse && (
+          <div className="flex w-full">
             <div>
-              <Label>Beskrivelse</Label>
-              <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
+              {etterlevelseDokumentasjon.beskrivelse && (
+                <div>
+                  <Label>Beskrivelse</Label>
+                  <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
+                </div>
+              )}
             </div>
-          )}
 
-          <div className="flex items-center my-5">
-            <EtterlevelseDokumentasjonExpansionCard
-              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-            />
-            {etterlevelseDokumentasjon && (
-              <div className="gap-4 ml-5">
-                {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-                  <>
+            <div className="flex flex-1 justify-end">
+              {etterlevelseDokumentasjon && (
+                <div className="gap-4 ml-5">
+                  {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+                    <>
+                      <Button
+                        onClick={() => {
+                          navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
+                        }}
+                        size="small"
+                        variant="secondary"
+                        className="whitespace-nowrap"
+                      >
+                        Endre dokumentegenskaper
+                      </Button>
+
+                      {etterlevelseDokumentasjon.forGjenbruk && user.isAdmin() && (
+                        <TillatGjenbrukModal
+                          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+                        />
+                      )}
+                    </>
+                  )}
+
+                  {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
                     <Button
                       onClick={() => {
-                        navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
+                        navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
                       }}
                       size="small"
-                      variant="secondary"
-                      className="whitespace-nowrap"
+                      variant="tertiary"
+                      className="whitespace-nowrap mt-3"
+                      type="button"
                     >
-                      Endre dokumentegenskaper
+                      Gjenbruk dokumentet
                     </Button>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
 
-                    {etterlevelseDokumentasjon.forGjenbruk && user.isAdmin() && (
-                      <TillatGjenbrukModal
-                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                        setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-                      />
-                    )}
-                  </>
-                )}
-
-                {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
-                  <Button
-                    onClick={() => {
-                      navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
-                    }}
-                    size="small"
-                    variant="tertiary"
-                    className="whitespace-nowrap mt-3"
-                    type="button"
-                  >
-                    Gjenbruk dokumentet
-                  </Button>
-                )}
-              </div>
-            )}
+          <div className="flex my-5">
+            <EtterlevelseDokumentasjonExpansionCard
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              dokumentRelasjon={dokumentRelasjon}
+            />
           </div>
         </div>
       </div>
