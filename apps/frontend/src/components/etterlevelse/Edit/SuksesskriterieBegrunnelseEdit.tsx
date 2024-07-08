@@ -1,4 +1,5 @@
 import {
+  Alert,
   BodyShort,
   Box,
   Checkbox,
@@ -15,6 +16,7 @@ import { useEffect, useState } from 'react'
 import {
   EEtterlevelseStatus,
   ESuksesskriterieStatus,
+  IEtterlevelse,
   ISuksesskriterie,
   ISuksesskriterieBegrunnelse,
 } from '../../../constants'
@@ -63,12 +65,14 @@ interface IPropsSuksesskriterierBegrunnelseEdit {
   suksesskriterie: ISuksesskriterie[]
   disableEdit: boolean
   forGjenbruk?: boolean
+  morEtterlevelse?: IEtterlevelse
 }
 
 export const SuksesskriterierBegrunnelseEdit = ({
   suksesskriterie,
   disableEdit,
   forGjenbruk,
+  morEtterlevelse,
 }: IPropsSuksesskriterierBegrunnelseEdit) => (
   <FieldWrapper>
     <FieldArray name={'suksesskriterieBegrunnelser'}>
@@ -78,6 +82,7 @@ export const SuksesskriterierBegrunnelseEdit = ({
           disableEdit={disableEdit}
           suksesskriterier={suksesskriterie}
           forGjenbruk={forGjenbruk}
+          morEtterlevelse={morEtterlevelse}
         />
       )}
     </FieldArray>
@@ -89,6 +94,7 @@ interface IPropsKriterieBegrunnelseList {
   suksesskriterier: ISuksesskriterie[]
   disableEdit: boolean
   forGjenbruk?: boolean
+  morEtterlevelse?: IEtterlevelse
 }
 
 const KriterieBegrunnelseList = ({
@@ -96,6 +102,7 @@ const KriterieBegrunnelseList = ({
   suksesskriterier,
   disableEdit,
   forGjenbruk,
+  morEtterlevelse,
 }: IPropsKriterieBegrunnelseList) => {
   const suksesskriterieBegrunnelser = fieldArrayRenderProps.form.values
     .suksesskriterieBegrunnelser as ISuksesskriterieBegrunnelse[]
@@ -114,6 +121,7 @@ const KriterieBegrunnelseList = ({
             feildArrayRenderProps={fieldArrayRenderProps}
             totalSuksesskriterie={suksesskriterier.length}
             forGjenbruk={forGjenbruk}
+            morEtterlevelse={morEtterlevelse}
           />
         </div>
       ))}
@@ -131,6 +139,7 @@ interface IPropsKriterieBegrunnelse {
   feildArrayRenderProps: FieldArrayRenderProps
   totalSuksesskriterie: number
   forGjenbruk?: boolean
+  morEtterlevelse?: IEtterlevelse
 }
 
 const KriterieBegrunnelse = ({
@@ -143,6 +152,7 @@ const KriterieBegrunnelse = ({
   feildArrayRenderProps,
   totalSuksesskriterie,
   forGjenbruk,
+  morEtterlevelse,
 }: IPropsKriterieBegrunnelse) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(
     suksesskriterieBegrunnelser,
@@ -161,6 +171,26 @@ const KriterieBegrunnelse = ({
   const [veiledningTekst, setVeiledningTekst] = useState(
     suksesskriterieBegrunnelse.veiledningsTekst
   )
+
+  const getVeiledningsTekstFromMorEtterlevelse = (
+    morEtterlevelse: IEtterlevelse,
+    suksessKriterieId: number
+  ): string => {
+    return morEtterlevelse.suksesskriterieBegrunnelser.filter(
+      (suksesskriterieBegrunnelse) =>
+        suksesskriterieBegrunnelse.suksesskriterieId === suksessKriterieId
+    )[0].veiledningsTekst
+  }
+
+  const hasVeildningFromMorEtterlevelse = (
+    morEtterlevelse: IEtterlevelse,
+    suksessKriterieId: number
+  ): boolean => {
+    return morEtterlevelse.suksesskriterieBegrunnelser.filter(
+      (suksesskriterieBegrunnelse) =>
+        suksesskriterieBegrunnelse.suksesskriterieId === suksessKriterieId
+    )[0].veiledning
+  }
 
   useEffect(() => {
     update({
@@ -240,6 +270,12 @@ const KriterieBegrunnelse = ({
             </div>
           )}
         </div>
+      )}
+
+      {morEtterlevelse && hasVeildningFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id) && (
+        <Alert variant="info" className="mb-5">
+          {getVeiledningsTekstFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id)}
+        </Alert>
       )}
 
       <div className="w-full">

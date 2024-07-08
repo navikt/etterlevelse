@@ -409,7 +409,7 @@ export const EtterlevelseKravView = (props: IProps) => {
                           navigatePath={navigatePath}
                           editedEtterlevelse={editedEtterlevelse}
                           tidligereEtterlevelser={tidligereEtterlevelser}
-                          forGjenbruk={etterlevelseDokumentasjon?.forGjenbruk}
+                          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                         />
                       )}
                       {kravFilter === EKravFilterType.BORTFILTTERTE_KRAV && (

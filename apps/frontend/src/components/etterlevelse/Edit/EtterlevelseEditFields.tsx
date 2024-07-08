@@ -2,14 +2,21 @@ import { Alert, BodyShort, Button, Checkbox, Label, Modal } from '@navikt/ds-rea
 import { Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import moment from 'moment'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { mapEtterlevelseToFormValue } from '../../../api/EtterlevelseApi'
+import { getDocumentRelationByToIdAndRelationType } from '../../../api/DocumentRelationApi'
+import {
+  getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
+  mapEtterlevelseToFormValue,
+} from '../../../api/EtterlevelseApi'
 import {
   EEtterlevelseStatus,
   EKravFilterType,
   EKravStatus,
+  ERelationType,
+  IDocumentRelation,
   IEtterlevelse,
+  TEtterlevelseDokumentasjonQL,
   TKravQL,
 } from '../../../constants'
 import { ampli, userRoleEventProp } from '../../../services/Amplitude'
@@ -31,7 +38,7 @@ type TEditProps = {
   editedEtterlevelse?: IEtterlevelse
   tidligereEtterlevelser?: IEtterlevelse[]
   kravFilter: EKravFilterType
-  forGjenbruk?: boolean
+  etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
 }
 
 export const EtterlevelseEditFields = ({
@@ -45,18 +52,21 @@ export const EtterlevelseEditFields = ({
   editedEtterlevelse,
   tidligereEtterlevelser,
   kravFilter,
-  forGjenbruk,
+  etterlevelseDokumentasjon,
 }: TEditProps) => {
-  const [etterlevelseStatus] = React.useState<string>(
+  const [etterlevelseStatus] = useState<string>(
     editedEtterlevelse
       ? editedEtterlevelse.status
       : etterlevelse.status || EEtterlevelseStatus.UNDER_REDIGERING
   )
-  const [isOppfylesSenere, setOppfylesSenere] = React.useState<boolean>(
+  const [isOppfylesSenere, setOppfylesSenere] = useState<boolean>(
     etterlevelseStatus === EEtterlevelseStatus.OPPFYLLES_SENERE
   )
-  const [isAvbrytModalOpen, setIsAvbryModalOpen] = React.useState<boolean>(false)
+  const [isAvbrytModalOpen, setIsAvbryModalOpen] = useState<boolean>(false)
   const location = useLocation()
+
+  const [morDokumentRelasjon, setMorDokumentRelasjon] = useState<IDocumentRelation>()
+  const [morEtterlevelse, setMorEtterlevelse] = useState<IEtterlevelse>()
 
   const navigate = useNavigate()
   useEffect(() => {
@@ -70,6 +80,36 @@ export const EtterlevelseEditFields = ({
       }
     }
   }, [navigatePath])
+
+  useEffect(() => {
+    ;(async () => {
+      if (etterlevelseDokumentasjon)
+        await getDocumentRelationByToIdAndRelationType(
+          etterlevelseDokumentasjon.id,
+          ERelationType.ARVER
+        ).then((resp) => {
+          if (resp.length !== 0) {
+            setMorDokumentRelasjon(resp[0])
+          }
+        })
+    })()
+  }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      if (morDokumentRelasjon) {
+        await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(
+          morDokumentRelasjon.fromDocument,
+          krav.kravNummer
+        ).then((resp) => {
+          const morEtterlevelse = resp.content.filter(
+            (morEtterlevelse) => morEtterlevelse.kravVersjon === krav.kravVersjon
+          )[0]
+          setMorEtterlevelse(morEtterlevelse)
+        })
+      }
+    })()
+  }, [morDokumentRelasjon])
 
   return (
     <div className="w-full">
@@ -131,7 +171,8 @@ export const EtterlevelseEditFields = ({
                 <SuksesskriterierBegrunnelseEdit
                   disableEdit={disableEdit}
                   suksesskriterie={krav.suksesskriterier}
-                  forGjenbruk={forGjenbruk}
+                  forGjenbruk={etterlevelseDokumentasjon?.forGjenbruk}
+                  morEtterlevelse={morEtterlevelse}
                 />
 
                 <div className="w-full my-6">
