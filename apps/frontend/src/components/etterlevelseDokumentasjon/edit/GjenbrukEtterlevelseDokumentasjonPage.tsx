@@ -1,4 +1,4 @@
-import { Alert, Heading, Loader } from '@navikt/ds-react'
+import { Alert, Heading, Label, Loader } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getDocumentRelationByToIdAndRelationType } from '../../../api/DocumentRelationApi'
@@ -56,13 +56,13 @@ export const GjenbrukEtterlevelseDokumentasjonPage = () => {
 
           {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
             <div>
-              <Heading size="small" level="2" spacing className="mt-5">
-                Forutsetninger for gjenbruk av dette dokumentet
-              </Heading>
+              <Alert variant="info" className="mb-5">
+                <Label>Forutsetninger for gjenbruk av dette dokumentet</Label>
 
-              <div className="mb-8">
-                <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />
-              </div>
+                <div className="mb-5">
+                  <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />
+                </div>
+              </Alert>
 
               <GjenbrukEtterlevelseDokumentasjonForm
                 etterlevelseDokumentasjon={etterlevelseDokumentasjon}
