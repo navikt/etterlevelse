@@ -1,10 +1,10 @@
-import { Button, Checkbox, CheckboxGroup, Heading } from '@navikt/ds-react'
+import { Alert, Button, Checkbox, CheckboxGroup, Heading, Label } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
-import { getDocumentRelationByToIdAndRelationType } from '../../../api/DocumentRelationApi'
+import { getDocumentRelationByToIdAndRelationTypeWithData } from '../../../api/DocumentRelationApi'
 import {
   createEtterlevelseDokumentasjon,
   etterlevelseDokumentasjonMapToFormVal,
@@ -14,7 +14,7 @@ import { searchResourceByNameOptions, useSearchTeamOptions } from '../../../api/
 import {
   ERelationType,
   IBehandling,
-  IDocumentRelation,
+  IDocumentRelationWithEtterlevelseDokumetajson,
   ITeam,
   ITeamResource,
   IVirkemiddel,
@@ -25,6 +25,7 @@ import { EListName, ICode, ICodeListFormValues, codelist } from '../../../servic
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
+import { Markdown } from '../../common/Markdown'
 import { Error } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
@@ -46,7 +47,8 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
   )
 
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<IVirkemiddel>()
-  const [dokumentRelasjon, setDokumentRelasjon] = useState<IDocumentRelation>()
+  const [dokumentRelasjon, setDokumentRelasjon] =
+    useState<IDocumentRelationWithEtterlevelseDokumetajson>()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -75,7 +77,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
 
     ;(async () => {
       if (etterlevelseDokumentasjon) {
-        await getDocumentRelationByToIdAndRelationType(
+        await getDocumentRelationByToIdAndRelationTypeWithData(
           etterlevelseDokumentasjon?.id,
           ERelationType.ARVER
         ).then((resp) => setDokumentRelasjon(resp[0]))
@@ -116,6 +118,16 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           <Heading size="medium" level="1" spacing>
             {title}
           </Heading>
+
+          {dokumentRelasjon && (
+            <Alert variant="info" className="mb-5">
+              <Label>Forutsetninger for gjenbruk av dette dokumentet</Label>
+
+              <div className="mb-5">
+                <Markdown source={dokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse} />
+              </div>
+            </Alert>
+          )}
 
           <TextAreaField
             rows={2}
