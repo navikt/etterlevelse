@@ -136,8 +136,7 @@ export const DokumentasjonPage = () => {
               Dette dokumentet er et arv fra{' '}
               <Link href={`/dokumentasjon/${dokumentRelasjon.fromDocumentWithData.id}`}>
                 E{dokumentRelasjon.fromDocumentWithData.etterlevelseNummer}{' '}
-                {dokumentRelasjon.fromDocumentWithData.title} av{' '}
-                {dokumentRelasjon.fromDocumentWithData.changeStamp.lastModifiedBy.split(' - ')[1]}
+                {dokumentRelasjon.fromDocumentWithData.title}
               </Link>
               .
             </BodyShort>
@@ -176,20 +175,6 @@ export const DokumentasjonPage = () => {
                         />
                       )}
                     </>
-                  )}
-
-                  {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
-                    <Button
-                      onClick={() => {
-                        navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
-                      }}
-                      size="small"
-                      variant="tertiary"
-                      className="whitespace-nowrap mt-3"
-                      type="button"
-                    >
-                      Gjenbruk dokumentet
-                    </Button>
                   )}
                 </div>
               )}

@@ -1,10 +1,12 @@
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import { BodyShort, Label, ReadMore, Tag } from '@navikt/ds-react'
+import { BodyShort, Button, Label, ReadMore, Tag } from '@navikt/ds-react'
+import { useNavigate } from 'react-router-dom'
 import {
   IDocumentRelationWithEtterlevelseDokumetajson,
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
 import { EListName, ICode, codelist } from '../../services/Codelist'
+import { user } from '../../services/User'
 import { BehandlingList } from '../behandling/BehandlingList'
 import { Teams } from '../common/TeamName'
 import { VarslingsadresserView } from './VarslingsAddresseView'
@@ -16,6 +18,7 @@ interface IProps {
 
 export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
   const { etterlevelseDokumentasjon, dokumentRelasjon } = props
+  const navigate = useNavigate()
 
   const relevansCodeList = codelist.getParsedOptions(EListName.RELEVANS)
 
@@ -136,6 +139,21 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
           <ReadMore header="Gjenbruk av dokument">
             Forutsetninger for gjenbruk av dette dokumentet:{' '}
             {dokumentRelasjon?.fromDocumentWithData.gjenbrukBeskrivelse}
+            {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
+              <div className="mt-5">
+                <Button
+                  onClick={() => {
+                    navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
+                  }}
+                  size="small"
+                  variant="secondary"
+                  className="whitespace-nowrap mt-3"
+                  type="button"
+                >
+                  Gjenbruk dokumentet
+                </Button>
+              </div>
+            )}
           </ReadMore>
         </div>
       </div>
