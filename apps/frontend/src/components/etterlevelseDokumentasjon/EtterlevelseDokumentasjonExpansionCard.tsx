@@ -1,17 +1,25 @@
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import { BodyShort, ExpansionCard, Label, Tag } from '@navikt/ds-react'
-import { TEtterlevelseDokumentasjonQL } from '../../constants'
+import { BodyShort, Button, Label, ReadMore, Tag } from '@navikt/ds-react'
+import { useNavigate } from 'react-router-dom'
+import {
+  IDocumentRelationWithEtterlevelseDokumetajson,
+  TEtterlevelseDokumentasjonQL,
+} from '../../constants'
 import { EListName, ICode, codelist } from '../../services/Codelist'
+import { user } from '../../services/User'
 import { BehandlingList } from '../behandling/BehandlingList'
 import { Teams } from '../common/TeamName'
 import { VarslingsadresserView } from './VarslingsAddresseView'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  morDokumentRelasjon?: IDocumentRelationWithEtterlevelseDokumetajson
+  relasjonLoading?: boolean
 }
 
 export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
-  const { etterlevelseDokumentasjon } = props
+  const { etterlevelseDokumentasjon, morDokumentRelasjon, relasjonLoading } = props
+  const navigate = useNavigate()
 
   const relevansCodeList = codelist.getParsedOptions(EListName.RELEVANS)
 
@@ -67,63 +75,94 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
 
   return (
     <>
-      <ExpansionCard aria-label="tittel på etterlevelsesdokument" className="w-full">
-        <ExpansionCard.Header className="border-b border-solid border-gray-500">
-          <ExpansionCard.Title as="h2" size="small">
-            Les mer om dokumentet
-          </ExpansionCard.Title>
-        </ExpansionCard.Header>
-        <ExpansionCard.Content>
-          {behandlerPersonopplysninger && (
-            <BehandlingList
-              behandlingIds={behandlingIds}
-              behandlerPersonopplysninger={behandlerPersonopplysninger}
-              behandlinger={behandlinger}
-            />
-          )}
-          <div className="mb-2.5">
-            {etterlevelseDokumentasjon.avdeling && (
-              <div className="flex items-start gap-2">
-                <BodyShort size="small">Avdeling:</BodyShort>
-                <BodyShort size="small">{etterlevelseDokumentasjon.avdeling.shortName}</BodyShort>
-              </div>
-            )}
-            {!etterlevelseDokumentasjon.avdeling && (
-              <BodyShort size="small">Avdeling er ikke angitt</BodyShort>
-            )}
-          </div>
-          <div className="mb-2.5">
-            {teams.length > 0 && <Teams teams={teams} link />}
-            {teams.length === 0 && <BodyShort size="small">Team er ikke angitt</BodyShort>}
-          </div>
-          <div className="flex items-start gap-2">
-            <BodyShort size="small">Egenskaper:</BodyShort>
-            {irrelevansFor.length === relevansCodeList.length && (
-              <div className="flex items-center gap-1">
-                <ExclamationmarkTriangleFillIcon
-                  area-label=""
-                  aria-hidden
-                  className="text-2xl text-icon-warning"
-                />
-                <Label size="small">Ingen egenskaper er oppgitt</Label>
-              </div>
-            )}
-            {getRelevans(irrelevansFor)}
-          </div>
-          <div className="flex items-start gap-2">
-            <BodyShort size="small" className="mt-[3px]">
-              Varslingsadresser:
-            </BodyShort>
+      <div>
+        <div>
+          <ReadMore
+            header="Les mer om dokumentet"
+            aria-label="tittel på etterlevelsesdokument"
+            className="w-full"
+          >
             <div>
-              {etterlevelseDokumentasjon.varslingsadresser && (
-                <VarslingsadresserView
-                  varslingsadresser={etterlevelseDokumentasjon.varslingsadresser}
+              {behandlerPersonopplysninger && (
+                <BehandlingList
+                  behandlingIds={behandlingIds}
+                  behandlerPersonopplysninger={behandlerPersonopplysninger}
+                  behandlinger={behandlinger}
                 />
               )}
+              <div className="mb-2.5">
+                {etterlevelseDokumentasjon.avdeling && (
+                  <div className="flex items-start gap-2">
+                    <BodyShort size="small">Avdeling:</BodyShort>
+                    <BodyShort size="small">
+                      {etterlevelseDokumentasjon.avdeling.shortName}
+                    </BodyShort>
+                  </div>
+                )}
+                {!etterlevelseDokumentasjon.avdeling && (
+                  <BodyShort size="small">Avdeling er ikke angitt</BodyShort>
+                )}
+              </div>
+              <div className="mb-2.5">
+                {teams.length > 0 && <Teams teams={teams} link />}
+                {teams.length === 0 && <BodyShort size="small">Team er ikke angitt</BodyShort>}
+              </div>
+              <div className="flex items-start gap-2">
+                <BodyShort size="small">Egenskaper:</BodyShort>
+                {irrelevansFor.length === relevansCodeList.length && (
+                  <div className="flex items-center gap-1">
+                    <ExclamationmarkTriangleFillIcon
+                      area-label=""
+                      aria-hidden
+                      className="text-2xl text-icon-warning"
+                    />
+                    <Label size="small">Ingen egenskaper er oppgitt</Label>
+                  </div>
+                )}
+                {getRelevans(irrelevansFor)}
+              </div>
+              <div className="flex items-start gap-2">
+                <BodyShort size="small" className="mt-[3px]">
+                  Varslingsadresser:
+                </BodyShort>
+                <div>
+                  {etterlevelseDokumentasjon.varslingsadresser && (
+                    <VarslingsadresserView
+                      varslingsadresser={etterlevelseDokumentasjon.varslingsadresser}
+                    />
+                  )}
+                </div>
+              </div>
             </div>
+          </ReadMore>
+        </div>
+        {!relasjonLoading && (
+          <div className="mt-5">
+            <ReadMore
+              header="Gjenbruk av dokument"
+              defaultOpen={morDokumentRelasjon ? true : false}
+            >
+              Forutsetninger for gjenbruk av dette dokumentet:{' '}
+              {morDokumentRelasjon?.fromDocumentWithData.gjenbrukBeskrivelse}
+              {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
+                <div className="mt-5">
+                  <Button
+                    onClick={() => {
+                      navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
+                    }}
+                    size="small"
+                    variant="secondary"
+                    className="whitespace-nowrap mt-3"
+                    type="button"
+                  >
+                    Gjenbruk dokumentet
+                  </Button>
+                </div>
+              )}
+            </ReadMore>
           </div>
-        </ExpansionCard.Content>
-      </ExpansionCard>
+        )}
+      </div>
     </>
   )
 }

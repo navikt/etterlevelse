@@ -22,7 +22,7 @@ interface IProps {
   relevanteStats: TKravQL[]
   utgaattStats: TKravQL[]
   loading: boolean
-  documentRelation?: IDocumentRelationWithEtterlevelseDokumetajson
+  morDocumentRelation?: IDocumentRelationWithEtterlevelseDokumetajson
 }
 
 export const DokumentasjonPageTabs = (props: IProps) => {
@@ -33,7 +33,7 @@ export const DokumentasjonPageTabs = (props: IProps) => {
     relevanteStats,
     utgaattStats,
     loading,
-    documentRelation,
+    morDocumentRelation,
   } = props
 
   const params = useParams<{ id?: string; tema?: string }>()
@@ -52,10 +52,13 @@ export const DokumentasjonPageTabs = (props: IProps) => {
   }, [])
 
   useEffect(() => {
-    if (documentRelation && documentRelation.fromDocumentWithData.prioritertKravNummer.length > 0) {
+    if (
+      morDocumentRelation &&
+      morDocumentRelation.fromDocumentWithData.prioritertKravNummer.length > 0
+    ) {
       setTabValue('prioritertKravliste')
     }
-  }, [documentRelation])
+  }, [morDocumentRelation])
 
   return (
     <div>

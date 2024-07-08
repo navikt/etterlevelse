@@ -34,8 +34,9 @@ export const DokumentasjonPage = () => {
     params.id
   )
 
-  const [dokumentRelasjon, setDokumentRelasjon] =
+  const [morDokumentRelasjon, setMorDokumentRelasjon] =
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
+  const [relasjonLoading, setRelasjonLoading] = useState(false)
 
   const {
     data: relevanteData,
@@ -103,11 +104,13 @@ export const DokumentasjonPage = () => {
         ...userRoleEventProp,
       })
       ;(async () => {
+        setRelasjonLoading(true)
         await getDocumentRelationByToIdAndRelationTypeWithData(
           etterlevelseDokumentasjon?.id,
           ERelationType.ARVER
         ).then((resp: IDocumentRelationWithEtterlevelseDokumetajson[]) => {
-          if (resp.length > 0) setDokumentRelasjon(resp[0])
+          if (resp.length > 0) setMorDokumentRelasjon(resp[0])
+          setRelasjonLoading(false)
         })
       })()
     }
@@ -131,68 +134,61 @@ export const DokumentasjonPage = () => {
             E{etterlevelseNummer.toString()} {title}
           </Heading>
 
-          {dokumentRelasjon && (
+          {morDokumentRelasjon && (
             <BodyShort className="my-5">
               Dette dokumentet er et arv fra{' '}
-              <Link href={`/dokumentasjon/${dokumentRelasjon.fromDocumentWithData.id}`}>
-                E{dokumentRelasjon.fromDocumentWithData.etterlevelseNummer}{' '}
-                {dokumentRelasjon.fromDocumentWithData.title} av{' '}
-                {dokumentRelasjon.fromDocumentWithData.changeStamp.lastModifiedBy.split(' - ')[1]}
+              <Link href={`/dokumentasjon/${morDokumentRelasjon.fromDocumentWithData.id}`}>
+                E{morDokumentRelasjon.fromDocumentWithData.etterlevelseNummer}{' '}
+                {morDokumentRelasjon.fromDocumentWithData.title}
               </Link>
               .
             </BodyShort>
           )}
 
-          {etterlevelseDokumentasjon.beskrivelse && (
+          <div className="flex w-full">
             <div>
-              <Label>Beskrivelse</Label>
-              <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
-            </div>
-          )}
-
-          <div className="flex items-center my-5">
-            <EtterlevelseDokumentasjonExpansionCard
-              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-            />
-            {etterlevelseDokumentasjon && (
-              <div className="gap-4 ml-5">
-                {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-                  <>
-                    <Button
-                      onClick={() => {
-                        navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
-                      }}
-                      size="small"
-                      variant="secondary"
-                      className="whitespace-nowrap"
-                    >
-                      Endre dokumentegenskaper
-                    </Button>
-
-                    {etterlevelseDokumentasjon.forGjenbruk && user.isAdmin() && (
-                      <TillatGjenbrukModal
-                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                        setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-                      />
-                    )}
-                  </>
-                )}
-
-                {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
-                  <Button
-                    onClick={() => {
-                      navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
-                    }}
-                    size="small"
-                    variant="tertiary"
-                    className="whitespace-nowrap mt-3"
-                    type="button"
-                  >
-                    Gjenbruk dokumentet
-                  </Button>
-                )}
+              {etterlevelseDokumentasjon.beskrivelse && (
+                <div className="mb-5">
+                  <Label>Beskrivelse</Label>
+                  <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
+                </div>
+              )}
+              <div className="flex mb-5">
+                <EtterlevelseDokumentasjonExpansionCard
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  morDokumentRelasjon={morDokumentRelasjon}
+                  relasjonLoading={relasjonLoading}
+                />
               </div>
-            )}
+            </div>
+
+            <div className="flex flex-1 justify-end">
+              {etterlevelseDokumentasjon && (
+                <div className="gap-4 ml-5">
+                  {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+                    <>
+                      <Button
+                        onClick={() => {
+                          navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
+                        }}
+                        size="small"
+                        variant="secondary"
+                        className="whitespace-nowrap"
+                      >
+                        Endre dokumentegenskaper
+                      </Button>
+
+                      {etterlevelseDokumentasjon.forGjenbruk && user.isAdmin() && (
+                        <TillatGjenbrukModal
+                          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+                        />
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -200,7 +196,7 @@ export const DokumentasjonPage = () => {
         Temaoversikt
       </Heading>
 
-      {dokumentRelasjon && (
+      {morDokumentRelasjon && (
         <ReadMore header="Slik bruker du disse vurderingene" className="my-5">
           Dokumenteieren har allerede besvart flere av suksesskriteriene for deg. Disse
           suksesskriteriene er merket med &#34;ikke relevant&#34; eller &#34;oppfylt&#34;, og du kan
@@ -215,7 +211,7 @@ export const DokumentasjonPage = () => {
         relevanteStats={relevanteStats}
         utgaattStats={utgaattStats}
         loading={loading}
-        documentRelation={dokumentRelasjon}
+        morDocumentRelation={morDokumentRelasjon}
       />
     </PageLayout>
   )

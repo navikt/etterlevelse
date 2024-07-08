@@ -55,7 +55,7 @@ export const TillatGjenbrukModal = (props: IProps) => {
           open={isOpen}
           onClose={() => setIsOpen(false)}
           header={{
-            heading: 'Tilgjengeliggjør dette dokumentet til gjenbruk av andre',
+            heading: 'Tilgjengeliggjør dette dokumentet for gjenbruk av andre',
             icon: <FilesIcon title="header-ikon" />,
             closeButton: false,
           }}
@@ -82,11 +82,26 @@ export const TillatGjenbrukModal = (props: IProps) => {
                   </List>
                   <TextAreaField
                     name="gjenbrukBeskrivelse"
-                    label="Beskriv forutsetningene for gjenbruk av dette dokumentet ."
+                    label="Den som gjenbruker dokumentet skal forstå rammene for gjenbruk."
                     height="150px"
                     markdown
                     noPlaceholder
-                    caption="Teksten blir vist for alle som skal gjenbruke dokumentet. Gi ikke kravspesifikk veiledning, da dette heller burde komme ved enkelte krav."
+                    caption={
+                      <>
+                        Teksten du skriver under vil vises for alle som skal gjenbruke dokumentet.
+                        <List as="ul" className="mb-5">
+                          <List.Item>
+                            Beskriv i hvilke kontekster dokumentet er tenkt brukt.
+                          </List.Item>
+                          <List.Item>
+                            Beskrive eventuelle tilfeller hvor dokumentet ikke skal gjenbrukes.
+                          </List.Item>
+                          <List.Item>
+                            Gi ikke kravspesifikk veiledning (dette gjøres ved enkelte krav)
+                          </List.Item>
+                        </List>
+                      </>
+                    }
                   />
                 </Modal.Body>
                 <Modal.Footer>
