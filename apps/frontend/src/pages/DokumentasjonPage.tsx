@@ -34,8 +34,9 @@ export const DokumentasjonPage = () => {
     params.id
   )
 
-  const [dokumentRelasjon, setDokumentRelasjon] =
+  const [morDokumentRelasjon, setMorDokumentRelasjon] =
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
+  const [relasjonLoading, setRelasjonLoading] = useState(false)
 
   const {
     data: relevanteData,
@@ -103,11 +104,13 @@ export const DokumentasjonPage = () => {
         ...userRoleEventProp,
       })
       ;(async () => {
+        setRelasjonLoading(true)
         await getDocumentRelationByToIdAndRelationTypeWithData(
           etterlevelseDokumentasjon?.id,
           ERelationType.ARVER
         ).then((resp: IDocumentRelationWithEtterlevelseDokumetajson[]) => {
-          if (resp.length > 0) setDokumentRelasjon(resp[0])
+          if (resp.length > 0) setMorDokumentRelasjon(resp[0])
+          setRelasjonLoading(false)
         })
       })()
     }
@@ -131,12 +134,12 @@ export const DokumentasjonPage = () => {
             E{etterlevelseNummer.toString()} {title}
           </Heading>
 
-          {dokumentRelasjon && (
+          {morDokumentRelasjon && (
             <BodyShort className="my-5">
               Dette dokumentet er et arv fra{' '}
-              <Link href={`/dokumentasjon/${dokumentRelasjon.fromDocumentWithData.id}`}>
-                E{dokumentRelasjon.fromDocumentWithData.etterlevelseNummer}{' '}
-                {dokumentRelasjon.fromDocumentWithData.title}
+              <Link href={`/dokumentasjon/${morDokumentRelasjon.fromDocumentWithData.id}`}>
+                E{morDokumentRelasjon.fromDocumentWithData.etterlevelseNummer}{' '}
+                {morDokumentRelasjon.fromDocumentWithData.title}
               </Link>
               .
             </BodyShort>
@@ -145,11 +148,18 @@ export const DokumentasjonPage = () => {
           <div className="flex w-full">
             <div>
               {etterlevelseDokumentasjon.beskrivelse && (
-                <div>
+                <div className="mb-5">
                   <Label>Beskrivelse</Label>
                   <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
                 </div>
               )}
+              <div className="flex mb-5">
+                <EtterlevelseDokumentasjonExpansionCard
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  morDokumentRelasjon={morDokumentRelasjon}
+                  relasjonLoading={relasjonLoading}
+                />
+              </div>
             </div>
 
             <div className="flex flex-1 justify-end">
@@ -180,20 +190,13 @@ export const DokumentasjonPage = () => {
               )}
             </div>
           </div>
-
-          <div className="flex my-5">
-            <EtterlevelseDokumentasjonExpansionCard
-              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-              dokumentRelasjon={dokumentRelasjon}
-            />
-          </div>
         </div>
       </div>
       <Heading level="2" size="medium" spacing className="mt-3">
         Temaoversikt
       </Heading>
 
-      {dokumentRelasjon && (
+      {morDokumentRelasjon && (
         <ReadMore header="Slik bruker du disse vurderingene" className="my-5">
           Dokumenteieren har allerede besvart flere av suksesskriteriene for deg. Disse
           suksesskriteriene er merket med &#34;ikke relevant&#34; eller &#34;oppfylt&#34;, og du kan
@@ -208,7 +211,7 @@ export const DokumentasjonPage = () => {
         relevanteStats={relevanteStats}
         utgaattStats={utgaattStats}
         loading={loading}
-        documentRelation={dokumentRelasjon}
+        morDocumentRelation={morDokumentRelasjon}
       />
     </PageLayout>
   )

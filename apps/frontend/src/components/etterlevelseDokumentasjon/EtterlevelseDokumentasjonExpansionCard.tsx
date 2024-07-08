@@ -13,11 +13,12 @@ import { VarslingsadresserView } from './VarslingsAddresseView'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-  dokumentRelasjon?: IDocumentRelationWithEtterlevelseDokumetajson
+  morDokumentRelasjon?: IDocumentRelationWithEtterlevelseDokumetajson
+  relasjonLoading?: boolean
 }
 
 export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
-  const { etterlevelseDokumentasjon, dokumentRelasjon } = props
+  const { etterlevelseDokumentasjon, morDokumentRelasjon, relasjonLoading } = props
   const navigate = useNavigate()
 
   const relevansCodeList = codelist.getParsedOptions(EListName.RELEVANS)
@@ -135,27 +136,32 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
             </div>
           </ReadMore>
         </div>
-        <div className="mt-5">
-          <ReadMore header="Gjenbruk av dokument">
-            Forutsetninger for gjenbruk av dette dokumentet:{' '}
-            {dokumentRelasjon?.fromDocumentWithData.gjenbrukBeskrivelse}
-            {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
-              <div className="mt-5">
-                <Button
-                  onClick={() => {
-                    navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
-                  }}
-                  size="small"
-                  variant="secondary"
-                  className="whitespace-nowrap mt-3"
-                  type="button"
-                >
-                  Gjenbruk dokumentet
-                </Button>
-              </div>
-            )}
-          </ReadMore>
-        </div>
+        {!relasjonLoading && (
+          <div className="mt-5">
+            <ReadMore
+              header="Gjenbruk av dokument"
+              defaultOpen={morDokumentRelasjon ? true : false}
+            >
+              Forutsetninger for gjenbruk av dette dokumentet:{' '}
+              {morDokumentRelasjon?.fromDocumentWithData.gjenbrukBeskrivelse}
+              {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
+                <div className="mt-5">
+                  <Button
+                    onClick={() => {
+                      navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
+                    }}
+                    size="small"
+                    variant="secondary"
+                    className="whitespace-nowrap mt-3"
+                    type="button"
+                  >
+                    Gjenbruk dokumentet
+                  </Button>
+                </div>
+              )}
+            </ReadMore>
+          </div>
+        )}
       </div>
     </>
   )
