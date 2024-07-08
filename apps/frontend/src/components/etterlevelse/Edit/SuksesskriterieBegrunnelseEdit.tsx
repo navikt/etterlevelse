@@ -274,7 +274,12 @@ const KriterieBegrunnelse = ({
 
       {morEtterlevelse && hasVeildningFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id) && (
         <Alert variant="info" className="mb-5">
-          {getVeiledningsTekstFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id)}
+          <Label>
+            Følgende veiledning er skrevet av{' '}
+            {morEtterlevelse.changeStamp.lastModifiedBy.split(' - ')[1]}
+          </Label>
+          <br />
+          <>{getVeiledningsTekstFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id)}</>
         </Alert>
       )}
 
