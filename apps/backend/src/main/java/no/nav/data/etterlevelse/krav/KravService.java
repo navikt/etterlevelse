@@ -7,6 +7,7 @@ import no.nav.data.common.auditing.AuditVersionService;
 import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.mail.EmailService;
 import no.nav.data.common.mail.MailTask;
+import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
@@ -57,6 +58,7 @@ public class KravService extends DomainService<Krav> {
     private final EmailService emailService;
     private final SlackClient slackClient;
     private final AuditVersionService auditVersionService;
+    private final SecurityProperties securityProperties;
 
     public Page<Krav> getAll(Pageable page) {
         Page<GenericStorage<Krav>> all;
@@ -259,7 +261,13 @@ public class KravService extends DomainService<Krav> {
                     switch (varslingsadresse.getType()) {
                         case EPOST -> emailService.scheduleMail(MailTask.builder().to(varslingsadresse.getAdresse()).subject(varsel.getTitle()).body(varsel.toHtml()).build());
                         case SLACK -> slackClient.sendMessageToChannel(varslingsadresse.getAdresse(), varsel.toSlack());
-                        case SLACK_USER -> slackClient.sendMessageToUserId(varslingsadresse.getAdresse(), varsel.toSlack());
+                        case SLACK_USER -> {
+                            if(securityProperties.isDev()) {
+                                slackClient.sendMessageToChannel(varslingsadresse.getAdresse(), varsel.toSlack());
+                            } else {
+                                slackClient.sendMessageToUserId(varslingsadresse.getAdresse(), varsel.toSlack());
+                            }
+                        }
                         default -> throw new NotImplementedException("%s is not an implemented varsel type".formatted(varslingsadresse.getType()));
                     }
                 });
