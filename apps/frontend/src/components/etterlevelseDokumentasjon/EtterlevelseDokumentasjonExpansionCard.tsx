@@ -143,7 +143,10 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
               defaultOpen={morDokumentRelasjon ? true : false}
             >
               Forutsetninger for gjenbruk av dette dokumentet:{' '}
-              {morDokumentRelasjon?.fromDocumentWithData.gjenbrukBeskrivelse}
+              {morDokumentRelasjon && morDokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse}
+              {!morDokumentRelasjon &&
+                etterlevelseDokumentasjon.tilgjengeligForGjenbruk &&
+                etterlevelseDokumentasjon.gjenbrukBeskrivelse}
               {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
                 <div className="mt-5">
                   <Button
