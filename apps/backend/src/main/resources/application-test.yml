@@ -5,6 +5,8 @@ client:
         url: http://localhost:${wiremock.server.port:8080}/teamcat
     slack:
         base-url: http://localhost:${wiremock.server.port:8080}/slack
+    devmail:
+        address: teamdatajegerne@nav.no
 
 etterlev:
     security:
