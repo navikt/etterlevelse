@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.mail.EmailService;
 import no.nav.data.common.mail.MailTask;
+import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -43,6 +44,8 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
     private final UrlGenerator urlGenerator;
 
     private final TilbakemeldingRepo tilbakemeldingRepo;
+
+    private final SecurityProperties securityProperties;
 
     public List<Tilbakemelding> getForKravByNumberAndVersion(int kravNummer, int kravVersjon) {
         return convertToDomaionObject(tilbakemeldingRepo.findByKravNummerAndVersion(kravNummer, kravVersjon));
@@ -143,7 +146,14 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
             switch (recipient.getType()) {
                 case EPOST -> emailService.scheduleMail(MailTask.builder().to(recipient.getAdresse()).subject(varsel.getTitle()).body(varsel.toHtml()).build());
                 case SLACK -> slackClient.sendMessageToChannel(recipient.getAdresse(), varsel.toSlack());
-                case SLACK_USER -> slackClient.sendMessageToUserId(recipient.getAdresse(), varsel.toSlack());
+                case SLACK_USER -> {
+                    if(securityProperties.isDev()) {
+                        slackClient.sendMessageToChannel(recipient.getAdresse(), varsel.toSlack());
+                    } else {
+                        slackClient.sendMessageToUserId(recipient.getAdresse(), varsel.toSlack());
+                    }
+                }
+
                 default -> throw new NotImplementedException("%s is not an implemented varsel type".formatted(recipient.getType()));
             }
         }
