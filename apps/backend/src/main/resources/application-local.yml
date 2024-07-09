@@ -1,12 +1,13 @@
 client:
     behandlingskatalog:
-        base-url: http://localhost:${wiremock.server.port:8080}/bkat
+      base-url: http://localhost:${wiremock.server.port:8080}/bkat
     teamcat:
-        url: http://localhost:${wiremock.server.port:8080}/teamcat
+      url: http://localhost:${wiremock.server.port:8080}/teamcat
     slack:
       base-url: http://localhost:${wiremock.server.port:8080}/slack
     devmail:
-        address: teamdatajegerne@nav.no
+      address: teamdatajegerne@nav.no
+      slack-channel-id: C03P9SASYF8
 
 etterlev:
     security:

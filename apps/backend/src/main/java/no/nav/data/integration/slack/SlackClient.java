@@ -25,7 +25,9 @@ import no.nav.data.integration.slack.dto.SlackDtos.UserResponse.User;
 import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -57,6 +59,9 @@ public class SlackClient {
     private static final String OPEN_CONVERSATION = "/conversations.open";
     private static final String POST_MESSAGE = "/chat.postMessage";
     private static final String LIST_CONVERSATIONS = "/conversations.list";
+
+    @Autowired
+    private Environment env;
 
     private static final int MAX_BLOCKS_PER_MESSAGE = 50;
     private static final int MAX_CHARS_PER_BLOCK = 3000;
@@ -207,7 +212,11 @@ public class SlackClient {
     public void sendMessageToChannel(String channel, List<Block> blocks) {
         try {
             List<List<Block>> partitions = ListUtils.partition(splitLongBlocks(blocks), MAX_BLOCKS_PER_MESSAGE);
-            partitions.forEach(partition -> doSendMessageToChannel(channel, partition));
+
+            String channelToRecieve = securityProperties.isDev() ? env.getProperty("client.devmail.slack-channel-id") : channel;
+
+            partitions.forEach(partition -> doSendMessageToChannel(channelToRecieve, partition));
+
         } catch (Exception e) {
             throw new TechnicalException("Failed to send message to " + channel + " " + JsonUtils.toJson(blocks), e);
         }
