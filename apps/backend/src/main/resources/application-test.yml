@@ -7,7 +7,7 @@ client:
       base-url: http://localhost:${wiremock.server.port:8080}/slack
     devmail:
       address: teamdatajegerne@nav.no
-      slack-channel-id: C03P9SASYF8
+      slack-channel-id: C07B5KX3R0X
 
 etterlev:
     security:

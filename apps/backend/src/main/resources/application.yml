@@ -126,4 +126,4 @@ client:
     token: ${SLACK_TOKEN:token}
   devmail:
     address: teamdatajegerne@nav.no
-    slack-channel-id: C03P9SASYF8
+    slack-channel-id: C07B5KX3R0X
