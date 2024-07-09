@@ -136,35 +136,38 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
             </div>
           </ReadMore>
         </div>
-        {!relasjonLoading && (
-          <div className="mt-5">
-            <ReadMore
-              header="Gjenbruk av dokument"
-              defaultOpen={morDokumentRelasjon ? true : false}
-            >
-              Forutsetninger for gjenbruk av dette dokumentet:{' '}
-              {morDokumentRelasjon && morDokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse}
-              {!morDokumentRelasjon &&
-                etterlevelseDokumentasjon.tilgjengeligForGjenbruk &&
-                etterlevelseDokumentasjon.gjenbrukBeskrivelse}
-              {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
-                <div className="mt-5">
-                  <Button
-                    onClick={() => {
-                      navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
-                    }}
-                    size="small"
-                    variant="secondary"
-                    className="whitespace-nowrap mt-3"
-                    type="button"
-                  >
-                    Gjenbruk dokumentet
-                  </Button>
-                </div>
-              )}
-            </ReadMore>
-          </div>
-        )}
+        {!relasjonLoading &&
+          (morDokumentRelasjon || etterlevelseDokumentasjon.tilgjengeligForGjenbruk) && (
+            <div className="mt-5">
+              <ReadMore
+                header="Gjenbruk av dokument"
+                defaultOpen={morDokumentRelasjon ? true : false}
+              >
+                {morDokumentRelasjon &&
+                  morDokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse}
+
+                {!morDokumentRelasjon &&
+                  etterlevelseDokumentasjon.tilgjengeligForGjenbruk &&
+                  etterlevelseDokumentasjon.gjenbrukBeskrivelse}
+
+                {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
+                  <div className="mt-5">
+                    <Button
+                      onClick={() => {
+                        navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
+                      }}
+                      size="small"
+                      variant="secondary"
+                      className="whitespace-nowrap mt-3"
+                      type="button"
+                    >
+                      Gjenbruk dokumentet
+                    </Button>
+                  </div>
+                )}
+              </ReadMore>
+            </div>
+          )}
       </div>
     </>
   )
