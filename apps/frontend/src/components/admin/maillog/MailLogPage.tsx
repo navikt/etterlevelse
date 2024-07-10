@@ -2,11 +2,10 @@ import { BodyShort, Box, Heading, Pagination, Select, Spacer } from '@navikt/ds-
 import axios from 'axios'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet'
 import { IPageResponse } from '../../../constants'
 import { env } from '../../../util/env'
-import { intl } from '../../../util/intl/intl'
 import { Markdown } from '../../common/Markdown'
+import { PageLayout } from '../../scaffold/Page'
 
 interface IMailLog {
   time: string
@@ -40,13 +39,9 @@ export const MailLogPage = () => {
   }, [page, rowsPerPage])
 
   return (
-    <div className="w-full px-16" role="main">
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Tilbakemeldings log</title>
-      </Helmet>
-      <Heading className="mt-4" size="large" level="1" spacing>
-        {intl.mailLog}
+    <PageLayout pageTitle="Sendt e-post log" currentPage="Sendt e-post log">
+      <Heading spacing size="medium" level="1">
+        Sendt e-post log
       </Heading>
       {log?.content.map((mailLog, index) => {
         let html = mailLog.body
@@ -104,6 +99,6 @@ export const MailLogPage = () => {
         <Spacer />
         <BodyShort>Totalt antall rader: {log.totalElements}</BodyShort>
       </div>
-    </div>
+    </PageLayout>
   )
 }

@@ -6,7 +6,6 @@ export interface IStrings {
 
   table: string
   settings: string
-  mailLog: string
   administrate: string
   nextButton: string
   prevButton: string
