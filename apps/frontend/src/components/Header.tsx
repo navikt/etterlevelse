@@ -116,6 +116,7 @@ const LoggedInHeader = () => {
         { label: 'Kodeverk', href: '/admin/codelist' },
         { label: intl.questionAndAnswers, href: '/admin/messageslog' },
         { label: intl.notifications, href: '/admin/varsel' },
+        { label: 'Sendt e-post log', href: '/admin/maillog' },
         // { label: intl.settings, href: '/admin/settings', disabled: true },
       ]
     : []
