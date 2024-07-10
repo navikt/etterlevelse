@@ -63,7 +63,7 @@ spec:
   gcp:
     sqlInstances:
       - name: etterlevelse
-        type: POSTGRES_13
+        type: POSTGRES_16
         databases:
           - name: etterlevelsedb
             envVarPrefix: DB
