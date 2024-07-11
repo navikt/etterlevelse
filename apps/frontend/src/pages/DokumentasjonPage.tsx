@@ -146,7 +146,7 @@ export const DokumentasjonPage = () => {
           )}
 
           <div className="flex w-full">
-            <div>
+            <div className="max-w-5xl">
               {etterlevelseDokumentasjon.beskrivelse && (
                 <div className="mb-5">
                   <Label>Beskrivelse</Label>
