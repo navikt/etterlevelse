@@ -91,6 +91,7 @@ etterlev:
     enc-key: ${AZURE_TOKEN_ENC_KEY:tokenkey}
     env: ${NAIS_CLUSTER_NAME:local}
     kraveier-groups: ${AZURE_CLIENT_GROUPS_KRAVEIER:teamdatajegerne}
+    risikoeier-groups: ${AZURE_CLIENT_GROUPS_RISIKOEIER:teamdatajegerne}
     redirectUris: http://localhost:3000
     write-groups: ${AZURE_CLIENT_GROUPS:teamdatajegerne}
 
