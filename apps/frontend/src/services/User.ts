@@ -7,6 +7,7 @@ export enum EGroup {
   READ = 'READ',
   WRITE = 'WRITE',
   KRAVEIER = 'KRAVEIER',
+  RISIKOEIER = 'RISIKOEIER',
   ADMIN = 'ADMIN',
 }
 
@@ -102,6 +103,10 @@ class UserService {
     return this.hasGroup(EGroup.KRAVEIER)
   }
 
+  public isRisikoeier(): boolean {
+    return this.hasGroup(EGroup.RISIKOEIER)
+  }
+
   public getError(): string {
     return this.error || ''
   }
@@ -127,5 +132,7 @@ const nameFor = (group: EGroup) => {
       return 'Admin'
     case EGroup.KRAVEIER:
       return 'Kraveier'
+    case EGroup.RISIKOEIER:
+      return 'Risikoeier'
   }
 }

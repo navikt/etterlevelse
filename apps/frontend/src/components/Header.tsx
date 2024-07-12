@@ -170,6 +170,14 @@ const LoggedInHeader = () => {
   )
 }
 
+const getUserRole = () => {
+  if (user.isAdmin()) return 'Admin'
+  else if (user.isKraveier()) return 'Kraveier'
+  else if (user.isRisikoeier()) return 'Risikoeier'
+  else if (user.canWrite()) return 'Etterlever'
+  else return 'Gjest'
+}
+
 const UserInfoView = () => {
   // const location = useLocation()
   // const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -179,15 +187,7 @@ const UserInfoView = () => {
       <Portrait ident={user.getIdent()} size={'3rem'} />
       <div className="flex flex-col ml-6">
         <Label>{user.getName()}</Label>
-        <Label size="small">
-          {user.isAdmin()
-            ? 'Admin'
-            : user.isKraveier()
-              ? 'Kraveier'
-              : user.canWrite()
-                ? 'Etterlever'
-                : 'Gjest'}
-        </Label>
+        <Label size="small">{getUserRole()}</Label>
       </div>
       {/* <div className="flex self-end ml-6">
         <Link href={`/logout?redirect_uri=${frontpage}${path}`}>Logg ut</Link>
