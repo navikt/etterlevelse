@@ -90,7 +90,7 @@ export const DokumentasjonTabs = () => {
         setTab(args as TSection)
         ampli.logEvent('knapp klikket', {
           tekst: 'Valgt dokumentasjons Tab',
-          pagePath: location.pathname + '/' + args,
+          pagePath: '/dokumentasjoner/' + args,
         })
         navigate(`/dokumentasjoner/${args}`)
       }}
