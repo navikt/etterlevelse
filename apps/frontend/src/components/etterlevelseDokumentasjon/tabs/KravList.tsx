@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
   EEtterlevelseStatus,
+  ESuksesskriterieStatus,
   IKravPriorityList,
   TEtterlevelseDokumentasjonQL,
   TKravQL,
@@ -10,7 +11,7 @@ import {
 import { isFerdigUtfylt } from '../../../pages/EtterlevelseDokumentasjonTemaPage'
 import { TTemaCode } from '../../../services/Codelist'
 import { KravAccordionList } from '../KravAccordionList'
-import { filterStatus, getNewestKravVersjon } from '../common/utils'
+import { filterStatus, filterSuksesskriterieStatus, getNewestKravVersjon } from '../common/utils'
 
 interface IProps {
   temaListe: TTemaCode[]
@@ -34,6 +35,7 @@ export const KravList = (props: IProps) => {
   } = props
   const [openAccordions, setOpenAccordions] = useState<boolean[]>(temaListe.map(() => false))
   const [statusFilter, setStatusFilter] = useState<string>('ALLE')
+  const [suksesskriterieStatusFilter, setSuksesskriterieStatusFilter] = useState<string>('ALLE')
   const [searchKrav, setSearchKrav] = useState<string>('')
   const [relevantKravList, setRelevantKravList] = useState<TKravQL[]>([])
   const [utgaattKravList, setUtgaattKravList] = useState<TKravQL[]>([])
@@ -60,6 +62,18 @@ export const KravList = (props: IProps) => {
       relevanteStatusListe = filterStatus(statusFilter, relevanteStatusListe)
       utgaattStatusListe = filterStatus(statusFilter, utgaattStatusListe)
     }
+
+    if (suksesskriterieStatusFilter !== 'ALLE') {
+      relevanteStatusListe = filterSuksesskriterieStatus(
+        suksesskriterieStatusFilter,
+        relevanteStatusListe
+      )
+      utgaattStatusListe = filterSuksesskriterieStatus(
+        suksesskriterieStatusFilter,
+        utgaattStatusListe
+      )
+    }
+
     if (searchKrav !== '') {
       relevanteStatusListe = relevanteStatusListe.filter((krav) => {
         const kravName = 'K' + krav.kravNummer + '.' + krav.kravVersjon + ' ' + krav.navn
@@ -75,7 +89,7 @@ export const KravList = (props: IProps) => {
 
     setRelevantKravList(relevanteStatusListe)
     setUtgaattKravList(utgaattStatusListe)
-  }, [relevanteStats, utgaattStats, searchKrav, statusFilter])
+  }, [relevanteStats, utgaattStats, searchKrav, statusFilter, suksesskriterieStatusFilter])
 
   let antallFylttKrav = 0
 
@@ -143,6 +157,21 @@ export const KravList = (props: IProps) => {
           <option value={EEtterlevelseStatus.OPPFYLLES_SENERE}>Oppfylles senere</option>
           <option value="">Ikke påbegynt</option>
           <option value={EEtterlevelseStatus.FERDIG_DOKUMENTERT}>Ferdig utfylt</option>
+        </Select>
+
+        <Select
+          label="Velg suksesskriterie status"
+          hideLabel
+          onChange={(event) => {
+            setSuksesskriterieStatusFilter(event.target.value)
+          }}
+        >
+          <option value="ALLE">Velg suksesskriterie status</option>
+          <option value="ALLE">Alle</option>
+          <option value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</option>
+          <option value={ESuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</option>
+          <option value={ESuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</option>
+          <option value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</option>
         </Select>
       </div>
 

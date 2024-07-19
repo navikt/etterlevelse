@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { EEtterlevelseStatus, TKravQL } from '../../../constants'
+import { EEtterlevelseStatus, ESuksesskriterieStatus, TKravQL } from '../../../constants'
 
 export const getNewestKravVersjon = (list: any[]) => {
   let relevanteStatusListe = [...list]
@@ -54,29 +54,66 @@ export const getStatusLabelColor = (status: EEtterlevelseStatus) => {
 }
 
 export const filterStatus = (statusFilter: string, dataToFilter: TKravQL[]): TKravQL[] => {
-  if (statusFilter === EEtterlevelseStatus.UNDER_REDIGERING) {
-    return dataToFilter.filter(
-      (krav) =>
-        krav.etterlevelser.length !== 0 &&
-        krav.etterlevelser[0].status !== EEtterlevelseStatus.FERDIG_DOKUMENTERT &&
-        krav.etterlevelser[0].status !== EEtterlevelseStatus.OPPFYLLES_SENERE
-    )
-  } else if (statusFilter === EEtterlevelseStatus.OPPFYLLES_SENERE) {
-    return dataToFilter.filter(
-      (krav) =>
-        krav.etterlevelser.length !== 0 &&
-        krav.etterlevelser[0].status === EEtterlevelseStatus.OPPFYLLES_SENERE
-    )
-  } else if (statusFilter === '') {
-    return dataToFilter.filter((krav) => krav.etterlevelser.length === 0)
-  } else if (statusFilter === EEtterlevelseStatus.FERDIG_DOKUMENTERT) {
-    return dataToFilter.filter(
-      (krav) =>
-        krav.etterlevelser.length !== 0 &&
-        (krav.etterlevelser[0].status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
-          krav.etterlevelser[0].status === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)
-    )
-  } else {
-    return dataToFilter
+  switch (statusFilter) {
+    case EEtterlevelseStatus.UNDER_REDIGERING:
+      return dataToFilter.filter(
+        (krav) =>
+          krav.etterlevelser.length !== 0 &&
+          krav.etterlevelser[0].status !== EEtterlevelseStatus.FERDIG_DOKUMENTERT &&
+          krav.etterlevelser[0].status !== EEtterlevelseStatus.OPPFYLLES_SENERE
+      )
+    case EEtterlevelseStatus.OPPFYLLES_SENERE:
+      return dataToFilter.filter(
+        (krav) =>
+          krav.etterlevelser.length !== 0 &&
+          krav.etterlevelser[0].status === EEtterlevelseStatus.OPPFYLLES_SENERE
+      )
+    case '':
+      return dataToFilter.filter((krav) => krav.etterlevelser.length === 0)
+    case EEtterlevelseStatus.FERDIG_DOKUMENTERT:
+      return dataToFilter.filter(
+        (krav) =>
+          krav.etterlevelser.length !== 0 &&
+          (krav.etterlevelser[0].status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
+            krav.etterlevelser[0].status === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)
+      )
+    default:
+      return dataToFilter
+  }
+}
+
+const suksesskriterieStatusCheck = (krav: TKravQL, status: ESuksesskriterieStatus) => {
+  return (
+    krav.etterlevelser.length !== 0 &&
+    krav.etterlevelser[0].suksesskriterieBegrunnelser.length !== 0 &&
+    krav.etterlevelser[0].suksesskriterieBegrunnelser.filter(
+      (suksesskriterieBegrunnelse) => suksesskriterieBegrunnelse.suksesskriterieStatus === status
+    ).length !== 0
+  )
+}
+
+export const filterSuksesskriterieStatus = (
+  suksesskriterieStatusFilter: string,
+  dataToFilter: TKravQL[]
+): TKravQL[] => {
+  switch (suksesskriterieStatusFilter) {
+    case ESuksesskriterieStatus.OPPFYLT:
+      return dataToFilter.filter((krav) =>
+        suksesskriterieStatusCheck(krav, ESuksesskriterieStatus.OPPFYLT)
+      )
+    case ESuksesskriterieStatus.IKKE_OPPFYLT:
+      return dataToFilter.filter((krav) =>
+        suksesskriterieStatusCheck(krav, ESuksesskriterieStatus.IKKE_OPPFYLT)
+      )
+    case ESuksesskriterieStatus.IKKE_RELEVANT:
+      return dataToFilter.filter((krav) =>
+        suksesskriterieStatusCheck(krav, ESuksesskriterieStatus.IKKE_RELEVANT)
+      )
+    case ESuksesskriterieStatus.UNDER_ARBEID:
+      return dataToFilter.filter((krav) =>
+        suksesskriterieStatusCheck(krav, ESuksesskriterieStatus.UNDER_ARBEID)
+      )
+    default:
+      return dataToFilter
   }
 }

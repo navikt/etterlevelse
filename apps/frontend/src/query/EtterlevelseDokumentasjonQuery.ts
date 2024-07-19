@@ -101,6 +101,9 @@ export const getEtterlevelseDokumentasjonStatsQuery = gql`
               status
               etterlevelseDokumentasjonId
               fristForFerdigstillelse
+              suksesskriterieBegrunnelser {
+                suksesskriterieStatus
+              }
               changeStamp {
                 lastModifiedBy
                 lastModifiedDate
@@ -129,6 +132,9 @@ export const getEtterlevelseDokumentasjonStatsQuery = gql`
               status
               etterlevelseDokumentasjonId
               fristForFerdigstillelse
+              suksesskriterieBegrunnelser {
+                suksesskriterieStatus
+              }
               changeStamp {
                 lastModifiedBy
                 lastModifiedDate
@@ -157,6 +163,9 @@ export const getEtterlevelseDokumentasjonStatsQuery = gql`
               behandlingId
               status
               etterlevelseDokumentasjonId
+              suksesskriterieBegrunnelser {
+                suksesskriterieStatus
+              }
               changeStamp {
                 lastModifiedBy
                 lastModifiedDate
