@@ -311,8 +311,15 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                       loadingMessage={() => 'Søker...'}
                       isClearable={false}
                       loadOptions={useSearchTeamOptions}
-                      onChange={(value) => {
-                        value && fieldArrayRenderProps.push(value)
+                      onChange={(value: any) => {
+                        if (
+                          value &&
+                          fieldArrayRenderProps.form.values.teamsData.filter(
+                            (team: ITeam) => team.id === value.id
+                          ).length === 0
+                        ) {
+                          fieldArrayRenderProps.push(value)
+                        }
                       }}
                       styles={selectOverrides}
                     />
@@ -342,8 +349,15 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                       loadingMessage={() => 'Søker...'}
                       isClearable={false}
                       loadOptions={searchResourceByNameOptions}
-                      onChange={(value) => {
-                        value && fieldArrayRenderProps.push(value)
+                      onChange={(value: any) => {
+                        if (
+                          value &&
+                          fieldArrayRenderProps.form.values.resourcesData.filter(
+                            (team: ITeamResource) => team.navIdent === value.navIdent
+                          ).length === 0
+                        ) {
+                          fieldArrayRenderProps.push(value)
+                        }
                       }}
                       styles={selectOverrides}
                     />
