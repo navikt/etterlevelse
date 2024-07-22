@@ -42,7 +42,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @ContextConfiguration(initializers = {Initializer.class})
 public abstract class IntegrationTestBase {
 
-    private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:16");
+    private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:12");
 
     static {
         postgreSQLContainer.start();
