@@ -27,6 +27,7 @@
         <flexmark.version>0.64.8</flexmark.version>
         <microsoft-graph.version>6.13.0</microsoft-graph.version>
         <msal4j.version>1.16.1</msal4j.version>
+        <flyway-database-postgresql.version>10.16.0</flyway-database-postgresql.version>
 
         <!-- transitive versions -->
         <commons-compress.version>1.26.2</commons-compress.version>
@@ -160,6 +161,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
+            <version>${flyway-database-postgresql.version}</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
