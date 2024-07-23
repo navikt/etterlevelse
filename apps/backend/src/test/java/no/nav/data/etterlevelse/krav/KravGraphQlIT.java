@@ -15,6 +15,7 @@ import no.nav.data.integration.behandling.BkatMocks;
 import no.nav.data.integration.behandling.dto.Behandling;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 import org.springframework.graphql.test.tester.GraphQlTester;
 
@@ -23,6 +24,8 @@ import java.util.List;
 
 @GraphQlTest(KravGraphQlController.class)
 class KravGraphQlIT extends IntegrationTestBase {
+
+    @Autowired
     private GraphQlTester graphQLTester;
     private final Behandling behandling = BkatMocks.processMockResponse().convertToBehandling();
 
