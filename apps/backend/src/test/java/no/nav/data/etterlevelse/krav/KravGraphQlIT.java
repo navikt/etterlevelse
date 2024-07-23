@@ -9,10 +9,12 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokume
 import no.nav.data.etterlevelse.graphql.KravGraphQlController;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
+import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.behandling.BkatMocks;
 import no.nav.data.integration.behandling.dto.Behandling;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,12 +74,13 @@ class KravGraphQlIT extends IntegrationTestBase {
                 .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString())
                 .build());
 
-        this.graphQLTester.documentName("kravGet").variable("nummer", krav.getKravNummer()).variable("versjon", krav.getKravVersjon()).execute().path("kravById").matchesJson("""
-                {
-                "navn": "Krav 1",
-                "
-                }
-                """);
+        this.graphQLTester.documentName("kravGet")
+                .variable("nummer", krav.getKravNummer())
+                .variable("versjon", krav.getKravVersjon())
+                .execute().path("kravById").entity(KravResponse.class).satisfies(kravResponse -> {
+                    Assertions.assertEquals( "Krav 1", kravResponse.getNavn());
+                    Assertions.assertEquals( 2, kravResponse.getVarslingsadresser().size()∫);
+                });
 
 /*        assertThat(response, "kravById")
                 .hasNoErrors()
