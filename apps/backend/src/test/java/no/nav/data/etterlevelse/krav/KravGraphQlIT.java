@@ -79,7 +79,7 @@ class KravGraphQlIT extends IntegrationTestBase {
                 .variable("versjon", krav.getKravVersjon())
                 .execute().path("kravById").entity(KravResponse.class).satisfies(kravResponse -> {
                     Assertions.assertEquals( "Krav 1", kravResponse.getNavn());
-                    Assertions.assertEquals( 2, kravResponse.getVarslingsadresser().size()∫);
+                    Assertions.assertEquals( 2, kravResponse.getVarslingsadresser().size());
                 });
 
 /*        assertThat(response, "kravById")
