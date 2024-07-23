@@ -49,7 +49,7 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
     class EtterlevelseDokumentasjonFilter {
         @Test
         @SneakyThrows
-        void statsForEtterlevelseDokOnlyRelevenatEtterlevelse() {
+        void statsForEtterlevelseDokOnlyRelevenatKrav() {
 
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of("INNSYN"));
 
@@ -74,10 +74,40 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
 
             var var = Map.of("etterlevelseDokumentasjonId",String.valueOf(etterlevelseDokumentasjon.getId()));
             var response = graphQLTestTemplate.perform("graphqltest/stats_for_etterlevelseDokumentasjon.graphql", vars(var));
+
             assertThat(response, "etterlevelseDokumentasjon")
                     .hasNoErrors()
                     .hasSize("content", 1)
                     .hasSize("content[0].stats.relevantKrav", 2)
+        }
+
+        @Test
+        @SneakyThrows
+        void statsForEtterlevelseDokOnlyRelevenatEtterlevelser() {
+
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of("INNSYN"));
+
+            kravStorageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                    .status(KravStatus.AKTIV)
+                    .relevansFor(List.of("SAK"))
+                    .build());
+
+            etterlevelseStorageService.save(Etterlevelse.builder()
+                    .kravNummer(50).kravVersjon(1)
+                    .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
+                    .build());
+            etterlevelseStorageService.save(Etterlevelse.builder()
+                    .kravNummer(50).kravVersjon(1)
+                    .build());
+
+            var var = Map.of("etterlevelseDokumentasjonId",String.valueOf(etterlevelseDokumentasjon.getId()));
+            var response = graphQLTestTemplate.perform("graphqltest/stats_for_etterlevelseDokumentasjon.graphql", vars(var));
+
+            assertThat(response, "etterlevelseDokumentasjon")
+                    .hasNoErrors()
+                    .hasSize("content", 1)
+                    .hasSize("content[0].stats.relevantKrav", 1)
                     .hasSize("content[0].stats.relevantKrav[0].etterlevelser", 1);
         }
     }
