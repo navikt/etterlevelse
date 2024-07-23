@@ -1,3 +1,51 @@
+scalar DateTime
+scalar Date
+scalar NonNegativeInt
+
+# Queries
+
+type Query {
+    kravById(id: ID, nummer: Int, versjon: Int): Krav
+    krav(filter: KravFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): KravPage!
+
+    etterlevelseById(id: ID!) : Etterlevelse
+
+    etterlevelseDokumentasjon(filter: EtterlevelseDokumentasjonFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): EtterlevelseDokumentasjonPage!
+}
+
+input KravFilter {
+    nummer: Int
+    etterlevelseDokumentasjonId: String
+    etterlevelseDokumentasjonIrrevantKrav: Boolean
+    virkemiddelId: String
+    underavdeling: String
+    lov: String
+    tema: String
+    status: [String!]
+    """ en av """
+    lover: [String!]
+    """ en av """
+    relevans: [String!]
+    gjeldendeKrav: Boolean = false
+    """min 1, max 20"""
+    sistRedigert: NonNegativeInt
+}
+
+input EtterlevelseDokumentasjonFilter {
+    id: ID
+    relevans: [String!]
+    """min 1, max 20"""
+    sistRedigert: NonNegativeInt
+    teams: [String!]
+    mineEtterlevelseDokumentasjoner: Boolean
+    behandlingId: String
+    behandlerPersonopplysninger: Boolean
+    virkemiddelId: String
+    knyttetTilVirkemiddel: Boolean
+    sok: String
+}
+
+
 type Krav {
     id: ID!
     changeStamp: ChangeStamp!
