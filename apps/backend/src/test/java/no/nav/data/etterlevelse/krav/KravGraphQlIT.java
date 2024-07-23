@@ -6,7 +6,6 @@ import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
-import no.nav.data.etterlevelse.graphql.KravGraphQlController;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
@@ -17,18 +16,22 @@ import no.nav.data.integration.behandling.dto.Behandling;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.graphql.test.tester.GraphQlTester;
+import org.springframework.graphql.test.tester.WebSocketGraphQlTester;
+import org.springframework.web.reactive.socket.client.ReactorNettyWebSocketClient;
 
+import java.net.URI;
 import java.util.List;
 
 
-@GraphQlTest(KravGraphQlController.class)
 class KravGraphQlIT extends IntegrationTestBase {
 
-    @Autowired
-    private GraphQlTester graphQLTester;
+    @Value("http://localhost:8080/graphql")
+    private String baseUrl;
+
+    private GraphQlTester graphQlTester;
+
     private final Behandling behandling = BkatMocks.processMockResponse().convertToBehandling();
 
     private EtterlevelseDokumentasjon generateEtterlevelseDok(List<String> irrelevans) {
@@ -55,6 +58,10 @@ class KravGraphQlIT extends IntegrationTestBase {
     @BeforeEach
     void setUp() {
         MockFilter.setUser(MockFilter.KRAVEIER);
+
+        URI url = URI.create(baseUrl);
+        this.graphQlTester = WebSocketGraphQlTester.builder(url, new ReactorNettyWebSocketClient())
+                .build();
     }
 
     @Test
@@ -74,7 +81,7 @@ class KravGraphQlIT extends IntegrationTestBase {
                 .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString())
                 .build());
 
-        this.graphQLTester.documentName("kravGet")
+        this.graphQlTester.documentName("kravGet")
                 .variable("nummer", krav.getKravNummer())
                 .variable("versjon", krav.getKravVersjon())
                 .execute().path("kravById").entity(KravResponse.class).satisfies(kravResponse -> {
