@@ -1,8 +1,0 @@
-query getKrav($relevans: [String!], $nummer: Int, $etterlevelseDokumentasjonId: String, $underavdeling: String, $gjeldendeKrav:Boolean, $pageNumber: NonNegativeInt, $pageSize: NonNegativeInt) {
-    krav(filter: {relevans: $relevans, nummer: $nummer, etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId, underavdeling: $underavdeling, gjeldendeKrav: $gjeldendeKrav}, pageNumber: $pageNumber, pageSize: $pageSize) {
-        content {
-            id
-            navn
-        }
-    }
-}
