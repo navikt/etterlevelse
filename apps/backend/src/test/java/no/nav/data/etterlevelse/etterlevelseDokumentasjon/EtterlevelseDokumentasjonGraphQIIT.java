@@ -74,7 +74,6 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
 
             var var = Map.of("etterlevelseDokumentasjonId",String.valueOf(etterlevelseDokumentasjon.getId()));
             var response = graphQLTestTemplate.perform("graphqltest/stats_for_etterlevelseDokumentasjon.graphql", vars(var));
-            System.out.println(response);
             assertThat(response, "etterlevelseDokumentasjon")
                     .hasNoErrors()
                     .hasSize("content", 1)
