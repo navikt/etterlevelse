@@ -78,7 +78,7 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
             assertThat(response, "etterlevelseDokumentasjon")
                     .hasNoErrors()
                     .hasSize("content", 1)
-                    .hasSize("content[0].stats.relevantKrav", 2)
+                    .hasSize("content[0].stats.relevantKrav", 2);
         }
 
         @Test
