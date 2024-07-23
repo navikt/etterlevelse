@@ -16,24 +16,21 @@ import no.nav.data.integration.behandling.dto.Behandling;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.graphql.GraphQlRequest;
-import org.springframework.graphql.GraphQlResponse;
-import org.springframework.graphql.client.GraphQlTransport;
-import org.springframework.graphql.test.tester.GraphQlTester;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.test.tester.HttpGraphQlTester;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
 
 class KravGraphQlIT extends IntegrationTestBase {
 
-    @Value("http://localhost:8080/graphql")
-    private String baseUrl;
+    @Autowired
+    WebApplicationContext context;
 
-
-    private GraphQlTester graphQlTester;
+    private HttpGraphQlTester tester;
 
     private final Behandling behandling = BkatMocks.processMockResponse().convertToBehandling();
 
@@ -61,17 +58,13 @@ class KravGraphQlIT extends IntegrationTestBase {
     @BeforeEach
     void setUp() {
         MockFilter.setUser(MockFilter.KRAVEIER);
-        this.graphQlTester = GraphQlTester.builder(new GraphQlTransport() {
-            @Override
-            public Mono<GraphQlResponse> execute(GraphQlRequest request) {
-                return null;
-            }
 
-            @Override
-            public Flux<GraphQlResponse> executeSubscription(GraphQlRequest request) {
-                return null;
-            }
-        }).build();
+        WebTestClient client = MockMvcWebTestClient.bindToApplicationContext(context)
+                .configureClient()
+                .baseUrl("/graphql")
+                .build();
+
+        tester = HttpGraphQlTester.create(client);
     }
 
     @Test
@@ -91,7 +84,7 @@ class KravGraphQlIT extends IntegrationTestBase {
                 .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString())
                 .build());
 
-        this.graphQlTester.documentName("kravGet")
+        this.tester.documentName("kravGet")
                 .variable("nummer", krav.getKravNummer())
                 .variable("versjon", krav.getKravVersjon())
                 .execute().path("kravById").entity(KravResponse.class).satisfies(kravResponse -> {
