@@ -7,7 +7,7 @@ query getEtterlevelseDokumentasjonStats($etterlevelseDokumentasjonId: ID) {
                     kravVersjon
                     navn
                     aktivertDato
-                    etterlevelser {
+                    etterlevelser(etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId) {
                         etterlevelseDokumentasjonId
                         id
                     }
