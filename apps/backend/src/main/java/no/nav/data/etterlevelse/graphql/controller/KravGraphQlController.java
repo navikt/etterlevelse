@@ -1,14 +1,13 @@
-package no.nav.data.etterlevelse.graphql;
+package no.nav.data.etterlevelse.graphql.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.etterlevelse.krav.KravService;
+import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
-import no.nav.data.common.exceptions.NotFoundException;
-import no.nav.data.etterlevelse.krav.domain.Krav;
 
 import java.util.UUID;
 
