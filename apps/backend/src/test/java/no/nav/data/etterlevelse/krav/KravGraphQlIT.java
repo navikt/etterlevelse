@@ -1,7 +1,6 @@
 package no.nav.data.etterlevelse.krav;
 
 import lombok.SneakyThrows;
-import no.nav.data.IntegrationTestBase;
 import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
@@ -11,26 +10,17 @@ import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
+import no.nav.data.graphql.GraphQLTestBase;
 import no.nav.data.integration.behandling.BkatMocks;
 import no.nav.data.integration.behandling.dto.Behandling;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.graphql.test.tester.HttpGraphQlTester;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
 
-class KravGraphQlIT extends IntegrationTestBase {
-
-    @Autowired
-    WebApplicationContext context;
-
-    private HttpGraphQlTester tester;
+class KravGraphQlIT extends GraphQLTestBase {
 
     private final Behandling behandling = BkatMocks.processMockResponse().convertToBehandling();
 
@@ -58,13 +48,6 @@ class KravGraphQlIT extends IntegrationTestBase {
     @BeforeEach
     void setUp() {
         MockFilter.setUser(MockFilter.KRAVEIER);
-
-        WebTestClient client = MockMvcWebTestClient.bindToApplicationContext(context)
-                .configureClient()
-                .baseUrl("/graphql")
-                .build();
-
-        tester = HttpGraphQlTester.create(client);
     }
 
     @Test
@@ -84,7 +67,7 @@ class KravGraphQlIT extends IntegrationTestBase {
                 .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString())
                 .build());
 
-        this.tester.documentName("kravGet")
+        graphQltester.documentName("kravGet")
                 .variable("nummer", krav.getKravNummer())
                 .variable("versjon", krav.getKravVersjon())
                 .execute().path("kravById").entity(KravResponse.class).satisfies(kravResponse -> {

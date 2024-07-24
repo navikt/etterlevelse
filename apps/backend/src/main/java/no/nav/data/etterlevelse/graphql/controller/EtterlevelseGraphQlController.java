@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.graphql;
+package no.nav.data.etterlevelse.graphql.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
