@@ -35,10 +35,10 @@ spec:
     cpuThresholdPercentage: 50
   resources:
     limits:
-      memory: 3Gi
+      memory: 4Gi
     requests:
-      cpu: 250m
-      memory: 2Gi
+      cpu: 500m
+      memory: 3Gi
   liveness:
     path: internal/isAlive
     initialDelay: 10
