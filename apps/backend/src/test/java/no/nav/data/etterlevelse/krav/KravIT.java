@@ -20,6 +20,7 @@ import no.nav.data.etterlevelse.krav.dto.SuksesskriterieRequest;
 import no.nav.data.etterlevelse.krav.dto.SuksesskriterieResponse;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
+import no.nav.data.etterlevelse.varsel.dto.VarslingsadresseResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,7 +151,7 @@ public class KravIT extends IntegrationTestBase {
         assertThat(krav.getBegrepIder()).containsOnly("TERM-1");
         assertThat(krav.getDokumentasjon()).containsOnly("dok");
         assertThat(krav.getImplementasjoner()).isEqualTo("impl");
-        assertThat(krav.getVarslingsadresser()).containsOnly(new Varslingsadresse("epost@nav.no", AdresseType.EPOST));
+        assertThat(krav.getVarslingsadresser()).containsOnly(VarslingsadresseResponse.builder().type(AdresseType.EPOST).adresse("epost@nav.no").build());
         assertThat(krav.getRettskilder()).containsOnly("kilde");
         assertThat(krav.getTagger()).containsOnly("tag");
         assertThat(krav.getRegelverk()).containsOnly(RegelverkResponse.builder().lov(CodelistService.getCodelistResponse(ListName.LOV, "ARKIV")).spesifisering("§1").build());
