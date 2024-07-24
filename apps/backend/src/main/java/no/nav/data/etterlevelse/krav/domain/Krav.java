@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.codelist.CodelistService;
@@ -20,6 +19,7 @@ import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
@@ -114,7 +114,7 @@ public class Krav extends DomainObject implements KravId {
                 .implementasjoner(implementasjoner)
                 .begrepIder(copyOf(begrepIder))
                 .virkemiddelIder(copyOf(virkemiddelIder))
-                .varslingsadresser(copyOf(varslingsadresser))
+                .varslingsadresser(copyOf(convert(varslingsadresser, Varslingsadresse::toResponse)))
                 .rettskilder(copyOf(rettskilder))
                 .tagger(copyOf(tagger))
                 .regelverk(StreamUtils.convert(regelverk, Regelverk::toResponse))
@@ -128,10 +128,14 @@ public class Krav extends DomainObject implements KravId {
                 .status(status)
                 .aktivertDato(aktivertDato)
                 .build();
-        if (!SecurityUtils.isKravEier()) {
-            response.getChangeStamp().setLastModifiedBy("Skjult");
-            response.setVarslingsadresser(List.of());
-        }
+
+        return response;
+    }
+
+    public KravResponse toResponseForNotKraveier () {
+        var response = toResponse();
+        response.getChangeStamp().setLastModifiedBy("Skjult");
+        response.setVarslingsadresser(List.of());
         return response;
     }
 

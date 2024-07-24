@@ -11,7 +11,7 @@ import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
-import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
+import no.nav.data.etterlevelse.varsel.dto.VarslingsadresseResponse;
 import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelResponse;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
 
@@ -44,7 +44,7 @@ public class KravResponse implements KravId {
     private String implementasjoner;
     private List<String> begrepIder;
     private List<String> virkemiddelIder;
-    private List<Varslingsadresse> varslingsadresser;
+    private List<VarslingsadresseResponse> varslingsadresser;
     private List<String> rettskilder;
     private List<String> tagger;
     private List<RegelverkResponse> regelverk;
