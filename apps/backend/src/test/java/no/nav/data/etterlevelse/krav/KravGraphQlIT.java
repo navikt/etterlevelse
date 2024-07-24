@@ -73,6 +73,9 @@ class KravGraphQlIT extends GraphQLTestBase {
                 .execute().path("kravById").entity(KravResponse.class).satisfies(kravResponse -> {
                     Assertions.assertEquals( "Krav 1", kravResponse.getNavn());
                     Assertions.assertEquals( 2, kravResponse.getVarslingsadresser().size());
+                    Assertions.assertEquals( "xyz", kravResponse.getVarslingsadresser().get(0).getAdresse());
+                    Assertions.assertEquals( "XYZ channel", kravResponse.getVarslingsadresser().get(0).getSlackChannel().getName());
+                    Assertions.assertEquals( "notfound", kravResponse.getVarslingsadresser().get(1).getAdresse());
                 });
 
 /*        assertThat(response, "kravById")
