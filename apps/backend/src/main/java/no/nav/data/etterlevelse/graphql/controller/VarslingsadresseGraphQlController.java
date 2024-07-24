@@ -17,7 +17,7 @@ public class VarslingsadresseGraphQlController {
 
     private final SlackClient slackClient;
 
-    @SchemaMapping(field = "slackChannel")
+    @SchemaMapping
     public SlackChannel slackChannel(VarslingsadresseResponse varslingsadresse) {
         if (varslingsadresse.getType() == AdresseType.SLACK) {
             return slackClient.getChannel(varslingsadresse.getAdresse());
@@ -25,7 +25,7 @@ public class VarslingsadresseGraphQlController {
         return null;
     }
 
-    @SchemaMapping(field = "slackUser")
+    @SchemaMapping
     public SlackUser slackUser(VarslingsadresseResponse varslingsadresse) {
         if (varslingsadresse.getType() == AdresseType.SLACK_USER) {
             return slackClient.getUserBySlackId(varslingsadresse.getAdresse());

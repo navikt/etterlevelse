@@ -1,6 +1,6 @@
 package no.nav.data.etterlevelse.varsel.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
@@ -15,8 +15,8 @@ public class VarslingsadresseResponse {
     private AdresseType type;
 
     // GraphQL only
-    @JsonIgnore
+    @Schema(hidden = true)
     private SlackUser slackUser;
-    @JsonIgnore
-    private SlackChannel SlackChannel;
+    @Schema(hidden = true)
+    private SlackChannel slackChannel;
 }
