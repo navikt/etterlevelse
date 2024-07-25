@@ -3,20 +3,27 @@ package no.nav.data.etterlevelse.graphql.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.rest.PageParameters;
+import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravGraphQlResponse;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static java.util.Comparator.comparing;
 import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.common.utils.StreamUtils.filter;
 
@@ -26,6 +33,8 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 public class KravGraphQlController {
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
+    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+
     @QueryMapping
     public KravGraphQlResponse kravById(@Argument UUID id, @Argument Integer nummer, @Argument Integer versjon) {
         if (id != null) {
@@ -42,6 +51,34 @@ public class KravGraphQlController {
         }
         return null;
     }
+
+    @QueryMapping
+    public RestResponsePage<KravGraphQlResponse> krav(@Argument KravFilter filter,@Argument Integer page,@Argument Integer pageSize) {
+        log.info("krav filter {}", filter);
+        var pageInput = new PageParameters(page, pageSize);
+
+        if (filter == null || filter.isEmpty()) {
+            return new RestResponsePage<>(kravService.getAll(pageInput.createPage())).convert(Krav::toGraphQlResponse);
+        }
+
+        if(filter.getEtterlevelseDokumentasjonId() != null && !filter.getEtterlevelseDokumentasjonId().isEmpty()) {
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(filter.getEtterlevelseDokumentasjonId()));
+            if(etterlevelseDokumentasjon.isKnyttetTilVirkemiddel() && etterlevelseDokumentasjon.getVirkemiddelId() != null && !etterlevelseDokumentasjon.getVirkemiddelId().isEmpty()){
+                filter.setVirkemiddelId(etterlevelseDokumentasjon.getVirkemiddelId());
+            }
+        }
+
+        List<Krav> filtered = new ArrayList<>(kravService.getByFilter(filter));
+        if (filter.getSistRedigert() == null) {
+            filtered.sort(comparing(Krav::getKravNummer).thenComparing(Krav::getKravVersjon));
+        }
+        var all = pageSize == 0;
+        if (all) {
+            return new RestResponsePage<>(filtered).convert(Krav::toGraphQlResponse);
+        }
+        return pageInput.pageFrom(filtered).convert(Krav::toGraphQlResponse);
+    }
+
 
     @SchemaMapping(typeName = "Krav")
     public List<EtterlevelseResponse> etterlevelser(KravGraphQlResponse krav, @Argument  boolean onlyForEtterlevelseDokumentasjon, @Argument UUID etterlevelseDokumentasjonId) {

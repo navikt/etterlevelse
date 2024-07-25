@@ -2,6 +2,7 @@ package no.nav.data.etterlevelse.krav;
 
 import lombok.SneakyThrows;
 import no.nav.data.TestConfig.MockFilter;
+import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
@@ -15,9 +16,11 @@ import no.nav.data.integration.behandling.BkatMocks;
 import no.nav.data.integration.behandling.dto.Behandling;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 
 class KravGraphQlIT extends GraphQLTestBase {
@@ -81,4 +84,39 @@ class KravGraphQlIT extends GraphQLTestBase {
                 });
     }
 
-}
+    @Nested
+    class KravFilter {
+
+        @Test
+        @SneakyThrows
+        void kravFilter() {
+            var krav = kravStorageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                    .relevansFor(List.of("SAK"))
+                    .status(KravStatus.AKTIV)
+                    .build());
+            kravStorageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(1)
+                    .relevansFor(List.of("INNSYN"))
+                    .status(KravStatus.AKTIV)
+                    .build());
+
+              /*  $etterlevelseDokumentasjonId: String, $underavdeling: String, $gjeldendeKrav:Boolean, $pageNumber: NonNegativeInt, $pageSize: NonNegativeInt
+*/
+            graphQltester.documentName("kravFilter")
+                    .variable("relevans", "SAK" )
+                    .variable("nummer",  50 )
+                    .variable("etterlevelseDokumentasjonId", null )
+                    .variable("underavdeling", null)
+                    .variable("gjeldendeKrav", null)
+                    .execute().path("krav").entity(RestResponsePage.class).satisfies(kravResponse -> {
+                        Assertions.assertEquals(1, kravResponse.getContent().size());
+                    });
+
+/*            assertThat(response, "krav")
+                    .hasNoErrors()
+                    .hasSize("content", 1)
+                    .hasField("content[0].id", krav.getId().toString());*/
+        }
+
+}}
