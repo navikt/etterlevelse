@@ -104,6 +104,9 @@ class KravGraphQlIT extends GraphQLTestBase {
                     .variable("nummer",  50 )
                     .execute().path("krav").entity(RestResponsePage.class).satisfies(kravPage -> {
                         Assertions.assertEquals(1, kravPage.getContent().size());
+                    })
+                    .path("krav.content[0]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                        Assertions.assertEquals(krav.getId().toString(), kravResponse.getId().toString());
                     });
         }
 
