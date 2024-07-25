@@ -100,7 +100,7 @@ class KravGraphQlIT extends GraphQLTestBase {
                     .build());
 
             graphQltester.documentName("kravFilter")
-                    .variable("relevans", "SAK" )
+                    .variable("relevans", List.of("SAK") )
                     .variable("nummer",  50 )
                     .execute().path("krav").entity(RestResponsePage.class).satisfies(kravPage -> {
                         Assertions.assertEquals(1, kravPage.getContent().size());
@@ -109,5 +109,38 @@ class KravGraphQlIT extends GraphQLTestBase {
                         Assertions.assertEquals(krav.getId().toString(), kravResponse.getId().toString());
                     });
         }
+    }
 
-}}
+    @Test
+    @SneakyThrows
+    void kravPaged() {
+        for (int i = 0; i < 10; i++) {
+            kravStorageService.save(Krav.builder()
+                    .navn("Krav " + i).kravNummer(50 + i).kravVersjon(1)
+                    .relevansFor(List.of("SAK"))
+                    .build());
+        }
+
+        // all
+        graphQltester.documentName("kravFilter")
+                .variable("relevans", List.of("SAK") )
+                .execute().path("krav").entity(RestResponsePage.class).satisfies(kravPage -> {
+                    Assertions.assertEquals(10, kravPage.getContent().size());
+                });
+
+        // size 3, 2nd page
+//        assertThat(graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(Map.of("pageNumber", 1, "pageSize", 3))), "krav")
+//                .hasNoErrors().hasSize("content", 3)
+//                .hasField("content[0].navn", "Krav 3")
+//                .hasField("content[1].navn", "Krav 4")
+//                .hasField("content[2].navn", "Krav 5");
+//
+//        // size 3, 2nd page with filter
+//        assertThat(graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(Map.of("relevans", "SAK", "pageNumber", 1, "pageSize", 3))), "krav")
+//                .hasNoErrors().hasSize("content", 3)
+//                .hasField("content[0].navn", "Krav 3")
+//                .hasField("content[1].navn", "Krav 4")
+//                .hasField("content[2].navn", "Krav 5");
+    }
+
+}
