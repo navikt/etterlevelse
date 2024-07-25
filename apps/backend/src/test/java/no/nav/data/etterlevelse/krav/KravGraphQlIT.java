@@ -8,6 +8,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDok
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
+import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.krav.dto.KravGraphQlResponse;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
@@ -130,7 +131,76 @@ class KravGraphQlIT extends GraphQLTestBase {
                         Assertions.assertEquals(krav.getId().toString(), kravResponse.getId().toString());
                     });
         }
-    }
+
+
+        @Test
+        @SneakyThrows
+        void kravForLov() {
+            var krav = kravStorageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                    .regelverk(List.of(Regelverk.builder().lov("ARKIV").build()))
+                    .build());
+            kravStorageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(1)
+                    .regelverk(List.of(Regelverk.builder().lov("PERSON").build()))
+                    .build());
+
+            graphQltester.documentName("kravFilter")
+                    .variable("lov", "ARKIV")
+                    .execute().path("krav").entity(RestResponsePage.class).satisfies(kravPage -> {
+                        Assertions.assertEquals(1, kravPage.getContent().size());
+                    })
+                    .path("krav.content[0]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                        Assertions.assertEquals(krav.getId().toString(), kravResponse.getId().toString());
+                    });
+        }
+
+        @Test
+        @SneakyThrows
+        void kravForLover() {
+            var krav = kravStorageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                    .regelverk(List.of(Regelverk.builder().lov("ARKIV").build()))
+                    .build());
+            kravStorageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(1)
+                    .regelverk(List.of(Regelverk.builder().lov("PERSON").build()))
+                    .build());
+
+            graphQltester.documentName("kravFilter")
+                    .variable("lover", List.of("ARKIV", "ANNET"))
+                    .execute().path("krav").entity(RestResponsePage.class).satisfies(kravPage -> {
+                        Assertions.assertEquals(1, kravPage.getContent().size());
+                    })
+                    .path("krav.content[0]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                        Assertions.assertEquals(krav.getId().toString(), kravResponse.getId().toString());
+                    });
+        }
+
+        @Test
+        @SneakyThrows
+        void kravGjeldende() {
+            var krav = kravStorageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                    .underavdeling("AVD1")
+                    .status(KravStatus.AKTIV)
+                    .build());
+            kravStorageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(1)
+                    .underavdeling("AVD2")
+                    .status(KravStatus.UTGAATT)
+                    .build());
+
+            graphQltester.documentName("kravFilter")
+                    .variable("gjeldendeKrav", true)
+                    .execute().path("krav").entity(RestResponsePage.class).satisfies(kravPage -> {
+                        Assertions.assertEquals(1, kravPage.getContent().size());
+                    })
+                    .path("krav.content[0]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                        Assertions.assertEquals(krav.getId().toString(), kravResponse.getId().toString());
+                    });
+
+        }
 
     @Test
     @SneakyThrows
@@ -185,4 +255,5 @@ class KravGraphQlIT extends GraphQLTestBase {
                 });
     }
 
+    }
 }
