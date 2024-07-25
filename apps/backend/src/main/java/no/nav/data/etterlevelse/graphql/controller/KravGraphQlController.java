@@ -53,9 +53,9 @@ public class KravGraphQlController {
     }
 
     @QueryMapping
-    public RestResponsePage<KravGraphQlResponse> krav(@Argument KravFilter filter,@Argument Integer page,@Argument Integer pageSize) {
+    public RestResponsePage<KravGraphQlResponse> krav(@Argument KravFilter filter,@Argument Integer pageNumber,@Argument Integer pageSize) {
         log.info("krav filter {}", filter);
-        var pageInput = new PageParameters(page, pageSize);
+        var pageInput = new PageParameters(pageNumber, pageSize);
 
         if (filter == null || filter.isEmpty()) {
             return new RestResponsePage<>(kravService.getAll(pageInput.createPage())).convert(Krav::toGraphQlResponse);

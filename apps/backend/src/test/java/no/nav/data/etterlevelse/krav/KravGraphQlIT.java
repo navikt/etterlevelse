@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Map;
 
 
 class KravGraphQlIT extends GraphQLTestBase {
@@ -86,7 +85,6 @@ class KravGraphQlIT extends GraphQLTestBase {
 
     @Nested
     class KravFilter {
-
         @Test
         @SneakyThrows
         void kravFilter() {
@@ -101,22 +99,12 @@ class KravGraphQlIT extends GraphQLTestBase {
                     .status(KravStatus.AKTIV)
                     .build());
 
-              /*  $etterlevelseDokumentasjonId: String, $underavdeling: String, $gjeldendeKrav:Boolean, $pageNumber: NonNegativeInt, $pageSize: NonNegativeInt
-*/
             graphQltester.documentName("kravFilter")
                     .variable("relevans", "SAK" )
                     .variable("nummer",  50 )
-                    .variable("etterlevelseDokumentasjonId", null )
-                    .variable("underavdeling", null)
-                    .variable("gjeldendeKrav", null)
-                    .execute().path("krav").entity(RestResponsePage.class).satisfies(kravResponse -> {
-                        Assertions.assertEquals(1, kravResponse.getContent().size());
+                    .execute().path("krav").entity(RestResponsePage.class).satisfies(kravPage -> {
+                        Assertions.assertEquals(1, kravPage.getContent().size());
                     });
-
-/*            assertThat(response, "krav")
-                    .hasNoErrors()
-                    .hasSize("content", 1)
-                    .hasField("content[0].id", krav.getId().toString());*/
         }
 
 }}
