@@ -134,20 +134,34 @@ class KravGraphQlIT extends GraphQLTestBase {
                 .variable("pageSize", 3)
                 .execute().path("krav").entity(RestResponsePage.class).satisfies(kravPage -> {
                     Assertions.assertEquals(3, kravPage.getContent().size());
+                })
+                .path("krav.content[0]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                    Assertions.assertEquals("Krav 3", kravResponse.getNavn());
+                })
+                .path("krav.content[1]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                    Assertions.assertEquals("Krav 4", kravResponse.getNavn());
+                })
+                .path("krav.content[2]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                    Assertions.assertEquals("Krav 5", kravResponse.getNavn());
                 });
 
-//        assertThat(graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(Map.of("pageNumber", 1, "pageSize", 3))), "krav")
-//                .hasNoErrors().hasSize("content", 3)
-//                .hasField("content[0].navn", "Krav 3")
-//                .hasField("content[1].navn", "Krav 4")
-//                .hasField("content[2].navn", "Krav 5");
-//
-//        // size 3, 2nd page with filter
-//        assertThat(graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(Map.of("relevans", "SAK", "pageNumber", 1, "pageSize", 3))), "krav")
-//                .hasNoErrors().hasSize("content", 3)
-//                .hasField("content[0].navn", "Krav 3")
-//                .hasField("content[1].navn", "Krav 4")
-//                .hasField("content[2].navn", "Krav 5");
+        // size 3, 2nd page with filter
+        graphQltester.documentName("kravFilter")
+                .variable("pageNumber", 1)
+                .variable("pageSize", 3)
+                .variable("relevans", List.of("SAK"))
+                .execute().path("krav").entity(RestResponsePage.class).satisfies(kravPage -> {
+                    Assertions.assertEquals(3, kravPage.getContent().size());
+                })
+                .path("krav.content[0]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                    Assertions.assertEquals("Krav 3", kravResponse.getNavn());
+                })
+                .path("krav.content[1]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                    Assertions.assertEquals("Krav 4", kravResponse.getNavn());
+                })
+                .path("krav.content[2]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                    Assertions.assertEquals("Krav 5", kravResponse.getNavn());
+                });
     }
 
 }
