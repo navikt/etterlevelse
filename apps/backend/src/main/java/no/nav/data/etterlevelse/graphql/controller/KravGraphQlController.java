@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.graphql.controller;
 
+import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
@@ -11,9 +12,18 @@ import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.KravService;
+import no.nav.data.etterlevelse.krav.TilbakemeldingService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
+import no.nav.data.etterlevelse.krav.domain.dto.KravFilter.Fields;
 import no.nav.data.etterlevelse.krav.dto.KravGraphQlResponse;
+import no.nav.data.etterlevelse.krav.dto.TilbakemeldingResponse;
+import no.nav.data.etterlevelse.kravprioritylist.KravPriorityListService;
+import no.nav.data.etterlevelse.virkemiddel.VirkemiddelService;
+import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelResponse;
+import no.nav.data.integration.begrep.BegrepService;
+import no.nav.data.integration.begrep.dto.BegrepResponse;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
@@ -33,6 +43,10 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 public class KravGraphQlController {
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
+    private final TilbakemeldingService tilbakemeldingService;
+    private final BegrepService begrepService;
+    private final KravPriorityListService kravPriorityListService;
+    private final VirkemiddelService virkemiddelService;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
     @QueryMapping
@@ -44,10 +58,9 @@ public class KravGraphQlController {
                 return null;
             }
         } else if (nummer != null && versjon != null) {
-            var resp = kravService.getByKravNummer(nummer, versjon)
+            return kravService.getByKravNummer(nummer, versjon)
                     .map(Krav::toGraphQlResponse)
                     .orElse(null);
-            return resp;
         }
         return null;
     }
@@ -81,15 +94,15 @@ public class KravGraphQlController {
 
 
     @SchemaMapping(typeName = "Krav")
-    public List<EtterlevelseResponse> etterlevelser(KravGraphQlResponse krav, @Argument  boolean onlyForEtterlevelseDokumentasjon, @Argument UUID etterlevelseDokumentasjonId) {
+    public List<EtterlevelseResponse> etterlevelser(KravGraphQlResponse krav, DataFetchingEnvironment env,  @Argument  boolean onlyForEtterlevelseDokumentasjon, @Argument UUID etterlevelseDokumentasjonId) {
         Integer nummer = krav.getKravNummer();
         Integer versjon = krav.getKravVersjon();
         log.info("etterlevelse for krav {}.{}", nummer, versjon);
 
         var etterlevelser = etterlevelseService.getByKravNummer(nummer, versjon);
 
-        if (onlyForEtterlevelseDokumentasjon && etterlevelseDokumentasjonId != null) {
-            String dokumentasjonId =  etterlevelseDokumentasjonId.toString();
+        if (onlyForEtterlevelseDokumentasjon || etterlevelseDokumentasjonId != null) {
+            String dokumentasjonId = etterlevelseDokumentasjonId != null ? etterlevelseDokumentasjonId.toString() : KravFilter.get(env, Fields.etterlevelseDokumentasjonId);
 
             if(dokumentasjonId != null) {
                 etterlevelser = filter(etterlevelser, e -> dokumentasjonId.equals(e.getEtterlevelseDokumentasjonId()));
@@ -97,5 +110,33 @@ public class KravGraphQlController {
         }
 
         return convert(etterlevelser, Etterlevelse::toResponse);
+    }
+
+
+    @SchemaMapping(typeName = "Krav")
+    public List<TilbakemeldingResponse> tilbakemeldinger(KravGraphQlResponse krav) {
+        var tilbakemeldinger = tilbakemeldingService.getForKravByNumberAndVersion(krav.getKravNummer(), krav.getKravVersjon());
+        return convert(tilbakemeldinger, Tilbakemelding::toResponse);
+    }
+
+    @SchemaMapping(typeName = "Krav")
+    public List<BegrepResponse> begreper(KravGraphQlResponse krav) {
+        return convert(krav.getBegrepIder(), begrep -> begrepService.getBegrep(begrep).orElse(null));
+    }
+
+    @SchemaMapping(typeName = "Krav")
+    public int prioriteringsId(KravGraphQlResponse krav, DataFetchingEnvironment env) {
+        var kravPrioritering = kravPriorityListService.getByTema(KravFilter.get(env, Fields.tema));
+        return kravPrioritering.map(kravPriorityList -> kravPriorityList.getPriorityList().indexOf(krav.getKravNummer()) + 1).orElse(0);
+    }
+
+    @SchemaMapping(typeName = "Krav")
+    public List<KravGraphQlResponse> kravRelasjoner(KravGraphQlResponse krav){
+        return convert(krav.getKravIdRelasjoner(), kravId -> kravService.get(UUID.fromString(kravId)).toGraphQlResponse());
+    }
+
+    @SchemaMapping(typeName = "Krav")
+    public List<VirkemiddelResponse> virkemidler(KravGraphQlResponse krav) {
+        return convert(krav.getVirkemiddelIder(), virkemiddel -> virkemiddelService.get(UUID.fromString(virkemiddel)).toResponse());
     }
 }

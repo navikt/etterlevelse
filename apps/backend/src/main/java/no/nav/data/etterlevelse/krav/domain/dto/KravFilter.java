@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static no.nav.data.common.utils.StringUtils.formatList;
+import static no.nav.data.etterlevelse.graphql.support.GraphQlResolverUtil.getFilter;
 
 @Data
 @Builder
@@ -72,6 +73,11 @@ public class KravFilter {
                 sistRedigert = 20;
             }
         }
+    }
+
+    public static <T> T get(DataFetchingEnvironment env, String field) {
+        Map<String, T> vars = getFilter(env.getExecutionStepInfo());
+        return vars.get(field);
     }
 
 }
