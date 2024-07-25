@@ -1,28 +1,21 @@
-package no.nav.data.etterlevelse.krav;
+package no.nav.data.etterlevelse.etterlevelse;
 
 import lombok.SneakyThrows;
-import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
+import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
-import no.nav.data.etterlevelse.krav.dto.KravGraphQlResponse;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.graphql.GraphQLTestBase;
-import no.nav.data.integration.behandling.BkatMocks;
-import no.nav.data.integration.behandling.dto.Behandling;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-
-class KravGraphQlIT extends GraphQLTestBase {
-
-    private final Behandling behandling = BkatMocks.processMockResponse().convertToBehandling();
+public class EtterlevelseGraphQlIT extends GraphQLTestBase {
 
     private EtterlevelseDokumentasjon generateEtterlevelseDok(List<String> irrelevans) {
         return etterlevelseDokumentasjonService.save(
@@ -36,23 +29,18 @@ class KravGraphQlIT extends GraphQLTestBase {
                         .teams(List.of(""))
                         .resources(List.of(""))
                         .irrelevansFor(irrelevans)
+                        .behandlingIds(List.of())
                         .update(false)
                         .behandlerPersonopplysninger(true)
-                        .behandlingIds(List.of(behandling.getId()))
                         .prioritertKravNummer(List.of())
                         .varslingsadresser(List.of())
                         .build()
         );
     }
 
-    @BeforeEach
-    void setUp() {
-        MockFilter.setUser(MockFilter.KRAVEIER);
-    }
-
     @Test
     @SneakyThrows
-    void getKrav() {
+    void getEtterlevelseWithDokumentasjonData() {
 
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of(""));
 
@@ -62,22 +50,20 @@ class KravGraphQlIT extends GraphQLTestBase {
                 .varslingsadresser(List.of(new Varslingsadresse("xyz", AdresseType.SLACK), new Varslingsadresse("notfound", AdresseType.SLACK)))
                 .status(KravStatus.AKTIV)
                 .build());
-        etterlevelseStorageService.save(Etterlevelse.builder()
+       var etterlevelse =  etterlevelseStorageService.save(Etterlevelse.builder()
                 .kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon())
                 .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString())
                 .build());
 
-        graphQltester.documentName("kravGet")
-                .variable("nummer", krav.getKravNummer())
-                .variable("versjon", krav.getKravVersjon())
-                .execute().path("kravById").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
-                    Assertions.assertEquals( "Krav 1", kravResponse.getNavn());
-                    Assertions.assertEquals( 2, kravResponse.getVarslingsadresser().size());
-                    Assertions.assertEquals( "xyz", kravResponse.getVarslingsadresser().get(0).getAdresse());
-                    Assertions.assertEquals( "XYZ channel", kravResponse.getVarslingsadresser().get(0).getSlackChannel().getName());
-                    Assertions.assertEquals( "notfound", kravResponse.getVarslingsadresser().get(1).getAdresse());
-                    Assertions.assertEquals(etterlevelseDokumentasjon.getId().toString(), kravResponse.getEtterlevelser().get(0).getEtterlevelseDokumentasjonId());
-                    Assertions.assertEquals(etterlevelseDokumentasjon.getTitle(), kravResponse.getEtterlevelser().get(0).getEtterlevelseDokumentasjon().getTitle());
+        graphQltester.documentName("etterlevelseGet")
+                .variable("id", etterlevelse.getId())
+                .execute().path("etterlevelseById").entity(EtterlevelseResponse.class).satisfies(etterlevelseResponse -> {
+                    Assertions.assertEquals( 50, etterlevelseResponse.getKravNummer());
+                    Assertions.assertEquals( 1, etterlevelseResponse.getKravVersjon());
+                    Assertions.assertEquals( etterlevelseDokumentasjon.getId().toString(), etterlevelseResponse.getEtterlevelseDokumentasjonId());
+                    Assertions.assertEquals( "test dokumentasjon", etterlevelseResponse.getEtterlevelseDokumentasjon().getTitle());
+                    Assertions.assertEquals( etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseResponse.getEtterlevelseDokumentasjon().getEtterlevelseNummer());
+
                 });
     }
 
