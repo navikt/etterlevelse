@@ -1,6 +1,6 @@
 package no.nav.data.etterlevelse.krav.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
-import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
+import no.nav.data.etterlevelse.varsel.dto.VarslingsadresseGraphQlResponse;
 import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelResponse;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
 
@@ -24,7 +24,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonPropertyOrder({"id", "kravNummer", "kravVersjon", "navn", "beskrivelse", "hensikt", "status"})
-public class KravResponse implements KravId {
+public class KravGraphQlResponse implements KravId {
 
     private UUID id;
     private ChangeStampResponse changeStamp;
@@ -44,7 +44,7 @@ public class KravResponse implements KravId {
     private String implementasjoner;
     private List<String> begrepIder;
     private List<String> virkemiddelIder;
-    private List<Varslingsadresse> varslingsadresser;
+    private List<VarslingsadresseGraphQlResponse> varslingsadresser;
     private List<String> rettskilder;
     private List<String> tagger;
     private List<RegelverkResponse> regelverk;
@@ -57,16 +57,10 @@ public class KravResponse implements KravId {
     private KravStatus status;
     private LocalDateTime aktivertDato;
 
-    // GraphQL only
-    @JsonIgnore
+    //Specific GraphQL fields
     private List<EtterlevelseResponse> etterlevelser;
-    @JsonIgnore
     private List<TilbakemeldingResponse> tilbakemeldinger;
-    @JsonIgnore
     private List<BegrepResponse> begreper;
-    @JsonIgnore
     private List<VirkemiddelResponse>  virkemidler;
-    @JsonIgnore
     private String prioriteringsId;
-
 }

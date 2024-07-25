@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
-import no.nav.data.etterlevelse.varsel.dto.VarslingsadresseResponse;
+import no.nav.data.etterlevelse.varsel.dto.VarslingsadresseGraphQlResponse;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
@@ -36,8 +36,8 @@ public class Varslingsadresse implements Validated {
         }
     }
 
-    public VarslingsadresseResponse toResponse() {
-        return VarslingsadresseResponse.builder()
+    public VarslingsadresseGraphQlResponse toGraphQlResponse() {
+        return VarslingsadresseGraphQlResponse.builder()
                 .adresse(adresse)
                 .type(type)
                 .build();
