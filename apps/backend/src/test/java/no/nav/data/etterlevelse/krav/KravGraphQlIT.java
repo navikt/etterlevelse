@@ -109,6 +109,27 @@ class KravGraphQlIT extends GraphQLTestBase {
                         Assertions.assertEquals(krav.getId().toString(), kravResponse.getId().toString());
                     });
         }
+        @Test
+        @SneakyThrows
+        void kravForUnderavdeling() {
+            var krav = kravStorageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                    .underavdeling("AVD1")
+                    .build());
+            kravStorageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(1)
+                    .underavdeling("AVD2")
+                    .build());
+
+            graphQltester.documentName("kravFilter")
+                    .variable("underavdeling", "AVD1")
+                    .execute().path("krav").entity(RestResponsePage.class).satisfies(kravPage -> {
+                        Assertions.assertEquals(1, kravPage.getContent().size());
+                    })
+                    .path("krav.content[0]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                        Assertions.assertEquals(krav.getId().toString(), kravResponse.getId().toString());
+                    });
+        }
     }
 
     @Test
