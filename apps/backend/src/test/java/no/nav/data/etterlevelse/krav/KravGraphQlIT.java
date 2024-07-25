@@ -255,5 +255,105 @@ class KravGraphQlIT extends GraphQLTestBase {
                 });
     }
 
+        @Test
+        @SneakyThrows
+        void kravForEtterlevelseDokumentasjon() {
+            List<String> EtterlevelseDokumentasjonRelevans = List.of("SAK");
+
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of("INNSYN"));
+
+            kravStorageService.save(Krav.builder()
+                    .navn("gammel versjon av krav 50").kravNummer(50).kravVersjon(1)
+                    .relevansFor(EtterlevelseDokumentasjonRelevans)
+                    .status(KravStatus.AKTIV)
+                    .build());
+
+            var krav50RelevansMatch = kravStorageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(2)
+                    .relevansFor(EtterlevelseDokumentasjonRelevans)
+                    .status(KravStatus.AKTIV)
+                    .build());
+            var krav51MedEtterlevelse = kravStorageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(1)
+                    .relevansFor(List.of("INNSYN"))
+                    .status(KravStatus.AKTIV)
+                    .build());
+            var krav51NyesteVersjon = kravStorageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(2)
+                    .relevansFor(List.of("INNSYN", "SAK"))
+                    .status(KravStatus.AKTIV)
+                    .build());
+            kravStorageService.save(Krav.builder()
+                    .navn("Irrelevant").kravNummer(52).kravVersjon(1)
+                    .relevansFor(List.of("INNSYN"))
+                    .status(KravStatus.AKTIV)
+                    .build());
+            kravStorageService.save(Krav.builder()
+                    .navn("UTKAST").kravNummer(53).kravVersjon(1)
+                    .status(KravStatus.UTKAST)
+                    .relevansFor(EtterlevelseDokumentasjonRelevans)
+                    .build());
+            kravStorageService.save(Krav.builder()
+                    .navn("UTGÅTT").kravNummer(54).kravVersjon(1)
+                    .status(KravStatus.UTGAATT)
+                    .relevansFor(EtterlevelseDokumentasjonRelevans)
+                    .build());
+
+            etterlevelseStorageService.save(Etterlevelse.builder()
+                    .kravNummer(51).kravVersjon(1)
+                    .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
+                    .build());
+
+            graphQltester.documentName("kravFilter")
+                    .variable("etterlevelseDokumentasjonId", String.valueOf(etterlevelseDokumentasjon.getId()))
+                    .execute().path("krav").entity(RestResponsePage.class).satisfies(kravPage -> {
+                        Assertions.assertEquals(3, kravPage.getContent().size());
+                    })
+                    .path("krav.content[0]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                        Assertions.assertEquals(krav50RelevansMatch.getId().toString(), kravResponse.getId().toString());
+                    })
+                    .path("krav.content[1]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                        Assertions.assertEquals(krav51MedEtterlevelse.getId().toString(), kravResponse.getId().toString());
+                    })
+                    .path("krav.content[2]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                        Assertions.assertEquals(krav51NyesteVersjon.getId().toString(), kravResponse.getId().toString());
+                    });
+        }
+
+        @Test
+        @SneakyThrows
+        void kravForEtterlevelseDokumentasjonNoIrrelevans() {
+
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of(""));
+
+
+            var krav = kravStorageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                    .relevansFor(List.of("SAK"))
+                    .status(KravStatus.AKTIV)
+                    .build());
+            var krav2 = kravStorageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(1)
+                    .relevansFor(List.of("INNSYN"))
+                    .status(KravStatus.AKTIV)
+                    .build());
+            etterlevelseStorageService.save(Etterlevelse.builder()
+                    .kravNummer(50).kravVersjon(1)
+                    .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
+                    .build());
+
+            graphQltester.documentName("kravFilter")
+                    .variable("etterlevelseDokumentasjonId", String.valueOf(etterlevelseDokumentasjon.getId()))
+                    .execute().path("krav").entity(RestResponsePage.class).satisfies(kravPage -> {
+                        Assertions.assertEquals(2, kravPage.getContent().size());
+                    })
+                    .path("krav.content[0]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                        Assertions.assertEquals(krav.getId().toString(), kravResponse.getId().toString());
+                    })
+                    .path("krav.content[1]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                        Assertions.assertEquals(krav2.getId().toString(), kravResponse.getId().toString());
+                    });
+
+        }
     }
 }
