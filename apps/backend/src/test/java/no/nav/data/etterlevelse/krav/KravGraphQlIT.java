@@ -355,5 +355,35 @@ class KravGraphQlIT extends GraphQLTestBase {
                     });
 
         }
+
+        @Test
+        @SneakyThrows
+        void kravForEtterlevelseDokOnlyRelevenatEtterlevelse() {
+
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of("INNSYN"));
+
+            kravStorageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                    .relevansFor(List.of("SAK"))
+                    .build());
+            etterlevelseStorageService.save(Etterlevelse.builder()
+                    .kravNummer(50).kravVersjon(1)
+                    .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
+                    .build());
+            etterlevelseStorageService.save(Etterlevelse.builder()
+                    .kravNummer(50).kravVersjon(1)
+                    .build());
+
+
+            graphQltester.documentName("kravForEtterlevelseDokumentasjon")
+                    .variable("etterlevelseDokumentasjonId", String.valueOf(etterlevelseDokumentasjon.getId()))
+                    .execute().path("krav").entity(RestResponsePage.class).satisfies(kravPage -> {
+                        Assertions.assertEquals(1, kravPage.getContent().size());
+                    })
+                    .path("krav.content[0]").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
+                        Assertions.assertEquals(1, kravResponse.getEtterlevelser().size());
+                    });
+
+        }
     }
 }
