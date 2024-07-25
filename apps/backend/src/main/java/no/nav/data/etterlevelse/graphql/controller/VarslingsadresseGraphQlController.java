@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.SlackChannel;
 import no.nav.data.etterlevelse.varsel.domain.SlackUser;
-import no.nav.data.etterlevelse.varsel.dto.VarslingsadresseResponse;
+import no.nav.data.etterlevelse.varsel.dto.VarslingsadresseGraphQlResponse;
 import no.nav.data.integration.slack.SlackClient;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ public class VarslingsadresseGraphQlController {
     private final SlackClient slackClient;
 
     @SchemaMapping
-    public SlackChannel slackChannel(VarslingsadresseResponse varslingsadresse) {
+    public SlackChannel slackChannel(VarslingsadresseGraphQlResponse varslingsadresse) {
         if (varslingsadresse.getType() == AdresseType.SLACK) {
             return slackClient.getChannel(varslingsadresse.getAdresse());
         }
@@ -26,7 +26,7 @@ public class VarslingsadresseGraphQlController {
     }
 
     @SchemaMapping
-    public SlackUser slackUser(VarslingsadresseResponse varslingsadresse) {
+    public SlackUser slackUser(VarslingsadresseGraphQlResponse varslingsadresse) {
         if (varslingsadresse.getType() == AdresseType.SLACK_USER) {
             return slackClient.getUserBySlackId(varslingsadresse.getAdresse());
         }
