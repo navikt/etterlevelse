@@ -59,11 +59,11 @@ public class KravController {
     @GetMapping
     public ResponseEntity<RestResponsePage<KravResponse>> getAll(PageParameters pageParameters) {
         log.info("Get all Krav");
-        Page<Krav> page = service.getAll(pageParameters.createPage());
-
         if(!SecurityUtils.isKravEier()) {
+            Page<Krav> page = service.getAllNonUtkast(pageParameters.createPage());
             return ResponseEntity.ok(new RestResponsePage<>(page).convert(Krav::toResponseForNotKraveier));
         } else {
+            Page<Krav> page = service.getAll(pageParameters.createPage());
             return ResponseEntity.ok(new RestResponsePage<>(page).convert(Krav::toResponse));
         }
     }

@@ -61,12 +61,12 @@ public class KravService extends DomainService<Krav> {
     private final SecurityProperties securityProperties;
 
     public Page<Krav> getAll(Pageable page) {
-        Page<GenericStorage<Krav>> all;
-        if (isKravEier()) {
-            all = kravRepo.findAll(page);
-        } else {
-            all = kravRepo.findAllNonUtkast(page);
-        }
+        Page<GenericStorage<Krav>> all = kravRepo.findAll(page);
+        return all.map(GenericStorage::getDomainObjectData);
+    }
+
+    public Page<Krav> getAllNonUtkast(Pageable page) {
+        Page<GenericStorage<Krav>> all = kravRepo.findAllNonUtkast(page);
         return all.map(GenericStorage::getDomainObjectData);
     }
 

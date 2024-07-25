@@ -129,6 +129,13 @@ class KravGraphQlIT extends GraphQLTestBase {
                 });
 
         // size 3, 2nd page
+        graphQltester.documentName("kravFilter")
+                .variable("pageNumber", 1)
+                .variable("pageSize", 3)
+                .execute().path("krav").entity(RestResponsePage.class).satisfies(kravPage -> {
+                    Assertions.assertEquals(3, kravPage.getContent().size());
+                });
+
 //        assertThat(graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(Map.of("pageNumber", 1, "pageSize", 3))), "krav")
 //                .hasNoErrors().hasSize("content", 3)
 //                .hasField("content[0].navn", "Krav 3")
