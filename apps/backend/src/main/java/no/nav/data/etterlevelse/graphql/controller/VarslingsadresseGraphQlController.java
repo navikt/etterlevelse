@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
-@SchemaMapping(typeName = "Varslingsadresse")
+@SchemaMapping(typeName = "VarslingsadresseQl")
 public class VarslingsadresseGraphQlController {
 
     private final SlackClient slackClient;

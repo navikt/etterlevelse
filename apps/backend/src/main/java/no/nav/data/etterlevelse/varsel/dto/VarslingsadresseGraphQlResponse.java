@@ -1,17 +1,20 @@
 package no.nav.data.etterlevelse.varsel.dto;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import no.nav.data.etterlevelse.varsel.domain.AdresseType;
+import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
+import lombok.experimental.SuperBuilder;
 import no.nav.data.etterlevelse.varsel.domain.SlackChannel;
 import no.nav.data.etterlevelse.varsel.domain.SlackUser;
+import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 @Data
-@Builder
-public class VarslingsadresseGraphQlResponse {
-
-    private String adresse;
-    private AdresseType type;
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldNameConstants
+public class VarslingsadresseGraphQlResponse extends Varslingsadresse {
     private SlackUser slackUser;
     private SlackChannel slackChannel;
 }

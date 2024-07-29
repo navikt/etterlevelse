@@ -75,10 +75,10 @@ class KravGraphQlIT extends GraphQLTestBase {
                 .variable("versjon", krav.getKravVersjon())
                 .execute().path("kravById").entity(KravGraphQlResponse.class).satisfies(kravResponse -> {
                     Assertions.assertEquals( "Krav 1", kravResponse.getNavn());
-                    Assertions.assertEquals( 2, kravResponse.getVarslingsadresser().size());
-                    Assertions.assertEquals( "xyz", kravResponse.getVarslingsadresser().get(0).getAdresse());
-                    Assertions.assertEquals( "XYZ channel", kravResponse.getVarslingsadresser().get(0).getSlackChannel().getName());
-                    Assertions.assertEquals( "notfound", kravResponse.getVarslingsadresser().get(1).getAdresse());
+                    Assertions.assertEquals( 2, kravResponse.getVarslingsadresserQl().size());
+                    Assertions.assertEquals( "xyz", kravResponse.getVarslingsadresserQl().get(0).getAdresse());
+                    Assertions.assertEquals( "XYZ channel", kravResponse.getVarslingsadresserQl().get(0).getSlackChannel().getName());
+                    Assertions.assertEquals( "notfound", kravResponse.getVarslingsadresserQl().get(1).getAdresse());
                     Assertions.assertEquals(etterlevelseDokumentasjon.getId().toString(), kravResponse.getEtterlevelser().get(0).getEtterlevelseDokumentasjonId());
                     Assertions.assertEquals(etterlevelseDokumentasjon.getTitle(), kravResponse.getEtterlevelser().get(0).getEtterlevelseDokumentasjon().getTitle());
                 });

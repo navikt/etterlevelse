@@ -1,10 +1,10 @@
 package no.nav.data.etterlevelse.varsel.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import lombok.experimental.SuperBuilder;
 import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.varsel.dto.VarslingsadresseGraphQlResponse;
@@ -12,7 +12,7 @@ import no.nav.data.etterlevelse.varsel.dto.VarslingsadresseGraphQlResponse;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldNameConstants

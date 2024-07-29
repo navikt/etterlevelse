@@ -68,6 +68,7 @@ type Krav {
     tagger: [String!]!
     regelverk: [Regelverk!]!
     varslingsadresser: [Varslingsadresse!]!
+    varslingsadresserQl: [VarslingsadresseQl!]!
     suksesskriterier: [Suksesskriterie!]!
 
     avdeling: Code
@@ -154,6 +155,11 @@ enum KravStatus {
 }
 
 type Varslingsadresse {
+    adresse: String!
+    type: AdresseType!
+}
+
+type VarslingsadresseQl {
     adresse: String!
     type: AdresseType!
     slackChannel: SlackChannel
