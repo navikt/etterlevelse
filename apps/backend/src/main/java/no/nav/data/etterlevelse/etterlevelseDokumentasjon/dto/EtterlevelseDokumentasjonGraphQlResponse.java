@@ -10,6 +10,7 @@ import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 @Data
 @SuperBuilder
 @AllArgsConstructor

@@ -28,7 +28,7 @@ public class EtterlevelseGraphQlController {
 
     @SchemaMapping(typeName = "Etterlevelse", field = "etterlevelseDokumentasjon")
     public EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon(EtterlevelseResponse etterlevelse) {
-        if(etterlevelse.getEtterlevelseDokumentasjonId() != null) {
+        if (etterlevelse.getEtterlevelseDokumentasjonId() != null) {
             return etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId())).toResponse();
         } else {
             return EtterlevelseDokumentasjonResponse.builder().build();

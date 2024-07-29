@@ -74,9 +74,9 @@ public class KravGraphQlController {
             return new RestResponsePage<>(kravService.getAll(pageInput.createPage())).convert(Krav::toGraphQlResponse);
         }
 
-        if(filter.getEtterlevelseDokumentasjonId() != null && !filter.getEtterlevelseDokumentasjonId().isEmpty()) {
+        if (filter.getEtterlevelseDokumentasjonId() != null && !filter.getEtterlevelseDokumentasjonId().isEmpty()) {
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(filter.getEtterlevelseDokumentasjonId()));
-            if(etterlevelseDokumentasjon.isKnyttetTilVirkemiddel() && etterlevelseDokumentasjon.getVirkemiddelId() != null && !etterlevelseDokumentasjon.getVirkemiddelId().isEmpty()){
+            if (etterlevelseDokumentasjon.isKnyttetTilVirkemiddel() && etterlevelseDokumentasjon.getVirkemiddelId() != null && !etterlevelseDokumentasjon.getVirkemiddelId().isEmpty()){
                 filter.setVirkemiddelId(etterlevelseDokumentasjon.getVirkemiddelId());
             }
         }
@@ -85,8 +85,7 @@ public class KravGraphQlController {
         if (filter.getSistRedigert() == null) {
             filtered.sort(comparing(Krav::getKravNummer).thenComparing(Krav::getKravVersjon));
         }
-        var all = pageSize == 0;
-        if (all) {
+        if (pageSize == 0) {
             return new RestResponsePage<>(filtered).convert(Krav::toGraphQlResponse);
         }
         return pageInput.pageFrom(filtered).convert(Krav::toGraphQlResponse);
@@ -104,7 +103,7 @@ public class KravGraphQlController {
         if (onlyForEtterlevelseDokumentasjon || etterlevelseDokumentasjonId != null) {
             String dokumentasjonId = etterlevelseDokumentasjonId != null ? etterlevelseDokumentasjonId.toString() : KravFilter.get(env, Fields.etterlevelseDokumentasjonId);
 
-            if(dokumentasjonId != null) {
+            if (dokumentasjonId != null) {
                 etterlevelser = filter(etterlevelser, e -> dokumentasjonId.equals(e.getEtterlevelseDokumentasjonId()));
             }
         }

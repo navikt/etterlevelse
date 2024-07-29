@@ -58,7 +58,7 @@ public class EtterlevelseDokumentasjonGraphQlController {
     private final EtterlevelseService etterlevelseService;
 
     @QueryMapping
-    public RestResponsePage<EtterlevelseDokumentasjonGraphQlResponse> etterlevelseDokumentasjon(@Argument EtterlevelseDokumentasjonFilter filter,@Argument Integer pageNumber,@Argument Integer pageSize) {
+    public RestResponsePage<EtterlevelseDokumentasjonGraphQlResponse> etterlevelseDokumentasjon(@Argument EtterlevelseDokumentasjonFilter filter, @Argument Integer pageNumber, @Argument Integer pageSize) {
         log.info("etterlevelseDokumentasjon filter {}", filter);
         var pageInput = new PageParameters(pageNumber, pageSize);
 
@@ -75,8 +75,7 @@ public class EtterlevelseDokumentasjonGraphQlController {
         if (filter.getSistRedigert() == null) {
             filtered.sort(Comparator.comparing(EtterlevelseDokumentasjon::getEtterlevelseNummer));
         }
-        var all = pageSize == 0;
-        if (all) {
+        if (pageSize == 0) {
             return new RestResponsePage<>(filtered).convert(EtterlevelseDokumentasjon::toGraphQlResponse);
         }
         return pageInput.pageFrom(filtered).convert(EtterlevelseDokumentasjon::toGraphQlResponse);
@@ -162,7 +161,7 @@ public class EtterlevelseDokumentasjonGraphQlController {
         List<TeamResponse> teamResponses = convert(teams, Team::toResponseWithMembers);
 
         teamResponses.forEach(t -> {
-            if(t.getProductAreaId() != null && !t.getProductAreaId().isEmpty()) {
+            if (t.getProductAreaId() != null && !t.getProductAreaId().isEmpty()) {
                 var po = teamsService.getProductArea(t.getProductAreaId());
                 po.ifPresent((productArea) -> t.setProductAreaName(productArea.getName()));
             }
