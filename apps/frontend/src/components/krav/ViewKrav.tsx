@@ -128,7 +128,7 @@ export const AllInfo = ({
 
       <LabelWrapper>
         <LabelAboveContent header={header} title="Varslingsadresser">
-          {krav.varslingsadresser.map((varslingsaddresse, index) => {
+          {krav.varslingsadresserQl.map((varslingsaddresse, index) => {
             if (varslingsaddresse.type === EAdresseType.SLACK)
               return (
                 <div className="flex mb-2" key={'kravVarsling_list_SLACK_' + index}>

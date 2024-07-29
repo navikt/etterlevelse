@@ -128,11 +128,11 @@ export const KravFormFields = (props: IProps) => {
             </Heading>
           </div>
 
-          <div id="varslingsadresser">
-            <VarslingsadresserEdit />
+          <div id="varslingsadresserQl">
+            <VarslingsadresserEdit fieldName="varslingsadresserQl" />
           </div>
 
-          <FormError fieldName="varslingsadresser" akselStyling />
+          <FormError fieldName="varslingsadresserQl" akselStyling />
 
           <div className="w-full">
             {Object.keys(errors).length > 0 && !errors.dokumentasjon && (

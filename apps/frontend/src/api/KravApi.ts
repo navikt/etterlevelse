@@ -79,6 +79,12 @@ function kravToKravDomainObject(krav: TKravQL): IKrav {
     begrepIder: krav.begreper.map((begrep) => begrep.id),
     virkemiddelIder: krav.virkemidler.map((virkemiddel) => virkemiddel.id),
     kravIdRelasjoner: krav.kravRelasjoner.map((kravRelasjon) => kravRelasjon.id),
+    varslingsadresser: krav.varslingsadresserQl.map((varslingsadresse) => {
+      return {
+        adresse: varslingsadresse.adresse,
+        type: varslingsadresse.type,
+      }
+    }),
   } as any
   delete domainToObject.changeStamp
   delete domainToObject.version
@@ -159,6 +165,7 @@ export const kravMapToFormVal = (krav: Partial<TKravQL>): TKravQL => ({
   begreper: krav.begreper || [],
   virkemidler: krav.virkemidler || [],
   varslingsadresser: krav.varslingsadresser || [],
+  varslingsadresserQl: krav.varslingsadresserQl || [],
   rettskilder: krav.rettskilder || [],
   tagger: krav.tagger || [],
   regelverk: krav.regelverk || [],

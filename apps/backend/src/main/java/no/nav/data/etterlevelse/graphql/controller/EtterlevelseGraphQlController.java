@@ -16,7 +16,6 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @Controller
-
 public class EtterlevelseGraphQlController {
     private final EtterlevelseService etterlevelseService;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;

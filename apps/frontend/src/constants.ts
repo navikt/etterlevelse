@@ -461,7 +461,7 @@ export type TKravQL = TReplace<
   IKrav,
   {
     etterlevelser: TEtterlevelseQL[]
-    varslingsadresser: TVarslingsadresseQL[]
+    varslingsadresserQl: TVarslingsadresseQL[]
     begreper: IBegrep[]
     virkemidler: IVirkemiddel[]
     kravRelasjoner: IKrav[]

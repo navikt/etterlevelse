@@ -400,7 +400,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           </div>
 
           <div id="varslingsadresser" className="mt-5">
-            <VarslingsadresserEdit />
+            <VarslingsadresserEdit fieldName="varslingsadresser" />
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
 

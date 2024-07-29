@@ -175,7 +175,7 @@ export const getKravWithEtterlevelseQuery = gql`
         navn
       }
       virkemiddelIder
-      varslingsadresser {
+      varslingsadresserQl {
         adresse
         type
         slackChannel {
