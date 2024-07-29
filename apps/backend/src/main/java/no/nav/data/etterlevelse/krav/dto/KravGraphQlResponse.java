@@ -3,6 +3,7 @@ package no.nav.data.etterlevelse.krav.dto;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.etterlevelse.common.domain.KravId;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Data
 @SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @JsonPropertyOrder({"id", "kravNummer", "kravVersjon", "navn", "beskrivelse", "hensikt", "status"})
 public class KravGraphQlResponse extends KravResponse implements KravId {

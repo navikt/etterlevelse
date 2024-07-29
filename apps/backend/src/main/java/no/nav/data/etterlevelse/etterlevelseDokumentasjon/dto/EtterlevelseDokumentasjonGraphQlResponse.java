@@ -3,6 +3,7 @@ package no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Data
 @SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonPropertyOrder({"id", "etterlevelseNummer", "title", "behandlingId"})
