@@ -59,7 +59,7 @@ public class KravController {
     @GetMapping
     public ResponseEntity<RestResponsePage<KravResponse>> getAll(PageParameters pageParameters) {
         log.info("Get all Krav");
-        if(!SecurityUtils.isKravEier()) {
+        if (!SecurityUtils.isKravEier()) {
             Page<Krav> page = service.getAllNonUtkast(pageParameters.createPage());
             return ResponseEntity.ok(new RestResponsePage<>(page).convert(Krav::toResponseForNotKraveier));
         } else {
@@ -75,7 +75,7 @@ public class KravController {
         log.info("Get all Krav Statistics");
         Page<Krav> page = service.getAllKravStatistics(pageParameters.createPage());
 
-        if(!SecurityUtils.isKravEier()) {
+        if (!SecurityUtils.isKravEier()) {
             return ResponseEntity.ok(new RestResponsePage<>(page).convert(Krav::toResponseForNotKraveier));
         } else {
             return ResponseEntity.ok(new RestResponsePage<>(page).convert(Krav::toResponse));
@@ -90,7 +90,7 @@ public class KravController {
 
         var krav = service.getByKravNummer(kravNummer);
 
-        if(!SecurityUtils.isKravEier()) {
+        if (!SecurityUtils.isKravEier()) {
             return ResponseEntity.ok(new RestResponsePage<>(krav).convert(Krav::toResponseForNotKraveier));
         } else {
             return ResponseEntity.ok(new RestResponsePage<>(krav).convert(Krav::toResponse));
@@ -104,7 +104,7 @@ public class KravController {
         log.info("Get Krav for kravNummer={} kravVersjon={}", kravNummer, kravVersjon);
         Optional<Krav> krav = service.getByKravNummer(kravNummer, kravVersjon);
         Optional<KravResponse> response;
-        if(!SecurityUtils.isKravEier()) {
+        if (!SecurityUtils.isKravEier()) {
             response = krav.map(Krav::toResponseForNotKraveier);
         } else {
             response = krav.map(Krav::toResponse);
@@ -120,7 +120,7 @@ public class KravController {
 
         var krav = service.get(id);
 
-        if(!SecurityUtils.isKravEier()) {
+        if (!SecurityUtils.isKravEier()) {
             return ResponseEntity.ok(krav.toResponseForNotKraveier());
         } else {
             return ResponseEntity.ok(krav.toResponse());
@@ -151,7 +151,7 @@ public class KravController {
         var krav = service.searchByNumber(number);
         log.info("Returned {} krav", krav.size());
 
-        if(!SecurityUtils.isKravEier()) {
+        if (!SecurityUtils.isKravEier()) {
             return new ResponseEntity<>(new RestResponsePage<>(convert(krav, Krav::toResponseForNotKraveier)), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new RestResponsePage<>(convert(krav, Krav::toResponse)), HttpStatus.OK);
