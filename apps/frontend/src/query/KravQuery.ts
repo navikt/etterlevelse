@@ -130,7 +130,10 @@ export const getKravMedPrioriteringOgEtterlevelseQuery = gql`
         kravVersjon
         status
         prioriteringsId
-        etterlevelser(onlyForEtterlevelseDokumentasjon: true) {
+        etterlevelser(
+          onlyForEtterlevelseDokumentasjon: true
+          etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
+        ) {
           id
           etterleves
           fristForFerdigstillelse
