@@ -2,10 +2,10 @@ package no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
+import lombok.experimental.SuperBuilder;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonPropertyOrder({"id", "etterlevelseNummer", "title", "behandlingId"})

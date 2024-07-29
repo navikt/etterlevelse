@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
-import no.nav.data.etterlevelse.krav.dto.KravResponse;
+import no.nav.data.etterlevelse.krav.dto.KravGraphQlResponse;
 
 import java.util.List;
 
@@ -17,11 +17,11 @@ import java.util.List;
 public class EtterlevelseDokumentasjonStats {
 
     @Singular("relevant")
-    private List<KravResponse> relevantKrav;
+    private List<KravGraphQlResponse> relevantKrav;
     @Singular("irrelevant")
-    private List<KravResponse> irrelevantKrav;
+    private List<KravGraphQlResponse> irrelevantKrav;
     @Singular("utgaatt")
-    private List<KravResponse> utgaattKrav;
+    private List<KravGraphQlResponse> utgaattKrav;
     @Singular
     private List<LovStats> lovStats;
 
@@ -33,11 +33,11 @@ public class EtterlevelseDokumentasjonStats {
 
         private CodelistResponse lovCode;
         @Singular("relevant")
-        private List<KravResponse> relevantKrav;
+        private List<KravGraphQlResponse> relevantKrav;
         @Singular("irrelevant")
-        private List<KravResponse> irrelevantKrav;
+        private List<KravGraphQlResponse> irrelevantKrav;
         @Singular("utgaatt")
-        private List<KravResponse> utgaattKrav;
+        private List<KravGraphQlResponse> utgaattKrav;
     }
 
     public static EtterlevelseDokumentasjonStats empty() {

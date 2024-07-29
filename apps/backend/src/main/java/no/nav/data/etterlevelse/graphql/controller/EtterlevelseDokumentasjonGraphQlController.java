@@ -1,7 +1,6 @@
 package no.nav.data.etterlevelse.graphql.controller;
 
 
-import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
@@ -15,7 +14,7 @@ import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonGraphQlResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonStats;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
@@ -28,6 +27,7 @@ import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
@@ -58,14 +58,14 @@ public class EtterlevelseDokumentasjonGraphQlController {
     private final EtterlevelseService etterlevelseService;
 
     @QueryMapping
-    public RestResponsePage<EtterlevelseDokumentasjonResponse> etterlevelseDokumentasjon(EtterlevelseDokumentasjonFilter filter, Integer page, Integer pageSize) {
+    public RestResponsePage<EtterlevelseDokumentasjonGraphQlResponse> etterlevelseDokumentasjon(@Argument EtterlevelseDokumentasjonFilter filter,@Argument Integer pageNumber,@Argument Integer pageSize) {
         log.info("etterlevelseDokumentasjon filter {}", filter);
-        var pageInput = new PageParameters(page, pageSize);
+        var pageInput = new PageParameters(pageNumber, pageSize);
 
         if (filter == null || filter.isEmpty()) {
             var resp = etterlevelseDokumentasjonService.getAll(pageInput.createPage());
 
-            return new RestResponsePage<>(resp).convert(EtterlevelseDokumentasjon::toResponse);
+            return new RestResponsePage<>(resp).convert(EtterlevelseDokumentasjon::toGraphQlResponse);
         }
         if (SecurityUtils.getCurrentUser().isEmpty() && filter.requiresLogin()) {
             return new RestResponsePage<>();
@@ -77,49 +77,49 @@ public class EtterlevelseDokumentasjonGraphQlController {
         }
         var all = pageSize == 0;
         if (all) {
-            return new RestResponsePage<>(filtered).convert(EtterlevelseDokumentasjon::toResponse);
+            return new RestResponsePage<>(filtered).convert(EtterlevelseDokumentasjon::toGraphQlResponse);
         }
-        return pageInput.pageFrom(filtered).convert(EtterlevelseDokumentasjon::toResponse);
+        return pageInput.pageFrom(filtered).convert(EtterlevelseDokumentasjon::toGraphQlResponse);
     }
 
 
 
-    @SchemaMapping(field = "EtterlevelseDokumentasjon")
-    public List<TeamResponse> teamsData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+    @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
+    public List<TeamResponse> teamsData(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjonResponse) {
         var teams = getTeams(etterlevelseDokumentasjonResponse.getTeams());
         return new ArrayList<>(teams.values());
     }
 
-    @SchemaMapping(field = "EtterlevelseDokumentasjon")
-    public List<Resource> resourcesData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+    @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
+    public List<Resource> resourcesData(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjonResponse) {
         var resources = resourceService.getResources(etterlevelseDokumentasjonResponse.getResources());
         return new ArrayList<>(resources.values());
     }
 
-    @SchemaMapping(field = "EtterlevelseDokumentasjon")
-    public List<Behandling> behandlinger(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+    @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
+    public List<Behandling> behandlinger(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjonResponse) {
         var behandlinger = behandlingService.findAllByIdMapped(etterlevelseDokumentasjonResponse.getBehandlingIds());
         return new ArrayList<>(behandlinger.values());
     }
 
-    @SchemaMapping(field = "EtterlevelseDokumentasjon")
-    public List<EtterlevelseResponse> etterlevelser(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon, DataFetchingEnvironment env) {
+    @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
+    public List<EtterlevelseResponse> etterlevelser(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjon) {
         return convert(etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString()), Etterlevelse::toResponse);
     }
 
-    @SchemaMapping(field = "EtterlevelseDokumentasjon")
-    public LocalDateTime sistEndretEtterlevelse(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon, DataFetchingEnvironment env) {
+    @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
+    public LocalDateTime sistEndretEtterlevelse(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjon) {
         var etterlevelser = etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString());
         return sistEndret(etterlevelser);
     }
 
-    @SchemaMapping(field = "EtterlevelseDokumentasjon")
-    public LocalDateTime sistEndretDokumentasjon(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+    @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
+    public LocalDateTime sistEndretDokumentasjon(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjonResponse) {
         return etterlevelseDokumentasjonResponse.getChangeStamp().getLastModifiedDate();
     }
 
-    @SchemaMapping(field = "EtterlevelseDokumentasjon")
-    public EtterlevelseDokumentasjonStats stats(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon) {
+    @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
+    public EtterlevelseDokumentasjonStats stats(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjon) {
         List<KravGraphQlResponse> krav;
         List<KravGraphQlResponse> irrelevantKrav;
 

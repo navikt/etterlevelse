@@ -262,7 +262,7 @@ type EtterlevelseDokumentasjon {
     virkemiddelId: String
     irrelevansFor: [Code!]!
     prioritertKravNummer: [String!]!
-    isForGjenbruk: Boolean
+    forGjenbruk: Boolean
     teams: [String!]!
     teamsData: [Team!]!
     resources: [String!]!
@@ -338,16 +338,6 @@ enum ListName {
     RELEVANS
     AVDELING
     UNDERAVDELING
-}
-
-type BehandlingPage {
-    pageNumber: Int!
-    pageSize: Int!
-    pages: Int!
-    numberOfElements: Int!
-    totalElements: Int!
-    paged: Boolean
-    content: [Behandling!]!
 }
 
 type EtterlevelseDokumentasjonPage {
