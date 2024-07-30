@@ -77,7 +77,7 @@ const getKravtableQuery = gql`
           code
           shortName
         }
-        etterlevelser {
+        etterlevelser(onlyForEtterlevelseDokumentasjon: false) {
           id
         }
         changeStamp {
