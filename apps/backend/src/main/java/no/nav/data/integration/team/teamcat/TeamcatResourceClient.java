@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.integration.team.dto.Resource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.client.HttpClientErrorException;
@@ -74,10 +73,8 @@ public class TeamcatResourceClient {
             Assert.isTrue(response.getStatusCode().is2xxSuccessful() && response.hasBody(), "Call to teamcat failed " + response.getStatusCode());
             return response.getBody();
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
-                return null;
-            }
-            throw e;
+            log.error("Error while connecting to teamcatalog.", e);
+            return null;
         }
     }
 
