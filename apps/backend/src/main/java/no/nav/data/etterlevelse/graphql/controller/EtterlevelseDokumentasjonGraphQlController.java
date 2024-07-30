@@ -17,7 +17,6 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokume
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonGraphQlResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonStats;
 import no.nav.data.etterlevelse.krav.KravService;
-import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.dto.KravGraphQlResponse;
 import no.nav.data.integration.behandling.BehandlingService;
@@ -123,18 +122,18 @@ public class EtterlevelseDokumentasjonGraphQlController {
         List<KravGraphQlResponse> irrelevantKrav;
 
         if (etterlevelseDokumentasjon.isKnyttetTilVirkemiddel() && (etterlevelseDokumentasjon.getVirkemiddelId() != null)) {
-            krav = convert(kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString(), etterlevelseDokumentasjon.getVirkemiddelId()), Krav::toGraphQlResponse);
-            irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId().toString(), etterlevelseDokumentasjon.getVirkemiddelId()), Krav::toGraphQlResponse);
+            krav = convert(kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString(), etterlevelseDokumentasjon.getVirkemiddelId()), KravGraphQlResponse::buildFrom);
+            irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId().toString(), etterlevelseDokumentasjon.getVirkemiddelId()), KravGraphQlResponse::buildFrom);
         } else {
-            krav = convert(kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString()), Krav::toGraphQlResponse);
-            irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId().toString()), Krav::toGraphQlResponse);
+            krav = convert(kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString()), KravGraphQlResponse::buildFrom);
+            irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId().toString()), KravGraphQlResponse::buildFrom);
         }
 
-        var relevantKrav = krav.stream().filter(k -> k.getStatus().equals(KravStatus.AKTIV) ).toList();
+        var relevantKrav = krav.stream().filter(k -> k.getStatus() == KravStatus.AKTIV).toList();
 
         var irrelevant = irrelevantKrav.stream().filter(i -> !relevantKrav.contains(i)).toList();
 
-        var utgaattKrav = krav.stream().filter(k -> k.getStatus().equals(KravStatus.UTGAATT)).toList();
+        var utgaattKrav = krav.stream().filter(k -> k.getStatus() == KravStatus.UTGAATT).toList();
 
         return EtterlevelseDokumentasjonStats.builder()
                 .relevantKrav(relevantKrav)
