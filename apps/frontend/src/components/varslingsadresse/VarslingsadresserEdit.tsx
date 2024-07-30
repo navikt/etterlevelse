@@ -15,6 +15,7 @@ import {
 } from '../../api/TeamApi'
 import {
   EAdresseType,
+  IEtterlevelseDokumentasjon,
   IKrav,
   ISlackChannel,
   ISlackUser,
@@ -33,17 +34,31 @@ import { AddEmailModal } from './AddEmailModal'
 import { AddSlackChannelModal } from './AddSlackChannelModal'
 import { AddSlackUserModal } from './AddSlackUserModal'
 
-export const VarslingsadresserEdit = () => {
+interface IVarslingsadresserEditProps {
+  fieldName: 'varslingsadresser' | 'varslingsadresserQl'
+}
+
+export const VarslingsadresserEdit = (props: IVarslingsadresserEditProps) => {
+  const { fieldName } = props
+
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
   const [addSlackUser, setAddSlackUser] = useState<boolean>(false)
   const [addEmail, setAddEmail] = useState<boolean>(false)
 
   return (
     <FieldWrapper>
-      <FieldArray name="varslingsadresser">
+      <FieldArray name={fieldName}>
         {(fieldArrayRenderProps: FieldArrayRenderProps) => {
-          const varslingsadresser = (fieldArrayRenderProps.form.values as IKrav).varslingsadresser
-          const push = (v: IVarslingsadresse) => {
+          let varslingsadresser = []
+
+          if (fieldName === 'varslingsadresser') {
+            varslingsadresser = (fieldArrayRenderProps.form.values as IEtterlevelseDokumentasjon)
+              .varslingsadresser
+          } else {
+            varslingsadresser = (fieldArrayRenderProps.form.values as IKrav).varslingsadresser
+          }
+
+          const push = (v: TVarslingsadresseQL) => {
             if (!varslingsadresser.find((v2) => v2.adresse === v.adresse))
               fieldArrayRenderProps.push(v)
           }
@@ -108,7 +123,7 @@ export const VarslingsadresserEdit = () => {
                 <AddEmailModal
                   isOpen={addEmail}
                   close={() => setAddEmail(false)}
-                  added={(fieldArrayRenderProps.form.values as IKrav).varslingsadresser}
+                  added={fieldArrayRenderProps.form.values[fieldName] as TVarslingsadresseQL[]}
                   doAdd={push}
                 />
               )}

@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.etterlevelse.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,8 +36,5 @@ public class EtterlevelseResponse {
     private EtterlevelseStatus status;
     private List<SuksesskriterieBegrunnelseResponse> suksesskriterieBegrunnelser;
 
-    // GraphQL only
-    @JsonIgnore
     private EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon;
-
 }

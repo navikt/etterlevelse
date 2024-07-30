@@ -113,7 +113,7 @@ export const kravCreateValidation = () =>
     hensikt: hensiktCheck,
     suksesskriterier: suksesskriterierCheck,
     regelverk: regelverkCheck,
-    varslingsadresser: varslingsadresserCheck,
+    varslingsadresserQl: varslingsadresserCheck,
   })
 
 export const kravNewVersionValidation = () =>
@@ -122,7 +122,7 @@ export const kravNewVersionValidation = () =>
     hensikt: hensiktCheck,
     suksesskriterier: suksesskriterierCheck,
     regelverk: regelverkCheck,
-    varslingsadresser: varslingsadresserCheck,
+    varslingsadresserQl: varslingsadresserCheck,
     versjonEndringer: versjonEndringCheck,
   })
 
@@ -132,7 +132,7 @@ export const kravEditValidation = ({ alleKravVersjoner, isEditingUtgaattKrav }: 
     hensikt: hensiktCheck,
     suksesskriterier: suksesskriterierCheck,
     regelverk: regelverkCheck,
-    varslingsadresser: varslingsadresserCheck,
+    varslingsadresserQl: varslingsadresserCheck,
     versjonEndringer: versjonEndringCheck,
 
     beskrivelse: yup.string().test({

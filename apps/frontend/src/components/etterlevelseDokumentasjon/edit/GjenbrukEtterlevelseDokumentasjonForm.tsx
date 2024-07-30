@@ -254,7 +254,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
           </FieldWrapper>
 
           <div id="varslingsadresser" className="mt-3">
-            <VarslingsadresserEdit />
+            <VarslingsadresserEdit fieldName="varslingsadresser" />
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
 

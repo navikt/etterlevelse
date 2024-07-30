@@ -1,0 +1,16 @@
+query getEtterlevelse($id: ID!) {
+    etterlevelseById(id: $id){
+        id
+        changeStamp {
+            lastModifiedBy
+            lastModifiedDate
+        }
+        kravNummer
+        kravVersjon
+        etterlevelseDokumentasjonId
+        etterlevelseDokumentasjon {
+            title
+            etterlevelseNummer
+        }
+    }
+}

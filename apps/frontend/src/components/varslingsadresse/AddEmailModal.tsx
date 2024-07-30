@@ -1,6 +1,6 @@
 import { Button, Label, Modal, Radio, RadioGroup, TextField } from '@navikt/ds-react'
 import { useState } from 'react'
-import { EAdresseType, IVarslingsadresse } from '../../constants'
+import { EAdresseType, TVarslingsadresseQL } from '../../constants'
 import { user } from '../../services/User'
 import { Error } from '../common/ModalSchema'
 import { emailValidator } from './VarslingsadresserEdit'
@@ -8,8 +8,8 @@ import { emailValidator } from './VarslingsadresserEdit'
 interface IProps {
   isOpen: boolean
   close: () => void
-  doAdd: (v: IVarslingsadresse) => void
-  added?: IVarslingsadresse[]
+  doAdd: (v: TVarslingsadresseQL) => void
+  added?: TVarslingsadresseQL[]
 }
 
 export const AddEmailModal = (props: IProps) => {

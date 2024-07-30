@@ -1,27 +1,29 @@
 package no.nav.data.graphql;
 
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.graphql.spring.boot.test.GraphQLTestTemplate;
 import no.nav.data.IntegrationTestBase;
-import no.nav.data.common.utils.JsonUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.test.tester.HttpGraphQlTester;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
+import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Map;
 
 public abstract class GraphQLTestBase extends IntegrationTestBase {
 
     @Autowired
-    protected GraphQLTestTemplate graphQLTestTemplate;
+    protected WebApplicationContext webApplicationContext;
 
-    protected ObjectNode vars() {
-        ObjectReader or = JsonUtils.getObjectReader();
-        return or.getConfig().getNodeFactory().objectNode();
+    public HttpGraphQlTester graphQltester;
+
+    @BeforeEach
+    void setup () {
+        WebTestClient client = MockMvcWebTestClient.bindToApplicationContext(webApplicationContext)
+                .configureClient()
+                .baseUrl("/graphql")
+                .build();
+
+        graphQltester = HttpGraphQlTester.create(client);
     }
 
-    protected ObjectNode vars(Map<String, ?> map) {
-        var on = vars();
-        map.forEach((key, val) -> on.set(key, JsonUtils.toJsonNode(val)));
-        return on;
-    }
 }

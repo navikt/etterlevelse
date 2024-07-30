@@ -165,10 +165,6 @@ public class KravRepoImpl implements KravRepoCustom {
     private boolean filterStateAndStatus(List<GenericStorage<Krav>> all, GenericStorage<Krav> test, KravFilter filter, List<String> kravIdSafeList) {
         Krav krav = test.getDomainObjectData();
 
-        if (krav.getStatus() == KravStatus.UTKAST && !SecurityUtils.isKravEier()) {
-            return false;
-        }
-
         if (kravIdSafeList.contains(krav.kravId())) {
             return true;
         }

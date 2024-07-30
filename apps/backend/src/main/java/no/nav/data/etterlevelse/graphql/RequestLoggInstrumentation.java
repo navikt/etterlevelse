@@ -3,6 +3,7 @@ package no.nav.data.etterlevelse.graphql;
 import graphql.ExecutionResult;
 import graphql.GraphQLError;
 import graphql.execution.instrumentation.InstrumentationContext;
+import graphql.execution.instrumentation.InstrumentationState;
 import graphql.execution.instrumentation.SimpleInstrumentationContext;
 import graphql.execution.instrumentation.SimplePerformantInstrumentation;
 import graphql.execution.instrumentation.parameters.InstrumentationExecutionParameters;
@@ -22,7 +23,7 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 public class RequestLoggInstrumentation extends SimplePerformantInstrumentation {
 
     @Override
-    public InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters) {
+    public InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters, InstrumentationState state) {
         var start = Instant.now();
 
         log.info("Query: {} with variables: {}", parameters.getQuery(), parameters.getVariables());

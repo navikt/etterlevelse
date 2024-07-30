@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.codelist.CodelistService;
@@ -99,7 +98,7 @@ public class Krav extends DomainObject implements KravId {
     }
 
     public KravResponse toResponse() {
-        var response = KravResponse.builder()
+        return KravResponse.builder()
                 .id(id)
                 .changeStamp(convertChangeStampResponse())
                 .version(version)
@@ -128,11 +127,6 @@ public class Krav extends DomainObject implements KravId {
                 .status(status)
                 .aktivertDato(aktivertDato)
                 .build();
-        if (!SecurityUtils.isKravEier()) {
-            response.getChangeStamp().setLastModifiedBy("Skjult");
-            response.setVarslingsadresser(List.of());
-        }
-        return response;
     }
 
     public InstanceId convertToInstanceId() {
