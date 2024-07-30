@@ -22,6 +22,7 @@ import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
+import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.varsel.UrlGenerator;
 import no.nav.data.etterlevelse.varsel.domain.Varsel;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
@@ -235,6 +236,14 @@ public class KravService extends DomainService<Krav> {
     public void cleanupImages() {
         var deletes = kravRepo.cleanupImages();
         log.info("Deleted {} unused krav images", deletes);
+    }
+
+
+    public KravResponse toResponseForNotKraveier (Krav krav) {
+        var response = krav.toResponse();
+        response.getChangeStamp().setLastModifiedBy("Skjult");
+        response.setVarslingsadresser(List.of());
+        return response;
     }
 
     private void varsle(Krav krav, boolean isNewVersion) {

@@ -164,13 +164,6 @@ public class Krav extends DomainObject implements KravId {
                 .build();
     }
 
-    public KravResponse toResponseForNotKraveier () {
-        var response = toResponse();
-        response.getChangeStamp().setLastModifiedBy("Skjult");
-        response.setVarslingsadresser(List.of());
-        return response;
-    }
-
     public InstanceId convertToInstanceId() {
         return new InstanceId(id.toString(), navn, "K" + kravNummer + "." + kravVersjon);
     }
