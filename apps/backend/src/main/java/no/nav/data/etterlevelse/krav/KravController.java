@@ -145,7 +145,7 @@ public class KravController {
     @GetMapping("/search/number/{number}")
     public ResponseEntity<RestResponsePage<KravResponse>> searchKravByNumber(@PathVariable String number) {
         log.info("Received request for Krav with the name like {}", number);
-        if (!number.isEmpty()) {
+        if (number.isEmpty()) {
             throw new ValidationException("Search krav number must be at least 1 characters");
         }
         var krav = service.searchByNumber(number);
