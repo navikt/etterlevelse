@@ -12,7 +12,6 @@ import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.common.domain.KravId;
-import no.nav.data.etterlevelse.krav.dto.KravGraphQlResponse;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
@@ -20,7 +19,6 @@ import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
@@ -116,39 +114,6 @@ public class Krav extends DomainObject implements KravId {
                 .begrepIder(copyOf(begrepIder))
                 .virkemiddelIder(copyOf(virkemiddelIder))
                 .varslingsadresser(copyOf(varslingsadresser))
-                .rettskilder(copyOf(rettskilder))
-                .tagger(copyOf(tagger))
-                .regelverk(StreamUtils.convert(regelverk, Regelverk::toResponse))
-                .notat(notat)
-                .varselMelding(varselMelding)
-                .suksesskriterier(StreamUtils.convert(suksesskriterier, Suksesskriterie::toResponse))
-                .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, avdeling))
-                .underavdeling(CodelistService.getCodelistResponse(ListName.UNDERAVDELING, underavdeling))
-                .relevansFor(CodelistService.getCodelistResponseList(ListName.RELEVANS, relevansFor))
-                .kravIdRelasjoner(copyOf(kravIdRelasjoner))
-                .status(status)
-                .aktivertDato(aktivertDato)
-                .build();
-    }
-
-    public KravGraphQlResponse toGraphQlResponse() {
-        return KravGraphQlResponse.builder()
-                .id(id)
-                .changeStamp(convertChangeStampResponse())
-                .version(version)
-                .kravNummer(kravNummer)
-                .kravVersjon(kravVersjon)
-                .navn(navn)
-                .beskrivelse(beskrivelse)
-                .hensikt(hensikt)
-                .utdypendeBeskrivelse(utdypendeBeskrivelse)
-                .versjonEndringer(versjonEndringer)
-                .dokumentasjon(copyOf(dokumentasjon))
-                .implementasjoner(implementasjoner)
-                .begrepIder(copyOf(begrepIder))
-                .virkemiddelIder(copyOf(virkemiddelIder))
-                .varslingsadresser(copyOf(varslingsadresser))
-                .varslingsadresserQl(copyOf(convert(varslingsadresser, Varslingsadresse::toGraphQlResponse)))
                 .rettskilder(copyOf(rettskilder))
                 .tagger(copyOf(tagger))
                 .regelverk(StreamUtils.convert(regelverk, Regelverk::toResponse))

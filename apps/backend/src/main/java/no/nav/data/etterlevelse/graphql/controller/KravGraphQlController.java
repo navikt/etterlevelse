@@ -53,13 +53,13 @@ public class KravGraphQlController {
     public KravGraphQlResponse kravById(@Argument UUID id, @Argument Integer nummer, @Argument Integer versjon) {
         if (id != null) {
             try {
-                return kravService.get(id).toGraphQlResponse();
+                return KravGraphQlResponse.buildFrom(kravService.get(id));
             } catch (NotFoundException e) {
                 return null;
             }
         } else if (nummer != null && versjon != null) {
             return kravService.getByKravNummer(nummer, versjon)
-                    .map(Krav::toGraphQlResponse)
+                    .map(KravGraphQlResponse::buildFrom)
                     .orElse(null);
         }
         return null;
@@ -71,7 +71,7 @@ public class KravGraphQlController {
         var pageInput = new PageParameters(pageNumber, pageSize);
 
         if (filter == null || filter.isEmpty()) {
-            return new RestResponsePage<>(kravService.getAll(pageInput.createPage())).convert(Krav::toGraphQlResponse);
+            return new RestResponsePage<>(kravService.getAll(pageInput.createPage())).convert(KravGraphQlResponse::buildFrom);
         }
 
         if (filter.getEtterlevelseDokumentasjonId() != null && !filter.getEtterlevelseDokumentasjonId().isEmpty()) {
@@ -86,9 +86,9 @@ public class KravGraphQlController {
             filtered.sort(comparing(Krav::getKravNummer).thenComparing(Krav::getKravVersjon));
         }
         if (pageSize == 0) {
-            return new RestResponsePage<>(filtered).convert(Krav::toGraphQlResponse);
+            return new RestResponsePage<>(filtered).convert(KravGraphQlResponse::buildFrom);
         }
-        return pageInput.pageFrom(filtered).convert(Krav::toGraphQlResponse);
+        return pageInput.pageFrom(filtered).convert(KravGraphQlResponse::buildFrom);
     }
 
 
@@ -131,7 +131,7 @@ public class KravGraphQlController {
 
     @SchemaMapping(typeName = "Krav")
     public List<KravGraphQlResponse> kravRelasjoner(KravGraphQlResponse krav){
-        return convert(krav.getKravIdRelasjoner(), kravId -> kravService.get(UUID.fromString(kravId)).toGraphQlResponse());
+        return convert(krav.getKravIdRelasjoner(), kravId -> KravGraphQlResponse.buildFrom(kravService.get(UUID.fromString(kravId))));
     }
 
     @SchemaMapping(typeName = "Krav")
