@@ -19,4 +19,11 @@ import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 public class VarslingsadresseGraphQlResponse extends Varslingsadresse {
     private SlackUser slackUser;
     private SlackChannel slackChannel;
+
+    public static VarslingsadresseGraphQlResponse buildFrom(Varslingsadresse varslingsadresse) {
+        return VarslingsadresseGraphQlResponse.builder()
+                .adresse(varslingsadresse.getAdresse())
+                .type(varslingsadresse.getType())
+                .build();
+    }
 }

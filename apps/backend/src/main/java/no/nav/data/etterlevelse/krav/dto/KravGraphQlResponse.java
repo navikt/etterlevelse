@@ -14,7 +14,6 @@ import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
-import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.etterlevelse.varsel.dto.VarslingsadresseGraphQlResponse;
 import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelResponse;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
@@ -54,7 +53,7 @@ public class KravGraphQlResponse extends KravResponse implements KravId {
                 .begrepIder(copyOf(krav.getBegrepIder()))
                 .virkemiddelIder(copyOf(krav.getVirkemiddelIder()))
                 .varslingsadresser(copyOf(krav.getVarslingsadresser()))
-                .varslingsadresserQl(copyOf(convert(krav.getVarslingsadresser(), Varslingsadresse::toGraphQlResponse)))
+                .varslingsadresserQl(copyOf(convert(krav.getVarslingsadresser(), VarslingsadresseGraphQlResponse::buildFrom)))
                 .rettskilder(copyOf(krav.getRettskilder()))
                 .tagger(copyOf(krav.getTagger()))
                 .regelverk(StreamUtils.convert(krav.getRegelverk(), Regelverk::toResponse))
