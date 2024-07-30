@@ -280,7 +280,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
       if (!user.isLoggedIn()) {
         window.location.href = loginUrl(location, location.pathname)
       }
-    }, 500)
+    }, 1000)
   }, [])
 
   React.useEffect(() => {
