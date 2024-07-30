@@ -87,10 +87,8 @@ public class TeamcatResourceClient {
             Assert.isTrue(response.getStatusCode().is2xxSuccessful() && response.hasBody(), "Call to teamcat failed " + response.getStatusCode());
             return response.getBody();
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
-                return null;
-            }
-            throw e;
+            log.error("Error while connecting to teamcatalog.", e);
+            return null;
         }
     }
 
