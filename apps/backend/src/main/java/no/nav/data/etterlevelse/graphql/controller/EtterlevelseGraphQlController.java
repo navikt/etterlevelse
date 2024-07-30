@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonGraphQlResponse;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
@@ -27,11 +27,11 @@ public class EtterlevelseGraphQlController {
     }
 
     @SchemaMapping(typeName = "Etterlevelse", field = "etterlevelseDokumentasjon")
-    public EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon(EtterlevelseResponse etterlevelse) {
+    public EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjon(EtterlevelseResponse etterlevelse) {
         if (etterlevelse.getEtterlevelseDokumentasjonId() != null) {
-            return etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId())).toResponse();
+            return EtterlevelseDokumentasjonGraphQlResponse.buildFrom(etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId())));
         } else {
-            return EtterlevelseDokumentasjonResponse.builder().build();
+            return EtterlevelseDokumentasjonGraphQlResponse.builder().build();
         }
     }
 }

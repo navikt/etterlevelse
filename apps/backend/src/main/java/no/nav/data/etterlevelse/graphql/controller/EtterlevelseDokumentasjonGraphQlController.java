@@ -80,8 +80,6 @@ public class EtterlevelseDokumentasjonGraphQlController {
         return pageInput.pageFrom(filtered).convert(EtterlevelseDokumentasjonGraphQlResponse::buildFrom);
     }
 
-
-
     @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
     public List<TeamResponse> teamsData(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjonResponse) {
         var teams = getTeams(etterlevelseDokumentasjonResponse.getTeams());
