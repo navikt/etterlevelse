@@ -11,7 +11,6 @@ import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonGraphQlResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
@@ -75,30 +74,6 @@ public class EtterlevelseDokumentasjon extends DomainObject {
 
     public EtterlevelseDokumentasjonResponse toResponse() {
         return EtterlevelseDokumentasjonResponse.builder()
-                .id(id)
-                .changeStamp(convertChangeStampResponse())
-                .version(version)
-                .etterlevelseNummer(etterlevelseNummer)
-                .title(title)
-                .beskrivelse(beskrivelse)
-                .gjenbrukBeskrivelse(gjenbrukBeskrivelse)
-                .tilgjengeligForGjenbruk(tilgjengeligForGjenbruk)
-                .behandlingIds(behandlingIds != null ? copyOf(behandlingIds) : List.of())
-                .virkemiddelId(virkemiddelId)
-                .irrelevansFor(irrelevantForAsCodes())
-                .prioritertKravNummer(prioritertKravNummer != null ? copyOf(prioritertKravNummer) : List.of())
-                .forGjenbruk(forGjenbruk)
-                .teams(teams != null ? copyOf(teams) : List.of())
-                .resources(resources != null ? copyOf(resources) : List.of())
-                .behandlerPersonopplysninger(behandlerPersonopplysninger)
-                .knyttetTilVirkemiddel(knyttetTilVirkemiddel)
-                .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, avdeling))
-                .varslingsadresser(varslingsadresser != null ? copyOf(varslingsadresser): List.of())
-                .build();
-    }
-
-    public EtterlevelseDokumentasjonGraphQlResponse toGraphQlResponse() {
-        return EtterlevelseDokumentasjonGraphQlResponse.builder()
                 .id(id)
                 .changeStamp(convertChangeStampResponse())
                 .version(version)

@@ -64,7 +64,7 @@ public class EtterlevelseDokumentasjonGraphQlController {
         if (filter == null || filter.isEmpty()) {
             var resp = etterlevelseDokumentasjonService.getAll(pageInput.createPage());
 
-            return new RestResponsePage<>(resp).convert(EtterlevelseDokumentasjon::toGraphQlResponse);
+            return new RestResponsePage<>(resp).convert(EtterlevelseDokumentasjonGraphQlResponse::buildFrom);
         }
         if (SecurityUtils.getCurrentUser().isEmpty() && filter.requiresLogin()) {
             return new RestResponsePage<>();
@@ -75,9 +75,9 @@ public class EtterlevelseDokumentasjonGraphQlController {
             filtered.sort(Comparator.comparing(EtterlevelseDokumentasjon::getEtterlevelseNummer));
         }
         if (pageSize == 0) {
-            return new RestResponsePage<>(filtered).convert(EtterlevelseDokumentasjon::toGraphQlResponse);
+            return new RestResponsePage<>(filtered).convert(EtterlevelseDokumentasjonGraphQlResponse::buildFrom);
         }
-        return pageInput.pageFrom(filtered).convert(EtterlevelseDokumentasjon::toGraphQlResponse);
+        return pageInput.pageFrom(filtered).convert(EtterlevelseDokumentasjonGraphQlResponse::buildFrom);
     }
 
 
