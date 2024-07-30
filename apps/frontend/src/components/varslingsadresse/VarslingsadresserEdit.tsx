@@ -16,11 +16,11 @@ import {
 import {
   EAdresseType,
   IEtterlevelseDokumentasjon,
-  IKrav,
   ISlackChannel,
   ISlackUser,
   ITeamResource,
   IVarslingsadresse,
+  TKravQL,
   TVarslingsadresseQL,
 } from '../../constants'
 import { user } from '../../services/User'
@@ -55,7 +55,7 @@ export const VarslingsadresserEdit = (props: IVarslingsadresserEditProps) => {
             varslingsadresser = (fieldArrayRenderProps.form.values as IEtterlevelseDokumentasjon)
               .varslingsadresser
           } else {
-            varslingsadresser = (fieldArrayRenderProps.form.values as IKrav).varslingsadresser
+            varslingsadresser = (fieldArrayRenderProps.form.values as TKravQL).varslingsadresserQl
           }
 
           const push = (v: TVarslingsadresseQL) => {

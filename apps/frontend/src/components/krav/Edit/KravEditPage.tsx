@@ -144,194 +144,196 @@ export const KravEditPage = () => {
         >
           {kravLoading && (
             <div className="w-full flex items-center flex-col">
-              <Loader size="3xlarge" />{' '}
+              <Loader size="3xlarge" />
             </div>
           )}
 
-          <div>
-            <Formik
-              initialValues={kravMapToFormVal(krav as TKravQL)}
-              onSubmit={submit}
-              validationSchema={kravEditValidation({ alleKravVersjoner, isEditingUtgaattKrav })}
-              validateOnChange={false}
-              validateOnBlur={false}
-            >
-              {({ values, errors, isSubmitting, submitForm, initialValues }) => (
-                <Form>
-                  <div>
-                    <div className="w-full">
-                      <Heading level="1" size="medium">
-                        Rediger krav
-                      </Heading>
-                      <Heading level="2" size="small">
-                        {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}{' '}
-                      </Heading>
-                    </div>
-                    <KravFormFields
-                      mode="edit"
-                      kravVersjon={values.kravVersjon}
-                      errors={errors}
-                      varselMeldingActive={varselMeldingActive}
-                      setVarselMeldingActive={setVarselMeldingActive}
-                      isEditingUtgaattKrav={isEditingUtgaattKrav}
-                    />
-                    <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-bg-default">
-                      <div className="flex w-full flex-row-reverse">
-                        <KravStandardButtons
-                          submitCancelButton={() => {
-                            if (krav.kravNummer && krav.kravVersjon) {
-                              navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
-                            } else {
-                              navigate('/kravliste')
-                            }
-                          }}
-                          submitSaveButton={() => {
-                            values.status = krav.status
-                            submitForm()
-                          }}
-                          kravStatus={krav.status}
-                          submitAktivButton={() => {
-                            values.status = EKravStatus.AKTIV
-                            submitForm()
-                          }}
-                          isSubmitting={isSubmitting}
-                        />
-                        <div className="flex w-full">
-                          {krav.status === EKravStatus.AKTIV && (
-                            <div className="mr-2">
-                              <Button
-                                variant="secondary"
-                                onClick={() => {
-                                  values.status = EKravStatus.UTGAATT
-                                  setUtgaattKravMessage(true)
-                                }}
-                                disabled={isSubmitting}
-                                type="button"
-                              >
-                                Sett kravet til utgått
-                              </Button>
-                            </div>
-                          )}
-
-                          {user.isAdmin() && krav.status === EKravStatus.UTGAATT && (
-                            <div className="mr-2">
-                              <Button
-                                variant="secondary"
-                                onClick={() => setAktivKravMessage(true)}
-                                disabled={isSubmitting}
-                                type="button"
-                              >
-                                Sett versjonen til aktiv
-                              </Button>
-                            </div>
-                          )}
-
-                          {user.isAdmin() && krav.status !== EKravStatus.UTKAST && (
-                            <div className="mr-2">
-                              <Button
-                                variant="secondary"
-                                onClick={() => {
-                                  values.status = EKravStatus.UTKAST
-                                  submitForm()
-                                }}
-                                disabled={isSubmitting}
-                                type="button"
-                              >
-                                Sett kravet til utkast
-                              </Button>
-                            </div>
-                          )}
-
-                          <KravEditStatusModal
-                            status="utgått"
-                            open={utgaattKravMessage}
-                            brukerBeskjed="Denne handligen kan ikke reverseres"
-                            setKravMessage={() => {
-                              values.status = initialValues.status
-                              setUtgaattKravMessage(false)
+          {!kravLoading && (
+            <div>
+              <Formik
+                initialValues={kravMapToFormVal(krav as TKravQL)}
+                onSubmit={submit}
+                validationSchema={kravEditValidation({ alleKravVersjoner, isEditingUtgaattKrav })}
+                validateOnChange={false}
+                validateOnBlur={false}
+              >
+                {({ values, errors, isSubmitting, submitForm, initialValues }) => (
+                  <Form>
+                    <div>
+                      <div className="w-full">
+                        <Heading level="1" size="medium">
+                          Rediger krav
+                        </Heading>
+                        <Heading level="2" size="small">
+                          {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}{' '}
+                        </Heading>
+                      </div>
+                      <KravFormFields
+                        mode="edit"
+                        kravVersjon={values.kravVersjon}
+                        errors={errors}
+                        varselMeldingActive={varselMeldingActive}
+                        setVarselMeldingActive={setVarselMeldingActive}
+                        isEditingUtgaattKrav={isEditingUtgaattKrav}
+                      />
+                      <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-bg-default">
+                        <div className="flex w-full flex-row-reverse">
+                          <KravStandardButtons
+                            submitCancelButton={() => {
+                              if (krav.kravNummer && krav.kravVersjon) {
+                                navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
+                              } else {
+                                navigate('/kravliste')
+                              }
                             }}
-                            formComponent={
-                              <TextAreaField
-                                label="Beskriv hvorfor kravet er utgått"
-                                name="beskrivelse"
-                                height="15.625rem"
-                                markdown
-                              />
-                            }
-                          >
-                            <Button
-                              type="button"
-                              className="mr-4"
-                              variant="primary"
-                              onClick={() => {
-                                submitForm()
+                            submitSaveButton={() => {
+                              values.status = krav.status
+                              submitForm()
+                            }}
+                            kravStatus={krav.status}
+                            submitAktivButton={() => {
+                              values.status = EKravStatus.AKTIV
+                              submitForm()
+                            }}
+                            isSubmitting={isSubmitting}
+                          />
+                          <div className="flex w-full">
+                            {krav.status === EKravStatus.AKTIV && (
+                              <div className="mr-2">
+                                <Button
+                                  variant="secondary"
+                                  onClick={() => {
+                                    values.status = EKravStatus.UTGAATT
+                                    setUtgaattKravMessage(true)
+                                  }}
+                                  disabled={isSubmitting}
+                                  type="button"
+                                >
+                                  Sett kravet til utgått
+                                </Button>
+                              </div>
+                            )}
 
-                                if (values.beskrivelse) {
-                                  setUtgaattKravMessage(false)
-                                }
+                            {user.isAdmin() && krav.status === EKravStatus.UTGAATT && (
+                              <div className="mr-2">
+                                <Button
+                                  variant="secondary"
+                                  onClick={() => setAktivKravMessage(true)}
+                                  disabled={isSubmitting}
+                                  type="button"
+                                >
+                                  Sett versjonen til aktiv
+                                </Button>
+                              </div>
+                            )}
+
+                            {user.isAdmin() && krav.status !== EKravStatus.UTKAST && (
+                              <div className="mr-2">
+                                <Button
+                                  variant="secondary"
+                                  onClick={() => {
+                                    values.status = EKravStatus.UTKAST
+                                    submitForm()
+                                  }}
+                                  disabled={isSubmitting}
+                                  type="button"
+                                >
+                                  Sett kravet til utkast
+                                </Button>
+                              </div>
+                            )}
+
+                            <KravEditStatusModal
+                              status="utgått"
+                              open={utgaattKravMessage}
+                              brukerBeskjed="Denne handligen kan ikke reverseres"
+                              setKravMessage={() => {
+                                values.status = initialValues.status
+                                setUtgaattKravMessage(false)
                               }}
+                              formComponent={
+                                <TextAreaField
+                                  label="Beskriv hvorfor kravet er utgått"
+                                  name="beskrivelse"
+                                  height="15.625rem"
+                                  markdown
+                                />
+                              }
                             >
-                              Ja, sett til utgått
-                            </Button>
-                          </KravEditStatusModal>
+                              <Button
+                                type="button"
+                                className="mr-4"
+                                variant="primary"
+                                onClick={() => {
+                                  submitForm()
 
-                          <KravEditStatusModal
-                            status="aktiv"
-                            open={aktivKravMessage}
-                            brukerBeskjed="Kravet har en nyere versjon som settes til utkast"
-                            setKravMessage={() => setAktivKravMessage(false)}
-                          >
-                            <Button
-                              type="button"
-                              variant="primary"
-                              onClick={async () => {
-                                const newVersionOfKrav = await getKravByKravNumberAndVersion(
-                                  krav.kravNummer,
-                                  krav.kravVersjon + 1
-                                )
-                                if (newVersionOfKrav) {
-                                  updateKrav(
-                                    kravMapToFormVal({
-                                      ...newVersionOfKrav,
-                                      status: EKravStatus.UTKAST,
-                                    }) as TKravQL
-                                  ).then(() => {
+                                  if (values.beskrivelse) {
+                                    setUtgaattKravMessage(false)
+                                  }
+                                }}
+                              >
+                                Ja, sett til utgått
+                              </Button>
+                            </KravEditStatusModal>
+
+                            <KravEditStatusModal
+                              status="aktiv"
+                              open={aktivKravMessage}
+                              brukerBeskjed="Kravet har en nyere versjon som settes til utkast"
+                              setKravMessage={() => setAktivKravMessage(false)}
+                            >
+                              <Button
+                                type="button"
+                                variant="primary"
+                                onClick={async () => {
+                                  const newVersionOfKrav = await getKravByKravNumberAndVersion(
+                                    krav.kravNummer,
+                                    krav.kravVersjon + 1
+                                  )
+                                  if (newVersionOfKrav) {
+                                    updateKrav(
+                                      kravMapToFormVal({
+                                        ...newVersionOfKrav,
+                                        status: EKravStatus.UTKAST,
+                                      }) as TKravQL
+                                    ).then(() => {
+                                      values.status = EKravStatus.AKTIV
+                                      submitForm()
+                                      setAktivKravMessage(false)
+                                    })
+                                  } else {
                                     values.status = EKravStatus.AKTIV
                                     submitForm()
                                     setAktivKravMessage(false)
-                                  })
-                                } else {
-                                  values.status = EKravStatus.AKTIV
-                                  submitForm()
-                                  setAktivKravMessage(false)
-                                }
-                              }}
-                            >
-                              Ja, sett til aktiv
-                            </Button>
-                          </KravEditStatusModal>
+                                  }
+                                }}
+                              >
+                                Ja, sett til aktiv
+                              </Button>
+                            </KravEditStatusModal>
+                          </div>
                         </div>
                       </div>
+                      <div className="py-12">
+                        <TextAreaField
+                          label="Notater (Kun synlig for kraveier)"
+                          name="notat"
+                          height="15.625rem"
+                          markdown
+                        />
+                      </div>
                     </div>
-                    <div className="py-12">
-                      <TextAreaField
-                        label="Notater (Kun synlig for kraveier)"
-                        name="notat"
-                        height="15.625rem"
-                        markdown
-                      />
-                    </div>
-                  </div>
-                  <ErrorModal
-                    isOpen={showErrorModal}
-                    errorMessage={errorModalMessage}
-                    submit={setShowErrorModal}
-                  />
-                  <ScrollToFieldError />
-                </Form>
-              )}
-            </Formik>
-          </div>
+                    <ErrorModal
+                      isOpen={showErrorModal}
+                      errorMessage={errorModalMessage}
+                      submit={setShowErrorModal}
+                    />
+                    <ScrollToFieldError />
+                  </Form>
+                )}
+              </Formik>
+            </div>
+          )}
         </PageLayout>
       )}
     </>
