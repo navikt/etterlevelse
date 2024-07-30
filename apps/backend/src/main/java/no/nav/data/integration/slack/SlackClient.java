@@ -150,11 +150,14 @@ public class SlackClient {
             }
             reqForm.add("limit", "1000");
             reqForm.add("exclude_archived", "true");
-
-            var response = restTemplate.postForEntity(LIST_CONVERSATIONS, new HttpEntity<>(reqForm, headers), ListChannelResponse.class);
-            list = checkResponse(response);
-            cursor = list.getResponseMetadata().getNextCursor();
-            all.addAll(list.getChannels());
+            try {
+                var response = restTemplate.postForEntity(LIST_CONVERSATIONS, new HttpEntity<>(reqForm, headers), ListChannelResponse.class);
+                list = checkResponse(response);
+                cursor = list.getResponseMetadata().getNextCursor();
+                all.addAll(list.getChannels());
+            } catch (Exception e) {
+                log.error("Error while getting response from slack.", e);
+            }
         } while (!StringUtils.isBlank(cursor));
         return all;
     }
@@ -242,6 +245,7 @@ public class SlackClient {
             CreateConversationResponse create = checkResponse(response);
             return create.getChannel().getId();
         } catch (Exception e) {
+            log.error("Failed to get channel for " + userId);
             throw new TechnicalException("Failed to get channel for " + userId, e);
         }
     }
