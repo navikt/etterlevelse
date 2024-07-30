@@ -229,7 +229,7 @@ export const getKravWithEtterlevelseQuery = gql`
         kravVersjon
         navn
       }
-      etterlevelser {
+      etterlevelser(onlyForEtterlevelseDokumentasjon: false) {
         id
         etterlevelseDokumentasjon {
           id
