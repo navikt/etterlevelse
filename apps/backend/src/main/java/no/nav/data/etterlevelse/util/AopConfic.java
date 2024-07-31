@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @EnableAspectJAutoProxy
-@Profile("test | local")
+@Profile("test | local | dev")
 public class AopConfic {
 
 }

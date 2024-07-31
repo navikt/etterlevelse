@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Profile;
 @Slf4j
 public class LogExecutionTimeAdvice {
 
-    @Around("execution(public * *..*Repository.*(..))")
+    @Around("execution(public * *..*Repo*.*(..))")
     public Object logExecTimeAdvice(ProceedingJoinPoint point) throws Throwable {
         Throwable thrown = null;
         Object result = null;
