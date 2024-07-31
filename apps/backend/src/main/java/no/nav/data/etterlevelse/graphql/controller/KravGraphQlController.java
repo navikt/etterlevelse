@@ -102,9 +102,9 @@ public class KravGraphQlController {
             if (dokumentasjonId != null) {
                 return List.of(etterlevelseService.getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(dokumentasjonId, krav.getKravNummer(), krav.getKravVersjon()).toResponse());
             }
-        } else {
-            return convert( etterlevelseService.getByKravNummer(nummer, versjon), Etterlevelse::toResponse);
         }
+
+        return convert( etterlevelseService.getByKravNummer(nummer, versjon), Etterlevelse::toResponse);
     }
 
 
