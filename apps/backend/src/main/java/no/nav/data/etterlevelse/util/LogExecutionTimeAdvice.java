@@ -8,12 +8,12 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Aspect
-@Profile("test | local | dev")
+@Profile("!prod")
 @Slf4j
 @Component
 public class LogExecutionTimeAdvice {
 
-    @Around("execution(public * *..*Repo.*(..)) || execution(public * *..*Repository.*(..)) || execution(public * *..*RepoImpl.*(..))")
+    @Around("execution(public * no.nav..*Repo.*(..)) || execution(public * no.nav..*Repository.*(..)) || execution(public * no.nav..*RepoImpl.*(..))")
     public Object logExecTimeAdvice(ProceedingJoinPoint point) throws Throwable {
         Throwable thrown = null;
         Object result = null;
