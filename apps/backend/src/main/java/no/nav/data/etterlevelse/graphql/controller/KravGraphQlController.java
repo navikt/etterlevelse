@@ -35,7 +35,6 @@ import java.util.UUID;
 
 import static java.util.Comparator.comparing;
 import static no.nav.data.common.utils.StreamUtils.convert;
-import static no.nav.data.common.utils.StreamUtils.filter;
 
 @RequiredArgsConstructor
 @Controller
@@ -98,17 +97,14 @@ public class KravGraphQlController {
         Integer versjon = krav.getKravVersjon();
         log.info("etterlevelse for krav {}.{}", nummer, versjon);
 
-        var etterlevelser = etterlevelseService.getByKravNummer(nummer, versjon);
-
         if (onlyForEtterlevelseDokumentasjon || etterlevelseDokumentasjonId != null) {
             String dokumentasjonId = etterlevelseDokumentasjonId != null ? etterlevelseDokumentasjonId.toString() : KravFilter.get(env, Fields.etterlevelseDokumentasjonId);
-
             if (dokumentasjonId != null) {
-                etterlevelser = filter(etterlevelser, e -> dokumentasjonId.equals(e.getEtterlevelseDokumentasjonId()));
+                return List.of(etterlevelseService.getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(dokumentasjonId, krav.getKravNummer(), krav.getKravVersjon()).toResponse());
             }
+        } else {
+            return convert( etterlevelseService.getByKravNummer(nummer, versjon), Etterlevelse::toResponse);
         }
-
-        return convert(etterlevelser, Etterlevelse::toResponse);
     }
 
 

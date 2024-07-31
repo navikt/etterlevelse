@@ -32,4 +32,7 @@ public interface EtterlevelseRepo extends JpaRepository<GenericStorage<Etterleve
     @Query(value = "select * from generic_storage where data ->> 'etterlevelseDokumentasjonId' = ?1 and data-> 'kravNummer' = to_jsonb(?2) and type = 'Etterlevelse'", nativeQuery = true)
     List<GenericStorage<Etterlevelse>> findByEtterlevelseDokumentasjonIdAndKravNummer(String etterlevelseDokumentasjonId, int nummer);
 
+    @Query(value = "select * from generic_storage where data ->> 'etterlevelseDokumentasjonId' = ?1 and data-> 'kravNummer' = to_jsonb(?2) and data -> 'kravVersjon' = to_jsonb(?3)and type = 'Etterlevelse'", nativeQuery = true)
+    GenericStorage<Etterlevelse> findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(String etterlevelseDokumentasjonId, int nummer, int versjon);
+
 }

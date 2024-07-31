@@ -58,6 +58,10 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
         return convertToDomaionObject(repo.findByEtterlevelseDokumentasjonIdAndKravNummer(etterlevelseDokumentasjonId, kravNummer));
     }
 
+    public Etterlevelse getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(String etterlevelseDokumentasjonId, int kravNummer, int kravVersjon) {
+        return repo.findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(etterlevelseDokumentasjonId, kravNummer, kravVersjon).getDomainObjectData();
+    }
+
     public Map<String, List<Etterlevelse>> getByEtterlevelseDokumentasjoner(Collection<String> etterlevelseDokumentasjonIds) {
         return groupBy(convertToDomaionObject(repo.findByEtterlevelseDokumentasjoner(new ArrayList<>(etterlevelseDokumentasjonIds))), Etterlevelse::getEtterlevelseDokumentasjonId);
     }
