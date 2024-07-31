@@ -1,0 +1,1 @@
+CREATE INDEX ON GENERIC_STORAGE USING GIN((data -> 'etterlevelseDokumentasjonId'));
