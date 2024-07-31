@@ -24,7 +24,8 @@ public class LogExecutionTimeAdvice {
             thrown = t;
         }
         execTime = System.currentTimeMillis() - execTime;
-        if(execTime > 500) {
+        var methodSignature = point.getSignature().toString();
+        if(execTime > 500 && methodSignature.contains("no.nav")) {
             log.warn("Execution time for {}: {} ms", point.getSignature().toString(), execTime);
         }
         if (thrown != null) {
