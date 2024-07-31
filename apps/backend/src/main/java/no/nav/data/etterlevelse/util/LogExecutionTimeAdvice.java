@@ -5,13 +5,15 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 @Aspect
 @Profile("test | local | dev")
 @Slf4j
+@Component
 public class LogExecutionTimeAdvice {
 
-    @Around("execution(public * *..*Repo*.*(..))")
+    @Around("execution(public * *..*Repo.*(..)) || execution(public * *..*Repository.*(..)) || execution(public * *..*RepoImpl.*(..))")
     public Object logExecTimeAdvice(ProceedingJoinPoint point) throws Throwable {
         Throwable thrown = null;
         Object result = null;
@@ -22,7 +24,7 @@ public class LogExecutionTimeAdvice {
             thrown = t;
         }
         execTime = System.currentTimeMillis() - execTime;
-        log.info("Execution time for {}: {}", point.getSignature().toString(), execTime);
+        log.info("Execution time for {}: {} ms", point.getSignature().toString(), execTime);
         if (thrown != null) {
             throw thrown;
         } else {
