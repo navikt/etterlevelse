@@ -100,7 +100,8 @@ public class KravGraphQlController {
         if (onlyForEtterlevelseDokumentasjon || etterlevelseDokumentasjonId != null) {
             String dokumentasjonId = etterlevelseDokumentasjonId != null ? etterlevelseDokumentasjonId.toString() : KravFilter.get(env, Fields.etterlevelseDokumentasjonId);
             if (dokumentasjonId != null) {
-                return List.of(etterlevelseService.getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(dokumentasjonId, krav.getKravNummer(), krav.getKravVersjon()).toResponse());
+                return etterlevelseService.getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(dokumentasjonId, krav.getKravNummer(), krav.getKravVersjon())
+                        .map(value -> List.of(value.toResponse())).orElseGet(List::of);
             }
         }
 

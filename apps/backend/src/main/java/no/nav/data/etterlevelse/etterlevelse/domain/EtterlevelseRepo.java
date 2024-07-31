@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface EtterlevelseRepo extends JpaRepository<GenericStorage<Etterlevelse>, UUID> {
@@ -33,6 +34,6 @@ public interface EtterlevelseRepo extends JpaRepository<GenericStorage<Etterleve
     List<GenericStorage<Etterlevelse>> findByEtterlevelseDokumentasjonIdAndKravNummer(String etterlevelseDokumentasjonId, int nummer);
 
     @Query(value = "select * from generic_storage where data ->> 'etterlevelseDokumentasjonId' = ?1 and data-> 'kravNummer' = to_jsonb(?2) and data -> 'kravVersjon' = to_jsonb(?3) and type = 'Etterlevelse'", nativeQuery = true)
-    GenericStorage<Etterlevelse> findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(String etterlevelseDokumentasjonId, int nummer, int versjon);
+    Optional<GenericStorage<Etterlevelse>> findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(String etterlevelseDokumentasjonId, int nummer, int versjon);
 
 }
