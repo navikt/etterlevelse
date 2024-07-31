@@ -24,7 +24,9 @@ public class LogExecutionTimeAdvice {
             thrown = t;
         }
         execTime = System.currentTimeMillis() - execTime;
-        log.info("Execution time for {}: {} ms", point.getSignature().toString(), execTime);
+        if(execTime > 500) {
+            log.warn("Execution time for {}: {} ms", point.getSignature().toString(), execTime);
+        }
         if (thrown != null) {
             throw thrown;
         } else {
