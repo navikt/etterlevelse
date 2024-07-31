@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LogExecutionTimeAdvice {
 
-    @Around("execution(public * *..*Repository.*(..))")
+    @Around("execution(public * *..*Repo.*(..)) || execution(public * *..*Repository.*(..)) || execution(public * *..*RepoImpl.*(..))")
     public Object logExecTimeAdvice(ProceedingJoinPoint point) throws Throwable {
         Throwable thrown = null;
         Object result = null;
