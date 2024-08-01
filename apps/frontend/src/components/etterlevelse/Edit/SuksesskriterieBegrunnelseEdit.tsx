@@ -10,6 +10,7 @@ import {
   RadioGroup,
   ReadMore,
   Textarea,
+  ToggleGroup,
 } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { useEffect, useState } from 'react'
@@ -171,6 +172,7 @@ const KriterieBegrunnelse = ({
   const [veiledningTekst, setVeiledningTekst] = useState(
     suksesskriterieBegrunnelse.veiledningsTekst
   )
+  const [mode, setMode] = useState('edit')
 
   const getVeiledningsTekstFromMorEtterlevelse = (
     morEtterlevelse: IEtterlevelse,
@@ -301,16 +303,28 @@ const KriterieBegrunnelse = ({
         </div>
         {!disableEdit && suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
           <div className="w-full mt-4">
-            <Label>{getLabelForSuksessKriterie(suksessKriterieStatus)}</Label>
-            <TextEditor
-              initialValue={begrunnelse}
-              setValue={setBegrunnelse}
-              height="11.75rem"
-              errors={feildArrayRenderProps.form.errors}
-              simple
-              maxWidth="49.375rem"
-              width="100%"
-            />
+            <div className="flex w-full justify-between items-center mb-1">
+              <Label>{getLabelForSuksessKriterie(suksessKriterieStatus)}</Label>
+              <div className="flex justify-end mr-1">
+                <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
+                  <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
+                  <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+                </ToggleGroup>
+              </div>
+            </div>
+            {mode === 'edit' && (
+              <TextEditor
+                initialValue={begrunnelse}
+                setValue={setBegrunnelse}
+                height="11.75rem"
+                errors={feildArrayRenderProps.form.errors}
+                simple
+                maxWidth="49.375rem"
+                width="100%"
+              />
+            )}
+
+            {mode === 'view' && <Markdown source={begrunnelse} />}
 
             <div className="mt-1">
               <FormError
