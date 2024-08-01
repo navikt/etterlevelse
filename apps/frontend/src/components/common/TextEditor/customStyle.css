@@ -35,3 +35,6 @@
 .DraftEditor-root {
   height: calc(100% - 1.25rem);
 }
+.public-DraftStyleDefault-block {
+  margin: 0
+}
