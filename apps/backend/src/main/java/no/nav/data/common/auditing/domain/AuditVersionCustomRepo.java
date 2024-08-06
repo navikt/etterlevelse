@@ -79,7 +79,7 @@ public class AuditVersionCustomRepo {
         var par = new MapSqlParameterSource();
 
         par.addValue("dokumentasjonId", dokumentasjonId);
-        par.addValue("currentUser", "'%" + SecurityUtils.getCurrentIdent() + "%'");
+        par.addValue("currentUser", "%" + SecurityUtils.getCurrentIdent() + "%");
 
 
         return fetch(jdbcTemplate.queryForList(query, par));
