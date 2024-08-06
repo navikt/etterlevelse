@@ -3,6 +3,10 @@ ingresses:
 replies:
   - https://etterlevelse.intern.nav.no/oauth2/callback
   - https://etterlevelse.ansatt.nav.no/oauth2/callback
+  - http://localhost:3000/oauth2/callback
+  - http://localhost:8080/oauth2/callback
+  - http://localhost:3000
+  - http://localhost:8080
 teamcat_ingress: teamkatalog-api.intern.nav.no
 env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
