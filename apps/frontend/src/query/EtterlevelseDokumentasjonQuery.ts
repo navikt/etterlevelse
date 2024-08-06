@@ -30,7 +30,6 @@ export const getEtterlevelseDokumentasjonListQuery = gql`
         title
         etterlevelseNummer
         sistEndretEtterlevelse
-        sistEndretEtterlevelseAvMeg
         changeStamp {
           createdDate
         }
