@@ -3,6 +3,8 @@ package no.nav.data.etterlevelse.graphql.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.auditing.AuditVersionService;
+import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
@@ -55,6 +57,7 @@ public class EtterlevelseDokumentasjonGraphQlController {
     private final TeamcatResourceClient resourceService;
     private final BehandlingService behandlingService;
     private final EtterlevelseService etterlevelseService;
+    private final AuditVersionService auditVersionService;
 
     @QueryMapping
     public RestResponsePage<EtterlevelseDokumentasjonGraphQlResponse> etterlevelseDokumentasjon(@Argument EtterlevelseDokumentasjonFilter filter, @Argument Integer pageNumber, @Argument Integer pageSize) {
@@ -110,6 +113,12 @@ public class EtterlevelseDokumentasjonGraphQlController {
     }
 
     @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
+    public LocalDateTime sistEndretEtterlevelseAvMeg(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjon) {
+        var etterlevelser = auditVersionService.findLatestEtterlevelseByEtterlevelseDokumentIAndCurrentUser(etterlevelseDokumentasjon.getId().toString());
+        return sistEndretAudit(etterlevelser);
+    }
+
+    @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
     public LocalDateTime sistEndretDokumentasjon(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjonResponse) {
         return etterlevelseDokumentasjonResponse.getChangeStamp().getLastModifiedDate();
     }
@@ -149,6 +158,13 @@ public class EtterlevelseDokumentasjonGraphQlController {
     private LocalDateTime sistEndret(List<Etterlevelse> etterlevelser) {
         return etterlevelser.stream()
                 .map(e -> e.getChangeStamp().getLastModifiedDate())
+                .max(Comparator.comparing(Function.identity()))
+                .orElse(null);
+    }
+
+    private LocalDateTime sistEndretAudit(List<AuditVersion> etterlevelser) {
+        return etterlevelser.stream()
+                .map(AuditVersion::getTime)
                 .max(Comparator.comparing(Function.identity()))
                 .orElse(null);
     }

@@ -26,6 +26,7 @@ import static java.util.List.copyOf;
 public class EtterlevelseDokumentasjonGraphQlResponse extends EtterlevelseDokumentasjonResponse {
     private List<EtterlevelseResponse> etterlevelser;
     private LocalDateTime sistEndretEtterlevelse;
+    private LocalDateTime sistEndretEtterlevelseAvMeg;
     private LocalDateTime sistEndretDokumentasjon;
     private EtterlevelseDokumentasjonStats stats;
 

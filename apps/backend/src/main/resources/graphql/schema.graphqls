@@ -269,6 +269,7 @@ type EtterlevelseDokumentasjon {
     resourcesData: [Resource!]!
     etterlevelser: [Etterlevelse!]!
     sistEndretEtterlevelse: DateTime
+    sistEndretEtterlevelseAvMeg: DateTime
     sistEndretDokumentasjon: DateTime
     stats: EtterlevelseDokumentasjonStats!
     varslingsadresser: [Varslingsadresse!]!

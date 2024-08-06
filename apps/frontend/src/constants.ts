@@ -480,6 +480,7 @@ export type TEtterlevelseDokumentasjonQL = TReplace<
     etterlevelser?: IEtterlevelse[]
     sistEndretEtterlevelse?: string
     sistEndretDokumentasjon?: string
+    sistEndretEtterlevelseAvMeg?: string
     stats?: IEtterlevelseDokumentasjonStats
   }
 >

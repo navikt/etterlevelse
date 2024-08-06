@@ -1,6 +1,7 @@
 package no.nav.data.common.auditing.domain;
 
 import lombok.RequiredArgsConstructor;
+import no.nav.data.common.security.SecurityUtils;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -52,6 +53,34 @@ public class AuditVersionCustomRepo {
 
         par.addValue("dokumentasjonId", dokumentasjonId);
         par.addValue("timestamps", timestamps);
+
+
+        return fetch(jdbcTemplate.queryForList(query, par));
+
+    }
+
+    @Transactional()
+    public List<AuditVersion> findLatestEtterlevelseByEtterlevelseDokumentIAndCurrentUser(String dokumentasjonId) {
+        String query = """
+                With query as (
+                                   select * ,   RANK () OVER (
+                                        PARTITION BY table_id
+                                   		ORDER BY time DESC
+                                   	) table_rank
+                                   
+                                    from audit_version where 
+                                    table_name = 'Etterlevelse' and 
+                                    user ilike %:currentUser% 
+                                    data -> 'data' ->> 'etterlevelseDokumentasjonId' = :dokumentasjonId
+                                   )
+                                    Select * from query where table_rank = 1;             
+                """;
+
+        var par = new MapSqlParameterSource();
+
+        par.addValue("dokumentasjonId", dokumentasjonId);
+        par.addValue("currentUser", SecurityUtils.getCurrentIdent());
+
 
         return fetch(jdbcTemplate.queryForList(query, par));
 
