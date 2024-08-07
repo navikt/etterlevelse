@@ -159,8 +159,6 @@ const EtterlevelseDokumentasjonList = ({
     ...etterlevelseDokumentasjoner,
   ])
 
-  console.debug(sortedEtterlevelseDokumentasjoner)
-
   const today = new Date()
 
   const filteredEtterlevelsesDokumentasjoner = sortedEtterlevelseDokumentasjoner

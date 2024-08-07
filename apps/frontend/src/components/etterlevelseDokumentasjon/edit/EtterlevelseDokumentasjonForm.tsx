@@ -56,6 +56,8 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
 
   const isDev = process.env.NODE_ENV !== 'production'
 
+  console.debug(process.env.NODE_ENV)
+
   useEffect(() => {
     if (etterlevelseDokumentasjon?.irrelevansFor.length) {
       const irrelevans = etterlevelseDokumentasjon.irrelevansFor.map((irrelevans: ICode) =>
