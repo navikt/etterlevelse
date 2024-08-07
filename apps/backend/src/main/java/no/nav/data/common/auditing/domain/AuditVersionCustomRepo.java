@@ -69,8 +69,8 @@ public class AuditVersionCustomRepo {
                                    	) table_rank
                                    
                                     from audit_version where 
-                                    table_name = 'Etterlevelse' and 
-                                    user ilike %:currentUser%
+                                    table_name = 'Etterlevelse' 
+                                    and user_id like :currentUser
                                     data -> 'data' ->> 'etterlevelseDokumentasjonId' = :dokumentasjonId
                                    )
                                     Select * from query where table_rank = 1;             
@@ -79,7 +79,7 @@ public class AuditVersionCustomRepo {
         var par = new MapSqlParameterSource();
 
         par.addValue("dokumentasjonId", dokumentasjonId);
-        par.addValue("currentUser", SecurityUtils.getCurrentIdent());
+        par.addValue("currentUser", SecurityUtils.getCurrentIdent() + "%");
 
 
         return fetch(jdbcTemplate.queryForList(query, par));
