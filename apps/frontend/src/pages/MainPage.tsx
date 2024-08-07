@@ -156,29 +156,34 @@ const EtterlevelseDokumentasjonList = ({
   etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]
 }) => {
   const sortedEtterlevelseDokumentasjoner = [...etterlevelseDokumentasjoner].sort((a, b) => {
-    if (a.sistEndretEtterlevelse === null && b.sistEndretEtterlevelse) {
-      return -1
-    }
-    if (b.sistEndretEtterlevelse === null && a.sistEndretEtterlevelse) {
+    if (a.sistEndretEtterlevelseAvMeg === null && b.sistEndretEtterlevelseAvMeg) {
       return 1
     }
-    if (a.sistEndretDokumentasjon === null && b.sistEndretEtterlevelse === null) {
+    if (b.sistEndretEtterlevelseAvMeg === null && a.sistEndretEtterlevelseAvMeg) {
+      return -1
+    }
+    if (!a.sistEndretDokumentasjon && !b.sistEndretEtterlevelseAvMeg) {
       return (
         moment(b.changeStamp.createdDate).valueOf() - moment(a.changeStamp.createdDate).valueOf()
       )
     } else {
-      return moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf()
+      return (
+        moment(b.sistEndretEtterlevelseAvMeg).valueOf() -
+        moment(a.sistEndretEtterlevelseAvMeg).valueOf()
+      )
     }
   })
 
   const today = new Date()
 
   const filteredEtterlevelsesDokumentasjoner = sortedEtterlevelseDokumentasjoner
-    .slice(0, 2)
     .filter((etterlevelseDokumentasjon) => {
       let monthAge
-      if (etterlevelseDokumentasjon.sistEndretEtterlevelse) {
-        monthAge = getNumberOfMonthsBetween(etterlevelseDokumentasjon.sistEndretEtterlevelse, today)
+      if (etterlevelseDokumentasjon.sistEndretEtterlevelseAvMeg) {
+        monthAge = getNumberOfMonthsBetween(
+          etterlevelseDokumentasjon.sistEndretEtterlevelseAvMeg,
+          today
+        )
       } else {
         monthAge = getNumberOfMonthsBetween(
           etterlevelseDokumentasjon.changeStamp.createdDate || '',
@@ -187,6 +192,7 @@ const EtterlevelseDokumentasjonList = ({
       }
       return monthAge <= 6
     })
+    .slice(0, 2)
 
   return (
     <div>
