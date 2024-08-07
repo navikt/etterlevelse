@@ -346,7 +346,11 @@ const KriterieBegrunnelse = ({
               />
             )}
 
-            {mode === 'view' && <Markdown source={begrunnelse} />}
+            {mode === 'view' && (
+              <div className="p-8 border-border-subtle-hover border border-solid rounded-md">
+                <Markdown source={begrunnelse} />
+              </div>
+            )}
 
             <div className="mt-1">
               <FormError
