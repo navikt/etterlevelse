@@ -69,8 +69,8 @@ public class AuditVersionCustomRepo {
                                    	) table_rank
                                    
                                     from audit_version where 
-                                    table_name = 'Etterlevelse' 
-                                    and user_id like :currentUser
+                                    table_name = 'Etterlevelse' and
+                                    user_id like :currentUser and
                                     data -> 'data' ->> 'etterlevelseDokumentasjonId' = :dokumentasjonId
                                    )
                                     Select * from query where table_rank = 1;             
