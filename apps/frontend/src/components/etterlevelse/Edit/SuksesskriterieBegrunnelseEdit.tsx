@@ -9,7 +9,6 @@ import {
   Radio,
   RadioGroup,
   ReadMore,
-  Textarea,
   ToggleGroup,
 } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
@@ -172,7 +171,9 @@ const KriterieBegrunnelse = ({
   const [veiledningTekst, setVeiledningTekst] = useState(
     suksesskriterieBegrunnelse.veiledningsTekst
   )
+
   const [mode, setMode] = useState('edit')
+  const [guideMode, setGuideMode] = useState('edit')
 
   const getVeiledningsTekstFromMorEtterlevelse = (
     morEtterlevelse: IEtterlevelse,
@@ -253,7 +254,7 @@ const KriterieBegrunnelse = ({
       </div>
 
       {forGjenbruk && (
-        <div className="my-5 flex flex-col gap-5">
+        <div className="my-5 flex flex-col">
           <CheckboxGroup
             legend="Skriv veiledning for gjenbruk"
             hideLegend
@@ -264,11 +265,30 @@ const KriterieBegrunnelse = ({
           </CheckboxGroup>
           {veiledning && (
             <div className="ml-8">
-              <Textarea
-                label="Skriv veiledning om dette suksesskriteriet til de som skal gjenbruke vurderingen din"
-                value={veiledningTekst}
-                onChange={(event) => setVeiledningTekst(event.target.value)}
-              />
+              <div className="w-full">
+                <div className="flex justify-end mr-1 mb-1">
+                  <ToggleGroup defaultValue="edit" onChange={setGuideMode} size="small">
+                    <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
+                    <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+                  </ToggleGroup>
+                </div>
+              </div>
+              {guideMode === 'edit' && (
+                <TextEditor
+                  initialValue={veiledningTekst}
+                  setValue={setVeiledningTekst}
+                  height="11.75rem"
+                  simple
+                  maxWidth="49.375rem"
+                  width="100%"
+                />
+              )}
+
+              {guideMode === 'view' && (
+                <div className="p-8 border-border-subtle-hover border border-solid rounded-md">
+                  <Markdown source={veiledningTekst} />
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -281,7 +301,9 @@ const KriterieBegrunnelse = ({
             {morEtterlevelse.changeStamp.lastModifiedBy.split(' - ')[1]}
           </Label>
           <br />
-          <>{getVeiledningsTekstFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id)}</>
+          <Markdown
+            source={getVeiledningsTekstFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id)}
+          />
         </Alert>
       )}
 
