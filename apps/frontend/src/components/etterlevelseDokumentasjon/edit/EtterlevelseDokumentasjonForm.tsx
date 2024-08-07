@@ -54,9 +54,8 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
 
   const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
 
-  const isDev = process.env.NODE_ENV !== 'production'
-
-  console.debug(process.env.NODE_ENV)
+  const isDev =
+    window.location.origin.includes('.dev.') || window.location.origin.includes('localhost')
 
   useEffect(() => {
     if (etterlevelseDokumentasjon?.irrelevansFor.length) {
