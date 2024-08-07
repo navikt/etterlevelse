@@ -66,7 +66,7 @@ public class AuditVersionService {
         return customRepo.findLatestEtterlevelseByEtterlevelseDokumentIdAndTimestamp(etterlevelseDokumentasjonId, timestamp);
     }
 
-    public List<AuditVersion> findLatestEtterlevelseByEtterlevelseDokumentIAndCurrentUser(String etterlevelseDokumentasjonId) {
-        return customRepo.findLatestEtterlevelseByEtterlevelseDokumentIAndCurrentUser(etterlevelseDokumentasjonId);
+    public List<AuditVersion> findLatestEtterlevelseByEtterlevelseDokumentIdAndCurrentUser(String etterlevelseDokumentasjonId) {
+        return customRepo.findLatestEtterlevelseByEtterlevelseDokumentIdAndCurrentUser(etterlevelseDokumentasjonId);
     }
 }

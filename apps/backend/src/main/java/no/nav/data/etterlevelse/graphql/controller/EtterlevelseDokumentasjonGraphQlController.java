@@ -114,7 +114,7 @@ public class EtterlevelseDokumentasjonGraphQlController {
 
     @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
     public LocalDateTime sistEndretEtterlevelseAvMeg(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjon) {
-        var etterlevelser = auditVersionService.findLatestEtterlevelseByEtterlevelseDokumentIAndCurrentUser(etterlevelseDokumentasjon.getId().toString());
+        var etterlevelser = auditVersionService.findLatestEtterlevelseByEtterlevelseDokumentIdAndCurrentUser(etterlevelseDokumentasjon.getId().toString());
         return sistEndretAudit(etterlevelser);
     }
 

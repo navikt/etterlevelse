@@ -74,6 +74,15 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
                 .ifErrorsThrowValidationException();
 
         var etterlevelse = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Etterlevelse();
+
+        if (!request.isUpdate()) {
+            var existingEtterlevelse = repo.findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.getKravVersjon());
+            if (existingEtterlevelse.isPresent()) {
+                log.warn("Found existing etterlevelse whne trying to create for etterlevelse dokumentation id: {}, for krav: K{}.{}", request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.getKravVersjon());
+                etterlevelse = existingEtterlevelse.get().getDomainObjectData();
+            }
+        }
+
         etterlevelse.merge(request);
 
         return storage.save(etterlevelse);

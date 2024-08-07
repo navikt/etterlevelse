@@ -60,7 +60,7 @@ public class AuditVersionCustomRepo {
     }
 
     @Transactional()
-    public List<AuditVersion> findLatestEtterlevelseByEtterlevelseDokumentIAndCurrentUser(String dokumentasjonId) {
+    public List<AuditVersion> findLatestEtterlevelseByEtterlevelseDokumentIdAndCurrentUser(String dokumentasjonId) {
         String query = """
                 With query as (
                                    select * ,   RANK () OVER (
