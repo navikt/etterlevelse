@@ -28,6 +28,7 @@ public class EtterlevelseDokumentasjonGraphQlResponse extends EtterlevelseDokume
     private LocalDateTime sistEndretEtterlevelse;
     private LocalDateTime sistEndretEtterlevelseAvMeg;
     private LocalDateTime sistEndretDokumentasjon;
+    private LocalDateTime sistEndretDokumentasjonAvMeg;
     private EtterlevelseDokumentasjonStats stats;
 
     public static EtterlevelseDokumentasjonGraphQlResponse buildFrom(EtterlevelseDokumentasjon etterlevelseDokumentasjon) {

@@ -271,6 +271,7 @@ type EtterlevelseDokumentasjon {
     sistEndretEtterlevelse: DateTime
     sistEndretEtterlevelseAvMeg: DateTime
     sistEndretDokumentasjon: DateTime
+    sistEndretDokumentasjonAvMeg: DateTime
     stats: EtterlevelseDokumentasjonStats!
     varslingsadresser: [Varslingsadresse!]!
 }

@@ -119,8 +119,14 @@ public class EtterlevelseDokumentasjonGraphQlController {
     }
 
     @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
-    public LocalDateTime sistEndretDokumentasjon(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjonResponse) {
-        return etterlevelseDokumentasjonResponse.getChangeStamp().getLastModifiedDate();
+    public LocalDateTime sistEndretDokumentasjon(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjon) {
+        return etterlevelseDokumentasjon.getChangeStamp().getLastModifiedDate();
+    }
+
+    @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
+    public LocalDateTime sistEndretDokumentasjonAvMeg(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjon) {
+        var etterlevelser = auditVersionService.findLatestEtterlevelseDokumentIdAndCurrentUser(etterlevelseDokumentasjon.getId().toString());
+        return sistEndretAudit(etterlevelser);
     }
 
     @SchemaMapping(typeName = "EtterlevelseDokumentasjon")

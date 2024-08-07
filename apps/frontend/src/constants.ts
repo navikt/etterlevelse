@@ -481,6 +481,7 @@ export type TEtterlevelseDokumentasjonQL = TReplace<
     sistEndretEtterlevelse?: string
     sistEndretDokumentasjon?: string
     sistEndretEtterlevelseAvMeg?: string
+    sistEndretDokumentasjonAvMeg?: string
     stats?: IEtterlevelseDokumentasjonStats
   }
 >
