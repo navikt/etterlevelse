@@ -88,7 +88,7 @@ public class AuditVersionCustomRepo {
     @Transactional()
     public List<AuditVersion> findLatestEtterlevelseDokumentIdAndCurrentUser(String dokumentasjonId) {
         String query = """
-                select * from from audit_version where 
+                select * from audit_version where 
                                     table_name = 'EtterlevelseDokumentasjon' and
                                     user_id like :currentUser and
                                     table_id = :dokumentasjonId
