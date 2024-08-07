@@ -1,4 +1,4 @@
-import { Alert, Button, Checkbox, CheckboxGroup, Heading, Label } from '@navikt/ds-react'
+import { Alert, Button, Checkbox, CheckboxGroup, Heading, Label, TextField } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -51,6 +51,10 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
   const [dokumentRelasjon, setDokumentRelasjon] =
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
   const navigate = useNavigate()
+
+  const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
+
+  const isDev = process.env.NODE_ENV !== 'production'
 
   useEffect(() => {
     if (etterlevelseDokumentasjon?.irrelevansFor.length) {
@@ -362,6 +366,34 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                       styles={selectOverrides}
                     />
                   </div>
+
+                  {isDev && (
+                    <div className="bg-surface-action-subtle-hover p-4 flex gap-2 items-end my-2">
+                      <TextField
+                        label="Skriv inn NAV ident dersom du ikke finner deg selv over"
+                        value={customPersonForDev}
+                        onChange={(event) => setCustomPersonForDev(event.target.value)}
+                      />
+                      <div>
+                        <Button
+                          type="button"
+                          onClick={() => {
+                            fieldArrayRenderProps.push({
+                              navIdent: customPersonForDev,
+                              givenName: customPersonForDev,
+                              familyName: customPersonForDev,
+                              fullName: customPersonForDev,
+                              email: customPersonForDev,
+                              resourceType: customPersonForDev,
+                            })
+                          }}
+                        >
+                          Legg til
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
                   <RenderTagList
                     list={fieldArrayRenderProps.form.values.resourcesData.map(
                       (resource: ITeamResource) => resource.fullName
