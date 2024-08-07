@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client'
 import { Alert, BodyLong, Button, Heading, LinkPanel, Skeleton } from '@navikt/ds-react'
-import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getMeldingByType } from '../api/MeldingApi'
@@ -19,6 +18,7 @@ import { getEtterlevelseDokumentasjonListQuery } from '../query/EtterlevelseDoku
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { user } from '../services/User'
 import { getNumberOfMonthsBetween } from '../util/checkAge'
+import { sortEtterlevelseDokumentasjonerByUsersLastModifiedDate } from '../util/sortEtterlevelseDokumentasjonerByUsersLastModifiedDate'
 import { TVariables } from './MyEtterlevelseDokumentasjonerPage'
 
 export const MainPage = () => {
@@ -155,24 +155,11 @@ const EtterlevelseDokumentasjonList = ({
 }: {
   etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]
 }) => {
-  const sortedEtterlevelseDokumentasjoner = [...etterlevelseDokumentasjoner].sort((a, b) => {
-    if (a.sistEndretEtterlevelseAvMeg === null && b.sistEndretEtterlevelseAvMeg) {
-      return 1
-    }
-    if (b.sistEndretEtterlevelseAvMeg === null && a.sistEndretEtterlevelseAvMeg) {
-      return -1
-    }
-    if (!a.sistEndretDokumentasjon && !b.sistEndretEtterlevelseAvMeg) {
-      return (
-        moment(b.changeStamp.createdDate).valueOf() - moment(a.changeStamp.createdDate).valueOf()
-      )
-    } else {
-      return (
-        moment(b.sistEndretEtterlevelseAvMeg).valueOf() -
-        moment(a.sistEndretEtterlevelseAvMeg).valueOf()
-      )
-    }
-  })
+  const sortedEtterlevelseDokumentasjoner = sortEtterlevelseDokumentasjonerByUsersLastModifiedDate([
+    ...etterlevelseDokumentasjoner,
+  ])
+
+  console.debug(sortedEtterlevelseDokumentasjoner)
 
   const today = new Date()
 
