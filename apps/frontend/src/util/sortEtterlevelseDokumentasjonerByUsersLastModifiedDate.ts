@@ -22,7 +22,7 @@ export const sortEtterlevelseDokumentasjonerByUsersLastModifiedDate = (
           moment(a.sistEndretEtterlevelseAvMeg).valueOf()
         )
       } else {
-        return 1
+        return -1
       }
     }
     if (!a.sistEndretEtterlevelseAvMeg && !b.sistEndretEtterlevelseAvMeg) {
