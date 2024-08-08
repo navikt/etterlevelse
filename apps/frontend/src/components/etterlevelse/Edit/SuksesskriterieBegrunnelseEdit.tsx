@@ -21,6 +21,7 @@ import {
   ISuksesskriterieBegrunnelse,
 } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
+import { user } from '../../../services/User'
 import { useDebouncedState } from '../../../util/hooks/customHooks'
 import { FieldWrapper } from '../../common/Inputs'
 import { Markdown } from '../../common/Markdown'
@@ -264,30 +265,33 @@ const KriterieBegrunnelse = ({
             <Checkbox value={true}>Skriv veiledning for gjenbruk</Checkbox>
           </CheckboxGroup>
           {veiledning && (
-            <div className="ml-8">
-              <div className="w-full">
-                <div className="flex justify-end mr-1 mb-1">
-                  <ToggleGroup defaultValue="edit" onChange={setGuideMode} size="small">
-                    <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
-                    <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
-                  </ToggleGroup>
+            <div>
+              <div className="ml-8">
+                <div className="w-full">
+                  <div className="flex justify-end mr-1 mb-1">
+                    <ToggleGroup defaultValue="edit" onChange={setGuideMode} size="small">
+                      <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
+                      <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+                    </ToggleGroup>
+                  </div>
                 </div>
+                {guideMode === 'edit' && (
+                  <TextEditor
+                    initialValue={veiledningTekst}
+                    setValue={setVeiledningTekst}
+                    height="11.75rem"
+                    simple
+                    maxWidth="49.375rem"
+                    width="100%"
+                  />
+                )}
               </div>
-              {guideMode === 'edit' && (
-                <TextEditor
-                  initialValue={veiledningTekst}
-                  setValue={setVeiledningTekst}
-                  height="11.75rem"
-                  simple
-                  maxWidth="49.375rem"
-                  width="100%"
-                />
-              )}
-
               {guideMode === 'view' && (
-                <div className="p-8 border-border-subtle-hover border border-solid rounded-md">
+                <Alert variant="info" className="mb-5">
+                  <Label>Følgende veiledning er skrevet av {user.getName()}</Label>
+                  <br />
                   <Markdown source={veiledningTekst} />
-                </div>
+                </Alert>
               )}
             </div>
           )}

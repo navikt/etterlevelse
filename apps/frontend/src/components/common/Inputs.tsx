@@ -8,6 +8,7 @@ import {
   Select,
   TextField,
   Textarea,
+  ToggleGroup,
   useDatepicker,
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
@@ -15,7 +16,7 @@ import React, { ReactNode, useState } from 'react'
 import { TOption, TOr } from '../../constants'
 import { EListName, ICode, codelist } from '../../services/Codelist'
 import LabelWithTooltip from '../common/LabelWithTooltip'
-import { MarkdownInfo } from './Markdown'
+import { Markdown, MarkdownInfo } from './Markdown'
 import { Error, FormError } from './ModalSchema'
 import { RenderTagList } from './TagList'
 import TextEditor from './TextEditor/TextEditor'
@@ -136,6 +137,8 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
     setIsFormDirty,
   } = props
 
+  const [mode, setMode] = useState('edit')
+
   return (
     <FieldWrapper marginBottom={marginBottom} id={name}>
       <Field name={name}>
@@ -145,15 +148,31 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
               <div>
                 <Label>{label}</Label>
                 <BodyShort className="text-[var(--a-text-subtle)]">{caption}</BodyShort>
-                <MarkdownInfo />
-                <TextEditor
-                  height={height}
-                  initialValue={fieldProps.field.value}
-                  setValue={(v) => fieldProps.form.setFieldValue(name, v)}
-                  errors={fieldProps.form.errors}
-                  name={name}
-                  setIsFormDirty={setIsFormDirty}
-                />
+                <div className="flex w-full justify-between items-center mb-1">
+                  <MarkdownInfo />
+                  <div className="flex justify-end mr-1">
+                    <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
+                      <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
+                      <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+                    </ToggleGroup>
+                  </div>
+                </div>
+                {mode === 'edit' && (
+                  <TextEditor
+                    height={height}
+                    initialValue={fieldProps.field.value}
+                    setValue={(v) => fieldProps.form.setFieldValue(name, v)}
+                    errors={fieldProps.form.errors}
+                    name={name}
+                    setIsFormDirty={setIsFormDirty}
+                  />
+                )}
+
+                {mode === 'view' && (
+                  <div className="p-8 border-border-subtle-hover border border-solid rounded-md">
+                    <Markdown source={fieldProps.field.value} />
+                  </div>
+                )}
               </div>
             )}
             {!markdown && (
