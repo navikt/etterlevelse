@@ -22,7 +22,6 @@ import {
 } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
 import { EListName, ICode, ICodeListFormValues, codelist } from '../../../services/Codelist'
-import { user } from '../../../services/User'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
@@ -437,7 +436,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
 
-          {!dokumentRelasjon && user.isAdmin() && (
+          {!dokumentRelasjon && isDev && (
             <div className="mt-5">
               <CheckboxGroup
                 legend="Skal dette dokumentet kunne gjenbrukes av andre?"
