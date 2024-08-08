@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.etterlevelse.domain;
 
 import no.nav.data.common.storage.domain.GenericStorage;
+import no.nav.data.etterlevelse.krav.domain.Krav;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,5 +36,8 @@ public interface EtterlevelseRepo extends JpaRepository<GenericStorage<Etterleve
 
     @Query(value = "select * from generic_storage where data ->> 'etterlevelseDokumentasjonId' = ?1 and data-> 'kravNummer' = to_jsonb(?2) and data -> 'kravVersjon' = to_jsonb(?3) and type = 'Etterlevelse'", nativeQuery = true)
     Optional<GenericStorage<Etterlevelse>> findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(String etterlevelseDokumentasjonId, int nummer, int versjon);
+
+    @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and data -> 'kravVersjon' = to_jsonb(?2) and type = 'Krav'", nativeQuery = true)
+    Optional<GenericStorage<Krav>> findKravForEtterlevelse(int nummer, int versjon);
 
 }

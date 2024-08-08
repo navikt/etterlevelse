@@ -11,6 +11,8 @@ import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest.Fields;
 import no.nav.data.etterlevelse.etterlevelse.dto.SuksesskriterieBegrunnelseRequest;
+import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
@@ -92,6 +94,11 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
     public void copyEtterlevelse(String fromDocumentId, String toDocumentId) {
         var etterlevelseToCopy = getByEtterlevelseDokumentasjon(fromDocumentId);
         etterlevelseToCopy.forEach(etterlevelse -> {
+
+            var krav = etterlevelseRepo.findKravForEtterlevelse(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon()).map(GenericStorage::getDomainObjectData).orElse(new Krav());
+
+            if (krav.getStatus() == KravStatus.AKTIV) {
+
             List<SuksesskriterieBegrunnelseRequest> suksesskriterieBegrunnelseRequestList = etterlevelse.getSuksesskriterieBegrunnelser().stream().map((skb) -> SuksesskriterieBegrunnelseRequest.builder()
                     .suksesskriterieId(skb.getSuksesskriterieId())
                     .begrunnelse(skb.getBegrunnelse())
@@ -116,6 +123,9 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
                             .build());
 
             storage.save(newEtterlevelse);
+
+            }
+
         });
     }
 
