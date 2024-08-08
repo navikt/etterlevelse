@@ -4,6 +4,7 @@ import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
@@ -100,8 +101,14 @@ public class KravGraphQlController {
         if (onlyForEtterlevelseDokumentasjon || etterlevelseDokumentasjonId != null) {
             String dokumentasjonId = etterlevelseDokumentasjonId != null ? etterlevelseDokumentasjonId.toString() : KravFilter.get(env, Fields.etterlevelseDokumentasjonId);
             if (dokumentasjonId != null) {
-                return etterlevelseService.getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(dokumentasjonId, krav.getKravNummer(), krav.getKravVersjon())
-                        .map(value -> List.of(value.toResponse())).orElseGet(List::of);
+                try {
+                    return etterlevelseService.getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(dokumentasjonId, krav.getKravNummer(), krav.getKravVersjon())
+                            .map(value -> List.of(value.toResponse())).orElseGet(List::of);
+                } catch (Exception e) {
+                    throw new ValidationException("Found duplicate etterlevelse for dokumentasjon with id = " + dokumentasjonId + " for krav K" + krav.getKravNummer() + "." + krav.getKravVersjon()
+                            + ", error: " + e
+                    );
+                }
             }
         }
 
