@@ -335,10 +335,12 @@ export interface IEtterlevelseDokumentasjon {
   etterlevelseNummer: number
   teams: string[]
   resources: string[]
+  risikoeiere: string[]
   avdeling?: ICode
   //data field for frontend only
   teamsData?: ITeam[]
   resourcesData?: ITeamResource[]
+  risikoeiereData?: ITeamResource[]
   behandlinger?: IBehandling[]
   behandlerPersonopplysninger: boolean
   virkemiddel?: IVirkemiddel
