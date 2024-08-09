@@ -53,6 +53,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
   const navigate = useNavigate()
 
   const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
+  const [customRisikoeierForDev, setCustomRisikoeierForDev] = useState<string>('')
 
   const isDev =
     window.location.origin.includes('.dev.') || window.location.origin.includes('localhost')
@@ -423,6 +424,11 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
 
           {errors.teamsData && <Error message={errors.teamsData as string} />}
 
+          <div id="varslingsadresser" className="mt-5">
+            <VarslingsadresserEdit fieldName="varslingsadresser" />
+            {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
+          </div>
+
           <div className="flex flex-col lg:flex-row gap-5">
             <FieldWrapper marginTop full>
               <Field name="avdeling">
@@ -444,12 +450,79 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                 )}
               </Field>
             </FieldWrapper>
+
             <div className="flex-1" />
           </div>
 
-          <div id="varslingsadresser" className="mt-5">
-            <VarslingsadresserEdit fieldName="varslingsadresser" />
-            {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
+          <div className="flex flex-col lg:flex-row gap-5 mt-5">
+            <FieldArray name="risikoeiereData">
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className="flex-1">
+                  <LabelWithTooltip label="Søk etter risikoeier" tooltip="" />
+                  <div className="w-full">
+                    <AsyncSelect
+                      aria-label="Søk etter risikoeier"
+                      placeholder=""
+                      components={{ DropdownIndicator }}
+                      noOptionsMessage={({ inputValue }) => {
+                        return noOptionMessage(inputValue)
+                      }}
+                      controlShouldRenderValue={false}
+                      loadingMessage={() => 'Søker...'}
+                      isClearable={false}
+                      loadOptions={searchResourceByNameOptions}
+                      onChange={(value: any) => {
+                        if (
+                          value &&
+                          fieldArrayRenderProps.form.values.risikoeiereData.filter(
+                            (team: ITeamResource) => team.navIdent === value.navIdent
+                          ).length === 0
+                        ) {
+                          fieldArrayRenderProps.push(value)
+                        }
+                      }}
+                      styles={selectOverrides}
+                    />
+                  </div>
+
+                  {isDev && (
+                    <div className="bg-surface-action-subtle-hover p-4 flex gap-2 items-end my-2">
+                      <TextField
+                        label="Skriv inn NAV ident dersom du ikke finner deg selv over"
+                        value={customRisikoeierForDev}
+                        onChange={(event) => setCustomRisikoeierForDev(event.target.value)}
+                      />
+                      <div>
+                        <Button
+                          type="button"
+                          onClick={() => {
+                            fieldArrayRenderProps.push({
+                              navIdent: customRisikoeierForDev,
+                              givenName: customRisikoeierForDev,
+                              familyName: customRisikoeierForDev,
+                              fullName: customRisikoeierForDev,
+                              email: customRisikoeierForDev,
+                              resourceType: customRisikoeierForDev,
+                            })
+                          }}
+                        >
+                          Legg til
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  <RenderTagList
+                    list={fieldArrayRenderProps.form.values.risikoeiereData.map(
+                      (resource: ITeamResource) => resource.fullName
+                    )}
+                    onRemove={fieldArrayRenderProps.remove}
+                  />
+                </div>
+              )}
+            </FieldArray>
+
+            <div className="flex-1" />
           </div>
 
           {!dokumentRelasjon && isDev && (
