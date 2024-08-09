@@ -440,6 +440,7 @@ export interface IProductArea {
 }
 
 export interface IMember {
+  navIdent?: string
   name?: string
   email?: string
 }
