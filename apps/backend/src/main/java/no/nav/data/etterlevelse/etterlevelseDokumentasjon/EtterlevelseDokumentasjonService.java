@@ -168,16 +168,19 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return convertToDomaionObject(etterlevelseDokumentasjonRepo.findByVirkemiddelIds(ids));
     }
 
-    public EtterlevelseDokumentasjonResponse getEtterlevelseDokumentasjonWithTeamAndBehandlingAndResourceData(UUID uuid) {
-        EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = addBehandlingAndTeamsDataAndResourceData(get(uuid).toResponse());
+    public EtterlevelseDokumentasjonResponse getEtterlevelseDokumentasjonWithTeamAndBehandlingAndResourceDataAndRiskoeiereData(UUID uuid) {
+        EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(get(uuid).toResponse());
 
         boolean resourceIsEmpty = etterlevelseDokumentasjonResponse.getResources() == null || etterlevelseDokumentasjonResponse.getResources().isEmpty();
         boolean teamIsEmpty = etterlevelseDokumentasjonResponse.getTeams() == null || etterlevelseDokumentasjonResponse.getTeams().isEmpty();
+        boolean risikoeiereIsEmpty = etterlevelseDokumentasjonResponse.getRisikoeiere() == null || etterlevelseDokumentasjonResponse.getRisikoeiere().isEmpty();
 
         boolean resourceIsNotEmpty = etterlevelseDokumentasjonResponse.getResources() != null && !etterlevelseDokumentasjonResponse.getResources().isEmpty();
         boolean teamIsNotEmpty = etterlevelseDokumentasjonResponse.getTeams() != null && !etterlevelseDokumentasjonResponse.getTeams().isEmpty();
+        boolean risikoeiereIsNotEmpty = etterlevelseDokumentasjonResponse.getRisikoeiere() != null && !etterlevelseDokumentasjonResponse.getRisikoeiere().isEmpty();
 
-        if(resourceIsEmpty && teamIsEmpty) {
+
+        if(resourceIsEmpty && teamIsEmpty && risikoeiereIsEmpty) {
             etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(true);
         } else {
             List<String> memeberList = new ArrayList<>();
@@ -185,6 +188,10 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             var currentUser = SecurityUtils.getCurrentIdent();
             if(resourceIsNotEmpty) {
                 memeberList.addAll(etterlevelseDokumentasjonResponse.getResources());
+            }
+
+            if(risikoeiereIsNotEmpty) {
+                memeberList.addAll(etterlevelseDokumentasjonResponse.getRisikoeiere());
             }
 
             if(teamIsNotEmpty) {
@@ -213,7 +220,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     }
 
     // Does not update DB
-    public EtterlevelseDokumentasjonResponse addBehandlingAndTeamsDataAndResourceData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+    public EtterlevelseDokumentasjonResponse addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
         if (etterlevelseDokumentasjonResponse.getBehandlingIds() != null && !etterlevelseDokumentasjonResponse.getBehandlingIds().isEmpty()) {
             addBehandlingData(etterlevelseDokumentasjonResponse);
         }
@@ -222,6 +229,9 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         }
         if (etterlevelseDokumentasjonResponse.getResources() != null && !etterlevelseDokumentasjonResponse.getResources().isEmpty()) {
             addResourcesData(etterlevelseDokumentasjonResponse);
+        }
+        if (etterlevelseDokumentasjonResponse.getRisikoeiere() != null && !etterlevelseDokumentasjonResponse.getRisikoeiere().isEmpty()) {
+            addRisikoeiereData(etterlevelseDokumentasjonResponse);
         }
         return etterlevelseDokumentasjonResponse;
     }
@@ -277,6 +287,26 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             }
         });
         etterlevelseDokumentasjonResponse.setResourcesData(resourcessData);
+    }
+
+    public void addRisikoeiereData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+        List<Resource> riskoeiereData = new ArrayList<>();
+        etterlevelseDokumentasjonResponse.getRisikoeiere().forEach((ident) -> {
+            var risikoeiereData = teamcatResourceClient.getResource(ident);
+            if (risikoeiereData.isPresent()) {
+                riskoeiereData.add(risikoeiereData.get());
+            } else {
+                var emptyResourceData = new Resource();
+                emptyResourceData.setNavIdent(ident);
+                emptyResourceData.setGivenName("Fant ikke person med NAV ident: " + ident);
+                emptyResourceData.setFamilyName("Fant ikke person med NAV ident: " + ident);
+                emptyResourceData.setFullName("Fant ikke person med NAV ident: " + ident);
+                emptyResourceData.setEmail("Fant ikke person med NAV ident: " + ident);
+                emptyResourceData.setResourceType(ResourceType.INTERNAL);
+                riskoeiereData.add(emptyResourceData);
+            }
+        });
+        etterlevelseDokumentasjonResponse.setRisikoeiereData(riskoeiereData);
     }
 
 }

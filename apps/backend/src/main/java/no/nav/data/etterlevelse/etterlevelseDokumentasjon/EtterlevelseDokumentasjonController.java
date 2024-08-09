@@ -53,7 +53,7 @@ public class EtterlevelseDokumentasjonController {
     @GetMapping("/{id}")
     public ResponseEntity<EtterlevelseDokumentasjonResponse> getById(@PathVariable UUID id) {
         log.info("Get Etterlevelse Dokumentasjon By Id Id={}", id);
-        return ResponseEntity.ok(etterlevelseDokumentasjonService.getEtterlevelseDokumentasjonWithTeamAndBehandlingAndResourceData(id));
+        return ResponseEntity.ok(etterlevelseDokumentasjonService.getEtterlevelseDokumentasjonWithTeamAndBehandlingAndResourceDataAndRiskoeiereData(id));
     }
 
     @Operation(summary = "Get All Etterlevelse Dokumentasjon by relevans")
@@ -131,7 +131,7 @@ public class EtterlevelseDokumentasjonController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.save(request);
-        return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceData(etterlevelseDokumentasjon.toResponse()));
+        return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjon.toResponse()));
     }
 
 
@@ -146,7 +146,7 @@ public class EtterlevelseDokumentasjonController {
         }
 
         var newEtterlevelseDokumentasjon = etterlevelseDokumentasjonService.saveAndCreateRelationWithEtterlevelseCopy(fromDocumentId ,request);
-        return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceData(newEtterlevelseDokumentasjon.toResponse()));
+        return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(newEtterlevelseDokumentasjon.toResponse()));
     }
 
     @ApiResponse(description = "Etterlevelse deleted")
