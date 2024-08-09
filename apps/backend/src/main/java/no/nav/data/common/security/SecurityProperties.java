@@ -21,7 +21,6 @@ public class SecurityProperties {
     private List<String> writeGroups;
     private List<String> adminGroups;
     private List<String> kraveierGroups;
-    private List<String> risikoeierGroups;
     private List<String> redirectUris;
     private String env;
     private List<String> devEmailAllowList;

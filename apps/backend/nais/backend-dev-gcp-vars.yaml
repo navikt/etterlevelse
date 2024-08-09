@@ -22,7 +22,5 @@ env:
     value: bf05a29f-6f80-4da1-b419-22c802fd41e7
   - name: AZURE_CLIENT_GROUPS_KRAVEIER
     value: d99d875c-c028-46a4-94bc-a87a633b3eee
-  - name: AZURE_CLIENT_GROUPS_RISIKOEIER
-    value: 30f38d50-ecfc-4566-a1dd-bd00e19f8f2f
   - name: CLIENT_BEGREPSKATALOG_FRONTEND_URL
     value: https://begrepskatalog.intern.nav.no/begrep

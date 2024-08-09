@@ -173,7 +173,6 @@ const LoggedInHeader = () => {
 const getUserRole = () => {
   if (user.isAdmin()) return 'Admin'
   else if (user.isKraveier()) return 'Kraveier'
-  else if (user.isRisikoeier()) return 'Risikoeier'
   else if (user.canWrite()) return 'Etterlever'
   else return 'Gjest'
 }

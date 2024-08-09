@@ -34,10 +34,6 @@ public class SecurityUtils {
         return getCurrentUser().map(UserInfo::isKravEier).orElse(false);
     }
 
-    public static boolean isRisikoEier() {
-        return getCurrentUser().map(UserInfo::isRisikoEier).orElse(false);
-    }
-
     public static boolean isUserOrAdmin(String ident) {
         return getCurrentIdent().equals(ident) || isAdmin();
     }

@@ -7,8 +7,7 @@ public enum AppRole {
     READ,
     WRITE,
     ADMIN,
-    KRAVEIER,
-    RISIKOEIER;
+    KRAVEIER;
 
     public static final String ROLE_PREFIX = "ROLE_";
 
