@@ -43,6 +43,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
     private boolean forGjenbruk = false;
     private List<String> teams;
     private List<String> resources;
+    private List<String> risikoeiere;
     private String avdeling;
     private List<String> irrelevansFor;
     private List<String> prioritertKravNummer;
@@ -64,6 +65,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
         irrelevansFor = copyOf(request.getIrrelevansFor());
         teams = copyOf(request.getTeams());
         resources = copyOf(request.getResources());
+        risikoeiere = copyOf(request.getRisikoeiere());
         behandlerPersonopplysninger = request.isBehandlerPersonopplysninger();
         knyttetTilVirkemiddel = request.isKnyttetTilVirkemiddel();
         forGjenbruk = request.isForGjenbruk();
@@ -89,6 +91,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
                 .forGjenbruk(forGjenbruk)
                 .teams(teams != null ? copyOf(teams) : List.of())
                 .resources(resources != null ? copyOf(resources) : List.of())
+                .risikoeiere(risikoeiere != null ? copyOf(risikoeiere) : List.of())
                 .behandlerPersonopplysninger(behandlerPersonopplysninger)
                 .knyttetTilVirkemiddel(knyttetTilVirkemiddel)
                 .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, avdeling))

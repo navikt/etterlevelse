@@ -42,6 +42,8 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private boolean forGjenbruk;
     private List<String> teams;
     private List<String> resources;
+    private List<String> risikoeiere;
+
 
     @Schema(description = "Codelist AVDELING")
     private String avdeling;
@@ -57,6 +59,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         setIrrelevansFor(formatListToUppercase(irrelevansFor));
         setTeams(formatList(teams));
         setResources(formatList(resources));
+        setRisikoeiere(formatList(risikoeiere));
         setVarslingsadresser(copyOf(varslingsadresser));
         setAvdeling(toUpperCaseAndTrim(avdeling));
     }

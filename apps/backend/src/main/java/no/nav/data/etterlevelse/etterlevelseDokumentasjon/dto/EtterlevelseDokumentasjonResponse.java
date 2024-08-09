@@ -44,6 +44,8 @@ public class EtterlevelseDokumentasjonResponse {
     private List<TeamResponse> teamsData;
     private List<String> resources;
     private List<Resource> resourcesData;
+    private List<String> risikoeiere;
+    private List<Resource> risikoeiereData;
     private List<Behandling> behandlinger;
     private CodelistResponse avdeling;
     private List<Varslingsadresse> varslingsadresser;
