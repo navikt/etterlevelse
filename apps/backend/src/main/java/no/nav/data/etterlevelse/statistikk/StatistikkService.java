@@ -114,7 +114,7 @@ public class StatistikkService {
 
         List<Krav> aktivKravList = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
 
-        List<EtterlevelseDokumentasjon> etterlevelseDokumentasjoner = etterlevelseDokumentasjonService.getAllWithValidBehandling();
+        Page<EtterlevelseDokumentasjon> etterlevelseDokumentasjoner = etterlevelseDokumentasjonService.getAllWithValidBehandling(page);
 
         etterlevelseDokumentasjoner.forEach(etterlevelseDokumentasjon -> {
 

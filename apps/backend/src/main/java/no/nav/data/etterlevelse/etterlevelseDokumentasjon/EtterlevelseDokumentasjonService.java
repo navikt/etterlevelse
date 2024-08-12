@@ -207,8 +207,8 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return etterlevelseDokumentasjonResponse;
     }
 
-    public List<EtterlevelseDokumentasjon> getAllWithValidBehandling() {
-        return convertToDomaionObject(etterlevelseDokumentasjonRepo.getAllEtterlevelseDokumentasjonWithValidBehandling());
+    public Page<EtterlevelseDokumentasjon> getAllWithValidBehandling(Pageable page) {
+        return etterlevelseDokumentasjonRepo.getAllEtterlevelseDokumentasjonWithValidBehandling(page).map(GenericStorage::getDomainObjectData);
     }
 
     public Page<EtterlevelseDokumentasjon> getAll(Pageable pageable) {
