@@ -28,6 +28,7 @@ public class EtterlevelseGraphQlIT extends GraphQLTestBase {
                         .forGjenbruk(false)
                         .teams(List.of(""))
                         .resources(List.of(""))
+                        .risikoeiere(List.of(""))
                         .irrelevansFor(irrelevans)
                         .behandlingIds(List.of())
                         .update(false)

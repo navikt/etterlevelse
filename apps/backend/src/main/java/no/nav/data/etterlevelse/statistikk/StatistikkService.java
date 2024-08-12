@@ -120,7 +120,7 @@ public class StatistikkService {
 
             totalElements.addAndGet(etterlevelseDokumentasjon.getBehandlingIds().size());
 
-            //Get all etterlevelse for behandling
+            //Get all etterlevelse for etterlevelses dokumentasjon
             List<Etterlevelse> etterlevelseList = etterlevelseService.getByEtterlevelseDokumentasjon(String.valueOf(etterlevelseDokumentasjon.getId()));
 
             LocalDateTime opprettetDato = getFirstCreatedDateForEtterlevelser(etterlevelseList);

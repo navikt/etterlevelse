@@ -30,6 +30,7 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
                         .forGjenbruk(false)
                         .teams(List.of(""))
                         .resources(List.of(""))
+                        .risikoeiere(List.of(""))
                         .irrelevansFor(irrelevans)
                         .update(false)
                         .behandlerPersonopplysninger(true)
