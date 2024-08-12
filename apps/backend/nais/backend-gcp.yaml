@@ -64,6 +64,7 @@ spec:
     sqlInstances:
       - name: etterlevelse
         type: POSTGRES_16
+        tier: db-custom-1-3840
         databases:
           - name: etterlevelsedb
             envVarPrefix: DB
