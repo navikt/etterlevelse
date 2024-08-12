@@ -345,14 +345,16 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             role="complementary"
           >
             <div className="flex gap-2">
-              <img
-                src={systemVarsel.alertType === EAlertType.INFO ? informationIcon : warningAlert}
-                width="18px"
-                height="18px"
-                alt={
-                  systemVarsel.alertType === EAlertType.INFO ? 'information icon' : 'warning icon'
-                }
-              />
+              <div className="flex items-baseline pt-1">
+                <img
+                  src={systemVarsel.alertType === EAlertType.INFO ? informationIcon : warningAlert}
+                  width="18px"
+                  height="18px"
+                  alt={
+                    systemVarsel.alertType === EAlertType.INFO ? 'information icon' : 'warning icon'
+                  }
+                />
+              </div>
               <Markdown source={systemVarsel.melding} />
             </div>
           </div>
