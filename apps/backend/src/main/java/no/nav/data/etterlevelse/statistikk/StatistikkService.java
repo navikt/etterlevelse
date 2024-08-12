@@ -203,11 +203,7 @@ public class StatistikkService {
             });
         });
 
-        if (etterlevelseDokumentasjoner.isEmpty()) {
-            return new PageImpl<>(new ArrayList<>(), page, totalElements.get());
-        } else {
-            return new PageImpl<>(behandlingStatistikkList, page, totalElements.get());
-        }
+        return new PageImpl<>(behandlingStatistikkList, page, etterlevelseDokumentasjoner.getTotalElements());
     }
 
     public EtterlevelseStatistikkResponse toEtterlevelseStatistikkResponse(Etterlevelse etterlevelse) {
