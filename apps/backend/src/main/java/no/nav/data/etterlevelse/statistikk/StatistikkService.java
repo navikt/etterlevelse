@@ -203,13 +203,10 @@ public class StatistikkService {
             });
         });
 
-        if ((page.getPageNumber() * page.getPageSize()) > behandlingStatistikkList.size()) {
+        if (etterlevelseDokumentasjoner.isEmpty()) {
             return new PageImpl<>(new ArrayList<>(), page, totalElements.get());
-        }
-        if ((page.getPageNumber() * page.getPageSize()) + page.getPageSize() >= behandlingStatistikkList.size()) {
-            return new PageImpl<>(behandlingStatistikkList.subList(page.getPageNumber() * page.getPageSize(), behandlingStatistikkList.size()), page, totalElements.get());
         } else {
-            return new PageImpl<>(behandlingStatistikkList.subList(page.getPageNumber() * page.getPageSize(), (page.getPageNumber() * page.getPageSize()) + page.getPageSize()), page, totalElements.get());
+            return new PageImpl<>(behandlingStatistikkList, page, totalElements.get());
         }
     }
 
