@@ -1,10 +1,7 @@
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Label, ReadMore, Tag } from '@navikt/ds-react'
 import { useNavigate } from 'react-router-dom'
-import {
-  IDocumentRelationWithEtterlevelseDokumetajson,
-  TEtterlevelseDokumentasjonQL,
-} from '../../constants'
+import { TEtterlevelseDokumentasjonQL } from '../../constants'
 import { EListName, ICode, codelist } from '../../services/Codelist'
 import { user } from '../../services/User'
 import { BehandlingList } from '../behandling/BehandlingList'
@@ -13,12 +10,11 @@ import { VarslingsadresserView } from './VarslingsAddresseView'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-  morDokumentRelasjon?: IDocumentRelationWithEtterlevelseDokumetajson
   relasjonLoading?: boolean
 }
 
 export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
-  const { etterlevelseDokumentasjon, morDokumentRelasjon, relasjonLoading } = props
+  const { etterlevelseDokumentasjon, relasjonLoading } = props
   const navigate = useNavigate()
 
   const relevansCodeList = codelist.getParsedOptions(EListName.RELEVANS)
@@ -136,38 +132,30 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
             </div>
           </ReadMore>
         </div>
-        {!relasjonLoading &&
-          (morDokumentRelasjon || etterlevelseDokumentasjon.tilgjengeligForGjenbruk) && (
-            <div className="mt-5">
-              <ReadMore
-                header="Gjenbruk av dokument"
-                defaultOpen={morDokumentRelasjon ? true : false}
-              >
-                {morDokumentRelasjon &&
-                  morDokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse}
+        {!relasjonLoading && etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
+          <div className="mt-5">
+            <ReadMore header="Gjenbruk av dokument">
+              {etterlevelseDokumentasjon.tilgjengeligForGjenbruk &&
+                etterlevelseDokumentasjon.gjenbrukBeskrivelse}
 
-                {!morDokumentRelasjon &&
-                  etterlevelseDokumentasjon.tilgjengeligForGjenbruk &&
-                  etterlevelseDokumentasjon.gjenbrukBeskrivelse}
-
-                {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
-                  <div className="mt-5">
-                    <Button
-                      onClick={() => {
-                        navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
-                      }}
-                      size="small"
-                      variant="secondary"
-                      className="whitespace-nowrap mt-3"
-                      type="button"
-                    >
-                      Gjenbruk dokumentet
-                    </Button>
-                  </div>
-                )}
-              </ReadMore>
-            </div>
-          )}
+              {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
+                <div className="mt-5">
+                  <Button
+                    onClick={() => {
+                      navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
+                    }}
+                    size="small"
+                    variant="secondary"
+                    className="whitespace-nowrap mt-3"
+                    type="button"
+                  >
+                    Gjenbruk dokumentet
+                  </Button>
+                </div>
+              )}
+            </ReadMore>
+          </div>
+        )}
       </div>
     </>
   )

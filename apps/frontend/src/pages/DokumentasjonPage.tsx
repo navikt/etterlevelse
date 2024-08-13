@@ -156,7 +156,6 @@ export const DokumentasjonPage = () => {
               <div className="flex mb-5">
                 <EtterlevelseDokumentasjonExpansionCard
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                  morDokumentRelasjon={morDokumentRelasjon}
                   relasjonLoading={relasjonLoading}
                 />
               </div>
