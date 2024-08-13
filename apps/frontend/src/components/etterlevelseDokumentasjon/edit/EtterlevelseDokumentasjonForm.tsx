@@ -58,6 +58,12 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
   const isDev =
     window.location.origin.includes('.dev.') || window.location.origin.includes('localhost')
 
+  const isForRedigering = window.location.pathname.includes('/edit')
+
+  const labelNavngiDokument: string = isForRedigering
+    ? 'Navngi dokumentet ditt'
+    : 'Navngi det nye dokumentet ditt'
+
   useEffect(() => {
     if (etterlevelseDokumentasjon?.irrelevansFor.length) {
       const irrelevans = etterlevelseDokumentasjon.irrelevansFor.map((irrelevans: ICode) =>
@@ -154,7 +160,8 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           <TextAreaField
             rows={2}
             noPlaceholder
-            label="Skriv inn tittel på etterlevelsesdokumentet"
+            label={labelNavngiDokument}
+            caption="Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre, lignende"
             name="title"
           />
 
@@ -162,7 +169,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             <TextAreaField
               height="150px"
               noPlaceholder
-              label="Beskrivelse"
+              label="Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller arbeid som omfattes"
               name="beskrivelse"
               markdown
             />
@@ -529,9 +536,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             <div className="mt-5">
               <CheckboxGroup
                 legend="Skal dette dokumentet kunne gjenbrukes av andre?"
-                onChange={(value: boolean[]) =>
-                  setFieldValue('forGjenbruk', value.length !== 0 ? true : false)
-                }
+                onChange={(value: boolean[]) => setFieldValue('forGjenbruk', value.length !== 0)}
                 value={[values.forGjenbruk]}
                 description="Velger du gjenbruk, får du mulighet til å legge inn vurderinger og veiledning. Du får velge selv når du vil tillate gjenbruk."
               >

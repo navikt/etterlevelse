@@ -90,13 +90,19 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
             </Field>
           </FieldWrapper>
 
-          <TextAreaField rows={2} noPlaceholder label="Navngi ditt nye dokument" name="title" />
+          <TextAreaField
+            rows={2}
+            noPlaceholder
+            label="Navngi ditt nye dokument"
+            caption="Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre, lignende"
+            name="title"
+          />
 
           <div className="mt-5">
             <TextAreaField
               rows={5}
               noPlaceholder
-              label="Beskriv hva som dokumentet gjelder (og eventuelt ikke gjelder)"
+              label="Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller arbeid som omfattes"
               name="beskrivelse"
             />
           </div>
