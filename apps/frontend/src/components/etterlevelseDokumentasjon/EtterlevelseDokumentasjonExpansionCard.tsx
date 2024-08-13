@@ -5,6 +5,7 @@ import { TEtterlevelseDokumentasjonQL } from '../../constants'
 import { EListName, ICode, codelist } from '../../services/Codelist'
 import { user } from '../../services/User'
 import { BehandlingList } from '../behandling/BehandlingList'
+import { Markdown } from '../common/Markdown'
 import { Teams } from '../common/TeamName'
 import { VarslingsadresserView } from './VarslingsAddresseView'
 
@@ -135,8 +136,9 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
         {!relasjonLoading && etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
           <div className="mt-5">
             <ReadMore header="Gjenbruk av dokument">
-              {etterlevelseDokumentasjon.tilgjengeligForGjenbruk &&
-                etterlevelseDokumentasjon.gjenbrukBeskrivelse}
+              {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
+                <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />
+              )}
 
               {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
                 <div className="mt-5">

@@ -55,6 +55,7 @@ export const TillatGjenbrukModal = (props: IProps) => {
 
       {isOpen && (
         <Modal
+          className="min-w-[1000px] px-5 py-5"
           open={isOpen}
           onClose={() => setIsOpen(false)}
           header={{
@@ -77,33 +78,22 @@ export const TillatGjenbrukModal = (props: IProps) => {
                 <Modal.Body>
                   <List as="ul" className="mb-5">
                     <List.Item>
-                      Når du gjør dokumentet tilgjengelig, kan andre gjenbruke det.
+                      Når du tillater gjenbruk av dokumentet ditt, vil de som gjenbruker kunne arve
+                      både veilending og svar, og bruke disse som utgangspunkt for sin egen
+                      dokumentasjon.
                     </List.Item>
                     <List.Item>
-                      De som gjenbruker dokumentet arver status og besvarelser på suksesskriterier.
+                      De som gjenbruker er likevel ansvarlig for at etterlevelsen blir riktig.
                     </List.Item>
                   </List>
                   <TextAreaField
                     name="gjenbrukBeskrivelse"
-                    label="Den som gjenbruker dokumentet skal forstå rammene for gjenbruk."
+                    label="Skriv veiledning som hjelper andre å forstå om de skal gjenbruke dette dokumentet"
                     height="150px"
                     markdown
                     noPlaceholder
                     caption={
-                      <>
-                        Teksten du skriver under vil vises for alle som skal gjenbruke dokumentet.
-                        <List as="ul" className="mb-5">
-                          <List.Item>
-                            Beskriv i hvilke kontekster dokumentet er tenkt brukt.
-                          </List.Item>
-                          <List.Item>
-                            Beskrive eventuelle tilfeller hvor dokumentet ikke skal gjenbrukes.
-                          </List.Item>
-                          <List.Item>
-                            Gi ikke kravspesifikk veiledning (dette gjøres ved enkelte krav)
-                          </List.Item>
-                        </List>
-                      </>
+                      <>Hvem skal gjenbruke? Ved hvilken type arbeid blir gjenbruk passende?</>
                     }
                   />
                 </Modal.Body>
