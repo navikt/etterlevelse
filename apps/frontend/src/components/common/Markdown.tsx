@@ -146,7 +146,6 @@ export const Markdown = ({
 
 export const MarkdownInfo = () => (
   <BodyShort className="mt-4 text-[var(--a-text-subtle)]">
-    <ExternalLink href={markdownLink}>Slik kan du bruke Markdown i dette feltet</ExternalLink>, se
-    her for mer
+    <ExternalLink href={markdownLink}>Slik kan du bruke Markdown i dette feltet</ExternalLink>
   </BodyShort>
 )
