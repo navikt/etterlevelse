@@ -182,7 +182,8 @@ export const EtterlevelseKravView = (props: IProps) => {
           ? ''
           : etterlevelse.fristForFerdigstillelse,
       suksesskriterieBegrunnelser: syncEtterlevelseKriterieBegrunnelseWithKrav(etterlevelse, krav),
-    }
+      prioritised: isPrioritised,
+    } as IEtterlevelse
     setEditedEtterlevelse(mutatedEtterlevelse)
 
     //double check if etterlevelse already exist before submitting
