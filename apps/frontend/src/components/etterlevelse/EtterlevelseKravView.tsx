@@ -108,6 +108,7 @@ export const EtterlevelseKravView = (props: IProps) => {
   const [isTabAlertActive, setIsTabAlertActive] = useState<boolean>(false)
   const [selectedTab, setSelectedTab] = useState<string>('dokumentasjon')
   const [isSavingChanges, setIsSavingChanges] = useState<boolean>(false)
+  const [isPrioritised, setIsPrioritised] = useState<boolean>(false)
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -143,6 +144,18 @@ export const EtterlevelseKravView = (props: IProps) => {
           }
         })
     })()
+
+    if (
+      etterlevelseDokumentasjon &&
+      etterlevelseDokumentasjon.prioritertKravNummer &&
+      etterlevelseDokumentasjon.prioritertKravNummer.length > 0
+    ) {
+      const priorityCheck = etterlevelseDokumentasjon.prioritertKravNummer.includes(
+        etterlevelse.kravNummer.toString()
+      )
+
+      setIsPrioritised(priorityCheck)
+    }
   }, [])
 
   const getNextKravUrl = (nextKravPath: string): string => {
@@ -159,7 +172,7 @@ export const EtterlevelseKravView = (props: IProps) => {
     }
   }
 
-  const handleChange = (val: string[]) => console.log('HEIEIEIEIEIIE', val)
+  const handleChange = (value: string[]) => setIsPrioritised(value.includes('check'))
 
   const submit = async (etterlevelse: IEtterlevelse) => {
     const mutatedEtterlevelse = {
@@ -399,8 +412,11 @@ export const EtterlevelseKravView = (props: IProps) => {
                         legend="Legg til i Prioritert kravliste"
                         hideLegend
                         onChange={handleChange}
+                        value={isPrioritised ? ['check'] : []}
                       >
-                        <Checkbox>Legg til dette kravet i Prioritert kravliste</Checkbox>
+                        <Checkbox value="check">
+                          Legg til dette kravet i Prioritert kravliste
+                        </Checkbox>
                       </CheckboxGroup>
                       {kravFilter !== EKravFilterType.BORTFILTTERTE_KRAV && (
                         <EtterlevelseEditFields
