@@ -74,10 +74,6 @@ public class EtterlevelseDokumentasjon extends DomainObject {
         varslingsadresser = copyOf(request.getVarslingsadresser());
     }
 
-    public void mergePrioritertKravNummer(List<String> newPrioritertKravNummer) {
-        prioritertKravNummer = newPrioritertKravNummer;
-    }
-
     public EtterlevelseDokumentasjonResponse toResponse() {
         return EtterlevelseDokumentasjonResponse.builder()
                 .id(id)

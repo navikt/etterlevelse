@@ -175,7 +175,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
                 priorityList = priorityList.stream().filter(number -> !number.equals(String.valueOf(kravNummer))).toList();
             }
         }
-        etterlevelseDokumentasjon.mergePrioritertKravNummer(priorityList);
+        etterlevelseDokumentasjon.setPrioritertKravNummer(priorityList);
         return storage.save(etterlevelseDokumentasjon);
     }
 

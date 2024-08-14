@@ -95,7 +95,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                         .build()
         );
 
-        etterlevelseDokumentasjon_1.mergePrioritertKravNummer(List.of("test"));
+        etterlevelseDokumentasjon_1.setPrioritertKravNummer(List.of("test"));
 
         var updatedEtterlevelseDokumentasjon = etterlevelseDokumentasjonStorageService.save(etterlevelseDokumentasjon_1);
 
