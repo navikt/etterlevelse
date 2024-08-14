@@ -1,5 +1,5 @@
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Box, Button, Radio, RadioGroup, TextField, Tooltip } from '@navikt/ds-react'
+import { Box, Button, Radio, RadioGroup, TextField, ToggleGroup, Tooltip } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import * as _ from 'lodash'
 import { useEffect, useState } from 'react'
@@ -7,6 +7,7 @@ import { EKravStatus, ISuksesskriterie } from '../../../constants'
 import { useDebouncedState } from '../../../util/hooks/customHooks'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
+import { Markdown } from '../../common/Markdown'
 import { FormError } from '../../common/ModalSchema'
 import { RearrangeButtons } from '../../common/RearrangeButtons'
 import TextEditor from '../../common/TextEditor/TextEditor'
@@ -138,6 +139,8 @@ const Kriterie = ({
       : suksesskriterium.behovForBegrunnelse.toString()
   )
 
+  const [mode, setMode] = useState('edit')
+
   const nummer = index + 1
 
   const updateIndex = (newIndex: number) => {
@@ -171,7 +174,6 @@ const Kriterie = ({
               />
             </Tooltip>
           )}
-
           <RearrangeButtons
             label="suksesskriterium"
             index={index}
@@ -181,11 +183,12 @@ const Kriterie = ({
           />
         </div>
 
-        <div>
+        <div className="mb-5">
           <LabelWithTooltip
             label={`Suksesskriterium ${nummer}`}
             tooltip="Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers."
           />
+
           <TextField
             label={`Suksesskriterium ${nummer}`}
             hideLabel
@@ -202,16 +205,36 @@ const Kriterie = ({
         </div>
 
         <div>
-          <LabelWithTooltip
-            label="Beskrivelse av suksesskriteriet"
-            tooltip="Nærmere detaljer rundt oppnåelse av suksesskriteriet."
-          />
-          <TextEditor
-            initialValue={beskrivelse}
-            setValue={setBeskrivelse}
-            height="15.625rem"
-            setIsFormDirty={setIsFormDirty}
-          />
+          <div className="flex w-full items-center justify-between mb-1">
+            <div>
+              <LabelWithTooltip
+                label="Beskrivelse av suksesskriteriet"
+                tooltip="Nærmere detaljer rundt oppnåelse av suksesskriteriet."
+                noMarginBottom
+              />
+            </div>
+            <div className="flex justify-end">
+              <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
+                <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
+                <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+              </ToggleGroup>
+            </div>
+          </div>
+
+          {mode === 'edit' && (
+            <TextEditor
+              initialValue={beskrivelse}
+              setValue={setBeskrivelse}
+              height="15.625rem"
+              setIsFormDirty={setIsFormDirty}
+            />
+          )}
+
+          {mode === 'view' && (
+            <div className="p-8 border-border-subtle-hover border border-solid rounded-md bg-bg-default">
+              <Markdown source={beskrivelse} />
+            </div>
+          )}
         </div>
 
         <div className="flex flex-1 mt-1">
