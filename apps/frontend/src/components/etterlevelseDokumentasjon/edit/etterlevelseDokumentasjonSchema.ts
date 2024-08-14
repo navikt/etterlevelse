@@ -56,7 +56,7 @@ export const etterlevelseDokumentasjonSchema = () =>
     resourcesData: resourcesDataCheck,
   })
 
-export const gjenbrukDokumentasjonSchema = () => {
+export const gjenbrukDokumentasjonSchema = () =>
   yup.object({
     title: titleCheck,
     varslingsadresser: varslingsadresserCheck,
@@ -65,7 +65,6 @@ export const gjenbrukDokumentasjonSchema = () => {
     resourcesData: resourcesDataCheck,
     gjenbrukBeskrivelse: gjenbrukBeskrivelseCheck,
   })
-}
 
 export const etterlevelseDokumentasjonWithRelationSchema = () =>
   yup.object({
