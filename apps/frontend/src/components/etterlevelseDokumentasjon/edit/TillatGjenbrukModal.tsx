@@ -97,9 +97,7 @@ export const TillatGjenbrukModal = (props: IProps) => {
                       <>Hvem skal gjenbruke? Ved hvilken type arbeid blir gjenbruk passende?</>
                     }
                   />
-                  {errors.gjenbrukBeskrivelse && (
-                    <Error message={errors.gjenbrukBeskrivelse as string} />
-                  )}
+                  {errors.gjenbrukBeskrivelse && <Error message={errors.gjenbrukBeskrivelse} />}
                 </Modal.Body>
                 <Modal.Footer>
                   <Button
