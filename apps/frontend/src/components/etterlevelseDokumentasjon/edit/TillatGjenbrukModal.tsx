@@ -9,6 +9,7 @@ import {
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { TEtterlevelseDokumentasjonQL } from '../../../constants'
 import { TextAreaField } from '../../common/Inputs'
+import { Error } from '../../common/ModalSchema'
 import { gjenbrukDokumentasjonSchema } from './etterlevelseDokumentasjonSchema'
 
 interface IProps {
@@ -73,7 +74,7 @@ export const TillatGjenbrukModal = (props: IProps) => {
             validateOnChange={false}
             validateOnBlur={false}
           >
-            {({ setFieldValue, submitForm, isSubmitting, initialValues }) => (
+            {({ setFieldValue, submitForm, isSubmitting, initialValues, errors }) => (
               <Form>
                 <Modal.Body>
                   <List as="ul" className="mb-5">
@@ -96,6 +97,9 @@ export const TillatGjenbrukModal = (props: IProps) => {
                       <>Hvem skal gjenbruke? Ved hvilken type arbeid blir gjenbruk passende?</>
                     }
                   />
+                  {errors.gjenbrukBeskrivelse && (
+                    <Error message={errors.gjenbrukBeskrivelse as string} />
+                  )}
                 </Modal.Body>
                 <Modal.Footer>
                   <Button
