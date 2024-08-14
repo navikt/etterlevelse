@@ -1,6 +1,7 @@
 import * as yup from 'yup'
 
 const titleCheck = yup.string().required('Etterlevelsesdokumentasjon trenger en tittel')
+const gjenbrukBeskrivelseCheck = yup.string().required('Påkrevd')
 
 const varslingsadresserCheck = yup.array().test({
   name: 'varslingsadresserCheck',
@@ -54,6 +55,17 @@ export const etterlevelseDokumentasjonSchema = () =>
     teamsData: teamsDataCheck,
     resourcesData: resourcesDataCheck,
   })
+
+export const gjenbrukDokumentasjonSchema = () => {
+  yup.object({
+    title: titleCheck,
+    varslingsadresser: varslingsadresserCheck,
+    virkemiddelId: virkemiddelIdCheck,
+    teamsData: teamsDataCheck,
+    resourcesData: resourcesDataCheck,
+    gjenbrukBeskrivelse: gjenbrukBeskrivelseCheck,
+  })
+}
 
 export const etterlevelseDokumentasjonWithRelationSchema = () =>
   yup.object({

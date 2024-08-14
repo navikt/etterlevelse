@@ -9,7 +9,7 @@ import {
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { TEtterlevelseDokumentasjonQL } from '../../../constants'
 import { TextAreaField } from '../../common/Inputs'
-import { etterlevelseDokumentasjonSchema } from './etterlevelseDokumentasjonSchema'
+import { gjenbrukDokumentasjonSchema } from './etterlevelseDokumentasjonSchema'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -69,7 +69,7 @@ export const TillatGjenbrukModal = (props: IProps) => {
               etterlevelseDokumentasjon ? etterlevelseDokumentasjon : {}
             )}
             onSubmit={submit}
-            validationSchema={etterlevelseDokumentasjonSchema()}
+            validationSchema={gjenbrukDokumentasjonSchema()}
             validateOnChange={false}
             validateOnBlur={false}
           >
