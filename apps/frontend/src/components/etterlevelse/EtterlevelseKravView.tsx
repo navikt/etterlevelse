@@ -4,6 +4,8 @@ import {
   Alert,
   BodyShort,
   Button,
+  Checkbox,
+  CheckboxGroup,
   Heading,
   Label,
   Link,
@@ -156,6 +158,8 @@ export const EtterlevelseKravView = (props: IProps) => {
       setIsNavigationModalOpen(true)
     }
   }
+
+  const handleChange = (val: string[]) => console.log('HEIEIEIEIEIIE', val)
 
   const submit = async (etterlevelse: IEtterlevelse) => {
     const mutatedEtterlevelse = {
@@ -391,6 +395,13 @@ export const EtterlevelseKravView = (props: IProps) => {
                 <Tabs.Panel value="dokumentasjon">
                   {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) && (
                     <div className="mt-2">
+                      <CheckboxGroup
+                        legend="Legg til i Prioritert kravliste"
+                        hideLegend
+                        onChange={handleChange}
+                      >
+                        <Checkbox>Legg til dette kravet i Prioritert kravliste</Checkbox>
+                      </CheckboxGroup>
                       {kravFilter !== EKravFilterType.BORTFILTTERTE_KRAV && (
                         <EtterlevelseEditFields
                           kravFilter={kravFilter}
