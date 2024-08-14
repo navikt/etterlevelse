@@ -16,7 +16,7 @@ import React, { ReactNode, useState } from 'react'
 import { TOption, TOr } from '../../constants'
 import { EListName, ICode, codelist } from '../../services/Codelist'
 import LabelWithTooltip from '../common/LabelWithTooltip'
-import { Markdown, MarkdownInfo } from './Markdown'
+import { Markdown } from './Markdown'
 import { Error, FormError } from './ModalSchema'
 import { RenderTagList } from './TagList'
 import TextEditor from './TextEditor/TextEditor'
@@ -146,11 +146,12 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
           <div>
             {markdown && (
               <div>
-                <Label>{label}</Label>
-                <BodyShort className="text-[var(--a-text-subtle)]">{caption}</BodyShort>
-                <div className="flex w-full justify-between items-center mb-1">
-                  <MarkdownInfo />
-                  <div className="flex justify-end mr-1">
+                <div className="flex w-full justify-between mb-1">
+                  <div>
+                    <Label>{label}</Label>
+                    <BodyShort className="text-[var(--a-text-subtle)]">{caption}</BodyShort>
+                  </div>
+                  <div className="flex flex-col items-end justify-end mr-1">
                     <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
                       <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
                       <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
