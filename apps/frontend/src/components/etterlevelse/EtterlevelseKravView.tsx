@@ -4,6 +4,8 @@ import {
   Alert,
   BodyShort,
   Button,
+  Checkbox,
+  CheckboxGroup,
   Heading,
   Label,
   Link,
@@ -106,6 +108,7 @@ export const EtterlevelseKravView = (props: IProps) => {
   const [isTabAlertActive, setIsTabAlertActive] = useState<boolean>(false)
   const [selectedTab, setSelectedTab] = useState<string>('dokumentasjon')
   const [isSavingChanges, setIsSavingChanges] = useState<boolean>(false)
+  const [isPrioritised, setIsPrioritised] = useState<boolean>(false)
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -141,6 +144,18 @@ export const EtterlevelseKravView = (props: IProps) => {
           }
         })
     })()
+
+    if (
+      etterlevelseDokumentasjon &&
+      etterlevelseDokumentasjon.prioritertKravNummer &&
+      etterlevelseDokumentasjon.prioritertKravNummer.length > 0
+    ) {
+      const priorityCheck = etterlevelseDokumentasjon.prioritertKravNummer.includes(
+        etterlevelse.kravNummer.toString()
+      )
+
+      setIsPrioritised(priorityCheck)
+    }
   }, [])
 
   const getNextKravUrl = (nextKravPath: string): string => {
@@ -157,6 +172,8 @@ export const EtterlevelseKravView = (props: IProps) => {
     }
   }
 
+  const handleChange = (value: string[]) => setIsPrioritised(value.includes('check'))
+
   const submit = async (etterlevelse: IEtterlevelse) => {
     const mutatedEtterlevelse = {
       ...etterlevelse,
@@ -165,7 +182,8 @@ export const EtterlevelseKravView = (props: IProps) => {
           ? ''
           : etterlevelse.fristForFerdigstillelse,
       suksesskriterieBegrunnelser: syncEtterlevelseKriterieBegrunnelseWithKrav(etterlevelse, krav),
-    }
+      prioritised: isPrioritised,
+    } as IEtterlevelse
     setEditedEtterlevelse(mutatedEtterlevelse)
 
     //double check if etterlevelse already exist before submitting
@@ -391,6 +409,16 @@ export const EtterlevelseKravView = (props: IProps) => {
                 <Tabs.Panel value="dokumentasjon">
                   {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) && (
                     <div className="mt-2">
+                      <CheckboxGroup
+                        legend="Legg til i Prioritert kravliste"
+                        hideLegend
+                        onChange={handleChange}
+                        value={isPrioritised ? ['check'] : []}
+                      >
+                        <Checkbox value="check">
+                          Legg til dette kravet i Prioritert kravliste
+                        </Checkbox>
+                      </CheckboxGroup>
                       {kravFilter !== EKravFilterType.BORTFILTTERTE_KRAV && (
                         <EtterlevelseEditFields
                           kravFilter={kravFilter}
