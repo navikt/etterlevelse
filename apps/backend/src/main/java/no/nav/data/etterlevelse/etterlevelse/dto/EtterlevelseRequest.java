@@ -39,6 +39,7 @@ public class EtterlevelseRequest implements RequestElement, KravId {
     private List<SuksesskriterieBegrunnelseRequest> suksesskriterieBegrunnelser;
 
     private Boolean update;
+    private boolean prioritised;
 
     @Override
     public void format() {

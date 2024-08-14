@@ -160,6 +160,27 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return storage.delete(id);
     }
 
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public EtterlevelseDokumentasjon updatePriorityList(String etterlevelseDokumentasjonId, int kravNummer, boolean prioritised) {
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = get(UUID.fromString(etterlevelseDokumentasjonId));
+
+        List<String> priorityList = etterlevelseDokumentasjon.getPrioritertKravNummer();
+        if (prioritised) {
+            if (!priorityList.contains(String.valueOf(kravNummer))) {
+                priorityList.add(String.valueOf(kravNummer));
+            }
+        } else {
+            if (priorityList.contains(String.valueOf(kravNummer))) {
+                priorityList = priorityList.stream().filter(number -> !number.equals(String.valueOf(kravNummer))).toList();
+            }
+        }
+        etterlevelseDokumentasjon.mergePrioritertKravNummer(priorityList);
+        return storage.save(etterlevelseDokumentasjon);
+    }
+
+    ;
+
     public List<EtterlevelseDokumentasjon> getByBehandlingId(List<String> ids) {
         return convertToDomaionObject(etterlevelseDokumentasjonRepo.findByBehandlingIds(ids));
     }

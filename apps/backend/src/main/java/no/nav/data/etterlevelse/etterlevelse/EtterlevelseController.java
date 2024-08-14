@@ -111,8 +111,10 @@ public class  EtterlevelseController {
             throw new ValidationException("Tried to create etterlevelse with old architecture");
         }
 
-        var krav = service.save(request);
-        return new ResponseEntity<>(krav.toResponse(), HttpStatus.CREATED);
+        etterlevelseDokumentasjonService.updatePriorityList(request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.isPrioritised());
+
+        var etterlevelse = service.save(request);
+        return new ResponseEntity<>(etterlevelse.toResponse(), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update Etterlevelse")
@@ -127,6 +129,8 @@ public class  EtterlevelseController {
         if(request.getEtterlevelseDokumentasjonId() == null || request.getEtterlevelseDokumentasjonId().isEmpty()) {
             throw new ValidationException("Tried to create etterlevelse with old architecture");
         }
+
+        etterlevelseDokumentasjonService.updatePriorityList(request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.isPrioritised());
 
         var etterlevelse = service.save(request);
         return ResponseEntity.ok(etterlevelse.toResponse());

@@ -5,11 +5,14 @@ import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -68,6 +71,37 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
         assertThat(etterlevelseMetadataStorageService.getAll(EtterlevelseMetadata.class)).isNotNull();
         assertThat(etterlevelseArkivStorageService.getAll(EtterlevelseArkiv.class)).isNotNull();
 
+    }
+
+    @Test
+    void shouldOnlyUpdatePrioritertKravNummerWithoutOverwrittingOtherFields() {
+        var etterlevelseDokumentasjon_1 = etterlevelseDokumentasjonService.save(
+                EtterlevelseDokumentasjonRequest.builder()
+                        .title("test dokumentasjon")
+                        .etterlevelseNummer(101)
+                        .knyttetTilVirkemiddel(false)
+                        .virkemiddelId("")
+                        .beskrivelse("")
+                        .forGjenbruk(false)
+                        .teams(List.of(""))
+                        .resources(List.of(""))
+                        .risikoeiere(List.of(""))
+                        .irrelevansFor(List.of(""))
+                        .update(false)
+                        .behandlerPersonopplysninger(true)
+                        .behandlingIds(List.of(""))
+                        .prioritertKravNummer(List.of())
+                        .varslingsadresser(List.of())
+                        .build()
+        );
+
+        etterlevelseDokumentasjon_1.mergePrioritertKravNummer(List.of("test"));
+
+        var updatedEtterlevelseDokumentasjon = etterlevelseDokumentasjonStorageService.save(etterlevelseDokumentasjon_1);
+
+        assertThat(updatedEtterlevelseDokumentasjon.getId()).isEqualTo(etterlevelseDokumentasjon_1.getId());
+        assertThat(updatedEtterlevelseDokumentasjon.getTitle()).isEqualTo(etterlevelseDokumentasjon_1.getTitle());
+        assertThat(updatedEtterlevelseDokumentasjon.getPrioritertKravNummer()).isEqualTo(List.of("test"));
     }
 
 
