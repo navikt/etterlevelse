@@ -367,7 +367,7 @@ const KriterieBegrunnelse = ({
 
         {!disableEdit && !suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
           <div className="w-full mt-4">
-            <Label>Sukseskriteriet har ikke behov for begrunnelse.</Label>
+            <Label>Suksesskriteriet har ikke behov for begrunnelse.</Label>
           </div>
         )}
         {disableEdit && (
