@@ -133,7 +133,7 @@ const KriterieBegrunnelse = (props: IKriterieBegrunnelseProps) => {
       <div className="flex w-full">
         {!suksesskriterie.behovForBegrunnelse && (
           <div className="w-full mt-8 ">
-            <Label>Sukseskriteriet har ikke behov for begrunnelse.</Label>
+            <Label>Suksesskriteriet har ikke behov for begrunnelse.</Label>
           </div>
         )}
 
