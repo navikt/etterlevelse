@@ -8,7 +8,7 @@ import { PageLayout } from '../components/scaffold/Page'
 import { IBreadCrumbPath, IEtterlevelseDokumentasjonStats, IPageResponse } from '../constants'
 import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDokumentasjonQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
+import { dokumentasjonBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const MorOversiktBarnDokument = () => {
   const params = useParams<{ id?: string; tema?: string }>()
@@ -40,15 +40,19 @@ export const MorOversiktBarnDokument = () => {
 
   if (!etterlevelseDokumentasjon) return <LoadingSkeleton header="Dokumentasjon" />
 
-  const breadcrumbPaths: IBreadCrumbPath[] = [dokumentasjonerBreadCrumbPath]
   const { etterlevelseNummer, title } = etterlevelseDokumentasjon
+  const etterlevelseNavn: string = 'E' + etterlevelseNummer.toString() + ' ' + title
+  const breadcrumbPaths: IBreadCrumbPath[] = [
+    dokumentasjonBreadCrumbPath(etterlevelseNavn, `/dokumentasjon/${params.id}`),
+  ]
 
   return (
     <PageLayout
-      pageTitle="PAGE TITLE"
-      currentPage={'Dokumenter som gjenbruker ' + 'E' + etterlevelseNummer.toString() + ' ' + title}
-      previousPage={'E' + etterlevelseNummer.toString() + ' ' + title}
+      pageTitle={'Dokumenter som gjenbruker ' + etterlevelseNavn}
+      currentPage={'Dokumenter som gjenbruker ' + etterlevelseNavn}
+      previousPage={etterlevelseNavn}
       breadcrumbPaths={breadcrumbPaths}
+      paramsId={params.id}
     >
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">

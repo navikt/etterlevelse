@@ -11,6 +11,7 @@ interface IPropsPageLayout {
   previousPage?: string
   currentPage?: string
   breadcrumbPaths?: IBreadCrumbPath[]
+  paramsId?: string
 }
 
 export const PageLayout = ({
@@ -21,6 +22,7 @@ export const PageLayout = ({
   previousPage,
   currentPage,
   breadcrumbPaths,
+  paramsId,
 }: IPropsPageLayout) => (
   <div
     id="content"
@@ -33,6 +35,7 @@ export const PageLayout = ({
           previousPage={previousPage}
           currentPage={currentPage}
           paths={breadcrumbPaths}
+          paramsId={paramsId}
         />
       )}
       {pageTitle && (

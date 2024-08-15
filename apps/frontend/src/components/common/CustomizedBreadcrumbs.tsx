@@ -7,12 +7,14 @@ interface IProps {
   currentPage?: string
   fontColor?: string
   previousPage?: string
+  paramsId?: string
 }
 
 type TCustomizedProps = IProps
 
 const CustomizedBreadcrumbs = (props: TCustomizedProps) => {
-  const { paths, currentPage, previousPage } = props
+  const { paths, currentPage, previousPage, paramsId } = props
+
   const getName = (pathName: string) =>
     pathName.length > 40 ? pathName.substring(0, 40) + '...' : pathName
   const linkColor = /^\/(lov|etterlevelse)\//.test(window.location.pathname)
@@ -33,12 +35,16 @@ const CustomizedBreadcrumbs = (props: TCustomizedProps) => {
           {getName(path.pathName)} <ChevronRightIcon area-label="" aria-hidden />
         </Link>
       ))}
-      {previousPage && (
-        <BodyShort className={`gap-1 flex ${linkColor}`}>
-          {getName(previousPage)}
-          <ChevronRightIcon area-label="" aria-hidden />
-        </BodyShort>
-      )}
+      {previousPage &&
+        paths?.map((path) => (
+          <Link
+            href={path.href + '/' + paramsId}
+            key={'breadcrumb_link_' + getName(path.pathName)}
+            className={`gap-1 flex ${linkColor}`}
+          >
+            {getName(path.pathName)} <ChevronRightIcon area-label="" aria-hidden />
+          </Link>
+        ))}
       {currentPage && <BodyShort className={linkColor}>{getName(currentPage)}</BodyShort>}
     </div>
   )
