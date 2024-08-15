@@ -1,5 +1,5 @@
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Label, ReadMore, Tag } from '@navikt/ds-react'
+import { BodyShort, Button, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
 import { useNavigate } from 'react-router-dom'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
 import { EListName, ICode, codelist } from '../../services/Codelist'
@@ -141,19 +141,26 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
               )}
 
               {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
-                <div className="mt-5">
-                  <Button
-                    onClick={() => {
-                      navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
-                    }}
-                    size="small"
-                    variant="secondary"
-                    className="whitespace-nowrap mt-3"
-                    type="button"
-                  >
-                    Gjenbruk dokumentet
-                  </Button>
-                </div>
+                <>
+                  <div className="mt-5">
+                    <Button
+                      onClick={() => {
+                        navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
+                      }}
+                      size="small"
+                      variant="secondary"
+                      className="whitespace-nowrap mt-3"
+                      type="button"
+                    >
+                      Gjenbruk dokumentet
+                    </Button>
+                  </div>
+                  <div className="mt-5">
+                    <Link href={`/dokumentasjon/${etterlevelseDokumentasjon.id}/morDokument`}>
+                      Se hvilke etterlevelser som allerede gjenbruker dette dokumentet
+                    </Link>
+                  </div>
+                </>
               )}
             </ReadMore>
           </div>
