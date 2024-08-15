@@ -46,13 +46,14 @@ export const MorOversiktBarnDokument = () => {
   return (
     <PageLayout
       pageTitle="PAGE TITLE"
-      currentPage={'E' + etterlevelseNummer.toString() + ' ' + title}
+      currentPage={'Dokumenter som gjenbruker ' + 'E' + etterlevelseNummer.toString() + ' ' + title}
+      previousPage={'E' + etterlevelseNummer.toString() + ' ' + title}
       breadcrumbPaths={breadcrumbPaths}
     >
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Heading level="1" size="medium">
-            MOR HEADER E{etterlevelseNummer.toString()} {title}
+            Dokumenter som gjenbruker E{etterlevelseNummer.toString()} {title}
           </Heading>
           <Table zebraStripes>
             <Table.Header>
