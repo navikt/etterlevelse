@@ -24,6 +24,7 @@ import { KravListPage } from './pages/KravListPage'
 import { KravPage } from './pages/KravPage'
 import { KravTablePage } from './pages/KravTablePage'
 import { MainPage } from './pages/MainPage'
+import { MorOversiktBarnDokument } from './pages/MorOversiktBarnDokumenter'
 import { MyEtterlevelseDokumentasjonerPage } from './pages/MyEtterlevelseDokumentasjonerPage'
 import NotFound from './pages/NotFound'
 import QuestionAndAnswerLogPage from './pages/QuestionAndAnswerLogPage'
@@ -149,6 +150,12 @@ const AppRoutes = (): JSX.Element => {
 
       <Route path="/dokumentasjon/:id" element={<DokumentasjonPage />} caseSensitive={true} />
       <Route path="/dokumentasjon/:id/:tema" element={<DokumentasjonPage />} caseSensitive={true} />
+      {/* Usikker på hva URL skal hete */}
+      <Route
+        path="/dokumentasjon/:id/morDokument"
+        element={<MorOversiktBarnDokument />}
+        caseSensitive={true}
+      />
       <Route
         path="/dokumentasjon/"
         element={<MyEtterlevelseDokumentasjonerPage />}
