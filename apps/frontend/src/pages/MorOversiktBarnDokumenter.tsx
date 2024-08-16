@@ -1,30 +1,26 @@
-import { useQuery } from '@apollo/client'
-import { Heading, Table } from '@navikt/ds-react'
-import { useEffect } from 'react'
+import { Heading, Link, Table } from '@navikt/ds-react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { getDocumentRelationByFromIdAndRelationTypeWithData } from '../api/DocumentRelationApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { PageLayout } from '../components/scaffold/Page'
-import { IBreadCrumbPath, IEtterlevelseDokumentasjonStats, IPageResponse } from '../constants'
-import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDokumentasjonQuery'
+import {
+  ERelationType,
+  IBreadCrumbPath,
+  IDocumentRelationWithEtterlevelseDokumetajson,
+} from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { dokumentasjonBreadCrumbPath, dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const MorOversiktBarnDokument = () => {
   const params = useParams<{ id?: string; tema?: string }>()
-  const variables = { etterlevelseDokumentasjonId: params.id }
 
   const [etterlevelseDokumentasjon, , ,] = useEtterlevelseDokumentasjon(params.id)
-
-  const { refetch: refetchRelevanteData } = useQuery<{
-    etterlevelseDokumentasjon: IPageResponse<{ stats: IEtterlevelseDokumentasjonStats }>
-  }>(getEtterlevelseDokumentasjonStatsQuery, {
-    variables,
-    skip: !params.id,
-  })
+  const [dokumentRelasjonBarn, setDokumentRelasjonBarn] =
+    useState<IDocumentRelationWithEtterlevelseDokumetajson[]>()
 
   useEffect(() => {
-    setTimeout(() => refetchRelevanteData(), 200)
     if (etterlevelseDokumentasjon) {
       ampli.logEvent('sidevisning', {
         side: 'Etterlevelse Dokumentasjon Page',
@@ -32,6 +28,13 @@ export const MorOversiktBarnDokument = () => {
           etterlevelseDokumentasjon.title
         }`,
         ...userRoleEventProp,
+      })
+
+      getDocumentRelationByFromIdAndRelationTypeWithData(
+        etterlevelseDokumentasjon.id,
+        ERelationType.ARVER
+      ).then((response) => {
+        setDokumentRelasjonBarn(response)
       })
     }
   }, [etterlevelseDokumentasjon])
@@ -64,9 +67,18 @@ export const MorOversiktBarnDokument = () => {
               <Table.HeaderCell>Dokumentnavn</Table.HeaderCell>
             </Table.Header>
             <Table.Body>
-              <Table.Row>
-                <Table.DataCell>DOKUMENT LENKE</Table.DataCell>
-              </Table.Row>
+              {dokumentRelasjonBarn?.map((dokument, index) => (
+                <Table.Row key={index + dokument.toDocumentWithData.etterlevelseNummer}>
+                  <Table.DataCell>
+                    <Link href={`/dokumentasjon/${dokument.toDocumentWithData.id}`}>
+                      {'E' +
+                        dokument.toDocumentWithData.etterlevelseNummer.toString() +
+                        ' ' +
+                        dokument.toDocumentWithData.title}
+                    </Link>
+                  </Table.DataCell>
+                </Table.Row>
+              ))}
             </Table.Body>
           </Table>
         </div>
