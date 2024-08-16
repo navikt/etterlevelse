@@ -27,6 +27,7 @@ import { MainPage } from './pages/MainPage'
 import { MyEtterlevelseDokumentasjonerPage } from './pages/MyEtterlevelseDokumentasjonerPage'
 import NotFound from './pages/NotFound'
 import QuestionAndAnswerLogPage from './pages/QuestionAndAnswerLogPage'
+import { RelasjonsOversikt } from './pages/RelasjonsOversikt'
 import { TemaPage } from './pages/TemaPage'
 import { TemaOversiktPage } from './pages/TemaoversiktPage'
 import { VarselPage } from './pages/VarselPage'
@@ -149,6 +150,11 @@ const AppRoutes = (): JSX.Element => {
 
       <Route path="/dokumentasjon/:id" element={<DokumentasjonPage />} caseSensitive={true} />
       <Route path="/dokumentasjon/:id/:tema" element={<DokumentasjonPage />} caseSensitive={true} />
+      <Route
+        path="/dokumentasjon/relasjon/:id/"
+        element={<RelasjonsOversikt />}
+        caseSensitive={true}
+      />
       <Route
         path="/dokumentasjon/"
         element={<MyEtterlevelseDokumentasjonerPage />}

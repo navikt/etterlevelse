@@ -11,6 +11,8 @@ interface IProps {
 type TCustomizedProps = IProps
 
 const CustomizedBreadcrumbs = (props: TCustomizedProps) => {
+  const { paths, currentPage } = props
+
   const getName = (pathName: string) =>
     pathName.length > 40 ? pathName.substring(0, 40) + '...' : pathName
   const linkColor = /^\/(lov|etterlevelse)\//.test(window.location.pathname)
@@ -22,7 +24,7 @@ const CustomizedBreadcrumbs = (props: TCustomizedProps) => {
       <Link href="/" className={`gap-1 flex ${linkColor}`}>
         Forsiden <ChevronRightIcon area-label="" aria-hidden />
       </Link>
-      {props.paths?.map((path) => (
+      {paths?.map((path) => (
         <Link
           href={path.href}
           key={'breadcrumb_link_' + getName(path.pathName)}
@@ -31,9 +33,7 @@ const CustomizedBreadcrumbs = (props: TCustomizedProps) => {
           {getName(path.pathName)} <ChevronRightIcon area-label="" aria-hidden />
         </Link>
       ))}
-      {props.currentPage && (
-        <BodyShort className={linkColor}>{getName(props.currentPage)}</BodyShort>
-      )}
+      {currentPage && <BodyShort className={linkColor}>{getName(currentPage)}</BodyShort>}
     </div>
   )
 }
