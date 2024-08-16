@@ -156,7 +156,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                     </Button>
                   </div>
                   <div className="mt-5">
-                    <Link href={`/dokumentasjon/${etterlevelseDokumentasjon.id}/morDokument`}>
+                    <Link href={`/dokumentasjon/relasjon/${etterlevelseDokumentasjon.id}`}>
                       Se hvilke etterlevelser som allerede gjenbruker dette dokumentet
                     </Link>
                   </div>

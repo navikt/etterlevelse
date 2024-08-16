@@ -13,7 +13,7 @@ import {
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { dokumentasjonBreadCrumbPath, dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
-export const MorOversiktBarnDokument = () => {
+export const RelasjonsOversikt = () => {
   const params = useParams<{ id?: string; tema?: string }>()
 
   const [etterlevelseDokumentasjon, , ,] = useEtterlevelseDokumentasjon(params.id)
