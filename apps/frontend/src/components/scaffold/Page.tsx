@@ -8,10 +8,8 @@ interface IPropsPageLayout {
   pageTitle?: string
   fullWidth?: boolean
   noPadding?: boolean
-  previousPage?: string
   currentPage?: string
   breadcrumbPaths?: IBreadCrumbPath[]
-  paramsId?: string
 }
 
 export const PageLayout = ({
@@ -19,10 +17,8 @@ export const PageLayout = ({
   pageTitle,
   fullWidth,
   noPadding,
-  previousPage,
   currentPage,
   breadcrumbPaths,
-  paramsId,
 }: IPropsPageLayout) => (
   <div
     id="content"
@@ -31,12 +27,7 @@ export const PageLayout = ({
   >
     <div className={`${noPadding ? '' : 'px-2 pb-6'}`}>
       {(currentPage || breadcrumbPaths) && (
-        <CustomizedBreadcrumbs
-          previousPage={previousPage}
-          currentPage={currentPage}
-          paths={breadcrumbPaths}
-          paramsId={paramsId}
-        />
+        <CustomizedBreadcrumbs currentPage={currentPage} paths={breadcrumbPaths} />
       )}
       {pageTitle && (
         <Helmet>

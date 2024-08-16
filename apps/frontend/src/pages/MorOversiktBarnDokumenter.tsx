@@ -8,15 +8,13 @@ import { PageLayout } from '../components/scaffold/Page'
 import { IBreadCrumbPath, IEtterlevelseDokumentasjonStats, IPageResponse } from '../constants'
 import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDokumentasjonQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { dokumentasjonBreadCrumbPath } from './util/BreadCrumbPath'
+import { dokumentasjonBreadCrumbPath, dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const MorOversiktBarnDokument = () => {
   const params = useParams<{ id?: string; tema?: string }>()
   const variables = { etterlevelseDokumentasjonId: params.id }
 
-  const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
-    params.id
-  )
+  const [etterlevelseDokumentasjon, , ,] = useEtterlevelseDokumentasjon(params.id)
 
   const { refetch: refetchRelevanteData } = useQuery<{
     etterlevelseDokumentasjon: IPageResponse<{ stats: IEtterlevelseDokumentasjonStats }>
@@ -43,6 +41,10 @@ export const MorOversiktBarnDokument = () => {
   const { etterlevelseNummer, title } = etterlevelseDokumentasjon
   const etterlevelseNavn: string = 'E' + etterlevelseNummer.toString() + ' ' + title
   const breadcrumbPaths: IBreadCrumbPath[] = [
+    dokumentasjonBreadCrumbPath(
+      dokumentasjonerBreadCrumbPath.pathName,
+      dokumentasjonerBreadCrumbPath.href
+    ),
     dokumentasjonBreadCrumbPath(etterlevelseNavn, `/dokumentasjon/${params.id}`),
   ]
 
@@ -50,9 +52,7 @@ export const MorOversiktBarnDokument = () => {
     <PageLayout
       pageTitle={'Dokumenter som gjenbruker ' + etterlevelseNavn}
       currentPage={'Dokumenter som gjenbruker ' + etterlevelseNavn}
-      previousPage={etterlevelseNavn}
       breadcrumbPaths={breadcrumbPaths}
-      paramsId={params.id}
     >
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
@@ -62,12 +62,10 @@ export const MorOversiktBarnDokument = () => {
           <Table zebraStripes>
             <Table.Header>
               <Table.HeaderCell>Dokumentnavn</Table.HeaderCell>
-              <Table.HeaderCell>CELLHEADING</Table.HeaderCell>
             </Table.Header>
             <Table.Body>
               <Table.Row>
                 <Table.DataCell>DOKUMENT LENKE</Table.DataCell>
-                <Table.DataCell>CELL TEXT</Table.DataCell>
               </Table.Row>
             </Table.Body>
           </Table>
