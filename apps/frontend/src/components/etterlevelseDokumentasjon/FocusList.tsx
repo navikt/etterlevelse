@@ -1,10 +1,10 @@
 import { BodyShort, Button } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   etterlevelseDokumentasjonMapToFormVal,
   getEtterlevelseDokumentasjon,
-  updateEtterlevelseDokumentasjon,
+  updateKravPriorityEtterlevelseDokumentasjon,
 } from '../../api/EtterlevelseDokumentasjonApi'
 import { IKravPriorityList, TEtterlevelseDokumentasjonQL, TKravQL } from '../../constants'
 import { TTemaCode } from '../../services/Codelist'
@@ -34,18 +34,29 @@ export const FocusList = (props: IProps) => {
   } = props
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
 
-  const submit = async (value: TEtterlevelseDokumentasjonQL) => {
-    const updatedEtterlevelseDokumentajson = await getEtterlevelseDokumentasjon(value.id)
+  const [updatedEtterlevelseDokumentasjon, setUpdatedEtterlevelseDokumentasjon] =
+    useState<TEtterlevelseDokumentasjonQL>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
-    const etterlevelseDokumentasjonWithFocusList: TEtterlevelseDokumentasjonQL = {
-      ...updatedEtterlevelseDokumentajson,
-      prioritertKravNummer: value.prioritertKravNummer,
-    }
-    setEtterlevelseDokumentasjon(etterlevelseDokumentasjonWithFocusList)
-    await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjonWithFocusList).catch((e) =>
-      console.debug(e)
-    )
+  const submit = async (value: TEtterlevelseDokumentasjonQL) => {
+    await updateKravPriorityEtterlevelseDokumentasjon(value)
+      .then((response) => {
+        setEtterlevelseDokumentasjon(response)
+      })
+      .catch((e) => console.debug(e))
   }
+
+  useEffect(() => {
+    ;(async () => {
+      if (isEditMode) {
+        setIsLoading(true)
+        await getEtterlevelseDokumentasjon(etterlevelseDokumentasjon.id).then(
+          setUpdatedEtterlevelseDokumentasjon
+        )
+        setIsLoading(false)
+      }
+    })()
+  }, [isEditMode])
 
   return (
     <div>
@@ -82,7 +93,7 @@ export const FocusList = (props: IProps) => {
           )}
         </div>
       )}
-      {isEditMode && (
+      {isEditMode && !isLoading && updatedEtterlevelseDokumentasjon && (
         <Formik
           validateOnChange={false}
           validateOnBlur={false}
@@ -90,7 +101,7 @@ export const FocusList = (props: IProps) => {
             submit(values)
             setIsEditMode(false)
           }}
-          initialValues={etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)}
+          initialValues={etterlevelseDokumentasjonMapToFormVal(updatedEtterlevelseDokumentasjon)}
         >
           {({ submitForm }) => (
             <Form>
@@ -112,7 +123,14 @@ export const FocusList = (props: IProps) => {
                   Lagre prioriterte krav
                 </Button>
 
-                <Button type="button" variant="secondary" onClick={() => setIsEditMode(false)}>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => {
+                    setEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon)
+                    setIsEditMode(false)
+                  }}
+                >
                   Avbryt
                 </Button>
               </div>
