@@ -119,6 +119,13 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
+    public EtterlevelseDokumentasjon updateKravPriority(EtterlevelseDokumentasjonRequest request) {
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = storage.get(request.getIdAsUUID());
+        etterlevelseDokumentasjon.setPrioritertKravNummer(request.getPrioritertKravNummer());
+        return storage.save(etterlevelseDokumentasjon);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon saveAndCreateRelationWithEtterlevelseCopy(UUID fromDocumentID, EtterlevelseDokumentasjonWithRelationRequest request) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = new EtterlevelseDokumentasjon();
         etterlevelseDokumentasjon.merge(request);

@@ -134,6 +134,18 @@ public class EtterlevelseDokumentasjonController {
         return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjon.toResponse()));
     }
 
+    @Operation(summary = "Update Krav Priority for Etterlevelse Dokumentasjon")
+    @ApiResponse(description = "Krav Priority for Etterlevelse Dokumentasjon updated")
+    @PutMapping("/kravpriority/{id}")
+    public ResponseEntity<EtterlevelseDokumentasjonResponse> updateKravPriorityForEtterlevelseDokumentasjon(@PathVariable UUID id, @Valid @RequestBody EtterlevelseDokumentasjonRequest request) {
+        log.debug("Update Etterlevelse Dokumentasjon id={}", id);
+        if (!Objects.equals(id, request.getIdAsUUID())) {
+            throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
+        }
+        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.updateKravPriority(request);
+        return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjon.toResponse()));
+    }
+
 
     @Operation(summary = "Create Etterlevelse Dokumentasjon with relation")
     @ApiResponse(description = "Created Etterlevelse Dokumentasjon with relation")
