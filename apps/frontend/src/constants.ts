@@ -278,6 +278,7 @@ export interface IEtterlevelse extends IDomainObject {
   fristForFerdigstillelse: string
   status: EEtterlevelseStatus
   suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
+  prioritised?: boolean
 }
 
 export type TKravEtterlevelseData = {
