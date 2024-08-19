@@ -107,13 +107,24 @@ const addTeam = (team: ITeam) => {
 }
 
 const pSubscribe = (id: string, done: () => void) => {
-  !people.has(id) && people.set(id, { f: false, v: id })
-  psubs.has(id) ? psubs.set(id, [...psubs.get(id)!, done]) : psubs.set(id, [done])
+  if (!people.has(id)) {
+    people.set(id, { f: false, v: id })
+  }
+  if (psubs.has(id)) {
+    psubs.set(id, [...psubs.get(id)!, done])
+  } else {
+    psubs.set(id, [done])
+  }
 }
 const tSubscribe = (id: string, done: () => void) => {
-  !teams.has(id) &&
+  if (!teams.has(id)) {
     teams.set(id, { f: false, v: { id, name: id, description: '', members: [], tags: [] } })
-  tsubs.has(id) ? tsubs.set(id, [...tsubs.get(id)!, done]) : tsubs.set(id, [done])
+  }
+  if (tsubs.has(id)) {
+    tsubs.set(id, [...tsubs.get(id)!, done])
+  } else {
+    tsubs.set(id, [done])
+  }
 }
 
 export const usePersonName = () => {
@@ -165,7 +176,7 @@ export const useMyTeams = () => {
   const ident = user.getIdent()
 
   useEffect(() => {
-    ident &&
+    if (ident) {
       myTeams()
         .then((teamListe) => {
           if (teamListe.length === 0) {
@@ -194,7 +205,9 @@ export const useMyTeams = () => {
           setLoading(false)
           console.error("couldn't find teams", error)
         })
-    !ident && setLoading(false)
+    } else {
+      setLoading(false)
+    }
   }, [ident, productAreas])
 
   return [data, loading] as [ITeam[], boolean]
@@ -206,7 +219,7 @@ export const useMyProductAreas = () => {
   const ident = user.getIdent()
 
   useEffect(() => {
-    ident &&
+    if (ident) {
       myProductArea()
         .then((r) => {
           setData(r)
@@ -217,7 +230,7 @@ export const useMyProductAreas = () => {
           setLoading(false)
           console.error('couldn\t find product area', e)
         })
-    !ident && setLoading(false)
+    } else setLoading(false)
   }, [ident])
 
   return [data, loading] as [IProductArea[], boolean]

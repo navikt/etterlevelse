@@ -74,7 +74,9 @@ export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: TKr
   )
 
   useEffect(() => {
-    id && !isCreateNew && getEtterlevelse(id).then(setData)
+    if (id && !isCreateNew) {
+      getEtterlevelse(id).then(setData)
+    }
   }, [id])
 
   return [data, setData] as [IEtterlevelse | undefined, (k: IEtterlevelse) => void]
