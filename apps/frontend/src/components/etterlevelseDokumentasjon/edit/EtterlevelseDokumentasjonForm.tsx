@@ -455,10 +455,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
               <Field name="avdeling">
                 {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
                   <div>
-                    <LabelWithDescription
-                      label="Avdeling"
-                      description="Angi hvilken avdeling som er ansvarlig for etterlevelsen og som er risikoeier."
-                    />
+                    <LabelWithDescription label="Angi hvilken avdeling som er ansvarlig for etterlevelsen" />
                     <OptionList
                       listName={EListName.AVDELING}
                       label="Avdeling"
