@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line "@typescript-eslint/no-restricted-types"
 export const getEtterlevelseDokumentasjonListQuery = gql`
   query getEtterlevelseDokumentasjoner(
     $pageNumber: NonNegativeInt

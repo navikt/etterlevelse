@@ -29,8 +29,11 @@ export const AuditPage = () => {
       setAuditLog(undefined)
       setError(undefined)
       if (!id) {
-        !!params.id && navigate('/admin/audit')
-        return
+        if (params.id) {
+          navigate('/admin/audit')
+        } else {
+          return
+        }
       }
       setLoading(true)
       try {

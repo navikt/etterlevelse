@@ -123,8 +123,7 @@ export const EtterlevelseKravView = (props: IProps) => {
 
   useEffect(() => {
     ;(async () => {
-      etterlevelseDokumentasjon?.id &&
-        kravId.kravNummer &&
+      if (etterlevelseDokumentasjon?.id && kravId.kravNummer) {
         getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(
           etterlevelseDokumentasjon?.id,
           kravId.kravNummer,
@@ -143,6 +142,7 @@ export const EtterlevelseKravView = (props: IProps) => {
             )
           }
         })
+      }
     })()
 
     if (

@@ -39,7 +39,9 @@ export const EditBegreper = () => {
                 isClearable={false}
                 loadOptions={useBegrepSearch}
                 onChange={(begrep) => {
-                  begrep && fieldArrayRenderProps.push(begrep)
+                  if (begrep) {
+                    fieldArrayRenderProps.push(begrep)
+                  }
                 }}
                 styles={selectOverrides}
               />

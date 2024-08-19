@@ -22,7 +22,9 @@ const init = (onErr: (e: any) => void) => {
 
 export const useNetworkStatus = () => {
   const [error, setError] = useState<any>()
-  !done && init(setError)
+  if (!done) {
+    init(setError)
+  }
 
   const clear = () => {
     setError(undefined)
