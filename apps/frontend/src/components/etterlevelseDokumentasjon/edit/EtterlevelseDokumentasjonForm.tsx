@@ -330,7 +330,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           )}
 
           <Heading level="2" size="small" spacing>
-            Legg til minst 1 team eller 1 person
+            Legg til minst et team og/eller en person
           </Heading>
 
           <div id="teamsData" className="flex flex-col lg:flex-row gap-5 mb-5">
