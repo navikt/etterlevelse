@@ -64,10 +64,7 @@ export const VarslingsadresserEdit = (props: IVarslingsadresserEditProps) => {
           }
           return (
             <div>
-              <LabelWithDescription
-                label="Varslingsadresser"
-                description="Angi varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger til kravet."
-              />
+              <LabelWithDescription label="Velg varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger på kravet." />
               <div>
                 <div className="mb-2.5">
                   <Button

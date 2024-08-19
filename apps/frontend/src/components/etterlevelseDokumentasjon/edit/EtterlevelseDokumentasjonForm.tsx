@@ -1,4 +1,13 @@
-import { Alert, Button, Checkbox, CheckboxGroup, Heading, Label, TextField } from '@navikt/ds-react'
+import {
+  Alert,
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  Heading,
+  Label,
+  ReadMore,
+  TextField,
+} from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -324,7 +333,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             Legg til minst 1 team eller 1 person
           </Heading>
 
-          <div id="teamsData" className="flex flex-col lg:flex-row gap-5">
+          <div id="teamsData" className="flex flex-col lg:flex-row gap-5 mb-5">
             <FieldArray name="teamsData">
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className="flex-1">
@@ -361,6 +370,9 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                 </div>
               )}
             </FieldArray>
+            <div className="flex-1" />
+          </div>
+          <div className="flex flex-col lg:flex-row gap-5 mb-5">
             <FieldArray name="resourcesData">
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className="flex-1">
@@ -392,41 +404,43 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                   </div>
 
                   {isDev && (
-                    <div className="bg-surface-action-subtle-hover p-4 flex gap-2 items-end my-2">
-                      <TextField
-                        label="Skriv inn NAV ident dersom du ikke finner deg selv over"
-                        value={customPersonForDev}
-                        onChange={(event) => setCustomPersonForDev(event.target.value)}
-                      />
-                      <div>
-                        <Button
-                          type="button"
-                          onClick={() => {
-                            fieldArrayRenderProps.push({
-                              navIdent: customPersonForDev,
-                              givenName: customPersonForDev,
-                              familyName: customPersonForDev,
-                              fullName: customPersonForDev,
-                              email: customPersonForDev,
-                              resourceType: customPersonForDev,
-                            })
-                          }}
-                        >
-                          Legg til
-                        </Button>
+                    <ReadMore header="Hva hvis jeg ikke person">
+                      <div className="flex gap-2 items-end my-2">
+                        <TextField
+                          label="Skriv inn NAV ident dersom du ikke finner person over"
+                          value={customPersonForDev}
+                          onChange={(event) => setCustomPersonForDev(event.target.value)}
+                        />
+                        <div>
+                          <Button
+                            type="button"
+                            onClick={() => {
+                              fieldArrayRenderProps.push({
+                                navIdent: customPersonForDev,
+                                givenName: customPersonForDev,
+                                familyName: customPersonForDev,
+                                fullName: customPersonForDev,
+                                email: customPersonForDev,
+                                resourceType: customPersonForDev,
+                              })
+                            }}
+                          >
+                            Legg til
+                          </Button>
+                        </div>
                       </div>
-                    </div>
+                      <RenderTagList
+                        list={fieldArrayRenderProps.form.values.resourcesData.map(
+                          (resource: ITeamResource) => resource.fullName
+                        )}
+                        onRemove={fieldArrayRenderProps.remove}
+                      />
+                    </ReadMore>
                   )}
-
-                  <RenderTagList
-                    list={fieldArrayRenderProps.form.values.resourcesData.map(
-                      (resource: ITeamResource) => resource.fullName
-                    )}
-                    onRemove={fieldArrayRenderProps.remove}
-                  />
                 </div>
               )}
             </FieldArray>
+            <div className="flex-1" />
           </div>
 
           {errors.teamsData && <Error message={errors.teamsData as string} />}
@@ -493,38 +507,39 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                   </div>
 
                   {isDev && (
-                    <div className="bg-surface-action-subtle-hover p-4 flex gap-2 items-end my-2">
-                      <TextField
-                        label="Skriv inn NAV ident dersom du ikke finner deg selv over"
-                        value={customRisikoeierForDev}
-                        onChange={(event) => setCustomRisikoeierForDev(event.target.value)}
-                      />
-                      <div>
-                        <Button
-                          type="button"
-                          onClick={() => {
-                            fieldArrayRenderProps.push({
-                              navIdent: customRisikoeierForDev,
-                              givenName: customRisikoeierForDev,
-                              familyName: customRisikoeierForDev,
-                              fullName: customRisikoeierForDev,
-                              email: customRisikoeierForDev,
-                              resourceType: customRisikoeierForDev,
-                            })
-                          }}
-                        >
-                          Legg til
-                        </Button>
+                    <ReadMore header="Hva hvis jeg ikke finner risikoeier?">
+                      <div className="flex gap-2 items-end my-2">
+                        <TextField
+                          label="Skriv inn NAV ident dersom du ikke finner risikoeier over"
+                          value={customRisikoeierForDev}
+                          onChange={(event) => setCustomRisikoeierForDev(event.target.value)}
+                        />
+                        <div>
+                          <Button
+                            type="button"
+                            onClick={() => {
+                              fieldArrayRenderProps.push({
+                                navIdent: customRisikoeierForDev,
+                                givenName: customRisikoeierForDev,
+                                familyName: customRisikoeierForDev,
+                                fullName: customRisikoeierForDev,
+                                email: customRisikoeierForDev,
+                                resourceType: customRisikoeierForDev,
+                              })
+                            }}
+                          >
+                            Legg til
+                          </Button>
+                        </div>
                       </div>
-                    </div>
+                      <RenderTagList
+                        list={fieldArrayRenderProps.form.values.risikoeiereData.map(
+                          (resource: ITeamResource) => resource.fullName
+                        )}
+                        onRemove={fieldArrayRenderProps.remove}
+                      />
+                    </ReadMore>
                   )}
-
-                  <RenderTagList
-                    list={fieldArrayRenderProps.form.values.risikoeiereData.map(
-                      (resource: ITeamResource) => resource.fullName
-                    )}
-                    onRemove={fieldArrayRenderProps.remove}
-                  />
                 </div>
               )}
             </FieldArray>
