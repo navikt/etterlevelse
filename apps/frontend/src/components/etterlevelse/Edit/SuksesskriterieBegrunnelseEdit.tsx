@@ -262,6 +262,7 @@ const KriterieBegrunnelse = ({
             value={veiledning ? [true] : []}
             onChange={(value: boolean[]) => setVeiledning(value.length !== 0 ? true : false)}
           >
+            BRUK DENNE SJEKKEN {/* {veiledning && ( */}
             <Checkbox value={true}>Skriv veiledning for gjenbruk</Checkbox>
             Legg inn tekst under tekstboks
             <br />
