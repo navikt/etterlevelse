@@ -263,6 +263,7 @@ const KriterieBegrunnelse = ({
             onChange={(value: boolean[]) => setVeiledning(value.length !== 0 ? true : false)}
           >
             <Checkbox value={true}>Skriv veiledning for gjenbruk</Checkbox>
+            PUT IN STUFF
           </CheckboxGroup>
           {veiledning && (
             <div>
