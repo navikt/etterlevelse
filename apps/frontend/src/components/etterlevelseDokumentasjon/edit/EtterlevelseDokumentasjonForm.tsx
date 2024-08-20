@@ -302,7 +302,9 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                         isClearable={false}
                         loadOptions={searchBehandlingOptions}
                         onChange={(value) => {
-                          value && fieldArrayRenderProps.push(value)
+                          if (value) {
+                            fieldArrayRenderProps.push(value)
+                          }
                           if (value && !values.avdeling && values.behandlinger?.length === 0) {
                             const behandling = value as IBehandling
                             const newAvdeling = {

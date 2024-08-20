@@ -72,7 +72,9 @@ export const Tilbakemeldinger = ({
 
   const refs = useRefs<HTMLDivElement>(tilbakemeldinger.map((tilbakemelding) => tilbakemelding.id))
   useEffect(() => {
-    !loading && focusNr && setTimeout(() => refs[focusNr]?.current?.scrollIntoView(), 100)
+    if (!loading && focusNr) {
+      setTimeout(() => refs[focusNr]?.current?.scrollIntoView(), 100)
+    }
   }, [loading])
 
   const setFocus = (id: string) => {
@@ -178,7 +180,9 @@ export const Tilbakemeldinger = ({
                         setFocusNummer={setFocusNr}
                         ubesvartOgKraveier={ubesvartOgKraveier}
                         close={(t) => {
-                          t && replace(t)
+                          if (t) {
+                            replace(t)
+                          }
                         }}
                         remove={remove}
                         replace={replace}
@@ -243,7 +247,9 @@ export const Tilbakemeldinger = ({
             krav={krav}
             open={addTilbakemelding}
             close={(t) => {
-              t && add(t)
+              if (t) {
+                add(t)
+              }
               setAddTilbakemelding(false)
             }}
           />

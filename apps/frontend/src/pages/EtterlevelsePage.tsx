@@ -37,7 +37,13 @@ export const EtterlevelsePage = () => {
   }
 
   useEffect(() => {
-    etterlevelse &&
+    if (etterlevelse) {
+      ampli.logEvent('sidevisning', {
+        side: 'Etterlevelse side',
+        sidetittel: getPageTitle(),
+        ...userRoleEventProp,
+      })
+
       getKravByKravNumberAndVersion(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(
         (res) => {
           if (res) {
@@ -49,12 +55,6 @@ export const EtterlevelsePage = () => {
           }
         }
       )
-    if (etterlevelse) {
-      ampli.logEvent('sidevisning', {
-        side: 'Etterlevelse side',
-        sidetittel: getPageTitle(),
-        ...userRoleEventProp,
-      })
     }
   }, [etterlevelse])
 

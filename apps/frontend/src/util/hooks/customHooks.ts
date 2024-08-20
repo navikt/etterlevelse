@@ -13,7 +13,9 @@ export function useDebouncedState<T>(
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedValue(value)
-      passThrough && passThrough(value)
+      if (passThrough) {
+        passThrough(value)
+      }
     }, delay)
     return () => {
       clearTimeout(handler)
@@ -41,10 +43,14 @@ export function useAwait<T>(promise: Promise<T>, setLoading?: Dispatch<SetStateA
 
   useEffect(() => {
     ;(async () => {
-      setLoading && setLoading(true)
+      if (setLoading) {
+        setLoading(true)
+      }
       await promise
       update()
-      setLoading && setLoading(false)
+      if (setLoading) {
+        setLoading(false)
+      }
     })()
   }, [])
 }

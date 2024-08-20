@@ -67,15 +67,15 @@ export const Etterlevelser = ({
         },
       ]
     }
-
-    etterlevelse.etterlevelseDokumentasjon.teamsData &&
+    if (etterlevelse.etterlevelseDokumentasjon.teamsData) {
       etterlevelse.etterlevelseDokumentasjon.teamsData.forEach((t) => {
         if (!t.productAreaId && !t.productAreaName) {
           t.productAreaId = 'INGEN_PO'
           t.productAreaName = 'Ingen produktområde'
         }
       })
-    return etterlevelse
+      return etterlevelse
+    }
   })
 
   const filteredEtterlevelse = etterlevelser.filter((e) => {

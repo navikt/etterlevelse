@@ -29,7 +29,9 @@ export const EditKravRelasjoner = () => {
                 isClearable={false}
                 loadOptions={useSearchKrav}
                 onChange={(krav) => {
-                  krav && fieldArrayRenderProps.push(krav)
+                  if (krav) {
+                    fieldArrayRenderProps.push(krav)
+                  }
                 }}
                 styles={selectOverrides}
               />

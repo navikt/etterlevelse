@@ -220,7 +220,9 @@ export const SlackChannelSearch = ({ add, close }: TAddVarslingsadresseProps) =>
       onChange={(slackKanal) => {
         const channel = slackKanal as ISlackChannel
         if (channel) add({ type: EAdresseType.SLACK, adresse: channel.id })
-        close && close()
+        if (close) {
+          close()
+        }
       }}
       styles={selectOverrides}
     />
@@ -237,7 +239,9 @@ export const SlackUserSearch = ({ add, close }: TAddVarslingsadresseProps) => {
         add({ type: EAdresseType.SLACK_USER, adresse: user.id })
         setLoadingSlackId(false)
         setError('')
-        close && close()
+        if (close) {
+          close()
+        }
       })
       .catch((e) => {
         setError('Fant ikke slack for bruker, error: ' + e.toString())
@@ -306,7 +310,9 @@ export const AddEmail = ({ added, add: doAdd, close }: TAddVarslingsadresseProps
       doAdd({ type: EAdresseType.EPOST, adresse: toAdd })
       setVal('')
     }
-    close && close()
+    if (close) {
+      close()
+    }
   }
 
   const onKey = (e: React.KeyboardEvent) => e.key === 'Enter' && add()
