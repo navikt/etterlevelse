@@ -6,7 +6,7 @@ import { env } from '../util/env'
 // unsure how to refactor code
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const reactProcessString = require('react-process-string')
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+// eslint-enable-next-line @typescript-eslint/no-require-imports
 const processString = reactProcessString as (
   converters: { regex: RegExp; fn: (key: string, result: string[]) => JSX.Element | string }[]
 ) => (input?: string) => JSX.Element[]
