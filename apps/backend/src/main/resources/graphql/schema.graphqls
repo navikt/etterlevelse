@@ -208,6 +208,7 @@ type SuksesskriterieBegrunnelse {
     suksesskriterieStatus: SuksesskriterieStatus
     veiledning: Boolean
     veiledningsTekst: String
+    veiledningsTekst2: String
 }
 
 enum EtterlevelseStatus {

@@ -20,4 +20,5 @@ public class SuksesskriterieBegrunnelseResponse {
 
     private boolean veiledning;
     private String veiledningsTekst;
+    private String veiledningsTekst2;
 }

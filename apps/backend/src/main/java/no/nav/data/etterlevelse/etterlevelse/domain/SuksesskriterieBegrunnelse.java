@@ -20,6 +20,7 @@ public class SuksesskriterieBegrunnelse {
     @Builder.Default
     private boolean veiledning = false;
     private String veiledningsTekst;
+    private String veiledningsTekst2;
 
 
     public static SuksesskriterieBegrunnelse convert(SuksesskriterieBegrunnelseRequest request) {
@@ -29,6 +30,7 @@ public class SuksesskriterieBegrunnelse {
                 .suksesskriterieStatus(request.getSuksesskriterieStatus())
                 .veiledning(request.isVeiledning())
                 .veiledningsTekst(request.getVeiledningsTekst())
+                .veiledningsTekst2(request.getVeiledningsTekst2())
                 .build();
     }
 
@@ -39,6 +41,7 @@ public class SuksesskriterieBegrunnelse {
                 .suksesskriterieStatus(suksesskriterieStatus)
                 .veiledning(veiledning)
                 .veiledningsTekst(veiledningsTekst)
+                .veiledningsTekst2(veiledningsTekst2)
                 .build();
     }
 }

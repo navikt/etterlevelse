@@ -24,6 +24,7 @@ public class SuksesskriterieBegrunnelseRequest implements Validated {
 
     private boolean veiledning;
     private String veiledningsTekst;
+    private String veiledningsTekst2;
 
     @Override
     public void format() {
