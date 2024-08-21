@@ -307,6 +307,7 @@ export interface ISuksesskriterieBegrunnelse {
   suksesskriterieStatus?: ESuksesskriterieStatus
   veiledning: boolean
   veiledningsTekst: string
+  veiledningsTekst2: string
 }
 
 export interface IBehandling {

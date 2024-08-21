@@ -107,6 +107,7 @@ export const mapEtterlevelseToFormValue = (
           suksesskriterieStatus: ESuksesskriterieStatus.UNDER_ARBEID,
           veiledning: false,
           veiledningsTekst: '',
+          veiledningsTekst2: '',
         })
       })
     }
