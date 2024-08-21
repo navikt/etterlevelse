@@ -44,6 +44,7 @@ export const getSuksesskriterieBegrunnelse = (
       suksesskriterieStatus: undefined,
       veiledning: false,
       veiledningsTekst: '',
+      veiledningsTekst2: '',
     }
   } else {
     return sb
@@ -172,9 +173,14 @@ const KriterieBegrunnelse = ({
   const [veiledningTekst, setVeiledningTekst] = useState(
     suksesskriterieBegrunnelse.veiledningsTekst
   )
+  const [veiledningTekst2, setVeiledningTekst2] = useState(
+    suksesskriterieBegrunnelse.veiledningsTekst2
+  )
 
   const [mode, setMode] = useState('edit')
-  const [guideMode, setGuideMode] = useState('edit')
+
+  const [veiledningsTekstMode, setVeiledningsTekstMode] = useState('edit')
+  const [veiledningsTekst2Mode, setVeiledningsTekst2Mode] = useState('edit')
 
   const getVeiledningsTekstFromMorEtterlevelse = (
     morEtterlevelse: IEtterlevelse,
@@ -186,14 +192,45 @@ const KriterieBegrunnelse = ({
     )[0].veiledningsTekst
   }
 
-  const hasVeildningFromMorEtterlevelse = (
+  const getVeiledningsTekst2FromMorEtterlevelse = (
     morEtterlevelse: IEtterlevelse,
     suksessKriterieId: number
-  ): boolean => {
+  ): string => {
     return morEtterlevelse.suksesskriterieBegrunnelser.filter(
       (suksesskriterieBegrunnelse) =>
         suksesskriterieBegrunnelse.suksesskriterieId === suksessKriterieId
-    )[0].veiledning
+    )[0].veiledningsTekst2
+  }
+
+  const hasVeildningTekstFromMorEtterlevelse = (
+    morEtterlevelse: IEtterlevelse,
+    suksessKriterieId: number
+  ): boolean => {
+    const suksesskriteriet = morEtterlevelse.suksesskriterieBegrunnelser.filter(
+      (suksesskriterieBegrunnelse) =>
+        suksesskriterieBegrunnelse.suksesskriterieId === suksessKriterieId
+    )[0]
+    return (
+      suksesskriteriet.veiledning &&
+      suksesskriteriet.veiledningsTekst !== null &&
+      suksesskriteriet.veiledningsTekst !== ''
+    )
+  }
+
+  const hasVeildningTekst2FromMorEtterlevelse = (
+    morEtterlevelse: IEtterlevelse,
+    suksessKriterieId: number
+  ): boolean => {
+    const suksesskriteriet = morEtterlevelse.suksesskriterieBegrunnelser.filter(
+      (suksesskriterieBegrunnelse) =>
+        suksesskriterieBegrunnelse.suksesskriterieId === suksessKriterieId
+    )[0]
+
+    return (
+      suksesskriteriet.veiledning &&
+      suksesskriteriet.veiledningsTekst2 !== null &&
+      suksesskriteriet.veiledningsTekst2 !== ''
+    )
   }
 
   useEffect(() => {
@@ -204,8 +241,9 @@ const KriterieBegrunnelse = ({
       suksesskriterieStatus: suksessKriterieStatus,
       veiledning: veiledning,
       veiledningsTekst: veiledningTekst,
+      veiledningsTekst2: veiledningTekst2,
     })
-  }, [begrunnelse, suksessKriterieStatus, veiledning, veiledningTekst])
+  }, [begrunnelse, suksessKriterieStatus, veiledning, veiledningTekst, veiledningTekst2])
 
   const getBorderColor = () => {
     if (
@@ -262,28 +300,22 @@ const KriterieBegrunnelse = ({
             value={veiledning ? [true] : []}
             onChange={(value: boolean[]) => setVeiledning(value.length !== 0 ? true : false)}
           >
-            BRUK DENNE SJEKKEN {/* {veiledning && ( */}
-            <Checkbox value={true}>Skriv veiledning for gjenbruk</Checkbox>
-            Legg inn tekst under tekstboks
-            <br />
-            <br />
-            Legg redigeringsfelt
-            <br />
-            <br />
-            Legg redigeringsfelt
+            <Checkbox
+              value={true}
+              description="Når du har tilgjengeliggjort dokumentet til gjenbruk, vil veiledningsteksten vises for de som gjenbruker."
+            >
+              Skriv veiledning til hvordan kravet oppfylles i denne konteksten
+            </Checkbox>
           </CheckboxGroup>
           {veiledning && (
             <div>
               <div className="ml-8">
-                <div className="w-full">
-                  <div className="flex justify-end mr-1 mb-1">
-                    <ToggleGroup defaultValue="edit" onChange={setGuideMode} size="small">
-                      <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
-                      <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
-                    </ToggleGroup>
-                  </div>
+                <div className="w-full flex mb-1">
+                  <Label className="mt-3.5">
+                    Beskriv NAVs tolkning av loven og besluttede praksiser i denne konteksten
+                  </Label>
                 </div>
-                {guideMode === 'edit' && (
+                {veiledningsTekstMode === 'edit' && (
                   <TextEditor
                     initialValue={veiledningTekst}
                     setValue={setVeiledningTekst}
@@ -293,31 +325,88 @@ const KriterieBegrunnelse = ({
                     width="100%"
                   />
                 )}
+                {veiledningsTekstMode === 'view' && (
+                  <Alert variant="info">
+                    <Label>Følgende veiledning er skrevet av {user.getName()}</Label>
+                    <br />
+                    <Label>
+                      NAVs tolkning av loven og besluttede praksiser i denne konteksten:
+                    </Label>
+                    <Markdown source={veiledningTekst} />
+                  </Alert>
+                )}
+                <div className="flex-col flex items-end justify-end mt-[-1px]">
+                  <ToggleGroup defaultValue="edit" onChange={setVeiledningsTekstMode} size="small">
+                    <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
+                    <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+                  </ToggleGroup>
+                </div>
               </div>
-              {guideMode === 'view' && (
-                <Alert variant="info" className="mb-5">
-                  <Label>Følgende veiledning er skrevet av {user.getName()}</Label>
-                  <br />
-                  <Markdown source={veiledningTekst} />
-                </Alert>
-              )}
+              <div className="ml-8">
+                <div className="w-full flex mb-1 mt-2.5">
+                  <Label className="mt-2.5">
+                    Skriv veiledning for hvordan suksesskriteriet kan etterleves
+                  </Label>
+                </div>
+                {veiledningsTekst2Mode === 'edit' && (
+                  <TextEditor
+                    initialValue={veiledningTekst2}
+                    setValue={setVeiledningTekst2}
+                    height="11.75rem"
+                    simple
+                    maxWidth="49.375rem"
+                    width="100%"
+                  />
+                )}
+                {veiledningsTekst2Mode === 'view' && (
+                  <Alert variant="info">
+                    <Label>Følgende veiledning er skrevet av {user.getName()}</Label>
+                    <br />
+                    <Label>Slik kan suksesskriteriet etterleves:</Label>
+                    <Markdown source={veiledningTekst2} />
+                  </Alert>
+                )}
+                <div className="flex-col flex items-end justify-end mt-[-1px]">
+                  <ToggleGroup defaultValue="edit" onChange={setVeiledningsTekst2Mode} size="small">
+                    <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
+                    <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+                  </ToggleGroup>
+                </div>
+              </div>
             </div>
           )}
         </div>
       )}
 
-      {morEtterlevelse && hasVeildningFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id) && (
-        <Alert variant="info" className="mb-5">
-          <Label>
-            Følgende veiledning er skrevet av{' '}
-            {morEtterlevelse.changeStamp.lastModifiedBy.split(' - ')[1]}
-          </Label>
-          <br />
-          <Markdown
-            source={getVeiledningsTekstFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id)}
-          />
-        </Alert>
-      )}
+      {morEtterlevelse &&
+        hasVeildningTekstFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id) && (
+          <Alert variant="info" className="mb-5">
+            <Label>
+              Følgende veiledning er skrevet av{' '}
+              {morEtterlevelse.changeStamp.lastModifiedBy.split(' - ')[1]}
+            </Label>
+            <br />
+            <Label>NAVs tolkning av loven og besluttede praksiser i denne konteksten:</Label>
+            <Markdown
+              source={getVeiledningsTekstFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id)}
+            />
+          </Alert>
+        )}
+
+      {morEtterlevelse &&
+        hasVeildningTekst2FromMorEtterlevelse(morEtterlevelse, suksesskriterie.id) && (
+          <Alert variant="info" className="mb-5">
+            <Label>
+              Følgende veiledning er skrevet av{' '}
+              {morEtterlevelse.changeStamp.lastModifiedBy.split(' - ')[1]}
+            </Label>
+            <br />
+            <Label>Slik kan suksesskriteriet etterleves:</Label>
+            <Markdown
+              source={getVeiledningsTekst2FromMorEtterlevelse(morEtterlevelse, suksesskriterie.id)}
+            />
+          </Alert>
+        )}
 
       <div className="w-full">
         <div className="min-w-fit">
