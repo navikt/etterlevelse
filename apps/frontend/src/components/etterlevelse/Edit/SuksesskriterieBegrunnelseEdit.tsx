@@ -428,12 +428,6 @@ const KriterieBegrunnelse = ({
           <div className="w-full mt-4">
             <div className="flex w-full justify-between items-center mb-1">
               <Label>{getLabelForSuksessKriterie(suksessKriterieStatus)}</Label>
-              <div className="flex justify-end mr-1">
-                <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
-                  <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
-                  <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
-                </ToggleGroup>
-              </div>
             </div>
             {mode === 'edit' && (
               <TextEditor
@@ -452,6 +446,12 @@ const KriterieBegrunnelse = ({
                 <Markdown source={begrunnelse} />
               </div>
             )}
+            <div className="flex justify-end mt-[-1px]">
+              <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
+                <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
+                <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+              </ToggleGroup>
+            </div>
 
             <div className="mt-1">
               <FormError

@@ -151,12 +151,6 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
                     <Label>{label}</Label>
                     <BodyShort className="text-[var(--a-text-subtle)]">{caption}</BodyShort>
                   </div>
-                  <div className="flex flex-col items-end justify-end mr-1">
-                    <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
-                      <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
-                      <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
-                    </ToggleGroup>
-                  </div>
                 </div>
                 {mode === 'edit' && (
                   <TextEditor
@@ -174,6 +168,12 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
                     <Markdown source={fieldProps.field.value} />
                   </div>
                 )}
+                <div className="flex flex-col items-end justify-end mt-[-1px]">
+                  <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
+                    <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
+                    <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+                  </ToggleGroup>
+                </div>
               </div>
             )}
             {!markdown && (

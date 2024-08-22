@@ -213,12 +213,6 @@ const Kriterie = ({
                 noMarginBottom
               />
             </div>
-            <div className="flex justify-end">
-              <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
-                <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
-                <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
-              </ToggleGroup>
-            </div>
           </div>
 
           {mode === 'edit' && (
@@ -235,6 +229,12 @@ const Kriterie = ({
               <Markdown source={beskrivelse} />
             </div>
           )}
+        </div>
+        <div className="flex justify-end mt-[-1px]">
+          <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
+            <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
+            <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+          </ToggleGroup>
         </div>
 
         <div className="flex flex-1 mt-1">
