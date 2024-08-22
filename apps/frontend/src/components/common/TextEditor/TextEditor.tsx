@@ -132,6 +132,8 @@ const TextEditor = (props: TTextEditorProps) => {
           editorStyle={{
             padding: '0.625rem',
             minHeight: height || '31.25rem',
+            zIndex: '0',
+            position: 'relative',
           }}
           toolbarStyle={{
             backgroundColor: ettlevColors.white,
