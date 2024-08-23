@@ -603,7 +603,7 @@ const getMembersFromEtterlevelseDokumentasjon = (
   const members = []
   if (etterlevelseDokumentasjon.teamsData && etterlevelseDokumentasjon.teamsData.length > 0) {
     etterlevelseDokumentasjon.teamsData.forEach((team) => {
-      const teamMembers = team.members.map((members) => members.navIdent || '')
+      const teamMembers = team.members.map((members) => members.navIdent || [])
       members.push(...teamMembers)
     })
   }
