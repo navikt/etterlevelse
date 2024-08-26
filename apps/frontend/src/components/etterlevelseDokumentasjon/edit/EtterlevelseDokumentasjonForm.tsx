@@ -506,6 +506,12 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                       }}
                       styles={selectOverrides}
                     />
+                    <RenderTagList
+                      list={fieldArrayRenderProps.form.values.risikoeiereData.map(
+                        (resource: ITeamResource) => resource.fullName
+                      )}
+                      onRemove={fieldArrayRenderProps.remove}
+                    />
                   </div>
 
                   {isDev && (
