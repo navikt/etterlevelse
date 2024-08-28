@@ -16,7 +16,9 @@ public interface GenericStorageRepository<T extends DomainObject> extends JpaRep
 
     // TODO: findAllByType(...) 
     // Metodene er kilder til feil (kan potensielt returnere veldig mye data). De bør derfor fjernes og evt. erstattes av 
-    // metoder kun for de typene vi trenger dette for (f.eks. findAllMailTasks)
+    // metoder kun for de typene vi trenger dette for (f.eks. findAllMailTasks).
+    // Hvis de bare brukes i test, kan metodene bli, men da bør testen kalle repo direkte, slik at disse ikke eksponeres i service.
+    // Hvis de bare brukes til å sjekke at noe finnes eller ikke, bør man heller kalle *Repository.count()
     
     List<GenericStorage<T>> findAllByType(String type);
 

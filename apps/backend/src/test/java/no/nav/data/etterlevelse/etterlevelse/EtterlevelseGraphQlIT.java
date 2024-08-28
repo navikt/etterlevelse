@@ -51,7 +51,7 @@ public class EtterlevelseGraphQlIT extends GraphQLTestBase {
                 .varslingsadresser(List.of(new Varslingsadresse("xyz", AdresseType.SLACK), new Varslingsadresse("notfound", AdresseType.SLACK)))
                 .status(KravStatus.AKTIV)
                 .build());
-       var etterlevelse =  etterlevelseStorageService.save(Etterlevelse.builder()
+       var etterlevelse = etterlevelseService.save(Etterlevelse.builder()
                 .kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon())
                 .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString())
                 .build());

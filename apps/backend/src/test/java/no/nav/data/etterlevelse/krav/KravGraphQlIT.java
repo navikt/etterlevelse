@@ -66,7 +66,7 @@ class KravGraphQlIT extends GraphQLTestBase {
                 .varslingsadresser(List.of(new Varslingsadresse("xyz", AdresseType.SLACK), new Varslingsadresse("notfound", AdresseType.SLACK)))
                 .status(KravStatus.AKTIV)
                 .build());
-        etterlevelseStorageService.save(Etterlevelse.builder()
+        etterlevelseService.save(Etterlevelse.builder()
                 .kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon())
                 .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString())
                 .build());
@@ -300,7 +300,7 @@ class KravGraphQlIT extends GraphQLTestBase {
                     .relevansFor(EtterlevelseDokumentasjonRelevans)
                     .build());
 
-            etterlevelseStorageService.save(Etterlevelse.builder()
+            etterlevelseService.save(Etterlevelse.builder()
                     .kravNummer(51).kravVersjon(1)
                     .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
                     .build());
@@ -338,7 +338,7 @@ class KravGraphQlIT extends GraphQLTestBase {
                     .relevansFor(List.of("INNSYN"))
                     .status(KravStatus.AKTIV)
                     .build());
-            etterlevelseStorageService.save(Etterlevelse.builder()
+            etterlevelseService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
                     .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
                     .build());
@@ -367,11 +367,11 @@ class KravGraphQlIT extends GraphQLTestBase {
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                     .relevansFor(List.of("SAK"))
                     .build());
-            etterlevelseStorageService.save(Etterlevelse.builder()
+            etterlevelseService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
                     .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
                     .build());
-            etterlevelseStorageService.save(Etterlevelse.builder()
+            etterlevelseService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
                     .build());
 

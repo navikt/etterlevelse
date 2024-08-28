@@ -63,7 +63,7 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected StorageService<KravImage> kravImageStorageService;
     @Autowired
-    protected StorageService<Etterlevelse> etterlevelseStorageService;
+    protected EtterlevelseService etterlevelseStorageService3; // FIXME
     @Autowired
     protected StorageService<EtterlevelseArkiv> etterlevelseArkivStorageService;
     @Autowired
