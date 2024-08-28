@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { BodyShort, Button, Heading, Label, Link, ReadMore } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, Heading, Label, Link, List, ReadMore } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -194,6 +194,33 @@ export const DokumentasjonPage = () => {
       <Heading level="2" size="medium" spacing className="mt-3">
         Temaoversikt
       </Heading>
+
+      {etterlevelseDokumentasjon.forGjenbruk &&
+        !etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
+          <div className="max-w-5xl">
+            <Alert variant="success" className="max-w-5xl">
+              <Heading spacing size="small" level="3">
+                Nå har du låst opp mulighet for å skrive veiledning til de som skal gjenbruke dette
+                dokumentet.
+              </Heading>
+              <Heading spacing size="small" level="3">
+                Slik gjør du nå:
+              </Heading>
+              <List>
+                <List.Item>
+                  Gjennomgå alle krav og legg inn veiledning eller endre på status der dette gir
+                  mening i din kontekst.
+                </List.Item>
+                <List.Item>
+                  Bruk Prioritert kravliste til å samle alle krav som skal framheves ved gjenbruk.
+                </List.Item>
+                <List.Item>
+                  Når du er ferdig med å forberede til gjenbruk, velger du “Slå på gjenbruk”, over.
+                </List.Item>
+              </List>
+            </Alert>
+          </div>
+        )}
 
       {morDokumentRelasjon && (
         <ReadMore header="Slik bruker du disse vurderingene" className="my-5">
