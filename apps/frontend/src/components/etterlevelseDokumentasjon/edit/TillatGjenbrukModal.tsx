@@ -1,4 +1,4 @@
-import { FilesIcon } from '@navikt/aksel-icons'
+// import { FilesIcon } from '@navikt/aksel-icons'
 import { Button, List, Modal } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
@@ -50,7 +50,7 @@ export const TillatGjenbrukModal = (props: IProps) => {
         {etterlevelseDokumentasjon.gjenbrukBeskrivelse &&
         etterlevelseDokumentasjon.tilgjengeligForGjenbruk
           ? 'Endre gjenbruk'
-          : 'Åpne for gjenbruk'}
+          : 'Slå på gjenbruk'}
       </Button>
 
       {isOpen && (
@@ -59,8 +59,8 @@ export const TillatGjenbrukModal = (props: IProps) => {
           open={isOpen}
           onClose={() => setIsOpen(false)}
           header={{
-            heading: 'Tilgjengeliggjør dette dokumentet for gjenbruk av andre',
-            icon: <FilesIcon title="header-ikon" />,
+            heading: 'Slå på gjenbruk av dette dokumentet',
+            // icon: <FilesIcon title="header-ikon" />,
             closeButton: false,
           }}
         >
@@ -107,7 +107,7 @@ export const TillatGjenbrukModal = (props: IProps) => {
                       submitForm()
                     }}
                   >
-                    Bekreft gjenbruk
+                    Slå på gjenbruk
                   </Button>
                   <Button
                     type="button"
