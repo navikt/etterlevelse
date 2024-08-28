@@ -26,7 +26,7 @@
         <graphql.version>22.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
         <microsoft-graph.version>6.13.0</microsoft-graph.version>
-        <msal4j.version>1.16.2</msal4j.version>
+        <msal4j.version>1.17.0</msal4j.version>
         <flyway-database-postgresql.version>10.16.0</flyway-database-postgresql.version>
 
         <!-- transitive versions -->
