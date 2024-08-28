@@ -408,7 +408,7 @@ const KriterieBegrunnelse = ({
           </Alert>
         )}
 
-      <div className="w-full">
+      <div className="w-full mt-5">
         <div className="min-w-fit">
           <RadioGroup
             value={suksessKriterieStatus}
@@ -416,18 +416,49 @@ const KriterieBegrunnelse = ({
             onChange={(val) => setSuksessKriterieStatus(val as ESuksesskriterieStatus)}
             name={'suksesskriterieStatus' + suksesskriterie.id}
           >
-            <div className="block lg:flex lg:gap-6">
-              <Radio value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</Radio>
-              <Radio value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</Radio>
-              <Radio value={ESuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</Radio>
-              <Radio value={ESuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</Radio>
+            <div>
+              <div>
+                {veiledning && (
+                  <ReadMore
+                    size="medium"
+                    header="Skal jeg som har skrevet veiledning endre på status?"
+                  >
+                    Status på suksesskriteriet i feltet under gjelder for etterleveren (den som skal
+                    lese din veiledning) og ikke for deg. Du kan likevel vurdere om du skal endre
+                    status i tråd med veiledningen du har skrevet. For eksempel, kanskje er ikke
+                    suksesskriteriet relevant for de som skal gjenbruke din dokumentasjon. Eller
+                    kanskje er suksesskriteriet oppfylt enn så lenge etterleveren følger
+                    veiledningen din. Hvis du er usikker på hva du skal gjøre med status, la den stå
+                    som Under arbeid.
+                  </ReadMore>
+                )}
+              </div>
+              <div className="block lg:flex lg:gap-6">
+                <Radio value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</Radio>
+                <Radio value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</Radio>
+                <Radio value={ESuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</Radio>
+                <Radio value={ESuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</Radio>
+              </div>
             </div>
           </RadioGroup>
         </div>
         {!disableEdit && suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
-          <div className="w-full mt-4">
+          <div className="w-full mt-8">
             <div className="flex w-full justify-between items-center mb-1">
               <Label>{getLabelForSuksessKriterie(suksessKriterieStatus)}</Label>
+            </div>
+            <div className="mb-3">
+              {veiledning && (
+                <ReadMore size="medium" header="Skal jeg som har skrevet veiledning svare her?">
+                  Status på suksesskriteriet i feltet under gjelder for etterleveren (den som skal
+                  lese din veiledning) og ikke for deg. Du kan likevel vurdere om du skal endre
+                  status i tråd med veiledningen du har skrevet. For eksempel, kanskje er ikke
+                  suksesskriteriet relevant for de som skal gjenbruke din dokumentasjon. Eller
+                  kanskje er suksesskriteriet oppfylt enn så lenge etterleveren følger veiledningen
+                  din. Hvis du er usikker på hva du skal gjøre med status, la den stå som Under
+                  arbeid.
+                </ReadMore>
+              )}
             </div>
             {mode === 'edit' && (
               <TextEditor
