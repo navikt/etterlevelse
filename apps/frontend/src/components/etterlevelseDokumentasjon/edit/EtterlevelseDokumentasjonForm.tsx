@@ -561,7 +561,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             <div className="flex-1" />
           </div>
 
-          {!dokumentRelasjon && isDev && (
+          {!dokumentRelasjon && (
             <div className="mt-5">
               <CheckboxGroup
                 legend="Skal dette dokumentet kunne gjenbrukes av andre?"
