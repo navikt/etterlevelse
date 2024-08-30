@@ -415,9 +415,19 @@ export const EtterlevelseKravView = (props: IProps) => {
                         onChange={handleChange}
                         value={isPrioritised ? ['check'] : []}
                       >
-                        <Checkbox value="check">
-                          Legg til dette kravet i Prioritert kravliste
-                        </Checkbox>
+                        {
+                          <Checkbox
+                            value="check"
+                            description={
+                              (etterlevelseDokumentasjon?.hasCurrentUserAccess &&
+                                etterlevelseDokumentasjon?.forGjenbruk &&
+                                'Her kommer veilednings text som bare vises for mor') ||
+                              ''
+                            }
+                          >
+                            Legg til dette kravet i Prioritert kravliste
+                          </Checkbox>
+                        }
                       </CheckboxGroup>
                       {kravFilter !== EKravFilterType.BORTFILTTERTE_KRAV && (
                         <EtterlevelseEditFields
