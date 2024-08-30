@@ -421,7 +421,7 @@ export const EtterlevelseKravView = (props: IProps) => {
                             description={
                               (etterlevelseDokumentasjon?.hasCurrentUserAccess &&
                                 etterlevelseDokumentasjon?.forGjenbruk &&
-                                'Her kommer veilednings text som bare vises for mor') ||
+                                'De som gjenbruker etterlevelsesdokumentet ditt vil få fremhevet kravet når de foretar sin egen vurdering') ||
                               ''
                             }
                           >

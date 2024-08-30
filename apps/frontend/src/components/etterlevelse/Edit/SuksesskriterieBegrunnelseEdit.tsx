@@ -6,6 +6,7 @@ import {
   CheckboxGroup,
   Heading,
   Label,
+  List,
   Radio,
   RadioGroup,
   ReadMore,
@@ -24,6 +25,7 @@ import { ampli } from '../../../services/Amplitude'
 import { user } from '../../../services/User'
 import { useDebouncedState } from '../../../util/hooks/customHooks'
 import { FieldWrapper } from '../../common/Inputs'
+import { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { Markdown } from '../../common/Markdown'
 import { FormError } from '../../common/ModalSchema'
 import { LabelAboveContent } from '../../common/PropertyLabel'
@@ -302,7 +304,7 @@ const KriterieBegrunnelse = ({
           >
             <Checkbox
               value={true}
-              description="Når du har tilgjengeliggjort dokumentet til gjenbruk, vil veiledningsteksten vises for de som gjenbruker."
+              description="De som gjenbruker vurderingen din må ta stilling til kravet."
             >
               Skriv veiledning til hvordan kravet oppfylles i denne konteksten
             </Checkbox>
@@ -310,10 +312,11 @@ const KriterieBegrunnelse = ({
           {veiledning && (
             <div>
               <div className="ml-8">
-                <div className="w-full flex mb-1">
-                  <Label className="mt-3.5">
-                    Beskriv NAVs tolkning av loven og besluttede praksiser i denne konteksten
-                  </Label>
+                <div className="w-full flex mb-1 mt-3.5">
+                  <LabelWithDescription
+                    label="Beskriv relevante, sentrale vurderinger."
+                    description="Dette kan inkludere blant annet tolkning av lov, forskrift og besluttede praksiser."
+                  />
                 </div>
                 {veiledningsTekstMode === 'edit' && (
                   <TextEditor
@@ -345,7 +348,7 @@ const KriterieBegrunnelse = ({
               <div className="ml-8">
                 <div className="w-full flex mb-1 mt-2.5">
                   <Label className="mt-2.5">
-                    Skriv veiledning for hvordan suksesskriteriet kan etterleves
+                    Skriv en praktisk veiledning om hvordan kravet kan etterleves
                   </Label>
                 </div>
                 {veiledningsTekst2Mode === 'edit' && (
@@ -423,13 +426,18 @@ const KriterieBegrunnelse = ({
                     size="medium"
                     header="Skal jeg som har skrevet veiledning endre på status?"
                   >
-                    Status på suksesskriteriet i feltet under gjelder for etterleveren (den som skal
-                    lese din veiledning) og ikke for deg. Du kan likevel vurdere om du skal endre
-                    status i tråd med veiledningen du har skrevet. For eksempel, kanskje er ikke
-                    suksesskriteriet relevant for de som skal gjenbruke din dokumentasjon. Eller
-                    kanskje er suksesskriteriet oppfylt enn så lenge etterleveren følger
-                    veiledningen din. Hvis du er usikker på hva du skal gjøre med status, la den stå
-                    som Under arbeid.
+                    Når noen gjenbruker etterlevelsesdokumentet ditt, vil de arve statusen du setter
+                    her.
+                    <List>
+                      <List.Item>
+                        Som hovedregel burde statusen settes til “Ikke oppfylt” fram til
+                        etterleveren har gjort sin egen vurdering.
+                      </List.Item>
+                      <List.Item>
+                        Hvis kravet er svart ut sentralt, kan det være aktuelt å sette status til
+                        “Oppfylt” eller “Ikke relevant”.
+                      </List.Item>
+                    </List>
                   </ReadMore>
                 )}
               </div>
@@ -450,13 +458,11 @@ const KriterieBegrunnelse = ({
             <div className="mb-3">
               {veiledning && (
                 <ReadMore size="medium" header="Skal jeg som har skrevet veiledning svare her?">
-                  Status på suksesskriteriet i feltet under gjelder for etterleveren (den som skal
-                  lese din veiledning) og ikke for deg. Du kan likevel vurdere om du skal endre
-                  status i tråd med veiledningen du har skrevet. For eksempel, kanskje er ikke
-                  suksesskriteriet relevant for de som skal gjenbruke din dokumentasjon. Eller
-                  kanskje er suksesskriteriet oppfylt enn så lenge etterleveren følger veiledningen
-                  din. Hvis du er usikker på hva du skal gjøre med status, la den stå som Under
-                  arbeid.
+                  De som gjenbruker vurderingen din skal svare i fritekstfeltet under. I noen
+                  tilfeller kan det likevel være aktuelt for deg å skrive i feltet, for eksempel
+                  hvis du skal forklare hvorfor du har satt status til “Ikke relevant”. Du kan også
+                  velge å skrive i feltet dersom du vil kladde et svar som etterleveren kan bygge på
+                  selv. Ikke skriv veiledning i denne boksen.
                 </ReadMore>
               )}
             </div>
