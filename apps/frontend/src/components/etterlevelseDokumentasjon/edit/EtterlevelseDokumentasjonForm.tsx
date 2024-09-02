@@ -31,8 +31,7 @@ import {
 } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
 import { EListName, ICode, ICodeListFormValues, codelist } from '../../../services/Codelist'
-// temporary remove to be able to create new document
-// import { user } from '../../../services/User'
+import { user } from '../../../services/User'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
@@ -112,24 +111,22 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
     console.debug(selectedVirkemiddel)
 
     if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
-      // temporary remove to be able to create new document
-      // const mutatedEtterlevelsesDokumentasjon = etterlevelseDokumentasjon
-      // const members = getMembersFromEtterlevelseDokumentasjon(etterlevelseDokumentasjon)
+      const mutatedEtterlevelsesDokumentasjon = etterlevelseDokumentasjon
+      const members = getMembersFromEtterlevelseDokumentasjon(etterlevelseDokumentasjon)
 
-      await createEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
-        // //Add document creator as member if user is not included in members list
-        // if (mutatedEtterlevelsesDokumentasjon.resourcesData && !members.includes(user.getIdent())) {
-        //   mutatedEtterlevelsesDokumentasjon.resourcesData.push({
-        //     navIdent: user.getIdent(),
-        //     givenName: user.getIdent(),
-        //     familyName: user.getIdent(),
-        //     fullName: user.getIdent(),
-        //     email: user.getIdent(),
-        //     resourceType: user.getIdent(),
-        //   })
-        // }
+      //Add document creator as member if user is not included in members list
+      if (mutatedEtterlevelsesDokumentasjon.resourcesData && !members.includes(user.getIdent())) {
+        mutatedEtterlevelsesDokumentasjon.resourcesData.push({
+          navIdent: user.getIdent(),
+          givenName: user.getIdent(),
+          familyName: user.getIdent(),
+          fullName: user.getIdent(),
+          email: user.getIdent(),
+          resourceType: user.getIdent(),
+        })
+      }
 
-        // await createEtterlevelseDokumentasjon(mutatedEtterlevelsesDokumentasjon).then((response) => {
+      await createEtterlevelseDokumentasjon(mutatedEtterlevelsesDokumentasjon).then((response) => {
         if (response.id) {
           navigate('/dokumentasjon/' + response.id)
         }
@@ -612,24 +609,26 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
   )
 }
 
-// const getMembersFromEtterlevelseDokumentasjon = (
-//   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-// ) => {
-//   const members = []
-//   if (etterlevelseDokumentasjon.teamsData && etterlevelseDokumentasjon.teamsData.length > 0) {
-//     etterlevelseDokumentasjon.teamsData.forEach((team) => {
-//       const teamMembers = team.members.map((members) => members.navIdent || '')
-//       members.push(...teamMembers)
-//     })
-//   }
-//   if (
-//     etterlevelseDokumentasjon.resourcesData &&
-//     etterlevelseDokumentasjon.resourcesData.length > 0
-//   ) {
-//     members.push(...etterlevelseDokumentasjon.resourcesData.map((resource) => resource.navIdent))
-//   }
+const getMembersFromEtterlevelseDokumentasjon = (
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+) => {
+  const members = []
+  if (etterlevelseDokumentasjon.teamsData && etterlevelseDokumentasjon.teamsData.length > 0) {
+    etterlevelseDokumentasjon.teamsData.forEach((team) => {
+      if (team.members) {
+        const teamMembers: string[] = team.members.map((members) => members.navIdent || '')
+        members.push(...teamMembers)
+      }
+    })
+  }
+  if (
+    etterlevelseDokumentasjon.resourcesData &&
+    etterlevelseDokumentasjon.resourcesData.length > 0
+  ) {
+    members.push(...etterlevelseDokumentasjon.resourcesData.map((resource) => resource.navIdent))
+  }
 
-//   return members
-// }
+  return members
+}
 
 export default EtterlevelseDokumentasjonForm
