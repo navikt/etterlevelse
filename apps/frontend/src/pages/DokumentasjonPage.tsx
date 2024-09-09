@@ -177,7 +177,7 @@ export const DokumentasjonPage = () => {
                         Endre dokumentegenskaper
                       </Button>
 
-                      {etterlevelseDokumentasjon.forGjenbruk && user.isAdmin() && (
+                      {etterlevelseDokumentasjon.forGjenbruk && (
                         <TillatGjenbrukModal
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                           setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
@@ -191,6 +191,10 @@ export const DokumentasjonPage = () => {
           </div>
         </div>
       </div>
+
+      <Heading level="2" size="medium" spacing className="mt-3">
+        Temaoversikt
+      </Heading>
 
       {etterlevelseDokumentasjon.forGjenbruk &&
         !etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
@@ -218,10 +222,6 @@ export const DokumentasjonPage = () => {
             </Alert>
           </div>
         )}
-
-      <Heading level="2" size="medium" spacing className="mt-3">
-        Temaoversikt
-      </Heading>
 
       {morDokumentRelasjon && (
         <ReadMore header="Slik bruker du disse vurderingene" className="my-5">
