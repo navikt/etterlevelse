@@ -225,33 +225,6 @@ export const DokumentasjonPage = () => {
         Temaoversikt
       </Heading>
 
-      {etterlevelseDokumentasjon.forGjenbruk &&
-        !etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
-          <div className="max-w-5xl">
-            <Alert variant="success" className="max-w-5xl">
-              <Heading spacing size="small" level="3">
-                Nå har du låst opp mulighet for å skrive veiledning til de som skal gjenbruke dette
-                dokumentet.
-              </Heading>
-              <Heading spacing size="small" level="3">
-                Slik gjør du nå:
-              </Heading>
-              <List>
-                <List.Item>
-                  Gjennomgå alle krav og legg inn veiledning eller endre på status der dette gir
-                  mening i din kontekst.
-                </List.Item>
-                <List.Item>
-                  Bruk Prioritert kravliste til å samle alle krav som skal framheves ved gjenbruk.
-                </List.Item>
-                <List.Item>
-                  Når du er ferdig med å forberede til gjenbruk, velger du “Slå på gjenbruk”, over.
-                </List.Item>
-              </List>
-            </Alert>
-          </div>
-        )}
-
       {morDokumentRelasjon && (
         <ReadMore header="Slik bruker du disse vurderingene" className="my-5">
           Dokumenteieren har allerede besvart flere av suksesskriteriene for deg. Disse
