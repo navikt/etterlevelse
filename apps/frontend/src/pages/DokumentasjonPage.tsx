@@ -150,7 +150,7 @@ export const DokumentasjonPage = () => {
               {etterlevelseDokumentasjon.forGjenbruk &&
                 !etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
                   <div className="max-w-5xl mb-5">
-                    <Alert variant="success">
+                    <Alert contentMaxWidth={false} variant="success">
                       <Heading spacing size="small" level="3">
                         Nå har du låst opp mulighet for å skrive veiledning til de som skal
                         gjenbruke dette dokumentet.
