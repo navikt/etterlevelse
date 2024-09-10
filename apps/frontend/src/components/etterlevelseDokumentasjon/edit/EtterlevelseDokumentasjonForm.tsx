@@ -157,8 +157,8 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           </Heading>
 
           {dokumentRelasjon && (
-            <Alert variant="info" className="mb-5">
-              <Label>Forutsetninger for gjenbruk av dette dokumentet</Label>
+            <Alert contentMaxWidth={false} variant="info" className="mb-5">
+              <Label>Dette må du vite om gjenbruk</Label>
 
               <div className="mb-5">
                 <Markdown source={dokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse} />

@@ -57,7 +57,7 @@ export const GjenbrukEtterlevelseDokumentasjonPage = () => {
           {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
             <div>
               <Alert variant="info" className="mb-5">
-                <Label>Forutsetninger for gjenbruk av dette dokumentet</Label>
+                <Label>Dette må du vite om gjenbruk</Label>
 
                 <div className="mb-5">
                   <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />

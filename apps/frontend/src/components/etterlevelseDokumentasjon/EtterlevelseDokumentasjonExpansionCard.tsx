@@ -135,7 +135,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
         </div>
         {!relasjonLoading && etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
           <div className="mt-5">
-            <ReadMore header="Les hvordan du kan gjenbruke dette dokument">
+            <ReadMore header="Dette må du vite om gjenbruk">
               {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
                 <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />
               )}
