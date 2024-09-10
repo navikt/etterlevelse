@@ -21,7 +21,7 @@ import {
   ISuksesskriterie,
   ISuksesskriterieBegrunnelse,
 } from '../../../constants'
-import { ampli } from '../../../services/Amplitude'
+// import { ampli } from '../../../services/Amplitude'
 import { user } from '../../../services/User'
 import { useDebouncedState } from '../../../util/hooks/customHooks'
 import { FieldWrapper } from '../../common/Inputs'
@@ -280,14 +280,15 @@ const KriterieBegrunnelse = ({
         </Heading>
 
         <ReadMore
-          onOpenChange={(isOpen) => {
-            if (isOpen) {
-              ampli.logEvent('knapp klikket', {
-                tekst: `Utfyllende om kriteriet ${index + 1} av ${totalSuksesskriterie}`,
-                pagePath: location.pathname,
-              })
-            }
-          }}
+          defaultOpen
+          // onOpenChange={(isOpen) => {
+          //   if (isOpen) {
+          //     ampli.logEvent('knapp klikket', {
+          //       tekst: `Utfyllende om kriteriet ${index + 1} av ${totalSuksesskriterie}`,
+          //       pagePath: location.pathname,
+          //     })
+          //   }
+          // }}
           header="Utfyllende om kriteriet"
         >
           <Markdown source={suksesskriterie.beskrivelse} />

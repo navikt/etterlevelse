@@ -137,7 +137,7 @@ export const ViewEtterlevelse = ({
                   </div>
                   <Label>{suksesskriterium.navn}</Label>
 
-                  <ReadMore header="Utfyllende om kriteriet">
+                  <ReadMore defaultOpen header="Utfyllende om kriteriet">
                     <Markdown source={suksesskriterium.beskrivelse} />
                   </ReadMore>
 

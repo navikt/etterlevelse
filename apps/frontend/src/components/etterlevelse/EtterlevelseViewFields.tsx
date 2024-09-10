@@ -125,7 +125,7 @@ const KriterieBegrunnelse = (props: IKriterieBegrunnelseProps) => {
           {suksesskriterie.navn}
         </Heading>
 
-        <ReadMore header="Utfyllende om kriteriet">
+        <ReadMore defaultOpen header="Utfyllende om kriteriet">
           <Markdown source={suksesskriterie.beskrivelse} />
         </ReadMore>
       </div>
