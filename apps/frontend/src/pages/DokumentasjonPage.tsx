@@ -146,13 +146,42 @@ export const DokumentasjonPage = () => {
           )}
 
           <div className="flex w-full">
-            <div className="max-w-5xl">
+            <div className="max-w-5xl flex-1">
+              {etterlevelseDokumentasjon.forGjenbruk &&
+                !etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
+                  <div className="max-w-5xl mb-5">
+                    <Alert variant="success">
+                      <Heading spacing size="small" level="3">
+                        Nå har du låst opp mulighet for å skrive veiledning til de som skal
+                        gjenbruke dette dokumentet.
+                      </Heading>
+                      <Heading spacing size="small" level="3">
+                        Slik gjør du nå:
+                      </Heading>
+                      <List>
+                        <List.Item>
+                          Gjennomgå alle krav og legg inn veiledning eller endre på status der dette
+                          gir mening i din kontekst.
+                        </List.Item>
+                        <List.Item>
+                          Bruk Prioritert kravliste til å samle alle krav som skal framheves ved
+                          gjenbruk.
+                        </List.Item>
+                        <List.Item>
+                          Når du er ferdig med å forberede til gjenbruk, velger du “Slå på
+                          gjenbruk”, over.
+                        </List.Item>
+                      </List>
+                    </Alert>
+                  </div>
+                )}
               {etterlevelseDokumentasjon.beskrivelse && (
                 <div className="mb-5">
                   <Label>Beskrivelse</Label>
                   <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
                 </div>
               )}
+
               <div className="flex mb-5">
                 <EtterlevelseDokumentasjonExpansionCard
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -161,7 +190,7 @@ export const DokumentasjonPage = () => {
               </div>
             </div>
 
-            <div className="flex flex-1 justify-end">
+            <div className="flex justify-end">
               {etterlevelseDokumentasjon && (
                 <div className="gap-4 ml-5">
                   {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
