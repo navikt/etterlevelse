@@ -1,6 +1,7 @@
 import * as yup from 'yup'
 
 const titleCheck = yup.string().required('Etterlevelsesdokumentasjon trenger en tittel')
+const beskrivelseCheck = yup.string().required('Etterlevelsesdokumentasjon trenger en beskrivelse')
 const gjenbrukBeskrivelseCheck = yup.string().required('Påkrevd')
 
 const varslingsadresserCheck = yup.array().test({
@@ -50,6 +51,7 @@ const virkemiddelIdCheck = yup.string().test({
 export const etterlevelseDokumentasjonSchema = () =>
   yup.object({
     title: titleCheck,
+    beskrivelse: beskrivelseCheck,
     varslingsadresser: varslingsadresserCheck,
     virkemiddelId: virkemiddelIdCheck,
     teamsData: teamsDataCheck,
@@ -59,6 +61,7 @@ export const etterlevelseDokumentasjonSchema = () =>
 export const gjenbrukDokumentasjonSchema = () =>
   yup.object({
     title: titleCheck,
+    beskrivelse: beskrivelseCheck,
     varslingsadresser: varslingsadresserCheck,
     virkemiddelId: virkemiddelIdCheck,
     teamsData: teamsDataCheck,
