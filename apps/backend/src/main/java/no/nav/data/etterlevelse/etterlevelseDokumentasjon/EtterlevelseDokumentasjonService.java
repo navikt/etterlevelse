@@ -2,6 +2,7 @@ package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.ForbiddenException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.security.SecurityUtils;
@@ -150,6 +151,12 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon deleteEtterlevelseDokumentasjonAndAllChildren(UUID id) {
+
+        if (!documentRelationService.findByFromDocument(id.toString()).isEmpty() || !documentRelationService.findByToDocument(id.toString()).isEmpty()) {
+            log.info("Requested to delete etterlevelses dokumentasjon id={} with relation.", id);
+            throw new ForbiddenException("Kan ikke slette et dokument som har relasjoner.");
+        }
+
         log.info("deleting etterlevelse metadata connected to etterlevelse dokumentasjon with id={}", id);
         etterlevelseMetadataService.deleteByEtterlevelseDokumentasjonId(id.toString());
 
