@@ -112,20 +112,20 @@ const UserService = () => {
   }
 
   return {
-    isLoggedIn,
-    getIdent,
-    getEmail,
-    getName,
-    getFirstNameThenLastName,
-    getAvailableGroups,
-    toggleGroup,
-    getGroups,
-    canWrite,
-    isAdmin,
-    isKraveier,
-    getError,
-    wait,
-    isLoaded,
+    isLoggedIn: isLoggedIn(),
+    getIdent: getIdent(),
+    getEmail: getEmail(),
+    getName: getName(),
+    getFirstNameThenLastName: getFirstNameThenLastName(),
+    getAvailableGroups: getAvailableGroups(),
+    toggleGroup: toggleGroup,
+    getGroups: getGroups(),
+    canWrite: canWrite(),
+    isAdmin: isAdmin(),
+    isKraveier: isKraveier(),
+    getError: getError(),
+    wait: wait(),
+    isLoaded: isLoaded(),
   }
 }
 
