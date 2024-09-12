@@ -11,7 +11,7 @@ export enum EGroup {
 }
 
 interface IProps {
-  loaded: false
+  loaded: boolean
   userInfo: IUserInfo
   currentGroups: [EGroup.READ]
   error?: string
@@ -30,6 +30,15 @@ const UserServiceNew = ({
   currentGroups
   error
   promise
+
+  const fetchData = async (): Promise<any> => {
+    return getUserInfo()
+      .then(this.handleGetResponse)
+      .catch((error) => {
+        error = error.message
+        loaded = true
+      })
+  }
 }
 
 class UserService {
