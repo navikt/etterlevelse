@@ -10,6 +10,28 @@ export enum EGroup {
   ADMIN = 'ADMIN',
 }
 
+interface IProps {
+  loaded: false
+  userInfo: IUserInfo
+  currentGroups: [EGroup.READ]
+  error?: string
+  promise: Promise<any>
+}
+
+const UserServiceNew = ({
+  loaded,
+  userInfo = { loggedIn: false, groups: [] },
+  currentGroups = [EGroup.READ],
+  error,
+  promise,
+}: IProps) => {
+  loaded
+  userInfo
+  currentGroups
+  error
+  promise
+}
+
 class UserService {
   private loaded = false
   private userInfo: IUserInfo = { loggedIn: false, groups: [] }
