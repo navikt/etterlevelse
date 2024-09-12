@@ -419,8 +419,9 @@ export const EtterlevelseKravView = (props: IProps) => {
                           <Checkbox
                             value="check"
                             description={
-                              (etterlevelseDokumentasjon?.hasCurrentUserAccess &&
-                                etterlevelseDokumentasjon?.forGjenbruk &&
+                              (((etterlevelseDokumentasjon?.hasCurrentUserAccess &&
+                                etterlevelseDokumentasjon?.forGjenbruk) ||
+                                (etterlevelseDokumentasjon?.forGjenbruk && user.isAdmin())) &&
                                 'De som gjenbruker etterlevelsesdokumentet ditt vil få fremhevet kravet når de foretar sin egen vurdering') ||
                               ''
                             }
