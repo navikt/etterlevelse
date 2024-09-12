@@ -3,6 +3,7 @@ import * as yup from 'yup'
 import { getAllCodelists } from '../api/CodelistApi'
 import { TReplace } from '../constants'
 
+/* eslint-disable */
 export enum EListName {
   AVDELING = 'AVDELING',
   UNDERAVDELING = 'UNDERAVDELING',
