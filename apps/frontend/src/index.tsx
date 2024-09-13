@@ -7,5 +7,7 @@ import './main.css'
 const container = document.getElementById('root')
 if (container) {
   const root = createRoot(container)
+  console.log('container')
+
   root.render(<Main />)
 }

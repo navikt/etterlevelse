@@ -10,128 +10,171 @@ export enum EGroup {
   ADMIN = 'ADMIN',
 }
 
-// const UserServiceNew = () => {
-//   let loaded: boolean
-//   let userInfo: IUserInfo = { loggedIn: false, groups: [] }
-//   let currentGroups: EGroup[] = [EGroup.READ]
-//   let error: string
+const UserService = async () => {
+  let loaded: boolean
+  let userInfo: IUserInfo = { loggedIn: false, groups: [] }
+  let currentGroups: EGroup[] = [EGroup.READ]
+  let error: string
 
-//   const fetchData = async (): Promise<any> => {
-//     return getUserInfo()
-//       .then(handleGetResponse)
-//       .catch((error) => {
-//         error = error.message
-//         loaded = true
-//       })
-//   }
+  console.log('userService')
 
-//   const promise: Promise<any> = fetchData()
+  const fetchData = async (): Promise<any> => {
+    console.log('getUserInfo', getUserInfo())
 
-//   const handleGetResponse = (response: AxiosResponse<IUserInfo>) => {
-//     if (typeof response.data === 'object' && response.data !== null) {
-//       const groups =
-//         response.data.groups.indexOf(EGroup.ADMIN) >= 0
-//           ? (Object.keys(EGroup) as EGroup[])
-//           : response.data.groups
-//       userInfo = { ...response.data, groups }
-//       currentGroups = userInfo.groups
-//     } else {
-//       error = response.data
-//     }
-//     loaded = true
-//   }
+    return await getUserInfo()
+      .then(handleGetResponse)
+      .catch((error) => {
+        error = error.message
+        loaded = true
+      })
+  }
 
-//   const isLoggedIn = (): boolean => {
-//     return userInfo.loggedIn
-//   }
+  console.log('fetchData', fetchData())
 
-//   const getIdent = (): string => {
-//     return userInfo.ident ?? ''
-//   }
+  // const [data, setData] = useState<any>()
 
-//   const getEmail = (): string => {
-//     return userInfo.email ?? ''
-//   }
+  // console.log('setData', setData)
 
-//   const getName = (): string => {
-//     return userInfo.name ?? ''
-//   }
+  // useEffect(() => {
+  //   console.log('useEffect')
 
-//   const getFirstNameThenLastName = (): string => {
-//     const splittedName = userInfo.name?.split(', ') ?? ''
+  //   const fetchData = async (): Promise<any> => {
+  //     console.log('getUserInfo', getUserInfo)
 
-//     return splittedName[1] + ' ' + splittedName[0]
-//   }
+  //     return getUserInfo()
+  //       .then(handleGetResponse)
+  //       .catch((error) => {
+  //         error = error.message
+  //         loaded = true
+  //       })
+  //   }
 
-//   const getAvailableGroups = (): { name: string; group: EGroup }[] => {
-//     return userInfo.groups
-//       .filter((group) => group !== EGroup.READ)
-//       .map((group) => ({ name: nameFor(group), group }))
-//   }
+  //   setData(fetchData)
+  // }, [data])
 
-//   const toggleGroup = (group: EGroup, active: boolean) => {
-//     if (active && !hasGroup(group) && userInfo.groups.indexOf(group) >= 0) {
-//       currentGroups = [...currentGroups, group]
-//       updateUser()
-//     } else {
-//       currentGroups = currentGroups.filter((currentGroup) => currentGroup !== group)
-//       updateUser()
-//     }
-//   }
+  let promise = await fetchData()
 
-//   const getGroups = (): string[] => {
-//     return currentGroups
-//   }
+  const handleGetResponse = (response: AxiosResponse<IUserInfo>) => {
+    console.log('handleGetResponse')
 
-//   const hasGroup = (group: string): boolean => {
-//     return getGroups().indexOf(group) >= 0
-//   }
+    if (typeof response.data === 'object' && response.data !== null) {
+      const groups =
+        response.data.groups.indexOf(EGroup.ADMIN) >= 0
+          ? (Object.keys(EGroup) as EGroup[])
+          : response.data.groups
+      userInfo = { ...response.data, groups }
+      currentGroups = userInfo.groups
+    } else {
+      error = response.data
+    }
+    loaded = true
+  }
+  console.log('handleGetResponse')
 
-//   const canWrite = (): boolean => {
-//     return hasGroup(EGroup.WRITE)
-//   }
+  const isLoggedIn = (): boolean => {
+    return userInfo.loggedIn
+  }
+  console.log('isLoggedIn')
 
-//   const isAdmin = (): boolean => {
-//     return hasGroup(EGroup.ADMIN)
-//   }
+  const getIdent = (): string => {
+    return userInfo.ident ?? ''
+  }
+  console.log('getIdent')
 
-//   const isKraveier = (): boolean => {
-//     return hasGroup(EGroup.KRAVEIER)
-//   }
+  const getEmail = (): string => {
+    return userInfo.email ?? ''
+  }
+  console.log('getEmail')
 
-//   const getError = (): string => {
-//     return error || ''
-//   }
+  const getName = (): string => {
+    return userInfo.name ?? ''
+  }
+  console.log('getName')
 
-//   const wait = async (): Promise<any> => {
-//     await promise
-//   }
+  const getFirstNameThenLastName = (): string => {
+    const splittedName = userInfo.name?.split(', ') ?? ''
 
-//   const isLoaded = (): boolean => {
-//     return loaded
-//   }
+    return splittedName[1] + ' ' + splittedName[0]
+  }
+  console.log('getFirstNameThenLastName')
 
-//   if (isLoggedIn) {
-//     return {
-//       isLoggedIn: isLoggedIn(),
-//       getIdent: getIdent(),
-//       getEmail: getEmail(),
-//       getName: getName(),
-//       getFirstNameThenLastName: getFirstNameThenLastName(),
-//       getAvailableGroups: getAvailableGroups(),
-//       toggleGroup: toggleGroup,
-//       getGroups: getGroups(),
-//       canWrite: canWrite(),
-//       isAdmin: isAdmin(),
-//       isKraveier: isKraveier(),
-//       getError: getError(),
-//       wait: wait(),
-//       isLoaded: isLoaded(),
-//     }
-//   }
-// }
+  const getAvailableGroups = (): { name: string; group: EGroup }[] => {
+    return userInfo.groups
+      .filter((group) => group !== EGroup.READ)
+      .map((group) => ({ name: nameFor(group), group }))
+  }
+  console.log('getAvailableGroups')
 
-class UserService {
+  const toggleGroup = (group: EGroup, active: boolean) => {
+    if (active && !hasGroup(group) && userInfo.groups.indexOf(group) >= 0) {
+      currentGroups = [...currentGroups, group]
+      updateUser()
+    } else {
+      currentGroups = currentGroups.filter((currentGroup) => currentGroup !== group)
+      updateUser()
+    }
+  }
+  console.log('toggleGroup')
+
+  const getGroups = (): string[] => {
+    return currentGroups
+  }
+  console.log('getGroups')
+
+  const hasGroup = (group: string): boolean => {
+    return getGroups().indexOf(group) >= 0
+  }
+  console.log('hasGroup')
+
+  const canWrite = (): boolean => {
+    return hasGroup(EGroup.WRITE)
+  }
+  console.log('canWrite')
+
+  const isAdmin = (): boolean => {
+    return hasGroup(EGroup.ADMIN)
+  }
+  console.log('isAdmin')
+
+  const isKraveier = (): boolean => {
+    return hasGroup(EGroup.KRAVEIER)
+  }
+  console.log('isKraveier')
+
+  const getError = (): string => {
+    return error || ''
+  }
+  console.log('getError')
+
+  const wait = async (): Promise<any> => {
+    await promise
+  }
+
+  const isLoaded = (): boolean => {
+    return loaded
+  }
+
+  console.log('isLoaded')
+
+  return {
+    isLoggedIn,
+    getIdent,
+    getEmail,
+    getName,
+    getFirstNameThenLastName,
+    getAvailableGroups,
+    toggleGroup,
+    getGroups,
+    canWrite,
+    isAdmin,
+    isKraveier,
+    getError,
+    wait,
+    isLoaded,
+  }
+}
+
+class UserServic {
   private loaded = false
   private userInfo: IUserInfo = { loggedIn: false, groups: [] }
   private currentGroups = [EGroup.READ]
@@ -139,10 +182,15 @@ class UserService {
   private readonly promise: Promise<any>
 
   constructor() {
+    console.log('constructor')
+
     this.promise = this.fetchData()
+    console.log('this.promise', this.promise)
+    console.log('this.fetchData()', this.fetchData())
   }
 
   private fetchData = async () => {
+    console.log('fetchData')
     return getUserInfo()
       .then(this.handleGetResponse)
       .catch((err) => {
@@ -152,6 +200,8 @@ class UserService {
   }
 
   handleGetResponse = (response: AxiosResponse<IUserInfo>) => {
+    console.log('handleGetResponse')
+
     if (typeof response.data === 'object' && response.data !== null) {
       const groups =
         response.data.groups.indexOf(EGroup.ADMIN) >= 0
@@ -166,34 +216,44 @@ class UserService {
   }
 
   isLoggedIn(): boolean {
+    console.log('isLoggedIn')
     return this.userInfo.loggedIn
   }
 
   public getIdent(): string {
+    console.log('getEmail')
     return this.userInfo.ident ?? ''
   }
 
   public getEmail(): string {
+    console.log('getEmail')
     return this.userInfo.email ?? ''
   }
 
   public getName(): string {
+    console.log('getName')
     return this.userInfo.name ?? ''
   }
 
   public getFirstNameThenLastName(): string {
+    console.log('getFirstNameThenLastName')
+
     const splittedName = this.userInfo.name?.split(', ') ?? ''
 
     return splittedName[1] + ' ' + splittedName[0]
   }
 
   public getAvailableGroups(): { name: string; group: EGroup }[] {
+    console.log('getAvailableGroups')
+
     return this.userInfo.groups
       .filter((g) => g !== EGroup.READ)
       .map((group) => ({ name: nameFor(group), group }))
   }
 
   public toggleGroup(group: EGroup, active: boolean) {
+    console.log('toggleGroup')
+
     if (active && !this.hasGroup(group) && this.userInfo.groups.indexOf(group) >= 0) {
       this.currentGroups = [...this.currentGroups, group]
       updateUser()
@@ -204,39 +264,66 @@ class UserService {
   }
 
   public getGroups(): string[] {
+    console.log('getGroups')
     return this.currentGroups
   }
 
   public hasGroup(group: string): boolean {
+    console.log('hasGroup')
     return this.getGroups().indexOf(group) >= 0
   }
 
   public canWrite(): boolean {
+    console.log('canWrite')
     return this.hasGroup(EGroup.WRITE)
   }
 
   public isAdmin(): boolean {
+    console.log('isAdmin')
     return this.hasGroup(EGroup.ADMIN)
   }
 
   public isKraveier(): boolean {
+    console.log('isKraveier')
     return this.hasGroup(EGroup.KRAVEIER)
   }
 
   public getError(): string {
+    console.log('getError')
     return this.error || ''
   }
 
   async wait() {
+    console.log('wait')
     await this.promise
   }
 
   isLoaded(): boolean {
+    console.log('isLoaded')
     return this.loaded
   }
 }
 
-export const user = new UserService()
+// export const user = new UserService()
+
+export const user = UserService()
+
+// export const user = {
+//   isLoggedIn,
+//   getIdent,
+//   getEmail,
+//   getName,
+//   getFirstNameThenLastName,
+//   getAvailableGroups,
+//   toggleGroup,
+//   getGroups,
+//   canWrite,
+//   isAdmin,
+//   isKraveier,
+//   getError,
+//   wait,
+//   isLoaded,
+// }
 
 const nameFor = (group: EGroup) => {
   switch (group) {

@@ -50,6 +50,8 @@ class CodelistService {
   }
 
   async wait() {
+    console.log('codelist wait')
+
     await this.promise
   }
 
