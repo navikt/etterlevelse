@@ -26,10 +26,14 @@ class CodelistService {
   promise: Promise<any>
 
   constructor() {
+    console.log('CodelistService')
+
     this.promise = this.fetchData()
   }
 
   private fetchData = async (refresh?: boolean) => {
+    console.log('CodelistService fetchData')
+
     const codeListPromise = getAllCodelists(refresh)
       .then(this.handleGetCodelistResponse)
       .catch((err) => (this.error = err.message))

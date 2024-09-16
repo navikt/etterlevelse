@@ -12,7 +12,7 @@ import { useNetworkStatus } from './util/network'
 // ampli.logEvent('sidevisning', { sidetittel: 'Etterlevelse' })
 
 const Main = () => {
-  console.log('main')
+  console.log('Main')
 
   useAwaitUser()
   useAwait(codelist.wait())

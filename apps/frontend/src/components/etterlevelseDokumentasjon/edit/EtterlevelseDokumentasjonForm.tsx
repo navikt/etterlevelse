@@ -115,14 +115,14 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
       const members = getMembersFromEtterlevelseDokumentasjon(etterlevelseDokumentasjon)
 
       //Add document creator as member if user is not included in members list
-      if (mutatedEtterlevelsesDokumentasjon.resourcesData && !members.includes(user.getIdent())) {
+      if (mutatedEtterlevelsesDokumentasjon.resourcesData && !members.includes(user.getIdent)) {
         mutatedEtterlevelsesDokumentasjon.resourcesData.push({
-          navIdent: user.getIdent(),
-          givenName: user.getIdent(),
-          familyName: user.getIdent(),
-          fullName: user.getIdent(),
-          email: user.getIdent(),
-          resourceType: user.getIdent(),
+          navIdent: user.getIdent,
+          givenName: user.getIdent,
+          familyName: user.getIdent,
+          fullName: user.getIdent,
+          email: user.getIdent,
+          resourceType: user.getIdent,
         })
       }
 

@@ -61,6 +61,8 @@ const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) =>
 }
 
 export const KravPage = () => {
+  console.log('KravPage')
+
   const params = useParams<TKravIdParams>()
   const [krav, setKrav] = useState<TKravQL | undefined>()
   const { loading: kravLoading, data: kravQuery } = useQuery<

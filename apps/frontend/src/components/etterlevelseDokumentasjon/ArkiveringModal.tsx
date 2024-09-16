@@ -131,7 +131,7 @@ export const ArkiveringModal = ({
                 onClick={() => {
                   const newEtterlevelseArkivering = {
                     etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
-                    arkivertAv: user.getIdent() + ' - ' + user.getName(),
+                    arkivertAv: user.getIdent + ' - ' + user.getName,
                     status:
                       etterlevelseArkiv &&
                       etterlevelseArkiv.status === EEtterlevelseArkivStatus.TIL_ARKIVERING
@@ -144,7 +144,7 @@ export const ArkiveringModal = ({
                     if (etterlevelseArkiv && etterlevelseArkiv.id) {
                       await updateEtterlevelseArkiv({
                         ...etterlevelseArkiv,
-                        arkivertAv: user.getIdent() + ' - ' + user.getName(),
+                        arkivertAv: user.getIdent + ' - ' + user.getName,
                         status:
                           etterlevelseArkiv &&
                           etterlevelseArkiv.status === EEtterlevelseArkivStatus.TIL_ARKIVERING

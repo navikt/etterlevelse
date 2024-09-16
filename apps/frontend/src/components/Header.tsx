@@ -27,6 +27,8 @@ import SkipToContent from './common/SkipToContent/SkipToContent'
 import MainSearch from './search/MainSearch'
 
 export const loginUrl = (location: Location, path?: string) => {
+  console.log('loginUrl')
+
   const frontpage = window.location.href.substr(
     0,
     window.location.href.length - location.pathname.length
@@ -85,16 +87,22 @@ const LoggedInHeader = () => {
         Endre aktive roller
       </Button>
       <div className={`mt-2 ${viewRoller ? 'block' : 'hidden'}`}>
-        {user.getAvailableGroups().map((g) => (
-          <Switch
-            size="small"
-            key={g.group}
-            checked={user.hasGroup(g.group)}
-            onChange={(e) => user.toggleGroup(g.group, (e.target as HTMLInputElement).checked)}
-          >
-            {g.name}
-          </Switch>
-        ))}
+        {user.getAvailableGroups().map((availableGroup) => {
+          console.log('Header')
+
+          return (
+            <Switch
+              size="small"
+              key={availableGroup.group}
+              checked={user.hasGroup(availableGroup.group)}
+              onChange={(event) =>
+                user.toggleGroup(availableGroup.group, (event.target as HTMLInputElement).checked)
+              }
+            >
+              {availableGroup.name}
+            </Switch>
+          )
+        })}
       </div>
     </div>
   )
@@ -266,6 +274,8 @@ const Menu = (props: {
 let sourceReported = false
 
 const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
+  console.log('Header')
+
   const [systemVarsel, setSystemVarsel] = useState<IMelding>()
   const location = useLocation()
   const source = useQueryParam('source')

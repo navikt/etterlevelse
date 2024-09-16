@@ -74,6 +74,8 @@ const UsageTable = (props: { usage: ICodeUsage }) => {
 }
 
 export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
+  console.log('UsageTable')
+
   const [showReplace, setShowReplace] = useState(false)
   const [newValue, setNewValue] = useState<string>()
   const ref = React.createRef<HTMLDivElement>()
