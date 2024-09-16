@@ -183,6 +183,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         List<String> priorityList = etterlevelseDokumentasjon.getPrioritertKravNummer();
 
         if (prioritised) {
+            // Update forbbiden exception after team or user has been added to all Etterlevelse Documentation.
             if (priorityList == null) {
                 log.info("PriorityList is Empty. Requested to save without user or team added to Etterlevelse document.");
                 throw new ForbiddenException("Har du lagt til team og eller person i dokument egenskaper? Dette er nødvendig for å lagre endringer.");
