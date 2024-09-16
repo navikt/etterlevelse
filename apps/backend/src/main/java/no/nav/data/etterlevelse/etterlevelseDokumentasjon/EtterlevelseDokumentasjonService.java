@@ -177,17 +177,17 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon updatePriorityList(String etterlevelseDokumentasjonId, int kravNummer, boolean prioritised) {
-
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = get(UUID.fromString(etterlevelseDokumentasjonId));
+
+        // Update exception after team or user has been added to all Documents.
+        if (etterlevelseDokumentasjon.getPrioritertKravNummer().isEmpty()) {
+            log.info("PriorityList is Empty. Requested to save without user or team added to Etterlevelse document.");
+            throw new ForbiddenException("Har du lagt til team og eller person i dokument egenskaper? Dette er nødvendig for å lagre endringer.");
+        }
 
         List<String> priorityList = etterlevelseDokumentasjon.getPrioritertKravNummer();
 
         if (prioritised) {
-            // Update forbbiden exception after team or user has been added to all Etterlevelse Documentation.
-            if (priorityList == null) {
-                log.info("PriorityList is Empty. Requested to save without user or team added to Etterlevelse document.");
-                throw new ForbiddenException("Har du lagt til team og eller person i dokument egenskaper? Dette er nødvendig for å lagre endringer.");
-            }
             if (!priorityList.contains(String.valueOf(kravNummer))) {
                 priorityList.add(String.valueOf(kravNummer));
             }
