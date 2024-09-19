@@ -20,5 +20,5 @@ instance.setUserId(null)
 export const ampli = instance
 
 export const userRoleEventProp = {
-  role: user.isAdmin ? 'ADMIN' : user.isKraveier ? 'KRAVEIER' : 'ETTERLEVER',
+  role: user.isAdmin() ? 'ADMIN' : user.isKraveier() ? 'KRAVEIER' : 'ETTERLEVER',
 }

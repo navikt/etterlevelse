@@ -193,7 +193,7 @@ export const DokumentasjonPage = () => {
             <div className="flex justify-end">
               {etterlevelseDokumentasjon && (
                 <div className="gap-4 ml-5">
-                  {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin) && (
+                  {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
                     <>
                       <Button
                         onClick={() => {
