@@ -116,7 +116,7 @@ const UserService = async (): Promise<IUserProps> => {
 
   const hasGroup = (group: string): boolean => {
     console.log('hasGroup', group)
-    return getGroups.indexOf(group) >= 0
+    return getGroups().indexOf(group) >= 0
   }
   console.log('after hasGroup')
 
@@ -173,156 +173,156 @@ const UserService = async (): Promise<IUserProps> => {
   }
 }
 
-class UserServic {
-  private loaded = false
-  private userInfo: IUserInfo = { loggedIn: false, groups: [] }
-  private currentGroups = [EGroup.READ]
-  private error?: string
-  private readonly promise: Promise<any>
+// class UserServic {
+//   private loaded = false
+//   private userInfo: IUserInfo = { loggedIn: false, groups: [] }
+//   private currentGroups = [EGroup.READ]
+//   private error?: string
+//   private readonly promise: Promise<any>
 
-  constructor() {
-    console.log('UserServic constructor')
+//   constructor() {
+//     console.log('UserServic constructor')
 
-    this.promise = this.fetchData()
-    console.log('UserServic this.promise', this.promise)
-    console.log('UserServic this.fetchData()', this.fetchData())
-  }
+//     this.promise = this.fetchData()
+//     console.log('UserServic this.promise', this.promise)
+//     console.log('UserServic this.fetchData()', this.fetchData())
+//   }
 
-  private fetchData = async (): Promise<void> => {
-    this.getIdent()
-    console.log('UserServic fetchData')
-    return getUserInfo()
-      .then(this.handleGetResponse)
-      .catch((err) => {
-        console.log('error')
+//   private fetchData = async (): Promise<void> => {
+//     this.getIdent()
+//     console.log('UserServic fetchData')
+//     return getUserInfo()
+//       .then(this.handleGetResponse)
+//       .catch((err) => {
+//         console.log('error')
 
-        this.error = err.message
-        this.loaded = true
-      })
-  }
+//         this.error = err.message
+//         this.loaded = true
+//       })
+//   }
 
-  handleGetResponse = (response: AxiosResponse<IUserInfo>) => {
-    console.log('handleGetResponse')
+//   handleGetResponse = (response: AxiosResponse<IUserInfo>) => {
+//     console.log('handleGetResponse')
 
-    if (typeof response.data === 'object' && response.data !== null) {
-      const groups =
-        response.data.groups.indexOf(EGroup.ADMIN) >= 0
-          ? (Object.keys(EGroup) as EGroup[])
-          : response.data.groups
-      this.userInfo = { ...response.data, groups }
-      this.currentGroups = this.userInfo.groups
-    } else {
-      this.error = response.data
-    }
-    this.loaded = true
-  }
+//     if (typeof response.data === 'object' && response.data !== null) {
+//       const groups =
+//         response.data.groups.indexOf(EGroup.ADMIN) >= 0
+//           ? (Object.keys(EGroup) as EGroup[])
+//           : response.data.groups
+//       this.userInfo = { ...response.data, groups }
+//       this.currentGroups = this.userInfo.groups
+//     } else {
+//       this.error = response.data
+//     }
+//     this.loaded = true
+//   }
 
-  isLoggedIn(): boolean {
-    console.log('isLoggedIn')
-    return this.userInfo.loggedIn
-  }
+//   isLoggedIn(): boolean {
+//     console.log('isLoggedIn')
+//     return this.userInfo.loggedIn
+//   }
 
-  public getIdent(): string {
-    console.log('getEmail')
-    return this.userInfo.ident ?? ''
-  }
+//   public getIdent(): string {
+//     console.log('getEmail')
+//     return this.userInfo.ident ?? ''
+//   }
 
-  public getEmail(): string {
-    console.log('getEmail')
-    return this.userInfo.email ?? ''
-  }
+//   public getEmail(): string {
+//     console.log('getEmail')
+//     return this.userInfo.email ?? ''
+//   }
 
-  public getName(): string {
-    console.log('getName')
-    return this.userInfo.name ?? ''
-  }
+//   public getName(): string {
+//     console.log('getName')
+//     return this.userInfo.name ?? ''
+//   }
 
-  public getFirstNameThenLastName(): string {
-    console.log('getFirstNameThenLastName')
+//   public getFirstNameThenLastName(): string {
+//     console.log('getFirstNameThenLastName')
 
-    const splittedName = this.userInfo.name?.split(', ') ?? ''
+//     const splittedName = this.userInfo.name?.split(', ') ?? ''
 
-    return splittedName[1] + ' ' + splittedName[0]
-  }
+//     return splittedName[1] + ' ' + splittedName[0]
+//   }
 
-  public getAvailableGroups(): { name: string; group: EGroup }[] {
-    console.log('getAvailableGroups')
+//   public getAvailableGroups(): { name: string; group: EGroup }[] {
+//     console.log('getAvailableGroups')
 
-    return this.userInfo.groups
-      .filter((g) => g !== EGroup.READ)
-      .map((group) => ({ name: nameFor(group), group }))
-  }
+//     return this.userInfo.groups
+//       .filter((g) => g !== EGroup.READ)
+//       .map((group) => ({ name: nameFor(group), group }))
+//   }
 
-  public toggleGroup(group: EGroup, active: boolean) {
-    console.log('toggleGroup')
+//   public toggleGroup(group: EGroup, active: boolean) {
+//     console.log('toggleGroup')
 
-    if (active && !this.hasGroup(group) && this.userInfo.groups.indexOf(group) >= 0) {
-      this.currentGroups = [...this.currentGroups, group]
-      updateUser()
-    } else {
-      this.currentGroups = this.currentGroups.filter((g) => g !== group)
-      updateUser()
-    }
-  }
+//     if (active && !this.hasGroup(group) && this.userInfo.groups.indexOf(group) >= 0) {
+//       this.currentGroups = [...this.currentGroups, group]
+//       updateUser()
+//     } else {
+//       this.currentGroups = this.currentGroups.filter((g) => g !== group)
+//       updateUser()
+//     }
+//   }
 
-  public getGroups(): string[] {
-    console.log('getGroups')
-    return this.currentGroups
-  }
+//   public getGroups(): string[] {
+//     console.log('getGroups')
+//     return this.currentGroups
+//   }
 
-  public hasGroup(group: string): boolean {
-    console.log('hasGroup')
-    return this.getGroups().indexOf(group) >= 0
-  }
+//   public hasGroup(group: string): boolean {
+//     console.log('hasGroup')
+//     return this.getGroups().indexOf(group) >= 0
+//   }
 
-  public canWrite(): boolean {
-    console.log('canWrite')
-    return this.hasGroup(EGroup.WRITE)
-  }
+//   public canWrite(): boolean {
+//     console.log('canWrite')
+//     return this.hasGroup(EGroup.WRITE)
+//   }
 
-  public isAdmin(): boolean {
-    console.log('isAdmin')
-    return this.hasGroup(EGroup.ADMIN)
-  }
+//   public isAdmin(): boolean {
+//     console.log('isAdmin')
+//     return this.hasGroup(EGroup.ADMIN)
+//   }
 
-  public isKraveier(): boolean {
-    console.log('isKraveier')
-    return this.hasGroup(EGroup.KRAVEIER)
-  }
+//   public isKraveier(): boolean {
+//     console.log('isKraveier')
+//     return this.hasGroup(EGroup.KRAVEIER)
+//   }
 
-  public getError(): string {
-    console.log('getError')
-    return this.error || ''
-  }
+//   public getError(): string {
+//     console.log('getError')
+//     return this.error || ''
+//   }
 
-  async wait() {
-    console.log('wait', this.promise)
-    await this.promise
-  }
+//   async wait() {
+//     console.log('wait', this.promise)
+//     await this.promise
+//   }
 
-  isLoaded(): boolean {
-    console.log('isLoaded')
-    return this.loaded
-  }
-}
+//   isLoaded(): boolean {
+//     console.log('isLoaded')
+//     return this.loaded
+//   }
+// }
 
-interface IUserProps2 {
-  // currentGroups: EGroup
-  error: any
-  fetchData: () => {}
-  handleGetResponse: () => {}
-  loaded: boolean
-  promise: Promise<any>
-  userInfo: {
-    email: string
-    groups: EGroup
-    ident: string
-    loggedIn: boolean
-    name: string
-  }
-}
+// interface IUserProps2 {
+//   // currentGroups: EGroup
+//   error: any
+//   fetchData: () => {}
+//   handleGetResponse: () => {}
+//   loaded: boolean
+//   promise: Promise<any>
+//   userInfo: {
+//     email: string
+//     groups: EGroup
+//     ident: string
+//     loggedIn: boolean
+//     name: string
+//   }
+// }
 
-export const user = new UserServic()
+// export const user = new UserServic()
 
 interface IUserProps {
   isLoggedIn: () => boolean
@@ -379,6 +379,14 @@ interface IUserProps {
 //     }
 //   }
 // }
+
+export const user: IUserProps = await UserService().then((response: IUserProps) => {
+  return response
+})
+
+export const fetchUserService = async (): Promise<void> => {
+  await UserService()
+}
 
 // export const user = async (): Promise<IUserProps> => {
 //   console.log('user')
