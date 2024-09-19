@@ -329,12 +329,12 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
       {systemVarsel && systemVarsel.meldingStatus === EMeldingStatus.ACTIVE && (
         <div className="w-full flex justify-center">
           <div
-            className={`flex 
-          flex-col 
-          items-center 
-          py-2 
-          border-b 
-          border-t 
+            className={`flex
+          flex-col
+          items-center
+          py-2
+          border-b
+          border-t
           w-full
           ${
             systemVarsel.alertType === 'INFO'
@@ -342,7 +342,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
               : 'bg-surface-warning-subtle border-surface-warning'
           }`}
             aria-label="Systemvarsel"
-            role="complementary"
+            role="status"
           >
             <div className="flex gap-2">
               <div className="flex items-baseline pt-1">
