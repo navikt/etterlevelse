@@ -34,8 +34,6 @@ export function useForceUpdate() {
 export let updateUser: () => void
 
 export function useAwaitUser() {
-  console.log('useAwaitUser')
-
   useAwait(user.wait())
   updateUser = useForceUpdate()
 }

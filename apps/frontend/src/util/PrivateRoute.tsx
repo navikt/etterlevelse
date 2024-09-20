@@ -10,8 +10,6 @@ interface IPrivateRouteProps {
 }
 
 export const PrivateRoute = ({ component, adminPage, kraveierPage }: IPrivateRouteProps) => {
-  console.log('PrivateRoute')
-
   const [isLoading, setIsLoading] = useState(true)
 
   React.useEffect(() => {

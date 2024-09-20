@@ -12,8 +12,6 @@ import CodeListTable from './CodeListStyledTable'
 import ModalCreateCodeList from './ModalCreateCodeList'
 
 const CodeListPage = () => {
-  console.log('CodeListPage')
-
   const params = useParams<{ listname?: string }>()
   const navigate = useNavigate()
   const [loading, setLoading] = React.useState(true)

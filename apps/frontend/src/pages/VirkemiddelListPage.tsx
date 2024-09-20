@@ -8,8 +8,6 @@ import { ampli } from '../services/Amplitude'
 import { user } from '../services/User'
 
 export const VirkemiddelListPage = () => {
-  console.log('VirkemiddelListPage')
-
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   ampli.logEvent('sidevisning', {
     side: 'Kraveier side',

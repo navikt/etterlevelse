@@ -22,9 +22,6 @@ import { sortEtterlevelseDokumentasjonerByUsersLastModifiedDate } from '../util/
 import { TVariables } from './MyEtterlevelseDokumentasjonerPage'
 
 export const MainPage = () => {
-  console.log('MainPage')
-  console.log('user', user)
-
   const [forsideVarsel, setForsideVarsle] = useState<IMelding>()
   const navigate = useNavigate()
 

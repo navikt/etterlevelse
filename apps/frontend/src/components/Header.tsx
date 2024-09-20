@@ -27,8 +27,6 @@ import SkipToContent from './common/SkipToContent/SkipToContent'
 import MainSearch from './search/MainSearch'
 
 export const loginUrl = (location: Location, path?: string) => {
-  console.log('loginUrl')
-
   const frontpage = window.location.href.substr(
     0,
     window.location.href.length - location.pathname.length
@@ -88,8 +86,6 @@ const LoggedInHeader = () => {
       </Button>
       <div className={`mt-2 ${viewRoller ? 'block' : 'hidden'}`}>
         {user.getAvailableGroups().map((availableGroup) => {
-          console.log('Header')
-
           return (
             <Switch
               size="small"
@@ -274,8 +270,6 @@ const Menu = (props: {
 let sourceReported = false
 
 const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
-  console.log('Header')
-
   const [systemVarsel, setSystemVarsel] = useState<IMelding>()
   const location = useLocation()
   const source = useQueryParam('source')

@@ -169,8 +169,6 @@ export const useTeam = () => {
 }
 
 export const useMyTeams = () => {
-  console.log('useMyTeams')
-
   const [productAreas] = useMyProductAreas()
   const [data, setData] = useState<ITeam[]>([])
   const [loading, setLoading] = useState(true)
@@ -216,8 +214,6 @@ export const useMyTeams = () => {
 }
 
 export const useMyProductAreas = () => {
-  console.log('useMyProductAreas')
-
   const [data, setData] = useState<IProductArea[]>([])
   const [loading, setLoading] = useState(true)
   const ident = user.getIdent()
