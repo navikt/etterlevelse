@@ -3,12 +3,13 @@ import 'react-app-polyfill/stable'
 import { Root, createRoot } from 'react-dom/client'
 import Main from './main'
 import './main.css'
-import { codelist } from './services/Codelist'
+import { codelist, fetchCodelistService } from './services/Codelist'
 import { fetchUserService } from './services/User'
 
 const container: HTMLElement | null = document.getElementById('root')
 if (container) {
   console.log('codelist', codelist)
+  fetchCodelistService()
   fetchUserService()
 
   /* Sannsynlig at vi må legge void call på codelist og user her for å starte API call */
