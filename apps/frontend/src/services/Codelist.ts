@@ -91,8 +91,6 @@ const CodelistService = async (): Promise<ICodelistProps> => {
   let promise: Promise<any>
 
   const fetchData = async (refresh?: boolean): Promise<any> => {
-    console.log('CodelistService fetchData')
-
     const codeListPromise: Promise<any> = getAllCodelists(refresh)
       .then(handleGetCodelistResponse)
       .catch((error: any) => (error = error.message))
@@ -113,8 +111,6 @@ const CodelistService = async (): Promise<ICodelistProps> => {
   }
 
   const wait = async (): Promise<void> => {
-    console.log('codelist wait')
-
     await promise
   }
 
