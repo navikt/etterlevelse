@@ -353,8 +353,13 @@ export const lovCodeRelevansToText = (lovCodeRelevans: string) => {
   }
 }
 
-export const lovCodeRelevansToOptions = () => {
-  return Object.keys(ELovCodeRelevans).map((key) => {
+interface ILovCodeRelevansToOptionsProps {
+  value: string
+  label: string | undefined
+}
+
+export const lovCodeRelevansToOptions = (): ILovCodeRelevansToOptionsProps[] => {
+  return Object.keys(ELovCodeRelevans).map((key: string) => {
     return { value: key, label: lovCodeRelevansToText(key) }
   })
 }
@@ -362,7 +367,7 @@ export const lovCodeRelevansToOptions = () => {
 export const filterLovCodeListForRelevans = (
   codeList: TLovCode[],
   relevantFor: ELovCodeRelevans
-) => {
+): TLovCode[] => {
   return codeList.filter((code: TLovCode) => {
     if (code.data) {
       //for old data
