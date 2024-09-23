@@ -14,6 +14,7 @@ import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,20 +49,20 @@ public class DocumentRelationController {
     public ResponseEntity<RestResponsePage<DocumentRelationResponse>> getAll(PageParameters pageParameters) {
         log.info("Get all Document relation");
         Page<DocumentRelation> page = service.getAll(pageParameters.createPage());
-        return ResponseEntity.ok(new RestResponsePage<>(page).convert(DocumentRelation::toResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(page).convert(DocumentRelationResponse::buildFrom));
     }
 
     @Operation(summary = "Get One Document relation")
     @ApiResponse(description = "ok")
     @GetMapping("/{id}")
-    public ResponseEntity<DocumentRelationResponse> getById(@PathVariable UUID id, @RequestParam(required = false) boolean widthDocumentData) {
+    public ResponseEntity<DocumentRelationResponse> getById(@PathVariable UUID id, @RequestParam(required = false) boolean withDocumentData) {
         log.info("Get Document relation id={}", id);
-        DocumentRelationResponse documentRelation = service.getById(id);
-        if(widthDocumentData){
+        DocumentRelationResponse documentRelation = DocumentRelationResponse.buildFrom(service.getById(id));
+        if (withDocumentData) {
             var fromEtterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelation.getFromDocument()));
             var toEtterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelation.getToDocument()));
-            documentRelation.setFromDocumentWithData(fromEtterlevelseDokumentasjon.toResponse());
-            documentRelation.setToDocumentWithData(toEtterlevelseDokumentasjon.toResponse());
+            documentRelation.setFromDocumentWithData(EtterlevelseDokumentasjonResponse.buildFrom(fromEtterlevelseDokumentasjon));
+            documentRelation.setToDocumentWithData(EtterlevelseDokumentasjonResponse.buildFrom(toEtterlevelseDokumentasjon));
         }
 
         return ResponseEntity.ok(documentRelation);
@@ -70,19 +71,23 @@ public class DocumentRelationController {
     @Operation(summary = "Get Document relation by from id")
     @ApiResponse(description = "ok")
     @GetMapping("/fromdocument/{id}")
-    public ResponseEntity<List<DocumentRelationResponse>> getByFromDocumentId(@PathVariable UUID id, @RequestParam(required = false) RelationType relationType, @RequestParam(required = false) boolean widthDocumentData) {
+    public ResponseEntity<List<DocumentRelationResponse>> getByFromDocumentId(
+            @PathVariable UUID id, 
+            @RequestParam(required = false) RelationType relationType, 
+            @RequestParam(required = false) boolean withDocumentData
+    ) {
         log.info("Get Document relation by from id={}", id);
         List<DocumentRelationResponse> documentRelationList;
-        if(relationType != null) {
-             documentRelationList = service.findByFromDocumentAndRelationType(id.toString(), relationType);
+        if (relationType != null) {
+             documentRelationList = service.findByFromDocumentAndRelationType(id.toString(), relationType).stream().map(DocumentRelationResponse::buildFrom).toList();
         } else {
-            documentRelationList = service.findByFromDocument(id.toString());
+            documentRelationList = service.findByFromDocument(id.toString()).stream().map(DocumentRelationResponse::buildFrom).toList();
         }
 
-        if(widthDocumentData) {
+        if (withDocumentData) {
             documentRelationList.forEach((documentRelationResponse) -> {
                 var toEtterlevelsesDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelationResponse.getToDocument()));
-                documentRelationResponse.setToDocumentWithData(toEtterlevelsesDokumentasjon.toResponse());
+                documentRelationResponse.setToDocumentWithData(EtterlevelseDokumentasjonResponse.buildFrom(toEtterlevelsesDokumentasjon));
             });
         }
 
@@ -92,25 +97,28 @@ public class DocumentRelationController {
     @Operation(summary = "Get Document relation by to id")
     @ApiResponse(description = "ok")
     @GetMapping("/todocument/{id}")
-    public ResponseEntity<List<DocumentRelationResponse>> getByToDocumentId(@PathVariable UUID id, @RequestParam(required = false) RelationType relationType, @RequestParam(required = false) boolean widthDocumentData) {
+    public ResponseEntity<List<DocumentRelationResponse>> getByToDocumentId(
+            @PathVariable UUID id, 
+            @RequestParam(required = false) RelationType relationType, 
+            @RequestParam(required = false) boolean withDocumentData
+    ) {
         log.info("Get Document relation by to id={}", id);
         List<DocumentRelationResponse> documentRelationList;
-        if(relationType != null) {
-            documentRelationList = service.findByToDocumentAndRelationType(id.toString(), relationType);
+        if (relationType != null) {
+            documentRelationList = service.findByToDocumentAndRelationType(id.toString(), relationType).stream().map(DocumentRelationResponse::buildFrom).toList();
         } else {
-            documentRelationList = service.findByToDocument(id.toString());
+            documentRelationList = service.findByToDocument(id.toString()).stream().map(DocumentRelationResponse::buildFrom).toList();
         }
 
-        if(widthDocumentData) {
+        if (withDocumentData) {
             documentRelationList.forEach((documentRelationResponse) -> {
                 var fromEtterlevelsesDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(documentRelationResponse.getFromDocument()));
-                documentRelationResponse.setFromDocumentWithData(fromEtterlevelsesDokumentasjon.toResponse());
+                documentRelationResponse.setFromDocumentWithData(EtterlevelseDokumentasjonResponse.buildFrom(fromEtterlevelsesDokumentasjon));
             });
         }
 
         return ResponseEntity.ok(documentRelationList);
     }
-
 
     @Operation(summary = "Create Document relation")
     @ApiResponse(responseCode = "201", description = "Document relation created")
@@ -120,12 +128,15 @@ public class DocumentRelationController {
 
         var existingDocumentRelation = service.findByFromDocumentAndToDocumentAndRelationType(request.getFromDocument(), request.getToDocument(), request.getRelationType());
 
-        if(existingDocumentRelation != null) {
+        if (existingDocumentRelation != null) {
             throw new ValidationException("Document relation already exist");
         }
+        
+        var documentRelation = request.toDocumentRelation();
+        documentRelation.setId(UUID.randomUUID());
+        documentRelation = service.save(documentRelation, request.isUpdate());
 
-        var documentRelation = service.save(request);
-        return new ResponseEntity<>(documentRelation.toResponse(), HttpStatus.CREATED);
+        return new ResponseEntity<>(DocumentRelationResponse.buildFrom(documentRelation), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update Document relation")
@@ -136,8 +147,11 @@ public class DocumentRelationController {
         if (!Objects.equals(id, request.getIdAsUUID())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
-        var krav = service.save(request);
-        return ResponseEntity.ok(krav.toResponse());
+        
+        var documentRelation = request.toDocumentRelation();
+        documentRelation.setId(id);
+        documentRelation = service.save(documentRelation, request.isUpdate());
+        return ResponseEntity.ok(DocumentRelationResponse.buildFrom(documentRelation));
     }
 
     @Operation(summary = "Delete Document relation")
@@ -146,11 +160,9 @@ public class DocumentRelationController {
     public ResponseEntity<DocumentRelationResponse> deleteDocumentRelationById(@PathVariable UUID id) {
         log.info("Delete Document relation id={}", id);
         var deletedDocumentRelation = service.deleteById(id);
-        return ResponseEntity.ok(deletedDocumentRelation);
+        return ResponseEntity.ok(DocumentRelationResponse.buildFrom(deletedDocumentRelation));
     }
 
-
     static class DocumentRelationPage extends RestResponsePage<DocumentRelationResponse> {
-
     }
 }

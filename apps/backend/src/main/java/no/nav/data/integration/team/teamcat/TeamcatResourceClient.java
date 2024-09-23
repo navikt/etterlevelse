@@ -32,8 +32,7 @@ public class TeamcatResourceClient {
     private final LoadingCache<String, Resource> cache;
     private final LoadingCache<String, byte[]> photoCache;
 
-    public TeamcatResourceClient(RestTemplate restTemplate,
-            TeamcatProperties properties) {
+    public TeamcatResourceClient(RestTemplate restTemplate, TeamcatProperties properties) {
         this.restTemplate = restTemplate;
         this.properties = properties;
 

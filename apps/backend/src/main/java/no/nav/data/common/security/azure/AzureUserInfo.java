@@ -24,12 +24,12 @@ import static org.apache.commons.lang3.StringUtils.substringAfter;
 @Value
 public class AzureUserInfo implements UserInfo {
 
-    String appId;
-    String userId;
-    String ident;
-    String name;
-    String email;
-    List<String> groups;
+    private String appId;
+    private String userId;
+    private String ident;
+    private String name;
+    private String email;
+    private List<String> groups;
 
     public AzureUserInfo(JWTClaimsSet jwtClaimsSet, Set<GrantedAuthority> grantedAuthorities) {
         this.appId = getAppId(jwtClaimsSet);

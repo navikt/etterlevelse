@@ -15,6 +15,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
+import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.KravService;
@@ -261,7 +262,7 @@ public class StatistikkService {
                 .dokumentasjon(etterlevelse.getDokumentasjon())
                 .fristForFerdigstillelse(etterlevelse.getFristForFerdigstillelse())
                 .status(etterlevelse.getStatus())
-                .suksesskriterieBegrunnelser(etterlevelse.toResponse().getSuksesskriterieBegrunnelser())
+                .suksesskriterieBegrunnelser(EtterlevelseResponse.buildFrom(etterlevelse).getSuksesskriterieBegrunnelser())
                 .statusBegrunnelse(etterlevelse.getStatusBegrunnelse())
                 .lastModifiedDate(etterlevelse.getLastModifiedDate().withNano(0))
                 .createdDate(etterlevelse.getCreatedDate().withNano(0))

@@ -9,10 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest;
+import no.nav.data.integration.team.dto.MemberResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -45,7 +48,7 @@ public class EtterlevelseDokumentasjonController {
     public ResponseEntity<RestResponsePage<EtterlevelseDokumentasjonResponse>> getAll(PageParameters pageParameters) {
         log.info("get all etterlevelse dokumentasjon");
         Page<EtterlevelseDokumentasjon> etterlevelseDokumentasjonPage = etterlevelseDokumentasjonService.getAll(pageParameters);
-        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseDokumentasjonPage).convert(EtterlevelseDokumentasjon::toResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseDokumentasjonPage).convert(EtterlevelseDokumentasjonResponse::buildFrom));
     }
 
     @Operation(summary = "Get One Etterlevelse Dokumentasjon")
@@ -53,7 +56,41 @@ public class EtterlevelseDokumentasjonController {
     @GetMapping("/{id}")
     public ResponseEntity<EtterlevelseDokumentasjonResponse> getById(@PathVariable UUID id) {
         log.info("Get Etterlevelse Dokumentasjon By Id Id={}", id);
-        return ResponseEntity.ok(etterlevelseDokumentasjonService.getEtterlevelseDokumentasjonWithTeamAndBehandlingAndResourceDataAndRiskoeiereData(id));
+        var response = EtterlevelseDokumentasjonResponse.buildFrom(
+                etterlevelseDokumentasjonService.get(id)
+        );
+        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+        
+        boolean resourceIsEmpty = response.getResources() == null || response.getResources().isEmpty();
+        boolean teamIsEmpty = response.getTeams() == null || response.getTeams().isEmpty();
+        boolean risikoeiereIsEmpty = response.getRisikoeiere() == null || response.getRisikoeiere().isEmpty();
+
+        boolean resourceIsNotEmpty = response.getResources() != null && !response.getResources().isEmpty();
+        boolean teamIsNotEmpty = response.getTeams() != null && !response.getTeams().isEmpty();
+        boolean risikoeiereIsNotEmpty = response.getRisikoeiere() != null && !response.getRisikoeiere().isEmpty();
+
+        if (resourceIsEmpty && teamIsEmpty && risikoeiereIsEmpty) {
+            response.setHasCurrentUserAccess(true);
+        } else {
+            List<String> memeberList = new ArrayList<>();
+            var currentUser = SecurityUtils.getCurrentIdent();
+            if (resourceIsNotEmpty) {
+                memeberList.addAll(response.getResources());
+            }
+            if (risikoeiereIsNotEmpty) {
+                memeberList.addAll(response.getRisikoeiere());
+            }
+            if (teamIsNotEmpty) {
+                response.getTeamsData().forEach((team) -> {
+                    if (team.getMembers() != null && !team.getMembers().isEmpty()) {
+                        memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList());
+                    }
+                });
+            }
+            response.setHasCurrentUserAccess(memeberList.contains(currentUser));
+        }
+
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Get All Etterlevelse Dokumentasjon by relevans")
@@ -62,7 +99,7 @@ public class EtterlevelseDokumentasjonController {
     public ResponseEntity<List<EtterlevelseDokumentasjonResponse>> getAllEtterlevelseDokumentasjonByRelevans(@RequestParam List<String> kravRelevans) {
         log.info("get all etterlevelse dokumentasjon by relevans");
         List<EtterlevelseDokumentasjon> etterlevelseDokumentasjoner = etterlevelseDokumentasjonService.findByKravRelevans(kravRelevans);
-        return ResponseEntity.ok(etterlevelseDokumentasjoner.stream().map(EtterlevelseDokumentasjon::toResponse).toList());
+        return ResponseEntity.ok(etterlevelseDokumentasjoner.stream().map(EtterlevelseDokumentasjonResponse::buildFrom).toList());
     }
 
     @Operation(summary = "Search Etterlevelse Dokumentasjon by BehandlingId")
@@ -73,7 +110,7 @@ public class EtterlevelseDokumentasjonController {
 
         var etterleveseDokumentasjon = etterlevelseDokumentasjonService.getByBehandlingId(List.of(id));
 
-        return ResponseEntity.ok(new RestResponsePage<>(etterleveseDokumentasjon).convert(EtterlevelseDokumentasjon::toResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(etterleveseDokumentasjon).convert(EtterlevelseDokumentasjonResponse::buildFrom));
     }
 
     @Operation(summary = "Search Etterlevelse Dokumentasjon by VirkemiddelId")
@@ -84,7 +121,7 @@ public class EtterlevelseDokumentasjonController {
 
         var etterleveseDokumentasjon = etterlevelseDokumentasjonService.getByVirkemiddelId(List.of(id));
 
-        return ResponseEntity.ok(new RestResponsePage<>(etterleveseDokumentasjon).convert(EtterlevelseDokumentasjon::toResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(etterleveseDokumentasjon).convert(EtterlevelseDokumentasjonResponse::buildFrom));
     }
 
     @Operation(summary = "Search Etterlevelse Dokumentasjon by team id")
@@ -95,7 +132,7 @@ public class EtterlevelseDokumentasjonController {
 
         var etterleveseDokumentasjon = etterlevelseDokumentasjonService.getEtterlevelseDokumentasjonerByTeam(id);
 
-        return ResponseEntity.ok(new RestResponsePage<>(etterleveseDokumentasjon).convert(EtterlevelseDokumentasjon::toResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(etterleveseDokumentasjon).convert(EtterlevelseDokumentasjonResponse::buildFrom));
     }
 
     @Operation(summary = "Search Etterlevelse Dokumentasjon")
@@ -103,14 +140,11 @@ public class EtterlevelseDokumentasjonController {
     @GetMapping("/search/{searchParam}")
     public ResponseEntity<RestResponsePage<EtterlevelseDokumentasjonResponse>> searchEtterlevelseDokumentasjon(@PathVariable String searchParam) {
         log.info("Search Etterlevelse Dokumentsjon by={}", searchParam);
-
-        if(searchParam.length() < 3) {
+        if (searchParam.length() < 3) {
             throw new ValidationException("Search Etterlevelse Dokumentasjon must be at least 3 characters");
         }
-
         List<EtterlevelseDokumentasjon> etterleveseDokumentasjon = etterlevelseDokumentasjonService.searchEtterlevelseDokumentasjon(searchParam);
-
-        return ResponseEntity.ok(new RestResponsePage<>(etterleveseDokumentasjon).convert(EtterlevelseDokumentasjon::toResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(etterleveseDokumentasjon).convert(EtterlevelseDokumentasjonResponse::buildFrom));
     }
 
     @Operation(summary = "Create Etterlevelse Dokumentasjon")
@@ -119,7 +153,7 @@ public class EtterlevelseDokumentasjonController {
     public ResponseEntity<EtterlevelseDokumentasjonResponse> createEtterlevelseDokumentasjon(@RequestBody EtterlevelseDokumentasjonRequest request) {
         log.info("Create Etterlevelse Dokumentasjon");
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.save(request);
-        return new ResponseEntity<>(etterlevelseDokumentasjon.toResponse(), HttpStatus.CREATED);
+        return new ResponseEntity<>(EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update Etterlevelse Dokumentasjon")
@@ -130,8 +164,10 @@ public class EtterlevelseDokumentasjonController {
         if (!Objects.equals(id, request.getIdAsUUID())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
-        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.save(request);
-        return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjon.toResponse()));
+        var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.save(request));
+        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Update Krav Priority for Etterlevelse Dokumentasjon")
@@ -142,8 +178,10 @@ public class EtterlevelseDokumentasjonController {
         if (!Objects.equals(id, request.getIdAsUUID())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
-        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.updateKravPriority(request);
-        return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjon.toResponse()));
+        var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.updateKravPriority(request));
+        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+
+        return ResponseEntity.ok(response);
     }
 
 
@@ -158,7 +196,9 @@ public class EtterlevelseDokumentasjonController {
         }
 
         var newEtterlevelseDokumentasjon = etterlevelseDokumentasjonService.saveAndCreateRelationWithEtterlevelseCopy(fromDocumentId ,request);
-        return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(newEtterlevelseDokumentasjon.toResponse()));
+        var response = EtterlevelseDokumentasjonResponse.buildFrom(newEtterlevelseDokumentasjon);
+        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+        return ResponseEntity.ok(response);
     }
 
     @ApiResponse(description = "Etterlevelse deleted")
@@ -166,10 +206,9 @@ public class EtterlevelseDokumentasjonController {
     public ResponseEntity<EtterlevelseDokumentasjonResponse> deleteEtterlevelseById(@PathVariable UUID id) {
         log.info("Delete Etterlevelse Dokumentasjon By Id={}", id);
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.deleteEtterlevelseDokumentasjonAndAllChildren(id);
-        return ResponseEntity.ok(etterlevelseDokumentasjon.toResponse());
+        return ResponseEntity.ok(EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon));
     }
 
     static class EtterlevelseDokumentasjonPage extends RestResponsePage<EtterlevelseDokumentasjonResponse> {
-
     }
 }

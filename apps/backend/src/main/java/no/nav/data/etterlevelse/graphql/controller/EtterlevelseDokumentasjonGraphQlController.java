@@ -103,7 +103,7 @@ public class EtterlevelseDokumentasjonGraphQlController {
 
     @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
     public List<EtterlevelseResponse> etterlevelser(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjon) {
-        return convert(etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString()), Etterlevelse::toResponse);
+        return convert(etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString()), EtterlevelseResponse::buildFrom);
     }
 
     @SchemaMapping(typeName = "EtterlevelseDokumentasjon")

@@ -11,7 +11,6 @@ import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelationRepository;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
-import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
@@ -63,8 +62,6 @@ public abstract class IntegrationTestBase {
     protected StorageService<KravPriorityList> kravPriorityListStorageService;
     @Autowired
     protected StorageService<KravImage> kravImageStorageService;
-    @Autowired
-    protected EtterlevelseService etterlevelseStorageService3; // FIXME
     @Autowired
     protected StorageService<EtterlevelseArkiv> etterlevelseArkivStorageService;
     @Autowired

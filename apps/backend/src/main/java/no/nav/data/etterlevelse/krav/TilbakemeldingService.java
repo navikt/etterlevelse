@@ -6,8 +6,10 @@ import no.nav.data.common.mail.EmailService;
 import no.nav.data.common.mail.MailTask;
 import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.common.security.SecurityUtils;
+import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
+import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.Melding;
 import no.nav.data.etterlevelse.krav.domain.TilbakemeldingRepo;
@@ -26,8 +28,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
@@ -69,6 +73,21 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
 
         log.info("New tilbakemelding {} på {} fra {}", tilbakemelding.getId(), tilbakemelding.kravId(), tilbakemelding.getMelder().getIdent());
         return storage.save(tilbakemelding);
+    }
+
+    // TODO: Dette må flyttes ut til en egen komponent og kalles fra Controller og ikke Service. Se lignende kommentar i EtterlevelseService
+    private Optional<Krav> validateKravNummer(Validator<CreateTilbakemeldingRequest> validator) {
+        Integer kravNummer = validator.getItem().getKravNummer();
+        Integer kravVersjon = validator.getItem().getKravVersjon();
+        if (kravNummer != null && kravVersjon != null) {
+            Optional<GenericStorage<Krav>> krav = kravRepo.findByKravNummer(kravNummer, kravVersjon);
+            if (krav.isEmpty()) {
+                validator.addError(Fields.kravNummer, Validator.DOES_NOT_EXIST, "KravNummer %d KravVersjon %d does not exist".formatted(kravNummer, kravVersjon));
+            } else {
+                return krav.map(GenericStorage::getDomainObjectData);
+            }
+        }
+        return Optional.empty();
     }
 
     @Transactional
@@ -158,4 +177,6 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
             }
         }
     }
+    
+    
 }

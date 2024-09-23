@@ -5,8 +5,6 @@ import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelationRepository;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
-import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
-import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,34 +20,29 @@ public class DocumentRelationService {
 
     private final DocumentRelationRepository repository;
 
-    public DocumentRelationResponse getById(UUID id){
+    public DocumentRelation getById(UUID id) {
         var documentRelation = repository.findById(id);
-
-        if(documentRelation.isPresent()) {
-            return documentRelation.get().toResponse();
-        } else {
-            throw new NotFoundException("Couldn't find GenericStorage with id " + id);
-        }
+        return documentRelation.orElseThrow(() -> new NotFoundException("Couldn't find GenericStorage with id " + id));
     }
 
     public Page<DocumentRelation> getAll(Pageable pageable) {
         return repository.findAll(pageable);
     }
 
-    public List<DocumentRelationResponse> findByFromDocument(String fromDocumentId) {
-        return repository.findByFromDocument(fromDocumentId).stream().map(DocumentRelation::toResponse).toList();
+    public List<DocumentRelation> findByFromDocument(String fromDocumentId) {
+        return repository.findByFromDocument(fromDocumentId);
     }
 
-    public List<DocumentRelationResponse> findByToDocument(String toDocumentId) {
-        return repository.findByToDocument(toDocumentId).stream().map(DocumentRelation::toResponse).toList();
+    public List<DocumentRelation> findByToDocument(String toDocumentId) {
+        return repository.findByToDocument(toDocumentId);
     }
 
-    public List<DocumentRelationResponse> findByFromDocumentAndRelationType (String fromDocumentId, RelationType relationType){
-        return repository.findByFromDocumentAndRelationType(fromDocumentId, relationType).stream().map(DocumentRelation::toResponse).toList();
+    public List<DocumentRelation> findByFromDocumentAndRelationType (String fromDocumentId, RelationType relationType) {
+        return repository.findByFromDocumentAndRelationType(fromDocumentId, relationType);
     };
 
-    public List<DocumentRelationResponse> findByToDocumentAndRelationType(String toDocumentId, RelationType relationType){
-        return repository.findByToDocumentAndRelationType(toDocumentId, relationType).stream().map(DocumentRelation::toResponse).toList();
+    public List<DocumentRelation> findByToDocumentAndRelationType(String toDocumentId, RelationType relationType) {
+        return repository.findByToDocumentAndRelationType(toDocumentId, relationType);
     };
 
     public DocumentRelation findByFromDocumentAndToDocumentAndRelationType(String fromDocumentId, String toDocumentId, RelationType relationType) {
@@ -57,16 +50,22 @@ public class DocumentRelationService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public DocumentRelation save(DocumentRelationRequest request) {
-        DocumentRelation documentRelation = request.isUpdate() ? repository.getReferenceById(request.getIdAsUUID()) : new DocumentRelation();
-        documentRelation.merge(request);
-
-        return repository.save(documentRelation);
+    public DocumentRelation save(DocumentRelation documentRelation, boolean isUpdate) {
+        if (isUpdate) {
+            DocumentRelation oldDocumentRelation = repository.getReferenceById(documentRelation.getId());
+            oldDocumentRelation.setRelationType(documentRelation.getRelationType());
+            oldDocumentRelation.setFromDocument(documentRelation.getFromDocument());
+            oldDocumentRelation.setToDocument(documentRelation.getToDocument());
+            oldDocumentRelation.setData(documentRelation.getData());
+            return repository.save(oldDocumentRelation);
+        } else {
+            return repository.save(documentRelation);
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public DocumentRelationResponse deleteById(UUID id){
-        DocumentRelationResponse documentRelation = getById(id);
+    public DocumentRelation deleteById(UUID id) {
+        DocumentRelation documentRelation = getById(id);
         repository.deleteById(id);
         return documentRelation;
     }
