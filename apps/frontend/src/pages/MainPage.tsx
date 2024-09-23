@@ -103,6 +103,7 @@ export const MainPage = () => {
                 <div className="mr-4">
                   <Button
                     onClick={() => {
+                      window.scrollTo(0, 0)
                       ampli.logEvent('knapp klikket', {
                         tekst: 'Nytt etterlevelsesdokument fra forsiden',
                       })
@@ -121,6 +122,7 @@ export const MainPage = () => {
                   variant="tertiary"
                   className="underline hover:no-underline"
                   onClick={() => {
+                    window.scrollTo(0, 0)
                     ampli.logEvent('navigere', {
                       app: 'etterlevelse',
                       kilde: 'forside-panel',
