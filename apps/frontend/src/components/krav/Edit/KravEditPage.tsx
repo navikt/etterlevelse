@@ -13,7 +13,7 @@ import {
 import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi'
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../../../constants'
 import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
-import { EListName, codelist } from '../../../services/Codelist'
+import { EListName, ICode, codelist } from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
@@ -48,9 +48,9 @@ export const KravEditPage = () => {
   const submit = async (krav: TKravQL): Promise<void> => {
     const regelverk = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
     const underavdeling = codelist.getCode(EListName.UNDERAVDELING, regelverk?.data?.underavdeling)
-    const mutatedKrav = {
+    const mutatedKrav: TKravQL = {
       ...krav,
-      underavdeling: underavdeling,
+      underavdeling: underavdeling as ICode | undefined,
       varselMelding: varselMeldingActive ? krav.varselMelding : undefined,
     }
     const etterlevelser = await getEtterlevelserByKravNumberKravVersion(

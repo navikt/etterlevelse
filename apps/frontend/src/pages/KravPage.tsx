@@ -21,7 +21,7 @@ import { PageLayout } from '../components/scaffold/Page'
 import { EKravStatus, IBreadCrumbPath, IKrav, IKravVersjon, TKravQL } from '../constants'
 import { getKravWithEtterlevelseQuery } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, TTemaCode, codelist } from '../services/Codelist'
+import { EListName, TLovCode, TTemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 import { useLocationState, useQueryParam } from '../util/hooks/customHooks'
 import { temaBreadCrumbPath } from './util/BreadCrumbPath'
@@ -108,9 +108,12 @@ export const KravPage = () => {
           }
         }
       })
-      const lovData = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov?.code)
+      const lovData: TLovCode = codelist.getCode(
+        EListName.LOV,
+        krav.regelverk[0]?.lov?.code
+      ) as TLovCode
       if (lovData?.data) {
-        setKravTema(codelist.getCode(EListName.TEMA, lovData.data.tema))
+        setKravTema(codelist.getCode(EListName.TEMA, lovData.data.tema) as TTemaCode | undefined)
       }
     }
   }, [krav])

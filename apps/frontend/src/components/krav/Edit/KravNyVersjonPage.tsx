@@ -6,7 +6,7 @@ import { TKravIdParams, createKrav, kravMapToFormVal } from '../../../api/KravAp
 import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi'
 import { EKravStatus, IKrav, TKravQL } from '../../../constants'
 import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
-import { EListName, codelist } from '../../../services/Codelist'
+import { EListName, ICode, codelist } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
@@ -31,9 +31,9 @@ export const KravNyVersjonPage = () => {
   const submit = async (krav: TKravQL): Promise<void> => {
     const regelverk = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
     const underavdeling = codelist.getCode(EListName.UNDERAVDELING, regelverk?.data?.underavdeling)
-    const mutatedKrav = {
+    const mutatedKrav: TKravQL = {
       ...krav,
-      underavdeling: underavdeling,
+      underavdeling: underavdeling as ICode | undefined,
       varselMelding: varselMeldingActive ? krav.varselMelding : undefined,
     }
     close(await createKrav(mutatedKrav))

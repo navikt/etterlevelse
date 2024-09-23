@@ -45,12 +45,14 @@ export const EtterlevelsePage = () => {
       })
 
       getKravByKravNumberAndVersion(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(
-        (res) => {
-          if (res) {
-            setKrav(res)
-            const lovData = codelist.getCode(EListName.LOV, res.regelverk[0]?.lov?.code)
+        (response) => {
+          if (response) {
+            setKrav(response)
+            const lovData = codelist.getCode(EListName.LOV, response.regelverk[0]?.lov?.code)
             if (lovData?.data) {
-              setKravTema(codelist.getCode(EListName.TEMA, lovData.data.tema))
+              setKravTema(
+                codelist.getCode(EListName.TEMA, lovData.data.tema) as TTemaCode | undefined
+              )
             }
           }
         }

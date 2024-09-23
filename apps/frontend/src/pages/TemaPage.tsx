@@ -19,7 +19,7 @@ import { temaBreadCrumbPath } from './util/BreadCrumbPath'
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
 
-  const code = codelist.getCode(EListName.TEMA, tema)
+  const code: TTemaCode = codelist.getCode(EListName.TEMA, tema) as TTemaCode
   if (!code) return <>`&apos;`invalid code`&apos;`</>
   return <TemaView tema={code} />
 }

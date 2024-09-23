@@ -25,8 +25,8 @@ interface ICodelistProps {
   refreshCodeLists: () => Promise<any>
   wait: () => Promise<void>
   isLoaded: () => string | IAllCodelists | undefined
-  getCodes: (list: EListName) => ICode[]
-  getCode: (list: EListName, codeName?: string) => ICode | undefined
+  getCodes: (list: EListName) => TLovCode[] | TTemaCode[] | ICode[]
+  getCode: (list: EListName, codeName?: string) => TLovCode | TTemaCode | ICode | undefined
   valid: (list: EListName, codeName?: string) => boolean
   getCodesForTema: (codeName?: string) => TLovCode[]
   getShortnameForCode: (code: ICode) => string
@@ -88,7 +88,6 @@ interface IMakeValueLabelForAllCodeListsProps {
 const CodelistService = async (): Promise<ICodelistProps> => {
   let lists: IAllCodelists | undefined
   let error: string | undefined
-  let promise: Promise<any>
 
   const fetchData = async (refresh?: boolean): Promise<any> => {
     const codeListPromise: Promise<any> = getAllCodelists(refresh)
@@ -104,6 +103,7 @@ const CodelistService = async (): Promise<ICodelistProps> => {
       error = response.data
     }
   }
+  let promise: Promise<any> = fetchData()
 
   const refreshCodeLists = (): Promise<any> => {
     promise = fetchData(true)
@@ -118,20 +118,56 @@ const CodelistService = async (): Promise<ICodelistProps> => {
     return lists || error
   }
 
-  const getCodes = (list: EListName): ICode[] => {
-    return lists && lists.codelist[list]
-      ? lists.codelist[list].sort((c1: ICode, c2: ICode) =>
-          c1.shortName.localeCompare(c2.shortName, 'nb')
-        )
-      : []
+  // overloads
+  // getCodes(list: EListName.LOV): TLovCode[]
+  // getCodes(list: EListName.TEMA): TTemaCode[]
+  // getCodes(list: EListName): ICode[]¨
+
+  const getCodes = (list: EListName): TLovCode[] | TTemaCode[] | ICode[] => {
+    const newList: ICode[] =
+      lists && lists.codelist[list]
+        ? lists.codelist[list].sort((c1: ICode, c2: ICode) =>
+            c1.shortName.localeCompare(c2.shortName, 'nb')
+          )
+        : []
+
+    if (list === EListName.LOV) {
+      return newList as TLovCode[]
+    }
+
+    if (list === EListName.TEMA) {
+      return newList as TTemaCode[]
+    }
+
+    return newList as ICode[]
   }
 
-  const getCode = (list: EListName, codeName?: string): ICode | undefined => {
-    return getCodes(list).find((getCode: ICode) => getCode.code === codeName)
+  // overloads
+  //  getCode(list: EListName.LOV, codeName?: string): TLovCode | undefined
+  //  getCode(list: EListName.TEMA, codeName?: string): TTemaCode | undefined
+  //  getCode(list: EListName, codeName?: string): ICode | undefined
+
+  const getCode = (
+    list: EListName,
+    codeName?: string
+  ): TLovCode | TTemaCode | ICode | undefined => {
+    const code: ICode | TLovCode | TTemaCode | undefined = getCodes(list).find(
+      (getCode) => getCode.code === codeName
+    )
+
+    if (list === EListName.LOV) {
+      return code as TLovCode | undefined
+    }
+
+    if (list === EListName.TEMA) {
+      return code as TTemaCode | undefined
+    }
+
+    return code
   }
 
   const getCodesForTema = (codeName?: string): TLovCode[] => {
-    return getCodes(EListName.LOV).filter((code: ICode) => code.data?.tema === codeName)
+    return getCodes(EListName.LOV).filter((code) => code.data?.tema === codeName) as TLovCode[]
   }
 
   const valid = (list: EListName, codeName?: string): boolean => {
@@ -147,7 +183,7 @@ const CodelistService = async (): Promise<ICodelistProps> => {
   }
 
   const getShortname = (list: EListName, codeName: string): string => {
-    const code: ICode | undefined = getCode(list, codeName)
+    const code: ICode | TLovCode | TTemaCode | undefined = getCode(list, codeName)
     return code ? code.shortName : codeName
   }
 
@@ -156,12 +192,12 @@ const CodelistService = async (): Promise<ICodelistProps> => {
   }
 
   const getDescription = (list: EListName, codeName: string): string => {
-    const code: ICode | undefined = getCode(list, codeName)
+    const code: ICode | TLovCode | TTemaCode | undefined = getCode(list, codeName)
     return code ? code.description : codeName
   }
 
   const getParsedOptions = (listName: EListName): IGetParsedOptionsProps[] => {
-    return getCodes(listName).map((code: ICode) => {
+    return getCodes(listName).map((code: ICode | TLovCode | TTemaCode) => {
       return { value: code.code, label: code.shortName, description: code.description }
     })
   }
@@ -173,7 +209,7 @@ const CodelistService = async (): Promise<ICodelistProps> => {
   }
 
   const getParsedOptionsForLov = (forVirkemiddel?: boolean): IGetParsedOptionsForLovProps[] => {
-    const lovList: ICode[] = getCodes(EListName.LOV)
+    const lovList: TLovCode[] = getCodes(EListName.LOV) as TLovCode[]
     let filteredLovList: TLovCode[] = []
 
     if (forVirkemiddel) {

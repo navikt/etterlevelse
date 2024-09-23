@@ -52,7 +52,7 @@ export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
         </BodyLong>
       </div>
       <div className="mt-6">
-        {temaListe.map((tema) => (
+        {temaListe.map((tema: TTemaCode) => (
           <TemaPanel subContent={subContent} key={tema.code} tema={tema} setNum={updateNum} />
         ))}
       </div>
