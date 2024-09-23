@@ -411,12 +411,12 @@ export const EtterlevelseKravView = (props: IProps) => {
                 <Tabs.Panel value="dokumentasjon">
                   {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) && (
                     <ToggleGroup
-                      className="pt-8"
-                      defaultValue="Av"
-                      onChange={(value) => setIsPreview(value === 'Paa' ? true : false)}
+                      className="mt-6"
+                      defaultValue="OFF"
+                      onChange={(value) => setIsPreview(value === 'ON' ? true : false)}
                     >
-                      <ToggleGroup.Item value="Av" label="Redigeringsvisning" />
-                      <ToggleGroup.Item value="Paa" label="Forhåndsvisning" />
+                      <ToggleGroup.Item value="OFF" label="Redigeringsvisning" />
+                      <ToggleGroup.Item value="ON" label="Forhåndsvisning" />
                     </ToggleGroup>
                   )}
                   {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&
