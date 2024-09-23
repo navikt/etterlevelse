@@ -223,21 +223,21 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         boolean risikoeiereIsNotEmpty = etterlevelseDokumentasjonResponse.getRisikoeiere() != null && !etterlevelseDokumentasjonResponse.getRisikoeiere().isEmpty();
 
 
-        if(resourceIsEmpty && teamIsEmpty && risikoeiereIsEmpty) {
+        if (resourceIsEmpty && teamIsEmpty && risikoeiereIsEmpty) {
             etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(true);
         } else {
             List<String> memeberList = new ArrayList<>();
 
             var currentUser = SecurityUtils.getCurrentIdent();
-            if(resourceIsNotEmpty) {
+            if (resourceIsNotEmpty) {
                 memeberList.addAll(etterlevelseDokumentasjonResponse.getResources());
             }
 
-            if(risikoeiereIsNotEmpty) {
+            if (risikoeiereIsNotEmpty) {
                 memeberList.addAll(etterlevelseDokumentasjonResponse.getRisikoeiere());
             }
 
-            if(teamIsNotEmpty) {
+            if (teamIsNotEmpty) {
                 etterlevelseDokumentasjonResponse.getTeamsData().forEach((team) -> {
                     if (team.getMembers() != null && !team.getMembers().isEmpty()) {
                         memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList());
