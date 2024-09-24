@@ -25,16 +25,16 @@ public interface EtterlevelseRepo extends JpaRepository<Etterlevelse, UUID> {
     @Query(value = "select * from etterlevelse where krav_nummer = ?1 and krav_versjon = ?2", nativeQuery = true)
     List<Etterlevelse> findByKravNummer(int nummer, int versjon);
 
-    @Query(value = "select * from etterlevelse where dokumentasjon_id' = ?1", nativeQuery = true)
+    @Query(value = "select * from etterlevelse where etterlevelse_dokumentasjon_id = ?1", nativeQuery = true)
     List<Etterlevelse> findByEtterlevelseDokumensjon(String etterlevelseDokumentasjonId);
 
-    @Query(value = "select * from etterlevelse where dokumentasjon_id in ?1", nativeQuery = true)
+    @Query(value = "select * from etterlevelse where etterlevelse_dokumentasjon_id in ?1", nativeQuery = true)
     List<Etterlevelse> findByEtterlevelseDokumentasjoner(List<String> etterlevelseDokumentasjonIds);
 
-    @Query(value = "select * from etterlevelse where dokumentasjon_id = ?1 and krav_nummer = ?2", nativeQuery = true)
+    @Query(value = "select * from etterlevelse where etterlevelse_dokumentasjon_id = ?1 and krav_nummer = ?2", nativeQuery = true)
     List<Etterlevelse> findByEtterlevelseDokumentasjonIdAndKravNummer(String etterlevelseDokumentasjonId, int nummer);
 
-    @Query(value = "select * from etterlevelse where dokumentasjon_id = ?1 and krav_nummer' = ?2 and krav_versjon = ?3", nativeQuery = true)
+    @Query(value = "select * from etterlevelse where etterlevelse_dokumentasjon_id = ?1 and krav_nummer = ?2 and krav_versjon = ?3", nativeQuery = true)
     Optional<Etterlevelse> findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(String etterlevelseDokumentasjonId, int nummer, int versjon);
 
     // FIXME: Denne bør flyttes til riktig *Repo

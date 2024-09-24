@@ -54,7 +54,7 @@ delete from generic_storage where type = 'Etterlevelse';
 
 -- Rydd opp i generic_storage...
 
-vacuum full generic_storage;
+/*vacuum full generic_storage;*/
 
 -- Oppdater audit_version...
 
