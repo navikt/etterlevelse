@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.UUID;
 
 public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
 
@@ -71,6 +72,7 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
                     .build());
             etterlevelseService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
+                    .etterlevelseDokumentasjonId(UUID.randomUUID().toString())
                     .build());
 
             graphQltester.documentName("statsForEtterlevelseDokumentasjon")
@@ -103,6 +105,7 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
                     .build());
             etterlevelseService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
+                    .etterlevelseDokumentasjonId(UUID.randomUUID().toString())
                     .build());
 
             graphQltester.documentName("statsForEtterlevelseDokumentasjon")

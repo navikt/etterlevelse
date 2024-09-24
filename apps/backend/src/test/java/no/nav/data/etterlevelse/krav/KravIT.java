@@ -32,6 +32,7 @@ import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -214,7 +215,7 @@ public class KravIT extends IntegrationTestBase {
     @Test
     void deleteKravWithEtterlevelse() {
         var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).kravVersjon(1).build());
-        etterlevelseService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).build());
+        etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(UUID.randomUUID().toString()).kravNummer(50).kravVersjon(1).build());
         restTemplate.delete("/krav/{id}", krav.getId());
 
         assertThat(kravStorageService.getAll(Krav.class)).isNotEmpty();

@@ -58,9 +58,9 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
         var etterlevelseDokumentasjon_2 = etterlevelseDokumentasjonStorageService.save(EtterlevelseDokumentasjon.builder().title("test2").etterlevelseNummer(102).build());
 
 
-        etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).build());
-        etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).build());
-        etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_2.getId().toString()).build());
+        etterlevelseService.save(Etterlevelse.builder().kravNummer(200).kravVersjon(1).etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).build());
+        etterlevelseService.save(Etterlevelse.builder().kravNummer(200).kravVersjon(1).etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).build());
+        etterlevelseService.save(Etterlevelse.builder().kravNummer(200).kravVersjon(1).etterlevelseDokumentasjonId(etterlevelseDokumentasjon_2.getId().toString()).build());
 
         etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).build());
         etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).build());
