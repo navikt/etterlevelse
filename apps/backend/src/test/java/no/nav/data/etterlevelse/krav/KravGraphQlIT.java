@@ -363,6 +363,8 @@ class KravGraphQlIT extends GraphQLTestBase {
 
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of("INNSYN"));
 
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon2 = generateEtterlevelseDok(List.of("INNSYN"));
+
             kravStorageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                     .relevansFor(List.of("SAK"))
@@ -372,6 +374,7 @@ class KravGraphQlIT extends GraphQLTestBase {
                     .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
                     .build());
             etterlevelseService.save(Etterlevelse.builder()
+                    .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon2.getId()))
                     .kravNummer(50).kravVersjon(1)
                     .build());
 
