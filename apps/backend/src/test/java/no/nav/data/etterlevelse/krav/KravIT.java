@@ -206,10 +206,10 @@ public class KravIT extends IntegrationTestBase {
 
     @Test
     void deleteKrav() {
-        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).kravVersjon(1).build());
+        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(99).kravVersjon(1).build());
         restTemplate.delete("/krav/{id}", krav.getId());
 
-        assertThat(kravStorageService.getAll(Krav.class)).isEmpty();
+        assertThat(kravStorageService.get(krav.getId())).isNull();
     }
 
     @Test
