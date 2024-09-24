@@ -2,11 +2,15 @@
 
 -- Lag ny tabell...
 
-create table etterlevelse
+create table if not exists etterlevelse
 (
     id                 uuid primary key,
-    behandling_id      text      not null,
-    dokumentasjon_id   text      not null,
+    behandling_id
+    text,
+    etterlevelse_dokumentasjon_id
+    text
+    not
+    null,
     krav_nummer        integer   not null,
     krav_versjon       integer   not null,
     data               jsonb     not null,
@@ -19,19 +23,15 @@ create table etterlevelse
 
 -- Opprett indekser for felt som søkes på...
 
-create index idx_etterlevelse_dokumentasjon_id on etterlevelse(dokumentasjon_id);
+create index idx_etterlevelse_dokumentasjon_id on etterlevelse (etterlevelse_dokumentasjon_id);
 create index idx_etterlevelse_krav_nummer on etterlevelse(krav_nummer);
 
 -- Populer tabellen...
 
 insert into etterlevelse 
     select
-        id, 
-        data -> behandlingId,
-        data -> dokumentasjonId,
-        data -> kravNummer,
-        data -> kravVersjon,
-        data - 'behandlingId' - 'dokumentasjonId' - 'kravNummer' - 'kravVersjon',
+        id,
+        data ->> 'behandlingId', data ->> 'etterlevelseDokumentasjonId', CAST (data ->> 'kravNummer' AS integer), CAST (data ->> 'kravVersjon' AS integer), data - 'behandlingId' - 'etterlevelseDokumentasjonId' - 'kravNummer' - 'kravVersjon',
         created_by,
         created_date,
         last_modified_by,
