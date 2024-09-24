@@ -124,7 +124,7 @@ const CodelistService = async (): Promise<ICodelistProps> => {
   // getCodes(list: EListName): ICode[]¨
 
   const getCodes = (list: EListName): TLovCode[] | TTemaCode[] | ICode[] => {
-    const newList: ICode[] =
+    const newList: TLovCode[] | TTemaCode[] | ICode[] =
       lists && lists.codelist[list]
         ? lists.codelist[list].sort((c1: ICode, c2: ICode) =>
             c1.shortName.localeCompare(c2.shortName, 'nb')
@@ -163,7 +163,7 @@ const CodelistService = async (): Promise<ICodelistProps> => {
       return code as TTemaCode | undefined
     }
 
-    return code
+    return code as ICode | undefined
   }
 
   const getCodesForTema = (codeName?: string): TLovCode[] => {
