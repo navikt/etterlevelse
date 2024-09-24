@@ -38,8 +38,9 @@ public class Etterlevelse extends Auditable implements KravId {
     // FIXME: Legg til migrering fra GenStore
     
     @Id
+    @Builder.Default
     @Column(name = "ID")
-    private UUID id;
+    private UUID id = UUID.randomUUID();
 
     @Column(name = "BEHANDLING_ID")
     private String behandlingId;

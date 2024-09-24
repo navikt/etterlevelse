@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
-import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
-import no.nav.data.etterlevelse.common.domain.DomainService;
-import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
@@ -31,7 +28,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
 import static no.nav.data.common.utils.StreamUtils.groupBy;
 
 
@@ -60,9 +56,6 @@ public class EtterlevelseService {
 
     @Transactional
     public Etterlevelse save(Etterlevelse etterlevelse) {
-        if (etterlevelse.getId() == null) {
-            etterlevelse.setId(UUID.randomUUID());
-        }
         etterlevelse = repo.save(etterlevelse);
         repo.flush();
         return etterlevelse;
