@@ -69,11 +69,10 @@ public class KravRepoImpl implements KravRepoCustom {
                 query += """
                         and (
                          exists(select 1
-                                   from generic_storage ettlev
-                                   where ettlev.data ->> 'kravNummer' = krav.data ->> 'kravNummer'
-                                     and ettlev.data ->> 'kravVersjon' = krav.data ->> 'kravVersjon'
-                                     and type = 'Etterlevelse'
-                                     and data @> :etterlevelseDokumentasjonIdQuery::jsonb
+                                   from etterlevelse ettlev
+                                   where ettlev.krav_nummer = cast(krav.data ->> 'kravNummer' as integer)
+                                     and ettlev.krav_versjon = cast(krav.data ->> 'kravVersjon' as integer)
+                                     and ettlev.etterlevelse_dokumentasjon_id = :etterlevelseDokumentasjonId
                                 ) 
                         or jsonb_array_length(data -> 'relevansFor') = 0
                         or jsonb_array_length((data -> 'relevansFor') - array(select jsonb_array_elements_text(data -> 'irrelevansFor') 
@@ -81,8 +80,7 @@ public class KravRepoImpl implements KravRepoCustom {
                             and type = 'EtterlevelseDokumentasjon')) > 0
                         )
                         """;
-                par.addValue("etterlevelseDokumentasjonIdQuery", String.format("{\"etterlevelseDokumentasjonId\": \"%s\"}", filter.getEtterlevelseDokumentasjonId()))
-                        .addValue("etterlevelseDokumentasjonId", filter.getEtterlevelseDokumentasjonId());
+                        par.addValue("etterlevelseDokumentasjonId", filter.getEtterlevelseDokumentasjonId());
             } else {
                 query += """
                         and data -> 'relevansFor' ??| array(

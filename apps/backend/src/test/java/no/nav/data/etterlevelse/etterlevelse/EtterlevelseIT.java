@@ -90,16 +90,16 @@ public class EtterlevelseIT extends IntegrationTestBase {
         @Test
         void getEtterlevelseByEtterlevelseDokumentasjonIdAndKravId_fetchEtterlevelseWithEtterlevelseDokumentasjonIdAndKravNummer_OneEtterlevelse(){
             etterlevelseService.save(Etterlevelse.builder()
-                    .etterlevelseDokumentasjonId("ed1")
+                    .etterlevelseDokumentasjonId("edTest1")
                     .kravNummer(50)
                     .kravVersjon(1)
                     .build());
             etterlevelseService.save(Etterlevelse.builder()
-                    .etterlevelseDokumentasjonId("ed2")
+                    .etterlevelseDokumentasjonId("edTest2")
                     .kravNummer(50)
                     .kravVersjon(2)
                     .build());
-            var resp = restTemplate.getForEntity("/etterlevelse/etterlevelseDokumentasjon/ed1/50", EtterlevelsePage.class);
+            var resp = restTemplate.getForEntity("/etterlevelse/etterlevelseDokumentasjon/edTest1/50", EtterlevelsePage.class);
             assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
             assertThat(resp.getBody()).isNotNull();
             assertThat(resp.getBody().getNumberOfElements()).isOne();
