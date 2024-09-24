@@ -3,7 +3,6 @@ import { getUserInfo } from '../api/UserApi'
 import { IUserInfo } from '../constants'
 import { updateUser } from '../util/hooks/customHooks'
 
-/* eslint-disable */
 export enum EGroup {
   READ = 'READ',
   WRITE = 'WRITE',

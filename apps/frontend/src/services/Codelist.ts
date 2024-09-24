@@ -3,7 +3,6 @@ import * as yup from 'yup'
 import { getAllCodelists } from '../api/CodelistApi'
 import { TReplace } from '../constants'
 
-/* eslint-disable */
 export enum EListName {
   AVDELING = 'AVDELING',
   UNDERAVDELING = 'UNDERAVDELING',
@@ -91,10 +90,12 @@ const CodelistService = async (): Promise<ICodelistProps> => {
   let error: string | undefined
 
   const fetchData = async (refresh?: boolean): Promise<any> => {
-    const codeListPromise: Promise<any> = getAllCodelists(refresh)
+    return await getAllCodelists(refresh)
       .then(handleGetCodelistResponse)
-      .catch((error: any) => (error = error.message))
-    return Promise.all([codeListPromise])
+      .catch((error: any) => {
+        error = error.message
+        console.debug({ error })
+      })
   }
 
   const handleGetCodelistResponse = (response: AxiosResponse<IAllCodelists>) => {
@@ -104,7 +105,7 @@ const CodelistService = async (): Promise<ICodelistProps> => {
       error = response.data
     }
   }
-  let promise: Promise<any> = fetchData()
+  let promise: Promise<any> = await fetchData()
 
   const refreshCodeLists = (): Promise<any> => {
     promise = fetchData(true)
@@ -118,11 +119,6 @@ const CodelistService = async (): Promise<ICodelistProps> => {
   const isLoaded = (): string | IAllCodelists | undefined => {
     return lists || error
   }
-
-  // overloads
-  // getCodes(list: EListName.LOV): TLovCode[]
-  // getCodes(list: EListName.TEMA): TTemaCode[]
-  // getCodes(list: EListName): ICode[]¨
 
   const getCodes = (list: EListName): TLovCode[] | TTemaCode[] | ICode[] => {
     const newList: TLovCode[] | TTemaCode[] | ICode[] =
@@ -142,11 +138,6 @@ const CodelistService = async (): Promise<ICodelistProps> => {
 
     return newList as ICode[]
   }
-
-  // overloads
-  //  getCode(list: EListName.LOV, codeName?: string): TLovCode | undefined
-  //  getCode(list: EListName.TEMA, codeName?: string): TTemaCode | undefined
-  //  getCode(list: EListName, codeName?: string): ICode | undefined
 
   const getCode = (
     list: EListName,
@@ -238,7 +229,7 @@ const CodelistService = async (): Promise<ICodelistProps> => {
     const parsedOptions = getParsedOptions(listName)
     return !currentSelected
       ? parsedOptions
-      : parsedOptions.filter((option) =>
+      : parsedOptions.filter((option: IGetParsedOptionsProps) =>
           currentSelected.includes(option.value) ? null : option.value
         )
   }
