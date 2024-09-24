@@ -3,13 +3,14 @@ import {
   Button,
   Checkbox,
   CheckboxGroup,
+  ErrorSummary,
   Heading,
   Label,
   ReadMore,
   TextField,
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
@@ -32,7 +33,6 @@ import {
 import { ampli } from '../../../services/Amplitude'
 import { EListName, ICode, ICodeListFormValues, codelist } from '../../../services/Codelist'
 import { user } from '../../../services/User'
-import { ScrollToFieldError } from '../../../util/formikUtils'
 import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { Markdown } from '../../common/Markdown'
@@ -68,6 +68,9 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
     window.location.origin.includes('.dev.') || window.location.origin.includes('localhost')
 
   const isForRedigering = window.location.pathname.includes('/edit')
+
+  const errorSummaryRef = React.useRef<HTMLDivElement>(null)
+  const [validateOnBlur, setValidateOnBlur] = useState(false)
 
   const labelNavngiDokument: string = isForRedigering
     ? 'Navngi dokumentet ditt'
@@ -148,7 +151,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
       onSubmit={submit}
       validationSchema={etterlevelseDokumentasjonSchema()}
       validateOnChange={false}
-      validateOnBlur={false}
+      validateOnBlur={validateOnBlur}
     >
       {({ values, submitForm, setFieldValue, errors }) => (
         <Form>
@@ -374,7 +377,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             </FieldArray>
             <div className="flex-1" />
           </div>
-          <div className="flex flex-col lg:flex-row gap-5 mb-5">
+          <div id="resourcesData" className="flex flex-col lg:flex-row gap-5 mb-5">
             <FieldArray name="resourcesData">
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className="flex-1">
@@ -571,6 +574,21 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             </div>
           )}
 
+          {Object.values(errors).some(Boolean) && (
+            <ErrorSummary
+              ref={errorSummaryRef}
+              heading="Du må rette disse feilene før du kan fortsette"
+            >
+              {Object.entries(errors)
+                .filter(([, error]) => error)
+                .map(([key, error]) => (
+                  <ErrorSummary.Item href={`#${key}`} key={key}>
+                    {error as string}
+                  </ErrorSummary.Item>
+                ))}
+            </ErrorSummary>
+          )}
+
           <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-2 bg-bg-default">
             <div className="flex flex-row-reverse">
               <Button
@@ -581,6 +599,8 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                       tekst: 'Opprett etterlevelsesdokument',
                     })
                   }
+                  errorSummaryRef.current?.focus()
+                  setValidateOnBlur(true)
                   submitForm()
                 }}
                 className="ml-2.5"
@@ -601,8 +621,6 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
               </Button>
             </div>
           </div>
-
-          <ScrollToFieldError />
         </Form>
       )}
     </Formik>
