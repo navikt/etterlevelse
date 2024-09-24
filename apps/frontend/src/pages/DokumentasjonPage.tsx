@@ -21,13 +21,13 @@ import {
 } from '../constants'
 import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDokumentasjonQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, codelist } from '../services/Codelist'
+import { EListName, TTemaCode, codelist } from '../services/Codelist'
 import { user } from '../services/User'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string; tema?: string }>()
-  const temaListe = codelist.getCodes(EListName.TEMA)
+  const temaListe: TTemaCode[] = codelist.getCodes(EListName.TEMA) as TTemaCode[]
   const variables = { etterlevelseDokumentasjonId: params.id }
   const navigate = useNavigate()
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(

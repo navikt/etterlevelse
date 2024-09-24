@@ -42,7 +42,7 @@ export const EtterlevelseDokumentasjonPage = () => {
   const temaData: TTemaCode | undefined = codelist.getCode(
     EListName.TEMA,
     params.tema?.replace('i', '')
-  )
+  ) as TTemaCode | undefined
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const lover = codelist.getCodesForTema(params.tema)
 
