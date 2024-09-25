@@ -5,26 +5,16 @@
 create table if not exists etterlevelse
 (
     id                 uuid primary key,
-    behandling_id
-    text,
-    etterlevelse_dokumentasjon_id
-    text
-    not
-    null,
+    behandling_id      text,
+    etterlevelse_dokumentasjon_id text not null,
     krav_nummer        integer   not null,
     krav_versjon       integer   not null,
     data               jsonb     not null,
-    version
-    integer
-    not
-    null,
+    version            integer   not null,
     created_by         text      not null,
     created_date       timestamp not null,
     last_modified_by   text      not null,
-    last_modified_date
-    timestamp
-    not
-    null
+    last_modified_date timestamp not null
 );
 
 -- Opprett indekser for felt som søkes på...
@@ -37,10 +27,16 @@ create index idx_etterlevelse_krav_nummer on etterlevelse(krav_nummer);
 insert into etterlevelse 
     select
         id,
-        data ->> 'behandlingId', data ->> 'etterlevelseDokumentasjonId', CAST (data ->> 'kravNummer' AS integer), CAST (data ->> 'kravVersjon' AS integer), data - 'behandlingId' - 'etterlevelseDokumentasjonId' - 'kravNummer' - 'kravVersjon', version,
+        data ->> 'behandlingId', 
+        data ->> 'etterlevelseDokumentasjonId', 
+        CAST (data ->> 'kravNummer' AS integer), 
+        CAST (data ->> 'kravVersjon' AS integer), 
+        data - 'behandlingId' - 'etterlevelseDokumentasjonId' - 'kravNummer' - 'kravVersjon', 
+        version,
         created_by,
         created_date,
-        last_modified_by, last_modified_date
+        last_modified_by,
+        last_modified_date
     from generic_storage
     where type = 'Etterlevelse'
 ;
