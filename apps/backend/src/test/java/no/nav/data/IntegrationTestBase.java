@@ -12,6 +12,7 @@ import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelationRepository;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
+import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
@@ -88,6 +89,8 @@ public abstract class IntegrationTestBase {
     protected EtterlevelseArkivService etterlevelseArkivService;
     @Autowired
     protected DocumentRelationService documentRelationService;
+    @Autowired
+    protected EtterlevelseRepo etterlevelseRepo;
 
     @BeforeEach
     void setUpBase() {
@@ -100,6 +103,7 @@ public abstract class IntegrationTestBase {
     void tearDownBase() {
         repository.deleteAll();
         MockFilter.clearUser();
+        etterlevelseRepo.deleteAll();
     }
 
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
