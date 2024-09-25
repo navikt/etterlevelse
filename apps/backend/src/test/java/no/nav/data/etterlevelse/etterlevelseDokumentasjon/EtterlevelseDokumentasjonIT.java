@@ -53,13 +53,12 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
 
     @Test
     void deleteEtterlevelseDokumentasjonAndChildren() {
-        // TODO: Denne testen tester ikke det den skal teste...
         var etterlevelseDokumentasjon_1 = etterlevelseDokumentasjonStorageService.save(EtterlevelseDokumentasjon.builder().title("test1").etterlevelseNummer(101).build());
         var etterlevelseDokumentasjon_2 = etterlevelseDokumentasjonStorageService.save(EtterlevelseDokumentasjon.builder().title("test2").etterlevelseNummer(102).build());
 
 
         etterlevelseService.save(Etterlevelse.builder().kravNummer(200).kravVersjon(1).etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).build());
-        etterlevelseService.save(Etterlevelse.builder().kravNummer(200).kravVersjon(1).etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).build());
+        etterlevelseService.save(Etterlevelse.builder().kravNummer(201).kravVersjon(1).etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).build());
         etterlevelseService.save(Etterlevelse.builder().kravNummer(200).kravVersjon(1).etterlevelseDokumentasjonId(etterlevelseDokumentasjon_2.getId().toString()).build());
 
         etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).build());
@@ -67,15 +66,15 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
         etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_2.getId().toString()).build());
 
         etterlevelseMetadataStorageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).kravNummer(200).build());
-        etterlevelseMetadataStorageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).kravNummer(200).build());
+        etterlevelseMetadataStorageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).kravNummer(201).build());
         etterlevelseMetadataStorageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_2.getId().toString()).kravNummer(200).build());
 
         restTemplate.delete("/etterlevelsedokumentasjon/{id}", etterlevelseDokumentasjon_1.getId());
 
         assertThat(etterlevelseDokumentasjonStorageService.getAll(EtterlevelseDokumentasjon.class)).isNotNull();
-        assertThat(etterlevelseRepo.count()).isEqualTo(0);
-        assertThat(etterlevelseMetadataStorageService.getAll(EtterlevelseMetadata.class)).isNotNull();
-        assertThat(etterlevelseArkivStorageService.getAll(EtterlevelseArkiv.class)).isNotNull();
+        assertThat(etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon_1.getId().toString()).size()).isEqualTo(0);
+        assertThat(etterlevelseMetadataService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon_1.getId().toString()).size()).isEqualTo(0);
+        assertThat(etterlevelseArkivService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon_1.getId().toString()).size()).isEqualTo(0);
 
     }
 
