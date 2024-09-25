@@ -51,7 +51,8 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
     @Test
     void getEtterlevelseByNummer() {
-        var etterlevelse = etterlevelseService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).etterlevelseDokumentasjonId(UUID.randomUUID().toString()).build());
+        var etterlevelseDokumentasjon = createEtterlevelseDokumentasjon();
+        var etterlevelse = etterlevelseService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString()).build());
 
         var resp = restTemplate.getForEntity("/etterlevelse/kravnummer/{nummer}/{versjon}", EtterlevelsePage.class, etterlevelse.getKravNummer(), etterlevelse.getKravVersjon());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);

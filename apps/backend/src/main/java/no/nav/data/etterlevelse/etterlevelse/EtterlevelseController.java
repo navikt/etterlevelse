@@ -35,7 +35,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/etterlevelse")
 @Tag(name = "Etterlevelse", description = "Etterlevelse for behandlinger")
-public class  EtterlevelseController {
+public class EtterlevelseController {
 
 
     private final EtterlevelseService service;
@@ -69,7 +69,7 @@ public class  EtterlevelseController {
 
     private EtterlevelseResponse toResponseWithEtterlevelseDokumentasjon(Etterlevelse etterlevelse) {
         EtterlevelseResponse response = etterlevelse.toResponse();
-        if(response.getEtterlevelseDokumentasjonId() != null && !response.getEtterlevelseDokumentasjonId().isEmpty())  {
+        if (response.getEtterlevelseDokumentasjonId() != null && !response.getEtterlevelseDokumentasjonId().isEmpty()) {
             response.setEtterlevelseDokumentasjon(etterlevelseDokumentasjonService.get(UUID.fromString(response.getEtterlevelseDokumentasjonId())).toResponse());
         }
         return response;
@@ -107,7 +107,7 @@ public class  EtterlevelseController {
     public ResponseEntity<EtterlevelseResponse> createEtterlevelse(@RequestBody EtterlevelseRequest request) {
         log.info("Create Etterlevelse");
 
-        if(request.getEtterlevelseDokumentasjonId() == null || request.getEtterlevelseDokumentasjonId().isEmpty()) {
+        if (request.getEtterlevelseDokumentasjonId() == null || request.getEtterlevelseDokumentasjonId().isEmpty()) {
             throw new ValidationException("Tried to create etterlevelse with old architecture");
         }
 
@@ -126,7 +126,7 @@ public class  EtterlevelseController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
-        if(request.getEtterlevelseDokumentasjonId() == null || request.getEtterlevelseDokumentasjonId().isEmpty()) {
+        if (request.getEtterlevelseDokumentasjonId() == null || request.getEtterlevelseDokumentasjonId().isEmpty()) {
             throw new ValidationException("Tried to create etterlevelse with old architecture");
         }
 
