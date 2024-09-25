@@ -32,7 +32,7 @@
         <!-- transitive versions -->
         <commons-compress.version>1.27.1</commons-compress.version>
         <commons-io.version>2.17.0</commons-io.version>
-        <guava.version>33.3.0-jre</guava.version>
+        <guava.version>33.3.1-jre</guava.version>
         <jna.version>5.15.0</jna.version>
         <jetbrains.annotation.version>24.1.0</jetbrains.annotation.version>
 
