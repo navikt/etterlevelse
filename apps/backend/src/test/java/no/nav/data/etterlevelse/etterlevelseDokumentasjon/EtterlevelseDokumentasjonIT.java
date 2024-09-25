@@ -71,7 +71,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
 
         restTemplate.delete("/etterlevelsedokumentasjon/{id}", etterlevelseDokumentasjon_1.getId());
 
-        assertThat(etterlevelseDokumentasjonStorageService.getAll(EtterlevelseDokumentasjon.class)).isNotNull();
+        assertThat(etterlevelseDokumentasjonStorageService.getAll(EtterlevelseDokumentasjon.class).size()).isEqualTo(1); // Only etterlevelseDokumentasjon_2 should remain
         assertThat(etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon_1.getId().toString()).size()).isEqualTo(0);
         assertThat(etterlevelseMetadataService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon_1.getId().toString()).size()).isEqualTo(0);
         assertThat(etterlevelseArkivService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon_1.getId().toString()).size()).isEqualTo(0);
