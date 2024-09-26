@@ -158,10 +158,6 @@ export const user: IUserProps = await UserService().then((response: IUserProps) 
   return response
 })
 
-export const fetchUserService = async (): Promise<void> => {
-  await UserService()
-}
-
 const nameFor = (group: EGroup) => {
   switch (group) {
     case EGroup.READ:
