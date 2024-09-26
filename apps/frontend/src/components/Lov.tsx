@@ -1,6 +1,6 @@
 import { Link } from '@navikt/ds-react'
 import { IRegelverk } from '../constants'
-import { CodelistService, EListName } from '../services/Codelist'
+import { CodelistService, EListName, ICodelistProps } from '../services/Codelist'
 import { env } from '../util/env'
 
 // unsure how to refactor code
@@ -31,21 +31,24 @@ export const LovView = (props: { regelverk?: IRegelverk; openOnSamePage?: boolea
   const lovDisplay = lov && codelistUtils.getShortname(EListName.LOV, lovCode)
 
   const descriptionText = codelistUtils.valid(EListName.LOV, lovCode)
-    ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering, props.openOnSamePage)
+    ? legalBasisLinkProcessor(
+        lovCode,
+        codelistUtils,
+        lovDisplay + ' ' + spesifisering,
+        props.openOnSamePage
+      )
     : spesifisering
 
   return <span>{descriptionText}</span>
 }
 
-const findLovId = (nationalLaw: string) => {
-  const [codelistUtils] = CodelistService()
+const findLovId = (nationalLaw: string, codelistUtils: ICodelistProps) => {
   const lov = codelistUtils.getCode(EListName.LOV, nationalLaw)
   return lov?.data?.lovId || lov?.description || ''
 }
 
-export const lovdataBase = (nationalLaw: string) => {
-  const lovId = findLovId(nationalLaw)
-  const [codelistUtils] = CodelistService()
+export const lovdataBase = (nationalLaw: string, codelistUtils: ICodelistProps) => {
+  const lovId = findLovId(nationalLaw, codelistUtils)
   if (codelistUtils.isForskrift(nationalLaw)) {
     return env.lovdataForskriftBaseUrl + lovId
   } else {
@@ -53,8 +56,13 @@ export const lovdataBase = (nationalLaw: string) => {
   }
 }
 
-const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: boolean) => {
-  if (!findLovId(law).match(/^\d+.*/)) {
+const legalBasisLinkProcessor = (
+  law: string,
+  codelistUtils: ICodelistProps,
+  text?: string,
+  openOnSamePage?: boolean
+) => {
+  if (!findLovId(law, codelistUtils).match(/^\d+.*/)) {
     return text
   }
 
@@ -70,7 +78,7 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
-          href={`${lovdataBase(law)}/§${result[4]}${result[6]}`}
+          href={`${lovdataBase(law, codelistUtils)}/§${result[4]}${result[6]}`}
           target={openOnSamePage ? '_self' : '_blank'}
           rel="noopener noreferrer"
         >
@@ -84,7 +92,7 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
-          href={`${lovdataBase(law)}/KAPITTEL_${result[3]}${result[4]}`}
+          href={`${lovdataBase(law, codelistUtils)}/KAPITTEL_${result[3]}${result[4]}`}
           target={openOnSamePage ? '_self' : '_blank'}
           rel="noopener noreferrer"
         >
@@ -98,7 +106,7 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
-          href={`${lovdataBase(law)}/ARTIKKEL_${result[3]}${result[4]}`}
+          href={`${lovdataBase(law, codelistUtils)}/ARTIKKEL_${result[3]}${result[4]}`}
           target={openOnSamePage ? '_self' : '_blank'}
           rel="noopener noreferrer"
         >

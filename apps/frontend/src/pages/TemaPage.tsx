@@ -62,7 +62,7 @@ const getTemaMainHeader = (
         </Heading>
         {lover.map((lov, index) => (
           <div key={lov.code + '_' + index} className="mb-1.5">
-            <ExternalLink href={lovdataBase(lov.code)}>{lov.shortName}</ExternalLink>
+            <ExternalLink href={lovdataBase(lov.code, codelistUtils)}>{lov.shortName}</ExternalLink>
           </div>
         ))}
       </div>
