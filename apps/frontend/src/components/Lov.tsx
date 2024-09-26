@@ -1,6 +1,6 @@
 import { Link } from '@navikt/ds-react'
 import { IRegelverk } from '../constants'
-import { EListName, codelist } from '../services/Codelist'
+import { CodelistService, EListName } from '../services/Codelist'
 import { env } from '../util/env'
 
 // unsure how to refactor code
@@ -22,13 +22,15 @@ export const LovViewList = (props: { regelverkListe: IRegelverk[]; openOnSamePag
 )
 
 export const LovView = (props: { regelverk?: IRegelverk; openOnSamePage?: boolean }) => {
+  const [codelistUtils] = CodelistService()
+
   if (!props.regelverk) return null
   const { spesifisering, lov } = props.regelverk
   const lovCode = lov?.code
 
-  const lovDisplay = lov && codelist.getShortname(EListName.LOV, lovCode)
+  const lovDisplay = lov && codelistUtils.getShortname(EListName.LOV, lovCode)
 
-  const descriptionText = codelist.valid(EListName.LOV, lovCode)
+  const descriptionText = codelistUtils.valid(EListName.LOV, lovCode)
     ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering, props.openOnSamePage)
     : spesifisering
 
@@ -36,13 +38,15 @@ export const LovView = (props: { regelverk?: IRegelverk; openOnSamePage?: boolea
 }
 
 const findLovId = (nationalLaw: string) => {
-  const lov = codelist.getCode(EListName.LOV, nationalLaw)
+  const [codelistUtils] = CodelistService()
+  const lov = codelistUtils.getCode(EListName.LOV, nationalLaw)
   return lov?.data?.lovId || lov?.description || ''
 }
 
 export const lovdataBase = (nationalLaw: string) => {
   const lovId = findLovId(nationalLaw)
-  if (codelist.isForskrift(nationalLaw)) {
+  const [codelistUtils] = CodelistService()
+  if (codelistUtils.isForskrift(nationalLaw)) {
     return env.lovdataForskriftBaseUrl + lovId
   } else {
     return env.lovdataLovBaseUrl + lovId

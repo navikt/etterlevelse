@@ -15,7 +15,7 @@ import {
 } from '../constants'
 import { getKravMedPrioriteringOgEtterlevelseQuery } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, TTemaCode, codelist } from '../services/Codelist'
+import { CodelistService, EListName, TTemaCode } from '../services/Codelist'
 import { sortKravListeByPriority } from '../util/sort'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
@@ -39,12 +39,13 @@ export const EtterlevelseDokumentasjonPage = () => {
     kravVersjon: string
     filter: string
   }>()
-  const temaData: TTemaCode | undefined = codelist.getCode(
+  const [codelistUtils] = CodelistService()
+  const temaData: TTemaCode | undefined = codelistUtils.getCode(
     EListName.TEMA,
     params.tema?.replace('i', '')
   ) as TTemaCode | undefined
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
-  const lover = codelist.getCodesForTema(params.tema)
+  const lover = codelistUtils.getCodesForTema(params.tema)
 
   const { data, loading } = useQuery<{ krav: IPageResponse<TKravQL> }>(
     getKravMedPrioriteringOgEtterlevelseQuery,

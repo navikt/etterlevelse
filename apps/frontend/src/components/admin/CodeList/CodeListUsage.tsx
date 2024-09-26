@@ -2,7 +2,7 @@ import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { replaceCodelistUsage } from '../../../api/CodelistApi'
-import { ICodeUsage, codelist } from '../../../services/Codelist'
+import { CodelistService, ICodeUsage } from '../../../services/Codelist'
 import { ObjectLink } from '../../common/RouteLink'
 import { EObjectType } from '../audit/AuditTypes'
 
@@ -77,6 +77,7 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
   const [showReplace, setShowReplace] = useState(false)
   const [newValue, setNewValue] = useState<string>()
   const ref = React.createRef<HTMLDivElement>()
+  const [codelistUtils] = CodelistService()
 
   const { usage, refresh } = props
 
@@ -112,7 +113,7 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
             onChange={(e) => setNewValue(e.target.value)}
           >
             <option value="">Ny verdi</option>
-            {codelist.getParsedOptions(usage.listName).map((code, index) => (
+            {codelistUtils.getParsedOptions(usage.listName).map((code, index) => (
               <option key={index + '_' + code.label} value={code.value}>
                 {code.label}
               </option>

@@ -30,7 +30,7 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
-import { EListName, ICode, ICodeListFormValues, codelist } from '../../../services/Codelist'
+import { CodelistService, EListName, ICode, ICodeListFormValues } from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
@@ -51,7 +51,8 @@ type TEditEtterlevelseDokumentasjonModalProps = {
 
 export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentasjonModalProps) => {
   const { title, etterlevelseDokumentasjon, isEditButton } = props
-  const relevansOptions = codelist.getParsedOptions(EListName.RELEVANS)
+  const [codelistUtils] = CodelistService()
+  const relevansOptions = codelistUtils.getParsedOptions(EListName.RELEVANS)
   const [selectedFilter, setSelectedFilter] = useState<number[]>(
     relevansOptions.map((_relevans, index) => index)
   )
@@ -243,7 +244,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                       fieldArrayRenderProps.form.setFieldValue(
                         'irrelevansFor',
                         irrelevansListe.map((irrelevans) =>
-                          codelist.getCode(EListName.RELEVANS, irrelevans.value)
+                          codelistUtils.getCode(EListName.RELEVANS, irrelevans.value)
                         )
                       )
                       // selected.forEach((value) => {
@@ -253,7 +254,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                       //     p.remove(p.form.values.irrelevansFor.findIndex((ir: ICode) => ir.code === relevansOptions[i].value))
                       //   } else {
                       //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
-                      //     p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
+                      //     p.push(codelistUtils.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
                       //   }
                       // })
                     }}

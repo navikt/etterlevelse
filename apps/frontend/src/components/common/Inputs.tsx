@@ -14,7 +14,7 @@ import {
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
 import React, { ReactNode, useState } from 'react'
 import { TOption, TOr } from '../../constants'
-import { EListName, ICode, codelist } from '../../services/Codelist'
+import { CodelistService, EListName, ICode } from '../../services/Codelist'
 import LabelWithTooltip from '../common/LabelWithTooltip'
 import { Markdown } from './Markdown'
 import { Error, FormError } from './ModalSchema'
@@ -384,7 +384,8 @@ type TPropsOptionList = IPropsOptionList & TOptionORListname
 
 export const OptionList = (props: TPropsOptionList) => {
   const { label, value, onChange, options, listName, error } = props
-  const optionsList: TOption[] = options || codelist.getParsedOptions(listName)
+  const [codelistUtils] = CodelistService()
+  const optionsList: TOption[] = options || codelistUtils.getParsedOptions(listName)
 
   return (
     <Select
@@ -395,7 +396,8 @@ export const OptionList = (props: TPropsOptionList) => {
       error={error}
       onChange={async (event) => {
         const val = event.target.value
-        const toSet = listName && val ? ((await codelist.getCode(listName, val)) as ICode) : val
+        const toSet =
+          listName && val ? ((await codelistUtils.getCode(listName, val)) as ICode) : val
         return onChange(toSet)
       }}
     >

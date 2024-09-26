@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import Select, { CSSObjectWithLabel } from 'react-select'
 import { useVirkemiddelFilter } from '../../api/VirkemiddelApi'
 import { EVirkemiddelListFilter } from '../../constants'
-import { EListName, codelist } from '../../services/Codelist'
+import { CodelistService, EListName } from '../../services/Codelist'
 import { useDebouncedState } from '../../util/hooks/customHooks'
 import { EditVirkemiddelModal } from '../virkemiddel/edit/EditVirkemiddelModal'
 import { VirkemiddelTable } from './VirkemiddelTable'
@@ -27,6 +27,7 @@ export const AllVirkemiddel = ({
   isCreateModalOpen,
   setIsCreateModalOpen,
 }: TAllVirkemiddelProps) => {
+  const [codelistUtils] = CodelistService()
   const getSortDateOptions = [
     { label: 'sorter på navn', value: 'navn' },
     { label: 'nyest-eldst', value: 'DESC' },
@@ -37,7 +38,7 @@ export const AllVirkemiddel = ({
     sort: [getSortDateOptions[0]],
   })
   const [sok, setSok] = useDebouncedState('', 300)
-  const virkemiddelTyper = codelist.getCodes(EListName.VIRKEMIDDELTYPE)
+  const virkemiddelTyper = codelistUtils.getCodes(EListName.VIRKEMIDDELTYPE)
   const getOptions = (label: string, options: any[]) => [
     { label: label, value: 'alle' },
     ...options,

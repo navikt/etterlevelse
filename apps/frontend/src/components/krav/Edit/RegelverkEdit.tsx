@@ -3,7 +3,7 @@ import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { useState } from 'react'
 import Select, { CSSObjectWithLabel } from 'react-select'
 import { IRegelverk } from '../../../constants'
-import { EListName, TLovCode, codelist } from '../../../services/Codelist'
+import { CodelistService, EListName, TLovCode } from '../../../services/Codelist'
 import { ettlevColors } from '../../../util/theme'
 import { LovView } from '../../Lov'
 import { FieldWrapper } from '../../common/Inputs'
@@ -17,16 +17,17 @@ type TRegelverkEditProps = {
 }
 
 export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
+  const [codelistUtils] = CodelistService()
   const [lov, setLov] = useState({ value: '', label: '', description: '' })
   const [text, setText] = useState('')
   const [error, setError] = useState('')
 
   const regelverkObject = () => ({
-    lov: codelist.getCode(EListName.LOV, lov.value as string) as TLovCode,
+    lov: codelistUtils.getCode(EListName.LOV, lov.value as string) as TLovCode,
     spesifisering: text,
   })
 
-  const options = codelist.getParsedOptionsForLov(forVirkemiddel)
+  const options = codelistUtils.getParsedOptionsForLov(forVirkemiddel)
 
   return (
     <FieldWrapper marginBottom id="regelverk">

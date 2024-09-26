@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { createCodelist } from '../../../api/CodelistApi'
-import { ICode, ICodeListFormValues, codelist } from '../../../services/Codelist'
+import { CodelistService, ICode, ICodeListFormValues } from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import { useAwait, useForceUpdate } from '../../../util/hooks/customHooks'
 import { PageLayout } from '../../scaffold/Page'
@@ -19,16 +19,16 @@ const CodeListPage = () => {
   const [createCodeListModal, setCreateCodeListModal] = React.useState(false)
   const [errorOnResponse, setErrorOnResponse] = React.useState(null)
   const forceUpdate = useForceUpdate()
-  useAwait(codelist.wait(), setLoading)
+  const [codelistUtils, lists] = CodelistService()
+  useAwait(codelistUtils.fetchData(), setLoading)
 
-  const lists = codelist.lists?.codelist
-  const currentCodelist = lists && listname ? lists[listname] : undefined
+  const currentCodelist = lists && listname ? lists.codelist[listname] : undefined
 
   const handleCreateCodelist = async (values: ICodeListFormValues) => {
     setLoading(true)
     try {
       await createCodelist({ ...values } as ICode)
-      await codelist.refreshCodeLists()
+      await codelistUtils.fetchData(true)
       setCreateCodeListModal(false)
     } catch (error: any) {
       setCreateCodeListModal(true)
@@ -38,7 +38,7 @@ const CodeListPage = () => {
   }
 
   const update = async () => {
-    await codelist.refreshCodeLists()
+    await codelistUtils.fetchData(true)
     forceUpdate()
   }
 
@@ -75,7 +75,7 @@ const CodeListPage = () => {
             onChange={(e) => setListname(e.target.value)}
           >
             <option value="">Velg kodeverk</option>
-            {codelist.makeValueLabelForAllCodeLists().map((codeLabel, index) => {
+            {codelistUtils.makeValueLabelForAllCodeLists().map((codeLabel, index) => {
               return (
                 <option key={index + '_' + codeLabel.label} value={codeLabel.value}>
                   {codeLabel.label}

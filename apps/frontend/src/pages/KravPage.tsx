@@ -21,7 +21,7 @@ import { PageLayout } from '../components/scaffold/Page'
 import { EKravStatus, IBreadCrumbPath, IKrav, IKravVersjon, TKravQL } from '../constants'
 import { getKravWithEtterlevelseQuery } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, TLovCode, TTemaCode, codelist } from '../services/Codelist'
+import { CodelistService, EListName, TLovCode, TTemaCode } from '../services/Codelist'
 import { user } from '../services/User'
 import { useLocationState, useQueryParam } from '../util/hooks/customHooks'
 import { temaBreadCrumbPath } from './util/BreadCrumbPath'
@@ -62,6 +62,7 @@ const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) =>
 
 export const KravPage = () => {
   const params = useParams<TKravIdParams>()
+  const [codelistUtils] = CodelistService()
   const [krav, setKrav] = useState<TKravQL | undefined>()
   const { loading: kravLoading, data: kravQuery } = useQuery<
     { kravById: TKravQL },
@@ -108,12 +109,14 @@ export const KravPage = () => {
           }
         }
       })
-      const lovData: TLovCode = codelist.getCode(
+      const lovData: TLovCode = codelistUtils.getCode(
         EListName.LOV,
         krav.regelverk[0]?.lov?.code
       ) as TLovCode
       if (lovData?.data) {
-        setKravTema(codelist.getCode(EListName.TEMA, lovData.data.tema) as TTemaCode | undefined)
+        setKravTema(
+          codelistUtils.getCode(EListName.TEMA, lovData.data.tema) as TTemaCode | undefined
+        )
       }
     }
   }, [krav])

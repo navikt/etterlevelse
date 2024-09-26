@@ -1,7 +1,7 @@
 import { BodyShort, Box, Button, Loader, Modal, Radio, RadioGroup, Select } from '@navikt/ds-react'
 import axios from 'axios'
 import { useState } from 'react'
-import { EListName, codelist } from '../../services/Codelist'
+import { CodelistService, EListName } from '../../services/Codelist'
 import { env } from '../../util/env'
 
 type TExportEtterlevelseModalProps = {
@@ -14,6 +14,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [valgtTema, setValgtTema] = useState<string>('')
   const [onlyActiveKrav, setOnlyActiveKrav] = useState<boolean>(false)
+  const [codelistUtils] = CodelistService()
 
   return (
     <div>
@@ -45,7 +46,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                 <option key="" value="">
                   Alle tema
                 </option>
-                {codelist.getParsedOptions(EListName.TEMA).map((codeListOption) => (
+                {codelistUtils.getParsedOptions(EListName.TEMA).map((codeListOption) => (
                   <option key={`option_${codeListOption.value}`} value={codeListOption.value}>
                     {codeListOption.label}
                   </option>

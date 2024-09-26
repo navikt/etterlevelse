@@ -1,7 +1,7 @@
 import { kravPrioritingMapToFormValue } from '../api/KravPriorityListApi'
 import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
 import { IKravPriorityList, TKravQL } from '../constants'
-import { TTemaCode, codelist } from '../services/Codelist'
+import { CodelistService, TTemaCode } from '../services/Codelist'
 
 interface IProps {
   tema: TTemaCode
@@ -11,8 +11,9 @@ interface IProps {
 
 export const getKravForTema = (props: IProps) => {
   const { tema, kravliste, allKravPriority } = props
+  const [codelistUtils] = CodelistService()
 
-  const lover = codelist.getCodesForTema(tema.code)
+  const lover = codelistUtils.getCodesForTema(tema.code)
   const lovCodes = lover.map((lov) => lov.code)
   const krav = kravliste.filter((krav) =>
     krav.regelverk

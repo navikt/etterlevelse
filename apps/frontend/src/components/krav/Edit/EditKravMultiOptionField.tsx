@@ -3,7 +3,7 @@ import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { ReactNode } from 'react'
 import Select, { CSSObjectWithLabel } from 'react-select'
 import { TOr } from '../../../constants'
-import { EListName, ICode, codelist } from '../../../services/Codelist'
+import { CodelistService, EListName, ICode } from '../../../services/Codelist'
 import { ettlevColors } from '../../../util/theme'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
@@ -20,7 +20,8 @@ export const EditKravMultiOptionField = (
     { listName: EListName }
   >
 ) => {
-  const options = props.options || codelist.getParsedOptions(props.listName)
+  const [codelistUtils] = CodelistService()
+  const options = props.options || codelistUtils.getParsedOptions(props.listName)
 
   return (
     <FieldWrapper marginBottom={props.marginBottom}>
@@ -45,7 +46,7 @@ export const EditKravMultiOptionField = (
                     if (props.listName) {
                       fieldArrayRenderProps.form.setFieldValue(
                         props.name,
-                        value.map((value) => codelist.getCode(props.listName, value?.value))
+                        value.map((value) => codelistUtils.getCode(props.listName, value?.value))
                       )
                     } else {
                       fieldArrayRenderProps.form.setFieldValue(

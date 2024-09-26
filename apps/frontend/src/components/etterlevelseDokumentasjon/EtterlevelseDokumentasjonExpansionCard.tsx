@@ -2,7 +2,7 @@ import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
 import { useNavigate } from 'react-router-dom'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
-import { EListName, ICode, codelist } from '../../services/Codelist'
+import { CodelistService, EListName, ICode } from '../../services/Codelist'
 import { user } from '../../services/User'
 import { BehandlingList } from '../behandling/BehandlingList'
 import { Markdown } from '../common/Markdown'
@@ -17,8 +17,9 @@ interface IProps {
 export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
   const { etterlevelseDokumentasjon, relasjonLoading } = props
   const navigate = useNavigate()
+  const [codelistUtils] = CodelistService()
 
-  const relevansCodeList = codelist.getParsedOptions(EListName.RELEVANS)
+  const relevansCodeList = codelistUtils.getParsedOptions(EListName.RELEVANS)
 
   const { behandlerPersonopplysninger, behandlingIds, behandlinger, teams, irrelevansFor } =
     etterlevelseDokumentasjon

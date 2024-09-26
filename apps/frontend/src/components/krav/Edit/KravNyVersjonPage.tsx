@@ -6,7 +6,7 @@ import { TKravIdParams, createKrav, kravMapToFormVal } from '../../../api/KravAp
 import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi'
 import { EKravStatus, IKrav, TKravQL } from '../../../constants'
 import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
-import { EListName, ICode, codelist } from '../../../services/Codelist'
+import { CodelistService, EListName, ICode } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
@@ -18,6 +18,7 @@ import { KravStandardButtons } from './components/KravStandardButtons'
 export const KravNyVersjonPage = () => {
   const params: Readonly<Partial<TKravIdParams>> = useParams<TKravIdParams>()
   const kravData: IKravDataProps | undefined = GetKravData(params)
+  const [codelistUtils] = CodelistService()
 
   const kravQuery: TKravById | undefined = kravData?.kravQuery
   const kravLoading: boolean | undefined = kravData?.kravLoading
@@ -29,8 +30,11 @@ export const KravNyVersjonPage = () => {
   )
 
   const submit = async (krav: TKravQL): Promise<void> => {
-    const regelverk = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
-    const underavdeling = codelist.getCode(EListName.UNDERAVDELING, regelverk?.data?.underavdeling)
+    const regelverk = codelistUtils.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
+    const underavdeling = codelistUtils.getCode(
+      EListName.UNDERAVDELING,
+      regelverk?.data?.underavdeling
+    )
     const mutatedKrav: TKravQL = {
       ...krav,
       underavdeling: underavdeling as ICode | undefined,

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { createKrav, kravMapToFormVal } from '../../../api/KravApi'
 import { EKravStatus, IKrav, TKravQL } from '../../../constants'
 import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
-import { EListName, ICode, codelist } from '../../../services/Codelist'
+import { CodelistService, EListName, ICode } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
 import { TextAreaField } from '../../common/Inputs'
@@ -19,13 +19,14 @@ export const KravCreatePage = () => {
   const [varselMeldingActive, setVarselMeldingActive] = useState<string[]>([])
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [errorModalMessage, setErrorModalMessage] = useState('')
+  const [codelistUtils] = CodelistService()
 
   const navigate = useNavigate()
 
   const submit = (krav: TKravQL) => {
     setLoading(true)
-    const regelverk = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
-    const underavdeling: ICode | undefined = codelist.getCode(
+    const regelverk = codelistUtils.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
+    const underavdeling: ICode | undefined = codelistUtils.getCode(
       EListName.UNDERAVDELING,
       regelverk?.data?.underavdeling
     ) as ICode | undefined

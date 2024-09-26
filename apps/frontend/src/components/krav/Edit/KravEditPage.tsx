@@ -13,7 +13,7 @@ import {
 import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi'
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../../../constants'
 import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
-import { EListName, ICode, codelist } from '../../../services/Codelist'
+import { CodelistService, EListName, ICode } from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
@@ -27,7 +27,7 @@ import { KravStandardButtons } from './components/KravStandardButtons'
 export const KravEditPage = () => {
   const params: Readonly<Partial<TKravIdParams>> = useParams<TKravIdParams>()
   const kravData: IKravDataProps | undefined = GetKravData(params)
-
+  const [codelistUtils] = CodelistService()
   const kravQuery: TKravById | undefined = kravData?.kravQuery
   const kravLoading: boolean | undefined = kravData?.kravLoading
   const navigate = useNavigate()
@@ -46,8 +46,11 @@ export const KravEditPage = () => {
   const [aktivKravMessage, setAktivKravMessage] = useState<boolean>(false)
 
   const submit = async (krav: TKravQL): Promise<void> => {
-    const regelverk = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
-    const underavdeling = codelist.getCode(EListName.UNDERAVDELING, regelverk?.data?.underavdeling)
+    const regelverk = codelistUtils.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
+    const underavdeling = codelistUtils.getCode(
+      EListName.UNDERAVDELING,
+      regelverk?.data?.underavdeling
+    )
     const mutatedKrav: TKravQL = {
       ...krav,
       underavdeling: underavdeling as ICode | undefined,

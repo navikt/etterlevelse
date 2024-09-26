@@ -20,7 +20,7 @@ import { ListPageHeader } from '../components/scaffold/ListPageHeader'
 import { PageLayout } from '../components/scaffold/Page'
 import { IKrav, TKravQL } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, codelist } from '../services/Codelist'
+import { CodelistService, EListName } from '../services/Codelist'
 import { user } from '../services/User'
 
 type TSection = 'siste' | 'alle' | 'tema'
@@ -79,13 +79,14 @@ export const KravPanels = ({
   kravene?: TKravQL[] | IKrav[]
   loading?: boolean
 }) => {
+  const [codelistUtils] = CodelistService()
   if (loading) return <Skeleton variant="rectangle" />
   return (
     <div className="mb-2.5 flex flex-col gap-2">
       {kravene &&
         kravene.map((krav) => {
-          const lov = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov?.code)
-          const tema = codelist.getCode(EListName.TEMA, lov?.data?.tema)
+          const lov = codelistUtils.getCode(EListName.LOV, krav.regelverk[0]?.lov?.code)
+          const tema = codelistUtils.getCode(EListName.TEMA, lov?.data?.tema)
           return (
             <div className="mb-0" key={krav.id}>
               <LinkPanel href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>

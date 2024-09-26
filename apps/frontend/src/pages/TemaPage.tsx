@@ -11,20 +11,22 @@ import { PageLayout } from '../components/scaffold/Page'
 import { IKrav } from '../constants'
 import { useKravCounter } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, TLovCode, TTemaCode, codelist } from '../services/Codelist'
+import { CodelistService, EListName, TLovCode, TTemaCode } from '../services/Codelist'
 import { sortKravListeByPriority } from '../util/sort'
 import { kravNumView } from './KravPage'
 import { temaBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
+  const [codelistUtils] = CodelistService()
 
-  const code: TTemaCode = codelist.getCode(EListName.TEMA, tema) as TTemaCode
+  const code: TTemaCode = codelistUtils.getCode(EListName.TEMA, tema) as TTemaCode
   if (!code) return <>`&apos;`invalid code`&apos;`</>
   return <TemaView tema={code} />
 }
 
 export const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?: boolean) => {
+  const [codelistUtils] = CodelistService()
   return (
     <div className="lg:grid lg:grid-flow-col lg:gap-2">
       <div>
@@ -42,7 +44,7 @@ export const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?:
         </Heading>
         {_.uniq(lover.map((lov) => lov.data?.underavdeling)).map((code, index) => (
           <BodyShort key={code + '_' + index} size="large" spacing>
-            {codelist.getCode(EListName.UNDERAVDELING, code)?.shortName}
+            {codelistUtils.getCode(EListName.UNDERAVDELING, code)?.shortName}
           </BodyShort>
         ))}
         <Heading level="2" size="small" spacing>
@@ -59,7 +61,8 @@ export const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?:
 }
 
 const TemaView = ({ tema }: { tema: TTemaCode }) => {
-  const lover = codelist.getCodesForTema(tema.code)
+  const [codelistUtils] = CodelistService()
+  const lover = codelistUtils.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter(
     { lover: lover.map((lov) => lov.code) },
     { skip: !lover.length }

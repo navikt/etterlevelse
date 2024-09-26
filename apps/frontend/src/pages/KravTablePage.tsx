@@ -14,11 +14,12 @@ import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import { PageLayout } from '../components/scaffold/Page'
 import { IKrav } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, codelist } from '../services/Codelist'
+import { CodelistService, EListName } from '../services/Codelist'
 import { handleSort } from '../util/handleTableSort'
 import { kravStatus } from './KravPage'
 
 export const KravTablePage = () => {
+  const [codelistUtils] = CodelistService()
   const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
@@ -35,8 +36,8 @@ export const KravTablePage = () => {
       case 'avdeling':
         return (a.underavdeling?.shortName || '').localeCompare(b.underavdeling?.shortName || '')
       case 'tema':
-        return (codelist.getCode(EListName.TEMA, a.tema)?.shortName || '').localeCompare(
-          codelist.getCode(EListName.TEMA, b.tema)?.shortName || ''
+        return (codelistUtils.getCode(EListName.TEMA, a.tema)?.shortName || '').localeCompare(
+          codelistUtils.getCode(EListName.TEMA, b.tema)?.shortName || ''
         )
       case 'status':
         return (a.status || '').localeCompare(b.status || '')
@@ -126,7 +127,7 @@ export const KravTablePage = () => {
                       {' '}
                       {krav.tema && (
                         <Link href={`/tema/${krav.tema}`}>
-                          {codelist.getCode(EListName.TEMA, krav.tema)?.shortName}
+                          {codelistUtils.getCode(EListName.TEMA, krav.tema)?.shortName}
                         </Link>
                       )}
                     </Table.DataCell>

@@ -9,7 +9,7 @@ import {
   virkemiddelMapToFormVal,
 } from '../../../api/VirkemiddelApi'
 import { EYupErrorMessage, IVirkemiddel } from '../../../constants'
-import { EListName, codelist } from '../../../services/Codelist'
+import { CodelistService, EListName } from '../../../services/Codelist'
 import { ettlevColors } from '../../../util/theme'
 import { FieldWrapper, InputField } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
@@ -27,7 +27,8 @@ type TEditVirkemiddelModalProps = {
 }
 
 export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
-  const virkemiddelTypeOptions = codelist.getParsedOptions(EListName.VIRKEMIDDELTYPE)
+  const [codelistUtils] = CodelistService()
+  const virkemiddelTypeOptions = codelistUtils.getParsedOptions(EListName.VIRKEMIDDELTYPE)
   const [valgtVirkemiddeltype, setValgtVirkemiddeltype] = useState<{
     value: string
     label: string

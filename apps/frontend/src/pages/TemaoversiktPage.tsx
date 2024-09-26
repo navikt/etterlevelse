@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { PageLayout } from '../components/scaffold/Page'
 import { useKravCounter } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, TTemaCode, codelist } from '../services/Codelist'
+import { CodelistService, EListName, TTemaCode } from '../services/Codelist'
 
 export const TemaOversiktPage = () => {
   useEffect(() => {
@@ -24,6 +24,7 @@ export const TemaOversiktPage = () => {
 export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
   const [num] = useState<{ [t: string]: number[] }>({})
   const [kravAntall, setKravAntall] = useState<number>(0)
+  const [codelistUtils] = CodelistService()
 
   const updateNum = (tema: string, temaNum: number[]) => {
     num[tema] = temaNum
@@ -37,7 +38,7 @@ export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
     )
   }
 
-  const temaListe = codelist
+  const temaListe = codelistUtils
     .getCodes(EListName.TEMA)
     .sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
 
@@ -69,7 +70,8 @@ export const TemaPanel = ({
   setNum: (tema: string, num: number[]) => void
   subContent?: boolean
 }) => {
-  const lover = codelist.getCodesForTema(tema.code)
+  const [codelistUtils] = CodelistService()
+  const lover = codelistUtils.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter(
     { lover: [...lover.map((lov) => lov.code)] },
     { skip: !lover.length }

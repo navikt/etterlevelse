@@ -8,7 +8,7 @@ import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
 import { PageLayout } from '../components/scaffold/Page'
 import { IBreadCrumbPath, IEtterlevelse, IKrav } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, TTemaCode, codelist } from '../services/Codelist'
+import { CodelistService, EListName, TTemaCode } from '../services/Codelist'
 import { kravNumView } from './KravPage'
 import { temaBreadCrumbPath } from './util/BreadCrumbPath'
 
@@ -16,6 +16,7 @@ export const etterlevelseName = (etterlevelse: IEtterlevelse) => `${kravNumView(
 
 export const EtterlevelsePage = () => {
   const params = useParams<{ id?: string }>()
+  const [codelistUtils] = CodelistService()
   const [etterlevelse] = useEtterlevelse(params.id)
   const [edit] = useState(etterlevelse && !etterlevelse.id)
   const [krav, setKrav] = useState<IKrav>()
@@ -48,10 +49,10 @@ export const EtterlevelsePage = () => {
         (response) => {
           if (response) {
             setKrav(response)
-            const lovData = codelist.getCode(EListName.LOV, response.regelverk[0]?.lov?.code)
+            const lovData = codelistUtils.getCode(EListName.LOV, response.regelverk[0]?.lov?.code)
             if (lovData?.data) {
               setKravTema(
-                codelist.getCode(EListName.TEMA, lovData.data.tema) as TTemaCode | undefined
+                codelistUtils.getCode(EListName.TEMA, lovData.data.tema) as TTemaCode | undefined
               )
             }
           }

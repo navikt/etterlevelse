@@ -1,6 +1,6 @@
 import { BodyShort } from '@navikt/ds-react'
 import React, { ReactNode } from 'react'
-import { EListName, ICode, codelist } from '../../services/Codelist'
+import { CodelistService, EListName, ICode } from '../../services/Codelist'
 import { TNavigableItem } from '../admin/audit/AuditTypes'
 import { Markdown } from './Markdown'
 import { ExternalLink, urlForObject } from './RouteLink'
@@ -12,15 +12,16 @@ const Content = (props: {
   markdown?: boolean
 }) => {
   const { item, list, linkCodelist, markdown } = props
+  const [codelistUtils] = CodelistService()
   if (list) {
     const itemString = item as string
     if (linkCodelist)
       return (
         <ExternalLink href={urlForObject(list as EListName & TNavigableItem, itemString)}>
-          {codelist.getShortname(list as EListName & TNavigableItem, itemString)}
+          {codelistUtils.getShortname(list as EListName & TNavigableItem, itemString)}
         </ExternalLink>
       )
-    return <>{codelist.getShortname(list, itemString)}</>
+    return <>{codelistUtils.getShortname(list, itemString)}</>
   }
   if (markdown) return <Markdown source={item as string} />
   return <>{item}</>
