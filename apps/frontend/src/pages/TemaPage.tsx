@@ -11,7 +11,13 @@ import { PageLayout } from '../components/scaffold/Page'
 import { IKrav } from '../constants'
 import { useKravCounter } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { CodelistService, EListName, TLovCode, TTemaCode } from '../services/Codelist'
+import {
+  CodelistService,
+  EListName,
+  ICodelistProps,
+  TLovCode,
+  TTemaCode,
+} from '../services/Codelist'
 import { sortKravListeByPriority } from '../util/sort'
 import { kravNumView } from './KravPage'
 import { temaBreadCrumbPath } from './util/BreadCrumbPath'
@@ -22,11 +28,15 @@ export const TemaPage = () => {
 
   const code: TTemaCode = codelistUtils.getCode(EListName.TEMA, tema) as TTemaCode
   if (!code) return <>`&apos;`invalid code`&apos;`</>
-  return <TemaView tema={code} />
+  return <TemaView tema={code} codelistUtils={codelistUtils} />
 }
 
-export const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?: boolean) => {
-  const [codelistUtils] = CodelistService()
+const getTemaMainHeader = (
+  tema: TTemaCode,
+  lover: TLovCode[],
+  codelistUtils: ICodelistProps,
+  noHeader?: boolean
+) => {
   return (
     <div className="lg:grid lg:grid-flow-col lg:gap-2">
       <div>
@@ -60,8 +70,7 @@ export const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?:
   )
 }
 
-const TemaView = ({ tema }: { tema: TTemaCode }) => {
-  const [codelistUtils] = CodelistService()
+const TemaView = ({ tema, codelistUtils }: { tema: TTemaCode; codelistUtils: ICodelistProps }) => {
   const lover = codelistUtils.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter(
     { lover: lover.map((lov) => lov.code) },
@@ -98,7 +107,7 @@ const TemaView = ({ tema }: { tema: TTemaCode }) => {
       breadcrumbPaths={[temaBreadCrumbPath]}
       currentPage={tema.shortName}
     >
-      {getTemaMainHeader(tema, lover)}
+      {getTemaMainHeader(tema, lover, codelistUtils)}
       <div className="mt-6">
         <Label>{loading ? '?' : data?.krav.numberOfElements || 0} krav</Label>
         {loading && <SkeletonPanel count={10} />}

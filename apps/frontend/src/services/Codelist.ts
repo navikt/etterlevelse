@@ -22,7 +22,7 @@ export enum ELovCodeRelevans {
 
 const LOVDATA_FORSKRIFT_PREFIX = 'FORSKRIFT_'
 
-interface ICodelistProps {
+export interface ICodelistProps {
   fetchData: (refresh?: boolean) => Promise<any>
   isLoaded: () => string | IAllCodelists | undefined
   getCodes: (list: EListName) => TLovCode[] | TTemaCode[] | ICode[]
