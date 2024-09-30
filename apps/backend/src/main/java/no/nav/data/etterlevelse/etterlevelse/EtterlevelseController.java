@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.ForbiddenException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
@@ -107,6 +108,12 @@ public class EtterlevelseController {
     public ResponseEntity<EtterlevelseResponse> createEtterlevelse(@RequestBody EtterlevelseRequest request) {
         log.info("Create Etterlevelse");
 
+        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.getEtterlevelseDokumentasjonWithTeamAndBehandlingAndResourceDataAndRiskoeiereData(UUID.fromString(request.getEtterlevelseDokumentasjonId()));
+        if (!etterlevelseDokumentasjon.isHasCurrentUserAccess()) {
+            log.info("PriorityList is Empty. Requested to save without user or team added to Etterlevelse document.");
+            throw new ForbiddenException("Har du lagt til team og eller person i dokument egenskaper? Dette er nødvendig for å lagre endringer.");
+        }
+
         if (request.getEtterlevelseDokumentasjonId() == null || request.getEtterlevelseDokumentasjonId().isEmpty()) {
             throw new ValidationException("Tried to create etterlevelse with old architecture");
         }
@@ -128,6 +135,12 @@ public class EtterlevelseController {
 
         if (request.getEtterlevelseDokumentasjonId() == null || request.getEtterlevelseDokumentasjonId().isEmpty()) {
             throw new ValidationException("Tried to create etterlevelse with old architecture");
+        }
+
+        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.getEtterlevelseDokumentasjonWithTeamAndBehandlingAndResourceDataAndRiskoeiereData(UUID.fromString(request.getEtterlevelseDokumentasjonId()));
+        if (!etterlevelseDokumentasjon.isHasCurrentUserAccess()) {
+            log.info("Requested to save without user or team added to Etterlevelse document.");
+            throw new ForbiddenException("Har du lagt til team og eller person i dokument egenskaper? Dette er nødvendig for å lagre endringer.");
         }
 
         etterlevelseDokumentasjonService.updatePriorityList(request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.isPrioritised());
