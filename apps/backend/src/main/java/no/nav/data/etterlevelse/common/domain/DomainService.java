@@ -47,6 +47,7 @@ public class DomainService<T extends DomainObject> {
         return storage.get(uuid);
     }
 
+    // TODO: Dette må flyttes ut til en egen komponent og kalles fra Controller og ikke Service. Se lignende kommentar i EtterlevelseService
     protected <R extends KravId & Validated> Optional<Krav> validateKravNummer(Validator<R> validator) {
         Integer kravNummer = validator.getItem().getKravNummer();
         Integer kravVersjon = validator.getItem().getKravVersjon();
