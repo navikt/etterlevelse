@@ -1,4 +1,4 @@
-import { BodyLong, Heading, LinkPanel, Loader, Spacer, Tag } from '@navikt/ds-react'
+import { BodyLong, Heading, LinkPanel, List, Loader, Spacer, Tag } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { PageLayout } from '../components/scaffold/Page'
 import { useKravCounter } from '../query/KravQuery'
@@ -51,11 +51,13 @@ export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
           Totalt {kravAntall} krav fordelt på {temaListe.length} temaer
         </BodyLong>
       </div>
-      <div className="mt-6">
+      <List className="mt-6">
         {temaListe.map((tema: TTemaCode) => (
-          <TemaPanel subContent={subContent} key={tema.code} tema={tema} setNum={updateNum} />
+          <List.Item icon={<div />} key={tema.code}>
+            <TemaPanel subContent={subContent} tema={tema} setNum={updateNum} />
+          </List.Item>
         ))}
-      </div>
+      </List>
     </div>
   )
 }

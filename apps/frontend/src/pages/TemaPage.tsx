@@ -1,4 +1,4 @@
-import { BodyShort, Detail, Heading, Label, LinkPanel } from '@navikt/ds-react'
+import { BodyShort, Detail, Heading, Label, LinkPanel, List } from '@navikt/ds-react'
 import * as _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -100,17 +100,19 @@ const TemaView = ({ tema }: { tema: TTemaCode }) => {
         <Label>{loading ? '?' : data?.krav.numberOfElements || 0} krav</Label>
         {loading && <SkeletonPanel count={10} />}
         {!loading && kravList && (
-          <div className="grid gap-2 ">
+          <List className="grid gap-2 ">
             {kravList.map((krav, index) => (
-              <LinkPanel
-                href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
+              <List.Item
+                icon={<div />}
                 key={krav.kravNummer + '.' + krav.kravVersjon + '_' + index}
               >
-                <Detail weight="semibold">{kravNumView(krav)}</Detail>
-                <BodyShort>{krav.navn}</BodyShort>
-              </LinkPanel>
+                <LinkPanel href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>
+                  <Detail weight="semibold">{kravNumView(krav)}</Detail>
+                  <BodyShort>{krav.navn}</BodyShort>
+                </LinkPanel>
+              </List.Item>
             ))}
-          </div>
+          </List>
         )}
       </div>
     </PageLayout>
