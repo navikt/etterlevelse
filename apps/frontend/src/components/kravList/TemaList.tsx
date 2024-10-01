@@ -1,4 +1,13 @@
-import { Accordion, BodyLong, BodyShort, Button, Label, LinkPanel, Spacer } from '@navikt/ds-react'
+import {
+  Accordion,
+  BodyLong,
+  BodyShort,
+  Button,
+  Label,
+  LinkPanel,
+  List,
+  Spacer,
+} from '@navikt/ds-react'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { getAllKrav } from '../../api/KravApi'
@@ -77,7 +86,7 @@ export const TemaList = () => {
 const getKravTemaRowsWithLabel = (kravListe: IKrav[], tema: string) => {
   return kravListe.map((krav, index) => {
     return (
-      <div key={`${krav.navn}_${krav.kravNummer}_${tema}_${index}`}>
+      <List.Item icon={<div />} key={`${krav.navn}_${krav.kravNummer}_${tema}_${index}`}>
         <LinkPanel href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>
           <LinkPanel.Title className="flex items-center">
             <div className="max-w-xl">
@@ -102,7 +111,7 @@ const getKravTemaRowsWithLabel = (kravListe: IKrav[], tema: string) => {
             </div>
           </LinkPanel.Title>
         </LinkPanel>
-      </div>
+      </List.Item>
     )
   })
 }
@@ -133,9 +142,10 @@ const KravTemaList = (props: {
 
   return (
     <div className="flex flex-col gap-2">
-      {getKravTemaRowsWithLabel(draftKrav, tema)}
-      {getKravTemaRowsWithLabel(activeKravSortedWithPriority, tema)}
-
+      <List>
+        {getKravTemaRowsWithLabel(draftKrav, tema)}
+        {getKravTemaRowsWithLabel(activeKravSortedWithPriority, tema)}
+      </List>
       <div className={'w-full flex flex-row-reverse pt-5'}>
         <Button variant="secondary" size="medium" onClick={() => setIsEditPriorityModalOpen(true)}>
           Endre rekkefølge på krav
