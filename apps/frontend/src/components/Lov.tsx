@@ -1,6 +1,13 @@
 import { Link } from '@navikt/ds-react'
 import { IRegelverk } from '../constants'
-import { CodelistService, EListName, ICodelistProps } from '../services/Codelist'
+import {
+  CodelistService,
+  EListName,
+  ICode,
+  ICodelistProps,
+  TLovCode,
+  TTemaCode,
+} from '../services/Codelist'
 import { env } from '../util/env'
 
 // unsure how to refactor code
@@ -11,9 +18,14 @@ const processString = reactProcessString as (
   converters: { regex: RegExp; fn: (key: string, result: string[]) => JSX.Element | string }[]
 ) => (input?: string) => JSX.Element[]
 
-export const LovViewList = (props: { regelverkListe: IRegelverk[]; openOnSamePage?: boolean }) => (
+interface ILovViewListProps {
+  regelverkListe: IRegelverk[]
+  openOnSamePage?: boolean
+}
+
+export const LovViewList = (props: ILovViewListProps) => (
   <div className="flex flex-col break-all">
-    {props.regelverkListe.map((regelverk, index) => (
+    {props.regelverkListe.map((regelverk: IRegelverk, index: number) => (
       <div key={index} className="mb-2">
         <LovView regelverk={regelverk} openOnSamePage={props.openOnSamePage} />
       </div>
@@ -21,34 +33,47 @@ export const LovViewList = (props: { regelverkListe: IRegelverk[]; openOnSamePag
   </div>
 )
 
-export const LovView = (props: { regelverk?: IRegelverk; openOnSamePage?: boolean }) => {
+interface ILovViewProps {
+  regelverk?: IRegelverk
+  openOnSamePage?: boolean
+}
+
+export const LovView = (props: ILovViewProps) => {
+  const { regelverk, openOnSamePage } = props
   const [codelistUtils] = CodelistService()
 
-  if (!props.regelverk) return null
-  const { spesifisering, lov } = props.regelverk
-  const lovCode = lov?.code
+  if (!regelverk) return null
 
-  const lovDisplay = lov && codelistUtils.getShortname(EListName.LOV, lovCode)
+  const { spesifisering, lov } = regelverk
+  const lovCode: string = lov?.code
 
-  const descriptionText = codelistUtils.valid(EListName.LOV, lovCode)
+  const lovDisplay: string = lov && codelistUtils.getShortname(EListName.LOV, lovCode)
+
+  const descriptionText: string | JSX.Element[] | undefined = codelistUtils.valid(
+    EListName.LOV,
+    lovCode
+  )
     ? legalBasisLinkProcessor(
         lovCode,
         codelistUtils,
         lovDisplay + ' ' + spesifisering,
-        props.openOnSamePage
+        openOnSamePage
       )
     : spesifisering
 
   return <span>{descriptionText}</span>
 }
 
-const findLovId = (nationalLaw: string, codelistUtils: ICodelistProps) => {
-  const lov = codelistUtils.getCode(EListName.LOV, nationalLaw)
+const findLovId = (nationalLaw: string, codelistUtils: ICodelistProps): string => {
+  const lov: ICode | TLovCode | TTemaCode | undefined = codelistUtils.getCode(
+    EListName.LOV,
+    nationalLaw
+  )
   return lov?.data?.lovId || lov?.description || ''
 }
 
-export const lovdataBase = (nationalLaw: string, codelistUtils: ICodelistProps) => {
-  const lovId = findLovId(nationalLaw, codelistUtils)
+export const lovdataBase = (nationalLaw: string, codelistUtils: ICodelistProps): string => {
+  const lovId: string = findLovId(nationalLaw, codelistUtils)
   if (codelistUtils.isForskrift(nationalLaw)) {
     return env.lovdataForskriftBaseUrl + lovId
   } else {
@@ -61,7 +86,7 @@ const legalBasisLinkProcessor = (
   codelistUtils: ICodelistProps,
   text?: string,
   openOnSamePage?: boolean
-) => {
+): string | JSX.Element[] | undefined => {
   if (!findLovId(law, codelistUtils).match(/^\d+.*/)) {
     return text
   }
