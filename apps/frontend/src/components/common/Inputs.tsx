@@ -12,7 +12,7 @@ import {
   useDatepicker,
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
-import React, { ReactNode, useState } from 'react'
+import React, { ChangeEvent, ReactNode, useState } from 'react'
 import { TOption, TOr } from '../../constants'
 import { CodelistService, EListName, ICode } from '../../services/Codelist'
 import LabelWithTooltip from '../common/LabelWithTooltip'
@@ -394,19 +394,27 @@ export const OptionList = (props: TPropsOptionList) => {
       className="w-full"
       value={value}
       error={error}
-      onChange={async (event) => {
-        const val = event.target.value
-        const toSet =
-          listName && val ? ((await codelistUtils.getCode(listName, val)) as ICode) : val
+      onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+        const val: string = event.target.value
+        const toSet: string | ICode =
+          listName && val ? (codelistUtils.getCode(listName, val) as ICode) : val
         return onChange(toSet)
       }}
     >
       <option value=""> </option>
-      {optionsList.map((code, index) => (
-        <option key={index + '_' + code.label} value={code.value}>
-          {code.label}
-        </option>
-      ))}
+      {optionsList.map(
+        (
+          code: Readonly<{
+            value?: string | number
+            label?: ReactNode
+          }>,
+          index: number
+        ) => (
+          <option key={index + '_' + code.label} value={code.value}>
+            {code.label}
+          </option>
+        )
+      )}
     </Select>
   )
 }
