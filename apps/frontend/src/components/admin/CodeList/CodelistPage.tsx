@@ -1,8 +1,7 @@
 import { PlusIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Loader, Select } from '@navikt/ds-react'
-import * as React from 'react'
-import { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { createCodelist } from '../../../api/CodelistApi'
 import { CodelistService, ICode, ICodeListFormValues } from '../../../services/Codelist'
 import { user } from '../../../services/User'
@@ -12,19 +11,24 @@ import CodeListTable from './CodeListStyledTable'
 import ModalCreateCodeList from './ModalCreateCodeList'
 
 const CodeListPage = () => {
-  const params = useParams<{ listname?: string }>()
-  const navigate = useNavigate()
-  const [loading, setLoading] = React.useState(true)
-  const [listname, setListname] = React.useState(params.listname)
-  const [createCodeListModal, setCreateCodeListModal] = React.useState(false)
-  const [errorOnResponse, setErrorOnResponse] = React.useState(null)
-  const forceUpdate = useForceUpdate()
+  const params: Readonly<
+    Partial<{
+      listname?: string
+    }>
+  > = useParams<{ listname?: string }>()
+  const navigate: NavigateFunction = useNavigate()
+  const [loading, setLoading] = useState(true)
+  const [listname, setListname] = useState(params.listname)
+  const [createCodeListModal, setCreateCodeListModal] = useState(false)
+  const [errorOnResponse, setErrorOnResponse] = useState(null)
+  const forceUpdate: () => void = useForceUpdate()
   const [codelistUtils, lists] = CodelistService()
   useAwait(codelistUtils.fetchData(), setLoading)
 
-  const currentCodelist = lists && listname ? lists.codelist[listname] : undefined
+  const currentCodelist: ICode[] | undefined =
+    lists && listname ? lists.codelist[listname] : undefined
 
-  const handleCreateCodelist = async (values: ICodeListFormValues) => {
+  const handleCreateCodelist = async (values: ICodeListFormValues): Promise<void> => {
     setLoading(true)
     try {
       await createCodelist({ ...values } as ICode)
@@ -37,7 +41,7 @@ const CodeListPage = () => {
     setLoading(false)
   }
 
-  const update = async () => {
+  const update = async (): Promise<void> => {
     await codelistUtils.fetchData(true)
     forceUpdate()
   }
@@ -64,24 +68,31 @@ const CodeListPage = () => {
       <Heading size="medium" level="1">
         Administrering av kodeverk
       </Heading>
-      {loading ? (
-        <Loader size="large" />
-      ) : (
+      {loading && <Loader size="large" />}
+      {!loading && (
         <div className="flex justify-between w-full">
           <Select
             label="Velg kodeverk"
             hideLabel
             className="w-full max-w-xl"
-            onChange={(e) => setListname(e.target.value)}
+            onChange={(event) => setListname(event.target.value)}
           >
             <option value="">Velg kodeverk</option>
-            {codelistUtils.makeValueLabelForAllCodeLists().map((codeLabel, index) => {
-              return (
-                <option key={index + '_' + codeLabel.label} value={codeLabel.value}>
-                  {codeLabel.label}
-                </option>
-              )
-            })}
+            {codelistUtils.makeValueLabelForAllCodeLists().map(
+              (
+                codeLabel: {
+                  value: string
+                  label: string
+                },
+                index: number
+              ) => {
+                return (
+                  <option key={index + '_' + codeLabel.label} value={codeLabel.value}>
+                    {codeLabel.label}
+                  </option>
+                )
+              }
+            )}
           </Select>
           {listname && (
             <Button
