@@ -11,7 +11,7 @@ import {
 } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import StatusView from '../components/common/StatusTag'
 import { AllKrav } from '../components/kravList/AllKrav'
 import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
@@ -20,13 +20,13 @@ import { ListPageHeader } from '../components/scaffold/ListPageHeader'
 import { PageLayout } from '../components/scaffold/Page'
 import { IKrav, TKravQL } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { CodelistService, EListName } from '../services/Codelist'
+import { CodelistService, EListName, TLovCode, TTemaCode } from '../services/Codelist'
 import { user } from '../services/User'
 
 type TSection = 'siste' | 'alle' | 'tema'
 
-export const sortKrav = (kravene: TKravQL[]) => {
-  return [...kravene].sort((a, b) => {
+export const sortKrav = (kravene: TKravQL[]): TKravQL[] => {
+  return [...kravene].sort((a: TKravQL, b: TKravQL) => {
     if (a.navn.toLocaleLowerCase() === b.navn.toLocaleLowerCase()) {
       return b.kravVersjon - a.kravVersjon
     }
@@ -72,60 +72,75 @@ export const KravListPage = () => {
   )
 }
 
-export const KravPanels = ({
-  kravene,
-  loading,
-}: {
+interface IKravPanelsProps {
   kravene?: TKravQL[] | IKrav[]
   loading?: boolean
-}) => {
+}
+
+export const KravPanels = ({ kravene, loading }: IKravPanelsProps) => {
   const [codelistUtils] = CodelistService()
-  if (loading) return <Skeleton variant="rectangle" />
+
   return (
-    <div className="mb-2.5 flex flex-col gap-2">
-      {kravene &&
-        kravene.map((krav) => {
-          const lov = codelistUtils.getCode(EListName.LOV, krav.regelverk[0]?.lov?.code)
-          const tema = codelistUtils.getCode(EListName.TEMA, lov?.data?.tema)
-          return (
-            <div className="mb-0" key={krav.id}>
-              <LinkPanel href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>
-                <LinkPanel.Title className="flex items-center">
-                  <div className="max-w-xl">
-                    <BodyShort size="small">
-                      K{krav.kravNummer}.{krav.kravVersjon}
-                    </BodyShort>
-                    <BodyLong>
-                      <Label>{krav.navn}</Label>
-                    </BodyLong>
-                  </div>
-                  <Spacer />
-                  <div className="mr-5">
-                    <StatusView status={krav.status} />
-                  </div>
-                  <div className="w-44">
-                    <BodyShort size="small" className="break-words">
-                      {tema && tema.shortName ? tema.shortName : ''}
-                    </BodyShort>
-                    <BodyShort size="small">
-                      {krav.changeStamp.lastModifiedDate !== undefined &&
-                      krav.changeStamp.lastModifiedDate !== ''
-                        ? `Sist endret: ${moment(krav.changeStamp.lastModifiedDate).format('ll')}`
-                        : ''}
-                    </BodyShort>
-                  </div>
-                </LinkPanel.Title>
-              </LinkPanel>
-            </div>
-          )
-        })}
-    </div>
+    <>
+      {loading && <Skeleton variant="rectangle" />}
+      {!loading && (
+        <div className="mb-2.5 flex flex-col gap-2">
+          {kravene &&
+            kravene.map((krav: IKrav | TKravQL) => {
+              const lov: TLovCode = codelistUtils.getCode(
+                EListName.LOV,
+                krav.regelverk[0]?.lov?.code
+              ) as TLovCode
+              const tema: TTemaCode = codelistUtils.getCode(
+                EListName.TEMA,
+                lov?.data?.tema
+              ) as TTemaCode
+
+              return (
+                <div className="mb-0" key={krav.id}>
+                  <LinkPanel href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>
+                    <LinkPanel.Title className="flex items-center">
+                      <div className="max-w-xl">
+                        <BodyShort size="small">
+                          K{krav.kravNummer}.{krav.kravVersjon}
+                        </BodyShort>
+                        <BodyLong>
+                          <Label>{krav.navn}</Label>
+                        </BodyLong>
+                      </div>
+                      <Spacer />
+                      <div className="mr-5">
+                        <StatusView status={krav.status} />
+                      </div>
+                      <div className="w-44">
+                        <BodyShort size="small" className="break-words">
+                          {tema && tema.shortName ? tema.shortName : ''}
+                        </BodyShort>
+                        <BodyShort size="small">
+                          {krav.changeStamp.lastModifiedDate !== undefined &&
+                          krav.changeStamp.lastModifiedDate !== ''
+                            ? `Sist endret: ${moment(krav.changeStamp.lastModifiedDate).format('ll')}`
+                            : ''}
+                        </BodyShort>
+                      </div>
+                    </LinkPanel.Title>
+                  </LinkPanel>
+                </div>
+              )
+            })}
+        </div>
+      )}
+    </>
   )
 }
 
 const KravTabs = () => {
-  const params = useParams<{ tab?: string }>()
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
+  const params: Readonly<
+    Partial<{
+      tab?: string
+    }>
+  > = useParams<{ tab?: string }>()
   const [tab, setTab] = useState<string>(params.tab || 'siste')
 
   useEffect(() => {
@@ -135,7 +150,7 @@ const KravTabs = () => {
   return (
     <Tabs
       defaultValue={tab}
-      onChange={(args) => {
+      onChange={(args: string) => {
         setTab(args)
         navigate(`/kravliste/${args}`)
       }}
