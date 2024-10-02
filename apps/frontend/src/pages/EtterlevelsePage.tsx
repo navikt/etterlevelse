@@ -8,24 +8,29 @@ import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
 import { PageLayout } from '../components/scaffold/Page'
 import { IBreadCrumbPath, IEtterlevelse, IKrav } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { CodelistService, EListName, TTemaCode } from '../services/Codelist'
+import { CodelistService, EListName, TLovCode, TTemaCode } from '../services/Codelist'
 import { kravNumView } from './KravPage'
 import { temaBreadCrumbPath } from './util/BreadCrumbPath'
 
-export const etterlevelseName = (etterlevelse: IEtterlevelse) => `${kravNumView(etterlevelse)}`
+export const etterlevelseName = (etterlevelse: IEtterlevelse): string =>
+  `${kravNumView(etterlevelse)}`
 
 export const EtterlevelsePage = () => {
-  const params = useParams<{ id?: string }>()
+  const params: Readonly<
+    Partial<{
+      id?: string
+    }>
+  > = useParams<{ id?: string }>()
   const [codelistUtils] = CodelistService()
   const [etterlevelse] = useEtterlevelse(params.id)
   const [edit] = useState(etterlevelse && !etterlevelse.id)
   const [krav, setKrav] = useState<IKrav>()
   const [kravTema, setKravTema] = useState<TTemaCode>()
 
-  const loading = !edit && !etterlevelse
+  const loading: boolean = !edit && !etterlevelse
 
   const getPageTitle = (): string => {
-    const kravNummerMedNavn = etterlevelse?.kravNummer
+    const kravNummerMedNavn: string = etterlevelse?.kravNummer
       ? 'K' +
         etterlevelse.kravNummer.toString() +
         '.' +
@@ -46,10 +51,13 @@ export const EtterlevelsePage = () => {
       })
 
       getKravByKravNumberAndVersion(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(
-        (response) => {
+        (response: IKrav | undefined) => {
           if (response) {
             setKrav(response)
-            const lovData = codelistUtils.getCode(EListName.LOV, response.regelverk[0]?.lov?.code)
+            const lovData: TLovCode | undefined = codelistUtils.getCode(
+              EListName.LOV,
+              response.regelverk[0]?.lov?.code
+            ) as TLovCode
             if (lovData?.data) {
               setKravTema(
                 codelistUtils.getCode(EListName.TEMA, lovData.data.tema) as TTemaCode | undefined
