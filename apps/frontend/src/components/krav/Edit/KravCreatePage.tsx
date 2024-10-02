@@ -1,11 +1,11 @@
 import { Heading, Loader } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { createKrav, kravMapToFormVal } from '../../../api/KravApi'
 import { EKravStatus, IKrav, TKravQL } from '../../../constants'
 import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
-import { CodelistService, EListName, ICode } from '../../../services/Codelist'
+import { CodelistService, EListName, ICode, TLovCode, TTemaCode } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
 import { TextAreaField } from '../../common/Inputs'
@@ -15,17 +15,19 @@ import { KravFormFields } from './components/KravFormFields'
 import { KravStandardButtons } from './components/KravStandardButtons'
 
 export const KravCreatePage = () => {
+  const navigate: NavigateFunction = useNavigate()
   const [loading, setLoading] = useState(false)
   const [varselMeldingActive, setVarselMeldingActive] = useState<string[]>([])
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [errorModalMessage, setErrorModalMessage] = useState('')
   const [codelistUtils] = CodelistService()
 
-  const navigate = useNavigate()
-
-  const submit = (krav: TKravQL) => {
+  const submit = (krav: TKravQL): void => {
     setLoading(true)
-    const regelverk = codelistUtils.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
+    const regelverk: ICode | TLovCode | TTemaCode | undefined = codelistUtils.getCode(
+      EListName.LOV,
+      krav.regelverk[0]?.lov.code
+    )
     const underavdeling: ICode | undefined = codelistUtils.getCode(
       EListName.UNDERAVDELING,
       regelverk?.data?.underavdeling
@@ -41,7 +43,7 @@ export const KravCreatePage = () => {
         setLoading(false)
         navigate('/krav/' + krav.id)
       })
-      .catch((error) => setErrorModalMessage(error))
+      .catch((error: any) => setErrorModalMessage(error))
   }
 
   return (
