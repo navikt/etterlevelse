@@ -10,13 +10,19 @@ import {
   Table,
 } from '@navikt/ds-react'
 import moment from 'moment'
-import { ReactNode, useEffect, useState } from 'react'
+import { ChangeEvent, ReactNode, useEffect, useState } from 'react'
 import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
 import { PersonName } from '../components/common/PersonName'
 import { getMelderInfo } from '../components/krav/tilbakemelding/Tilbakemelding'
 import { PageLayout } from '../components/scaffold/Page'
-import { ETilbakemeldingMeldingStatus, IKrav, IPageResponse, ITilbakemelding } from '../constants'
+import {
+  ETilbakemeldingMeldingStatus,
+  IKrav,
+  IPageResponse,
+  ITilbakemelding,
+  TKravQL,
+} from '../constants'
 import { ampli } from '../services/Amplitude'
 import { CodelistService, EListName } from '../services/Codelist'
 import { handleSort } from '../util/handleTableSort'
@@ -41,11 +47,11 @@ export const QuestionAndAnswerLogPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
 
-  let sortedData = kravMessages.sort((a, b) =>
+  let sortedData: TKravMessage[] = kravMessages.sort((a: TKravMessage, b: TKravMessage) =>
     (b.tidForSporsmaal || '').localeCompare(a.tidForSporsmaal || '')
   )
 
-  const comparator = (a: TKravMessage, b: TKravMessage, orderBy: string) => {
+  const comparator = (a: TKravMessage, b: TKravMessage, orderBy: string): number => {
     switch (orderBy) {
       case 'kravNummer':
         return a.kravNummer - b.kravNummer
@@ -63,7 +69,7 @@ export const QuestionAndAnswerLogPage = () => {
   }
 
   sortedData = sortedData
-    .sort((a, b) => {
+    .sort((a: TKravMessage, b: TKravMessage) => {
       if (sort) {
         return sort.direction === 'ascending'
           ? comparator(b, a, sort.orderBy)
@@ -75,8 +81,8 @@ export const QuestionAndAnswerLogPage = () => {
 
   useEffect(() => {
     ;(async () => {
-      const kraver = await getAllKrav()
-      const mappedKraver = kraver.map((krav) => kravMapToFormVal(krav))
+      const kraver: IKrav[] = await getAllKrav()
+      const mappedKraver: TKravQL[] = kraver.map((krav: IKrav) => kravMapToFormVal(krav))
       setTableContent([...mappedKraver])
       ampli.logEvent('sidevisning', {
         side: 'Log side for spørsmål og svar',
@@ -91,42 +97,46 @@ export const QuestionAndAnswerLogPage = () => {
     const tilbakeMeldinger: ITilbakemelding[] = []
 
     const getTilbakeMeldingerPromise: Promise<any>[] = []
-    tableContent.forEach((k) => {
+    tableContent.forEach((krav: IKrav) => {
       getTilbakeMeldingerPromise.push(
-        (async () => await getTilbakemeldingForKrav(k.kravNummer, k.kravVersjon))()
+        (async () => await getTilbakemeldingForKrav(krav.kravNummer, krav.kravVersjon))()
       )
     })
 
     try {
-      Promise.all(getTilbakeMeldingerPromise).then((res: IPageResponse<ITilbakemelding>[]) => {
-        res.forEach((t) => {
-          if (t.content) {
-            tilbakeMeldinger.push(...t.content)
+      Promise.all(getTilbakeMeldingerPromise).then((response: IPageResponse<ITilbakemelding>[]) => {
+        response.forEach((tilbakemelding: IPageResponse<ITilbakemelding>) => {
+          if (tilbakemelding.content) {
+            tilbakeMeldinger.push(...tilbakemelding.content)
           }
         })
 
-        tilbakeMeldinger.forEach((t) => {
-          const kravNavn = tableContent.filter(
-            (k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon
+        tilbakeMeldinger.forEach((tilbakemelding: ITilbakemelding) => {
+          const kravNavn: string = tableContent.filter(
+            (krav: IKrav) =>
+              krav.kravNummer === tilbakemelding.kravNummer &&
+              krav.kravVersjon === tilbakemelding.kravVersjon
           )[0].navn
-          const kravTema = tableContent.filter(
-            (k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon
+          const kravTema: string | undefined = tableContent.filter(
+            (krav: IKrav) =>
+              krav.kravNummer === tilbakemelding.kravNummer &&
+              krav.kravVersjon === tilbakemelding.kravVersjon
           )[0].tema
-          const { status, sistMelding } = getMelderInfo(t)
+          const { status, sistMelding } = getMelderInfo(tilbakemelding)
           kravMessages.push({
-            ...t,
+            ...tilbakemelding,
             kravNavn: kravNavn,
-            tidForSporsmaal: t.meldinger[0].tid,
+            tidForSporsmaal: tilbakemelding.meldinger[0].tid,
             tidForSvar:
               status === ETilbakemeldingMeldingStatus.UBESVART ? undefined : sistMelding.tid,
-            melderNavn: <PersonName ident={t.melderIdent} />,
+            melderNavn: <PersonName ident={tilbakemelding.melderIdent} />,
             tema: kravTema,
           })
         })
         setKravMessages(kravMessages)
       })
-    } catch (e: any) {
-      console.error(e)
+    } catch (error: any) {
+      console.error(error)
     }
     setIsLoading(false)
   }, [tableContent])
@@ -144,7 +154,7 @@ export const QuestionAndAnswerLogPage = () => {
               size="large"
               zebraStripes
               sort={sort}
-              onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
+              onSortChange={(sortKey: string) => handleSort(sort, setSort, sortKey)}
             >
               <Table.Header>
                 <Table.Row>
@@ -167,38 +177,34 @@ export const QuestionAndAnswerLogPage = () => {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {sortedData.map((message: TKravMessage) => {
-                  return (
-                    <Table.Row key={message.id}>
-                      <Table.HeaderCell className="w-[6%]" scope="row">
-                        {' '}
-                        K{message.kravNummer}.{message.kravVersjon}
-                      </Table.HeaderCell>
+                {sortedData.map((message: TKravMessage) => (
+                  <Table.Row key={message.id}>
+                    <Table.HeaderCell className="w-[6%]" scope="row">
+                      {' '}
+                      K{message.kravNummer}.{message.kravVersjon}
+                    </Table.HeaderCell>
 
-                      <Table.DataCell className="w-[25%]">
-                        <Link
-                          href={`/krav/${message.kravNummer}/${message.kravVersjon}?tilbakemeldingId=${message.id}`}
-                        >
-                          {message.kravNavn}
-                        </Link>
-                      </Table.DataCell>
-                      <Table.DataCell>
-                        {codelistUtils.getCode(EListName.TEMA, message.tema)?.shortName}
-                      </Table.DataCell>
-                      <Table.DataCell>{message.melderNavn}</Table.DataCell>
-                      <Table.DataCell>
-                        {moment(message.tidForSporsmaal).format('lll')}
-                      </Table.DataCell>
-                      <Table.DataCell>
-                        {message.tidForSvar ? (
-                          moment(message.tidForSvar).format('lll')
-                        ) : (
-                          <BodyShort>Ikke besvart</BodyShort>
-                        )}
-                      </Table.DataCell>
-                    </Table.Row>
-                  )
-                })}
+                    <Table.DataCell className="w-[25%]">
+                      <Link
+                        href={`/krav/${message.kravNummer}/${message.kravVersjon}?tilbakemeldingId=${message.id}`}
+                      >
+                        {message.kravNavn}
+                      </Link>
+                    </Table.DataCell>
+                    <Table.DataCell>
+                      {codelistUtils.getCode(EListName.TEMA, message.tema)?.shortName}
+                    </Table.DataCell>
+                    <Table.DataCell>{message.melderNavn}</Table.DataCell>
+                    <Table.DataCell>{moment(message.tidForSporsmaal).format('lll')}</Table.DataCell>
+                    <Table.DataCell>
+                      {message.tidForSvar ? (
+                        moment(message.tidForSvar).format('lll')
+                      ) : (
+                        <BodyShort>Ikke besvart</BodyShort>
+                      )}
+                    </Table.DataCell>
+                  </Table.Row>
+                ))}
               </Table.Body>
             </Table>
 
@@ -206,7 +212,9 @@ export const QuestionAndAnswerLogPage = () => {
               <Select
                 label="Antall rader:"
                 value={rowsPerPage}
-                onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+                onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+                  setRowsPerPage(parseInt(event.target.value))
+                }
                 size="small"
               >
                 <option value="5">5</option>
