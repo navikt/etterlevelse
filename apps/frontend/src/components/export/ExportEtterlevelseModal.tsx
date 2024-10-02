@@ -1,7 +1,7 @@
 import { BodyShort, Box, Button, Loader, Modal, Radio, RadioGroup, Select } from '@navikt/ds-react'
 import axios from 'axios'
-import { useState } from 'react'
-import { CodelistService, EListName } from '../../services/Codelist'
+import { ChangeEvent, useState } from 'react'
+import { CodelistService, EListName, IGetParsedOptionsProps } from '../../services/Codelist'
 import { env } from '../../util/env'
 
 type TExportEtterlevelseModalProps = {
@@ -9,6 +9,7 @@ type TExportEtterlevelseModalProps = {
 }
 
 export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) => {
+  const { etterlevelseDokumentasjonId } = props
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -40,23 +41,27 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
             <div className="flex flex-col gap-4">
               <Select
                 label="Velg et tema for eksportering"
-                onChange={(ev) => setValgtTema(ev.currentTarget.value)}
+                onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+                  setValgtTema(event.currentTarget.value)
+                }
                 value={valgtTema}
               >
                 <option key="" value="">
                   Alle tema
                 </option>
-                {codelistUtils.getParsedOptions(EListName.TEMA).map((codeListOption) => (
-                  <option key={`option_${codeListOption.value}`} value={codeListOption.value}>
-                    {codeListOption.label}
-                  </option>
-                ))}
+                {codelistUtils
+                  .getParsedOptions(EListName.TEMA)
+                  .map((codeListOption: IGetParsedOptionsProps) => (
+                    <option key={`option_${codeListOption.value}`} value={codeListOption.value}>
+                      {codeListOption.label}
+                    </option>
+                  ))}
               </Select>
               <RadioGroup
                 legend="Dokumentet skal inneholde"
                 hideLegend
                 value={onlyActiveKrav}
-                onChange={(val: boolean) => setOnlyActiveKrav(val)}
+                onChange={(value: boolean) => setOnlyActiveKrav(value)}
               >
                 <Radio value={false}>Eksporter alle krav versjoner</Radio>
                 <Radio value={true}>Eksporter kun gjeldende versjon krav</Radio>
@@ -86,7 +91,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                     ;(async () => {
                       setIsLoading(true)
                       setErrorMessage('')
-                      let exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}`
+                      let exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${etterlevelseDokumentasjonId}`
                       if (valgtTema !== '') {
                         exportUrl += `&temakode=${valgtTema}&onlyActiveKrav=${onlyActiveKrav}`
                         axios
@@ -96,8 +101,8 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                             setIsLoading(false)
                             setIsExportModalOpen(false)
                           })
-                          .catch((e) => {
-                            setErrorMessage(e.response.data.message)
+                          .catch((error: any) => {
+                            setErrorMessage(error.response.data.message)
                             setIsLoading(false)
                           })
                       } else {
@@ -108,8 +113,8 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                             window.location.href = exportUrl
                             setIsLoading(false)
                           })
-                          .catch((e) => {
-                            setErrorMessage(e.response.data.message)
+                          .catch((error: any) => {
+                            setErrorMessage(error.response.data.message)
                             setIsLoading(false)
                           })
                       }
