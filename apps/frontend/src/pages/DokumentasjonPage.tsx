@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import { Alert, BodyShort, Button, Heading, Label, Link, List, ReadMore } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
-import { useNavigate, useParams } from 'react-router-dom'
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { getDocumentRelationByToIdAndRelationTypeWithData } from '../api/DocumentRelationApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
@@ -26,11 +26,18 @@ import { user } from '../services/User'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const DokumentasjonPage = () => {
-  const params = useParams<{ id?: string; tema?: string }>()
+  const navigate: NavigateFunction = useNavigate()
+  const params: Readonly<
+    Partial<{
+      id?: string
+      tema?: string
+    }>
+  > = useParams<{ id?: string; tema?: string }>()
   const [codelistUtils] = CodelistService()
   const temaListe: TTemaCode[] = codelistUtils.getCodes(EListName.TEMA) as TTemaCode[]
-  const variables = { etterlevelseDokumentasjonId: params.id }
-  const navigate = useNavigate()
+  const variables: {
+    etterlevelseDokumentasjonId: string | undefined
+  } = { etterlevelseDokumentasjonId: params.id }
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
     params.id
   )
@@ -61,7 +68,7 @@ export const DokumentasjonPage = () => {
           }>
         }
       | undefined
-  ) => {
+  ): TKravQL[][] => {
     const relevanteStatusListe: TKravQL[] = []
     const utgaattStatusListe: TKravQL[] = []
 
@@ -70,11 +77,11 @@ export const DokumentasjonPage = () => {
       utgaattStatusListe.push(...stats.utgaattKrav)
     })
 
-    relevanteStatusListe.sort((a, b) => {
+    relevanteStatusListe.sort((a: TKravQL, b: TKravQL) => {
       return a.kravNummer - b.kravNummer
     })
 
-    utgaattStatusListe.sort((a, b) => {
+    utgaattStatusListe.sort((a: TKravQL, b: TKravQL) => {
       if (a.kravNummer === b.kravNummer) {
         return a.kravVersjon - b.kravVersjon
       }
@@ -109,8 +116,8 @@ export const DokumentasjonPage = () => {
         await getDocumentRelationByToIdAndRelationTypeWithData(
           etterlevelseDokumentasjon?.id,
           ERelationType.ARVER
-        ).then((resp: IDocumentRelationWithEtterlevelseDokumetajson[]) => {
-          if (resp.length > 0) setMorDokumentRelasjon(resp[0])
+        ).then((response: IDocumentRelationWithEtterlevelseDokumetajson[]) => {
+          if (response.length > 0) setMorDokumentRelasjon(response[0])
           setRelasjonLoading(false)
         })
       })()
