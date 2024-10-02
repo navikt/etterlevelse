@@ -1,10 +1,10 @@
 import { Accordion, BodyLong, BodyShort, Button, Label, LinkPanel, Spacer } from '@navikt/ds-react'
 import moment from 'moment'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getAllKrav } from '../../api/KravApi'
 import { useKravPriorityList } from '../../api/KravPriorityListApi'
-import { EKravStatus, IKrav, IKravPriorityList } from '../../constants'
-import { CodelistService, EListName } from '../../services/Codelist'
+import { EKravStatus, IKrav, IKravPriorityList, IRegelverk } from '../../constants'
+import { CodelistService, EListName, TTemaCode } from '../../services/Codelist'
 import { sortKravListeByPriority } from '../../util/sort'
 import StatusView from '../common/StatusTag'
 import { KravPanelHeader } from '../etterlevelseDokumentasjon/KravPanelHeader'
@@ -19,26 +19,26 @@ export const TemaList = () => {
     fetchKrav()
   }, [])
 
-  const fetchKrav = () => {
+  const fetchKrav = (): void => {
     ;(async () => {
-      const kraver = await getAllKrav()
+      const kraver: IKrav[] = await getAllKrav()
 
-      setAllActiveKrav(kraver.filter((krav) => krav.status === EKravStatus.AKTIV))
-      setAllDraftKrav(kraver.filter((krav) => krav.status === EKravStatus.UTKAST))
+      setAllActiveKrav(kraver.filter((krav: IKrav) => krav.status === EKravStatus.AKTIV))
+      setAllDraftKrav(kraver.filter((krav: IKrav) => krav.status === EKravStatus.UTKAST))
     })()
   }
 
   return (
     <Accordion>
-      {codelistUtils.getCodes(EListName.TEMA).map((tema) => {
-        const activeKraver = allActiveKrav?.filter((k) => {
-          return k.regelverk
-            .map((regelverk) => regelverk.lov.data && regelverk.lov.data.tema)
+      {codelistUtils.getCodes(EListName.TEMA).map((tema: TTemaCode) => {
+        const activeKraver: IKrav[] = allActiveKrav?.filter((krav: IKrav) => {
+          return krav.regelverk
+            .map((regelverk: IRegelverk) => regelverk.lov.data && regelverk.lov.data.tema)
             .includes(tema.code)
         })
-        const draftKraver = allDraftKrav?.filter((k) => {
-          return k.regelverk
-            .map((regelverk) => regelverk.lov.data && regelverk.lov.data.tema)
+        const draftKraver: IKrav[] = allDraftKrav?.filter((krav: IKrav) => {
+          return krav.regelverk
+            .map((regelverk: IRegelverk) => regelverk.lov.data && regelverk.lov.data.tema)
             .includes(tema.code)
         })
         return activeKraver && activeKraver.length > 0 ? (
@@ -75,9 +75,9 @@ export const TemaList = () => {
   )
 }
 
-const getKravTemaRowsWithLabel = (kravListe: IKrav[], tema: string) => {
-  return kravListe.map((krav, index) => {
-    return (
+const getKravTemaRowsWithLabel = (kravListe: IKrav[], tema: string) => (
+  <>
+    {kravListe.map((krav: IKrav, index: number) => (
       <div key={`${krav.navn}_${krav.kravNummer}_${tema}_${index}`}>
         <LinkPanel href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>
           <LinkPanel.Title className="flex items-center">
@@ -104,24 +104,26 @@ const getKravTemaRowsWithLabel = (kravListe: IKrav[], tema: string) => {
           </LinkPanel.Title>
         </LinkPanel>
       </div>
-    )
-  })
-}
+    ))}
+  </>
+)
 
-const KravTemaList = (props: {
+interface IKravTemaListProps {
   activeKravList: IKrav[]
   tema: string
   temaCode: string
   draftKrav: IKrav[]
-}) => {
-  const [isEditPriorityModalOpen, setIsEditPriorityModalOpen] = React.useState(false)
+}
+
+const KravTemaList = (props: IKravTemaListProps) => {
   const { activeKravList, tema, temaCode, draftKrav } = props
+  const [isEditPriorityModalOpen, setIsEditPriorityModalOpen] = useState(false)
   const [kravPriorityList, kravPriorityLoading, refresh] = useKravPriorityList(temaCode)
   const [activeKravSortedWithPriority, setActiveKravSortedWithPriority] = useState<IKrav[]>([])
 
-  const setPriorityToKravList = (kravList: IKrav[], priorityList: IKravPriorityList) => {
-    return kravList.map((krav) => {
-      const priorityForTema = priorityList.priorityList.indexOf(krav.kravNummer) + 1
+  const setPriorityToKravList = (kravList: IKrav[], priorityList: IKravPriorityList): IKrav[] => {
+    return kravList.map((krav: IKrav) => {
+      const priorityForTema: number = priorityList.priorityList.indexOf(krav.kravNummer) + 1
       krav.prioriteringsId = priorityForTema
       return krav
     })
