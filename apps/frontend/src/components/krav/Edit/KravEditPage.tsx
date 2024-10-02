@@ -1,7 +1,7 @@
 import { Box, Button, Heading, Loader } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { getEtterlevelserByKravNumberKravVersion } from '../../../api/EtterlevelseApi'
 import {
   TKravIdParams,
@@ -11,9 +11,16 @@ import {
   updateKrav,
 } from '../../../api/KravApi'
 import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi'
-import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '../../../constants'
+import {
+  EKravStatus,
+  IEtterlevelse,
+  IKrav,
+  IKravVersjon,
+  IPageResponse,
+  TKravQL,
+} from '../../../constants'
 import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
-import { CodelistService, EListName, ICode } from '../../../services/Codelist'
+import { CodelistService, EListName, ICode, TLovCode, TTemaCode } from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
@@ -25,12 +32,12 @@ import { KravFormFields } from './components/KravFormFields'
 import { KravStandardButtons } from './components/KravStandardButtons'
 
 export const KravEditPage = () => {
+  const navigate: NavigateFunction = useNavigate()
   const params: Readonly<Partial<TKravIdParams>> = useParams<TKravIdParams>()
   const kravData: IKravDataProps | undefined = GetKravData(params)
   const [codelistUtils] = CodelistService()
   const kravQuery: TKravById | undefined = kravData?.kravQuery
   const kravLoading: boolean | undefined = kravData?.kravLoading
-  const navigate = useNavigate()
   const [krav, setKrav] = useState<TKravQL | undefined>()
   const [isEditingUtgaattKrav, setIsEditingUtgaattKrav] = useState<boolean>(false)
   const [alleKravVersjoner, setAlleKravVersjoner] = useState<IKravVersjon[]>([
@@ -46,8 +53,11 @@ export const KravEditPage = () => {
   const [aktivKravMessage, setAktivKravMessage] = useState<boolean>(false)
 
   const submit = async (krav: TKravQL): Promise<void> => {
-    const regelverk = codelistUtils.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
-    const underavdeling = codelistUtils.getCode(
+    const regelverk: ICode | TLovCode | TTemaCode | undefined = codelistUtils.getCode(
+      EListName.LOV,
+      krav.regelverk[0]?.lov.code
+    )
+    const underavdeling: ICode | TLovCode | TTemaCode | undefined = codelistUtils.getCode(
       EListName.UNDERAVDELING,
       regelverk?.data?.underavdeling
     )
@@ -56,10 +66,8 @@ export const KravEditPage = () => {
       underavdeling: underavdeling as ICode | undefined,
       varselMelding: varselMeldingActive ? krav.varselMelding : undefined,
     }
-    const etterlevelser = await getEtterlevelserByKravNumberKravVersion(
-      krav.kravNummer,
-      krav.kravVersjon
-    )
+    const etterlevelser: IPageResponse<IEtterlevelse> =
+      await getEtterlevelserByKravNumberKravVersion(krav.kravNummer, krav.kravVersjon)
     if (etterlevelser.totalElements > 0 && krav.status === EKravStatus.UTKAST) {
       setErrorModalMessage(
         'Du kan ikke sette dette kravet til «Utkast» fordi det er minst én etterlevelse som bruker kravet i sin dokumentasjon.'
@@ -71,28 +79,28 @@ export const KravEditPage = () => {
     }
   }
 
-  const close = (k: IKrav): void => {
-    if (k) {
-      navigate(`/krav/${k.kravNummer}/${k.kravVersjon}`)
+  const close = (krav: IKrav): void => {
+    if (krav) {
+      navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
     }
   }
 
   useEffect(() => {
     if (krav) {
-      getKravByKravNummer(krav.kravNummer).then((resp) => {
-        if (resp.content.length) {
-          const alleVersjoner = resp.content
-            .map((krav) => {
+      getKravByKravNummer(krav.kravNummer).then((response: IPageResponse<IKrav>) => {
+        if (response.content.length) {
+          const alleVersjoner: IKravVersjon[] = response.content
+            .map((krav: IKrav) => {
               return {
                 kravVersjon: krav.kravVersjon,
                 kravNummer: krav.kravNummer,
                 kravStatus: krav.status,
               }
             })
-            .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
+            .sort((a: IKravVersjon, b: IKravVersjon) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
 
           const filteredVersjoner = alleVersjoner.filter(
-            (krav) => krav.kravStatus !== EKravStatus.UTKAST
+            (krav: IKravVersjon) => krav.kravStatus !== EKravStatus.UTKAST
           )
 
           if (filteredVersjoner.length) {
@@ -289,10 +297,11 @@ export const KravEditPage = () => {
                                 type="button"
                                 variant="primary"
                                 onClick={async () => {
-                                  const newVersionOfKrav = await getKravByKravNumberAndVersion(
-                                    krav.kravNummer,
-                                    krav.kravVersjon + 1
-                                  )
+                                  const newVersionOfKrav: IKrav | undefined =
+                                    await getKravByKravNumberAndVersion(
+                                      krav.kravNummer,
+                                      krav.kravVersjon + 1
+                                    )
                                   if (newVersionOfKrav) {
                                     updateKrav(
                                       kravMapToFormVal({
