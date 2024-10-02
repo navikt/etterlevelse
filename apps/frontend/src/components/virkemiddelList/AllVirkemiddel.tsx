@@ -1,9 +1,9 @@
 import { BodyShort, Label, Loader, Search } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import Select, { CSSObjectWithLabel } from 'react-select'
+import Select, { CSSObjectWithLabel, SingleValue } from 'react-select'
 import { useVirkemiddelFilter } from '../../api/VirkemiddelApi'
-import { EVirkemiddelListFilter } from '../../constants'
-import { CodelistService, EListName } from '../../services/Codelist'
+import { EVirkemiddelListFilter, IVirkemiddel } from '../../constants'
+import { CodelistService, EListName, ICode } from '../../services/Codelist'
 import { useDebouncedState } from '../../util/hooks/customHooks'
 import { EditVirkemiddelModal } from '../virkemiddel/edit/EditVirkemiddelModal'
 import { VirkemiddelTable } from './VirkemiddelTable'
@@ -28,7 +28,10 @@ export const AllVirkemiddel = ({
   setIsCreateModalOpen,
 }: TAllVirkemiddelProps) => {
   const [codelistUtils] = CodelistService()
-  const getSortDateOptions = [
+  const getSortDateOptions: {
+    label: string
+    value: string
+  }[] = [
     { label: 'sorter på navn', value: 'navn' },
     { label: 'nyest-eldst', value: 'DESC' },
     { label: 'eldst-nyest', value: 'ASC' },
@@ -38,8 +41,8 @@ export const AllVirkemiddel = ({
     sort: [getSortDateOptions[0]],
   })
   const [sok, setSok] = useDebouncedState('', 300)
-  const virkemiddelTyper = codelistUtils.getCodes(EListName.VIRKEMIDDELTYPE)
-  const getOptions = (label: string, options: any[]) => [
+  const virkemiddelTyper = codelistUtils.getCodes(EListName.VIRKEMIDDELTYPE) as ICode[]
+  const getOptions = (label: string, options: any[]): any[] => [
     { label: label, value: 'alle' },
     ...options,
   ]
@@ -47,10 +50,15 @@ export const AllVirkemiddel = ({
   const [data, totalDataLength, setVirkemiddelTypeFilter, loading, refetchData] =
     useVirkemiddelFilter()
 
-  const filteredVirkemiddel =
-    sok && sok.length > 2 ? data.filter((v) => v.navn.includes(sok)) : data
+  const filteredVirkemiddel: IVirkemiddel[] =
+    sok && sok.length > 2
+      ? data.filter((virkemiddel: IVirkemiddel) => virkemiddel.navn.includes(sok))
+      : data
 
-  const updateFilter = (value: { value: string; label: string }, type: EVirkemiddelListFilter) => {
+  const updateFilter = (
+    value: { value: string; label: string },
+    type: EVirkemiddelListFilter
+  ): void => {
     const newFilterValue = { ...filter }
     if (type === EVirkemiddelListFilter.VIRKEMIDDELTYPE) {
       newFilterValue.virkemiddelType = value
@@ -87,12 +95,12 @@ export const AllVirkemiddel = ({
                   <Select
                     options={getOptions(
                       'Alle virkemiddel typer',
-                      virkemiddelTyper?.map((regelverk) => {
+                      virkemiddelTyper?.map((regelverk: ICode) => {
                         return { label: regelverk.shortName, value: regelverk.code }
                       })
                     )}
                     value={filter.virkemiddelType}
-                    onChange={(params) => {
+                    onChange={(params: SingleValue<TVirkemiddelOption>) => {
                       if (params) {
                         updateFilter(params, EVirkemiddelListFilter.VIRKEMIDDELTYPE)
                       }
