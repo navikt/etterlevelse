@@ -1,13 +1,6 @@
 import { Link } from '@navikt/ds-react'
 import { IRegelverk } from '../constants'
-import {
-  CodelistService,
-  EListName,
-  ICode,
-  ICodelistProps,
-  TLovCode,
-  TTemaCode,
-} from '../services/Codelist'
+import { CodelistService, EListName, ICodelistProps, TLovCode } from '../services/Codelist'
 import { env } from '../util/env'
 
 // unsure how to refactor code
@@ -65,10 +58,7 @@ export const LovView = (props: ILovViewProps) => {
 }
 
 const findLovId = (nationalLaw: string, codelistUtils: ICodelistProps): string => {
-  const lov: ICode | TLovCode | TTemaCode | undefined = codelistUtils.getCode(
-    EListName.LOV,
-    nationalLaw
-  )
+  const lov: TLovCode = codelistUtils.getCode(EListName.LOV, nationalLaw) as TLovCode
   return lov?.data?.lovId || lov?.description || ''
 }
 
