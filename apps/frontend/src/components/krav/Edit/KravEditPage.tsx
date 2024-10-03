@@ -20,7 +20,7 @@ import {
   TKravQL,
 } from '../../../constants'
 import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
-import { CodelistService, EListName, ICode, TLovCode, TTemaCode } from '../../../services/Codelist'
+import { CodelistService, EListName, ICode, TLovCode } from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
@@ -53,14 +53,14 @@ export const KravEditPage = () => {
   const [aktivKravMessage, setAktivKravMessage] = useState<boolean>(false)
 
   const submit = async (krav: TKravQL): Promise<void> => {
-    const regelverk: ICode | TLovCode | TTemaCode | undefined = codelistUtils.getCode(
+    const regelverk: TLovCode = codelistUtils.getCode(
       EListName.LOV,
       krav.regelverk[0]?.lov.code
-    )
-    const underavdeling: ICode | TLovCode | TTemaCode | undefined = codelistUtils.getCode(
+    ) as TLovCode
+    const underavdeling: ICode = codelistUtils.getCode(
       EListName.UNDERAVDELING,
       regelverk?.data?.underavdeling
-    )
+    ) as ICode
     const mutatedKrav: TKravQL = {
       ...krav,
       underavdeling: underavdeling as ICode | undefined,

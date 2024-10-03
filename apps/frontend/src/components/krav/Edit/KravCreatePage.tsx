@@ -5,7 +5,7 @@ import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { createKrav, kravMapToFormVal } from '../../../api/KravApi'
 import { EKravStatus, IKrav, TKravQL } from '../../../constants'
 import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
-import { CodelistService, EListName, ICode, TLovCode, TTemaCode } from '../../../services/Codelist'
+import { CodelistService, EListName, ICode, TLovCode } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
 import { TextAreaField } from '../../common/Inputs'
@@ -24,14 +24,14 @@ export const KravCreatePage = () => {
 
   const submit = (krav: TKravQL): void => {
     setLoading(true)
-    const regelverk: ICode | TLovCode | TTemaCode | undefined = codelistUtils.getCode(
+    const regelverk: TLovCode = codelistUtils.getCode(
       EListName.LOV,
       krav.regelverk[0]?.lov.code
-    )
-    const underavdeling: ICode | undefined = codelistUtils.getCode(
+    ) as TLovCode
+    const underavdeling: ICode = codelistUtils.getCode(
       EListName.UNDERAVDELING,
       regelverk?.data?.underavdeling
-    ) as ICode | undefined
+    ) as ICode
 
     const mutatedKrav: TKravQL = {
       ...krav,
