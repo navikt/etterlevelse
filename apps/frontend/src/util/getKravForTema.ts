@@ -13,7 +13,7 @@ export const getKravForTema = (props: IProps) => {
   const { tema, kravliste, allKravPriority } = props
   const [codelistUtils] = CodelistService()
 
-  const lover: TLovCode[] = codelistUtils.getCodesForTema(tema.code)
+  const lover: TLovCode[] = codelistUtils.getLovCodesForTema(tema.code)
   const lovCodes: string[] = lover.map((lov: TLovCode) => lov.code)
   const krav: TKravQL[] = kravliste.filter((krav: TKravQL) =>
     krav.regelverk

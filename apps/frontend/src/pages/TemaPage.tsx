@@ -76,7 +76,7 @@ interface ITemaViewProps {
 }
 
 const TemaView = ({ tema, codelistUtils }: ITemaViewProps) => {
-  const lover: TLovCode[] = codelistUtils.getCodesForTema(tema.code)
+  const lover: TLovCode[] = codelistUtils.getLovCodesForTema(tema.code)
   const { data, loading } = useKravCounter(
     { lover: lover.map((lov) => lov.code) },
     { skip: !lover.length }

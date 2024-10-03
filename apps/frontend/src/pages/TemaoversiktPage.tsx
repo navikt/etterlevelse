@@ -73,7 +73,7 @@ interface ITemaPanelProps {
 
 export const TemaPanel = ({ tema, setNum, subContent }: ITemaPanelProps) => {
   const [codelistUtils] = CodelistService()
-  const lover: TLovCode[] = codelistUtils.getCodesForTema(tema.code)
+  const lover: TLovCode[] = codelistUtils.getLovCodesForTema(tema.code)
   const { data, loading } = useKravCounter(
     { lover: [...lover.map((lov: TLovCode) => lov.code)] },
     { skip: !lover.length }

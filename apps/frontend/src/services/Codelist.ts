@@ -28,7 +28,7 @@ export interface ICodelistProps {
   getCodes: (list: EListName) => TLovCode[] | TTemaCode[] | ICode[]
   getCode: (list: EListName, codeName?: string) => TLovCode | TTemaCode | ICode | undefined
   valid: (list: EListName, codeName?: string) => boolean
-  getCodesForTema: (codeName?: string) => TLovCode[]
+  getLovCodesForTema: (codeName?: string) => TLovCode[]
   getShortnameForCode: (code: ICode) => string
   getShortnameForCodes: (codes: ICode[]) => string
   getShortname: (list: EListName, codeName: string) => string
@@ -163,7 +163,7 @@ export const CodelistService = () => {
     return code as ICode | undefined
   }
 
-  const getCodesForTema = (codeName?: string): TLovCode[] => {
+  const getLovCodesForTema = (codeName?: string): TLovCode[] => {
     return getCodes(EListName.LOV).filter((code) => code.data?.tema === codeName) as TLovCode[]
   }
 
@@ -248,7 +248,7 @@ export const CodelistService = () => {
   }
 
   const gjelderForLov = (tema: TTemaCode, lov: TLovCode): boolean => {
-    return !!getCodesForTema(tema.code).filter((code: TLovCode) => code.code === lov.code).length
+    return !!getLovCodesForTema(tema.code).filter((code: TLovCode) => code.code === lov.code).length
   }
 
   const utils: ICodelistProps = {
@@ -256,7 +256,7 @@ export const CodelistService = () => {
     isLoaded,
     getCodes,
     getCode,
-    getCodesForTema,
+    getLovCodesForTema,
     valid,
     getShortnameForCode,
     getShortnameForCodes,

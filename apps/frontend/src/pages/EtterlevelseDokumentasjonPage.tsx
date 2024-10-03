@@ -53,7 +53,7 @@ export const EtterlevelseDokumentasjonPage = () => {
     params.tema?.replace('i', '')
   ) as TTemaCode | undefined
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
-  const lover: TLovCode[] = codelistUtils.getCodesForTema(params.tema)
+  const lover: TLovCode[] = codelistUtils.getLovCodesForTema(params.tema)
 
   const { data, loading } = useQuery<{ krav: IPageResponse<TKravQL> }>(
     getKravMedPrioriteringOgEtterlevelseQuery,
