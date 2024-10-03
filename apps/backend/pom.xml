@@ -18,15 +18,15 @@
         <java.version>17</java.version>
 
         <springdoc-openapi-starter-webmvc-ui.version>2.6.0</springdoc-openapi-starter-webmvc-ui.version>
-        <hypersistence-utils-hibernate-63.version>3.8.2</hypersistence-utils-hibernate-63.version>
+        <hypersistence-utils-hibernate-63.version>3.8.3</hypersistence-utils-hibernate-63.version>
         <logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
         <shedlock.version>5.16.0</shedlock.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <graphql-spring-boot-starter.version>15.1.0</graphql-spring-boot-starter.version>
         <graphql.version>22.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
-        <microsoft-graph.version>6.16.0</microsoft-graph.version>
-        <msal4j.version>1.17.1</msal4j.version>
+        <microsoft-graph.version>6.17.0</microsoft-graph.version>
+        <msal4j.version>1.17.2</msal4j.version>
         <flyway-database-postgresql.version>10.16.0</flyway-database-postgresql.version>
 
         <!-- transitive versions -->
@@ -37,7 +37,7 @@
         <jetbrains.annotation.version>25.0.0</jetbrains.annotation.version>
 
         <!-- Test -->
-        <testcontainers.version>1.20.1</testcontainers.version>
+        <testcontainers.version>1.20.2</testcontainers.version>
         <wiremock.version>3.0.1</wiremock.version>
         <docx4j.version>11.5.0</docx4j.version>
 

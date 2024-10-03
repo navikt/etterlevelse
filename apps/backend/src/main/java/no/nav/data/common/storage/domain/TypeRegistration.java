@@ -29,7 +29,6 @@ public final class TypeRegistration {
     static {
         addDomainClass(Krav.class, true);
         addDomainClass(KravPriorityList.class, true);
-        addDomainClass(Etterlevelse.class, true);
         addDomainClass(EtterlevelseMetadata.class, true);
         addDomainClass(Melding.class, true);
         addDomainClass(EtterlevelseArkiv.class, true);

@@ -180,13 +180,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
 
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = get(UUID.fromString(etterlevelseDokumentasjonId));
 
-        List<String> priorityList = etterlevelseDokumentasjon.getPrioritertKravNummer();
-
-        // TODO Remove priorityList == null exception after team or user has been added to all Documents.
-        if (priorityList == null) {
-            log.info("PriorityList is Empty. Requested to save without user or team added to Etterlevelse document.");
-            throw new ForbiddenException("Har du lagt til team og eller person i dokument egenskaper? Dette er nødvendig for å lagre endringer.");
-        }
+        List<String> priorityList = etterlevelseDokumentasjon.getPrioritertKravNummer() == null ? new ArrayList<>() : etterlevelseDokumentasjon.getPrioritertKravNummer();
 
         if (prioritised) {
             if (!priorityList.contains(String.valueOf(kravNummer))) {
@@ -201,7 +195,6 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return storage.save(etterlevelseDokumentasjon);
     }
 
-    ;
 
     public List<EtterlevelseDokumentasjon> getByBehandlingId(List<String> ids) {
         return convertToDomaionObject(etterlevelseDokumentasjonRepo.findByBehandlingIds(ids));

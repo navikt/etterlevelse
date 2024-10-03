@@ -5,6 +5,7 @@ import {
   Button,
   Label,
   LinkPanel,
+  List,
   Skeleton,
   Spacer,
   Tabs,
@@ -84,7 +85,7 @@ export const KravPanels = ({ kravene, loading }: IKravPanelsProps) => {
     <>
       {loading && <Skeleton variant="rectangle" />}
       {!loading && (
-        <div className="mb-2.5 flex flex-col gap-2">
+        <List className="mb-2.5 flex flex-col gap-2">
           {kravene &&
             kravene.map((krav: IKrav | TKravQL) => {
               const lov: TLovCode = codelistUtils.getCode(
@@ -97,7 +98,7 @@ export const KravPanels = ({ kravene, loading }: IKravPanelsProps) => {
               ) as TTemaCode
 
               return (
-                <div className="mb-0" key={krav.id}>
+                <List.Item icon={<div />} className="mb-0" key={krav.id}>
                   <LinkPanel href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>
                     <LinkPanel.Title className="flex items-center">
                       <div className="max-w-xl">
@@ -125,10 +126,10 @@ export const KravPanels = ({ kravene, loading }: IKravPanelsProps) => {
                       </div>
                     </LinkPanel.Title>
                   </LinkPanel>
-                </div>
+                </List.Item>
               )
             })}
-        </div>
+        </List>
       )}
     </>
   )

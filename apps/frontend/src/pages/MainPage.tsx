@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Alert, BodyLong, Button, Heading, LinkPanel, Skeleton } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, LinkPanel, List, Skeleton } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getMeldingByType } from '../api/MeldingApi'
@@ -186,23 +186,24 @@ const EtterlevelseDokumentasjonList = ({
       <Heading size="medium" level="2">
         Mine sist dokumenterte
       </Heading>
-      <div className="mt-6 flex flex-col gap-2">
+      <List className="mt-6 flex flex-col gap-2">
         {filteredEtterlevelsesDokumentasjoner.length !== 0 &&
           filteredEtterlevelsesDokumentasjoner
             .slice(0, 2)
             .map((etterlevelseDokumentasjon, index) => (
-              <EtterlevelseDokumentasjonsPanel
-                key={etterlevelseDokumentasjon.title + '_' + index}
-                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                onClick={() =>
-                  ampli.logEvent('navigere', {
-                    app: 'etterlevelse',
-                    kilde: 'forside-panel',
-                    til: `'/dokumentasjon/' + ${etterlevelseDokumentasjon.id}`,
-                    fra: '/',
-                  })
-                }
-              />
+              <List.Item icon={<div />} key={etterlevelseDokumentasjon.title + '_' + index}>
+                <EtterlevelseDokumentasjonsPanel
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  onClick={() =>
+                    ampli.logEvent('navigere', {
+                      app: 'etterlevelse',
+                      kilde: 'forside-panel',
+                      til: `'/dokumentasjon/' + ${etterlevelseDokumentasjon.id}`,
+                      fra: '/',
+                    })
+                  }
+                />
+              </List.Item>
             ))}
 
         {filteredEtterlevelsesDokumentasjoner.length === 0 && (
@@ -211,7 +212,7 @@ const EtterlevelseDokumentasjonList = ({
             månedene.
           </BodyLong>
         )}
-      </div>
+      </List>
     </div>
   )
 }

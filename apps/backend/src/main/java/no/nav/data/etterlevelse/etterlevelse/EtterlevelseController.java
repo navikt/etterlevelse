@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.ForbiddenException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
@@ -35,7 +36,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/etterlevelse")
 @Tag(name = "Etterlevelse", description = "Etterlevelse for behandlinger")
-public class  EtterlevelseController {
+public class EtterlevelseController {
 
 
     private final EtterlevelseService service;
@@ -69,7 +70,7 @@ public class  EtterlevelseController {
 
     private EtterlevelseResponse toResponseWithEtterlevelseDokumentasjon(Etterlevelse etterlevelse) {
         EtterlevelseResponse response = etterlevelse.toResponse();
-        if(response.getEtterlevelseDokumentasjonId() != null && !response.getEtterlevelseDokumentasjonId().isEmpty())  {
+        if (response.getEtterlevelseDokumentasjonId() != null && !response.getEtterlevelseDokumentasjonId().isEmpty()) {
             response.setEtterlevelseDokumentasjon(etterlevelseDokumentasjonService.get(UUID.fromString(response.getEtterlevelseDokumentasjonId())).toResponse());
         }
         return response;
@@ -107,7 +108,13 @@ public class  EtterlevelseController {
     public ResponseEntity<EtterlevelseResponse> createEtterlevelse(@RequestBody EtterlevelseRequest request) {
         log.info("Create Etterlevelse");
 
-        if(request.getEtterlevelseDokumentasjonId() == null || request.getEtterlevelseDokumentasjonId().isEmpty()) {
+        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(request.getEtterlevelseDokumentasjonId())).toResponse();
+        if (etterlevelseDokumentasjon.getTeams().isEmpty() && etterlevelseDokumentasjon.getResources().isEmpty()) {
+            log.info("PriorityList is Empty. Requested to save without user or team added to Etterlevelse document.");
+            throw new ForbiddenException("Har du lagt til team og eller person i dokument egenskaper? Dette er nødvendig for å lagre endringer.");
+        }
+
+        if (request.getEtterlevelseDokumentasjonId() == null || request.getEtterlevelseDokumentasjonId().isEmpty()) {
             throw new ValidationException("Tried to create etterlevelse with old architecture");
         }
 
@@ -126,8 +133,14 @@ public class  EtterlevelseController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
-        if(request.getEtterlevelseDokumentasjonId() == null || request.getEtterlevelseDokumentasjonId().isEmpty()) {
+        if (request.getEtterlevelseDokumentasjonId() == null || request.getEtterlevelseDokumentasjonId().isEmpty()) {
             throw new ValidationException("Tried to create etterlevelse with old architecture");
+        }
+
+        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(request.getEtterlevelseDokumentasjonId())).toResponse();
+        if (etterlevelseDokumentasjon.getTeams().isEmpty() && etterlevelseDokumentasjon.getResources().isEmpty()) {
+            log.info("Requested to save without user or team added to Etterlevelse document.");
+            throw new ForbiddenException("Har du lagt til team og eller person i dokument egenskaper? Dette er nødvendig for å lagre endringer.");
         }
 
         etterlevelseDokumentasjonService.updatePriorityList(request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.isPrioritised());

@@ -163,7 +163,7 @@ public class EtterlevelseDokumentasjonGraphQlController {
 
     private LocalDateTime sistEndret(List<Etterlevelse> etterlevelser) {
         return etterlevelser.stream()
-                .map(e -> e.getChangeStamp().getLastModifiedDate())
+                .map(e -> e.getLastModifiedDate())
                 .max(Comparator.comparing(Function.identity()))
                 .orElse(null);
     }

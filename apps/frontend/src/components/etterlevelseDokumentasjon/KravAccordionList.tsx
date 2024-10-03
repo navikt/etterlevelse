@@ -1,4 +1,4 @@
-import { Accordion, Link, Tag } from '@navikt/ds-react'
+import { Accordion, Link, List, Tag } from '@navikt/ds-react'
 import { EEtterlevelseStatus, EKravFilterType, IKravPriorityList, TKravQL } from '../../constants'
 import { TTemaCode } from '../../services/Codelist'
 import { getNumberOfDaysBetween } from '../../util/checkAge'
@@ -90,17 +90,18 @@ export const KravAccordionList = (props: IProps) => {
                       Lær mer om {tema.shortName} (åpnes i ny fane)
                     </Link>
                   </div>
-                  <div className="flex flex-col gap-2">
+                  <List className="flex flex-col gap-2">
                     {kravliste.map((krav, idx) => (
-                      <KravCard
-                        key={`krav_${idx}`}
-                        krav={krav}
-                        kravFilter={EKravFilterType.RELEVANTE_KRAV}
-                        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-                        temaCode={tema.code}
-                      />
+                      <List.Item icon={<div />} key={`krav_${idx}`}>
+                        <KravCard
+                          krav={krav}
+                          kravFilter={EKravFilterType.RELEVANTE_KRAV}
+                          etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                          temaCode={tema.code}
+                        />
+                      </List.Item>
                     ))}
-                  </div>
+                  </List>
                 </div>
               </Accordion.Content>
             </Accordion.Item>
