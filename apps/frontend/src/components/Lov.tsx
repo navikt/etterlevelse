@@ -1,6 +1,6 @@
 import { Link } from '@navikt/ds-react'
 import { IRegelverk } from '../constants'
-import { EListName, codelist } from '../services/Codelist'
+import { CodelistService, EListName, ICodelistProps, TLovCode } from '../services/Codelist'
 import { env } from '../util/env'
 
 // unsure how to refactor code
@@ -11,9 +11,14 @@ const processString = reactProcessString as (
   converters: { regex: RegExp; fn: (key: string, result: string[]) => JSX.Element | string }[]
 ) => (input?: string) => JSX.Element[]
 
-export const LovViewList = (props: { regelverkListe: IRegelverk[]; openOnSamePage?: boolean }) => (
+interface ILovViewListProps {
+  regelverkListe: IRegelverk[]
+  openOnSamePage?: boolean
+}
+
+export const LovViewList = (props: ILovViewListProps) => (
   <div className="flex flex-col break-all">
-    {props.regelverkListe.map((regelverk, index) => (
+    {props.regelverkListe.map((regelverk: IRegelverk, index: number) => (
       <div key={index} className="mb-2">
         <LovView regelverk={regelverk} openOnSamePage={props.openOnSamePage} />
       </div>
@@ -21,36 +26,58 @@ export const LovViewList = (props: { regelverkListe: IRegelverk[]; openOnSamePag
   </div>
 )
 
-export const LovView = (props: { regelverk?: IRegelverk; openOnSamePage?: boolean }) => {
-  if (!props.regelverk) return null
-  const { spesifisering, lov } = props.regelverk
-  const lovCode = lov?.code
+interface ILovViewProps {
+  regelverk?: IRegelverk
+  openOnSamePage?: boolean
+}
 
-  const lovDisplay = lov && codelist.getShortname(EListName.LOV, lovCode)
+export const LovView = (props: ILovViewProps) => {
+  const { regelverk, openOnSamePage } = props
+  const [codelistUtils] = CodelistService()
 
-  const descriptionText = codelist.valid(EListName.LOV, lovCode)
-    ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering, props.openOnSamePage)
+  if (!regelverk) return null
+
+  const { spesifisering, lov } = regelverk
+  const lovCode: string = lov?.code
+
+  const lovDisplay: string = lov && codelistUtils.getShortname(EListName.LOV, lovCode)
+
+  const descriptionText: string | JSX.Element[] | undefined = codelistUtils.valid(
+    EListName.LOV,
+    lovCode
+  )
+    ? legalBasisLinkProcessor(
+        lovCode,
+        codelistUtils,
+        lovDisplay + ' ' + spesifisering,
+        openOnSamePage
+      )
     : spesifisering
 
   return <span>{descriptionText}</span>
 }
 
-const findLovId = (nationalLaw: string) => {
-  const lov = codelist.getCode(EListName.LOV, nationalLaw)
+const findLovId = (nationalLaw: string, codelistUtils: ICodelistProps): string => {
+  const lov: TLovCode = codelistUtils.getCode(EListName.LOV, nationalLaw) as TLovCode
   return lov?.data?.lovId || lov?.description || ''
 }
 
-export const lovdataBase = (nationalLaw: string) => {
-  const lovId = findLovId(nationalLaw)
-  if (codelist.isForskrift(nationalLaw)) {
+export const lovdataBase = (nationalLaw: string, codelistUtils: ICodelistProps): string => {
+  const lovId: string = findLovId(nationalLaw, codelistUtils)
+  if (codelistUtils.isForskrift(nationalLaw)) {
     return env.lovdataForskriftBaseUrl + lovId
   } else {
     return env.lovdataLovBaseUrl + lovId
   }
 }
 
-const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: boolean) => {
-  if (!findLovId(law).match(/^\d+.*/)) {
+const legalBasisLinkProcessor = (
+  law: string,
+  codelistUtils: ICodelistProps,
+  text?: string,
+  openOnSamePage?: boolean
+): string | JSX.Element[] | undefined => {
+  if (!findLovId(law, codelistUtils).match(/^\d+.*/)) {
     return text
   }
 
@@ -66,7 +93,7 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
-          href={`${lovdataBase(law)}/§${result[4]}${result[6]}`}
+          href={`${lovdataBase(law, codelistUtils)}/§${result[4]}${result[6]}`}
           target={openOnSamePage ? '_self' : '_blank'}
           rel="noopener noreferrer"
         >
@@ -80,7 +107,7 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
-          href={`${lovdataBase(law)}/KAPITTEL_${result[3]}${result[4]}`}
+          href={`${lovdataBase(law, codelistUtils)}/KAPITTEL_${result[3]}${result[4]}`}
           target={openOnSamePage ? '_self' : '_blank'}
           rel="noopener noreferrer"
         >
@@ -94,7 +121,7 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
-          href={`${lovdataBase(law)}/ARTIKKEL_${result[3]}${result[4]}`}
+          href={`${lovdataBase(law, codelistUtils)}/ARTIKKEL_${result[3]}${result[4]}`}
           target={openOnSamePage ? '_self' : '_blank'}
           rel="noopener noreferrer"
         >

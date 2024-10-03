@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios'
+import { useEffect, useState } from 'react'
 import * as yup from 'yup'
 import { getAllCodelists } from '../api/CodelistApi'
 import { TReplace } from '../constants'
@@ -21,15 +22,13 @@ export enum ELovCodeRelevans {
 
 const LOVDATA_FORSKRIFT_PREFIX = 'FORSKRIFT_'
 
-interface ICodelistProps {
-  lists: IAllCodelists | undefined
-  refreshCodeLists: () => Promise<any>
-  wait: () => Promise<void>
+export interface ICodelistProps {
+  fetchData: (refresh?: boolean) => Promise<any>
   isLoaded: () => string | IAllCodelists | undefined
   getCodes: (list: EListName) => TLovCode[] | TTemaCode[] | ICode[]
   getCode: (list: EListName, codeName?: string) => TLovCode | TTemaCode | ICode | undefined
   valid: (list: EListName, codeName?: string) => boolean
-  getCodesForTema: (codeName?: string) => TLovCode[]
+  getLovCodesForTema: (codeName?: string) => TLovCode[]
   getShortnameForCode: (code: ICode) => string
   getShortnameForCodes: (codes: ICode[]) => string
   getShortname: (list: EListName, codeName: string) => string
@@ -53,7 +52,7 @@ interface ICodelistProps {
   gjelderForLov: (tema: TTemaCode, lov: TLovCode) => boolean
 }
 
-interface IGetParsedOptionsProps {
+export interface IGetParsedOptionsProps {
   value: string
   label: string
   description: string
@@ -86,33 +85,30 @@ interface IMakeValueLabelForAllCodeListsProps {
   label: string
 }
 
-const CodelistService = async (): Promise<ICodelistProps> => {
-  let lists: IAllCodelists | undefined
-  let error: string | undefined
+export const CodelistService = () => {
+  const [lists, setLists] = useState<IAllCodelists | undefined>()
+  const [error, setError] = useState<string | undefined>()
+
+  useEffect(() => {
+    ;(async () => {
+      await fetchData()
+    })()
+  }, [])
 
   const fetchData = async (refresh?: boolean): Promise<any> => {
-    const codeListPromise: Promise<any> = getAllCodelists(refresh)
-      .then(handleGetCodelistResponse)
-      .catch((error: any) => (error = error.message))
-    return Promise.all([codeListPromise])
+    if (lists === undefined || refresh) {
+      getAllCodelists(refresh)
+        .then(handleGetCodelistResponse)
+        .catch((error: any) => (error = error.message))
+    }
   }
 
   const handleGetCodelistResponse = (response: AxiosResponse<IAllCodelists>) => {
     if (typeof response.data === 'object' && response.data !== null) {
-      lists = response.data
+      setLists(response.data)
     } else {
-      error = response.data
+      setError(response.data)
     }
-  }
-  let promise: Promise<any> = fetchData()
-
-  const refreshCodeLists = (): Promise<any> => {
-    promise = fetchData(true)
-    return promise
-  }
-
-  const wait = async (): Promise<void> => {
-    await promise
   }
 
   const isLoaded = (): string | IAllCodelists | undefined => {
@@ -167,7 +163,7 @@ const CodelistService = async (): Promise<ICodelistProps> => {
     return code as ICode | undefined
   }
 
-  const getCodesForTema = (codeName?: string): TLovCode[] => {
+  const getLovCodesForTema = (codeName?: string): TLovCode[] => {
     return getCodes(EListName.LOV).filter((code) => code.data?.tema === codeName) as TLovCode[]
   }
 
@@ -252,17 +248,15 @@ const CodelistService = async (): Promise<ICodelistProps> => {
   }
 
   const gjelderForLov = (tema: TTemaCode, lov: TLovCode): boolean => {
-    return !!getCodesForTema(tema.code).filter((code: TLovCode) => code.code === lov.code).length
+    return !!getLovCodesForTema(tema.code).filter((code: TLovCode) => code.code === lov.code).length
   }
 
-  return {
-    lists,
-    refreshCodeLists,
-    wait,
+  const utils: ICodelistProps = {
+    fetchData,
     isLoaded,
     getCodes,
     getCode,
-    getCodesForTema,
+    getLovCodesForTema,
     valid,
     getShortnameForCode,
     getShortnameForCodes,
@@ -278,14 +272,8 @@ const CodelistService = async (): Promise<ICodelistProps> => {
     makeValueLabelForAllCodeLists,
     gjelderForLov,
   }
-}
 
-export const codelist: ICodelistProps = await CodelistService().then((response: ICodelistProps) => {
-  return response
-})
-
-export const fetchCodelistService = async (): Promise<void> => {
-  await CodelistService()
+  return [utils, lists] as [ICodelistProps, IAllCodelists | undefined]
 }
 
 export interface IAllCodelists {

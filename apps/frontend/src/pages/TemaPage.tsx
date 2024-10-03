@@ -8,58 +8,75 @@ import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
 import { ExternalLink } from '../components/common/RouteLink'
 import { PageLayout } from '../components/scaffold/Page'
-import { IKrav } from '../constants'
+import { IKrav, IKravPriorityList, TKravQL } from '../constants'
 import { useKravCounter } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, TLovCode, TTemaCode, codelist } from '../services/Codelist'
+import {
+  CodelistService,
+  EListName,
+  ICodelistProps,
+  TLovCode,
+  TTemaCode,
+} from '../services/Codelist'
 import { sortKravListeByPriority } from '../util/sort'
 import { kravNumView } from './KravPage'
 import { temaBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
+  const [codelistUtils] = CodelistService()
 
-  const code: TTemaCode = codelist.getCode(EListName.TEMA, tema) as TTemaCode
+  const code: TTemaCode = codelistUtils.getCode(EListName.TEMA, tema) as TTemaCode
   if (!code) return <>`&apos;`invalid code`&apos;`</>
-  return <TemaView tema={code} />
+  return <TemaView tema={code} codelistUtils={codelistUtils} />
 }
 
-export const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?: boolean) => {
-  return (
-    <div className="lg:grid lg:grid-flow-col lg:gap-2">
-      <div>
-        {!noHeader && (
-          <Heading level="1" size="medium" spacing>
-            {tema.shortName}
-          </Heading>
-        )}
-        <Markdown source={tema.description} />
-      </div>
-
-      <div className="my-8 lg:border-l-2 lg:pl-2 lg:border-gray-200">
-        <Heading level="2" size="small" spacing>
-          Ansvarlig for lovtolkning
+const getTemaMainHeader = (
+  tema: TTemaCode,
+  lover: TLovCode[],
+  codelistUtils: ICodelistProps,
+  noHeader?: boolean
+) => (
+  <div className="lg:grid lg:grid-flow-col lg:gap-2">
+    <div>
+      {!noHeader && (
+        <Heading level="1" size="medium" spacing>
+          {tema.shortName}
         </Heading>
-        {_.uniq(lover.map((lov) => lov.data?.underavdeling)).map((code, index) => (
-          <BodyShort key={code + '_' + index} size="large" spacing>
-            {codelist.getCode(EListName.UNDERAVDELING, code)?.shortName}
-          </BodyShort>
-        ))}
-        <Heading level="2" size="small" spacing>
-          Lovdata
-        </Heading>
-        {lover.map((lov, index) => (
-          <div key={lov.code + '_' + index} className="mb-1.5">
-            <ExternalLink href={lovdataBase(lov.code)}>{lov.shortName}</ExternalLink>
-          </div>
-        ))}
-      </div>
+      )}
+      <Markdown source={tema.description} />
     </div>
-  )
+
+    <div className="my-8 lg:border-l-2 lg:pl-2 lg:border-gray-200">
+      <Heading level="2" size="small" spacing>
+        Ansvarlig for lovtolkning
+      </Heading>
+      {_.uniq(lover.map((lov: TLovCode) => lov.data?.underavdeling)).map(
+        (code: string | undefined, index: number) => (
+          <BodyShort key={code + '_' + index} size="large" spacing>
+            {codelistUtils.getCode(EListName.UNDERAVDELING, code)?.shortName}
+          </BodyShort>
+        )
+      )}
+      <Heading level="2" size="small" spacing>
+        Lovdata
+      </Heading>
+      {lover.map((lov: TLovCode, index: number) => (
+        <div key={lov.code + '_' + index} className="mb-1.5">
+          <ExternalLink href={lovdataBase(lov.code, codelistUtils)}>{lov.shortName}</ExternalLink>
+        </div>
+      ))}
+    </div>
+  </div>
+)
+
+interface ITemaViewProps {
+  tema: TTemaCode
+  codelistUtils: ICodelistProps
 }
 
-const TemaView = ({ tema }: { tema: TTemaCode }) => {
-  const lover = codelist.getCodesForTema(tema.code)
+const TemaView = ({ tema, codelistUtils }: ITemaViewProps) => {
+  const lover: TLovCode[] = codelistUtils.getLovCodesForTema(tema.code)
   const { data, loading } = useKravCounter(
     { lover: lover.map((lov) => lov.code) },
     { skip: !lover.length }
@@ -77,10 +94,10 @@ const TemaView = ({ tema }: { tema: TTemaCode }) => {
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
       ;(async () => {
-        const kravPriorityList = await getKravPriorityListByTemaCode(tema.code)
-        const kravListe = _.cloneDeep(data.krav.content)
-        kravListe.map((krav) => {
-          const priority = kravPriorityList.priorityList.indexOf(krav.kravNummer) + 1
+        const kravPriorityList: IKravPriorityList = await getKravPriorityListByTemaCode(tema.code)
+        const kravListe: TKravQL[] = _.cloneDeep(data.krav.content)
+        kravListe.map((krav: TKravQL) => {
+          const priority: number = kravPriorityList.priorityList.indexOf(krav.kravNummer) + 1
           krav.prioriteringsId = priority
           return krav
         })
@@ -95,7 +112,7 @@ const TemaView = ({ tema }: { tema: TTemaCode }) => {
       breadcrumbPaths={[temaBreadCrumbPath]}
       currentPage={tema.shortName}
     >
-      {getTemaMainHeader(tema, lover)}
+      {getTemaMainHeader(tema, lover, codelistUtils)}
       <div className="mt-6">
         <Label>{loading ? '?' : data?.krav.numberOfElements || 0} krav</Label>
         {loading && <SkeletonPanel count={10} />}

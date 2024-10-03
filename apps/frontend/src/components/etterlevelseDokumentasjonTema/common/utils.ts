@@ -3,7 +3,9 @@ import {
   EEtterlevelseStatus,
   IEtterlevelse,
   IKravPriorityList,
+  ISuksesskriterie,
   ISuksesskriterieBegrunnelse,
+  TEtterlevelseQL,
   TKravQL,
 } from '../../../constants'
 import { mapEtterlevelseData } from '../../../pages/EtterlevelseDokumentasjonTemaPage'
@@ -14,18 +16,21 @@ export const filterKrav = (
   kravList?: TKravQL[],
   filterFerdigDokumentert?: boolean
 ) => {
-  const unfilteredkraver = kravList ? _.cloneDeep(kravList) : []
+  const unfilteredkraver: TKravQL[] = kravList ? _.cloneDeep(kravList) : []
 
-  unfilteredkraver.map((krav) => {
-    const priority = kravPriority.priorityList.indexOf(krav.kravNummer)
+  unfilteredkraver.map((krav: TKravQL) => {
+    const priority: number = kravPriority.priorityList.indexOf(krav.kravNummer)
     krav.prioriteringsId = priority + 1
     return krav
   })
 
-  const sortedKrav = sortKravListeByPriority<TKravQL>(unfilteredkraver)
+  const sortedKrav: TKravQL[] = sortKravListeByPriority<TKravQL>(unfilteredkraver)
 
-  const mapped = sortedKrav.map((krav) => {
-    const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
+  // burde types
+  const mapped = sortedKrav.map((krav: TKravQL) => {
+    const etterlevelse: TEtterlevelseQL | undefined = krav.etterlevelser.length
+      ? krav.etterlevelser[0]
+      : undefined
     return {
       kravNummer: krav.kravNummer,
       kravVersjon: krav.kravVersjon,
@@ -69,9 +74,11 @@ export const syncEtterlevelseKriterieBegrunnelseWithKrav = (
 ) => {
   const suksesskriterieBegrunnelse: ISuksesskriterieBegrunnelse[] = []
 
-  krav?.suksesskriterier.forEach((k) => {
+  krav?.suksesskriterier.forEach((krav: ISuksesskriterie) => {
     suksesskriterieBegrunnelse.push(
-      etterlevelse.suksesskriterieBegrunnelser.filter((e) => e.suksesskriterieId === k.id)[0]
+      etterlevelse.suksesskriterieBegrunnelser.filter(
+        (begrunnelse: ISuksesskriterieBegrunnelse) => begrunnelse.suksesskriterieId === krav.id
+      )[0]
     )
   })
 

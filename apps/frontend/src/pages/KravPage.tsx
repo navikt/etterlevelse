@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { BodyLong, BodyShort, Button, Heading, Spacer, Tabs } from '@navikt/ds-react'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
   TKravId as KravIdQueryVariables,
@@ -18,10 +18,17 @@ import ExpiredAlert from '../components/krav/ExpiredAlert'
 import { AllInfo, ViewKrav } from '../components/krav/ViewKrav'
 import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
 import { PageLayout } from '../components/scaffold/Page'
-import { EKravStatus, IBreadCrumbPath, IKrav, IKravVersjon, TKravQL } from '../constants'
+import {
+  EKravStatus,
+  IBreadCrumbPath,
+  IKrav,
+  IKravVersjon,
+  IPageResponse,
+  TKravQL,
+} from '../constants'
 import { getKravWithEtterlevelseQuery } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, TLovCode, TTemaCode, codelist } from '../services/Codelist'
+import { CodelistService, EListName, TLovCode, TTemaCode } from '../services/Codelist'
 import { user } from '../services/User'
 import { useLocationState, useQueryParam } from '../util/hooks/customHooks'
 import { temaBreadCrumbPath } from './util/BreadCrumbPath'
@@ -61,7 +68,8 @@ const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) =>
 }
 
 export const KravPage = () => {
-  const params = useParams<TKravIdParams>()
+  const params: Readonly<Partial<TKravIdParams>> = useParams<TKravIdParams>()
+  const [codelistUtils] = CodelistService()
   const [krav, setKrav] = useState<TKravQL | undefined>()
   const { loading: kravLoading, data: kravQuery } = useQuery<
     { kravById: TKravQL },
@@ -80,40 +88,44 @@ export const KravPage = () => {
       : state?.tab || 'krav'
   )
 
-  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<IKravVersjon[]>([
+  const [alleKravVersjoner, setAlleKravVersjoner] = useState<IKravVersjon[]>([
     { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
   ])
   const [kravTema, setKravTema] = useState<TTemaCode>()
 
-  const slettKravButtonShouldOnlyBeVisibleOnUtkast = krav?.status === EKravStatus.UTKAST
+  const slettKravButtonShouldOnlyBeVisibleOnUtkast: boolean = krav?.status === EKravStatus.UTKAST
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (krav) {
-      getKravByKravNummer(krav.kravNummer).then((resp) => {
-        if (resp.content.length) {
-          const alleVersjoner = resp.content
-            .map((krav) => {
+      getKravByKravNummer(krav.kravNummer).then((response: IPageResponse<IKrav>) => {
+        if (response.content.length) {
+          const alleVersjoner: IKravVersjon[] = response.content
+            .map((krav: IKrav) => {
               return {
-                kravVersjon: krav.kravVersjon,
                 kravNummer: krav.kravNummer,
+                kravVersjon: krav.kravVersjon,
                 kravStatus: krav.status,
               }
             })
             .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
 
-          const filteredVersjoner = alleVersjoner.filter((k) => k.kravStatus !== EKravStatus.UTKAST)
+          const filteredVersjoner: IKravVersjon[] = alleVersjoner.filter(
+            (krav: IKravVersjon) => krav.kravStatus !== EKravStatus.UTKAST
+          )
 
           if (filteredVersjoner.length) {
             setAlleKravVersjoner(filteredVersjoner)
           }
         }
       })
-      const lovData: TLovCode = codelist.getCode(
+      const lovData: TLovCode = codelistUtils.getCode(
         EListName.LOV,
         krav.regelverk[0]?.lov?.code
       ) as TLovCode
       if (lovData?.data) {
-        setKravTema(codelist.getCode(EListName.TEMA, lovData.data.tema) as TTemaCode | undefined)
+        setKravTema(
+          codelistUtils.getCode(EListName.TEMA, lovData.data.tema) as TTemaCode | undefined
+        )
       }
     }
   }, [krav])
@@ -149,7 +161,7 @@ export const KravPage = () => {
   }
 
   // todo split loading krav and subelements?
-  const etterlevelserLoading = kravLoading
+  const etterlevelserLoading: boolean = kravLoading
 
   const getBreadcrumPaths = () => {
     const breadcrumbPaths: IBreadCrumbPath[] = [temaBreadCrumbPath]
@@ -289,7 +301,7 @@ export const KravPage = () => {
                         buttonLabel="Slett krav"
                         buttonSize="small"
                         fun={() => deleteKrav(krav.id)}
-                        redirect={'/kravliste'}
+                        redirect="/kravliste"
                       />
                     </div>
                   )}

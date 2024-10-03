@@ -9,8 +9,8 @@ import {
   TextField,
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { ChangeEvent, useEffect, useState } from 'react'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
 import { getDocumentRelationByToIdAndRelationTypeWithData } from '../../../api/DocumentRelationApi'
@@ -24,13 +24,21 @@ import {
   ERelationType,
   IBehandling,
   IDocumentRelationWithEtterlevelseDokumetajson,
+  IEtterlevelseDokumentasjon,
+  IMember,
   ITeam,
   ITeamResource,
   IVirkemiddel,
   TEtterlevelseDokumentasjonQL,
 } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
-import { EListName, ICode, ICodeListFormValues, codelist } from '../../../services/Codelist'
+import {
+  CodelistService,
+  EListName,
+  ICode,
+  ICodeListFormValues,
+  IGetParsedOptionsProps,
+} from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
@@ -51,7 +59,11 @@ type TEditEtterlevelseDokumentasjonModalProps = {
 
 export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentasjonModalProps) => {
   const { title, etterlevelseDokumentasjon, isEditButton } = props
-  const relevansOptions = codelist.getParsedOptions(EListName.RELEVANS)
+  const navigate: NavigateFunction = useNavigate()
+  const [codelistUtils] = CodelistService()
+  const relevansOptions: IGetParsedOptionsProps[] = codelistUtils.getParsedOptions(
+    EListName.RELEVANS
+  )
   const [selectedFilter, setSelectedFilter] = useState<number[]>(
     relevansOptions.map((_relevans, index) => index)
   )
@@ -59,15 +71,14 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<IVirkemiddel>()
   const [dokumentRelasjon, setDokumentRelasjon] =
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
-  const navigate = useNavigate()
 
   const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
   const [customRisikoeierForDev, setCustomRisikoeierForDev] = useState<string>('')
 
-  const isDev =
+  const isDev: boolean =
     window.location.origin.includes('.dev.') || window.location.origin.includes('localhost')
 
-  const isForRedigering = window.location.pathname.includes('/edit')
+  const isForRedigering: boolean = window.location.pathname.includes('/edit')
 
   const labelNavngiDokument: string = isForRedigering
     ? 'Navngi dokumentet ditt'
@@ -76,18 +87,20 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
   useEffect(() => {
     if (etterlevelseDokumentasjon?.irrelevansFor.length) {
       const irrelevans = etterlevelseDokumentasjon.irrelevansFor.map((irrelevans: ICode) =>
-        relevansOptions.findIndex((relevans) => relevans.value === irrelevans.code)
+        relevansOptions.findIndex(
+          (relevans: IGetParsedOptionsProps) => relevans.value === irrelevans.code
+        )
       )
       setSelectedFilter(
         relevansOptions
-          .map((_relevans, index) => {
+          .map((_relevans: IGetParsedOptionsProps, index: number) => {
             return index
           })
-          .filter((index) => !irrelevans.includes(index))
+          .filter((index: number) => !irrelevans.includes(index))
       )
     } else {
       setSelectedFilter(
-        relevansOptions.map((_relevans, index) => {
+        relevansOptions.map((_relevans: IGetParsedOptionsProps, index: number) => {
           return index
         })
       )
@@ -102,12 +115,14 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
         await getDocumentRelationByToIdAndRelationTypeWithData(
           etterlevelseDokumentasjon?.id,
           ERelationType.ARVER
-        ).then((resp) => setDokumentRelasjon(resp[0]))
+        ).then((response: IDocumentRelationWithEtterlevelseDokumetajson[]) =>
+          setDokumentRelasjon(response[0])
+        )
       }
     })()
   }, [etterlevelseDokumentasjon])
 
-  const submit = async (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL) => {
+  const submit = async (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL): Promise<void> => {
     console.debug(selectedVirkemiddel)
 
     if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
@@ -126,17 +141,21 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
         })
       }
 
-      await createEtterlevelseDokumentasjon(mutatedEtterlevelsesDokumentasjon).then((response) => {
-        if (response.id) {
-          navigate('/dokumentasjon/' + response.id)
+      await createEtterlevelseDokumentasjon(mutatedEtterlevelsesDokumentasjon).then(
+        (response: IEtterlevelseDokumentasjon) => {
+          if (response.id) {
+            navigate('/dokumentasjon/' + response.id)
+          }
         }
-      })
+      )
     } else {
-      await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
-        if (response.id) {
-          navigate('/dokumentasjon/' + response.id)
+      await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then(
+        (response: IEtterlevelseDokumentasjon) => {
+          if (response.id) {
+            navigate('/dokumentasjon/' + response.id)
+          }
         }
-      })
+      )
     }
   }
 
@@ -234,16 +253,17 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                     legend="Hvilke egenskaper gjelder for etterlevelsen?"
                     description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
                     value={selectedFilter}
-                    onChange={(selected) => {
+                    onChange={(selected: any[]) => {
                       setSelectedFilter(selected)
 
                       const irrelevansListe = relevansOptions.filter(
-                        (_irrelevans, index) => !selected.includes(index)
+                        (_irrelevans: IGetParsedOptionsProps, index: number) =>
+                          !selected.includes(index)
                       )
                       fieldArrayRenderProps.form.setFieldValue(
                         'irrelevansFor',
-                        irrelevansListe.map((irrelevans) =>
-                          codelist.getCode(EListName.RELEVANS, irrelevans.value)
+                        irrelevansListe.map((irrelevans: IGetParsedOptionsProps) =>
+                          codelistUtils.getCode(EListName.RELEVANS, irrelevans.value)
                         )
                       )
                       // selected.forEach((value) => {
@@ -253,12 +273,12 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                       //     p.remove(p.form.values.irrelevansFor.findIndex((ir: ICode) => ir.code === relevansOptions[i].value))
                       //   } else {
                       //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
-                      //     p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
+                      //     p.push(codelistUtils.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
                       //   }
                       // })
                     }}
                   >
-                    {relevansOptions.map((relevans, index) => (
+                    {relevansOptions.map((relevans: IGetParsedOptionsProps, index: number) => (
                       <Checkbox
                         key={'relevans_' + relevans.value}
                         value={index}
@@ -288,7 +308,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                   <div className="my-3">
                     <LabelWithDescription
-                      label={'Legg til behandlinger fra Behandlingskatalogen'}
+                      label="Legg til behandlinger fra Behandlingskatalogen"
                       description="Skriv minst 3 tegn for å søke"
                     />
                     <div className="w-full">
@@ -301,7 +321,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                         loadingMessage={() => 'Søker...'}
                         isClearable={false}
                         loadOptions={searchBehandlingOptions}
-                        onChange={(value) => {
+                        onChange={(value: any) => {
                           if (value) {
                             fieldArrayRenderProps.push(value)
                           }
@@ -417,7 +437,9 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                         <TextField
                           label="Skriv inn NAV ident dersom du ikke finner person over"
                           value={customPersonForDev}
-                          onChange={(event) => setCustomPersonForDev(event.target.value)}
+                          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                            setCustomPersonForDev(event.target.value)
+                          }
                         />
                         <div>
                           <Button
@@ -468,7 +490,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                       listName={EListName.AVDELING}
                       label="Avdeling"
                       value={fieldProps.field.value?.code}
-                      onChange={(value) => {
+                      onChange={(value: any) => {
                         fieldProps.form.setFieldValue('avdeling', value)
                       }}
                     />
@@ -523,7 +545,9 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                         <TextField
                           label="Skriv inn NAV ident dersom du ikke finner risikoeier over"
                           value={customRisikoeierForDev}
-                          onChange={(event) => setCustomRisikoeierForDev(event.target.value)}
+                          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                            setCustomRisikoeierForDev(event.target.value)
+                          }
                         />
                         <div>
                           <Button
@@ -611,12 +635,12 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
 
 const getMembersFromEtterlevelseDokumentasjon = (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-) => {
-  const members = []
+): string[] => {
+  const members: string[] = []
   if (etterlevelseDokumentasjon.teamsData && etterlevelseDokumentasjon.teamsData.length > 0) {
-    etterlevelseDokumentasjon.teamsData.forEach((team) => {
+    etterlevelseDokumentasjon.teamsData.forEach((team: ITeam) => {
       if (team.members) {
-        const teamMembers: string[] = team.members.map((members) => members.navIdent || '')
+        const teamMembers: string[] = team.members.map((members: IMember) => members.navIdent || '')
         members.push(...teamMembers)
       }
     })
@@ -625,7 +649,9 @@ const getMembersFromEtterlevelseDokumentasjon = (
     etterlevelseDokumentasjon.resourcesData &&
     etterlevelseDokumentasjon.resourcesData.length > 0
   ) {
-    members.push(...etterlevelseDokumentasjon.resourcesData.map((resource) => resource.navIdent))
+    members.push(
+      ...etterlevelseDokumentasjon.resourcesData.map((resource: ITeamResource) => resource.navIdent)
+    )
   }
 
   return members
