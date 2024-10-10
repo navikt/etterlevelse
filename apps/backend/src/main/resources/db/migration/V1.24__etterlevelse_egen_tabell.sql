@@ -41,20 +41,10 @@ insert into etterlevelse
     where type = 'Etterlevelse'
 ;
 
--- Drop den gamle indeksen på etterlevelseDokumentasjonId (opprettet i 1.23)...
--- FIXME
-
 -- Slett rader i den gamle tabellen...
 
 delete from generic_storage where type = 'Etterlevelse';
 
--- Rydd opp i generic_storage...
+-- Skal ikke droppe den gamle indeksen på etterlevelseDokumentasjonId (opprettet i 1.23). Brukes av andre typer.
 
-/*vacuum full generic_storage;*/
-
--- Oppdater audit_version...
-
--- FIXME
-
-
-
+-- I tillegg bør det kjøres en manuell vacuum i forbindelse med prodsetting.
