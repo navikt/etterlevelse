@@ -35,8 +35,7 @@ create table if not exists pvk_dokument
     last_modified_date
     timestamp
     not
-    null,
-
+    null
 );
 
 create index if not exists idx_pvk_etterlevelse_dokumentasjon_id on pvk_dokument (etterlevelse_dokumentasjon_id);
