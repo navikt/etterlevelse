@@ -8,9 +8,13 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.pvk.pvkdokument.domain.OpplysningtypeData;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvkdokument.domain.YtterligereEgenskaper;
 
 import java.util.List;
+import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.copyOf;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
@@ -25,7 +29,7 @@ public class PvkDokumentRequest implements RequestElement {
     private String etterlevelseDokumentId;
     private PvkDokumentStatus status;
 
-    private List<String> ytterligereEgenskaper;
+    private List<YtterligereEgenskaper> ytterligereEgenskaper;
     private boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
     private boolean stemmerOpplysningstypene;
@@ -66,5 +70,30 @@ public class PvkDokumentRequest implements RequestElement {
         validator.checkUUID(Fields.etterlevelseDokumentId, etterlevelseDokumentId);
         validator.checkNull(Fields.status, status);
         validator.checkId(this);
+    }
+
+    public PvkDokument convertToPvkDokument() {
+        var pkvDokumentData = PvkDokumentData.builder()
+                .ytterligereEgenskaper(List.copyOf(ytterligereEgenskaper))
+                .skalUtforePvk(skalUtforePvk)
+                .pvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse)
+                .stemmerOpplysningstypene(stemmerOpplysningstypene)
+                .opplysningtypeData(copyOf(opplysningtypeData))
+                .tilgangsBeskrivelseForOpplysningstyper(tilgangsBeskrivelseForOpplysningstyper)
+                .lagringsBeskrivelseForOpplysningstyper(lagringsBeskrivelseForOpplysningstyper)
+                .stemmerPersonkategorier(stemmerPersonkategorier)
+                .harInvolvertRepresentant(harInvolvertRepresentant)
+                .representantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse)
+                .stemmerDatabehandlere(stemmerDatabehandlere)
+                .harDatabehandlerRepresentantInvolvering(harDatabehandlerRepresentantInvolvering)
+                .dataBehandlerRepresentantInvolveringBeskrivelse(dataBehandlerRepresentantInvolveringBeskrivelse)
+                .build();
+
+        return PvkDokument.builder()
+                .id(UUID.fromString(id))
+                .etterlevelseDokumentId(etterlevelseDokumentId)
+                .status(status)
+                .pvkDokumentData(pkvDokumentData)
+                .build();
     }
 }
