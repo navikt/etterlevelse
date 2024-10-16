@@ -19,7 +19,7 @@ Besluttet med å gå for remix.js. Remix vil kreve mindre tilpassing både for p
 PLUSS
 + Vi får bekvitte oss av sårbarheter pga utdaterte dependecies
 + Vi flytter over til et rammeverk som er mer oppdatert og vedlikeholdt
-+ Vi trenger ikke å bruke mye tid til å tilpasset oss på det nye kode/mappe struktur
++ Vi trenger ikke å bruke mye tid (ca. 1-2 dager) til å tilpasset oss på det nye kode/mappe struktur
 
 MINUS
-- Vi må bruke litt tid til å bli vandt til den nye kode/mappe struktur
+- Vi må bruke litt tid (ca. 1-2 dager) til å bli vandt til den nye kode/mappe struktur
