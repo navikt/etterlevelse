@@ -16,20 +16,20 @@ import java.util.List;
 public class PvkDokumentData {
 
     private List<YtterligereEgenskaper> ytterligereEgenskaper;
-    private Boolean skalUtforePvk;
-    private String PvkVurderingsBegrunnelse;
+    private boolean skalUtforePvk;
+    private String pvkVurderingsBegrunnelse;
 
-    private Boolean stemmerOpplysningstypene;
+    private boolean stemmerOpplysningstypene;
     private List<OpplysningtypeData> opplysningtypeData;
     private String tilgangsBeskrivelseForOpplysningstyper;
     private String lagringsBeskrivelseForOpplysningstyper;
 
-    private Boolean stemmerPersonkategorier;
-    private Boolean harInvolvertRepresentant;
+    private boolean stemmerPersonkategorier;
+    private boolean harInvolvertRepresentant;
     private String representantInvolveringsBeskrivelse;
 
-    private Boolean stemmerDatabehandlere;
-    private Boolean harDatabehandlerRepresentantInvolvering;
+    private boolean stemmerDatabehandlere;
+    private boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
 }
