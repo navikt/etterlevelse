@@ -10,6 +10,7 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.pvk.pvkdokument.domain.OpplysningtypeData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentFil;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvkdokument.domain.YtterligereEgenskaper;
 
@@ -44,6 +45,8 @@ public class PvkDokumentRequest implements RequestElement {
     private boolean stemmerDatabehandlere;
     private boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
+
+    private List<PvkDokumentFil> pvkDokumentFiler;
 
     private Boolean update;
 

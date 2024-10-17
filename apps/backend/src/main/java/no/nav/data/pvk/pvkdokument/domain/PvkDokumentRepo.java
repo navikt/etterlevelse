@@ -20,4 +20,5 @@ public interface PvkDokumentRepo extends JpaRepository<PvkDokument, UUID> {
     @Query(value = "select * from pvk_dokument where etterlevelse_dokumentasjon_id = ?1", nativeQuery = true)
     Optional<PvkDokument> findByEtterlevelseDokumensjon(String etterlevelseDokumentasjonId);
 
+
 }
