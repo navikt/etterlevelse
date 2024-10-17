@@ -49,13 +49,12 @@ public class PvkDokumentService {
     public PvkDokument save(PvkDokument pvkDokument, boolean isUpdate) {
 
         if (!isUpdate) {
-            if (pvkDokument.getId() == null) {
-                pvkDokument.setId(UUID.randomUUID());
-            }
             var existingPvkDokument = repo.findByEtterlevelseDokumensjon(pvkDokument.getEtterlevelseDokumentId());
             if (existingPvkDokument.isPresent()) {
                 log.warn("Found existing pvk document when trying to create for etterlevelse dokumentation id: {}", pvkDokument.getEtterlevelseDokumentId());
-                pvkDokument = existingPvkDokument.get();
+                pvkDokument.setId(existingPvkDokument.get().getId());
+            } else {
+                pvkDokument.setId(UUID.randomUUID());
             }
         }
 
