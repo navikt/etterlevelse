@@ -15,6 +15,7 @@ import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -35,18 +37,36 @@ public class PvkDokumentController {
 
     private final PvkDokumentService pvkDokumentService;
 
-    @Operation(summary = "Get All PvkDokument")
+    @Operation(summary = "Get All Pvk Document")
     @ApiResponse(description = "ok")
     @GetMapping
     public ResponseEntity<RestResponsePage<PvkDokumentResponse>> getAll(
             PageParameters pageParameters
     ) {
-        log.info("Get all PvkDokument");
+        log.info("Get all Pvk Document");
         Page<PvkDokument> page = pvkDokumentService.getAll(pageParameters);
         return ResponseEntity.ok(new RestResponsePage<>(page).convert(PvkDokumentResponse::buildFrom));
     }
 
-    @Operation(summary = "Create PvkDocument")
+    @Operation(summary = "Get One Pvk Document")
+    @ApiResponse(description = "ok")
+    @GetMapping("/{id}")
+    public ResponseEntity<PvkDokumentResponse> getById(@PathVariable UUID id) {
+        log.info("Get Pvk Document id={}", id);
+        return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokumentService.get(id)));
+    }
+
+    @Operation(summary = "Get Pvk Document by etterlevelsedokument id")
+    @ApiResponse(description = "ok")
+    @GetMapping("/etterlevelsedokument/{etterlevelseDokumentId}")
+    public ResponseEntity<PvkDokumentResponse> getByPvkDokumentByEtterlevelseDokumentId(@PathVariable String etterlevelseDokumentId) {
+        log.info("Get Pvk Document by etterlevelseDokument id={}", etterlevelseDokumentId);
+        Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentId);
+
+        return pvkDokument.map(dokument -> ResponseEntity.ok(PvkDokumentResponse.buildFrom(dokument))).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Operation(summary = "Create Pvk Document")
     @ApiResponse(responseCode = "201", description = "PvkDokument created")
     @PostMapping
     public ResponseEntity<PvkDokumentResponse> createPvkDokumente(@RequestBody PvkDokumentRequest request) {
@@ -67,6 +87,15 @@ public class PvkDokumentController {
         }
 
         var pvkDokument = pvkDokumentService.save(request.convertToPvkDokument(), true);
+        return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokument));
+    }
+
+    @Operation(summary = "Delete Pvk Document")
+    @ApiResponse(description = "Pvk Document deleted")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<PvkDokumentResponse> deletePvkDokumentById(@PathVariable UUID id) {
+        log.info("Delete Pvk Document id={}", id);
+        var pvkDokument = pvkDokumentService.delete(id);
         return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokument));
     }
 }
