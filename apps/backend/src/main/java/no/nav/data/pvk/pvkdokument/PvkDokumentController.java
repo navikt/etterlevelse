@@ -121,6 +121,7 @@ public class PvkDokumentController {
     }
 
 
+
     @Operation(summary = "Upload Pvk Document files")
     @ApiResponse(responseCode = "201", description = "Files saved")
     @PostMapping("/{pvkdokumentid}/files")
@@ -135,10 +136,10 @@ public class PvkDokumentController {
             throw new ValidationException(String.format("Unable to save files, no pvk document with id=%s found", pvkdokumentid));
         }
 
-        files.forEach(i -> Assert.isTrue(validImage(i), () -> "Invalid file " + i.getName() + " " + i.getContentType()));
+        files.forEach(i -> Assert.isTrue(validFile(i), () -> "Invalid file " + i.getName() + " " + i.getContentType()));
 
         var filesToSave = pvkDokumentService.saveImages(convert(files, f -> {
-            var pvkDokumentFil = pvkDokumentService.getPvkDokumentFilByFileName(f.getOriginalFilename());
+            var pvkDokumentFil = pvkDokumentService.getPvkDokumentFilByFileNameAndType(f.getOriginalFilename(), f.getContentType());
 
             var pvkDokumentFilToSave = PvkDokumentFil.builder()
                     .pvkDokumetId(pvkDokument.getId().toString())
@@ -157,7 +158,16 @@ public class PvkDokumentController {
         return new ResponseEntity<>(convert(filesToSave, i -> i.getId().toString()), HttpStatus.CREATED);
     }
 
-    private boolean validImage(MultipartFile i) {
+    @Operation(summary = "Delete Pvk Document file")
+    @ApiResponse(description = "Pvk Document file deleted")
+    @DeleteMapping("/pvkdokumentfil/{id}")
+    public ResponseEntity<PvkDokumentFil> deletePvkDokumentFilById(@PathVariable UUID id) {
+        log.info("Delete Pvk Document file with id={}", id);
+        var pvkDokumentFil = pvkDokumentService.deleteFile(id);
+        return ResponseEntity.ok(pvkDokumentFil);
+    }
+
+    private boolean validFile(MultipartFile i) {
         return List.of(MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.APPLICATION_PDF).contains(i.getContentType())
                 && getBytes(i).length > 0;
     }

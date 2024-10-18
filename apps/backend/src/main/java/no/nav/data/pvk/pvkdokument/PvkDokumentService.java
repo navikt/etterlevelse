@@ -76,12 +76,19 @@ public class PvkDokumentService {
         return pvkDokumentFilRepo.findPvkDokumentFilerByPvkDokumentId(pvkDokumentId);
     }
 
-    public Optional<PvkDokumentFil> getPvkDokumentFilByFileName(String filName) {
-        return pvkDokumentFilRepo.findPvkDokumentFilerByFilename(filName);
+    public Optional<PvkDokumentFil> getPvkDokumentFilByFileNameAndType(String filName, String filType) {
+        return pvkDokumentFilRepo.findPvkDokumentFilerByFilenameAndType(filName, filType);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public List<PvkDokumentFil> saveImages(List<PvkDokumentFil> files) {
         return pvkDokumentFilRepo.saveAll(files);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public PvkDokumentFil deleteFile(UUID id) {
+        var pvkDokumentFilToDelete = pvkDokumentFilRepo.findById(id);
+        pvkDokumentFilRepo.deleteById(id);
+        return pvkDokumentFilToDelete.orElse(null);
     }
 }

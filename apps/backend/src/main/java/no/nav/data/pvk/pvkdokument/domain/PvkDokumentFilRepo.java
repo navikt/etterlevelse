@@ -12,6 +12,6 @@ public interface PvkDokumentFilRepo  extends JpaRepository<PvkDokumentFil, UUID>
     @Query(value = "select * from pvk_dokument_fil where pvk_dokument_id = ?1", nativeQuery = true)
     List<PvkDokumentFil> findPvkDokumentFilerByPvkDokumentId(String pvkDokumentId);
 
-    @Query(value = "select * from pvk_dokument_fil where file_name = ?1", nativeQuery = true)
-    Optional<PvkDokumentFil> findPvkDokumentFilerByFilename(String fileName);
+    @Query(value = "select * from pvk_dokument_fil where file_name = ?1 and file_type = ?2", nativeQuery = true)
+    Optional<PvkDokumentFil> findPvkDokumentFilerByFilenameAndType(String fileName, String fileType);
 }
