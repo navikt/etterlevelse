@@ -42,5 +42,4 @@ public class PvkDokument extends Auditable {
     @Builder.Default
     private PvkDokumentData pvkDokumentData = new PvkDokumentData();
 
-
 }
