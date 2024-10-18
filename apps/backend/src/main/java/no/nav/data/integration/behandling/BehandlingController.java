@@ -10,6 +10,7 @@ import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.integration.behandling.dto.Behandling;
+import no.nav.data.integration.behandling.dto.DataBehandler;
 import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.http.ResponseEntity;
@@ -78,6 +79,18 @@ public class BehandlingController {
         log.info("Search behandling by value={}", search);
         List<Behandling> behandlingList = service.findBehandlinger(search);
         return ResponseEntity.ok(new RestResponsePage<>(behandlingList));
+    }
+
+    @Operation(summary = "Get Databehandler")
+    @ApiResponses(value = {@ApiResponse(description = "Databehandler fetched")})
+    @GetMapping("/databehandler/{id}")
+    public ResponseEntity<DataBehandler> getDatabehandler(@PathVariable String id) {
+        log.info("Get Databehandler by id={}", id);
+        DataBehandler dataBehandler = service.getDataBehandler(id);
+        if (dataBehandler == null) {
+            throw new NotFoundException("behandling %s not found".formatted(id));
+        }
+        return ResponseEntity.ok(dataBehandler);
     }
 
     public static class BehandlingPage extends RestResponsePage<Behandling> {

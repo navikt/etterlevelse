@@ -28,6 +28,9 @@ public class BkatProcess {
     @Singular
     private List<BkatCode> purposes;
     private BkatAffiliation affiliation;
+    @Singular
+    private List<BkatPolicy> policies;
+    private BkatDataProcessing dataProcessing;
 
     public Behandling convertToBehandling() {
         return Behandling.builder()
@@ -40,6 +43,8 @@ public class BkatProcess {
                 .linjer(convert(affiliation.getSubDepartments(), BkatCode::toCode))
                 .systemer(convert(affiliation.getProducts(), BkatCode::toCode))
                 .teams(affiliation.getProductTeams())
+                .policies(policies.stream().map(BkatPolicy::convertToPolyResponse).toList())
+                .dataProsessering(dataProcessing.convertToDataProsessering())
                 .build();
     }
 }

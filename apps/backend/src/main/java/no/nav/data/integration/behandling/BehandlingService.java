@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.behandling.dto.BkatProcess;
+import no.nav.data.integration.behandling.dto.BkatProcessor;
+import no.nav.data.integration.behandling.dto.DataBehandler;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -53,5 +55,13 @@ public class BehandlingService {
 
     private List<Behandling> convertBehandlinger(Collection<BkatProcess> processes) {
         return convert(processes, BkatProcess::convertToBehandling);
+    }
+
+    public DataBehandler getDataBehandler(String id) {
+        BkatProcessor dataBehandler = bkatClient.getProcessor(id);
+        if (dataBehandler == null) {
+            return null;
+        }
+        return dataBehandler.convertToDataBehandler();
     }
 }
