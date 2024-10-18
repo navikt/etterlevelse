@@ -11,6 +11,7 @@ import no.nav.data.integration.begrep.BegrepService;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
 import no.nav.data.integration.begrep.dto.PollyTerm;
 import no.nav.data.integration.behandling.dto.BkatProcess;
+import no.nav.data.integration.behandling.dto.BkatProcessor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -31,6 +32,7 @@ public class BkatClient implements BegrepService {
     private final WebClient client;
     private final LoadingCache<String, List<BkatProcess>> processSearchCache;
     private final LoadingCache<String, BkatProcess> processCache;
+    private final LoadingCache<String, BkatProcessor> processorCache;
     private final Cache<String, ProcessPage> processPageCache;
     private final LoadingCache<String, List<BkatProcess>> processTeamCache;
 
@@ -51,6 +53,12 @@ public class BkatClient implements BegrepService {
                 Caffeine.newBuilder().recordStats()
                         .expireAfterWrite(Duration.ofMinutes(2))
                         .maximumSize(300).build(this::getProcess0));
+
+        this.processorCache = MetricUtils.register("bkatProcessorCache",
+                Caffeine.newBuilder().recordStats()
+                        .expireAfterWrite(Duration.ofMinutes(2))
+                        .maximumSize(300).build(this::getProcessor0));
+
         this.processPageCache = MetricUtils.register("bkatProcessPageCache",
                 Caffeine.newBuilder().recordStats()
                         .expireAfterWrite(Duration.ofMinutes(2))
@@ -72,6 +80,10 @@ public class BkatClient implements BegrepService {
 
     public BkatProcess getProcess(String id) {
         return processCache.get(id);
+    }
+
+    public BkatProcessor getProcessor(String id) {
+        return processorCache.get(id);
     }
 
     public Map<String, BkatProcess> getProcessesById(Collection<String> ids) {
@@ -96,6 +108,10 @@ public class BkatClient implements BegrepService {
 
     private BkatProcess getProcess0(String id) {
         return get("/process/{id}", BkatProcess.class, id);
+    }
+
+    private BkatProcessor getProcessor0(String id) {
+        return get("/processor/{id}", BkatProcessor.class, id);
     }
 
     private Map<String, BkatProcess> getProcesses0(Iterable<? extends String> uncachedIds) {
