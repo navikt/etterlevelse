@@ -3,6 +3,7 @@ package no.nav.data.integration.behandling;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.integration.behandling.dto.BkatAffiliation;
 import no.nav.data.integration.behandling.dto.BkatCode;
+import no.nav.data.integration.behandling.dto.BkatDataProcessing;
 import no.nav.data.integration.behandling.dto.BkatInformationTypeShort;
 import no.nav.data.integration.behandling.dto.BkatPolicy;
 import no.nav.data.integration.behandling.dto.BkatProcess;
@@ -58,6 +59,7 @@ public class BkatMocks {
                                         .sensitivity(BkatCode.builder().list("SENSITIVITY").code("POL").shortName("pol").description("desc").build())
                                         .build())
                         .build()))
+                .dataProcessing(BkatDataProcessing.builder().dataProcessor(true).processors(List.of("processor_1")).build())
                 .build();
     }
 }

@@ -4,6 +4,7 @@ import no.nav.data.IntegrationTestBase;
 import no.nav.data.etterlevelse.common.domain.ExternalCode;
 import no.nav.data.integration.behandling.BehandlingController.BehandlingPage;
 import no.nav.data.integration.behandling.dto.Behandling;
+import no.nav.data.integration.behandling.dto.DataProsessering;
 import no.nav.data.integration.behandling.dto.PolicyResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -53,6 +54,7 @@ class BehandlingControllerIT extends IntegrationTestBase {
                                 .behandlingId(behandling.getId())
                                 .personKategorier(List.of(ExternalCode.builder().list("SUBJECT_CATEGORY").code("BRUKER").shortName("Bruker").description("desc").external(true).build()))
                                 .build()))
+                        .dataProsessering(DataProsessering.builder().benyttesDataBehandlere(true).dataBehandlerIds(List.of("processor_1")).build())
                 .build());
     }
 }

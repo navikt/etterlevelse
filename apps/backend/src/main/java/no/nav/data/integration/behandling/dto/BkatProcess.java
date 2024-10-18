@@ -30,6 +30,7 @@ public class BkatProcess {
     private BkatAffiliation affiliation;
     @Singular
     private List<BkatPolicy> policies;
+    private BkatDataProcessing dataProcessing;
 
     public Behandling convertToBehandling() {
         return Behandling.builder()
@@ -43,6 +44,7 @@ public class BkatProcess {
                 .systemer(convert(affiliation.getProducts(), BkatCode::toCode))
                 .teams(affiliation.getProductTeams())
                 .policies(policies.stream().map(BkatPolicy::convertToPolyResponse).toList())
+                .dataProsessering(dataProcessing.convertToDataProsessering())
                 .build();
     }
 }

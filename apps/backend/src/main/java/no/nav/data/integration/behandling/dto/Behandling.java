@@ -35,4 +35,6 @@ public class Behandling {
     private List<TeamResponse> teamsData;
 
     private List<PolicyResponse> policies;
+    
+    private DataProsessering dataProsessering;
 }
