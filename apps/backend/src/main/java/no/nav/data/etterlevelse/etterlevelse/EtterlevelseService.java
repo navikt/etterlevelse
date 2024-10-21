@@ -96,7 +96,7 @@ public class EtterlevelseService {
         if (!request.isUpdate()) {
             var existingEtterlevelse = repo.findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.getKravVersjon());
             if (existingEtterlevelse.isPresent()) {
-                log.warn("Found existing etterlevelse wheN trying to create for etterlevelse dokumentation id: {}, for krav: K{}.{}", request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.getKravVersjon());
+                log.warn("Found existing etterlevelse when trying to create for etterlevelse dokumentation id: {}, for krav: K{}.{}", request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.getKravVersjon());
                 etterlevelse = existingEtterlevelse.get();
             }
         }
@@ -110,7 +110,7 @@ public class EtterlevelseService {
     public void copyEtterlevelse(String fromDocumentId, String toDocumentId) {
         var etterlevelseToCopy = getByEtterlevelseDokumentasjon(fromDocumentId);
         etterlevelseToCopy.forEach(etterlevelse -> {
-            var krav = kravRepo.findKravForEtterlevelse(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon()).map(GenericStorage::getDomainObjectData).orElse(new Krav());
+            var krav = kravRepo.findByKravNummer(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon()).map(GenericStorage::getDomainObjectData).orElse(new Krav());
             if (krav.getStatus() == KravStatus.AKTIV) {
                 List<SuksesskriterieBegrunnelseRequest> suksesskriterieBegrunnelseRequestList = etterlevelse.getSuksesskriterieBegrunnelser().stream().map((skb) -> SuksesskriterieBegrunnelseRequest.builder()
                         .suksesskriterieId(skb.getSuksesskriterieId())
