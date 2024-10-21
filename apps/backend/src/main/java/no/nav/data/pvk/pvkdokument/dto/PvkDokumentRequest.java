@@ -77,7 +77,7 @@ public class PvkDokumentRequest implements RequestElement {
 
     public PvkDokument convertToPvkDokument() {
         var pkvDokumentData = PvkDokumentData.builder()
-                .ytterligereEgenskaper(List.copyOf(ytterligereEgenskaper))
+                .ytterligereEgenskaper(copyOf(ytterligereEgenskaper))
                 .skalUtforePvk(skalUtforePvk)
                 .pvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse)
                 .stemmerOpplysningstypene(stemmerOpplysningstypene)
@@ -98,5 +98,23 @@ public class PvkDokumentRequest implements RequestElement {
                 .status(status != null ? status : PvkDokumentStatus.AKTIV)
                 .pvkDokumentData(pkvDokumentData)
                 .build();
+    }
+
+    public void mergeInto(PvkDokument pvkDokumentToMerge) {
+        pvkDokumentToMerge.setEtterlevelseDokumentId(etterlevelseDokumentId);
+        pvkDokumentToMerge.setStatus(status);
+        pvkDokumentToMerge.getPvkDokumentData().setYtterligereEgenskaper(copyOf(ytterligereEgenskaper));
+        pvkDokumentToMerge.getPvkDokumentData().setSkalUtforePvk(skalUtforePvk);
+        pvkDokumentToMerge.getPvkDokumentData().setPvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse);
+        pvkDokumentToMerge.getPvkDokumentData().setStemmerOpplysningstypene(stemmerOpplysningstypene);
+        pvkDokumentToMerge.getPvkDokumentData().setOpplysningtypeData(copyOf(opplysningtypeData));
+        pvkDokumentToMerge.getPvkDokumentData().setTilgangsBeskrivelseForOpplysningstyper(tilgangsBeskrivelseForOpplysningstyper);
+        pvkDokumentToMerge.getPvkDokumentData().setLagringsBeskrivelseForOpplysningstyper(lagringsBeskrivelseForOpplysningstyper);
+        pvkDokumentToMerge.getPvkDokumentData().setStemmerPersonkategorier(stemmerPersonkategorier);
+        pvkDokumentToMerge.getPvkDokumentData().setHarInvolvertRepresentant(harInvolvertRepresentant);
+        pvkDokumentToMerge.getPvkDokumentData().setRepresentantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse);
+        pvkDokumentToMerge.getPvkDokumentData().setStemmerDatabehandlere(stemmerDatabehandlere);
+        pvkDokumentToMerge.getPvkDokumentData().setDataBehandlerRepresentantInvolveringBeskrivelse(dataBehandlerRepresentantInvolveringBeskrivelse);
+
     }
 }

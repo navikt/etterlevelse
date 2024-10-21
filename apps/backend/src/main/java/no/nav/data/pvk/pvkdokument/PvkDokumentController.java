@@ -70,7 +70,7 @@ public class PvkDokumentController {
     @Operation(summary = "Get Pvk Document by etterlevelsedokument id")
     @ApiResponse(description = "ok")
     @GetMapping("/etterlevelsedokument/{etterlevelseDokumentId}")
-    public ResponseEntity<PvkDokumentResponse> getByPvkDokumentByEtterlevelseDokumentId(@PathVariable String etterlevelseDokumentId) {
+    public ResponseEntity<PvkDokumentResponse> getPvkDokumentByEtterlevelseDokumentId(@PathVariable String etterlevelseDokumentId) {
         log.info("Get Pvk Document by etterlevelseDokument id={}", etterlevelseDokumentId);
         Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentId);
 
@@ -82,7 +82,7 @@ public class PvkDokumentController {
     @PostMapping
     public ResponseEntity<PvkDokumentResponse> createPvkDokumente(@RequestBody PvkDokumentRequest request) {
         log.info("Create PvkDokument");
-        var pvkDokument = pvkDokumentService.save(request.convertToPvkDokument(), false);
+        var pvkDokument = pvkDokumentService.save(request.convertToPvkDokument(), request.isUpdate());
 
         return new ResponseEntity<>(PvkDokumentResponse.buildFrom(pvkDokument), HttpStatus.CREATED);
     }
@@ -97,7 +97,9 @@ public class PvkDokumentController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
-        var pvkDokument = pvkDokumentService.save(request.convertToPvkDokument(), true);
+        var pvkDokumentToUpdate = pvkDokumentService.get(id);
+        request.mergeInto(pvkDokumentToUpdate);
+        var pvkDokument = pvkDokumentService.save( pvkDokumentToUpdate, request.isUpdate());
         return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokument));
     }
 

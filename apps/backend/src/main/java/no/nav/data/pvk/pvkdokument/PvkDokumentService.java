@@ -22,8 +22,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PvkDokumentService {
 
-    private PvkDokumentRepo pvkDokumentRepo;
-    private PvkDokumentFilRepo pvkDokumentFilRepo;
+    private final PvkDokumentRepo pvkDokumentRepo;
+    private final PvkDokumentFilRepo pvkDokumentFilRepo;
 
     public PvkDokument get(UUID uuid) {
         if (uuid == null || !pvkDokumentRepo.existsById(uuid)) return null;
@@ -53,7 +53,7 @@ public class PvkDokumentService {
     public PvkDokument save(PvkDokument pvkDokument, boolean isUpdate) {
 
         if (!isUpdate) {
-            var existingPvkDokument = pvkDokumentRepo.findByEtterlevelseDokumensjon(pvkDokument.getEtterlevelseDokumentId());
+            var existingPvkDokument = getByEtterlevelseDokumentasjon(pvkDokument.getEtterlevelseDokumentId());
             if (existingPvkDokument.isPresent()) {
                 log.warn("Found existing pvk document when trying to create for etterlevelse dokumentation id: {}", pvkDokument.getEtterlevelseDokumentId());
                 pvkDokument.setId(existingPvkDokument.get().getId());
