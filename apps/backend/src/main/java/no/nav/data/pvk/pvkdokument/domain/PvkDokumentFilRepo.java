@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface PvkDokumentFilRepo  extends JpaRepository<PvkDokumentFil, UUID> {
+public interface PvkDokumentFilRepo extends JpaRepository<PvkDokumentFil, UUID> {
 
     @Query(value = "select * from pvk_dokument_fil where pvk_dokument_id = ?1", nativeQuery = true)
     List<PvkDokumentFil> findPvkDokumentFilerByPvkDokumentId(String pvkDokumentId);
