@@ -75,7 +75,6 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
         assertThat(etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon_1.getId().toString()).size()).isEqualTo(0);
         assertThat(etterlevelseMetadataService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon_1.getId().toString()).size()).isEqualTo(0);
         assertThat(etterlevelseArkivService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon_1.getId().toString()).size()).isEqualTo(0);
-
     }
 
     @Test

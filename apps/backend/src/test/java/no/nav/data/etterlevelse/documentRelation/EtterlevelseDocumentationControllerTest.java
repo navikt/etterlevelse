@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class etterlevelseDocumentationControllerTest extends IntegrationTestBase {
+public class EtterlevelseDocumentationControllerTest extends IntegrationTestBase {
 
     @BeforeEach
     void setup(){
@@ -81,21 +81,19 @@ public class etterlevelseDocumentationControllerTest extends IntegrationTestBase
 
     @Test
     void getAllDocumentRelations() {
-        documentRelationService.save(DocumentRelationRequest
+        documentRelationService.save(DocumentRelation
                 .builder()
-                .update(false)
                 .fromDocument("oldFromDocument")
                 .toDocument("toOldDocument")
                 .relationType(RelationType.BYGGER)
-                .build());
+                .build(), false);
 
-        documentRelationService.save(DocumentRelationRequest
+        documentRelationService.save(DocumentRelation
                 .builder()
-                .update(false)
                 .fromDocument("newFromDocument")
                 .toDocument("toNewDocument")
                 .relationType(RelationType.ARVER)
-                .build());
+                .build(), false);
 
 
         var resp = restTemplate.getForEntity("/documentrelation?pageSize=1", DocumentRelationController.DocumentRelationPage.class);
@@ -110,12 +108,11 @@ public class etterlevelseDocumentationControllerTest extends IntegrationTestBase
         documentRelationPage = resp.getBody();
         Assertions.assertThat(documentRelationPage).isNotNull();
         Assertions.assertThat(documentRelationPage.getNumberOfElements()).isZero();
-
     }
 
     @Test
     void getDocumentRelation() {
-        var documentRelation = documentRelationService.save(getDocumentRelationRequest());
+        var documentRelation = documentRelationService.save(buildDocumentRelation(), false);
 
         var resp = restTemplate.getForEntity("/documentrelation/{id}", DocumentRelationResponse.class, documentRelation.getId());
         Assertions.assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -127,15 +124,14 @@ public class etterlevelseDocumentationControllerTest extends IntegrationTestBase
 
     @Test
     void deleteDocumentRelation() {
-        var documentRelationToDelete = documentRelationService.save(getDocumentRelationRequest());
+        var documentRelationToDelete = documentRelationService.save(buildDocumentRelation(), false);
 
-        var otherDocumentRelationToNotDelete = documentRelationService.save(DocumentRelationRequest
+        var otherDocumentRelationToNotDelete = documentRelationService.save(DocumentRelation
                 .builder()
-                .update(false)
                 .fromDocument("newFromDocument")
                 .toDocument("toNewDocument")
                 .relationType(RelationType.ARVER)
-                .build());
+                .build(), false);
 
         restTemplate.delete("/documentrelation/{id}", documentRelationToDelete.getId());
 
@@ -148,6 +144,14 @@ public class etterlevelseDocumentationControllerTest extends IntegrationTestBase
         return DocumentRelationRequest.builder()
                 .toDocument("toId")
                 .update(false)
+                .fromDocument("fromId")
+                .relationType(RelationType.ARVER)
+                .build();
+    }
+
+    private DocumentRelation buildDocumentRelation() {
+        return DocumentRelation.builder()
+                .toDocument("toId")
                 .fromDocument("fromId")
                 .relationType(RelationType.ARVER)
                 .build();

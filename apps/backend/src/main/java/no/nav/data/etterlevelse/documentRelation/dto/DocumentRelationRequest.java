@@ -8,7 +8,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
+import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
+
+import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
@@ -28,6 +31,7 @@ public class DocumentRelationRequest implements RequestElement {
 
     private JsonNode data;
 
+    // TODO: Ser ikke ut til at update brukes noe annet sted enn i test
     private Boolean update;
 
     @Override
@@ -43,4 +47,15 @@ public class DocumentRelationRequest implements RequestElement {
         validator.checkUUID(Fields.fromDocument, fromDocument);
         validator.checkUUID(Fields.toDocument, toDocument);
     };
+    
+    public DocumentRelation toDocumentRelation() {
+        return DocumentRelation.builder()
+                .id(id != null ? UUID.fromString(id) : null)
+                .relationType(relationType)
+                .fromDocument(fromDocument)
+                .toDocument(toDocument)
+                .data(data)
+                .build();
+    };
+
 }

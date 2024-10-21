@@ -24,7 +24,7 @@ public interface GenericStorageRepository<T extends DomainObject> extends JpaRep
 
     Page<GenericStorage<T>> findAllByType(String type, Pageable pageable);
 
-    @Query(value = "select * from generic_storage where data ->> 'name' ilike ?1 and type = ?2", nativeQuery = true)
+    @Query(value = "select * from generic_storage where data ->> 'navn' ilike ?1 and type = ?2", nativeQuery = true)
     List<GenericStorage<T>> findByNameAndType(String name, String type);
 
     long countByType(String type);

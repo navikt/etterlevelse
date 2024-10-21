@@ -5,24 +5,22 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ForbiddenException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
-import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
+import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
-import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter; // TODO: Snu avhengigheten
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest; // TODO: Snu avhengigheten
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse; // TODO: Snu avhengigheten
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest; // TODO: Snu avhengigheten
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.team.domain.Team;
-import no.nav.data.integration.team.dto.MemberResponse;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.ResourceType;
 import no.nav.data.integration.team.dto.TeamResponse;
@@ -103,7 +101,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon save(EtterlevelseDokumentasjonRequest request) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new EtterlevelseDokumentasjon();
-        etterlevelseDokumentasjon.merge(request);
+        request.mergeInto(etterlevelseDokumentasjon);
 
         if (!request.isUpdate()) {
             etterlevelseDokumentasjon.setEtterlevelseNummer(etterlevelseDokumentasjonRepo.nextEtterlevelseDokumentasjonNummer());
@@ -129,7 +127,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon saveAndCreateRelationWithEtterlevelseCopy(UUID fromDocumentID, EtterlevelseDokumentasjonWithRelationRequest request) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = new EtterlevelseDokumentasjon();
-        etterlevelseDokumentasjon.merge(request);
+        request.mergeInto(etterlevelseDokumentasjon);
         etterlevelseDokumentasjon.setEtterlevelseNummer(etterlevelseDokumentasjonRepo.nextEtterlevelseDokumentasjonNummer());
         log.info("creating new Etterlevelse document with relation");
         var newEtterlevelseDokumentasjon = storage.save(etterlevelseDokumentasjon);
@@ -137,12 +135,11 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         etterlevelseService.copyEtterlevelse(fromDocumentID.toString(), newEtterlevelseDokumentasjon.getId().toString());
 
         var newDocumentRelation = documentRelationService.save(
-                DocumentRelationRequest.builder()
-                        .update(false)
+                DocumentRelation.builder()
                         .fromDocument(fromDocumentID.toString())
                         .toDocument(newEtterlevelseDokumentasjon.getId().toString())
                         .relationType(request.getRelationType())
-                        .build());
+                        .build(), false);
 
         log.info("Created new relation with fromId = {}, toId = {} with relation type = {}", newDocumentRelation.getFromDocument(), newDocumentRelation.getToDocument(), newDocumentRelation.getRelationType().name());
 
@@ -176,13 +173,13 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
 
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public EtterlevelseDokumentasjon updatePriorityList(String etterlevelseDokumentasjonId, int kravNummer, boolean prioritised) {
+    public EtterlevelseDokumentasjon updatePriorityList(String etterlevelseDokumentasjonId, int kravNummer, boolean prioritized) {
 
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = get(UUID.fromString(etterlevelseDokumentasjonId));
 
         List<String> priorityList = etterlevelseDokumentasjon.getPrioritertKravNummer() == null ? new ArrayList<>() : etterlevelseDokumentasjon.getPrioritertKravNummer();
 
-        if (prioritised) {
+        if (prioritized) {
             if (!priorityList.contains(String.valueOf(kravNummer))) {
                 priorityList.add(String.valueOf(kravNummer));
             }
@@ -204,45 +201,6 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return convertToDomaionObject(etterlevelseDokumentasjonRepo.findByVirkemiddelIds(ids));
     }
 
-    public EtterlevelseDokumentasjonResponse getEtterlevelseDokumentasjonWithTeamAndBehandlingAndResourceDataAndRiskoeiereData(UUID uuid) {
-        EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(get(uuid).toResponse());
-
-        boolean resourceIsEmpty = etterlevelseDokumentasjonResponse.getResources() == null || etterlevelseDokumentasjonResponse.getResources().isEmpty();
-        boolean teamIsEmpty = etterlevelseDokumentasjonResponse.getTeams() == null || etterlevelseDokumentasjonResponse.getTeams().isEmpty();
-        boolean risikoeiereIsEmpty = etterlevelseDokumentasjonResponse.getRisikoeiere() == null || etterlevelseDokumentasjonResponse.getRisikoeiere().isEmpty();
-
-        boolean resourceIsNotEmpty = etterlevelseDokumentasjonResponse.getResources() != null && !etterlevelseDokumentasjonResponse.getResources().isEmpty();
-        boolean teamIsNotEmpty = etterlevelseDokumentasjonResponse.getTeams() != null && !etterlevelseDokumentasjonResponse.getTeams().isEmpty();
-        boolean risikoeiereIsNotEmpty = etterlevelseDokumentasjonResponse.getRisikoeiere() != null && !etterlevelseDokumentasjonResponse.getRisikoeiere().isEmpty();
-
-
-        if (resourceIsEmpty && teamIsEmpty && risikoeiereIsEmpty) {
-            etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(true);
-        } else {
-            List<String> memeberList = new ArrayList<>();
-
-            var currentUser = SecurityUtils.getCurrentIdent();
-            if (resourceIsNotEmpty) {
-                memeberList.addAll(etterlevelseDokumentasjonResponse.getResources());
-            }
-
-            if (risikoeiereIsNotEmpty) {
-                memeberList.addAll(etterlevelseDokumentasjonResponse.getRisikoeiere());
-            }
-
-            if (teamIsNotEmpty) {
-                etterlevelseDokumentasjonResponse.getTeamsData().forEach((team) -> {
-                    if (team.getMembers() != null && !team.getMembers().isEmpty()) {
-                        memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList());
-                    }
-                });
-            }
-
-            etterlevelseDokumentasjonResponse.setHasCurrentUserAccess(memeberList.contains(currentUser));
-        }
-        return etterlevelseDokumentasjonResponse;
-    }
-
     public Page<EtterlevelseDokumentasjon> getAllWithValidBehandling(Pageable page) {
         return etterlevelseDokumentasjonRepo.getAllEtterlevelseDokumentasjonWithValidBehandling(page).map(GenericStorage::getDomainObjectData);
     }
@@ -256,25 +214,21 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     }
 
     // Does not update DB
-    public EtterlevelseDokumentasjonResponse addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
-        if (etterlevelseDokumentasjonResponse.getBehandlingIds() != null && !etterlevelseDokumentasjonResponse.getBehandlingIds().isEmpty()) {
-            addBehandlingData(etterlevelseDokumentasjonResponse);
-        }
-        if (etterlevelseDokumentasjonResponse.getTeams() != null && !etterlevelseDokumentasjonResponse.getTeams().isEmpty()) {
-            addTeamsData(etterlevelseDokumentasjonResponse);
-        }
-        if (etterlevelseDokumentasjonResponse.getResources() != null && !etterlevelseDokumentasjonResponse.getResources().isEmpty()) {
-            addResourcesData(etterlevelseDokumentasjonResponse);
-        }
-        if (etterlevelseDokumentasjonResponse.getRisikoeiere() != null && !etterlevelseDokumentasjonResponse.getRisikoeiere().isEmpty()) {
-            addRisikoeiereData(etterlevelseDokumentasjonResponse);
-        }
-        return etterlevelseDokumentasjonResponse;
+    // TODO: Skal ikke være avhengighet til dto i service
+    public void addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+        etterlevelseDokumentasjonResponse.setBehandlinger(getBehandlingData(etterlevelseDokumentasjonResponse.getBehandlingIds()));
+        etterlevelseDokumentasjonResponse.setTeamsData(getTeamsData(etterlevelseDokumentasjonResponse.getTeams()));
+        etterlevelseDokumentasjonResponse.setResourcesData(getResourcesData(etterlevelseDokumentasjonResponse.getResources()));
+        etterlevelseDokumentasjonResponse.setRisikoeiereData(getRisikoeiereData(etterlevelseDokumentasjonResponse.getRisikoeiere()));
     }
 
-    public void addBehandlingData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+    private List<Behandling> getBehandlingData(List<String> behandlinger) {
+        if (behandlinger == null || behandlinger.isEmpty()) {
+            return null;
+        }
+
         List<Behandling> behandlingList = new ArrayList<>();
-        etterlevelseDokumentasjonResponse.getBehandlingIds().forEach((behandlingId) -> {
+        behandlinger.forEach((behandlingId) -> {
             try {
                 var behandling = behandlingService.getBehandling(behandlingId);
                 behandlingList.add(behandling);
@@ -285,12 +239,16 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
                 behandlingList.add(behandling);
             }
         });
-        etterlevelseDokumentasjonResponse.setBehandlinger(behandlingList);
+        return behandlingList;
     }
 
-    public void addTeamsData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+    private List<TeamResponse> getTeamsData(List<String> teams) {
+        if (teams == null || teams.isEmpty()) {
+            return null;
+        }
+
         List<TeamResponse> teamsData = new ArrayList<>();
-        etterlevelseDokumentasjonResponse.getTeams().forEach((teamId) -> {
+        teams.forEach((teamId) -> {
             var teamData = teamcatTeamClient.getTeam(teamId);
             if (teamData.isPresent()) {
                 teamsData.add(teamData.get().toResponseWithMembers());
@@ -302,12 +260,16 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
                 teamsData.add(emptyTeamData);
             }
         });
-        etterlevelseDokumentasjonResponse.setTeamsData(teamsData);
+        return teamsData;
     }
 
-    public void addResourcesData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+    private List<Resource> getResourcesData(List<String> resourceIds) {
+        if (resourceIds == null || resourceIds.isEmpty()) {
+            return null;
+        }
+
         List<Resource> resourcessData = new ArrayList<>();
-        etterlevelseDokumentasjonResponse.getResources().forEach((ident) -> {
+        resourceIds.forEach((ident) -> {
             var resourceData = teamcatResourceClient.getResource(ident);
             if (resourceData.isPresent()) {
                 resourcessData.add(resourceData.get());
@@ -322,12 +284,16 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
                 resourcessData.add(emptyResourceData);
             }
         });
-        etterlevelseDokumentasjonResponse.setResourcesData(resourcessData);
+        return resourcessData;
     }
 
-    public void addRisikoeiereData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+    private List<Resource> getRisikoeiereData(List<String> risikoeiere) {
+        if (risikoeiere == null || risikoeiere.isEmpty()) {
+            return null;
+        }
+
         List<Resource> riskoeiereData = new ArrayList<>();
-        etterlevelseDokumentasjonResponse.getRisikoeiere().forEach((ident) -> {
+        risikoeiere.forEach((ident) -> {
             var risikoeiereData = teamcatResourceClient.getResource(ident);
             if (risikoeiereData.isPresent()) {
                 riskoeiereData.add(risikoeiereData.get());
@@ -342,7 +308,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
                 riskoeiereData.add(emptyResourceData);
             }
         });
-        etterlevelseDokumentasjonResponse.setRisikoeiereData(riskoeiereData);
+        return riskoeiereData;
     }
 
 }

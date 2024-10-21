@@ -64,9 +64,7 @@ public class Krav extends DomainObject implements KravId {
     @Default
     private KravStatus status = KravStatus.UTKAST;
 
-    // Updates all fields from the request except id, version and changestamp
-    // TODO: kravNummer og kravVersjon blir IKKE merget. Er dette riktig? Hvis ja: oppdater kommentaren over. Hvis nei: fiks
-    // Se https://trello.com/c/lJlryZIG/357-felter-blir-ignorert-ved-konvertering-av-request
+    // Updates all fields from the request except id, kravNummer, kravVersjon, version and changestamp
     public Krav merge(KravRequest request) {
         navn = request.getNavn();
         beskrivelse = request.getBeskrivelse();

@@ -36,8 +36,7 @@ public class TeamcatTeamClient {
     private final LoadingCache<String, Map<String, Team>> allTeamsCache;
     private final LoadingCache<String, Map<String, ProductArea>> allPaCache;
 
-    public TeamcatTeamClient(RestTemplate restTemplate,
-            TeamcatProperties properties) {
+    public TeamcatTeamClient(RestTemplate restTemplate, TeamcatProperties properties) {
         this.restTemplate = restTemplate;
         this.properties = properties;
 

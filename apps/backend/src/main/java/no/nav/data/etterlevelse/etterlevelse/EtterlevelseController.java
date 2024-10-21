@@ -14,6 +14,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,11 +53,11 @@ public class EtterlevelseController {
         if (etterlevelseDokumentasjon != null) {
             log.info("Get all Etterlevelse for behandling={}", etterlevelseDokumentasjon);
             List<Etterlevelse> etterlevelseList = service.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon);
-            return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::toResponse));
+            return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(EtterlevelseResponse::buildFrom));
         }
         log.info("Get all Etterlevelse");
         Page<Etterlevelse> page = service.getAll(pageParameters);
-        return ResponseEntity.ok(new RestResponsePage<>(page).convert(Etterlevelse::toResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(page).convert(EtterlevelseResponse::buildFrom));
     }
 
     @Operation(summary = "Get Etterlevelse by KravNummer and KravVersjon, include etterlevelse dokumentajson metadata")
@@ -69,9 +70,11 @@ public class EtterlevelseController {
     }
 
     private EtterlevelseResponse toResponseWithEtterlevelseDokumentasjon(Etterlevelse etterlevelse) {
-        EtterlevelseResponse response = etterlevelse.toResponse();
+        EtterlevelseResponse response = EtterlevelseResponse.buildFrom(etterlevelse);
         if (response.getEtterlevelseDokumentasjonId() != null && !response.getEtterlevelseDokumentasjonId().isEmpty()) {
-            response.setEtterlevelseDokumentasjon(etterlevelseDokumentasjonService.get(UUID.fromString(response.getEtterlevelseDokumentasjonId())).toResponse());
+            response.setEtterlevelseDokumentasjon(EtterlevelseDokumentasjonResponse.buildFrom(
+                    etterlevelseDokumentasjonService.get(UUID.fromString(response.getEtterlevelseDokumentasjonId()))
+            ));
         }
         return response;
     }
@@ -81,7 +84,7 @@ public class EtterlevelseController {
     @GetMapping("/{id}")
     public ResponseEntity<EtterlevelseResponse> getById(@PathVariable UUID id) {
         log.info("Get Etterlevelse id={}", id);
-        return ResponseEntity.ok(service.get(id).toResponse());
+        return ResponseEntity.ok(EtterlevelseResponse.buildFrom(service.get(id)));
     }
 
     @Operation(summary = "Get Etterlevelse by etterlevelseDokumentasjonId and KravNummer")
@@ -90,7 +93,7 @@ public class EtterlevelseController {
     public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getByEtterlevelseDokumentasjonIdAndKravNummer(@PathVariable String etterlevelseDokumentasjonId, @PathVariable Integer kravNummer) {
         log.info("Get Etterlevelse by etterlevelseDokumentasjonId={} and kravNummer={}", etterlevelseDokumentasjonId, kravNummer);
         List<Etterlevelse> etterlevelseList = service.getByEtterlevelseDokumentasjonIdAndKravNummer(etterlevelseDokumentasjonId, kravNummer);
-        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::toResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(EtterlevelseResponse::buildFrom));
     }
 
     @Operation(summary = "Get Etterlevelse by etterlevelsedokumentasjonId")
@@ -99,7 +102,7 @@ public class EtterlevelseController {
     public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getByEtterlevelseDokumentasjonId(@PathVariable String etterlevelseDokumentasjonId) {
         log.info("Get Etterlevelse by etterlevelseDokumentasjonsId={}", etterlevelseDokumentasjonId);
         List<Etterlevelse> etterlevelseList = service.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId);
-        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::toResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(EtterlevelseResponse::buildFrom));
     }
 
     @Operation(summary = "Create Etterlevelse")
@@ -108,7 +111,9 @@ public class EtterlevelseController {
     public ResponseEntity<EtterlevelseResponse> createEtterlevelse(@RequestBody EtterlevelseRequest request) {
         log.info("Create Etterlevelse");
 
-        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(request.getEtterlevelseDokumentasjonId())).toResponse();
+        var etterlevelseDokumentasjon = EtterlevelseDokumentasjonResponse.buildFrom(
+                etterlevelseDokumentasjonService.get(UUID.fromString(request.getEtterlevelseDokumentasjonId()))
+        );
         if (etterlevelseDokumentasjon.getTeams().isEmpty() && etterlevelseDokumentasjon.getResources().isEmpty()) {
             log.info("PriorityList is Empty. Requested to save without user or team added to Etterlevelse document.");
             throw new ForbiddenException("Har du lagt til team og eller person i dokument egenskaper? Dette er nødvendig for å lagre endringer.");
@@ -121,7 +126,7 @@ public class EtterlevelseController {
         etterlevelseDokumentasjonService.updatePriorityList(request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.isPrioritised());
 
         var etterlevelse = service.save(request);
-        return new ResponseEntity<>(etterlevelse.toResponse(), HttpStatus.CREATED);
+        return new ResponseEntity<>(EtterlevelseResponse.buildFrom(etterlevelse), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update Etterlevelse")
@@ -137,7 +142,9 @@ public class EtterlevelseController {
             throw new ValidationException("Tried to create etterlevelse with old architecture");
         }
 
-        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(request.getEtterlevelseDokumentasjonId())).toResponse();
+        var etterlevelseDokumentasjon = EtterlevelseDokumentasjonResponse.buildFrom(
+                etterlevelseDokumentasjonService.get(UUID.fromString(request.getEtterlevelseDokumentasjonId()))
+        );
         if (etterlevelseDokumentasjon.getTeams().isEmpty() && etterlevelseDokumentasjon.getResources().isEmpty()) {
             log.info("Requested to save without user or team added to Etterlevelse document.");
             throw new ForbiddenException("Har du lagt til team og eller person i dokument egenskaper? Dette er nødvendig for å lagre endringer.");
@@ -146,7 +153,7 @@ public class EtterlevelseController {
         etterlevelseDokumentasjonService.updatePriorityList(request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.isPrioritised());
 
         var etterlevelse = service.save(request);
-        return ResponseEntity.ok(etterlevelse.toResponse());
+        return ResponseEntity.ok(EtterlevelseResponse.buildFrom(etterlevelse));
     }
 
     @Operation(summary = "Delete Etterlevelse")
@@ -155,7 +162,7 @@ public class EtterlevelseController {
     public ResponseEntity<EtterlevelseResponse> deleteEtterlevelseById(@PathVariable UUID id) {
         log.info("Delete Etterlevelse id={}", id);
         var etterlevelse = service.delete(id);
-        return ResponseEntity.ok(etterlevelse.toResponse());
+        return ResponseEntity.ok(EtterlevelseResponse.buildFrom(etterlevelse));
     }
 
     static class EtterlevelsePage extends RestResponsePage<EtterlevelseResponse> {

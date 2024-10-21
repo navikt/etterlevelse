@@ -2,7 +2,6 @@ package no.nav.data.etterlevelse.etterlevelse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
@@ -39,19 +38,13 @@ public class EtterlevelseService {
     private final EtterlevelseRepo repo;
     private final KravRepo kravRepo;
 
-    // FIXME: get(...) og getEtterlevelse(...)
-    
     public Etterlevelse get(UUID uuid) {
         if (uuid == null || !exists(uuid)) return null; 
-        return getEtterlevelse(uuid);
+        return repo.findById(uuid).get();
     }
     
     public boolean exists(UUID uuid) {
         return repo.existsById(uuid);
-    }
-
-    private Etterlevelse getEtterlevelse(UUID uuid) {
-        return repo.findById(uuid).orElseThrow(() -> new NotFoundException("Couldn't find Etterlevelse with id " + uuid));
     }
 
     @Transactional
@@ -60,31 +53,6 @@ public class EtterlevelseService {
         repo.flush();
         return etterlevelse;
     }
-
-    /*
-    // FIXME: I bruk?
-    // FIXME: I bruk?
-    @Transactional
-    public void deleteAll(List<Etterlevelse> objects) {
-        repo.deleteAll(convert(objects, Etterlevelse::getId));
-    }
-
-    // FIXME: I bruk?
-    @Transactional
-    public Etterlevelse delete(Etterlevelse item) {
-        repo.deleteById(item.getId());
-        return item;
-    }
-
-    // FIXME: I bruk?
-    @Transactional
-    public Etterlevelse delete(UUID id) {
-        var etterlevelse = getEtterlevelse(id);
-        repo.delete(etterlevelse);
-        return etterlevelse;
-    }
-
-    //*/
     
     Page<Etterlevelse> getAll(PageParameters pageParameters) {
         return repo.findAll(pageParameters.createPage());
@@ -128,12 +96,12 @@ public class EtterlevelseService {
         if (!request.isUpdate()) {
             var existingEtterlevelse = repo.findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.getKravVersjon());
             if (existingEtterlevelse.isPresent()) {
-                log.warn("Found existing etterlevelse wheN trying to create for etterlevelse dokumentation id: {}, for krav: K{}.{}", request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.getKravVersjon());
+                log.warn("Found existing etterlevelse when trying to create for etterlevelse dokumentation id: {}, for krav: K{}.{}", request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.getKravVersjon());
                 etterlevelse = existingEtterlevelse.get();
             }
         }
 
-        etterlevelse.merge(request);
+        request.mergeInto(etterlevelse);
 
         return repo.save(etterlevelse);
     }
@@ -142,7 +110,7 @@ public class EtterlevelseService {
     public void copyEtterlevelse(String fromDocumentId, String toDocumentId) {
         var etterlevelseToCopy = getByEtterlevelseDokumentasjon(fromDocumentId);
         etterlevelseToCopy.forEach(etterlevelse -> {
-            var krav = repo.findKravForEtterlevelse(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon()).map(GenericStorage::getDomainObjectData).orElse(new Krav());
+            var krav = kravRepo.findByKravNummer(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon()).map(GenericStorage::getDomainObjectData).orElse(new Krav());
             if (krav.getStatus() == KravStatus.AKTIV) {
                 List<SuksesskriterieBegrunnelseRequest> suksesskriterieBegrunnelseRequestList = etterlevelse.getSuksesskriterieBegrunnelser().stream().map((skb) -> SuksesskriterieBegrunnelseRequest.builder()
                         .suksesskriterieId(skb.getSuksesskriterieId())
@@ -152,19 +120,19 @@ public class EtterlevelseService {
                         .veiledningsTekst("")
                         .build()).toList();
                 var newEtterlevelse = new Etterlevelse();
-                newEtterlevelse.merge(
-                        EtterlevelseRequest.builder()
-                        .update(false)
-                        .etterlevelseDokumentasjonId(toDocumentId)
-                        .kravNummer(etterlevelse.getKravNummer())
-                        .kravVersjon(etterlevelse.getKravVersjon())
-                        .etterleves(etterlevelse.isEtterleves())
-                        .statusBegrunnelse(etterlevelse.getStatusBegrunnelse())
-                        .dokumentasjon(etterlevelse.getDokumentasjon())
-                        .fristForFerdigstillelse(etterlevelse.getFristForFerdigstillelse())
-                        .status(etterlevelse.getStatus())
-                        .suksesskriterieBegrunnelser(suksesskriterieBegrunnelseRequestList)
-                        .build());
+                EtterlevelseRequest.builder()
+                    .update(false)
+                    .etterlevelseDokumentasjonId(toDocumentId)
+                    .kravNummer(etterlevelse.getKravNummer())
+                    .kravVersjon(etterlevelse.getKravVersjon())
+                    .etterleves(etterlevelse.isEtterleves())
+                    .statusBegrunnelse(etterlevelse.getStatusBegrunnelse())
+                    .dokumentasjon(etterlevelse.getDokumentasjon())
+                    .fristForFerdigstillelse(etterlevelse.getFristForFerdigstillelse())
+                    .status(etterlevelse.getStatus())
+                    .suksesskriterieBegrunnelser(suksesskriterieBegrunnelseRequestList)
+                    .build()
+                    .mergeInto(newEtterlevelse);
                 repo.save(newEtterlevelse);
             }
         });
