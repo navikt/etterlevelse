@@ -86,7 +86,7 @@ export const KravTablePage = () => {
             size="large"
             zebraStripes
             sort={sort}
-            onSortChange={(sortKey: string) => handleSort(sort, setSort, sortKey)}
+            onSortChange={(sortKey?: string) => handleSort(sort, setSort, sortKey)}
           >
             <Table.Header>
               <Table.Row>

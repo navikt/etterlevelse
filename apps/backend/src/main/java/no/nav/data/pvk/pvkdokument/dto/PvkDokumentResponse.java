@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
-import no.nav.data.pvk.pvkdokument.domain.OpplysningtypeData;
+import no.nav.data.pvk.pvkdokument.domain.PersonkategoriData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentFil;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
@@ -35,12 +35,11 @@ public class PvkDokumentResponse {
     private List<YtterligereEgenskaper> ytterligereEgenskaper;
     private boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
-    private boolean stemmerOpplysningstypene;
-    private List<OpplysningtypeData> opplysningtypeData;
-    private String tilgangsBeskrivelseForOpplysningstyper;
-    private String lagringsBeskrivelseForOpplysningstyper;
-
     private boolean stemmerPersonkategorier;
+    private List<PersonkategoriData> personkategoriData;
+    private String tilgangsBeskrivelsePersonopplysningene;
+    private String lagringsBeskrivelsePersonopplysningene;
+
     private boolean harInvolvertRepresentant;
     private String representantInvolveringsBeskrivelse;
 
@@ -65,10 +64,9 @@ public class PvkDokumentResponse {
                 .ytterligereEgenskaper(copyOf(pvkDokument.getPvkDokumentData().getYtterligereEgenskaper()))
                 .skalUtforePvk(pvkDokument.getPvkDokumentData().isSkalUtforePvk())
                 .pvkVurderingsBegrunnelse(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse())
-                .stemmerOpplysningstypene(pvkDokument.getPvkDokumentData().isStemmerOpplysningstypene())
-                .opplysningtypeData(copyOf(pvkDokument.getPvkDokumentData().getOpplysningtypeData()))
-                .tilgangsBeskrivelseForOpplysningstyper(pvkDokument.getPvkDokumentData().getTilgangsBeskrivelseForOpplysningstyper())
-                .lagringsBeskrivelseForOpplysningstyper(pvkDokument.getPvkDokumentData().getLagringsBeskrivelseForOpplysningstyper())
+                .personkategoriData(copyOf(pvkDokument.getPvkDokumentData().getPersonkategoriData()))
+                .tilgangsBeskrivelsePersonopplysningene(pvkDokument.getPvkDokumentData().getTilgangsBeskrivelsePersonopplysningene())
+                .lagringsBeskrivelsePersonopplysningene(pvkDokument.getPvkDokumentData().getLagringsBeskrivelsePersonopplysningene())
                 .stemmerPersonkategorier(pvkDokument.getPvkDokumentData().isStemmerPersonkategorier())
                 .harInvolvertRepresentant(pvkDokument.getPvkDokumentData().isHarInvolvertRepresentant())
                 .representantInvolveringsBeskrivelse(pvkDokument.getPvkDokumentData().getRepresentantInvolveringsBeskrivelse())

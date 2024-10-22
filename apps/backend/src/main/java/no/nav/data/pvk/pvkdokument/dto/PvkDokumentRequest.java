@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
-import no.nav.data.pvk.pvkdokument.domain.OpplysningtypeData;
+import no.nav.data.pvk.pvkdokument.domain.PersonkategoriData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentFil;
@@ -33,12 +33,11 @@ public class PvkDokumentRequest implements RequestElement {
     private List<YtterligereEgenskaper> ytterligereEgenskaper;
     private boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
-    private boolean stemmerOpplysningstypene;
-    private List<OpplysningtypeData> opplysningtypeData;
-    private String tilgangsBeskrivelseForOpplysningstyper;
-    private String lagringsBeskrivelseForOpplysningstyper;
-
     private boolean stemmerPersonkategorier;
+    private List<PersonkategoriData> personkategoriData;
+    private String tilgangsBeskrivelsePersonopplysningene;
+    private String lagringsBeskrivelsePersonopplysningene;
+
     private boolean harInvolvertRepresentant;
     private String representantInvolveringsBeskrivelse;
 
@@ -55,9 +54,9 @@ public class PvkDokumentRequest implements RequestElement {
         setId(trimToNull(id));
         setEtterlevelseDokumentId(trimToNull(etterlevelseDokumentId));
         setPvkVurderingsBegrunnelse(trimToNull(pvkVurderingsBegrunnelse));
-        setOpplysningtypeData(copyOf(opplysningtypeData));
-        setTilgangsBeskrivelseForOpplysningstyper(trimToNull(tilgangsBeskrivelseForOpplysningstyper));
-        setLagringsBeskrivelseForOpplysningstyper(trimToNull(lagringsBeskrivelseForOpplysningstyper));
+        setPersonkategoriData(copyOf(personkategoriData));
+        setTilgangsBeskrivelsePersonopplysningene(trimToNull(tilgangsBeskrivelsePersonopplysningene));
+        setLagringsBeskrivelsePersonopplysningene(trimToNull(lagringsBeskrivelsePersonopplysningene));
 
         setRepresentantInvolveringsBeskrivelse(trimToNull(representantInvolveringsBeskrivelse));
         setDataBehandlerRepresentantInvolveringBeskrivelse(trimToNull(dataBehandlerRepresentantInvolveringBeskrivelse));
@@ -80,10 +79,9 @@ public class PvkDokumentRequest implements RequestElement {
                 .ytterligereEgenskaper(copyOf(ytterligereEgenskaper))
                 .skalUtforePvk(skalUtforePvk)
                 .pvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse)
-                .stemmerOpplysningstypene(stemmerOpplysningstypene)
-                .opplysningtypeData(copyOf(opplysningtypeData))
-                .tilgangsBeskrivelseForOpplysningstyper(tilgangsBeskrivelseForOpplysningstyper)
-                .lagringsBeskrivelseForOpplysningstyper(lagringsBeskrivelseForOpplysningstyper)
+                .personkategoriData(copyOf(personkategoriData))
+                .tilgangsBeskrivelsePersonopplysningene(tilgangsBeskrivelsePersonopplysningene)
+                .lagringsBeskrivelsePersonopplysningene(lagringsBeskrivelsePersonopplysningene)
                 .stemmerPersonkategorier(stemmerPersonkategorier)
                 .harInvolvertRepresentant(harInvolvertRepresentant)
                 .representantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse)
@@ -106,10 +104,9 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.getPvkDokumentData().setYtterligereEgenskaper(copyOf(ytterligereEgenskaper));
         pvkDokumentToMerge.getPvkDokumentData().setSkalUtforePvk(skalUtforePvk);
         pvkDokumentToMerge.getPvkDokumentData().setPvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse);
-        pvkDokumentToMerge.getPvkDokumentData().setStemmerOpplysningstypene(stemmerOpplysningstypene);
-        pvkDokumentToMerge.getPvkDokumentData().setOpplysningtypeData(copyOf(opplysningtypeData));
-        pvkDokumentToMerge.getPvkDokumentData().setTilgangsBeskrivelseForOpplysningstyper(tilgangsBeskrivelseForOpplysningstyper);
-        pvkDokumentToMerge.getPvkDokumentData().setLagringsBeskrivelseForOpplysningstyper(lagringsBeskrivelseForOpplysningstyper);
+        pvkDokumentToMerge.getPvkDokumentData().setPersonkategoriData(copyOf(personkategoriData));
+        pvkDokumentToMerge.getPvkDokumentData().setTilgangsBeskrivelsePersonopplysningene(tilgangsBeskrivelsePersonopplysningene);
+        pvkDokumentToMerge.getPvkDokumentData().setLagringsBeskrivelsePersonopplysningene(lagringsBeskrivelsePersonopplysningene);
         pvkDokumentToMerge.getPvkDokumentData().setStemmerPersonkategorier(stemmerPersonkategorier);
         pvkDokumentToMerge.getPvkDokumentData().setHarInvolvertRepresentant(harInvolvertRepresentant);
         pvkDokumentToMerge.getPvkDokumentData().setRepresentantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse);

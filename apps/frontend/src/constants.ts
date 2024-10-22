@@ -495,4 +495,47 @@ export type TVarslingsadresseQL = IVarslingsadresse & {
   slackChannel?: ISlackChannel
   slackUser?: ISlackUser
 }
+
+export interface IPvkDokument {
+  id: string
+  changeStamp: IChangeStamp
+  version: number
+  etterlevelseDokumentId: string
+  status: EPvkDokumentStatus
+  ytterligereEgenskaper: EYtterligereEgenskaper[]
+  skalUtforePvk: boolean
+  pvkVurderingsBegrunnelse: string
+
+  stemmerPersonkategorier: boolean
+  personkategoriData: IPersonkategoriData[]
+  tilgangsBeskrivelsePersonopplysningene: string
+  lagringsBeskrivelsePersonopplysningene: string
+
+  harInvolvertRepresentant: boolean
+  representantInvolveringsBeskrivelse: string
+
+  stemmerDatabehandlere: boolean
+  harDatabehandlerRepresentantInvolvering: boolean
+  dataBehandlerRepresentantInvolveringBeskrivelse: string
+}
+
+export interface IPersonkategoriData {
+  personkategoriId: string
+  antallBruker: string
+}
+
+export enum EPvkDokumentStatus {
+  AKTIV = 'AKTIV',
+  INAKTIV = 'INAKTIV',
+}
+
+export enum EYtterligereEgenskaper {
+  SYSTEMATISK_OVERVÅKNING = 'SYSTEMATISK_OVERVÅKNING',
+  PERSONOPPLYSNINGER_BEHANDLES = 'PERSONOPPLYSNINGER_BEHANDLES',
+  SAMMENSTILLING_AV_DATASETT = 'SAMMENSTILLING_AV_DATASETT',
+  SAARBARE_REGISTRERTE = 'SAARBARE_REGISTRERTE',
+  BRUK_AV_NY_TEKNOLOGI = 'BRUK_AV_NY_TEKNOLOGI',
+  TJENESTE_TILGANG = 'TJENESTE_TILGANG',
+}
+
 export type TReplace<T, K> = Omit<T, keyof K> & K

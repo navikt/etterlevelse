@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OpplysningtypeData {
-    private String opplysningtypeId;
+public class PersonkategoriData {
+    private String personkategoriId;
     private String antallBruker;
 }

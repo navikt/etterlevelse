@@ -55,7 +55,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
                 .etterlevelseDokumentId(UUID.randomUUID().toString())
                 .status(PvkDokumentStatus.AKTIV)
                 .ytterligereEgenskaper(List.of())
-                .opplysningtypeData(List.of())
+                .personkategoriData(List.of())
                 .build();
 
 
@@ -75,7 +75,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
                 .etterlevelseDokumentId(pvkDokuemnt.getEtterlevelseDokumentId())
                 .status(PvkDokumentStatus.AKTIV)
                 .ytterligereEgenskaper(List.of(YtterligereEgenskaper.BRUK_AV_NY_TEKNOLOGI, YtterligereEgenskaper.SAARBARE_REGISTRERTE))
-                .opplysningtypeData(List.of())
+                .personkategoriData(List.of())
                 .build();
 
 
@@ -103,7 +103,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
                 .pvkDokumentData(
                         PvkDokumentData.builder()
                                 .ytterligereEgenskaper(List.of())
-                                .opplysningtypeData(List.of())
+                                .personkategoriData(List.of())
                                 .build()
                 )
                 .build();
