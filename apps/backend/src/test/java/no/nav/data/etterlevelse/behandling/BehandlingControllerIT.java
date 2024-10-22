@@ -4,9 +4,13 @@ import no.nav.data.IntegrationTestBase;
 import no.nav.data.etterlevelse.common.domain.ExternalCode;
 import no.nav.data.integration.behandling.BehandlingController.BehandlingPage;
 import no.nav.data.integration.behandling.dto.Behandling;
+import no.nav.data.integration.behandling.dto.DataProsessering;
+import no.nav.data.integration.behandling.dto.PolicyResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,6 +46,15 @@ class BehandlingControllerIT extends IntegrationTestBase {
                 .linje(ExternalCode.builder().list("LINJE").code("LIN").shortName("Lin").description("desc").external(true).build())
                 .system(ExternalCode.builder().list("SYSTEM").code("SYS").shortName("Sys").description("desc").external(true).build())
                 .team("team")
+                .policies(List.of(PolicyResponse.builder()
+                                .id("test policy")
+                                .opplysningsTypeId("test information type")
+                                .opplysningsTypeNavn("test information type")
+                                .sensitivity(ExternalCode.builder().list("SENSITIVITY").code("POL").shortName("pol").description("desc").external(true).build())
+                                .behandlingId(behandling.getId())
+                                .personKategorier(List.of(ExternalCode.builder().list("SUBJECT_CATEGORY").code("BRUKER").shortName("Bruker").description("desc").external(true).build()))
+                                .build()))
+                        .dataProsessering(DataProsessering.builder().benyttesDataBehandlere(true).dataBehandlerIds(List.of("processor_1")).build())
                 .build());
     }
 }

@@ -3,6 +3,9 @@ package no.nav.data.integration.behandling;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.integration.behandling.dto.BkatAffiliation;
 import no.nav.data.integration.behandling.dto.BkatCode;
+import no.nav.data.integration.behandling.dto.BkatDataProcessing;
+import no.nav.data.integration.behandling.dto.BkatInformationTypeShort;
+import no.nav.data.integration.behandling.dto.BkatPolicy;
 import no.nav.data.integration.behandling.dto.BkatProcess;
 
 import java.util.List;
@@ -45,6 +48,18 @@ public class BkatMocks {
                         .product(BkatCode.builder().list("SYSTEM").code("SYS").shortName("Sys").description("desc").build())
                         .productTeam("team")
                         .build())
+                .policies(List.of(BkatPolicy.builder()
+                                .id("test policy")
+                                .informationTypeId("test information type")
+                                .processId(id)
+                                .subjectCategories(List.of(BkatCode.builder().list("SUBJECT_CATEGORY").code("BRUKER").shortName("Bruker").description("desc").build()))
+                                .informationType(BkatInformationTypeShort.builder()
+                                        .id("test information type")
+                                        .name("test information type")
+                                        .sensitivity(BkatCode.builder().list("SENSITIVITY").code("POL").shortName("pol").description("desc").build())
+                                        .build())
+                        .build()))
+                .dataProcessing(BkatDataProcessing.builder().dataProcessor(true).processors(List.of("processor_1")).build())
                 .build();
     }
 }

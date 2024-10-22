@@ -22,6 +22,8 @@ import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.integration.behandling.BehandlingService;
+import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -88,6 +90,10 @@ public abstract class IntegrationTestBase {
     protected DocumentRelationService documentRelationService;
     @Autowired
     protected EtterlevelseRepo etterlevelseRepo;
+    @Autowired
+    protected PvkDokumentRepo pvkDokumentRepo;
+    @Autowired
+    protected PvkDokumentService pvkDokumentService;
 
     @BeforeEach
     void setUpBase() {
