@@ -112,7 +112,12 @@ public class PvkDokumentController {
     public ResponseEntity<PvkDokumentResponse> deletePvkDokumentById(@PathVariable UUID id) {
         log.info("Delete Pvk Document id={}", id);
         var pvkDokument = pvkDokumentService.delete(id);
-        return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokument));
+        if(pvkDokument == null) {
+            log.warn("Could not find pvk dokument with id = {} to delete", id);
+            return ResponseEntity.ok(null);
+        } else {
+            return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokument));
+        }
     }
 
     @Operation(summary = "Get Pvk Document files")
@@ -168,7 +173,13 @@ public class PvkDokumentController {
     public ResponseEntity<PvkDokumentFil> deletePvkDokumentFilById(@PathVariable UUID id) {
         log.info("Delete Pvk Document file with id={}", id);
         var pvkDokumentFil = pvkDokumentService.deleteFile(id);
-        return ResponseEntity.ok(pvkDokumentFil);
+
+        if(pvkDokumentFil == null) {
+            log.warn("Could not find pvk dokument file with id = {} to delete", id);
+            return ResponseEntity.ok(null);
+        } else {
+            return ResponseEntity.ok(pvkDokumentFil);
+        }
     }
 
     private boolean validFile(MultipartFile i) {
