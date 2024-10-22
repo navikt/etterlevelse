@@ -12,7 +12,6 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentFil;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentFilRepo;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
 import org.springframework.data.domain.Page;
@@ -46,7 +45,6 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 public class PvkDokumentController {
 
     private final PvkDokumentService pvkDokumentService;
-    private final PvkDokumentFilRepo pvkDokumentFilRepo; // FIXME: Ikke i bruk
 
     @Operation(summary = "Get All Pvk Document")
     @ApiResponse(description = "ok")
@@ -98,7 +96,12 @@ public class PvkDokumentController {
         }
 
         var pvkDokumentToUpdate = pvkDokumentService.get(id);
-        request.mergeInto(pvkDokumentToUpdate); // FIXME: Vil resultere i NPE hvis pvkDokumentToUpdate == null
+
+        if(pvkDokumentToUpdate == null) {
+            throw new ValidationException(String.format("Could not find pvk dokument to be updated with id = %s ", request.getId()));
+        }
+
+        request.mergeInto(pvkDokumentToUpdate);
         var pvkDokument = pvkDokumentService.save(pvkDokumentToUpdate, request.isUpdate());
         return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokument));
     }
@@ -109,7 +112,6 @@ public class PvkDokumentController {
     public ResponseEntity<PvkDokumentResponse> deletePvkDokumentById(@PathVariable UUID id) {
         log.info("Delete Pvk Document id={}", id);
         var pvkDokument = pvkDokumentService.delete(id);
-        // FIXME: I service er det ingen sjekk på om det som skal slettes finnes. Kallet returnerer normalt også hvis dokumentet ikke finnes. Ikke nødvendigvis en feil, men greit å tenke over.
         return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokument));
     }
 
@@ -166,7 +168,6 @@ public class PvkDokumentController {
     public ResponseEntity<PvkDokumentFil> deletePvkDokumentFilById(@PathVariable UUID id) {
         log.info("Delete Pvk Document file with id={}", id);
         var pvkDokumentFil = pvkDokumentService.deleteFile(id);
-        // FIXME: Denne returnerer normalt også når filen ikke finnes. Ok oppførsel?
         return ResponseEntity.ok(pvkDokumentFil);
     }
 
