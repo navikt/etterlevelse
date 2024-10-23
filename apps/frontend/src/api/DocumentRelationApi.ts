@@ -55,7 +55,7 @@ export const getDocumentRelationByToIdAndRelationTypeWithData = async (
   }
 
   const paramConnector = relationType ? '&' : '?'
-  const param = 'widthDocumentData=true'
+  const param = 'withDocumentData=true'
   const updatedUrl = url + paramConnector + param
   return (await axios.get<IDocumentRelationWithEtterlevelseDokumetajson[]>(updatedUrl)).data
 }
