@@ -31,6 +31,7 @@ public class PvkDokumentResponse {
     private String etterlevelseDokumentId;
     private PvkDokumentStatus status;
 
+    private String behandlingensLivslopBeskrivelse;
     private List<CodelistResponse> ytterligereEgenskaper;
     private boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
@@ -60,6 +61,7 @@ public class PvkDokumentResponse {
                 .etterlevelseDokumentId(pvkDokument.getEtterlevelseDokumentId())
                 .status(pvkDokument.getStatus())
 
+                .behandlingensLivslopBeskrivelse(pvkDokument.getPvkDokumentData().getBehandlingensLivslopBeskrivelse())
                 .ytterligereEgenskaper(pvkDokument.getPvkDokumentData().ytterligereEgenskaperAsCodes())
                 .skalUtforePvk(pvkDokument.getPvkDokumentData().isSkalUtforePvk())
                 .pvkVurderingsBegrunnelse(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse())
