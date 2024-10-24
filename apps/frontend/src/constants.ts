@@ -507,7 +507,7 @@ export interface IPvkDokument {
   pvkVurderingsBegrunnelse: string
 
   stemmerPersonkategorier: boolean
-  personkategoriData: IPersonkategoriData[]
+  personkategoriAntallBeskrivelse: string
   tilgangsBeskrivelsePersonopplysningene: string
   lagringsBeskrivelsePersonopplysningene: string
 
@@ -517,11 +517,6 @@ export interface IPvkDokument {
   stemmerDatabehandlere: boolean
   harDatabehandlerRepresentantInvolvering: boolean
   dataBehandlerRepresentantInvolveringBeskrivelse: string
-}
-
-export interface IPersonkategoriData {
-  personkategoriId: string
-  antallBruker: string
 }
 
 export enum EPvkDokumentStatus {

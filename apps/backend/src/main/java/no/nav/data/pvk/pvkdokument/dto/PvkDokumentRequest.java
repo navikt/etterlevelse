@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
-import no.nav.data.pvk.pvkdokument.domain.PersonkategoriData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentFil;
@@ -34,7 +33,7 @@ public class PvkDokumentRequest implements RequestElement {
     private boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
     private boolean stemmerPersonkategorier;
-    private List<PersonkategoriData> personkategoriData;
+    private String personkategoriAntallBeskrivelse;
     private String tilgangsBeskrivelsePersonopplysningene;
     private String lagringsBeskrivelsePersonopplysningene;
 
@@ -54,7 +53,7 @@ public class PvkDokumentRequest implements RequestElement {
         setId(trimToNull(id));
         setEtterlevelseDokumentId(trimToNull(etterlevelseDokumentId));
         setPvkVurderingsBegrunnelse(trimToNull(pvkVurderingsBegrunnelse));
-        setPersonkategoriData(copyOf(personkategoriData));
+        setPersonkategoriAntallBeskrivelse(trimToNull(personkategoriAntallBeskrivelse));
         setTilgangsBeskrivelsePersonopplysningene(trimToNull(tilgangsBeskrivelsePersonopplysningene));
         setLagringsBeskrivelsePersonopplysningene(trimToNull(lagringsBeskrivelsePersonopplysningene));
 
@@ -79,7 +78,7 @@ public class PvkDokumentRequest implements RequestElement {
                 .ytterligereEgenskaper(copyOf(ytterligereEgenskaper))
                 .skalUtforePvk(skalUtforePvk)
                 .pvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse)
-                .personkategoriData(copyOf(personkategoriData))
+                .personkategoriAntallBeskrivelse(personkategoriAntallBeskrivelse)
                 .tilgangsBeskrivelsePersonopplysningene(tilgangsBeskrivelsePersonopplysningene)
                 .lagringsBeskrivelsePersonopplysningene(lagringsBeskrivelsePersonopplysningene)
                 .stemmerPersonkategorier(stemmerPersonkategorier)
@@ -104,7 +103,7 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.getPvkDokumentData().setYtterligereEgenskaper(copyOf(ytterligereEgenskaper));
         pvkDokumentToMerge.getPvkDokumentData().setSkalUtforePvk(skalUtforePvk);
         pvkDokumentToMerge.getPvkDokumentData().setPvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse);
-        pvkDokumentToMerge.getPvkDokumentData().setPersonkategoriData(copyOf(personkategoriData));
+        pvkDokumentToMerge.getPvkDokumentData().setPersonkategoriAntallBeskrivelse(personkategoriAntallBeskrivelse);
         pvkDokumentToMerge.getPvkDokumentData().setTilgangsBeskrivelsePersonopplysningene(tilgangsBeskrivelsePersonopplysningene);
         pvkDokumentToMerge.getPvkDokumentData().setLagringsBeskrivelsePersonopplysningene(lagringsBeskrivelsePersonopplysningene);
         pvkDokumentToMerge.getPvkDokumentData().setStemmerPersonkategorier(stemmerPersonkategorier);

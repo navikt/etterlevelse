@@ -20,7 +20,7 @@ public class PvkDokumentData {
     private String pvkVurderingsBegrunnelse;
 
     private boolean stemmerPersonkategorier;
-    private List<PersonkategoriData> personkategoriData;
+    private String personkategoriAntallBeskrivelse;
     private String tilgangsBeskrivelsePersonopplysningene;
     private String lagringsBeskrivelsePersonopplysningene;
 

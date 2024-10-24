@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
-import no.nav.data.pvk.pvkdokument.domain.PersonkategoriData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentFil;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
@@ -36,7 +35,7 @@ public class PvkDokumentResponse {
     private boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
     private boolean stemmerPersonkategorier;
-    private List<PersonkategoriData> personkategoriData;
+    private String personkategoriAntallBeskrivelse;
     private String tilgangsBeskrivelsePersonopplysningene;
     private String lagringsBeskrivelsePersonopplysningene;
 
@@ -64,7 +63,7 @@ public class PvkDokumentResponse {
                 .ytterligereEgenskaper(copyOf(pvkDokument.getPvkDokumentData().getYtterligereEgenskaper()))
                 .skalUtforePvk(pvkDokument.getPvkDokumentData().isSkalUtforePvk())
                 .pvkVurderingsBegrunnelse(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse())
-                .personkategoriData(copyOf(pvkDokument.getPvkDokumentData().getPersonkategoriData()))
+                .personkategoriAntallBeskrivelse(pvkDokument.getPvkDokumentData().getPersonkategoriAntallBeskrivelse())
                 .tilgangsBeskrivelsePersonopplysningene(pvkDokument.getPvkDokumentData().getTilgangsBeskrivelsePersonopplysningene())
                 .lagringsBeskrivelsePersonopplysningene(pvkDokument.getPvkDokumentData().getLagringsBeskrivelsePersonopplysningene())
                 .stemmerPersonkategorier(pvkDokument.getPvkDokumentData().isStemmerPersonkategorier())

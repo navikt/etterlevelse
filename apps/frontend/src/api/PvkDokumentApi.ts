@@ -74,7 +74,7 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     skalUtforePvk: pvkDokument.skalUtforePvk || false,
     pvkVurderingsBegrunnelse: pvkDokument.pvkVurderingsBegrunnelse || '',
     stemmerPersonkategorier: pvkDokument.stemmerPersonkategorier || false,
-    personkategoriData: pvkDokument.personkategoriData || [],
+    personkategoriAntallBeskrivelse: pvkDokument.personkategoriAntallBeskrivelse || '',
     tilgangsBeskrivelsePersonopplysningene:
       pvkDokument.tilgangsBeskrivelsePersonopplysningene || '',
     lagringsBeskrivelsePersonopplysningene:
