@@ -5,7 +5,6 @@ import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
-import no.nav.data.pvk.pvkdokument.domain.YtterligereEgenskaper;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
 import org.junit.jupiter.api.BeforeEach;
