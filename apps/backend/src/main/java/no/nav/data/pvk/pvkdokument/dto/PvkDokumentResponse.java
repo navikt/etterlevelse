@@ -6,10 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentFil;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
-import no.nav.data.pvk.pvkdokument.domain.YtterligereEgenskaper;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,7 +31,7 @@ public class PvkDokumentResponse {
     private String etterlevelseDokumentId;
     private PvkDokumentStatus status;
 
-    private List<YtterligereEgenskaper> ytterligereEgenskaper;
+    private List<CodelistResponse> ytterligereEgenskaper;
     private boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
     private boolean stemmerPersonkategorier;
@@ -60,7 +60,7 @@ public class PvkDokumentResponse {
                 .etterlevelseDokumentId(pvkDokument.getEtterlevelseDokumentId())
                 .status(pvkDokument.getStatus())
 
-                .ytterligereEgenskaper(copyOf(pvkDokument.getPvkDokumentData().getYtterligereEgenskaper()))
+                .ytterligereEgenskaper(pvkDokument.getPvkDokumentData().ytterligereEgenskaperAsCodes())
                 .skalUtforePvk(pvkDokument.getPvkDokumentData().isSkalUtforePvk())
                 .pvkVurderingsBegrunnelse(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse())
                 .personkategoriAntallBeskrivelse(pvkDokument.getPvkDokumentData().getPersonkategoriAntallBeskrivelse())

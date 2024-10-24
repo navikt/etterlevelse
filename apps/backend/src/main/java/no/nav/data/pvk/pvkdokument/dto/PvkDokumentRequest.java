@@ -11,7 +11,6 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentFil;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
-import no.nav.data.pvk.pvkdokument.domain.YtterligereEgenskaper;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,7 +28,7 @@ public class PvkDokumentRequest implements RequestElement {
     private String etterlevelseDokumentId;
     private PvkDokumentStatus status;
 
-    private List<YtterligereEgenskaper> ytterligereEgenskaper;
+    private List<String> ytterligereEgenskaper;
     private boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
     private boolean stemmerPersonkategorier;

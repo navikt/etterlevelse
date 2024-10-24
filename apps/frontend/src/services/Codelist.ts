@@ -12,6 +12,7 @@ export enum EListName {
   LOV = 'LOV',
   TEMA = 'TEMA',
   VIRKEMIDDELTYPE = 'VIRKEMIDDELTYPE',
+  YTTERLIGERE_EGENSKAPER = 'YTTERLIGERE_EGENSKAPER',
 }
 
 export enum ELovCodeRelevans {

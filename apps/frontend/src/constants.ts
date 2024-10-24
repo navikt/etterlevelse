@@ -502,7 +502,7 @@ export interface IPvkDokument {
   version: number
   etterlevelseDokumentId: string
   status: EPvkDokumentStatus
-  ytterligereEgenskaper: EYtterligereEgenskaper[]
+  ytterligereEgenskaper: ICode[]
   skalUtforePvk: boolean
   pvkVurderingsBegrunnelse: string
 
@@ -522,15 +522,6 @@ export interface IPvkDokument {
 export enum EPvkDokumentStatus {
   AKTIV = 'AKTIV',
   INAKTIV = 'INAKTIV',
-}
-
-export enum EYtterligereEgenskaper {
-  SYSTEMATISK_OVERVÅKNING = 'SYSTEMATISK_OVERVÅKNING',
-  PERSONOPPLYSNINGER_BEHANDLES = 'PERSONOPPLYSNINGER_BEHANDLES',
-  SAMMENSTILLING_AV_DATASETT = 'SAMMENSTILLING_AV_DATASETT',
-  SAARBARE_REGISTRERTE = 'SAARBARE_REGISTRERTE',
-  BRUK_AV_NY_TEKNOLOGI = 'BRUK_AV_NY_TEKNOLOGI',
-  TJENESTE_TILGANG = 'TJENESTE_TILGANG',
 }
 
 export type TReplace<T, K> = Omit<T, keyof K> & K

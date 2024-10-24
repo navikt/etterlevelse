@@ -129,21 +129,21 @@ public class CodeUsageService {
             case AVDELING -> kravRepo.findByAvdeling(code);
             case UNDERAVDELING -> kravRepo.findByUnderavdeling(code);
             case LOV -> kravRepo.findByLov(code);
-            case TEMA, VIRKEMIDDELTYPE -> List.of();
+            case TEMA, VIRKEMIDDELTYPE, YTTERLIGERE_EGENSKAPER -> List.of();
         };
     }
 
     private List<GenericStorage<Virkemiddel>> findVirkemiddel(ListName listName, String code) {
         return switch (listName) {
             case VIRKEMIDDELTYPE -> virkemiddelRepo.findByVirkemiddelType(code);
-            case TEMA, RELEVANS, AVDELING, UNDERAVDELING, LOV -> List.of();
+            case TEMA, RELEVANS, AVDELING, UNDERAVDELING, LOV, YTTERLIGERE_EGENSKAPER-> List.of();
         };
     }
 
     private List<GenericStorage<EtterlevelseDokumentasjon>> findEtterlevelseDokumentasjoner(ListName listName, String code) {
         return switch (listName) {
             case RELEVANS -> etterlevelseDokumentasjonRepo.findByIrrelevans(List.of(code));
-            case AVDELING, UNDERAVDELING, LOV, TEMA, VIRKEMIDDELTYPE -> List.of();
+            case AVDELING, UNDERAVDELING, LOV, TEMA, VIRKEMIDDELTYPE, YTTERLIGERE_EGENSKAPER -> List.of();
         };
     }
 
@@ -151,7 +151,7 @@ public class CodeUsageService {
         return switch (listName) {
             case TEMA -> filter(getCodelist(ListName.LOV), c -> code.equals(getField(c, "tema")));
             case UNDERAVDELING -> filter(getCodelist(ListName.LOV), c -> code.equals(getField(c, "underavdeling")));
-            case AVDELING, LOV, RELEVANS, VIRKEMIDDELTYPE -> List.of();
+            case AVDELING, LOV, RELEVANS, VIRKEMIDDELTYPE, YTTERLIGERE_EGENSKAPER -> List.of();
         };
     }
 

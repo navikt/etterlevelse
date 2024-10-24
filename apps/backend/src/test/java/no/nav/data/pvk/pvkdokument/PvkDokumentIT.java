@@ -73,7 +73,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
                 .id(pvkDokuemnt.getId().toString())
                 .etterlevelseDokumentId(pvkDokuemnt.getEtterlevelseDokumentId())
                 .status(PvkDokumentStatus.AKTIV)
-                .ytterligereEgenskaper(List.of(YtterligereEgenskaper.BRUK_AV_NY_TEKNOLOGI, YtterligereEgenskaper.SAARBARE_REGISTRERTE))
+                .ytterligereEgenskaper(List.of("PROFILERING", "TEKNOLOGI"))
                 .build();
 
 

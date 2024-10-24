@@ -57,6 +57,7 @@ export const deletePvkDokument = async (id: string) => {
 function pvkDokumentToPvkDokumentDto(pvkDokument: IPvkDokument) {
   const dto = {
     ...pvkDokument,
+    ytterligereEgenskaper: pvkDokument.ytterligereEgenskaper.map((egenskap) => egenskap.code),
   } as any
   delete dto.changeStamp
   delete dto.version

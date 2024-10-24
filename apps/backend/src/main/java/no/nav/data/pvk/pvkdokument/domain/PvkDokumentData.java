@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 
 import java.util.List;
 
@@ -15,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PvkDokumentData {
 
-    private List<YtterligereEgenskaper> ytterligereEgenskaper;
+    private List<String> ytterligereEgenskaper;
     private boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
 
@@ -30,5 +33,10 @@ public class PvkDokumentData {
     private boolean stemmerDatabehandlere;
     private boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
+
+    public List<CodelistResponse> ytterligereEgenskaperAsCodes() {
+        return CodelistService.getCodelistResponseList(ListName.YTTERLIGERE_EGENSKAPER, ytterligereEgenskaper);
+    }
+
 
 }
