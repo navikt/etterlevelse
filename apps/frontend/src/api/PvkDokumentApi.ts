@@ -71,6 +71,7 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     version: -1,
     etterlevelseDokumentId: pvkDokument.etterlevelseDokumentId || '',
     status: pvkDokument.status || EPvkDokumentStatus.AKTIV,
+    behandlingensLivslopBeskrivelse: pvkDokument.behandlingensLivslopBeskrivelse || '',
     ytterligereEgenskaper: pvkDokument.ytterligereEgenskaper || [],
     skalUtforePvk: pvkDokument.skalUtforePvk || false,
     pvkVurderingsBegrunnelse: pvkDokument.pvkVurderingsBegrunnelse || '',

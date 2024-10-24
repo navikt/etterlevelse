@@ -502,6 +502,7 @@ export interface IPvkDokument {
   version: number
   etterlevelseDokumentId: string
   status: EPvkDokumentStatus
+  behandlingensLivslopBeskrivelse: string
   ytterligereEgenskaper: ICode[]
   skalUtforePvk: boolean
   pvkVurderingsBegrunnelse: string
