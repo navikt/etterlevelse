@@ -200,7 +200,7 @@ export const DokumentasjonPage = () => {
 
             <div className="flex justify-end">
               {etterlevelseDokumentasjon && (
-                <div className="gap-4 ml-5">
+                <div className="gap-4 ml-5 flex flex-col ">
                   {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
                     <>
                       <Button
@@ -220,6 +220,17 @@ export const DokumentasjonPage = () => {
                           setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
                         />
                       )}
+
+                      <Button
+                        onClick={() => {
+                          navigate('/dokumentasjon/' + 'etterlevelseDokumentasjon.id' + '/pvkbehov')
+                        }}
+                        size="small"
+                        variant="secondary"
+                        className="whitespace-nowrap"
+                      >
+                        Vurdér behov for PVK
+                      </Button>
                     </>
                   )}
                 </div>
