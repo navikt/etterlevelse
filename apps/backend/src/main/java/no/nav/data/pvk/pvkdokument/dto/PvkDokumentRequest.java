@@ -28,7 +28,6 @@ public class PvkDokumentRequest implements RequestElement {
     private String etterlevelseDokumentId;
     private PvkDokumentStatus status;
 
-    private String behandlingensLivslopBeskrivelse;
     private List<String> ytterligereEgenskaper;
     private boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
@@ -52,7 +51,6 @@ public class PvkDokumentRequest implements RequestElement {
     public void format() {
         setId(trimToNull(id));
         setEtterlevelseDokumentId(trimToNull(etterlevelseDokumentId));
-        setBehandlingensLivslopBeskrivelse(trimToNull(behandlingensLivslopBeskrivelse));
         setPvkVurderingsBegrunnelse(trimToNull(pvkVurderingsBegrunnelse));
         setPersonkategoriAntallBeskrivelse(trimToNull(personkategoriAntallBeskrivelse));
         setTilgangsBeskrivelsePersonopplysningene(trimToNull(tilgangsBeskrivelsePersonopplysningene));
@@ -76,7 +74,6 @@ public class PvkDokumentRequest implements RequestElement {
 
     public PvkDokument convertToPvkDokument() {
         var pkvDokumentData = PvkDokumentData.builder()
-                .behandlingensLivslopBeskrivelse(behandlingensLivslopBeskrivelse)
                 .ytterligereEgenskaper(copyOf(ytterligereEgenskaper))
                 .skalUtforePvk(skalUtforePvk)
                 .pvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse)
@@ -102,7 +99,6 @@ public class PvkDokumentRequest implements RequestElement {
     public void mergeInto(PvkDokument pvkDokumentToMerge) {
         pvkDokumentToMerge.setEtterlevelseDokumentId(etterlevelseDokumentId);
         pvkDokumentToMerge.setStatus(status);
-        pvkDokumentToMerge.getPvkDokumentData().setBehandlingensLivslopBeskrivelse(behandlingensLivslopBeskrivelse);
         pvkDokumentToMerge.getPvkDokumentData().setYtterligereEgenskaper(copyOf(ytterligereEgenskaper));
         pvkDokumentToMerge.getPvkDokumentData().setSkalUtforePvk(skalUtforePvk);
         pvkDokumentToMerge.getPvkDokumentData().setPvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse);

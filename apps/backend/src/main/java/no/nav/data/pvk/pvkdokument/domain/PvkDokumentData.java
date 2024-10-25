@@ -18,7 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 public class PvkDokumentData {
 
-    private String behandlingensLivslopBeskrivelse;
     private List<String> ytterligereEgenskaper;
     private boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
