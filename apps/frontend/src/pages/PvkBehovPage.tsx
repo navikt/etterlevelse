@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Heading, Label, Link, List } from '@navikt/ds-react'
+import { Alert, BodyLong, BodyShort, Heading, Label, Link, List } from '@navikt/ds-react'
 import { useParams } from 'react-router-dom'
 import { behandlingName } from '../api/BehandlingApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
@@ -48,6 +48,7 @@ export const PvkBehovPage = () => {
             <Heading level="2" size="small" className="mb-5">
               Hentet fra deres etterlevelsesdokumentasjon
             </Heading>
+
             <Label>
               Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:
             </Label>
@@ -65,15 +66,19 @@ export const PvkBehovPage = () => {
                 ))}
               </List>
             )}
-            <Link
-              href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="redigere etterlevelsesdokumentasjon"
-            >
-              Dere kan redigere hvilke behandinger som gjelder under Dokumentegenskaper (åpnes i
-              nytt vindu).
-            </Link>
+
+            <BodyShort className="inline-block">
+              Dere kan{' '}
+              <Link
+                href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="redigere etterlevelsesdokumentasjon"
+              >
+                redigere hvilke behandinger som gjelder under Dokumentegenskaper (åpnes i nytt
+                vindu).
+              </Link>
+            </BodyShort>
           </div>
         )}
       </div>
