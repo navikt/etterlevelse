@@ -29,7 +29,6 @@ public class EtterlevelseDokumentasjonFilter {
     private Boolean knyttetTilVirkemiddel;
     private String sok;
 
-
     public boolean isEmpty() {
         validate();
         return StringUtils.isBlank(id)

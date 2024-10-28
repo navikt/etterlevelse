@@ -65,22 +65,18 @@ public class EtterlevelseDokumentasjonController {
         boolean teamIsEmpty = response.getTeams() == null || response.getTeams().isEmpty();
         boolean risikoeiereIsEmpty = response.getRisikoeiere() == null || response.getRisikoeiere().isEmpty();
 
-        boolean resourceIsNotEmpty = response.getResources() != null && !response.getResources().isEmpty();
-        boolean teamIsNotEmpty = response.getTeams() != null && !response.getTeams().isEmpty();
-        boolean risikoeiereIsNotEmpty = response.getRisikoeiere() != null && !response.getRisikoeiere().isEmpty();
-
         if (resourceIsEmpty && teamIsEmpty && risikoeiereIsEmpty) {
             response.setHasCurrentUserAccess(true);
         } else {
             List<String> memeberList = new ArrayList<>();
             var currentUser = SecurityUtils.getCurrentIdent();
-            if (resourceIsNotEmpty) {
+            if (!resourceIsEmpty) {
                 memeberList.addAll(response.getResources());
             }
-            if (risikoeiereIsNotEmpty) {
+            if (!risikoeiereIsEmpty) {
                 memeberList.addAll(response.getRisikoeiere());
             }
-            if (teamIsNotEmpty) {
+            if (!teamIsEmpty) {
                 response.getTeamsData().forEach((team) -> {
                     if (team.getMembers() != null && !team.getMembers().isEmpty()) {
                         memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList());

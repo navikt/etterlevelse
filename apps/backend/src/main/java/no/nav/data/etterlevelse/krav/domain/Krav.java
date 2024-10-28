@@ -95,38 +95,6 @@ public class Krav extends DomainObject implements KravId {
         return this;
     }
 
-    public KravResponse toResponse() {
-        return KravResponse.builder()
-                .id(id)
-                .changeStamp(convertChangeStampResponse())
-                .version(version)
-                .kravNummer(kravNummer)
-                .kravVersjon(kravVersjon)
-                .navn(navn)
-                .beskrivelse(beskrivelse)
-                .hensikt(hensikt)
-                .utdypendeBeskrivelse(utdypendeBeskrivelse)
-                .versjonEndringer(versjonEndringer)
-                .dokumentasjon(copyOf(dokumentasjon))
-                .implementasjoner(implementasjoner)
-                .begrepIder(copyOf(begrepIder))
-                .virkemiddelIder(copyOf(virkemiddelIder))
-                .varslingsadresser(copyOf(varslingsadresser))
-                .rettskilder(copyOf(rettskilder))
-                .tagger(copyOf(tagger))
-                .regelverk(StreamUtils.convert(regelverk, Regelverk::toResponse))
-                .notat(notat)
-                .varselMelding(varselMelding)
-                .suksesskriterier(StreamUtils.convert(suksesskriterier, Suksesskriterie::toResponse))
-                .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, avdeling))
-                .underavdeling(CodelistService.getCodelistResponse(ListName.UNDERAVDELING, underavdeling))
-                .relevansFor(CodelistService.getCodelistResponseList(ListName.RELEVANS, relevansFor))
-                .kravIdRelasjoner(copyOf(kravIdRelasjoner))
-                .status(status)
-                .aktivertDato(aktivertDato)
-                .build();
-    }
-
     public InstanceId convertToInstanceId() {
         return new InstanceId(id.toString(), navn, "K" + kravNummer + "." + kravVersjon);
     }

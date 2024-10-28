@@ -10,8 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface EtterlevelseDokumentasjonRepo  extends JpaRepository<GenericStorage<EtterlevelseDokumentasjon>, UUID>, EtterlevelseDokumentasjonRepoCustom {
-
+public interface EtterlevelseDokumentasjonRepo extends JpaRepository<GenericStorage<EtterlevelseDokumentasjon>, UUID>, EtterlevelseDokumentasjonRepoCustom {
 
     @Override
     @Query(value = "select * from generic_storage where type = 'EtterlevelseDokumentasjon'",

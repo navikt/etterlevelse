@@ -45,7 +45,7 @@ public class EtterlevelseMetadataController {
     ) {
         log.info("Get all etterlevelsemetadata");
         Page<EtterlevelseMetadata> page = service.getAll(pageParameters);
-        return ResponseEntity.ok(new RestResponsePage<>(page).convert(EtterlevelseMetadata::toResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(page).convert(EtterlevelseMetadataResponse::buildFrom));
     }
 
     @Operation(summary = "Get etterlevelsemetadata by id")
@@ -55,7 +55,7 @@ public class EtterlevelseMetadataController {
             @PathVariable UUID id
     ) {
         log.info("Get etterlevelsemetadata by id={}", id);
-        return ResponseEntity.ok(service.get(id).toResponse());
+        return ResponseEntity.ok(EtterlevelseMetadataResponse.buildFrom(service.get(id)));
     }
 
     @Operation(summary = "Get etterlevelsemetadata by KravNummer and KravVersjon")
@@ -67,7 +67,7 @@ public class EtterlevelseMetadataController {
     ) {
         log.info("Get etterlevelsemetadata for kravnummer={}", kravNummer);
         List<EtterlevelseMetadata> etterlevelseMetadataList = service.getByKravNummer(kravNummer, kravVersjon);
-        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseMetadataList).convert(EtterlevelseMetadata::toResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseMetadataList).convert(EtterlevelseMetadataResponse::buildFrom));
     }
 
     @Operation(summary = "Get etterlevelsemetadata by etterlevelseDokumentasjonId")
@@ -78,7 +78,7 @@ public class EtterlevelseMetadataController {
     ) {
         log.info("Get etterlevelsemetadatafor etterlevelseDokumentasjonId={}", etterlevelseDokumentasjonId);
         List<EtterlevelseMetadata> etterlevelseMetadataList = service.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId);
-        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseMetadataList).convert(EtterlevelseMetadata::toResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseMetadataList).convert(EtterlevelseMetadataResponse::buildFrom));
     }
 
     @Operation(summary = "Get etterlevelsemetadata by etterlevelseDokumentasjon and krav")
@@ -91,7 +91,7 @@ public class EtterlevelseMetadataController {
     ) {
         log.info("Get etterlevelsemetadatafor etterlevelseDokumentasjonId={}, kravNummer={}", etterlevelseDokumentasjonId, kravNummer);
         List<EtterlevelseMetadata> etterlevelseMetadataList = service.getByEtterlevelseDokumentasjonAndKrav(etterlevelseDokumentasjonId, kravNummer, kravVersjon);
-        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseMetadataList).convert(EtterlevelseMetadata::toResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseMetadataList).convert(EtterlevelseMetadataResponse::buildFrom));
     }
 
     @Operation(summary = "Creating etterlevelsemetadata")
@@ -100,7 +100,7 @@ public class EtterlevelseMetadataController {
     public ResponseEntity<EtterlevelseMetadataResponse> createEtterlevelseMetadata(@RequestBody EtterlevelseMetadataRequest request) {
         log.info("Create etterlevelsemetadata");
         var etterlevelseMetadata = service.save(request);
-        return new ResponseEntity<>(etterlevelseMetadata.toResponse(), HttpStatus.CREATED);
+        return new ResponseEntity<>(EtterlevelseMetadataResponse.buildFrom(etterlevelseMetadata), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update etterlevelsemetadata")
@@ -114,7 +114,7 @@ public class EtterlevelseMetadataController {
         }
 
         var etterlevelseMetadata = service.save(request);
-        return ResponseEntity.ok(etterlevelseMetadata.toResponse());
+        return ResponseEntity.ok(EtterlevelseMetadataResponse.buildFrom(etterlevelseMetadata));
     }
 
     @Operation(summary = "Delete etterlevelsemetadata")
@@ -123,7 +123,7 @@ public class EtterlevelseMetadataController {
     public ResponseEntity<EtterlevelseMetadataResponse> deleteEtterlevelseMetadata(@PathVariable UUID id) {
         log.info("Delete EtterlevelseMetadataResponse id={}", id);
         var etterlevelseMetadata = service.delete(id);
-        return ResponseEntity.ok(etterlevelseMetadata.toResponse());
+        return ResponseEntity.ok(EtterlevelseMetadataResponse.buildFrom(etterlevelseMetadata));
     }
 
     // Used only for unittests

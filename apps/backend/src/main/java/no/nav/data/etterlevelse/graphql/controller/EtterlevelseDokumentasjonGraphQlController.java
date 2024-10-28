@@ -60,7 +60,11 @@ public class EtterlevelseDokumentasjonGraphQlController {
     private final AuditVersionService auditVersionService;
 
     @QueryMapping
-    public RestResponsePage<EtterlevelseDokumentasjonGraphQlResponse> etterlevelseDokumentasjon(@Argument EtterlevelseDokumentasjonFilter filter, @Argument Integer pageNumber, @Argument Integer pageSize) {
+    public RestResponsePage<EtterlevelseDokumentasjonGraphQlResponse> etterlevelseDokumentasjon(
+            @Argument EtterlevelseDokumentasjonFilter filter, 
+            @Argument Integer pageNumber, 
+            @Argument Integer pageSize
+    ) {
         log.info("etterlevelseDokumentasjon filter {}", filter);
         var pageInput = new PageParameters(pageNumber, pageSize);
 

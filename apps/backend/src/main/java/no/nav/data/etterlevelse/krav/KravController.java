@@ -51,6 +51,7 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 public class KravController {
 
     private final KravService service;
+    private final KravValidator validator;
     private final EtterlevelseService etterlevelseService;
     private final TilbakemeldingService tilbakemeldingService;
 
@@ -61,10 +62,10 @@ public class KravController {
         log.info("Get all Krav");
         if (!SecurityUtils.isKravEier()) {
             Page<Krav> page = service.getAllNonUtkast(pageParameters.createPage());
-            return ResponseEntity.ok(new RestResponsePage<>(page).convert(service::toResponseForNotKraveier));
+            return ResponseEntity.ok(new RestResponsePage<>(page).convert(KravResponse::buildFromForNotKraveier));
         } else {
             Page<Krav> page = service.getAll(pageParameters.createPage());
-            return ResponseEntity.ok(new RestResponsePage<>(page).convert(Krav::toResponse));
+            return ResponseEntity.ok(new RestResponsePage<>(page).convert(KravResponse::buildFrom));
         }
     }
 
@@ -76,9 +77,9 @@ public class KravController {
         Page<Krav> page = service.getAllKravStatistics(pageParameters.createPage());
 
         if (!SecurityUtils.isKravEier()) {
-            return ResponseEntity.ok(new RestResponsePage<>(page).convert(service::toResponseForNotKraveier));
+            return ResponseEntity.ok(new RestResponsePage<>(page).convert(KravResponse::buildFromForNotKraveier));
         } else {
-            return ResponseEntity.ok(new RestResponsePage<>(page).convert(Krav::toResponse));
+            return ResponseEntity.ok(new RestResponsePage<>(page).convert(KravResponse::buildFrom));
         }
     }
 
@@ -91,9 +92,9 @@ public class KravController {
         var krav = service.getByKravNummer(kravNummer);
 
         if (!SecurityUtils.isKravEier()) {
-            return ResponseEntity.ok(new RestResponsePage<>(krav).convert(service::toResponseForNotKraveier));
+            return ResponseEntity.ok(new RestResponsePage<>(krav).convert(KravResponse::buildFromForNotKraveier));
         } else {
-            return ResponseEntity.ok(new RestResponsePage<>(krav).convert(Krav::toResponse));
+            return ResponseEntity.ok(new RestResponsePage<>(krav).convert(KravResponse::buildFrom));
         }
     }
 
@@ -105,9 +106,9 @@ public class KravController {
         Optional<Krav> krav = service.getByKravNummer(kravNummer, kravVersjon);
         Optional<KravResponse> response;
         if (!SecurityUtils.isKravEier()) {
-            response = krav.map(service::toResponseForNotKraveier);
+            response = krav.map(KravResponse::buildFromForNotKraveier);
         } else {
-            response = krav.map(Krav::toResponse);
+            response = krav.map(KravResponse::buildFrom);
         }
         return response.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -121,9 +122,9 @@ public class KravController {
         var krav = service.get(id);
 
         if (!SecurityUtils.isKravEier()) {
-            return ResponseEntity.ok(service.toResponseForNotKraveier(krav));
+            return ResponseEntity.ok(KravResponse.buildFromForNotKraveier(krav));
         } else {
-            return ResponseEntity.ok(krav.toResponse());
+            return ResponseEntity.ok(KravResponse.buildFrom(krav));
         }
     }
 
@@ -137,7 +138,7 @@ public class KravController {
         }
         var krav = service.search(name);
         log.info("Returned {} krav", krav.size());
-        return new ResponseEntity<>(new RestResponsePage<>(convert(krav, Krav::toResponse)), HttpStatus.OK);
+        return new ResponseEntity<>(new RestResponsePage<>(convert(krav, KravResponse::buildFrom)), HttpStatus.OK);
     }
 
     @Operation(summary = "Search krav by krav number")
@@ -152,9 +153,9 @@ public class KravController {
         log.info("Returned {} krav", krav.size());
 
         if (!SecurityUtils.isKravEier()) {
-            return new ResponseEntity<>(new RestResponsePage<>(convert(krav, service::toResponseForNotKraveier)), HttpStatus.OK);
+            return new ResponseEntity<>(new RestResponsePage<>(convert(krav, KravResponse::buildFromForNotKraveier)), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new RestResponsePage<>(convert(krav, Krav::toResponse)), HttpStatus.OK);
+            return new ResponseEntity<>(new RestResponsePage<>(convert(krav, KravResponse::buildFrom)), HttpStatus.OK);
         }
     }
 
@@ -164,8 +165,9 @@ public class KravController {
     @PostMapping
     public ResponseEntity<KravResponse> createKrav(@RequestBody KravRequest request) {
         log.info("Create Krav");
+        validator.validate(request);
         var krav = service.save(request);
-        return new ResponseEntity<>(krav.toResponse(), HttpStatus.CREATED);
+        return new ResponseEntity<>(KravResponse.buildFrom(krav), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update Krav")
@@ -173,11 +175,12 @@ public class KravController {
     @PutMapping("/{id}")
     public ResponseEntity<KravResponse> updateKrav(@PathVariable UUID id, @Valid @RequestBody KravRequest request) {
         log.debug("Update Krav id={}", id);
+        validator.validate(request);
         if (!Objects.equals(id, request.getIdAsUUID())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
         var krav = service.save(request);
-        return ResponseEntity.ok(krav.toResponse());
+        return ResponseEntity.ok(KravResponse.buildFrom(krav));
     }
 
     @Operation(summary = "Delete Krav")
@@ -195,7 +198,7 @@ public class KravController {
             throw new ValidationException(String.format("Can not delete krav. Found %s tilbakemelding connected to krav.", tilbakemeldingList.size()));
         }
         var deletedKrav = service.delete(id);
-        return ResponseEntity.ok(deletedKrav.toResponse());
+        return ResponseEntity.ok(KravResponse.buildFrom(deletedKrav));
     }
 
     // Image

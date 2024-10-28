@@ -8,9 +8,11 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.KravId;
+import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 
 import java.util.List;
 
+import static no.nav.data.common.utils.StreamUtils.copyOf;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
@@ -39,6 +41,15 @@ public class EtterlevelseMetadataRequest implements RequestElement, KravId {
         validator.checkId(this);
         validator.checkNull(Fields.kravNummer, kravNummer);
         validator.checkNull(Fields.kravVersjon, kravVersjon);
+    }
+
+    // Updates all fields of the input with this request, except id, behandlingId, version and changestamp
+    public void mergeInto(EtterlevelseMetadata emd) {
+        emd.setKravNummer(kravNummer);
+        emd.setKravVersjon(kravVersjon);
+        emd.setEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
+        emd.setTildeltMed(copyOf(tildeltMed));
+        emd.setNotater(notater);
     }
 
 }
