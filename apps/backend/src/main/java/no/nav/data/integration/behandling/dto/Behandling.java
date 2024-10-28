@@ -37,4 +37,7 @@ public class Behandling {
     private List<PolicyResponse> policies;
 
     private DataProsessering dataProsessering;
+
+    private Boolean automatiskBehandling;
+    private Boolean profilering;
 }

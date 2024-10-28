@@ -25,6 +25,8 @@ public class BkatProcess {
     private int number;
     private String name;
     private String description;
+    private Boolean automaticProcessing;
+    private Boolean profiling;
     @Singular
     private List<BkatCode> purposes;
     private BkatAffiliation affiliation;
@@ -45,6 +47,8 @@ public class BkatProcess {
                 .teams(affiliation.getProductTeams())
                 .policies(policies.stream().map(BkatPolicy::convertToPolyResponse).toList())
                 .dataProsessering(dataProcessing.convertToDataProsessering())
+                .automatiskBehandling(automaticProcessing)
+                .profilering(profiling)
                 .build();
     }
 }
