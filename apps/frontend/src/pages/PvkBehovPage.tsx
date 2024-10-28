@@ -34,7 +34,7 @@ export const PvkBehovPage = () => {
             personopplysninger som sannsynligvis vil medføre høy risiko for den registrertes
             rettigheter og friheter.
           </BodyLong>
-          <Alert variant="info">
+          <Alert inline variant="info">
             Informasjon om behandlingene deres er basert på det vi har hentet fra
             Behandlingskatalogen. Dere er selv ansvarlige for at informasjonen her er korrekt og
             komplett, spesielt opplysningstyper og informasjon om profilering og automatisering.
