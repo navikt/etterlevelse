@@ -322,6 +322,8 @@ export interface IBehandling {
   teams: string[]
   policies: IPolicy[]
   dataProsessering: IDataBehandler
+  automatiskBehandling: boolean
+  profilering: boolean
 }
 
 export interface IPolicy {
