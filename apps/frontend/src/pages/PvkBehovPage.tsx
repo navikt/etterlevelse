@@ -8,6 +8,10 @@ import {
   Label,
   Link,
   List,
+  Radio,
+  RadioGroup,
+  ReadMore,
+  Textarea,
 } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useEffect, useState } from 'react'
@@ -132,6 +136,18 @@ export const PvkBehovPage = () => {
             Data som hentes og svarene dere har oppgitt gir en indikasjon på at det kan være behov
             for gjennomføring av PVK. Likevel er dere ansvarlige for å vurdere behov.
           </Alert>
+
+          <ReadMore header="Lurer dere fortsatt på om det er behov for PVK?">
+            Personvernombudet (PVO) kan hjelpe dere å vurdere om dere skal gjøre en PVK. Send e-post
+            til PVO (må legge inn epost)
+          </ReadMore>
+
+          <RadioGroup legend="Hvilken vurdering har dere kommet fram til?" onChange={() => {}}>
+            <Radio value="yes">Vi skal gjennomføre en PVK</Radio>
+            <Radio value="no">Vi skal ikke gjennomføre PVK</Radio>
+          </RadioGroup>
+
+          <Textarea label="Beskriv hvordan dere har tenkt" />
         </div>
 
         {etterlevelseDokumentasjon && (
