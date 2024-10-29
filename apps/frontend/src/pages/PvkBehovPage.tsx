@@ -185,15 +185,14 @@ export const PvkBehovPage = () => {
             )}
 
             <BodyShort className="inline-block">
-              Dere kan{' '}
+              Dere kan redigere hvilke behandinger som gjelder i{' '}
               <Link
                 href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="redigere etterlevelsesdokumentasjon"
               >
-                redigere hvilke behandinger som gjelder under Dokumentegenskaper (åpnes i nytt
-                vindu).
+                Dokumentegenskaper (åpnes i nytt vindu).
               </Link>
             </BodyShort>
           </div>
