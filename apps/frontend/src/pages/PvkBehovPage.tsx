@@ -1,4 +1,14 @@
-import { Alert, BodyLong, BodyShort, Heading, Label, Link, List } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyLong,
+  BodyShort,
+  Checkbox,
+  CheckboxGroup,
+  Heading,
+  Label,
+  Link,
+  List,
+} from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -7,6 +17,7 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { ExternalLink } from '../components/common/RouteLink'
 import { PageLayout } from '../components/scaffold/Page'
 import { IBehandling, IBreadCrumbPath, IExternalCode, IPolicy } from '../constants'
+import { CodelistService, EListName, ICode } from '../services/Codelist'
 import { env } from '../util/env'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
@@ -17,10 +28,15 @@ export const PvkBehovPage = () => {
     }>
   > = useParams<{ id?: string }>()
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
+  const [codelistUtils] = CodelistService()
   const breadcrumbPaths: IBreadCrumbPath[] = [dokumentasjonerBreadCrumbPath]
   const [profilering, setProfilering] = useState<boolean>(false)
   const [automatiskBehandling, setAutomatiskBehandling] = useState<boolean>(false)
   const [saerligKategorier, setSaerligKategorier] = useState<boolean>(false)
+
+  const ytterligereEgenskaper: ICode[] = codelistUtils.getCodes(
+    EListName.YTTERLIGERE_EGENSKAPER
+  ) as ICode[]
 
   useEffect(() => {
     if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.behandlinger) {
@@ -90,10 +106,32 @@ export const PvkBehovPage = () => {
           </div>
 
           <div className="mt-3" id="ytterlige-egenskaper">
-            <Label>
-              Les igjennom og velg ytterligere egenskaper som gjelder for behandlingene deres.
-            </Label>
+            <CheckboxGroup legend="Les igjennom og velg ytterligere egenskaper som gjelder for behandlingene deres.">
+              {ytterligereEgenskaper.map((egenskap) => (
+                <Checkbox key={egenskap.code} value={egenskap.code}>
+                  {egenskap.shortName}
+                </Checkbox>
+              ))}
+            </CheckboxGroup>
+            {etterlevelseDokumentasjon && (
+              <BodyShort className="mt-3">
+                Disse egenskapene blir enklere å vurdere hvis{' '}
+                <Link
+                  href={'/dokumentasjon/' + etterlevelseDokumentasjon.id + '/livslop'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="redigere etterlevelsesdokumentasjon"
+                >
+                  dere har tegnet behandlingens livsløp (åpnes i nytt vindu).
+                </Link>
+              </BodyShort>
+            )}
           </div>
+
+          <Alert variant="info">
+            Data som hentes og svarene dere har oppgitt gir en indikasjon på at det kan være behov
+            for gjennomføring av PVK. Likevel er dere ansvarlige for å vurdere behov.
+          </Alert>
         </div>
 
         {etterlevelseDokumentasjon && (
