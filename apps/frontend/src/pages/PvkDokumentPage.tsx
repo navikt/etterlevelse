@@ -80,6 +80,14 @@ export const PvkDokumentPage = () => {
           </div>
         </div>
       )}
+
+      {etterlevelseDokumentasjon && pvkDokument && (
+        <div className="flex flex-col w-full items-center">
+          <div className="w-full max-w-7xl">
+            <div className="px-2 pb-6">WIP</div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
