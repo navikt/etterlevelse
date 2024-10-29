@@ -117,7 +117,7 @@ export const PvkBehovPage = () => {
               <BodyShort className="mt-3">
                 Disse egenskapene blir enklere å vurdere hvis{' '}
                 <Link
-                  href={'/dokumentasjon/' + etterlevelseDokumentasjon.id + '/livslop'}
+                  href={'/dokumentasjon/' + etterlevelseDokumentasjon.id + '/behandlingens-livslop'}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="redigere etterlevelsesdokumentasjon"
