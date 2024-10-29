@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { env } from 'process'
+import { useEffect, useState } from 'react'
 import { EPvkDokumentStatus, IPageResponse, IPvkDokument } from '../constants'
 
 export const getAllPvkDokument = async () => {
@@ -54,7 +55,33 @@ export const deletePvkDokument = async (id: string) => {
   return (await axios.delete<IPvkDokument>(`${env.backendBaseUrl}/pvkdokument/${id}`)).data
 }
 
-function pvkDokumentToPvkDokumentDto(pvkDokument: IPvkDokument) {
+export const usePvkDokument = (pvkDokumentId?: string) => {
+  const isCreateNew = pvkDokumentId === 'ny'
+  const [data, setData] = useState<IPvkDokument | undefined>(
+    isCreateNew ? mapPvkDokumentToFormValue({}) : undefined
+  )
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    setIsLoading(true)
+    if (pvkDokumentId && !isCreateNew) {
+      ;(async () => {
+        await getPvkDokument(pvkDokumentId).then(async (pvkDokument) => {
+          setData(pvkDokument)
+          setIsLoading(false)
+        })
+      })()
+    }
+  }, [pvkDokumentId])
+
+  return [data, setData, isLoading] as [
+    IPvkDokument | undefined,
+    (e: IPvkDokument) => void,
+    boolean,
+  ]
+}
+
+const pvkDokumentToPvkDokumentDto = (pvkDokument: IPvkDokument) => {
   const dto = {
     ...pvkDokument,
     ytterligereEgenskaper: pvkDokument.ytterligereEgenskaper.map((egenskap) => egenskap.code),

@@ -28,6 +28,7 @@ import { MainPage } from './pages/MainPage'
 import { MyEtterlevelseDokumentasjonerPage } from './pages/MyEtterlevelseDokumentasjonerPage'
 import NotFound from './pages/NotFound'
 import PvkBehovPage from './pages/PvkBehovPage'
+import PvkDokumentPage from './pages/PvkDokumentPage'
 import QuestionAndAnswerLogPage from './pages/QuestionAndAnswerLogPage'
 import { RelasjonsOversikt } from './pages/RelasjonsOversikt'
 import { TemaPage } from './pages/TemaPage'
@@ -147,6 +148,13 @@ const AppRoutes = (): JSX.Element => {
         element={<BehandlingensLivslopPage />}
         caseSensitive={true}
       />
+
+      <Route path="/dokumentasjon/:id/pvkbehov" element={<PvkBehovPage />} caseSensitive={true} />
+      <Route
+        path="/dokumentasjon/:id/pvkdokument/:pvkdokumentId"
+        element={<PvkDokumentPage />}
+        caseSensitive={true}
+      />
       <Route
         path="/dokumentasjon/relasjon/:id/"
         element={<RelasjonsOversikt />}
@@ -172,8 +180,7 @@ const AppRoutes = (): JSX.Element => {
         element={<GjenbrukEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
-      <Route path="/dokumentasjon/:id/pvkbehov" element={<PvkBehovPage />} caseSensitive={true} />
-      PvkBehovPage
+
       <Route
         path="/admin/codelist/:listname"
         element={<PrivateRoute component={<CodeListPage />} adminPage />}
