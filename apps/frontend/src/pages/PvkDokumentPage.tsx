@@ -8,6 +8,15 @@ import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { IBreadCrumbPath } from '../constants'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
+const StepTitle: string[] = [
+  'Oversikt',
+  'Behandlingens art og omfang',
+  'Innvolvering av eksterne',
+  'Risikoscenarioer tilknyttet etterlevelseskrav',
+  'Generelle risikoscenarioer',
+  'Send inn',
+]
+
 export const PvkDokumentPage = () => {
   const params: Readonly<
     Partial<{
@@ -17,7 +26,9 @@ export const PvkDokumentPage = () => {
   > = useParams<{ id?: string }>()
   const url = new URL(window.location.href)
   const currentStep = url.searchParams.get('steg')
-  const [currentPage] = useState<string>('Oversikt')
+  const [currentPage, setCurrentPage] = useState<string>(
+    currentStep !== null ? StepTitle[parseInt(currentStep) - 1] : 'Oversikt'
+  )
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const [pvkDokument] = usePvkDokument(params.pvkdokumentId)
   const [activeStep, setActiveStep] = useState<number>(
@@ -65,15 +76,13 @@ export const PvkDokumentPage = () => {
                   onStepChange={(value) => {
                     setActiveStep(value)
                     handleStepChange(value)
+                    setCurrentPage(StepTitle[value - 1])
                   }}
                   orientation="horizontal"
                 >
-                  <Stepper.Step>Oversikt</Stepper.Step>
-                  <Stepper.Step>Behandlingens art og omfang</Stepper.Step>
-                  <Stepper.Step>Innvolvering av eksterne</Stepper.Step>
-                  <Stepper.Step>Risikoscenarioer tilknyttet etterlevelseskrav</Stepper.Step>
-                  <Stepper.Step>Generelle risikoscenarioer</Stepper.Step>
-                  <Stepper.Step>Send inn</Stepper.Step>
+                  {StepTitle.map((title) => (
+                    <Stepper.Step key={title}>{title}</Stepper.Step>
+                  ))}
                 </Stepper>
               </div>
             </div>
@@ -84,7 +93,14 @@ export const PvkDokumentPage = () => {
       {etterlevelseDokumentasjon && pvkDokument && (
         <div className="flex flex-col w-full items-center">
           <div className="w-full max-w-7xl">
-            <div className="px-2 pb-6">WIP</div>
+            <div className="px-2 pb-6">
+              {activeStep === 1 && <div>Oversikt</div>}
+              {activeStep === 2 && <div>Behandlingens art og omfang</div>}
+              {activeStep === 3 && <div>Innvolvering av eksterne</div>}
+              {activeStep === 4 && <div>Risikoscenarioer tilknyttet etterlevelseskrav</div>}
+              {activeStep === 5 && <div>Generelle risikoscenarioer</div>}
+              {activeStep === 6 && <div>Send inn</div>}
+            </div>
           </div>
         </div>
       )}
