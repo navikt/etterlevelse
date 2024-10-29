@@ -43,12 +43,12 @@ export const PvkDokumentPage = () => {
         etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
         ' ' +
         etterlevelseDokumentasjon?.title,
-      href: '/dokumentasjoner/' + params.id,
+      href: '/dokumentasjon/' + params.id,
     },
 
     {
       pathName: 'Personvernkonsekvensvurdering',
-      href: '/dokumentasjoner/' + params.id + '/pvkbehov/' + params.pvkdokumentId,
+      href: '/dokumentasjon/' + params.id + '/pvkbehov/' + params.pvkdokumentId,
     },
   ]
 

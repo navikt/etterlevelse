@@ -1,5 +1,5 @@
-import { BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } from '@navikt/ds-react'
-import { IPvkDokument, TEtterlevelseDokumentasjonQL } from '../../constants'
+import { Alert, BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } from '@navikt/ds-react'
+import { IPvkDokument, ITeam, ITeamResource, TEtterlevelseDokumentasjonQL } from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
 
 interface IProps {
@@ -28,6 +28,24 @@ export const OversiktView = (props: IProps) => {
     risikoscenarioTilknyttetKrav.length > 0,
     generelleRisikoscenario.length > 0,
   ]
+
+  const getMemberListToString = (membersData: ITeamResource[]): string => {
+    let memberList = ''
+    membersData.forEach((member) => {
+      memberList += `, ${member.fullName}`
+    })
+
+    return memberList.substring(2)
+  }
+
+  const getTeamsNameToString = (teamsData: ITeam[]): string => {
+    let teamList = ''
+    teamsData.forEach((team) => {
+      teamList += `, ${team.name}`
+    })
+
+    return teamList.substring(2)
+  }
 
   return (
     <div>
@@ -76,7 +94,8 @@ export const OversiktView = (props: IProps) => {
         <List.Item>
           <BodyShort>
             <strong>Risikoeier:</strong>{' '}
-            {etterlevelseDokumentasjon.risikoeiereData && 'kode for å henta alle separert med , '}
+            {etterlevelseDokumentasjon.risikoeiereData &&
+              getMemberListToString(etterlevelseDokumentasjon.risikoeiereData)}
             {!etterlevelseDokumentasjon.risikoeiereData && 'Ingen risikoeier angitt'}
           </BodyShort>
         </List.Item>
@@ -87,7 +106,37 @@ export const OversiktView = (props: IProps) => {
             {!etterlevelseDokumentasjon.avdeling && 'Avdeling er ikke angitt'}
           </BodyShort>
         </List.Item>
+        <List.Item>
+          <BodyShort>
+            <strong>Team eller personer:</strong>{' '}
+            {etterlevelseDokumentasjon.teamsData &&
+              getTeamsNameToString(etterlevelseDokumentasjon.teamsData)}
+            {etterlevelseDokumentasjon.teamsData && ', '}
+            {etterlevelseDokumentasjon.resourcesData &&
+              getMemberListToString(etterlevelseDokumentasjon.resourcesData)}
+            {!etterlevelseDokumentasjon.teamsData &&
+              !etterlevelseDokumentasjon.resourcesData &&
+              'Avdeling er ikke angitt'}
+          </BodyShort>
+        </List.Item>
       </List>
+
+      {!etterlevelseDokumentasjon.risikoeiereData && (
+        <div className="w-fit">
+          <Alert variant="warning">
+            Dere har ikke lagt inn en risikoeier. Dere må gjøre dette før dere sender PVK-en til
+            Personvernombudet. Dere kan redigere deltakere og ansvarlige under
+            <Link
+              href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="redigere etterlevelsesdokumentasjon"
+            >
+              Dokumentegenskaper (åpnes i nytt vindu).
+            </Link>
+          </Alert>
+        </div>
+      )}
     </div>
   )
 }
