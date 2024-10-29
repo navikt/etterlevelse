@@ -1,8 +1,9 @@
 import { BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } from '@navikt/ds-react'
-import { IPvkDokument } from '../../constants'
+import { IPvkDokument, TEtterlevelseDokumentasjonQL } from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
 
 interface IProps {
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   pvkDokument: IPvkDokument
   risikoscenarioTilknyttetKrav: any[]
   generelleRisikoscenario: any[]
@@ -11,6 +12,7 @@ interface IProps {
 
 export const OversiktView = (props: IProps) => {
   const {
+    etterlevelseDokumentasjon,
     pvkDokument,
     risikoscenarioTilknyttetKrav,
     generelleRisikoscenario,
@@ -70,9 +72,22 @@ export const OversiktView = (props: IProps) => {
         </FormSummary.Answers>
       </FormSummary>
 
-      <Heading level="2" size="small" className="mb-5">
-        Deltaker og ansvarlige
-      </Heading>
+      <List title="Deltaker og ansvarlige" className="w-full">
+        <List.Item>
+          <BodyShort>
+            <strong>Risikoeier:</strong>{' '}
+            {etterlevelseDokumentasjon.risikoeiereData && 'kode for å henta alle separert med , '}
+            {!etterlevelseDokumentasjon.risikoeiereData && 'Ingen risikoeier angitt'}
+          </BodyShort>
+        </List.Item>
+        <List.Item>
+          <BodyShort>
+            <strong>Avdeling:</strong>{' '}
+            {etterlevelseDokumentasjon.avdeling && etterlevelseDokumentasjon.avdeling.shortName}
+            {!etterlevelseDokumentasjon.avdeling && 'Avdeling er ikke angitt'}
+          </BodyShort>
+        </List.Item>
+      </List>
     </div>
   )
 }

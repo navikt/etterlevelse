@@ -99,6 +99,7 @@ export const PvkDokumentPage = () => {
             <div className="px-2 pb-6">
               {activeStep === 1 && (
                 <OversiktView
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   pvkDokument={pvkDokument}
                   risikoscenarioTilknyttetKrav={[]}
                   generelleRisikoscenario={[]}
