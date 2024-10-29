@@ -1,3 +1,4 @@
+import { Loader } from '@navikt/ds-react'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
@@ -13,20 +14,40 @@ export const PvkDokumentPage = () => {
       pvkdokumentId?: string
     }>
   > = useParams<{ id?: string }>()
-  const breadcrumbPaths: IBreadCrumbPath[] = [dokumentasjonerBreadCrumbPath]
   const [currentPage] = useState<string>('Oversikt')
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const [pvkDokument] = usePvkDokument(params.pvkdokumentId)
+  const breadcrumbPaths: IBreadCrumbPath[] = [
+    dokumentasjonerBreadCrumbPath,
+    {
+      pathName:
+        'E' +
+        etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
+        ' ' +
+        etterlevelseDokumentasjon?.title,
+      href: '/dokumentasjoner/' + params.id,
+    },
+
+    {
+      pathName: 'Personvernkonsekvensvurdering',
+      href: '/dokumentasjoner/' + params.id + '/pvkbehov/' + params.pvkdokumentId,
+    },
+  ]
 
   return (
-    <PageLayout
-      pageTitle="Pvk Dokument"
-      currentPage={currentPage}
-      breadcrumbPaths={breadcrumbPaths}
-      fullWidth
-    >
-      {etterlevelseDokumentasjon && pvkDokument && <div>WIP</div>}
-    </PageLayout>
+    <>
+      {!etterlevelseDokumentasjon && <Loader size="large" />}
+      {etterlevelseDokumentasjon && pvkDokument && (
+        <PageLayout
+          pageTitle="Pvk Dokument"
+          currentPage={currentPage}
+          breadcrumbPaths={breadcrumbPaths}
+          fullWidth
+        >
+          <div>WIP</div>
+        </PageLayout>
+      )}
+    </>
   )
 }
 

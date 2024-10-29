@@ -223,7 +223,9 @@ export const DokumentasjonPage = () => {
 
                       <Button
                         onClick={() => {
-                          navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id + '/pvkbehov')
+                          navigate(
+                            '/dokumentasjon/' + etterlevelseDokumentasjon.id + '/pvkbehov/ny'
+                          )
                         }}
                         size="small"
                         variant="secondary"
