@@ -4,11 +4,12 @@ import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
+import OversiktView from '../components/PvkDokument/OversiktView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { IBreadCrumbPath } from '../constants'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
-const StepTitle: string[] = [
+export const StepTitle: string[] = [
   'Oversikt',
   'Behandlingens art og omfang',
   'Innvolvering av eksterne',
@@ -51,9 +52,15 @@ export const PvkDokumentPage = () => {
     },
   ]
 
-  const handleStepChange = (step: number) => {
+  const updateUrlOnStepChange = (step: number) => {
     url.searchParams.set('steg', step.toString())
     window.history.pushState({}, '', url)
+  }
+
+  const updateTitleUrlAndStep = (step: number) => {
+    setActiveStep(step)
+    updateUrlOnStepChange(step)
+    setCurrentPage(StepTitle[step - 1])
   }
 
   return (
@@ -73,11 +80,7 @@ export const PvkDokumentPage = () => {
                 <Stepper
                   aria-labelledby="stepper-heading"
                   activeStep={activeStep}
-                  onStepChange={(value) => {
-                    setActiveStep(value)
-                    handleStepChange(value)
-                    setCurrentPage(StepTitle[value - 1])
-                  }}
+                  onStepChange={updateTitleUrlAndStep}
                   orientation="horizontal"
                 >
                   {StepTitle.map((title) => (
@@ -91,10 +94,17 @@ export const PvkDokumentPage = () => {
       )}
 
       {etterlevelseDokumentasjon && pvkDokument && (
-        <div className="flex flex-col w-full items-center">
+        <div className="flex flex-col w-full items-center mt-5">
           <div className="w-full max-w-7xl">
             <div className="px-2 pb-6">
-              {activeStep === 1 && <div>Oversikt</div>}
+              {activeStep === 1 && (
+                <OversiktView
+                  pvkDokument={pvkDokument}
+                  risikoscenarioTilknyttetKrav={[]}
+                  generelleRisikoscenario={[]}
+                  updateTitleUrlAndStep={updateTitleUrlAndStep}
+                />
+              )}
               {activeStep === 2 && <div>Behandlingens art og omfang</div>}
               {activeStep === 3 && <div>Innvolvering av eksterne</div>}
               {activeStep === 4 && <div>Risikoscenarioer tilknyttet etterlevelseskrav</div>}
