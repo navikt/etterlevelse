@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { env } from 'process'
 import { useEffect, useState } from 'react'
 import { EPvkDokumentStatus, IPageResponse, IPvkDokument } from '../constants'
+import { env } from '../util/env'
 
 export const getAllPvkDokument = async () => {
   const pageSize = 100
