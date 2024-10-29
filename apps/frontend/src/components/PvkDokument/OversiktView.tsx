@@ -37,7 +37,7 @@ export const OversiktView = (props: IProps) => {
           I PVK-en skal dere beskrive deres behandling av personopplysninger, og gjøre en
           risikoanalyse. Prosessen inkluderer:
         </BodyShort>
-        <List>
+        <List as="ol">
           <List.Item>
             Dere beskriver behandlingen slik at det er enklere å identifisere risikoer.
           </List.Item>
