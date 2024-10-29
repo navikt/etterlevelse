@@ -37,6 +37,7 @@ export const PvkBehovPage = () => {
   const [profilering, setProfilering] = useState<boolean>(false)
   const [automatiskBehandling, setAutomatiskBehandling] = useState<boolean>(false)
   const [saerligKategorier, setSaerligKategorier] = useState<boolean>(false)
+  const [checkedYttligereEgenskaper, setCheckedYttligereEgenskaper] = useState<string[]>([])
 
   const ytterligereEgenskaper: ICode[] = codelistUtils.getCodes(
     EListName.YTTERLIGERE_EGENSKAPER
@@ -84,11 +85,6 @@ export const PvkBehovPage = () => {
             personopplysninger som sannsynligvis vil medføre høy risiko for den registrertes
             rettigheter og friheter.
           </BodyLong>
-          <Alert inline variant="info">
-            Informasjon om behandlingene deres er basert på det vi har hentet fra
-            Behandlingskatalogen. Dere er selv ansvarlige for at informasjonen her er korrekt og
-            komplett, spesielt opplysningstyper og informasjon om profilering og automatisering.
-          </Alert>
 
           <div className="mt-3" id="behandlings-egenskaper">
             <Label>
@@ -107,10 +103,18 @@ export const PvkBehovPage = () => {
                 Disse egenskapene gir høy sannsynlighet for at dere må gjennomføre en PVK.
               </BodyShort>
             )}
+
+            <Alert inline variant="info">
+              Dere er selv ansvarlige for at informasjonen her er korrekt og komplett, spesielt
+              opplysningstyper og informasjon om profilering og automatisering.
+            </Alert>
           </div>
 
           <div className="mt-3" id="ytterlige-egenskaper">
-            <CheckboxGroup legend="Les igjennom og velg ytterligere egenskaper som gjelder for behandlingene deres.">
+            <CheckboxGroup
+              onChange={setCheckedYttligereEgenskaper}
+              legend="Les igjennom og velg ytterligere egenskaper som gjelder for behandlingene deres."
+            >
               {ytterligereEgenskaper.map((egenskap) => (
                 <Checkbox key={egenskap.code} value={egenskap.code}>
                   {egenskap.shortName}
@@ -132,14 +136,20 @@ export const PvkBehovPage = () => {
             )}
           </div>
 
-          <Alert variant="info">
-            Data som hentes og svarene dere har oppgitt gir en indikasjon på at det kan være behov
-            for gjennomføring av PVK. Likevel er dere ansvarlige for å vurdere behov.
-          </Alert>
+          {(checkedYttligereEgenskaper.length > 0 ||
+            profilering ||
+            automatiskBehandling ||
+            saerligKategorier) && (
+            <Alert variant="info">
+              Data som hentes og svarene dere har oppgitt gir en indikasjon på at det kan være behov
+              for gjennomføring av PVK. Likevel er dere ansvarlige for å vurdere behov.
+            </Alert>
+          )}
 
+          {/* // åpne outlook med emne Skal vi gjøre PVK? lenke til etterlevelsedokumentet. Epost: pvk@nav.no */}
           <ReadMore header="Lurer dere fortsatt på om det er behov for PVK?">
-            Personvernombudet (PVO) kan hjelpe dere å vurdere om dere skal gjøre en PVK. Send e-post
-            til PVO (må legge inn epost)
+            Personvernombudet (PVO) kan hjelpe dere å vurdere om dere skal gjøre en PVK.{' '}
+            <a href="mailto:pvk@nav.no">Send e-post til PVO(pvk@nav.no)</a>
           </ReadMore>
 
           <RadioGroup legend="Hvilken vurdering har dere kommet fram til?" onChange={() => {}}>
@@ -147,7 +157,7 @@ export const PvkBehovPage = () => {
             <Radio value="no">Vi skal ikke gjennomføre PVK</Radio>
           </RadioGroup>
 
-          <Textarea label="Beskriv hvordan dere har tenkt" />
+          <Textarea label="Begrunn vurderingen deres" />
         </div>
 
         {etterlevelseDokumentasjon && (
