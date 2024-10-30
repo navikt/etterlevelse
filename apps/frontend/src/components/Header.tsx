@@ -149,7 +149,7 @@ const LoggedInHeader = () => {
           [
             {
               label: 'Status i organisasjonen',
-              href: '//metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse',
+              href: '//metabase.ansatt.nav.no/dashboard/116-dashboard-for-etterlevelse',
               icon: <BarChartIcon area-label="" aria-hidden />,
             },
           ],

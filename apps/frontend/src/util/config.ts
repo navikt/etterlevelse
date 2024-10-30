@@ -13,7 +13,7 @@ export const teamInfoLink = 'https://teamkatalog.nav.no/team/264cebfa-ad46-4af9-
 export const markdownLink = 'https://guides.github.com/features/mastering-markdown/'
 export const behandlingsKatalogLink = 'https://behandlingskatalog.ansatt.nav.no/'
 export const statusPageLink =
-  'https://metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse'
+  'https://metabase.ansatt.nav.no/dashboard/116-dashboard-for-etterlevelse'
 export const VeilederEtterlevelseskrav =
   'https://navno.sharepoint.com/:w:/s/SttteforetterlevelseDIR/ERm9VrgVX4REo-ksMNyrlEUBK9RROHbqPhJXPq_h5wxgPA?e=kLeUO5'
 export const omEtterlevelsePaNavet =

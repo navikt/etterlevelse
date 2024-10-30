@@ -242,12 +242,12 @@ const ForstaKravene = () => (
 const StatusIOrganisasjonen = () => (
   <div className="w-full ml-2.5">
     <LinkPanel
-      href="https://metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse"
+      href="https://metabase.ansatt.nav.no/dashboard/116-dashboard-for-etterlevelse"
       onClick={() => {
         ampli.logEvent('navigere', {
           kilde: 'forside-panel',
           app: 'etterlevelse',
-          til: 'https://metabase.intern.nav.no/dashboard/117-dashboard-for-etterlevelse',
+          til: 'https://metabase.ansatt.nav.no/dashboard/117-dashboard-for-etterlevelse',
           fra: '/',
         })
       }}
