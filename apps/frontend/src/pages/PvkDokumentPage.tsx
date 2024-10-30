@@ -1,8 +1,9 @@
 import { Loader, Stepper } from '@navikt/ds-react'
-import { uniqBy } from 'lodash'
+import { uniq, uniqBy } from 'lodash'
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
+import { getDatabehandlerById } from '../api/BehandlingApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
 import BehandlingensArtOgOmfangView from '../components/PvkDokument/BehandlingensArtOgOmfangView'
@@ -36,6 +37,7 @@ export const PvkDokumentPage = () => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const [personkategorier, setPersonKategorier] = useState<string[]>([])
   const [pvkDokument] = usePvkDokument(params.pvkdokumentId)
+  const [databehandlere, setDatabehandlere] = useState<string[]>([])
   const [activeStep, setActiveStep] = useState<number>(
     currentStep !== null ? parseInt(currentStep) : 1
   )
@@ -74,8 +76,11 @@ export const PvkDokumentPage = () => {
       etterlevelseDokumentasjon.behandlinger.length > 0
     ) {
       const allePersonKategorier: IExternalCode[] = []
+      const alleDatabehandlerIds: string[] = []
+      const databehandlerList: string[] = []
 
       etterlevelseDokumentasjon.behandlinger.map((behandling) => {
+        alleDatabehandlerIds.push(...behandling.dataProsessering.dataBehandlerIds)
         behandling.policies.map((policy) => {
           allePersonKategorier.push(...policy.personKategorier)
         })
@@ -85,6 +90,17 @@ export const PvkDokumentPage = () => {
         (personkategori) => personkategori.shortName
       )
 
+      //MOVE LOGIC TO BACKEND WHEN GETTING LIST OF DATABEHANDLER NAMES
+      ;(async () => {
+        const uniqDatabehandlere = uniq(alleDatabehandlerIds)
+        uniqDatabehandlere.forEach(async (databehandlerId) => {
+          await getDatabehandlerById(databehandlerId).then((response) => {
+            databehandlerList.push(response.navn)
+          })
+        })
+      })()
+
+      setDatabehandlere(databehandlerList)
       setPersonKategorier(uniqPersonkategorier)
     }
   }, [etterlevelseDokumentasjon])
@@ -136,7 +152,10 @@ export const PvkDokumentPage = () => {
                 <BehandlingensArtOgOmfangView personkategorier={personkategorier} />
               )}
               {activeStep === 3 && (
-                <InnvolveringAvEksterneView personkategorier={personkategorier} />
+                <InnvolveringAvEksterneView
+                  personkategorier={personkategorier}
+                  databehandlere={databehandlere}
+                />
               )}
               {activeStep === 4 && <div>Risikoscenarioer tilknyttet etterlevelseskrav</div>}
               {activeStep === 5 && <div>Generelle risikoscenarioer</div>}

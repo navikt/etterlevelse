@@ -12,10 +12,12 @@ import {
 
 interface IProps {
   personkategorier: string[]
+  databehandlere: string[]
 }
 
 export const InnvolveringAvEksterneView = (props: IProps) => {
-  const { personkategorier } = props
+  const { personkategorier, databehandlere } = props
+
   return (
     <div>
       <Heading level="1" size="medium" className="mb-5">
@@ -76,10 +78,10 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
 
       <List className="mt-3" title="Representanter for databehandlere">
         <BodyShort>I Behandlingskatalogen står det at følgende databehandlere benyttes:</BodyShort>
-        {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
-        {personkategorier.length > 0 &&
-          personkategorier.map((personkategori) => (
-            <List.Item key={personkategori}>{personkategori}</List.Item>
+        {databehandlere.length === 0 && <List.Item>Ingen</List.Item>}
+        {databehandlere.length > 0 &&
+          databehandlere.map((databehandler) => (
+            <List.Item key={databehandler}>{databehandler}</List.Item>
           ))}
       </List>
 
