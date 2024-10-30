@@ -115,13 +115,20 @@ public class KravService extends DomainService<Krav> {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Krav save(KravRequest request) {
-        Validator.validate(request, storage::get)
-                .addValidations(this::validateName)
-                .addValidations(this::validateStatus)
-                .addValidations(this::validateKravNummerVersjon)
-                .addValidations(this::validateBegreper)
-                .ifErrorsThrowValidationException();
-
+        if(request.isNyKravVersjon()) {
+            Validator.validate(request, storage::get)
+                    .addValidations(this::validateStatus)
+                    .addValidations(this::validateKravNummerVersjon)
+                    .addValidations(this::validateBegreper)
+                    .ifErrorsThrowValidationException();
+        } else {
+            Validator.validate(request, storage::get)
+                    .addValidations(this::validateName)
+                    .addValidations(this::validateStatus)
+                    .addValidations(this::validateKravNummerVersjon)
+                    .addValidations(this::validateBegreper)
+                    .ifErrorsThrowValidationException();
+        }
 
         var krav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
 
@@ -188,10 +195,12 @@ public class KravService extends DomainService<Krav> {
 
     private void validateName(Validator<KravRequest> validator) {
         String name = validator.getItem().getNavn();
+
         if (name == null) {
             return;
         }
         var items = filter(storage.findByNameAndType(name, Krav.class), t -> !t.getId().equals(validator.getItem().getIdAsUUID()));
+
         if (!items.isEmpty()) {
             validator.addError(Fields.navn, Validator.ALREADY_EXISTS, "name '%s' already in use".formatted(name));
         }
@@ -213,7 +222,7 @@ public class KravService extends DomainService<Krav> {
         if (!req.isUpdate()) {
             return;
         }
-        Krav oldKrav = validator.<Krav>getDomainItem();
+        Krav oldKrav = validator.getDomainItem();
         if (req.getStatus() == KravStatus.UTKAST && oldKrav.getStatus() != KravStatus.UTKAST) {
             var etterlevelser = etterlevelseRepo.findByKravNummer(oldKrav.getKravNummer(), oldKrav.getKravVersjon());
             if (!etterlevelser.isEmpty()) {
