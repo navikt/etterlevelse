@@ -58,15 +58,14 @@ type TEditEtterlevelseDokumentasjonModalProps = {
 }
 
 export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentasjonModalProps) => {
-  const { title, etterlevelseDokumentasjon, isEditButton } = props
-  const navigate: NavigateFunction = useNavigate()
-  const [codelistUtils] = CodelistService()
+  const [codelistUtils, list] = CodelistService()
   const relevansOptions: IGetParsedOptionsProps[] = codelistUtils.getParsedOptions(
     EListName.RELEVANS
   )
-  const [selectedFilter, setSelectedFilter] = useState<number[]>(
-    relevansOptions.map((_relevans, index) => index)
-  )
+  const { title, etterlevelseDokumentasjon, isEditButton } = props
+  const navigate: NavigateFunction = useNavigate()
+
+  const [selectedFilter, setSelectedFilter] = useState<number[]>([])
 
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<IVirkemiddel>()
   const [dokumentRelasjon, setDokumentRelasjon] =
@@ -85,18 +84,18 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
     : 'Navngi det nye dokumentet ditt'
 
   useEffect(() => {
-    if (etterlevelseDokumentasjon?.irrelevansFor.length) {
-      const irrelevans = etterlevelseDokumentasjon.irrelevansFor.map((irrelevans: ICode) =>
-        relevansOptions.findIndex(
+    if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.irrelevansFor.length) {
+      const irrelevansIndex = etterlevelseDokumentasjon.irrelevansFor.map((irrelevans: ICode) => {
+        return relevansOptions.findIndex(
           (relevans: IGetParsedOptionsProps) => relevans.value === irrelevans.code
         )
-      )
+      })
       setSelectedFilter(
         relevansOptions
           .map((_relevans: IGetParsedOptionsProps, index: number) => {
             return index
           })
-          .filter((index: number) => !irrelevans.includes(index))
+          .filter((index: number) => !irrelevansIndex.includes(index))
       )
     } else {
       setSelectedFilter(
@@ -109,7 +108,9 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
     if (etterlevelseDokumentasjon?.virkemiddel?.navn) {
       setSelectedVirkemiddel(etterlevelseDokumentasjon.virkemiddel)
     }
+  }, [etterlevelseDokumentasjon, list])
 
+  useEffect(() => {
     ;(async () => {
       if (etterlevelseDokumentasjon) {
         await getDocumentRelationByToIdAndRelationTypeWithData(
@@ -246,20 +247,20 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                   ) : ( */}
 
           {!dokumentRelasjon && (
-            <FieldArray name="irrelevansFor">
+            <FieldArray name="test">
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className="h-full pt-5 w-[calc(100% - 1rem)]">
                   <CheckboxGroup
                     legend="Hvilke egenskaper gjelder for etterlevelsen?"
                     description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
                     value={selectedFilter}
-                    onChange={(selected: any[]) => {
+                    onChange={(selected: number[]) => {
                       setSelectedFilter(selected)
-
                       const irrelevansListe = relevansOptions.filter(
                         (_irrelevans: IGetParsedOptionsProps, index: number) =>
                           !selected.includes(index)
                       )
+
                       fieldArrayRenderProps.form.setFieldValue(
                         'irrelevansFor',
                         irrelevansListe.map((irrelevans: IGetParsedOptionsProps) =>
