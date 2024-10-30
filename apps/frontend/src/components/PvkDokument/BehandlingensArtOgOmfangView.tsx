@@ -31,8 +31,8 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
 
       <RadioGroup legend="Stemmer denne lista over personkategorier?" onChange={() => {}}>
         <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
-          <Radio value="yes">ja</Radio>
-          <Radio value="no">nei</Radio>
+          <Radio value="yes">Ja</Radio>
+          <Radio value="no">Nei</Radio>
         </Stack>
       </RadioGroup>
 
