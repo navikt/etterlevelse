@@ -132,7 +132,9 @@ export const PvkDokumentPage = () => {
                   updateTitleUrlAndStep={updateTitleUrlAndStep}
                 />
               )}
-              {activeStep === 2 && <BehandlingensArtOgOmfangView />}
+              {activeStep === 2 && (
+                <BehandlingensArtOgOmfangView personkategorier={personkategorier} />
+              )}
               {activeStep === 3 && (
                 <InnvolveringAvEksterneView personkategorier={personkategorier} />
               )}
