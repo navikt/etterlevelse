@@ -1,5 +1,6 @@
 import { Loader, Stepper } from '@navikt/ds-react'
-import { useState } from 'react'
+import { uniqBy } from 'lodash'
+import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
@@ -8,7 +9,7 @@ import BehandlingensArtOgOmfangView from '../components/PvkDokument/Behandlingen
 import InnvolveringAvEksterneView from '../components/PvkDokument/InnvolveringAvEksterneView'
 import OversiktView from '../components/PvkDokument/OversiktView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { IBreadCrumbPath } from '../constants'
+import { IBreadCrumbPath, IExternalCode } from '../constants'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const StepTitle: string[] = [
@@ -33,6 +34,7 @@ export const PvkDokumentPage = () => {
     currentStep !== null ? StepTitle[parseInt(currentStep) - 1] : 'Oversikt'
   )
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
+  const [personkategorier, setPersonKategorier] = useState<string[]>([])
   const [pvkDokument] = usePvkDokument(params.pvkdokumentId)
   const [activeStep, setActiveStep] = useState<number>(
     currentStep !== null ? parseInt(currentStep) : 1
@@ -64,6 +66,28 @@ export const PvkDokumentPage = () => {
     updateUrlOnStepChange(step)
     setCurrentPage(StepTitle[step - 1])
   }
+
+  useEffect(() => {
+    if (
+      etterlevelseDokumentasjon &&
+      etterlevelseDokumentasjon.behandlinger &&
+      etterlevelseDokumentasjon.behandlinger.length > 0
+    ) {
+      const allePersonKategorier: IExternalCode[] = []
+
+      etterlevelseDokumentasjon.behandlinger.map((behandling) => {
+        behandling.policies.map((policy) => {
+          allePersonKategorier.push(...policy.personKategorier)
+        })
+      })
+
+      const uniqPersonkategorier: string[] = uniqBy(allePersonKategorier, 'code').map(
+        (personkategori) => personkategori.shortName
+      )
+
+      setPersonKategorier(uniqPersonkategorier)
+    }
+  }, [etterlevelseDokumentasjon])
 
   return (
     <div id="content" role="main" className="flex flex-col w-full bg-white">
@@ -109,7 +133,9 @@ export const PvkDokumentPage = () => {
                 />
               )}
               {activeStep === 2 && <BehandlingensArtOgOmfangView />}
-              {activeStep === 3 && <InnvolveringAvEksterneView />}
+              {activeStep === 3 && (
+                <InnvolveringAvEksterneView personkategorier={personkategorier} />
+              )}
               {activeStep === 4 && <div>Risikoscenarioer tilknyttet etterlevelseskrav</div>}
               {activeStep === 5 && <div>Generelle risikoscenarioer</div>}
               {activeStep === 6 && <div>Send inn</div>}
