@@ -4,6 +4,8 @@ import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
+import BehandlingensArtOgOmfangView from '../components/PvkDokument/BehandlingensArtOgOmfangView'
+import InnvolveringAvEksterneView from '../components/PvkDokument/InnvolveringAvEksterneView'
 import OversiktView from '../components/PvkDokument/OversiktView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { IBreadCrumbPath } from '../constants'
@@ -106,8 +108,8 @@ export const PvkDokumentPage = () => {
                   updateTitleUrlAndStep={updateTitleUrlAndStep}
                 />
               )}
-              {activeStep === 2 && <div>Behandlingens art og omfang</div>}
-              {activeStep === 3 && <div>Innvolvering av eksterne</div>}
+              {activeStep === 2 && <BehandlingensArtOgOmfangView />}
+              {activeStep === 3 && <InnvolveringAvEksterneView />}
               {activeStep === 4 && <div>Risikoscenarioer tilknyttet etterlevelseskrav</div>}
               {activeStep === 5 && <div>Generelle risikoscenarioer</div>}
               {activeStep === 6 && <div>Send inn</div>}
