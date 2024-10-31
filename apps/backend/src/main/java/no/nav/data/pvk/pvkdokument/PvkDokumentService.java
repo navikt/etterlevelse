@@ -51,7 +51,6 @@ public class PvkDokumentService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public PvkDokument save(PvkDokument pvkDokument, boolean isUpdate) {
-
         if (!isUpdate) {
             var existingPvkDokument = getByEtterlevelseDokumentasjon(pvkDokument.getEtterlevelseDokumentId());
             if (existingPvkDokument.isPresent()) {

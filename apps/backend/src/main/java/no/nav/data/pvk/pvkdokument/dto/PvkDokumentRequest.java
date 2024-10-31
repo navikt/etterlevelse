@@ -92,7 +92,7 @@ public class PvkDokumentRequest implements RequestElement {
                 .build();
 
         return PvkDokument.builder()
-                .id(id != null ? UUID.fromString(id) : null)
+                .id(id != null && !id.isEmpty() ? UUID.fromString(id) : null)
                 .etterlevelseDokumentId(etterlevelseDokumentId)
                 .status(status != null ? status : PvkDokumentStatus.AKTIV)
                 .pvkDokumentData(pkvDokumentData)

@@ -80,6 +80,7 @@ public class PvkDokumentController {
     @PostMapping
     public ResponseEntity<PvkDokumentResponse> createPvkDokumente(@RequestBody PvkDokumentRequest request) {
         log.info("Create PvkDokument");
+
         var pvkDokument = pvkDokumentService.save(request.convertToPvkDokument(), request.isUpdate());
 
         return new ResponseEntity<>(PvkDokumentResponse.buildFrom(pvkDokument), HttpStatus.CREATED);
