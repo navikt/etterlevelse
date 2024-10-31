@@ -84,6 +84,14 @@ export const PvkBehovPage = () => {
     }
   }, [etterlevelseDokumentasjon])
 
+  useEffect(() => {
+    if (pvkdokument && pvkdokument.ytterligereEgenskaper.length > 0) {
+      setCheckedYttligereEgenskaper(
+        pvkdokument.ytterligereEgenskaper.map((egenskap) => egenskap.code)
+      )
+    }
+  }, [pvkdokument])
+
   const submit = async (pvkDokument: IPvkDokument) => {
     if (etterlevelseDokumentasjon) {
       const mutatedPvkDokument = {
@@ -138,7 +146,7 @@ export const PvkBehovPage = () => {
           <Loader size="large" />
         </div>
       )}
-      {!isEtterlevelseDokumentasjonLoading && etterlevelseDokumentasjon && (
+      {!isEtterlevelseDokumentasjonLoading && etterlevelseDokumentasjon && pvkdokument && (
         <PageLayout
           pageTitle="Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?"
           currentPage="Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?"
