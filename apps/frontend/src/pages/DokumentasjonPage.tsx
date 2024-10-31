@@ -230,6 +230,22 @@ export const DokumentasjonPage = () => {
                         />
                       )}
 
+                      <Button
+                        onClick={() => {
+                          navigate(
+                            '/dokumentasjon/' +
+                              etterlevelseDokumentasjon.id +
+                              '/behandlingens-livslop/'
+                          )
+                        }}
+                        size="small"
+                        variant="primary"
+                        className="whitespace-nowrap"
+                      >
+                        {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
+                        Tegn behandlingens livsløp
+                      </Button>
+
                       {(!pvkDokument || !pvkDokument.skalUtforePvk) && (
                         <Button
                           onClick={() => {
