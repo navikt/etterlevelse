@@ -76,7 +76,6 @@ export const PvkDokumentPage = () => {
     ) {
       const allePersonKategorier: IExternalCode[] = []
       const alleDatabehandlerIds: IDataBehandler[] = []
-      const databehandlerList: string[] = []
 
       etterlevelseDokumentasjon.behandlinger.map((behandling) => {
         alleDatabehandlerIds.push(...behandling.dataBehandlerList)
@@ -89,7 +88,11 @@ export const PvkDokumentPage = () => {
         (personkategori) => personkategori.shortName
       )
 
-      setDatabehandlere(databehandlerList)
+      const uniqDatabehandlere: string[] = uniqBy(alleDatabehandlerIds, 'id').map(
+        (databehandler) => databehandler.navn
+      )
+
+      setDatabehandlere(uniqDatabehandlere)
       setPersonKategorier(uniqPersonkategorier)
     }
   }, [etterlevelseDokumentasjon])
