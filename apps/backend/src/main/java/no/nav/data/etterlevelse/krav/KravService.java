@@ -115,20 +115,12 @@ public class KravService extends DomainService<Krav> {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Krav save(KravRequest request) {
-        if(request.isNyKravVersjon()) {
-            Validator.validate(request, storage::get)
-                    .addValidations(this::validateStatus)
-                    .addValidations(this::validateKravNummerVersjon)
-                    .addValidations(this::validateBegreper)
-                    .ifErrorsThrowValidationException();
-        } else {
             Validator.validate(request, storage::get)
                     .addValidations(this::validateName)
                     .addValidations(this::validateStatus)
                     .addValidations(this::validateKravNummerVersjon)
                     .addValidations(this::validateBegreper)
                     .ifErrorsThrowValidationException();
-        }
 
         var krav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
 
@@ -199,7 +191,9 @@ public class KravService extends DomainService<Krav> {
         if (name == null) {
             return;
         }
-        var items = filter(storage.findByNameAndType(name, Krav.class), t -> !t.getId().equals(validator.getItem().getIdAsUUID()));
+        var items = filter(storage.findByNameAndType(name, Krav.class),
+                t -> (!t.getId().equals(validator.getItem().getIdAsUUID())
+                || !t.getKravNummer().equals(validator.getItem().getKravNummer())));
 
         if (!items.isEmpty()) {
             validator.addError(Fields.navn, Validator.ALREADY_EXISTS, "name '%s' already in use".formatted(name));
