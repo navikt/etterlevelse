@@ -5,6 +5,7 @@ import { hotjar } from 'react-hotjar'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { getDocumentRelationByToIdAndRelationTypeWithData } from '../api/DocumentRelationApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
+import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
 import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
@@ -17,6 +18,7 @@ import {
   IDocumentRelationWithEtterlevelseDokumetajson,
   IEtterlevelseDokumentasjonStats,
   IPageResponse,
+  IPvkDokument,
   TKravQL,
 } from '../constants'
 import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDokumentasjonQuery'
@@ -45,6 +47,7 @@ export const DokumentasjonPage = () => {
   const [morDokumentRelasjon, setMorDokumentRelasjon] =
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
   const [relasjonLoading, setRelasjonLoading] = useState(false)
+  const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
 
   const {
     data: relevanteData,
@@ -120,6 +123,12 @@ export const DokumentasjonPage = () => {
           if (response.length > 0) setMorDokumentRelasjon(response[0])
           setRelasjonLoading(false)
         })
+
+        await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+          .then((response: IPvkDokument) => {
+            if (response) setPvkDokument(response)
+          })
+          .catch(() => undefined)
       })()
     }
   }, [etterlevelseDokumentasjon])
@@ -221,18 +230,44 @@ export const DokumentasjonPage = () => {
                         />
                       )}
 
-                      <Button
-                        onClick={() => {
-                          navigate(
-                            '/dokumentasjon/' + etterlevelseDokumentasjon.id + '/pvkbehov/ny'
-                          )
-                        }}
-                        size="small"
-                        variant="secondary"
-                        className="whitespace-nowrap"
-                      >
-                        Vurdér behov for PVK
-                      </Button>
+                      {(!pvkDokument || !pvkDokument.skalUtforePvk) && (
+                        <Button
+                          onClick={() => {
+                            let pvkBehovUrl =
+                              '/dokumentasjon/' + etterlevelseDokumentasjon.id + '/pvkbehov/'
+
+                            if (pvkDokument) {
+                              pvkBehovUrl += pvkDokument.id
+                            } else {
+                              pvkBehovUrl += 'ny'
+                            }
+                            navigate(pvkBehovUrl)
+                          }}
+                          size="small"
+                          variant="secondary"
+                          className="whitespace-nowrap"
+                        >
+                          {pvkDokument ? 'Revurdér behov for PVK' : 'Vurdér behov for PVK'}
+                        </Button>
+                      )}
+
+                      {pvkDokument && pvkDokument.skalUtforePvk && (
+                        <Button
+                          onClick={() => {
+                            navigate(
+                              '/dokumentasjon/' +
+                                etterlevelseDokumentasjon.id +
+                                '/pvkdokument/' +
+                                pvkDokument.id
+                            )
+                          }}
+                          size="small"
+                          variant="secondary"
+                          className="whitespace-nowrap"
+                        >
+                          Påbegynn PVK
+                        </Button>
+                      )}
                     </>
                   )}
                 </div>
