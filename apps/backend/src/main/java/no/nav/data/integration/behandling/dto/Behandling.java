@@ -35,8 +35,7 @@ public class Behandling {
     private List<TeamResponse> teamsData;
 
     private List<PolicyResponse> policies;
-
-    private DataProsessering dataProsessering;
+    private List<DataBehandler> dataBehandlerList;
 
     private Boolean automatiskBehandling;
     private Boolean profilering;

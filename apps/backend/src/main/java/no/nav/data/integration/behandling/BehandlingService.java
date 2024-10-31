@@ -9,6 +9,7 @@ import no.nav.data.integration.behandling.dto.DataBehandler;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,18 @@ public class BehandlingService {
         if (process == null) {
             return null;
         }
-        return process.convertToBehandling();
+
+        Behandling behandling = process.convertToBehandling();
+        List<DataBehandler> dataBehandlerList = new ArrayList<>();
+        if(!process.getDataProcessing().getProcessors().isEmpty()) {
+            process.getDataProcessing().getProcessors().forEach(databehandlerId -> {
+                        DataBehandler databehandler = getDataBehandler(databehandlerId);
+                        dataBehandlerList.add(databehandler);
+                    });
+        }
+        behandling.setDataBehandlerList(dataBehandlerList);
+
+        return behandling;
     }
 
     public List<Behandling> getBehandlingerForTeam(String teamId) {
