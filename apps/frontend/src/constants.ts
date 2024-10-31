@@ -321,7 +321,7 @@ export interface IBehandling {
   systemer: IExternalCode[]
   teams: string[]
   policies: IPolicy[]
-  dataProsessering: IDataBehandlerAvtale
+  dataBehandlerList: IDataBehandler[]
   automatiskBehandling: boolean
   profilering: boolean
 }
@@ -333,11 +333,6 @@ export interface IPolicy {
   opplysningsTypeNavn: string
   personKategorier: IExternalCode[]
   sensitivity: IExternalCode[]
-}
-
-export interface IDataBehandlerAvtale {
-  benyttesDataBehandlere: boolean
-  dataBehandlerIds: string[]
 }
 
 export interface IDataBehandler {

@@ -1,16 +1,15 @@
 import { Loader, Stepper } from '@navikt/ds-react'
-import { uniq, uniqBy } from 'lodash'
+import { uniqBy } from 'lodash'
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
-import { getDatabehandlerById } from '../api/BehandlingApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
 import BehandlingensArtOgOmfangView from '../components/PvkDokument/BehandlingensArtOgOmfangView'
 import InnvolveringAvEksterneView from '../components/PvkDokument/InnvolveringAvEksterneView'
 import OversiktView from '../components/PvkDokument/OversiktView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { IBreadCrumbPath, IExternalCode } from '../constants'
+import { IBreadCrumbPath, IDataBehandler, IExternalCode } from '../constants'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const StepTitle: string[] = [
@@ -76,11 +75,11 @@ export const PvkDokumentPage = () => {
       etterlevelseDokumentasjon.behandlinger.length > 0
     ) {
       const allePersonKategorier: IExternalCode[] = []
-      const alleDatabehandlerIds: string[] = []
+      const alleDatabehandlerIds: IDataBehandler[] = []
       const databehandlerList: string[] = []
 
       etterlevelseDokumentasjon.behandlinger.map((behandling) => {
-        alleDatabehandlerIds.push(...behandling.dataProsessering.dataBehandlerIds)
+        alleDatabehandlerIds.push(...behandling.dataBehandlerList)
         behandling.policies.map((policy) => {
           allePersonKategorier.push(...policy.personKategorier)
         })
@@ -89,16 +88,6 @@ export const PvkDokumentPage = () => {
       const uniqPersonkategorier: string[] = uniqBy(allePersonKategorier, 'code').map(
         (personkategori) => personkategori.shortName
       )
-
-      //MOVE LOGIC TO BACKEND WHEN GETTING LIST OF DATABEHANDLER NAMES
-      ;(async () => {
-        const uniqDatabehandlere = uniq(alleDatabehandlerIds)
-        uniqDatabehandlere.forEach(async (databehandlerId) => {
-          await getDatabehandlerById(databehandlerId).then((response) => {
-            databehandlerList.push(response.navn)
-          })
-        })
-      })()
 
       setDatabehandlere(databehandlerList)
       setPersonKategorier(uniqPersonkategorier)
