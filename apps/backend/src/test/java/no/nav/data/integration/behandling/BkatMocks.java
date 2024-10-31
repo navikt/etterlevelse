@@ -7,6 +7,7 @@ import no.nav.data.integration.behandling.dto.BkatDataProcessing;
 import no.nav.data.integration.behandling.dto.BkatInformationTypeShort;
 import no.nav.data.integration.behandling.dto.BkatPolicy;
 import no.nav.data.integration.behandling.dto.BkatProcess;
+import no.nav.data.integration.behandling.dto.BkatProcessor;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class BkatMocks {
 
     public static void mock() {
         stubFor(get("/bkat/process/74288ec1-c45d-4b9f-b799-33539981a690").willReturn(okJson(toJson(processMockResponse()))));
+        stubFor(get("/bkat/processor/processor_1").willReturn(okJson(toJson(processorMockResponse()))));
         stubFor(get("/bkat/process?pageNumber=0&pageSize=20").willReturn(okJson(toJson(new RestResponsePage<>(List.of(processMockResponse()))))));
         stubFor(post("/bkat/process/shortbyid").willReturn(okJson(toJson(new RestResponsePage<>(List.of(processMockResponse()))))));
         stubFor(get("/bkat/process/search/name?includePurpose=true").willReturn(okJson(toJson(new RestResponsePage<>(List.of(processMockResponse()))))));
@@ -27,6 +29,13 @@ public class BkatMocks {
 
     public static BkatProcess processMockResponse() {
         return processMockResponse("74288ec1-c45d-4b9f-b799-33539981a690", 101);
+    }
+
+    public static BkatProcessor processorMockResponse () {
+        return BkatProcessor.builder()
+                .id("processor_1")
+                .name("processor_1")
+                .build();
     }
 
     public static BkatProcess stubProcess(String id, int num) {

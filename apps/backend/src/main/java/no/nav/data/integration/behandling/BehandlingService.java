@@ -24,6 +24,19 @@ public class BehandlingService {
 
     private final BkatClient bkatClient;
 
+    private List<DataBehandler> getDatabehandlerForBehandling(BkatProcess process) {
+        List<DataBehandler> dataBehandlerList = new ArrayList<>();
+        if(!process.getDataProcessing().getProcessors().isEmpty()) {
+            process.getDataProcessing().getProcessors().forEach(databehandlerId -> {
+                DataBehandler databehandler = getDataBehandler(databehandlerId);
+                if(databehandler != null) {
+                    dataBehandlerList.add(databehandler);
+                }
+            });
+        }
+        return dataBehandlerList;
+    }
+
     public Behandling getBehandling(String id) {
         BkatProcess process = bkatClient.getProcess(id);
         if (process == null) {
@@ -31,15 +44,8 @@ public class BehandlingService {
         }
 
         Behandling behandling = process.convertToBehandling();
-        List<DataBehandler> dataBehandlerList = new ArrayList<>();
-        if(!process.getDataProcessing().getProcessors().isEmpty()) {
-            process.getDataProcessing().getProcessors().forEach(databehandlerId -> {
-                        DataBehandler databehandler = getDataBehandler(databehandlerId);
-                        dataBehandlerList.add(databehandler);
-                    });
-        }
+        List<DataBehandler> dataBehandlerList = getDatabehandlerForBehandling(process);
         behandling.setDataBehandlerList(dataBehandlerList);
-
         return behandling;
     }
 

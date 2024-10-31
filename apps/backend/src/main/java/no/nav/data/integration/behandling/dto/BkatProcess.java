@@ -48,6 +48,7 @@ public class BkatProcess {
                 .policies(policies.stream().map(BkatPolicy::convertToPolyResponse).toList())
                 .automatiskBehandling(automaticProcessing)
                 .profilering(profiling)
+                .dataBehandlerList(List.of())
                 .build();
     }
 }
