@@ -191,9 +191,11 @@ public class KravService extends DomainService<Krav> {
         if (name == null) {
             return;
         }
+
         var items = filter(storage.findByNameAndType(name, Krav.class),
                 t -> (!t.getId().equals(validator.getItem().getIdAsUUID())
-                || !t.getKravNummer().equals(validator.getItem().getKravNummer())));
+                && !t.getKravNummer().equals(validator.getItem().getKravNummer())
+                ));
 
         if (!items.isEmpty()) {
             validator.addError(Fields.navn, Validator.ALREADY_EXISTS, "name '%s' already in use".formatted(name));
