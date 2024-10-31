@@ -146,7 +146,6 @@ export const PvkBehovPage = () => {
             </Alert>
           )}
 
-          {/* // åpne outlook med emne Skal vi gjøre PVK? lenke til etterlevelsedokumentet. Epost: pvk@nav.no */}
           <ReadMore header="Lurer dere fortsatt på om det er behov for PVK?">
             Personvernombudet (PVO) kan hjelpe dere å vurdere om dere skal gjøre en PVK.{' '}
             <a href="mailto:pvk@nav.no">Send e-post til PVO(pvk@nav.no)</a>
