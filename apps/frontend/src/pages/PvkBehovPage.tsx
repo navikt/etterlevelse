@@ -151,7 +151,14 @@ export const PvkBehovPage = () => {
   }
 
   return (
-    <>
+    <PageLayout
+      pageTitle="Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?"
+      currentPage="Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?"
+      breadcrumbPaths={breadcrumbPaths}
+    >
+      <Heading level="1" size="medium" className="mb-5">
+        Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?
+      </Heading>
       {isEtterlevelseDokumentasjonLoading && (
         <div className="flex w-full justify-center">
           <Loader size="large" />
@@ -173,231 +180,220 @@ export const PvkBehovPage = () => {
             </div>
           </div>
         )}
-
       {!isEtterlevelseDokumentasjonLoading &&
         etterlevelseDokumentasjon &&
         pvkdokument &&
         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-          <PageLayout
-            pageTitle="Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?"
-            currentPage="Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?"
-            breadcrumbPaths={breadcrumbPaths}
-          >
-            <Heading level="1" size="medium" className="mb-5">
-              Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?
-            </Heading>
+          <div className="flex w-full">
+            <div className="pr-4 flex flex-1 flex-col gap-4 col-span-8">
+              <BodyLong>
+                En PVK skal gjennomføres når vi ønsker å starte eller endre en behandling av
+                personopplysninger som sannsynligvis vil medføre høy risiko for den registrertes
+                rettigheter og friheter.
+              </BodyLong>
 
-            <div className="flex w-full">
-              <div className="pr-4 flex flex-1 flex-col gap-4 col-span-8">
-                <BodyLong>
-                  En PVK skal gjennomføres når vi ønsker å starte eller endre en behandling av
-                  personopplysninger som sannsynligvis vil medføre høy risiko for den registrertes
-                  rettigheter og friheter.
-                </BodyLong>
-
-                <div className="mt-3" id="behandlings-egenskaper">
-                  <Label>
-                    I Behandlingskatalogen står det at behandlingene deres inneholder følgende
-                    egenskaper:
-                  </Label>
-                  <List>
-                    {!profilering && !automatiskBehandling && !saerligKategorier && (
-                      <List.Item>Ingen</List.Item>
-                    )}
-                    {profilering && <List.Item>Profilering</List.Item>}
-                    {automatiskBehandling && <List.Item>automatisert behandling</List.Item>}
-                    {saerligKategorier && (
-                      <List.Item>særlige kategorier av personopplysninger</List.Item>
-                    )}
-                  </List>
-                  {(profilering || automatiskBehandling || saerligKategorier) && (
-                    <BodyShort>
-                      Disse egenskapene gir høy sannsynlighet for at dere må gjennomføre en PVK.
-                    </BodyShort>
+              <div className="mt-3" id="behandlings-egenskaper">
+                <Label>
+                  I Behandlingskatalogen står det at behandlingene deres inneholder følgende
+                  egenskaper:
+                </Label>
+                <List>
+                  {!profilering && !automatiskBehandling && !saerligKategorier && (
+                    <List.Item>Ingen</List.Item>
                   )}
+                  {profilering && <List.Item>Profilering</List.Item>}
+                  {automatiskBehandling && <List.Item>automatisert behandling</List.Item>}
+                  {saerligKategorier && (
+                    <List.Item>særlige kategorier av personopplysninger</List.Item>
+                  )}
+                </List>
+                {(profilering || automatiskBehandling || saerligKategorier) && (
+                  <BodyShort>
+                    Disse egenskapene gir høy sannsynlighet for at dere må gjennomføre en PVK.
+                  </BodyShort>
+                )}
 
-                  <Alert inline variant="info">
-                    Dere er selv ansvarlige for at informasjonen her er korrekt og komplett,
-                    spesielt opplysningstyper og informasjon om profilering og automatisering.
-                  </Alert>
-                </div>
+                <Alert inline variant="info">
+                  Dere er selv ansvarlige for at informasjonen her er korrekt og komplett, spesielt
+                  opplysningstyper og informasjon om profilering og automatisering.
+                </Alert>
+              </div>
 
-                <Formik
-                  validateOnChange={false}
-                  validateOnBlur={false}
-                  onSubmit={submit}
-                  initialValues={mapPvkDokumentToFormValue(pvkdokument as IPvkDokument)}
-                >
-                  {({ values, submitForm }) => (
-                    <Form>
-                      <div className="mt-3" id="ytterlige-egenskaper">
-                        <FieldArray name="ytterligereEgenskaper">
-                          {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                            <CheckboxGroup
-                              legend="Les igjennom og velg ytterligere egenskaper som gjelder for behandlingene deres."
-                              value={checkedYttligereEgenskaper}
-                              onChange={(selected: string[]) => {
-                                setCheckedYttligereEgenskaper(selected)
+              <Formik
+                validateOnChange={false}
+                validateOnBlur={false}
+                onSubmit={submit}
+                initialValues={mapPvkDokumentToFormValue(pvkdokument as IPvkDokument)}
+              >
+                {({ values, submitForm }) => (
+                  <Form>
+                    <div className="mt-3" id="ytterlige-egenskaper">
+                      <FieldArray name="ytterligereEgenskaper">
+                        {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                          <CheckboxGroup
+                            legend="Les igjennom og velg ytterligere egenskaper som gjelder for behandlingene deres."
+                            value={checkedYttligereEgenskaper}
+                            onChange={(selected: string[]) => {
+                              setCheckedYttligereEgenskaper(selected)
 
-                                fieldArrayRenderProps.form.setFieldValue(
-                                  'ytterligereEgenskaper',
-                                  selected.map((egenskapId: string) =>
-                                    codelistUtils.getCode(
-                                      EListName.YTTERLIGERE_EGENSKAPER,
-                                      egenskapId
-                                    )
+                              fieldArrayRenderProps.form.setFieldValue(
+                                'ytterligereEgenskaper',
+                                selected.map((egenskapId: string) =>
+                                  codelistUtils.getCode(
+                                    EListName.YTTERLIGERE_EGENSKAPER,
+                                    egenskapId
                                   )
                                 )
-                              }}
-                            >
-                              {ytterligereEgenskaper.map((egenskap) => (
-                                <Checkbox key={egenskap.code} value={egenskap.code}>
-                                  {egenskap.shortName}
-                                </Checkbox>
-                              ))}
-                            </CheckboxGroup>
-                          )}
-                        </FieldArray>
-                        {etterlevelseDokumentasjon && (
-                          <BodyShort className="mt-3">
-                            Disse egenskapene blir enklere å vurdere hvis{' '}
-                            <Link
-                              href={
-                                '/dokumentasjon/' +
-                                etterlevelseDokumentasjon.id +
-                                '/behandlingens-livslop'
-                              }
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label="redigere etterlevelsesdokumentasjon"
-                            >
-                              dere har tegnet behandlingens livsløp (åpnes i nytt vindu).
-                            </Link>
-                          </BodyShort>
-                        )}
-                      </div>
-
-                      {(checkedYttligereEgenskaper.length > 0 ||
-                        profilering ||
-                        automatiskBehandling ||
-                        saerligKategorier) && (
-                        <Alert variant="info">
-                          Data som hentes og svarene dere har oppgitt gir en indikasjon på at det
-                          kan være behov for gjennomføring av PVK. Likevel er dere ansvarlige for å
-                          vurdere behov.
-                        </Alert>
-                      )}
-
-                      <ReadMore header="Lurer dere fortsatt på om det er behov for PVK?">
-                        Personvernombudet (PVO) kan hjelpe dere å vurdere om dere skal gjøre en PVK.{' '}
-                        <a href="mailto:pvk@nav.no">Send e-post til PVO(pvk@nav.no)</a>
-                      </ReadMore>
-
-                      <FieldWrapper marginBottom marginTop>
-                        <Field name="skalUtforePvk">
-                          {(fieldProps: FieldProps) => (
-                            <RadioGroup
-                              legend="Hvilken vurdering har dere kommet fram til?"
-                              value={fieldProps.field.value}
-                              onChange={(value) => {
-                                fieldProps.form.setFieldValue('skalUtforePvk', value)
-                              }}
-                            >
-                              <Radio value={true}>Vi skal gjennomføre en PVK</Radio>
-                              <Radio value={false}>Vi skal ikke gjennomføre PVK</Radio>
-                            </RadioGroup>
-                          )}
-                        </Field>
-                      </FieldWrapper>
-
-                      <TextAreaField
-                        rows={5}
-                        noPlaceholder
-                        label="Begrunn vurderingen deres"
-                        name="pvkVurderingsBegrunnelse"
-                      />
-
-                      <div className="flex items-center mt-5 gap-2">
-                        {values.skalUtforePvk && (
-                          <Button
-                            type="button"
-                            variant="primary"
-                            onClick={() => {
-                              setTilPvkDokument(true)
-                              submitForm()
+                              )
                             }}
                           >
-                            Lagre og gå til PVK
-                          </Button>
+                            {ytterligereEgenskaper.map((egenskap) => (
+                              <Checkbox key={egenskap.code} value={egenskap.code}>
+                                {egenskap.shortName}
+                              </Checkbox>
+                            ))}
+                          </CheckboxGroup>
                         )}
+                      </FieldArray>
+                      {etterlevelseDokumentasjon && (
+                        <BodyShort className="mt-3">
+                          Disse egenskapene blir enklere å vurdere hvis{' '}
+                          <Link
+                            href={
+                              '/dokumentasjon/' +
+                              etterlevelseDokumentasjon.id +
+                              '/behandlingens-livslop'
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="redigere etterlevelsesdokumentasjon"
+                          >
+                            dere har tegnet behandlingens livsløp (åpnes i nytt vindu).
+                          </Link>
+                        </BodyShort>
+                      )}
+                    </div>
 
+                    {(checkedYttligereEgenskaper.length > 0 ||
+                      profilering ||
+                      automatiskBehandling ||
+                      saerligKategorier) && (
+                      <Alert variant="info">
+                        Data som hentes og svarene dere har oppgitt gir en indikasjon på at det kan
+                        være behov for gjennomføring av PVK. Likevel er dere ansvarlige for å
+                        vurdere behov.
+                      </Alert>
+                    )}
+
+                    <ReadMore header="Lurer dere fortsatt på om det er behov for PVK?">
+                      Personvernombudet (PVO) kan hjelpe dere å vurdere om dere skal gjøre en PVK.{' '}
+                      <a href="mailto:pvk@nav.no">Send e-post til PVO(pvk@nav.no)</a>
+                    </ReadMore>
+
+                    <FieldWrapper marginBottom marginTop>
+                      <Field name="skalUtforePvk">
+                        {(fieldProps: FieldProps) => (
+                          <RadioGroup
+                            legend="Hvilken vurdering har dere kommet fram til?"
+                            value={fieldProps.field.value}
+                            onChange={(value) => {
+                              fieldProps.form.setFieldValue('skalUtforePvk', value)
+                            }}
+                          >
+                            <Radio value={true}>Vi skal gjennomføre en PVK</Radio>
+                            <Radio value={false}>Vi skal ikke gjennomføre PVK</Radio>
+                          </RadioGroup>
+                        )}
+                      </Field>
+                    </FieldWrapper>
+
+                    <TextAreaField
+                      rows={5}
+                      noPlaceholder
+                      label="Begrunn vurderingen deres"
+                      name="pvkVurderingsBegrunnelse"
+                    />
+
+                    <div className="flex items-center mt-5 gap-2">
+                      {values.skalUtforePvk && (
                         <Button
                           type="button"
-                          variant="secondary"
+                          variant="primary"
                           onClick={() => {
-                            setTilTemaOversikt(true)
+                            setTilPvkDokument(true)
                             submitForm()
                           }}
                         >
-                          Lagre og gå til Temaoversikt
+                          Lagre og gå til PVK
                         </Button>
+                      )}
 
-                        <Button
-                          type="button"
-                          variant="tertiary"
-                          onClick={() => {
-                            navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
-                          }}
-                        >
-                          Avbryt
-                        </Button>
-                      </div>
-                    </Form>
-                  )}
-                </Formik>
-              </div>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => {
+                          setTilTemaOversikt(true)
+                          submitForm()
+                        }}
+                      >
+                        Lagre og gå til Temaoversikt
+                      </Button>
 
-              {etterlevelseDokumentasjon && (
-                <div className="pl-4 border-l border-border-divider w-full max-w-md">
-                  <Heading level="2" size="small" className="mb-5">
-                    Hentet fra deres etterlevelsesdokumentasjon
-                  </Heading>
-
-                  <Label>
-                    Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:
-                  </Label>
-                  {etterlevelseDokumentasjon.behandlinger && (
-                    <List>
-                      {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
-                        <List.Item key={behandling.nummer}>
-                          <ExternalLink
-                            className="text-medium"
-                            href={`${env.pollyBaseUrl}process/${behandling.id}`}
-                          >
-                            {behandlingName(behandling)} (åpnes i nytt vindu)
-                          </ExternalLink>
-                        </List.Item>
-                      ))}
-                    </List>
-                  )}
-
-                  <BodyShort className="inline-block">
-                    Dere kan redigere hvilke behandinger som gjelder i{' '}
-                    <Link
-                      href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="redigere etterlevelsesdokumentasjon"
-                    >
-                      Dokumentegenskaper (åpnes i nytt vindu).
-                    </Link>
-                  </BodyShort>
-                </div>
-              )}
+                      <Button
+                        type="button"
+                        variant="tertiary"
+                        onClick={() => {
+                          navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
+                        }}
+                      >
+                        Avbryt
+                      </Button>
+                    </div>
+                  </Form>
+                )}
+              </Formik>
             </div>
-          </PageLayout>
+
+            {etterlevelseDokumentasjon && (
+              <div className="pl-4 border-l border-border-divider w-full max-w-md">
+                <Heading level="2" size="small" className="mb-5">
+                  Hentet fra deres etterlevelsesdokumentasjon
+                </Heading>
+
+                <Label>
+                  Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:
+                </Label>
+                {etterlevelseDokumentasjon.behandlinger && (
+                  <List>
+                    {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
+                      <List.Item key={behandling.nummer}>
+                        <ExternalLink
+                          className="text-medium"
+                          href={`${env.pollyBaseUrl}process/${behandling.id}`}
+                        >
+                          {behandlingName(behandling)} (åpnes i nytt vindu)
+                        </ExternalLink>
+                      </List.Item>
+                    ))}
+                  </List>
+                )}
+
+                <BodyShort className="inline-block">
+                  Dere kan redigere hvilke behandinger som gjelder i{' '}
+                  <Link
+                    href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="redigere etterlevelsesdokumentasjon"
+                  >
+                    Dokumentegenskaper (åpnes i nytt vindu).
+                  </Link>
+                </BodyShort>
+              </div>
+            )}
+          </div>
         )}
-    </>
+    </PageLayout>
   )
 }
 
