@@ -6,6 +6,7 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Stack,
   TextField,
   Textarea,
   ToggleGroup,
@@ -202,6 +203,7 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
 
 interface IPropsBoolField extends TLabelName, ITooltip {
   nullable?: boolean
+  horizontal?: boolean
 }
 
 const YES = 'YES',
@@ -211,7 +213,7 @@ const boolToRadio = (bool?: boolean) => (bool === undefined ? UNCLARIFIED : bool
 const radioToBool = (radio: string) => (radio === UNCLARIFIED ? undefined : radio === YES)
 
 export const BoolField = (props: IPropsBoolField) => {
-  const { label, name, nullable, tooltip } = props
+  const { label, name, nullable, tooltip, horizontal } = props
 
   return (
     <FieldWrapper>
@@ -227,9 +229,15 @@ export const BoolField = (props: IPropsBoolField) => {
               }}
               error={fieldProps.form.errors[name] && <FormError fieldName={name} />}
             >
-              <Radio value={YES}>Ja</Radio>
-              <Radio value={NO}>Nei</Radio>
-              {nullable && <Radio value={UNCLARIFIED}>Uavklart</Radio>}
+              <Stack
+                gap="0 6"
+                direction={{ xs: horizontal ? 'column' : 'row', sm: horizontal ? 'row' : 'column' }}
+                wrap={false}
+              >
+                <Radio value={YES}>Ja</Radio>
+                <Radio value={NO}>Nei</Radio>
+                {nullable && <Radio value={UNCLARIFIED}>Uavklart</Radio>}
+              </Stack>
             </RadioGroup>
           </div>
         )}

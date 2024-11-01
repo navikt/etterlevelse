@@ -1,13 +1,5 @@
-import {
-  Alert,
-  Heading,
-  List,
-  Radio,
-  RadioGroup,
-  ReadMore,
-  Stack,
-  Textarea,
-} from '@navikt/ds-react'
+import { Alert, Heading, List, ReadMore } from '@navikt/ds-react'
+import { BoolField, TextAreaField } from '../common/Inputs'
 
 interface IProps {
   personkategorier: string[]
@@ -29,12 +21,11 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
           ))}
       </List>
 
-      <RadioGroup legend="Stemmer denne lista over personkategorier?" onChange={() => {}}>
-        <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
-          <Radio value="yes">Ja</Radio>
-          <Radio value="no">Nei</Radio>
-        </Stack>
-      </RadioGroup>
+      <BoolField
+        label="Stemmer denne lista over personkategorier?"
+        name="stemmerPersonkategorier"
+        horizontal
+      />
 
       <Alert inline variant="warning" className="mt-3">
         Dere må oppdatere personkategori(er) i Behandlingskatalogen.
@@ -47,20 +38,32 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
         advice goes here]
       </ReadMore>
 
-      <Textarea
-        className="mt-3"
-        label="For hver av personkategoriene over, beskriv hvor mange personer dere behandler personopplysninger om."
-      />
+      <div className="mt-3">
+        <TextAreaField
+          rows={3}
+          noPlaceholder
+          label="For hver av personkategoriene over, beskriv hvor mange personer dere behandler personopplysninger om."
+          name="personkategoriAntallBeskrivelse"
+        />
+      </div>
 
-      <Textarea
-        className="mt-3"
-        label="Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av rollene, beskriv hvor mange som har tilgang."
-      />
+      <div className="mt-3">
+        <TextAreaField
+          rows={3}
+          noPlaceholder
+          label="Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av rollene, beskriv hvor mange som har tilgang."
+          name="tilgangsBeskrivelsePersonopplysningene"
+        />
+      </div>
 
-      <Textarea
-        className="mt-3"
-        label="Beskriv hvordan og hvor lenge personopplysningene skal lagres."
-      />
+      <div className="mt-3">
+        <TextAreaField
+          rows={3}
+          noPlaceholder
+          label="Beskriv hvordan og hvor lenge personopplysningene skal lagres."
+          name="lagringsBeskrivelsePersonopplysningene"
+        />
+      </div>
     </div>
   )
 }
