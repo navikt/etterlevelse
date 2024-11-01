@@ -1,4 +1,4 @@
-import { Loader, Stepper } from '@navikt/ds-react'
+import { Alert, Loader, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
@@ -10,6 +10,7 @@ import InnvolveringAvEksterneView from '../components/PvkDokument/InnvolveringAv
 import OversiktView from '../components/PvkDokument/OversiktView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { IBreadCrumbPath, IDataBehandler, IExternalCode } from '../constants'
+import { user } from '../services/User'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const StepTitle: string[] = [
@@ -104,58 +105,79 @@ export const PvkDokumentPage = () => {
         <title>Pvk Dokument</title>
       </Helmet>
       {!etterlevelseDokumentasjon && <Loader size="large" />}
-      {etterlevelseDokumentasjon && pvkDokument && (
-        <div className="h-48 bg-[#8269A21F] flex flex-col w-full items-center">
-          <div className="w-full max-w-7xl">
-            <div className="px-2 pb-6">
-              <CustomizedBreadcrumbs currentPage={currentPage} paths={breadcrumbPaths} />
 
-              <div>
-                <Stepper
-                  aria-labelledby="stepper-heading"
-                  activeStep={activeStep}
-                  onStepChange={updateTitleUrlAndStep}
-                  orientation="horizontal"
-                >
-                  {StepTitle.map((title) => (
-                    <Stepper.Step key={title}>{title}</Stepper.Step>
-                  ))}
-                </Stepper>
+      {etterlevelseDokumentasjon &&
+        !etterlevelseDokumentasjon.hasCurrentUserAccess &&
+        !user.isAdmin() && (
+          <div className="flex w-full justify-center mt-5">
+            <div className="flex items-center flex-col gap-5">
+              <Alert variant="warning">Du har ikke tilgang til å redigere på PVK dokument.</Alert>
+
+              <img
+                src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXMyNngxa2djMXdhOXdhcXQwNG9hbWJ3czZ4MW42bDY3ZXVkNHd3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zaCojXv2S01zy/giphy.webp"
+                alt="no no no"
+                width="400px"
+              />
+            </div>
+          </div>
+        )}
+
+      {etterlevelseDokumentasjon &&
+        pvkDokument &&
+        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+          <div className="h-48 bg-[#8269A21F] flex flex-col w-full items-center">
+            <div className="w-full max-w-7xl">
+              <div className="px-2 pb-6">
+                <CustomizedBreadcrumbs currentPage={currentPage} paths={breadcrumbPaths} />
+
+                <div>
+                  <Stepper
+                    aria-labelledby="stepper-heading"
+                    activeStep={activeStep}
+                    onStepChange={updateTitleUrlAndStep}
+                    orientation="horizontal"
+                  >
+                    {StepTitle.map((title) => (
+                      <Stepper.Step key={title}>{title}</Stepper.Step>
+                    ))}
+                  </Stepper>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {etterlevelseDokumentasjon && pvkDokument && (
-        <div className="flex flex-col w-full items-center mt-5">
-          <div className="w-full max-w-7xl">
-            <div className="px-2 pb-6">
-              {activeStep === 1 && (
-                <OversiktView
-                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                  pvkDokument={pvkDokument}
-                  risikoscenarioTilknyttetKrav={[]}
-                  generelleRisikoscenario={[]}
-                  updateTitleUrlAndStep={updateTitleUrlAndStep}
-                />
-              )}
-              {activeStep === 2 && (
-                <BehandlingensArtOgOmfangView personkategorier={personkategorier} />
-              )}
-              {activeStep === 3 && (
-                <InnvolveringAvEksterneView
-                  personkategorier={personkategorier}
-                  databehandlere={databehandlere}
-                />
-              )}
-              {activeStep === 4 && <div>Risikoscenarioer tilknyttet etterlevelseskrav</div>}
-              {activeStep === 5 && <div>Generelle risikoscenarioer</div>}
-              {activeStep === 6 && <div>Send inn</div>}
+      {etterlevelseDokumentasjon &&
+        pvkDokument &&
+        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+          <div className="flex flex-col w-full items-center mt-5">
+            <div className="w-full max-w-7xl">
+              <div className="px-2 pb-6">
+                {activeStep === 1 && (
+                  <OversiktView
+                    etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                    pvkDokument={pvkDokument}
+                    risikoscenarioTilknyttetKrav={[]}
+                    generelleRisikoscenario={[]}
+                    updateTitleUrlAndStep={updateTitleUrlAndStep}
+                  />
+                )}
+                {activeStep === 2 && (
+                  <BehandlingensArtOgOmfangView personkategorier={personkategorier} />
+                )}
+                {activeStep === 3 && (
+                  <InnvolveringAvEksterneView
+                    personkategorier={personkategorier}
+                    databehandlere={databehandlere}
+                  />
+                )}
+                {activeStep === 4 && <div>Risikoscenarioer tilknyttet etterlevelseskrav</div>}
+                {activeStep === 5 && <div>Generelle risikoscenarioer</div>}
+                {activeStep === 6 && <div>Send inn</div>}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   )
 }
