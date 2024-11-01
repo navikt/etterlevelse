@@ -1,5 +1,5 @@
-import { Alert, BodyShort, Heading, List, ReadMore, Textarea } from '@navikt/ds-react'
-import { BoolField } from '../common/Inputs'
+import { Alert, BodyShort, Heading, List, ReadMore } from '@navikt/ds-react'
+import { BoolField, TextAreaField } from '../common/Inputs'
 
 interface IProps {
   personkategorier: string[]
@@ -59,10 +59,14 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
         />
       </div>
 
-      <Textarea
-        className="mt-3"
-        label="Utdyp hvordan dere har involvert representant(er) for de registrerte"
-      />
+      <div className="mt-3">
+        <TextAreaField
+          rows={3}
+          noPlaceholder
+          label="Utdyp hvordan dere har involvert representant(er) for de registrerte"
+          name="representantInvolveringsBeskrivelse"
+        />
+      </div>
 
       <List className="mt-3" title="Representanter for databehandlere">
         <BodyShort>I Behandlingskatalogen står det at følgende databehandlere benyttes:</BodyShort>
@@ -109,10 +113,14 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
         />
       </div>
 
-      <Textarea
-        className="mt-3"
-        label="Utdyp hvordan dere har involvert representant(er) for databehandler(e)"
-      />
+      <div className="mt-3">
+        <TextAreaField
+          rows={3}
+          noPlaceholder
+          label="Utdyp hvordan dere har involvert representant(er) for databehandler(e"
+          name="dataBehandlerRepresentantInvolveringBeskrivelse"
+        />
+      </div>
     </div>
   )
 }
