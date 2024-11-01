@@ -232,62 +232,68 @@ export const DokumentasjonPage = () => {
                       )}
 
                       {/*WIP ikke klar til å vises i prod*/}
-                      {isDev && (
-                        <Button
-                          onClick={() => {
-                            navigate(
-                              '/dokumentasjon/' +
-                                etterlevelseDokumentasjon.id +
-                                '/behandlingens-livslop/'
-                            )
-                          }}
-                          size="small"
-                          variant="primary"
-                          className="whitespace-nowrap"
-                        >
-                          {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
-                          Tegn behandlingens livsløp
-                        </Button>
-                      )}
+                      {isDev &&
+                        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+                          <Button
+                            onClick={() => {
+                              navigate(
+                                '/dokumentasjon/' +
+                                  etterlevelseDokumentasjon.id +
+                                  '/behandlingens-livslop/'
+                              )
+                            }}
+                            size="small"
+                            variant="primary"
+                            className="whitespace-nowrap"
+                          >
+                            {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
+                            Tegn behandlingens livsløp
+                          </Button>
+                        )}
                       {/*WIP ikke klar til å vises i prod*/}
-                      {(!pvkDokument || !pvkDokument.skalUtforePvk) && isDev && (
-                        <Button
-                          onClick={() => {
-                            let pvkBehovUrl =
-                              '/dokumentasjon/' + etterlevelseDokumentasjon.id + '/pvkbehov/'
+                      {(!pvkDokument || !pvkDokument.skalUtforePvk) &&
+                        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
+                        isDev && (
+                          <Button
+                            onClick={() => {
+                              let pvkBehovUrl =
+                                '/dokumentasjon/' + etterlevelseDokumentasjon.id + '/pvkbehov/'
 
-                            if (pvkDokument) {
-                              pvkBehovUrl += pvkDokument.id
-                            } else {
-                              pvkBehovUrl += 'ny'
-                            }
-                            navigate(pvkBehovUrl)
-                          }}
-                          size="small"
-                          variant="secondary"
-                          className="whitespace-nowrap"
-                        >
-                          {pvkDokument ? 'Revurdér behov for PVK' : 'Vurdér behov for PVK'}
-                        </Button>
-                      )}
+                              if (pvkDokument) {
+                                pvkBehovUrl += pvkDokument.id
+                              } else {
+                                pvkBehovUrl += 'ny'
+                              }
+                              navigate(pvkBehovUrl)
+                            }}
+                            size="small"
+                            variant="secondary"
+                            className="whitespace-nowrap"
+                          >
+                            {pvkDokument ? 'Revurdér behov for PVK' : 'Vurdér behov for PVK'}
+                          </Button>
+                        )}
                       {/*WIP ikke klar til å vises i prod*/}
-                      {pvkDokument && pvkDokument.skalUtforePvk && isDev && (
-                        <Button
-                          onClick={() => {
-                            navigate(
-                              '/dokumentasjon/' +
-                                etterlevelseDokumentasjon.id +
-                                '/pvkdokument/' +
-                                pvkDokument.id
-                            )
-                          }}
-                          size="small"
-                          variant="secondary"
-                          className="whitespace-nowrap"
-                        >
-                          Påbegynn PVK
-                        </Button>
-                      )}
+                      {pvkDokument &&
+                        pvkDokument.skalUtforePvk &&
+                        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
+                        isDev && (
+                          <Button
+                            onClick={() => {
+                              navigate(
+                                '/dokumentasjon/' +
+                                  etterlevelseDokumentasjon.id +
+                                  '/pvkdokument/' +
+                                  pvkDokument.id
+                              )
+                            }}
+                            size="small"
+                            variant="secondary"
+                            className="whitespace-nowrap"
+                          >
+                            Påbegynn PVK
+                          </Button>
+                        )}
                     </>
                   )}
                 </div>
