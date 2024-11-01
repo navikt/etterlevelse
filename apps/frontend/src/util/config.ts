@@ -25,3 +25,6 @@ export const teamKatTeamLink = (id: string) => `${env.teamKatBaseUrl}team/${id}`
 export const behandlingLink = (id: string) => `${env.pollyBaseUrl}process/${id}`
 export const termUrl = (termId: string) =>
   `https://navno.sharepoint.com/sites/begreper/SitePages/Begrep.aspx?bid=${termId}`
+
+export const isDev: boolean =
+  window.location.origin.includes('.dev.') || window.location.origin.includes('localhost')

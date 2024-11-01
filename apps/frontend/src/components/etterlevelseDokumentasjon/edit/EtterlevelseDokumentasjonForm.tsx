@@ -40,6 +40,7 @@ import {
   IGetParsedOptionsProps,
 } from '../../../services/Codelist'
 import { user } from '../../../services/User'
+import { isDev } from '../../../util/config'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
@@ -74,9 +75,6 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
 
   const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
   const [customRisikoeierForDev, setCustomRisikoeierForDev] = useState<string>('')
-
-  const isDev: boolean =
-    window.location.origin.includes('.dev.') || window.location.origin.includes('localhost')
 
   const isForRedigering: boolean = window.location.pathname.includes('/edit')
 

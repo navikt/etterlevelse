@@ -25,6 +25,7 @@ import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDok
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { CodelistService, EListName, TTemaCode } from '../services/Codelist'
 import { user } from '../services/User'
+import { isDev } from '../util/config'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const DokumentasjonPage = () => {
@@ -230,23 +231,26 @@ export const DokumentasjonPage = () => {
                         />
                       )}
 
-                      <Button
-                        onClick={() => {
-                          navigate(
-                            '/dokumentasjon/' +
-                              etterlevelseDokumentasjon.id +
-                              '/behandlingens-livslop/'
-                          )
-                        }}
-                        size="small"
-                        variant="primary"
-                        className="whitespace-nowrap"
-                      >
-                        {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
-                        Tegn behandlingens livsløp
-                      </Button>
-
-                      {(!pvkDokument || !pvkDokument.skalUtforePvk) && (
+                      {/*WIP ikke klar til å vises i prod*/}
+                      {isDev && (
+                        <Button
+                          onClick={() => {
+                            navigate(
+                              '/dokumentasjon/' +
+                                etterlevelseDokumentasjon.id +
+                                '/behandlingens-livslop/'
+                            )
+                          }}
+                          size="small"
+                          variant="primary"
+                          className="whitespace-nowrap"
+                        >
+                          {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
+                          Tegn behandlingens livsløp
+                        </Button>
+                      )}
+                      {/*WIP ikke klar til å vises i prod*/}
+                      {(!pvkDokument || !pvkDokument.skalUtforePvk) && isDev && (
                         <Button
                           onClick={() => {
                             let pvkBehovUrl =
@@ -266,8 +270,8 @@ export const DokumentasjonPage = () => {
                           {pvkDokument ? 'Revurdér behov for PVK' : 'Vurdér behov for PVK'}
                         </Button>
                       )}
-
-                      {pvkDokument && pvkDokument.skalUtforePvk && (
+                      {/*WIP ikke klar til å vises i prod*/}
+                      {pvkDokument && pvkDokument.skalUtforePvk && isDev && (
                         <Button
                           onClick={() => {
                             navigate(
