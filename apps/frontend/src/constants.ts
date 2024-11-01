@@ -320,6 +320,24 @@ export interface IBehandling {
   linjer: IExternalCode[]
   systemer: IExternalCode[]
   teams: string[]
+  policies: IPolicy[]
+  dataBehandlerList: IDataBehandler[]
+  automatiskBehandling: boolean
+  profilering: boolean
+}
+
+export interface IPolicy {
+  behandlingId: string
+  id: string
+  opplysningsTypeId: string
+  opplysningsTypeNavn: string
+  personKategorier: IExternalCode[]
+  sensitivity: IExternalCode[]
+}
+
+export interface IDataBehandler {
+  id: string
+  navn: string
 }
 
 export interface IEtterlevelseDokumentasjon {

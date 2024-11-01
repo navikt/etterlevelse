@@ -12,6 +12,7 @@ import { KravCreatePage } from './components/krav/Edit/KravCreatePage'
 import { KravEditPage } from './components/krav/Edit/KravEditPage'
 import { KravNyVersjonPage } from './components/krav/Edit/KravNyVersjonPage'
 import ArkivAdminPage from './pages/ArkivAdminPage'
+import BehandlingensLivslopPage from './pages/BehandlingensLivslopPage'
 import DocumentRelationAdminPage from './pages/DocumentRelationAdminPage'
 import { DokumentasjonPage } from './pages/DokumentasjonPage'
 import EtterlevelseAdminPage from './pages/EtterlevelseAdminPage'
@@ -26,6 +27,8 @@ import { KravTablePage } from './pages/KravTablePage'
 import { MainPage } from './pages/MainPage'
 import { MyEtterlevelseDokumentasjonerPage } from './pages/MyEtterlevelseDokumentasjonerPage'
 import NotFound from './pages/NotFound'
+import PvkBehovPage from './pages/PvkBehovPage'
+import PvkDokumentPage from './pages/PvkDokumentPage'
 import QuestionAndAnswerLogPage from './pages/QuestionAndAnswerLogPage'
 import { RelasjonsOversikt } from './pages/RelasjonsOversikt'
 import { TemaPage } from './pages/TemaPage'
@@ -51,7 +54,6 @@ const AppRoutes = (): JSX.Element => {
   return (
     <Routes>
       <Route path="/" element={<MainPage />} caseSensitive={true} />
-
       <Route
         path="/kravliste/:tab"
         element={<PrivateRoute component={<KravListPage />} kraveierPage />}
@@ -62,16 +64,13 @@ const AppRoutes = (): JSX.Element => {
         element={<PrivateRoute component={<KravListPage />} kraveierPage />}
         caseSensitive={true}
       />
-
       <Route
         path="/kravliste/opprett"
         element={<PrivateRoute component={<KravCreatePage />} kraveierPage />}
         caseSensitive={true}
       />
-
       <Route path="/krav/:id" element={<KravPage />} caseSensitive={true} />
       <Route path="/krav/:kravNummer/:kravVersjon" element={<KravPage />} caseSensitive={true} />
-
       <Route
         path="/krav/redigering/:id"
         element={<PrivateRoute component={<KravEditPage />} kraveierPage />}
@@ -82,15 +81,12 @@ const AppRoutes = (): JSX.Element => {
         element={<PrivateRoute component={<KravNyVersjonPage />} kraveierPage />}
         caseSensitive={true}
       />
-
       <Route
         path="/virkemiddelliste/"
         element={<PrivateRoute component={<VirkemiddelListPage />} kraveierPage />}
         caseSensitive={true}
       />
-
       <Route path="/etterlevelse/:id" element={<EtterlevelsePage />} caseSensitive={true} />
-
       <Route
         path="/behandling/:id/:tema/:filter/krav/:kravNummer/:kravVersjon"
         element={<RedirectToEtterlevelseDokumentasjonPage />}
@@ -116,7 +112,6 @@ const AppRoutes = (): JSX.Element => {
         element={<RedirectToEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
-
       <Route
         path="/behandlinger/:tab"
         element={<RedirectToEtterlevelseDokumentasjonPage />}
@@ -127,7 +122,6 @@ const AppRoutes = (): JSX.Element => {
         element={<RedirectToEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
-
       <Route
         path="/dokumentasjon/:id/:tema/:filter/krav/:kravNummer/:kravVersjon"
         element={<EtterlevelseDokumentasjonPage />}
@@ -147,9 +141,24 @@ const AppRoutes = (): JSX.Element => {
         element={<MyEtterlevelseDokumentasjonerPage />}
         caseSensitive={true}
       />
-
       <Route path="/dokumentasjon/:id" element={<DokumentasjonPage />} caseSensitive={true} />
       <Route path="/dokumentasjon/:id/:tema" element={<DokumentasjonPage />} caseSensitive={true} />
+      <Route
+        path="/dokumentasjon/:id/behandlingens-livslop"
+        element={<BehandlingensLivslopPage />}
+        caseSensitive={true}
+      />
+
+      <Route
+        path="/dokumentasjon/:id/pvkbehov/:pvkdokumentId"
+        element={<PvkBehovPage />}
+        caseSensitive={true}
+      />
+      <Route
+        path="/dokumentasjon/:id/pvkdokument/:pvkdokumentId"
+        element={<PvkDokumentPage />}
+        caseSensitive={true}
+      />
       <Route
         path="/dokumentasjon/relasjon/:id/"
         element={<RelasjonsOversikt />}
@@ -160,7 +169,6 @@ const AppRoutes = (): JSX.Element => {
         element={<MyEtterlevelseDokumentasjonerPage />}
         caseSensitive={true}
       />
-
       <Route
         path="/dokumentasjon/edit/:id"
         element={<EditEtterlevelseDokumentasjonPage />}
@@ -171,7 +179,6 @@ const AppRoutes = (): JSX.Element => {
         element={<CreateEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
-
       <Route
         path="/dokumentasjon/gjenbruk/:id"
         element={<GjenbrukEtterlevelseDokumentasjonPage />}
@@ -188,7 +195,6 @@ const AppRoutes = (): JSX.Element => {
         element={<PrivateRoute component={<CodeListPage />} adminPage />}
         caseSensitive={true}
       />
-
       <Route
         path="/admin/audit/:id/:auditId"
         element={<PrivateRoute component={<AuditPage />} adminPage />}
@@ -204,7 +210,6 @@ const AppRoutes = (): JSX.Element => {
         element={<PrivateRoute component={<AuditPage />} adminPage />}
         caseSensitive={true}
       />
-
       <Route
         path="/admin/maillog"
         element={<PrivateRoute component={<MailLogPage />} adminPage />}
@@ -240,21 +245,16 @@ const AppRoutes = (): JSX.Element => {
         element={<PrivateRoute component={<VarselPage />} adminPage />}
         caseSensitive={true}
       />
-
       <Route
         path="/admin/dokumentrelasjon"
         element={<PrivateRoute component={<DocumentRelationAdminPage />} adminPage />}
         caseSensitive={true}
       />
-
       <Route path="/tema/:tema" element={<TemaPage />} caseSensitive={true} />
       <Route path="/tema/" element={<TemaOversiktPage />} caseSensitive={true} />
-
       <Route path="/help" element={<RedirectHelpUrl />} caseSensitive={true} />
       <Route path="/omstottetiletterlevelse" element={<FAQ />} caseSensitive={true} />
-
       <Route path="/forbidden" element={<Forbidden />} caseSensitive={true} />
-
       <Route path="*" element={<NotFound />} caseSensitive={true} />
     </Routes>
   )
