@@ -16,7 +16,17 @@ export const BehandlingensLivslopPage = () => {
     }>
   > = useParams<{ id?: string }>()
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
-  const breadcrumbPaths: IBreadCrumbPath[] = [dokumentasjonerBreadCrumbPath]
+  const breadcrumbPaths: IBreadCrumbPath[] = [
+    dokumentasjonerBreadCrumbPath,
+    {
+      href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,
+      pathName:
+        'E' +
+        etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
+        ' ' +
+        etterlevelseDokumentasjon?.title,
+    },
+  ]
 
   return (
     <PageLayout

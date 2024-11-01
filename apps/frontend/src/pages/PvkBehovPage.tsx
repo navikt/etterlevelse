@@ -47,7 +47,6 @@ export const PvkBehovPage = () => {
     useEtterlevelseDokumentasjon(params.id)
   const [pvkdokument, setPvkDokument] = usePvkDokument(params.pvkdokumentId)
   const [codelistUtils] = CodelistService()
-  const breadcrumbPaths: IBreadCrumbPath[] = [dokumentasjonerBreadCrumbPath]
   const [profilering, setProfilering] = useState<boolean>(false)
   const [automatiskBehandling, setAutomatiskBehandling] = useState<boolean>(false)
   const [saerligKategorier, setSaerligKategorier] = useState<boolean>(false)
@@ -55,6 +54,17 @@ export const PvkBehovPage = () => {
   const [tilTemaOversikt, setTilTemaOversikt] = useState<boolean>(false)
   const [tilPvkDokument, setTilPvkDokument] = useState<boolean>(false)
   const navigate = useNavigate()
+  const breadcrumbPaths: IBreadCrumbPath[] = [
+    dokumentasjonerBreadCrumbPath,
+    {
+      href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,
+      pathName:
+        'E' +
+        etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
+        ' ' +
+        etterlevelseDokumentasjon?.title,
+    },
+  ]
 
   const ytterligereEgenskaper: ICode[] = codelistUtils.getCodes(
     EListName.YTTERLIGERE_EGENSKAPER
