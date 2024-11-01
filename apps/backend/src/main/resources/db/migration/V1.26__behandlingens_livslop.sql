@@ -6,7 +6,6 @@ create table if not exists behandlingens_livslop
 (
     id                 uuid primary key,
     etterlevelse_dokumentasjon_id      text not null,
-    status             text not null,
     data               jsonb not null,
     version            integer not null,
     created_by         text not null,
