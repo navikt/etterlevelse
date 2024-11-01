@@ -1,14 +1,5 @@
-import {
-  Alert,
-  BodyShort,
-  Heading,
-  List,
-  Radio,
-  RadioGroup,
-  ReadMore,
-  Stack,
-  Textarea,
-} from '@navikt/ds-react'
+import { Alert, BodyShort, Heading, List, ReadMore, Textarea } from '@navikt/ds-react'
+import { BoolField } from '../common/Inputs'
 
 interface IProps {
   personkategorier: string[]
@@ -60,16 +51,13 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
         brosjyre på Navet]
       </ReadMore>
 
-      <RadioGroup
-        className="mt-3"
-        legend="Har dere involvert en representant for de registrerte?"
-        onChange={() => {}}
-      >
-        <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
-          <Radio value="yes">Ja</Radio>
-          <Radio value="no">Nei</Radio>
-        </Stack>
-      </RadioGroup>
+      <div className="mt-3">
+        <BoolField
+          label="Har dere involvert en representant for de registrerte?"
+          name="harInvolvertRepresentant"
+          horizontal
+        />
+      </div>
 
       <Textarea
         className="mt-3"
@@ -90,16 +78,13 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
         være til hjelp å se på behandlingens livsløp.
       </BodyShort>
 
-      <RadioGroup
-        className="mt-5"
-        legend="Stemmer denne lista over databehandlere? "
-        onChange={() => {}}
-      >
-        <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
-          <Radio value="yes">Ja</Radio>
-          <Radio value="no">Nei</Radio>
-        </Stack>
-      </RadioGroup>
+      <div className="mt-5">
+        <BoolField
+          label="Stemmer denne lista over databehandlere?"
+          name="stemmerDatabehandlere"
+          horizontal
+        />
+      </div>
 
       <Alert variant="warning" className="mt-3">
         Dere må oppdatere databehandlere i Behandlingskatalogen
@@ -116,16 +101,13 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
         Anskaffelse har egne sider som vi ev. kunne lenke til.
       </ReadMore>
 
-      <RadioGroup
-        className="mt-5"
-        legend="Har dere involvert en representant for databehandlere?"
-        onChange={() => {}}
-      >
-        <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
-          <Radio value="yes">Ja</Radio>
-          <Radio value="no">Nei</Radio>
-        </Stack>
-      </RadioGroup>
+      <div className="mt-5">
+        <BoolField
+          label="Har dere involvert en representant for databehandlere?"
+          name="harDatabehandlerRepresentantInvolvering"
+          horizontal
+        />
+      </div>
 
       <Textarea
         className="mt-3"
