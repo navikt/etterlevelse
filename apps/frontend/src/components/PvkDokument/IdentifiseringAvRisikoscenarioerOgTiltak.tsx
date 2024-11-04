@@ -5,7 +5,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = () => {
     <div>
       <ReadMore header="Vis behandlingens livsløp">Her kommer Behandlingens livsløp.</ReadMore>
 
-      <Heading level="1" size="medium" className="mb-5">
+      <Heading level="1" size="medium" className="my-5">
         Identifisering av risikoscenarioer og tiltak
       </Heading>
 
