@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { mapPvkDokumentToFormValue, updatePvkDokument, usePvkDokument } from '../api/PvkDokumentApi'
 import BehandlingensArtOgOmfangView from '../components/PvkDokument/BehandlingensArtOgOmfangView'
+import IdentifiseringAvRisikoscenarioerOgTiltak from '../components/PvkDokument/IdentifiseringAvRisikoscenarioerOgTiltak'
 import InnvolveringAvEksterneView from '../components/PvkDokument/InnvolveringAvEksterneView'
 import OversiktView from '../components/PvkDokument/OversiktView'
 import SendInnView from '../components/PvkDokument/SendInnView'
@@ -187,7 +188,7 @@ export const PvkDokumentPage = () => {
                           databehandlere={databehandlere}
                         />
                       )}
-                      {activeStep === 4 && <div>Risikoscenarioer tilknyttet etterlevelseskrav</div>}
+                      {activeStep === 4 && <IdentifiseringAvRisikoscenarioerOgTiltak />}
                       {activeStep === 5 && <div>Generelle risikoscenarioer</div>}
                       {activeStep === 6 && (
                         <SendInnView updateTitleUrlAndStep={updateTitleUrlAndStep} />
