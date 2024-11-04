@@ -18,9 +18,9 @@ export const StepTitle: string[] = [
   'Oversikt',
   'Behandlingens art og omfang',
   'Innvolvering av eksterne',
-  'Risikoscenarioer tilknyttet etterlevelseskrav',
-  'Generelle risikoscenarioer',
-  'Send inn',
+  'Identifisering av risikoscenarioer og tiltak',
+  'Oppsummering av alle risikoscenarioer og tiltak',
+  'Les og send inn',
 ]
 
 export const PvkDokumentPage = () => {
