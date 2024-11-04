@@ -117,7 +117,7 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
         <TextAreaField
           rows={3}
           noPlaceholder
-          label="Utdyp hvordan dere har involvert representant(er) for databehandler(e"
+          label="Utdyp hvordan dere har involvert representant(er) for databehandler(e)"
           name="dataBehandlerRepresentantInvolveringBeskrivelse"
         />
       </div>
