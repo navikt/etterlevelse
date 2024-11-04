@@ -522,19 +522,19 @@ export interface IPvkDokument {
   status: EPvkDokumentStatus
   behandlingensLivslopBeskrivelse: string
   ytterligereEgenskaper: ICode[]
-  skalUtforePvk: boolean
+  skalUtforePvk?: boolean
   pvkVurderingsBegrunnelse: string
 
-  stemmerPersonkategorier: boolean
+  stemmerPersonkategorier?: boolean
   personkategoriAntallBeskrivelse: string
   tilgangsBeskrivelsePersonopplysningene: string
   lagringsBeskrivelsePersonopplysningene: string
 
-  harInvolvertRepresentant: boolean
+  harInvolvertRepresentant?: boolean
   representantInvolveringsBeskrivelse: string
 
-  stemmerDatabehandlere: boolean
-  harDatabehandlerRepresentantInvolvering: boolean
+  stemmerDatabehandlere?: boolean
+  harDatabehandlerRepresentantInvolvering?: boolean
   dataBehandlerRepresentantInvolveringBeskrivelse: string
 }
 

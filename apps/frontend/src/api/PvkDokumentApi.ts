@@ -100,19 +100,30 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     status: pvkDokument.status || EPvkDokumentStatus.AKTIV,
     behandlingensLivslopBeskrivelse: pvkDokument.behandlingensLivslopBeskrivelse || '',
     ytterligereEgenskaper: pvkDokument.ytterligereEgenskaper || [],
-    skalUtforePvk: pvkDokument.skalUtforePvk || false,
+    skalUtforePvk: pvkDokument.skalUtforePvk === undefined ? undefined : pvkDokument.skalUtforePvk,
     pvkVurderingsBegrunnelse: pvkDokument.pvkVurderingsBegrunnelse || '',
-    stemmerPersonkategorier: pvkDokument.stemmerPersonkategorier || false,
+    stemmerPersonkategorier:
+      pvkDokument.stemmerPersonkategorier === undefined
+        ? undefined
+        : pvkDokument.stemmerPersonkategorier,
     personkategoriAntallBeskrivelse: pvkDokument.personkategoriAntallBeskrivelse || '',
     tilgangsBeskrivelsePersonopplysningene:
       pvkDokument.tilgangsBeskrivelsePersonopplysningene || '',
     lagringsBeskrivelsePersonopplysningene:
       pvkDokument.lagringsBeskrivelsePersonopplysningene || '',
-    harInvolvertRepresentant: pvkDokument.harInvolvertRepresentant || false,
+    harInvolvertRepresentant:
+      pvkDokument.harInvolvertRepresentant === undefined
+        ? undefined
+        : pvkDokument.harInvolvertRepresentant,
     representantInvolveringsBeskrivelse: pvkDokument.representantInvolveringsBeskrivelse || '',
-    stemmerDatabehandlere: pvkDokument.stemmerDatabehandlere || false,
+    stemmerDatabehandlere:
+      pvkDokument.stemmerDatabehandlere === undefined
+        ? undefined
+        : pvkDokument.stemmerDatabehandlere,
     harDatabehandlerRepresentantInvolvering:
-      pvkDokument.harDatabehandlerRepresentantInvolvering || false,
+      pvkDokument.harDatabehandlerRepresentantInvolvering === undefined
+        ? undefined
+        : pvkDokument.harDatabehandlerRepresentantInvolvering,
     dataBehandlerRepresentantInvolveringBeskrivelse:
       pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse || '',
   }
