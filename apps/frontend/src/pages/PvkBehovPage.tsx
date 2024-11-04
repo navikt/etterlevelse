@@ -278,14 +278,17 @@ export const PvkBehovPage = () => {
                       profilering ||
                       automatiskBehandling ||
                       saerligKategorier) && (
-                      <Alert variant="info">
+                      <Alert className="my-5" variant="info">
                         Data som hentes og svarene dere har oppgitt gir en indikasjon på at det kan
                         være behov for gjennomføring av PVK. Likevel er dere ansvarlige for å
                         vurdere behov.
                       </Alert>
                     )}
 
-                    <ReadMore header="Lurer dere fortsatt på om det er behov for PVK?">
+                    <ReadMore
+                      className="mt-10"
+                      header="Lurer dere fortsatt på om det er behov for PVK?"
+                    >
                       Personvernombudet (PVO) kan hjelpe dere å vurdere om dere skal gjøre en PVK.{' '}
                       <a href="mailto:pvk@nav.no">Send e-post til PVO(pvk@nav.no)</a>
                     </ReadMore>
