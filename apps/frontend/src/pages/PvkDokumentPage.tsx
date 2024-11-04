@@ -9,6 +9,7 @@ import { mapPvkDokumentToFormValue, updatePvkDokument, usePvkDokument } from '..
 import BehandlingensArtOgOmfangView from '../components/PvkDokument/BehandlingensArtOgOmfangView'
 import InnvolveringAvEksterneView from '../components/PvkDokument/InnvolveringAvEksterneView'
 import OversiktView from '../components/PvkDokument/OversiktView'
+import SendInnView from '../components/PvkDokument/SendInnView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { IBreadCrumbPath, IDataBehandler, IExternalCode, IPvkDokument } from '../constants'
 import { user } from '../services/User'
@@ -188,7 +189,9 @@ export const PvkDokumentPage = () => {
                       )}
                       {activeStep === 4 && <div>Risikoscenarioer tilknyttet etterlevelseskrav</div>}
                       {activeStep === 5 && <div>Generelle risikoscenarioer</div>}
-                      {activeStep === 6 && <div>Send inn</div>}
+                      {activeStep === 6 && (
+                        <SendInnView updateTitleUrlAndStep={updateTitleUrlAndStep} />
+                      )}
                     </div>
                   </div>
                 </div>
