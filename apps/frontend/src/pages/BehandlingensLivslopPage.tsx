@@ -10,13 +10,15 @@ import {
   ReadMore,
 } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
-import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { behandlingName } from '../api/BehandlingApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
+import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
 import { TextAreaField } from '../components/common/Inputs'
 import { ExternalLink } from '../components/common/RouteLink'
 import { PageLayout } from '../components/scaffold/Page'
-import { IBehandling, IBreadCrumbPath } from '../constants'
+import { IBehandling, IBreadCrumbPath, IPvkDokument } from '../constants'
 import behandlingensLivslop from '../resources/behandlingensLivslop.svg'
 import { user } from '../services/User'
 import { env } from '../util/env'
@@ -30,6 +32,10 @@ export const BehandlingensLivslopPage = () => {
   > = useParams<{ id?: string }>()
   const [etterlevelseDokumentasjon, , isEtterlevelseDokumentasjonLoading] =
     useEtterlevelseDokumentasjon(params.id)
+  const [tilPvkDokument, setTilPvkDokument] = useState<boolean>(false)
+  const [tilTemaOversikt, setTilTemaOversikt] = useState<boolean>(false)
+  const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
+  const navigate = useNavigate()
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
     {
@@ -41,6 +47,32 @@ export const BehandlingensLivslopPage = () => {
         etterlevelseDokumentasjon?.title,
     },
   ]
+
+  useEffect(() => {
+    if (etterlevelseDokumentasjon) {
+      getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+        .then((response) => {
+          if (response) {
+            setPvkDokument(response)
+          }
+        })
+        .catch(() => undefined)
+    }
+  }, [etterlevelseDokumentasjon])
+
+  const submit = (behandlingensLivslop: any) => {
+    console.debug(behandlingensLivslop)
+
+    if (tilPvkDokument) {
+      if (pvkDokument) {
+        navigate('/dokumentasjon/' + etterlevelseDokumentasjon?.id + '/pvkbehov/' + pvkDokument.id)
+      } else {
+        navigate('/dokumentasjon/' + etterlevelseDokumentasjon?.id + '/pvkbehov/ny')
+      }
+    } else if (tilTemaOversikt) {
+      navigate('/dokumentasjon/' + etterlevelseDokumentasjon?.id)
+    }
+  }
 
   return (
     <PageLayout
@@ -82,10 +114,10 @@ export const BehandlingensLivslopPage = () => {
             <Formik
               validateOnBlur={false}
               validateOnChange={false}
-              onSubmit={console.debug}
+              onSubmit={submit}
               initialValues={{}}
             >
-              {() => (
+              {({ submitForm }) => (
                 <Form>
                   <div className="pr-4 flex flex-1 flex-col gap-4 col-span-8">
                     <BodyShort>
@@ -161,11 +193,32 @@ export const BehandlingensLivslopPage = () => {
                       />
                     </div>
                     <div className="flex gap-2">
-                      <Button type="button">Lagre og vurdér behov for PVK</Button>
-                      <Button type="button" variant="secondary">
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          setTilPvkDokument(true)
+                          submitForm()
+                        }}
+                      >
+                        Lagre og vurdér behov for PVK
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => {
+                          setTilTemaOversikt(true)
+                          submitForm()
+                        }}
+                      >
                         Lagre og gå til Temaoversikt
                       </Button>
-                      <Button type="button" variant="tertiary">
+                      <Button
+                        type="button"
+                        variant="tertiary"
+                        onClick={() => {
+                          navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
+                        }}
+                      >
                         Avbryt
                       </Button>
                     </div>
