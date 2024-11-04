@@ -55,7 +55,7 @@ const CodeListPage = () => {
   if (!user.isAdmin() || !lists) {
     return (
       <div role="main">
-        <Loader size="large" />
+        <Loader size="large" className="flex justify-self-center" />
       </div>
     )
   }

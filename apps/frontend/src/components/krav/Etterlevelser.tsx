@@ -149,7 +149,7 @@ export const Etterlevelser = ({
           </div>
         </div>
       )}
-      {loading && <Loader size="large" />}
+      {loading && <Loader size="large" className="flex justify-self-center" />}
       {!loading && !etterlevelser.length && (
         <InfoBlock
           icon={sadFolderIcon}

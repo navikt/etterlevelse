@@ -72,7 +72,7 @@ export const AllVirkemiddel = ({
 
   return (
     <div className="w-full pt-6">
-      {loading && <Loader size="large" />}
+      {loading && <Loader size="large" className="flex justify-self-center" />}
 
       {!loading && (
         <div>

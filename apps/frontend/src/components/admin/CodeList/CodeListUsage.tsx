@@ -127,7 +127,7 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
       )}
 
       {usage && <UsageTable usage={usage} />}
-      {!usage && <Loader size="large" />}
+      {!usage && <Loader size="large" className="flex justify-self-center" />}
     </div>
   )
 }

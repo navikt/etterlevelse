@@ -9,7 +9,7 @@ export const Portrait = (props: { ident: string; size?: string }) => {
   const [error, setError] = useState<boolean>(false)
   return (
     <div className="w-11 h-11">
-      {loading && <Loader size={'large'} />}
+      {loading && <Loader size={'large'} className="flex justify-self-center" />}
       {!error ? (
         <img
           onLoad={() => {

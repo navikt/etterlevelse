@@ -92,7 +92,7 @@ export const TemaPanel = ({ tema, setNum, subContent }: ITemaPanelProps) => {
 
   return (
     <>
-      {loading && <Loader size="large" />}
+      {loading && <Loader size="large" className="flex justify-self-center" />}
       {!loading && (
         <LinkPanel className="mb-2" key={tema.code} href={'/tema/' + tema.code}>
           <div className="w-full flex items-center ">

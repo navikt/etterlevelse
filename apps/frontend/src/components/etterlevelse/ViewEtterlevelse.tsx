@@ -59,7 +59,7 @@ export const ViewEtterlevelse = ({
           etterlevelse.etterlevelseDokumentasjonId && (
             <div>
               {' '}
-              <Loader size={'large'} />
+              <Loader size={'large'} className="flex justify-self-center" />
               {etterlevelse.etterlevelseDokumentasjonId}
             </div>
           )

@@ -34,7 +34,7 @@ export const GjenbrukEtterlevelseDokumentasjonPage = () => {
     <>
       {isLoading && (
         <div className="flex w-full justify-center items-center mt-5">
-          <Loader size="3xlarge" />
+          <Loader size="3xlarge" className="flex justify-self-center" />
         </div>
       )}
       {!isLoading && etterlevelseDokumentasjon && (
