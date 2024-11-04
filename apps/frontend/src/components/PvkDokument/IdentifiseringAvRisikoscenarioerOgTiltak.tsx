@@ -1,4 +1,5 @@
-import { Alert, BodyShort, Button, Heading, List, ReadMore } from '@navikt/ds-react'
+import { Alert, BodyShort, Heading, List, ReadMore } from '@navikt/ds-react'
+import CreateRisikoscenario from './edit/CreateRisikoscenario'
 
 export const IdentifiseringAvRisikoscenarioerOgTiltak = () => {
   return (
@@ -46,9 +47,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = () => {
         Dere har ikke lagt inn noen generelle risikoscenarioer.
       </Alert>
 
-      <Button variant="secondary" className="mt-5">
-        Opprett nytt generelt risikoscenario
-      </Button>
+      <CreateRisikoscenario />
     </div>
   )
 }
