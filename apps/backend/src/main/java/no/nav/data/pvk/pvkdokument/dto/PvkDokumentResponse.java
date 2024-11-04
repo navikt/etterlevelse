@@ -15,8 +15,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static java.util.List.copyOf;
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -32,18 +30,18 @@ public class PvkDokumentResponse {
     private PvkDokumentStatus status;
 
     private List<CodelistResponse> ytterligereEgenskaper;
-    private boolean skalUtforePvk;
+    private Boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
-    private boolean stemmerPersonkategorier;
+    private Boolean stemmerPersonkategorier;
     private String personkategoriAntallBeskrivelse;
     private String tilgangsBeskrivelsePersonopplysningene;
     private String lagringsBeskrivelsePersonopplysningene;
 
-    private boolean harInvolvertRepresentant;
+    private Boolean harInvolvertRepresentant;
     private String representantInvolveringsBeskrivelse;
 
-    private boolean stemmerDatabehandlere;
-    private boolean harDatabehandlerRepresentantInvolvering;
+    private Boolean stemmerDatabehandlere;
+    private Boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
     private List<PvkDokumentFil> pvkDokumentFiler;
@@ -61,16 +59,16 @@ public class PvkDokumentResponse {
                 .status(pvkDokument.getStatus())
 
                 .ytterligereEgenskaper(pvkDokument.getPvkDokumentData().ytterligereEgenskaperAsCodes())
-                .skalUtforePvk(pvkDokument.getPvkDokumentData().isSkalUtforePvk())
+                .skalUtforePvk(pvkDokument.getPvkDokumentData().getSkalUtforePvk())
                 .pvkVurderingsBegrunnelse(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse())
                 .personkategoriAntallBeskrivelse(pvkDokument.getPvkDokumentData().getPersonkategoriAntallBeskrivelse())
                 .tilgangsBeskrivelsePersonopplysningene(pvkDokument.getPvkDokumentData().getTilgangsBeskrivelsePersonopplysningene())
                 .lagringsBeskrivelsePersonopplysningene(pvkDokument.getPvkDokumentData().getLagringsBeskrivelsePersonopplysningene())
-                .stemmerPersonkategorier(pvkDokument.getPvkDokumentData().isStemmerPersonkategorier())
-                .harInvolvertRepresentant(pvkDokument.getPvkDokumentData().isHarInvolvertRepresentant())
+                .stemmerPersonkategorier(pvkDokument.getPvkDokumentData().getStemmerPersonkategorier())
+                .harInvolvertRepresentant(pvkDokument.getPvkDokumentData().getHarInvolvertRepresentant())
                 .representantInvolveringsBeskrivelse(pvkDokument.getPvkDokumentData().getRepresentantInvolveringsBeskrivelse())
-                .stemmerDatabehandlere(pvkDokument.getPvkDokumentData().isStemmerDatabehandlere())
-                .harDatabehandlerRepresentantInvolvering(pvkDokument.getPvkDokumentData().isHarDatabehandlerRepresentantInvolvering())
+                .stemmerDatabehandlere(pvkDokument.getPvkDokumentData().getStemmerDatabehandlere())
+                .harDatabehandlerRepresentantInvolvering(pvkDokument.getPvkDokumentData().getHarDatabehandlerRepresentantInvolvering())
                 .dataBehandlerRepresentantInvolveringBeskrivelse(pvkDokument.getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse())
                 .build();
     }

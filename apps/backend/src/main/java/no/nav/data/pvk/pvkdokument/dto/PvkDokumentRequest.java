@@ -29,18 +29,18 @@ public class PvkDokumentRequest implements RequestElement {
     private PvkDokumentStatus status;
 
     private List<String> ytterligereEgenskaper;
-    private boolean skalUtforePvk;
+    private Boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
-    private boolean stemmerPersonkategorier;
+    private Boolean stemmerPersonkategorier;
     private String personkategoriAntallBeskrivelse;
     private String tilgangsBeskrivelsePersonopplysningene;
     private String lagringsBeskrivelsePersonopplysningene;
 
-    private boolean harInvolvertRepresentant;
+    private Boolean harInvolvertRepresentant;
     private String representantInvolveringsBeskrivelse;
 
-    private boolean stemmerDatabehandlere;
-    private boolean harDatabehandlerRepresentantInvolvering;
+    private Boolean stemmerDatabehandlere;
+    private Boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
     private List<PvkDokumentFil> pvkDokumentFiler;
