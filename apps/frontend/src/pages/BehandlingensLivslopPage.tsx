@@ -15,6 +15,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { behandlingName } from '../api/BehandlingApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
+import { CustomFileUpload } from '../components/behandlingensLivlop/CustomFileUpload'
 import { TextAreaField } from '../components/common/Inputs'
 import { ExternalLink } from '../components/common/RouteLink'
 import { PageLayout } from '../components/scaffold/Page'
@@ -183,6 +184,8 @@ export const BehandlingensLivslopPage = () => {
                       Dere kan velge å lage og laste opp flere tegninger hvis det gir bedre
                       oversikt.
                     </BodyShort>
+
+                    <CustomFileUpload />
 
                     <div className="mt-3">
                       <TextAreaField
