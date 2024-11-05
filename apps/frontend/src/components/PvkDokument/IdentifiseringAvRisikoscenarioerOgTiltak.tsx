@@ -1,5 +1,6 @@
 import { Alert, BodyShort, Heading, List, ReadMore } from '@navikt/ds-react'
 import CreateRisikoscenario from './edit/CreateRisikoscenario'
+import CreateRisikoscenarioTiltak from './edit/CreateRisikoscenarioTiltak'
 
 export const IdentifiseringAvRisikoscenarioerOgTiltak = () => {
   return (
@@ -42,10 +43,12 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = () => {
         Generelle risikoscenarioer
       </Heading>
 
-      {/* bare hvis vis det ikke finnes risikoscenarioer */}
-      <Alert variant="info" className="mt-10">
+      {/* bare vis alert hvis det ikke finnes risikoscenarioer WIP*/}
+      {/* <Alert variant="info" className="mt-10">
         Dere har ikke lagt inn noen generelle risikoscenarioer.
-      </Alert>
+      </Alert> */}
+
+      <CreateRisikoscenarioTiltak />
 
       <CreateRisikoscenario />
     </div>
