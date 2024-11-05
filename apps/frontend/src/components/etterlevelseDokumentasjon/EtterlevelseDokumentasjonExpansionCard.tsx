@@ -3,7 +3,6 @@ import { BodyShort, Button, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
 import { CodelistService, EListName, ICode, IGetParsedOptionsProps } from '../../services/Codelist'
-import { user } from '../../services/User'
 import { BehandlingList } from '../behandling/BehandlingList'
 import { Markdown } from '../common/Markdown'
 import { Teams } from '../common/TeamName'
@@ -145,7 +144,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                 <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />
               )}
 
-              {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
+              {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
                 <>
                   <div className="mt-5">
                     <Button
