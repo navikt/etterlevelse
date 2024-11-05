@@ -24,7 +24,7 @@ export const CreateRisikoscenarioTiltak = () => {
   return (
     <Accordion className="mt-5">
       <Accordion.Item>
-        <Accordion.Header>Navnet til ditt risikoscenario WIP</Accordion.Header>
+        <Accordion.Header>Risikoscenario eksempel 1 (WIP)</Accordion.Header>
         <Accordion.Content>
           {/* This is just sample text: WIP*/}
           <div>
