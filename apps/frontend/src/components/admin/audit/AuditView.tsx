@@ -75,7 +75,7 @@ export const AuditView = (props: TAuditViewProps) => {
 
   return (
     <Box background="surface-default" padding="4">
-      {loading && <Loader size="large" />}
+      {loading && <Loader size="large" className="flex justify-self-center" />}
       {!loading && auditLog && !logFound && <Label>{intl.auditNotFound}</Label>}
 
       {logFound && (

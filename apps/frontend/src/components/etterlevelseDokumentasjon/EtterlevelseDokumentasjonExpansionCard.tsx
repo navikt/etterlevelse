@@ -1,9 +1,8 @@
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
-import { useNavigate } from 'react-router-dom'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
-import { EListName, ICode, codelist } from '../../services/Codelist'
-import { user } from '../../services/User'
+import { CodelistService, EListName, ICode, IGetParsedOptionsProps } from '../../services/Codelist'
 import { BehandlingList } from '../behandling/BehandlingList'
 import { Markdown } from '../common/Markdown'
 import { Teams } from '../common/TeamName'
@@ -16,9 +15,12 @@ interface IProps {
 
 export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
   const { etterlevelseDokumentasjon, relasjonLoading } = props
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
+  const [codelistUtils] = CodelistService()
 
-  const relevansCodeList = codelist.getParsedOptions(EListName.RELEVANS)
+  const relevansCodeList: IGetParsedOptionsProps[] = codelistUtils.getParsedOptions(
+    EListName.RELEVANS
+  )
 
   const { behandlerPersonopplysninger, behandlingIds, behandlinger, teams, irrelevansFor } =
     etterlevelseDokumentasjon
@@ -27,12 +29,14 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
     const fargeForFemAlternativ = ['alt1', 'alt2', 'alt3', 'alt1', 'alt2'] as const
     const ingenEgenskaper: boolean = irrelevans.length === relevansCodeList.length
 
-    const relevans = relevansCodeList.filter((relevans) => {
-      const hentIder: string[] = irrelevans.map((irrelevans: ICode) => irrelevans.code)
-      const isIdPresent: boolean = hentIder.includes(relevans.value)
+    const relevans: IGetParsedOptionsProps[] = relevansCodeList.filter(
+      (relevans: IGetParsedOptionsProps) => {
+        const hentIder: string[] = irrelevans.map((irrelevans: ICode) => irrelevans.code)
+        const isIdPresent: boolean = hentIder.includes(relevans.value)
 
-      return !isIdPresent
-    })
+        return !isIdPresent
+      }
+    )
 
     return (
       <div>
@@ -45,7 +49,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
 
         {irrelevans && (
           <div className="flex flex-wrap gap-2">
-            {relevans.map((relevans, index) => (
+            {relevans.map((relevans: IGetParsedOptionsProps, index: number) => (
               <div key={relevans.value} className="flex items-center gap-1">
                 <Tag variant={fargeForFemAlternativ[index]} size="small">
                   <BodyShort size="small">{relevans.label}</BodyShort>
@@ -57,7 +61,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
 
         {!irrelevans && (
           <div className="flex flex-wrap gap-2">
-            {relevansCodeList.map((relevans, index) => (
+            {relevansCodeList.map((relevans: IGetParsedOptionsProps, index: number) => (
               <div key={relevans.value} className="flex items-center gap-1">
                 <Tag variant={fargeForFemAlternativ[index]} size="small">
                   <BodyShort size="small">{relevans.label}</BodyShort>
@@ -140,7 +144,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                 <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />
               )}
 
-              {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && user.isAdmin() && (
+              {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
                 <>
                   <div className="mt-5">
                     <Button

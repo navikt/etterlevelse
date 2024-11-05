@@ -9,22 +9,23 @@ import {
   Table,
 } from '@navikt/ds-react'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import { PageLayout } from '../components/scaffold/Page'
-import { IKrav } from '../constants'
+import { IKrav, TKravQL } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, codelist } from '../services/Codelist'
+import { CodelistService, EListName } from '../services/Codelist'
 import { handleSort } from '../util/handleTableSort'
 import { kravStatus } from './KravPage'
 
 export const KravTablePage = () => {
+  const [codelistUtils] = CodelistService()
   const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
 
-  let sortedData = tableContent
+  let sortedData: IKrav[] = tableContent
 
   const comparator = (a: IKrav, b: IKrav, orderBy: string) => {
     switch (orderBy) {
@@ -35,8 +36,8 @@ export const KravTablePage = () => {
       case 'avdeling':
         return (a.underavdeling?.shortName || '').localeCompare(b.underavdeling?.shortName || '')
       case 'tema':
-        return (codelist.getCode(EListName.TEMA, a.tema)?.shortName || '').localeCompare(
-          codelist.getCode(EListName.TEMA, b.tema)?.shortName || ''
+        return (codelistUtils.getCode(EListName.TEMA, a.tema)?.shortName || '').localeCompare(
+          codelistUtils.getCode(EListName.TEMA, b.tema)?.shortName || ''
         )
       case 'status':
         return (a.status || '').localeCompare(b.status || '')
@@ -50,7 +51,7 @@ export const KravTablePage = () => {
   }
 
   sortedData = sortedData
-    .sort((a, b) => {
+    .sort((a: IKrav, b: IKrav) => {
       if (sort) {
         return sort.direction === 'ascending'
           ? comparator(b, a, sort.orderBy)
@@ -62,8 +63,8 @@ export const KravTablePage = () => {
 
   useEffect(() => {
     ;(async () => {
-      const kraver = await getAllKrav()
-      const mappedKraver = kraver.map((krav) => kravMapToFormVal(krav))
+      const kraver: IKrav[] = await getAllKrav()
+      const mappedKraver: TKravQL[] = kraver.map((krav: IKrav) => kravMapToFormVal(krav))
       setTableContent(mappedKraver)
       ampli.logEvent('sidevisning', {
         side: 'Krav admin side',
@@ -85,7 +86,7 @@ export const KravTablePage = () => {
             size="large"
             zebraStripes
             sort={sort}
-            onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
+            onSortChange={(sortKey?: string) => handleSort(sort, setSort, sortKey)}
           >
             <Table.Header>
               <Table.Row>
@@ -110,40 +111,40 @@ export const KravTablePage = () => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {sortedData.map((krav: IKrav) => {
-                return (
-                  <Table.Row key={krav.id}>
-                    <Table.HeaderCell className="w-[6%] text-end" scope="row">
-                      {krav.kravNummer}.{krav.kravVersjon}
-                    </Table.HeaderCell>
-                    <Table.DataCell className="w-[25%]">
-                      <Link href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</Link>
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {krav.underavdeling && krav.underavdeling.shortName}
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {' '}
-                      {krav.tema && (
-                        <Link href={`/tema/${krav.tema}`}>
-                          {codelist.getCode(EListName.TEMA, krav.tema)?.shortName}
-                        </Link>
-                      )}
-                    </Table.DataCell>
-                    <Table.DataCell>{kravStatus(krav.status)}</Table.DataCell>
-                    <Table.DataCell className="w-[10%] text-end">
-                      {moment(krav.changeStamp.lastModifiedDate).format('ll')}
-                    </Table.DataCell>
-                  </Table.Row>
-                )
-              })}
+              {sortedData.map((krav: IKrav) => (
+                <Table.Row key={krav.id}>
+                  <Table.HeaderCell className="w-[6%] text-end" scope="row">
+                    {krav.kravNummer}.{krav.kravVersjon}
+                  </Table.HeaderCell>
+                  <Table.DataCell className="w-[25%]">
+                    <Link href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</Link>
+                  </Table.DataCell>
+                  <Table.DataCell>
+                    {krav.underavdeling && krav.underavdeling.shortName}
+                  </Table.DataCell>
+                  <Table.DataCell>
+                    {' '}
+                    {krav.tema && (
+                      <Link href={`/tema/${krav.tema}`}>
+                        {codelistUtils.getCode(EListName.TEMA, krav.tema)?.shortName}
+                      </Link>
+                    )}
+                  </Table.DataCell>
+                  <Table.DataCell>{kravStatus(krav.status)}</Table.DataCell>
+                  <Table.DataCell className="w-[10%] text-end">
+                    {moment(krav.changeStamp.lastModifiedDate).format('ll')}
+                  </Table.DataCell>
+                </Table.Row>
+              ))}
             </Table.Body>
           </Table>
           <div className="flex w-full justify-center items-center mt-3">
             <Select
               label="Antall rader:"
               value={rowsPerPage}
-              onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+              onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+                setRowsPerPage(parseInt(event.target.value))
+              }
               size="small"
             >
               <option value="5">5</option>

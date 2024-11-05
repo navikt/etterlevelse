@@ -24,10 +24,9 @@ public interface EtterlevelseDokumentasjonRepo  extends JpaRepository<GenericSto
 
     @Query(value = """
             select 
-             data ->> 'kravNummer' as kravNummer, data ->> 'kravVersjon' as kravVersjon
-             from generic_storage
-             where type = 'Etterlevelse'
-             and data ->> 'etterlevelseDokumentasjonId' = :etterlevelseDokId
+             krav_nummer as kravNummer, krav_versjon as kravVersjon
+             from etterlevelse
+             where etterlevelse_dokumentasjon_id = :etterlevelseDokId
             """, nativeQuery = true)
     List<KravId> findKravIdsForEtterlevelseDokumentasjon(String etterlevelseDokId);
 

@@ -45,7 +45,9 @@ export const SistRedigertKrav = () => {
 
   return (
     <div>
-      {loading && data && data.krav?.numberOfElements === 0 && <Loader size={'large'} />}
+      {loading && data && data.krav?.numberOfElements === 0 && (
+        <Loader size={'large'} className="flex justify-self-center" />
+      )}
 
       {error && <Alert variant={'error'}>{JSON.stringify(error, null, 2)}</Alert>}
 

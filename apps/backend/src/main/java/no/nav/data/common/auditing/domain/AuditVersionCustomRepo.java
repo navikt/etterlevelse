@@ -20,8 +20,8 @@ public class AuditVersionCustomRepo {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final AuditVersionRepository repository;
 
-    @Transactional()
-    public List<AuditVersion> findLatestByTableIdAndTimeStamp(String tableId, String timestamps){
+    @Transactional
+    public List<AuditVersion> findLatestByTableIdAndTimeStamp(String tableId, String timestamps) {
         String query = "select audit_id as id from audit_version where table_id = :tableId and time <= :timestamps::timestamp order by time desc limit 1";
         var par = new MapSqlParameterSource();
 
@@ -32,7 +32,7 @@ public class AuditVersionCustomRepo {
     }
 
 
-    @Transactional()
+    @Transactional
     public List<AuditVersion> findLatestEtterlevelseByEtterlevelseDokumentIdAndTimestamp(String dokumentasjonId, String timestamps) {
         String query = """
                 With query as (
@@ -54,12 +54,10 @@ public class AuditVersionCustomRepo {
         par.addValue("dokumentasjonId", dokumentasjonId);
         par.addValue("timestamps", timestamps);
 
-
         return fetch(jdbcTemplate.queryForList(query, par));
-
     }
 
-    @Transactional()
+    @Transactional
     public List<AuditVersion> findLatestEtterlevelseByEtterlevelseDokumentIdAndCurrentUser(String dokumentasjonId) {
         String query = """
                 With query as (
@@ -69,9 +67,9 @@ public class AuditVersionCustomRepo {
                                    	) table_rank
                                    
                                     from audit_version where 
-                                    table_name = 'Etterlevelse' and
+                                    table_name = 'ETTERLEVELSE' and
                                     user_id like :currentUser and
-                                    data -> 'data' ->> 'etterlevelseDokumentasjonId' = :dokumentasjonId
+                                    data ->> 'etterlevelseDokumentasjonId' = :dokumentasjonId
                                    )
                                     Select * from query where table_rank = 1;             
                 """;
@@ -85,7 +83,7 @@ public class AuditVersionCustomRepo {
 
     }
 
-    @Transactional()
+    @Transactional
     public List<AuditVersion> findLatestEtterlevelseDokumentIdAndCurrentUser(String dokumentasjonId) {
         String query = """
                 select * from audit_version where 

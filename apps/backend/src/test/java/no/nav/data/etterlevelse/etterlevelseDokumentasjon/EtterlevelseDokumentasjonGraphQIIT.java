@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.UUID;
 
 public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
 
@@ -65,12 +66,13 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
                     .relevansFor(List.of("SAK"))
                     .build());
 
-            etterlevelseStorageService.save(Etterlevelse.builder()
+            etterlevelseService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
                     .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
                     .build());
-            etterlevelseStorageService.save(Etterlevelse.builder()
+            etterlevelseService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
+                    .etterlevelseDokumentasjonId(UUID.randomUUID().toString())
                     .build());
 
             graphQltester.documentName("statsForEtterlevelseDokumentasjon")
@@ -97,12 +99,13 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
                     .relevansFor(List.of("SAK"))
                     .build());
 
-            etterlevelseStorageService.save(Etterlevelse.builder()
+            etterlevelseService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
                     .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
                     .build());
-            etterlevelseStorageService.save(Etterlevelse.builder()
+            etterlevelseService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
+                    .etterlevelseDokumentasjonId(UUID.randomUUID().toString())
                     .build());
 
             graphQltester.documentName("statsForEtterlevelseDokumentasjon")

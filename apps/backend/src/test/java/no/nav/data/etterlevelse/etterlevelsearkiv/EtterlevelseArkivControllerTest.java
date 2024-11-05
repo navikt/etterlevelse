@@ -165,7 +165,7 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
     @Test
     void createEtterlevelseArkiv() {
         Krav krav = kravStorageService.save(Krav.builder().kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
-        etterlevelseStorageService.save(Etterlevelse.builder().etterlevelseDokumentasjonId("test_dok").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
+        etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId("test_dok").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
         var req = EtterlevelseArkivRequest.builder()
                 .etterlevelseDokumentasjonId("test_dok")
                 .status(EtterlevelseArkivStatus.TIL_ARKIVERING)
@@ -194,7 +194,7 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
     @Test
     void updateEtterlevelseArkiv() {
         var krav = kravStorageService.save(Krav.builder().kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
-        etterlevelseStorageService.save(Etterlevelse.builder().etterlevelseDokumentasjonId("test_dok").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
+        etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId("test_dok").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
         var etterlevelseArkiv = etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.TIL_ARKIVERING).webSakNummer("test/websak").etterlevelseDokumentasjonId("test_dok").build());
         var req = EtterlevelseArkivRequest.builder()
                 .id(etterlevelseArkiv.getId().toString())

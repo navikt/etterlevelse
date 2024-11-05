@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.codelist.CodelistService.ListReq;
@@ -37,14 +38,11 @@ import static no.nav.data.common.utils.StringUtils.toUpperCaseAndTrim;
 @Slf4j
 @RestController
 @RequestMapping("/codelist")
+@RequiredArgsConstructor
 @Tag(name = "Codelist", description = "REST API for common list of values")
 public class CodelistController {
 
     private final CodelistService service;
-
-    public CodelistController(CodelistService service) {
-        this.service = service;
-    }
 
     @Operation(summary = "Get the entire Codelist")
     @ApiResponse(description = "Entire Codelist fetched")

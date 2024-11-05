@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.behandling.dto.BkatProcess;
+import no.nav.data.integration.behandling.dto.BkatProcessor;
+import no.nav.data.integration.behandling.dto.DataBehandler;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +24,29 @@ public class BehandlingService {
 
     private final BkatClient bkatClient;
 
+    private List<DataBehandler> getDatabehandlerForBehandling(BkatProcess process) {
+        List<DataBehandler> dataBehandlerList = new ArrayList<>();
+        if(!process.getDataProcessing().getProcessors().isEmpty()) {
+            process.getDataProcessing().getProcessors().forEach(databehandlerId -> {
+                DataBehandler databehandler = getDataBehandler(databehandlerId);
+                if(databehandler != null) {
+                    dataBehandlerList.add(databehandler);
+                }
+            });
+        }
+        return dataBehandlerList;
+    }
+
     public Behandling getBehandling(String id) {
         BkatProcess process = bkatClient.getProcess(id);
         if (process == null) {
             return null;
         }
-        return process.convertToBehandling();
+
+        Behandling behandling = process.convertToBehandling();
+        List<DataBehandler> dataBehandlerList = getDatabehandlerForBehandling(process);
+        behandling.setDataBehandlerList(dataBehandlerList);
+        return behandling;
     }
 
     public List<Behandling> getBehandlingerForTeam(String teamId) {
@@ -53,5 +73,13 @@ public class BehandlingService {
 
     private List<Behandling> convertBehandlinger(Collection<BkatProcess> processes) {
         return convert(processes, BkatProcess::convertToBehandling);
+    }
+
+    public DataBehandler getDataBehandler(String id) {
+        BkatProcessor dataBehandler = bkatClient.getProcessor(id);
+        if (dataBehandler == null) {
+            return null;
+        }
+        return dataBehandler.convertToDataBehandler();
     }
 }

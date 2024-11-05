@@ -85,16 +85,20 @@ const LoggedInHeader = () => {
         Endre aktive roller
       </Button>
       <div className={`mt-2 ${viewRoller ? 'block' : 'hidden'}`}>
-        {user.getAvailableGroups().map((g) => (
-          <Switch
-            size="small"
-            key={g.group}
-            checked={user.hasGroup(g.group)}
-            onChange={(e) => user.toggleGroup(g.group, (e.target as HTMLInputElement).checked)}
-          >
-            {g.name}
-          </Switch>
-        ))}
+        {user.getAvailableGroups().map((availableGroup) => {
+          return (
+            <Switch
+              size="small"
+              key={availableGroup.group}
+              checked={user.hasGroup(availableGroup.group)}
+              onChange={(event) =>
+                user.toggleGroup(availableGroup.group, (event.target as HTMLInputElement).checked)
+              }
+            >
+              {availableGroup.name}
+            </Switch>
+          )
+        })}
       </div>
     </div>
   )
@@ -145,7 +149,7 @@ const LoggedInHeader = () => {
           [
             {
               label: 'Status i organisasjonen',
-              href: '//metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse',
+              href: '//metabase.ansatt.nav.no/dashboard/116-dashboard-for-etterlevelse',
               icon: <BarChartIcon area-label="" aria-hidden />,
             },
           ],

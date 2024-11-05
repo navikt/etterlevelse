@@ -25,9 +25,14 @@ public class BkatProcess {
     private int number;
     private String name;
     private String description;
+    private Boolean automaticProcessing;
+    private Boolean profiling;
     @Singular
     private List<BkatCode> purposes;
     private BkatAffiliation affiliation;
+    @Singular
+    private List<BkatPolicy> policies;
+    private BkatDataProcessing dataProcessing;
 
     public Behandling convertToBehandling() {
         return Behandling.builder()
@@ -40,6 +45,10 @@ public class BkatProcess {
                 .linjer(convert(affiliation.getSubDepartments(), BkatCode::toCode))
                 .systemer(convert(affiliation.getProducts(), BkatCode::toCode))
                 .teams(affiliation.getProductTeams())
+                .policies(policies.stream().map(BkatPolicy::convertToPolyResponse).toList())
+                .automatiskBehandling(automaticProcessing)
+                .profilering(profiling)
+                .dataBehandlerList(List.of())
                 .build();
     }
 }

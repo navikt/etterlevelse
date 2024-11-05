@@ -320,6 +320,24 @@ export interface IBehandling {
   linjer: IExternalCode[]
   systemer: IExternalCode[]
   teams: string[]
+  policies: IPolicy[]
+  dataBehandlerList: IDataBehandler[]
+  automatiskBehandling: boolean
+  profilering: boolean
+}
+
+export interface IPolicy {
+  behandlingId: string
+  id: string
+  opplysningsTypeId: string
+  opplysningsTypeNavn: string
+  personKategorier: IExternalCode[]
+  sensitivity: IExternalCode[]
+}
+
+export interface IDataBehandler {
+  id: string
+  navn: string
 }
 
 export interface IEtterlevelseDokumentasjon {
@@ -495,4 +513,50 @@ export type TVarslingsadresseQL = IVarslingsadresse & {
   slackChannel?: ISlackChannel
   slackUser?: ISlackUser
 }
+
+export interface IPvkDokument {
+  id: string
+  changeStamp: IChangeStamp
+  version: number
+  etterlevelseDokumentId: string
+  status: EPvkDokumentStatus
+  behandlingensLivslopBeskrivelse: string
+  ytterligereEgenskaper: ICode[]
+  skalUtforePvk?: boolean
+  pvkVurderingsBegrunnelse: string
+
+  stemmerPersonkategorier?: boolean
+  personkategoriAntallBeskrivelse: string
+  tilgangsBeskrivelsePersonopplysningene: string
+  lagringsBeskrivelsePersonopplysningene: string
+
+  harInvolvertRepresentant?: boolean
+  representantInvolveringsBeskrivelse: string
+
+  stemmerDatabehandlere?: boolean
+  harDatabehandlerRepresentantInvolvering?: boolean
+  dataBehandlerRepresentantInvolveringBeskrivelse: string
+}
+
+export enum EPvkDokumentStatus {
+  AKTIV = 'AKTIV',
+  INAKTIV = 'INAKTIV',
+}
+
+export enum ESannsynlighetsnivaa {
+  MEGET_LITE_SANNSYNILIG = 'MEGET_LITE_SANNSYNILIG',
+  LITE_SANNSYNLIG = 'LITE_SANNSYLING',
+  MODERAT_SANNSYNLIG = 'MODERAT_SANNSYNLIG',
+  SANNSYNLIG = 'SANNSYNLIG',
+  NESTEN_SIKKERT = 'NESTEN_SIKKERT',
+}
+
+export enum EKonsekvensnivaa {
+  UBETYDELIG = 'UBETYDELIG',
+  LAV_KONSEKVENS = 'LAV_KONSEKVENS',
+  MODERAT_KONSEKVENS = 'MODERAT_KONSEKVENS',
+  ALVORLIG_KONSEKVENS = 'ALVORLIG_KONSEKVENS',
+  SVAERT_ALVORLIG_KONSEKVENS = 'SVAERT_ALVORLIG_KONSEKVENS',
+}
+
 export type TReplace<T, K> = Omit<T, keyof K> & K

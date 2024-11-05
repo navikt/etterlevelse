@@ -2,9 +2,10 @@ import { useQuery } from '@apollo/client'
 import { Alert, BodyShort, Button, Heading, Label, Link, List, ReadMore } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
-import { useNavigate, useParams } from 'react-router-dom'
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { getDocumentRelationByToIdAndRelationTypeWithData } from '../api/DocumentRelationApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
+import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
 import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
@@ -17,19 +18,29 @@ import {
   IDocumentRelationWithEtterlevelseDokumetajson,
   IEtterlevelseDokumentasjonStats,
   IPageResponse,
+  IPvkDokument,
   TKravQL,
 } from '../constants'
 import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDokumentasjonQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, codelist } from '../services/Codelist'
+import { CodelistService, EListName, TTemaCode } from '../services/Codelist'
 import { user } from '../services/User'
+import { isDev } from '../util/config'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const DokumentasjonPage = () => {
-  const params = useParams<{ id?: string; tema?: string }>()
-  const temaListe = codelist.getCodes(EListName.TEMA)
-  const variables = { etterlevelseDokumentasjonId: params.id }
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
+  const params: Readonly<
+    Partial<{
+      id?: string
+      tema?: string
+    }>
+  > = useParams<{ id?: string; tema?: string }>()
+  const [codelistUtils] = CodelistService()
+  const temaListe: TTemaCode[] = codelistUtils.getCodes(EListName.TEMA) as TTemaCode[]
+  const variables: {
+    etterlevelseDokumentasjonId: string | undefined
+  } = { etterlevelseDokumentasjonId: params.id }
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
     params.id
   )
@@ -37,6 +48,7 @@ export const DokumentasjonPage = () => {
   const [morDokumentRelasjon, setMorDokumentRelasjon] =
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
   const [relasjonLoading, setRelasjonLoading] = useState(false)
+  const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
 
   const {
     data: relevanteData,
@@ -60,7 +72,7 @@ export const DokumentasjonPage = () => {
           }>
         }
       | undefined
-  ) => {
+  ): TKravQL[][] => {
     const relevanteStatusListe: TKravQL[] = []
     const utgaattStatusListe: TKravQL[] = []
 
@@ -69,11 +81,11 @@ export const DokumentasjonPage = () => {
       utgaattStatusListe.push(...stats.utgaattKrav)
     })
 
-    relevanteStatusListe.sort((a, b) => {
+    relevanteStatusListe.sort((a: TKravQL, b: TKravQL) => {
       return a.kravNummer - b.kravNummer
     })
 
-    utgaattStatusListe.sort((a, b) => {
+    utgaattStatusListe.sort((a: TKravQL, b: TKravQL) => {
       if (a.kravNummer === b.kravNummer) {
         return a.kravVersjon - b.kravVersjon
       }
@@ -108,10 +120,16 @@ export const DokumentasjonPage = () => {
         await getDocumentRelationByToIdAndRelationTypeWithData(
           etterlevelseDokumentasjon?.id,
           ERelationType.ARVER
-        ).then((resp: IDocumentRelationWithEtterlevelseDokumetajson[]) => {
-          if (resp.length > 0) setMorDokumentRelasjon(resp[0])
+        ).then((response: IDocumentRelationWithEtterlevelseDokumetajson[]) => {
+          if (response.length > 0) setMorDokumentRelasjon(response[0])
           setRelasjonLoading(false)
         })
+
+        await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+          .then((response: IPvkDokument) => {
+            if (response) setPvkDokument(response)
+          })
+          .catch(() => undefined)
       })()
     }
   }, [etterlevelseDokumentasjon])
@@ -192,7 +210,7 @@ export const DokumentasjonPage = () => {
 
             <div className="flex justify-end">
               {etterlevelseDokumentasjon && (
-                <div className="gap-4 ml-5">
+                <div className="gap-4 ml-5 flex flex-col ">
                   {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
                     <>
                       <Button
@@ -212,6 +230,70 @@ export const DokumentasjonPage = () => {
                           setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
                         />
                       )}
+
+                      {/*WIP ikke klar til å vises i prod*/}
+                      {isDev &&
+                        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+                          <Button
+                            onClick={() => {
+                              navigate(
+                                '/dokumentasjon/' +
+                                  etterlevelseDokumentasjon.id +
+                                  '/behandlingens-livslop/'
+                              )
+                            }}
+                            size="small"
+                            variant="primary"
+                            className="whitespace-nowrap"
+                          >
+                            {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
+                            Tegn behandlingens livsløp
+                          </Button>
+                        )}
+                      {/*WIP ikke klar til å vises i prod*/}
+                      {(!pvkDokument || !pvkDokument.skalUtforePvk) &&
+                        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
+                        isDev && (
+                          <Button
+                            onClick={() => {
+                              let pvkBehovUrl =
+                                '/dokumentasjon/' + etterlevelseDokumentasjon.id + '/pvkbehov/'
+
+                              if (pvkDokument) {
+                                pvkBehovUrl += pvkDokument.id
+                              } else {
+                                pvkBehovUrl += 'ny'
+                              }
+                              navigate(pvkBehovUrl)
+                            }}
+                            size="small"
+                            variant="secondary"
+                            className="whitespace-nowrap"
+                          >
+                            {pvkDokument ? 'Revurdér behov for PVK' : 'Vurdér behov for PVK'}
+                          </Button>
+                        )}
+                      {/*WIP ikke klar til å vises i prod*/}
+                      {pvkDokument &&
+                        pvkDokument.skalUtforePvk &&
+                        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
+                        isDev && (
+                          <Button
+                            onClick={() => {
+                              navigate(
+                                '/dokumentasjon/' +
+                                  etterlevelseDokumentasjon.id +
+                                  '/pvkdokument/' +
+                                  pvkDokument.id
+                              )
+                            }}
+                            size="small"
+                            variant="secondary"
+                            className="whitespace-nowrap"
+                          >
+                            Påbegynn PVK
+                          </Button>
+                        )}
                     </>
                   )}
                 </div>

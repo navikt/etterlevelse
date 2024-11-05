@@ -7,4 +7,5 @@ public enum ListName {
     LOV,
     TEMA,
     VIRKEMIDDELTYPE,
+    YTTERLIGERE_EGENSKAPER,
 }

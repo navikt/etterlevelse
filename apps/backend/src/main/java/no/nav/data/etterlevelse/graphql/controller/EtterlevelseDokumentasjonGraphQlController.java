@@ -103,7 +103,7 @@ public class EtterlevelseDokumentasjonGraphQlController {
 
     @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
     public List<EtterlevelseResponse> etterlevelser(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjon) {
-        return convert(etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString()), Etterlevelse::toResponse);
+        return convert(etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString()), EtterlevelseResponse::buildFrom);
     }
 
     @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
@@ -163,7 +163,7 @@ public class EtterlevelseDokumentasjonGraphQlController {
 
     private LocalDateTime sistEndret(List<Etterlevelse> etterlevelser) {
         return etterlevelser.stream()
-                .map(e -> e.getChangeStamp().getLastModifiedDate())
+                .map(e -> e.getLastModifiedDate())
                 .max(Comparator.comparing(Function.identity()))
                 .orElse(null);
     }

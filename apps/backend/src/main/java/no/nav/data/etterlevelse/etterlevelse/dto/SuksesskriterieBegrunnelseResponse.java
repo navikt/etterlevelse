@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
 
 @Data
@@ -21,4 +22,16 @@ public class SuksesskriterieBegrunnelseResponse {
     private boolean veiledning;
     private String veiledningsTekst;
     private String veiledningsTekst2;
+    
+    public static SuksesskriterieBegrunnelseResponse buildFrom(SuksesskriterieBegrunnelse sb) {
+        return SuksesskriterieBegrunnelseResponse.builder()
+                .suksesskriterieId(sb.getSuksesskriterieId())
+                .begrunnelse(sb.getBegrunnelse())
+                .suksesskriterieStatus(sb.getSuksesskriterieStatus())
+                .veiledning(sb.isVeiledning())
+                .veiledningsTekst(sb.getVeiledningsTekst())
+                .veiledningsTekst2(sb.getVeiledningsTekst2())
+                .build();
+    }
+
 }

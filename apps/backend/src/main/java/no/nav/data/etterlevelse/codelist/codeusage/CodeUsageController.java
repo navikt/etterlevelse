@@ -4,6 +4,7 @@ package no.nav.data.etterlevelse.codelist.codeusage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.CodeUsage;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.CodeUsageResponse;
@@ -26,13 +27,10 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 @RestController
 @Tag(name = "CodeUsage", description = "REST API for usage of codes")
 @RequestMapping("/codelist/usage")
+@RequiredArgsConstructor
 public class CodeUsageController {
 
     private final CodeUsageService service;
-
-    public CodeUsageController(CodeUsageService service) {
-        this.service = service;
-    }
 
     @Operation(summary = "Get all usage of the provided listName")
     @ApiResponse(description = "Fetch all usage of the provided listName")

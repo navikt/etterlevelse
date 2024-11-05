@@ -23,7 +23,7 @@ public class EtterlevelseGraphQlController {
     @QueryMapping
     public EtterlevelseResponse etterlevelseById(@Argument UUID id) {
         log.info("etterlevelse {}", id);
-        return etterlevelseService.get(id).toResponse();
+        return EtterlevelseResponse.buildFrom(etterlevelseService.get(id));
     }
 
     @SchemaMapping(typeName = "Etterlevelse", field = "etterlevelseDokumentasjon")

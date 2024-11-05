@@ -1,12 +1,12 @@
 import { Alert, Heading, Loader } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { TKravIdParams, createKrav, kravMapToFormVal } from '../../../api/KravApi'
 import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi'
 import { EKravStatus, IKrav, TKravQL } from '../../../constants'
 import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
-import { EListName, codelist } from '../../../services/Codelist'
+import { CodelistService, EListName, ICode, TLovCode } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
@@ -17,32 +17,39 @@ import { KravStandardButtons } from './components/KravStandardButtons'
 
 export const KravNyVersjonPage = () => {
   const params: Readonly<Partial<TKravIdParams>> = useParams<TKravIdParams>()
+  const navigate: NavigateFunction = useNavigate()
   const kravData: IKravDataProps | undefined = GetKravData(params)
+  const [codelistUtils] = CodelistService()
 
   const kravQuery: TKravById | undefined = kravData?.kravQuery
   const kravLoading: boolean | undefined = kravData?.kravLoading
 
-  const navigate = useNavigate()
   const [krav, setKrav] = useState<TKravQL | undefined>()
   const [varselMeldingActive, setVarselMeldingActive] = useState<string[]>(
     krav?.varselMelding ? ['VarselMelding'] : []
   )
 
   const submit = async (krav: TKravQL): Promise<void> => {
-    const regelverk = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
-    const underavdeling = codelist.getCode(EListName.UNDERAVDELING, regelverk?.data?.underavdeling)
-    const mutatedKrav = {
+    const regelverk: TLovCode = codelistUtils.getCode(
+      EListName.LOV,
+      krav.regelverk[0]?.lov.code
+    ) as TLovCode
+    const underavdeling: ICode = codelistUtils.getCode(
+      EListName.UNDERAVDELING,
+      regelverk?.data?.underavdeling
+    ) as ICode
+    const mutatedKrav: TKravQL = {
       ...krav,
-      underavdeling: underavdeling,
+      underavdeling: underavdeling as ICode,
       varselMelding: varselMeldingActive ? krav.varselMelding : undefined,
     }
     close(await createKrav(mutatedKrav))
     setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
   }
 
-  const close = (k: IKrav): void => {
-    if (k) {
-      navigate(`/krav/${k.kravNummer}/${k.kravVersjon}`)
+  const close = (krav: IKrav): void => {
+    if (krav) {
+      navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
     }
   }
 

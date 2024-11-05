@@ -14,6 +14,9 @@ public class CodelistStub {
         add(ListName.LOV, "ARKIV", "Arkivloven");
         add(ListName.TEMA, "PERSONVERN", "Personvern");
         add(ListName.VIRKEMIDDELTYPE, "YTELSE", "Ytelse");
+        add(ListName.YTTERLIGERE_EGENSKAPER, "PROFILERING", "Profilering");
+        add(ListName.YTTERLIGERE_EGENSKAPER, "TEKNOLOGI", "Bruk av teknologi");
+
     }
 
     private static void add(ListName source, String code, String name) {

@@ -33,4 +33,10 @@ public class Behandling {
     private List<String> teams;
     @JsonIgnore
     private List<TeamResponse> teamsData;
+
+    private List<PolicyResponse> policies;
+    private List<DataBehandler> dataBehandlerList;
+
+    private Boolean automatiskBehandling;
+    private Boolean profilering;
 }

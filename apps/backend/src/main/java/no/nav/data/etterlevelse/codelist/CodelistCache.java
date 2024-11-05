@@ -28,11 +28,11 @@ final class CodelistCache {
         CodelistCache.init();
     }
 
-    static void init() {
+    static synchronized void init() {
         init(null);
     }
 
-    static void init(Consumer<CodelistCache> consumer) {
+    static synchronized void init(Consumer<CodelistCache> consumer) {
         var newCache = new CodelistCache();
         Stream.of(ListName.values()).forEach(listName -> newCache.codelists.put(listName, new HashMap<>()));
         if (consumer != null) {
@@ -41,35 +41,37 @@ final class CodelistCache {
         cache = newCache;
     }
 
-    static List<Codelist> getAll() {
+    static synchronized List<Codelist> getAll() {
         return cache.codelists.values().stream().flatMap(e -> e.values().stream()).collect(Collectors.toList());
     }
 
-    static List<Codelist> getCodelist(ListName name) {
+    static synchronized List<Codelist> getCodelist(ListName name) {
         return List.copyOf(cache.codelists.get(name).values());
     }
 
-    static Codelist getCodelist(ListName listName, String code) {
+    static synchronized Codelist getCodelist(ListName listName, String code) {
         return cache.codelists.get(listName).get(code);
     }
 
-    static boolean contains(ListName listName, String code) {
+    static synchronized boolean contains(ListName listName, String code) {
         return cache.codelists.get(listName).containsKey(code);
     }
 
-    static void remove(ListName listName, String code) {
+    static synchronized void remove(ListName listName, String code) {
         cache.codelists.get(listName).remove(code);
     }
 
-    static void set(Codelist codelist) {
+    static synchronized void set(Codelist codelist) {
         cache.setCode(codelist);
     }
 
     void setCode(Codelist codelist) {
         Assert.notNull(codelist.getList(), "listName cannot be null");
         Assert.notNull(codelist.getCode(), "code cannot be null");
-        Assert.notNull(codelist.getShortName(), "shortName cannot be null");
         Assert.notNull(codelist.getDescription(), "description cannot be null");
-        codelists.get(codelist.getList()).put(codelist.getCode(), codelist);
+        Assert.notNull(codelist.getShortName(), "shortName cannot be null");
+        synchronized(CodelistCache.class) {
+            codelists.get(codelist.getList()).put(codelist.getCode(), codelist);
+        }
     }
 }

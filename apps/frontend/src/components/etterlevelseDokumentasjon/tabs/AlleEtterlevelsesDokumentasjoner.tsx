@@ -79,7 +79,7 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
           {loading && (
             <div>
               <div className="mx-2.5">
-                <Loader size="large" />
+                <Loader size="large" className="flex justify-self-center" />
               </div>
             </div>
           )}

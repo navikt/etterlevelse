@@ -1,11 +1,11 @@
 import { Heading, Loader } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { createKrav, kravMapToFormVal } from '../../../api/KravApi'
-import { EKravStatus, TKravQL } from '../../../constants'
+import { EKravStatus, IKrav, TKravQL } from '../../../constants'
 import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
-import { EListName, codelist } from '../../../services/Codelist'
+import { CodelistService, EListName, ICode, TLovCode } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
 import { TextAreaField } from '../../common/Inputs'
@@ -15,29 +15,35 @@ import { KravFormFields } from './components/KravFormFields'
 import { KravStandardButtons } from './components/KravStandardButtons'
 
 export const KravCreatePage = () => {
+  const navigate: NavigateFunction = useNavigate()
   const [loading, setLoading] = useState(false)
   const [varselMeldingActive, setVarselMeldingActive] = useState<string[]>([])
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [errorModalMessage, setErrorModalMessage] = useState('')
+  const [codelistUtils] = CodelistService()
 
-  const navigate = useNavigate()
-
-  const submit = (krav: TKravQL) => {
+  const submit = (krav: TKravQL): void => {
     setLoading(true)
-    const regelverk = codelist.getCode(EListName.LOV, krav.regelverk[0]?.lov.code)
-    const underavdeling = codelist.getCode(EListName.UNDERAVDELING, regelverk?.data?.underavdeling)
+    const regelverk: TLovCode = codelistUtils.getCode(
+      EListName.LOV,
+      krav.regelverk[0]?.lov.code
+    ) as TLovCode
+    const underavdeling: ICode = codelistUtils.getCode(
+      EListName.UNDERAVDELING,
+      regelverk?.data?.underavdeling
+    ) as ICode
 
-    const mutatedKrav = {
+    const mutatedKrav: TKravQL = {
       ...krav,
       underavdeling: underavdeling,
     }
 
     createKrav(mutatedKrav)
-      .then((krav) => {
+      .then((krav: IKrav) => {
         setLoading(false)
         navigate('/krav/' + krav.id)
       })
-      .catch((e) => setErrorModalMessage(e))
+      .catch((error: any) => setErrorModalMessage(error))
   }
 
   return (

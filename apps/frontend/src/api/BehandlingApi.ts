@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { IBehandling, IPageResponse } from '../constants'
+import { IBehandling, IDataBehandler, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
 export const getBehandling = async (id: string) => {
@@ -10,6 +10,11 @@ export const searchBehandling = async (name: string) => {
   return (
     await axios.get<IPageResponse<IBehandling>>(`${env.backendBaseUrl}/behandling/search/${name}`)
   ).data.content
+}
+
+export const getDatabehandlerById = async (id: string) => {
+  return (await axios.get<IDataBehandler>(`${env.backendBaseUrl}/behandling/databehandler/${id}`))
+    .data
 }
 
 export const behandlingName = (behandling?: IBehandling) => {

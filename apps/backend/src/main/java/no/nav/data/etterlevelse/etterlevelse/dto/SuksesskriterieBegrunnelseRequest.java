@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
+import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
@@ -42,5 +43,17 @@ public class SuksesskriterieBegrunnelseRequest implements Validated {
             validator.addError(Fields.suksesskriterieId, "NEGATIVE_ID", "Id cannot be negative");
         }
     }
+    
+    public SuksesskriterieBegrunnelse convertTo() {
+        return SuksesskriterieBegrunnelse.builder()
+                .suksesskriterieId(suksesskriterieId)
+                .begrunnelse(begrunnelse)
+                .suksesskriterieStatus(suksesskriterieStatus)
+                .veiledning(veiledning)
+                .veiledningsTekst(veiledningsTekst)
+                .veiledningsTekst2(veiledningsTekst2)
+                .build();
+    }
+
 }
 

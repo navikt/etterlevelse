@@ -14,9 +14,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.auditing.domain.Auditable;
-import no.nav.data.common.rest.ChangeStampResponse;
-import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
-import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationResponse;
 import org.hibernate.annotations.Type;
 
 import java.util.UUID;
@@ -49,27 +46,4 @@ public class DocumentRelation extends Auditable {
     @Column(name = "DATA")
     private JsonNode data;
 
-    public DocumentRelation merge(DocumentRelationRequest request){
-        relationType = request.getRelationType();
-        fromDocument = request.getFromDocument();
-        toDocument = request.getToDocument();
-        data = request.getData();
-        return this;
-    };
-
-    public DocumentRelationResponse toResponse() {
-        return DocumentRelationResponse.builder()
-                .id(id)
-                .version(version)
-                .changeStamp(ChangeStampResponse.builder()
-                        .createdDate(createdDate)
-                        .lastModifiedBy(lastModifiedBy)
-                        .lastModifiedDate(lastModifiedDate)
-                        .build())
-                .relationType(relationType)
-                .fromDocument(fromDocument)
-                .toDocument(toDocument)
-                .data(data)
-                .build();
-    };
 }

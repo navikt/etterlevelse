@@ -6,15 +6,16 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Stack,
   TextField,
   Textarea,
   ToggleGroup,
   useDatepicker,
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
-import React, { ReactNode, useState } from 'react'
+import React, { ChangeEvent, ReactNode, useState } from 'react'
 import { TOption, TOr } from '../../constants'
-import { EListName, ICode, codelist } from '../../services/Codelist'
+import { CodelistService, EListName, ICode } from '../../services/Codelist'
 import LabelWithTooltip from '../common/LabelWithTooltip'
 import { Markdown } from './Markdown'
 import { Error, FormError } from './ModalSchema'
@@ -202,6 +203,7 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
 
 interface IPropsBoolField extends TLabelName, ITooltip {
   nullable?: boolean
+  horizontal?: boolean
 }
 
 const YES = 'YES',
@@ -211,7 +213,7 @@ const boolToRadio = (bool?: boolean) => (bool === undefined ? UNCLARIFIED : bool
 const radioToBool = (radio: string) => (radio === UNCLARIFIED ? undefined : radio === YES)
 
 export const BoolField = (props: IPropsBoolField) => {
-  const { label, name, nullable, tooltip } = props
+  const { label, name, nullable, tooltip, horizontal } = props
 
   return (
     <FieldWrapper>
@@ -227,9 +229,15 @@ export const BoolField = (props: IPropsBoolField) => {
               }}
               error={fieldProps.form.errors[name] && <FormError fieldName={name} />}
             >
-              <Radio value={YES}>Ja</Radio>
-              <Radio value={NO}>Nei</Radio>
-              {nullable && <Radio value={UNCLARIFIED}>Uavklart</Radio>}
+              <Stack
+                gap="0 6"
+                direction={{ xs: horizontal ? 'column' : 'row', sm: horizontal ? 'row' : 'column' }}
+                wrap={false}
+              >
+                <Radio value={YES}>Ja</Radio>
+                <Radio value={NO}>Nei</Radio>
+                {nullable && <Radio value={UNCLARIFIED}>Uavklart</Radio>}
+              </Stack>
             </RadioGroup>
           </div>
         )}
@@ -384,7 +392,8 @@ type TPropsOptionList = IPropsOptionList & TOptionORListname
 
 export const OptionList = (props: TPropsOptionList) => {
   const { label, value, onChange, options, listName, error } = props
-  const optionsList: TOption[] = options || codelist.getParsedOptions(listName)
+  const [codelistUtils] = CodelistService()
+  const optionsList: TOption[] = options || codelistUtils.getParsedOptions(listName)
 
   return (
     <Select
@@ -393,18 +402,27 @@ export const OptionList = (props: TPropsOptionList) => {
       className="w-full"
       value={value}
       error={error}
-      onChange={async (event) => {
-        const val = event.target.value
-        const toSet = listName && val ? ((await codelist.getCode(listName, val)) as ICode) : val
+      onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+        const val: string = event.target.value
+        const toSet: string | ICode =
+          listName && val ? (codelistUtils.getCode(listName, val) as ICode) : val
         return onChange(toSet)
       }}
     >
       <option value=""> </option>
-      {optionsList.map((code, index) => (
-        <option key={index + '_' + code.label} value={code.value}>
-          {code.label}
-        </option>
-      ))}
+      {optionsList.map(
+        (
+          code: Readonly<{
+            value?: string | number
+            label?: ReactNode
+          }>,
+          index: number
+        ) => (
+          <option key={index + '_' + code.label} value={code.value}>
+            {code.label}
+          </option>
+        )
+      )}
     </Select>
   )
 }

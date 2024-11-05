@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 
@@ -29,4 +30,21 @@ public class DocumentRelationResponse {
 
     private EtterlevelseDokumentasjonResponse fromDocumentWithData;
     private EtterlevelseDokumentasjonResponse toDocumentWithData;
+    
+    public static DocumentRelationResponse buildFrom(DocumentRelation dr) {
+        return DocumentRelationResponse.builder()
+                .id(dr.getId())
+                .version(dr.getVersion())
+                .changeStamp(ChangeStampResponse.builder()
+                        .createdDate(dr.getCreatedDate())
+                        .lastModifiedBy(dr.getLastModifiedBy())
+                        .lastModifiedDate(dr.getLastModifiedDate())
+                        .build())
+                .relationType(dr.getRelationType())
+                .fromDocument(dr.getFromDocument())
+                .toDocument(dr.getToDocument())
+                .data(dr.getData())
+                .build();
+    };
+
 }

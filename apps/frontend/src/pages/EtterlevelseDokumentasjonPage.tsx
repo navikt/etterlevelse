@@ -15,7 +15,7 @@ import {
 } from '../constants'
 import { getKravMedPrioriteringOgEtterlevelseQuery } from '../query/KravQuery'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
-import { EListName, TTemaCode, codelist } from '../services/Codelist'
+import { CodelistService, EListName, TLovCode, TTemaCode } from '../services/Codelist'
 import { sortKravListeByPriority } from '../util/sort'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
@@ -32,26 +32,35 @@ export const getFilterType = (id: string | number | undefined): EKravFilterType 
 }
 
 export const EtterlevelseDokumentasjonPage = () => {
-  const params = useParams<{
+  const params: Readonly<
+    Partial<{
+      id: string
+      tema: string
+      kravNummer: string
+      kravVersjon: string
+      filter: string
+    }>
+  > = useParams<{
     id: string
     tema: string
     kravNummer: string
     kravVersjon: string
     filter: string
   }>()
-  const temaData: TTemaCode | undefined = codelist.getCode(
+  const [codelistUtils] = CodelistService()
+  const temaData: TTemaCode | undefined = codelistUtils.getCode(
     EListName.TEMA,
     params.tema?.replace('i', '')
-  )
+  ) as TTemaCode | undefined
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
-  const lover = codelist.getCodesForTema(params.tema)
+  const lover: TLovCode[] = codelistUtils.getLovCodesForTema(params.tema)
 
   const { data, loading } = useQuery<{ krav: IPageResponse<TKravQL> }>(
     getKravMedPrioriteringOgEtterlevelseQuery,
     {
       variables: {
         etterlevelseDokumentasjonId: params.id,
-        lover: lover.map((lov) => lov.code),
+        lover: lover.map((lov: TLovCode) => lov.code),
         tema: params.tema,
         status: EKravStatus.AKTIV,
       },
@@ -65,20 +74,21 @@ export const EtterlevelseDokumentasjonPage = () => {
 
   useEffect(() => {
     if (data && !loading) {
-      const kravPriorityList = sortKravListeByPriority<TKravQL>(data?.krav.content)
-      const currentKravIndex = kravPriorityList.findIndex(
-        (k) => k.kravNummer === kravId?.kravNummer
+      const kravPriorityList: TKravQL[] = sortKravListeByPriority<TKravQL>(data?.krav.content)
+      const currentKravIndex: number = kravPriorityList.findIndex(
+        (krav: TKravQL) => krav.kravNummer === kravId?.kravNummer
       )
       if (currentKravIndex !== null && kravPriorityList.length - 1 !== currentKravIndex) {
         const nextKravIndex = kravPriorityList.findIndex(
-          (k, i) =>
-            i > currentKravIndex &&
-            (k.etterlevelser.length === 0 ||
-              (k.etterlevelser.length > 0 &&
-                k.etterlevelser[0].status !== EEtterlevelseStatus.FERDIG_DOKUMENTERT &&
-                k.etterlevelser[0].status !== EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT))
+          (krav: TKravQL, index: number) =>
+            index > currentKravIndex &&
+            (krav.etterlevelser.length === 0 ||
+              (krav.etterlevelser.length > 0 &&
+                krav.etterlevelser[0].status !== EEtterlevelseStatus.FERDIG_DOKUMENTERT &&
+                krav.etterlevelser[0].status !==
+                  EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT))
         )
-        const nextKrav = kravPriorityList[nextKravIndex]
+        const nextKrav: TKravQL = kravPriorityList[nextKravIndex]
         if (nextKrav) {
           setNextKravToDocument('/' + nextKrav.kravNummer + '/' + nextKrav.kravVersjon)
         }

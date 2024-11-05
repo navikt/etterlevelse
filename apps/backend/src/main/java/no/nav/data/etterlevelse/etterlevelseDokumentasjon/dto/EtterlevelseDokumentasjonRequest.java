@@ -9,6 +9,7 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;
@@ -72,4 +73,26 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         validator.checkCodelist(Fields.avdeling, avdeling, ListName.AVDELING);
         validator.validateType(Fields.varslingsadresser, varslingsadresser);
     }
+    
+    // Updates all fields of an EtterlevelseDokumentasjon except id, version and changestamp
+    public void mergeInto(EtterlevelseDokumentasjon eDok) {
+        eDok.setEtterlevelseNummer(etterlevelseNummer);
+        eDok.setTitle(title);
+        eDok.setBehandlingIds(copyOf(behandlingIds));
+        eDok.setBeskrivelse(beskrivelse);
+        eDok.setGjenbrukBeskrivelse(gjenbrukBeskrivelse);
+        eDok.setTilgjengeligForGjenbruk(tilgjengeligForGjenbruk);
+        eDok.setVirkemiddelId(virkemiddelId);
+        eDok.setIrrelevansFor(copyOf(irrelevansFor));
+        eDok.setTeams(copyOf(teams));
+        eDok.setResources(copyOf(resources));
+        eDok.setRisikoeiere(copyOf(risikoeiere));
+        eDok.setBehandlerPersonopplysninger(behandlerPersonopplysninger);
+        eDok.setKnyttetTilVirkemiddel(knyttetTilVirkemiddel);
+        eDok.setForGjenbruk(forGjenbruk);
+        eDok.setAvdeling(avdeling);
+        eDok.setPrioritertKravNummer(copyOf(prioritertKravNummer));
+        eDok.setVarslingsadresser(copyOf(varslingsadresser));
+    }
+
 }

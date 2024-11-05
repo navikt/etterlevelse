@@ -1,12 +1,12 @@
 import { PlusIcon } from '@navikt/aksel-icons'
 import { Alert, BodyShort, Button, Label, Loader, Select } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { emptyPage } from '../../api/util/EmptyPageConstant'
-import { EKravListFilter, EKravStatus, TKravQL, TOption } from '../../constants'
+import { EKravListFilter, EKravStatus, IPageResponse, TKravQL, TOption } from '../../constants'
 import { KravPanels, sortKrav } from '../../pages/KravListPage'
 import { kravStatus } from '../../pages/KravPage'
 import { useKravFilter } from '../../query/KravQuery'
-import { EListName, codelist } from '../../services/Codelist'
+import { CodelistService, EListName, ICode, TLovCode } from '../../services/Codelist'
 
 type TKravFilter = {
   status: TOption[]
@@ -16,7 +16,8 @@ type TKravFilter = {
 }
 
 export const AllKrav = () => {
-  const pageSize = 20
+  const [codelistUtils] = CodelistService()
+  const pageSize: number = 20
   const [sorting] = useState('sist')
   const [filter, setFilter] = useState<TKravFilter>({
     status: [{ label: 'Alle statuser', value: 'alle' }],
@@ -25,8 +26,8 @@ export const AllKrav = () => {
     lover: [{ label: 'Alle lover', value: 'alle' }],
   })
 
-  const relevans = codelist.getCodes(EListName.RELEVANS)
-  const lover = codelist.getCodes(EListName.LOV)
+  const relevans = codelistUtils.getCodes(EListName.RELEVANS) as ICode[]
+  const lover = codelistUtils.getCodes(EListName.LOV) as TLovCode[]
 
   const {
     data,
@@ -38,7 +39,14 @@ export const AllKrav = () => {
     relevans:
       filter.relevans[0]?.value === 'alle'
         ? undefined
-        : filter.relevans.map((relevans) => (relevans.value ? relevans.value.toString() : '')),
+        : filter.relevans.map(
+            (
+              relevans: Readonly<{
+                value?: string | number
+                label?: React.ReactNode
+              }>
+            ) => (relevans.value ? relevans.value.toString() : '')
+          ),
     lover:
       filter.lover[0].value === 'alle'
         ? undefined
@@ -53,16 +61,30 @@ export const AllKrav = () => {
 
   const [sortedKravList, setSortedKravList] = useState<TKravQL[]>([])
 
-  const loading = !data && gqlLoading
-  const lastMer = () => {
+  const loading: boolean = !data && gqlLoading
+  const lastMer = (): void => {
     fetchMore({
       variables: {
         pageNumber: data && data.krav.pageNumber + 1,
         pageSize,
       },
-      updateQuery: (p, o) => {
-        const oldData = p.krav
-        const newData = o.fetchMoreResult && o.fetchMoreResult.krav
+      updateQuery: (
+        oldKravData: {
+          krav: IPageResponse<TKravQL>
+        },
+        newKravData: {
+          fetchMoreResult: {
+            krav: IPageResponse<TKravQL>
+          }
+          variables: {
+            pageNumber: number
+            pageSize: number
+          }
+        }
+      ) => {
+        const oldData: IPageResponse<TKravQL> = oldKravData.krav
+        const newData: IPageResponse<TKravQL> =
+          newKravData.fetchMoreResult && newKravData.fetchMoreResult.krav
         return {
           krav: {
             ...oldData,
@@ -72,13 +94,13 @@ export const AllKrav = () => {
           },
         }
       },
-    }).catch((e) => console.error(e))
+    }).catch((error: any) => console.error(error))
   }
 
   useEffect(() => {
-    let sortedData = [...kravene.content]
+    let sortedData: TKravQL[] = [...kravene.content]
     if (sorting === 'sist') {
-      sortedData.sort((a, b) =>
+      sortedData.sort((a: TKravQL, b: TKravQL) =>
         a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
       )
     } else {
@@ -88,9 +110,9 @@ export const AllKrav = () => {
   }, [data])
 
   useEffect(() => {
-    let sortedData = [...kravene.content]
+    let sortedData: TKravQL[] = [...kravene.content]
     if (sorting === 'sist') {
-      sortedData.sort((a, b) =>
+      sortedData.sort((a: TKravQL, b: TKravQL) =>
         a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
       )
     } else {
@@ -103,8 +125,13 @@ export const AllKrav = () => {
     refetch()
   }, [filter])
 
-  const updateFilter = (value: any, type: EKravListFilter) => {
-    const newFilterValue = { ...filter }
+  const updateFilter = (value: any, type: EKravListFilter): void => {
+    const newFilterValue: {
+      status: TOption[]
+      relevans: TOption[]
+      tema: TOption[]
+      lover: TOption[]
+    } = { ...filter }
     if (type === EKravListFilter.RELEVANS) {
       newFilterValue.relevans = value
     }
@@ -120,76 +147,76 @@ export const AllKrav = () => {
     setFilter(newFilterValue)
   }
 
-  const kravene = data?.krav || emptyPage
+  const kravene: IPageResponse<TKravQL> = data?.krav || emptyPage
 
-  const getOptions = (label: string, options: any[]) => [
+  const getOptions = (label: string, options: any[]): any[] => [
     { label: label, value: 'alle' },
     ...options,
   ]
 
-  const getLovOptions = () => {
+  const getLovOptions = (): any[] => {
     return getOptions(
       'Alle lover',
-      lover.map((lov) => {
+      lover.map((lov: TLovCode) => {
         return { label: lov.shortName, value: lov.code }
       })
     )
   }
 
-  const getSelector = (kravFilter: EKravListFilter, options: any[], value: string) => {
-    return (
-      <div className="ml-3 min-w-fit">
-        <Select
-          key={'krav_filter_' + kravFilter}
-          size={'small'}
-          label={`Filter ${kravFilter}`}
-          hideLabel
-          //placeholder='tema'
-          value={value}
-          onChange={(params) => {
-            updateFilter(
-              [
-                {
-                  value: params.currentTarget.value,
-                  label: options.filter((o) => o.value === params.currentTarget.value)[0].label,
-                },
-              ],
-              kravFilter
-            )
-          }}
-          className={'flex'}
-        >
-          {options.map((option) => (
-            <option value={option.value} key={kravFilter + '_' + option.value}>
-              {option.label}
-            </option>
-          ))}
-        </Select>
-      </div>
-    )
-  }
+  const getSelector = (kravFilter: EKravListFilter, options: any[], value: string) => (
+    <div className="ml-3 min-w-fit">
+      <Select
+        key={'krav_filter_' + kravFilter}
+        size="small"
+        label={`Filter ${kravFilter}`}
+        hideLabel
+        //placeholder='tema'
+        value={value}
+        onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+          updateFilter(
+            [
+              {
+                value: event.currentTarget.value,
+                label: options.filter(
+                  (option: any) => option.value === event.currentTarget.value
+                )[0].label,
+              },
+            ],
+            kravFilter
+          )
+        }}
+        className="flex"
+      >
+        {options.map((option: any) => (
+          <option value={option.value} key={kravFilter + '_' + option.value}>
+            {option.label}
+          </option>
+        ))}
+      </Select>
+    </div>
+  )
 
   return loading && !kravene.numberOfElements ? (
     <div className="justify-center flex flex-1 mt-10">
       <Loader size="large" />
     </div>
   ) : error ? (
-    <Alert variant={'error'}>{JSON.stringify(error, null, 2)}</Alert>
+    <Alert variant="error">{JSON.stringify(error, null, 2)}</Alert>
   ) : (
     <div>
-      <div className={'w-full justify-center my-4'}>
-        <div className={'flex justify-center content-center w-full'}>
-          <div className={'flex justify-start align-middle w-full'}>
-            <Label size={'medium'}>{kravene.totalElements ? kravene.totalElements : 0} Krav</Label>
+      <div className="w-full justify-center my-4">
+        <div className="flex justify-center content-center w-full">
+          <div className="flex justify-start align-middle w-full">
+            <Label size="medium">{kravene.totalElements ? kravene.totalElements : 0} Krav</Label>
           </div>
-          <div className={'flex w-full items-center'}>
-            <div className={'flex items-center justify-end w-full'}>
-              <Label size={'small'}>Filter</Label>
+          <div className="flex w-full items-center">
+            <div className="flex items-center justify-end w-full">
+              <Label size="small">Filter</Label>
               {getSelector(
                 EKravListFilter.RELEVANS,
                 getOptions(
                   'Alle relevans',
-                  relevans?.map((relevans) => {
+                  relevans?.map((relevans: ICode) => {
                     return { label: relevans.shortName, value: relevans.code }
                   })
                 ),
@@ -200,7 +227,10 @@ export const AllKrav = () => {
                 EKravListFilter.STATUS,
                 getOptions(
                   'Alle statuser',
-                  Object.values(EKravStatus).map((value) => ({ value, label: kravStatus(value) }))
+                  Object.values(EKravStatus).map((value: EKravStatus) => ({
+                    value,
+                    label: kravStatus(value),
+                  }))
                 ),
                 filter.status[0].value as string
               )}
@@ -210,8 +240,8 @@ export const AllKrav = () => {
       </div>
       <KravPanels kravene={sortedKravList} loading={loading} />
       {sortedKravList.length === 0 && (
-        <div className={'w-full flex justify-center'}>
-          <BodyShort size={'small'}>Fant ingen krav</BodyShort>
+        <div className="w-full flex justify-center">
+          <BodyShort size="small">Fant ingen krav</BodyShort>
         </div>
       )}
 
@@ -221,7 +251,7 @@ export const AllKrav = () => {
             <Button
               onClick={lastMer}
               icon={<PlusIcon area-label="" aria-hidden />}
-              variant={'secondary'}
+              variant="secondary"
               size="medium"
               disabled={gqlLoading || kravene.numberOfElements >= kravene.totalElements}
             >
@@ -234,7 +264,7 @@ export const AllKrav = () => {
               </div>
             )}
           </div>
-          <Label className={'mr-2.5'}>
+          <Label className="mr-2.5">
             Viser {kravene.numberOfElements}/{kravene.totalElements}
           </Label>
         </div>

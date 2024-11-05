@@ -1,4 +1,4 @@
-import { Button, Label, Loader, Modal } from '@navikt/ds-react'
+import { Button, Label, List, Loader, Modal } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import React from 'react'
 import { createKravPriorityList, updateKravPriorityList } from '../../../api/KravPriorityListApi'
@@ -14,17 +14,22 @@ const KravPriorityPanels = (props: IKravPriorityPanelsProps) => {
 
   const kravListe = fieldArrayRenderProps.form.values.krav as IKrav[]
 
-  return kravListe.map((krav, index) => {
-    return (
-      <KravPriorityPanel
-        key={`${krav.navn}_${krav.kravNummer}`}
-        krav={krav}
-        index={index}
-        arrayLength={kravListe.length}
-        fieldArrayRenderProps={fieldArrayRenderProps}
-      />
-    )
-  })
+  return (
+    <List>
+      {kravListe.map((krav, index) => {
+        return (
+          <List.Item icon={<div />} key={`${krav.navn}_${krav.kravNummer}`}>
+            <KravPriorityPanel
+              krav={krav}
+              index={index}
+              arrayLength={kravListe.length}
+              fieldArrayRenderProps={fieldArrayRenderProps}
+            />
+          </List.Item>
+        )
+      })}
+    </List>
+  )
 }
 
 export const EditPriorityModal = (props: {

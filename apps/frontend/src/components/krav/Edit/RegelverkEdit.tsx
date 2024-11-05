@@ -1,9 +1,9 @@
 import { Button, Label, TextField } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
-import { useState } from 'react'
-import Select, { CSSObjectWithLabel } from 'react-select'
+import { ChangeEvent, useState } from 'react'
+import Select, { CSSObjectWithLabel, SingleValue } from 'react-select'
 import { IRegelverk } from '../../../constants'
-import { EListName, TLovCode, codelist } from '../../../services/Codelist'
+import { CodelistService, EListName, TLovCode } from '../../../services/Codelist'
 import { ettlevColors } from '../../../util/theme'
 import { LovView } from '../../Lov'
 import { FieldWrapper } from '../../common/Inputs'
@@ -17,22 +17,30 @@ type TRegelverkEditProps = {
 }
 
 export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
+  const [codelistUtils] = CodelistService()
   const [lov, setLov] = useState({ value: '', label: '', description: '' })
   const [text, setText] = useState('')
   const [error, setError] = useState('')
 
-  const regelverkObject = () => ({
-    lov: codelist.getCode(EListName.LOV, lov.value as string) as TLovCode,
+  const regelverkObject = (): {
+    lov: TLovCode
+    spesifisering: string
+  } => ({
+    lov: codelistUtils.getCode(EListName.LOV, lov.value as string) as TLovCode,
     spesifisering: text,
   })
 
-  const options = codelist.getParsedOptionsForLov(forVirkemiddel)
+  const options: {
+    value: string
+    label: string
+    description: string
+  }[] = codelistUtils.getParsedOptionsForLov(forVirkemiddel)
 
   return (
     <FieldWrapper marginBottom id="regelverk">
       <FieldArray name="regelverk">
         {(fieldArrayRenderProps: FieldArrayRenderProps) => {
-          const add = () => {
+          const add = (): void => {
             if (!text || !lov) return
             if (lov.value === '') {
               setError('Du må velge minst et regelverk')
@@ -44,7 +52,7 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
             setText('')
           }
 
-          const hasError = !!fieldArrayRenderProps.form.errors['regelverk'] || error !== ''
+          const hasError: boolean = !!fieldArrayRenderProps.form.errors['regelverk'] || error !== ''
 
           return (
             <div>
@@ -62,7 +70,13 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
                       placeholder="Velg regelverk"
                       aria-label="Velg regelverk"
                       value={lov}
-                      onChange={(value) => {
+                      onChange={(
+                        value: SingleValue<{
+                          value: string
+                          label: string
+                          description: string
+                        }>
+                      ) => {
                         if (value) {
                           setLov(value)
                         }
@@ -94,7 +108,9 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
                       label="Paragraf, kapittel eller artikkel i regelverk"
                       hideLabel
                       value={text}
-                      onChange={(e) => setText((e.target as HTMLInputElement).value)}
+                      onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                        setText((event.target as HTMLInputElement).value)
+                      }
                       placeholder="Beskrivelse, paragraf, artikkel eller kapittel i regelverk"
                     />
                   </div>

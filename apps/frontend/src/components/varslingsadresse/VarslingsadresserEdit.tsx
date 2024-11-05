@@ -280,7 +280,7 @@ export const SlackUserSearch = ({ add, close }: TAddVarslingsadresseProps) => {
           </Button>
         </div>
       </div>
-      {loadingSlackId && <Loader size="large" />}
+      {loadingSlackId && <Loader size="large" className="flex justify-self-center" />}
       {error && (
         <Alert className="mt-2.5" variant="error">
           {error}

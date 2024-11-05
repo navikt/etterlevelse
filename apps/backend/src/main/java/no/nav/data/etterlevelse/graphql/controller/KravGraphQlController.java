@@ -8,7 +8,6 @@ import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
-import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
@@ -103,7 +102,7 @@ public class KravGraphQlController {
             if (dokumentasjonId != null) {
                 try {
                     return etterlevelseService.getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(dokumentasjonId, krav.getKravNummer(), krav.getKravVersjon())
-                            .map(value -> List.of(value.toResponse())).orElseGet(List::of);
+                            .map(value -> List.of(EtterlevelseResponse.buildFrom(value))).orElseGet(List::of);
                 } catch (Exception e) {
                     throw new ValidationException("Found duplicate etterlevelse for dokumentasjon with id = " + dokumentasjonId + " for krav K" + krav.getKravNummer() + "." + krav.getKravVersjon()
                             + ", error: " + e
@@ -112,7 +111,7 @@ public class KravGraphQlController {
             }
         }
 
-        return convert( etterlevelseService.getByKravNummer(nummer, versjon), Etterlevelse::toResponse);
+        return convert( etterlevelseService.getByKravNummer(nummer, versjon), EtterlevelseResponse::buildFrom);
     }
 
 

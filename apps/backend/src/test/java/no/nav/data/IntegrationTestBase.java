@@ -11,7 +11,7 @@ import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelationRepository;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
-import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
+import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
@@ -22,6 +22,8 @@ import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.integration.behandling.BehandlingService;
+import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,8 +65,6 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected StorageService<KravImage> kravImageStorageService;
     @Autowired
-    protected StorageService<Etterlevelse> etterlevelseStorageService;
-    @Autowired
     protected StorageService<EtterlevelseArkiv> etterlevelseArkivStorageService;
     @Autowired
     protected StorageService<EtterlevelseMetadata> etterlevelseMetadataStorageService;
@@ -88,6 +88,12 @@ public abstract class IntegrationTestBase {
     protected EtterlevelseArkivService etterlevelseArkivService;
     @Autowired
     protected DocumentRelationService documentRelationService;
+    @Autowired
+    protected EtterlevelseRepo etterlevelseRepo;
+    @Autowired
+    protected PvkDokumentRepo pvkDokumentRepo;
+    @Autowired
+    protected PvkDokumentService pvkDokumentService;
 
     @BeforeEach
     void setUpBase() {
@@ -100,6 +106,7 @@ public abstract class IntegrationTestBase {
     void tearDownBase() {
         repository.deleteAll();
         MockFilter.clearUser();
+        etterlevelseRepo.deleteAll();
     }
 
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {

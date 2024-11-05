@@ -5,9 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.KravId;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 
 import java.time.LocalDate;
@@ -62,4 +64,21 @@ public class EtterlevelseRequest implements RequestElement, KravId {
         validator.checkNull(Fields.kravNummer, kravNummer);
         validator.checkNull(Fields.kravVersjon, kravVersjon);
     }
+    
+    // Updates all fields from the request except id, version and changestamp
+    public Etterlevelse mergeInto(Etterlevelse etterlevelse) {
+        etterlevelse.setBehandlingId(behandlingId);
+        etterlevelse.setEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
+        etterlevelse.setKravNummer(kravNummer);
+        etterlevelse.setKravVersjon(kravVersjon);
+
+        etterlevelse.setEtterleves(etterleves);
+        etterlevelse.setStatusBegrunnelse(statusBegrunnelse);
+        etterlevelse.setDokumentasjon(copyOf(dokumentasjon));
+        etterlevelse.setFristForFerdigstillelse(fristForFerdigstillelse);
+        etterlevelse.setStatus(status);
+        etterlevelse.setSuksesskriterieBegrunnelser(StreamUtils.convert(suksesskriterieBegrunnelser, SuksesskriterieBegrunnelseRequest::convertTo));
+        return etterlevelse;
+    }
+
 }

@@ -124,7 +124,7 @@ export const BehandlingSok = () => {
       {loading && (
         <div>
           <div className="ml-2.5 mt-2.5">
-            <Loader size="large" />
+            <Loader size="large" className="flex justify-self-center" />
           </div>
         </div>
       )}

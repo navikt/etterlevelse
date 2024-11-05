@@ -15,6 +15,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
+import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.KravService;
@@ -78,13 +79,13 @@ public class StatistikkService {
     }
 
     public LocalDateTime getFirstCreatedDateForEtterlevelser(List<Etterlevelse> etterlevelseList) {
-        etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getCreatedDate()));
-        return !etterlevelseList.isEmpty() ? etterlevelseList.get(0).getChangeStamp().getCreatedDate().withNano(0) : null;
+        etterlevelseList.sort(Comparator.comparing(a -> a.getCreatedDate()));
+        return !etterlevelseList.isEmpty() ? etterlevelseList.get(0).getCreatedDate().withNano(0) : null;
     }
 
     public LocalDateTime getLastUpdatedDateForEtterlevelser(List<Etterlevelse> etterlevelseList) {
-        etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getLastModifiedDate()));
-        return !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate().withNano(0) : null;
+        etterlevelseList.sort(Comparator.comparing(a -> a.getLastModifiedDate()));
+        return !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getLastModifiedDate().withNano(0) : null;
     }
 
     public Page<TilbakemeldingStatistikkResponse> getAllTilbakemeldingStatistikk(Pageable page) {
@@ -222,7 +223,7 @@ public class StatistikkService {
             if (!etterlevelseAudits.isEmpty()) {
                 ferdigDokumentertDato = LocalDateTime.parse(etterlevelseAudits.get(etterlevelseAudits.size() - 1).getData().get("lastModifiedDate").asText()).withNano(0);
             } else {
-                ferdigDokumentertDato = etterlevelse.getChangeStamp().getLastModifiedDate().withNano(0);
+                ferdigDokumentertDato = etterlevelse.getLastModifiedDate().withNano(0);
             }
         }
 
@@ -261,10 +262,10 @@ public class StatistikkService {
                 .dokumentasjon(etterlevelse.getDokumentasjon())
                 .fristForFerdigstillelse(etterlevelse.getFristForFerdigstillelse())
                 .status(etterlevelse.getStatus())
-                .suksesskriterieBegrunnelser(etterlevelse.toResponse().getSuksesskriterieBegrunnelser())
+                .suksesskriterieBegrunnelser(EtterlevelseResponse.buildFrom(etterlevelse).getSuksesskriterieBegrunnelser())
                 .statusBegrunnelse(etterlevelse.getStatusBegrunnelse())
-                .lastModifiedDate(etterlevelse.getChangeStamp().getLastModifiedDate().withNano(0))
-                .createdDate(etterlevelse.getChangeStamp().getCreatedDate().withNano(0))
+                .lastModifiedDate(etterlevelse.getLastModifiedDate().withNano(0))
+                .createdDate(etterlevelse.getCreatedDate().withNano(0))
                 .ferdigDokumentertDato(ferdigDokumentertDato)
                 .antallSuksesskriterie(etterlevelse.getSuksesskriterieBegrunnelser().size())
                 .teamId(etterlevelseDokumentasjon.getTeams())

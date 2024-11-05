@@ -3,58 +3,91 @@ import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { ReactNode } from 'react'
 import Select, { CSSObjectWithLabel } from 'react-select'
 import { TOr } from '../../../constants'
-import { EListName, ICode, codelist } from '../../../services/Codelist'
+import { CodelistService, EListName, ICode } from '../../../services/Codelist'
 import { ettlevColors } from '../../../util/theme'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 
+interface IEditKravMultiOptionFieldProps {
+  label: string
+  name: string
+  caption?: ReactNode
+  tooltip?: string
+  marginBottom?: boolean
+}
+
+type TEditKravMultiOptionFieldTypes = TOr<
+  { options: { value: string; label: string; description: string }[] },
+  { listName: EListName }
+>
+
 export const EditKravMultiOptionField = (
-  props: {
-    label: string
-    name: string
-    caption?: ReactNode
-    tooltip?: string
-    marginBottom?: boolean
-  } & TOr<
-    { options: { value: string; label: string; description: string }[] },
-    { listName: EListName }
-  >
+  props: IEditKravMultiOptionFieldProps & TEditKravMultiOptionFieldTypes
 ) => {
-  const options = props.options || codelist.getParsedOptions(props.listName)
+  const { label, name, caption, tooltip, marginBottom } = props
+  const [codelistUtils] = CodelistService()
+  const options: {
+    value: string
+    label: string
+    description: string
+  }[] = props.options || codelistUtils.getParsedOptions(props.listName)
 
   return (
-    <FieldWrapper marginBottom={props.marginBottom}>
-      <FieldArray name={props.name}>
+    <FieldWrapper marginBottom={marginBottom}>
+      <FieldArray name={name}>
         {(fieldArrayRenderProps: FieldArrayRenderProps) => {
-          const selectedIds = (fieldArrayRenderProps.form.values[props.name] as any[]).map(
-            (value) => (props.listName ? (value as ICode).code : value)
+          const selectedIds = (fieldArrayRenderProps.form.values[name] as any[]).map(
+            (value: any) => (props.listName ? (value as ICode).code : value)
           )
           return (
             <div>
-              <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
-              {props.caption && (
-                <BodyShort className="text-[var(--a-text-subtle)]">{props.caption}</BodyShort>
-              )}
+              <LabelWithTooltip label={label} tooltip={tooltip} />
+              {caption && <BodyShort className="text-[var(--a-text-subtle)]">{caption}</BodyShort>}
               <Select
-                aria-label={props.label}
+                aria-label={label}
                 isMulti
                 options={options}
-                value={selectedIds.map((value) => options.find((option) => option.value === value))}
+                value={selectedIds.map((value: any) =>
+                  options.find(
+                    (option: { value: string; label: string; description: string }) =>
+                      option.value === value
+                  )
+                )}
                 onChange={(value) => {
                   if (value.length) {
                     if (props.listName) {
                       fieldArrayRenderProps.form.setFieldValue(
-                        props.name,
-                        value.map((value) => codelist.getCode(props.listName, value?.value))
+                        name,
+                        value.map(
+                          (
+                            value:
+                              | {
+                                  value: string
+                                  label: string
+                                  description: string
+                                }
+                              | undefined
+                          ) => codelistUtils.getCode(props.listName, value?.value)
+                        )
                       )
                     } else {
                       fieldArrayRenderProps.form.setFieldValue(
-                        props.name,
-                        value.map((value) => value?.value)
+                        name,
+                        value.map(
+                          (
+                            value:
+                              | {
+                                  value: string
+                                  label: string
+                                  description: string
+                                }
+                              | undefined
+                          ) => value?.value
+                        )
                       )
                     }
                   } else {
-                    fieldArrayRenderProps.form.setFieldValue(props.name, [])
+                    fieldArrayRenderProps.form.setFieldValue(name, [])
                   }
                 }}
                 styles={{

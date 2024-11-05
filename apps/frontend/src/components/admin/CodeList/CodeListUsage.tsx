@@ -1,8 +1,7 @@
 import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
-import * as React from 'react'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, RefObject, createRef, useEffect, useState } from 'react'
 import { replaceCodelistUsage } from '../../../api/CodelistApi'
-import { ICodeUsage, codelist } from '../../../services/Codelist'
+import { CodelistService, ICodeUsage, IGetParsedOptionsProps } from '../../../services/Codelist'
 import { ObjectLink } from '../../common/RouteLink'
 import { EObjectType } from '../audit/AuditTypes'
 
@@ -76,7 +75,8 @@ const UsageTable = (props: { usage: ICodeUsage }) => {
 export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
   const [showReplace, setShowReplace] = useState(false)
   const [newValue, setNewValue] = useState<string>()
-  const ref = React.createRef<HTMLDivElement>()
+  const ref: RefObject<HTMLDivElement> = createRef<HTMLDivElement>()
+  const [codelistUtils] = CodelistService()
 
   const { usage, refresh } = props
 
@@ -109,14 +109,16 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
             hideLabel
             value={newValue}
             className="mr-4"
-            onChange={(e) => setNewValue(e.target.value)}
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => setNewValue(event.target.value)}
           >
             <option value="">Ny verdi</option>
-            {codelist.getParsedOptions(usage.listName).map((code, index) => (
-              <option key={index + '_' + code.label} value={code.value}>
-                {code.label}
-              </option>
-            ))}
+            {codelistUtils
+              .getParsedOptions(usage.listName)
+              .map((code: IGetParsedOptionsProps, index: number) => (
+                <option key={index + '_' + code.label} value={code.value}>
+                  {code.label}
+                </option>
+              ))}
           </Select>
           <Button type="button" onClick={replace} disabled={!newValue}>
             Erstatt
@@ -125,7 +127,7 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
       )}
 
       {usage && <UsageTable usage={usage} />}
-      {!usage && <Loader size="large" />}
+      {!usage && <Loader size="large" className="flex justify-self-center" />}
     </div>
   )
 }

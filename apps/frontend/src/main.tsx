@@ -5,7 +5,7 @@ import AppRoutes from './AppRoutes'
 import { apolloClient } from './api/ApolloClient'
 import Header from './components/Header'
 import { Footer } from './components/Navigation/Footer'
-import { codelist } from './services/Codelist'
+import { CodelistService } from './services/Codelist'
 import { useAwait, useAwaitUser } from './util/hooks/customHooks'
 import { useNetworkStatus } from './util/network'
 
@@ -13,7 +13,8 @@ import { useNetworkStatus } from './util/network'
 
 const Main = () => {
   useAwaitUser()
-  useAwait(codelist.wait())
+  const [codelistUtils] = CodelistService()
+  useAwait(codelistUtils.fetchData())
 
   return (
     <ApolloProvider client={apolloClient}>
