@@ -1,6 +1,6 @@
 import { Button, Heading, Radio, RadioGroup, ReadMore, TextField } from '@navikt/ds-react'
 import { useState } from 'react'
-import { ESannsynlighetsnivaa } from '../../../constants'
+import { EKonsekvensnivaa, ESannsynlighetsnivaa } from '../../../constants'
 import { TextAreaField } from '../../common/Inputs'
 
 export const CreateRisikoscenario = () => {
@@ -33,12 +33,12 @@ export const CreateRisikoscenario = () => {
             />
           </div>
 
-          <Heading level="2" size="small" className="mb-3">
+          <Heading level="2" size="small" className="my-5">
             Risikoscenarioets sannsynlighet
           </Heading>
 
-          <ReadMore header="Hva menes med de ulike sannsynlighetsnivåene?" className="mt-5">
-            ????????
+          <ReadMore header="Hva menes med de ulike sannsynlighetsnivåene?" className="my-5">
+            ???????? WIP
           </ReadMore>
 
           <RadioGroup legend="Vurdér risikoscenarioets sannsynlighetsnivå">
@@ -51,6 +51,28 @@ export const CreateRisikoscenario = () => {
 
           <div className="mt-3">
             <TextAreaField rows={3} noPlaceholder label="Begrunn sannsynlighetsnivået" name="WIP" />
+          </div>
+
+          <Heading level="2" size="small" className="my-5">
+            Risikoscenarioets konsekvensnivå
+          </Heading>
+
+          <ReadMore header="Hva menes med de ulike konsekvensnivåene?" className="my-5">
+            ???????? WIP
+          </ReadMore>
+
+          <RadioGroup legend="Vurdér risikoscenarioets konsekvensnivå">
+            <Radio value={EKonsekvensnivaa.UBETYDELIG}>Ubetydelig</Radio>
+            <Radio value={EKonsekvensnivaa.LAV_KONSEKVENS}>Lav konsekvens</Radio>
+            <Radio value={EKonsekvensnivaa.MODERAT_KONSEKVENS}>Moderat konsekvens</Radio>
+            <Radio value={EKonsekvensnivaa.ALVORLIG_KONSEKVENS}>Alvorlig konsekvens</Radio>
+            <Radio value={EKonsekvensnivaa.SVAERT_ALVORLIG_KONSEKVENS}>
+              Svært alvorlig konsekvens
+            </Radio>
+          </RadioGroup>
+
+          <div className="mt-3">
+            <TextAreaField rows={3} noPlaceholder label="Begrunn konsekvensnivået" name="WIP" />
           </div>
 
           <div className="flex gap-2 mt-5">
