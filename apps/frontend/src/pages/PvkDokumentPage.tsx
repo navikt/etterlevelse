@@ -9,6 +9,7 @@ import { mapPvkDokumentToFormValue, updatePvkDokument, usePvkDokument } from '..
 import BehandlingensArtOgOmfangView from '../components/PvkDokument/BehandlingensArtOgOmfangView'
 import IdentifiseringAvRisikoscenarioerOgTiltak from '../components/PvkDokument/IdentifiseringAvRisikoscenarioerOgTiltak'
 import InnvolveringAvEksterneView from '../components/PvkDokument/InnvolveringAvEksterneView'
+import OppsummeringAvAlleRisikoscenarioerOgTiltak from '../components/PvkDokument/OppsummeringAvAlleRisikoscenarioerOgTiltak'
 import OversiktView from '../components/PvkDokument/OversiktView'
 import SendInnView from '../components/PvkDokument/SendInnView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
@@ -189,7 +190,7 @@ export const PvkDokumentPage = () => {
                         />
                       )}
                       {activeStep === 4 && <IdentifiseringAvRisikoscenarioerOgTiltak />}
-                      {activeStep === 5 && <div>Generelle risikoscenarioer</div>}
+                      {activeStep === 5 && <OppsummeringAvAlleRisikoscenarioerOgTiltak />}
                       {activeStep === 6 && (
                         <SendInnView
                           personkategorier={personkategorier}
