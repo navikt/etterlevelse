@@ -65,7 +65,7 @@ export const CreateRisikoscenarioTiltak = () => {
 
           {isEdit && (
             <div>
-              <div className="border-b border-border-divider w-full" />
+              <div className="border-b-[5px] border-[#8269a2] border-border-divider w-full" />
 
               <Heading level="2" size="small" className="my-5">
                 Opprett tiltak
