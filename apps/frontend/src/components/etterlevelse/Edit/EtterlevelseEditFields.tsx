@@ -1,5 +1,5 @@
-import { Alert, BodyShort, Button, Checkbox, Label, Modal } from '@navikt/ds-react'
-import { Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
+import {Alert, BodyShort, Button, Checkbox, ErrorSummary, Label, Modal} from '@navikt/ds-react'
+import {Form, Formik, FormikProps, validateYupSchema, yupToFormErrors} from 'formik'
 import _ from 'lodash'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
@@ -67,6 +67,9 @@ export const EtterlevelseEditFields = ({
 
   const [morDokumentRelasjon, setMorDokumentRelasjon] = useState<IDocumentRelation>()
   const [morEtterlevelse, setMorEtterlevelse] = useState<IEtterlevelse>()
+
+  const errorSummaryRef = React.useRef<HTMLDivElement>(null)
+  const [validateOnBlur, setValidateOnBlur] = useState(false)
 
   const navigate = useNavigate()
   useEffect(() => {
@@ -137,7 +140,7 @@ export const EtterlevelseEditFields = ({
         }}
         innerRef={formRef}
         validateOnChange={false}
-        validateOnBlur={false}
+        validateOnBlur={validateOnBlur}
       >
         {({
           values,
@@ -175,13 +178,6 @@ export const EtterlevelseEditFields = ({
                   morEtterlevelse={morEtterlevelse}
                 />
 
-                <div className="w-full my-6">
-                  {Object.keys(errors).length > 0 && (
-                    <Alert fullWidth variant="error">
-                      Du må fylle ut alle obligatoriske felter
-                    </Alert>
-                  )}
-                </div>
               </div>
             </Form>
 
@@ -213,12 +209,39 @@ export const EtterlevelseEditFields = ({
                 </div>
               )}
 
-              <div className="w-full justify-end">
+              {Object.values(errors).some(Boolean) && (
+                <ErrorSummary
+                  ref={errorSummaryRef}
+                  heading="Du må rette disse feilene før du kan fortsette"
+                >
+                  {errors.suksesskriterieBegrunnelser && Object.entries(errors.suksesskriterieBegrunnelser) &&
+
+                    Object.entries(errors.suksesskriterieBegrunnelser)
+                      .filter(([, error]) => error)
+                      .map((key) =>
+                        Object.values(key)
+                          .filter((v) => !v[0])
+                          .map((komponent) =>
+                            Object.entries(komponent)
+                              .map((singleError, id) =>
+                                <ErrorSummary.Item
+                                  href={"#" + singleError[0].toString() + "_" + (id + 1).toString()}
+                                  key={singleError[0] + id}>
+                                  {singleError[1] as string}
+                                </ErrorSummary.Item>)
+                          ))
+                  }
+                </ErrorSummary>
+              )}
+
+
+              <div className="w-full justify-end mt-5">
                 <div className="flex w-full pb-3 flex-row-reverse">
                   <Button
                     disabled={disableEdit || isOppfylesSenere}
                     type="button"
                     onClick={() => {
+                      setValidateOnBlur(true)
                       values.status = EEtterlevelseStatus.FERDIG_DOKUMENTERT
                       values.suksesskriterieBegrunnelser.forEach((skb, index) => {
                         if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
