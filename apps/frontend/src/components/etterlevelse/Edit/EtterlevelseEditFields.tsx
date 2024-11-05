@@ -1,5 +1,5 @@
-import {Alert, BodyShort, Button, Checkbox, ErrorSummary, Label, Modal} from '@navikt/ds-react'
-import {Form, Formik, FormikProps, validateYupSchema, yupToFormErrors} from 'formik'
+import { Alert, BodyShort, Button, Checkbox, ErrorSummary, Label, Modal } from '@navikt/ds-react'
+import { Form, Formik, FormikErrors, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
@@ -16,6 +16,7 @@ import {
   ERelationType,
   IDocumentRelation,
   IEtterlevelse,
+  ISuksesskriterieBegrunnelse,
   TEtterlevelseDokumentasjonQL,
   TKravQL,
 } from '../../../constants'
@@ -24,6 +25,7 @@ import { DateField } from '../../common/Inputs'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
 import EtterlevelseCard from '../EtterlevelseCard'
 import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
+import SuksesskriterieErrorFields from './SuksesskriterieErrorFields'
 import { etterlevelseSchema } from './etterlevelseSchema'
 
 type TEditProps = {
@@ -177,7 +179,6 @@ export const EtterlevelseEditFields = ({
                   forGjenbruk={etterlevelseDokumentasjon?.forGjenbruk}
                   morEtterlevelse={morEtterlevelse}
                 />
-
               </div>
             </Form>
 
@@ -195,7 +196,7 @@ export const EtterlevelseEditFields = ({
                   </Checkbox>
 
                   {isOppfylesSenere && (
-                    <div className="w-full">
+                    <div className="w-full" id="fristForFerdigstillelse">
                       <div className="w-full max-w-[10.625rem]">
                         <DateField name="fristForFerdigstillelse" />
                       </div>
@@ -209,31 +210,27 @@ export const EtterlevelseEditFields = ({
                 </div>
               )}
 
-              {Object.values(errors).some(Boolean) && (
+              {!_.isEmpty(errors) && (
                 <ErrorSummary
                   ref={errorSummaryRef}
                   heading="Du må rette disse feilene før du kan fortsette"
+                  onClick={() => console.debug(errors)}
                 >
-                  {errors.suksesskriterieBegrunnelser && Object.entries(errors.suksesskriterieBegrunnelser) &&
+                  {errors.suksesskriterieBegrunnelser && (
+                    <SuksesskriterieErrorFields
+                      errors={
+                        errors.suksesskriterieBegrunnelser as FormikErrors<ISuksesskriterieBegrunnelse>[]
+                      }
+                    />
+                  )}
 
-                    Object.entries(errors.suksesskriterieBegrunnelser)
-                      .filter(([, error]) => error)
-                      .map((key) =>
-                        Object.values(key)
-                          .filter((v) => !v[0])
-                          .map((komponent) =>
-                            Object.entries(komponent)
-                              .map((singleError, id) =>
-                                <ErrorSummary.Item
-                                  href={"#" + singleError[0].toString() + "_" + (id + 1).toString()}
-                                  key={singleError[0] + id}>
-                                  {singleError[1] as string}
-                                </ErrorSummary.Item>)
-                          ))
-                  }
+                  {errors.fristForFerdigstillelse && (
+                    <ErrorSummary.Item href={'#fristForFerdigstillelse'}>
+                      {errors.fristForFerdigstillelse}
+                    </ErrorSummary.Item>
+                  )}
                 </ErrorSummary>
               )}
-
 
               <div className="w-full justify-end mt-5">
                 <div className="flex w-full pb-3 flex-row-reverse">
