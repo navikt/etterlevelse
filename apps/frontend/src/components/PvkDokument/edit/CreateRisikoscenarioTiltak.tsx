@@ -95,7 +95,7 @@ export const CreateRisikoscenarioTiltak = () => {
                 <DatePicker {...datepickerProps}>
                   <DatePicker.Input
                     {...inputProps}
-                    label="Velg dato"
+                    label="Legg inn tiltaksfrist"
                     error={hasError && 'Noe er feil'}
                   />
                 </DatePicker>
