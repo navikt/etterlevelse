@@ -268,7 +268,12 @@ export const DateField = (props: TPropsDateField) => {
               } else fieldProps.form.setFieldValue(name, undefined)
             }}
           >
-            <DatePicker.Input {...inputProps} label="Velg dato" />
+            <DatePicker.Input
+              className="mb-2"
+              {...inputProps}
+              value={fieldProps.form.values[name]}
+              label="Velg dato"
+            />
           </DatePicker>
         )}
       </Field>
