@@ -33,6 +33,7 @@ export const KravView = (props: IProps) => {
   const [etterlevelse, setEtterlevelse] = useState<IEtterlevelse>()
   const [loadingEtterlevelseData, setLoadingEtterlevelseData] = useState<boolean>(false)
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<IEtterlevelse[]>()
+
   useEffect(() => {
     ;(async () => {
       setLoadingEtterlevelseData(true)
@@ -89,6 +90,7 @@ export const KravView = (props: IProps) => {
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           kravId={toKravId(etterlevelse)}
           etterlevelse={etterlevelse}
+          setEtterlevelse={setEtterlevelse}
           varsleMelding={varsleMelding}
           navigatePath={navigatePath}
           kravFilter={kravFilter}

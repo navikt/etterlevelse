@@ -18,7 +18,7 @@ import {
 } from '@navikt/ds-react'
 import { FormikProps } from 'formik'
 import moment from 'moment'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import {
   createEtterlevelse,
@@ -63,6 +63,7 @@ import EtterlevelseViewFields from './EtterlevelseViewFields'
 interface IProps {
   temaName?: string
   etterlevelse: IEtterlevelse
+  setEtterlevelse: Dispatch<SetStateAction<IEtterlevelse | undefined>>
   kravId: TKravId
   formRef?: React.Ref<any>
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
@@ -78,6 +79,7 @@ export const EtterlevelseKravView = (props: IProps) => {
     temaName,
     kravId,
     etterlevelse,
+    setEtterlevelse,
     varsleMelding,
     etterlevelseDokumentasjon,
     navigatePath,
@@ -213,6 +215,7 @@ export const EtterlevelseKravView = (props: IProps) => {
           setStatustext(res.status)
           setHasNextKrav(false)
           activeAlertModalController()
+          setEtterlevelse(res)
         }
       })
     } else {
@@ -225,6 +228,7 @@ export const EtterlevelseKravView = (props: IProps) => {
           setStatustext(res.status)
           setHasNextKrav(false)
           activeAlertModalController()
+          setEtterlevelse(res)
         }
       })
     }
