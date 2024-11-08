@@ -17,10 +17,11 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
 import { CustomFileUpload } from '../components/behandlingensLivlop/CustomFileUpload'
 import { TextAreaField } from '../components/common/Inputs'
+import { Markdown } from '../components/common/Markdown'
 import { ExternalLink } from '../components/common/RouteLink'
 import { PageLayout } from '../components/scaffold/Page'
 import { IBehandling, IBreadCrumbPath, IPvkDokument } from '../constants'
-import behandlingensLivslop from '../resources/behandlingensLivslop.svg'
+import behandlingensLivslop from '../resources/behandlingensLivslop.png'
 import { user } from '../services/User'
 import { env } from '../util/env'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
@@ -272,10 +273,14 @@ export const BehandlingensLivslopPage = () => {
                 </Heading>
 
                 {etterlevelseDokumentasjon.beskrivelse && (
-                  <div className="mt-3">{etterlevelseDokumentasjon.beskrivelse}</div>
+                  <div className="mt-3">
+                    <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
+                  </div>
                 )}
                 {!etterlevelseDokumentasjon.beskrivelse && (
-                  <div className="mt-3">Det er ikke skrevet en beskrivelse på etterlevelsen</div>
+                  <BodyShort className="mt-3">
+                    Det er ikke skrevet en beskrivelse på etterlevelsen
+                  </BodyShort>
                 )}
               </div>
             )}
