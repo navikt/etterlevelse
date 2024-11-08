@@ -1,4 +1,5 @@
 import { Alert, BodyShort, Heading, List, ReadMore } from '@navikt/ds-react'
+import { Field, FieldProps } from 'formik'
 import { BoolField, TextAreaField } from '../common/Inputs'
 
 interface IProps {
@@ -90,9 +91,17 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
         />
       </div>
 
-      <Alert variant="warning" className="mt-3">
-        Dere må oppdatere databehandlere i Behandlingskatalogen
-      </Alert>
+      <Field>
+        {(fieldProps: FieldProps) => (
+          <>
+            {fieldProps.form.values.stemmerDatabehandlere && (
+              <Alert variant="warning" className="mt-3">
+                Dere må oppdatere databehandlere i Behandlingskatalogen
+              </Alert>
+            )}
+          </>
+        )}
+      </Field>
 
       <BodyShort className="mt-5">
         Dersom det skal benyttes en databehandler i hele eller deler av behandlingen, skal dere som
