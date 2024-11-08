@@ -1,4 +1,5 @@
 import { Alert, Heading, List, ReadMore } from '@navikt/ds-react'
+import { Field, FieldProps } from 'formik'
 import { BoolField, TextAreaField } from '../common/Inputs'
 
 interface IProps {
@@ -27,9 +28,17 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
         horizontal
       />
 
-      <Alert inline variant="warning" className="mt-3">
-        Dere må oppdatere personkategori(er) i Behandlingskatalogen.
-      </Alert>
+      <Field>
+        {(fieldProps: FieldProps) => (
+          <>
+            {fieldProps.form.values.stemmerPersonkategorier === false && (
+              <Alert inline variant="warning" className="mt-3">
+                Dere må oppdatere personkategori(er) i Behandlingskatalogen.
+              </Alert>
+            )}
+          </>
+        )}
+      </Field>
 
       <ReadMore className="mt-3" header="Hvordan kan vi komme med gode estimater?">
         Det blir ofte vanskelig å tallfeste noen personkategorier, for eksempel når det er snakk om

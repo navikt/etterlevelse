@@ -209,7 +209,9 @@ interface IPropsBoolField extends TLabelName, ITooltip {
 const YES = 'YES',
   NO = 'NO',
   UNCLARIFIED = 'UNCLARIFIED'
-const boolToRadio = (bool?: boolean) => (bool === undefined ? UNCLARIFIED : bool ? YES : NO)
+const boolToRadio = (bool?: boolean) => {
+  return bool === null || bool === undefined ? UNCLARIFIED : bool ? YES : NO
+}
 const radioToBool = (radio: string) => (radio === UNCLARIFIED ? undefined : radio === YES)
 
 export const BoolField = (props: IPropsBoolField) => {

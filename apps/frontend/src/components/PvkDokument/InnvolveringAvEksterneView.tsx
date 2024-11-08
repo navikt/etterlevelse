@@ -94,8 +94,8 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
       <Field>
         {(fieldProps: FieldProps) => (
           <>
-            {fieldProps.form.values.stemmerDatabehandlere && (
-              <Alert variant="warning" className="mt-3">
+            {fieldProps.form.values.stemmerDatabehandlere === false && (
+              <Alert inline variant="warning" className="mt-3">
                 Dere må oppdatere databehandlere i Behandlingskatalogen
               </Alert>
             )}
