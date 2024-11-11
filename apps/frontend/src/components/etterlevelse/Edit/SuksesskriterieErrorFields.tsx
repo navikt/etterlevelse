@@ -1,6 +1,7 @@
 import { ErrorSummary } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import _ from 'lodash'
+import React from 'react'
 import { ISuksesskriterieBegrunnelse } from '../../../constants'
 
 interface IProps {
@@ -15,7 +16,7 @@ export const SuksesskriterieErrorFields = (props: IProps) => {
       {errors.map((error, index) => {
         if (!_.isEmpty(error)) {
           return (
-            <div key={'suksesskrietier_error_' + index}>
+            <React.Fragment key={'suksesskrietier_error_' + index}>
               {error.begrunnelse && (
                 <ErrorSummary.Item href={'#begrunnelse_' + index}>
                   {error.begrunnelse}
@@ -26,7 +27,7 @@ export const SuksesskriterieErrorFields = (props: IProps) => {
                   {error.suksesskriterieStatus}
                 </ErrorSummary.Item>
               )}
-            </div>
+            </React.Fragment>
           )
         }
       })}
