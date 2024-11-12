@@ -216,7 +216,7 @@ public class StatistikkService {
 
             List<AuditResponse> etterlevelseAudits = new AuditLogResponse(etterlevelse.getId().toString(), convert(etterlevelseLog, AuditVersion::toResponse))
                     .getAudits().stream().filter(audit ->
-                            Objects.equals(audit.getData().get("data").get("status").asText(), etterlevelse.getStatus().name())
+                            Objects.equals(audit.getData().get("etterlevelseData").get("status").asText(), etterlevelse.getStatus().name())
                     ).toList();
 
             //Because of migration script some etterlevelser has no audit record of being set to ferdig_dokumentert or ikke_relevant_ferdig_dokumentert
