@@ -9,7 +9,6 @@ import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentFil;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 
 import java.util.List;
@@ -42,8 +41,6 @@ public class PvkDokumentRequest implements RequestElement {
     private Boolean stemmerDatabehandlere;
     private Boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
-
-    private List<PvkDokumentFil> pvkDokumentFiler;
 
     private Boolean update;
 
