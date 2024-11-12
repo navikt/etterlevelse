@@ -4,5 +4,6 @@ public enum SuksesskriterieStatus {
     UNDER_ARBEID,
     OPPFYLT,
     IKKE_RELEVANT,
-    IKKE_OPPFYLT,
+    IKKE_OPPFYLT;
+    
 }

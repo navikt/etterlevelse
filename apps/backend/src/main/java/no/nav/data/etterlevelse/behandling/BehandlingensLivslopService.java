@@ -4,16 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.rest.PageParameters;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentFil;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentFilRepo;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
+import no.nav.data.etterlevelse.behandling.domain.BehandlingensLivslop;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,71 +18,52 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BehandlingensLivslopService {
 
-    private final BehandlingensLivslopRepo pvkDokumentRepo;
+    private final BehandlingensLivslopRepo repo;
 
-    public PvkDokument get(UUID uuid) {
-        if (uuid == null || !pvkDokumentRepo.existsById(uuid)) return null;
-        return getPvkDokument(uuid);
+    public BehandlingensLivslop get(UUID uuid) {
+        if (uuid == null || !repo.existsById(uuid)) return null;
+        return getBehandlingensLivslop(uuid);
     }
 
-    private PvkDokument getPvkDokument(UUID uuid) {
-        return pvkDokumentRepo.findById(uuid).orElseThrow(() -> new NotFoundException("Couldn't find Pvk Dokument with id " + uuid));
+    private BehandlingensLivslop getBehandlingensLivslop(UUID uuid) {
+        return repo.findById(uuid).orElseThrow(() -> new NotFoundException("Couldn't find behandlingens livsløp with id " + uuid));
     }
 
     @Transactional
-    public PvkDokument saveTestData(PvkDokument pvkDokument) {
-        pvkDokument = pvkDokumentRepo.save(pvkDokument);
-        pvkDokumentRepo.flush();
-        return pvkDokument;
+    public BehandlingensLivslop saveTestData(BehandlingensLivslop behandlingensLivslop) {
+        behandlingensLivslop = repo.save(behandlingensLivslop);
+        repo.flush();
+        return behandlingensLivslop;
     }
 
-    public Page<PvkDokument> getAll(PageParameters pageParameters) {
-        return pvkDokumentRepo.findAll(pageParameters.createPage());
+    public Page<BehandlingensLivslop> getAll(PageParameters pageParameters) {
+        return repo.findAll(pageParameters.createPage());
     }
 
-    public Optional<PvkDokument> getByEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId) {
-        return pvkDokumentRepo.findByEtterlevelseDokumensjon(etterlevelseDokumentasjonId);
+    public Optional<BehandlingensLivslop> getByEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId) {
+        return repo.findByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public PvkDokument save(PvkDokument pvkDokument, boolean isUpdate) {
+    public BehandlingensLivslop save(BehandlingensLivslop behandlingensLivslop, boolean isUpdate) {
         if (!isUpdate) {
-            var existingPvkDokument = getByEtterlevelseDokumentasjon(pvkDokument.getEtterlevelseDokumentId());
-            if (existingPvkDokument.isPresent()) {
-                log.warn("Found existing pvk document when trying to create for etterlevelse dokumentation id: {}", pvkDokument.getEtterlevelseDokumentId());
-                pvkDokument.setId(existingPvkDokument.get().getId());
+            var existingBehandlingensLivslop = getByEtterlevelseDokumentasjon(behandlingensLivslop.getEtterlevelseDokumentasjonId());
+            if (existingBehandlingensLivslop.isPresent()) {
+                log.warn("Found existing behandlingens livsløp when trying to create for etterlevelse dokumentation id: {}", behandlingensLivslop.getEtterlevelseDokumentasjonId());
+                behandlingensLivslop.setId(existingBehandlingensLivslop.get().getId());
             } else {
-                pvkDokument.setId(UUID.randomUUID());
+                behandlingensLivslop.setId(UUID.randomUUID());
             }
         }
 
-        return pvkDokumentRepo.save(pvkDokument);
+        return repo.save(behandlingensLivslop);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public PvkDokument delete(UUID id) {
-        var pvkDokumentToDelete = pvkDokumentRepo.findById(id);
-        pvkDokumentRepo.deleteById(id);
-        return pvkDokumentToDelete.orElse(null);
+    public BehandlingensLivslop delete(UUID id) {
+        var behandlingensLivslopToDelete = repo.findById(id);
+        repo.deleteById(id);
+        return behandlingensLivslopToDelete.orElse(null);
     }
 
-    public List<PvkDokumentFil> getPvkDokumentFilByPvkDokumentId(String pvkDokumentId) {
-        return pvkDokumentFilRepo.findPvkDokumentFilerByPvkDokumentId(pvkDokumentId);
-    }
-
-    public Optional<PvkDokumentFil> getPvkDokumentFilByFileNameAndType(String filName, String filType) {
-        return pvkDokumentFilRepo.findPvkDokumentFilerByFilenameAndType(filName, filType);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public List<PvkDokumentFil> saveImages(List<PvkDokumentFil> files) {
-        return pvkDokumentFilRepo.saveAll(files);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public PvkDokumentFil deleteFile(UUID id) {
-        var pvkDokumentFilToDelete = pvkDokumentFilRepo.findById(id);
-        pvkDokumentFilRepo.deleteById(id);
-        return pvkDokumentFilToDelete.orElse(null);
-    }
 }

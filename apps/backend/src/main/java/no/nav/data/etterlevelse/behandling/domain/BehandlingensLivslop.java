@@ -30,10 +30,6 @@ import java.util.UUID;
 @Table(name = "BEHANDLINGENS_LIVSLOP")
 public class BehandlingensLivslop extends Auditable {
     
-    // FIXME:
-    // 1) Skal denne extende Auditable?
-    // 2) Riktig med @EqualsAndHashCode(callSuper = true)?
-
     @Id
     @Builder.Default
     @Column(name = "ID")

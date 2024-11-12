@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.behandling;
+ package no.nav.data.etterlevelse.behandling;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -10,8 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentFil;
+import no.nav.data.etterlevelse.behandling.domain.BehandlingensLivslop;
+import no.nav.data.etterlevelse.behandling.dto.BehandlingensLivslopRequest;
+import no.nav.data.etterlevelse.behandling.dto.BehandlingensLivslopResponse;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
 import org.springframework.data.domain.Page;
@@ -40,74 +41,78 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/pvkdokument")
-@Tag(name = "Pvk Dokument", description = "Pvk Dokument for etterlevelsesdokumentasjon")
+@RequestMapping("/behandlingenslivslop")
+@Tag(name = "Behandlingens Livsløp", description = "Behandlingens Livsløp for etterlevelsesdokumentasjon")
 public class BehandlingensLivslopController {
 
-    private final BehandlingensLivslopService pvkDokumentService;
+    private final BehandlingensLivslopService service;
 
-    @Operation(summary = "Get All Pvk Document")
+    @Operation(summary = "Get All Behandlingens Livsløp")
     @ApiResponse(description = "ok")
     @GetMapping
-    public ResponseEntity<RestResponsePage<PvkDokumentResponse>> getAll(
+    public ResponseEntity<RestResponsePage<BehandlingensLivslopResponse>> getAll(
             PageParameters pageParameters
     ) {
-        log.info("Get all Pvk Document");
-        Page<PvkDokument> page = pvkDokumentService.getAll(pageParameters);
-        return ResponseEntity.ok(new RestResponsePage<>(page).convert(PvkDokumentResponse::buildFrom));
+        log.info("Get all Behandlingens Livsløp");
+        Page<BehandlingensLivslop> page = service.getAll(pageParameters);
+        return ResponseEntity.ok(new RestResponsePage<>(page).convert(BehandlingensLivslopResponse::buildFrom));
     }
 
-    @Operation(summary = "Get One Pvk Document")
+    @Operation(summary = "Get One Behandlingens Livsløp")
     @ApiResponse(description = "ok")
     @GetMapping("/{id}")
-    public ResponseEntity<PvkDokumentResponse> getById(@PathVariable UUID id) {
-        log.info("Get Pvk Document id={}", id);
-        return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokumentService.get(id)));
+    public ResponseEntity<BehandlingensLivslopResponse> getById(@PathVariable UUID id) {
+        log.info("Get Behandlingens Livsløp id={}", id);
+        return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(service.get(id)));
     }
 
-    @Operation(summary = "Get Pvk Document by etterlevelsedokument id")
+    @Operation(summary = "Get Behandlingens Livsløp by etterlevelsedokument id")
     @ApiResponse(description = "ok")
     @GetMapping("/etterlevelsedokument/{etterlevelseDokumentId}")
-    public ResponseEntity<PvkDokumentResponse> getPvkDokumentByEtterlevelseDokumentId(@PathVariable String etterlevelseDokumentId) {
-        log.info("Get Pvk Document by etterlevelseDokument id={}", etterlevelseDokumentId);
-        Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentId);
-
-        return pvkDokument.map(dokument -> ResponseEntity.ok(PvkDokumentResponse.buildFrom(dokument))).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<BehandlingensLivslopResponse> getPvkDokumentByEtterlevelseDokumentId(@PathVariable String etterlevelseDokumentId) {
+        log.info("Get Behandlingens Livsløp by etterlevelseDokument id={}", etterlevelseDokumentId);
+        Optional<BehandlingensLivslop> behandlingensLivslop = service.getByEtterlevelseDokumentasjon(etterlevelseDokumentId);
+        if (behandlingensLivslop.isPresent()) {
+            return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop.get()));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @Operation(summary = "Create Pvk Document")
-    @ApiResponse(responseCode = "201", description = "PvkDokument created")
+    @Operation(summary = "Create Behandlingens Livsløp")
+    @ApiResponse(responseCode = "201", description = "Behandlingens Livsløp created")
     @PostMapping
-    public ResponseEntity<PvkDokumentResponse> createPvkDokumente(@RequestBody PvkDokumentRequest request) {
-        log.info("Create PvkDokument");
+    public ResponseEntity<BehandlingensLivslopResponse> createBehandlingensLivslop(@RequestBody BehandlingensLivslopRequest request) {
+        log.info("Create Behandlingens Livsløp");
 
-        var pvkDokument = pvkDokumentService.save(request.convertToPvkDokument(), request.isUpdate());
+        var behandlingensLivslop = service.save(request.convertToBehandlingensLivslop(), request.isUpdate());
 
-        return new ResponseEntity<>(PvkDokumentResponse.buildFrom(pvkDokument), HttpStatus.CREATED);
+        return new ResponseEntity<>(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Update Pvk Document")
-    @ApiResponse(description = "Pvk Document updated")
+    @Operation(summary = "Update Behandlingens Livsløp")
+    @ApiResponse(description = "Behandlingens Livsløp updated")
     @PutMapping("/{id}")
-    public ResponseEntity<PvkDokumentResponse> updatePvkDokument(@PathVariable UUID id, @Valid @RequestBody PvkDokumentRequest request) {
-        log.info("Update Pvk Document id={}", id);
+    public ResponseEntity<BehandlingensLivslopResponse> updateBehandlingensLivslo(@PathVariable UUID id, @Valid @RequestBody BehandlingensLivslopRequest request) {
+        log.info("Update Behandlingens Livsløp id={}", id);
 
         if (!Objects.equals(id, request.getIdAsUUID())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
-        var pvkDokumentToUpdate = pvkDokumentService.get(id);
+        var behandlingensLivslopToUpdate = service.get(id);
 
-        if(pvkDokumentToUpdate == null) {
-            throw new ValidationException(String.format("Could not find pvk dokument to be updated with id = %s ", request.getId()));
+        if (behandlingensLivslopToUpdate == null) {
+            throw new ValidationException(String.format("Could not find behandlingens livsløp to be updated with id = %s ", request.getId()));
         }
 
-        request.mergeInto(pvkDokumentToUpdate);
-        var pvkDokument = pvkDokumentService.save(pvkDokumentToUpdate, request.isUpdate());
-        return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokument));
+        request.mergeInto(behandlingensLivslopToUpdate);
+        var behandlingensLivslop = service.save(behandlingensLivslopToUpdate, request.isUpdate());
+        return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop));
     }
 
-    @Operation(summary = "Delete Pvk Document")
+    /* FIXME
+    @Operation(summary = "Delete Behandlingens Livsløp")
     @ApiResponse(description = "Pvk Document deleted")
     @DeleteMapping("/{id}")
     public ResponseEntity<PvkDokumentResponse> deletePvkDokumentById(@PathVariable UUID id) {
@@ -192,4 +197,5 @@ public class BehandlingensLivslopController {
     private byte[] getBytes(MultipartFile f) {
         return f.getBytes();
     }
+    //*/
 }
