@@ -1,5 +1,6 @@
-import { Alert, Checkbox, CheckboxGroup, Heading } from '@navikt/ds-react'
+import { Checkbox, CheckboxGroup, ErrorSummary, Heading } from '@navikt/ds-react'
 import { FormikErrors } from 'formik/dist/types'
+import { useRef } from 'react'
 import { TKravQL } from '../../../../constants'
 import { EListName } from '../../../../services/Codelist'
 import { InputField, TextAreaField } from '../../../common/Inputs'
@@ -32,6 +33,7 @@ export const KravFormFields = (props: IProps) => {
     setVarselMeldingActive,
     isEditingUtgaattKrav,
   } = props
+  const errorSummaryRef = useRef<HTMLDivElement>(null)
   return (
     <>
       <div className="mt-5 mb-10">
@@ -135,14 +137,20 @@ export const KravFormFields = (props: IProps) => {
           <FormError fieldName="varslingsadresserQl" akselStyling />
 
           <div className="w-full">
-            {Object.keys(errors).length > 0 && !errors.dokumentasjon && (
-              <div className="flex w-full my-12">
-                <div className="w-full bg-red-300">
-                  <Alert variant="warning" role="status">
-                    Du må fylle ut alle obligatoriske felter
-                  </Alert>
-                </div>
-              </div>
+            {Object.values(errors).some(Boolean) && (
+              <ErrorSummary
+                ref={errorSummaryRef}
+                heading="Du må rette disse feilene før du kan fortsette"
+                className="mt-5"
+              >
+                {Object.entries(errors)
+                  .filter(([, error]) => error)
+                  .map(([key, error]) => (
+                    <ErrorSummary.Item href={`#${key}`} key={key}>
+                      {error as string}
+                    </ErrorSummary.Item>
+                  ))}
+              </ErrorSummary>
             )}
           </div>
         </div>
