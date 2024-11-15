@@ -1,15 +1,15 @@
-package no.nav.data.etterlevelse.behandling.dto;
+package no.nav.data.etterlevelse.behandlingensLivslop.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
-import no.nav.data.etterlevelse.behandling.domain.BehandlingensLivslop;
-import no.nav.data.etterlevelse.behandling.domain.BehandlingensLivslopData;
-import no.nav.data.etterlevelse.behandling.domain.BehandlingensLivslopFil;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
+import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
+import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopData;
+import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopFil;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,6 +17,7 @@ import java.util.UUID;
 @Data
 @Builder
 @NoArgsConstructor
+@FieldNameConstants
 @AllArgsConstructor
 public class BehandlingensLivslopRequest implements RequestElement {
     
@@ -42,11 +43,8 @@ public class BehandlingensLivslopRequest implements RequestElement {
     }
 
     public void validateFieldValues(Validator<?> validator) {
-        // FIXME
-    }
-
-    public Boolean getUpdate() {
-        return update;
+        validator.checkUUID(Fields.id, id);
+        validator.checkId(this);
     }
 
     public void mergeInto(BehandlingensLivslop bl) {

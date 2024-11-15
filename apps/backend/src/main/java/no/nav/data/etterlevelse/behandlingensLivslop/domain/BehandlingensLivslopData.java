@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.behandling.domain;
+package no.nav.data.etterlevelse.behandlingensLivslop.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

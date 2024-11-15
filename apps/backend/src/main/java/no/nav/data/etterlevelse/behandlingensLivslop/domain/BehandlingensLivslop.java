@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.behandling.domain;
+package no.nav.data.etterlevelse.behandlingensLivslop.domain;
 
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
@@ -11,14 +11,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.auditing.domain.Auditable;
-import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
-import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseData;
-import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
-import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
 import org.hibernate.annotations.Type;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Data
