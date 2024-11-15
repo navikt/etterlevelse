@@ -113,6 +113,8 @@ public abstract class IntegrationTestBase {
         repository.deleteAll();
         MockFilter.clearUser();
         etterlevelseRepo.deleteAll();
+        behandlingensLivslopRepo.deleteAll();
+        pvkDokumentRepo.deleteAll();
     }
 
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {

@@ -68,6 +68,7 @@ public class BehandlingensLivslopIT extends IntegrationTestBase {
         var behandlingensLivslop = behandlingensLivslopService.save(generateBehandlingensLivslop(UUID.randomUUID().toString()), false);
 
         var request = BehandlingensLivslopRequest.builder()
+                .id(behandlingensLivslop.getId().toString())
                 .etterlevelseDokumentasjonId(behandlingensLivslop.getEtterlevelseDokumentasjonId())
                 .filer(List.of())
                 .beskrivelse("test updated")
