@@ -126,19 +126,19 @@ export const BehandlingensLivslopPage = () => {
                       “Behandlingens livsløp” beskriver hvor og hvordan personopplysninger flyter
                       når de behandles i deres kontekst. Hensikten med å tegne behandlingens livsløp
                       er at dere blant annet må tenke på:
-                      <List>
-                        <List.Item>Hvor opplysningene innhentes fra.</List.Item>
-                        <List.Item>Hvor opplysningene flyter underveis i behandling.</List.Item>
-                        <List.Item>
-                          Om og hvor opplysningene sendes videre i NAV eller til eksterne.
-                        </List.Item>
-                      </List>
-                      <Alert inline variant="info" className="mt-3">
-                        Det er kun påkrevd å tegne behandlingens livsløp hvis dere gjennomfører en
-                        PVK, men vi anbefaler at alle tegner flyten. Dette vil være til hjelp når
-                        dere svarer ut etterlevelseskrav innen Personvern og Arkiv og dokumentasjon.
-                      </Alert>
                     </BodyShort>
+                    <List>
+                      <List.Item>Hvor opplysningene innhentes fra.</List.Item>
+                      <List.Item>Hvor opplysningene flyter underveis i behandling.</List.Item>
+                      <List.Item>
+                        Om og hvor opplysningene sendes videre i NAV eller til eksterne.
+                      </List.Item>
+                    </List>
+                    <Alert inline variant="info" className="mt-3">
+                      Det er kun påkrevd å tegne behandlingens livsløp hvis dere gjennomfører en
+                      PVK, men vi anbefaler at alle tegner flyten. Dette vil være til hjelp når dere
+                      svarer ut etterlevelseskrav innen Personvern og Arkiv og dokumentasjon.
+                    </Alert>
 
                     <Heading level="2" size="small" className="mt-3">
                       Slik lager dere en god tegning av behandlingens livsløp
