@@ -13,6 +13,7 @@ import { Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { behandlingName } from '../api/BehandlingApi'
+import { mapBehandlingensLivslopToFormValue } from '../api/BehandlingensLivslopApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
 import { CustomFileUpload } from '../components/behandlingensLivlop/CustomFileUpload'
@@ -117,9 +118,9 @@ export const BehandlingensLivslopPage = () => {
               validateOnBlur={false}
               validateOnChange={false}
               onSubmit={submit}
-              initialValues={{}}
+              initialValues={mapBehandlingensLivslopToFormValue({})}
             >
-              {({ submitForm }) => (
+              {({ initialValues, submitForm }) => (
                 <Form>
                   <div className="pr-4 flex flex-1 flex-col gap-4 col-span-8">
                     <BodyShort>
@@ -186,7 +187,7 @@ export const BehandlingensLivslopPage = () => {
                       oversikt.
                     </BodyShort>
 
-                    <CustomFileUpload />
+                    <CustomFileUpload initialValues={initialValues.filer} />
 
                     <div className="mt-3">
                       <TextAreaField

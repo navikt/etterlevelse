@@ -6,8 +6,9 @@ import {
   Heading,
   VStack,
 } from '@navikt/ds-react'
-import { Field, FieldProps, FormikErrors } from 'formik'
-import { useState } from 'react'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
+import { useEffect, useState } from 'react'
+import { IBehandlingensLivslopFil } from '../../constants'
 
 const MAX_FILES = 4
 const MAX_SIZE_MB = 5
@@ -18,27 +19,31 @@ const errors: Record<FileRejectionReason, string> = {
   fileSize: `Filen er større enn ${MAX_SIZE_MB} MB`,
 }
 
-export const CustomFileUpload = () => {
+interface IProps {
+  initialValues: IBehandlingensLivslopFil[]
+}
+
+export const CustomFileUpload = (props: IProps) => {
+  const { initialValues } = props
   const [files, setFiles] = useState<FileObject[]>([])
   const acceptedFiles = files.filter((file) => !file.error)
   const rejectedFiles = files.filter((f): f is FileRejected => f.error)
 
-  const removeFile = (
-    fileToRemove: FileObject,
-    setFieldValue: (
-      field: string,
-      value: any,
-      shouldValidate?: boolean
-    ) => Promise<void | FormikErrors<any>>
-  ) => {
-    const fileUpdated = files.filter((file) => file !== fileToRemove)
-    setFieldValue('WIP', fileUpdated)
-    setFiles(fileUpdated)
-  }
+  useEffect(() => {
+    if (initialValues && initialValues.length > 0) {
+      const initialFiles: FileObject[] = []
+      initialValues.forEach((formFile) => {
+        const blob = new Blob([formFile.fil], { type: formFile.filtype })
+        const initialFile = new File([blob], formFile.filnavn)
+        initialFiles.push({ file: initialFile, error: false })
+      })
+      setFiles(initialFiles)
+    }
+  }, [])
 
   return (
-    <Field>
-      {(fieldProps: FieldProps) => (
+    <FieldArray name="filer">
+      {(fieldArrayRenderProps: FieldArrayRenderProps) => (
         <VStack gap="6">
           <FileUpload.Dropzone
             label="Last opp behandlingslivsløp"
@@ -48,7 +53,29 @@ export const CustomFileUpload = () => {
             fileLimit={{ max: MAX_FILES, current: acceptedFiles.length }}
             onSelect={(newFiles: FileObject[]) => {
               setFiles([...files, ...newFiles])
-              fieldProps.form.setFieldValue('WIP', [...files, ...newFiles])
+
+              newFiles.forEach((file) => {
+                // TESTING
+                // const reader = new FileReader()
+                // reader.readAsArrayBuffer(file.file)
+                // reader.onloadend = () => {
+                //   const blob = new Blob([reader.result as ArrayBuffer], {type: file.file.type})
+                //   const recreatedFile = new File([blob], file.file.name)
+                //   setFiles([...files, {file: recreatedFile, error: false}])
+                // }
+
+                if (!file.error) {
+                  const reader = new FileReader()
+                  reader.readAsArrayBuffer(file.file)
+                  reader.onloadend = () => {
+                    fieldArrayRenderProps.push({
+                      filnavn: file.file.name,
+                      filtype: file.file.type,
+                      fil: reader.result,
+                    } as IBehandlingensLivslopFil)
+                  }
+                }
+              })
             }}
           />
 
@@ -65,7 +92,11 @@ export const CustomFileUpload = () => {
                     file={file.file}
                     button={{
                       action: 'delete',
-                      onClick: () => removeFile(file, fieldProps.form.setFieldValue),
+                      onClick: () => {
+                        const fileUpdated = files.filter((file) => file !== file)
+                        setFiles(fileUpdated)
+                        fieldArrayRenderProps.remove(index)
+                      },
                     }}
                   />
                 ))}
@@ -85,7 +116,10 @@ export const CustomFileUpload = () => {
                     file={rejected.file}
                     button={{
                       action: 'delete',
-                      onClick: () => removeFile(rejected, fieldProps.form.setFieldValue),
+                      onClick: () => {
+                        const fileUpdated = files.filter((file) => file !== rejected)
+                        setFiles(fileUpdated)
+                      },
                     }}
                     error={errors[rejected.reasons[0] as FileRejectionReason]}
                   />
@@ -95,7 +129,7 @@ export const CustomFileUpload = () => {
           )}
         </VStack>
       )}
-    </Field>
+    </FieldArray>
   )
 }
 
