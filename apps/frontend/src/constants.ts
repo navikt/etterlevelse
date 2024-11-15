@@ -538,6 +538,21 @@ export interface IPvkDokument {
   dataBehandlerRepresentantInvolveringBeskrivelse: string
 }
 
+export interface IBehandlingensLivslop {
+  id: string
+  changeStamp: IChangeStamp
+  version: number
+  etterlevelseDokumentasjonId: string
+  beskrivelse: string
+  filer: IBehandlingensLivslopFil[]
+}
+
+export interface IBehandlingensLivslopFil {
+  filnavn: string
+  filtype: string
+  fil: string
+}
+
 export enum EPvkDokumentStatus {
   AKTIV = 'AKTIV',
   INAKTIV = 'INAKTIV',
