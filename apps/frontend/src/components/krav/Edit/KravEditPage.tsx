@@ -22,7 +22,6 @@ import {
 import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
 import { CodelistService, EListName, ICode, TLovCode } from '../../../services/Codelist'
 import { user } from '../../../services/User'
-import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
 import { TextAreaField } from '../../common/Inputs'
 import { PageLayout } from '../../scaffold/Page'
@@ -340,7 +339,6 @@ export const KravEditPage = () => {
                       errorMessage={errorModalMessage}
                       submit={setShowErrorModal}
                     />
-                    <ScrollToFieldError />
                   </Form>
                 )}
               </Formik>

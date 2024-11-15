@@ -6,7 +6,6 @@ import { createKrav, kravMapToFormVal } from '../../../api/KravApi'
 import { EKravStatus, IKrav, TKravQL } from '../../../constants'
 import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
 import { CodelistService, EListName, ICode, TLovCode } from '../../../services/Codelist'
-import { ScrollToFieldError } from '../../../util/formikUtils'
 import ErrorModal from '../../ErrorModal'
 import { TextAreaField } from '../../common/Inputs'
 import { PageLayout } from '../../scaffold/Page'
@@ -119,7 +118,6 @@ export const KravCreatePage = () => {
                 errorMessage={errorModalMessage}
                 submit={setShowErrorModal}
               />
-              <ScrollToFieldError />
             </Form>
           )}
         </Formik>

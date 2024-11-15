@@ -99,7 +99,7 @@ const KriterieList = ({
       {newKrav && <AddSuksessKriterieButton />}
 
       {!newKrav &&
-        (fieldArrayRenderProps.form.values.status !== EKravStatus.AKTIV || newVersion) && (
+        (fieldArrayRenderProps.form.initialValues.status !== EKravStatus.AKTIV || newVersion) && (
           <AddSuksessKriterieButton />
         )}
     </div>
@@ -162,7 +162,8 @@ const Kriterie = ({
     <Box padding="4" className="mb-4" background="surface-subtle" borderColor="border-on-inverted">
       <div className="relative pt-1">
         <div className="flex items-center absolute right-0 top-0">
-          {(fieldArrayRenderProps.form.values.status !== EKravStatus.AKTIV || newVersion) && (
+          {(fieldArrayRenderProps.form.initialValues.status !== EKravStatus.AKTIV ||
+            newVersion) && (
             <Tooltip content="Fjern suksesskriterium">
               <Button
                 variant="secondary"

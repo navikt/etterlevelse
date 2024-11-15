@@ -52,7 +52,7 @@ const checkIfVersjonEndringIsEmpty = (versjonEndringer: string, kravVersjon: num
 
 const hensiktCheck = yup.string().test({
   name: 'hensiktCheck',
-  message: EYupErrorMessage.PAAKREVD,
+  message: 'Du må oppgi et hensikt til kravet',
   test: function (hensikt) {
     const { parent } = this
     return activeStatusValueValidation(parent.status, checkIfHensiktHasValue(hensikt as string))
@@ -73,7 +73,7 @@ const suksesskriterierCheck = yup.array().test({
 
 const regelverkCheck = yup.array().test({
   name: 'regelverkCheck',
-  message: EYupErrorMessage.PAAKREVD,
+  message: 'Kravet må være knyttet til et regelverk',
   test: function (regelverk) {
     const { parent } = this
     return activeStatusValueValidation(

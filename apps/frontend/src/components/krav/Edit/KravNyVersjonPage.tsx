@@ -7,7 +7,6 @@ import { GetKravData, IKravDataProps, TKravById } from '../../../api/KravEditApi
 import { EKravStatus, IKrav, TKravQL } from '../../../constants'
 import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
 import { CodelistService, EListName, ICode, TLovCode } from '../../../services/Codelist'
-import { ScrollToFieldError } from '../../../util/formikUtils'
 import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 import { PageLayout } from '../../scaffold/Page'
@@ -152,7 +151,6 @@ export const KravNyVersjonPage = () => {
                       />
                     </div>
                   </div>
-                  <ScrollToFieldError />
                 </Form>
               )}
             </Formik>

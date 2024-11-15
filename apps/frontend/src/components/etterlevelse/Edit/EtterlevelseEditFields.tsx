@@ -1,5 +1,5 @@
-import { Alert, BodyShort, Button, Checkbox, Label, Modal } from '@navikt/ds-react'
-import { Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
+import { Alert, BodyShort, Button, Checkbox, ErrorSummary, Label, Modal } from '@navikt/ds-react'
+import { Form, Formik, FormikErrors, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
@@ -16,6 +16,7 @@ import {
   ERelationType,
   IDocumentRelation,
   IEtterlevelse,
+  ISuksesskriterieBegrunnelse,
   TEtterlevelseDokumentasjonQL,
   TKravQL,
 } from '../../../constants'
@@ -24,6 +25,7 @@ import { DateField } from '../../common/Inputs'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
 import EtterlevelseCard from '../EtterlevelseCard'
 import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
+import SuksesskriterieErrorFields from './SuksesskriterieErrorFields'
 import { etterlevelseSchema } from './etterlevelseSchema'
 
 type TEditProps = {
@@ -67,6 +69,9 @@ export const EtterlevelseEditFields = ({
 
   const [morDokumentRelasjon, setMorDokumentRelasjon] = useState<IDocumentRelation>()
   const [morEtterlevelse, setMorEtterlevelse] = useState<IEtterlevelse>()
+
+  const errorSummaryRef = React.useRef<HTMLDivElement>(null)
+  const [validateOnBlur, setValidateOnBlur] = useState(false)
 
   const navigate = useNavigate()
   useEffect(() => {
@@ -137,7 +142,7 @@ export const EtterlevelseEditFields = ({
         }}
         innerRef={formRef}
         validateOnChange={false}
-        validateOnBlur={false}
+        validateOnBlur={validateOnBlur}
       >
         {({
           values,
@@ -174,14 +179,6 @@ export const EtterlevelseEditFields = ({
                   forGjenbruk={etterlevelseDokumentasjon?.forGjenbruk}
                   morEtterlevelse={morEtterlevelse}
                 />
-
-                <div className="w-full my-6">
-                  {Object.keys(errors).length > 0 && (
-                    <Alert fullWidth variant="error">
-                      Du må fylle ut alle obligatoriske felter
-                    </Alert>
-                  )}
-                </div>
               </div>
             </Form>
 
@@ -199,7 +196,7 @@ export const EtterlevelseEditFields = ({
                   </Checkbox>
 
                   {isOppfylesSenere && (
-                    <div className="w-full">
+                    <div className="w-full" id="fristForFerdigstillelse">
                       <div className="w-full max-w-[10.625rem]">
                         <DateField name="fristForFerdigstillelse" />
                       </div>
@@ -213,12 +210,35 @@ export const EtterlevelseEditFields = ({
                 </div>
               )}
 
-              <div className="w-full justify-end">
+              {!_.isEmpty(errors) && (
+                <ErrorSummary
+                  ref={errorSummaryRef}
+                  heading="Du må rette disse feilene før du kan fortsette"
+                  onClick={() => console.debug(errors)}
+                >
+                  {errors.suksesskriterieBegrunnelser && (
+                    <SuksesskriterieErrorFields
+                      errors={
+                        errors.suksesskriterieBegrunnelser as FormikErrors<ISuksesskriterieBegrunnelse>[]
+                      }
+                    />
+                  )}
+
+                  {errors.fristForFerdigstillelse && (
+                    <ErrorSummary.Item href={'#fristForFerdigstillelse'}>
+                      {errors.fristForFerdigstillelse}
+                    </ErrorSummary.Item>
+                  )}
+                </ErrorSummary>
+              )}
+
+              <div className="w-full justify-end mt-5">
                 <div className="flex w-full pb-3 flex-row-reverse">
                   <Button
                     disabled={disableEdit || isOppfylesSenere}
                     type="button"
                     onClick={() => {
+                      setValidateOnBlur(true)
                       values.status = EEtterlevelseStatus.FERDIG_DOKUMENTERT
                       values.suksesskriterieBegrunnelser.forEach((skb, index) => {
                         if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {

@@ -415,6 +415,7 @@ const KriterieBegrunnelse = ({
       <div className="w-full mt-5">
         <div className="min-w-fit">
           <RadioGroup
+            id={'suksesskriterieStatus_' + index}
             value={suksessKriterieStatus}
             legend="Oppgi status på suksesskriteriet"
             onChange={(val) => setSuksessKriterieStatus(val as ESuksesskriterieStatus)}
@@ -452,7 +453,7 @@ const KriterieBegrunnelse = ({
           </RadioGroup>
         </div>
         {!disableEdit && suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
-          <div className="w-full mt-8">
+          <div id={'begrunnelse_' + index} className="w-full mt-8">
             <div className="flex w-full justify-between items-center mb-1">
               <Label>{getLabelForSuksessKriterie(suksessKriterieStatus)}</Label>
             </div>
