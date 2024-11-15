@@ -7,6 +7,8 @@ import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
+import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService;
+import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopRepo;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelationRepository;
@@ -94,6 +96,10 @@ public abstract class IntegrationTestBase {
     protected PvkDokumentRepo pvkDokumentRepo;
     @Autowired
     protected PvkDokumentService pvkDokumentService;
+    @Autowired
+    protected BehandlingensLivslopRepo behandlingensLivslopRepo;
+    @Autowired
+    protected BehandlingensLivslopService behandlingensLivslopService;
 
     @BeforeEach
     void setUpBase() {
@@ -107,6 +113,8 @@ public abstract class IntegrationTestBase {
         repository.deleteAll();
         MockFilter.clearUser();
         etterlevelseRepo.deleteAll();
+        behandlingensLivslopRepo.deleteAll();
+        pvkDokumentRepo.deleteAll();
     }
 
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {

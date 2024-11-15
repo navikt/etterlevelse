@@ -89,7 +89,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
         var pvkDokuemnt = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID().toString()), false);
         restTemplate.delete("/pvkdokument/{id}", pvkDokuemnt.getId());
 
-        assertThat(etterlevelseRepo.count()).isEqualTo(0);
+        assertThat(pvkDokumentRepo.count()).isEqualTo(0);
     }
 
 

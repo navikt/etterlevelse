@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentFil;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 
 import java.time.LocalDateTime;
@@ -43,8 +42,6 @@ public class PvkDokumentResponse {
     private Boolean stemmerDatabehandlere;
     private Boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
-
-    private List<PvkDokumentFil> pvkDokumentFiler;
 
     public static PvkDokumentResponse buildFrom(PvkDokument pvkDokument) {
         return PvkDokumentResponse.builder()
