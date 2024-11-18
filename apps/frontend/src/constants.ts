@@ -553,6 +553,15 @@ export interface IBehandlingensLivslopFil {
   fil: string
 }
 
+export interface IBehandlingensLivslopRequest {
+  id: string
+  changeStamp: IChangeStamp
+  version: number
+  etterlevelseDokumentasjonId: string
+  beskrivelse: string
+  filer: File[]
+}
+
 export enum EPvkDokumentStatus {
   AKTIV = 'AKTIV',
   INAKTIV = 'INAKTIV',

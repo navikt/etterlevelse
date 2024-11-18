@@ -8,7 +8,6 @@ import {
 } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { useEffect, useState } from 'react'
-import { IBehandlingensLivslopFil } from '../../constants'
 
 const MAX_FILES = 4
 const MAX_SIZE_MB = 5
@@ -20,7 +19,7 @@ const errors: Record<FileRejectionReason, string> = {
 }
 
 interface IProps {
-  initialValues: IBehandlingensLivslopFil[]
+  initialValues: File[]
 }
 
 export const CustomFileUpload = (props: IProps) => {
@@ -32,14 +31,16 @@ export const CustomFileUpload = (props: IProps) => {
   useEffect(() => {
     if (initialValues && initialValues.length > 0) {
       const initialFiles: FileObject[] = []
-      initialValues.forEach((formFile) => {
-        const blob = new Blob([formFile.fil], { type: formFile.filtype })
-        const initialFile = new File([blob], formFile.filnavn)
+      initialValues.forEach((initialFile) => {
         initialFiles.push({ file: initialFile, error: false })
       })
       setFiles(initialFiles)
     }
   }, [])
+
+  const removeFile = (fileToRemove: FileObject) => {
+    setFiles(files.filter((file) => file !== fileToRemove))
+  }
 
   return (
     <FieldArray name="filer">
@@ -53,26 +54,12 @@ export const CustomFileUpload = (props: IProps) => {
             fileLimit={{ max: MAX_FILES, current: acceptedFiles.length }}
             onSelect={(newFiles: FileObject[]) => {
               setFiles([...files, ...newFiles])
-
               newFiles.forEach((file) => {
-                // TESTING
-                // const reader = new FileReader()
-                // reader.readAsArrayBuffer(file.file)
-                // reader.onloadend = () => {
-                //   const blob = new Blob([reader.result as ArrayBuffer], {type: file.file.type})
-                //   const recreatedFile = new File([blob], file.file.name)
-                //   setFiles([...files, {file: recreatedFile, error: false}])
-                // }
-
                 if (!file.error) {
                   const reader = new FileReader()
                   reader.readAsArrayBuffer(file.file)
                   reader.onloadend = () => {
-                    fieldArrayRenderProps.push({
-                      filnavn: file.file.name,
-                      filtype: file.file.type,
-                      fil: reader.result,
-                    } as IBehandlingensLivslopFil)
+                    fieldArrayRenderProps.push(file.file)
                   }
                 }
               })
@@ -88,13 +75,12 @@ export const CustomFileUpload = (props: IProps) => {
                 {acceptedFiles.map((file, index) => (
                   <FileUpload.Item
                     as="li"
-                    key={index}
+                    key={file.file.name + '_' + index}
                     file={file.file}
                     button={{
                       action: 'delete',
                       onClick: () => {
-                        const fileUpdated = files.filter((file) => file !== file)
-                        setFiles(fileUpdated)
+                        removeFile(file)
                         fieldArrayRenderProps.remove(index)
                       },
                     }}
@@ -117,8 +103,7 @@ export const CustomFileUpload = (props: IProps) => {
                     button={{
                       action: 'delete',
                       onClick: () => {
-                        const fileUpdated = files.filter((file) => file !== rejected)
-                        setFiles(fileUpdated)
+                        removeFile(rejected)
                       },
                     }}
                     error={errors[rejected.reasons[0] as FileRejectionReason]}

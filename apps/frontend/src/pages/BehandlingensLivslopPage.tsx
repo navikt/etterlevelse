@@ -13,7 +13,12 @@ import { Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { behandlingName } from '../api/BehandlingApi'
-import { mapBehandlingensLivslopToFormValue } from '../api/BehandlingensLivslopApi'
+import {
+  createBehandlingensLivslop,
+  getBehandlingensLivslopByEtterlevelseDokumentId,
+  mapBehandlingensLivslopRequestToFormValue,
+  updateBehandlingensLivslop,
+} from '../api/BehandlingensLivslopApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
 import { CustomFileUpload } from '../components/behandlingensLivlop/CustomFileUpload'
@@ -21,8 +26,14 @@ import { TextAreaField } from '../components/common/Inputs'
 import { Markdown } from '../components/common/Markdown'
 import { ExternalLink } from '../components/common/RouteLink'
 import { PageLayout } from '../components/scaffold/Page'
-import { IBehandling, IBreadCrumbPath, IPvkDokument } from '../constants'
-import behandlingensLivslop from '../resources/behandlingensLivslop.png'
+import {
+  IBehandling,
+  IBehandlingensLivslop,
+  IBehandlingensLivslopRequest,
+  IBreadCrumbPath,
+  IPvkDokument,
+} from '../constants'
+import behandlingensLivslopImage from '../resources/behandlingensLivslop.png'
 import { user } from '../services/User'
 import { env } from '../util/env'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
@@ -38,6 +49,7 @@ export const BehandlingensLivslopPage = () => {
   const [tilPvkDokument, setTilPvkDokument] = useState<boolean>(false)
   const [tilTemaOversikt, setTilTemaOversikt] = useState<boolean>(false)
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
+  const [, setBehandlingesLivslop] = useState<IBehandlingensLivslop>()
   const navigate = useNavigate()
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -63,17 +75,54 @@ export const BehandlingensLivslopPage = () => {
     }
   }, [etterlevelseDokumentasjon])
 
-  const submit = (behandlingensLivslop: any) => {
-    console.debug(behandlingensLivslop)
+  const submit = async (behandlingensLivslop: any) => {
+    if (etterlevelseDokumentasjon) {
+      const mutatedBehandlingensLivslop = {
+        ...behandlingensLivslop,
+        etterlevelseDokumentasjonId: etterlevelseDokumentasjon.id,
+      } as IBehandlingensLivslopRequest
 
-    if (tilPvkDokument) {
-      if (pvkDokument) {
-        navigate('/dokumentasjon/' + etterlevelseDokumentasjon?.id + '/pvkbehov/' + pvkDokument.id)
-      } else {
-        navigate('/dokumentasjon/' + etterlevelseDokumentasjon?.id + '/pvkbehov/ny')
+      //double check if etterlevelse already exist before submitting
+      let existingBehandlingsLivslopId = ''
+      const existingBehandlingensLivsLop = await getBehandlingensLivslopByEtterlevelseDokumentId(
+        etterlevelseDokumentasjon.id
+      ).catch(() => undefined)
+      if (existingBehandlingensLivsLop) {
+        existingBehandlingsLivslopId = existingBehandlingensLivsLop.id
+        mutatedBehandlingensLivslop.id = existingBehandlingensLivsLop.id
       }
-    } else if (tilTemaOversikt) {
-      navigate('/dokumentasjon/' + etterlevelseDokumentasjon?.id)
+
+      if (behandlingensLivslop.id || existingBehandlingsLivslopId) {
+        await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
+          if (tilTemaOversikt) {
+            navigate('/dokumentasjon/' + response.etterlevelseDokumentasjonId)
+          } else if (tilPvkDokument) {
+            navigate(
+              '/dokumentasjon/' +
+                response.etterlevelseDokumentasjonId +
+                '/pvkdokument/' +
+                (pvkDokument ? pvkDokument.id : 'ny')
+            )
+          } else {
+            setBehandlingesLivslop(response)
+          }
+        })
+      } else {
+        await createBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
+          if (tilTemaOversikt) {
+            navigate('/dokumentasjon/' + response.etterlevelseDokumentasjonId)
+          } else if (tilPvkDokument) {
+            navigate(
+              '/dokumentasjon/' +
+                response.etterlevelseDokumentasjonId +
+                '/pvkdokument/' +
+                (pvkDokument ? pvkDokument.id : 'ny')
+            )
+          } else {
+            setBehandlingesLivslop(response)
+          }
+        })
+      }
     }
   }
 
@@ -118,7 +167,7 @@ export const BehandlingensLivslopPage = () => {
               validateOnBlur={false}
               validateOnChange={false}
               onSubmit={submit}
-              initialValues={mapBehandlingensLivslopToFormValue({})}
+              initialValues={mapBehandlingensLivslopRequestToFormValue({})}
             >
               {({ initialValues, submitForm }) => (
                 <Form>
@@ -153,7 +202,7 @@ export const BehandlingensLivslopPage = () => {
 
                     <img
                       className="mr-2.5"
-                      src={behandlingensLivslop}
+                      src={behandlingensLivslopImage}
                       alt="Behandligens livsløp tegning"
                       aria-hidden
                       aria-label=""
