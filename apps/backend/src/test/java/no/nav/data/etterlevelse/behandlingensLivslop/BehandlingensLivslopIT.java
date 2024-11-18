@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.behandlingensLivslop;
 
+import lombok.SneakyThrows;
 import no.nav.data.IntegrationTestBase;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopData;
@@ -8,9 +9,13 @@ import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopRes
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.util.LinkedMultiValueMap;
 
 import java.util.List;
 import java.util.UUID;
@@ -47,38 +52,59 @@ public class BehandlingensLivslopIT extends IntegrationTestBase {
         assertThat(behandlingensLivslopResponse.getEtterlevelseDokumentasjonId()).isEqualTo(behandlingensLivslop.getEtterlevelseDokumentasjonId());
     }
 
+    @SneakyThrows
     @Test
     void createBehandlingensLivslop() {
 
-        var request = BehandlingensLivslopRequest.builder()
+        var requestBody = BehandlingensLivslopRequest.builder()
                 .etterlevelseDokumentasjonId(UUID.randomUUID().toString())
                 .filer(List.of())
                 .beskrivelse("test")
                 .build();
 
-        var resp = restTemplate.postForEntity("/behandlingenslivslop",request,  BehandlingensLivslopResponse.class);
+        var headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        var body = new LinkedMultiValueMap<String, Object>();
+        var request = new HttpEntity<>(body, headers);
+        byte[] image = new ClassPathResource("img.png").getInputStream().readAllBytes();
+        body.add("request", requestBody);
+        addImage(body, "image1.png", image);
+        addImage(body, "image2.png", image);
+
+        var resp = restTemplate.postForEntity("/behandlingenslivslop", request,  BehandlingensLivslopResponse.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         BehandlingensLivslopResponse behandlingensLivslopResponse = resp.getBody();
         assertThat(behandlingensLivslopResponse).isNotNull();
-        assertThat(behandlingensLivslopResponse.getEtterlevelseDokumentasjonId()).isEqualTo(request.getEtterlevelseDokumentasjonId());
+        assertThat(behandlingensLivslopResponse.getEtterlevelseDokumentasjonId()).isEqualTo(requestBody.getEtterlevelseDokumentasjonId());
     }
 
+    @SneakyThrows
     @Test
     void updateBehandlingensLivslop() {
         var behandlingensLivslop = behandlingensLivslopService.save(generateBehandlingensLivslop(UUID.randomUUID().toString()), false);
 
-        var request = BehandlingensLivslopRequest.builder()
+        var requestBody = BehandlingensLivslopRequest.builder()
                 .id(behandlingensLivslop.getId().toString())
                 .etterlevelseDokumentasjonId(behandlingensLivslop.getEtterlevelseDokumentasjonId())
                 .filer(List.of())
                 .beskrivelse("test updated")
                 .build();
 
-        var resp = restTemplate.exchange("/behandlingenslivslop/{id}", HttpMethod.PUT, new HttpEntity<>(request), BehandlingensLivslopResponse.class, request.getId());
+        var headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        var body = new LinkedMultiValueMap<String, Object>();
+        var request = new HttpEntity<>(body, headers);
+        byte[] image = new ClassPathResource("img.png").getInputStream().readAllBytes();
+        body.add("id", requestBody.getId());
+        body.add("request", requestBody);
+        addImage(body, "image1.png", image);
+        addImage(body, "image2.png", image);
+
+        var resp = restTemplate.exchange("/behandlingenslivslop/{id}", HttpMethod.PUT, request, BehandlingensLivslopResponse.class, requestBody.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         BehandlingensLivslopResponse behandlingensLivslopResponse = resp.getBody();
         assertThat(behandlingensLivslopResponse).isNotNull();
-        assertThat(behandlingensLivslopResponse.getEtterlevelseDokumentasjonId()).isEqualTo(request.getEtterlevelseDokumentasjonId());
+        assertThat(behandlingensLivslopResponse.getEtterlevelseDokumentasjonId()).isEqualTo(requestBody.getEtterlevelseDokumentasjonId());
         assertThat(behandlingensLivslopResponse.getBeskrivelse()).isEqualTo("test updated");
     }
 
@@ -99,5 +125,15 @@ public class BehandlingensLivslopIT extends IntegrationTestBase {
                                 .build()
                 )
                 .build();
+    }
+
+
+    private void addImage(LinkedMultiValueMap<String, Object> body, final String name, byte[] content) {
+        var imageHeaders = new LinkedMultiValueMap<String, String>();
+        imageHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "form-data; name=filer; filename=" + name + ";");
+        imageHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_PNG_VALUE);
+        var imageEntity = new HttpEntity<>(content, imageHeaders);
+
+        body.add("filer", imageEntity);
     }
 }

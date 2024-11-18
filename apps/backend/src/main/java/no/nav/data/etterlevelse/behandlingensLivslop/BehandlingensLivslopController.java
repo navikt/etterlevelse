@@ -79,7 +79,9 @@ public class BehandlingensLivslopController {
             @RequestPart BehandlingensLivslopRequest request
     ) {
         log.info("Create Behandlingens Livsløp");
-        request.setFiler(filer);
+        if(!filer.isEmpty()) {
+            request.setFiler(filer);
+        }
         var behandlingensLivslop = service.save(request.convertToBehandlingensLivslop(), request.isUpdate());
         return new ResponseEntity<>(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop), HttpStatus.CREATED);
     }
@@ -102,7 +104,9 @@ public class BehandlingensLivslopController {
         if (behandlingensLivslopToUpdate == null) {
             throw new ValidationException(String.format("Could not find behandlingens livsløp to be updated with id = %s ", request.getId()));
         }
-        request.setFiler(filer);
+        if(!filer.isEmpty()) {
+            request.setFiler(filer);
+        }
         request.mergeInto(behandlingensLivslopToUpdate);
         var behandlingensLivslop = service.save(behandlingensLivslopToUpdate, request.isUpdate());
         return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop));
