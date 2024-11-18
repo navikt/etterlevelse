@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldNameConstants;
-import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
@@ -13,7 +13,6 @@ import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopFil;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,16 +45,16 @@ public class BehandlingensLivslopRequest implements RequestElement {
     }
 
     private BehandlingensLivslopFil fileToBehandlingsLivlopFil(MultipartFile multipartFile){
-        try{
             return BehandlingensLivslopFil.builder()
-                    .filnavn(multipartFile.getName())
+                    .filnavn(multipartFile.getOriginalFilename())
                     .filtype(multipartFile.getContentType())
-                    .fil(multipartFile.getBytes())
+                    .fil(getBytes(multipartFile))
                     .build();
-        } catch (IOException e){
-           throw new ValidationException("Unable to convert fil to byte[], error: " + e.getMessage());
-        }
+    }
 
+    @SneakyThrows
+    private byte[] getBytes(MultipartFile f) {
+        return f.getBytes();
     }
 
     public void validateFieldValues(Validator<?> validator) {
