@@ -248,7 +248,7 @@ export const PvkBehovPage = () => {
                         )}
                       </FieldArray>
                       {etterlevelseDokumentasjon && (
-                        <BodyShort className="mt-3">
+                        <BodyShort className="mt-5">
                           Disse egenskapene blir enklere å vurdere hvis{' '}
                           <Link
                             href={
@@ -270,7 +270,7 @@ export const PvkBehovPage = () => {
                       profilering ||
                       automatiskBehandling ||
                       saerligKategorier) && (
-                      <Alert className="my-5" variant="info">
+                      <Alert className="mb-5 mt-10" variant="info">
                         Data som hentes og svarene dere har oppgitt gir en indikasjon på at det kan
                         være behov for gjennomføring av PVK. Likevel er dere ansvarlige for å
                         vurdere behov.
