@@ -20,10 +20,12 @@
  import org.springframework.web.bind.annotation.PathVariable;
  import org.springframework.web.bind.annotation.PostMapping;
  import org.springframework.web.bind.annotation.PutMapping;
- import org.springframework.web.bind.annotation.RequestBody;
  import org.springframework.web.bind.annotation.RequestMapping;
+ import org.springframework.web.bind.annotation.RequestPart;
  import org.springframework.web.bind.annotation.RestController;
+ import org.springframework.web.multipart.MultipartFile;
 
+ import java.util.List;
  import java.util.Objects;
  import java.util.Optional;
  import java.util.UUID;
@@ -72,18 +74,23 @@ public class BehandlingensLivslopController {
     @Operation(summary = "Create Behandlingens Livsløp")
     @ApiResponse(responseCode = "201", description = "Behandlingens Livsløp created")
     @PostMapping
-    public ResponseEntity<BehandlingensLivslopResponse> createBehandlingensLivslop(@RequestBody BehandlingensLivslopRequest request) {
+    public ResponseEntity<BehandlingensLivslopResponse> createBehandlingensLivslop(
+            @RequestPart(value = "filer", required = false) List<MultipartFile> filer,
+            @RequestPart BehandlingensLivslopRequest request
+    ) {
         log.info("Create Behandlingens Livsløp");
-
+        request.setFiler(filer);
         var behandlingensLivslop = service.save(request.convertToBehandlingensLivslop(), request.isUpdate());
-
         return new ResponseEntity<>(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update Behandlingens Livsløp")
     @ApiResponse(description = "Behandlingens Livsløp updated")
     @PutMapping("/{id}")
-    public ResponseEntity<BehandlingensLivslopResponse> updateBehandlingensLivslop(@PathVariable UUID id, @Valid @RequestBody BehandlingensLivslopRequest request) {
+    public ResponseEntity<BehandlingensLivslopResponse> updateBehandlingensLivslop(
+            @PathVariable UUID id,
+            @RequestPart(value = "filer", required = false) List<MultipartFile> filer,
+            @Valid @RequestPart BehandlingensLivslopRequest request) {
         log.info("Update Behandlingens Livsløp id={}", id);
 
         if (!Objects.equals(id, request.getIdAsUUID())) {
@@ -95,7 +102,7 @@ public class BehandlingensLivslopController {
         if (behandlingensLivslopToUpdate == null) {
             throw new ValidationException(String.format("Could not find behandlingens livsløp to be updated with id = %s ", request.getId()));
         }
-
+        request.setFiler(filer);
         request.mergeInto(behandlingensLivslopToUpdate);
         var behandlingensLivslop = service.save(behandlingensLivslopToUpdate, request.isUpdate());
         return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop));

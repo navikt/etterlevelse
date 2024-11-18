@@ -5,12 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopData;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopFil;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +30,7 @@ public class BehandlingensLivslopRequest implements RequestElement {
 
     private String beskrivelse;
 
-    private List<BehandlingensLivslopFil> filer;
+    private List<MultipartFile> filer;
     
     private Boolean update;
     
@@ -37,9 +40,22 @@ public class BehandlingensLivslopRequest implements RequestElement {
                 .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
                 .behandlingensLivslopData(BehandlingensLivslopData.builder()
                         .beskrivelse(beskrivelse)
-                        .filer(filer)
+                        .filer(filer.stream().map(this::fileToBehandlingsLivlopFil).toList())
                         .build())
                 .build();
+    }
+
+    private BehandlingensLivslopFil fileToBehandlingsLivlopFil(MultipartFile multipartFile){
+        try{
+            return BehandlingensLivslopFil.builder()
+                    .filnavn(multipartFile.getName())
+                    .filtype(multipartFile.getContentType())
+                    .fil(multipartFile.getBytes())
+                    .build();
+        } catch (IOException e){
+           throw new ValidationException("Unable to convert fil to byte[], error: " + e.getMessage());
+        }
+
     }
 
     public void validateFieldValues(Validator<?> validator) {
@@ -50,7 +66,7 @@ public class BehandlingensLivslopRequest implements RequestElement {
     public void mergeInto(BehandlingensLivslop bl) {
         bl.setEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
         bl.getBehandlingensLivslopData().setBeskrivelse(beskrivelse);
-        bl.getBehandlingensLivslopData().setFiler(filer);
+        bl.getBehandlingensLivslopData().setFiler(filer.stream().map(this::fileToBehandlingsLivlopFil).toList());
     }
 
 }
