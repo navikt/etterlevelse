@@ -19,6 +19,7 @@
     "@types/react-draft-wysiwyg": "^1.13.5",
     "amplitude-js": "^8.21.9",
     "axios": "^1.5.1",
+    "buffer": "^6.0.3",
     "core-js": "^3.32.2",
     "depcheck": "^1.4.7",
     "draft-js": "^0.11.7",

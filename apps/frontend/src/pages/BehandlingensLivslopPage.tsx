@@ -181,7 +181,7 @@ export const BehandlingensLivslopPage = () => {
                 behandlingsLivslop as IBehandlingensLivslop
               )}
             >
-              {({ initialValues, submitForm }) => (
+              {({ submitForm, initialValues }) => (
                 <Form>
                   <div className="pr-4 flex flex-1 flex-col gap-4 col-span-8">
                     <BodyShort>

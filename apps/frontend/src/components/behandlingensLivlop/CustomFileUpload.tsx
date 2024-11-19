@@ -36,7 +36,7 @@ export const CustomFileUpload = (props: IProps) => {
       })
       setFiles(initialFiles)
     }
-  }, [])
+  }, [initialValues])
 
   const removeFile = (fileToRemove: FileObject) => {
     setFiles(files.filter((file) => file !== fileToRemove))

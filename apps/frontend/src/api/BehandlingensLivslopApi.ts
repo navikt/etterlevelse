@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { Buffer } from 'buffer'
 import { useEffect, useState } from 'react'
 import { IBehandlingensLivslop, IBehandlingensLivslopRequest, IPageResponse } from '../constants'
 import { env } from '../util/env'
@@ -166,12 +167,27 @@ export const mapBehandlingensLivslopToFormValue = (
 export const mapBehandlingensLivslopRequestToFormValue = (
   behandlingensLivslop: Partial<IBehandlingensLivslop>
 ): IBehandlingensLivslopRequest => {
+  const filer: File[] = []
+  if (
+    behandlingensLivslop &&
+    behandlingensLivslop.filer &&
+    behandlingensLivslop.filer?.length > 0
+  ) {
+    behandlingensLivslop.filer.forEach((fil) => {
+      const decodedBase64File = Buffer.from(fil.fil, 'base64')
+      const parsedFile = Uint8Array.from(decodedBase64File)
+      const blob = new Blob([parsedFile], { type: fil.filtype })
+      const file = new File([blob], fil.filnavn, { type: fil.filtype })
+      filer.push(file)
+    })
+  }
+
   return {
     id: behandlingensLivslop.id || '',
     changeStamp: behandlingensLivslop.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
     version: -1,
     etterlevelseDokumentasjonId: behandlingensLivslop.etterlevelseDokumentasjonId || '',
     beskrivelse: behandlingensLivslop.beskrivelse || '',
-    filer: [],
+    filer: filer,
   }
 }
