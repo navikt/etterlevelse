@@ -112,8 +112,8 @@ public class BehandlingensLivslopController {
         return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop));
     }
 
-     @Operation(summary = "Delete Etterlevelse")
-     @ApiResponse(description = "Etterlevelse deleted")
+     @Operation(summary = "Delete Behandlingens Livsløp")
+     @ApiResponse(description = "Behandlingens Livsløp deleted")
      @DeleteMapping("/{id}")
      public ResponseEntity<BehandlingensLivslopResponse> deleteBehandlingensLivslopById(@PathVariable UUID id) {
          log.info("Delete Behandlingens Livslop id={}", id);
