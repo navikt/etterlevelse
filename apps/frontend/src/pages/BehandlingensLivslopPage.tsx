@@ -18,6 +18,7 @@ import {
   getBehandlingensLivslopByEtterlevelseDokumentId,
   mapBehandlingensLivslopRequestToFormValue,
   updateBehandlingensLivslop,
+  useBehandlingensLivslop,
 } from '../api/BehandlingensLivslopApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
@@ -42,10 +43,12 @@ export const BehandlingensLivslopPage = () => {
   const params: Readonly<
     Partial<{
       id?: string
+      behandlingsLivslopId?: string
     }>
-  > = useParams<{ id?: string }>()
+  > = useParams<{ id?: string; behandlingsLivslopId?: string }>()
   const [etterlevelseDokumentasjon, , isEtterlevelseDokumentasjonLoading] =
     useEtterlevelseDokumentasjon(params.id)
+  const [behandlingsLivslop] = useBehandlingensLivslop(params.behandlingsLivslopId)
   const [tilPvkDokument, setTilPvkDokument] = useState<boolean>(false)
   const [tilTemaOversikt, setTilTemaOversikt] = useState<boolean>(false)
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
@@ -149,6 +152,7 @@ export const BehandlingensLivslopPage = () => {
 
       {!isEtterlevelseDokumentasjonLoading &&
         etterlevelseDokumentasjon &&
+        behandlingsLivslop &&
         !etterlevelseDokumentasjon.hasCurrentUserAccess &&
         !user.isAdmin() && (
           <div className="flex w-full justify-center mt-5">
@@ -166,13 +170,16 @@ export const BehandlingensLivslopPage = () => {
 
       {!isEtterlevelseDokumentasjonLoading &&
         etterlevelseDokumentasjon &&
+        behandlingsLivslop &&
         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
           <div className="flex w-full">
             <Formik
               validateOnBlur={false}
               validateOnChange={false}
               onSubmit={submit}
-              initialValues={mapBehandlingensLivslopRequestToFormValue({})}
+              initialValues={mapBehandlingensLivslopRequestToFormValue(
+                behandlingsLivslop as IBehandlingensLivslop
+              )}
             >
               {({ initialValues, submitForm }) => (
                 <Form>

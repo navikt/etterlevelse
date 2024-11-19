@@ -3,6 +3,7 @@ import { Alert, BodyShort, Button, Heading, Label, Link, List, ReadMore } from '
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
+import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../api/BehandlingensLivslopApi'
 import { getDocumentRelationByToIdAndRelationTypeWithData } from '../api/DocumentRelationApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
@@ -14,6 +15,7 @@ import DokumentasjonPageTabs from '../components/etterlevelseDokumentasjon/tabs/
 import { PageLayout } from '../components/scaffold/Page'
 import {
   ERelationType,
+  IBehandlingensLivslop,
   IBreadCrumbPath,
   IDocumentRelationWithEtterlevelseDokumetajson,
   IEtterlevelseDokumentasjonStats,
@@ -49,6 +51,7 @@ export const DokumentasjonPage = () => {
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
   const [relasjonLoading, setRelasjonLoading] = useState(false)
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
+  const [behandlingsLivslop, setBehandlingsLivslop] = useState<IBehandlingensLivslop>()
 
   const {
     data: relevanteData,
@@ -128,6 +131,12 @@ export const DokumentasjonPage = () => {
         await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
           .then((response: IPvkDokument) => {
             if (response) setPvkDokument(response)
+          })
+          .catch(() => undefined)
+
+        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+          .then((response: IBehandlingensLivslop) => {
+            if (response) setBehandlingsLivslop(response)
           })
           .catch(() => undefined)
       })()
@@ -236,11 +245,17 @@ export const DokumentasjonPage = () => {
                         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
                           <Button
                             onClick={() => {
-                              navigate(
+                              let behandlingensLivlopUrl =
                                 '/dokumentasjon/' +
-                                  etterlevelseDokumentasjon.id +
-                                  '/behandlingens-livslop/'
-                              )
+                                etterlevelseDokumentasjon.id +
+                                '/behandlingens-livslop/'
+
+                              if (behandlingsLivslop) {
+                                behandlingensLivlopUrl += behandlingsLivslop.id
+                              } else {
+                                behandlingensLivlopUrl += 'ny'
+                              }
+                              navigate(behandlingensLivlopUrl)
                             }}
                             size="small"
                             variant="primary"

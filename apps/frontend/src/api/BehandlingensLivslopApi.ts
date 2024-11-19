@@ -164,7 +164,7 @@ export const mapBehandlingensLivslopToFormValue = (
 }
 
 export const mapBehandlingensLivslopRequestToFormValue = (
-  behandlingensLivslop: Partial<IBehandlingensLivslopRequest>
+  behandlingensLivslop: Partial<IBehandlingensLivslop>
 ): IBehandlingensLivslopRequest => {
   return {
     id: behandlingensLivslop.id || '',
@@ -172,6 +172,6 @@ export const mapBehandlingensLivslopRequestToFormValue = (
     version: -1,
     etterlevelseDokumentasjonId: behandlingensLivslop.etterlevelseDokumentasjonId || '',
     beskrivelse: behandlingensLivslop.beskrivelse || '',
-    filer: behandlingensLivslop.filer || [],
+    filer: [],
   }
 }
