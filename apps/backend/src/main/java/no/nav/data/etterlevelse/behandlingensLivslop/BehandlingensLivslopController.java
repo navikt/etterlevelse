@@ -14,6 +14,7 @@
  import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopResponse;
  import org.springframework.data.domain.Page;
  import org.springframework.http.HttpStatus;
+ import org.springframework.http.MediaType;
  import org.springframework.http.ResponseEntity;
  import org.springframework.web.bind.annotation.DeleteMapping;
  import org.springframework.web.bind.annotation.GetMapping;
@@ -73,7 +74,7 @@ public class BehandlingensLivslopController {
 
     @Operation(summary = "Create Behandlingens Livsløp")
     @ApiResponse(responseCode = "201", description = "Behandlingens Livsløp created")
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BehandlingensLivslopResponse> createBehandlingensLivslop(
             @RequestPart(value = "filer", required = false) List<MultipartFile> filer,
             @RequestPart BehandlingensLivslopRequest request
@@ -88,7 +89,7 @@ public class BehandlingensLivslopController {
 
     @Operation(summary = "Update Behandlingens Livsløp")
     @ApiResponse(description = "Behandlingens Livsløp updated")
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BehandlingensLivslopResponse> updateBehandlingensLivslop(
             @PathVariable UUID id,
             @RequestPart(value = "filer", required = false) List<MultipartFile> filer,
