@@ -50,6 +50,7 @@ export const BehandlingensLivslopPage = () => {
   const [tilTemaOversikt, setTilTemaOversikt] = useState<boolean>(false)
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [, setBehandlingesLivslop] = useState<IBehandlingensLivslop>()
+  const [filesToUpload, setFilesToUpload] = useState<File[]>([])
   const navigate = useNavigate()
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -79,6 +80,7 @@ export const BehandlingensLivslopPage = () => {
     if (etterlevelseDokumentasjon) {
       const mutatedBehandlingensLivslop = {
         ...behandlingensLivslop,
+        filer: filesToUpload,
         etterlevelseDokumentasjonId: etterlevelseDokumentasjon.id,
       } as IBehandlingensLivslopRequest
 
@@ -239,7 +241,10 @@ export const BehandlingensLivslopPage = () => {
                       oversikt.
                     </BodyShort>
 
-                    <CustomFileUpload initialValues={initialValues.filer} />
+                    <CustomFileUpload
+                      initialValues={initialValues.filer}
+                      setFilesToUpload={setFilesToUpload}
+                    />
 
                     <div className="mt-3">
                       <TextAreaField
