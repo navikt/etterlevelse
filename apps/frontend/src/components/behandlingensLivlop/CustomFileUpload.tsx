@@ -6,7 +6,8 @@ import {
   Heading,
   VStack,
 } from '@navikt/ds-react'
-import { Dispatch, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+
 const MAX_FILES = 4
 const MAX_SIZE_MB = 5
 const MAX_SIZE = MAX_SIZE_MB * 1024 * 1024
@@ -18,36 +19,39 @@ const errors: Record<FileRejectionReason, string> = {
 
 interface IProps {
   initialValues: File[]
-  setFilesToUpload: Dispatch<React.SetStateAction<File[]>>
+  rejectedFiles: FileRejected[]
+  setRejectedFiles: Dispatch<SetStateAction<FileRejected[]>>
+  setFilesToUpload: Dispatch<SetStateAction<File[]>>
 }
 
 export const CustomFileUpload = (props: IProps) => {
-  const {initialValues, setFilesToUpload} = props
+  const { initialValues, rejectedFiles, setRejectedFiles, setFilesToUpload } = props
   const [files, setFiles] = useState<FileObject[]>([])
   const acceptedFiles = files.filter((file) => !file.error)
-  const rejectedFiles = files.filter((f): f is FileRejected => f.error)
 
   useEffect(() => {
     if (initialValues && initialValues.length > 0) {
       const initialFiles: FileObject[] = []
       initialValues.forEach((initialFile) => {
-        initialFiles.push({file: initialFile, error: false})
+        initialFiles.push({ file: initialFile, error: false })
       })
       setFiles(initialFiles)
     }
   }, [initialValues])
+
+  useEffect(() => {
+    setRejectedFiles(files.filter((f): f is FileRejected => f.error))
+  }, [files])
 
   const removeFile = (fileToRemove: FileObject) => {
     setFiles(files.filter((file) => file !== fileToRemove))
     setFilesToUpload(files.filter((file) => file !== fileToRemove).map((file) => file.file))
   }
 
-
   const getErrorMessage = (message: string): string => {
     if (message === 'fileType' || message === 'fileSize') {
       return errors[message as FileRejectionReason]
-    }
-    else {
+    } else {
       return message
     }
   }
@@ -60,14 +64,12 @@ export const CustomFileUpload = (props: IProps) => {
         accept=".png,.jpeg,.pdf"
         maxSizeInBytes={MAX_SIZE}
         fileLimit={{ max: MAX_FILES, current: acceptedFiles.length }}
-        validator={(file: File)=> {
-          if (files.map((file)=>file.file.name).includes(file.name)) {
-
+        validator={(file: File) => {
+          if (files.map((file) => file.file.name).includes(file.name)) {
             return 'Filen eksisterer allerede.'
           }
           return true
-        }
-          }
+        }}
         onSelect={(newFiles: FileObject[]) => {
           setFiles([...files, ...newFiles])
           setFilesToUpload([
@@ -101,7 +103,7 @@ export const CustomFileUpload = (props: IProps) => {
       )}
       {rejectedFiles.length > 0 && (
         <VStack gap="2">
-          <Heading level="3" size="xsmall">
+          <Heading level="3" size="xsmall" id="vedleggMedFeil">
             Vedlegg med feil
           </Heading>
           <VStack as="ul" gap="3">

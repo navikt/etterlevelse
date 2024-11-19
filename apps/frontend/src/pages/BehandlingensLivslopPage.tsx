@@ -2,6 +2,8 @@ import {
   Alert,
   BodyShort,
   Button,
+  ErrorSummary,
+  FileRejected,
   Heading,
   Label,
   Link,
@@ -54,6 +56,7 @@ export const BehandlingensLivslopPage = () => {
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [, setBehandlingesLivslop] = useState<IBehandlingensLivslop>()
   const [filesToUpload, setFilesToUpload] = useState<File[]>([])
+  const [rejectedFiles, setRejectedFiles] = useState<FileRejected[]>([])
   const navigate = useNavigate()
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -250,6 +253,8 @@ export const BehandlingensLivslopPage = () => {
 
                     <CustomFileUpload
                       initialValues={initialValues.filer}
+                      rejectedFiles={rejectedFiles}
+                      setRejectedFiles={setRejectedFiles}
                       setFilesToUpload={setFilesToUpload}
                     />
 
@@ -261,9 +266,19 @@ export const BehandlingensLivslopPage = () => {
                         name="beskrivelse"
                       />
                     </div>
+
+                    {rejectedFiles.length > 0 && (
+                      <ErrorSummary className="mt-3">
+                        <ErrorSummary.Item href={'#vedleggMedFeil'}>
+                          Vedlegg(er) med feil
+                        </ErrorSummary.Item>
+                      </ErrorSummary>
+                    )}
+
                     <div className="flex gap-2">
                       <Button
                         type="button"
+                        disabled={rejectedFiles.length > 0}
                         onClick={() => {
                           setTilPvkDokument(true)
                           submitForm()
@@ -273,6 +288,7 @@ export const BehandlingensLivslopPage = () => {
                       </Button>
                       <Button
                         type="button"
+                        disabled={rejectedFiles.length > 0}
                         variant="secondary"
                         onClick={() => {
                           setTilTemaOversikt(true)
