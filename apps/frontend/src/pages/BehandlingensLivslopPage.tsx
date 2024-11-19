@@ -92,6 +92,9 @@ export const BehandlingensLivslopPage = () => {
         mutatedBehandlingensLivslop.id = existingBehandlingensLivsLop.id
       }
 
+      const pvkDokumentLink =
+        pvkDokument && pvkDokument.skalUtforePvk ? '/pvkdokument/' : '/pvkbehov/'
+
       if (behandlingensLivslop.id || existingBehandlingsLivslopId) {
         await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
           if (tilTemaOversikt) {
@@ -100,7 +103,7 @@ export const BehandlingensLivslopPage = () => {
             navigate(
               '/dokumentasjon/' +
                 response.etterlevelseDokumentasjonId +
-                '/pvkdokument/' +
+                pvkDokumentLink +
                 (pvkDokument ? pvkDokument.id : 'ny')
             )
           } else {
@@ -115,7 +118,7 @@ export const BehandlingensLivslopPage = () => {
             navigate(
               '/dokumentasjon/' +
                 response.etterlevelseDokumentasjonId +
-                '/pvkdokument/' +
+                pvkDokumentLink +
                 (pvkDokument ? pvkDokument.id : 'ny')
             )
           } else {
