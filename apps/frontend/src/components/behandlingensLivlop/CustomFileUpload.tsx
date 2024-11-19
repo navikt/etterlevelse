@@ -7,7 +7,6 @@ import {
   VStack,
 } from '@navikt/ds-react'
 import { Dispatch, useEffect, useState } from 'react'
-
 const MAX_FILES = 4
 const MAX_SIZE_MB = 5
 const MAX_SIZE = MAX_SIZE_MB * 1024 * 1024
@@ -23,7 +22,7 @@ interface IProps {
 }
 
 export const CustomFileUpload = (props: IProps) => {
-  const { initialValues, setFilesToUpload } = props
+  const {initialValues, setFilesToUpload} = props
   const [files, setFiles] = useState<FileObject[]>([])
   const acceptedFiles = files.filter((file) => !file.error)
   const rejectedFiles = files.filter((f): f is FileRejected => f.error)
@@ -32,7 +31,7 @@ export const CustomFileUpload = (props: IProps) => {
     if (initialValues && initialValues.length > 0) {
       const initialFiles: FileObject[] = []
       initialValues.forEach((initialFile) => {
-        initialFiles.push({ file: initialFile, error: false })
+        initialFiles.push({file: initialFile, error: false})
       })
       setFiles(initialFiles)
     }
@@ -43,6 +42,16 @@ export const CustomFileUpload = (props: IProps) => {
     setFilesToUpload(files.filter((file) => file !== fileToRemove).map((file) => file.file))
   }
 
+
+  const getErrorMessage = (message: string): string => {
+    if (message === 'fileType' || message === 'fileSize') {
+      return errors[message as FileRejectionReason]
+    }
+    else {
+      return message
+    }
+  }
+
   return (
     <VStack gap="6">
       <FileUpload.Dropzone
@@ -51,6 +60,14 @@ export const CustomFileUpload = (props: IProps) => {
         accept=".png,.jpeg,.pdf"
         maxSizeInBytes={MAX_SIZE}
         fileLimit={{ max: MAX_FILES, current: acceptedFiles.length }}
+        validator={(file: File)=> {
+          if (files.map((file)=>file.file.name).includes(file.name)) {
+
+            return 'Filen eksisterer allerede.'
+          }
+          return true
+        }
+          }
         onSelect={(newFiles: FileObject[]) => {
           setFiles([...files, ...newFiles])
           setFilesToUpload([
@@ -99,7 +116,7 @@ export const CustomFileUpload = (props: IProps) => {
                     removeFile(rejected)
                   },
                 }}
-                error={errors[rejected.reasons[0] as FileRejectionReason]}
+                error={getErrorMessage(rejected.reasons[0])}
               />
             ))}
           </VStack>
