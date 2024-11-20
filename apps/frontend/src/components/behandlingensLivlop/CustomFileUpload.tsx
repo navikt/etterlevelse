@@ -6,10 +6,9 @@ import {
   Heading,
   VStack,
 } from '@navikt/ds-react'
-import { Field, FieldProps, FormikErrors } from 'formik'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
-const MAX_FILES = 4
+const MAX_FILES = 10
 const MAX_SIZE_MB = 5
 const MAX_SIZE = MAX_SIZE_MB * 1024 * 1024
 
@@ -18,84 +17,114 @@ const errors: Record<FileRejectionReason, string> = {
   fileSize: `Filen er større enn ${MAX_SIZE_MB} MB`,
 }
 
-export const CustomFileUpload = () => {
+interface IProps {
+  initialValues: File[]
+  rejectedFiles: FileRejected[]
+  setRejectedFiles: Dispatch<SetStateAction<FileRejected[]>>
+  setFilesToUpload: Dispatch<SetStateAction<File[]>>
+}
+
+export const CustomFileUpload = (props: IProps) => {
+  const { initialValues, rejectedFiles, setRejectedFiles, setFilesToUpload } = props
   const [files, setFiles] = useState<FileObject[]>([])
   const acceptedFiles = files.filter((file) => !file.error)
-  const rejectedFiles = files.filter((f): f is FileRejected => f.error)
 
-  const removeFile = (
-    fileToRemove: FileObject,
-    setFieldValue: (
-      field: string,
-      value: any,
-      shouldValidate?: boolean
-    ) => Promise<void | FormikErrors<any>>
-  ) => {
-    const fileUpdated = files.filter((file) => file !== fileToRemove)
-    setFieldValue('WIP', fileUpdated)
-    setFiles(fileUpdated)
+  useEffect(() => {
+    if (initialValues && initialValues.length > 0) {
+      const initialFiles: FileObject[] = []
+      initialValues.forEach((initialFile) => {
+        initialFiles.push({ file: initialFile, error: false })
+      })
+      setFiles(initialFiles)
+    }
+  }, [initialValues])
+
+  useEffect(() => {
+    setRejectedFiles(files.filter((f): f is FileRejected => f.error))
+  }, [files])
+
+  const removeFile = (fileToRemove: FileObject) => {
+    setFiles(files.filter((file) => file !== fileToRemove))
+    setFilesToUpload(files.filter((file) => file !== fileToRemove).map((file) => file.file))
+  }
+
+  const getErrorMessage = (message: string): string => {
+    if (message === 'fileType' || message === 'fileSize') {
+      return errors[message as FileRejectionReason]
+    } else {
+      return message
+    }
   }
 
   return (
-    <Field>
-      {(fieldProps: FieldProps) => (
-        <VStack gap="6">
-          <FileUpload.Dropzone
-            label="Last opp behandlingslivsløp"
-            description={`Støttet filformater er pdf, png, og jpeg. Maks 4 filer. Maks størrelse på ${MAX_SIZE_MB} MB.`}
-            accept=".png,.jpeg,.pdf"
-            maxSizeInBytes={MAX_SIZE}
-            fileLimit={{ max: MAX_FILES, current: acceptedFiles.length }}
-            onSelect={(newFiles: FileObject[]) => {
-              setFiles([...files, ...newFiles])
-              fieldProps.form.setFieldValue('WIP', [...files, ...newFiles])
-            }}
-          />
+    <VStack gap="6">
+      <FileUpload.Dropzone
+        label="Last opp behandlingslivsløp"
+        description={`Støttet filformater er pdf, png, og jpeg. Maks 4 filer. Maks størrelse på ${MAX_SIZE_MB} MB.`}
+        accept=".png,.jpeg,.pdf"
+        maxSizeInBytes={MAX_SIZE}
+        fileLimit={{ max: MAX_FILES, current: acceptedFiles.length }}
+        validator={(file: File) => {
+          if (files.map((file) => file.file.name).includes(file.name)) {
+            return 'Filen eksisterer allerede.'
+          }
+          return true
+        }}
+        onSelect={(newFiles: FileObject[]) => {
+          setFiles([...files, ...newFiles])
+          setFilesToUpload([
+            ...files.map((file) => file.file),
+            ...newFiles.map((newFile) => newFile.file),
+          ])
+        }}
+      />
 
-          {acceptedFiles.length > 0 && (
-            <VStack gap="2">
-              <Heading level="3" size="xsmall">
-                {`Vedlegg (${acceptedFiles.length})`}
-              </Heading>
-              <VStack as="ul" gap="3">
-                {acceptedFiles.map((file, index) => (
-                  <FileUpload.Item
-                    as="li"
-                    key={index}
-                    file={file.file}
-                    button={{
-                      action: 'delete',
-                      onClick: () => removeFile(file, fieldProps.form.setFieldValue),
-                    }}
-                  />
-                ))}
-              </VStack>
-            </VStack>
-          )}
-          {rejectedFiles.length > 0 && (
-            <VStack gap="2">
-              <Heading level="3" size="xsmall">
-                Vedlegg med feil
-              </Heading>
-              <VStack as="ul" gap="3">
-                {rejectedFiles.map((rejected, index) => (
-                  <FileUpload.Item
-                    as="li"
-                    key={index}
-                    file={rejected.file}
-                    button={{
-                      action: 'delete',
-                      onClick: () => removeFile(rejected, fieldProps.form.setFieldValue),
-                    }}
-                    error={errors[rejected.reasons[0] as FileRejectionReason]}
-                  />
-                ))}
-              </VStack>
-            </VStack>
-          )}
+      {acceptedFiles.length > 0 && (
+        <VStack gap="2">
+          <Heading level="3" size="xsmall">
+            {`Vedlegg (${acceptedFiles.length})`}
+          </Heading>
+          <VStack as="ul" gap="3">
+            {acceptedFiles.map((file, index) => (
+              <FileUpload.Item
+                as="li"
+                key={file.file.name + '_' + index}
+                file={file.file}
+                button={{
+                  action: 'delete',
+                  onClick: () => {
+                    removeFile(file)
+                  },
+                }}
+              />
+            ))}
+          </VStack>
         </VStack>
       )}
-    </Field>
+      {rejectedFiles.length > 0 && (
+        <VStack gap="2">
+          <Heading level="3" size="xsmall" id="vedleggMedFeil">
+            Vedlegg med feil
+          </Heading>
+          <VStack as="ul" gap="3">
+            {rejectedFiles.map((rejected, index) => (
+              <FileUpload.Item
+                as="li"
+                key={index}
+                file={rejected.file}
+                button={{
+                  action: 'delete',
+                  onClick: () => {
+                    removeFile(rejected)
+                  },
+                }}
+                error={getErrorMessage(rejected.reasons[0])}
+              />
+            ))}
+          </VStack>
+        </VStack>
+      )}
+    </VStack>
   )
 }
 

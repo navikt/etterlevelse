@@ -2,6 +2,8 @@ import {
   Alert,
   BodyShort,
   Button,
+  ErrorSummary,
+  FileRejected,
   Heading,
   Label,
   Link,
@@ -13,6 +15,13 @@ import { Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { behandlingName } from '../api/BehandlingApi'
+import {
+  createBehandlingensLivslop,
+  getBehandlingensLivslopByEtterlevelseDokumentId,
+  mapBehandlingensLivslopRequestToFormValue,
+  updateBehandlingensLivslop,
+  useBehandlingensLivslop,
+} from '../api/BehandlingensLivslopApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
 import { CustomFileUpload } from '../components/behandlingensLivlop/CustomFileUpload'
@@ -20,8 +29,14 @@ import { TextAreaField } from '../components/common/Inputs'
 import { Markdown } from '../components/common/Markdown'
 import { ExternalLink } from '../components/common/RouteLink'
 import { PageLayout } from '../components/scaffold/Page'
-import { IBehandling, IBreadCrumbPath, IPvkDokument } from '../constants'
-import behandlingensLivslop from '../resources/behandlingensLivslop.png'
+import {
+  IBehandling,
+  IBehandlingensLivslop,
+  IBehandlingensLivslopRequest,
+  IBreadCrumbPath,
+  IPvkDokument,
+} from '../constants'
+import behandlingensLivslopImage from '../resources/behandlingensLivslop.png'
 import { user } from '../services/User'
 import { env } from '../util/env'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
@@ -30,13 +45,18 @@ export const BehandlingensLivslopPage = () => {
   const params: Readonly<
     Partial<{
       id?: string
+      behandlingsLivslopId?: string
     }>
-  > = useParams<{ id?: string }>()
+  > = useParams<{ id?: string; behandlingsLivslopId?: string }>()
   const [etterlevelseDokumentasjon, , isEtterlevelseDokumentasjonLoading] =
     useEtterlevelseDokumentasjon(params.id)
+  const [behandlingsLivslop] = useBehandlingensLivslop(params.behandlingsLivslopId)
   const [tilPvkDokument, setTilPvkDokument] = useState<boolean>(false)
   const [tilTemaOversikt, setTilTemaOversikt] = useState<boolean>(false)
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
+  const [, setBehandlingesLivslop] = useState<IBehandlingensLivslop>()
+  const [filesToUpload, setFilesToUpload] = useState<File[]>([])
+  const [rejectedFiles, setRejectedFiles] = useState<FileRejected[]>([])
   const navigate = useNavigate()
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -62,17 +82,58 @@ export const BehandlingensLivslopPage = () => {
     }
   }, [etterlevelseDokumentasjon])
 
-  const submit = (behandlingensLivslop: any) => {
-    console.debug(behandlingensLivslop)
+  const submit = async (behandlingensLivslop: any) => {
+    if (etterlevelseDokumentasjon) {
+      const mutatedBehandlingensLivslop = {
+        ...behandlingensLivslop,
+        filer: filesToUpload,
+        etterlevelseDokumentasjonId: etterlevelseDokumentasjon.id,
+      } as IBehandlingensLivslopRequest
 
-    if (tilPvkDokument) {
-      if (pvkDokument) {
-        navigate('/dokumentasjon/' + etterlevelseDokumentasjon?.id + '/pvkbehov/' + pvkDokument.id)
-      } else {
-        navigate('/dokumentasjon/' + etterlevelseDokumentasjon?.id + '/pvkbehov/ny')
+      //double check if etterlevelse already exist before submitting
+      let existingBehandlingsLivslopId = ''
+      const existingBehandlingensLivsLop = await getBehandlingensLivslopByEtterlevelseDokumentId(
+        etterlevelseDokumentasjon.id
+      ).catch(() => undefined)
+      if (existingBehandlingensLivsLop) {
+        existingBehandlingsLivslopId = existingBehandlingensLivsLop.id
+        mutatedBehandlingensLivslop.id = existingBehandlingensLivsLop.id
       }
-    } else if (tilTemaOversikt) {
-      navigate('/dokumentasjon/' + etterlevelseDokumentasjon?.id)
+
+      const pvkDokumentLink =
+        pvkDokument && pvkDokument.skalUtforePvk ? '/pvkdokument/' : '/pvkbehov/'
+
+      if (behandlingensLivslop.id || existingBehandlingsLivslopId) {
+        await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
+          if (tilTemaOversikt) {
+            navigate('/dokumentasjon/' + response.etterlevelseDokumentasjonId)
+          } else if (tilPvkDokument) {
+            navigate(
+              '/dokumentasjon/' +
+                response.etterlevelseDokumentasjonId +
+                pvkDokumentLink +
+                (pvkDokument ? pvkDokument.id : 'ny')
+            )
+          } else {
+            setBehandlingesLivslop(response)
+          }
+        })
+      } else {
+        await createBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
+          if (tilTemaOversikt) {
+            navigate('/dokumentasjon/' + response.etterlevelseDokumentasjonId)
+          } else if (tilPvkDokument) {
+            navigate(
+              '/dokumentasjon/' +
+                response.etterlevelseDokumentasjonId +
+                pvkDokumentLink +
+                (pvkDokument ? pvkDokument.id : 'ny')
+            )
+          } else {
+            setBehandlingesLivslop(response)
+          }
+        })
+      }
     }
   }
 
@@ -94,6 +155,7 @@ export const BehandlingensLivslopPage = () => {
 
       {!isEtterlevelseDokumentasjonLoading &&
         etterlevelseDokumentasjon &&
+        behandlingsLivslop &&
         !etterlevelseDokumentasjon.hasCurrentUserAccess &&
         !user.isAdmin() && (
           <div className="flex w-full justify-center mt-5">
@@ -111,15 +173,18 @@ export const BehandlingensLivslopPage = () => {
 
       {!isEtterlevelseDokumentasjonLoading &&
         etterlevelseDokumentasjon &&
+        behandlingsLivslop &&
         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
           <div className="flex w-full">
             <Formik
               validateOnBlur={false}
               validateOnChange={false}
               onSubmit={submit}
-              initialValues={{}}
+              initialValues={mapBehandlingensLivslopRequestToFormValue(
+                behandlingsLivslop as IBehandlingensLivslop
+              )}
             >
-              {({ submitForm }) => (
+              {({ submitForm, initialValues }) => (
                 <Form>
                   <div className="pr-4 flex flex-1 flex-col gap-4 col-span-8">
                     <BodyShort>
@@ -152,7 +217,7 @@ export const BehandlingensLivslopPage = () => {
 
                     <img
                       className="mr-2.5"
-                      src={behandlingensLivslop}
+                      src={behandlingensLivslopImage}
                       alt="Behandligens livsløp tegning"
                       aria-hidden
                       aria-label=""
@@ -186,7 +251,12 @@ export const BehandlingensLivslopPage = () => {
                       oversikt.
                     </BodyShort>
 
-                    <CustomFileUpload />
+                    <CustomFileUpload
+                      initialValues={initialValues.filer}
+                      rejectedFiles={rejectedFiles}
+                      setRejectedFiles={setRejectedFiles}
+                      setFilesToUpload={setFilesToUpload}
+                    />
 
                     <div className="mt-3">
                       <TextAreaField
@@ -196,9 +266,19 @@ export const BehandlingensLivslopPage = () => {
                         name="beskrivelse"
                       />
                     </div>
+
+                    {rejectedFiles.length > 0 && (
+                      <ErrorSummary className="mt-3">
+                        <ErrorSummary.Item href={'#vedleggMedFeil'}>
+                          Vedlegg(er) med feil
+                        </ErrorSummary.Item>
+                      </ErrorSummary>
+                    )}
+
                     <div className="flex gap-2">
                       <Button
                         type="button"
+                        disabled={rejectedFiles.length > 0}
                         onClick={() => {
                           setTilPvkDokument(true)
                           submitForm()
@@ -208,6 +288,7 @@ export const BehandlingensLivslopPage = () => {
                       </Button>
                       <Button
                         type="button"
+                        disabled={rejectedFiles.length > 0}
                         variant="secondary"
                         onClick={() => {
                           setTilTemaOversikt(true)

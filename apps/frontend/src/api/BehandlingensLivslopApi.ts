@@ -1,6 +1,7 @@
 import axios from 'axios'
+import { Buffer } from 'buffer'
 import { useEffect, useState } from 'react'
-import { IBehandlingensLivslop, IPageResponse } from '../constants'
+import { IBehandlingensLivslop, IBehandlingensLivslopRequest, IPageResponse } from '../constants'
 import { env } from '../util/env'
 
 export const getAllBehandlingensLivslop = async () => {
@@ -44,19 +45,64 @@ export const getBehandlingensLivslopByEtterlevelseDokumentId = async (
   ).data
 }
 
-export const createBehandlingensLivslop = async (behandlingensLivslop: IBehandlingensLivslop) => {
+export const createBehandlingensLivslop = async (
+  behandlingensLivslop: IBehandlingensLivslopRequest
+) => {
+  const formData = new FormData()
   const dto = behandlingensLivslopToBehandlingensLivslopDto(behandlingensLivslop)
+  formData.append(
+    'request',
+    new Blob([JSON.stringify(dto)], {
+      type: 'application/json',
+    })
+  )
+
+  if (behandlingensLivslop.filer && behandlingensLivslop.filer.length > 0) {
+    behandlingensLivslop.filer.forEach((fil) => {
+      formData.append('filer', fil)
+    })
+  }
+
   return (
-    await axios.post<IBehandlingensLivslop>(`${env.backendBaseUrl}/behandlingenslivslop`, dto)
+    await axios.post<IBehandlingensLivslop>(
+      `${env.backendBaseUrl}/behandlingenslivslop`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    )
   ).data
 }
 
-export const updateBehandlingensLivslop = async (behandlingensLivslop: IBehandlingensLivslop) => {
+export const updateBehandlingensLivslop = async (
+  behandlingensLivslop: IBehandlingensLivslopRequest
+) => {
+  const formData = new FormData()
   const dto = behandlingensLivslopToBehandlingensLivslopDto(behandlingensLivslop)
+  formData.append(
+    'request',
+    new Blob([JSON.stringify(dto)], {
+      type: 'application/json',
+    })
+  )
+
+  if (behandlingensLivslop.filer && behandlingensLivslop.filer.length > 0) {
+    behandlingensLivslop.filer.forEach((fil) => {
+      formData.append('filer', fil)
+    })
+  }
+
   return (
     await axios.put<IBehandlingensLivslop>(
       `${env.backendBaseUrl}/behandlingenslivslop/${behandlingensLivslop.id}`,
-      dto
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
     )
   ).data
 }
@@ -94,10 +140,11 @@ export const useBehandlingensLivslop = (behandlingensLivslopId?: string) => {
 }
 
 const behandlingensLivslopToBehandlingensLivslopDto = (
-  behandlingensLivslop: IBehandlingensLivslop
+  behandlingensLivslop: IBehandlingensLivslopRequest
 ) => {
   const dto = {
     ...behandlingensLivslop,
+    filer: [],
   } as any
   delete dto.changeStamp
   delete dto.version
@@ -114,5 +161,33 @@ export const mapBehandlingensLivslopToFormValue = (
     etterlevelseDokumentasjonId: behandlingensLivslop.etterlevelseDokumentasjonId || '',
     beskrivelse: behandlingensLivslop.beskrivelse || '',
     filer: behandlingensLivslop.filer || [],
+  }
+}
+
+export const mapBehandlingensLivslopRequestToFormValue = (
+  behandlingensLivslop: Partial<IBehandlingensLivslop>
+): IBehandlingensLivslopRequest => {
+  const filer: File[] = []
+  if (
+    behandlingensLivslop &&
+    behandlingensLivslop.filer &&
+    behandlingensLivslop.filer?.length > 0
+  ) {
+    behandlingensLivslop.filer.forEach((fil) => {
+      const decodedBase64File = Buffer.from(fil.fil, 'base64')
+      const parsedFile = Uint8Array.from(decodedBase64File)
+      const blob = new Blob([parsedFile], { type: fil.filtype })
+      const file = new File([blob], fil.filnavn, { type: fil.filtype })
+      filer.push(file)
+    })
+  }
+
+  return {
+    id: behandlingensLivslop.id || '',
+    changeStamp: behandlingensLivslop.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
+    version: -1,
+    etterlevelseDokumentasjonId: behandlingensLivslop.etterlevelseDokumentasjonId || '',
+    beskrivelse: behandlingensLivslop.beskrivelse || '',
+    filer: filer,
   }
 }
