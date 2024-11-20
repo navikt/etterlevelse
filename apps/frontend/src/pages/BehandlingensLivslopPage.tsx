@@ -275,7 +275,7 @@ export const BehandlingensLivslopPage = () => {
                       </ErrorSummary>
                     )}
 
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 mt-5">
                       <Button
                         type="button"
                         disabled={rejectedFiles.length > 0}
@@ -314,7 +314,7 @@ export const BehandlingensLivslopPage = () => {
 
             {/* right side */}
             {etterlevelseDokumentasjon && (
-              <div className="pl-4 border-l border-border-divider w-full max-w-md">
+              <div className="pl-4 border-l border-border-divider w-full max-w-lg">
                 <Heading level="2" size="small" className="mb-5">
                   Hentet fra deres etterlevelsesdokumentasjon
                 </Heading>
