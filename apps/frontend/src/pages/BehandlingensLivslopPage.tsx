@@ -186,7 +186,7 @@ export const BehandlingensLivslopPage = () => {
             >
               {({ submitForm, initialValues }) => (
                 <Form>
-                  <div className="pr-4 flex flex-1 flex-col gap-4 col-span-8">
+                  <div className="pr-6 flex flex-1 flex-col gap-4 col-span-8">
                     <BodyShort>
                       “Behandlingens livsløp” beskriver hvor og hvordan personopplysninger flyter
                       når de behandles i deres kontekst. Hensikten med å tegne behandlingens livsløp
@@ -314,7 +314,7 @@ export const BehandlingensLivslopPage = () => {
 
             {/* right side */}
             {etterlevelseDokumentasjon && (
-              <div className="pl-4 border-l border-border-divider w-full max-w-lg">
+              <div className="pl-6 border-l border-border-divider w-full max-w-lg">
                 <Heading level="2" size="small" className="mb-5">
                   Hentet fra deres etterlevelsesdokumentasjon
                 </Heading>

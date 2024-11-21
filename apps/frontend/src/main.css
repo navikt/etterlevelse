@@ -12,3 +12,7 @@
 .navds-accordion__header-content {
   width: 100%;
 }
+
+p {
+  max-width: 75ch;
+}

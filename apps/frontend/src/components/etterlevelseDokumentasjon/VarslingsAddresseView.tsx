@@ -61,7 +61,7 @@ export const VarslingsadresserView = ({
   }, [varslingsadresser])
 
   return (
-    <div>
+    <div className="mt-1.5">
       {varslingsadresser.map((varslingsaddresse, index) => {
         if (varslingsaddresse.type === EAdresseType.SLACK) {
           const channel = slackChannels.find((c) => c.id === varslingsaddresse.adresse)

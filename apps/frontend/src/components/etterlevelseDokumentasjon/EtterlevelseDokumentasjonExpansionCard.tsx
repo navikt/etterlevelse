@@ -1,5 +1,5 @@
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
 import { CodelistService, EListName, ICode, IGetParsedOptionsProps } from '../../services/Codelist'
@@ -79,59 +79,72 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
       <div>
         <div>
           <ReadMore
-            header="Les mer om dokumentet"
-            aria-label="tittel på etterlevelsesdokument"
+            header="Les mer om dette dokumentet"
+            aria-label="Les mer om dette dokumentet"
             className="w-full"
           >
             <div>
-              {behandlerPersonopplysninger && (
-                <BehandlingList
-                  behandlingIds={behandlingIds}
-                  behandlerPersonopplysninger={behandlerPersonopplysninger}
-                  behandlinger={behandlinger}
-                />
+              {etterlevelseDokumentasjon.beskrivelse && (
+                <div className="mb-3">
+                  <Heading className="mb-3" level="2" size="small">
+                    Dokumentbeskrivelse
+                  </Heading>
+                  <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
+                </div>
               )}
-              <div className="mb-2.5">
-                {etterlevelseDokumentasjon.avdeling && (
-                  <div className="flex items-start gap-2">
-                    <BodyShort size="small">Avdeling:</BodyShort>
-                    <BodyShort size="small">
-                      {etterlevelseDokumentasjon.avdeling.shortName}
-                    </BodyShort>
-                  </div>
+              <div className="max-w-[75ch]">
+                <Heading className="mb-3" level="2" size="small">
+                  Dokumentegenskaper
+                </Heading>
+                {behandlerPersonopplysninger && (
+                  <BehandlingList
+                    behandlingIds={behandlingIds}
+                    behandlerPersonopplysninger={behandlerPersonopplysninger}
+                    behandlinger={behandlinger}
+                  />
                 )}
-                {!etterlevelseDokumentasjon.avdeling && (
-                  <BodyShort size="small">Avdeling er ikke angitt</BodyShort>
-                )}
-              </div>
-              <div className="mb-2.5">
-                {teams.length > 0 && <Teams teams={teams} link />}
-                {teams.length === 0 && <BodyShort size="small">Team er ikke angitt</BodyShort>}
-              </div>
-              <div className="flex items-start gap-2">
-                <BodyShort size="small">Egenskaper:</BodyShort>
-                {irrelevansFor.length === relevansCodeList.length && (
-                  <div className="flex items-center gap-1">
-                    <ExclamationmarkTriangleFillIcon
-                      area-label=""
-                      aria-hidden
-                      className="text-2xl text-icon-warning"
-                    />
-                    <Label size="small">Ingen egenskaper er oppgitt</Label>
-                  </div>
-                )}
-                {getRelevans(irrelevansFor)}
-              </div>
-              <div className="flex items-start gap-2">
-                <BodyShort size="small" className="mt-[3px]">
-                  Varslingsadresser:
-                </BodyShort>
-                <div>
-                  {etterlevelseDokumentasjon.varslingsadresser && (
-                    <VarslingsadresserView
-                      varslingsadresser={etterlevelseDokumentasjon.varslingsadresser}
-                    />
+                <div className="mb-2.5">
+                  {etterlevelseDokumentasjon.avdeling && (
+                    <div className="flex items-start gap-2">
+                      <Label size="small">Avdeling:</Label>
+                      <BodyShort size="small">
+                        {etterlevelseDokumentasjon.avdeling.shortName}
+                      </BodyShort>
+                    </div>
                   )}
+                  {!etterlevelseDokumentasjon.avdeling && (
+                    <BodyShort size="small">Avdeling er ikke angitt</BodyShort>
+                  )}
+                </div>
+                <div className="mb-2.5">
+                  {teams.length > 0 && <Teams teams={teams} link />}
+                  {teams.length === 0 && <BodyShort size="small">Team er ikke angitt</BodyShort>}
+                </div>
+                <div className="flex items-start gap-2">
+                  <Label size="small">Egenskaper:</Label>
+                  {irrelevansFor.length === relevansCodeList.length && (
+                    <div className="flex items-center gap-1">
+                      <ExclamationmarkTriangleFillIcon
+                        area-label=""
+                        aria-hidden
+                        className="text-2xl text-icon-warning"
+                      />
+                      <Label size="small">Ingen egenskaper er oppgitt</Label>
+                    </div>
+                  )}
+                  {getRelevans(irrelevansFor)}
+                </div>
+                <div className="flex items-start gap-2">
+                  <Label size="small" className="mt-2.5">
+                    Varslingsadresser:
+                  </Label>
+                  <div>
+                    {etterlevelseDokumentasjon.varslingsadresser && (
+                      <VarslingsadresserView
+                        varslingsadresser={etterlevelseDokumentasjon.varslingsadresser}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

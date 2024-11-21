@@ -1,4 +1,4 @@
-import { BodyShort, Link } from '@navikt/ds-react'
+import { Label, Link } from '@navikt/ds-react'
 import { useTeam } from '../../api/TeamApi'
 import { teamKatTeamLink } from '../../util/config'
 
@@ -38,7 +38,7 @@ export const Teams = (props: IPropsTeams) => {
 
   return (
     <div className="flex flex-wrap gap-2 items-center">
-      <BodyShort size="small">Team:</BodyShort>
+      <Label size="small">Team:</Label>
       {teams.map((team, index) => (
         <TeamName key={`team_${index}`} id={team} link={link} big={big} />
       ))}

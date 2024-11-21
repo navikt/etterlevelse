@@ -1,4 +1,4 @@
-import { BodyShort } from '@navikt/ds-react'
+import { BodyShort, Label } from '@navikt/ds-react'
 import { behandlingName } from '../../api/BehandlingApi'
 import { IBehandling } from '../../constants'
 import { env } from '../../util/env'
@@ -15,7 +15,7 @@ export const BehandlingList = (props: IProps) => {
 
   return (
     <div className="flex gap-2 flex-wrap items-center mb-2.5">
-      <BodyShort size="small">Behandling:</BodyShort>
+      <Label size="small">Behandling:</Label>
       {behandlingIds?.length >= 1 &&
         behandlerPersonopplysninger &&
         behandlingIds.map((behandlingId, index) => (

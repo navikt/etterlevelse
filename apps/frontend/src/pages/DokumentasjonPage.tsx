@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Alert, BodyShort, Button, Heading, Label, Link, List, ReadMore } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, Heading, Link, List, ReadMore } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
@@ -8,7 +8,6 @@ import { getDocumentRelationByToIdAndRelationTypeWithData } from '../api/Documen
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { Markdown } from '../components/common/Markdown'
 import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
 import TillatGjenbrukModal from '../components/etterlevelseDokumentasjon/edit/TillatGjenbrukModal'
 import DokumentasjonPageTabs from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonPageTabs'
@@ -202,12 +201,6 @@ export const DokumentasjonPage = () => {
                     </Alert>
                   </div>
                 )}
-              {etterlevelseDokumentasjon.beskrivelse && (
-                <div className="mb-5">
-                  <Label>Beskrivelse</Label>
-                  <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
-                </div>
-              )}
 
               <div className="flex mb-5">
                 <EtterlevelseDokumentasjonExpansionCard
