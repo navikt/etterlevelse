@@ -32,15 +32,28 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
         {(fieldProps: FieldProps) => (
           <>
             {fieldProps.form.values.stemmerPersonkategorier === false && (
-              <Alert inline variant="warning" className="mt-3">
-                Dere må oppdatere personkategori(er) i Behandlingskatalogen.
-              </Alert>
+              <div className="border-l-2 ml-[13px] border-[#d2d4d9] py-7">
+                <div>
+                  <Alert inline variant="warning" className="ml-[13px] mb-10">
+                    Dere må oppdatere personkategori(er) i Behandlingskatalogen.
+                  </Alert>
+
+                  <div className="ml-[13px]">
+                    <TextAreaField
+                      rows={1}
+                      noPlaceholder
+                      label="Dersom det ikke er mulig å oppdatere Behandlingskatalogen på tilstrekkelig vis for denne PVK-en, skriv inn ytterligere personkategorier."
+                      name="ytterligerePersonkategorier"
+                    />
+                  </div>
+                </div>
+              </div>
             )}
           </>
         )}
       </Field>
 
-      <ReadMore className="mt-3" header="Hvordan kan vi komme med gode estimater?">
+      <ReadMore className="mt-5" header="Hvordan kan vi komme med gode estimater?">
         Det blir ofte vanskelig å tallfeste noen personkategorier, for eksempel når det er snakk om
         antall brukere eller saksbehandlere. Det er tilstrekkelig å oppgi ca. antall. Hvis du er
         usikker på hvor du faktisk finner tall på hvor mange som kan ha tilgang, kan du … [good
