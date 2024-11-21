@@ -77,10 +77,6 @@ public class StorageService<T extends DomainObject> {
         return storage.getDomainObjectData();
     }
 
-    // TODO: getAll(...) 
-    // Metodene er kilder til feil (kan potensielt returnere veldig mye data). De bør derfor fjernes og evt. erstattes av 
-    // metoder kun for de typene vi trenger dette for (f.eks. findAllMailTasks)
-
     public List<T> getAll(Class<T> type) {
         return convert(repository.findAllByType(TypeRegistration.typeOf(type)), GenericStorage::getDomainObjectData);
     }

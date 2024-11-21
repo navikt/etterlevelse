@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
@@ -37,6 +38,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/export")
 @Tag(name = "Export", description = "REST API for exports")
+@RequiredArgsConstructor
 public class ExportController {
 
     private static final String WORDPROCESSINGML_DOCUMENT = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
@@ -52,18 +54,6 @@ public class ExportController {
     private final EtterlevelseService etterlevelseService;
 
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
-
-    public ExportController(CodelistToDoc codelistToDoc, KravToDoc kravToDoc, EtterlevelseDokumentasjonToDoc etterlevelseDokumentasjonToDoc, KravService kravService, CodelistService codelistService, CodeUsageService codeUsageService,
-                            EtterlevelseService etterlevelseService, EtterlevelseDokumentasjonService etterlevelseDokumentasjonService) {
-        this.codelistToDoc = codelistToDoc;
-        this.kravToDoc = kravToDoc;
-        this.etterlevelseDokumentasjonToDoc = etterlevelseDokumentasjonToDoc;
-        this.kravService = kravService;
-        this.codelistService = codelistService;
-        this.codeUsageService = codeUsageService;
-        this.etterlevelseService = etterlevelseService;
-        this.etterlevelseDokumentasjonService = etterlevelseDokumentasjonService;
-    }
 
 
     @Operation(summary = "Get export for codelist")

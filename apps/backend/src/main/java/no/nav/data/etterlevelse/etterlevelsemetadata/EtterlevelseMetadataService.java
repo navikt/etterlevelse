@@ -60,7 +60,7 @@ public class EtterlevelseMetadataService extends DomainService<EtterlevelseMetad
     public EtterlevelseMetadata save(EtterlevelseMetadataRequest request) {
 
         var etterlevelseMetadata = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new EtterlevelseMetadata();
-        etterlevelseMetadata.merge(request);
+        request.mergeInto(etterlevelseMetadata);
 
         return storage.save(etterlevelseMetadata);
     }

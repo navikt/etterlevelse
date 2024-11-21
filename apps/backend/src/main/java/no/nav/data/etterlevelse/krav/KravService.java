@@ -10,7 +10,6 @@ import no.nav.data.common.mail.MailTask;
 import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
-import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
@@ -21,8 +20,6 @@ import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
-import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
-import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.varsel.UrlGenerator;
 import no.nav.data.etterlevelse.varsel.domain.Varsel;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
@@ -44,7 +41,6 @@ import java.util.UUID;
 
 import static no.nav.data.common.security.SecurityUtils.isKravEier;
 import static no.nav.data.common.utils.StreamUtils.convert;
-import static no.nav.data.common.utils.StreamUtils.filter;
 import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.url;
 
 @Slf4j
@@ -52,7 +48,7 @@ import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.
 @RequiredArgsConstructor
 public class KravService extends DomainService<Krav> {
 
-    protected final StorageService<KravImage> imageStorage;
+    private final StorageService<KravImage> imageStorage;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final EtterlevelseService etterlevelseService;
     private final UrlGenerator urlGenerator;
@@ -115,13 +111,6 @@ public class KravService extends DomainService<Krav> {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Krav save(KravRequest request) {
-            Validator.validate(request, storage::get)
-                    .addValidations(this::validateName)
-                    .addValidations(this::validateStatus)
-                    .addValidations(this::validateKravNummerVersjon)
-                    .addValidations(this::validateBegreper)
-                    .ifErrorsThrowValidationException();
-
         var krav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
 
         krav.merge(request);
@@ -185,56 +174,6 @@ public class KravService extends DomainService<Krav> {
         return kravRepo.findKravImage(kravId, fileId).getDomainObjectData();
     }
 
-    private void validateName(Validator<KravRequest> validator) {
-        String name = validator.getItem().getNavn();
-
-        if (name == null) {
-            return;
-        }
-
-        var items = filter(storage.findByNameAndType(name, Krav.class),
-                t -> (!t.getId().equals(validator.getItem().getIdAsUUID())
-                && !t.getKravNummer().equals(validator.getItem().getKravNummer())
-                ));
-
-        if (!items.isEmpty()) {
-            validator.addError(Fields.navn, Validator.ALREADY_EXISTS, "name '%s' already in use".formatted(name));
-        }
-    }
-
-    private void validateKravNummerVersjon(Validator<KravRequest> validator) {
-        KravRequest req = validator.getItem();
-        Integer kravNummer = req.getKravNummer();
-        boolean nyKravVersjon = req.isNyKravVersjon();
-        if (nyKravVersjon && kravNummer != null) {
-            if (getByKravNummer(kravNummer).isEmpty()) {
-                validator.addError(Fields.kravNummer, Validator.DOES_NOT_EXIST, "KravNummer %d does not exist".formatted(kravNummer));
-            }
-        }
-    }
-
-    private void validateStatus(Validator<KravRequest> validator) {
-        KravRequest req = validator.getItem();
-        if (!req.isUpdate()) {
-            return;
-        }
-        Krav oldKrav = validator.getDomainItem();
-        if (req.getStatus() == KravStatus.UTKAST && oldKrav.getStatus() != KravStatus.UTKAST) {
-            var etterlevelser = etterlevelseRepo.findByKravNummer(oldKrav.getKravNummer(), oldKrav.getKravVersjon());
-            if (!etterlevelser.isEmpty()) {
-                validator.addError(Fields.status, "INVALID_STATUS", "Krav already contains %d etterlevelser, cannot change status to UTKAST".formatted(etterlevelser.size()));
-            }
-        }
-    }
-
-    private void validateBegreper(Validator<KravRequest> validator) {
-        var existingBegreper = Optional.ofNullable(validator.<Krav>getDomainItem()).map(Krav::getBegrepIder).orElse(List.of());
-        validator.getItem().getBegrepIder().stream()
-                .filter(b -> !existingBegreper.contains(b))
-                .filter(b -> begrepService.getBegrep(b).isEmpty())
-                .forEach(b -> validator.addError(Fields.begrepIder, "BEGREP_NOT_FOUND", "Begrep %s ble ikke funnet i begrepskatalogen.".formatted(b)));
-    }
-
     @SchedulerLock(name = "clean_krav_images", lockAtLeastFor = "PT5M")
     @Scheduled(initialDelayString = "PT5M", fixedRateString = "PT1H")
     @Transactional(propagation = Propagation.REQUIRED)
@@ -243,23 +182,15 @@ public class KravService extends DomainService<Krav> {
         log.info("Deleted {} unused krav images", deletes);
     }
 
-
-    public KravResponse toResponseForNotKraveier (Krav krav) {
-        var response = krav.toResponse();
-        response.getChangeStamp().setLastModifiedBy("Skjult");
-        response.setVarslingsadresser(List.of());
-        return response;
-    }
-
     private void varsle(Krav krav, boolean isNewVersion) {
         List<EtterlevelseDokumentasjon> relevanteDokumentasjon = getDocumentForKrav(krav, isNewVersion);
 
         relevanteDokumentasjon.forEach(e -> {
-            if(e.getVarslingsadresser() != null && !e.getVarslingsadresser().isEmpty()) {
+            if (e.getVarslingsadresser() != null && !e.getVarslingsadresser().isEmpty()) {
                 List<Varslingsadresse> recipients = e.getVarslingsadresser();
                 String etterlevelseId = "E%s %s".formatted(e.getEtterlevelseNummer(), e.getTitle());
                 var builder = Varsel.builder();
-                if(isNewVersion) {
+                if (isNewVersion) {
                     builder.title("Det har kommet en ny versjon på krav K%d".formatted(krav.getKravNummer()));
                 }  else {
                     builder.title("Det har kommet et nytt krav som er relevant for ditt Etterlevelses dokument. K%d.%d".formatted(krav.getKravNummer(), krav.getKravVersjon()));
@@ -276,7 +207,7 @@ public class KravService extends DomainService<Krav> {
                         case EPOST -> emailService.scheduleMail(MailTask.builder().to(varslingsadresse.getAdresse()).subject(varsel.getTitle()).body(varsel.toHtml()).build());
                         case SLACK -> slackClient.sendMessageToChannel(varslingsadresse.getAdresse(), varsel.toSlack());
                         case SLACK_USER -> {
-                            if(securityProperties.isDev()) {
+                            if (securityProperties.isDev()) {
                                 slackClient.sendMessageToChannel(varslingsadresse.getAdresse(), varsel.toSlack());
                             } else {
                                 slackClient.sendMessageToUserId(varslingsadresse.getAdresse(), varsel.toSlack());
@@ -292,7 +223,7 @@ public class KravService extends DomainService<Krav> {
     private List<EtterlevelseDokumentasjon> getDocumentForKrav(Krav krav, boolean isNewVersion) {
         List<EtterlevelseDokumentasjon> etterlevelseDokumentasjonList = new ArrayList<>();
 
-        if(isNewVersion) {
+        if (isNewVersion) {
             List<String> etterlevelseDokumentasjonIds = etterlevelseService.getByKravNummer(krav.getKravNummer(), krav.getKravVersjon() -1 ).stream().map(Etterlevelse::getEtterlevelseDokumentasjonId).toList();
             etterlevelseDokumentasjonIds.forEach(id -> {
                 var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(id));

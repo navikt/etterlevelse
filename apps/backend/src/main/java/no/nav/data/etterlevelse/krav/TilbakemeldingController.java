@@ -32,6 +32,7 @@ import java.util.UUID;
 public class TilbakemeldingController {
 
     private final TilbakemeldingService tilbakemeldingService;
+    private final TilbakemeldingValidator validator;
 
     // Tilbakemelding
 
@@ -40,6 +41,7 @@ public class TilbakemeldingController {
     @PostMapping
     public ResponseEntity<TilbakemeldingResponse> createTilbakemelding(@RequestBody CreateTilbakemeldingRequest request) {
         log.info("Create Tilbakemelding");
+        validator.validate(request);
         var tilbakemelding = tilbakemeldingService.create(request);
         return new ResponseEntity<>(tilbakemelding.toResponse(), HttpStatus.CREATED);
     }
