@@ -1,4 +1,4 @@
-import { Alert, Heading, List, ReadMore } from '@navikt/ds-react'
+import { Alert, Heading, Link, List, ReadMore } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
 import { BoolField, TextAreaField } from '../common/Inputs'
 
@@ -32,22 +32,18 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
         {(fieldProps: FieldProps) => (
           <>
             {fieldProps.form.values.stemmerPersonkategorier === false && (
-              <div className="border-l-2 ml-[13px] border-[#d2d4d9] py-7">
-                <div>
-                  <Alert inline variant="warning" className="ml-[13px] mb-10">
-                    Dere må oppdatere personkategori(er) i Behandlingskatalogen.
-                  </Alert>
-
-                  <div className="ml-[13px]">
-                    <TextAreaField
-                      rows={1}
-                      noPlaceholder
-                      label="Dersom det ikke er mulig å oppdatere Behandlingskatalogen på tilstrekkelig vis for denne PVK-en, skriv inn ytterligere personkategorier."
-                      name="ytterligerePersonkategorier"
-                    />
-                  </div>
-                </div>
-              </div>
+              <Alert inline variant="warning" className="mt-5 mb-10">
+                Dere må oppdatere personkategori(er) i Behandlingskatalogen. Hvis dere ikke finner
+                riktig personkategori(er), ta kontakt på{' '}
+                <Link
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://nav-it.slack.com/archives/CR1B19E6L"
+                >
+                  #behandlingskatalogen på Slack (åpnes i ny fane)
+                </Link>
+                , eller på epost: teamdatajegerne@nav.no.
+              </Alert>
             )}
           </>
         )}
