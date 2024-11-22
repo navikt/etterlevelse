@@ -11,7 +11,8 @@ import {
   Loader,
   ReadMore,
 } from '@navikt/ds-react'
-import { Form, Formik } from 'formik'
+import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
+import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { behandlingName } from '../api/BehandlingApi'
@@ -25,6 +26,7 @@ import {
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
 import { CustomFileUpload } from '../components/behandlingensLivlop/CustomFileUpload'
+import behandlingensLivslopSchema from '../components/behandlingensLivlop/behandlingensLivsLopSchema'
 import { TextAreaField } from '../components/common/Inputs'
 import { Markdown } from '../components/common/Markdown'
 import { ExternalLink } from '../components/common/RouteLink'
@@ -183,8 +185,19 @@ export const BehandlingensLivslopPage = () => {
               initialValues={mapBehandlingensLivslopRequestToFormValue(
                 behandlingsLivslop as IBehandlingensLivslop
               )}
+              validate={() => {
+                try {
+                  validateYupSchema(
+                    { rejectedFiles: rejectedFiles },
+                    behandlingensLivslopSchema(),
+                    true
+                  )
+                } catch (error) {
+                  return yupToFormErrors(error)
+                }
+              }}
             >
-              {({ submitForm, initialValues }) => (
+              {({ submitForm, initialValues, errors }) => (
                 <Form>
                   <div className="pr-6 flex flex-1 flex-col gap-4 col-span-8">
                     <BodyShort>
@@ -267,7 +280,7 @@ export const BehandlingensLivslopPage = () => {
                       />
                     </div>
 
-                    {rejectedFiles.length > 0 && (
+                    {!_.isEmpty(errors) && rejectedFiles.length > 0 && (
                       <ErrorSummary className="mt-3">
                         <ErrorSummary.Item href={'#vedleggMedFeil'}>
                           Vedlegg(er) med feil
@@ -278,7 +291,6 @@ export const BehandlingensLivslopPage = () => {
                     <div className="flex gap-2 mt-5">
                       <Button
                         type="button"
-                        disabled={rejectedFiles.length > 0}
                         onClick={() => {
                           setTilPvkDokument(true)
                           submitForm()
@@ -288,7 +300,6 @@ export const BehandlingensLivslopPage = () => {
                       </Button>
                       <Button
                         type="button"
-                        disabled={rejectedFiles.length > 0}
                         variant="secondary"
                         onClick={() => {
                           setTilTemaOversikt(true)
