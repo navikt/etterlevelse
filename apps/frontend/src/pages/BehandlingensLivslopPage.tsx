@@ -283,7 +283,7 @@ export const BehandlingensLivslopPage = () => {
                     {!_.isEmpty(errors) && rejectedFiles.length > 0 && (
                       <ErrorSummary className="mt-3">
                         <ErrorSummary.Item href={'#vedleggMedFeil'}>
-                          Vedlegg(er) med feil
+                          Vedlegg med feil
                         </ErrorSummary.Item>
                       </ErrorSummary>
                     )}

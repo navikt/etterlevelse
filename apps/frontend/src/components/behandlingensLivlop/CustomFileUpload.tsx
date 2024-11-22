@@ -66,7 +66,7 @@ export const CustomFileUpload = (props: IProps) => {
         fileLimit={{ max: MAX_FILES, current: acceptedFiles.length }}
         validator={(file: File) => {
           if (files.map((file) => file.file.name).includes(file.name)) {
-            return 'Filen eksisterer allerede.'
+            return 'Filen er allerede lastet opp'
           }
           return true
         }}
