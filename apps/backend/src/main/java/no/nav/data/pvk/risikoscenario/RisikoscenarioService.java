@@ -6,6 +6,7 @@ import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepo;
+import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepoCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,6 +21,7 @@ import java.util.UUID;
 public class RisikoscenarioService {
 
     private final RisikoscenarioRepo risikoscenarioRepo;
+    private final RisikoscenarioRepoCustom risikoscenarioRepoCustom;
 
     public Risikoscenario get(UUID uuid) {
         if (uuid == null || !risikoscenarioRepo.existsById(uuid)) return null;
@@ -36,6 +38,10 @@ public class RisikoscenarioService {
 
     public List<Risikoscenario> getByPvkDokument(String pvkDokumentId) {
         return risikoscenarioRepo.findByPvkDokumentId(pvkDokumentId);
+    }
+
+    public List<Risikoscenario> getByKravNummer(String kravNummer) {
+        return risikoscenarioRepoCustom.findByKravNummer(kravNummer);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

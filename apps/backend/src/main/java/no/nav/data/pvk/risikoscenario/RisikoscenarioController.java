@@ -59,6 +59,16 @@ public class RisikoscenarioController {
         return ResponseEntity.ok(new RestResponsePage<>(risikoscenarioList).convert(RisikoscenarioResponse::buildFrom));
     }
 
+    @Operation(summary = "Get Riskoscenario by kravnummer")
+    @ApiResponse(description = "ok")
+    @GetMapping("/kravnummer/{kravnummer}")
+    public ResponseEntity<RestResponsePage<RisikoscenarioResponse>> getRiskoscenarioByKravnummer(@PathVariable String kravnummer) {
+        log.info("Get Riskoscenario by kravnummer={}", kravnummer);
+        List<Risikoscenario> risikoscenarioList = riskoscenarioService.getByKravNummer(kravnummer);
+
+        return ResponseEntity.ok(new RestResponsePage<>(risikoscenarioList).convert(RisikoscenarioResponse::buildFrom));
+    }
+
     @Operation(summary = "Create Risikoscenario")
     @ApiResponse(responseCode = "201", description = "Risikoscenario created")
     @PostMapping
