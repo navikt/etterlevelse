@@ -9,14 +9,14 @@ export const CreateRisikoscenario = () => {
     <div className="mt-5">
       {!isEdit && (
         <Button onClick={() => setIsEdit(true)} variant="secondary">
-          Opprett nytt generelt risikoscenario
+          Opprett nytt øvrig risikoscenario
         </Button>
       )}
 
       {isEdit && (
         <div>
           <Heading level="2" size="small" className="mb-3">
-            Opprett nytt generelt risikoscenario
+            Opprett nytt øvirg risikoscenario
           </Heading>
 
           <TextField
