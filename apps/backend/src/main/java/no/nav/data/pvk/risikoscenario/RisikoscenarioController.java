@@ -9,9 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
-import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
-import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioRequest;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
