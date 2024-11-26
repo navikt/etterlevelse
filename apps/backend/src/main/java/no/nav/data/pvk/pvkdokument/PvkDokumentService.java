@@ -30,13 +30,6 @@ public class PvkDokumentService {
         return pvkDokumentRepo.findById(uuid).orElseThrow(() -> new NotFoundException("Couldn't find Pvk Dokument with id " + uuid));
     }
 
-    @Transactional
-    public PvkDokument saveTestData(PvkDokument pvkDokument) {
-        pvkDokument = pvkDokumentRepo.save(pvkDokument);
-        pvkDokumentRepo.flush();
-        return pvkDokument;
-    }
-
     public Page<PvkDokument> getAll(PageParameters pageParameters) {
         return pvkDokumentRepo.findAll(pageParameters.createPage());
     }
