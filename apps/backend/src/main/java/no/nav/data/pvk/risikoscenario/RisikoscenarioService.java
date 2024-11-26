@@ -4,15 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.rest.PageParameters;
-import no.nav.data.pvk.risikoscenario.domain.Riskoscenario;
-import no.nav.data.pvk.risikoscenario.domain.RiskoscenarioRepo;
+import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
+import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepo;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -20,38 +19,38 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RisikoscenarioService {
 
-    private final RiskoscenarioRepo riskoscenarioRepo;
+    private final RisikoscenarioRepo risikoscenarioRepo;
 
-    public Riskoscenario get(UUID uuid) {
-        if (uuid == null || !riskoscenarioRepo.existsById(uuid)) return null;
+    public Risikoscenario get(UUID uuid) {
+        if (uuid == null || !risikoscenarioRepo.existsById(uuid)) return null;
         return getRiskoscenario(uuid);
     }
 
-    private Riskoscenario getRiskoscenario(UUID uuid) {
-        return riskoscenarioRepo.findById(uuid).orElseThrow(() -> new NotFoundException("Couldn't find Pvk Dokument with id " + uuid));
+    private Risikoscenario getRiskoscenario(UUID uuid) {
+        return risikoscenarioRepo.findById(uuid).orElseThrow(() -> new NotFoundException("Couldn't find Pvk Dokument with id " + uuid));
     }
 
-    public Page<Riskoscenario> getAll(PageParameters pageParameters) {
-        return riskoscenarioRepo.findAll(pageParameters.createPage());
+    public Page<Risikoscenario> getAll(PageParameters pageParameters) {
+        return risikoscenarioRepo.findAll(pageParameters.createPage());
     }
 
-    public List<Riskoscenario> getByPvkDokument(String pvkDokumentId) {
-        return riskoscenarioRepo.findByPvkDokumentId(pvkDokumentId);
+    public List<Risikoscenario> getByPvkDokument(String pvkDokumentId) {
+        return risikoscenarioRepo.findByPvkDokumentId(pvkDokumentId);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Riskoscenario save(Riskoscenario riskoscenario, boolean isUpdate) {
+    public Risikoscenario save(Risikoscenario risikoscenario, boolean isUpdate) {
         if (!isUpdate) {
-            riskoscenario.setId(UUID.randomUUID());
+            risikoscenario.setId(UUID.randomUUID());
         }
 
-        return riskoscenarioRepo.save(riskoscenario);
+        return risikoscenarioRepo.save(risikoscenario);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Riskoscenario delete(UUID id) {
-        var pvkDokumentToDelete = riskoscenarioRepo.findById(id);
-        riskoscenarioRepo.deleteById(id);
+    public Risikoscenario delete(UUID id) {
+        var pvkDokumentToDelete = risikoscenarioRepo.findById(id);
+        risikoscenarioRepo.deleteById(id);
         return pvkDokumentToDelete.orElse(null);
     }
 }

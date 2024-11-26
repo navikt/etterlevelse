@@ -10,7 +10,7 @@ import java.util.List;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class RiskoscenarioData {
+public class RisikoscenarioData {
     private String navn;
     private String beskrivelse;
     private Integer sannsynlighetsNivaa;

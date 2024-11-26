@@ -18,7 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "RISKOSCENARIO")
-public class Riskoscenario extends Auditable {
+public class Risikoscenario extends Auditable {
 
     @Id
     @Builder.Default
@@ -31,6 +31,6 @@ public class Riskoscenario extends Auditable {
     @Type(value = JsonBinaryType.class)
     @Builder.Default
     @Column(name = "DATA", nullable = false)
-    private RiskoscenarioData riskoscenarioData = new RiskoscenarioData();
+    private RisikoscenarioData risikoscenarioData = new RisikoscenarioData();
 
 }

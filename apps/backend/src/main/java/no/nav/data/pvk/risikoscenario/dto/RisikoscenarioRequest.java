@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
-import no.nav.data.pvk.risikoscenario.domain.Riskoscenario;
-import no.nav.data.pvk.risikoscenario.domain.RiskoscenarioData;
+import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
+import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioData;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,7 +22,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class RiskoscenarioRequest implements RequestElement {
+public class RisikoscenarioRequest implements RequestElement {
     private String id;
     private String pvkDokumentId;
 
@@ -54,8 +54,8 @@ public class RiskoscenarioRequest implements RequestElement {
     }
 
 
-    public Riskoscenario convertToRiskoscenario() {
-        var risikoscenarioData = RiskoscenarioData.builder()
+    public Risikoscenario convertToRiskoscenario() {
+        var risikoscenarioData = RisikoscenarioData.builder()
                 .navn(navn)
                 .beskrivelse(beskrivelse)
                 .sannsynlighetsNivaa(sannsynlighetsNivaa)
@@ -65,22 +65,22 @@ public class RiskoscenarioRequest implements RequestElement {
                 .relvanteKravNummerList(copyOf(relvanteKravNummerList))
                 .build();
 
-        return Riskoscenario.builder()
+        return Risikoscenario.builder()
                 .id(id != null && !id.isEmpty() ? UUID.fromString(id) : null)
                 .pvkDokumentId(pvkDokumentId)
-                .riskoscenarioData(risikoscenarioData)
+                .risikoscenarioData(risikoscenarioData)
                 .build();
     }
 
-    public void mergeInto(Riskoscenario riskoscenarioToMerge) {
-        riskoscenarioToMerge.setPvkDokumentId(pvkDokumentId);
-        riskoscenarioToMerge.getRiskoscenarioData().setNavn(navn);
-        riskoscenarioToMerge.getRiskoscenarioData().setBeskrivelse(beskrivelse);
-        riskoscenarioToMerge.getRiskoscenarioData().setSannsynlighetsNivaa(sannsynlighetsNivaa);
-        riskoscenarioToMerge.getRiskoscenarioData().setKonsekvensNivaaBegrunnelse(sannsynlighetsNivaaBegrunnelse);
-        riskoscenarioToMerge.getRiskoscenarioData().setKonsekvensNivaa(konsekvensNivaa);
-        riskoscenarioToMerge.getRiskoscenarioData().setKonsekvensNivaaBegrunnelse(konsekvensNivaaBegrunnelse);
-        riskoscenarioToMerge.getRiskoscenarioData().setRelvanteKravNummerList(copyOf(relvanteKravNummerList));
+    public void mergeInto(Risikoscenario risikoscenarioToMerge) {
+        risikoscenarioToMerge.setPvkDokumentId(pvkDokumentId);
+        risikoscenarioToMerge.getRisikoscenarioData().setNavn(navn);
+        risikoscenarioToMerge.getRisikoscenarioData().setBeskrivelse(beskrivelse);
+        risikoscenarioToMerge.getRisikoscenarioData().setSannsynlighetsNivaa(sannsynlighetsNivaa);
+        risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaaBegrunnelse(sannsynlighetsNivaaBegrunnelse);
+        risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaa(konsekvensNivaa);
+        risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaaBegrunnelse(konsekvensNivaaBegrunnelse);
+        risikoscenarioToMerge.getRisikoscenarioData().setRelvanteKravNummerList(copyOf(relvanteKravNummerList));
     }
 }
 
