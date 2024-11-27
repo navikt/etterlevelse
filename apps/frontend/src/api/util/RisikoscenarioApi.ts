@@ -30,3 +30,11 @@ export const getRiskoscenarioPage = async (pageNumber: number, pageSize: number)
 export const getRisikoscenario = async (id: string) => {
   return (await axios.get<IRisikoscenario>(`${env.backendBaseUrl}/riskoscenario/${id}`)).data
 }
+
+export const getRisikoscenarioByPvkDokumentId = async (pvkDokumentId: string) => {
+  return (
+    await axios.get<IPageResponse<IRisikoscenario>>(
+      `${env.backendBaseURl}/risikoscenario/pvkdokument/${pvkDokumentId}`
+    )
+  ).data
+}
