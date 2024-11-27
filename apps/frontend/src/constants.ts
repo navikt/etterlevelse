@@ -538,6 +538,20 @@ export interface IPvkDokument {
   dataBehandlerRepresentantInvolveringBeskrivelse: string
 }
 
+export interface IRisikoscenario {
+  id: string
+  changeStamp: IChangeStamp
+  version: number
+  pvkDokumentId: string
+  navn: string
+  beskrivelse: string
+  sannsynlighetsNivaa: number
+  sannsynlighetsNivaaBegrunnelse: string
+  konsekvensNivaa: number
+  konsekvensNivaaBegrunnelse: string
+  relvanteKravNummerList: number[]
+}
+
 export interface IBehandlingensLivslop {
   id: string
   changeStamp: IChangeStamp
