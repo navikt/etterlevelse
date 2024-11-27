@@ -38,3 +38,11 @@ export const getRisikoscenarioByPvkDokumentId = async (pvkDokumentId: string) =>
     )
   ).data
 }
+
+export const getRisikoscenarioByKravnummer = async (kravnummer: string) => {
+  return (
+    await axios.get<IPageResponse<IRisikoscenario>>(
+      `${env.backendBaseURl}/risikoscenario/kravnummer/${kravnummer}`
+    )
+  ).data
+}
