@@ -32,6 +32,7 @@ public class RisikoscenarioRequest implements RequestElement {
     private String sannsynlighetsNivaaBegrunnelse;
     private Integer konsekvensNivaa;
     private String konsekvensNivaaBegrunnelse;
+    private boolean generelScenario;
     private List<Integer> relvanteKravNummerList;
 
     private Boolean update;
@@ -62,6 +63,7 @@ public class RisikoscenarioRequest implements RequestElement {
                 .sannsynlighetsNivaaBegrunnelse(sannsynlighetsNivaaBegrunnelse)
                 .konsekvensNivaa(konsekvensNivaa)
                 .konsekvensNivaaBegrunnelse(konsekvensNivaaBegrunnelse)
+                .generelScenario(generelScenario)
                 .relvanteKravNummerList(copyOf(relvanteKravNummerList))
                 .build();
 
@@ -80,6 +82,7 @@ public class RisikoscenarioRequest implements RequestElement {
         risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaaBegrunnelse(sannsynlighetsNivaaBegrunnelse);
         risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaa(konsekvensNivaa);
         risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaaBegrunnelse(konsekvensNivaaBegrunnelse);
+        risikoscenarioToMerge.getRisikoscenarioData().setGenerelScenario(generelScenario);
         risikoscenarioToMerge.getRisikoscenarioData().setRelvanteKravNummerList(copyOf(relvanteKravNummerList));
     }
 }

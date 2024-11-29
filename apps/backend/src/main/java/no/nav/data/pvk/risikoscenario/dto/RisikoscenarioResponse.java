@@ -28,6 +28,7 @@ public class RisikoscenarioResponse {
     private String sannsynlighetsNivaaBegrunnelse;
     private Integer konsekvensNivaa;
     private String konsekvensNivaaBegrunnelse;
+    private boolean generelScenario;
     private List<Integer> relvanteKravNummerList;
 
     public static RisikoscenarioResponse buildFrom(Risikoscenario risikoscenario) {
@@ -47,6 +48,7 @@ public class RisikoscenarioResponse {
                 .sannsynlighetsNivaaBegrunnelse(risikoscenario.getRisikoscenarioData().getSannsynlighetsNivaaBegrunnelse())
                 .konsekvensNivaa(risikoscenario.getRisikoscenarioData().getKonsekvensNivaa())
                 .konsekvensNivaaBegrunnelse(risikoscenario.getRisikoscenarioData().getKonsekvensNivaaBegrunnelse())
+                .generelScenario(risikoscenario.getRisikoscenarioData().isGenerelScenario())
                 .relvanteKravNummerList(risikoscenario.getRisikoscenarioData().getRelvanteKravNummerList())
                 .build();
     }
