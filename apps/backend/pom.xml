@@ -39,7 +39,7 @@
         <!-- Test -->
         <testcontainers.version>1.20.4</testcontainers.version>
         <wiremock.version>3.0.1</wiremock.version>
-        <docx4j.version>11.5.0</docx4j.version>
+        <docx4j.version>11.5.1</docx4j.version>
 
 
     </properties>
