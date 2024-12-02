@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.etterlevelse.krav.KravService;
+import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioRequest;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
@@ -36,6 +38,7 @@ import java.util.UUID;
 public class RisikoscenarioController {
 
     private final RisikoscenarioService riskoscenarioService;
+    private final KravService kravService;
 
     @Operation(summary = "Get All Riskoscenario")
     @ApiResponse(description = "ok")
@@ -53,7 +56,10 @@ public class RisikoscenarioController {
     @GetMapping("/{id}")
     public ResponseEntity<RisikoscenarioResponse> getById(@PathVariable UUID id) {
         log.info("Get Riskoscenario id={}", id);
-        return ResponseEntity.ok(RisikoscenarioResponse.buildFrom(riskoscenarioService.get(id)));
+
+        var risikoscenario = RisikoscenarioResponse.buildFrom(riskoscenarioService.get(id));
+        getKravDataforRelevantKravList(risikoscenario);
+        return ResponseEntity.ok(risikoscenario);
     }
 
     @Operation(summary = "Get Riskoscenario by Pvk Document id")
@@ -62,8 +68,11 @@ public class RisikoscenarioController {
     public ResponseEntity<RestResponsePage<RisikoscenarioResponse>> getRiskoscenarioByPvkDokumentId(@PathVariable String pvkDokumentId) {
         log.info("Get Riskoscenario by Pvk Document id={}", pvkDokumentId);
         List<Risikoscenario> risikoscenarioList = riskoscenarioService.getByPvkDokument(pvkDokumentId);
+        List<RisikoscenarioResponse> risikoscenarioResponseList = risikoscenarioList.stream().map(RisikoscenarioResponse::buildFrom).toList();
 
-        return ResponseEntity.ok(new RestResponsePage<>(risikoscenarioList).convert(RisikoscenarioResponse::buildFrom));
+        risikoscenarioResponseList.forEach(this::getKravDataforRelevantKravList);
+
+        return ResponseEntity.ok(new RestResponsePage<>(risikoscenarioResponseList));
     }
 
     @Operation(summary = "Get Riskoscenario by kravnummer")
@@ -72,8 +81,9 @@ public class RisikoscenarioController {
     public ResponseEntity<RestResponsePage<RisikoscenarioResponse>> getRiskoscenarioByKravnummer(@PathVariable String kravnummer) {
         log.info("Get Riskoscenario by kravnummer={}", kravnummer);
         List<Risikoscenario> risikoscenarioList = riskoscenarioService.getByKravNummer(kravnummer);
-
-        return ResponseEntity.ok(new RestResponsePage<>(risikoscenarioList).convert(RisikoscenarioResponse::buildFrom));
+        List<RisikoscenarioResponse> risikoscenarioResponseList = risikoscenarioList.stream().map(RisikoscenarioResponse::buildFrom).toList();
+        risikoscenarioResponseList.forEach(this::getKravDataforRelevantKravList);
+        return ResponseEntity.ok(new RestResponsePage<>(risikoscenarioResponseList));
     }
 
     @Operation(summary = "Create Risikoscenario")
@@ -84,7 +94,10 @@ public class RisikoscenarioController {
 
         var risikoscenario = riskoscenarioService.save(request.convertToRiskoscenario(), request.isUpdate());
 
-        return new ResponseEntity<>(RisikoscenarioResponse.buildFrom(risikoscenario), HttpStatus.CREATED);
+        var response = RisikoscenarioResponse.buildFrom(risikoscenario);
+        getKravDataforRelevantKravList(response);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update Risikoscenario")
@@ -107,7 +120,11 @@ public class RisikoscenarioController {
 
         updatedRequest.mergeInto(risikoscenarioToUpdate);
         var risikoscenario = riskoscenarioService.save(risikoscenarioToUpdate, request.isUpdate());
-        return ResponseEntity.ok(RisikoscenarioResponse.buildFrom(risikoscenario));
+
+        var response = RisikoscenarioResponse.buildFrom(risikoscenario);
+        getKravDataforRelevantKravList(response);
+
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Delete Risikoscenario")
@@ -125,5 +142,13 @@ public class RisikoscenarioController {
     }
 
 
-
+    private void getKravDataforRelevantKravList(RisikoscenarioResponse risikoscenario) {
+        if (!risikoscenario.getRelvanteKravNummerList().isEmpty()) {
+            risikoscenario.getRelvanteKravNummerList().forEach(kravShort -> {
+                List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
+                kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
+                kravShort.setNavn(kravList.get(0).getNavn());
+            });
+        }
+    }
 }

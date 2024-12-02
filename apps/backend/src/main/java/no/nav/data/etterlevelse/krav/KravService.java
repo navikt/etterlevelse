@@ -109,6 +109,11 @@ public class KravService extends DomainService<Krav> {
         return convert(byNumberContaining, GenericStorage::getDomainObjectData);
     }
 
+    public List<Krav> findByKravNummerAndActiveStatus(int kravNummer) {
+        return convert(kravRepo.findByKravNummerAndActiveStatus(kravNummer), GenericStorage::getDomainObjectData);
+    }
+
+
     @Transactional(propagation = Propagation.REQUIRED)
     public Krav save(KravRequest request) {
         var krav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
@@ -169,6 +174,7 @@ public class KravService extends DomainService<Krav> {
     public List<KravImage> saveImages(List<KravImage> images) {
         return convert(imageStorage.saveAll(images), GenericStorage::getDomainObjectData);
     }
+
 
     public KravImage getImage(UUID kravId, UUID fileId) {
         return kravRepo.findKravImage(kravId, fileId).getDomainObjectData();

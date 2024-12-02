@@ -10,6 +10,7 @@ import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -29,7 +30,7 @@ public class RisikoscenarioResponse {
     private Integer konsekvensNivaa;
     private String konsekvensNivaaBegrunnelse;
     private boolean generelScenario;
-    private List<Integer> relvanteKravNummerList;
+    private List<KravShort> relvanteKravNummerList;
 
     public static RisikoscenarioResponse buildFrom(Risikoscenario risikoscenario) {
         return RisikoscenarioResponse.builder()
@@ -49,7 +50,7 @@ public class RisikoscenarioResponse {
                 .konsekvensNivaa(risikoscenario.getRisikoscenarioData().getKonsekvensNivaa())
                 .konsekvensNivaaBegrunnelse(risikoscenario.getRisikoscenarioData().getKonsekvensNivaaBegrunnelse())
                 .generelScenario(risikoscenario.getRisikoscenarioData().isGenerelScenario())
-                .relvanteKravNummerList(risikoscenario.getRisikoscenarioData().getRelvanteKravNummerList())
+                .relvanteKravNummerList(risikoscenario.getRisikoscenarioData().getRelvanteKravNummerList().stream().map(kravNummer -> KravShort.builder().kravNummer(kravNummer).build()).collect(Collectors.toList()))
                 .build();
     }
 }
