@@ -31,7 +31,7 @@ public class RisikoscenarioResponse {
     private Integer konsekvensNivaa;
     private String konsekvensNivaaBegrunnelse;
     private boolean generelScenario;
-    private List<KravReference> relvanteKravNummerList;
+    private List<KravReference> relevanteKravNummer;
 
     public static RisikoscenarioResponse buildFrom(Risikoscenario risikoscenario) {
         return RisikoscenarioResponse.builder()
@@ -51,7 +51,7 @@ public class RisikoscenarioResponse {
                 .konsekvensNivaa(risikoscenario.getRisikoscenarioData().getKonsekvensNivaa())
                 .konsekvensNivaaBegrunnelse(risikoscenario.getRisikoscenarioData().getKonsekvensNivaaBegrunnelse())
                 .generelScenario(risikoscenario.getRisikoscenarioData().isGenerelScenario())
-                .relvanteKravNummerList(risikoscenario.getRisikoscenarioData().getRelvanteKravNummerList().stream().map(kravNummer -> KravReference.builder().kravNummer(kravNummer).build()).collect(Collectors.toList()))
+                .relevanteKravNummer(risikoscenario.getRisikoscenarioData().getRelevanteKravNummer().stream().map(kravNummer -> KravReference.builder().kravNummer(kravNummer).build()).collect(Collectors.toList()))
                 .build();
     }
 }

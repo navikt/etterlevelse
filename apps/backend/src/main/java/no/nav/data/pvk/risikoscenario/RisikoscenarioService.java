@@ -54,7 +54,7 @@ public class RisikoscenarioService {
 
         //remove krav from list based on request krav to remove
         List<Integer>  newKravList = new ArrayList<>(CollectionUtils.removeAll(
-                risikoscenario.getRisikoscenarioData().getRelvanteKravNummerList(),
+                risikoscenario.getRisikoscenarioData().getRelevanteKravNummer(),
                 request.getKravToDelete()).stream().toList());
 
         //add new krav to list based on request krav to remove
@@ -63,7 +63,7 @@ public class RisikoscenarioService {
         //remove duplicates
         List<Integer> uniqueKravList = newKravList.stream().distinct().collect(Collectors.toList());
 
-        request.setRelvanteKravNummerList(uniqueKravList);
+        request.setRelevanteKravNummer(uniqueKravList);
         return request;
     }
 

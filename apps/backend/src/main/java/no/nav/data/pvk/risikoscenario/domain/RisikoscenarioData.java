@@ -22,6 +22,6 @@ public class RisikoscenarioData {
     private Integer konsekvensNivaa;
     private String konsekvensNivaaBegrunnelse;
     private boolean generelScenario;
-    private List<Integer> relvanteKravNummerList;
+    private List<Integer> relevanteKravNummer;
 
 }

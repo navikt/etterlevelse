@@ -143,8 +143,8 @@ public class RisikoscenarioController {
 
 
     private void getKravDataforRelevantKravList(RisikoscenarioResponse risikoscenario) {
-        if (!risikoscenario.getRelvanteKravNummerList().isEmpty()) {
-            risikoscenario.getRelvanteKravNummerList().forEach(kravShort -> {
+        if (!risikoscenario.getRelevanteKravNummer().isEmpty()) {
+            risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
                 List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
                 kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
                 kravShort.setNavn(kravList.get(0).getNavn());

@@ -35,7 +35,7 @@ public class RisikoscenarioRequest implements RequestElement {
     private boolean generelScenario;
     // felt verdiene som kommer fra frontend blir ignorert under lagring
     // dette feltet brukes av frontend for visualisering og defualt verdier
-    private List<Integer> relvanteKravNummerList;
+    private List<Integer> relevanteKravNummer;
     private List<Integer> kravToAdd;
     private List<Integer> kravToDelete;
 
@@ -68,7 +68,7 @@ public class RisikoscenarioRequest implements RequestElement {
                 .konsekvensNivaa(konsekvensNivaa)
                 .konsekvensNivaaBegrunnelse(konsekvensNivaaBegrunnelse)
                 .generelScenario(generelScenario)
-                .relvanteKravNummerList(copyOf(relvanteKravNummerList))
+                .relevanteKravNummer(copyOf(relevanteKravNummer))
                 .build();
 
         return Risikoscenario.builder()
@@ -87,7 +87,7 @@ public class RisikoscenarioRequest implements RequestElement {
         risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaa(konsekvensNivaa);
         risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaaBegrunnelse(konsekvensNivaaBegrunnelse);
         risikoscenarioToMerge.getRisikoscenarioData().setGenerelScenario(generelScenario);
-        risikoscenarioToMerge.getRisikoscenarioData().setRelvanteKravNummerList(copyOf(relvanteKravNummerList));
+        risikoscenarioToMerge.getRisikoscenarioData().setRelevanteKravNummer(copyOf(relevanteKravNummer));
     }
 }
 
