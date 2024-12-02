@@ -550,6 +550,7 @@ export interface IRisikoscenario {
   konsekvensNivaa: number
   konsekvensNivaaBegrunnelse: string
   relvanteKravNummerList: number[]
+  generelScenario: boolean
 }
 
 export interface IBehandlingensLivslop {

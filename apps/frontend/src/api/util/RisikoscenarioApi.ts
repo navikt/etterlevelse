@@ -90,5 +90,6 @@ export const mapRisikoscenarioToFormValue = (
     konsekvensNivaa: risikoscenario.konsekvensNivaa || 0,
     konsekvensNivaaBegrunnelse: risikoscenario.konsekvensNivaaBegrunnelse || '',
     relvanteKravNummerList: risikoscenario.relvanteKravNummerList || [],
+    generelScenario: risikoscenario.generelScenario || false,
   }
 }
