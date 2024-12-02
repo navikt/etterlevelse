@@ -46,3 +46,49 @@ export const getRisikoscenarioByKravnummer = async (kravnummer: string) => {
     )
   ).data
 }
+
+export const createRiskoscenario = async (risikoscenario: IRisikoscenario) => {
+  const dto = risikoscenarioToRisikoscenarioDto(risikoscenario)
+  return (await axios.post<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario`, dto)).data
+}
+
+export const updateRiskoscenario = async (risikoscenario: IRisikoscenario) => {
+  const dto = risikoscenarioToRisikoscenarioDto(risikoscenario)
+  return (
+    await axios.put<IRisikoscenario>(
+      `${env.backendBaseUrl}/risikoscenario/${risikoscenario.id}`,
+      dto
+    )
+  ).data
+}
+
+export const deleteRisikoscenario = async (id: string) => {
+  return (await axios.delete<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario/${id}`)).data
+}
+
+const risikoscenarioToRisikoscenarioDto = (risikoscenario: IRisikoscenario) => {
+  const dto = {
+    ...risikoscenario,
+  } as any
+  delete dto.changeStamp
+  delete dto.version
+  return dto
+}
+
+export const mapRisikoscenarioToFormValue = (
+  risikoscenario: Partial<IRisikoscenario>
+): IRisikoscenario => {
+  return {
+    id: risikoscenario.id || '',
+    changeStamp: risikoscenario.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
+    version: -1,
+    pvkDokumentId: risikoscenario.pvkDokumentId || '',
+    navn: risikoscenario.navn || '',
+    beskrivelse: risikoscenario.beskrivelse || '',
+    sannsynlighetsNivaa: risikoscenario.sannsynlighetsNivaa || 0,
+    sannsynlighetsNivaaBegrunnelse: risikoscenario.sannsynlighetsNivaaBegrunnelse || '',
+    konsekvensNivaa: risikoscenario.konsekvensNivaa || 0,
+    konsekvensNivaaBegrunnelse: risikoscenario.konsekvensNivaaBegrunnelse || '',
+    relvanteKravNummerList: risikoscenario.relvanteKravNummerList || [],
+  }
+}
