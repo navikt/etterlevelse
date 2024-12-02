@@ -34,6 +34,8 @@ public class RisikoscenarioRequest implements RequestElement {
     private String konsekvensNivaaBegrunnelse;
     private boolean generelScenario;
     private List<Integer> relvanteKravNummerList;
+    private List<Integer> kravToAdd;
+    private List<Integer> kravToDelete;
 
     private Boolean update;
 

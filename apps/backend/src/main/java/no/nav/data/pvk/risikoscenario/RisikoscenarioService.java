@@ -7,13 +7,17 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepo;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepoCustom;
+import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioRequest;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -42,6 +46,24 @@ public class RisikoscenarioService {
 
     public List<Risikoscenario> getByKravNummer(String kravNummer) {
         return risikoscenarioRepoCustom.findByKravNummer(kravNummer);
+    }
+
+    public RisikoscenarioRequest updateRelevantKravListe(RisikoscenarioRequest request) {
+        var risikoscenario = get(request.getIdAsUUID());
+
+        //remove krav from list based on request krav to remove
+        List<Integer>  newKravList = new ArrayList<>(CollectionUtils.removeAll(
+                risikoscenario.getRisikoscenarioData().getRelvanteKravNummerList()
+                , request.getKravToDelete()).stream().toList());
+
+        //add new krav to list based on request krav to remove
+        newKravList.addAll(request.getKravToAdd());
+
+        //remove duplicates
+        List<Integer> uniqueKravList = newKravList.stream().distinct().collect(Collectors.toList());
+
+        request.setRelvanteKravNummerList(uniqueKravList);
+        return request;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
