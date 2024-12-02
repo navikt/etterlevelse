@@ -69,6 +69,9 @@ export const deleteRisikoscenario = async (id: string) => {
 const risikoscenarioToRisikoscenarioDto = (risikoscenario: IRisikoscenario) => {
   const dto = {
     ...risikoscenario,
+    relevanteKravNummerList: risikoscenario.relevanteKravNummer.map(
+      (kravReference) => kravReference.kravNummer
+    ),
   } as any
   delete dto.changeStamp
   delete dto.version
@@ -89,7 +92,9 @@ export const mapRisikoscenarioToFormValue = (
     sannsynlighetsNivaaBegrunnelse: risikoscenario.sannsynlighetsNivaaBegrunnelse || '',
     konsekvensNivaa: risikoscenario.konsekvensNivaa || 0,
     konsekvensNivaaBegrunnelse: risikoscenario.konsekvensNivaaBegrunnelse || '',
-    relvanteKravNummerList: risikoscenario.relvanteKravNummerList || [],
+    relevanteKravNummer: risikoscenario.relevanteKravNummer || [],
     generelScenario: risikoscenario.generelScenario || false,
+    kravToAdd: [],
+    kravToDelete: [],
   }
 }

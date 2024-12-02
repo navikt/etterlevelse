@@ -549,10 +549,17 @@ export interface IRisikoscenario {
   sannsynlighetsNivaaBegrunnelse: string
   konsekvensNivaa: number
   konsekvensNivaaBegrunnelse: string
-  relvanteKravNummerList: number[]
+  relevanteKravNummer: IKravReference[]
   generelScenario: boolean
+  kravToAdd: number[]
+  kravToDelete: number[]
 }
 
+export interface IKravReference {
+  navn: string
+  kravNummer: number
+  kravVersjon: number
+}
 export interface IBehandlingensLivslop {
   id: string
   changeStamp: IChangeStamp
