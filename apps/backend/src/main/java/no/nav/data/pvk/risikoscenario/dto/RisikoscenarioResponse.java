@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.etterlevelse.krav.domain.KravReference;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 
 import java.time.LocalDateTime;
@@ -30,7 +31,7 @@ public class RisikoscenarioResponse {
     private Integer konsekvensNivaa;
     private String konsekvensNivaaBegrunnelse;
     private boolean generelScenario;
-    private List<KravShort> relvanteKravNummerList;
+    private List<KravReference> relvanteKravNummerList;
 
     public static RisikoscenarioResponse buildFrom(Risikoscenario risikoscenario) {
         return RisikoscenarioResponse.builder()
@@ -50,7 +51,7 @@ public class RisikoscenarioResponse {
                 .konsekvensNivaa(risikoscenario.getRisikoscenarioData().getKonsekvensNivaa())
                 .konsekvensNivaaBegrunnelse(risikoscenario.getRisikoscenarioData().getKonsekvensNivaaBegrunnelse())
                 .generelScenario(risikoscenario.getRisikoscenarioData().isGenerelScenario())
-                .relvanteKravNummerList(risikoscenario.getRisikoscenarioData().getRelvanteKravNummerList().stream().map(kravNummer -> KravShort.builder().kravNummer(kravNummer).build()).collect(Collectors.toList()))
+                .relvanteKravNummerList(risikoscenario.getRisikoscenarioData().getRelvanteKravNummerList().stream().map(kravNummer -> KravReference.builder().kravNummer(kravNummer).build()).collect(Collectors.toList()))
                 .build();
     }
 }

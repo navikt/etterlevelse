@@ -1,11 +1,11 @@
-package no.nav.data.pvk.risikoscenario.dto;
+package no.nav.data.etterlevelse.krav.domain;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class KravShort {
+public class KravReference {
     private String navn;
     private Integer kravNummer;
     public Integer kravVersjon;
