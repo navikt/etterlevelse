@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { env } from 'process'
-import { IPageResponse, IRisikoscenario } from '../../constants'
+import { IPageResponse, IRisikoscenario } from '../constants'
+import { env } from '../util/env'
 
 export const getAllRisikoscenario = async () => {
   const pageSize = 100
@@ -34,7 +34,7 @@ export const getRisikoscenario = async (id: string) => {
 export const getRisikoscenarioByPvkDokumentId = async (pvkDokumentId: string) => {
   return (
     await axios.get<IPageResponse<IRisikoscenario>>(
-      `${env.backendBaseURl}/risikoscenario/pvkdokument/${pvkDokumentId}`
+      `${env.backendBaseUrl}/risikoscenario/pvkdokument/${pvkDokumentId}`
     )
   ).data
 }
@@ -42,7 +42,7 @@ export const getRisikoscenarioByPvkDokumentId = async (pvkDokumentId: string) =>
 export const getRisikoscenarioByKravnummer = async (kravnummer: string) => {
   return (
     await axios.get<IPageResponse<IRisikoscenario>>(
-      `${env.backendBaseURl}/risikoscenario/kravnummer/${kravnummer}`
+      `${env.backendBaseUrl}/risikoscenario/kravnummer/${kravnummer}`
     )
   ).data
 }
