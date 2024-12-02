@@ -33,6 +33,8 @@ public class RisikoscenarioRequest implements RequestElement {
     private Integer konsekvensNivaa;
     private String konsekvensNivaaBegrunnelse;
     private boolean generelScenario;
+    // felt verdiene som kommer fra frontend blir ignorert under lagring
+    // dette feltet brukes av frontend for visualisering og defualt verdier
     private List<Integer> relvanteKravNummerList;
     private List<Integer> kravToAdd;
     private List<Integer> kravToDelete;

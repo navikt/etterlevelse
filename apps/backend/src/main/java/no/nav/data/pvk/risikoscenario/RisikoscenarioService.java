@@ -49,12 +49,13 @@ public class RisikoscenarioService {
     }
 
     public RisikoscenarioRequest updateRelevantKravListe(RisikoscenarioRequest request) {
+
         var risikoscenario = get(request.getIdAsUUID());
 
         //remove krav from list based on request krav to remove
         List<Integer>  newKravList = new ArrayList<>(CollectionUtils.removeAll(
-                risikoscenario.getRisikoscenarioData().getRelvanteKravNummerList()
-                , request.getKravToDelete()).stream().toList());
+                risikoscenario.getRisikoscenarioData().getRelvanteKravNummerList(),
+                request.getKravToDelete()).stream().toList());
 
         //add new krav to list based on request krav to remove
         newKravList.addAll(request.getKravToAdd());
