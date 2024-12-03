@@ -1,11 +1,10 @@
-import { Alert, Button, Loader, Stepper } from '@navikt/ds-react'
-import { Form, Formik } from 'formik'
+import { Alert, Loader, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
-import { mapPvkDokumentToFormValue, updatePvkDokument, usePvkDokument } from '../api/PvkDokumentApi'
+import { usePvkDokument } from '../api/PvkDokumentApi'
 import BehandlingensArtOgOmfangView from '../components/PvkDokument/BehandlingensArtOgOmfangView'
 import IdentifiseringAvRisikoscenarioerOgTiltak from '../components/PvkDokument/IdentifiseringAvRisikoscenarioerOgTiltak'
 import InnvolveringAvEksterneView from '../components/PvkDokument/InnvolveringAvEksterneView'
@@ -13,7 +12,7 @@ import OppsummeringAvAlleRisikoscenarioerOgTiltak from '../components/PvkDokumen
 import OversiktView from '../components/PvkDokument/OversiktView'
 import SendInnView from '../components/PvkDokument/SendInnView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { IBreadCrumbPath, IDataBehandler, IExternalCode, IPvkDokument } from '../constants'
+import { IBreadCrumbPath, IDataBehandler, IExternalCode } from '../constants'
 import { user } from '../services/User'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
@@ -45,7 +44,7 @@ export const PvkDokumentPage = () => {
   const [activeStep, setActiveStep] = useState<number>(
     currentStep !== null ? parseInt(currentStep) : 1
   )
-  const navigate = useNavigate()
+
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
     {
@@ -103,12 +102,6 @@ export const PvkDokumentPage = () => {
     }
   }, [etterlevelseDokumentasjon])
 
-  const submit = async (pvkDokument: IPvkDokument) => {
-    await updatePvkDokument(pvkDokument).then((response) => {
-      setPvkDokument(response)
-    })
-  }
-
   return (
     <div id="content" role="main" className="flex flex-col w-full bg-white">
       <Helmet>
@@ -140,102 +133,74 @@ export const PvkDokumentPage = () => {
       {etterlevelseDokumentasjon &&
         pvkDokument &&
         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-          <Formik
-            validateOnChange={false}
-            validateOnBlur={false}
-            onSubmit={submit}
-            initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
-          >
-            {({ submitForm }) => (
-              <Form>
-                <div className="h-48 bg-[#8269A21F] flex flex-col w-full items-center">
-                  <div className="w-full max-w-7xl">
-                    <div className="px-2 pb-6">
-                      <CustomizedBreadcrumbs currentPage={currentPage} paths={breadcrumbPaths} />
-                      <div>
-                        <Stepper
-                          aria-labelledby="stepper-heading"
-                          activeStep={activeStep}
-                          onStepChange={updateTitleUrlAndStep}
-                          orientation="horizontal"
-                        >
-                          {StepTitle.map((title) => (
-                            <Stepper.Step key={title}>{title}</Stepper.Step>
-                          ))}
-                        </Stepper>
-                      </div>
-                    </div>
+          <div className="w-full">
+            <div className="h-48 bg-[#8269A21F] flex flex-col w-full items-center">
+              <div className="w-full max-w-7xl">
+                <div className="px-2 pb-6">
+                  <CustomizedBreadcrumbs currentPage={currentPage} paths={breadcrumbPaths} />
+                  <div>
+                    <Stepper
+                      aria-labelledby="stepper-heading"
+                      activeStep={activeStep}
+                      onStepChange={updateTitleUrlAndStep}
+                      orientation="horizontal"
+                      interactive={false}
+                    >
+                      {StepTitle.map((title) => (
+                        <Stepper.Step key={title}>{title}</Stepper.Step>
+                      ))}
+                    </Stepper>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                <div className="flex flex-col w-full items-center mt-5">
-                  <div className="w-full max-w-7xl">
-                    <div className="px-2 pb-6">
-                      {activeStep === 1 && (
-                        <OversiktView
-                          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                          pvkDokument={pvkDokument}
-                          risikoscenarioTilknyttetKrav={[]}
-                          generelleRisikoscenario={[]}
-                          updateTitleUrlAndStep={updateTitleUrlAndStep}
-                        />
-                      )}
-                      {activeStep === 2 && (
-                        <BehandlingensArtOgOmfangView personkategorier={personkategorier} />
-                      )}
-                      {activeStep === 3 && (
-                        <InnvolveringAvEksterneView
-                          personkategorier={personkategorier}
-                          databehandlere={databehandlere}
-                        />
-                      )}
-                      {activeStep === 4 && <IdentifiseringAvRisikoscenarioerOgTiltak />}
-                      {activeStep === 5 && <OppsummeringAvAlleRisikoscenarioerOgTiltak />}
-                      {activeStep === 6 && (
-                        <SendInnView
-                          personkategorier={personkategorier}
-                          databehandlere={databehandlere}
-                          updateTitleUrlAndStep={updateTitleUrlAndStep}
-                        />
-                      )}
-                    </div>
-                  </div>
+            <div className="flex flex-col w-full items-center mt-5">
+              <div className="w-full max-w-7xl">
+                <div className="px-2 pb-6">
+                  {activeStep === 1 && (
+                    <OversiktView
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      pvkDokument={pvkDokument}
+                      risikoscenarioTilknyttetKrav={[]}
+                      generelleRisikoscenario={[]}
+                      updateTitleUrlAndStep={updateTitleUrlAndStep}
+                    />
+                  )}
+                  {activeStep === 2 && (
+                    <BehandlingensArtOgOmfangView
+                      personkategorier={personkategorier}
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      pvkDokument={pvkDokument}
+                      setPvkDokument={setPvkDokument}
+                      activeStep={activeStep}
+                      setActiveStep={setActiveStep}
+                    />
+                  )}
+                  {activeStep === 3 && (
+                    <InnvolveringAvEksterneView
+                      personkategorier={personkategorier}
+                      databehandlere={databehandlere}
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      pvkDokument={pvkDokument}
+                      setPvkDokument={setPvkDokument}
+                      activeStep={activeStep}
+                      setActiveStep={setActiveStep}
+                    />
+                  )}
+                  {activeStep === 4 && <IdentifiseringAvRisikoscenarioerOgTiltak />}
+                  {activeStep === 5 && <OppsummeringAvAlleRisikoscenarioerOgTiltak />}
+                  {activeStep === 6 && (
+                    <SendInnView
+                      personkategorier={personkategorier}
+                      databehandlere={databehandlere}
+                      updateTitleUrlAndStep={updateTitleUrlAndStep}
+                    />
+                  )}
                 </div>
-
-                <div className="flex flex-col w-full items-center mt-5 button_container sticky bottom-0  bg-bg-default">
-                  <div className="w-full max-w-7xl py-4 px-4 border-t-2 z-2">
-                    <div className="flex w-full gap-2">
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={() => {
-                          if (activeStep === 1) {
-                            navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
-                          } else {
-                            setActiveStep(activeStep - 1)
-                          }
-                        }}
-                      >
-                        {activeStep === 1 ? 'Tilbake til Temaoversikt' : 'Tilbake'}
-                      </Button>
-                      <Button
-                        type="button"
-                        onClick={() => {
-                          if (activeStep === 6) {
-                            submitForm()
-                          } else {
-                            setActiveStep(activeStep + 1)
-                          }
-                        }}
-                      >
-                        {activeStep === 6 ? 'Lagre' : 'Fortsett'}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </Form>
-            )}
-          </Formik>
+              </div>
+            </div>
+          </div>
         )}
     </div>
   )
