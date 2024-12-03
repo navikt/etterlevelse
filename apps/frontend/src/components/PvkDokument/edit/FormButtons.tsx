@@ -51,10 +51,12 @@ export const FormButtons = (props: IProps) => {
           <Button
             type="button"
             onClick={() => {
-              if ((activeStep === 2 || activeStep === 3) && submitForm) {
+              if ((activeStep === 2 || activeStep === 3 || activeStep === 6) && submitForm) {
                 submitForm()
               }
-              setActiveStep(activeStep + 1)
+              if (activeStep !== 6) {
+                setActiveStep(activeStep + 1)
+              }
             }}
           >
             {activeStep === 6

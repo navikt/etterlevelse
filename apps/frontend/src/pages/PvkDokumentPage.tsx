@@ -206,9 +206,13 @@ export const PvkDokumentPage = () => {
                   )}
                   {activeStep === 6 && (
                     <SendInnView
+                      pvkDokument={pvkDokument}
                       personkategorier={personkategorier}
                       databehandlere={databehandlere}
                       updateTitleUrlAndStep={updateTitleUrlAndStep}
+                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      activeStep={activeStep}
+                      setActiveStep={setActiveStep}
                     />
                   )}
                 </div>
