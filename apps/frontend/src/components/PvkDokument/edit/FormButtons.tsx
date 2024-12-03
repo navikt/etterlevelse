@@ -23,16 +23,20 @@ export const FormButtons = (props: IProps) => {
               if (activeStep === 1) {
                 navigate('/dokumentasjon/' + etterlevelseDokumentasjonId)
               } else {
-                if (submitForm) {
+                if ((activeStep === 2 || activeStep === 3) && submitForm) {
                   submitForm()
                 }
                 setActiveStep(activeStep - 1)
               }
             }}
           >
-            {activeStep === 1 ? 'Tilbake til Temaoversikt' : 'Lagre og gå tilbake'}
+            {activeStep === 1
+              ? 'Tilbake til Temaoversikt'
+              : activeStep === 2 || activeStep === 3
+                ? 'Lagre og gå tilbake'
+                : 'Tilbake'}
           </Button>
-          {activeStep !== 6 && (
+          {(activeStep === 2 || activeStep === 3) && (
             <Button
               type="button"
               onClick={() => {
@@ -47,13 +51,17 @@ export const FormButtons = (props: IProps) => {
           <Button
             type="button"
             onClick={() => {
-              if (submitForm) {
+              if ((activeStep === 2 || activeStep === 3) && submitForm) {
                 submitForm()
               }
               setActiveStep(activeStep + 1)
             }}
           >
-            {activeStep === 6 ? 'Lagre' : 'Lagre og fortsett'}
+            {activeStep === 6
+              ? 'Send Inn'
+              : activeStep === 2 || activeStep === 3
+                ? 'Lagre og fortsett'
+                : 'Fortsett'}
           </Button>
         </div>
       </div>
