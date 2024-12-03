@@ -1,8 +1,16 @@
 import { Alert, BodyShort, Heading, List, ReadMore } from '@navikt/ds-react'
 import CreateRisikoscenario from './edit/CreateRisikoscenario'
 import CreateRisikoscenarioTiltak from './edit/CreateRisikoscenarioTiltak'
+import FormButtons from './edit/FormButtons'
 
-export const IdentifiseringAvRisikoscenarioerOgTiltak = () => {
+interface IProps {
+  etterlevelseDokumentasjonId: string
+  activeStep: number
+  setActiveStep: (step: number) => void
+}
+
+export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
+  const { etterlevelseDokumentasjonId, activeStep, setActiveStep } = props
   return (
     <div>
       <ReadMore header="Vis behandlingens livsløp">Her kommer Behandlingens livsløp.</ReadMore>
@@ -51,6 +59,12 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = () => {
       <CreateRisikoscenarioTiltak />
 
       <CreateRisikoscenario />
+
+      <FormButtons
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+        activeStep={activeStep}
+        setActiveStep={setActiveStep}
+      />
     </div>
   )
 }

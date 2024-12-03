@@ -1,6 +1,14 @@
 import { BodyShort, Heading, List, Tabs } from '@navikt/ds-react'
+import FormButtons from './edit/FormButtons'
 
-export const OppsummeringAvAlleRisikoscenarioerOgTiltak = () => {
+interface IProps {
+  etterlevelseDokumentasjonId: string
+  activeStep: number
+  setActiveStep: (step: number) => void
+}
+
+export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
+  const { etterlevelseDokumentasjonId, activeStep, setActiveStep } = props
   return (
     <div>
       <Heading level="1" size="medium" className="mb-5">
@@ -38,6 +46,12 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = () => {
           Her skal tiltak vises
         </Tabs.Panel>
       </Tabs>
+
+      <FormButtons
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+        activeStep={activeStep}
+        setActiveStep={setActiveStep}
+      />
     </div>
   )
 }

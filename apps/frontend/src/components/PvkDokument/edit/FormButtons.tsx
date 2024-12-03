@@ -13,7 +13,7 @@ export const FormButtons = (props: IProps) => {
   const navigate = useNavigate()
 
   return (
-    <div className="flex flex-col w-full items-center mt-5 button_container sticky bottom-0  bg-bg-default">
+    <div className="z-10 flex flex-col w-full items-center mt-5 button_container sticky bottom-0  bg-bg-default">
       <div className="w-full max-w-7xl py-4 px-4 border-t-2 z-2">
         <div className="flex w-full gap-2">
           <Button

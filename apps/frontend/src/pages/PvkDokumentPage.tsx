@@ -165,6 +165,8 @@ export const PvkDokumentPage = () => {
                       risikoscenarioTilknyttetKrav={[]}
                       generelleRisikoscenario={[]}
                       updateTitleUrlAndStep={updateTitleUrlAndStep}
+                      activeStep={activeStep}
+                      setActiveStep={setActiveStep}
                     />
                   )}
                   {activeStep === 2 && (
@@ -188,8 +190,20 @@ export const PvkDokumentPage = () => {
                       setActiveStep={setActiveStep}
                     />
                   )}
-                  {activeStep === 4 && <IdentifiseringAvRisikoscenarioerOgTiltak />}
-                  {activeStep === 5 && <OppsummeringAvAlleRisikoscenarioerOgTiltak />}
+                  {activeStep === 4 && (
+                    <IdentifiseringAvRisikoscenarioerOgTiltak
+                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      activeStep={activeStep}
+                      setActiveStep={setActiveStep}
+                    />
+                  )}
+                  {activeStep === 5 && (
+                    <OppsummeringAvAlleRisikoscenarioerOgTiltak
+                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      activeStep={activeStep}
+                      setActiveStep={setActiveStep}
+                    />
+                  )}
                   {activeStep === 6 && (
                     <SendInnView
                       personkategorier={personkategorier}

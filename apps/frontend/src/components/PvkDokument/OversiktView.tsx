@@ -1,6 +1,7 @@
 import { Alert, BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } from '@navikt/ds-react'
 import { IPvkDokument, ITeam, ITeamResource, TEtterlevelseDokumentasjonQL } from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
+import FormButtons from './edit/FormButtons'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -8,6 +9,8 @@ interface IProps {
   risikoscenarioTilknyttetKrav: any[]
   generelleRisikoscenario: any[]
   updateTitleUrlAndStep: (step: number) => void
+  activeStep: number
+  setActiveStep: (step: number) => void
 }
 
 export const OversiktView = (props: IProps) => {
@@ -17,6 +20,8 @@ export const OversiktView = (props: IProps) => {
     risikoscenarioTilknyttetKrav,
     generelleRisikoscenario,
     updateTitleUrlAndStep,
+    activeStep,
+    setActiveStep,
   } = props
 
   const formStatus = [
@@ -137,6 +142,12 @@ export const OversiktView = (props: IProps) => {
           </Alert>
         </div>
       )}
+
+      <FormButtons
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        activeStep={activeStep}
+        setActiveStep={setActiveStep}
+      />
     </div>
   )
 }
