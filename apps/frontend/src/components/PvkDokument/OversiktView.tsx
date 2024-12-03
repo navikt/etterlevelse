@@ -8,9 +8,8 @@ interface IProps {
   pvkDokument: IPvkDokument
   risikoscenarioTilknyttetKrav: any[]
   generelleRisikoscenario: any[]
-  updateTitleUrlAndStep: (step: number) => void
   activeStep: number
-  setActiveStep: (step: number) => void
+  updateTitleUrlAndStep: (step: number) => void
 }
 
 export const OversiktView = (props: IProps) => {
@@ -19,9 +18,8 @@ export const OversiktView = (props: IProps) => {
     pvkDokument,
     risikoscenarioTilknyttetKrav,
     generelleRisikoscenario,
-    updateTitleUrlAndStep,
     activeStep,
-    setActiveStep,
+    updateTitleUrlAndStep,
   } = props
 
   const formStatus = [
@@ -146,7 +144,7 @@ export const OversiktView = (props: IProps) => {
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
         activeStep={activeStep}
-        setActiveStep={setActiveStep}
+        setActiveStep={updateTitleUrlAndStep}
       />
     </div>
   )

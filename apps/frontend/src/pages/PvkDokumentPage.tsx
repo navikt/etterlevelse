@@ -164,9 +164,8 @@ export const PvkDokumentPage = () => {
                       pvkDokument={pvkDokument}
                       risikoscenarioTilknyttetKrav={[]}
                       generelleRisikoscenario={[]}
-                      updateTitleUrlAndStep={updateTitleUrlAndStep}
                       activeStep={activeStep}
-                      setActiveStep={setActiveStep}
+                      updateTitleUrlAndStep={updateTitleUrlAndStep}
                     />
                   )}
                   {activeStep === 2 && (
@@ -176,7 +175,7 @@ export const PvkDokumentPage = () => {
                       pvkDokument={pvkDokument}
                       setPvkDokument={setPvkDokument}
                       activeStep={activeStep}
-                      setActiveStep={setActiveStep}
+                      setActiveStep={updateTitleUrlAndStep}
                     />
                   )}
                   {activeStep === 3 && (
@@ -187,21 +186,21 @@ export const PvkDokumentPage = () => {
                       pvkDokument={pvkDokument}
                       setPvkDokument={setPvkDokument}
                       activeStep={activeStep}
-                      setActiveStep={setActiveStep}
+                      setActiveStep={updateTitleUrlAndStep}
                     />
                   )}
                   {activeStep === 4 && (
                     <IdentifiseringAvRisikoscenarioerOgTiltak
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                       activeStep={activeStep}
-                      setActiveStep={setActiveStep}
+                      setActiveStep={updateTitleUrlAndStep}
                     />
                   )}
                   {activeStep === 5 && (
                     <OppsummeringAvAlleRisikoscenarioerOgTiltak
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                       activeStep={activeStep}
-                      setActiveStep={setActiveStep}
+                      setActiveStep={updateTitleUrlAndStep}
                     />
                   )}
                   {activeStep === 6 && (
@@ -212,7 +211,7 @@ export const PvkDokumentPage = () => {
                       updateTitleUrlAndStep={updateTitleUrlAndStep}
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                       activeStep={activeStep}
-                      setActiveStep={setActiveStep}
+                      setActiveStep={updateTitleUrlAndStep}
                     />
                   )}
                 </div>
