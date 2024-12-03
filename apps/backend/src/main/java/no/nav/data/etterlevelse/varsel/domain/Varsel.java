@@ -67,6 +67,7 @@ public class Varsel {
 
     }
 
+    // FIXME: Flytt
     public List<Block> toSlack() {
         var blocks = new ArrayList<Block>();
         blocks.add(Block.header(title));
