@@ -78,10 +78,13 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
       )}
 
       {risikoscenarioList.length > 0 && (
-        <RisikoscenarioAccordianList risikoscenarioList={risikoscenarioList} />
+        <div className="my-5">
+          <RisikoscenarioAccordianList risikoscenarioList={risikoscenarioList} />
+        </div>
       )}
 
       <CreateRisikoscenario
+        pvkDokument={pvkDokument}
         onSubmitStateUpdate={(risikoscenario: IRisikoscenario) => {
           setRisikoscenarioList([...risikoscenarioList, risikoscenario])
         }}

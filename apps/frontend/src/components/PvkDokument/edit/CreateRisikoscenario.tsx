@@ -2,17 +2,18 @@ import { Button, Heading, Modal, Radio, RadioGroup, ReadMore } from '@navikt/ds-
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
 import { createRiskoscenario, mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
-import { IRisikoscenario } from '../../../constants'
+import { IPvkDokument, IRisikoscenario } from '../../../constants'
 import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 import { risikoscenarioCreateValidation } from './RisikoscenarioSchemaValidation'
 
 interface IProps {
+  pvkDokument: IPvkDokument
   onSubmitStateUpdate?: (risikoscenario: IRisikoscenario) => void
 }
 
 export const CreateRisikoscenario = (props: IProps) => {
-  const { onSubmitStateUpdate } = props
+  const { pvkDokument, onSubmitStateUpdate } = props
   const [isEdit, setIsEdit] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario) => {
@@ -44,7 +45,10 @@ export const CreateRisikoscenario = (props: IProps) => {
             validateOnChange={false}
             onSubmit={submit}
             validationSchema={risikoscenarioCreateValidation()}
-            initialValues={mapRisikoscenarioToFormValue({ generelScenario: true })}
+            initialValues={mapRisikoscenarioToFormValue({
+              pvkDokumentId: pvkDokument.id,
+              generelScenario: true,
+            })}
           >
             {({ submitForm }) => (
               <Form>
