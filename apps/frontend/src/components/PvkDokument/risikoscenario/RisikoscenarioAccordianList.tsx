@@ -12,16 +12,21 @@ interface IProps {
 
 export const RisikoscenarioAccordianList = (props: IProps) => {
   const { risikoscenarioList } = props
+  const currentUrl = window.location.origin.toString() + window.location.pathname + '?steg=4'
+
   return (
     <div>
       <Accordion>
         {risikoscenarioList.map((risikoscenario, index) => (
-          <Accordion.Item key={index + '_' + risikoscenario.navn}>
+          <Accordion.Item
+            id={index + '_' + risikoscenario.id}
+            key={index + '_' + risikoscenario.navn}
+          >
             <Accordion.Header>{risikoscenario.navn}</Accordion.Header>
             <Accordion.Content>
               <CopyButton
                 variant="action"
-                copyText={window.location.toString()}
+                copyText={currentUrl + '#' + index + '_' + risikoscenario.id}
                 text="Kopiér scenariolenke"
                 activeText="Lenken er kopiert"
                 icon={<LinkIcon aria-hidden />}
