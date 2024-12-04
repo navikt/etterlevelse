@@ -3,11 +3,13 @@ import { FormikErrors } from 'formik/dist/types'
 import { useRef } from 'react'
 import { TKravQL } from '../../../../constants'
 import { EListName } from '../../../../services/Codelist'
+import { user } from '../../../../services/User'
 import { InputField, TextAreaField } from '../../../common/Inputs'
 import { FormError } from '../../../common/ModalSchema'
 import { VarslingsadresserEdit } from '../../../varslingsadresse/VarslingsadresserEdit'
 import { EditKravMultiOptionField } from '../EditKravMultiOptionField'
 import { EditKravRelasjoner } from '../EditKravRelasjoner'
+import EditKravTags from '../EditKravTags'
 import { EditBegreper } from '../KravBegreperEdit'
 import { KravSuksesskriterierEdit } from '../KravSuksesskriterieEdit'
 import { RegelverkEdit } from '../RegelverkEdit'
@@ -123,6 +125,12 @@ export const KravFormFields = (props: IProps) => {
           <div className="w-full mb-20 max-w-md">
             <EditKravRelasjoner />
           </div>
+
+          {user.isAdmin() && (
+            <div className="w-full mb-20 max-w-md">
+              <EditKravTags />
+            </div>
+          )}
 
           <div className="mb-8">
             <Heading level="2" size="medium">
