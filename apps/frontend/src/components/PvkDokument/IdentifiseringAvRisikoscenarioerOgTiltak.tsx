@@ -1,16 +1,34 @@
-import { Alert, BodyShort, Heading, List, ReadMore } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, ReadMore } from '@navikt/ds-react'
+import { useEffect, useState } from 'react'
+import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
+import { IPvkDokument, IRisikoscenario } from '../../constants'
 import CreateRisikoscenario from './edit/CreateRisikoscenario'
 import CreateRisikoscenarioTiltak from './edit/CreateRisikoscenarioTiltak'
 import FormButtons from './edit/FormButtons'
 
 interface IProps {
   etterlevelseDokumentasjonId: string
+  pvkDokument: IPvkDokument
   activeStep: number
   setActiveStep: (step: number) => void
 }
 
 export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
-  const { etterlevelseDokumentasjonId, activeStep, setActiveStep } = props
+  const { etterlevelseDokumentasjonId, pvkDokument, activeStep, setActiveStep } = props
+  const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
+
+  useEffect(() => {
+    if (pvkDokument) {
+      ;(async () => {
+        await getRisikoscenarioByPvkDokumentId(pvkDokument.id).then((risikoscenarioer) => {
+          setRisikoscenarioList(
+            risikoscenarioer.content.filter((risikoscenario) => risikoscenario.generelScenario)
+          )
+        })
+      })()
+    }
+  }, [pvkDokument])
+
   return (
     <div>
       <ReadMore header="Vis behandlingens livsløp">Her kommer Behandlingens livsløp.</ReadMore>
@@ -19,46 +37,53 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
         Identifisering av risikoscenarioer og tiltak
       </Heading>
 
-      <BodyShort>
+      <BodyLong>
         I en PVK må dere vurdere sannsynligheten for at personvern ikke ivaretas på tilstrekkelig
-        vis, og hvilke konsekvenser det vil gi. Hvor dette risikoscenarioet er av betydning, må dere
+        vis, og konsekvensene det vil føre til. Hvor dette risikoscenarioet er av betydning, må dere
         identifisere forebyggende tiltak som reduserer risiko.
-      </BodyShort>
-      <Heading spacing size="small" level="3" className="mt-3">
-        Slik gjør dere:
-      </Heading>
-      <List>
-        <List.Item>
-          Risikoscenarioer og tiltak som har tilknytning til etterlevelseskrav, må dere opprette på
-          den aktuelle kravsiden. Se Temaoversikt med alle PVK-relaterte etterlevelseskrav (åpnes i
-          et nytt vindu)
-        </List.Item>
-        <List.Item>
-          Generelle risikoscenarioer og tiltak som ikke har en direkte tilknytning til
-          etterlevelseskrav legger dere inn på denne siden.
-        </List.Item>
-      </List>
-      <BodyShort>
-        Vi anbefaler at dere vurderer etterlevelseskravene først, og beskriver generelle, resterende
-        risikoscenarioer og tiltak deretter.
-      </BodyShort>
+      </BodyLong>
 
-      <Alert inline variant="info" className="mt-5">
-        Hvis risikoscenarioer eller tiltak gjelder flere steder, kan dere finne og gjenbruke disse.
+      <Alert variant="info" inline className="mt-5">
+        <strong>Godt å vite:</strong> risikoscenarioer og tiltak som dere har dokumentert et sted,
+        kan dere finne og gjenbruke andre steder hvor det er aktuelt.
       </Alert>
 
-      <Heading level="2" size="medium" className="mt-5">
-        Generelle risikoscenarioer
+      <Heading spacing size="small" level="2" className="my-5">
+        Legg til risikoscenarioer og tiltak med en tilknytning til etterlevelseskrav
       </Heading>
 
-      {/* bare vis alert hvis det ikke finnes risikoscenarioer WIP*/}
-      {/* <Alert variant="info" className="mt-10">
-        Dere har ikke lagt inn noen generelle risikoscenarioer.
-      </Alert> */}
+      <BodyLong className="mb-5">
+        Disse vil nok utgjøre hovedparten av deres PVK. Slike risikoscenarioer, samt motvirkende
+        tiltak, beskriver dere på den aktuelle kravsiden.
+      </BodyLong>
 
-      <CreateRisikoscenarioTiltak />
+      <Button variant="secondary" type="button">
+        Gå til liste over PVK-relaterte krav
+      </Button>
 
-      <CreateRisikoscenario />
+      <Heading level="2" size="small" className="my-5">
+        Legg til øvrige risikoscenarioer
+      </Heading>
+
+      <BodyLong>
+        Noen risikoscenarioer vil ikke har en direkte tilknytning til etterlevelseskrav. Disse, samt
+        motvirkende tiltak, legger dere inn på denne siden. Vi anbefaler at dette gjøres etter at
+        dere har vurderert kravspesifikke risikoscenarioer.
+      </BodyLong>
+
+      {risikoscenarioList.length === 0 && (
+        <Alert variant="info" className="mt-10 w-fit">
+          Dere har ikke lagt inn noen øvrige risikoscenarioer.
+        </Alert>
+      )}
+
+      {risikoscenarioList.length > 0 && <CreateRisikoscenarioTiltak />}
+
+      <CreateRisikoscenario
+        onSubmitStateUpdate={(risikoscenario: IRisikoscenario) => {
+          setRisikoscenarioList([...risikoscenarioList, risikoscenario])
+        }}
+      />
 
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}

@@ -2,12 +2,27 @@ import { Button, Heading, Modal, Radio, RadioGroup, ReadMore } from '@navikt/ds-
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
 import { mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
+import { IRisikoscenario } from '../../../constants'
 import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 import { risikoscenarioCreateValidation } from './RisikoscenarioSchemaValidation'
 
-export const CreateRisikoscenario = () => {
+interface IProps {
+  onSubmitStateUpdate?: (risikoscenario: IRisikoscenario) => void
+}
+
+export const CreateRisikoscenario = (props: IProps) => {
+  const { onSubmitStateUpdate } = props
   const [isEdit, setIsEdit] = useState<boolean>(false)
+
+  const submit = (risikoscenario: IRisikoscenario) => {
+    console.debug(risikoscenario)
+    if (onSubmitStateUpdate) {
+      onSubmitStateUpdate(risikoscenario)
+    }
+    setIsEdit(false)
+  }
+
   return (
     <div className="mt-5">
       {!isEdit && (
@@ -26,9 +41,7 @@ export const CreateRisikoscenario = () => {
           <Formik
             validateOnBlur={false}
             validateOnChange={false}
-            onSubmit={(values) => {
-              console.debug(values)
-            }}
+            onSubmit={submit}
             validationSchema={risikoscenarioCreateValidation()}
             initialValues={mapRisikoscenarioToFormValue({ generelScenario: true })}
           >

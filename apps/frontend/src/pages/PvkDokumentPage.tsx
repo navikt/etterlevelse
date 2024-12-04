@@ -192,6 +192,7 @@ export const PvkDokumentPage = () => {
                   {activeStep === 4 && (
                     <IdentifiseringAvRisikoscenarioerOgTiltak
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      pvkDokument={pvkDokument}
                       activeStep={activeStep}
                       setActiveStep={updateTitleUrlAndStep}
                     />
