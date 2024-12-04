@@ -16,9 +16,9 @@ export const RisikoscenarioTag = (props: IProps) => {
         return 'success'
       case 3:
         return 'warning'
-      case 5:
+      case 4:
         return 'warning'
-      case 6:
+      case 5:
         return 'error'
       default:
         return 'neutral'
@@ -31,17 +31,17 @@ export const RisikoscenarioTag = (props: IProps) => {
 export const getKonsekvenssnivaaText = (konsekvensnivaa: number) => {
   switch (konsekvensnivaa) {
     case 1:
-      return 'Ubetydelig'
+      return 'Ubetydelig konsekvens'
     case 2:
       return 'Lav konsekvens'
     case 3:
       return 'Moderat konsekvens'
-    case 5:
+    case 4:
       return 'Alvorlig konsekvens'
-    case 6:
-      return 'Nesten sikkert'
-    default:
+    case 5:
       return 'Svaert alvorlig konsekvens'
+    default:
+      return 'Ingen konsekvensnivå satt'
   }
 }
 
@@ -53,9 +53,9 @@ export const getSannsynlighetsnivaaText = (sannsynlighetsnivaa: number) => {
       return 'Lite sannsyling'
     case 3:
       return 'Moderat sannsynlig'
-    case 5:
+    case 4:
       return 'Sannsynlig'
-    case 6:
+    case 5:
       return 'Nesten sikkert'
     default:
       return 'Ingen sannsynlighetsnivå satt'
