@@ -3,6 +3,8 @@ import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
 import { mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
 import { TextAreaField } from '../../common/Inputs'
+import { FormError } from '../../common/ModalSchema'
+import { risikoscenarioCreateValidation } from './RisikoscenarioSchemaValidation'
 
 export const CreateRisikoscenario = () => {
   const [isEdit, setIsEdit] = useState<boolean>(false)
@@ -27,6 +29,7 @@ export const CreateRisikoscenario = () => {
             onSubmit={(values) => {
               console.debug(values)
             }}
+            validationSchema={risikoscenarioCreateValidation()}
             initialValues={mapRisikoscenarioToFormValue({ generelScenario: true })}
           >
             {({ submitForm }) => (
@@ -64,6 +67,11 @@ export const CreateRisikoscenario = () => {
                         onChange={(value) => {
                           fieldProps.form.setFieldValue('sannsynlighetsNivaa', value)
                         }}
+                        error={
+                          fieldProps.form.errors['sannsynlighetsNivaa'] && (
+                            <FormError fieldName={'sannsynlighetsNivaa'} />
+                          )
+                        }
                       >
                         <Radio value={1}>Meget lite sannsynlig</Radio>
                         <Radio value={2}>Lite sannsynlig</Radio>
@@ -99,6 +107,11 @@ export const CreateRisikoscenario = () => {
                         onChange={(value) => {
                           fieldProps.form.setFieldValue('konsekvensNivaa', value)
                         }}
+                        error={
+                          fieldProps.form.errors['konsekvensNivaa'] && (
+                            <FormError fieldName={'konsekvensNivaa'} />
+                          )
+                        }
                       >
                         <Radio value={1}>Ubetydelig</Radio>
                         <Radio value={2}>Lav konsekvens</Radio>
