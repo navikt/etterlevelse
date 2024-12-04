@@ -13,10 +13,10 @@ import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter; // TODO: Snu avhengigheten
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest; // TODO: Snu avhengigheten
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse; // TODO: Snu avhengigheten
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest; // TODO: Snu avhengigheten
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
@@ -292,11 +292,11 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             return null;
         }
 
-        List<Resource> riskoeiereData = new ArrayList<>();
+        List<Resource> risikoeiereData = new ArrayList<>();
         risikoeiere.forEach((ident) -> {
-            var risikoeiereData = teamcatResourceClient.getResource(ident);
-            if (risikoeiereData.isPresent()) {
-                riskoeiereData.add(risikoeiereData.get());
+            var risikoeiereMetaData = teamcatResourceClient.getResource(ident);
+            if (risikoeiereMetaData.isPresent()) {
+                risikoeiereData.add(risikoeiereMetaData.get());
             } else {
                 var emptyResourceData = new Resource();
                 emptyResourceData.setNavIdent(ident);
@@ -305,10 +305,10 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
                 emptyResourceData.setFullName("Fant ikke person med NAV ident: " + ident);
                 emptyResourceData.setEmail("Fant ikke person med NAV ident: " + ident);
                 emptyResourceData.setResourceType(ResourceType.INTERNAL);
-                riskoeiereData.add(emptyResourceData);
+                risikoeiereData.add(emptyResourceData);
             }
         });
-        return riskoeiereData;
+        return risikoeiereData;
     }
 
 }

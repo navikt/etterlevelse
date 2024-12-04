@@ -34,40 +34,40 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/risikoscenario")
-@Tag(name = "Risikoscenario", description = "Riskoscenario for PVK dokument")
+@Tag(name = "Risikoscenario", description = "Risikoscenario for PVK dokument")
 public class RisikoscenarioController {
 
-    private final RisikoscenarioService riskoscenarioService;
+    private final RisikoscenarioService risikoscenarioService;
     private final KravService kravService;
 
-    @Operation(summary = "Get All Riskoscenario")
+    @Operation(summary = "Get All Risikoscenario")
     @ApiResponse(description = "ok")
     @GetMapping
     public ResponseEntity<RestResponsePage<RisikoscenarioResponse>> getAll(
             PageParameters pageParameters
     ) {
         log.info("Get all Pvk Document");
-        Page<Risikoscenario> page = riskoscenarioService.getAll(pageParameters);
+        Page<Risikoscenario> page = risikoscenarioService.getAll(pageParameters);
         return ResponseEntity.ok(new RestResponsePage<>(page).convert(RisikoscenarioResponse::buildFrom));
     }
 
-    @Operation(summary = "Get One Riskoscenario")
+    @Operation(summary = "Get One Risikoscenario")
     @ApiResponse(description = "ok")
     @GetMapping("/{id}")
     public ResponseEntity<RisikoscenarioResponse> getById(@PathVariable UUID id) {
-        log.info("Get Riskoscenario id={}", id);
+        log.info("Get Risikoscenario id={}", id);
 
-        var risikoscenario = RisikoscenarioResponse.buildFrom(riskoscenarioService.get(id));
+        var risikoscenario = RisikoscenarioResponse.buildFrom(risikoscenarioService.get(id));
         getKravDataforRelevantKravList(risikoscenario);
         return ResponseEntity.ok(risikoscenario);
     }
 
-    @Operation(summary = "Get Riskoscenario by Pvk Document id")
+    @Operation(summary = "Get Risikoscenario by Pvk Document id")
     @ApiResponse(description = "ok")
     @GetMapping("/pvkdokument/{pvkDokumentId}")
-    public ResponseEntity<RestResponsePage<RisikoscenarioResponse>> getRiskoscenarioByPvkDokumentId(@PathVariable String pvkDokumentId) {
-        log.info("Get Riskoscenario by Pvk Document id={}", pvkDokumentId);
-        List<Risikoscenario> risikoscenarioList = riskoscenarioService.getByPvkDokument(pvkDokumentId);
+    public ResponseEntity<RestResponsePage<RisikoscenarioResponse>> getRisikoscenarioByPvkDokumentId(@PathVariable String pvkDokumentId) {
+        log.info("Get Risikoscenario by Pvk Document id={}", pvkDokumentId);
+        List<Risikoscenario> risikoscenarioList = risikoscenarioService.getByPvkDokument(pvkDokumentId);
         List<RisikoscenarioResponse> risikoscenarioResponseList = risikoscenarioList.stream().map(RisikoscenarioResponse::buildFrom).toList();
 
         risikoscenarioResponseList.forEach(this::getKravDataforRelevantKravList);
@@ -75,12 +75,12 @@ public class RisikoscenarioController {
         return ResponseEntity.ok(new RestResponsePage<>(risikoscenarioResponseList));
     }
 
-    @Operation(summary = "Get Riskoscenario by kravnummer")
+    @Operation(summary = "Get Risikoscenario by kravnummer")
     @ApiResponse(description = "ok")
     @GetMapping("/kravnummer/{kravnummer}")
-    public ResponseEntity<RestResponsePage<RisikoscenarioResponse>> getRiskoscenarioByKravnummer(@PathVariable String kravnummer) {
-        log.info("Get Riskoscenario by kravnummer={}", kravnummer);
-        List<Risikoscenario> risikoscenarioList = riskoscenarioService.getByKravNummer(kravnummer);
+    public ResponseEntity<RestResponsePage<RisikoscenarioResponse>> getRisikoscenarioByKravnummer(@PathVariable String kravnummer) {
+        log.info("Get Risikoscenario by kravnummer={}", kravnummer);
+        List<Risikoscenario> risikoscenarioList = risikoscenarioService.getByKravNummer(kravnummer);
         List<RisikoscenarioResponse> risikoscenarioResponseList = risikoscenarioList.stream().map(RisikoscenarioResponse::buildFrom).toList();
         risikoscenarioResponseList.forEach(this::getKravDataforRelevantKravList);
         return ResponseEntity.ok(new RestResponsePage<>(risikoscenarioResponseList));
@@ -92,7 +92,7 @@ public class RisikoscenarioController {
     public ResponseEntity<RisikoscenarioResponse> createRisikoscenario(@RequestBody RisikoscenarioRequest request) {
         log.info("Create Risikoscenario");
 
-        var risikoscenario = riskoscenarioService.save(request.convertToRiskoscenario(), request.isUpdate());
+        var risikoscenario = risikoscenarioService.save(request.convertToRisikoscenario(), request.isUpdate());
 
         var response = RisikoscenarioResponse.buildFrom(risikoscenario);
         getKravDataforRelevantKravList(response);
@@ -110,16 +110,16 @@ public class RisikoscenarioController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
-        var risikoscenarioToUpdate = riskoscenarioService.get(id);
+        var risikoscenarioToUpdate = risikoscenarioService.get(id);
 
         if (risikoscenarioToUpdate == null) {
             throw new ValidationException(String.format("Could not find risikoscenario to be updated with id = %s ", request.getId()));
         }
 
-        RisikoscenarioRequest updatedRequest = riskoscenarioService.updateRelevantKravListe(request);
+        RisikoscenarioRequest updatedRequest = risikoscenarioService.updateRelevantKravListe(request);
 
         updatedRequest.mergeInto(risikoscenarioToUpdate);
-        var risikoscenario = riskoscenarioService.save(risikoscenarioToUpdate, request.isUpdate());
+        var risikoscenario = risikoscenarioService.save(risikoscenarioToUpdate, request.isUpdate());
 
         var response = RisikoscenarioResponse.buildFrom(risikoscenario);
         getKravDataforRelevantKravList(response);
@@ -132,7 +132,7 @@ public class RisikoscenarioController {
     @DeleteMapping("/{id}")
     public ResponseEntity<RisikoscenarioResponse> deleteRisikoscenarioById(@PathVariable UUID id) {
         log.info("Delete Risikoscenario id={}", id);
-        var risikoscenario = riskoscenarioService.delete(id);
+        var risikoscenario = risikoscenarioService.delete(id);
         if (risikoscenario == null) {
             log.warn("Could not find risikoscenario with id = {} to delete", id);
             return ResponseEntity.ok(null);

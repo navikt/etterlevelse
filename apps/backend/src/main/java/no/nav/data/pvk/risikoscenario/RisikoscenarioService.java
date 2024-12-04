@@ -29,10 +29,10 @@ public class RisikoscenarioService {
 
     public Risikoscenario get(UUID uuid) {
         if (uuid == null || !risikoscenarioRepo.existsById(uuid)) return null;
-        return getRiskoscenario(uuid);
+        return getRisikoscenario(uuid);
     }
 
-    private Risikoscenario getRiskoscenario(UUID uuid) {
+    private Risikoscenario getRisikoscenario(UUID uuid) {
         return risikoscenarioRepo.findById(uuid).orElseThrow(() -> new NotFoundException("Couldn't find Pvk Dokument with id " + uuid));
     }
 

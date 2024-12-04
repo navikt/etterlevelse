@@ -59,7 +59,7 @@ public class RisikoscenarioRequest implements RequestElement {
     }
 
 
-    public Risikoscenario convertToRiskoscenario() {
+    public Risikoscenario convertToRisikoscenario() {
         var risikoscenarioData = RisikoscenarioData.builder()
                 .navn(navn)
                 .beskrivelse(beskrivelse)
