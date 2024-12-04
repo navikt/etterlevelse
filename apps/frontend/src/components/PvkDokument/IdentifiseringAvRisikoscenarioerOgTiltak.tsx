@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { IPvkDokument, IRisikoscenario } from '../../constants'
 import CreateRisikoscenario from './edit/CreateRisikoscenario'
-import CreateRisikoscenarioTiltak from './edit/CreateRisikoscenarioTiltak'
 import FormButtons from './edit/FormButtons'
+import RisikoscenarioAccordianList from './risikoscenario/RisikoscenarioAccordianList'
 
 interface IProps {
   etterlevelseDokumentasjonId: string
@@ -77,7 +77,9 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
         </Alert>
       )}
 
-      {risikoscenarioList.length > 0 && <CreateRisikoscenarioTiltak />}
+      {risikoscenarioList.length > 0 && (
+        <RisikoscenarioAccordianList risikoscenarioList={risikoscenarioList} />
+      )}
 
       <CreateRisikoscenario
         onSubmitStateUpdate={(risikoscenario: IRisikoscenario) => {
