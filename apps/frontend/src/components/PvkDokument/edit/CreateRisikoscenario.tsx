@@ -1,7 +1,7 @@
 import { Button, Heading, Modal, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
-import { mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
+import { createRiskoscenario, mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../../constants'
 import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
@@ -15,12 +15,13 @@ export const CreateRisikoscenario = (props: IProps) => {
   const { onSubmitStateUpdate } = props
   const [isEdit, setIsEdit] = useState<boolean>(false)
 
-  const submit = (risikoscenario: IRisikoscenario) => {
-    console.debug(risikoscenario)
-    if (onSubmitStateUpdate) {
-      onSubmitStateUpdate(risikoscenario)
-    }
-    setIsEdit(false)
+  const submit = async (risikoscenario: IRisikoscenario) => {
+    await createRiskoscenario(risikoscenario).then((response) => {
+      if (onSubmitStateUpdate) {
+        onSubmitStateUpdate(response)
+      }
+      setIsEdit(false)
+    })
   }
 
   return (
