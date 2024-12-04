@@ -1,5 +1,6 @@
 import { LinkIcon } from '@navikt/aksel-icons'
 import { Accordion, BodyLong, CopyButton } from '@navikt/ds-react'
+import { useEffect } from 'react'
 import { IRisikoscenario } from '../../../constants'
 import RisikoscenarioTag, {
   getKonsekvenssnivaaText,
@@ -14,19 +15,27 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
   const { risikoscenarioList } = props
   const currentUrl = window.location.origin.toString() + window.location.pathname + '?steg=4'
 
+  useEffect(() => {
+    if (window.location.hash) {
+      setTimeout(() => {
+        const element = document.getElementById(window.location.hash.substring(1))
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 200)
+    }
+  }, [])
+
   return (
     <div>
       <Accordion>
         {risikoscenarioList.map((risikoscenario, index) => (
-          <Accordion.Item
-            id={index + '_' + risikoscenario.id}
-            key={index + '_' + risikoscenario.navn}
-          >
+          <Accordion.Item id={risikoscenario.id} key={index + '_' + risikoscenario.navn}>
             <Accordion.Header>{risikoscenario.navn}</Accordion.Header>
             <Accordion.Content>
               <CopyButton
                 variant="action"
-                copyText={currentUrl + '#' + index + '_' + risikoscenario.id}
+                copyText={currentUrl + '#' + risikoscenario.id}
                 text="Kopiér scenariolenke"
                 activeText="Lenken er kopiert"
                 icon={<LinkIcon aria-hidden />}
