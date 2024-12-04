@@ -16,6 +16,7 @@ interface IProps {
 export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
   const { etterlevelseDokumentasjonId, pvkDokument, activeStep, setActiveStep } = props
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
+  const [defaultOpen, setDefaultOpen] = useState<boolean>(false)
 
   useEffect(() => {
     if (pvkDokument) {
@@ -28,6 +29,14 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
       })()
     }
   }, [pvkDokument])
+
+  useEffect(() => {
+    if (window.location.hash) {
+      setDefaultOpen(true)
+    } else {
+      setDefaultOpen(false)
+    }
+  }, [])
 
   return (
     <div>
@@ -79,7 +88,10 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
 
       {risikoscenarioList.length > 0 && (
         <div className="my-5">
-          <RisikoscenarioAccordianList risikoscenarioList={risikoscenarioList} />
+          <RisikoscenarioAccordianList
+            risikoscenarioList={risikoscenarioList}
+            defaultOpen={defaultOpen}
+          />
         </div>
       )}
 
