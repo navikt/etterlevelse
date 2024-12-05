@@ -60,11 +60,17 @@ export const EtterlevelseSidePanel = (props: IProps) => {
             <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />
           </div>
         </Tabs.Panel>
-        <Tabs.Panel value="pvkDokumentasjon">
-          <div className="mt-2 p-4">
-            <KravRisikoscenario risikoscenarioer={[]} setIsPreview={setIsPreview} />
-          </div>
-        </Tabs.Panel>
+        {pvkDokument && pvkDokument.skalUtforePvk && (
+          <Tabs.Panel value="pvkDokumentasjon">
+            <div className="mt-2 p-4">
+              <KravRisikoscenario
+                krav={krav}
+                pvkDokument={pvkDokument}
+                setIsPreview={setIsPreview}
+              />
+            </div>
+          </Tabs.Panel>
+        )}
         <Tabs.Panel value="notat">
           <div className="mt-2 p-4">
             <div className="flex justify-between mb-2.5">

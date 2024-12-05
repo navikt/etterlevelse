@@ -1,15 +1,22 @@
 import { Alert, Button, ReadMore } from '@navikt/ds-react'
-import { useState } from 'react'
-import { IRisikoscenario } from '../../constants'
+import { useEffect, useState } from 'react'
+import { IPvkDokument, IRisikoscenario, TKravQL } from '../../constants'
 
 interface IProps {
-  risikoscenarioer: IRisikoscenario[]
+  krav: TKravQL
+  pvkDokument: IPvkDokument
   setIsPreview: (state: boolean) => void
 }
 
 export const KravRisikoscenario = (props: IProps) => {
-  const { risikoscenarioer, setIsPreview } = props
+  const { krav, pvkDokument, setIsPreview } = props
+  const [risikoscenarioer, setRisikoscenarioer] = useState<IRisikoscenario[]>([])
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
+
+  useEffect(() => {
+    //logic for å hente alle risikoscenarioer knyttet til kravet
+    setRisikoscenarioer([])
+  }, [krav, pvkDokument])
 
   return (
     <div className="w-full">
