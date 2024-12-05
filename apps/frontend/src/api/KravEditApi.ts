@@ -18,19 +18,17 @@ export interface IKravDataProps {
 }
 
 export function GetKravData(params: Readonly<Partial<TKravIdParams>>): IKravDataProps | undefined {
-  const {
-    loading: kravLoading,
-    data: kravQuery,
-    refetch: reloadKrav,
-  } = useQuery<{ kravById: TKravQL }, KravIdQueryVariables>(getKravWithEtterlevelseQuery, {
-    variables: getQueryVariableFromParams(params),
-    skip: (!params.id || params.id === 'ny') && !params.kravNummer,
-    fetchPolicy: 'no-cache',
-  })
+  const { loading, data, refetch } = useQuery<{ kravById: TKravQL }, KravIdQueryVariables>(
+    getKravWithEtterlevelseQuery,
+    {
+      variables: getQueryVariableFromParams(params),
+      skip: (!params.id || params.id === 'ny') && !params.kravNummer,
+      fetchPolicy: 'no-cache',
+    }
+  )
 
-  if (kravQuery?.kravById) {
-    const kravData = { kravQuery: kravQuery, kravLoading: kravLoading, reloadKrav: reloadKrav() }
-
+  if (data && data.kravById) {
+    const kravData = { kravQuery: data, kravLoading: loading, reloadKrav: refetch() }
     return kravData
   } else {
     return undefined
