@@ -331,6 +331,7 @@ export const DokumentasjonPage = () => {
         utgaattStats={utgaattStats}
         loading={loading}
         morDocumentRelation={morDokumentRelasjon}
+        pvkDokument={pvkDokument}
       />
     </PageLayout>
   )

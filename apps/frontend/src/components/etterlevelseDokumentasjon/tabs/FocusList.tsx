@@ -5,12 +5,12 @@ import {
   etterlevelseDokumentasjonMapToFormVal,
   getEtterlevelseDokumentasjon,
   updateKravPriorityEtterlevelseDokumentasjon,
-} from '../../api/EtterlevelseDokumentasjonApi'
-import { IKravPriorityList, TEtterlevelseDokumentasjonQL, TKravQL } from '../../constants'
-import { TTemaCode } from '../../services/Codelist'
-import { user } from '../../services/User'
-import { AccordionList } from '../focusList/AccordionList'
-import KravList from './tabs/KravList'
+} from '../../../api/EtterlevelseDokumentasjonApi'
+import { IKravPriorityList, TEtterlevelseDokumentasjonQL, TKravQL } from '../../../constants'
+import { TTemaCode } from '../../../services/Codelist'
+import { user } from '../../../services/User'
+import { AccordionList } from '../../focusList/AccordionList'
+import KravList from './KravList'
 
 interface IProps {
   loading: boolean

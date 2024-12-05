@@ -6,13 +6,14 @@ import { getAllKravPriorityList } from '../../../api/KravPriorityListApi'
 import {
   IDocumentRelationWithEtterlevelseDokumetajson,
   IKravPriorityList,
+  IPvkDokument,
   TEtterlevelseDokumentasjonQL,
   TKravQL,
 } from '../../../constants'
 import { TTemaCode } from '../../../services/Codelist'
 import ExportEtterlevelseModal from '../../export/ExportEtterlevelseModal'
 import { ArkiveringModal } from '../ArkiveringModal'
-import FocusList from '../FocusList'
+import FocusList from './FocusList'
 import KravList from './KravList'
 
 interface IProps {
@@ -23,6 +24,7 @@ interface IProps {
   utgaattStats: TKravQL[]
   loading: boolean
   morDocumentRelation?: IDocumentRelationWithEtterlevelseDokumetajson
+  pvkDokument?: IPvkDokument
 }
 
 export const DokumentasjonPageTabs = (props: IProps) => {
@@ -34,6 +36,7 @@ export const DokumentasjonPageTabs = (props: IProps) => {
     utgaattStats,
     loading,
     morDocumentRelation,
+    pvkDokument,
   } = props
 
   const params = useParams<{ id?: string; tema?: string }>()
@@ -58,7 +61,10 @@ export const DokumentasjonPageTabs = (props: IProps) => {
     ) {
       setTabValue('prioritertKravliste')
     }
-  }, [morDocumentRelation])
+    if (pvkDokument && pvkDokument.skalUtforePvk) {
+      setTabValue('pvkRelaterteKrav')
+    }
+  }, [morDocumentRelation, pvkDokument])
 
   return (
     <div>
@@ -66,6 +72,9 @@ export const DokumentasjonPageTabs = (props: IProps) => {
         <Tabs.List>
           <Tabs.Tab value="alleKrav" label="Alle Krav" />
           <Tabs.Tab value="prioritertKravliste" label="Prioritert kravliste" />
+          {pvkDokument && pvkDokument.skalUtforePvk && (
+            <Tabs.Tab value="pvkRelaterteKrav" label="PVK-relaterte krav" />
+          )}
         </Tabs.List>
         <Tabs.Panel value="alleKrav">
           <div className="pt-4 flex flex-col gap-4">
@@ -104,6 +113,9 @@ export const DokumentasjonPageTabs = (props: IProps) => {
               temaListe={temaListe}
             />
           </div>
+        </Tabs.Panel>
+        <Tabs.Panel value="prioritertKravliste">
+          <div className="pt-4 flex flex-col gap-4"></div>
         </Tabs.Panel>
       </Tabs>
     </div>
