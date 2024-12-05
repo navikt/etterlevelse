@@ -1,5 +1,4 @@
 import { useQuery } from '@apollo/client'
-import { FileTextIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyShort,
@@ -7,7 +6,6 @@ import {
   Checkbox,
   CheckboxGroup,
   Heading,
-  Label,
   Link,
   Loader,
   Modal,
@@ -48,17 +46,15 @@ import {
 import { getKravWithEtterlevelseQuery } from '../../query/KravQuery'
 import { ampli, userRoleEventProp } from '../../services/Amplitude'
 import { user } from '../../services/User'
-import KravRisikoscenario from '../PvkDokument/KravRisikoscenario'
 import { Markdown } from '../common/Markdown'
 import { getEtterlevelseStatus } from '../etterlevelseDokumentasjon/common/utils'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
-import EditNotatfelt from '../etterlevelseMetadata/EditNotatfelt'
 import Etterlevelser from '../krav/Etterlevelser'
 import ExpiredAlert from '../krav/ExpiredAlert'
-import { AllInfo } from '../krav/ViewKrav'
 import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import EtterlevelseViewFields from './EtterlevelseViewFields'
+import EtterlevelseSidePanel from './tabs/EtterlevelseSidePanel'
 
 interface IProps {
   temaName?: string
@@ -100,7 +96,6 @@ export const EtterlevelseKravView = (props: IProps) => {
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<IEtterlevelse>()
   const etterlevelseFormRef: React.Ref<FormikProps<IEtterlevelse> | undefined> = useRef()
-  const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
   const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<IKravVersjon[]>([
     { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
   ])
@@ -508,59 +503,14 @@ export const EtterlevelseKravView = (props: IProps) => {
               </Tabs>
             </div>
 
-            <div className="pl-4 border-l border-border-divider w-full max-w-lg">
-              <Tabs defaultValue="mer" size="small">
-                <Tabs.List>
-                  <Tabs.Tab className="whitespace-nowrap" value="mer" label="Mer om kravet" />
-                  {pvkDokument && pvkDokument.skalUtforePvk && (
-                    <Tabs.Tab
-                      className="whitespace-nowrap"
-                      value="pvkDokumentasjon"
-                      label="PVK-dokumentasjon"
-                    />
-                  )}
-                  <Tabs.Tab value="notat" label="Notat" />
-                </Tabs.List>
-                <Tabs.Panel value="mer">
-                  <div className="mt-2 p-4">
-                    <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />
-                  </div>
-                </Tabs.Panel>
-                <Tabs.Panel value="pvkDokumentasjon">
-                  <div className="mt-2 p-4">
-                    <KravRisikoscenario risikoscenarioer={[]} setIsPreview={setIsPreview} />
-                  </div>
-                </Tabs.Panel>
-                <Tabs.Panel value="notat">
-                  <div className="mt-2 p-4">
-                    <div className="flex justify-between mb-2.5">
-                      <Label className="flex gap-1" size="medium">
-                        <FileTextIcon fontSize="1.5rem" area-label="" aria-hidden />
-                        Notat
-                      </Label>
-                      <Button
-                        variant="secondary"
-                        size="xsmall"
-                        onClick={() => setIsNotatModalOpen(true)}
-                      >
-                        Rediger
-                      </Button>
-                    </div>
-
-                    <EditNotatfelt
-                      isOpen={isNotatModalOpen}
-                      setIsNotatfeltOpen={setIsNotatModalOpen}
-                      etterlevelseMetadata={etterlevelseMetadata}
-                      setEtterlevelseMetadata={setEtterlevelseMetadata}
-                    />
-
-                    <div className="break-words">
-                      <Markdown source={etterlevelseMetadata.notater} />
-                    </div>
-                  </div>
-                </Tabs.Panel>
-              </Tabs>
-            </div>
+            <EtterlevelseSidePanel
+              krav={krav}
+              pvkDokument={pvkDokument}
+              etterlevelseMetadata={etterlevelseMetadata}
+              setEtterlevelseMetadata={setEtterlevelseMetadata}
+              alleKravVersjoner={alleKravVersjoner}
+              setIsPreview={setIsPreview}
+            />
           </div>
 
           <Modal
