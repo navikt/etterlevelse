@@ -493,7 +493,7 @@ export type TKravQL = TReplace<
 >
 
 export type TEtterlevelseQL = IEtterlevelse & {
-  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
 }
 
 export type TEtterlevelseDokumentasjonQL = TReplace<

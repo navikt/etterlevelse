@@ -1,4 +1,4 @@
-import { ApolloQueryResult, useQuery } from '@apollo/client'
+import { ApolloQueryResult, WatchQueryFetchPolicy, useQuery } from '@apollo/client'
 import { TKravQL } from '../constants'
 import { getKravWithEtterlevelseQuery } from '../query/KravQuery'
 import { TKravId as KravIdQueryVariables, TKravIdParams } from './KravApi'
@@ -20,13 +20,15 @@ export interface IKravDataProps {
 export const GetKravData = (
   params: Readonly<Partial<TKravIdParams>>
 ): IKravDataProps | undefined => {
+  const filter = {
+    variables: getQueryVariableFromParams(params),
+    skip: (!params.id || params.id === 'ny') && !params.kravNummer,
+    fetchPolicy: 'no-cache' as WatchQueryFetchPolicy,
+  }
+
   const { data, loading, refetch } = useQuery<{ kravById: TKravQL }, KravIdQueryVariables>(
     getKravWithEtterlevelseQuery,
-    {
-      variables: getQueryVariableFromParams(params),
-      skip: (!params.id || params.id === 'ny') && !params.kravNummer,
-      fetchPolicy: 'no-cache',
-    }
+    filter
   )
 
   if (data && data.kravById) {
