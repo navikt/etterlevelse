@@ -48,6 +48,7 @@ import {
 import { getKravWithEtterlevelseQuery } from '../../query/KravQuery'
 import { ampli, userRoleEventProp } from '../../services/Amplitude'
 import { user } from '../../services/User'
+import KravRisikoscenario from '../PvkDokument/KravRisikoscenario'
 import { Markdown } from '../common/Markdown'
 import { getEtterlevelseStatus } from '../etterlevelseDokumentasjon/common/utils'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
@@ -525,7 +526,9 @@ export const EtterlevelseKravView = (props: IProps) => {
                   </div>
                 </Tabs.Panel>
                 <Tabs.Panel value="pvkDokumentasjon">
-                  <div className="mt-2 p-4">WIP</div>
+                  <div className="mt-2 p-4">
+                    <KravRisikoscenario risikoscenarioer={[]} setIsPreview={setIsPreview} />
+                  </div>
                 </Tabs.Panel>
                 <Tabs.Panel value="notat">
                   <div className="mt-2 p-4">
