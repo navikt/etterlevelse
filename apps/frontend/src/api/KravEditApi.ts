@@ -17,8 +17,10 @@ export interface IKravDataProps {
   >
 }
 
-export function GetKravData(params: Readonly<Partial<TKravIdParams>>): IKravDataProps | undefined {
-  const { loading, data, refetch } = useQuery<{ kravById: TKravQL }, KravIdQueryVariables>(
+export const GetKravData = (
+  params: Readonly<Partial<TKravIdParams>>
+): IKravDataProps | undefined => {
+  const { data, loading, refetch } = useQuery<{ kravById: TKravQL }, KravIdQueryVariables>(
     getKravWithEtterlevelseQuery,
     {
       variables: getQueryVariableFromParams(params),
@@ -28,8 +30,7 @@ export function GetKravData(params: Readonly<Partial<TKravIdParams>>): IKravData
   )
 
   if (data && data.kravById) {
-    const kravData = { kravQuery: data, kravLoading: loading, reloadKrav: refetch() }
-    return kravData
+    return { kravQuery: data, kravLoading: loading, reloadKrav: refetch() }
   } else {
     return undefined
   }
