@@ -11,7 +11,7 @@ interface IProps {
   submit: (riskoscenario: IRisikoscenario) => void
 }
 
-export const CreateRisikoscenarioForm = (props: IProps) => {
+export const RisikoscenarioForm = (props: IProps) => {
   const { initialValues, submit } = props
 
   return (
@@ -138,4 +138,4 @@ export const CreateRisikoscenarioForm = (props: IProps) => {
   )
 }
 
-export default CreateRisikoscenarioForm
+export default RisikoscenarioForm
