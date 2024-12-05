@@ -1,5 +1,6 @@
 import { Label } from '@navikt/ds-react'
 import { Dispatch, SetStateAction } from 'react'
+import { createRiskoscenario } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario, TKravQL } from '../../../constants'
 import RisikoscenarioForm from './RisikoscenarioForm'
 
@@ -15,11 +16,10 @@ export const CreateRisikoscenario = (props: IProps) => {
   const { krav, pvkDokumentId, setIsCreateMode, risikoscenarioer, setRisikoscenarioer } = props
 
   const submit = async (risikoscenario: IRisikoscenario) => {
-    //logic for å lagre i backend og oppdatere liste i parent komponent
-    console.debug(risikoscenario)
-    //ferdig med submit, oppdaterer list og lukker create mode
-    setRisikoscenarioer([...risikoscenarioer, risikoscenario])
-    setIsCreateMode(false)
+    await createRiskoscenario(risikoscenario).then((response) => {
+      setRisikoscenarioer([...risikoscenarioer, response])
+      setIsCreateMode(false)
+    })
   }
 
   return (

@@ -1,7 +1,8 @@
-import { Alert, BodyLong, Button, ReadMore } from '@navikt/ds-react'
+import { Accordion, Alert, BodyLong, Button, ReadMore } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { IPvkDokument, IRisikoscenario, TKravQL } from '../../constants'
 import CreateRisikoscenario from './edit/CreateRisikoscenario'
+import RisikoscenarioAccordionContent from './risikoscenario/RisikoscenarioAccordianContent'
 
 interface IProps {
   krav: TKravQL
@@ -59,9 +60,16 @@ export const KravRisikoscenario = (props: IProps) => {
 
         {!isCreateMode && !isLeggTilEksisterendeMode && (
           <div>
-            {risikoscenarioer.map((risikoscenario) => (
-              <BodyLong key={risikoscenario.id}>{risikoscenario.navn}</BodyLong>
-            ))}
+            <Accordion>
+              {risikoscenarioer.map((risikoscenario, index) => (
+                <Accordion.Item id={risikoscenario.id} key={index + '_' + risikoscenario.navn}>
+                  <Accordion.Header>{risikoscenario.navn}</Accordion.Header>
+                  <Accordion.Content>
+                    <RisikoscenarioAccordionContent risikoscenario={risikoscenario} />
+                  </Accordion.Content>
+                </Accordion.Item>
+              ))}
+            </Accordion>
           </div>
         )}
 
