@@ -32,6 +32,7 @@ import {
   updateEtterlevelseMetadata,
 } from '../../api/EtterlevelseMetadataApi'
 import { TKravId, getKravByKravNummer } from '../../api/KravApi'
+import { getPvkDokumentByEtterlevelseDokumentId } from '../../api/PvkDokumentApi'
 import {
   EEtterlevelseStatus,
   EKravFilterType,
@@ -40,16 +41,14 @@ import {
   IEtterlevelseMetadata,
   IKrav,
   IKravVersjon,
+  IPvkDokument,
   TEtterlevelseDokumentasjonQL,
   TKravQL,
 } from '../../constants'
 import { getKravWithEtterlevelseQuery } from '../../query/KravQuery'
 import { ampli, userRoleEventProp } from '../../services/Amplitude'
 import { user } from '../../services/User'
-import { behandlingLink } from '../../util/config'
 import { Markdown } from '../common/Markdown'
-import { ExternalLink } from '../common/RouteLink'
-import { TeamName } from '../common/TeamName'
 import { getEtterlevelseStatus } from '../etterlevelseDokumentasjon/common/utils'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import EditNotatfelt from '../etterlevelseMetadata/EditNotatfelt'
@@ -113,6 +112,7 @@ export const EtterlevelseKravView = (props: IProps) => {
   const [isSavingChanges, setIsSavingChanges] = useState<boolean>(false)
   const [isPrioritised, setIsPrioritised] = useState<boolean>(false)
   const [isPreview, setIsPreview] = useState<boolean>(false)
+  const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -146,6 +146,12 @@ export const EtterlevelseKravView = (props: IProps) => {
             )
           }
         })
+
+        getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+          .then((response: IPvkDokument) => {
+            if (response) setPvkDokument(response)
+          })
+          .catch(() => undefined)
       }
     })()
 
@@ -499,15 +505,18 @@ export const EtterlevelseKravView = (props: IProps) => {
                 </Tabs.Panel>
               </Tabs>
             </div>
-            <div className="pl-4 border-l border-border-divider w-full max-w-sm">
+
+            <div className="pl-4 border-l border-border-divider w-full max-w-lg">
               <Tabs defaultValue="mer" size="small">
                 <Tabs.List>
                   <Tabs.Tab className="whitespace-nowrap" value="mer" label="Mer om kravet" />
-                  <Tabs.Tab
-                    className="whitespace-nowrap"
-                    value="dokument"
-                    label="Om etterlevelsen"
-                  />
+                  {pvkDokument && pvkDokument.skalUtforePvk && (
+                    <Tabs.Tab
+                      className="whitespace-nowrap"
+                      value="pvkDokumentasjon"
+                      label="PVK-dokumentasjon"
+                    />
+                  )}
                   <Tabs.Tab value="notat" label="Notat" />
                 </Tabs.List>
                 <Tabs.Panel value="mer">
@@ -515,27 +524,8 @@ export const EtterlevelseKravView = (props: IProps) => {
                     <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />
                   </div>
                 </Tabs.Panel>
-                <Tabs.Panel value="dokument">
-                  <div className="mt-2 p-4">
-                    <div className="mb-4">
-                      <Label size="medium">Tittel</Label>
-                      <BodyShort>{etterlevelseDokumentasjon?.title}</BodyShort>
-                    </div>
-                    <div className="mb-4">
-                      <Label size="medium">Behandling</Label>
-                      {etterlevelseDokumentasjon?.behandlinger?.map((behandling) => (
-                        <ExternalLink key={behandling.id} href={behandlingLink(behandling.id)}>
-                          {behandling.navn}
-                        </ExternalLink>
-                      ))}
-                    </div>
-                    <div className="flex flex-col">
-                      <Label size="medium">Team</Label>
-                      {etterlevelseDokumentasjon?.teamsData?.map((team, index) => (
-                        <TeamName key={'team_' + index} id={team.id} big link />
-                      ))}
-                    </div>
-                  </div>
+                <Tabs.Panel value="pvkDokumentasjon">
+                  <div className="mt-2 p-4">WIP</div>
                 </Tabs.Panel>
                 <Tabs.Panel value="notat">
                   <div className="mt-2 p-4">
