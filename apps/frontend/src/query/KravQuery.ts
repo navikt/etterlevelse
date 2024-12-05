@@ -6,20 +6,24 @@ export const useKravFilter = (
   variables: TKravFilters,
   options?: QueryHookOptions<any, TKravFilters>
 ) => {
-  return useQuery<{ krav: IPageResponse<TKravQL> }, TKravFilters>(getKravtableQuery, {
-    ...(options || {}),
-    variables,
-  })
+  let filter = {}
+  if (options) {
+    filter = { ...options }
+  }
+  filter = { ...filter, variables }
+  return useQuery<{ krav: IPageResponse<TKravQL> }, TKravFilters>(getKravtableQuery, filter)
 }
 
 export const useKravCounter = (
   variables: { lover: string[] },
   options?: QueryHookOptions<any, { lover?: string[] }>
 ) => {
-  return useQuery<{ krav: IPageResponse<TKravQL> }, TKravFilters>(getKravByLovCodeQuery, {
-    ...(options || {}),
-    variables,
-  })
+  let filter = {}
+  if (options) {
+    filter = { ...options }
+  }
+  filter = { ...filter, variables }
+  return useQuery<{ krav: IPageResponse<TKravQL> }, TKravFilters>(getKravByLovCodeQuery, filter)
 }
 
 // eslint-disable-next-line "@typescript-eslint/no-restricted-types"
