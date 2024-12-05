@@ -15,6 +15,7 @@ import ExportEtterlevelseModal from '../../export/ExportEtterlevelseModal'
 import { ArkiveringModal } from '../ArkiveringModal'
 import FocusList from './FocusList'
 import KravList from './KravList'
+import PvkRelatedKravList from './PvkRelatedKravList'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -115,7 +116,16 @@ export const DokumentasjonPageTabs = (props: IProps) => {
           </div>
         </Tabs.Panel>
         <Tabs.Panel value="prioritertKravliste">
-          <div className="pt-4 flex flex-col gap-4"></div>
+          <div className="pt-4 flex flex-col gap-4">
+            <PvkRelatedKravList
+              temaListe={temaListe}
+              relevanteStats={relevanteStats}
+              utgaattStats={utgaattStats}
+              allKravPriority={allKravPriority}
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              loading={loading}
+            />
+          </div>
         </Tabs.Panel>
       </Tabs>
     </div>
