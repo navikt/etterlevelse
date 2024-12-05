@@ -430,9 +430,9 @@ export const EtterlevelseKravView = (props: IProps) => {
                       <ToggleGroup.Item value="ON" label="Forhåndsvisning" />
                     </ToggleGroup>
                   )}
-                  {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&
-                    !isPreview && (
-                      <div className="mt-2">
+                  {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) && (
+                    <div className="mt-2">
+                      {!isPreview && (
                         <CheckboxGroup
                           legend="Legg til i Prioritert kravliste"
                           hideLegend
@@ -454,39 +454,40 @@ export const EtterlevelseKravView = (props: IProps) => {
                             </Checkbox>
                           }
                         </CheckboxGroup>
-                        {kravFilter !== EKravFilterType.BORTFILTTERTE_KRAV && (
-                          <EtterlevelseEditFields
-                            kravFilter={kravFilter}
-                            krav={krav}
-                            etterlevelse={etterlevelse}
-                            submit={submit}
-                            formRef={etterlevelseFormRef}
-                            varsleMelding={varsleMelding}
-                            disableEdit={disableEdit}
-                            close={() => {
-                              setTimeout(
-                                () => navigate(`/dokumentasjon/${etterlevelseDokumentasjon?.id}`),
-                                1
-                              )
-                            }}
-                            navigatePath={navigatePath}
-                            editedEtterlevelse={editedEtterlevelse}
-                            tidligereEtterlevelser={tidligereEtterlevelser}
-                            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                          />
-                        )}
-                        {kravFilter === EKravFilterType.BORTFILTTERTE_KRAV && (
-                          <EtterlevelseViewFields
-                            etterlevelse={etterlevelse}
-                            suksesskriterier={krav.suksesskriterier}
-                            tidligereEtterlevelser={tidligereEtterlevelser}
-                            isBortfiltrert
-                          />
-                        )}
-                      </div>
-                    )}
-                  {((!etterlevelseDokumentasjon?.hasCurrentUserAccess && !user.isAdmin()) ||
-                    isPreview) && (
+                      )}
+                      {kravFilter !== EKravFilterType.BORTFILTTERTE_KRAV && (
+                        <EtterlevelseEditFields
+                          isPreview={isPreview}
+                          kravFilter={kravFilter}
+                          krav={krav}
+                          etterlevelse={etterlevelse}
+                          submit={submit}
+                          formRef={etterlevelseFormRef}
+                          varsleMelding={varsleMelding}
+                          disableEdit={disableEdit}
+                          close={() => {
+                            setTimeout(
+                              () => navigate(`/dokumentasjon/${etterlevelseDokumentasjon?.id}`),
+                              1
+                            )
+                          }}
+                          navigatePath={navigatePath}
+                          editedEtterlevelse={editedEtterlevelse}
+                          tidligereEtterlevelser={tidligereEtterlevelser}
+                          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                        />
+                      )}
+                      {kravFilter === EKravFilterType.BORTFILTTERTE_KRAV && (
+                        <EtterlevelseViewFields
+                          etterlevelse={etterlevelse}
+                          suksesskriterier={krav.suksesskriterier}
+                          tidligereEtterlevelser={tidligereEtterlevelser}
+                          isBortfiltrert
+                        />
+                      )}
+                    </div>
+                  )}
+                  {!etterlevelseDokumentasjon?.hasCurrentUserAccess && !user.isAdmin() && (
                     <EtterlevelseViewFields
                       etterlevelse={etterlevelse}
                       suksesskriterier={krav.suksesskriterier}
