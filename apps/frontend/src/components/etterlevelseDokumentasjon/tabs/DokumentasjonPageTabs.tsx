@@ -115,7 +115,7 @@ export const DokumentasjonPageTabs = (props: IProps) => {
             />
           </div>
         </Tabs.Panel>
-        <Tabs.Panel value="prioritertKravliste">
+        <Tabs.Panel value="pvkRelaterteKrav">
           <div className="pt-4 flex flex-col gap-4">
             <PvkRelatedKravList
               temaListe={temaListe}

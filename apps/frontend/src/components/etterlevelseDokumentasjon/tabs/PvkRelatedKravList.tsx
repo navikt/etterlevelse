@@ -27,10 +27,20 @@ export const PvkRelatedKravList = (props: IProps) => {
 
   useEffect(() => {
     setPvkRelevanteStats(
-      relevanteStats.filter((krav) => krav.tagger.includes('Personvernkonsekvensvurdering'))
+      relevanteStats.filter(
+        (krav) =>
+          krav.tagger &&
+          krav.tagger.length > 0 &&
+          krav.tagger.includes('Personvernkonsekvensvurdering')
+      )
     )
     setPvkUtgaattStats(
-      utgaattStats.filter((krav) => krav.tagger.includes('Personvernkonsekvensvurdering'))
+      utgaattStats.filter(
+        (krav) =>
+          krav.tagger &&
+          krav.tagger.length > 0 &&
+          krav.tagger.includes('Personvernkonsekvensvurdering')
+      )
     )
   }, [relevanteStats, utgaattStats])
 
