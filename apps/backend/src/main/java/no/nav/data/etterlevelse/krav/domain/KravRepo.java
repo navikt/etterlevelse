@@ -40,7 +40,7 @@ public interface KravRepo extends JpaRepository<GenericStorage<Krav>, UUID>, Kra
     @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and type = 'Krav'", nativeQuery = true)
     List<GenericStorage<Krav>> findByKravNummer(int nummer);
 
-    @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and data -> 'status' = 'AKTIV' and type = 'Krav'", nativeQuery = true)
+    @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and data ->> 'status' = 'AKTIV' and type = 'Krav'", nativeQuery = true)
     List<GenericStorage<Krav>> findByKravNummerAndActiveStatus(int nummer);
 
     @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and data -> 'kravVersjon' = to_jsonb(?2) and type = 'Krav'", nativeQuery = true)
