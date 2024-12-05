@@ -69,7 +69,7 @@ export const deleteRisikoscenario = async (id: string) => {
 const risikoscenarioToRisikoscenarioDto = (risikoscenario: IRisikoscenario) => {
   const dto = {
     ...risikoscenario,
-    relevanteKravNummerList: risikoscenario.relevanteKravNummer.map(
+    relevanteKravNummer: risikoscenario.relevanteKravNummer.map(
       (kravReference) => kravReference.kravNummer
     ),
   } as any
