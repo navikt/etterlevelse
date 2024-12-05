@@ -99,6 +99,7 @@ export const getEtterlevelseDokumentasjonStatsQuery = gql`
             navn
             status
             aktivertDato
+            tagger
             etterlevelser(
               onlyForEtterlevelseDokumentasjon: true
               etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
@@ -133,6 +134,7 @@ export const getEtterlevelseDokumentasjonStatsQuery = gql`
             navn
             status
             aktivertDato
+            tagger
             etterlevelser(
               onlyForEtterlevelseDokumentasjon: true
               etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
