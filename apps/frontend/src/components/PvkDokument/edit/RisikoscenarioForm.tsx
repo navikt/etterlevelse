@@ -9,10 +9,11 @@ import { risikoscenarioCreateValidation } from './RisikoscenarioSchemaValidation
 interface IProps {
   initialValues: Partial<IRisikoscenario>
   submit: (riskoscenario: IRisikoscenario) => void
+  onClose: () => void
 }
 
 export const RisikoscenarioForm = (props: IProps) => {
-  const { initialValues, submit } = props
+  const { initialValues, submit, onClose } = props
 
   return (
     <div>
@@ -127,7 +128,7 @@ export const RisikoscenarioForm = (props: IProps) => {
               <Button type="button" onClick={() => submitForm()}>
                 Lagre risikoscenario
               </Button>
-              <Button onClick={() => {}} type="button" variant="secondary">
+              <Button onClick={() => onClose()} type="button" variant="secondary">
                 Avbryt, ikke lagre
               </Button>
             </div>
