@@ -26,7 +26,7 @@ public class BehandlingService {
 
     private List<DataBehandler> getDatabehandlerForBehandling(BkatProcess process) {
         List<DataBehandler> dataBehandlerList = new ArrayList<>();
-        if(!process.getDataProcessing().getProcessors().isEmpty()) {
+        if(process.getDataProcessing() != null && !process.getDataProcessing().getProcessors().isEmpty()) {
             process.getDataProcessing().getProcessors().forEach(databehandlerId -> {
                 DataBehandler databehandler = getDataBehandler(databehandlerId);
                 if(databehandler != null) {
