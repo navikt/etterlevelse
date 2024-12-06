@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { IPageResponse, IRisikoscenario } from '../constants'
+import { ERisikoscenarioType, IPageResponse, IRisikoscenario } from '../constants'
 import { env } from '../util/env'
 
 export const getAllRisikoscenario = async () => {
@@ -31,10 +31,13 @@ export const getRisikoscenario = async (id: string) => {
   return (await axios.get<IRisikoscenario>(`${env.backendBaseUrl}/riskoscenario/${id}`)).data
 }
 
-export const getRisikoscenarioByPvkDokumentId = async (pvkDokumentId: string) => {
+export const getRisikoscenarioByPvkDokumentId = async (
+  pvkDokumentId: string,
+  scenarioType: ERisikoscenarioType
+) => {
   return (
     await axios.get<IPageResponse<IRisikoscenario>>(
-      `${env.backendBaseUrl}/risikoscenario/pvkdokument/${pvkDokumentId}`
+      `${env.backendBaseUrl}/risikoscenario/pvkdokument/${pvkDokumentId}/${scenarioType}`
     )
   ).data
 }

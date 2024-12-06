@@ -589,6 +589,12 @@ export enum EPvkDokumentStatus {
   INAKTIV = 'INAKTIV',
 }
 
+export enum ERisikoscenarioType {
+  ALL = 'ALL',
+  GENERAL = 'GENERAL',
+  KRAV = 'KRAV',
+}
+
 export enum ESannsynlighetsnivaa {
   MEGET_LITE_SANNSYNILIG = 'MEGET_LITE_SANNSYNILIG',
   LITE_SANNSYNLIG = 'LITE_SANNSYLING',

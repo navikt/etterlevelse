@@ -1,7 +1,7 @@
 import { Alert, BodyLong, Button, Heading, ReadMore } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
-import { IPvkDokument, IRisikoscenario } from '../../constants'
+import { ERisikoscenarioType, IPvkDokument, IRisikoscenario } from '../../constants'
 import CreateRisikoscenarioModal from './edit/CreateRisikoscenarioModal'
 import FormButtons from './edit/FormButtons'
 import RisikoscenarioAccordianList from './risikoscenario/RisikoscenarioAccordianList'
@@ -21,11 +21,11 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
   useEffect(() => {
     if (pvkDokument) {
       ;(async () => {
-        await getRisikoscenarioByPvkDokumentId(pvkDokument.id).then((risikoscenarioer) => {
-          setRisikoscenarioList(
-            risikoscenarioer.content.filter((risikoscenario) => risikoscenario.generelScenario)
-          )
-        })
+        await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.GENERAL).then(
+          (risikoscenarioer) => {
+            setRisikoscenarioList(risikoscenarioer.content)
+          }
+        )
       })()
     }
   }, [pvkDokument])
