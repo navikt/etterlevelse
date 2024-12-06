@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -45,7 +46,7 @@ public class BkatProcess {
                 .linjer(convert(affiliation.getSubDepartments(), BkatCode::toCode))
                 .systemer(convert(affiliation.getProducts(), BkatCode::toCode))
                 .teams(affiliation.getProductTeams())
-                .policies(policies.stream().map(BkatPolicy::convertToPolyResponse).toList())
+                .policies(policies != null && !policies.isEmpty() ? policies.stream().map(BkatPolicy::convertToPolyResponse).toList(): new ArrayList<>())
                 .automatiskBehandling(automaticProcessing)
                 .profilering(profiling)
                 .dataBehandlerList(List.of())
