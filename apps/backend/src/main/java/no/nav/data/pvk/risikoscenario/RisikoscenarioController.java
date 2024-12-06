@@ -12,6 +12,7 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
+import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioRequest;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
 import org.springframework.data.domain.Page;
@@ -64,10 +65,10 @@ public class RisikoscenarioController {
 
     @Operation(summary = "Get Risikoscenario by Pvk Document id")
     @ApiResponse(description = "ok")
-    @GetMapping("/pvkdokument/{pvkDokumentId}")
-    public ResponseEntity<RestResponsePage<RisikoscenarioResponse>> getRisikoscenarioByPvkDokumentId(@PathVariable String pvkDokumentId) {
+    @GetMapping("/pvkdokument/{pvkDokumentId}/{scenarioType}")
+    public ResponseEntity<RestResponsePage<RisikoscenarioResponse>> getRisikoscenarioByPvkDokumentId(@PathVariable String pvkDokumentId, @PathVariable RisikoscenarioType scenarioType) {
         log.info("Get Risikoscenario by Pvk Document id={}", pvkDokumentId);
-        List<Risikoscenario> risikoscenarioList = risikoscenarioService.getByPvkDokument(pvkDokumentId);
+        List<Risikoscenario> risikoscenarioList = risikoscenarioService.getByPvkDokument(pvkDokumentId, scenarioType);
         List<RisikoscenarioResponse> risikoscenarioResponseList = risikoscenarioList.stream().map(RisikoscenarioResponse::buildFrom).toList();
 
         risikoscenarioResponseList.forEach(this::getKravDataforRelevantKravList);

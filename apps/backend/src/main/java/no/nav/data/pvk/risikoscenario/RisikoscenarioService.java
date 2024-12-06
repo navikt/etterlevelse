@@ -7,6 +7,7 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepo;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepoCustom;
+import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioRequest;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.domain.Page;
@@ -40,8 +41,19 @@ public class RisikoscenarioService {
         return risikoscenarioRepo.findAll(pageParameters.createPage());
     }
 
-    public List<Risikoscenario> getByPvkDokument(String pvkDokumentId) {
-        return risikoscenarioRepo.findByPvkDokumentId(pvkDokumentId);
+    public List<Risikoscenario> getByPvkDokument(String pvkDokumentId, RisikoscenarioType scenarioType) {
+        List<Risikoscenario> risikoscenarioList = risikoscenarioRepo.findByPvkDokumentId(pvkDokumentId);
+        switch (scenarioType) {
+            case GENERAL -> {
+                return risikoscenarioList.stream().filter((scenario) -> scenario.getRisikoscenarioData().isGenerelScenario()).collect(Collectors.toList());
+            }
+            case KRAV -> {
+                return risikoscenarioList.stream().filter((scenario) -> !scenario.getRisikoscenarioData().isGenerelScenario()).collect(Collectors.toList());
+            }
+            default -> {
+                return  risikoscenarioList;
+            }
+        }
     }
 
     public List<Risikoscenario> getByKravNummer(String kravNummer) {
