@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const { createProxyMiddleware } = require('http-proxy-middleware')
 
 // Used in local development server only
