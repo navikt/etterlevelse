@@ -95,7 +95,7 @@ export const EtterlevelseKravView = (props: IProps) => {
   const [nyereKrav, setNyereKrav] = React.useState<IKrav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<IEtterlevelse>()
-  const etterlevelseFormRef: React.Ref<FormikProps<IEtterlevelse> | undefined> = useRef()
+  const etterlevelseFormRef: React.Ref<FormikProps<IEtterlevelse> | undefined> = useRef(undefined)
   const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<IKravVersjon[]>([
     { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
   ])

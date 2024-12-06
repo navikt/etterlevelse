@@ -1,5 +1,5 @@
 import { Loader } from '@navikt/ds-react'
-import React, { useState } from 'react'
+import React, { JSX, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { user } from '../services/User'
 

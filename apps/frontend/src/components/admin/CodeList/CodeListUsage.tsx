@@ -1,5 +1,5 @@
 import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
-import { ChangeEvent, RefObject, createRef, useEffect, useState } from 'react'
+import { ChangeEvent, createRef, useEffect, useState } from 'react'
 import { replaceCodelistUsage } from '../../../api/CodelistApi'
 import { CodelistService, ICodeUsage, IGetParsedOptionsProps } from '../../../services/Codelist'
 import { ObjectLink } from '../../common/RouteLink'
@@ -75,7 +75,7 @@ const UsageTable = (props: { usage: ICodeUsage }) => {
 export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
   const [showReplace, setShowReplace] = useState(false)
   const [newValue, setNewValue] = useState<string>()
-  const ref: RefObject<HTMLDivElement> = createRef<HTMLDivElement>()
+  const ref = createRef<HTMLDivElement>()
   const [codelistUtils] = CodelistService()
 
   const { usage, refresh } = props

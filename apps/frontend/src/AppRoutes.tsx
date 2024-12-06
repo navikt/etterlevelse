@@ -1,5 +1,5 @@
 import { Loader } from '@navikt/ds-react'
-import { useEffect } from 'react'
+import { JSX, useEffect } from 'react'
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import { searchEtterlevelsedokumentasjonByBehandlingId } from './api/EtterlevelseDokumentasjonApi'
 import CodeListPage from './components/admin/CodeList/CodelistPage'

@@ -1,7 +1,7 @@
 import { RawDraftContentState, convertToRaw } from 'draft-js'
 import { FormikErrors } from 'formik'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Editor } from 'react-draft-wysiwyg'
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import { useDebouncedState } from '../../../util/hooks/customHooks'
@@ -22,12 +22,11 @@ type TTextEditorProps = {
   setIsFormDirty?: (v: boolean) => void
 }
 
-const TextEditor = (props: TTextEditorProps) => {
+export const TextEditor = (props: TTextEditorProps) => {
   const { initialValue, setValue, height, errors, name, simple, width, maxWidth, setIsFormDirty } =
     props
-
-  const [val, setVal] = useDebouncedState(initialValue, 500, setValue)
   const [isFocused, setIsFocused] = useState(false)
+  const [val, setVal] = useDebouncedState(initialValue, 500, setValue)
 
   const CustomDraftToMarkdown = (data: RawDraftContentState) => {
     return draftToMarkdown(data, {
@@ -72,44 +71,45 @@ const TextEditor = (props: TTextEditorProps) => {
       preserveNewlines: true,
     })
 
-  //--------ADD nessesary roles to toolbar options and editor------------
+  useEffect(() => {
+    //--------ADD nessesary roles to toolbar options and editor------------
+    const editorToolbar = document.getElementsByClassName('rdw-editor-toolbar')
 
-  const editorToolbar = document.getElementsByClassName('rdw-editor-toolbar')
+    for (let i = 0; i < editorToolbar.length; i++) {
+      editorToolbar[i].setAttribute('role', 'toolbar')
+    }
 
-  for (let i = 0; i < editorToolbar.length; i++) {
-    editorToolbar[i].setAttribute('role', 'toolbar')
-  }
+    const editorTextArea = document.getElementsByClassName('rdw-editor-wrapper')
 
-  const editorTextArea = document.getElementsByClassName('rdw-editor-wrapper')
+    for (let i = 0; i < editorTextArea.length; i++) {
+      editorTextArea[i].setAttribute('aria-label', '')
+    }
 
-  for (let i = 0; i < editorTextArea.length; i++) {
-    editorTextArea[i].setAttribute('aria-label', '')
-  }
+    const toolbarOptionWrapper = document.getElementsByClassName('rdw-option-wrapper')
 
-  const toolbarOptionWrapper = document.getElementsByClassName('rdw-option-wrapper')
+    for (let i = 0; i < toolbarOptionWrapper.length; i++) {
+      toolbarOptionWrapper[i].setAttribute('role', 'option')
+    }
 
-  for (let i = 0; i < toolbarOptionWrapper.length; i++) {
-    toolbarOptionWrapper[i].setAttribute('role', 'option')
-  }
+    const toolbarInlineWrapper = document.getElementsByClassName('rdw-inline-wrapper')
 
-  const toolbarInlineWrapper = document.getElementsByClassName('rdw-inline-wrapper')
+    for (let i = 0; i < toolbarInlineWrapper.length; i++) {
+      toolbarInlineWrapper[i].setAttribute('role', 'listbox')
+    }
 
-  for (let i = 0; i < toolbarInlineWrapper.length; i++) {
-    toolbarInlineWrapper[i].setAttribute('role', 'listbox')
-  }
+    const toolbarListWrapper = document.getElementsByClassName('rdw-list-wrapper')
 
-  const toolbarListWrapper = document.getElementsByClassName('rdw-list-wrapper')
+    for (let i = 0; i < toolbarListWrapper.length; i++) {
+      toolbarListWrapper[i].setAttribute('role', 'listbox')
+    }
 
-  for (let i = 0; i < toolbarListWrapper.length; i++) {
-    toolbarListWrapper[i].setAttribute('role', 'listbox')
-  }
+    const toolbarLinkWrapper = document.getElementsByClassName('rdw-link-wrapper')
 
-  const toolbarLinkWrapper = document.getElementsByClassName('rdw-link-wrapper')
-
-  for (let i = 0; i < toolbarLinkWrapper.length; i++) {
-    toolbarLinkWrapper[i].setAttribute('role', 'listbox')
-  }
-  //--------------------------
+    for (let i = 0; i < toolbarLinkWrapper.length; i++) {
+      toolbarLinkWrapper[i].setAttribute('role', 'listbox')
+    }
+    //--------------------------
+  }, [])
 
   const hasError = errors && name && errors[name]
 

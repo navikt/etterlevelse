@@ -1,4 +1,4 @@
-import React, { Dispatch, RefObject, SetStateAction, useEffect, useState } from 'react'
+import React, { createRef, Dispatch, RefObject, SetStateAction, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { user } from '../../services/User'
 
@@ -60,7 +60,7 @@ type TRefs<T> = { [id: string]: RefObject<T> }
 export function useRefs<T>(ids: string[]) {
   const refs: TRefs<T> =
     ids.reduce((acc, value) => {
-      acc[value] = React.createRef()
+      acc[value] = createRef() as RefObject<T>
       return acc
     }, {} as TRefs<T>) || {}
 

@@ -2,6 +2,7 @@ import { Link } from '@navikt/ds-react'
 import { IRegelverk } from '../constants'
 import { CodelistService, EListName, ICodelistProps, TLovCode } from '../services/Codelist'
 import { env } from '../util/env'
+import { JSX } from 'react'
 
 // unsure how to refactor code
 // eslint-disable-next-line @typescript-eslint/no-require-imports
