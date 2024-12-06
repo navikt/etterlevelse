@@ -21,7 +21,7 @@ public class RisikoscenarioRepoCustom {
     public List<Risikoscenario> findByKravNummer(String kravNummer) {
         var query = "select id from risikoscenario where data #> '{relevanteKravNummer}' @> :kravnummerList::jsonb";
         var par = new MapSqlParameterSource();
-        par.addValue("kravnummerList", String.format("[\"%s\"]", kravNummer));
+        par.addValue("kravnummerList", String.format("[%s]", kravNummer));
         return fetch(jdbcTemplate.queryForList(query, par));
     }
 
