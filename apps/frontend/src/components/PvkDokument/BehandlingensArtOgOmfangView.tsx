@@ -1,4 +1,4 @@
-import { Alert, Heading, Link, List, ReadMore } from '@navikt/ds-react'
+import { Alert, Button, Heading, Link, List, ReadMore } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import {
   getPvkDokument,
@@ -123,6 +123,19 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
               label="Beskriv hvordan og hvor lenge personopplysningene skal lagres."
               name="lagringsBeskrivelsePersonopplysningene"
             />
+          </div>
+
+          <div className="mt-5">
+            <Button
+              type="button"
+              onClick={() => {
+                if (submitForm) {
+                  submitForm()
+                }
+              }}
+            >
+              Lagre
+            </Button>
           </div>
 
           <FormButtons
