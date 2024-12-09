@@ -1,4 +1,4 @@
-import { BodyLong, Heading } from '@navikt/ds-react'
+import { BodyLong, Button, Heading } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { mapPvkDokumentToFormValue } from '../../api/PvkDokumentApi'
 import { IPvkDokument } from '../../constants'
@@ -58,6 +58,12 @@ export const SendInnView = (props: IProps) => {
             personkategorier={personkategorier}
             updateTitleUrlAndStep={updateTitleUrlAndStep}
           />
+
+          <div className="mt-5">
+            <Button type="button" onClick={() => {}}>
+              Send til PVO
+            </Button>
+          </div>
 
           <FormButtons
             etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
