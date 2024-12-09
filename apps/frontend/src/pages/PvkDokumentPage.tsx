@@ -17,7 +17,7 @@ import { user } from '../services/User'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const StepTitle: string[] = [
-  'Oversikt',
+  'Oversikt og status',
   'Behandlingens art og omfang',
   'Innvolvering av eksterne',
   'Identifisering av risikoscenarioer og tiltak',
@@ -144,7 +144,6 @@ export const PvkDokumentPage = () => {
                       activeStep={activeStep}
                       onStepChange={updateTitleUrlAndStep}
                       orientation="horizontal"
-                      interactive={false}
                     >
                       {StepTitle.map((title) => (
                         <Stepper.Step key={title}>{title}</Stepper.Step>
