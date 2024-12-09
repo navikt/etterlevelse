@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Heading, List, ReadMore } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, List, ReadMore } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import {
   getPvkDokument,
@@ -66,6 +66,7 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
           </Heading>
 
           <List
+            size="small"
             className="mt-5"
             title="I Behandlingskatalogen står det at dere behandler personopplysninger om:"
           >
@@ -76,24 +77,29 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
               ))}
           </List>
 
-          <BodyShort>
+          {/* <Alert inline variant="info" className="my-5">
+            Dersom disse typer personopplysninger ikke stemmer, må dere oppdatere
+            Behandlingskatalogen.
+          </Alert> */}
+
+          <BodyLong className="my-5">
+            Dersom disse typer personopplysninger ikke stemmer, må dere oppdatere
+            Behandlingskatalogen.
+          </BodyLong>
+
+          <BodyLong>
             Representanter for disse gruppene vil kunne bidra til å belyse hvilke konsekvenser en
             behandling av personopplysninger kan ha for den enkelte. Når vi gjennomfører en
             personvernkonsekvensvurdering (PVK), må vi derfor alltid vurdere om det er behov for å
             involvere en representant for de registrerte.
-          </BodyShort>
+          </BodyLong>
 
-          <BodyShort className="mt-3">
+          <BodyLong className="mt-3">
             Hvis dere er usikre på om behandlingene treffer flere eller færre personkategorier, kan
             det være til hjelp å se på behandlingens livsløp.
-          </BodyShort>
+          </BodyLong>
 
-          <Alert inline variant="info" className="mt-3">
-            Dersom disse typer personopplysninger ikke stemmer, må dere oppdatere
-            Behandlingskatalogen.
-          </Alert>
-
-          <ReadMore className="mt-3" header="Slik kan dere involvere de forskjellige gruppene">
+          <ReadMore className="my-8" header="Slik kan dere involvere de forskjellige gruppene">
             Et eller annet fornuftig råd her om f. eks. høre med Sentral brukerutvalg … osv. [Lenke
             til brosjyre på Navet]
           </ReadMore>
@@ -106,7 +112,7 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
             />
           </div>
 
-          <div className="mt-3">
+          <div className="mt-5">
             <TextAreaField
               rows={3}
               noPlaceholder
@@ -115,10 +121,10 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
             />
           </div>
 
-          <List className="mt-3" title="Representanter for databehandlere">
-            <BodyShort>
+          <List className="mt-10" title="Representanter for databehandlere">
+            <BodyLong>
               I Behandlingskatalogen står det at følgende databehandlere benyttes:
-            </BodyShort>
+            </BodyLong>
             {databehandlere.length === 0 && <List.Item>Ingen</List.Item>}
             {databehandlere.length > 0 &&
               databehandlere.map((databehandler) => (
@@ -126,12 +132,12 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
               ))}
           </List>
 
-          <BodyShort>
+          <BodyLong>
             Hvis dere er usikker på om behandlingene benytter flere eller færre databehandlere, kan
             det være til hjelp å se på behandlingens livsløp.
-          </BodyShort>
+          </BodyLong>
 
-          <div className="mt-5">
+          <div className="mt-7">
             <BoolField
               label="Stemmer denne lista over databehandlere?"
               name="stemmerDatabehandlere"
@@ -143,7 +149,7 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
             {(fieldProps: FieldProps) => (
               <>
                 {fieldProps.form.values.stemmerDatabehandlere === false && (
-                  <Alert inline variant="warning" className="mt-3">
+                  <Alert inline variant="warning" className="my-5">
                     Dere må oppdatere databehandlere i Behandlingskatalogen
                   </Alert>
                 )}
@@ -151,11 +157,11 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
             )}
           </Field>
 
-          <BodyShort className="mt-5">
+          <BodyLong className="mt-5">
             Dersom det skal benyttes en databehandler i hele eller deler av behandlingen, skal dere
             som hovedregel inkludere en representant for databehandler i vurderingen av
             personvernkonsekvenser (PVK).
-          </BodyShort>
+          </BodyLong>
 
           <ReadMore className="mt-3" header="Trenger vi å snakke direkte med databehandlere?">
             Noe her om hvor grensa går, særlig mtp avtaler som NAV kan ha med store aktører — IT og
@@ -177,6 +183,19 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
               label="Utdyp hvordan dere har involvert representant(er) for databehandler(e)"
               name="dataBehandlerRepresentantInvolveringBeskrivelse"
             />
+          </div>
+
+          <div className="mt-5">
+            <Button
+              type="button"
+              onClick={() => {
+                if (submitForm) {
+                  submitForm()
+                }
+              }}
+            >
+              Lagre
+            </Button>
           </div>
 
           <FormButtons
