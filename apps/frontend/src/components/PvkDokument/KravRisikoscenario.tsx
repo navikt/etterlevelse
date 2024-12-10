@@ -31,7 +31,7 @@ export const KravRisikoscenario = (props: IProps) => {
       <div className="mt-5">
         {!isCreateMode && !isLeggTilEksisterendeMode && risikoscenarioer.length === 0 && (
           <Alert variant="info">
-            Foreløpig finnes det ingen risikoscenarioer koblet på dette kravet.
+            Foreløpig finnes det ingen risikoscenarioer tilknyttet dette kravet.
           </Alert>
         )}
 
