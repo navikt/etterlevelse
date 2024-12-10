@@ -99,7 +99,10 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
             det være til hjelp å se på behandlingens livsløp.
           </BodyLong>
 
-          <ReadMore className="my-8" header="Slik kan dere involvere de forskjellige gruppene">
+          <ReadMore
+            className="my-8 max-w-[75ch]"
+            header="Slik kan dere involvere de forskjellige gruppene"
+          >
             Et eller annet fornuftig råd her om f. eks. høre med Sentral brukerutvalg … osv. [Lenke
             til brosjyre på Navet]
           </ReadMore>
@@ -112,7 +115,7 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
             />
           </div>
 
-          <div className="mt-5">
+          <div className="mt-5 max-w-[75ch]">
             <TextAreaField
               rows={3}
               noPlaceholder
@@ -163,7 +166,10 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
             personvernkonsekvenser (PVK).
           </BodyLong>
 
-          <ReadMore className="mt-3" header="Trenger vi å snakke direkte med databehandlere?">
+          <ReadMore
+            className="mt-3 max-w-[75ch]"
+            header="Trenger vi å snakke direkte med databehandlere?"
+          >
             Noe her om hvor grensa går, særlig mtp avtaler som NAV kan ha med store aktører — IT og
             Anskaffelse har egne sider som vi ev. kunne lenke til.
           </ReadMore>
@@ -176,7 +182,7 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
             />
           </div>
 
-          <div className="mt-3">
+          <div className="mt-3 max-w-[75ch]">
             <TextAreaField
               rows={3}
               noPlaceholder

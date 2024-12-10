@@ -24,7 +24,7 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
 
   return (
     <div>
-      <Accordion>
+      <Accordion className="max-w-[75ch]">
         {risikoscenarioList.map((risikoscenario, index) => (
           <Accordion.Item
             defaultOpen={defaultOpen}

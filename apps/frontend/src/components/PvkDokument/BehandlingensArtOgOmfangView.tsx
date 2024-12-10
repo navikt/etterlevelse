@@ -91,14 +91,14 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
             )}
           </Field>
 
-          <ReadMore className="mt-5" header="Hvordan kan vi komme med gode estimater?">
+          <ReadMore className="mt-5 max-w-[75ch]" header="Hvordan kan vi komme med gode estimater?">
             Det blir ofte vanskelig å tallfeste noen personkategorier, for eksempel når det er snakk
             om antall brukere eller saksbehandlere. Det er tilstrekkelig å oppgi ca. antall. Hvis du
             er usikker på hvor du faktisk finner tall på hvor mange som kan ha tilgang, kan du …
             [good advice goes here]
           </ReadMore>
 
-          <div className="mt-3">
+          <div className="mt-5 max-w-[75ch]">
             <TextAreaField
               rows={3}
               noPlaceholder
@@ -107,7 +107,7 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
             />
           </div>
 
-          <div className="mt-3">
+          <div className="mt-5 max-w-[75ch]">
             <TextAreaField
               rows={3}
               noPlaceholder
@@ -116,7 +116,7 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
             />
           </div>
 
-          <div className="mt-3">
+          <div className="mt-5 max-w-[75ch]">
             <TextAreaField
               rows={3}
               noPlaceholder
