@@ -32,7 +32,7 @@ export const CreateRisikoscenarioModal = (props: IProps) => {
 
       {isEdit && (
         <RisikoscenarioModalForm
-          headerText="Opprett nytt øvirg risikoscenario"
+          headerText="Opprett nytt risikoscenario"
           isOpen={isEdit}
           setIsOpen={setIsEdit}
           submit={submit}
