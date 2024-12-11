@@ -6,12 +6,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.domain.TilbakemeldingStatus;
 import no.nav.data.etterlevelse.krav.dto.CreateTilbakemeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.EditTilbakemeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingNewMeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingResponse;
+import no.nav.data.integration.slack.SlackService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +35,7 @@ public class TilbakemeldingController {
 
     private final TilbakemeldingService tilbakemeldingService;
     private final TilbakemeldingValidator validator;
+    private final SlackService slackService;
 
     // Tilbakemelding
 
@@ -98,6 +101,17 @@ public class TilbakemeldingController {
         log.info("Update tilbakemelding status");
         var tilbakemelding = tilbakemeldingService.updateTilbakemeldingStatusAndEndretKrav(tilbakeMeldingId, status, endretkrav);
         return ResponseEntity.ok(tilbakemelding.toResponse());
+    }
+    
+    @Operation(summary = "Initiates sending of all pending slack messages (admin use only)")
+    @ApiResponse(description = "Pending slack messages sent")
+    @GetMapping("/flushSlack")
+    public void flushSlack() {
+        if (!SecurityUtils.isAdmin()) {
+            log.info("Ignoring request to flush slack messages: user not admin");
+        }
+        log.info("Requested to flush pending slack messages");
+        slackService.sendAll();
     }
 
     static class TilbakemeldingPage extends RestResponsePage<TilbakemeldingResponse> {
