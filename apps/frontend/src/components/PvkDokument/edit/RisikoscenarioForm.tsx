@@ -1,5 +1,6 @@
-import { Button, Heading, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
+import { Button, ErrorSummary, Heading, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
+import React, { useState } from 'react'
 import { mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../../constants'
 import { TextAreaField } from '../../common/Inputs'
@@ -15,23 +16,26 @@ interface IProps {
 export const RisikoscenarioForm = (props: IProps) => {
   const { initialValues, submit, onClose } = props
 
+  const errorSummaryRef = React.useRef<HTMLDivElement>(null)
+  const [validateOnBlur, setValidateOnBlur] = useState(false)
+
   return (
     <div>
       <Formik
-        validateOnBlur={false}
+        validateOnBlur={validateOnBlur}
         validateOnChange={false}
         onSubmit={submit}
         validationSchema={risikoscenarioCreateValidation()}
         initialValues={mapRisikoscenarioToFormValue(initialValues)}
       >
-        {({ submitForm }) => (
+        {({ submitForm, errors }) => (
           <Form>
             <div>
               <TextAreaField
                 rows={1}
                 name="navn"
                 label="Navngi risikoscenarioet"
-                caption="Velg et navn som gjør scenarioet lett å skille fra andre "
+                caption="Velg et navn som gjør scenarioet lett å skille fra andre"
               />
 
               <div className="mt-3">
@@ -124,8 +128,32 @@ export const RisikoscenarioForm = (props: IProps) => {
               </div>
             </div>
 
+            {Object.values(errors).some(Boolean) && (
+              <div className="mt-5">
+                <ErrorSummary
+                  ref={errorSummaryRef}
+                  heading="Du må rette disse feilene før du kan fortsette"
+                >
+                  {Object.entries(errors)
+                    .filter(([, error]) => error)
+                    .map(([key, error]) => (
+                      <ErrorSummary.Item href={`#${key}`} key={key}>
+                        {error as string}
+                      </ErrorSummary.Item>
+                    ))}
+                </ErrorSummary>
+              </div>
+            )}
+
             <div className="flex gap-2 mt-5">
-              <Button type="button" onClick={() => submitForm()}>
+              <Button
+                type="button"
+                onClick={() => {
+                  errorSummaryRef.current?.focus()
+                  setValidateOnBlur(true)
+                  submitForm()
+                }}
+              >
                 Lagre risikoscenario
               </Button>
               <Button onClick={() => onClose()} type="button" variant="secondary">
