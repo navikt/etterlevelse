@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.etterlevelse.varsel.domain.SlackChannel;
@@ -13,62 +15,79 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
-public class SlackDtos {
+public final class SlackDtos {
+    
+    // FIXME
+    
+    /*
+     * OBS!!! Instanser av noen av klassen her (Block m/ innhold) vil bli serialisert til en arbeidstabell, og der kan 
+     * de være i flere dager. Derfor:
+     * Ikke gjør endringer her som medfører at eksisterende rader i arbeidstabellen ikke lar seg deserialisere! 
+     * Ikke gjør endringer her som medfører at eksisterende rader i arbeidstabellen ikke lar seg deserialisere! 
+     * Ikke gjør endringer her som medfører at eksisterende rader i arbeidstabellen ikke lar seg deserialisere! 
+     * Se no.nav.data.etterlevelse.krav.TilbakemeldingController.flushSlack() for manuell tømmin av arbeidstabellen.
+     */
 
-    @Value
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class PostMessageRequest {
+        private String channel = null;
+        private List<Block> blocks = null;
+    }
 
-        String channel;
-        List<Block> blocks;
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Block {
 
-        @Value
-        public static class Block {
+        private BlockType type = null;
+        @JsonInclude(Include.NON_NULL)
+        private Text text = null;
 
-            public static Block header(String text) {
-                return new Block(BlockType.header, Text.plain(text));
-            }
+        public static Block header(String text) {
+            return new Block(BlockType.header, Text.plain(text));
+        }
 
-            public static Block text(String text) {
-                return new Block(BlockType.section, Text.markdown(text));
-            }
+        public static Block text(String text) {
+            return new Block(BlockType.section, Text.markdown(text));
+        }
 
-            public static Block divider() {
-                return new Block(BlockType.divider, null);
-            }
+        public static Block divider() {
+            return new Block(BlockType.divider, null);
+        }
 
-            /**
-             * Create Block with text, keeping other properties
-             */
-            public Block withText(String newText) {
-                Assert.isTrue(text != null, "this is not a text block");
-                return new Block(type, new Text(text.type, newText));
-            }
+        /**
+         * Create Block with text, keeping other properties
+         */
+        public Block withText(String newText) {
+            Assert.isTrue(text != null, "this is not a text block");
+            return new Block(type, new Text(text.type, newText));
+        }
+    }
 
-            public enum BlockType {
-                header, section, divider
-            }
+    public enum BlockType {
+        header, section, divider
+    }
 
-            BlockType type;
-            @JsonInclude(Include.NON_NULL)
-            Text text;
+    public enum TextType {
+        mrkdwn, plain_text
+    }
 
-            @Value
-            public static class Text {
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Text {
 
-                enum TextType {mrkdwn, plain_text}
+        private TextType type;
+        private String text;
 
-                TextType type;
-                String text;
+        public static Text plain(String text) {
+            return new Text(TextType.plain_text, text);
+        }
 
-                public static Text plain(String text) {
-                    return new Text(TextType.plain_text, text);
-                }
-
-                public static Text markdown(String text) {
-                    return new Text(TextType.mrkdwn, text);
-
-                }
-            }
+        public static Text markdown(String text) {
+            return new Text(TextType.mrkdwn, text);
         }
     }
 

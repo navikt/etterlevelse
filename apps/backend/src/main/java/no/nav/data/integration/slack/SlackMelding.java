@@ -11,9 +11,8 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import no.nav.data.integration.slack.dto.SlackDtos.PostMessageRequest.Block;
+import no.nav.data.integration.slack.dto.SlackDtos.Block;
 import org.hibernate.annotations.Type;
 
 import java.util.List;
@@ -30,6 +29,9 @@ import java.util.List;
 @Entity
 @Table(name = "SLACK_MELDING")
 public class SlackMelding {
+    
+    public static final int PRIORITY_LOW = 0;
+    public static final int PRIORITY_HIGH = 10;
 
     @Id
     @SequenceGenerator(name = "slack_melding_id_seq", sequenceName = "slack_melding_id_seq", allocationSize = 1)
@@ -42,9 +44,11 @@ public class SlackMelding {
     @Builder.Default
     private SlackMeldingData data = new SlackMeldingData();
     
-    public SlackMelding(String mottager, boolean tilKanal, List<Block> blocks) {
+    public SlackMelding(String mottager, boolean tilKanal, int prioritet, List<Block> blocks) {
+        data = new SlackMeldingData();
         data.mottager = mottager;
         data.sendTilKanal = tilKanal;
+        data.prioritet = prioritet;
         data.blocks = blocks;
     }
 
@@ -53,8 +57,18 @@ public class SlackMelding {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SlackMeldingData {
+        
+        /*
+         * OBS!!! Instanser av denne klassen vil bli serialisert til en arbeidstabell, og der kan de være i flere dager. Derfor:
+         * Ikke gjør endringer her som medfører at eksisterende rader i arbeidstabellen ikke lar seg deserialisere! 
+         * Ikke gjør endringer her som medfører at eksisterende rader i arbeidstabellen ikke lar seg deserialisere! 
+         * Ikke gjør endringer her som medfører at eksisterende rader i arbeidstabellen ikke lar seg deserialisere!
+         * Se no.nav.data.etterlevelse.krav.TilbakemeldingController.flushSlack() for manuell tømmin av arbeidstabellen.
+         */
+        
         private String mottager;
         private boolean sendTilKanal;
+        private int prioritet; // == 0 → send bulk, >= 10 → send ASAP
         private List<Block> blocks;
     }
     

@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
 import lombok.Value;
-import no.nav.data.integration.slack.dto.SlackDtos.PostMessageRequest.Block;
+import no.nav.data.integration.slack.dto.SlackDtos.Block;
 
 import java.util.ArrayList;
 import java.util.Arrays;
