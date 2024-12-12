@@ -11,24 +11,28 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   const { etterlevelseDokumentasjonId, activeStep, setActiveStep } = props
   return (
     <div>
-      <Heading level="1" size="medium" className="mb-5">
-        Oppsummering av alle risikoscenarioer og tiltak
-      </Heading>
+      <div className="flex justify-center">
+        <div>
+          <Heading level="1" size="medium" className="mb-5">
+            Oppsummering av alle risikoscenarioer og tiltak
+          </Heading>
 
-      <BodyShort className="mt-5">
-        Her får dere oversikt over alle risikoscenarioer og tiltak som er lagt inn. Dere kan velge å
-        se på:
-      </BodyShort>
+          <BodyShort className="mt-5">
+            Her får dere oversikt over alle risikoscenarioer og tiltak som er lagt inn. Dere kan
+            velge å se på:
+          </BodyShort>
 
-      <List>
-        <List.Item>
-          Etterlevelseskrav, og hvilke risikoscenarioer og tiltak som finnes ved hvert krav
-        </List.Item>
-        <List.Item>
-          Etterlevelseskrav, og hvilke risikoscenarioer og tiltak som finnes ved hvert krav
-        </List.Item>
-        <List.Item>Tiltak, inkludert hvilke tiltak som savner ansvarlig eller frist.</List.Item>
-      </List>
+          <List>
+            <List.Item>
+              Etterlevelseskrav, og hvilke risikoscenarioer og tiltak som finnes ved hvert krav
+            </List.Item>
+            <List.Item>
+              Etterlevelseskrav, og hvilke risikoscenarioer og tiltak som finnes ved hvert krav
+            </List.Item>
+            <List.Item>Tiltak, inkludert hvilke tiltak som savner ansvarlig eller frist.</List.Item>
+          </List>
+        </div>
+      </div>
 
       <Tabs defaultValue="etterlevelseskrav" fill>
         <Tabs.List>
@@ -46,12 +50,15 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
           Her skal tiltak vises
         </Tabs.Panel>
       </Tabs>
-
-      <FormButtons
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-        activeStep={activeStep}
-        setActiveStep={setActiveStep}
-      />
+      <div className="flex justify-center">
+        <div>
+          <FormButtons
+            etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+          />
+        </div>
+      </div>
     </div>
   )
 }

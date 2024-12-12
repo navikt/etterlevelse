@@ -39,38 +39,42 @@ export const SendInnView = (props: IProps) => {
     >
       {({ submitForm }) => (
         <Form>
-          <Heading level="1" size="medium" className="mb-5">
-            Les og send inn
-          </Heading>
-          <BodyLong>
-            Her kan dere lese over det som er lagt inn i PVK-en. Hvis dere oppdager feil eller
-            mangel, er det mulig å gå tilbake og endre svar. Til slutt er det plass til å legge til
-            ytterligere informasjon dersom det er aktuelt.
-          </BodyLong>
+          <div className="flex justify-center">
+            <div>
+              <Heading level="1" size="medium" className="mb-5">
+                Les og send inn
+              </Heading>
+              <BodyLong>
+                Her kan dere lese over det som er lagt inn i PVK-en. Hvis dere oppdager feil eller
+                mangel, er det mulig å gå tilbake og endre svar. Til slutt er det plass til å legge
+                til ytterligere informasjon dersom det er aktuelt.
+              </BodyLong>
 
-          <ArtOgOmFangSummary
-            personkategorier={personkategorier}
-            updateTitleUrlAndStep={updateTitleUrlAndStep}
-          />
+              <ArtOgOmFangSummary
+                personkategorier={personkategorier}
+                updateTitleUrlAndStep={updateTitleUrlAndStep}
+              />
 
-          <InnvolveringSummary
-            databehandlere={databehandlere}
-            personkategorier={personkategorier}
-            updateTitleUrlAndStep={updateTitleUrlAndStep}
-          />
+              <InnvolveringSummary
+                databehandlere={databehandlere}
+                personkategorier={personkategorier}
+                updateTitleUrlAndStep={updateTitleUrlAndStep}
+              />
 
-          <div className="mt-5">
-            <Button type="button" onClick={() => {}}>
-              Send til PVO
-            </Button>
+              <div className="mt-5">
+                <Button type="button" onClick={() => {}}>
+                  Send til PVO
+                </Button>
+              </div>
+
+              <FormButtons
+                etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                activeStep={activeStep}
+                setActiveStep={setActiveStep}
+                submitForm={submitForm}
+              />
+            </div>
           </div>
-
-          <FormButtons
-            etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-            activeStep={activeStep}
-            setActiveStep={setActiveStep}
-            submitForm={submitForm}
-          />
         </Form>
       )}
     </Formik>
