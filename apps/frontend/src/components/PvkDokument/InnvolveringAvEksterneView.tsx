@@ -105,8 +105,8 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
                 className="my-8 max-w-[75ch]"
                 header="Slik kan dere involvere de forskjellige gruppene"
               >
-                Et eller annet fornuftig råd her om f. eks. høre med Sentral brukerutvalg … osv.
-                [Lenke til brosjyre på Navet]
+                Her står noen gode råd om hvordan du skal involvere de du behandler
+                personopplysninger om.
               </ReadMore>
 
               <div className="mt-3">
@@ -172,8 +172,9 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
                 className="mt-3 max-w-[75ch]"
                 header="Trenger vi å snakke direkte med databehandlere?"
               >
-                Noe her om hvor grensa går, særlig mtp avtaler som NAV kan ha med store aktører — IT
-                og Anskaffelse har egne sider som vi ev. kunne lenke til.
+                Gode råd her om hvordan bestemme om man må ta en egen prat med databehandlere,
+                kontra tilfeller hvor NAV kan ha avtaler med store aktører. Lenker til IT og
+                Anskaffelse sine sider, osv.
               </ReadMore>
 
               <div className="mt-5">

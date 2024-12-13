@@ -101,8 +101,7 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
               >
                 Det blir ofte vanskelig å tallfeste noen personkategorier, for eksempel når det er
                 snakk om antall brukere eller saksbehandlere. Det er tilstrekkelig å oppgi ca.
-                antall. Hvis du er usikker på hvor du faktisk finner tall på hvor mange som kan ha
-                tilgang, kan du … [good advice goes here]
+                antall.
               </ReadMore>
 
               <div className="mt-5 max-w-[75ch]">
