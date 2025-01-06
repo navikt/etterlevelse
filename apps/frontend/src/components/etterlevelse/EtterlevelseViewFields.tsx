@@ -130,6 +130,22 @@ const KriterieBegrunnelse = (props: IKriterieBegrunnelseProps) => {
         </ReadMore>
       </div>
 
+      {suksesskriterieBegrunnelse.veiledningsTekst && (
+        <div className="my-5">
+          <Alert variant="info">
+            <Label>NAVs tolkning av loven og besluttede praksiser i denne konteksten:</Label>
+            <Markdown source={suksesskriterieBegrunnelse.veiledningsTekst} />
+          </Alert>
+        </div>
+      )}
+
+      {suksesskriterieBegrunnelse.veiledningsTekst2 && (
+        <Alert variant="info">
+          <Label>Slik kan suksesskriteriet etterleves:</Label>
+          <Markdown source={suksesskriterieBegrunnelse.veiledningsTekst2} />
+        </Alert>
+      )}
+
       <div className="flex w-full">
         {!suksesskriterie.behovForBegrunnelse && (
           <div className="w-full mt-8 ">

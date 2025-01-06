@@ -22,7 +22,6 @@ import {
   ISuksesskriterieBegrunnelse,
 } from '../../../constants'
 // import { ampli } from '../../../services/Amplitude'
-import { user } from '../../../services/User'
 import { useDebouncedState } from '../../../util/hooks/customHooks'
 import { FieldWrapper } from '../../common/Inputs'
 import { LabelWithDescription } from '../../common/LabelWithTooltip'
@@ -331,8 +330,6 @@ const KriterieBegrunnelse = ({
                 )}
                 {veiledningsTekstMode === 'view' && (
                   <Alert variant="info">
-                    <Label>Følgende veiledning er skrevet av {user.getName()}</Label>
-                    <br />
                     <Label>
                       NAVs tolkning av loven og besluttede praksiser i denne konteksten:
                     </Label>
@@ -364,8 +361,6 @@ const KriterieBegrunnelse = ({
                 )}
                 {veiledningsTekst2Mode === 'view' && (
                   <Alert variant="info">
-                    <Label>Følgende veiledning er skrevet av {user.getName()}</Label>
-                    <br />
                     <Label>Slik kan suksesskriteriet etterleves:</Label>
                     <Markdown source={veiledningTekst2} />
                   </Alert>
