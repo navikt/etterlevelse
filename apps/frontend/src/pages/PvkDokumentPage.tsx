@@ -1,7 +1,7 @@
 import { Alert, Loader, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet'
+
 import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
@@ -15,6 +15,7 @@ import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { IBreadCrumbPath, IDataBehandler, IExternalCode } from '../constants'
 import { user } from '../services/User'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
+import { Helmet } from 'react-helmet-async'
 
 export const StepTitle: string[] = [
   'Oversikt og status',
