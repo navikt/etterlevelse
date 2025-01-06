@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client'
-import { Helmet } from 'react-helmet-async'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter } from 'react-router-dom'
 import AppRoutes from './AppRoutes'
 import { apolloClient } from './api/ApolloClient'
@@ -17,21 +17,23 @@ const Main = () => {
   useAwait(codelistUtils.fetchData())
 
   return (
-    <ApolloProvider client={apolloClient}>
-      <BrowserRouter window={window}>
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>Etterlevelse</title>
-        </Helmet>
+    <HelmetProvider>
+      <ApolloProvider client={apolloClient}>
+        <BrowserRouter window={window}>
+          <Helmet>
+            <meta charSet="utf-8" />
+            <title>Etterlevelse</title>
+          </Helmet>
 
-        <div className="flex flex-col w-full items-center min-h-screen bg-white">
-          <Header />
-          <AppRoutes />
-          <Footer />
-        </div>
-      </BrowserRouter>
-      <ErrorModal />
-    </ApolloProvider>
+          <div className="flex flex-col w-full items-center min-h-screen bg-white">
+            <Header />
+            <AppRoutes />
+            <Footer />
+          </div>
+        </BrowserRouter>
+        <ErrorModal />
+      </ApolloProvider>
+    </HelmetProvider>
   )
 }
 
