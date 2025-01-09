@@ -65,6 +65,18 @@ export const updateRiskoscenario = async (risikoscenario: IRisikoscenario) => {
   ).data
 }
 
+export const updateKravForRiskoscenarioer = async (
+  kravnummer: number,
+  risikoscenarioIder: string[]
+) => {
+  return (
+    await axios.put<IRisikoscenario[]>(`${env.backendBaseUrl}/risikoscenario/update/relevantKrav`, {
+      kravnummer: kravnummer,
+      risikoscenarioIder: risikoscenarioIder,
+    })
+  ).data
+}
+
 export const deleteRisikoscenario = async (id: string) => {
   return (await axios.delete<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario/${id}`)).data
 }

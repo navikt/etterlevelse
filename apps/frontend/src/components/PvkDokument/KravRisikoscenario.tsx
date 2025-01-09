@@ -1,8 +1,9 @@
-import { Accordion, Alert, Button, ReadMore, Select } from '@navikt/ds-react'
+import { Accordion, Alert, Button, ReadMore } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, TKravQL } from '../../constants'
 import CreateRisikoscenario from './edit/CreateRisikoscenario'
+import LeggTilEksisterendeRisikoscenario from './risikoscenario/LeggTilEksisterendeRisikoscenario'
 import RisikoscenarioAccordionContent from './risikoscenario/RisikoscenarioAccordianContent'
 
 interface IProps {
@@ -62,27 +63,10 @@ export const KravRisikoscenario = (props: IProps) => {
         )}
 
         {isLeggTilEksisterendeMode && (
-          //LAGE EGEN KOMPONENT MED FORM
-          <div>
-            <Select label="Legg til eksisterende risikoscenario">
-              <option value=""></option>
-              {risikoscenarioer.map((risikoscenario) => {
-                return (
-                  <option key={risikoscenario.id} value={risikoscenario.id}>
-                    {risikoscenario.navn}
-                  </option>
-                )
-              })}
-            </Select>
-
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => setIsLeggTilEksisterendeMode(false)}
-            >
-              avbyrt
-            </Button>
-          </div>
+          <LeggTilEksisterendeRisikoscenario
+            risikoscenarioer={risikoscenarioer}
+            setIsLeggTilEksisterendeMode={setIsLeggTilEksisterendeMode}
+          />
         )}
 
         {!isLeggTilEksisterendeMode && (
