@@ -1,4 +1,4 @@
-import { Accordion, Alert, BodyLong, Button, ReadMore } from '@navikt/ds-react'
+import { Accordion, Alert, Button, ReadMore, Select } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, TKravQL } from '../../constants'
@@ -15,7 +15,7 @@ export const KravRisikoscenario = (props: IProps) => {
   const { krav, pvkDokument, setIsPreview } = props
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
-  const [, setRisikoscenarioer] = useState<IRisikoscenario[]>([])
+  const [risikoscenarioer, setRisikoscenarioer] = useState<IRisikoscenario[]>([])
   const [risikoscenerioForKrav, setRisikoscenarioForKrav] = useState<IRisikoscenario[]>([])
 
   useEffect(() => {
@@ -23,14 +23,22 @@ export const KravRisikoscenario = (props: IProps) => {
       if (pvkDokument && krav) {
         getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.KRAV).then(
           (response) => {
-            setRisikoscenarioer(response.content)
+            setRisikoscenarioer(
+              response.content.filter(
+                (risikoscenario) =>
+                  risikoscenario.relevanteKravNummer.filter(
+                    (relevantekrav) => relevantekrav.kravNummer !== krav.kravNummer
+                  ).length > 0
+              )
+            )
             setRisikoscenarioForKrav(
-              response.content.filter((risikoscenario) =>
-                risikoscenario.relevanteKravNummer.filter(
-                  (relevantekrav) =>
-                    relevantekrav.kravNummer === krav.kravNummer &&
-                    relevantekrav.kravVersjon === krav.kravVersjon
-                )
+              response.content.filter(
+                (risikoscenario) =>
+                  risikoscenario.relevanteKravNummer.filter(
+                    (relevantekrav) =>
+                      relevantekrav.kravNummer === krav.kravNummer &&
+                      relevantekrav.kravVersjon === krav.kravVersjon
+                  ).length > 0
               )
             )
           }
@@ -54,8 +62,19 @@ export const KravRisikoscenario = (props: IProps) => {
         )}
 
         {isLeggTilEksisterendeMode && (
+          //LAGE EGEN KOMPONENT MED FORM
           <div>
-            <BodyLong>Legg til eksisterende risikoscenario</BodyLong>
+            <Select label="Legg til eksisterende risikoscenario">
+              <option value=""></option>
+              {risikoscenarioer.map((risikoscenario) => {
+                return (
+                  <option key={risikoscenario.id} value={risikoscenario.id}>
+                    {risikoscenario.navn}
+                  </option>
+                )
+              })}
+            </Select>
+
             <Button
               type="button"
               variant="secondary"
