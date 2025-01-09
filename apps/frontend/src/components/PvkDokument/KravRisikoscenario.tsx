@@ -1,6 +1,7 @@
 import { Accordion, Alert, BodyLong, Button, ReadMore } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { IPvkDokument, IRisikoscenario, TKravQL } from '../../constants'
+import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
+import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, TKravQL } from '../../constants'
 import CreateRisikoscenario from './edit/CreateRisikoscenario'
 import RisikoscenarioAccordionContent from './risikoscenario/RisikoscenarioAccordianContent'
 
@@ -12,13 +13,30 @@ interface IProps {
 
 export const KravRisikoscenario = (props: IProps) => {
   const { krav, pvkDokument, setIsPreview } = props
-  const [risikoscenarioer, setRisikoscenarioer] = useState<IRisikoscenario[]>([])
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
+  const [, setRisikoscenarioer] = useState<IRisikoscenario[]>([])
+  const [risikoscenerioForKrav, setRisikoscenarioForKrav] = useState<IRisikoscenario[]>([])
 
   useEffect(() => {
-    //logic for å hente alle risikoscenarioer knyttet til kravet
-    setRisikoscenarioer([])
+    ;(async () => {
+      if (pvkDokument && krav) {
+        getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.KRAV).then(
+          (response) => {
+            setRisikoscenarioer(response.content)
+            setRisikoscenarioForKrav(
+              response.content.filter((risikoscenario) =>
+                risikoscenario.relevanteKravNummer.filter(
+                  (relevantekrav) =>
+                    relevantekrav.kravNummer === krav.kravNummer &&
+                    relevantekrav.kravVersjon === krav.kravVersjon
+                )
+              )
+            )
+          }
+        )
+      }
+    })()
   }, [krav, pvkDokument])
 
   return (
@@ -29,7 +47,7 @@ export const KravRisikoscenario = (props: IProps) => {
       <ReadMore header="Slik dokumenterer dere risikoscenarioer og tiltak">WIP</ReadMore>
 
       <div className="mt-5">
-        {!isCreateMode && !isLeggTilEksisterendeMode && risikoscenarioer.length === 0 && (
+        {!isCreateMode && !isLeggTilEksisterendeMode && risikoscenerioForKrav.length === 0 && (
           <Alert variant="info">
             Foreløpig finnes det ingen risikoscenarioer tilknyttet dette kravet.
           </Alert>
@@ -39,8 +57,8 @@ export const KravRisikoscenario = (props: IProps) => {
           <CreateRisikoscenario
             krav={krav}
             pvkDokumentId={pvkDokument.id}
-            risikoscenarioer={risikoscenarioer}
-            setRisikoscenarioer={setRisikoscenarioer}
+            risikoscenarioer={risikoscenerioForKrav}
+            setRisikoscenarioer={setRisikoscenarioForKrav}
             setIsCreateMode={setIsCreateMode}
           />
         )}
@@ -61,7 +79,7 @@ export const KravRisikoscenario = (props: IProps) => {
         {!isCreateMode && !isLeggTilEksisterendeMode && (
           <div>
             <Accordion>
-              {risikoscenarioer.map((risikoscenario, index) => (
+              {risikoscenerioForKrav.map((risikoscenario, index) => (
                 <Accordion.Item id={risikoscenario.id} key={index + '_' + risikoscenario.navn}>
                   <Accordion.Header>{risikoscenario.navn}</Accordion.Header>
                   <Accordion.Content>
