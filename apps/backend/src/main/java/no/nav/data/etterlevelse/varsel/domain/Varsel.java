@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
 import lombok.Value;
-import no.nav.data.integration.slack.dto.SlackDtos.PostMessageRequest.Block;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,12 +39,12 @@ public class Varsel {
             this.urls = Arrays.asList(urls);
         }
 
-        private String toSlack() {
+        public String toSlack() {
             var urlsFormatted = convert(urls, u -> "<%s%s|%s>".formatted(u.url, source(u), u.name));
             return val.formatted(urlsFormatted.toArray());
         }
 
-        private String toHtml() {
+        public String toHtml() {
             var urlsFormatted = convert(urls, u -> "<a href=\"%s%s\">%s</a>".formatted(u.url, source(u), u.name));
             return val.formatted(urlsFormatted.toArray());
         }
@@ -56,24 +55,13 @@ public class Varsel {
 
         @Value
         public static class VarselUrl {
-
             String url;
             String name;
-
             public static VarselUrl url(String url, String name) {
                 return new VarselUrl(url, name);
             }
         }
 
-    }
-
-    public List<Block> toSlack() {
-        var blocks = new ArrayList<Block>();
-        blocks.add(Block.header(title));
-
-        paragraphs.forEach(p -> blocks.add(Block.text(p.toSlack())));
-
-        return blocks;
     }
 
     public String toHtml() {

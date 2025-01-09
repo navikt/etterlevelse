@@ -109,6 +109,7 @@ export const EtterlevelseKravView = (props: IProps) => {
   const [isPrioritised, setIsPrioritised] = useState<boolean>(false)
   const [isPreview, setIsPreview] = useState<boolean>(false)
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
+
   const location = useLocation()
   const navigate = useNavigate()
 

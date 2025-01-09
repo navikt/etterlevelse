@@ -12,12 +12,12 @@ import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.common.web.TraceHeaderRequestInterceptor;
 import no.nav.data.etterlevelse.varsel.domain.SlackChannel;
 import no.nav.data.etterlevelse.varsel.domain.SlackUser;
+import no.nav.data.integration.slack.SlackMeldingData.MeldingPart;
 import no.nav.data.integration.slack.dto.SlackDtos.Channel;
 import no.nav.data.integration.slack.dto.SlackDtos.CreateConversationRequest;
 import no.nav.data.integration.slack.dto.SlackDtos.CreateConversationResponse;
 import no.nav.data.integration.slack.dto.SlackDtos.ListChannelResponse;
 import no.nav.data.integration.slack.dto.SlackDtos.PostMessageRequest;
-import no.nav.data.integration.slack.dto.SlackDtos.PostMessageRequest.Block;
 import no.nav.data.integration.slack.dto.SlackDtos.PostMessageResponse;
 import no.nav.data.integration.slack.dto.SlackDtos.Response;
 import no.nav.data.integration.slack.dto.SlackDtos.UserResponse;
@@ -63,8 +63,8 @@ public class SlackClient {
     @Autowired
     private Environment env;
 
-    private static final int MAX_BLOCKS_PER_MESSAGE = 50;
-    private static final int MAX_CHARS_PER_BLOCK = 3000;
+    private static final int MAX_PARTS_PER_MESSAGE = 50;
+    private static final int MAX_CHARS_PER_PART = 3000;
     private static final String SINGLETON = "SINGLETON";
 
     private final TeamcatResourceClient resourceClient;
@@ -190,48 +190,48 @@ public class SlackClient {
         }
     }
 
-    public void sendMessageToUser(String email, List<Block> blocks) {
+    public void sendMessageToUser(String email, List<MeldingPart> parts) {
         try {
             var userId = getUserByEmail(email).getId();
             if (userId == null) {
                 throw new NotFoundException("Couldn't find slack user for email" + email);
             }
-            sendMessageToUserId(userId, blocks);
+            sendMessageToUserId(userId, parts);
         } catch (Exception e) {
-            throw new TechnicalException("Failed to send message to " + email + " " + JsonUtils.toJson(blocks), e);
+            throw new TechnicalException("Failed to send message to " + email + " " + JsonUtils.toJson(parts), e);
         }
     }
 
-    public void sendMessageToUserId(String userId, List<Block> blocks) {
+    public void sendMessageToUserId(String userId, List<MeldingPart> parts) {
         try {
             var channel = openConversation(userId);
-            List<List<Block>> partitions = ListUtils.partition(splitLongBlocks(blocks), MAX_BLOCKS_PER_MESSAGE);
+            List<List<MeldingPart>> partitions = ListUtils.partition(splitLongParts(parts), MAX_PARTS_PER_MESSAGE);
             partitions.forEach(partition -> doSendMessageToChannel(channel, partition));
         } catch (Exception e) {
-            throw new TechnicalException("Failed to send message to " + userId + " " + JsonUtils.toJson(blocks), e);
+            throw new TechnicalException("Failed to send message to " + userId + " " + JsonUtils.toJson(parts), e);
         }
     }
 
-    public void sendMessageToChannel(String channel, List<Block> blocks) {
+    public void sendMessageToChannel(String channel, List<MeldingPart> parts) {
         try {
-            List<List<Block>> partitions = ListUtils.partition(splitLongBlocks(blocks), MAX_BLOCKS_PER_MESSAGE);
+            List<List<MeldingPart>> partitions = ListUtils.partition(splitLongParts(parts), MAX_PARTS_PER_MESSAGE);
 
             String channelToRecieve = securityProperties.isDev() ? env.getProperty("client.devmail.slack-channel-id") : channel;
 
             partitions.forEach(partition -> doSendMessageToChannel(channelToRecieve, partition));
 
         } catch (Exception e) {
-            throw new TechnicalException("Failed to send message to " + channel + " " + JsonUtils.toJson(blocks), e);
+            throw new TechnicalException("Failed to send message to " + channel + " " + JsonUtils.toJson(parts), e);
         }
     }
 
-    private void doSendMessageToChannel(String channel, List<Block> blockKit) {
+    private void doSendMessageToChannel(String channel, List<MeldingPart> parts) {
         try {
             log.info("Sending slack message to {}", channel);
             if (securityProperties.isDev()) {
-                blockKit.add(0, Block.header("[DEV]"));
+                parts.add(0, MeldingPart.header("[DEV]"));
             }
-            var request = new PostMessageRequest(channel, blockKit);
+            var request = PostMessageRequest.createRequest(channel, parts);
             var response = restTemplate.postForEntity(POST_MESSAGE, request, PostMessageResponse.class);
             checkResponse(response);
         } catch (Exception e) {
@@ -256,26 +256,26 @@ public class SlackClient {
         return response.getBody();
     }
 
-    private List<Block> splitLongBlocks(List<Block> blocks) {
-        var newBlocks = new ArrayList<Block>();
-        for (Block block : blocks) {
-            if (block.getText() == null || block.getText().getText().length() <= MAX_CHARS_PER_BLOCK) {
-                newBlocks.add(block);
+    private List<MeldingPart> splitLongParts(List<MeldingPart> parts) {
+        var newParts = new ArrayList<MeldingPart>();
+        for (MeldingPart part : parts) {
+            if (part.getText() == null || part.getText().length() <= MAX_CHARS_PER_PART) {
+                newParts.add(part);
             } else {
-                var text = block.getText().getText();
+                var text = part.getText();
                 var lines = StringUtils.splitPreserveAllTokens(text, StringUtils.LF);
                 var sb = new StringBuilder(StringUtils.LF);
                 for (String line : lines) {
-                    if (sb.length() + line.length() >= MAX_CHARS_PER_BLOCK) {
-                        newBlocks.add(block.withText(sb.toString()));
+                    if (sb.length() + line.length() >= MAX_CHARS_PER_PART) {
+                        newParts.add(part.withText(sb.toString()));
                         sb = new StringBuilder(StringUtils.LF);
                     }
                     sb.append(line).append(StringUtils.LF);
                 }
-                newBlocks.add(block.withText(sb.toString()));
+                newParts.add(part.withText(sb.toString()));
             }
         }
-        return newBlocks;
+        return newParts;
     }
 
     @Scheduled(initialDelayString = "PT30S", fixedRateString = "PT1M")

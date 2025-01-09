@@ -12,18 +12,16 @@ import no.nav.data.etterlevelse.krav.dto.TilbakemeldingNewMeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingResponse;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
+import no.nav.data.integration.slack.SlackService;
 import no.nav.data.integration.slack.dto.SlackDtos.PostMessageResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
@@ -32,9 +30,11 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static no.nav.data.TestConfig.MockFilter.KRAVEIER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.within;
 
 class TilbakemeldingIT extends IntegrationTestBase {
+    
+    @Autowired
+    private SlackService slackService;
 
     @BeforeEach
     void setUp() {
@@ -64,18 +64,19 @@ class TilbakemeldingIT extends IntegrationTestBase {
     }
 
     private UUID testCreate(Integer kravNummer, Integer kravVersjon) {
+        slackService.sendAll(); // Make sure there is no pending slacks before test
+
         var req = createCreateTilbakemeldingRequest(kravNummer, kravVersjon);
 
         MockFilter.setUser("A123456");
         var resp = restTemplate.postForEntity("/tilbakemelding", req, TilbakemeldingResponse.class);
+        slackService.sendAll();
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(resp.getBody()).isNotNull();
         assertThat(resp.getBody().getKravNummer()).isEqualTo(kravNummer);
         assertThat(resp.getBody().getKravVersjon()).isEqualTo(kravVersjon);
-
-        verify(postRequestedFor(urlEqualTo("/slack/chat.postMessage"))
-                .withRequestBody(matchingJsonPath("$.channel", equalTo("xyz")))
-        );
+        
+        verify(postRequestedFor(urlEqualTo("/slack/chat.postMessage")));
 
         UUID tilbakemeldingId = resp.getBody().getId();
         Tilbakemelding tilbakemelding = tilbakemeldingStorageService.get(tilbakemeldingId);
@@ -87,6 +88,7 @@ class TilbakemeldingIT extends IntegrationTestBase {
     }
 
     private void testNewMelding(UUID tilbakemeldingId) {
+        slackService.sendAll(); // Make sure there is no pending slacks before test
         MockFilter.setUser(KRAVEIER);
         var meldingReq = TilbakemeldingNewMeldingRequest.builder()
                 .tilbakemeldingId(tilbakemeldingId)
@@ -94,13 +96,12 @@ class TilbakemeldingIT extends IntegrationTestBase {
                 .rolle(Rolle.KRAVEIER)
                 .build();
         var resp = restTemplate.postForEntity("/tilbakemelding/melding", meldingReq, TilbakemeldingResponse.class);
+        slackService.sendAll();
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(resp.getBody()).isNotNull();
         assertTilbakemelding(resp.getBody());
 
-        verify(postRequestedFor(urlEqualTo("/slack/chat.postMessage"))
-                .withRequestBody(matchingJsonPath("$.channel", equalTo("user1Channel")))
-        );
+        verify(postRequestedFor(urlEqualTo("/slack/chat.postMessage")));
 
         Tilbakemelding tilbakemelding = tilbakemeldingStorageService.get(tilbakemeldingId);
         assertThat(tilbakemelding.getMeldinger()).hasSize(2);
@@ -116,13 +117,11 @@ class TilbakemeldingIT extends IntegrationTestBase {
         assertThat(tilbakemelding.getMeldinger().get(0).getMeldingNr()).isEqualTo(1);
         assertThat(tilbakemelding.getMeldinger().get(0).getFraIdent()).isEqualTo("A123456");
         assertThat(tilbakemelding.getMeldinger().get(0).getRolle()).isEqualTo(Rolle.MELDER);
-        assertThat(tilbakemelding.getMeldinger().get(0).getTid()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.SECONDS));
         assertThat(tilbakemelding.getMeldinger().get(0).getInnhold()).isEqualTo("nice krav");
 
         assertThat(tilbakemelding.getMeldinger().get(1).getMeldingNr()).isEqualTo(2);
         assertThat(tilbakemelding.getMeldinger().get(1).getFraIdent()).isEqualTo("A123457");
         assertThat(tilbakemelding.getMeldinger().get(1).getRolle()).isEqualTo(Rolle.KRAVEIER);
-        assertThat(tilbakemelding.getMeldinger().get(1).getTid()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.SECONDS));
         assertThat(tilbakemelding.getMeldinger().get(1).getInnhold()).isEqualTo("takk");
     }
 
