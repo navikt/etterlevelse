@@ -13,11 +13,13 @@ import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
+import no.nav.data.pvk.risikoscenario.dto.KravRisikoscenarioRequest;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioRequest;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -124,6 +127,26 @@ public class RisikoscenarioController {
 
         var response = RisikoscenarioResponse.buildFrom(risikoscenario);
         getKravDataforRelevantKravList(response);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Set krav on risikoscenarioer")
+    @ApiResponse(responseCode = "201", description = "Krav set on risikoscenarioer")
+    @PutMapping("/update/relevantKrav")
+    @Transactional
+    public ResponseEntity<List<RisikoscenarioResponse>> updateRelevantKravForRisikoscenarioer(@RequestBody KravRisikoscenarioRequest request) {
+        log.info("Update relevantKrav for risikoscenarioer");
+        List<RisikoscenarioResponse> response = new ArrayList<>();
+
+        request.getRisikoscenarioIder().forEach(risikoscenarioId -> {
+            var risikoscenario = risikoscenarioService.get(UUID.fromString(risikoscenarioId));
+            var RelevanteKravNummer = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer();
+            RelevanteKravNummer.add(request.getKravnummer());
+            risikoscenario.getRisikoscenarioData().setRelevanteKravNummer(RelevanteKravNummer);
+            var updatedRisikoscenario = risikoscenarioService.save(risikoscenario, true);
+            response.add(RisikoscenarioResponse.buildFrom(updatedRisikoscenario));
+        });
 
         return ResponseEntity.ok(response);
     }
