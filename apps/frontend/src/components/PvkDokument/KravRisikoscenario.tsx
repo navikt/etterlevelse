@@ -48,19 +48,9 @@ export const KravRisikoscenario = (props: IProps) => {
 
       <div className="mt-5">
         {!isCreateMode && !isLeggTilEksisterendeMode && risikoscenerioForKrav.length === 0 && (
-          <Alert variant="info">
+          <Alert variant="info" className="mb-5">
             Foreløpig finnes det ingen risikoscenarioer tilknyttet dette kravet.
           </Alert>
-        )}
-
-        {isCreateMode && (
-          <CreateRisikoscenario
-            krav={krav}
-            pvkDokumentId={pvkDokument.id}
-            risikoscenarioer={risikoscenerioForKrav}
-            setRisikoscenarioer={setRisikoscenarioForKrav}
-            setIsCreateMode={setIsCreateMode}
-          />
         )}
 
         {isLeggTilEksisterendeMode && (
@@ -76,19 +66,33 @@ export const KravRisikoscenario = (props: IProps) => {
           </div>
         )}
 
-        {!isCreateMode && !isLeggTilEksisterendeMode && (
-          <div>
+        {!isLeggTilEksisterendeMode && (
+          <div className="mb-5">
             <Accordion>
               {risikoscenerioForKrav.map((risikoscenario, index) => (
                 <Accordion.Item id={risikoscenario.id} key={index + '_' + risikoscenario.navn}>
                   <Accordion.Header>{risikoscenario.navn}</Accordion.Header>
                   <Accordion.Content>
-                    <RisikoscenarioAccordionContent risikoscenario={risikoscenario} noCopyButton />
+                    <RisikoscenarioAccordionContent
+                      risikoscenario={risikoscenario}
+                      noCopyButton
+                      isCreateMode={isCreateMode}
+                    />
                   </Accordion.Content>
                 </Accordion.Item>
               ))}
             </Accordion>
           </div>
+        )}
+
+        {isCreateMode && (
+          <CreateRisikoscenario
+            krav={krav}
+            pvkDokumentId={pvkDokument.id}
+            risikoscenarioer={risikoscenerioForKrav}
+            setRisikoscenarioer={setRisikoscenarioForKrav}
+            setIsCreateMode={setIsCreateMode}
+          />
         )}
 
         {!isCreateMode && !isLeggTilEksisterendeMode && (

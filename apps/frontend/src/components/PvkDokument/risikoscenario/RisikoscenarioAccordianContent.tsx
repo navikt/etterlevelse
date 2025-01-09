@@ -11,11 +11,12 @@ import RisikoscenarioTag, {
 
 interface IProps {
   risikoscenario: IRisikoscenario
+  isCreateMode?: boolean
   noCopyButton?: boolean
 }
 
 export const RisikoscenarioAccordionContent = (props: IProps) => {
-  const { risikoscenario, noCopyButton } = props
+  const { risikoscenario, isCreateMode, noCopyButton } = props
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   const currentUrl = window.location.origin.toString() + window.location.pathname + '?steg=4'
@@ -71,15 +72,17 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
         <BodyLong className="mt-5">{activeRisikoscenario.konsekvensNivaaBegrunnelse}</BodyLong>
       )}
 
-      <Button
-        className="mt-5"
-        variant="tertiary"
-        type="button"
-        icon={<PencilIcon aria-hidden />}
-        onClick={() => setIsEditModalOpen(true)}
-      >
-        Redigèr risikoscenario
-      </Button>
+      {!isCreateMode && (
+        <Button
+          className="mt-5"
+          variant="tertiary"
+          type="button"
+          icon={<PencilIcon aria-hidden />}
+          onClick={() => setIsEditModalOpen(true)}
+        >
+          Redigèr risikoscenario
+        </Button>
+      )}
 
       {isEditModalOpen && (
         <RisikoscenarioModalForm
