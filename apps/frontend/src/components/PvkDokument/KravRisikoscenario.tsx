@@ -83,7 +83,7 @@ export const KravRisikoscenario = (props: IProps) => {
                 <Accordion.Item id={risikoscenario.id} key={index + '_' + risikoscenario.navn}>
                   <Accordion.Header>{risikoscenario.navn}</Accordion.Header>
                   <Accordion.Content>
-                    <RisikoscenarioAccordionContent risikoscenario={risikoscenario} />
+                    <RisikoscenarioAccordionContent risikoscenario={risikoscenario} noCopyButton />
                   </Accordion.Content>
                 </Accordion.Item>
               ))}

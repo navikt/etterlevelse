@@ -11,10 +11,11 @@ import RisikoscenarioTag, {
 
 interface IProps {
   risikoscenario: IRisikoscenario
+  noCopyButton?: boolean
 }
 
 export const RisikoscenarioAccordionContent = (props: IProps) => {
-  const { risikoscenario } = props
+  const { risikoscenario, noCopyButton } = props
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   const currentUrl = window.location.origin.toString() + window.location.pathname + '?steg=4'
@@ -28,13 +29,15 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
 
   return (
     <div>
-      <CopyButton
-        variant="action"
-        copyText={currentUrl + '#' + activeRisikoscenario.id}
-        text="Kopiér scenariolenke"
-        activeText="Lenken er kopiert"
-        icon={<LinkIcon aria-hidden />}
-      />
+      {!noCopyButton && (
+        <CopyButton
+          variant="action"
+          copyText={currentUrl + '#' + activeRisikoscenario.id}
+          text="Kopiér scenariolenke"
+          activeText="Lenken er kopiert"
+          icon={<LinkIcon aria-hidden />}
+        />
+      )}
       <BodyLong className="mt-5">{activeRisikoscenario.beskrivelse}</BodyLong>
       <BodyLong className="mt-5">
         Dette risikoscenarioet er ikke tilknyttet spesifikke etterlevelseskrav.
