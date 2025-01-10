@@ -4,71 +4,31 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.etterlevelse.varsel.domain.SlackChannel;
 import no.nav.data.etterlevelse.varsel.domain.SlackUser;
-import org.springframework.util.Assert;
+import no.nav.data.integration.slack.SlackMeldingData.MeldingPart;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SlackDtos {
+/**
+ * These classes are to be used only for interaction with external services. Otherwise, use SlackMelding or SlackMeldingData.
+ */
+public final class SlackDtos {
 
-    @Value
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class PostMessageRequest {
-
-        String channel;
-        List<Block> blocks;
-
-        @Value
-        public static class Block {
-
-            public static Block header(String text) {
-                return new Block(BlockType.header, Text.plain(text));
-            }
-
-            public static Block text(String text) {
-                return new Block(BlockType.section, Text.markdown(text));
-            }
-
-            public static Block divider() {
-                return new Block(BlockType.divider, null);
-            }
-
-            /**
-             * Create Block with text, keeping other properties
-             */
-            public Block withText(String newText) {
-                Assert.isTrue(text != null, "this is not a text block");
-                return new Block(type, new Text(text.type, newText));
-            }
-
-            public enum BlockType {
-                header, section, divider
-            }
-
-            BlockType type;
-            @JsonInclude(Include.NON_NULL)
-            Text text;
-
-            @Value
-            public static class Text {
-
-                enum TextType {mrkdwn, plain_text}
-
-                TextType type;
-                String text;
-
-                public static Text plain(String text) {
-                    return new Text(TextType.plain_text, text);
-                }
-
-                public static Text markdown(String text) {
-                    return new Text(TextType.mrkdwn, text);
-
-                }
-            }
+        private String channel = null;
+        private List<Block> blocks = null;
+        public static PostMessageRequest createRequest(String channel, List<MeldingPart> parts) {
+            return new PostMessageRequest(channel, convertPartsToBlocks(parts));
         }
     }
 
@@ -100,11 +60,34 @@ public class SlackDtos {
 
     @Data
     public static class CreateConversationResponse implements Response {
-
         private boolean ok;
         private String error;
         private Channel channel;
+    }
+    
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Block {
+        private BlockType type = null;
+        @JsonInclude(Include.NON_NULL)
+        private Text text = null;
+    }
 
+    public enum BlockType {
+        header, section, divider
+    }
+
+    public enum TextType {
+        mrkdwn, plain_text
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Text {
+        private TextType type;
+        private String text;
     }
 
     @Data
@@ -143,7 +126,6 @@ public class SlackDtos {
 
     @Data
     public static class ResponseMetadata {
-
         @JsonProperty("next_cursor")
         private String nextCursor;
     }
@@ -159,11 +141,19 @@ public class SlackDtos {
     }
 
     public interface Response {
-
         boolean isOk();
-
         String getError();
+    }
 
+    private static List<Block> convertPartsToBlocks(List<MeldingPart> parts) {
+        List<Block> result = new ArrayList<>();
+        for (MeldingPart part : parts) {
+            BlockType blockType = BlockType.valueOf(part.getPartType().name()); // This works as long as the items have the same name
+            TextType textType = part.getTextType() == no.nav.data.integration.slack.SlackMeldingData.TextType.markdown ? TextType.mrkdwn : TextType.plain_text;
+            Text text = new Text(textType, part.getText());
+            result.add(new Block(blockType, text));
+        }
+        return result;
     }
 
 }

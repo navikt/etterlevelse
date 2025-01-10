@@ -5,9 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import no.nav.data.common.auditing.AuditVersionService;
 import no.nav.data.common.auditing.domain.AuditVersion;
-import no.nav.data.common.mail.EmailService;
-import no.nav.data.common.mail.MailTask;
-import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -21,10 +18,9 @@ import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.varsel.UrlGenerator;
+import no.nav.data.etterlevelse.varsel.VarselService;
 import no.nav.data.etterlevelse.varsel.domain.Varsel;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
-import no.nav.data.integration.slack.SlackClient;
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,10 +48,8 @@ public class KravService extends DomainService<Krav> {
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final EtterlevelseService etterlevelseService;
     private final UrlGenerator urlGenerator;
-    private final EmailService emailService;
-    private final SlackClient slackClient;
+    private final VarselService varselService;
     private final AuditVersionService auditVersionService;
-    private final SecurityProperties securityProperties;
 
     public Page<Krav> getAll(Pageable page) {
         Page<GenericStorage<Krav>> all = kravRepo.findAll(page);
@@ -195,33 +189,18 @@ public class KravService extends DomainService<Krav> {
             if (e.getVarslingsadresser() != null && !e.getVarslingsadresser().isEmpty()) {
                 List<Varslingsadresse> recipients = e.getVarslingsadresser();
                 String etterlevelseId = "E%s %s".formatted(e.getEtterlevelseNummer(), e.getTitle());
-                var builder = Varsel.builder();
+                var varselBuilder = Varsel.builder();
                 if (isNewVersion) {
-                    builder.title("Det har kommet en ny versjon på krav K%d".formatted(krav.getKravNummer()));
+                    varselBuilder.title("Det har kommet en ny versjon på krav K%d".formatted(krav.getKravNummer()));
                 }  else {
-                    builder.title("Det har kommet et nytt krav som er relevant for ditt Etterlevelses dokument. K%d.%d".formatted(krav.getKravNummer(), krav.getKravVersjon()));
+                    varselBuilder.title("Det har kommet et nytt krav som er relevant for ditt Etterlevelses dokument. K%d.%d".formatted(krav.getKravNummer(), krav.getKravVersjon()));
                 }
 
-                var varsel = builder
-                        .paragraph(new Varsel.Paragraph("Det har kommet nytt krav som gjelder for din Etterlevelses dokumentasjon, %s"
-                                , url(urlGenerator.etterlevelseDokumentasjonUrl(e.getId().toString()), etterlevelseId )))
-                        .build();
+                varselBuilder.paragraph(new Varsel.Paragraph("Det har kommet nytt krav som gjelder for din Etterlevelses dokumentasjon, %s",
+                                url(urlGenerator.etterlevelseDokumentasjonUrl(e.getId().toString()), etterlevelseId )));
 
-                // TODO consider schedule slack messages async (like email) to guard against slack downtime
-                recipients.forEach(varslingsadresse ->  {
-                    switch (varslingsadresse.getType()) {
-                        case EPOST -> emailService.scheduleMail(MailTask.builder().to(varslingsadresse.getAdresse()).subject(varsel.getTitle()).body(varsel.toHtml()).build());
-                        case SLACK -> slackClient.sendMessageToChannel(varslingsadresse.getAdresse(), varsel.toSlack());
-                        case SLACK_USER -> {
-                            if (securityProperties.isDev()) {
-                                slackClient.sendMessageToChannel(varslingsadresse.getAdresse(), varsel.toSlack());
-                            } else {
-                                slackClient.sendMessageToUserId(varslingsadresse.getAdresse(), varsel.toSlack());
-                            }
-                        }
-                        default -> throw new NotImplementedException("%s is not an implemented varsel type".formatted(varslingsadresse.getType()));
-                    }
-                });
+                varselService.varsle(recipients, varselBuilder.build());
+                
             }
         });
     }
