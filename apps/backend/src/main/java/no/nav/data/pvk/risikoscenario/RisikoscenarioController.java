@@ -165,6 +165,18 @@ public class RisikoscenarioController {
         }
     }
 
+    @Operation(summary = "Remove krav from risikoscenario")
+    @ApiResponse(description = "krav removed form risikoscenario")
+    @DeleteMapping("/{id}/{kravnummer}")
+    public ResponseEntity<RisikoscenarioResponse> removeKravFromRisikoscenarioById(@PathVariable String id, @PathVariable Integer kravnummer) {
+        log.info("Remove krav from risikoscenario id={} with kravnummer={}", id, kravnummer);
+        var risikoscenario = risikoscenarioService.get(UUID.fromString(id));
+        var RelevanteKravNummer = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer().stream().filter(relevantKrav -> !relevantKrav.equals(kravnummer)).toList();
+        risikoscenario.getRisikoscenarioData().setRelevanteKravNummer(RelevanteKravNummer);
+        var updatedRisikoscenario = risikoscenarioService.save(risikoscenario, true);
+        return ResponseEntity.ok(RisikoscenarioResponse.buildFrom(updatedRisikoscenario));
+    }
+
 
     private void getKravDataforRelevantKravList(RisikoscenarioResponse risikoscenario) {
         if (!risikoscenario.getRelevanteKravNummer().isEmpty()) {
