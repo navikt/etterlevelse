@@ -64,7 +64,11 @@ export const KravRisikoscenario = (props: IProps) => {
 
         {isLeggTilEksisterendeMode && (
           <LeggTilEksisterendeRisikoscenario
+            kravnummer={krav.kravNummer}
             risikoscenarioer={risikoscenarioer}
+            setRisikoscenarioer={setRisikoscenarioer}
+            risikoscenerioForKrav={risikoscenerioForKrav}
+            setRisikoscenarioForKrav={setRisikoscenarioForKrav}
             setIsLeggTilEksisterendeMode={setIsLeggTilEksisterendeMode}
           />
         )}

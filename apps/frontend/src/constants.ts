@@ -555,11 +555,17 @@ export interface IRisikoscenario {
   kravToDelete: number[]
 }
 
+export interface IKravRisikoscenarioRelasjon {
+  kravnummer: number
+  risikoscenarioIder: string[]
+}
+
 export interface IKravReference {
   navn: string
   kravNummer: number
   kravVersjon: number
 }
+
 export interface IBehandlingensLivslop {
   id: string
   changeStamp: IChangeStamp

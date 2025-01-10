@@ -1,5 +1,10 @@
 import axios from 'axios'
-import { ERisikoscenarioType, IPageResponse, IRisikoscenario } from '../constants'
+import {
+  ERisikoscenarioType,
+  IKravRisikoscenarioRelasjon,
+  IPageResponse,
+  IRisikoscenario,
+} from '../constants'
 import { env } from '../util/env'
 
 export const getAllRisikoscenario = async () => {
@@ -65,14 +70,11 @@ export const updateRiskoscenario = async (risikoscenario: IRisikoscenario) => {
   ).data
 }
 
-export const updateKravForRiskoscenarioer = async (
-  kravnummer: number,
-  risikoscenarioIder: string[]
-) => {
+export const updateKravForRiskoscenarioer = async (request: IKravRisikoscenarioRelasjon) => {
   return (
     await axios.put<IRisikoscenario[]>(`${env.backendBaseUrl}/risikoscenario/update/relevantKrav`, {
-      kravnummer: kravnummer,
-      risikoscenarioIder: risikoscenarioIder,
+      kravnummer: request.kravnummer,
+      risikoscenarioIder: request.risikoscenarioIder,
     })
   ).data
 }
