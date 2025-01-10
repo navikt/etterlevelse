@@ -8,15 +8,26 @@ import RisikoscenarioTag, {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
 } from './RisikoscenarioTag'
+import SlettOvrigRisikoscenario from './SlettOvrigRisikoscenario'
 
 interface IProps {
   risikoscenario: IRisikoscenario
+  risikoscenarioer?: IRisikoscenario[]
+  setRisikoscenarioer?: (state: IRisikoscenario[]) => void
+  kravnummer?: boolean
   isCreateMode?: boolean
   noCopyButton?: boolean
 }
 
 export const RisikoscenarioAccordionContent = (props: IProps) => {
-  const { risikoscenario, isCreateMode, noCopyButton } = props
+  const {
+    risikoscenario,
+    risikoscenarioer,
+    setRisikoscenarioer,
+    isCreateMode,
+    kravnummer,
+    noCopyButton,
+  } = props
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   const currentUrl = window.location.origin.toString() + window.location.pathname + '?steg=4'
@@ -73,15 +84,24 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
       )}
 
       {!isCreateMode && (
-        <Button
-          className="mt-5"
-          variant="tertiary"
-          type="button"
-          icon={<PencilIcon aria-hidden />}
-          onClick={() => setIsEditModalOpen(true)}
-        >
-          Redigèr risikoscenario
-        </Button>
+        <div className="mt-5 flex gap-2 items-center">
+          <Button
+            variant="tertiary"
+            type="button"
+            icon={<PencilIcon aria-hidden />}
+            onClick={() => setIsEditModalOpen(true)}
+          >
+            Redigèr risikoscenario
+          </Button>
+
+          {!isCreateMode && !kravnummer && (
+            <SlettOvrigRisikoscenario
+              risikoscenarioId={risikoscenario.id}
+              risikoscenarioer={risikoscenarioer}
+              setRisikoscenarioer={setRisikoscenarioer}
+            />
+          )}
+        </div>
       )}
 
       {isEditModalOpen && (

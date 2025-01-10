@@ -91,6 +91,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
           <div className="my-5">
             <RisikoscenarioAccordianList
               risikoscenarioList={risikoscenarioList}
+              setRisikoscenarioList={setRisikoscenarioList}
               defaultOpen={defaultOpen}
             />
           </div>

@@ -5,11 +5,12 @@ import RisikoscenarioAccordionContent from './RisikoscenarioAccordianContent'
 
 interface IProps {
   risikoscenarioList: IRisikoscenario[]
+  setRisikoscenarioList: (state: IRisikoscenario[]) => void
   defaultOpen?: boolean
 }
 
 export const RisikoscenarioAccordianList = (props: IProps) => {
-  const { risikoscenarioList } = props
+  const { risikoscenarioList, setRisikoscenarioList } = props
 
   useEffect(() => {
     if (window.location.hash) {
@@ -29,7 +30,11 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
           <Accordion.Item id={risikoscenario.id} key={index + '_' + risikoscenario.navn}>
             <Accordion.Header>{risikoscenario.navn}</Accordion.Header>
             <Accordion.Content>
-              <RisikoscenarioAccordionContent risikoscenario={risikoscenario} />
+              <RisikoscenarioAccordionContent
+                risikoscenario={risikoscenario}
+                risikoscenarioer={risikoscenarioList}
+                setRisikoscenarioer={setRisikoscenarioList}
+              />
             </Accordion.Content>
           </Accordion.Item>
         ))}
