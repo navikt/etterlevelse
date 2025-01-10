@@ -28,8 +28,8 @@ export const KravRisikoscenario = (props: IProps) => {
               response.content.filter(
                 (risikoscenario) =>
                   risikoscenario.relevanteKravNummer.filter(
-                    (relevantekrav) => relevantekrav.kravNummer !== krav.kravNummer
-                  ).length > 0
+                    (relevantekrav) => relevantekrav.kravNummer === krav.kravNummer
+                  ).length === 0
               )
             )
             setRisikoscenarioForKrav(
