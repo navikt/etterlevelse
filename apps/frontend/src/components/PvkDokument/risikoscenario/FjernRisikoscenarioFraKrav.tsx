@@ -30,11 +30,15 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
 
   const submit = async () => {
     getRisikoscenario(risikoscenarioId).then((response) => {
-      console.debug(response)
       const relevanteKravNummer = response.relevanteKravNummer
       if (relevanteKravNummer.length > 1) {
         fjernKravFraRisikoscenario(risikoscenarioId, kravnummer).then((deleteResponse) => {
+          const updatedRisikoscenarioForKrav = risikoscenarioForKrav.filter(
+            (risikoscenario) => risikoscenario.id !== deleteResponse.id
+          )
+          setRisikoscenerioForKrav([...updatedRisikoscenarioForKrav])
           setRisikoscenarioer([...risikoscenarioer, deleteResponse])
+          setIsOpen(false)
         })
       } else {
         deleteRisikoscenario(risikoscenarioId).then((deleteResponse) => {
@@ -42,6 +46,7 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
             (risikoscenario) => risikoscenario.id !== deleteResponse.id
           )
           setRisikoscenerioForKrav([...updatedRisikoscenarioForKrav])
+          setIsOpen(false)
         })
       }
     })
