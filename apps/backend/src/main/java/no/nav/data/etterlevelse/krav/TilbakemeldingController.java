@@ -103,6 +103,8 @@ public class TilbakemeldingController {
         return ResponseEntity.ok(tilbakemelding.toResponse());
     }
     
+    // This is for manual flushing of pending slack messages.
+    // Should be called before deploying changes in the datastructure of no.nav.data.integration.slack.SlackMelding
     @Operation(summary = "Initiates sending of all pending slack messages (admin use only)")
     @ApiResponse(description = "Pending slack messages sent")
     @GetMapping("/flushSlack")

@@ -34,7 +34,7 @@ public class SlackService {
     }
 
     @SchedulerLock(name = "sendSlackPriority")
-    @Scheduled(cron = "10 * * * * *") // Happens every minute at 10 seconds.
+    @Scheduled(cron = "10 * * * * *") // Happens every minute (10 seconds past every minute)
     public void sendHighPriority() {
         int sendCount = 0;
         while (sendOneMessage(SlackMeldingData.PRIORITY_HIGH)) {
