@@ -33,7 +33,7 @@ export const getRiskoscenarioPage = async (pageNumber: number, pageSize: number)
 }
 
 export const getRisikoscenario = async (id: string) => {
-  return (await axios.get<IRisikoscenario>(`${env.backendBaseUrl}/riskoscenario/${id}`)).data
+  return (await axios.get<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario/${id}`)).data
 }
 
 export const getRisikoscenarioByPvkDokumentId = async (
@@ -81,6 +81,12 @@ export const updateKravForRiskoscenarioer = async (request: IKravRisikoscenarioR
 
 export const deleteRisikoscenario = async (id: string) => {
   return (await axios.delete<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario/${id}`)).data
+}
+
+export const fjernKravFraRisikoscenario = async (id: string, kravnummer: number) => {
+  return (
+    await axios.delete<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario/${id}/${kravnummer}`)
+  ).data
 }
 
 const risikoscenarioToRisikoscenarioDto = (risikoscenario: IRisikoscenario) => {

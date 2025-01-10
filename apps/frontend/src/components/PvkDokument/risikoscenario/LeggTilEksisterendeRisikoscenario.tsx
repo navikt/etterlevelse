@@ -8,7 +8,7 @@ interface IProps {
   kravnummer: number
   risikoscenarioer: IRisikoscenario[]
   setRisikoscenarioer: (state: IRisikoscenario[]) => void
-  risikoscenerioForKrav: IRisikoscenario[]
+  risikoscenarioForKrav: IRisikoscenario[]
   setRisikoscenarioForKrav: (state: IRisikoscenario[]) => void
   setIsLeggTilEksisterendeMode: (state: boolean) => void
 }
@@ -18,7 +18,7 @@ export const LeggTilEksisterendeRisikoscenario = (props: IProps) => {
     kravnummer,
     risikoscenarioer,
     setRisikoscenarioer,
-    risikoscenerioForKrav,
+    risikoscenarioForKrav,
     setRisikoscenarioForKrav,
     setIsLeggTilEksisterendeMode,
   } = props
@@ -50,7 +50,7 @@ export const LeggTilEksisterendeRisikoscenario = (props: IProps) => {
           (risikoscenario) => !selectedRisikoscenarioer.includes(risikoscenario.id)
         )
       )
-      setRisikoscenarioForKrav([...risikoscenerioForKrav, ...response])
+      setRisikoscenarioForKrav([...risikoscenarioForKrav, ...response])
     })
   }
 

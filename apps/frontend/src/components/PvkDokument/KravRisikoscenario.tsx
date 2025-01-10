@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, TKravQL } from '../../constants'
 import CreateRisikoscenario from './edit/CreateRisikoscenario'
+import FjernRisikoscenarioFraKrav from './risikoscenario/FjernRisikoscenarioFraKrav'
 import LeggTilEksisterendeRisikoscenario from './risikoscenario/LeggTilEksisterendeRisikoscenario'
 import RisikoscenarioAccordionContent from './risikoscenario/RisikoscenarioAccordianContent'
 
@@ -17,7 +18,7 @@ export const KravRisikoscenario = (props: IProps) => {
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
   const [risikoscenarioer, setRisikoscenarioer] = useState<IRisikoscenario[]>([])
-  const [risikoscenerioForKrav, setRisikoscenarioForKrav] = useState<IRisikoscenario[]>([])
+  const [risikoscenarioForKrav, setRisikoscenarioForKrav] = useState<IRisikoscenario[]>([])
 
   useEffect(() => {
     ;(async () => {
@@ -56,7 +57,7 @@ export const KravRisikoscenario = (props: IProps) => {
       <ReadMore header="Slik dokumenterer dere risikoscenarioer og tiltak">WIP</ReadMore>
 
       <div className="mt-5">
-        {!isCreateMode && !isLeggTilEksisterendeMode && risikoscenerioForKrav.length === 0 && (
+        {!isCreateMode && !isLeggTilEksisterendeMode && risikoscenarioForKrav.length === 0 && (
           <Alert variant="info" className="mb-5">
             Foreløpig finnes det ingen risikoscenarioer tilknyttet dette kravet.
           </Alert>
@@ -67,7 +68,7 @@ export const KravRisikoscenario = (props: IProps) => {
             kravnummer={krav.kravNummer}
             risikoscenarioer={risikoscenarioer}
             setRisikoscenarioer={setRisikoscenarioer}
-            risikoscenerioForKrav={risikoscenerioForKrav}
+            risikoscenarioForKrav={risikoscenarioForKrav}
             setRisikoscenarioForKrav={setRisikoscenarioForKrav}
             setIsLeggTilEksisterendeMode={setIsLeggTilEksisterendeMode}
           />
@@ -76,7 +77,7 @@ export const KravRisikoscenario = (props: IProps) => {
         {!isLeggTilEksisterendeMode && (
           <div className="mb-5">
             <Accordion>
-              {risikoscenerioForKrav.map((risikoscenario, index) => (
+              {risikoscenarioForKrav.map((risikoscenario, index) => (
                 <Accordion.Item id={risikoscenario.id} key={index + '_' + risikoscenario.navn}>
                   <Accordion.Header>{risikoscenario.navn}</Accordion.Header>
                   <Accordion.Content>
@@ -85,6 +86,16 @@ export const KravRisikoscenario = (props: IProps) => {
                       noCopyButton
                       isCreateMode={isCreateMode}
                     />
+                    {!isCreateMode && (
+                      <FjernRisikoscenarioFraKrav
+                        kravnummer={krav.kravNummer}
+                        risikoscenarioId={risikoscenario.id}
+                        risikoscenarioer={risikoscenarioer}
+                        setRisikoscenarioer={setRisikoscenarioer}
+                        risikoscenarioForKrav={risikoscenarioForKrav}
+                        setRisikoscenerioForKrav={setRisikoscenarioForKrav}
+                      />
+                    )}
                   </Accordion.Content>
                 </Accordion.Item>
               ))}
@@ -96,7 +107,7 @@ export const KravRisikoscenario = (props: IProps) => {
           <CreateRisikoscenario
             krav={krav}
             pvkDokumentId={pvkDokument.id}
-            risikoscenarioer={risikoscenerioForKrav}
+            risikoscenarioer={risikoscenarioForKrav}
             setRisikoscenarioer={setRisikoscenarioForKrav}
             setIsCreateMode={setIsCreateMode}
           />
