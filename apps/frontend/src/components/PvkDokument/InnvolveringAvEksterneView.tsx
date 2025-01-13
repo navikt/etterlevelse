@@ -126,7 +126,7 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
                 />
               </div>
 
-              <List className="mt-10" title="Representanter for databehandlere">
+              <List className="mt-10" title="Involvering av representanter">
                 <BodyLong>
                   I Behandlingskatalogen står det at følgende databehandlere benyttes:
                 </BodyLong>
