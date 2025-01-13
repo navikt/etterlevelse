@@ -1,5 +1,6 @@
 import {
   Alert,
+  BodyLong,
   BodyShort,
   Button,
   ErrorSummary,
@@ -334,21 +335,23 @@ export const BehandlingensLivslopPage = () => {
                   Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:
                 </Label>
                 {etterlevelseDokumentasjon.behandlinger && (
-                  <List>
-                    {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
-                      <List.Item key={behandling.nummer}>
-                        <ExternalLink
-                          className="text-medium"
-                          href={`${env.pollyBaseUrl}process/${behandling.id}`}
-                        >
-                          {behandlingName(behandling)} (åpnes i nytt vindu)
-                        </ExternalLink>
-                      </List.Item>
-                    ))}
-                  </List>
+                  <BodyLong>
+                    <List>
+                      {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
+                        <List.Item key={behandling.nummer}>
+                          <ExternalLink
+                            className="text-medium"
+                            href={`${env.pollyBaseUrl}process/${behandling.id}`}
+                          >
+                            {behandlingName(behandling)} (åpnes i nytt vindu)
+                          </ExternalLink>
+                        </List.Item>
+                      ))}
+                    </List>
+                  </BodyLong>
                 )}
 
-                <BodyShort className="inline-block">
+                <BodyShort className="inline-block mb-5">
                   Dere kan redigere hvilke behandinger som gjelder i{' '}
                   <Link
                     href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
@@ -360,13 +363,13 @@ export const BehandlingensLivslopPage = () => {
                   </Link>
                 </BodyShort>
 
-                <Heading level="2" size="small" className="mt-3">
-                  Deres beskrivelse av etterlevelsen
-                </Heading>
+                <Label>Deres beskrivelse av etterlevelsen</Label>
 
                 {etterlevelseDokumentasjon.beskrivelse && (
                   <div className="mt-3">
-                    <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
+                    <BodyLong>
+                      <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
+                    </BodyLong>
                   </div>
                 )}
                 {!etterlevelseDokumentasjon.beskrivelse && (

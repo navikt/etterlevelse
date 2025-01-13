@@ -359,18 +359,20 @@ export const PvkBehovPage = () => {
                   Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:
                 </Label>
                 {etterlevelseDokumentasjon.behandlinger && (
-                  <List>
-                    {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
-                      <List.Item key={behandling.nummer}>
-                        <ExternalLink
-                          className="text-medium"
-                          href={`${env.pollyBaseUrl}process/${behandling.id}`}
-                        >
-                          {behandlingName(behandling)} (åpnes i nytt vindu)
-                        </ExternalLink>
-                      </List.Item>
-                    ))}
-                  </List>
+                  <BodyLong>
+                    <List>
+                      {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
+                        <List.Item key={behandling.nummer}>
+                          <ExternalLink
+                            className="text-medium"
+                            href={`${env.pollyBaseUrl}process/${behandling.id}`}
+                          >
+                            {behandlingName(behandling)} (åpnes i nytt vindu)
+                          </ExternalLink>
+                        </List.Item>
+                      ))}
+                    </List>
+                  </BodyLong>
                 )}
 
                 <BodyShort className="inline-block">
