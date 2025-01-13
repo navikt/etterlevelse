@@ -1,5 +1,6 @@
 import { Alert, BodyLong, Button, Heading, ReadMore } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario } from '../../constants'
 import CreateRisikoscenarioModal from './edit/CreateRisikoscenarioModal'
@@ -17,6 +18,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
   const { etterlevelseDokumentasjonId, pvkDokument, activeStep, setActiveStep } = props
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [defaultOpen, setDefaultOpen] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (pvkDokument) {
@@ -67,7 +69,14 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
           tiltak, beskriver dere på den aktuelle kravsiden.
         </BodyLong>
 
-        <Button variant="secondary" type="button">
+        <Button
+          variant="secondary"
+          type="button"
+          onClick={() => {
+            if (etterlevelseDokumentasjonId)
+              navigate('/dokumentasjon/' + etterlevelseDokumentasjonId)
+          }}
+        >
           Gå til liste over PVK-relaterte krav
         </Button>
 
