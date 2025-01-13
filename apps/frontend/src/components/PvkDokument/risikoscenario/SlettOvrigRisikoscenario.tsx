@@ -35,19 +35,27 @@ export const SlettOvrigRisikoscenario = (props: IProps) => {
         onClick={() => setIsOpen(true)}
         icon={<TrashIcon aria-hidden title="" />}
       >
-        Fjern krav
+        Slett risikoscenario
       </Button>
 
       {isOpen && (
         <Modal
-          header={{ heading: 'Fjern kravet fra risikoscenario' }}
+          width="medium"
+          header={{ heading: 'Vil dere slette dette risikoscenarioet?' }}
           open={isOpen}
           onClose={() => setIsOpen(false)}
         >
-          <Modal.Body>Er du sikkert på at du vil slette risikoscenarioet?</Modal.Body>
+          <Modal.Body>
+            Risikoscenarioet slettes helt og blir ikke lenger tilgjengelig i PVK-dokumentasjonen
+            deres.
+            <br />
+            <br />
+            Hvis risikoscenarioet er tenkt brukt andre steder i samme PVK-dokumentasjon, lag den
+            koblingen først, og kom så tilbake og slett scenarioet herfra.
+          </Modal.Body>
           <Modal.Footer>
             <Button type="button" onClick={() => submit()}>
-              ja, slett risikoscenario
+              Slett risikoscenario
             </Button>
             <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
               avbryt
