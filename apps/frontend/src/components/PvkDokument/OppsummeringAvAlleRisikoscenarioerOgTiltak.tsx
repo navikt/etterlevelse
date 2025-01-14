@@ -5,10 +5,11 @@ interface IProps {
   etterlevelseDokumentasjonId: string
   activeStep: number
   setActiveStep: (step: number) => void
+  setSelectedStep: (step: number) => void
 }
 
 export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
-  const { etterlevelseDokumentasjonId, activeStep, setActiveStep } = props
+  const { etterlevelseDokumentasjonId, activeStep, setActiveStep, setSelectedStep } = props
   return (
     <div>
       <div className="flex justify-center">
@@ -56,6 +57,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
             etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
             activeStep={activeStep}
             setActiveStep={setActiveStep}
+            setSelectedStep={setSelectedStep}
           />
         </div>
       </div>

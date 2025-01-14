@@ -9,6 +9,7 @@ interface IProps {
   risikoscenarioTilknyttetKrav: any[]
   generelleRisikoscenario: any[]
   activeStep: number
+  setSelectedStep: (step: number) => void
   updateTitleUrlAndStep: (step: number) => void
 }
 
@@ -19,6 +20,7 @@ export const OversiktView = (props: IProps) => {
     risikoscenarioTilknyttetKrav,
     generelleRisikoscenario,
     activeStep,
+    setSelectedStep,
     updateTitleUrlAndStep,
   } = props
 
@@ -146,6 +148,7 @@ export const OversiktView = (props: IProps) => {
           etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
           activeStep={activeStep}
           setActiveStep={updateTitleUrlAndStep}
+          setSelectedStep={setSelectedStep}
         />
       </div>
     </div>

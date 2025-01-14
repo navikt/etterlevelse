@@ -18,6 +18,7 @@ interface IProps {
   setPvkDokument: (pvkDokument: IPvkDokument) => void
   activeStep: number
   setActiveStep: (step: number) => void
+  setSelectedStep: (step: number) => void
   formRef: RefObject<any>
 }
 
@@ -30,6 +31,7 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
     setPvkDokument,
     activeStep,
     setActiveStep,
+    setSelectedStep,
     formRef,
   } = props
 
@@ -215,6 +217,7 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                 activeStep={activeStep}
                 setActiveStep={setActiveStep}
+                setSelectedStep={setSelectedStep}
                 submitForm={submitForm}
               />
             </div>

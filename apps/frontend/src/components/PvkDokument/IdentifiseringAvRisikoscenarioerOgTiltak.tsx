@@ -12,10 +12,12 @@ interface IProps {
   pvkDokument: IPvkDokument
   activeStep: number
   setActiveStep: (step: number) => void
+  setSelectedStep: (step: number) => void
 }
 
 export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
-  const { etterlevelseDokumentasjonId, pvkDokument, activeStep, setActiveStep } = props
+  const { etterlevelseDokumentasjonId, pvkDokument, activeStep, setActiveStep, setSelectedStep } =
+    props
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [defaultOpen, setDefaultOpen] = useState<boolean>(false)
   const navigate = useNavigate()
@@ -117,6 +119,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
           etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
           activeStep={activeStep}
           setActiveStep={setActiveStep}
+          setSelectedStep={setSelectedStep}
         />
       </div>
     </div>

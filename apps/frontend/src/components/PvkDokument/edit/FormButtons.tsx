@@ -6,11 +6,12 @@ interface IProps {
   etterlevelseDokumentasjonId: string
   activeStep: number
   setActiveStep: (step: number) => void
+  setSelectedStep: (step: number) => void
   submitForm?: (() => Promise<void>) & (() => Promise<any>)
 }
 
 export const FormButtons = (props: IProps) => {
-  const { etterlevelseDokumentasjonId, activeStep, setActiveStep } = props
+  const { etterlevelseDokumentasjonId, activeStep, setActiveStep, setSelectedStep } = props
   const navigate = useNavigate()
 
   return (
@@ -26,6 +27,7 @@ export const FormButtons = (props: IProps) => {
                 navigate('/dokumentasjon/' + etterlevelseDokumentasjonId)
               } else {
                 setActiveStep(activeStep - 1)
+                setSelectedStep(activeStep - 1)
               }
             }}
           >
@@ -50,6 +52,7 @@ export const FormButtons = (props: IProps) => {
               onClick={() => {
                 if (activeStep !== 6) {
                   setActiveStep(activeStep + 1)
+                  setSelectedStep(activeStep + 1)
                 }
               }}
             >

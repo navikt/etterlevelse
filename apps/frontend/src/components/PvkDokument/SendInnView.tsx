@@ -14,6 +14,7 @@ interface IProps {
   etterlevelseDokumentasjonId: string
   activeStep: number
   setActiveStep: (step: number) => void
+  setSelectedStep: (step: number) => void
 }
 export const SendInnView = (props: IProps) => {
   const {
@@ -24,6 +25,7 @@ export const SendInnView = (props: IProps) => {
     etterlevelseDokumentasjonId,
     activeStep,
     setActiveStep,
+    setSelectedStep,
   } = props
 
   const submit = async (pvkDokument: IPvkDokument) => {
@@ -71,6 +73,7 @@ export const SendInnView = (props: IProps) => {
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                 activeStep={activeStep}
                 setActiveStep={setActiveStep}
+                setSelectedStep={setSelectedStep}
                 submitForm={submitForm}
               />
             </div>

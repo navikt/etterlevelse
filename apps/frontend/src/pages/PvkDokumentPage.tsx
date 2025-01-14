@@ -45,6 +45,7 @@ export const PvkDokumentPage = () => {
   const [activeStep, setActiveStep] = useState<number>(
     currentStep !== null ? parseInt(currentStep) : 1
   )
+  const [selectedStep, setSelectedStep] = useState<number>(1)
   const formRef: RefObject<any> = useRef(undefined)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
@@ -148,7 +149,10 @@ export const PvkDokumentPage = () => {
                     <Stepper
                       aria-labelledby="stepper-heading"
                       activeStep={activeStep}
-                      onStepChange={updateTitleUrlAndStep}
+                      onStepChange={(step) => {
+                        setSelectedStep(step)
+                        updateTitleUrlAndStep(step)
+                      }}
                       orientation="horizontal"
                     >
                       {StepTitle.map((title) => (
@@ -170,6 +174,7 @@ export const PvkDokumentPage = () => {
                       risikoscenarioTilknyttetKrav={[]}
                       generelleRisikoscenario={[]}
                       activeStep={activeStep}
+                      setSelectedStep={setSelectedStep}
                       updateTitleUrlAndStep={updateTitleUrlAndStep}
                     />
                   )}
@@ -181,6 +186,7 @@ export const PvkDokumentPage = () => {
                       setPvkDokument={setPvkDokument}
                       activeStep={activeStep}
                       setActiveStep={updateTitleUrlAndStep}
+                      setSelectedStep={setSelectedStep}
                       formRef={formRef}
                     />
                   )}
@@ -193,6 +199,7 @@ export const PvkDokumentPage = () => {
                       setPvkDokument={setPvkDokument}
                       activeStep={activeStep}
                       setActiveStep={updateTitleUrlAndStep}
+                      setSelectedStep={setSelectedStep}
                       formRef={formRef}
                     />
                   )}
@@ -201,6 +208,7 @@ export const PvkDokumentPage = () => {
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                       pvkDokument={pvkDokument}
                       activeStep={activeStep}
+                      setSelectedStep={setSelectedStep}
                       setActiveStep={updateTitleUrlAndStep}
                     />
                   )}
@@ -208,6 +216,7 @@ export const PvkDokumentPage = () => {
                     <OppsummeringAvAlleRisikoscenarioerOgTiltak
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                       activeStep={activeStep}
+                      setSelectedStep={setSelectedStep}
                       setActiveStep={updateTitleUrlAndStep}
                     />
                   )}
@@ -219,6 +228,7 @@ export const PvkDokumentPage = () => {
                       updateTitleUrlAndStep={updateTitleUrlAndStep}
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                       activeStep={activeStep}
+                      setSelectedStep={setSelectedStep}
                       setActiveStep={updateTitleUrlAndStep}
                     />
                   )}
@@ -238,8 +248,11 @@ export const PvkDokumentPage = () => {
                 <Button
                   type="button"
                   onClick={() => {
-                    //submit coden
-                    //nesteSteg koden
+                    formRef.current?.submitForm()
+                    setActiveStep(selectedStep)
+                    updateUrlOnStepChange(selectedStep)
+                    setCurrentPage(StepTitle[selectedStep - 1])
+                    setIsUnsaved(false)
                   }}
                 >
                   Lagre og fortsette
@@ -248,7 +261,10 @@ export const PvkDokumentPage = () => {
                   type="button"
                   variant="secondary"
                   onClick={() => {
-                    //neste steg koden
+                    setActiveStep(selectedStep)
+                    updateUrlOnStepChange(selectedStep)
+                    setCurrentPage(StepTitle[selectedStep - 1])
+                    setIsUnsaved(false)
                   }}
                 >
                   Fortsett uten å lagre
