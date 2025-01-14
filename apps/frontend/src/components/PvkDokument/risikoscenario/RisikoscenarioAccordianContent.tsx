@@ -14,7 +14,7 @@ interface IProps {
   risikoscenario: IRisikoscenario
   risikoscenarioer?: IRisikoscenario[]
   setRisikoscenarioer?: (state: IRisikoscenario[]) => void
-  kravnummer?: boolean
+  kravnummer?: number
   isCreateMode?: boolean
   noCopyButton?: boolean
 }
@@ -94,7 +94,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
             Redigèr risikoscenario
           </Button>
 
-          {!isCreateMode && !kravnummer && (
+          {!kravnummer && (
             <SlettOvrigRisikoscenario
               risikoscenarioId={risikoscenario.id}
               risikoscenarioer={risikoscenarioer}

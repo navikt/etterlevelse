@@ -10,7 +10,7 @@ import { IRisikoscenario } from '../../../constants'
 
 interface IProps {
   kravnummer: number
-  risikoscenarioId: string
+  risikoscenario: IRisikoscenario
   risikoscenarioer: IRisikoscenario[]
   setRisikoscenarioer: (state: IRisikoscenario[]) => void
   risikoscenarioForKrav: IRisikoscenario[]
@@ -20,7 +20,7 @@ interface IProps {
 export const FjernRisikoscenarioFraKrav = (props: IProps) => {
   const {
     kravnummer,
-    risikoscenarioId,
+    risikoscenario,
     risikoscenarioer,
     setRisikoscenarioer,
     risikoscenarioForKrav,
@@ -29,10 +29,10 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const submit = async () => {
-    getRisikoscenario(risikoscenarioId).then((response) => {
+    getRisikoscenario(risikoscenario.id).then((response) => {
       const relevanteKravNummer = response.relevanteKravNummer
       if (relevanteKravNummer.length > 1) {
-        fjernKravFraRisikoscenario(risikoscenarioId, kravnummer).then((deleteResponse) => {
+        fjernKravFraRisikoscenario(risikoscenario.id, kravnummer).then((deleteResponse) => {
           const updatedRisikoscenarioForKrav = risikoscenarioForKrav.filter(
             (risikoscenario) => risikoscenario.id !== deleteResponse.id
           )
@@ -41,7 +41,7 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
           setIsOpen(false)
         })
       } else {
-        deleteRisikoscenario(risikoscenarioId).then((deleteResponse) => {
+        deleteRisikoscenario(risikoscenario.id).then((deleteResponse) => {
           const updatedRisikoscenarioForKrav = risikoscenarioForKrav.filter(
             (risikoscenario) => risikoscenario.id !== deleteResponse.id
           )
@@ -60,19 +60,32 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
         onClick={() => setIsOpen(true)}
         icon={<TrashIcon aria-hidden title="" />}
       >
-        Fjern krav
+        {risikoscenario.relevanteKravNummer.length > 1
+          ? 'Fjern risikoscenario fra krav'
+          : 'Slett risikoscenario'}
       </Button>
 
       {isOpen && (
         <Modal
-          header={{ heading: 'Fjern kravet fra risikoscenario' }}
+          header={{
+            heading:
+              risikoscenario.relevanteKravNummer.length > 1
+                ? 'Fjerne kravet fra risikoscenario'
+                : 'Slett risikoscenarioet',
+          }}
           open={isOpen}
           onClose={() => setIsOpen(false)}
         >
-          <Modal.Body>Er du sikkert på at du vil fjerne kravet fra risikoscenario?</Modal.Body>
+          <Modal.Body>
+            {risikoscenario.relevanteKravNummer.length > 1
+              ? 'Er du sikkert på at du vil fjerne kravet fra risikoscenario?'
+              : 'Er du sikkert på at du vil slette risikoscenarioet?'}
+          </Modal.Body>
           <Modal.Footer>
             <Button type="button" onClick={() => submit()}>
-              ja, fjern kravet
+              {risikoscenario.relevanteKravNummer.length > 1
+                ? 'ja, fjern kravet fra risikoscenario'
+                : 'ja, slett risikoscenarioet'}
             </Button>
             <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
               avbryt

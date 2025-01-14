@@ -85,11 +85,12 @@ export const KravRisikoscenario = (props: IProps) => {
                       risikoscenario={risikoscenario}
                       noCopyButton
                       isCreateMode={isCreateMode}
+                      kravnummer={krav.kravNummer}
                     />
                     {!isCreateMode && (
                       <FjernRisikoscenarioFraKrav
                         kravnummer={krav.kravNummer}
-                        risikoscenarioId={risikoscenario.id}
+                        risikoscenario={risikoscenario}
                         risikoscenarioer={risikoscenarioer}
                         setRisikoscenarioer={setRisikoscenarioer}
                         risikoscenarioForKrav={risikoscenarioForKrav}
