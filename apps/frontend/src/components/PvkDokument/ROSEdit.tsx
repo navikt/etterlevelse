@@ -1,17 +1,15 @@
-import {Button, Label, TextField, Select} from '@navikt/ds-react'
+import {Button, TextField, Heading} from '@navikt/ds-react'
 import {FieldArray, FieldArrayRenderProps} from 'formik'
 import {ChangeEvent, useState} from 'react'
 //import {IRegelverk} from '../../constants'
 //import {LovView} from '../Lov'
 import {FieldWrapper} from '../common/Inputs'
-import LabelWithTooltip from '../common/LabelWithTooltip'
 import {Error, FormError} from '../common/ModalSchema'
 //import {RenderTagList} from '../common/TagList'
 
 export const ROSEdit = () => {
-  const [source, setSource] = useState('')
-  const [id, setId] = useState('')
-  const [description, setDescription] = useState('')
+  const [url, setUrl] = useState('')
+  const [name, setName] = useState('')
   const [error, setError] = useState('')
 
   return (
@@ -19,24 +17,19 @@ export const ROSEdit = () => {
       <FieldArray name="ros">
         {(fieldArrayRenderProps: FieldArrayRenderProps) => {
           const add = (): void => {
-            if (source === '') {
-              setError('Du må velge en kilde')
+            if (url === '') {
+              setError('Du må legge til en URL')
               return
             }
-            if (id === '') {
-              setError('Du må legge til en identifikator')
-              return
-            }
-            if (description === '') {
-              setError('Legg til en beskrivelse')
+            if (name === '') {
+              setError('Legg til et navn')
               return
             }
             setError('')
-            console.log("ROS link lagt til (TODO)", source, id, description)
+            console.log("ROS link lagt til (TODO)", url, name)
             console.log(fieldArrayRenderProps.form.values)
-            setSource('')
-            setId('')
-            setDescription('')
+            setUrl('')
+            setName('')
           }
 
           return (
@@ -44,48 +37,27 @@ export const ROSEdit = () => {
               <div>
                 <div className="flex items-end">
                   <div className="w-full max-w-[25rem] mr-2.5">
-                    <LabelWithTooltip
-                      label={'ROS'}
-                      tooltip={
-                        'Velg relevant kilde fra nedtrekksmenyen, og angi id til korrekt ROS.'
-                      }
-                    />
-                    <Select
-                      label="Hvor er ROS lagret"
-                      hideLabel
-                      onChange={(event) => {
-                        setSource(event.target.value)
-                      }}
-                      value={source}
-                    >
-                      <option value="">Velg kilde</option>
-                      <option value="TryggNok">TryggNok</option>
-                      <option value="Websak">Websak</option>
-                    </Select>
-
+                    <Heading level="2" size="small" spacing>
+                      Legg til informasjon on gjeldende ROS-dokumentasjon
+                    </Heading>
                   </div>
                   <div className="w-full">
-                    <LabelWithTooltip
-                      label="ID"
-                      tooltip="Identifikator som viser til riktig ROS i det valgte systemet."
-                    />
                     <TextField
                       className="max-w-[25rem] mr-2.5"
-                      label="ID"
-                      hideLabel
-                      value={id}
+                      label="Legg inn URL til ROS-dokumentasjon"
+                      value={url}
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                        setId((event.target as HTMLInputElement).value)
+                        setUrl((event.target as HTMLInputElement).value)
                       }
                     />
 
                   </div>
                   <TextField
                     className="w-full"
-                    label="Beskrivelse"
-                    value={description}
+                    label="Legg inn navnet til ROS-dokumentet"
+                    value={name}
                     onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      setDescription((event.target as HTMLInputElement).value)}
+                      setName((event.target as HTMLInputElement).value)}
                   />
                   <div className="min-w-[6.688rem] ml-2.5">
                     <Button type="button" onClick={add} variant="secondary">
@@ -95,12 +67,7 @@ export const ROSEdit = () => {
                 </div>
                 {error && <Error message={error}/>}
                 {!error && <FormError fieldName="ros" akselStyling/>}
-                {!!source && id && (
-                  <div className="flex items-center mt-2.5">
-                    <Label className="mr-6">Forhåndsvisning: </Label>
-                    {source}{id} {description}
-                  </div>
-                )}
+
               </div>
 
               {/*              <RenderTagList

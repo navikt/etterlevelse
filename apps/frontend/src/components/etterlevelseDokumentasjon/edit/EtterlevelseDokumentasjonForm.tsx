@@ -355,6 +355,8 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             </FieldWrapper>
           )}
 
+          <ROSEdit/>
+
           <Heading level="2" size="small" spacing>
             Legg til minst et team og/eller en person
           </Heading>
@@ -586,7 +588,6 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             <div className="flex-1"/>
           </div>
 
-          <ROSEdit/>
 
           {!dokumentRelasjon && (
             <div className="mt-5">
