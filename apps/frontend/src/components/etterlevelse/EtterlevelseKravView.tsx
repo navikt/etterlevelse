@@ -582,7 +582,13 @@ export const EtterlevelseKravView = (props: IProps) => {
                     </Button>
                   </Link>
                 )}
-                <Button onClick={() => setIsNavigationModalOpen(false)} variant="secondary">
+                <Button
+                  onClick={() => {
+                    setIsNavigationModalOpen(false)
+                    window.location.reload()
+                  }}
+                  variant="secondary"
+                >
                   Fortsett å redigere dokumentet
                 </Button>
 
