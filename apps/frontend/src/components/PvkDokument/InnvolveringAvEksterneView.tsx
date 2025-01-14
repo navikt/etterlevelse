@@ -49,6 +49,7 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
       }
       await updatePvkDokument(updatedatePvkDokument).then((response) => {
         setPvkDokument(response)
+        window.location.reload()
       })
     })
   }
