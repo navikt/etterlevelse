@@ -40,6 +40,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     @Schema(description = "Codelist RELEVANS")
     private List<String> irrelevansFor;
     private List<String> prioritertKravNummer;
+    private List<String> risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown
     private boolean forGjenbruk;
     private List<String> teams;
     private List<String> resources;
@@ -63,6 +64,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         setRisikoeiere(formatList(risikoeiere));
         setVarslingsadresser(copyOf(varslingsadresser));
         setAvdeling(toUpperCaseAndTrim(avdeling));
+        setRisikovurderinger(formatList(risikovurderinger));
     }
 
     @Override
@@ -93,6 +95,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         eDok.setAvdeling(avdeling);
         eDok.setPrioritertKravNummer(copyOf(prioritertKravNummer));
         eDok.setVarslingsadresser(copyOf(varslingsadresser));
+        eDok.setRisikovurderinger(copyOf(risikovurderinger));
     }
 
 }

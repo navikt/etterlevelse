@@ -53,6 +53,7 @@ public class EtterlevelseDokumentasjonResponse {
     private List<Resource> risikoeiereData;
     private List<Behandling> behandlinger;
     private CodelistResponse avdeling;
+    private List<String> risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown
     private List<Varslingsadresse> varslingsadresser;
     private boolean hasCurrentUserAccess;
     
@@ -78,6 +79,7 @@ public class EtterlevelseDokumentasjonResponse {
                 .knyttetTilVirkemiddel(eDok.isKnyttetTilVirkemiddel())
                 .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, eDok.getAvdeling()))
                 .varslingsadresser(nullsafeCopyOf(eDok.getVarslingsadresser()))
+                .risikovurderinger(eDok.getRisikovurderinger())
                 .build();
     }
     
