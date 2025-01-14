@@ -9,19 +9,19 @@ import {
   ReadMore,
   TextField,
 } from '@navikt/ds-react'
-import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
+import {Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik} from 'formik'
 import React from 'react'
-import { ChangeEvent, useEffect, useState } from 'react'
-import { NavigateFunction, useNavigate } from 'react-router-dom'
+import {ChangeEvent, useEffect, useState} from 'react'
+import {NavigateFunction, useNavigate} from 'react-router-dom'
 import AsyncSelect from 'react-select/async'
-import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
-import { getDocumentRelationByToIdAndRelationTypeWithData } from '../../../api/DocumentRelationApi'
+import {behandlingName, searchBehandlingOptions} from '../../../api/BehandlingApi'
+import {getDocumentRelationByToIdAndRelationTypeWithData} from '../../../api/DocumentRelationApi'
 import {
   createEtterlevelseDokumentasjon,
   etterlevelseDokumentasjonMapToFormVal,
   updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
-import { searchResourceByNameOptions, useSearchTeamOptions } from '../../../api/TeamApi'
+import {searchResourceByNameOptions, useSearchTeamOptions} from '../../../api/TeamApi'
 import {
   ERelationType,
   IBehandling,
@@ -33,7 +33,7 @@ import {
   IVirkemiddel,
   TEtterlevelseDokumentasjonQL,
 } from '../../../constants'
-import { ampli } from '../../../services/Amplitude'
+import {ampli} from '../../../services/Amplitude'
 import {
   CodelistService,
   EListName,
@@ -41,17 +41,18 @@ import {
   ICodeListFormValues,
   IGetParsedOptionsProps,
 } from '../../../services/Codelist'
-import { user } from '../../../services/User'
-import { isDev } from '../../../util/config'
-import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
-import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
-import { Markdown } from '../../common/Markdown'
-import { Error } from '../../common/ModalSchema'
-import { RenderTagList } from '../../common/TagList'
-import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
-import { noOptionMessage, selectOverrides } from '../../search/util'
-import { VarslingsadresserEdit } from '../../varslingsadresse/VarslingsadresserEdit'
-import { etterlevelseDokumentasjonSchema } from './etterlevelseDokumentasjonSchema'
+import {user} from '../../../services/User'
+import {isDev} from '../../../util/config'
+import {BoolField, FieldWrapper, OptionList, TextAreaField} from '../../common/Inputs'
+import LabelWithTooltip, {LabelWithDescription} from '../../common/LabelWithTooltip'
+import {Markdown} from '../../common/Markdown'
+import {Error} from '../../common/ModalSchema'
+import {RenderTagList} from '../../common/TagList'
+import {DropdownIndicator} from '../../krav/Edit/KravBegreperEdit'
+import {noOptionMessage, selectOverrides} from '../../search/util'
+import {VarslingsadresserEdit} from '../../varslingsadresse/VarslingsadresserEdit'
+import {etterlevelseDokumentasjonSchema} from './etterlevelseDokumentasjonSchema'
+import {ROSEdit} from "../../PvkDokument/ROSEdit";
 
 type TEditEtterlevelseDokumentasjonModalProps = {
   title: string
@@ -64,7 +65,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
   const relevansOptions: IGetParsedOptionsProps[] = codelistUtils.getParsedOptions(
     EListName.RELEVANS
   )
-  const { title, etterlevelseDokumentasjon, isEditButton } = props
+  const {title, etterlevelseDokumentasjon, isEditButton} = props
   const navigate: NavigateFunction = useNavigate()
 
   const [selectedFilter, setSelectedFilter] = useState<number[]>([])
@@ -172,7 +173,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
       validateOnChange={false}
       validateOnBlur={validateOnBlur}
     >
-      {({ values, submitForm, setFieldValue, errors }) => (
+      {({values, submitForm, setFieldValue, errors}) => (
         <Form>
           <Heading size="medium" level="1" spacing>
             {title}
@@ -183,7 +184,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
               <Label>Dette må du vite om gjenbruk</Label>
 
               <div className="mb-5">
-                <Markdown source={dokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse} />
+                <Markdown source={dokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse}/>
               </div>
             </Alert>
           )}
@@ -318,8 +319,8 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                       <AsyncSelect
                         aria-label="Søk etter behandlinger"
                         placeholder=""
-                        components={{ DropdownIndicator }}
-                        noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+                        components={{DropdownIndicator}}
+                        noOptionsMessage={({inputValue}) => noOptionMessage(inputValue)}
                         controlShouldRenderValue={false}
                         loadingMessage={() => 'Søker...'}
                         isClearable={false}
@@ -362,13 +363,13 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             <FieldArray name="teamsData">
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className="flex-1">
-                  <LabelWithTooltip label="Søk team fra Teamkatalogen" tooltip="" />
+                  <LabelWithTooltip label="Søk team fra Teamkatalogen" tooltip=""/>
                   <div className="w-full">
                     <AsyncSelect
                       aria-label="Søk etter team"
                       placeholder=""
-                      components={{ DropdownIndicator }}
-                      noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+                      components={{DropdownIndicator}}
+                      noOptionsMessage={({inputValue}) => noOptionMessage(inputValue)}
                       controlShouldRenderValue={false}
                       loadingMessage={() => 'Søker...'}
                       isClearable={false}
@@ -395,19 +396,19 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                 </div>
               )}
             </FieldArray>
-            <div className="flex-1" />
+            <div className="flex-1"/>
           </div>
           <div id="resourcesData" className="flex flex-col lg:flex-row gap-5 mb-5">
             <FieldArray name="resourcesData">
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className="flex-1">
-                  <LabelWithTooltip label="Søk etter person" tooltip="" />
+                  <LabelWithTooltip label="Søk etter person" tooltip=""/>
                   <div className="w-full">
                     <AsyncSelect
                       aria-label="Søk etter person"
                       placeholder=""
-                      components={{ DropdownIndicator }}
-                      noOptionsMessage={({ inputValue }) => {
+                      components={{DropdownIndicator}}
+                      noOptionsMessage={({inputValue}) => {
                         return noOptionMessage(inputValue)
                       }}
                       controlShouldRenderValue={false}
@@ -473,14 +474,14 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                 </div>
               )}
             </FieldArray>
-            <div className="flex-1" />
+            <div className="flex-1"/>
           </div>
 
-          {errors.teamsData && <Error message={errors.teamsData as string} />}
+          {errors.teamsData && <Error message={errors.teamsData as string}/>}
 
           <div id="varslingsadresser" className="mt-5">
-            <VarslingsadresserEdit fieldName="varslingsadresser" />
-            {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
+            <VarslingsadresserEdit fieldName="varslingsadresser"/>
+            {errors.varslingsadresser && <Error message={errors.varslingsadresser as string}/>}
           </div>
 
           <div className="flex flex-col lg:flex-row gap-5">
@@ -488,7 +489,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
               <Field name="avdeling">
                 {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
                   <div>
-                    <LabelWithDescription label="Angi hvilken avdeling som er ansvarlig for etterlevelsen" />
+                    <LabelWithDescription label="Angi hvilken avdeling som er ansvarlig for etterlevelsen"/>
                     <OptionList
                       listName={EListName.AVDELING}
                       label="Avdeling"
@@ -502,20 +503,20 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
               </Field>
             </FieldWrapper>
 
-            <div className="flex-1" />
+            <div className="flex-1"/>
           </div>
 
           <div className="flex flex-col lg:flex-row gap-5 mt-5">
             <FieldArray name="risikoeiereData">
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className="flex-1">
-                  <LabelWithTooltip label="Søk etter risikoeier" tooltip="" />
+                  <LabelWithTooltip label="Søk etter risikoeier" tooltip=""/>
                   <div className="w-full">
                     <AsyncSelect
                       aria-label="Søk etter risikoeier"
                       placeholder=""
-                      components={{ DropdownIndicator }}
-                      noOptionsMessage={({ inputValue }) => {
+                      components={{DropdownIndicator}}
+                      noOptionsMessage={({inputValue}) => {
                         return noOptionMessage(inputValue)
                       }}
                       controlShouldRenderValue={false}
@@ -582,8 +583,10 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
               )}
             </FieldArray>
 
-            <div className="flex-1" />
+            <div className="flex-1"/>
           </div>
+
+          <ROSEdit/>
 
           {!dokumentRelasjon && (
             <div className="mt-5">
