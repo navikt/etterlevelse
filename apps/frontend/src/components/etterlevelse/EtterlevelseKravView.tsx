@@ -530,17 +530,6 @@ export const EtterlevelseKravView = (props: IProps) => {
             <Modal.Footer>
               <Button
                 type="button"
-                variant="secondary"
-                onClick={() => {
-                  setCurrentTab(selectedTab)
-                  setIsTabAlertActive(false)
-                }}
-              >
-                Fortsett uten å lagre
-              </Button>
-
-              <Button
-                type="button"
                 variant="primary"
                 onClick={async () => {
                   setCurrentTab(selectedTab)
@@ -549,6 +538,17 @@ export const EtterlevelseKravView = (props: IProps) => {
                 }}
               >
                 Lagre og fortsett
+              </Button>
+
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  setCurrentTab(selectedTab)
+                  setIsTabAlertActive(false)
+                }}
+              >
+                Fortsett uten å lagre
               </Button>
             </Modal.Footer>
           </Modal>
