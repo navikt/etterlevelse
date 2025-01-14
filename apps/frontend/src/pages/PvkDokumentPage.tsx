@@ -242,7 +242,7 @@ export const PvkDokumentPage = () => {
                     //nesteSteg koden
                   }}
                 >
-                  Lagre
+                  Lagre og fortsette
                 </Button>
                 <Button
                   type="button"
@@ -251,7 +251,7 @@ export const PvkDokumentPage = () => {
                     //neste steg koden
                   }}
                 >
-                  Fortsett uten å lager
+                  Fortsett uten å lagre
                 </Button>
               </Modal.Footer>
             </Modal>
