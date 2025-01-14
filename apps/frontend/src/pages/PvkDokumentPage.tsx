@@ -1,7 +1,7 @@
-import { Alert, Loader, Stepper } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Loader, Modal, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
-import { useEffect, useState } from 'react'
-
+import { RefObject, useEffect, useRef, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
@@ -15,7 +15,6 @@ import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { IBreadCrumbPath, IDataBehandler, IExternalCode } from '../constants'
 import { user } from '../services/User'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
-import { Helmet } from 'react-helmet-async'
 
 export const StepTitle: string[] = [
   'Oversikt og status',
@@ -42,9 +41,11 @@ export const PvkDokumentPage = () => {
   const [personkategorier, setPersonKategorier] = useState<string[]>([])
   const [pvkDokument, setPvkDokument] = usePvkDokument(params.pvkdokumentId)
   const [databehandlere, setDatabehandlere] = useState<string[]>([])
+  const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [activeStep, setActiveStep] = useState<number>(
     currentStep !== null ? parseInt(currentStep) : 1
   )
+  const formRef: RefObject<any> = useRef(undefined)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -69,9 +70,13 @@ export const PvkDokumentPage = () => {
   }
 
   const updateTitleUrlAndStep = (step: number) => {
-    setActiveStep(step)
-    updateUrlOnStepChange(step)
-    setCurrentPage(StepTitle[step - 1])
+    if (formRef.current?.dirty) {
+      setIsUnsaved(true)
+    } else {
+      setActiveStep(step)
+      updateUrlOnStepChange(step)
+      setCurrentPage(StepTitle[step - 1])
+    }
   }
 
   useEffect(() => {
@@ -176,6 +181,7 @@ export const PvkDokumentPage = () => {
                       setPvkDokument={setPvkDokument}
                       activeStep={activeStep}
                       setActiveStep={updateTitleUrlAndStep}
+                      formRef={formRef}
                     />
                   )}
                   {activeStep === 3 && (
@@ -187,6 +193,7 @@ export const PvkDokumentPage = () => {
                       setPvkDokument={setPvkDokument}
                       activeStep={activeStep}
                       setActiveStep={updateTitleUrlAndStep}
+                      formRef={formRef}
                     />
                   )}
                   {activeStep === 4 && (
@@ -218,6 +225,36 @@ export const PvkDokumentPage = () => {
                 </div>
               </div>
             </div>
+
+            <Modal
+              onClose={() => setIsUnsaved(false)}
+              open={isUnsaved}
+              header={{ heading: 'Varsel' }}
+            >
+              <Modal.Body>
+                <BodyLong>Endringene som er gjort er ikke lagret.</BodyLong>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    //submit coden
+                    //nesteSteg koden
+                  }}
+                >
+                  Lagre
+                </Button>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => {
+                    //neste steg koden
+                  }}
+                >
+                  Fortsett uten å lager
+                </Button>
+              </Modal.Footer>
+            </Modal>
           </div>
         )}
     </div>

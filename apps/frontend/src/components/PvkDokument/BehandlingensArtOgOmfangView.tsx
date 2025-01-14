@@ -1,5 +1,6 @@
 import { Alert, Button, Heading, Link, List, ReadMore } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
+import { RefObject } from 'react'
 import {
   getPvkDokument,
   mapPvkDokumentToFormValue,
@@ -16,6 +17,7 @@ interface IProps {
   setPvkDokument: (pvkDokument: IPvkDokument) => void
   activeStep: number
   setActiveStep: (step: number) => void
+  formRef: RefObject<any>
 }
 
 export const BehandlingensArtOgOmfangView = (props: IProps) => {
@@ -26,6 +28,7 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
     setPvkDokument,
     activeStep,
     setActiveStep,
+    formRef,
   } = props
 
   const submit = async (pvkDokument: IPvkDokument) => {
@@ -37,8 +40,9 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
         tilgangsBeskrivelsePersonopplysningene: pvkDokument.tilgangsBeskrivelsePersonopplysningene,
         lagringsBeskrivelsePersonopplysningene: pvkDokument.lagringsBeskrivelsePersonopplysningene,
       }
-      await updatePvkDokument(updatedatePvkDokument).then((response) => {
+      await updatePvkDokument(updatedatePvkDokument).then((response: IPvkDokument) => {
         setPvkDokument(response)
+        window.location.reload()
       })
     })
   }
@@ -49,6 +53,7 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
       validateOnBlur={false}
       onSubmit={submit}
       initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
+      innerRef={formRef}
     >
       {({ submitForm }) => (
         <Form>
@@ -135,9 +140,7 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
                 <Button
                   type="button"
                   onClick={() => {
-                    if (submitForm) {
-                      submitForm()
-                    }
+                    submitForm()
                   }}
                 >
                   Lagre

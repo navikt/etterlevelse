@@ -1,5 +1,6 @@
 import { Alert, BodyLong, Button, Heading, List, ReadMore } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
+import { RefObject } from 'react'
 import {
   getPvkDokument,
   mapPvkDokumentToFormValue,
@@ -17,6 +18,7 @@ interface IProps {
   setPvkDokument: (pvkDokument: IPvkDokument) => void
   activeStep: number
   setActiveStep: (step: number) => void
+  formRef: RefObject<any>
 }
 
 export const InnvolveringAvEksterneView = (props: IProps) => {
@@ -28,6 +30,7 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
     setPvkDokument,
     activeStep,
     setActiveStep,
+    formRef,
   } = props
 
   const submit = async (pvkDokument: IPvkDokument) => {
@@ -54,6 +57,7 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
       validateOnBlur={false}
       onSubmit={submit}
       initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
+      innerRef={formRef}
     >
       {({ submitForm }) => (
         <Form>
