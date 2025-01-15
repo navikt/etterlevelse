@@ -553,6 +553,10 @@ export interface IRisikoscenario {
   generelScenario: boolean
   kravToAdd: number[]
   kravToDelete: number[]
+  ingenTiltak?: boolean
+  sannsynlighetsNivaaEtterTiltak: number
+  konsekvensNivaaEtterTiltak: number
+  nivaaBegrunnelseEtterTiltak: string
 }
 
 export interface IKravRisikoscenarioRelasjon {
