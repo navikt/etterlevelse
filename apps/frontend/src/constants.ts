@@ -535,6 +535,8 @@ export interface IPvkDokument {
 
   harDatabehandlerRepresentantInvolvering?: boolean
   dataBehandlerRepresentantInvolveringBeskrivelse: string
+
+  merknadTilPvoEllerRisikoeier: string
 }
 
 export interface IRisikoscenario {
@@ -594,8 +596,11 @@ export interface IBehandlingensLivslopRequest {
 }
 
 export enum EPvkDokumentStatus {
+  UNDERARBEID = 'UNDERARBEID',
+  SENDT_TIL_PVO = 'SENDT_TIL_PVO',
+  VURDERT_AV_PVO = 'VURDERT_AV_PVO',
+  GODKJENT_AV_RISIKOEIER = 'GODKJENT_AV_RISIKOEIER',
   AKTIV = 'AKTIV',
-  INAKTIV = 'INAKTIV',
 }
 
 export enum ERisikoscenarioType {
