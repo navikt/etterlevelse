@@ -1,14 +1,15 @@
 import { LinkIcon, PencilIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, CopyButton } from '@navikt/ds-react'
+import { BodyLong, Button, CopyButton, Label } from '@navikt/ds-react'
 import { useState } from 'react'
-import { updateRiskoscenario } from '../../../api/RisikoscenarioApi'
-import { IRisikoscenario } from '../../../constants'
-import RisikoscenarioModalForm from '../edit/RisikoscenarioModalForm'
+import { updateRiskoscenario } from '../../api/RisikoscenarioApi'
+import { IRisikoscenario } from '../../constants'
+import RisikoscenarioModalForm from '../PvkDokument/edit/RisikoscenarioModalForm'
 import RisikoscenarioTag, {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
 } from './RisikoscenarioTag'
 import SlettOvrigRisikoscenario from './SlettOvrigRisikoscenario'
+import IngenTiltakField from './edit/IngenTiltakField'
 
 interface IProps {
   risikoscenario: IRisikoscenario
@@ -103,6 +104,19 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
           )}
         </div>
       )}
+
+      <div className="mt-5">
+        <Label>Følgende tiltak gjelder for dette risikoscenarioet</Label>
+
+        {!risikoscenario.ingenTiltak && <div>liste over tiltak og redigeringsknappene</div>}
+
+        <div>
+          <IngenTiltakField
+            risikoscenario={activeRisikoscenario}
+            setRisikoscenario={setActiveRisikoscenario}
+          />
+        </div>
+      </div>
 
       {isEditModalOpen && (
         <RisikoscenarioModalForm

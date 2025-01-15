@@ -1,8 +1,8 @@
 import { TrashIcon } from '@navikt/aksel-icons'
 import { Button, Modal } from '@navikt/ds-react'
 import { useState } from 'react'
-import { deleteRisikoscenario } from '../../../api/RisikoscenarioApi'
-import { IRisikoscenario } from '../../../constants'
+import { deleteRisikoscenario } from '../../api/RisikoscenarioApi'
+import { IRisikoscenario } from '../../constants'
 
 interface IProps {
   risikoscenarioId: string

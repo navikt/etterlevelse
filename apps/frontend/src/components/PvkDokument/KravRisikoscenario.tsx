@@ -2,10 +2,10 @@ import { Accordion, Alert, Button, ReadMore } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, TKravQL } from '../../constants'
+import RisikoscenarioAccordionContent from '../risikoscenario/RisikoscenarioAccordianContent'
+import FjernRisikoscenarioFraKrav from '../risikoscenario/edit/FjernRisikoscenarioFraKrav'
+import LeggTilEksisterendeRisikoscenario from '../risikoscenario/edit/LeggTilEksisterendeRisikoscenario'
 import CreateRisikoscenario from './edit/CreateRisikoscenario'
-import FjernRisikoscenarioFraKrav from './risikoscenario/FjernRisikoscenarioFraKrav'
-import LeggTilEksisterendeRisikoscenario from './risikoscenario/LeggTilEksisterendeRisikoscenario'
-import RisikoscenarioAccordionContent from './risikoscenario/RisikoscenarioAccordianContent'
 
 interface IProps {
   krav: TKravQL

@@ -1,6 +1,6 @@
 import { Accordion } from '@navikt/ds-react'
 import { useEffect } from 'react'
-import { IRisikoscenario } from '../../../constants'
+import { IRisikoscenario } from '../../constants'
 import RisikoscenarioAccordionContent from './RisikoscenarioAccordianContent'
 
 interface IProps {
