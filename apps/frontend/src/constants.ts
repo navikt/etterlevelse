@@ -368,6 +368,7 @@ export interface IEtterlevelseDokumentasjon {
   forGjenbruk: boolean
   varslingsadresser: IVarslingsadresse[]
   hasCurrentUserAccess: boolean
+  risikovurderinger: string[]
 }
 
 export interface IDocumentRelation {

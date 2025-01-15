@@ -198,6 +198,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   knyttetTilVirkemiddel: false,
   varslingsadresser: etterlevelseDokumentasjon.varslingsadresser || [],
   forGjenbruk: etterlevelseDokumentasjon.forGjenbruk || false,
+  risikovurderinger: etterlevelseDokumentasjon.risikovurderinger || [],
 })
 
 export const etterlevelseDokumentasjonWithRelationMapToFormVal = (
