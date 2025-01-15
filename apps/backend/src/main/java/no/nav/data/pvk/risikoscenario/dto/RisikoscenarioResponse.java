@@ -34,7 +34,6 @@ public class RisikoscenarioResponse {
     private List<KravReference> relevanteKravNummer;
 
     private Boolean ingenTiltak;
-    private String ingenTiltakBegrunnelse;
 
     private Integer sannsynlighetsNivaaEtterTiltak;
     private Integer konsekvensNivaaEtterTiltak;
@@ -60,7 +59,6 @@ public class RisikoscenarioResponse {
                 .generelScenario(risikoscenario.getRisikoscenarioData().isGenerelScenario())
                 .relevanteKravNummer(risikoscenario.getRisikoscenarioData().getRelevanteKravNummer().stream().map(kravNummer -> KravReference.builder().kravNummer(kravNummer).build()).collect(Collectors.toList()))
                 .ingenTiltak(risikoscenario.getRisikoscenarioData().getIngenTiltak())
-                .ingenTiltakBegrunnelse(risikoscenario.getRisikoscenarioData().getIngenTiltakBegrunnelse())
                 .sannsynlighetsNivaaEtterTiltak(risikoscenario.getRisikoscenarioData().getSannsynlighetsNivaaEtterTiltak())
                 .konsekvensNivaaEtterTiltak(risikoscenario.getRisikoscenarioData().getKonsekvensNivaaEtterTiltak())
                 .nivaaBegrunnelseEtterTiltak(risikoscenario.getRisikoscenarioData().getNivaaBegrunnelseEtterTiltak())
