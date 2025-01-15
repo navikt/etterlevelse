@@ -116,10 +116,7 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
         ? undefined
         : pvkDokument.harInvolvertRepresentant,
     representantInvolveringsBeskrivelse: pvkDokument.representantInvolveringsBeskrivelse || '',
-    stemmerDatabehandlere:
-      pvkDokument.stemmerDatabehandlere === undefined
-        ? undefined
-        : pvkDokument.stemmerDatabehandlere,
+
     harDatabehandlerRepresentantInvolvering:
       pvkDokument.harDatabehandlerRepresentantInvolvering === undefined
         ? undefined

@@ -533,7 +533,6 @@ export interface IPvkDokument {
   harInvolvertRepresentant?: boolean
   representantInvolveringsBeskrivelse: string
 
-  stemmerDatabehandlere?: boolean
   harDatabehandlerRepresentantInvolvering?: boolean
   dataBehandlerRepresentantInvolveringBeskrivelse: string
 }

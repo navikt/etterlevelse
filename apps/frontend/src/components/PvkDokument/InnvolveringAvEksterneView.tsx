@@ -41,7 +41,6 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
         ...response,
         harInvolvertRepresentant: pvkDokument.harInvolvertRepresentant,
         representantInvolveringsBeskrivelse: pvkDokument.representantInvolveringsBeskrivelse,
-        stemmerDatabehandlere: pvkDokument.stemmerDatabehandlere,
         harDatabehandlerRepresentantInvolvering:
           pvkDokument.harDatabehandlerRepresentantInvolvering,
         dataBehandlerRepresentantInvolveringBeskrivelse:
@@ -148,14 +147,6 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
                 Hvis dere er usikker på om behandlingene benytter flere eller færre databehandlere,
                 kan det være til hjelp å se på behandlingens livsløp.
               </BodyLong>
-
-              <div className="mt-7">
-                <BoolField
-                  label="Stemmer denne lista over databehandlere?"
-                  name="stemmerDatabehandlere"
-                  horizontal
-                />
-              </div>
 
               <Field>
                 {(fieldProps: FieldProps) => (
