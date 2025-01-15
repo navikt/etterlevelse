@@ -37,13 +37,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
 
       <Tabs defaultValue="etterlevelseskrav" fill>
         <Tabs.List>
-          <Tabs.Tab value="etterlevelseskrav" label="Vis etterlevelseskrav" />
           <Tabs.Tab value="risikoscenarioer" label="Vis risikoscenarioer" />
           <Tabs.Tab value="tiltak" label=" Vis tiltak " />
         </Tabs.List>
-        <Tabs.Panel value="etterlevelseskrav" className="h-24 w-full bg-gray-50 p-4">
-          Her skal etterlevelseskrav vises
-        </Tabs.Panel>
         <Tabs.Panel value="risikoscenarioer" className="h-24 w-full bg-gray-50 p-4">
           Her skal risikoscenarioer vises
         </Tabs.Panel>

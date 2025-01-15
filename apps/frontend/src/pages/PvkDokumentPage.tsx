@@ -21,7 +21,7 @@ export const StepTitle: string[] = [
   'Behandlingens art og omfang',
   'Innvolvering av eksterne',
   'Identifisering av risikoscenarioer og tiltak',
-  'Oppsummering av alle risikoscenarioer og tiltak',
+  'Risikobildet etter tiltak',
   'Les og send inn',
 ]
 

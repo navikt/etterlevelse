@@ -51,9 +51,6 @@ export const KravRisikoscenario = (props: IProps) => {
 
   return (
     <div className="w-full">
-      <ReadMore header="Må vi dokumentere risikoscenarioer for alle PVK-relaterte krav?">
-        WIP
-      </ReadMore>
       <ReadMore header="Slik dokumenterer dere risikoscenarioer og tiltak">WIP</ReadMore>
 
       <div className="mt-5">
