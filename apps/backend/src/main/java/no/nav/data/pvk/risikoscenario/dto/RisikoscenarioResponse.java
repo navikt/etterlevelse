@@ -33,6 +33,13 @@ public class RisikoscenarioResponse {
     private boolean generelScenario;
     private List<KravReference> relevanteKravNummer;
 
+    private Boolean ingenTiltak;
+    private String ingenTiltakBegrunnelse;
+
+    private Integer sannsynlighetsNivaaEtterTiltak;
+    private Integer konsekvensNivaaEtterTiltak;
+    private String nivaaBegrunnelseEtterTiltak;
+
     public static RisikoscenarioResponse buildFrom(Risikoscenario risikoscenario) {
         return RisikoscenarioResponse.builder()
                 .id(risikoscenario.getId())
@@ -52,6 +59,11 @@ public class RisikoscenarioResponse {
                 .konsekvensNivaaBegrunnelse(risikoscenario.getRisikoscenarioData().getKonsekvensNivaaBegrunnelse())
                 .generelScenario(risikoscenario.getRisikoscenarioData().isGenerelScenario())
                 .relevanteKravNummer(risikoscenario.getRisikoscenarioData().getRelevanteKravNummer().stream().map(kravNummer -> KravReference.builder().kravNummer(kravNummer).build()).collect(Collectors.toList()))
+                .ingenTiltak(risikoscenario.getRisikoscenarioData().getIngenTiltak())
+                .ingenTiltakBegrunnelse(risikoscenario.getRisikoscenarioData().getIngenTiltakBegrunnelse())
+                .sannsynlighetsNivaaEtterTiltak(risikoscenario.getRisikoscenarioData().getSannsynlighetsNivaaEtterTiltak())
+                .konsekvensNivaaEtterTiltak(risikoscenario.getRisikoscenarioData().getKonsekvensNivaaEtterTiltak())
+                .nivaaBegrunnelseEtterTiltak(risikoscenario.getRisikoscenarioData().getNivaaBegrunnelseEtterTiltak())
                 .build();
     }
 }

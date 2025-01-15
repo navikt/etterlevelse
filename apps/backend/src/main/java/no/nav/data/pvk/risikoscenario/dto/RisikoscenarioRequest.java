@@ -39,6 +39,13 @@ public class RisikoscenarioRequest implements RequestElement {
     private List<Integer> kravToAdd;
     private List<Integer> kravToDelete;
 
+    private Boolean ingenTiltak;
+    private String ingenTiltakBegrunnelse;
+
+    private Integer sannsynlighetsNivaaEtterTiltak;
+    private Integer konsekvensNivaaEtterTiltak;
+    private String nivaaBegrunnelseEtterTiltak;
+
     private Boolean update;
 
     @Override
@@ -49,6 +56,8 @@ public class RisikoscenarioRequest implements RequestElement {
         setBeskrivelse(trimToNull(beskrivelse));
         setSannsynlighetsNivaaBegrunnelse(trimToNull(sannsynlighetsNivaaBegrunnelse));
         setKonsekvensNivaaBegrunnelse(trimToNull(konsekvensNivaaBegrunnelse));
+        setIngenTiltakBegrunnelse(trimToNull(ingenTiltakBegrunnelse));
+        setNivaaBegrunnelseEtterTiltak(trimToNull(nivaaBegrunnelseEtterTiltak));
     }
 
     @Override
@@ -69,6 +78,11 @@ public class RisikoscenarioRequest implements RequestElement {
                 .konsekvensNivaaBegrunnelse(konsekvensNivaaBegrunnelse)
                 .generelScenario(generelScenario)
                 .relevanteKravNummer(copyOf(relevanteKravNummer))
+                .ingenTiltak(ingenTiltak)
+                .ingenTiltakBegrunnelse(ingenTiltakBegrunnelse)
+                .sannsynlighetsNivaaEtterTiltak(sannsynlighetsNivaaEtterTiltak)
+                .konsekvensNivaaEtterTiltak(konsekvensNivaaEtterTiltak)
+                .nivaaBegrunnelseEtterTiltak(nivaaBegrunnelseEtterTiltak)
                 .build();
 
         return Risikoscenario.builder()
@@ -88,6 +102,12 @@ public class RisikoscenarioRequest implements RequestElement {
         risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaaBegrunnelse(konsekvensNivaaBegrunnelse);
         risikoscenarioToMerge.getRisikoscenarioData().setGenerelScenario(generelScenario);
         risikoscenarioToMerge.getRisikoscenarioData().setRelevanteKravNummer(copyOf(relevanteKravNummer));
+        risikoscenarioToMerge.getRisikoscenarioData().setIngenTiltak(ingenTiltak);
+        risikoscenarioToMerge.getRisikoscenarioData().setIngenTiltakBegrunnelse(ingenTiltakBegrunnelse);
+        risikoscenarioToMerge.getRisikoscenarioData().setSannsynlighetsNivaaEtterTiltak(sannsynlighetsNivaaEtterTiltak);
+        risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaaEtterTiltak(konsekvensNivaaEtterTiltak);
+        risikoscenarioToMerge.getRisikoscenarioData().setNivaaBegrunnelseEtterTiltak(nivaaBegrunnelseEtterTiltak);
+
     }
 }
 
