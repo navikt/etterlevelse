@@ -39,7 +39,6 @@ public class PvkDokumentResponse {
     private Boolean harInvolvertRepresentant;
     private String representantInvolveringsBeskrivelse;
 
-    private Boolean stemmerDatabehandlere;
     private Boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
@@ -64,7 +63,6 @@ public class PvkDokumentResponse {
                 .stemmerPersonkategorier(pvkDokument.getPvkDokumentData().getStemmerPersonkategorier())
                 .harInvolvertRepresentant(pvkDokument.getPvkDokumentData().getHarInvolvertRepresentant())
                 .representantInvolveringsBeskrivelse(pvkDokument.getPvkDokumentData().getRepresentantInvolveringsBeskrivelse())
-                .stemmerDatabehandlere(pvkDokument.getPvkDokumentData().getStemmerDatabehandlere())
                 .harDatabehandlerRepresentantInvolvering(pvkDokument.getPvkDokumentData().getHarDatabehandlerRepresentantInvolvering())
                 .dataBehandlerRepresentantInvolveringBeskrivelse(pvkDokument.getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse())
                 .build();

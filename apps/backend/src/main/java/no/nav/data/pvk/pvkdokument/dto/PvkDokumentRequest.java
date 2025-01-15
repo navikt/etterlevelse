@@ -38,7 +38,6 @@ public class PvkDokumentRequest implements RequestElement {
     private Boolean harInvolvertRepresentant;
     private String representantInvolveringsBeskrivelse;
 
-    private Boolean stemmerDatabehandlere;
     private Boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
@@ -80,7 +79,6 @@ public class PvkDokumentRequest implements RequestElement {
                 .stemmerPersonkategorier(stemmerPersonkategorier)
                 .harInvolvertRepresentant(harInvolvertRepresentant)
                 .representantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse)
-                .stemmerDatabehandlere(stemmerDatabehandlere)
                 .harDatabehandlerRepresentantInvolvering(harDatabehandlerRepresentantInvolvering)
                 .dataBehandlerRepresentantInvolveringBeskrivelse(dataBehandlerRepresentantInvolveringBeskrivelse)
                 .build();
@@ -105,7 +103,6 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.getPvkDokumentData().setStemmerPersonkategorier(stemmerPersonkategorier);
         pvkDokumentToMerge.getPvkDokumentData().setHarInvolvertRepresentant(harInvolvertRepresentant);
         pvkDokumentToMerge.getPvkDokumentData().setRepresentantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse);
-        pvkDokumentToMerge.getPvkDokumentData().setStemmerDatabehandlere(stemmerDatabehandlere);
         pvkDokumentToMerge.getPvkDokumentData().setDataBehandlerRepresentantInvolveringBeskrivelse(dataBehandlerRepresentantInvolveringBeskrivelse);
 
     }

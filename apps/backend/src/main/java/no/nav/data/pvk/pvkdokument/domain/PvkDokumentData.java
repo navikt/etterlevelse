@@ -30,7 +30,6 @@ public class PvkDokumentData {
     private Boolean harInvolvertRepresentant;
     private String representantInvolveringsBeskrivelse;
 
-    private Boolean stemmerDatabehandlere;
     private Boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
