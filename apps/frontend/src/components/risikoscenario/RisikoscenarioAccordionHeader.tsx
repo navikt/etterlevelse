@@ -1,4 +1,4 @@
-import { Accordion } from '@navikt/ds-react/esm/accordion'
+import { Accordion } from '@navikt/ds-react'
 import { IRisikoscenario } from '../../constants'
 
 interface IProps {
