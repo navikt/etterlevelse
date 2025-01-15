@@ -55,12 +55,12 @@ export const getRisikoscenarioByKravnummer = async (kravnummer: string) => {
   ).data
 }
 
-export const createRiskoscenario = async (risikoscenario: IRisikoscenario) => {
+export const createRisikoscenario = async (risikoscenario: IRisikoscenario) => {
   const dto = risikoscenarioToRisikoscenarioDto(risikoscenario)
   return (await axios.post<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario`, dto)).data
 }
 
-export const updateRiskoscenario = async (risikoscenario: IRisikoscenario) => {
+export const updateRisikoscenario = async (risikoscenario: IRisikoscenario) => {
   const dto = risikoscenarioToRisikoscenarioDto(risikoscenario)
   return (
     await axios.put<IRisikoscenario>(
@@ -70,7 +70,7 @@ export const updateRiskoscenario = async (risikoscenario: IRisikoscenario) => {
   ).data
 }
 
-export const updateKravForRiskoscenarioer = async (request: IKravRisikoscenarioRelasjon) => {
+export const updateKravForRisikoscenarioer = async (request: IKravRisikoscenarioRelasjon) => {
   return (
     await axios.put<IRisikoscenario[]>(`${env.backendBaseUrl}/risikoscenario/update/relevantKrav`, {
       kravnummer: request.kravnummer,

@@ -1,7 +1,7 @@
 import { Button, Chips, Select, VStack } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
-import { updateKravForRiskoscenarioer } from '../../../api/RisikoscenarioApi'
+import { updateKravForRisikoscenarioer } from '../../../api/RisikoscenarioApi'
 import { IKravRisikoscenarioRelasjon, IRisikoscenario } from '../../../constants'
 
 interface IProps {
@@ -44,7 +44,7 @@ export const LeggTilEksisterendeRisikoscenario = (props: IProps) => {
   }
 
   const submit = async (request: IKravRisikoscenarioRelasjon) => {
-    updateKravForRiskoscenarioer(request).then((response) => {
+    updateKravForRisikoscenarioer(request).then((response) => {
       setRisikoscenarioer(
         risikoscenarioer.filter(
           (risikoscenario) => !selectedRisikoscenarioer.includes(risikoscenario.id)

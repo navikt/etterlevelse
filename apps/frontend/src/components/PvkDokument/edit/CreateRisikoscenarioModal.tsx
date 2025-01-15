@@ -1,6 +1,6 @@
 import { Button } from '@navikt/ds-react'
 import { useState } from 'react'
-import { createRiskoscenario } from '../../../api/RisikoscenarioApi'
+import { createRisikoscenario } from '../../../api/RisikoscenarioApi'
 import { IPvkDokument, IRisikoscenario } from '../../../constants'
 import RisikoscenarioModalForm from './RisikoscenarioModalForm'
 
@@ -14,7 +14,7 @@ export const CreateRisikoscenarioModal = (props: IProps) => {
   const [isEdit, setIsEdit] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario) => {
-    await createRiskoscenario(risikoscenario).then((response) => {
+    await createRisikoscenario(risikoscenario).then((response) => {
       if (onSubmitStateUpdate) {
         onSubmitStateUpdate(response)
       }

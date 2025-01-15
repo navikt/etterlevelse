@@ -1,6 +1,6 @@
 import { Label } from '@navikt/ds-react'
 import { Dispatch, SetStateAction } from 'react'
-import { createRiskoscenario } from '../../../api/RisikoscenarioApi'
+import { createRisikoscenario } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario, TKravQL } from '../../../constants'
 import RisikoscenarioForm from './RisikoscenarioForm'
 
@@ -16,7 +16,7 @@ export const CreateRisikoscenario = (props: IProps) => {
   const { krav, pvkDokumentId, setIsCreateMode, risikoscenarioer, setRisikoscenarioer } = props
 
   const submit = async (risikoscenario: IRisikoscenario) => {
-    await createRiskoscenario(risikoscenario).then((response) => {
+    await createRisikoscenario(risikoscenario).then((response) => {
       setRisikoscenarioer([...risikoscenarioer, response])
       setIsCreateMode(false)
     })

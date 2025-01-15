@@ -1,7 +1,7 @@
 import { LinkIcon, PencilIcon } from '@navikt/aksel-icons'
 import { BodyLong, Button, CopyButton, Label } from '@navikt/ds-react'
 import { useState } from 'react'
-import { updateRiskoscenario } from '../../api/RisikoscenarioApi'
+import { updateRisikoscenario } from '../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../constants'
 import RisikoscenarioModalForm from '../PvkDokument/edit/RisikoscenarioModalForm'
 import RisikoscenarioTag, {
@@ -34,7 +34,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
   const currentUrl = window.location.origin.toString() + window.location.pathname + '?steg=4'
 
   const submit = async (risikoscenario: IRisikoscenario) => {
-    await updateRiskoscenario(risikoscenario).then((response) => {
+    await updateRisikoscenario(risikoscenario).then((response) => {
       setActiveRisikoscenario(response)
       setIsEditModalOpen(false)
     })
@@ -110,7 +110,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
 
         {!risikoscenario.ingenTiltak && <div>liste over tiltak og redigeringsknappene</div>}
 
-        <div>
+        <div className="mt-3">
           <IngenTiltakField
             risikoscenario={activeRisikoscenario}
             setRisikoscenario={setActiveRisikoscenario}
