@@ -43,6 +43,7 @@ public class EtterlevelseDokumentasjon extends DomainObject {
     private String avdeling;
     private List<String> irrelevansFor;
     private List<String> prioritertKravNummer;
+    private List<String> Risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown
     private List<Varslingsadresse> varslingsadresser;
 
     public List<CodelistResponse> irrelevantForAsCodes() {

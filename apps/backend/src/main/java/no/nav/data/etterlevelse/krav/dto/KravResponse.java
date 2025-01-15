@@ -44,7 +44,7 @@ public class KravResponse implements KravId {
     private String notat;
     private String varselMelding;
 
-    private List<String> dokumentasjon;
+    private List<String> dokumentasjon; // Inneholder både lenke og beskrivelse, formattert som markdown
     private String implementasjoner;
     private List<String> begrepIder;
     private List<String> virkemiddelIder;
