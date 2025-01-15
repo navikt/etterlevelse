@@ -35,7 +35,7 @@ public class PvkDokument extends Auditable {
 
     @Builder.Default
     @Column(name = "STATUS")
-    private PvkDokumentStatus status = PvkDokumentStatus.AKTIV;
+    private PvkDokumentStatus status = PvkDokumentStatus.UNDERARBEID;
 
     @Type(value = JsonBinaryType.class)
     @Column(name = "DATA", nullable = false)

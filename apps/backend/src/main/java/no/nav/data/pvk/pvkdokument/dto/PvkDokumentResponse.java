@@ -42,6 +42,8 @@ public class PvkDokumentResponse {
     private Boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
+    private String merknadTilPvoEllerRisikoeier;
+
     public static PvkDokumentResponse buildFrom(PvkDokument pvkDokument) {
         return PvkDokumentResponse.builder()
                 .id(pvkDokument.getId())
@@ -65,6 +67,7 @@ public class PvkDokumentResponse {
                 .representantInvolveringsBeskrivelse(pvkDokument.getPvkDokumentData().getRepresentantInvolveringsBeskrivelse())
                 .harDatabehandlerRepresentantInvolvering(pvkDokument.getPvkDokumentData().getHarDatabehandlerRepresentantInvolvering())
                 .dataBehandlerRepresentantInvolveringBeskrivelse(pvkDokument.getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse())
+                .merknadTilPvoEllerRisikoeier(pvkDokument.getPvkDokumentData().getMerknadTilPvoEllerRisikoeier())
                 .build();
     }
 

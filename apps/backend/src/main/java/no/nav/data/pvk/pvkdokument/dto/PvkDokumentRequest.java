@@ -41,6 +41,8 @@ public class PvkDokumentRequest implements RequestElement {
     private Boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
+    private String merknadTilPvoEllerRisikoeier;
+
     private Boolean update;
 
     @Override
@@ -55,8 +57,10 @@ public class PvkDokumentRequest implements RequestElement {
         setRepresentantInvolveringsBeskrivelse(trimToNull(representantInvolveringsBeskrivelse));
         setDataBehandlerRepresentantInvolveringBeskrivelse(trimToNull(dataBehandlerRepresentantInvolveringBeskrivelse));
 
-        if (status == null) {
-            status = PvkDokumentStatus.AKTIV;
+        setMerknadTilPvoEllerRisikoeier(trimToNull(merknadTilPvoEllerRisikoeier));
+
+        if (status == null || status == PvkDokumentStatus.AKTIV) {
+            status = PvkDokumentStatus.UNDERARBEID;
         }
     }
 
@@ -81,12 +85,13 @@ public class PvkDokumentRequest implements RequestElement {
                 .representantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse)
                 .harDatabehandlerRepresentantInvolvering(harDatabehandlerRepresentantInvolvering)
                 .dataBehandlerRepresentantInvolveringBeskrivelse(dataBehandlerRepresentantInvolveringBeskrivelse)
+                .merknadTilPvoEllerRisikoeier(merknadTilPvoEllerRisikoeier)
                 .build();
 
         return PvkDokument.builder()
                 .id(id != null && !id.isEmpty() ? UUID.fromString(id) : null)
                 .etterlevelseDokumentId(etterlevelseDokumentId)
-                .status(status != null ? status : PvkDokumentStatus.AKTIV)
+                .status(status != null ? status : PvkDokumentStatus.UNDERARBEID)
                 .pvkDokumentData(pkvDokumentData)
                 .build();
     }
@@ -104,6 +109,7 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.getPvkDokumentData().setHarInvolvertRepresentant(harInvolvertRepresentant);
         pvkDokumentToMerge.getPvkDokumentData().setRepresentantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse);
         pvkDokumentToMerge.getPvkDokumentData().setDataBehandlerRepresentantInvolveringBeskrivelse(dataBehandlerRepresentantInvolveringBeskrivelse);
+        pvkDokumentToMerge.getPvkDokumentData().setMerknadTilPvoEllerRisikoeier(merknadTilPvoEllerRisikoeier);
 
     }
 }

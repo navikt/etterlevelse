@@ -33,6 +33,8 @@ public class PvkDokumentData {
     private Boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
+    private String merknadTilPvoEllerRisikoeier;
+
     public List<CodelistResponse> ytterligereEgenskaperAsCodes() {
         return CodelistService.getCodelistResponseList(ListName.YTTERLIGERE_EGENSKAPER, ytterligereEgenskaper);
     }

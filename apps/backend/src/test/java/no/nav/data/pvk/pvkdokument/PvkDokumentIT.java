@@ -52,7 +52,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
 
         var request = PvkDokumentRequest.builder()
                 .etterlevelseDokumentId(UUID.randomUUID().toString())
-                .status(PvkDokumentStatus.AKTIV)
+                .status(PvkDokumentStatus.UNDERARBEID)
                 .ytterligereEgenskaper(List.of())
                 .build();
 
@@ -71,7 +71,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
         var request = PvkDokumentRequest.builder()
                 .id(pvkDokuemnt.getId().toString())
                 .etterlevelseDokumentId(pvkDokuemnt.getEtterlevelseDokumentId())
-                .status(PvkDokumentStatus.AKTIV)
+                .status(PvkDokumentStatus.UNDERARBEID)
                 .ytterligereEgenskaper(List.of("PROFILERING", "TEKNOLOGI"))
                 .build();
 
@@ -96,7 +96,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
     public PvkDokument generatePvkDokument(String etterlevelseDokumentasjonId) {
         return PvkDokument.builder()
                 .etterlevelseDokumentId(etterlevelseDokumentasjonId)
-                .status(PvkDokumentStatus.AKTIV)
+                .status(PvkDokumentStatus.UNDERARBEID)
                 .pvkDokumentData(
                         PvkDokumentData.builder()
                                 .ytterligereEgenskaper(List.of())
