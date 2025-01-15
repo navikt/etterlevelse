@@ -1,7 +1,8 @@
 import { BodyLong, Button, Heading } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
-import { mapPvkDokumentToFormValue } from '../../api/PvkDokumentApi'
-import { IPvkDokument } from '../../constants'
+import { getPvkDokument, mapPvkDokumentToFormValue } from '../../api/PvkDokumentApi'
+import { EPvkDokumentStatus, IPvkDokument } from '../../constants'
+import { TextAreaField } from '../common/Inputs'
 import FormButtons from './edit/FormButtons'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
 import InnvolveringSummary from './formSummary/InnvolveringSummary'
@@ -16,6 +17,7 @@ interface IProps {
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
 }
+
 export const SendInnView = (props: IProps) => {
   const {
     pvkDokument,
@@ -29,7 +31,16 @@ export const SendInnView = (props: IProps) => {
   } = props
 
   const submit = async (pvkDokument: IPvkDokument) => {
-    console.debug('submited pvkdokument, pvkdokument: ', pvkDokument)
+    await getPvkDokument(pvkDokument.id).then((response) => {
+      const updatedPvkDokument = {
+        ...response,
+        status: EPvkDokumentStatus.SENDT_TIL_PVO,
+        merknadTilPvoEllerRisikoeier: pvkDokument.merknadTilPvoEllerRisikoeier,
+      }
+      console.debug('submited pvkdokument, pvkdokument: ', updatedPvkDokument)
+      // code to update pvk dokument send updatedPvkDokument as request payload
+      // reason for not implementing is we have no way of updating status after
+    })
   }
 
   return (
@@ -63,8 +74,17 @@ export const SendInnView = (props: IProps) => {
                 updateTitleUrlAndStep={updateTitleUrlAndStep}
               />
 
+              <div className="mt-5 max-w-[75ch]">
+                <TextAreaField
+                  rows={3}
+                  noPlaceholder
+                  label="Er det noe annet dere ønsker å formidle til etterlever? (valgfritt)"
+                  name="merknadTilPvoEllerRisikoeier"
+                />
+              </div>
+
               <div className="mt-5">
-                <Button type="button" onClick={() => {}}>
+                <Button type="button" onClick={() => submitForm()}>
                   Send til PVO
                 </Button>
               </div>
