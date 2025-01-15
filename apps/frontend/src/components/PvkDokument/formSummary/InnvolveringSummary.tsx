@@ -73,7 +73,7 @@ export const InnvolveringSummary = (props: IProps) => {
             </FormSummary.Answer>
 
             <FormSummary.Answer>
-              <FormSummary.Label>Involvering av representanter</FormSummary.Label>
+              <FormSummary.Label>Representanter for databehandlere</FormSummary.Label>
               <FormSummary.Value>
                 <FormSummary.Answers>
                   <FormSummary.Answer>

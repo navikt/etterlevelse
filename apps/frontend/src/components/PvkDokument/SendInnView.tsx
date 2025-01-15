@@ -6,6 +6,7 @@ import { TextAreaField } from '../common/Inputs'
 import FormButtons from './edit/FormButtons'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
 import InnvolveringSummary from './formSummary/InnvolveringSummary'
+import RisikoscenarioSummary from './formSummary/RisikoscenarioSummary'
 
 interface IProps {
   pvkDokument: IPvkDokument
@@ -73,6 +74,8 @@ export const SendInnView = (props: IProps) => {
                 personkategorier={personkategorier}
                 updateTitleUrlAndStep={updateTitleUrlAndStep}
               />
+
+              <RisikoscenarioSummary />
 
               <div className="mt-5 max-w-[75ch]">
                 <TextAreaField
