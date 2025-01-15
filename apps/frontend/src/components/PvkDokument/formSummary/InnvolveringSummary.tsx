@@ -92,13 +92,6 @@ export const InnvolveringSummary = (props: IProps) => {
                   </FormSummary.Answer>
 
                   <FormSummary.Answer>
-                    <FormSummary.Label>Stemmer denne lista over databehandlere?</FormSummary.Label>
-                    <FormSummary.Value>
-                      {fieldProp.form.values.stemmerDatabehandlere ? 'Ja' : 'Nei'}
-                    </FormSummary.Value>
-                  </FormSummary.Answer>
-
-                  <FormSummary.Answer>
                     <FormSummary.Label>
                       Har dere involvert en representant for databehandlere?
                     </FormSummary.Label>
