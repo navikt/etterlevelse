@@ -119,5 +119,9 @@ export const mapRisikoscenarioToFormValue = (
     generelScenario: risikoscenario.generelScenario || false,
     kravToAdd: [],
     kravToDelete: [],
+    ingenTiltak: risikoscenario.ingenTiltak === undefined ? undefined : risikoscenario.ingenTiltak,
+    sannsynlighetsNivaaEtterTiltak: risikoscenario.sannsynlighetsNivaaEtterTiltak || 0,
+    konsekvensNivaaEtterTiltak: risikoscenario.konsekvensNivaaEtterTiltak || 0,
+    nivaaBegrunnelseEtterTiltak: risikoscenario.nivaaBegrunnelseEtterTiltak || '',
   }
 }
