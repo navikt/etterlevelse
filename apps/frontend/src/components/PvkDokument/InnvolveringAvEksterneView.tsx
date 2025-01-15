@@ -1,5 +1,5 @@
-import { Alert, BodyLong, Button, Heading, List, ReadMore } from '@navikt/ds-react'
-import { Field, FieldProps, Form, Formik } from 'formik'
+import { BodyLong, Button, Heading, List, ReadMore } from '@navikt/ds-react'
+import { Form, Formik } from 'formik'
 import { RefObject } from 'react'
 import {
   getPvkDokument,
@@ -132,7 +132,7 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
                 />
               </div>
 
-              <List className="mt-10" title="Involvering av representanter">
+              <List className="mt-10" title="Representanter for databehandlere">
                 <BodyLong>
                   I Behandlingskatalogen står det at følgende databehandlere benyttes:
                 </BodyLong>
@@ -143,22 +143,15 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
                   ))}
               </List>
 
+              <BodyLong className="my-3">
+                Dersom listen over behandlere ikke stemmer, må dere gjøre endringer i
+                Behandlingskatalogen.
+              </BodyLong>
+
               <BodyLong>
                 Hvis dere er usikker på om behandlingene benytter flere eller færre databehandlere,
                 kan det være til hjelp å se på behandlingens livsløp.
               </BodyLong>
-
-              <Field>
-                {(fieldProps: FieldProps) => (
-                  <>
-                    {fieldProps.form.values.stemmerDatabehandlere === false && (
-                      <Alert inline variant="warning" className="my-5">
-                        Dere må oppdatere databehandlere i Behandlingskatalogen
-                      </Alert>
-                    )}
-                  </>
-                )}
-              </Field>
 
               <BodyLong className="mt-5">
                 Dersom det skal benyttes en databehandler i hele eller deler av behandlingen, skal
