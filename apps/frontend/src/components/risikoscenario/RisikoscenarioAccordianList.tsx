@@ -2,6 +2,7 @@ import { Accordion } from '@navikt/ds-react'
 import { useEffect } from 'react'
 import { IRisikoscenario } from '../../constants'
 import RisikoscenarioAccordionContent from './RisikoscenarioAccordianContent'
+import RisikoscenarioAccordianHeader from './RisikoscenarioAccordionHeader'
 
 interface IProps {
   risikoscenarioList: IRisikoscenario[]
@@ -10,8 +11,7 @@ interface IProps {
 }
 
 export const RisikoscenarioAccordianList = (props: IProps) => {
-  const { risikoscenarioList, setRisikoscenarioList } = props
-
+  const { risikoscenarioList, setRisikoscenarioList, defaultOpen } = props
   useEffect(() => {
     if (window.location.hash) {
       setTimeout(() => {
@@ -27,8 +27,12 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
     <div>
       <Accordion className="max-w-[75ch]">
         {risikoscenarioList.map((risikoscenario, index) => (
-          <Accordion.Item id={risikoscenario.id} key={index + '_' + risikoscenario.navn}>
-            <Accordion.Header>{risikoscenario.navn}</Accordion.Header>
+          <Accordion.Item
+            id={risikoscenario.id}
+            key={index + '_' + risikoscenario.navn}
+            defaultOpen={defaultOpen}
+          >
+            <RisikoscenarioAccordianHeader risikoscenario={risikoscenario} />
             <Accordion.Content>
               <RisikoscenarioAccordionContent
                 risikoscenario={risikoscenario}
