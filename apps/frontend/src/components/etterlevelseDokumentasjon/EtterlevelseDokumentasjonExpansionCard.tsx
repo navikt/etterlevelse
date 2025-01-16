@@ -108,7 +108,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
 
                 {isDev && user.isAdmin() && (
                   <div className="mb-2.5">
-                    <Label size="small">Risikovurderinger:</Label>
+                    <Label size="small">ROS-dokumentasjon:</Label>
                     <BodyShort size="small">
                       {etterlevelseDokumentasjon.risikovurderinger
                         ? etterlevelseDokumentasjon.risikovurderinger.map((vurdering) => (
