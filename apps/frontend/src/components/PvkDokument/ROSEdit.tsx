@@ -1,9 +1,16 @@
-import {Button, TextField, Heading} from '@navikt/ds-react'
-import {FieldArray, FieldArrayRenderProps} from 'formik'
-import {ChangeEvent, useState} from 'react'
-import {FieldWrapper} from '../common/Inputs'
-import {Error, FormError} from '../common/ModalSchema'
-import {RenderTagList} from '../common/TagList'
+import { Button, Heading, TextField } from '@navikt/ds-react'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
+import { ChangeEvent, useState } from 'react'
+import { FieldWrapper } from '../common/Inputs'
+import { Error, FormError } from '../common/ModalSchema'
+import { RenderTagList } from '../common/TagList'
+
+const linkReg = /\[(.+)\]\((.+)\)/i
+const linkNameFor = (t: string) => {
+  const groups = t.match(linkReg)
+  if (groups) return groups[1]
+  return t
+}
 
 export const ROSEdit = () => {
   const [url, setUrl] = useState('')
@@ -11,8 +18,8 @@ export const ROSEdit = () => {
   const [error, setError] = useState('')
 
   return (
-    <FieldWrapper marginBottom id="ros">
-      <FieldArray name="ros">
+    <FieldWrapper marginBottom id="risikovurderinger">
+      <FieldArray name="risikovurderinger">
         {(fieldArrayRenderProps: FieldArrayRenderProps) => {
           const add = (): void => {
             if (url === '') {
@@ -23,18 +30,18 @@ export const ROSEdit = () => {
               setError('Legg til et navn')
               return
             }
+            fieldArrayRenderProps.push(`[${name}](${url})`)
             setError('')
-            console.log("ROS link lagt til (TODO)", url, name)
-            console.log(fieldArrayRenderProps.form.values)
             setUrl('')
             setName('')
           }
 
           return (
-            <div>
+            <div className="my-8">
               <Heading level="2" size="small" spacing>
                 Legg til informasjon on gjeldende ROS-dokumentasjon
               </Heading>
+
               <div className="flex">
                 <TextField
                   className="w-2/5"
@@ -49,7 +56,8 @@ export const ROSEdit = () => {
                   label="Legg inn navnet til ROS-dokumentet"
                   value={name}
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                    setName((event.target as HTMLInputElement).value)}
+                    setName((event.target as HTMLInputElement).value)
+                  }
                 />
                 <div className="flex items-end">
                   <Button type="button" onClick={add} variant="secondary">
@@ -58,11 +66,13 @@ export const ROSEdit = () => {
                 </div>
               </div>
 
-              {error && <Error message={error}/>}
-              {!error && <FormError fieldName="ros" akselStyling/>}
+              {error && <Error message={error} />}
+              {!error && <FormError fieldName="risikovurderinger" akselStyling />}
 
               <RenderTagList
-                list={["ros-1", "ros-2"]}
+                list={(fieldArrayRenderProps.form.values.risikovurderinger as string[]).map(
+                  linkNameFor
+                )}
                 onRemove={fieldArrayRenderProps.remove}
               />
             </div>
