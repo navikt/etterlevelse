@@ -5,7 +5,7 @@ import { FieldWrapper } from '../common/Inputs'
 import { Error, FormError } from '../common/ModalSchema'
 import { RenderTagList } from '../common/TagList'
 
-const linkReg = /\[(.+)\]\((.+)\)/i
+const linkReg = /\[(.+)]\((.+)\)/i
 const linkNameFor = (t: string) => {
   const groups = t.match(linkReg)
   if (groups) return groups[1]
