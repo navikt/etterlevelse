@@ -7,6 +7,7 @@ import { user } from '../../services/User'
 import { isDev } from '../../util/config'
 import { BehandlingList } from '../behandling/BehandlingList'
 import { Markdown } from '../common/Markdown'
+import { ExternalLink } from '../common/RouteLink'
 import { Teams } from '../common/TeamName'
 import { VarslingsadresserView } from './VarslingsAddresseView'
 
@@ -111,9 +112,21 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                     <Label size="small">ROS-dokumentasjon:</Label>
                     <BodyShort size="small">
                       {etterlevelseDokumentasjon.risikovurderinger
-                        ? etterlevelseDokumentasjon.risikovurderinger.map((vurdering) => (
-                            <span key={vurdering}>{vurdering}</span>
-                          ))
+                        ? etterlevelseDokumentasjon.risikovurderinger.map((vurdering) => {
+                            const linkReg = /\[(.+)]\((.+)\)/i
+                            const groups = vurdering.match(linkReg)
+                            if (groups)
+                              return (
+                                <ExternalLink key={vurdering} className="flex" href={groups[2]}>
+                                  {groups[1]}
+                                </ExternalLink>
+                              )
+                            return (
+                              <span className="flex" key={vurdering}>
+                                {vurdering}
+                              </span>
+                            )
+                          })
                         : 'Ikke angitt'}
                     </BodyShort>
                   </div>
