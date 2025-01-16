@@ -44,7 +44,7 @@ export const ROSEdit = () => {
 
               <div className="flex">
                 <TextField
-                  className="w-2/5"
+                  className="w-full"
                   label="Legg inn URL til ROS-dokumentasjon"
                   value={url}
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
@@ -52,7 +52,7 @@ export const ROSEdit = () => {
                   }
                 />
                 <TextField
-                  className="w-2/5 mx-2.5"
+                  className="w-full mx-2.5"
                   label="Legg inn navnet til ROS-dokumentet"
                   value={name}
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
@@ -60,7 +60,12 @@ export const ROSEdit = () => {
                   }
                 />
                 <div className="flex items-end">
-                  <Button type="button" onClick={add} variant="secondary">
+                  <Button
+                    className="min-w-[6.688rem] "
+                    type="button"
+                    onClick={add}
+                    variant="secondary"
+                  >
                     Legg til
                   </Button>
                 </div>
