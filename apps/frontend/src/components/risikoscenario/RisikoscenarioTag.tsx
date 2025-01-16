@@ -39,7 +39,7 @@ export const getKonsekvenssnivaaText = (konsekvensnivaa: number) => {
     case 4:
       return 'Alvorlig konsekvens'
     case 5:
-      return 'Svaert alvorlig konsekvens'
+      return 'Svært alvorlig konsekvens'
     default:
       return 'Ingen konsekvensnivå satt'
   }
