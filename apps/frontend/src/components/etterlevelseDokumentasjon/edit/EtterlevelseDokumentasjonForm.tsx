@@ -43,6 +43,7 @@ import {
 } from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import { isDev } from '../../../util/config'
+import { ROSEdit } from '../../PvkDokument/ROSEdit'
 import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { Markdown } from '../../common/Markdown'
@@ -353,6 +354,8 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
               </FieldArray>
             </FieldWrapper>
           )}
+
+          {isDev && user.isAdmin() && <ROSEdit />}
 
           <Heading level="2" size="small" spacing>
             Legg til minst et team og/eller en person
