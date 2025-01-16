@@ -103,6 +103,18 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                     behandlinger={behandlinger}
                   />
                 )}
+
+                <div className="mb-2.5">
+                  <Label size="small">Risikovurderinger:</Label>
+                  <BodyShort size="small">
+                    {etterlevelseDokumentasjon.risikovurderinger
+                      ? etterlevelseDokumentasjon.risikovurderinger.map((vurdering) => (
+                          <span key={vurdering}>{vurdering}</span>
+                        ))
+                      : 'Ikke angitt'}
+                  </BodyShort>
+                </div>
+
                 <div className="mb-2.5">
                   {etterlevelseDokumentasjon.avdeling && (
                     <div className="flex items-start gap-2">
