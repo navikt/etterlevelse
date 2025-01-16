@@ -25,7 +25,7 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
 
   return (
     <div>
-      <Accordion className="max-w-[75ch]">
+      <Accordion>
         {risikoscenarioList.map((risikoscenario, index) => (
           <Accordion.Item
             id={risikoscenario.id}

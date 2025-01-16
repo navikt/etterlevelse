@@ -43,8 +43,8 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
   }, [])
 
   return (
-    <div className="flex justify-center">
-      <div>
+    <div className="flex justify-center w-full">
+      <div className="w-full">
         <ReadMore header="Vis behandlingens livsløp">Her kommer Behandlingens livsløp.</ReadMore>
 
         <Heading level="1" size="medium" className="my-5">
