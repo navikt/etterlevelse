@@ -1,4 +1,4 @@
-import { BodyLong, Label } from '@navikt/ds-react'
+import { Alert, BodyLong, Label } from '@navikt/ds-react'
 import { useState } from 'react'
 import { IRisikoscenario } from '../../constants'
 import RisikoscenarioView from './RisikoscenarioView'
@@ -15,7 +15,7 @@ export const OppsumeringAccordianContent = (props: IProps) => {
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const currentUrl = window.location.origin.toString() + window.location.pathname + '?steg=4'
 
-  const tiltakListe = ['testTiltak']
+  const tiltakListe = []
 
   return (
     <div>
@@ -25,14 +25,37 @@ export const OppsumeringAccordianContent = (props: IProps) => {
         <Label>Følgende tiltak gjelder for dette risikoscenarioet</Label>
         {risikoscenario.ingenTiltak && <BodyLong>Vi skal ikke ha tiltak.</BodyLong>}
 
-        {!risikoscenario.ingenTiltak && tiltakListe.length !== 0 && (
+        {!risikoscenario.ingenTiltak && tiltakListe.length === 0 && (
           <div>
-            <BodyLong>liste over tiltak og redigeringsknappene</BodyLong>
+            <Alert className="mt-3" variant="warning">
+              Dere må legge inn tiltak under Identifisering av risikoscenarioer og tiltak.
+            </Alert>
+          </div>
+        )}
 
-            <VurdereTiltaksEffekt
-              risikoscenario={activeRisikoscenario}
-              setRisikoscenario={setActiveRisikoscenario}
-            />
+        {!risikoscenario.ingenTiltak && (
+          <div>
+            <div className="mt-5">
+              <Label>Antatt risikonivå etter gjennomførte tiltak</Label>
+            </div>
+
+            {tiltakListe.length !== 0 && (
+              <div>
+                <BodyLong>liste over tiltak og redigeringsknappene</BodyLong>
+
+                <VurdereTiltaksEffekt
+                  risikoscenario={activeRisikoscenario}
+                  setRisikoscenario={setActiveRisikoscenario}
+                />
+              </div>
+            )}
+
+            {tiltakListe.length === 0 && (
+              <Alert className="mt-3" variant="warning">
+                Før dere kan vurdere tiltakenes effekt, må dere legge inn tiltak under
+                Identifisering av risikoscenarioer og tiltak.
+              </Alert>
+            )}
           </div>
         )}
       </div>

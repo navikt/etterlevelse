@@ -1,4 +1,5 @@
-import { Alert, Button, Label, Radio, RadioGroup, Stack } from '@navikt/ds-react'
+import { PencilIcon } from '@navikt/aksel-icons'
+import { Alert, BodyLong, Button, Label, Radio, RadioGroup, Stack } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
 import {
@@ -11,6 +12,10 @@ import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 import ReadMoreKonsekvensnivaa from '../ReadMoreKonsekvensnivaa'
 import ReadMoreSannsynlighetsnivaa from '../ReadMoreSannsynlighetsnivaa'
+import RisikoscenarioTag, {
+  getKonsekvenssnivaaText,
+  getSannsynlighetsnivaaText,
+} from '../RisikoscenarioTag'
 
 interface IProps {
   risikoscenario: IRisikoscenario
@@ -54,12 +59,35 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
               Du må vurdere tiltakenes effekt
             </Alert>
           )}
+
+          {!revurdertEffektCheck && (
+            <div className="mt-3">
+              <RisikoscenarioTag
+                level={risikoscenario.sannsynlighetsNivaaEtterTiltak}
+                text={getSannsynlighetsnivaaText(risikoscenario.sannsynlighetsNivaaEtterTiltak)}
+              />
+
+              <div className="mt-3">
+                <RisikoscenarioTag
+                  level={risikoscenario.konsekvensNivaaEtterTiltak}
+                  text={getKonsekvenssnivaaText(risikoscenario.konsekvensNivaaEtterTiltak)}
+                />
+              </div>
+              <BodyLong className="mt-3">{risikoscenario.nivaaBegrunnelseEtterTiltak}</BodyLong>
+            </div>
+          )}
         </div>
       )}
 
       {!isFormActive && (
-        <Button className="mt-3" type="button" onClick={() => setIsFormActive(true)}>
-          Vurdér tiltakenes effekt
+        <Button
+          className="mt-3"
+          type="button"
+          variant={revurdertEffektCheck ? 'primary' : 'tertiary'}
+          onClick={() => setIsFormActive(true)}
+          icon={revurdertEffektCheck ? undefined : <PencilIcon aria-hidden title="" />}
+        >
+          {revurdertEffektCheck ? 'Vurdér tiltakenes effekt' : 'Redigér tiltakenes effekt'}
         </Button>
       )}
 
