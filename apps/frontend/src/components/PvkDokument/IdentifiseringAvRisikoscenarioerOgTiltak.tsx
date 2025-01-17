@@ -98,7 +98,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
           </Alert>
         )}
 
-        {risikoscenarioList.length > 0 && (
+        {risikoscenarioList.length !== 0 && (
           <div className="my-5">
             <RisikoscenarioAccordianList
               risikoscenarioList={risikoscenarioList}
