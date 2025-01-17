@@ -1,4 +1,4 @@
-import { BodyLong, Label } from '@navikt/ds-react'
+import { Alert, BodyLong, Label } from '@navikt/ds-react'
 import { useState } from 'react'
 import { IRisikoscenario } from '../../constants'
 import RisikoscenarioView from './RisikoscenarioView'
@@ -13,7 +13,16 @@ export const OppsumeringAccordianContent = (props: IProps) => {
   const { risikoscenario } = props
   const [activeRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const currentUrl = window.location.origin.toString() + window.location.pathname + '?steg=4'
+  const revurdertEffektCheck =
+    activeRisikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
+    activeRisikoscenario.sannsynlighetsNivaaEtterTiltak === null ||
+    activeRisikoscenario.konsekvensNivaaEtterTiltak === 0 ||
+    activeRisikoscenario.konsekvensNivaaEtterTiltak === null
+
   const tiltakListe = ['testTiltak']
+
+  console.debug(activeRisikoscenario.sannsynlighetsNivaaEtterTiltak)
+  console.debug(activeRisikoscenario.konsekvensNivaaEtterTiltak)
 
   return (
     <div>
@@ -21,14 +30,23 @@ export const OppsumeringAccordianContent = (props: IProps) => {
 
       <div className="mt-5">
         <Label>Følgende tiltak gjelder for dette risikoscenarioet</Label>
+        {risikoscenario.ingenTiltak && <BodyLong>Vi skal ikke ha tiltak.</BodyLong>}
 
         {!risikoscenario.ingenTiltak && tiltakListe.length !== 0 && (
           <div>
             <BodyLong>liste over tiltak og redigeringsknappene</BodyLong>
-            <div>{/* component for å revurdere sannsynlighets-/konsekvensnivaa */}</div>
+
+            <div className="mt-5">
+              <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
+
+              {revurdertEffektCheck && (
+                <Alert variant="warning">Du må vurdere tiltakenes effekt</Alert>
+              )}
+
+              <div>{/* component for å revurdere sannsynlighets-/konsekvensnivaa */}</div>
+            </div>
           </div>
         )}
-        {risikoscenario.ingenTiltak && <BodyLong>Vi skal ikke ha tiltak.</BodyLong>}
       </div>
     </div>
   )
