@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario } from '../../constants'
 import RisikoscenarioAccordianList from '../risikoscenario/RisikoscenarioAccordianList'
-import CreateRisikoscenarioModal from './edit/CreateRisikoscenarioModal'
+import CreateRisikoscenarioModal from '../risikoscenario/edit/CreateRisikoscenarioModal'
 import FormButtons from './edit/FormButtons'
 
 interface IProps {

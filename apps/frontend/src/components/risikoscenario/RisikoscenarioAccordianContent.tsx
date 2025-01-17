@@ -3,10 +3,10 @@ import { Button, Label } from '@navikt/ds-react'
 import { useState } from 'react'
 import { updateRisikoscenario } from '../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../constants'
-import RisikoscenarioModalForm from '../PvkDokument/edit/RisikoscenarioModalForm'
 import RisikoscenarioView from './RisikoscenarioView'
 import SlettOvrigRisikoscenario from './SlettOvrigRisikoscenario'
 import IngenTiltakField from './edit/IngenTiltakField'
+import RisikoscenarioModalForm from './edit/RisikoscenarioModalForm'
 
 interface IProps {
   risikoscenario: IRisikoscenario
