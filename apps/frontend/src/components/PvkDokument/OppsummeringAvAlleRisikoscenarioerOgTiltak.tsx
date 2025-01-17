@@ -67,19 +67,22 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
             </ToggleGroup>
 
             {/* WIP blir vist før den tas bort */}
-            {risikoscenarioList.length < 1 && (
+            {risikoscenarioList.length === 0 && (
               <div className="my-5">
                 <Alert variant="info">
                   <Heading spacing size="small" level="3">
                     Dere har foreløpig ingen risikoscenarioer
                   </Heading>
-                  Risikoscenarioer legges inn under <Link href="WIP">PVK-relaterte krav</Link>{' '}
+                  Risikoscenarioer legges inn under{' '}
+                  <Link href={`/dokumentasjon/${etterlevelseDokumentasjonId}`}>
+                    PVK-relaterte krav
+                  </Link>{' '}
                   (åpnes i ny fane) eller eventuelt under øvrige risikoscenarioer (åpnes i ny fane).
                 </Alert>
               </div>
             )}
 
-            {risikoscenarioList.length > 0 && (
+            {risikoscenarioList.length !== 0 && (
               <div className="my-5">
                 <RisikoscenarioAccordianList
                   risikoscenarioList={risikoscenarioList}
