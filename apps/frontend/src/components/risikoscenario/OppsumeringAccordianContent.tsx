@@ -2,6 +2,7 @@ import { Alert, BodyLong, Label } from '@navikt/ds-react'
 import { useState } from 'react'
 import { IRisikoscenario } from '../../constants'
 import RisikoscenarioView from './RisikoscenarioView'
+import VurdereTiltaksEffekt from './edit/VurdereTiltaksEffekt'
 
 interface IProps {
   risikoscenario: IRisikoscenario
@@ -11,7 +12,7 @@ interface IProps {
 
 export const OppsumeringAccordianContent = (props: IProps) => {
   const { risikoscenario } = props
-  const [activeRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
+  const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const currentUrl = window.location.origin.toString() + window.location.pathname + '?steg=4'
   const revurdertEffektCheck =
     activeRisikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
@@ -40,10 +41,17 @@ export const OppsumeringAccordianContent = (props: IProps) => {
               <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
 
               {revurdertEffektCheck && (
-                <Alert variant="warning">Du må vurdere tiltakenes effekt</Alert>
+                <Alert className="mt-3" variant="warning">
+                  Du må vurdere tiltakenes effekt
+                </Alert>
               )}
 
-              <div>{/* component for å revurdere sannsynlighets-/konsekvensnivaa */}</div>
+              <div className="mt-3">
+                <VurdereTiltaksEffekt
+                  risikoscenario={activeRisikoscenario}
+                  setRisikoscenario={setActiveRisikoscenario}
+                />
+              </div>
             </div>
           </div>
         )}
