@@ -1,7 +1,11 @@
 import { Alert, Button, Label, Radio, RadioGroup, Stack } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
-import { mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
+import {
+  getRisikoscenario,
+  mapRisikoscenarioToFormValue,
+  updateRisikoscenario,
+} from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../../constants'
 import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
@@ -14,7 +18,7 @@ interface IProps {
 }
 
 export const VurdereTiltaksEffekt = (props: IProps) => {
-  const { risikoscenario } = props
+  const { risikoscenario, setRisikoscenario } = props
   const [isFormActive, setIsFormActive] = useState<boolean>(false)
   const revurdertEffektCheck =
     risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
@@ -22,9 +26,21 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
     risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
     risikoscenario.konsekvensNivaaEtterTiltak === null
 
-  const submit = async (risikoscenario: IRisikoscenario) => {
-    console.debug(risikoscenario)
-    setIsFormActive(false)
+  const submit = async (submitedValues: IRisikoscenario) => {
+    await getRisikoscenario(risikoscenario.id).then((response) => {
+      const updatedRisikoscenario = {
+        ...submitedValues,
+        ...response,
+        sannsynlighetsNivaaEtterTiltak: submitedValues.sannsynlighetsNivaaEtterTiltak,
+        konsekvensNivaaEtterTiltak: submitedValues.konsekvensNivaaEtterTiltak,
+        nivaaBegrunnelseEtterTiltak: submitedValues.nivaaBegrunnelseEtterTiltak,
+      }
+
+      updateRisikoscenario(updatedRisikoscenario).then((response) => {
+        setRisikoscenario(response)
+        setIsFormActive(false)
+      })
+    })
   }
 
   return (
