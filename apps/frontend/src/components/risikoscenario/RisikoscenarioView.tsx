@@ -1,5 +1,6 @@
 import { LinkIcon } from '@navikt/aksel-icons'
 import { BodyLong, CopyButton, List, ReadMore } from '@navikt/ds-react'
+import { useParams } from 'react-router'
 import { IRisikoscenario } from '../../constants'
 import { ExternalLink } from '../common/RouteLink'
 import RisikoscenarioTag, {
@@ -15,6 +16,7 @@ interface IProps {
 
 export const RisikoscenarioView = (props: IProps) => {
   const { risikoscenario, currentUrl, noCopyButton } = props
+  const params = useParams<{ id?: string }>()
   return (
     <div>
       {!noCopyButton && (
@@ -37,9 +39,10 @@ export const RisikoscenarioView = (props: IProps) => {
         <ReadMore header="Vis etterlevelseskrav hvor risikoscenarioet inntreffer">
           <List as="ul">
             {risikoscenario.relevanteKravNummer.map((relevantKrav, index) => {
+              const kravHref = `/dokumentasjon/${params.id}/PVK/RELEVANTE_KRAV/krav/${relevantKrav.kravNummer}/${relevantKrav.kravVersjon}`
               return (
                 <List.Item key={relevantKrav.kravNummer + '_' + index}>
-                  <ExternalLink href="">
+                  <ExternalLink href={kravHref}>
                     K{relevantKrav.kravNummer}.{relevantKrav.kravVersjon} {relevantKrav.navn}
                   </ExternalLink>
                 </List.Item>
