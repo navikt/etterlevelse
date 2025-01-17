@@ -1,6 +1,7 @@
 import { LinkIcon } from '@navikt/aksel-icons'
-import { BodyLong, CopyButton } from '@navikt/ds-react'
+import { BodyLong, CopyButton, List, ReadMore } from '@navikt/ds-react'
 import { IRisikoscenario } from '../../constants'
+import { ExternalLink } from '../common/RouteLink'
 import RisikoscenarioTag, {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
@@ -26,9 +27,27 @@ export const RisikoscenarioView = (props: IProps) => {
         />
       )}
       <BodyLong className="mt-5">{risikoscenario.beskrivelse}</BodyLong>
-      <BodyLong className="mt-5">
-        Dette risikoscenarioet er ikke tilknyttet spesifikke etterlevelseskrav.
-      </BodyLong>
+      {risikoscenario.generelScenario && (
+        <BodyLong className="mt-5">
+          Dette risikoscenarioet er ikke tilknyttet spesifikke etterlevelseskrav.
+        </BodyLong>
+      )}
+
+      {!risikoscenario.generelScenario && (
+        <ReadMore header="Vis etterlevelseskrav hvor risikoscenarioet inntreffer">
+          <List as="ul">
+            {risikoscenario.relevanteKravNummer.map((relevantKrav, index) => {
+              return (
+                <List.Item key={relevantKrav.kravNummer + '_' + index}>
+                  <ExternalLink href="">
+                    K{relevantKrav.kravNummer}.{relevantKrav.kravVersjon} {relevantKrav.navn}
+                  </ExternalLink>
+                </List.Item>
+              )
+            })}
+          </List>
+        </ReadMore>
+      )}
 
       <div className="mt-5">
         <RisikoscenarioTag

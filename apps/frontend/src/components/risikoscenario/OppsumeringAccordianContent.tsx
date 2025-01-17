@@ -28,7 +28,6 @@ export const OppsumeringAccordianContent = (props: IProps) => {
             <div>{/* component for å revurdere sannsynlighets-/konsekvensnivaa */}</div>
           </div>
         )}
-
         {risikoscenario.ingenTiltak && <BodyLong>Vi skal ikke ha tiltak.</BodyLong>}
       </div>
     </div>
