@@ -21,7 +21,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   useEffect(() => {
     if (pvkDokument) {
       ;(async () => {
-        await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.GENERAL).then(
+        await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
           (risikoscenarioer) => {
             setRisikoscenarioList(risikoscenarioer.content)
           }
