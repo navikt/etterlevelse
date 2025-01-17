@@ -9,7 +9,7 @@ import { risikoscenarioCreateValidation } from './RisikoscenarioSchemaValidation
 
 interface IProps {
   initialValues: Partial<IRisikoscenario>
-  submit: (riskoscenario: IRisikoscenario) => void
+  submit: (risikoscenario: IRisikoscenario) => void
   onClose: () => void
 }
 

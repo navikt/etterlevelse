@@ -66,7 +66,6 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
               <ToggleGroup.Item value="" label="Ferdig" />
             </ToggleGroup>
 
-            {/* WIP blir vist før den tas bort */}
             {risikoscenarioList.length === 0 && (
               <div className="my-5">
                 <Alert variant="info">
