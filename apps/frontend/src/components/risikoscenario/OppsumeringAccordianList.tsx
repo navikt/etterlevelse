@@ -1,7 +1,6 @@
 import { Accordion } from '@navikt/ds-react'
-import { useEffect } from 'react'
 import { IRisikoscenario } from '../../constants'
-import RisikoscenarioAccordionContent from './RisikoscenarioAccordianContent'
+import OppsumeringAccordianContent from './OppsumeringAccordianContent'
 import RisikoscenarioAccordianHeader from './RisikoscenarioAccordionHeader'
 
 interface IProps {
@@ -10,19 +9,8 @@ interface IProps {
   defaultOpen?: boolean
 }
 
-export const RisikoscenarioAccordianList = (props: IProps) => {
+export const OppsumeringAccordianList = (props: IProps) => {
   const { risikoscenarioList, setRisikoscenarioList, defaultOpen } = props
-
-  useEffect(() => {
-    if (window.location.hash) {
-      setTimeout(() => {
-        const element = document.getElementById(window.location.hash.substring(1))
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' })
-        }
-      }, 200)
-    }
-  }, [])
 
   return (
     <div>
@@ -35,7 +23,7 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
           >
             <RisikoscenarioAccordianHeader risikoscenario={risikoscenario} />
             <Accordion.Content>
-              <RisikoscenarioAccordionContent
+              <OppsumeringAccordianContent
                 risikoscenario={risikoscenario}
                 risikoscenarioer={risikoscenarioList}
                 setRisikoscenarioer={setRisikoscenarioList}
@@ -47,5 +35,4 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
     </div>
   )
 }
-
-export default RisikoscenarioAccordianList
+export default OppsumeringAccordianList

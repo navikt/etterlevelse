@@ -2,7 +2,7 @@ import { Alert, BodyShort, Heading, Link, List, Tabs, ToggleGroup } from '@navik
 import { useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario } from '../../constants'
-import RisikoscenarioAccordianList from '../risikoscenario/RisikoscenarioAccordianList'
+import OppsumeringAccordianList from '../risikoscenario/OppsumeringAccordianList'
 import FormButtons from './edit/FormButtons'
 
 interface IProps {
@@ -84,7 +84,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
 
             {risikoscenarioList.length !== 0 && (
               <div className="my-5">
-                <RisikoscenarioAccordianList
+                <OppsumeringAccordianList
                   risikoscenarioList={risikoscenarioList}
                   setRisikoscenarioList={setRisikoscenarioList}
                 />
