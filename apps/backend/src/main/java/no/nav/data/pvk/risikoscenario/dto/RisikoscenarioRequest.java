@@ -25,8 +25,6 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 public class RisikoscenarioRequest implements RequestElement {
     private String id;
     private String pvkDokumentId;
-    
-    // FIXME: List<String> tiltak;
 
     private String navn;
     private String beskrivelse;

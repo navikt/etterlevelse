@@ -24,7 +24,7 @@ public class RisikoscenarioResponse {
     private Integer version;
 
     private String pvkDokumentId;
-    private List<String> tiltak;
+    private List<String> tiltakIds;
 
     private String navn;
     private String beskrivelse;

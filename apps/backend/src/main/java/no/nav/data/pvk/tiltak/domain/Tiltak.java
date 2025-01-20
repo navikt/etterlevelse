@@ -6,8 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -17,10 +15,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
-import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import org.hibernate.annotations.Type;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -41,19 +37,9 @@ public class Tiltak extends Auditable {
     @JoinColumn(name = "PVK_DOKUMENT_ID", nullable = false)
     private PvkDokument pvkDokument;
     
-    @ManyToMany(cascade = {}, fetch = FetchType.LAZY) // Merk: Cascade på merge og persist på andre siden av relasjonen
-    @JoinTable(name = "risikoscenario_tiltak", joinColumns = @JoinColumn(name = "tiltak"), inverseJoinColumns = @JoinColumn(name = "risikoscenario"))
-    private List<Risikoscenario> risikoscenarioer;
-
     @Type(value = JsonBinaryType.class)
     @Builder.Default
     @Column(name = "DATA", nullable = false)
     private TiltakData tiltakData = new TiltakData();
     
-    /*
-     * FIXME
-     * 1) Hvordan kommer requests?
-     * 2) Hvordan lagres tiltak, risscen og relasjonen?
-     */
-
 }
