@@ -109,6 +109,7 @@ export const EtterlevelseKravView = (props: IProps) => {
   const [isPrioritised, setIsPrioritised] = useState<boolean>(false)
   const [isPreview, setIsPreview] = useState<boolean>(false)
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
+  const [isPvkTabActive, setIsPvkTabActive] = useState<boolean>(false)
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -416,15 +417,23 @@ export const EtterlevelseKravView = (props: IProps) => {
                   <Tabs.Tab value="tilbakemeldinger" label="Spørsmål og svar" />
                 </Tabs.List>
                 <Tabs.Panel value="dokumentasjon">
-                  {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) && (
-                    <ToggleGroup
-                      className="mt-6"
-                      defaultValue="OFF"
-                      onChange={(value) => setIsPreview(value === 'ON' ? true : false)}
-                    >
-                      <ToggleGroup.Item value="OFF" label="Redigeringsvisning" />
-                      <ToggleGroup.Item value="ON" label="Forhåndsvisning" />
-                    </ToggleGroup>
+                  {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&
+                    !isPvkTabActive && (
+                      <ToggleGroup
+                        className="mt-6"
+                        defaultValue="OFF"
+                        value={isPreview ? 'ON' : 'OFF'}
+                        onChange={(value) => setIsPreview(value === 'ON' ? true : false)}
+                      >
+                        <ToggleGroup.Item value="OFF" label="Redigeringsvisning" />
+                        <ToggleGroup.Item value="ON" label="Forhåndsvisning" />
+                      </ToggleGroup>
+                    )}
+
+                  {isPvkTabActive && (
+                    <Alert className="mt-6" variant="info">
+                      Kan ikke redigeres når PVK tab på sidepanel er aktiv
+                    </Alert>
                   )}
                   {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) && (
                     <div className="mt-2">
@@ -511,6 +520,7 @@ export const EtterlevelseKravView = (props: IProps) => {
               setEtterlevelseMetadata={setEtterlevelseMetadata}
               alleKravVersjoner={alleKravVersjoner}
               setIsPreview={setIsPreview}
+              setIsPvkTabActive={setIsPvkTabActive}
             />
           </div>
 

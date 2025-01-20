@@ -9,11 +9,10 @@ import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionCon
 interface IProps {
   krav: TKravQL
   pvkDokument: IPvkDokument
-  setIsPreview: (state: boolean) => void
 }
 
 export const KravRisikoscenario = (props: IProps) => {
-  const { krav, pvkDokument, setIsPreview } = props
+  const { krav, pvkDokument } = props
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
   const [risikoscenarioer, setRisikoscenarioer] = useState<IRisikoscenario[]>([])
@@ -109,7 +108,6 @@ export const KravRisikoscenario = (props: IProps) => {
               size="small"
               type="button"
               onClick={() => {
-                setIsPreview(true)
                 setIsCreateMode(true)
               }}
             >
@@ -120,7 +118,6 @@ export const KravRisikoscenario = (props: IProps) => {
               variant="secondary"
               type="button"
               onClick={() => {
-                setIsPreview(true)
                 setIsLeggTilEksisterendeMode(true)
               }}
             >
