@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.behandlingensLivslop;
+package no.nav.data.pvk.tiltak.domain;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,6 +12,7 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
 import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopRequest;
 import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopResponse;
+import no.nav.data.pvk.tiltak.domain.dto.TiltakResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,31 +35,24 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/behandlingenslivslop")
-@Tag(name = "Behandlingens Livsløp", description = "Behandlingens Livsløp for etterlevelsesdokumentasjon")
-public class BehandlingensLivslopController {
+@RequestMapping("/tiltak")
+@Tag(name = "Tiltak", description = "Tiltak for Pvk")
+public class TiltakController {
 
-    private final BehandlingensLivslopService service;
+    private final TiltakService service;
 
-    @Operation(summary = "Get All Behandlingens Livsløp")
-    @ApiResponse(description = "ok")
-    @GetMapping
-    public ResponseEntity<RestResponsePage<BehandlingensLivslopResponse>> getAll(
-            PageParameters pageParameters
-    ) {
-        log.info("Get all Behandlingens Livsløp");
-        Page<BehandlingensLivslop> page = service.getAll(pageParameters);
-        return ResponseEntity.ok(new RestResponsePage<>(page).convert(BehandlingensLivslopResponse::buildFrom));
-    }
+    // FIXME Trengs? public ResponseEntity<RestResponsePage<BehandlingensLivslopResponse>> getAll(PageParameters pageParameters
 
-    @Operation(summary = "Get One Behandlingens Livsløp")
+    
+    @Operation(summary = "Get One Tiltak")
     @ApiResponse(description = "ok")
     @GetMapping("/{id}")
-    public ResponseEntity<BehandlingensLivslopResponse> getById(@PathVariable UUID id) {
-        log.info("Get Behandlingens Livsløp id={}", id);
-        return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(service.get(id)));
+    public ResponseEntity<TiltakResponse> getById(@PathVariable UUID id) {
+        log.info("Get Tiltak id={}", id);
+        return ResponseEntity.ok(TiltakResponse.buildFrom(service.get(id)));
     }
 
+/* FIXME
     @Operation(summary = "Get Behandlingens Livsløp by etterlevelsedokument id")
     @ApiResponse(description = "ok")
     @GetMapping("/etterlevelsedokument/{etterlevelseDokumentId}")
@@ -121,5 +115,5 @@ public class BehandlingensLivslopController {
          var behandlingensLivslop = service.delete(id);
          return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop));
      }
-
+//*/
 }

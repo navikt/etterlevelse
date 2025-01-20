@@ -14,8 +14,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TiltakData {
+    
     private String navn;
     private String beskrivelse;
     private String ansvarlig;
     private LocalDate frist;
+
 }
