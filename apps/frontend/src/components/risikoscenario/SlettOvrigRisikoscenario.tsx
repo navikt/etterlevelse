@@ -1,6 +1,7 @@
 import { TrashIcon } from '@navikt/aksel-icons'
 import { Button, Modal } from '@navikt/ds-react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { deleteRisikoscenario } from '../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../constants'
 
@@ -13,6 +14,7 @@ interface IProps {
 export const SlettOvrigRisikoscenario = (props: IProps) => {
   const { risikoscenarioId, risikoscenarioer, setRisikoscenarioer } = props
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   const submit = async () => {
     deleteRisikoscenario(risikoscenarioId).then((response) => {
@@ -24,6 +26,7 @@ export const SlettOvrigRisikoscenario = (props: IProps) => {
         setRisikoscenarioer([...updatedRisikoscenarioForKrav])
       }
       setIsOpen(false)
+      navigate(window.location.pathname)
     })
   }
 
