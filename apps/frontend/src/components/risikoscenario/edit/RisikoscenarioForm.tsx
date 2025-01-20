@@ -1,4 +1,4 @@
-import { Button, ErrorSummary, Heading, Radio, RadioGroup, Stack } from '@navikt/ds-react'
+import { Button, ErrorSummary, Heading, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import React, { useState } from 'react'
 import { mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
@@ -70,13 +70,11 @@ export const RisikoscenarioForm = (props: IProps) => {
                       )
                     }
                   >
-                    <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
-                      <Radio value={1}>Meget lite sannsynlig</Radio>
-                      <Radio value={2}>Lite sannsynlig</Radio>
-                      <Radio value={3}>Moderat sannsynlig</Radio>
-                      <Radio value={4}>Sannsynlig</Radio>
-                      <Radio value={5}>Nesten sikkert</Radio>
-                    </Stack>
+                    <Radio value={1}>Meget lite sannsynlig</Radio>
+                    <Radio value={2}>Lite sannsynlig</Radio>
+                    <Radio value={3}>Moderat sannsynlig</Radio>
+                    <Radio value={4}>Sannsynlig</Radio>
+                    <Radio value={5}>Nesten sikkert</Radio>
                   </RadioGroup>
                 )}
               </Field>
@@ -110,13 +108,11 @@ export const RisikoscenarioForm = (props: IProps) => {
                       )
                     }
                   >
-                    <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
-                      <Radio value={1}>Ubetydelig</Radio>
-                      <Radio value={2}>Lav konsekvens</Radio>
-                      <Radio value={3}>Moderat konsekvens</Radio>
-                      <Radio value={4}>Alvorlig konsekvens</Radio>
-                      <Radio value={5}>Svært alvorlig konsekvens</Radio>
-                    </Stack>
+                    <Radio value={1}>Ubetydelig</Radio>
+                    <Radio value={2}>Lav konsekvens</Radio>
+                    <Radio value={3}>Moderat konsekvens</Radio>
+                    <Radio value={4}>Alvorlig konsekvens</Radio>
+                    <Radio value={5}>Svært alvorlig konsekvens</Radio>
                   </RadioGroup>
                 )}
               </Field>
