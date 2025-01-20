@@ -1,16 +1,10 @@
-import { Button, Heading, TextField } from '@navikt/ds-react'
+import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
+import { Button, Heading, Table, TextField } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { ChangeEvent, useState } from 'react'
 import { FieldWrapper } from '../common/Inputs'
 import { Error, FormError } from '../common/ModalSchema'
-import { RenderTagList } from '../common/TagList'
-
-const linkReg = /\[(.+)]\((.+)\)/i
-const linkNameFor = (t: string) => {
-  const groups = t.match(linkReg)
-  if (groups) return groups[1]
-  return t
-}
+import { ExternalLink } from '../common/RouteLink'
 
 export const ROSEdit = () => {
   const [url, setUrl] = useState('')
@@ -45,18 +39,18 @@ export const ROSEdit = () => {
               <div className="flex">
                 <TextField
                   className="w-full"
-                  label="Legg inn URL til ROS-dokumentasjon"
-                  value={url}
-                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                    setUrl((event.target as HTMLInputElement).value)
-                  }
-                />
-                <TextField
-                  className="w-full mx-2.5"
                   label="Legg inn navnet til ROS-dokumentet"
                   value={name}
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     setName((event.target as HTMLInputElement).value)
+                  }
+                />
+                <TextField
+                  className="w-full mx-2.5"
+                  label="Legg inn URL til ROS-dokumentasjon"
+                  value={url}
+                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    setUrl((event.target as HTMLInputElement).value)
                   }
                 />
                 <div className="flex items-end">
@@ -74,12 +68,50 @@ export const ROSEdit = () => {
               {error && <Error message={error} />}
               {!error && <FormError fieldName="risikovurderinger" akselStyling />}
 
-              <RenderTagList
-                list={(fieldArrayRenderProps.form.values.risikovurderinger as string[]).map(
-                  linkNameFor
-                )}
-                onRemove={fieldArrayRenderProps.remove}
-              />
+              <Table className="mt-2.5" size="small">
+                <Table.Body>
+                  {fieldArrayRenderProps.form.values.risikovurderinger
+                    ? fieldArrayRenderProps.form.values.risikovurderinger.map(
+                        (vurdering: string, index: number) => {
+                          const linkReg = /\[(.+)]\((.+)\)/i
+                          const groups = vurdering.match(linkReg)
+                          if (groups)
+                            return (
+                              <Table.Row key={vurdering}>
+                                <Table.DataCell>
+                                  <ExternalLink key={vurdering} className="flex" href={groups[2]}>
+                                    {groups[1]}
+                                  </ExternalLink>
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                  <Button
+                                    variant="tertiary"
+                                    icon={<PencilIcon aria-hidden aria-label="" />}
+                                  >
+                                    Redigér lenke
+                                  </Button>
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                  <Button
+                                    variant="tertiary"
+                                    icon={<TrashIcon aria-hidden aria-label="" />}
+                                    onClick={() => fieldArrayRenderProps.remove(index)}
+                                  >
+                                    Slett lenke
+                                  </Button>
+                                </Table.DataCell>
+                              </Table.Row>
+                            )
+                          return (
+                            <span className="flex" key={vurdering}>
+                              {vurdering}
+                            </span>
+                          )
+                        }
+                      )
+                    : 'Ikke angitt'}
+                </Table.Body>
+              </Table>
             </div>
           )
         }}
