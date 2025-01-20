@@ -2,10 +2,10 @@ import { FileTextIcon } from '@navikt/aksel-icons'
 import { Button, Label, Tabs } from '@navikt/ds-react'
 import { Dispatch, useEffect, useState } from 'react'
 import { IEtterlevelseMetadata, IKravVersjon, IPvkDokument, TKravQL } from '../../../constants'
-import KravRisikoscenario from '../../PvkDokument/KravRisikoscenario'
 import { Markdown } from '../../common/Markdown'
 import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
 import { AllInfo } from '../../krav/ViewKrav'
+import KravRisikoscenario from '../../risikoscenario/KravRisikoscenario'
 
 interface IProps {
   krav: TKravQL

@@ -215,6 +215,7 @@ export const PvkDokumentPage = () => {
                   {activeStep === 5 && (
                     <OppsummeringAvAlleRisikoscenarioerOgTiltak
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      pvkDokument={pvkDokument}
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}
                       setActiveStep={updateTitleUrlAndStep}
