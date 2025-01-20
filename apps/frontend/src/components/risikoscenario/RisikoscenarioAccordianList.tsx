@@ -1,5 +1,5 @@
-import { Accordion } from '@navikt/ds-react'
-import { useEffect } from 'react'
+import { Accordion, BodyLong, Button, Modal } from '@navikt/ds-react'
+import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IRisikoscenario } from '../../constants'
 import RisikoscenarioAccordionContent from './RisikoscenarioAccordianContent'
@@ -8,10 +8,13 @@ import RisikoscenarioAccordianHeader from './RisikoscenarioAccordionHeader'
 interface IProps {
   risikoscenarioList: IRisikoscenario[]
   setRisikoscenarioList: (state: IRisikoscenario[]) => void
+  formRef: RefObject<any>
 }
 
 export const RisikoscenarioAccordianList = (props: IProps) => {
-  const { risikoscenarioList, setRisikoscenarioList } = props
+  const { risikoscenarioList, setRisikoscenarioList, formRef } = props
+  const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
+  const [navigateUrl, setNavigateUrl] = useState<string>('')
   const url = new URL(window.location.href)
   const risikoscenarioId = url.searchParams.get('risikoscenario')
   const navigate = useNavigate()
@@ -29,9 +32,19 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
 
   const handleAccordionChange = (risikoscenarioId?: string) => {
     if (risikoscenarioId) {
-      navigate(window.location.pathname + '?risikoscenario=' + risikoscenarioId)
+      setNavigateUrl(window.location.pathname + '?risikoscenario=' + risikoscenarioId)
+      if (formRef.current?.dirty) {
+        setIsUnsaved(true)
+      } else {
+        navigate(window.location.pathname + '?risikoscenario=' + risikoscenarioId)
+      }
     } else {
-      navigate(window.location.pathname)
+      setNavigateUrl(window.location.pathname)
+      if (formRef.current?.dirty) {
+        setIsUnsaved(true)
+      } else {
+        navigate(window.location.pathname)
+      }
     }
   }
 
@@ -51,16 +64,47 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
             >
               <RisikoscenarioAccordianHeader risikoscenario={risikoscenario} />
               <Accordion.Content>
-                <RisikoscenarioAccordionContent
-                  risikoscenario={risikoscenario}
-                  risikoscenarioer={risikoscenarioList}
-                  setRisikoscenarioer={setRisikoscenarioList}
-                />
+                {expanded && (
+                  <RisikoscenarioAccordionContent
+                    risikoscenario={risikoscenario}
+                    risikoscenarioer={risikoscenarioList}
+                    setRisikoscenarioer={setRisikoscenarioList}
+                    formRef={formRef}
+                  />
+                )}
               </Accordion.Content>
             </Accordion.Item>
           )
         })}
       </Accordion>
+
+      <Modal onClose={() => setIsUnsaved(false)} open={isUnsaved} header={{ heading: 'Varsel' }}>
+        <Modal.Body>
+          <BodyLong>Endringene som er gjort er ikke lagret.</BodyLong>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            type="button"
+            onClick={() => {
+              formRef.current?.submitForm()
+              setIsUnsaved(false)
+              navigate(navigateUrl)
+            }}
+          >
+            Lagre og fortsette
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => {
+              setIsUnsaved(false)
+              navigate(navigateUrl)
+            }}
+          >
+            Fortsett uten å lagre
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { Alert, BodyLong, Button, Heading, ReadMore } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario } from '../../constants'
@@ -13,11 +13,18 @@ interface IProps {
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
+  formRef: RefObject<any>
 }
 
 export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
-  const { etterlevelseDokumentasjonId, pvkDokument, activeStep, setActiveStep, setSelectedStep } =
-    props
+  const {
+    etterlevelseDokumentasjonId,
+    pvkDokument,
+    activeStep,
+    setActiveStep,
+    setSelectedStep,
+    formRef,
+  } = props
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const navigate = useNavigate()
 
@@ -94,6 +101,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
             <RisikoscenarioAccordianList
               risikoscenarioList={risikoscenarioList}
               setRisikoscenarioList={setRisikoscenarioList}
+              formRef={formRef}
             />
           </div>
         )}

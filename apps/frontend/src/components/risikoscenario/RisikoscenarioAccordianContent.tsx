@@ -1,6 +1,6 @@
 import { PencilIcon } from '@navikt/aksel-icons'
 import { Button, Label } from '@navikt/ds-react'
-import { useState } from 'react'
+import { RefObject, useState } from 'react'
 import { updateRisikoscenario } from '../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../constants'
 import RisikoscenarioView from './RisikoscenarioView'
@@ -10,6 +10,7 @@ import RisikoscenarioModalForm from './edit/RisikoscenarioModalForm'
 
 interface IProps {
   risikoscenario: IRisikoscenario
+  formRef?: RefObject<any>
   risikoscenarioer?: IRisikoscenario[]
   setRisikoscenarioer?: (state: IRisikoscenario[]) => void
   kravnummer?: number
@@ -25,6 +26,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
     isCreateMode,
     kravnummer,
     noCopyButton,
+    formRef,
   } = props
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
@@ -70,6 +72,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
           <IngenTiltakField
             risikoscenario={activeRisikoscenario}
             setRisikoscenario={setActiveRisikoscenario}
+            formRef={formRef}
           />
         </div>
       </div>

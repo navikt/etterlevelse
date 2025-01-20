@@ -1,5 +1,6 @@
 import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
+import { RefObject } from 'react'
 import {
   getRisikoscenario,
   mapRisikoscenarioToFormValue,
@@ -10,10 +11,11 @@ import { IRisikoscenario } from '../../../constants'
 interface IProps {
   risikoscenario: IRisikoscenario
   setRisikoscenario: (state: IRisikoscenario) => void
+  formRef?: RefObject<any>
 }
 
 export const IngenTiltakField = (props: IProps) => {
-  const { risikoscenario, setRisikoscenario } = props
+  const { risikoscenario, setRisikoscenario, formRef } = props
 
   const submit = async (submitedValues: IRisikoscenario) => {
     await getRisikoscenario(risikoscenario.id).then((response) => {
@@ -32,7 +34,11 @@ export const IngenTiltakField = (props: IProps) => {
 
   return (
     <div>
-      <Formik initialValues={mapRisikoscenarioToFormValue(risikoscenario)} onSubmit={submit}>
+      <Formik
+        initialValues={mapRisikoscenarioToFormValue(risikoscenario)}
+        onSubmit={submit}
+        innerRef={formRef}
+      >
         {({ submitForm }) => (
           <Form>
             <Field name="ingenTiltak">
