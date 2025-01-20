@@ -1,11 +1,10 @@
-package no.nav.data.pvk.tiltak.domain.dto;
+package no.nav.data.pvk.tiltak.dto;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakData;
 

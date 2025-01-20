@@ -1,8 +1,10 @@
-package no.nav.data.pvk.tiltak.domain;
+package no.nav.data.pvk.tiltak;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.pvk.tiltak.domain.Tiltak;
+import no.nav.data.pvk.tiltak.domain.TiltakRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
