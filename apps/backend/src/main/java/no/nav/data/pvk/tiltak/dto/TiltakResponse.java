@@ -10,7 +10,6 @@ import no.nav.data.pvk.tiltak.domain.TiltakData;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -19,7 +18,7 @@ import java.util.UUID;
 @JsonPropertyOrder({"id", "behandlingId", "etterlevelseDokumentasjonId", "webSakNummer", "arkiveringDato", "status"})
 public class TiltakResponse {
 
-    private UUID id;
+    private String id;
     private String pvkDokumentId;
     private String navn;
     private String beskrivelse;
@@ -30,14 +29,13 @@ public class TiltakResponse {
     public static TiltakResponse buildFrom(Tiltak tiltak) {
         TiltakData td = tiltak.getTiltakData();
         return builder()
-                .id(tiltak.getId())
-                .pvkDokumentId(tiltak.getPvkDokument().getId().toString()) // FIXME: Riktig med toString her?
+                .id(tiltak.getId().toString())
+                .pvkDokumentId(tiltak.getPvkDokumentId())
                 .navn(td.getNavn())
                 .beskrivelse(td.getBeskrivelse())
                 .ansvarlig(td.getAnsvarlig())
                 .frist(td.getFrist())
                 .build();
-        // FIXME: risikoscenarioIds
     }
     
 }
