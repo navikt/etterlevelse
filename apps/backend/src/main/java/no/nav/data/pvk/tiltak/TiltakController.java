@@ -1,35 +1,17 @@
-package no.nav.data.pvk.tiltak.domain;
+package no.nav.data.pvk.tiltak;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.exceptions.ValidationException;
-import no.nav.data.common.rest.PageParameters;
-import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
-import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopRequest;
-import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopResponse;
-import no.nav.data.pvk.tiltak.domain.dto.TiltakResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import no.nav.data.pvk.tiltak.dto.TiltakResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
