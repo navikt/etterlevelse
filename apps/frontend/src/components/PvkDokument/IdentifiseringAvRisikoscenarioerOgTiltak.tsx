@@ -19,7 +19,6 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
   const { etterlevelseDokumentasjonId, pvkDokument, activeStep, setActiveStep, setSelectedStep } =
     props
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
-  const [defaultOpen, setDefaultOpen] = useState<boolean>(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -33,14 +32,6 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
       })()
     }
   }, [pvkDokument])
-
-  useEffect(() => {
-    if (window.location.hash) {
-      setDefaultOpen(true)
-    } else {
-      setDefaultOpen(false)
-    }
-  }, [])
 
   return (
     <div className="flex justify-center w-full">
@@ -103,7 +94,6 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
             <RisikoscenarioAccordianList
               risikoscenarioList={risikoscenarioList}
               setRisikoscenarioList={setRisikoscenarioList}
-              defaultOpen={defaultOpen}
             />
           </div>
         )}

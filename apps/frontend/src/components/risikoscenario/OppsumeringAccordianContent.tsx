@@ -13,13 +13,12 @@ interface IProps {
 export const OppsumeringAccordianContent = (props: IProps) => {
   const { risikoscenario } = props
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
-  const currentUrl = window.location.origin.toString() + window.location.pathname + '?steg=4'
 
   const tiltakListe = []
 
   return (
     <div>
-      <RisikoscenarioView risikoscenario={activeRisikoscenario} currentUrl={currentUrl} />
+      <RisikoscenarioView risikoscenario={activeRisikoscenario} />
 
       <div className="mt-5">
         <Label>Følgende tiltak gjelder for dette risikoscenarioet</Label>

@@ -28,7 +28,6 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
   } = props
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
-  const currentUrl = window.location.origin.toString() + window.location.pathname + '?steg=4'
 
   const submit = async (risikoscenario: IRisikoscenario) => {
     await updateRisikoscenario(risikoscenario).then((response) => {
@@ -39,11 +38,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
 
   return (
     <div>
-      <RisikoscenarioView
-        risikoscenario={activeRisikoscenario}
-        currentUrl={currentUrl}
-        noCopyButton={noCopyButton}
-      />
+      <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={noCopyButton} />
 
       {!isCreateMode && (
         <div className="mt-5 flex gap-2 items-center">

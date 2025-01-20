@@ -10,19 +10,18 @@ import RisikoscenarioTag, {
 
 interface IProps {
   risikoscenario: IRisikoscenario
-  currentUrl: string
   noCopyButton?: boolean
 }
 
 export const RisikoscenarioView = (props: IProps) => {
-  const { risikoscenario, currentUrl, noCopyButton } = props
+  const { risikoscenario, noCopyButton } = props
   const params = useParams<{ id?: string }>()
   return (
     <div>
       {!noCopyButton && (
         <CopyButton
           variant="action"
-          copyText={currentUrl + '#' + risikoscenario.id}
+          copyText={window.location.href}
           text="Kopiér scenariolenke"
           activeText="Lenken er kopiert"
           icon={<LinkIcon aria-hidden />}
