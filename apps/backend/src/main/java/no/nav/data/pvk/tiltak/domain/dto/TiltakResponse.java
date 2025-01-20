@@ -26,18 +26,19 @@ public class TiltakResponse {
     private String beskrivelse;
     private String ansvarlig;
     private LocalDate frist;
-    private List<String> risikoscenarioer; // Evt. (Id, navn)
+    private List<String> risikoscenarioIds;
 
     public static TiltakResponse buildFrom(Tiltak tiltak) {
         TiltakData td = tiltak.getTiltakData();
         return builder()
-                .id (tiltak.getId())
+                .id(tiltak.getId())
                 .pvkDokumentId(tiltak.getPvkDokument().getId().toString()) // FIXME: Riktig med toString her?
                 .navn(td.getNavn())
                 .beskrivelse(td.getBeskrivelse())
                 .ansvarlig(td.getAnsvarlig())
                 .frist(td.getFrist())
                 .build();
+        // FIXME: risikoscenarioIds
     }
     
 }
