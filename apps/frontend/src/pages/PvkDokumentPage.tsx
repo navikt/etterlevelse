@@ -2,7 +2,7 @@ import { Alert, BodyLong, Button, Loader, Modal, Stepper } from '@navikt/ds-reac
 import { uniqBy } from 'lodash'
 import { RefObject, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
 import BehandlingensArtOgOmfangView from '../components/PvkDokument/BehandlingensArtOgOmfangView'
@@ -30,10 +30,10 @@ export const PvkDokumentPage = () => {
     Partial<{
       id?: string
       pvkdokumentId?: string
+      steg?: string
     }>
   > = useParams<{ id?: string }>()
-  const url = new URL(window.location.href)
-  const currentStep = url.searchParams.get('steg')
+  const currentStep = params.steg || '1'
   const [currentPage, setCurrentPage] = useState<string>(
     currentStep !== null ? StepTitle[parseInt(currentStep) - 1] : 'Oversikt'
   )
@@ -46,6 +46,7 @@ export const PvkDokumentPage = () => {
     currentStep !== null ? parseInt(currentStep) : 1
   )
   const [selectedStep, setSelectedStep] = useState<number>(1)
+  const navigate = useNavigate()
   const formRef: RefObject<any> = useRef(undefined)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
@@ -66,8 +67,9 @@ export const PvkDokumentPage = () => {
   ]
 
   const updateUrlOnStepChange = (step: number) => {
-    url.searchParams.set('steg', step.toString())
-    window.history.pushState({}, '', url)
+    navigate(
+      `/dokumentasjon/${pvkDokument?.etterlevelseDokumentId}/pvkdokument/${pvkDokument?.id}/${step}`
+    )
   }
 
   const updateTitleUrlAndStep = (step: number) => {
