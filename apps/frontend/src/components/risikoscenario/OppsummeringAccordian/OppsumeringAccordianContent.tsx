@@ -1,8 +1,8 @@
 import { Alert, BodyLong, Label } from '@navikt/ds-react'
 import { useState } from 'react'
-import { IRisikoscenario } from '../../constants'
-import RisikoscenarioView from './RisikoscenarioView'
-import VurdereTiltaksEffekt from './edit/VurdereTiltaksEffekt'
+import { IRisikoscenario } from '../../../constants'
+import RisikoscenarioView from '../RisikoscenarioView'
+import VurdereTiltaksEffekt from '../edit/VurdereTiltaksEffekt'
 
 interface IProps {
   risikoscenario: IRisikoscenario

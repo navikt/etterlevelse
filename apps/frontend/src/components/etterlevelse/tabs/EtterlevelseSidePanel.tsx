@@ -5,7 +5,7 @@ import { IEtterlevelseMetadata, IKravVersjon, IPvkDokument, TKravQL } from '../.
 import { Markdown } from '../../common/Markdown'
 import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
 import { AllInfo } from '../../krav/ViewKrav'
-import KravRisikoscenario from '../../risikoscenario/KravRisikoscenario'
+import KravRisikoscenario from '../../risikoscenario/kravRisikoscenario/KravRisikoscenario'
 
 interface IProps {
   krav: TKravQL

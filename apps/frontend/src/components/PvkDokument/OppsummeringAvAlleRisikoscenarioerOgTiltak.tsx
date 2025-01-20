@@ -2,7 +2,7 @@ import { Alert, BodyShort, Heading, Link, List, Tabs, ToggleGroup } from '@navik
 import { useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario } from '../../constants'
-import OppsumeringAccordianList from '../risikoscenario/OppsumeringAccordianList'
+import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/OppsumeringAccordianList'
 import FormButtons from './edit/FormButtons'
 
 interface IProps {

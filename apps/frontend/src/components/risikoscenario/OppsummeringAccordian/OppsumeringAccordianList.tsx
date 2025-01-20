@@ -1,7 +1,7 @@
 import { Accordion } from '@navikt/ds-react'
-import { IRisikoscenario } from '../../constants'
+import { IRisikoscenario } from '../../../constants'
+import RisikoscenarioAccordianHeader from '../RisikoscenarioAccordionHeader'
 import OppsumeringAccordianContent from './OppsumeringAccordianContent'
-import RisikoscenarioAccordianHeader from './RisikoscenarioAccordionHeader'
 
 interface IProps {
   risikoscenarioList: IRisikoscenario[]
