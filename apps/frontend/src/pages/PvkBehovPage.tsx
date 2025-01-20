@@ -1,4 +1,4 @@
-import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons'
+import { CheckmarkCircleFillIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyLong,
@@ -6,6 +6,7 @@ import {
   Button,
   Checkbox,
   CheckboxGroup,
+  CopyButton,
   Heading,
   Label,
   Link,
@@ -281,8 +282,16 @@ export const PvkBehovPage = () => {
                       className="mt-10"
                       header="Lurer dere fortsatt på om det er behov for PVK?"
                     >
-                      Personvernombudet (PVO) kan hjelpe dere å vurdere om dere skal gjøre en PVK.{' '}
-                      <a href="mailto:pvk@nav.no">Send e-post til PVO(pvk@nav.no)</a>
+                      Personvernombudet (PVO) kan hjelpe dere å vurdere om dere skal gjøre en PVK.
+                      Ta kontakt via mail.
+                      <CopyButton
+                        className="mt-3 border-2 border-solid"
+                        variant="action"
+                        copyText="pvk@nav.no"
+                        text="Kopiér PVO sin e-postadresse"
+                        activeText="E-postadressen er kopiert"
+                        icon={<EnvelopeClosedIcon aria-hidden />}
+                      />
                     </ReadMore>
 
                     <FieldWrapper marginBottom marginTop>
