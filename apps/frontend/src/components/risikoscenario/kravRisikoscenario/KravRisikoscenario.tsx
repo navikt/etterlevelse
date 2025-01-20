@@ -2,10 +2,9 @@ import { Accordion, Alert, Button, ReadMore } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, TKravQL } from '../../../constants'
-import RisikoscenarioAccordionContent from '../RisikoscenarioAccordianContent'
 import CreateRisikoscenario from '../edit/CreateRisikoscenario'
-import FjernRisikoscenarioFraKrav from '../edit/FjernRisikoscenarioFraKrav'
 import LeggTilEksisterendeRisikoscenario from '../edit/LeggTilEksisterendeRisikoscenario'
+import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionContent'
 
 interface IProps {
   krav: TKravQL
@@ -78,22 +77,15 @@ export const KravRisikoscenario = (props: IProps) => {
                 <Accordion.Item id={risikoscenario.id} key={index + '_' + risikoscenario.navn}>
                   <Accordion.Header>{risikoscenario.navn}</Accordion.Header>
                   <Accordion.Content>
-                    <RisikoscenarioAccordionContent
+                    <KravRisikoscenarioAccordionContent
                       risikoscenario={risikoscenario}
-                      noCopyButton
                       isCreateMode={isCreateMode}
                       kravnummer={krav.kravNummer}
+                      risikoscenarioer={risikoscenarioer}
+                      setRisikoscenarioer={setRisikoscenarioer}
+                      risikoscenarioForKrav={risikoscenarioForKrav}
+                      setRisikoscenarioForKrav={setRisikoscenarioForKrav}
                     />
-                    {!isCreateMode && (
-                      <FjernRisikoscenarioFraKrav
-                        kravnummer={krav.kravNummer}
-                        risikoscenario={risikoscenario}
-                        risikoscenarioer={risikoscenarioer}
-                        setRisikoscenarioer={setRisikoscenarioer}
-                        risikoscenarioForKrav={risikoscenarioForKrav}
-                        setRisikoscenerioForKrav={setRisikoscenarioForKrav}
-                      />
-                    )}
                   </Accordion.Content>
                 </Accordion.Item>
               ))}

@@ -14,7 +14,7 @@ interface IProps {
   risikoscenarioer: IRisikoscenario[]
   setRisikoscenarioer: (state: IRisikoscenario[]) => void
   risikoscenarioForKrav: IRisikoscenario[]
-  setRisikoscenerioForKrav: (state: IRisikoscenario[]) => void
+  setRisikoscenarioForKrav: (state: IRisikoscenario[]) => void
 }
 
 export const FjernRisikoscenarioFraKrav = (props: IProps) => {
@@ -24,7 +24,7 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
     risikoscenarioer,
     setRisikoscenarioer,
     risikoscenarioForKrav,
-    setRisikoscenerioForKrav,
+    setRisikoscenarioForKrav,
   } = props
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
@@ -36,7 +36,7 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
           const updatedRisikoscenarioForKrav = risikoscenarioForKrav.filter(
             (risikoscenario) => risikoscenario.id !== deleteResponse.id
           )
-          setRisikoscenerioForKrav([...updatedRisikoscenarioForKrav])
+          setRisikoscenarioForKrav([...updatedRisikoscenarioForKrav])
           setRisikoscenarioer([...risikoscenarioer, deleteResponse])
           setIsOpen(false)
         })
@@ -45,7 +45,7 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
           const updatedRisikoscenarioForKrav = risikoscenarioForKrav.filter(
             (risikoscenario) => risikoscenario.id !== deleteResponse.id
           )
-          setRisikoscenerioForKrav([...updatedRisikoscenarioForKrav])
+          setRisikoscenarioForKrav([...updatedRisikoscenarioForKrav])
           setIsOpen(false)
         })
       }
@@ -60,32 +60,21 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
         onClick={() => setIsOpen(true)}
         icon={<TrashIcon aria-hidden title="" />}
       >
-        {risikoscenario.relevanteKravNummer.length > 1
-          ? 'Fjern risikoscenario fra krav'
-          : 'Slett risikoscenario'}
+        Slett risikoscenario
       </Button>
 
       {isOpen && (
         <Modal
           header={{
-            heading:
-              risikoscenario.relevanteKravNummer.length > 1
-                ? 'Fjerne kravet fra risikoscenario'
-                : 'Slett risikoscenarioet',
+            heading: 'Slett risikoscenarioe',
           }}
           open={isOpen}
           onClose={() => setIsOpen(false)}
         >
-          <Modal.Body>
-            {risikoscenario.relevanteKravNummer.length > 1
-              ? 'Er du sikkert på at du vil fjerne kravet fra risikoscenario?'
-              : 'Er du sikkert på at du vil slette risikoscenarioet?'}
-          </Modal.Body>
+          <Modal.Body>Er du sikkert på at du vil slette risikoscenarioet?</Modal.Body>
           <Modal.Footer>
             <Button type="button" onClick={() => submit()}>
-              {risikoscenario.relevanteKravNummer.length > 1
-                ? 'ja, fjern kravet fra risikoscenario'
-                : 'ja, slett risikoscenarioet'}
+              ja, slett risikoscenarioet
             </Button>
             <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
               avbryt

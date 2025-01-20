@@ -10,24 +10,13 @@ import RisikoscenarioModalForm from './edit/RisikoscenarioModalForm'
 
 interface IProps {
   risikoscenario: IRisikoscenario
+  risikoscenarioer: IRisikoscenario[]
+  setRisikoscenarioer: (state: IRisikoscenario[]) => void
   formRef?: RefObject<any>
-  risikoscenarioer?: IRisikoscenario[]
-  setRisikoscenarioer?: (state: IRisikoscenario[]) => void
-  kravnummer?: number
-  isCreateMode?: boolean
-  noCopyButton?: boolean
 }
 
 export const RisikoscenarioAccordionContent = (props: IProps) => {
-  const {
-    risikoscenario,
-    risikoscenarioer,
-    setRisikoscenarioer,
-    isCreateMode,
-    kravnummer,
-    noCopyButton,
-    formRef,
-  } = props
+  const { risikoscenario, risikoscenarioer, setRisikoscenarioer, formRef } = props
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
 
@@ -40,28 +29,23 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
 
   return (
     <div>
-      <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={noCopyButton} />
+      <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={false} />
 
-      {!isCreateMode && (
-        <div className="mt-5 flex gap-2 items-center">
-          <Button
-            variant="tertiary"
-            type="button"
-            icon={<PencilIcon aria-hidden />}
-            onClick={() => setIsEditModalOpen(true)}
-          >
-            Redigèr risikoscenario
-          </Button>
-
-          {!kravnummer && (
-            <SlettOvrigRisikoscenario
-              risikoscenarioId={risikoscenario.id}
-              risikoscenarioer={risikoscenarioer}
-              setRisikoscenarioer={setRisikoscenarioer}
-            />
-          )}
-        </div>
-      )}
+      <div className="mt-5 flex gap-2 items-center">
+        <Button
+          variant="tertiary"
+          type="button"
+          icon={<PencilIcon aria-hidden />}
+          onClick={() => setIsEditModalOpen(true)}
+        >
+          Redigèr risikoscenario
+        </Button>
+        <SlettOvrigRisikoscenario
+          risikoscenarioId={risikoscenario.id}
+          risikoscenarioer={risikoscenarioer}
+          setRisikoscenarioer={setRisikoscenarioer}
+        />
+      </div>
 
       <div className="mt-5">
         <Label>Følgende tiltak gjelder for dette risikoscenarioet</Label>

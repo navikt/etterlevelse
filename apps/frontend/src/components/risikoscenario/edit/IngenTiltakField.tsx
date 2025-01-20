@@ -52,7 +52,7 @@ export const IngenTiltakField = (props: IProps) => {
                     fieldProps.form.setFieldValue('ingenTiltak', fieldValue)
                   }}
                 >
-                  <Checkbox value={'ingenTiltak'}>Ingen tiltak</Checkbox>
+                  <Checkbox value={'ingenTiltak'}>Vi skal ikke ha tiltak</Checkbox>
                 </CheckboxGroup>
               )}
             </Field>
