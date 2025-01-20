@@ -292,7 +292,8 @@ export const DokumentasjonPage = () => {
                                 '/dokumentasjon/' +
                                   etterlevelseDokumentasjon.id +
                                   '/pvkdokument/' +
-                                  pvkDokument.id
+                                  pvkDokument.id +
+                                  '/1'
                               )
                             }}
                             size="small"
