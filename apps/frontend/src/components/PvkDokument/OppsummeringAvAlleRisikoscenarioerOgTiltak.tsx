@@ -17,6 +17,8 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   const { etterlevelseDokumentasjonId, pvkDokument, activeStep, setActiveStep, setSelectedStep } =
     props
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
+  const url = new URL(window.location.href)
+  const tabQuery = url.searchParams.get('tab')
 
   useEffect(() => {
     if (pvkDokument) {
@@ -52,7 +54,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
           <List.Item>Tiltak, inkludert hvilke tiltak som savner ansvarlig eller frist.</List.Item>
         </List>
 
-        <Tabs defaultValue="risikoscenarioer" fill>
+        <Tabs defaultValue={tabQuery ? tabQuery : 'risikoscenarioer'} fill>
           <Tabs.List>
             <Tabs.Tab value="risikoscenarioer" label="Vis risikoscenarioer" />
             <Tabs.Tab value="tiltak" label=" Vis tiltak " />
