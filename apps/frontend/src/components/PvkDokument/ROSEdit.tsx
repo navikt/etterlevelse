@@ -1,4 +1,4 @@
-import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
+import { TrashIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Table, TextField } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { ChangeEvent, useState } from 'react'
@@ -16,12 +16,12 @@ export const ROSEdit = () => {
       <FieldArray name="risikovurderinger">
         {(fieldArrayRenderProps: FieldArrayRenderProps) => {
           const add = (): void => {
-            if (url === '') {
+            if (url == '') {
               setError('Du må legge til en URL')
               return
             }
-            if (name === '') {
-              setError('Legg til et navn')
+            if (!url.match(/https?:\/\//i)) {
+              setError('Dette ser ikke ut som en gyldig URL')
               return
             }
             fieldArrayRenderProps.push(`[${name}](${url})`)
@@ -36,8 +36,9 @@ export const ROSEdit = () => {
                 Legg til informasjon on gjeldende ROS-dokumentasjon
               </Heading>
 
-              <div className="flex">
+              <div className="w-full my-2.5">
                 <TextField
+                  maxLength={75}
                   className="w-full"
                   label="Legg inn navnet til ROS-dokumentet"
                   value={name}
@@ -46,70 +47,60 @@ export const ROSEdit = () => {
                   }
                 />
                 <TextField
-                  className="w-full mx-2.5"
+                  className="w-full my-2.5"
                   label="Legg inn URL til ROS-dokumentasjon"
                   value={url}
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     setUrl((event.target as HTMLInputElement).value)
                   }
                 />
-                <div className="flex items-end">
-                  <Button
-                    className="min-w-[6.688rem] "
-                    type="button"
-                    onClick={add}
-                    variant="secondary"
-                  >
-                    Legg til
-                  </Button>
-                </div>
+                <Button
+                  className="min-w-[6.688rem] my-2.5 items-end"
+                  type="button"
+                  onClick={add}
+                  variant="secondary"
+                >
+                  Legg til
+                </Button>
               </div>
 
               {error && <Error message={error} />}
               {!error && <FormError fieldName="risikovurderinger" akselStyling />}
 
-              <Table className="mt-2.5" size="small">
+              <Table className="mt-2.5 w-3/5" size="small">
                 <Table.Body>
-                  {fieldArrayRenderProps.form.values.risikovurderinger
-                    ? fieldArrayRenderProps.form.values.risikovurderinger.map(
-                        (vurdering: string, index: number) => {
-                          const linkReg = /\[(.+)]\((.+)\)/i
-                          const groups = vurdering.match(linkReg)
-                          if (groups)
-                            return (
-                              <Table.Row key={vurdering}>
-                                <Table.DataCell>
-                                  <ExternalLink key={vurdering} className="flex" href={groups[2]}>
-                                    {groups[1]}
-                                  </ExternalLink>
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                  <Button
-                                    variant="tertiary"
-                                    icon={<PencilIcon aria-hidden aria-label="" />}
-                                  >
-                                    Redigér lenke
-                                  </Button>
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                  <Button
-                                    variant="tertiary"
-                                    icon={<TrashIcon aria-hidden aria-label="" />}
-                                    onClick={() => fieldArrayRenderProps.remove(index)}
-                                  >
-                                    Slett lenke
-                                  </Button>
-                                </Table.DataCell>
-                              </Table.Row>
-                            )
+                  {fieldArrayRenderProps.form.values.risikovurderinger &&
+                    fieldArrayRenderProps.form.values.risikovurderinger.map(
+                      (vurdering: string, index: number) => {
+                        const linkReg = /\[(.+)]\((.+)\)/i
+                        const groups = vurdering.match(linkReg)
+                        if (groups)
                           return (
-                            <span className="flex" key={vurdering}>
-                              {vurdering}
-                            </span>
+                            <Table.Row key={vurdering}>
+                              <Table.DataCell>
+                                <ExternalLink key={vurdering} className="flex" href={groups[2]}>
+                                  {groups[1]}
+                                </ExternalLink>
+                              </Table.DataCell>
+                              <Table.DataCell className="flex justify-end">
+                                <Button
+                                  type="button"
+                                  variant="tertiary"
+                                  icon={<TrashIcon aria-hidden aria-label="" />}
+                                  onClick={() => fieldArrayRenderProps.remove(index)}
+                                >
+                                  Slett lenke
+                                </Button>
+                              </Table.DataCell>
+                            </Table.Row>
                           )
-                        }
-                      )
-                    : 'Ikke angitt'}
+                        return (
+                          <span className="flex" key={vurdering}>
+                            {vurdering}
+                          </span>
+                        )
+                      }
+                    )}
                 </Table.Body>
               </Table>
             </div>
