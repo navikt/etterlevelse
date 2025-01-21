@@ -5,6 +5,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.rest.PageParameters;
+import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopResponse;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +26,10 @@ public class TiltakController {
 
     private final TiltakService service;
 
-    // FIXME Trengs? public ResponseEntity<RestResponsePage<BehandlingensLivslopResponse>> getAll(PageParameters pageParameters
+    public ResponseEntity<RestResponsePage<BehandlingensLivslopResponse>> getAll(PageParameters pageParameters) {
+        //FIX ME
+        return null;
+    }
 
     
     @Operation(summary = "Get One Tiltak")
@@ -33,6 +39,8 @@ public class TiltakController {
         log.info("Get Tiltak id={}", id);
         return ResponseEntity.ok(TiltakResponse.buildFrom(service.get(id)));
     }
+
+
 
 /* FIXME
     @Operation(summary = "Get Behandlingens Livsløp by etterlevelsedokument id")
