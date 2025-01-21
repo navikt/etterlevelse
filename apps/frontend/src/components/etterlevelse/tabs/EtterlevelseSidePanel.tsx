@@ -2,10 +2,10 @@ import { FileTextIcon } from '@navikt/aksel-icons'
 import { Button, Label, Tabs } from '@navikt/ds-react'
 import { Dispatch, useEffect, useState } from 'react'
 import { IEtterlevelseMetadata, IKravVersjon, IPvkDokument, TKravQL } from '../../../constants'
-import KravRisikoscenario from '../../PvkDokument/KravRisikoscenario'
 import { Markdown } from '../../common/Markdown'
 import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
 import { AllInfo } from '../../krav/ViewKrav'
+import KravRisikoscenario from '../../risikoscenario/kravRisikoscenario/KravRisikoscenario'
 
 interface IProps {
   krav: TKravQL
@@ -14,6 +14,7 @@ interface IProps {
   setEtterlevelseMetadata: Dispatch<React.SetStateAction<IEtterlevelseMetadata>>
   alleKravVersjoner: IKravVersjon[]
   setIsPreview: (state: boolean) => void
+  setIsPvkTabActive: (state: boolean) => void
 }
 
 export const EtterlevelseSidePanel = (props: IProps) => {
@@ -24,6 +25,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
     setEtterlevelseMetadata,
     alleKravVersjoner,
     setIsPreview,
+    setIsPvkTabActive,
   } = props
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
   const [activeTab, setActiveTab] = useState<string>('mer')
@@ -33,6 +35,16 @@ export const EtterlevelseSidePanel = (props: IProps) => {
       setActiveTab('pvkDokumentasjon')
     }
   }, [pvkDokument])
+
+  useEffect(() => {
+    if (activeTab === 'pvkDokumentasjon') {
+      setIsPreview(true)
+      setIsPvkTabActive(true)
+    } else {
+      setIsPreview(false)
+      setIsPvkTabActive(false)
+    }
+  }, [activeTab])
 
   return (
     <div className="pl-4 border-l border-border-divider w-full max-w-lg">
@@ -63,11 +75,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
         {pvkDokument && pvkDokument.skalUtforePvk && (
           <Tabs.Panel value="pvkDokumentasjon">
             <div className="mt-2 p-4">
-              <KravRisikoscenario
-                krav={krav}
-                pvkDokument={pvkDokument}
-                setIsPreview={setIsPreview}
-              />
+              <KravRisikoscenario krav={krav} pvkDokument={pvkDokument} />
             </div>
           </Tabs.Panel>
         )}

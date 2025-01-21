@@ -1,20 +1,18 @@
 import { Accordion, Alert, Button, ReadMore } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
-import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, TKravQL } from '../../constants'
-import RisikoscenarioAccordionContent from '../risikoscenario/RisikoscenarioAccordianContent'
-import FjernRisikoscenarioFraKrav from '../risikoscenario/edit/FjernRisikoscenarioFraKrav'
-import LeggTilEksisterendeRisikoscenario from '../risikoscenario/edit/LeggTilEksisterendeRisikoscenario'
-import CreateRisikoscenario from './edit/CreateRisikoscenario'
+import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
+import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, TKravQL } from '../../../constants'
+import CreateRisikoscenario from '../edit/CreateRisikoscenario'
+import LeggTilEksisterendeRisikoscenario from '../edit/LeggTilEksisterendeRisikoscenario'
+import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionContent'
 
 interface IProps {
   krav: TKravQL
   pvkDokument: IPvkDokument
-  setIsPreview: (state: boolean) => void
 }
 
 export const KravRisikoscenario = (props: IProps) => {
-  const { krav, pvkDokument, setIsPreview } = props
+  const { krav, pvkDokument } = props
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
   const [risikoscenarioer, setRisikoscenarioer] = useState<IRisikoscenario[]>([])
@@ -78,22 +76,15 @@ export const KravRisikoscenario = (props: IProps) => {
                 <Accordion.Item id={risikoscenario.id} key={index + '_' + risikoscenario.navn}>
                   <Accordion.Header>{risikoscenario.navn}</Accordion.Header>
                   <Accordion.Content>
-                    <RisikoscenarioAccordionContent
+                    <KravRisikoscenarioAccordionContent
                       risikoscenario={risikoscenario}
-                      noCopyButton
                       isCreateMode={isCreateMode}
                       kravnummer={krav.kravNummer}
+                      risikoscenarioer={risikoscenarioer}
+                      setRisikoscenarioer={setRisikoscenarioer}
+                      risikoscenarioForKrav={risikoscenarioForKrav}
+                      setRisikoscenarioForKrav={setRisikoscenarioForKrav}
                     />
-                    {!isCreateMode && (
-                      <FjernRisikoscenarioFraKrav
-                        kravnummer={krav.kravNummer}
-                        risikoscenario={risikoscenario}
-                        risikoscenarioer={risikoscenarioer}
-                        setRisikoscenarioer={setRisikoscenarioer}
-                        risikoscenarioForKrav={risikoscenarioForKrav}
-                        setRisikoscenerioForKrav={setRisikoscenarioForKrav}
-                      />
-                    )}
                   </Accordion.Content>
                 </Accordion.Item>
               ))}
@@ -117,7 +108,6 @@ export const KravRisikoscenario = (props: IProps) => {
               size="small"
               type="button"
               onClick={() => {
-                setIsPreview(true)
                 setIsCreateMode(true)
               }}
             >
@@ -128,7 +118,6 @@ export const KravRisikoscenario = (props: IProps) => {
               variant="secondary"
               type="button"
               onClick={() => {
-                setIsPreview(true)
                 setIsLeggTilEksisterendeMode(true)
               }}
             >

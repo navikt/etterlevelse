@@ -1,10 +1,10 @@
 import { Alert, BodyLong, Button, Heading, ReadMore } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario } from '../../constants'
 import RisikoscenarioAccordianList from '../risikoscenario/RisikoscenarioAccordianList'
-import CreateRisikoscenarioModal from './edit/CreateRisikoscenarioModal'
+import CreateRisikoscenarioModal from '../risikoscenario/edit/CreateRisikoscenarioModal'
 import FormButtons from './edit/FormButtons'
 
 interface IProps {
@@ -13,13 +13,19 @@ interface IProps {
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
+  formRef: RefObject<any>
 }
 
 export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
-  const { etterlevelseDokumentasjonId, pvkDokument, activeStep, setActiveStep, setSelectedStep } =
-    props
+  const {
+    etterlevelseDokumentasjonId,
+    pvkDokument,
+    activeStep,
+    setActiveStep,
+    setSelectedStep,
+    formRef,
+  } = props
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
-  const [defaultOpen, setDefaultOpen] = useState<boolean>(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -33,14 +39,6 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
       })()
     }
   }, [pvkDokument])
-
-  useEffect(() => {
-    if (window.location.hash) {
-      setDefaultOpen(true)
-    } else {
-      setDefaultOpen(false)
-    }
-  }, [])
 
   return (
     <div className="flex justify-center w-full">
@@ -98,12 +96,12 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
           </Alert>
         )}
 
-        {risikoscenarioList.length > 0 && (
+        {risikoscenarioList.length !== 0 && (
           <div className="my-5">
             <RisikoscenarioAccordianList
               risikoscenarioList={risikoscenarioList}
               setRisikoscenarioList={setRisikoscenarioList}
-              defaultOpen={defaultOpen}
+              formRef={formRef}
             />
           </div>
         )}
