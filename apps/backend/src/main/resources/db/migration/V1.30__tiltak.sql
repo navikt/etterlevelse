@@ -15,8 +15,9 @@ create index if not exists idx_tiltak_pvk_dokument_id on tiltak (pvk_dokument_id
 
 create table if not exists risikoscenario_tiltak_relation
 (
-    risikoscenario      uuid references risikoscenario(id),
-    tiltak              uuid references tiltak(id)
+    risikoscenario_id   uuid references risikoscenario(id),
+    tiltak_id           uuid references tiltak(id),
+    unique (risikoscenario, tiltak)
 );
 
 create index if not exists idx_risikoscenario_tiltak_risikoscenario on risikoscenario_tiltak_relation (risikoscenario);

@@ -52,7 +52,7 @@ public class RisikoscenarioResponse {
                 .version(risikoscenario.getVersion())
                 .pvkDokumentId(risikoscenario.getPvkDokumentId())
                 
-                .tiltak(risikoscenario.getTiltak().stream().map(Tiltak::getId).map(UUID::toString).toList()) // FIXME: Riktig med toString?
+                // .tiltak(risikoscenario.getTiltak().stream().map(Tiltak::getId).map(UUID::toString).toList()) // FIXME: Riktig med toString?
 
                 .navn(risikoscenario.getRisikoscenarioData().getNavn())
                 .beskrivelse(risikoscenario.getRisikoscenarioData().getBeskrivelse())
