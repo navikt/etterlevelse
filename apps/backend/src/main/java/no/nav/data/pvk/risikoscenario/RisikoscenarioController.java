@@ -16,6 +16,8 @@ import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.KravRisikoscenarioRequest;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioRequest;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
+import no.nav.data.pvk.tiltak.dto.RisikoscenarioTiltakRequest;
+import org.docx4j.wml.U;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -151,6 +153,22 @@ public class RisikoscenarioController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Set tiltak on risikoscenario")
+    @ApiResponse(responseCode = "201", description = "Tiltak set on risikoscenario")
+    @PutMapping("/update/addRelevantTiltak")
+    @Transactional
+    public ResponseEntity<RisikoscenarioResponse> updateRisikoscenarioAddRelevantTiltak(@RequestBody RisikoscenarioTiltakRequest request) {
+        log.info("Update relevantTiltak for risikoscenario");
+        Risikoscenario risikoscenario = risikoscenarioService.addTiltak(request.getRiskoscenarioId(), request.getTiltakIds());
+        List<String> tiltak = risikoscenarioService.getTiltak(UUID.fromString(request.getRiskoscenarioId()));
+
+        RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenario);
+        response.setTiltak(tiltak);
+
+        return ResponseEntity.ok(response);
+    }
+
+
     @Operation(summary = "Delete Risikoscenario")
     @ApiResponse(description = "Risikoscenario deleted")
     @DeleteMapping("/{id}")
@@ -176,6 +194,21 @@ public class RisikoscenarioController {
         var updatedRisikoscenario = risikoscenarioService.save(risikoscenario, true);
         return ResponseEntity.ok(RisikoscenarioResponse.buildFrom(updatedRisikoscenario));
     }
+
+    // remove tiltak from riskoscenario
+    // risikoscenarioId tiltakid
+    //FIXME
+/*    @Operation(summary = "Remove tiltak from risikoscenario")
+    @ApiResponse(description = "Tiltak removed form risikoscenario")
+    @DeleteMapping("/{id}/{kravnummer}")
+    public ResponseEntity<RisikoscenarioResponse> removeTiltakFromRisikoscenarioById(@PathVariable String id, @PathVariable Integer kravnummer) {
+        log.info("Remove krav from risikoscenario id={} with kravnummer={}", id, kravnummer);
+        var risikoscenario = risikoscenarioService.get(UUID.fromString(id));
+        var RelevanteKravNummer = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer().stream().filter(relevantKrav -> !relevantKrav.equals(kravnummer)).toList();
+        risikoscenario.getRisikoscenarioData().setRelevanteKravNummer(RelevanteKravNummer);
+        var updatedRisikoscenario = risikoscenarioService.save(risikoscenario, true);
+        return ResponseEntity.ok(RisikoscenarioResponse.buildFrom(updatedRisikoscenario));
+    }*/
 
 
     private void getKravDataforRelevantKravList(RisikoscenarioResponse risikoscenario) {
