@@ -77,7 +77,7 @@ export const ROSEdit = () => {
                           return (
                             <Table.Row key={ros}>
                               <Table.DataCell>
-                                <ExternalLink key={ros} className="flex" href={rosParts[2]}>
+                                <ExternalLink key={ros} href={rosParts[2]}>
                                   {rosParts[1]}
                                 </ExternalLink>
                               </Table.DataCell>
