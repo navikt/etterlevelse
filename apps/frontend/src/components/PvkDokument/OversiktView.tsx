@@ -1,6 +1,15 @@
 import { Alert, BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } from '@navikt/ds-react'
-import { IPvkDokument, ITeam, ITeamResource, TEtterlevelseDokumentasjonQL } from '../../constants'
+import { useEffect, useState } from 'react'
+import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../../api/BehandlingensLivslopApi'
+import {
+  IBehandlingensLivslop,
+  IPvkDokument,
+  ITeam,
+  ITeamResource,
+  TEtterlevelseDokumentasjonQL,
+} from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
+import { ExternalLink } from '../common/RouteLink'
 import FormButtons from './edit/FormButtons'
 
 interface IProps {
@@ -23,6 +32,8 @@ export const OversiktView = (props: IProps) => {
     setSelectedStep,
     updateTitleUrlAndStep,
   } = props
+
+  const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
 
   const formStatus = [
     pvkDokument.personkategoriAntallBeskrivelse ||
@@ -51,6 +62,18 @@ export const OversiktView = (props: IProps) => {
 
     return teamList.substring(2)
   }
+
+  useEffect(() => {
+    ;(async () => {
+      await getBehandlingensLivslopByEtterlevelseDokumentId(
+        pvkDokument.etterlevelseDokumentId
+      ).then((response) => {
+        if (response) {
+          setBehandlingensLivslop(response)
+        }
+      })
+    })()
+  }, [])
 
   return (
     <div className="flex justify-center">
@@ -85,6 +108,52 @@ export const OversiktView = (props: IProps) => {
             <FormSummary.Heading level="2">Status</FormSummary.Heading>
           </FormSummary.Header>
           <FormSummary.Answers>
+            <FormSummary.Answer>
+              <FormSummary.Value>
+                <ExternalLink
+                  href={`/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/behandlingens-livslop/${behandlingensLivslop ? behandlingensLivslop.id : 'ny'}`}
+                >
+                  Behandlingens livsløp
+                </ExternalLink>
+              </FormSummary.Value>
+              <FormSummary.Value>
+                <div className="gap-2 flex">
+                  {!behandlingensLivslop && (
+                    <Tag variant="warning" size="xsmall">
+                      Ikke påbegynt
+                    </Tag>
+                  )}
+                  {behandlingensLivslop && behandlingensLivslop.filer.length === 0 && (
+                    <Tag variant="neutral" size="xsmall">
+                      Ingen filer er lastet opp
+                    </Tag>
+                  )}
+                  {behandlingensLivslop && behandlingensLivslop.filer.length !== 0 && (
+                    <Tag variant="success" size="xsmall">
+                      Lastet opp {behandlingensLivslop.filer.length}{' '}
+                      {behandlingensLivslop.filer.length === 1 ? 'fil' : 'filer'}
+                    </Tag>
+                  )}
+                  {behandlingensLivslop && (
+                    <Tag
+                      variant={
+                        behandlingensLivslop.beskrivelse !== '' &&
+                        behandlingensLivslop.beskrivelse !== undefined
+                          ? 'success'
+                          : 'neutral'
+                      }
+                      size="xsmall"
+                    >
+                      {behandlingensLivslop.beskrivelse !== '' &&
+                      behandlingensLivslop.beskrivelse !== undefined
+                        ? 'Skriftlig beskrivelse'
+                        : 'Ingen skrftilig beskrivelse'}
+                    </Tag>
+                  )}
+                </div>
+              </FormSummary.Value>
+            </FormSummary.Answer>
+
             {StepTitle.slice(1).map((title, index) => (
               <FormSummaryPanel
                 key={title}
