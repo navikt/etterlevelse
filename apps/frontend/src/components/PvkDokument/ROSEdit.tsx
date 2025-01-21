@@ -24,7 +24,7 @@ export const ROSEdit = () => {
               setError('Dette ser ikke ut som en gyldig URL')
               return
             }
-            fieldArrayRenderProps.push(`[${name}](${url})`)
+            fieldArrayRenderProps.insert(0, `[${name}](${url})`)
             setError('')
             setUrl('')
             setName('')
@@ -38,7 +38,6 @@ export const ROSEdit = () => {
 
               <div className="w-full my-2.5">
                 <TextField
-                  maxLength={75}
                   className="w-full"
                   label="Legg inn navnet til ROS-dokumentet"
                   value={name}
@@ -71,14 +70,14 @@ export const ROSEdit = () => {
                 <Table.Body>
                   {fieldArrayRenderProps.form.values.risikovurderinger &&
                     fieldArrayRenderProps.form.values.risikovurderinger.map(
-                      (vurdering: string, index: number) => {
+                      (ros: string, index: number) => {
                         const linkReg = /\[(.+)]\((.+)\)/i
-                        const groups = vurdering.match(linkReg)
+                        const groups = ros.match(linkReg)
                         if (groups)
                           return (
-                            <Table.Row key={vurdering}>
+                            <Table.Row key={ros}>
                               <Table.DataCell>
-                                <ExternalLink key={vurdering} className="flex" href={groups[2]}>
+                                <ExternalLink key={ros} className="flex" href={groups[2]}>
                                   {groups[1]}
                                 </ExternalLink>
                               </Table.DataCell>
@@ -95,8 +94,8 @@ export const ROSEdit = () => {
                             </Table.Row>
                           )
                         return (
-                          <span className="flex" key={vurdering}>
-                            {vurdering}
+                          <span className="flex" key={ros}>
+                            {ros}
                           </span>
                         )
                       }
