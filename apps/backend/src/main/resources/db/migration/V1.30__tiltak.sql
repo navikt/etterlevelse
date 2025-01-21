@@ -17,8 +17,8 @@ create table if not exists risikoscenario_tiltak_relation
 (
     risikoscenario_id   uuid references risikoscenario(id),
     tiltak_id           uuid references tiltak(id),
-    unique (risikoscenario, tiltak)
+    unique (risikoscenario_id, tiltak_id)
 );
 
-create index if not exists idx_risikoscenario_tiltak_risikoscenario on risikoscenario_tiltak_relation (risikoscenario);
-create index if not exists idx_risikoscenario_tiltak_tiltak on risikoscenario_tiltak_relation (tiltak);
+create index if not exists idx_risikoscenario_tiltak_risikoscenario on risikoscenario_tiltak_relation (risikoscenario_id);
+create index if not exists idx_risikoscenario_tiltak_tiltak on risikoscenario_tiltak_relation (tiltak_id);
