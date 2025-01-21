@@ -363,10 +363,7 @@ export const PvkBehovPage = () => {
                     <List>
                       {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
                         <List.Item key={behandling.nummer}>
-                          <ExternalLink
-                            className="text-medium"
-                            href={`${env.pollyBaseUrl}process/${behandling.id}`}
-                          >
+                          <ExternalLink href={`${env.pollyBaseUrl}process/${behandling.id}`}>
                             {behandlingName(behandling)} (åpnes i nytt vindu)
                           </ExternalLink>
                         </List.Item>
@@ -375,8 +372,33 @@ export const PvkBehovPage = () => {
                   </BodyLong>
                 )}
 
+                <div className="mb-2.5">
+                  <Label>ROS-dokumentasjon:</Label>
+                  <BodyShort>
+                    <List>
+                      {etterlevelseDokumentasjon.risikovurderinger
+                        ? etterlevelseDokumentasjon.risikovurderinger.map((ros) => {
+                            const rosReg = /\[(.+)]\((.+)\)/i
+                            const rosParts = ros.match(rosReg)
+                            if (rosParts)
+                              return (
+                                <List.Item key={ros}>
+                                  <ExternalLink href={rosParts[2]}>{rosParts[1]}</ExternalLink>
+                                </List.Item>
+                              )
+                            return (
+                              <span className="flex" key={ros}>
+                                {ros}
+                              </span>
+                            )
+                          })
+                        : 'Ikke angitt'}
+                    </List>
+                  </BodyShort>
+                </div>
+
                 <BodyShort className="inline-block">
-                  Dere kan redigere hvilke behandinger som gjelder i{' '}
+                  Dere kan redigere hvilke behandinger og risikovurderinger som gjelder i{' '}
                   <Link
                     href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
                     target="_blank"
