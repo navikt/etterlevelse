@@ -3,8 +3,6 @@ import { BodyShort, Button, Heading, Label, Link, ReadMore, Tag } from '@navikt/
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
 import { CodelistService, EListName, ICode, IGetParsedOptionsProps } from '../../services/Codelist'
-import { user } from '../../services/User'
-import { isDev } from '../../util/config'
 import { BehandlingList } from '../behandling/BehandlingList'
 import { Markdown } from '../common/Markdown'
 import { ExternalLink } from '../common/RouteLink'
@@ -107,30 +105,28 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                   />
                 )}
 
-                {isDev && user.isAdmin() && (
-                  <div className="mb-2.5">
-                    <Label size="small">ROS-dokumentasjon:</Label>
-                    <BodyShort size="small">
-                      {etterlevelseDokumentasjon.risikovurderinger
-                        ? etterlevelseDokumentasjon.risikovurderinger.map((vurdering) => {
-                            const linkReg = /\[(.+)]\((.+)\)/i
-                            const groups = vurdering.match(linkReg)
-                            if (groups)
-                              return (
-                                <ExternalLink key={vurdering} className="flex" href={groups[2]}>
-                                  {groups[1]}
-                                </ExternalLink>
-                              )
+                <div className="mb-2.5">
+                  <Label size="small">ROS-dokumentasjon:</Label>
+                  <BodyShort size="small">
+                    {etterlevelseDokumentasjon.risikovurderinger
+                      ? etterlevelseDokumentasjon.risikovurderinger.map((vurdering) => {
+                          const rosReg = /\[(.+)]\((.+)\)/i
+                          const rosParts = vurdering.match(rosReg)
+                          if (rosParts)
                             return (
-                              <span className="flex" key={vurdering}>
-                                {vurdering}
-                              </span>
+                              <ExternalLink key={vurdering} className="flex" href={rosParts[2]}>
+                                {rosParts[1]}
+                              </ExternalLink>
                             )
-                          })
-                        : 'Ikke angitt'}
-                    </BodyShort>
-                  </div>
-                )}
+                          return (
+                            <span className="flex" key={vurdering}>
+                              {vurdering}
+                            </span>
+                          )
+                        })
+                      : 'Ikke angitt'}
+                  </BodyShort>
+                </div>
 
                 <div className="mb-2.5">
                   {etterlevelseDokumentasjon.avdeling && (

@@ -71,14 +71,14 @@ export const ROSEdit = () => {
                   {fieldArrayRenderProps.form.values.risikovurderinger &&
                     fieldArrayRenderProps.form.values.risikovurderinger.map(
                       (ros: string, index: number) => {
-                        const linkReg = /\[(.+)]\((.+)\)/i
-                        const groups = ros.match(linkReg)
-                        if (groups)
+                        const rosReg = /\[(.+)]\((.+)\)/i
+                        const rosParts = ros.match(rosReg)
+                        if (rosParts)
                           return (
                             <Table.Row key={ros}>
                               <Table.DataCell>
-                                <ExternalLink key={ros} className="flex" href={groups[2]}>
-                                  {groups[1]}
+                                <ExternalLink key={ros} className="flex" href={rosParts[2]}>
+                                  {rosParts[1]}
                                 </ExternalLink>
                               </Table.DataCell>
                               <Table.DataCell className="flex justify-end">
