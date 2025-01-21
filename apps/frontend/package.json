@@ -114,7 +114,7 @@
     "eslint-plugin-react": "^7.36.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "http-proxy-middleware": "3.0.3",
-    "husky": "^9.0.6",
+    "husky": "^9.1.7",
     "lint-staged": "^15.4.1",
     "postcss": "^8.4.33",
     "prettier": "3.4.2",
