@@ -9,11 +9,12 @@ import OppsumeringAccordianContent from './OppsumeringAccordianContent'
 interface IProps {
   risikoscenarioList: IRisikoscenario[]
   formRef: RefObject<any>
+  isUnsaved: boolean
+  setIsUnsaved: (state: boolean) => void
 }
 
 export const OppsumeringAccordianList = (props: IProps) => {
-  const { risikoscenarioList, formRef } = props
-  const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
+  const { risikoscenarioList, formRef, isUnsaved, setIsUnsaved } = props
   const [navigateUrl, setNavigateUrl] = useState<string>('')
   const url = new URL(window.location.href)
   const risikoscenarioId = url.searchParams.get('risikoscenario')

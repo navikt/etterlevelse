@@ -7,10 +7,11 @@ interface IProps {
   setIsOpen: (state: boolean) => void
   navigateUrl: string
   formRef: RefObject<any>
+  reloadOnSubmit?: boolean
 }
 
 export const AccordianAlertModal = (props: IProps) => {
-  const { isOpen, setIsOpen, navigateUrl, formRef } = props
+  const { isOpen, setIsOpen, navigateUrl, formRef, reloadOnSubmit } = props
   const navigate = useNavigate()
 
   return (
@@ -21,10 +22,13 @@ export const AccordianAlertModal = (props: IProps) => {
       <Modal.Footer>
         <Button
           type="button"
-          onClick={() => {
-            formRef.current?.submitForm()
+          onClick={async () => {
+            await formRef.current?.submitForm()
             setIsOpen(false)
             navigate(navigateUrl)
+            if (reloadOnSubmit) {
+              window.location.reload()
+            }
           }}
         >
           Lagre og fortsette

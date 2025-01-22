@@ -1,7 +1,9 @@
 import { Alert, BodyShort, Heading, Link, List, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario } from '../../constants'
+import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/OppsumeringAccordianList'
 import FormButtons from './edit/FormButtons'
 
@@ -24,8 +26,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
     formRef,
   } = props
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
+  const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
+  const [navigateUrl, setNavigateUrl] = useState<string>('')
   const url = new URL(window.location.href)
   const tabQuery = url.searchParams.get('tab')
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (pvkDokument) {
@@ -38,6 +43,15 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
       })()
     }
   }, [pvkDokument])
+
+  const onTabChange = (tab: string) => {
+    setNavigateUrl(window.location.pathname + '?tab=' + tab)
+    if (formRef.current?.dirty) {
+      setIsUnsaved(true)
+    } else {
+      navigate(window.location.pathname + '?tab=' + tab)
+    }
+  }
 
   return (
     <div className="flex justify-center w-full">
@@ -61,7 +75,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
           <List.Item>Tiltak, inkludert hvilke tiltak som savner ansvarlig eller frist.</List.Item>
         </List>
 
-        <Tabs defaultValue={tabQuery ? tabQuery : 'risikoscenarioer'} fill>
+        <Tabs value={tabQuery ? tabQuery : 'risikoscenarioer'} onChange={onTabChange} fill>
           <Tabs.List>
             <Tabs.Tab value="risikoscenarioer" label="Vis risikoscenarioer" />
             <Tabs.Tab value="tiltak" label=" Vis tiltak " />
@@ -95,6 +109,8 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                 <OppsumeringAccordianList
                   risikoscenarioList={risikoscenarioList}
                   formRef={formRef}
+                  isUnsaved={isUnsaved}
+                  setIsUnsaved={setIsUnsaved}
                 />
               </div>
             )}
@@ -103,6 +119,14 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
             Her skal tiltak vises
           </Tabs.Panel>
         </Tabs>
+
+        <AccordianAlertModal
+          isOpen={isUnsaved}
+          setIsOpen={setIsUnsaved}
+          navigateUrl={navigateUrl}
+          formRef={formRef}
+          reloadOnSubmit={true}
+        />
 
         <div className="mt-5">
           <FormButtons

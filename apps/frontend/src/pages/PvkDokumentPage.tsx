@@ -68,7 +68,7 @@ export const PvkDokumentPage = () => {
 
   const updateUrlOnStepChange = (step: number) => {
     navigate(
-      `/dokumentasjon/${pvkDokument?.etterlevelseDokumentId}/pvkdokument/${pvkDokument?.id}/${step}`
+      `/dokumentasjon/${pvkDokument?.etterlevelseDokumentId}/pvkdokument/${pvkDokument?.id}/${step}${step === 5 ? '?tab=risikoscenarioer' : ''}`
     )
   }
 
