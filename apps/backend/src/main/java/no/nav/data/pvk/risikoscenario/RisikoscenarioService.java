@@ -63,7 +63,7 @@ public class RisikoscenarioService {
     }
 
     public RisikoscenarioRequest updateRelevantKravListe(RisikoscenarioRequest request) {
-
+        // FIXME: Avhengighet til Request i Service
         var risikoscenario = get(request.getIdAsUUID());
 
         //remove krav from list based on request krav to remove
@@ -100,12 +100,17 @@ public class RisikoscenarioService {
     @Transactional(propagation = Propagation.REQUIRED)
     public Risikoscenario addTiltak(String riskoscenarioId, List<String> tiltakIds) {
         for (String tiltakId : tiltakIds) {
-            tiltakRepo.insertTiltakRisikoscenarioRelation(UUID.fromString(riskoscenarioId), UUID.fromString(tiltakId));
+            tiltakRepo.insertTiltakRisikoscenarioRelation(riskoscenarioId, tiltakId);
         }
         return getRisikoscenario(UUID.fromString(riskoscenarioId));
     }
 
-    public List<String> getTiltak(UUID uuid) {
+    public boolean removeTiltak(String id, String tiltakId) {
+        int removed = tiltakRepo.deleteTiltakRisikoscenarioRelation(id, tiltakId);
+        return removed > 0;
+    }
+    
+    public List<String> getTiltak(String uuid) {
         return tiltakRepo.getTiltakForRisikoscenario(uuid);
     }
 }

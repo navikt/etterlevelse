@@ -16,19 +16,19 @@ public interface TiltakRepo extends JpaRepository<Tiltak, UUID> {
     List<Tiltak> findByPvkDokumentId(String pvkDokumentId);
     
     @Query(value="select risikoscenario_id from risikoscenario_tiltak_relation where tiltak_id = ?1", nativeQuery = true)
-    List<String> getRisikoscenarioForTiltak(UUID tiltakId);
+    List<String> getRisikoscenarioForTiltak(String tiltakId);
     
     @Query(value="select tiltak_id from risikoscenario_tiltak_relation where risikoscenario_id = ?1", nativeQuery = true)
-    List<String> getTiltakForRisikoscenario(UUID risikoscenarioId);
+    List<String> getTiltakForRisikoscenario(String risikoscenarioId);
     
     @Transactional(propagation = Propagation.MANDATORY)
     @Modifying
     @Query(value="delete from risikoscenario_tiltak_relation where risikoscenario = ?1 and tiltak = ?2", nativeQuery = true)
-    int deleteTiltakRisikoscenarioRelation(UUID risikoscenarioId, UUID tiltakId);
+    int deleteTiltakRisikoscenarioRelation(String risikoscenarioId, String tiltakId);
 
     @Transactional(propagation = Propagation.MANDATORY)
     @Modifying
     @Query(value="insert into risikoscenario_tiltak_relation (risikoscenario, tiltak) values (?1, ?2)", nativeQuery = true)
-    int insertTiltakRisikoscenarioRelation(UUID risikoscenarioId, UUID tiltakId);
+    int insertTiltakRisikoscenarioRelation(String risikoscenarioId, String tiltakId);
 
 }

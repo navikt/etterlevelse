@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "behandlingId", "etterlevelseDokumentasjonId", "webSakNummer", "arkiveringDato", "status"})
+@JsonPropertyOrder({"id", "pvkDokumentId", "navn", "beskrivelse", "ansvarlig", "frist", "risikoscenarioIds"})
 public class TiltakResponse {
 
     private String id;
@@ -24,7 +24,7 @@ public class TiltakResponse {
     private String beskrivelse;
     private String ansvarlig;
     private LocalDate frist;
-    private List<String> risikoscenarioIds;
+    private List<String> risikoscenarioIds; // Merk: Settes ikke i buildFrom
 
     public static TiltakResponse buildFrom(Tiltak tiltak) {
         TiltakData td = tiltak.getTiltakData();

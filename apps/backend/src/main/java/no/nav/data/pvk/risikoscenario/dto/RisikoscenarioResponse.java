@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.krav.domain.KravReference;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
-import no.nav.data.pvk.tiltak.domain.Tiltak;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -52,9 +51,6 @@ public class RisikoscenarioResponse {
                         .build())
                 .version(risikoscenario.getVersion())
                 .pvkDokumentId(risikoscenario.getPvkDokumentId())
-                
-                // .tiltak(risikoscenario.getTiltak().stream().map(Tiltak::getId).map(UUID::toString).toList()) // FIXME: Riktig med toString?
-
                 .navn(risikoscenario.getRisikoscenarioData().getNavn())
                 .beskrivelse(risikoscenario.getRisikoscenarioData().getBeskrivelse())
                 .sannsynlighetsNivaa(risikoscenario.getRisikoscenarioData().getSannsynlighetsNivaa())

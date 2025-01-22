@@ -17,7 +17,8 @@ import no.nav.data.pvk.risikoscenario.dto.KravRisikoscenarioRequest;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioRequest;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
 import no.nav.data.pvk.tiltak.dto.RisikoscenarioTiltakRequest;
-import org.docx4j.wml.U;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +65,7 @@ public class RisikoscenarioController {
         log.info("Get Risikoscenario id={}", id);
 
         var risikoscenario = RisikoscenarioResponse.buildFrom(risikoscenarioService.get(id));
-        getKravDataforRelevantKravList(risikoscenario);
+        setTiltakAndKravDataForRelevantKravList(risikoscenario);
         return ResponseEntity.ok(risikoscenario);
     }
 
@@ -76,7 +77,7 @@ public class RisikoscenarioController {
         List<Risikoscenario> risikoscenarioList = risikoscenarioService.getByPvkDokument(pvkDokumentId, scenarioType);
         List<RisikoscenarioResponse> risikoscenarioResponseList = risikoscenarioList.stream().map(RisikoscenarioResponse::buildFrom).toList();
 
-        risikoscenarioResponseList.forEach(this::getKravDataforRelevantKravList);
+        risikoscenarioResponseList.forEach(this::setTiltakAndKravDataForRelevantKravList);
 
         return ResponseEntity.ok(new RestResponsePage<>(risikoscenarioResponseList));
     }
@@ -88,7 +89,7 @@ public class RisikoscenarioController {
         log.info("Get Risikoscenario by kravnummer={}", kravnummer);
         List<Risikoscenario> risikoscenarioList = risikoscenarioService.getByKravNummer(kravnummer);
         List<RisikoscenarioResponse> risikoscenarioResponseList = risikoscenarioList.stream().map(RisikoscenarioResponse::buildFrom).toList();
-        risikoscenarioResponseList.forEach(this::getKravDataforRelevantKravList);
+        risikoscenarioResponseList.forEach(this::setTiltakAndKravDataForRelevantKravList);
         return ResponseEntity.ok(new RestResponsePage<>(risikoscenarioResponseList));
     }
 
@@ -101,7 +102,7 @@ public class RisikoscenarioController {
         var risikoscenario = risikoscenarioService.save(request.convertToRisikoscenario(), request.isUpdate());
 
         var response = RisikoscenarioResponse.buildFrom(risikoscenario);
-        getKravDataforRelevantKravList(response);
+        setTiltakAndKravDataForRelevantKravList(response);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -128,46 +129,10 @@ public class RisikoscenarioController {
         var risikoscenario = risikoscenarioService.save(risikoscenarioToUpdate, request.isUpdate());
 
         var response = RisikoscenarioResponse.buildFrom(risikoscenario);
-        getKravDataforRelevantKravList(response);
+        setTiltakAndKravDataForRelevantKravList(response);
 
         return ResponseEntity.ok(response);
     }
-
-    @Operation(summary = "Set krav on risikoscenarioer")
-    @ApiResponse(responseCode = "201", description = "Krav set on risikoscenarioer")
-    @PutMapping("/update/relevantKrav")
-    @Transactional
-    public ResponseEntity<List<RisikoscenarioResponse>> updateRelevantKravForRisikoscenarioer(@RequestBody KravRisikoscenarioRequest request) {
-        log.info("Update relevantKrav for risikoscenarioer");
-        List<RisikoscenarioResponse> response = new ArrayList<>();
-
-        request.getRisikoscenarioIder().forEach(risikoscenarioId -> {
-            var risikoscenario = risikoscenarioService.get(UUID.fromString(risikoscenarioId));
-            var RelevanteKravNummer = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer();
-            RelevanteKravNummer.add(request.getKravnummer());
-            risikoscenario.getRisikoscenarioData().setRelevanteKravNummer(RelevanteKravNummer);
-            var updatedRisikoscenario = risikoscenarioService.save(risikoscenario, true);
-            response.add(RisikoscenarioResponse.buildFrom(updatedRisikoscenario));
-        });
-
-        return ResponseEntity.ok(response);
-    }
-
-    @Operation(summary = "Set tiltak on risikoscenario")
-    @ApiResponse(responseCode = "201", description = "Tiltak set on risikoscenario")
-    @PutMapping("/update/addRelevantTiltak")
-    @Transactional
-    public ResponseEntity<RisikoscenarioResponse> updateRisikoscenarioAddRelevantTiltak(@RequestBody RisikoscenarioTiltakRequest request) {
-        log.info("Update relevantTiltak for risikoscenario");
-        Risikoscenario risikoscenario = risikoscenarioService.addTiltak(request.getRiskoscenarioId(), request.getTiltakIds());
-        List<String> tiltak = risikoscenarioService.getTiltak(UUID.fromString(request.getRiskoscenarioId()));
-
-        RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenario);
-        response.setTiltak(tiltak);
-
-        return ResponseEntity.ok(response);
-    }
-
 
     @Operation(summary = "Delete Risikoscenario")
     @ApiResponse(description = "Risikoscenario deleted")
@@ -177,47 +142,106 @@ public class RisikoscenarioController {
         var risikoscenario = risikoscenarioService.delete(id);
         if (risikoscenario == null) {
             log.warn("Could not find risikoscenario with id = {} to delete", id);
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok(null); // FIXME: throw new ValidationException(...) ?
         } else {
             return ResponseEntity.ok(RisikoscenarioResponse.buildFrom(risikoscenario));
         }
     }
 
+    @Operation(summary = "Set krav on risikoscenarioer")
+    @ApiResponse(responseCode = "201", description = "Krav set on risikoscenarioer")
+    @PutMapping("/update/relevantKrav") // FIXME: Revisitt. "/update/addRelevantKrav"?
+    @Transactional // FIXME: Flytt tx (og loop) til service
+    public ResponseEntity<List<RisikoscenarioResponse>> setRelevantKravForRisikoscenarioer(@RequestBody KravRisikoscenarioRequest request) {
+        log.info("Set relevantKrav for risikoscenarioer");
+        List<RisikoscenarioResponse> responses = new ArrayList<>();
+
+        request.getRisikoscenarioIder().forEach(risikoscenarioId -> {
+            var risikoscenario = risikoscenarioService.get(UUID.fromString(risikoscenarioId));
+            List<Integer> RelevanteKravNummer = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer();
+            // FIXME: Vi må sjekke om den allerede finnes. (Kan evt. endre typen til Set<Integer>)
+            RelevanteKravNummer.add(request.getKravnummer());
+            // risikoscenario.getRisikoscenarioData().setRelevanteKravNummer(RelevanteKravNummer);
+            var updatedRisikoscenario = risikoscenarioService.save(risikoscenario, true);
+            RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(updatedRisikoscenario);
+            setTiltakAndKravDataForRelevantKravList(response);
+            responses.add(response);
+        });
+
+        return ResponseEntity.ok(responses);
+    }
+
     @Operation(summary = "Remove krav from risikoscenario")
     @ApiResponse(description = "krav removed form risikoscenario")
-    @DeleteMapping("/{id}/{kravnummer}")
+    @DeleteMapping("/{id}/krav/{kravnummer}") // FIXME: revisitt... Er strengt tatt en put (f.eks. /{id}/removeKrav/{kravnummer}
     public ResponseEntity<RisikoscenarioResponse> removeKravFromRisikoscenarioById(@PathVariable String id, @PathVariable Integer kravnummer) {
-        log.info("Remove krav from risikoscenario id={} with kravnummer={}", id, kravnummer);
+        log.info("Remove krav {} from risikoscenario id={}", kravnummer, id);
         var risikoscenario = risikoscenarioService.get(UUID.fromString(id));
-        var RelevanteKravNummer = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer().stream().filter(relevantKrav -> !relevantKrav.equals(kravnummer)).toList();
-        risikoscenario.getRisikoscenarioData().setRelevanteKravNummer(RelevanteKravNummer);
+        //* FIXME: Ingen sjekk på at noe ble fjernet.
+        List<Integer> relevanteKravNummer = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer().stream().filter(relevantKrav -> !relevantKrav.equals(kravnummer)).toList();
+        risikoscenario.getRisikoscenarioData().setRelevanteKravNummer(relevanteKravNummer);
         var updatedRisikoscenario = risikoscenarioService.save(risikoscenario, true);
         return ResponseEntity.ok(RisikoscenarioResponse.buildFrom(updatedRisikoscenario));
+        //*/ 
+        /* FIXME: Alternativt:
+        List<Integer> relevanteKravNummer = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer();
+        if (relevanteKravNummer.remove(kravnummer)) {
+            var updatedRisikoscenario = risikoscenarioService.save(risikoscenario, true);
+            RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(updatedRisikoscenario);
+            setTiltakAndKravDataForRelevantKravList(response);
+            return ResponseEntity.ok(response);
+        } else {
+            log.warn("Could not remove Krav from Risikoscenario: Krav is not related to Risikoscenario");
+            throw new ValidationException("Could not remove Krav from Risikoscenario: Krav is not related to Risikoscenario");
+        }
+        //*/
     }
 
-    // remove tiltak from riskoscenario
-    // risikoscenarioId tiltakid
-    //FIXME
-/*    @Operation(summary = "Remove tiltak from risikoscenario")
+    @Operation(summary = "Add tiltak to risikoscenario")
+    @ApiResponse(responseCode = "201", description = "Tiltak added to risikoscenario")
+    @PutMapping("/update/addRelevanteTiltak") // FIXME: revisitt
+    public ResponseEntity<RisikoscenarioResponse> updateRisikoscenarioAddTiltak(@RequestBody RisikoscenarioTiltakRequest request) {
+        log.info("Add Tiltak to risikoscenario id={}", request.getRiskoscenarioId());
+        try {
+            Risikoscenario risikoscenario = risikoscenarioService.addTiltak(request.getRiskoscenarioId(), request.getTiltakIds());
+            RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenario);
+            setTiltakAndKravDataForRelevantKravList(response);
+            return ResponseEntity.ok(response);
+        } catch (DuplicateKeyException e) {
+            log.warn("DuplicateKeyException caught while inserting Tiltak-Risikoscenario relation", e);
+            throw new ValidationException("Could not insert Tiltak-Risikoscenario relation: already exists");
+        } catch (DataIntegrityViolationException e) {
+            log.warn("DataIntegrityViolationException caught while inserting Tiltak-Risikoscenario relation", e);
+            throw new ValidationException("Could not insert Tiltak-Risikoscenario relation: non-existing Tiltak and/or Risikoscenario");
+        }
+        // FIXME: ITest for exception handling
+    }
+
+    @Operation(summary = "Remove tiltak from risikoscenario")
     @ApiResponse(description = "Tiltak removed form risikoscenario")
-    @DeleteMapping("/{id}/{kravnummer}")
-    public ResponseEntity<RisikoscenarioResponse> removeTiltakFromRisikoscenarioById(@PathVariable String id, @PathVariable Integer kravnummer) {
-        log.info("Remove krav from risikoscenario id={} with kravnummer={}", id, kravnummer);
-        var risikoscenario = risikoscenarioService.get(UUID.fromString(id));
-        var RelevanteKravNummer = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer().stream().filter(relevantKrav -> !relevantKrav.equals(kravnummer)).toList();
-        risikoscenario.getRisikoscenarioData().setRelevanteKravNummer(RelevanteKravNummer);
-        var updatedRisikoscenario = risikoscenarioService.save(risikoscenario, true);
-        return ResponseEntity.ok(RisikoscenarioResponse.buildFrom(updatedRisikoscenario));
-    }*/
-
-
-    private void getKravDataforRelevantKravList(RisikoscenarioResponse risikoscenario) {
-        if (!risikoscenario.getRelevanteKravNummer().isEmpty()) {
-            risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
-                List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
-                kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
-                kravShort.setNavn(kravList.get(0).getNavn());
-            });
+    @PutMapping("/{id}/removeTiltak/{tiltakId}")
+    public ResponseEntity<RisikoscenarioResponse> removeTiltakFromRisikoscenarioById(@PathVariable String id, @PathVariable String tiltakId) {
+        log.info("Remove Tiltak (id={}) from risikoscenario (id={})", tiltakId, id);
+        if (risikoscenarioService.removeTiltak(id, tiltakId)) {
+            RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenarioService.get(UUID.fromString(id)));
+            setTiltakAndKravDataForRelevantKravList(response);
+            return ResponseEntity.ok(response);
+        } else {
+            log.warn("Could not remove Tiltak from Risikoscenario: Tiltak is not related to Risikoscenario");
+            throw new ValidationException("Could not remove Tiltak from Risikoscenario: Tiltak is not related to Risikoscenario");
         }
     }
+
+    private void setTiltakAndKravDataForRelevantKravList(RisikoscenarioResponse risikoscenario) {
+        // Set Tiltak...
+        risikoscenario.setTiltak(risikoscenarioService.getTiltak(risikoscenario.getId().toString()));
+
+        // Set KravData...
+        risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
+            List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
+            kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
+            kravShort.setNavn(kravList.get(0).getNavn());
+        });
+    }
+
 }
