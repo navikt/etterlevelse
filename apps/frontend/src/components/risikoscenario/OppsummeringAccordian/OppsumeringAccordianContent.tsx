@@ -1,20 +1,19 @@
 import { Alert, BodyLong, Label } from '@navikt/ds-react'
-import { useState } from 'react'
+import { RefObject, useState } from 'react'
 import { IRisikoscenario } from '../../../constants'
 import RisikoscenarioView from '../RisikoscenarioView'
 import VurdereTiltaksEffekt from '../edit/VurdereTiltaksEffekt'
 
 interface IProps {
   risikoscenario: IRisikoscenario
-  risikoscenarioer: IRisikoscenario[]
-  setRisikoscenarioer: (state: IRisikoscenario[]) => void
+  formRef: RefObject<any>
 }
 
 export const OppsumeringAccordianContent = (props: IProps) => {
-  const { risikoscenario } = props
+  const { risikoscenario, formRef } = props
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
 
-  const tiltakListe = []
+  const tiltakListe = ['test']
 
   return (
     <div>
@@ -45,6 +44,7 @@ export const OppsumeringAccordianContent = (props: IProps) => {
                 <VurdereTiltaksEffekt
                   risikoscenario={activeRisikoscenario}
                   setRisikoscenario={setActiveRisikoscenario}
+                  formRef={formRef}
                 />
               </div>
             )}

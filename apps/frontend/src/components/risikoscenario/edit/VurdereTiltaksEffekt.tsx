@@ -1,7 +1,7 @@
 import { PencilIcon } from '@navikt/aksel-icons'
 import { Alert, BodyLong, Button, Label, Radio, RadioGroup, Stack } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { useState } from 'react'
+import { RefObject, useState } from 'react'
 import {
   getRisikoscenario,
   mapRisikoscenarioToFormValue,
@@ -20,10 +20,11 @@ import RisikoscenarioTag, {
 interface IProps {
   risikoscenario: IRisikoscenario
   setRisikoscenario: (state: IRisikoscenario) => void
+  formRef: RefObject<any>
 }
 
 export const VurdereTiltaksEffekt = (props: IProps) => {
-  const { risikoscenario, setRisikoscenario } = props
+  const { risikoscenario, setRisikoscenario, formRef } = props
   const [isFormActive, setIsFormActive] = useState<boolean>(false)
   const revurdertEffektCheck =
     risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
@@ -92,7 +93,11 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
       )}
 
       {isFormActive && (
-        <Formik onSubmit={submit} initialValues={mapRisikoscenarioToFormValue(risikoscenario)}>
+        <Formik
+          onSubmit={submit}
+          innerRef={formRef}
+          initialValues={mapRisikoscenarioToFormValue(risikoscenario)}
+        >
           {({ submitForm }) => (
             <Form>
               <div className="mt-5">

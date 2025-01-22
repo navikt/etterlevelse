@@ -1,7 +1,8 @@
-import { Accordion, BodyLong, Button, Modal } from '@navikt/ds-react'
+import { Accordion } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IRisikoscenario } from '../../constants'
+import AccordianAlertModal from './AccordianAlertModal'
 import RisikoscenarioAccordionContent from './RisikoscenarioAccordianContent'
 import RisikoscenarioAccordianHeader from './RisikoscenarioAccordionHeader'
 
@@ -78,33 +79,12 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
         })}
       </Accordion>
 
-      <Modal onClose={() => setIsUnsaved(false)} open={isUnsaved} header={{ heading: 'Varsel' }}>
-        <Modal.Body>
-          <BodyLong>Endringene som er gjort er ikke lagret.</BodyLong>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            type="button"
-            onClick={() => {
-              formRef.current?.submitForm()
-              setIsUnsaved(false)
-              navigate(navigateUrl)
-            }}
-          >
-            Lagre og fortsette
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => {
-              setIsUnsaved(false)
-              navigate(navigateUrl)
-            }}
-          >
-            Fortsett uten å lagre
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <AccordianAlertModal
+        isOpen={isUnsaved}
+        setIsOpen={setIsUnsaved}
+        navigateUrl={navigateUrl}
+        formRef={formRef}
+      />
     </div>
   )
 }

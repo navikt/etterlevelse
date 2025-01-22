@@ -222,6 +222,7 @@ export const PvkDokumentPage = () => {
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}
                       setActiveStep={updateTitleUrlAndStep}
+                      formRef={formRef}
                     />
                   )}
                   {activeStep === 6 && (

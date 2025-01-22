@@ -1,5 +1,5 @@
 import { Alert, BodyShort, Heading, Link, List, Tabs, ToggleGroup } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { RefObject, useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario } from '../../constants'
 import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/OppsumeringAccordianList'
@@ -11,11 +11,18 @@ interface IProps {
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
+  formRef: RefObject<any>
 }
 
 export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
-  const { etterlevelseDokumentasjonId, pvkDokument, activeStep, setActiveStep, setSelectedStep } =
-    props
+  const {
+    etterlevelseDokumentasjonId,
+    pvkDokument,
+    activeStep,
+    setActiveStep,
+    setSelectedStep,
+    formRef,
+  } = props
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const url = new URL(window.location.href)
   const tabQuery = url.searchParams.get('tab')
@@ -87,7 +94,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
               <div className="my-5">
                 <OppsumeringAccordianList
                   risikoscenarioList={risikoscenarioList}
-                  setRisikoscenarioList={setRisikoscenarioList}
+                  formRef={formRef}
                 />
               </div>
             )}
