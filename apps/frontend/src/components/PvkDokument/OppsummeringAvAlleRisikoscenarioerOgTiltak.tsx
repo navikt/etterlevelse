@@ -34,6 +34,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
     formRef,
   } = props
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
+  const [filteredRisikoscenarioList, setFilteredRisikosenarioList] = useState<IRisikoscenario[]>([])
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [navigateUrl, setNavigateUrl] = useState<string>('')
   const url = new URL(window.location.href)
@@ -47,6 +48,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
         await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
           (risikoscenarioer) => {
             setRisikoscenarioList(risikoscenarioer.content)
+            setFilteredRisikosenarioList(risikoscenarioer.content)
           }
         )
       })()
@@ -70,6 +72,21 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
 
   const onFilterChange = (filter: string) => {
     const tab = tabQuery ? tabQuery : tabValues.risikoscenarioer
+
+    switch (filter) {
+      case filterValues.alleRisikoscenarioer:
+        setFilteredRisikosenarioList(risikoscenarioList)
+        break
+      case filterValues.tiltakIkkeAktuelt:
+        setFilteredRisikosenarioList(
+          risikoscenarioList.filter((risikoscenario) => risikoscenario.ingenTiltak)
+        )
+        break
+      default:
+        setFilteredRisikosenarioList(risikoscenarioList)
+        break
+    }
+
     setNavigateUrl(window.location.pathname + '?tab=' + tab + '&filter=' + filter)
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
@@ -140,7 +157,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
             {risikoscenarioList.length !== 0 && (
               <div className="my-5">
                 <OppsumeringAccordianList
-                  risikoscenarioList={risikoscenarioList}
+                  risikoscenarioList={filteredRisikoscenarioList}
                   formRef={formRef}
                   isUnsaved={isUnsaved}
                   setIsUnsaved={setIsUnsaved}
