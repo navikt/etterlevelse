@@ -1,4 +1,13 @@
-import { Alert, BodyShort, Heading, Link, List, Tabs, ToggleGroup } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyLong,
+  BodyShort,
+  Heading,
+  Link,
+  List,
+  Tabs,
+  ToggleGroup,
+} from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
@@ -57,16 +66,13 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
 
   const onTabChange = (tab: string) => {
     const filter = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
-    setNavigateUrl(
-      `${window.location.pathname}?tab=${tab}${tab === tabValues.risikoscenarioer ? '&filter=' + filter : ''}`
-    )
+    const paramQuery = tab === tabValues.risikoscenarioer ? '&filter=' + filter : ''
+    setNavigateUrl(`${window.location.pathname}?tab=${tab}${paramQuery}`)
 
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
     } else {
-      navigate(
-        `${window.location.pathname}?tab=${tab}${tab === tabValues.risikoscenarioer ? '&filter=' + filter : ''}`
-      )
+      navigate(`${window.location.pathname}?tab=${tab}${paramQuery}`)
     }
   }
 
@@ -82,16 +88,19 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
           risikoscenarioList.filter((risikoscenario) => risikoscenario.ingenTiltak)
         )
         break
+      case filterValues.hoyRisiko:
+        setFilteredRisikosenarioList([])
+        break
       default:
         setFilteredRisikosenarioList(risikoscenarioList)
         break
     }
 
-    setNavigateUrl(window.location.pathname + '?tab=' + tab + '&filter=' + filter)
+    setNavigateUrl(`${window.location.pathname}?tab=${tab}&filter=${filter}`)
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
     } else {
-      navigate(window.location.pathname + '?tab=' + tab + '&filter=' + filter)
+      navigate(`${window.location.pathname}?tab=${tab}&filter=${filter}`)
     }
   }
 
@@ -154,7 +163,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
               </div>
             )}
 
-            {risikoscenarioList.length !== 0 && (
+            {filteredRisikoscenarioList.length === 0 && (
+              <BodyLong>Ingen risikoscenario med {filterQuery}</BodyLong>
+            )}
+
+            {filteredRisikoscenarioList.length !== 0 && (
               <div className="my-5">
                 <OppsumeringAccordianList
                   risikoscenarioList={filteredRisikoscenarioList}

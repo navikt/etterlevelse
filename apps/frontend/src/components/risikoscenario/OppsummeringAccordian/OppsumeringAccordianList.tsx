@@ -37,37 +37,22 @@ export const OppsumeringAccordianList = (props: IProps) => {
   const handleAccordionChange = (risikoscenarioId?: string) => {
     if (risikoscenarioId) {
       setNavigateUrl(
-        window.location.pathname +
-          '?tab=' +
-          tabQuery +
-          '&filter=' +
-          filterQuery +
-          '&risikoscenario=' +
-          risikoscenarioId
+        `${window.location.pathname}?tab=${tabQuery}&filter=${filterQuery}&risikoscenario=${risikoscenarioId}`
       )
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
       } else {
         navigate(
-          window.location.pathname +
-            '?tab=' +
-            tabQuery +
-            '&filter=' +
-            filterQuery +
-            '&risikoscenario=' +
-            risikoscenarioId
+          `${window.location.pathname}?tab=${tabQuery}&filter=${filterQuery}&risikoscenario=${risikoscenarioId}`
         )
       }
     } else {
-      setNavigateUrl(
-        `${window.location.pathname}?tab=${tabQuery}${tabQuery === tabValues.risikoscenarioer ? '&filter=' + filterQuery : ''}`
-      )
+      const paramQuery = tabQuery === tabValues.risikoscenarioer ? '&filter=' + filterQuery : ''
+      setNavigateUrl(`${window.location.pathname}?tab=${tabQuery}${paramQuery}`)
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
       } else {
-        navigate(
-          `${window.location.pathname}?tab=${tabQuery}${tabQuery === tabValues.risikoscenarioer ? '&filter=' + filterQuery : ''}`
-        )
+        navigate(`${window.location.pathname}?tab=${tabQuery}${paramQuery}`)
       }
     }
   }
@@ -80,7 +65,7 @@ export const OppsumeringAccordianList = (props: IProps) => {
           return (
             <Accordion.Item
               id={risikoscenario.id}
-              key={index + '_' + risikoscenario.navn}
+              key={index + '_' + risikoscenario.id}
               open={expanded}
               onOpenChange={(open) => {
                 handleAccordionChange(open ? risikoscenario.id : undefined)

@@ -36,7 +36,8 @@ export const AccordianAlertModal = (props: IProps) => {
         <Button
           type="button"
           variant="secondary"
-          onClick={() => {
+          onClick={async () => {
+            await formRef.current?.resetForm()
             setIsOpen(false)
             navigate(navigateUrl)
           }}
