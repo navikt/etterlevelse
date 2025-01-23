@@ -105,6 +105,9 @@ public class RisikoscenarioService {
         return getRisikoscenario(UUID.fromString(riskoscenarioId));
     }
 
+    /**
+     * Returns false if nothing was removed
+     */
     public boolean removeTiltak(String id, String tiltakId) {
         int removed = tiltakRepo.deleteTiltakRisikoscenarioRelation(id, tiltakId);
         return removed > 0;

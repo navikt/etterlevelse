@@ -3,18 +3,29 @@ package no.nav.data.pvk.tiltak;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopResponse;
+import no.nav.data.pvk.tiltak.domain.Tiltak;
+import no.nav.data.pvk.tiltak.dto.TiltakRequest;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -26,84 +37,76 @@ public class TiltakController {
 
     private final TiltakService service;
 
-    public ResponseEntity<RestResponsePage<BehandlingensLivslopResponse>> getAll(PageParameters pageParameters) {
-        //FIX ME
-        return null;
+    @Operation(summary = "Get All Tiltak")
+    @ApiResponse(description = "ok")
+    @GetMapping
+    public ResponseEntity<RestResponsePage<TiltakResponse>> getAll(PageParameters pageParameters) {
+        log.info("Get all Tiltak");
+        Page<Tiltak> page = service.getAll(pageParameters);
+        return ResponseEntity.ok(new RestResponsePage<>(page).convert(TiltakResponse::buildFrom));
     }
-
     
     @Operation(summary = "Get One Tiltak")
     @ApiResponse(description = "ok")
     @GetMapping("/{id}")
     public ResponseEntity<TiltakResponse> getById(@PathVariable UUID id) {
         log.info("Get Tiltak id={}", id);
-        return ResponseEntity.ok(TiltakResponse.buildFrom(service.get(id)));
+        TiltakResponse resp = TiltakResponse.buildFrom(service.get(id));
+        setRisikoscenarioer(resp);
+        return ResponseEntity.ok(resp);
     }
 
-
-
-/* FIXME
-    @Operation(summary = "Get Behandlingens Livsløp by etterlevelsedokument id")
-    @ApiResponse(description = "ok")
-    @GetMapping("/etterlevelsedokument/{etterlevelseDokumentId}")
-    public ResponseEntity<BehandlingensLivslopResponse> getPvkDokumentByEtterlevelseDokumentId(@PathVariable String etterlevelseDokumentId) {
-        log.info("Get Behandlingens Livsløp by etterlevelseDokument id={}", etterlevelseDokumentId);
-        Optional<BehandlingensLivslop> behandlingensLivslop = service.getByEtterlevelseDokumentasjon(etterlevelseDokumentId);
-        if (behandlingensLivslop.isPresent()) {
-            return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop.get()));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @Operation(summary = "Create Tiltak")
+    @ApiResponse(responseCode = "201", description = "Tiltak created")
+    @PostMapping
+    public ResponseEntity<TiltakResponse> createTiltak(@RequestBody TiltakRequest request) {
+        log.info("Create Tiltak");
+        Tiltak tiltak = service.save(request.convertToTiltak(), request.isUpdate()); // FIXME: isUpdate → false? Evt. slå sammen denne og neste?
+        var resp = TiltakResponse.buildFrom(tiltak);
+        setRisikoscenarioer(resp);
+        return new ResponseEntity<>(resp, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Create Behandlingens Livsløp")
-    @ApiResponse(responseCode = "201", description = "Behandlingens Livsløp created")
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<BehandlingensLivslopResponse> createBehandlingensLivslop(
-            @RequestPart(value = "filer", required = false) List<MultipartFile> filer,
-            @RequestPart BehandlingensLivslopRequest request
-    ) {
-        log.info("Create Behandlingens Livsløp");
-        if(filer != null && !filer.isEmpty()) {
-            request.setFiler(filer);
-        }
-        var behandlingensLivslop = service.save(request.convertToBehandlingensLivslop(), request.isUpdate());
-        return new ResponseEntity<>(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop), HttpStatus.CREATED);
-    }
+    @Operation(summary = "Update tiltak")
+    @ApiResponse(description = "Tiltak updated")
+    @PutMapping("/{id}")
+    public ResponseEntity<TiltakResponse> updatetiltak(@PathVariable String id, @Valid @RequestBody TiltakRequest request) {
+        log.info("Update tiltak id={}", id);
 
-    @Operation(summary = "Update Behandlingens Livsløp")
-    @ApiResponse(description = "Behandlingens Livsløp updated")
-    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<BehandlingensLivslopResponse> updateBehandlingensLivslop(
-            @PathVariable UUID id,
-            @RequestPart(value = "filer", required = false) List<MultipartFile> filer,
-            @Valid @RequestPart BehandlingensLivslopRequest request) {
-        log.info("Update Behandlingens Livsløp id={}", id);
-
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
-
-        var behandlingensLivslopToUpdate = service.get(id);
-
-        if (behandlingensLivslopToUpdate == null) {
-            throw new ValidationException(String.format("Could not find behandlingens livsløp to be updated with id = %s ", request.getId()));
+        Tiltak tiltakToUpdate = service.get(UUID.fromString(id));
+        if (tiltakToUpdate == null) {
+            throw new NotFoundException(String.format("Could not find tiltak to be updated with id = %s ", request.getId()));
         }
-        if(filer != null && !filer.isEmpty()) {
-            request.setFiler(filer);
-        }
-        request.mergeInto(behandlingensLivslopToUpdate);
-        var behandlingensLivslop = service.save(behandlingensLivslopToUpdate, request.isUpdate());
-        return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop));
+
+        request.mergeInto(tiltakToUpdate);
+        Tiltak tiltak = service.save(tiltakToUpdate, true); // FIXME: true vs. request.isUpdate()
+        var response = TiltakResponse.buildFrom(tiltak);
+        setRisikoscenarioer(response);
+
+        return ResponseEntity.ok(response);
     }
 
-     @Operation(summary = "Delete Behandlingens Livsløp")
-     @ApiResponse(description = "Behandlingens Livsløp deleted")
-     @DeleteMapping("/{id}")
-     public ResponseEntity<BehandlingensLivslopResponse> deleteBehandlingensLivslopById(@PathVariable UUID id) {
-         log.info("Delete Behandlingens Livslop id={}", id);
-         var behandlingensLivslop = service.delete(id);
-         return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop));
-     }
-//*/
+    @Operation(summary = "Delete tiltak")
+    @ApiResponse(description = "tiltak deleted")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<TiltakResponse> deletetiltakById(@PathVariable UUID id) {
+        log.info("Delete tiltak id={}", id);
+        Tiltak tiltak = service.delete(id);
+        if (tiltak == null) {
+            log.warn("Could not find tiltak with id = {} to delete", id);
+            return ResponseEntity.ok(null); // FIXME: throw new NotFoundException(...) ?
+        } else {
+            return ResponseEntity.ok(TiltakResponse.buildFrom(tiltak));
+        }
+    }
+
+    private TiltakResponse setRisikoscenarioer(TiltakResponse res) {
+        res.setRisikoscenarioIds(service.getRisikoscenarioer(res.getId()));
+        return res;
+    }
+
+
 }

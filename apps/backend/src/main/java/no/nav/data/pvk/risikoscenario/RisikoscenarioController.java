@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
@@ -53,7 +54,7 @@ public class RisikoscenarioController {
     public ResponseEntity<RestResponsePage<RisikoscenarioResponse>> getAll(
             PageParameters pageParameters
     ) {
-        log.info("Get all Pvk Document");
+        log.info("Get all Risikoscenario");
         Page<Risikoscenario> page = risikoscenarioService.getAll(pageParameters);
         return ResponseEntity.ok(new RestResponsePage<>(page).convert(RisikoscenarioResponse::buildFrom));
     }
@@ -99,7 +100,7 @@ public class RisikoscenarioController {
     public ResponseEntity<RisikoscenarioResponse> createRisikoscenario(@RequestBody RisikoscenarioRequest request) {
         log.info("Create Risikoscenario");
 
-        var risikoscenario = risikoscenarioService.save(request.convertToRisikoscenario(), request.isUpdate());
+        var risikoscenario = risikoscenarioService.save(request.convertToRisikoscenario(), request.isUpdate()); // FIXME: isUpdate → false? Evt. slå sammen denne og neste?
 
         var response = RisikoscenarioResponse.buildFrom(risikoscenario);
         setTiltakAndKravDataForRelevantKravList(response);
@@ -119,14 +120,14 @@ public class RisikoscenarioController {
 
         var risikoscenarioToUpdate = risikoscenarioService.get(id);
 
-        if (risikoscenarioToUpdate == null) {
+        if (risikoscenarioToUpdate == null) { // NotFoundException?
             throw new ValidationException(String.format("Could not find risikoscenario to be updated with id = %s ", request.getId()));
         }
 
         RisikoscenarioRequest updatedRequest = risikoscenarioService.updateRelevantKravListe(request);
 
         updatedRequest.mergeInto(risikoscenarioToUpdate);
-        var risikoscenario = risikoscenarioService.save(risikoscenarioToUpdate, request.isUpdate());
+        var risikoscenario = risikoscenarioService.save(risikoscenarioToUpdate, request.isUpdate()); // FIXME: isUpdate → true?
 
         var response = RisikoscenarioResponse.buildFrom(risikoscenario);
         setTiltakAndKravDataForRelevantKravList(response);
@@ -142,7 +143,7 @@ public class RisikoscenarioController {
         var risikoscenario = risikoscenarioService.delete(id);
         if (risikoscenario == null) {
             log.warn("Could not find risikoscenario with id = {} to delete", id);
-            return ResponseEntity.ok(null); // FIXME: throw new ValidationException(...) ?
+            return ResponseEntity.ok(null); // FIXME: throw new NotFoundException(...) ?
         } else {
             return ResponseEntity.ok(RisikoscenarioResponse.buildFrom(risikoscenario));
         }
@@ -212,7 +213,7 @@ public class RisikoscenarioController {
             throw new ValidationException("Could not insert Tiltak-Risikoscenario relation: already exists");
         } catch (DataIntegrityViolationException e) {
             log.warn("DataIntegrityViolationException caught while inserting Tiltak-Risikoscenario relation", e);
-            throw new ValidationException("Could not insert Tiltak-Risikoscenario relation: non-existing Tiltak and/or Risikoscenario");
+            throw new NotFoundException("Could not insert Tiltak-Risikoscenario relation: non-existing Tiltak and/or Risikoscenario");
         }
         // FIXME: ITest for exception handling
     }
