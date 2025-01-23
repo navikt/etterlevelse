@@ -264,15 +264,17 @@ export const DateField = (props: TPropsDateField) => {
             onSelect={(date: any) => {
               const dateSingle: Date = Array.isArray(date) ? date[0] : date
               if (dateSingle) {
-                const newDate = dateSingle.setDate(dateSingle.getDate() + 1)
-                const formatedDate = new Date(newDate)
-                fieldProps.form.setFieldValue(name, formatedDate.toISOString().split('T')[0])
+                const year = dateSingle.getFullYear()
+                const month = dateSingle.getMonth() + 1
+                const day = dateSingle.getDate()
+                const date = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
+                fieldProps.form.setFieldValue(name, date)
               } else fieldProps.form.setFieldValue(name, undefined)
             }}
           >
             <DatePicker.Input
-              className="mb-2"
               {...inputProps}
+              className="mb-2"
               value={fieldProps.form.values[name]}
               label="Velg dato"
             />
