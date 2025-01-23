@@ -16,6 +16,14 @@ interface IProps {
   formRef: RefObject<any>
 }
 
+const tabValues = { risikoscenarioer: 'risikoscenarioer', tiltak: 'tiltak' }
+const filterValues = {
+  alleRisikoscenarioer: 'alle',
+  effektIkkeVurdert: 'ikke-vurdert',
+  hoyRisiko: 'hoy-risiko',
+  tiltakIkkeAktuelt: 'ingen-tiltak',
+}
+
 export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   const {
     etterlevelseDokumentasjonId,
@@ -30,6 +38,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   const [navigateUrl, setNavigateUrl] = useState<string>('')
   const url = new URL(window.location.href)
   const tabQuery = url.searchParams.get('tab')
+  const filterQuery = url.searchParams.get('filter')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -45,11 +54,32 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   }, [pvkDokument])
 
   const onTabChange = (tab: string) => {
-    setNavigateUrl(window.location.pathname + '?tab=' + tab)
+    const filter = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
+
+    if (tab === tabValues.tiltak) {
+      setNavigateUrl(window.location.pathname + '?tab=' + tab)
+    } else {
+      setNavigateUrl(window.location.pathname + '?tab=' + tab + '&filter=' + filter)
+    }
+
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
     } else {
-      navigate(window.location.pathname + '?tab=' + tab)
+      if (tab === tabValues.tiltak) {
+        navigate(window.location.pathname + '?tab=' + tab)
+      } else {
+        navigate(window.location.pathname + '?tab=' + tab + '&filter=' + filter)
+      }
+    }
+  }
+
+  const onFilterChange = (filter: string) => {
+    const tab = tabQuery ? tabQuery : tabValues.risikoscenarioer
+    setNavigateUrl(window.location.pathname + '?tab=' + tab + '&filter=' + filter)
+    if (formRef.current?.dirty) {
+      setIsUnsaved(true)
+    } else {
+      navigate(window.location.pathname + '?tab=' + tab + '&filter=' + filter)
     }
   }
 
@@ -75,18 +105,26 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
           <List.Item>Tiltak, inkludert hvilke tiltak som savner ansvarlig eller frist.</List.Item>
         </List>
 
-        <Tabs value={tabQuery ? tabQuery : 'risikoscenarioer'} onChange={onTabChange} fill>
+        <Tabs value={tabQuery ? tabQuery : tabValues.risikoscenarioer} onChange={onTabChange} fill>
           <Tabs.List>
-            <Tabs.Tab value="risikoscenarioer" label="Vis risikoscenarioer" />
-            <Tabs.Tab value="tiltak" label=" Vis tiltak " />
+            <Tabs.Tab value={tabValues.risikoscenarioer} label="Vis risikoscenarioer" />
+            <Tabs.Tab value={tabValues.tiltak} label=" Vis tiltak " />
           </Tabs.List>
-          <Tabs.Panel value="risikoscenarioer" className="w-full">
-            <ToggleGroup defaultValue="Alle risikoscenarioer" onChange={console.debug} fill>
-              <ToggleGroup.Item value="Alle risikoscenarioer" label="Alle risikoscenarioer" />
-              <ToggleGroup.Item value="" label="Effekt ikke vurdert" />
-              <ToggleGroup.Item value="" label="Høy risiko" />
-              <ToggleGroup.Item value="" label="Blir ikke tiltak" />
-              <ToggleGroup.Item value="" label="Ferdig" />
+          <Tabs.Panel value={tabValues.risikoscenarioer} className="w-full">
+            <ToggleGroup value={filterQuery ? filterQuery : 'alle'} onChange={onFilterChange} fill>
+              <ToggleGroup.Item
+                value={filterValues.alleRisikoscenarioer}
+                label="Alle risikoscenarioer"
+              />
+              <ToggleGroup.Item
+                value={filterValues.effektIkkeVurdert}
+                label="Effekt ikke vurdert"
+              />
+              <ToggleGroup.Item value={filterValues.hoyRisiko} label="Høy risiko" />
+              <ToggleGroup.Item
+                value={filterValues.tiltakIkkeAktuelt}
+                label="Tiltak ikke aktuelt"
+              />
             </ToggleGroup>
 
             {risikoscenarioList.length === 0 && (
@@ -115,7 +153,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
               </div>
             )}
           </Tabs.Panel>
-          <Tabs.Panel value="tiltak" className="h-24 w-full">
+          <Tabs.Panel value={tabValues.tiltak} className="h-24 w-full">
             Her skal tiltak vises
           </Tabs.Panel>
         </Tabs>
