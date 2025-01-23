@@ -2,6 +2,7 @@ import { Accordion } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IRisikoscenario } from '../../../constants'
+import { tabValues } from '../../PvkDokument/OppsummeringAvAlleRisikoscenarioerOgTiltak'
 import AccordianAlertModal from '../AccordianAlertModal'
 import RisikoscenarioAccordianHeader from '../RisikoscenarioAccordionHeader'
 import OppsumeringAccordianContent from './OppsumeringAccordianContent'
@@ -19,6 +20,7 @@ export const OppsumeringAccordianList = (props: IProps) => {
   const url = new URL(window.location.href)
   const risikoscenarioId = url.searchParams.get('risikoscenario')
   const tabQuery = url.searchParams.get('tab')
+  const filterQuery = url.searchParams.get('filter')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -35,21 +37,37 @@ export const OppsumeringAccordianList = (props: IProps) => {
   const handleAccordionChange = (risikoscenarioId?: string) => {
     if (risikoscenarioId) {
       setNavigateUrl(
-        window.location.pathname + '?tab=' + tabQuery + '&risikoscenario=' + risikoscenarioId
+        window.location.pathname +
+          '?tab=' +
+          tabQuery +
+          '&filter=' +
+          filterQuery +
+          '&risikoscenario=' +
+          risikoscenarioId
       )
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
       } else {
         navigate(
-          window.location.pathname + '?tab=' + tabQuery + '&risikoscenario=' + risikoscenarioId
+          window.location.pathname +
+            '?tab=' +
+            tabQuery +
+            '&filter=' +
+            filterQuery +
+            '&risikoscenario=' +
+            risikoscenarioId
         )
       }
     } else {
-      setNavigateUrl(window.location.pathname + '?tab=' + tabQuery)
+      setNavigateUrl(
+        `${window.location.pathname}?tab=${tabQuery}${tabQuery === tabValues.risikoscenarioer ? '&filter=' + filterQuery : ''}`
+      )
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
       } else {
-        navigate(window.location.pathname + '?tab=' + tabQuery)
+        navigate(
+          `${window.location.pathname}?tab=${tabQuery}${tabQuery === tabValues.risikoscenarioer ? '&filter=' + filterQuery : ''}`
+        )
       }
     }
   }

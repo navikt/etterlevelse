@@ -16,8 +16,8 @@ interface IProps {
   formRef: RefObject<any>
 }
 
-const tabValues = { risikoscenarioer: 'risikoscenarioer', tiltak: 'tiltak' }
-const filterValues = {
+export const tabValues = { risikoscenarioer: 'risikoscenarioer', tiltak: 'tiltak' }
+export const filterValues = {
   alleRisikoscenarioer: 'alle',
   effektIkkeVurdert: 'ikke-vurdert',
   hoyRisiko: 'hoy-risiko',
@@ -55,21 +55,16 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
 
   const onTabChange = (tab: string) => {
     const filter = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
-
-    if (tab === tabValues.tiltak) {
-      setNavigateUrl(window.location.pathname + '?tab=' + tab)
-    } else {
-      setNavigateUrl(window.location.pathname + '?tab=' + tab + '&filter=' + filter)
-    }
+    setNavigateUrl(
+      `${window.location.pathname}?tab=${tab}${tab === tabValues.risikoscenarioer ? '&filter=' + filter : ''}`
+    )
 
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
     } else {
-      if (tab === tabValues.tiltak) {
-        navigate(window.location.pathname + '?tab=' + tab)
-      } else {
-        navigate(window.location.pathname + '?tab=' + tab + '&filter=' + filter)
-      }
+      navigate(
+        `${window.location.pathname}?tab=${tab}${tab === tabValues.risikoscenarioer ? '&filter=' + filter : ''}`
+      )
     }
   }
 
