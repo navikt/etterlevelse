@@ -34,7 +34,7 @@
         <commons-io.version>2.18.0</commons-io.version>
         <guava.version>33.4.0-jre</guava.version>
         <jna.version>5.16.0</jna.version>
-        <jetbrains.annotation.version>26.0.1</jetbrains.annotation.version>
+        <jetbrains.annotation.version>26.0.2</jetbrains.annotation.version>
 
         <!-- Test -->
         <testcontainers.version>1.20.4</testcontainers.version>
