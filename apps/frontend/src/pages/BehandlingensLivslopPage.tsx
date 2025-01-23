@@ -219,14 +219,8 @@ export const BehandlingensLivslopPage = () => {
                       svarer ut etterlevelseskrav innen Personvern og Arkiv og dokumentasjon.
                     </Alert>
 
-                    <Heading level="2" size="small" className="mt-3">
-                      Slik lager dere en god tegning av behandlingens livsløp
-                    </Heading>
-
                     <BodyShort className="mt-3">
                       Illustrasjonen under viser hvordan dere kunne tegne behandlingens livsløp.
-                      Detaljnivået vil variere, men intensjonen er at dere viser [PVO må gjerne
-                      supplere her]
                     </BodyShort>
 
                     <img
@@ -238,7 +232,7 @@ export const BehandlingensLivslopPage = () => {
                     />
 
                     <ReadMore
-                      header="Slik lager du en god tegning av behandlingens livsløp"
+                      header="Slik lager dere en god tegning av behandlingens livsløp"
                       className="mt-3"
                     >
                       Du kan bruke verktøy som PowerPoint, Mural, eller Figma til å lage tegningen

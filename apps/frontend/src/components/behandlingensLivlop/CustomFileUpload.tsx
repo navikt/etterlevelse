@@ -59,8 +59,8 @@ export const CustomFileUpload = (props: IProps) => {
   return (
     <VStack gap="6">
       <FileUpload.Dropzone
-        label="Last opp behandlingslivsløp"
-        description={`Støttet filformater er pdf, png, og jpeg. Maks 4 filer. Maks størrelse på ${MAX_SIZE_MB} MB.`}
+        label="Last opp behandlingens livsløp"
+        description={`Følgende filformater er tillatt: PDF, PNG og JPEG. Du kan laste opp maks 4 filer. Filstørrelse pr. fil må være mindre enn ${MAX_SIZE_MB} MB.`}
         accept=".png,.jpeg,.pdf"
         maxSizeInBytes={MAX_SIZE}
         fileLimit={{ max: MAX_FILES, current: acceptedFiles.length }}
