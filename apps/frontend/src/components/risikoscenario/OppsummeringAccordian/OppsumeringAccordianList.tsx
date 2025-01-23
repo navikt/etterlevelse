@@ -18,6 +18,7 @@ export const OppsumeringAccordianList = (props: IProps) => {
   const [navigateUrl, setNavigateUrl] = useState<string>('')
   const url = new URL(window.location.href)
   const risikoscenarioId = url.searchParams.get('risikoscenario')
+  const tabQuery = url.searchParams.get('tab')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -33,18 +34,22 @@ export const OppsumeringAccordianList = (props: IProps) => {
 
   const handleAccordionChange = (risikoscenarioId?: string) => {
     if (risikoscenarioId) {
-      setNavigateUrl(window.location.pathname + '?risikoscenario=' + risikoscenarioId)
+      setNavigateUrl(
+        window.location.pathname + '?tab=' + tabQuery + '&risikoscenario=' + risikoscenarioId
+      )
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
       } else {
-        navigate(window.location.pathname + '?risikoscenario=' + risikoscenarioId)
+        navigate(
+          window.location.pathname + '?tab=' + tabQuery + '&risikoscenario=' + risikoscenarioId
+        )
       }
     } else {
-      setNavigateUrl(window.location.pathname)
+      setNavigateUrl(window.location.pathname + '?tab=' + tabQuery)
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
       } else {
-        navigate(window.location.pathname)
+        navigate(window.location.pathname + '?tab=' + tabQuery)
       }
     }
   }
