@@ -94,7 +94,7 @@ public class RisikoscenarioRequest implements RequestElement {
         risikoscenarioToMerge.getRisikoscenarioData().setNavn(navn);
         risikoscenarioToMerge.getRisikoscenarioData().setBeskrivelse(beskrivelse);
         risikoscenarioToMerge.getRisikoscenarioData().setSannsynlighetsNivaa(sannsynlighetsNivaa);
-        risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaaBegrunnelse(sannsynlighetsNivaaBegrunnelse);
+        risikoscenarioToMerge.getRisikoscenarioData().setSannsynlighetsNivaaBegrunnelse(sannsynlighetsNivaaBegrunnelse);
         risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaa(konsekvensNivaa);
         risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaaBegrunnelse(konsekvensNivaaBegrunnelse);
         risikoscenarioToMerge.getRisikoscenarioData().setGenerelScenario(generelScenario);
