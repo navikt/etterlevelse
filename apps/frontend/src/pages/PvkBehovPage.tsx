@@ -29,6 +29,7 @@ import {
   updatePvkDokument,
   usePvkDokument,
 } from '../api/PvkDokumentApi'
+import pvkBehovSchema from '../components/PvkDokument/edit/pvkBehovSchema'
 import { FieldWrapper, TextAreaField } from '../components/common/Inputs'
 import { ExternalLink } from '../components/common/RouteLink'
 import { PageLayout } from '../components/scaffold/Page'
@@ -205,6 +206,7 @@ export const PvkBehovPage = () => {
               <Formik
                 validateOnChange={false}
                 validateOnBlur={false}
+                validationSchema={pvkBehovSchema}
                 onSubmit={submit}
                 initialValues={mapPvkDokumentToFormValue(pvkdokument as IPvkDokument)}
               >
@@ -319,12 +321,14 @@ export const PvkBehovPage = () => {
                       </Field>
                     </FieldWrapper>
 
-                    <TextAreaField
-                      rows={5}
-                      noPlaceholder
-                      label="Begrunn vurderingen deres"
-                      name="pvkVurderingsBegrunnelse"
-                    />
+                    {values.skalUtforePvk !== undefined && !values.skalUtforePvk && (
+                      <TextAreaField
+                        rows={5}
+                        noPlaceholder
+                        label="Begrunn vurderingen deres"
+                        name="pvkVurderingsBegrunnelse"
+                      />
+                    )}
 
                     <div className="flex items-center mt-5 gap-2">
                       {values.skalUtforePvk && (
