@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { IRisikoscenario } from '../../constants'
 import AccordianAlertModal from './AccordianAlertModal'
 import RisikoscenarioAccordionContent from './RisikoscenarioAccordianContent'
-import RisikoscenarioAccordianHeader from './RisikoscenarioAccordionHeader'
+import { IdentifiseringAvRisikoscenarioAccordianHeader } from './RisikoscenarioAccordionHeader'
 
 interface IProps {
   risikoscenarioList: IRisikoscenario[]
@@ -63,7 +63,7 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
                 handleAccordionChange(open ? risikoscenario.id : undefined)
               }}
             >
-              <RisikoscenarioAccordianHeader risikoscenario={risikoscenario} />
+              <IdentifiseringAvRisikoscenarioAccordianHeader risikoscenario={risikoscenario} />
               <Accordion.Content>
                 {expanded && (
                   <RisikoscenarioAccordionContent
