@@ -1,6 +1,6 @@
 import { Button, ErrorSummary, Heading, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
-import React, { useState } from 'react'
+import React, { RefObject, useState } from 'react'
 import { mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../../constants'
 import { TextAreaField } from '../../common/Inputs'
@@ -13,10 +13,11 @@ interface IProps {
   initialValues: Partial<IRisikoscenario>
   submit: (risikoscenario: IRisikoscenario) => void
   onClose: () => void
+  formRef: RefObject<any>
 }
 
 export const RisikoscenarioForm = (props: IProps) => {
-  const { initialValues, submit, onClose } = props
+  const { initialValues, submit, onClose, formRef } = props
 
   const errorSummaryRef = React.useRef<HTMLDivElement>(null)
   const [validateOnBlur, setValidateOnBlur] = useState(false)
@@ -29,6 +30,7 @@ export const RisikoscenarioForm = (props: IProps) => {
         onSubmit={submit}
         validationSchema={risikoscenarioCreateValidation()}
         initialValues={mapRisikoscenarioToFormValue(initialValues)}
+        innerRef={formRef}
       >
         {({ submitForm, errors }) => (
           <Form>

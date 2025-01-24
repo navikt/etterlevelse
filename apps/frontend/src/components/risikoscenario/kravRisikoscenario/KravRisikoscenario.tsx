@@ -1,5 +1,5 @@
 import { Accordion, Alert, Button, ReadMore } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { RefObject, useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, TKravQL } from '../../../constants'
 import CreateRisikoscenario from '../edit/CreateRisikoscenario'
@@ -9,14 +9,16 @@ import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionCon
 interface IProps {
   krav: TKravQL
   pvkDokument: IPvkDokument
+  formRef: RefObject<any>
 }
 
 export const KravRisikoscenario = (props: IProps) => {
-  const { krav, pvkDokument } = props
+  const { krav, pvkDokument, formRef } = props
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
   const [risikoscenarioer, setRisikoscenarioer] = useState<IRisikoscenario[]>([])
   const [risikoscenarioForKrav, setRisikoscenarioForKrav] = useState<IRisikoscenario[]>([])
+  const [activeRisikoscenarioId, setActiveRisikoscenarioId] = useState<string>()
 
   useEffect(() => {
     ;(async () => {
@@ -47,6 +49,10 @@ export const KravRisikoscenario = (props: IProps) => {
     })()
   }, [krav, pvkDokument])
 
+  const handleAccordionChange = (risikoscenarioId: string) => {
+    setActiveRisikoscenarioId(risikoscenarioId)
+  }
+
   return (
     <div className="w-full">
       <ReadMore header="Slik dokumenterer dere risikoscenarioer og tiltak">WIP</ReadMore>
@@ -73,7 +79,14 @@ export const KravRisikoscenario = (props: IProps) => {
           <div className="mb-5">
             <Accordion>
               {risikoscenarioForKrav.map((risikoscenario, index) => (
-                <Accordion.Item id={risikoscenario.id} key={index + '_' + risikoscenario.navn}>
+                <Accordion.Item
+                  open={activeRisikoscenarioId === risikoscenario.id}
+                  id={risikoscenario.id}
+                  key={index + '_' + risikoscenario.navn}
+                  onOpenChange={(open) => {
+                    handleAccordionChange(open ? risikoscenario.id : '')
+                  }}
+                >
                   <Accordion.Header>{risikoscenario.navn}</Accordion.Header>
                   <Accordion.Content>
                     <KravRisikoscenarioAccordionContent
@@ -84,6 +97,7 @@ export const KravRisikoscenario = (props: IProps) => {
                       setRisikoscenarioer={setRisikoscenarioer}
                       risikoscenarioForKrav={risikoscenarioForKrav}
                       setRisikoscenarioForKrav={setRisikoscenarioForKrav}
+                      formRef={formRef}
                     />
                   </Accordion.Content>
                 </Accordion.Item>
@@ -99,6 +113,7 @@ export const KravRisikoscenario = (props: IProps) => {
             risikoscenarioer={risikoscenarioForKrav}
             setRisikoscenarioer={setRisikoscenarioForKrav}
             setIsCreateMode={setIsCreateMode}
+            formRef={formRef}
           />
         )}
 

@@ -1,6 +1,6 @@
 import { FileTextIcon } from '@navikt/aksel-icons'
 import { Button, Label, Tabs } from '@navikt/ds-react'
-import { Dispatch, useEffect, useState } from 'react'
+import { Dispatch, RefObject, useEffect, useRef, useState } from 'react'
 import { IEtterlevelseMetadata, IKravVersjon, IPvkDokument, TKravQL } from '../../../constants'
 import { Markdown } from '../../common/Markdown'
 import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
@@ -29,6 +29,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
   } = props
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
   const [activeTab, setActiveTab] = useState<string>('mer')
+  const formRef: RefObject<any> = useRef(undefined)
 
   useEffect(() => {
     if (pvkDokument && pvkDokument.skalUtforePvk) {
@@ -75,7 +76,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
         {pvkDokument && pvkDokument.skalUtforePvk && (
           <Tabs.Panel value="pvkDokumentasjon">
             <div className="mt-2 p-4">
-              <KravRisikoscenario krav={krav} pvkDokument={pvkDokument} />
+              <KravRisikoscenario krav={krav} pvkDokument={pvkDokument} formRef={formRef} />
             </div>
           </Tabs.Panel>
         )}
