@@ -1,7 +1,9 @@
 import { Accordion, Alert, Button, ReadMore } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, TKravQL } from '../../../constants'
+import AccordianAlertModal from '../AccordianAlertModal'
 import CreateRisikoscenario from '../edit/CreateRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/LeggTilEksisterendeRisikoscenario'
 import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionContent'
@@ -10,15 +12,20 @@ interface IProps {
   krav: TKravQL
   pvkDokument: IPvkDokument
   formRef: RefObject<any>
+  isUnsaved: boolean
+  setIsUnsaved: (state: boolean) => void
 }
 
 export const KravRisikoscenario = (props: IProps) => {
-  const { krav, pvkDokument, formRef } = props
+  const { krav, pvkDokument, formRef, isUnsaved, setIsUnsaved } = props
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
   const [risikoscenarioer, setRisikoscenarioer] = useState<IRisikoscenario[]>([])
   const [risikoscenarioForKrav, setRisikoscenarioForKrav] = useState<IRisikoscenario[]>([])
-  const [activeRisikoscenarioId, setActiveRisikoscenarioId] = useState<string>()
+  const [navigateUrl, setNavigateUrl] = useState<string>('')
+  const url = new URL(window.location.href)
+  const risikoscenarioId = url.searchParams.get('risikoscenario')
+  const navigate = useNavigate()
 
   useEffect(() => {
     ;(async () => {
@@ -50,7 +57,13 @@ export const KravRisikoscenario = (props: IProps) => {
   }, [krav, pvkDokument])
 
   const handleAccordionChange = (risikoscenarioId: string) => {
-    setActiveRisikoscenarioId(risikoscenarioId)
+    const risikoscenarioParams = risikoscenarioId ? `?risikoscenario=${risikoscenarioId}` : ''
+    setNavigateUrl(`${window.location.pathname}${risikoscenarioParams}`)
+    if (formRef.current?.dirty) {
+      setIsUnsaved(true)
+    } else {
+      navigate(`${window.location.pathname}${risikoscenarioParams}`)
+    }
   }
 
   return (
@@ -78,30 +91,35 @@ export const KravRisikoscenario = (props: IProps) => {
         {!isLeggTilEksisterendeMode && (
           <div className="mb-5">
             <Accordion>
-              {risikoscenarioForKrav.map((risikoscenario, index) => (
-                <Accordion.Item
-                  open={activeRisikoscenarioId === risikoscenario.id}
-                  id={risikoscenario.id}
-                  key={index + '_' + risikoscenario.navn}
-                  onOpenChange={(open) => {
-                    handleAccordionChange(open ? risikoscenario.id : '')
-                  }}
-                >
-                  <Accordion.Header>{risikoscenario.navn}</Accordion.Header>
-                  <Accordion.Content>
-                    <KravRisikoscenarioAccordionContent
-                      risikoscenario={risikoscenario}
-                      isCreateMode={isCreateMode}
-                      kravnummer={krav.kravNummer}
-                      risikoscenarioer={risikoscenarioer}
-                      setRisikoscenarioer={setRisikoscenarioer}
-                      risikoscenarioForKrav={risikoscenarioForKrav}
-                      setRisikoscenarioForKrav={setRisikoscenarioForKrav}
-                      formRef={formRef}
-                    />
-                  </Accordion.Content>
-                </Accordion.Item>
-              ))}
+              {risikoscenarioForKrav.map((risikoscenario, index) => {
+                const expanded = risikoscenarioId === risikoscenario.id
+                return (
+                  <Accordion.Item
+                    open={expanded}
+                    id={risikoscenario.id}
+                    key={index + '_' + risikoscenario.navn}
+                    onOpenChange={(open) => {
+                      handleAccordionChange(open ? risikoscenario.id : '')
+                    }}
+                  >
+                    <Accordion.Header>{risikoscenario.navn}</Accordion.Header>
+                    {expanded && (
+                      <Accordion.Content>
+                        <KravRisikoscenarioAccordionContent
+                          risikoscenario={risikoscenario}
+                          isCreateMode={isCreateMode}
+                          kravnummer={krav.kravNummer}
+                          risikoscenarioer={risikoscenarioer}
+                          setRisikoscenarioer={setRisikoscenarioer}
+                          risikoscenarioForKrav={risikoscenarioForKrav}
+                          setRisikoscenarioForKrav={setRisikoscenarioForKrav}
+                          formRef={formRef}
+                        />
+                      </Accordion.Content>
+                    )}
+                  </Accordion.Item>
+                )
+              })}
             </Accordion>
           </div>
         )}
@@ -123,7 +141,11 @@ export const KravRisikoscenario = (props: IProps) => {
               size="small"
               type="button"
               onClick={() => {
-                setIsCreateMode(true)
+                if (formRef.current?.dirty) {
+                  setIsUnsaved(true)
+                } else {
+                  setIsCreateMode(true)
+                }
               }}
             >
               Opprett nytt risikoscenario
@@ -140,6 +162,13 @@ export const KravRisikoscenario = (props: IProps) => {
             </Button>
           </div>
         )}
+
+        <AccordianAlertModal
+          isOpen={isUnsaved}
+          setIsOpen={setIsUnsaved}
+          formRef={formRef}
+          navigateUrl={navigateUrl}
+        />
       </div>
     </div>
   )

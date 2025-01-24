@@ -29,6 +29,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
   } = props
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
   const [activeTab, setActiveTab] = useState<string>('mer')
+  const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const formRef: RefObject<any> = useRef(undefined)
 
   useEffect(() => {
@@ -76,7 +77,13 @@ export const EtterlevelseSidePanel = (props: IProps) => {
         {pvkDokument && pvkDokument.skalUtforePvk && (
           <Tabs.Panel value="pvkDokumentasjon">
             <div className="mt-2 p-4">
-              <KravRisikoscenario krav={krav} pvkDokument={pvkDokument} formRef={formRef} />
+              <KravRisikoscenario
+                krav={krav}
+                pvkDokument={pvkDokument}
+                formRef={formRef}
+                isUnsaved={isUnsaved}
+                setIsUnsaved={setIsUnsaved}
+              />
             </div>
           </Tabs.Panel>
         )}

@@ -73,13 +73,15 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
 
         {!risikoscenario.ingenTiltak && <div>liste over tiltak og redigeringsknappene</div>}
 
-        <div className="mt-3">
-          <IngenTiltakField
-            risikoscenario={activeRisikoscenario}
-            setRisikoscenario={setActiveRisikoscenario}
-            formRef={formRef}
-          />
-        </div>
+        {!isCreateMode && (
+          <div className="mt-3">
+            <IngenTiltakField
+              risikoscenario={activeRisikoscenario}
+              setRisikoscenario={setActiveRisikoscenario}
+              formRef={formRef}
+            />
+          </div>
+        )}
       </div>
 
       {isEditModalOpen && (
