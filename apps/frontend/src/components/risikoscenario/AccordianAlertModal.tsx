@@ -43,7 +43,8 @@ export const AccordianAlertModal = (props: IProps) => {
           type="button"
           variant="secondary"
           onClick={async () => {
-            await formRef.current?.resetForm()
+            const values = formRef.current?.values
+            await formRef.current?.resetForm({ values })
             setIsOpen(false)
             if (customOnClick) {
               customOnClick()

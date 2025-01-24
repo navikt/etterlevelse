@@ -15,6 +15,11 @@ interface IProps {
   setIsUnsaved: (state: boolean) => void
 }
 
+const unsavedAction = {
+  createRisikoscenario: 'createRisikoscenario',
+  leggTilEksisterendeRisikoscenario: 'leggTilEksisterendeRisikoscenario',
+}
+
 export const KravRisikoscenario = (props: IProps) => {
   const { krav, pvkDokument, formRef, isUnsaved, setIsUnsaved } = props
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
@@ -23,6 +28,7 @@ export const KravRisikoscenario = (props: IProps) => {
   const [risikoscenarioForKrav, setRisikoscenarioForKrav] = useState<IRisikoscenario[]>([])
   const [activeRisikoscenarioId, setActiveRisikoscenarioId] = useState<string>('')
   const [selectedRisikoscenarioId, setSelectedRisikoscenarioId] = useState<string>('')
+  const [editButtonClicked, setEditButtonClicked] = useState<string>('')
 
   useEffect(() => {
     ;(async () => {
@@ -139,6 +145,7 @@ export const KravRisikoscenario = (props: IProps) => {
               onClick={() => {
                 if (formRef.current?.dirty) {
                   setIsUnsaved(true)
+                  setEditButtonClicked(unsavedAction.createRisikoscenario)
                 } else {
                   setIsCreateMode(true)
                 }
@@ -151,7 +158,12 @@ export const KravRisikoscenario = (props: IProps) => {
               variant="secondary"
               type="button"
               onClick={() => {
-                setIsLeggTilEksisterendeMode(true)
+                if (formRef.current?.dirty) {
+                  setIsUnsaved(true)
+                  setEditButtonClicked(unsavedAction.leggTilEksisterendeRisikoscenario)
+                } else {
+                  setIsLeggTilEksisterendeMode(true)
+                }
               }}
             >
               Legg til eksisterende risikoscenario
@@ -164,7 +176,16 @@ export const KravRisikoscenario = (props: IProps) => {
           setIsOpen={setIsUnsaved}
           formRef={formRef}
           customOnClick={() => {
-            setActiveRisikoscenarioId(selectedRisikoscenarioId)
+            if (selectedRisikoscenarioId) {
+              setActiveRisikoscenarioId(selectedRisikoscenarioId)
+            }
+            if (editButtonClicked) {
+              if (editButtonClicked === unsavedAction.createRisikoscenario) {
+                setIsCreateMode(true)
+              } else if (editButtonClicked === unsavedAction.leggTilEksisterendeRisikoscenario) {
+                setIsLeggTilEksisterendeMode(true)
+              }
+            }
           }}
         />
       </div>
