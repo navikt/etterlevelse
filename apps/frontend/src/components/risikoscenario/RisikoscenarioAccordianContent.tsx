@@ -1,7 +1,7 @@
 import { PencilIcon } from '@navikt/aksel-icons'
 import { Button, Label } from '@navikt/ds-react'
 import { RefObject, useState } from 'react'
-import { updateRisikoscenario } from '../../api/RisikoscenarioApi'
+import { getRisikoscenario, updateRisikoscenario } from '../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../constants'
 import RisikoscenarioView from './RisikoscenarioView'
 import SlettOvrigRisikoscenario from './SlettOvrigRisikoscenario'
@@ -24,6 +24,21 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
     await updateRisikoscenario(risikoscenario).then((response) => {
       setActiveRisikoscenario(response)
       setIsEditModalOpen(false)
+    })
+  }
+
+  const submitIngenTiltak = async (submitedValues: IRisikoscenario) => {
+    await getRisikoscenario(risikoscenario.id).then((response) => {
+      const updatedRisikoscenario = {
+        ...submitedValues,
+        ...response,
+        ingenTiltak: submitedValues.ingenTiltak,
+      }
+
+      updateRisikoscenario(updatedRisikoscenario).then((response) => {
+        setActiveRisikoscenario(response)
+        window.location.reload()
+      })
     })
   }
 
@@ -55,8 +70,8 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
         <div className="mt-3">
           <IngenTiltakField
             risikoscenario={activeRisikoscenario}
-            setRisikoscenario={setActiveRisikoscenario}
             formRef={formRef}
+            submit={submitIngenTiltak}
           />
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { PencilIcon } from '@navikt/aksel-icons'
 import { Button, Label } from '@navikt/ds-react'
 import { RefObject, useState } from 'react'
-import { updateRisikoscenario } from '../../../api/RisikoscenarioApi'
+import { getRisikoscenario, updateRisikoscenario } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../../constants'
 import RisikoscenarioView from '../RisikoscenarioView'
 import FjernRisikoscenarioFraKrav from '../edit/FjernRisikoscenarioFraKrav'
@@ -34,10 +34,38 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
 
+  const updateRisikoscenarioList = (updatedRisikoscenario: IRisikoscenario) => {
+    setRisikoscenarioForKrav(
+      risikoscenarioForKrav.map((risikoscenario) => {
+        if (risikoscenario.id === updatedRisikoscenario.id) {
+          return { ...updatedRisikoscenario }
+        } else {
+          return risikoscenario
+        }
+      })
+    )
+  }
+
   const submit = async (risikoscenario: IRisikoscenario) => {
     await updateRisikoscenario(risikoscenario).then((response) => {
       setActiveRisikoscenario(response)
+      updateRisikoscenarioList(response)
       setIsEditModalOpen(false)
+    })
+  }
+
+  const submitIngenTiltak = async (submitedValues: IRisikoscenario) => {
+    await getRisikoscenario(risikoscenario.id).then((response) => {
+      const updatedRisikoscenario = {
+        ...submitedValues,
+        ...response,
+        ingenTiltak: submitedValues.ingenTiltak,
+      }
+
+      updateRisikoscenario(updatedRisikoscenario).then((response) => {
+        setActiveRisikoscenario(response)
+        updateRisikoscenarioList(response)
+      })
     })
   }
 
@@ -77,7 +105,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
           <div className="mt-3">
             <IngenTiltakField
               risikoscenario={activeRisikoscenario}
-              setRisikoscenario={setActiveRisikoscenario}
+              submit={submitIngenTiltak}
               formRef={formRef}
             />
           </div>

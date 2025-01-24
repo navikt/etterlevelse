@@ -5,13 +5,14 @@ import { useNavigate } from 'react-router-dom'
 interface IProps {
   isOpen: boolean
   setIsOpen: (state: boolean) => void
-  navigateUrl: string
+  navigateUrl?: string
   formRef: RefObject<any>
   reloadOnSubmit?: boolean
+  customOnClick?: () => void
 }
 
 export const AccordianAlertModal = (props: IProps) => {
-  const { isOpen, setIsOpen, navigateUrl, formRef, reloadOnSubmit } = props
+  const { isOpen, setIsOpen, navigateUrl, formRef, reloadOnSubmit, customOnClick } = props
   const navigate = useNavigate()
 
   return (
@@ -25,7 +26,12 @@ export const AccordianAlertModal = (props: IProps) => {
           onClick={async () => {
             await formRef.current?.submitForm()
             setIsOpen(false)
-            navigate(navigateUrl)
+            if (customOnClick) {
+              customOnClick()
+            }
+            if (navigateUrl) {
+              navigate(navigateUrl)
+            }
             if (reloadOnSubmit) {
               window.location.reload()
             }
@@ -39,7 +45,12 @@ export const AccordianAlertModal = (props: IProps) => {
           onClick={async () => {
             await formRef.current?.resetForm()
             setIsOpen(false)
-            navigate(navigateUrl)
+            if (customOnClick) {
+              customOnClick()
+            }
+            if (navigateUrl) {
+              navigate(navigateUrl)
+            }
           }}
         >
           Fortsett uten å lagre

@@ -1,36 +1,17 @@
 import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { RefObject } from 'react'
-import {
-  getRisikoscenario,
-  mapRisikoscenarioToFormValue,
-  updateRisikoscenario,
-} from '../../../api/RisikoscenarioApi'
+import { mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../../constants'
 
 interface IProps {
   risikoscenario: IRisikoscenario
-  setRisikoscenario: (state: IRisikoscenario) => void
+  submit: (risikoscenario: IRisikoscenario) => void
   formRef?: RefObject<any>
 }
 
 export const IngenTiltakField = (props: IProps) => {
-  const { risikoscenario, setRisikoscenario, formRef } = props
-
-  const submit = async (submitedValues: IRisikoscenario) => {
-    await getRisikoscenario(risikoscenario.id).then((response) => {
-      const updatedRisikoscenario = {
-        ...submitedValues,
-        ...response,
-        ingenTiltak: submitedValues.ingenTiltak,
-      }
-
-      updateRisikoscenario(updatedRisikoscenario).then((response) => {
-        setRisikoscenario(response)
-        window.location.reload()
-      })
-    })
-  }
+  const { risikoscenario, submit, formRef } = props
 
   return (
     <div>
@@ -39,7 +20,7 @@ export const IngenTiltakField = (props: IProps) => {
         onSubmit={submit}
         innerRef={formRef}
       >
-        {({ submitForm }) => (
+        {({ submitForm, values, resetForm }) => (
           <Form>
             <Field name="ingenTiltak">
               {(fieldProps: FieldProps) => (
@@ -57,7 +38,13 @@ export const IngenTiltakField = (props: IProps) => {
               )}
             </Field>
 
-            <Button type="button" onClick={() => submitForm()}>
+            <Button
+              type="button"
+              onClick={() => {
+                submitForm()
+                resetForm({ values })
+              }}
+            >
               Lagre
             </Button>
           </Form>
