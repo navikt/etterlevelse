@@ -11,8 +11,6 @@ interface IProps {
   krav: TKravQL
   pvkDokument: IPvkDokument
   formRef: RefObject<any>
-  isUnsaved: boolean
-  setIsUnsaved: (state: boolean) => void
 }
 
 const unsavedAction = {
@@ -21,9 +19,10 @@ const unsavedAction = {
 }
 
 export const KravRisikoscenario = (props: IProps) => {
-  const { krav, pvkDokument, formRef, isUnsaved, setIsUnsaved } = props
+  const { krav, pvkDokument, formRef } = props
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
+  const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [risikoscenarioer, setRisikoscenarioer] = useState<IRisikoscenario[]>([])
   const [risikoscenarioForKrav, setRisikoscenarioForKrav] = useState<IRisikoscenario[]>([])
   const [activeRisikoscenarioId, setActiveRisikoscenarioId] = useState<string>('')
@@ -86,6 +85,7 @@ export const KravRisikoscenario = (props: IProps) => {
             risikoscenarioForKrav={risikoscenarioForKrav}
             setRisikoscenarioForKrav={setRisikoscenarioForKrav}
             setIsLeggTilEksisterendeMode={setIsLeggTilEksisterendeMode}
+            formRef={formRef}
           />
         )}
 

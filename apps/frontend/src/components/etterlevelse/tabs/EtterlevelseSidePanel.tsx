@@ -5,6 +5,7 @@ import { IEtterlevelseMetadata, IKravVersjon, IPvkDokument, TKravQL } from '../.
 import { Markdown } from '../../common/Markdown'
 import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
 import { AllInfo } from '../../krav/ViewKrav'
+import AccordianAlertModal from '../../risikoscenario/AccordianAlertModal'
 import KravRisikoscenario from '../../risikoscenario/kravRisikoscenario/KravRisikoscenario'
 
 interface IProps {
@@ -30,6 +31,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
   const [activeTab, setActiveTab] = useState<string>('mer')
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
+  const [selectedTab, setSelectedTab] = useState<string>('')
   const formRef: RefObject<any> = useRef(undefined)
 
   useEffect(() => {
@@ -55,7 +57,12 @@ export const EtterlevelseSidePanel = (props: IProps) => {
         value={activeTab}
         size="small"
         onChange={(tabValue) => {
-          setActiveTab(tabValue)
+          if (formRef.current?.dirty) {
+            setSelectedTab(tabValue)
+            setIsUnsaved(true)
+          } else {
+            setActiveTab(tabValue)
+          }
         }}
       >
         <Tabs.List>
@@ -77,13 +84,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
         {pvkDokument && pvkDokument.skalUtforePvk && (
           <Tabs.Panel value="pvkDokumentasjon">
             <div className="mt-2 p-4">
-              <KravRisikoscenario
-                krav={krav}
-                pvkDokument={pvkDokument}
-                formRef={formRef}
-                isUnsaved={isUnsaved}
-                setIsUnsaved={setIsUnsaved}
-              />
+              <KravRisikoscenario krav={krav} pvkDokument={pvkDokument} formRef={formRef} />
             </div>
           </Tabs.Panel>
         )}
@@ -112,6 +113,15 @@ export const EtterlevelseSidePanel = (props: IProps) => {
           </div>
         </Tabs.Panel>
       </Tabs>
+
+      <AccordianAlertModal
+        isOpen={isUnsaved}
+        setIsOpen={setIsUnsaved}
+        formRef={formRef}
+        customOnClick={() => {
+          setActiveTab(selectedTab)
+        }}
+      />
     </div>
   )
 }

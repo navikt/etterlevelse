@@ -281,7 +281,7 @@ export const EtterlevelseKravView = (props: IProps) => {
       {krav && (
         <div className="flex flex-col gap-8">
           <div>
-            <BodyShort size="small">
+            <BodyShort size="small" id="kravTitle">
               {temaName} / K{krav.kravNummer}.{krav.kravVersjon}
             </BodyShort>
             <div>

@@ -1,6 +1,6 @@
 import { Button, Chips, Select, VStack } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { useState } from 'react'
+import { RefObject, useEffect, useState } from 'react'
 import { updateKravForRisikoscenarioer } from '../../../api/RisikoscenarioApi'
 import { IKravRisikoscenarioRelasjon, IRisikoscenario } from '../../../constants'
 
@@ -11,6 +11,7 @@ interface IProps {
   risikoscenarioForKrav: IRisikoscenario[]
   setRisikoscenarioForKrav: (state: IRisikoscenario[]) => void
   setIsLeggTilEksisterendeMode: (state: boolean) => void
+  formRef: RefObject<any>
 }
 
 export const LeggTilEksisterendeRisikoscenario = (props: IProps) => {
@@ -21,6 +22,7 @@ export const LeggTilEksisterendeRisikoscenario = (props: IProps) => {
     risikoscenarioForKrav,
     setRisikoscenarioForKrav,
     setIsLeggTilEksisterendeMode,
+    formRef,
   } = props
   const [selectedRisikoscenarioer, setSelectedRisikoscenarioer] = useState<string[]>([])
 
@@ -54,6 +56,15 @@ export const LeggTilEksisterendeRisikoscenario = (props: IProps) => {
     })
   }
 
+  useEffect(() => {
+    setTimeout(() => {
+      const element = document.getElementById('kravTitle')
+      if (element) {
+        element.scrollIntoView({ behavior: 'instant' })
+      }
+    }, 200)
+  }, [])
+
   return (
     <div>
       <Formik
@@ -64,6 +75,7 @@ export const LeggTilEksisterendeRisikoscenario = (props: IProps) => {
         initialValues={
           { kravnummer: kravnummer, risikoscenarioIder: [] } as IKravRisikoscenarioRelasjon
         }
+        innerRef={formRef}
       >
         {({ submitForm }) => (
           <Form>
