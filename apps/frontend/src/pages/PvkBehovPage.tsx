@@ -130,7 +130,11 @@ export const PvkBehovPage = () => {
             navigate('/dokumentasjon/' + response.etterlevelseDokumentId)
           } else if (tilPvkDokument) {
             navigate(
-              '/dokumentasjon/' + response.etterlevelseDokumentId + '/pvkdokument/' + response.id
+              '/dokumentasjon/' +
+                response.etterlevelseDokumentId +
+                '/pvkdokument/' +
+                response.id +
+                '/1'
             )
           } else {
             setPvkDokument(response)
@@ -142,7 +146,11 @@ export const PvkBehovPage = () => {
             navigate('/dokumentasjon/' + response.etterlevelseDokumentId)
           } else if (tilPvkDokument) {
             navigate(
-              '/dokumentasjon/' + response.etterlevelseDokumentId + '/pvkdokument/' + response.id
+              '/dokumentasjon/' +
+                response.etterlevelseDokumentId +
+                '/pvkdokument/' +
+                response.id +
+                '/1'
             )
           } else {
             setPvkDokument(response)
