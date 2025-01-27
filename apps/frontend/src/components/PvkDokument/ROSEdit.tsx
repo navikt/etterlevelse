@@ -16,6 +16,10 @@ export const ROSEdit = () => {
       <FieldArray name="risikovurderinger">
         {(fieldArrayRenderProps: FieldArrayRenderProps) => {
           const add = (): void => {
+            if (name == '') {
+              setError('Legg til et navn')
+              return
+            }
             if (url == '') {
               setError('Du må legge til en URL')
               return
