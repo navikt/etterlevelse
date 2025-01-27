@@ -115,7 +115,8 @@ export const BehandlingensLivslopPage = () => {
               '/dokumentasjon/' +
                 response.etterlevelseDokumentasjonId +
                 pvkDokumentLink +
-                (pvkDokument ? pvkDokument.id : 'ny')
+                (pvkDokument ? pvkDokument.id : 'ny') +
+                '/1'
             )
           } else {
             setBehandlingesLivslop(response)
@@ -333,7 +334,10 @@ export const BehandlingensLivslopPage = () => {
                     <List>
                       {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
                         <List.Item key={behandling.nummer}>
-                          <ExternalLink href={`${env.pollyBaseUrl}process/${behandling.id}`}>
+                          <ExternalLink
+                            className="text-medium"
+                            href={`${env.pollyBaseUrl}process/${behandling.id}`}
+                          >
                             {behandlingName(behandling)} (åpnes i nytt vindu)
                           </ExternalLink>
                         </List.Item>
@@ -342,31 +346,8 @@ export const BehandlingensLivslopPage = () => {
                   </BodyLong>
                 )}
 
-                <Label>ROS-dokumentasjon:</Label>
-                <BodyShort>
-                  <List>
-                    {etterlevelseDokumentasjon.risikovurderinger
-                      ? etterlevelseDokumentasjon.risikovurderinger.map((ros) => {
-                          const rosReg = /\[(.+)]\((.+)\)/i
-                          const rosParts = ros.match(rosReg)
-                          if (rosParts)
-                            return (
-                              <List.Item key={ros}>
-                                <ExternalLink href={rosParts[2]}>{rosParts[1]}</ExternalLink>
-                              </List.Item>
-                            )
-                          return (
-                            <span className="flex" key={ros}>
-                              {ros}
-                            </span>
-                          )
-                        })
-                      : 'Ikke angitt'}
-                  </List>
-                </BodyShort>
-
                 <BodyShort className="inline-block mb-5">
-                  Dere kan redigere hvilke behandinger og risikovurderinger som gjelder i{' '}
+                  Dere kan redigere hvilke behandinger som gjelder i{' '}
                   <Link
                     href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
                     target="_blank"
