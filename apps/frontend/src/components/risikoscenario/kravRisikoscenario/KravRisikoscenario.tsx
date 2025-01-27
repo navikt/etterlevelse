@@ -134,6 +134,7 @@ export const KravRisikoscenario = (props: IProps) => {
             setRisikoscenarioer={setRisikoscenarioForKrav}
             setIsCreateMode={setIsCreateMode}
             formRef={formRef}
+            setActiveRisikoscenarioId={setActiveRisikoscenarioId}
           />
         )}
 

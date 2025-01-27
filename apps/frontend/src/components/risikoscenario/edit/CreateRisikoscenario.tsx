@@ -10,16 +10,25 @@ interface IProps {
   risikoscenarioer: IRisikoscenario[]
   setRisikoscenarioer: Dispatch<SetStateAction<IRisikoscenario[]>>
   setIsCreateMode: (state: boolean) => void
+  setActiveRisikoscenarioId: (state: string) => void
   formRef: RefObject<any>
 }
 
 export const CreateRisikoscenario = (props: IProps) => {
-  const { krav, pvkDokumentId, setIsCreateMode, risikoscenarioer, setRisikoscenarioer, formRef } =
-    props
+  const {
+    krav,
+    pvkDokumentId,
+    setIsCreateMode,
+    risikoscenarioer,
+    setRisikoscenarioer,
+    setActiveRisikoscenarioId,
+    formRef,
+  } = props
 
   const submit = async (risikoscenario: IRisikoscenario) => {
     await createRisikoscenario(risikoscenario).then((response) => {
       setRisikoscenarioer([...risikoscenarioer, response])
+      setActiveRisikoscenarioId(risikoscenario.id)
       setIsCreateMode(false)
     })
   }
