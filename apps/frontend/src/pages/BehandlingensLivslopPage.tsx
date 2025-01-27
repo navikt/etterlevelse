@@ -346,8 +346,31 @@ export const BehandlingensLivslopPage = () => {
                   </BodyLong>
                 )}
 
+                <Label>ROS-dokumentasjon:</Label>
+                <BodyShort>
+                  <List>
+                    {etterlevelseDokumentasjon.risikovurderinger
+                      ? etterlevelseDokumentasjon.risikovurderinger.map((ros) => {
+                          const rosReg = /\[(.+)]\((.+)\)/i
+                          const rosParts = ros.match(rosReg)
+                          if (rosParts)
+                            return (
+                              <List.Item key={ros}>
+                                <ExternalLink href={rosParts[2]}>{rosParts[1]}</ExternalLink>
+                              </List.Item>
+                            )
+                          return (
+                            <span className="flex" key={ros}>
+                              {ros}
+                            </span>
+                          )
+                        })
+                      : 'Ikke angitt'}
+                  </List>
+                </BodyShort>
+
                 <BodyShort className="inline-block mb-5">
-                  Dere kan redigere hvilke behandinger som gjelder i{' '}
+                  Dere kan redigere hvilke behandinger og risikovurderinger som gjelder i{' '}
                   <Link
                     href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
                     target="_blank"
