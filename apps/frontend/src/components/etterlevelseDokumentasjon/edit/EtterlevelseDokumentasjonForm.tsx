@@ -355,7 +355,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             </FieldWrapper>
           )}
 
-          {isDev && user.isAdmin() && <ROSEdit />}
+          <ROSEdit />
 
           <Heading level="2" size="small" spacing>
             Legg til minst et team og/eller en person
