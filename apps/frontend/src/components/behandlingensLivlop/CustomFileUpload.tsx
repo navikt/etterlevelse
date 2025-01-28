@@ -9,7 +9,7 @@ import {
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 const MAX_FILES = 10
-const MAX_SIZE_MB = 5
+const MAX_SIZE_MB = 10
 const MAX_SIZE = MAX_SIZE_MB * 1024 * 1024
 
 const errors: Record<FileRejectionReason, string> = {
