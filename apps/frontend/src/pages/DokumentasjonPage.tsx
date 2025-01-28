@@ -302,7 +302,12 @@ export const DokumentasjonPage = () => {
                           >
                             {pvkDokument.skalUtforePvk &&
                             (behandlingsLivslop?.beskrivelse ||
-                              (behandlingsLivslop && behandlingsLivslop?.filer.length > 0))
+                              (behandlingsLivslop && behandlingsLivslop?.filer.length > 0) ||
+                              pvkDokument.personkategoriAntallBeskrivelse ||
+                              pvkDokument.tilgangsBeskrivelsePersonopplysningene ||
+                              pvkDokument.lagringsBeskrivelsePersonopplysningene ||
+                              pvkDokument.representantInvolveringsBeskrivelse ||
+                              pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse)
                               ? 'Fullfør PVK'
                               : 'Påbegynn PVK'}
                           </Button>
