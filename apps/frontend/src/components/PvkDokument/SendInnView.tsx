@@ -1,5 +1,7 @@
-import { BodyLong, Button, Heading } from '@navikt/ds-react'
+import { FilesIcon } from '@navikt/aksel-icons'
+import { BodyLong, Button, CopyButton, Heading } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
+import { useState } from 'react'
 import { getPvkDokument, mapPvkDokumentToFormValue } from '../../api/PvkDokumentApi'
 import { EPvkDokumentStatus, IPvkDokument } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
@@ -31,11 +33,15 @@ export const SendInnView = (props: IProps) => {
     setSelectedStep,
   } = props
 
+  const [submitPvkStatus, setSubmitPvkStatus] = useState<EPvkDokumentStatus>(
+    EPvkDokumentStatus.UNDERARBEID
+  )
+
   const submit = async (pvkDokument: IPvkDokument) => {
     await getPvkDokument(pvkDokument.id).then((response) => {
       const updatedPvkDokument = {
         ...response,
-        status: EPvkDokumentStatus.SENDT_TIL_PVO,
+        status: submitPvkStatus,
         merknadTilPvoEllerRisikoeier: pvkDokument.merknadTilPvoEllerRisikoeier,
       }
       console.debug('submited pvkdokument, pvkdokument: ', updatedPvkDokument)
@@ -51,7 +57,7 @@ export const SendInnView = (props: IProps) => {
       onSubmit={submit}
       initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
     >
-      {({ submitForm }) => (
+      {({ submitForm, dirty }) => (
         <Form>
           <div className="flex justify-center">
             <div>
@@ -86,11 +92,13 @@ export const SendInnView = (props: IProps) => {
                 />
               </div>
 
-              <div className="mt-5">
-                <Button type="button" onClick={() => submitForm()}>
-                  Send til PVO
-                </Button>
-              </div>
+              <CopyButton
+                variant="action"
+                copyText={window.location.href}
+                text="Kopiér lenken til denne siden"
+                activeText="Lenken er kopiert"
+                icon={<FilesIcon aria-hidden />}
+              />
 
               <FormButtons
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
@@ -98,6 +106,32 @@ export const SendInnView = (props: IProps) => {
                 setActiveStep={setActiveStep}
                 setSelectedStep={setSelectedStep}
                 submitForm={submitForm}
+                customButtons={
+                  <div className="mt-5 flex gap-2 items-center">
+                    {dirty && (
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => {
+                          setSubmitPvkStatus(EPvkDokumentStatus.UNDERARBEID)
+                          submitForm()
+                        }}
+                      >
+                        Lagre og fortsett senere
+                      </Button>
+                    )}
+
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setSubmitPvkStatus(EPvkDokumentStatus.SENDT_TIL_PVO)
+                        submitForm()
+                      }}
+                    >
+                      Send til PVO
+                    </Button>
+                  </div>
+                }
               />
             </div>
           </div>

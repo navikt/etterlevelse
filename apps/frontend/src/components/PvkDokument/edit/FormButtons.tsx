@@ -1,5 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
+import { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 interface IProps {
@@ -7,17 +8,19 @@ interface IProps {
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
+  customButtons?: ReactNode
   submitForm?: (() => Promise<void>) & (() => Promise<any>)
 }
 
 export const FormButtons = (props: IProps) => {
-  const { etterlevelseDokumentasjonId, activeStep, setActiveStep, setSelectedStep } = props
+  const { etterlevelseDokumentasjonId, activeStep, setActiveStep, setSelectedStep, customButtons } =
+    props
   const navigate = useNavigate()
 
   return (
     <div className="z-10 flex flex-col w-full items-center mt-5 button_container sticky bottom-0  bg-bg-default">
       <div className="w-full max-w-7xl py-4 px-4 border-t-2 z-2">
-        <div className="flex w-full gap-2">
+        <div className="flex w-full gap-2 items-end">
           <Button
             icon={<ChevronLeftIcon aria-hidden />}
             type="button"
@@ -69,6 +72,8 @@ export const FormButtons = (props: IProps) => {
                         : 'Send til PVO'}
             </Button>
           )}
+
+          {customButtons}
         </div>
       </div>
     </div>
