@@ -28,7 +28,7 @@ export const CreateRisikoscenario = (props: IProps) => {
   const submit = async (risikoscenario: IRisikoscenario) => {
     await createRisikoscenario(risikoscenario).then((response) => {
       setRisikoscenarioer([...risikoscenarioer, response])
-      setActiveRisikoscenarioId(risikoscenario.id)
+      setActiveRisikoscenarioId(response.id)
       setIsCreateMode(false)
     })
   }
