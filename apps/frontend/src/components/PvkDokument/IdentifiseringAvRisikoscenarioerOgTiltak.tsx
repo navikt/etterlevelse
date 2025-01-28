@@ -75,7 +75,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
             type="button"
             onClick={() => {
               if (etterlevelseDokumentasjonId)
-                navigate('/dokumentasjon/' + etterlevelseDokumentasjonId)
+                navigate('/dokumentasjon/' + etterlevelseDokumentasjonId + '?tab=pvk')
             }}
           >
             Gå til liste over PVK-relaterte krav

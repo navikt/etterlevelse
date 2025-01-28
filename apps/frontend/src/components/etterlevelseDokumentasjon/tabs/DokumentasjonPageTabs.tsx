@@ -1,6 +1,6 @@
 import { Button, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../../../api/ArkiveringApi'
 import { getAllKravPriorityList } from '../../../api/KravPriorityListApi'
 import {
@@ -50,6 +50,9 @@ export const DokumentasjonPageTabs = (props: IProps) => {
   )
 
   const [tabValue, setTabValue] = useState('alleKrav')
+  const url = new URL(window.location.href)
+  const tabQuery = url.searchParams.get('tab')
+  const navigate = useNavigate()
 
   useEffect(() => {
     getAllKravPriorityList().then((priority) => setAllKravPriority(priority))
@@ -62,14 +65,18 @@ export const DokumentasjonPageTabs = (props: IProps) => {
     ) {
       setTabValue('prioritertKravliste')
     }
-    if (pvkDokument && pvkDokument.skalUtforePvk) {
-      setTabValue('pvkRelaterteKrav')
-    }
   }, [morDocumentRelation, pvkDokument])
 
   return (
     <div>
-      <Tabs defaultValue="alleKrav" value={tabValue} onChange={(newValue) => setTabValue(newValue)}>
+      <Tabs
+        defaultValue="alleKrav"
+        value={tabQuery && tabQuery === 'pvk' ? 'pvkRelaterteKrav' : tabValue}
+        onChange={(newValue) => {
+          setTabValue(newValue)
+          navigate(window.location.pathname)
+        }}
+      >
         <Tabs.List>
           <Tabs.Tab value="alleKrav" label="Alle Krav" />
           <Tabs.Tab value="prioritertKravliste" label="Prioritert kravliste" />

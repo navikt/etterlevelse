@@ -148,6 +148,14 @@ export const DokumentasjonPage = () => {
 
   const { etterlevelseNummer, title } = etterlevelseDokumentasjon
 
+  const pvkDokumentStartedCheck =
+    pvkDokument &&
+    (pvkDokument.personkategoriAntallBeskrivelse ||
+      pvkDokument.tilgangsBeskrivelsePersonopplysningene ||
+      pvkDokument.lagringsBeskrivelsePersonopplysningene ||
+      pvkDokument.representantInvolveringsBeskrivelse ||
+      pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse)
+
   return (
     <PageLayout
       pageTitle={'E' + etterlevelseNummer.toString() + ' ' + title}
@@ -300,7 +308,12 @@ export const DokumentasjonPage = () => {
                             variant="secondary"
                             className="whitespace-nowrap"
                           >
-                            Påbegynn PVK
+                            {pvkDokument.skalUtforePvk &&
+                            (behandlingsLivslop?.beskrivelse ||
+                              (behandlingsLivslop && behandlingsLivslop?.filer.length > 0) ||
+                              pvkDokumentStartedCheck)
+                              ? 'Fullfør PVK'
+                              : 'Påbegynn PVK'}
                           </Button>
                         )}
                     </>

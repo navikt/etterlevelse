@@ -28,7 +28,15 @@ export const CreateRisikoscenario = (props: IProps) => {
   const submit = async (risikoscenario: IRisikoscenario) => {
     await createRisikoscenario(risikoscenario).then((response) => {
       setRisikoscenarioer([...risikoscenarioer, response])
-      setActiveRisikoscenarioId(risikoscenario.id)
+      setActiveRisikoscenarioId(response.id)
+
+      setTimeout(() => {
+        const element = document.getElementById(response.id)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 200)
+
       setIsCreateMode(false)
     })
   }
