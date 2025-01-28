@@ -22,7 +22,7 @@ interface IProps {
   formRef: RefObject<any>
 }
 
-export const InnvolveringAvEksterneView = (props: IProps) => {
+export const InvolveringAvEksterneView = (props: IProps) => {
   const {
     personkategorier,
     databehandlere,
@@ -66,7 +66,7 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
           <div className="flex justify-center">
             <div>
               <Heading level="1" size="medium" className="mb-5">
-                Innvolvering av eksterne deltakere
+                Involvering av eksterne deltakere
               </Heading>
 
               <Heading level="2" size="small" className="mb-3">
@@ -212,4 +212,4 @@ export const InnvolveringAvEksterneView = (props: IProps) => {
     </Formik>
   )
 }
-export default InnvolveringAvEksterneView
+export default InvolveringAvEksterneView

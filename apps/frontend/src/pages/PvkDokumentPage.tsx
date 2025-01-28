@@ -7,7 +7,7 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { usePvkDokument } from '../api/PvkDokumentApi'
 import BehandlingensArtOgOmfangView from '../components/PvkDokument/BehandlingensArtOgOmfangView'
 import IdentifiseringAvRisikoscenarioerOgTiltak from '../components/PvkDokument/IdentifiseringAvRisikoscenarioerOgTiltak'
-import InnvolveringAvEksterneView from '../components/PvkDokument/InnvolveringAvEksterneView'
+import InvolveringAvEksterneView from '../components/PvkDokument/InvolveringAvEksterneView'
 import OppsummeringAvAlleRisikoscenarioerOgTiltak from '../components/PvkDokument/OppsummeringAvAlleRisikoscenarioerOgTiltak'
 import OversiktView from '../components/PvkDokument/OversiktView'
 import SendInnView from '../components/PvkDokument/SendInnView'
@@ -19,7 +19,7 @@ import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 export const StepTitle: string[] = [
   'Oversikt og status',
   'Behandlingens art og omfang',
-  'Innvolvering av eksterne',
+  'Involvering av eksterne',
   'Identifisering av risikoscenarioer og tiltak',
   'Risikobildet etter tiltak',
   'Les og send inn',
@@ -193,7 +193,7 @@ export const PvkDokumentPage = () => {
                     />
                   )}
                   {activeStep === 3 && (
-                    <InnvolveringAvEksterneView
+                    <InvolveringAvEksterneView
                       personkategorier={personkategorier}
                       databehandlere={databehandlere}
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}

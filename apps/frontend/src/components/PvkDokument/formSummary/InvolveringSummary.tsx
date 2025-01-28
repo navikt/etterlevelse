@@ -8,7 +8,7 @@ interface IProps {
   databehandlere: string[]
 }
 
-export const InnvolveringSummary = (props: IProps) => {
+export const InvolveringSummary = (props: IProps) => {
   const { updateTitleUrlAndStep, personkategorier, databehandlere } = props
   return (
     <Field>
@@ -119,4 +119,4 @@ export const InnvolveringSummary = (props: IProps) => {
     </Field>
   )
 }
-export default InnvolveringSummary
+export default InvolveringSummary

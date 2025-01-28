@@ -11,7 +11,7 @@ import { EPvkDokumentStatus, IPvkDokument } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
 import FormButtons from './edit/FormButtons'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
-import InnvolveringSummary from './formSummary/InnvolveringSummary'
+import InvolveringSummary from './formSummary/InvolveringSummary'
 import RisikoscenarioSummary from './formSummary/RisikoscenarioSummary'
 
 interface IProps {
@@ -82,7 +82,7 @@ export const SendInnView = (props: IProps) => {
                 updateTitleUrlAndStep={updateTitleUrlAndStep}
               />
 
-              <InnvolveringSummary
+              <InvolveringSummary
                 databehandlere={databehandlere}
                 personkategorier={personkategorier}
                 updateTitleUrlAndStep={updateTitleUrlAndStep}
