@@ -64,6 +64,7 @@ spring:
       enabled: true
       file-size-threshold: 5MB
       max-request-size: 20MB
+      max-file-size: 10MB
   codec:
     max-in-memory-size: 5MB
 
