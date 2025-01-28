@@ -300,7 +300,11 @@ export const DokumentasjonPage = () => {
                             variant="secondary"
                             className="whitespace-nowrap"
                           >
-                            Påbegynn PVK
+                            {pvkDokument.skalUtforePvk &&
+                            (behandlingsLivslop?.beskrivelse ||
+                              (behandlingsLivslop && behandlingsLivslop?.filer.length > 0))
+                              ? 'Fullfør PVK'
+                              : 'Påbegynn PVK'}
                           </Button>
                         )}
                     </>
