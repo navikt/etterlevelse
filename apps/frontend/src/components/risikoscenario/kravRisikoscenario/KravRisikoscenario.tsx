@@ -104,7 +104,9 @@ export const KravRisikoscenario = (props: IProps) => {
                       handleAccordionChange(open ? risikoscenario.id : '')
                     }}
                   >
-                    <Accordion.Header>{risikoscenario.navn}</Accordion.Header>
+                    <Accordion.Header id={risikoscenario.id}>
+                      {risikoscenario.navn}
+                    </Accordion.Header>
                     {expanded && (
                       <Accordion.Content>
                         <KravRisikoscenarioAccordionContent
