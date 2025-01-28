@@ -106,91 +106,103 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
 
   return (
     <div className="flex justify-center w-full">
-      <div className="w-full">
-        <Heading level="1" size="medium" className="mb-5">
-          Oppsummering av alle risikoscenarioer og tiltak
-        </Heading>
+      <div className="flex-col justify-items-center min-w-[900px]">
+        <div>
+          <Heading level="1" size="medium" className="mb-5">
+            Oppsummering av alle risikoscenarioer og tiltak
+          </Heading>
 
-        <BodyShort className="mt-5">
-          Her får dere oversikt over alle risikoscenarioer og tiltak som er lagt inn. Dere kan velge
-          å se på:
-        </BodyShort>
+          <BodyShort className="mt-5">
+            Her får dere oversikt over alle risikoscenarioer og tiltak som er lagt inn. Dere kan
+            velge å se på:
+          </BodyShort>
 
-        <List>
-          <List.Item>
-            Etterlevelseskrav, og hvilke risikoscenarioer og tiltak som finnes ved hvert krav
-          </List.Item>
-          <List.Item>
-            Etterlevelseskrav, og hvilke risikoscenarioer og tiltak som finnes ved hvert krav
-          </List.Item>
-          <List.Item>Tiltak, inkludert hvilke tiltak som savner ansvarlig eller frist.</List.Item>
-        </List>
-
-        <Tabs value={tabQuery ? tabQuery : tabValues.risikoscenarioer} onChange={onTabChange} fill>
-          <Tabs.List>
-            <Tabs.Tab value={tabValues.risikoscenarioer} label="Vis risikoscenarioer" />
-            <Tabs.Tab value={tabValues.tiltak} label=" Vis tiltak " />
-          </Tabs.List>
-          <Tabs.Panel value={tabValues.risikoscenarioer} className="w-full">
-            <ToggleGroup value={filterQuery ? filterQuery : 'alle'} onChange={onFilterChange} fill>
-              <ToggleGroup.Item
-                value={filterValues.alleRisikoscenarioer}
-                label="Alle risikoscenarioer"
-              />
-              <ToggleGroup.Item
-                value={filterValues.effektIkkeVurdert}
-                label="Effekt ikke vurdert"
-              />
-              <ToggleGroup.Item value={filterValues.hoyRisiko} label="Høy risiko" />
-              <ToggleGroup.Item
-                value={filterValues.tiltakIkkeAktuelt}
-                label="Tiltak ikke aktuelt"
-              />
-            </ToggleGroup>
-
-            {risikoscenarioList.length === 0 && (
-              <div className="my-5">
-                <Alert variant="info">
-                  <Heading spacing size="small" level="3">
-                    Dere har foreløpig ingen risikoscenarioer
-                  </Heading>
-                  Risikoscenarioer legges inn under{' '}
-                  <Link href={`/dokumentasjon/${etterlevelseDokumentasjonId}`}>
-                    PVK-relaterte krav
-                  </Link>{' '}
-                  (åpnes i ny fane) eller eventuelt under øvrige risikoscenarioer (åpnes i ny fane).
-                </Alert>
-              </div>
-            )}
-
-            {filteredRisikoscenarioList.length === 0 && (
-              <BodyLong>Ingen risikoscenario med {filterQuery}</BodyLong>
-            )}
-
-            {filteredRisikoscenarioList.length !== 0 && (
-              <div className="my-5">
-                <OppsumeringAccordianList
-                  risikoscenarioList={filteredRisikoscenarioList}
-                  formRef={formRef}
-                  isUnsaved={isUnsaved}
-                  setIsUnsaved={setIsUnsaved}
+          <List>
+            <List.Item>
+              Etterlevelseskrav, og hvilke risikoscenarioer og tiltak som finnes ved hvert krav
+            </List.Item>
+            <List.Item>
+              Etterlevelseskrav, og hvilke risikoscenarioer og tiltak som finnes ved hvert krav
+            </List.Item>
+            <List.Item>Tiltak, inkludert hvilke tiltak som savner ansvarlig eller frist.</List.Item>
+          </List>
+        </div>
+        <div className="w-full mt-5">
+          <Tabs
+            value={tabQuery ? tabQuery : tabValues.risikoscenarioer}
+            onChange={onTabChange}
+            fill
+          >
+            <Tabs.List>
+              <Tabs.Tab value={tabValues.risikoscenarioer} label="Vis risikoscenarioer" />
+              <Tabs.Tab value={tabValues.tiltak} label=" Vis tiltak " />
+            </Tabs.List>
+            <Tabs.Panel value={tabValues.risikoscenarioer} className="w-full">
+              <ToggleGroup
+                className="mt-10"
+                value={filterQuery ? filterQuery : 'alle'}
+                onChange={onFilterChange}
+                fill
+              >
+                <ToggleGroup.Item
+                  value={filterValues.alleRisikoscenarioer}
+                  label="Alle risikoscenarioer"
                 />
-              </div>
-            )}
-          </Tabs.Panel>
-          <Tabs.Panel value={tabValues.tiltak} className="h-24 w-full">
-            Her skal tiltak vises
-          </Tabs.Panel>
-        </Tabs>
+                <ToggleGroup.Item
+                  value={filterValues.effektIkkeVurdert}
+                  label="Effekt ikke vurdert"
+                />
+                <ToggleGroup.Item value={filterValues.hoyRisiko} label="Høy risiko" />
+                <ToggleGroup.Item
+                  value={filterValues.tiltakIkkeAktuelt}
+                  label="Tiltak ikke aktuelt"
+                />
+              </ToggleGroup>
 
-        <AccordianAlertModal
-          isOpen={isUnsaved}
-          setIsOpen={setIsUnsaved}
-          navigateUrl={navigateUrl}
-          formRef={formRef}
-          reloadOnSubmit={true}
-        />
+              {risikoscenarioList.length === 0 && (
+                <div className="my-5">
+                  <Alert variant="info">
+                    <Heading spacing size="small" level="3">
+                      Dere har foreløpig ingen risikoscenarioer
+                    </Heading>
+                    Risikoscenarioer legges inn under{' '}
+                    <Link href={`/dokumentasjon/${etterlevelseDokumentasjonId}`}>
+                      PVK-relaterte krav
+                    </Link>{' '}
+                    (åpnes i ny fane) eller eventuelt under øvrige risikoscenarioer (åpnes i ny
+                    fane).
+                  </Alert>
+                </div>
+              )}
 
+              {filteredRisikoscenarioList.length === 0 && (
+                <BodyLong>Ingen risikoscenario med {filterQuery}</BodyLong>
+              )}
+
+              {filteredRisikoscenarioList.length !== 0 && (
+                <div className="my-5">
+                  <OppsumeringAccordianList
+                    risikoscenarioList={filteredRisikoscenarioList}
+                    formRef={formRef}
+                    isUnsaved={isUnsaved}
+                    setIsUnsaved={setIsUnsaved}
+                  />
+                </div>
+              )}
+            </Tabs.Panel>
+            <Tabs.Panel value={tabValues.tiltak} className="h-24 w-full">
+              Her skal tiltak vises
+            </Tabs.Panel>
+          </Tabs>
+
+          <AccordianAlertModal
+            isOpen={isUnsaved}
+            setIsOpen={setIsUnsaved}
+            navigateUrl={navigateUrl}
+            formRef={formRef}
+            reloadOnSubmit={true}
+          />
+        </div>
         <div className="mt-5">
           <FormButtons
             etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
