@@ -1,6 +1,5 @@
 import {
   Alert,
-  BodyLong,
   BodyShort,
   Button,
   ErrorSummary,
@@ -53,11 +52,12 @@ export const BehandlingensLivslopPage = () => {
   > = useParams<{ id?: string; behandlingsLivslopId?: string }>()
   const [etterlevelseDokumentasjon, , isEtterlevelseDokumentasjonLoading] =
     useEtterlevelseDokumentasjon(params.id)
-  const [behandlingsLivslop] = useBehandlingensLivslop(params.behandlingsLivslopId)
+  const [behandlingsLivslop, setBehandlingesLivslop] = useBehandlingensLivslop(
+    params.behandlingsLivslopId
+  )
   const [tilPvkDokument, setTilPvkDokument] = useState<boolean>(false)
   const [tilTemaOversikt, setTilTemaOversikt] = useState<boolean>(false)
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
-  const [, setBehandlingesLivslop] = useState<IBehandlingensLivslop>()
   const [filesToUpload, setFilesToUpload] = useState<File[]>([])
   const [rejectedFiles, setRejectedFiles] = useState<FileRejected[]>([])
   const navigate = useNavigate()
@@ -93,11 +93,12 @@ export const BehandlingensLivslopPage = () => {
         etterlevelseDokumentasjonId: etterlevelseDokumentasjon.id,
       } as IBehandlingensLivslopRequest
 
-      //double check if etterlevelse already exist before submitting
+      //double check if behandlingslivslop already exist before submitting
       let existingBehandlingsLivslopId = ''
       const existingBehandlingensLivsLop = await getBehandlingensLivslopByEtterlevelseDokumentId(
         etterlevelseDokumentasjon.id
       ).catch(() => undefined)
+
       if (existingBehandlingensLivsLop) {
         existingBehandlingsLivslopId = existingBehandlingensLivsLop.id
         mutatedBehandlingensLivslop.id = existingBehandlingensLivsLop.id
@@ -108,6 +109,7 @@ export const BehandlingensLivslopPage = () => {
 
       if (behandlingensLivslop.id || existingBehandlingsLivslopId) {
         await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
+          setBehandlingesLivslop(response)
           if (tilTemaOversikt) {
             navigate('/dokumentasjon/' + response.etterlevelseDokumentasjonId)
           } else if (tilPvkDokument) {
@@ -118,12 +120,11 @@ export const BehandlingensLivslopPage = () => {
                 (pvkDokument ? pvkDokument.id : 'ny') +
                 '/1'
             )
-          } else {
-            setBehandlingesLivslop(response)
           }
         })
       } else {
         await createBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
+          setBehandlingesLivslop(response)
           if (tilTemaOversikt) {
             navigate('/dokumentasjon/' + response.etterlevelseDokumentasjonId)
           } else if (tilPvkDokument) {
@@ -133,8 +134,6 @@ export const BehandlingensLivslopPage = () => {
                 pvkDokumentLink +
                 (pvkDokument ? pvkDokument.id : 'ny')
             )
-          } else {
-            setBehandlingesLivslop(response)
           }
         })
       }
@@ -330,44 +329,40 @@ export const BehandlingensLivslopPage = () => {
                   Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:
                 </Label>
                 {etterlevelseDokumentasjon.behandlinger && (
-                  <BodyLong>
-                    <List>
-                      {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
-                        <List.Item key={behandling.nummer}>
-                          <ExternalLink
-                            className="text-medium"
-                            href={`${env.pollyBaseUrl}process/${behandling.id}`}
-                          >
-                            {behandlingName(behandling)} (åpnes i nytt vindu)
-                          </ExternalLink>
-                        </List.Item>
-                      ))}
-                    </List>
-                  </BodyLong>
+                  <List>
+                    {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
+                      <List.Item key={behandling.nummer}>
+                        <ExternalLink
+                          className="text-medium"
+                          href={`${env.pollyBaseUrl}process/${behandling.id}`}
+                        >
+                          {behandlingName(behandling)} (åpnes i nytt vindu)
+                        </ExternalLink>
+                      </List.Item>
+                    ))}
+                  </List>
                 )}
 
                 <Label>ROS-dokumentasjon:</Label>
-                <BodyShort>
-                  <List>
-                    {etterlevelseDokumentasjon.risikovurderinger
-                      ? etterlevelseDokumentasjon.risikovurderinger.map((ros) => {
-                          const rosReg = /\[(.+)]\((.+)\)/i
-                          const rosParts = ros.match(rosReg)
-                          if (rosParts)
-                            return (
-                              <List.Item key={ros}>
-                                <ExternalLink href={rosParts[2]}>{rosParts[1]}</ExternalLink>
-                              </List.Item>
-                            )
+                <List>
+                  {etterlevelseDokumentasjon.risikovurderinger
+                    ? etterlevelseDokumentasjon.risikovurderinger.map((ros) => {
+                        const rosReg = /\[(.+)]\((.+)\)/i
+                        const rosParts = ros.match(rosReg)
+                        if (rosParts)
                           return (
-                            <span className="flex" key={ros}>
-                              {ros}
-                            </span>
+                            <List.Item key={ros}>
+                              <ExternalLink href={rosParts[2]}>{rosParts[1]}</ExternalLink>
+                            </List.Item>
                           )
-                        })
-                      : 'Ikke angitt'}
-                  </List>
-                </BodyShort>
+                        return (
+                          <span className="flex" key={ros}>
+                            {ros}
+                          </span>
+                        )
+                      })
+                    : 'Ikke angitt'}
+                </List>
 
                 <BodyShort className="inline-block mb-5">
                   Dere kan redigere hvilke behandinger og risikovurderinger som gjelder i{' '}
@@ -385,9 +380,7 @@ export const BehandlingensLivslopPage = () => {
 
                 {etterlevelseDokumentasjon.beskrivelse && (
                   <div className="mt-3">
-                    <BodyLong>
-                      <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
-                    </BodyLong>
+                    <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
                   </div>
                 )}
                 {!etterlevelseDokumentasjon.beskrivelse && (

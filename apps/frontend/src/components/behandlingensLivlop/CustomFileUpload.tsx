@@ -36,6 +36,7 @@ export const CustomFileUpload = (props: IProps) => {
         initialFiles.push({ file: initialFile, error: false })
       })
       setFiles(initialFiles)
+      setFilesToUpload(initialValues)
     }
   }, [initialValues])
 
@@ -61,7 +62,7 @@ export const CustomFileUpload = (props: IProps) => {
       <FileUpload.Dropzone
         label="Last opp behandlingens livsløp"
         description={`Følgende filformater er tillatt: PDF, PNG og JPEG. Du kan laste opp maks 4 filer. Filstørrelse pr. fil må være mindre enn ${MAX_SIZE_MB} MB.`}
-        accept=".png,.jpeg,.pdf"
+        accept=".png,.jpeg,.pdf,.jpg"
         maxSizeInBytes={MAX_SIZE}
         fileLimit={{ max: MAX_FILES, current: acceptedFiles.length }}
         validator={(file: File) => {
