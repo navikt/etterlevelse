@@ -2,7 +2,11 @@ import { FilesIcon } from '@navikt/aksel-icons'
 import { BodyLong, Button, CopyButton, Heading } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
-import { getPvkDokument, mapPvkDokumentToFormValue } from '../../api/PvkDokumentApi'
+import {
+  getPvkDokument,
+  mapPvkDokumentToFormValue,
+  updatePvkDokument,
+} from '../../api/PvkDokumentApi'
 import { EPvkDokumentStatus, IPvkDokument } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
 import FormButtons from './edit/FormButtons'
@@ -12,6 +16,7 @@ import RisikoscenarioSummary from './formSummary/RisikoscenarioSummary'
 
 interface IProps {
   pvkDokument: IPvkDokument
+  setPvkDokument: (state: IPvkDokument) => void
   updateTitleUrlAndStep: (step: number) => void
   personkategorier: string[]
   databehandlere: string[]
@@ -24,6 +29,7 @@ interface IProps {
 export const SendInnView = (props: IProps) => {
   const {
     pvkDokument,
+    setPvkDokument,
     updateTitleUrlAndStep,
     personkategorier,
     databehandlere,
@@ -44,9 +50,10 @@ export const SendInnView = (props: IProps) => {
         status: submitPvkStatus,
         merknadTilPvoEllerRisikoeier: pvkDokument.merknadTilPvoEllerRisikoeier,
       }
-      console.debug('submited pvkdokument, pvkdokument: ', updatedPvkDokument)
-      // code to update pvk dokument send updatedPvkDokument as request payload
-      // reason for not implementing is we have no way of updating status after
+
+      updatePvkDokument(updatedPvkDokument).then((savedResponse) => {
+        setPvkDokument(savedResponse)
+      })
     })
   }
 
