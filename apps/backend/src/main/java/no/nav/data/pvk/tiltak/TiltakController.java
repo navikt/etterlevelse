@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -53,8 +54,19 @@ public class TiltakController {
     public ResponseEntity<TiltakResponse> getById(@PathVariable UUID id) {
         log.info("Get Tiltak id={}", id);
         TiltakResponse resp = TiltakResponse.buildFrom(service.get(id));
-        setRisikoscenarioer(resp);
+        addRisikoscenarioer(resp);
         return ResponseEntity.ok(resp);
+    }
+
+    @Operation(summary = "Get Tiltak by Pvk Document id")
+    @ApiResponse(description = "ok")
+    @GetMapping("/pvkdokument/{pvkDokumentId}")
+    public ResponseEntity<RestResponsePage<TiltakResponse>> getTiltakByPvkDokumentId(@PathVariable String pvkDokumentId) {
+        log.info("Get Tiltak by Pvk Document id={}", pvkDokumentId);
+        List<Tiltak> tiltakList = service.getByPvkDokument(pvkDokumentId);
+        List<TiltakResponse> tiltakResponseList = tiltakList.stream().map(TiltakResponse::buildFrom).toList();
+        tiltakResponseList.forEach(this::addRisikoscenarioer);
+        return ResponseEntity.ok(new RestResponsePage<>(tiltakResponseList));
     }
 
     @Operation(summary = "Create Tiltak")
@@ -64,7 +76,7 @@ public class TiltakController {
         log.info("Create Tiltak");
         Tiltak tiltak = service.save(request.convertToTiltak(), false);
         TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
-        setRisikoscenarioer(resp);
+        addRisikoscenarioer(resp);
         return new ResponseEntity<>(resp, HttpStatus.CREATED);
     }
 
@@ -85,7 +97,7 @@ public class TiltakController {
         request.mergeInto(tiltakToUpdate);
         Tiltak tiltak = service.save(tiltakToUpdate, true);
         var response = TiltakResponse.buildFrom(tiltak);
-        setRisikoscenarioer(response);
+        addRisikoscenarioer(response);
 
         return ResponseEntity.ok(response);
     }
@@ -110,7 +122,7 @@ public class TiltakController {
         }
     }
 
-    private TiltakResponse setRisikoscenarioer(TiltakResponse res) {
+    private TiltakResponse addRisikoscenarioer(TiltakResponse res) {
         res.setRisikoscenarioIds(service.getRisikoscenarioer(res.getId()));
         return res;
     }

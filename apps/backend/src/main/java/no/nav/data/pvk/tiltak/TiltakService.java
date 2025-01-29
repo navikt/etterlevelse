@@ -51,9 +51,12 @@ public class TiltakService {
         return tiltak.orElse(null);
     }
 
+    public List<Tiltak> getByPvkDokument(String pvkDokumentId) {
+        return repo.findByPvkDokumentId(pvkDokumentId);
+    }
+
     public List<String> getRisikoscenarioer(String id) {
         return repo.getRisikoscenarioForTiltak(id);
     }
-
 
 }
