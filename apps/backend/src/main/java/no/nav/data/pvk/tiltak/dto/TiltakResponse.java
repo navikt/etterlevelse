@@ -34,7 +34,7 @@ public class TiltakResponse {
         TiltakData td = tiltak.getTiltakData();
         return builder()
                 .id(tiltak.getId().toString())
-                .pvkDokumentId(tiltak.getPvkDokumentId())
+                .pvkDokumentId(tiltak.getPvkDokumentId().toString())
                 .navn(td.getNavn())
                 .beskrivelse(td.getBeskrivelse())
                 .ansvarlig(td.getAnsvarlig())
