@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakData;
 
@@ -25,6 +26,8 @@ public class TiltakResponse {
     private String ansvarlig;
     private LocalDate frist;
     private List<String> risikoscenarioIds; // Merk: Settes ikke i buildFrom
+    private ChangeStampResponse changeStamp;
+    private Integer version;
 
     public static TiltakResponse buildFrom(Tiltak tiltak) {
         TiltakData td = tiltak.getTiltakData();
