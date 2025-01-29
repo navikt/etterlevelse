@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
+import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakRepo;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -49,6 +51,11 @@ public class TiltakService {
             throw new ValidationException("Could not delete tiltak: Tiltak is related to one or more Risikoscenario");
         }
         return tiltak.orElse(null);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void addRisikoscenarioTiltakRelasjon(String risikoscenarioId, String tiltakId) {
+        repo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId);
     }
 
     public List<Tiltak> getByPvkDokument(String pvkDokumentId) {

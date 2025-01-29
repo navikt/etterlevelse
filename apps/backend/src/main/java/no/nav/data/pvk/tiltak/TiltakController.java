@@ -71,10 +71,11 @@ public class TiltakController {
 
     @Operation(summary = "Create Tiltak")
     @ApiResponse(responseCode = "201", description = "Tiltak created")
-    @PostMapping
-    public ResponseEntity<TiltakResponse> createTiltak(@RequestBody TiltakRequest request) {
+    @PostMapping("/risikoscenario/{risikoscenarioId}")
+    public ResponseEntity<TiltakResponse> createTiltak(@PathVariable UUID risikoscenarioId, @RequestBody TiltakRequest request) {
         log.info("Create Tiltak");
         Tiltak tiltak = service.save(request.convertToTiltak(), false);
+        service.addRisikoscenarioTiltakRelasjon(risikoscenarioId.toString(), tiltak.getId().toString());
         TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
         addRisikoscenarioer(resp);
         return new ResponseEntity<>(resp, HttpStatus.CREATED);

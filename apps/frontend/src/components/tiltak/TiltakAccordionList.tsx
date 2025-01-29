@@ -1,5 +1,6 @@
 import { Accordion } from '@navikt/ds-react'
 import { ITiltak } from '../../constants'
+import TiltakView from './TiltakView'
 
 interface IProps {
   tiltakList: ITiltak[]
@@ -14,7 +15,9 @@ export const TiltakAccordionList = (props: IProps) => {
         return (
           <Accordion.Item key={tiltak.id}>
             <Accordion.Header>{tiltak.navn}</Accordion.Header>
-            <Accordion.Content>test</Accordion.Content>
+            <Accordion.Content>
+              <TiltakView tiltak={tiltak} />
+            </Accordion.Content>
           </Accordion.Item>
         )
       })}
