@@ -4,6 +4,7 @@ import {
   IKravRisikoscenarioRelasjon,
   IPageResponse,
   IRisikoscenario,
+  ITiltakRisikoscenarioRelasjon,
 } from '../constants'
 import { env } from '../util/env'
 
@@ -87,6 +88,23 @@ export const fjernKravFraRisikoscenario = async (id: string, kravnummer: number)
   return (
     await axios.put<IRisikoscenario>(
       `${env.backendBaseUrl}/risikoscenario/${id}/removeKrav/${kravnummer}`
+    )
+  ).data
+}
+
+export const addTiltakToRisikoscenario = async (request: ITiltakRisikoscenarioRelasjon) => {
+  return (
+    await axios.put<IRisikoscenario>(
+      `${env.backendBaseUrl}/risikoscenario/update/addRelevanteTiltak`,
+      request
+    )
+  ).data
+}
+
+export const removeTiltakToRisikoscenario = async (risikoscenarioId: string, tiltakId: string) => {
+  return (
+    await axios.put<IRisikoscenario>(
+      `${env.backendBaseUrl}/risikoscenario/${risikoscenarioId}/removeTiltak/${tiltakId}`
     )
   ).data
 }
