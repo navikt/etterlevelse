@@ -1,4 +1,4 @@
-import { Accordion } from '@navikt/ds-react'
+import { Accordion, Tag } from '@navikt/ds-react'
 import { ITiltak } from '../../constants'
 import TiltakView from './TiltakView'
 
@@ -14,7 +14,13 @@ export const TiltakAccordionList = (props: IProps) => {
       {tiltakList.map((tiltak) => {
         return (
           <Accordion.Item key={tiltak.id}>
-            <Accordion.Header>{tiltak.navn}</Accordion.Header>
+            <Accordion.Header>
+              {tiltak.navn}{' '}
+              <div className="flex gap-2">
+                {!tiltak.ansvarlig.navIdent && <Tag variant="alt2">Tiltaksansvarlig savnes</Tag>}
+                {!tiltak.frist && <Tag variant="alt2">Tiltaksfrist savnes</Tag>}
+              </div>
+            </Accordion.Header>
             <Accordion.Content>
               <TiltakView tiltak={tiltak} />
             </Accordion.Content>
