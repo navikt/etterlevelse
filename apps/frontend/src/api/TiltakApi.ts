@@ -36,6 +36,19 @@ export const getTiltakByPvkDokumentId = async (pvkDokumentId: string) => {
   ).data
 }
 
+export const createTiltakAndRelasjonWithRisikoscenario = async (
+  tiltak: ITiltak,
+  risikoscenarioId: string
+) => {
+  const dto = tiltakTotiltakDto(tiltak)
+  return (
+    await axios.post<ITiltak>(
+      `${env.backendBaseUrl}/tiltak/risikoscenario/${risikoscenarioId}`,
+      dto
+    )
+  ).data
+}
+
 export const updateTiltak = async (tiltak: ITiltak) => {
   const dto = tiltakTotiltakDto(tiltak)
   return (await axios.put<ITiltak>(`${env.backendBaseUrl}/tiltak/${tiltak.id}`, dto)).data
