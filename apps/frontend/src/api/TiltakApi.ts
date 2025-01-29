@@ -28,6 +28,34 @@ export const getTiltak = async (id: string) => {
   return (await axios.get<ITiltak>(`${env.backendBaseUrl}/tiltak/${id}`)).data
 }
 
+export const getTiltakByPvkDokumentId = async (pvkDokumentId: string) => {
+  return (
+    await axios.get<IPageResponse<ITiltak>>(
+      `${env.backendBaseUrl}/tiltak/pvkdokument/${pvkDokumentId}`
+    )
+  ).data
+}
+
+export const updateTiltak = async (tiltak: ITiltak) => {
+  const dto = tiltakTotiltakDto(tiltak)
+  return (await axios.put<ITiltak>(`${env.backendBaseUrl}/tiltak/${tiltak.id}`, dto)).data
+}
+
+export const deleteTiltak = async (id: string) => {
+  return (await axios.delete<ITiltak>(`${env.backendBaseUrl}/tiltak/${id}`)).data
+}
+
+const tiltakTotiltakDto = (tiltak: ITiltak) => {
+  const dto = {
+    ...tiltak,
+    ansvarlig: tiltak.ansvarlig.navIdent,
+  } as any
+  delete dto.changeStamp
+  delete dto.version
+  delete dto.risikoscenarioIds
+  return dto
+}
+
 export const mapTiltakToFormValue = (tiltak: Partial<ITiltak>): ITiltak => {
   return {
     id: tiltak.id || '',
