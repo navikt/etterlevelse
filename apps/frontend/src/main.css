@@ -1,9 +1,9 @@
-@import '@navikt/ds-css';
-@import 'react-json-view-lite/dist/index.css';
-@import 'json-diff-kit/dist/viewer.css';
-@import 'tailwindcss/base.css';
-@import 'tailwindcss/components.css';
-@import 'tailwindcss/utilities.css';
+@import 'node_modules/@navikt/ds-css';
+@import 'node_modules/react-json-view-lite/dist/index.css';
+@import 'node_modules/json-diff-kit/dist/viewer.css';
+@import 'node_modules/tailwindcss/base';
+@import 'node_modules/tailwindcss/components.css';
+@import 'node_modules/tailwindcss/utilities.css';
 
 .navds-link-panel__content {
   width: 100%;
