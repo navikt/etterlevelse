@@ -27,7 +27,11 @@ export const TiltakForm = (props: IProps) => {
 
   return (
     <Formik
-      initialValues={mapTiltakToFormValue({ ...initialValues, pvkDokumentId: pvkDokumentId })}
+      initialValues={mapTiltakToFormValue({
+        ...initialValues,
+        id: initialValues.id || 'ny',
+        pvkDokumentId: pvkDokumentId,
+      })}
       onSubmit={submit}
       innerRef={formRef}
     >
