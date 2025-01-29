@@ -3,9 +3,11 @@ package no.nav.data.pvk.tiltak;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakRepo;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +28,7 @@ public class TiltakService {
     }
 
     public Tiltak get(UUID uuid) {
-        return repo.findById(uuid).orElseThrow(() -> new NotFoundException("Couldn't find behandlingens livsløp with id " + uuid));
+        return repo.findById(uuid).orElseThrow(() -> new NotFoundException("Could not find behandlingens livsløp with id " + uuid));
     }
 
     @Transactional
@@ -40,12 +42,15 @@ public class TiltakService {
     @Transactional
     public Tiltak delete(UUID id) {
         Optional<Tiltak> tiltak = repo.findById(id);
-        repo.deleteById(id);
+        try {
+            repo.deleteById(id);
+        } catch (DataIntegrityViolationException e) { // FIXME: Flytt ut til controller
+            log.warn("Could not delete tiltak with id: Tiltak is related to one or more Risikoscenario", id);
+            throw new ValidationException("Could not delete tiltak: Tiltak is related to one or more Risikoscenario");
+        }
         return tiltak.orElse(null);
     }
 
-    
-    
     public List<String> getRisikoscenarioer(String id) {
         return repo.getRisikoscenarioForTiltak(id);
     }

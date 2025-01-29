@@ -62,6 +62,7 @@ public class RisikoscenarioService {
         return risikoscenarioRepoCustom.findByKravNummer(kravNummer);
     }
 
+    @Deprecated
     public RisikoscenarioRequest updateRelevantKravListe(RisikoscenarioRequest request) {
         // FIXME: Avhengighet til Request i Service
         var risikoscenario = get(request.getIdAsUUID());
@@ -81,6 +82,24 @@ public class RisikoscenarioService {
         return request;
     }
 
+    /* FIXME
+    @Transactional
+    public RisikoscenarioRequest updateRelevantKravListe(UUID uuid, List<Integer> kravToDelete, List<Integer> kravToAdd) {
+        var risikoscenario = get(uuid);
+        List<Integer> newKravList = new ArrayList<>(risikoscenario.getRisikoscenarioData().getRelevanteKravNummer());
+        // Remove krav from list based on request krav to remove
+        newKravList.removeAll(kravToDelete);
+        // Add new krav to list based on request krav to remove
+        newKravList.addAll(request.getKravToAdd());
+
+        //remove duplicates
+        List<Integer> uniqueKravList = newKravList.stream().distinct().collect(Collectors.toList());
+
+        request.setRelevanteKravNummer(uniqueKravList);
+        return request;
+    }
+    //*/
+
     @Transactional(propagation = Propagation.REQUIRED)
     public Risikoscenario save(Risikoscenario risikoscenario, boolean isUpdate) {
         if (!isUpdate) {
@@ -90,6 +109,9 @@ public class RisikoscenarioService {
         return risikoscenarioRepo.save(risikoscenario);
     }
 
+    /**
+     * @throws DataIntegrityViolationException If the Risikoscenario is related to one or more Tiltak
+     */
     @Transactional(propagation = Propagation.REQUIRED)
     public Risikoscenario delete(UUID id) {
         var pvkDokumentToDelete = risikoscenarioRepo.findById(id);

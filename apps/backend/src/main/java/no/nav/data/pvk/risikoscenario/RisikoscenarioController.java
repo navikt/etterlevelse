@@ -100,7 +100,7 @@ public class RisikoscenarioController {
     public ResponseEntity<RisikoscenarioResponse> createRisikoscenario(@RequestBody RisikoscenarioRequest request) {
         log.info("Create Risikoscenario");
 
-        var risikoscenario = risikoscenarioService.save(request.convertToRisikoscenario(), request.isUpdate()); // FIXME: isUpdate → false? Evt. slå sammen denne og neste?
+        var risikoscenario = risikoscenarioService.save(request.convertToRisikoscenario(), false);
 
         var response = RisikoscenarioResponse.buildFrom(risikoscenario);
         setTiltakAndKravDataForRelevantKravList(response);
@@ -120,14 +120,14 @@ public class RisikoscenarioController {
 
         var risikoscenarioToUpdate = risikoscenarioService.get(id);
 
-        if (risikoscenarioToUpdate == null) { // NotFoundException?
-            throw new ValidationException(String.format("Could not find risikoscenario to be updated with id = %s ", request.getId()));
+        if (risikoscenarioToUpdate == null) { 
+            throw new NotFoundException(String.format("Could not find risikoscenario to be updated with id = %s ", request.getId()));
         }
 
         RisikoscenarioRequest updatedRequest = risikoscenarioService.updateRelevantKravListe(request);
 
         updatedRequest.mergeInto(risikoscenarioToUpdate);
-        var risikoscenario = risikoscenarioService.save(risikoscenarioToUpdate, request.isUpdate()); // FIXME: isUpdate → true?
+        var risikoscenario = risikoscenarioService.save(risikoscenarioToUpdate, true);
 
         var response = RisikoscenarioResponse.buildFrom(risikoscenario);
         setTiltakAndKravDataForRelevantKravList(response);
@@ -140,10 +140,16 @@ public class RisikoscenarioController {
     @DeleteMapping("/{id}")
     public ResponseEntity<RisikoscenarioResponse> deleteRisikoscenarioById(@PathVariable UUID id) {
         log.info("Delete Risikoscenario id={}", id);
-        var risikoscenario = risikoscenarioService.delete(id);
+        Risikoscenario risikoscenario;
+        try {
+            risikoscenario = risikoscenarioService.delete(id);
+        } catch (DataIntegrityViolationException e) {
+            log.warn("Could delete Risikoscenario with id = {}: Risikoscenario is related to one or more Tiltak", id);
+            throw new ValidationException("Could delete Risikoscenario: Risikoscenario is related to one or more Tiltak");
+        }
         if (risikoscenario == null) {
             log.warn("Could not find risikoscenario with id = {} to delete", id);
-            return ResponseEntity.ok(null); // FIXME: throw new NotFoundException(...) ?
+            return ResponseEntity.ok(null);
         } else {
             return ResponseEntity.ok(RisikoscenarioResponse.buildFrom(risikoscenario));
         }
@@ -151,7 +157,7 @@ public class RisikoscenarioController {
 
     @Operation(summary = "Set krav on risikoscenarioer")
     @ApiResponse(responseCode = "201", description = "Krav set on risikoscenarioer")
-    @PutMapping("/update/relevantKrav") // FIXME: Revisitt. "/update/addRelevantKrav"?
+    @PutMapping("/update/relevantKrav") // TODO: Revisitt. "/update/addRelevantKrav" / synch FE
     @Transactional // FIXME: Flytt tx (og loop) til service
     public ResponseEntity<List<RisikoscenarioResponse>> setRelevantKravForRisikoscenarioer(@RequestBody KravRisikoscenarioRequest request) {
         log.info("Set relevantKrav for risikoscenarioer");
@@ -160,9 +166,8 @@ public class RisikoscenarioController {
         request.getRisikoscenarioIder().forEach(risikoscenarioId -> {
             var risikoscenario = risikoscenarioService.get(UUID.fromString(risikoscenarioId));
             List<Integer> RelevanteKravNummer = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer();
-            // FIXME: Vi må sjekke om den allerede finnes. (Kan evt. endre typen til Set<Integer>)
+            // TODO: Vi må sjekke om den allerede finnes. (Kan evt. endre typen til Set<Integer>)
             RelevanteKravNummer.add(request.getKravnummer());
-            // risikoscenario.getRisikoscenarioData().setRelevanteKravNummer(RelevanteKravNummer);
             var updatedRisikoscenario = risikoscenarioService.save(risikoscenario, true);
             RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(updatedRisikoscenario);
             setTiltakAndKravDataForRelevantKravList(response);
@@ -174,17 +179,10 @@ public class RisikoscenarioController {
 
     @Operation(summary = "Remove krav from risikoscenario")
     @ApiResponse(description = "krav removed form risikoscenario")
-    @DeleteMapping("/{id}/krav/{kravnummer}") // FIXME: revisitt... Er strengt tatt en put (f.eks. /{id}/removeKrav/{kravnummer}
+    @DeleteMapping("/{id}/krav/{kravnummer}") // TODO: revisitt... Er strengt tatt en put (f.eks. /{id}/removeKrav/{kravnummer} / sych FE
     public ResponseEntity<RisikoscenarioResponse> removeKravFromRisikoscenarioById(@PathVariable String id, @PathVariable Integer kravnummer) {
         log.info("Remove krav {} from risikoscenario id={}", kravnummer, id);
         var risikoscenario = risikoscenarioService.get(UUID.fromString(id));
-        //* FIXME: Ingen sjekk på at noe ble fjernet.
-        List<Integer> relevanteKravNummer = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer().stream().filter(relevantKrav -> !relevantKrav.equals(kravnummer)).toList();
-        risikoscenario.getRisikoscenarioData().setRelevanteKravNummer(relevanteKravNummer);
-        var updatedRisikoscenario = risikoscenarioService.save(risikoscenario, true);
-        return ResponseEntity.ok(RisikoscenarioResponse.buildFrom(updatedRisikoscenario));
-        //*/ 
-        /* FIXME: Alternativt:
         List<Integer> relevanteKravNummer = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer();
         if (relevanteKravNummer.remove(kravnummer)) {
             var updatedRisikoscenario = risikoscenarioService.save(risikoscenario, true);
@@ -195,12 +193,11 @@ public class RisikoscenarioController {
             log.warn("Could not remove Krav from Risikoscenario: Krav is not related to Risikoscenario");
             throw new ValidationException("Could not remove Krav from Risikoscenario: Krav is not related to Risikoscenario");
         }
-        //*/
     }
 
     @Operation(summary = "Add tiltak to risikoscenario")
     @ApiResponse(responseCode = "201", description = "Tiltak added to risikoscenario")
-    @PutMapping("/update/addRelevanteTiltak") // FIXME: revisitt
+    @PutMapping("/update/addRelevanteTiltak")
     public ResponseEntity<RisikoscenarioResponse> updateRisikoscenarioAddTiltak(@RequestBody RisikoscenarioTiltakRequest request) {
         log.info("Add Tiltak to risikoscenario id={}", request.getRiskoscenarioId());
         try {
@@ -215,7 +212,7 @@ public class RisikoscenarioController {
             log.warn("DataIntegrityViolationException caught while inserting Tiltak-Risikoscenario relation", e);
             throw new NotFoundException("Could not insert Tiltak-Risikoscenario relation: non-existing Tiltak and/or Risikoscenario");
         }
-        // FIXME: ITest for exception handling
+        // TODO: ITest for exception handling
     }
 
     @Operation(summary = "Remove tiltak from risikoscenario")

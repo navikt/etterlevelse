@@ -18,7 +18,7 @@ import java.util.List;
 @JsonPropertyOrder({"id", "pvkDokumentId", "navn", "beskrivelse", "ansvarlig", "frist", "risikoscenarioIds"})
 public class TiltakResponse {
 
-    private String id; // FIXME: Bytte til UUID?
+    private String id;
     private String pvkDokumentId;
     private String navn;
     private String beskrivelse;

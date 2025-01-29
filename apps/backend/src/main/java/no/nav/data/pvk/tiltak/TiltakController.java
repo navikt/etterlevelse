@@ -13,6 +13,7 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.dto.TiltakRequest;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,8 +62,8 @@ public class TiltakController {
     @PostMapping
     public ResponseEntity<TiltakResponse> createTiltak(@RequestBody TiltakRequest request) {
         log.info("Create Tiltak");
-        Tiltak tiltak = service.save(request.convertToTiltak(), request.isUpdate()); // FIXME: isUpdate → false? Evt. slå sammen denne og neste?
-        var resp = TiltakResponse.buildFrom(tiltak);
+        Tiltak tiltak = service.save(request.convertToTiltak(), false);
+        TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
         setRisikoscenarioer(resp);
         return new ResponseEntity<>(resp, HttpStatus.CREATED);
     }
@@ -70,7 +71,7 @@ public class TiltakController {
     @Operation(summary = "Update tiltak")
     @ApiResponse(description = "Tiltak updated")
     @PutMapping("/{id}")
-    public ResponseEntity<TiltakResponse> updatetiltak(@PathVariable String id, @Valid @RequestBody TiltakRequest request) {
+    public ResponseEntity<TiltakResponse> updateTiltak(@PathVariable String id, @Valid @RequestBody TiltakRequest request) {
         log.info("Update tiltak id={}", id);
 
         if (!Objects.equals(id, request.getId())) {
@@ -82,7 +83,7 @@ public class TiltakController {
         }
 
         request.mergeInto(tiltakToUpdate);
-        Tiltak tiltak = service.save(tiltakToUpdate, true); // FIXME: true vs. request.isUpdate()
+        Tiltak tiltak = service.save(tiltakToUpdate, true);
         var response = TiltakResponse.buildFrom(tiltak);
         setRisikoscenarioer(response);
 
@@ -92,12 +93,18 @@ public class TiltakController {
     @Operation(summary = "Delete tiltak")
     @ApiResponse(description = "tiltak deleted")
     @DeleteMapping("/{id}")
-    public ResponseEntity<TiltakResponse> deletetiltakById(@PathVariable UUID id) {
+    public ResponseEntity<TiltakResponse> deleteTiltakById(@PathVariable UUID id) {
         log.info("Delete tiltak id={}", id);
-        Tiltak tiltak = service.delete(id);
+        Tiltak tiltak;
+        try {
+            tiltak = service.delete(id);
+        } catch (DataIntegrityViolationException e) {
+            log.warn("Could delete Tiltak with id = {}: Tiltak is related to one or more Risikoscenario", id);
+            throw new ValidationException("Could delete Tiltak: Tiltak is related to one or more Risikoscenario");
+        }
         if (tiltak == null) {
             log.warn("Could not find tiltak with id = {} to delete", id);
-            return ResponseEntity.ok(null); // FIXME: throw new NotFoundException(...) ?
+            return ResponseEntity.ok(null);
         } else {
             return ResponseEntity.ok(TiltakResponse.buildFrom(tiltak));
         }
@@ -108,5 +115,5 @@ public class TiltakController {
         return res;
     }
 
-
+    // FIXME: ITest
 }
