@@ -88,8 +88,24 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
           risikoscenarioList.filter((risikoscenario) => risikoscenario.ingenTiltak)
         )
         break
+      case filterValues.effektIkkeVurdert:
+        setFilteredRisikosenarioList(
+          risikoscenarioList.filter(
+            (risikoscenario) =>
+              !risikoscenario.ingenTiltak &&
+              (risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
+                risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
+                risikoscenario.nivaaBegrunnelseEtterTiltak === '')
+          )
+        )
+        break
       case filterValues.hoyRisiko:
-        setFilteredRisikosenarioList([])
+        setFilteredRisikosenarioList(
+          risikoscenarioList.filter(
+            (risikoscenario) =>
+              risikoscenario.konsekvensNivaa === 5 || risikoscenario.sannsynlighetsNivaa === 5
+          )
+        )
         break
       default:
         setFilteredRisikosenarioList(risikoscenarioList)
