@@ -232,7 +232,7 @@ public class RisikoscenarioController {
 
     private void setTiltakAndKravDataForRelevantKravList(RisikoscenarioResponse risikoscenario) {
         // Set Tiltak...
-        risikoscenario.setTiltak(risikoscenarioService.getTiltak(risikoscenario.getId().toString()));
+        risikoscenario.setTiltakIds(risikoscenarioService.getTiltak(risikoscenario.getId().toString()));
 
         // Set KravData...
         risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {

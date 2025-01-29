@@ -125,5 +125,6 @@ export const mapRisikoscenarioToFormValue = (
     sannsynlighetsNivaaEtterTiltak: risikoscenario.sannsynlighetsNivaaEtterTiltak || 0,
     konsekvensNivaaEtterTiltak: risikoscenario.konsekvensNivaaEtterTiltak || 0,
     nivaaBegrunnelseEtterTiltak: risikoscenario.nivaaBegrunnelseEtterTiltak || '',
+    tiltakIds: risikoscenario.tiltakIds || [],
   }
 }

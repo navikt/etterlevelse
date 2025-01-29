@@ -559,6 +559,7 @@ export interface IRisikoscenario {
   sannsynlighetsNivaaEtterTiltak: number
   konsekvensNivaaEtterTiltak: number
   nivaaBegrunnelseEtterTiltak: string
+  tiltakIds: string[]
 }
 
 export interface IKravRisikoscenarioRelasjon {

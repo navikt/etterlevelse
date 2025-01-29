@@ -23,7 +23,6 @@ public class RisikoscenarioResponse {
     private Integer version;
 
     private String pvkDokumentId;
-    private List<String> tiltakIds;
 
     private String navn;
     private String beskrivelse;
@@ -33,7 +32,7 @@ public class RisikoscenarioResponse {
     private String konsekvensNivaaBegrunnelse;
     private boolean generelScenario;
     private List<KravReference> relevanteKravNummer;
-    private List<String> tiltak; // denne blir ikke satt i buildFrom
+    private List<String> tiltakIds; // denne blir ikke satt i buildFrom
 
     private Boolean ingenTiltak;
 
