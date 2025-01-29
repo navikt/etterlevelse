@@ -9,6 +9,7 @@ import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepo;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepoCustom;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioRequest;
+import no.nav.data.pvk.tiltak.domain.TiltakRepo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 public class RisikoscenarioService {
 
     private final RisikoscenarioRepo risikoscenarioRepo;
+    private final TiltakRepo tiltakRepo;
     private final RisikoscenarioRepoCustom risikoscenarioRepoCustom;
 
     public Risikoscenario get(UUID uuid) {
@@ -51,7 +53,7 @@ public class RisikoscenarioService {
                 return risikoscenarioList.stream().filter((scenario) -> !scenario.getRisikoscenarioData().isGenerelScenario()).collect(Collectors.toList());
             }
             default -> {
-                return  risikoscenarioList;
+                return risikoscenarioList;
             }
         }
     }
@@ -60,12 +62,13 @@ public class RisikoscenarioService {
         return risikoscenarioRepoCustom.findByKravNummer(kravNummer);
     }
 
+    @Deprecated
     public RisikoscenarioRequest updateRelevantKravListe(RisikoscenarioRequest request) {
-
+        // FIXME: Avhengighet til Request i Service
         var risikoscenario = get(request.getIdAsUUID());
 
         //remove krav from list based on request krav to remove
-        List<Integer>  newKravList = new ArrayList<>(CollectionUtils.removeAll(
+        List<Integer> newKravList = new ArrayList<>(CollectionUtils.removeAll(
                 risikoscenario.getRisikoscenarioData().getRelevanteKravNummer(),
                 request.getKravToDelete()).stream().toList());
 
@@ -79,6 +82,24 @@ public class RisikoscenarioService {
         return request;
     }
 
+    /* FIXME
+    @Transactional
+    public RisikoscenarioRequest updateRelevantKravListe(UUID uuid, List<Integer> kravToDelete, List<Integer> kravToAdd) {
+        var risikoscenario = get(uuid);
+        List<Integer> newKravList = new ArrayList<>(risikoscenario.getRisikoscenarioData().getRelevanteKravNummer());
+        // Remove krav from list based on request krav to remove
+        newKravList.removeAll(kravToDelete);
+        // Add new krav to list based on request krav to remove
+        newKravList.addAll(request.getKravToAdd());
+
+        //remove duplicates
+        List<Integer> uniqueKravList = newKravList.stream().distinct().collect(Collectors.toList());
+
+        request.setRelevanteKravNummer(uniqueKravList);
+        return request;
+    }
+    //*/
+
     @Transactional(propagation = Propagation.REQUIRED)
     public Risikoscenario save(Risikoscenario risikoscenario, boolean isUpdate) {
         if (!isUpdate) {
@@ -88,10 +109,33 @@ public class RisikoscenarioService {
         return risikoscenarioRepo.save(risikoscenario);
     }
 
+    /**
+     * @throws DataIntegrityViolationException If the Risikoscenario is related to one or more Tiltak
+     */
     @Transactional(propagation = Propagation.REQUIRED)
     public Risikoscenario delete(UUID id) {
         var pvkDokumentToDelete = risikoscenarioRepo.findById(id);
         risikoscenarioRepo.deleteById(id);
         return pvkDokumentToDelete.orElse(null);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Risikoscenario addTiltak(String riskoscenarioId, List<String> tiltakIds) {
+        for (String tiltakId : tiltakIds) {
+            tiltakRepo.insertTiltakRisikoscenarioRelation(riskoscenarioId, tiltakId);
+        }
+        return getRisikoscenario(UUID.fromString(riskoscenarioId));
+    }
+
+    /**
+     * Returns false if nothing was removed
+     */
+    public boolean removeTiltak(String id, String tiltakId) {
+        int removed = tiltakRepo.deleteTiltakRisikoscenarioRelation(id, tiltakId);
+        return removed > 0;
+    }
+    
+    public List<String> getTiltak(String uuid) {
+        return tiltakRepo.getTiltakForRisikoscenario(uuid);
     }
 }

@@ -23,6 +23,7 @@ public class RisikoscenarioResponse {
     private Integer version;
 
     private String pvkDokumentId;
+    private List<String> tiltakIds;
 
     private String navn;
     private String beskrivelse;
@@ -32,6 +33,7 @@ public class RisikoscenarioResponse {
     private String konsekvensNivaaBegrunnelse;
     private boolean generelScenario;
     private List<KravReference> relevanteKravNummer;
+    private List<String> tiltak; // denne blir ikke satt i buildFrom
 
     private Boolean ingenTiltak;
 
@@ -49,7 +51,6 @@ public class RisikoscenarioResponse {
                         .build())
                 .version(risikoscenario.getVersion())
                 .pvkDokumentId(risikoscenario.getPvkDokumentId())
-
                 .navn(risikoscenario.getRisikoscenarioData().getNavn())
                 .beskrivelse(risikoscenario.getRisikoscenarioData().getBeskrivelse())
                 .sannsynlighetsNivaa(risikoscenario.getRisikoscenarioData().getSannsynlighetsNivaa())
