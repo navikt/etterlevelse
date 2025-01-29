@@ -89,11 +89,12 @@ export const FieldWrapper = ({
 )
 
 interface IPropsInputField extends TLabelName, IMarginBottom {
+  description?: string
   disablePlaceHolder?: boolean
 }
 
 export const InputField = (props: IPropsInputField) => {
-  const { name, label, disablePlaceHolder, marginBottom } = props
+  const { name, label, disablePlaceHolder, marginBottom, description } = props
 
   return (
     <FieldWrapper marginBottom={marginBottom} id={name}>
@@ -102,6 +103,7 @@ export const InputField = (props: IPropsInputField) => {
           <div className="w-full">
             <TextField
               label={label}
+              description={description}
               {...fieldProps.field}
               placeholder={!disablePlaceHolder ? label : undefined}
               error={fieldProps.form.errors[name] ? <FormError fieldName={name} /> : undefined}
@@ -248,10 +250,12 @@ export const BoolField = (props: IPropsBoolField) => {
   )
 }
 
-type TPropsDateField = IName
+interface IPropsDateField extends IName {
+  label?: string
+}
 
-export const DateField = (props: TPropsDateField) => {
-  const { name } = props
+export const DateField = (props: IPropsDateField) => {
+  const { name, label } = props
 
   const { datepickerProps, inputProps } = useDatepicker({})
 
@@ -276,7 +280,7 @@ export const DateField = (props: TPropsDateField) => {
               {...inputProps}
               className="mb-2"
               value={fieldProps.form.values[name]}
-              label="Velg dato"
+              label={label ? label : 'Velg dato'}
             />
           </DatePicker>
         )}
