@@ -18,10 +18,11 @@ interface IProps {
   pvkDokumentId: string
   submit: (tiltak: ITiltak) => void
   formRef: RefObject<any>
+  size?: 'medium' | 'small' | 'xsmall'
 }
 
 export const TiltakForm = (props: IProps) => {
-  const { title, initialValues, pvkDokumentId, submit, formRef } = props
+  const { title, initialValues, pvkDokumentId, submit, formRef, size } = props
   const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
 
   return (
@@ -100,6 +101,7 @@ export const TiltakForm = (props: IProps) => {
                       <div>
                         <Button
                           type="button"
+                          size={size ? size : 'medium'}
                           onClick={() => {
                             fieldRenderProps.form.setFieldValue('ansvarlig', {
                               navIdent: customPersonForDev,
@@ -132,10 +134,15 @@ export const TiltakForm = (props: IProps) => {
           </div>
 
           <div className="flex gap-2 mt-5">
-            <Button type="button" onClick={() => submitForm()}>
+            <Button size={size ? size : 'medium'} type="button" onClick={() => submitForm()}>
               Lagre
             </Button>
-            <Button type="button" variant="secondary" onClick={() => resetForm({ values })}>
+            <Button
+              type="button"
+              size={size ? size : 'medium'}
+              variant="secondary"
+              onClick={() => resetForm({ values })}
+            >
               Avbryt
             </Button>
           </div>
