@@ -11,9 +11,12 @@ import {
 import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
-import { ERisikoscenarioType, IPvkDokument, IRisikoscenario } from '../../constants'
+import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
+import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, ITiltak } from '../../constants'
+import { ExternalLink } from '../common/RouteLink'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/OppsumeringAccordianList'
+import TiltakAccordionList from '../tiltak/TiltakAccordionList'
 import FormButtons from './edit/FormButtons'
 
 interface IProps {
@@ -33,6 +36,12 @@ export const filterValues = {
   tiltakIkkeAktuelt: 'ingen-tiltak',
 }
 
+export const tiltakFilterValues = {
+  alleTiltak: 'alle',
+  utenAnsvarlig: 'utenAnsvarlig',
+  utenFrist: 'utenFrist',
+}
+
 export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   const {
     etterlevelseDokumentasjonId,
@@ -43,7 +52,10 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
     formRef,
   } = props
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
+  const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
   const [filteredRisikoscenarioList, setFilteredRisikosenarioList] = useState<IRisikoscenario[]>([])
+  const [tiltakFilter, setTiltakFilter] = useState<string>(tiltakFilterValues.alleTiltak)
+  const [filteredTiltakList, setFilteredTiltakList] = useState<ITiltak[]>([])
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [navigateUrl, setNavigateUrl] = useState<string>('')
   const url = new URL(window.location.href)
@@ -60,6 +72,10 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
             setFilteredRisikosenarioList(risikoscenarioer.content)
           }
         )
+
+        await getTiltakByPvkDokumentId(pvkDokument.id).then((tiltak) => {
+          setTiltakList(tiltak.content)
+        })
       })()
     }
   }, [pvkDokument])
@@ -117,6 +133,21 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
       setIsUnsaved(true)
     } else {
       navigate(`${window.location.pathname}?tab=${tab}&filter=${filter}`)
+    }
+  }
+
+  const onTiltakFilterChange = (filter: string) => {
+    setTiltakFilter(filter)
+    switch (filter) {
+      case tiltakFilterValues.alleTiltak:
+        setFilteredTiltakList(tiltakList)
+        break
+      case tiltakFilterValues.utenAnsvarlig:
+        setFilteredTiltakList(tiltakList.filter((tiltak) => !tiltak.ansvarlig))
+        break
+      case tiltakFilterValues.utenFrist:
+        setFilteredTiltakList(tiltakList.filter((tiltak) => !tiltak.frist))
+        break
     }
   }
 
@@ -207,7 +238,42 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
               )}
             </Tabs.Panel>
             <Tabs.Panel value={tabValues.tiltak} className="h-24 w-full">
-              Her skal tiltak vises
+              {tiltakList.length === 0 && (
+                <div className="my-5">
+                  <Alert variant="info">
+                    <Heading spacing size="small" level="3">
+                      Foreløpig er ingen tiltak satt
+                    </Heading>
+                    Tiltak legges inn under{' '}
+                    <ExternalLink
+                      href={`/dokumentasjon/${etterlevelseDokumentasjonId}/pvkdokument/${pvkDokument.id}/4`}
+                    >
+                      Identifisering av risikoscenarioer og tiltak
+                    </ExternalLink>
+                    .
+                  </Alert>
+                </div>
+              )}
+
+              {tiltakList.length !== 0 && (
+                <ToggleGroup
+                  className="mt-10"
+                  value={tiltakFilter}
+                  onChange={onTiltakFilterChange}
+                  fill
+                >
+                  <ToggleGroup.Item value={tiltakFilterValues.alleTiltak} label="Alle tiltak" />
+                  <ToggleGroup.Item
+                    value={tiltakFilterValues.utenAnsvarlig}
+                    label="Uten tiltaksansvarlig"
+                  />
+                  <ToggleGroup.Item value={tiltakFilterValues.utenFrist} label="Uten frist" />
+                </ToggleGroup>
+              )}
+
+              {filteredTiltakList.length !== 0 && (
+                <TiltakAccordionList tiltakList={filteredTiltakList} />
+              )}
             </Tabs.Panel>
           </Tabs>
 
@@ -219,6 +285,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
             reloadOnSubmit={true}
           />
         </div>
+
         <div className="mt-5">
           <FormButtons
             etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}

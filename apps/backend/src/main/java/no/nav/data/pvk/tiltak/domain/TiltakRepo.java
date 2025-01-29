@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface TiltakRepo extends JpaRepository<Tiltak, UUID> {
 
-    @Query(value = "select * from tiltak where pvk_dokument_id = ?1", nativeQuery = true)
+    @Query(value = "select * from tiltak where pvk_dokument_id = uuid(?1)", nativeQuery = true)
     List<Tiltak> findByPvkDokumentId(String pvkDokumentId);
     
     @Query(value="select risikoscenario_id from risikoscenario_tiltak_relation where tiltak_id = uuid(?1)", nativeQuery = true)
