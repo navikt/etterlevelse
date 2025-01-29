@@ -2,7 +2,8 @@ import { Alert, BodyLong, Button, Heading, ReadMore } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
-import { ERisikoscenarioType, IPvkDokument, IRisikoscenario } from '../../constants'
+import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
+import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, ITiltak } from '../../constants'
 import RisikoscenarioAccordianList from '../risikoscenario/RisikoscenarioAccordianList'
 import CreateRisikoscenarioModal from '../risikoscenario/edit/CreateRisikoscenarioModal'
 import FormButtons from './edit/FormButtons'
@@ -26,6 +27,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
     formRef,
   } = props
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
+  const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -36,6 +38,9 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
             setRisikoscenarioList(risikoscenarioer.content)
           }
         )
+        await getTiltakByPvkDokumentId(pvkDokument.id).then((response) => {
+          setTiltakList(response.content)
+        })
       })()
     }
   }, [pvkDokument])
@@ -102,6 +107,8 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
             <div className="my-5">
               <RisikoscenarioAccordianList
                 risikoscenarioList={risikoscenarioList}
+                tiltakList={tiltakList}
+                setTiltakList={setTiltakList}
                 setRisikoscenarioList={setRisikoscenarioList}
                 formRef={formRef}
               />
@@ -115,6 +122,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
             }}
           />
         </div>
+
         <FormButtons
           etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
           activeStep={activeStep}

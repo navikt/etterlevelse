@@ -1,7 +1,7 @@
 import { Accordion } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { IRisikoscenario } from '../../constants'
+import { IRisikoscenario, ITiltak } from '../../constants'
 import AccordianAlertModal from './AccordianAlertModal'
 import RisikoscenarioAccordionContent from './RisikoscenarioAccordianContent'
 import { IdentifiseringAvRisikoscenarioAccordianHeader } from './RisikoscenarioAccordionHeader'
@@ -9,11 +9,13 @@ import { IdentifiseringAvRisikoscenarioAccordianHeader } from './RisikoscenarioA
 interface IProps {
   risikoscenarioList: IRisikoscenario[]
   setRisikoscenarioList: (state: IRisikoscenario[]) => void
+  tiltakList: ITiltak[]
+  setTiltakList: (state: ITiltak[]) => void
   formRef: RefObject<any>
 }
 
 export const RisikoscenarioAccordianList = (props: IProps) => {
-  const { risikoscenarioList, setRisikoscenarioList, formRef } = props
+  const { risikoscenarioList, tiltakList, setTiltakList, setRisikoscenarioList, formRef } = props
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [navigateUrl, setNavigateUrl] = useState<string>('')
   const url = new URL(window.location.href)
@@ -69,6 +71,8 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
                   <RisikoscenarioAccordionContent
                     risikoscenario={risikoscenario}
                     risikoscenarioer={risikoscenarioList}
+                    tiltakList={tiltakList}
+                    setTiltakList={setTiltakList}
                     setRisikoscenarioer={setRisikoscenarioList}
                     formRef={formRef}
                   />

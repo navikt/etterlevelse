@@ -1,5 +1,5 @@
 import { PencilIcon } from '@navikt/aksel-icons'
-import { Button, Label } from '@navikt/ds-react'
+import { BodyLong, Button, Label } from '@navikt/ds-react'
 import { RefObject, useState } from 'react'
 import { getRisikoscenario, updateRisikoscenario } from '../../api/RisikoscenarioApi'
 import { createTiltakAndRelasjonWithRisikoscenario } from '../../api/TiltakApi'
@@ -13,12 +13,21 @@ import RisikoscenarioModalForm from './edit/RisikoscenarioModalForm'
 interface IProps {
   risikoscenario: IRisikoscenario
   risikoscenarioer: IRisikoscenario[]
+  tiltakList: ITiltak[]
+  setTiltakList: (state: ITiltak[]) => void
   setRisikoscenarioer: (state: IRisikoscenario[]) => void
   formRef?: RefObject<any>
 }
 
 export const RisikoscenarioAccordionContent = (props: IProps) => {
-  const { risikoscenario, risikoscenarioer, setRisikoscenarioer, formRef } = props
+  const {
+    risikoscenario,
+    risikoscenarioer,
+    tiltakList,
+    setTiltakList,
+    setRisikoscenarioer,
+    formRef,
+  } = props
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   const [isCreateTiltakFormActive, setIsCreateTiltakFormActive] = useState<boolean>(false)
@@ -54,6 +63,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
         ...activeRisikoscenario,
         tiltakIds: [...activeRisikoscenario.tiltakIds, response.id],
       })
+      setTiltakList([...tiltakList, response])
       setIsCreateTiltakFormActive(false)
     })
   }
@@ -80,10 +90,18 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
 
       <div className="mt-5">
         <Label>Følgende tiltak gjelder for dette risikoscenarioet</Label>
-
         {!risikoscenario.ingenTiltak && (
           <div>
-            liste over tiltak og redigeringsknappene
+            {risikoscenario.tiltakIds.length !== 0 && (
+              <div>
+                {tiltakList
+                  .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
+                  .map((tiltak) => (
+                    <BodyLong key={tiltak.id}>{tiltak.navn}</BodyLong>
+                  ))}
+              </div>
+            )}
+
             {isCreateTiltakFormActive && (
               <TiltakForm
                 title="Opprett nytt tiltak"
