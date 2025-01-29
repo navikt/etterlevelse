@@ -26,6 +26,7 @@ public class TiltakResponse {
     private String ansvarlig;
     private LocalDate frist;
     private List<String> risikoscenarioIds; // Merk: Settes ikke i buildFrom
+
     private ChangeStampResponse changeStamp;
     private Integer version;
 
