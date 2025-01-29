@@ -579,6 +579,10 @@ export interface IKravRisikoscenarioRelasjon {
   risikoscenarioIder: string[]
 }
 
+export interface ITiltakRisikoscenarioRelasjon {
+  riskoscenarioId: string
+  tiltakIds: string[]
+}
 export interface IKravReference {
   navn: string
   kravNummer: number
