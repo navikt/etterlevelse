@@ -15,17 +15,18 @@ import { noOptionMessage, selectOverrides } from '../../search/util'
 interface IProps {
   title: string
   initialValues: ITiltak
+  pvkDokumentId: string
   submit: (tiltak: ITiltak) => void
   formRef: RefObject<any>
 }
 
 export const TiltakForm = (props: IProps) => {
-  const { title, initialValues, submit, formRef } = props
+  const { title, initialValues, pvkDokumentId, submit, formRef } = props
   const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
 
   return (
     <Formik
-      initialValues={mapTiltakToFormValue(initialValues)}
+      initialValues={mapTiltakToFormValue({ ...initialValues, pvkDokumentId: pvkDokumentId })}
       onSubmit={submit}
       innerRef={formRef}
     >
