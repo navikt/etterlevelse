@@ -10,6 +10,7 @@ import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakData;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -34,6 +35,12 @@ public class TiltakResponse {
         TiltakData td = tiltak.getTiltakData();
         return builder()
                 .id(tiltak.getId().toString())
+                .changeStamp(ChangeStampResponse.builder()
+                        .createdDate(tiltak.getCreatedDate() == null ? LocalDateTime.now() : tiltak.getCreatedDate())
+                        .lastModifiedBy(tiltak.getLastModifiedBy())
+                        .lastModifiedDate(tiltak.getLastModifiedDate() == null ? LocalDateTime.now() : tiltak.getLastModifiedDate())
+                        .build())
+                .version(tiltak.getVersion())
                 .pvkDokumentId(tiltak.getPvkDokumentId().toString())
                 .navn(td.getNavn())
                 .beskrivelse(td.getBeskrivelse())
