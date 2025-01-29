@@ -82,7 +82,8 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
           Redigèr risikoscenario
         </Button>
         <SlettOvrigRisikoscenario
-          risikoscenarioId={risikoscenario.id}
+          risikoscenario={risikoscenario}
+          tiltakList={tiltakList}
           risikoscenarioer={risikoscenarioer}
           setRisikoscenarioer={setRisikoscenarioer}
         />
