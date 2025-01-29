@@ -100,6 +100,7 @@ const risikoscenarioToRisikoscenarioDto = (risikoscenario: IRisikoscenario) => {
   } as any
   delete dto.changeStamp
   delete dto.version
+  delete dto.tiltakIds
   return dto
 }
 
