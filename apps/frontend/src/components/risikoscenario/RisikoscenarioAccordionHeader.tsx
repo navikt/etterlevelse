@@ -48,7 +48,7 @@ export const IdentifiseringAvRisikoscenarioAccordianHeader = (props: IProps) => 
   const WIP_tiltaksListe = []
 
   return (
-    <Accordion.Header>
+    <Accordion.Header className="z-0">
       {risikoscenario.navn}
       <div className="flex gap-2">
         {ikkeFerdigBeskrevet && <Tag variant="alt2">Det er felter som ikke er ferdig utfylt</Tag>}
