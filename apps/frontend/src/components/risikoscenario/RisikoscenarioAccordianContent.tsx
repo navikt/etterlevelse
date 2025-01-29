@@ -65,6 +65,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
       })
       setTiltakList([...tiltakList, response])
       setIsCreateTiltakFormActive(false)
+      window.location.reload()
     })
   }
 
