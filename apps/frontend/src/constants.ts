@@ -562,6 +562,18 @@ export interface IRisikoscenario {
   tiltakIds: string[]
 }
 
+export interface ITiltak {
+  id: string
+  changeStamp: IChangeStamp
+  version: number
+  pvkDokumentId: string
+  navn: string
+  beskrivelse: string
+  ansvarlig: ITeamResource
+  frist: string
+  risikoscenarioIds: string[]
+}
+
 export interface IKravRisikoscenarioRelasjon {
   kravnummer: number
   risikoscenarioIder: string[]
