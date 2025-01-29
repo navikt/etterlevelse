@@ -1,12 +1,13 @@
 import { BodyLong, Label } from '@navikt/ds-react'
-import { ITiltak } from '../../constants'
+import { IRisikoscenario, ITiltak } from '../../constants'
 
 interface IProps {
   tiltak: ITiltak
+  risikoscenarioList: IRisikoscenario[]
 }
 
 export const TiltakView = (props: IProps) => {
-  const { tiltak } = props
+  const { tiltak, risikoscenarioList } = props
 
   return (
     <div>
@@ -29,7 +30,11 @@ export const TiltakView = (props: IProps) => {
         )}
 
         {tiltak.risikoscenarioIds.length !== 0 &&
-          tiltak.risikoscenarioIds.map((id) => <BodyLong key={id}>{id}</BodyLong>)}
+          risikoscenarioList
+            .filter((risikoscenario) => tiltak.risikoscenarioIds.includes(risikoscenario.id))
+            .map((risikoscenario) => (
+              <BodyLong key={risikoscenario.id}>{risikoscenario.navn}</BodyLong>
+            ))}
       </div>
     </div>
   )

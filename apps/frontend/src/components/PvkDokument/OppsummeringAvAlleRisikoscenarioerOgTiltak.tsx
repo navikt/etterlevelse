@@ -231,6 +231,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                 <div className="my-5">
                   <OppsumeringAccordianList
                     risikoscenarioList={filteredRisikoscenarioList}
+                    tiltakList={tiltakList}
                     formRef={formRef}
                     isUnsaved={isUnsaved}
                     setIsUnsaved={setIsUnsaved}
@@ -273,7 +274,10 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
               )}
 
               {filteredTiltakList.length !== 0 && (
-                <TiltakAccordionList tiltakList={filteredTiltakList} />
+                <TiltakAccordionList
+                  tiltakList={filteredTiltakList}
+                  risikoscenarioList={risikoscenarioList}
+                />
               )}
             </Tabs.Panel>
           </Tabs>

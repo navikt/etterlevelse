@@ -1,13 +1,14 @@
 import { Accordion, Tag } from '@navikt/ds-react'
-import { ITiltak } from '../../constants'
+import { IRisikoscenario, ITiltak } from '../../constants'
 import TiltakView from './TiltakView'
 
 interface IProps {
   tiltakList: ITiltak[]
+  risikoscenarioList: IRisikoscenario[]
 }
 
 export const TiltakAccordionList = (props: IProps) => {
-  const { tiltakList } = props
+  const { tiltakList, risikoscenarioList } = props
 
   return (
     <Accordion>
@@ -22,7 +23,7 @@ export const TiltakAccordionList = (props: IProps) => {
               </div>
             </Accordion.Header>
             <Accordion.Content>
-              <TiltakView tiltak={tiltak} />
+              <TiltakView tiltak={tiltak} risikoscenarioList={risikoscenarioList} />
             </Accordion.Content>
           </Accordion.Item>
         )
