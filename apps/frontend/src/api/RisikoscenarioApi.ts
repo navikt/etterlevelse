@@ -85,7 +85,9 @@ export const deleteRisikoscenario = async (id: string) => {
 
 export const fjernKravFraRisikoscenario = async (id: string, kravnummer: number) => {
   return (
-    await axios.delete<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario/${id}/${kravnummer}`)
+    await axios.put<IRisikoscenario>(
+      `${env.backendBaseUrl}/risikoscenario/${id}/removeKrav/${kravnummer}`
+    )
   ).data
 }
 

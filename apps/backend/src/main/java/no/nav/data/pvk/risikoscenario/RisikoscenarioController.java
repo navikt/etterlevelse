@@ -179,7 +179,7 @@ public class RisikoscenarioController {
 
     @Operation(summary = "Remove krav from risikoscenario")
     @ApiResponse(description = "krav removed form risikoscenario")
-    @DeleteMapping("/{id}/krav/{kravnummer}") // TODO: revisitt... Er strengt tatt en put (f.eks. /{id}/removeKrav/{kravnummer} / sych FE
+    @PutMapping("/{id}/removeKrav/{kravnummer}")
     public ResponseEntity<RisikoscenarioResponse> removeKravFromRisikoscenarioById(@PathVariable String id, @PathVariable Integer kravnummer) {
         log.info("Remove krav {} from risikoscenario id={}", kravnummer, id);
         var risikoscenario = risikoscenarioService.get(UUID.fromString(id));
