@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TiltakService {
 
-    private TiltakRepo repo;
+    private final TiltakRepo repo;
     
     public Page<Tiltak> getAll(PageParameters pageParameters) {
         return repo.findAll(pageParameters.createPage());
