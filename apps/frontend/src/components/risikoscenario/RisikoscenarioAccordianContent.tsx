@@ -2,6 +2,7 @@ import { PencilIcon } from '@navikt/aksel-icons'
 import { Button, Label } from '@navikt/ds-react'
 import { RefObject, useState } from 'react'
 import { getRisikoscenario, updateRisikoscenario } from '../../api/RisikoscenarioApi'
+import { createTiltakAndRelasjonWithRisikoscenario } from '../../api/TiltakApi'
 import { IRisikoscenario, ITiltak } from '../../constants'
 import TiltakForm from '../tiltak/edit/TiltakForm'
 import RisikoscenarioView from './RisikoscenarioView'
@@ -44,6 +45,19 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
     })
   }
 
+  const submitCreateTiltak = async (submitedTiltakValues: ITiltak) => {
+    await createTiltakAndRelasjonWithRisikoscenario(
+      submitedTiltakValues,
+      activeRisikoscenario.id
+    ).then((response) => {
+      setActiveRisikoscenario({
+        ...activeRisikoscenario,
+        tiltakIds: [...activeRisikoscenario.tiltakIds, response.id],
+      })
+      setIsCreateTiltakFormActive(false)
+    })
+  }
+
   return (
     <div>
       <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={false} />
@@ -75,10 +89,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
                 title="Opprett nytt tiltak"
                 initialValues={{} as ITiltak}
                 pvkDokumentId={risikoscenario.pvkDokumentId}
-                submit={(tiltak: ITiltak) => {
-                  console.debug(tiltak)
-                  setIsCreateTiltakFormActive(false)
-                }}
+                submit={submitCreateTiltak}
                 close={() => setIsCreateTiltakFormActive(false)}
                 formRef={formRef}
               />
