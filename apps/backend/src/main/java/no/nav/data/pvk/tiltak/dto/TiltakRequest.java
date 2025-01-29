@@ -50,7 +50,7 @@ public class TiltakRequest implements RequestElement {
     public Tiltak convertToTiltak() {
         return Tiltak.builder()
                 .id(id != null && !id.isEmpty() ? UUID.fromString(id) : null)
-                .pvkDokumentId(pvkDokumentId)
+                .pvkDokumentId(UUID.fromString(pvkDokumentId))
                 .tiltakData(TiltakData.builder()
                         .navn(navn)
                         .beskrivelse(beskrivelse)
@@ -61,7 +61,7 @@ public class TiltakRequest implements RequestElement {
     }
 
     public void mergeInto(Tiltak tiltakToMerge) {
-        tiltakToMerge.setPvkDokumentId(pvkDokumentId);
+        tiltakToMerge.setPvkDokumentId(UUID.fromString(pvkDokumentId));
         tiltakToMerge.getTiltakData().setNavn(navn);
         tiltakToMerge.getTiltakData().setBeskrivelse(beskrivelse);
         tiltakToMerge.getTiltakData().setAnsvarlig(ansvarlig);
