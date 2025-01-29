@@ -75,6 +75,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
 
         await getTiltakByPvkDokumentId(pvkDokument.id).then((tiltak) => {
           setTiltakList(tiltak.content)
+          setFilteredTiltakList(tiltak.content)
         })
       })()
     }
@@ -237,7 +238,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                 </div>
               )}
             </Tabs.Panel>
-            <Tabs.Panel value={tabValues.tiltak} className="h-24 w-full">
+            <Tabs.Panel value={tabValues.tiltak} className="w-full">
               {tiltakList.length === 0 && (
                 <div className="my-5">
                   <Alert variant="info">

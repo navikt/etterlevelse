@@ -29,7 +29,7 @@ export const TiltakView = (props: IProps) => {
         )}
 
         {tiltak.risikoscenarioIds.length !== 0 &&
-          tiltak.risikoscenarioIds.map((id) => <BodyLong key={id}>id</BodyLong>)}
+          tiltak.risikoscenarioIds.map((id) => <BodyLong key={id}>{id}</BodyLong>)}
       </div>
     </div>
   )
