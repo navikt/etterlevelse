@@ -34,6 +34,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   const [isCreateTiltakFormActive, setIsCreateTiltakFormActive] = useState<boolean>(false)
+  const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario) => {
     await updateRisikoscenario(risikoscenario).then((response) => {
@@ -103,10 +104,12 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
                 risikoscenarioList={allRisikoscenarioList}
                 tiltakList={tiltakList}
                 setTiltakList={setTiltakList}
+                setIsEditTiltakFormActive={setIsEditTiltakFormActive}
+                isCreateTiltakFormActive={isCreateTiltakFormActive}
               />
             )}
 
-            {isCreateTiltakFormActive && (
+            {isCreateTiltakFormActive && !isEditTiltakFormActive && (
               <TiltakForm
                 title="Opprett nytt tiltak"
                 initialValues={{} as ITiltak}
@@ -116,7 +119,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
                 formRef={formRef}
               />
             )}
-            {!isCreateTiltakFormActive && (
+            {!isCreateTiltakFormActive && !isEditTiltakFormActive && (
               <div className="mt-5 flex gap-2">
                 <Button type="button" onClick={() => setIsCreateTiltakFormActive(true)}>
                   Opprett nytt tiltak
@@ -129,7 +132,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
           </div>
         )}
 
-        {!isCreateTiltakFormActive && (
+        {!isCreateTiltakFormActive && !isEditTiltakFormActive && (
           <div className="mt-3">
             <IngenTiltakField
               risikoscenario={activeRisikoscenario}
