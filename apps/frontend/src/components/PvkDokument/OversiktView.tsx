@@ -235,7 +235,7 @@ const FormSummaryPanel = (props: IFormSummaryPanelProps) => {
   return (
     <FormSummary.Answer key={title}>
       <FormSummary.Value>
-        <Link onClick={onClick} className="cursor-pointer">
+        <Link onClick={onClick} className="cursor-pointer" tabIndex={0}>
           {title}
         </Link>
       </FormSummary.Value>

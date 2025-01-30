@@ -90,7 +90,7 @@ export const SendInnView = (props: IProps) => {
 
               <RisikoscenarioSummary />
 
-              <div className="mt-5 max-w-[75ch]">
+              <div className="mt-5 mb-3 max-w-[75ch]">
                 <TextAreaField
                   rows={3}
                   noPlaceholder

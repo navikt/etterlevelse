@@ -18,6 +18,7 @@ export const ArtOgOmFangSummary = (props: IProps) => {
             <FormSummary.EditLink
               className="cursor-pointer"
               onClick={() => updateTitleUrlAndStep(2)}
+              tabIndex={0}
             >
               Endre svar
             </FormSummary.EditLink>
