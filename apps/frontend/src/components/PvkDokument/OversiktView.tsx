@@ -116,8 +116,8 @@ export const OversiktView = (props: IProps) => {
                   Behandlingens livsløp
                 </ExternalLink>
               </FormSummary.Value>
-              <FormSummary.Value>
-                <div className="gap-2 flex">
+              <FormSummary.Value className="gap-2 flex">
+                <div className="gap-2 flex pt-1">
                   {!behandlingensLivslop && (
                     <Tag variant="warning" size="xsmall">
                       Ikke påbegynt
