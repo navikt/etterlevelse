@@ -1,7 +1,8 @@
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Button, ReadMore } from '@navikt/ds-react'
+import { Button, Modal, ReadMore } from '@navikt/ds-react'
 import { RefObject, useState } from 'react'
-import { updateTiltak } from '../../api/TiltakApi'
+import { removeTiltakToRisikoscenario } from '../../api/RisikoscenarioApi'
+import { deleteTiltak, getTiltak, updateTiltak } from '../../api/TiltakApi'
 import { IRisikoscenario, ITiltak } from '../../constants'
 import TiltakView from './TiltakView'
 import TiltakForm from './edit/TiltakForm'
@@ -74,6 +75,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
     formRef,
   } = props
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
 
   const submit = async (submitedValues: ITiltak) => {
     await updateTiltak(submitedValues).then((response) => {
@@ -87,6 +89,27 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
         })
       )
       setIsEditMode(false)
+    })
+  }
+
+  const onDeleteSubmit = async (tiltakId: string) => {
+    await getTiltak(tiltakId).then(async (response) => {
+      if (
+        response.risikoscenarioIds.length === 1 &&
+        response.risikoscenarioIds[0] === risikoscenario.id
+      ) {
+        await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(async () => {
+          await deleteTiltak(tiltakId).then(() => {
+            setIsDeleteModalOpen(false)
+            window.location.reload()
+          })
+        })
+      } else {
+        await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(() => {
+          setIsDeleteModalOpen(false)
+          window.location.reload()
+        })
+      }
     })
   }
 
@@ -139,10 +162,27 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
             variant="tertiary"
             size="small"
             icon={<TrashIcon title="" aria-hidden />}
+            onClick={() => setIsDeleteModalOpen(true)}
           >
             Slett tiltak
           </Button>
         </div>
+      )}
+
+      {isDeleteModalOpen && (
+        <Modal
+          open={isDeleteModalOpen}
+          header={{ heading: 'Slette tiltak fra risikoscenario' }}
+          onClose={() => setIsDeleteModalOpen(false)}
+        >
+          <Modal.Body>Er du sikkert på at du vil slette tiltaket?</Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() => setIsDeleteModalOpen(false)} variant={'secondary'}>
+              Avbryt
+            </Button>
+            <Button onClick={() => onDeleteSubmit(tiltak.id)}>Slett</Button>
+          </Modal.Footer>
+        </Modal>
       )}
     </div>
   )
