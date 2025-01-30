@@ -18,7 +18,7 @@ export const RisikoscenarioSummary = () => {
                 <FormSummary.Label>Risikoscenarioer</FormSummary.Label>
                 <FormSummary.Value>
                   Det er beskrevet totalt sett X risikoscenarioer.{' '}
-                  <ExternalLink href={risikoscenarioLink + '?tab=risikoscenarioer'}>
+                  <ExternalLink href={risikoscenarioLink + '?tab=risikoscenarioer&filter=alle'}>
                     Se alle risikoscenarioer
                   </ExternalLink>
                   .
