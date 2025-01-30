@@ -1,6 +1,6 @@
 import { Label } from '@navikt/ds-react'
 import { Dispatch, RefObject, SetStateAction } from 'react'
-import { createRisikoscenario } from '../../../api/RisikoscenarioApi'
+import { createRisikoscenarioKnyttetTilKrav } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario, TKravQL } from '../../../constants'
 import RisikoscenarioForm from './RisikoscenarioForm'
 
@@ -26,7 +26,7 @@ export const CreateRisikoscenario = (props: IProps) => {
   } = props
 
   const submit = async (risikoscenario: IRisikoscenario) => {
-    await createRisikoscenario(risikoscenario).then((response) => {
+    await createRisikoscenarioKnyttetTilKrav(krav.kravNummer, risikoscenario).then((response) => {
       setRisikoscenarioer([...risikoscenarioer, response])
       setActiveRisikoscenarioId(response.id)
 
@@ -50,7 +50,6 @@ export const CreateRisikoscenario = (props: IProps) => {
         initialValues={{
           pvkDokumentId: pvkDokumentId,
           generelScenario: false,
-          kravToAdd: [krav.kravNummer],
           relevanteKravNummer: [
             { kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, navn: krav.navn },
           ],

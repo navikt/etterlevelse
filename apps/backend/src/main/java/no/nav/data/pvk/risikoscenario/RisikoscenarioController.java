@@ -106,6 +106,21 @@ public class RisikoscenarioController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Create Risikoscenario knyttet til krav")
+    @ApiResponse(responseCode = "201", description = "Risikoscenario knyttet til krav created")
+    @PostMapping("/krav/{kravnummer}")
+    public ResponseEntity<RisikoscenarioResponse> createRisikoscenarioKnyttetTilKrav(@PathVariable Integer kravnummer , @RequestBody RisikoscenarioRequest request) {
+        log.info("Create Risikoscenario knyttet til krav");
+
+        Risikoscenario risikoscenario = risikoscenarioService.save(request.convertToRisikoscenario(), false);
+        risikoscenarioService.addRelevantKravToRisikoscenarioer(kravnummer, List.of(risikoscenario.getId().toString()));
+
+        var response = RisikoscenarioResponse.buildFrom(risikoscenario);
+        setTiltakAndKravDataForRelevantKravList(response);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
     @Operation(summary = "Update Risikoscenario")
     @ApiResponse(description = "Risikoscenario updated")
     @PutMapping("/{id}")

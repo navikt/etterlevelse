@@ -61,6 +61,19 @@ export const createRisikoscenario = async (risikoscenario: IRisikoscenario) => {
   return (await axios.post<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario`, dto)).data
 }
 
+export const createRisikoscenarioKnyttetTilKrav = async (
+  kravnummer: number,
+  risikoscenario: IRisikoscenario
+) => {
+  const dto = risikoscenarioToRisikoscenarioDto(risikoscenario)
+  return (
+    await axios.post<IRisikoscenario>(
+      `${env.backendBaseUrl}/risikoscenario/krav/${kravnummer}`,
+      dto
+    )
+  ).data
+}
+
 export const updateRisikoscenario = async (risikoscenario: IRisikoscenario) => {
   const dto = risikoscenarioToRisikoscenarioDto(risikoscenario)
   return (
@@ -115,13 +128,11 @@ export const removeTiltakToRisikoscenario = async (risikoscenarioId: string, til
 const risikoscenarioToRisikoscenarioDto = (risikoscenario: IRisikoscenario) => {
   const dto = {
     ...risikoscenario,
-    relevanteKravNummer: risikoscenario.relevanteKravNummer.map(
-      (kravReference) => kravReference.kravNummer
-    ),
   } as any
   delete dto.changeStamp
   delete dto.version
   delete dto.tiltakIds
+  delete dto.relevanteKravNummer
   return dto
 }
 
@@ -141,8 +152,6 @@ export const mapRisikoscenarioToFormValue = (
     konsekvensNivaaBegrunnelse: risikoscenario.konsekvensNivaaBegrunnelse || '',
     relevanteKravNummer: risikoscenario.relevanteKravNummer || [],
     generelScenario: risikoscenario.generelScenario || false,
-    kravToAdd: [],
-    kravToDelete: [],
     ingenTiltak: risikoscenario.ingenTiltak === undefined ? undefined : risikoscenario.ingenTiltak,
     sannsynlighetsNivaaEtterTiltak: risikoscenario.sannsynlighetsNivaaEtterTiltak || 0,
     konsekvensNivaaEtterTiltak: risikoscenario.konsekvensNivaaEtterTiltak || 0,
