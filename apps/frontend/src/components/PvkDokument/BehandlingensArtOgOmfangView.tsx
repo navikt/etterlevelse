@@ -65,7 +65,10 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
                 Behandlingens art og omfang
               </Heading>
 
-              <List title="I Behandlingskatalogen står det at dere behandler personopplysninger om:">
+              <List
+                headingTag="label"
+                title="I Behandlingskatalogen står det at dere behandler personopplysninger om:"
+              >
                 {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
                 {personkategorier.length > 0 &&
                   personkategorier.map((personkategori) => (

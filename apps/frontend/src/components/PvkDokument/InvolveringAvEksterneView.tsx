@@ -76,6 +76,7 @@ export const InvolveringAvEksterneView = (props: IProps) => {
               <List
                 size="small"
                 className="mt-5"
+                headingTag="label"
                 title="I Behandlingskatalogen står det at dere behandler personopplysninger om:"
               >
                 {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
