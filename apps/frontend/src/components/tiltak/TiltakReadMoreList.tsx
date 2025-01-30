@@ -15,6 +15,7 @@ interface IProps {
   setIsEditTiltakFormActive: (state: boolean) => void
   isCreateTiltakFormActive: boolean
   isAddExistingMode: boolean
+  customDelete?: (tiltakId: string) => void
   formRef?: RefObject<any>
 }
 
@@ -27,6 +28,7 @@ export const TiltakReadMoreList = (props: IProps) => {
     setIsEditTiltakFormActive,
     isCreateTiltakFormActive,
     isAddExistingMode,
+    customDelete,
     formRef,
   } = props
   const [activeTiltak, setActiveTiltak] = useState<string>('')
@@ -49,6 +51,7 @@ export const TiltakReadMoreList = (props: IProps) => {
                 setIsEditTiltakFormActive={setIsEditTiltakFormActive}
                 isCreateTiltakFormActive={isCreateTiltakFormActive}
                 isAddExistingMode={isAddExistingMode}
+                customDelete={customDelete}
                 formRef={formRef}
               />
             </div>
@@ -76,6 +79,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
     setIsEditTiltakFormActive,
     isCreateTiltakFormActive,
     isAddExistingMode,
+    customDelete,
     formRef,
   } = props
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
@@ -111,7 +115,6 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
         })
       } else {
         await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(() => {
-          setIsDeleteModalOpen(false)
           window.location.reload()
         })
       }
@@ -191,7 +194,19 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
             <Button onClick={() => setIsDeleteModalOpen(false)} variant={'secondary'}>
               Avbryt
             </Button>
-            <Button onClick={() => onDeleteSubmit(tiltak.id)}>Slett</Button>
+            <Button
+              onClick={async () => {
+                if (customDelete) {
+                  await customDelete(tiltak.id)
+                  setIsDeleteModalOpen(false)
+                } else {
+                  await onDeleteSubmit(tiltak.id)
+                  setIsDeleteModalOpen(false)
+                }
+              }}
+            >
+              Slett
+            </Button>
           </Modal.Footer>
         </Modal>
       )}

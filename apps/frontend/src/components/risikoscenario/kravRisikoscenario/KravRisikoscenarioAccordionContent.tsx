@@ -4,9 +4,14 @@ import { RefObject, useState } from 'react'
 import {
   addTiltakToRisikoscenario,
   getRisikoscenario,
+  removeTiltakToRisikoscenario,
   updateRisikoscenario,
 } from '../../../api/RisikoscenarioApi'
-import { createTiltakAndRelasjonWithRisikoscenario } from '../../../api/TiltakApi'
+import {
+  createTiltakAndRelasjonWithRisikoscenario,
+  deleteTiltak,
+  getTiltak,
+} from '../../../api/TiltakApi'
 import { IRisikoscenario, ITiltak, ITiltakRisikoscenarioRelasjon } from '../../../constants'
 import TiltakReadMoreList from '../../tiltak/TiltakReadMoreList'
 import LeggTilEksisterendeTiltak from '../../tiltak/edit/LeggTilEksisterendeTiltak'
@@ -112,6 +117,31 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     })
   }
 
+  const submitDeleteTiltak = async (tiltakId: string) => {
+    await getTiltak(tiltakId).then(async (response) => {
+      if (
+        response.risikoscenarioIds.length === 1 &&
+        response.risikoscenarioIds[0] === risikoscenario.id
+      ) {
+        await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(async () => {
+          await deleteTiltak(tiltakId).then(() => {
+            setActiveRisikoscenario({
+              ...activeRisikoscenario,
+              tiltakIds: activeRisikoscenario.tiltakIds.filter((id) => id !== tiltakId),
+            })
+          })
+        })
+      } else {
+        await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(() => {
+          setActiveRisikoscenario({
+            ...activeRisikoscenario,
+            tiltakIds: activeRisikoscenario.tiltakIds.filter((id) => id !== tiltakId),
+          })
+        })
+      }
+    })
+  }
+
   return (
     <div>
       <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true} />
@@ -153,6 +183,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
                 setIsEditTiltakFormActive={setIsEditTiltakFormActive}
                 isCreateTiltakFormActive={isCreateTiltakFormActive}
                 isAddExistingMode={isAddExistingMode}
+                customDelete={submitDeleteTiltak}
                 formRef={formRef}
               />
             )}
