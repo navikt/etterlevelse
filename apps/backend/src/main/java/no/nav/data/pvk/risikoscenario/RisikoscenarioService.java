@@ -8,9 +8,8 @@ import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepo;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepoCustom;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
-import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioRequest;
 import no.nav.data.pvk.tiltak.domain.TiltakRepo;
-import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -62,43 +61,19 @@ public class RisikoscenarioService {
         return risikoscenarioRepoCustom.findByKravNummer(kravNummer);
     }
 
-    @Deprecated
-    public RisikoscenarioRequest updateRelevantKravListe(RisikoscenarioRequest request) {
-        // FIXME: Avhengighet til Request i Service
-        var risikoscenario = get(request.getIdAsUUID());
-
-        //remove krav from list based on request krav to remove
-        List<Integer> newKravList = new ArrayList<>(CollectionUtils.removeAll(
-                risikoscenario.getRisikoscenarioData().getRelevanteKravNummer(),
-                request.getKravToDelete()).stream().toList());
-
-        //add new krav to list based on request krav to remove
-        newKravList.addAll(request.getKravToAdd());
-
-        //remove duplicates
-        List<Integer> uniqueKravList = newKravList.stream().distinct().collect(Collectors.toList());
-
-        request.setRelevanteKravNummer(uniqueKravList);
-        return request;
-    }
-
-    /* FIXME
     @Transactional
-    public RisikoscenarioRequest updateRelevantKravListe(UUID uuid, List<Integer> kravToDelete, List<Integer> kravToAdd) {
-        var risikoscenario = get(uuid);
-        List<Integer> newKravList = new ArrayList<>(risikoscenario.getRisikoscenarioData().getRelevanteKravNummer());
-        // Remove krav from list based on request krav to remove
-        newKravList.removeAll(kravToDelete);
-        // Add new krav to list based on request krav to remove
-        newKravList.addAll(request.getKravToAdd());
-
-        //remove duplicates
-        List<Integer> uniqueKravList = newKravList.stream().distinct().collect(Collectors.toList());
-
-        request.setRelevanteKravNummer(uniqueKravList);
-        return request;
+    public List<Risikoscenario> addRelevantKravToRisikoscenarioer(Integer kravnummer, List<String> risikoscenarioIder) {
+        List<Risikoscenario> res = new ArrayList<Risikoscenario>();
+        for (String id : risikoscenarioIder) {
+            Risikoscenario risikoscenario = get(UUID.fromString(id)); // Throws NotFoundEx if not exists
+            List<Integer> kravList = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer();
+            if (!kravList.contains(kravnummer)) {
+                kravList.add(kravnummer);
+            }
+            res.add(risikoscenarioRepo.save(risikoscenario));
+        }
+        return res;
     }
-    //*/
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Risikoscenario save(Risikoscenario risikoscenario, boolean isUpdate) {
@@ -139,4 +114,5 @@ public class RisikoscenarioService {
     public List<String> getTiltak(String uuid) {
         return tiltakRepo.getTiltakForRisikoscenario(uuid);
     }
+
 }

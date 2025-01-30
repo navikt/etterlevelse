@@ -10,10 +10,9 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioData;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 
-import static no.nav.data.common.utils.StreamUtils.copyOf;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 
@@ -33,11 +32,7 @@ public class RisikoscenarioRequest implements RequestElement {
     private Integer konsekvensNivaa;
     private String konsekvensNivaaBegrunnelse;
     private boolean generelScenario;
-    // felt verdiene som kommer fra frontend blir ignorert under lagring
-    // dette feltet brukes av frontend for visualisering og defualt verdier
-    private List<Integer> relevanteKravNummer;
-    private List<Integer> kravToAdd;
-    private List<Integer> kravToDelete;
+    // relevanteKravNummer blir manipulert i egne endepunkt, og er derfor ikke en del av request
 
     private Boolean ingenTiltak;
 
@@ -75,11 +70,11 @@ public class RisikoscenarioRequest implements RequestElement {
                 .konsekvensNivaa(konsekvensNivaa)
                 .konsekvensNivaaBegrunnelse(konsekvensNivaaBegrunnelse)
                 .generelScenario(generelScenario)
-                .relevanteKravNummer(copyOf(relevanteKravNummer))
                 .ingenTiltak(ingenTiltak)
                 .sannsynlighetsNivaaEtterTiltak(sannsynlighetsNivaaEtterTiltak)
                 .konsekvensNivaaEtterTiltak(konsekvensNivaaEtterTiltak)
                 .nivaaBegrunnelseEtterTiltak(nivaaBegrunnelseEtterTiltak)
+                .relevanteKravNummer(new ArrayList<Integer>())
                 .build();
 
         return Risikoscenario.builder()
@@ -98,12 +93,10 @@ public class RisikoscenarioRequest implements RequestElement {
         risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaa(konsekvensNivaa);
         risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaaBegrunnelse(konsekvensNivaaBegrunnelse);
         risikoscenarioToMerge.getRisikoscenarioData().setGenerelScenario(generelScenario);
-        risikoscenarioToMerge.getRisikoscenarioData().setRelevanteKravNummer(copyOf(relevanteKravNummer));
         risikoscenarioToMerge.getRisikoscenarioData().setIngenTiltak(ingenTiltak);
         risikoscenarioToMerge.getRisikoscenarioData().setSannsynlighetsNivaaEtterTiltak(sannsynlighetsNivaaEtterTiltak);
         risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaaEtterTiltak(konsekvensNivaaEtterTiltak);
         risikoscenarioToMerge.getRisikoscenarioData().setNivaaBegrunnelseEtterTiltak(nivaaBegrunnelseEtterTiltak);
-
     }
 }
 

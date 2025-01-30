@@ -23,7 +23,6 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -100,7 +98,7 @@ public class RisikoscenarioController {
     public ResponseEntity<RisikoscenarioResponse> createRisikoscenario(@RequestBody RisikoscenarioRequest request) {
         log.info("Create Risikoscenario");
 
-        var risikoscenario = risikoscenarioService.save(request.convertToRisikoscenario(), false);
+        Risikoscenario risikoscenario = risikoscenarioService.save(request.convertToRisikoscenario(), false);
 
         var response = RisikoscenarioResponse.buildFrom(risikoscenario);
         setTiltakAndKravDataForRelevantKravList(response);
@@ -112,6 +110,7 @@ public class RisikoscenarioController {
     @ApiResponse(description = "Risikoscenario updated")
     @PutMapping("/{id}")
     public ResponseEntity<RisikoscenarioResponse> updateRisikoscenario(@PathVariable UUID id, @Valid @RequestBody RisikoscenarioRequest request) {
+        // This endpoint ignores relevante krav
         log.info("Update Risikoscenario Document id={}", id);
 
         if (!Objects.equals(id, request.getIdAsUUID())) {
@@ -124,11 +123,8 @@ public class RisikoscenarioController {
             throw new NotFoundException(String.format("Could not find risikoscenario to be updated with id = %s ", request.getId()));
         }
 
-        RisikoscenarioRequest updatedRequest = risikoscenarioService.updateRelevantKravListe(request);
-
-        updatedRequest.mergeInto(risikoscenarioToUpdate);
+        request.mergeInto(risikoscenarioToUpdate);
         var risikoscenario = risikoscenarioService.save(risikoscenarioToUpdate, true);
-
         var response = RisikoscenarioResponse.buildFrom(risikoscenario);
         setTiltakAndKravDataForRelevantKravList(response);
 
@@ -155,26 +151,19 @@ public class RisikoscenarioController {
         }
     }
 
-    @Operation(summary = "Set krav on risikoscenarioer")
-    @ApiResponse(responseCode = "201", description = "Krav set on risikoscenarioer")
-    @PutMapping("/update/relevantKrav") // TODO: Revisitt. "/update/addRelevantKrav" / synch FE
-    @Transactional // FIXME: Flytt tx (og loop) til service
-    public ResponseEntity<List<RisikoscenarioResponse>> setRelevantKravForRisikoscenarioer(@RequestBody KravRisikoscenarioRequest request) {
-        log.info("Set relevantKrav for risikoscenarioer");
-        List<RisikoscenarioResponse> responses = new ArrayList<>();
-
-        request.getRisikoscenarioIder().forEach(risikoscenarioId -> {
-            var risikoscenario = risikoscenarioService.get(UUID.fromString(risikoscenarioId));
-            List<Integer> RelevanteKravNummer = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer();
-            // TODO: Vi må sjekke om den allerede finnes. (Kan evt. endre typen til Set<Integer>)
-            RelevanteKravNummer.add(request.getKravnummer());
-            var updatedRisikoscenario = risikoscenarioService.save(risikoscenario, true);
-            RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(updatedRisikoscenario);
-            setTiltakAndKravDataForRelevantKravList(response);
-            responses.add(response);
-        });
-
-        return ResponseEntity.ok(responses);
+    @Operation(summary = "Add krav to risikoscenarioer")
+    @ApiResponse(responseCode = "201", description = "Krav added to risikoscenarioer")
+    @PutMapping("/update/addRelevantKrav")
+    public ResponseEntity<List<RisikoscenarioResponse>> addRelevantKravToRisikoscenarioer(@RequestBody KravRisikoscenarioRequest request) {
+        log.info("Add relevantKrav for risikoscenarioer");
+        
+        List<Risikoscenario> updatedRisikoscenarioer =  risikoscenarioService.addRelevantKravToRisikoscenarioer(request.getKravnummer(), request.getRisikoscenarioIder());
+       
+        return ResponseEntity.ok(updatedRisikoscenarioer.stream()
+                .map(RisikoscenarioResponse::buildFrom)
+                .map(this::setTiltakAndKravDataForRelevantKravList)
+                .toList()
+        );
     }
 
     @Operation(summary = "Remove krav from risikoscenario")
@@ -230,7 +219,7 @@ public class RisikoscenarioController {
         }
     }
 
-    private void setTiltakAndKravDataForRelevantKravList(RisikoscenarioResponse risikoscenario) {
+    private RisikoscenarioResponse setTiltakAndKravDataForRelevantKravList(RisikoscenarioResponse risikoscenario) {
         // Set Tiltak...
         risikoscenario.setTiltakIds(risikoscenarioService.getTiltak(risikoscenario.getId().toString()));
 
@@ -240,6 +229,7 @@ public class RisikoscenarioController {
             kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
             kravShort.setNavn(kravList.get(0).getNavn());
         });
+        return risikoscenario;
     }
 
 }
