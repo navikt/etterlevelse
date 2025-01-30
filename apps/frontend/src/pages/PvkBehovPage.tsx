@@ -289,7 +289,7 @@ export const PvkBehovPage = () => {
                     )}
 
                     <ReadMore
-                      className="mt-10"
+                      className="mt-10 mb-2"
                       header="Lurer dere fortsatt på om det er behov for PVK?"
                     >
                       Personvernombudet (PVO) kan hjelpe dere å vurdere om dere skal gjøre en PVK.
