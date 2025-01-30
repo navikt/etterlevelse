@@ -29,6 +29,24 @@ import { user } from '../services/User'
 import { isDev } from '../util/config'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
+const getVariantForBLLButton = (
+  behandlingsLivslop: IBehandlingensLivslop | undefined
+): 'primary' | 'secondary' => {
+  return (behandlingsLivslop && behandlingsLivslop?.filer.length > 0) || behandlingsLivslop
+    ? 'secondary'
+    : 'primary'
+}
+
+const getVariantForPVKButton = (
+  pvkDokument: IPvkDokument | undefined,
+  behandlingsLivslop: IBehandlingensLivslop | undefined
+) => {
+  if (pvkDokument?.skalUtforePvk === false) return 'tertiary'
+  if ((behandlingsLivslop && behandlingsLivslop?.filer.length > 0) || behandlingsLivslop)
+    return 'primary'
+  return 'secondary'
+}
+
 export const DokumentasjonPage = () => {
   const navigate: NavigateFunction = useNavigate()
   const params: Readonly<
@@ -228,10 +246,10 @@ export const DokumentasjonPage = () => {
                           navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
                         }}
                         size="small"
-                        variant="secondary"
+                        variant="tertiary"
                         className="whitespace-nowrap"
                       >
-                        Endre dokumentegenskaper
+                        Redigér dokumentegenskaper
                       </Button>
 
                       {etterlevelseDokumentasjon.forGjenbruk && (
@@ -259,7 +277,7 @@ export const DokumentasjonPage = () => {
                               navigate(behandlingensLivlopUrl)
                             }}
                             size="small"
-                            variant="primary"
+                            variant={getVariantForBLLButton(behandlingsLivslop)}
                             className="whitespace-nowrap"
                           >
                             {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
@@ -283,7 +301,7 @@ export const DokumentasjonPage = () => {
                               navigate(pvkBehovUrl)
                             }}
                             size="small"
-                            variant="secondary"
+                            variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
                             className="whitespace-nowrap"
                           >
                             {pvkDokument ? 'Revurdér behov for PVK' : 'Vurdér behov for PVK'}
@@ -305,7 +323,7 @@ export const DokumentasjonPage = () => {
                               )
                             }}
                             size="small"
-                            variant="secondary"
+                            variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
                             className="whitespace-nowrap"
                           >
                             {pvkDokument.skalUtforePvk &&
