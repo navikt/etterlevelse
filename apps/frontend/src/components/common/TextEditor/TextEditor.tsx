@@ -211,7 +211,7 @@ const translations = {
   // Link
   'components.controls.link.linkTitle': 'Link Tittel',
   'components.controls.link.linkTarget': 'Link Url',
-  'components.controls.link.linkTargetOption': 'Åpen link i nytt vindu',
+  'components.controls.link.linkTargetOption': 'Åpen link i et nytt vindu',
   'components.controls.link.link': 'Link',
   'components.controls.link.unlink': 'Unlink',
 

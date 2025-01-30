@@ -336,7 +336,7 @@ export const BehandlingensLivslopPage = () => {
                           className="text-medium"
                           href={`${env.pollyBaseUrl}process/${behandling.id}`}
                         >
-                          {behandlingName(behandling)} (åpnes i nytt vindu)
+                          {behandlingName(behandling)} (åpnes i et nytt vindu)
                         </ExternalLink>
                       </List.Item>
                     ))}
@@ -372,7 +372,7 @@ export const BehandlingensLivslopPage = () => {
                     rel="noopener noreferrer"
                     aria-label="redigere etterlevelsesdokumentasjon"
                   >
-                    Dokumentegenskaper (åpnes i nytt vindu).
+                    Dokumentegenskaper (åpnes i et nytt vindu).
                   </Link>
                 </BodyShort>
 

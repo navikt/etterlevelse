@@ -271,7 +271,7 @@ export const PvkBehovPage = () => {
                             rel="noopener noreferrer"
                             aria-label="redigere etterlevelsesdokumentasjon"
                           >
-                            dere har tegnet behandlingens livsløp (åpnes i nytt vindu).
+                            dere har tegnet behandlingens livsløp (åpnes i et nytt vindu).
                           </Link>
                         </BodyShort>
                       )}
@@ -385,7 +385,7 @@ export const PvkBehovPage = () => {
                       {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
                         <List.Item key={behandling.nummer}>
                           <ExternalLink href={`${env.pollyBaseUrl}process/${behandling.id}`}>
-                            {behandlingName(behandling)} (åpnes i nytt vindu)
+                            {behandlingName(behandling)} (åpnes i et nytt vindu)
                           </ExternalLink>
                         </List.Item>
                       ))}
@@ -426,7 +426,7 @@ export const PvkBehovPage = () => {
                     rel="noopener noreferrer"
                     aria-label="redigere etterlevelsesdokumentasjon"
                   >
-                    Dokumentegenskaper (åpnes i nytt vindu).
+                    Dokumentegenskaper (åpnes i et nytt vindu).
                   </Link>
                 </BodyShort>
               </div>
