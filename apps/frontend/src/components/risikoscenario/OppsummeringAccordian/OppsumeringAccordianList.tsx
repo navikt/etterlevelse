@@ -9,6 +9,7 @@ import OppsumeringAccordianContent from './OppsumeringAccordianContent'
 
 interface IProps {
   risikoscenarioList: IRisikoscenario[]
+  allRisikoscenarioList: IRisikoscenario[]
   tiltakList: ITiltak[]
   formRef: RefObject<any>
   isUnsaved: boolean
@@ -16,7 +17,14 @@ interface IProps {
 }
 
 export const OppsumeringAccordianList = (props: IProps) => {
-  const { risikoscenarioList, tiltakList, formRef, isUnsaved, setIsUnsaved } = props
+  const {
+    risikoscenarioList,
+    allRisikoscenarioList,
+    tiltakList,
+    formRef,
+    isUnsaved,
+    setIsUnsaved,
+  } = props
   const [navigateUrl, setNavigateUrl] = useState<string>('')
   const url = new URL(window.location.href)
   const risikoscenarioId = url.searchParams.get('risikoscenario')
@@ -76,6 +84,7 @@ export const OppsumeringAccordianList = (props: IProps) => {
               <Accordion.Content>
                 <OppsumeringAccordianContent
                   risikoscenario={risikoscenario}
+                  allRisikoscenarioList={allRisikoscenarioList}
                   tiltakList={tiltakList}
                   formRef={formRef}
                 />

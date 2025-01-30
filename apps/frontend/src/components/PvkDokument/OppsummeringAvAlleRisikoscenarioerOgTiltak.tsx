@@ -231,6 +231,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                 <div className="my-5">
                   <OppsumeringAccordianList
                     risikoscenarioList={filteredRisikoscenarioList}
+                    allRisikoscenarioList={risikoscenarioList}
                     tiltakList={tiltakList}
                     formRef={formRef}
                     isUnsaved={isUnsaved}
