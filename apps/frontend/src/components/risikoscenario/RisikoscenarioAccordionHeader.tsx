@@ -7,7 +7,6 @@ interface IProps {
 
 export const RisikoscenarioAccordianHeader = (props: IProps) => {
   const { risikoscenario } = props
-  const WIP_tiltaksListe = []
 
   const ikkeFerdigBeskrevet =
     risikoscenario.konsekvensNivaa === 0 ||
@@ -15,7 +14,7 @@ export const RisikoscenarioAccordianHeader = (props: IProps) => {
     risikoscenario.konsekvensNivaaBegrunnelse === '' ||
     risikoscenario.sannsynlighetsNivaaBegrunnelse === ''
   const mangelfulScenario =
-    ikkeFerdigBeskrevet || (!risikoscenario.ingenTiltak && WIP_tiltaksListe.length === 0)
+    ikkeFerdigBeskrevet || (!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0)
   const ikkeFerdigVurdert =
     risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
     risikoscenario.konsekvensNivaaEtterTiltak === 0
@@ -45,7 +44,6 @@ export const IdentifiseringAvRisikoscenarioAccordianHeader = (props: IProps) => 
     risikoscenario.sannsynlighetsNivaa === 0 ||
     risikoscenario.konsekvensNivaaBegrunnelse === '' ||
     risikoscenario.sannsynlighetsNivaaBegrunnelse === ''
-  const WIP_tiltaksListe = []
 
   return (
     <Accordion.Header className="z-0">
@@ -53,7 +51,7 @@ export const IdentifiseringAvRisikoscenarioAccordianHeader = (props: IProps) => 
       <div className="flex gap-2">
         {ikkeFerdigBeskrevet && <Tag variant="alt2">Det er felter som ikke er ferdig utfylt</Tag>}
         {risikoscenario.ingenTiltak && <Tag variant="neutral">Tiltak ikke aktuelt</Tag>}
-        {!risikoscenario.ingenTiltak && WIP_tiltaksListe.length === 0 && (
+        {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
           <Tag variant="alt1">Savner tiltak</Tag>
         )}
       </div>
