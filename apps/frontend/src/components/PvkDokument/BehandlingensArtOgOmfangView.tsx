@@ -104,7 +104,7 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
 
               <ReadMore
                 className="mt-5 max-w-[75ch]"
-                header="Hvordan kan vi komme med gode estimater?"
+                header="Hvordan kan vi komme med gode estimater på art og omfang?"
               >
                 Det blir ofte vanskelig å tallfeste noen personkategorier, for eksempel når det er
                 snakk om antall brukere eller saksbehandlere. Det er tilstrekkelig å oppgi ca.
