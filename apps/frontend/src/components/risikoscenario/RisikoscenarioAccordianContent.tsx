@@ -106,6 +106,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
                 setTiltakList={setTiltakList}
                 setIsEditTiltakFormActive={setIsEditTiltakFormActive}
                 isCreateTiltakFormActive={isCreateTiltakFormActive}
+                formRef={formRef}
               />
             )}
 

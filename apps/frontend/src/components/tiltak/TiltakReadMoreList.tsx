@@ -1,8 +1,10 @@
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Button, ReadMore } from '@navikt/ds-react'
-import { useState } from 'react'
+import { RefObject, useState } from 'react'
+import { updateTiltak } from '../../api/TiltakApi'
 import { IRisikoscenario, ITiltak } from '../../constants'
 import TiltakView from './TiltakView'
+import TiltakForm from './edit/TiltakForm'
 
 interface IProps {
   risikoscenario: IRisikoscenario
@@ -11,6 +13,7 @@ interface IProps {
   risikoscenarioList: IRisikoscenario[]
   setIsEditTiltakFormActive: (state: boolean) => void
   isCreateTiltakFormActive: boolean
+  formRef?: RefObject<any>
 }
 
 export const TiltakReadMoreList = (props: IProps) => {
@@ -21,6 +24,7 @@ export const TiltakReadMoreList = (props: IProps) => {
     risikoscenarioList,
     setIsEditTiltakFormActive,
     isCreateTiltakFormActive,
+    formRef,
   } = props
   const [activeTiltak, setActiveTiltak] = useState<string>('')
 
@@ -36,10 +40,12 @@ export const TiltakReadMoreList = (props: IProps) => {
                 setActiveTiltak={setActiveTiltak}
                 risikoscenario={risikoscenario}
                 tiltak={tiltak}
+                tiltakList={tiltakList}
                 setTiltakList={setTiltakList}
                 risikoscenarioList={risikoscenarioList}
                 setIsEditTiltakFormActive={setIsEditTiltakFormActive}
                 isCreateTiltakFormActive={isCreateTiltakFormActive}
+                formRef={formRef}
               />
             </div>
           )
@@ -48,15 +54,10 @@ export const TiltakReadMoreList = (props: IProps) => {
   )
 }
 
-interface ITiltakListContentProps {
+interface ITiltakListContentProps extends IProps {
   activeTiltak: string
   setActiveTiltak: (state: string) => void
-  risikoscenario: IRisikoscenario
   tiltak: ITiltak
-  setTiltakList: (state: ITiltak[]) => void
-  risikoscenarioList: IRisikoscenario[]
-  setIsEditTiltakFormActive: (state: boolean) => void
-  isCreateTiltakFormActive: boolean
 }
 
 const TiltakListContent = (props: ITiltakListContentProps) => {
@@ -65,11 +66,30 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
     setActiveTiltak,
     risikoscenario,
     tiltak,
+    tiltakList,
+    setTiltakList,
     risikoscenarioList,
     setIsEditTiltakFormActive,
     isCreateTiltakFormActive,
+    formRef,
   } = props
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
+
+  const submit = async (submitedValues: ITiltak) => {
+    await updateTiltak(submitedValues).then((response) => {
+      setTiltakList(
+        tiltakList.map((tiltak) => {
+          if (tiltak.id === response.id) {
+            return { ...response }
+          } else {
+            return tiltak
+          }
+        })
+      )
+      setIsEditMode(false)
+    })
+  }
+
   return (
     <div key={risikoscenario.id + '_' + tiltak.id}>
       {!isEditMode && (
@@ -86,6 +106,17 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
         >
           <TiltakView tiltak={tiltak} risikoscenarioList={risikoscenarioList} />
         </ReadMore>
+      )}
+
+      {isEditMode && (
+        <TiltakForm
+          title="Redigér tiltak"
+          initialValues={tiltak}
+          pvkDokumentId={tiltak.pvkDokumentId}
+          submit={submit}
+          close={() => setIsEditMode(false)}
+          formRef={formRef}
+        />
       )}
 
       {activeTiltak === tiltak.id && !isEditMode && !isCreateTiltakFormActive && (
