@@ -5,6 +5,7 @@ import { getRisikoscenario, updateRisikoscenario } from '../../api/Risikoscenari
 import { createTiltakAndRelasjonWithRisikoscenario } from '../../api/TiltakApi'
 import { IRisikoscenario, ITiltak } from '../../constants'
 import TiltakReadMoreList from '../tiltak/TiltakReadMoreList'
+import LeggTilEksisterendeTiltak from '../tiltak/edit/LeggTilEksisterendeTiltak'
 import TiltakForm from '../tiltak/edit/TiltakForm'
 import RisikoscenarioView from './RisikoscenarioView'
 import SlettOvrigRisikoscenario from './SlettOvrigRisikoscenario'
@@ -34,6 +35,8 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   const [isCreateTiltakFormActive, setIsCreateTiltakFormActive] = useState<boolean>(false)
+  const [isAddExistingMode, setIsAddExisitingMode] = useState<boolean>(false)
+
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario) => {
@@ -106,11 +109,12 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
                 setTiltakList={setTiltakList}
                 setIsEditTiltakFormActive={setIsEditTiltakFormActive}
                 isCreateTiltakFormActive={isCreateTiltakFormActive}
+                isAddExistingMode={isAddExistingMode}
                 formRef={formRef}
               />
             )}
 
-            {isCreateTiltakFormActive && !isEditTiltakFormActive && (
+            {isCreateTiltakFormActive && (
               <TiltakForm
                 title="Opprett nytt tiltak"
                 initialValues={{} as ITiltak}
@@ -120,12 +124,26 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
                 formRef={formRef}
               />
             )}
-            {!isCreateTiltakFormActive && !isEditTiltakFormActive && (
+
+            {isAddExistingMode && (
+              <LeggTilEksisterendeTiltak
+                risikoscenario={activeRisikoscenario}
+                tiltakList={tiltakList}
+                setIsAddExisitingMode={setIsAddExisitingMode}
+                formRef={formRef}
+              />
+            )}
+
+            {!isCreateTiltakFormActive && !isEditTiltakFormActive && !isAddExistingMode && (
               <div className="mt-5 flex gap-2">
                 <Button type="button" onClick={() => setIsCreateTiltakFormActive(true)}>
                   Opprett nytt tiltak
                 </Button>
-                <Button type="button" variant="secondary">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => setIsAddExisitingMode(true)}
+                >
                   Legg til eksisterende tiltak
                 </Button>
               </div>
@@ -133,7 +151,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
           </div>
         )}
 
-        {!isCreateTiltakFormActive && !isEditTiltakFormActive && (
+        {!isCreateTiltakFormActive && !isEditTiltakFormActive && !isAddExistingMode && (
           <div className="mt-3">
             <IngenTiltakField
               risikoscenario={activeRisikoscenario}

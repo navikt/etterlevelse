@@ -14,6 +14,7 @@ interface IProps {
   risikoscenarioList: IRisikoscenario[]
   setIsEditTiltakFormActive: (state: boolean) => void
   isCreateTiltakFormActive: boolean
+  isAddExistingMode: boolean
   formRef?: RefObject<any>
 }
 
@@ -25,6 +26,7 @@ export const TiltakReadMoreList = (props: IProps) => {
     risikoscenarioList,
     setIsEditTiltakFormActive,
     isCreateTiltakFormActive,
+    isAddExistingMode,
     formRef,
   } = props
   const [activeTiltak, setActiveTiltak] = useState<string>('')
@@ -46,6 +48,7 @@ export const TiltakReadMoreList = (props: IProps) => {
                 risikoscenarioList={risikoscenarioList}
                 setIsEditTiltakFormActive={setIsEditTiltakFormActive}
                 isCreateTiltakFormActive={isCreateTiltakFormActive}
+                isAddExistingMode={isAddExistingMode}
                 formRef={formRef}
               />
             </div>
@@ -72,6 +75,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
     risikoscenarioList,
     setIsEditTiltakFormActive,
     isCreateTiltakFormActive,
+    isAddExistingMode,
     formRef,
   } = props
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
@@ -145,32 +149,35 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
         />
       )}
 
-      {activeTiltak === tiltak.id && !isEditMode && !isCreateTiltakFormActive && (
-        <div className="flex gap-2 mt-5">
-          <Button
-            type="button"
-            variant="tertiary"
-            size="small"
-            icon={<PencilIcon title="" aria-hidden />}
-            onClick={() => {
-              setIsEditTiltakFormActive(true)
-              setIsEditMode(true)
-            }}
-          >
-            Redigér tiltak
-          </Button>
+      {activeTiltak === tiltak.id &&
+        !isEditMode &&
+        !isCreateTiltakFormActive &&
+        !isAddExistingMode && (
+          <div className="flex gap-2 mt-5">
+            <Button
+              type="button"
+              variant="tertiary"
+              size="small"
+              icon={<PencilIcon title="" aria-hidden />}
+              onClick={() => {
+                setIsEditTiltakFormActive(true)
+                setIsEditMode(true)
+              }}
+            >
+              Redigér tiltak
+            </Button>
 
-          <Button
-            type="button"
-            variant="tertiary"
-            size="small"
-            icon={<TrashIcon title="" aria-hidden />}
-            onClick={() => setIsDeleteModalOpen(true)}
-          >
-            Slett tiltak
-          </Button>
-        </div>
-      )}
+            <Button
+              type="button"
+              variant="tertiary"
+              size="small"
+              icon={<TrashIcon title="" aria-hidden />}
+              onClick={() => setIsDeleteModalOpen(true)}
+            >
+              Slett tiltak
+            </Button>
+          </div>
+        )}
 
       {isDeleteModalOpen && (
         <Modal

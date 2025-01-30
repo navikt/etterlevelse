@@ -46,7 +46,7 @@ export const LeggTilEksisterendeRisikoscenario = (props: IProps) => {
   }
 
   const submit = async (request: IKravRisikoscenarioRelasjon) => {
-    updateKravForRisikoscenarioer(request).then((response) => {
+    await updateKravForRisikoscenarioer(request).then((response) => {
       setRisikoscenarioer(
         risikoscenarioer.filter(
           (risikoscenario) => !selectedRisikoscenarioer.includes(risikoscenario.id)

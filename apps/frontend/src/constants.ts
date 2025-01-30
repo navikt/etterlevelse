@@ -580,7 +580,7 @@ export interface IKravRisikoscenarioRelasjon {
 }
 
 export interface ITiltakRisikoscenarioRelasjon {
-  riskoscenarioId: string
+  risikoscenarioId: string
   tiltakIds: string[]
 }
 export interface IKravReference {
