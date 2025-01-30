@@ -1,5 +1,5 @@
 import { PencilIcon } from '@navikt/aksel-icons'
-import { Button, Label } from '@navikt/ds-react'
+import { Alert, Button, Label } from '@navikt/ds-react'
 import { RefObject, useState } from 'react'
 import { getRisikoscenario, updateRisikoscenario } from '../../api/RisikoscenarioApi'
 import { createTiltakAndRelasjonWithRisikoscenario } from '../../api/TiltakApi'
@@ -80,7 +80,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
     <div>
       <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={false} />
 
-      <div className="mt-5 flex gap-2 items-center">
+      <div className="mt-12 flex gap-2 items-center">
         <Button
           variant="tertiary"
           type="button"
@@ -101,6 +101,12 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
         <Label>Følgende tiltak gjelder for dette risikoscenarioet</Label>
         {!risikoscenario.ingenTiltak && (
           <div>
+            {risikoscenario.tiltakIds.length === 0 && (
+              <Alert className="mt-5 mb-9" variant="warning">
+                Dere har ikke lagt inn tiltak
+              </Alert>
+            )}
+
             {risikoscenario.tiltakIds.length !== 0 && (
               <TiltakReadMoreList
                 risikoscenario={risikoscenario}

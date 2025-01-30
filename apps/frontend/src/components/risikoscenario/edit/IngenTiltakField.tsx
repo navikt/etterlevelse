@@ -20,7 +20,7 @@ export const IngenTiltakField = (props: IProps) => {
         onSubmit={submit}
         innerRef={formRef}
       >
-        {({ submitForm, values, resetForm }) => (
+        {({ submitForm, values, resetForm, dirty }) => (
           <Form>
             <Field name="ingenTiltak">
               {(fieldProps: FieldProps) => (
@@ -38,15 +38,17 @@ export const IngenTiltakField = (props: IProps) => {
               )}
             </Field>
 
-            <Button
-              type="button"
-              onClick={() => {
-                submitForm()
-                resetForm({ values })
-              }}
-            >
-              Lagre
-            </Button>
+            {dirty && (
+              <Button
+                type="button"
+                onClick={() => {
+                  submitForm()
+                  resetForm({ values })
+                }}
+              >
+                Lagre
+              </Button>
+            )}
           </Form>
         )}
       </Formik>

@@ -28,8 +28,9 @@ export const RisikoscenarioView = (props: IProps) => {
         />
       )}
       <BodyLong className="mt-5">{risikoscenario.beskrivelse}</BodyLong>
+
       {risikoscenario.generelScenario && (
-        <BodyLong className="mt-5">
+        <BodyLong className="mt-8">
           Dette risikoscenarioet er ikke tilknyttet spesifikke etterlevelseskrav.
         </BodyLong>
       )}
@@ -51,7 +52,7 @@ export const RisikoscenarioView = (props: IProps) => {
         </ReadMore>
       )}
 
-      <div className="mt-5">
+      <div className="mt-12">
         <RisikoscenarioTag
           level={risikoscenario.sannsynlighetsNivaa}
           text={getSannsynlighetsnivaaText(risikoscenario.sannsynlighetsNivaa)}
@@ -65,7 +66,7 @@ export const RisikoscenarioView = (props: IProps) => {
         <BodyLong className="mt-5">{risikoscenario.sannsynlighetsNivaaBegrunnelse}</BodyLong>
       )}
 
-      <div className="mt-5">
+      <div className="mt-12">
         <RisikoscenarioTag
           level={risikoscenario.konsekvensNivaa}
           text={getKonsekvenssnivaaText(risikoscenario.konsekvensNivaa)}

@@ -158,7 +158,10 @@ export const PvkDokumentPage = () => {
                       orientation="horizontal"
                     >
                       {StepTitle.map((title, index) => {
-                        const stepHref = window.location.pathname.slice(0, -1) + (index + 1)
+                        let stepHref = window.location.pathname.slice(0, -1) + (index + 1)
+                        if (index + 1 === 5) {
+                          stepHref += '?tab=risikoscenarioer&filter=alle'
+                        }
                         return (
                           <Stepper.Step key={title} href={stepHref}>
                             {title}

@@ -155,7 +155,10 @@ export const OversiktView = (props: IProps) => {
             </FormSummary.Answer>
 
             {StepTitle.slice(1).map((title, index) => {
-              const panelHref = window.location.pathname.slice(0, -1) + (index + 2)
+              let panelHref = window.location.pathname.slice(0, -1) + (index + 2)
+              if (index + 2 === 5) {
+                panelHref += '?tab=risikoscenarioer&filter=alle'
+              }
               return (
                 <FormSummaryPanel
                   key={title}

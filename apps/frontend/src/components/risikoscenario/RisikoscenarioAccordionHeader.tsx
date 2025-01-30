@@ -25,7 +25,7 @@ export const RisikoscenarioAccordianHeader = (props: IProps) => {
   return (
     <Accordion.Header>
       {risikoscenario.navn}
-      <div className="flex gap-2">
+      <div className="flex gap-2 mt-1">
         {mangelfulScenario && <Tag variant="alt2">Scenario er mangelfullt </Tag>}
         {risikoscenario.ingenTiltak && <Tag variant="neutral">Tiltak ikke aktuelt</Tag>}
         {!risikoscenario.ingenTiltak && ikkeFerdigVurdert && (
@@ -48,7 +48,7 @@ export const IdentifiseringAvRisikoscenarioAccordianHeader = (props: IProps) => 
   return (
     <Accordion.Header className="z-0">
       {risikoscenario.navn}
-      <div className="flex gap-2">
+      <div className="flex gap-2 mt-1">
         {ikkeFerdigBeskrevet && <Tag variant="alt2">Det er felter som ikke er ferdig utfylt</Tag>}
         {risikoscenario.ingenTiltak && <Tag variant="neutral">Tiltak ikke aktuelt</Tag>}
         {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
