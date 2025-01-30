@@ -1,7 +1,14 @@
 import { Accordion, Alert, Button, ReadMore } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
-import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, TKravQL } from '../../../constants'
+import { getTiltakByPvkDokumentId } from '../../../api/TiltakApi'
+import {
+  ERisikoscenarioType,
+  IPvkDokument,
+  IRisikoscenario,
+  ITiltak,
+  TKravQL,
+} from '../../../constants'
 import AccordianAlertModal from '../AccordianAlertModal'
 import CreateRisikoscenario from '../edit/CreateRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/LeggTilEksisterendeRisikoscenario'
@@ -23,8 +30,10 @@ export const KravRisikoscenario = (props: IProps) => {
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
+  const [alleRisikoscenarioer, setAlleRisikoscenarioer] = useState<IRisikoscenario[]>([])
   const [risikoscenarioer, setRisikoscenarioer] = useState<IRisikoscenario[]>([])
   const [risikoscenarioForKrav, setRisikoscenarioForKrav] = useState<IRisikoscenario[]>([])
+  const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
   const [activeRisikoscenarioId, setActiveRisikoscenarioId] = useState<string>('')
   const [selectedRisikoscenarioId, setSelectedRisikoscenarioId] = useState<string>('')
   const [editButtonClicked, setEditButtonClicked] = useState<string>('')
@@ -32,11 +41,14 @@ export const KravRisikoscenario = (props: IProps) => {
   useEffect(() => {
     ;(async () => {
       if (pvkDokument && krav) {
-        getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.KRAV).then(
+        await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
           (response) => {
+            setAlleRisikoscenarioer(response.content)
+
             setRisikoscenarioer(
               response.content.filter(
                 (risikoscenario) =>
+                  !risikoscenario.generelScenario &&
                   risikoscenario.relevanteKravNummer.filter(
                     (relevantekrav) => relevantekrav.kravNummer === krav.kravNummer
                   ).length === 0
@@ -45,6 +57,7 @@ export const KravRisikoscenario = (props: IProps) => {
             setRisikoscenarioForKrav(
               response.content.filter(
                 (risikoscenario) =>
+                  !risikoscenario.generelScenario &&
                   risikoscenario.relevanteKravNummer.filter(
                     (relevantekrav) =>
                       relevantekrav.kravNummer === krav.kravNummer &&
@@ -54,6 +67,10 @@ export const KravRisikoscenario = (props: IProps) => {
             )
           }
         )
+
+        await getTiltakByPvkDokumentId(pvkDokument.id).then((response) => {
+          setTiltakList(response.content)
+        })
       }
     })()
   }, [krav, pvkDokument])
@@ -111,12 +128,15 @@ export const KravRisikoscenario = (props: IProps) => {
                       <Accordion.Content>
                         <KravRisikoscenarioAccordionContent
                           risikoscenario={risikoscenario}
+                          alleRisikoscenarioer={alleRisikoscenarioer}
                           isCreateMode={isCreateMode}
                           kravnummer={krav.kravNummer}
                           risikoscenarioer={risikoscenarioer}
                           setRisikoscenarioer={setRisikoscenarioer}
                           risikoscenarioForKrav={risikoscenarioForKrav}
                           setRisikoscenarioForKrav={setRisikoscenarioForKrav}
+                          tiltakList={tiltakList}
+                          setTiltakList={setTiltakList}
                           formRef={formRef}
                         />
                       </Accordion.Content>
