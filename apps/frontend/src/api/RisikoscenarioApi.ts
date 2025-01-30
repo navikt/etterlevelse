@@ -73,10 +73,13 @@ export const updateRisikoscenario = async (risikoscenario: IRisikoscenario) => {
 
 export const updateKravForRisikoscenarioer = async (request: IKravRisikoscenarioRelasjon) => {
   return (
-    await axios.put<IRisikoscenario[]>(`${env.backendBaseUrl}/risikoscenario/update/relevantKrav`, {
-      kravnummer: request.kravnummer,
-      risikoscenarioIder: request.risikoscenarioIder,
-    })
+    await axios.put<IRisikoscenario[]>(
+      `${env.backendBaseUrl}/risikoscenario/update/addRelevantKrav`,
+      {
+        kravnummer: request.kravnummer,
+        risikoscenarioIder: request.risikoscenarioIder,
+      }
+    )
   ).data
 }
 
