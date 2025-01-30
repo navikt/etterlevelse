@@ -11,15 +11,16 @@ export const TiltakView = (props: IProps) => {
 
   return (
     <div>
-      <div className="my-3">
+      <div className="my-3 flex gap-2">
+        <Label>Tiltaksbeskrivelse:</Label>
         <BodyLong>{tiltak.beskrivelse}</BodyLong>
       </div>
       <div className="flex gap-2">
-        <Label>Tiltaksansvarlig</Label>
+        <Label>Tiltaksansvarlig:</Label>
         <BodyLong>{tiltak.ansvarlig.fullName}</BodyLong>
       </div>
       <div className="mt-3 flex gap-2">
-        <Label>Tiltaksfrist</Label>
+        <Label>Tiltaksfrist:</Label>
         <BodyLong>{tiltak.frist}</BodyLong>
       </div>
 
@@ -30,7 +31,7 @@ export const TiltakView = (props: IProps) => {
           <BodyLong>Tiltaket er ikke gjenbrukt ved andre risikoscenarioer</BodyLong>
         )}
 
-        {tiltak.risikoscenarioIds.length !== 0 && (
+        {tiltak.risikoscenarioIds.length !== 0 && risikoscenarioList && (
           <List as="ul">
             {risikoscenarioList
               .filter((risikoscenario) => tiltak.risikoscenarioIds.includes(risikoscenario.id))

@@ -27,15 +27,19 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
     formRef,
   } = props
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
+  const [allRisikoscenarioList, setAllRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
   const navigate = useNavigate()
 
   useEffect(() => {
     if (pvkDokument) {
       ;(async () => {
-        await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.GENERAL).then(
+        await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
           (risikoscenarioer) => {
-            setRisikoscenarioList(risikoscenarioer.content)
+            setAllRisikoscenarioList(risikoscenarioer.content)
+            setRisikoscenarioList(
+              risikoscenarioer.content.filter((risikoscenario) => risikoscenario.generelScenario)
+            )
           }
         )
         await getTiltakByPvkDokumentId(pvkDokument.id).then((response) => {
@@ -107,6 +111,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
             <div className="my-5">
               <RisikoscenarioAccordianList
                 risikoscenarioList={risikoscenarioList}
+                allRisikoscenarioList={allRisikoscenarioList}
                 tiltakList={tiltakList}
                 setTiltakList={setTiltakList}
                 setRisikoscenarioList={setRisikoscenarioList}

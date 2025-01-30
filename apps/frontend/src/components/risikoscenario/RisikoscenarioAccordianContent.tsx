@@ -1,9 +1,10 @@
 import { PencilIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, Label } from '@navikt/ds-react'
+import { Button, Label } from '@navikt/ds-react'
 import { RefObject, useState } from 'react'
 import { getRisikoscenario, updateRisikoscenario } from '../../api/RisikoscenarioApi'
 import { createTiltakAndRelasjonWithRisikoscenario } from '../../api/TiltakApi'
 import { IRisikoscenario, ITiltak } from '../../constants'
+import TiltakReadMoreList from '../tiltak/TiltakReadMoreList'
 import TiltakForm from '../tiltak/edit/TiltakForm'
 import RisikoscenarioView from './RisikoscenarioView'
 import SlettOvrigRisikoscenario from './SlettOvrigRisikoscenario'
@@ -13,6 +14,7 @@ import RisikoscenarioModalForm from './edit/RisikoscenarioModalForm'
 interface IProps {
   risikoscenario: IRisikoscenario
   risikoscenarioer: IRisikoscenario[]
+  allRisikoscenarioList: IRisikoscenario[]
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
   setRisikoscenarioer: (state: IRisikoscenario[]) => void
@@ -23,6 +25,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
   const {
     risikoscenario,
     risikoscenarioer,
+    allRisikoscenarioList,
     tiltakList,
     setTiltakList,
     setRisikoscenarioer,
@@ -95,13 +98,12 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
         {!risikoscenario.ingenTiltak && (
           <div>
             {risikoscenario.tiltakIds.length !== 0 && (
-              <div>
-                {tiltakList
-                  .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
-                  .map((tiltak) => (
-                    <BodyLong key={tiltak.id}>{tiltak.navn}</BodyLong>
-                  ))}
-              </div>
+              <TiltakReadMoreList
+                risikoscenario={risikoscenario}
+                risikoscenarioList={allRisikoscenarioList}
+                tiltakList={tiltakList}
+                setTiltakList={setTiltakList}
+              />
             )}
 
             {isCreateTiltakFormActive && (

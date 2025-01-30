@@ -8,6 +8,7 @@ import { IdentifiseringAvRisikoscenarioAccordianHeader } from './RisikoscenarioA
 
 interface IProps {
   risikoscenarioList: IRisikoscenario[]
+  allRisikoscenarioList: IRisikoscenario[]
   setRisikoscenarioList: (state: IRisikoscenario[]) => void
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
@@ -15,7 +16,14 @@ interface IProps {
 }
 
 export const RisikoscenarioAccordianList = (props: IProps) => {
-  const { risikoscenarioList, tiltakList, setTiltakList, setRisikoscenarioList, formRef } = props
+  const {
+    risikoscenarioList,
+    allRisikoscenarioList,
+    tiltakList,
+    setTiltakList,
+    setRisikoscenarioList,
+    formRef,
+  } = props
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [navigateUrl, setNavigateUrl] = useState<string>('')
   const url = new URL(window.location.href)
@@ -71,6 +79,7 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
                   <RisikoscenarioAccordionContent
                     risikoscenario={risikoscenario}
                     risikoscenarioer={risikoscenarioList}
+                    allRisikoscenarioList={allRisikoscenarioList}
                     tiltakList={tiltakList}
                     setTiltakList={setTiltakList}
                     setRisikoscenarioer={setRisikoscenarioList}
