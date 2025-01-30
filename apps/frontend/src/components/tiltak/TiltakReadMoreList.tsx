@@ -137,7 +137,10 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
           initialValues={tiltak}
           pvkDokumentId={tiltak.pvkDokumentId}
           submit={submit}
-          close={() => setIsEditMode(false)}
+          close={() => {
+            setIsEditMode(false)
+            setIsEditTiltakFormActive(false)
+          }}
           formRef={formRef}
         />
       )}
