@@ -92,6 +92,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
           }
         })
       )
+      setIsEditTiltakFormActive(false)
       setIsEditMode(false)
     })
   }
