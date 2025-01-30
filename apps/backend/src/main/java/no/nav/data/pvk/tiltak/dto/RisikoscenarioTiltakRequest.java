@@ -14,6 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RisikoscenarioTiltakRequest {
-    private String riskoscenarioId;
+    private String risikoscenarioId;
     private List<String> tiltakIds;
 }

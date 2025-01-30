@@ -199,9 +199,9 @@ public class RisikoscenarioController {
     @ApiResponse(responseCode = "201", description = "Tiltak added to risikoscenario")
     @PutMapping("/update/addRelevanteTiltak")
     public ResponseEntity<RisikoscenarioResponse> updateRisikoscenarioAddTiltak(@RequestBody RisikoscenarioTiltakRequest request) {
-        log.info("Add Tiltak to risikoscenario id={}", request.getRiskoscenarioId());
+        log.info("Add Tiltak to risikoscenario id={}", request.getRisikoscenarioId());
         try {
-            Risikoscenario risikoscenario = risikoscenarioService.addTiltak(request.getRiskoscenarioId(), request.getTiltakIds());
+            Risikoscenario risikoscenario = risikoscenarioService.addTiltak(request.getRisikoscenarioId(), request.getTiltakIds());
             RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenario);
             setTiltakAndKravDataForRelevantKravList(response);
             return ResponseEntity.ok(response);
