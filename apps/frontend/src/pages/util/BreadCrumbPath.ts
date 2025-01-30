@@ -11,7 +11,7 @@ export const temaBreadCrumbPath: IBreadCrumbPath = {
 }
 
 export const dokumentasjonerBreadCrumbPath: IBreadCrumbPath = {
-  pathName: 'Dokumenter etterlevelse',
+  pathName: 'Dokumentere etterlevelse',
   href: '/dokumentasjoner',
 }
 
