@@ -1,9 +1,13 @@
 import { PencilIcon } from '@navikt/aksel-icons'
 import { Button, Label } from '@navikt/ds-react'
 import { RefObject, useState } from 'react'
-import { getRisikoscenario, updateRisikoscenario } from '../../../api/RisikoscenarioApi'
+import {
+  addTiltakToRisikoscenario,
+  getRisikoscenario,
+  updateRisikoscenario,
+} from '../../../api/RisikoscenarioApi'
 import { createTiltakAndRelasjonWithRisikoscenario } from '../../../api/TiltakApi'
-import { IRisikoscenario, ITiltak } from '../../../constants'
+import { IRisikoscenario, ITiltak, ITiltakRisikoscenarioRelasjon } from '../../../constants'
 import TiltakReadMoreList from '../../tiltak/TiltakReadMoreList'
 import LeggTilEksisterendeTiltak from '../../tiltak/edit/LeggTilEksisterendeTiltak'
 import TiltakForm from '../../tiltak/edit/TiltakForm'
@@ -93,8 +97,18 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
         tiltakIds: [...activeRisikoscenario.tiltakIds, response.id],
       })
       setTiltakList([...tiltakList, response])
+
       setIsCreateTiltakFormActive(false)
-      window.location.reload()
+    })
+  }
+
+  const submitExistingTiltak = async (request: ITiltakRisikoscenarioRelasjon) => {
+    await addTiltakToRisikoscenario(request).then(() => {
+      setActiveRisikoscenario({
+        ...activeRisikoscenario,
+        tiltakIds: [...activeRisikoscenario.tiltakIds, ...request.tiltakIds],
+      })
+      setIsAddExisitingMode(false)
     })
   }
 
@@ -132,7 +146,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
           <div>
             {risikoscenario.tiltakIds.length !== 0 && (
               <TiltakReadMoreList
-                risikoscenario={risikoscenario}
+                risikoscenario={activeRisikoscenario}
                 risikoscenarioList={alleRisikoscenarioer}
                 tiltakList={tiltakList}
                 setTiltakList={setTiltakList}
@@ -159,6 +173,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
                 risikoscenario={activeRisikoscenario}
                 tiltakList={tiltakList}
                 setIsAddExisitingMode={setIsAddExisitingMode}
+                customSubmit={submitExistingTiltak}
                 formRef={formRef}
               />
             )}

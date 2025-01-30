@@ -8,11 +8,12 @@ interface IProps {
   risikoscenario: IRisikoscenario
   tiltakList: ITiltak[]
   setIsAddExisitingMode: (state: boolean) => void
+  customSubmit?: (request: ITiltakRisikoscenarioRelasjon) => void
   formRef?: RefObject<any>
 }
 
 export const LeggTilEksisterendeTiltak = (props: IProps) => {
-  const { risikoscenario, tiltakList, setIsAddExisitingMode, formRef } = props
+  const { risikoscenario, tiltakList, setIsAddExisitingMode, customSubmit, formRef } = props
   const [selectedTiltak, setSelectedTiltak] = useState<string[]>([])
 
   const addTiltak = (tiltakId: string, fieldProps: FieldProps) => {
@@ -39,7 +40,7 @@ export const LeggTilEksisterendeTiltak = (props: IProps) => {
   return (
     <div className="mt-5">
       <Formik
-        onSubmit={submit}
+        onSubmit={customSubmit ? customSubmit : submit}
         initialValues={
           { risikoscenarioId: risikoscenario.id, tiltakIds: [] } as ITiltakRisikoscenarioRelasjon
         }
