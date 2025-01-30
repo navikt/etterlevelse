@@ -130,6 +130,7 @@ public class RisikoscenarioService {
     /**
      * Returns false if nothing was removed
      */
+    @Transactional(propagation = Propagation.REQUIRED)
     public boolean removeTiltak(String id, String tiltakId) {
         int removed = tiltakRepo.deleteTiltakRisikoscenarioRelation(id, tiltakId);
         return removed > 0;
