@@ -380,42 +380,38 @@ export const PvkBehovPage = () => {
                   Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:
                 </Label>
                 {etterlevelseDokumentasjon.behandlinger && (
-                  <BodyLong>
-                    <List>
-                      {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
-                        <List.Item key={behandling.nummer}>
-                          <ExternalLink href={`${env.pollyBaseUrl}process/${behandling.id}`}>
-                            {behandlingName(behandling)}
-                          </ExternalLink>
-                        </List.Item>
-                      ))}
-                    </List>
-                  </BodyLong>
+                  <List>
+                    {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
+                      <List.Item key={behandling.nummer}>
+                        <ExternalLink href={`${env.pollyBaseUrl}process/${behandling.id}`}>
+                          {behandlingName(behandling)}
+                        </ExternalLink>
+                      </List.Item>
+                    ))}
+                  </List>
                 )}
 
                 <div className="mb-2.5">
                   <Label>ROS-dokumentasjon:</Label>
-                  <BodyShort>
-                    <List>
-                      {etterlevelseDokumentasjon.risikovurderinger
-                        ? etterlevelseDokumentasjon.risikovurderinger.map((ros) => {
-                            const rosReg = /\[(.+)]\((.+)\)/i
-                            const rosParts = ros.match(rosReg)
-                            if (rosParts)
-                              return (
-                                <List.Item key={ros}>
-                                  <ExternalLink href={rosParts[2]}>{rosParts[1]}</ExternalLink>
-                                </List.Item>
-                              )
+                  <List>
+                    {etterlevelseDokumentasjon.risikovurderinger
+                      ? etterlevelseDokumentasjon.risikovurderinger.map((ros) => {
+                          const rosReg = /\[(.+)]\((.+)\)/i
+                          const rosParts = ros.match(rosReg)
+                          if (rosParts)
                             return (
-                              <span className="flex" key={ros}>
-                                {ros}
-                              </span>
+                              <List.Item key={ros}>
+                                <ExternalLink href={rosParts[2]}>{rosParts[1]}</ExternalLink>
+                              </List.Item>
                             )
-                          })
-                        : 'Ikke angitt'}
-                    </List>
-                  </BodyShort>
+                          return (
+                            <span className="flex" key={ros}>
+                              {ros}
+                            </span>
+                          )
+                        })
+                      : 'Ikke angitt'}
+                  </List>
                 </div>
 
                 <BodyShort className="inline-block">

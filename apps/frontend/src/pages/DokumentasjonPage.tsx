@@ -174,6 +174,10 @@ export const DokumentasjonPage = () => {
       pvkDokument.representantInvolveringsBeskrivelse ||
       pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse)
 
+  const pvkDokumentVurdertCheck =
+    pvkDokument &&
+    (pvkDokument.ytterligereEgenskaper.length !== 0 || pvkDokument.skalUtforePvk !== null)
+
   return (
     <PageLayout
       pageTitle={'E' + etterlevelseNummer.toString() + ' ' + title}
@@ -304,7 +308,9 @@ export const DokumentasjonPage = () => {
                             variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
                             className="whitespace-nowrap"
                           >
-                            {pvkDokument ? 'Revurdér behov for PVK' : 'Vurdér behov for PVK'}
+                            {pvkDokumentVurdertCheck
+                              ? 'Revurdér behov for PVK'
+                              : 'Vurdér behov for PVK'}
                           </Button>
                         )}
                       {/*WIP ikke klar til å vises i prod*/}
