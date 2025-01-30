@@ -207,7 +207,7 @@ export const OversiktView = (props: IProps) => {
                 rel="noopener noreferrer"
                 aria-label="redigere etterlevelsesdokumentasjon"
               >
-                Dokumentegenskaper (åpnes i et nytt vindu).
+                Dokumentegenskaper (åpner i en ny fane).
               </Link>
             </Alert>
           </div>

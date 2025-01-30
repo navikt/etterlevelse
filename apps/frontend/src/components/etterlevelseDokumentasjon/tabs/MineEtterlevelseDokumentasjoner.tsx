@@ -79,7 +79,7 @@ export const MineEtterlevelseDokumentasjoner = ({
             backgroundColor={ettlevColors.grey25}
           >
             <div className="mt-4">
-              <Link href={`${env.teamKatBaseUrl}`}>Teamkatalogen (åpnes i ny fane)</Link>
+              <Link href={`${env.teamKatBaseUrl}`}>Teamkatalogen (åpner i en ny fane)</Link>
             </div>
           </InfoBlock2>
         </div>

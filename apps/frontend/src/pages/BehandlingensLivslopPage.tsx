@@ -243,7 +243,7 @@ export const BehandlingensLivslopPage = () => {
                       <List>
                         <List.Item>Sørg for at tegningen dekker X, Y, Z</List.Item>
                         <List.Item>
-                          Husk god kontrast mellom tekst og bakgrunn. Les mer om kontrast (åpnes i
+                          Husk god kontrast mellom tekst og bakgrunn. Les mer om kontrast (åpner i
                           en ny fane).
                         </List.Item>
                         <List.Item>Du må ikke forklare alt i selve tegninga.</List.Item>
@@ -336,7 +336,7 @@ export const BehandlingensLivslopPage = () => {
                           className="text-medium"
                           href={`${env.pollyBaseUrl}process/${behandling.id}`}
                         >
-                          {behandlingName(behandling)} (åpnes i et nytt vindu)
+                          {behandlingName(behandling)}
                         </ExternalLink>
                       </List.Item>
                     ))}
@@ -372,7 +372,7 @@ export const BehandlingensLivslopPage = () => {
                     rel="noopener noreferrer"
                     aria-label="redigere etterlevelsesdokumentasjon"
                   >
-                    Dokumentegenskaper (åpnes i et nytt vindu).
+                    Dokumentegenskaper (åpner i en ny fane).
                   </Link>
                 </BodyShort>
 

@@ -26,7 +26,7 @@ export const TeamName = (props: IPropsTeamName) => {
       target={'_blank'}
       href={teamKatTeamLink(id)}
     >
-      {name} (åpnes i ny fane)
+      {name} (åpner i en ny fane)
     </Link>
   ) : (
     <>{name}</>

@@ -217,8 +217,8 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                     <Link href={`/dokumentasjon/${etterlevelseDokumentasjonId}`}>
                       PVK-relaterte krav
                     </Link>{' '}
-                    (åpnes i ny fane) eller eventuelt under øvrige risikoscenarioer (åpnes i ny
-                    fane).
+                    (åpner i en ny fane) eller eventuelt under øvrige risikoscenarioer (åpner i en
+                    ny fane).
                   </Alert>
                 </div>
               )}

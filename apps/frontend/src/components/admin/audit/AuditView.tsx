@@ -97,7 +97,7 @@ export const AuditView = (props: TAuditViewProps) => {
                   noNewTabLabel
                   audit={newestAudit}
                 >
-                  <Button variant="tertiary">Vis bruk (åpnes i ny fane)</Button>
+                  <Button variant="tertiary">Vis bruk (åpner i en ny fane)</Button>
                 </ObjectLink>
               )}
               <Tooltip content="Lukk" placement="top">

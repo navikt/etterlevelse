@@ -87,7 +87,7 @@ export const KravAccordionList = (props: IProps) => {
                 <div className="flex flex-col gap-6">
                   <div>
                     <Link href={`/tema/${tema.code}`} target="_blank">
-                      Lær mer om {tema.shortName} (åpnes i ny fane)
+                      Lær mer om {tema.shortName} (åpner i en ny fane)
                     </Link>
                   </div>
                   <List className="flex flex-col gap-2">

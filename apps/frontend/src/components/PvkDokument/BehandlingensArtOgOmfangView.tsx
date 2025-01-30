@@ -92,7 +92,7 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
                             rel="noopener noreferrer"
                             href="https://nav-it.slack.com/archives/CR1B19E6L"
                           >
-                            #behandlingskatalogen på Slack (åpnes i ny fane)
+                            #behandlingskatalogen på Slack (åpner i en ny fane)
                           </Link>
                           , eller på epost: teamdatajegerne@nav.no.
                         </Alert>

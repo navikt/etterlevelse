@@ -1,8 +1,8 @@
 import { Link } from '@navikt/ds-react'
+import { JSX } from 'react'
 import { IRegelverk } from '../constants'
 import { CodelistService, EListName, ICodelistProps, TLovCode } from '../services/Codelist'
 import { env } from '../util/env'
-import { JSX } from 'react'
 
 // unsure how to refactor code
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -99,7 +99,7 @@ const legalBasisLinkProcessor = (
           rel="noopener noreferrer"
         >
           {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]}
-          {result[6]} {result[7]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
+          {result[6]} {result[7]} {openOnSamePage ? '' : ' (åpner i en ny fane)'}
         </Link>
       ),
     },
@@ -113,7 +113,7 @@ const legalBasisLinkProcessor = (
           rel="noopener noreferrer"
         >
           {result[1]} Kapittel {result[3]} {result[4]} {result[5]}{' '}
-          {openOnSamePage ? '' : ' (åpnes i ny fane)'}
+          {openOnSamePage ? '' : ' (åpner i en ny fane)'}
         </Link>
       ),
     },
@@ -127,7 +127,7 @@ const legalBasisLinkProcessor = (
           rel="noopener noreferrer"
         >
           {result[1]} Artikkel {result[3]} {result[4]} {result[5]}{' '}
-          {openOnSamePage ? '' : ' (åpnes i ny fane)'}
+          {openOnSamePage ? '' : ' (åpner i en ny fane)'}
         </Link>
       ),
     },

@@ -91,7 +91,7 @@ export const ExternalLink = ({
       rel="noopener noreferrer"
       aria-label={label}
     >
-      {children} {!openOnSamePage && !noNewTabLabel && ' (åpnes i ny fane)'}
+      {children} {!openOnSamePage && !noNewTabLabel && ' (åpner i en ny fane)'}
     </Link>
   )
 }
