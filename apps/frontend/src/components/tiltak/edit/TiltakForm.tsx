@@ -11,6 +11,7 @@ import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 import { noOptionMessage, selectOverrides } from '../../search/util'
+import { tiltakSchemaValidation } from './tiltakSchema'
 
 interface IProps {
   title: string
@@ -31,6 +32,9 @@ export const TiltakForm = (props: IProps) => {
         ...initialValues,
         pvkDokumentId: pvkDokumentId,
       })}
+      validateOnBlur={false}
+      validateOnChange={false}
+      validationSchema={tiltakSchemaValidation()}
       onSubmit={submit}
       innerRef={formRef}
     >
@@ -136,7 +140,12 @@ export const TiltakForm = (props: IProps) => {
           </div>
 
           <div className="flex gap-2 mt-5">
-            <Button type="button" onClick={() => submitForm()}>
+            <Button
+              type="button"
+              onClick={() => {
+                submitForm()
+              }}
+            >
               Lagre tiltak
             </Button>
             <Button
