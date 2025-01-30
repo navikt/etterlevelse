@@ -291,7 +291,9 @@ export const BehandlingensLivslopPage = () => {
                           submitForm()
                         }}
                       >
-                        Lagre og vurdér behov for PVK
+                        {pvkDokument
+                          ? 'Lagre og gå til PVK-Oversikt'
+                          : 'Lagre og vurdér behov for PVK'}
                       </Button>
                       <Button
                         type="button"
