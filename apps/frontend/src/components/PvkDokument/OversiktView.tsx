@@ -81,7 +81,7 @@ export const OversiktView = (props: IProps) => {
         <Heading level="1" size="medium" className="mb-5">
           Oversikt over PVK-prosessen
         </Heading>
-        <ReadMore header="Hvordan skal vi jobbe med PVK?">
+        <ReadMore className="mb-5 max-w-[766px]" header="Hvordan skal vi jobbe med PVK?">
           <BodyShort>
             I PVK-en skal dere beskrive deres behandling av personopplysninger, og gjøre en
             risikoanalyse. Prosessen inkluderer:
