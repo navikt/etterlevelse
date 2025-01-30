@@ -19,7 +19,7 @@ export const InvolveringSummary = (props: IProps) => {
             <FormSummary.EditLink
               className="cursor-pointer"
               onClick={() => updateTitleUrlAndStep(3)}
-              tabIndex={0}
+              href={window.location.pathname.slice(0, -1) + 3}
             >
               Endre svar
             </FormSummary.EditLink>

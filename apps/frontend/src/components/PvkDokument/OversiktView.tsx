@@ -154,14 +154,20 @@ export const OversiktView = (props: IProps) => {
               </FormSummary.Value>
             </FormSummary.Answer>
 
-            {StepTitle.slice(1).map((title, index) => (
-              <FormSummaryPanel
-                key={title}
-                title={title}
-                onClick={() => updateTitleUrlAndStep(index + 2)}
-                status={index === 4 ? undefined : formStatus[index] ? 'Påbegynt' : 'Ikke påbegynt'}
-              />
-            ))}
+            {StepTitle.slice(1).map((title, index) => {
+              const panelHref = window.location.pathname.slice(0, -1) + (index + 2)
+              return (
+                <FormSummaryPanel
+                  key={title}
+                  title={title}
+                  onClick={() => updateTitleUrlAndStep(index + 2)}
+                  href={panelHref}
+                  status={
+                    index === 4 ? undefined : formStatus[index] ? 'Påbegynt' : 'Ikke påbegynt'
+                  }
+                />
+              )
+            })}
           </FormSummary.Answers>
         </FormSummary>
 
@@ -227,15 +233,16 @@ export const OversiktView = (props: IProps) => {
 interface IFormSummaryPanelProps {
   title: string
   onClick: () => void
+  href: string
   status?: 'Ikke påbegynt' | 'Påbegynt'
 }
 
 const FormSummaryPanel = (props: IFormSummaryPanelProps) => {
-  const { title, onClick, status } = props
+  const { title, onClick, href, status } = props
   return (
     <FormSummary.Answer key={title}>
       <FormSummary.Value>
-        <Link onClick={onClick} className="cursor-pointer" tabIndex={0}>
+        <Link onClick={onClick} href={href} className="cursor-pointer">
           {title}
         </Link>
       </FormSummary.Value>
