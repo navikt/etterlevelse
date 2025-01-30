@@ -158,7 +158,9 @@ export const PvkDokumentPage = () => {
                       orientation="horizontal"
                     >
                       {StepTitle.map((title) => (
-                        <Stepper.Step key={title}>{title}</Stepper.Step>
+                        <Stepper.Step key={title} href="">
+                          {title}
+                        </Stepper.Step>
                       ))}
                     </Stepper>
                   </div>
