@@ -616,7 +616,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             </ErrorSummary>
           )}
 
-          <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-2 bg-bg-default">
+          <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-2 bg-white">
             <div className="flex flex-row-reverse">
               <Button
                 type="button"

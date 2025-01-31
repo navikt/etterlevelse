@@ -83,7 +83,7 @@ export const KravCreatePage = () => {
                   setVarselMeldingActive={setVarselMeldingActive}
                 />
 
-                <div className="button_container flex flex-col py-4 px-4 sticky mt-5 bottom-0 border-t-2 z-10 bg-bg-default">
+                <div className="button_container flex flex-col py-4 px-4 sticky mt-5 bottom-0 border-t-2 z-10 bg-white">
                   <div className="flex w-full">
                     <KravStandardButtons
                       submitCancelButton={() => {
