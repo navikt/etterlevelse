@@ -3,8 +3,10 @@ kind: "Application"
 metadata:
   name: etterlevelse-backend
   namespace: teamdatajegerne
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 100M
   labels:
-    team: teamdatajegerne 
+    team: teamdatajegerne
 spec:
   image: {{image}}
   port: 8080
