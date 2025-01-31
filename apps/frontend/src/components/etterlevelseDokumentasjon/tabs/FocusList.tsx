@@ -118,7 +118,7 @@ export const FocusList = (props: IProps) => {
                   )}
                 </FieldArray>
               </div>
-              <div className="border-border-subtle flex -mt-1 items-center gap-2 sticky bottom-0 border-black border-t-2 bg-bg-default z-10 py-4">
+              <div className="border-border-subtle flex -mt-1 items-center gap-2 sticky bottom-0 border-black border-t-2 bg-white z-10 py-4">
                 <Button type="button" onClick={submitForm}>
                   Lagre prioriterte krav
                 </Button>

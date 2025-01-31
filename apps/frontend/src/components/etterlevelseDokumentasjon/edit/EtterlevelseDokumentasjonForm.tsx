@@ -10,8 +10,7 @@ import {
   TextField,
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import React from 'react'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
@@ -79,7 +78,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
 
   const isForRedigering: boolean = window.location.pathname.includes('/edit')
 
-  const errorSummaryRef = React.useRef<HTMLDivElement>(null)
+  const errorSummaryRef = useRef<HTMLDivElement>(null)
   const [validateOnBlur, setValidateOnBlur] = useState(false)
 
   const labelNavngiDokument: string = isForRedigering
@@ -616,7 +615,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             </ErrorSummary>
           )}
 
-          <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-2 bg-bg-default">
+          <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-2 bg-white">
             <div className="flex flex-row-reverse">
               <Button
                 type="button"

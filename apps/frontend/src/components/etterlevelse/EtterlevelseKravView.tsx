@@ -394,7 +394,7 @@ export const EtterlevelseKravView = (props: IProps) => {
                 />
               )}
 
-              <div className="rounded bg-purple-50 p-8">
+              <div className="rounded-sm bg-purple-50 p-8">
                 <Heading level="2" size="small">
                   Hensikten med kravet
                 </Heading>

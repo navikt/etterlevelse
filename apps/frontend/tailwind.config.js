@@ -1,6 +1,8 @@
+import dsTailwind from '@navikt/ds-tailwind'
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx}'],
+  content: ['./src/**/*.{js,jsx,ts,tsx}', '!./node_modules'],
   theme: {
     screens: {
       sm: '29.938rem',
@@ -18,5 +20,5 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-  presets: [require('@navikt/ds-tailwind')],
+  presets: [dsTailwind],
 }

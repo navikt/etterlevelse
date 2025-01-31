@@ -226,7 +226,7 @@ const Kriterie = ({
           )}
 
           {mode === 'view' && (
-            <div className="p-8 border-border-subtle-hover border border-solid rounded-md bg-bg-default">
+            <div className="p-8 border-border-subtle-hover border border-solid rounded-md bg-white">
               <Markdown source={beskrivelse} />
             </div>
           )}

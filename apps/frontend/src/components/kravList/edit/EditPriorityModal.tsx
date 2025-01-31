@@ -122,7 +122,7 @@ export const EditPriorityModal = (props: {
               )}
             </div>
 
-            <Modal.Footer className="button_container border-t-2 z-10 bg-bg-default">
+            <Modal.Footer className="button_container border-t-2 z-10 bg-white">
               <Button
                 type="button"
                 onClick={() => {

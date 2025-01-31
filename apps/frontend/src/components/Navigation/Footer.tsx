@@ -34,7 +34,7 @@ export const Footer = () => {
 
   return (
     <div
-      className="bg-purple-400 text-white px-12 py-7 w-full mt-auto justify-center flex"
+      className="bg-[#8269a2] text-white px-12 py-7 w-full mt-auto justify-center flex"
       role="contentinfo"
     >
       <div className="max-w-7xl w-full">

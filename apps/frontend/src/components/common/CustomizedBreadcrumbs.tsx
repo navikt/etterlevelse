@@ -17,7 +17,7 @@ const CustomizedBreadcrumbs = (props: TCustomizedProps) => {
     pathName.length > 40 ? pathName.substring(0, 40) + '...' : pathName
   const linkColor = /^\/(lov|etterlevelse)\//.test(window.location.pathname)
     ? 'text-white'
-    : 'text-text-default'
+    : 'text-gray-800'
 
   return (
     <div className="flex gap-1 items-center my-6">

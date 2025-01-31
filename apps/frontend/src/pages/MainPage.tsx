@@ -71,7 +71,7 @@ export const MainPage = () => {
           )}
 
           {etterlevelseDokumentasjonLoading && (
-            <div className="bg-white mt-8 p-8 shadow-md shadow-slate-900 shadow-[#00000040]">
+            <div className="bg-white mt-8 p-8 shadow-md shadow-[#00000040]">
               <Heading as={Skeleton} size="large">
                 Card-title
               </Heading>
@@ -81,7 +81,7 @@ export const MainPage = () => {
           )}
 
           {!etterlevelseDokumentasjonLoading && data?.etterlevelseDokumentasjoner.content && (
-            <div className="bg-white mt-8 p-8 shadow-md shadow-slate-900 shadow-[#00000040]">
+            <div className="bg-white mt-8 p-8 shadow-md shadow-[#00000040]">
               {data?.etterlevelseDokumentasjoner.content.length === 0 && (
                 <div>
                   <Heading size="medium" level="2">
