@@ -1,6 +1,3 @@
-http {
-  client_max_body_size 11M;
-
 server {
   listen       8080;
 
@@ -34,10 +31,6 @@ server {
     proxy_pass http://etterlevelse-backend;
   }
 
-  location /upload {
-    client_max_body_size 11M;
-  }
-
   location /login {
     proxy_pass http://etterlevelse-backend;
   }
@@ -49,5 +42,4 @@ server {
   location /logout {
     proxy_pass http://etterlevelse-backend;
   }
-}
 }
