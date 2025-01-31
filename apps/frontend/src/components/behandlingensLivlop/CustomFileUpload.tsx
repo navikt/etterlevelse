@@ -9,7 +9,7 @@ import {
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 const MAX_FILES = 4
-const MAX_SIZE_MB = 10
+const MAX_SIZE_MB = 5
 const MAX_SIZE = MAX_SIZE_MB * 1024 * 1024
 
 const errors: Record<FileRejectionReason, string> = {
@@ -61,7 +61,7 @@ export const CustomFileUpload = (props: IProps) => {
     <VStack gap="6">
       <FileUpload.Dropzone
         label="Last opp behandlingens livsløp"
-        description={`Følgende filformater er tillatt: PDF, PNG og JPEG. Du kan laste opp maks 4 filer. Filstørrelse pr. fil må være mindre enn ${MAX_SIZE_MB} MB.`}
+        description={`Følgende filformater er tillatt: PDF, PNG, JPG og JPEG. Du kan laste opp maks 4 filer. Filstørrelse pr. fil må være mindre enn ${MAX_SIZE_MB} MB.`}
         accept=".png,.jpeg,.pdf,.jpg"
         maxSizeInBytes={MAX_SIZE}
         fileLimit={{ max: MAX_FILES, current: acceptedFiles.length }}

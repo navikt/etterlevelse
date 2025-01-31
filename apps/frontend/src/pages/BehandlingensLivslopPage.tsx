@@ -198,7 +198,7 @@ export const BehandlingensLivslopPage = () => {
                 }
               }}
             >
-              {({ submitForm, initialValues, errors }) => (
+              {({ submitForm, initialValues, errors, isSubmitting }) => (
                 <Form>
                   <div className="pr-6 flex flex-1 flex-col gap-4 col-span-8">
                     <BodyShort>
@@ -283,38 +283,46 @@ export const BehandlingensLivslopPage = () => {
                       </ErrorSummary>
                     )}
 
-                    <div className="flex gap-2 mt-5">
-                      <Button
-                        type="button"
-                        onClick={() => {
-                          setTilPvkDokument(true)
-                          submitForm()
-                        }}
-                      >
-                        {pvkDokument
-                          ? 'Lagre og gå til PVK-Oversikt'
-                          : 'Lagre og vurdér behov for PVK'}
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={() => {
-                          setTilTemaOversikt(true)
-                          submitForm()
-                        }}
-                      >
-                        Lagre og gå til Temaoversikt
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="tertiary"
-                        onClick={() => {
-                          navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
-                        }}
-                      >
-                        Avbryt
-                      </Button>
-                    </div>
+                    {!isSubmitting && (
+                      <div className="flex gap-2 mt-5">
+                        <Button
+                          type="button"
+                          onClick={() => {
+                            setTilPvkDokument(true)
+                            submitForm()
+                          }}
+                        >
+                          {pvkDokument
+                            ? 'Lagre og gå til PVK-Oversikt'
+                            : 'Lagre og vurdér behov for PVK'}
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          onClick={() => {
+                            setTilTemaOversikt(true)
+                            submitForm()
+                          }}
+                        >
+                          Lagre og gå til Temaoversikt
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="tertiary"
+                          onClick={() => {
+                            navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
+                          }}
+                        >
+                          Avbryt
+                        </Button>
+                      </div>
+                    )}
+
+                    {isSubmitting && (
+                      <div className="flex mt-5 justify-center items-center">
+                        <Loader size="large" />
+                      </div>
+                    )}
                   </div>
                 </Form>
               )}
