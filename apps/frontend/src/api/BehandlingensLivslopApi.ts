@@ -104,8 +104,8 @@ export const updateBehandlingensLivslop = async (
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        maxContentLength: 10 * 1024 * 1024,
-        maxBodyLength: 10 * 1024 * 1024,
+        // maxContentLength: 10 * 1024 * 1024,
+        // maxBodyLength: 10 * 1024 * 1024,
       }
     )
   ).data
