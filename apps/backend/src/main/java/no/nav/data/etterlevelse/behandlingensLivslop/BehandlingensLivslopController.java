@@ -76,7 +76,7 @@ public class BehandlingensLivslopController {
     @ApiResponse(responseCode = "201", description = "Behandlingens Livsløp created")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BehandlingensLivslopResponse> createBehandlingensLivslop(
-            @RequestPart(value = "filer", required = false) List<MultipartFile> filer,
+            @RequestPart(value = "file", required = false) List<MultipartFile> filer,
             @RequestPart BehandlingensLivslopRequest request
     ) {
         log.info("Create Behandlingens Livsløp");
@@ -92,7 +92,7 @@ public class BehandlingensLivslopController {
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BehandlingensLivslopResponse> updateBehandlingensLivslop(
             @PathVariable UUID id,
-            @RequestPart(value = "filer", required = false) List<MultipartFile> filer,
+            @RequestPart(value = "file", required = false) List<MultipartFile> filer,
             @Valid @RequestPart BehandlingensLivslopRequest request) {
         log.info("Update Behandlingens Livsløp id={}", id);
 
