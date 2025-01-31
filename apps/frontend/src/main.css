@@ -1,5 +1,5 @@
-@import '@navikt/ds-css';
 @import 'tailwindcss';
+@import '@navikt/ds-css' layer(components);
 @import 'react-json-view-lite/dist/index.css';
 @import 'json-diff-kit/dist/viewer.css';
 
