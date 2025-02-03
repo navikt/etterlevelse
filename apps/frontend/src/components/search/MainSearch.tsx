@@ -167,6 +167,7 @@ const MainSearch = () => {
               cursor: 'text',
               div: { div: { color: 'var(--a-text-default)' } },
             }) as CSSObjectWithLabel,
+          option: (base) => ({ ...base, color: 'var(--a-text-default)' }) as CSSObjectWithLabel,
           groupHeading: (base) =>
             ({
               ...base,
