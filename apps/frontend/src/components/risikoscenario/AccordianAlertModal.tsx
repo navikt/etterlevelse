@@ -1,4 +1,4 @@
-import { BodyLong, Button, Modal } from '@navikt/ds-react'
+import { Button, Modal } from '@navikt/ds-react'
 import { RefObject } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -16,9 +16,13 @@ export const AccordianAlertModal = (props: IProps) => {
   const navigate = useNavigate()
 
   return (
-    <Modal onClose={() => setIsOpen(false)} open={isOpen} header={{ heading: 'Varsel' }}>
+    <Modal
+      onClose={() => setIsOpen(false)}
+      open={isOpen}
+      header={{ heading: 'Vil du lagre endringene dine før du går videre?', closeButton: false }}
+    >
       <Modal.Body>
-        <BodyLong>Endringene som er gjort er ikke lagret.</BodyLong>
+        <br />
       </Modal.Body>
       <Modal.Footer>
         <Button
@@ -55,6 +59,15 @@ export const AccordianAlertModal = (props: IProps) => {
           }}
         >
           Fortsett uten å lagre
+        </Button>
+        <Button
+          type="button"
+          variant="tertiary"
+          onClick={() => {
+            setIsOpen(false)
+          }}
+        >
+          Avbryt
         </Button>
       </Modal.Footer>
     </Modal>

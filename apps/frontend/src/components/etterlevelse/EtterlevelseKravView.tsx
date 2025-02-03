@@ -527,15 +527,18 @@ export const EtterlevelseKravView = (props: IProps) => {
           <Modal
             open={isTabAlertActive}
             onClose={() => setIsTabAlertActive(false)}
-            header={{ heading: 'Varsel' }}
+            header={{
+              heading: 'Vil du lagre endringene dine før du går videre?',
+              closeButton: false,
+            }}
           >
             <Modal.Body>
-              {!isSavingChanges && <div>Endringene som er gjort er ikke lagret.</div>}
               {isSavingChanges && (
                 <div className="flex justify-center items-center w-full">
                   <Loader size="2xlarge" title="lagrer endringer" />
                 </div>
               )}
+              <br />
             </Modal.Body>
             <Modal.Footer>
               <Button
@@ -559,6 +562,15 @@ export const EtterlevelseKravView = (props: IProps) => {
                 }}
               >
                 Fortsett uten å lagre
+              </Button>
+              <Button
+                type="button"
+                variant="tertiary"
+                onClick={() => {
+                  setIsTabAlertActive(false)
+                }}
+              >
+                Avbryt
               </Button>
             </Modal.Footer>
           </Modal>
