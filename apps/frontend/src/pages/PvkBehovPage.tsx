@@ -21,6 +21,7 @@ import { uniqBy } from 'lodash'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { behandlingName } from '../api/BehandlingApi'
+import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../api/BehandlingensLivslopApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import {
   createPvkDokument,
@@ -33,7 +34,14 @@ import pvkBehovSchema from '../components/PvkDokument/edit/pvkBehovSchema'
 import { FieldWrapper, TextAreaField } from '../components/common/Inputs'
 import { ExternalLink } from '../components/common/RouteLink'
 import { PageLayout } from '../components/scaffold/Page'
-import { IBehandling, IBreadCrumbPath, IExternalCode, IPolicy, IPvkDokument } from '../constants'
+import {
+  IBehandling,
+  IBehandlingensLivslop,
+  IBreadCrumbPath,
+  IExternalCode,
+  IPolicy,
+  IPvkDokument,
+} from '../constants'
 import { CodelistService, EListName, ICode } from '../services/Codelist'
 import { user } from '../services/User'
 import { env } from '../util/env'
@@ -57,6 +65,7 @@ export const PvkBehovPage = () => {
   const [tilTemaOversikt, setTilTemaOversikt] = useState<boolean>(false)
   const [tilPvkDokument, setTilPvkDokument] = useState<boolean>(false)
   const navigate = useNavigate()
+  const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
     {
@@ -72,6 +81,20 @@ export const PvkBehovPage = () => {
   const ytterligereEgenskaper: ICode[] = codelistUtils.getCodes(
     EListName.YTTERLIGERE_EGENSKAPER
   ) as ICode[]
+
+  useEffect(() => {
+    ;(async () => {
+      if (etterlevelseDokumentasjon) {
+        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjon?.id).then(
+          (response) => {
+            if (response) {
+              setBehandlingensLivslop(response)
+            }
+          }
+        )
+      }
+    })()
+  }, [etterlevelseDokumentasjon])
 
   useEffect(() => {
     if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.behandlinger) {
@@ -265,7 +288,8 @@ export const PvkBehovPage = () => {
                             href={
                               '/dokumentasjon/' +
                               etterlevelseDokumentasjon.id +
-                              '/behandlingens-livslop'
+                              '/behandlingens-livslop/' +
+                              (behandlingensLivslop?.id ? behandlingensLivslop.id : 'ny')
                             }
                             target="_blank"
                             rel="noopener noreferrer"
