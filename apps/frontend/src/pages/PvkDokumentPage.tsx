@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Button, Loader, Modal, Stepper } from '@navikt/ds-react'
+import { Alert, Button, Loader, Modal, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { RefObject, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
@@ -157,13 +157,9 @@ export const PvkDokumentPage = () => {
                       }}
                       orientation="horizontal"
                     >
-                      {StepTitle.map((title, index) => {
-                        let stepHref = window.location.pathname.slice(0, -1) + (index + 1)
-                        if (index + 1 === 5) {
-                          stepHref += '?tab=risikoscenarioer&filter=alle'
-                        }
+                      {StepTitle.map((title) => {
                         return (
-                          <Stepper.Step key={title} href={stepHref}>
+                          <Stepper.Step key={title} href="#">
                             {title}
                           </Stepper.Step>
                         )
@@ -253,10 +249,13 @@ export const PvkDokumentPage = () => {
             <Modal
               onClose={() => setIsUnsaved(false)}
               open={isUnsaved}
-              header={{ heading: 'Varsel' }}
+              header={{
+                heading: 'Vil du lagre endringene dine før du går videre?',
+                closeButton: false,
+              }}
             >
               <Modal.Body>
-                <BodyLong>Endringene som er gjort er ikke lagret.</BodyLong>
+                <br />
               </Modal.Body>
               <Modal.Footer>
                 <Button
@@ -282,6 +281,15 @@ export const PvkDokumentPage = () => {
                   }}
                 >
                   Fortsett uten å lagre
+                </Button>
+                <Button
+                  type="button"
+                  variant="tertiary"
+                  onClick={() => {
+                    setIsUnsaved(false)
+                  }}
+                >
+                  Avbryt
                 </Button>
               </Modal.Footer>
             </Modal>

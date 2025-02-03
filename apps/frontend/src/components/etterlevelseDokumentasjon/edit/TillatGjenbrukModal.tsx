@@ -59,7 +59,9 @@ export const TillatGjenbrukModal = (props: IProps) => {
           open={isOpen}
           onClose={() => setIsOpen(false)}
           header={{
-            heading: 'Slå på gjenbruk av dette dokumentet',
+            heading: etterlevelseDokumentasjon.tilgjengeligForGjenbruk
+              ? 'Redigér gjenbruk av dette dokumentet'
+              : 'Slå på gjenbruk av dette dokumentet',
             // icon: <FilesIcon title="header-ikon" />,
             closeButton: false,
           }}
@@ -107,7 +109,9 @@ export const TillatGjenbrukModal = (props: IProps) => {
                       submitForm()
                     }}
                   >
-                    Slå på gjenbruk
+                    {etterlevelseDokumentasjon.tilgjengeligForGjenbruk
+                      ? 'Lagre veiledning'
+                      : 'Slå på gjenbruk'}
                   </Button>
                   <Button
                     type="button"

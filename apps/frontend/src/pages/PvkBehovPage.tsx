@@ -294,6 +294,7 @@ export const PvkBehovPage = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="redigere etterlevelsesdokumentasjon"
+                            className="inline"
                           >
                             dere har tegnet behandlingens livsløp (åpner i en ny fane).
                           </Link>
@@ -313,7 +314,7 @@ export const PvkBehovPage = () => {
                     )}
 
                     <ReadMore
-                      className="mt-10 mb-2"
+                      className="mt-10 mb-4"
                       header="Lurer dere fortsatt på om det er behov for PVK?"
                     >
                       Personvernombudet (PVO) kan hjelpe dere å vurdere om dere skal gjøre en PVK.
