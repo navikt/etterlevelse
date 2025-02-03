@@ -270,6 +270,7 @@ export const PvkBehovPage = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="redigere etterlevelsesdokumentasjon"
+                            className="inline"
                           >
                             dere har tegnet behandlingens livsløp (åpner i en ny fane).
                           </Link>
