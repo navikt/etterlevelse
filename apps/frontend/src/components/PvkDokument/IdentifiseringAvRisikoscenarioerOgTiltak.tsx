@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Button, Heading, ReadMore } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
@@ -53,8 +53,6 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
     <div className="flex justify-center w-full">
       <div className="flex-col justify-items-center">
         <div className="w-4/5">
-          <ReadMore header="Vis behandlingens livsløp">Her kommer Behandlingens livsløp.</ReadMore>
-
           <Heading level="1" size="medium" className="my-5">
             Identifisering av risikoscenarioer og tiltak
           </Heading>
