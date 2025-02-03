@@ -1,8 +1,4 @@
-import {
-  CheckmarkCircleFillIcon,
-  EnvelopeClosedIcon,
-  XMarkOctagonFillIcon,
-} from '@navikt/aksel-icons'
+import { CheckmarkCircleFillIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyLong,
@@ -260,42 +256,22 @@ export const PvkBehovPage = () => {
                             }}
                           >
                             <List>
-                              <List.Item
-                                icon={
-                                  profilering ? (
-                                    <CheckmarkCircleFillIcon title="checked" />
-                                  ) : (
-                                    <XMarkOctagonFillIcon title="checked" />
-                                  )
-                                }
-                              >
-                                Profilering (hentet fra Behandlingskatalogen)
-                              </List.Item>
-
-                              <List.Item
-                                icon={
-                                  automatiskBehandling ? (
-                                    <CheckmarkCircleFillIcon title="checked" />
-                                  ) : (
-                                    <XMarkOctagonFillIcon title="checked" />
-                                  )
-                                }
-                              >
-                                automatisert behandling (hentet fra Behandlingskatalogen)
-                              </List.Item>
-
-                              <List.Item
-                                icon={
-                                  saerligKategorier ? (
-                                    <CheckmarkCircleFillIcon title="checked" />
-                                  ) : (
-                                    <XMarkOctagonFillIcon title="checked" />
-                                  )
-                                }
-                              >
-                                særlige kategorier av personopplysninger (hentet fra
-                                Behandlingskatalogen)
-                              </List.Item>
+                              {profilering && (
+                                <List.Item icon={<CheckmarkCircleFillIcon title="checked" />}>
+                                  Profilering (hentet fra Behandlingskatalogen)
+                                </List.Item>
+                              )}
+                              {automatiskBehandling && (
+                                <List.Item icon={<CheckmarkCircleFillIcon title="checked" />}>
+                                  automatisert behandling (hentet fra Behandlingskatalogen)
+                                </List.Item>
+                              )}
+                              {saerligKategorier && (
+                                <List.Item icon={<CheckmarkCircleFillIcon title="checked" />}>
+                                  særlige kategorier av personopplysninger (hentet fra
+                                  Behandlingskatalogen)
+                                </List.Item>
+                              )}
                             </List>
                             {ytterligereEgenskaper.map((egenskap) => (
                               <Checkbox key={egenskap.code} value={egenskap.code}>
