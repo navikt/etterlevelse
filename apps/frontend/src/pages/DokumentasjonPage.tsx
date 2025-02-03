@@ -32,7 +32,8 @@ import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 const getVariantForBLLButton = (
   behandlingsLivslop: IBehandlingensLivslop | undefined
 ): 'primary' | 'secondary' => {
-  return (behandlingsLivslop && behandlingsLivslop?.filer.length > 0) || behandlingsLivslop
+  return (behandlingsLivslop && behandlingsLivslop?.filer.length > 0) ||
+    behandlingsLivslop?.beskrivelse
     ? 'secondary'
     : 'primary'
 }
@@ -42,7 +43,10 @@ const getVariantForPVKButton = (
   behandlingsLivslop: IBehandlingensLivslop | undefined
 ) => {
   if (pvkDokument?.skalUtforePvk === false) return 'tertiary'
-  if ((behandlingsLivslop && behandlingsLivslop?.filer.length > 0) || behandlingsLivslop)
+  if (
+    (behandlingsLivslop && behandlingsLivslop?.filer.length > 0) ||
+    behandlingsLivslop?.beskrivelse
+  )
     return 'primary'
   return 'secondary'
 }
