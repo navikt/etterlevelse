@@ -323,7 +323,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
         </InternalHeader>
       </div>
       <div
-        className="flex lg:hidden bg-icon-default py-1 px-1 w-full justify-center items-center"
+        className="flex lg:hidden bg-gray-900 py-1 px-1 w-full justify-center items-center"
         role="search"
       >
         <div className=" max-w-xl w-full ">
