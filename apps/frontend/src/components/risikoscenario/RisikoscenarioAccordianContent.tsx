@@ -157,15 +157,18 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
           </div>
         )}
 
-        {!isCreateTiltakFormActive && !isEditTiltakFormActive && !isAddExistingMode && (
-          <div className="mt-3">
-            <IngenTiltakField
-              risikoscenario={activeRisikoscenario}
-              formRef={formRef}
-              submit={submitIngenTiltak}
-            />
-          </div>
-        )}
+        {!isCreateTiltakFormActive &&
+          !isEditTiltakFormActive &&
+          !isAddExistingMode &&
+          activeRisikoscenario.tiltakIds.length === 0 && (
+            <div className="mt-3">
+              <IngenTiltakField
+                risikoscenario={activeRisikoscenario}
+                formRef={formRef}
+                submit={submitIngenTiltak}
+              />
+            </div>
+          )}
       </div>
 
       {isEditModalOpen && (
