@@ -88,7 +88,7 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
               ja, slett risikoscenarioet
             </Button>
             <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
-              avbryt
+              Avbryt
             </Button>
           </Modal.Footer>
         </Modal>

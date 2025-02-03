@@ -49,7 +49,7 @@ export const IdentifiseringAvRisikoscenarioAccordianHeader = (props: IProps) => 
     <Accordion.Header className="z-0">
       {risikoscenario.navn}
       <div className="flex gap-2 mt-1">
-        {ikkeFerdigBeskrevet && <Tag variant="alt2">Det er felter som ikke er ferdig utfylt</Tag>}
+        {ikkeFerdigBeskrevet && <Tag variant="alt2">Ikke ferdig utfylt</Tag>}
         {risikoscenario.ingenTiltak && <Tag variant="neutral">Tiltak ikke aktuelt</Tag>}
         {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
           <Tag variant="alt1">Savner tiltak</Tag>

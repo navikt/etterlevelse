@@ -86,7 +86,7 @@ export const SlettOvrigRisikoscenario = (props: IProps) => {
               Slett risikoscenario
             </Button>
             <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
-              avbryt
+              Avbryt
             </Button>
           </Modal.Footer>
         </Modal>
