@@ -33,7 +33,7 @@ interface IProps {
   kravnummer: number
   isCreateMode?: boolean
   noCopyButton?: boolean
-  formRef?: RefObject<any>
+  formRef: RefObject<any>
 }
 
 export const KravRisikoscenarioAccordionContent = (props: IProps) => {
@@ -56,6 +56,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
   const [isAddExistingMode, setIsAddExisitingMode] = useState<boolean>(false)
 
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
+  const [isIngenTilgangFormDirty, setIsIngenTilgangFormDirty] = useState<boolean>(false)
 
   const updateRisikoscenarioList = (updatedRisikoscenario: IRisikoscenario) => {
     setRisikoscenarioForKrav(
@@ -146,28 +147,38 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     <div>
       <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true} />
 
-      {!isCreateMode && (
-        <div className="mt-5">
-          <Button
-            variant="tertiary"
-            type="button"
-            icon={<PencilIcon aria-hidden />}
-            onClick={() => setIsEditModalOpen(true)}
-            className="mb-2"
-          >
-            Redigèr risikoscenario
-          </Button>
+      {!isIngenTilgangFormDirty &&
+        !isCreateTiltakFormActive &&
+        !isEditTiltakFormActive &&
+        !isAddExistingMode &&
+        !isCreateMode && (
+          <div className="mt-5">
+            <Button
+              variant="tertiary"
+              type="button"
+              icon={<PencilIcon aria-hidden />}
+              onClick={() => setIsEditModalOpen(true)}
+              className="mb-2"
+            >
+              Redigèr risikoscenario
+            </Button>
 
-          <FjernRisikoscenarioFraKrav
-            kravnummer={kravnummer}
-            risikoscenario={risikoscenario}
-            risikoscenarioer={risikoscenarioer}
-            setRisikoscenarioer={setRisikoscenarioer}
-            risikoscenarioForKrav={risikoscenarioForKrav}
-            setRisikoscenarioForKrav={setRisikoscenarioForKrav}
-          />
-        </div>
-      )}
+            <FjernRisikoscenarioFraKrav
+              kravnummer={kravnummer}
+              risikoscenario={risikoscenario}
+              risikoscenarioer={risikoscenarioer}
+              setRisikoscenarioer={setRisikoscenarioer}
+              risikoscenarioForKrav={risikoscenarioForKrav}
+              setRisikoscenarioForKrav={setRisikoscenarioForKrav}
+            />
+          </div>
+        )}
+
+      {(isIngenTilgangFormDirty ||
+        isCreateTiltakFormActive ||
+        isEditTiltakFormActive ||
+        isAddExistingMode ||
+        isCreateMode) && <div className="mt-5 h-[104px]" />}
 
       <div className="mt-12">
         <Heading level="3" size="small">
@@ -211,20 +222,26 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
               />
             )}
 
-            {!isCreateTiltakFormActive && !isEditTiltakFormActive && !isAddExistingMode && (
-              <div className="mt-5 flex gap-2">
-                <Button type="button" onClick={() => setIsCreateTiltakFormActive(true)}>
-                  Opprett nytt tiltak
-                </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={() => setIsAddExisitingMode(true)}
-                >
-                  Legg til eksisterende tiltak
-                </Button>
-              </div>
-            )}
+            {!isIngenTilgangFormDirty &&
+              !isCreateTiltakFormActive &&
+              !isEditTiltakFormActive &&
+              !isAddExistingMode &&
+              !isCreateMode && (
+                <div className="mt-5 flex gap-2">
+                  <Button type="button" onClick={() => setIsCreateTiltakFormActive(true)}>
+                    Opprett nytt tiltak
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => setIsAddExisitingMode(true)}
+                  >
+                    Legg til eksisterende tiltak
+                  </Button>
+                </div>
+              )}
+
+            {isIngenTilgangFormDirty && <div className="mt-5 h-18" />}
           </div>
         )}
         {!isCreateMode &&
@@ -236,6 +253,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
                 risikoscenario={activeRisikoscenario}
                 submit={submitIngenTiltak}
                 formRef={formRef}
+                setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
               />
             </div>
           )}

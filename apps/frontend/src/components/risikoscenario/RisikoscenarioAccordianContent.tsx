@@ -19,7 +19,7 @@ interface IProps {
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
   setRisikoscenarioer: (state: IRisikoscenario[]) => void
-  formRef?: RefObject<any>
+  formRef: RefObject<any>
 }
 
 export const RisikoscenarioAccordionContent = (props: IProps) => {
@@ -38,6 +38,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
   const [isAddExistingMode, setIsAddExisitingMode] = useState<boolean>(false)
 
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
+  const [isIngenTilgangFormDirty, setIsIngenTilgangFormDirty] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario) => {
     await updateRisikoscenario(risikoscenario).then((response) => {
@@ -80,22 +81,32 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
     <div>
       <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={false} />
 
-      <div className="mt-12 flex gap-2 items-center">
-        <Button
-          variant="tertiary"
-          type="button"
-          icon={<PencilIcon aria-hidden />}
-          onClick={() => setIsEditModalOpen(true)}
-        >
-          Redigèr risikoscenario
-        </Button>
-        <SlettOvrigRisikoscenario
-          risikoscenario={risikoscenario}
-          tiltakList={tiltakList}
-          risikoscenarioer={risikoscenarioer}
-          setRisikoscenarioer={setRisikoscenarioer}
-        />
-      </div>
+      {!isIngenTilgangFormDirty &&
+        !isCreateTiltakFormActive &&
+        !isEditTiltakFormActive &&
+        !isAddExistingMode && (
+          <div className="mt-12 flex gap-2 items-center">
+            <Button
+              variant="tertiary"
+              type="button"
+              icon={<PencilIcon aria-hidden />}
+              onClick={() => setIsEditModalOpen(true)}
+            >
+              Redigèr risikoscenario
+            </Button>
+            <SlettOvrigRisikoscenario
+              risikoscenario={risikoscenario}
+              tiltakList={tiltakList}
+              risikoscenarioer={risikoscenarioer}
+              setRisikoscenarioer={setRisikoscenarioer}
+            />
+          </div>
+        )}
+
+      {(isIngenTilgangFormDirty ||
+        isCreateTiltakFormActive ||
+        isEditTiltakFormActive ||
+        isAddExistingMode) && <div className="mt-12 h-12" />}
 
       <div className="mt-12">
         <Heading level="3" size="small">
@@ -103,11 +114,13 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
         </Heading>
         {!risikoscenario.ingenTiltak && (
           <div>
-            {risikoscenario.tiltakIds.length === 0 && (
-              <Alert className="mt-5 mb-9" variant="warning">
-                Dere har ikke lagt inn tiltak
-              </Alert>
-            )}
+            {risikoscenario.tiltakIds.length === 0 &&
+              !isCreateTiltakFormActive &&
+              !isEditTiltakFormActive && (
+                <Alert className="mt-5 mb-9" variant="warning">
+                  Dere har ikke lagt inn tiltak
+                </Alert>
+              )}
 
             {risikoscenario.tiltakIds.length !== 0 && (
               <TiltakReadMoreList
@@ -142,20 +155,25 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
               />
             )}
 
-            {!isCreateTiltakFormActive && !isEditTiltakFormActive && !isAddExistingMode && (
-              <div className="mt-5 flex gap-2">
-                <Button type="button" onClick={() => setIsCreateTiltakFormActive(true)}>
-                  Opprett nytt tiltak
-                </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={() => setIsAddExisitingMode(true)}
-                >
-                  Legg til eksisterende tiltak
-                </Button>
-              </div>
-            )}
+            {!isIngenTilgangFormDirty &&
+              !isCreateTiltakFormActive &&
+              !isEditTiltakFormActive &&
+              !isAddExistingMode && (
+                <div className="mt-5 flex gap-2">
+                  <Button type="button" onClick={() => setIsCreateTiltakFormActive(true)}>
+                    Opprett nytt tiltak
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => setIsAddExisitingMode(true)}
+                  >
+                    Legg til eksisterende tiltak
+                  </Button>
+                </div>
+              )}
+
+            {isIngenTilgangFormDirty && <div className="mt-5 h-12" />}
           </div>
         )}
 
@@ -168,6 +186,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
                 risikoscenario={activeRisikoscenario}
                 formRef={formRef}
                 submit={submitIngenTiltak}
+                setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
               />
             </div>
           )}

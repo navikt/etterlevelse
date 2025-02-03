@@ -7,11 +7,12 @@ import { IRisikoscenario } from '../../../constants'
 interface IProps {
   risikoscenario: IRisikoscenario
   submit: (risikoscenario: IRisikoscenario) => void
-  formRef?: RefObject<any>
+  formRef: RefObject<any>
+  setIsIngenTilgangFormDirty: (state: boolean) => void
 }
 
 export const IngenTiltakField = (props: IProps) => {
-  const { risikoscenario, submit, formRef } = props
+  const { risikoscenario, submit, formRef, setIsIngenTilgangFormDirty } = props
 
   return (
     <div>
@@ -20,7 +21,7 @@ export const IngenTiltakField = (props: IProps) => {
         onSubmit={submit}
         innerRef={formRef}
       >
-        {({ submitForm, values, resetForm, dirty }) => (
+        {({ submitForm, values, resetForm, dirty, initialValues }) => (
           <Form>
             <Field name="ingenTiltak">
               {(fieldProps: FieldProps) => (
@@ -31,6 +32,11 @@ export const IngenTiltakField = (props: IProps) => {
                   onChange={(value) => {
                     const fieldValue = value.length > 0 ? true : false
                     fieldProps.form.setFieldValue('ingenTiltak', fieldValue)
+                    if (fieldValue !== initialValues.ingenTiltak) {
+                      setIsIngenTilgangFormDirty(true)
+                    } else {
+                      setIsIngenTilgangFormDirty(false)
+                    }
                   }}
                 >
                   <Checkbox value={'ingenTiltak'}>Vi skal ikke ha tiltak</Checkbox>
