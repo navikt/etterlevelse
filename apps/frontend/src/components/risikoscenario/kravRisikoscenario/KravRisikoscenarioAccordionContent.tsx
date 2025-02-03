@@ -1,5 +1,5 @@
 import { PencilIcon } from '@navikt/aksel-icons'
-import { Button, Label } from '@navikt/ds-react'
+import { Button, Heading } from '@navikt/ds-react'
 import { RefObject, useState } from 'react'
 import {
   addTiltakToRisikoscenario,
@@ -169,8 +169,10 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
         </div>
       )}
 
-      <div className="mt-5">
-        <Label>Følgende tiltak gjelder for dette risikoscenarioet</Label>
+      <div className="mt-12">
+        <Heading level="3" size="small">
+          Følgende tiltak gjelder for dette risikoscenarioet
+        </Heading>
 
         {!risikoscenario.ingenTiltak && (
           <div>

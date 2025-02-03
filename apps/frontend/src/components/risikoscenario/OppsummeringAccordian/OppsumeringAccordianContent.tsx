@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Label, ReadMore } from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, ReadMore } from '@navikt/ds-react'
 import { RefObject, useState } from 'react'
 import { IRisikoscenario, ITiltak } from '../../../constants'
 import TiltakView from '../../tiltak/TiltakView'
@@ -20,8 +20,10 @@ export const OppsumeringAccordianContent = (props: IProps) => {
     <div>
       <RisikoscenarioView risikoscenario={activeRisikoscenario} />
 
-      <div className="mt-5">
-        <Label>Følgende tiltak gjelder for dette risikoscenarioet</Label>
+      <div className="mt-12">
+        <Heading level="3" size="small">
+          Følgende tiltak gjelder for dette risikoscenarioet
+        </Heading>
         {risikoscenario.ingenTiltak && <BodyLong>Vi skal ikke ha tiltak.</BodyLong>}
 
         {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length !== 0 && (
