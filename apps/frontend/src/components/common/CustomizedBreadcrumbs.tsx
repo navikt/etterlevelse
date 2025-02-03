@@ -21,19 +21,21 @@ const CustomizedBreadcrumbs = (props: TCustomizedProps) => {
 
   return (
     <div className="flex gap-1 items-center my-6">
-      <Link href="/" className={`gap-1 flex ${linkColor}`}>
+      <Link href="/" className={`gap-1 flex ${linkColor} focus:text-white`}>
         Forsiden <ChevronRightIcon area-label="" aria-hidden />
       </Link>
       {paths?.map((path) => (
         <Link
           href={path.href}
           key={'breadcrumb_link_' + getName(path.pathName)}
-          className={`gap-1 flex ${linkColor}`}
+          className={`gap-1 flex ${linkColor} focus:text-white`}
         >
           {getName(path.pathName)} <ChevronRightIcon area-label="" aria-hidden />
         </Link>
       ))}
-      {currentPage && <BodyShort className={linkColor}>{getName(currentPage)}</BodyShort>}
+      {currentPage && (
+        <BodyShort className={`${linkColor} focus:text-white`}>{getName(currentPage)}</BodyShort>
+      )}
     </div>
   )
 }
