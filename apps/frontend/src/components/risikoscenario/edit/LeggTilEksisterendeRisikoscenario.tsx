@@ -135,7 +135,7 @@ export const LeggTilEksisterendeRisikoscenario = (props: IProps) => {
                 variant="secondary"
                 onClick={() => setIsLeggTilEksisterendeMode(false)}
               >
-                avbyrt
+                Avbryt
               </Button>
             </div>
           </Form>

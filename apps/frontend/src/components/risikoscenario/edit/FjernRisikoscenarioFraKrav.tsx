@@ -85,7 +85,7 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
           </Modal.Body>
           <Modal.Footer>
             <Button type="button" onClick={() => submit()}>
-              ja, slett risikoscenarioet
+              Ja, slett risikoscenarioet
             </Button>
             <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
               Avbryt
