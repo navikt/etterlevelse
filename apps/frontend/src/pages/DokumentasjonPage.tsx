@@ -336,10 +336,7 @@ export const DokumentasjonPage = () => {
                             variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
                             className="whitespace-nowrap"
                           >
-                            {pvkDokument.skalUtforePvk &&
-                            (behandlingsLivslop?.beskrivelse ||
-                              (behandlingsLivslop && behandlingsLivslop?.filer.length > 0) ||
-                              pvkDokumentStartedCheck)
+                            {pvkDokument.skalUtforePvk && pvkDokumentStartedCheck
                               ? 'Fullfør PVK'
                               : 'Påbegynn PVK'}
                           </Button>
