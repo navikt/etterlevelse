@@ -72,13 +72,17 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
           onClose={() => setIsOpen(false)}
         >
           <Modal.Body>
-            <List title="Dette risikoscenarioet brukes også ved følgende etterlevelseskrav:">
-              {risikoscenario.relevanteKravNummer.map((krav) => (
-                <List.Item key={risikoscenario.id + '_' + krav.kravNummer + '.' + krav.kravVersjon}>
-                  K{krav.kravNummer}.{krav.kravVersjon} {krav.navn}
-                </List.Item>
-              ))}
-            </List>
+            {risikoscenario.relevanteKravNummer.length > 0 && (
+              <List title="Dette risikoscenarioet brukes også ved følgende etterlevelseskrav:">
+                {risikoscenario.relevanteKravNummer.map((krav) => (
+                  <List.Item
+                    key={risikoscenario.id + '_' + krav.kravNummer + '.' + krav.kravVersjon}
+                  >
+                    K{krav.kravNummer}.{krav.kravVersjon} {krav.navn}
+                  </List.Item>
+                ))}
+              </List>
+            )}
             Ved å slette scenarioet her, vil dere bare fjerne koblingen. Scenarioet, samt tilhørende
             tiltak, vil fortsatt være tilknyttet de andre kravene. Scenarioet kan ved behov også
             slettes derfra.
