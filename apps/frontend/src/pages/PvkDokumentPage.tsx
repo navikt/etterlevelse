@@ -159,7 +159,7 @@ export const PvkDokumentPage = () => {
                     >
                       {StepTitle.map((title) => {
                         return (
-                          <Stepper.Step key={title} href="#">
+                          <Stepper.Step key={title} as="button">
                             {title}
                           </Stepper.Step>
                         )
