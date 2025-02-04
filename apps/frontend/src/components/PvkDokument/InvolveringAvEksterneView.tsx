@@ -61,7 +61,7 @@ export const InvolveringAvEksterneView = (props: IProps) => {
       initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
       innerRef={formRef}
     >
-      {({ submitForm }) => (
+      {({ submitForm, values }) => (
         <Form>
           <div className="flex justify-center">
             <div>
@@ -128,7 +128,11 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                 <TextAreaField
                   rows={3}
                   noPlaceholder
-                  label="Utdyp hvordan dere har involvert representant(er) for de registrerte"
+                  label={
+                    values.harInvolvertRepresentant || values.harInvolvertRepresentant === null
+                      ? 'Utdyp hvordan dere har involvert representant(er) for de registrerte'
+                      : 'Utdyp hvorfor dere ikke har involvert representant(er) for de registrerte'
+                  }
                   name="representantInvolveringsBeskrivelse"
                 />
               </div>
@@ -181,7 +185,12 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                 <TextAreaField
                   rows={3}
                   noPlaceholder
-                  label="Utdyp hvordan dere har involvert representant(er) for databehandler(e)"
+                  label={
+                    values.harDatabehandlerRepresentantInvolvering ||
+                    values.harDatabehandlerRepresentantInvolvering === null
+                      ? 'Utdyp hvordan dere har involvert representant(er) for databehandler(e)'
+                      : 'Utdyp hvorfor dere ikke har involvert representant(er) for databehandler(e)'
+                  }
                   name="dataBehandlerRepresentantInvolveringBeskrivelse"
                 />
               </div>
