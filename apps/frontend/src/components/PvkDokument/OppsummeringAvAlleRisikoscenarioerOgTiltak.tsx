@@ -1,13 +1,4 @@
-import {
-  Alert,
-  BodyLong,
-  BodyShort,
-  Heading,
-  Link,
-  List,
-  Tabs,
-  ToggleGroup,
-} from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, Link, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
@@ -157,23 +148,12 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
       <div className="flex-col justify-items-center min-w-[900px]">
         <div>
           <Heading level="1" size="medium" className="mb-5">
-            Oppsummering av alle risikoscenarioer og tiltak
+            Risikobildet etter tiltak
           </Heading>
 
-          <BodyShort className="mt-5">
-            Her får dere oversikt over alle risikoscenarioer og tiltak som er lagt inn. Dere kan
-            velge å se på:
-          </BodyShort>
-
-          <List>
-            <List.Item>
-              Etterlevelseskrav, og hvilke risikoscenarioer og tiltak som finnes ved hvert krav
-            </List.Item>
-            <List.Item>
-              Etterlevelseskrav, og hvilke risikoscenarioer og tiltak som finnes ved hvert krav
-            </List.Item>
-            <List.Item>Tiltak, inkludert hvilke tiltak som savner ansvarlig eller frist.</List.Item>
-          </List>
+          <BodyLong className="mt-5">
+            Her vurderer dere det samlede risikobildet pr. scenario etter at tiltak er gjennomført.
+          </BodyLong>
         </div>
         <div className="w-full mt-5">
           <Tabs
