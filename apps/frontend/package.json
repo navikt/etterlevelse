@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "type": "commonjs",
   "dependencies": {
     "@apollo/client": "^3.8.4",
     "@fontsource/source-sans-pro": "^5.0.8",
