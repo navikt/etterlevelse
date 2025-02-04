@@ -228,11 +228,16 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
               !isAddExistingMode &&
               !isCreateMode && (
                 <div className="mt-5 flex gap-2">
-                  <Button type="button" onClick={() => setIsCreateTiltakFormActive(true)}>
+                  <Button
+                    size="small"
+                    type="button"
+                    onClick={() => setIsCreateTiltakFormActive(true)}
+                  >
                     Opprett nytt tiltak
                   </Button>
                   <Button
                     type="button"
+                    size="small"
                     variant="secondary"
                     onClick={() => setIsAddExisitingMode(true)}
                   >
