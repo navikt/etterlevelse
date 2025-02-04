@@ -143,7 +143,7 @@ export const PvkDokumentPage = () => {
         pvkDokument &&
         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
           <div className="w-full">
-            <div className="h-48 bg-[#8269A21F] flex flex-col w-full items-center">
+            <div className="min-h-48 bg-[#8269A21F] flex flex-col w-full items-center">
               <div className="w-full max-w-7xl">
                 <div className="px-2 pb-6">
                   <CustomizedBreadcrumbs currentPage={currentPage} paths={breadcrumbPaths} />
