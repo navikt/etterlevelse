@@ -50,7 +50,7 @@ export const getSannsynlighetsnivaaText = (sannsynlighetsnivaa: number) => {
     case 1:
       return 'Meget lite sannsynlig'
     case 2:
-      return 'Lite sannsyling'
+      return 'Lite sannsynlig'
     case 3:
       return 'Moderat sannsynlig'
     case 4:
