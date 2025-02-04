@@ -89,6 +89,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
       updateRisikoscenario(updatedRisikoscenario).then((response) => {
         setActiveRisikoscenario(response)
         updateRisikoscenarioList(response)
+        setIsIngenTilgangFormDirty(false)
       })
     })
   }
