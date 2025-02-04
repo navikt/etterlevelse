@@ -8,6 +8,7 @@ import { ITiltak } from '../../../constants'
 import { isDev } from '../../../util/config'
 import { DateField, InputField, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
+import { FormError } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 import { noOptionMessage, selectOverrides } from '../../search/util'
@@ -53,7 +54,7 @@ export const TiltakForm = (props: IProps) => {
           />
 
           <TextAreaField
-            label="Beskriv tiltaket nærmere (valgfritt)"
+            label="Beskriv tiltaket nærmere"
             name="beskrivelse"
             rows={3}
             noPlaceholder
@@ -137,6 +138,7 @@ export const TiltakForm = (props: IProps) => {
 
           <div className="mb-5">
             <DateField label="Legg inn tiltaksfrist" name="frist" />
+            <FormError fieldName="frist" akselStyling />
           </div>
 
           <div className="flex gap-2 mt-5">
