@@ -10,6 +10,9 @@ import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.integration.team.dto.Resource;
+import no.nav.data.integration.team.dto.ResourceType;
+import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.dto.TiltakRequest;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -38,6 +42,7 @@ import java.util.UUID;
 public class TiltakController {
 
     private final TiltakService service;
+    private final TeamcatResourceClient teamcatResourceClient;
 
     @Operation(summary = "Get All Tiltak")
     @ApiResponse(description = "ok")
@@ -55,6 +60,7 @@ public class TiltakController {
         log.info("Get Tiltak id={}", id);
         TiltakResponse resp = TiltakResponse.buildFrom(service.get(id));
         addRisikoscenarioer(resp);
+        addResourceData(resp);
         return ResponseEntity.ok(resp);
     }
 
@@ -65,7 +71,10 @@ public class TiltakController {
         log.info("Get Tiltak by Pvk Document id={}", pvkDokumentId);
         List<Tiltak> tiltakList = service.getByPvkDokument(pvkDokumentId);
         List<TiltakResponse> tiltakResponseList = tiltakList.stream().map(TiltakResponse::buildFrom).toList();
-        tiltakResponseList.forEach(this::addRisikoscenarioer);
+        tiltakResponseList.forEach(tiltakResponse -> {
+            addRisikoscenarioer(tiltakResponse);
+            addResourceData(tiltakResponse);
+        });
         return ResponseEntity.ok(new RestResponsePage<>(tiltakResponseList));
     }
 
@@ -78,6 +87,7 @@ public class TiltakController {
         service.addRisikoscenarioTiltakRelasjon(risikoscenarioId.toString(), tiltak.getId().toString());
         TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
         addRisikoscenarioer(resp);
+        addResourceData(resp);
         return new ResponseEntity<>(resp, HttpStatus.CREATED);
     }
 
@@ -99,7 +109,7 @@ public class TiltakController {
         Tiltak tiltak = service.save(tiltakToUpdate, true);
         var response = TiltakResponse.buildFrom(tiltak);
         addRisikoscenarioer(response);
-
+        addResourceData(response);
         return ResponseEntity.ok(response);
     }
 
@@ -125,6 +135,28 @@ public class TiltakController {
 
     private TiltakResponse addRisikoscenarioer(TiltakResponse res) {
         res.setRisikoscenarioIds(service.getRisikoscenarioer(res.getId()));
+        return res;
+    }
+
+    private TiltakResponse addResourceData(TiltakResponse res) {
+        if (res.getAnsvarlig().getNavIdent() == null || res.getAnsvarlig().getNavIdent().isEmpty()) {
+            return res;
+        }
+
+        var resourceData = teamcatResourceClient.getResource(res.getAnsvarlig().getNavIdent());
+        if(resourceData.isPresent()) {
+            res.setAnsvarlig(resourceData.get());
+        } else {
+            res.setAnsvarlig(Resource.builder()
+                    .navIdent(res.getAnsvarlig().getNavIdent())
+                    .givenName("Fant ikke person med NAV ident: " + res.getAnsvarlig().getNavIdent())
+                    .familyName("Fant ikke person med NAV ident: " + res.getAnsvarlig().getNavIdent())
+                    .fullName("Fant ikke person med NAV ident: " + res.getAnsvarlig().getNavIdent())
+                    .email("Fant ikke person med NAV ident: " + res.getAnsvarlig().getNavIdent())
+                    .resourceType(ResourceType.INTERNAL)
+                    .build());
+        }
+
         return res;
     }
 

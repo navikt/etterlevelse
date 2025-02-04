@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakData;
 
@@ -24,7 +25,7 @@ public class TiltakResponse {
     private String pvkDokumentId;
     private String navn;
     private String beskrivelse;
-    private String ansvarlig;
+    private Resource ansvarlig;
     private LocalDate frist;
     private List<String> risikoscenarioIds; // Merk: Settes ikke i buildFrom
 
@@ -44,7 +45,7 @@ public class TiltakResponse {
                 .pvkDokumentId(tiltak.getPvkDokumentId().toString())
                 .navn(td.getNavn())
                 .beskrivelse(td.getBeskrivelse())
-                .ansvarlig(td.getAnsvarlig())
+                .ansvarlig(Resource.builder().navIdent(td.getAnsvarlig()).build())
                 .frist(td.getFrist())
                 .build();
     }
