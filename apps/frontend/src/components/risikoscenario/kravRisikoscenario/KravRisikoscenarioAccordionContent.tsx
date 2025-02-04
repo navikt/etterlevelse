@@ -103,6 +103,10 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
         ...activeRisikoscenario,
         tiltakIds: [...activeRisikoscenario.tiltakIds, response.id],
       })
+      updateRisikoscenarioList({
+        ...activeRisikoscenario,
+        tiltakIds: [...activeRisikoscenario.tiltakIds, response.id],
+      })
       setTiltakList([...tiltakList, response])
 
       setIsCreateTiltakFormActive(false)
