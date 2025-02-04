@@ -161,7 +161,7 @@ export const KravRisikoscenario = (props: IProps) => {
         )}
 
         {!isCreateMode && !isLeggTilEksisterendeMode && (
-          <div className="flex gap-2 mt-8">
+          <div className="flex gap-2 mt-8 lg:flex-row flex-col">
             <Button
               size="small"
               type="button"

@@ -307,7 +307,7 @@ export const EtterlevelseKravView = (props: IProps) => {
           <div className="w-full flex">
             <div className="pr-4 flex flex-1 flex-col gap-4 col-span-8">
               <div>
-                <div className="flex items-center justify-between">
+                <div className="flex justify-between lg:flex-row flex-col">
                   <div>
                     {krav.aktivertDato !== null && krav.kravVersjon > 1 && (
                       <Tag variant="warning">
