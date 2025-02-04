@@ -94,6 +94,7 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
                             target="_blank"
                             rel="noopener noreferrer"
                             href="https://nav-it.slack.com/archives/CR1B19E6L"
+                            className="inline"
                           >
                             #behandlingskatalogen på Slack (åpner i en ny fane)
                           </Link>

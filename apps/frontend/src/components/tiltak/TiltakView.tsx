@@ -17,7 +17,11 @@ export const TiltakView = (props: IProps) => {
       </div>
       <div className="flex gap-2">
         <Label>Tiltaksansvarlig:</Label>
-        <BodyLong>{tiltak.ansvarlig.fullName}</BodyLong>
+        <BodyLong>
+          {tiltak.ansvarlig.fullName
+            ? tiltak.ansvarlig.fullName
+            : 'Det er ikke satt en ansvarlig for tiltaket'}
+        </BodyLong>
       </div>
       <div className="mt-3 flex gap-2">
         <Label>Tiltaksfrist:</Label>
