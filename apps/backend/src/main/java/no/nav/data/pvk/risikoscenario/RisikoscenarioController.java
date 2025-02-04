@@ -213,7 +213,7 @@ public class RisikoscenarioController {
             log.warn("DuplicateKeyException caught while inserting Tiltak-Risikoscenario relation", e);
             throw new ValidationException("Could not insert Tiltak-Risikoscenario relation: already exists");
         } catch (DataIntegrityViolationException e) {
-            log.warn("DataIntegrityViolationException caught while inserting Tiltak-Risikoscenario relation", e);
+            log.warn("DataIntegrityViolationException caught while inserting Tiltak-Risikoscenario relation");
             throw new NotFoundException("Could not insert Tiltak-Risikoscenario relation: non-existing Tiltak and/or Risikoscenario");
         }
         // TODO: ITest for exception handling
@@ -247,4 +247,5 @@ public class RisikoscenarioController {
         return risikoscenario;
     }
 
+    // FIXME: ITest
 }

@@ -2,10 +2,8 @@ package no.nav.data.pvk.tiltak;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
-import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakRepo;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -30,15 +28,22 @@ public class TiltakService {
     }
 
     public Tiltak get(UUID uuid) {
-        return repo.findById(uuid).orElseThrow(() -> new NotFoundException("Could not find behandlingens livsløp with id " + uuid));
+        return repo.findById(uuid).orElse(null);
     }
 
+    /**
+     * @throws DataIntegrityViolationException If the Risikoscenario does not exist
+     */
     @Transactional
-    public Tiltak save(Tiltak tiltak, boolean update) {
+    public Tiltak save(Tiltak tiltak, UUID risikoscenarioId, boolean update) {
         if (!update) {
             tiltak.setId(UUID.randomUUID());
         }
-        return repo.save(tiltak);
+        tiltak = repo.save(tiltak);
+        if (risikoscenarioId != null) {
+            addRisikoscenarioTiltakRelasjon(risikoscenarioId.toString(), tiltak.getId().toString());
+        }
+        return tiltak;
     }
 
     @Transactional
@@ -53,6 +58,9 @@ public class TiltakService {
         return tiltak.orElse(null);
     }
 
+    /**
+     * @throws DataIntegrityViolationException If the Risikoscenario or Tiltak does not exist
+     */
     @Transactional(propagation = Propagation.REQUIRED)
     public void addRisikoscenarioTiltakRelasjon(String risikoscenarioId, String tiltakId) {
         repo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId);

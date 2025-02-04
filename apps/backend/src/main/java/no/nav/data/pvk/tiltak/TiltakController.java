@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -58,7 +57,11 @@ public class TiltakController {
     @GetMapping("/{id}")
     public ResponseEntity<TiltakResponse> getById(@PathVariable UUID id) {
         log.info("Get Tiltak id={}", id);
-        TiltakResponse resp = TiltakResponse.buildFrom(service.get(id));
+        Tiltak tiltak = service.get(id);
+        if (tiltak == null) {
+            throw new NotFoundException(String.format("Could not find tiltak with id = %s ", id));
+        }
+        TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
         addRisikoscenarioer(resp);
         addResourceData(resp);
         return ResponseEntity.ok(resp);
@@ -83,12 +86,16 @@ public class TiltakController {
     @PostMapping("/risikoscenario/{risikoscenarioId}")
     public ResponseEntity<TiltakResponse> createTiltak(@PathVariable UUID risikoscenarioId, @RequestBody TiltakRequest request) {
         log.info("Create Tiltak");
-        Tiltak tiltak = service.save(request.convertToTiltak(), false);
-        service.addRisikoscenarioTiltakRelasjon(risikoscenarioId.toString(), tiltak.getId().toString());
-        TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
-        addRisikoscenarioer(resp);
-        addResourceData(resp);
-        return new ResponseEntity<>(resp, HttpStatus.CREATED);
+        try {
+            Tiltak tiltak = service.save(request.convertToTiltak(), risikoscenarioId, false);
+            TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
+            addRisikoscenarioer(resp);
+            addResourceData(resp);
+            return new ResponseEntity<>(resp, HttpStatus.CREATED);
+        } catch (DataIntegrityViolationException e) {
+            log.warn("DataIntegrityViolationException caught while inserting Tiltak-Risikoscenario relation");
+            throw new NotFoundException("Could not insert Tiltak-Risikoscenario relation: non-existing Risikoscenario");
+        }
     }
 
     @Operation(summary = "Update tiltak")
@@ -106,7 +113,7 @@ public class TiltakController {
         }
 
         request.mergeInto(tiltakToUpdate);
-        Tiltak tiltak = service.save(tiltakToUpdate, true);
+        Tiltak tiltak = service.save(tiltakToUpdate, null, true);
         var response = TiltakResponse.buildFrom(tiltak);
         addRisikoscenarioer(response);
         addResourceData(response);

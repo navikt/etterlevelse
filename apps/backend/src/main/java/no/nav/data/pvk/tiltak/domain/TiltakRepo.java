@@ -31,4 +31,9 @@ public interface TiltakRepo extends JpaRepository<Tiltak, UUID> {
     @Query(value="insert into risikoscenario_tiltak_relation (risikoscenario_id, tiltak_id) values (uuid(?1), uuid(?2))", nativeQuery = true)
     int insertTiltakRisikoscenarioRelation(String risikoscenarioId, String tiltakId);
 
+    @Transactional
+    @Modifying
+    @Query(value="delete from risikoscenario_tiltak_relation", nativeQuery = true)
+    int deleteAllTiltakRisikoscenarioRelations();
+
 }

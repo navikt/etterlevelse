@@ -2,8 +2,6 @@ package no.nav.data.pvk.pvkdokument;
 
 import no.nav.data.IntegrationTestBase;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
@@ -27,7 +25,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
 
     @Test
     void getPvkDokument() {
-        var pvkDokuemnt = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID().toString()), false);
+        var pvkDokuemnt = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
 
         var resp = restTemplate.getForEntity("/pvkdokument/{id}", PvkDokumentResponse.class, pvkDokuemnt.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -37,8 +35,8 @@ public class PvkDokumentIT extends IntegrationTestBase {
 
     @Test
     void getPvkDokumentByEtterlevelseDokumentasjonId() {
-        var pvkDokuemnt = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID().toString()), false);
-        pvkDokumentService.save(generatePvkDokument(UUID.randomUUID().toString()), false);
+        var pvkDokuemnt = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
+        pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
 
         var resp = restTemplate.getForEntity("/pvkdokument/etterlevelsedokument/{etterlevelseDokumentId}", PvkDokumentResponse.class, pvkDokuemnt.getEtterlevelseDokumentId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -66,7 +64,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
 
     @Test
     void updatePvkDokument() {
-        var pvkDokuemnt = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID().toString()), false);
+        var pvkDokuemnt = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
 
         var request = PvkDokumentRequest.builder()
                 .id(pvkDokuemnt.getId().toString())
@@ -86,23 +84,10 @@ public class PvkDokumentIT extends IntegrationTestBase {
 
     @Test
     void deletePvkDokument() {
-        var pvkDokuemnt = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID().toString()), false);
+        var pvkDokuemnt = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
         restTemplate.delete("/pvkdokument/{id}", pvkDokuemnt.getId());
 
         assertThat(pvkDokumentRepo.count()).isEqualTo(0);
-    }
-
-
-    public PvkDokument generatePvkDokument(String etterlevelseDokumentasjonId) {
-        return PvkDokument.builder()
-                .etterlevelseDokumentId(etterlevelseDokumentasjonId)
-                .status(PvkDokumentStatus.UNDERARBEID)
-                .pvkDokumentData(
-                        PvkDokumentData.builder()
-                                .ytterligereEgenskaper(List.of())
-                                .build()
-                )
-                .build();
     }
 
 }

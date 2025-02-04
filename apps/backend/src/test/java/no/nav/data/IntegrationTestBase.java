@@ -25,7 +25,15 @@ import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
+import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
+import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioData;
+import no.nav.data.pvk.tiltak.TiltakService;
+import no.nav.data.pvk.tiltak.domain.TiltakRepo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,9 +44,15 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @ActiveProfiles("test")
 @ExtendWith(WiremockExtension.class)
@@ -97,9 +111,15 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected PvkDokumentService pvkDokumentService;
     @Autowired
+    protected TiltakRepo tiltakRepo;
+    @Autowired
+    protected TiltakService tiltakService;
+    @Autowired
     protected BehandlingensLivslopRepo behandlingensLivslopRepo;
     @Autowired
     protected BehandlingensLivslopService behandlingensLivslopService;
+    @Autowired
+    protected RisikoscenarioService risikoscenarioService;
 
     @BeforeEach
     void setUpBase() {
@@ -109,11 +129,15 @@ public abstract class IntegrationTestBase {
     }
 
     @AfterEach
+    @Commit
+    @Transactional
     void tearDownBase() {
         repository.deleteAll();
         MockFilter.clearUser();
         etterlevelseRepo.deleteAll();
         behandlingensLivslopRepo.deleteAll();
+        tiltakRepo.deleteAllTiltakRisikoscenarioRelations();
+        tiltakRepo.deleteAll();
         pvkDokumentRepo.deleteAll();
     }
 
@@ -128,4 +152,27 @@ public abstract class IntegrationTestBase {
             ).applyTo(configurableApplicationContext.getEnvironment());
         }
     }
+    
+    public static PvkDokument generatePvkDokument(UUID etterlevelseDokumentasjonId) {
+        return PvkDokument.builder()
+                .etterlevelseDokumentId(etterlevelseDokumentasjonId.toString())
+                .status(PvkDokumentStatus.UNDERARBEID)
+                .pvkDokumentData(
+                        PvkDokumentData.builder()
+                                .ytterligereEgenskaper(List.of())
+                                .build()
+                )
+                .build();
+    }
+    
+    public static Risikoscenario generateRisikoscenario(UUID pvkDokumentId) {
+        return Risikoscenario.builder()
+                .pvkDokumentId(pvkDokumentId.toString())
+                .risikoscenarioData(RisikoscenarioData.builder()
+                        .relevanteKravNummer(new ArrayList<Integer>())
+                        .build()
+                )
+                .build();
+    }
+
 }
