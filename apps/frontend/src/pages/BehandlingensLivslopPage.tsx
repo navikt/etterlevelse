@@ -284,7 +284,7 @@ export const BehandlingensLivslopPage = () => {
                     )}
 
                     {!isSubmitting && (
-                      <div className="flex gap-2 mt-5">
+                      <div className="flex gap-2 mt-5 lg:flex-row flex-col">
                         <Button
                           type="button"
                           onClick={() => {

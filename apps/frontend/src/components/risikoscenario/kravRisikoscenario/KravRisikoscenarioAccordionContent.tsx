@@ -227,7 +227,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
               !isEditTiltakFormActive &&
               !isAddExistingMode &&
               !isCreateMode && (
-                <div className="mt-5 flex gap-2">
+                <div className="mt-5 flex gap-2 lg:flex-row flex-col">
                   <Button
                     size="small"
                     type="button"
