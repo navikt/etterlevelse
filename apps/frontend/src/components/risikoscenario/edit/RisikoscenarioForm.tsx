@@ -52,7 +52,7 @@ export const RisikoscenarioForm = (props: IProps) => {
                 />
               </div>
 
-              <Heading level="2" size="small" className="my-5">
+              <Heading level="3" size="small" className="my-5">
                 Risikoscenarioets sannsynlighet
               </Heading>
 
@@ -90,7 +90,7 @@ export const RisikoscenarioForm = (props: IProps) => {
                 />
               </div>
 
-              <Heading level="2" size="small" className="my-5">
+              <Heading level="3" size="small" className="my-5">
                 Risikoscenarioets konsekvensnivå
               </Heading>
 

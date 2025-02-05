@@ -1,4 +1,4 @@
-import { Label } from '@navikt/ds-react'
+import { Heading } from '@navikt/ds-react'
 import { Dispatch, RefObject, SetStateAction } from 'react'
 import { createRisikoscenarioKnyttetTilKrav } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario, TKravQL } from '../../../constants'
@@ -43,7 +43,9 @@ export const CreateRisikoscenario = (props: IProps) => {
 
   return (
     <div className="w-full">
-      <Label>Legg til nytt risikoscenario</Label>
+      <Heading size="medium" level="2" className="mb-5">
+        Legg til nytt risikoscenario
+      </Heading>
       <RisikoscenarioForm
         onClose={() => setIsCreateMode(false)}
         submit={submit}
