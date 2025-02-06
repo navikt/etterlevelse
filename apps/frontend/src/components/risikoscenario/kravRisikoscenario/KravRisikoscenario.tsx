@@ -1,4 +1,4 @@
-import { Accordion, Alert, Button, List, ReadMore } from '@navikt/ds-react'
+import { Accordion, Alert, BodyLong, Button, List, ReadMore } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../../api/TiltakApi'
@@ -86,7 +86,10 @@ export const KravRisikoscenario = (props: IProps) => {
   return (
     <div className="w-full">
       <ReadMore header="Slik dokumenterer dere risikoscenarioer og tiltak">
-        <List title="Her dokumenter dere risikoscenarioer og tiltak som gjelder for dette kravet. Her kan dere:">
+        <BodyLong>
+          Her dokumenter dere risikoscenarioer og tiltak som gjelder for dette kravet. Her kan dere:
+        </BodyLong>
+        <List>
           <List.Item>Opprette nye risikoscenarioer.</List.Item>
           <List.Item>
             Koble på eksisterende risikoscenarioer som dere har beskrevet andre steder i løsninga.
