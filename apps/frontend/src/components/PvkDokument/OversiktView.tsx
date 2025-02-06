@@ -4,6 +4,7 @@ import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../../api/Behan
 import {
   IBehandlingensLivslop,
   IPvkDokument,
+  IRisikoscenario,
   ITeam,
   ITeamResource,
   TEtterlevelseDokumentasjonQL,
@@ -15,8 +16,7 @@ import FormButtons from './edit/FormButtons'
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   pvkDokument: IPvkDokument
-  risikoscenarioTilknyttetKrav: any[]
-  generelleRisikoscenario: any[]
+  allRisikoscenarioList: IRisikoscenario[]
   activeStep: number
   setSelectedStep: (step: number) => void
   updateTitleUrlAndStep: (step: number) => void
@@ -26,8 +26,7 @@ export const OversiktView = (props: IProps) => {
   const {
     etterlevelseDokumentasjon,
     pvkDokument,
-    risikoscenarioTilknyttetKrav,
-    generelleRisikoscenario,
+    allRisikoscenarioList,
     activeStep,
     setSelectedStep,
     updateTitleUrlAndStep,
@@ -36,13 +35,21 @@ export const OversiktView = (props: IProps) => {
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
 
   const formStatus = [
-    pvkDokument.personkategoriAntallBeskrivelse ||
+    pvkDokument.stemmerPersonkategorier !== null ||
+      pvkDokument.personkategoriAntallBeskrivelse ||
       pvkDokument.tilgangsBeskrivelsePersonopplysningene ||
       pvkDokument.lagringsBeskrivelsePersonopplysningene,
-    pvkDokument.representantInvolveringsBeskrivelse ||
+    pvkDokument.harInvolvertRepresentant !== null ||
+      pvkDokument.representantInvolveringsBeskrivelse ||
+      pvkDokument.harDatabehandlerRepresentantInvolvering !== null ||
       pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse,
-    risikoscenarioTilknyttetKrav.length > 0,
-    generelleRisikoscenario.length > 0,
+    allRisikoscenarioList.length > 0,
+    allRisikoscenarioList.filter(
+      (risikoscenario) =>
+        risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
+        risikoscenario.sannsynlighetsNivaaEtterTiltak ||
+        risikoscenario.nivaaBegrunnelseEtterTiltak !== ''
+    ).length > 0,
   ]
 
   const getMemberListToString = (membersData: ITeamResource[]): string => {

@@ -20,11 +20,23 @@ import RisikoscenarioTag, {
 interface IProps {
   risikoscenario: IRisikoscenario
   setRisikoscenario: (state: IRisikoscenario) => void
+  risikoscenarioList: IRisikoscenario[]
+  setRisikosenarioList: (state: IRisikoscenario[]) => void
+  allRisikoscenarioList: IRisikoscenario[]
+  setAllRisikoscenarioList: (state: IRisikoscenario[]) => void
   formRef: RefObject<any>
 }
 
 export const VurdereTiltaksEffekt = (props: IProps) => {
-  const { risikoscenario, setRisikoscenario, formRef } = props
+  const {
+    risikoscenario,
+    setRisikoscenario,
+    risikoscenarioList,
+    setRisikosenarioList,
+    allRisikoscenarioList,
+    setAllRisikoscenarioList,
+    formRef,
+  } = props
   const [isFormActive, setIsFormActive] = useState<boolean>(false)
   const revurdertEffektCheck =
     risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
@@ -44,6 +56,25 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
 
       updateRisikoscenario(updatedRisikoscenario).then((response) => {
         setRisikoscenario(response)
+        setAllRisikoscenarioList(
+          allRisikoscenarioList.map((unfilteredRisikoscenario) => {
+            if (unfilteredRisikoscenario.id === response.id) {
+              return response
+            } else {
+              return unfilteredRisikoscenario
+            }
+          })
+        )
+
+        setRisikosenarioList(
+          risikoscenarioList.map((filteredRisikoscenario) => {
+            if (filteredRisikoscenario.id === response.id) {
+              return response
+            } else {
+              return filteredRisikoscenario
+            }
+          })
+        )
         setIsFormActive(false)
       })
     })

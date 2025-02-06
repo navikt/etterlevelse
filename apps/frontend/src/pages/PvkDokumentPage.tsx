@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
+import { getRisikoscenarioByPvkDokumentId } from '../api/RisikoscenarioApi'
 import BehandlingensArtOgOmfangView from '../components/PvkDokument/BehandlingensArtOgOmfangView'
 import IdentifiseringAvRisikoscenarioerOgTiltak from '../components/PvkDokument/IdentifiseringAvRisikoscenarioerOgTiltak'
 import InvolveringAvEksterneView from '../components/PvkDokument/InvolveringAvEksterneView'
@@ -12,7 +13,13 @@ import OppsummeringAvAlleRisikoscenarioerOgTiltak from '../components/PvkDokumen
 import OversiktView from '../components/PvkDokument/OversiktView'
 import SendInnView from '../components/PvkDokument/SendInnView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { IBreadCrumbPath, IDataBehandler, IExternalCode } from '../constants'
+import {
+  ERisikoscenarioType,
+  IBreadCrumbPath,
+  IDataBehandler,
+  IExternalCode,
+  IRisikoscenario,
+} from '../constants'
 import { user } from '../services/User'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
@@ -40,6 +47,7 @@ export const PvkDokumentPage = () => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const [personkategorier, setPersonKategorier] = useState<string[]>([])
   const [pvkDokument, setPvkDokument] = usePvkDokument(params.pvkdokumentId)
+  const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [databehandlere, setDatabehandlere] = useState<string[]>([])
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [activeStep, setActiveStep] = useState<number>(
@@ -111,6 +119,18 @@ export const PvkDokumentPage = () => {
     }
   }, [etterlevelseDokumentasjon])
 
+  useEffect(() => {
+    ;(async () => {
+      if (pvkDokument && pvkDokument.id) {
+        await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
+          (response) => {
+            setAllRisikoscenario(response.content)
+          }
+        )
+      }
+    })()
+  }, [pvkDokument])
+
   return (
     <div id="content" role="main" className="flex flex-col w-full bg-white">
       <Helmet>
@@ -177,8 +197,7 @@ export const PvkDokumentPage = () => {
                     <OversiktView
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvkDokument={pvkDokument}
-                      risikoscenarioTilknyttetKrav={[]}
-                      generelleRisikoscenario={[]}
+                      allRisikoscenarioList={allRisikoscenario}
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}
                       updateTitleUrlAndStep={updateTitleUrlAndStep}

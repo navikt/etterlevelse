@@ -9,7 +9,9 @@ import OppsumeringAccordianContent from './OppsumeringAccordianContent'
 
 interface IProps {
   risikoscenarioList: IRisikoscenario[]
+  setRisikosenarioList: (state: IRisikoscenario[]) => void
   allRisikoscenarioList: IRisikoscenario[]
+  setAllRisikoscenarioList: (state: IRisikoscenario[]) => void
   tiltakList: ITiltak[]
   formRef: RefObject<any>
   isUnsaved: boolean
@@ -19,7 +21,9 @@ interface IProps {
 export const OppsumeringAccordianList = (props: IProps) => {
   const {
     risikoscenarioList,
+    setRisikosenarioList,
     allRisikoscenarioList,
+    setAllRisikoscenarioList,
     tiltakList,
     formRef,
     isUnsaved,
@@ -84,7 +88,10 @@ export const OppsumeringAccordianList = (props: IProps) => {
               <Accordion.Content>
                 <OppsumeringAccordianContent
                   risikoscenario={risikoscenario}
+                  risikoscenarioList={risikoscenarioList}
+                  setRisikosenarioList={setRisikosenarioList}
                   allRisikoscenarioList={allRisikoscenarioList}
+                  setAllRisikoscenarioList={setAllRisikoscenarioList}
                   tiltakList={tiltakList}
                   formRef={formRef}
                 />
