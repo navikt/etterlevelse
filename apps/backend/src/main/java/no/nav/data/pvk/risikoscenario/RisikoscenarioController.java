@@ -62,10 +62,14 @@ public class RisikoscenarioController {
     @GetMapping("/{id}")
     public ResponseEntity<RisikoscenarioResponse> getById(@PathVariable UUID id) {
         log.info("Get Risikoscenario id={}", id);
-
-        var risikoscenario = RisikoscenarioResponse.buildFrom(risikoscenarioService.get(id));
-        setTiltakAndKravDataForRelevantKravList(risikoscenario);
-        return ResponseEntity.ok(risikoscenario);
+        Risikoscenario risikoscenario = risikoscenarioService.get(id);
+        if (risikoscenario == null) {
+            log.warn("Could not find risikoscenario with id = {}", id);
+            throw new NotFoundException(String.format("Could not find risikoscenario with id = %s", id));
+        }
+        RisikoscenarioResponse resp = RisikoscenarioResponse.buildFrom(risikoscenario);
+        setTiltakAndKravDataForRelevantKravList(resp);
+        return ResponseEntity.ok(resp);
     }
 
     @Operation(summary = "Get Risikoscenario by Pvk Document id")
@@ -98,12 +102,15 @@ public class RisikoscenarioController {
     public ResponseEntity<RisikoscenarioResponse> createRisikoscenario(@RequestBody RisikoscenarioRequest request) {
         log.info("Create Risikoscenario");
 
-        Risikoscenario risikoscenario = risikoscenarioService.save(request.convertToRisikoscenario(), false);
-
-        var response = RisikoscenarioResponse.buildFrom(risikoscenario);
-        setTiltakAndKravDataForRelevantKravList(response);
-
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        try {
+            Risikoscenario risikoscenario = risikoscenarioService.save(request.convertToRisikoscenario(), false);
+            RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenario);
+            setTiltakAndKravDataForRelevantKravList(response);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        } catch (DataIntegrityViolationException e) {
+            log.warn("DataIntegrityViolationException caught while creating Risikoscenario. Probably reference to non-existing PvkDokument");
+            throw new ValidationException("Could not insert Risikoscenario: non-existing PvkDokument");
+        }
     }
 
     @Operation(summary = "Create Risikoscenario knyttet til krav")
@@ -112,20 +119,31 @@ public class RisikoscenarioController {
     public ResponseEntity<RisikoscenarioResponse> createRisikoscenarioKnyttetTilKrav(@PathVariable Integer kravnummer , @RequestBody RisikoscenarioRequest request) {
         log.info("Create Risikoscenario knyttet til krav");
 
-        Risikoscenario risikoscenario = risikoscenarioService.save(request.convertToRisikoscenario(), false);
-        risikoscenarioService.addRelevantKravToRisikoscenarioer(kravnummer, List.of(risikoscenario.getId().toString()));
+        // TODO: This validity check should be moved to DB
+        if (!kravService.isActiveKrav(kravnummer)) {
+            log.warn("Requested to create Risikoscenario with reference to non-existing Krav");
+            throw new ValidationException("Could not insert Risikoscenario: non-existing Krav");
+        }
+        
+        try {
+            Risikoscenario risikoscenario = request.convertToRisikoscenario();
+            risikoscenario.getRisikoscenarioData().getRelevanteKravNummer().add(kravnummer);
+            risikoscenario = risikoscenarioService.save(risikoscenario, false);
 
-        var response = RisikoscenarioResponse.buildFrom(risikoscenario);
-        setTiltakAndKravDataForRelevantKravList(response);
+            var response = RisikoscenarioResponse.buildFrom(risikoscenario);
+            setTiltakAndKravDataForRelevantKravList(response);
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        } catch (DataIntegrityViolationException e) {
+            log.warn("DataIntegrityViolationException caught while creating Risikoscenario. Probably reference to non-existing PvkDokument");
+            throw new ValidationException("Could not insert Risikoscenario: non-existing PvkDokument");
+        }
     }
 
     @Operation(summary = "Update Risikoscenario")
     @ApiResponse(description = "Risikoscenario updated")
     @PutMapping("/{id}")
     public ResponseEntity<RisikoscenarioResponse> updateRisikoscenario(@PathVariable UUID id, @Valid @RequestBody RisikoscenarioRequest request) {
-        // This endpoint ignores relevante krav
         log.info("Update Risikoscenario Document id={}", id);
 
         if (!Objects.equals(id, request.getIdAsUUID())) {
@@ -247,5 +265,4 @@ public class RisikoscenarioController {
         return risikoscenario;
     }
 
-    // FIXME: ITest
 }

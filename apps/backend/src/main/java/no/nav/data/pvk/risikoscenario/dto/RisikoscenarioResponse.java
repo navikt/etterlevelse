@@ -9,6 +9,7 @@ import no.nav.data.etterlevelse.krav.domain.KravReference;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -31,7 +32,8 @@ public class RisikoscenarioResponse {
     private Integer konsekvensNivaa;
     private String konsekvensNivaaBegrunnelse;
     private boolean generelScenario;
-    private List<KravReference> relevanteKravNummer;
+    @Builder.Default
+    private List<KravReference> relevanteKravNummer = new ArrayList<>();
     private List<String> tiltakIds; // denne blir ikke satt i buildFrom
 
     private Boolean ingenTiltak;
@@ -49,7 +51,7 @@ public class RisikoscenarioResponse {
                         .lastModifiedDate(risikoscenario.getLastModifiedDate() == null ? LocalDateTime.now() : risikoscenario.getLastModifiedDate())
                         .build())
                 .version(risikoscenario.getVersion())
-                .pvkDokumentId(risikoscenario.getPvkDokumentId())
+                .pvkDokumentId(risikoscenario.getPvkDokumentId().toString())
                 .navn(risikoscenario.getRisikoscenarioData().getNavn())
                 .beskrivelse(risikoscenario.getRisikoscenarioData().getBeskrivelse())
                 .sannsynlighetsNivaa(risikoscenario.getRisikoscenarioData().getSannsynlighetsNivaa())

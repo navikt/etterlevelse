@@ -32,6 +32,7 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioData;
+import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepo;
 import no.nav.data.pvk.tiltak.TiltakService;
 import no.nav.data.pvk.tiltak.domain.TiltakRepo;
 import org.junit.jupiter.api.AfterEach;
@@ -120,6 +121,8 @@ public abstract class IntegrationTestBase {
     protected BehandlingensLivslopService behandlingensLivslopService;
     @Autowired
     protected RisikoscenarioService risikoscenarioService;
+    @Autowired
+    protected RisikoscenarioRepo risikoscenarioRepo;
 
     @BeforeEach
     void setUpBase() {
@@ -138,6 +141,7 @@ public abstract class IntegrationTestBase {
         behandlingensLivslopRepo.deleteAll();
         tiltakRepo.deleteAllTiltakRisikoscenarioRelations();
         tiltakRepo.deleteAll();
+        risikoscenarioRepo.deleteAll();
         pvkDokumentRepo.deleteAll();
     }
 
@@ -167,7 +171,7 @@ public abstract class IntegrationTestBase {
     
     public static Risikoscenario generateRisikoscenario(UUID pvkDokumentId) {
         return Risikoscenario.builder()
-                .pvkDokumentId(pvkDokumentId.toString())
+                .pvkDokumentId(pvkDokumentId)
                 .risikoscenarioData(RisikoscenarioData.builder()
                         .relevanteKravNummer(new ArrayList<Integer>())
                         .build()
