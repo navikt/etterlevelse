@@ -147,7 +147,7 @@ export const OversiktView = (props: IProps) => {
                       {behandlingensLivslop.beskrivelse !== '' &&
                       behandlingensLivslop.beskrivelse !== undefined
                         ? 'Skriftlig beskrivelse'
-                        : 'Ingen skrftilig beskrivelse'}
+                        : 'Ingen skriftlig beskrivelse'}
                     </Tag>
                   )}
                 </div>
