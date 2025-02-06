@@ -169,9 +169,14 @@ public class KravService extends DomainService<Krav> {
         return convert(imageStorage.saveAll(images), GenericStorage::getDomainObjectData);
     }
 
-
     public KravImage getImage(UUID kravId, UUID fileId) {
         return kravRepo.findKravImage(kravId, fileId).getDomainObjectData();
+    }
+
+    public boolean isActiveKrav(Integer kravnummer) {
+        return findByKravNummerAndActiveStatus(kravnummer).stream().anyMatch(k -> {
+            return k.getStatus() == KravStatus.AKTIV;
+        });
     }
 
     @SchedulerLock(name = "clean_krav_images", lockAtLeastFor = "PT5M")
@@ -219,4 +224,5 @@ public class KravService extends DomainService<Krav> {
             return etterlevelseDokumentasjonService.findByKravRelevans(krav.getRelevansFor());
         }
     }
+
 }

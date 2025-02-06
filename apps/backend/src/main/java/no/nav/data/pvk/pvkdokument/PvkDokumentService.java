@@ -55,6 +55,7 @@ public class PvkDokumentService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public PvkDokument delete(UUID id) {
+        // FIXME: Det skal ikke gå an å slette et PvkDokument hvis noe refererer til det (risikoscenario, tiltak, fil, mm.)
         var pvkDokumentToDelete = pvkDokumentRepo.findById(id);
         pvkDokumentRepo.deleteById(id);
         return pvkDokumentToDelete.orElse(null);

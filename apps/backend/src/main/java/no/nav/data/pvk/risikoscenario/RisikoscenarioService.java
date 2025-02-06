@@ -2,7 +2,6 @@ package no.nav.data.pvk.risikoscenario;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepo;
@@ -30,12 +29,7 @@ public class RisikoscenarioService {
     private final RisikoscenarioRepoCustom risikoscenarioRepoCustom;
 
     public Risikoscenario get(UUID uuid) {
-        if (uuid == null || !risikoscenarioRepo.existsById(uuid)) return null;
-        return getRisikoscenario(uuid);
-    }
-
-    private Risikoscenario getRisikoscenario(UUID uuid) {
-        return risikoscenarioRepo.findById(uuid).orElseThrow(() -> new NotFoundException("Couldn't find Pvk Dokument with id " + uuid));
+        return risikoscenarioRepo.findById(uuid).orElse(null);
     }
 
     public Page<Risikoscenario> getAll(PageParameters pageParameters) {
@@ -43,7 +37,7 @@ public class RisikoscenarioService {
     }
 
     public List<Risikoscenario> getByPvkDokument(String pvkDokumentId, RisikoscenarioType scenarioType) {
-        List<Risikoscenario> risikoscenarioList = risikoscenarioRepo.findByPvkDokumentId(pvkDokumentId);
+        List<Risikoscenario> risikoscenarioList = risikoscenarioRepo.findByPvkDokumentId(UUID.fromString(pvkDokumentId));
         switch (scenarioType) {
             case GENERAL -> {
                 return risikoscenarioList.stream().filter((scenario) -> scenario.getRisikoscenarioData().isGenerelScenario()).collect(Collectors.toList());
@@ -63,9 +57,10 @@ public class RisikoscenarioService {
 
     @Transactional
     public List<Risikoscenario> addRelevantKravToRisikoscenarioer(Integer kravnummer, List<String> risikoscenarioIder) {
+        // FIXME: Sjekk på at kravnummer er et eksisterende krav...?
         List<Risikoscenario> res = new ArrayList<Risikoscenario>();
         for (String id : risikoscenarioIder) {
-            Risikoscenario risikoscenario = get(UUID.fromString(id)); // Throws NotFoundEx if not exists
+            Risikoscenario risikoscenario = get(UUID.fromString(id));
             List<Integer> kravList = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer();
             if (!kravList.contains(kravnummer)) {
                 kravList.add(kravnummer);
@@ -80,7 +75,6 @@ public class RisikoscenarioService {
         if (!isUpdate) {
             risikoscenario.setId(UUID.randomUUID());
         }
-
         return risikoscenarioRepo.save(risikoscenario);
     }
 
@@ -99,7 +93,7 @@ public class RisikoscenarioService {
         for (String tiltakId : tiltakIds) {
             tiltakRepo.insertTiltakRisikoscenarioRelation(riskoscenarioId, tiltakId);
         }
-        return getRisikoscenario(UUID.fromString(riskoscenarioId));
+        return get(UUID.fromString(riskoscenarioId));
     }
 
     /**

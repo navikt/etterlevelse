@@ -59,7 +59,8 @@ public class TiltakController {
         log.info("Get Tiltak id={}", id);
         Tiltak tiltak = service.get(id);
         if (tiltak == null) {
-            throw new NotFoundException(String.format("Could not find tiltak with id = %s ", id));
+            log.warn("Could not find tiltak with id = {}", id);
+            throw new NotFoundException(String.format("Could not find tiltak with id = %s", id));
         }
         TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
         addRisikoscenarioer(resp);
@@ -167,5 +168,4 @@ public class TiltakController {
         return res;
     }
 
-    // FIXME: ITest
 }

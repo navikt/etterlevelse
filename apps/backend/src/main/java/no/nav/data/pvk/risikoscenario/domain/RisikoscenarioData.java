@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -22,7 +23,8 @@ public class RisikoscenarioData {
     private Integer konsekvensNivaa;
     private String konsekvensNivaaBegrunnelse;
     private boolean generelScenario;
-    private List<Integer> relevanteKravNummer;
+    @Builder.Default
+    private List<Integer> relevanteKravNummer = new ArrayList<>();
 
     private Boolean ingenTiltak;
 
