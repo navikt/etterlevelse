@@ -342,8 +342,8 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           w-full
           ${
             systemVarsel.alertType === 'INFO'
-              ? 'bg-surface-info-subtle border-surface-info'
-              : 'bg-surface-warning-subtle border-surface-warning'
+              ? 'bg-[#d8f9ff] border-[#66cbec]'
+              : 'bg-[#ffeccc] border-[#ff9100]'
           }`}
             aria-label="Systemvarsel"
             role="status"
