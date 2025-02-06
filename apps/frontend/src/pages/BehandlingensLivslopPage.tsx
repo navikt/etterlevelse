@@ -338,7 +338,7 @@ export const BehandlingensLivslopPage = () => {
                 <Label>
                   Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:
                 </Label>
-                {etterlevelseDokumentasjon.behandlinger && (
+                {etterlevelseDokumentasjon.behandlinger ? (
                   <List>
                     {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
                       <List.Item key={behandling.nummer}>
@@ -351,28 +351,35 @@ export const BehandlingensLivslopPage = () => {
                       </List.Item>
                     ))}
                   </List>
+                ) : (
+                  <BodyShort className="my-5">Ingen behandling er valgt.</BodyShort>
                 )}
 
-                <Label>ROS-dokumentasjon:</Label>
-                <List>
-                  {etterlevelseDokumentasjon.risikovurderinger
-                    ? etterlevelseDokumentasjon.risikovurderinger.map((ros) => {
-                        const rosReg = /\[(.+)]\((.+)\)/i
-                        const rosParts = ros.match(rosReg)
-                        if (rosParts)
-                          return (
-                            <List.Item key={ros}>
-                              <ExternalLink href={rosParts[2]}>{rosParts[1]}</ExternalLink>
-                            </List.Item>
-                          )
+                <Label>
+                  Dere har koblet følgende ROS-dokumentasjon på denne etterlevelsesdokumentasjonen:
+                </Label>
+
+                {etterlevelseDokumentasjon.risikovurderinger.length > 0 ? (
+                  <List>
+                    {etterlevelseDokumentasjon.risikovurderinger.map((ros) => {
+                      const rosReg = /\[(.+)]\((.+)\)/i
+                      const rosParts = ros.match(rosReg)
+                      if (rosParts)
                         return (
-                          <span className="flex" key={ros}>
-                            {ros}
-                          </span>
+                          <List.Item key={ros}>
+                            <ExternalLink href={rosParts[2]}>{rosParts[1]}</ExternalLink>
+                          </List.Item>
                         )
-                      })
-                    : 'Ikke angitt'}
-                </List>
+                      return (
+                        <span className="flex" key={ros}>
+                          {ros}
+                        </span>
+                      )
+                    })}
+                  </List>
+                ) : (
+                  <BodyShort className="my-5"> Ingen ROS er valgt.</BodyShort>
+                )}
 
                 <BodyShort className="inline-block mb-5">
                   Dere kan redigere hvilke behandinger og risikovurderinger som gjelder i{' '}
