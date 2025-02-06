@@ -33,6 +33,19 @@ export const tiltakFilterValues = {
   utenFrist: 'utenFrist',
 }
 
+function visTomListeBeskrivelse(filter: string | null) {
+  switch (filter) {
+    case filterValues.hoyRisiko:
+      return 'Det finnes ingen risikoscenarioer med høy risiko'
+    case filterValues.tiltakIkkeAktuelt:
+      return 'Det finnes ingen risikoscenarioer uten tiltak'
+    case filterValues.effektIkkeVurdert:
+      return 'Det finnes ingen risikoscenarioer der effekt ikke er vurdert'
+    default:
+      return ''
+  }
+}
+
 export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   const {
     etterlevelseDokumentasjonId,
@@ -203,8 +216,8 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                 </div>
               )}
 
-              {filteredRisikoscenarioList.length === 0 && (
-                <BodyLong>Ingen risikoscenario med {filterQuery}</BodyLong>
+              {risikoscenarioList.length !== 0 && filteredRisikoscenarioList.length === 0 && (
+                <BodyLong className="my-5">{visTomListeBeskrivelse(filterQuery)}</BodyLong>
               )}
 
               {filteredRisikoscenarioList.length !== 0 && (
