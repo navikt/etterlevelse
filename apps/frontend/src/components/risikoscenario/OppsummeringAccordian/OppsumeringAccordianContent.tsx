@@ -7,13 +7,24 @@ import VurdereTiltaksEffekt from '../edit/VurdereTiltaksEffekt'
 
 interface IProps {
   risikoscenario: IRisikoscenario
+  risikoscenarioList: IRisikoscenario[]
+  setRisikosenarioList: (state: IRisikoscenario[]) => void
   allRisikoscenarioList: IRisikoscenario[]
+  setAllRisikoscenarioList: (state: IRisikoscenario[]) => void
   tiltakList: ITiltak[]
   formRef: RefObject<any>
 }
 
 export const OppsumeringAccordianContent = (props: IProps) => {
-  const { risikoscenario, allRisikoscenarioList, tiltakList, formRef } = props
+  const {
+    risikoscenario,
+    risikoscenarioList,
+    setRisikosenarioList,
+    allRisikoscenarioList,
+    setAllRisikoscenarioList,
+    tiltakList,
+    formRef,
+  } = props
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
 
   return (
@@ -56,6 +67,10 @@ export const OppsumeringAccordianContent = (props: IProps) => {
                 <VurdereTiltaksEffekt
                   risikoscenario={activeRisikoscenario}
                   setRisikoscenario={setActiveRisikoscenario}
+                  risikoscenarioList={risikoscenarioList}
+                  setRisikosenarioList={setRisikosenarioList}
+                  allRisikoscenarioList={allRisikoscenarioList}
+                  setAllRisikoscenarioList={setAllRisikoscenarioList}
                   formRef={formRef}
                 />
               </div>
