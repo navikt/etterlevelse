@@ -1,5 +1,5 @@
 import { PencilIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, Label, Radio, RadioGroup, Stack } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, Label, Radio, RadioGroup, Stack } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { RefObject, useState } from 'react'
 import {
@@ -101,7 +101,9 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
           {({ submitForm }) => (
             <Form>
               <div className="mt-5">
-                <Label>Vurdér tiltakenes antatte effekt på risikoscenarionivået</Label>
+                <Heading size="medium" level="2" className="mb-5">
+                  Vurdér tiltakenes antatte effekt på risikoscenarionivået
+                </Heading>
               </div>
 
               <Field name="sannsynlighetsNivaaEtterTiltak">
