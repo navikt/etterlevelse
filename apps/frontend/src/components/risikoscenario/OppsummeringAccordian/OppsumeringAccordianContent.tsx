@@ -38,7 +38,7 @@ export const OppsumeringAccordianContent = (props: IProps) => {
         {risikoscenario.ingenTiltak && <BodyLong>Vi skal ikke ha tiltak.</BodyLong>}
 
         {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length !== 0 && (
-          <div>
+          <div className="mt-5">
             {tiltakList
               .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
               .map((tiltak, index) => (
@@ -53,7 +53,7 @@ export const OppsumeringAccordianContent = (props: IProps) => {
         )}
 
         {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
-          <div>
+          <div className="mt-5">
             <Alert className="mt-3" variant="warning">
               Dere må legge inn tiltak under Identifisering av risikoscenarioer og tiltak.
             </Alert>
@@ -61,7 +61,7 @@ export const OppsumeringAccordianContent = (props: IProps) => {
         )}
 
         {!risikoscenario.ingenTiltak && (
-          <div>
+          <div className="mt-5">
             {risikoscenario.tiltakIds.length !== 0 && (
               <div>
                 <VurdereTiltaksEffekt
