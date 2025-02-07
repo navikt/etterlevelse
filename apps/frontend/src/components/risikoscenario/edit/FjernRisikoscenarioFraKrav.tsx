@@ -5,7 +5,9 @@ import {
   deleteRisikoscenario,
   fjernKravFraRisikoscenario,
   getRisikoscenario,
+  removeTiltakToRisikoscenario,
 } from '../../../api/RisikoscenarioApi'
+import { deleteTiltak, getTiltak } from '../../../api/TiltakApi'
 import { IRisikoscenario } from '../../../constants'
 
 interface IProps {
@@ -29,10 +31,23 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const submit = async () => {
-    getRisikoscenario(risikoscenario.id).then((response) => {
+    getRisikoscenario(risikoscenario.id).then(async (response) => {
       const relevanteKravNummer = response.relevanteKravNummer
+
+      if (response.tiltakIds.length > 0) {
+        for await (const tiltakId of response.tiltakIds) {
+          await getTiltak(tiltakId).then(async (tiltakResponse) => {
+            await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(async () => {
+              if (tiltakResponse.risikoscenarioIds.length === 1) {
+                await deleteTiltak(tiltakId)
+              }
+            })
+          })
+        }
+      }
+
       if (relevanteKravNummer.length > 1) {
-        fjernKravFraRisikoscenario(risikoscenario.id, kravnummer).then((deleteResponse) => {
+        await fjernKravFraRisikoscenario(risikoscenario.id, kravnummer).then((deleteResponse) => {
           const updatedRisikoscenarioForKrav = risikoscenarioForKrav.filter(
             (risikoscenario) => risikoscenario.id !== deleteResponse.id
           )
@@ -41,7 +56,7 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
           setIsOpen(false)
         })
       } else {
-        deleteRisikoscenario(risikoscenario.id).then((deleteResponse) => {
+        await deleteRisikoscenario(risikoscenario.id).then((deleteResponse) => {
           const updatedRisikoscenarioForKrav = risikoscenarioForKrav.filter(
             (risikoscenario) => risikoscenario.id !== deleteResponse.id
           )

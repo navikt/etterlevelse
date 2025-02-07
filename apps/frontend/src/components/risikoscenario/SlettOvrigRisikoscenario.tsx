@@ -2,7 +2,12 @@ import { TrashIcon } from '@navikt/aksel-icons'
 import { Button, List, Modal } from '@navikt/ds-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { deleteRisikoscenario } from '../../api/RisikoscenarioApi'
+import {
+  deleteRisikoscenario,
+  getRisikoscenario,
+  removeTiltakToRisikoscenario,
+} from '../../api/RisikoscenarioApi'
+import { deleteTiltak, getTiltak } from '../../api/TiltakApi'
 import { IRisikoscenario, ITiltak } from '../../constants'
 
 interface IProps {
@@ -18,16 +23,31 @@ export const SlettOvrigRisikoscenario = (props: IProps) => {
   const navigate = useNavigate()
 
   const submit = async () => {
-    deleteRisikoscenario(risikoscenario.id).then((response) => {
-      if (risikoscenarioer && setRisikoscenarioer) {
-        const updatedRisikoscenarioForKrav = risikoscenarioer.filter(
-          (risikoscenario) => risikoscenario.id !== response.id
-        )
-
-        setRisikoscenarioer([...updatedRisikoscenarioForKrav])
+    await getRisikoscenario(risikoscenario.id).then(async (response) => {
+      if (response.tiltakIds.length > 0) {
+        for await (const tiltakId of response.tiltakIds) {
+          await getTiltak(tiltakId).then(async (tiltakResponse) => {
+            await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(async () => {
+              if (tiltakResponse.risikoscenarioIds.length === 1) {
+                await deleteTiltak(tiltakId)
+              }
+            })
+          })
+        }
       }
-      setIsOpen(false)
-      navigate(window.location.pathname)
+
+      deleteRisikoscenario(response.id).then((response) => {
+        if (risikoscenarioer && setRisikoscenarioer) {
+          const updatedRisikoscenarioForKrav = risikoscenarioer.filter(
+            (risikoscenario) => risikoscenario.id !== response.id
+          )
+
+          setRisikoscenarioer([...updatedRisikoscenarioForKrav])
+        }
+        setIsOpen(false)
+        navigate(window.location.pathname)
+        window.location.reload()
+      })
     })
   }
 
@@ -54,21 +74,27 @@ export const SlettOvrigRisikoscenario = (props: IProps) => {
               Dette risikoscenarioet brukes ikke noe annet sted i dokumentasjonen deres.
               <br />
               <br />
-              <List
-                as="ul"
-                title="Følgende tiltak er unike for dette risikoscenarioet, og vil også slettes:"
-              >
-                {tiltakList
-                  .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
-                  .filter((tiltak) => tiltak.risikoscenarioIds.length === 1)
-                  .map((tiltak, index) => (
-                    <List.Item key={risikoscenario.id + '_' + tiltak.id + '_' + index}>
-                      {tiltak.navn}
-                    </List.Item>
-                  ))}
-              </List>
-              Hvis disse tiltakene er tenkt brukt ved andre scenarioer, koble tiltakene på de
-              scenarioene først, og kom så tilbake og slette scenarioet.
+              {tiltakList
+                .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
+                .filter((tiltak) => tiltak.risikoscenarioIds.length === 1).length !== 0 && (
+                <List
+                  as="ul"
+                  title="Følgende tiltak er unike for dette risikoscenarioet, og vil også slettes:"
+                >
+                  {tiltakList
+                    .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
+                    .filter((tiltak) => tiltak.risikoscenarioIds.length === 1)
+                    .map((tiltak, index) => (
+                      <List.Item key={risikoscenario.id + '_' + tiltak.id + '_' + index}>
+                        {tiltak.navn}
+                      </List.Item>
+                    ))}
+                </List>
+              )}
+              {tiltakList
+                .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
+                .filter((tiltak) => tiltak.risikoscenarioIds.length === 1).length !== 0 &&
+                'Hvis disse tiltakene er tenkt brukt ved andre scenarioer, koble tiltakene på de scenarioene først, og kom så tilbake og slette scenarioet.'}
             </Modal.Body>
           )}
           {risikoscenario.tiltakIds.length === 0 && (
