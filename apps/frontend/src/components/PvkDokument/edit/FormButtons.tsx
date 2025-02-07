@@ -29,6 +29,7 @@ export const FormButtons = (props: IProps) => {
               if (activeStep === 1) {
                 navigate('/dokumentasjon/' + etterlevelseDokumentasjonId)
               } else {
+                window.scrollTo(0, 0)
                 setActiveStep(activeStep - 1)
                 setSelectedStep(activeStep - 1)
               }
@@ -54,6 +55,7 @@ export const FormButtons = (props: IProps) => {
               variant={'tertiary'}
               onClick={() => {
                 if (activeStep !== 6) {
+                  window.scrollTo(0, 0)
                   setActiveStep(activeStep + 1)
                   setSelectedStep(activeStep + 1)
                 }
