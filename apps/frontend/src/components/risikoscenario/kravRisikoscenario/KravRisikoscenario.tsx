@@ -224,6 +224,22 @@ export const KravRisikoscenario = (props: IProps) => {
           </div>
         )}
 
+        {!isCreateMode && !isLeggTilEksisterendeMode && pvkDokument && (
+          <div className="mt-5">
+            <Button
+              variant="secondary"
+              type="button"
+              onClick={() => {
+                navigate(
+                  `/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/pvkdokument/${pvkDokument.id}/4`
+                )
+              }}
+            >
+              Gå til liste over øvrig risikoscenario
+            </Button>
+          </div>
+        )}
+
         <AccordianAlertModal
           isOpen={isUnsaved}
           setIsOpen={setIsUnsaved}
