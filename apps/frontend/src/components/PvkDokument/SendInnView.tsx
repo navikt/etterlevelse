@@ -94,7 +94,7 @@ export const SendInnView = (props: IProps) => {
                 <TextAreaField
                   rows={3}
                   noPlaceholder
-                  label="Er det noe annet dere ønsker å formidle til etterlever? (valgfritt)"
+                  label="Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)"
                   name="merknadTilPvoEllerRisikoeier"
                 />
               </div>
@@ -135,7 +135,7 @@ export const SendInnView = (props: IProps) => {
                         submitForm()
                       }}
                     >
-                      Send til PVO
+                      Send til Personvernombudet
                     </Button>
                   </div>
                 }
