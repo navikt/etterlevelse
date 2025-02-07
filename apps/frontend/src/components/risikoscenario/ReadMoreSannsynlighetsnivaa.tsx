@@ -2,7 +2,7 @@ import { List, ReadMore } from '@navikt/ds-react'
 
 export const ReadMoreSannsynlighetsnivaa = () => {
   return (
-    <ReadMore header="Hva menes med de ulike sannsynlighetsnivåene?" className="my-5">
+    <ReadMore header="Hva menes med de ulike sannsynlighetsnivåene?" className="py-2">
       <h2>
         <b>Meget lite sannsynlig</b>
       </h2>

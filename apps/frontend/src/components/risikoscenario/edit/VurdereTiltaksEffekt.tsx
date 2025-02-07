@@ -130,68 +130,70 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
           initialValues={mapRisikoscenarioToFormValue(risikoscenario)}
         >
           {({ submitForm }) => (
-            <Form>
+            <Form className="w-full border-t border-[#071a3636]">
               <div className="mt-5">
                 <Heading size="medium" level="2" className="mb-5">
                   Vurdér tiltakenes antatte effekt på risikoscenarionivået
                 </Heading>
               </div>
 
-              <Field name="sannsynlighetsNivaaEtterTiltak">
-                {(fieldProps: FieldProps) => (
-                  <RadioGroup
-                    className="mt-3"
-                    legend="Beskriv risikoscenarioets antatte sannsynlighetsnivå etter at tiltakene er iverksatt"
-                    value={fieldProps.field.value}
-                    onChange={(value) => {
-                      fieldProps.form.setFieldValue('sannsynlighetsNivaaEtterTiltak', value)
-                    }}
-                    error={
-                      fieldProps.form.errors['sannsynlighetsNivaaEtterTiltak'] && (
-                        <FormError fieldName={'sannsynlighetsNivaaEtterTiltak'} />
-                      )
-                    }
-                  >
-                    <ReadMoreSannsynlighetsnivaa />
-                    <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
-                      <Radio value={1}>Meget lite sannsynlig</Radio>
-                      <Radio value={2}>Lite sannsynlig</Radio>
-                      <Radio value={3}>Moderat sannsynlig</Radio>
-                      <Radio value={4}>Sannsynlig</Radio>
-                      <Radio value={5}>Nesten sikkert</Radio>
-                    </Stack>
-                  </RadioGroup>
-                )}
-              </Field>
+              <div className="pb-5">
+                <Field name="sannsynlighetsNivaaEtterTiltak">
+                  {(fieldProps: FieldProps) => (
+                    <RadioGroup
+                      legend="Beskriv risikoscenarioets antatte sannsynlighetsnivå etter at tiltakene er iverksatt"
+                      value={fieldProps.field.value}
+                      onChange={(value) => {
+                        fieldProps.form.setFieldValue('sannsynlighetsNivaaEtterTiltak', value)
+                      }}
+                      error={
+                        fieldProps.form.errors['sannsynlighetsNivaaEtterTiltak'] && (
+                          <FormError fieldName={'sannsynlighetsNivaaEtterTiltak'} />
+                        )
+                      }
+                    >
+                      <ReadMoreSannsynlighetsnivaa />
+                      <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
+                        <Radio value={1}>Meget lite sannsynlig</Radio>
+                        <Radio value={2}>Lite sannsynlig</Radio>
+                        <Radio value={3}>Moderat sannsynlig</Radio>
+                        <Radio value={4}>Sannsynlig</Radio>
+                        <Radio value={5}>Nesten sikkert</Radio>
+                      </Stack>
+                    </RadioGroup>
+                  )}
+                </Field>
+              </div>
 
-              <Field name="konsekvensNivaaEtterTiltak">
-                {(fieldProps: FieldProps) => (
-                  <RadioGroup
-                    className="mt-3"
-                    legend="Beskriv risikoscenarioets antatte konsekvensnivå etter at tiltakene er iverksatt"
-                    value={fieldProps.field.value}
-                    onChange={(value) => {
-                      fieldProps.form.setFieldValue('konsekvensNivaaEtterTiltak', value)
-                    }}
-                    error={
-                      fieldProps.form.errors['konsekvensNivaaEtterTiltak'] && (
-                        <FormError fieldName={'konsekvensNivaaEtterTiltak'} />
-                      )
-                    }
-                  >
-                    <ReadMoreKonsekvensnivaa />
-                    <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
-                      <Radio value={1}>Ubetydelig</Radio>
-                      <Radio value={2}>Lav konsekvens</Radio>
-                      <Radio value={3}>Moderat konsekvens</Radio>
-                      <Radio value={4}>Alvorlig konsekvens</Radio>
-                      <Radio value={5}>Svært alvorlig konsekvens</Radio>
-                    </Stack>
-                  </RadioGroup>
-                )}
-              </Field>
+              <div className="pb-5">
+                <Field name="konsekvensNivaaEtterTiltak">
+                  {(fieldProps: FieldProps) => (
+                    <RadioGroup
+                      legend="Beskriv risikoscenarioets antatte konsekvensnivå etter at tiltakene er iverksatt"
+                      value={fieldProps.field.value}
+                      onChange={(value) => {
+                        fieldProps.form.setFieldValue('konsekvensNivaaEtterTiltak', value)
+                      }}
+                      error={
+                        fieldProps.form.errors['konsekvensNivaaEtterTiltak'] && (
+                          <FormError fieldName={'konsekvensNivaaEtterTiltak'} />
+                        )
+                      }
+                    >
+                      <ReadMoreKonsekvensnivaa />
+                      <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
+                        <Radio value={1}>Ubetydelig</Radio>
+                        <Radio value={2}>Lav konsekvens</Radio>
+                        <Radio value={3}>Moderat konsekvens</Radio>
+                        <Radio value={4}>Alvorlig konsekvens</Radio>
+                        <Radio value={5}>Svært alvorlig konsekvens</Radio>
+                      </Stack>
+                    </RadioGroup>
+                  )}
+                </Field>
+              </div>
 
-              <div className="mt-3">
+              <div className="py-5">
                 <TextAreaField
                   rows={3}
                   noPlaceholder
