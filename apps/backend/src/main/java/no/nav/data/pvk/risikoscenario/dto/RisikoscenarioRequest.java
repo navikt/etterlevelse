@@ -79,13 +79,13 @@ public class RisikoscenarioRequest implements RequestElement {
 
         return Risikoscenario.builder()
                 .id(id != null && !id.isEmpty() ? UUID.fromString(id) : null)
-                .pvkDokumentId(pvkDokumentId)
+                .pvkDokumentId(UUID.fromString(pvkDokumentId))
                 .risikoscenarioData(risikoscenarioData)
                 .build();
     }
 
     public void mergeInto(Risikoscenario risikoscenarioToMerge) {
-        risikoscenarioToMerge.setPvkDokumentId(pvkDokumentId);
+        risikoscenarioToMerge.setPvkDokumentId(UUID.fromString(pvkDokumentId));
         risikoscenarioToMerge.getRisikoscenarioData().setNavn(navn);
         risikoscenarioToMerge.getRisikoscenarioData().setBeskrivelse(beskrivelse);
         risikoscenarioToMerge.getRisikoscenarioData().setSannsynlighetsNivaa(sannsynlighetsNivaa);

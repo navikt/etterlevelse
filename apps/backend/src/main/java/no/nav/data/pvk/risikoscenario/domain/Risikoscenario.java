@@ -30,7 +30,7 @@ public class Risikoscenario extends Auditable {
     private UUID id = UUID.randomUUID();
 
     @Column(name = "PVK_DOKUMENT_ID", nullable = false)
-    private String pvkDokumentId;
+    private UUID pvkDokumentId;
 
     @Type(value = JsonBinaryType.class)
     @Builder.Default
