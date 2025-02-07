@@ -1,5 +1,6 @@
 package no.nav.data.pvk.risikoscenario;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -263,12 +264,10 @@ public class RisikoscenarioController {
         // Set KravData...
         risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
             List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
-            try {
-                RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
-                kravShort.setTemaCode(regelverk.getLov().getData().get("tema").toString());
-            } catch (Exception e) {
-                log.warn("Could not find regelverk for krav");
-                throw new ValidationException("Could not find regelverk for krav");
+            RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
+            JsonNode lovData = regelverk.getLov().getData();
+            if(lovData != null) {
+                kravShort.setTemaCode(lovData.get("tema").asText());
             }
             kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
             kravShort.setNavn(kravList.get(0).getNavn());
