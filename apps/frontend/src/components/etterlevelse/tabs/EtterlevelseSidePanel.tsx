@@ -51,7 +51,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
   }, [activeTab])
 
   return (
-    <div className="pl-4 border-l border-border-divider w-full max-w-lg">
+    <div className="pl-4 border-l border-border-divider border-[#071a3636] w-full max-w-lg">
       <Tabs
         defaultValue="mer"
         value={activeTab}
