@@ -119,6 +119,10 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
         ...activeRisikoscenario,
         tiltakIds: [...activeRisikoscenario.tiltakIds, ...request.tiltakIds],
       })
+      updateRisikoscenarioList({
+        ...activeRisikoscenario,
+        tiltakIds: [...activeRisikoscenario.tiltakIds, ...request.tiltakIds],
+      })
       setIsAddExisitingMode(false)
     })
   }
