@@ -105,12 +105,12 @@ const KriterieBegrunnelse = (props: IKriterieBegrunnelseProps) => {
       borderWidth="3"
       borderRadius="medium"
     >
-      <div className="flex w-full">
+      <div className="flex w-full lg:flex-row flex-col">
         <BodyShort className="min-w-fit">
           Suksesskriterium {index + 1} av {totalSuksesskriterie}
         </BodyShort>
 
-        <div className="flex w-full justify-end">
+        <div className="flex w-full lg:justify-end justify-normal">
           {isBortfiltrert && <BodyShort className="text-text-danger">Bortfiltert</BodyShort>}
           {!isBortfiltrert && suksesskriterieBegrunnelse.suksesskriterieStatus && (
             <BodyShort>

@@ -44,6 +44,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
     await updateRisikoscenario(risikoscenario).then((response) => {
       setActiveRisikoscenario(response)
       setIsEditModalOpen(false)
+      window.location.reload()
     })
   }
 

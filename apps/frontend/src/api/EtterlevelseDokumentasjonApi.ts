@@ -117,10 +117,12 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
                 (virkemiddelResponse) => (virkmiddel = virkemiddelResponse)
               )
             }
-            setData({
-              ...etterlevelseDokumentasjon,
-              virkemiddel: virkmiddel,
-            })
+            setData(
+              etterlevelseDokumentasjonMapToFormVal({
+                ...etterlevelseDokumentasjon,
+                virkemiddel: virkmiddel,
+              })
+            )
             setIsLoading(false)
           }
         )

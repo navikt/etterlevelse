@@ -1,5 +1,5 @@
 import { LinkIcon } from '@navikt/aksel-icons'
-import { BodyLong, CopyButton, List, ReadMore } from '@navikt/ds-react'
+import { Alert, BodyLong, CopyButton, List, ReadMore } from '@navikt/ds-react'
 import { useParams } from 'react-router'
 import { IRisikoscenario } from '../../constants'
 import { ExternalLink } from '../common/RouteLink'
@@ -60,7 +60,9 @@ export const RisikoscenarioView = (props: IProps) => {
       </div>
 
       {!risikoscenario.sannsynlighetsNivaaBegrunnelse && (
-        <BodyLong className="mt-5">Ingen begrunnelse skrevet for sannsylighetsnivå</BodyLong>
+        <Alert className="mt-5" variant="warning">
+          Dere må begrunne sannsylighetsvurderingen
+        </Alert>
       )}
       {risikoscenario.sannsynlighetsNivaaBegrunnelse && (
         <BodyLong className="mt-5">{risikoscenario.sannsynlighetsNivaaBegrunnelse}</BodyLong>
@@ -74,7 +76,9 @@ export const RisikoscenarioView = (props: IProps) => {
       </div>
 
       {!risikoscenario.konsekvensNivaaBegrunnelse && (
-        <BodyLong className="mt-5">Ingen begrunnelse skrevet for konsekvensnivå</BodyLong>
+        <Alert className="mt-5" variant="warning">
+          Dere må begrunne konsekvensvurderingen
+        </Alert>
       )}
       {risikoscenario.konsekvensNivaaBegrunnelse && (
         <BodyLong className="mt-5">{risikoscenario.konsekvensNivaaBegrunnelse}</BodyLong>
