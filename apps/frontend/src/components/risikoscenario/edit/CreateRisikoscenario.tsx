@@ -53,7 +53,12 @@ export const CreateRisikoscenario = (props: IProps) => {
           pvkDokumentId: pvkDokumentId,
           generelScenario: false,
           relevanteKravNummer: [
-            { kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, navn: krav.navn },
+            {
+              kravNummer: krav.kravNummer,
+              kravVersjon: krav.kravVersjon,
+              navn: krav.navn,
+              temaCode: krav.regelverk[0].lov.data?.tema || '',
+            },
           ],
         }}
         formRef={formRef}

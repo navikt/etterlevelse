@@ -10,8 +10,11 @@ import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.dto.RegelverkResponse;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.KravRisikoscenarioRequest;
@@ -45,6 +48,7 @@ public class RisikoscenarioController {
 
     private final RisikoscenarioService risikoscenarioService;
     private final KravService kravService;
+    private final CodelistService codelistService;
 
     @Operation(summary = "Get All Risikoscenario")
     @ApiResponse(description = "ok")
@@ -259,6 +263,13 @@ public class RisikoscenarioController {
         // Set KravData...
         risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
             List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
+            try {
+                RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
+                kravShort.setTemaCode(regelverk.getLov().getData().get("tema").toString());
+            } catch (Exception e) {
+                log.warn("Could not find regelverk for krav");
+                throw new ValidationException("Could not find regelverk for krav");
+            }
             kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
             kravShort.setNavn(kravList.get(0).getNavn());
         });

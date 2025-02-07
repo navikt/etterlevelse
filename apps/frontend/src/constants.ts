@@ -585,6 +585,7 @@ export interface IKravReference {
   navn: string
   kravNummer: number
   kravVersjon: number
+  temaCode: string
 }
 
 export interface IBehandlingensLivslop {

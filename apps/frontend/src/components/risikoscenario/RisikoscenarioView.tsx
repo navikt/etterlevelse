@@ -39,7 +39,7 @@ export const RisikoscenarioView = (props: IProps) => {
         <ReadMore header="Vis etterlevelseskrav hvor risikoscenarioet inntreffer">
           <List as="ul">
             {risikoscenario.relevanteKravNummer.map((relevantKrav, index) => {
-              const kravHref = `/dokumentasjon/${params.id}/PVK/RELEVANTE_KRAV/krav/${relevantKrav.kravNummer}/${relevantKrav.kravVersjon}`
+              const kravHref = `/dokumentasjon/${params.id}/${relevantKrav.temaCode || 'PVK'}/RELEVANTE_KRAV/krav/${relevantKrav.kravNummer}/${relevantKrav.kravVersjon}`
               return (
                 <List.Item key={relevantKrav.kravNummer + '_' + index}>
                   <ExternalLink href={kravHref}>

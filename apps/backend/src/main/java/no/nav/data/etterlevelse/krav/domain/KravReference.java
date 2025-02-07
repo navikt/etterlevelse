@@ -14,4 +14,5 @@ public class KravReference {
     private String navn;
     private Integer kravNummer;
     public Integer kravVersjon;
+    public String temaCode;
 }
