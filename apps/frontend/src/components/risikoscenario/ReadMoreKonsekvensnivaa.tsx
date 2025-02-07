@@ -2,7 +2,7 @@ import { List, ReadMore } from '@navikt/ds-react'
 
 export const ReadMoreKonsekvensnivaa = () => {
   return (
-    <ReadMore header="Hva menes med de ulike konsekvensnivåene?" className="my-5">
+    <ReadMore header="Hva menes med de ulike konsekvensnivåene?">
       <h2>
         <b>Ubetydelig konsekvens</b>
       </h2>
