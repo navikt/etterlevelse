@@ -131,8 +131,8 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
         >
           {({ submitForm }) => (
             <Form className="w-full border-t border-[#071a3636]">
-              <div className="mt-5">
-                <Heading size="medium" level="2" className="mb-5">
+              <div className="py-7">
+                <Heading size="medium" level="2">
                   Vurdér tiltakenes antatte effekt på risikoscenarionivået
                 </Heading>
               </div>
