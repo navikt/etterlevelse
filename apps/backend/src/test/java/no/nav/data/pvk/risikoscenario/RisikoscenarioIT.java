@@ -5,6 +5,8 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
+import no.nav.data.etterlevelse.krav.domain.Regelverk;
+import no.nav.data.etterlevelse.krav.dto.RegelverkRequest;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioData;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -102,7 +105,7 @@ public class RisikoscenarioIT extends IntegrationTestBase {
     @Test
     void testCrateRisikoscenarioKnyttetTilKrav() {
         PvkDokument pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
-        Krav krav = kravStorageService.save(Krav.builder().navn("Krav 50").kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
+        Krav krav = kravStorageService.save(Krav.builder().navn("Krav 50").kravNummer(50).kravVersjon(1).regelverk(List.of(Regelverk.builder().lov("ARKIV").spesifisering("§1").build())).status(KravStatus.AKTIV).build());
         RisikoscenarioRequest request = RisikoscenarioRequest.builder()
                 .pvkDokumentId(pvkDokument.getId().toString())
                 .build();
@@ -172,7 +175,7 @@ public class RisikoscenarioIT extends IntegrationTestBase {
 
     private Risikoscenario insertRisikoscenario() {
         PvkDokument pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
-        Krav krav = kravStorageService.save(Krav.builder().navn("Krav 50").kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
+        Krav krav = kravStorageService.save(Krav.builder().navn("Krav 50").kravNummer(50).kravVersjon(1).regelverk(List.of(Regelverk.builder().lov("ARKIV").spesifisering("§1").build())).status(KravStatus.AKTIV).build());
 
         Risikoscenario risikoscenario = Risikoscenario.builder()
                 .pvkDokumentId(pvkDokument.getId())
