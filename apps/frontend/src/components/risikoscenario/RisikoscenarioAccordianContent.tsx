@@ -1,6 +1,7 @@
 import { PencilIcon } from '@navikt/aksel-icons'
 import { Alert, Button, Heading } from '@navikt/ds-react'
 import { RefObject, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getRisikoscenario, updateRisikoscenario } from '../../api/RisikoscenarioApi'
 import { createTiltakAndRelasjonWithRisikoscenario } from '../../api/TiltakApi'
 import { IRisikoscenario, ITiltak } from '../../constants'
@@ -39,6 +40,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
 
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
   const [isIngenTilgangFormDirty, setIsIngenTilgangFormDirty] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   const submit = async (risikoscenario: IRisikoscenario) => {
     await updateRisikoscenario(risikoscenario).then((response) => {
@@ -74,6 +76,9 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
       })
       setTiltakList([...tiltakList, response])
       setIsCreateTiltakFormActive(false)
+      navigate(
+        `${window.location.pathname}?risikoscenario=${activeRisikoscenario.id}&tiltak=${response.id}`
+      )
       window.location.reload()
     })
   }

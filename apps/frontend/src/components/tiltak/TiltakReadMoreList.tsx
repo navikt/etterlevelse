@@ -1,6 +1,7 @@
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Button, Modal, ReadMore } from '@navikt/ds-react'
 import { RefObject, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { removeTiltakToRisikoscenario } from '../../api/RisikoscenarioApi'
 import { deleteTiltak, getTiltak, updateTiltak } from '../../api/TiltakApi'
 import { IRisikoscenario, ITiltak } from '../../constants'
@@ -84,6 +85,9 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
   } = props
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
+  const url = new URL(window.location.href)
+  const tiltakId = url.searchParams.get('tiltak')
+  const navigate = useNavigate()
 
   const submit = async (submitedValues: ITiltak) => {
     await updateTiltak(submitedValues).then((response) => {
@@ -110,11 +114,13 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
         await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(async () => {
           await deleteTiltak(tiltakId).then(() => {
             setIsDeleteModalOpen(false)
+            navigate(`${window.location.pathname}?risikoscenario=${risikoscenario.id}`)
             window.location.reload()
           })
         })
       } else {
         await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(() => {
+          navigate(`${window.location.pathname}?risikoscenario=${risikoscenario.id}`)
           window.location.reload()
         })
       }
@@ -125,12 +131,17 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
     <div key={risikoscenario.id + '_' + tiltak.id}>
       {!isEditMode && (
         <ReadMore
-          open={activeTiltak === tiltak.id}
+          open={tiltakId === tiltak.id}
+          id={risikoscenario.id + '_' + tiltak.id}
           onOpenChange={(open) => {
             if (open) {
               setActiveTiltak(tiltak.id)
+              navigate(
+                `${window.location.pathname}?risikoscenario=${risikoscenario.id}&tiltak=${tiltak.id}`
+              )
             } else {
               setActiveTiltak('')
+              navigate(`${window.location.pathname}?risikoscenario=${risikoscenario.id}`)
             }
           }}
           header={tiltak.navn}

@@ -28,6 +28,7 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
   const [navigateUrl, setNavigateUrl] = useState<string>('')
   const url = new URL(window.location.href)
   const risikoscenarioId = url.searchParams.get('risikoscenario')
+  const tiltakId = url.searchParams.get('tiltak')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -36,6 +37,14 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
         const element = document.getElementById(risikoscenarioId)
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' })
+
+          if (tiltakId) {
+            const tiltakElement = document.getElementById(`${risikoscenarioId}_${tiltakId}`)
+            if (tiltakElement) {
+              tiltakElement.focus()
+              tiltakElement.scrollIntoView({ behavior: 'smooth' })
+            }
+          }
         }
       }, 200)
     }

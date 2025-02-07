@@ -1,5 +1,6 @@
 import { Accordion, Alert, BodyLong, Button, List, ReadMore } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../../api/TiltakApi'
 import {
@@ -37,6 +38,7 @@ export const KravRisikoscenario = (props: IProps) => {
   const [activeRisikoscenarioId, setActiveRisikoscenarioId] = useState<string>('')
   const [selectedRisikoscenarioId, setSelectedRisikoscenarioId] = useState<string>('')
   const [editButtonClicked, setEditButtonClicked] = useState<string>('')
+  const navigate = useNavigate()
 
   useEffect(() => {
     ;(async () => {
@@ -75,11 +77,21 @@ export const KravRisikoscenario = (props: IProps) => {
     })()
   }, [krav, pvkDokument])
 
-  const handleAccordionChange = (risikoscenarioId: string) => {
-    if (formRef.current?.dirty) {
-      setIsUnsaved(true)
+  const handleAccordionChange = (risikoscenarioId?: string) => {
+    if (risikoscenarioId) {
+      if (formRef.current?.dirty) {
+        setIsUnsaved(true)
+      } else {
+        setActiveRisikoscenarioId(risikoscenarioId)
+        navigate(window.location.pathname + '?risikoscenario=' + risikoscenarioId)
+      }
     } else {
-      setActiveRisikoscenarioId(risikoscenarioId)
+      if (formRef.current?.dirty) {
+        setIsUnsaved(true)
+      } else {
+        setActiveRisikoscenarioId('')
+        navigate(window.location.pathname)
+      }
     }
   }
 
