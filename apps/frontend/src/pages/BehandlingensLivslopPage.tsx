@@ -330,7 +330,7 @@ export const BehandlingensLivslopPage = () => {
 
             {/* right side */}
             {etterlevelseDokumentasjon && (
-              <div className="pl-6 border-l border-border-divider border-[#071a3636] w-full max-w-lg">
+              <div className="pl-6 border-l border-[#071a3636] w-full max-w-lg">
                 <Heading level="2" size="small" className="mb-5">
                   Hentet fra deres etterlevelsesdokumentasjon
                 </Heading>

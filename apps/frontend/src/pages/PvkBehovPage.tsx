@@ -396,7 +396,7 @@ export const PvkBehovPage = () => {
             </div>
 
             {etterlevelseDokumentasjon && (
-              <div className="pl-4 border-l border-border-divider border-[#071a3636] w-full max-w-md">
+              <div className="pl-4 border-l border-[#071a3636] w-full max-w-md">
                 <Heading level="2" size="small" className="mb-5">
                   Hentet fra deres etterlevelsesdokumentasjon
                 </Heading>

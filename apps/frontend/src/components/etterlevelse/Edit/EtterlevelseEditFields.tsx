@@ -188,7 +188,7 @@ export const EtterlevelseEditFields = ({
                   </div>
                 </Form>
 
-                <div className="w-full border-t border-border-divider border-[#071a3636] pt-5">
+                <div className="w-full border-t border-[#071a3636] pt-5">
                   {kravFilter === EKravFilterType.RELEVANTE_KRAV && (
                     <div className="w-full flex flex-col min-w-fit mb-4">
                       <Checkbox
