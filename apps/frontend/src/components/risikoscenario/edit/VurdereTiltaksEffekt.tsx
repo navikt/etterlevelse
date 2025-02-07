@@ -202,7 +202,7 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                 />
               </div>
 
-              <div className="flex gap-2 mt-3">
+              <div className="flex gap-2">
                 <Button type="button" onClick={() => submitForm()}>
                   Lagre
                 </Button>
