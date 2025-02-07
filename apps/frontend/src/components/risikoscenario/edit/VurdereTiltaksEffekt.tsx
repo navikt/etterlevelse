@@ -193,7 +193,7 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                 </Field>
               </div>
 
-              <div className="py-5">
+              <div className="pb-5">
                 <TextAreaField
                   rows={3}
                   noPlaceholder
