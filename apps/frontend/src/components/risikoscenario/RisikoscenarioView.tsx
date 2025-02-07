@@ -41,7 +41,7 @@ export const RisikoscenarioView = (props: IProps) => {
             {risikoscenario.relevanteKravNummer.map((relevantKrav, index) => {
               const kravHref = `/dokumentasjon/${params.id}/${relevantKrav.temaCode || 'PVK'}/RELEVANTE_KRAV/krav/${relevantKrav.kravNummer}/${relevantKrav.kravVersjon}`
               return (
-                <List.Item key={relevantKrav.kravNummer + '_' + index}>
+                <List.Item className="max-w-[75ch]" key={relevantKrav.kravNummer + '_' + index}>
                   <ExternalLink href={kravHref}>
                     K{relevantKrav.kravNummer}.{relevantKrav.kravVersjon} {relevantKrav.navn}
                   </ExternalLink>
