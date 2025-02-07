@@ -96,7 +96,7 @@ export const KravCard = (props: IProps) => {
 
   return (
     <LinkPanel
-      href={`/dokumentasjon/${etterlevelseDokumentasjonId}/${temaCode}/${kravStatusFilter}/krav/${krav.kravNummer}/${krav.kravVersjon}/`}
+      href={`/dokumentasjon/${etterlevelseDokumentasjonId}/${temaCode}/${kravStatusFilter}/krav/${krav.kravNummer}/${krav.kravVersjon}`}
     >
       <div className="md:flex justify-between">
         <div className="self-start">

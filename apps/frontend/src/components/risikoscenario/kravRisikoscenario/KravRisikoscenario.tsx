@@ -38,6 +38,8 @@ export const KravRisikoscenario = (props: IProps) => {
   const [activeRisikoscenarioId, setActiveRisikoscenarioId] = useState<string>('')
   const [selectedRisikoscenarioId, setSelectedRisikoscenarioId] = useState<string>('')
   const [editButtonClicked, setEditButtonClicked] = useState<string>('')
+  const url = new URL(window.location.href)
+  const risikoscenarioId = url.searchParams.get('risikoscenario')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -136,7 +138,9 @@ export const KravRisikoscenario = (props: IProps) => {
           <div className="mb-5">
             <Accordion>
               {risikoscenarioForKrav.map((risikoscenario, index) => {
-                const expanded = activeRisikoscenarioId === risikoscenario.id
+                const expanded = risikoscenarioId
+                  ? risikoscenarioId === risikoscenario.id
+                  : activeRisikoscenarioId === risikoscenario.id
                 return (
                   <Accordion.Item
                     open={expanded}
