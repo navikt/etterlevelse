@@ -16,6 +16,7 @@ import RisikoscenarioTag, {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
 } from '../RisikoscenarioTag'
+import { PVKFieldWrapper, TopBottomWrapper } from '../StylingLayout'
 
 interface IProps {
   risikoscenario: IRisikoscenario
@@ -131,13 +132,13 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
         >
           {({ submitForm }) => (
             <Form className="w-full border-t border-[#071a3636]">
-              <div className="py-7">
-                <Heading size="medium" level="2">
+              <TopBottomWrapper>
+                <Heading size="medium" level="3">
                   Vurdér tiltakenes antatte effekt på risikoscenarionivået
                 </Heading>
-              </div>
+              </TopBottomWrapper>
 
-              <div className="pb-5">
+              <PVKFieldWrapper>
                 <Field name="sannsynlighetsNivaaEtterTiltak">
                   {(fieldProps: FieldProps) => (
                     <RadioGroup
@@ -163,9 +164,9 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                     </RadioGroup>
                   )}
                 </Field>
-              </div>
+              </PVKFieldWrapper>
 
-              <div className="pb-5">
+              <PVKFieldWrapper>
                 <Field name="konsekvensNivaaEtterTiltak">
                   {(fieldProps: FieldProps) => (
                     <RadioGroup
@@ -191,9 +192,9 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                     </RadioGroup>
                   )}
                 </Field>
-              </div>
+              </PVKFieldWrapper>
 
-              <div className="pb-5">
+              <div>
                 <TextAreaField
                   rows={3}
                   noPlaceholder
@@ -202,15 +203,17 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                 />
               </div>
 
-              <div className="flex gap-2">
-                <Button type="button" onClick={() => submitForm()}>
-                  Lagre
-                </Button>
+              <TopBottomWrapper>
+                <div className="flex gap-2">
+                  <Button type="button" onClick={() => submitForm()}>
+                    Lagre
+                  </Button>
 
-                <Button type="button" variant="secondary" onClick={() => setIsFormActive(false)}>
-                  Avbryt
-                </Button>
-              </div>
+                  <Button type="button" variant="secondary" onClick={() => setIsFormActive(false)}>
+                    Avbryt
+                  </Button>
+                </div>
+              </TopBottomWrapper>
             </Form>
           )}
         </Formik>
