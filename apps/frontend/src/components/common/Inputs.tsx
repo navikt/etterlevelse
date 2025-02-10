@@ -258,6 +258,7 @@ export const DateField = (props: IPropsDateField) => {
   const { name, label } = props
 
   const { datepickerProps, inputProps } = useDatepicker({})
+  const beforeMatcher = { before: new Date() }
 
   return (
     <FieldWrapper>
@@ -275,6 +276,7 @@ export const DateField = (props: IPropsDateField) => {
                 fieldProps.form.setFieldValue(name, date)
               } else fieldProps.form.setFieldValue(name, undefined)
             }}
+            disabled={[beforeMatcher]}
           >
             <DatePicker.Input
               {...inputProps}
