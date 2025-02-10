@@ -89,6 +89,12 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
     }
   }, [pvkDokument])
 
+  useEffect(() => {
+    if (risikoscenarioList.length !== 0 && filterQuery) {
+      onFilterChange(filterQuery)
+    }
+  }, [filterQuery, risikoscenarioList])
+
   const onTabChange = (tab: string) => {
     const filter = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
     const paramQuery = tab === tabValues.risikoscenarioer ? '&filter=' + filter : ''
@@ -203,8 +209,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                   label="Tiltak ikke aktuelt"
                 />
               </ToggleGroup>
-
-              {risikoscenarioList.length === 0 ? (
+              {risikoscenarioList.length === 0 && (
                 <div className="my-5">
                   <Alert variant="info">
                     <Heading spacing size="small" level="3">
@@ -218,9 +223,13 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                     ny fane).
                   </Alert>
                 </div>
-              ) : filteredRisikoscenarioList.length === 0 ? (
-                visTomListeBeskrivelse(filterQuery)
-              ) : (
+              )}
+
+              {risikoscenarioList.length !== 0 &&
+                filteredRisikoscenarioList.length === 0 &&
+                visTomListeBeskrivelse(filterQuery)}
+
+              {risikoscenarioList.length !== 0 && filteredRisikoscenarioList.length !== 0 && (
                 <div className="my-5">
                   <OppsumeringAccordianList
                     risikoscenarioList={filteredRisikoscenarioList}
