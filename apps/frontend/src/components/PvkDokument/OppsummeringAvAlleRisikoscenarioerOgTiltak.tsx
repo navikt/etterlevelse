@@ -33,17 +33,23 @@ export const tiltakFilterValues = {
   utenFrist: 'utenFrist',
 }
 
-function visTomListeBeskrivelse(filter: string | null) {
+const visTomListeBeskrivelse = (filter: string | null) => {
+  let textBody = ''
   switch (filter) {
     case filterValues.hoyRisiko:
-      return 'Det finnes ingen risikoscenarioer med høy risiko'
+      textBody = 'Det finnes ingen risikoscenarioer med høy risiko 🎉'
+      break
     case filterValues.tiltakIkkeAktuelt:
-      return 'Det finnes ingen risikoscenarioer uten tiltak'
+      textBody = 'Det finnes ingen risikoscenarioer uten tiltak 🎉'
+      break
     case filterValues.effektIkkeVurdert:
-      return 'Det finnes ingen risikoscenarioer der effekt ikke er vurdert'
+      textBody = 'Det finnes ingen risikoscenarioer der effekt ikke er vurdert'
+      break
     default:
-      return ''
+      textBody = ''
+      break
   }
+  return <BodyLong className="my-5">{textBody}</BodyLong>
 }
 
 export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
@@ -200,7 +206,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                 />
               </ToggleGroup>
 
-              {risikoscenarioList.length === 0 && (
+              {risikoscenarioList.length === 0 ? (
                 <div className="my-5">
                   <Alert variant="info">
                     <Heading spacing size="small" level="3">
@@ -214,13 +220,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                     ny fane).
                   </Alert>
                 </div>
-              )}
-
-              {risikoscenarioList.length !== 0 && filteredRisikoscenarioList.length === 0 && (
-                <BodyLong className="my-5">{visTomListeBeskrivelse(filterQuery)}</BodyLong>
-              )}
-
-              {filteredRisikoscenarioList.length !== 0 && (
+              ) : filteredRisikoscenarioList.length === 0 ? (
+                visTomListeBeskrivelse(filterQuery)
+              ) : (
                 <div className="my-5">
                   <OppsumeringAccordianList
                     risikoscenarioList={filteredRisikoscenarioList}
