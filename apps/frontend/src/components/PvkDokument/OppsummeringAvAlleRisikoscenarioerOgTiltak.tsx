@@ -46,8 +46,6 @@ const visTomListeBeskrivelse = (filter: string | null) => {
       textBody = 'Det finnes ingen risikoscenarioer der effekt ikke er vurdert'
       break
     default:
-      textBody = ''
-      break
   }
   return <BodyLong className="my-5">{textBody}</BodyLong>
 }
