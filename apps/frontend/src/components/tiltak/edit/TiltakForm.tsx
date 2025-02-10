@@ -1,6 +1,6 @@
-import { Button, Detail, Label, ReadMore, TextField } from '@navikt/ds-react'
+import { Button, Detail, ErrorSummary, Label, ReadMore, TextField } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { ChangeEvent, RefObject, useState } from 'react'
+import { ChangeEvent, RefObject, useRef, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import { searchResourceByNameOptions } from '../../../api/TeamApi'
 import { mapTiltakToFormValue } from '../../../api/TiltakApi'
@@ -27,6 +27,9 @@ export const TiltakForm = (props: IProps) => {
   const { title, initialValues, pvkDokumentId, submit, close, formRef } = props
   const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
 
+  const [validateOnBlur, setValidateOnBlur] = useState(false)
+  const errorSummaryRef = useRef<HTMLDivElement>(null)
+
   return (
     <Formik
       initialValues={mapTiltakToFormValue({
@@ -34,12 +37,12 @@ export const TiltakForm = (props: IProps) => {
         pvkDokumentId: pvkDokumentId,
       })}
       validateOnBlur={false}
-      validateOnChange={false}
+      validateOnChange={validateOnBlur}
       validationSchema={tiltakSchemaValidation()}
       onSubmit={submit}
       innerRef={formRef}
     >
-      {({ values, resetForm, submitForm }) => (
+      {({ values, resetForm, submitForm, errors }) => (
         <Form>
           <div className="mb-5">
             <Label>{title}</Label>
@@ -141,10 +144,26 @@ export const TiltakForm = (props: IProps) => {
             <FormError fieldName="frist" akselStyling />
           </div>
 
+          {Object.values(errors).some(Boolean) && (
+            <ErrorSummary
+              ref={errorSummaryRef}
+              heading="Du må rette disse feilene før du kan fortsette"
+            >
+              {Object.entries(errors)
+                .filter(([, error]) => error)
+                .map(([key, error]) => (
+                  <ErrorSummary.Item href={`#${key}`} key={key}>
+                    {error as string}
+                  </ErrorSummary.Item>
+                ))}
+            </ErrorSummary>
+          )}
+
           <div className="flex gap-2 mt-5">
             <Button
               type="button"
               onClick={() => {
+                setValidateOnBlur(true)
                 submitForm()
               }}
             >
