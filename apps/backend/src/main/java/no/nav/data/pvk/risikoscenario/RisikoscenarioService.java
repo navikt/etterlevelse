@@ -61,6 +61,7 @@ public class RisikoscenarioService {
         List<Risikoscenario> res = new ArrayList<Risikoscenario>();
         for (String id : risikoscenarioIder) {
             Risikoscenario risikoscenario = get(UUID.fromString(id));
+            // TODO: risikoscenario may be null here...
             List<Integer> kravList = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer();
             if (!kravList.contains(kravnummer)) {
                 kravList.add(kravnummer);
@@ -89,11 +90,11 @@ public class RisikoscenarioService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Risikoscenario addTiltak(String riskoscenarioId, List<String> tiltakIds) {
+    public Risikoscenario addTiltak(String risikoscenarioId, List<String> tiltakIds) {
         for (String tiltakId : tiltakIds) {
-            tiltakRepo.insertTiltakRisikoscenarioRelation(riskoscenarioId, tiltakId);
+            tiltakRepo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId);
         }
-        return get(UUID.fromString(riskoscenarioId));
+        return get(UUID.fromString(risikoscenarioId));
     }
 
     /**

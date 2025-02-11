@@ -6,19 +6,24 @@ import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
-import no.nav.data.etterlevelse.krav.dto.RegelverkRequest;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioData;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
+import no.nav.data.pvk.risikoscenario.dto.KravRisikoscenarioRequest;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioRequest;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
+import no.nav.data.pvk.tiltak.domain.Tiltak;
+import no.nav.data.pvk.tiltak.domain.TiltakData;
+import no.nav.data.pvk.tiltak.dto.RisikoscenarioTiltakRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -105,7 +110,7 @@ public class RisikoscenarioIT extends IntegrationTestBase {
     @Test
     void testCrateRisikoscenarioKnyttetTilKrav() {
         PvkDokument pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
-        Krav krav = kravStorageService.save(Krav.builder().navn("Krav 50").kravNummer(50).kravVersjon(1).regelverk(List.of(Regelverk.builder().lov("ARKIV").spesifisering("§1").build())).status(KravStatus.AKTIV).build());
+        kravStorageService.save(Krav.builder().navn("Krav 50").kravNummer(50).kravVersjon(1).regelverk(List.of(Regelverk.builder().lov("ARKIV").spesifisering("§1").build())).status(KravStatus.AKTIV).build());
         RisikoscenarioRequest request = RisikoscenarioRequest.builder()
                 .pvkDokumentId(pvkDokument.getId().toString())
                 .build();
@@ -127,52 +132,153 @@ public class RisikoscenarioIT extends IntegrationTestBase {
         assertThat(respEnt.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
-    /* FIXME: Make tests for the rest
-    
     @Test
     void testUpdate() {
-        risikoscenario risikoscenario = insertrisikoscenario();
-        risikoscenarioRequest request = risikoscenarioRequest.builder()
+        Risikoscenario risikoscenario = insertRisikoscenario();
+        RisikoscenarioRequest request = RisikoscenarioRequest.builder()
                 .pvkDokumentId(risikoscenario.getPvkDokumentId().toString())
-                .navn("BoinkBoink")
+                .navn("2024 YR4")
                 .build();
 
         // Update should fail for unknown risikoscenario...
-        ResponseEntity<risikoscenarioResponse> respEnt = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.PUT, new HttpEntity<>(request), risikoscenarioResponse.class, request.getId());
+        ResponseEntity<RisikoscenarioResponse> respEnt = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.PUT, new HttpEntity<>(request), RisikoscenarioResponse.class, request.getId());
         assertThat(respEnt.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         
         // Test update...
         request.setId(risikoscenario.getId().toString());
-        respEnt = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.PUT, new HttpEntity<>(request), risikoscenarioResponse.class, request.getId());
+        respEnt = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.PUT, new HttpEntity<>(request), RisikoscenarioResponse.class, request.getId());
         risikoscenario = risikoscenarioService.get(risikoscenario.getId());
-        assertThat(risikoscenario.getrisikoscenarioData().getNavn()).isEqualTo("BoinkBoink");
+        assertThat(risikoscenario.getRisikoscenarioData().getNavn()).isEqualTo("2024 YR4");
     }
 
     @Test
     void testDelete() {
-        PvkDokument pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
-        risikoscenario risikoscenario = insertrisikoscenario();
+        Risikoscenario risikoscenario = insertRisikoscenario();
 
-        // Delete should fail if risikoscenario has a relation to one or more risikoscenarioer...
-        Risikoscenario risikoscenario = risikoscenarioService.save(generateRisikoscenario(pvkDokument.getId()), false);
-        RisikoscenariorisikoscenarioRequest relReq = RisikoscenariorisikoscenarioRequest.builder()
-                .risikoscenarioId(risikoscenario.getId().toString())
-                .risikoscenarioIds(List.of(risikoscenario.getId().toString()))
-                .build();
-        restTemplate.exchange("/risikoscenario/update/addRelevanterisikoscenario", HttpMethod.PUT, new HttpEntity<>(relReq), RisikoscenarioResponse.class);
-        ResponseEntity<risikoscenarioResponse> resp = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.DELETE, null, risikoscenarioResponse.class, risikoscenario.getId());
+        // Delete should fail if risikoscenario has a relation to one or more tiltak...
+        PvkDokument pvkDokument = pvkDokumentService.get(risikoscenario.getPvkDokumentId());
+        Tiltak tiltak = tiltakService.save(Tiltak.builder()
+                .pvkDokumentId(pvkDokument.getId())
+                .tiltakData(new TiltakData())
+                .build(), null, false);
+        risikoscenarioService.addTiltak(risikoscenario.getId().toString(), List.of(tiltak.getId().toString()));
+        ResponseEntity<RisikoscenarioResponse> resp = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.DELETE, null, RisikoscenarioResponse.class, risikoscenario.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(risikoscenarioRepo.count()).isEqualTo(1);
-        restTemplate.exchange("/risikoscenario/{id}/removerisikoscenario/{risikoscenarioId}", HttpMethod.PUT, null, RisikoscenarioResponse.class, risikoscenario.getId().toString(), risikoscenario.getId().toString());
+        risikoscenarioService.removeTiltak(risikoscenario.getId().toString(), tiltak.getId().toString());
 
+        // Delete should return OK and null if requested to delete non-existing Risikoscenario
+        resp = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.DELETE, null, RisikoscenarioResponse.class, UUID.randomUUID());
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(resp.getBody()).isNull();
+        assertThat(risikoscenarioRepo.count()).isEqualTo(1);
+        
         // Test delete...
-        resp = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.DELETE, null, risikoscenarioResponse.class, risikoscenario.getId());
+        resp = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.DELETE, null, RisikoscenarioResponse.class, risikoscenario.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(risikoscenarioRepo.count()).isEqualTo(0);
     }
 
-        //*/
+    @Test
+    void testAddRelevantKravToRisikoscenarioer() {
+        Risikoscenario risikoscenario = insertRisikoscenario();
+        
+        // Should get BAD REQUEST if unknown Krav...
+        KravRisikoscenarioRequest relReq = KravRisikoscenarioRequest.builder().kravnummer(1113).risikoscenarioIder(List.of(risikoscenario.getId().toString())).build();
+        ResponseEntity<List<RisikoscenarioResponse>> respEntPage = restTemplate.exchange(
+                "/risikoscenario/update/addRelevantKrav", 
+                HttpMethod.PUT, 
+                new HttpEntity<>(relReq),
+                new ParameterizedTypeReference<List<RisikoscenarioResponse>>() {}
+        );
+        assertThat(respEntPage.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 
+        // Test add Krav...
+        kravStorageService.save(Krav.builder().navn("Krav 40").kravNummer(99).kravVersjon(1).status(KravStatus.AKTIV).build());
+        relReq.setKravnummer(99);
+        respEntPage = restTemplate.exchange(
+                "/risikoscenario/update/addRelevantKrav", 
+                HttpMethod.PUT, 
+                new HttpEntity<>(relReq), 
+                new ParameterizedTypeReference<List<RisikoscenarioResponse>>() {}
+        );
+        assertThat(respEntPage.getStatusCode()).isEqualTo(HttpStatus.OK);
+        risikoscenario = risikoscenarioService.get(risikoscenario.getId());
+        assertThat(risikoscenario.getRisikoscenarioData().getRelevanteKravNummer()).containsOnly(50, 99);
+    }
+    
+    @Test
+    void testRemoveKravFromRisikoscenarioById() {
+        Risikoscenario risikoscenario = insertRisikoscenario();
+        
+        // Should get BAD REQUEST if unknown Krav or Krav not related to Risikoscenario...
+        kravStorageService.save(Krav.builder().navn("Krav 51").kravNummer(51).kravVersjon(1).status(KravStatus.AKTIV).build());
+        ResponseEntity<RisikoscenarioResponse> respEntPage = restTemplate.exchange(
+                "/risikoscenario/{id}/removeKrav/{kravnummer}", HttpMethod.PUT, null, RisikoscenarioResponse.class, risikoscenario.getId(), 51
+        );
+        assertThat(respEntPage.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        respEntPage = restTemplate.exchange(
+                "/risikoscenario/{id}/removeKrav/{kravnummer}", HttpMethod.PUT, null, RisikoscenarioResponse.class, risikoscenario.getId(), 404
+        );
+        assertThat(respEntPage.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+
+        // Test add Krav...
+        respEntPage = restTemplate.exchange(
+                "/risikoscenario/{id}/removeKrav/{kravnummer}", HttpMethod.PUT, null, RisikoscenarioResponse.class, risikoscenario.getId(), 50
+        );
+        assertThat(respEntPage.getStatusCode()).isEqualTo(HttpStatus.OK);
+        risikoscenario = risikoscenarioService.get(risikoscenario.getId());
+        assertThat(risikoscenario.getRisikoscenarioData().getRelevanteKravNummer()).isEmpty();
+    }
+
+    @Test
+    void testUpdateRisikoscenarioAddTiltak() {
+        Risikoscenario risikoscenario = insertRisikoscenario();
+        Tiltak tiltak = insertTiltak(risikoscenario.getPvkDokumentId());
+        
+        // Should get 404 if unknown Tiltak or Risikoscenario...
+        RisikoscenarioTiltakRequest relReq = RisikoscenarioTiltakRequest.builder().risikoscenarioId(risikoscenario.getId().toString()).build();
+        relReq.setTiltakIds(List.of(UUID.randomUUID().toString()));
+        ResponseEntity<RisikoscenarioResponse> resp = restTemplate.exchange("/risikoscenario/update/addRelevanteTiltak", HttpMethod.PUT, new HttpEntity<>(relReq), RisikoscenarioResponse.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        relReq.setTiltakIds(List.of(tiltak.getId().toString()));
+        relReq.setRisikoscenarioId(UUID.randomUUID().toString());
+        resp = restTemplate.exchange("/risikoscenario/update/addRelevanteTiltak", HttpMethod.PUT, new HttpEntity<>(relReq), RisikoscenarioResponse.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        relReq.setRisikoscenarioId(risikoscenario.getId().toString());
+        
+        // Test add Tiltak...
+        resp = restTemplate.exchange("/risikoscenario/update/addRelevanteTiltak", HttpMethod.PUT, new HttpEntity<>(relReq), RisikoscenarioResponse.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(risikoscenarioService.getTiltak(risikoscenario.getId().toString())).containsOnly(tiltak.getId().toString());
+        
+        // Should get Bad Request if relation already exists...
+        resp = restTemplate.exchange("/risikoscenario/update/addRelevanteTiltak", HttpMethod.PUT, new HttpEntity<>(relReq), RisikoscenarioResponse.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+   
+    @Test
+    void testRemoveTiltakFromRisikoscenarioById() {
+        Risikoscenario risikoscenario = insertRisikoscenario();
+        Tiltak tiltak = insertTiltak(risikoscenario.getPvkDokumentId());
+        
+        // Should get Bad Request if Tiltak is not related to Risikoscenario...
+        ResponseEntity<RisikoscenarioResponse> resp = restTemplate.exchange(
+                "/risikoscenario/{id}/removeTiltak/{tiltakId}", HttpMethod.PUT, null, RisikoscenarioResponse.class, 
+                risikoscenario.getId().toString(), tiltak.getId().toString()
+        );
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+
+        // Test remove...
+        tiltakService.addRisikoscenarioTiltakRelasjon(risikoscenario.getId().toString(), tiltak.getId().toString());
+        resp = restTemplate.exchange(
+                "/risikoscenario/{id}/removeTiltak/{tiltakId}", HttpMethod.PUT, null, RisikoscenarioResponse.class, 
+                risikoscenario.getId().toString(), tiltak.getId().toString()
+        );
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(risikoscenarioService.getTiltak(risikoscenario.getId().toString())).isEmpty();
+    }
+   
     private Risikoscenario insertRisikoscenario() {
         PvkDokument pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
         Krav krav = kravStorageService.save(Krav.builder().navn("Krav 50").kravNummer(50).kravVersjon(1).regelverk(List.of(Regelverk.builder().lov("ARKIV").spesifisering("§1").build())).status(KravStatus.AKTIV).build());
@@ -187,5 +293,13 @@ public class RisikoscenarioIT extends IntegrationTestBase {
         return risikoscenarioService.save(risikoscenario, false);
     }
 
+    private Tiltak insertTiltak(UUID pvkDokId) {
+        Tiltak tiltak = Tiltak.builder()
+                .pvkDokumentId(pvkDokId)
+                .tiltakData(new TiltakData())
+                .build();
+        return tiltakService.save(tiltak, null, false);
+
+    }
 
 }
