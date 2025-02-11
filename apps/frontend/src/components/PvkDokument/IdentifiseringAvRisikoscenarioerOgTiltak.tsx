@@ -68,7 +68,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
             sted, kan dere finne og gjenbruke andre steder hvor det er aktuelt.
           </Alert>
 
-          <Heading spacing size="small" level="2" className="my-5">
+          <Heading spacing size="small" level="2" className="mb-5 mt-10">
             Legg til risikoscenarioer og tiltak med en tilknytning til etterlevelseskrav
           </Heading>
 
@@ -88,7 +88,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
             Gå til liste over PVK-relaterte krav
           </Button>
 
-          <Heading level="2" size="small" className="my-5">
+          <Heading level="2" size="small" className="mb-5 mt-10">
             Legg til øvrige risikoscenarioer
           </Heading>
 
@@ -99,7 +99,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
           </BodyLong>
 
           {risikoscenarioList.length === 0 && (
-            <Alert variant="info" className="mt-10 w-fit">
+            <Alert variant="info" className="my-5 w-fit">
               Dere har ikke lagt inn noen øvrige risikoscenarioer.
             </Alert>
           )}
