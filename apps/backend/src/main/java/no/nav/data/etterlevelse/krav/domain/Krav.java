@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.krav.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,6 +15,7 @@ import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static no.nav.data.common.utils.StreamUtils.copyOf;
@@ -43,7 +45,8 @@ public class Krav extends DomainObject implements KravId {
     private List<Varslingsadresse> varslingsadresser;
     private List<String> rettskilder;
     private List<String> tagger;
-    private List<Regelverk> regelverk;
+    @Builder.Default
+    private List<Regelverk> regelverk = new ArrayList<Regelverk>();
 
     private List<Suksesskriterie> suksesskriterier;
 
