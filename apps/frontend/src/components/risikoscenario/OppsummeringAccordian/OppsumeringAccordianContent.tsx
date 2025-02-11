@@ -45,6 +45,7 @@ export const OppsumeringAccordianContent = (props: IProps) => {
                 <ReadMore
                   key={risikoscenario.id + '_' + tiltak.id + '_' + index}
                   header={tiltak.navn}
+                  className="mb-3"
                 >
                   <TiltakView tiltak={tiltak} risikoscenarioList={allRisikoscenarioList} />
                 </ReadMore>

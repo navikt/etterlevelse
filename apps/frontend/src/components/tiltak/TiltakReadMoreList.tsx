@@ -133,6 +133,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
         <ReadMore
           open={tiltakId === tiltak.id}
           id={risikoscenario.id + '_' + tiltak.id}
+          className="mb-3"
           onOpenChange={(open) => {
             if (open) {
               setActiveTiltak(tiltak.id)

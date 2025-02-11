@@ -68,6 +68,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   const [navigateUrl, setNavigateUrl] = useState<string>('')
   const url = new URL(window.location.href)
   const tabQuery = url.searchParams.get('tab')
+  const risikoscenarioId = url.searchParams.get('risikoscenario')
   const filterQuery = url.searchParams.get('filter')
   const navigate = useNavigate()
 
@@ -143,11 +144,15 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
         break
     }
 
-    setNavigateUrl(`${window.location.pathname}?tab=${tab}&filter=${filter}`)
+    setNavigateUrl(
+      `${window.location.pathname}?tab=${tab}&filter=${filter}${risikoscenarioId ? '&risikoscenario=' + risikoscenarioId : ''}`
+    )
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
     } else {
-      navigate(`${window.location.pathname}?tab=${tab}&filter=${filter}`)
+      navigate(
+        `${window.location.pathname}?tab=${tab}&filter=${filter}${risikoscenarioId ? '&risikoscenario=' + risikoscenarioId : ''}`
+      )
     }
   }
 
