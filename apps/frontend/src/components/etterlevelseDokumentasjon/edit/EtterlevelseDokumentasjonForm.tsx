@@ -252,6 +252,9 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             <FieldArray name="test">
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className="h-full pt-5 w-[calc(100% - 1rem)]">
+                  <Heading size="small" level="2" spacing>
+                    Velg egenskaper
+                  </Heading>
                   <CheckboxGroup
                     legend="Hvilke egenskaper gjelder for etterlevelsen?"
                     description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
@@ -299,6 +302,9 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           {/* DONT REMOVE */}
           {/* )} */}
 
+          <Heading className="mt-5" size="small" level="2" spacing>
+            Velg behandlinger
+          </Heading>
           <BoolField
             label="Ønsker du å legge til eksisterende behandling(er) nå?"
             name="behandlerPersonopplysninger"
