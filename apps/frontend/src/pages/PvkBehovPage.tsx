@@ -450,9 +450,12 @@ export const PvkBehovPage = () => {
                         variant="tertiary"
                         onClick={() => {
                           setFieldValue('skalUtforePvk', null)
+                          setFieldValue('pvkVurderingsBegrunnelse', '')
+                          setFieldValue('ytterligereEgenskaper', [])
+                          setCheckedYttligereEgenskaper([])
                         }}
                       >
-                        Nullstill svar
+                        Nullstill alle svar
                       </Button>
                     </div>
                   </Form>
