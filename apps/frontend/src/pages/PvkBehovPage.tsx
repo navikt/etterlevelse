@@ -1,4 +1,4 @@
-import { CheckmarkCircleFillIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons'
+import { EnvelopeClosedIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyLong,
@@ -58,9 +58,10 @@ export const PvkBehovPage = () => {
     useEtterlevelseDokumentasjon(params.id)
   const [pvkdokument, setPvkDokument] = usePvkDokument(params.pvkdokumentId)
   const [codelistUtils] = CodelistService()
-  const [profilering, setProfilering] = useState<boolean>(false)
-  const [automatiskBehandling, setAutomatiskBehandling] = useState<boolean>(false)
+  const [profilering, setProfilering] = useState<boolean | null>(false)
+  const [automatiskBehandling, setAutomatiskBehandling] = useState<boolean | null>(false)
   const [saerligKategorier, setSaerligKategorier] = useState<boolean>(false)
+  const [opplysningstyperMangler, setOpplysningstyperMangler] = useState<boolean>(false)
   const [checkedYttligereEgenskaper, setCheckedYttligereEgenskaper] = useState<string[]>([])
   const [tilTemaOversikt, setTilTemaOversikt] = useState<boolean>(false)
   const [tilPvkDokument, setTilPvkDokument] = useState<boolean>(false)
@@ -99,16 +100,32 @@ export const PvkBehovPage = () => {
   useEffect(() => {
     if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.behandlinger) {
       const alleOpplysningstyper: IPolicy[] = []
+      const alleProfilering: any[] = []
+      const alleAutomatiskBehandling: any[] = []
       etterlevelseDokumentasjon.behandlinger.forEach((behandling) => {
+        if (behandling.policies.length === 0) {
+          setOpplysningstyperMangler(true)
+        }
         alleOpplysningstyper.push(...behandling.policies)
-
-        if (behandling.profilering) {
-          setProfilering(true)
-        }
-        if (behandling.automatiskBehandling) {
-          setAutomatiskBehandling(true)
-        }
+        alleProfilering.push(behandling.profilering)
+        alleAutomatiskBehandling.push(behandling.automatiskBehandling)
       })
+
+      if (alleProfilering.includes(true)) {
+        setProfilering(true)
+      } else if (alleProfilering.every((v) => v === false)) {
+        setProfilering(false)
+      } else if (alleProfilering.includes(null)) {
+        setProfilering(null)
+      }
+
+      if (alleAutomatiskBehandling.includes(true)) {
+        setAutomatiskBehandling(true)
+      } else if (alleAutomatiskBehandling.every((v) => v === false)) {
+        setAutomatiskBehandling(false)
+      } else if (alleAutomatiskBehandling.includes(null)) {
+        setAutomatiskBehandling(null)
+      }
 
       const saerligKategorierOppsumert: IExternalCode[] = uniqBy(
         alleOpplysningstyper.flatMap((opplysningstyper) => opplysningstyper.sensitivity),
@@ -219,12 +236,87 @@ export const PvkBehovPage = () => {
         pvkdokument &&
         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
           <div className="flex w-full">
-            <div className="pr-4 flex flex-1 flex-col gap-4 col-span-8">
+            <div className="pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8">
               <BodyLong>
                 En PVK skal gjennomføres når vi ønsker å starte eller endre en behandling av
                 personopplysninger som sannsynligvis vil medføre høy risiko for den registrertes
                 rettigheter og friheter.
               </BodyLong>
+
+              <Heading level="2" size="small" className="mb-5">
+                Egenskaper som gjelder for behandlingene deres
+              </Heading>
+
+              {etterlevelseDokumentasjon.behandlinger && (
+                <Alert variant="info">
+                  Dere har ikke ennå lagt til behandlinger under Dokumentegenskaper (åpner i en ny
+                  fane). Det anbefales at dere gjør dette før dere vurderer behov for PVK.
+                </Alert>
+              )}
+
+              {etterlevelseDokumentasjon && (
+                <BodyShort className="mt-5">
+                  Disse egenskapene blir enklere å vurdere hvis{' '}
+                  <Link
+                    href={
+                      '/dokumentasjon/' +
+                      etterlevelseDokumentasjon.id +
+                      '/behandlingens-livslop/' +
+                      (behandlingensLivslop?.id ? behandlingensLivslop.id : 'ny')
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="redigere etterlevelsesdokumentasjon"
+                    className="inline"
+                  >
+                    dere har tegnet behandlingens livsløp (åpner i en ny fane).
+                  </Link>
+                </BodyShort>
+              )}
+
+              <List
+                title="- Følgende egenskaper er hentet fra Behandlingskatalogen:"
+                className="py-5"
+              >
+                {profilering !== null && (
+                  <List.Item>
+                    <strong>Det {profilering ? 'gjelder' : 'gjelder ikke'}</strong> profilering
+                  </List.Item>
+                )}
+
+                {automatiskBehandling !== null && (
+                  <List.Item>
+                    <strong>Det {automatiskBehandling ? 'gjelder' : 'gjelder ikke'}</strong>{' '}
+                    automatisert behandling
+                  </List.Item>
+                )}
+
+                {!opplysningstyperMangler && (
+                  <List.Item>
+                    <strong>Det {saerligKategorier ? 'gjelder' : 'gjelder ikke'}</strong> særlige
+                    kategorier av personopplysninger
+                  </List.Item>
+                )}
+              </List>
+
+              {(profilering === null ||
+                automatiskBehandling === null ||
+                opplysningstyperMangler) && (
+                <Alert variant="warning">
+                  Dere har ikke vurdert følgende egenskaper i Behandlingskatalogen:
+                  <List>
+                    {profilering === null && <List.Item>Profilering</List.Item>}
+                    {automatiskBehandling === null && (
+                      <List.Item>Automatisert behandling</List.Item>
+                    )}
+                    {opplysningstyperMangler && (
+                      <List.Item>Særlige kategorier av personopplysninger</List.Item>
+                    )}
+                  </List>
+                  behandling Dere burde oppdatere behandlingene deres før dere bestemmer behov for
+                  PVK.
+                </Alert>
+              )}
 
               <Formik
                 validateOnChange={false}
@@ -235,11 +327,11 @@ export const PvkBehovPage = () => {
               >
                 {({ values, submitForm }) => (
                   <Form>
-                    <div className="mt-3" id="ytterlige-egenskaper">
+                    <div id="ytterlige-egenskaper">
                       <FieldArray name="ytterligereEgenskaper">
                         {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                           <CheckboxGroup
-                            legend="Les igjennom og velg ytterligere egenskaper som gjelder for behandlingene deres."
+                            legend="Les igjennom og velg eventuelt øvrige egenskaper som gjelder for behandlingene deres:"
                             value={checkedYttligereEgenskaper}
                             onChange={(selected: string[]) => {
                               setCheckedYttligereEgenskaper(selected)
@@ -255,24 +347,6 @@ export const PvkBehovPage = () => {
                               )
                             }}
                           >
-                            <List>
-                              {profilering && (
-                                <List.Item icon={<CheckmarkCircleFillIcon title="checked" />}>
-                                  Profilering (hentet fra Behandlingskatalogen)
-                                </List.Item>
-                              )}
-                              {automatiskBehandling && (
-                                <List.Item icon={<CheckmarkCircleFillIcon title="checked" />}>
-                                  automatisert behandling (hentet fra Behandlingskatalogen)
-                                </List.Item>
-                              )}
-                              {saerligKategorier && (
-                                <List.Item icon={<CheckmarkCircleFillIcon title="checked" />}>
-                                  særlige kategorier av personopplysninger (hentet fra
-                                  Behandlingskatalogen)
-                                </List.Item>
-                              )}
-                            </List>
                             {ytterligereEgenskaper.map((egenskap) => (
                               <Checkbox key={egenskap.code} value={egenskap.code}>
                                 {egenskap.shortName}
@@ -281,25 +355,6 @@ export const PvkBehovPage = () => {
                           </CheckboxGroup>
                         )}
                       </FieldArray>
-                      {etterlevelseDokumentasjon && (
-                        <BodyShort className="mt-5">
-                          Disse egenskapene blir enklere å vurdere hvis{' '}
-                          <Link
-                            href={
-                              '/dokumentasjon/' +
-                              etterlevelseDokumentasjon.id +
-                              '/behandlingens-livslop/' +
-                              (behandlingensLivslop?.id ? behandlingensLivslop.id : 'ny')
-                            }
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="redigere etterlevelsesdokumentasjon"
-                            className="inline"
-                          >
-                            dere har tegnet behandlingens livsløp (åpner i en ny fane).
-                          </Link>
-                        </BodyShort>
-                      )}
                     </div>
 
                     {(checkedYttligereEgenskaper.length > 0 ||
