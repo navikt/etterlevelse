@@ -89,18 +89,23 @@ public class TeamcatResourceClient {
     }
 
     private Map<String, Resource> getResources0(Iterable<? extends String> idents) {
-        var response = restTemplate.postForEntity(properties.getResourcesUrl(), idents, ResourcePage.class);
-        Assert.isTrue(response.getStatusCode().is2xxSuccessful() && response.hasBody(), "Call to teamcat failed " + response.getStatusCode());
-        Assert.isTrue(response.getBody() != null, "response is null");
-        List<Resource> resources = response.getBody().getContent();
-        log.info("fetched {} resources from teamkat", resources.size());
-        Map<String, Resource> results = toMap(resources, Resource::getNavIdent);
+        try {
+            var response = restTemplate.postForEntity(properties.getResourcesUrl(), idents, ResourcePage.class);
+            Assert.isTrue(response.getStatusCode().is2xxSuccessful() && response.hasBody(), "Call to teamcat failed " + response.getStatusCode());
+            Assert.isTrue(response.getBody() != null, "response is null");
+            List<Resource> resources = response.getBody().getContent();
+            log.info("fetched {} resources from teamkat", resources.size());
+            Map<String, Resource> results = toMap(resources, Resource::getNavIdent);
 
-        safeStream(idents)
-                .filter(not(results.keySet()::contains))
-                .forEach(ident -> results.put(ident, new Resource(ident)));
+            safeStream(idents)
+                    .filter(not(results.keySet()::contains))
+                    .forEach(ident -> results.put(ident, new Resource(ident)));
 
-        return results;
+            return results;
+        } catch (HttpClientErrorException e) {
+            log.error("Error while connecting to teamcatalog.", e);
+            return null;
+        }
     }
 
     private RestResponsePage<Resource> doSearch(String name) {

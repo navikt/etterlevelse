@@ -102,8 +102,14 @@ public class TeamcatTeamClient {
     }
 
     private Map<String, ProductArea> getProductAreasResponse() {
-        var response = restTemplate.getForEntity(properties.getProductAreasUrl(), ProductAreaPage.class);
-        List<TeamKatProductArea> teams = response.hasBody() ? requireNonNull(response.getBody()).getContent() : List.of();
+        List<TeamKatProductArea>  teams = List.of();
+        try {
+            var response = restTemplate.getForEntity(properties.getProductAreasUrl(), ProductAreaPage.class);
+            teams = response.hasBody() ? requireNonNull(response.getBody()).getContent() : List.of();
+        } catch (RestClientException e) {
+            log.error("Unable to connect to teamkatalog, error: " + e);
+        }
+
         return safeStream(teams)
                 .map(TeamKatProductArea::convertToProductArea)
                 .collect(Collectors.toMap(ProductArea::getId, Function.identity()));
