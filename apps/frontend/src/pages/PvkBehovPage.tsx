@@ -325,7 +325,7 @@ export const PvkBehovPage = () => {
                 onSubmit={submit}
                 initialValues={mapPvkDokumentToFormValue(pvkdokument as IPvkDokument)}
               >
-                {({ values, submitForm }) => (
+                {({ setFieldValue, values, submitForm }) => (
                   <Form>
                     <div id="ytterlige-egenskaper">
                       <FieldArray name="ytterligereEgenskaper">
@@ -443,6 +443,16 @@ export const PvkBehovPage = () => {
                         }}
                       >
                         Avbryt
+                      </Button>
+
+                      <Button
+                        type="button"
+                        variant="tertiary"
+                        onClick={() => {
+                          setFieldValue('skalUtforePvk', null)
+                        }}
+                      >
+                        Nullstill svar
                       </Button>
                     </div>
                   </Form>
