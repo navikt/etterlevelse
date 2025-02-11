@@ -11,7 +11,7 @@ env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
     value: https://etterlevelse.ansatt.dev.nav.no,https://etterlevelse.intern.dev.nav.no,https://etterlevelse-api.intern.dev.nav.no,http://localhost:3000
   - name: CLIENT_TEAMCAT_URL
-    value: https://teamkatalog-api.intern.nav.no
+    value: https://teamkatalog-api.intern.dev.nav.no
   - name: CLIENT_TEAMCAT_FRONTEND_URL
     value: https://teamkatalog.intern.nav.no/
   - name: CLIENT_POLLY_URL
