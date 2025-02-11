@@ -1,4 +1,4 @@
-import { BodyShort, Button, Loader, Select, TextField } from '@navikt/ds-react'
+import { BodyShort, Button, Label, Loader, Select, TextField } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
@@ -136,22 +136,18 @@ export const KravList = (props: IProps) => {
         </div>
       </div>
 
-      <div className="flex items-center w-full gap-4">
-        <BodyShort>Filter:</BodyShort>
+      <div className="flex items-end w-full gap-6 pb-2">
+        <Label className="pb-3">Filter:</Label>
         <TextField
           label="Søk etter kravet"
-          hideLabel
-          placeholder="Søk etter krav"
           onChange={(event) => setSearchKrav(event.target.value)}
         />
         <Select
-          label="Velg status"
-          hideLabel
+          label="Velg fullføringsgrad"
           onChange={(event) => {
             setStatusFilter(event.target.value)
           }}
         >
-          <option value="ALLE">Velg status</option>
           <option value="ALLE">Alle</option>
           <option value={EEtterlevelseStatus.UNDER_REDIGERING}>Under arbeid</option>
           <option value={EEtterlevelseStatus.OPPFYLLES_SENERE}>Oppfylles senere</option>
@@ -161,12 +157,10 @@ export const KravList = (props: IProps) => {
 
         <Select
           label="Velg suksesskriterie status"
-          hideLabel
           onChange={(event) => {
             setSuksesskriterieStatusFilter(event.target.value)
           }}
         >
-          <option value="ALLE">Velg suksesskriterie status</option>
           <option value="ALLE">Alle</option>
           <option value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</option>
           <option value={ESuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</option>
