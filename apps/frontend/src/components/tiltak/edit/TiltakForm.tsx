@@ -1,4 +1,4 @@
-import { Button, Detail, ErrorSummary, Label, ReadMore, TextField } from '@navikt/ds-react'
+import { Button, Detail, ErrorSummary, Heading, ReadMore, TextField } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { ChangeEvent, RefObject, useRef, useState } from 'react'
 import AsyncSelect from 'react-select/async'
@@ -44,8 +44,10 @@ export const TiltakForm = (props: IProps) => {
     >
       {({ values, resetForm, submitForm, errors }) => (
         <Form>
-          <div className="mb-5">
-            <Label>{title}</Label>
+          <div className="mb-5 border-t-2 mt-5">
+            <Heading size="medium" className="mt-5">
+              {title}
+            </Heading>
           </div>
 
           <InputField
