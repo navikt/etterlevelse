@@ -38,6 +38,9 @@ export const KravRisikoscenario = (props: IProps) => {
   const [activeRisikoscenarioId, setActiveRisikoscenarioId] = useState<string>('')
   const [selectedRisikoscenarioId, setSelectedRisikoscenarioId] = useState<string>('')
   const [editButtonClicked, setEditButtonClicked] = useState<string>('')
+  const [isCreateTiltakFormActive, setIsCreateTiltakFormActive] = useState<boolean>(false)
+  const [isAddExistingTiltakMode, setIsAddExisitingTiltakMode] = useState<boolean>(false)
+  const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
   const url = new URL(window.location.href)
   const risikoscenarioId = url.searchParams.get('risikoscenario')
   const navigate = useNavigate()
@@ -167,6 +170,12 @@ export const KravRisikoscenario = (props: IProps) => {
                           setRisikoscenarioForKrav={setRisikoscenarioForKrav}
                           tiltakList={tiltakList}
                           setTiltakList={setTiltakList}
+                          isCreateTiltakFormActive={isCreateTiltakFormActive}
+                          setIsCreateTiltakFormActive={setIsCreateTiltakFormActive}
+                          isAddExistingMode={isAddExistingTiltakMode}
+                          setIsAddExisitingMode={setIsAddExisitingTiltakMode}
+                          isEditTiltakFormActive={isEditTiltakFormActive}
+                          setIsEditTiltakFormActive={setIsEditTiltakFormActive}
                           formRef={formRef}
                         />
                       </Accordion.Content>
@@ -190,39 +199,43 @@ export const KravRisikoscenario = (props: IProps) => {
           />
         )}
 
-        {!isCreateMode && !isLeggTilEksisterendeMode && (
-          <div className="flex gap-2 mt-8 lg:flex-row flex-col">
-            <Button
-              size="small"
-              type="button"
-              onClick={() => {
-                if (formRef.current?.dirty) {
-                  setIsUnsaved(true)
-                  setEditButtonClicked(unsavedAction.createRisikoscenario)
-                } else {
-                  setIsCreateMode(true)
-                }
-              }}
-            >
-              Opprett nytt risikoscenario
-            </Button>
-            <Button
-              size="small"
-              variant="secondary"
-              type="button"
-              onClick={() => {
-                if (formRef.current?.dirty) {
-                  setIsUnsaved(true)
-                  setEditButtonClicked(unsavedAction.leggTilEksisterendeRisikoscenario)
-                } else {
-                  setIsLeggTilEksisterendeMode(true)
-                }
-              }}
-            >
-              Legg til eksisterende risikoscenario
-            </Button>
-          </div>
-        )}
+        {!isCreateMode &&
+          !isLeggTilEksisterendeMode &&
+          !isCreateTiltakFormActive &&
+          !isEditTiltakFormActive &&
+          !isAddExistingTiltakMode && (
+            <div className="flex gap-2 mt-8 lg:flex-row flex-col">
+              <Button
+                size="small"
+                type="button"
+                onClick={() => {
+                  if (formRef.current?.dirty) {
+                    setIsUnsaved(true)
+                    setEditButtonClicked(unsavedAction.createRisikoscenario)
+                  } else {
+                    setIsCreateMode(true)
+                  }
+                }}
+              >
+                Opprett nytt risikoscenario
+              </Button>
+              <Button
+                size="small"
+                variant="secondary"
+                type="button"
+                onClick={() => {
+                  if (formRef.current?.dirty) {
+                    setIsUnsaved(true)
+                    setEditButtonClicked(unsavedAction.leggTilEksisterendeRisikoscenario)
+                  } else {
+                    setIsLeggTilEksisterendeMode(true)
+                  }
+                }}
+              >
+                Legg til eksisterende risikoscenario
+              </Button>
+            </div>
+          )}
 
         {!isCreateMode && !isLeggTilEksisterendeMode && pvkDokument && (
           <div className="mt-5">
