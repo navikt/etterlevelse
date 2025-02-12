@@ -3,7 +3,6 @@ import { BodyShort, Button, Heading, Label, Link, ReadMore, Tag } from '@navikt/
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
 import { CodelistService, EListName, ICode, IGetParsedOptionsProps } from '../../services/Codelist'
-import { user } from '../../services/User'
 import { BehandlingList } from '../behandling/BehandlingList'
 import { Markdown } from '../common/Markdown'
 import { ExternalLink } from '../common/RouteLink'
@@ -175,21 +174,6 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                   </div>
                 </div>
               </div>
-
-              {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-                <div className="py-8">
-                  <Button
-                    onClick={() => {
-                      navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
-                    }}
-                    size="small"
-                    variant="secondary"
-                    className="whitespace-nowrap"
-                  >
-                    Redigér dokumentegenskaper
-                  </Button>
-                </div>
-              )}
             </div>
           </ReadMore>
         </div>

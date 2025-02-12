@@ -265,6 +265,17 @@ export const DokumentasjonPage = () => {
                 <div className="gap-4 ml-5 flex flex-col ">
                   {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
                     <>
+                      <Button
+                        onClick={() => {
+                          navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
+                        }}
+                        size="small"
+                        variant="tertiary"
+                        className="whitespace-nowrap"
+                      >
+                        Redigér dokumentegenskaper
+                      </Button>
+
                       {etterlevelseDokumentasjon.forGjenbruk && (
                         <TillatGjenbrukModal
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
