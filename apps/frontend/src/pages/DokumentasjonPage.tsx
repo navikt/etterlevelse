@@ -38,6 +38,22 @@ const getVariantForBLLButton = (
     : 'primary'
 }
 
+const getVariantForPVKBehovButton = (
+  pvkDokument: IPvkDokument | undefined,
+  behandlingsLivslop: IBehandlingensLivslop | undefined
+) => {
+  if (pvkDokument) {
+    return 'tertiary'
+  } else if (
+    (behandlingsLivslop && behandlingsLivslop.filer.length > 0) ||
+    behandlingsLivslop?.beskrivelse
+  ) {
+    return 'primary'
+  } else {
+    return 'secondary'
+  }
+}
+
 const getVariantForPVKButton = (
   pvkDokument: IPvkDokument | undefined,
   behandlingsLivslop: IBehandlingensLivslop | undefined
@@ -249,17 +265,6 @@ export const DokumentasjonPage = () => {
                 <div className="gap-4 ml-5 flex flex-col ">
                   {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
                     <>
-                      <Button
-                        onClick={() => {
-                          navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
-                        }}
-                        size="small"
-                        variant="tertiary"
-                        className="whitespace-nowrap"
-                      >
-                        Redigér dokumentegenskaper
-                      </Button>
-
                       {etterlevelseDokumentasjon.forGjenbruk && (
                         <TillatGjenbrukModal
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -293,31 +298,6 @@ export const DokumentasjonPage = () => {
                           </Button>
                         )}
                       {/*WIP ikke klar til å vises i prod*/}
-                      {(!pvkDokument || !pvkDokument.skalUtforePvk) &&
-                        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
-                        isDev && (
-                          <Button
-                            onClick={() => {
-                              let pvkBehovUrl =
-                                '/dokumentasjon/' + etterlevelseDokumentasjon.id + '/pvkbehov/'
-
-                              if (pvkDokument) {
-                                pvkBehovUrl += pvkDokument.id
-                              } else {
-                                pvkBehovUrl += 'ny'
-                              }
-                              navigate(pvkBehovUrl)
-                            }}
-                            size="small"
-                            variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
-                            className="whitespace-nowrap"
-                          >
-                            {pvkDokumentVurdertCheck
-                              ? 'Revurdér behov for PVK'
-                              : 'Vurdér behov for PVK'}
-                          </Button>
-                        )}
-                      {/*WIP ikke klar til å vises i prod*/}
                       {pvkDokument &&
                         pvkDokument.skalUtforePvk &&
                         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
@@ -339,6 +319,31 @@ export const DokumentasjonPage = () => {
                             {pvkDokument.skalUtforePvk && pvkDokumentStartedCheck
                               ? 'Fullfør PVK'
                               : 'Påbegynn PVK'}
+                          </Button>
+                        )}
+
+                      {/*WIP ikke klar til å vises i prod*/}
+                      {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
+                        isDev && (
+                          <Button
+                            onClick={() => {
+                              let pvkBehovUrl =
+                                '/dokumentasjon/' + etterlevelseDokumentasjon.id + '/pvkbehov/'
+
+                              if (pvkDokument) {
+                                pvkBehovUrl += pvkDokument.id
+                              } else {
+                                pvkBehovUrl += 'ny'
+                              }
+                              navigate(pvkBehovUrl)
+                            }}
+                            size="small"
+                            variant={getVariantForPVKBehovButton(pvkDokument, behandlingsLivslop)}
+                            className="whitespace-nowrap"
+                          >
+                            {pvkDokumentVurdertCheck
+                              ? 'Revurdér behov for PVK'
+                              : 'Vurdér behov for PVK'}
                           </Button>
                         )}
                     </>
