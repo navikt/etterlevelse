@@ -247,15 +247,22 @@ export const PvkBehovPage = () => {
                 Egenskaper som gjelder for behandlingene deres
               </Heading>
 
-              {etterlevelseDokumentasjon.behandlinger && (
-                <Alert variant="info">
-                  Dere har ikke ennå lagt til behandlinger under Dokumentegenskaper (åpner i en ny
-                  fane). Det anbefales at dere gjør dette før dere vurderer behov for PVK.
+              {(!etterlevelseDokumentasjon.behandlinger ||
+                etterlevelseDokumentasjon.behandlinger.length === 0) && (
+                <Alert variant="info" className="mb-5">
+                  Dere har ikke ennå lagt til behandlinger under{' '}
+                  <ExternalLink
+                    className="text-medium"
+                    href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
+                  >
+                    Dokumentegenskaper
+                  </ExternalLink>
+                  . Det anbefales at dere gjør dette før dere vurderer behov for PVK.
                 </Alert>
               )}
 
               {etterlevelseDokumentasjon && (
-                <BodyShort className="mt-5">
+                <BodyShort>
                   Disse egenskapene blir enklere å vurdere hvis{' '}
                   <Link
                     href={
@@ -313,8 +320,11 @@ export const PvkBehovPage = () => {
                       <List.Item>Særlige kategorier av personopplysninger</List.Item>
                     )}
                   </List>
-                  behandling Dere burde oppdatere behandlingene deres før dere bestemmer behov for
-                  PVK.
+                  Dere bør fullføre dokumentasjon av behandlingene deres i{' '}
+                  <ExternalLink className="text-medium" href={`${env.pollyBaseUrl}`}>
+                    Behandlingskatalogen
+                  </ExternalLink>{' '}
+                  før dere vurderer behov for PVK.
                 </Alert>
               )}
 
