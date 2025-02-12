@@ -101,7 +101,40 @@ export const KravList = (props: IProps) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center w-full">
+      <div className="flex items-end w-full gap-6 py-2">
+        <Label className="pb-3">Filter:</Label>
+        <TextField
+          label="Søk etter kravet"
+          onChange={(event) => setSearchKrav(event.target.value)}
+        />
+        <Select
+          label="Velg fullføringsgrad"
+          onChange={(event) => {
+            setStatusFilter(event.target.value)
+          }}
+        >
+          <option value="ALLE">Alle</option>
+          <option value={EEtterlevelseStatus.UNDER_REDIGERING}>Under arbeid</option>
+          <option value={EEtterlevelseStatus.OPPFYLLES_SENERE}>Oppfylles senere</option>
+          <option value="">Ikke påbegynt</option>
+          <option value={EEtterlevelseStatus.FERDIG_DOKUMENTERT}>Ferdig utfylt</option>
+        </Select>
+
+        <Select
+          label="Velg suksesskriterie status"
+          onChange={(event) => {
+            setSuksesskriterieStatusFilter(event.target.value)
+          }}
+        >
+          <option value="ALLE">Alle</option>
+          <option value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</option>
+          <option value={ESuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</option>
+          <option value={ESuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</option>
+          <option value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</option>
+        </Select>
+      </div>
+
+      <div className="flex items-center w-full pb-2">
         <div className="flex items-center w-full gap-4">
           <Button
             variant="tertiary"
@@ -134,39 +167,6 @@ export const KravList = (props: IProps) => {
               : ''}
           </BodyShort>
         </div>
-      </div>
-
-      <div className="flex items-end w-full gap-6 pb-2">
-        <Label className="pb-3">Filter:</Label>
-        <TextField
-          label="Søk etter kravet"
-          onChange={(event) => setSearchKrav(event.target.value)}
-        />
-        <Select
-          label="Velg fullføringsgrad"
-          onChange={(event) => {
-            setStatusFilter(event.target.value)
-          }}
-        >
-          <option value="ALLE">Alle</option>
-          <option value={EEtterlevelseStatus.UNDER_REDIGERING}>Under arbeid</option>
-          <option value={EEtterlevelseStatus.OPPFYLLES_SENERE}>Oppfylles senere</option>
-          <option value="">Ikke påbegynt</option>
-          <option value={EEtterlevelseStatus.FERDIG_DOKUMENTERT}>Ferdig utfylt</option>
-        </Select>
-
-        <Select
-          label="Velg suksesskriterie status"
-          onChange={(event) => {
-            setSuksesskriterieStatusFilter(event.target.value)
-          }}
-        >
-          <option value="ALLE">Alle</option>
-          <option value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</option>
-          <option value={ESuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</option>
-          <option value={ESuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</option>
-          <option value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</option>
-        </Select>
       </div>
 
       {loading && (
