@@ -5,10 +5,8 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
-import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakData;
-import no.nav.data.pvk.tiltak.dto.RisikoscenarioTiltakRequest;
 import no.nav.data.pvk.tiltak.dto.TiltakRequest;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -111,15 +109,11 @@ public class TiltakIT extends IntegrationTestBase {
 
         // Delete should fail if tiltak has a relation to one or more risikoscenarioer...
         Risikoscenario risikoscenario = risikoscenarioService.save(generateRisikoscenario(pvkDokument.getId()), false);
-        RisikoscenarioTiltakRequest relReq = RisikoscenarioTiltakRequest.builder()
-                .risikoscenarioId(risikoscenario.getId().toString())
-                .tiltakIds(List.of(tiltak.getId().toString()))
-                .build();
-        restTemplate.exchange("/risikoscenario/update/addRelevanteTiltak", HttpMethod.PUT, new HttpEntity<>(relReq), RisikoscenarioResponse.class);
+        risikoscenarioService.addTiltak(risikoscenario.getId().toString(), List.of(tiltak.getId().toString()));
         ResponseEntity<TiltakResponse> resp = restTemplate.exchange("/tiltak/{id}", HttpMethod.DELETE, null, TiltakResponse.class, tiltak.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(tiltakRepo.count()).isEqualTo(1);
-        restTemplate.exchange("/risikoscenario/{id}/removeTiltak/{tiltakId}", HttpMethod.PUT, null, RisikoscenarioResponse.class, risikoscenario.getId().toString(), tiltak.getId().toString());
+        risikoscenarioService.removeTiltak(risikoscenario.getId().toString(), tiltak.getId().toString());
 
         // Test delete...
         resp = restTemplate.exchange("/tiltak/{id}", HttpMethod.DELETE, null, TiltakResponse.class, tiltak.getId());

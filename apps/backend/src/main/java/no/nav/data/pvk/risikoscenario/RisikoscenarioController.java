@@ -11,8 +11,6 @@ import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.etterlevelse.codelist.CodelistService;
-import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.dto.RegelverkResponse;
@@ -23,7 +21,6 @@ import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioRequest;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
 import no.nav.data.pvk.tiltak.dto.RisikoscenarioTiltakRequest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +46,6 @@ public class RisikoscenarioController {
 
     private final RisikoscenarioService risikoscenarioService;
     private final KravService kravService;
-    private final CodelistService codelistService;
 
     @Operation(summary = "Get All Risikoscenario")
     @ApiResponse(description = "ok")
@@ -194,14 +190,21 @@ public class RisikoscenarioController {
     @PutMapping("/update/addRelevantKrav")
     public ResponseEntity<List<RisikoscenarioResponse>> addRelevantKravToRisikoscenarioer(@RequestBody KravRisikoscenarioRequest request) {
         log.info("Add relevantKrav for risikoscenarioer");
+
+        // TODO: This validity check should be moved to DB
+        if (!kravService.isActiveKrav(request.getKravnummer())) {
+            log.warn("Requested to add non-existing Krav to Risikoscenario");
+            // Somehow we get client-side MismatchedInputException if we just throw ValidationException here
+            return ResponseEntity.badRequest().build();
+        }
         
+        // TODO: Will cause NPE and INTERNAL SE if a request contains non-existing risikoscenarios
         List<Risikoscenario> updatedRisikoscenarioer =  risikoscenarioService.addRelevantKravToRisikoscenarioer(request.getKravnummer(), request.getRisikoscenarioIder());
-       
-        return ResponseEntity.ok(updatedRisikoscenarioer.stream()
-                .map(RisikoscenarioResponse::buildFrom)
-                .map(this::setTiltakAndKravDataForRelevantKravList)
-                .toList()
-        );
+        
+        List<RisikoscenarioResponse> reply = updatedRisikoscenarioer.stream().map(RisikoscenarioResponse::buildFrom).toList();
+        reply.forEach(this::setTiltakAndKravDataForRelevantKravList);
+
+        return ResponseEntity.ok(reply);
     }
 
     @Operation(summary = "Remove krav from risikoscenario")
@@ -232,14 +235,11 @@ public class RisikoscenarioController {
             RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenario);
             setTiltakAndKravDataForRelevantKravList(response);
             return ResponseEntity.ok(response);
-        } catch (DuplicateKeyException e) {
-            log.warn("DuplicateKeyException caught while inserting Tiltak-Risikoscenario relation", e);
-            throw new ValidationException("Could not insert Tiltak-Risikoscenario relation: already exists");
         } catch (DataIntegrityViolationException e) {
+            // Eigther non-existing, or relation already exists
             log.warn("DataIntegrityViolationException caught while inserting Tiltak-Risikoscenario relation");
-            throw new NotFoundException("Could not insert Tiltak-Risikoscenario relation: non-existing Tiltak and/or Risikoscenario");
+            throw new ValidationException("Could not insert Tiltak-Risikoscenario relation: non-existing Tiltak and/or Risikoscenario or relation already exists");
         }
-        // TODO: ITest for exception handling
     }
 
     @Operation(summary = "Remove tiltak from risikoscenario")
@@ -257,22 +257,23 @@ public class RisikoscenarioController {
         }
     }
 
-    private RisikoscenarioResponse setTiltakAndKravDataForRelevantKravList(RisikoscenarioResponse risikoscenario) {
+    private void setTiltakAndKravDataForRelevantKravList(RisikoscenarioResponse risikoscenario) {
         // Set Tiltak...
         risikoscenario.setTiltakIds(risikoscenarioService.getTiltak(risikoscenario.getId().toString()));
 
         // Set KravData...
         risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
             List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
-            RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
-            JsonNode lovData = regelverk.getLov().getData();
-            if(lovData != null) {
+            try {
+                RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
+                JsonNode lovData = regelverk.getLov().getData();
                 kravShort.setTemaCode(lovData.get("tema").asText());
+            } catch (RuntimeException e) {
+                // Ignore. If something went wrong (IOOBE or NPE), temaCode is not set.
             }
             kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
             kravShort.setNavn(kravList.get(0).getNavn());
         });
-        return risikoscenario;
     }
 
 }
