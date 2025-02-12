@@ -18,14 +18,16 @@ export const TiltakView = (props: IProps) => {
       <div className="flex gap-2">
         <Label>Tiltaksansvarlig:</Label>
         <BodyLong>
-          {tiltak.ansvarlig.fullName
-            ? tiltak.ansvarlig.fullName
-            : 'Det er ikke satt en ansvarlig for tiltaket'}
+          {tiltak.ansvarlig && tiltak.ansvarlig.fullName}
+          {!tiltak.ansvarlig && 'Det er ikke satt en ansvarlig for tiltaket'}
         </BodyLong>
       </div>
       <div className="mt-3 flex gap-2">
         <Label>Tiltaksfrist:</Label>
-        <BodyLong>{tiltak.frist}</BodyLong>
+        <BodyLong>
+          {tiltak.frist && tiltak.frist}
+          {!tiltak.frist && 'Det er ikke satt en frist for tiltaket'}
+        </BodyLong>
       </div>
 
       <div className="mt-3">
