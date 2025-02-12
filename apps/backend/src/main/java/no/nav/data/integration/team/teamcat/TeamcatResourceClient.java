@@ -8,7 +8,7 @@ import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.integration.team.dto.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
@@ -71,7 +71,7 @@ public class TeamcatResourceClient {
             var response = restTemplate.getForEntity(properties.getResourceUrl(), Resource.class, ident);
             Assert.isTrue(response.getStatusCode().is2xxSuccessful() && response.hasBody(), "Call to teamcat failed " + response.getStatusCode());
             return response.getBody();
-        } catch (HttpClientErrorException e) {
+        } catch (RestClientException e) {
             log.error("Error while connecting to teamcatalog.", e);
             return null;
         }
@@ -82,7 +82,7 @@ public class TeamcatResourceClient {
             var response = restTemplate.getForEntity(properties.getResourcePhotoUrl(), byte[].class, ident);
             Assert.isTrue(response.getStatusCode().is2xxSuccessful() && response.hasBody(), "Call to teamcat failed " + response.getStatusCode());
             return response.getBody();
-        } catch (HttpClientErrorException e) {
+        } catch (RestClientException e) {
             log.error("Error while connecting to teamcatalog.", e);
             return null;
         }
@@ -102,7 +102,7 @@ public class TeamcatResourceClient {
                     .forEach(ident -> results.put(ident, new Resource(ident)));
 
             return results;
-        } catch (HttpClientErrorException e) {
+        } catch (RestClientException e) {
             log.error("Error while connecting to teamcatalog.", e);
             return null;
         }
