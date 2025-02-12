@@ -1,6 +1,6 @@
 import { PencilIcon } from '@navikt/aksel-icons'
 import { Button, Heading } from '@navikt/ds-react'
-import { RefObject, useState } from 'react'
+import { RefObject, useEffect, useState } from 'react'
 import {
   addTiltakToRisikoscenario,
   getRisikoscenario,
@@ -31,12 +31,7 @@ interface IProps {
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
   kravnummer: number
-  isCreateTiltakFormActive: boolean
-  setIsCreateTiltakFormActive: (state: boolean) => void
-  isAddExistingMode: boolean
-  setIsAddExisitingMode: (state: boolean) => void
-  isEditTiltakFormActive: boolean
-  setIsEditTiltakFormActive: (state: boolean) => void
+  setIsTiltakFormActive: (state: boolean) => void
   isCreateMode?: boolean
   noCopyButton?: boolean
   formRef: RefObject<any>
@@ -54,16 +49,15 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     tiltakList,
     setTiltakList,
     isCreateMode,
-    isCreateTiltakFormActive,
-    setIsCreateTiltakFormActive,
-    isAddExistingMode,
-    setIsAddExisitingMode,
-    isEditTiltakFormActive,
-    setIsEditTiltakFormActive,
+    setIsTiltakFormActive,
     formRef,
   } = props
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
+  const [isCreateTiltakFormActive, setIsCreateTiltakFormActive] = useState<boolean>(false)
+  const [isAddExistingMode, setIsAddExisitingMode] = useState<boolean>(false)
+
+  const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
   const [isIngenTilgangFormDirty, setIsIngenTilgangFormDirty] = useState<boolean>(false)
 
   const updateRisikoscenarioList = (updatedRisikoscenario: IRisikoscenario) => {
@@ -159,6 +153,12 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
       }
     })
   }
+
+  useEffect(() => {
+    if (isCreateTiltakFormActive || isAddExistingMode || isEditTiltakFormActive) {
+      setIsTiltakFormActive(true)
+    } else setIsTiltakFormActive(false)
+  }, [isCreateTiltakFormActive, isAddExistingMode, isEditTiltakFormActive])
 
   return (
     <div>

@@ -29,6 +29,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [allRisikoscenarioList, setAllRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
+  const [isTiltakFormActive, setIsTiltakFormActive] = useState<boolean>(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -113,17 +114,20 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
                 tiltakList={tiltakList}
                 setTiltakList={setTiltakList}
                 setRisikoscenarioList={setRisikoscenarioList}
+                setIsTiltakFormActive={setIsTiltakFormActive}
                 formRef={formRef}
               />
             </div>
           )}
 
-          <CreateRisikoscenarioModal
-            pvkDokument={pvkDokument}
-            onSubmitStateUpdate={(risikoscenario: IRisikoscenario) => {
-              setRisikoscenarioList([...risikoscenarioList, risikoscenario])
-            }}
-          />
+          {!isTiltakFormActive && (
+            <CreateRisikoscenarioModal
+              pvkDokument={pvkDokument}
+              onSubmitStateUpdate={(risikoscenario: IRisikoscenario) => {
+                setRisikoscenarioList([...risikoscenarioList, risikoscenario])
+              }}
+            />
+          )}
         </div>
 
         <FormButtons

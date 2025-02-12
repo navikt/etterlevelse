@@ -1,6 +1,6 @@
 import { PencilIcon } from '@navikt/aksel-icons'
 import { Alert, Button, Heading } from '@navikt/ds-react'
-import { RefObject, useState } from 'react'
+import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRisikoscenario, updateRisikoscenario } from '../../api/RisikoscenarioApi'
 import { createTiltakAndRelasjonWithRisikoscenario } from '../../api/TiltakApi'
@@ -20,6 +20,7 @@ interface IProps {
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
   setRisikoscenarioer: (state: IRisikoscenario[]) => void
+  setIsTiltakFormActive: (state: boolean) => void
   formRef: RefObject<any>
 }
 
@@ -31,6 +32,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
     tiltakList,
     setTiltakList,
     setRisikoscenarioer,
+    setIsTiltakFormActive,
     formRef,
   } = props
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
@@ -83,6 +85,14 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
     })
   }
 
+  useEffect(() => {
+    if (isCreateTiltakFormActive || isAddExistingMode || isEditTiltakFormActive) {
+      setIsTiltakFormActive(true)
+    } else {
+      setIsTiltakFormActive(false)
+    }
+  }, [isCreateTiltakFormActive, isAddExistingMode, isEditTiltakFormActive])
+
   return (
     <div>
       <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={false} />
@@ -108,11 +118,6 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
             />
           </div>
         )}
-
-      {(isIngenTilgangFormDirty ||
-        isCreateTiltakFormActive ||
-        isEditTiltakFormActive ||
-        isAddExistingMode) && <div className="mt-12 h-12" />}
 
       <div className="mt-12">
         <Heading level="3" size="small">
@@ -166,20 +171,28 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
               !isEditTiltakFormActive &&
               !isAddExistingMode && (
                 <div className="mt-5 flex gap-2">
-                  <Button type="button" onClick={() => setIsCreateTiltakFormActive(true)}>
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      setIsCreateTiltakFormActive(true)
+
+                      setIsTiltakFormActive(true)
+                    }}
+                  >
                     Opprett nytt tiltak
                   </Button>
                   <Button
                     type="button"
                     variant="secondary"
-                    onClick={() => setIsAddExisitingMode(true)}
+                    onClick={() => {
+                      setIsAddExisitingMode(true)
+                      setIsTiltakFormActive(true)
+                    }}
                   >
                     Legg til eksisterende tiltak
                   </Button>
                 </div>
               )}
-
-            {isIngenTilgangFormDirty && <div className="mt-5 h-12" />}
           </div>
         )}
 
