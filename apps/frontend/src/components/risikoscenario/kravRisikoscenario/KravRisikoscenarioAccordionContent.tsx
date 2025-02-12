@@ -183,12 +183,6 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
           </div>
         )}
 
-      {(isIngenTilgangFormDirty ||
-        isCreateTiltakFormActive ||
-        isEditTiltakFormActive ||
-        isAddExistingMode ||
-        isCreateMode) && <div className="mt-5 h-[104px]" />}
-
       <div className="mt-12">
         <Heading level="3" size="small">
           Følgende tiltak gjelder for dette risikoscenarioet
@@ -254,14 +248,13 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
                   </Button>
                 </div>
               )}
-
-            {isIngenTilgangFormDirty && <div className="mt-5 h-18" />}
           </div>
         )}
         {!isCreateMode &&
           !isCreateTiltakFormActive &&
           !isEditTiltakFormActive &&
-          !isAddExistingMode && (
+          !isAddExistingMode &&
+          activeRisikoscenario.tiltakIds.length === 0 && (
             <div className="mt-3">
               <IngenTiltakField
                 risikoscenario={activeRisikoscenario}
