@@ -9,14 +9,16 @@ import { Markdown } from '../common/Markdown'
 import { ExternalLink } from '../common/RouteLink'
 import { Teams } from '../common/TeamName'
 import { VarslingsadresserView } from './VarslingsAddresseView'
+import TillatGjenbrukModal from './edit/TillatGjenbrukModal'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
   relasjonLoading?: boolean
 }
 
 export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
-  const { etterlevelseDokumentasjon, relasjonLoading } = props
+  const { etterlevelseDokumentasjon, setEtterlevelseDokumentasjon, relasjonLoading } = props
   const navigate: NavigateFunction = useNavigate()
   const [codelistUtils] = CodelistService()
 
@@ -194,16 +196,18 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
           </ReadMore>
         </div>
 
-        {!relasjonLoading && etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
-          <div className="mt-5">
-            <ReadMore header="Dette må du vite om gjenbruk">
-              {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
-                <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />
-              )}
+        {!relasjonLoading &&
+          (etterlevelseDokumentasjon.tilgjengeligForGjenbruk ||
+            etterlevelseDokumentasjon.hasCurrentUserAccess ||
+            user.isAdmin()) && (
+            <div className="mt-5">
+              <ReadMore header="Dette må du vite om gjenbruk">
+                {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
+                  <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />
+                )}
 
-              {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
-                <>
-                  <div className="mt-5">
+                <div className="mt-5 flex gap-2">
+                  {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
                     <Button
                       onClick={() => {
                         navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
@@ -215,17 +219,24 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                     >
                       Gjenbruk dokumentet
                     </Button>
-                  </div>
-                  <div className="mt-5">
-                    <Link href={`/dokumentasjon/relasjon/${etterlevelseDokumentasjon.id}`}>
-                      Se hvilke etterlevelser som allerede gjenbruker dette dokumentet
-                    </Link>
-                  </div>
-                </>
-              )}
-            </ReadMore>
-          </div>
-        )}
+                  )}
+
+                  {etterlevelseDokumentasjon.forGjenbruk &&
+                    (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+                      <TillatGjenbrukModal
+                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                        setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+                      />
+                    )}
+                </div>
+                <div className="mt-5">
+                  <Link href={`/dokumentasjon/relasjon/${etterlevelseDokumentasjon.id}`}>
+                    Se hvilke etterlevelser som allerede gjenbruker dette dokumentet
+                  </Link>
+                </div>
+              </ReadMore>
+            </div>
+          )}
       </div>
     </>
   )

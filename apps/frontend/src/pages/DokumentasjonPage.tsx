@@ -9,7 +9,6 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
-import TillatGjenbrukModal from '../components/etterlevelseDokumentasjon/edit/TillatGjenbrukModal'
 import DokumentasjonPageTabs from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonPageTabs'
 import { PageLayout } from '../components/scaffold/Page'
 import {
@@ -255,6 +254,7 @@ export const DokumentasjonPage = () => {
               <div className="flex mb-5">
                 <EtterlevelseDokumentasjonExpansionCard
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
                   relasjonLoading={relasjonLoading}
                 />
               </div>
@@ -265,13 +265,6 @@ export const DokumentasjonPage = () => {
                 <div className="gap-4 ml-5 flex flex-col ">
                   {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
                     <>
-                      {etterlevelseDokumentasjon.forGjenbruk && (
-                        <TillatGjenbrukModal
-                          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-                        />
-                      )}
-
                       {/*WIP ikke klar til å vises i prod*/}
                       {isDev &&
                         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (

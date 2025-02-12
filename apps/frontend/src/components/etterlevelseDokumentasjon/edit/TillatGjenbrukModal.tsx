@@ -42,7 +42,7 @@ export const TillatGjenbrukModal = (props: IProps) => {
     <div>
       <Button
         size="small"
-        variant="tertiary"
+        variant="primary"
         className="whitespace-nowrap mt-3"
         type="button"
         onClick={() => setIsOpen(true)}
