@@ -14,7 +14,7 @@ export const BehandlingList = (props: IProps) => {
   const { behandlingIds, behandlinger, behandlerPersonopplysninger } = props
 
   return (
-    <div className="flex gap-2 flex-wrap items-center mb-2.5">
+    <div className="flex gap-2 flex-wrap items-center mb-2.5 break-all">
       <Label size="small">Behandling:</Label>
       {behandlingIds?.length >= 1 &&
         behandlerPersonopplysninger &&

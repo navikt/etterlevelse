@@ -94,9 +94,6 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                 </div>
               )}
               <div className="max-w-[75ch]">
-                <Heading className="mb-3" level="2" size="small">
-                  Dokumentegenskaper
-                </Heading>
                 {behandlerPersonopplysninger && (
                   <BehandlingList
                     behandlingIds={behandlingIds}
@@ -105,47 +102,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                   />
                 )}
 
-                <div className="mb-2.5">
-                  <Label size="small">ROS-dokumentasjon:</Label>
-                  <BodyShort size="small">
-                    {etterlevelseDokumentasjon.risikovurderinger
-                      ? etterlevelseDokumentasjon.risikovurderinger.map((vurdering) => {
-                          const rosReg = /\[(.+)]\((.+)\)/i
-                          const rosParts = vurdering.match(rosReg)
-                          if (rosParts)
-                            return (
-                              <ExternalLink key={vurdering} className="flex" href={rosParts[2]}>
-                                {rosParts[1]}
-                              </ExternalLink>
-                            )
-                          return (
-                            <span className="flex" key={vurdering}>
-                              {vurdering}
-                            </span>
-                          )
-                        })
-                      : 'Ikke angitt'}
-                  </BodyShort>
-                </div>
-
-                <div className="mb-2.5">
-                  {etterlevelseDokumentasjon.avdeling && (
-                    <div className="flex items-start gap-2">
-                      <Label size="small">Avdeling:</Label>
-                      <BodyShort size="small">
-                        {etterlevelseDokumentasjon.avdeling.shortName}
-                      </BodyShort>
-                    </div>
-                  )}
-                  {!etterlevelseDokumentasjon.avdeling && (
-                    <BodyShort size="small">Avdeling er ikke angitt</BodyShort>
-                  )}
-                </div>
-                <div className="mb-2.5">
-                  {teams.length > 0 && <Teams teams={teams} link />}
-                  {teams.length === 0 && <BodyShort size="small">Team er ikke angitt</BodyShort>}
-                </div>
-                <div className="flex items-start gap-2">
+                <div className="flex items-start gap-2 mb-2.5">
                   <Label size="small">Egenskaper:</Label>
                   {irrelevansFor.length === relevansCodeList.length && (
                     <div className="flex items-center gap-1">
@@ -159,6 +116,51 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                   )}
                   {getRelevans(irrelevansFor)}
                 </div>
+
+                <div className="flex items-start gap-2 mb-2.5">
+                  <Label size="small">ROS-dokumentasjon:</Label>
+                  <BodyShort size="small">
+                    {etterlevelseDokumentasjon.risikovurderinger.length !== 0 &&
+                      etterlevelseDokumentasjon.risikovurderinger.map((vurdering) => {
+                        const rosReg = /\[(.+)]\((.+)\)/i
+                        const rosParts = vurdering.match(rosReg)
+                        if (rosParts)
+                          return (
+                            <ExternalLink key={vurdering} className="flex" href={rosParts[2]}>
+                              {rosParts[1]}
+                            </ExternalLink>
+                          )
+                        return (
+                          <span className="flex" key={vurdering}>
+                            {vurdering}
+                          </span>
+                        )
+                      })}
+
+                    {etterlevelseDokumentasjon.risikovurderinger.length === 0 && 'Ikke angitt'}
+                  </BodyShort>
+                </div>
+
+                <div className="mb-2.5">
+                  <div className="flex items-start gap-2">
+                    <Label size="small">Avdeling:</Label>
+                    <BodyShort size="small">
+                      {etterlevelseDokumentasjon.avdeling &&
+                        etterlevelseDokumentasjon.avdeling.shortName}
+                      {!etterlevelseDokumentasjon.avdeling && 'Ikke angitt'}
+                    </BodyShort>
+                  </div>
+                </div>
+                <div className="mb-2.5">
+                  {teams.length > 0 && <Teams teams={teams} link />}
+                  {teams.length === 0 && (
+                    <div className="flex flex-wrap gap-2 items-center">
+                      <Label size="small">Team:</Label>
+                      <BodyShort>Ikke angitt</BodyShort>
+                    </div>
+                  )}
+                </div>
+
                 <div className="flex items-start gap-2">
                   <Label size="small" className="mt-2.5">
                     Varslingsadresser:
@@ -175,6 +177,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
             </div>
           </ReadMore>
         </div>
+
         {!relasjonLoading && etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
           <div className="mt-5">
             <ReadMore header="Dette må du vite om gjenbruk">
