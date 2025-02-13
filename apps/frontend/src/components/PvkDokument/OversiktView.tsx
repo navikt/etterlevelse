@@ -161,6 +161,20 @@ export const OversiktView = (props: IProps) => {
               </FormSummary.Value>
             </FormSummary.Answer>
 
+            <FormSummary.Answer>
+              <FormSummary.Value>
+                <ExternalLink
+                  href={`/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/pvkbehov/${pvkDokument.id}`}
+                >
+                  Vurdér behov for PVK
+                </ExternalLink>
+              </FormSummary.Value>
+              <FormSummary.Value className="gap-2 flex">
+                {pvkDokument.skalUtforePvk && 'Vi skal gjennomføre PVK'}
+                {!pvkDokument.skalUtforePvk && 'Vi skal ikke gjennomføre PVK'}
+              </FormSummary.Value>
+            </FormSummary.Answer>
+
             {StepTitle.slice(1).map((title, index) => {
               let panelHref = window.location.pathname.slice(0, -1) + (index + 2)
               if (index + 2 === 5) {
@@ -202,7 +216,9 @@ export const OversiktView = (props: IProps) => {
               <strong>Team eller personer:</strong>{' '}
               {etterlevelseDokumentasjon.teamsData &&
                 getTeamsNameToString(etterlevelseDokumentasjon.teamsData)}
-              {etterlevelseDokumentasjon.teamsData && ', '}
+              {etterlevelseDokumentasjon.teamsData &&
+                etterlevelseDokumentasjon.teamsData.length !== 0 &&
+                ', '}
               {etterlevelseDokumentasjon.resourcesData &&
                 getMemberListToString(etterlevelseDokumentasjon.resourcesData)}
               {!etterlevelseDokumentasjon.teamsData &&
