@@ -191,14 +191,13 @@ public class RisikoscenarioController {
     public ResponseEntity<List<RisikoscenarioResponse>> addRelevantKravToRisikoscenarioer(@RequestBody KravRisikoscenarioRequest request) {
         log.info("Add relevantKrav for risikoscenarioer");
 
-        // TODO: This validity check should be moved to DB
+        // This validity check will be moved to DB.
         if (!kravService.isActiveKrav(request.getKravnummer())) {
             log.warn("Requested to add non-existing Krav to Risikoscenario");
-            // Somehow we get client-side MismatchedInputException if we just throw ValidationException here
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build(); // Somehow we may get client-side MismatchedInputException if we just throw ValidationException here
         }
         
-        // TODO: Will cause NPE and INTERNAL SE if a request contains non-existing risikoscenarios
+        // Note: The following will cause NPE (and INTERNAL SE) if a request contains non-existing risikoscenarios.
         List<Risikoscenario> updatedRisikoscenarioer =  risikoscenarioService.addRelevantKravToRisikoscenarioer(request.getKravnummer(), request.getRisikoscenarioIder());
         
         List<RisikoscenarioResponse> reply = updatedRisikoscenarioer.stream().map(RisikoscenarioResponse::buildFrom).toList();
