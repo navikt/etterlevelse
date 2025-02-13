@@ -35,7 +35,11 @@ export const EtterlevelseSidePanel = (props: IProps) => {
   const formRef: RefObject<any> = useRef(undefined)
 
   useEffect(() => {
-    if (pvkDokument && pvkDokument.skalUtforePvk) {
+    if (
+      pvkDokument &&
+      pvkDokument.skalUtforePvk &&
+      krav.tagger.includes('Personvernkonsekvensvurdering')
+    ) {
       setActiveTab('pvkDokumentasjon')
     }
   }, [pvkDokument])
@@ -67,13 +71,15 @@ export const EtterlevelseSidePanel = (props: IProps) => {
       >
         <Tabs.List>
           <Tabs.Tab className="whitespace-nowrap" value="mer" label="Mer om kravet" />
-          {pvkDokument && pvkDokument.skalUtforePvk && (
-            <Tabs.Tab
-              className="whitespace-nowrap"
-              value="pvkDokumentasjon"
-              label="PVK-dokumentasjon"
-            />
-          )}
+          {pvkDokument &&
+            pvkDokument.skalUtforePvk &&
+            krav.tagger.includes('Personvernkonsekvensvurdering') && (
+              <Tabs.Tab
+                className="whitespace-nowrap"
+                value="pvkDokumentasjon"
+                label="PVK-dokumentasjon"
+              />
+            )}
           <Tabs.Tab value="notat" label="Notat" />
         </Tabs.List>
         <Tabs.Panel value="mer">
