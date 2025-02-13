@@ -1,5 +1,5 @@
 import { FileTextIcon } from '@navikt/aksel-icons'
-import { Button, Label, Tabs } from '@navikt/ds-react'
+import { Button, Heading, Label, Tabs } from '@navikt/ds-react'
 import { Dispatch, RefObject, useEffect, useRef, useState } from 'react'
 import { IEtterlevelseMetadata, IKravVersjon, IPvkDokument, TKravQL } from '../../../constants'
 import { Markdown } from '../../common/Markdown'
@@ -70,17 +70,36 @@ export const EtterlevelseSidePanel = (props: IProps) => {
         }}
       >
         <Tabs.List>
-          <Tabs.Tab className="whitespace-nowrap" value="mer" label="Mer om kravet" />
+          <Tabs.Tab
+            className="whitespace-nowrap"
+            value="mer"
+            label={
+              <Heading level="2" size="xsmall">
+                Mer om kravet
+              </Heading>
+            }
+          />
           {pvkDokument &&
             pvkDokument.skalUtforePvk &&
             krav.tagger.includes('Personvernkonsekvensvurdering') && (
               <Tabs.Tab
                 className="whitespace-nowrap"
                 value="pvkDokumentasjon"
-                label="PVK-dokumentasjon"
+                label={
+                  <Heading level="2" size="xsmall">
+                    PVK-dokumentasjon
+                  </Heading>
+                }
               />
             )}
-          <Tabs.Tab value="notat" label="Notat" />
+          <Tabs.Tab
+            value="notat"
+            label={
+              <Heading level="2" size="xsmall">
+                Notat
+              </Heading>
+            }
+          />
         </Tabs.List>
         <Tabs.Panel value="mer">
           <div className="mt-2 p-4">

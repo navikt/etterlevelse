@@ -412,9 +412,30 @@ export const EtterlevelseKravView = (props: IProps) => {
                 }}
               >
                 <Tabs.List>
-                  <Tabs.Tab value="dokumentasjon" label="Dokumentasjon" />
-                  <Tabs.Tab value="etterlevelser" label="Hvordan har andre gjort det?" />
-                  <Tabs.Tab value="tilbakemeldinger" label="Spørsmål og svar" />
+                  <Tabs.Tab
+                    value="dokumentasjon"
+                    label={
+                      <Heading level="2" size="small">
+                        Dokumentasjon
+                      </Heading>
+                    }
+                  />
+                  <Tabs.Tab
+                    value="etterlevelser"
+                    label={
+                      <Heading level="2" size="small">
+                        Hvordan har andre gjort det?
+                      </Heading>
+                    }
+                  />
+                  <Tabs.Tab
+                    value="tilbakemeldinger"
+                    label={
+                      <Heading level="2" size="small">
+                        Spørsmål og svar
+                      </Heading>
+                    }
+                  />
                 </Tabs.List>
                 <Tabs.Panel value="dokumentasjon">
                   {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&
