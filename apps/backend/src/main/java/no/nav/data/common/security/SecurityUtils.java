@@ -34,6 +34,10 @@ public class SecurityUtils {
         return getCurrentUser().map(UserInfo::isKravEier).orElse(false);
     }
 
+    public  static boolean isPersonvernombud() {
+        return getCurrentUser().map(UserInfo::isPersonvernombud).orElse(false);
+    }
+
     public static boolean isUserOrAdmin(String ident) {
         return getCurrentIdent().equals(ident) || isAdmin();
     }

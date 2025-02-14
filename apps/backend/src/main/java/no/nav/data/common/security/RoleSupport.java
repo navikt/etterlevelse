@@ -46,6 +46,9 @@ public class RoleSupport {
         if (securityProperties.getKraveierGroups().contains(group)) {
             return AppRole.KRAVEIER;
         }
+        if (securityProperties.getPvoGroups().contains(group)) {
+            return AppRole.PERSONVERNOMBUD;
+        }
         // for future - add team -> system roles here
         return null;
     }

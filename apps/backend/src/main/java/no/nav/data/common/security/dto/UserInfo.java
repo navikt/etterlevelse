@@ -24,5 +24,7 @@ public interface UserInfo {
 
     boolean isKravEier();
 
+    boolean isPersonvernombud();
+
     UserInfoResponse toResponse();
 }
