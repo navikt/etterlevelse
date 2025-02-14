@@ -284,35 +284,37 @@ export const DokumentasjonPage = () => {
                       )}
 
                       {/*WIP ikke klar til å vises i prod*/}
-                      {isInLimitedAccess(user.getIdent()) &&
-                        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-                          <Button
-                            onClick={() => {
-                              let behandlingensLivlopUrl =
-                                '/dokumentasjon/' +
-                                etterlevelseDokumentasjon.id +
-                                '/behandlingens-livslop/'
+                      {((isInLimitedAccess(user.getIdent()) &&
+                        etterlevelseDokumentasjon.hasCurrentUserAccess) ||
+                        user.isAdmin()) && (
+                        <Button
+                          onClick={() => {
+                            let behandlingensLivlopUrl =
+                              '/dokumentasjon/' +
+                              etterlevelseDokumentasjon.id +
+                              '/behandlingens-livslop/'
 
-                              if (behandlingsLivslop) {
-                                behandlingensLivlopUrl += behandlingsLivslop.id
-                              } else {
-                                behandlingensLivlopUrl += 'ny'
-                              }
-                              navigate(behandlingensLivlopUrl)
-                            }}
-                            size="small"
-                            variant={getVariantForBLLButton(behandlingsLivslop)}
-                            className="whitespace-nowrap"
-                          >
-                            {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
-                            Tegn behandlingens livsløp
-                          </Button>
-                        )}
+                            if (behandlingsLivslop) {
+                              behandlingensLivlopUrl += behandlingsLivslop.id
+                            } else {
+                              behandlingensLivlopUrl += 'ny'
+                            }
+                            navigate(behandlingensLivlopUrl)
+                          }}
+                          size="small"
+                          variant={getVariantForBLLButton(behandlingsLivslop)}
+                          className="whitespace-nowrap"
+                        >
+                          {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
+                          Tegn behandlingens livsløp
+                        </Button>
+                      )}
                       {/*WIP ikke klar til å vises i prod*/}
                       {pvkDokument &&
                         pvkDokument.skalUtforePvk &&
-                        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
-                        isInLimitedAccess(user.getIdent()) && (
+                        ((isInLimitedAccess(user.getIdent()) &&
+                          etterlevelseDokumentasjon.hasCurrentUserAccess) ||
+                          user.isAdmin()) && (
                           <Button
                             onClick={() => {
                               navigate(
@@ -334,29 +336,30 @@ export const DokumentasjonPage = () => {
                         )}
 
                       {/*WIP ikke klar til å vises i prod*/}
-                      {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
-                        isInLimitedAccess(user.getIdent()) && (
-                          <Button
-                            onClick={() => {
-                              let pvkBehovUrl =
-                                '/dokumentasjon/' + etterlevelseDokumentasjon.id + '/pvkbehov/'
+                      {((isInLimitedAccess(user.getIdent()) &&
+                        etterlevelseDokumentasjon.hasCurrentUserAccess) ||
+                        user.isAdmin()) && (
+                        <Button
+                          onClick={() => {
+                            let pvkBehovUrl =
+                              '/dokumentasjon/' + etterlevelseDokumentasjon.id + '/pvkbehov/'
 
-                              if (pvkDokument) {
-                                pvkBehovUrl += pvkDokument.id
-                              } else {
-                                pvkBehovUrl += 'ny'
-                              }
-                              navigate(pvkBehovUrl)
-                            }}
-                            size="small"
-                            variant={getVariantForPVKBehovButton(pvkDokument, behandlingsLivslop)}
-                            className="whitespace-nowrap"
-                          >
-                            {pvkDokumentVurdertCheck
-                              ? 'Revurdér behov for PVK'
-                              : 'Vurdér behov for PVK'}
-                          </Button>
-                        )}
+                            if (pvkDokument) {
+                              pvkBehovUrl += pvkDokument.id
+                            } else {
+                              pvkBehovUrl += 'ny'
+                            }
+                            navigate(pvkBehovUrl)
+                          }}
+                          size="small"
+                          variant={getVariantForPVKBehovButton(pvkDokument, behandlingsLivslop)}
+                          className="whitespace-nowrap"
+                        >
+                          {pvkDokumentVurdertCheck
+                            ? 'Revurdér behov for PVK'
+                            : 'Vurdér behov for PVK'}
+                        </Button>
+                      )}
                     </>
                   )}
                 </div>
