@@ -69,7 +69,7 @@ export const CustomFileUpload = (props: IProps) => {
           if (files.map((file) => file.file.name).includes(file.name)) {
             return 'Filen er allerede lastet opp'
           }
-          if (files.map((file) => file.file.size === 0)) {
+          if (file.size === 0) {
             return 'Ugyldig filestørrelse: 0 MB'
           }
           return true
