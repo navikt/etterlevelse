@@ -284,7 +284,7 @@ export const DokumentasjonPage = () => {
                       )}
 
                       {/*WIP ikke klar til å vises i prod*/}
-                      {isInLimitedAccess &&
+                      {isInLimitedAccess(user.getIdent()) &&
                         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
                           <Button
                             onClick={() => {
@@ -312,7 +312,7 @@ export const DokumentasjonPage = () => {
                       {pvkDokument &&
                         pvkDokument.skalUtforePvk &&
                         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
-                        isInLimitedAccess && (
+                        isInLimitedAccess(user.getIdent()) && (
                           <Button
                             onClick={() => {
                               navigate(
@@ -335,7 +335,7 @@ export const DokumentasjonPage = () => {
 
                       {/*WIP ikke klar til å vises i prod*/}
                       {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
-                        isInLimitedAccess && (
+                        isInLimitedAccess(user.getIdent()) && (
                           <Button
                             onClick={() => {
                               let pvkBehovUrl =
