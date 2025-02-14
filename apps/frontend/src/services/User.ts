@@ -8,6 +8,7 @@ export enum EGroup {
   READ = 'READ',
   WRITE = 'WRITE',
   KRAVEIER = 'KRAVEIER',
+  PERSONVERNOMBUD = 'PERSONVERNOMBUD',
   ADMIN = 'ADMIN',
 }
 
@@ -105,6 +106,10 @@ const UserService = async (): Promise<IUserProps> => {
     return hasGroup(EGroup.KRAVEIER)
   }
 
+  const isPersonvernombud = (): boolean => {
+    return hasGroup(EGroup.PERSONVERNOMBUD)
+  }
+
   const getError = (): string => {
     return error || ''
   }
@@ -129,6 +134,7 @@ const UserService = async (): Promise<IUserProps> => {
     canWrite,
     isAdmin,
     isKraveier,
+    isPersonvernombud,
     getError,
     wait,
     isLoaded,
@@ -149,6 +155,7 @@ interface IUserProps {
   canWrite: () => boolean
   isAdmin: () => boolean
   isKraveier: () => boolean
+  isPersonvernombud: () => boolean
   getError: () => string
   wait: () => Promise<any>
   isLoaded: () => boolean
@@ -168,5 +175,7 @@ const nameFor = (group: EGroup) => {
       return 'Admin'
     case EGroup.KRAVEIER:
       return 'Kraveier'
+    case EGroup.PERSONVERNOMBUD:
+      return 'Personvernombud'
   }
 }
