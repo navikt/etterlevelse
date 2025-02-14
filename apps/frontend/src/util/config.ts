@@ -1,3 +1,4 @@
+import { user } from '../services/User'
 import { env } from './env'
 
 export const navSlackTeamId = 'T5LNAMWNA'
@@ -28,3 +29,7 @@ export const termUrl = (termId: string) =>
 
 export const isDev: boolean =
   window.location.origin.includes('.dev.') || window.location.origin.includes('localhost')
+
+export const isInLimitedAccess: boolean = ['H103464', 'R154124', 'G155120'].includes(
+  user.getIdent()
+)

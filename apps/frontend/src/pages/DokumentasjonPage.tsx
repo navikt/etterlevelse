@@ -26,7 +26,7 @@ import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDok
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { CodelistService, EListName, TTemaCode } from '../services/Codelist'
 import { user } from '../services/User'
-import { isDev } from '../util/config'
+import { isInLimitedAccess } from '../util/config'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 const getVariantForBLLButton = (
@@ -284,7 +284,7 @@ export const DokumentasjonPage = () => {
                       )}
 
                       {/*WIP ikke klar til å vises i prod*/}
-                      {isDev &&
+                      {isInLimitedAccess &&
                         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
                           <Button
                             onClick={() => {
@@ -312,7 +312,7 @@ export const DokumentasjonPage = () => {
                       {pvkDokument &&
                         pvkDokument.skalUtforePvk &&
                         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
-                        isDev && (
+                        isInLimitedAccess && (
                           <Button
                             onClick={() => {
                               navigate(
@@ -335,7 +335,7 @@ export const DokumentasjonPage = () => {
 
                       {/*WIP ikke klar til å vises i prod*/}
                       {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
-                        isDev && (
+                        isInLimitedAccess && (
                           <Button
                             onClick={() => {
                               let pvkBehovUrl =
