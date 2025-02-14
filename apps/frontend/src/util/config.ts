@@ -29,4 +29,5 @@ export const termUrl = (termId: string) =>
 export const isDev: boolean =
   window.location.origin.includes('.dev.') || window.location.origin.includes('localhost')
 
-export const isInLimitedAccess = (ident: string) => ['H103464', 'R154124'].includes(ident)
+export const isInLimitedAccess = (ident: string) =>
+  ['H103464', 'R154124', 'U155122'].includes(ident)
