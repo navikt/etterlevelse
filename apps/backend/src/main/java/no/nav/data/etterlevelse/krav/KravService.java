@@ -173,10 +173,9 @@ public class KravService extends DomainService<Krav> {
         return kravRepo.findKravImage(kravId, fileId).getDomainObjectData();
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     public boolean isActiveKrav(Integer kravnummer) {
-        return findByKravNummerAndActiveStatus(kravnummer).stream().anyMatch(k -> {
-            return k.getStatus() == KravStatus.AKTIV;
-        });
+        return !findByKravNummerAndActiveStatus(kravnummer).isEmpty();
     }
 
     @SchedulerLock(name = "clean_krav_images", lockAtLeastFor = "PT5M")
