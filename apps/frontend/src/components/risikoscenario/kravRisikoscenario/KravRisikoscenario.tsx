@@ -208,28 +208,30 @@ export const KravRisikoscenario = (props: IProps) => {
             >
               Opprett nytt risikoscenario
             </Button>
-            <Button
-              size="small"
-              variant="secondary"
-              type="button"
-              onClick={() => {
-                if (formRef.current?.dirty) {
-                  setIsUnsaved(true)
-                  setEditButtonClicked(unsavedAction.leggTilEksisterendeRisikoscenario)
-                } else {
-                  setIsLeggTilEksisterendeMode(true)
-                }
-              }}
-            >
-              Legg til eksisterende risikoscenario
-            </Button>
+            {risikoscenarioer.length !== 0 && (
+              <Button
+                size="small"
+                variant="secondary"
+                type="button"
+                onClick={() => {
+                  if (formRef.current?.dirty) {
+                    setIsUnsaved(true)
+                    setEditButtonClicked(unsavedAction.leggTilEksisterendeRisikoscenario)
+                  } else {
+                    setIsLeggTilEksisterendeMode(true)
+                  }
+                }}
+              >
+                Legg til eksisterende risikoscenario
+              </Button>
+            )}
           </div>
         )}
 
         {!isCreateMode && !isLeggTilEksisterendeMode && pvkDokument && (
           <div className="mt-5">
             <Button
-              variant="secondary"
+              variant="tertiary"
               type="button"
               onClick={() => {
                 navigate(
@@ -237,7 +239,7 @@ export const KravRisikoscenario = (props: IProps) => {
                 )
               }}
             >
-              Gå til liste over øvrig risikoscenario
+              Gå til liste over øvrige risikoscenarioer
             </Button>
           </div>
         )}
