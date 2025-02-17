@@ -282,7 +282,7 @@ export const PvkBehovPage = () => {
               )}
 
               <List
-                title="- Følgende egenskaper er hentet fra Behandlingskatalogen:"
+                title="Følgende egenskaper er hentet fra Behandlingskatalogen:"
                 className="py-5"
               >
                 {profilering !== null && (
