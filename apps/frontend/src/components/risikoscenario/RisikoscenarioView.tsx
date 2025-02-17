@@ -52,32 +52,54 @@ export const RisikoscenarioView = (props: IProps) => {
         </ReadMore>
       )}
 
-      <div className="mt-12">
-        <RisikoscenarioTag
-          level={risikoscenario.sannsynlighetsNivaa}
-          text={getSannsynlighetsnivaaText(risikoscenario.sannsynlighetsNivaa)}
-        />
-      </div>
+      {risikoscenario.sannsynlighetsNivaa !== 0 && (
+        <div className="mt-12">
+          <RisikoscenarioTag
+            level={risikoscenario.sannsynlighetsNivaa}
+            text={getSannsynlighetsnivaaText(risikoscenario.sannsynlighetsNivaa)}
+          />
+        </div>
+      )}
 
-      {!risikoscenario.sannsynlighetsNivaaBegrunnelse && (
+      {(!risikoscenario.sannsynlighetsNivaaBegrunnelse ||
+        risikoscenario.sannsynlighetsNivaa === 0) && (
         <Alert className="mt-5" variant="warning">
-          Dere må begrunne sannsylighetsvurderingen
+          {risikoscenario.sannsynlighetsNivaa === 0 &&
+            !risikoscenario.sannsynlighetsNivaaBegrunnelse &&
+            'Dere må gjøre sannsynlighetsvurdering'}
+          {!risikoscenario.sannsynlighetsNivaaBegrunnelse &&
+            risikoscenario.sannsynlighetsNivaa !== 0 &&
+            'Dere må begrunne sannsynlighetsvurderingen'}
+          {risikoscenario.sannsynlighetsNivaaBegrunnelse &&
+            risikoscenario.sannsynlighetsNivaa === 0 &&
+            'Dere må velge sannsynlighetsnivå'}
         </Alert>
       )}
+
       {risikoscenario.sannsynlighetsNivaaBegrunnelse && (
         <BodyLong className="mt-5">{risikoscenario.sannsynlighetsNivaaBegrunnelse}</BodyLong>
       )}
 
-      <div className="mt-12">
-        <RisikoscenarioTag
-          level={risikoscenario.konsekvensNivaa}
-          text={getKonsekvenssnivaaText(risikoscenario.konsekvensNivaa)}
-        />
-      </div>
+      {risikoscenario.konsekvensNivaa !== 0 && (
+        <div className="mt-12">
+          <RisikoscenarioTag
+            level={risikoscenario.konsekvensNivaa}
+            text={getKonsekvenssnivaaText(risikoscenario.konsekvensNivaa)}
+          />
+        </div>
+      )}
 
-      {!risikoscenario.konsekvensNivaaBegrunnelse && (
+      {(!risikoscenario.konsekvensNivaaBegrunnelse || risikoscenario.konsekvensNivaa === 0) && (
         <Alert className="mt-5" variant="warning">
-          Dere må begrunne konsekvensvurderingen
+          {risikoscenario.konsekvensNivaa === 0 &&
+            !risikoscenario.konsekvensNivaaBegrunnelse &&
+            'Dere må gjøre konsekvensvurdering'}
+          {!risikoscenario.konsekvensNivaaBegrunnelse &&
+            risikoscenario.konsekvensNivaa !== 0 &&
+            'Dere må begrunne konsekvensvurderingen'}
+          {risikoscenario.konsekvensNivaaBegrunnelse &&
+            risikoscenario.konsekvensNivaa === 0 &&
+            'Dere må velge konsekensnivå'}
         </Alert>
       )}
       {risikoscenario.konsekvensNivaaBegrunnelse && (
