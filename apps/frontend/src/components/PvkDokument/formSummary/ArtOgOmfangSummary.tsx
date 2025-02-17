@@ -62,9 +62,18 @@ export const ArtOgOmFangSummary = (props: IProps) => {
                     <FormSummary.Label>
                       Beskriv antall personer dere behandler personopplysninger om
                     </FormSummary.Label>
-                    <FormSummary.Value>
-                      <BodyShort>{fieldProp.form.values.personkategoriAntallBeskrivelse}</BodyShort>
-                    </FormSummary.Value>
+                    {fieldProp.form.values.personkategoriAntallBeskrivelse && (
+                      <FormSummary.Value>
+                        <BodyShort>
+                          {fieldProp.form.values.personkategoriAntallBeskrivelse}
+                        </BodyShort>
+                      </FormSummary.Value>
+                    )}
+                    {!fieldProp.form.values.personkategoriAntallBeskrivelse && (
+                      <FormSummary.Value>
+                        <BodyShort>Ikke besvart</BodyShort>
+                      </FormSummary.Value>
+                    )}
                   </FormSummary.Answer>
                 </FormSummary.Answers>
               </FormSummary.Value>
@@ -75,13 +84,16 @@ export const ArtOgOmFangSummary = (props: IProps) => {
               <FormSummary.Value>
                 <FormSummary.Answers>
                   <FormSummary.Answer>
-                    <FormSummary.Label>
-                      Besktriv hvilke roller som skal ha tilgang
-                    </FormSummary.Label>
+                    <FormSummary.Label>Beskriv hvilke roller som skal ha tilgang</FormSummary.Label>
                     <FormSummary.Value>
-                      <BodyShort>
-                        {fieldProp.form.values.tilgangsBeskrivelsePersonopplysningene}
-                      </BodyShort>
+                      {fieldProp.form.values.tilgangsBeskrivelsePersonopplysningene && (
+                        <BodyShort>
+                          {fieldProp.form.values.tilgangsBeskrivelsePersonopplysningene}
+                        </BodyShort>
+                      )}
+                      {!fieldProp.form.values.tilgangsBeskrivelsePersonopplysningene && (
+                        <BodyShort>Ikke besvart</BodyShort>
+                      )}
                     </FormSummary.Value>
                   </FormSummary.Answer>
                 </FormSummary.Answers>
@@ -99,9 +111,16 @@ export const ArtOgOmFangSummary = (props: IProps) => {
                       Beskriv hvordan og hvor lenge personopplysningene skal lagres
                     </FormSummary.Label>
                     <FormSummary.Value>
-                      <BodyShort>
-                        {fieldProp.form.values.lagringsBeskrivelsePersonopplysningene}
-                      </BodyShort>
+                      {fieldProp.form.values.lagringsBeskrivelsePersonopplysningene && (
+                        <BodyShort>
+                          {fieldProp.form.values.lagringsBeskrivelsePersonopplysningene}
+                        </BodyShort>
+                      )}
+                    </FormSummary.Value>
+                    <FormSummary.Value>
+                      {!fieldProp.form.values.lagringsBeskrivelsePersonopplysningene && (
+                        <BodyShort>Ikke besvart</BodyShort>
+                      )}
                     </FormSummary.Value>
                   </FormSummary.Answer>
                 </FormSummary.Answers>
