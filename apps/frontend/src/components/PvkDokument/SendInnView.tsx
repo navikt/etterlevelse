@@ -1,5 +1,5 @@
 import { FilesIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, CopyButton, Heading } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, CopyButton, Heading } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
 import {
@@ -106,6 +106,12 @@ export const SendInnView = (props: IProps) => {
                 activeText="Lenken er kopiert"
                 icon={<FilesIcon aria-hidden />}
               />
+
+              {pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO && (
+                <Alert variant="success" className="my-5">
+                  Sendt til Personvernombudet
+                </Alert>
+              )}
 
               <FormButtons
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}

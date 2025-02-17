@@ -2,6 +2,7 @@ import { Alert, BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } fro
 import { useEffect, useState } from 'react'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../../api/BehandlingensLivslopApi'
 import {
+  EPvkDokumentStatus,
   IBehandlingensLivslop,
   IPvkDokument,
   IRisikoscenario,
@@ -68,6 +69,14 @@ export const OversiktView = (props: IProps) => {
     })
 
     return teamList.substring(2)
+  }
+
+  const getStatus = (step: number) => {
+    if (step === 4) {
+      return undefined
+    } else {
+      return formStatus[step] ? 'Påbegynt' : 'Ikke påbegynt'
+    }
   }
 
   useEffect(() => {
@@ -186,9 +195,9 @@ export const OversiktView = (props: IProps) => {
                   title={title}
                   onClick={() => updateTitleUrlAndStep(index + 2)}
                   href={panelHref}
-                  status={
-                    index === 4 ? undefined : formStatus[index] ? 'Påbegynt' : 'Ikke påbegynt'
-                  }
+                  step={index}
+                  pvkDokumentStatus={pvkDokument.status}
+                  status={getStatus(index)}
                 />
               )
             })}
@@ -260,11 +269,28 @@ interface IFormSummaryPanelProps {
   title: string
   onClick: () => void
   href: string
+  step: number
+  pvkDokumentStatus: EPvkDokumentStatus
   status?: 'Ikke påbegynt' | 'Påbegynt'
 }
 
+export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
+  switch (status) {
+    case EPvkDokumentStatus.AKTIV:
+      return 'Under arbeid'
+    case EPvkDokumentStatus.UNDERARBEID:
+      return 'Under arbeid'
+    case EPvkDokumentStatus.SENDT_TIL_PVO:
+      return 'Sendt inn til Personvernombudet'
+    case EPvkDokumentStatus.VURDERT_AV_PVO:
+      return 'Vurdert av Personvernombudet'
+    case EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER:
+      return 'Godkjent av Risikoeier'
+  }
+}
+
 const FormSummaryPanel = (props: IFormSummaryPanelProps) => {
-  const { title, onClick, href, status } = props
+  const { title, onClick, href, status, pvkDokumentStatus, step } = props
   return (
     <FormSummary.Answer key={title}>
       <FormSummary.Value>
@@ -278,7 +304,15 @@ const FormSummaryPanel = (props: IFormSummaryPanelProps) => {
             {status}
           </Tag>
         )}
-        {!status && (
+        {step === 4 && (
+          <Tag
+            variant={pvkDokumentStatus !== EPvkDokumentStatus.UNDERARBEID ? 'info' : 'warning'}
+            size="xsmall"
+          >
+            {pvkDokumentStatusToText(pvkDokumentStatus)}
+          </Tag>
+        )}
+        {step === 4 && (
           <BodyShort>
             Her får dere oversikt over alle deres svar. PVK-dokumentasjon er ikke ennå sendt inn.
           </BodyShort>
