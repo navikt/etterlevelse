@@ -103,10 +103,12 @@ export const PvkBehovPage = () => {
       const alleProfilering: any[] = []
       const alleAutomatiskBehandling: any[] = []
       etterlevelseDokumentasjon.behandlinger.forEach((behandling) => {
-        if (behandling.policies.length === 0) {
-          setOpplysningstyperMangler(true)
+        if (behandling.policies) {
+          if (behandling.policies.length === 0) {
+            setOpplysningstyperMangler(true)
+          }
+          alleOpplysningstyper.push(...behandling.policies)
         }
-        alleOpplysningstyper.push(...behandling.policies)
         alleProfilering.push(behandling.profilering)
         alleAutomatiskBehandling.push(behandling.automatiskBehandling)
       })

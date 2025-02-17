@@ -100,10 +100,12 @@ export const PvkDokumentPage = () => {
       const alleDatabehandlerIds: IDataBehandler[] = []
 
       etterlevelseDokumentasjon.behandlinger.map((behandling) => {
-        alleDatabehandlerIds.push(...behandling.dataBehandlerList)
-        behandling.policies.map((policy) => {
-          allePersonKategorier.push(...policy.personKategorier)
-        })
+        if (behandling.dataBehandlerList) {
+          alleDatabehandlerIds.push(...behandling.dataBehandlerList)
+          behandling.policies.map((policy) => {
+            allePersonKategorier.push(...policy.personKategorier)
+          })
+        }
       })
 
       const uniqPersonkategorier: string[] = uniqBy(allePersonKategorier, 'code').map(
