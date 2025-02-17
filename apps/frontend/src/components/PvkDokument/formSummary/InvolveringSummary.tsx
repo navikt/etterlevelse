@@ -63,11 +63,18 @@ export const InvolveringSummary = (props: IProps) => {
                     <FormSummary.Label>
                       Utdyp hvordan dere har involvert representant(er) for de registrerte
                     </FormSummary.Label>
-                    <FormSummary.Value>
-                      <BodyShort>
-                        {fieldProp.form.values.representantInvolveringsBeskrivelse}
-                      </BodyShort>
-                    </FormSummary.Value>
+                    {fieldProp.form.values.representantInvolveringsBeskrivelse && (
+                      <FormSummary.Value>
+                        <BodyShort>
+                          {fieldProp.form.values.representantInvolveringsBeskrivelse}
+                        </BodyShort>
+                      </FormSummary.Value>
+                    )}
+                    {!fieldProp.form.values.representantInvolveringsBeskrivelse && (
+                      <FormSummary.Value>
+                        <BodyShort>Ikke besvart</BodyShort>
+                      </FormSummary.Value>
+                    )}
                   </FormSummary.Answer>
                 </FormSummary.Answers>
               </FormSummary.Value>
@@ -105,11 +112,18 @@ export const InvolveringSummary = (props: IProps) => {
                     <FormSummary.Label>
                       Utdyp hvordan dere har involvert representant(er) for databehandler(e)
                     </FormSummary.Label>
-                    <FormSummary.Value>
-                      <BodyShort>
-                        {fieldProp.form.values.dataBehandlerRepresentantInvolveringBeskrivelse}
-                      </BodyShort>
-                    </FormSummary.Value>
+                    {fieldProp.form.values.dataBehandlerRepresentantInvolveringBeskrivelse && (
+                      <FormSummary.Value>
+                        <BodyShort>
+                          {fieldProp.form.values.dataBehandlerRepresentantInvolveringBeskrivelse}
+                        </BodyShort>
+                      </FormSummary.Value>
+                    )}
+                    {!fieldProp.form.values.dataBehandlerRepresentantInvolveringBeskrivelse && (
+                      <FormSummary.Value>
+                        <BodyShort>Ikke besvart</BodyShort>
+                      </FormSummary.Value>
+                    )}
                   </FormSummary.Answer>
                 </FormSummary.Answers>
               </FormSummary.Value>
