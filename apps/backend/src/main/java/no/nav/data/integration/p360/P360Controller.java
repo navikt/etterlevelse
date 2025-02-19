@@ -111,4 +111,36 @@ public class P360Controller {
                 .build());
         return ResponseEntity.ok(document);
     }
+
+
+    @Operation(summary = "Update Document")
+    @ApiResponses(value = {@ApiResponse(description = "Cases created")})
+    @PostMapping("/documentCases/etterlevelseDokumentasjon/{id}/dokumentnummer/{dokumentNummber}")
+    public ResponseEntity<P360Document> updateDocument(@PathVariable String id, @PathVariable String dokumentNummber) {
+        log.info("Creating document for dokument: {}", dokumentNummber);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd");
+        Date date = new Date();
+
+        var etterlevelsedokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(id));
+        byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelsedokumentasjon.getId(), Collections.emptyList(), Collections.emptyList(), true);
+
+        P360Document document = p360Service.updateDocument(P360DocumentUpdateRequest.builder()
+                .DocumentNumber(dokumentNummber)
+                .Archive("Saksdokument")
+                .DefaultValueSet("Etterlevelse")
+                .Title("E" + etterlevelsedokumentasjon.getEtterlevelseNummer() + " test dokument")
+                .DocumentDate(formatter.format(date))
+                .Category("Internt notat uten oppfølging")
+                .Status("J")
+                .AccessGroup("Alle ansatte i Nav")
+                .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
+                .Files(List.of(P360File.builder()
+                        .Title(formatter.format(date) + "_Etterlevelse_E" + etterlevelsedokumentasjon.getEtterlevelseNummer())
+                        .Format("docx")
+                        .Base64Data(Base64.getEncoder().encodeToString(wordFile))
+                        .build()))
+                .build());
+        return ResponseEntity.ok(document);
+    }
 }

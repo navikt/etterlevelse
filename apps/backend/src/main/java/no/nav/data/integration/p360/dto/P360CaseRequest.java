@@ -12,6 +12,7 @@ import lombok.experimental.FieldNameConstants;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
+//FIXME: set default values instead of in controller
 public class P360CaseRequest {
         private String CaseType;
         private String DefaultValueSet;
