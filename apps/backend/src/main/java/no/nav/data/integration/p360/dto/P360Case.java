@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class P360Case {
     private Integer Recno;
     private String CaseNumber;
+    private String Title;
     private Boolean Successful;
     private String ErrorMessage;
     private String ErrorDetails;

@@ -14,5 +14,8 @@ public class P360Document {
 
     private Integer Recno;
     private String DocumentNumber;
-
+    private String Title;
+    private Boolean Successful;
+    private String ErrorMessage;
+    private String ErrorDetails;
 }
