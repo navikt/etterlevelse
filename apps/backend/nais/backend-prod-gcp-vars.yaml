@@ -13,6 +13,8 @@ env:
     value: https://teamkatalog.nav.no
   - name: CLIENT_POLLY_URL
     value: http://behandlingskatalog-backend.teamdatajegerne
+  - name: CLIENT_P360_URL
+    value: http://behandlingskatalog-backend.teamdatajegerne
   - name: AZURE_CLIENT_GROUPS
     value: 7d275d5e-59a5-473d-b530-a9091b3de4c6
   - name: AZURE_CLIENT_GROUPS_ADMIN

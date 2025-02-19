@@ -123,6 +123,12 @@ client:
     resources-url: ${client.teamcat.url}/resource/multi
     teams-url: ${client.teamcat.url}/team
     url: https://teamcat/api
+  p360:
+    case-url: ${client.p360.url}/CaseService
+    document-url: ${client.p360.url}/DocumentService
+    url: ${client.p360.url:https://something}
+    auth-key: ${P360_AUTH_KEY:tokenkey}
+    client-id: ${P360_INTEGRATION_CLIENT_ID:clientId}
   slack:
     base-url: https://slack.com/api
     token: ${SLACK_TOKEN:token}

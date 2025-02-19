@@ -16,6 +16,8 @@ env:
     value: https://teamkatalog.intern.nav.no/
   - name: CLIENT_POLLY_URL
     value: http://behandlingskatalog-backend.teamdatajegerne
+  - name: CLIENT_P360_URL
+    value: https://nav-test.public360online.com/Biz/v2/api/call/SI.Data.RPC/SI.Data.RPC
   - name: AZURE_CLIENT_GROUPS
     value: 7d275d5e-59a5-473d-b530-a9091b3de4c6
   - name: AZURE_CLIENT_GROUPS_ADMIN
