@@ -13,4 +13,5 @@ public class P360Properties {
     private String documentUrl;
     private String authKey;
     private String clientId;
+    private String clientSecret;
 }

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class P360Case {
+
     private Integer Recno;
     private String CaseNumber;
     private String Title;
