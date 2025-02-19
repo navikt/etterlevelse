@@ -128,7 +128,8 @@ client:
     document-url: ${client.p360.url}/DocumentService
     url: ${client.p360.url:https://something}
     auth-key: ${P360_AUTH_KEY:tokenkey}
-    client-id: ${P360_INTEGRATION_CLIENT_ID:clientId}
+    client-id: ${AZURE_APP_CLIENT_ID:clientId}
+    client-secret: ${AZURE_APP_CLIENT_SECRET:client-secret}
   slack:
     base-url: https://slack.com/api
     token: ${SLACK_TOKEN:token}
