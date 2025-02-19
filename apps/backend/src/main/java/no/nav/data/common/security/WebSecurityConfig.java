@@ -85,6 +85,7 @@ public class WebSecurityConfig {
                     "/audit/**",
                     "/settings/**",
                     "/codelist/**",
+                    "/p360/**",
                     "/export/codelist/**",
                     "/etterlevelsearkiv/status/arkivert",
                     "/etterlevelsearkiv/admin/update"
