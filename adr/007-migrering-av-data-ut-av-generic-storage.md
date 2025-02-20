@@ -6,7 +6,10 @@
 20.02.2025
 
 ## Kontekst
-Vi har mye forskjellige data type i generic storage. Dette gjør at det er vanskelig å lage database relasjoner på de.
+Vi har mye forskjellige data type i generic storage. Dette gjør at det er vanskelig å lage database relasjoner på de. 
+Hoved brukeren vår vil ikke merke noe forskje.
+
+
 Eks. på data typene i generic storage
 - krav
 - etterlevelse dokumentasjon
@@ -14,7 +17,7 @@ Eks. på data typene i generic storage
 - system varsel
 - osv.
 
-  Hoved brukeren vår vil ikke merke noe forskje.
+  
 
 
 ## Beslutning
