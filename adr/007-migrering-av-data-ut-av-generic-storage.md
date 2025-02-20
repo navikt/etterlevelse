@@ -6,7 +6,15 @@
 20.02.2025
 
 ## Kontekst
-Vi har mye forskjellige data type i generic storage. Dette gjør at det er vanskelig å lage database relasjoner på de
+Vi har mye forskjellige data type i generic storage. Dette gjør at det er vanskelig å lage database relasjoner på de.
+Eks. på data typene i generic storage
+- krav
+- etterlevelse dokumentasjon
+- krav tilbakemelding
+- system varsel
+- osv.
+
+  Hoved brukeren vår vil ikke merke noe forskje.
 
 
 ## Beslutning
@@ -17,7 +25,7 @@ Pågående
 
 ## Konsekvenser
 MINUS
-- mer tabell
+- vi også migrere/lage logikk på dataene vi har i audit log
 
 PLUSS
 + Lettere å ha foregn key på database modell
