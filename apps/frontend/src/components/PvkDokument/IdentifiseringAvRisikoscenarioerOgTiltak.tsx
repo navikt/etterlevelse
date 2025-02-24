@@ -1,9 +1,21 @@
-import { Alert, BodyLong, Button, Heading } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  Heading,
+  Label,
+  Radio,
+  RadioGroup,
+  ToggleGroup,
+} from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, ITiltak } from '../../constants'
+import { user } from '../../services/User'
+import { Markdown } from '../common/Markdown'
+import TextEditor from '../common/TextEditor/TextEditor'
 import RisikoscenarioAccordianList from '../risikoscenario/RisikoscenarioAccordianList'
 import CreateRisikoscenarioModal from '../risikoscenario/edit/CreateRisikoscenarioModal'
 import FormButtons from './edit/FormButtons'
@@ -31,6 +43,8 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
   const [isTiltakFormActive, setIsTiltakFormActive] = useState<boolean>(false)
   const navigate = useNavigate()
+  const [mode, setMode] = useState('edit')
+  const [value, setValue] = useState('')
 
   useEffect(() => {
     if (pvkDokument) {
@@ -137,6 +151,110 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
           setSelectedStep={setSelectedStep}
         />
       </div>
+
+      {/* PVO sidepanel */}
+      {(user.isPersonvernombud() || user.isAdmin()) && (
+        <div className="ml-4 px-4 py-4 border-l border-[#071a3636] w-full max-w-md bg-[#F0EEF4] mt-35">
+          {/* // should be last modified by PVO */}
+          {pvkDokument.changeStamp.lastModifiedBy && (
+            <div className="mt-5 mb-10">
+              {'Sist redigert av: ' + pvkDokument.changeStamp.lastModifiedBy}
+            </div>
+          )}
+          <div>
+            <RadioGroup
+              legend="Vurdér om etterleverens bidrag er tilstrekkelig"
+              // onChange={handleChange}
+              description="Denne vurderingen blir ikke tilgjengelig for etterleveren før dere har ferdigstilt selve vurderingen."
+            >
+              <Radio value="JA">Ja, tilstrekkelig </Radio>
+              <Radio value="Tilstrekkelig">
+                Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som
+                beskrives i fritekst under
+              </Radio>
+              <Radio value="40">Utilstrekkelig, beskrives nærmere under</Radio>
+            </RadioGroup>
+          </div>
+          <div className="my-5">
+            <Label>Skriv intern PVO diskusjon her</Label>
+            <BodyLong>Denne teksten er privat for PVO og skal ikke deles med etterleveren</BodyLong>
+          </div>
+          <div>
+            {mode === 'edit' && (
+              <TextEditor
+                initialValue={value}
+                setValue={setValue}
+                height="15.625rem"
+                // setIsFormDirty={setIsFormDirty}
+              />
+            )}
+
+            {mode === 'view' && (
+              <div className="p-8 border-border-subtle-hover border border-solid rounded-md bg-white">
+                <Markdown source={''} />
+              </div>
+            )}
+          </div>
+          <div className="flex justify-end mt-[-1px]">
+            <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
+              <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
+              <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+            </ToggleGroup>
+          </div>
+          <div className="my-5">
+            <Label>Skriv tilbakemelding til etterleveren</Label>
+            <BodyLong>
+              Tilbakemeldingen blir ikke tilgjengelig for etterleveren før du velger å publisere
+              den.{' '}
+            </BodyLong>
+          </div>
+          <div>
+            {mode === 'edit' && (
+              <TextEditor
+                initialValue={value}
+                setValue={setValue}
+                height="15.625rem"
+                // setIsFormDirty={setIsFormDirty}
+              />
+            )}
+
+            {mode === 'view' && (
+              <div className="p-8 border-border-subtle-hover border border-solid rounded-md bg-white">
+                <Markdown source={''} />
+              </div>
+            )}
+          </div>
+          <div className="flex justify-end mt-[-1px]">
+            <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
+              <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
+              <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+            </ToggleGroup>
+          </div>
+          <div className="mt-10 flex flex-row gap-2">
+            <div>
+              <Button
+                size="small"
+                onClick={() => {
+                  setValue('')
+                }}
+              >
+                Lagre
+              </Button>
+            </div>
+            <div>
+              <Button
+                size="small"
+                variant="secondary"
+                onClick={() => {
+                  setValue('')
+                }}
+              >
+                Avbryt
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
