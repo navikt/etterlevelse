@@ -8,6 +8,7 @@ import {
   updatePvkDokument,
 } from '../../api/PvkDokumentApi'
 import { EPvkDokumentStatus, IPvkDokument } from '../../constants'
+import { user } from '../../services/User'
 import { TextAreaField } from '../common/Inputs'
 import FormButtons from './edit/FormButtons'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
@@ -98,6 +99,17 @@ export const SendInnView = (props: IProps) => {
                   name="merknadTilPvoEllerRisikoeier"
                 />
               </div>
+
+              {(user.isPersonvernombud() || user.isAdmin()) && (
+                <div className="mt-5 mb-3 max-w-[75ch]">
+                  <TextAreaField
+                    rows={3}
+                    noPlaceholder
+                    label="Er det noe annet dere ønsker å formidle til etterlever? (valgfritt)"
+                    name="merknadTilEtterleverEllerRisikoeier"
+                  />
+                </div>
+              )}
 
               <CopyButton
                 variant="action"
