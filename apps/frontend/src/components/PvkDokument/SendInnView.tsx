@@ -1,5 +1,5 @@
 import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, CopyButton, Heading } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, CopyButton, Heading, Label } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
 import {
@@ -91,14 +91,25 @@ export const SendInnView = (props: IProps) => {
 
               <RisikoscenarioSummary />
 
-              <div className="mt-5 mb-3 max-w-[75ch]">
-                <TextAreaField
-                  rows={3}
-                  noPlaceholder
-                  label="Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)"
-                  name="merknadTilPvoEllerRisikoeier"
-                />
-              </div>
+              {(user.isPersonvernombud() || user.isAdmin()) && (
+                <div className="mt-5 mb-3 max-w-[75ch]">
+                  <Label>
+                    Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)
+                  </Label>
+                  <BodyLong>{pvkDokument.merknadTilPvoEllerRisikoeier}</BodyLong>
+                </div>
+              )}
+
+              {(!user.isPersonvernombud() || user.isAdmin()) && (
+                <div className="mt-5 mb-3 max-w-[75ch]">
+                  <TextAreaField
+                    rows={3}
+                    noPlaceholder
+                    label="Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)"
+                    name="merknadTilPvoEllerRisikoeier"
+                  />
+                </div>
+              )}
 
               {(user.isPersonvernombud() || user.isAdmin()) && (
                 <div className="mt-5 mb-3 max-w-[75ch]">
