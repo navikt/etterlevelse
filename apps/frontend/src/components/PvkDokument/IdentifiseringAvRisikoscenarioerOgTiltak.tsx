@@ -155,12 +155,6 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
       {/* PVO sidepanel */}
       {(user.isPersonvernombud() || user.isAdmin()) && (
         <div className="ml-4 px-4 py-4 border-l border-[#071a3636] w-full max-w-md bg-[#F0EEF4] mt-35">
-          {/* // should be last modified by PVO */}
-          {pvkDokument.changeStamp.lastModifiedBy && (
-            <div className="mt-5 mb-10">
-              {'Sist redigert av: ' + pvkDokument.changeStamp.lastModifiedBy}
-            </div>
-          )}
           <div>
             <RadioGroup
               legend="Vurdér om etterleverens bidrag er tilstrekkelig"
