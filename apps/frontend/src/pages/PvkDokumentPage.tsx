@@ -163,7 +163,9 @@ export const PvkDokumentPage = () => {
 
       {etterlevelseDokumentasjon &&
         pvkDokument &&
-        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+        (etterlevelseDokumentasjon.hasCurrentUserAccess ||
+          user.isAdmin() ||
+          user.isPersonvernombud()) && (
           <div className="w-full">
             <div className="min-h-48 bg-[#8269A21F] flex flex-col w-full items-center">
               <div className="w-full max-w-7xl">
