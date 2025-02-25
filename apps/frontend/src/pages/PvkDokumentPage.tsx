@@ -147,7 +147,8 @@ export const PvkDokumentPage = () => {
 
       {etterlevelseDokumentasjon &&
         !etterlevelseDokumentasjon.hasCurrentUserAccess &&
-        (!user.isAdmin() || !user.isPersonvernombud()) && (
+        !user.isAdmin() &&
+        !user.isPersonvernombud() && (
           <div className="flex w-full justify-center mt-5">
             <div className="flex items-center flex-col gap-5">
               <Alert variant="warning">Du har ikke tilgang til å redigere på PVK dokument.</Alert>
