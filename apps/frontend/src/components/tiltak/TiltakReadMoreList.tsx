@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { removeTiltakToRisikoscenario } from '../../api/RisikoscenarioApi'
 import { deleteTiltak, getTiltak, updateTiltak } from '../../api/TiltakApi'
 import { IRisikoscenario, ITiltak } from '../../constants'
+import { user } from '../../services/User'
 import TiltakView from './TiltakView'
 import TiltakForm from './edit/TiltakForm'
 
@@ -151,49 +152,53 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
         </ReadMore>
       )}
 
-      {isEditMode && (
-        <TiltakForm
-          title="Redigér tiltak"
-          initialValues={tiltak}
-          pvkDokumentId={tiltak.pvkDokumentId}
-          submit={submit}
-          close={() => {
-            setIsEditMode(false)
-            setIsEditTiltakFormActive(false)
-          }}
-          formRef={formRef}
-        />
-      )}
-
-      {activeTiltak === tiltak.id &&
-        !isEditMode &&
-        !isCreateTiltakFormActive &&
-        !isAddExistingMode && (
-          <div className="flex gap-2 mt-5">
-            <Button
-              type="button"
-              variant="tertiary"
-              size="small"
-              icon={<PencilIcon title="" aria-hidden />}
-              onClick={() => {
-                setIsEditTiltakFormActive(true)
-                setIsEditMode(true)
+      {!(user.isPersonvernombud() || user.isAdmin()) && (
+        <div>
+          {isEditMode && (
+            <TiltakForm
+              title="Redigér tiltak"
+              initialValues={tiltak}
+              pvkDokumentId={tiltak.pvkDokumentId}
+              submit={submit}
+              close={() => {
+                setIsEditMode(false)
+                setIsEditTiltakFormActive(false)
               }}
-            >
-              Redigér tiltak
-            </Button>
+              formRef={formRef}
+            />
+          )}
 
-            <Button
-              type="button"
-              variant="tertiary"
-              size="small"
-              icon={<TrashIcon title="" aria-hidden />}
-              onClick={() => setIsDeleteModalOpen(true)}
-            >
-              Slett tiltak
-            </Button>
-          </div>
-        )}
+          {activeTiltak === tiltak.id &&
+            !isEditMode &&
+            !isCreateTiltakFormActive &&
+            !isAddExistingMode && (
+              <div className="flex gap-2 mt-5">
+                <Button
+                  type="button"
+                  variant="tertiary"
+                  size="small"
+                  icon={<PencilIcon title="" aria-hidden />}
+                  onClick={() => {
+                    setIsEditTiltakFormActive(true)
+                    setIsEditMode(true)
+                  }}
+                >
+                  Redigér tiltak
+                </Button>
+
+                <Button
+                  type="button"
+                  variant="tertiary"
+                  size="small"
+                  icon={<TrashIcon title="" aria-hidden />}
+                  onClick={() => setIsDeleteModalOpen(true)}
+                >
+                  Slett tiltak
+                </Button>
+              </div>
+            )}
+        </div>
+      )}
 
       {isDeleteModalOpen && (
         <Modal

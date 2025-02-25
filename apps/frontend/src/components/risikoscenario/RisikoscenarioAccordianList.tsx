@@ -2,8 +2,10 @@ import { Accordion } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../constants'
+import { user } from '../../services/User'
 import AccordianAlertModal from './AccordianAlertModal'
 import RisikoscenarioAccordionContent from './RisikoscenarioAccordianContent'
+import RisikoscenarioAccordionContentReadonly from './RisikoscenarioAccordianContentReadOnly'
 import { IdentifiseringAvRisikoscenarioAccordianHeader } from './RisikoscenarioAccordionHeader'
 
 interface IProps {
@@ -87,16 +89,32 @@ export const RisikoscenarioAccordianList = (props: IProps) => {
               <IdentifiseringAvRisikoscenarioAccordianHeader risikoscenario={risikoscenario} />
               <Accordion.Content>
                 {expanded && (
-                  <RisikoscenarioAccordionContent
-                    risikoscenario={risikoscenario}
-                    risikoscenarioer={risikoscenarioList}
-                    allRisikoscenarioList={allRisikoscenarioList}
-                    tiltakList={tiltakList}
-                    setTiltakList={setTiltakList}
-                    setRisikoscenarioer={setRisikoscenarioList}
-                    setIsTiltakFormActive={setIsTiltakFormActive}
-                    formRef={formRef}
-                  />
+                  <div>
+                    {!(user.isPersonvernombud() || user.isAdmin()) && (
+                      <RisikoscenarioAccordionContent
+                        risikoscenario={risikoscenario}
+                        risikoscenarioer={risikoscenarioList}
+                        allRisikoscenarioList={allRisikoscenarioList}
+                        tiltakList={tiltakList}
+                        setTiltakList={setTiltakList}
+                        setRisikoscenarioer={setRisikoscenarioList}
+                        setIsTiltakFormActive={setIsTiltakFormActive}
+                        formRef={formRef}
+                      />
+                    )}
+                    {(user.isPersonvernombud() || user.isAdmin()) && (
+                      <RisikoscenarioAccordionContentReadonly
+                        risikoscenario={risikoscenario}
+                        risikoscenarioer={risikoscenarioList}
+                        allRisikoscenarioList={allRisikoscenarioList}
+                        tiltakList={tiltakList}
+                        setTiltakList={setTiltakList}
+                        setRisikoscenarioer={setRisikoscenarioList}
+                        setIsTiltakFormActive={setIsTiltakFormActive}
+                        formRef={formRef}
+                      />
+                    )}
+                  </div>
                 )}
               </Accordion.Content>
             </Accordion.Item>
