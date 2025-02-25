@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { getRisikoscenario, updateRisikoscenario } from '../../api/RisikoscenarioApi'
 import { createTiltakAndRelasjonWithRisikoscenario } from '../../api/TiltakApi'
 import { IRisikoscenario, ITiltak } from '../../constants'
+import { user } from '../../services/User'
 import TiltakReadMoreList from '../tiltak/TiltakReadMoreList'
 import LeggTilEksisterendeTiltak from '../tiltak/edit/LeggTilEksisterendeTiltak'
 import TiltakForm from '../tiltak/edit/TiltakForm'
@@ -97,119 +98,125 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
     <div>
       <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={false} />
 
-      {!isIngenTilgangFormDirty &&
-        !isCreateTiltakFormActive &&
-        !isEditTiltakFormActive &&
-        !isAddExistingMode && (
-          <div className="mt-12 flex gap-2 items-center">
-            <Button
-              variant="tertiary"
-              type="button"
-              icon={<PencilIcon aria-hidden />}
-              onClick={() => setIsEditModalOpen(true)}
-            >
-              Redigèr risikoscenario
-            </Button>
-            <SlettOvrigRisikoscenario
-              risikoscenario={risikoscenario}
-              tiltakList={tiltakList}
-              risikoscenarioer={risikoscenarioer}
-              setRisikoscenarioer={setRisikoscenarioer}
-            />
-          </div>
-        )}
+      {(!user.isPersonvernombud() || user.isAdmin()) && (
+        <div>
+          {!isIngenTilgangFormDirty &&
+            !isCreateTiltakFormActive &&
+            !isEditTiltakFormActive &&
+            !isAddExistingMode && (
+              <div className="mt-12 flex gap-2 items-center">
+                <Button
+                  variant="tertiary"
+                  type="button"
+                  icon={<PencilIcon aria-hidden />}
+                  onClick={() => setIsEditModalOpen(true)}
+                >
+                  Redigèr risikoscenario
+                </Button>
+                <SlettOvrigRisikoscenario
+                  risikoscenario={risikoscenario}
+                  tiltakList={tiltakList}
+                  risikoscenarioer={risikoscenarioer}
+                  setRisikoscenarioer={setRisikoscenarioer}
+                />
+              </div>
+            )}
+        </div>
+      )}
 
-      <div className="mt-12">
-        <Heading level="3" size="small">
-          Følgende tiltak gjelder for dette risikoscenarioet
-        </Heading>
-        {!risikoscenario.ingenTiltak && (
-          <div>
-            {risikoscenario.tiltakIds.length === 0 &&
-              !isCreateTiltakFormActive &&
-              !isEditTiltakFormActive && (
-                <Alert className="mt-5 mb-9" variant="warning">
-                  Dere har ikke lagt inn tiltak
-                </Alert>
+      {(!user.isPersonvernombud() || user.isAdmin()) && (
+        <div className="mt-12">
+          <Heading level="3" size="small">
+            Følgende tiltak gjelder for dette risikoscenarioet
+          </Heading>
+          {!risikoscenario.ingenTiltak && (
+            <div>
+              {risikoscenario.tiltakIds.length === 0 &&
+                !isCreateTiltakFormActive &&
+                !isEditTiltakFormActive && (
+                  <Alert className="mt-5 mb-9" variant="warning">
+                    Dere har ikke lagt inn tiltak
+                  </Alert>
+                )}
+
+              {risikoscenario.tiltakIds.length !== 0 && (
+                <TiltakReadMoreList
+                  risikoscenario={risikoscenario}
+                  risikoscenarioList={allRisikoscenarioList}
+                  tiltakList={tiltakList}
+                  setTiltakList={setTiltakList}
+                  setIsEditTiltakFormActive={setIsEditTiltakFormActive}
+                  isCreateTiltakFormActive={isCreateTiltakFormActive}
+                  isAddExistingMode={isAddExistingMode}
+                  formRef={formRef}
+                />
               )}
 
-            {risikoscenario.tiltakIds.length !== 0 && (
-              <TiltakReadMoreList
-                risikoscenario={risikoscenario}
-                risikoscenarioList={allRisikoscenarioList}
-                tiltakList={tiltakList}
-                setTiltakList={setTiltakList}
-                setIsEditTiltakFormActive={setIsEditTiltakFormActive}
-                isCreateTiltakFormActive={isCreateTiltakFormActive}
-                isAddExistingMode={isAddExistingMode}
-                formRef={formRef}
-              />
-            )}
-
-            {isCreateTiltakFormActive && (
-              <TiltakForm
-                title="Opprett nytt tiltak"
-                initialValues={{} as ITiltak}
-                pvkDokumentId={risikoscenario.pvkDokumentId}
-                submit={submitCreateTiltak}
-                close={() => setIsCreateTiltakFormActive(false)}
-                formRef={formRef}
-              />
-            )}
-
-            {isAddExistingMode && (
-              <LeggTilEksisterendeTiltak
-                risikoscenario={activeRisikoscenario}
-                tiltakList={tiltakList}
-                setIsAddExisitingMode={setIsAddExisitingMode}
-                formRef={formRef}
-              />
-            )}
-
-            {!isIngenTilgangFormDirty &&
-              !isCreateTiltakFormActive &&
-              !isEditTiltakFormActive &&
-              !isAddExistingMode && (
-                <div className="mt-5 flex gap-2">
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      setIsCreateTiltakFormActive(true)
-
-                      setIsTiltakFormActive(true)
-                    }}
-                  >
-                    Opprett nytt tiltak
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => {
-                      setIsAddExisitingMode(true)
-                      setIsTiltakFormActive(true)
-                    }}
-                  >
-                    Legg til eksisterende tiltak
-                  </Button>
-                </div>
+              {isCreateTiltakFormActive && (
+                <TiltakForm
+                  title="Opprett nytt tiltak"
+                  initialValues={{} as ITiltak}
+                  pvkDokumentId={risikoscenario.pvkDokumentId}
+                  submit={submitCreateTiltak}
+                  close={() => setIsCreateTiltakFormActive(false)}
+                  formRef={formRef}
+                />
               )}
-          </div>
-        )}
 
-        {!isCreateTiltakFormActive &&
-          !isEditTiltakFormActive &&
-          !isAddExistingMode &&
-          activeRisikoscenario.tiltakIds.length === 0 && (
-            <div className="mt-3">
-              <IngenTiltakField
-                risikoscenario={activeRisikoscenario}
-                formRef={formRef}
-                submit={submitIngenTiltak}
-                setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
-              />
+              {isAddExistingMode && (
+                <LeggTilEksisterendeTiltak
+                  risikoscenario={activeRisikoscenario}
+                  tiltakList={tiltakList}
+                  setIsAddExisitingMode={setIsAddExisitingMode}
+                  formRef={formRef}
+                />
+              )}
+
+              {!isIngenTilgangFormDirty &&
+                !isCreateTiltakFormActive &&
+                !isEditTiltakFormActive &&
+                !isAddExistingMode && (
+                  <div className="mt-5 flex gap-2">
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setIsCreateTiltakFormActive(true)
+
+                        setIsTiltakFormActive(true)
+                      }}
+                    >
+                      Opprett nytt tiltak
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      onClick={() => {
+                        setIsAddExisitingMode(true)
+                        setIsTiltakFormActive(true)
+                      }}
+                    >
+                      Legg til eksisterende tiltak
+                    </Button>
+                  </div>
+                )}
             </div>
           )}
-      </div>
+
+          {!isCreateTiltakFormActive &&
+            !isEditTiltakFormActive &&
+            !isAddExistingMode &&
+            activeRisikoscenario.tiltakIds.length === 0 && (
+              <div className="mt-3">
+                <IngenTiltakField
+                  risikoscenario={activeRisikoscenario}
+                  formRef={formRef}
+                  submit={submitIngenTiltak}
+                  setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
+                />
+              </div>
+            )}
+        </div>
+      )}
 
       {isEditModalOpen && (
         <RisikoscenarioModalForm

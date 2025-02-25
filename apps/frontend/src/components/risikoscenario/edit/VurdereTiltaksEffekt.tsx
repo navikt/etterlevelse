@@ -8,6 +8,7 @@ import {
   updateRisikoscenario,
 } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../../constants'
+import { user } from '../../../services/User'
 import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 import ReadMoreKonsekvensnivaa from '../ReadMoreKonsekvensnivaa'
@@ -83,45 +84,49 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
 
   return (
     <div>
-      {!isFormActive && (
-        <div className="mt-5">
-          <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
+      {(!user.isPersonvernombud() || user.isAdmin()) && (
+        <div>
+          {!isFormActive && (
+            <div className="mt-5">
+              <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
 
-          {revurdertEffektCheck && (
-            <Alert className="mt-3" variant="warning">
-              Du må vurdere tiltakenes effekt
-            </Alert>
-          )}
+              {revurdertEffektCheck && (
+                <Alert className="mt-3" variant="warning">
+                  Du må vurdere tiltakenes effekt
+                </Alert>
+              )}
 
-          {!revurdertEffektCheck && (
-            <div className="mt-3">
-              <RisikoscenarioTag
-                level={risikoscenario.sannsynlighetsNivaaEtterTiltak}
-                text={getSannsynlighetsnivaaText(risikoscenario.sannsynlighetsNivaaEtterTiltak)}
-              />
+              {!revurdertEffektCheck && (
+                <div className="mt-3">
+                  <RisikoscenarioTag
+                    level={risikoscenario.sannsynlighetsNivaaEtterTiltak}
+                    text={getSannsynlighetsnivaaText(risikoscenario.sannsynlighetsNivaaEtterTiltak)}
+                  />
 
-              <div className="mt-3">
-                <RisikoscenarioTag
-                  level={risikoscenario.konsekvensNivaaEtterTiltak}
-                  text={getKonsekvenssnivaaText(risikoscenario.konsekvensNivaaEtterTiltak)}
-                />
-              </div>
-              <BodyLong className="mt-3">{risikoscenario.nivaaBegrunnelseEtterTiltak}</BodyLong>
+                  <div className="mt-3">
+                    <RisikoscenarioTag
+                      level={risikoscenario.konsekvensNivaaEtterTiltak}
+                      text={getKonsekvenssnivaaText(risikoscenario.konsekvensNivaaEtterTiltak)}
+                    />
+                  </div>
+                  <BodyLong className="mt-3">{risikoscenario.nivaaBegrunnelseEtterTiltak}</BodyLong>
+                </div>
+              )}
             </div>
           )}
-        </div>
-      )}
 
-      {!isFormActive && (
-        <Button
-          className="mt-3"
-          type="button"
-          variant={revurdertEffektCheck ? 'primary' : 'tertiary'}
-          onClick={() => setIsFormActive(true)}
-          icon={revurdertEffektCheck ? undefined : <PencilIcon aria-hidden title="" />}
-        >
-          {revurdertEffektCheck ? 'Vurdér tiltakenes effekt' : 'Redigér tiltakenes effekt'}
-        </Button>
+          {!isFormActive && (
+            <Button
+              className="mt-3"
+              type="button"
+              variant={revurdertEffektCheck ? 'primary' : 'tertiary'}
+              onClick={() => setIsFormActive(true)}
+              icon={revurdertEffektCheck ? undefined : <PencilIcon aria-hidden title="" />}
+            >
+              {revurdertEffektCheck ? 'Vurdér tiltakenes effekt' : 'Redigér tiltakenes effekt'}
+            </Button>
+          )}
+        </div>
       )}
 
       {isFormActive && (
