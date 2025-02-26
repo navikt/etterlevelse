@@ -197,7 +197,7 @@ public class KravController {
         if (!tilbakemeldingList.isEmpty()) {
             throw new ValidationException(String.format("Can not delete krav. Found %s tilbakemelding connected to krav.", tilbakemeldingList.size()));
         }
-        // FIXME: Sjekke om krav har relasjon til risikoscenario
+        // TODO: Sjekke om krav har relasjon til risikoscenario
         var deletedKrav = service.delete(id);
         return ResponseEntity.ok(KravResponse.buildFrom(deletedKrav));
     }

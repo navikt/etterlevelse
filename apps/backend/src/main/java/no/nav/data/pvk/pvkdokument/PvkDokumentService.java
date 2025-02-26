@@ -6,6 +6,9 @@ import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
+import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
+import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
+import no.nav.data.pvk.tiltak.TiltakService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,14 +23,11 @@ import java.util.UUID;
 public class PvkDokumentService {
 
     private final PvkDokumentRepo pvkDokumentRepo;
+    private final RisikoscenarioService risikoscenarioService;
+    private final TiltakService tiltakService;
 
     public PvkDokument get(UUID uuid) {
-        if (uuid == null || !pvkDokumentRepo.existsById(uuid)) return null;
-        return getPvkDokument(uuid);
-    }
-
-    private PvkDokument getPvkDokument(UUID uuid) {
-        return pvkDokumentRepo.findById(uuid).orElseThrow(() -> new NotFoundException("Couldn't find Pvk Dokument with id " + uuid));
+        return pvkDokumentRepo.findById(uuid).orElse(null);
     }
 
     public Page<PvkDokument> getAll(PageParameters pageParameters) {
@@ -53,12 +53,22 @@ public class PvkDokumentService {
         return pvkDokumentRepo.save(pvkDokument);
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public boolean isDeleteable(UUID id) {
+        PvkDokument pvkDokument = pvkDokumentRepo.findById(id).orElse(null);
+        return pvkDokument != null
+                && risikoscenarioService.getByPvkDokument(id.toString(), RisikoscenarioType.ALL).isEmpty()
+                && tiltakService.getByPvkDokument(id.toString()).isEmpty();
+    }
+    
     @Transactional(propagation = Propagation.REQUIRED)
     public PvkDokument delete(UUID id) {
-        // FIXME: Det skal ikke gå an å slette et PvkDokument hvis noe refererer til det (risikoscenario, tiltak, fil, mm.)
-        var pvkDokumentToDelete = pvkDokumentRepo.findById(id);
+        if (!isDeleteable(id)) {
+            return null;
+        }
+        PvkDokument pvkDokumentToDelete = pvkDokumentRepo.findById(id).orElse(null);
         pvkDokumentRepo.deleteById(id);
-        return pvkDokumentToDelete.orElse(null);
+        return pvkDokumentToDelete;
     }
 
 }
