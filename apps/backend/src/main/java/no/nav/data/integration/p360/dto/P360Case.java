@@ -1,6 +1,5 @@
 package no.nav.data.integration.p360.dto;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

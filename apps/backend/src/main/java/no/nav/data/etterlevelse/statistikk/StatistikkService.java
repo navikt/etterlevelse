@@ -238,7 +238,7 @@ public class StatistikkService {
         List<String> teamNames = etterlevelseDokumentasjon.getTeams().stream().map(t -> teamService.getTeam(t).isPresent() ? teamService.getTeam(t).get().getName() : "").toList();
         String ansvarlig;
 
-        if(etterlevelseDokumentasjon.getAvdeling() != null && !etterlevelseDokumentasjon.getAvdeling().isEmpty()) {
+        if (etterlevelseDokumentasjon.getAvdeling() != null && !etterlevelseDokumentasjon.getAvdeling().isEmpty()) {
             ansvarlig = CodelistService.getCodelist(ListName.AVDELING, etterlevelseDokumentasjon.getAvdeling()).getShortName();
         } else {
             ansvarlig = "";
@@ -261,7 +261,7 @@ public class StatistikkService {
                 .id(etterlevelse.getId())
                 .etterlevelseDokumentasjonId(etterlevelse.getEtterlevelseDokumentasjonId())
                 .etterlevelseDokumentasjonTittel(etterlevelseDokumentasjon.getTitle())
-                .etterlevelseDokumentasjonNummer("E" + etterlevelseDokumentasjon.getEtterlevelseNummer().toString())
+                .etterlevelseDokumentasjonNummer("E" + etterlevelseDokumentasjon.getEtterlevelseNummer())
                 .ansvarligId(etterlevelseDokumentasjon.getAvdeling())
                 .ansvarlig(ansvarlig)
                 .kravNummer(etterlevelse.getKravNummer())

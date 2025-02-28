@@ -96,7 +96,7 @@ public class CodeUsageService {
             switch (listName) {
                 case RELEVANS -> {
                     usage.getKrav().forEach(gs -> gs.consumeDomainObject(k -> replaceAll(k.getRelevansFor(), oldCode, newCode)));
-                    usage.getEtterlevelseDokumentasjoner().forEach(gs -> gs.consumeDomainObject(ed -> replaceAll(ed.getIrrelevansFor(), oldCode, newCode)));
+                    usage.getEtterlevelseDokumentasjoner().forEach(ed -> replaceAll(ed.getIrrelevansFor(), oldCode, newCode));
                 }
                 case AVDELING -> usage.getKrav().forEach(gs -> gs.consumeDomainObject(k -> k.setAvdeling(newCode)));
                 case UNDERAVDELING -> {
@@ -140,7 +140,7 @@ public class CodeUsageService {
         };
     }
 
-    private List<GenericStorage<EtterlevelseDokumentasjon>> findEtterlevelseDokumentasjoner(ListName listName, String code) {
+    private List<EtterlevelseDokumentasjon> findEtterlevelseDokumentasjoner(ListName listName, String code) {
         return switch (listName) {
             case RELEVANS -> etterlevelseDokumentasjonRepo.findByIrrelevans(List.of(code));
             case AVDELING, UNDERAVDELING, LOV, TEMA, VIRKEMIDDELTYPE, YTTERLIGERE_EGENSKAPER -> List.of();

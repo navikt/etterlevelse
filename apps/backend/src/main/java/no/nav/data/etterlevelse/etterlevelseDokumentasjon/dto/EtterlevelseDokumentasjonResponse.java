@@ -11,6 +11,7 @@ import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.team.dto.Resource;
@@ -58,28 +59,29 @@ public class EtterlevelseDokumentasjonResponse {
     private boolean hasCurrentUserAccess;
     
     public static EtterlevelseDokumentasjonResponse buildFrom(EtterlevelseDokumentasjon eDok) {
+        EtterlevelseDokumentasjonData eDokData = eDok.getEtterlevelseDokumentasjonData();
         return EtterlevelseDokumentasjonResponse.builder()
                 .id(eDok.getId())
-                .changeStamp(eDok.convertChangeStampResponse())
+                .changeStamp(ChangeStampResponse.buildFrom(eDok))
                 .version(eDok.getVersion())
-                .etterlevelseNummer(eDok.getEtterlevelseNummer())
-                .title(eDok.getTitle())
-                .beskrivelse(eDok.getBeskrivelse())
-                .gjenbrukBeskrivelse(eDok.getGjenbrukBeskrivelse())
-                .tilgjengeligForGjenbruk(eDok.isTilgjengeligForGjenbruk())
-                .behandlingIds(nullsafeCopyOf(eDok.getBehandlingIds()))
-                .virkemiddelId(eDok.getVirkemiddelId())
+                .etterlevelseNummer(eDokData.getEtterlevelseNummer())
+                .title(eDokData.getTitle())
+                .beskrivelse(eDokData.getBeskrivelse())
+                .gjenbrukBeskrivelse(eDokData.getGjenbrukBeskrivelse())
+                .tilgjengeligForGjenbruk(eDokData.isTilgjengeligForGjenbruk())
+                .behandlingIds(nullsafeCopyOf(eDokData.getBehandlingIds()))
+                .virkemiddelId(eDokData.getVirkemiddelId())
                 .irrelevansFor(eDok.irrelevantForAsCodes())
-                .prioritertKravNummer(nullsafeCopyOf(eDok.getPrioritertKravNummer()))
-                .forGjenbruk(eDok.isForGjenbruk())
-                .teams(nullsafeCopyOf(eDok.getTeams()))
-                .resources(nullsafeCopyOf(eDok.getResources()))
-                .risikoeiere(nullsafeCopyOf(eDok.getRisikoeiere()))
-                .behandlerPersonopplysninger(eDok.isBehandlerPersonopplysninger())
-                .knyttetTilVirkemiddel(eDok.isKnyttetTilVirkemiddel())
-                .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, eDok.getAvdeling()))
-                .varslingsadresser(nullsafeCopyOf(eDok.getVarslingsadresser()))
-                .risikovurderinger(eDok.getRisikovurderinger())
+                .prioritertKravNummer(nullsafeCopyOf(eDokData.getPrioritertKravNummer()))
+                .forGjenbruk(eDokData.isForGjenbruk())
+                .teams(nullsafeCopyOf(eDokData.getTeams()))
+                .resources(nullsafeCopyOf(eDokData.getResources()))
+                .risikoeiere(nullsafeCopyOf(eDokData.getRisikoeiere()))
+                .behandlerPersonopplysninger(eDokData.isBehandlerPersonopplysninger())
+                .knyttetTilVirkemiddel(eDokData.isKnyttetTilVirkemiddel())
+                .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, eDokData.getAvdeling()))
+                .varslingsadresser(nullsafeCopyOf(eDokData.getVarslingsadresser()))
+                .risikovurderinger(eDokData.getRisikovurderinger())
                 .build();
     }
     
