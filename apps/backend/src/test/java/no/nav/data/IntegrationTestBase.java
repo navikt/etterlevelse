@@ -15,7 +15,7 @@ import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelationReposito
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.etterlevelse.krav.domain.Krav;
@@ -86,8 +86,6 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected StorageService<EtterlevelseMetadata> etterlevelseMetadataStorageService;
     @Autowired
-    protected StorageService<EtterlevelseDokumentasjon> etterlevelseDokumentasjonStorageService;
-    @Autowired
     protected StorageService<Melding> meldingStorageService;
     @Autowired
     protected StorageService<Tilbakemelding> tilbakemeldingStorageService;
@@ -97,6 +95,8 @@ public abstract class IntegrationTestBase {
     protected BehandlingService behandlingService;
     @Autowired
     protected EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+    @Autowired
+    protected EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
     @Autowired
     protected EtterlevelseService etterlevelseService;
     @Autowired
