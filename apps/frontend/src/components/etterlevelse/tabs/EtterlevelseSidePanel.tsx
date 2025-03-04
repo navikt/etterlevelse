@@ -7,6 +7,7 @@ import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
 import {AllInfo} from '../../krav/ViewKrav'
 import AccordianAlertModal from '../../risikoscenario/AccordianAlertModal'
 import KravRisikoscenario from '../../risikoscenario/kravRisikoscenario/KravRisikoscenario'
+import KravRisikoscenarioReadOnly from "../../risikoscenario/kravRisikoscenario/KravRisikoscenarioReadOnly";
 
 interface IProps {
   krav: TKravQL
@@ -112,6 +113,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
           <Tabs.Panel value="pvkDokumentasjon">
             <div className="mt-2 p-4">
               <KravRisikoscenario krav={krav} pvkDokument={pvkDokument} formRef={formRef} etterlevelseDokumentasjon={etterlevelseDokumentasjon}/>
+              <KravRisikoscenarioReadOnly krav={krav} pvkDokument={pvkDokument}/>
             </div>
           </Tabs.Panel>
         )}
