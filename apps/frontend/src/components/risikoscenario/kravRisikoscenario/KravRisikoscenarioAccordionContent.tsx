@@ -1,6 +1,6 @@
-import { PencilIcon } from '@navikt/aksel-icons'
-import { Button, Heading } from '@navikt/ds-react'
-import { RefObject, useEffect, useState } from 'react'
+import {PencilIcon} from '@navikt/aksel-icons'
+import {Button, Heading} from '@navikt/ds-react'
+import {RefObject, useEffect, useState} from 'react'
 import {
   addTiltakToRisikoscenario,
   getRisikoscenario,
@@ -12,7 +12,7 @@ import {
   deleteTiltak,
   getTiltak,
 } from '../../../api/TiltakApi'
-import { IRisikoscenario, ITiltak, ITiltakRisikoscenarioRelasjon } from '../../../constants'
+import {IRisikoscenario, ITiltak, ITiltakRisikoscenarioRelasjon, TEtterlevelseDokumentasjonQL} from '../../../constants'
 import TiltakReadMoreList from '../../tiltak/TiltakReadMoreList'
 import LeggTilEksisterendeTiltak from '../../tiltak/edit/LeggTilEksisterendeTiltak'
 import TiltakForm from '../../tiltak/edit/TiltakForm'
@@ -20,6 +20,7 @@ import RisikoscenarioView from '../RisikoscenarioView'
 import FjernRisikoscenarioFraKrav from '../edit/FjernRisikoscenarioFraKrav'
 import IngenTiltakField from '../edit/IngenTiltakField'
 import RisikoscenarioModalForm from '../edit/RisikoscenarioModalForm'
+import {user} from "../../../services/User";
 
 interface IProps {
   risikoscenario: IRisikoscenario
@@ -35,6 +36,7 @@ interface IProps {
   isCreateMode?: boolean
   noCopyButton?: boolean
   formRef: RefObject<any>
+  etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
 }
 
 export const KravRisikoscenarioAccordionContent = (props: IProps) => {
@@ -51,6 +53,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     isCreateMode,
     setIsTiltakFormActive,
     formRef,
+    etterlevelseDokumentasjon
   } = props
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
@@ -64,7 +67,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     setRisikoscenarioForKrav(
       risikoscenarioForKrav.map((risikoscenario) => {
         if (risikoscenario.id === updatedRisikoscenario.id) {
-          return { ...updatedRisikoscenario }
+          return {...updatedRisikoscenario}
         } else {
           return risikoscenario
         }
@@ -160,20 +163,25 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     } else setIsTiltakFormActive(false)
   }, [isCreateTiltakFormActive, isAddExistingMode, isEditTiltakFormActive])
 
+  const userHasAccess = () => {
+    return user.isAdmin() || etterlevelseDokumentasjon?.hasCurrentUserAccess || false
+  }
+
   return (
     <div>
-      <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true} />
+      <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true}/>
 
       {!isIngenTilgangFormDirty &&
         !isCreateTiltakFormActive &&
         !isEditTiltakFormActive &&
         !isAddExistingMode &&
-        !isCreateMode && (
+        !isCreateMode &&
+        userHasAccess() && (
           <div className="mt-5">
             <Button
               variant="tertiary"
               type="button"
-              icon={<PencilIcon aria-hidden />}
+              icon={<PencilIcon aria-hidden/>}
               onClick={() => setIsEditModalOpen(true)}
               className="mb-2"
             >
@@ -196,7 +204,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
           Følgende tiltak gjelder for dette risikoscenarioet
         </Heading>
 
-        {!risikoscenario.ingenTiltak && (
+        {!risikoscenario.ingenTiltak && userHasAccess() && (
           <div>
             {risikoscenario.tiltakIds.length !== 0 && (
               <TiltakReadMoreList

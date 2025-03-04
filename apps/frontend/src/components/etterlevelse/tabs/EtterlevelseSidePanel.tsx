@@ -1,10 +1,10 @@
-import { FileTextIcon } from '@navikt/aksel-icons'
-import { Button, Heading, Label, Tabs } from '@navikt/ds-react'
-import { Dispatch, RefObject, useEffect, useRef, useState } from 'react'
-import { IEtterlevelseMetadata, IKravVersjon, IPvkDokument, TKravQL } from '../../../constants'
-import { Markdown } from '../../common/Markdown'
+import {FileTextIcon} from '@navikt/aksel-icons'
+import {Button, Heading, Label, Tabs} from '@navikt/ds-react'
+import {Dispatch, RefObject, useEffect, useRef, useState} from 'react'
+import {IEtterlevelseMetadata, IKravVersjon, IPvkDokument, TEtterlevelseDokumentasjonQL, TKravQL} from '../../../constants'
+import {Markdown} from '../../common/Markdown'
 import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
-import { AllInfo } from '../../krav/ViewKrav'
+import {AllInfo} from '../../krav/ViewKrav'
 import AccordianAlertModal from '../../risikoscenario/AccordianAlertModal'
 import KravRisikoscenario from '../../risikoscenario/kravRisikoscenario/KravRisikoscenario'
 
@@ -16,6 +16,7 @@ interface IProps {
   alleKravVersjoner: IKravVersjon[]
   setIsPreview: (state: boolean) => void
   setIsPvkTabActive: (state: boolean) => void
+  etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
 }
 
 export const EtterlevelseSidePanel = (props: IProps) => {
@@ -27,6 +28,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
     alleKravVersjoner,
     setIsPreview,
     setIsPvkTabActive,
+    etterlevelseDokumentasjon
   } = props
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
   const [activeTab, setActiveTab] = useState<string>('mer')
@@ -103,13 +105,13 @@ export const EtterlevelseSidePanel = (props: IProps) => {
         </Tabs.List>
         <Tabs.Panel value="mer">
           <div className="mt-2 p-4">
-            <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />
+            <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner}/>
           </div>
         </Tabs.Panel>
         {pvkDokument && pvkDokument.skalUtforePvk && (
           <Tabs.Panel value="pvkDokumentasjon">
             <div className="mt-2 p-4">
-              <KravRisikoscenario krav={krav} pvkDokument={pvkDokument} formRef={formRef} />
+              <KravRisikoscenario krav={krav} pvkDokument={pvkDokument} formRef={formRef} etterlevelseDokumentasjon={etterlevelseDokumentasjon}/>
             </div>
           </Tabs.Panel>
         )}
@@ -117,7 +119,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
           <div className="mt-2 p-4">
             <div className="flex justify-between mb-2.5">
               <Label className="flex gap-1" size="medium">
-                <FileTextIcon fontSize="1.5rem" area-label="" aria-hidden />
+                <FileTextIcon fontSize="1.5rem" area-label="" aria-hidden/>
                 Notat
               </Label>
               <Button variant="secondary" size="xsmall" onClick={() => setIsNotatModalOpen(true)}>
@@ -133,7 +135,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
             />
 
             <div className="break-words">
-              <Markdown source={etterlevelseMetadata.notater} />
+              <Markdown source={etterlevelseMetadata.notater}/>
             </div>
           </div>
         </Tabs.Panel>

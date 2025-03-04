@@ -1,24 +1,27 @@
-import { Accordion, Alert, BodyLong, Button, List, ReadMore } from '@navikt/ds-react'
-import { RefObject, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
-import { getTiltakByPvkDokumentId } from '../../../api/TiltakApi'
+import {Accordion, Alert, BodyLong, Button, List, ReadMore} from '@navikt/ds-react'
+import {RefObject, useEffect, useState} from 'react'
+import {useNavigate} from 'react-router-dom'
+import {getRisikoscenarioByPvkDokumentId} from '../../../api/RisikoscenarioApi'
+import {getTiltakByPvkDokumentId} from '../../../api/TiltakApi'
 import {
   ERisikoscenarioType,
   IPvkDokument,
   IRisikoscenario,
-  ITiltak,
+  ITiltak, TEtterlevelseDokumentasjonQL,
   TKravQL,
 } from '../../../constants'
 import AccordianAlertModal from '../AccordianAlertModal'
 import CreateRisikoscenario from '../edit/CreateRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/LeggTilEksisterendeRisikoscenario'
 import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionContent'
+import KravRisikoscenarioAccordionContentReadOnly from './KravRisikoscenarioAccordionContentReadOnly'
+import {user} from "../../../services/User";
 
 interface IProps {
   krav: TKravQL
   pvkDokument: IPvkDokument
   formRef: RefObject<any>
+  etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
 }
 
 const unsavedAction = {
@@ -27,7 +30,7 @@ const unsavedAction = {
 }
 
 export const KravRisikoscenario = (props: IProps) => {
-  const { krav, pvkDokument, formRef } = props
+  const {krav, pvkDokument, formRef, etterlevelseDokumentasjon} = props
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
@@ -98,6 +101,10 @@ export const KravRisikoscenario = (props: IProps) => {
     }
   }
 
+  const userHasAccess = () => {
+    return user.isAdmin() || etterlevelseDokumentasjon?.hasCurrentUserAccess || false
+  }
+
   return (
     <div className="w-full">
       <ReadMore header="Slik dokumenterer dere risikoscenarioer og tiltak">
@@ -123,7 +130,7 @@ export const KravRisikoscenario = (props: IProps) => {
           </Alert>
         )}
 
-        {isLeggTilEksisterendeMode && (
+        {isLeggTilEksisterendeMode && userHasAccess() && (
           <LeggTilEksisterendeRisikoscenario
             kravnummer={krav.kravNummer}
             risikoscenarioer={risikoscenarioer}
@@ -157,6 +164,11 @@ export const KravRisikoscenario = (props: IProps) => {
                     </Accordion.Header>
                     {expanded && (
                       <Accordion.Content>
+                        <KravRisikoscenarioAccordionContentReadOnly
+                          risikoscenario={risikoscenario}
+                          alleRisikoscenarioer={alleRisikoscenarioer}
+                          tiltakList={tiltakList}/>
+
                         <KravRisikoscenarioAccordionContent
                           risikoscenario={risikoscenario}
                           alleRisikoscenarioer={alleRisikoscenarioer}
@@ -192,7 +204,7 @@ export const KravRisikoscenario = (props: IProps) => {
           />
         )}
 
-        {!isCreateMode && !isLeggTilEksisterendeMode && !isTiltakFormActive && (
+        {!isCreateMode && !isLeggTilEksisterendeMode && !isTiltakFormActive && userHasAccess() && (
           <div className="flex gap-2 mt-8 lg:flex-row flex-col">
             <Button
               size="small"
