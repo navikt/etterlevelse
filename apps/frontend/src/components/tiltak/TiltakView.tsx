@@ -1,5 +1,9 @@
-import { BodyLong, Label, List } from '@navikt/ds-react'
+import { List } from '@navikt/ds-react'
 import { IRisikoscenario, ITiltak } from '../../constants'
+import ReadOnlyField, {
+  ReadOnlyFieldBool,
+  ReadOnlyFieldDescriptionOptional,
+} from '../common/ReadOnlyField'
 
 interface IProps {
   tiltak: ITiltak
@@ -11,31 +15,34 @@ export const TiltakView = (props: IProps) => {
 
   return (
     <div>
-      <div className="my-3 flex gap-2">
-        <Label>Tiltaksbeskrivelse:</Label>
-        <BodyLong>{tiltak.beskrivelse}</BodyLong>
-      </div>
-      <div className="flex gap-2">
-        <Label>Tiltaksansvarlig:</Label>
-        <BodyLong>
-          {tiltak.ansvarlig && tiltak.ansvarlig.fullName}
-          {!tiltak.ansvarlig && 'Det er ikke satt en ansvarlig for tiltaket'}
-        </BodyLong>
-      </div>
-      <div className="mt-3 flex gap-2">
-        <Label>Tiltaksfrist:</Label>
-        <BodyLong>
-          {tiltak.frist && tiltak.frist}
-          {!tiltak.frist && 'Det er ikke satt en frist for tiltaket'}
-        </BodyLong>
-      </div>
+      <ReadOnlyField
+        label="Tiltaksbeskrivelse:"
+        description={tiltak.beskrivelse}
+        className="my-3 flex gap-2"
+      />
+
+      <ReadOnlyFieldBool
+        label="Tiltaksansvarlig:"
+        description={tiltak.ansvarlig.fullName}
+        className="flex gap-2"
+        isFalse={!tiltak.ansvarlig}
+        descriptionFalse="Det er ikke satt en ansvarlig for tiltaket"
+      />
+
+      <ReadOnlyFieldBool
+        label="Tiltaksfrist:"
+        description={tiltak.frist}
+        className="mt-3 flex gap-2"
+        isFalse={!tiltak.frist}
+        descriptionFalse="Det er ikke satt en frist for tiltaket"
+      />
 
       <div className="mt-3">
-        <Label>Tiltaket er gjenbrukt ved følgende scenarioer: </Label>
-
-        {tiltak.risikoscenarioIds.length === 0 && (
-          <BodyLong>Tiltaket er ikke gjenbrukt ved andre risikoscenarioer</BodyLong>
-        )}
+        <ReadOnlyFieldDescriptionOptional
+          label="Tiltaket er gjenbrukt ved følgende scenarioer:"
+          description="Tiltaket er ikke gjenbrukt ved andre risikoscenarioer"
+          isVisible={tiltak.risikoscenarioIds.length === 0}
+        />
 
         {tiltak.risikoscenarioIds.length !== 0 && risikoscenarioList && (
           <List as="ul">

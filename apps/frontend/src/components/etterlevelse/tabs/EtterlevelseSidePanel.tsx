@@ -1,7 +1,13 @@
 import { FileTextIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Label, Tabs } from '@navikt/ds-react'
 import { Dispatch, RefObject, useEffect, useRef, useState } from 'react'
-import { IEtterlevelseMetadata, IKravVersjon, IPvkDokument, TKravQL } from '../../../constants'
+import {
+  IEtterlevelseMetadata,
+  IKravVersjon,
+  IPvkDokument,
+  TEtterlevelseDokumentasjonQL,
+  TKravQL,
+} from '../../../constants'
 import { Markdown } from '../../common/Markdown'
 import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
 import { AllInfo } from '../../krav/ViewKrav'
@@ -16,6 +22,7 @@ interface IProps {
   alleKravVersjoner: IKravVersjon[]
   setIsPreview: (state: boolean) => void
   setIsPvkTabActive: (state: boolean) => void
+  etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
 }
 
 export const EtterlevelseSidePanel = (props: IProps) => {
@@ -27,6 +34,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
     alleKravVersjoner,
     setIsPreview,
     setIsPvkTabActive,
+    etterlevelseDokumentasjon,
   } = props
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
   const [activeTab, setActiveTab] = useState<string>('mer')
@@ -109,7 +117,15 @@ export const EtterlevelseSidePanel = (props: IProps) => {
         {pvkDokument && pvkDokument.skalUtforePvk && (
           <Tabs.Panel value="pvkDokumentasjon">
             <div className="mt-2 p-4">
-              <KravRisikoscenario krav={krav} pvkDokument={pvkDokument} formRef={formRef} />
+              <KravRisikoscenario
+                krav={krav}
+                pvkDokument={pvkDokument}
+                formRef={formRef}
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              />
+
+              {/* Denne må vi vente med til vi får tilganger på plass
+              <KravRisikoscenarioReadOnly krav={krav} pvkDokument={pvkDokument} /> */}
             </div>
           </Tabs.Panel>
         )}

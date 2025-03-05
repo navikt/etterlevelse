@@ -1,11 +1,11 @@
-import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Button, Modal, ReadMore } from '@navikt/ds-react'
-import { RefObject, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { removeTiltakToRisikoscenario } from '../../api/RisikoscenarioApi'
-import { deleteTiltak, getTiltak, updateTiltak } from '../../api/TiltakApi'
-import { IRisikoscenario, ITiltak } from '../../constants'
-import { user } from '../../services/User'
+import {PencilIcon, TrashIcon} from '@navikt/aksel-icons'
+import {Button, Modal, ReadMore} from '@navikt/ds-react'
+import {RefObject, useState} from 'react'
+import {useNavigate} from 'react-router-dom'
+import {removeTiltakToRisikoscenario} from '../../api/RisikoscenarioApi'
+import {deleteTiltak, getTiltak, updateTiltak} from '../../api/TiltakApi'
+import {IRisikoscenario, ITiltak} from '../../constants'
+import {user} from '../../services/User'
 import TiltakView from './TiltakView'
 import TiltakForm from './edit/TiltakForm'
 
@@ -95,7 +95,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
       setTiltakList(
         tiltakList.map((tiltak) => {
           if (tiltak.id === response.id) {
-            return { ...response }
+            return {...response}
           } else {
             return tiltak
           }
@@ -148,11 +148,11 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
           }}
           header={tiltak.navn}
         >
-          <TiltakView tiltak={tiltak} risikoscenarioList={risikoscenarioList} />
+          <TiltakView tiltak={tiltak} risikoscenarioList={risikoscenarioList}/>
         </ReadMore>
       )}
 
-      {!(user.isPersonvernombud() || user.isAdmin()) && (
+      {(user.isPersonvernombud() || user.isAdmin()) && (
         <div>
           {isEditMode && (
             <TiltakForm
@@ -177,7 +177,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
                   type="button"
                   variant="tertiary"
                   size="small"
-                  icon={<PencilIcon title="" aria-hidden />}
+                  icon={<PencilIcon title="" aria-hidden/>}
                   onClick={() => {
                     setIsEditTiltakFormActive(true)
                     setIsEditMode(true)
@@ -190,7 +190,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
                   type="button"
                   variant="tertiary"
                   size="small"
-                  icon={<TrashIcon title="" aria-hidden />}
+                  icon={<TrashIcon title="" aria-hidden/>}
                   onClick={() => setIsDeleteModalOpen(true)}
                 >
                   Slett tiltak
@@ -203,7 +203,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
       {isDeleteModalOpen && (
         <Modal
           open={isDeleteModalOpen}
-          header={{ heading: 'Slette tiltak fra risikoscenario' }}
+          header={{heading: 'Slette tiltak fra risikoscenario'}}
           onClose={() => setIsDeleteModalOpen(false)}
         >
           <Modal.Body>Er du sikkert på at du vil slette tiltaket?</Modal.Body>

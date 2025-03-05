@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client'
+import {useQuery} from '@apollo/client'
 import {
   Alert,
   BodyShort,
@@ -14,10 +14,10 @@ import {
   Tag,
   ToggleGroup,
 } from '@navikt/ds-react'
-import { FormikProps } from 'formik'
+import {FormikProps} from 'formik'
 import moment from 'moment'
-import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from 'react'
+import {useLocation, useNavigate, useParams} from 'react-router-dom'
 import {
   createEtterlevelse,
   getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
@@ -29,8 +29,8 @@ import {
   mapEtterlevelseMetadataToFormValue,
   updateEtterlevelseMetadata,
 } from '../../api/EtterlevelseMetadataApi'
-import { TKravId, getKravByKravNummer } from '../../api/KravApi'
-import { getPvkDokumentByEtterlevelseDokumentId } from '../../api/PvkDokumentApi'
+import {TKravId, getKravByKravNummer} from '../../api/KravApi'
+import {getPvkDokumentByEtterlevelseDokumentId} from '../../api/PvkDokumentApi'
 import {
   EEtterlevelseStatus,
   EKravFilterType,
@@ -43,15 +43,15 @@ import {
   TEtterlevelseDokumentasjonQL,
   TKravQL,
 } from '../../constants'
-import { getKravWithEtterlevelseQuery } from '../../query/KravQuery'
-import { ampli, userRoleEventProp } from '../../services/Amplitude'
-import { user } from '../../services/User'
-import { Markdown } from '../common/Markdown'
-import { getEtterlevelseStatus } from '../etterlevelseDokumentasjon/common/utils'
-import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
+import {getKravWithEtterlevelseQuery} from '../../query/KravQuery'
+import {ampli, userRoleEventProp} from '../../services/Amplitude'
+import {user} from '../../services/User'
+import {Markdown} from '../common/Markdown'
+import {getEtterlevelseStatus} from '../etterlevelseDokumentasjon/common/utils'
+import {syncEtterlevelseKriterieBegrunnelseWithKrav} from '../etterlevelseDokumentasjonTema/common/utils'
 import Etterlevelser from '../krav/Etterlevelser'
 import ExpiredAlert from '../krav/ExpiredAlert'
-import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
+import {Tilbakemeldinger} from '../krav/tilbakemelding/Tilbakemelding'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import EtterlevelseViewFields from './EtterlevelseViewFields'
 import EtterlevelseSidePanel from './tabs/EtterlevelseSidePanel'
@@ -84,7 +84,7 @@ export const EtterlevelseKravView = (props: IProps) => {
     nextKravToDocument,
   } = props
 
-  const { data, loading } = useQuery<{ kravById: TKravQL }, TKravId>(getKravWithEtterlevelseQuery, {
+  const {data, loading} = useQuery<{ kravById: TKravQL }, TKravId>(getKravWithEtterlevelseQuery, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
     fetchPolicy: 'no-cache',
@@ -97,7 +97,7 @@ export const EtterlevelseKravView = (props: IProps) => {
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<IEtterlevelse>()
   const etterlevelseFormRef: React.Ref<FormikProps<IEtterlevelse> | undefined> = useRef(undefined)
   const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<IKravVersjon[]>([
-    { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
+    {kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast'},
   ])
   const [statusText, setStatustext] = useState<string>('')
   const [isNavigationModalOpen, setIsNavigationModalOpen] = useState<boolean>(false)
@@ -371,7 +371,7 @@ export const EtterlevelseKravView = (props: IProps) => {
 
                 {krav.versjonEndringer && (
                   <ReadMore header="Se hva som er nytt">
-                    <Markdown source={krav.versjonEndringer} />
+                    <Markdown source={krav.versjonEndringer}/>
                   </ReadMore>
                 )}
               </div>
@@ -387,7 +387,7 @@ export const EtterlevelseKravView = (props: IProps) => {
                         <Heading size="small" level="2">
                           Begrunnelse for at kravet er utgått
                         </Heading>
-                        <Markdown source={krav.beskrivelse} />
+                        <Markdown source={krav.beskrivelse}/>
                       </div>
                     )
                   }
@@ -398,7 +398,7 @@ export const EtterlevelseKravView = (props: IProps) => {
                 <Heading level="2" size="small">
                   Hensikten med kravet
                 </Heading>
-                <Markdown source={krav.hensikt} />
+                <Markdown source={krav.hensikt}/>
               </div>
               <Tabs
                 value={currentTab}
@@ -446,8 +446,8 @@ export const EtterlevelseKravView = (props: IProps) => {
                         value={isPreview ? 'ON' : 'OFF'}
                         onChange={(value) => setIsPreview(value === 'ON' ? true : false)}
                       >
-                        <ToggleGroup.Item value="OFF" label="Redigeringsvisning" />
-                        <ToggleGroup.Item value="ON" label="Forhåndsvisning" />
+                        <ToggleGroup.Item value="OFF" label="Redigeringsvisning"/>
+                        <ToggleGroup.Item value="ON" label="Forhåndsvisning"/>
                       </ToggleGroup>
                     )}
 
@@ -470,8 +470,8 @@ export const EtterlevelseKravView = (props: IProps) => {
                               value="check"
                               description={
                                 (((etterlevelseDokumentasjon?.hasCurrentUserAccess &&
-                                  etterlevelseDokumentasjon?.forGjenbruk) ||
-                                  (etterlevelseDokumentasjon?.forGjenbruk && user.isAdmin())) &&
+                                      etterlevelseDokumentasjon?.forGjenbruk) ||
+                                    (etterlevelseDokumentasjon?.forGjenbruk && user.isAdmin())) &&
                                   'De som gjenbruker etterlevelsesdokumentet ditt vil få fremhevet kravet når de foretar sin egen vurdering') ||
                                 ''
                               }
@@ -523,12 +523,12 @@ export const EtterlevelseKravView = (props: IProps) => {
                 </Tabs.Panel>
                 <Tabs.Panel value="etterlevelser">
                   <div className="mt-2">
-                    <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />
+                    <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion/>
                   </div>
                 </Tabs.Panel>
                 <Tabs.Panel value="tilbakemeldinger">
                   <div className="mt-2">
-                    <Tilbakemeldinger krav={krav} hasKravExpired={false} />
+                    <Tilbakemeldinger krav={krav} hasKravExpired={false}/>
                   </div>
                 </Tabs.Panel>
               </Tabs>
@@ -542,6 +542,7 @@ export const EtterlevelseKravView = (props: IProps) => {
               alleKravVersjoner={alleKravVersjoner}
               setIsPreview={setIsPreview}
               setIsPvkTabActive={setIsPvkTabActive}
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             />
           </div>
 
@@ -556,10 +557,10 @@ export const EtterlevelseKravView = (props: IProps) => {
             <Modal.Body>
               {isSavingChanges && (
                 <div className="flex justify-center items-center w-full">
-                  <Loader size="2xlarge" title="lagrer endringer" />
+                  <Loader size="2xlarge" title="lagrer endringer"/>
                 </div>
               )}
-              <br />
+              <br/>
             </Modal.Body>
             <Modal.Footer>
               <Button
@@ -599,7 +600,7 @@ export const EtterlevelseKravView = (props: IProps) => {
           <Modal
             open={isNavigationModalOpen && !isTabAlertActive}
             onClose={() => setIsNavigationModalOpen(false)}
-            header={{ heading: 'Endringene er lagret' }}
+            header={{heading: 'Endringene er lagret'}}
           >
             <Modal.Body>
               <BodyShort>
