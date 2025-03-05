@@ -1,21 +1,22 @@
-import {Accordion, Alert, BodyLong, Button, List, ReadMore} from '@navikt/ds-react'
-import {RefObject, useEffect, useState} from 'react'
-import {useNavigate} from 'react-router-dom'
-import {getRisikoscenarioByPvkDokumentId} from '../../../api/RisikoscenarioApi'
-import {getTiltakByPvkDokumentId} from '../../../api/TiltakApi'
+import { Accordion, Alert, Button } from '@navikt/ds-react'
+import { RefObject, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
+import { getTiltakByPvkDokumentId } from '../../../api/TiltakApi'
 import {
   ERisikoscenarioType,
   IPvkDokument,
   IRisikoscenario,
-  ITiltak, TEtterlevelseDokumentasjonQL,
+  ITiltak,
+  TEtterlevelseDokumentasjonQL,
   TKravQL,
 } from '../../../constants'
+import { user } from '../../../services/User'
 import AccordianAlertModal from '../AccordianAlertModal'
 import CreateRisikoscenario from '../edit/CreateRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/LeggTilEksisterendeRisikoscenario'
 import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionContent'
-import KravRisikoscenarioAccordionContentReadOnly from './KravRisikoscenarioAccordionContentReadOnly'
-import {user} from "../../../services/User";
+import { KravRisikoscenarioReadMore } from './KravRisikoscenarioReadMore'
 
 interface IProps {
   krav: TKravQL
@@ -30,7 +31,7 @@ const unsavedAction = {
 }
 
 export const KravRisikoscenario = (props: IProps) => {
-  const {krav, pvkDokument, formRef, etterlevelseDokumentasjon} = props
+  const { krav, pvkDokument, formRef, etterlevelseDokumentasjon } = props
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
@@ -107,21 +108,7 @@ export const KravRisikoscenario = (props: IProps) => {
 
   return (
     <div className="w-full">
-      <ReadMore header="Slik dokumenterer dere risikoscenarioer og tiltak">
-        <BodyLong>
-          Her dokumenter dere risikoscenarioer og tiltak som gjelder for dette kravet. Her kan dere:
-        </BodyLong>
-        <List>
-          <List.Item>Opprette nye risikoscenarioer.</List.Item>
-          <List.Item>
-            Koble på eksisterende risikoscenarioer som dere har beskrevet andre steder i løsninga.
-          </List.Item>
-          <List.Item>Opprette nye tiltak.</List.Item>
-          <List.Item>
-            Koble på eksisterende tiltak som dere har beskrevet andre steder i løsninga.
-          </List.Item>
-        </List>
-      </ReadMore>
+      <KravRisikoscenarioReadMore />
 
       <div className="mt-5">
         {!isCreateMode && !isLeggTilEksisterendeMode && risikoscenarioForKrav.length === 0 && (
@@ -164,11 +151,6 @@ export const KravRisikoscenario = (props: IProps) => {
                     </Accordion.Header>
                     {expanded && (
                       <Accordion.Content>
-                        <KravRisikoscenarioAccordionContentReadOnly
-                          risikoscenario={risikoscenario}
-                          alleRisikoscenarioer={alleRisikoscenarioer}
-                          tiltakList={tiltakList}/>
-
                         <KravRisikoscenarioAccordionContent
                           risikoscenario={risikoscenario}
                           alleRisikoscenarioer={alleRisikoscenarioer}
