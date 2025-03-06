@@ -1,6 +1,5 @@
-import {PencilIcon} from '@navikt/aksel-icons'
-import {Button, Heading} from '@navikt/ds-react'
-import {RefObject, useEffect, useState} from 'react'
+import { Button, Heading } from '@navikt/ds-react'
+import { RefObject, useEffect, useState } from 'react'
 import {
   addTiltakToRisikoscenario,
   getRisikoscenario,
@@ -12,15 +11,20 @@ import {
   deleteTiltak,
   getTiltak,
 } from '../../../api/TiltakApi'
-import {IRisikoscenario, ITiltak, ITiltakRisikoscenarioRelasjon, TEtterlevelseDokumentasjonQL} from '../../../constants'
+import {
+  IRisikoscenario,
+  ITiltak,
+  ITiltakRisikoscenarioRelasjon,
+  TEtterlevelseDokumentasjonQL,
+} from '../../../constants'
+import { user } from '../../../services/User'
 import TiltakReadMoreList from '../../tiltak/TiltakReadMoreList'
 import LeggTilEksisterendeTiltak from '../../tiltak/edit/LeggTilEksisterendeTiltak'
 import TiltakForm from '../../tiltak/edit/TiltakForm'
 import RisikoscenarioView from '../RisikoscenarioView'
-import FjernRisikoscenarioFraKrav from '../edit/FjernRisikoscenarioFraKrav'
 import IngenTiltakField from '../edit/IngenTiltakField'
 import RisikoscenarioModalForm from '../edit/RisikoscenarioModalForm'
-import {user} from "../../../services/User";
+import RedigerRisikoscenarioButtons from './RedigerRisikoscenarioButtons/RedigerRisikoscenarioButtons'
 
 interface IProps {
   risikoscenario: IRisikoscenario
@@ -53,7 +57,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     isCreateMode,
     setIsTiltakFormActive,
     formRef,
-    etterlevelseDokumentasjon
+    etterlevelseDokumentasjon,
   } = props
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
@@ -67,7 +71,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     setRisikoscenarioForKrav(
       risikoscenarioForKrav.map((risikoscenario) => {
         if (risikoscenario.id === updatedRisikoscenario.id) {
-          return {...updatedRisikoscenario}
+          return { ...updatedRisikoscenario }
         } else {
           return risikoscenario
         }
@@ -169,7 +173,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
 
   return (
     <div>
-      <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true}/>
+      <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true} />
 
       {!isIngenTilgangFormDirty &&
         !isCreateTiltakFormActive &&
@@ -177,26 +181,15 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
         !isAddExistingMode &&
         !isCreateMode &&
         userHasAccess() && (
-          <div className="mt-5">
-            <Button
-              variant="tertiary"
-              type="button"
-              icon={<PencilIcon aria-hidden/>}
-              onClick={() => setIsEditModalOpen(true)}
-              className="mb-2"
-            >
-              Redigèr risikoscenario
-            </Button>
-
-            <FjernRisikoscenarioFraKrav
-              kravnummer={kravnummer}
-              risikoscenario={risikoscenario}
-              risikoscenarioer={risikoscenarioer}
-              setRisikoscenarioer={setRisikoscenarioer}
-              risikoscenarioForKrav={risikoscenarioForKrav}
-              setRisikoscenarioForKrav={setRisikoscenarioForKrav}
-            />
-          </div>
+          <RedigerRisikoscenarioButtons
+            setIsEditModalOpen={setIsEditModalOpen}
+            kravnummer={kravnummer}
+            risikoscenario={risikoscenario}
+            risikoscenarioer={risikoscenarioer}
+            setRisikoscenarioer={setRisikoscenarioer}
+            risikoscenarioForKrav={risikoscenarioForKrav}
+            setRisikoscenarioForKrav={setRisikoscenarioForKrav}
+          />
         )}
 
       <div className="mt-12">
@@ -294,4 +287,5 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     </div>
   )
 }
+
 export default KravRisikoscenarioAccordionContent
