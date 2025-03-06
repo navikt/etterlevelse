@@ -16,6 +16,7 @@ import AccordianAlertModal from '../AccordianAlertModal'
 import CreateRisikoscenario from '../edit/CreateRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/LeggTilEksisterendeRisikoscenario'
 import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionContent'
+import { KravRisikoscenarioOvrigeRisikoscenarier } from './KravRisikoscenarioOvrigeRisikoscenarier/KravRisikoscenarioOvrigeRisikoscenarier'
 import { KravRisikoscenarioReadMore } from './KravRisikoscenarioReadMore'
 
 interface IProps {
@@ -223,19 +224,7 @@ export const KravRisikoscenario = (props: IProps) => {
         )}
 
         {!isCreateMode && !isLeggTilEksisterendeMode && pvkDokument && (
-          <div className="mt-5">
-            <Button
-              variant="tertiary"
-              type="button"
-              onClick={() => {
-                navigate(
-                  `/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/pvkdokument/${pvkDokument.id}/4`
-                )
-              }}
-            >
-              Gå til liste over øvrige risikoscenarioer
-            </Button>
-          </div>
+          <KravRisikoscenarioOvrigeRisikoscenarier pvkDokument={pvkDokument} />
         )}
 
         <AccordianAlertModal

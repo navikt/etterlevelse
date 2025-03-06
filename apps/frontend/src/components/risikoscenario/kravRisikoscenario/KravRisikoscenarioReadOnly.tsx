@@ -9,7 +9,9 @@ import {
   ITiltak,
   TKravQL,
 } from '../../../constants'
+import { user } from '../../../services/User'
 import KravRisikoscenarioAccordionContentReadOnly from './KravRisikoscenarioAccordionContentReadOnly'
+import { KravRisikoscenarioOvrigeRisikoscenarier } from './KravRisikoscenarioOvrigeRisikoscenarier/KravRisikoscenarioOvrigeRisikoscenarier'
 import { KravRisikoscenarioReadMore } from './KravRisikoscenarioReadMore'
 
 interface IProps {
@@ -78,6 +80,10 @@ export const KravRisikoscenarioReadOnly = (props: IProps) => {
             ))}
           </Accordion>
         </div>
+
+        {user.isPersonvernombud() && (
+          <KravRisikoscenarioOvrigeRisikoscenarier pvkDokument={pvkDokument} />
+        )}
       </div>
     </div>
   )
