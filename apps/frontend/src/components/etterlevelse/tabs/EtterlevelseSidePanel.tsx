@@ -8,11 +8,13 @@ import {
   TEtterlevelseDokumentasjonQL,
   TKravQL,
 } from '../../../constants'
+import { user } from '../../../services/User'
 import { Markdown } from '../../common/Markdown'
 import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
 import { AllInfo } from '../../krav/ViewKrav'
 import AccordianAlertModal from '../../risikoscenario/AccordianAlertModal'
 import KravRisikoscenario from '../../risikoscenario/kravRisikoscenario/KravRisikoscenario'
+import KravRisikoscenarioReadOnly from '../../risikoscenario/kravRisikoscenario/KravRisikoscenarioReadOnly'
 
 interface IProps {
   krav: TKravQL
@@ -41,6 +43,10 @@ export const EtterlevelseSidePanel = (props: IProps) => {
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [selectedTab, setSelectedTab] = useState<string>('')
   const formRef: RefObject<any> = useRef(undefined)
+
+  const userHasAccess = () => {
+    return user.isAdmin() || etterlevelseDokumentasjon?.hasCurrentUserAccess || false
+  }
 
   useEffect(() => {
     if (
@@ -117,15 +123,18 @@ export const EtterlevelseSidePanel = (props: IProps) => {
         {pvkDokument && pvkDokument.skalUtforePvk && (
           <Tabs.Panel value="pvkDokumentasjon">
             <div className="mt-2 p-4">
-              <KravRisikoscenario
-                krav={krav}
-                pvkDokument={pvkDokument}
-                formRef={formRef}
-                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-              />
+              {userHasAccess() && (
+                <KravRisikoscenario
+                  krav={krav}
+                  pvkDokument={pvkDokument}
+                  formRef={formRef}
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                />
+              )}
 
-              {/* Denne må vi vente med til vi får tilganger på plass
-              <KravRisikoscenarioReadOnly krav={krav} pvkDokument={pvkDokument} /> */}
+              {!userHasAccess() && (
+                <KravRisikoscenarioReadOnly krav={krav} pvkDokument={pvkDokument} />
+              )}
             </div>
           </Tabs.Panel>
         )}
