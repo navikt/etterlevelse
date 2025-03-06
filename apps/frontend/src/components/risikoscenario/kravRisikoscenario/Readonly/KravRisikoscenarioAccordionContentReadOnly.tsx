@@ -1,8 +1,8 @@
 import { Heading } from '@navikt/ds-react'
-import { IRisikoscenario, ITiltak } from '../../../constants'
-import TiltakView from '../../tiltak/TiltakView'
-import RisikoscenarioViewReadOnly from '../RisikoscenarioViewReadOnly'
-import KravRisikoscenarioIngenTiltak from './KravRisikoscenarioIngenTiltak/KravRisikoscenarioIngenTiltak'
+import { IRisikoscenario, ITiltak } from '../../../../constants'
+import TiltakView from '../../../tiltak/TiltakView'
+import RisikoscenarioViewReadOnly from '../../RisikoscenarioViewReadOnly'
+import KravRisikoscenarioIngenTiltak from '../KravRisikoscenarioIngenTiltak/KravRisikoscenarioIngenTiltak'
 
 interface IProps {
   risikoscenario: IRisikoscenario

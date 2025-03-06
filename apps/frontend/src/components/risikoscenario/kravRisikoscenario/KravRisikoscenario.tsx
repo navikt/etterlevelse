@@ -17,7 +17,7 @@ import CreateRisikoscenario from '../edit/CreateRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/LeggTilEksisterendeRisikoscenario'
 import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionContent'
 import { KravRisikoscenarioOvrigeRisikoscenarier } from './KravRisikoscenarioOvrigeRisikoscenarier/KravRisikoscenarioOvrigeRisikoscenarier'
-import { KravRisikoscenarioReadMore } from './KravRisikoscenarioReadMore'
+import { KravRisikoscenarioReadMore } from './KravRisikoscenarioReadMore/KravRisikoscenarioReadMore'
 
 interface IProps {
   krav: TKravQL

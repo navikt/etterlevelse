@@ -14,7 +14,7 @@ import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
 import { AllInfo } from '../../krav/ViewKrav'
 import AccordianAlertModal from '../../risikoscenario/AccordianAlertModal'
 import KravRisikoscenario from '../../risikoscenario/kravRisikoscenario/KravRisikoscenario'
-import KravRisikoscenarioReadOnly from '../../risikoscenario/kravRisikoscenario/KravRisikoscenarioReadOnly'
+import KravRisikoscenarioReadOnly from '../../risikoscenario/kravRisikoscenario/Readonly/KravRisikoscenarioReadOnly'
 
 interface IProps {
   krav: TKravQL
