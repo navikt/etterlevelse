@@ -1,4 +1,3 @@
-import { Heading } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import {
   addTiltakToRisikoscenario,
@@ -18,11 +17,8 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '../../../../constants'
 import { user } from '../../../../services/User'
-import TiltakReadMoreList from '../../../tiltak/TiltakReadMoreList'
-import LeggTilEksisterendeTiltak from '../../../tiltak/edit/LeggTilEksisterendeTiltak'
-import TiltakForm from '../../../tiltak/edit/TiltakForm'
-import RisikoscenarioView from '../../RisikoscenarioView'
 import RisikoscenarioModalForm from '../../edit/RisikoscenarioModalForm'
+import { KravRisikoscenarioAccordionContentEditMode } from './KravRisikoscenarioAccordionContentEditMode'
 import { KravRisikoscenarioAccordionContentLimitedReadonly } from './KravRisikoscenarioAccordionContentLimitedReadonly'
 
 interface IProps {
@@ -203,54 +199,23 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
         )}
 
       {isCreateMode && isAddExistingMode && isCreateTiltakFormActive && isEditTiltakFormActive && (
-        <div>
-          <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true} />
-
-          <div className="mt-12">
-            <Heading level="3" size="small">
-              Følgende tiltak gjelder for dette risikoscenarioet
-            </Heading>
-
-            {!risikoscenario.ingenTiltak && userHasAccess() && (
-              <div>
-                {risikoscenario.tiltakIds.length !== 0 && (
-                  <TiltakReadMoreList
-                    risikoscenario={activeRisikoscenario}
-                    risikoscenarioList={alleRisikoscenarioer}
-                    tiltakList={tiltakList}
-                    setTiltakList={setTiltakList}
-                    setIsEditTiltakFormActive={setIsEditTiltakFormActive}
-                    isCreateTiltakFormActive={isCreateTiltakFormActive}
-                    isAddExistingMode={isAddExistingMode}
-                    customDelete={submitDeleteTiltak}
-                    formRef={formRef}
-                  />
-                )}
-              </div>
-            )}
-
-            {isCreateTiltakFormActive && (
-              <TiltakForm
-                title="Opprett nytt tiltak"
-                initialValues={{} as ITiltak}
-                pvkDokumentId={risikoscenario.pvkDokumentId}
-                submit={submitCreateTiltak}
-                close={() => setIsCreateTiltakFormActive(false)}
-                formRef={formRef}
-              />
-            )}
-
-            {isAddExistingMode && (
-              <LeggTilEksisterendeTiltak
-                risikoscenario={activeRisikoscenario}
-                tiltakList={tiltakList}
-                setIsAddExisitingMode={setIsAddExisitingMode}
-                customSubmit={submitExistingTiltak}
-                formRef={formRef}
-              />
-            )}
-          </div>
-        </div>
+        <KravRisikoscenarioAccordionContentEditMode
+          activeRisikoscenario={activeRisikoscenario}
+          userHasAccess={userHasAccess}
+          risikoscenario={risikoscenario}
+          alleRisikoscenarioer={alleRisikoscenarioer}
+          tiltakList={tiltakList}
+          setTiltakList={setTiltakList}
+          setIsEditTiltakFormActive={setIsEditTiltakFormActive}
+          isCreateTiltakFormActive={isCreateTiltakFormActive}
+          isAddExistingMode={isAddExistingMode}
+          submitDeleteTiltak={submitDeleteTiltak}
+          formRef={formRef}
+          setIsCreateTiltakFormActive={setIsCreateTiltakFormActive}
+          setIsAddExisitingMode={setIsAddExisitingMode}
+          submitCreateTiltak={submitCreateTiltak}
+          submitExistingTiltak={submitExistingTiltak}
+        />
       )}
 
       {isEditModalOpen && (

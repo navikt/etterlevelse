@@ -1,10 +1,11 @@
-import { Button, Heading } from '@navikt/ds-react'
+import { Button } from '@navikt/ds-react'
 import { Dispatch, RefObject, SetStateAction } from 'react'
 import { IRisikoscenario, ITiltak } from '../../../../constants'
 import TiltakReadMoreList from '../../../tiltak/TiltakReadMoreList'
 import RisikoscenarioView from '../../RisikoscenarioView'
 import IngenTiltakField from '../../edit/IngenTiltakField'
 import RedigerRisikoscenarioButtons from '../RedigerRisikoscenarioButtons/RedigerRisikoscenarioButtons'
+import KravRisikoscenarioAccordionContentHeader from './KravRisikoscenarioAccordionContentHeader'
 
 interface IProps {
   activeRisikoscenario: IRisikoscenario
@@ -73,9 +74,7 @@ export const KravRisikoscenarioAccordionContentLimitedReadonly = (props: IProps)
       )}
 
       <div className="mt-12">
-        <Heading level="3" size="small">
-          Følgende tiltak gjelder for dette risikoscenarioet
-        </Heading>
+        <KravRisikoscenarioAccordionContentHeader />
 
         {!risikoscenario.ingenTiltak && userHasAccess() && (
           <div>

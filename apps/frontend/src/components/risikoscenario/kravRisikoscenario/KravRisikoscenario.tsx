@@ -15,8 +15,7 @@ import { user } from '../../../services/User'
 import AccordianAlertModal from '../AccordianAlertModal'
 import CreateRisikoscenario from '../edit/CreateRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/LeggTilEksisterendeRisikoscenario'
-import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionContent'
-import KravRisikoscenarioAccordionContentExample from './KravRisikoscenarioAccordionContent/KravRisikoscenarioAccordionContent'
+import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionContent/KravRisikoscenarioAccordionContent'
 import { KravRisikoscenarioOvrigeRisikoscenarier } from './KravRisikoscenarioOvrigeRisikoscenarier/KravRisikoscenarioOvrigeRisikoscenarier'
 import { KravRisikoscenarioReadMore } from './KravRisikoscenarioReadMore/KravRisikoscenarioReadMore'
 
@@ -155,21 +154,6 @@ export const KravRisikoscenario = (props: IProps) => {
                     {expanded && (
                       <Accordion.Content>
                         <KravRisikoscenarioAccordionContent
-                          risikoscenario={risikoscenario}
-                          alleRisikoscenarioer={alleRisikoscenarioer}
-                          isCreateMode={isCreateMode}
-                          kravnummer={krav.kravNummer}
-                          risikoscenarioer={risikoscenarioer}
-                          setRisikoscenarioer={setRisikoscenarioer}
-                          risikoscenarioForKrav={risikoscenarioForKrav}
-                          setRisikoscenarioForKrav={setRisikoscenarioForKrav}
-                          tiltakList={tiltakList}
-                          setTiltakList={setTiltakList}
-                          setIsTiltakFormActive={setIsTiltakFormActive}
-                          formRef={formRef}
-                        />
-
-                        <KravRisikoscenarioAccordionContentExample
                           risikoscenario={risikoscenario}
                           alleRisikoscenarioer={alleRisikoscenarioer}
                           isCreateMode={isCreateMode}
