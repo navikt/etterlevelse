@@ -33,8 +33,8 @@ public class P360Service {
                     P360CasePageResponse.class);
 
             if (response.hasBody()) {
+                log.error(requireNonNull(response.getBody()).toString());
                 cases.addAll(requireNonNull(response.getBody()).getCases());
-
                 if(response.getBody().getErrorMessage() != null) {
                     log.error(response.getBody().getErrorMessage());
                 }
