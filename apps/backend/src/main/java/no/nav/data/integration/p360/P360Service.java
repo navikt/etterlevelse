@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.integration.p360.dto.*;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -130,6 +131,7 @@ public class P360Service {
 
             var response = restTemplate.postForEntity(p360Properties.getTokenUrl(), body, P360AuthToken.class);
             headers.setBearerAuth(requireNonNull(response.getBody()).getAccess_token());
+            headers.setContentType(MediaType.APPLICATION_JSON);
             headers.set("authkey", p360Properties.getAuthKey());
             headers.set("clientid", p360Properties.getClientId());
 
