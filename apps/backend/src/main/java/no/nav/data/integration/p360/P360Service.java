@@ -30,6 +30,7 @@ public class P360Service {
         List<P360Case> cases = new ArrayList<>();
         try {
             log.info("Forwarding request to P360");
+            log.debug("request content: {}", new HttpEntity<>( P360GetRequest.builder().Title("%" + title +  "%").build(), createHeadersWithAuth()));
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
                     new HttpEntity<>( P360GetRequest.builder().Title("%" + title +  "%").build(), createHeadersWithAuth()),
                     P360CasePageResponse.class);
@@ -139,7 +140,6 @@ public class P360Service {
             headers.set("clientid", p360Properties.getClientId());
 
             log.info("successfully created auth headers for p360");
-            log.debug(headers.toString());
             return headers;
 
         } catch (RestClientException e) {
