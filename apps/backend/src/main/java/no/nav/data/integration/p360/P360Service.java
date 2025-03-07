@@ -35,9 +35,9 @@ public class P360Service {
             log.error(response.getStatusCode().toString());
             log.error(response.toString());
 
-            if (response.hasBody()) {
-                log.error(requireNonNull(response.getBody()).toString());
-                cases.addAll(requireNonNull(response.getBody()).getCases());
+            if (response.getBody() != null) {
+                log.error(response.getBody().toString());
+                cases.addAll(response.getBody().getCases());
                 if(response.getBody().getErrorMessage() != null) {
                     log.error(response.getBody().getErrorMessage());
                 }
@@ -55,8 +55,8 @@ public class P360Service {
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
                     new HttpEntity<>( P360GetRequest.builder().CaseNumber(caseNumber).build(), createHeadersWithAuth()),
                     P360CasePageResponse.class);
-            if (response.hasBody()) {
-                cases.addAll(requireNonNull(response.getBody()).getCases());
+            if (response.getBody() != null) {
+                cases.addAll(response.getBody().getCases());
                 if(response.getBody().getErrorMessage() != null) {
                     log.error(response.getBody().getErrorMessage());
                 }
