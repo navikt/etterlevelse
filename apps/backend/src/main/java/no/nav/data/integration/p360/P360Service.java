@@ -33,12 +33,12 @@ public class P360Service {
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
                     new HttpEntity<>( P360GetRequest.builder().Title("%" + title +  "%").build(), createHeadersWithAuth()),
                     P360CasePageResponse.class);
-            log.error(response.getStatusCode().toString());
-            log.error(response.toString());
+            log.debug(response.getStatusCode().toString());
+            log.debug(response.toString());
 
             if (response.getBody() != null) {
                 log.info("Succesfully sent request to P360");
-                log.error(response.getBody().toString());
+                log.debug(response.getBody().toString());
                 cases.addAll(response.getBody().getCases());
                 if(response.getBody().getErrorMessage() != null) {
                     log.error(response.getBody().getErrorMessage());
@@ -133,13 +133,13 @@ public class P360Service {
             body.set("scope", p360Properties.getClientId() + "/.default");
 
             var response = restTemplate.postForEntity(p360Properties.getTokenUrl(), body, P360AuthToken.class);
-            log.debug("bearer token: {}", requireNonNull(response.getBody()).getAccess_token());
             headers.setBearerAuth(requireNonNull(response.getBody()).getAccess_token());
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.set("authkey", p360Properties.getAuthKey());
             headers.set("clientid", p360Properties.getClientId());
 
             log.info("successfully created auth headers for p360");
+            log.debug(headers.toString());
             return headers;
 
         } catch (RestClientException e) {
