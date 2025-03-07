@@ -4,6 +4,7 @@ replies:
   - https://etterlevelse.intern.nav.no/oauth2/callback
   - https://etterlevelse.ansatt.nav.no/oauth2/callback
 teamcat_ingress: teamkatalog-api.intern.nav.no
+p360_ingress: http://behandlingskatalog-backend.teamdatajegerne
 env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
     value: https://etterlevelse.ansatt.nav.no, https://etterlevelse.intern.nav.no

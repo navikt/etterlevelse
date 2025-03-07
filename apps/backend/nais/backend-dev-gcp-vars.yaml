@@ -7,6 +7,7 @@ replies:
   - http://localhost:8080/oauth2/callback
   - http://localhost:3000/oauth2/callback
 teamcat_ingress: teamkatalog-api.intern.dev.nav.no
+p360_ingress: https://nav-test.public360online.com/Biz/v2/api/call/SI.Data.RPC/SI.Data.RPC
 env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
     value: https://etterlevelse.ansatt.dev.nav.no,https://etterlevelse.intern.dev.nav.no,https://etterlevelse-api.intern.dev.nav.no,http://localhost:3000
