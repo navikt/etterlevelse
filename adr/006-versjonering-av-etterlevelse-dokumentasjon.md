@@ -11,6 +11,13 @@ Risikoeier må kunne bestemme om dokumentet er ferdigstilt og der etter må kunn
 Teknisk behovet vi har er:
 - etterlevelren må kunne se tidligere versjon av dokumentet
 - mulighet til å endre/forkaste versjons endringen
+- Vi trenger versjonering for å sikre at dokumentasjon ikke overskrives over tid. Behovet forsterkes når PVK integreres i Støtte til etterlevelse.
+- Vi må versjonere etterleverens dokumentasjon på etterlevelseskravene også når det ikke skal gjennomføres en PVK. Versjonen vil da inneholde etterleverens besvarelse av etterlevelseskravene, hvilken kravversjon som ble besvart, eventuell vurdering av at PVK ikke er nødvendig og risikoeiers godkjenning. At risikoeier skal godkjenne etterlevelsesdokumentasjonen følger av etterlevelsesrammeverket med HUKI-matrise som ble besluttet i d-møte et par år tilbake i tid.
+- Når det gjennomføres en PVK vil en versjon inneholde etterleverens besvarelse av etterlevelseskravene, hvilken kravversjon som ble besvart, personvernkonsekvensvurderingen, behandlingens livsløp, hvilke råd personvernombudet ga, hvordan rådene ble innarbeidet av etterlever og risikoeiers godkjenning.
+- Det bør være slik at det er risikoeier som låser en versjon ved godkjenning. Dette gjelder ikke bare PVK-delen av dokumentasjonen men også besvarelsen på etterlevelseskravene. Versjonen skal så arkiveres.
+- Det bør være opp til etterlever om, og eventuelt når, det skal opprettes en ny versjon av dokumentasjonen.
+- Etterlever, personvernombudet og risikoeier må enkelt kunne se de ulike versjonene og hva de inneholder, samt hvilke datoer disse gjelder for.
+- Hvis et krav settes til utgått før ny versjon av etterlevelsesdokumentasjonen opprettes, skal ikke dette kravet være en del av dokumentasjonen.
 
 
 
