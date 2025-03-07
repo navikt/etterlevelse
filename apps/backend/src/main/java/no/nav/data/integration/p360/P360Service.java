@@ -11,6 +11,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -25,12 +26,15 @@ public class P360Service {
     private final P360Properties p360Properties;
 
     public List<P360Case> getCasesByTitle(String title) {
-        List<P360Case>  cases = List.of();
+        List<P360Case>  cases = new ArrayList<>();
         try {
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
                     new HttpEntity<>( P360GetRequest.builder().title("%" + title +  "%").build(), createHeadersWithAuth()),
                     P360CasePageResponse.class);
-            cases = response.hasBody() ? requireNonNull(response.getBody()).getCases() : List.of();
+
+            if (response.hasBody()) {
+                cases = requireNonNull(response.getBody()).getCases();
+            }
         } catch (RestClientException e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));
         }
@@ -38,12 +42,14 @@ public class P360Service {
     }
 
     public List<P360Case> getCasesByCaseNumber(String caseNumber) {
-        List<P360Case>  cases = List.of();
+        List<P360Case>  cases =new ArrayList<>();
         try {
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
                     new HttpEntity<>( P360GetRequest.builder().CaseNumber(caseNumber).build(), createHeadersWithAuth()),
                     P360CasePageResponse.class);
-            cases = response.hasBody() ? requireNonNull(response.getBody()).getCases() : List.of();
+            if (response.hasBody()) {
+                cases = requireNonNull(response.getBody()).getCases();
+            }
         } catch (RestClientException e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));
         }
@@ -63,12 +69,15 @@ public class P360Service {
     }
 
     public List<P360Document> getDocumentByCaseNumber(String caseNumber) {
-        List<P360Document>  documents = List.of();
+        List<P360Document>  documents = new ArrayList<>();
         try {
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetDocuments",
                     new HttpEntity<>( P360GetRequest.builder().CaseNumber(caseNumber).build(), createHeadersWithAuth()),
                     P360DocumentPageResponse.class);
-            documents = response.hasBody() ? requireNonNull(response.getBody()).getDocuments() : List.of();
+
+            if (response.hasBody()) {
+                documents = requireNonNull(response.getBody()).getDocuments();
+            }
         } catch (RestClientException e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));
         }
