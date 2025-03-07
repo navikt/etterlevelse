@@ -109,7 +109,7 @@ public class P360Service {
             body.set("grant_type", "client_credentials");
             body.set("scope", p360Properties.getClientId() + "/.default");
 
-            var response = restTemplate.postForEntity("token URL", body, P360AuthToken.class);
+            var response = restTemplate.postForEntity(p360Properties.getTokenUrl(), body, P360AuthToken.class);
             headers.setBearerAuth(requireNonNull(response.getBody()).getAccess_token());
             headers.set("authkey", p360Properties.getAuthKey());
             headers.set("clientid", p360Properties.getClientId());
