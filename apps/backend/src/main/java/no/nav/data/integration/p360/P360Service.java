@@ -28,10 +28,11 @@ public class P360Service {
     public List<P360Case> getCasesByTitle(String title) {
         List<P360Case> cases = new ArrayList<>();
         try {
-            log.error(p360Properties.getCaseUrl() + "/GetCases");
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
                     new HttpEntity<>( P360GetRequest.builder().Title("%" + title +  "%").build(), createHeadersWithAuth()),
                     P360CasePageResponse.class);
+            log.error(response.getStatusCode().toString());
+            log.error(response.toString());
 
             if (response.hasBody()) {
                 log.error(requireNonNull(response.getBody()).toString());
