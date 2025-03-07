@@ -43,13 +43,11 @@ public class P360Controller {
     @PostMapping("/getCases")
     public ResponseEntity<RestResponsePage<P360Case>> findCases(@RequestBody P360GetRequest request) {
         log.info("Finding all cases by title or case number");
-        List<P360Case> cases;
         if (request.getCaseNumber() != null) {
-            cases = p360Service.getCasesByCaseNumber(request.getCaseNumber());
+            return ResponseEntity.ok(new RestResponsePage<>(p360Service.getCasesByCaseNumber(request.getCaseNumber())));
         } else {
-            cases = p360Service.getCasesByTitle(request.getTitle());
+            return ResponseEntity.ok(new RestResponsePage<>(p360Service.getCasesByTitle(request.getTitle())));
         }
-        return ResponseEntity.ok(new RestResponsePage<>(cases));
     }
 
     @Operation(summary = "Create Case")

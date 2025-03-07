@@ -33,7 +33,7 @@ public class P360Service {
                     P360CasePageResponse.class);
 
             if (response.hasBody()) {
-                cases = requireNonNull(response.getBody()).getCases();
+                cases.addAll(requireNonNull(response.getBody()).getCases());
 
                 if(response.getBody().getErrorMessage() != null) {
                     log.error(response.getBody().getErrorMessage());
@@ -53,7 +53,7 @@ public class P360Service {
                     new HttpEntity<>( P360GetRequest.builder().CaseNumber(caseNumber).build(), createHeadersWithAuth()),
                     P360CasePageResponse.class);
             if (response.hasBody()) {
-                cases = requireNonNull(response.getBody()).getCases();
+                cases.addAll(requireNonNull(response.getBody()).getCases());
                 if(response.getBody().getErrorMessage() != null) {
                     log.error(response.getBody().getErrorMessage());
                 }
