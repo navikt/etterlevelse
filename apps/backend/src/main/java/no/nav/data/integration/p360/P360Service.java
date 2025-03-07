@@ -29,6 +29,7 @@ public class P360Service {
     public List<P360Case> getCasesByTitle(String title) {
         List<P360Case> cases = new ArrayList<>();
         try {
+            log.info("Forwarding request to P360");
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
                     new HttpEntity<>( P360GetRequest.builder().Title("%" + title +  "%").build(), createHeadersWithAuth()),
                     P360CasePageResponse.class);
@@ -36,6 +37,7 @@ public class P360Service {
             log.error(response.toString());
 
             if (response.getBody() != null) {
+                log.info("Succesfully sent request to P360");
                 log.error(response.getBody().toString());
                 cases.addAll(response.getBody().getCases());
                 if(response.getBody().getErrorMessage() != null) {
@@ -82,7 +84,7 @@ public class P360Service {
     public List<P360Document> getDocumentByCaseNumber(String caseNumber) {
         List<P360Document> documents = new ArrayList<>();
         try {
-            var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetDocuments",
+            var response = restTemplate.postForEntity(p360Properties.getDocumentUrl() + "/GetDocuments",
                     new HttpEntity<>( P360GetRequest.builder().CaseNumber(caseNumber).build(), createHeadersWithAuth()),
                     P360DocumentPageResponse.class);
 
@@ -97,7 +99,7 @@ public class P360Service {
 
     public P360Document createDocument(P360DocumentCreateRequest request) {
         try {
-            var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/CreateDocument",
+            var response = restTemplate.postForEntity(p360Properties.getDocumentUrl() + "/CreateDocument",
                     new HttpEntity<>(request, createHeadersWithAuth()),
                     P360Document.class);
             return response.getBody();
@@ -109,7 +111,7 @@ public class P360Service {
 
     public P360Document updateDocument(P360DocumentUpdateRequest request) {
         try {
-            var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/UpdateDocument",
+            var response = restTemplate.postForEntity(p360Properties.getDocumentUrl() + "/UpdateDocument",
                     new HttpEntity<>(request, createHeadersWithAuth()),
                     P360Document.class);
             return response.getBody();
@@ -121,6 +123,7 @@ public class P360Service {
 
     private HttpHeaders createHeadersWithAuth () {
         var headers = new HttpHeaders();
+        log.info("getting auth headers for p360");
 
         try {
             MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
@@ -130,11 +133,13 @@ public class P360Service {
             body.set("scope", p360Properties.getClientId() + "/.default");
 
             var response = restTemplate.postForEntity(p360Properties.getTokenUrl(), body, P360AuthToken.class);
+            log.debug("bearer token: {}", requireNonNull(response.getBody()).getAccess_token());
             headers.setBearerAuth(requireNonNull(response.getBody()).getAccess_token());
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.set("authkey", p360Properties.getAuthKey());
             headers.set("clientid", p360Properties.getClientId());
 
+            log.info("successfully created auth headers for p360");
             return headers;
 
         } catch (RestClientException e) {

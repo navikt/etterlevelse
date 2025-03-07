@@ -56,7 +56,10 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
           Testing p360 intergation
           <Button
             onClick={() => {
-              axios.post(`${env.backendBaseUrl}/p360/getCases`, { title: 'E101' })
+              axios.post(
+                `${env.backendBaseUrl}/p360/createCases/etterlevelseDokumentasjon/95256200-60db-45eb-bee9-772a299d3dcb`
+              )
+              // axios.post(`${env.backendBaseUrl}/p360/getCases`, { title: 'E101' })
             }}
           >
             Test
