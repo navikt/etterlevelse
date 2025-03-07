@@ -50,12 +50,13 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
           >
             Slett
           </Button>
+        </div>
 
+        <div className="pt-10">
+          Testing p360 intergation
           <Button
             onClick={() => {
-              axios.post(`${env.backendBaseUrl}/p360/getCases`, {
-                title: 'E101',
-              })
+              axios.post(`${env.backendBaseUrl}/p360/getCases`, { title: 'E101' })
             }}
           >
             Test
