@@ -1,7 +1,9 @@
 import { Box, Button, Heading, TextField } from '@navikt/ds-react'
+import axios from 'axios'
 import { useState } from 'react'
 import { deleteEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { PageLayout } from '../components/scaffold/Page'
+import { env } from '../util/env'
 import { UpdateMessage } from './EtterlevelseAdminPage'
 
 export const EtterlevelseDokumentasjonAdminPage = () => {
@@ -47,6 +49,16 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
             }}
           >
             Slett
+          </Button>
+
+          <Button
+            onClick={() => {
+              axios.post(`${env.backendBaseUrl}/p360/getCases`, {
+                title: 'E101',
+              })
+            }}
+          >
+            Test
           </Button>
         </div>
       </div>
