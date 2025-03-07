@@ -26,7 +26,7 @@ public class P360Service {
     private final P360Properties p360Properties;
 
     public List<P360Case> getCasesByTitle(String title) {
-        List<P360Case>  cases = new ArrayList<>();
+        List<P360Case> cases = new ArrayList<>();
         try {
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
                     new HttpEntity<>( P360GetRequest.builder().title("%" + title +  "%").build(), createHeadersWithAuth()),
@@ -42,7 +42,7 @@ public class P360Service {
     }
 
     public List<P360Case> getCasesByCaseNumber(String caseNumber) {
-        List<P360Case>  cases =new ArrayList<>();
+        List<P360Case> cases = new ArrayList<>();
         try {
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
                     new HttpEntity<>( P360GetRequest.builder().CaseNumber(caseNumber).build(), createHeadersWithAuth()),
@@ -69,7 +69,7 @@ public class P360Service {
     }
 
     public List<P360Document> getDocumentByCaseNumber(String caseNumber) {
-        List<P360Document>  documents = new ArrayList<>();
+        List<P360Document> documents = new ArrayList<>();
         try {
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetDocuments",
                     new HttpEntity<>( P360GetRequest.builder().CaseNumber(caseNumber).build(), createHeadersWithAuth()),
