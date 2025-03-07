@@ -126,7 +126,6 @@ client:
   p360:
     case-url: ${client.p360.url}/CaseService
     document-url: ${client.p360.url}/DocumentService
-    url: ${client.p360.url:https://something}
     auth-key: ${P360_AUTH_KEY:tokenkey}
     client-id: ${AZURE_APP_CLIENT_ID:clientId}
     client-secret: ${AZURE_APP_CLIENT_SECRET:client-secret}
