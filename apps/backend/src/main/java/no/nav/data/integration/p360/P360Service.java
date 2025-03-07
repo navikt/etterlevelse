@@ -40,7 +40,7 @@ public class P360Service {
                 }
             }
 
-        } catch (RestClientException e) {
+        } catch (Exception e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));
         }
         return cases;
