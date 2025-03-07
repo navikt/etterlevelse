@@ -16,6 +16,7 @@ import AccordianAlertModal from '../AccordianAlertModal'
 import CreateRisikoscenario from '../edit/CreateRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/LeggTilEksisterendeRisikoscenario'
 import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionContent'
+import KravRisikoscenarioAccordionContentExample from './KravRisikoscenarioAccordionContent/KravRisikoscenarioAccordionContent'
 import { KravRisikoscenarioOvrigeRisikoscenarier } from './KravRisikoscenarioOvrigeRisikoscenarier/KravRisikoscenarioOvrigeRisikoscenarier'
 import { KravRisikoscenarioReadMore } from './KravRisikoscenarioReadMore/KravRisikoscenarioReadMore'
 
@@ -44,6 +45,7 @@ export const KravRisikoscenario = (props: IProps) => {
   const [selectedRisikoscenarioId, setSelectedRisikoscenarioId] = useState<string>('')
   const [editButtonClicked, setEditButtonClicked] = useState<string>('')
   const [isTiltakFormActive, setIsTiltakFormActive] = useState<boolean>(false)
+
   const url = new URL(window.location.href)
   const risikoscenarioId = url.searchParams.get('risikoscenario')
   const navigate = useNavigate()
@@ -153,6 +155,21 @@ export const KravRisikoscenario = (props: IProps) => {
                     {expanded && (
                       <Accordion.Content>
                         <KravRisikoscenarioAccordionContent
+                          risikoscenario={risikoscenario}
+                          alleRisikoscenarioer={alleRisikoscenarioer}
+                          isCreateMode={isCreateMode}
+                          kravnummer={krav.kravNummer}
+                          risikoscenarioer={risikoscenarioer}
+                          setRisikoscenarioer={setRisikoscenarioer}
+                          risikoscenarioForKrav={risikoscenarioForKrav}
+                          setRisikoscenarioForKrav={setRisikoscenarioForKrav}
+                          tiltakList={tiltakList}
+                          setTiltakList={setTiltakList}
+                          setIsTiltakFormActive={setIsTiltakFormActive}
+                          formRef={formRef}
+                        />
+
+                        <KravRisikoscenarioAccordionContentExample
                           risikoscenario={risikoscenario}
                           alleRisikoscenarioer={alleRisikoscenarioer}
                           isCreateMode={isCreateMode}
