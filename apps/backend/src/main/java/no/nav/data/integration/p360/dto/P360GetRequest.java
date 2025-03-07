@@ -12,6 +12,6 @@ import lombok.experimental.FieldNameConstants;
 @NoArgsConstructor
 @AllArgsConstructor
 public class P360GetRequest {
-    private String title;
+    private String Title;
     private String CaseNumber;
 }

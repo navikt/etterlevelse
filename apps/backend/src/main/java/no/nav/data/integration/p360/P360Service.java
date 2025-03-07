@@ -29,7 +29,7 @@ public class P360Service {
         List<P360Case> cases = new ArrayList<>();
         try {
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
-                    new HttpEntity<>( P360GetRequest.builder().title("%" + title +  "%").build(), createHeadersWithAuth()),
+                    new HttpEntity<>( P360GetRequest.builder().Title("%" + title +  "%").build(), createHeadersWithAuth()),
                     P360CasePageResponse.class);
 
             if (response.hasBody()) {
