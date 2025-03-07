@@ -34,7 +34,12 @@ public class P360Service {
 
             if (response.hasBody()) {
                 cases = requireNonNull(response.getBody()).getCases();
+
+                if(response.getBody().getErrorMessage() != null) {
+                    log.error(response.getBody().getErrorMessage());
+                }
             }
+
         } catch (RestClientException e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));
         }
@@ -49,6 +54,9 @@ public class P360Service {
                     P360CasePageResponse.class);
             if (response.hasBody()) {
                 cases = requireNonNull(response.getBody()).getCases();
+                if(response.getBody().getErrorMessage() != null) {
+                    log.error(response.getBody().getErrorMessage());
+                }
             }
         } catch (RestClientException e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));
