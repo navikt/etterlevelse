@@ -6,10 +6,10 @@ import java.util.List;
 
 @Data
 public class P360CasePageResponse {
-    //private List<P360Case> Cases;
-    //private Integer TotalPageCount;
-    //private Integer TotalCount;
-    private Boolean Successful;
-    private String ErrorMessage;
-    private String ErrorDetails;
+    public List<P360Case> Cases;
+    public Integer TotalPageCount;
+    public Integer TotalCount;
+    public Boolean Successful;
+    public String ErrorMessage;
+    public String ErrorDetails;
 }
