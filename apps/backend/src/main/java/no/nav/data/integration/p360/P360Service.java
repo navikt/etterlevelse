@@ -30,6 +30,7 @@ public class P360Service {
         List<P360Case> cases = new ArrayList<>();
         try {
             log.info("Forwarding request to P360");
+            log.debug("request body:  {}", P360GetRequest.builder().Title("%" + title +  "%").build().toString());
             log.debug("request content: {}", new HttpEntity<>( P360GetRequest.builder().Title("%" + title +  "%").build(), createHeadersWithAuth()));
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
                     new HttpEntity<>( P360GetRequest.builder().Title("%" + title +  "%").build(), createHeadersWithAuth()),
