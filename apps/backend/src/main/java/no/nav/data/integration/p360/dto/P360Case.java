@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class P360Case {
 
-    private Integer Recno;
-    private String CaseNumber;
-    private String Title;
-    private Boolean Successful;
-    private String ErrorMessage;
-    private String ErrorDetails;
+    public Integer Recno;
+    public String CaseNumber;
+    public String Title;
+    public Boolean Successful;
+    public String ErrorMessage;
+    public String ErrorDetails;
 
 }
