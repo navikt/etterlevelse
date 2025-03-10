@@ -9,7 +9,7 @@ public class P360CasePageResponse {
     //private List<P360Case> Cases;
     //private Integer TotalPageCount;
     //private Integer TotalCount;
-    //private Boolean Successful;
+    private Boolean Successful;
     private String ErrorMessage;
     private String ErrorDetails;
 }
