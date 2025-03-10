@@ -65,7 +65,7 @@ public class P360Controller {
                         .Status("B")
                         .AccessCode("U")
                         .AccessGroup("Alle ansatte i Nav")
-                        .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
+                        .ResponsiblePersonEmail(SecurityUtils.getCurrentEmail())
                 .build());
         return ResponseEntity.ok(sak);
     }

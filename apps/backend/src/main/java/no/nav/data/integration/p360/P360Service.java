@@ -11,6 +11,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +31,6 @@ public class P360Service {
         List<P360Case> cases = new ArrayList<>();
         try {
             log.info("Forwarding request to P360");
-            log.debug("request body:  {}", P360GetRequest.builder().Title("%" + title +  "%").build().toString());
-            log.debug("request content: {}", new HttpEntity<>( P360GetRequest.builder().Title("%" + title +  "%").build(), createHeadersWithAuth()));
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
                     new HttpEntity<>( P360GetRequest.builder().Title("%" + title +  "%").build(), createHeadersWithAuth()),
                     P360CasePageResponse.class);
@@ -40,7 +39,6 @@ public class P360Service {
 
             if (response.getBody() != null) {
                 log.info("Succesfully sent request to P360");
-                log.debug(response.getBody().toString());
                 cases.addAll(response.getBody().getCases());
                 if(response.getBody().getErrorMessage() != null) {
                     log.error(response.getBody().getErrorMessage());
