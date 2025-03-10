@@ -135,7 +135,6 @@ public class P360Service {
 
             var response = restTemplate.postForEntity(p360Properties.getTokenUrl(), body, P360AuthToken.class);
             headers.setBearerAuth(requireNonNull(response.getBody()).getAccess_token());
-            log.debug("access token: " + requireNonNull(response.getBody()).getAccess_token());
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.set("authkey", p360Properties.getAuthKey());
             headers.set("clientid", p360Properties.getClientId());
