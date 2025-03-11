@@ -3,6 +3,7 @@ package no.nav.data.pvk.pvotilbakemelding.domain;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 public class Tilbakemeldingsinnhold {
 
     private String sistRedigertAv;
-    private LocalDate sistRedigertDato;
+    private LocalDateTime sistRedigertDato;
     private String bidragsVurdering;
     private String internDiskusjon;
     private String TilbakemeldingTilEtterlevere;
