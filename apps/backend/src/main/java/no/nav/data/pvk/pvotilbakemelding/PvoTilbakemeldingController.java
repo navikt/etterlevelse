@@ -52,7 +52,7 @@ public class PvoTilbakemeldingController {
     @GetMapping("/pvkdokument/{pvkdokumentId}")
     public ResponseEntity<PvoTilbakemeldingResponse> getPvoTilbakemeldingByPvkDokumentId(@PathVariable String pvkdokumentId) {
         log.info("Get PVO tilbakemelding by PVK dokument id={}", pvkdokumentId);
-        Optional<PvoTilbakemelding> pvoTilbakemelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkdokumentId);
+        Optional<PvoTilbakemelding> pvoTilbakemelding = pvoTilbakemeldingService.getByPvkDokumentId(UUID.fromString(pvkdokumentId));
         return pvoTilbakemelding.map(tilbakemelding -> ResponseEntity.ok(PvoTilbakemeldingResponse.buildFrom(tilbakemelding))).orElseGet(() -> ResponseEntity.notFound().build());
     }
 

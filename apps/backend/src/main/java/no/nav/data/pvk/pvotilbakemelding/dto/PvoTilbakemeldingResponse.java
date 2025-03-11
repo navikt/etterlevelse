@@ -41,7 +41,7 @@ public class PvoTilbakemeldingResponse {
                         .lastModifiedDate(pvoTilbakemelding.getLastModifiedDate() == null ? LocalDateTime.now() : pvoTilbakemelding.getLastModifiedDate())
                         .build())
                 .version(pvoTilbakemelding.getVersion())
-                .pvkDokumentId(pvoTilbakemelding.getPvkDokumentId())
+                .pvkDokumentId(pvoTilbakemelding.getPvkDokumentId().toString())
                 .status(pvoTilbakemelding.getStatus())
 
                 .behandlingensArtOgOmfang(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingensArtOgOmfang())

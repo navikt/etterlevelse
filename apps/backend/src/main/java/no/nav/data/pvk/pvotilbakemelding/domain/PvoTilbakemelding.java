@@ -27,7 +27,7 @@ public class PvoTilbakemelding extends Auditable {
     private UUID id = UUID.randomUUID();
 
     @Column(name = "PVK_DOKUMENT_ID", nullable = false)
-    private String pvkDokumentId;
+    private UUID pvkDokumentId;
 
     @Builder.Default
     @Column(name = "STATUS")

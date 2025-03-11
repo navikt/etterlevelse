@@ -33,7 +33,7 @@ public class PvoTilbakemeldingService {
         return pvoTilbakemeldingRepo.findAll(pageParameters.createPage());
     }
 
-    public Optional<PvoTilbakemelding> getByPvkDokumentId(String pvkDokumentId) {
+    public Optional<PvoTilbakemelding> getByPvkDokumentId(UUID pvkDokumentId) {
         return pvoTilbakemeldingRepo.findByPvkDokumentId(pvkDokumentId);
     }
 

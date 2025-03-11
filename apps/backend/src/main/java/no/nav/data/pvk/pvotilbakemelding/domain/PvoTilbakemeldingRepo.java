@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface PvoTilbakemeldingRepo extends JpaRepository<PvoTilbakemelding, UUID> {
     @Query(value = "select * from pvo_tilbakemelding where pvk_dokument_id = ?1", nativeQuery = true)
-    Optional<PvoTilbakemelding> findByPvkDokumentId(String pvkDokumentId);
+    Optional<PvoTilbakemelding> findByPvkDokumentId(UUID pvkDokumentId);
 }

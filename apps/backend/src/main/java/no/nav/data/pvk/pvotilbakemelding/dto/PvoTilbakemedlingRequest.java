@@ -65,14 +65,14 @@ public class PvoTilbakemedlingRequest implements RequestElement {
 
         return PvoTilbakemelding.builder()
                 .id(id != null && !id.isEmpty() ? UUID.fromString(id) : null)
-                .pvkDokumentId(pvkDokumentId)
+                .pvkDokumentId(UUID.fromString(pvkDokumentId))
                 .status(status != null ? status : PvoTilbakemeldingStatus.UNDERARBEID)
                 .pvoTilbakemeldingData(pvoTilbakemeldingData)
                 .build();
     }
 
     public void mergeInto(PvoTilbakemelding pvoTilbakemeldingToMerge) {
-        pvoTilbakemeldingToMerge.setPvkDokumentId(pvkDokumentId);
+        pvoTilbakemeldingToMerge.setPvkDokumentId(UUID.fromString(pvkDokumentId));
         pvoTilbakemeldingToMerge.setStatus(status);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setBehandlingensArtOgOmfang(behandlingensArtOgOmfang);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setInnvolveringAvEksterne(innvolveringAvEksterne);
