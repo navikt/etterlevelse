@@ -26,7 +26,7 @@ public class PvoTilbakemeldingService {
     }
 
     public PvoTilbakemelding getPvoTilbakemelding(UUID uuid) {
-        return pvoTilbakemeldingRepo.findById(uuid).orElseThrow(() -> new NotFoundException("Couldn't find Pvk Dokument with id " + uuid));
+        return pvoTilbakemeldingRepo.findById(uuid).orElseThrow(() -> new NotFoundException("Couldn't find Pvo tilbakemelding with id " + uuid));
     }
 
     public Page<PvoTilbakemelding> getAll(PageParameters pageParameters) {

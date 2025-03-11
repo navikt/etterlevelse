@@ -75,6 +75,7 @@ public class WebSecurityConfig {
                     "/etterlevelsearkiv/**",
                     "/documentrelation/**",
                     "/behandlingenslivslop/**",
+                    "/pvotilbakemelding/**",
                     "/pvkdokument/**",
                     "/risikoscenario/**",
                     "/tiltak/**",
@@ -101,6 +102,7 @@ public class WebSecurityConfig {
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/behandling/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/etterlevelsedokumentasjon/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/etterlevelsemetadata/**")).hasAnyRole(AppRole.ADMIN.name(), AppRole.WRITE.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/pvotilbakemelding/**")).hasAnyRole(AppRole.ADMIN.name(), AppRole.PERSONVERNOMBUD.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/melding/**")).hasAnyRole(AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/etterlevelsearkiv/**")).hasAnyRole(AppRole.WRITE.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/behandlingenslivslop/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
