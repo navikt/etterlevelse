@@ -9,6 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 public class PvoTilbakemeldingData {
     private Tilbakemeldingsinnhold behandlingensArtOgOmfang;
-    private Tilbakemeldingsinnhold InnvolveringAvEksterne;
+    private Tilbakemeldingsinnhold innvolveringAvEksterne;
     private Tilbakemeldingsinnhold risikoscenarioEtterTiltakk;
 }

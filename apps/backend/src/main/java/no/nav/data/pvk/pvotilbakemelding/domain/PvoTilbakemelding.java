@@ -36,6 +36,6 @@ public class PvoTilbakemelding extends Auditable {
     @Type(value = JsonBinaryType.class)
     @Column(name = "DATA", nullable = false)
     @Builder.Default
-    private PvoTilbakemeldingData pvkDokumentData = new PvoTilbakemeldingData();
+    private PvoTilbakemeldingData pvoTilbakemeldingData = new PvoTilbakemeldingData();
 }
 
