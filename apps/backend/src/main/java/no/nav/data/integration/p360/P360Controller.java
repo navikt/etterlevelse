@@ -81,7 +81,7 @@ public class P360Controller {
 
     @Operation(summary = "Create Document")
     @ApiResponses(value = {@ApiResponse(description = "Cases created")})
-    @PostMapping("/documentCases/etterlevelseDokumentasjon/{id}")
+    @PostMapping("/create/documentCases/etterlevelseDokumentasjon/{id}")
     public ResponseEntity<P360Document> createDocument(@PathVariable String id, @RequestBody String caseNumber) {
         log.info("Creating document for sak: {}", caseNumber);
 
@@ -112,8 +112,8 @@ public class P360Controller {
 
 
     @Operation(summary = "Update Document")
-    @ApiResponses(value = {@ApiResponse(description = "Cases created")})
-    @PostMapping("/documentCases/etterlevelseDokumentasjon/{id}")
+    @ApiResponses(value = {@ApiResponse(description = "Cases updated")})
+    @PostMapping("/update/documentCases/etterlevelseDokumentasjon/{id}")
     public ResponseEntity<P360Document> updateDocument(@PathVariable String id, @RequestBody String dokumentNummber) {
         log.info("Creating document for dokument: {}", dokumentNummber);
 
