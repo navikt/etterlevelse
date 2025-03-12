@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.utils.StreamUtils;
@@ -82,9 +83,11 @@ public class P360Controller {
     @Operation(summary = "Create Document")
     @ApiResponses(value = {@ApiResponse(description = "Cases created")})
     @PostMapping("/create/documentCases/etterlevelseDokumentasjon/{id}")
-    public ResponseEntity<P360Document> createDocument(@PathVariable String id, @RequestBody String caseNumber) {
-        log.info("Creating document for sak: {}", caseNumber);
-
+    public ResponseEntity<P360Document> createDocument(@PathVariable String id, @RequestBody P360DocumentRequest request) {
+        log.info("Creating document for sak: {}", request.getCaseNumber());
+        if (request.getCaseNumber() == null || request.getCaseNumber().isEmpty()) {
+            throw new ValidationException("Cannot create document because caseNumber is empty");
+        }
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd");
         Date date = new Date();
 
@@ -92,7 +95,7 @@ public class P360Controller {
         byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelsedokumentasjon.getId(), Collections.emptyList(), Collections.emptyList(), true);
 
         P360Document document = p360Service.createDocument(P360DocumentCreateRequest.builder()
-                        .CaseNumber(caseNumber)
+                        .CaseNumber(request.getCaseNumber())
                         .Archive("Saksdokument")
                         .DefaultValueSet("Etterlevelse")
                         .Title("E" + etterlevelsedokumentasjon.getEtterlevelseNummer() + " test dokument")
@@ -114,9 +117,11 @@ public class P360Controller {
     @Operation(summary = "Update Document")
     @ApiResponses(value = {@ApiResponse(description = "Cases updated")})
     @PostMapping("/update/documentCases/etterlevelseDokumentasjon/{id}")
-    public ResponseEntity<P360Document> updateDocument(@PathVariable String id, @RequestBody String dokumentNummber) {
-        log.info("Creating document for dokument: {}", dokumentNummber);
-
+    public ResponseEntity<P360Document> updateDocument(@PathVariable String id, @RequestBody P360DocumentRequest request) {
+        log.info("Creating document for dokument: {}", request.getDocumentNumber());
+        if (request.getDocumentNumber() == null || request.getDocumentNumber().isEmpty()) {
+            throw new ValidationException("Cannot create document because document number is empty");
+        }
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd");
         Date date = new Date();
 
@@ -124,7 +129,7 @@ public class P360Controller {
         byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelsedokumentasjon.getId(), Collections.emptyList(), Collections.emptyList(), true);
 
         P360Document document = p360Service.updateDocument(P360DocumentUpdateRequest.builder()
-                .DocumentNumber(dokumentNummber)
+                .DocumentNumber(request.getDocumentNumber())
                 .Archive("Saksdokument")
                 .DefaultValueSet("Etterlevelse")
                 .Title("E" + etterlevelsedokumentasjon.getEtterlevelseNummer() + " test dokument")
