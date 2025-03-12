@@ -1,5 +1,5 @@
 import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, CopyButton, Heading } from '@navikt/ds-react'
+import { Alert, BodyLong, CopyButton, Heading, Label } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
 import {
@@ -8,11 +8,11 @@ import {
   updatePvkDokument,
 } from '../../api/PvkDokumentApi'
 import { EPvkDokumentStatus, IPvkDokument } from '../../constants'
+import FormButtons from '../PvkDokument/edit/FormButtons'
+import ArtOgOmFangSummary from '../PvkDokument/formSummary/ArtOgOmfangSummary'
+import InvolveringSummary from '../PvkDokument/formSummary/InvolveringSummary'
+import RisikoscenarioSummary from '../PvkDokument/formSummary/RisikoscenarioSummary'
 import { TextAreaField } from '../common/Inputs'
-import FormButtons from './edit/FormButtons'
-import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
-import InvolveringSummary from './formSummary/InvolveringSummary'
-import RisikoscenarioSummary from './formSummary/RisikoscenarioSummary'
 
 interface IProps {
   pvkDokument: IPvkDokument
@@ -26,7 +26,7 @@ interface IProps {
   setSelectedStep: (step: number) => void
 }
 
-export const SendInnView = (props: IProps) => {
+export const SendInnPvoView = (props: IProps) => {
   const {
     pvkDokument,
     setPvkDokument,
@@ -39,9 +39,7 @@ export const SendInnView = (props: IProps) => {
     setSelectedStep,
   } = props
 
-  const [submitPvkStatus, setSubmitPvkStatus] = useState<EPvkDokumentStatus>(
-    EPvkDokumentStatus.UNDERARBEID
-  )
+  const [submitPvkStatus] = useState<EPvkDokumentStatus>(EPvkDokumentStatus.UNDERARBEID)
 
   const submit = async (pvkDokument: IPvkDokument) => {
     await getPvkDokument(pvkDokument.id).then((response) => {
@@ -64,7 +62,7 @@ export const SendInnView = (props: IProps) => {
       onSubmit={submit}
       initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
     >
-      {({ submitForm, dirty }) => (
+      {({ submitForm }) => (
         <Form>
           <div className="flex justify-center">
             <div>
@@ -91,11 +89,18 @@ export const SendInnView = (props: IProps) => {
               <RisikoscenarioSummary />
 
               <div className="mt-5 mb-3 max-w-[75ch]">
+                <Label>
+                  Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)
+                </Label>
+                <BodyLong>{pvkDokument.merknadTilPvoEllerRisikoeier}</BodyLong>
+              </div>
+
+              <div className="mt-5 mb-3 max-w-[75ch]">
                 <TextAreaField
                   rows={3}
                   noPlaceholder
-                  label="Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)"
-                  name="merknadTilPvoEllerRisikoeier"
+                  label="Er det noe annet dere ønsker å formidle til etterlever? (valgfritt)"
+                  name="merknadTilEtterleverEllerRisikoeier"
                 />
               </div>
 
@@ -119,32 +124,32 @@ export const SendInnView = (props: IProps) => {
                 setActiveStep={setActiveStep}
                 setSelectedStep={setSelectedStep}
                 submitForm={submitForm}
-                customButtons={
-                  <div className="mt-5 flex gap-2 items-center">
-                    {dirty && (
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={() => {
-                          setSubmitPvkStatus(EPvkDokumentStatus.UNDERARBEID)
-                          submitForm()
-                        }}
-                      >
-                        Lagre og fortsett senere
-                      </Button>
-                    )}
+                // customButtons={
+                //   <div className="mt-5 flex gap-2 items-center">
+                //     {dirty && (
+                //       <Button
+                //         type="button"
+                //         variant="secondary"
+                //         onClick={() => {
+                //           setSubmitPvkStatus(EPvkDokumentStatus.UNDERARBEID)
+                //           submitForm()
+                //         }}
+                //       >
+                //         Lagre og fortsett senere
+                //       </Button>
+                //     )}
 
-                    <Button
-                      type="button"
-                      onClick={() => {
-                        setSubmitPvkStatus(EPvkDokumentStatus.SENDT_TIL_PVO)
-                        submitForm()
-                      }}
-                    >
-                      Send til Personvernombudet
-                    </Button>
-                  </div>
-                }
+                //     <Button
+                //       type="button"
+                //       onClick={() => {
+                //         setSubmitPvkStatus(EPvkDokumentStatus.SENDT_TIL_PVO)
+                //         submitForm()
+                //       }}
+                //     >
+                //       Send til Personvernombudet
+                //     </Button>
+                //   </div>
+                // }
               />
             </div>
           </div>
@@ -154,4 +159,4 @@ export const SendInnView = (props: IProps) => {
   )
 }
 
-export default SendInnView
+export default SendInnPvoView

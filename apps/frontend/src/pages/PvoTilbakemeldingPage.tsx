@@ -7,11 +7,11 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { usePvkDokument } from '../api/PvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '../api/RisikoscenarioApi'
 import OversiktView from '../components/PvkDokument/OversiktView'
-import SendInnView from '../components/PvkDokument/SendInnView'
 import BehandlingensArtOgOmfangPvoView from '../components/PvoTilbakemelding/BehandlingensArtOgOmfangPvoView'
 import IdentifiseringAvRisikoscenarioerOgTiltakPvoView from '../components/PvoTilbakemelding/IdentifiseringAvRisikoscenarioerOgTiltakPvoView'
 import InvolveringAvEksternePvoView from '../components/PvoTilbakemelding/InvolveringAvEksternePvoView'
 import OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView from '../components/PvoTilbakemelding/OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
+import SendInnPvoView from '../components/PvoTilbakemelding/SendInnPvoView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import {
   ERisikoscenarioType,
@@ -231,7 +231,7 @@ export const PvkDokumentPage = () => {
                   />
                 )}
                 {activeStep === 6 && (
-                  <SendInnView
+                  <SendInnPvoView
                     pvkDokument={pvkDokument}
                     setPvkDokument={setPvkDokument}
                     personkategorier={personkategorier}
