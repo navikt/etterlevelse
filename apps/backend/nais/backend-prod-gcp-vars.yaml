@@ -4,7 +4,7 @@ replies:
   - https://etterlevelse.intern.nav.no/oauth2/callback
   - https://etterlevelse.ansatt.nav.no/oauth2/callback
 teamcat_ingress: teamkatalog-api.intern.nav.no
-p360_ingress: behandlingskatalog-backend.teamdatajegerne
+p360_ingress: nav.public360online.com
 env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
     value: https://etterlevelse.ansatt.nav.no, https://etterlevelse.intern.nav.no
@@ -15,7 +15,7 @@ env:
   - name: CLIENT_POLLY_URL
     value: http://behandlingskatalog-backend.teamdatajegerne
   - name: CLIENT_P360_URL
-    value: http://behandlingskatalog-backend.teamdatajegerne
+    value: https://nav.public360online.com/Biz/v2/api/call/SI.Data.RPC/SI.Data.RPC
   - name: AZURE_CLIENT_GROUPS
     value: 7d275d5e-59a5-473d-b530-a9091b3de4c6
   - name: AZURE_CLIENT_GROUPS_ADMIN
