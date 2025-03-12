@@ -29,6 +29,7 @@ import { MyEtterlevelseDokumentasjonerPage } from './pages/MyEtterlevelseDokumen
 import NotFound from './pages/NotFound'
 import PvkBehovPage from './pages/PvkBehovPage'
 import PvkDokumentPage from './pages/PvkDokumentPage'
+import PvoTilbakemeldingPage from './pages/PvoTilbakemeldingPage'
 import QuestionAndAnswerLogPage from './pages/QuestionAndAnswerLogPage'
 import { RelasjonsOversikt } from './pages/RelasjonsOversikt'
 import { TemaPage } from './pages/TemaPage'
@@ -157,6 +158,12 @@ const AppRoutes = (): JSX.Element => {
       <Route
         path="/dokumentasjon/:id/pvkdokument/:pvkdokumentId/:steg"
         element={<PvkDokumentPage />}
+        caseSensitive={true}
+      />
+
+      <Route
+        path="/dokumentasjon/:id/pvkdokument/pvo/:pvkdokumentId/:steg"
+        element={<PvoTilbakemeldingPage />}
         caseSensitive={true}
       />
 
