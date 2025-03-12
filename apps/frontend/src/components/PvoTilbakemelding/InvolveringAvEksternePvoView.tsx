@@ -20,7 +20,7 @@ interface IProps {
   formRef: RefObject<any>
 }
 
-export const InvolveringAvEksterneView = (props: IProps) => {
+export const InvolveringAvEksternePvoView = (props: IProps) => {
   const { personkategorier, databehandlere, pvkDokument } = props
 
   const [mode, setMode] = useState('edit')
@@ -207,4 +207,4 @@ export const InvolveringAvEksterneView = (props: IProps) => {
     </div>
   )
 }
-export default InvolveringAvEksterneView
+export default InvolveringAvEksternePvoView

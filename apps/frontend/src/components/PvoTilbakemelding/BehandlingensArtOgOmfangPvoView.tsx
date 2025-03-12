@@ -19,7 +19,7 @@ interface IProps {
   formRef: RefObject<any>
 }
 
-export const BehandlingensArtOgOmfangView = (props: IProps) => {
+export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
   const { personkategorier, pvkDokument } = props
 
   const [mode, setMode] = useState('edit')
@@ -177,4 +177,4 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
     </div>
   )
 }
-export default BehandlingensArtOgOmfangView
+export default BehandlingensArtOgOmfangPvoView
