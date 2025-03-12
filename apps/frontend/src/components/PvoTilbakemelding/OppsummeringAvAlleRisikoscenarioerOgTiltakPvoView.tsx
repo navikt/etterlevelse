@@ -20,7 +20,7 @@ import { ExternalLink } from '../common/RouteLink'
 import TextEditor from '../common/TextEditor/TextEditor'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
-import OppsumeringAccordianListPvoView from './OppsummeringAccordionContentPvoView'
+import OppsumeringAccordianListPvoView from './OppsumeringAccordianListPvoView'
 
 interface IProps {
   etterlevelseDokumentasjonId: string

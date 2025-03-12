@@ -6,10 +6,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '../api/RisikoscenarioApi'
-import IdentifiseringAvRisikoscenarioerOgTiltak from '../components/PvkDokument/IdentifiseringAvRisikoscenarioerOgTiltak'
 import OversiktView from '../components/PvkDokument/OversiktView'
 import SendInnView from '../components/PvkDokument/SendInnView'
 import BehandlingensArtOgOmfangPvoView from '../components/PvoTilbakemelding/BehandlingensArtOgOmfangPvoView'
+import IdentifiseringAvRisikoscenarioerOgTiltakPvoView from '../components/PvoTilbakemelding/IdentifiseringAvRisikoscenarioerOgTiltakPvoView'
 import InvolveringAvEksternePvoView from '../components/PvoTilbakemelding/InvolveringAvEksternePvoView'
 import OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView from '../components/PvoTilbakemelding/OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
@@ -217,12 +217,9 @@ export const PvkDokumentPage = () => {
                   />
                 )}
                 {activeStep === 4 && (
-                  <IdentifiseringAvRisikoscenarioerOgTiltak
+                  <IdentifiseringAvRisikoscenarioerOgTiltakPvoView
                     etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                     pvkDokument={pvkDokument}
-                    activeStep={activeStep}
-                    setSelectedStep={setSelectedStep}
-                    setActiveStep={updateTitleUrlAndStep}
                     formRef={formRef}
                   />
                 )}
