@@ -61,7 +61,7 @@ public class PvoTilbakemeldingController {
     @PostMapping
     public ResponseEntity<PvoTilbakemeldingResponse> createPvoTilbakemelding(@RequestBody PvoTilbakemedlingRequest request) {
         log.info("Create PVO tilbakemelding");
-
+        //kan kaste et data integrity violation exception(1 til 1 kobling mot pvk dokument)
         var pvoTilbakemelding = pvoTilbakemeldingService.save(request.convertToPvoTilbakemelding(), request.isUpdate());
 
         return new ResponseEntity<>(PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding), HttpStatus.CREATED);
@@ -79,7 +79,7 @@ public class PvoTilbakemeldingController {
 
         var pvoTilbakemeldingToUpdate = pvoTilbakemeldingService.get(id);
 
-        if(pvoTilbakemeldingToUpdate == null) {
+        if (pvoTilbakemeldingToUpdate == null) {
             throw new ValidationException(String.format("Could not find pvo tilbakemelding to be updated with id = %s ", request.getId()));
         }
 
@@ -94,7 +94,7 @@ public class PvoTilbakemeldingController {
     public ResponseEntity<PvoTilbakemeldingResponse> deletePvoTilbakemeldingById(@PathVariable UUID id) {
         log.info("Delete PVO tilbakemelding id={}", id);
         var pvoTilbakemelding = pvoTilbakemeldingService.delete(id);
-        if(pvoTilbakemelding == null) {
+        if (pvoTilbakemelding == null) {
             log.warn("Could not find PVO tilbakemelding with id = {} to delete", id);
             return ResponseEntity.ok(null);
         } else {

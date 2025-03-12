@@ -2,9 +2,6 @@ package no.nav.data.pvk.pvotilbakemelding;
 
 import no.nav.data.IntegrationTestBase;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
-import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
-import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemedlingRequest;
 import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemeldingResponse;
@@ -14,7 +11,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;

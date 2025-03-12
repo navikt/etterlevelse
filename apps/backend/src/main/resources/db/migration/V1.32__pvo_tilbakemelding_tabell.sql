@@ -1,7 +1,7 @@
 create table if not exists pvo_tilbakemelding
 (
     id                 uuid primary key,
-    pvk_dokument_id    uuid references pvk_dokument(id),
+    pvk_dokument_id    uuid unique references pvk_dokument(id),
     status             text not null,
     data               jsonb not null,
     version            integer not null,

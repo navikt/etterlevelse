@@ -15,6 +15,6 @@ public class Tilbakemeldingsinnhold {
     private LocalDateTime sistRedigertDato;
     private String bidragsVurdering;
     private String internDiskusjon;
-    private String TilbakemeldingTilEtterlevere;
+    private String tilbakemeldingTilEtterlevere;
 
 }

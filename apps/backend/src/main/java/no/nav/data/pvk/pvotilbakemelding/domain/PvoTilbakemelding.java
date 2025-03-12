@@ -26,13 +26,12 @@ public class PvoTilbakemelding extends Auditable {
     @Column(name = "ID")
     private UUID id = UUID.randomUUID();
 
-    @Column(name = "PVK_DOKUMENT_ID", nullable = false)
+    @Column(name = "PVK_DOKUMENT_ID", nullable = false, updatable = false)
     private UUID pvkDokumentId;
 
     @Builder.Default
-    @Column(name = "STATUS")
+    @Column(name = "STATUS", nullable = false)
     private PvoTilbakemeldingStatus status = PvoTilbakemeldingStatus.UNDERARBEID;
-
     @Type(value = JsonBinaryType.class)
     @Column(name = "DATA", nullable = false)
     @Builder.Default

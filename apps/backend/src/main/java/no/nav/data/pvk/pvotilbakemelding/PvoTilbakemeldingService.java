@@ -21,7 +21,7 @@ public class PvoTilbakemeldingService {
     private final PvoTilbakemeldingRepo pvoTilbakemeldingRepo;
 
     public PvoTilbakemelding get(UUID uuid) {
-        if(uuid == null || !pvoTilbakemeldingRepo.existsById(uuid)) return null;
+        if (uuid == null || !pvoTilbakemeldingRepo.existsById(uuid)) return null;
         return getPvoTilbakemelding(uuid);
     }
 
