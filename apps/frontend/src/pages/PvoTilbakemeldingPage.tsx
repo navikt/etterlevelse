@@ -7,11 +7,11 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { usePvkDokument } from '../api/PvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '../api/RisikoscenarioApi'
 import IdentifiseringAvRisikoscenarioerOgTiltak from '../components/PvkDokument/IdentifiseringAvRisikoscenarioerOgTiltak'
-import InvolveringAvEksterneView from '../components/PvkDokument/InvolveringAvEksterneView'
 import OppsummeringAvAlleRisikoscenarioerOgTiltak from '../components/PvkDokument/OppsummeringAvAlleRisikoscenarioerOgTiltak'
 import OversiktView from '../components/PvkDokument/OversiktView'
 import SendInnView from '../components/PvkDokument/SendInnView'
 import BehandlingensArtOgOmfangPvoView from '../components/PvoTilbakemelding/BehandlingensArtOgOmfangPvoView'
+import InvolveringAvEksternePvoView from '../components/PvoTilbakemelding/InvolveringAvEksternePvoView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import {
   ERisikoscenarioType,
@@ -209,15 +209,10 @@ export const PvkDokumentPage = () => {
                   />
                 )}
                 {activeStep === 3 && (
-                  <InvolveringAvEksterneView
+                  <InvolveringAvEksternePvoView
                     personkategorier={personkategorier}
                     databehandlere={databehandlere}
-                    etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                     pvkDokument={pvkDokument}
-                    setPvkDokument={setPvkDokument}
-                    activeStep={activeStep}
-                    setActiveStep={updateTitleUrlAndStep}
-                    setSelectedStep={setSelectedStep}
                     formRef={formRef}
                   />
                 )}
