@@ -22,6 +22,6 @@ public class P360DocumentCreateRequest {
     private String Category;
     private String Status;
     private String AccessGroup;
-    private String ResponsiblePersonIdNumber;
+    private String ResponsiblePersonEmail;
     private List<P360File> Files;
 }

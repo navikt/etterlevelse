@@ -81,8 +81,8 @@ public class P360Controller {
 
     @Operation(summary = "Create Document")
     @ApiResponses(value = {@ApiResponse(description = "Cases created")})
-    @PostMapping("/documentCases/etterlevelseDokumentasjon/{id}/saksnummer/{caseNumber}")
-    public ResponseEntity<P360Document> createDocument(@PathVariable String id, @PathVariable String caseNumber) {
+    @PostMapping("/documentCases/etterlevelseDokumentasjon/{id}")
+    public ResponseEntity<P360Document> createDocument(@PathVariable String id, @RequestBody String caseNumber) {
         log.info("Creating document for sak: {}", caseNumber);
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd");
@@ -100,7 +100,7 @@ public class P360Controller {
                         .Category("Internt notat uten oppfølging")
                         .Status("J")
                         .AccessGroup("Alle ansatte i Nav")
-                        .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
+                        .ResponsiblePersonEmail(SecurityUtils.getCurrentEmail())
                         .Files(List.of(P360File.builder()
                                         .Title(formatter.format(date) + "_Etterlevelse_E" + etterlevelsedokumentasjon.getEtterlevelseNummer())
                                         .Format("docx")
@@ -113,8 +113,8 @@ public class P360Controller {
 
     @Operation(summary = "Update Document")
     @ApiResponses(value = {@ApiResponse(description = "Cases created")})
-    @PostMapping("/documentCases/etterlevelseDokumentasjon/{id}/dokumentnummer/{dokumentNummber}")
-    public ResponseEntity<P360Document> updateDocument(@PathVariable String id, @PathVariable String dokumentNummber) {
+    @PostMapping("/documentCases/etterlevelseDokumentasjon/{id}")
+    public ResponseEntity<P360Document> updateDocument(@PathVariable String id, @RequestBody String dokumentNummber) {
         log.info("Creating document for dokument: {}", dokumentNummber);
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd");
@@ -132,7 +132,7 @@ public class P360Controller {
                 .Category("Internt notat uten oppfølging")
                 .Status("J")
                 .AccessGroup("Alle ansatte i Nav")
-                .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
+                .ResponsiblePersonEmail(SecurityUtils.getCurrentEmail())
                 .Files(List.of(P360File.builder()
                         .Title(formatter.format(date) + "_Etterlevelse_E" + etterlevelsedokumentasjon.getEtterlevelseNummer())
                         .Format("docx")
