@@ -1,5 +1,15 @@
+import { PageLayout } from '../components/scaffold/Page'
+
 export const PvoOversiktPage = () => {
-  return <div>test</div>
+  return (
+    <PageLayout
+      pageTitle="Oversikts side for Personvernsombudet"
+      currentPage="Oversikts side for Personvernsombudet"
+    >
+      test
+      <div className="pb-52 w-full">test</div>
+    </PageLayout>
+  )
 }
 
 export default PvoOversiktPage
