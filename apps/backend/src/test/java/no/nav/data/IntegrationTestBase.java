@@ -29,6 +29,11 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingData;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingRepo;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioData;
@@ -112,6 +117,10 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected PvkDokumentService pvkDokumentService;
     @Autowired
+    protected PvoTilbakemeldingRepo pvoTilbakemeldingRepo;
+    @Autowired
+    protected PvoTilbakemeldingService pvoTilbakemeldingService;
+    @Autowired
     protected TiltakRepo tiltakRepo;
     @Autowired
     protected TiltakService tiltakService;
@@ -142,6 +151,7 @@ public abstract class IntegrationTestBase {
         tiltakRepo.deleteAllTiltakRisikoscenarioRelations();
         tiltakRepo.deleteAll();
         risikoscenarioRepo.deleteAll();
+        pvoTilbakemeldingRepo.deleteAll();
         pvkDokumentRepo.deleteAll();
     }
 
@@ -156,7 +166,17 @@ public abstract class IntegrationTestBase {
             ).applyTo(configurableApplicationContext.getEnvironment());
         }
     }
-    
+
+    public static PvoTilbakemelding generatePvoTilbakemelding(UUID id) {
+        return PvoTilbakemelding.builder()
+                .pvkDokumentId(id)
+                .status(PvoTilbakemeldingStatus.UNDERARBEID)
+                .pvoTilbakemeldingData(
+                        PvoTilbakemeldingData.builder().build()
+                )
+        .build();
+    }
+
     public static PvkDokument generatePvkDokument(UUID etterlevelseDokumentasjonId) {
         return PvkDokument.builder()
                 .etterlevelseDokumentId(etterlevelseDokumentasjonId.toString())
@@ -168,7 +188,7 @@ public abstract class IntegrationTestBase {
                 )
                 .build();
     }
-    
+
     public static Risikoscenario generateRisikoscenario(UUID pvkDokumentId) {
         return Risikoscenario.builder()
                 .pvkDokumentId(pvkDokumentId)
