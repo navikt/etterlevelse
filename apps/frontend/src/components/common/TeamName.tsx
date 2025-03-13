@@ -1,6 +1,6 @@
-import { Label, Link } from '@navikt/ds-react'
-import { useTeam } from '../../api/TeamApi'
-import { teamKatTeamLink } from '../../util/config'
+import {Label, Link} from '@navikt/ds-react'
+import {useTeam} from '../../api/TeamApi'
+import {teamKatTeamLink} from '../../util/config'
 
 interface IPropsTeamName {
   id: string
@@ -16,7 +16,7 @@ interface IPropsTeams {
 }
 
 export const TeamName = (props: IPropsTeamName) => {
-  const { id, link, big } = props
+  const {id, link, big} = props
   const [name] = useTeam()(id)
 
   return link ? (
@@ -34,13 +34,13 @@ export const TeamName = (props: IPropsTeamName) => {
 }
 
 export const Teams = (props: IPropsTeams) => {
-  const { teams, link, big } = props
+  const {teams, link, big} = props
 
   return (
     <div className="flex flex-wrap gap-2 items-center">
-      <Label size="small">Team:</Label>
+      <Label size="medium">Team:</Label>
       {teams.map((team, index) => (
-        <TeamName key={`team_${index}`} id={team} link={link} big={big} />
+        <TeamName key={`team_${index}`} id={team} link={link} big={big}/>
       ))}
     </div>
   )

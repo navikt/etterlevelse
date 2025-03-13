@@ -1,8 +1,8 @@
-import { BodyShort, Label } from '@navikt/ds-react'
-import { behandlingName } from '../../api/BehandlingApi'
-import { IBehandling } from '../../constants'
-import { env } from '../../util/env'
-import { ExternalLink } from '../common/RouteLink'
+import {BodyLong, Label} from '@navikt/ds-react'
+import {behandlingName} from '../../api/BehandlingApi'
+import {IBehandling} from '../../constants'
+import {env} from '../../util/env'
+import {ExternalLink} from '../common/RouteLink'
 
 interface IProps {
   behandlingIds: string[]
@@ -11,11 +11,11 @@ interface IProps {
 }
 
 export const BehandlingList = (props: IProps) => {
-  const { behandlingIds, behandlinger, behandlerPersonopplysninger } = props
+  const {behandlingIds, behandlinger, behandlerPersonopplysninger} = props
 
   return (
     <div className="flex gap-2 flex-wrap items-center mb-2.5 break-all">
-      <Label size="small">Behandling:</Label>
+      <Label size="medium">Behandling:</Label>
       {behandlingIds?.length >= 1 &&
         behandlerPersonopplysninger &&
         behandlingIds.map((behandlingId, index) => (
@@ -30,13 +30,13 @@ export const BehandlingList = (props: IProps) => {
             )}
 
             {behandlinger && !behandlinger[index].navn && (
-              <BodyShort size="small">Ingen data</BodyShort>
+              <BodyLong size="medium">Ingen data</BodyLong>
             )}
           </div>
         ))}
 
       {behandlingIds?.length === 0 && (
-        <BodyShort size="small">Husk å legge til behandling fra behandlingskatalogen</BodyShort>
+        <BodyLong size="medium">Husk å legge til behandling fra behandlingskatalogen</BodyLong>
       )}
     </div>
   )
