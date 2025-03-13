@@ -120,7 +120,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.4.1",
     "postcss": "^8.5.1",
-    "prettier": "3.5.1",
+    "prettier": "3.5.3",
     "react-localization": "^2.0.5",
     "react-router-dom": "7.2.0",
     "react-scripts": "5.0.1"
