@@ -259,10 +259,8 @@ export const OversiktView = (props: IProps) => {
           activeStep={activeStep}
           setActiveStep={updateTitleUrlAndStep}
           setSelectedStep={setSelectedStep}
-          //TODO bytt til riktig url
-          customOriginLink="URL til oversikt page til PVO"
-          //TODO bytt med bedre label
-          customOriginLinkLabel="Tilbake til PVO oversikt page"
+          customOriginLink="/pvo/overiskt"
+          customOriginLinkLabel="Tilbake til PVO oversikt side"
         />
       </div>
     </div>
