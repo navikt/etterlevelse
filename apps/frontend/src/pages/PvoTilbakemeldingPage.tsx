@@ -6,11 +6,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '../api/RisikoscenarioApi'
-import OversiktView from '../components/PvkDokument/OversiktView'
 import BehandlingensArtOgOmfangPvoView from '../components/PvoTilbakemelding/BehandlingensArtOgOmfangPvoView'
 import IdentifiseringAvRisikoscenarioerOgTiltakPvoView from '../components/PvoTilbakemelding/IdentifiseringAvRisikoscenarioerOgTiltakPvoView'
 import InvolveringAvEksternePvoView from '../components/PvoTilbakemelding/InvolveringAvEksternePvoView'
 import OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView from '../components/PvoTilbakemelding/OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
+import OversiktPvoView from '../components/PvoTilbakemelding/OversiktPvoView'
 import SendInnPvoView from '../components/PvoTilbakemelding/SendInnPvoView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import {
@@ -192,7 +192,7 @@ export const PvkDokumentPage = () => {
             <div className="w-full max-w-7xl">
               <div className="px-2 pb-6">
                 {activeStep === 1 && (
-                  <OversiktView
+                  <OversiktPvoView
                     etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                     pvkDokument={pvkDokument}
                     allRisikoscenarioList={allRisikoscenario}

@@ -11,6 +11,7 @@ interface IProps {
   customButtons?: ReactNode
   submitForm?: (() => Promise<void>) & (() => Promise<any>)
   customOriginLink?: string
+  customOriginLinkLabel?: string
 }
 
 export const FormButtons = (props: IProps) => {
@@ -21,6 +22,7 @@ export const FormButtons = (props: IProps) => {
     setSelectedStep,
     customButtons,
     customOriginLink,
+    customOriginLinkLabel,
   } = props
   const navigate = useNavigate()
 
@@ -47,7 +49,9 @@ export const FormButtons = (props: IProps) => {
             }}
           >
             {activeStep === 1
-              ? 'Tilbake til Temaoversikt'
+              ? customOriginLinkLabel
+                ? customOriginLinkLabel
+                : 'Tilbake til Temaoversikt'
               : activeStep === 2
                 ? 'Tilbake til Oversikt'
                 : activeStep === 3
