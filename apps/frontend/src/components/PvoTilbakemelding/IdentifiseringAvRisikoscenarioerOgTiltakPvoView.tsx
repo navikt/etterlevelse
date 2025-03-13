@@ -4,16 +4,27 @@ import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, ITiltak } from '../../constants'
+import FormButtons from '../PvkDokument/edit/FormButtons'
 import RisikoscenarioAccordianListPvoView from './RisikoscenarioAccordianListPvoView'
 
 interface IProps {
   etterlevelseDokumentasjonId: string
   pvkDokument: IPvkDokument
+  activeStep: number
+  setActiveStep: (step: number) => void
+  setSelectedStep: (step: number) => void
   formRef: RefObject<any>
 }
 
 export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView = (props: IProps) => {
-  const { etterlevelseDokumentasjonId, pvkDokument, formRef } = props
+  const {
+    etterlevelseDokumentasjonId,
+    pvkDokument,
+    activeStep,
+    setActiveStep,
+    setSelectedStep,
+    formRef,
+  } = props
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [allRisikoscenarioList, setAllRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
@@ -104,6 +115,13 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView = (props: IProps) =
             </div>
           )}
         </div>
+
+        <FormButtons
+          etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+          activeStep={activeStep}
+          setActiveStep={setActiveStep}
+          setSelectedStep={setSelectedStep}
+        />
       </div>
     </div>
   )

@@ -10,11 +10,18 @@ interface IProps {
   setSelectedStep: (step: number) => void
   customButtons?: ReactNode
   submitForm?: (() => Promise<void>) & (() => Promise<any>)
+  customOriginLink?: string
 }
 
 export const FormButtons = (props: IProps) => {
-  const { etterlevelseDokumentasjonId, activeStep, setActiveStep, setSelectedStep, customButtons } =
-    props
+  const {
+    etterlevelseDokumentasjonId,
+    activeStep,
+    setActiveStep,
+    setSelectedStep,
+    customButtons,
+    customOriginLink,
+  } = props
   const navigate = useNavigate()
 
   return (
@@ -27,7 +34,11 @@ export const FormButtons = (props: IProps) => {
             variant="tertiary"
             onClick={() => {
               if (activeStep === 1) {
-                navigate('/dokumentasjon/' + etterlevelseDokumentasjonId)
+                navigate(
+                  customOriginLink
+                    ? customOriginLink
+                    : '/dokumentasjon/' + etterlevelseDokumentasjonId
+                )
               } else {
                 window.scrollTo(0, 0)
                 setActiveStep(activeStep - 1)

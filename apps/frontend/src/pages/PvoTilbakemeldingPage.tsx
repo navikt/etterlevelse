@@ -205,6 +205,10 @@ export const PvkDokumentPage = () => {
                   <BehandlingensArtOgOmfangPvoView
                     personkategorier={personkategorier}
                     pvkDokument={pvkDokument}
+                    etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                    activeStep={activeStep}
+                    setSelectedStep={setSelectedStep}
+                    setActiveStep={updateTitleUrlAndStep}
                     formRef={formRef}
                   />
                 )}
@@ -213,6 +217,10 @@ export const PvkDokumentPage = () => {
                     personkategorier={personkategorier}
                     databehandlere={databehandlere}
                     pvkDokument={pvkDokument}
+                    etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                    activeStep={activeStep}
+                    setSelectedStep={setSelectedStep}
+                    setActiveStep={updateTitleUrlAndStep}
                     formRef={formRef}
                   />
                 )}
@@ -220,6 +228,9 @@ export const PvkDokumentPage = () => {
                   <IdentifiseringAvRisikoscenarioerOgTiltakPvoView
                     etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                     pvkDokument={pvkDokument}
+                    activeStep={activeStep}
+                    setSelectedStep={setSelectedStep}
+                    setActiveStep={updateTitleUrlAndStep}
                     formRef={formRef}
                   />
                 )}
@@ -227,6 +238,9 @@ export const PvkDokumentPage = () => {
                   <OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView
                     etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                     pvkDokument={pvkDokument}
+                    activeStep={activeStep}
+                    setSelectedStep={setSelectedStep}
+                    setActiveStep={updateTitleUrlAndStep}
                     formRef={formRef}
                   />
                 )}

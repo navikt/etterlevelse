@@ -124,6 +124,7 @@ export const SendInnPvoView = (props: IProps) => {
                 setActiveStep={setActiveStep}
                 setSelectedStep={setSelectedStep}
                 submitForm={submitForm}
+
                 // customButtons={
                 //   <div className="mt-5 flex gap-2 items-center">
                 //     {dirty && (
