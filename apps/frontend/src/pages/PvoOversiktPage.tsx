@@ -1,6 +1,7 @@
 import { Loader } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { getAllPvkDokumentListItem } from '../api/PvkDokumentApi'
+import { PvoList } from '../components/PvkDokument/PvoList'
 import { PageLayout } from '../components/scaffold/Page'
 import { IPvkDokumentListItem } from '../constants'
 
@@ -29,7 +30,11 @@ export const PvoOversiktPage = () => {
           </div>
         )}
         {!isLoading && allPvkDocumentListItem.length !== 0 && (
-          <div className="w-full">{allPvkDocumentListItem[0].title}</div>
+          <div className="w-full">
+            {allPvkDocumentListItem[0].title}
+
+            <PvoList />
+          </div>
         )}
       </div>
     </PageLayout>
