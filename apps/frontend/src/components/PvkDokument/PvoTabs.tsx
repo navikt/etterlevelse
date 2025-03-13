@@ -1,4 +1,4 @@
-import { Tabs } from '@navikt/ds-react'
+import { Label, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { PvoList } from './PvoList'
@@ -34,6 +34,17 @@ const PvoTabs = () => {
         HER SKAL DET VÆRE SISTE REDIGERTE {/* <SistRedigertKrav /> */}
       </Tabs.Panel>
       <Tabs.Panel value="alle">
+        <div className="w-full justify-center my-4">
+          <div className="flex justify-center content-center w-full">
+            <div className="flex justify-start align-middle w-full">
+              <Label size="medium">
+                {/* {kravene.totalElements ? kravene.totalElements : 0}  */}
+                antall PVKer
+              </Label>
+            </div>
+          </div>
+        </div>
+
         <PvoList />
       </Tabs.Panel>
     </Tabs>

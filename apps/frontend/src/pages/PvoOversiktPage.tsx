@@ -21,8 +21,8 @@ export const PvoOversiktPage = () => {
 
   return (
     <PageLayout
-      pageTitle="Oversikts side for Personvernsombudet"
-      currentPage="Oversikts side for Personvernsombudet"
+      pageTitle="Oversiktsside for Personvernsombudet"
+      currentPage="Oversiktsside for Personvernsombudet"
     >
       <div className="pb-52 w-full">
         <ListPageHeader headingText="Oversiktsside for Personvernombudet" />

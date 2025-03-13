@@ -105,7 +105,7 @@ const LoggedInHeader = () => {
   const pvoPages = user.isPersonvernombud()
     ? [
         {
-          label: 'Oversikts side for Personvernsombudet',
+          label: 'Oversiktsside for Personvernsombudet',
           href: '/pvoliste/oversikt',
         },
       ]
