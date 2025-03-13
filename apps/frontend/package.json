@@ -27,7 +27,7 @@
     "draft-js": "^0.11.7",
     "formik": "^2.4.5",
     "graphql": "^16.8.1",
-    "json-diff-kit": "1.0.18",
+    "json-diff-kit": "1.0.31",
     "lodash": "^4.17.21",
     "markdown-draft-js": "^2.4.0",
     "moment": "^2.29.4",
@@ -122,7 +122,7 @@
     "postcss": "^8.5.1",
     "prettier": "3.5.3",
     "react-localization": "^2.0.5",
-    "react-router-dom": "7.2.0",
+    "react-router-dom": "7.3.0",
     "react-scripts": "5.0.1"
   },
   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
