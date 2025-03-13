@@ -29,6 +29,7 @@ import { MyEtterlevelseDokumentasjonerPage } from './pages/MyEtterlevelseDokumen
 import NotFound from './pages/NotFound'
 import PvkBehovPage from './pages/PvkBehovPage'
 import PvkDokumentPage from './pages/PvkDokumentPage'
+import PvoOversiktPage from './pages/PvoOversiktPage'
 import PvoTilbakemeldingPage from './pages/PvoTilbakemeldingPage'
 import QuestionAndAnswerLogPage from './pages/QuestionAndAnswerLogPage'
 import { RelasjonsOversikt } from './pages/RelasjonsOversikt'
@@ -162,6 +163,12 @@ const AppRoutes = (): JSX.Element => {
       />
 
       <Route
+        path="/pvo/oversikt"
+        element={<PrivateRoute component={<PvoOversiktPage />} pvoPage />}
+        caseSensitive={true}
+      />
+
+      <Route
         path="/dokumentasjon/:id/pvkdokument/pvo/:pvkdokumentId/:steg"
         element={<PvoTilbakemeldingPage />}
         caseSensitive={true}
@@ -258,6 +265,7 @@ const AppRoutes = (): JSX.Element => {
         element={<PrivateRoute component={<DocumentRelationAdminPage />} adminPage />}
         caseSensitive={true}
       />
+
       <Route path="/tema/:tema" element={<TemaPage />} caseSensitive={true} />
       <Route path="/tema/" element={<TemaOversiktPage />} caseSensitive={true} />
       <Route path="/help" element={<RedirectHelpUrl />} caseSensitive={true} />
