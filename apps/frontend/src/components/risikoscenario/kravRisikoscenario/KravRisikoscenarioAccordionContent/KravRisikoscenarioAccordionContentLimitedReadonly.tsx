@@ -29,7 +29,7 @@ interface IProps {
   setIsCreateTiltakFormActive: (value: SetStateAction<boolean>) => void
   setIsAddExisitingMode: (value: SetStateAction<boolean>) => void
   submitIngenTiltak: (submitedValues: IRisikoscenario) => Promise<void>
-  setIsIngenTilgangFormDirty: React.Dispatch<React.SetStateAction<boolean>>
+  setIsIngenTilgangFormDirty: Dispatch<SetStateAction<boolean>>
 }
 
 export const KravRisikoscenarioAccordionContentLimitedReadonly = (props: IProps) => {
