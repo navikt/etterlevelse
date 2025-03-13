@@ -540,6 +540,15 @@ export interface IPvkDokument {
   merknadTilPvoEllerRisikoeier: string
 }
 
+export interface IPvkDokumentListItem {
+  id: string
+  changeStamp: IChangeStamp
+  etterlevelseDokumentId: string
+  status: EPvkDokumentStatus
+  title: string
+  etterlevelseNummer: number
+}
+
 export interface IRisikoscenario {
   id: string
   changeStamp: IChangeStamp
