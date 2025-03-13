@@ -1,34 +1,38 @@
 import { Tabs } from '@navikt/ds-react'
+import { useEffect, useState } from 'react'
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { PvoList } from './PvoList'
 
-const PvoTabs = () => {
-  //   const navigate: NavigateFunction = useNavigate()
-  //   const params: Readonly<
-  //     Partial<{
-  //       tab?: string
-  //     }>
-  //   > = useParams<{ tab?: string }>()
-  //   const [tab, setTab] = useState<string>(params.tab || 'siste')
+type TSection = 'siste' | 'alle'
 
-  //   useEffect(() => {
-  //     setTab((params.tab as TSection) || 'siste')
-  //   }, [params])
+const PvoTabs = () => {
+  const navigate: NavigateFunction = useNavigate()
+  const params: Readonly<
+    Partial<{
+      tab?: string
+    }>
+  > = useParams<{ tab?: string }>()
+  const [tab, setTab] = useState<string>(params.tab || 'siste')
+
+  useEffect(() => {
+    setTab((params.tab as TSection) || 'siste')
+  }, [params])
 
   return (
     <Tabs
-    //   defaultValue={tab}
-    //   onChange={(args: string) => {
-    //     setTab(args)
-    //     navigate(`/kravliste/${args}`)
-    //   }}
+      defaultValue={tab}
+      onChange={(args: string) => {
+        setTab(args)
+        navigate(`/pvoliste/${args}`)
+      }}
     >
       <Tabs.List>
-        <Tabs.Tab value="siste" label="Sist endret av meg" />
-        <Tabs.Tab value="tema" label="Endre rekkefølge på krav (Temaoversikt)" />
-        <Tabs.Tab value="alle" label="Alle krav" />
+        <Tabs.Tab value="siste" label="Mine sist redigerte" />
+        <Tabs.Tab value="alle" label="Alle PVKer" />
       </Tabs.List>
-      <Tabs.Panel value="siste">gerbgf{/* <SistRedigertKrav /> */}</Tabs.Panel>
-      <Tabs.Panel value="tema">ta b 2{/* <TemaList /> */}</Tabs.Panel>
+      <Tabs.Panel value="siste">
+        HER SKAL DET VÆRE SISTE REDIGERTE {/* <SistRedigertKrav /> */}
+      </Tabs.Panel>
       <Tabs.Panel value="alle">
         <PvoList />
       </Tabs.Panel>

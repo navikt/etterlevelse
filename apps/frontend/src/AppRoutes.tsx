@@ -163,7 +163,13 @@ const AppRoutes = (): JSX.Element => {
       />
 
       <Route
-        path="/pvo/oversikt"
+        path="/pvoliste/:tab"
+        element={<PrivateRoute component={<PvoOversiktPage />} kraveierPage />}
+        caseSensitive={true}
+      />
+
+      <Route
+        path="/pvoliste/oversikt"
         element={<PrivateRoute component={<PvoOversiktPage />} pvoPage />}
         caseSensitive={true}
       />
