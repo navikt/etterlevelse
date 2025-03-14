@@ -1,7 +1,7 @@
 import { List, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
 import { IPvkDokumentListItem } from '../../constants'
-import { ListLayout } from '../ListLayout'
+import { ListLayout } from '../common/ListLayout'
 import StatusView from '../common/StatusTag'
 
 interface IProps {
