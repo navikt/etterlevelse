@@ -61,7 +61,7 @@ export const PvkDokumentPage = () => {
   const breadcrumbPaths: IBreadCrumbPath[] = [
     {
       pathName: 'Oversikt siden for personvernombudet',
-      href: '/pvoliste/oversikt',
+      href: '/pvo/oversikt',
     },
     {
       pathName:

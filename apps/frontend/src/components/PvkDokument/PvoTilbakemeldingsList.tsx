@@ -17,9 +17,7 @@ export const PvoTilbakemeldingsList = ({ allPvkDocumentListItem, isLoading }: IP
           allPvkDocumentListItem.map((pvkDokument: IPvkDokumentListItem) => {
             return (
               <List.Item icon={<div />} className="mb-0" key={pvkDokument.id}>
-                <LinkPanel
-                // href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
-                >
+                <LinkPanel href={`/pvo/pvkdokument/${pvkDokument.id}/tilbakemelding/1`}>
                   <LinkPanel.Title className="flex items-center">
                     <div className="max-w-xl">
                       <BodyShort size="small">E{pvkDokument.etterlevelseNummer}</BodyShort>
