@@ -35,7 +35,7 @@ export const PvoOversiktPage = () => {
           <div className="flex justify-center w-full">
             <div className="w-full">
               <div className="pt-6">
-                <PvoTabs />
+                <PvoTabs allPvkDocumentListItem={allPvkDocumentListItem} isLoading={isLoading} />
               </div>
             </div>
           </div>

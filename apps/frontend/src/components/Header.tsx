@@ -106,7 +106,7 @@ const LoggedInHeader = () => {
     ? [
         {
           label: 'Oversiktsside for Personvernsombudet',
-          href: '/pvoliste/oversikt',
+          href: '/pvo/oversikt',
         },
       ]
     : []

@@ -1,11 +1,17 @@
 import { Label, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
-import { PvoList } from './PvoList'
+import { IPvkDokumentListItem } from '../../constants'
+import { PvoTilbakemeldingsList } from './PvoTilbakemeldingsList'
 
 type TSection = 'siste' | 'alle'
 
-const PvoTabs = () => {
+interface IProps {
+  allPvkDocumentListItem: IPvkDokumentListItem[]
+  isLoading: false
+}
+
+const PvoTabs = ({ allPvkDocumentListItem, isLoading }: IProps) => {
   const navigate: NavigateFunction = useNavigate()
   const params: Readonly<
     Partial<{
@@ -23,7 +29,7 @@ const PvoTabs = () => {
       defaultValue={tab}
       onChange={(args: string) => {
         setTab(args)
-        navigate(`/pvoliste/${args}`)
+        navigate(`/pvo/${args}`)
       }}
     >
       <Tabs.List>
@@ -45,7 +51,10 @@ const PvoTabs = () => {
           </div>
         </div>
 
-        <PvoList />
+        <PvoTilbakemeldingsList
+          allPvkDocumentListItem={allPvkDocumentListItem}
+          isLoading={isLoading}
+        />
       </Tabs.Panel>
     </Tabs>
   )
