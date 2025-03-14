@@ -102,7 +102,14 @@ const LoggedInHeader = () => {
       </div>
     </div>
   )
-
+  const pvoPages = user.isPersonvernombud()
+    ? [
+        {
+          label: 'Oversiktsside for Personvernsombudet',
+          href: '/pvo/oversikt',
+        },
+      ]
+    : []
   const kravPages = user.isKraveier()
     ? [
         { label: 'Forvalte og opprette krav', href: '/kravliste' },
@@ -128,7 +135,13 @@ const LoggedInHeader = () => {
   return (
     <div className="flex items-center justify-center">
       <Menu
-        pages={[[{ label: <UserInfoView /> }], kravPages, adminPages, [{ label: roller }]]}
+        pages={[
+          [{ label: <UserInfoView /> }],
+          kravPages,
+          pvoPages,
+          adminPages,
+          [{ label: roller }],
+        ]}
         title={user.getIdent()}
         icon={<PersonIcon area-label="" aria-hidden />}
       />

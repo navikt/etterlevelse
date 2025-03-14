@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { EPvkDokumentStatus, IPageResponse, IPvkDokument } from '../constants'
+import { EPvkDokumentStatus, IPageResponse, IPvkDokument, IPvkDokumentListItem } from '../constants'
 import { env } from '../util/env'
 
 export const getAllPvkDokument = async () => {
@@ -20,10 +20,35 @@ export const getAllPvkDokument = async () => {
   }
 }
 
+export const getAllPvkDokumentListItem = async () => {
+  const pageSize = 100
+  const firstPage = await getPvkDokumentListItemPage(0, pageSize)
+  if (firstPage.pages === 1) {
+    return firstPage.content.length > 0 ? [...firstPage.content] : []
+  } else {
+    let allPvkDokument: IPvkDokumentListItem[] = [...firstPage.content]
+    for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
+      allPvkDokument = [
+        ...allPvkDokument,
+        ...(await getPvkDokumentListItemPage(currentPage, pageSize)).content,
+      ]
+    }
+    return allPvkDokument
+  }
+}
+
 export const getPvkDokumentPage = async (pageNumber: number, pageSize: number) => {
   return (
     await axios.get<IPageResponse<IPvkDokument>>(
       `${env.backendBaseUrl}/pvkdokument?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    )
+  ).data
+}
+
+export const getPvkDokumentListItemPage = async (pageNumber: number, pageSize: number) => {
+  return (
+    await axios.get<IPageResponse<IPvkDokumentListItem>>(
+      `${env.backendBaseUrl}/pvkdokument/pvo?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
   ).data
 }

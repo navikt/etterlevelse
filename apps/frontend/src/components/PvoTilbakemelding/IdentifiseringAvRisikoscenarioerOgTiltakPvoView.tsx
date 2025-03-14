@@ -4,9 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, ITiltak } from '../../constants'
-import RisikoscenarioAccordianList from '../risikoscenario/RisikoscenarioAccordianList'
-import CreateRisikoscenarioModal from '../risikoscenario/edit/CreateRisikoscenarioModal'
-import FormButtons from './edit/FormButtons'
+import FormButtons from '../PvkDokument/edit/FormButtons'
+import RisikoscenarioAccordianListPvoView from './RisikoscenarioAccordianListPvoView'
 
 interface IProps {
   etterlevelseDokumentasjonId: string
@@ -17,7 +16,7 @@ interface IProps {
   formRef: RefObject<any>
 }
 
-export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
+export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView = (props: IProps) => {
   const {
     etterlevelseDokumentasjonId,
     pvkDokument,
@@ -29,7 +28,6 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [allRisikoscenarioList, setAllRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
-  const [isTiltakFormActive, setIsTiltakFormActive] = useState<boolean>(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -108,25 +106,13 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
         <div className="w-full">
           {risikoscenarioList.length !== 0 && (
             <div className="my-5">
-              <RisikoscenarioAccordianList
+              <RisikoscenarioAccordianListPvoView
                 risikoscenarioList={risikoscenarioList}
                 allRisikoscenarioList={allRisikoscenarioList}
                 tiltakList={tiltakList}
-                setTiltakList={setTiltakList}
-                setRisikoscenarioList={setRisikoscenarioList}
-                setIsTiltakFormActive={setIsTiltakFormActive}
                 formRef={formRef}
               />
             </div>
-          )}
-
-          {!isTiltakFormActive && (
-            <CreateRisikoscenarioModal
-              pvkDokument={pvkDokument}
-              onSubmitStateUpdate={(risikoscenario: IRisikoscenario) => {
-                setRisikoscenarioList([...risikoscenarioList, risikoscenario])
-              }}
-            />
           )}
         </div>
 
@@ -141,4 +127,4 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
   )
 }
 
-export default IdentifiseringAvRisikoscenarioerOgTiltak
+export default IdentifiseringAvRisikoscenarioerOgTiltakPvoView

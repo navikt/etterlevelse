@@ -540,6 +540,15 @@ export interface IPvkDokument {
   merknadTilPvoEllerRisikoeier: string
 }
 
+export interface IPvkDokumentListItem {
+  id: string
+  changeStamp: IChangeStamp
+  etterlevelseDokumentId: string
+  status: EPvkDokumentStatus
+  title: string
+  etterlevelseNummer: number
+}
+
 export interface IRisikoscenario {
   id: string
   changeStamp: IChangeStamp
@@ -603,13 +612,33 @@ export interface IBehandlingensLivslopFil {
   fil: string
 }
 
-export interface IBehandlingensLivslopRequest {
+export interface IBehandlingensLivslopRequest extends IDomainObject {
   id: string
-  changeStamp: IChangeStamp
-  version: number
   etterlevelseDokumentasjonId: string
   beskrivelse: string
   filer: File[]
+}
+
+export interface IPvoTilbakemelding extends IDomainObject {
+  id: string
+  pvkDokumentId: string
+  status: EPvoTilbakemeldingStatus
+  behandlingensArtOgOmfang: ITilbakemeldingsinnhold
+  innvolveringAvEksterne: ITilbakemeldingsinnhold
+  risikoscenarioEtterTiltakk: ITilbakemeldingsinnhold
+}
+
+export interface ITilbakemeldingsinnhold {
+  sistRedigertAv: string
+  sistRedigertDato: string
+  bidragsVurdering: string
+  internDiskusjon: string
+  tilbakemeldingTilEtterlevere: string
+}
+
+export enum EPvoTilbakemeldingStatus {
+  UNDERARBEID = 'UNDERARBEID',
+  FERDIG = 'FERDIG',
 }
 
 export enum EPvkDokumentStatus {
