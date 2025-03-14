@@ -9,7 +9,7 @@ import {
   ToggleGroup,
 } from '@navikt/ds-react'
 import { RefObject, useState } from 'react'
-import { IPvkDokument } from '../../constants'
+import { IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import FormButtons from '../PvkDokument/edit/FormButtons'
 import { Markdown } from '../common/Markdown'
 import TextEditor from '../common/TextEditor/TextEditor'
@@ -19,6 +19,8 @@ interface IProps {
   databehandlere: string[]
   pvkDokument: IPvkDokument
   etterlevelseDokumentasjonId: string
+  pvoTilbakemelding: IPvoTilbakemelding
+  setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void

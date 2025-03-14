@@ -7,7 +7,7 @@ import {
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '../../api/PvkDokumentApi'
-import { EPvkDokumentStatus, IPvkDokument } from '../../constants'
+import { EPvkDokumentStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import FormButtons from '../PvkDokument/edit/FormButtons'
 import ArtOgOmFangSummary from '../PvkDokument/formSummary/ArtOgOmfangSummary'
 import InvolveringSummary from '../PvkDokument/formSummary/InvolveringSummary'
@@ -21,6 +21,8 @@ interface IProps {
   personkategorier: string[]
   databehandlere: string[]
   etterlevelseDokumentasjonId: string
+  pvoTilbakemelding: IPvoTilbakemelding
+  setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void

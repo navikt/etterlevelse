@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
+import { usePvoTilbakemelding } from '../api/PvoApi'
 import { getRisikoscenarioByPvkDokumentId } from '../api/RisikoscenarioApi'
 import BehandlingensArtOgOmfangPvoView from '../components/PvoTilbakemelding/BehandlingensArtOgOmfangPvoView'
 import IdentifiseringAvRisikoscenarioerOgTiltakPvoView from '../components/PvoTilbakemelding/IdentifiseringAvRisikoscenarioerOgTiltakPvoView'
@@ -46,8 +47,12 @@ export const PvkDokumentPage = () => {
   )
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] =
     useState<IEtterlevelseDokumentasjon>()
+  const [isEtterlevelseDokumentaasjonLoading, setIsEtterlevelseDokumentaasjonLoading] =
+    useState<boolean>(false)
   const [personkategorier, setPersonKategorier] = useState<string[]>([])
-  const [pvkDokument, setPvkDokument] = usePvkDokument(params.id)
+  const [pvkDokument, setPvkDokument, isPvkDokumentLoading] = usePvkDokument(params.id)
+  const [pvoTilbakemelding, setPvoTilbakemelding, isPvoTilbakemeldingLoading] =
+    usePvoTilbakemelding(params.id)
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [databehandlere, setDatabehandlere] = useState<string[]>([])
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
@@ -123,6 +128,7 @@ export const PvkDokumentPage = () => {
   useEffect(() => {
     ;(async () => {
       if (pvkDokument && pvkDokument.id) {
+        setIsEtterlevelseDokumentaasjonLoading(true)
         await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
           (response) => {
             setAllRisikoscenario(response.content)
@@ -130,10 +136,17 @@ export const PvkDokumentPage = () => {
         )
         await getEtterlevelseDokumentasjon(pvkDokument.etterlevelseDokumentId).then((response) => {
           setEtterlevelseDokumentasjon(response)
+          setIsEtterlevelseDokumentaasjonLoading(false)
         })
       }
     })()
   }, [pvkDokument])
+
+  const isPageLoading =
+    isEtterlevelseDokumentaasjonLoading || isPvkDokumentLoading || isPvoTilbakemeldingLoading
+
+  const isPageDoneLoading =
+    !isEtterlevelseDokumentaasjonLoading && !isPvkDokumentLoading && !isPvoTilbakemeldingLoading
 
   return (
     <div id="content" role="main" className="flex flex-col w-full bg-white">
@@ -161,157 +174,170 @@ export const PvkDokumentPage = () => {
         </div>
       )}
 
-      {etterlevelseDokumentasjon && pvkDokument && (user.isPersonvernombud() || user.isAdmin()) && (
-        <div className="w-full">
-          <div className="min-h-48 bg-[#8269A21F] flex flex-col w-full items-center">
-            <div className="w-full max-w-7xl">
-              <div className="px-2 pb-6">
-                <CustomizedBreadcrumbs currentPage={currentPage} paths={breadcrumbPaths} />
-                <div>
-                  <Stepper
-                    aria-labelledby="stepper-heading"
-                    activeStep={activeStep}
-                    onStepChange={(step) => {
-                      setSelectedStep(step)
-                      updateTitleUrlAndStep(step)
-                    }}
-                    orientation="horizontal"
-                  >
-                    {StepTitle.map((title) => {
-                      return (
-                        <Stepper.Step key={title} as="button">
-                          {title}
-                        </Stepper.Step>
-                      )
-                    })}
-                  </Stepper>
+      {isPageLoading && <div></div>}
+
+      {isPageDoneLoading &&
+        etterlevelseDokumentasjon &&
+        pvkDokument &&
+        (user.isPersonvernombud() || user.isAdmin()) && (
+          <div className="w-full">
+            <div className="min-h-48 bg-[#8269A21F] flex flex-col w-full items-center">
+              <div className="w-full max-w-7xl">
+                <div className="px-2 pb-6">
+                  <CustomizedBreadcrumbs currentPage={currentPage} paths={breadcrumbPaths} />
+                  <div>
+                    <Stepper
+                      aria-labelledby="stepper-heading"
+                      activeStep={activeStep}
+                      onStepChange={(step) => {
+                        setSelectedStep(step)
+                        updateTitleUrlAndStep(step)
+                      }}
+                      orientation="horizontal"
+                    >
+                      {StepTitle.map((title) => {
+                        return (
+                          <Stepper.Step key={title} as="button">
+                            {title}
+                          </Stepper.Step>
+                        )
+                      })}
+                    </Stepper>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex flex-col w-full items-center mt-5">
-            <div className="w-full max-w-7xl">
-              <div className="px-2 pb-6">
-                {activeStep === 1 && (
-                  <OversiktPvoView
-                    etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                    pvkDokument={pvkDokument}
-                    allRisikoscenarioList={allRisikoscenario}
-                    activeStep={activeStep}
-                    setSelectedStep={setSelectedStep}
-                    updateTitleUrlAndStep={updateTitleUrlAndStep}
-                  />
-                )}
-                {activeStep === 2 && (
-                  <BehandlingensArtOgOmfangPvoView
-                    personkategorier={personkategorier}
-                    pvkDokument={pvkDokument}
-                    etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                    activeStep={activeStep}
-                    setSelectedStep={setSelectedStep}
-                    setActiveStep={updateTitleUrlAndStep}
-                    formRef={formRef}
-                  />
-                )}
-                {activeStep === 3 && (
-                  <InvolveringAvEksternePvoView
-                    personkategorier={personkategorier}
-                    databehandlere={databehandlere}
-                    pvkDokument={pvkDokument}
-                    etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                    activeStep={activeStep}
-                    setSelectedStep={setSelectedStep}
-                    setActiveStep={updateTitleUrlAndStep}
-                    formRef={formRef}
-                  />
-                )}
-                {activeStep === 4 && (
-                  <IdentifiseringAvRisikoscenarioerOgTiltakPvoView
-                    etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                    pvkDokument={pvkDokument}
-                    activeStep={activeStep}
-                    setSelectedStep={setSelectedStep}
-                    setActiveStep={updateTitleUrlAndStep}
-                    formRef={formRef}
-                  />
-                )}
-                {activeStep === 5 && (
-                  <OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView
-                    etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                    pvkDokument={pvkDokument}
-                    activeStep={activeStep}
-                    setSelectedStep={setSelectedStep}
-                    setActiveStep={updateTitleUrlAndStep}
-                    formRef={formRef}
-                  />
-                )}
-                {activeStep === 6 && (
-                  <SendInnPvoView
-                    pvkDokument={pvkDokument}
-                    setPvkDokument={setPvkDokument}
-                    personkategorier={personkategorier}
-                    databehandlere={databehandlere}
-                    updateTitleUrlAndStep={updateTitleUrlAndStep}
-                    etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                    activeStep={activeStep}
-                    setSelectedStep={setSelectedStep}
-                    setActiveStep={updateTitleUrlAndStep}
-                  />
-                )}
+            <div className="flex flex-col w-full items-center mt-5">
+              <div className="w-full max-w-7xl">
+                <div className="px-2 pb-6">
+                  {activeStep === 1 && (
+                    <OversiktPvoView
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      pvkDokument={pvkDokument}
+                      allRisikoscenarioList={allRisikoscenario}
+                      activeStep={activeStep}
+                      setSelectedStep={setSelectedStep}
+                      updateTitleUrlAndStep={updateTitleUrlAndStep}
+                    />
+                  )}
+                  {activeStep === 2 && (
+                    <BehandlingensArtOgOmfangPvoView
+                      personkategorier={personkategorier}
+                      pvkDokument={pvkDokument}
+                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      setPvoTilbakemelding={setPvoTilbakemelding}
+                      activeStep={activeStep}
+                      setSelectedStep={setSelectedStep}
+                      setActiveStep={updateTitleUrlAndStep}
+                      formRef={formRef}
+                    />
+                  )}
+                  {activeStep === 3 && (
+                    <InvolveringAvEksternePvoView
+                      personkategorier={personkategorier}
+                      databehandlere={databehandlere}
+                      pvkDokument={pvkDokument}
+                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      setPvoTilbakemelding={setPvoTilbakemelding}
+                      activeStep={activeStep}
+                      setSelectedStep={setSelectedStep}
+                      setActiveStep={updateTitleUrlAndStep}
+                      formRef={formRef}
+                    />
+                  )}
+                  {activeStep === 4 && (
+                    <IdentifiseringAvRisikoscenarioerOgTiltakPvoView
+                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      pvkDokument={pvkDokument}
+                      activeStep={activeStep}
+                      setSelectedStep={setSelectedStep}
+                      setActiveStep={updateTitleUrlAndStep}
+                      formRef={formRef}
+                    />
+                  )}
+                  {activeStep === 5 && (
+                    <OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView
+                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      pvkDokument={pvkDokument}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      setPvoTilbakemelding={setPvoTilbakemelding}
+                      activeStep={activeStep}
+                      setSelectedStep={setSelectedStep}
+                      setActiveStep={updateTitleUrlAndStep}
+                      formRef={formRef}
+                    />
+                  )}
+                  {activeStep === 6 && (
+                    <SendInnPvoView
+                      pvkDokument={pvkDokument}
+                      setPvkDokument={setPvkDokument}
+                      personkategorier={personkategorier}
+                      databehandlere={databehandlere}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      setPvoTilbakemelding={setPvoTilbakemelding}
+                      updateTitleUrlAndStep={updateTitleUrlAndStep}
+                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      activeStep={activeStep}
+                      setSelectedStep={setSelectedStep}
+                      setActiveStep={updateTitleUrlAndStep}
+                    />
+                  )}
+                </div>
               </div>
             </div>
-          </div>
 
-          <Modal
-            onClose={() => setIsUnsaved(false)}
-            open={isUnsaved}
-            header={{
-              heading: 'Vil du lagre endringene dine før du går videre?',
-              closeButton: false,
-            }}
-          >
-            <Modal.Body>
-              <br />
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                type="button"
-                onClick={() => {
-                  formRef.current?.submitForm()
-                  setActiveStep(selectedStep)
-                  updateUrlOnStepChange(selectedStep)
-                  setCurrentPage(StepTitle[selectedStep - 1])
-                  setIsUnsaved(false)
-                }}
-              >
-                Lagre og fortsette
-              </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => {
-                  setActiveStep(selectedStep)
-                  updateUrlOnStepChange(selectedStep)
-                  setCurrentPage(StepTitle[selectedStep - 1])
-                  setIsUnsaved(false)
-                }}
-              >
-                Fortsett uten å lagre
-              </Button>
-              <Button
-                type="button"
-                variant="tertiary"
-                onClick={() => {
-                  setIsUnsaved(false)
-                }}
-              >
-                Avbryt
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </div>
-      )}
+            <Modal
+              onClose={() => setIsUnsaved(false)}
+              open={isUnsaved}
+              header={{
+                heading: 'Vil du lagre endringene dine før du går videre?',
+                closeButton: false,
+              }}
+            >
+              <Modal.Body>
+                <br />
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    formRef.current?.submitForm()
+                    setActiveStep(selectedStep)
+                    updateUrlOnStepChange(selectedStep)
+                    setCurrentPage(StepTitle[selectedStep - 1])
+                    setIsUnsaved(false)
+                  }}
+                >
+                  Lagre og fortsette
+                </Button>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => {
+                    setActiveStep(selectedStep)
+                    updateUrlOnStepChange(selectedStep)
+                    setCurrentPage(StepTitle[selectedStep - 1])
+                    setIsUnsaved(false)
+                  }}
+                >
+                  Fortsett uten å lagre
+                </Button>
+                <Button
+                  type="button"
+                  variant="tertiary"
+                  onClick={() => {
+                    setIsUnsaved(false)
+                  }}
+                >
+                  Avbryt
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          </div>
+        )}
     </div>
   )
 }

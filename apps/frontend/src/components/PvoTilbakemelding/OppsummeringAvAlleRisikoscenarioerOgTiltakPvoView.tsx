@@ -14,7 +14,13 @@ import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
-import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, ITiltak } from '../../constants'
+import {
+  ERisikoscenarioType,
+  IPvkDokument,
+  IPvoTilbakemelding,
+  IRisikoscenario,
+  ITiltak,
+} from '../../constants'
 import FormButtons from '../PvkDokument/edit/FormButtons'
 import { Markdown } from '../common/Markdown'
 import { ExternalLink } from '../common/RouteLink'
@@ -26,6 +32,8 @@ import OppsumeringAccordianListPvoView from './OppsumeringAccordianListPvoView'
 interface IProps {
   etterlevelseDokumentasjonId: string
   pvkDokument: IPvkDokument
+  pvoTilbakemelding: IPvoTilbakemelding
+  setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
