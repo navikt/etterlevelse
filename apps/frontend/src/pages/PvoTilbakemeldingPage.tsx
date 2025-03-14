@@ -75,7 +75,7 @@ export const PvkDokumentPage = () => {
 
   const updateUrlOnStepChange = (step: number) => {
     navigate(
-      `/pvo/pvkdokument/${pvkDokument?.id}/tilbakemedling/${step}${step === 5 ? '?tab=risikoscenarioer&filter=alle' : ''}`
+      `/pvo/pvkdokument/${pvkDokument?.id}/tilbakemelding/${step}${step === 5 ? '?tab=risikoscenarioer&filter=alle' : ''}`
     )
   }
 
