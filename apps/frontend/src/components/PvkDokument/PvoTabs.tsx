@@ -45,7 +45,7 @@ const PvoTabs = ({ allPvkDocumentListItem, isLoading }: IProps) => {
             <div className="flex justify-start align-middle w-full">
               <Label size="medium">
                 {/* {kravene.totalElements ? kravene.totalElements : 0}  */}
-                antall PVKer
+                {allPvkDocumentListItem.length} PVK dokumenter
               </Label>
             </div>
           </div>
