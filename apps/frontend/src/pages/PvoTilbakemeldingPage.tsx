@@ -37,7 +37,7 @@ export const PvkDokumentPage = () => {
   const params: Readonly<
     Partial<{
       id?: string
-      pvkdokumentId?: string
+      tilbakemeldingid?: string
       steg?: string
     }>
   > = useParams<{ id?: string }>()
@@ -48,7 +48,7 @@ export const PvkDokumentPage = () => {
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] =
     useState<IEtterlevelseDokumentasjon>()
   const [personkategorier, setPersonKategorier] = useState<string[]>([])
-  const [pvkDokument, setPvkDokument] = usePvkDokument(params.pvkdokumentId)
+  const [pvkDokument, setPvkDokument] = usePvkDokument(params.id)
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [databehandlere, setDatabehandlere] = useState<string[]>([])
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
@@ -72,7 +72,7 @@ export const PvkDokumentPage = () => {
 
     {
       pathName: 'Personvernkonsekvensvurdering',
-      href: '/dokumentasjon/' + params.id + '/pvkbehov/' + params.pvkdokumentId,
+      href: '/dokumentasjon/' + params.id + '/pvkbehov/' + params.id,
     },
   ]
 

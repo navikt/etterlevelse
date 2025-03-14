@@ -175,7 +175,7 @@ const AppRoutes = (): JSX.Element => {
       />
 
       <Route
-        path="/pvo/pvkdokument/:pvkdokumentId/:steg"
+        path="/pvo/pvkdokument/:id/tilbakemedling/:tilbakemeldingid/:steg"
         element={<PvoTilbakemeldingPage />}
         caseSensitive={true}
       />
@@ -185,6 +185,7 @@ const AppRoutes = (): JSX.Element => {
         element={<RelasjonsOversikt />}
         caseSensitive={true}
       />
+
       <Route
         path="/dokumentasjon/"
         element={<MyEtterlevelseDokumentasjonerPage />}
