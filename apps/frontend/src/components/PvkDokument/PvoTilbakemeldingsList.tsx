@@ -19,7 +19,7 @@ export const PvoTilbakemeldingsList = ({ allPvkDocumentListItem, isLoading }: IP
             <ListLayout
               key={pvkDokument.id}
               id={pvkDokument.id}
-              url={`${EPVO.dokument}/${pvkDokument.id}/tilbakemelding/1`}
+              url={`/dokumentasjon/${pvkDokument.etterlevelseDokumentId}${EPVO.tilbakemelding}/${pvkDokument.id}/1`}
               documentNumber={`E${pvkDokument.etterlevelseNummer}`}
               title={pvkDokument.title}
               status={
