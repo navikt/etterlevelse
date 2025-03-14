@@ -3,7 +3,7 @@ import { uniqBy } from 'lodash'
 import { RefObject, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
+import { getEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '../api/RisikoscenarioApi'
 import BehandlingensArtOgOmfangPvoView from '../components/PvoTilbakemelding/BehandlingensArtOgOmfangPvoView'
@@ -17,6 +17,7 @@ import {
   ERisikoscenarioType,
   IBreadCrumbPath,
   IDataBehandler,
+  IEtterlevelseDokumentasjon,
   IExternalCode,
   IRisikoscenario,
 } from '../constants'
@@ -44,7 +45,8 @@ export const PvkDokumentPage = () => {
   const [currentPage, setCurrentPage] = useState<string>(
     currentStep !== null ? StepTitle[parseInt(currentStep) - 1] : 'Oversikt'
   )
-  const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
+  const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] =
+    useState<IEtterlevelseDokumentasjon>()
   const [personkategorier, setPersonKategorier] = useState<string[]>([])
   const [pvkDokument, setPvkDokument] = usePvkDokument(params.pvkdokumentId)
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
@@ -129,6 +131,9 @@ export const PvkDokumentPage = () => {
             setAllRisikoscenario(response.content)
           }
         )
+        await getEtterlevelseDokumentasjon(pvkDokument.etterlevelseDokumentId).then((response) => {
+          setEtterlevelseDokumentasjon(response)
+        })
       }
     })()
   }, [pvkDokument])
