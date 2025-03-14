@@ -22,7 +22,6 @@ import {
   IRisikoscenario,
 } from '../constants'
 import { user } from '../services/User'
-import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const StepTitle: string[] = [
   'Oversikt og status',
@@ -60,7 +59,10 @@ export const PvkDokumentPage = () => {
   const formRef: RefObject<any> = useRef(undefined)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
-    dokumentasjonerBreadCrumbPath,
+    {
+      pathName: 'Oversikt siden for personvernombudet',
+      href: '/pvoliste/oversikt',
+    },
     {
       pathName:
         'E' +
@@ -69,16 +71,11 @@ export const PvkDokumentPage = () => {
         etterlevelseDokumentasjon?.title,
       href: '/dokumentasjon/' + params.id,
     },
-
-    {
-      pathName: 'Personvernkonsekvensvurdering',
-      href: '/dokumentasjon/' + params.id + '/pvkbehov/' + params.id,
-    },
   ]
 
   const updateUrlOnStepChange = (step: number) => {
     navigate(
-      `/dokumentasjon/${pvkDokument?.etterlevelseDokumentId}/pvkdokument/pvo/${pvkDokument?.id}/${step}${step === 5 ? '?tab=risikoscenarioer&filter=alle' : ''}`
+      `/pvo/pvkdokument/${pvkDokument?.id}/tilbakemedling/${step}${step === 5 ? '?tab=risikoscenarioer&filter=alle' : ''}`
     )
   }
 
