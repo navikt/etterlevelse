@@ -4,7 +4,7 @@ import { getAllPvkDokumentListItem } from '../api/PvkDokumentApi'
 import PvoTabs from '../components/PvkDokument/PvoTabs'
 import { ListPageHeader } from '../components/scaffold/ListPageHeader'
 import { PageLayout } from '../components/scaffold/Page'
-import { IPvkDokumentListItem } from '../constants'
+import { EPVO, IPvkDokumentListItem } from '../constants'
 
 export const PvoOversiktPage = () => {
   const [allPvkDocumentListItem, setAllPvkDocumentListItem] = useState<IPvkDokumentListItem[]>([])
@@ -20,12 +20,9 @@ export const PvoOversiktPage = () => {
   }, [])
 
   return (
-    <PageLayout
-      pageTitle="Oversiktsside for Personvernsombudet"
-      currentPage="Oversiktsside for Personvernsombudet"
-    >
+    <PageLayout pageTitle={EPVO.overskrift} currentPage={EPVO.overskrift}>
       <div className="pb-52 w-full">
-        <ListPageHeader headingText="Oversiktsside for Personvernombudet" />
+        <ListPageHeader headingText={EPVO.overskrift} />
         {isLoading && (
           <div className="flex w-full justify-center items-center mt-5">
             <Loader size="3xlarge" className="flex justify-self-center" />

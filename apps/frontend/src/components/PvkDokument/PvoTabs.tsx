@@ -1,7 +1,7 @@
 import { Label, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
-import { IPvkDokumentListItem } from '../../constants'
+import { EPVO, IPvkDokumentListItem } from '../../constants'
 import { PvoTilbakemeldingsList } from './PvoTilbakemeldingsList'
 
 type TSection = 'siste' | 'alle'
@@ -29,7 +29,7 @@ const PvoTabs = ({ allPvkDocumentListItem, isLoading }: IProps) => {
       defaultValue={tab}
       onChange={(args: string) => {
         setTab(args)
-        navigate(`/pvo/${args}`)
+        navigate(`${EPVO.url}/${args}`)
       }}
     >
       <Tabs.List>

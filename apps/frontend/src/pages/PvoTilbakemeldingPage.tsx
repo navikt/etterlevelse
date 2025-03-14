@@ -15,6 +15,7 @@ import OversiktPvoView from '../components/PvoTilbakemelding/OversiktPvoView'
 import SendInnPvoView from '../components/PvoTilbakemelding/SendInnPvoView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import {
+  EPVO,
   ERisikoscenarioType,
   IBreadCrumbPath,
   IDataBehandler,
@@ -66,7 +67,7 @@ export const PvkDokumentPage = () => {
   const breadcrumbPaths: IBreadCrumbPath[] = [
     {
       pathName: 'Oversikt siden for personvernombudet',
-      href: '/pvo/oversikt',
+      href: EPVO.oversikt,
     },
     {
       pathName:
@@ -80,7 +81,7 @@ export const PvkDokumentPage = () => {
 
   const updateUrlOnStepChange = (step: number) => {
     navigate(
-      `/pvo/pvkdokument/${pvkDokument?.id}/tilbakemelding/${step}${step === 5 ? '?tab=risikoscenarioer&filter=alle' : ''}`
+      `${EPVO.dokument}/${pvkDokument?.id}/tilbakemelding/${step}${step === 5 ? '?tab=risikoscenarioer&filter=alle' : ''}`
     )
   }
 

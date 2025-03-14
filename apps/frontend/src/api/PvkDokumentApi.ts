@@ -1,6 +1,12 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { EPvkDokumentStatus, IPageResponse, IPvkDokument, IPvkDokumentListItem } from '../constants'
+import {
+  EPVO,
+  EPvkDokumentStatus,
+  IPageResponse,
+  IPvkDokument,
+  IPvkDokumentListItem,
+} from '../constants'
 import { env } from '../util/env'
 
 export const getAllPvkDokument = async () => {
@@ -48,7 +54,7 @@ export const getPvkDokumentPage = async (pageNumber: number, pageSize: number) =
 export const getPvkDokumentListItemPage = async (pageNumber: number, pageSize: number) => {
   return (
     await axios.get<IPageResponse<IPvkDokumentListItem>>(
-      `${env.backendBaseUrl}/pvkdokument/pvo?pageNumber=${pageNumber}&pageSize=${pageSize}`
+      `${env.backendBaseUrl}/pvkdokument${EPVO.url}?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
   ).data
 }

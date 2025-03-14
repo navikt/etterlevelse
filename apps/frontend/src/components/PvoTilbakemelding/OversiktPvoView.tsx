@@ -2,6 +2,7 @@ import { Alert, BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } fro
 import { useEffect, useState } from 'react'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../../api/BehandlingensLivslopApi'
 import {
+  EPVO,
   EPvkDokumentStatus,
   IBehandlingensLivslop,
   IPvkDokument,
@@ -259,7 +260,7 @@ export const OversiktView = (props: IProps) => {
           activeStep={activeStep}
           setActiveStep={updateTitleUrlAndStep}
           setSelectedStep={setSelectedStep}
-          customOriginLink="/pvo/overiskt"
+          customOriginLink={EPVO.oversikt}
           customOriginLinkLabel="Tilbake til PVO oversikt side"
         />
       </div>
