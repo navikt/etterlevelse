@@ -626,6 +626,7 @@ export interface IPvoTilbakemelding extends IDomainObject {
   behandlingensArtOgOmfang: ITilbakemeldingsinnhold
   innvolveringAvEksterne: ITilbakemeldingsinnhold
   risikoscenarioEtterTiltakk: ITilbakemeldingsinnhold
+  merknadTilEtterleverEllerRisikoeier: string
 }
 
 export interface ITilbakemeldingsinnhold {

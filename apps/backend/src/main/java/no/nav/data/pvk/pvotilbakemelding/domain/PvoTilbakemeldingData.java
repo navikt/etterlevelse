@@ -11,4 +11,5 @@ public class PvoTilbakemeldingData {
     private Tilbakemeldingsinnhold behandlingensArtOgOmfang;
     private Tilbakemeldingsinnhold innvolveringAvEksterne;
     private Tilbakemeldingsinnhold risikoscenarioEtterTiltakk;
+    private String merknadTilEtterleverEllerRisikoeier;
 }
