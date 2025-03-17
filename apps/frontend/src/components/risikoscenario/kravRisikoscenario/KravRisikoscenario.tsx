@@ -155,6 +155,7 @@ export const KravRisikoscenario = (props: IProps) => {
                         <KravRisikoscenarioAccordionContent
                           risikoscenario={risikoscenario}
                           alleRisikoscenarioer={alleRisikoscenarioer}
+                          etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId}
                           isCreateMode={isCreateMode}
                           kravnummer={krav.kravNummer}
                           risikoscenarioer={risikoscenarioer}

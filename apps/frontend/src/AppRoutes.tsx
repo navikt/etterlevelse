@@ -176,7 +176,7 @@ const AppRoutes = (): JSX.Element => {
       />
 
       <Route
-        path={`/dokumentasjon/:id${EPVO.tilbakemelding}/:id/:steg`}
+        path={`/pvkdokument/:id${EPVO.tilbakemelding}/:steg`}
         element={<PvoTilbakemeldingPage />}
         caseSensitive={true}
       />

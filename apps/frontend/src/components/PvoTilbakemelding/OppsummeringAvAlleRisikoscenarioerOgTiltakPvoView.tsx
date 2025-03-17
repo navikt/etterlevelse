@@ -268,6 +268,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
                             <OppsumeringAccordianListPvoView
                               risikoscenarioList={filteredRisikoscenarioList}
                               allRisikoscenarioList={risikoscenarioList}
+                              etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                               tiltakList={tiltakList}
                               formRef={formRef}
                               isUnsaved={isUnsaved}

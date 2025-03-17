@@ -39,10 +39,9 @@ export const PvoTilbakemeldingPage = () => {
   const params: Readonly<
     Partial<{
       id?: string
-      tilbakemeldingid?: string
       steg?: string
     }>
-  > = useParams<{ id?: string }>()
+  > = useParams<{ id?: string; steg?: string }>()
   const currentStep = params.steg || '1'
   const [currentPage, setCurrentPage] = useState<string>(
     currentStep !== null ? StepTitle[parseInt(currentStep) - 1] : 'Oversikt'
@@ -71,14 +70,14 @@ export const PvoTilbakemeldingPage = () => {
       href: EPVO.oversikt,
     },
     {
-      pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
-      href: `${EPVK.pvkDokumentasjon}/${params.id}`,
+      pathName:`E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
+      href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,
     },
   ]
 
   const updateUrlOnStepChange = (step: number) => {
     navigate(
-      `${EPVK.pvkDokumentasjon}/${etterlevelseDokumentasjon?.id}${EPVO.tilbakemelding}/${pvkDokument?.id}/${step}${step === 5 ? '?tab=risikoscenarioer&filter=alle' : ''}`
+      `/pvkdokument/${params.id}${EPVO.tilbakemelding}/${step}${step === 5 ? '?tab=risikoscenarioer&filter=alle' : ''}`
     )
   }
 

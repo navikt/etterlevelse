@@ -15,6 +15,7 @@ import { tabValues } from './OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
 interface IProps {
   risikoscenarioList: IRisikoscenario[]
   allRisikoscenarioList: IRisikoscenario[]
+  etterlevelseDokumentasjonId: string
   tiltakList: ITiltak[]
   formRef: RefObject<any>
   isUnsaved: boolean
@@ -25,6 +26,7 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
   const {
     risikoscenarioList,
     allRisikoscenarioList,
+    etterlevelseDokumentasjonId,
     tiltakList,
     formRef,
     isUnsaved,
@@ -93,7 +95,10 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
             >
               <RisikoscenarioAccordianHeader risikoscenario={risikoscenario} />
               <Accordion.Content>
-                <RisikoscenarioView risikoscenario={risikoscenario} />
+                <RisikoscenarioView
+                  risikoscenario={risikoscenario}
+                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                />
                 <div className="mt-12">
                   <Heading level="3" size="small">
                     Følgende tiltak gjelder for dette risikoscenarioet

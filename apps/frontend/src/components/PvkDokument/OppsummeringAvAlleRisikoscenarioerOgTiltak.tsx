@@ -242,6 +242,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                       setRisikosenarioList={setFilteredRisikosenarioList}
                       allRisikoscenarioList={risikoscenarioList}
                       setAllRisikoscenarioList={setRisikoscenarioList}
+                      etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                       tiltakList={tiltakList}
                       formRef={formRef}
                       isUnsaved={isUnsaved}

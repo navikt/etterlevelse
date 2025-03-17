@@ -30,6 +30,7 @@ interface IProps {
   risikoscenario: IRisikoscenario
   risikoscenarioer: IRisikoscenario[]
   alleRisikoscenarioer: IRisikoscenario[]
+  etterlevelseDokumentasjonId: string
   setRisikoscenarioer: (state: IRisikoscenario[]) => void
   risikoscenarioForKrav: IRisikoscenario[]
   setRisikoscenarioForKrav: (state: IRisikoscenario[]) => void
@@ -49,6 +50,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     risikoscenarioer,
     alleRisikoscenarioer,
     risikoscenarioForKrav,
+    etterlevelseDokumentasjonId,
     kravnummer,
     setRisikoscenarioer,
     setRisikoscenarioForKrav,
@@ -173,7 +175,11 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
 
   return (
     <div>
-      <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true} />
+      <RisikoscenarioView
+        risikoscenario={activeRisikoscenario}
+        noCopyButton={true}
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+      />
 
       {!isIngenTilgangFormDirty &&
         !isCreateTiltakFormActive &&

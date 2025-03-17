@@ -8,6 +8,7 @@ import VurdereTiltaksEffekt from '../edit/VurdereTiltaksEffekt'
 interface IProps {
   risikoscenario: IRisikoscenario
   risikoscenarioList: IRisikoscenario[]
+  etterlevelseDokumentasjonId: string
   setRisikosenarioList: (state: IRisikoscenario[]) => void
   allRisikoscenarioList: IRisikoscenario[]
   setAllRisikoscenarioList: (state: IRisikoscenario[]) => void
@@ -19,6 +20,7 @@ export const OppsumeringAccordianContent = (props: IProps) => {
   const {
     risikoscenario,
     risikoscenarioList,
+    etterlevelseDokumentasjonId,
     setRisikosenarioList,
     allRisikoscenarioList,
     setAllRisikoscenarioList,
@@ -29,7 +31,10 @@ export const OppsumeringAccordianContent = (props: IProps) => {
 
   return (
     <div>
-      <RisikoscenarioView risikoscenario={activeRisikoscenario} />
+      <RisikoscenarioView
+        risikoscenario={activeRisikoscenario}
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+      />
       <div className="mt-12">
         <Heading level="3" size="small">
           Følgende tiltak gjelder for dette risikoscenarioet
