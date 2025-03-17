@@ -86,7 +86,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
           >
             <div>
               {etterlevelseDokumentasjon.beskrivelse && (
-                <div className="mb-3">
+                <div className="mb-5">
                   <Heading className="mb-3" level="2" size="small">
                     Dokumentbeskrivelse
                   </Heading>
@@ -95,7 +95,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
               )}
 
               <Heading className="mb-3" level="2" size="small">
-                Dokumentbeskrivelse
+                Dokumentegenskaper
               </Heading>
 
               <div className="max-w-[75ch]">

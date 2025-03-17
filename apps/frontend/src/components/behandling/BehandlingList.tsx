@@ -14,30 +14,32 @@ export const BehandlingList = (props: IProps) => {
   const {behandlingIds, behandlinger, behandlerPersonopplysninger} = props
 
   return (
-    <div className="flex gap-2 flex-wrap items-center mb-2.5 break-all">
+    <div className="flex gap-2 mb-2.5">
       <Label size="medium">Behandling:</Label>
-      {behandlingIds?.length >= 1 &&
-        behandlerPersonopplysninger &&
-        behandlingIds.map((behandlingId, index) => (
-          <div key={'behandling_link_' + index}>
-            {behandlinger && behandlinger[index].navn && (
-              <ExternalLink
-                className="text-medium"
-                href={`${env.pollyBaseUrl}process/${behandlingId}`}
-              >
-                {behandlinger?.length > 0 ? `${behandlingName(behandlinger[index])}` : 'Ingen data'}
-              </ExternalLink>
-            )}
+      <div>
+        {behandlingIds?.length >= 1 &&
+          behandlerPersonopplysninger &&
+          behandlingIds.map((behandlingId, index) => (
+            <div key={'behandling_link_' + index}>
+              {behandlinger && behandlinger[index].navn && (
+                <ExternalLink
+                  className="text-medium"
+                  href={`${env.pollyBaseUrl}process/${behandlingId}`}
+                >
+                  {behandlinger?.length > 0 ? `${behandlingName(behandlinger[index])}` : 'Ingen data'}
+                </ExternalLink>
+              )}
 
-            {behandlinger && !behandlinger[index].navn && (
-              <BodyLong size="medium">Ingen data</BodyLong>
-            )}
-          </div>
-        ))}
+              {behandlinger && !behandlinger[index].navn && (
+                <BodyLong size="medium">Ingen data</BodyLong>
+              )}
+            </div>
+          ))}
 
-      {behandlingIds?.length === 0 && (
-        <BodyLong size="medium">Husk å legge til behandling fra behandlingskatalogen</BodyLong>
-      )}
+        {behandlingIds?.length === 0 && (
+          <BodyLong size="medium">Husk å legge til behandling fra behandlingskatalogen</BodyLong>
+        )}
+      </div>
     </div>
   )
 }
