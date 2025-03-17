@@ -11,7 +11,7 @@ import GjenbrukEtterlevelseDokumentasjonPage from './components/etterlevelseDoku
 import { KravCreatePage } from './components/krav/Edit/KravCreatePage'
 import { KravEditPage } from './components/krav/Edit/KravEditPage'
 import { KravNyVersjonPage } from './components/krav/Edit/KravNyVersjonPage'
-import { EPVO } from './constants'
+import { EPVK, EPVO } from './constants'
 import ArkivAdminPage from './pages/ArkivAdminPage'
 import BehandlingensLivslopPage from './pages/BehandlingensLivslopPage'
 import DocumentRelationAdminPage from './pages/DocumentRelationAdminPage'
@@ -153,12 +153,12 @@ const AppRoutes = (): JSX.Element => {
       />
 
       <Route
-        path="/dokumentasjon/:id/pvkbehov/:pvkdokumentId"
+        path={`${EPVK.pvkDokumentasjon}/:id${EPVK.pvkBehov}/:pvkdokumentId`}
         element={<PvkBehovPage />}
         caseSensitive={true}
       />
       <Route
-        path="/dokumentasjon/:id/pvkdokument/:pvkdokumentId/:steg"
+        path={`${EPVK.pvkDokumentasjon}/:id${EPVK.pvkDokument}/:pvkdokumentId/:steg`}
         element={<PvkDokumentPage />}
         caseSensitive={true}
       />

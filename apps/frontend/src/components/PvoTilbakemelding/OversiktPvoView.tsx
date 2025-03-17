@@ -2,6 +2,7 @@ import { Alert, BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } fro
 import { useEffect, useState } from 'react'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../../api/BehandlingensLivslopApi'
 import {
+  EPVK,
   EPVO,
   EPvkDokumentStatus,
   IBehandlingensLivslop,
@@ -174,14 +175,14 @@ export const OversiktView = (props: IProps) => {
             <FormSummary.Answer>
               <FormSummary.Value>
                 <ExternalLink
-                  href={`/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/pvkbehov/${pvkDokument.id}`}
+                  href={`${EPVK.pvkDokumentasjon}/${pvkDokument.etterlevelseDokumentId}${EPVK.pvkBehov}/${pvkDokument.id}`}
                 >
                   Vurdér behov for PVK
                 </ExternalLink>
               </FormSummary.Value>
               <FormSummary.Value className="gap-2 flex">
-                {pvkDokument.skalUtforePvk && 'Vi skal gjennomføre PVK'}
-                {!pvkDokument.skalUtforePvk && 'Vi skal ikke gjennomføre PVK'}
+                {pvkDokument.skalUtforePvk && EPVK.skalGjennomfore}
+                {!pvkDokument.skalUtforePvk && EPVK.ikkeGjennomfore}
               </FormSummary.Value>
             </FormSummary.Answer>
 

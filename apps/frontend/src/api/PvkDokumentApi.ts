@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import {
+  EPVK,
   EPVO,
   EPvkDokumentStatus,
   IPageResponse,
@@ -46,7 +47,7 @@ export const getAllPvkDokumentListItem = async () => {
 export const getPvkDokumentPage = async (pageNumber: number, pageSize: number) => {
   return (
     await axios.get<IPageResponse<IPvkDokument>>(
-      `${env.backendBaseUrl}/pvkdokument?pageNumber=${pageNumber}&pageSize=${pageSize}`
+      `${env.backendBaseUrl}${EPVK.pvkDokument}?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
   ).data
 }
@@ -54,36 +55,37 @@ export const getPvkDokumentPage = async (pageNumber: number, pageSize: number) =
 export const getPvkDokumentListItemPage = async (pageNumber: number, pageSize: number) => {
   return (
     await axios.get<IPageResponse<IPvkDokumentListItem>>(
-      `${env.backendBaseUrl}/pvkdokument${EPVO.url}?pageNumber=${pageNumber}&pageSize=${pageSize}`
+      `${env.backendBaseUrl}${EPVK.pvkDokument}${EPVO.url}?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
   ).data
 }
 
 export const getPvkDokument = async (id: string) => {
-  return (await axios.get<IPvkDokument>(`${env.backendBaseUrl}/pvkdokument/${id}`)).data
+  return (await axios.get<IPvkDokument>(`${env.backendBaseUrl}${EPVK.pvkDokument}/${id}`)).data
 }
 
 export const getPvkDokumentByEtterlevelseDokumentId = async (etterlevelseDokumentId: string) => {
   return (
     await axios.get<IPvkDokument>(
-      `${env.backendBaseUrl}/pvkdokument/etterlevelsedokument/${etterlevelseDokumentId}`
+      `${env.backendBaseUrl}${EPVK.pvkDokument}/etterlevelsedokument/${etterlevelseDokumentId}`
     )
   ).data
 }
 
 export const createPvkDokument = async (pvkDokument: IPvkDokument) => {
   const dto = pvkDokumentToPvkDokumentDto(pvkDokument)
-  return (await axios.post<IPvkDokument>(`${env.backendBaseUrl}/pvkdokument`, dto)).data
+  return (await axios.post<IPvkDokument>(`${env.backendBaseUrl}${EPVK.pvkDokument}`, dto)).data
 }
 
 export const updatePvkDokument = async (pvkDokument: IPvkDokument) => {
   const dto = pvkDokumentToPvkDokumentDto(pvkDokument)
-  return (await axios.put<IPvkDokument>(`${env.backendBaseUrl}/pvkdokument/${pvkDokument.id}`, dto))
-    .data
+  return (
+    await axios.put<IPvkDokument>(`${env.backendBaseUrl}${EPVK.pvkDokument}/${pvkDokument.id}`, dto)
+  ).data
 }
 
 export const deletePvkDokument = async (id: string) => {
-  return (await axios.delete<IPvkDokument>(`${env.backendBaseUrl}/pvkdokument/${id}`)).data
+  return (await axios.delete<IPvkDokument>(`${env.backendBaseUrl}${EPVK.pvkDokument}/${id}`)).data
 }
 
 export const usePvkDokument = (pvkDokumentId?: string) => {

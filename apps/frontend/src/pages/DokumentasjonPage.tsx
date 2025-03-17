@@ -13,6 +13,7 @@ import TillatGjenbrukModal from '../components/etterlevelseDokumentasjon/edit/Ti
 import DokumentasjonPageTabs from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonPageTabs'
 import { PageLayout } from '../components/scaffold/Page'
 import {
+  EPVK,
   ERelationType,
   IBehandlingensLivslop,
   IBreadCrumbPath,
@@ -318,11 +319,7 @@ export const DokumentasjonPage = () => {
                           <Button
                             onClick={() => {
                               navigate(
-                                '/dokumentasjon/' +
-                                  etterlevelseDokumentasjon.id +
-                                  '/pvkdokument/' +
-                                  pvkDokument.id +
-                                  '/1'
+                                `${EPVK.pvkDokumentasjon}/${etterlevelseDokumentasjon.id}${EPVK.pvkDokument}/${pvkDokument.id}/1`
                               )
                             }}
                             size="small"
@@ -341,8 +338,7 @@ export const DokumentasjonPage = () => {
                         user.isAdmin()) && (
                         <Button
                           onClick={() => {
-                            let pvkBehovUrl =
-                              '/dokumentasjon/' + etterlevelseDokumentasjon.id + '/pvkbehov/'
+                            let pvkBehovUrl: string = `${EPVK.pvkDokumentasjon}/${etterlevelseDokumentasjon.id}${EPVK.pvkBehov}`
 
                             if (pvkDokument) {
                               pvkBehovUrl += pvkDokument.id

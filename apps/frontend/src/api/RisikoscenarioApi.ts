@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {
+  EPVK,
   ERisikoscenarioType,
   IKravRisikoscenarioRelasjon,
   IPageResponse,
@@ -43,7 +44,7 @@ export const getRisikoscenarioByPvkDokumentId = async (
 ) => {
   return (
     await axios.get<IPageResponse<IRisikoscenario>>(
-      `${env.backendBaseUrl}/risikoscenario/pvkdokument/${pvkDokumentId}/${scenarioType}`
+      `${env.backendBaseUrl}/risikoscenario${EPVK.pvkDokument}/${pvkDokumentId}/${scenarioType}`
     )
   ).data
 }

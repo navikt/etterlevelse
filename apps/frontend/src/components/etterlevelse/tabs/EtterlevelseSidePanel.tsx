@@ -2,6 +2,7 @@ import { FileTextIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Label, Tabs } from '@navikt/ds-react'
 import { Dispatch, RefObject, useEffect, useRef, useState } from 'react'
 import {
+  EPVK,
   IEtterlevelseMetadata,
   IKravVersjon,
   IPvkDokument,
@@ -49,11 +50,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
   }
 
   useEffect(() => {
-    if (
-      pvkDokument &&
-      pvkDokument.skalUtforePvk &&
-      krav.tagger.includes('Personvernkonsekvensvurdering')
-    ) {
+    if (pvkDokument && pvkDokument.skalUtforePvk && krav.tagger.includes(EPVK.pvk)) {
       setActiveTab('pvkDokumentasjon')
     }
   }, [pvkDokument])
@@ -93,19 +90,17 @@ export const EtterlevelseSidePanel = (props: IProps) => {
               </Heading>
             }
           />
-          {pvkDokument &&
-            pvkDokument.skalUtforePvk &&
-            krav.tagger.includes('Personvernkonsekvensvurdering') && (
-              <Tabs.Tab
-                className="whitespace-nowrap"
-                value="pvkDokumentasjon"
-                label={
-                  <Heading level="2" size="xsmall">
-                    PVK-dokumentasjon
-                  </Heading>
-                }
-              />
-            )}
+          {pvkDokument && pvkDokument.skalUtforePvk && krav.tagger.includes(EPVK.pvk) && (
+            <Tabs.Tab
+              className="whitespace-nowrap"
+              value="pvkDokumentasjon"
+              label={
+                <Heading level="2" size="xsmall">
+                  PVK-dokumentasjon
+                </Heading>
+              }
+            />
+          )}
           <Tabs.Tab
             value="notat"
             label={

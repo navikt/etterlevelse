@@ -1,6 +1,6 @@
 import { List, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
-import { EPVO, IPvkDokumentListItem } from '../../constants'
+import { EPVK, EPVO, IPvkDokumentListItem } from '../../constants'
 import { ListLayout } from '../common/ListLayout'
 import StatusView from '../common/StatusTag'
 
@@ -19,7 +19,7 @@ export const PvoTilbakemeldingsList = ({ allPvkDocumentListItem, isLoading }: IP
             <ListLayout
               key={pvkDokument.id}
               id={pvkDokument.id}
-              url={`/dokumentasjon/${pvkDokument.etterlevelseDokumentId}${EPVO.tilbakemelding}/${pvkDokument.id}/1`}
+              url={`${EPVK.pvkDokumentasjon}/${pvkDokument.etterlevelseDokumentId}${EPVO.tilbakemelding}/${pvkDokument.id}/1`}
               documentNumber={`E${pvkDokument.etterlevelseNummer}`}
               title={pvkDokument.title}
               status={

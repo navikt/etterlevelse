@@ -3,7 +3,7 @@ import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
-import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, ITiltak } from '../../constants'
+import { EPVK, ERisikoscenarioType, IPvkDokument, IRisikoscenario, ITiltak } from '../../constants'
 import { ExternalLink } from '../common/RouteLink'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/OppsumeringAccordianList'
@@ -222,7 +222,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                         Dere har foreløpig ingen risikoscenarioer
                       </Heading>
                       Risikoscenarioer legges inn under{' '}
-                      <Link href={`/dokumentasjon/${etterlevelseDokumentasjonId}`}>
+                      <Link href={`${EPVK.pvkDokumentasjon}/${etterlevelseDokumentasjonId}`}>
                         PVK-relaterte krav
                       </Link>{' '}
                       (åpner i en ny fane) eller eventuelt under øvrige risikoscenarioer (åpner i en
@@ -259,7 +259,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                       </Heading>
                       Tiltak legges inn under{' '}
                       <ExternalLink
-                        href={`/dokumentasjon/${etterlevelseDokumentasjonId}/pvkdokument/${pvkDokument.id}/4`}
+                        href={`${EPVK.pvkDokumentasjon}/${etterlevelseDokumentasjonId}${EPVK.pvkDokument}/${pvkDokument.id}/4`}
                       >
                         Identifisering av risikoscenarioer og tiltak
                       </ExternalLink>

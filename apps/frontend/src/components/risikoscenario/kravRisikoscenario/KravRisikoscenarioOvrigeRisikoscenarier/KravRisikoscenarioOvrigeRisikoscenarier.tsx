@@ -1,6 +1,6 @@
 import { Button } from '@navikt/ds-react'
 import { useNavigate } from 'react-router-dom'
-import { IPvkDokument } from '../../../../constants'
+import { EPVK, IPvkDokument } from '../../../../constants'
 
 interface IProps {
   pvkDokument: IPvkDokument
@@ -16,7 +16,7 @@ export const KravRisikoscenarioOvrigeRisikoscenarier = ({ pvkDokument }: IProps)
         type="button"
         onClick={() => {
           navigate(
-            `/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/pvkdokument/${pvkDokument.id}/4`
+            `${EPVK.pvkDokumentasjon}/${pvkDokument.etterlevelseDokumentId}${EPVK.pvkDokument}/${pvkDokument.id}/4`
           )
         }}
       >

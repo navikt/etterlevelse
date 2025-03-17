@@ -14,6 +14,7 @@ import OversiktView from '../components/PvkDokument/OversiktView'
 import SendInnView from '../components/PvkDokument/SendInnView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import {
+  EPVK,
   ERisikoscenarioType,
   IBreadCrumbPath,
   IDataBehandler,
@@ -58,26 +59,24 @@ export const PvkDokumentPage = () => {
   const navigate = useNavigate()
   const formRef: RefObject<any> = useRef(undefined)
 
+  const pvkUrl: string = `${EPVK.pvkDokumentasjon}/${params.id}`
+
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
     {
-      pathName:
-        'E' +
-        etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
-        ' ' +
-        etterlevelseDokumentasjon?.title,
-      href: '/dokumentasjon/' + params.id,
+      pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
+      href: pvkUrl,
     },
 
     {
-      pathName: 'Personvernkonsekvensvurdering',
-      href: '/dokumentasjon/' + params.id + '/pvkbehov/' + params.pvkdokumentId,
+      pathName: EPVK.pvk,
+      href: `${pvkUrl}${EPVK.pvkBehov}/${params.pvkdokumentId}`,
     },
   ]
 
   const updateUrlOnStepChange = (step: number) => {
     navigate(
-      `/dokumentasjon/${pvkDokument?.etterlevelseDokumentId}/pvkdokument/${pvkDokument?.id}/${step}${step === 5 ? '?tab=risikoscenarioer&filter=alle' : ''}`
+      `${EPVK.pvkDokumentasjon}/${pvkDokument?.etterlevelseDokumentId}${EPVK.pvkDokument}/${pvkDokument?.id}/${step}${step === 5 ? '?tab=risikoscenarioer&filter=alle' : ''}`
     )
   }
 

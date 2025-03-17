@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { IPageResponse, ITeamResource, ITiltak } from '../constants'
+import { EPVK, IPageResponse, ITeamResource, ITiltak } from '../constants'
 import { env } from '../util/env'
 
 export const getAllTiltak = async () => {
@@ -31,7 +31,7 @@ export const getTiltak = async (id: string) => {
 export const getTiltakByPvkDokumentId = async (pvkDokumentId: string) => {
   return (
     await axios.get<IPageResponse<ITiltak>>(
-      `${env.backendBaseUrl}/tiltak/pvkdokument/${pvkDokumentId}`
+      `${env.backendBaseUrl}/tiltak${EPVK.pvkDokument}/${pvkDokumentId}`
     )
   ).data
 }

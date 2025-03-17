@@ -671,11 +671,20 @@ export enum EKonsekvensnivaa {
   SVAERT_ALVORLIG_KONSEKVENS = 'SVAERT_ALVORLIG_KONSEKVENS',
 }
 
+export enum EPVK {
+  pvk = 'Personvernkonsekvensvurdering',
+  pvkTitle = `Bør vi gjøre en ${pvk} (PVK) ?`,
+  skalGjennomfore = 'Vi skal gjennomføre PVK',
+  ikkeGjennomfore = 'Vi skal ikke gjennomføre PVK',
+  pvkDokumentasjon = '/dokumentasjon',
+  pvkDokument = '/pvkdokument',
+  pvkBehov = '/pvkbehov',
+}
+
 export enum EPVO {
   overskrift = 'Oversiktsside for Personvernombudet',
   url = '/pvo',
   tilbakemelding = `${url}tilbakemelding`,
-  dokument = `${url}/pvkdokument`,
   oversikt = `${url}/oversikt`,
 }
 
