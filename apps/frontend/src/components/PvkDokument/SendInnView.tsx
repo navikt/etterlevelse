@@ -7,7 +7,10 @@ import {
   updatePvkDokument,
 } from '../../api/PvkDokumentApi'
 import { EPVK, EPvkDokumentStatus, IPvkDokument } from '../../constants'
-import { SendInnViewArtInvRis, SendInnViewCopySend } from '../PvkCommon/SendInnView'
+import {
+  SendInnViewArtInvRisCommon,
+  SendInnViewCopySendCommon,
+} from '../PvkCommon/SendInnViewCommon'
 import { TextAreaField } from '../common/Inputs'
 import FormButtons from './edit/FormButtons'
 
@@ -65,7 +68,7 @@ export const SendInnView = (props: IProps) => {
         <Form>
           <div className="flex justify-center">
             <div>
-              <SendInnViewArtInvRis
+              <SendInnViewArtInvRisCommon
                 personkategorier={personkategorier}
                 updateTitleUrlAndStep={updateTitleUrlAndStep}
                 databehandlere={databehandlere}
@@ -80,7 +83,7 @@ export const SendInnView = (props: IProps) => {
                 />
               </div>
 
-              <SendInnViewCopySend pvkDokument={pvkDokument} />
+              <SendInnViewCopySendCommon pvkDokument={pvkDokument} />
 
               <FormButtons
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}

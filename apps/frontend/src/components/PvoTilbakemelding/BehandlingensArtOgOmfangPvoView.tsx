@@ -1,15 +1,7 @@
-import {
-  BodyLong,
-  Button,
-  Heading,
-  Label,
-  List,
-  Radio,
-  RadioGroup,
-  ToggleGroup,
-} from '@navikt/ds-react'
+import { BodyLong, Button, Label, Radio, RadioGroup, ToggleGroup } from '@navikt/ds-react'
 import { RefObject, useState } from 'react'
 import { IPvkDokument, IPvoTilbakemelding } from '../../constants'
+import { BehandlingensArtOgOmfangViewCommon } from '../PvkCommon/BehandlingensArtOgOmfangViewCommon'
 import FormButtons from '../PvkDokument/edit/FormButtons'
 import { Markdown } from '../common/Markdown'
 import TextEditor from '../common/TextEditor/TextEditor'
@@ -46,25 +38,10 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
         <div className="pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8">
           <div className="flex justify-center">
             <div>
-              <Heading level="1" size="medium" className="mb-5">
-                Behandlingens art og omfang
-              </Heading>
-              {pvkDokument.changeStamp.lastModifiedBy && (
-                <div className="mt-5 mb-10">
-                  {'Sist redigert av: ' + pvkDokument.changeStamp.lastModifiedBy}
-                </div>
-              )}
-
-              <List
-                headingTag="label"
-                title="I Behandlingskatalogen står det at dere behandler personopplysninger om:"
-              >
-                {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
-                {personkategorier.length > 0 &&
-                  personkategorier.map((personkategori) => (
-                    <List.Item key={personkategori}>{personkategori}</List.Item>
-                  ))}
-              </List>
+              <BehandlingensArtOgOmfangViewCommon
+                pvkDokument={pvkDokument}
+                personkategorier={personkategorier}
+              />
 
               <div className="mt-5 mb-3 max-w-[75ch]">
                 <Label>Stemmer denne lista over personkategorier?</Label>
