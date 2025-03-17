@@ -31,7 +31,7 @@ export const getPvoTilbakemelding = async (id: string) => {
   return (await axios.get<IPvoTilbakemelding>(`${env.backendBaseUrl}/pvotilbakemelding/${id}`)).data
 }
 
-export const getPvkDokumentByPvkDokumentId = async (pvkDokumentId: string) => {
+export const getPvoTilbakemeldingByPvkDokumentId = async (pvkDokumentId: string) => {
   return (
     await axios.get<IPvoTilbakemelding>(
       `${env.backendBaseUrl}/pvotilbakemelding/pvkdokument/${pvkDokumentId}`
@@ -47,7 +47,7 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
     setIsLoading(true)
     if (pvkDokumentId) {
       ;(async () => {
-        await getPvkDokumentByPvkDokumentId(pvkDokumentId).then(async (pvoTilbakemelding) => {
+        await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId).then(async (pvoTilbakemelding) => {
           setData(pvoTilbakemelding)
           setIsLoading(false)
         })

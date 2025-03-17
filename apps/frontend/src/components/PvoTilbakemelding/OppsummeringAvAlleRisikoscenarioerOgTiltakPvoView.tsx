@@ -1,15 +1,4 @@
-import {
-  Alert,
-  BodyLong,
-  Button,
-  Heading,
-  Label,
-  Link,
-  Radio,
-  RadioGroup,
-  Tabs,
-  ToggleGroup,
-} from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, Link, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
@@ -22,12 +11,11 @@ import {
   ITiltak,
 } from '../../constants'
 import FormButtons from '../PvkDokument/edit/FormButtons'
-import { Markdown } from '../common/Markdown'
 import { ExternalLink } from '../common/RouteLink'
-import TextEditor from '../common/TextEditor/TextEditor'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
 import OppsumeringAccordianListPvoView from './OppsumeringAccordianListPvoView'
+import PvoTilbakemeldingForm from './edit/PvoTilbakemeldingForm'
 
 interface IProps {
   etterlevelseDokumentasjonId: string
@@ -75,6 +63,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
   const {
     etterlevelseDokumentasjonId,
     pvkDokument,
+    pvoTilbakemelding,
     activeStep,
     setActiveStep,
     setSelectedStep,
@@ -92,8 +81,6 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
   const risikoscenarioId = url.searchParams.get('risikoscenario')
   const filterQuery = url.searchParams.get('filter')
   const navigate = useNavigate()
-  const [mode, setMode] = useState('edit')
-  const [value, setValue] = useState('')
 
   useEffect(() => {
     if (pvkDokument) {
@@ -329,100 +316,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
                 <div>
                   {/* PVO sidepanel */}
                   <div className="ml-4 px-4 py-4 border-l border-[#071a3636] w-full max-w-md bg-[#F0EEF4] mt-35">
-                    <div>
-                      <RadioGroup
-                        legend="Vurdér om etterleverens bidrag er tilstrekkelig"
-                        // onChange={handleChange}
-                        description="Denne vurderingen blir ikke tilgjengelig for etterleveren før dere har ferdigstilt selve vurderingen."
-                      >
-                        <Radio value="JA">Ja, tilstrekkelig </Radio>
-                        <Radio value="Tilstrekkelig">
-                          Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger
-                          som beskrives i fritekst under
-                        </Radio>
-                        <Radio value="40">Utilstrekkelig, beskrives nærmere under</Radio>
-                      </RadioGroup>
-                    </div>
-                    <div className="my-5">
-                      <Label>Skriv intern PVO diskusjon her</Label>
-                      <BodyLong>
-                        Denne teksten er privat for PVO og skal ikke deles med etterleveren
-                      </BodyLong>
-                    </div>
-                    <div>
-                      {mode === 'edit' && (
-                        <TextEditor
-                          initialValue={value}
-                          setValue={setValue}
-                          height="15.625rem"
-                          // setIsFormDirty={setIsFormDirty}
-                        />
-                      )}
-
-                      {mode === 'view' && (
-                        <div className="p-8 border-border-subtle-hover border border-solid rounded-md bg-white">
-                          <Markdown source={''} />
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex justify-end mt-[-1px]">
-                      <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
-                        <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
-                        <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
-                      </ToggleGroup>
-                    </div>
-                    <div className="my-5">
-                      <Label>Skriv tilbakemelding til etterleveren</Label>
-                      <BodyLong>
-                        Tilbakemeldingen blir ikke tilgjengelig for etterleveren før du velger å
-                        publisere den.{' '}
-                      </BodyLong>
-                    </div>
-                    <div>
-                      {mode === 'edit' && (
-                        <TextEditor
-                          initialValue={value}
-                          setValue={setValue}
-                          height="15.625rem"
-                          // setIsFormDirty={setIsFormDirty}
-                        />
-                      )}
-
-                      {mode === 'view' && (
-                        <div className="p-8 border-border-subtle-hover border border-solid rounded-md bg-white">
-                          <Markdown source={''} />
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex justify-end mt-[-1px]">
-                      <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
-                        <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
-                        <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
-                      </ToggleGroup>
-                    </div>
-                    <div className="mt-10 flex flex-row gap-2">
-                      <div>
-                        <Button
-                          size="small"
-                          onClick={() => {
-                            setValue('')
-                          }}
-                        >
-                          Lagre
-                        </Button>
-                      </div>
-                      <div>
-                        <Button
-                          size="small"
-                          variant="secondary"
-                          onClick={() => {
-                            setValue('')
-                          }}
-                        >
-                          Avbryt
-                        </Button>
-                      </div>
-                    </div>
+                    <PvoTilbakemeldingForm
+                      pvkDokumentId={pvkDokument.id}
+                      fieldName="risikoscenarioEtterTiltakk"
+                      initialValue={pvoTilbakemelding.risikoscenarioEtterTiltakk}
+                    />
                   </div>
                 </div>
               </div>

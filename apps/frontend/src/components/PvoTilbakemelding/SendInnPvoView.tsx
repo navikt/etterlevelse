@@ -80,12 +80,14 @@ export const SendInnPvoView = (props: IProps) => {
               <ArtOgOmFangSummary
                 personkategorier={personkategorier}
                 updateTitleUrlAndStep={updateTitleUrlAndStep}
+                customLinktext="Endre tilbakemelding"
               />
 
               <InvolveringSummary
                 databehandlere={databehandlere}
                 personkategorier={personkategorier}
                 updateTitleUrlAndStep={updateTitleUrlAndStep}
+                customLinktext="Endre tilbakemelding"
               />
 
               <RisikoscenarioSummary />

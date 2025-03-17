@@ -20,7 +20,7 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
   const {
     personkategorier,
     pvkDokument,
-
+    pvoTilbakemelding,
     etterlevelseDokumentasjonId,
     activeStep,
     setActiveStep,
@@ -84,7 +84,11 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
 
         {/* PVO sidepanel */}
         <div className="px-4 py-4 border-l border-[#071a3636] w-full max-w-md bg-[#F0EEF4] mt-35">
-          <PvoTilbakemeldingForm />
+          <PvoTilbakemeldingForm
+            pvkDokumentId={pvkDokument.id}
+            fieldName="behandlingensArtOgOmfang"
+            initialValue={pvoTilbakemelding.behandlingensArtOgOmfang}
+          />
         </div>
       </div>
       <FormButtons
