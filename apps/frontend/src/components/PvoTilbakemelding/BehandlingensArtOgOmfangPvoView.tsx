@@ -1,18 +1,8 @@
-import {
-  BodyLong,
-  Button,
-  Heading,
-  Label,
-  List,
-  Radio,
-  RadioGroup,
-  ToggleGroup,
-} from '@navikt/ds-react'
-import { RefObject, useState } from 'react'
+import { BodyLong, Heading, Label, List } from '@navikt/ds-react'
+import { RefObject } from 'react'
 import { IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import FormButtons from '../PvkDokument/edit/FormButtons'
-import { Markdown } from '../common/Markdown'
-import TextEditor from '../common/TextEditor/TextEditor'
+import PvoTilbakemeldingForm from './edit/PvoTilbakemeldingForm'
 
 interface IProps {
   personkategorier: string[]
@@ -36,9 +26,6 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
     setActiveStep,
     setSelectedStep,
   } = props
-
-  const [mode, setMode] = useState('edit')
-  const [value, setValue] = useState('')
 
   return (
     <div className="w-full">
@@ -97,98 +84,7 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
 
         {/* PVO sidepanel */}
         <div className="px-4 py-4 border-l border-[#071a3636] w-full max-w-md bg-[#F0EEF4] mt-35">
-          <div>
-            <RadioGroup
-              legend="Vurdér om etterleverens bidrag er tilstrekkelig"
-              // onChange={handleChange}
-              description="Denne vurderingen blir ikke tilgjengelig for etterleveren før dere har ferdigstilt selve vurderingen."
-            >
-              <Radio value="JA">Ja, tilstrekkelig </Radio>
-              <Radio value="Tilstrekkelig">
-                Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som
-                beskrives i fritekst under
-              </Radio>
-              <Radio value="40">Utilstrekkelig, beskrives nærmere under</Radio>
-            </RadioGroup>
-          </div>
-          <div className="my-5">
-            <Label>Skriv intern PVO diskusjon her</Label>
-            <BodyLong>Denne teksten er privat for PVO og skal ikke deles med etterleveren</BodyLong>
-          </div>
-          <div>
-            {mode === 'edit' && (
-              <TextEditor
-                initialValue={value}
-                setValue={setValue}
-                height="15.625rem"
-                // setIsFormDirty={setIsFormDirty}
-              />
-            )}
-
-            {mode === 'view' && (
-              <div className="p-8 border-border-subtle-hover border border-solid rounded-md bg-white">
-                <Markdown source={''} />
-              </div>
-            )}
-          </div>
-          <div className="flex justify-end mt-[-1px]">
-            <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
-              <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
-              <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
-            </ToggleGroup>
-          </div>
-          <div className="my-5">
-            <Label>Skriv tilbakemelding til etterleveren</Label>
-            <BodyLong>
-              Tilbakemeldingen blir ikke tilgjengelig for etterleveren før du velger å publisere
-              den.{' '}
-            </BodyLong>
-          </div>
-          <div>
-            {mode === 'edit' && (
-              <TextEditor
-                initialValue={value}
-                setValue={setValue}
-                height="15.625rem"
-                // setIsFormDirty={setIsFormDirty}
-              />
-            )}
-
-            {mode === 'view' && (
-              <div className="p-8 border-border-subtle-hover border border-solid rounded-md bg-white">
-                <Markdown source={''} />
-              </div>
-            )}
-          </div>
-          <div className="flex justify-end mt-[-1px]">
-            <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
-              <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
-              <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
-            </ToggleGroup>
-          </div>
-          <div className="mt-10 flex flex-row gap-2">
-            <div>
-              <Button
-                size="small"
-                onClick={() => {
-                  setValue('')
-                }}
-              >
-                Lagre
-              </Button>
-            </div>
-            <div>
-              <Button
-                size="small"
-                variant="secondary"
-                onClick={() => {
-                  setValue('')
-                }}
-              >
-                Avbryt
-              </Button>
-            </div>
-          </div>
+          <PvoTilbakemeldingForm />
         </div>
       </div>
       <FormButtons
