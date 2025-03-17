@@ -679,6 +679,7 @@ export enum EPVK {
   pvkDokumentasjon = '/dokumentasjon',
   pvkDokument = '/pvkdokument',
   pvkBehov = '/pvkbehov',
+  tilbakemelding = 'Er det noe annet dere ønsker å formidle til',
 }
 
 export enum EPVO {

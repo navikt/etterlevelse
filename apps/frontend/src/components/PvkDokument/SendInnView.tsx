@@ -1,5 +1,4 @@
-import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, CopyButton, Heading } from '@navikt/ds-react'
+import { Button } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
 import {
@@ -7,12 +6,10 @@ import {
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '../../api/PvkDokumentApi'
-import { EPvkDokumentStatus, IPvkDokument } from '../../constants'
+import { EPVK, EPvkDokumentStatus, IPvkDokument } from '../../constants'
+import { SendInnViewArtInvRis, SendInnViewCopySend } from '../PvkCommon/SendInnView'
 import { TextAreaField } from '../common/Inputs'
 import FormButtons from './edit/FormButtons'
-import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
-import InvolveringSummary from './formSummary/InvolveringSummary'
-import RisikoscenarioSummary from './formSummary/RisikoscenarioSummary'
 
 interface IProps {
   pvkDokument: IPvkDokument
@@ -68,50 +65,22 @@ export const SendInnView = (props: IProps) => {
         <Form>
           <div className="flex justify-center">
             <div>
-              <Heading level="1" size="medium" className="mb-5">
-                Les og send inn
-              </Heading>
-              <BodyLong>
-                Her kan dere lese over det som er lagt inn i PVK-en. Hvis dere oppdager feil eller
-                mangel, er det mulig å gå tilbake og endre svar. Til slutt er det plass til å legge
-                til ytterligere informasjon dersom det er aktuelt.
-              </BodyLong>
-
-              <ArtOgOmFangSummary
+              <SendInnViewArtInvRis
                 personkategorier={personkategorier}
                 updateTitleUrlAndStep={updateTitleUrlAndStep}
-              />
-
-              <InvolveringSummary
                 databehandlere={databehandlere}
-                personkategorier={personkategorier}
-                updateTitleUrlAndStep={updateTitleUrlAndStep}
               />
-
-              <RisikoscenarioSummary />
 
               <div className="mt-5 mb-3 max-w-[75ch]">
                 <TextAreaField
                   rows={3}
                   noPlaceholder
-                  label="Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)"
+                  label={`${EPVK.tilbakemelding} ${EPVK.pvk}? (valgfritt)`}
                   name="merknadTilPvoEllerRisikoeier"
                 />
               </div>
 
-              <CopyButton
-                variant="action"
-                copyText={window.location.href}
-                text="Kopiér lenken til denne siden"
-                activeText="Lenken er kopiert"
-                icon={<FilesIcon aria-hidden />}
-              />
-
-              {pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO && (
-                <Alert variant="success" className="my-5">
-                  Sendt til Personvernombudet
-                </Alert>
-              )}
+              <SendInnViewCopySend pvkDokument={pvkDokument} />
 
               <FormButtons
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
@@ -141,7 +110,7 @@ export const SendInnView = (props: IProps) => {
                         submitForm()
                       }}
                     >
-                      Send til Personvernombudet
+                      Send til {EPVK.pvk}
                     </Button>
                   </div>
                 }
