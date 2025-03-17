@@ -1,30 +1,25 @@
-import { Button, Heading } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import {
   addTiltakToRisikoscenario,
   getRisikoscenario,
   removeTiltakToRisikoscenario,
   updateRisikoscenario,
-} from '../../../api/RisikoscenarioApi'
+} from '../../../../api/RisikoscenarioApi'
 import {
   createTiltakAndRelasjonWithRisikoscenario,
   deleteTiltak,
   getTiltak,
-} from '../../../api/TiltakApi'
+} from '../../../../api/TiltakApi'
 import {
   IRisikoscenario,
   ITiltak,
   ITiltakRisikoscenarioRelasjon,
   TEtterlevelseDokumentasjonQL,
-} from '../../../constants'
-import { user } from '../../../services/User'
-import TiltakReadMoreList from '../../tiltak/TiltakReadMoreList'
-import LeggTilEksisterendeTiltak from '../../tiltak/edit/LeggTilEksisterendeTiltak'
-import TiltakForm from '../../tiltak/edit/TiltakForm'
-import RisikoscenarioView from '../RisikoscenarioView'
-import IngenTiltakField from '../edit/IngenTiltakField'
-import RisikoscenarioModalForm from '../edit/RisikoscenarioModalForm'
-import RedigerRisikoscenarioButtons from './RedigerRisikoscenarioButtons/RedigerRisikoscenarioButtons'
+} from '../../../../constants'
+import { user } from '../../../../services/User'
+import RisikoscenarioModalForm from '../../edit/RisikoscenarioModalForm'
+import { KravRisikoscenarioAccordionContentEditMode } from './KravRisikoscenarioAccordionContentEditMode'
+import { KravRisikoscenarioAccordionContentLimitedReadonly } from './KravRisikoscenarioAccordionContentLimitedReadonly'
 
 interface IProps {
   risikoscenario: IRisikoscenario
@@ -173,15 +168,14 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
 
   return (
     <div>
-      <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true} />
-
-      {!isIngenTilgangFormDirty &&
-        !isCreateTiltakFormActive &&
-        !isEditTiltakFormActive &&
+      {!isCreateMode &&
         !isAddExistingMode &&
-        !isCreateMode &&
-        userHasAccess() && (
-          <RedigerRisikoscenarioButtons
+        !isCreateTiltakFormActive &&
+        !isEditTiltakFormActive && (
+          <KravRisikoscenarioAccordionContentLimitedReadonly
+            activeRisikoscenario={activeRisikoscenario}
+            isIngenTilgangFormDirty={isIngenTilgangFormDirty}
+            userHasAccess={userHasAccess}
             setIsEditModalOpen={setIsEditModalOpen}
             kravnummer={kravnummer}
             risikoscenario={risikoscenario}
@@ -189,91 +183,40 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
             setRisikoscenarioer={setRisikoscenarioer}
             risikoscenarioForKrav={risikoscenarioForKrav}
             setRisikoscenarioForKrav={setRisikoscenarioForKrav}
+            alleRisikoscenarioer={alleRisikoscenarioer}
+            tiltakList={tiltakList}
+            setTiltakList={setTiltakList}
+            setIsEditTiltakFormActive={setIsEditTiltakFormActive}
+            isCreateTiltakFormActive={isCreateTiltakFormActive}
+            isAddExistingMode={isAddExistingMode}
+            submitDeleteTiltak={submitDeleteTiltak}
+            formRef={formRef}
+            setIsCreateTiltakFormActive={setIsCreateTiltakFormActive}
+            setIsAddExisitingMode={setIsAddExisitingMode}
+            submitIngenTiltak={submitIngenTiltak}
+            setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
           />
         )}
 
-      <div className="mt-12">
-        <Heading level="3" size="small">
-          Følgende tiltak gjelder for dette risikoscenarioet
-        </Heading>
-
-        {!risikoscenario.ingenTiltak && userHasAccess() && (
-          <div>
-            {risikoscenario.tiltakIds.length !== 0 && (
-              <TiltakReadMoreList
-                risikoscenario={activeRisikoscenario}
-                risikoscenarioList={alleRisikoscenarioer}
-                tiltakList={tiltakList}
-                setTiltakList={setTiltakList}
-                setIsEditTiltakFormActive={setIsEditTiltakFormActive}
-                isCreateTiltakFormActive={isCreateTiltakFormActive}
-                isAddExistingMode={isAddExistingMode}
-                customDelete={submitDeleteTiltak}
-                formRef={formRef}
-              />
-            )}
-
-            {isCreateTiltakFormActive && (
-              <TiltakForm
-                title="Opprett nytt tiltak"
-                initialValues={{} as ITiltak}
-                pvkDokumentId={risikoscenario.pvkDokumentId}
-                submit={submitCreateTiltak}
-                close={() => setIsCreateTiltakFormActive(false)}
-                formRef={formRef}
-              />
-            )}
-
-            {isAddExistingMode && (
-              <LeggTilEksisterendeTiltak
-                risikoscenario={activeRisikoscenario}
-                tiltakList={tiltakList}
-                setIsAddExisitingMode={setIsAddExisitingMode}
-                customSubmit={submitExistingTiltak}
-                formRef={formRef}
-              />
-            )}
-
-            {!isIngenTilgangFormDirty &&
-              !isCreateTiltakFormActive &&
-              !isEditTiltakFormActive &&
-              !isAddExistingMode &&
-              !isCreateMode && (
-                <div className="mt-5 flex gap-2 lg:flex-row flex-col">
-                  <Button
-                    size="small"
-                    type="button"
-                    onClick={() => setIsCreateTiltakFormActive(true)}
-                  >
-                    Opprett nytt tiltak
-                  </Button>
-                  <Button
-                    type="button"
-                    size="small"
-                    variant="secondary"
-                    onClick={() => setIsAddExisitingMode(true)}
-                  >
-                    Legg til eksisterende tiltak
-                  </Button>
-                </div>
-              )}
-          </div>
-        )}
-        {!isCreateMode &&
-          !isCreateTiltakFormActive &&
-          !isEditTiltakFormActive &&
-          !isAddExistingMode &&
-          activeRisikoscenario.tiltakIds.length === 0 && (
-            <div className="mt-3">
-              <IngenTiltakField
-                risikoscenario={activeRisikoscenario}
-                submit={submitIngenTiltak}
-                formRef={formRef}
-                setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
-              />
-            </div>
-          )}
-      </div>
+      {isCreateMode && isAddExistingMode && isCreateTiltakFormActive && isEditTiltakFormActive && (
+        <KravRisikoscenarioAccordionContentEditMode
+          activeRisikoscenario={activeRisikoscenario}
+          userHasAccess={userHasAccess}
+          risikoscenario={risikoscenario}
+          alleRisikoscenarioer={alleRisikoscenarioer}
+          tiltakList={tiltakList}
+          setTiltakList={setTiltakList}
+          setIsEditTiltakFormActive={setIsEditTiltakFormActive}
+          isCreateTiltakFormActive={isCreateTiltakFormActive}
+          isAddExistingMode={isAddExistingMode}
+          submitDeleteTiltak={submitDeleteTiltak}
+          formRef={formRef}
+          setIsCreateTiltakFormActive={setIsCreateTiltakFormActive}
+          setIsAddExisitingMode={setIsAddExisitingMode}
+          submitCreateTiltak={submitCreateTiltak}
+          submitExistingTiltak={submitExistingTiltak}
+        />
+      )}
 
       {isEditModalOpen && (
         <RisikoscenarioModalForm
