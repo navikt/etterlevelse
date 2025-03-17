@@ -109,6 +109,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView = (props: IProps) =
               <RisikoscenarioAccordianListPvoView
                 risikoscenarioList={risikoscenarioList}
                 allRisikoscenarioList={allRisikoscenarioList}
+                etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                 tiltakList={tiltakList}
                 formRef={formRef}
               />

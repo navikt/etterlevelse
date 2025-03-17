@@ -9,13 +9,20 @@ import TiltakView from '../tiltak/TiltakView'
 
 interface IProps {
   risikoscenarioList: IRisikoscenario[]
+  etterlevelseDokumentasjonId: string
   allRisikoscenarioList: IRisikoscenario[]
   tiltakList: ITiltak[]
   formRef: RefObject<any>
 }
 
 export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
-  const { risikoscenarioList, allRisikoscenarioList, tiltakList, formRef } = props
+  const {
+    risikoscenarioList,
+    allRisikoscenarioList,
+    tiltakList,
+    etterlevelseDokumentasjonId,
+    formRef,
+  } = props
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [navigateUrl, setNavigateUrl] = useState<string>('')
   const url = new URL(window.location.href)
@@ -78,7 +85,10 @@ export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
               <Accordion.Content>
                 {expanded && (
                   <div>
-                    <RisikoscenarioView risikoscenario={risikoscenario} />
+                    <RisikoscenarioView
+                      risikoscenario={risikoscenario}
+                      etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                    />
                     <div className="mt-12">
                       <Heading level="3" size="small">
                         Følgende tiltak gjelder for dette risikoscenarioet

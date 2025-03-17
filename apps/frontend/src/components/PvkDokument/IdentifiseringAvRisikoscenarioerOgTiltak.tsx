@@ -112,6 +112,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
                 risikoscenarioList={risikoscenarioList}
                 allRisikoscenarioList={allRisikoscenarioList}
                 tiltakList={tiltakList}
+                etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                 setTiltakList={setTiltakList}
                 setRisikoscenarioList={setRisikoscenarioList}
                 setIsTiltakFormActive={setIsTiltakFormActive}
