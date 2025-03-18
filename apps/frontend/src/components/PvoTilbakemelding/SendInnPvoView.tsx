@@ -109,7 +109,7 @@ export const SendInnPvoView = (props: IProps) => {
                 customStepNumber={4}
               />
 
-              <RisikoscenarioSummary />
+              <RisikoscenarioSummary customStepNumber={6} />
 
               <div className="mt-5 mb-3 max-w-[75ch]">
                 <Label>
