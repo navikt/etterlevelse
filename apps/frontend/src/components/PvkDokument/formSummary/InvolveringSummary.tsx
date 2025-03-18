@@ -6,10 +6,11 @@ interface IProps {
   updateTitleUrlAndStep: (step: number) => void
   personkategorier: string[]
   databehandlere: string[]
+  customLinktext?: string
 }
 
 export const InvolveringSummary = (props: IProps) => {
-  const { updateTitleUrlAndStep, personkategorier, databehandlere } = props
+  const { updateTitleUrlAndStep, personkategorier, customLinktext, databehandlere } = props
   return (
     <Field>
       {(fieldProp: FieldProps) => (
@@ -21,7 +22,7 @@ export const InvolveringSummary = (props: IProps) => {
               onClick={() => updateTitleUrlAndStep(3)}
               href={window.location.pathname.slice(0, -1) + 3}
             >
-              Endre svar
+              {customLinktext ? customLinktext : 'Endre svar'}
             </FormSummary.EditLink>
           </FormSummary.Header>
           <FormSummary.Answers>

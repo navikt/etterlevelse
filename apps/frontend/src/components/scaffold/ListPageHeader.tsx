@@ -2,7 +2,7 @@ import { Heading } from '@navikt/ds-react'
 
 interface IProps {
   headingText: string
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export const ListPageHeader = (props: IProps) => {

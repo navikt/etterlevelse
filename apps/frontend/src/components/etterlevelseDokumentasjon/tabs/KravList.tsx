@@ -133,7 +133,6 @@ export const KravList = (props: IProps) => {
           <option value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</option>
         </Select>
       </div>
-
       <div className="flex items-center w-full pb-2">
         <div className="flex items-center w-full gap-4">
           <Button
@@ -168,13 +167,11 @@ export const KravList = (props: IProps) => {
           </BodyShort>
         </div>
       </div>
-
       {loading && (
         <div className="flex w-full justify-center mt-3.5">
           <Loader size={'large'} />
         </div>
       )}
-
       {!loading && (relevanteStats.length !== 0 || utgaattStats.length !== 0) && (
         <KravAccordionList
           allKravPriority={allKravPriority}
@@ -195,7 +192,6 @@ export const KravList = (props: IProps) => {
             <BodyShort>Fant ingen krav</BodyShort>
           </div>
         )}
-
       {/*
         DISABLED TEMPORARY
         {irrelevanteStats.length > 0 && (

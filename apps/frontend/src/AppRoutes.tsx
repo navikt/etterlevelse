@@ -11,6 +11,7 @@ import GjenbrukEtterlevelseDokumentasjonPage from './components/etterlevelseDoku
 import { KravCreatePage } from './components/krav/Edit/KravCreatePage'
 import { KravEditPage } from './components/krav/Edit/KravEditPage'
 import { KravNyVersjonPage } from './components/krav/Edit/KravNyVersjonPage'
+import { EPVO } from './constants'
 import ArkivAdminPage from './pages/ArkivAdminPage'
 import BehandlingensLivslopPage from './pages/BehandlingensLivslopPage'
 import DocumentRelationAdminPage from './pages/DocumentRelationAdminPage'
@@ -29,6 +30,8 @@ import { MyEtterlevelseDokumentasjonerPage } from './pages/MyEtterlevelseDokumen
 import NotFound from './pages/NotFound'
 import PvkBehovPage from './pages/PvkBehovPage'
 import PvkDokumentPage from './pages/PvkDokumentPage'
+import PvoOversiktPage from './pages/PvoOversiktPage'
+import PvoTilbakemeldingPage from './pages/PvoTilbakemeldingPage'
 import QuestionAndAnswerLogPage from './pages/QuestionAndAnswerLogPage'
 import { RelasjonsOversikt } from './pages/RelasjonsOversikt'
 import { TemaPage } from './pages/TemaPage'
@@ -161,10 +164,29 @@ const AppRoutes = (): JSX.Element => {
       />
 
       <Route
+        path={`${EPVO.url}/:tab`}
+        element={<PrivateRoute component={<PvoOversiktPage />} kraveierPage />}
+        caseSensitive={true}
+      />
+
+      <Route
+        path={EPVO.oversikt}
+        element={<PrivateRoute component={<PvoOversiktPage />} pvoPage />}
+        caseSensitive={true}
+      />
+
+      <Route
+        path={`/pvkdokument/:id${EPVO.tilbakemelding}/:steg`}
+        element={<PvoTilbakemeldingPage />}
+        caseSensitive={true}
+      />
+
+      <Route
         path="/dokumentasjon/relasjon/:id/"
         element={<RelasjonsOversikt />}
         caseSensitive={true}
       />
+
       <Route
         path="/dokumentasjon/"
         element={<MyEtterlevelseDokumentasjonerPage />}
@@ -251,6 +273,7 @@ const AppRoutes = (): JSX.Element => {
         element={<PrivateRoute component={<DocumentRelationAdminPage />} adminPage />}
         caseSensitive={true}
       />
+
       <Route path="/tema/:tema" element={<TemaPage />} caseSensitive={true} />
       <Route path="/tema/" element={<TemaOversiktPage />} caseSensitive={true} />
       <Route path="/help" element={<RedirectHelpUrl />} caseSensitive={true} />

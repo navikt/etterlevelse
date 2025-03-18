@@ -21,6 +21,7 @@ import {
   IRisikoscenario,
 } from '../constants'
 import { user } from '../services/User'
+import { isInLimitedAccess } from '../util/config'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const StepTitle: string[] = [
@@ -146,9 +147,9 @@ export const PvkDokumentPage = () => {
       )}
 
       {etterlevelseDokumentasjon &&
+        !isInLimitedAccess(user.getIdent()) &&
         !etterlevelseDokumentasjon.hasCurrentUserAccess &&
-        !user.isAdmin() &&
-        !user.isPersonvernombud() && (
+        !user.isAdmin() && (
           <div className="flex w-full justify-center mt-5">
             <div className="flex items-center flex-col gap-5">
               <Alert variant="warning">Du har ikke tilgang til å redigere på PVK dokument.</Alert>
@@ -165,8 +166,8 @@ export const PvkDokumentPage = () => {
       {etterlevelseDokumentasjon &&
         pvkDokument &&
         (etterlevelseDokumentasjon.hasCurrentUserAccess ||
-          user.isAdmin() ||
-          user.isPersonvernombud()) && (
+          isInLimitedAccess(user.getIdent()) ||
+          user.isAdmin()) && (
           <div className="w-full">
             <div className="min-h-48 bg-[#8269A21F] flex flex-col w-full items-center">
               <div className="w-full max-w-7xl">

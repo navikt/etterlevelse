@@ -1,0 +1,104 @@
+package no.nav.data.pvk.pvotilbakemelding;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.ValidationException;
+import no.nav.data.common.rest.PageParameters;
+import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemedlingRequest;
+import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemeldingResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
+@Slf4j
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/pvotilbakemelding")
+@Tag(name = "Pvo tilbakemelding", description = "PVO tilbakemelding for PVK dokument")
+public class PvoTilbakemeldingController {
+
+    private final PvoTilbakemeldingService pvoTilbakemeldingService;
+
+    @Operation(summary = "Get All PVO tilbakemelding")
+    @ApiResponse(description = "ok")
+    @GetMapping
+    public ResponseEntity<RestResponsePage<PvoTilbakemeldingResponse>> getAll(PageParameters pageParameters) {
+        log.info("Get all Pvo tilbakemelding");
+        Page<PvoTilbakemelding> page = pvoTilbakemeldingService.getAll(pageParameters);
+        return ResponseEntity.ok(new RestResponsePage<>(page).convert(PvoTilbakemeldingResponse::buildFrom));
+    }
+
+    @Operation(summary = "Get One PVO tilbakemelding")
+    @ApiResponse(description = "ok")
+    @GetMapping("/{id}")
+    public ResponseEntity<PvoTilbakemeldingResponse> getById(@PathVariable UUID id) {
+        log.info("Get PVO tilbakemelding id={}", id);
+        return ResponseEntity.ok(PvoTilbakemeldingResponse.buildFrom(pvoTilbakemeldingService.get(id)));
+    }
+
+    @Operation(summary = "Get PVO tilbakemelding by PVK dokument id")
+    @ApiResponse(description = "ok")
+    @GetMapping("/pvkdokument/{pvkdokumentId}")
+    public ResponseEntity<PvoTilbakemeldingResponse> getPvoTilbakemeldingByPvkDokumentId(@PathVariable String pvkdokumentId) {
+        log.info("Get PVO tilbakemelding by PVK dokument id={}", pvkdokumentId);
+        Optional<PvoTilbakemelding> pvoTilbakemelding = pvoTilbakemeldingService.getByPvkDokumentId(UUID.fromString(pvkdokumentId));
+        return pvoTilbakemelding.map(tilbakemelding -> ResponseEntity.ok(PvoTilbakemeldingResponse.buildFrom(tilbakemelding))).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Operation(summary = "Create PVO tilbakemelding")
+    @ApiResponse(responseCode = "201", description = "PVO tilbakemelding created")
+    @PostMapping
+    public ResponseEntity<PvoTilbakemeldingResponse> createPvoTilbakemelding(@RequestBody PvoTilbakemedlingRequest request) {
+        log.info("Create PVO tilbakemelding");
+        //kan kaste et data integrity violation exception(1 til 1 kobling mot pvk dokument)
+        var pvoTilbakemelding = pvoTilbakemeldingService.save(request.convertToPvoTilbakemelding(), request.isUpdate());
+
+        return new ResponseEntity<>(PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding), HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Update PVO tilbakemelding")
+    @ApiResponse(description = "PVO tilbakemelding updated")
+    @PutMapping("/{id}")
+    public ResponseEntity<PvoTilbakemeldingResponse> updatePvoTilbakemelding(@PathVariable UUID id, @Valid @RequestBody PvoTilbakemedlingRequest request) {
+        log.info("Update PVO tilbakemelding id={}", id);
+
+        if (!Objects.equals(id, request.getIdAsUUID())) {
+            throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
+        }
+
+        var pvoTilbakemeldingToUpdate = pvoTilbakemeldingService.get(id);
+
+        if (pvoTilbakemeldingToUpdate == null) {
+            throw new ValidationException(String.format("Could not find pvo tilbakemelding to be updated with id = %s ", request.getId()));
+        }
+
+        request.mergeInto(pvoTilbakemeldingToUpdate);
+        var pvoTilbakemelding = pvoTilbakemeldingService.save(pvoTilbakemeldingToUpdate, request.isUpdate());
+        return ResponseEntity.ok(PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding));
+    }
+
+    @Operation(summary = "Delete PVO tilbakemelding")
+    @ApiResponse(description = "PVO tilbakemelding deleted")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<PvoTilbakemeldingResponse> deletePvoTilbakemeldingById(@PathVariable UUID id) {
+        log.info("Delete PVO tilbakemelding id={}", id);
+        var pvoTilbakemelding = pvoTilbakemeldingService.delete(id);
+        if (pvoTilbakemelding == null) {
+            log.warn("Could not find PVO tilbakemelding with id = {} to delete", id);
+            return ResponseEntity.ok(null);
+        } else {
+            return ResponseEntity.ok(PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding));
+        }
+    }
+}

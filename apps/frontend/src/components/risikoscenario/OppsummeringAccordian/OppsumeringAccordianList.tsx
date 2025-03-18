@@ -11,6 +11,7 @@ interface IProps {
   risikoscenarioList: IRisikoscenario[]
   setRisikosenarioList: (state: IRisikoscenario[]) => void
   allRisikoscenarioList: IRisikoscenario[]
+  etterlevelseDokumentasjonId: string
   setAllRisikoscenarioList: (state: IRisikoscenario[]) => void
   tiltakList: ITiltak[]
   formRef: RefObject<any>
@@ -24,6 +25,7 @@ export const OppsumeringAccordianList = (props: IProps) => {
     setRisikosenarioList,
     allRisikoscenarioList,
     setAllRisikoscenarioList,
+    etterlevelseDokumentasjonId,
     tiltakList,
     formRef,
     isUnsaved,
@@ -90,6 +92,7 @@ export const OppsumeringAccordianList = (props: IProps) => {
                   risikoscenario={risikoscenario}
                   risikoscenarioList={risikoscenarioList}
                   setRisikosenarioList={setRisikosenarioList}
+                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                   allRisikoscenarioList={allRisikoscenarioList}
                   setAllRisikoscenarioList={setAllRisikoscenarioList}
                   tiltakList={tiltakList}

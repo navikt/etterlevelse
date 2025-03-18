@@ -5,10 +5,11 @@ import { StepTitle } from '../../../pages/PvkDokumentPage'
 interface IProps {
   updateTitleUrlAndStep: (step: number) => void
   personkategorier: string[]
+  customLinktext?: string
 }
 
 export const ArtOgOmFangSummary = (props: IProps) => {
-  const { updateTitleUrlAndStep, personkategorier } = props
+  const { updateTitleUrlAndStep, personkategorier, customLinktext } = props
   return (
     <Field>
       {(fieldProp: FieldProps) => (
@@ -20,7 +21,7 @@ export const ArtOgOmFangSummary = (props: IProps) => {
               onClick={() => updateTitleUrlAndStep(2)}
               href={window.location.pathname.slice(0, -1) + 2}
             >
-              Endre svar
+              {customLinktext ? customLinktext : 'Endre svar'}
             </FormSummary.EditLink>
           </FormSummary.Header>
           <FormSummary.Answers>

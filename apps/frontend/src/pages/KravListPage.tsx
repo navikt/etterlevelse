@@ -1,18 +1,9 @@
 import { PlusIcon } from '@navikt/aksel-icons'
-import {
-  BodyLong,
-  BodyShort,
-  Button,
-  Label,
-  LinkPanel,
-  List,
-  Skeleton,
-  Spacer,
-  Tabs,
-} from '@navikt/ds-react'
+import { Button, List, Skeleton, Tabs } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
+import { ListLayout } from '../components/common/ListLayout'
 import StatusView from '../components/common/StatusTag'
 import { AllKrav } from '../components/kravList/AllKrav'
 import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
@@ -98,35 +89,21 @@ export const KravPanels = ({ kravene, loading }: IKravPanelsProps) => {
               ) as TTemaCode
 
               return (
-                <List.Item icon={<div />} className="mb-0" key={krav.id}>
-                  <LinkPanel href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>
-                    <LinkPanel.Title className="flex items-center">
-                      <div className="max-w-xl">
-                        <BodyShort size="small">
-                          K{krav.kravNummer}.{krav.kravVersjon}
-                        </BodyShort>
-                        <BodyLong>
-                          <Label>{krav.navn}</Label>
-                        </BodyLong>
-                      </div>
-                      <Spacer />
-                      <div className="mr-5">
-                        <StatusView status={krav.status} />
-                      </div>
-                      <div className="w-44">
-                        <BodyShort size="small" className="break-words">
-                          {tema && tema.shortName ? tema.shortName : ''}
-                        </BodyShort>
-                        <BodyShort size="small">
-                          {krav.changeStamp.lastModifiedDate !== undefined &&
-                          krav.changeStamp.lastModifiedDate !== ''
-                            ? `Sist endret: ${moment(krav.changeStamp.lastModifiedDate).format('ll')}`
-                            : ''}
-                        </BodyShort>
-                      </div>
-                    </LinkPanel.Title>
-                  </LinkPanel>
-                </List.Item>
+                <ListLayout
+                  key={krav.id}
+                  id={krav.id}
+                  url={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
+                  documentNumber={`K${krav.kravNummer}.${krav.kravVersjon}`}
+                  title={krav.navn}
+                  status={<StatusView status={krav.status} />}
+                  upperRightField={tema && tema.shortName ? tema.shortName : ''}
+                  changeStamp={
+                    krav.changeStamp.lastModifiedDate !== undefined &&
+                    krav.changeStamp.lastModifiedDate !== ''
+                      ? `Sist endret: ${moment(krav.changeStamp.lastModifiedDate).format('ll')}`
+                      : ''
+                  }
+                />
               )
             })}
         </List>

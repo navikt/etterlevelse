@@ -2,7 +2,6 @@ package no.nav.data.pvk.tiltak;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakRepo;
@@ -49,12 +48,7 @@ public class TiltakService {
     @Transactional
     public Tiltak delete(UUID id) {
         Optional<Tiltak> tiltak = repo.findById(id);
-        try {
-            repo.deleteById(id);
-        } catch (DataIntegrityViolationException e) { // FIXME: Flytt ut til controller
-            log.warn("Could not delete tiltak with id: Tiltak is related to one or more Risikoscenario", id);
-            throw new ValidationException("Could not delete tiltak: Tiltak is related to one or more Risikoscenario");
-        }
+        repo.deleteById(id);
         return tiltak.orElse(null);
     }
 
