@@ -98,6 +98,7 @@ export const SendInnPvoView = (props: IProps) => {
                 personkategorier={personkategorier}
                 updateTitleUrlAndStep={updateTitleUrlAndStep}
                 customLinktext="Endre tilbakemelding"
+                customStepNumber={3}
               />
 
               <InvolveringSummary
@@ -105,6 +106,7 @@ export const SendInnPvoView = (props: IProps) => {
                 personkategorier={personkategorier}
                 updateTitleUrlAndStep={updateTitleUrlAndStep}
                 customLinktext="Endre tilbakemelding"
+                customStepNumber={4}
               />
 
               <RisikoscenarioSummary />

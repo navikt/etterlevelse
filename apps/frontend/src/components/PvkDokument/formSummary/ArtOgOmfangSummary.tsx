@@ -6,10 +6,11 @@ interface IProps {
   updateTitleUrlAndStep: (step: number) => void
   personkategorier: string[]
   customLinktext?: string
+  customStepNumber?: number
 }
 
 export const ArtOgOmFangSummary = (props: IProps) => {
-  const { updateTitleUrlAndStep, personkategorier, customLinktext } = props
+  const { updateTitleUrlAndStep, personkategorier, customLinktext, customStepNumber } = props
   return (
     <Field>
       {(fieldProp: FieldProps) => (
@@ -18,8 +19,10 @@ export const ArtOgOmFangSummary = (props: IProps) => {
             <FormSummary.Heading level="2">{StepTitle[1]}</FormSummary.Heading>
             <FormSummary.EditLink
               className="cursor-pointer"
-              onClick={() => updateTitleUrlAndStep(2)}
-              href={window.location.pathname.slice(0, -1) + 2}
+              onClick={() => updateTitleUrlAndStep(customStepNumber ? customStepNumber : 2)}
+              href={
+                window.location.pathname.slice(0, -1) + `${customStepNumber ? customStepNumber : 2}`
+              }
             >
               {customLinktext ? customLinktext : 'Endre svar'}
             </FormSummary.EditLink>
