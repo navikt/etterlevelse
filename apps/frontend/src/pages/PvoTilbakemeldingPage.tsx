@@ -8,6 +8,7 @@ import { usePvkDokument } from '../api/PvkDokumentApi'
 import { usePvoTilbakemelding } from '../api/PvoApi'
 import { getRisikoscenarioByPvkDokumentId } from '../api/RisikoscenarioApi'
 import BehandlingensArtOgOmfangPvoView from '../components/PvoTilbakemelding/BehandlingensArtOgOmfangPvoView'
+import BehandlingensLivslopPvoView from '../components/PvoTilbakemelding/BehandlingsLivslopPvoView'
 import IdentifiseringAvRisikoscenarioerOgTiltakPvoView from '../components/PvoTilbakemelding/IdentifiseringAvRisikoscenarioerOgTiltakPvoView'
 import InvolveringAvEksternePvoView from '../components/PvoTilbakemelding/InvolveringAvEksternePvoView'
 import OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView from '../components/PvoTilbakemelding/OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
@@ -27,6 +28,7 @@ import { user } from '../services/User'
 
 export const StepTitle: string[] = [
   'Oversikt og status',
+  'Behandlingens livsløp',
   'Behandlingens art og omfang',
   'Involvering av eksterne',
   'Identifisering av risikoscenarioer og tiltak',
@@ -80,7 +82,7 @@ export const PvoTilbakemeldingPage = () => {
 
   const updateUrlOnStepChange = (step: number) => {
     navigate(
-      `/pvkdokument/${params.id}${EPVO.tilbakemelding}/${step}${step === 5 ? '?tab=risikoscenarioer&filter=alle' : ''}`
+      `/pvkdokument/${params.id}${EPVO.tilbakemelding}/${step}${step === 6 ? '?tab=risikoscenarioer&filter=alle' : ''}`
     )
   }
 
@@ -223,7 +225,8 @@ export const PvoTilbakemeldingPage = () => {
                         updateTitleUrlAndStep={updateTitleUrlAndStep}
                       />
                     )}
-                    {activeStep === 2 && (
+                    {activeStep === 2 && <BehandlingensLivslopPvoView pvkDokument={pvkDokument} />}
+                    {activeStep === 3 && (
                       <BehandlingensArtOgOmfangPvoView
                         personkategorier={personkategorier}
                         pvkDokument={pvkDokument}
@@ -236,7 +239,7 @@ export const PvoTilbakemeldingPage = () => {
                         formRef={formRef}
                       />
                     )}
-                    {activeStep === 3 && (
+                    {activeStep === 4 && (
                       <InvolveringAvEksternePvoView
                         personkategorier={personkategorier}
                         databehandlere={databehandlere}
@@ -250,7 +253,7 @@ export const PvoTilbakemeldingPage = () => {
                         formRef={formRef}
                       />
                     )}
-                    {activeStep === 4 && (
+                    {activeStep === 5 && (
                       <IdentifiseringAvRisikoscenarioerOgTiltakPvoView
                         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         pvkDokument={pvkDokument}
@@ -259,7 +262,7 @@ export const PvoTilbakemeldingPage = () => {
                         setActiveStep={updateTitleUrlAndStep}
                       />
                     )}
-                    {activeStep === 5 && (
+                    {activeStep === 6 && (
                       <OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView
                         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         pvkDokument={pvkDokument}
@@ -271,7 +274,7 @@ export const PvoTilbakemeldingPage = () => {
                         formRef={formRef}
                       />
                     )}
-                    {activeStep === 6 && (
+                    {activeStep === 7 && (
                       <SendInnPvoView
                         pvkDokument={pvkDokument}
                         personkategorier={personkategorier}
