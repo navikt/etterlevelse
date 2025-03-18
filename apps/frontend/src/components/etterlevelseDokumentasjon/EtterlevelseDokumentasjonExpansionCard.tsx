@@ -123,7 +123,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                 </div>
 
                 <div className="flex items-start gap-2 mb-2.5">
-                  <Label size="medium">ROS-dokumentasjon:</Label>
+                  <Label size="medium">Dokumentasjon:</Label>
                   <BodyLong size="medium">
                     {etterlevelseDokumentasjon.risikovurderinger.length !== 0 &&
                       etterlevelseDokumentasjon.risikovurderinger.map((vurdering) => {
