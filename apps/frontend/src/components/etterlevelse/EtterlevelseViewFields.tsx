@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Box, Heading, Label, ReadMore } from '@navikt/ds-react'
+import { Alert, BodyShort, Box, Heading, Label, ReadMore, Tag } from '@navikt/ds-react'
 import {
   EEtterlevelseStatus,
   ESuksesskriterieStatus,
@@ -20,6 +20,7 @@ interface IProps {
   tidligereEtterlevelser?: IEtterlevelse[]
   isBortfiltrert?: boolean
 }
+
 export const EtterlevelseViewFields = (props: IProps) => {
   const { etterlevelse, suksesskriterier, tidligereEtterlevelser, isBortfiltrert } = props
 
@@ -65,13 +66,29 @@ export const EtterlevelseViewFields = (props: IProps) => {
 export const getSuksesskriterieStatus = (status: ESuksesskriterieStatus) => {
   switch (status) {
     case ESuksesskriterieStatus.IKKE_OPPFYLT:
-      return 'Ikke oppfylt'
+      return (
+        <Tag size="small" variant="warning">
+          Ikke oppfylt
+        </Tag>
+      )
     case ESuksesskriterieStatus.IKKE_RELEVANT:
-      return 'Ikke relevant'
+      return (
+        <Tag size="small" variant="info">
+          Ikke relevant
+        </Tag>
+      )
     case ESuksesskriterieStatus.OPPFYLT:
-      return 'Oppfylt'
+      return (
+        <Tag size="small" variant="success">
+          Oppfylt
+        </Tag>
+      )
     default:
-      return 'Under arbeid'
+      return (
+        <Tag size="small" variant="info">
+          Under arbeid
+        </Tag>
+      )
   }
 }
 
@@ -113,7 +130,7 @@ const KriterieBegrunnelse = (props: IKriterieBegrunnelseProps) => {
         <div className="flex w-full lg:justify-end justify-normal">
           {isBortfiltrert && <BodyShort className="text-text-danger">Bortfiltert</BodyShort>}
           {!isBortfiltrert && suksesskriterieBegrunnelse.suksesskriterieStatus && (
-            <BodyShort>
+            <BodyShort className="mb-1">
               Status: {getSuksesskriterieStatus(suksesskriterieBegrunnelse.suksesskriterieStatus)}
             </BodyShort>
           )}
