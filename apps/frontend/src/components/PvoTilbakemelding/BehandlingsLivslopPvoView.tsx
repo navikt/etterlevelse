@@ -4,15 +4,22 @@ import {
   getBehandlingensLivslopByEtterlevelseDokumentId,
   mapBehandlingensLivslopRequestToFormValue,
 } from '../../api/BehandlingensLivslopApi'
-import { IBehandlingensLivslopRequest, IPvkDokument, IPvoTilbakemelding } from '../../constants'
+import {
+  IBehandlingensLivslopRequest,
+  IEtterlevelseDokumentasjon,
+  IPvkDokument,
+  IPvoTilbakemelding,
+} from '../../constants'
 import FormButtons from '../PvkDokument/edit/FormButtons'
+import BehandlingensLivsLopSidePanel from '../behandlingensLivlop/BehandlingensLivslopSidePanel'
 import BehandlingensLivslopTextContent from '../behandlingensLivlop/BehandlingensLivslopTextContent'
+import DataTextWrapper from './DataTextWrapper'
 import PvoTilbakemeldingForm from './edit/PvoTilbakemeldingForm'
 
 interface IProps {
   pvoTilbakemelding: IPvoTilbakemelding
   pvkDokument: IPvkDokument
-  etterlevelseDokumentasjonId: string
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -23,7 +30,7 @@ export const BehandlingensLivslopPvoView = (props: IProps) => {
   const {
     pvoTilbakemelding,
     pvkDokument,
-    etterlevelseDokumentasjonId,
+    etterlevelseDokumentasjon,
     activeStep,
     setActiveStep,
     setSelectedStep,
@@ -38,9 +45,9 @@ export const BehandlingensLivslopPvoView = (props: IProps) => {
 
   useEffect(() => {
     ;(async () => {
-      if (etterlevelseDokumentasjonId) {
+      if (etterlevelseDokumentasjon.id) {
         setIsLoading(true)
-        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
+        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
           .then((response) => {
             const behandlingenslivslop = mapBehandlingensLivslopRequestToFormValue(response)
             setBehandlingsLivslop(behandlingenslivslop)
@@ -55,7 +62,7 @@ export const BehandlingensLivslopPvoView = (props: IProps) => {
           .finally(() => setIsLoading(false))
       }
     })()
-  }, [etterlevelseDokumentasjonId])
+  }, [etterlevelseDokumentasjon])
 
   return (
     <div className="flex justify-center">
@@ -97,11 +104,19 @@ export const BehandlingensLivslopPvoView = (props: IProps) => {
 
                   <div className="mt-5">
                     <Label>Beskrivelse av behandlingens livsløp</Label>
-                    <div className="bg-[#eef6fc] p-3 rounded-lg">
+                    <DataTextWrapper>
                       <BodyLong>
                         {behandlingensLivslop.beskrivelse && behandlingensLivslop.beskrivelse}
                         {!behandlingensLivslop.beskrivelse && 'Ingen beskrivelse '}
                       </BodyLong>
+                    </DataTextWrapper>
+                  </div>
+
+                  <div className="mt-5">
+                    <div className="pt-6 border-t border-[#071a3636]">
+                      <BehandlingensLivsLopSidePanel
+                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      />
                     </div>
                   </div>
                 </div>
@@ -119,7 +134,7 @@ export const BehandlingensLivslopPvoView = (props: IProps) => {
             </div>
           </div>
           <FormButtons
-            etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
             activeStep={activeStep}
             setActiveStep={setActiveStep}
             setSelectedStep={setSelectedStep}
