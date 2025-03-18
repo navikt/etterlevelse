@@ -27,6 +27,7 @@ export const InvolveringAvEksternePvoView = (props: IProps) => {
     activeStep,
     setActiveStep,
     setSelectedStep,
+    formRef,
   } = props
 
   return (
@@ -121,6 +122,7 @@ export const InvolveringAvEksternePvoView = (props: IProps) => {
             pvkDokumentId={pvkDokument.id}
             fieldName="innvolveringAvEksterne"
             initialValue={pvoTilbakemelding.innvolveringAvEksterne}
+            formRef={formRef}
           />
         </div>
       </div>

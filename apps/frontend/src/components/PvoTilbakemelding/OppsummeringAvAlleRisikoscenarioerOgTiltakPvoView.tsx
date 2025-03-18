@@ -257,9 +257,6 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
                               allRisikoscenarioList={risikoscenarioList}
                               etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                               tiltakList={tiltakList}
-                              formRef={formRef}
-                              isUnsaved={isUnsaved}
-                              setIsUnsaved={setIsUnsaved}
                             />
                           </div>
                         )}
@@ -320,6 +317,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
                       pvkDokumentId={pvkDokument.id}
                       fieldName="risikoscenarioEtterTiltakk"
                       initialValue={pvoTilbakemelding.risikoscenarioEtterTiltakk}
+                      formRef={formRef}
                     />
                   </div>
                 </div>

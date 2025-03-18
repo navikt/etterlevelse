@@ -2,6 +2,7 @@ import { BodyShort, Button, Radio, RadioGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import moment from 'moment'
+import { RefObject } from 'react'
 import {
   createPvoTilbakemelding,
   getPvoTilbakemeldingByPvkDokumentId,
@@ -22,10 +23,11 @@ interface IProps {
   pvkDokumentId: string
   fieldName: 'behandlingensArtOgOmfang' | 'innvolveringAvEksterne' | 'risikoscenarioEtterTiltakk'
   initialValue: ITilbakemeldingsinnhold
+  formRef: RefObject<any>
 }
 
 export const PvoTilbakemeldingForm = (props: IProps) => {
-  const { fieldName, pvkDokumentId, initialValue } = props
+  const { fieldName, pvkDokumentId, initialValue, formRef } = props
 
   const submit = async (tilbakemeldingsInnhold: ITilbakemeldingsinnhold) => {
     const mutatedTilbakemeldingsInnhold: ITilbakemeldingsinnhold = {
@@ -83,6 +85,7 @@ export const PvoTilbakemeldingForm = (props: IProps) => {
         submit(values)
       }}
       initialValues={initialValue}
+      innerRef={formRef}
     >
       {({ submitForm }) => (
         <Form>

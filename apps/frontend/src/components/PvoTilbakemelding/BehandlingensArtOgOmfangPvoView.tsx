@@ -25,6 +25,7 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
     activeStep,
     setActiveStep,
     setSelectedStep,
+    formRef,
   } = props
 
   return (
@@ -88,6 +89,7 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
             pvkDokumentId={pvkDokument.id}
             fieldName="behandlingensArtOgOmfang"
             initialValue={pvoTilbakemelding.behandlingensArtOgOmfang}
+            formRef={formRef}
           />
         </div>
       </div>

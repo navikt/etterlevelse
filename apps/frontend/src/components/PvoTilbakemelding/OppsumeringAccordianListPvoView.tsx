@@ -1,8 +1,7 @@
 import { Accordion, Alert, BodyLong, Heading, Label, ReadMore } from '@navikt/ds-react'
-import { RefObject, useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../constants'
-import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import RisikoscenarioAccordianHeader from '../risikoscenario/RisikoscenarioAccordionHeader'
 import RisikoscenarioTag, {
   getKonsekvenssnivaaText,
@@ -17,22 +16,11 @@ interface IProps {
   allRisikoscenarioList: IRisikoscenario[]
   etterlevelseDokumentasjonId: string
   tiltakList: ITiltak[]
-  formRef: RefObject<any>
-  isUnsaved: boolean
-  setIsUnsaved: (state: boolean) => void
 }
 
 export const OppsumeringAccordianListPvoView = (props: IProps) => {
-  const {
-    risikoscenarioList,
-    allRisikoscenarioList,
-    etterlevelseDokumentasjonId,
-    tiltakList,
-    formRef,
-    isUnsaved,
-    setIsUnsaved,
-  } = props
-  const [navigateUrl, setNavigateUrl] = useState<string>('')
+  const { risikoscenarioList, allRisikoscenarioList, etterlevelseDokumentasjonId, tiltakList } =
+    props
   const url = new URL(window.location.href)
   const risikoscenarioId = url.searchParams.get('risikoscenario')
   const tabQuery = url.searchParams.get('tab')
@@ -52,24 +40,12 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
 
   const handleAccordionChange = (risikoscenarioId?: string) => {
     if (risikoscenarioId) {
-      setNavigateUrl(
+      navigate(
         `${window.location.pathname}?tab=${tabQuery}&filter=${filterQuery}&risikoscenario=${risikoscenarioId}`
       )
-      if (formRef.current?.dirty) {
-        setIsUnsaved(true)
-      } else {
-        navigate(
-          `${window.location.pathname}?tab=${tabQuery}&filter=${filterQuery}&risikoscenario=${risikoscenarioId}`
-        )
-      }
     } else {
       const paramQuery = tabQuery === tabValues.risikoscenarioer ? '&filter=' + filterQuery : ''
-      setNavigateUrl(`${window.location.pathname}?tab=${tabQuery}${paramQuery}`)
-      if (formRef.current?.dirty) {
-        setIsUnsaved(true)
-      } else {
-        navigate(`${window.location.pathname}?tab=${tabQuery}${paramQuery}`)
-      }
+      navigate(`${window.location.pathname}?tab=${tabQuery}${paramQuery}`)
     }
   }
 
@@ -171,13 +147,6 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
           )
         })}
       </Accordion>
-
-      <AccordianAlertModal
-        isOpen={isUnsaved}
-        setIsOpen={setIsUnsaved}
-        navigateUrl={navigateUrl}
-        formRef={formRef}
-      />
     </div>
   )
 }
