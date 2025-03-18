@@ -11,15 +11,15 @@ import RisikoscenarioTag, {
 interface IProps {
   risikoscenario: IRisikoscenario
   etterlevelseDokumentasjonId: string
+  currentStep: string
   noCopyButton?: boolean
 }
 
 export const RisikoscenarioView = (props: IProps) => {
-  const { risikoscenario, etterlevelseDokumentasjonId, noCopyButton } = props
+  const { risikoscenario, etterlevelseDokumentasjonId, currentStep, noCopyButton } = props
   const params = useParams<{ id?: string }>()
   const stepUrl = window.location.href.split('?')
   const queryUrl = stepUrl[1]
-  const currentStep = stepUrl[0].slice(-1)
   return (
     <div>
       {!noCopyButton && (
