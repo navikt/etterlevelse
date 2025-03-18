@@ -48,7 +48,7 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
     if (pvkDokumentId) {
       ;(async () => {
         await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId).then(async (pvoTilbakemelding) => {
-          setData(pvoTilbakemelding)
+          setData(mapPvoTilbakemeldingToFormValue(pvoTilbakemelding))
           setIsLoading(false)
         })
       })()
