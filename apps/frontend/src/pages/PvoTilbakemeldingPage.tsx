@@ -225,7 +225,17 @@ export const PvoTilbakemeldingPage = () => {
                         updateTitleUrlAndStep={updateTitleUrlAndStep}
                       />
                     )}
-                    {activeStep === 2 && <BehandlingensLivslopPvoView pvkDokument={pvkDokument} />}
+                    {activeStep === 2 && (
+                      <BehandlingensLivslopPvoView
+                        pvoTilbakemelding={pvoTilbakemelding}
+                        pvkDokument={pvkDokument}
+                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                        activeStep={activeStep}
+                        setSelectedStep={setSelectedStep}
+                        setActiveStep={updateTitleUrlAndStep}
+                        formRef={formRef}
+                      />
+                    )}
                     {activeStep === 3 && (
                       <BehandlingensArtOgOmfangPvoView
                         personkategorier={personkategorier}
