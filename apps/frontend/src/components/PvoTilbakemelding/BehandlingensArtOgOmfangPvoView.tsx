@@ -84,7 +84,7 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
         </div>
 
         {/* PVO sidepanel */}
-        <div className="px-4 py-4 border-l border-[#071a3636] w-full max-w-md bg-[#F0EEF4] mt-35">
+        <div className="px-4 py-4 border-l border-[#071a3636] w-full max-w-md bg-[#E3EFF7] mt-35">
           <PvoTilbakemeldingForm
             pvkDokumentId={pvkDokument.id}
             fieldName="behandlingensArtOgOmfang"
