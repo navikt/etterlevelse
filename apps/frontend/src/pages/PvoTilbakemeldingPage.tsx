@@ -50,7 +50,7 @@ export const PvoTilbakemeldingPage = () => {
   const [isEtterlevelseDokumentaasjonLoading, setIsEtterlevelseDokumentaasjonLoading] =
     useState<boolean>(false)
   const [personkategorier, setPersonKategorier] = useState<string[]>([])
-  const [pvkDokument, setPvkDokument, isPvkDokumentLoading] = usePvkDokument(params.id)
+  const [pvkDokument, , isPvkDokumentLoading] = usePvkDokument(params.id)
   const [pvoTilbakemelding, setPvoTilbakemelding, isPvoTilbakemeldingLoading] =
     usePvoTilbakemelding(params.id)
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
@@ -274,7 +274,6 @@ export const PvoTilbakemeldingPage = () => {
                     {activeStep === 6 && (
                       <SendInnPvoView
                         pvkDokument={pvkDokument}
-                        setPvkDokument={setPvkDokument}
                         personkategorier={personkategorier}
                         databehandlere={databehandlere}
                         pvoTilbakemelding={pvoTilbakemelding}

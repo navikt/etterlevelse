@@ -1,13 +1,15 @@
 import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, CopyButton, Heading, Label } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, CopyButton, Heading, Label } from '@navikt/ds-react'
+import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
 import {
-  getPvkDokument,
-  mapPvkDokumentToFormValue,
-  updatePvkDokument,
-} from '../../api/PvkDokumentApi'
-import { EPvkDokumentStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
+  createPvoTilbakemelding,
+  getPvoTilbakemeldingByPvkDokumentId,
+  mapPvoTilbakemeldingToFormValue,
+  updatePvoTilbakemelding,
+} from '../../api/PvoApi'
+import { EPvoTilbakemeldingStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import FormButtons from '../PvkDokument/edit/FormButtons'
 import ArtOgOmFangSummary from '../PvkDokument/formSummary/ArtOgOmfangSummary'
 import InvolveringSummary from '../PvkDokument/formSummary/InvolveringSummary'
@@ -16,7 +18,6 @@ import { TextAreaField } from '../common/Inputs'
 
 interface IProps {
   pvkDokument: IPvkDokument
-  setPvkDokument: (state: IPvkDokument) => void
   updateTitleUrlAndStep: (step: number) => void
   personkategorier: string[]
   databehandlere: string[]
@@ -31,7 +32,7 @@ interface IProps {
 export const SendInnPvoView = (props: IProps) => {
   const {
     pvkDokument,
-    setPvkDokument,
+    pvoTilbakemelding,
     updateTitleUrlAndStep,
     personkategorier,
     databehandlere,
@@ -41,20 +42,36 @@ export const SendInnPvoView = (props: IProps) => {
     setSelectedStep,
   } = props
 
-  const [submitPvkStatus] = useState<EPvkDokumentStatus>(EPvkDokumentStatus.UNDERARBEID)
+  const [submittedStatus, setSubmittedStatus] = useState<EPvoTilbakemeldingStatus>(
+    EPvoTilbakemeldingStatus.UNDERARBEID
+  )
 
-  const submit = async (pvkDokument: IPvkDokument) => {
-    await getPvkDokument(pvkDokument.id).then((response) => {
-      const updatedPvkDokument = {
-        ...response,
-        status: submitPvkStatus,
-        merknadTilPvoEllerRisikoeier: pvkDokument.merknadTilPvoEllerRisikoeier,
-      }
-
-      updatePvkDokument(updatedPvkDokument).then((savedResponse) => {
-        setPvkDokument(savedResponse)
+  const submit = async (submittedValues: IPvoTilbakemelding) => {
+    await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
+      .then(async (response) => {
+        if (response) {
+          const updatedValues: IPvoTilbakemelding = {
+            ...response,
+            status: submittedStatus,
+            merknadTilEtterleverEllerRisikoeier:
+              submittedValues.merknadTilEtterleverEllerRisikoeier,
+          }
+          await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
+        }
       })
-    })
+      .catch(async (error: AxiosError) => {
+        if (error.status === 404) {
+          const createValue = mapPvoTilbakemeldingToFormValue({
+            pvkDokumentId: pvkDokument.id,
+            status: submittedStatus,
+            merknadTilEtterleverEllerRisikoeier:
+              submittedValues.merknadTilEtterleverEllerRisikoeier,
+          })
+          await createPvoTilbakemelding(createValue).then(() => window.location.reload())
+        } else {
+          console.debug(error)
+        }
+      })
   }
 
   return (
@@ -62,9 +79,9 @@ export const SendInnPvoView = (props: IProps) => {
       validateOnChange={false}
       validateOnBlur={false}
       onSubmit={submit}
-      initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
+      initialValues={mapPvoTilbakemeldingToFormValue(pvoTilbakemelding)}
     >
-      {({ submitForm }) => (
+      {({ submitForm, dirty }) => (
         <Form>
           <div className="flex justify-center">
             <div>
@@ -116,9 +133,9 @@ export const SendInnPvoView = (props: IProps) => {
                 icon={<FilesIcon aria-hidden />}
               />
 
-              {pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO && (
+              {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
                 <Alert variant="success" className="my-5">
-                  Sendt til Personvernombudet
+                  Tilbakemelding er sendt
                 </Alert>
               )}
 
@@ -128,33 +145,32 @@ export const SendInnPvoView = (props: IProps) => {
                 setActiveStep={setActiveStep}
                 setSelectedStep={setSelectedStep}
                 submitForm={submitForm}
+                customButtons={
+                  <div className="mt-5 flex gap-2 items-center">
+                    {dirty && (
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => {
+                          setSubmittedStatus(EPvoTilbakemeldingStatus.UNDERARBEID)
+                          submitForm()
+                        }}
+                      >
+                        Lagre og fortsett senere
+                      </Button>
+                    )}
 
-                // customButtons={
-                //   <div className="mt-5 flex gap-2 items-center">
-                //     {dirty && (
-                //       <Button
-                //         type="button"
-                //         variant="secondary"
-                //         onClick={() => {
-                //           setSubmitPvkStatus(EPvkDokumentStatus.UNDERARBEID)
-                //           submitForm()
-                //         }}
-                //       >
-                //         Lagre og fortsett senere
-                //       </Button>
-                //     )}
-
-                //     <Button
-                //       type="button"
-                //       onClick={() => {
-                //         setSubmitPvkStatus(EPvkDokumentStatus.SENDT_TIL_PVO)
-                //         submitForm()
-                //       }}
-                //     >
-                //       Send til Personvernombudet
-                //     </Button>
-                //   </div>
-                // }
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
+                        submitForm()
+                      }}
+                    >
+                      Send tilbakemelding
+                    </Button>
+                  </div>
+                }
               />
             </div>
           </div>
