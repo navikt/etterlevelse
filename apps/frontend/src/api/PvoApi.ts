@@ -102,6 +102,13 @@ export const mapPvoTilbakemeldingToFormValue = (
     status: pvoTilbakemelding.status || EPvoTilbakemeldingStatus.UNDERARBEID,
     merknadTilEtterleverEllerRisikoeier:
       pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier || '',
+    behandlingenslivslop: pvoTilbakemelding.behandlingenslivslop || {
+      sistRedigertAv: '',
+      sistRedigertDato: '',
+      bidragsVurdering: '',
+      internDiskusjon: '',
+      tilbakemeldingTilEtterlevere: '',
+    },
     behandlingensArtOgOmfang: pvoTilbakemelding.behandlingensArtOgOmfang || {
       sistRedigertAv: '',
       sistRedigertDato: '',

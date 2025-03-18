@@ -21,7 +21,11 @@ enum EBidragVerdier {
 
 interface IProps {
   pvkDokumentId: string
-  fieldName: 'behandlingensArtOgOmfang' | 'innvolveringAvEksterne' | 'risikoscenarioEtterTiltakk'
+  fieldName:
+    | 'behandlingenslivslop'
+    | 'behandlingensArtOgOmfang'
+    | 'innvolveringAvEksterne'
+    | 'risikoscenarioEtterTiltakk'
   initialValue: ITilbakemeldingsinnhold
   formRef: RefObject<any>
 }
@@ -61,6 +65,8 @@ export const PvoTilbakemeldingForm = (props: IProps) => {
         if (error.status === 404) {
           const createValue = mapPvoTilbakemeldingToFormValue({
             pvkDokumentId: pvkDokumentId,
+            behandlingenslivslop:
+              fieldName === 'behandlingenslivslop' ? mutatedTilbakemeldingsInnhold : undefined,
             behandlingensArtOgOmfang:
               fieldName === 'behandlingensArtOgOmfang' ? mutatedTilbakemeldingsInnhold : undefined,
             innvolveringAvEksterne:
