@@ -1,6 +1,6 @@
 import { List, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
-import { EPVK, EPVO, IPvkDokumentListItem } from '../../constants'
+import { EPVO, IPvkDokumentListItem } from '../../constants'
 import { ListLayout } from '../common/ListLayout'
 import StatusView from '../common/StatusTag'
 

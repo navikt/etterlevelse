@@ -15,7 +15,6 @@ import OversiktPvoView from '../components/PvoTilbakemelding/OversiktPvoView'
 import SendInnPvoView from '../components/PvoTilbakemelding/SendInnPvoView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import {
-  EPVK,
   EPVO,
   ERisikoscenarioType,
   IBreadCrumbPath,
@@ -70,7 +69,7 @@ export const PvoTilbakemeldingPage = () => {
       href: EPVO.oversikt,
     },
     {
-      pathName:`E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
+      pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
       href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,
     },
   ]
