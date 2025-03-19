@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, ITiltak } from '../../constants'
-import FormButtons from '../PvkDokument/edit/FormButtons'
 import RisikoscenarioAccordianListPvoView from './RisikoscenarioAccordianListPvoView'
+import PvoFormButtons from './edit/PvoFormButtons'
 
 interface IProps {
   etterlevelseDokumentasjonId: string
@@ -109,8 +109,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView = (props: IProps) =
           )}
         </div>
 
-        <FormButtons
-          etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+        <PvoFormButtons
           activeStep={activeStep}
           setActiveStep={setActiveStep}
           setSelectedStep={setSelectedStep}

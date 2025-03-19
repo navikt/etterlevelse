@@ -240,7 +240,6 @@ export const PvoTilbakemeldingPage = () => {
                       <BehandlingensArtOgOmfangPvoView
                         personkategorier={personkategorier}
                         pvkDokument={pvkDokument}
-                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         pvoTilbakemelding={pvoTilbakemelding}
                         setPvoTilbakemelding={setPvoTilbakemelding}
                         activeStep={activeStep}
@@ -254,7 +253,6 @@ export const PvoTilbakemeldingPage = () => {
                         personkategorier={personkategorier}
                         databehandlere={databehandlere}
                         pvkDokument={pvkDokument}
-                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         pvoTilbakemelding={pvoTilbakemelding}
                         setPvoTilbakemelding={setPvoTilbakemelding}
                         activeStep={activeStep}
@@ -292,7 +290,6 @@ export const PvoTilbakemeldingPage = () => {
                         pvoTilbakemelding={pvoTilbakemelding}
                         setPvoTilbakemelding={setPvoTilbakemelding}
                         updateTitleUrlAndStep={updateTitleUrlAndStep}
-                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
                         setActiveStep={updateTitleUrlAndStep}

@@ -10,11 +10,11 @@ import {
   IPvkDokument,
   IPvoTilbakemelding,
 } from '../../constants'
-import FormButtons from '../PvkDokument/edit/FormButtons'
 import BehandlingensLivsLopSidePanel from '../behandlingensLivlop/BehandlingensLivslopSidePanel'
 import BehandlingensLivslopTextContent from '../behandlingensLivlop/BehandlingensLivslopTextContent'
 import DataTextWrapper from './common/DataTextWrapper'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
+import PvoFormButtons from './edit/PvoFormButtons'
 import PvoTilbakemeldingForm from './edit/PvoTilbakemeldingForm'
 
 interface IProps {
@@ -134,8 +134,7 @@ export const BehandlingensLivslopPvoView = (props: IProps) => {
               />
             </PvoSidePanelWrapper>
           </div>
-          <FormButtons
-            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+          <PvoFormButtons
             activeStep={activeStep}
             setActiveStep={setActiveStep}
             setSelectedStep={setSelectedStep}

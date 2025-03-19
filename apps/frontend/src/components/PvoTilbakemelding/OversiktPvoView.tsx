@@ -2,7 +2,6 @@ import { Alert, BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } fro
 import { useEffect, useState } from 'react'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../../api/BehandlingensLivslopApi'
 import {
-  EPVO,
   EPvkDokumentStatus,
   IBehandlingensLivslop,
   IPvkDokument,
@@ -12,8 +11,8 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
-import FormButtons from '../PvkDokument/edit/FormButtons'
 import { ExternalLink } from '../common/RouteLink'
+import PvoFormButtons from './edit/PvoFormButtons'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -257,13 +256,10 @@ export const OversiktView = (props: IProps) => {
           </div>
         )}
 
-        <FormButtons
-          etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        <PvoFormButtons
           activeStep={activeStep}
           setActiveStep={updateTitleUrlAndStep}
           setSelectedStep={setSelectedStep}
-          customOriginLink={EPVO.oversikt}
-          customOriginLinkLabel="Tilbake til PVO oversikt side"
         />
       </div>
     </div>

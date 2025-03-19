@@ -1,15 +1,14 @@
 import { Heading, Label, List } from '@navikt/ds-react'
 import { RefObject } from 'react'
 import { IPvkDokument, IPvoTilbakemelding } from '../../constants'
-import FormButtons from '../PvkDokument/edit/FormButtons'
 import DataTextWrapper from './common/DataTextWrapper'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
+import PvoFormButtons from './edit/PvoFormButtons'
 import PvoTilbakemeldingForm from './edit/PvoTilbakemeldingForm'
 
 interface IProps {
   personkategorier: string[]
   pvkDokument: IPvkDokument
-  etterlevelseDokumentasjonId: string
   pvoTilbakemelding: IPvoTilbakemelding
   setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   activeStep: number
@@ -23,7 +22,6 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
     personkategorier,
     pvkDokument,
     pvoTilbakemelding,
-    etterlevelseDokumentasjonId,
     activeStep,
     setActiveStep,
     setSelectedStep,
@@ -98,8 +96,7 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
           />
         </PvoSidePanelWrapper>
       </div>
-      <FormButtons
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+      <PvoFormButtons
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         setSelectedStep={setSelectedStep}

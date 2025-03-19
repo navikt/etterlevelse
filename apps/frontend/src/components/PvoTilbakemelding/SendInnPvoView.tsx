@@ -10,16 +10,15 @@ import {
   updatePvoTilbakemelding,
 } from '../../api/PvoApi'
 import { EPvoTilbakemeldingStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
-import FormButtons from '../PvkDokument/edit/FormButtons'
 import { TextAreaField } from '../common/Inputs'
 import DataTextWrapper from './common/DataTextWrapper'
+import PvoFormButtons from './edit/PvoFormButtons'
 
 interface IProps {
   pvkDokument: IPvkDokument
   updateTitleUrlAndStep: (step: number) => void
   personkategorier: string[]
   databehandlere: string[]
-  etterlevelseDokumentasjonId: string
   pvoTilbakemelding: IPvoTilbakemelding
   setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   activeStep: number
@@ -28,14 +27,7 @@ interface IProps {
 }
 
 export const SendInnPvoView = (props: IProps) => {
-  const {
-    pvkDokument,
-    pvoTilbakemelding,
-    etterlevelseDokumentasjonId,
-    activeStep,
-    setActiveStep,
-    setSelectedStep,
-  } = props
+  const { pvkDokument, pvoTilbakemelding, activeStep, setActiveStep, setSelectedStep } = props
 
   const [submittedStatus, setSubmittedStatus] = useState<EPvoTilbakemeldingStatus>(
     EPvoTilbakemeldingStatus.UNDERARBEID
@@ -115,8 +107,7 @@ export const SendInnPvoView = (props: IProps) => {
                 </Alert>
               )}
 
-              <FormButtons
-                etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+              <PvoFormButtons
                 activeStep={activeStep}
                 setActiveStep={setActiveStep}
                 setSelectedStep={setSelectedStep}

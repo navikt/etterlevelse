@@ -10,12 +10,12 @@ import {
   IRisikoscenario,
   ITiltak,
 } from '../../constants'
-import FormButtons from '../PvkDokument/edit/FormButtons'
 import { ExternalLink } from '../common/RouteLink'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
 import OppsumeringAccordianListPvoView from './OppsumeringAccordianListPvoView'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
+import PvoFormButtons from './edit/PvoFormButtons'
 import PvoTilbakemeldingForm from './edit/PvoTilbakemeldingForm'
 
 interface IProps {
@@ -336,8 +336,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
           </PvoSidePanelWrapper>
         </div>
       </div>
-      <FormButtons
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+      <PvoFormButtons
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         setSelectedStep={setSelectedStep}
