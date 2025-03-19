@@ -169,4 +169,5 @@ export const BehandlingSok = () => {
     </div>
   )
 }
+
 export default BehandlingSok
