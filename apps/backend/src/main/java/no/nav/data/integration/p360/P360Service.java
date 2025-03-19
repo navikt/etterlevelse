@@ -42,7 +42,7 @@ public class P360Service {
         List<P360Case> cases = new ArrayList<>();
         try {
             log.info("Forwarding request to P360");
-            var response = post(p360Properties.getCaseUrl() + "/GetCases",P360GetRequest.builder().Title("%" + title +  "%").build(),P360CasePageResponse.class∫ );
+            var response = post(p360Properties.getCaseUrl() + "/GetCases",P360GetRequest.builder().Title("%" + title +  "%").build(),P360CasePageResponse.class );
 /*
  var response = restTemplate.exchange(p360Properties.getCaseUrl() + "/GetCases", HttpMethod.POST,
                     new HttpEntity<>( P360GetRequest.builder().Title("%" + title +  "%").build(), createHeadersWithAuth()),
