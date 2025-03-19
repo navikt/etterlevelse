@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
+import static no.nav.data.common.utils.Constants.PUBLIC_360_AUTHKEY;
+import static no.nav.data.common.utils.Constants.PUBLIC_360_CLIENTID;
 
 @Slf4j
 @Service
@@ -140,8 +142,8 @@ public class P360Service {
                 .uri(uri)
                 .bodyValue(body)
                 .header("Content-Type", "application/json")
-                .header("authkey", p360Properties.getAuthKey())
-                .header("clientid", p360Properties.getClientId())
+                .header(PUBLIC_360_AUTHKEY, p360Properties.getAuthKey())
+                .header(PUBLIC_360_CLIENTID, p360Properties.getClientId())
                 .header("Authorization", "Bearer " + getBearerToken())
                 .retrieve()
                 .bodyToMono(response)
@@ -185,8 +187,8 @@ public class P360Service {
             var response = restTemplate.postForEntity(p360Properties.getTokenUrl(), body, P360AuthToken.class);
             headers.setBearerAuth(requireNonNull(response.getBody()).getAccess_token());
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("authkey", p360Properties.getAuthKey());
-            headers.set("clientid", p360Properties.getClientId());
+            headers.set(PUBLIC_360_AUTHKEY, p360Properties.getAuthKey());
+            headers.set(PUBLIC_360_CLIENTID, p360Properties.getClientId());
 
             log.info("successfully created auth headers for p360");
             return headers;
