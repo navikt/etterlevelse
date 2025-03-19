@@ -27,6 +27,7 @@ import behandlingensLivslopSchema from '../components/behandlingensLivlop/behand
 import { TextAreaField } from '../components/common/Inputs'
 import { PageLayout } from '../components/scaffold/Page'
 import {
+  EPVK,
   IBehandlingensLivslop,
   IBehandlingensLivslopRequest,
   IBreadCrumbPath,
@@ -56,19 +57,15 @@ export const BehandlingensLivslopPage = () => {
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
     {
-      href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,
-      pathName:
-        'E' +
-        etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
-        ' ' +
-        etterlevelseDokumentasjon?.title,
+      href: `${EPVK.pvkDokumentasjon}/${etterlevelseDokumentasjon?.id}`,
+      pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
     },
   ]
 
   useEffect(() => {
     if (etterlevelseDokumentasjon) {
       getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
-        .then((response) => {
+        .then((response: IPvkDokument) => {
           if (response) {
             setPvkDokument(response)
           }
@@ -97,35 +94,30 @@ export const BehandlingensLivslopPage = () => {
       }
 
       const pvkDokumentLink =
-        pvkDokument && pvkDokument.skalUtforePvk ? '/pvkdokument/' : '/pvkbehov/'
+        pvkDokument && pvkDokument.skalUtforePvk ? `${EPVK.pvkDokument}/` : `${EPVK.pvkBehov}/`
 
       if (behandlingensLivslop.id || existingBehandlingsLivslopId) {
-        await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
-          setBehandlingesLivslop(response)
-          if (tilTemaOversikt) {
-            navigate('/dokumentasjon/' + response.etterlevelseDokumentasjonId)
-          } else if (tilPvkDokument) {
-            navigate(
-              '/dokumentasjon/' +
-                response.etterlevelseDokumentasjonId +
-                pvkDokumentLink +
-                (pvkDokument ? pvkDokument.id : 'ny') +
-                '/1'
-            )
+        await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then(
+          (response: IBehandlingensLivslop) => {
+            const url: string = `${EPVK.pvkDokumentasjon}/${response.etterlevelseDokumentasjonId}`
+
+            setBehandlingesLivslop(response)
+            if (tilTemaOversikt) {
+              navigate(url)
+            } else if (tilPvkDokument) {
+              navigate(`${url}${pvkDokumentLink}${pvkDokument ? pvkDokument.id : 'ny'}/1`)
+            }
           }
-        })
+        )
       } else {
         await createBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
+          const url: string = `${EPVK.pvkDokumentasjon}/${response.etterlevelseDokumentasjonId}`
+
           setBehandlingesLivslop(response)
           if (tilTemaOversikt) {
-            navigate('/dokumentasjon/' + response.etterlevelseDokumentasjonId)
+            navigate(url)
           } else if (tilPvkDokument) {
-            navigate(
-              '/dokumentasjon/' +
-                response.etterlevelseDokumentasjonId +
-                pvkDokumentLink +
-                (pvkDokument ? pvkDokument.id : 'ny')
-            )
+            navigate(`${url}${pvkDokumentLink}${pvkDokument ? pvkDokument.id : 'ny'}`)
           }
         })
       }
@@ -218,7 +210,7 @@ export const BehandlingensLivslopPage = () => {
 
                     {!_.isEmpty(errors) && rejectedFiles.length > 0 && (
                       <ErrorSummary className="mt-3">
-                        <ErrorSummary.Item href={'#vedleggMedFeil'}>
+                        <ErrorSummary.Item href="#vedleggMedFeil">
                           Vedlegg med feil
                         </ErrorSummary.Item>
                       </ErrorSummary>
@@ -251,7 +243,7 @@ export const BehandlingensLivslopPage = () => {
                           type="button"
                           variant="tertiary"
                           onClick={() => {
-                            navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
+                            navigate(`${EPVK.pvkDokumentasjon}/${etterlevelseDokumentasjon.id}`)
                           }}
                         >
                           Avbryt

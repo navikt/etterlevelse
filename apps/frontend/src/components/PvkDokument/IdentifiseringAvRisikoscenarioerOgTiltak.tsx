@@ -3,7 +3,7 @@ import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
-import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, ITiltak } from '../../constants'
+import { EPVK, ERisikoscenarioType, IPvkDokument, IRisikoscenario, ITiltak } from '../../constants'
 import RisikoscenarioAccordianList from '../risikoscenario/RisikoscenarioAccordianList'
 import CreateRisikoscenarioModal from '../risikoscenario/edit/CreateRisikoscenarioModal'
 import FormButtons from './edit/FormButtons'
@@ -83,7 +83,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
             type="button"
             onClick={() => {
               if (etterlevelseDokumentasjonId)
-                navigate('/dokumentasjon/' + etterlevelseDokumentasjonId + '?tab=pvk')
+                navigate(`${EPVK.pvkDokumentasjon}/${etterlevelseDokumentasjonId}?tab=pvk`)
             }}
           >
             Gå til liste over PVK-relaterte krav

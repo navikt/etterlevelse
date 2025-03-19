@@ -35,6 +35,7 @@ import { FieldWrapper, TextAreaField } from '../components/common/Inputs'
 import { ExternalLink } from '../components/common/RouteLink'
 import { PageLayout } from '../components/scaffold/Page'
 import {
+  EPVK,
   IBehandling,
   IBehandlingensLivslop,
   IBreadCrumbPath,
@@ -70,12 +71,8 @@ export const PvkBehovPage = () => {
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
     {
-      href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,
-      pathName:
-        'E' +
-        etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
-        ' ' +
-        etterlevelseDokumentasjon?.title,
+      href: `${EPVK.pvkDokumentasjon}/${etterlevelseDokumentasjon?.id}`,
+      pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
     },
   ]
 
@@ -169,32 +166,24 @@ export const PvkBehovPage = () => {
 
       if (pvkDokument.id || existingPvkDokumentId) {
         await updatePvkDokument(mutatedPvkDokument).then((response) => {
+          const url: string = `${EPVK.pvkDokumentasjon}/${response.etterlevelseDokumentId}`
+
           if (tilTemaOversikt) {
-            navigate('/dokumentasjon/' + response.etterlevelseDokumentId)
+            navigate(url)
           } else if (tilPvkDokument) {
-            navigate(
-              '/dokumentasjon/' +
-                response.etterlevelseDokumentId +
-                '/pvkdokument/' +
-                response.id +
-                '/1'
-            )
+            navigate(`${url}${EPVK.pvkDokument}/${response.id}/1`)
           } else {
             setPvkDokument(response)
           }
         })
       } else {
         await createPvkDokument(mutatedPvkDokument).then((response) => {
+          const url: string = `${EPVK.pvkDokumentasjon}/${response.etterlevelseDokumentId}`
+
           if (tilTemaOversikt) {
-            navigate('/dokumentasjon/' + response.etterlevelseDokumentId)
+            navigate(url)
           } else if (tilPvkDokument) {
-            navigate(
-              '/dokumentasjon/' +
-                response.etterlevelseDokumentId +
-                '/pvkdokument/' +
-                response.id +
-                '/1'
-            )
+            navigate(`${url}/${EPVK.pvkDokument}/${response.id}/1`)
           } else {
             setPvkDokument(response)
           }
@@ -205,12 +194,12 @@ export const PvkBehovPage = () => {
 
   return (
     <PageLayout
-      pageTitle="Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?"
-      currentPage="Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?"
+      pageTitle={EPVK.pvkTitle}
+      currentPage={EPVK.pvkTitle}
       breadcrumbPaths={breadcrumbPaths}
     >
       <Heading level="1" size="medium" className="mb-5">
-        Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?
+        {EPVK.pvkTitle}
       </Heading>
       {isEtterlevelseDokumentasjonLoading && (
         <div className="flex w-full justify-center">
@@ -255,7 +244,7 @@ export const PvkBehovPage = () => {
                   Dere har ikke ennå lagt til behandlinger under{' '}
                   <ExternalLink
                     className="text-medium"
-                    href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
+                    href={`${EPVK.pvkDokumentasjon}/edit/${etterlevelseDokumentasjon.id}`}
                   >
                     Dokumentegenskaper
                   </ExternalLink>
@@ -267,12 +256,7 @@ export const PvkBehovPage = () => {
                 <BodyShort>
                   Disse egenskapene blir enklere å vurdere hvis{' '}
                   <Link
-                    href={
-                      '/dokumentasjon/' +
-                      etterlevelseDokumentasjon.id +
-                      '/behandlingens-livslop/' +
-                      (behandlingensLivslop?.id ? behandlingensLivslop.id : 'ny')
-                    }
+                    href={`${EPVK.pvkDokumentasjon}/${etterlevelseDokumentasjon.id}/behandlingens-livslop/${behandlingensLivslop?.id ? behandlingensLivslop.id : 'ny'}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="redigere etterlevelsesdokumentasjon"
@@ -451,7 +435,7 @@ export const PvkBehovPage = () => {
                         type="button"
                         variant="tertiary"
                         onClick={() => {
-                          navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
+                          navigate(`${EPVK.pvkDokumentasjon}/${etterlevelseDokumentasjon.id}`)
                         }}
                       >
                         Avbryt
@@ -530,7 +514,7 @@ export const PvkBehovPage = () => {
                 <BodyShort className="inline-block">
                   Dere kan redigere hvilke behandinger og risikovurderinger som gjelder i{' '}
                   <Link
-                    href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
+                    href={`${EPVK.pvkDokumentasjon}/edit/${etterlevelseDokumentasjon.id}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="redigere etterlevelsesdokumentasjon"

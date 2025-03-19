@@ -67,15 +67,11 @@ export const PvoTilbakemeldingPage = () => {
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     {
-      pathName: 'Oversikt siden for personvernombudet',
+      pathName: EPVO.overskrift,
       href: EPVO.oversikt,
     },
     {
-      pathName:
-        'E' +
-        etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
-        ' ' +
-        etterlevelseDokumentasjon?.title,
+      pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
       href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,
     },
   ]

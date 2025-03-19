@@ -1,13 +1,12 @@
 import { BodyLong } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import Select, { CSSObjectWithLabel } from 'react-select'
+import { EPVK } from '../../../constants'
 import { ettlevColors } from '../../../util/theme'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
 
 export const EditKravTags = () => {
-  const options = [
-    { value: 'Personvernkonsekvensvurdering', label: 'Personvernkonsekvensvurdering' },
-  ]
+  const options = [{ value: EPVK.pvk, label: EPVK.pvk }]
 
   return (
     <FieldArray name="tagger">

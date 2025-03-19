@@ -1,5 +1,4 @@
-import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, CopyButton, Heading, Label } from '@navikt/ds-react'
+import { Button, Label } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
@@ -9,11 +8,12 @@ import {
   mapPvoTilbakemeldingToFormValue,
   updatePvoTilbakemelding,
 } from '../../api/PvoApi'
-import { EPvoTilbakemeldingStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
+import { EPVK, EPvoTilbakemeldingStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
+import {
+  SendInnViewArtInvRisCommon,
+  SendInnViewCopySendCommon,
+} from '../PvkCommon/SendInnViewCommon'
 import FormButtons from '../PvkDokument/edit/FormButtons'
-import ArtOgOmFangSummary from '../PvkDokument/formSummary/ArtOgOmfangSummary'
-import InvolveringSummary from '../PvkDokument/formSummary/InvolveringSummary'
-import RisikoscenarioSummary from '../PvkDokument/formSummary/RisikoscenarioSummary'
 import { TextAreaField } from '../common/Inputs'
 import DataTextWrapper from './common/DataTextWrapper'
 
@@ -86,35 +86,15 @@ export const SendInnPvoView = (props: IProps) => {
         <Form>
           <div className="pt-6 flex justify-center">
             <div>
-              <Heading level="1" size="medium" className="mb-5">
-                Les og send inn
-              </Heading>
-              <BodyLong>
-                Her kan dere lese over det som er lagt inn i PVK-en. Hvis dere oppdager feil eller
-                mangel, er det mulig å gå tilbake og endre svar. Til slutt er det plass til å legge
-                til ytterligere informasjon dersom det er aktuelt.
-              </BodyLong>
-
-              <ArtOgOmFangSummary
+              <SendInnViewArtInvRisCommon
                 personkategorier={personkategorier}
                 updateTitleUrlAndStep={updateTitleUrlAndStep}
-                customLinktext="Endre tilbakemelding"
-                customStepNumber={3}
-              />
-
-              <InvolveringSummary
                 databehandlere={databehandlere}
-                personkategorier={personkategorier}
-                updateTitleUrlAndStep={updateTitleUrlAndStep}
-                customLinktext="Endre tilbakemelding"
-                customStepNumber={4}
               />
-
-              <RisikoscenarioSummary customStepNumber={6} />
 
               <div className="mt-5 mb-3 max-w-[75ch]">
                 <Label>
-                  Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)
+                  {EPVK.tilbakemelding} {EPVK.pvk}? (valgfritt)
                 </Label>
                 <DataTextWrapper>{pvkDokument.merknadTilPvoEllerRisikoeier}</DataTextWrapper>
               </div>
@@ -123,24 +103,12 @@ export const SendInnPvoView = (props: IProps) => {
                 <TextAreaField
                   rows={3}
                   noPlaceholder
-                  label="Er det noe annet dere ønsker å formidle til etterlever? (valgfritt)"
+                  label={`${EPVK.tilbakemelding} etterlever? (valgfritt)`}
                   name="merknadTilEtterleverEllerRisikoeier"
                 />
               </div>
 
-              <CopyButton
-                variant="action"
-                copyText={window.location.href}
-                text="Kopiér lenken til denne siden"
-                activeText="Lenken er kopiert"
-                icon={<FilesIcon aria-hidden />}
-              />
-
-              {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-                <Alert variant="success" className="my-5">
-                  Tilbakemelding er sendt
-                </Alert>
-              )}
+              <SendInnViewCopySendCommon pvkDokument={pvkDokument} />
 
               <FormButtons
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}

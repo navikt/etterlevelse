@@ -2,6 +2,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
 import { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { EPVK } from '../../../constants'
 
 interface IProps {
   etterlevelseDokumentasjonId: string
@@ -39,7 +40,7 @@ export const FormButtons = (props: IProps) => {
                 navigate(
                   customOriginLink
                     ? customOriginLink
-                    : '/dokumentasjon/' + etterlevelseDokumentasjonId
+                    : `${EPVK.pvkDokumentasjon}/${etterlevelseDokumentasjonId}`
                 )
               } else {
                 window.scrollTo(0, 0)

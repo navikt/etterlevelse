@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { IKravPriorityList, TEtterlevelseDokumentasjonQL, TKravQL } from '../../../constants'
+import { EPVK, IKravPriorityList, TEtterlevelseDokumentasjonQL, TKravQL } from '../../../constants'
 import { TTemaCode } from '../../../services/Codelist'
 import KravList from './KravList'
 
@@ -28,18 +28,12 @@ export const PvkRelatedKravList = (props: IProps) => {
   useEffect(() => {
     setPvkRelevanteStats(
       relevanteStats.filter(
-        (krav) =>
-          krav.tagger &&
-          krav.tagger.length > 0 &&
-          krav.tagger.includes('Personvernkonsekvensvurdering')
+        (krav) => krav.tagger && krav.tagger.length > 0 && krav.tagger.includes(EPVK.pvk)
       )
     )
     setPvkUtgaattStats(
       utgaattStats.filter(
-        (krav) =>
-          krav.tagger &&
-          krav.tagger.length > 0 &&
-          krav.tagger.includes('Personvernkonsekvensvurdering')
+        (krav) => krav.tagger && krav.tagger.length > 0 && krav.tagger.includes(EPVK.pvk)
       )
     )
   }, [relevanteStats, utgaattStats])
