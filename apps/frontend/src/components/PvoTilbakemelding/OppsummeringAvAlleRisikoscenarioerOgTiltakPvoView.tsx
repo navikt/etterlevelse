@@ -184,8 +184,8 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
 
   return (
     <div className="w-full">
-      <div className="flex justify-center w-full">
-        <div className="pt-6 flex-col min-w-[900px]">
+      <div className="flex w-full">
+        <div className="pt-6 min-w-[816px]">
           <div>
             <Heading level="1" size="medium" className="mb-5">
               Risikobildet etter tiltak
@@ -199,7 +199,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
           <div>
             <div className="w-full mt-5">
               <div className="pt-6 pr-4 flex flex-1 flex-row gap-4 col-span-8">
-                <div>
+                <div className="w-full">
                   <Tabs
                     value={tabQuery ? tabQuery : tabValues.risikoscenarioer}
                     onChange={onTabChange}
