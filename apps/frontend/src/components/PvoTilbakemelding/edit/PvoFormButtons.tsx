@@ -61,7 +61,7 @@ export const PvoFormButtons = (props: IProps) => {
               {activeStep === 3 && 'Fortsett til Involvering av eksterne'}
               {activeStep === 4 && 'Fortsett til Identifisering av risikoscenarioer'}
               {activeStep === 5 && 'Fortsett til Oppsummering av alle risikoscenarioer og tiltak'}
-              {activeStep === 6 && 'Fortsett til Les og send inn'}
+              {activeStep === 6 && 'Fortsett til Send tilbakemelding'}
               {activeStep === 7 && 'Send til PVO'}
             </Button>
           )}
