@@ -110,13 +110,13 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                     personkategorier, kan det være til hjelp å se på behandlingens livsløp.
                   </BodyLong>
 
-                  <ReadMore
+                  {/* <ReadMore
                     className="my-8 max-w-[75ch]"
                     header="Slik kan dere involvere de forskjellige gruppene"
                   >
                     Her står noen gode råd om hvordan du skal involvere de du behandler
                     personopplysninger om.
-                  </ReadMore>
+                  </ReadMore> */}
 
                   <div className="mt-3">
                     <BoolField
@@ -170,9 +170,12 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                     className="mt-3 max-w-[75ch]"
                     header="Trenger vi å snakke direkte med databehandlere?"
                   >
-                    Gode råd her om hvordan bestemme om man må ta en egen prat med databehandlere,
-                    kontra tilfeller hvor NAV kan ha avtaler med store aktører. Lenker til IT og
-                    Anskaffelse sine sider, osv.
+                    Når dere vurderer personvernrisiko, må dere sette dere inn i hvordan
+                    databehandlere behandler personopplysninger. Det kan være aktuelt å diskutere
+                    endringer i databehandleravtalen, for eksempel ved å be om sletterutiner. Hvis
+                    dere selv er ansvarlige for anskaffelsen, skal dere involvere databehandleren
+                    ved behov. Dersom andre team er ansvarlige, bør dere ta kontakt med teamet for å
+                    melde fra om endringer dere ønsker å diskutere.
                   </ReadMore>
 
                   <div className="mt-5">
