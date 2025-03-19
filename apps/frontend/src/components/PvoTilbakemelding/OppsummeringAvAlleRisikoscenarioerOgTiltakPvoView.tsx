@@ -185,7 +185,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
   return (
     <div className="w-full">
       <div className="flex w-full">
-        <div className="pt-6 min-w-[816px]">
+        <div className="pt-6 w-[816px]">
           <div>
             <Heading level="1" size="medium" className="mb-5">
               Risikobildet etter tiltak
