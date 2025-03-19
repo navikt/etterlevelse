@@ -6,6 +6,7 @@ import no.nav.data.integration.p360.dto.*;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -39,7 +40,7 @@ public class P360Service {
         List<P360Case> cases = new ArrayList<>();
         try {
             log.info("Forwarding request to P360");
-            var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
+            var response = restTemplate.exchange(p360Properties.getCaseUrl() + "/GetCases", HttpMethod.POST,
                     new HttpEntity<>( P360GetRequest.builder().Title("%" + title +  "%").build(), createHeadersWithAuth()),
                     P360CasePageResponse.class);
             log.debug(response.getStatusCode().toString());
