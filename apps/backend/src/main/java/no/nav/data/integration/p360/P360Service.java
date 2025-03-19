@@ -6,7 +6,6 @@ import no.nav.data.integration.p360.dto.*;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -43,18 +42,21 @@ public class P360Service {
         List<P360Case> cases = new ArrayList<>();
         try {
             log.info("Forwarding request to P360");
-            var response = restTemplate.exchange(p360Properties.getCaseUrl() + "/GetCases", HttpMethod.POST,
+            var response = post(p360Properties.getCaseUrl() + "/GetCases",P360GetRequest.builder().Title("%" + title +  "%").build(),P360CasePageResponse.class∫ );
+/*
+ var response = restTemplate.exchange(p360Properties.getCaseUrl() + "/GetCases", HttpMethod.POST,
                     new HttpEntity<>( P360GetRequest.builder().Title("%" + title +  "%").build(), createHeadersWithAuth()),
                     P360CasePageResponse.class);
+
             log.debug(response.getStatusCode().toString());
+            ∫
+ */
             log.debug(response.toString());
 
-            if (response.getBody() != null) {
-                log.info("Succesfully sent request to P360");
-                cases.addAll(response.getBody().getCases());
-                if(response.getBody().getErrorMessage() != null) {
-                    log.error(response.getBody().getErrorMessage());
-                }
+            log.info("Succesfully sent request to P360");
+            cases.addAll(response.getCases());
+            if(response.getErrorMessage() != null) {
+                log.error(response.getErrorMessage());
             }
 
         } catch (RestClientException e) {
@@ -66,11 +68,13 @@ public class P360Service {
     public List<P360Case> getCasesByCaseNumber(String caseNumber) {
         List<P360Case> cases = new ArrayList<>();
         try {
-            var response = post(p360Properties.getCaseUrl() + "/GetCases",  P360GetRequest.builder().CaseNumber(caseNumber).build(), P360CasePageResponse.class);
-            if (response != null) {
-                cases.addAll(response.getCases());
-                if(response.getErrorMessage() != null) {
-                    log.error(response.getErrorMessage());
+            var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
+                    new HttpEntity<>( P360GetRequest.builder().CaseNumber(caseNumber).build(), createHeadersWithAuth()),
+                    P360CasePageResponse.class);
+            if (response.getBody() != null) {
+                cases.addAll(response.getBody().getCases());
+                if(response.getBody().getErrorMessage() != null) {
+                    log.error(response.getBody().getErrorMessage());
                 }
             }
         } catch (RestClientException e) {
