@@ -140,6 +140,7 @@ public class P360Service {
             log.info("successfully created auth headers for p360");
             log.debug("Auth key for p360: " + p360Properties.getAuthKey());
             log.debug("Client id for p360: " + p360Properties.getClientId());
+            log.debug("token: " + requireNonNull(response.getBody()).getAccess_token());
 
             return headers;
 
