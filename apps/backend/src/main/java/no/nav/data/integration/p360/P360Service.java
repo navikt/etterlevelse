@@ -1,8 +1,9 @@
 package no.nav.data.integration.p360;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.web.TraceHeaderRequestInterceptor;
 import no.nav.data.integration.p360.dto.*;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,12 +20,18 @@ import static java.util.Objects.requireNonNull;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 //FIXME: WIP service class needs better exception handling and async dispatch
 public class P360Service {
 
     private final RestTemplate restTemplate;
     private final P360Properties p360Properties;
+
+    public P360Service(P360Properties p360Properties, RestTemplateBuilder restTemplateBuilder) {
+        this.p360Properties = p360Properties;
+        this.restTemplate = restTemplateBuilder
+                .additionalInterceptors(TraceHeaderRequestInterceptor.correlationInterceptor())
+                .build();
+    }
 
     public List<P360Case> getCasesByTitle(String title) {
         List<P360Case> cases = new ArrayList<>();
