@@ -84,22 +84,22 @@ export const BehandlingensLivslopPvoView = (props: IProps) => {
                   <BehandlingensLivslopTextContent />
 
                   <VStack gap="6" className="mt-5">
-                    {files.length > 0 && (
-                      <VStack gap="2">
-                        <Heading level="3" size="xsmall">
-                          {`Behandlingens livsløp filer som er lastet opp. (${files.length})`}
-                        </Heading>
-                        <VStack as="ul" gap="3">
-                          {files.map((file, index) => (
+                    <VStack gap="2">
+                      <Heading level="3" size="xsmall">
+                        {`Behandlingens livsløp filer som er lastet opp. (${files.length})`}
+                      </Heading>
+                      <VStack as="ul" gap="3">
+                        {files.length > 0 &&
+                          files.map((file, index) => (
                             <FileUpload.Item
                               as="li"
                               key={file.file.name + '_' + index}
                               file={file.file}
                             />
                           ))}
-                        </VStack>
+                        {files.length === 0 && <DataTextWrapper>Ingen filer</DataTextWrapper>}
                       </VStack>
-                    )}
+                    </VStack>
                   </VStack>
 
                   <div className="mt-5">

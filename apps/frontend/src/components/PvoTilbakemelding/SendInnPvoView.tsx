@@ -15,6 +15,7 @@ import ArtOgOmFangSummary from '../PvkDokument/formSummary/ArtOgOmfangSummary'
 import InvolveringSummary from '../PvkDokument/formSummary/InvolveringSummary'
 import RisikoscenarioSummary from '../PvkDokument/formSummary/RisikoscenarioSummary'
 import { TextAreaField } from '../common/Inputs'
+import DataTextWrapper from './DataTextWrapper'
 
 interface IProps {
   pvkDokument: IPvkDokument
@@ -115,7 +116,7 @@ export const SendInnPvoView = (props: IProps) => {
                 <Label>
                   Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)
                 </Label>
-                <BodyLong>{pvkDokument.merknadTilPvoEllerRisikoeier}</BodyLong>
+                <DataTextWrapper>{pvkDokument.merknadTilPvoEllerRisikoeier}</DataTextWrapper>
               </div>
 
               <div className="mt-5 mb-3 max-w-[75ch]">
