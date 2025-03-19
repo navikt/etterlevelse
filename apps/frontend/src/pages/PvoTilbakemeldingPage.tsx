@@ -33,7 +33,7 @@ export const StepTitle: string[] = [
   'Involvering av eksterne',
   'Identifisering av risikoscenarioer og tiltak',
   'Risikobildet etter tiltak',
-  'Les og send inn',
+  'Send tilbakemelding',
 ]
 
 export const PvoTilbakemeldingPage = () => {
