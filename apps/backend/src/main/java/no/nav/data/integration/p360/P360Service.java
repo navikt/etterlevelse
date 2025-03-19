@@ -1,7 +1,7 @@
 package no.nav.data.integration.p360;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.web.TraceHeaderRequestInterceptor;
+import no.nav.data.common.web.TraceHeaderFilter;
 import no.nav.data.integration.p360.dto.*;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -9,10 +9,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +28,14 @@ public class P360Service {
 
     private final RestTemplate restTemplate;
     private final P360Properties p360Properties;
+    private final WebClient client;
 
-    public P360Service(P360Properties p360Properties, RestTemplateBuilder restTemplateBuilder) {
+    public P360Service(P360Properties p360Properties, RestTemplateBuilder restTemplateBuilder, WebClient.Builder webClientBuilder) {
         this.p360Properties = p360Properties;
         this.restTemplate = restTemplateBuilder
-                .additionalInterceptors(TraceHeaderRequestInterceptor.correlationInterceptor())
+                .build();
+        this.client = webClientBuilder
+                .filter(new TraceHeaderFilter(true))
                 .build();
     }
 
@@ -61,13 +66,11 @@ public class P360Service {
     public List<P360Case> getCasesByCaseNumber(String caseNumber) {
         List<P360Case> cases = new ArrayList<>();
         try {
-            var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
-                    new HttpEntity<>( P360GetRequest.builder().CaseNumber(caseNumber).build(), createHeadersWithAuth()),
-                    P360CasePageResponse.class);
-            if (response.getBody() != null) {
-                cases.addAll(response.getBody().getCases());
-                if(response.getBody().getErrorMessage() != null) {
-                    log.error(response.getBody().getErrorMessage());
+            var response = post(p360Properties.getCaseUrl() + "/GetCases",  P360GetRequest.builder().CaseNumber(caseNumber).build(), P360CasePageResponse.class);
+            if (response != null) {
+                cases.addAll(response.getCases());
+                if(response.getErrorMessage() != null) {
+                    log.error(response.getErrorMessage());
                 }
             }
         } catch (RestClientException e) {
@@ -124,6 +127,42 @@ public class P360Service {
             return response.getBody();
         } catch (RestClientException e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));
+            return null;
+        }
+    }
+
+    private <T> T post(String uri, Object body, Class<T> response) {
+        var res = client.post()
+                .uri(uri)
+                .bodyValue(body)
+                .header("Content-Type", "application/json")
+                .header("authkey", p360Properties.getAuthKey())
+                .header("clientid", p360Properties.getClientId())
+                .header("Authorization", "Bearer " + getBearerToken())
+                .retrieve()
+                .bodyToMono(response)
+                .block();
+        Assert.isTrue(res != null, "response is null");
+
+        return res;
+    }
+
+    private String getBearerToken () {
+        var headers = new HttpHeaders();
+        log.info("getting auth headers for p360");
+
+        try {
+            MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+            body.set("client_id", p360Properties.getClientId());
+            body.set("client_secret", p360Properties.getClientSecret());
+            body.set("grant_type", "client_credentials");
+            body.set("scope", p360Properties.getClientId() + "/.default");
+
+            var response = restTemplate.postForEntity(p360Properties.getTokenUrl(), body, P360AuthToken.class);
+            return requireNonNull(response.getBody()).getAccess_token();
+
+        } catch (RestClientException e) {
+            log.error("Unable to connect and get token, error: {}", String.valueOf(e));
             return null;
         }
     }
