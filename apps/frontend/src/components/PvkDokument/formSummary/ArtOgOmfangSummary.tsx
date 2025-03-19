@@ -29,7 +29,6 @@ export const ArtOgOmFangSummary = (props: IProps) => {
           </FormSummary.Header>
           <FormSummary.Answers>
             <FormSummary.Answer>
-              <FormSummary.Label>Hvem behandles det personopplysninger om?</FormSummary.Label>
               <FormSummary.Value>
                 <FormSummary.Answers>
                   <FormSummary.Answer>
@@ -57,9 +56,6 @@ export const ArtOgOmFangSummary = (props: IProps) => {
             </FormSummary.Answer>
 
             <FormSummary.Answer>
-              <FormSummary.Label>
-                Hvor mange personer behandles det personopplysninger om?
-              </FormSummary.Label>
               <FormSummary.Value>
                 <FormSummary.Answers>
                   <FormSummary.Answer>
@@ -84,7 +80,6 @@ export const ArtOgOmFangSummary = (props: IProps) => {
             </FormSummary.Answer>
 
             <FormSummary.Answer>
-              <FormSummary.Label>Hvem skal ha tilgang til opplysningene?</FormSummary.Label>
               <FormSummary.Value>
                 <FormSummary.Answers>
                   <FormSummary.Answer>
@@ -105,9 +100,6 @@ export const ArtOgOmFangSummary = (props: IProps) => {
             </FormSummary.Answer>
 
             <FormSummary.Answer>
-              <FormSummary.Label>
-                Hvordan og hvor lenge skal personopplysningene lagres?
-              </FormSummary.Label>
               <FormSummary.Value>
                 <FormSummary.Answers>
                   <FormSummary.Answer>
