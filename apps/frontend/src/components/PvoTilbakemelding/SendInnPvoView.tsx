@@ -1,5 +1,5 @@
 import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, CopyButton, Heading, Label } from '@navikt/ds-react'
+import { Alert, Button, CopyButton, Heading, Label } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
@@ -11,9 +11,6 @@ import {
 } from '../../api/PvoApi'
 import { EPvoTilbakemeldingStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import FormButtons from '../PvkDokument/edit/FormButtons'
-import ArtOgOmFangSummary from '../PvkDokument/formSummary/ArtOgOmfangSummary'
-import InvolveringSummary from '../PvkDokument/formSummary/InvolveringSummary'
-import RisikoscenarioSummary from '../PvkDokument/formSummary/RisikoscenarioSummary'
 import { TextAreaField } from '../common/Inputs'
 import DataTextWrapper from './common/DataTextWrapper'
 
@@ -34,9 +31,6 @@ export const SendInnPvoView = (props: IProps) => {
   const {
     pvkDokument,
     pvoTilbakemelding,
-    updateTitleUrlAndStep,
-    personkategorier,
-    databehandlere,
     etterlevelseDokumentasjonId,
     activeStep,
     setActiveStep,
@@ -87,37 +81,16 @@ export const SendInnPvoView = (props: IProps) => {
           <div className="pt-6 flex justify-center">
             <div>
               <Heading level="1" size="medium" className="mb-5">
-                Les og send inn
+                Send tilbakemelding til etterlever
               </Heading>
-              <BodyLong>
-                Her kan dere lese over det som er lagt inn i PVK-en. Hvis dere oppdager feil eller
-                mangel, er det mulig å gå tilbake og endre svar. Til slutt er det plass til å legge
-                til ytterligere informasjon dersom det er aktuelt.
-              </BodyLong>
 
-              <ArtOgOmFangSummary
-                personkategorier={personkategorier}
-                updateTitleUrlAndStep={updateTitleUrlAndStep}
-                customLinktext="Endre tilbakemelding"
-                customStepNumber={3}
-              />
-
-              <InvolveringSummary
-                databehandlere={databehandlere}
-                personkategorier={personkategorier}
-                updateTitleUrlAndStep={updateTitleUrlAndStep}
-                customLinktext="Endre tilbakemelding"
-                customStepNumber={4}
-              />
-
-              <RisikoscenarioSummary customStepNumber={6} />
-
-              <div className="mt-5 mb-3 max-w-[75ch]">
-                <Label>
-                  Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)
-                </Label>
-                <DataTextWrapper>{pvkDokument.merknadTilPvoEllerRisikoeier}</DataTextWrapper>
-              </div>
+              {pvkDokument.merknadTilPvoEllerRisikoeier &&
+                pvkDokument.merknadTilPvoEllerRisikoeier.length > 0 && (
+                  <div className="mt-5 mb-3 max-w-[75ch]">
+                    <Label>Beskjed fra etterlever</Label>
+                    <DataTextWrapper>{pvkDokument.merknadTilPvoEllerRisikoeier}</DataTextWrapper>
+                  </div>
+                )}
 
               <div className="mt-5 mb-3 max-w-[75ch]">
                 <TextAreaField
