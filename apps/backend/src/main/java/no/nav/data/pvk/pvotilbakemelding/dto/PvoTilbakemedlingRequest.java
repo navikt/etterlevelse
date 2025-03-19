@@ -26,9 +26,11 @@ public class PvoTilbakemedlingRequest implements RequestElement {
     private String pvkDokumentId;
     private PvoTilbakemeldingStatus status;
 
+    private Tilbakemeldingsinnhold behandlingenslivslop;
     private Tilbakemeldingsinnhold behandlingensArtOgOmfang;
     private Tilbakemeldingsinnhold innvolveringAvEksterne;
     private Tilbakemeldingsinnhold risikoscenarioEtterTiltakk;
+    private String merknadTilEtterleverEllerRisikoeier;
 
     private Boolean update;
 
@@ -36,6 +38,9 @@ public class PvoTilbakemedlingRequest implements RequestElement {
     public void format() {
         setId(trimToNull(id));
         setPvkDokumentId(trimToNull(pvkDokumentId));
+
+        getBehandlingenslivslop().setTilbakemeldingTilEtterlevere(trimToNull(behandlingenslivslop.getTilbakemeldingTilEtterlevere()));
+        getBehandlingenslivslop().setInternDiskusjon(trimToNull(behandlingenslivslop.getInternDiskusjon()));
 
         getBehandlingensArtOgOmfang().setTilbakemeldingTilEtterlevere(trimToNull(behandlingensArtOgOmfang.getTilbakemeldingTilEtterlevere()));
         getBehandlingensArtOgOmfang().setInternDiskusjon(trimToNull(behandlingensArtOgOmfang.getInternDiskusjon()));
@@ -45,6 +50,7 @@ public class PvoTilbakemedlingRequest implements RequestElement {
 
         getRisikoscenarioEtterTiltakk().setTilbakemeldingTilEtterlevere(trimToNull(risikoscenarioEtterTiltakk.getTilbakemeldingTilEtterlevere()));
         getRisikoscenarioEtterTiltakk().setInternDiskusjon(trimToNull(risikoscenarioEtterTiltakk.getInternDiskusjon()));
+        setMerknadTilEtterleverEllerRisikoeier(trimToNull(merknadTilEtterleverEllerRisikoeier));
     }
 
     @Override
@@ -58,9 +64,11 @@ public class PvoTilbakemedlingRequest implements RequestElement {
     public PvoTilbakemelding convertToPvoTilbakemelding() {
 
         var pvoTilbakemeldingData = PvoTilbakemeldingData.builder()
+                .behandlingenslivslop(behandlingenslivslop)
                 .behandlingensArtOgOmfang(behandlingensArtOgOmfang)
                 .innvolveringAvEksterne(innvolveringAvEksterne)
                 .risikoscenarioEtterTiltakk(risikoscenarioEtterTiltakk)
+                .merknadTilEtterleverEllerRisikoeier(merknadTilEtterleverEllerRisikoeier)
                 .build();
 
         return PvoTilbakemelding.builder()
@@ -74,9 +82,11 @@ public class PvoTilbakemedlingRequest implements RequestElement {
     public void mergeInto(PvoTilbakemelding pvoTilbakemeldingToMerge) {
         pvoTilbakemeldingToMerge.setPvkDokumentId(UUID.fromString(pvkDokumentId));
         pvoTilbakemeldingToMerge.setStatus(status);
+        pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setBehandlingenslivslop(behandlingenslivslop);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setBehandlingensArtOgOmfang(behandlingensArtOgOmfang);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setInnvolveringAvEksterne(innvolveringAvEksterne);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setRisikoscenarioEtterTiltakk(risikoscenarioEtterTiltakk);
+        pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setMerknadTilEtterleverEllerRisikoeier(merknadTilEtterleverEllerRisikoeier);
 
     }
 }

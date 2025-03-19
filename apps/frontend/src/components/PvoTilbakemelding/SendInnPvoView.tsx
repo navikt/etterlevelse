@@ -1,22 +1,24 @@
-import { BodyLong, Label } from '@navikt/ds-react'
+import { Button, Label } from '@navikt/ds-react'
+import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
 import {
-  getPvkDokument,
-  mapPvkDokumentToFormValue,
-  updatePvkDokument,
-} from '../../api/PvkDokumentApi'
-import { EPVK, EPvkDokumentStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
+  createPvoTilbakemelding,
+  getPvoTilbakemeldingByPvkDokumentId,
+  mapPvoTilbakemeldingToFormValue,
+  updatePvoTilbakemelding,
+} from '../../api/PvoApi'
+import { EPVK, EPvoTilbakemeldingStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import {
   SendInnViewArtInvRisCommon,
   SendInnViewCopySendCommon,
 } from '../PvkCommon/SendInnViewCommon'
 import FormButtons from '../PvkDokument/edit/FormButtons'
 import { TextAreaField } from '../common/Inputs'
+import DataTextWrapper from './common/DataTextWrapper'
 
 interface IProps {
   pvkDokument: IPvkDokument
-  setPvkDokument: (state: IPvkDokument) => void
   updateTitleUrlAndStep: (step: number) => void
   personkategorier: string[]
   databehandlere: string[]
@@ -31,7 +33,7 @@ interface IProps {
 export const SendInnPvoView = (props: IProps) => {
   const {
     pvkDokument,
-    setPvkDokument,
+    pvoTilbakemelding,
     updateTitleUrlAndStep,
     personkategorier,
     databehandlere,
@@ -41,20 +43,36 @@ export const SendInnPvoView = (props: IProps) => {
     setSelectedStep,
   } = props
 
-  const [submitPvkStatus] = useState<EPvkDokumentStatus>(EPvkDokumentStatus.UNDERARBEID)
+  const [submittedStatus, setSubmittedStatus] = useState<EPvoTilbakemeldingStatus>(
+    EPvoTilbakemeldingStatus.UNDERARBEID
+  )
 
-  const submit = async (pvkDokument: IPvkDokument) => {
-    await getPvkDokument(pvkDokument.id).then((response) => {
-      const updatedPvkDokument = {
-        ...response,
-        status: submitPvkStatus,
-        merknadTilPvoEllerRisikoeier: pvkDokument.merknadTilPvoEllerRisikoeier,
-      }
-
-      updatePvkDokument(updatedPvkDokument).then((savedResponse) => {
-        setPvkDokument(savedResponse)
+  const submit = async (submittedValues: IPvoTilbakemelding) => {
+    await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
+      .then(async (response) => {
+        if (response) {
+          const updatedValues: IPvoTilbakemelding = {
+            ...response,
+            status: submittedStatus,
+            merknadTilEtterleverEllerRisikoeier:
+              submittedValues.merknadTilEtterleverEllerRisikoeier,
+          }
+          await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
+        }
       })
-    })
+      .catch(async (error: AxiosError) => {
+        if (error.status === 404) {
+          const createValue = mapPvoTilbakemeldingToFormValue({
+            pvkDokumentId: pvkDokument.id,
+            status: submittedStatus,
+            merknadTilEtterleverEllerRisikoeier:
+              submittedValues.merknadTilEtterleverEllerRisikoeier,
+          })
+          await createPvoTilbakemelding(createValue).then(() => window.location.reload())
+        } else {
+          console.debug(error)
+        }
+      })
   }
 
   return (
@@ -62,11 +80,11 @@ export const SendInnPvoView = (props: IProps) => {
       validateOnChange={false}
       validateOnBlur={false}
       onSubmit={submit}
-      initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
+      initialValues={mapPvoTilbakemeldingToFormValue(pvoTilbakemelding)}
     >
-      {({ submitForm }) => (
+      {({ submitForm, dirty }) => (
         <Form>
-          <div className="flex justify-center">
+          <div className="pt-6 flex justify-center">
             <div>
               <SendInnViewArtInvRisCommon
                 personkategorier={personkategorier}
@@ -78,7 +96,7 @@ export const SendInnPvoView = (props: IProps) => {
                 <Label>
                   {EPVK.tilbakemelding} {EPVK.pvk}? (valgfritt)
                 </Label>
-                <BodyLong>{pvkDokument.merknadTilPvoEllerRisikoeier}</BodyLong>
+                <DataTextWrapper>{pvkDokument.merknadTilPvoEllerRisikoeier}</DataTextWrapper>
               </div>
 
               <div className="mt-5 mb-3 max-w-[75ch]">
@@ -98,33 +116,32 @@ export const SendInnPvoView = (props: IProps) => {
                 setActiveStep={setActiveStep}
                 setSelectedStep={setSelectedStep}
                 submitForm={submitForm}
+                customButtons={
+                  <div className="mt-5 flex gap-2 items-center">
+                    {dirty && (
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => {
+                          setSubmittedStatus(EPvoTilbakemeldingStatus.UNDERARBEID)
+                          submitForm()
+                        }}
+                      >
+                        Lagre og fortsett senere
+                      </Button>
+                    )}
 
-                // customButtons={
-                //   <div className="mt-5 flex gap-2 items-center">
-                //     {dirty && (
-                //       <Button
-                //         type="button"
-                //         variant="secondary"
-                //         onClick={() => {
-                //           setSubmitPvkStatus(EPvkDokumentStatus.UNDERARBEID)
-                //           submitForm()
-                //         }}
-                //       >
-                //         Lagre og fortsett senere
-                //       </Button>
-                //     )}
-
-                //     <Button
-                //       type="button"
-                //       onClick={() => {
-                //         setSubmitPvkStatus(EPvkDokumentStatus.SENDT_TIL_PVO)
-                //         submitForm()
-                //       }}
-                //     >
-                //       Send til {EPVK.pvk}
-                //     </Button>
-                //   </div>
-                // }
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
+                        submitForm()
+                      }}
+                    >
+                      Send tilbakemelding
+                    </Button>
+                  </div>
+                }
               />
             </div>
           </div>

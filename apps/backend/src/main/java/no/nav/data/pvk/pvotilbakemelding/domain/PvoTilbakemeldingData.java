@@ -8,7 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PvoTilbakemeldingData {
+    private Tilbakemeldingsinnhold behandlingenslivslop;
     private Tilbakemeldingsinnhold behandlingensArtOgOmfang;
     private Tilbakemeldingsinnhold innvolveringAvEksterne;
     private Tilbakemeldingsinnhold risikoscenarioEtterTiltakk;
+    private String merknadTilEtterleverEllerRisikoeier;
 }

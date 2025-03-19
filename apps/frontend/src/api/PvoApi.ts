@@ -38,7 +38,7 @@ export const getPvoTilbakemelding = async (id: string) => {
     .data
 }
 
-export const getPvkDokumentByPvkDokumentId = async (pvkDokumentId: string) => {
+export const getPvoTilbakemeldingByPvkDokumentId = async (pvkDokumentId: string) => {
   return (
     await axios.get<IPvoTilbakemelding>(
       `${env.backendBaseUrl}${EPVO.tilbakemelding}${EPVK.pvkDokument}/${pvkDokumentId}`
@@ -54,8 +54,8 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
     setIsLoading(true)
     if (pvkDokumentId) {
       ;(async () => {
-        await getPvkDokumentByPvkDokumentId(pvkDokumentId).then(async (pvoTilbakemelding) => {
-          setData(pvoTilbakemelding)
+        await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId).then(async (pvoTilbakemelding) => {
+          setData(mapPvoTilbakemeldingToFormValue(pvoTilbakemelding))
           setIsLoading(false)
         })
       })()
@@ -109,6 +109,15 @@ export const mapPvoTilbakemeldingToFormValue = (
     version: -1,
     pvkDokumentId: pvoTilbakemelding.pvkDokumentId || '',
     status: pvoTilbakemelding.status || EPvoTilbakemeldingStatus.UNDERARBEID,
+    merknadTilEtterleverEllerRisikoeier:
+      pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier || '',
+    behandlingenslivslop: pvoTilbakemelding.behandlingenslivslop || {
+      sistRedigertAv: '',
+      sistRedigertDato: '',
+      bidragsVurdering: '',
+      internDiskusjon: '',
+      tilbakemeldingTilEtterlevere: '',
+    },
     behandlingensArtOgOmfang: pvoTilbakemelding.behandlingensArtOgOmfang || {
       sistRedigertAv: '',
       sistRedigertDato: '',
