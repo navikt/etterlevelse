@@ -43,9 +43,9 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView = (props: IProps) =
 
   return (
     <div className="flex justify-center w-full">
-      <div className="flex-col justify-items-center">
+      <div className="pt-6 flex-col justify-items-center">
         <div className="w-4/5">
-          <Heading level="1" size="medium" className="my-5">
+          <Heading level="1" size="medium" className="mb-5">
             Identifisering av risikoscenarioer og tiltak
           </Heading>
 

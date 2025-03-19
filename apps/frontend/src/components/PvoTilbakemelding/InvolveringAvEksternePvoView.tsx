@@ -2,7 +2,8 @@ import { BodyLong, Heading, Label, List } from '@navikt/ds-react'
 import { RefObject } from 'react'
 import { IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import FormButtons from '../PvkDokument/edit/FormButtons'
-import DataTextWrapper from './DataTextWrapper'
+import DataTextWrapper from './common/DataTextWrapper'
+import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
 import PvoTilbakemeldingForm from './edit/PvoTilbakemeldingForm'
 
 interface IProps {
@@ -104,14 +105,14 @@ export const InvolveringAvEksternePvoView = (props: IProps) => {
           </div>
         </div>
         {/* PVO sidepanel */}
-        <div className="px-4 py-4 border-l border-[#071a3636] w-full max-w-md bg-[#E3EFF7] mt-35">
+        <PvoSidePanelWrapper>
           <PvoTilbakemeldingForm
             pvkDokumentId={pvkDokument.id}
             fieldName="innvolveringAvEksterne"
             initialValue={pvoTilbakemelding.innvolveringAvEksterne}
             formRef={formRef}
           />
-        </div>
+        </PvoSidePanelWrapper>
       </div>
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}

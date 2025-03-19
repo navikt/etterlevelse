@@ -15,7 +15,7 @@ import ArtOgOmFangSummary from '../PvkDokument/formSummary/ArtOgOmfangSummary'
 import InvolveringSummary from '../PvkDokument/formSummary/InvolveringSummary'
 import RisikoscenarioSummary from '../PvkDokument/formSummary/RisikoscenarioSummary'
 import { TextAreaField } from '../common/Inputs'
-import DataTextWrapper from './DataTextWrapper'
+import DataTextWrapper from './common/DataTextWrapper'
 
 interface IProps {
   pvkDokument: IPvkDokument
@@ -84,7 +84,7 @@ export const SendInnPvoView = (props: IProps) => {
     >
       {({ submitForm, dirty }) => (
         <Form>
-          <div className="flex justify-center">
+          <div className="pt-6 flex justify-center">
             <div>
               <Heading level="1" size="medium" className="mb-5">
                 Les og send inn

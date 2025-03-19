@@ -1,4 +1,4 @@
-import { BodyShort, Button, Radio, RadioGroup } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import moment from 'moment'
@@ -96,8 +96,12 @@ export const PvoTilbakemeldingForm = (props: IProps) => {
       {({ submitForm }) => (
         <Form>
           <div>
+            <Heading level="2" size="small" className="mb-5">
+              Gi tilbakemelding
+            </Heading>
+
             {initialValue.sistRedigertAv && initialValue.sistRedigertDato && (
-              <BodyShort size="small">
+              <BodyShort size="small" className="pb-5">
                 Sist endret: {moment(initialValue.sistRedigertDato).format('ll')} av{' '}
                 {initialValue.sistRedigertAv.split('-')[1]}
               </BodyShort>

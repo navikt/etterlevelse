@@ -13,7 +13,8 @@ import {
 import FormButtons from '../PvkDokument/edit/FormButtons'
 import BehandlingensLivsLopSidePanel from '../behandlingensLivlop/BehandlingensLivslopSidePanel'
 import BehandlingensLivslopTextContent from '../behandlingensLivlop/BehandlingensLivslopTextContent'
-import DataTextWrapper from './DataTextWrapper'
+import DataTextWrapper from './common/DataTextWrapper'
+import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
 import PvoTilbakemeldingForm from './edit/PvoTilbakemeldingForm'
 
 interface IProps {
@@ -124,14 +125,14 @@ export const BehandlingensLivslopPvoView = (props: IProps) => {
             </div>
 
             {/* PVO sidepanel */}
-            <div className="px-4 py-4 border-l border-[#071a3636] w-full max-w-md bg-[#e3eff7] mt-35">
+            <PvoSidePanelWrapper>
               <PvoTilbakemeldingForm
                 pvkDokumentId={pvkDokument.id}
                 fieldName="behandlingenslivslop"
                 initialValue={pvoTilbakemelding.behandlingenslivslop}
                 formRef={formRef}
               />
-            </div>
+            </PvoSidePanelWrapper>
           </div>
           <FormButtons
             etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
