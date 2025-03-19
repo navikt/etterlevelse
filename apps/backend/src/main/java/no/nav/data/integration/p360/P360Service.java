@@ -31,8 +31,6 @@ public class P360Service {
         this.p360Properties = p360Properties;
         this.restTemplate = restTemplateBuilder
                 .additionalInterceptors(TraceHeaderRequestInterceptor.correlationInterceptor())
-                .defaultHeader("authkey", p360Properties.getAuthKey())
-                .defaultHeader("clientid", p360Properties.getClientId())
                 .build();
     }
 
@@ -144,7 +142,8 @@ public class P360Service {
             var response = restTemplate.postForEntity(p360Properties.getTokenUrl(), body, P360AuthToken.class);
             headers.setBearerAuth(requireNonNull(response.getBody()).getAccess_token());
             headers.setContentType(MediaType.APPLICATION_JSON);
-
+            headers.set("authkey", p360Properties.getAuthKey());
+            headers.set("clientid", p360Properties.getClientId());
 
             log.info("successfully created auth headers for p360");
             return headers;
