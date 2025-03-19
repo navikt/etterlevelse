@@ -45,6 +45,10 @@ export const PvoTilbakemeldingForm = (props: IProps) => {
         if (response) {
           const updatedValues: IPvoTilbakemelding = {
             ...response,
+            behandlingenslivslop:
+              fieldName === 'behandlingenslivslop'
+                ? mutatedTilbakemeldingsInnhold
+                : response.behandlingenslivslop,
             behandlingensArtOgOmfang:
               fieldName === 'behandlingensArtOgOmfang'
                 ? mutatedTilbakemeldingsInnhold
