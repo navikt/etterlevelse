@@ -54,7 +54,7 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
               <div className="pt-5 pb-3 max-w-[75ch]">
                 <Label>Stemmer denne lista over personkategorier?</Label>
                 <DataTextWrapper>
-                  {pvkDokument.stemmerPersonkategorier === null && 'Ingen svar'}
+                  {pvkDokument.stemmerPersonkategorier === null && 'Ikke besvart'}
                   {pvkDokument.stemmerPersonkategorier === true && 'Ja'}
                   {pvkDokument.stemmerPersonkategorier === false && 'Nei'}
                 </DataTextWrapper>

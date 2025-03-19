@@ -62,7 +62,7 @@ export const InvolveringAvEksternePvoView = (props: IProps) => {
               <div className="mt-5 mb-3 max-w-[75ch]">
                 <Label>Har dere involvert en representant for de registrerte?</Label>
                 <DataTextWrapper>
-                  {pvkDokument.harInvolvertRepresentant === null && 'Ingen svar'}
+                  {pvkDokument.harInvolvertRepresentant === null && 'Ikke besvart'}
                   {pvkDokument.harInvolvertRepresentant === true && 'Ja'}
                   {pvkDokument.harInvolvertRepresentant === false && 'Nei'}
                 </DataTextWrapper>
