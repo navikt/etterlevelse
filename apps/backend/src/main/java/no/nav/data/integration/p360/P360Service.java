@@ -44,9 +44,10 @@ public class P360Service {
         List<P360Case> cases = new ArrayList<>();
         try {
             log.info("Forwarding request to P360");
+
             var response = post(p360Properties.getCaseUrl() + "/GetCases",P360GetRequest.builder().Title("%" + title +  "%").build(),P360CasePageResponse.class );
 /*
- var response = restTemplate.exchange(p360Properties.getCaseUrl() + "/GetCases", HttpMethod.POST,
+            var response = restTemplate.exchange(p360Properties.getCaseUrl() + "/GetCases", HttpMethod.POST,
                     new HttpEntity<>( P360GetRequest.builder().Title("%" + title +  "%").build(), createHeadersWithAuth()),
                     P360CasePageResponse.class);
 
@@ -138,6 +139,8 @@ public class P360Service {
     }
 
     private <T> T post(String uri, Object body, Class<T> response) {
+        log.debug("authkey: " + "START." + p360Properties.getAuthKey() + ".STOP");
+        log.debug("clientid: " + p360Properties.getClientId());
         var res = client.post()
                 .uri(uri)
                 .bodyValue(body)
@@ -149,7 +152,6 @@ public class P360Service {
                 .bodyToMono(response)
                 .block();
         Assert.isTrue(res != null, "response is null");
-
         return res;
     }
 
