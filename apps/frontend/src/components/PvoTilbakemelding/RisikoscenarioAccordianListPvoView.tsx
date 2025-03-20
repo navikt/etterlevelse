@@ -1,8 +1,7 @@
 import { Accordion, Alert, BodyLong, Heading, ReadMore } from '@navikt/ds-react'
-import { RefObject, useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../constants'
-import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import { IdentifiseringAvRisikoscenarioAccordianHeader } from '../risikoscenario/RisikoscenarioAccordionHeader'
 import RisikoscenarioView from '../risikoscenario/RisikoscenarioView'
 import TiltakView from '../tiltak/TiltakView'
@@ -12,19 +11,11 @@ interface IProps {
   etterlevelseDokumentasjonId: string
   allRisikoscenarioList: IRisikoscenario[]
   tiltakList: ITiltak[]
-  formRef: RefObject<any>
 }
 
 export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
-  const {
-    risikoscenarioList,
-    allRisikoscenarioList,
-    tiltakList,
-    etterlevelseDokumentasjonId,
-    formRef,
-  } = props
-  const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
-  const [navigateUrl, setNavigateUrl] = useState<string>('')
+  const { risikoscenarioList, allRisikoscenarioList, tiltakList, etterlevelseDokumentasjonId } =
+    props
   const url = new URL(window.location.href)
   const risikoscenarioId = url.searchParams.get('risikoscenario')
   const tiltakId = url.searchParams.get('tiltak')
@@ -51,19 +42,9 @@ export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
 
   const handleAccordionChange = (risikoscenarioId?: string) => {
     if (risikoscenarioId) {
-      setNavigateUrl(window.location.pathname + '?risikoscenario=' + risikoscenarioId)
-      if (formRef.current?.dirty) {
-        setIsUnsaved(true)
-      } else {
-        navigate(window.location.pathname + '?risikoscenario=' + risikoscenarioId)
-      }
+      navigate(window.location.pathname + '?risikoscenario=' + risikoscenarioId)
     } else {
-      setNavigateUrl(window.location.pathname)
-      if (formRef.current?.dirty) {
-        setIsUnsaved(true)
-      } else {
-        navigate(window.location.pathname)
-      }
+      navigate(window.location.pathname)
     }
   }
 
@@ -88,6 +69,7 @@ export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
                     <RisikoscenarioView
                       risikoscenario={risikoscenario}
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                      currentStep="4"
                     />
                     <div className="mt-12">
                       <Heading level="3" size="small">
@@ -130,13 +112,6 @@ export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
           )
         })}
       </Accordion>
-
-      <AccordianAlertModal
-        isOpen={isUnsaved}
-        setIsOpen={setIsUnsaved}
-        navigateUrl={navigateUrl}
-        formRef={formRef}
-      />
     </div>
   )
 }

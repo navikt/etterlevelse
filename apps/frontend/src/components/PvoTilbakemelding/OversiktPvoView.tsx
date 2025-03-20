@@ -2,7 +2,6 @@ import { Alert, BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } fro
 import { useEffect, useState } from 'react'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../../api/BehandlingensLivslopApi'
 import {
-  EPVO,
   EPvkDokumentStatus,
   IBehandlingensLivslop,
   IPvkDokument,
@@ -12,8 +11,8 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
-import FormButtons from '../PvkDokument/edit/FormButtons'
 import { ExternalLink } from '../common/RouteLink'
+import PvoFormButtons from './edit/PvoFormButtons'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -127,11 +126,13 @@ export const OversiktView = (props: IProps) => {
           <FormSummary.Answers>
             <FormSummary.Answer>
               <FormSummary.Value>
-                <ExternalLink
-                  href={`/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/behandlingens-livslop/${behandlingensLivslop ? behandlingensLivslop.id : 'ny'}`}
+                <Link
+                  onClick={() => updateTitleUrlAndStep(2)}
+                  href={window.location.pathname.slice(0, -1) + 2}
+                  className="cursor-pointer"
                 >
                   Behandlingens livsløp
-                </ExternalLink>
+                </Link>
               </FormSummary.Value>
               <FormSummary.Value className="gap-2 flex">
                 <div className="gap-2 flex pt-1">
@@ -186,15 +187,15 @@ export const OversiktView = (props: IProps) => {
             </FormSummary.Answer>
 
             {StepTitle.slice(1).map((title, index) => {
-              let panelHref = window.location.pathname.slice(0, -1) + (index + 2)
-              if (index + 2 === 5) {
+              let panelHref = window.location.pathname.slice(0, -1) + (index + 3)
+              if (index + 3 === 6) {
                 panelHref += '?tab=risikoscenarioer&filter=alle'
               }
               return (
                 <FormSummaryPanel
                   key={title}
                   title={title}
-                  onClick={() => updateTitleUrlAndStep(index + 2)}
+                  onClick={() => updateTitleUrlAndStep(index + 3)}
                   href={panelHref}
                   step={index}
                   pvkDokumentStatus={pvkDokument.status}
@@ -255,13 +256,10 @@ export const OversiktView = (props: IProps) => {
           </div>
         )}
 
-        <FormButtons
-          etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        <PvoFormButtons
           activeStep={activeStep}
           setActiveStep={updateTitleUrlAndStep}
           setSelectedStep={setSelectedStep}
-          customOriginLink={EPVO.oversikt}
-          customOriginLinkLabel="Tilbake til PVO oversikt side"
         />
       </div>
     </div>

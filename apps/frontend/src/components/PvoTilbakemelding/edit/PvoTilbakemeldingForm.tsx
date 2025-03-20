@@ -1,7 +1,8 @@
-import { BodyShort, Button, Radio, RadioGroup } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import moment from 'moment'
+import { RefObject } from 'react'
 import {
   createPvoTilbakemelding,
   getPvoTilbakemeldingByPvkDokumentId,
@@ -20,12 +21,17 @@ enum EBidragVerdier {
 
 interface IProps {
   pvkDokumentId: string
-  fieldName: 'behandlingensArtOgOmfang' | 'innvolveringAvEksterne' | 'risikoscenarioEtterTiltakk'
+  fieldName:
+    | 'behandlingenslivslop'
+    | 'behandlingensArtOgOmfang'
+    | 'innvolveringAvEksterne'
+    | 'risikoscenarioEtterTiltakk'
   initialValue: ITilbakemeldingsinnhold
+  formRef: RefObject<any>
 }
 
 export const PvoTilbakemeldingForm = (props: IProps) => {
-  const { fieldName, pvkDokumentId, initialValue } = props
+  const { fieldName, pvkDokumentId, initialValue, formRef } = props
 
   const submit = async (tilbakemeldingsInnhold: ITilbakemeldingsinnhold) => {
     const mutatedTilbakemeldingsInnhold: ITilbakemeldingsinnhold = {
@@ -39,6 +45,10 @@ export const PvoTilbakemeldingForm = (props: IProps) => {
         if (response) {
           const updatedValues: IPvoTilbakemelding = {
             ...response,
+            behandlingenslivslop:
+              fieldName === 'behandlingenslivslop'
+                ? mutatedTilbakemeldingsInnhold
+                : response.behandlingenslivslop,
             behandlingensArtOgOmfang:
               fieldName === 'behandlingensArtOgOmfang'
                 ? mutatedTilbakemeldingsInnhold
@@ -59,6 +69,8 @@ export const PvoTilbakemeldingForm = (props: IProps) => {
         if (error.status === 404) {
           const createValue = mapPvoTilbakemeldingToFormValue({
             pvkDokumentId: pvkDokumentId,
+            behandlingenslivslop:
+              fieldName === 'behandlingenslivslop' ? mutatedTilbakemeldingsInnhold : undefined,
             behandlingensArtOgOmfang:
               fieldName === 'behandlingensArtOgOmfang' ? mutatedTilbakemeldingsInnhold : undefined,
             innvolveringAvEksterne:
@@ -83,12 +95,17 @@ export const PvoTilbakemeldingForm = (props: IProps) => {
         submit(values)
       }}
       initialValues={initialValue}
+      innerRef={formRef}
     >
       {({ submitForm }) => (
         <Form>
           <div>
+            <Heading level="2" size="small" className="mb-5">
+              Gi tilbakemelding
+            </Heading>
+
             {initialValue.sistRedigertAv && initialValue.sistRedigertDato && (
-              <BodyShort size="small">
+              <BodyShort size="small" className="pb-5">
                 Sist endret: {moment(initialValue.sistRedigertDato).format('ll')} av{' '}
                 {initialValue.sistRedigertAv.split('-')[1]}
               </BodyShort>

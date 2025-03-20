@@ -5,17 +5,12 @@ import {
   ErrorSummary,
   FileRejected,
   Heading,
-  Label,
-  Link,
-  List,
   Loader,
-  ReadMore,
 } from '@navikt/ds-react'
-import {Form, Formik, validateYupSchema, yupToFormErrors} from 'formik'
+import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
-import {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
-import {behandlingName} from '../api/BehandlingApi'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import {
   createBehandlingensLivslop,
   getBehandlingensLivslopByEtterlevelseDokumentId,
@@ -23,25 +18,22 @@ import {
   updateBehandlingensLivslop,
   useBehandlingensLivslop,
 } from '../api/BehandlingensLivslopApi'
-import {useEtterlevelseDokumentasjon} from '../api/EtterlevelseDokumentasjonApi'
-import {getPvkDokumentByEtterlevelseDokumentId} from '../api/PvkDokumentApi'
-import {CustomFileUpload} from '../components/behandlingensLivlop/CustomFileUpload'
+import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
+import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
+import BehandlingensLivsLopSidePanel from '../components/behandlingensLivlop/BehandlingensLivslopSidePanel'
+import BehandlingensLivslopTextContent from '../components/behandlingensLivlop/BehandlingensLivslopTextContent'
+import { CustomFileUpload } from '../components/behandlingensLivlop/CustomFileUpload'
 import behandlingensLivslopSchema from '../components/behandlingensLivlop/behandlingensLivsLopSchema'
-import {TextAreaField} from '../components/common/Inputs'
-import {Markdown} from '../components/common/Markdown'
-import {ExternalLink} from '../components/common/RouteLink'
-import {PageLayout} from '../components/scaffold/Page'
+import { TextAreaField } from '../components/common/Inputs'
+import { PageLayout } from '../components/scaffold/Page'
 import {
-  IBehandling,
   IBehandlingensLivslop,
   IBehandlingensLivslopRequest,
   IBreadCrumbPath,
   IPvkDokument,
 } from '../constants'
-import behandlingensLivslopImage from '../resources/behandlingensLivslop.png'
-import {user} from '../services/User'
-import {env} from '../util/env'
-import {dokumentasjonerBreadCrumbPath} from './util/BreadCrumbPath'
+import { user } from '../services/User'
+import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const BehandlingensLivslopPage = () => {
   const params: Readonly<
@@ -115,10 +107,10 @@ export const BehandlingensLivslopPage = () => {
           } else if (tilPvkDokument) {
             navigate(
               '/dokumentasjon/' +
-              response.etterlevelseDokumentasjonId +
-              pvkDokumentLink +
-              (pvkDokument ? pvkDokument.id : 'ny') +
-              '/1'
+                response.etterlevelseDokumentasjonId +
+                pvkDokumentLink +
+                (pvkDokument ? pvkDokument.id : 'ny') +
+                '/1'
             )
           }
         })
@@ -130,9 +122,9 @@ export const BehandlingensLivslopPage = () => {
           } else if (tilPvkDokument) {
             navigate(
               '/dokumentasjon/' +
-              response.etterlevelseDokumentasjonId +
-              pvkDokumentLink +
-              (pvkDokument ? pvkDokument.id : 'ny')
+                response.etterlevelseDokumentasjonId +
+                pvkDokumentLink +
+                (pvkDokument ? pvkDokument.id : 'ny')
             )
           }
         })
@@ -152,7 +144,7 @@ export const BehandlingensLivslopPage = () => {
 
       {isEtterlevelseDokumentasjonLoading && (
         <div className="flex w-full justify-center">
-          <Loader size="large"/>
+          <Loader size="large" />
         </div>
       )}
 
@@ -189,7 +181,7 @@ export const BehandlingensLivslopPage = () => {
               validate={() => {
                 try {
                   validateYupSchema(
-                    {rejectedFiles: rejectedFiles},
+                    { rejectedFiles: rejectedFiles },
                     behandlingensLivslopSchema(),
                     true
                   )
@@ -198,61 +190,10 @@ export const BehandlingensLivslopPage = () => {
                 }
               }}
             >
-              {({submitForm, initialValues, errors, isSubmitting}) => (
+              {({ submitForm, initialValues, errors, isSubmitting }) => (
                 <Form>
                   <div className="pr-6 flex flex-1 flex-col gap-4 col-span-8">
-                    <BodyShort>
-                      “Behandlingens livsløp” beskriver hvor og hvordan personopplysninger flyter
-                      når de behandles i deres kontekst. Hensikten med å tegne behandlingens livsløp
-                      er at dere blant annet må tenke på:
-                    </BodyShort>
-                    <List>
-                      <List.Item>Hvor opplysningene innhentes fra.</List.Item>
-                      <List.Item>Hvor opplysningene flyter underveis i behandling.</List.Item>
-                      <List.Item>
-                        Om og hvor opplysningene sendes videre i NAV eller til eksterne.
-                      </List.Item>
-                    </List>
-                    <Alert inline variant="info" className="mt-3">
-                      Det er kun påkrevd å tegne behandlingens livsløp hvis dere gjennomfører en
-                      PVK, men vi anbefaler at alle tegner flyten. Dette vil være til hjelp når dere
-                      svarer ut etterlevelseskrav innen Personvern og Arkiv og dokumentasjon.
-                    </Alert>
-
-                    <BodyShort className="mt-3">
-                      Illustrasjonen under viser hvordan dere kunne tegne behandlingens livsløp.
-                    </BodyShort>
-
-                    <img
-                      className="mr-2.5"
-                      src={behandlingensLivslopImage}
-                      alt="Behandligens livsløp tegning"
-                      aria-hidden
-                      aria-label=""
-                    />
-
-                    <ReadMore
-                      header="Slik lager dere en god tegning av behandlingens livsløp"
-                      className="mt-3"
-                    >
-                      Du kan bruke verktøy som PowerPoint, Mural, eller Figma til å lage tegningen
-                      din som flytdiagram. Vi anbefaler ikke at du bruker Word.
-                      <br/>
-                      <br/>
-                      Noen tips til hvordan lage gode tegninger:
-                      <List>
-                        <List.Item>Sørg for at tegningen dekker X, Y, Z</List.Item>
-                        <List.Item>
-                          Husk god kontrast mellom tekst og bakgrunn. Les mer om kontrast (åpner i
-                          en ny fane).
-                        </List.Item>
-                        <List.Item>Du må ikke forklare alt i selve tegninga.</List.Item>
-                        <List.Item>
-                          Pass på at tegningens tekst blir lesbar også etter at du lagret fila og
-                          før den laster den opp.
-                        </List.Item>
-                      </List>
-                    </ReadMore>
+                    <BehandlingensLivslopTextContent />
 
                     <BodyShort className="mt-3">
                       Dere kan velge å lage og laste opp flere tegninger hvis det gir bedre
@@ -320,7 +261,7 @@ export const BehandlingensLivslopPage = () => {
 
                     {isSubmitting && (
                       <div className="flex mt-5 justify-center items-center">
-                        <Loader size="large"/>
+                        <Loader size="large" />
                       </div>
                     )}
                   </div>
@@ -331,80 +272,9 @@ export const BehandlingensLivslopPage = () => {
             {/* right side */}
             {etterlevelseDokumentasjon && (
               <div className="pl-6 border-l border-[#071a3636] w-full max-w-lg">
-                <Heading level="2" size="small" className="mb-5">
-                  Hentet fra deres etterlevelsesdokumentasjon
-                </Heading>
-
-                <Label>
-                  Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:
-                </Label>
-                {etterlevelseDokumentasjon.behandlinger ? (
-                  <List>
-                    {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
-                      <List.Item key={behandling.nummer}>
-                        <ExternalLink
-                          className="text-medium"
-                          href={`${env.pollyBaseUrl}process/${behandling.id}`}
-                        >
-                          {behandlingName(behandling)}
-                        </ExternalLink>
-                      </List.Item>
-                    ))}
-                  </List>
-                ) : (
-                  <BodyShort className="my-5">Ingen behandling er valgt.</BodyShort>
-                )}
-
-                <Label>
-                  Dere har koblet følgende dokumenter på denne etterlevelsesdokumentasjonen:
-                </Label>
-
-                {etterlevelseDokumentasjon.risikovurderinger.length > 0 ? (
-                  <List>
-                    {etterlevelseDokumentasjon.risikovurderinger.map((ros) => {
-                      const rosReg = /\[(.+)]\((.+)\)/i
-                      const rosParts = ros.match(rosReg)
-                      if (rosParts)
-                        return (
-                          <List.Item key={ros}>
-                            <ExternalLink href={rosParts[2]}>{rosParts[1]}</ExternalLink>
-                          </List.Item>
-                        )
-                      return (
-                        <span className="flex" key={ros}>
-                          {ros}
-                        </span>
-                      )
-                    })}
-                  </List>
-                ) : (
-                  <BodyShort className="my-5"> Ingen dokumenter valgt.</BodyShort>
-                )}
-
-                <BodyShort className="inline-block mb-5">
-                  Dere kan redigere hvilke behandinger og dokumenter som er tilknyttet i{' '}
-                  <Link
-                    href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="redigere etterlevelsesdokumentasjon"
-                  >
-                    Dokumentegenskaper (åpner i en ny fane).
-                  </Link>
-                </BodyShort>
-
-                <Label>Deres beskrivelse av etterlevelsen</Label>
-
-                {etterlevelseDokumentasjon.beskrivelse && (
-                  <div className="mt-3">
-                    <Markdown source={etterlevelseDokumentasjon.beskrivelse}/>
-                  </div>
-                )}
-                {!etterlevelseDokumentasjon.beskrivelse && (
-                  <BodyShort className="mt-3">
-                    Det er ikke skrevet en beskrivelse på etterlevelsen
-                  </BodyShort>
-                )}
+                <BehandlingensLivsLopSidePanel
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                />
               </div>
             )}
           </div>

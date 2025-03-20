@@ -1,11 +1,11 @@
 import { Alert, BodyLong, Button, Heading } from '@navikt/ds-react'
-import { RefObject, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, ITiltak } from '../../constants'
-import FormButtons from '../PvkDokument/edit/FormButtons'
 import RisikoscenarioAccordianListPvoView from './RisikoscenarioAccordianListPvoView'
+import PvoFormButtons from './edit/PvoFormButtons'
 
 interface IProps {
   etterlevelseDokumentasjonId: string
@@ -13,18 +13,11 @@ interface IProps {
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
-  formRef: RefObject<any>
 }
 
 export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView = (props: IProps) => {
-  const {
-    etterlevelseDokumentasjonId,
-    pvkDokument,
-    activeStep,
-    setActiveStep,
-    setSelectedStep,
-    formRef,
-  } = props
+  const { etterlevelseDokumentasjonId, pvkDokument, activeStep, setActiveStep, setSelectedStep } =
+    props
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [allRisikoscenarioList, setAllRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
@@ -50,9 +43,9 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView = (props: IProps) =
 
   return (
     <div className="flex justify-center w-full">
-      <div className="flex-col justify-items-center">
+      <div className="pt-6 flex-col justify-items-center">
         <div className="w-4/5">
-          <Heading level="1" size="medium" className="my-5">
+          <Heading level="1" size="medium" className="mb-5">
             Identifisering av risikoscenarioer og tiltak
           </Heading>
 
@@ -111,14 +104,12 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView = (props: IProps) =
                 allRisikoscenarioList={allRisikoscenarioList}
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                 tiltakList={tiltakList}
-                formRef={formRef}
               />
             </div>
           )}
         </div>
 
-        <FormButtons
-          etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+        <PvoFormButtons
           activeStep={activeStep}
           setActiveStep={setActiveStep}
           setSelectedStep={setSelectedStep}

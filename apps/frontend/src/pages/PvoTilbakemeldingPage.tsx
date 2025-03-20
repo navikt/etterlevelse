@@ -8,6 +8,7 @@ import { usePvkDokument } from '../api/PvkDokumentApi'
 import { usePvoTilbakemelding } from '../api/PvoApi'
 import { getRisikoscenarioByPvkDokumentId } from '../api/RisikoscenarioApi'
 import BehandlingensArtOgOmfangPvoView from '../components/PvoTilbakemelding/BehandlingensArtOgOmfangPvoView'
+import BehandlingensLivslopPvoView from '../components/PvoTilbakemelding/BehandlingsLivslopPvoView'
 import IdentifiseringAvRisikoscenarioerOgTiltakPvoView from '../components/PvoTilbakemelding/IdentifiseringAvRisikoscenarioerOgTiltakPvoView'
 import InvolveringAvEksternePvoView from '../components/PvoTilbakemelding/InvolveringAvEksternePvoView'
 import OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView from '../components/PvoTilbakemelding/OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
@@ -27,11 +28,12 @@ import { user } from '../services/User'
 
 export const StepTitle: string[] = [
   'Oversikt og status',
+  'Behandlingens livsløp',
   'Behandlingens art og omfang',
   'Involvering av eksterne',
   'Identifisering av risikoscenarioer og tiltak',
   'Risikobildet etter tiltak',
-  'Les og send inn',
+  'Send tilbakemelding',
 ]
 
 export const PvoTilbakemeldingPage = () => {
@@ -50,7 +52,7 @@ export const PvoTilbakemeldingPage = () => {
   const [isEtterlevelseDokumentaasjonLoading, setIsEtterlevelseDokumentaasjonLoading] =
     useState<boolean>(false)
   const [personkategorier, setPersonKategorier] = useState<string[]>([])
-  const [pvkDokument, setPvkDokument, isPvkDokumentLoading] = usePvkDokument(params.id)
+  const [pvkDokument, , isPvkDokumentLoading] = usePvkDokument(params.id)
   const [pvoTilbakemelding, setPvoTilbakemelding, isPvoTilbakemeldingLoading] =
     usePvoTilbakemelding(params.id)
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
@@ -80,7 +82,7 @@ export const PvoTilbakemeldingPage = () => {
 
   const updateUrlOnStepChange = (step: number) => {
     navigate(
-      `/pvkdokument/${params.id}${EPVO.tilbakemelding}/${step}${step === 5 ? '?tab=risikoscenarioer&filter=alle' : ''}`
+      `/pvkdokument/${params.id}${EPVO.tilbakemelding}/${step}${step === 6 ? '?tab=risikoscenarioer&filter=alle' : ''}`
     )
   }
 
@@ -224,12 +226,10 @@ export const PvoTilbakemeldingPage = () => {
                       />
                     )}
                     {activeStep === 2 && (
-                      <BehandlingensArtOgOmfangPvoView
-                        personkategorier={personkategorier}
-                        pvkDokument={pvkDokument}
-                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      <BehandlingensLivslopPvoView
                         pvoTilbakemelding={pvoTilbakemelding}
-                        setPvoTilbakemelding={setPvoTilbakemelding}
+                        pvkDokument={pvkDokument}
+                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
                         setActiveStep={updateTitleUrlAndStep}
@@ -237,11 +237,9 @@ export const PvoTilbakemeldingPage = () => {
                       />
                     )}
                     {activeStep === 3 && (
-                      <InvolveringAvEksternePvoView
+                      <BehandlingensArtOgOmfangPvoView
                         personkategorier={personkategorier}
-                        databehandlere={databehandlere}
                         pvkDokument={pvkDokument}
-                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         pvoTilbakemelding={pvoTilbakemelding}
                         setPvoTilbakemelding={setPvoTilbakemelding}
                         activeStep={activeStep}
@@ -251,9 +249,12 @@ export const PvoTilbakemeldingPage = () => {
                       />
                     )}
                     {activeStep === 4 && (
-                      <IdentifiseringAvRisikoscenarioerOgTiltakPvoView
-                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      <InvolveringAvEksternePvoView
+                        personkategorier={personkategorier}
+                        databehandlere={databehandlere}
                         pvkDokument={pvkDokument}
+                        pvoTilbakemelding={pvoTilbakemelding}
+                        setPvoTilbakemelding={setPvoTilbakemelding}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
                         setActiveStep={updateTitleUrlAndStep}
@@ -261,6 +262,15 @@ export const PvoTilbakemeldingPage = () => {
                       />
                     )}
                     {activeStep === 5 && (
+                      <IdentifiseringAvRisikoscenarioerOgTiltakPvoView
+                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                        pvkDokument={pvkDokument}
+                        activeStep={activeStep}
+                        setSelectedStep={setSelectedStep}
+                        setActiveStep={updateTitleUrlAndStep}
+                      />
+                    )}
+                    {activeStep === 6 && (
                       <OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView
                         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         pvkDokument={pvkDokument}
@@ -272,16 +282,14 @@ export const PvoTilbakemeldingPage = () => {
                         formRef={formRef}
                       />
                     )}
-                    {activeStep === 6 && (
+                    {activeStep === 7 && (
                       <SendInnPvoView
                         pvkDokument={pvkDokument}
-                        setPvkDokument={setPvkDokument}
                         personkategorier={personkategorier}
                         databehandlere={databehandlere}
                         pvoTilbakemelding={pvoTilbakemelding}
                         setPvoTilbakemelding={setPvoTilbakemelding}
                         updateTitleUrlAndStep={updateTitleUrlAndStep}
-                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
                         setActiveStep={updateTitleUrlAndStep}

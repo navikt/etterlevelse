@@ -1,13 +1,14 @@
-import { BodyLong, Heading, Label, List } from '@navikt/ds-react'
+import { Heading, Label, List } from '@navikt/ds-react'
 import { RefObject } from 'react'
 import { IPvkDokument, IPvoTilbakemelding } from '../../constants'
-import FormButtons from '../PvkDokument/edit/FormButtons'
+import DataTextWrapper from './common/DataTextWrapper'
+import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
+import PvoFormButtons from './edit/PvoFormButtons'
 import PvoTilbakemeldingForm from './edit/PvoTilbakemeldingForm'
 
 interface IProps {
   personkategorier: string[]
   pvkDokument: IPvkDokument
-  etterlevelseDokumentasjonId: string
   pvoTilbakemelding: IPvoTilbakemelding
   setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   activeStep: number
@@ -21,10 +22,10 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
     personkategorier,
     pvkDokument,
     pvoTilbakemelding,
-    etterlevelseDokumentasjonId,
     activeStep,
     setActiveStep,
     setSelectedStep,
+    formRef,
   } = props
 
   return (
@@ -36,11 +37,6 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
               <Heading level="1" size="medium" className="mb-5">
                 Behandlingens art og omfang
               </Heading>
-              {pvkDokument.changeStamp.lastModifiedBy && (
-                <div className="mt-5 mb-10">
-                  {'Sist redigert av: ' + pvkDokument.changeStamp.lastModifiedBy}
-                </div>
-              )}
 
               <List
                 headingTag="label"
@@ -53,46 +49,54 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
                   ))}
               </List>
 
-              <div className="mt-5 mb-3 max-w-[75ch]">
+              <div className="pt-5 pb-3 max-w-[75ch]">
                 <Label>Stemmer denne lista over personkategorier?</Label>
-                <BodyLong>{pvkDokument.stemmerPersonkategorier}</BodyLong>
+                <DataTextWrapper>
+                  {pvkDokument.stemmerPersonkategorier === null && 'Ikke besvart'}
+                  {pvkDokument.stemmerPersonkategorier === true && 'Ja'}
+                  {pvkDokument.stemmerPersonkategorier === false && 'Nei'}
+                </DataTextWrapper>
               </div>
 
-              <div className="mt-5 mb-3 max-w-[75ch]">
+              <div className="pt-5 pb-3 max-w-[75ch]">
                 <Label>
                   For hver av personkategoriene over, beskriv hvor mange personer dere behandler
                   personopplysninger om.
                 </Label>
-                <BodyLong>{pvkDokument.personkategoriAntallBeskrivelse}</BodyLong>
+                <DataTextWrapper>{pvkDokument.personkategoriAntallBeskrivelse}</DataTextWrapper>
               </div>
 
-              <div className="mt-5 mb-3 max-w-[75ch]">
+              <div className="pt-5 pb-3 max-w-[75ch]">
                 <Label>
                   Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av
                   rollene, beskriv hvor mange som har tilgang.
                 </Label>
-                <BodyLong>{pvkDokument.tilgangsBeskrivelsePersonopplysningene}</BodyLong>
+                <DataTextWrapper>
+                  {pvkDokument.tilgangsBeskrivelsePersonopplysningene}
+                </DataTextWrapper>
               </div>
 
-              <div className="mt-5 mb-3 max-w-[75ch]">
+              <div className="pt-5 pb-3 max-w-[75ch]">
                 <Label>Beskriv hvordan og hvor lenge personopplysningene skal lagres.</Label>
-                <BodyLong>{pvkDokument.lagringsBeskrivelsePersonopplysningene}</BodyLong>
+                <DataTextWrapper>
+                  {pvkDokument.lagringsBeskrivelsePersonopplysningene}
+                </DataTextWrapper>
               </div>
             </div>
           </div>
         </div>
 
         {/* PVO sidepanel */}
-        <div className="px-4 py-4 border-l border-[#071a3636] w-full max-w-md bg-[#F0EEF4] mt-35">
+        <PvoSidePanelWrapper>
           <PvoTilbakemeldingForm
             pvkDokumentId={pvkDokument.id}
             fieldName="behandlingensArtOgOmfang"
             initialValue={pvoTilbakemelding.behandlingensArtOgOmfang}
+            formRef={formRef}
           />
-        </div>
+        </PvoSidePanelWrapper>
       </div>
-      <FormButtons
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+      <PvoFormButtons
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         setSelectedStep={setSelectedStep}

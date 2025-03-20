@@ -1,14 +1,15 @@
 import { BodyLong, Heading, Label, List } from '@navikt/ds-react'
 import { RefObject } from 'react'
 import { IPvkDokument, IPvoTilbakemelding } from '../../constants'
-import FormButtons from '../PvkDokument/edit/FormButtons'
+import DataTextWrapper from './common/DataTextWrapper'
+import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
+import PvoFormButtons from './edit/PvoFormButtons'
 import PvoTilbakemeldingForm from './edit/PvoTilbakemeldingForm'
 
 interface IProps {
   personkategorier: string[]
   databehandlere: string[]
   pvkDokument: IPvkDokument
-  etterlevelseDokumentasjonId: string
   pvoTilbakemelding: IPvoTilbakemelding
   setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   activeStep: number
@@ -23,10 +24,10 @@ export const InvolveringAvEksternePvoView = (props: IProps) => {
     databehandlere,
     pvkDokument,
     pvoTilbakemelding,
-    etterlevelseDokumentasjonId,
     activeStep,
     setActiveStep,
     setSelectedStep,
+    formRef,
   } = props
 
   return (
@@ -58,26 +59,17 @@ export const InvolveringAvEksternePvoView = (props: IProps) => {
 
               <div className="mt-5 mb-3 max-w-[75ch]">
                 <Label>Har dere involvert en representant for de registrerte?</Label>
-                <BodyLong>{pvkDokument.harInvolvertRepresentant}</BodyLong>
+                <DataTextWrapper>
+                  {pvkDokument.harInvolvertRepresentant === null && 'Ikke besvart'}
+                  {pvkDokument.harInvolvertRepresentant === true && 'Ja'}
+                  {pvkDokument.harInvolvertRepresentant === false && 'Nei'}
+                </DataTextWrapper>
               </div>
 
-              {pvkDokument.representantInvolveringsBeskrivelse && (
-                <div className="mt-5 mb-3 max-w-[75ch]">
-                  <Label>
-                    Utdyp hvordan dere har involvert representant(er) for de registrerte
-                  </Label>
-                  <BodyLong>{pvkDokument.representantInvolveringsBeskrivelse}</BodyLong>
-                </div>
-              )}
-
-              {!pvkDokument.representantInvolveringsBeskrivelse && (
-                <div className="mt-5 mb-3 max-w-[75ch]">
-                  <Label>
-                    Utdyp hvorfor dere ikke har involvert representant(er) for de registrerte
-                  </Label>
-                  <BodyLong>{pvkDokument.representantInvolveringsBeskrivelse}</BodyLong>
-                </div>
-              )}
+              <div className="mt-5 mb-3 max-w-[75ch]">
+                <Label>Utdyp hvordan dere har involvert representant(er) for de registrerte</Label>
+                <DataTextWrapper>{pvkDokument.representantInvolveringsBeskrivelse}</DataTextWrapper>
+              </div>
 
               <List className="mt-10" title="Representanter for databehandlere">
                 <BodyLong>
@@ -92,40 +84,35 @@ export const InvolveringAvEksternePvoView = (props: IProps) => {
 
               <div className="mt-5 mb-3 max-w-[75ch]">
                 <Label>Har dere involvert en representant for databehandlere?</Label>
-                <BodyLong>{pvkDokument.harDatabehandlerRepresentantInvolvering}</BodyLong>
+                <DataTextWrapper>
+                  {pvkDokument.harDatabehandlerRepresentantInvolvering === null && 'Ingen svar'}
+                  {pvkDokument.harDatabehandlerRepresentantInvolvering === true && 'Ja'}
+                  {pvkDokument.harDatabehandlerRepresentantInvolvering === false && 'Nei'}
+                </DataTextWrapper>
               </div>
 
-              {pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse && (
-                <div className="mt-5 mb-3 max-w-[75ch]">
-                  <Label>
-                    Utdyp hvordan dere har involvert representant(er) for databehandler(e)
-                  </Label>
-                  <BodyLong>{pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse}</BodyLong>
-                </div>
-              )}
-
-              {!pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse && (
-                <div className="mt-5 mb-3 max-w-[75ch]">
-                  <Label>
-                    Utdyp hvorfor dere ikke har involvert representant(er) for databehandler(e)
-                  </Label>
-                  <BodyLong>{pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse}</BodyLong>
-                </div>
-              )}
+              <div className="mt-5 mb-3 max-w-[75ch]">
+                <Label>
+                  Utdyp hvordan dere har involvert representant(er) for databehandler(e)
+                </Label>
+                <DataTextWrapper>
+                  {pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse}
+                </DataTextWrapper>
+              </div>
             </div>
           </div>
         </div>
         {/* PVO sidepanel */}
-        <div className="px-4 py-4 border-l border-[#071a3636] w-full max-w-md bg-[#F0EEF4] mt-35">
+        <PvoSidePanelWrapper>
           <PvoTilbakemeldingForm
             pvkDokumentId={pvkDokument.id}
             fieldName="innvolveringAvEksterne"
             initialValue={pvoTilbakemelding.innvolveringAvEksterne}
+            formRef={formRef}
           />
-        </div>
+        </PvoSidePanelWrapper>
       </div>
-      <FormButtons
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+      <PvoFormButtons
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         setSelectedStep={setSelectedStep}

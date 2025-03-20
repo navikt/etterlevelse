@@ -623,6 +623,7 @@ export interface IPvoTilbakemelding extends IDomainObject {
   id: string
   pvkDokumentId: string
   status: EPvoTilbakemeldingStatus
+  behandlingenslivslop: ITilbakemeldingsinnhold
   behandlingensArtOgOmfang: ITilbakemeldingsinnhold
   innvolveringAvEksterne: ITilbakemeldingsinnhold
   risikoscenarioEtterTiltakk: ITilbakemeldingsinnhold

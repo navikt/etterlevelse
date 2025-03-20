@@ -101,6 +101,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
         risikoscenario={activeRisikoscenario}
         noCopyButton={false}
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+        currentStep="4"
       />
       <div>
         {!isIngenTilgangFormDirty &&
