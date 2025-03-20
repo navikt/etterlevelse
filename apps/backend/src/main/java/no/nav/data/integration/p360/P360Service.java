@@ -1,19 +1,16 @@
 package no.nav.data.integration.p360;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.web.TraceHeaderFilter;
 import no.nav.data.integration.p360.dto.*;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,44 +21,29 @@ import static no.nav.data.common.utils.Constants.PUBLIC_360_CLIENTID;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 //FIXME: WIP service class needs better exception handling and async dispatch
 public class P360Service {
 
     private final RestTemplate restTemplate;
     private final P360Properties p360Properties;
-    private final WebClient client;
 
-    public P360Service(P360Properties p360Properties, RestTemplateBuilder restTemplateBuilder, WebClient.Builder webClientBuilder) {
-        this.p360Properties = p360Properties;
-        this.restTemplate = restTemplateBuilder
-                .build();
-        this.client = webClientBuilder
-                .filter(new TraceHeaderFilter(true))
-                .build();
-    }
 
     public List<P360Case> getCasesByTitle(String title) {
         List<P360Case> cases = new ArrayList<>();
         try {
             log.info("Forwarding request to P360");
-
-            var response = post(p360Properties.getCaseUrl() + "/GetCases",P360GetRequest.builder().Title("%" + title +  "%").build(),P360CasePageResponse.class );
-/*
-            var response = restTemplate.exchange(p360Properties.getCaseUrl() + "/GetCases", HttpMethod.POST,
+            var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/GetCases",
                     new HttpEntity<>( P360GetRequest.builder().Title("%" + title +  "%").build(), createHeadersWithAuth()),
                     P360CasePageResponse.class);
 
-            log.debug(response.getStatusCode().toString());
-            ∫
- */
-            log.debug(response.toString());
-
-            log.info("Succesfully sent request to P360");
-            cases.addAll(response.getCases());
-            if(response.getErrorMessage() != null) {
-                log.error(response.getErrorMessage());
+            if(response.getBody() != null) {
+                log.info("Succesfully sent request to P360");
+                cases.addAll(response.getBody().getCases());
+                if(response.getBody().getErrorMessage() != null) {
+                    log.error(response.getBody().getErrorMessage());
+                }
             }
-
         } catch (RestClientException e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));
         }
@@ -134,44 +116,6 @@ public class P360Service {
             return response.getBody();
         } catch (RestClientException e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));
-            return null;
-        }
-    }
-
-    private <T> T post(String uri, Object body, Class<T> response) {
-        log.debug("authkey: " + "START." + p360Properties.getAuthKey() + ".STOP");
-        log.debug("clientid: " + p360Properties.getClientId());
-        var res = client.post()
-                .uri(uri)
-                .bodyValue(body)
-                .header("Content-Type", "application/json")
-                //cleaning up key values for some wierd reason a \n is being added to the keys
-                .header(PUBLIC_360_AUTHKEY,  p360Properties.getAuthKey().replaceAll("[\\r\\n\\t]", "").trim())
-                .header(PUBLIC_360_CLIENTID, p360Properties.getClientId().replaceAll("[\\r\\n\\t]", "").trim())
-                .header("Authorization", "Bearer " + getBearerToken())
-                .retrieve()
-                .bodyToMono(response)
-                .block();
-        Assert.isTrue(res != null, "response is null");
-        return res;
-    }
-
-    private String getBearerToken () {
-        var headers = new HttpHeaders();
-        log.info("getting auth headers for p360");
-
-        try {
-            MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-            body.set("client_id", p360Properties.getClientId());
-            body.set("client_secret", p360Properties.getClientSecret());
-            body.set("grant_type", "client_credentials");
-            body.set("scope", p360Properties.getClientId() + "/.default");
-
-            var response = restTemplate.postForEntity(p360Properties.getTokenUrl(), body, P360AuthToken.class);
-            return requireNonNull(response.getBody()).getAccess_token();
-
-        } catch (RestClientException e) {
-            log.error("Unable to connect and get token, error: {}", String.valueOf(e));
             return null;
         }
     }
