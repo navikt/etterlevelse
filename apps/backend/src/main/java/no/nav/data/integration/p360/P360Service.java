@@ -145,8 +145,9 @@ public class P360Service {
                 .uri(uri)
                 .bodyValue(body)
                 .header("Content-Type", "application/json")
-                .header(PUBLIC_360_AUTHKEY, p360Properties.getAuthKey())
-                .header(PUBLIC_360_CLIENTID, p360Properties.getClientId())
+                //cleaning up key values for some wierd reason a \n is being added to the keys
+                .header(PUBLIC_360_AUTHKEY,  p360Properties.getAuthKey().replaceAll("[\\r\\n\\t]", "").trim())
+                .header(PUBLIC_360_CLIENTID, p360Properties.getClientId().replaceAll("[\\r\\n\\t]", "").trim())
                 .header("Authorization", "Bearer " + getBearerToken())
                 .retrieve()
                 .bodyToMono(response)
@@ -189,8 +190,9 @@ public class P360Service {
             var response = restTemplate.postForEntity(p360Properties.getTokenUrl(), body, P360AuthToken.class);
             headers.setBearerAuth(requireNonNull(response.getBody()).getAccess_token());
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set(PUBLIC_360_AUTHKEY, p360Properties.getAuthKey());
-            headers.set(PUBLIC_360_CLIENTID, p360Properties.getClientId());
+            //cleaning up key values for some wierd reason a \n is being added to the keys
+            headers.set(PUBLIC_360_AUTHKEY, p360Properties.getAuthKey().replaceAll("[\\r\\n\\t]", "").trim());
+            headers.set(PUBLIC_360_CLIENTID, p360Properties.getClientId().replaceAll("[\\r\\n\\t]", "").trim());
 
             log.info("successfully created auth headers for p360");
             return headers;
