@@ -1,10 +1,10 @@
-import { TrashIcon } from '@navikt/aksel-icons'
-import { Button, Heading, Table, TextField } from '@navikt/ds-react'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import { ChangeEvent, useState } from 'react'
-import { FieldWrapper } from '../common/Inputs'
-import { Error, FormError } from '../common/ModalSchema'
-import { ExternalLink } from '../common/RouteLink'
+import {TrashIcon} from '@navikt/aksel-icons'
+import {Button, Heading, Table, TextField} from '@navikt/ds-react'
+import {FieldArray, FieldArrayRenderProps} from 'formik'
+import {ChangeEvent, useState} from 'react'
+import {FieldWrapper} from '../common/Inputs'
+import {Error, FormError} from '../common/ModalSchema'
+import {ExternalLink} from '../common/RouteLink'
 
 export const ROSEdit = () => {
   const [url, setUrl] = useState('')
@@ -37,13 +37,13 @@ export const ROSEdit = () => {
           return (
             <div className="my-8">
               <Heading level="2" size="small" spacing>
-                Legg til informasjon om gjeldende ROS-dokumentasjon
+                Legg til ROS eller annen aktuell dokumentasjon
               </Heading>
 
               <div className="w-full my-2.5">
                 <TextField
                   className="w-full"
-                  label="Legg inn navnet til ROS-dokumentet"
+                  label="Legg inn navnet på dokumentet"
                   value={name}
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     setName((event.target as HTMLInputElement).value)
@@ -51,7 +51,7 @@ export const ROSEdit = () => {
                 />
                 <TextField
                   className="w-full my-2.5"
-                  label="Legg inn lenken til ROS-dokumentasjon"
+                  label="Legg inn lenken (URL) til dokumentet"
                   value={url}
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     setUrl((event.target as HTMLInputElement).value)
@@ -67,8 +67,8 @@ export const ROSEdit = () => {
                 </Button>
               </div>
 
-              {error && <Error message={error} />}
-              {!error && <FormError fieldName="risikovurderinger" akselStyling />}
+              {error && <Error message={error}/>}
+              {!error && <FormError fieldName="risikovurderinger" akselStyling/>}
 
               <Table className="mt-2.5 w-3/5" size="small">
                 <Table.Body>
@@ -89,7 +89,7 @@ export const ROSEdit = () => {
                                 <Button
                                   type="button"
                                   variant="tertiary"
-                                  icon={<TrashIcon aria-hidden aria-label="" />}
+                                  icon={<TrashIcon aria-hidden aria-label=""/>}
                                   onClick={() => fieldArrayRenderProps.remove(index)}
                                 >
                                   Slett lenke
