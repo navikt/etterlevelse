@@ -1,13 +1,13 @@
-import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Heading, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
-import { NavigateFunction, useNavigate } from 'react-router-dom'
-import { TEtterlevelseDokumentasjonQL } from '../../constants'
-import { CodelistService, EListName, ICode, IGetParsedOptionsProps } from '../../services/Codelist'
-import { BehandlingList } from '../behandling/BehandlingList'
-import { Markdown } from '../common/Markdown'
-import { ExternalLink } from '../common/RouteLink'
-import { Teams } from '../common/TeamName'
-import { VarslingsadresserView } from './VarslingsAddresseView'
+import {ExclamationmarkTriangleFillIcon} from '@navikt/aksel-icons'
+import {BodyLong, Button, Heading, Label, Link, ReadMore, Tag} from '@navikt/ds-react'
+import {NavigateFunction, useNavigate} from 'react-router-dom'
+import {TEtterlevelseDokumentasjonQL} from '../../constants'
+import {CodelistService, EListName, ICode, IGetParsedOptionsProps} from '../../services/Codelist'
+import {BehandlingList} from '../behandling/BehandlingList'
+import {Markdown} from '../common/Markdown'
+import {ExternalLink} from '../common/RouteLink'
+import {Teams} from '../common/TeamName'
+import {VarslingsadresserView} from './VarslingsAddresseView'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
-  const { etterlevelseDokumentasjon, relasjonLoading } = props
+  const {etterlevelseDokumentasjon, relasjonLoading} = props
   const navigate: NavigateFunction = useNavigate()
   const [codelistUtils] = CodelistService()
 
@@ -23,7 +23,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
     EListName.RELEVANS
   )
 
-  const { behandlerPersonopplysninger, behandlingIds, behandlinger, teams, irrelevansFor } =
+  const {behandlerPersonopplysninger, behandlingIds, behandlinger, teams, irrelevansFor} =
     etterlevelseDokumentasjon
 
   const getRelevans = (irrelevans: ICode[]) => {
@@ -42,18 +42,18 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
     return (
       <div>
         {ingenEgenskaper && (
-          <BodyShort size="small">
+          <BodyLong size="medium">
             For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved
             dokumentasjonen.
-          </BodyShort>
+          </BodyLong>
         )}
 
         {irrelevans && (
           <div className="flex flex-wrap gap-2">
             {relevans.map((relevans: IGetParsedOptionsProps, index: number) => (
               <div key={relevans.value} className="flex items-center gap-1">
-                <Tag variant={fargeForFemAlternativ[index]} size="small">
-                  <BodyShort size="small">{relevans.label}</BodyShort>
+                <Tag variant={fargeForFemAlternativ[index]} size="medium">
+                  <BodyLong size="medium">{relevans.label}</BodyLong>
                 </Tag>
               </div>
             ))}
@@ -64,8 +64,8 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
           <div className="flex flex-wrap gap-2">
             {relevansCodeList.map((relevans: IGetParsedOptionsProps, index: number) => (
               <div key={relevans.value} className="flex items-center gap-1">
-                <Tag variant={fargeForFemAlternativ[index]} size="small">
-                  <BodyShort size="small">{relevans.label}</BodyShort>
+                <Tag variant={fargeForFemAlternativ[index]} size="medium">
+                  <BodyLong size="medium">{relevans.label}</BodyLong>
                 </Tag>
               </div>
             ))}
@@ -86,13 +86,18 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
           >
             <div>
               {etterlevelseDokumentasjon.beskrivelse && (
-                <div className="mb-3">
+                <div className="mb-5">
                   <Heading className="mb-3" level="2" size="small">
                     Dokumentbeskrivelse
                   </Heading>
-                  <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
+                  <Markdown source={etterlevelseDokumentasjon.beskrivelse}/>
                 </div>
               )}
+
+              <Heading className="mb-3" level="2" size="small">
+                Dokumentegenskaper
+              </Heading>
+
               <div className="max-w-[75ch]">
                 {behandlerPersonopplysninger && (
                   <BehandlingList
@@ -103,7 +108,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                 )}
 
                 <div className="flex items-start gap-2 mb-2.5">
-                  <Label size="small">Egenskaper:</Label>
+                  <Label size="medium">Egenskaper:</Label>
                   {irrelevansFor.length === relevansCodeList.length && (
                     <div className="flex items-center gap-1">
                       <ExclamationmarkTriangleFillIcon
@@ -111,15 +116,15 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                         aria-hidden
                         className="text-2xl text-icon-warning"
                       />
-                      <Label size="small">Ingen egenskaper er oppgitt</Label>
+                      <Label size="medium">Ingen egenskaper er oppgitt</Label>
                     </div>
                   )}
                   {getRelevans(irrelevansFor)}
                 </div>
 
                 <div className="flex items-start gap-2 mb-2.5">
-                  <Label size="small">ROS-dokumentasjon:</Label>
-                  <BodyShort size="small">
+                  <Label size="medium">Dokumentasjon:</Label>
+                  <BodyLong size="medium">
                     {etterlevelseDokumentasjon.risikovurderinger.length !== 0 &&
                       etterlevelseDokumentasjon.risikovurderinger.map((vurdering) => {
                         const rosReg = /\[(.+)]\((.+)\)/i
@@ -138,31 +143,30 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                       })}
 
                     {etterlevelseDokumentasjon.risikovurderinger.length === 0 && 'Ikke angitt'}
-                  </BodyShort>
+                  </BodyLong>
+                </div>
+
+                <div className="flex items-start gap-2 mb-2.5">
+                  <Label size="medium">Avdeling:</Label>
+                  <BodyLong size="medium">
+                    {etterlevelseDokumentasjon.avdeling &&
+                      etterlevelseDokumentasjon.avdeling.shortName}
+                    {!etterlevelseDokumentasjon.avdeling && 'Ikke angitt'}
+                  </BodyLong>
                 </div>
 
                 <div className="mb-2.5">
-                  <div className="flex items-start gap-2">
-                    <Label size="small">Avdeling:</Label>
-                    <BodyShort size="small">
-                      {etterlevelseDokumentasjon.avdeling &&
-                        etterlevelseDokumentasjon.avdeling.shortName}
-                      {!etterlevelseDokumentasjon.avdeling && 'Ikke angitt'}
-                    </BodyShort>
-                  </div>
-                </div>
-                <div className="mb-2.5">
-                  {teams.length > 0 && <Teams teams={teams} link />}
+                  {teams.length > 0 && <Teams teams={teams} link/>}
                   {teams.length === 0 && (
                     <div className="flex flex-wrap gap-2 items-center">
-                      <Label size="small">Team:</Label>
-                      <BodyShort>Ikke angitt</BodyShort>
+                      <Label size="medium">Team:</Label>
+                      <BodyLong size="medium">Ikke angitt</BodyLong>
                     </div>
                   )}
                 </div>
 
                 <div className="flex items-start gap-2">
-                  <Label size="small" className="mt-2.5">
+                  <Label size="medium">
                     Varslingsadresser:
                   </Label>
                   <div>
@@ -182,7 +186,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
           <div className="mt-5">
             <ReadMore header="Dette må du vite om gjenbruk">
               {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
-                <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />
+                <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse}/>
               )}
 
               {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
