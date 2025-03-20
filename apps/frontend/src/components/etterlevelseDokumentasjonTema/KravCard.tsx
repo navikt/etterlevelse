@@ -1,25 +1,15 @@
-import { BodyShort, Detail, LinkPanel } from '@navikt/ds-react'
+import {BodyShort, Detail, LinkPanel} from '@navikt/ds-react'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
-import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '../../api/EtterlevelseApi'
-import {
-  getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion,
-  mapEtterlevelseMetadataToFormValue,
-} from '../../api/EtterlevelseMetadataApi'
-import {
-  EEtterlevelseStatus,
-  EKravFilterType,
-  EKravStatus,
-  IEtterlevelseMetadata,
-  TKravEtterlevelseData,
-} from '../../constants'
-import { getNumberOfDaysBetween } from '../../util/checkAge'
-import { warningAlert } from '../Images'
+import {useEffect, useState} from 'react'
+import {getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber} from '../../api/EtterlevelseApi'
+import {getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue,} from '../../api/EtterlevelseMetadataApi'
+import {EEtterlevelseStatus, EKravFilterType, EKravStatus, ERisikoscenarioType, IEtterlevelseMetadata, TKravEtterlevelseData,} from '../../constants'
+import {getNumberOfDaysBetween} from '../../util/checkAge'
+import {warningAlert} from '../Images'
 import StatusView from '../common/StatusTag'
-import {
-  getEtterlevelseStatus,
-  getStatusLabelColor,
-} from '../etterlevelseDokumentasjon/common/utils'
+import {getEtterlevelseStatus, getStatusLabelColor,} from '../etterlevelseDokumentasjon/common/utils'
+import {getRisikoscenarioByPvkDokumentId} from "../../api/RisikoscenarioApi";
+import {getPvkDokumentByEtterlevelseDokumentId} from "../../api/PvkDokumentApi";
 
 interface IProps {
   krav: TKravEtterlevelseData
@@ -31,7 +21,7 @@ interface IProps {
 }
 
 export const KravCard = (props: IProps) => {
-  const { noVarsling, krav, kravFilter, temaCode, etterlevelseDokumentasjonId } = props
+  const {noVarsling, krav, kravFilter, temaCode, etterlevelseDokumentasjonId} = props
 
   const isIngenEtterlevelse = krav.etterlevelseStatus === undefined
   const isOppfyllesSenereEtterlevelse =
@@ -89,6 +79,27 @@ export const KravCard = (props: IProps) => {
     })()
   }, [])
 
+  useEffect(() => {
+    ;(async () => {
+      const pvkDokId = await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
+      const riskoscenario = await getRisikoscenarioByPvkDokumentId(pvkDokId.id, ERisikoscenarioType.KRAV)
+
+
+      console.log('etterlevelsedokid', etterlevelseDokumentasjonId)
+      console.log('pvkdocid', pvkDokId.id)
+      const filteredRisikoscenario = riskoscenario.content.filter((rs) => !rs.generelScenario && rs.relevanteKravNummer.filter(
+        (relevantekrav) => relevantekrav.kravNummer === krav.kravNummer
+      ))
+      console.log(riskoscenario)
+      console.log(riskoscenario.numberOfElements)
+      console.log(filteredRisikoscenario)
+      console.log(filteredRisikoscenario.length)
+      console.log("kravnummer", krav.kravNummer)
+
+    })()
+
+  }, []);
+
   const kravStatusFilter =
     krav.status === EKravStatus.UTGAATT
       ? EKravFilterType.UTGAATE_KRAV
@@ -106,15 +117,15 @@ export const KravCard = (props: IProps) => {
             </Detail>
             <div className="ml-4">
               {krav.status === EKravStatus.UTGAATT && (
-                <ShowWarningMessage warningMessage="Utgått krav" />
+                <ShowWarningMessage warningMessage="Utgått krav"/>
               )}
               {isVarslingStatus && krav.kravVersjon === 1 && kravAge < 30 && (
-                <ShowWarningMessage warningMessage="Nytt krav" />
+                <ShowWarningMessage warningMessage="Nytt krav"/>
               )}
               {isVarslingStatus &&
                 nyVersionFlag &&
                 kravFilter === EKravFilterType.RELEVANTE_KRAV &&
-                kravAge < 30 && <ShowWarningMessage warningMessage="Ny versjon" />}
+                kravAge < 30 && <ShowWarningMessage warningMessage="Ny versjon"/>}
             </div>
           </div>
           <BodyShort>{krav.navn}</BodyShort>
@@ -143,6 +154,7 @@ export const KravCard = (props: IProps) => {
         </div>
         {kravFilter === EKravFilterType.RELEVANTE_KRAV && krav && krav.etterlevelseStatus && (
           <div className="self-center">
+            <StatusView status="Min tag" variant="alt1"/>
             <StatusView
               status={getEtterlevelseStatus(krav.etterlevelseStatus, krav.frist)}
               variant={getStatusLabelColor(krav.etterlevelseStatus)}
@@ -162,9 +174,9 @@ export const KravCard = (props: IProps) => {
   )
 }
 
-export const ShowWarningMessage = ({ warningMessage }: { warningMessage: string }) => (
+export const ShowWarningMessage = ({warningMessage}: { warningMessage: string }) => (
   <div className="flex items-center gap-2">
-    <img src={warningAlert} width="18px" height="18px" alt="warning icon" />
+    <img src={warningAlert} width="18px" height="18px" alt="warning icon"/>
     <Detail className="whitespace-nowrap">{warningMessage}</Detail>
   </div>
 )
