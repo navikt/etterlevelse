@@ -10,11 +10,12 @@ import {
   IRisikoscenario,
   ITiltak,
 } from '../../constants'
-import FormButtons from '../PvkDokument/edit/FormButtons'
 import { ExternalLink } from '../common/RouteLink'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
 import OppsumeringAccordianListPvoView from './OppsumeringAccordianListPvoView'
+import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
+import PvoFormButtons from './edit/PvoFormButtons'
 import PvoTilbakemeldingForm from './edit/PvoTilbakemeldingForm'
 
 interface IProps {
@@ -183,8 +184,8 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
 
   return (
     <div className="w-full">
-      <div className="flex justify-center w-full">
-        <div className="flex-col min-w-[900px]">
+      <div className="flex w-full">
+        <div className="pt-6 w-[816px]">
           <div>
             <Heading level="1" size="medium" className="mb-5">
               Risikobildet etter tiltak
@@ -198,7 +199,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
           <div>
             <div className="w-full mt-5">
               <div className="pt-6 pr-4 flex flex-1 flex-row gap-4 col-span-8">
-                <div>
+                <div className="w-full">
                   <Tabs
                     value={tabQuery ? tabQuery : tabValues.risikoscenarioer}
                     onChange={onTabChange}
@@ -310,17 +311,6 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
                     </Tabs.Panel>
                   </Tabs>
                 </div>
-                <div>
-                  {/* PVO sidepanel */}
-                  <div className="ml-4 px-4 py-4 border-l border-[#071a3636] w-full max-w-md bg-[#F0EEF4] mt-35">
-                    <PvoTilbakemeldingForm
-                      pvkDokumentId={pvkDokument.id}
-                      fieldName="risikoscenarioEtterTiltakk"
-                      initialValue={pvoTilbakemelding.risikoscenarioEtterTiltakk}
-                      formRef={formRef}
-                    />
-                  </div>
-                </div>
               </div>
 
               <AccordianAlertModal
@@ -333,9 +323,20 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
             </div>
           </div>
         </div>
+
+        <div>
+          {/* PVO sidepanel */}
+          <PvoSidePanelWrapper>
+            <PvoTilbakemeldingForm
+              pvkDokumentId={pvkDokument.id}
+              fieldName="risikoscenarioEtterTiltakk"
+              initialValue={pvoTilbakemelding.risikoscenarioEtterTiltakk}
+              formRef={formRef}
+            />
+          </PvoSidePanelWrapper>
+        </div>
       </div>
-      <FormButtons
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+      <PvoFormButtons
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         setSelectedStep={setSelectedStep}

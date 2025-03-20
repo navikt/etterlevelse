@@ -33,7 +33,7 @@ export const StepTitle: string[] = [
   'Involvering av eksterne',
   'Identifisering av risikoscenarioer og tiltak',
   'Risikobildet etter tiltak',
-  'Les og send inn',
+  'Send tilbakemelding',
 ]
 
 export const PvoTilbakemeldingPage = () => {
@@ -229,7 +229,7 @@ export const PvoTilbakemeldingPage = () => {
                       <BehandlingensLivslopPvoView
                         pvoTilbakemelding={pvoTilbakemelding}
                         pvkDokument={pvkDokument}
-                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
                         setActiveStep={updateTitleUrlAndStep}
@@ -240,7 +240,6 @@ export const PvoTilbakemeldingPage = () => {
                       <BehandlingensArtOgOmfangPvoView
                         personkategorier={personkategorier}
                         pvkDokument={pvkDokument}
-                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         pvoTilbakemelding={pvoTilbakemelding}
                         setPvoTilbakemelding={setPvoTilbakemelding}
                         activeStep={activeStep}
@@ -254,7 +253,6 @@ export const PvoTilbakemeldingPage = () => {
                         personkategorier={personkategorier}
                         databehandlere={databehandlere}
                         pvkDokument={pvkDokument}
-                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         pvoTilbakemelding={pvoTilbakemelding}
                         setPvoTilbakemelding={setPvoTilbakemelding}
                         activeStep={activeStep}
@@ -292,7 +290,6 @@ export const PvoTilbakemeldingPage = () => {
                         pvoTilbakemelding={pvoTilbakemelding}
                         setPvoTilbakemelding={setPvoTilbakemelding}
                         updateTitleUrlAndStep={updateTitleUrlAndStep}
-                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
                         setActiveStep={updateTitleUrlAndStep}

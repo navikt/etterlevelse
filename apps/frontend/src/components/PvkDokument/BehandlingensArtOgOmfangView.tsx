@@ -117,9 +117,14 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
                     className="mt-5 max-w-[75ch]"
                     header="Hvordan kan vi komme med gode estimater på art og omfang?"
                   >
-                    Det blir ofte vanskelig å tallfeste noen personkategorier, for eksempel når det
-                    er snakk om antall brukere eller saksbehandlere. Det er tilstrekkelig å oppgi
-                    ca. antall.
+                    Art og omfang skal hjelpe oss å vurdere risiko. Det er ofte vanskelig å gi
+                    presise anslag. Det holder å estimere ca antall.
+                    <br />
+                    <br />
+                    For antall personer vi behandler opplysninger om kan publisert statistikk brukes
+                    for å estimere. På spørsmålet om hvem som har tilgang må hele behandlingsløpet
+                    vurderes, inkludert f.eks. utviklere av applikasjonen og eventuelle
+                    underleverandører.
                   </ReadMore>
 
                   <div className="mt-5 max-w-[75ch]">

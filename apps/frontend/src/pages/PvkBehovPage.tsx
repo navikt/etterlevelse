@@ -1,4 +1,4 @@
-import { EnvelopeClosedIcon } from '@navikt/aksel-icons'
+import {EnvelopeClosedIcon} from '@navikt/aksel-icons'
 import {
   Alert,
   BodyLong,
@@ -16,13 +16,13 @@ import {
   RadioGroup,
   ReadMore,
 } from '@navikt/ds-react'
-import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import { uniqBy } from 'lodash'
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { behandlingName } from '../api/BehandlingApi'
-import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../api/BehandlingensLivslopApi'
-import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
+import {Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik} from 'formik'
+import {uniqBy} from 'lodash'
+import {useEffect, useState} from 'react'
+import {useNavigate, useParams} from 'react-router-dom'
+import {behandlingName} from '../api/BehandlingApi'
+import {getBehandlingensLivslopByEtterlevelseDokumentId} from '../api/BehandlingensLivslopApi'
+import {useEtterlevelseDokumentasjon} from '../api/EtterlevelseDokumentasjonApi'
 import {
   createPvkDokument,
   getPvkDokumentByEtterlevelseDokumentId,
@@ -31,9 +31,9 @@ import {
   usePvkDokument,
 } from '../api/PvkDokumentApi'
 import pvkBehovSchema from '../components/PvkDokument/edit/pvkBehovSchema'
-import { FieldWrapper, TextAreaField } from '../components/common/Inputs'
-import { ExternalLink } from '../components/common/RouteLink'
-import { PageLayout } from '../components/scaffold/Page'
+import {FieldWrapper, TextAreaField} from '../components/common/Inputs'
+import {ExternalLink} from '../components/common/RouteLink'
+import {PageLayout} from '../components/scaffold/Page'
 import {
   IBehandling,
   IBehandlingensLivslop,
@@ -42,10 +42,10 @@ import {
   IPolicy,
   IPvkDokument,
 } from '../constants'
-import { CodelistService, EListName, ICode } from '../services/Codelist'
-import { user } from '../services/User'
-import { env } from '../util/env'
-import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
+import {CodelistService, EListName, ICode} from '../services/Codelist'
+import {user} from '../services/User'
+import {env} from '../util/env'
+import {dokumentasjonerBreadCrumbPath} from './util/BreadCrumbPath'
 
 export const PvkBehovPage = () => {
   const params: Readonly<
@@ -174,10 +174,10 @@ export const PvkBehovPage = () => {
           } else if (tilPvkDokument) {
             navigate(
               '/dokumentasjon/' +
-                response.etterlevelseDokumentId +
-                '/pvkdokument/' +
-                response.id +
-                '/1'
+              response.etterlevelseDokumentId +
+              '/pvkdokument/' +
+              response.id +
+              '/1'
             )
           } else {
             setPvkDokument(response)
@@ -190,10 +190,10 @@ export const PvkBehovPage = () => {
           } else if (tilPvkDokument) {
             navigate(
               '/dokumentasjon/' +
-                response.etterlevelseDokumentId +
-                '/pvkdokument/' +
-                response.id +
-                '/1'
+              response.etterlevelseDokumentId +
+              '/pvkdokument/' +
+              response.id +
+              '/1'
             )
           } else {
             setPvkDokument(response)
@@ -214,7 +214,7 @@ export const PvkBehovPage = () => {
       </Heading>
       {isEtterlevelseDokumentasjonLoading && (
         <div className="flex w-full justify-center">
-          <Loader size="large" />
+          <Loader size="large"/>
         </div>
       )}
       {!isEtterlevelseDokumentasjonLoading &&
@@ -337,7 +337,7 @@ export const PvkBehovPage = () => {
                 onSubmit={submit}
                 initialValues={mapPvkDokumentToFormValue(pvkdokument as IPvkDokument)}
               >
-                {({ setFieldValue, values, submitForm }) => (
+                {({setFieldValue, values, submitForm}) => (
                   <Form>
                     <div id="ytterlige-egenskaper">
                       <FieldArray name="ytterligereEgenskaper">
@@ -392,7 +392,7 @@ export const PvkBehovPage = () => {
                         copyText="pvk@nav.no"
                         text="Kopiér PVO sin e-postadresse"
                         activeText="E-postadressen er kopiert"
-                        icon={<EnvelopeClosedIcon aria-hidden />}
+                        icon={<EnvelopeClosedIcon aria-hidden/>}
                       />
                     </ReadMore>
 
@@ -502,7 +502,7 @@ export const PvkBehovPage = () => {
                 )}
 
                 <Label>
-                  Dere har koblet følgende ROS-dokumentasjon på denne etterlevelsesdokumentasjonen:
+                  Dere har koblet følgende dokumenter på denne etterlevelsesdokumentasjonen:
                 </Label>
 
                 {etterlevelseDokumentasjon.risikovurderinger.length > 0 ? (
@@ -524,11 +524,11 @@ export const PvkBehovPage = () => {
                     })}
                   </List>
                 ) : (
-                  <BodyShort className="my-5"> Ingen ROS er valgt.</BodyShort>
+                  <BodyShort className="my-5"> Ingen dokumenter valgt.</BodyShort>
                 )}
 
                 <BodyShort className="inline-block">
-                  Dere kan redigere hvilke behandinger og risikovurderinger som gjelder i{' '}
+                  Dere kan redigere hvilke behandinger og dokumenter som er tilknyttet i{' '}
                   <Link
                     href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
                     target="_blank"
