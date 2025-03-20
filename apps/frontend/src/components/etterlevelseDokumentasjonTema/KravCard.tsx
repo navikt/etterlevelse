@@ -1,4 +1,4 @@
-import {BodyShort, Detail, LinkPanel} from '@navikt/ds-react'
+import {BodyShort, Detail, LinkPanel, Loader} from '@navikt/ds-react'
 import moment from 'moment'
 import {useEffect, useState} from 'react'
 import {getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber} from '../../api/EtterlevelseApi'
@@ -30,6 +30,8 @@ export const KravCard = (props: IProps) => {
 
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
   const [kravAge, setKravAge] = useState<number>(0)
+  const [kravMedRelevantRisikoscenario, setKravMedRelevantRisikoscenario] = useState<boolean>(false)
+  const [kravLoading, setKravLoading] = useState<boolean>(true)
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<IEtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
@@ -81,23 +83,19 @@ export const KravCard = (props: IProps) => {
 
   useEffect(() => {
     ;(async () => {
-      const pvkDokId = await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
-      const riskoscenario = await getRisikoscenarioByPvkDokumentId(pvkDokId.id, ERisikoscenarioType.KRAV)
-
-
-      console.log('etterlevelsedokid', etterlevelseDokumentasjonId)
-      console.log('pvkdocid', pvkDokId.id)
-      const filteredRisikoscenario = riskoscenario.content.filter((rs) => !rs.generelScenario && rs.relevanteKravNummer.filter(
-        (relevantekrav) => relevantekrav.kravNummer === krav.kravNummer
-      ))
-      console.log(riskoscenario)
-      console.log(riskoscenario.numberOfElements)
-      console.log(filteredRisikoscenario)
-      console.log(filteredRisikoscenario.length)
-      console.log("kravnummer", krav.kravNummer)
-
+      setKravLoading(true)
+      await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
+        async (pvkDocId) => {
+          await getRisikoscenarioByPvkDokumentId(pvkDocId.id, ERisikoscenarioType.KRAV).then(
+            (riskoscenario) => {
+              setKravMedRelevantRisikoscenario(riskoscenario.content.filter(
+                (rs) => !rs.generelScenario && rs.relevanteKravNummer.filter((rk) => rk.kravNummer === krav.kravNummer).length > 0).length > 0)
+              setKravLoading(false)
+            }
+          )
+        }
+      ).catch()
     })()
-
   }, []);
 
   const kravStatusFilter =
@@ -153,8 +151,10 @@ export const KravCard = (props: IProps) => {
           </div>
         </div>
         {kravFilter === EKravFilterType.RELEVANTE_KRAV && krav && krav.etterlevelseStatus && (
-          <div className="self-center">
-            <StatusView status="Min tag" variant="alt1"/>
+          <div className="self-center flex gap-2">
+            {kravLoading && <Loader size="small"/>}
+            {!kravLoading && kravMedRelevantRisikoscenario && <StatusView status="Inneholder risikoscenario" variant="alt1"/>}
+
             <StatusView
               status={getEtterlevelseStatus(krav.etterlevelseStatus, krav.frist)}
               variant={getStatusLabelColor(krav.etterlevelseStatus)}
