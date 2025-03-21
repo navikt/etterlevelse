@@ -10,7 +10,6 @@ interface IProps {
   personkategorier: string[]
   pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
-  setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void

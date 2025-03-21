@@ -53,8 +53,7 @@ export const PvoTilbakemeldingPage = () => {
     useState<boolean>(false)
   const [personkategorier, setPersonKategorier] = useState<string[]>([])
   const [pvkDokument, , isPvkDokumentLoading] = usePvkDokument(params.id)
-  const [pvoTilbakemelding, setPvoTilbakemelding, isPvoTilbakemeldingLoading] =
-    usePvoTilbakemelding(params.id)
+  const [pvoTilbakemelding, , isPvoTilbakemeldingLoading] = usePvoTilbakemelding(params.id)
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [databehandlere, setDatabehandlere] = useState<string[]>([])
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
@@ -241,7 +240,6 @@ export const PvoTilbakemeldingPage = () => {
                         personkategorier={personkategorier}
                         pvkDokument={pvkDokument}
                         pvoTilbakemelding={pvoTilbakemelding}
-                        setPvoTilbakemelding={setPvoTilbakemelding}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
                         setActiveStep={updateTitleUrlAndStep}
@@ -254,7 +252,6 @@ export const PvoTilbakemeldingPage = () => {
                         databehandlere={databehandlere}
                         pvkDokument={pvkDokument}
                         pvoTilbakemelding={pvoTilbakemelding}
-                        setPvoTilbakemelding={setPvoTilbakemelding}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
                         setActiveStep={updateTitleUrlAndStep}
@@ -275,7 +272,6 @@ export const PvoTilbakemeldingPage = () => {
                         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         pvkDokument={pvkDokument}
                         pvoTilbakemelding={pvoTilbakemelding}
-                        setPvoTilbakemelding={setPvoTilbakemelding}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
                         setActiveStep={updateTitleUrlAndStep}
@@ -288,7 +284,6 @@ export const PvoTilbakemeldingPage = () => {
                         personkategorier={personkategorier}
                         databehandlere={databehandlere}
                         pvoTilbakemelding={pvoTilbakemelding}
-                        setPvoTilbakemelding={setPvoTilbakemelding}
                         updateTitleUrlAndStep={updateTitleUrlAndStep}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
