@@ -69,7 +69,7 @@ export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
                     <RisikoscenarioView
                       risikoscenario={risikoscenario}
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-                      currentStep="4"
+                      stepUrl="4"
                     />
                     <div className="mt-12">
                       <Heading level="3" size="small">
