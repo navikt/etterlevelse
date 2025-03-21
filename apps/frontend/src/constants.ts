@@ -628,6 +628,7 @@ export interface IPvoTilbakemelding extends IDomainObject {
   innvolveringAvEksterne: ITilbakemeldingsinnhold
   risikoscenarioEtterTiltakk: ITilbakemeldingsinnhold
   merknadTilEtterleverEllerRisikoeier: string
+  sendtDato: string
 }
 
 export interface ITilbakemeldingsinnhold {

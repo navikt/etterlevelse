@@ -12,6 +12,7 @@ import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingData;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
@@ -31,6 +32,7 @@ public class PvoTilbakemedlingRequest implements RequestElement {
     private Tilbakemeldingsinnhold innvolveringAvEksterne;
     private Tilbakemeldingsinnhold risikoscenarioEtterTiltakk;
     private String merknadTilEtterleverEllerRisikoeier;
+    private LocalDateTime sendtDato;
 
     private Boolean update;
 
@@ -38,6 +40,7 @@ public class PvoTilbakemedlingRequest implements RequestElement {
     public void format() {
         setId(trimToNull(id));
         setPvkDokumentId(trimToNull(pvkDokumentId));
+        setSendtDato(sendtDato);
 
         getBehandlingenslivslop().setTilbakemeldingTilEtterlevere(trimToNull(behandlingenslivslop.getTilbakemeldingTilEtterlevere()));
         getBehandlingenslivslop().setInternDiskusjon(trimToNull(behandlingenslivslop.getInternDiskusjon()));
@@ -69,6 +72,7 @@ public class PvoTilbakemedlingRequest implements RequestElement {
                 .innvolveringAvEksterne(innvolveringAvEksterne)
                 .risikoscenarioEtterTiltakk(risikoscenarioEtterTiltakk)
                 .merknadTilEtterleverEllerRisikoeier(merknadTilEtterleverEllerRisikoeier)
+                .sendtDato(sendtDato)
                 .build();
 
         return PvoTilbakemelding.builder()
@@ -82,6 +86,7 @@ public class PvoTilbakemedlingRequest implements RequestElement {
     public void mergeInto(PvoTilbakemelding pvoTilbakemeldingToMerge) {
         pvoTilbakemeldingToMerge.setPvkDokumentId(UUID.fromString(pvkDokumentId));
         pvoTilbakemeldingToMerge.setStatus(status);
+        pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setSendtDato(sendtDato);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setBehandlingenslivslop(behandlingenslivslop);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setBehandlingensArtOgOmfang(behandlingensArtOgOmfang);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setInnvolveringAvEksterne(innvolveringAvEksterne);
