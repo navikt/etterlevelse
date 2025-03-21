@@ -8,7 +8,7 @@ import {
   removeTiltakToRisikoscenario,
 } from '../../../api/RisikoscenarioApi'
 import { deleteTiltak, getTiltak } from '../../../api/TiltakApi'
-import { IRisikoscenario } from '../../../constants'
+import { IKravReference, IRisikoscenario, ITiltak } from '../../../constants'
 
 interface IProps {
   kravnummer: number
@@ -30,13 +30,13 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
   } = props
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
-  const submit = async () => {
-    getRisikoscenario(risikoscenario.id).then(async (response) => {
-      const relevanteKravNummer = response.relevanteKravNummer
+  const submit = async (): Promise<void> => {
+    getRisikoscenario(risikoscenario.id).then(async (response: IRisikoscenario) => {
+      const relevanteKravNummer: IKravReference[] = response.relevanteKravNummer
 
       if (response.tiltakIds.length > 0) {
         for await (const tiltakId of response.tiltakIds) {
-          await getTiltak(tiltakId).then(async (tiltakResponse) => {
+          await getTiltak(tiltakId).then(async (tiltakResponse: ITiltak) => {
             await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(async () => {
               if (tiltakResponse.risikoscenarioIds.length === 1) {
                 await deleteTiltak(tiltakId)
@@ -47,18 +47,20 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
       }
 
       if (relevanteKravNummer.length > 1) {
-        await fjernKravFraRisikoscenario(risikoscenario.id, kravnummer).then((deleteResponse) => {
-          const updatedRisikoscenarioForKrav = risikoscenarioForKrav.filter(
-            (risikoscenario) => risikoscenario.id !== deleteResponse.id
-          )
-          setRisikoscenarioForKrav([...updatedRisikoscenarioForKrav])
-          setRisikoscenarioer([...risikoscenarioer, deleteResponse])
-          setIsOpen(false)
-        })
+        await fjernKravFraRisikoscenario(risikoscenario.id, kravnummer).then(
+          (deleteResponse: IRisikoscenario) => {
+            const updatedRisikoscenarioForKrav: IRisikoscenario[] = risikoscenarioForKrav.filter(
+              (risikoscenario: IRisikoscenario) => risikoscenario.id !== deleteResponse.id
+            )
+            setRisikoscenarioForKrav([...updatedRisikoscenarioForKrav])
+            setRisikoscenarioer([...risikoscenarioer, deleteResponse])
+            setIsOpen(false)
+          }
+        )
       } else {
-        await deleteRisikoscenario(risikoscenario.id).then((deleteResponse) => {
+        await deleteRisikoscenario(risikoscenario.id).then((deleteResponse: IRisikoscenario) => {
           const updatedRisikoscenarioForKrav = risikoscenarioForKrav.filter(
-            (risikoscenario) => risikoscenario.id !== deleteResponse.id
+            (risikoscenario: IRisikoscenario) => risikoscenario.id !== deleteResponse.id
           )
           setRisikoscenarioForKrav([...updatedRisikoscenarioForKrav])
           setIsOpen(false)
@@ -81,18 +83,16 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
       {isOpen && (
         <Modal
           header={{
-            heading: 'Vil dere slette dette risikoscenarioet?',
+            heading: 'Vil dere slette dette risikoscenariet?',
           }}
           open={isOpen}
           onClose={() => setIsOpen(false)}
         >
           <Modal.Body>
             {risikoscenario.relevanteKravNummer.length > 0 && (
-              <List title="Dette risikoscenarioet brukes også ved følgende etterlevelseskrav:">
-                {risikoscenario.relevanteKravNummer.map((krav) => (
-                  <List.Item
-                    key={risikoscenario.id + '_' + krav.kravNummer + '.' + krav.kravVersjon}
-                  >
+              <List title="Dette risikoscenariet brukes også ved følgende etterlevelseskrav:">
+                {risikoscenario.relevanteKravNummer.map((krav: IKravReference) => (
+                  <List.Item key={`${risikoscenario.id}_${krav.kravNummer}.${krav.kravVersjon}`}>
                     K{krav.kravNummer}.{krav.kravVersjon} {krav.navn}
                   </List.Item>
                 ))}

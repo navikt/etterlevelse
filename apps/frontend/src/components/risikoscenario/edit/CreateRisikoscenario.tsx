@@ -25,7 +25,7 @@ export const CreateRisikoscenario = (props: IProps) => {
     formRef,
   } = props
 
-  const submit = async (risikoscenario: IRisikoscenario) => {
+  const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
     await createRisikoscenarioKnyttetTilKrav(krav.kravNummer, risikoscenario).then((response) => {
       setRisikoscenarioer([...risikoscenarioer, response])
       setActiveRisikoscenarioId(response.id)

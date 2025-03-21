@@ -1,6 +1,6 @@
 import { Button, Chips, Select, VStack } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { RefObject, useEffect, useState } from 'react'
+import { ChangeEvent, RefObject, useEffect, useState } from 'react'
 import { updateKravForRisikoscenarioer } from '../../../api/RisikoscenarioApi'
 import { IKravRisikoscenarioRelasjon, IRisikoscenario } from '../../../constants'
 
@@ -24,32 +24,32 @@ export const LeggTilEksisterendeRisikoscenario = (props: IProps) => {
     setIsLeggTilEksisterendeMode,
     formRef,
   } = props
-  const [selectedRisikoscenarioer, setSelectedRisikoscenarioer] = useState<string[]>([])
+  const [selectedRisikoscenarier, setSelectedRisikoscenarier] = useState<string[]>([])
 
-  const addRisikoscenario = (risikoscenarioId: string, fieldProps: FieldProps) => {
-    const existingId = selectedRisikoscenarioer.filter(
+  const addRisikoscenario = (risikoscenarioId: string, fieldProps: FieldProps): void => {
+    const existingId = selectedRisikoscenarier.filter(
       (selectedRisikoscenario) => selectedRisikoscenario === risikoscenarioId
     )
     if (existingId.length === 0) {
-      setSelectedRisikoscenarioer([...selectedRisikoscenarioer, risikoscenarioId])
+      setSelectedRisikoscenarier([...selectedRisikoscenarier, risikoscenarioId])
       fieldProps.form.setFieldValue('risikoscenarioIder', [
-        ...selectedRisikoscenarioer,
+        ...selectedRisikoscenarier,
         risikoscenarioId,
       ])
     }
   }
 
-  const removeRisikoscenario = (risikoscenarioId: string, fieldProps: FieldProps) => {
-    const updatedScenario = selectedRisikoscenarioer.filter((id) => id !== risikoscenarioId)
-    setSelectedRisikoscenarioer([...updatedScenario])
+  const removeRisikoscenario = (risikoscenarioId: string, fieldProps: FieldProps): void => {
+    const updatedScenario = selectedRisikoscenarier.filter((id) => id !== risikoscenarioId)
+    setSelectedRisikoscenarier([...updatedScenario])
     fieldProps.form.setFieldValue('risikoscenarioIder', [...updatedScenario])
   }
 
-  const submit = async (request: IKravRisikoscenarioRelasjon) => {
+  const submit = async (request: IKravRisikoscenarioRelasjon): Promise<void> => {
     await updateKravForRisikoscenarioer(request).then((response) => {
       setRisikoscenarioer(
         risikoscenarioer.filter(
-          (risikoscenario) => !selectedRisikoscenarioer.includes(risikoscenario.id)
+          (risikoscenario) => !selectedRisikoscenarier.includes(risikoscenario.id)
         )
       )
       setRisikoscenarioForKrav([...risikoscenarioForKrav, ...response])
@@ -58,7 +58,8 @@ export const LeggTilEksisterendeRisikoscenario = (props: IProps) => {
 
   useEffect(() => {
     setTimeout(() => {
-      const element = document.getElementById('kravTitle')
+      const element: HTMLElement | null = document.getElementById('kravTitle')
+
       if (element) {
         element.scrollIntoView({ behavior: 'instant' })
       }
@@ -68,7 +69,7 @@ export const LeggTilEksisterendeRisikoscenario = (props: IProps) => {
   return (
     <div>
       <Formik
-        onSubmit={(values) => {
+        onSubmit={(values: IKravRisikoscenarioRelasjon) => {
           submit(values)
           setIsLeggTilEksisterendeMode(false)
         }}
@@ -83,20 +84,18 @@ export const LeggTilEksisterendeRisikoscenario = (props: IProps) => {
               {(fieldProps: FieldProps) => (
                 <Select
                   label="Legg til eksisterende risikoscenario"
-                  onChange={(event) => {
+                  onChange={(event: ChangeEvent<HTMLSelectElement>) => {
                     if (event.target.value) {
                       addRisikoscenario(event.target.value, fieldProps)
                     }
                   }}
                 >
                   <option value=""></option>
-                  {risikoscenarioer.map((risikoscenario) => {
-                    return (
-                      <option key={risikoscenario.id} value={risikoscenario.id}>
-                        {risikoscenario.navn}
-                      </option>
-                    )
-                  })}
+                  {risikoscenarioer.map((risikoscenario: IRisikoscenario) => (
+                    <option key={risikoscenario.id} value={risikoscenario.id}>
+                      {risikoscenario.navn}
+                    </option>
+                  ))}
                 </Select>
               )}
             </Field>
@@ -105,9 +104,10 @@ export const LeggTilEksisterendeRisikoscenario = (props: IProps) => {
               {(fieldProps: FieldProps) => (
                 <VStack gap="10" className="mt-3">
                   <Chips>
-                    {selectedRisikoscenarioer.map((selectedRisikoscenario) => {
-                      const data = risikoscenarioer.filter(
-                        (risikoscenario) => risikoscenario.id === selectedRisikoscenario
+                    {selectedRisikoscenarier.map((selectedRisikoscenario: string) => {
+                      const data: IRisikoscenario[] = risikoscenarioer.filter(
+                        (risikoscenario: IRisikoscenario) =>
+                          risikoscenario.id === selectedRisikoscenario
                       )
                       return (
                         <Chips.Removable
