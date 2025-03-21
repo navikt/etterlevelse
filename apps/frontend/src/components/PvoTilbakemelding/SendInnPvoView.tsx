@@ -33,6 +33,7 @@ export const SendInnPvoView = (props: IProps) => {
   )
 
   const submit = async (submittedValues: IPvoTilbakemelding) => {
+    //backend vil oppdatere statusen til PVk dokument til 'VURDERT_AV_PVO', dersom statusen til PVO tilbakemelding = 'FERDIG'
     await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
       .then(async (response) => {
         if (response) {
