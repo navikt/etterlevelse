@@ -6,7 +6,6 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonGraphQlResponse;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.graphql.GraphQLTestBase;
@@ -16,31 +15,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.UUID;
 
 public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
-
-    private EtterlevelseDokumentasjon generateEtterlevelseDok(List<String> irrelevans) {
-        return etterlevelseDokumentasjonService.save(
-                EtterlevelseDokumentasjonRequest.builder()
-                        .title("test dokumentasjon")
-                        .etterlevelseNummer(101)
-                        .knyttetTilVirkemiddel(false)
-                        .virkemiddelId("")
-                        .beskrivelse("")
-                        .forGjenbruk(false)
-                        .teams(List.of(""))
-                        .resources(List.of(""))
-                        .risikoeiere(List.of(""))
-                        .irrelevansFor(irrelevans)
-                        .update(false)
-                        .behandlerPersonopplysninger(true)
-                        .behandlingIds(List.of(""))
-                        .prioritertKravNummer(List.of())
-                        .varslingsadresser(List.of())
-                        .build()
-        );
-    }
 
     @BeforeEach
     void setUp() {
@@ -53,7 +29,8 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
         @SneakyThrows
         void statsForEtterlevelseDokOnlyRelevenatKrav() {
 
-            EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of("INNSYN"));
+            EtterlevelseDokumentasjon eDok1 = createEtterlevelseDokumentasjon();
+            EtterlevelseDokumentasjon eDok2 = createEtterlevelseDokumentasjon();
 
             kravStorageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
@@ -68,15 +45,15 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
 
             etterlevelseService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
-                    .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
+                    .etterlevelseDokumentasjonId(eDok1.getId())
                     .build());
             etterlevelseService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
-                    .etterlevelseDokumentasjonId(UUID.randomUUID().toString())
+                    .etterlevelseDokumentasjonId(eDok2.getId())
                     .build());
 
             graphQltester.documentName("statsForEtterlevelseDokumentasjon")
-                    .variable("etterlevelseDokumentasjonId", String.valueOf(etterlevelseDokumentasjon.getId()))
+                    .variable("etterlevelseDokumentasjonId", String.valueOf(eDok1.getId()))
                     .execute().path("etterlevelseDokumentasjon").entity(RestResponsePage.class)
                     .satisfies(page -> {
                         Assertions.assertEquals( 1, page.getContent().size());
@@ -91,7 +68,8 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
         @SneakyThrows
         void statsForEtterlevelseDokOnlyRelevenatEtterlevelser() {
 
-            EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of("INNSYN"));
+            EtterlevelseDokumentasjon eDok1 = createEtterlevelseDokumentasjon();
+            EtterlevelseDokumentasjon eDok2 = createEtterlevelseDokumentasjon();
 
             kravStorageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
@@ -101,15 +79,15 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
 
             etterlevelseService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
-                    .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
+                    .etterlevelseDokumentasjonId(eDok1.getId())
                     .build());
             etterlevelseService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
-                    .etterlevelseDokumentasjonId(UUID.randomUUID().toString())
+                    .etterlevelseDokumentasjonId(eDok2.getId())
                     .build());
 
             graphQltester.documentName("statsForEtterlevelseDokumentasjon")
-                    .variable("etterlevelseDokumentasjonId", String.valueOf(etterlevelseDokumentasjon.getId()))
+                    .variable("etterlevelseDokumentasjonId", String.valueOf(eDok1.getId()))
                     .execute().path("etterlevelseDokumentasjon").entity(RestResponsePage.class).satisfies(page -> {
                         Assertions.assertEquals( 1, page.getContent().size());
                     })

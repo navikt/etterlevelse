@@ -14,6 +14,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.copyOf;
 import static no.nav.data.common.utils.StringUtils.formatList;
@@ -29,7 +30,7 @@ public class EtterlevelseRequest implements RequestElement, KravId {
     private String id;
 
     private String behandlingId;
-    private String etterlevelseDokumentasjonId;
+    private UUID etterlevelseDokumentasjonId;
     private Integer kravNummer;
     private Integer kravVersjon;
 
@@ -47,7 +48,6 @@ public class EtterlevelseRequest implements RequestElement, KravId {
     public void format() {
         setId(trimToNull(id));
         setBehandlingId(trimToNull(behandlingId));
-        setEtterlevelseDokumentasjonId(trimToNull(etterlevelseDokumentasjonId));
         setStatusBegrunnelse(trimToNull(statusBegrunnelse));
         setDokumentasjon(formatList(dokumentasjon));
         setSuksesskriterieBegrunnelser(copyOf(suksesskriterieBegrunnelser));

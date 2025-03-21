@@ -10,6 +10,7 @@ import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;
@@ -52,7 +53,6 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private List<Varslingsadresse> varslingsadresser;
     @Override
     public void format() {
-        setId(trimToNull(id));
         setTitle(trimToNull(title));
         setBeskrivelse(trimToNull(beskrivelse));
         setGjenbrukBeskrivelse(trimToNull(gjenbrukBeskrivelse));
@@ -69,7 +69,6 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(EtterlevelseDokumentasjonRequest.Fields.id, id);
         validator.checkId(this);
         validator.checkCodelists(EtterlevelseDokumentasjonRequest.Fields.irrelevansFor, irrelevansFor, ListName.RELEVANS);
         validator.checkCodelist(Fields.avdeling, avdeling, ListName.AVDELING);
@@ -78,24 +77,25 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     
     // Updates all fields of an EtterlevelseDokumentasjon except id, version and changestamp
     public void mergeInto(EtterlevelseDokumentasjon eDok) {
+        EtterlevelseDokumentasjonData eDokData = eDok.getEtterlevelseDokumentasjonData();
         eDok.setEtterlevelseNummer(etterlevelseNummer);
-        eDok.setTitle(title);
-        eDok.setBehandlingIds(copyOf(behandlingIds));
-        eDok.setBeskrivelse(beskrivelse);
-        eDok.setGjenbrukBeskrivelse(gjenbrukBeskrivelse);
-        eDok.setTilgjengeligForGjenbruk(tilgjengeligForGjenbruk);
-        eDok.setVirkemiddelId(virkemiddelId);
-        eDok.setIrrelevansFor(copyOf(irrelevansFor));
-        eDok.setTeams(copyOf(teams));
-        eDok.setResources(copyOf(resources));
-        eDok.setRisikoeiere(copyOf(risikoeiere));
-        eDok.setBehandlerPersonopplysninger(behandlerPersonopplysninger);
-        eDok.setKnyttetTilVirkemiddel(knyttetTilVirkemiddel);
-        eDok.setForGjenbruk(forGjenbruk);
-        eDok.setAvdeling(avdeling);
-        eDok.setPrioritertKravNummer(copyOf(prioritertKravNummer));
-        eDok.setVarslingsadresser(copyOf(varslingsadresser));
-        eDok.setRisikovurderinger(copyOf(risikovurderinger));
+        eDokData.setTitle(title);
+        eDokData.setBehandlingIds(copyOf(behandlingIds));
+        eDokData.setBeskrivelse(beskrivelse);
+        eDokData.setGjenbrukBeskrivelse(gjenbrukBeskrivelse);
+        eDokData.setTilgjengeligForGjenbruk(tilgjengeligForGjenbruk);
+        eDokData.setVirkemiddelId(virkemiddelId);
+        eDokData.setIrrelevansFor(copyOf(irrelevansFor));
+        eDokData.setTeams(copyOf(teams));
+        eDokData.setResources(copyOf(resources));
+        eDokData.setRisikoeiere(copyOf(risikoeiere));
+        eDokData.setBehandlerPersonopplysninger(behandlerPersonopplysninger);
+        eDokData.setKnyttetTilVirkemiddel(knyttetTilVirkemiddel);
+        eDokData.setForGjenbruk(forGjenbruk);
+        eDokData.setAvdeling(avdeling);
+        eDokData.setPrioritertKravNummer(copyOf(prioritertKravNummer));
+        eDokData.setVarslingsadresser(copyOf(varslingsadresser));
+        eDokData.setRisikovurderinger(copyOf(risikovurderinger));
     }
 
 }

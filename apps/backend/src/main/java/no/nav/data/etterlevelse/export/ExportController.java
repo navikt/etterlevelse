@@ -161,7 +161,7 @@ public class ExportController {
 
         if (etterlevelseId != null) {
             Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
-            filename += etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId())).getEtterlevelseNummer() + ".docx";
+            filename += etterlevelseDokumentasjonService.get(etterlevelse.getEtterlevelseDokumentasjonId()).getEtterlevelseNummer() + ".docx";
             log.info("Exporting 1 etterlevelse to doc");
             doc = etterlevelseDokumentasjonToDoc.generateDocForEtterlevelse(etterlevelseId);
         } else if (etterlevelseDokumentasjonId != null) {

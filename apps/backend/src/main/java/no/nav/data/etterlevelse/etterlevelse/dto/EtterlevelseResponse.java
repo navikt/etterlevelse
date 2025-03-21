@@ -30,7 +30,7 @@ public class EtterlevelseResponse {
     private Integer version;
 
     private String behandlingId;
-    private String etterlevelseDokumentasjonId;
+    private UUID etterlevelseDokumentasjonId;
     private Integer kravNummer;
     private Integer kravVersjon;
 
@@ -44,6 +44,9 @@ public class EtterlevelseResponse {
     private EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon;
     
     public static EtterlevelseResponse buildFrom(Etterlevelse etterlevelse) {
+        if (etterlevelse == null) {
+            return null;
+        }
         return EtterlevelseResponse.builder()
                 .id(etterlevelse.getId())
                 .changeStamp(ChangeStampResponse.buildFrom(etterlevelse))

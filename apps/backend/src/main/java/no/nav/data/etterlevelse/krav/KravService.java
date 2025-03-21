@@ -213,9 +213,9 @@ public class KravService extends DomainService<Krav> {
         List<EtterlevelseDokumentasjon> etterlevelseDokumentasjonList = new ArrayList<>();
 
         if (isNewVersion) {
-            List<String> etterlevelseDokumentasjonIds = etterlevelseService.getByKravNummer(krav.getKravNummer(), krav.getKravVersjon() -1 ).stream().map(Etterlevelse::getEtterlevelseDokumentasjonId).toList();
+            List<UUID> etterlevelseDokumentasjonIds = etterlevelseService.getByKravNummer(krav.getKravNummer(), krav.getKravVersjon() -1 ).stream().map(Etterlevelse::getEtterlevelseDokumentasjonId).toList();
             etterlevelseDokumentasjonIds.forEach(id -> {
-                var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(id));
+                var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(id);
                 etterlevelseDokumentasjonList.add(etterlevelseDokumentasjon);
             });
             return etterlevelseDokumentasjonList;

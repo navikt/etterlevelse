@@ -11,6 +11,8 @@
     <logger name="org.springframework.boot.test.context.SpringBootTestContextBootstrapper" level="WARN"/>
     <logger name="org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTestContextBootstrapper" level="WARN"/>
     <logger name="org.springframework.test.context.support.AbstractContextLoader" level="WARN"/>    <!--    <logger name="org.hibernate.SQL" level="DEBUG"/>-->
+    <!-- Enable to log queries etc <logger name="org.springframework.jdbc" level="TRACE"/> -->
+
 <!--    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>-->
 
     <root level="INFO">

@@ -164,7 +164,7 @@ public class EtterlevelseArkivController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
-        if (etterlevelseService.getByEtterlevelseDokumentasjon(request.getEtterlevelseDokumentasjonId()).isEmpty()) {
+        if (etterlevelseService.getByEtterlevelseDokumentasjon(UUID.fromString(request.getEtterlevelseDokumentasjonId())).isEmpty()) {
             log.info("Ingen dokumentasjon på etterlevelse dokumentasjon med id: " + request.getEtterlevelseDokumentasjonId());
             throw new ValidationException("Kan ikke arkivere en etterlevelse dokumentasjon som ikke har dokumentert innhold");
         } else {
@@ -188,7 +188,7 @@ public class EtterlevelseArkivController {
     public ResponseEntity<EtterlevelseArkivResponse> createEtterlevelseArkiv(@RequestBody EtterlevelseArkivRequest request) {
         log.info("Create etterlevelseArkiv");
 
-        List<Etterlevelse> etterlevelseList = etterlevelseService.getByEtterlevelseDokumentasjon(request.getEtterlevelseDokumentasjonId());
+        List<Etterlevelse> etterlevelseList = etterlevelseService.getByEtterlevelseDokumentasjon(UUID.fromString(request.getEtterlevelseDokumentasjonId()));
         if (etterlevelseList.isEmpty()) {
             log.info("Ingen etterlevelse dokumentasjon med id: " + request.getEtterlevelseDokumentasjonId());
             throw new ValidationException("Kan ikke arkivere uten ferdig dokumentert innhold");
@@ -214,7 +214,7 @@ public class EtterlevelseArkivController {
 
         EtterlevelseArkiv etterlevelseArkivToUpate = etterlevelseArkivService.get(id);
 
-        if (etterlevelseService.getByEtterlevelseDokumentasjon(request.getEtterlevelseDokumentasjonId()).isEmpty()) {
+        if (etterlevelseService.getByEtterlevelseDokumentasjon(UUID.fromString(request.getEtterlevelseDokumentasjonId())).isEmpty()) {
             log.info("Ingen etterlevelse dokumentasjon med id: " + request.getEtterlevelseDokumentasjonId());
             throw new ValidationException("Kan ikke arkivere uten ferdig dokumentert innhold");
         } else if (etterlevelseArkivToUpate.getStatus() == EtterlevelseArkivStatus.BEHANDLER_ARKIVERING) {

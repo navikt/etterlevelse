@@ -6,10 +6,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.common.utils.HibernateUtils;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,26 +35,28 @@ public class EtterlevelseDokumentasjonGraphQlResponse extends EtterlevelseDokume
     private EtterlevelseDokumentasjonStats stats;
 
     public static EtterlevelseDokumentasjonGraphQlResponse buildFrom(EtterlevelseDokumentasjon etterlevelseDokumentasjon) {
+        HibernateUtils.initialize(etterlevelseDokumentasjon); // Fully loads input if it is a detached proxy
+        EtterlevelseDokumentasjonData eDokData = etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData();
         return EtterlevelseDokumentasjonGraphQlResponse.builder()
                 .id(etterlevelseDokumentasjon.getId())
-                .changeStamp(etterlevelseDokumentasjon.convertChangeStampResponse())
+                .changeStamp(ChangeStampResponse.buildFrom(etterlevelseDokumentasjon))
                 .version(etterlevelseDokumentasjon.getVersion())
-                .etterlevelseNummer(etterlevelseDokumentasjon.getEtterlevelseNummer())
-                .title(etterlevelseDokumentasjon.getTitle())
-                .beskrivelse(etterlevelseDokumentasjon.getBeskrivelse())
-                .gjenbrukBeskrivelse(etterlevelseDokumentasjon.getGjenbrukBeskrivelse())
-                .tilgjengeligForGjenbruk(etterlevelseDokumentasjon.isTilgjengeligForGjenbruk())
-                .behandlingIds(etterlevelseDokumentasjon.getBehandlingIds() != null ? copyOf(etterlevelseDokumentasjon.getBehandlingIds()) : List.of())
-                .virkemiddelId(etterlevelseDokumentasjon.getVirkemiddelId())
+                .etterlevelseNummer(eDokData.getEtterlevelseNummer())
+                .title(eDokData.getTitle())
+                .beskrivelse(eDokData.getBeskrivelse())
+                .gjenbrukBeskrivelse(eDokData.getGjenbrukBeskrivelse())
+                .tilgjengeligForGjenbruk(eDokData.isTilgjengeligForGjenbruk())
+                .behandlingIds(eDokData.getBehandlingIds() != null ? copyOf(eDokData.getBehandlingIds()) : List.of())
+                .virkemiddelId(eDokData.getVirkemiddelId())
                 .irrelevansFor(etterlevelseDokumentasjon.irrelevantForAsCodes())
-                .prioritertKravNummer(etterlevelseDokumentasjon.getPrioritertKravNummer() != null ? copyOf(etterlevelseDokumentasjon.getPrioritertKravNummer()) : List.of())
-                .forGjenbruk(etterlevelseDokumentasjon.isForGjenbruk())
-                .teams(etterlevelseDokumentasjon.getTeams() != null ? copyOf(etterlevelseDokumentasjon.getTeams()) : List.of())
-                .resources(etterlevelseDokumentasjon.getResources() != null ? copyOf(etterlevelseDokumentasjon.getResources()) : List.of())
-                .behandlerPersonopplysninger(etterlevelseDokumentasjon.isBehandlerPersonopplysninger())
-                .knyttetTilVirkemiddel(etterlevelseDokumentasjon.isKnyttetTilVirkemiddel())
-                .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, etterlevelseDokumentasjon.getAvdeling()))
-                .varslingsadresser(etterlevelseDokumentasjon.getVarslingsadresser() != null ? copyOf(etterlevelseDokumentasjon.getVarslingsadresser()): List.of())
+                .prioritertKravNummer(eDokData.getPrioritertKravNummer() != null ? copyOf(etterlevelseDokumentasjon.getPrioritertKravNummer()) : List.of())
+                .forGjenbruk(eDokData.isForGjenbruk())
+                .teams(eDokData.getTeams() != null ? copyOf(eDokData.getTeams()) : List.of())
+                .resources(eDokData.getResources() != null ? copyOf(eDokData.getResources()) : List.of())
+                .behandlerPersonopplysninger(eDokData.isBehandlerPersonopplysninger())
+                .knyttetTilVirkemiddel(eDokData.isKnyttetTilVirkemiddel())
+                .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, eDokData.getAvdeling()))
+                .varslingsadresser(eDokData.getVarslingsadresser() != null ? copyOf(eDokData.getVarslingsadresser()): List.of())
                 .build();
     }
 }

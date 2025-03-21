@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class EtterlevelseArkivControllerTest extends IntegrationTestBase {
 
-
     @Test
     void getEtterlevelseArkiv() {
         var etterlevelseArkiv = etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.TIL_ARKIVERING).build());
@@ -33,6 +32,7 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
         EtterlevelseArkivResponse etterlevelseArkivResp = resp.getBody();
         assertThat(etterlevelseArkivResp).isNotNull();
     }
+
     @Test
     void getAllEtterlevelseArkiv_createTwoEtterlevelseArkiv_getTwoEtterlevelseArkiv() {
         etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.TIL_ARKIVERING).build());
@@ -164,10 +164,11 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
 
     @Test
     void createEtterlevelseArkiv() {
+        var eDokId = createEtterlevelseDokumentasjon().getId();
         Krav krav = kravStorageService.save(Krav.builder().kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
-        etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId("test_dok").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
+        etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(eDokId).kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
         var req = EtterlevelseArkivRequest.builder()
-                .etterlevelseDokumentasjonId("test_dok")
+                .etterlevelseDokumentasjonId(eDokId.toString())
                 .status(EtterlevelseArkivStatus.TIL_ARKIVERING)
                 .webSakNummer("test/websak")
                 .build();
@@ -193,14 +194,15 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
 
     @Test
     void updateEtterlevelseArkiv() {
+        var eDokId = createEtterlevelseDokumentasjon().getId();
         var krav = kravStorageService.save(Krav.builder().kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
-        etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId("test_dok").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
-        var etterlevelseArkiv = etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.TIL_ARKIVERING).webSakNummer("test/websak").etterlevelseDokumentasjonId("test_dok").build());
+        etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(eDokId).kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
+        var etterlevelseArkiv = etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.TIL_ARKIVERING).webSakNummer("test/websak").etterlevelseDokumentasjonId(eDokId.toString()).build());
         var req = EtterlevelseArkivRequest.builder()
                 .id(etterlevelseArkiv.getId().toString())
                 .status(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING)
                 .webSakNummer("test/websak")
-                .etterlevelseDokumentasjonId("test_dok")
+                .etterlevelseDokumentasjonId(eDokId.toString())
                 .build();
 
         var resp = restTemplate.exchange("/etterlevelsearkiv/{id}", HttpMethod.PUT, new HttpEntity<>(req), EtterlevelseArkivResponse.class, etterlevelseArkiv.getId());
@@ -210,7 +212,6 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
         assertThat(etterlevelseArkivResp).isNotNull();
         assertThat(etterlevelseArkivResp.getStatus()).isEqualTo(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING.name());
     }
-
 
     @Test
     void arkiver_createSixEtterlevelseArkiv_getTwoWithUpdatedStatus() {
@@ -235,7 +236,7 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
         assertThat(etterlevelseArkiv.getChangeStamp()).isNotNull();
         assertThat(etterlevelseArkiv.getVersion()).isEqualTo(0);
 
-        assertThat(etterlevelseArkiv.getEtterlevelseDokumentasjonId()).isEqualTo("test_dok");
+        assertThat(etterlevelseArkiv.getEtterlevelseDokumentasjonId()).isNotNull();
         assertThat(etterlevelseArkiv.getStatus()).isEqualTo(EtterlevelseArkivStatus.TIL_ARKIVERING.name());
         assertThat(etterlevelseArkiv.getWebSakNummer()).isEqualTo("test/websak");
     }

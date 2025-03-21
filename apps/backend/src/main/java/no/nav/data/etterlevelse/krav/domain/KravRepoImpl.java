@@ -64,33 +64,33 @@ public class KravRepoImpl implements KravRepoCustom {
         }
 
         if (filter.getEtterlevelseDokumentasjonId() != null ) {
-            kravIdSafeList.addAll(convert(etterlevelseDokumentasjonRepo.findKravIdsForEtterlevelseDokumentasjon(filter.getEtterlevelseDokumentasjonId()), KravId::kravId));
+            kravIdSafeList.addAll(convert(etterlevelseDokumentasjonRepo.findKravIdsForEtterlevelseDokumentasjon(UUID.fromString(filter.getEtterlevelseDokumentasjonId())), KravId::kravId));
             if (!filter.isEtterlevelseDokumentasjonIrrevantKrav()) {
                 query += """
                         and (
                          exists(select 1
-                                   from etterlevelse ettlev
-                                   where ettlev.krav_nummer = cast(krav.data ->> 'kravNummer' as integer)
-                                     and ettlev.krav_versjon = cast(krav.data ->> 'kravVersjon' as integer)
-                                     and ettlev.etterlevelse_dokumentasjon_id = :etterlevelseDokumentasjonId
-                                ) 
-                        or jsonb_array_length(data -> 'relevansFor') = 0
-                        or jsonb_array_length((data -> 'relevansFor') - array(select jsonb_array_elements_text(data -> 'irrelevansFor') 
-                            from generic_storage where data ->> 'id' = :etterlevelseDokumentasjonId
-                            and type = 'EtterlevelseDokumentasjon')) > 0
+                                from etterlevelse ettlev
+                                where ettlev.krav_nummer = cast(krav.data ->> 'kravNummer' as integer)
+                                  and ettlev.krav_versjon = cast(krav.data ->> 'kravVersjon' as integer)
+                                  and ettlev.etterlevelse_dokumentasjon_id = :etterlevelseDokumentasjonId
+                         ) 
+                         or jsonb_array_length(data -> 'relevansFor') = 0
+                         or jsonb_array_length((data -> 'relevansFor') - array(
+                            select jsonb_array_elements_text(data -> 'irrelevansFor') 
+                            from etterlevelse_dokumentasjon where id = :etterlevelseDokumentasjonId)
+                         ) > 0
                         )
                         """;
-                        par.addValue("etterlevelseDokumentasjonId", filter.getEtterlevelseDokumentasjonId());
             } else {
                 query += """
                         and data -> 'relevansFor' ??| array(
                          select jsonb_array_elements_text(data -> 'irrelevansFor')
-                          from generic_storage
-                          where data ->> 'id' = :etterlevelseDokumentasjonId
-                            and type = 'EtterlevelseDokumentasjon')
+                         from etterlevelse_dokumentasjon
+                         where id = :etterlevelseDokumentasjonId
+                        )
                         """;
-                par.addValue("etterlevelseDokumentasjonId", filter.getEtterlevelseDokumentasjonId());
             }
+            par.addValue("etterlevelseDokumentasjonId", UUID.fromString(filter.getEtterlevelseDokumentasjonId()));
         }
 
         if (filter.getUnderavdeling() != null) {

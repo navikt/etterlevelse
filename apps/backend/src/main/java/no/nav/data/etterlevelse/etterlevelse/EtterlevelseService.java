@@ -69,19 +69,19 @@ public class EtterlevelseService {
         return repo.findByKravNummer(kravNummer, kravVersjon);
     }
 
-    public List<Etterlevelse> getByEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId) {
+    public List<Etterlevelse> getByEtterlevelseDokumentasjon(UUID etterlevelseDokumentasjonId) {
         return repo.findByEtterlevelseDokumensjon(etterlevelseDokumentasjonId);
     }
 
-    public List<Etterlevelse> getByEtterlevelseDokumentasjonIdAndKravNummer(String etterlevelseDokumentasjonId, int kravNummer) {
+    public List<Etterlevelse> getByEtterlevelseDokumentasjonIdAndKravNummer(UUID etterlevelseDokumentasjonId, int kravNummer) {
         return repo.findByEtterlevelseDokumentasjonIdAndKravNummer(etterlevelseDokumentasjonId, kravNummer);
     }
 
-    public Optional<Etterlevelse> getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(String etterlevelseDokumentasjonId, int kravNummer, int kravVersjon) {
+    public Optional<Etterlevelse> getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(UUID etterlevelseDokumentasjonId, int kravNummer, int kravVersjon) {
         return repo.findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(etterlevelseDokumentasjonId, kravNummer, kravVersjon);
     }
 
-    public Map<String, List<Etterlevelse>> getByEtterlevelseDokumentasjoner(Collection<String> etterlevelseDokumentasjonIds) {
+    public Map<UUID, List<Etterlevelse>> getByEtterlevelseDokumentasjoner(Collection<UUID> etterlevelseDokumentasjonIds) {
         return groupBy(repo.findByEtterlevelseDokumentasjoner(new ArrayList<>(etterlevelseDokumentasjonIds)), Etterlevelse::getEtterlevelseDokumentasjonId);
     }
 
@@ -107,7 +107,7 @@ public class EtterlevelseService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void copyEtterlevelse(String fromDocumentId, String toDocumentId) {
+    public void copyEtterlevelse(UUID fromDocumentId, UUID toDocumentId) {
         var etterlevelseToCopy = getByEtterlevelseDokumentasjon(fromDocumentId);
         etterlevelseToCopy.forEach(etterlevelse -> {
             var krav = kravRepo.findByKravNummer(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon()).map(GenericStorage::getDomainObjectData).orElse(new Krav());
@@ -139,7 +139,7 @@ public class EtterlevelseService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteByEtterlevelseDokumentasjonId(String etterlevelseDokumentasjonId) {
+    public void deleteByEtterlevelseDokumentasjonId(UUID etterlevelseDokumentasjonId) {
         List<Etterlevelse> etterlevelser = repo.findByEtterlevelseDokumensjon(etterlevelseDokumentasjonId);
         etterlevelser.forEach(e -> log.info("deleting etterlevelse with id={}, connected to etterlevelse dokumentasjon with id={}", e.getId(), etterlevelseDokumentasjonId));
         repo.deleteAll(etterlevelser);

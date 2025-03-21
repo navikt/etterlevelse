@@ -37,7 +37,7 @@ public class Etterlevelse extends Auditable implements KravId {
     private String behandlingId;
 
     @Column(name = "ETTERLEVELSE_DOKUMENTASJON_ID", nullable = false)
-    private String etterlevelseDokumentasjonId;
+    private UUID etterlevelseDokumentasjonId;
 
     @Column(name = "KRAV_NUMMER", nullable = false)
     private Integer kravNummer;
