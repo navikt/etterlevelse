@@ -98,7 +98,7 @@ public class EtterlevelseDokumentasjonToDoc {
         }
     }
 
-    private List<EtterlevelseMedKravData> getEtterlevelseByFilter(String etterlevelseDokumentasjonId, List<String> statusKoder, List<String> lover) {
+    private List<EtterlevelseMedKravData> getEtterlevelseByFilter(UUID etterlevelseDokumentasjonId, List<String> statusKoder, List<String> lover) {
 
         List<Etterlevelse> etterlevelser = etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId);
         List<EtterlevelseMedKravData> etterlevelseMedKravData = new ArrayList<>();
@@ -133,7 +133,7 @@ public class EtterlevelseDokumentasjonToDoc {
 
         Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
 
-        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId()));
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelse.getEtterlevelseDokumentasjonId());
 
         var doc = new EtterlevelseDocumentBuilder();
 
@@ -149,13 +149,13 @@ public class EtterlevelseDokumentasjonToDoc {
         return doc.build();
     }
 
-    private void addUndocummentedEtterlevelseToList(List<EtterlevelseMedKravData> etterlevelseMedKravData, int kravNumber, int kravVersion, Optional<Krav> krav, String etterlevelseDokumentasjonId) {
+    private void addUndocummentedEtterlevelseToList(List<EtterlevelseMedKravData> etterlevelseMedKravData, int kravNumber, int kravVersion, Optional<Krav> krav, UUID etterlevelseDokumentasjonId) {
         etterlevelseMedKravData.add(
                 EtterlevelseMedKravData.builder()
                         .etterlevelseData(
                                 Etterlevelse.builder()
                                         .id(UUID.randomUUID())
-                                        .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId.toString())
+                                        .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
                                         .kravNummer(kravNumber)
                                         .kravVersjon(kravVersion)
                                         .build())
@@ -171,7 +171,7 @@ public class EtterlevelseDokumentasjonToDoc {
         List<CodeUsage> temaListe = codeUsageService.findCodeUsageOfList(ListName.TEMA).stream()
                 .sorted(Comparator.comparing(CodeUsage::getShortName)).toList();
 
-        List<EtterlevelseMedKravData> etterlevelseMedKravData = getEtterlevelseByFilter(etterlevelseDokumentasjonId.toString(), statusKoder, lover);
+        List<EtterlevelseMedKravData> etterlevelseMedKravData = getEtterlevelseByFilter(etterlevelseDokumentasjonId, statusKoder, lover);
 
         List<EtterlevelseMedKravData> filteredEtterlevelseMedKravData = new ArrayList<>();
 
@@ -194,7 +194,7 @@ public class EtterlevelseDokumentasjonToDoc {
 
                 //If no etterlevelse is found, create an empty etterlevelse for krav
                 if (etterlevelseMedKravNummer.isEmpty()) {
-                    addUndocummentedEtterlevelseToList(filteredEtterlevelseMedKravData, krav.getKravNummer(), krav.getKravVersjon(), Optional.of(krav), etterlevelseDokumentasjonId.toString());
+                    addUndocummentedEtterlevelseToList(filteredEtterlevelseMedKravData, krav.getKravNummer(), krav.getKravVersjon(), Optional.of(krav), etterlevelseDokumentasjonId);
                 } else {
                     filteredEtterlevelseMedKravData.add(etterlevelseMedKravNummer.get(0));
                 }
@@ -213,7 +213,7 @@ public class EtterlevelseDokumentasjonToDoc {
 
                 //If no etterlevelse is found, create an empty etterlevelse for krav
                 if (etterlevelseMedKravDataList.isEmpty()) {
-                    addUndocummentedEtterlevelseToList(filteredEtterlevelseMedKravData, krav.getKravNummer(), krav.getKravVersjon(), Optional.of(krav), etterlevelseDokumentasjonId.toString());
+                    addUndocummentedEtterlevelseToList(filteredEtterlevelseMedKravData, krav.getKravNummer(), krav.getKravVersjon(), Optional.of(krav), etterlevelseDokumentasjonId);
                 }
 
                 //check if krav has earlier version
@@ -230,7 +230,7 @@ public class EtterlevelseDokumentasjonToDoc {
                                     krav.getKravNummer(),
                                     currentTidligereVersjon,
                                     kravService.getByKravNummer(krav.getKravNummer(), currentTidligereVersjon),
-                                    etterlevelseDokumentasjonId.toString()
+                                    etterlevelseDokumentasjonId
                             );
                         }
                     }

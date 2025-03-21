@@ -98,7 +98,7 @@ public class KravGraphQlController {
         log.info("etterlevelse for krav {}.{}", nummer, versjon);
 
         if (onlyForEtterlevelseDokumentasjon || etterlevelseDokumentasjonId != null) {
-            String dokumentasjonId = etterlevelseDokumentasjonId != null ? etterlevelseDokumentasjonId.toString() : KravFilter.get(env, Fields.etterlevelseDokumentasjonId);
+            UUID dokumentasjonId = etterlevelseDokumentasjonId != null ? etterlevelseDokumentasjonId : UUID.fromString(KravFilter.get(env, Fields.etterlevelseDokumentasjonId));
             if (dokumentasjonId != null) {
                 try {
                     return etterlevelseService.getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(dokumentasjonId, krav.getKravNummer(), krav.getKravVersjon())
