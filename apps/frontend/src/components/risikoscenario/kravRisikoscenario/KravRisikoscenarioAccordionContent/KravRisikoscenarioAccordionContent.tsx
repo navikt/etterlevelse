@@ -220,7 +220,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
 
       {isEditModalOpen && (
         <RisikoscenarioModalForm
-          headerText="Redigér øvirg risikoscenario"
+          headerText="Redigér øvrig risikoscenario"
           isOpen={isEditModalOpen}
           setIsOpen={setIsEditModalOpen}
           submit={submit}

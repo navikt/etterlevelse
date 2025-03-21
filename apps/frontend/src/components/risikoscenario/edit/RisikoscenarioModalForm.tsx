@@ -51,7 +51,7 @@ export const RisikoscenarioModalForm = (props: IProps) => {
                 name="navn"
                 label="Navngi risikoscenarioet"
                 noPlaceholder
-                caption="Velg et navn som gjør scenarioet lett å skille fra andre "
+                caption="Velg et navn som gjør scenariet lett å skille fra andre "
               />
 
               <div className="mt-3">
