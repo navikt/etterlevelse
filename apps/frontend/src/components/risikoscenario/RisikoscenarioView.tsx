@@ -1,5 +1,6 @@
 import { LinkIcon } from '@navikt/aksel-icons'
 import { Alert, BodyLong, CopyButton, List, ReadMore } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import { useParams } from 'react-router'
 import { IRisikoscenario } from '../../constants'
 import { ExternalLink } from '../common/RouteLink'
@@ -8,14 +9,18 @@ import RisikoscenarioTag, {
   getSannsynlighetsnivaaText,
 } from './RisikoscenarioTag'
 
-interface IProps {
+type TProps = {
   risikoscenario: IRisikoscenario
   noCopyButton?: boolean
 }
 
-export const RisikoscenarioView = (props: IProps) => {
-  const { risikoscenario, noCopyButton } = props
-  const params = useParams<{ id?: string }>()
+export const RisikoscenarioView: FunctionComponent<TProps> = ({ risikoscenario, noCopyButton }) => {
+  const params: Readonly<
+    Partial<{
+      id?: string
+    }>
+  > = useParams<{ id?: string }>()
+
   return (
     <div>
       {!noCopyButton && (
@@ -108,4 +113,5 @@ export const RisikoscenarioView = (props: IProps) => {
     </div>
   )
 }
+
 export default RisikoscenarioView

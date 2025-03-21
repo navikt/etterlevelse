@@ -1,14 +1,14 @@
 import { Button, ErrorSummary, Modal } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
-import { useRef, useState } from 'react'
+import { FunctionComponent, useRef, useState } from 'react'
 import { mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../../constants'
-import { TextAreaField } from '../../common/Inputs'
-import { RisikoscenarioModalFormKonsekvensniva } from './RisikoscenarioModalFormKonsekvensniva/RisikoscenarioModalFormKonsekvensniva'
-import { RisikoscenarioModalFormSannsynlighet } from './RisikoscenarioModalFormSannsynlighet/RisikoscenarioModalFormSannsynlighet'
+import { RisikoscenarioBeskrivelse } from '../common/RisikoscenarioBeskrivelse/RisikoscenarioBeskrivelse'
+import { RisikoscenarioKonsekvensnivaa } from '../common/RisikoscenarioKonsekvensnivaa/RisikoscenarioKonsekvensnivaa'
+import { RisikoscenarioSannsynlighet } from '../common/RisikoscenarioSannsynlighet/RisikoscenarioSannsynlighet'
 import { risikoscenarioCreateValidation } from './RisikoscenarioSchemaValidation'
 
-interface IProps {
+type TProps = {
   headerText: string
   isOpen: boolean
   setIsOpen: (open: boolean) => void
@@ -16,8 +16,13 @@ interface IProps {
   submit: (risikoscenario: IRisikoscenario) => void
 }
 
-export const RisikoscenarioModalForm = (props: IProps) => {
-  const { headerText, isOpen, setIsOpen, submit, initialValues } = props
+export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
+  headerText,
+  isOpen,
+  setIsOpen,
+  submit,
+  initialValues,
+}) => {
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   const [validateOnBlur, setValidateOnBlur] = useState(false)
 
@@ -38,26 +43,11 @@ export const RisikoscenarioModalForm = (props: IProps) => {
         {({ submitForm, errors }) => (
           <Form>
             <Modal.Body>
-              <TextAreaField
-                rows={1}
-                name="navn"
-                label="Navngi risikoscenariet"
-                noPlaceholder
-                caption="Velg et navn som gjør scenariet lett å skille fra andre "
-              />
+              <RisikoscenarioBeskrivelse />
 
-              <div className="mt-3">
-                <TextAreaField
-                  rows={3}
-                  noPlaceholder
-                  label="Beskriv risikoscenariet"
-                  name="beskrivelse"
-                />
-              </div>
+              <RisikoscenarioSannsynlighet />
 
-              <RisikoscenarioModalFormSannsynlighet />
-
-              <RisikoscenarioModalFormKonsekvensniva />
+              <RisikoscenarioKonsekvensnivaa />
             </Modal.Body>
 
             {Object.values(errors).some(Boolean) && (
@@ -100,4 +90,5 @@ export const RisikoscenarioModalForm = (props: IProps) => {
     </Modal>
   )
 }
+
 export default RisikoscenarioModalForm

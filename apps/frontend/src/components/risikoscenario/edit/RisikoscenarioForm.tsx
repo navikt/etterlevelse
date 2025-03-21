@@ -1,26 +1,27 @@
-import { Button, ErrorSummary, Heading, Radio, RadioGroup } from '@navikt/ds-react'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import React, { RefObject, useState } from 'react'
+import { Button, ErrorSummary } from '@navikt/ds-react'
+import { Form, Formik } from 'formik'
+import { FunctionComponent, RefObject, useRef, useState } from 'react'
 import { mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../../constants'
-import { TextAreaField } from '../../common/Inputs'
-import { FormError } from '../../common/ModalSchema'
-import ReadMoreKonsekvensnivaa from '../ReadMoreKonsekvensnivaa'
-import ReadMoreSannsynlighetsnivaa from '../ReadMoreSannsynlighetsnivaa'
-import { RisikoscenarioSannsynlighetHeader } from '../common/KravRisikoscenarioHeaders'
+import { RisikoscenarioBeskrivelse } from '../common/RisikoscenarioBeskrivelse/RisikoscenarioBeskrivelse'
+import { RisikoscenarioKonsekvensnivaa } from '../common/RisikoscenarioKonsekvensnivaa/RisikoscenarioKonsekvensnivaa'
+import RisikoscenarioSannsynlighet from '../common/RisikoscenarioSannsynlighet/RisikoscenarioSannsynlighet'
 import { risikoscenarioCreateValidation } from './RisikoscenarioSchemaValidation'
 
-interface IProps {
+type TProps = {
   initialValues: Partial<IRisikoscenario>
   submit: (risikoscenario: IRisikoscenario) => void
   onClose: () => void
   formRef: RefObject<any>
 }
 
-export const RisikoscenarioForm = (props: IProps) => {
-  const { initialValues, submit, onClose, formRef } = props
-
-  const errorSummaryRef = React.useRef<HTMLDivElement>(null)
+export const RisikoscenarioForm: FunctionComponent<TProps> = ({
+  initialValues,
+  submit,
+  onClose,
+  formRef,
+}) => {
+  const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
   const [validateOnBlur, setValidateOnBlur] = useState(false)
 
   return (
@@ -36,96 +37,11 @@ export const RisikoscenarioForm = (props: IProps) => {
         {({ submitForm, errors }) => (
           <Form>
             <div>
-              <TextAreaField
-                rows={1}
-                name="navn"
-                label="Navngi risikoscenariet"
-                noPlaceholder
-                caption="Velg et navn som gjør scenarioet lett å skille fra andre"
-              />
+              <RisikoscenarioBeskrivelse />
 
-              <div className="mt-3">
-                <TextAreaField
-                  rows={3}
-                  noPlaceholder
-                  label="Beskriv risikoscenariet"
-                  name="beskrivelse"
-                />
-              </div>
+              <RisikoscenarioSannsynlighet />
 
-              <RisikoscenarioSannsynlighetHeader />
-
-              <ReadMoreSannsynlighetsnivaa />
-
-              <Field name="sannsynlighetsNivaa">
-                {(fieldProps: FieldProps) => (
-                  <RadioGroup
-                    legend="Vurdér risikoscenariets sannsynlighetsnivå"
-                    value={fieldProps.field.value}
-                    onChange={(value) => {
-                      fieldProps.form.setFieldValue('sannsynlighetsNivaa', value)
-                    }}
-                    error={
-                      fieldProps.form.errors['sannsynlighetsNivaa'] && (
-                        <FormError fieldName={'sannsynlighetsNivaa'} />
-                      )
-                    }
-                  >
-                    <Radio value={1}>Meget lite sannsynlig</Radio>
-                    <Radio value={2}>Lite sannsynlig</Radio>
-                    <Radio value={3}>Moderat sannsynlig</Radio>
-                    <Radio value={4}>Sannsynlig</Radio>
-                    <Radio value={5}>Nesten sikkert</Radio>
-                  </RadioGroup>
-                )}
-              </Field>
-
-              <div className="mt-3">
-                <TextAreaField
-                  rows={3}
-                  noPlaceholder
-                  label="Begrunn sannsynlighetsnivået"
-                  name="sannsynlighetsNivaaBegrunnelse"
-                />
-              </div>
-
-              <Heading level="3" size="small" className="my-5">
-                Risikoscenariets konsekvensnivå
-              </Heading>
-
-              <ReadMoreKonsekvensnivaa />
-
-              <Field name="konsekvensNivaa">
-                {(fieldProps: FieldProps) => (
-                  <RadioGroup
-                    legend="Vurdér risikoscenariets konsekvensnivå"
-                    value={fieldProps.field.value}
-                    onChange={(value) => {
-                      fieldProps.form.setFieldValue('konsekvensNivaa', value)
-                    }}
-                    error={
-                      fieldProps.form.errors['konsekvensNivaa'] && (
-                        <FormError fieldName={'konsekvensNivaa'} />
-                      )
-                    }
-                  >
-                    <Radio value={1}>Ubetydelig</Radio>
-                    <Radio value={2}>Lav konsekvens</Radio>
-                    <Radio value={3}>Moderat konsekvens</Radio>
-                    <Radio value={4}>Alvorlig konsekvens</Radio>
-                    <Radio value={5}>Svært alvorlig konsekvens</Radio>
-                  </RadioGroup>
-                )}
-              </Field>
-
-              <div className="mt-3">
-                <TextAreaField
-                  rows={3}
-                  noPlaceholder
-                  label="Begrunn konsekvensnivået"
-                  name="konsekvensNivaaBegrunnelse"
-                />
-              </div>
+              <RisikoscenarioKonsekvensnivaa />
             </div>
 
             {Object.values(errors).some(Boolean) && (

@@ -1,6 +1,6 @@
 import { TrashIcon } from '@navikt/aksel-icons'
 import { Button, List, Modal } from '@navikt/ds-react'
-import { useState } from 'react'
+import { FunctionComponent, useState } from 'react'
 import {
   deleteRisikoscenario,
   fjernKravFraRisikoscenario,
@@ -10,7 +10,7 @@ import {
 import { deleteTiltak, getTiltak } from '../../../api/TiltakApi'
 import { IKravReference, IRisikoscenario, ITiltak } from '../../../constants'
 
-interface IProps {
+type TProps = {
   kravnummer: number
   risikoscenario: IRisikoscenario
   risikoscenarioer: IRisikoscenario[]
@@ -19,15 +19,14 @@ interface IProps {
   setRisikoscenarioForKrav: (state: IRisikoscenario[]) => void
 }
 
-export const FjernRisikoscenarioFraKrav = (props: IProps) => {
-  const {
-    kravnummer,
-    risikoscenario,
-    risikoscenarioer,
-    setRisikoscenarioer,
-    risikoscenarioForKrav,
-    setRisikoscenarioForKrav,
-  } = props
+export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
+  kravnummer,
+  risikoscenario,
+  risikoscenarioer,
+  setRisikoscenarioer,
+  risikoscenarioForKrav,
+  setRisikoscenarioForKrav,
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const submit = async (): Promise<void> => {

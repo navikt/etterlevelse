@@ -1,4 +1,4 @@
-import { Dispatch, RefObject, SetStateAction } from 'react'
+import { Dispatch, FunctionComponent, RefObject, SetStateAction } from 'react'
 import { IRisikoscenario, ITiltak, ITiltakRisikoscenarioRelasjon } from '../../../../constants'
 import TiltakReadMoreList from '../../../tiltak/TiltakReadMoreList'
 import LeggTilEksisterendeTiltak from '../../../tiltak/edit/LeggTilEksisterendeTiltak'
@@ -6,7 +6,7 @@ import TiltakForm from '../../../tiltak/edit/TiltakForm'
 import RisikoscenarioView from '../../RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '../../common/KravRisikoscenarioHeaders'
 
-interface IProps {
+type TProps = {
   activeRisikoscenario: IRisikoscenario
   userHasAccess: () => boolean
   risikoscenario: IRisikoscenario
@@ -24,7 +24,7 @@ interface IProps {
   submitExistingTiltak: (request: ITiltakRisikoscenarioRelasjon) => Promise<void>
 }
 
-export const KravRisikoscenarioAccordionContentEditMode = ({
+export const KravRisikoscenarioAccordionContentEditMode: FunctionComponent<TProps> = ({
   activeRisikoscenario,
   userHasAccess,
   risikoscenario,
@@ -40,7 +40,7 @@ export const KravRisikoscenarioAccordionContentEditMode = ({
   setIsAddExisitingMode,
   submitCreateTiltak,
   submitExistingTiltak,
-}: IProps) => (
+}) => (
   <div>
     <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true} />
 

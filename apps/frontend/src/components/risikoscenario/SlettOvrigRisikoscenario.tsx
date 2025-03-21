@@ -1,7 +1,7 @@
 import { TrashIcon } from '@navikt/aksel-icons'
 import { Button, List, Modal } from '@navikt/ds-react'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { FunctionComponent, useState } from 'react'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import {
   deleteRisikoscenario,
   getRisikoscenario,
@@ -10,23 +10,27 @@ import {
 import { deleteTiltak, getTiltak } from '../../api/TiltakApi'
 import { IRisikoscenario, ITiltak } from '../../constants'
 
-interface IProps {
+type TProps = {
   risikoscenario: IRisikoscenario
   tiltakList: ITiltak[]
   risikoscenarioer?: IRisikoscenario[]
   setRisikoscenarioer?: (state: IRisikoscenario[]) => void
 }
 
-export const SlettOvrigRisikoscenario = (props: IProps) => {
-  const { risikoscenario, tiltakList, risikoscenarioer, setRisikoscenarioer } = props
+export const SlettOvrigRisikoscenario: FunctionComponent<TProps> = ({
+  risikoscenario,
+  tiltakList,
+  risikoscenarioer,
+  setRisikoscenarioer,
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
 
-  const submit = async () => {
-    await getRisikoscenario(risikoscenario.id).then(async (response) => {
+  const submit = async (): Promise<void> => {
+    await getRisikoscenario(risikoscenario.id).then(async (response: IRisikoscenario) => {
       if (response.tiltakIds.length > 0) {
         for await (const tiltakId of response.tiltakIds) {
-          await getTiltak(tiltakId).then(async (tiltakResponse) => {
+          await getTiltak(tiltakId).then(async (tiltakResponse: ITiltak) => {
             await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(async () => {
               if (tiltakResponse.risikoscenarioIds.length === 1) {
                 await deleteTiltak(tiltakId)
@@ -36,10 +40,10 @@ export const SlettOvrigRisikoscenario = (props: IProps) => {
         }
       }
 
-      deleteRisikoscenario(response.id).then((response) => {
+      deleteRisikoscenario(response.id).then((response: IRisikoscenario) => {
         if (risikoscenarioer && setRisikoscenarioer) {
-          const updatedRisikoscenarioForKrav = risikoscenarioer.filter(
-            (risikoscenario) => risikoscenario.id !== response.id
+          const updatedRisikoscenarioForKrav: IRisikoscenario[] = risikoscenarioer.filter(
+            (risikoscenario: IRisikoscenario) => risikoscenario.id !== response.id
           )
 
           setRisikoscenarioer([...updatedRisikoscenarioForKrav])
@@ -75,25 +79,26 @@ export const SlettOvrigRisikoscenario = (props: IProps) => {
               <br />
               <br />
               {tiltakList
-                .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
-                .filter((tiltak) => tiltak.risikoscenarioIds.length === 1).length !== 0 && (
+                .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
+                .filter((tiltak: ITiltak) => tiltak.risikoscenarioIds.length === 1).length !==
+                0 && (
                 <List
                   as="ul"
                   title="Følgende tiltak er unike for dette risikoscenariet, og vil også slettes:"
                 >
                   {tiltakList
-                    .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
-                    .filter((tiltak) => tiltak.risikoscenarioIds.length === 1)
-                    .map((tiltak, index) => (
-                      <List.Item key={risikoscenario.id + '_' + tiltak.id + '_' + index}>
+                    .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
+                    .filter((tiltak: ITiltak) => tiltak.risikoscenarioIds.length === 1)
+                    .map((tiltak: ITiltak, index: number) => (
+                      <List.Item key={`${risikoscenario.id}_${tiltak.id}_${index}`}>
                         {tiltak.navn}
                       </List.Item>
                     ))}
                 </List>
               )}
               {tiltakList
-                .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
-                .filter((tiltak) => tiltak.risikoscenarioIds.length === 1).length !== 0 &&
+                .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
+                .filter((tiltak: ITiltak) => tiltak.risikoscenarioIds.length === 1).length !== 0 &&
                 'Hvis disse tiltakene er tenkt brukt ved andre scenarioer, koble tiltakene på de scenarioene først, og kom så tilbake og slette scenarioet.'}
             </Modal.Body>
           )}
@@ -120,4 +125,5 @@ export const SlettOvrigRisikoscenario = (props: IProps) => {
     </div>
   )
 }
+
 export default SlettOvrigRisikoscenario

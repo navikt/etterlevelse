@@ -1,22 +1,22 @@
 import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { RefObject } from 'react'
+import { FunctionComponent, RefObject } from 'react'
 import { mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../../constants'
 
-interface IProps {
+type TProps = {
   risikoscenario: IRisikoscenario
   submit: (risikoscenario: IRisikoscenario) => void
   formRef: RefObject<any>
   setIsIngenTilgangFormDirty: (state: boolean) => void
 }
 
-export const IngenTiltakField = ({
+export const IngenTiltakField: FunctionComponent<TProps> = ({
   risikoscenario,
   submit,
   formRef,
   setIsIngenTilgangFormDirty,
-}: IProps) => (
+}) => (
   <div>
     <Formik
       initialValues={mapRisikoscenarioToFormValue(risikoscenario)}

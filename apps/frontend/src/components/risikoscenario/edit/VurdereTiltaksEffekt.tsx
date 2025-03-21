@@ -11,13 +11,13 @@ import { IRisikoscenario } from '../../../constants'
 import { user } from '../../../services/User'
 import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
-import ReadMoreKonsekvensnivaa from '../ReadMoreKonsekvensnivaa'
-import ReadMoreSannsynlighetsnivaa from '../ReadMoreSannsynlighetsnivaa'
 import RisikoscenarioTag, {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
 } from '../RisikoscenarioTag'
 import { PVKFieldWrapper, TopBottomWrapper } from '../StylingLayout'
+import RisikoscenarioKonsekvensnivaaReadMore from '../common/RisikoscenarioKonsekvensnivaa/RisikoscenarioKonsekvensnivaaReadMore'
+import RisikoscenarioSannsynlighetReadMore from '../common/RisikoscenarioSannsynlighet/RisikoscenarioSannsynlighetReadMore'
 
 interface IProps {
   risikoscenario: IRisikoscenario
@@ -158,7 +158,7 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                         )
                       }
                     >
-                      <ReadMoreSannsynlighetsnivaa />
+                      <RisikoscenarioSannsynlighetReadMore />
                       <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
                         <Radio value={1}>Meget lite sannsynlig</Radio>
                         <Radio value={2}>Lite sannsynlig</Radio>
@@ -186,7 +186,7 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                         )
                       }
                     >
-                      <ReadMoreKonsekvensnivaa />
+                      <RisikoscenarioKonsekvensnivaaReadMore />
                       <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
                         <Radio value={1}>Ubetydelig</Radio>
                         <Radio value={2}>Lav konsekvens</Radio>

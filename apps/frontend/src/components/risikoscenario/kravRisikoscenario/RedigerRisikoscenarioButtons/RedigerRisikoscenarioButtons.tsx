@@ -1,9 +1,10 @@
 import { PencilIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import { IRisikoscenario } from '../../../../constants'
 import FjernRisikoscenarioFraKrav from '../../edit/FjernRisikoscenarioFraKrav'
 
-interface IProps {
+type TProps = {
   setIsEditModalOpen: (value: React.SetStateAction<boolean>) => void
   kravnummer: number
   risikoscenario: IRisikoscenario
@@ -13,7 +14,7 @@ interface IProps {
   setRisikoscenarioForKrav: (state: IRisikoscenario[]) => void
 }
 
-export const RedigerRisikoscenarioButtons = ({
+export const RedigerRisikoscenarioButtons: FunctionComponent<TProps> = ({
   setIsEditModalOpen,
   kravnummer,
   risikoscenario,
@@ -21,7 +22,7 @@ export const RedigerRisikoscenarioButtons = ({
   setRisikoscenarioer,
   risikoscenarioForKrav,
   setRisikoscenarioForKrav,
-}: IProps) => (
+}) => (
   <div className="mt-5">
     <Button
       variant="tertiary"

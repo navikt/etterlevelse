@@ -1,19 +1,21 @@
 import { Button } from '@navikt/ds-react'
-import { useState } from 'react'
+import { FunctionComponent, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { createRisikoscenario } from '../../../api/RisikoscenarioApi'
 import { IPvkDokument, IRisikoscenario } from '../../../constants'
 import RisikoscenarioModalForm from './RisikoscenarioModalForm'
 
-interface IProps {
+type TProps = {
   pvkDokument: IPvkDokument
   onSubmitStateUpdate?: (risikoscenario: IRisikoscenario) => void
 }
 
-export const CreateRisikoscenarioModal = (props: IProps) => {
-  const { pvkDokument, onSubmitStateUpdate } = props
-  const [isEdit, setIsEdit] = useState<boolean>(false)
+export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
+  pvkDokument,
+  onSubmitStateUpdate,
+}) => {
   const navigate: NavigateFunction = useNavigate()
+  const [isEdit, setIsEdit] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
     await createRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
