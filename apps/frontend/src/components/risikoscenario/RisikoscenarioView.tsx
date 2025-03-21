@@ -31,12 +31,12 @@ export const RisikoscenarioView = (props: IProps) => {
 
       {risikoscenario.generelScenario && (
         <BodyLong className="mt-8">
-          Dette risikoscenarioet er ikke tilknyttet spesifikke etterlevelseskrav.
+          Dette risikoscenariet er ikke tilknyttet spesifikke etterlevelseskrav.
         </BodyLong>
       )}
 
       {!risikoscenario.generelScenario && (
-        <ReadMore header="Vis etterlevelseskrav hvor risikoscenarioet inntreffer">
+        <ReadMore header="Vis etterlevelseskrav hvor risikoscenariet inntreffer">
           <List as="ul">
             {risikoscenario.relevanteKravNummer.map((relevantKrav, index) => {
               const kravHref = `/dokumentasjon/${params.id}/${relevantKrav.temaCode || 'PVK'}/RELEVANTE_KRAV/krav/${relevantKrav.kravNummer}/${relevantKrav.kravVersjon}`

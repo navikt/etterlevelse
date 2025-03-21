@@ -75,8 +75,8 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
 
             <BodyLong>
               I en PVK må dere vurdere sannsynligheten for at personvern ikke ivaretas på
-              tilstrekkelig vis, og konsekvensene det vil føre til. Hvor dette risikoscenarioet er
-              av betydning, må dere identifisere forebyggende tiltak som reduserer risiko.
+              tilstrekkelig vis, og konsekvensene det vil føre til. Hvor dette risikoscenariet er av
+              betydning, må dere identifisere forebyggende tiltak som reduserer risiko.
             </BodyLong>
 
             <Alert variant="info" inline className="mt-5">

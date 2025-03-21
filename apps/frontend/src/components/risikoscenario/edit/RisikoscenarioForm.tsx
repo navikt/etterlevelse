@@ -7,6 +7,7 @@ import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 import ReadMoreKonsekvensnivaa from '../ReadMoreKonsekvensnivaa'
 import ReadMoreSannsynlighetsnivaa from '../ReadMoreSannsynlighetsnivaa'
+import { RisikoscenarioSannsynlighetHeader } from '../common/KravRisikoscenarioHeaders'
 import { risikoscenarioCreateValidation } from './RisikoscenarioSchemaValidation'
 
 interface IProps {
@@ -38,7 +39,7 @@ export const RisikoscenarioForm = (props: IProps) => {
               <TextAreaField
                 rows={1}
                 name="navn"
-                label="Navngi risikoscenarioet"
+                label="Navngi risikoscenariet"
                 noPlaceholder
                 caption="Velg et navn som gjør scenarioet lett å skille fra andre"
               />
@@ -47,21 +48,19 @@ export const RisikoscenarioForm = (props: IProps) => {
                 <TextAreaField
                   rows={3}
                   noPlaceholder
-                  label="Beskriv risikoscenarioet"
+                  label="Beskriv risikoscenariet"
                   name="beskrivelse"
                 />
               </div>
 
-              <Heading level="3" size="small" className="my-5">
-                Risikoscenarioets sannsynlighet
-              </Heading>
+              <RisikoscenarioSannsynlighetHeader />
 
               <ReadMoreSannsynlighetsnivaa />
 
               <Field name="sannsynlighetsNivaa">
                 {(fieldProps: FieldProps) => (
                   <RadioGroup
-                    legend="Vurdér risikoscenarioets sannsynlighetsnivå"
+                    legend="Vurdér risikoscenariets sannsynlighetsnivå"
                     value={fieldProps.field.value}
                     onChange={(value) => {
                       fieldProps.form.setFieldValue('sannsynlighetsNivaa', value)
@@ -91,7 +90,7 @@ export const RisikoscenarioForm = (props: IProps) => {
               </div>
 
               <Heading level="3" size="small" className="my-5">
-                Risikoscenarioets konsekvensnivå
+                Risikoscenariets konsekvensnivå
               </Heading>
 
               <ReadMoreKonsekvensnivaa />
@@ -99,7 +98,7 @@ export const RisikoscenarioForm = (props: IProps) => {
               <Field name="konsekvensNivaa">
                 {(fieldProps: FieldProps) => (
                   <RadioGroup
-                    legend="Vurdér risikoscenarioets konsekvensnivå"
+                    legend="Vurdér risikoscenariets konsekvensnivå"
                     value={fieldProps.field.value}
                     onChange={(value) => {
                       fieldProps.form.setFieldValue('konsekvensNivaa', value)

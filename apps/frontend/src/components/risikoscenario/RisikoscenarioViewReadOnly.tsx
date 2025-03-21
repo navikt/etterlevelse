@@ -1,8 +1,8 @@
-import {LinkIcon} from '@navikt/aksel-icons'
-import {BodyLong, CopyButton, List, ReadMore} from '@navikt/ds-react'
-import {useParams} from 'react-router'
-import {IRisikoscenario} from '../../constants'
-import {ExternalLink} from '../common/RouteLink'
+import { LinkIcon } from '@navikt/aksel-icons'
+import { BodyLong, CopyButton, List, ReadMore } from '@navikt/ds-react'
+import { useParams } from 'react-router'
+import { IRisikoscenario } from '../../constants'
+import { ExternalLink } from '../common/RouteLink'
 import RisikoscenarioTag, {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
@@ -14,7 +14,7 @@ interface IProps {
 }
 
 export const RisikoscenarioViewReadOnly = (props: IProps) => {
-  const {risikoscenario, noCopyButton} = props
+  const { risikoscenario, noCopyButton } = props
   const params = useParams<{ id?: string }>()
   return (
     <div>
@@ -24,19 +24,19 @@ export const RisikoscenarioViewReadOnly = (props: IProps) => {
           copyText={window.location.href}
           text="Kopiér scenariolenke"
           activeText="Lenken er kopiert"
-          icon={<LinkIcon aria-hidden/>}
+          icon={<LinkIcon aria-hidden />}
         />
       )}
       <BodyLong className="mt-5">{risikoscenario.beskrivelse}</BodyLong>
 
       {risikoscenario.generelScenario && (
         <BodyLong className="mt-8">
-          Dette risikoscenarioet er ikke tilknyttet spesifikke etterlevelseskrav.
+          Dette risikoscenariet er ikke tilknyttet spesifikke etterlevelseskrav.
         </BodyLong>
       )}
 
       {!risikoscenario.generelScenario && (
-        <ReadMore header="Vis etterlevelseskrav hvor risikoscenarioet inntreffer">
+        <ReadMore header="Vis etterlevelseskrav hvor risikoscenariet inntreffer">
           <List as="ul">
             {risikoscenario.relevanteKravNummer.map((relevantKrav, index) => {
               const kravHref = `/dokumentasjon/${params.id}/${relevantKrav.temaCode || 'PVK'}/RELEVANTE_KRAV/krav/${relevantKrav.kravNummer}/${relevantKrav.kravVersjon}`

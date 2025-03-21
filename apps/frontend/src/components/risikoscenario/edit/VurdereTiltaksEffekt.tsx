@@ -147,7 +147,7 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                 <Field name="sannsynlighetsNivaaEtterTiltak">
                   {(fieldProps: FieldProps) => (
                     <RadioGroup
-                      legend="Beskriv risikoscenarioets antatte sannsynlighetsnivå etter at tiltakene er iverksatt"
+                      legend="Beskriv risikoscenariets antatte sannsynlighetsnivå etter at tiltakene er iverksatt"
                       value={fieldProps.field.value}
                       onChange={(value) => {
                         fieldProps.form.setFieldValue('sannsynlighetsNivaaEtterTiltak', value)
@@ -175,7 +175,7 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                 <Field name="konsekvensNivaaEtterTiltak">
                   {(fieldProps: FieldProps) => (
                     <RadioGroup
-                      legend="Beskriv risikoscenarioets antatte konsekvensnivå etter at tiltakene er iverksatt"
+                      legend="Beskriv risikoscenariets antatte konsekvensnivå etter at tiltakene er iverksatt"
                       value={fieldProps.field.value}
                       onChange={(value) => {
                         fieldProps.form.setFieldValue('konsekvensNivaaEtterTiltak', value)
