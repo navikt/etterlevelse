@@ -24,71 +24,69 @@ interface IProps {
   submitExistingTiltak: (request: ITiltakRisikoscenarioRelasjon) => Promise<void>
 }
 
-export const KravRisikoscenarioAccordionContentEditMode = (props: IProps) => {
-  const {
-    activeRisikoscenario,
-    userHasAccess,
-    risikoscenario,
-    alleRisikoscenarioer,
-    tiltakList,
-    setTiltakList,
-    setIsEditTiltakFormActive,
-    isCreateTiltakFormActive,
-    isAddExistingMode,
-    submitDeleteTiltak,
-    formRef,
-    setIsCreateTiltakFormActive,
-    setIsAddExisitingMode,
-    submitCreateTiltak,
-    submitExistingTiltak,
-  } = props
+export const KravRisikoscenarioAccordionContentEditMode = ({
+  activeRisikoscenario,
+  userHasAccess,
+  risikoscenario,
+  alleRisikoscenarioer,
+  tiltakList,
+  setTiltakList,
+  setIsEditTiltakFormActive,
+  isCreateTiltakFormActive,
+  isAddExistingMode,
+  submitDeleteTiltak,
+  formRef,
+  setIsCreateTiltakFormActive,
+  setIsAddExisitingMode,
+  submitCreateTiltak,
+  submitExistingTiltak,
+}: IProps) => (
+  <div>
+    <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true} />
 
-  return (
-    <div>
-      <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true} />
+    <div className="mt-12">
+      <KravRisikoscenarioAccordionContentHeader />
 
-      <div className="mt-12">
-        <KravRisikoscenarioAccordionContentHeader />
+      {!risikoscenario.ingenTiltak && userHasAccess() && (
+        <div>
+          {risikoscenario.tiltakIds.length !== 0 && (
+            <TiltakReadMoreList
+              risikoscenario={activeRisikoscenario}
+              risikoscenarioList={alleRisikoscenarioer}
+              tiltakList={tiltakList}
+              setTiltakList={setTiltakList}
+              setIsEditTiltakFormActive={setIsEditTiltakFormActive}
+              isCreateTiltakFormActive={isCreateTiltakFormActive}
+              isAddExistingMode={isAddExistingMode}
+              customDelete={submitDeleteTiltak}
+              formRef={formRef}
+            />
+          )}
+        </div>
+      )}
 
-        {!risikoscenario.ingenTiltak && userHasAccess() && (
-          <div>
-            {risikoscenario.tiltakIds.length !== 0 && (
-              <TiltakReadMoreList
-                risikoscenario={activeRisikoscenario}
-                risikoscenarioList={alleRisikoscenarioer}
-                tiltakList={tiltakList}
-                setTiltakList={setTiltakList}
-                setIsEditTiltakFormActive={setIsEditTiltakFormActive}
-                isCreateTiltakFormActive={isCreateTiltakFormActive}
-                isAddExistingMode={isAddExistingMode}
-                customDelete={submitDeleteTiltak}
-                formRef={formRef}
-              />
-            )}
-          </div>
-        )}
+      {isCreateTiltakFormActive && (
+        <TiltakForm
+          title="Opprett nytt tiltak"
+          initialValues={{} as ITiltak}
+          pvkDokumentId={risikoscenario.pvkDokumentId}
+          submit={submitCreateTiltak}
+          close={() => setIsCreateTiltakFormActive(false)}
+          formRef={formRef}
+        />
+      )}
 
-        {isCreateTiltakFormActive && (
-          <TiltakForm
-            title="Opprett nytt tiltak"
-            initialValues={{} as ITiltak}
-            pvkDokumentId={risikoscenario.pvkDokumentId}
-            submit={submitCreateTiltak}
-            close={() => setIsCreateTiltakFormActive(false)}
-            formRef={formRef}
-          />
-        )}
-
-        {isAddExistingMode && (
-          <LeggTilEksisterendeTiltak
-            risikoscenario={activeRisikoscenario}
-            tiltakList={tiltakList}
-            setIsAddExisitingMode={setIsAddExisitingMode}
-            customSubmit={submitExistingTiltak}
-            formRef={formRef}
-          />
-        )}
-      </div>
+      {isAddExistingMode && (
+        <LeggTilEksisterendeTiltak
+          risikoscenario={activeRisikoscenario}
+          tiltakList={tiltakList}
+          setIsAddExisitingMode={setIsAddExisitingMode}
+          customSubmit={submitExistingTiltak}
+          formRef={formRef}
+        />
+      )}
     </div>
-  )
-}
+  </div>
+)
+
+export default KravRisikoscenarioAccordionContentEditMode
