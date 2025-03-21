@@ -1,6 +1,6 @@
 import { Accordion, Alert, Button } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../../api/TiltakApi'
 import {
@@ -45,9 +45,9 @@ export const KravRisikoscenario = (props: IProps) => {
   const [editButtonClicked, setEditButtonClicked] = useState<string>('')
   const [isTiltakFormActive, setIsTiltakFormActive] = useState<boolean>(false)
 
-  const url = new URL(window.location.href)
-  const risikoscenarioId = url.searchParams.get('risikoscenario')
-  const navigate = useNavigate()
+  const url: URL = new URL(window.location.href)
+  const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
+  const navigate: NavigateFunction = useNavigate()
 
   useEffect(() => {
     ;(async () => {
@@ -86,7 +86,7 @@ export const KravRisikoscenario = (props: IProps) => {
     })()
   }, [krav, pvkDokument])
 
-  const handleAccordionChange = (risikoscenarioId?: string) => {
+  const handleAccordionChange = (risikoscenarioId?: string): void => {
     if (risikoscenarioId) {
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
@@ -104,7 +104,7 @@ export const KravRisikoscenario = (props: IProps) => {
     }
   }
 
-  const userHasAccess = () => {
+  const userHasAccess = (): boolean => {
     return user.isAdmin() || etterlevelseDokumentasjon?.hasCurrentUserAccess || false
   }
 
@@ -142,8 +142,8 @@ export const KravRisikoscenario = (props: IProps) => {
                   <Accordion.Item
                     open={expanded}
                     id={risikoscenario.id}
-                    key={index + '_' + risikoscenario.navn}
-                    onOpenChange={(open) => {
+                    key={`${index} ${risikoscenario.navn}`}
+                    onOpenChange={(open: boolean) => {
                       setSelectedRisikoscenarioId(open ? risikoscenario.id : '')
                       handleAccordionChange(open ? risikoscenario.id : '')
                     }}
@@ -249,4 +249,5 @@ export const KravRisikoscenario = (props: IProps) => {
     </div>
   )
 }
+
 export default KravRisikoscenario

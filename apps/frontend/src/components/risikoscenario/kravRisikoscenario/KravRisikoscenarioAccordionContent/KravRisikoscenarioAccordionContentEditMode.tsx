@@ -4,7 +4,7 @@ import TiltakReadMoreList from '../../../tiltak/TiltakReadMoreList'
 import LeggTilEksisterendeTiltak from '../../../tiltak/edit/LeggTilEksisterendeTiltak'
 import TiltakForm from '../../../tiltak/edit/TiltakForm'
 import RisikoscenarioView from '../../RisikoscenarioView'
-import KravRisikoscenarioAccordionContentHeader from './KravRisikoscenarioAccordionContentHeader'
+import { RisikoscenarioTiltakHeader } from '../../common/KravRisikoscenarioHeaders'
 
 interface IProps {
   activeRisikoscenario: IRisikoscenario
@@ -45,7 +45,7 @@ export const KravRisikoscenarioAccordionContentEditMode = ({
     <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true} />
 
     <div className="mt-12">
-      <KravRisikoscenarioAccordionContentHeader />
+      <RisikoscenarioTiltakHeader />
 
       {!risikoscenario.ingenTiltak && userHasAccess() && (
         <div>

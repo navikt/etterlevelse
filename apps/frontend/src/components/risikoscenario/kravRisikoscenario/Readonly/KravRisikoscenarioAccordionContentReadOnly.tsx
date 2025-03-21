@@ -1,7 +1,7 @@
-import { Heading } from '@navikt/ds-react'
 import { IRisikoscenario, ITiltak } from '../../../../constants'
 import TiltakView from '../../../tiltak/TiltakView'
 import RisikoscenarioViewReadOnly from '../../RisikoscenarioViewReadOnly'
+import { RisikoscenarioTiltakHeader } from '../../common/KravRisikoscenarioHeaders'
 import KravRisikoscenarioIngenTiltak from '../KravRisikoscenarioIngenTiltak/KravRisikoscenarioIngenTiltak'
 
 interface IProps {
@@ -24,9 +24,7 @@ export const KravRisikoscenarioAccordionContentReadOnly = ({
       <RisikoscenarioViewReadOnly risikoscenario={risikoscenario} noCopyButton={true} />
 
       <div className="mt-12">
-        <Heading level="3" size="small">
-          Følgende tiltak gjelder for dette risikoscenarioet
-        </Heading>
+        <RisikoscenarioTiltakHeader />
 
         <div>
           {filterTiltakId.map((tiltak: ITiltak, index: number) => (

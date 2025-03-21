@@ -1,9 +1,10 @@
-import { Alert, BodyLong, Heading, ReadMore } from '@navikt/ds-react'
+import { Alert, BodyLong, ReadMore } from '@navikt/ds-react'
 import { RefObject, useState } from 'react'
 import { IRisikoscenario, ITiltak } from '../../../constants'
 import { user } from '../../../services/User'
 import TiltakView from '../../tiltak/TiltakView'
 import RisikoscenarioView from '../RisikoscenarioView'
+import { RisikoscenarioTiltakHeader } from '../common/KravRisikoscenarioHeaders'
 import VurdereTiltaksEffekt from '../edit/VurdereTiltaksEffekt'
 
 interface IProps {
@@ -34,9 +35,8 @@ export const OppsumeringAccordianContent = (props: IProps) => {
 
       {(!user.isPersonvernombud() || user.isAdmin()) && (
         <div className="mt-12">
-          <Heading level="3" size="small">
-            Følgende tiltak gjelder for dette risikoscenarioet
-          </Heading>
+          <RisikoscenarioTiltakHeader />
+
           {risikoscenario.ingenTiltak && <BodyLong>Vi skal ikke ha tiltak.</BodyLong>}
 
           {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length !== 0 && (

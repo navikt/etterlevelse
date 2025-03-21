@@ -1,5 +1,5 @@
 import { PencilIcon } from '@navikt/aksel-icons'
-import { Alert, Button, Heading } from '@navikt/ds-react'
+import { Alert, Button } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRisikoscenario, updateRisikoscenario } from '../../api/RisikoscenarioApi'
@@ -11,6 +11,7 @@ import LeggTilEksisterendeTiltak from '../tiltak/edit/LeggTilEksisterendeTiltak'
 import TiltakForm from '../tiltak/edit/TiltakForm'
 import RisikoscenarioView from './RisikoscenarioView'
 import SlettOvrigRisikoscenario from './SlettOvrigRisikoscenario'
+import { RisikoscenarioTiltakHeader } from './common/KravRisikoscenarioHeaders'
 import IngenTiltakField from './edit/IngenTiltakField'
 import RisikoscenarioModalForm from './edit/RisikoscenarioModalForm'
 
@@ -126,9 +127,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
 
       {(!user.isPersonvernombud() || user.isAdmin()) && (
         <div className="mt-12">
-          <Heading level="3" size="small">
-            Følgende tiltak gjelder for dette risikoscenarioet
-          </Heading>
+          <RisikoscenarioTiltakHeader />
           {!risikoscenario.ingenTiltak && (
             <div>
               {risikoscenario.tiltakIds.length === 0 &&

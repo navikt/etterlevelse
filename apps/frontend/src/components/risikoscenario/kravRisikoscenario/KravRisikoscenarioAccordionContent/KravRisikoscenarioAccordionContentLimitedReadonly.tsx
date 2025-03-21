@@ -3,9 +3,9 @@ import { Dispatch, RefObject, SetStateAction } from 'react'
 import { IRisikoscenario, ITiltak } from '../../../../constants'
 import TiltakReadMoreList from '../../../tiltak/TiltakReadMoreList'
 import RisikoscenarioView from '../../RisikoscenarioView'
+import { RisikoscenarioTiltakHeader } from '../../common/KravRisikoscenarioHeaders'
 import IngenTiltakField from '../../edit/IngenTiltakField'
 import RedigerRisikoscenarioButtons from '../RedigerRisikoscenarioButtons/RedigerRisikoscenarioButtons'
-import KravRisikoscenarioAccordionContentHeader from './KravRisikoscenarioAccordionContentHeader'
 
 interface IProps {
   activeRisikoscenario: IRisikoscenario
@@ -72,7 +72,7 @@ export const KravRisikoscenarioAccordionContentLimitedReadonly = ({
     )}
 
     <div className="mt-12">
-      <KravRisikoscenarioAccordionContentHeader />
+      <RisikoscenarioTiltakHeader />
 
       {!risikoscenario.ingenTiltak && userHasAccess() && (
         <div>
