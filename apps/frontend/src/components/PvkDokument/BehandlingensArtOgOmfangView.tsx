@@ -71,11 +71,6 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
                     <Heading level="1" size="medium" className="mb-5">
                       Behandlingens art og omfang
                     </Heading>
-                    {pvkDokument.changeStamp.lastModifiedBy && (
-                      <div className="mt-5 mb-10">
-                        {'Sist redigert av: ' + pvkDokument.changeStamp.lastModifiedBy}
-                      </div>
-                    )}
 
                     <List
                       headingTag="label"
