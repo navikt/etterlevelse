@@ -31,7 +31,7 @@ interface IProps {
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
   formRef: RefObject<any>
-  pvoTilbakemeliding?: IPvoTilbakemelding
+  pvoTilbakemelding?: IPvoTilbakemelding
 }
 
 export const BehandlingensLivslopView = (props: IProps) => {
@@ -41,7 +41,7 @@ export const BehandlingensLivslopView = (props: IProps) => {
     setActiveStep,
     setSelectedStep,
     formRef,
-    pvoTilbakemeliding,
+    pvoTilbakemelding,
   } = props
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -186,7 +186,7 @@ export const BehandlingensLivslopView = (props: IProps) => {
                     )}
                   </div>
 
-                  {pvoTilbakemeliding && etterlevelseDokumentasjon && (
+                  {pvoTilbakemelding && etterlevelseDokumentasjon && (
                     <div className="mt-5">
                       <div className="pt-6 border-t border-[#071a3636]">
                         <BehandlingensLivsLopSidePanel
@@ -201,16 +201,16 @@ export const BehandlingensLivslopView = (props: IProps) => {
           </div>
 
           {/* Sidepanel */}
-          {pvoTilbakemeliding && (
+          {pvoTilbakemelding && (
             <PvoSidePanelWrapper>
               <PvoTilbakemeldingReadOnly
-                tilbakemeldingsinnhold={pvoTilbakemeliding.behandlingenslivslop}
-                sentDate={pvoTilbakemeliding.sendtDato}
+                tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
+                sentDate={pvoTilbakemelding.sendtDato}
               />
             </PvoSidePanelWrapper>
           )}
 
-          {!pvoTilbakemeliding && etterlevelseDokumentasjon && (
+          {!pvoTilbakemelding && etterlevelseDokumentasjon && (
             <div className="pl-6 border-l border-[#071a3636] w-full max-w-lg">
               <BehandlingensLivsLopSidePanel
                 etterlevelseDokumentasjon={etterlevelseDokumentasjon}

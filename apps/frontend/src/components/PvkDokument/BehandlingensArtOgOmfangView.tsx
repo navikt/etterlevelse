@@ -21,7 +21,7 @@ interface IProps {
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
   formRef: RefObject<any>
-  pvoTilbakemeliding?: IPvoTilbakemelding
+  pvoTilbakemelding?: IPvoTilbakemelding
 }
 
 export const BehandlingensArtOgOmfangView = (props: IProps) => {
@@ -34,7 +34,7 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
     setActiveStep,
     setSelectedStep,
     formRef,
-    pvoTilbakemeliding,
+    pvoTilbakemelding,
   } = props
 
   const submit = async (pvkDokument: IPvkDokument) => {
@@ -171,13 +171,13 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
           </Formik>
         </div>
 
-        {/* PVO sidepanel */}
+        {/* sidepanel */}
 
-        {pvoTilbakemeliding && (
+        {pvoTilbakemelding && (
           <PvoSidePanelWrapper>
             <PvoTilbakemeldingReadOnly
-              tilbakemeldingsinnhold={pvoTilbakemeliding.behandlingensArtOgOmfang}
-              sentDate={pvoTilbakemeliding.sendtDato}
+              tilbakemeldingsinnhold={pvoTilbakemelding.behandlingensArtOgOmfang}
+              sentDate={pvoTilbakemelding.sendtDato}
             />
           </PvoSidePanelWrapper>
         )}

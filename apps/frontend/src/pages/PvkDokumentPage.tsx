@@ -228,7 +228,7 @@ export const PvkDokumentPage = () => {
                       setActiveStep={updateTitleUrlAndStep}
                       setSelectedStep={setSelectedStep}
                       formRef={formRef}
-                      pvoTilbakemeliding={pvoTilbakemelding}
+                      pvoTilbakemelding={pvoTilbakemelding}
                     />
                   )}
                   {activeStep === 3 && (
@@ -237,7 +237,7 @@ export const PvkDokumentPage = () => {
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvkDokument={pvkDokument}
                       setPvkDokument={setPvkDokument}
-                      pvoTilbakemeliding={pvoTilbakemelding}
+                      pvoTilbakemelding={pvoTilbakemelding}
                       activeStep={activeStep}
                       setActiveStep={updateTitleUrlAndStep}
                       setSelectedStep={setSelectedStep}
@@ -251,6 +251,7 @@ export const PvkDokumentPage = () => {
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvkDokument={pvkDokument}
                       setPvkDokument={setPvkDokument}
+                      pvoTilbakemelding={pvoTilbakemelding}
                       activeStep={activeStep}
                       setActiveStep={updateTitleUrlAndStep}
                       setSelectedStep={setSelectedStep}
