@@ -128,7 +128,7 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     changeStamp: pvkDokument.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
     version: -1,
     etterlevelseDokumentId: pvkDokument.etterlevelseDokumentId || '',
-    status: pvkDokument.status || EPvkDokumentStatus.AKTIV,
+    status: pvkDokument.status || EPvkDokumentStatus.UNDERARBEID,
     behandlingensLivslopBeskrivelse: pvkDokument.behandlingensLivslopBeskrivelse || '',
     ytterligereEgenskaper: pvkDokument.ytterligereEgenskaper || [],
     skalUtforePvk: pvkDokument.skalUtforePvk === undefined ? undefined : pvkDokument.skalUtforePvk,
