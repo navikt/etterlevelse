@@ -9,7 +9,7 @@
       "plugin:jsx-a11y/recommended",
       "plugin:react/recommended",
       "plugin:react-hooks/recommended",
-      "plugin:@typescript-eslint/recommended",
+      "plugin:@typescript-eslint/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -56,6 +56,9 @@
       "react/react-in-jsx-scope": "off",
       "no-console":["warn", { "allow": ["warn", "error", "debug"] }],
       // no-extra-semi is added because there are places where the ; is necessary
-      "no-extra-semi": "off"
+      "no-extra-semi": "off",
+      "eqeqeq": "off",
+      "no-unused-vars": "error",
+      "prefer-const": ["error", { "ignoreReadBeforeAssign": true }]
     }
   }
