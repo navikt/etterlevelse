@@ -165,7 +165,7 @@ const AppRoutes = (): JSX.Element => {
 
       <Route
         path={`${EPVO.url}/:tab`}
-        element={<PrivateRoute component={<PvoOversiktPage />} kraveierPage />}
+        element={<PrivateRoute component={<PvoOversiktPage />} pvoPage />}
         caseSensitive={true}
       />
 
