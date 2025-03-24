@@ -56,9 +56,7 @@ public class EtterlevelseDokumentasjonController {
     @GetMapping("/{id}")
     public ResponseEntity<EtterlevelseDokumentasjonResponse> getById(@PathVariable UUID id) {
         log.info("Get Etterlevelse Dokumentasjon By Id Id={}", id);
-        var response = EtterlevelseDokumentasjonResponse.buildFrom(
-                etterlevelseDokumentasjonService.get(id)
-        );
+        var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.get(id));
         etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
         
         boolean resourceIsEmpty = response.getResources() == null || response.getResources().isEmpty();
