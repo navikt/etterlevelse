@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
+import { getPvoTilbakemeldingByPvkDokumentId } from '../api/PvoApi'
 import { getRisikoscenarioByPvkDokumentId } from '../api/RisikoscenarioApi'
 import BehandlingensArtOgOmfangView from '../components/PvkDokument/BehandlingensArtOgOmfangView'
 import IdentifiseringAvRisikoscenarioerOgTiltak from '../components/PvkDokument/IdentifiseringAvRisikoscenarioerOgTiltak'
@@ -14,10 +15,12 @@ import OversiktView from '../components/PvkDokument/OversiktView'
 import SendInnView from '../components/PvkDokument/SendInnView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import {
+  EPvkDokumentStatus,
   ERisikoscenarioType,
   IBreadCrumbPath,
   IDataBehandler,
   IExternalCode,
+  IPvoTilbakemelding,
   IRisikoscenario,
 } from '../constants'
 import { user } from '../services/User'
@@ -50,6 +53,7 @@ export const PvkDokumentPage = () => {
   const [pvkDokument, setPvkDokument] = usePvkDokument(params.pvkdokumentId)
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [databehandlere, setDatabehandlere] = useState<string[]>([])
+  const [pvoTilbakemelding, setPvoTilbakemelding] = useState<IPvoTilbakemelding>()
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [activeStep, setActiveStep] = useState<number>(
     currentStep !== null ? parseInt(currentStep) : 1
@@ -130,6 +134,12 @@ export const PvkDokumentPage = () => {
             setAllRisikoscenario(response.content)
           }
         )
+        if (
+          pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
+          pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
+        ) {
+          await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id).then(setPvoTilbakemelding)
+        }
       }
     })()
   }, [pvkDokument])
@@ -215,6 +225,7 @@ export const PvkDokumentPage = () => {
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvkDokument={pvkDokument}
                       setPvkDokument={setPvkDokument}
+                      pvoTilbakemeliding={pvoTilbakemelding}
                       activeStep={activeStep}
                       setActiveStep={updateTitleUrlAndStep}
                       setSelectedStep={setSelectedStep}
