@@ -1,5 +1,5 @@
 import { Alert, BodyLong, ReadMore } from '@navikt/ds-react'
-import { RefObject, useState } from 'react'
+import { FunctionComponent, RefObject, useState } from 'react'
 import { IRisikoscenario, ITiltak } from '../../../constants'
 import { user } from '../../../services/User'
 import TiltakView from '../../tiltak/TiltakView'
@@ -7,7 +7,7 @@ import RisikoscenarioView from '../RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '../common/KravRisikoscenarioHeaders'
 import VurdereTiltaksEffekt from '../edit/VurdereTiltaksEffekt'
 
-interface IProps {
+type TProps = {
   risikoscenario: IRisikoscenario
   risikoscenarioList: IRisikoscenario[]
   setRisikosenarioList: (state: IRisikoscenario[]) => void
@@ -17,16 +17,15 @@ interface IProps {
   formRef: RefObject<any>
 }
 
-export const OppsumeringAccordianContent = (props: IProps) => {
-  const {
-    risikoscenario,
-    risikoscenarioList,
-    setRisikosenarioList,
-    allRisikoscenarioList,
-    setAllRisikoscenarioList,
-    tiltakList,
-    formRef,
-  } = props
+export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
+  risikoscenario,
+  risikoscenarioList,
+  setRisikosenarioList,
+  allRisikoscenarioList,
+  setAllRisikoscenarioList,
+  tiltakList,
+  formRef,
+}) => {
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
 
   return (
@@ -42,10 +41,10 @@ export const OppsumeringAccordianContent = (props: IProps) => {
           {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length !== 0 && (
             <div className="mt-5">
               {tiltakList
-                .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
-                .map((tiltak, index) => (
+                .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
+                .map((tiltak: ITiltak, index: number) => (
                   <ReadMore
-                    key={risikoscenario.id + '_' + tiltak.id + '_' + index}
+                    key={`${risikoscenario.id}_${tiltak.id}_${index}`}
                     header={tiltak.navn}
                     className="mb-3"
                   >
@@ -92,4 +91,5 @@ export const OppsumeringAccordianContent = (props: IProps) => {
     </div>
   )
 }
+
 export default OppsumeringAccordianContent

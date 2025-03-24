@@ -1,13 +1,12 @@
 import { Tag } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 
-interface IProps {
+type TProps = {
   text: string
   level: number
 }
 
-export const RisikoscenarioTag = (props: IProps) => {
-  const { text, level } = props
-
+export const RisikoscenarioTag: FunctionComponent<TProps> = ({ text, level }) => {
   const getVariantFromLevel = (level: number) => {
     switch (level) {
       case 1:

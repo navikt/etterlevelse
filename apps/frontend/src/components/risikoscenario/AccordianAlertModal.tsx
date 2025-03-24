@@ -1,8 +1,8 @@
 import { Button, Modal } from '@navikt/ds-react'
-import { RefObject } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { FunctionComponent, RefObject } from 'react'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 
-interface IProps {
+type TProps = {
   isOpen: boolean
   setIsOpen: (state: boolean) => void
   navigateUrl?: string
@@ -11,9 +11,15 @@ interface IProps {
   customOnClick?: () => void
 }
 
-export const AccordianAlertModal = (props: IProps) => {
-  const { isOpen, setIsOpen, navigateUrl, formRef, reloadOnSubmit, customOnClick } = props
-  const navigate = useNavigate()
+export const AccordianAlertModal: FunctionComponent<TProps> = ({
+  isOpen,
+  setIsOpen,
+  navigateUrl,
+  formRef,
+  reloadOnSubmit,
+  customOnClick,
+}) => {
+  const navigate: NavigateFunction = useNavigate()
 
   return (
     <Modal
@@ -47,7 +53,7 @@ export const AccordianAlertModal = (props: IProps) => {
           type="button"
           variant="secondary"
           onClick={async () => {
-            const values = formRef.current?.values
+            const values: any = formRef.current?.values
             await formRef.current?.resetForm({ values })
             setIsOpen(false)
             if (customOnClick) {

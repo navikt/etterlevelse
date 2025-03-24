@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import {
   addTiltakToRisikoscenario,
   getRisikoscenario,
@@ -21,7 +21,7 @@ import RisikoscenarioModalForm from '../../edit/RisikoscenarioModalForm'
 import { KravRisikoscenarioAccordionContentEditMode } from './KravRisikoscenarioAccordionContentEditMode'
 import { KravRisikoscenarioAccordionContentLimitedReadonly } from './KravRisikoscenarioAccordionContentLimitedReadonly'
 
-interface IProps {
+type TProps = {
   risikoscenario: IRisikoscenario
   risikoscenarioer: IRisikoscenario[]
   alleRisikoscenarioer: IRisikoscenario[]
@@ -38,22 +38,21 @@ interface IProps {
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
 }
 
-export const KravRisikoscenarioAccordionContent = (props: IProps) => {
-  const {
-    risikoscenario,
-    risikoscenarioer,
-    alleRisikoscenarioer,
-    risikoscenarioForKrav,
-    kravnummer,
-    setRisikoscenarioer,
-    setRisikoscenarioForKrav,
-    tiltakList,
-    setTiltakList,
-    isCreateMode,
-    setIsTiltakFormActive,
-    formRef,
-    etterlevelseDokumentasjon,
-  } = props
+export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
+  risikoscenario,
+  risikoscenarioer,
+  alleRisikoscenarioer,
+  risikoscenarioForKrav,
+  kravnummer,
+  setRisikoscenarioer,
+  setRisikoscenarioForKrav,
+  tiltakList,
+  setTiltakList,
+  isCreateMode,
+  setIsTiltakFormActive,
+  formRef,
+  etterlevelseDokumentasjon,
+}) => {
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   const [isCreateTiltakFormActive, setIsCreateTiltakFormActive] = useState<boolean>(false)
@@ -62,9 +61,9 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
   const [isIngenTilgangFormDirty, setIsIngenTilgangFormDirty] = useState<boolean>(false)
 
-  const updateRisikoscenarioList = (updatedRisikoscenario: IRisikoscenario) => {
+  const updateRisikoscenarioList = (updatedRisikoscenario: IRisikoscenario): void => {
     setRisikoscenarioForKrav(
-      risikoscenarioForKrav.map((risikoscenario) => {
+      risikoscenarioForKrav.map((risikoscenario: IRisikoscenario) => {
         if (risikoscenario.id === updatedRisikoscenario.id) {
           return { ...updatedRisikoscenario }
         } else {
@@ -74,23 +73,23 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     )
   }
 
-  const submit = async (risikoscenario: IRisikoscenario) => {
-    await updateRisikoscenario(risikoscenario).then((response) => {
+  const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
+    await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
       setActiveRisikoscenario(response)
       updateRisikoscenarioList(response)
       setIsEditModalOpen(false)
     })
   }
 
-  const submitIngenTiltak = async (submitedValues: IRisikoscenario) => {
-    await getRisikoscenario(risikoscenario.id).then((response) => {
+  const submitIngenTiltak = async (submitedValues: IRisikoscenario): Promise<void> => {
+    await getRisikoscenario(risikoscenario.id).then((response: IRisikoscenario) => {
       const updatedRisikoscenario = {
         ...submitedValues,
         ...response,
         ingenTiltak: submitedValues.ingenTiltak,
       }
 
-      updateRisikoscenario(updatedRisikoscenario).then((response) => {
+      updateRisikoscenario(updatedRisikoscenario).then((response: IRisikoscenario) => {
         setActiveRisikoscenario(response)
         updateRisikoscenarioList(response)
         setIsIngenTilgangFormDirty(false)
@@ -98,7 +97,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     })
   }
 
-  const submitCreateTiltak = async (submitedTiltakValues: ITiltak) => {
+  const submitCreateTiltak = async (submitedTiltakValues: ITiltak): Promise<void> => {
     await createTiltakAndRelasjonWithRisikoscenario(
       submitedTiltakValues,
       activeRisikoscenario.id

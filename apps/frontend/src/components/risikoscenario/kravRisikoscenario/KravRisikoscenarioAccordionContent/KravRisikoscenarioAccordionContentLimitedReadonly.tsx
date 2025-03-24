@@ -1,5 +1,5 @@
 import { Button } from '@navikt/ds-react'
-import { Dispatch, RefObject, SetStateAction } from 'react'
+import { Dispatch, FunctionComponent, RefObject, SetStateAction } from 'react'
 import { IRisikoscenario, ITiltak } from '../../../../constants'
 import TiltakReadMoreList from '../../../tiltak/TiltakReadMoreList'
 import RisikoscenarioView from '../../RisikoscenarioView'
@@ -7,7 +7,7 @@ import { RisikoscenarioTiltakHeader } from '../../common/KravRisikoscenarioHeade
 import IngenTiltakField from '../../edit/IngenTiltakField'
 import RedigerRisikoscenarioButtons from '../RedigerRisikoscenarioButtons/RedigerRisikoscenarioButtons'
 
-interface IProps {
+type TProps = {
   activeRisikoscenario: IRisikoscenario
   isIngenTilgangFormDirty: boolean
   userHasAccess: () => boolean
@@ -32,7 +32,7 @@ interface IProps {
   setIsIngenTilgangFormDirty: Dispatch<SetStateAction<boolean>>
 }
 
-export const KravRisikoscenarioAccordionContentLimitedReadonly = ({
+export const KravRisikoscenarioAccordionContentLimitedReadonly: FunctionComponent<TProps> = ({
   activeRisikoscenario,
   isIngenTilgangFormDirty,
   userHasAccess,
@@ -55,7 +55,7 @@ export const KravRisikoscenarioAccordionContentLimitedReadonly = ({
   setIsAddExisitingMode,
   submitIngenTiltak,
   setIsIngenTilgangFormDirty,
-}: IProps) => (
+}) => (
   <div>
     <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true} />
 

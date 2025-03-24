@@ -2,7 +2,7 @@ import { LinkIcon } from '@navikt/aksel-icons'
 import { BodyLong, CopyButton, List, ReadMore } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { useParams } from 'react-router'
-import { IRisikoscenario } from '../../constants'
+import { IKravReference, IRisikoscenario } from '../../constants'
 import { ExternalLink } from '../common/RouteLink'
 import RisikoscenarioTag, {
   getKonsekvenssnivaaText,
@@ -46,16 +46,19 @@ export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
       {!risikoscenario.generelScenario && (
         <ReadMore header="Vis etterlevelseskrav hvor risikoscenariet inntreffer">
           <List as="ul">
-            {risikoscenario.relevanteKravNummer.map((relevantKrav, index) => {
-              const kravHref: string = `/dokumentasjon/${params.id}/${relevantKrav.temaCode || 'PVK'}/RELEVANTE_KRAV/krav/${relevantKrav.kravNummer}/${relevantKrav.kravVersjon}`
-              return (
-                <List.Item className="max-w-[75ch]" key={`${relevantKrav.kravNummer}_${index}`}>
-                  <ExternalLink href={kravHref}>
-                    K{relevantKrav.kravNummer}.{relevantKrav.kravVersjon} {relevantKrav.navn}
-                  </ExternalLink>
-                </List.Item>
-              )
-            })}
+            {risikoscenario.relevanteKravNummer.map(
+              (relevantKrav: IKravReference, index: number) => {
+                const kravHref: string = `/dokumentasjon/${params.id}/${relevantKrav.temaCode || 'PVK'}/RELEVANTE_KRAV/krav/${relevantKrav.kravNummer}/${relevantKrav.kravVersjon}`
+
+                return (
+                  <List.Item className="max-w-[75ch]" key={`${relevantKrav.kravNummer}_${index}`}>
+                    <ExternalLink href={kravHref}>
+                      K{relevantKrav.kravNummer}.{relevantKrav.kravVersjon} {relevantKrav.navn}
+                    </ExternalLink>
+                  </List.Item>
+                )
+              }
+            )}
           </List>
         </ReadMore>
       )}

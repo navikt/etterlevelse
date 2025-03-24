@@ -1,24 +1,23 @@
 import { Accordion, Tag } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import { IRisikoscenario } from '../../constants'
 
-interface IProps {
+type TProps = {
   risikoscenario: IRisikoscenario
 }
 
-export const RisikoscenarioAccordianHeader = (props: IProps) => {
-  const { risikoscenario } = props
-
-  const ikkeFerdigBeskrevet =
+export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({ risikoscenario }) => {
+  const ikkeFerdigBeskrevet: boolean =
     risikoscenario.konsekvensNivaa === 0 ||
     risikoscenario.sannsynlighetsNivaa === 0 ||
     risikoscenario.konsekvensNivaaBegrunnelse === '' ||
     risikoscenario.sannsynlighetsNivaaBegrunnelse === ''
-  const mangelfulScenario =
+  const mangelfulScenario: boolean =
     ikkeFerdigBeskrevet || (!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0)
-  const ikkeFerdigVurdert =
+  const ikkeFerdigVurdert: boolean =
     risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
     risikoscenario.konsekvensNivaaEtterTiltak === 0
-  const ferdigVurdert =
+  const ferdigVurdert: boolean =
     risikoscenario.sannsynlighetsNivaaEtterTiltak !== 0 &&
     risikoscenario.konsekvensNivaaEtterTiltak !== 0
 
@@ -37,9 +36,10 @@ export const RisikoscenarioAccordianHeader = (props: IProps) => {
   )
 }
 
-export const IdentifiseringAvRisikoscenarioAccordianHeader = (props: IProps) => {
-  const { risikoscenario } = props
-  const ikkeFerdigBeskrevet =
+export const IdentifiseringAvRisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
+  risikoscenario,
+}) => {
+  const ikkeFerdigBeskrevet: boolean =
     risikoscenario.konsekvensNivaa === 0 ||
     risikoscenario.sannsynlighetsNivaa === 0 ||
     risikoscenario.konsekvensNivaaBegrunnelse === '' ||
@@ -58,4 +58,5 @@ export const IdentifiseringAvRisikoscenarioAccordianHeader = (props: IProps) => 
     </Accordion.Header>
   )
 }
+
 export default RisikoscenarioAccordianHeader

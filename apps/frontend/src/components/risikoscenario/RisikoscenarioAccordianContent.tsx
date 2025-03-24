@@ -179,7 +179,6 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
                       type="button"
                       onClick={() => {
                         setIsCreateTiltakFormActive(true)
-
                         setIsTiltakFormActive(true)
                       }}
                     >

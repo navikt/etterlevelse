@@ -1,5 +1,5 @@
 import { Accordion, Alert, Button } from '@navikt/ds-react'
-import { RefObject, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../../api/TiltakApi'
@@ -19,7 +19,7 @@ import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionCon
 import { KravRisikoscenarioOvrigeRisikoscenarier } from './KravRisikoscenarioOvrigeRisikoscenarier/KravRisikoscenarioOvrigeRisikoscenarier'
 import { KravRisikoscenarioReadMore } from './KravRisikoscenarioReadMore/KravRisikoscenarioReadMore'
 
-interface IProps {
+type TProps = {
   krav: TKravQL
   pvkDokument: IPvkDokument
   formRef: RefObject<any>
@@ -31,8 +31,12 @@ const unsavedAction = {
   leggTilEksisterendeRisikoscenario: 'leggTilEksisterendeRisikoscenario',
 }
 
-export const KravRisikoscenario = (props: IProps) => {
-  const { krav, pvkDokument, formRef, etterlevelseDokumentasjon } = props
+export const KravRisikoscenario: FunctionComponent<TProps> = ({
+  krav,
+  pvkDokument,
+  formRef,
+  etterlevelseDokumentasjon,
+}) => {
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
@@ -92,7 +96,7 @@ export const KravRisikoscenario = (props: IProps) => {
         setIsUnsaved(true)
       } else {
         setActiveRisikoscenarioId(risikoscenarioId)
-        navigate(window.location.pathname + '?risikoscenario=' + risikoscenarioId)
+        navigate(`${window.location.pathname}?risikoscenario=${risikoscenarioId}`)
       }
     } else {
       if (formRef.current?.dirty) {
@@ -134,10 +138,11 @@ export const KravRisikoscenario = (props: IProps) => {
         {!isLeggTilEksisterendeMode && (
           <div className="mb-5">
             <Accordion>
-              {risikoscenarioForKrav.map((risikoscenario, index) => {
-                const expanded = risikoscenarioId
+              {risikoscenarioForKrav.map((risikoscenario: IRisikoscenario, index: number) => {
+                const expanded: boolean = risikoscenarioId
                   ? risikoscenarioId === risikoscenario.id
                   : activeRisikoscenarioId === risikoscenario.id
+
                 return (
                   <Accordion.Item
                     open={expanded}
