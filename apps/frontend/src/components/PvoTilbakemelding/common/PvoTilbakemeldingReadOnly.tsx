@@ -31,11 +31,15 @@ export const PvoTilbakemeldingReadOnly = (props: IProps) => {
       <div>
         <Label>Vurdéring av etterleverens svar.</Label>
         <BodyLong>
-          {tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.TILSTREKKELIG &&
+          {!tilbakemeldingsinnhold && 'Ikke vurdert'}
+          {tilbakemeldingsinnhold &&
+            tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.TILSTREKKELIG &&
             'Ja, tilstrekkelig'}
-          {tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.TILSTREKKELIG_FORBEHOLDT &&
+          {tilbakemeldingsinnhold &&
+            tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.TILSTREKKELIG_FORBEHOLDT &&
             ' Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som beskrives i fritekst under'}
-          {tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.UTILSTREKKELIG &&
+          {tilbakemeldingsinnhold &&
+            tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.UTILSTREKKELIG &&
             'Utilstrekkelig, beskrives nærmere under'}
         </BodyLong>
       </div>
@@ -43,10 +47,12 @@ export const PvoTilbakemeldingReadOnly = (props: IProps) => {
       <div className="my-5">
         <Label>Tilbakemelding</Label>
         <BodyLong>
-          {tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere &&
+          {tilbakemeldingsinnhold &&
+            tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere &&
             tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere.length !== 0 &&
             tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere}
-          {(!tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere ||
+          {(!tilbakemeldingsinnhold ||
+            !tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere ||
             tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere.length === 0) &&
             'Ingen tilbakemelding'}
         </BodyLong>

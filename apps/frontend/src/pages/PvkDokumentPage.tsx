@@ -221,7 +221,16 @@ export const PvkDokumentPage = () => {
                       updateTitleUrlAndStep={updateTitleUrlAndStep}
                     />
                   )}
-                  {activeStep === 2 && <BehandlingensLivslopView />}
+                  {activeStep === 2 && (
+                    <BehandlingensLivslopView
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      activeStep={activeStep}
+                      setActiveStep={updateTitleUrlAndStep}
+                      setSelectedStep={setSelectedStep}
+                      formRef={formRef}
+                      pvoTilbakemeliding={pvoTilbakemelding}
+                    />
+                  )}
                   {activeStep === 3 && (
                     <BehandlingensArtOgOmfangView
                       personkategorier={personkategorier}
