@@ -1,4 +1,4 @@
-package no.nav.data.common.utils;
+    package no.nav.data.common.utils;
 
 import no.nav.data.common.exceptions.TechnicalException;
 import org.hibernate.Hibernate;
@@ -35,6 +35,8 @@ public final class HibernateUtils {
     
     /**
      * Initializes the object, even when it is a detached proxy
+     * This should only be used in tests. 
+     * You will need this in production code only if you have a problem with transaction boundries that you need to fix.
      */
     public static <T> T initialize(T input) {
         if (! (input instanceof HibernateProxy)) {

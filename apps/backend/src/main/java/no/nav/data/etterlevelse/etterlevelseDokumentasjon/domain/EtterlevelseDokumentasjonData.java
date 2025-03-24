@@ -23,14 +23,14 @@ public class EtterlevelseDokumentasjonData {
     private String beskrivelse;
     private String gjenbrukBeskrivelse;
     @Builder.Default
-    private boolean tilgjengeligForGjenbruk = false; // FIXME: tilgjengeligForGjenbruk vs. forGjenbruk
+    private boolean tilgjengeligForGjenbruk = false; // True if document is ready for re-use
     @Builder.Default
     private boolean behandlerPersonopplysninger = true;
     private String virkemiddelId;
     @Builder.Default
     private boolean knyttetTilVirkemiddel = true;
     @Builder.Default
-    private boolean forGjenbruk = false;
+    private boolean forGjenbruk = false; // True if document is intenden for re-use
     private List<String> teams;
     private List<String> resources;
     private List<String> risikoeiere;

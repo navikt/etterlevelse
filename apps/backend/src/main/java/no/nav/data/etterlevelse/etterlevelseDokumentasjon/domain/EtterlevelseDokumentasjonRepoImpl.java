@@ -79,13 +79,12 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
                        select etterlevelseDokumentasjonId
                          from (
                                   select distinct on (data #>> '{data,etterlevelseDokumentasjonId}') data #>> '{data,etterlevelseDokumentasjonId}' etterlevelseDokumentasjonId, time
-                                   from audit_version
-                                   where table_name in ('Etterlevelse', 'ETTERLEVELSE')
-                                   and user_id like :user_id
-                                   and data #>> '{data,etterlevelseDokumentasjonId}' is not null -- old data that lacks this field, probably only dev
-                                   and (exists (select 1 from generic_storage where id = cast(table_id as uuid))
-                                        or exists (select 1 from etterlevelse_dokumentasjon where id = cast(table_id as uuid)))
-                                   order by data #>> '{data,etterlevelseDokumentasjonId}', time desc
+                                  from audit_version
+                                  where table_name in ('Etterlevelse', 'ETTERLEVELSE')
+                                    and user_id like :user_id
+                                    and data #>> '{data,etterlevelseDokumentasjonId}' is not null -- old data that lacks this field, probably only dev
+                                    and exists (select 1 from etterlevelse_dokumentasjon where id = cast(table_id as uuid))
+                                  order by data #>> '{data,etterlevelseDokumentasjonId}', time desc
                               ) sub
                          order by time desc
                          limit :limit
@@ -95,13 +94,12 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
                        select etterlevelseDokumentasjonId
                          from (
                                   select distinct on (data #>> '{data,id}') data #>> '{data,id}' etterlevelseDokumentasjonId, time
-                                   from audit_version
-                                   where table_name in ('Etterlevelse', 'ETTERLEVELSE')
-                                   and user_id like :user_id
-                                   and data #>> '{data,id}' is not null -- old data that lacks this field, probably only dev
-                                   and (exists (select 1 from generic_storage where id = cast(table_id as uuid))
-                                        or exists (select 1 from etterlevelse_dokumentasjon where id = cast(table_id as uuid)))
-                                   order by data #>> '{data,id}', time desc
+                                  from audit_version
+                                  where table_name in ('EtterlevelseDokumentasjon', 'ETTERLEVELSE_DOKUMENTASJON')
+                                    and user_id like :user_id
+                                    and data #>> '{data,id}' is not null -- old data that lacks this field, probably only dev
+                                    and exists (select 1 from etterlevelse_dokumentasjon where id = cast(table_id as uuid))
+                                  order by data #>> '{data,id}', time desc
                               ) sub
                          order by time desc
                          limit :limit
