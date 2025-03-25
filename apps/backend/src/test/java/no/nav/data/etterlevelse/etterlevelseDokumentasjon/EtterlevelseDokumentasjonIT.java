@@ -27,7 +27,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
     @Test
     void getEtterlevelseDokumentasjon() {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.save(EtterlevelseDokumentasjon.builder()
-                .etterlevelseDokumentasjonData(EtterlevelseDokumentasjonData.builder().title("test").build()).build());
+                .data(EtterlevelseDokumentasjonData.builder().title("test").build()).build());
 
         var resp = restTemplate.getForEntity("/etterlevelsedokumentasjon/{id}", EtterlevelseDokumentasjonResponse.class, etterlevelseDokumentasjon.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -39,7 +39,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
     @Test
     void getEtterlevelseByNummer() {
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.save(EtterlevelseDokumentasjon.builder()
-                .etterlevelseDokumentasjonData(EtterlevelseDokumentasjonData.builder().title("test2").etterlevelseNummer(701).build()).build());
+                .data(EtterlevelseDokumentasjonData.builder().title("test2").etterlevelseNummer(701).build()).build());
 
         var resp = restTemplate.getForEntity("/etterlevelsedokumentasjon/search/{searchParam}", EtterlevelseDokumentasjonController.EtterlevelseDokumentasjonPage.class, etterlevelseDokumentasjon.getEtterlevelseNummer());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -52,9 +52,9 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
     @Test
     void deleteEtterlevelseDokumentasjonAndChildren() {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon_1 = etterlevelseDokumentasjonRepo.save(EtterlevelseDokumentasjon.builder()
-                .etterlevelseDokumentasjonData(EtterlevelseDokumentasjonData.builder().title("test1").etterlevelseNummer(101).build()).build());
+                .data(EtterlevelseDokumentasjonData.builder().title("test1").etterlevelseNummer(101).build()).build());
         EtterlevelseDokumentasjon etterlevelseDokumentasjon_2 = etterlevelseDokumentasjonRepo.save(EtterlevelseDokumentasjon.builder()
-                .etterlevelseDokumentasjonData(EtterlevelseDokumentasjonData.builder().title("test2").etterlevelseNummer(102).build()).build());
+                .data(EtterlevelseDokumentasjonData.builder().title("test2").etterlevelseNummer(102).build()).build());
 
 
         etterlevelseService.save(Etterlevelse.builder().kravNummer(200).kravVersjon(1).etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId()).build());
