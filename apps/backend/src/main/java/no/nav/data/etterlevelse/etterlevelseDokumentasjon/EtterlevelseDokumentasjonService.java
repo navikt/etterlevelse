@@ -12,7 +12,6 @@ import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepoImpl;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
@@ -49,7 +48,6 @@ public class EtterlevelseDokumentasjonService {
     // TODO: Flere avhengighet i denne serviceklassen til controller
 
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
-    private final EtterlevelseDokumentasjonRepoImpl customEtterlevelseDokumentasjonRepo;
     
     private final BehandlingService behandlingService;
     private final EtterlevelseMetadataService etterlevelseMetadataService;
@@ -75,7 +73,7 @@ public class EtterlevelseDokumentasjonService {
     }
 
     public List<EtterlevelseDokumentasjon> getEtterlevelseDokumentasjonerByTeam(String teamId) {
-        return customEtterlevelseDokumentasjonRepo.getEtterlevelseDokumentasjonerForTeam(List.of(teamId));
+        return etterlevelseDokumentasjonRepo.getEtterlevelseDokumentasjonerForTeam(List.of(teamId));
     }
 
     public List<EtterlevelseDokumentasjon> searchEtterlevelseDokumentasjon(String searchParam) {
@@ -110,7 +108,7 @@ public class EtterlevelseDokumentasjonService {
         if (filter.getVirkemiddelId() != null && !filter.getVirkemiddelId().isEmpty()) {
             return getByVirkemiddelId(List.of(filter.getVirkemiddelId()));
         }
-        return customEtterlevelseDokumentasjonRepo.findBy(filter);
+        return etterlevelseDokumentasjonRepo.findBy(filter);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -210,7 +208,7 @@ public class EtterlevelseDokumentasjonService {
 
 
     public List<EtterlevelseDokumentasjon> getByBehandlingId(List<String> ids) {
-        return customEtterlevelseDokumentasjonRepo.findByBehandlingIds(ids);
+        return etterlevelseDokumentasjonRepo.findByBehandlingIds(ids);
     }
 
     public List<EtterlevelseDokumentasjon> getByVirkemiddelId(List<String> ids) {
@@ -226,7 +224,7 @@ public class EtterlevelseDokumentasjonService {
     }
 
     public List<EtterlevelseDokumentasjon> findByKravRelevans(List<String> kravRelevans) {
-        return customEtterlevelseDokumentasjonRepo.findByKravRelevans(kravRelevans);
+        return etterlevelseDokumentasjonRepo.findByKravRelevans(kravRelevans);
     }
 
     // Does not update DB

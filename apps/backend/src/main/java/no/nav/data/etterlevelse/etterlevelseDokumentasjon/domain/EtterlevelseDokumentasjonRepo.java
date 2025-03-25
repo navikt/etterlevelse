@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface EtterlevelseDokumentasjonRepo extends JpaRepository<EtterlevelseDokumentasjon, UUID> {
+public interface EtterlevelseDokumentasjonRepo extends JpaRepository<EtterlevelseDokumentasjon, UUID>, EtterlevelseDokumentasjonRepoCustom {
 
     @Query(value = "select * from etterlevelse_dokumentasjon where data ->> 'virkemiddelId' in ?1", nativeQuery = true)
     List<EtterlevelseDokumentasjon> findByVirkemiddelIds(List<String> ids);
