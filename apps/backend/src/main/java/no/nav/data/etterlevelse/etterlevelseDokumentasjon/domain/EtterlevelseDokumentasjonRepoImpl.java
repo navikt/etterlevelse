@@ -3,6 +3,7 @@ package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 import lombok.RequiredArgsConstructor;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -10,12 +11,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
+import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Repository
 @RequiredArgsConstructor
 public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentasjonRepoCustom {
 
+    private final JpaRepository<EtterlevelseDokumentasjon, UUID> repository;
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     public List<EtterlevelseDokumentasjon> findByIrrelevans(List<String> codes) {
@@ -112,12 +115,6 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
     }
 
     private List<EtterlevelseDokumentasjon> fetch(List<Map<String, Object>> resp) {
-        List<UUID> ids = resp.stream().map(i -> ((UUID) i.values().iterator().next())).collect(Collectors.toList());
-        if (ids.isEmpty()) {
-            return List.of();
-        }
-        String query = "select * from etterlevelse_dokumentasjon where id in ( :ids )";
-        var par = Map.of("ids", ids);
-        return jdbcTemplate.queryForList(query, par, EtterlevelseDokumentasjon.class);
+        return repository.findAllById(convert(resp, i -> (UUID) i.values().iterator().next()));
     }
 }
