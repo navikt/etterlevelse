@@ -59,7 +59,7 @@ public class EtterlevelseDokumentasjonResponse {
     private boolean hasCurrentUserAccess;
     
     public static EtterlevelseDokumentasjonResponse buildFrom(EtterlevelseDokumentasjon eDok) {
-        EtterlevelseDokumentasjonData eDokData = eDok.getEtterlevelseDokumentasjonData();
+        EtterlevelseDokumentasjonData eDokData = eDok.getData();
         return EtterlevelseDokumentasjonResponse.builder()
                 .id(eDok.getId())
                 .changeStamp(ChangeStampResponse.buildFrom(eDok))

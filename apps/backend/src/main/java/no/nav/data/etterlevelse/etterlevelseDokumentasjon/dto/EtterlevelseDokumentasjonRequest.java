@@ -16,9 +16,7 @@ import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import java.util.List;
 
 import static no.nav.data.common.utils.StreamUtils.copyOf;
-import static no.nav.data.common.utils.StringUtils.formatList;
-import static no.nav.data.common.utils.StringUtils.formatListToUppercase;
-import static no.nav.data.common.utils.StringUtils.toUpperCaseAndTrim;
+import static no.nav.data.common.utils.StringUtils.*;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
@@ -77,7 +75,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     
     // Updates all fields of an EtterlevelseDokumentasjon except id, version and changestamp
     public void mergeInto(EtterlevelseDokumentasjon eDok) {
-        EtterlevelseDokumentasjonData eDokData = eDok.getEtterlevelseDokumentasjonData();
+        EtterlevelseDokumentasjonData eDokData = eDok.getData();
         eDok.setEtterlevelseNummer(etterlevelseNummer);
         eDokData.setTitle(title);
         eDokData.setBehandlingIds(copyOf(behandlingIds));

@@ -5,11 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
@@ -39,72 +35,72 @@ public class EtterlevelseDokumentasjon extends Auditable  {
     @Type(value = JsonBinaryType.class)
     @Column(name = "DATA", nullable = false)
     @Builder.Default
-    private EtterlevelseDokumentasjonData etterlevelseDokumentasjonData = new EtterlevelseDokumentasjonData();
+    private EtterlevelseDokumentasjonData data = new EtterlevelseDokumentasjonData();
     
     public List<CodelistResponse> irrelevantForAsCodes() {
-        return CodelistService.getCodelistResponseList(ListName.RELEVANS, etterlevelseDokumentasjonData.getIrrelevansFor());
+        return CodelistService.getCodelistResponseList(ListName.RELEVANS, data.getIrrelevansFor());
     }
 
     public InstanceId convertToInstanceId() {
-        return new InstanceId(id.toString(), etterlevelseDokumentasjonData.getTitle(), "E" + etterlevelseDokumentasjonData.getEtterlevelseNummer());
+        return new InstanceId(id.toString(), data.getTitle(), "E" + data.getEtterlevelseNummer());
     }
 
     // The rest is just boilerplate to delegate some getters and setters to data
     
     public int getEtterlevelseNummer() {
-        return etterlevelseDokumentasjonData.getEtterlevelseNummer();
+        return data.getEtterlevelseNummer();
     }
 
     public void setEtterlevelseNummer(int nextEtterlevelseDokumentasjonNummer) {
-        etterlevelseDokumentasjonData.setEtterlevelseNummer(nextEtterlevelseDokumentasjonNummer);
+        data.setEtterlevelseNummer(nextEtterlevelseDokumentasjonNummer);
     }
 
     public String getTitle() {
-        return etterlevelseDokumentasjonData.getTitle();
+        return data.getTitle();
     }
 
     public boolean isForGjenbruk() {
-        return etterlevelseDokumentasjonData.isForGjenbruk();
+        return data.isForGjenbruk();
     }
 
     public List<String> getPrioritertKravNummer() {
-        return etterlevelseDokumentasjonData.getPrioritertKravNummer();
+        return data.getPrioritertKravNummer();
     }
 
     public void setPrioritertKravNummer(List<String> prioritertKravNummer) {
-        etterlevelseDokumentasjonData.setPrioritertKravNummer(prioritertKravNummer);
+        data.setPrioritertKravNummer(prioritertKravNummer);
     }
 
     public List<String> getBehandlingIds() {
-        return etterlevelseDokumentasjonData.getBehandlingIds();
+        return data.getBehandlingIds();
     }
 
     public String getAvdeling() {
-        return etterlevelseDokumentasjonData.getAvdeling();
+        return data.getAvdeling();
     }
 
     public List<String> getTeams() {
-        return etterlevelseDokumentasjonData.getTeams();
+        return data.getTeams();
     }
 
     public List<Varslingsadresse> getVarslingsadresser() {
-        return etterlevelseDokumentasjonData.getVarslingsadresser();
+        return data.getVarslingsadresser();
     }
 
     public String getVirkemiddelId() {
-        return etterlevelseDokumentasjonData.getVirkemiddelId();
+        return data.getVirkemiddelId();
     }
 
     public boolean isTilgjengeligForGjenbruk() {
-        return etterlevelseDokumentasjonData.isTilgjengeligForGjenbruk();
+        return data.isTilgjengeligForGjenbruk();
     }
 
     public boolean isKnyttetTilVirkemiddel() {
-        return etterlevelseDokumentasjonData.isKnyttetTilVirkemiddel();
+        return data.isKnyttetTilVirkemiddel();
     }
 
     public List<String> getIrrelevansFor() {
-        return etterlevelseDokumentasjonData.getIrrelevansFor();
+        return data.getIrrelevansFor();
     }
 
 }
