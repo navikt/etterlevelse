@@ -49,11 +49,6 @@ alter table etterlevelse
 alter column etterlevelse_dokumentasjon_id type uuid using (etterlevelse_dokumentasjon_id::uuid)
 ;
 
--- Slett foreldreløse etterlevelser...
-delete from etterlevelse e
-where not exists (select 1 from etterlevelse_dokumentasjon ed where e.id = ed.id)
-;
-
 -- Gjør den til en fremmednøkkel...
 alter table etterlevelse
 add constraint fk_etterlevelse_etterlevelse_dokumentasjon_id
