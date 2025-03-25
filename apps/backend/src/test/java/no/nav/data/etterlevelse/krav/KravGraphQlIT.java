@@ -235,7 +235,7 @@ class KravGraphQlIT extends GraphQLTestBase {
             List<String> EtterlevelseDokumentasjonRelevans = List.of("SAK");
 
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = createEtterlevelseDokumentasjon();
-            etterlevelseDokumentasjon.getData().setIrrelevansFor(List.of("INNSYN"));
+            etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setIrrelevansFor(List.of("INNSYN"));
             etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
             
 

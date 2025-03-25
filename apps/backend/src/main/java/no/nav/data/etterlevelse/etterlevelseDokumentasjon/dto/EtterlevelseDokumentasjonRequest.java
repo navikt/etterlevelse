@@ -75,7 +75,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     
     // Updates all fields of an EtterlevelseDokumentasjon except id, version and changestamp
     public void mergeInto(EtterlevelseDokumentasjon eDok) {
-        EtterlevelseDokumentasjonData eDokData = eDok.getData();
+        EtterlevelseDokumentasjonData eDokData = eDok.getEtterlevelseDokumentasjonData();
         eDok.setEtterlevelseNummer(etterlevelseNummer);
         eDokData.setTitle(title);
         eDokData.setBehandlingIds(copyOf(behandlingIds));
