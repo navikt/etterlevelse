@@ -11,7 +11,6 @@ interface IProps {
   databehandlere: string[]
   pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
-  setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -116,6 +115,7 @@ export const InvolveringAvEksternePvoView = (props: IProps) => {
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         setSelectedStep={setSelectedStep}
+        submitForm={formRef.current?.submitForm}
       />
     </div>
   )

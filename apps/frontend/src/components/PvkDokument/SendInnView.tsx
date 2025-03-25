@@ -1,5 +1,5 @@
 import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, CopyButton, Heading } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, CopyButton, Heading, Label } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
 import {
@@ -7,7 +7,8 @@ import {
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '../../api/PvkDokumentApi'
-import { EPvkDokumentStatus, IPvkDokument } from '../../constants'
+import { EPvkDokumentStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
+import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
 import FormButtons from './edit/FormButtons'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
@@ -24,6 +25,7 @@ interface IProps {
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
+  pvoTilbakemelding?: IPvoTilbakemelding
 }
 
 export const SendInnView = (props: IProps) => {
@@ -37,6 +39,7 @@ export const SendInnView = (props: IProps) => {
     activeStep,
     setActiveStep,
     setSelectedStep,
+    pvoTilbakemelding,
   } = props
 
   const [submitPvkStatus, setSubmitPvkStatus] = useState<EPvkDokumentStatus>(
@@ -56,6 +59,10 @@ export const SendInnView = (props: IProps) => {
       })
     })
   }
+
+  const underarbeidCheck =
+    pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
+    pvkDokument.status === EPvkDokumentStatus.AKTIV
 
   return (
     <Formik
@@ -90,14 +97,39 @@ export const SendInnView = (props: IProps) => {
 
               <RisikoscenarioSummary />
 
-              <div className="mt-5 mb-3 max-w-[75ch]">
-                <TextAreaField
-                  rows={3}
-                  noPlaceholder
-                  label="Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)"
-                  name="merknadTilPvoEllerRisikoeier"
-                />
-              </div>
+              {underarbeidCheck && (
+                <div className="mt-5 mb-3 max-w-[75ch]">
+                  <TextAreaField
+                    rows={3}
+                    noPlaceholder
+                    label="Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)"
+                    name="merknadTilPvoEllerRisikoeier"
+                  />
+                </div>
+              )}
+
+              {pvoTilbakemelding &&
+                (pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
+                  pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) && (
+                  <div>
+                    <div className="mt-5 mb-3 max-w-[75ch]">
+                      <Label>Beskjed til personvernombudet</Label>
+                      <DataTextWrapper>
+                        {pvkDokument.merknadTilPvoEllerRisikoeier
+                          ? pvkDokument.merknadTilPvoEllerRisikoeier
+                          : 'Ingen beskjed'}
+                      </DataTextWrapper>
+                    </div>
+                    <div className="mt-5 mb-3 max-w-[75ch]">
+                      <Label>Beskjed til etterlever</Label>
+                      <DataTextWrapper>
+                        {pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
+                          ? pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
+                          : 'Ingen beskjed'}
+                      </DataTextWrapper>
+                    </div>
+                  </div>
+                )}
 
               <CopyButton
                 variant="action"
@@ -126,7 +158,14 @@ export const SendInnView = (props: IProps) => {
                         type="button"
                         variant="secondary"
                         onClick={() => {
-                          setSubmitPvkStatus(EPvkDokumentStatus.UNDERARBEID)
+                          if (
+                            pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
+                            pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
+                          ) {
+                            setSubmitPvkStatus(EPvkDokumentStatus.UNDERARBEID)
+                          } else {
+                            setSubmitPvkStatus(pvkDokument.status)
+                          }
                           submitForm()
                         }}
                       >
@@ -134,15 +173,41 @@ export const SendInnView = (props: IProps) => {
                       </Button>
                     )}
 
-                    <Button
-                      type="button"
-                      onClick={() => {
-                        setSubmitPvkStatus(EPvkDokumentStatus.SENDT_TIL_PVO)
-                        submitForm()
-                      }}
-                    >
-                      Send til Personvernombudet
-                    </Button>
+                    {underarbeidCheck && (
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          setSubmitPvkStatus(EPvkDokumentStatus.SENDT_TIL_PVO)
+                          submitForm()
+                        }}
+                      >
+                        Send til Personvernombudet
+                      </Button>
+                    )}
+
+                    {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          setSubmitPvkStatus(EPvkDokumentStatus.VURDERT_AV_PVO)
+                          submitForm()
+                        }}
+                      >
+                        Angre godkjenning
+                      </Button>
+                    )}
+
+                    {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && (
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          setSubmitPvkStatus(EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
+                          submitForm()
+                        }}
+                      >
+                        Godkjent
+                      </Button>
+                    )}
                   </div>
                 }
               />

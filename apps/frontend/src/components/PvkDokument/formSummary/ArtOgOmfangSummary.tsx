@@ -19,9 +19,9 @@ export const ArtOgOmFangSummary = (props: IProps) => {
             <FormSummary.Heading level="2">{StepTitle[1]}</FormSummary.Heading>
             <FormSummary.EditLink
               className="cursor-pointer"
-              onClick={() => updateTitleUrlAndStep(customStepNumber ? customStepNumber : 2)}
+              onClick={() => updateTitleUrlAndStep(customStepNumber ? customStepNumber : 3)}
               href={
-                window.location.pathname.slice(0, -1) + `${customStepNumber ? customStepNumber : 2}`
+                window.location.pathname.slice(0, -1) + `${customStepNumber ? customStepNumber : 3}`
               }
             >
               {customLinktext ? customLinktext : 'Endre svar'}

@@ -5,6 +5,7 @@ import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
+import no.nav.data.common.utils.SpringUtils;
 import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService;
@@ -16,6 +17,8 @@ import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.etterlevelse.krav.domain.Krav;
@@ -47,8 +50,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
@@ -91,8 +97,6 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected StorageService<EtterlevelseMetadata> etterlevelseMetadataStorageService;
     @Autowired
-    protected StorageService<EtterlevelseDokumentasjon> etterlevelseDokumentasjonStorageService;
-    @Autowired
     protected StorageService<Melding> meldingStorageService;
     @Autowired
     protected StorageService<Tilbakemelding> tilbakemeldingStorageService;
@@ -102,6 +106,8 @@ public abstract class IntegrationTestBase {
     protected BehandlingService behandlingService;
     @Autowired
     protected EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+    @Autowired
+    protected EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
     @Autowired
     protected EtterlevelseService etterlevelseService;
     @Autowired
@@ -134,6 +140,7 @@ public abstract class IntegrationTestBase {
     protected RisikoscenarioRepo risikoscenarioRepo;
 
     @BeforeEach
+    @Transactional
     void setUpBase() {
         repository.deleteAll();
         auditVersionRepository.deleteAll();
@@ -147,6 +154,7 @@ public abstract class IntegrationTestBase {
         repository.deleteAll();
         MockFilter.clearUser();
         etterlevelseRepo.deleteAll();
+        etterlevelseDokumentasjonRepo.deleteAll();
         behandlingensLivslopRepo.deleteAll();
         tiltakRepo.deleteAllTiltakRisikoscenarioRelations();
         tiltakRepo.deleteAll();
@@ -158,6 +166,7 @@ public abstract class IntegrationTestBase {
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
         public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
+            configurableApplicationContext.addApplicationListener(new AppListener());
             TestPropertyValues.of(
                     "spring.datasource.url=" + postgreSQLContainer.getJdbcUrl(),
                     "spring.datasource.username=" + postgreSQLContainer.getUsername(),
@@ -198,5 +207,43 @@ public abstract class IntegrationTestBase {
                 )
                 .build();
     }
+    
+    protected EtterlevelseDokumentasjon createEtterlevelseDokumentasjon() {
+        return etterlevelseDokumentasjonService.save(
+                EtterlevelseDokumentasjonRequest.builder()
+                        .title("test dokumentasjon")
+                        .etterlevelseNummer(101)
+                        .knyttetTilVirkemiddel(false)
+                        .virkemiddelId("")
+                        .beskrivelse("")
+                        .forGjenbruk(false)
+                        .teams(List.of("TEST"))
+                        .resources(List.of("TEST"))
+                        .risikoeiere(List.of(""))
+                        .irrelevansFor(List.of(""))
+                        .update(false)
+                        .behandlerPersonopplysninger(true)
+                        .behandlingIds(List.of(""))
+                        .prioritertKravNummer(List.of())
+                        .varslingsadresser(List.of())
+                        .build()
+        );
+    }
+
+    /*
+     * Dette er et lite vakkert men nødvendig hæck. Ellers er det ikke sikkert AuditVersionListener.setRepo blir kalt. JpaConfig har kode som kaller
+     * AuditVersionListener.setRepo. Men i test er det av ukjent grunn ikke alltid den koden er kjørt før testene kjøres (ca. 2 av 3 ganger), noe som resulterer
+     * i NPE. Hæcket må fjernes når det ikke trengs lenger, siden dette er oppførsel som skiller den fra prod (kan teoretisk medføre maskering av bugs).
+     * TODO: Fjern dette hæcket når det ikke trengs lenger.
+     */
+    public static class AppListener implements ApplicationListener<ContextRefreshedEvent> {
+    @Override
+        public void onApplicationEvent(ContextRefreshedEvent event) {
+            ApplicationContext ctx = event.getApplicationContext();
+            // AuditVersionListener.setRepo(ctx.getBean(AuditVersionRepository.class));
+            new SpringUtils().setApplicationContext(ctx);
+        }
+    }
+
 
 }

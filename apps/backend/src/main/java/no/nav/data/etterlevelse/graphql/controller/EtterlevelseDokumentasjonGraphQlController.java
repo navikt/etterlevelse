@@ -107,12 +107,12 @@ public class EtterlevelseDokumentasjonGraphQlController {
 
     @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
     public List<EtterlevelseResponse> etterlevelser(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjon) {
-        return convert(etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString()), EtterlevelseResponse::buildFrom);
+        return convert(etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId()), EtterlevelseResponse::buildFrom);
     }
 
     @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
     public LocalDateTime sistEndretEtterlevelse(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjon) {
-        var etterlevelser = etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString());
+        var etterlevelser = etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId());
         return sistEndret(etterlevelser);
     }
 

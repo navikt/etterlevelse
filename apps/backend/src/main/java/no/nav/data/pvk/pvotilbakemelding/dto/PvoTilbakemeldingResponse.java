@@ -33,6 +33,7 @@ public class PvoTilbakemeldingResponse {
     private Tilbakemeldingsinnhold innvolveringAvEksterne;
     private Tilbakemeldingsinnhold risikoscenarioEtterTiltakk;
     private String merknadTilEtterleverEllerRisikoeier;
+    private LocalDateTime sendtDato;
 
     public static PvoTilbakemeldingResponse buildFrom(PvoTilbakemelding pvoTilbakemelding) {
         return PvoTilbakemeldingResponse.builder()
@@ -45,6 +46,7 @@ public class PvoTilbakemeldingResponse {
                 .version(pvoTilbakemelding.getVersion())
                 .pvkDokumentId(pvoTilbakemelding.getPvkDokumentId().toString())
                 .status(pvoTilbakemelding.getStatus())
+                .sendtDato(pvoTilbakemelding.getPvoTilbakemeldingData().getSendtDato())
 
                 .behandlingenslivslop(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingenslivslop())
                 .behandlingensArtOgOmfang(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingensArtOgOmfang())
