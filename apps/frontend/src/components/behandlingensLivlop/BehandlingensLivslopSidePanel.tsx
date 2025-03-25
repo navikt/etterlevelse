@@ -38,7 +38,8 @@ export const BehandlingensLivsLopSidePanel = (props: IProps) => {
         Dere har koblet følgende ROS-dokumentasjon på denne etterlevelsesdokumentasjonen:
       </Label>
 
-      {etterlevelseDokumentasjon.risikovurderinger.length > 0 ? (
+      {etterlevelseDokumentasjon.risikovurderinger &&
+      etterlevelseDokumentasjon.risikovurderinger.length > 0 ? (
         <List>
           {etterlevelseDokumentasjon.risikovurderinger.map((ros) => {
             const rosReg = /\[(.+)]\((.+)\)/i

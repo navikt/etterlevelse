@@ -26,9 +26,9 @@ export const InvolveringSummary = (props: IProps) => {
             <FormSummary.Heading level="2">{StepTitle[2]}</FormSummary.Heading>
             <FormSummary.EditLink
               className="cursor-pointer"
-              onClick={() => updateTitleUrlAndStep(customStepNumber ? customStepNumber : 3)}
+              onClick={() => updateTitleUrlAndStep(customStepNumber ? customStepNumber : 4)}
               href={
-                window.location.pathname.slice(0, -1) + `${customStepNumber ? customStepNumber : 3}`
+                window.location.pathname.slice(0, -1) + `${customStepNumber ? customStepNumber : 4}`
               }
             >
               {customLinktext ? customLinktext : 'Endre svar'}

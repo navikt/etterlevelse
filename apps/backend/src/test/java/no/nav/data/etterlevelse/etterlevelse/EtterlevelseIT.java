@@ -8,8 +8,6 @@ import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
@@ -41,7 +39,8 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
     @Test
     void getEtterlevelse() {
-        var etterlevelse = etterlevelseService.save(Etterlevelse.builder().kravVersjon(1).kravNummer(200).etterlevelseDokumentasjonId(UUID.randomUUID().toString()).build());
+        var eDok = createEtterlevelseDokumentasjon();
+        var etterlevelse = etterlevelseService.save(Etterlevelse.builder().kravVersjon(1).kravNummer(200).etterlevelseDokumentasjonId(eDok.getId()).build());
 
         var resp = restTemplate.getForEntity("/etterlevelse/{id}", EtterlevelseResponse.class, etterlevelse.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -51,8 +50,8 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
     @Test
     void getEtterlevelseByNummer() {
-        var etterlevelseDokumentasjon = createEtterlevelseDokumentasjon();
-        var etterlevelse = etterlevelseService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString()).build());
+        var eDok = createEtterlevelseDokumentasjon();
+        var etterlevelse = etterlevelseService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).etterlevelseDokumentasjonId(eDok.getId()).build());
 
         var resp = restTemplate.getForEntity("/etterlevelse/kravnummer/{nummer}/{versjon}", EtterlevelsePage.class, etterlevelse.getKravNummer(), etterlevelse.getKravVersjon());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -69,8 +68,9 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
     @Test
     void deleteEtterlevelse() {
-        var krav = etterlevelseService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).etterlevelseDokumentasjonId(UUID.randomUUID().toString()).build());
-        restTemplate.delete("/etterlevelse/{id}", krav.getId());
+        var eDok = createEtterlevelseDokumentasjon();
+        var etterlevelse = etterlevelseService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).etterlevelseDokumentasjonId(eDok.getId()).build());
+        restTemplate.delete("/etterlevelse/{id}", etterlevelse.getId());
 
         assertThat(etterlevelseRepo.count()).isEqualTo(0);
     }
@@ -78,11 +78,11 @@ public class EtterlevelseIT extends IntegrationTestBase {
     @Test
     void updateEtterlevelse() {
         var krav = kravStorageService.save(Krav.builder().kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
-        var etterlevelseDokumentasjon1 = createEtterlevelseDokumentasjon();
-        var etterlevelseDokumentasjon2 = createEtterlevelseDokumentasjon();
-        var etterlevelse = etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon1.getId().toString()).kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
+        var eDok1 = createEtterlevelseDokumentasjon();
+        var eDok2 = createEtterlevelseDokumentasjon();
+        var etterlevelse = etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(eDok1.getId()).kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
         var req = EtterlevelseRequest.builder()
-                .etterlevelseDokumentasjonId(etterlevelseDokumentasjon2.getId().toString())
+                .etterlevelseDokumentasjonId(eDok2.getId())
                 .kravNummer(krav.getKravNummer())
                 .kravVersjon(krav.getKravVersjon())
                 .id(etterlevelse.getId().toString())
@@ -92,39 +92,17 @@ public class EtterlevelseIT extends IntegrationTestBase {
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         EtterlevelseResponse etterlevelseResp = resp.getBody();
         assertThat(etterlevelseResp).isNotNull();
-        assertThat(etterlevelseResp.getEtterlevelseDokumentasjonId()).isEqualTo(etterlevelseDokumentasjon2.getId().toString());
-    }
-
-    private EtterlevelseDokumentasjon createEtterlevelseDokumentasjon() {
-        return etterlevelseDokumentasjonService.save(
-                EtterlevelseDokumentasjonRequest.builder()
-                        .title("test dokumentasjon")
-                        .etterlevelseNummer(101)
-                        .knyttetTilVirkemiddel(false)
-                        .virkemiddelId("")
-                        .beskrivelse("")
-                        .forGjenbruk(false)
-                        .teams(List.of("TEST"))
-                        .resources(List.of("TEST"))
-                        .risikoeiere(List.of(""))
-                        .irrelevansFor(List.of(""))
-                        .update(false)
-                        .behandlerPersonopplysninger(true)
-                        .behandlingIds(List.of(""))
-                        .prioritertKravNummer(List.of())
-                        .varslingsadresser(List.of())
-                        .build()
-        );
+        assertThat(etterlevelseResp.getEtterlevelseDokumentasjonId()).isEqualTo(eDok2.getId());
     }
 
     @Test
     void deleteKravOnEtterlevelseEndpoint() {
-        etterlevelseService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).etterlevelseDokumentasjonId(UUID.randomUUID().toString()).build());
+        var eDok = createEtterlevelseDokumentasjon();
+        etterlevelseService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).etterlevelseDokumentasjonId(eDok.getId()).build());
 
         var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).build());
 
         restTemplate.delete("/etterlevelse/{id}", krav.getId());
-
 
         var resp = restTemplate.getForEntity("/krav/{id}", KravResponse.class, krav.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -137,8 +115,10 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
         @Test
         void getAllEtterlevelse() {
-            etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(UUID.randomUUID().toString()).kravNummer(50).kravVersjon(1).build());
-            etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(UUID.randomUUID().toString()).kravNummer(50).kravVersjon(2).build());
+            var eDok1 = createEtterlevelseDokumentasjon();
+            var eDok2 = createEtterlevelseDokumentasjon();
+            etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(eDok1.getId()).kravNummer(50).kravVersjon(1).build());
+            etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(eDok2.getId()).kravNummer(50).kravVersjon(2).build());
 
             var resp = restTemplate.getForEntity("/etterlevelse?pageSize=1", EtterlevelsePage.class);
             assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -155,18 +135,21 @@ public class EtterlevelseIT extends IntegrationTestBase {
         }
 
         @Test
-        void getEtterlevelseByEtterlevelseDokumentasjonIdAndKravId_fetchEtterlevelseWithEtterlevelseDokumentasjonIdAndKravNummer_OneEtterlevelse(){
+        void getEtterlevelseByEtterlevelseDokumentasjonIdAndKravId_fetchEtterlevelseWithEtterlevelseDokumentasjonIdAndKravNummer_OneEtterlevelse() {
+            var eDok1 = createEtterlevelseDokumentasjon();
+            var eDok2 = createEtterlevelseDokumentasjon();
+
             etterlevelseService.save(Etterlevelse.builder()
-                    .etterlevelseDokumentasjonId("edTest1")
+                    .etterlevelseDokumentasjonId(eDok1.getId())
                     .kravNummer(50)
                     .kravVersjon(1)
                     .build());
             etterlevelseService.save(Etterlevelse.builder()
-                    .etterlevelseDokumentasjonId("edTest2")
+                    .etterlevelseDokumentasjonId(eDok2.getId())
                     .kravNummer(50)
                     .kravVersjon(2)
                     .build());
-            var resp = restTemplate.getForEntity("/etterlevelse/etterlevelseDokumentasjon/edTest1/50", EtterlevelsePage.class);
+            var resp = restTemplate.getForEntity("/etterlevelse/etterlevelseDokumentasjon/{id}/50", EtterlevelsePage.class, eDok1.getId());
             assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
             assertThat(resp.getBody()).isNotNull();
             assertThat(resp.getBody().getNumberOfElements()).isOne();
@@ -174,23 +157,26 @@ public class EtterlevelseIT extends IntegrationTestBase {
         }
 
         @Test
-        void getEtterlevelseByEtterlevelseDokumentasjonsIdAndKravId_fetchEtterlevelseWithEtterlevelseDokumentasjonsIdAndKravNummer_TwoEtterlevelse(){
+        void getEtterlevelseByEtterlevelseDokumentasjonsIdAndKravId_fetchEtterlevelseWithEtterlevelseDokumentasjonsIdAndKravNummer_TwoEtterlevelse() {
+            var eDok1 = createEtterlevelseDokumentasjon();
+            var eDok2 = createEtterlevelseDokumentasjon();
+
             etterlevelseService.save(Etterlevelse.builder()
-                    .etterlevelseDokumentasjonId("ed1")
+                    .etterlevelseDokumentasjonId(eDok1.getId())
                     .kravNummer(50)
                     .kravVersjon(1)
                     .build());
             etterlevelseService.save(Etterlevelse.builder()
-                    .etterlevelseDokumentasjonId("ed2")
+                    .etterlevelseDokumentasjonId(eDok2.getId())
                     .kravNummer(50)
                     .kravVersjon(2)
                     .build());
             etterlevelseService.save(Etterlevelse.builder()
-                    .etterlevelseDokumentasjonId("ed1")
+                    .etterlevelseDokumentasjonId(eDok1.getId())
                     .kravNummer(50)
                     .kravVersjon(3)
                     .build());
-            var resp = restTemplate.getForEntity("/etterlevelse/etterlevelseDokumentasjon/ed1/50", EtterlevelsePage.class);
+            var resp = restTemplate.getForEntity("/etterlevelse/etterlevelseDokumentasjon/{ed1}/50", EtterlevelsePage.class, eDok1.getId());
             assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
             assertThat(resp.getBody()).isNotNull();
             assertThat(resp.getBody().getTotalElements()).isEqualTo(2L);
@@ -198,10 +184,13 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
         @Test
         void getByEtterlevelseDokumentasjon() {
-            var ed1 = etterlevelseService.save(Etterlevelse.builder().kravNummer(200).kravVersjon(1).etterlevelseDokumentasjonId("ed1").build());
-            etterlevelseService.save(Etterlevelse.builder().kravNummer(200).kravVersjon(1).etterlevelseDokumentasjonId("ed2").build());
+            var eDok1 = createEtterlevelseDokumentasjon();
+            var eDok2 = createEtterlevelseDokumentasjon();
 
-            var resp = restTemplate.getForEntity("/etterlevelse?etterlevelseDokumentasjon={etterlevelseDokumentasjon}", EtterlevelsePage.class, "ed1");
+            var ed1 = etterlevelseService.save(Etterlevelse.builder().kravNummer(200).kravVersjon(1).etterlevelseDokumentasjonId(eDok1.getId()).build());
+            etterlevelseService.save(Etterlevelse.builder().kravNummer(200).kravVersjon(1).etterlevelseDokumentasjonId(eDok2.getId()).build());
+
+            var resp = restTemplate.getForEntity("/etterlevelse?etterlevelseDokumentasjon={etterlevelseDokumentasjon}", EtterlevelsePage.class, eDok1.getId());
             assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
             var body = resp.getBody();
             assertThat(body).isNotNull();
@@ -216,11 +205,11 @@ public class EtterlevelseIT extends IntegrationTestBase {
         @Test
         void createEtterlevelse() {
             var krav = kravStorageService.save(Krav.builder().kravNummer(50).status(KravStatus.AKTIV).build());
-            var etterlevelseDokumentasjon = createEtterlevelseDokumentasjon();
+            var eDok = createEtterlevelseDokumentasjon();
             var req = EtterlevelseRequest.builder()
                     .kravNummer(krav.getKravNummer())
                     .kravVersjon(krav.getKravVersjon())
-                    .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString())
+                    .etterlevelseDokumentasjonId(eDok.getId())
                     .statusBegrunnelse("statusBegrunnelse")
                     .dokumentasjon(List.of("dok"))
                     .etterleves(true)
@@ -236,10 +225,10 @@ public class EtterlevelseIT extends IntegrationTestBase {
             assertThat(etterlevelse).isNotNull();
 
             assertThat(etterlevelse.getId()).isNotNull();
-            assertFields(etterlevelse, etterlevelseDokumentasjon.getId().toString());
+            assertFields(etterlevelse, eDok.getId());
         }
 
-        private void assertFields(EtterlevelseResponse etterlevelse, String etterlevelseDokumentasjonId) {
+        private void assertFields(EtterlevelseResponse etterlevelse, UUID etterlevelseDokumentasjonId) {
             assertThat(etterlevelse.getChangeStamp()).isNotNull();
             assertThat(etterlevelse.getVersion()).isEqualTo(0);
 
@@ -261,7 +250,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
             var req = EtterlevelseRequest.builder()
                     .kravNummer(50)
                     .kravVersjon(1)
-                    .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString())
+                    .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId())
                     .prioritised(false)
                     .build();
 
@@ -279,7 +268,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
             var req = EtterlevelseRequest.builder()
                     .kravNummer(krav.getKravNummer())
                     .kravVersjon(krav.getKravVersjon())
-                    .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString())
+                    .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId())
                     .prioritised(false)
                     .build();
 

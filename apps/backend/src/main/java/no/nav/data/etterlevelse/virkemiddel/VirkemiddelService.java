@@ -34,7 +34,7 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
 
     private void validateVirkemiddelIsNotInUse(UUID virkemiddelId) {
         Virkemiddel virkemiddel = storage.get(virkemiddelId);
-        List<String> etterlevelseDokumentasjonList = etterlevelseDokumentasjonService.getByVirkemiddelId(List.of(virkemiddelId.toString())).stream().map((e)-> 'E' + e.getEtterlevelseNummer().toString()).toList();
+        List<String> etterlevelseDokumentasjonList = etterlevelseDokumentasjonService.getByVirkemiddelId(List.of(virkemiddelId.toString())).stream().map((e) -> "E" + e.getEtterlevelseNummer()).toList();
         List<String> kravList = kravService.findByVirkmiddelId(virkemiddelId.toString()).stream()
                 .map((k) -> 'K' + k.getKravNummer().toString() + "." + k.getKravVersjon().toString()).toList();
         List<String> joinedList = Stream.concat(etterlevelseDokumentasjonList.stream(), kravList.stream()).toList();

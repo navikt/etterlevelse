@@ -46,7 +46,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -122,7 +121,7 @@ public class StatistikkService {
             totalElements.addAndGet(etterlevelseDokumentasjon.getBehandlingIds().size());
 
             //Get all etterlevelse for etterlevelses dokumentasjon
-            List<Etterlevelse> etterlevelseList = etterlevelseService.getByEtterlevelseDokumentasjon(String.valueOf(etterlevelseDokumentasjon.getId()));
+            List<Etterlevelse> etterlevelseList = etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId());
 
             LocalDateTime opprettetDato = getFirstCreatedDateForEtterlevelser(etterlevelseList);
 
@@ -208,7 +207,7 @@ public class StatistikkService {
     }
 
     public EtterlevelseStatistikkResponse toEtterlevelseStatistikkResponse(Etterlevelse etterlevelse) {
-        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId()));
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelse.getEtterlevelseDokumentasjonId());
         LocalDateTime ferdigDokumentertDato = null;
 
         if (etterlevelse.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
@@ -238,7 +237,7 @@ public class StatistikkService {
         List<String> teamNames = etterlevelseDokumentasjon.getTeams().stream().map(t -> teamService.getTeam(t).isPresent() ? teamService.getTeam(t).get().getName() : "").toList();
         String ansvarlig;
 
-        if(etterlevelseDokumentasjon.getAvdeling() != null && !etterlevelseDokumentasjon.getAvdeling().isEmpty()) {
+        if (etterlevelseDokumentasjon.getAvdeling() != null && !etterlevelseDokumentasjon.getAvdeling().isEmpty()) {
             ansvarlig = CodelistService.getCodelist(ListName.AVDELING, etterlevelseDokumentasjon.getAvdeling()).getShortName();
         } else {
             ansvarlig = "";
@@ -259,9 +258,9 @@ public class StatistikkService {
 
         return EtterlevelseStatistikkResponse.builder()
                 .id(etterlevelse.getId())
-                .etterlevelseDokumentasjonId(etterlevelse.getEtterlevelseDokumentasjonId())
+                .etterlevelseDokumentasjonId(etterlevelse.getEtterlevelseDokumentasjonId().toString())
                 .etterlevelseDokumentasjonTittel(etterlevelseDokumentasjon.getTitle())
-                .etterlevelseDokumentasjonNummer("E" + etterlevelseDokumentasjon.getEtterlevelseNummer().toString())
+                .etterlevelseDokumentasjonNummer("E" + etterlevelseDokumentasjon.getEtterlevelseNummer())
                 .ansvarligId(etterlevelseDokumentasjon.getAvdeling())
                 .ansvarlig(ansvarlig)
                 .kravNummer(etterlevelse.getKravNummer())

@@ -34,7 +34,7 @@ export const OppsumeringAccordianContent = (props: IProps) => {
       <RisikoscenarioView
         risikoscenario={activeRisikoscenario}
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-        currentStep="5"
+        stepUrl="6"
       />
       <div className="mt-12">
         <Heading level="3" size="small">

@@ -9,7 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemedlingRequest;
 import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemeldingResponse;
 import org.springframework.data.domain.Page;
@@ -29,6 +32,7 @@ import java.util.UUID;
 public class PvoTilbakemeldingController {
 
     private final PvoTilbakemeldingService pvoTilbakemeldingService;
+    private final PvkDokumentService pvkDokumentService;
 
     @Operation(summary = "Get All PVO tilbakemelding")
     @ApiResponse(description = "ok")
@@ -64,6 +68,10 @@ public class PvoTilbakemeldingController {
         //kan kaste et data integrity violation exception(1 til 1 kobling mot pvk dokument)
         var pvoTilbakemelding = pvoTilbakemeldingService.save(request.convertToPvoTilbakemelding(), request.isUpdate());
 
+        if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
+            updatePvkDokumentStatusToVurdertAvPvo(pvoTilbakemelding);
+        }
+
         return new ResponseEntity<>(PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding), HttpStatus.CREATED);
     }
 
@@ -85,6 +93,11 @@ public class PvoTilbakemeldingController {
 
         request.mergeInto(pvoTilbakemeldingToUpdate);
         var pvoTilbakemelding = pvoTilbakemeldingService.save(pvoTilbakemeldingToUpdate, request.isUpdate());
+
+        if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
+            updatePvkDokumentStatusToVurdertAvPvo(pvoTilbakemelding);
+        }
+
         return ResponseEntity.ok(PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding));
     }
 
@@ -100,5 +113,12 @@ public class PvoTilbakemeldingController {
         } else {
             return ResponseEntity.ok(PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding));
         }
+    }
+
+    private void updatePvkDokumentStatusToVurdertAvPvo(PvoTilbakemelding pvoTilbakemelding) {
+            log.info("Updating PVK document with id = {}, with status = {}, after PVO has finished the evaluation.", pvoTilbakemelding.getPvkDokumentId(), PvkDokumentStatus.VURDERT_AV_PVO);
+            var pvkDokument = pvkDokumentService.get(pvoTilbakemelding.getPvkDokumentId());
+            pvkDokument.setStatus(PvkDokumentStatus.VURDERT_AV_PVO);
+            pvkDokumentService.save(pvkDokument, true);
     }
 }

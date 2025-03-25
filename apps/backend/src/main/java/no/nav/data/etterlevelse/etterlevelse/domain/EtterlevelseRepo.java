@@ -24,15 +24,15 @@ public interface EtterlevelseRepo extends JpaRepository<Etterlevelse, UUID> {
     List<Etterlevelse> findByKravNummer(int nummer, int versjon);
 
     @Query(value = "select * from etterlevelse where etterlevelse_dokumentasjon_id = ?1", nativeQuery = true)
-    List<Etterlevelse> findByEtterlevelseDokumensjon(String etterlevelseDokumentasjonId);
+    List<Etterlevelse> findByEtterlevelseDokumensjon(UUID etterlevelseDokumentasjonId);
 
     @Query(value = "select * from etterlevelse where etterlevelse_dokumentasjon_id in ?1", nativeQuery = true)
-    List<Etterlevelse> findByEtterlevelseDokumentasjoner(List<String> etterlevelseDokumentasjonIds);
+    List<Etterlevelse> findByEtterlevelseDokumentasjoner(List<UUID> etterlevelseDokumentasjonIds);
 
     @Query(value = "select * from etterlevelse where etterlevelse_dokumentasjon_id = ?1 and krav_nummer = ?2", nativeQuery = true)
-    List<Etterlevelse> findByEtterlevelseDokumentasjonIdAndKravNummer(String etterlevelseDokumentasjonId, int nummer);
+    List<Etterlevelse> findByEtterlevelseDokumentasjonIdAndKravNummer(UUID etterlevelseDokumentasjonId, int nummer);
 
     @Query(value = "select * from etterlevelse where etterlevelse_dokumentasjon_id = ?1 and krav_nummer = ?2 and krav_versjon = ?3", nativeQuery = true)
-    Optional<Etterlevelse> findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(String etterlevelseDokumentasjonId, int nummer, int versjon);
+    Optional<Etterlevelse> findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(UUID etterlevelseDokumentasjonId, int nummer, int versjon);
 
 }

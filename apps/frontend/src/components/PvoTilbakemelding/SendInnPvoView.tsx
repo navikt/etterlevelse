@@ -20,7 +20,6 @@ interface IProps {
   personkategorier: string[]
   databehandlere: string[]
   pvoTilbakemelding: IPvoTilbakemelding
-  setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -34,12 +33,15 @@ export const SendInnPvoView = (props: IProps) => {
   )
 
   const submit = async (submittedValues: IPvoTilbakemelding) => {
+    //backend vil oppdatere statusen til PVk dokument til 'VURDERT_AV_PVO', dersom statusen til PVO tilbakemelding = 'FERDIG'
     await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
       .then(async (response) => {
         if (response) {
           const updatedValues: IPvoTilbakemelding = {
             ...response,
             status: submittedStatus,
+            sendtDato:
+              submittedStatus === EPvoTilbakemeldingStatus.FERDIG ? new Date().toISOString() : '',
             merknadTilEtterleverEllerRisikoeier:
               submittedValues.merknadTilEtterleverEllerRisikoeier,
           }
@@ -51,6 +53,8 @@ export const SendInnPvoView = (props: IProps) => {
           const createValue = mapPvoTilbakemeldingToFormValue({
             pvkDokumentId: pvkDokument.id,
             status: submittedStatus,
+            sendtDato:
+              submittedStatus === EPvoTilbakemeldingStatus.FERDIG ? new Date().toISOString() : '',
             merknadTilEtterleverEllerRisikoeier:
               submittedValues.merknadTilEtterleverEllerRisikoeier,
           })

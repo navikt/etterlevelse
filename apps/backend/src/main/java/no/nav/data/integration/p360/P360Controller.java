@@ -6,27 +6,32 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
-import no.nav.data.common.utils.StreamUtils;
-import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivToDocService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.export.EtterlevelseDokumentasjonToDoc;
-import no.nav.data.integration.behandling.BehandlingService;
-import no.nav.data.integration.behandling.dto.Behandling;
-import no.nav.data.integration.behandling.dto.DataBehandler;
-import no.nav.data.integration.p360.dto.*;
-import no.nav.data.integration.team.domain.Team;
-import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
+import no.nav.data.integration.p360.dto.P360Case;
+import no.nav.data.integration.p360.dto.P360CaseRequest;
+import no.nav.data.integration.p360.dto.P360Document;
+import no.nav.data.integration.p360.dto.P360DocumentCreateRequest;
+import no.nav.data.integration.p360.dto.P360DocumentRequest;
+import no.nav.data.integration.p360.dto.P360DocumentUpdateRequest;
+import no.nav.data.integration.p360.dto.P360File;
+import no.nav.data.integration.p360.dto.P360GetRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
-
-import static java.util.stream.Collectors.toList;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RestController
