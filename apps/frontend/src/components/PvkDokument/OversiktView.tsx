@@ -11,7 +11,6 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
-import { ExternalLink } from '../common/RouteLink'
 import FormButtons from './edit/FormButtons'
 
 interface IProps {
@@ -169,20 +168,6 @@ export const OversiktView = (props: IProps) => {
                     </Tag>
                   )}
                 </div>
-              </FormSummary.Value>
-            </FormSummary.Answer>
-
-            <FormSummary.Answer>
-              <FormSummary.Value>
-                <ExternalLink
-                  href={`/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/pvkbehov/${pvkDokument.id}`}
-                >
-                  Vurdér behov for PVK
-                </ExternalLink>
-              </FormSummary.Value>
-              <FormSummary.Value className="gap-2 flex">
-                {pvkDokument.skalUtforePvk && 'Vi skal gjennomføre PVK'}
-                {!pvkDokument.skalUtforePvk && 'Vi skal ikke gjennomføre PVK'}
               </FormSummary.Value>
             </FormSummary.Answer>
 
