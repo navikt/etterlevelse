@@ -36,7 +36,7 @@ public class EtterlevelseDokumentasjonGraphQlResponse extends EtterlevelseDokume
 
     public static EtterlevelseDokumentasjonGraphQlResponse buildFrom(EtterlevelseDokumentasjon etterlevelseDokumentasjon) {
         HibernateUtils.initialize(etterlevelseDokumentasjon); // Fully loads input if it is a detached proxy
-        EtterlevelseDokumentasjonData eDokData = etterlevelseDokumentasjon.getData();
+        EtterlevelseDokumentasjonData eDokData = etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData();
         return EtterlevelseDokumentasjonGraphQlResponse.builder()
                 .id(etterlevelseDokumentasjon.getId())
                 .changeStamp(ChangeStampResponse.buildFrom(etterlevelseDokumentasjon))
