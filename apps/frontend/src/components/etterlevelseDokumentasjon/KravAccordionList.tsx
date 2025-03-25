@@ -1,9 +1,12 @@
-import { Accordion, Link, List, Tag } from '@navikt/ds-react'
-import { EEtterlevelseStatus, EKravFilterType, IKravPriorityList, TKravQL } from '../../constants'
-import { TTemaCode } from '../../services/Codelist'
-import { getNumberOfDaysBetween } from '../../util/checkAge'
-import { getKravForTema } from '../../util/getKravForTema'
-import { KravCard } from '../etterlevelseDokumentasjonTema/KravCard'
+import {Accordion, Link, List, Tag} from '@navikt/ds-react'
+import {EEtterlevelseStatus, EKravFilterType, ERisikoscenarioType, IKravPriorityList, IRisikoscenario, TKravQL} from '../../constants'
+import {TTemaCode} from '../../services/Codelist'
+import {getNumberOfDaysBetween} from '../../util/checkAge'
+import {getKravForTema} from '../../util/getKravForTema'
+import {KravCard} from '../etterlevelseDokumentasjonTema/KravCard'
+import {useEffect, useState} from "react";
+import {getPvkDokumentByEtterlevelseDokumentId} from "../../api/PvkDokumentApi";
+import {getRisikoscenarioByPvkDokumentId} from "../../api/RisikoscenarioApi";
 
 interface IProps {
   etterlevelseDokumentasjonId: string
@@ -26,11 +29,36 @@ export const KravAccordionList = (props: IProps) => {
     allKravPriority,
   } = props
 
+  const [kravMedRelevantRisikoscenario, setKravMedRelevantRisikoscenario] = useState<IRisikoscenario[]>([])
+  const [isRisikoscenarioLoading, setIsRisikoscenarioLoading] = useState<boolean>(true)
+
   const toggleAccordion = (index: number) => {
     const newState = [...openAccordions]
     newState[index] = !openAccordions[index]
     setOpenAccordions(newState)
   }
+
+
+  useEffect(() => {
+    ;(async () => {
+      if (etterlevelseDokumentasjonId) {
+        setIsRisikoscenarioLoading(true)
+        await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
+          async (pvkDocId) => {
+            await getRisikoscenarioByPvkDokumentId(pvkDocId.id, ERisikoscenarioType.KRAV).then(
+              (riskoscenario) => {
+                setKravMedRelevantRisikoscenario(riskoscenario.content)
+
+                setIsRisikoscenarioLoading(false)
+              }
+            )
+          }
+        )
+      }
+
+    })()
+  }, [etterlevelseDokumentasjonId]);
+
 
   return (
     <Accordion indent={false}>
@@ -39,7 +67,7 @@ export const KravAccordionList = (props: IProps) => {
           const relevantStatsKravnummer = relevanteStats.map((k) => k.kravNummer)
 
           const filteredUtgaatKrav = utgaattStats.filter(
-            ({ kravNummer }) => !relevantStatsKravnummer.includes(kravNummer)
+            ({kravNummer}) => !relevantStatsKravnummer.includes(kravNummer)
           )
 
           const kravliste = getKravForTema({
@@ -92,8 +120,10 @@ export const KravAccordionList = (props: IProps) => {
                   </div>
                   <List className="flex flex-col gap-2">
                     {kravliste.map((krav, idx) => (
-                      <List.Item icon={<div />} key={`krav_${idx}`}>
+                      <List.Item icon={<div/>} key={`krav_${idx}`}>
                         <KravCard
+                          risikoscenarioList={kravMedRelevantRisikoscenario}
+                          isRisikoscenarioLoading={isRisikoscenarioLoading}
                           krav={krav}
                           kravFilter={EKravFilterType.RELEVANTE_KRAV}
                           etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}

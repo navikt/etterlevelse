@@ -3,13 +3,12 @@ import moment from 'moment'
 import {useEffect, useState} from 'react'
 import {getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber} from '../../api/EtterlevelseApi'
 import {getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue,} from '../../api/EtterlevelseMetadataApi'
-import {EEtterlevelseStatus, EKravFilterType, EKravStatus, ERisikoscenarioType, IEtterlevelseMetadata, TKravEtterlevelseData,} from '../../constants'
+import {EEtterlevelseStatus, EKravFilterType, EKravStatus, IEtterlevelseMetadata, IRisikoscenario, TKravEtterlevelseData,} from '../../constants'
 import {getNumberOfDaysBetween} from '../../util/checkAge'
 import {warningAlert} from '../Images'
 import StatusView from '../common/StatusTag'
 import {getEtterlevelseStatus, getStatusLabelColor,} from '../etterlevelseDokumentasjon/common/utils'
-import {getRisikoscenarioByPvkDokumentId} from "../../api/RisikoscenarioApi";
-import {getPvkDokumentByEtterlevelseDokumentId} from "../../api/PvkDokumentApi";
+
 
 interface IProps {
   krav: TKravEtterlevelseData
@@ -18,10 +17,12 @@ interface IProps {
   noVarsling?: boolean
   kravFilter: EKravFilterType
   temaCode?: string
+  risikoscenarioList: IRisikoscenario[]
+  isRisikoscenarioLoading: boolean
 }
 
 export const KravCard = (props: IProps) => {
-  const {noVarsling, krav, kravFilter, temaCode, etterlevelseDokumentasjonId} = props
+  const {noVarsling, krav, kravFilter, temaCode, etterlevelseDokumentasjonId, risikoscenarioList, isRisikoscenarioLoading} = props
 
   const isIngenEtterlevelse = krav.etterlevelseStatus === undefined
   const isOppfyllesSenereEtterlevelse =
@@ -30,8 +31,8 @@ export const KravCard = (props: IProps) => {
 
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
   const [kravAge, setKravAge] = useState<number>(0)
-  const [kravMedRelevantRisikoscenario, setKravMedRelevantRisikoscenario] = useState<boolean>(false)
-  const [kravLoading, setKravLoading] = useState<boolean>(true)
+  const kravMedRelevantRisikoscenario = risikoscenarioList.filter((risikoscenario) => risikoscenario.relevanteKravNummer.filter((kravReference) => kravReference.kravNummer === krav.kravNummer).length > 0).length > 0
+
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<IEtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
@@ -81,22 +82,6 @@ export const KravCard = (props: IProps) => {
     })()
   }, [])
 
-  useEffect(() => {
-    ;(async () => {
-      setKravLoading(true)
-      await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
-        async (pvkDocId) => {
-          await getRisikoscenarioByPvkDokumentId(pvkDocId.id, ERisikoscenarioType.KRAV).then(
-            (riskoscenario) => {
-              setKravMedRelevantRisikoscenario(riskoscenario.content.filter(
-                (rs) => !rs.generelScenario && rs.relevanteKravNummer.filter((rk) => rk.kravNummer === krav.kravNummer).length > 0).length > 0)
-              setKravLoading(false)
-            }
-          )
-        }
-      ).catch()
-    })()
-  }, []);
 
   const kravStatusFilter =
     krav.status === EKravStatus.UTGAATT
@@ -152,8 +137,8 @@ export const KravCard = (props: IProps) => {
         </div>
         {kravFilter === EKravFilterType.RELEVANTE_KRAV && krav && krav.etterlevelseStatus && (
           <div className="self-center flex gap-2">
-            {kravLoading && <Loader size="small"/>}
-            {!kravLoading && kravMedRelevantRisikoscenario && <StatusView status="Inneholder risikoscenario" variant="alt1"/>}
+            {isRisikoscenarioLoading && <Loader size="small"/>}
+            {!isRisikoscenarioLoading && kravMedRelevantRisikoscenario && <StatusView status="Inneholder risikoscenario" variant="alt1"/>}
 
             <StatusView
               status={getEtterlevelseStatus(krav.etterlevelseStatus, krav.frist)}
