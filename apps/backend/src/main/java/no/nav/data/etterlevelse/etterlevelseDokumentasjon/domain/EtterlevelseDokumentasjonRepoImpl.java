@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentasjonRepoCustom {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
@@ -118,6 +120,9 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
         }
         String query = "select * from etterlevelse_dokumentasjon where id in ( :ids )";
         var par = Map.of("ids", ids);
-        return jdbcTemplate.query(query, par, new BeanPropertyRowMapper<>(EtterlevelseDokumentasjon.class));
+        List<EtterlevelseDokumentasjon> data = jdbcTemplate.query(query, par, new BeanPropertyRowMapper<>(EtterlevelseDokumentasjon.class));
+        log.debug("data: {}", data);
+        log.debug(data.get(0).toString());
+        return data;
     }
 }
