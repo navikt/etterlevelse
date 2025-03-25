@@ -117,12 +117,16 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
         List<UUID> ids = resp.stream().map(i -> ((UUID) i.values().iterator().next())).toList();
         if (ids.isEmpty()) {
             return List.of();
+        } try {
+            String query = "select * from etterlevelse_dokumentasjon where id in ( :ids )";
+            var par = Map.of("ids", ids);
+            List<EtterlevelseDokumentasjon> data = jdbcTemplate.query(query, par, new BeanPropertyRowMapper<>(EtterlevelseDokumentasjon.class));
+            log.debug("data: {}", data);
+            log.debug(data.get(0).toString());
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return List.of();
         }
-        String query = "select * from etterlevelse_dokumentasjon where id in ( :ids )";
-        var par = Map.of("ids", ids);
-        List<EtterlevelseDokumentasjon> data = jdbcTemplate.query(query, par, new BeanPropertyRowMapper<>(EtterlevelseDokumentasjon.class));
-        log.debug("data: {}", data);
-        log.debug(data.get(0).toString());
-        return data;
     }
 }
