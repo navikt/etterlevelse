@@ -3,7 +3,6 @@ package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 import lombok.RequiredArgsConstructor;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -119,6 +118,6 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
         }
         String query = "select * from etterlevelse_dokumentasjon where id in ( :ids )";
         var par = Map.of("ids", ids);
-        return jdbcTemplate.query(query, par, new BeanPropertyRowMapper<>(EtterlevelseDokumentasjon.class));
+        return jdbcTemplate.queryForList(query, par, EtterlevelseDokumentasjon.class);
     }
 }
