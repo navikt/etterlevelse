@@ -117,7 +117,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
         if (ids.isEmpty()) {
             return List.of();
         }
-        String query = "select id from etterlevelse_dokumentasjon where id in ( :ids )";
+        String query = "select * from etterlevelse_dokumentasjon where id in ( :ids )";
         var par = Map.of("ids", ids);
         return jdbcTemplate.query(query, par, new BeanPropertyRowMapper<>(EtterlevelseDokumentasjon.class));
     }
