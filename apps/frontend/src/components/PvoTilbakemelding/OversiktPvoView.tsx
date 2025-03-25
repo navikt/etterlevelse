@@ -186,7 +186,7 @@ export const OversiktView = (props: IProps) => {
               </FormSummary.Value>
             </FormSummary.Answer>
 
-            {StepTitle.slice(1).map((title, index) => {
+            {StepTitle.slice(2).map((title, index) => {
               let panelHref = window.location.pathname.slice(0, -1) + (index + 3)
               if (index + 3 === 6) {
                 panelHref += '?tab=risikoscenarioer&filter=alle'
