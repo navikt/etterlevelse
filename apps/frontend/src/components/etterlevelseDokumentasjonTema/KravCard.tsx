@@ -11,6 +11,7 @@ import {
   EKravFilterType,
   EKravStatus,
   IEtterlevelseMetadata,
+  IRisikoscenario,
   TKravEtterlevelseData,
 } from '../../constants'
 import { getNumberOfDaysBetween } from '../../util/checkAge'
@@ -28,7 +29,7 @@ interface IProps {
   noVarsling?: boolean
   kravFilter: EKravFilterType
   temaCode?: string
-  kravMedRelevantRisikoscenario: boolean
+  risikoscenarioList: IRisikoscenario[]
 }
 
 export const KravCard = (props: IProps) => {
@@ -38,7 +39,7 @@ export const KravCard = (props: IProps) => {
     kravFilter,
     temaCode,
     etterlevelseDokumentasjonId,
-    kravMedRelevantRisikoscenario,
+    risikoscenarioList,
   } = props
 
   const isIngenEtterlevelse = krav.etterlevelseStatus === undefined
@@ -48,6 +49,14 @@ export const KravCard = (props: IProps) => {
 
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
   const [kravAge, setKravAge] = useState<number>(0)
+
+  const kravMedRelevantRisikoscenario =
+    risikoscenarioList.filter(
+      (risikoscenario) =>
+        risikoscenario.relevanteKravNummer.filter(
+          (kravReference) => kravReference.kravNummer === krav.kravNummer
+        ).length > 0
+    ).length > 0
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<IEtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({

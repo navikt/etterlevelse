@@ -111,15 +111,7 @@ export const KravAccordionList = (props: IProps) => {
                         {kravliste.map((krav, idx) => (
                           <List.Item icon={<div />} key={`krav_${idx}`}>
                             <KravCard
-                              kravMedRelevantRisikoscenario={
-                                risikoscenarioList.filter(
-                                  (risikoscenario) =>
-                                    risikoscenario.relevanteKravNummer.filter(
-                                      (kravReference) =>
-                                        kravReference.kravNummer === krav.kravNummer
-                                    ).length > 0
-                                ).length > 0
-                              }
+                              risikoscenarioList={risikoscenarioList}
                               krav={krav}
                               kravFilter={EKravFilterType.RELEVANTE_KRAV}
                               etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
