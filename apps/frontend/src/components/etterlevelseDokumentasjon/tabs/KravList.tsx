@@ -1,10 +1,14 @@
 import { BodyShort, Button, Label, Loader, Select, TextField } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { getPvkDokumentByEtterlevelseDokumentId } from '../../../api/PvkDokumentApi'
+import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
 import {
   EEtterlevelseStatus,
+  ERisikoscenarioType,
   ESuksesskriterieStatus,
   IKravPriorityList,
+  IRisikoscenario,
   TEtterlevelseDokumentasjonQL,
   TKravQL,
 } from '../../../constants'
@@ -39,7 +43,28 @@ export const KravList = (props: IProps) => {
   const [searchKrav, setSearchKrav] = useState<string>('')
   const [relevantKravList, setRelevantKravList] = useState<TKravQL[]>([])
   const [utgaattKravList, setUtgaattKravList] = useState<TKravQL[]>([])
+  const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
+  const [isRisikoscenarioLoading, setIsRisikoscenarioLoading] = useState<boolean>(true)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    ;(async () => {
+      if (etterlevelseDokumentasjon) {
+        setIsRisikoscenarioLoading(true)
+        await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id).then(
+          async (pvkDocId) => {
+            await getRisikoscenarioByPvkDokumentId(pvkDocId.id, ERisikoscenarioType.KRAV).then(
+              (riskoscenario) => {
+                setRisikoscenarioList(riskoscenario.content)
+
+                setIsRisikoscenarioLoading(false)
+              }
+            )
+          }
+        )
+      }
+    })()
+  }, [etterlevelseDokumentasjon])
 
   useEffect(() => {
     if (params.tema === 'ALLE') {
@@ -174,6 +199,8 @@ export const KravList = (props: IProps) => {
       )}
       {!loading && (relevanteStats.length !== 0 || utgaattStats.length !== 0) && (
         <KravAccordionList
+          risikoscenarioList={risikoscenarioList}
+          isRisikoscenarioLoading={isRisikoscenarioLoading}
           allKravPriority={allKravPriority}
           etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
           relevanteStats={relevantKravList}
