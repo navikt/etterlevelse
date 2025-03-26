@@ -20,7 +20,7 @@ import {
   updatePvkDokument,
 } from '../../../api/PvkDokumentApi'
 import { IEtterlevelseDokumentasjon, IPvkDokument } from '../../../constants'
-import { CodelistService, EListName, ICode } from '../../../services/Codelist'
+import { EListName, ICode, ICodelistProps } from '../../../services/Codelist'
 import { FieldWrapper, TextAreaField } from '../../common/Inputs'
 import pvkBehovSchema from './pvkBehovSchema'
 
@@ -33,6 +33,8 @@ type TProps = {
   saerligKategorier: boolean
   checkedYtterligereEgenskaper: string[]
   setCheckedYtterligereEgenskaper: (state: string[]) => void
+  codelistUtils: ICodelistProps
+  ytterligereEgenskaper: ICode[]
 }
 
 export const PvkBehovForm: FunctionComponent<TProps> = ({
@@ -44,16 +46,13 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
   saerligKategorier,
   checkedYtterligereEgenskaper,
   setCheckedYtterligereEgenskaper,
+  codelistUtils,
+  ytterligereEgenskaper,
 }) => {
   const [isUnsavedModalOpen, setIsUnsavedModalOpen] = useState<boolean>(false)
   const [urlToNavigate, setUrlToNavigate] = useState<string>('')
   const formRef: RefObject<any> = useRef(undefined)
-  const [codelistUtils] = CodelistService()
   const navigate = useNavigate()
-
-  const ytterligereEgenskaper: ICode[] = codelistUtils.getCodes(
-    EListName.YTTERLIGERE_EGENSKAPER
-  ) as ICode[]
 
   const submit = async (pvkDokument: IPvkDokument) => {
     if (etterlevelseDokumentasjon) {

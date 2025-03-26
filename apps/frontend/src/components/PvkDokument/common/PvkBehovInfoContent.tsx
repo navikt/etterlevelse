@@ -1,4 +1,4 @@
-import { Alert, BodyLong, BodyShort, Heading, Link, List } from '@navikt/ds-react'
+import { Alert, BodyLong, BodyShort, Heading, Label, Link, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { IBehandlingensLivslop, IEtterlevelseDokumentasjon } from '../../../constants'
 import { user } from '../../../services/User'
@@ -30,9 +30,11 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
         og friheter.
       </BodyLong>
 
-      <Heading level="2" size="small" className="mb-5">
-        Egenskaper som gjelder for behandlingene deres
-      </Heading>
+      {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+        <Heading level="2" size="small" className="mb-5">
+          Egenskaper som gjelder for behandlingene deres
+        </Heading>
+      )}
 
       {(!etterlevelseDokumentasjon.behandlinger ||
         etterlevelseDokumentasjon.behandlinger.length === 0) && (
@@ -79,7 +81,10 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
           </BodyShort>
         )}
 
-      <List title="Følgende egenskaper er hentet fra Behandlingskatalogen:" className="py-5">
+      <List className="py-5">
+        <div className="pb-3">
+          <Label>Følgende egenskaper er hentet fra Behandlingskatalogen:</Label>
+        </div>
         {profilering !== null && (
           <List.Item>
             <strong>Det {profilering ? 'gjelder' : 'gjelder ikke'}</strong> profilering

@@ -7,9 +7,11 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { usePvkDokument } from '../api/PvkDokumentApi'
 import PvkBehovInfoContent from '../components/PvkDokument/common/PvkBehovInfoContent'
 import PvkBehovMetadata from '../components/PvkDokument/common/PvkBehovMetadata'
+import PvkBehovReadOnly from '../components/PvkDokument/common/PvkBehovReadOnly'
 import PvkBehovForm from '../components/PvkDokument/edit/PvkBehovForm'
 import { PageLayout } from '../components/scaffold/Page'
 import { IBehandlingensLivslop, IBreadCrumbPath, IExternalCode, IPolicy } from '../constants'
+import { CodelistService, EListName, ICode } from '../services/Codelist'
 import { user } from '../services/User'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
@@ -41,6 +43,12 @@ export const PvkBehovPage = () => {
         etterlevelseDokumentasjon?.title,
     },
   ]
+
+  const [codelistUtils] = CodelistService()
+
+  const ytterligereEgenskaper: ICode[] = codelistUtils.getCodes(
+    EListName.YTTERLIGERE_EGENSKAPER
+  ) as ICode[]
 
   useEffect(() => {
     ;(async () => {
@@ -143,11 +151,16 @@ export const PvkBehovPage = () => {
                 saerligKategorier={saerligKategorier}
                 checkedYtterligereEgenskaper={checkedYtterligereEgenskaper}
                 setCheckedYtterligereEgenskaper={setCheckedYtterligereEgenskaper}
+                codelistUtils={codelistUtils}
+                ytterligereEgenskaper={ytterligereEgenskaper}
               />
             )}
 
             {!etterlevelseDokumentasjon.hasCurrentUserAccess && !user.isAdmin() && (
-              <div>READ ONLY</div>
+              <PvkBehovReadOnly
+                pvkDokument={pvkdokument}
+                ytterligereEgenskaper={ytterligereEgenskaper}
+              />
             )}
           </div>
 
