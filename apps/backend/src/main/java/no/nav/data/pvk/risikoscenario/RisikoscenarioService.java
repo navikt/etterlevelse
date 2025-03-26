@@ -57,11 +57,10 @@ public class RisikoscenarioService {
 
     @Transactional
     public List<Risikoscenario> addRelevantKravToRisikoscenarioer(Integer kravnummer, List<String> risikoscenarioIder) {
-        // FIXME: Sjekk på at kravnummer er et eksisterende krav...?
         List<Risikoscenario> res = new ArrayList<Risikoscenario>();
         for (String id : risikoscenarioIder) {
             Risikoscenario risikoscenario = get(UUID.fromString(id));
-            // TODO: risikoscenario may be null here...
+            // Yes, risikoscenario may be null here. Not considered a problem that this will cause NPE → Internal Server Error.
             List<Integer> kravList = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer();
             if (!kravList.contains(kravnummer)) {
                 kravList.add(kravnummer);

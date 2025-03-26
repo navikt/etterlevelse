@@ -1,4 +1,4 @@
-import { Button, Tabs } from '@navikt/ds-react'
+import { Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../../../api/ArkiveringApi'
@@ -96,9 +96,10 @@ export const DokumentasjonPageTabs = (props: IProps) => {
             />
             <div className="w-full flex justify-end items-center">
               <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
-              <Button variant="tertiary" size="small" onClick={() => setArkivModal(true)}>
+              {/* DISABLED UNTIL P360 arkivering is integrated and planned*/}
+              {/* <Button variant="tertiary" size="small" onClick={() => setArkivModal(true)}>
                 Arkivér i WebSak
-              </Button>
+              </Button> */}
               <ArkiveringModal
                 arkivModal={arkivModal}
                 setArkivModal={setArkivModal}

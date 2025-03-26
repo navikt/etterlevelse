@@ -1,7 +1,7 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent, ReactNode } from 'react'
 
 type TPropsTopBottomWrapper = {
-  children: React.ReactNode
+  children: ReactNode
 }
 
 /* WIP, vankser rundt <FieldWrapper> */
@@ -10,7 +10,7 @@ export const TopBottomWrapper: FunctionComponent<TPropsTopBottomWrapper> = ({ ch
 )
 
 type TPropsPVKFieldWrapper = {
-  children: React.ReactNode
+  children: ReactNode
 }
 
 /* WIP, vansker rundt <FieldWrapper> */

@@ -502,7 +502,7 @@ export const PvkBehovPage = () => {
                 )}
 
                 <Label>
-                  Dere har koblet følgende ROS-dokumentasjon på denne etterlevelsesdokumentasjonen:
+                  Dere har koblet følgende dokumenter på denne etterlevelsesdokumentasjonen:
                 </Label>
 
                 {etterlevelseDokumentasjon.risikovurderinger.length > 0 ? (
@@ -524,11 +524,11 @@ export const PvkBehovPage = () => {
                     })}
                   </List>
                 ) : (
-                  <BodyShort className="my-5"> Ingen ROS er valgt.</BodyShort>
+                  <BodyShort className="my-5"> Ingen dokumenter valgt.</BodyShort>
                 )}
 
                 <BodyShort className="inline-block">
-                  Dere kan redigere hvilke behandinger og risikovurderinger som gjelder i{' '}
+                  Dere kan redigere hvilke behandinger og dokumenter som er tilknyttet i{' '}
                   <Link
                     href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
                     target="_blank"

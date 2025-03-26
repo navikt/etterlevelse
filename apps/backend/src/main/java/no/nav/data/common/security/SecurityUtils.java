@@ -22,9 +22,18 @@ public class SecurityUtils {
         return getCurrentUser().map(UserInfo::getIdent);
     }
 
+    public static Optional<String> lookupCurrentEmail() {
+        return getCurrentUser().map(UserInfo::getEmail);
+    }
+
     public static String getCurrentIdent() {
         return lookupCurrentIdent().orElseThrow(() -> new ValidationException("Invalid user, no ident found"));
     }
+
+    public static String getCurrentEmail() {
+        return lookupCurrentEmail().orElseThrow(() -> new ValidationException("Invalid user, no email found"));
+    }
+
 
     public static boolean isAdmin() {
         return getCurrentUser().map(UserInfo::isAdmin).orElse(false);

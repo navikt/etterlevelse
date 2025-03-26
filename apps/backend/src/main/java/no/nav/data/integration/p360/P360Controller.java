@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.utils.StreamUtils;
@@ -43,13 +44,11 @@ public class P360Controller {
     @PostMapping("/getCases")
     public ResponseEntity<RestResponsePage<P360Case>> findCases(@RequestBody P360GetRequest request) {
         log.info("Finding all cases by title or case number");
-        List<P360Case> cases;
         if (request.getCaseNumber() != null) {
-            cases = p360Service.getCasesByCaseNumber(request.getCaseNumber());
+            return ResponseEntity.ok(new RestResponsePage<>(p360Service.getCasesByCaseNumber(request.getCaseNumber())));
         } else {
-            cases = p360Service.getCasesByTitle(request.getTitle());
+            return ResponseEntity.ok(new RestResponsePage<>(p360Service.getCasesByTitle(request.getTitle())));
         }
-        return ResponseEntity.ok(new RestResponsePage<>(cases));
     }
 
     @Operation(summary = "Create Case")
@@ -67,7 +66,7 @@ public class P360Controller {
                         .Status("B")
                         .AccessCode("U")
                         .AccessGroup("Alle ansatte i Nav")
-                        .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
+                        .ResponsiblePersonEmail(SecurityUtils.getCurrentEmail())
                 .build());
         return ResponseEntity.ok(sak);
     }
@@ -83,10 +82,12 @@ public class P360Controller {
 
     @Operation(summary = "Create Document")
     @ApiResponses(value = {@ApiResponse(description = "Cases created")})
-    @PostMapping("/documentCases/etterlevelseDokumentasjon/{id}/saksnummer/{caseNumber}")
-    public ResponseEntity<P360Document> createDocument(@PathVariable String id, @PathVariable String caseNumber) {
-        log.info("Creating document for sak: {}", caseNumber);
-
+    @PostMapping("/create/documentCases/etterlevelseDokumentasjon/{id}")
+    public ResponseEntity<P360Document> createDocument(@PathVariable String id, @RequestBody P360DocumentRequest request) {
+        log.info("Creating document for sak: {}", request.getCaseNumber());
+        if (request.getCaseNumber() == null || request.getCaseNumber().isEmpty()) {
+            throw new ValidationException("Cannot create document because caseNumber is empty");
+        }
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd");
         Date date = new Date();
 
@@ -94,7 +95,7 @@ public class P360Controller {
         byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelsedokumentasjon.getId(), Collections.emptyList(), Collections.emptyList(), true);
 
         P360Document document = p360Service.createDocument(P360DocumentCreateRequest.builder()
-                        .CaseNumber(caseNumber)
+                        .CaseNumber(request.getCaseNumber())
                         .Archive("Saksdokument")
                         .DefaultValueSet("Etterlevelse")
                         .Title("E" + etterlevelsedokumentasjon.getEtterlevelseNummer() + " test dokument")
@@ -102,7 +103,7 @@ public class P360Controller {
                         .Category("Internt notat uten oppfølging")
                         .Status("J")
                         .AccessGroup("Alle ansatte i Nav")
-                        .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
+                        .ResponsiblePersonEmail(SecurityUtils.getCurrentEmail())
                         .Files(List.of(P360File.builder()
                                         .Title(formatter.format(date) + "_Etterlevelse_E" + etterlevelsedokumentasjon.getEtterlevelseNummer())
                                         .Format("docx")
@@ -114,11 +115,13 @@ public class P360Controller {
 
 
     @Operation(summary = "Update Document")
-    @ApiResponses(value = {@ApiResponse(description = "Cases created")})
-    @PostMapping("/documentCases/etterlevelseDokumentasjon/{id}/dokumentnummer/{dokumentNummber}")
-    public ResponseEntity<P360Document> updateDocument(@PathVariable String id, @PathVariable String dokumentNummber) {
-        log.info("Creating document for dokument: {}", dokumentNummber);
-
+    @ApiResponses(value = {@ApiResponse(description = "Cases updated")})
+    @PostMapping("/update/documentCases/etterlevelseDokumentasjon/{id}")
+    public ResponseEntity<P360Document> updateDocument(@PathVariable String id, @RequestBody P360DocumentRequest request) {
+        log.info("Creating document for dokument: {}", request.getDocumentNumber());
+        if (request.getDocumentNumber() == null || request.getDocumentNumber().isEmpty()) {
+            throw new ValidationException("Cannot create document because document number is empty");
+        }
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd");
         Date date = new Date();
 
@@ -126,7 +129,7 @@ public class P360Controller {
         byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelsedokumentasjon.getId(), Collections.emptyList(), Collections.emptyList(), true);
 
         P360Document document = p360Service.updateDocument(P360DocumentUpdateRequest.builder()
-                .DocumentNumber(dokumentNummber)
+                .DocumentNumber(request.getDocumentNumber())
                 .Archive("Saksdokument")
                 .DefaultValueSet("Etterlevelse")
                 .Title("E" + etterlevelsedokumentasjon.getEtterlevelseNummer() + " test dokument")
@@ -134,7 +137,7 @@ public class P360Controller {
                 .Category("Internt notat uten oppfølging")
                 .Status("J")
                 .AccessGroup("Alle ansatte i Nav")
-                .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
+                .ResponsiblePersonEmail(SecurityUtils.getCurrentEmail())
                 .Files(List.of(P360File.builder()
                         .Title(formatter.format(date) + "_Etterlevelse_E" + etterlevelsedokumentasjon.getEtterlevelseNummer())
                         .Format("docx")

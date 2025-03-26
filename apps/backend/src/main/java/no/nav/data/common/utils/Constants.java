@@ -17,4 +17,7 @@ public class Constants {
 
     public static final Duration SESSION_LENGTH = Duration.ofDays(14);
 
+    public static final String PUBLIC_360_AUTHKEY = "authkey";
+    public static final String PUBLIC_360_CLIENTID = "clientId";
+
 }

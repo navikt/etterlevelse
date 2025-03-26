@@ -5,6 +5,7 @@ import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi
 import { getTiltakByPvkDokumentId } from '../../../api/TiltakApi'
 import {
   ERisikoscenarioType,
+  IPageResponse,
   IPvkDokument,
   IRisikoscenario,
   ITiltak,
@@ -57,12 +58,12 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
     ;(async () => {
       if (pvkDokument && krav) {
         await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
-          (response) => {
+          (response: IPageResponse<IRisikoscenario>) => {
             setAlleRisikoscenarioer(response.content)
 
             setRisikoscenarioer(
               response.content.filter(
-                (risikoscenario) =>
+                (risikoscenario: IRisikoscenario) =>
                   !risikoscenario.generelScenario &&
                   risikoscenario.relevanteKravNummer.filter(
                     (relevantekrav) => relevantekrav.kravNummer === krav.kravNummer
@@ -71,7 +72,7 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
             )
             setRisikoscenarioForKrav(
               response.content.filter(
-                (risikoscenario) =>
+                (risikoscenario: IRisikoscenario) =>
                   !risikoscenario.generelScenario &&
                   risikoscenario.relevanteKravNummer.filter(
                     (relevantekrav) =>
@@ -83,7 +84,7 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
           }
         )
 
-        await getTiltakByPvkDokumentId(pvkDokument.id).then((response) => {
+        await getTiltakByPvkDokumentId(pvkDokument.id).then((response: IPageResponse<ITiltak>) => {
           setTiltakList(response.content)
         })
       }
@@ -161,6 +162,7 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
                         <KravRisikoscenarioAccordionContent
                           risikoscenario={risikoscenario}
                           alleRisikoscenarioer={alleRisikoscenarioer}
+                          etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId}
                           isCreateMode={isCreateMode}
                           kravnummer={krav.kravNummer}
                           risikoscenarioer={risikoscenarioer}

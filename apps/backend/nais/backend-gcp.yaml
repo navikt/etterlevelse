@@ -85,4 +85,5 @@ spec:
         - application: behandlingskatalog-backend
       external:
         - host: {{teamcat_ingress}}
+        - host: {{p360_ingress}}
         - host: slack.com

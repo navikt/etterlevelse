@@ -37,13 +37,13 @@ export const ROSEdit = () => {
           return (
             <div className="my-8">
               <Heading level="2" size="small" spacing>
-                Legg til informasjon om gjeldende ROS-dokumentasjon
+                Legg til ROS eller annen aktuell dokumentasjon
               </Heading>
 
               <div className="w-full my-2.5">
                 <TextField
                   className="w-full"
-                  label="Legg inn navnet til ROS-dokumentet"
+                  label="Legg inn navnet på dokumentet"
                   value={name}
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     setName((event.target as HTMLInputElement).value)
@@ -51,7 +51,7 @@ export const ROSEdit = () => {
                 />
                 <TextField
                   className="w-full my-2.5"
-                  label="Legg inn lenken til ROS-dokumentasjon"
+                  label="Legg inn lenken (URL) til dokumentet"
                   value={url}
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     setUrl((event.target as HTMLInputElement).value)

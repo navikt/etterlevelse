@@ -15,7 +15,7 @@ import { useState } from 'react'
 import { Location, useLocation } from 'react-router-dom'
 import { writeLog } from '../api/LogApi'
 import { getMeldingByType } from '../api/MeldingApi'
-import { EAlertType, EMeldingStatus, EMeldingType, IMelding } from '../constants'
+import { EAlertType, EMeldingStatus, EMeldingType, EPVO, IMelding } from '../constants'
 import { ampli } from '../services/Amplitude'
 import { user } from '../services/User'
 import { useQueryParam } from '../util/hooks/customHooks'
@@ -102,7 +102,14 @@ const LoggedInHeader = () => {
       </div>
     </div>
   )
-
+  const pvoPages = user.isPersonvernombud()
+    ? [
+        {
+          label: EPVO.overskrift,
+          href: EPVO.oversikt,
+        },
+      ]
+    : []
   const kravPages = user.isKraveier()
     ? [
         { label: 'Forvalte og opprette krav', href: '/kravliste' },
@@ -128,7 +135,13 @@ const LoggedInHeader = () => {
   return (
     <div className="flex items-center justify-center">
       <Menu
-        pages={[[{ label: <UserInfoView /> }], kravPages, adminPages, [{ label: roller }]]}
+        pages={[
+          [{ label: <UserInfoView /> }],
+          kravPages,
+          pvoPages,
+          adminPages,
+          [{ label: roller }],
+        ]}
         title={user.getIdent()}
         icon={<PersonIcon area-label="" aria-hidden />}
       />

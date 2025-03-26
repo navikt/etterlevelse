@@ -7,9 +7,15 @@ interface IPrivateRouteProps {
   component: JSX.Element
   adminPage?: boolean
   kraveierPage?: boolean
+  pvoPage?: boolean
 }
 
-export const PrivateRoute = ({ component, adminPage, kraveierPage }: IPrivateRouteProps) => {
+export const PrivateRoute = ({
+  component,
+  adminPage,
+  kraveierPage,
+  pvoPage,
+}: IPrivateRouteProps) => {
   const [isLoading, setIsLoading] = useState(true)
 
   React.useEffect(() => {
@@ -31,6 +37,12 @@ export const PrivateRoute = ({ component, adminPage, kraveierPage }: IPrivateRou
       }
     } else if (kraveierPage) {
       if (user.isKraveier() || user.isAdmin()) {
+        return component
+      } else {
+        return <Navigate to={{ pathname: '/forbidden' }} />
+      }
+    } else if (pvoPage) {
+      if (user.isPersonvernombud() || user.isAdmin()) {
         return component
       } else {
         return <Navigate to={{ pathname: '/forbidden' }} />

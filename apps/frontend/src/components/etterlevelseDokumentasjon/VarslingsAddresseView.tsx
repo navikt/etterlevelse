@@ -1,4 +1,4 @@
-import { BodyShort } from '@navikt/ds-react'
+import { BodyLong } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { getSlackChannelById, getSlackUserById } from '../../api/TeamApi'
 import {
@@ -61,15 +61,15 @@ export const VarslingsadresserView = ({
   }, [varslingsadresser])
 
   return (
-    <div className="mt-1.5">
+    <div>
       {varslingsadresser.map((varslingsaddresse, index) => {
         if (varslingsaddresse.type === EAdresseType.SLACK) {
           const channel = slackChannels.find((c) => c.id === varslingsaddresse.adresse)
           return (
-            <div className="flex items-center mb-2" key={'kravVarsling_list_SLACK_' + index}>
-              <BodyShort size="small" className="mr-1">
+            <div className="flex items-center mb-2.5" key={'kravVarsling_list_SLACK_' + index}>
+              <BodyLong size="medium" className="mr-1">
                 Slack:
-              </BodyShort>
+              </BodyLong>
               <ExternalLink
                 className="text-medium"
                 href={slackLink(varslingsaddresse.adresse)}
@@ -80,10 +80,10 @@ export const VarslingsadresserView = ({
         if (varslingsaddresse.type === EAdresseType.SLACK_USER) {
           const user = slackUsers.find((u) => u.id === varslingsaddresse.adresse)
           return (
-            <div className="flex items-center mb-2" key={'kravVarsling_list_SLACK_USER_' + index}>
-              <BodyShort size="small" className="mr-1">
+            <div className="flex items-center mb-2.5" key={'kravVarsling_list_SLACK_USER_' + index}>
+              <BodyLong size="medium" className="mr-1">
                 Slack:
-              </BodyShort>
+              </BodyLong>
               <ExternalLink
                 className="text-medium"
                 href={slackUserLink(varslingsaddresse.adresse)}
@@ -92,10 +92,10 @@ export const VarslingsadresserView = ({
           )
         }
         return (
-          <div className="flex items-center mb-2" key={'kravVarsling_list_EMAIL_' + index}>
-            <BodyShort size="small" className="mr-1">
+          <div className="flex items-center mb-2.5" key={'kravVarsling_list_EMAIL_' + index}>
+            <BodyLong size="medium" className="mr-1">
               Epost:
-            </BodyShort>
+            </BodyLong>
             <ExternalLink
               className="text-medium"
               href={`mailto:${varslingsaddresse.adresse}`}
@@ -108,19 +108,4 @@ export const VarslingsadresserView = ({
       })}
     </div>
   )
-}
-{
-  /* <RenderTagList
-      list={varslingsadresser.map((varslingaddresse) => {
-        if (varslingaddresse.type === EAdresseType.SLACK) {
-          const channel = slackChannels.find((c) => c.id === varslingaddresse.adresse)
-          return channel ? slackChannelView(channel) : `Slack: ${varslingaddresse.adresse}`
-        } else if (varslingaddresse.type === EAdresseType.SLACK_USER) {
-          const user = slackUsers.find((u) => u.id === varslingaddresse.adresse)
-          return user ? `Slack: ${user.name}` : `Slack: ${varslingaddresse.adresse}`
-        }
-        return 'Epost: ' + varslingaddresse.adresse
-      })}
-      onRemove={remove}
-    /> */
 }

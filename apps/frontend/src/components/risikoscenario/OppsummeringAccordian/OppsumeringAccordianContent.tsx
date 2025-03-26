@@ -10,6 +10,7 @@ import VurdereTiltaksEffekt from '../edit/VurdereTiltaksEffekt'
 type TProps = {
   risikoscenario: IRisikoscenario
   risikoscenarioList: IRisikoscenario[]
+  etterlevelseDokumentasjonId: string
   setRisikosenarioList: (state: IRisikoscenario[]) => void
   allRisikoscenarioList: IRisikoscenario[]
   setAllRisikoscenarioList: (state: IRisikoscenario[]) => void

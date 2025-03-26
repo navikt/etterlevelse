@@ -25,9 +25,9 @@ public class PvkDokumentIT extends IntegrationTestBase {
 
     @Test
     void getPvkDokument() {
-        var pvkDokuemnt = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
+        var pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
 
-        var resp = restTemplate.getForEntity("/pvkdokument/{id}", PvkDokumentResponse.class, pvkDokuemnt.getId());
+        var resp = restTemplate.getForEntity("/pvkdokument/{id}", PvkDokumentResponse.class, pvkDokument.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         PvkDokumentResponse pvkDokumentResponse = resp.getBody();
         assertThat(pvkDokumentResponse).isNotNull();
@@ -35,14 +35,14 @@ public class PvkDokumentIT extends IntegrationTestBase {
 
     @Test
     void getPvkDokumentByEtterlevelseDokumentasjonId() {
-        var pvkDokuemnt = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
+        var pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
         pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
 
-        var resp = restTemplate.getForEntity("/pvkdokument/etterlevelsedokument/{etterlevelseDokumentId}", PvkDokumentResponse.class, pvkDokuemnt.getEtterlevelseDokumentId());
+        var resp = restTemplate.getForEntity("/pvkdokument/etterlevelsedokument/{etterlevelseDokumentId}", PvkDokumentResponse.class, pvkDokument.getEtterlevelseDokumentId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         PvkDokumentResponse pvkDokumentResponse = resp.getBody();
         assertThat(pvkDokumentResponse).isNotNull();
-        assertThat(pvkDokumentResponse.getEtterlevelseDokumentId()).isEqualTo(pvkDokuemnt.getEtterlevelseDokumentId());
+        assertThat(pvkDokumentResponse.getEtterlevelseDokumentId()).isEqualTo(pvkDokument.getEtterlevelseDokumentId());
     }
 
     @Test
@@ -64,11 +64,11 @@ public class PvkDokumentIT extends IntegrationTestBase {
 
     @Test
     void updatePvkDokument() {
-        var pvkDokuemnt = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
+        var pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
 
         var request = PvkDokumentRequest.builder()
-                .id(pvkDokuemnt.getId().toString())
-                .etterlevelseDokumentId(pvkDokuemnt.getEtterlevelseDokumentId())
+                .id(pvkDokument.getId().toString())
+                .etterlevelseDokumentId(pvkDokument.getEtterlevelseDokumentId())
                 .status(PvkDokumentStatus.UNDERARBEID)
                 .ytterligereEgenskaper(List.of("PROFILERING", "TEKNOLOGI"))
                 .build();
@@ -84,8 +84,8 @@ public class PvkDokumentIT extends IntegrationTestBase {
 
     @Test
     void deletePvkDokument() {
-        var pvkDokuemnt = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
-        restTemplate.delete("/pvkdokument/{id}", pvkDokuemnt.getId());
+        var pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
+        restTemplate.delete("/pvkdokument/{id}", pvkDokument.getId());
 
         assertThat(pvkDokumentRepo.count()).isEqualTo(0);
     }

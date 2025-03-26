@@ -3,7 +3,7 @@ import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../constants'
 import AccordianAlertModal from './AccordianAlertModal'
-import RisikoscenarioAccordionContent from './RisikoscenarioAccordianContent'
+import { RisikoscenarioAccordionContent } from './RisikoscenarioAccordianContent'
 import { IdentifiseringAvRisikoscenarioAccordianHeader } from './RisikoscenarioAccordionHeader'
 
 type TProps = {
@@ -12,6 +12,7 @@ type TProps = {
   setRisikoscenarioList: (state: IRisikoscenario[]) => void
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
+  etterlevelseDokumentasjonId: string
   setIsTiltakFormActive: (state: boolean) => void
   formRef: RefObject<any>
 }
@@ -20,6 +21,7 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
   risikoscenarioList,
   allRisikoscenarioList,
   tiltakList,
+  etterlevelseDokumentasjonId,
   setTiltakList,
   setRisikoscenarioList,
   setIsTiltakFormActive,
@@ -93,6 +95,7 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
                     risikoscenario={risikoscenario}
                     risikoscenarioer={risikoscenarioList}
                     allRisikoscenarioList={allRisikoscenarioList}
+                    etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                     tiltakList={tiltakList}
                     setTiltakList={setTiltakList}
                     setRisikoscenarioer={setRisikoscenarioList}

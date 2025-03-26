@@ -25,6 +25,7 @@ type TProps = {
   risikoscenario: IRisikoscenario
   risikoscenarioer: IRisikoscenario[]
   alleRisikoscenarioer: IRisikoscenario[]
+  etterlevelseDokumentasjonId: string
   setRisikoscenarioer: (state: IRisikoscenario[]) => void
   risikoscenarioForKrav: IRisikoscenario[]
   setRisikoscenarioForKrav: (state: IRisikoscenario[]) => void
@@ -131,7 +132,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   }
 
   const submitDeleteTiltak = async (tiltakId: string) => {
-    await getTiltak(tiltakId).then(async (response) => {
+    await getTiltak(tiltakId).then(async (response: ITiltak) => {
       if (
         response.risikoscenarioIds.length === 1 &&
         response.risikoscenarioIds[0] === risikoscenario.id
@@ -161,7 +162,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
     } else setIsTiltakFormActive(false)
   }, [isCreateTiltakFormActive, isAddExistingMode, isEditTiltakFormActive])
 
-  const userHasAccess = () => {
+  const userHasAccess = (): boolean => {
     return user.isAdmin() || etterlevelseDokumentasjon?.hasCurrentUserAccess || false
   }
 

@@ -37,11 +37,13 @@ export const Teams = (props: IPropsTeams) => {
   const { teams, link, big } = props
 
   return (
-    <div className="flex flex-wrap gap-2 items-center">
-      <Label size="small">Team:</Label>
-      {teams.map((team, index) => (
-        <TeamName key={`team_${index}`} id={team} link={link} big={big} />
-      ))}
+    <div className="flex gap-2 items-start">
+      <Label size="medium">Team:</Label>
+      <div>
+        {teams.map((team, index) => (
+          <TeamName key={`team_${index}`} id={team} link={link} big={big} />
+        ))}
+      </div>
     </div>
   )
 }
