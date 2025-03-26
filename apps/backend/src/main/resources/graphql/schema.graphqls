@@ -11,6 +11,7 @@ type Query {
     etterlevelseById(id: ID!) : Etterlevelse
 
     etterlevelseDokumentasjon(filter: EtterlevelseDokumentasjonFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): EtterlevelseDokumentasjonPage!
+    pvoTilbakemelding(filter: PvoTilbakemeldingFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): PvoTilbakemeldingPage!
 }
 
 input KravFilter {
@@ -43,6 +44,11 @@ input EtterlevelseDokumentasjonFilter {
     virkemiddelId: String
     knyttetTilVirkemiddel: Boolean
     sok: String
+}
+
+input PvoTilbakemeldingFilter {
+    id: ID
+    sistRedigert: NonNegativeInt
 }
 
 
@@ -277,6 +283,37 @@ type EtterlevelseDokumentasjon {
     varslingsadresser: [Varslingsadresse!]!
 }
 
+type PvoTilbakemelding {
+    id: String!
+    changeStamp: ChangeStamp!
+    version: Int!
+    status: PvoTilbakemeldingStatus!
+    pvkDokumentId: String!
+    pvkDokumentStatus: String!
+    etterlevelseDokumentasjonId: String!
+    etterlevelseDokumentasjonData: EtterlevelseDokumentasjon!
+    behandlingenslivslop: Tilbakemeldingsinnhold!
+    behandlingensArtOgOmfang: Tilbakemeldingsinnhold!
+    innvolveringAvEksterne: Tilbakemeldingsinnhold!
+    risikoscenarioEtterTiltakk: Tilbakemeldingsinnhold!
+    merknadTilEtterleverEllerRisikoeier: String
+    sendtDato: DateTime
+    sistEndretAvMeg: DateTime
+}
+
+type Tilbakemeldingsinnhold {
+    sistRedigertAv: String
+    private LocalDateTime sistRedigertDato: DateTime
+    bidragsVurdering: String
+    internDiskusjon: String
+    tilbakemeldingTilEtterlevere: String
+}
+
+enum PvoTilbakemeldingStatus {
+    UNDERARBEID,
+    FERDIG
+}
+
 type LovStats {
     lovCode: Code!
     relevantKrav: [Krav!]!
@@ -361,4 +398,14 @@ type KravPage {
     totalElements: Int!
     paged: Boolean
     content: [Krav!]!
+}
+
+type PvoTilbakemeldingPage {
+    pageNumber: Int!
+    pageSize: Int!
+    pages: Int!
+    numberOfElements: Int!
+    totalElements: Int!
+    paged: Boolean
+    content: [PvoTilbakemelding!]!
 }
