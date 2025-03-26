@@ -3,6 +3,7 @@ package no.nav.data.pvk.pvotilbakemelding;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.rest.PageParameters;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingRepo;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingRepoCustom;
@@ -32,6 +33,10 @@ public class PvoTilbakemeldingService {
 
     public PvoTilbakemelding getPvoTilbakemelding(UUID uuid) {
         return pvoTilbakemeldingRepo.findById(uuid).orElseThrow(() -> new NotFoundException("Couldn't find Pvo tilbakemelding with id " + uuid));
+    }
+
+    public Page<PvoTilbakemelding> getAll(PageParameters pageParameters) {
+        return pvoTilbakemeldingRepo.findAll(pageParameters.createPage());
     }
 
     public Page<PvoTilbakemelding> getAll(Pageable pageable) {
