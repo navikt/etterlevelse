@@ -1,0 +1,124 @@
+import { Alert, BodyLong, BodyShort, Heading, Link, List } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
+import { IBehandlingensLivslop, IEtterlevelseDokumentasjon } from '../../../constants'
+import { user } from '../../../services/User'
+import { env } from '../../../util/env'
+import { ExternalLink } from '../../common/RouteLink'
+
+type TProps = {
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+  profilering: boolean | null
+  automatiskBehandling: boolean | null
+  opplysningstyperMangler: boolean
+  saerligKategorier: boolean
+  behandlingensLivslop?: IBehandlingensLivslop
+}
+
+export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  behandlingensLivslop,
+  profilering,
+  opplysningstyperMangler,
+  saerligKategorier,
+  automatiskBehandling,
+}) => {
+  return (
+    <>
+      <BodyLong>
+        En PVK skal gjennomføres når vi ønsker å starte eller endre en behandling av
+        personopplysninger som sannsynligvis vil medføre høy risiko for den registrertes rettigheter
+        og friheter.
+      </BodyLong>
+
+      <Heading level="2" size="small" className="mb-5">
+        Egenskaper som gjelder for behandlingene deres
+      </Heading>
+
+      {(!etterlevelseDokumentasjon.behandlinger ||
+        etterlevelseDokumentasjon.behandlinger.length === 0) && (
+        <div>
+          {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+            <Alert variant="info" className="mb-5">
+              Dere har ikke ennå lagt til behandlinger under{' '}
+              <ExternalLink
+                className="text-medium"
+                href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
+              >
+                Dokumentegenskaper
+              </ExternalLink>
+              . Det anbefales at dere gjør dette før dere vurderer behov for PVK.
+            </Alert>
+          )}
+
+          {!etterlevelseDokumentasjon.hasCurrentUserAccess && !user.isAdmin() && (
+            <Alert variant="info" className="mb-5">
+              Det har ikke blitt lagt til behandlinger under dokumentegenskaper.
+            </Alert>
+          )}
+        </div>
+      )}
+
+      {etterlevelseDokumentasjon &&
+        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+          <BodyShort>
+            Disse egenskapene blir enklere å vurdere hvis{' '}
+            <Link
+              href={
+                '/dokumentasjon/' +
+                etterlevelseDokumentasjon.id +
+                '/behandlingens-livslop/' +
+                (behandlingensLivslop?.id ? behandlingensLivslop.id : 'ny')
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="redigere etterlevelsesdokumentasjon"
+              className="inline"
+            >
+              dere har tegnet behandlingens livsløp (åpner i en ny fane).
+            </Link>
+          </BodyShort>
+        )}
+
+      <List title="Følgende egenskaper er hentet fra Behandlingskatalogen:" className="py-5">
+        {profilering !== null && (
+          <List.Item>
+            <strong>Det {profilering ? 'gjelder' : 'gjelder ikke'}</strong> profilering
+          </List.Item>
+        )}
+
+        {automatiskBehandling !== null && (
+          <List.Item>
+            <strong>Det {automatiskBehandling ? 'gjelder' : 'gjelder ikke'}</strong> automatisert
+            behandling
+          </List.Item>
+        )}
+
+        {!opplysningstyperMangler && (
+          <List.Item>
+            <strong>Det {saerligKategorier ? 'gjelder' : 'gjelder ikke'}</strong> særlige kategorier
+            av personopplysninger
+          </List.Item>
+        )}
+      </List>
+
+      {(profilering === null || automatiskBehandling === null || opplysningstyperMangler) && (
+        <Alert variant="warning">
+          Dere har ikke vurdert følgende egenskaper i Behandlingskatalogen:
+          <List>
+            {profilering === null && <List.Item>Profilering</List.Item>}
+            {automatiskBehandling === null && <List.Item>Automatisert behandling</List.Item>}
+            {opplysningstyperMangler && (
+              <List.Item>Særlige kategorier av personopplysninger</List.Item>
+            )}
+          </List>
+          Dere bør fullføre dokumentasjon av behandlingene deres i{' '}
+          <ExternalLink className="text-medium" href={`${env.pollyBaseUrl}`}>
+            Behandlingskatalogen
+          </ExternalLink>{' '}
+          før dere vurderer behov for PVK.
+        </Alert>
+      )}
+    </>
+  )
+}
+export default PvkBehovInfoContent
