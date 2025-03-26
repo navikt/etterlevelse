@@ -28,7 +28,7 @@ public class PvoTilbakemeldingGraphqlResponse extends PvoTilbakemeldingResponse 
     public static PvoTilbakemeldingGraphqlResponse buildFrom(PvoTilbakemelding pvoTilbakemelding) {
         HibernateUtils.initialize(pvoTilbakemelding); // Fully loads input if it is a detached proxy
         PvoTilbakemeldingData pvoTilbakemeldingData = pvoTilbakemelding.getPvoTilbakemeldingData();
-        return (PvoTilbakemeldingGraphqlResponse) PvoTilbakemeldingGraphqlResponse.builder()
+        return PvoTilbakemeldingGraphqlResponse.builder()
                 .id(pvoTilbakemelding.getId())
                 .changeStamp(ChangeStampResponse.buildFrom(pvoTilbakemelding))
                 .version(pvoTilbakemelding.getVersion())
