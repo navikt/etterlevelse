@@ -5,12 +5,13 @@ import {
   Checkbox,
   CheckboxGroup,
   CopyButton,
+  Modal,
   Radio,
   RadioGroup,
   ReadMore,
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   createPvkDokument,
@@ -44,6 +45,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
   checkedYtterligereEgenskaper,
   setCheckedYtterligereEgenskaper,
 }) => {
+  const [isUnsavedModalOpen, setIsUnsavedModalOpen] = useState<boolean>(false)
   const [codelistUtils] = CodelistService()
   const navigate = useNavigate()
 
@@ -71,13 +73,17 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
       }
 
       if (pvkDokument.id || existingPvkDokumentId) {
-        await updatePvkDokument(mutatedPvkDokument).then((response) => {
-          setPvkDokument(response)
-        })
+        await updatePvkDokument(mutatedPvkDokument)
+          .then((response) => {
+            setPvkDokument(response)
+          })
+          .finally(() => window.location.reload())
       } else {
-        await createPvkDokument(mutatedPvkDokument).then((response) => {
-          setPvkDokument(response)
-        })
+        await createPvkDokument(mutatedPvkDokument)
+          .then((response) => {
+            setPvkDokument(response)
+          })
+          .finally(() => window.location.reload())
       }
     }
   }
@@ -91,7 +97,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
         onSubmit={submit}
         initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
       >
-        {({ setFieldValue, values, submitForm }) => (
+        {({ setFieldValue, values, submitForm, dirty }) => (
           <Form>
             <div id="ytterlige-egenskaper">
               <FieldArray name="ytterligereEgenskaper">
@@ -173,17 +179,15 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
             )}
 
             <div className="flex items-center mt-5 gap-2">
-              {values.skalUtforePvk && (
-                <Button
-                  type="button"
-                  variant="primary"
-                  onClick={() => {
-                    submitForm()
-                  }}
-                >
-                  Lagre
-                </Button>
-              )}
+              <Button
+                type="button"
+                variant="primary"
+                onClick={() => {
+                  submitForm()
+                }}
+              >
+                Lagre
+              </Button>
 
               <Button
                 type="button"
@@ -208,38 +212,55 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 Nullstill alle svar
               </Button>
             </div>
+            <div className="mt-5 flex w-full gap-2 items-end">
+              <Button
+                type="button"
+                variant="tertiary"
+                onClick={() => {
+                  if (dirty) {
+                    setIsUnsavedModalOpen(true)
+                  } else {
+                    navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
+                  }
+                }}
+              >
+                Gå til Temaoversikt
+              </Button>
+              {pvkDokument && pvkDokument.id && (
+                <Button
+                  iconPosition="right"
+                  type="button"
+                  variant={'tertiary'}
+                  onClick={() => {
+                    if (dirty) {
+                      setIsUnsavedModalOpen(true)
+                    } else {
+                      navigate(
+                        '/dokumentasjon/' +
+                          etterlevelseDokumentasjon.id +
+                          '/pvkdokument/' +
+                          pvkDokument.id +
+                          '/1'
+                      )
+                    }
+                  }}
+                >
+                  Gå til PVK
+                </Button>
+              )}
+            </div>
           </Form>
         )}
       </Formik>
-      <div className="mt-5 flex w-full gap-2 items-end">
-        <Button
-          type="button"
-          variant="tertiary"
-          onClick={() => {
-            navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
-          }}
+      {isUnsavedModalOpen && (
+        <Modal
+          open={isUnsavedModalOpen}
+          header={{ heading: 'Endringer er ikke lagret' }}
+          onClose={() => setIsUnsavedModalOpen(false)}
         >
-          Gå til Temaoversikt
-        </Button>
-        {pvkDokument && pvkDokument.id && (
-          <Button
-            iconPosition="right"
-            type="button"
-            variant={'tertiary'}
-            onClick={() => {
-              navigate(
-                '/dokumentasjon/' +
-                  etterlevelseDokumentasjon.id +
-                  '/pvkdokument/' +
-                  pvkDokument.id +
-                  '/1'
-              )
-            }}
-          >
-            Gå til PVK
-          </Button>
-        )}
-      </div>
+          Du må forkaste eller lagre endringer
+        </Modal>
+      )}
     </>
   )
 }
