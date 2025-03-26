@@ -11,7 +11,7 @@ import {
   ReadMore,
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, RefObject, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   createPvkDokument,
@@ -46,6 +46,8 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
   setCheckedYtterligereEgenskaper,
 }) => {
   const [isUnsavedModalOpen, setIsUnsavedModalOpen] = useState<boolean>(false)
+  const [urlToNavigate, setUrlToNavigate] = useState<string>('')
+  const formRef: RefObject<any> = useRef(undefined)
   const [codelistUtils] = CodelistService()
   const navigate = useNavigate()
 
@@ -96,6 +98,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
         validationSchema={pvkBehovSchema}
         onSubmit={submit}
         initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
+        innerRef={formRef}
       >
         {({ setFieldValue, values, submitForm, dirty }) => (
           <Form>
@@ -219,6 +222,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 onClick={() => {
                   if (dirty) {
                     setIsUnsavedModalOpen(true)
+                    setUrlToNavigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
                   } else {
                     navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
                   }
@@ -226,7 +230,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
               >
                 Gå til Temaoversikt
               </Button>
-              {pvkDokument && pvkDokument.id && (
+              {pvkDokument && pvkDokument.id && values.skalUtforePvk && (
                 <Button
                   iconPosition="right"
                   type="button"
@@ -234,6 +238,13 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                   onClick={() => {
                     if (dirty) {
                       setIsUnsavedModalOpen(true)
+                      setUrlToNavigate(
+                        '/dokumentasjon/' +
+                          etterlevelseDokumentasjon.id +
+                          '/pvkdokument/' +
+                          pvkDokument.id +
+                          '/1'
+                      )
                     } else {
                       navigate(
                         '/dokumentasjon/' +
@@ -254,11 +265,47 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
       </Formik>
       {isUnsavedModalOpen && (
         <Modal
-          open={isUnsavedModalOpen}
-          header={{ heading: 'Endringer er ikke lagret' }}
           onClose={() => setIsUnsavedModalOpen(false)}
+          open={isUnsavedModalOpen}
+          header={{
+            heading: 'Vil du lagre endringene dine før du går videre?',
+            closeButton: false,
+          }}
         >
-          Du må forkaste eller lagre endringer
+          <Modal.Body>
+            <br />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              type="button"
+              onClick={() => {
+                formRef.current?.submitForm()
+                navigate(urlToNavigate)
+                setIsUnsavedModalOpen(false)
+              }}
+            >
+              Lagre og fortsette
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                navigate(urlToNavigate)
+                setIsUnsavedModalOpen(false)
+              }}
+            >
+              Fortsett uten å lagre
+            </Button>
+            <Button
+              type="button"
+              variant="tertiary"
+              onClick={() => {
+                setIsUnsavedModalOpen(false)
+              }}
+            >
+              Avbryt
+            </Button>
+          </Modal.Footer>
         </Modal>
       )}
     </>
