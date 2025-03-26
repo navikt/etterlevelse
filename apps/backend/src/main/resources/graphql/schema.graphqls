@@ -11,6 +11,7 @@ type Query {
     etterlevelseById(id: ID!) : Etterlevelse
 
     etterlevelseDokumentasjon(filter: EtterlevelseDokumentasjonFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): EtterlevelseDokumentasjonPage!
+
     pvoTilbakemelding(filter: PvoTilbakemeldingFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): PvoTilbakemeldingPage!
 }
 
@@ -48,6 +49,7 @@ input EtterlevelseDokumentasjonFilter {
 
 input PvoTilbakemeldingFilter {
     id: ID
+     """min 1, max 20"""
     sistRedigert: NonNegativeInt
 }
 
@@ -287,11 +289,11 @@ type PvoTilbakemelding {
     id: String!
     changeStamp: ChangeStamp!
     version: Int!
-    status: PvoTilbakemeldingStatus!
+    status: PvoTilbakemeldingStatus
     pvkDokumentId: String!
-    pvkDokumentStatus: String!
-    etterlevelseDokumentasjonId: String!
-    etterlevelseDokumentasjonData: EtterlevelseDokumentasjon!
+    pvkDokumentStatus: String
+    etterlevelseDokumentasjonId: String
+    etterlevelseDokumentasjonData: EtterlevelseDokumentasjon
     behandlingenslivslop: Tilbakemeldingsinnhold!
     behandlingensArtOgOmfang: Tilbakemeldingsinnhold!
     innvolveringAvEksterne: Tilbakemeldingsinnhold!
