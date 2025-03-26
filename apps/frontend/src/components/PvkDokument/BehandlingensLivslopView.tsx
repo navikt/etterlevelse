@@ -127,6 +127,7 @@ export const BehandlingensLivslopView = (props: IProps) => {
                   return yupToFormErrors(error)
                 }
               }}
+              innerRef={formRef}
             >
               {({ submitForm, initialValues, errors, isSubmitting }) => (
                 <Form>
