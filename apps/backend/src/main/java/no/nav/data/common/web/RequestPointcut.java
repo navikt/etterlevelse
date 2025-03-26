@@ -29,11 +29,11 @@ public class RequestPointcut {
         boolean isPut = signature.getMethod().isAnnotationPresent(PutMapping.class);
         Stream.of(joinPoint.getArgs())
                 .flatMap(arg -> {
-                    if (arg instanceof RequestElement re) {
+                    if (arg instanceof RequestElement<?> re) {
                         return Stream.of(re);
                     }
                     if (arg instanceof Collection<?> c) {
-                        return c.stream().filter(a -> a instanceof RequestElement).map(a -> ((RequestElement) a));
+                        return c.stream().filter(a -> a instanceof RequestElement<?>).map(a -> ((RequestElement<?>) a));
                     }
                     return Stream.empty();
                 })

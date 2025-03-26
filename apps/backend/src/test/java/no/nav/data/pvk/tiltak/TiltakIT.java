@@ -39,7 +39,7 @@ public class TiltakIT extends IntegrationTestBase {
         // Test get...
         respEnt = restTemplate.getForEntity("/tiltak/{id}", TiltakResponse.class, tiltak.getId());
         assertThat(respEnt.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(respEnt.getBody().getId()).isEqualTo(tiltak.getId().toString());
+        assertThat(respEnt.getBody().getId()).isEqualTo(tiltak.getId());
     }
     
     @Test
@@ -78,7 +78,7 @@ public class TiltakIT extends IntegrationTestBase {
         assertThat(response.getId()).isNotNull();
         assertThat(response.getPvkDokumentId()).isEqualTo(pvkDokument.getId().toString());
         assertThat(response.getRisikoscenarioIds()).contains(risikoscenario.getId().toString());
-        Tiltak tiltak = tiltakService.get(UUID.fromString(response.getId()));
+        Tiltak tiltak = tiltakService.get(response.getId());
         assertThat(tiltak).isNotNull();
         assertThat(response.getRisikoscenarioIds().get(0)).isEqualTo(risikoscenario.getId().toString());
     }
@@ -96,7 +96,7 @@ public class TiltakIT extends IntegrationTestBase {
         assertThat(respEnt.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         
         // Test update...
-        request.setId(tiltak.getId().toString());
+        request.setId(tiltak.getId());
         respEnt = restTemplate.exchange("/tiltak/{id}", HttpMethod.PUT, new HttpEntity<>(request), TiltakResponse.class, request.getId());
         tiltak = tiltakService.get(tiltak.getId());
         assertThat(tiltak.getTiltakData().getNavn()).isEqualTo("BoinkBoink");

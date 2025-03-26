@@ -20,7 +20,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class VirkemiddelRequest implements RequestElement {
+public class VirkemiddelRequest implements RequestElement<String> {
 
     private String id;
     private String navn;

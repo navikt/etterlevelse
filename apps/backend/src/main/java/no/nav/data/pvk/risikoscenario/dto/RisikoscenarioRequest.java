@@ -21,8 +21,9 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class RisikoscenarioRequest implements RequestElement {
-    private String id;
+public class RisikoscenarioRequest implements RequestElement<UUID> {
+
+    private UUID id;
     private String pvkDokumentId;
 
     private String navn;
@@ -44,7 +45,6 @@ public class RisikoscenarioRequest implements RequestElement {
 
     @Override
     public void format() {
-        setId(trimToNull(id));
         setPvkDokumentId(trimToNull(pvkDokumentId));
         setNavn(trimToNull(navn));
         setBeskrivelse(trimToNull(beskrivelse));
@@ -55,7 +55,6 @@ public class RisikoscenarioRequest implements RequestElement {
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(Fields.id, id);
         validator.checkUUID(Fields.pvkDokumentId, pvkDokumentId);
         validator.checkId(this);
     }
@@ -78,7 +77,7 @@ public class RisikoscenarioRequest implements RequestElement {
                 .build();
 
         return Risikoscenario.builder()
-                .id(id != null && !id.isEmpty() ? UUID.fromString(id) : null)
+                .id(id)
                 .pvkDokumentId(UUID.fromString(pvkDokumentId))
                 .risikoscenarioData(risikoscenarioData)
                 .build();

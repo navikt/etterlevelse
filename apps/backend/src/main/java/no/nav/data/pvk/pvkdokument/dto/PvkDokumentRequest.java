@@ -22,8 +22,9 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class PvkDokumentRequest implements RequestElement {
-    private String id;
+public class PvkDokumentRequest implements RequestElement<UUID> {
+
+    private UUID id;
     private String etterlevelseDokumentId;
     private PvkDokumentStatus status;
 
@@ -47,7 +48,6 @@ public class PvkDokumentRequest implements RequestElement {
 
     @Override
     public void format() {
-        setId(trimToNull(id));
         setEtterlevelseDokumentId(trimToNull(etterlevelseDokumentId));
         setPvkVurderingsBegrunnelse(trimToNull(pvkVurderingsBegrunnelse));
         setPersonkategoriAntallBeskrivelse(trimToNull(personkategoriAntallBeskrivelse));
@@ -66,7 +66,6 @@ public class PvkDokumentRequest implements RequestElement {
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(Fields.id, id);
         validator.checkUUID(Fields.etterlevelseDokumentId, etterlevelseDokumentId);
         validator.checkNull(Fields.status, status);
         validator.checkId(this);
@@ -89,7 +88,7 @@ public class PvkDokumentRequest implements RequestElement {
                 .build();
 
         return PvkDokument.builder()
-                .id(id != null && !id.isEmpty() ? UUID.fromString(id) : null)
+                .id(id)
                 .etterlevelseDokumentId(etterlevelseDokumentId)
                 .status(status != null ? status : PvkDokumentStatus.UNDERARBEID)
                 .pvkDokumentData(pkvDokumentData)

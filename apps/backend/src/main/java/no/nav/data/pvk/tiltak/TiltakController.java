@@ -102,13 +102,13 @@ public class TiltakController {
     @Operation(summary = "Update tiltak")
     @ApiResponse(description = "Tiltak updated")
     @PutMapping("/{id}")
-    public ResponseEntity<TiltakResponse> updateTiltak(@PathVariable String id, @Valid @RequestBody TiltakRequest request) {
+    public ResponseEntity<TiltakResponse> updateTiltak(@PathVariable UUID id, @Valid @RequestBody TiltakRequest request) {
         log.info("Update tiltak id={}", id);
 
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
-        Tiltak tiltakToUpdate = service.get(UUID.fromString(id));
+        Tiltak tiltakToUpdate = service.get(id);
         if (tiltakToUpdate == null) {
             throw new NotFoundException(String.format("Could not find tiltak to be updated with id = %s ", request.getId()));
         }

@@ -22,8 +22,9 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class PvoTilbakemedlingRequest implements RequestElement {
-    private String id;
+public class PvoTilbakemedlingRequest implements RequestElement<UUID> {
+
+    private UUID id;
     private String pvkDokumentId;
     private PvoTilbakemeldingStatus status;
 
@@ -38,7 +39,6 @@ public class PvoTilbakemedlingRequest implements RequestElement {
 
     @Override
     public void format() {
-        setId(trimToNull(id));
         setPvkDokumentId(trimToNull(pvkDokumentId));
         setSendtDato(sendtDato);
 
@@ -58,7 +58,6 @@ public class PvoTilbakemedlingRequest implements RequestElement {
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(Fields.id, id);
         validator.checkUUID(Fields.pvkDokumentId, pvkDokumentId);
         validator.checkNull(Fields.status, status);
         validator.checkId(this);
@@ -76,7 +75,7 @@ public class PvoTilbakemedlingRequest implements RequestElement {
                 .build();
 
         return PvoTilbakemelding.builder()
-                .id(id != null && !id.isEmpty() ? UUID.fromString(id) : null)
+                .id(id)
                 .pvkDokumentId(UUID.fromString(pvkDokumentId))
                 .status(status != null ? status : PvoTilbakemeldingStatus.UNDERARBEID)
                 .pvoTilbakemeldingData(pvoTilbakemeldingData)

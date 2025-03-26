@@ -18,7 +18,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class KravPriorityListRequest implements RequestElement {
+public class KravPriorityListRequest implements RequestElement<String> {
 
     private String id;
 
