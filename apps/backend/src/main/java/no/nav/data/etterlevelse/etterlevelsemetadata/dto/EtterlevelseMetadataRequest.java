@@ -20,7 +20,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class EtterlevelseMetadataRequest implements RequestElement, KravId {
+public class EtterlevelseMetadataRequest implements RequestElement<String>, KravId {
 
     private String id;
     private Integer kravVersjon;

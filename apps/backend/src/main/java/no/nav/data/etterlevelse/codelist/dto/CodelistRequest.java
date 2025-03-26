@@ -20,7 +20,7 @@ import static no.nav.data.common.utils.StringUtils.toUpperCaseAndTrim;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldNameConstants
-public class CodelistRequest implements RequestElement {
+public class CodelistRequest implements RequestElement<String> {
 
     private String list;
     private String code;

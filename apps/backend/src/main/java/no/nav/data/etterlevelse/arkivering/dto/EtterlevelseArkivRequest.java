@@ -18,7 +18,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class EtterlevelseArkivRequest implements RequestElement {
+public class EtterlevelseArkivRequest implements RequestElement<String> {
     private String id;
     private String behandlingId;
     private String etterlevelseDokumentasjonId;

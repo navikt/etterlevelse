@@ -85,7 +85,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
                 .etterlevelseDokumentasjonId(eDok2.getId())
                 .kravNummer(krav.getKravNummer())
                 .kravVersjon(krav.getKravVersjon())
-                .id(etterlevelse.getId().toString())
+                .id(etterlevelse.getId())
                 .prioritised(false)
                 .build();
         var resp = restTemplate.exchange("/etterlevelse/{id}", HttpMethod.PUT, new HttpEntity<>(req), EtterlevelseResponse.class, etterlevelse.getId());

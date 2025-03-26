@@ -27,7 +27,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class KravRequest implements RequestElement {
+public class KravRequest implements RequestElement<String> {
 
     private String id;
 

@@ -11,7 +11,6 @@ import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentListItemResponse;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
@@ -19,10 +18,21 @@ import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,7 +43,6 @@ public class PvkDokumentController {
 
     private final PvkDokumentService pvkDokumentService;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
-    private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
 
     @Operation(summary = "Get All Pvk Document")
     @ApiResponse(description = "ok")

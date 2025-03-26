@@ -67,7 +67,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
         var pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
 
         var request = PvkDokumentRequest.builder()
-                .id(pvkDokument.getId().toString())
+                .id(pvkDokument.getId())
                 .etterlevelseDokumentId(pvkDokument.getEtterlevelseDokumentId())
                 .status(PvkDokumentStatus.UNDERARBEID)
                 .ytterligereEgenskaper(List.of("PROFILERING", "TEKNOLOGI"))

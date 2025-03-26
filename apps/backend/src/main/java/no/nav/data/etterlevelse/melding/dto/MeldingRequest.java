@@ -18,7 +18,8 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class MeldingRequest implements RequestElement {
+public class MeldingRequest implements RequestElement<String> {
+
     private String id;
     private ChangeStamp changeStamp;
     private String melding;

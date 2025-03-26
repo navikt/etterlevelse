@@ -145,7 +145,7 @@ public class RisikoscenarioIT extends IntegrationTestBase {
         assertThat(respEnt.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         
         // Test update...
-        request.setId(risikoscenario.getId().toString());
+        request.setId(risikoscenario.getId());
         respEnt = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.PUT, new HttpEntity<>(request), RisikoscenarioResponse.class, request.getId());
         risikoscenario = risikoscenarioService.get(risikoscenario.getId());
         assertThat(risikoscenario.getRisikoscenarioData().getNavn()).isEqualTo("2024 YR4");

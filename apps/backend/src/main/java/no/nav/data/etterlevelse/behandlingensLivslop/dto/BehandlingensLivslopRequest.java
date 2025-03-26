@@ -21,9 +21,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @FieldNameConstants
 @AllArgsConstructor
-public class BehandlingensLivslopRequest implements RequestElement {
+public class BehandlingensLivslopRequest implements RequestElement<UUID> {
     
-    private String id;
+    private UUID id;
 
     private String etterlevelseDokumentasjonId;
 
@@ -35,7 +35,7 @@ public class BehandlingensLivslopRequest implements RequestElement {
     
     public BehandlingensLivslop convertToBehandlingensLivslop() {
         return BehandlingensLivslop.builder()
-                .id(id != null && !id.isEmpty() ? UUID.fromString(id) : null)
+                .id(id)
                 .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
                 .behandlingensLivslopData(BehandlingensLivslopData.builder()
                         .beskrivelse(beskrivelse)
@@ -58,7 +58,6 @@ public class BehandlingensLivslopRequest implements RequestElement {
     }
 
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(Fields.id, id);
         validator.checkId(this);
     }
 

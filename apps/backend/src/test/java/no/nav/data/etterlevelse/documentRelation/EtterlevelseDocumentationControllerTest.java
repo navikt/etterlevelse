@@ -59,7 +59,7 @@ public class EtterlevelseDocumentationControllerTest extends IntegrationTestBase
         var resp = restTemplate.postForEntity("/documentrelation", req, DocumentRelationResponse.class);
 
         var updateRequest = DocumentRelationRequest.builder()
-                .id(resp.getBody().getId().toString())
+                .id(resp.getBody().getId())
                 .toDocument("newDocument")
                 .fromDocument("fromOldDocument")
                 .relationType(RelationType.BYGGER)
