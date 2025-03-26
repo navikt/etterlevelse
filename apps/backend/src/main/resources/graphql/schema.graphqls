@@ -305,7 +305,7 @@ type PvoTilbakemelding {
 
 type Tilbakemeldingsinnhold {
     sistRedigertAv: String
-    private LocalDateTime sistRedigertDato: DateTime
+    sistRedigertDato: DateTime
     bidragsVurdering: String
     internDiskusjon: String
     tilbakemeldingTilEtterlevere: String
