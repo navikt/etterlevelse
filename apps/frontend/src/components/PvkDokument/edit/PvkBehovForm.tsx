@@ -10,7 +10,7 @@ import {
   ReadMore,
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   createPvkDokument,
@@ -44,8 +44,6 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
   checkedYtterligereEgenskaper,
   setCheckedYtterligereEgenskaper,
 }) => {
-  const [tilTemaOversikt, setTilTemaOversikt] = useState<boolean>(false)
-  const [tilPvkDokument, setTilPvkDokument] = useState<boolean>(false)
   const [codelistUtils] = CodelistService()
   const navigate = useNavigate()
 
@@ -74,35 +72,11 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
 
       if (pvkDokument.id || existingPvkDokumentId) {
         await updatePvkDokument(mutatedPvkDokument).then((response) => {
-          if (tilTemaOversikt) {
-            navigate('/dokumentasjon/' + response.etterlevelseDokumentId)
-          } else if (tilPvkDokument) {
-            navigate(
-              '/dokumentasjon/' +
-                response.etterlevelseDokumentId +
-                '/pvkdokument/' +
-                response.id +
-                '/1'
-            )
-          } else {
-            setPvkDokument(response)
-          }
+          setPvkDokument(response)
         })
       } else {
         await createPvkDokument(mutatedPvkDokument).then((response) => {
-          if (tilTemaOversikt) {
-            navigate('/dokumentasjon/' + response.etterlevelseDokumentId)
-          } else if (tilPvkDokument) {
-            navigate(
-              '/dokumentasjon/' +
-                response.etterlevelseDokumentId +
-                '/pvkdokument/' +
-                response.id +
-                '/1'
-            )
-          } else {
-            setPvkDokument(response)
-          }
+          setPvkDokument(response)
         })
       }
     }
@@ -204,11 +178,10 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                   type="button"
                   variant="primary"
                   onClick={() => {
-                    setTilPvkDokument(true)
                     submitForm()
                   }}
                 >
-                  Lagre og gå til PVK
+                  Lagre
                 </Button>
               )}
 
@@ -216,21 +189,10 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 type="button"
                 variant="secondary"
                 onClick={() => {
-                  setTilTemaOversikt(true)
-                  submitForm()
+                  window.location.reload()
                 }}
               >
-                Lagre og gå til Temaoversikt
-              </Button>
-
-              <Button
-                type="button"
-                variant="tertiary"
-                onClick={() => {
-                  navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
-                }}
-              >
-                Avbryt
+                Forkast endringer
               </Button>
 
               <Button
@@ -249,6 +211,35 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
           </Form>
         )}
       </Formik>
+      <div className="mt-5 flex w-full gap-2 items-end">
+        <Button
+          type="button"
+          variant="tertiary"
+          onClick={() => {
+            navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
+          }}
+        >
+          Gå til Temaoversikt
+        </Button>
+        {pvkDokument && pvkDokument.id && (
+          <Button
+            iconPosition="right"
+            type="button"
+            variant={'tertiary'}
+            onClick={() => {
+              navigate(
+                '/dokumentasjon/' +
+                  etterlevelseDokumentasjon.id +
+                  '/pvkdokument/' +
+                  pvkDokument.id +
+                  '/1'
+              )
+            }}
+          >
+            Gå til PVK
+          </Button>
+        )}
+      </div>
     </>
   )
 }
