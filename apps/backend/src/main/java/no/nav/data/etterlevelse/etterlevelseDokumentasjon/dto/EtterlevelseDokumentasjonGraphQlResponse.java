@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.common.utils.HibernateUtils;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
@@ -34,6 +35,7 @@ public class EtterlevelseDokumentasjonGraphQlResponse extends EtterlevelseDokume
     private EtterlevelseDokumentasjonStats stats;
 
     public static EtterlevelseDokumentasjonGraphQlResponse buildFrom(EtterlevelseDokumentasjon etterlevelseDokumentasjon) {
+        HibernateUtils.initialize(etterlevelseDokumentasjon); // Fully loads input if it is a detached proxy
         EtterlevelseDokumentasjonData eDokData = etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData();
         return EtterlevelseDokumentasjonGraphQlResponse.builder()
                 .id(etterlevelseDokumentasjon.getId())
