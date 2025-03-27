@@ -6,9 +6,6 @@ on:
       - '.github/workflows/etterlevelse-backend.yml'
       - 'apps/backend/**'
 
-env:
-  IMAGE: ghcr.io/${{ github.repository }}/etterlevelsebackend:${{ github.sha }}
-
 defaults:
   run:
     working-directory: apps/backend
@@ -45,13 +42,6 @@ jobs:
       - name: Test and Package
         run: mvn package
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build and push
         if: github.ref == 'refs/heads/prod' || github.ref == 'refs/heads/master'
         uses: nais/docker-build-push@v0
@@ -59,7 +49,6 @@ jobs:
         with:
           team: teamdatajegerne
           push_image: true
-          tag: ${{env.IMAGE}}
           docker_context: ./apps/backend
 
   deploy-preprod:
