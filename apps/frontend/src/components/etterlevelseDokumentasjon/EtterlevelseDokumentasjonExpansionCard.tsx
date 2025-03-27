@@ -182,6 +182,19 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
             </div>
             {!(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
               <BodyLong>Trenger du tilgang til å redigere dette dokumentet? I så fall ta kontakt med de som er nevnt under Team eller Varslingsadresser.</BodyLong>}
+
+            {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
+              <Button
+                onClick={() => {
+                  navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
+                }}
+                size="small"
+                variant="secondary"
+                className="whitespace-nowrap mt-2.5"
+              >
+                Redigér dokumentegenskaper
+              </Button>}
+
           </ReadMore>
         </div>
 
