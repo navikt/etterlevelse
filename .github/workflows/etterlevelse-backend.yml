@@ -20,6 +20,11 @@ jobs:
     permissions:
       packages: write
       contents: read
+      id-token: write
+      actions: read
+    outputs:
+        image: ${{ steps.docker-build-push.outputs.image }}
+        telemetry: ${{ steps.docker-build-push.outputs.telemetry }}      
     steps:
       - uses: actions/checkout@v4
         
@@ -49,11 +54,13 @@ jobs:
 
       - name: Build and push
         if: github.ref == 'refs/heads/prod' || github.ref == 'refs/heads/master'
-        uses: docker/build-push-action@v6
+        uses: nais/docker-build-push@v0
+        id: docker-build-push
         with:
-          push: true
-          tags: ${{env.IMAGE}}
-          context: ./apps/backend
+          team: teamdatajegerne
+          push_image: true
+          tag: ${{env.IMAGE}}
+          docker_context: ./apps/backend
 
   deploy-preprod:
     name: Backend - deploy Dev GCP
@@ -65,11 +72,12 @@ jobs:
         
       - uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: apps/backend/nais/backend-gcp.yaml
           VARS: apps/backend/nais/backend-dev-gcp-vars.yaml
           ENVIRONMENT: dev-gcp:teamdatajegerne:etterlevelse-backend
+          WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
+          TELEMETRY: ${{ needs.build.outputs.telemetry }}
 
       - name: deploy alerts to dev-gcp
         uses: nais/deploy/actions/deploy@v2
@@ -88,11 +96,12 @@ jobs:
         
       - uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: apps/backend/nais/backend-gcp.yaml
           VARS: apps/backend/nais/backend-prod-gcp-vars.yaml
           ENVIRONMENT: prod-gcp:teamdatajegerne:etterlevelse-backend
+          WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
+          TELEMETRY: ${{ needs.build.outputs.telemetry }}
           
       - name: deploy alerts to prod-gcp
         uses: nais/deploy/actions/deploy@v2
