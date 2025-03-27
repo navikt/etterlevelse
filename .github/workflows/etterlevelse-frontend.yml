@@ -6,22 +6,19 @@ on:
             - ".github/workflows/etterlevelse-frontend.yml"
             - "apps/frontend/**"
 
-env:
-    IMAGE: ghcr.io/${{ github.repository }}/etterlevelsefront${{ github.ref == 'refs/heads/prod' }}:${{ github.sha }}
-
 defaults:
   run:
     working-directory: apps/frontend
-
+  
 jobs:
     build:
         name: Frontend - build and push docker
         runs-on: ubuntu-latest
         permissions:
           packages: write
-          contents: read
           id-token: write
-          actions: read
+          contents: read
+          actions: read 
         outputs:
             image: ${{ steps.docker-build-push.outputs.image }}
             telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
@@ -65,7 +62,7 @@ jobs:
               with:
                 team: teamdatajegerne
                 push_image: true
-                tag: ${{env.IMAGE}}
+                image_suffix: frontend
                 docker_context: ./apps/frontend
 
     deploy-preprod:
@@ -73,6 +70,10 @@ jobs:
         needs: build
         if: github.ref == 'refs/heads/master'
         runs-on: ubuntu-latest
+        permissions:
+          id-token: write
+          contents: read
+          actions: read 
         steps:
             - uses: actions/checkout@v4
             - uses: nais/deploy/actions/deploy@v2
@@ -89,6 +90,10 @@ jobs:
         needs: build
         if: github.ref == 'refs/heads/prod'
         runs-on: ubuntu-latest
+        permissions:
+          id-token: write
+          contents: read
+          actions: read 
         steps:
             - uses: actions/checkout@v4
             - uses: nais/deploy/actions/deploy@v2

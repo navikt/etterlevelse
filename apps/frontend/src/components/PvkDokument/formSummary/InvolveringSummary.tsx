@@ -23,7 +23,7 @@ export const InvolveringSummary = (props: IProps) => {
       {(fieldProp: FieldProps) => (
         <FormSummary className="my-3">
           <FormSummary.Header>
-            <FormSummary.Heading level="2">{StepTitle[2]}</FormSummary.Heading>
+            <FormSummary.Heading level="2">{StepTitle[3]}</FormSummary.Heading>
             <FormSummary.EditLink
               className="cursor-pointer"
               onClick={() => updateTitleUrlAndStep(customStepNumber ? customStepNumber : 4)}
