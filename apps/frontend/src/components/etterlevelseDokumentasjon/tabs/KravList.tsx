@@ -53,13 +53,11 @@ export const KravList = (props: IProps) => {
         setIsRisikoscenarioLoading(true)
         await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id).then(
           async (pvkDocId) => {
-            await getRisikoscenarioByPvkDokumentId(pvkDocId.id, ERisikoscenarioType.KRAV).then(
-              (riskoscenario) => {
+            await getRisikoscenarioByPvkDokumentId(pvkDocId.id, ERisikoscenarioType.KRAV)
+              .then((riskoscenario) => {
                 setRisikoscenarioList(riskoscenario.content)
-
-                setIsRisikoscenarioLoading(false)
-              }
-            )
+              })
+              .finally(() => setIsRisikoscenarioLoading(false))
           }
         )
       }
