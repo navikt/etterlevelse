@@ -6,9 +6,6 @@ on:
             - ".github/workflows/etterlevelse-frontend.yml"
             - "apps/frontend/**"
 
-env:
-    IMAGE: ghcr.io/${{ github.repository }}/etterlevelsefront${{ github.ref == 'refs/heads/prod' }}:${{ github.sha }}
-
 defaults:
   run:
     working-directory: apps/frontend
@@ -65,7 +62,7 @@ jobs:
               with:
                 team: teamdatajegerne
                 push_image: true
-                tag: ${{env.IMAGE}}
+                image_suffix: frontend
                 docker_context: ./apps/frontend
 
     deploy-preprod:
