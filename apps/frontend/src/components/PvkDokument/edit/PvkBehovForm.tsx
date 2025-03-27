@@ -74,17 +74,15 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
       }
 
       if (pvkDokument.id || existingPvkDokumentId) {
-        await updatePvkDokument(mutatedPvkDokument)
-          .then((response) => {
-            setPvkDokument(response)
-          })
-          .finally(() => window.location.reload())
+        await updatePvkDokument(mutatedPvkDokument).then((response) => {
+          setPvkDokument(response)
+          navigate(`/dokumentasjon/${response.etterlevelseDokumentId}/pvkbehov/${response.id}`)
+        })
       } else {
-        await createPvkDokument(mutatedPvkDokument)
-          .then((response) => {
-            setPvkDokument(response)
-          })
-          .finally(() => window.location.reload())
+        await createPvkDokument(mutatedPvkDokument).then((response) => {
+          setPvkDokument(response)
+          navigate(`/dokumentasjon/${response.etterlevelseDokumentId}/pvkbehov/${response.id}`)
+        })
       }
     }
   }
