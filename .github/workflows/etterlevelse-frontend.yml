@@ -20,6 +20,8 @@ jobs:
         permissions:
           packages: write
           contents: read
+          id-token: write
+          actions: read
         outputs:
             image: ${{ steps.docker-build-push.outputs.image }}
             telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
