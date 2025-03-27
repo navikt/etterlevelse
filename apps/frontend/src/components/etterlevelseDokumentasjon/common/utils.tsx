@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { EEtterlevelseStatus, ESuksesskriterieStatus, TKravQL } from '../../../constants'
+import {EEtterlevelseStatus, ESuksesskriterieStatus, TKravQL} from '../../../constants'
 
 export const getNewestKravVersjon = (list: any[]) => {
   let relevanteStatusListe = [...list]
@@ -20,9 +20,9 @@ export const getEtterlevelseStatus = (status?: EEtterlevelseStatus, frist?: stri
     case EEtterlevelseStatus.IKKE_RELEVANT:
       return 'Ikke relevant'
     case EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
-      return 'Ferdig utfylt'
+      return 'Ferdig utfylt etterlevelse'
     case EEtterlevelseStatus.FERDIG_DOKUMENTERT:
-      return 'Ferdig utfylt'
+      return 'Ferdig utfylt etterlevelse'
     case EEtterlevelseStatus.OPPFYLLES_SENERE:
       if (frist) {
         return 'Utsatt til ' + moment(frist).format('ll')
