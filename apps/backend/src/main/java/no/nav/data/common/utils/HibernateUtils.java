@@ -1,10 +1,6 @@
     package no.nav.data.common.utils;
 
 import no.nav.data.common.exceptions.TechnicalException;
-import org.hibernate.Hibernate;
-import org.hibernate.LazyInitializationException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.springframework.data.util.ReflectionUtils;
@@ -33,28 +29,4 @@ public final class HibernateUtils {
         }
     }
     
-    /**
-     * Initializes the object, even when it is a detached proxy
-     * This should only be used in tests. 
-     * You will need this in production code only if you have a problem with transaction boundries that you need to fix.
-     */
-    public static <T> T initialize(T input) {
-        if (! (input instanceof HibernateProxy)) {
-            return input;
-        }
-        try {
-            Hibernate.initialize(input);
-            return input;
-        } catch (LazyInitializationException e) {
-        }
-        // We are here probably only if we no longer have the session that was used to get input
-        SessionFactory sFac = SpringUtils.getSessionFactory();
-        sFac.inSession((Session session) -> {
-            session.update(input);
-            Hibernate.initialize(input);
-        });
-        return input;
-    }
-
-
 }
