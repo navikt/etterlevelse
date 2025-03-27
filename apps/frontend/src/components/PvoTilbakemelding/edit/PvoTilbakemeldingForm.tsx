@@ -172,7 +172,7 @@ export const PvoTilbakemeldingForm = (props: IProps) => {
                   window.location.reload()
                 }}
               >
-                Avbryt
+                Forkast endringer
               </Button>
             </div>
           </div>

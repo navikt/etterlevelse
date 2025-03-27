@@ -16,7 +16,7 @@ export const KravRisikoscenarioOvrigeRisikoscenarier = ({ pvkDokument }: IProps)
         type="button"
         onClick={() => {
           navigate(
-            `/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/pvkdokument/${pvkDokument.id}/4`
+            `/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/pvkdokument/${pvkDokument.id}/5`
           )
         }}
       >

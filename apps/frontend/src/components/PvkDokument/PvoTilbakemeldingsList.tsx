@@ -1,8 +1,8 @@
 import { List, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
 import { EPVO, IPvkDokumentListItem } from '../../constants'
+import PvoStatusView from '../PvoTilbakemelding/common/PvoStatusView'
 import { ListLayout } from '../common/ListLayout'
-import StatusView from '../common/StatusTag'
 
 interface IProps {
   allPvkDocumentListItem: IPvkDokumentListItem[]
@@ -22,11 +22,7 @@ export const PvoTilbakemeldingsList = ({ allPvkDocumentListItem, isLoading }: IP
               url={`/pvkdokument/${pvkDokument.id}${EPVO.tilbakemelding}/1`}
               documentNumber={`E${pvkDokument.etterlevelseNummer}`}
               title={pvkDokument.title}
-              status={
-                <StatusView
-                  status={pvkDokument.status === 'AKTIV' ? 'Under arbeid' : pvkDokument.status}
-                />
-              }
+              status={<PvoStatusView status={pvkDokument.status} />}
               upperRightField="PVK dokument ble"
               changeStamp={
                 pvkDokument.changeStamp.lastModifiedDate !== undefined &&

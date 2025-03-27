@@ -74,11 +74,6 @@ export const PvkDokumentPage = () => {
         etterlevelseDokumentasjon?.title,
       href: '/dokumentasjon/' + params.id,
     },
-
-    {
-      pathName: 'Personvernkonsekvensvurdering',
-      href: '/dokumentasjon/' + params.id + '/pvkbehov/' + params.pvkdokumentId,
-    },
   ]
 
   const updateUrlOnStepChange = (step: number) => {

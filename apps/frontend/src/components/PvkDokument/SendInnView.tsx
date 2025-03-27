@@ -42,15 +42,25 @@ export const SendInnView = (props: IProps) => {
     pvoTilbakemelding,
   } = props
 
-  const [submitPvkStatus, setSubmitPvkStatus] = useState<EPvkDokumentStatus>(
-    EPvkDokumentStatus.UNDERARBEID
-  )
+  const [submitPvkStatus, setSubmitPvkStatus] = useState<EPvkDokumentStatus>(pvkDokument.status)
+
+  const underarbeidCheck =
+    pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
+    pvkDokument.status === EPvkDokumentStatus.AKTIV
 
   const submit = async (pvkDokument: IPvkDokument) => {
     await getPvkDokument(pvkDokument.id).then((response) => {
+      const updatedStatus =
+        submitPvkStatus !== EPvkDokumentStatus.VURDERT_AV_PVO &&
+        submitPvkStatus !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+        (response.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
+          response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
+          ? response.status
+          : submitPvkStatus
+
       const updatedPvkDokument = {
         ...response,
-        status: submitPvkStatus,
+        status: updatedStatus,
         merknadTilPvoEllerRisikoeier: pvkDokument.merknadTilPvoEllerRisikoeier,
       }
 
@@ -59,10 +69,6 @@ export const SendInnView = (props: IProps) => {
       })
     })
   }
-
-  const underarbeidCheck =
-    pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
-    pvkDokument.status === EPvkDokumentStatus.AKTIV
 
   return (
     <Formik
