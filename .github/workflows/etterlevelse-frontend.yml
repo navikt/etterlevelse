@@ -10,15 +10,17 @@ defaults:
   run:
     working-directory: apps/frontend
 
+permissions:
+  id-token: write
+  contents: read
+  actions: read 
+  
 jobs:
     build:
         name: Frontend - build and push docker
         runs-on: ubuntu-latest
         permissions:
           packages: write
-          contents: read
-          id-token: write
-          actions: read
         outputs:
             image: ${{ steps.docker-build-push.outputs.image }}
             telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
