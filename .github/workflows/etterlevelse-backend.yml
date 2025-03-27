@@ -50,6 +50,7 @@ jobs:
           team: teamdatajegerne
           push_image: true
           docker_context: ./apps/backend
+          image_suffix: backend
 
   deploy-preprod:
     name: Backend - deploy Dev GCP
