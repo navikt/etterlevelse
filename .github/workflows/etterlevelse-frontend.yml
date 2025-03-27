@@ -21,8 +21,8 @@ jobs:
           packages: write
           contents: read
         outputs:
-            image: ${{ step.docker-build-push.outputs.image }}
-            telemetry: ${{ step.docker-build-push.outputs.telemetry }}
+            image: ${{ steps.docker-build-push.outputs.image }}
+            telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
         steps:
             - uses: actions/checkout@v4
               
