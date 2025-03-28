@@ -12,15 +12,15 @@ import no.nav.data.etterlevelse.melding.domain.AlertType;
 import no.nav.data.etterlevelse.melding.domain.MeldingStatus;
 import no.nav.data.etterlevelse.melding.domain.MeldingType;
 
-import static org.apache.commons.lang3.StringUtils.trimToNull;
+import java.util.UUID;
 @Data
 @Builder
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class MeldingRequest implements RequestElement<String> {
+public class MeldingRequest implements RequestElement {
 
-    private String id;
+    private UUID id;
     private ChangeStamp changeStamp;
     private String melding;
     private String secondaryTittel;
@@ -34,12 +34,10 @@ public class MeldingRequest implements RequestElement<String> {
 
     @Override
     public void format() {
-        setId(trimToNull(id));
     }
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(MeldingRequest.Fields.id,id);
         validator.checkId(this);
         validator.checkNull(Fields.melding, melding);
         validator.checkNull(Fields.meldingType, meldingType);

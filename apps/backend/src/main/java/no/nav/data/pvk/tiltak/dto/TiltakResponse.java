@@ -28,7 +28,7 @@ public class TiltakResponse {
     private String beskrivelse;
     private Resource ansvarlig;
     private LocalDate frist;
-    private List<String> risikoscenarioIds; // Merk: Settes ikke i buildFrom
+    private List<UUID> risikoscenarioIds; // Merk: Settes ikke i buildFrom
 
     private ChangeStampResponse changeStamp;
     private Integer version;

@@ -21,7 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @FieldNameConstants
 @AllArgsConstructor
-public class BehandlingensLivslopRequest implements RequestElement<UUID> {
+public class BehandlingensLivslopRequest implements RequestElement {
     
     private UUID id;
 

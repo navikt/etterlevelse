@@ -147,14 +147,14 @@ public class RisikoscenarioController {
     public ResponseEntity<RisikoscenarioResponse> updateRisikoscenario(@PathVariable UUID id, @Valid @RequestBody RisikoscenarioRequest request) {
         log.info("Update Risikoscenario Document id={}", id);
 
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
         var risikoscenarioToUpdate = risikoscenarioService.get(id);
 
         if (risikoscenarioToUpdate == null) { 
-            throw new NotFoundException(String.format("Could not find risikoscenario to be updated with id = %s ", request.getId()));
+            throw new NotFoundException(String.format("Could not find risikoscenario to be updated with id = %s ", id));
         }
 
         request.mergeInto(risikoscenarioToUpdate);
@@ -244,10 +244,10 @@ public class RisikoscenarioController {
     @Operation(summary = "Remove tiltak from risikoscenario")
     @ApiResponse(description = "Tiltak removed form risikoscenario")
     @PutMapping("/{id}/removeTiltak/{tiltakId}")
-    public ResponseEntity<RisikoscenarioResponse> removeTiltakFromRisikoscenarioById(@PathVariable String id, @PathVariable String tiltakId) {
+    public ResponseEntity<RisikoscenarioResponse> removeTiltakFromRisikoscenarioById(@PathVariable UUID id, @PathVariable UUID tiltakId) {
         log.info("Remove Tiltak (id={}) from risikoscenario (id={})", tiltakId, id);
         if (risikoscenarioService.removeTiltak(id, tiltakId)) {
-            RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenarioService.get(UUID.fromString(id)));
+            RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenarioService.get(id));
             setTiltakAndKravDataForRelevantKravList(response);
             return ResponseEntity.ok(response);
         } else {
@@ -258,7 +258,7 @@ public class RisikoscenarioController {
 
     private void setTiltakAndKravDataForRelevantKravList(RisikoscenarioResponse risikoscenario) {
         // Set Tiltak...
-        risikoscenario.setTiltakIds(risikoscenarioService.getTiltak(risikoscenario.getId().toString()));
+        risikoscenario.setTiltakIds(risikoscenarioService.getTiltak(risikoscenario.getId()));
 
         // Set KravData...
         risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {

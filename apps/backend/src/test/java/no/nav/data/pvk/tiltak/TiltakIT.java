@@ -77,10 +77,10 @@ public class TiltakIT extends IntegrationTestBase {
         TiltakResponse response = respEnt.getBody();
         assertThat(response.getId()).isNotNull();
         assertThat(response.getPvkDokumentId()).isEqualTo(pvkDokument.getId().toString());
-        assertThat(response.getRisikoscenarioIds()).contains(risikoscenario.getId().toString());
+        assertThat(response.getRisikoscenarioIds()).contains(risikoscenario.getId());
         Tiltak tiltak = tiltakService.get(response.getId());
         assertThat(tiltak).isNotNull();
-        assertThat(response.getRisikoscenarioIds().get(0)).isEqualTo(risikoscenario.getId().toString());
+        assertThat(response.getRisikoscenarioIds().get(0)).isEqualTo(risikoscenario.getId());
     }
     
     @Test
@@ -109,11 +109,11 @@ public class TiltakIT extends IntegrationTestBase {
 
         // Delete should fail if tiltak has a relation to one or more risikoscenarioer...
         Risikoscenario risikoscenario = risikoscenarioService.save(generateRisikoscenario(pvkDokument.getId()), false);
-        risikoscenarioService.addTiltak(risikoscenario.getId().toString(), List.of(tiltak.getId().toString()));
+        risikoscenarioService.addTiltak(risikoscenario.getId(), List.of(tiltak.getId()));
         ResponseEntity<TiltakResponse> resp = restTemplate.exchange("/tiltak/{id}", HttpMethod.DELETE, null, TiltakResponse.class, tiltak.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(tiltakRepo.count()).isEqualTo(1);
-        risikoscenarioService.removeTiltak(risikoscenario.getId().toString(), tiltak.getId().toString());
+        risikoscenarioService.removeTiltak(risikoscenario.getId(), tiltak.getId());
 
         // Test delete...
         resp = restTemplate.exchange("/tiltak/{id}", HttpMethod.DELETE, null, TiltakResponse.class, tiltak.getId());

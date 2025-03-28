@@ -97,7 +97,7 @@ public class VirkemiddelController {
     @PutMapping("/{id}")
     public ResponseEntity<VirkemiddelResponse> updateVirkemiddel(@PathVariable UUID id, @Valid @RequestBody VirkemiddelRequest request) {
         log.debug("Update virkemiddel id={}", id);
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
         var virkemiddel = service.save(request);

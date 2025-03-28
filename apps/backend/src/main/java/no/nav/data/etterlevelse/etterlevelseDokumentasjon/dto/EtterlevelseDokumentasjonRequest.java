@@ -25,7 +25,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class EtterlevelseDokumentasjonRequest implements RequestElement<UUID> {
+public class EtterlevelseDokumentasjonRequest implements RequestElement {
 
     private UUID id;
     private Boolean update;

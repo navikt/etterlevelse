@@ -10,6 +10,7 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
@@ -18,8 +19,8 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class EtterlevelseArkivRequest implements RequestElement<String> {
-    private String id;
+public class EtterlevelseArkivRequest implements RequestElement {
+    private UUID id;
     private String behandlingId;
     private String etterlevelseDokumentasjonId;
     private EtterlevelseArkivStatus status;
@@ -33,7 +34,6 @@ public class EtterlevelseArkivRequest implements RequestElement<String> {
 
     @Override
     public void format() {
-        setId(trimToNull(id));
         setBehandlingId(trimToNull(behandlingId));
         setEtterlevelseDokumentasjonId(trimToNull(etterlevelseDokumentasjonId));
         if (status == null) {
@@ -43,7 +43,6 @@ public class EtterlevelseArkivRequest implements RequestElement<String> {
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(Fields.id,id);
         validator.checkId(this);
 
     }

@@ -176,7 +176,7 @@ public class KravController {
     public ResponseEntity<KravResponse> updateKrav(@PathVariable UUID id, @Valid @RequestBody KravRequest request) {
         log.debug("Update Krav id={}", id);
         validator.validate(request);
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
         var krav = service.save(request);

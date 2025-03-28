@@ -65,7 +65,7 @@ public class PvoTilbakemeldingController {
     @PostMapping
     public ResponseEntity<PvoTilbakemeldingResponse> createPvoTilbakemelding(@RequestBody PvoTilbakemedlingRequest request) {
         log.info("Create PVO tilbakemelding");
-        //kan kaste et data integrity violation exception(1 til 1 kobling mot pvk dokument)
+        // kan kaste et data integrity violation exception(1 til 1 kobling mot pvk dokument)
         var pvoTilbakemelding = pvoTilbakemeldingService.save(request.convertToPvoTilbakemelding(), request.isUpdate());
 
         if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
@@ -81,14 +81,14 @@ public class PvoTilbakemeldingController {
     public ResponseEntity<PvoTilbakemeldingResponse> updatePvoTilbakemelding(@PathVariable UUID id, @Valid @RequestBody PvoTilbakemedlingRequest request) {
         log.info("Update PVO tilbakemelding id={}", id);
 
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
         var pvoTilbakemeldingToUpdate = pvoTilbakemeldingService.get(id);
 
         if (pvoTilbakemeldingToUpdate == null) {
-            throw new ValidationException(String.format("Could not find pvo tilbakemelding to be updated with id = %s ", request.getId()));
+            throw new ValidationException(String.format("Could not find pvo tilbakemelding to be updated with id = %s ", id));
         }
 
         request.mergeInto(pvoTilbakemeldingToUpdate);

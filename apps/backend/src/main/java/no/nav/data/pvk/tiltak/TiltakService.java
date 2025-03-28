@@ -40,7 +40,7 @@ public class TiltakService {
         }
         tiltak = repo.save(tiltak);
         if (risikoscenarioId != null) {
-            addRisikoscenarioTiltakRelasjon(risikoscenarioId.toString(), tiltak.getId().toString());
+            addRisikoscenarioTiltakRelasjon(risikoscenarioId, tiltak.getId());
         }
         return tiltak;
     }
@@ -56,15 +56,15 @@ public class TiltakService {
      * @throws DataIntegrityViolationException If the Risikoscenario or Tiltak does not exist
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void addRisikoscenarioTiltakRelasjon(String risikoscenarioId, String tiltakId) {
+    public void addRisikoscenarioTiltakRelasjon(UUID risikoscenarioId, UUID tiltakId) {
         repo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId);
     }
 
-    public List<Tiltak> getByPvkDokument(String pvkDokumentId) {
+    public List<Tiltak> getByPvkDokument(UUID pvkDokumentId) {
         return repo.findByPvkDokumentId(pvkDokumentId);
     }
 
-    public List<String> getRisikoscenarioer(UUID id) {
+    public List<UUID> getRisikoscenarioer(UUID id) {
         return repo.getRisikoscenarioForTiltak(id);
     }
 

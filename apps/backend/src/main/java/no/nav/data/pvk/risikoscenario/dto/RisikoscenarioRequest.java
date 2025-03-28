@@ -21,7 +21,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class RisikoscenarioRequest implements RequestElement<UUID> {
+public class RisikoscenarioRequest implements RequestElement {
 
     private UUID id;
     private String pvkDokumentId;

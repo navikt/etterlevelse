@@ -44,7 +44,7 @@ public class KravValidator {
         }
 
         var items = filter(storage.findByNameAndType(name, Krav.class),
-                t -> (!t.getId().equals(validator.getItem().getIdAsUUID())
+                t -> (!t.getId().equals(validator.getItem().getId())
                 && !t.getKravNummer().equals(validator.getItem().getKravNummer())
                 ));
 
