@@ -2,9 +2,9 @@ package no.nav.data.pvk.pvotilbakemelding.dto;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
@@ -13,9 +13,8 @@ import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonPropertyOrder({"id", "pvkDokumentId", "status"})
