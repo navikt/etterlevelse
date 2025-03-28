@@ -5,7 +5,7 @@ import { mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../../constants'
 import { RisikoscenarioKonsekvensnivaaField } from './RisikoscenarioKonsekvensnivaaField/RisikoscenarioKonsekvensnivaaField'
 import { RisikoscenarioNavnBeskrivelseField } from './RisikoscenarioNavnBeskrivelseField/RisikoscenarioNavnBeskrivelseField'
-import RisikoscenarioSannsynlighet from './RisikoscenarioSannsynlighet/RisikoscenarioSannsynlighet'
+import RisikoscenarioSannsynlighetField from './RisikoscenarioSannsynlighetField/RisikoscenarioSannsynlighetField'
 import { risikoscenarioCreateValidation } from './RisikoscenarioSchemaValidation'
 
 type TProps = {
@@ -39,7 +39,7 @@ export const RisikoscenarioForm: FunctionComponent<TProps> = ({
             <div>
               <RisikoscenarioNavnBeskrivelseField />
 
-              <RisikoscenarioSannsynlighet />
+              <RisikoscenarioSannsynlighetField />
 
               <RisikoscenarioKonsekvensnivaaField />
             </div>

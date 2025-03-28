@@ -3,7 +3,7 @@ import RisikoscenarioSannsynligNivaaRadioField from './RisikoscenarioSannsynligN
 import { RisikoscenarioSannsynlighetReadMore } from './RisikoscenarioSannsynlighetReadMore'
 import { RisikoscenarioSannsynlighetsBegrunnelseField } from './RisikoscenarioSannsynlighetsBegrunnelseField'
 
-export const RisikoscenarioSannsynlighet = () => (
+export const RisikoscenarioSannsynlighetField = () => (
   <>
     <RisikoscenarioSannsynlighetHeader />
 
@@ -15,4 +15,4 @@ export const RisikoscenarioSannsynlighet = () => (
   </>
 )
 
-export default RisikoscenarioSannsynlighet
+export default RisikoscenarioSannsynlighetField
