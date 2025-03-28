@@ -57,8 +57,5 @@
       "no-console":["warn", { "allow": ["warn", "error", "debug"] }],
       // no-extra-semi is added because there are places where the ; is necessary
       "no-extra-semi": "off",
-      "eqeqeq": "off",
-      "no-unused-vars": "error",
-      "prefer-const": ["error", { "ignoreReadBeforeAssign": true }]
     }
   }
