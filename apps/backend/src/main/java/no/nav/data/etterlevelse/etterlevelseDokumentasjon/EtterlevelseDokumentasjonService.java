@@ -135,7 +135,7 @@ public class EtterlevelseDokumentasjonService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon updateKravPriority(EtterlevelseDokumentasjonRequest request) {
-        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getIdAsUUID());
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getId());
         etterlevelseDokumentasjon.setPrioritertKravNummer(request.getPrioritertKravNummer());
         return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
     }

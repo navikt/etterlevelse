@@ -59,7 +59,7 @@ public class EtterlevelseMetadataService extends DomainService<EtterlevelseMetad
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseMetadata save(EtterlevelseMetadataRequest request) {
 
-        var etterlevelseMetadata = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new EtterlevelseMetadata();
+        var etterlevelseMetadata = request.isUpdate() ? storage.get(request.getId()) : new EtterlevelseMetadata();
         request.mergeInto(etterlevelseMetadata);
 
         return storage.save(etterlevelseMetadata);

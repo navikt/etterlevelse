@@ -89,23 +89,23 @@ public class RisikoscenarioService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Risikoscenario addTiltak(String risikoscenarioId, List<String> tiltakIds) {
-        for (String tiltakId : tiltakIds) {
+    public Risikoscenario addTiltak(UUID risikoscenarioId, List<UUID> tiltakIds) {
+        for (UUID tiltakId : tiltakIds) {
             tiltakRepo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId);
         }
-        return get(UUID.fromString(risikoscenarioId));
+        return get(risikoscenarioId);
     }
 
     /**
      * Returns false if nothing was removed
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public boolean removeTiltak(String id, String tiltakId) {
+    public boolean removeTiltak(UUID id, UUID tiltakId) {
         int removed = tiltakRepo.deleteTiltakRisikoscenarioRelation(id, tiltakId);
         return removed > 0;
     }
     
-    public List<String> getTiltak(String uuid) {
+    public List<UUID> getTiltak(UUID uuid) {
         return tiltakRepo.getTiltakForRisikoscenario(uuid);
     }
 

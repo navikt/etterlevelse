@@ -34,7 +34,7 @@ public class RisikoscenarioResponse {
     private boolean generelScenario;
     @Builder.Default
     private List<KravReference> relevanteKravNummer = new ArrayList<>();
-    private List<String> tiltakIds; // denne blir ikke satt i buildFrom
+    private List<UUID> tiltakIds; // denne blir ikke satt i buildFrom
 
     private Boolean ingenTiltak;
 

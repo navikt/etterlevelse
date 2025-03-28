@@ -64,7 +64,7 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
                 .addValidations(this::validateName)
                 .ifErrorsThrowValidationException();
 
-        var virkemiddel = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Virkemiddel();
+        var virkemiddel = request.isUpdate() ? storage.get(request.getId()) : new Virkemiddel();
 
         virkemiddel.merge(request);
 
@@ -82,7 +82,7 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
         if (name == null) {
             return;
         }
-        var items = filter(storage.findByNameAndType(name, Virkemiddel.class), t -> !t.getId().equals(validator.getItem().getIdAsUUID()));
+        var items = filter(storage.findByNameAndType(name, Virkemiddel.class), t -> !t.getId().equals(validator.getItem().getId()));
         if (!items.isEmpty()) {
             validator.addError(VirkemiddelRequest.Fields.navn, Validator.ALREADY_EXISTS, "name '%s' already in use".formatted(name));
         }

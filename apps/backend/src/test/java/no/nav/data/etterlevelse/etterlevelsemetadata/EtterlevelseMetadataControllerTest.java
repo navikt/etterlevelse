@@ -231,7 +231,7 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
                 .kravNummer(200)
                 .kravVersjon(1)
                 .tildeltMed(List.of("Y123456 - Rogan, Joe"))
-                .id(etterlevelseMetadata.getId().toString())
+                .id(etterlevelseMetadata.getId())
                 .build();
 
         var resp = restTemplate.exchange("/etterlevelsemetadata/{id}", HttpMethod.PUT, new HttpEntity<>(req), EtterlevelseMetadataResponse.class, etterlevelseMetadata.getId());
@@ -243,23 +243,6 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
         assertThat(etterlevelseMetadataResp.getId()).isNotNull();
         assertThat(etterlevelseMetadataResp.getTildeltMed().get(0)).isEqualTo("Y123456 - Rogan, Joe");
 
-    }
-
-    @Test
-    void updateEtterlevelseMetadata_invalidId() {
-        var etterlevelseMetadata = etterlevelseMetadataStorageService.save(EtterlevelseMetadata.builder().kravNummer(200).kravVersjon(1).behandlingId("behandling1").etterlevelseDokumentasjonId("e1").tildeltMed(List.of("Y789012 - Doe, John")).build());
-
-        var req = EtterlevelseMetadataRequest.builder()
-                .etterlevelseDokumentasjonId("e1")
-                .kravNummer(200)
-                .kravVersjon(1)
-                .tildeltMed(List.of("Y123456 - Rogan, Joe"))
-                .id("test_invalid_id")
-                .build();
-
-        var resp = restTemplate.exchange("/etterlevelsemetadata/{id}", HttpMethod.PUT, new HttpEntity<>(req), EtterlevelseMetadataResponse.class, etterlevelseMetadata.getId());
-
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test

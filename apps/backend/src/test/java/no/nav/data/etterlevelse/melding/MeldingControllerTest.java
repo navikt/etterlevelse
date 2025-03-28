@@ -116,7 +116,7 @@ class MeldingControllerTest extends IntegrationTestBase {
     @Test
     void updateMelding_updateOneMelding_success() {
         var melding = meldingStorageService.save(Melding.builder().melding("Test update").meldingType(MeldingType.FORSIDE).meldingStatus(MeldingStatus.DEACTIVE).build());
-        var req = MeldingRequest.builder().id(melding.getId().toString()).melding("Test melding").meldingType(MeldingType.SYSTEM).meldingStatus(MeldingStatus.ACTIVE).build();
+        var req = MeldingRequest.builder().id(melding.getId()).melding("Test melding").meldingType(MeldingType.SYSTEM).meldingStatus(MeldingStatus.ACTIVE).build();
 
         var resp = restTemplate.exchange("/melding/{id}", HttpMethod.PUT, new HttpEntity<>(req), MeldingResponse.class, melding.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);

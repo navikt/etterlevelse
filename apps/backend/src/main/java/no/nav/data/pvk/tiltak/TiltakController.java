@@ -71,7 +71,7 @@ public class TiltakController {
     @Operation(summary = "Get Tiltak by Pvk Document id")
     @ApiResponse(description = "ok")
     @GetMapping("/pvkdokument/{pvkDokumentId}")
-    public ResponseEntity<RestResponsePage<TiltakResponse>> getTiltakByPvkDokumentId(@PathVariable String pvkDokumentId) {
+    public ResponseEntity<RestResponsePage<TiltakResponse>> getTiltakByPvkDokumentId(@PathVariable UUID pvkDokumentId) {
         log.info("Get Tiltak by Pvk Document id={}", pvkDokumentId);
         List<Tiltak> tiltakList = service.getByPvkDokument(pvkDokumentId);
         List<TiltakResponse> tiltakResponseList = tiltakList.stream().map(TiltakResponse::buildFrom).toList();
@@ -110,7 +110,7 @@ public class TiltakController {
         }
         Tiltak tiltakToUpdate = service.get(id);
         if (tiltakToUpdate == null) {
-            throw new NotFoundException(String.format("Could not find tiltak to be updated with id = %s ", request.getId()));
+            throw new NotFoundException(String.format("Could not find tiltak to be updated with id = %s ", id));
         }
 
         request.mergeInto(tiltakToUpdate);

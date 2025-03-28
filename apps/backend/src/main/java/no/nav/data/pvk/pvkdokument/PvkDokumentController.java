@@ -122,14 +122,14 @@ public class PvkDokumentController {
     public ResponseEntity<PvkDokumentResponse> updatePvkDokument(@PathVariable UUID id, @Valid @RequestBody PvkDokumentRequest request) {
         log.info("Update Pvk Document id={}", id);
 
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
         var pvkDokumentToUpdate = pvkDokumentService.get(id);
 
         if(pvkDokumentToUpdate == null) {
-            throw new ValidationException(String.format("Could not find pvk dokument to be updated with id = %s ", request.getId()));
+            throw new ValidationException(String.format("Could not find pvk dokument to be updated with id = %s ", id));
         }
 
         request.mergeInto(pvkDokumentToUpdate);

@@ -57,7 +57,7 @@ public class PvkDokumentService {
         PvkDokument pvkDokument = pvkDokumentRepo.findById(id).orElse(null);
         return pvkDokument != null
                 && risikoscenarioService.getByPvkDokument(id.toString(), RisikoscenarioType.ALL).isEmpty()
-                && tiltakService.getByPvkDokument(id.toString()).isEmpty();
+                && tiltakService.getByPvkDokument(id).isEmpty();
     }
     
     @Transactional(propagation = Propagation.REQUIRED)

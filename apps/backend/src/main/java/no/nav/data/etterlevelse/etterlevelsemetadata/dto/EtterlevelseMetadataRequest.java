@@ -11,18 +11,18 @@ import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 
 import java.util.List;
+import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.copyOf;
-import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
 @Builder
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class EtterlevelseMetadataRequest implements RequestElement<String>, KravId {
+public class EtterlevelseMetadataRequest implements RequestElement, KravId {
 
-    private String id;
+    private UUID id;
     private Integer kravVersjon;
     private Integer kravNummer;
     private String etterlevelseDokumentasjonId;
@@ -32,12 +32,10 @@ public class EtterlevelseMetadataRequest implements RequestElement<String>, Krav
 
     @Override
     public void format() {
-        setId(trimToNull(id));
     }
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(Fields.id,id);
         validator.checkId(this);
         validator.checkNull(Fields.kravNummer, kravNummer);
         validator.checkNull(Fields.kravVersjon, kravVersjon);

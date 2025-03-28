@@ -74,9 +74,9 @@ public class Validator<T extends Validated> {
         this.item = item;
     }
 
-    public static <R extends RequestElement<?>> Validator<R> validate(R item, Function<UUID, DomainObject> getDomainObjectForUuid) {
+    public static <R extends RequestElement> Validator<R> validate(R item, Function<UUID, DomainObject> getDomainObjectForUuid) {
         Validator<R> validator = validate(item);
-        UUID uuid = item.getIdAsUUID();
+        UUID uuid = item.getId();
         validator.domainItem = getDomainObjectForUuid.apply(uuid);
         validator.validateRepositoryValues(item, validator.domainItem != null);
         return validator;
@@ -84,7 +84,7 @@ public class Validator<T extends Validated> {
 
     public static <R extends Validated> Validator<R> validate(R item) {
         item.format();
-        RequestElement<?> requestElement = item instanceof RequestElement re ? re : null;
+        RequestElement requestElement = item instanceof RequestElement re ? re : null;
         if (requestElement != null) {
             Assert.isTrue(requestElement.getUpdate() != null, "request not initialized");
         }
@@ -237,7 +237,7 @@ public class Validator<T extends Validated> {
         validationErrors.add(new ValidationError(getFieldName(fieldName), errorType, errorMessage));
     }
 
-    public void checkId(RequestElement<?> request) {
+    public void checkId(RequestElement request) {
         boolean nullId = request.getId() == null;
         boolean update = request.isUpdate();
         if (update && nullId) {
@@ -264,7 +264,7 @@ public class Validator<T extends Validated> {
         validationErrors.addAll(validator.getErrors());
     }
 
-    void validateRepositoryValues(RequestElement<?> request, boolean existInRepository) {
+    void validateRepositoryValues(RequestElement request, boolean existInRepository) {
         if (creatingExistingElement(request.isUpdate(), existInRepository)) {
             validationErrors.add(new ValidationError(getFieldName("id"), "creatingExisting",
                     String.format("The %s %s already exists and therefore cannot be created", request.getRequestType(), request.getId())));

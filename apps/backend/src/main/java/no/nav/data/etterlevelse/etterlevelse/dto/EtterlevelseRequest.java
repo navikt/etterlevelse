@@ -25,7 +25,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class EtterlevelseRequest implements RequestElement<UUID>, KravId {
+public class EtterlevelseRequest implements RequestElement, KravId {
 
     private UUID id;
 

@@ -160,7 +160,7 @@ public class EtterlevelseArkivController {
 
         log.info("Oppdaterer arkivering som admin");
 
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
@@ -208,7 +208,7 @@ public class EtterlevelseArkivController {
     public ResponseEntity<EtterlevelseArkivResponse> updateEtterlevelseArkiv(@PathVariable UUID id, @Valid @RequestBody EtterlevelseArkivRequest request) {
         log.info("Update EtterlevelseArkivResponseid={}", id);
 
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 

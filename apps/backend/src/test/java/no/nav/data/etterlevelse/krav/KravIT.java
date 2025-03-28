@@ -194,7 +194,7 @@ public class KravIT extends IntegrationTestBase {
         var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).kravVersjon(1).build());
         var req = KravRequest.builder()
                 .navn("Krav 2")
-                .id(krav.getId().toString())
+                .id(krav.getId())
                 .build();
         var resp = restTemplate.exchange("/krav/{id}", HttpMethod.PUT, new HttpEntity<>(req), KravResponse.class, krav.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);

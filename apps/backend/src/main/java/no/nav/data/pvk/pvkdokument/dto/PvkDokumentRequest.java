@@ -23,7 +23,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class PvkDokumentRequest implements RequestElement<UUID> {
+public class PvkDokumentRequest implements RequestElement {
 
     private UUID id;
     private String etterlevelseDokumentId;
