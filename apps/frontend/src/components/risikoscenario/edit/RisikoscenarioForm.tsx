@@ -3,8 +3,8 @@ import { Form, Formik } from 'formik'
 import { FunctionComponent, RefObject, useRef, useState } from 'react'
 import { mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../../constants'
-import { RisikoscenarioBeskrivelseField } from './RisikoscenarioBeskrivelsField/RisikoscenarioBeskrivelseField'
 import { RisikoscenarioKonsekvensnivaaField } from './RisikoscenarioKonsekvensnivaaField/RisikoscenarioKonsekvensnivaaField'
+import { RisikoscenarioNavnBeskrivelseField } from './RisikoscenarioNavnBeskrivelseField/RisikoscenarioNavnBeskrivelseField'
 import RisikoscenarioSannsynlighet from './RisikoscenarioSannsynlighet/RisikoscenarioSannsynlighet'
 import { risikoscenarioCreateValidation } from './RisikoscenarioSchemaValidation'
 
@@ -37,7 +37,7 @@ export const RisikoscenarioForm: FunctionComponent<TProps> = ({
         {({ submitForm, errors }) => (
           <Form>
             <div>
-              <RisikoscenarioBeskrivelseField />
+              <RisikoscenarioNavnBeskrivelseField />
 
               <RisikoscenarioSannsynlighet />
 
