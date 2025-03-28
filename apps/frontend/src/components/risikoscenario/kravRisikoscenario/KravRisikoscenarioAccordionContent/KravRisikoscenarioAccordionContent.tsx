@@ -43,6 +43,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   risikoscenario,
   risikoscenarioer,
   alleRisikoscenarioer,
+  etterlevelseDokumentasjonId,
   risikoscenarioForKrav,
   kravnummer,
   setRisikoscenarioer,
@@ -177,6 +178,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
             isIngenTilgangFormDirty={isIngenTilgangFormDirty}
             userHasAccess={userHasAccess}
             setIsEditModalOpen={setIsEditModalOpen}
+            etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
             kravnummer={kravnummer}
             risikoscenario={risikoscenario}
             risikoscenarioer={risikoscenarioer}
@@ -191,8 +193,6 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
             isAddExistingMode={isAddExistingMode}
             submitDeleteTiltak={submitDeleteTiltak}
             formRef={formRef}
-            setIsCreateTiltakFormActive={setIsCreateTiltakFormActive}
-            setIsAddExisitingMode={setIsAddExisitingMode}
             submitIngenTiltak={submitIngenTiltak}
             setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
           />
@@ -203,6 +203,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
           activeRisikoscenario={activeRisikoscenario}
           userHasAccess={userHasAccess}
           risikoscenario={risikoscenario}
+          etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
           alleRisikoscenarioer={alleRisikoscenarioer}
           tiltakList={tiltakList}
           setTiltakList={setTiltakList}
