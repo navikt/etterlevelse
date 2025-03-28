@@ -2,7 +2,7 @@ import { Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
 import { FormError } from '../../../common/ModalSchema'
 
-export const RisikoscenarioKonsekvensnivaaNivaa = () => (
+export const RisikoscenarioKonsekvensnivaaNivaaRadioField = () => (
   <Field name="konsekvensNivaa">
     {(fieldProps: FieldProps) => (
       <RadioGroup

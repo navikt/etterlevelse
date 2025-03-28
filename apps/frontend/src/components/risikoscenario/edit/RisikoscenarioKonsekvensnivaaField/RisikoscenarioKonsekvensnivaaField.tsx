@@ -1,6 +1,6 @@
 import { RisikoscenarioKonsekvensnivaHeader } from '../../common/KravRisikoscenarioHeaders'
 import { RisikoscenarioKonsekvensnivaaBegrunnelsesField } from './RisikoscenarioKonsekvensnivaaBegrunnelsesField'
-import { RisikoscenarioKonsekvensnivaaNivaa } from './RisikoscenarioKonsekvensnivaaNivaa'
+import { RisikoscenarioKonsekvensnivaaNivaaRadioField } from './RisikoscenarioKonsekvensnivaaNivaaRadioField'
 import RisikoscenarioKonsekvensnivaaReadMore from './RisikoscenarioKonsekvensnivaaReadMore'
 
 export const RisikoscenarioKonsekvensnivaaField = () => (
@@ -9,7 +9,7 @@ export const RisikoscenarioKonsekvensnivaaField = () => (
 
     <RisikoscenarioKonsekvensnivaaReadMore />
 
-    <RisikoscenarioKonsekvensnivaaNivaa />
+    <RisikoscenarioKonsekvensnivaaNivaaRadioField />
 
     <RisikoscenarioKonsekvensnivaaBegrunnelsesField />
   </>
