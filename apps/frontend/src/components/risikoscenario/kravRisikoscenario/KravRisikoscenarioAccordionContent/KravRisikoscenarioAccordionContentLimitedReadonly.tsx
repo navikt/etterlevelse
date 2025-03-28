@@ -3,12 +3,10 @@ import { IRisikoscenario, ITiltak } from '../../../../constants'
 import TiltakReadMoreList from '../../../tiltak/TiltakReadMoreList'
 import RisikoscenarioView from '../../RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '../../common/KravRisikoscenarioHeaders'
-import IngenTiltakField from '../../edit/IngenTiltakField'
 import RedigerRisikoscenarioButtons from '../RedigerRisikoscenarioButtons/RedigerRisikoscenarioButtons'
 
 type TProps = {
   activeRisikoscenario: IRisikoscenario
-  isIngenTilgangFormDirty: boolean
   userHasAccess: () => boolean
   setIsEditModalOpen: Dispatch<SetStateAction<boolean>>
   kravnummer: number
@@ -26,13 +24,10 @@ type TProps = {
   etterlevelseDokumentasjonId: string
   submitDeleteTiltak: (tiltakId: string) => Promise<void>
   formRef: RefObject<any>
-  submitIngenTiltak: (submitedValues: IRisikoscenario) => Promise<void>
-  setIsIngenTilgangFormDirty: Dispatch<SetStateAction<boolean>>
 }
 
 export const KravRisikoscenarioAccordionContentLimitedReadonly: FunctionComponent<TProps> = ({
   activeRisikoscenario,
-  isIngenTilgangFormDirty,
   userHasAccess,
   setIsEditModalOpen,
   kravnummer,
@@ -50,8 +45,6 @@ export const KravRisikoscenarioAccordionContentLimitedReadonly: FunctionComponen
   isAddExistingMode,
   submitDeleteTiltak,
   formRef,
-  submitIngenTiltak,
-  setIsIngenTilgangFormDirty,
 }) => (
   <div>
     <RisikoscenarioView
@@ -61,7 +54,7 @@ export const KravRisikoscenarioAccordionContentLimitedReadonly: FunctionComponen
       stepUrl="0"
     />
 
-    {!isIngenTilgangFormDirty && userHasAccess() && (
+    {userHasAccess() && (
       <RedigerRisikoscenarioButtons
         setIsEditModalOpen={setIsEditModalOpen}
         kravnummer={kravnummer}
@@ -91,17 +84,6 @@ export const KravRisikoscenarioAccordionContentLimitedReadonly: FunctionComponen
               formRef={formRef}
             />
           )}
-        </div>
-      )}
-
-      {activeRisikoscenario.tiltakIds.length === 0 && (
-        <div className="mt-3">
-          <IngenTiltakField
-            risikoscenario={activeRisikoscenario}
-            submit={submitIngenTiltak}
-            formRef={formRef}
-            setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
-          />
         </div>
       )}
     </div>

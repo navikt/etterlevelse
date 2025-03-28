@@ -1,7 +1,6 @@
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import {
   addTiltakToRisikoscenario,
-  getRisikoscenario,
   removeTiltakToRisikoscenario,
   updateRisikoscenario,
 } from '../../../../api/RisikoscenarioApi'
@@ -61,7 +60,6 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   const [isAddExistingMode, setIsAddExisitingMode] = useState<boolean>(false)
 
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
-  const [isIngenTilgangFormDirty, setIsIngenTilgangFormDirty] = useState<boolean>(false)
 
   const updateRisikoscenarioList = (updatedRisikoscenario: IRisikoscenario): void => {
     setRisikoscenarioForKrav(
@@ -80,22 +78,6 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
       setActiveRisikoscenario(response)
       updateRisikoscenarioList(response)
       setIsEditModalOpen(false)
-    })
-  }
-
-  const submitIngenTiltak = async (submitedValues: IRisikoscenario): Promise<void> => {
-    await getRisikoscenario(risikoscenario.id).then((response: IRisikoscenario) => {
-      const updatedRisikoscenario = {
-        ...submitedValues,
-        ...response,
-        ingenTiltak: submitedValues.ingenTiltak,
-      }
-
-      updateRisikoscenario(updatedRisikoscenario).then((response: IRisikoscenario) => {
-        setActiveRisikoscenario(response)
-        updateRisikoscenarioList(response)
-        setIsIngenTilgangFormDirty(false)
-      })
     })
   }
 
@@ -175,7 +157,6 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         !isEditTiltakFormActive && (
           <KravRisikoscenarioAccordionContentLimitedReadonly
             activeRisikoscenario={activeRisikoscenario}
-            isIngenTilgangFormDirty={isIngenTilgangFormDirty}
             userHasAccess={userHasAccess}
             setIsEditModalOpen={setIsEditModalOpen}
             etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
@@ -193,8 +174,6 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
             isAddExistingMode={isAddExistingMode}
             submitDeleteTiltak={submitDeleteTiltak}
             formRef={formRef}
-            submitIngenTiltak={submitIngenTiltak}
-            setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
           />
         )}
 
