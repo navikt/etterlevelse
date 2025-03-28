@@ -1,4 +1,5 @@
 import { BodyShort, Button, Label, Loader, Select, TextField } from '@navikt/ds-react'
+import { AxiosError } from 'axios'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getPvkDokumentByEtterlevelseDokumentId } from '../../../api/PvkDokumentApi'
@@ -52,12 +53,17 @@ export const KravList = (props: IProps) => {
       if (etterlevelseDokumentasjon) {
         setIsRisikoscenarioLoading(true)
         await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
-          .then((pvkDocId) => {
-            getRisikoscenarioByPvkDokumentId(pvkDocId.id, ERisikoscenarioType.KRAV).then(
-              (riskoscenario) => {
-                setRisikoscenarioList(riskoscenario.content)
-              }
-            )
+          .then((pvkDokument) => {
+            if (pvkDokument) {
+              getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.KRAV).then(
+                (riskoscenario) => {
+                  setRisikoscenarioList(riskoscenario.content)
+                }
+              )
+            }
+          })
+          .catch((error: AxiosError) => {
+            console.debug(error)
           })
           .finally(() => setIsRisikoscenarioLoading(false))
       }
