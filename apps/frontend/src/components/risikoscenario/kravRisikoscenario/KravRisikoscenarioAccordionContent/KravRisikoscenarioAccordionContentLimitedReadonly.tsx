@@ -3,18 +3,10 @@ import { IRisikoscenario, ITiltak } from '../../../../constants'
 import TiltakReadMoreList from '../../../tiltak/TiltakReadMoreList'
 import RisikoscenarioView from '../../RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '../../common/KravRisikoscenarioHeaders'
-import RedigerRisikoscenarioButtons from '../RedigerRisikoscenarioButtons/RedigerRisikoscenarioButtons'
 
 type TProps = {
   activeRisikoscenario: IRisikoscenario
-  userHasAccess: () => boolean
-  setIsEditModalOpen: Dispatch<SetStateAction<boolean>>
-  kravnummer: number
   risikoscenario: IRisikoscenario
-  risikoscenarioer: IRisikoscenario[]
-  setRisikoscenarioer: (state: IRisikoscenario[]) => void
-  risikoscenarioForKrav: IRisikoscenario[]
-  setRisikoscenarioForKrav: (state: IRisikoscenario[]) => void
   alleRisikoscenarioer: IRisikoscenario[]
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
@@ -28,14 +20,7 @@ type TProps = {
 
 export const KravRisikoscenarioAccordionContentLimitedReadonly: FunctionComponent<TProps> = ({
   activeRisikoscenario,
-  userHasAccess,
-  setIsEditModalOpen,
-  kravnummer,
   risikoscenario,
-  risikoscenarioer,
-  setRisikoscenarioer,
-  risikoscenarioForKrav,
-  setRisikoscenarioForKrav,
   alleRisikoscenarioer,
   tiltakList,
   etterlevelseDokumentasjonId,
@@ -53,18 +38,6 @@ export const KravRisikoscenarioAccordionContentLimitedReadonly: FunctionComponen
       etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
       stepUrl="0"
     />
-
-    {userHasAccess() && (
-      <RedigerRisikoscenarioButtons
-        setIsEditModalOpen={setIsEditModalOpen}
-        kravnummer={kravnummer}
-        risikoscenario={risikoscenario}
-        risikoscenarioer={risikoscenarioer}
-        setRisikoscenarioer={setRisikoscenarioer}
-        risikoscenarioForKrav={risikoscenarioForKrav}
-        setRisikoscenarioForKrav={setRisikoscenarioForKrav}
-      />
-    )}
 
     <div className="mt-12">
       <RisikoscenarioTiltakHeader />

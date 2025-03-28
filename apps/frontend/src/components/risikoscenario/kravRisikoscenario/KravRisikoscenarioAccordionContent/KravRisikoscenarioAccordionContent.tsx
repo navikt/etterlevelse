@@ -22,15 +22,12 @@ import { KravRisikoscenarioAccordionContentLimitedReadonly } from './KravRisikos
 
 type TProps = {
   risikoscenario: IRisikoscenario
-  risikoscenarioer: IRisikoscenario[]
   alleRisikoscenarioer: IRisikoscenario[]
   etterlevelseDokumentasjonId: string
-  setRisikoscenarioer: (state: IRisikoscenario[]) => void
   risikoscenarioForKrav: IRisikoscenario[]
   setRisikoscenarioForKrav: (state: IRisikoscenario[]) => void
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
-  kravnummer: number
   setIsTiltakFormActive: (state: boolean) => void
   isCreateMode?: boolean
   noCopyButton?: boolean
@@ -40,12 +37,9 @@ type TProps = {
 
 export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   risikoscenario,
-  risikoscenarioer,
   alleRisikoscenarioer,
   etterlevelseDokumentasjonId,
   risikoscenarioForKrav,
-  kravnummer,
-  setRisikoscenarioer,
   setRisikoscenarioForKrav,
   tiltakList,
   setTiltakList,
@@ -157,15 +151,8 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         !isEditTiltakFormActive && (
           <KravRisikoscenarioAccordionContentLimitedReadonly
             activeRisikoscenario={activeRisikoscenario}
-            userHasAccess={userHasAccess}
-            setIsEditModalOpen={setIsEditModalOpen}
             etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-            kravnummer={kravnummer}
             risikoscenario={risikoscenario}
-            risikoscenarioer={risikoscenarioer}
-            setRisikoscenarioer={setRisikoscenarioer}
-            risikoscenarioForKrav={risikoscenarioForKrav}
-            setRisikoscenarioForKrav={setRisikoscenarioForKrav}
             alleRisikoscenarioer={alleRisikoscenarioer}
             tiltakList={tiltakList}
             setTiltakList={setTiltakList}
