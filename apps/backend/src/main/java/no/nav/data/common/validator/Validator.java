@@ -76,7 +76,7 @@ public class Validator<T extends Validated> {
 
     public static <R extends RequestElement> Validator<R> validate(R item, Function<UUID, DomainObject> getDomainObjectForUuid) {
         Validator<R> validator = validate(item);
-        UUID uuid = item.getIdAsUUID();
+        UUID uuid = item.getId();
         validator.domainItem = getDomainObjectForUuid.apply(uuid);
         validator.validateRepositoryValues(item, validator.domainItem != null);
         return validator;

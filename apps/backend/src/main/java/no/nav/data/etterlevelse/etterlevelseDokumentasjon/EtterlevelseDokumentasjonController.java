@@ -151,7 +151,7 @@ public class EtterlevelseDokumentasjonController {
     @PutMapping("/{id}")
     public ResponseEntity<EtterlevelseDokumentasjonResponse> updateEtterlevelseDokumentasjon(@PathVariable UUID id, @Valid @RequestBody EtterlevelseDokumentasjonRequest request) {
         log.debug("Update Etterlevelse Dokumentasjon id={}", id);
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.save(request));
@@ -165,7 +165,7 @@ public class EtterlevelseDokumentasjonController {
     @PutMapping("/kravpriority/{id}")
     public ResponseEntity<EtterlevelseDokumentasjonResponse> updateKravPriorityForEtterlevelseDokumentasjon(@PathVariable UUID id, @Valid @RequestBody EtterlevelseDokumentasjonRequest request) {
         log.debug("Update Etterlevelse Dokumentasjon id={}", id);
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.updateKravPriority(request));

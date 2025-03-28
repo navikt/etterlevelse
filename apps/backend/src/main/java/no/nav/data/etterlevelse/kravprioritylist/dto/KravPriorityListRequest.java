@@ -10,6 +10,7 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
@@ -20,7 +21,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @AllArgsConstructor
 public class KravPriorityListRequest implements RequestElement {
 
-    private String id;
+    private UUID id;
 
     private String temaId;
     private List<Integer> priorityList;
@@ -29,13 +30,11 @@ public class KravPriorityListRequest implements RequestElement {
 
     @Override
     public void format() {
-        setId(trimToNull(id));
         setTemaId(trimToNull(temaId));
     }
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(KravPriorityListRequest.Fields.id, id);
         validator.checkId(this);
         validator.checkNull(Fields.temaId, temaId);
         validator.checkCodelist(Fields.temaId, temaId, ListName.TEMA);

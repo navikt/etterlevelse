@@ -51,7 +51,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         List<EtterlevelseArkiv> arkivert = new ArrayList<>();
         tilArkivertStatus.forEach(e -> {
             EtterlevelseArkiv etterlevelseArkiv =  save(EtterlevelseArkivRequest.builder()
-                    .id(e.getId().toString())
+                    .id(e.getId())
                     .behandlingId(e.getBehandlingId())
                     .etterlevelseDokumentasjonId(e.getEtterlevelseDokumentasjonId())
                     .status(EtterlevelseArkivStatus.ARKIVERT)
@@ -75,7 +75,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         List<EtterlevelseArkiv> behandlerArkivering = new ArrayList<>();
         tilArkivering.forEach(e -> {
             EtterlevelseArkiv etterlevelseArkiv = save(EtterlevelseArkivRequest.builder()
-                    .id(e.getId().toString())
+                    .id(e.getId())
                     .behandlingId(e.getBehandlingId())
                     .arkivertAv(e.getArkivertAv())
                     .etterlevelseDokumentasjonId(e.getEtterlevelseDokumentasjonId())
@@ -97,7 +97,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         List<EtterlevelseArkiv> arkiveringTilNyStatus = getByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId);
         arkiveringTilNyStatus.forEach(e ->
             save(EtterlevelseArkivRequest.builder()
-                    .id(e.getId().toString())
+                    .id(e.getId())
                     .behandlingId(e.getBehandlingId())
                     .etterlevelseDokumentasjonId(e.getEtterlevelseDokumentasjonId())
                     .status(newStatus)
@@ -114,7 +114,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseArkiv save(EtterlevelseArkivRequest request) {
-        var etterlevelseArkiv = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new EtterlevelseArkiv();
+        var etterlevelseArkiv = request.isUpdate() ? storage.get(request.getId()) : new EtterlevelseArkiv();
         etterlevelseArkiv.merge(request);
         return storage.save(etterlevelseArkiv);
     }

@@ -27,7 +27,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @AllArgsConstructor
 public class EtterlevelseRequest implements RequestElement, KravId {
 
-    private String id;
+    private UUID id;
 
     private String behandlingId;
     private UUID etterlevelseDokumentasjonId;
@@ -46,7 +46,6 @@ public class EtterlevelseRequest implements RequestElement, KravId {
 
     @Override
     public void format() {
-        setId(trimToNull(id));
         setBehandlingId(trimToNull(behandlingId));
         setStatusBegrunnelse(trimToNull(statusBegrunnelse));
         setDokumentasjon(formatList(dokumentasjon));
@@ -59,7 +58,6 @@ public class EtterlevelseRequest implements RequestElement, KravId {
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(Fields.id, id);
         validator.checkId(this);
         validator.checkNull(Fields.kravNummer, kravNummer);
         validator.checkNull(Fields.kravVersjon, kravVersjon);

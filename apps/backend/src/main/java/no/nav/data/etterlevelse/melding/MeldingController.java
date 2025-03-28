@@ -95,7 +95,7 @@ public class MeldingController {
     public ResponseEntity<MeldingResponse> updateMelding(@PathVariable UUID id, @Valid @RequestBody MeldingRequest request) {
         log.info("Update melding={}", id);
 
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 

@@ -31,7 +31,7 @@ public class KravPriorityListService extends DomainService<KravPriorityList>  {
 
     public KravPriorityList save(KravPriorityListRequest request) {
 
-        var kravPriorityList = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new KravPriorityList();
+        var kravPriorityList = request.isUpdate() ? storage.get(request.getId()) : new KravPriorityList();
         kravPriorityList.convert(request);
 
         return storage.save(kravPriorityList);

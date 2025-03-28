@@ -199,7 +199,7 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
         etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(eDokId).kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
         var etterlevelseArkiv = etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.TIL_ARKIVERING).webSakNummer("test/websak").etterlevelseDokumentasjonId(eDokId.toString()).build());
         var req = EtterlevelseArkivRequest.builder()
-                .id(etterlevelseArkiv.getId().toString())
+                .id(etterlevelseArkiv.getId())
                 .status(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING)
                 .webSakNummer("test/websak")
                 .etterlevelseDokumentasjonId(eDokId.toString())

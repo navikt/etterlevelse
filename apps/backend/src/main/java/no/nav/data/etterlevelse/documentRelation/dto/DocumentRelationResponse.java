@@ -20,6 +20,7 @@ import java.util.UUID;
 @EqualsAndHashCode(exclude = "data")
 @JsonPropertyOrder({"id", "fromDocument", "toDocument", "relationType"})
 public class DocumentRelationResponse {
+
     private UUID id;
     private ChangeStampResponse changeStamp;
     private Integer version;

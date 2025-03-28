@@ -14,6 +14,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDok
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;
+import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.copyOf;
 import static no.nav.data.common.utils.StringUtils.*;
@@ -25,7 +26,8 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EtterlevelseDokumentasjonRequest implements RequestElement {
-    private String id;
+
+    private UUID id;
     private Boolean update;
     private Integer etterlevelseNummer;
     private String title;

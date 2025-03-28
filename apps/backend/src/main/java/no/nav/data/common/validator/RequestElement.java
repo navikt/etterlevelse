@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface RequestElement extends Validated {
 
-    String getId();
+    UUID getId();
 
     @JsonIgnore
     default String getRequestType() {
@@ -24,14 +24,5 @@ public interface RequestElement extends Validated {
 
     @JsonIgnore
     void setUpdate(Boolean update);
-
-    @JsonIgnore
-    default UUID getIdAsUUID() {
-        try {
-            return getId() == null ? null : UUID.fromString(getId());
-        } catch (IllegalArgumentException ignored) {
-            return null;
-        }
-    }
 
 }

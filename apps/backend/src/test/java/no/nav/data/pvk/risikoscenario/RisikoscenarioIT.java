@@ -145,7 +145,7 @@ public class RisikoscenarioIT extends IntegrationTestBase {
         assertThat(respEnt.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         
         // Test update...
-        request.setId(risikoscenario.getId().toString());
+        request.setId(risikoscenario.getId());
         respEnt = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.PUT, new HttpEntity<>(request), RisikoscenarioResponse.class, request.getId());
         risikoscenario = risikoscenarioService.get(risikoscenario.getId());
         assertThat(risikoscenario.getRisikoscenarioData().getNavn()).isEqualTo("2024 YR4");
@@ -161,11 +161,11 @@ public class RisikoscenarioIT extends IntegrationTestBase {
                 .pvkDokumentId(pvkDokument.getId())
                 .tiltakData(new TiltakData())
                 .build(), null, false);
-        risikoscenarioService.addTiltak(risikoscenario.getId().toString(), List.of(tiltak.getId().toString()));
+        risikoscenarioService.addTiltak(risikoscenario.getId(), List.of(tiltak.getId()));
         ResponseEntity<RisikoscenarioResponse> resp = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.DELETE, null, RisikoscenarioResponse.class, risikoscenario.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(risikoscenarioRepo.count()).isEqualTo(1);
-        risikoscenarioService.removeTiltak(risikoscenario.getId().toString(), tiltak.getId().toString());
+        risikoscenarioService.removeTiltak(risikoscenario.getId(), tiltak.getId());
 
         // Delete should return OK and null if requested to delete non-existing Risikoscenario
         resp = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.DELETE, null, RisikoscenarioResponse.class, UUID.randomUUID());
@@ -237,20 +237,20 @@ public class RisikoscenarioIT extends IntegrationTestBase {
         Tiltak tiltak = insertTiltak(risikoscenario.getPvkDokumentId());
         
         // Should get 404 if unknown Tiltak or Risikoscenario...
-        RisikoscenarioTiltakRequest relReq = RisikoscenarioTiltakRequest.builder().risikoscenarioId(risikoscenario.getId().toString()).build();
-        relReq.setTiltakIds(List.of(UUID.randomUUID().toString()));
+        RisikoscenarioTiltakRequest relReq = RisikoscenarioTiltakRequest.builder().risikoscenarioId(risikoscenario.getId()).build();
+        relReq.setTiltakIds(List.of(UUID.randomUUID()));
         ResponseEntity<RisikoscenarioResponse> resp = restTemplate.exchange("/risikoscenario/update/addRelevanteTiltak", HttpMethod.PUT, new HttpEntity<>(relReq), RisikoscenarioResponse.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        relReq.setTiltakIds(List.of(tiltak.getId().toString()));
-        relReq.setRisikoscenarioId(UUID.randomUUID().toString());
+        relReq.setTiltakIds(List.of(tiltak.getId()));
+        relReq.setRisikoscenarioId(UUID.randomUUID());
         resp = restTemplate.exchange("/risikoscenario/update/addRelevanteTiltak", HttpMethod.PUT, new HttpEntity<>(relReq), RisikoscenarioResponse.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        relReq.setRisikoscenarioId(risikoscenario.getId().toString());
+        relReq.setRisikoscenarioId(risikoscenario.getId());
         
         // Test add Tiltak...
         resp = restTemplate.exchange("/risikoscenario/update/addRelevanteTiltak", HttpMethod.PUT, new HttpEntity<>(relReq), RisikoscenarioResponse.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(risikoscenarioService.getTiltak(risikoscenario.getId().toString())).containsOnly(tiltak.getId().toString());
+        assertThat(risikoscenarioService.getTiltak(risikoscenario.getId())).containsOnly(tiltak.getId());
         
         // Should get Bad Request if relation already exists...
         resp = restTemplate.exchange("/risikoscenario/update/addRelevanteTiltak", HttpMethod.PUT, new HttpEntity<>(relReq), RisikoscenarioResponse.class);
@@ -270,13 +270,13 @@ public class RisikoscenarioIT extends IntegrationTestBase {
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 
         // Test remove...
-        tiltakService.addRisikoscenarioTiltakRelasjon(risikoscenario.getId().toString(), tiltak.getId().toString());
+        tiltakService.addRisikoscenarioTiltakRelasjon(risikoscenario.getId(), tiltak.getId());
         resp = restTemplate.exchange(
                 "/risikoscenario/{id}/removeTiltak/{tiltakId}", HttpMethod.PUT, null, RisikoscenarioResponse.class, 
                 risikoscenario.getId().toString(), tiltak.getId().toString()
         );
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(risikoscenarioService.getTiltak(risikoscenario.getId().toString())).isEmpty();
+        assertThat(risikoscenarioService.getTiltak(risikoscenario.getId())).isEmpty();
     }
    
     private Risikoscenario insertRisikoscenario() {

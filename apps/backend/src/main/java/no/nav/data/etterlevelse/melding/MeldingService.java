@@ -37,7 +37,7 @@ public class MeldingService extends DomainService<Melding> {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Melding save(MeldingRequest request) {
-        var melding = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Melding();
+        var melding = request.isUpdate() ? storage.get(request.getId()) : new Melding();
         melding.merge(request);
         return storage.save(melding);
     }

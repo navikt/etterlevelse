@@ -12,6 +12,7 @@ import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.RegelverkRequest;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
@@ -22,7 +23,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @AllArgsConstructor
 public class VirkemiddelRequest implements RequestElement {
 
-    private String id;
+    private UUID id;
     private String navn;
     @Schema(description = "Codelist VIRKEMIDDELTYPE")
     private String virkemiddelType;
@@ -32,7 +33,6 @@ public class VirkemiddelRequest implements RequestElement {
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(KravRequest.Fields.id, id);
         validator.checkId(this);
         validator.checkBlank(KravRequest.Fields.navn, navn);
         validator.validateType(KravRequest.Fields.regelverk, regelverk);
@@ -40,7 +40,6 @@ public class VirkemiddelRequest implements RequestElement {
 
     @Override
     public void format() {
-        setId(trimToNull(id));
         setNavn(trimToNull(navn));
     }
 }

@@ -21,7 +21,8 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DocumentRelationRequest implements RequestElement {
-    private String id;
+
+    private UUID id;
 
     private RelationType relationType;
 
@@ -36,21 +37,19 @@ public class DocumentRelationRequest implements RequestElement {
 
     @Override
     public void format(){
-        setId(trimToNull(id));
         setFromDocument(trimToNull(fromDocument));
         setToDocument(trimToNull(toDocument));
     };
 
     @Override
     public void validateFieldValues(Validator<?>validator) {
-        validator.checkUUID(Fields.id, id);
         validator.checkUUID(Fields.fromDocument, fromDocument);
         validator.checkUUID(Fields.toDocument, toDocument);
     };
     
     public DocumentRelation toDocumentRelation() {
         return DocumentRelation.builder()
-                .id(id != null ? UUID.fromString(id) : null)
+                .id(id)
                 .relationType(relationType)
                 .fromDocument(fromDocument)
                 .toDocument(toDocument)

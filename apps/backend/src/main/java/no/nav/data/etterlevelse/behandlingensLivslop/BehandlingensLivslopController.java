@@ -96,7 +96,7 @@ public class BehandlingensLivslopController {
             @Valid @RequestPart BehandlingensLivslopRequest request) {
         log.info("Update Behandlingens Livsløp id={}", id);
 
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 

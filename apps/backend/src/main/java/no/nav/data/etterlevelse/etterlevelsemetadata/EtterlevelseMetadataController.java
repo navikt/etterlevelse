@@ -109,7 +109,7 @@ public class EtterlevelseMetadataController {
     public ResponseEntity<EtterlevelseMetadataResponse> updateEtterlevelseMetadata(@PathVariable UUID id, @Valid @RequestBody EtterlevelseMetadataRequest request) {
         log.info("Update EtterlevelseMetadataResponseid={}", id);
 
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 

@@ -157,14 +157,14 @@ public class CodelistService implements InitializingBean {
 
     public void validateRequest(List<CodelistRequest> requests) {
         Set<String> requestIds = new HashSet<>();
-        requests.forEach(CodelistRequest::format);
         requests.forEach(r -> {
+            r.format();
             r.validate();
-            if (!requestIds.add(r.getId())) {
-                throw new ValidationException("Duplicate request for " + r.getId());
+            if (!requestIds.add(r.getKey())) {
+                throw new ValidationException("Duplicate request for " + r.getKey());
             }
-            if (!r.isUpdate() && getCodelist(r.getListAsListName(), r.getCode()) != null) {
-                throw new ValidationException("Code already exists " + r.getId());
+            if (!r.getUpdate() && getCodelist(r.getListAsListName(), r.getCode()) != null) {
+                throw new ValidationException("Code already exists " + r.getKey());
             }
         });
     }
