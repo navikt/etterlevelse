@@ -1,4 +1,3 @@
-import { Button } from '@navikt/ds-react'
 import { Dispatch, FunctionComponent, RefObject, SetStateAction } from 'react'
 import { IRisikoscenario, ITiltak } from '../../../../constants'
 import TiltakReadMoreList from '../../../tiltak/TiltakReadMoreList'
@@ -24,10 +23,9 @@ type TProps = {
   setIsEditTiltakFormActive: Dispatch<SetStateAction<boolean>>
   isCreateTiltakFormActive: boolean
   isAddExistingMode: boolean
+  etterlevelseDokumentasjonId: string
   submitDeleteTiltak: (tiltakId: string) => Promise<void>
   formRef: RefObject<any>
-  setIsCreateTiltakFormActive: (value: SetStateAction<boolean>) => void
-  setIsAddExisitingMode: (value: SetStateAction<boolean>) => void
   submitIngenTiltak: (submitedValues: IRisikoscenario) => Promise<void>
   setIsIngenTilgangFormDirty: Dispatch<SetStateAction<boolean>>
 }
@@ -45,19 +43,23 @@ export const KravRisikoscenarioAccordionContentLimitedReadonly: FunctionComponen
   setRisikoscenarioForKrav,
   alleRisikoscenarioer,
   tiltakList,
+  etterlevelseDokumentasjonId,
   setTiltakList,
   setIsEditTiltakFormActive,
   isCreateTiltakFormActive,
   isAddExistingMode,
   submitDeleteTiltak,
   formRef,
-  setIsCreateTiltakFormActive,
-  setIsAddExisitingMode,
   submitIngenTiltak,
   setIsIngenTilgangFormDirty,
 }) => (
   <div>
-    <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true} />
+    <RisikoscenarioView
+      risikoscenario={activeRisikoscenario}
+      noCopyButton={true}
+      etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+      stepUrl="0"
+    />
 
     {!isIngenTilgangFormDirty && userHasAccess() && (
       <RedigerRisikoscenarioButtons
@@ -74,7 +76,7 @@ export const KravRisikoscenarioAccordionContentLimitedReadonly: FunctionComponen
     <div className="mt-12">
       <RisikoscenarioTiltakHeader />
 
-      {!risikoscenario.ingenTiltak && userHasAccess() && (
+      {!risikoscenario.ingenTiltak && (
         <div>
           {risikoscenario.tiltakIds.length !== 0 && (
             <TiltakReadMoreList
@@ -88,22 +90,6 @@ export const KravRisikoscenarioAccordionContentLimitedReadonly: FunctionComponen
               customDelete={submitDeleteTiltak}
               formRef={formRef}
             />
-          )}
-
-          {!isIngenTilgangFormDirty && (
-            <div className="mt-5 flex gap-2 lg:flex-row flex-col">
-              <Button size="small" type="button" onClick={() => setIsCreateTiltakFormActive(true)}>
-                Opprett nytt tiltak
-              </Button>
-              <Button
-                type="button"
-                size="small"
-                variant="secondary"
-                onClick={() => setIsAddExisitingMode(true)}
-              >
-                Legg til eksisterende tiltak
-              </Button>
-            </div>
           )}
         </div>
       )}

@@ -10,8 +10,8 @@ import RisikoscenarioTag, {
 
 type TProps = {
   risikoscenario: IRisikoscenario
-  etterlevelseDokumentasjonId?: string
-  stepUrl?: string
+  etterlevelseDokumentasjonId: string
+  stepUrl: string
   noCopyButton?: boolean
 }
 
