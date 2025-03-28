@@ -1,7 +1,6 @@
 import { Alert, BodyLong, ReadMore } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useState } from 'react'
 import { IRisikoscenario, ITiltak } from '../../../constants'
-import { user } from '../../../services/User'
 import TiltakView from '../../tiltak/TiltakView'
 import RisikoscenarioView from '../RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '../common/KravRisikoscenarioHeaders'
@@ -38,62 +37,60 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
         stepUrl="6"
       />
 
-      {(!user.isPersonvernombud() || user.isAdmin()) && (
-        <div className="mt-12">
-          <RisikoscenarioTiltakHeader />
+      <div className="mt-12">
+        <RisikoscenarioTiltakHeader />
 
-          {risikoscenario.ingenTiltak && <BodyLong>Vi skal ikke ha tiltak.</BodyLong>}
+        {risikoscenario.ingenTiltak && <BodyLong>Vi skal ikke ha tiltak.</BodyLong>}
 
-          {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length !== 0 && (
-            <div className="mt-5">
-              {tiltakList
-                .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
-                .map((tiltak: ITiltak, index: number) => (
-                  <ReadMore
-                    key={`${risikoscenario.id}_${tiltak.id}_${index}`}
-                    header={tiltak.navn}
-                    className="mb-3"
-                  >
-                    <TiltakView tiltak={tiltak} risikoscenarioList={allRisikoscenarioList} />
-                  </ReadMore>
-                ))}
-            </div>
-          )}
+        {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length !== 0 && (
+          <div className="mt-5">
+            {tiltakList
+              .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
+              .map((tiltak: ITiltak, index: number) => (
+                <ReadMore
+                  key={`${risikoscenario.id}_${tiltak.id}_${index}`}
+                  header={tiltak.navn}
+                  className="mb-3"
+                >
+                  <TiltakView tiltak={tiltak} risikoscenarioList={allRisikoscenarioList} />
+                </ReadMore>
+              ))}
+          </div>
+        )}
 
-          {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
-            <div className="mt-5">
+        {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
+          <div className="mt-5">
+            <Alert className="mt-3" variant="warning">
+              Dere må legge inn tiltak under Identifisering av risikoscenarioer og tiltak.
+            </Alert>
+          </div>
+        )}
+
+        {!risikoscenario.ingenTiltak && (
+          <div className="mt-5">
+            {risikoscenario.tiltakIds.length !== 0 && (
+              <div>
+                <VurdereTiltaksEffekt
+                  risikoscenario={activeRisikoscenario}
+                  setRisikoscenario={setActiveRisikoscenario}
+                  risikoscenarioList={risikoscenarioList}
+                  setRisikosenarioList={setRisikosenarioList}
+                  allRisikoscenarioList={allRisikoscenarioList}
+                  setAllRisikoscenarioList={setAllRisikoscenarioList}
+                  formRef={formRef}
+                />
+              </div>
+            )}
+
+            {risikoscenario.tiltakIds.length === 0 && (
               <Alert className="mt-3" variant="warning">
-                Dere må legge inn tiltak under Identifisering av risikoscenarioer og tiltak.
+                Før dere kan vurdere tiltakenes effekt, må dere legge inn tiltak under
+                Identifisering av risikoscenarioer og tiltak.
               </Alert>
-            </div>
-          )}
-
-          {!risikoscenario.ingenTiltak && (
-            <div className="mt-5">
-              {risikoscenario.tiltakIds.length !== 0 && (
-                <div>
-                  <VurdereTiltaksEffekt
-                    risikoscenario={activeRisikoscenario}
-                    setRisikoscenario={setActiveRisikoscenario}
-                    risikoscenarioList={risikoscenarioList}
-                    setRisikosenarioList={setRisikosenarioList}
-                    allRisikoscenarioList={allRisikoscenarioList}
-                    setAllRisikoscenarioList={setAllRisikoscenarioList}
-                    formRef={formRef}
-                  />
-                </div>
-              )}
-
-              {risikoscenario.tiltakIds.length === 0 && (
-                <Alert className="mt-3" variant="warning">
-                  Før dere kan vurdere tiltakenes effekt, må dere legge inn tiltak under
-                  Identifisering av risikoscenarioer og tiltak.
-                </Alert>
-              )}
-            </div>
-          )}
-        </div>
-      )}
+            )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
