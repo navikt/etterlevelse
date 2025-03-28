@@ -1,6 +1,6 @@
 import { TextAreaField } from '../../../common/Inputs'
 
-export const RisikoscenarioBeskrivelse = () => (
+export const RisikoscenarioBeskrivelseField = () => (
   <>
     <TextAreaField
       rows={1}
