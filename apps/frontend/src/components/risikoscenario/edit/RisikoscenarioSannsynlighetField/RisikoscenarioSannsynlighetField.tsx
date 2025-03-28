@@ -1,6 +1,6 @@
 import { RisikoscenarioSannsynlighetHeader } from '../../common/KravRisikoscenarioHeaders'
+import { RisikoscenarioSannsynlighetReadMore } from '../../common/RisikoscenarioSannsynlighetReadMore'
 import RisikoscenarioSannsynligNivaaRadioField from './RisikoscenarioSannsynligNivaaRadioField'
-import { RisikoscenarioSannsynlighetReadMore } from './RisikoscenarioSannsynlighetReadMore'
 import { RisikoscenarioSannsynlighetsBegrunnelseField } from './RisikoscenarioSannsynlighetsBegrunnelseField'
 
 export const RisikoscenarioSannsynlighetField = () => (
