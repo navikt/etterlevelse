@@ -5,8 +5,10 @@ import { Helmet } from 'react-helmet-async'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
+import { getPvoTilbakemeldingByPvkDokumentId } from '../api/PvoApi'
 import { getRisikoscenarioByPvkDokumentId } from '../api/RisikoscenarioApi'
 import BehandlingensArtOgOmfangView from '../components/PvkDokument/BehandlingensArtOgOmfangView'
+import BehandlingensLivslopView from '../components/PvkDokument/BehandlingensLivslopView'
 import IdentifiseringAvRisikoscenarioerOgTiltak from '../components/PvkDokument/IdentifiseringAvRisikoscenarioerOgTiltak'
 import InvolveringAvEksterneView from '../components/PvkDokument/InvolveringAvEksterneView'
 import OppsummeringAvAlleRisikoscenarioerOgTiltak from '../components/PvkDokument/OppsummeringAvAlleRisikoscenarioerOgTiltak'
@@ -14,10 +16,12 @@ import OversiktView from '../components/PvkDokument/OversiktView'
 import SendInnView from '../components/PvkDokument/SendInnView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import {
+  EPvkDokumentStatus,
   ERisikoscenarioType,
   IBreadCrumbPath,
   IDataBehandler,
   IExternalCode,
+  IPvoTilbakemelding,
   IRisikoscenario,
 } from '../constants'
 import { user } from '../services/User'
@@ -26,6 +30,7 @@ import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const StepTitle: string[] = [
   'Oversikt og status',
+  'Behandlingens livsløp',
   'Behandlingens art og omfang',
   'Involvering av eksterne',
   'Identifisering av risikoscenarioer og tiltak',
@@ -50,6 +55,7 @@ export const PvkDokumentPage = () => {
   const [pvkDokument, setPvkDokument] = usePvkDokument(params.pvkdokumentId)
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [databehandlere, setDatabehandlere] = useState<string[]>([])
+  const [pvoTilbakemelding, setPvoTilbakemelding] = useState<IPvoTilbakemelding>()
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [activeStep, setActiveStep] = useState<number>(
     currentStep !== null ? parseInt(currentStep) : 1
@@ -68,16 +74,11 @@ export const PvkDokumentPage = () => {
         etterlevelseDokumentasjon?.title,
       href: '/dokumentasjon/' + params.id,
     },
-
-    {
-      pathName: 'Personvernkonsekvensvurdering',
-      href: '/dokumentasjon/' + params.id + '/pvkbehov/' + params.pvkdokumentId,
-    },
   ]
 
   const updateUrlOnStepChange = (step: number) => {
     navigate(
-      `/dokumentasjon/${pvkDokument?.etterlevelseDokumentId}/pvkdokument/${pvkDokument?.id}/${step}${step === 5 ? '?tab=risikoscenarioer&filter=alle' : ''}`
+      `/dokumentasjon/${pvkDokument?.etterlevelseDokumentId}/pvkdokument/${pvkDokument?.id}/${step}${step === 6 ? '?tab=risikoscenarioer&filter=alle' : ''}`
     )
   }
 
@@ -130,6 +131,12 @@ export const PvkDokumentPage = () => {
             setAllRisikoscenario(response.content)
           }
         )
+        if (
+          pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
+          pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
+        ) {
+          await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id).then(setPvoTilbakemelding)
+        }
       }
     })()
   }, [pvkDokument])
@@ -210,24 +217,22 @@ export const PvkDokumentPage = () => {
                     />
                   )}
                   {activeStep === 2 && (
+                    <BehandlingensLivslopView
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      activeStep={activeStep}
+                      setActiveStep={updateTitleUrlAndStep}
+                      setSelectedStep={setSelectedStep}
+                      formRef={formRef}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                    />
+                  )}
+                  {activeStep === 3 && (
                     <BehandlingensArtOgOmfangView
                       personkategorier={personkategorier}
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvkDokument={pvkDokument}
                       setPvkDokument={setPvkDokument}
-                      activeStep={activeStep}
-                      setActiveStep={updateTitleUrlAndStep}
-                      setSelectedStep={setSelectedStep}
-                      formRef={formRef}
-                    />
-                  )}
-                  {activeStep === 3 && (
-                    <InvolveringAvEksterneView
-                      personkategorier={personkategorier}
-                      databehandlere={databehandlere}
-                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                      pvkDokument={pvkDokument}
-                      setPvkDokument={setPvkDokument}
+                      pvoTilbakemelding={pvoTilbakemelding}
                       activeStep={activeStep}
                       setActiveStep={updateTitleUrlAndStep}
                       setSelectedStep={setSelectedStep}
@@ -235,6 +240,20 @@ export const PvkDokumentPage = () => {
                     />
                   )}
                   {activeStep === 4 && (
+                    <InvolveringAvEksterneView
+                      personkategorier={personkategorier}
+                      databehandlere={databehandlere}
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      pvkDokument={pvkDokument}
+                      setPvkDokument={setPvkDokument}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      activeStep={activeStep}
+                      setActiveStep={updateTitleUrlAndStep}
+                      setSelectedStep={setSelectedStep}
+                      formRef={formRef}
+                    />
+                  )}
+                  {activeStep === 5 && (
                     <IdentifiseringAvRisikoscenarioerOgTiltak
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                       pvkDokument={pvkDokument}
@@ -244,17 +263,18 @@ export const PvkDokumentPage = () => {
                       formRef={formRef}
                     />
                   )}
-                  {activeStep === 5 && (
+                  {activeStep === 6 && (
                     <OppsummeringAvAlleRisikoscenarioerOgTiltak
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                       pvkDokument={pvkDokument}
+                      pvoTilbakemelding={pvoTilbakemelding}
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}
                       setActiveStep={updateTitleUrlAndStep}
                       formRef={formRef}
                     />
                   )}
-                  {activeStep === 6 && (
+                  {activeStep === 7 && (
                     <SendInnView
                       pvkDokument={pvkDokument}
                       setPvkDokument={setPvkDokument}
@@ -262,6 +282,7 @@ export const PvkDokumentPage = () => {
                       databehandlere={databehandlere}
                       updateTitleUrlAndStep={updateTitleUrlAndStep}
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      pvoTilbakemelding={pvoTilbakemelding}
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}
                       setActiveStep={updateTitleUrlAndStep}

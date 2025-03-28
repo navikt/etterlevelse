@@ -6,20 +6,22 @@ on:
             - ".github/workflows/etterlevelse-frontend.yml"
             - "apps/frontend/**"
 
-env:
-    IMAGE: ghcr.io/${{ github.repository }}/etterlevelsefront${{ github.ref == 'refs/heads/prod' }}:${{ github.sha }}
-
 defaults:
   run:
     working-directory: apps/frontend
-
+  
 jobs:
     build:
         name: Frontend - build and push docker
         runs-on: ubuntu-latest
         permissions:
           packages: write
-          contents: read      
+          id-token: write
+          contents: read
+          actions: read 
+        outputs:
+            image: ${{ steps.docker-build-push.outputs.image }}
+            telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
         steps:
             - uses: actions/checkout@v4
               
@@ -53,47 +55,52 @@ jobs:
             - name: Build
               run: CI=false yarn run build
 
-            - name: Login to DockerHub
-              uses: docker/login-action@v3
-              with:
-                registry: ghcr.io
-                username: ${{ github.actor }}
-                password: ${{ secrets.GITHUB_TOKEN }}
-
             - name: Build and push
               if: github.ref == 'refs/heads/prod' || github.ref == 'refs/heads/master'
-              uses: docker/build-push-action@v6
+              uses: nais/docker-build-push@v0
+              id: docker-build-push
               with:
-                push: true
-                tags: ${{env.IMAGE}}
-                context: ./apps/frontend
+                team: teamdatajegerne
+                push_image: true
+                image_suffix: frontend
+                docker_context: ./apps/frontend
 
     deploy-preprod:
         name: Frontend - deploy Dev GCP
         needs: build
         if: github.ref == 'refs/heads/master'
         runs-on: ubuntu-latest
+        permissions:
+          id-token: write
+          contents: read
+          actions: read 
         steps:
             - uses: actions/checkout@v4
             - uses: nais/deploy/actions/deploy@v2
               env:
-                  APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
                   CLUSTER: dev-gcp
                   RESOURCE: apps/frontend/nais/frontend-gcp.yaml
                   VARS: apps/frontend/nais/frontend-dev-gcp-vars.yaml
                   ENVIRONMENT: dev-gcp:teamdatajegerne:etterlevelse-frontend
+                  WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
+                  TELEMETRY: ${{ needs.build.outputs.telemetry }}
 
     deploy-prod:
         name: Frontend - deploy Prod GCP
         needs: build
         if: github.ref == 'refs/heads/prod'
         runs-on: ubuntu-latest
+        permissions:
+          id-token: write
+          contents: read
+          actions: read 
         steps:
             - uses: actions/checkout@v4
             - uses: nais/deploy/actions/deploy@v2
               env:
-                  APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
                   CLUSTER: prod-gcp
                   RESOURCE: apps/frontend/nais/frontend-gcp.yaml
                   VARS: apps/frontend/nais/frontend-prod-gcp-vars.yaml
                   ENVIRONMENT: prod-gcp:teamdatajegerne:etterlevelse-frontend
+                  WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
+                  TELEMETRY: ${{ needs.build.outputs.telemetry }}

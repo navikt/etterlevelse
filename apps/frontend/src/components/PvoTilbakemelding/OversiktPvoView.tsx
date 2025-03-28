@@ -126,6 +126,21 @@ export const OversiktView = (props: IProps) => {
           <FormSummary.Answers>
             <FormSummary.Answer>
               <FormSummary.Value>
+                {/* TODO: lage et readonly url/komponent for pvkdokument vurderings side */}
+                <ExternalLink
+                  href={`/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/pvkbehov/${pvkDokument.id}`}
+                >
+                  Vurdér behov for PVK
+                </ExternalLink>
+              </FormSummary.Value>
+              <FormSummary.Value className="gap-2 flex">
+                {pvkDokument.skalUtforePvk && 'Vi skal gjennomføre PVK'}
+                {!pvkDokument.skalUtforePvk && 'Vi skal ikke gjennomføre PVK'}
+              </FormSummary.Value>
+            </FormSummary.Answer>
+
+            <FormSummary.Answer>
+              <FormSummary.Value>
                 <Link
                   onClick={() => updateTitleUrlAndStep(2)}
                   href={window.location.pathname.slice(0, -1) + 2}
@@ -172,21 +187,7 @@ export const OversiktView = (props: IProps) => {
               </FormSummary.Value>
             </FormSummary.Answer>
 
-            <FormSummary.Answer>
-              <FormSummary.Value>
-                <ExternalLink
-                  href={`/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/pvkbehov/${pvkDokument.id}`}
-                >
-                  Vurdér behov for PVK
-                </ExternalLink>
-              </FormSummary.Value>
-              <FormSummary.Value className="gap-2 flex">
-                {pvkDokument.skalUtforePvk && 'Vi skal gjennomføre PVK'}
-                {!pvkDokument.skalUtforePvk && 'Vi skal ikke gjennomføre PVK'}
-              </FormSummary.Value>
-            </FormSummary.Answer>
-
-            {StepTitle.slice(1).map((title, index) => {
+            {StepTitle.slice(2).map((title, index) => {
               let panelHref = window.location.pathname.slice(0, -1) + (index + 3)
               if (index + 3 === 6) {
                 panelHref += '?tab=risikoscenarioer&filter=alle'

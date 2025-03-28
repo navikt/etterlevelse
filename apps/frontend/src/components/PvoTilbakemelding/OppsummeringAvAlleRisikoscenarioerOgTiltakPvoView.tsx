@@ -339,6 +339,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         setSelectedStep={setSelectedStep}
+        submitForm={formRef.current?.submitForm}
       />
     </div>
   )

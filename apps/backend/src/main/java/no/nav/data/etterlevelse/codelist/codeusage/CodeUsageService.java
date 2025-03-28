@@ -13,7 +13,7 @@ import no.nav.data.etterlevelse.codelist.codeusage.dto.CodeUsageRequest;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepoCustom;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
@@ -30,23 +30,21 @@ import java.util.stream.Stream;
 
 import static java.util.Collections.replaceAll;
 import static java.util.stream.Collectors.toList;
-import static no.nav.data.common.utils.StreamUtils.convert;
-import static no.nav.data.common.utils.StreamUtils.filter;
-import static no.nav.data.common.utils.StreamUtils.safeStream;
+import static no.nav.data.common.utils.StreamUtils.*;
 import static no.nav.data.etterlevelse.codelist.CodelistService.getCodelist;
 
 @Service
 public class CodeUsageService {
 
     private final KravRepo kravRepo;
-    private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
+    private final EtterlevelseDokumentasjonRepoCustom etterlevelseDokumentasjonRepoCustom;
     private final VirkemiddelRepo virkemiddelRepo;
     private final Summary summary;
     private final CodelistService codelistService;
 
-    public CodeUsageService(KravRepo kravRepo, EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo, VirkemiddelRepo virkemiddelRepo, @Lazy CodelistService codelistService) {
+    public CodeUsageService(EtterlevelseDokumentasjonRepoCustom etterlevelseDokumentasjonRepoCustom, KravRepo kravRepo, VirkemiddelRepo virkemiddelRepo, @Lazy CodelistService codelistService) {
+        this.etterlevelseDokumentasjonRepoCustom = etterlevelseDokumentasjonRepoCustom;
         this.kravRepo = kravRepo;
-        this.etterlevelseDokumentasjonRepo = etterlevelseDokumentasjonRepo;
         this.virkemiddelRepo = virkemiddelRepo;
         this.codelistService = codelistService;
         List<String[]> listnames = Stream.of(ListName.values()).map(e -> new String[]{e.name()}).collect(toList());
@@ -96,7 +94,7 @@ public class CodeUsageService {
             switch (listName) {
                 case RELEVANS -> {
                     usage.getKrav().forEach(gs -> gs.consumeDomainObject(k -> replaceAll(k.getRelevansFor(), oldCode, newCode)));
-                    usage.getEtterlevelseDokumentasjoner().forEach(gs -> gs.consumeDomainObject(ed -> replaceAll(ed.getIrrelevansFor(), oldCode, newCode)));
+                    usage.getEtterlevelseDokumentasjoner().forEach(ed -> replaceAll(ed.getIrrelevansFor(), oldCode, newCode));
                 }
                 case AVDELING -> usage.getKrav().forEach(gs -> gs.consumeDomainObject(k -> k.setAvdeling(newCode)));
                 case UNDERAVDELING -> {
@@ -140,9 +138,9 @@ public class CodeUsageService {
         };
     }
 
-    private List<GenericStorage<EtterlevelseDokumentasjon>> findEtterlevelseDokumentasjoner(ListName listName, String code) {
+    private List<EtterlevelseDokumentasjon> findEtterlevelseDokumentasjoner(ListName listName, String code) {
         return switch (listName) {
-            case RELEVANS -> etterlevelseDokumentasjonRepo.findByIrrelevans(List.of(code));
+            case RELEVANS -> etterlevelseDokumentasjonRepoCustom.findByIrrelevans(List.of(code));
             case AVDELING, UNDERAVDELING, LOV, TEMA, VIRKEMIDDELTYPE, YTTERLIGERE_EGENSKAPER -> List.of();
         };
     }

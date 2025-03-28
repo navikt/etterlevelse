@@ -2,6 +2,7 @@ import { Button } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IPvkDokument } from '../../../../constants'
+import { user } from '../../../../services/User'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -18,9 +19,13 @@ export const KravRisikoscenarioOvrigeRisikoscenarier: FunctionComponent<TProps> 
         variant="tertiary"
         type="button"
         onClick={() => {
-          navigate(
-            `/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/pvkdokument/${pvkDokument.id}/4`
-          )
+          if (user.isPersonvernombud()) {
+            navigate(`/pvkdokument/${pvkDokument.id}/pvotilbakemelding/5`)
+          } else {
+            navigate(
+              `/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/pvkdokument/${pvkDokument.id}/5`
+            )
+          }
         }}
       >
         Gå til liste over øvrige risikoscenarier

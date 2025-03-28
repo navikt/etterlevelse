@@ -8,7 +8,7 @@ interface IProps {
 export const RisikoscenarioSummary = (props: IProps) => {
   const { customStepNumber } = props
   const currentPath = window.location.pathname
-  const risikoscenarioLink = currentPath.slice(0, -1) + `${customStepNumber ? customStepNumber : 5}`
+  const risikoscenarioLink = currentPath.slice(0, -1) + `${customStepNumber ? customStepNumber : 6}`
 
   return (
     <FormSummary className="my-3">

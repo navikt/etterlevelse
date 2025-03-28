@@ -115,6 +115,7 @@ export const InvolveringAvEksternePvoView = (props: IProps) => {
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         setSelectedStep={setSelectedStep}
+        submitForm={formRef.current?.submitForm}
       />
     </div>
   )

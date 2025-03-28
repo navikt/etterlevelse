@@ -5,14 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ForbiddenException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
-import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
-import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepoCustom;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
@@ -39,14 +39,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
 import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EtterlevelseDokumentasjonService extends DomainService<EtterlevelseDokumentasjon> {
+public class EtterlevelseDokumentasjonService {
+    
+    // TODO: Flere avhengighet i denne serviceklassen til controller
 
+    private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
+    private final EtterlevelseDokumentasjonRepoCustom etterlevelseDokumentasjonRepoCustom;
+    
     private final BehandlingService behandlingService;
     private final EtterlevelseMetadataService etterlevelseMetadataService;
     private final EtterlevelseService etterlevelseService;
@@ -55,25 +59,36 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     private final TeamcatResourceClient teamcatResourceClient;
     private final DocumentRelationService documentRelationService;
 
+    public EtterlevelseDokumentasjon get(UUID uuid) {
+        if (uuid == null) {
+            return null; 
+        }
+        return etterlevelseDokumentasjonRepo.findById(uuid).orElse(null);
+    }
+    
+    public boolean exists(UUID uuid) {
+        return etterlevelseDokumentasjonRepo.existsById(uuid);
+    }
+
     public Page<EtterlevelseDokumentasjon> getAll(PageParameters pageParameters) {
-        return etterlevelseDokumentasjonRepo.findAll(pageParameters.createPage()).map(GenericStorage::getDomainObjectData);
+        return etterlevelseDokumentasjonRepo.findAll(pageParameters.createPage());
     }
 
     public List<EtterlevelseDokumentasjon> getEtterlevelseDokumentasjonerByTeam(String teamId) {
-        return convertToDomaionObject(etterlevelseDokumentasjonRepo.getEtterlevelseDokumentasjonerForTeam(List.of(teamId)));
+        return etterlevelseDokumentasjonRepoCustom.getEtterlevelseDokumentasjonerForTeam(List.of(teamId));
     }
 
     public List<EtterlevelseDokumentasjon> searchEtterlevelseDokumentasjon(String searchParam) {
         if (searchParam.toLowerCase().matches("e[0-9]+(.*)")) {
-            return convertToDomaionObject(etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjon(searchParam.substring(1)));
+            return etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjon(searchParam.substring(1));
         } else {
-            return convertToDomaionObject(etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjon(searchParam));
+            return etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjon(searchParam);
         }
     }
 
     public List<EtterlevelseDokumentasjon> getByFilter(EtterlevelseDokumentasjonFilter filter) {
         if (!StringUtils.isBlank(filter.getId())) {
-            EtterlevelseDokumentasjon etterlevelseDokumentasjon = storage.get(UUID.fromString(filter.getId()));
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(UUID.fromString(filter.getId()));
             if (etterlevelseDokumentasjon != null) {
                 return List.of(etterlevelseDokumentasjon);
             }
@@ -95,12 +110,12 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         if (filter.getVirkemiddelId() != null && !filter.getVirkemiddelId().isEmpty()) {
             return getByVirkemiddelId(List.of(filter.getVirkemiddelId()));
         }
-        return convertToDomaionObject(etterlevelseDokumentasjonRepo.findBy(filter));
+        return etterlevelseDokumentasjonRepoCustom.findBy(filter);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon save(EtterlevelseDokumentasjonRequest request) {
-        EtterlevelseDokumentasjon etterlevelseDokumentasjon = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new EtterlevelseDokumentasjon();
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = request.isUpdate() ? etterlevelseDokumentasjonRepo.getReferenceById(request.getIdAsUUID()) : new EtterlevelseDokumentasjon();
         request.mergeInto(etterlevelseDokumentasjon);
 
         if (!request.isUpdate()) {
@@ -114,14 +129,14 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             }
         }
 
-        return storage.save(etterlevelseDokumentasjon);
+        return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon updateKravPriority(EtterlevelseDokumentasjonRequest request) {
-        EtterlevelseDokumentasjon etterlevelseDokumentasjon = storage.get(request.getIdAsUUID());
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getIdAsUUID());
         etterlevelseDokumentasjon.setPrioritertKravNummer(request.getPrioritertKravNummer());
-        return storage.save(etterlevelseDokumentasjon);
+        return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -130,9 +145,9 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         request.mergeInto(etterlevelseDokumentasjon);
         etterlevelseDokumentasjon.setEtterlevelseNummer(etterlevelseDokumentasjonRepo.nextEtterlevelseDokumentasjonNummer());
         log.info("creating new Etterlevelse document with relation");
-        var newEtterlevelseDokumentasjon = storage.save(etterlevelseDokumentasjon);
+        var newEtterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
 
-        etterlevelseService.copyEtterlevelse(fromDocumentID.toString(), newEtterlevelseDokumentasjon.getId().toString());
+        etterlevelseService.copyEtterlevelse(fromDocumentID, newEtterlevelseDokumentasjon.getId());
 
         var newDocumentRelation = documentRelationService.save(
                 DocumentRelation.builder()
@@ -161,21 +176,22 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         etterlevelseArkivService.deleteByEtterlevelseDokumentsjonId(id.toString());
 
         log.info("deleting etterlevelse connected to etterlevelse dokumentasjon with id={}", id);
-        etterlevelseService.deleteByEtterlevelseDokumentasjonId(id.toString());
+        etterlevelseService.deleteByEtterlevelseDokumentasjonId(id);
 
         return delete(id);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon delete(UUID id) {
-        return storage.delete(id);
+        var eDokToDelete = etterlevelseDokumentasjonRepo.findById(id);
+        etterlevelseDokumentasjonRepo.deleteById(id);
+        return eDokToDelete.orElse(null);
     }
 
-
     @Transactional(propagation = Propagation.REQUIRED)
-    public EtterlevelseDokumentasjon updatePriorityList(String etterlevelseDokumentasjonId, int kravNummer, boolean prioritized) {
+    public EtterlevelseDokumentasjon updatePriorityList(UUID etterlevelseDokumentasjonId, int kravNummer, boolean prioritized) {
 
-        EtterlevelseDokumentasjon etterlevelseDokumentasjon = get(UUID.fromString(etterlevelseDokumentasjonId));
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = get(etterlevelseDokumentasjonId);
 
         List<String> priorityList = etterlevelseDokumentasjon.getPrioritertKravNummer() == null ? new ArrayList<>() : etterlevelseDokumentasjon.getPrioritertKravNummer();
 
@@ -189,28 +205,28 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             }
         }
         etterlevelseDokumentasjon.setPrioritertKravNummer(priorityList);
-        return storage.save(etterlevelseDokumentasjon);
+        return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
     }
 
 
     public List<EtterlevelseDokumentasjon> getByBehandlingId(List<String> ids) {
-        return convertToDomaionObject(etterlevelseDokumentasjonRepo.findByBehandlingIds(ids));
+        return etterlevelseDokumentasjonRepoCustom.findByBehandlingIds(ids);
     }
 
     public List<EtterlevelseDokumentasjon> getByVirkemiddelId(List<String> ids) {
-        return convertToDomaionObject(etterlevelseDokumentasjonRepo.findByVirkemiddelIds(ids));
+        return etterlevelseDokumentasjonRepo.findByVirkemiddelIds(ids);
     }
 
     public Page<EtterlevelseDokumentasjon> getAllWithValidBehandling(Pageable page) {
-        return etterlevelseDokumentasjonRepo.getAllEtterlevelseDokumentasjonWithValidBehandling(page).map(GenericStorage::getDomainObjectData);
+        return etterlevelseDokumentasjonRepo.getAllEtterlevelseDokumentasjonWithValidBehandling(page);
     }
 
     public Page<EtterlevelseDokumentasjon> getAll(Pageable pageable) {
-        return storage.getAll(EtterlevelseDokumentasjon.class, pageable);
+        return etterlevelseDokumentasjonRepo.findAll(pageable);
     }
 
     public List<EtterlevelseDokumentasjon> findByKravRelevans(List<String> kravRelevans) {
-        return convertToDomaionObject(etterlevelseDokumentasjonRepo.findByKravRelevans(kravRelevans));
+        return etterlevelseDokumentasjonRepoCustom.findByKravRelevans(kravRelevans);
     }
 
     // Does not update DB

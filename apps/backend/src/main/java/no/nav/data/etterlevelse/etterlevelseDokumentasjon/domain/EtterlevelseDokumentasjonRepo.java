@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
-import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,16 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface EtterlevelseDokumentasjonRepo extends JpaRepository<GenericStorage<EtterlevelseDokumentasjon>, UUID>, EtterlevelseDokumentasjonRepoCustom {
+public interface EtterlevelseDokumentasjonRepo extends JpaRepository<EtterlevelseDokumentasjon, UUID> {
 
-    @Override
-    @Query(value = "select * from generic_storage where type = 'EtterlevelseDokumentasjon'",
-            countQuery = "select count(1) from generic_storage where type = 'EtterlevelseDokumentasjon'",
-            nativeQuery = true)
-    Page<GenericStorage<EtterlevelseDokumentasjon>> findAll(Pageable pageable);
-
-    @Query(value = "select * from generic_storage where data ->> 'virkemiddelId' in ?1 and type = 'EtterlevelseDokumentasjon'", nativeQuery = true)
-    List<GenericStorage<EtterlevelseDokumentasjon>> findByVirkemiddelIds(List<String> ids);
+    @Query(value = "select * from etterlevelse_dokumentasjon where data ->> 'virkemiddelId' in ?1", nativeQuery = true)
+    List<EtterlevelseDokumentasjon> findByVirkemiddelIds(List<String> ids);
 
     @Query(value = """
             select 
@@ -27,19 +20,19 @@ public interface EtterlevelseDokumentasjonRepo extends JpaRepository<GenericStor
              from etterlevelse
              where etterlevelse_dokumentasjon_id = :etterlevelseDokId
             """, nativeQuery = true)
-    List<KravId> findKravIdsForEtterlevelseDokumentasjon(String etterlevelseDokId);
+    List<KravId> findKravIdsForEtterlevelseDokumentasjon(UUID etterlevelseDokId);
 
-    @Query(value = "select * from generic_storage where data ->> 'title' ilike %?1% or data ->> 'etterlevelseNummer' ilike %?1%  and type = 'EtterlevelseDokumentasjon'", nativeQuery = true)
-    List<GenericStorage<EtterlevelseDokumentasjon>> searchEtterlevelseDokumentasjon(String searchParam);
+    @Query(value = "select * from etterlevelse_dokumentasjon where data ->> 'title' ilike %?1% or data ->> 'etterlevelseNummer' ilike %?1%", nativeQuery = true)
+    List<EtterlevelseDokumentasjon> searchEtterlevelseDokumentasjon(String searchParam);
 
-    @Query(value = "SELECT nextVal('etterlevelse_nummer')",nativeQuery = true)
+    @Query(value = "select nextVal('etterlevelse_nummer')", nativeQuery = true)
     int nextEtterlevelseDokumentasjonNummer();
 
-    @Query(value = "select * from generic_storage where type = 'EtterlevelseDokumentasjon'", nativeQuery = true )
-    List<GenericStorage<EtterlevelseDokumentasjon>> getAllEtterlevelseDokumentasjoner();
+    @Query(value = "select * from etterlevelse_dokumentasjon", nativeQuery = true )
+    List<EtterlevelseDokumentasjon> getAllEtterlevelseDokumentasjoner();
 
-    @Query(value = "select * from generic_storage where type = 'EtterlevelseDokumentasjon' and data->> 'title' not ilike '%fant ikke behandling%' and data->'behandlingIds' != '[]'",
-            countQuery = "select count(1) from generic_storage where type = 'EtterlevelseDokumentasjon' and data->> 'title' not ilike '%fant ikke behandling%' and data->'behandlingIds' != '[]'",
+    @Query(value = "select * from etterlevelse_dokumentasjon where data->> 'title' not ilike '%fant ikke behandling%' and data->'behandlingIds' != '[]'",
+            countQuery = "select count(1) from etterlevelse_dokumentasjon where data->> 'title' not ilike '%fant ikke behandling%' and data->'behandlingIds' != '[]'",
             nativeQuery = true)
-    Page<GenericStorage<EtterlevelseDokumentasjon>> getAllEtterlevelseDokumentasjonWithValidBehandling(Pageable pageable);
+    Page<EtterlevelseDokumentasjon> getAllEtterlevelseDokumentasjonWithValidBehandling(Pageable pageable);
 }
