@@ -1,7 +1,7 @@
-import { RisikoscenarioSannsynlighetHeader } from '../KravRisikoscenarioHeaders'
-import { RisikoscenarioBegrunnelse } from './RisikoscenarioBegrunnelse'
+import { RisikoscenarioSannsynlighetHeader } from '../../common/KravRisikoscenarioHeaders'
 import RisikoscenarioSannsynligNivaa from './RisikoscenarioSannsynligNivaa'
 import { RisikoscenarioSannsynlighetReadMore } from './RisikoscenarioSannsynlighetReadMore'
+import { RisikoscenarioSannsynlighetsBegrunnelseField } from './RisikoscenarioSannsynlighetsBegrunnelseField'
 
 export const RisikoscenarioSannsynlighet = () => (
   <>
@@ -11,7 +11,7 @@ export const RisikoscenarioSannsynlighet = () => (
 
     <RisikoscenarioSannsynligNivaa />
 
-    <RisikoscenarioBegrunnelse />
+    <RisikoscenarioSannsynlighetsBegrunnelseField />
   </>
 )
 
