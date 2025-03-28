@@ -11,6 +11,7 @@ type TProps = {
   userHasAccess: () => boolean
   risikoscenario: IRisikoscenario
   alleRisikoscenarioer: IRisikoscenario[]
+  etterlevelseDokumentasjonId: string
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
   setIsEditTiltakFormActive: Dispatch<SetStateAction<boolean>>
@@ -29,6 +30,7 @@ export const KravRisikoscenarioAccordionContentEditMode: FunctionComponent<TProp
   userHasAccess,
   risikoscenario,
   alleRisikoscenarioer,
+  etterlevelseDokumentasjonId,
   tiltakList,
   setTiltakList,
   setIsEditTiltakFormActive,
@@ -42,7 +44,12 @@ export const KravRisikoscenarioAccordionContentEditMode: FunctionComponent<TProp
   submitExistingTiltak,
 }) => (
   <div>
-    <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={true} />
+    <RisikoscenarioView
+      risikoscenario={activeRisikoscenario}
+      noCopyButton={true}
+      etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+      stepUrl="0"
+    />
 
     <div className="mt-12">
       <RisikoscenarioTiltakHeader />
