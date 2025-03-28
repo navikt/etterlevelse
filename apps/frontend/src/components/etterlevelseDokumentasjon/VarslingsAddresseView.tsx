@@ -1,6 +1,6 @@
-import {BodyLong} from '@navikt/ds-react'
-import {useEffect, useState} from 'react'
-import {getSlackChannelById, getSlackUserById} from '../../api/TeamApi'
+import { BodyLong } from '@navikt/ds-react'
+import { useEffect, useState } from 'react'
+import { getSlackChannelById, getSlackUserById } from '../../api/TeamApi'
 import {
   EAdresseType,
   ISlackChannel,
@@ -8,12 +8,12 @@ import {
   IVarslingsadresse,
   TVarslingsadresseQL,
 } from '../../constants'
-import {slackLink, slackUserLink} from '../../util/config'
-import {ExternalLink} from '../common/RouteLink'
+import { slackLink, slackUserLink } from '../../util/config'
+import { ExternalLink } from '../common/RouteLink'
 
 export const VarslingsadresserView = ({
-                                        varslingsadresser,
-                                      }: {
+  varslingsadresser,
+}: {
   varslingsadresser: IVarslingsadresse[]
 }) => {
   const [slackChannels, setSlackChannels] = useState<ISlackChannel[]>([])

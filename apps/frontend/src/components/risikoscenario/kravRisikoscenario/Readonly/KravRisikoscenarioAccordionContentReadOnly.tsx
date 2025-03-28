@@ -1,20 +1,21 @@
-import { Heading } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import { IRisikoscenario, ITiltak } from '../../../../constants'
 import TiltakView from '../../../tiltak/TiltakView'
 import RisikoscenarioViewReadOnly from '../../RisikoscenarioViewReadOnly'
+import { RisikoscenarioTiltakHeader } from '../../common/KravRisikoscenarioHeaders'
 import KravRisikoscenarioIngenTiltak from '../KravRisikoscenarioIngenTiltak/KravRisikoscenarioIngenTiltak'
 
-interface IProps {
+type TProps = {
   risikoscenario: IRisikoscenario
   alleRisikoscenarioer: IRisikoscenario[]
   tiltakList: ITiltak[]
 }
 
-export const KravRisikoscenarioAccordionContentReadOnly = ({
+export const KravRisikoscenarioAccordionContentReadOnly: FunctionComponent<TProps> = ({
   risikoscenario,
   alleRisikoscenarioer,
   tiltakList,
-}: IProps) => {
+}) => {
   const filterTiltakId: ITiltak[] = tiltakList.filter((tiltak: ITiltak) =>
     risikoscenario.tiltakIds.includes(tiltak.id)
   )
@@ -24,9 +25,7 @@ export const KravRisikoscenarioAccordionContentReadOnly = ({
       <RisikoscenarioViewReadOnly risikoscenario={risikoscenario} noCopyButton={true} />
 
       <div className="mt-12">
-        <Heading level="3" size="small">
-          Følgende tiltak gjelder for dette risikoscenarioet
-        </Heading>
+        <RisikoscenarioTiltakHeader />
 
         <div>
           {filterTiltakId.map((tiltak: ITiltak, index: number) => (

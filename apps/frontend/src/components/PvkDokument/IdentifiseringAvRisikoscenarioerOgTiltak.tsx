@@ -1,14 +1,20 @@
 import { Alert, BodyLong, Button, Heading } from '@navikt/ds-react'
-import { RefObject, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
-import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, ITiltak } from '../../constants'
+import {
+  ERisikoscenarioType,
+  IPageResponse,
+  IPvkDokument,
+  IRisikoscenario,
+  ITiltak,
+} from '../../constants'
 import RisikoscenarioAccordianList from '../risikoscenario/RisikoscenarioAccordianList'
 import CreateRisikoscenarioModal from '../risikoscenario/edit/CreateRisikoscenarioModal'
 import FormButtons from './edit/FormButtons'
 
-interface IProps {
+type TProps = {
   etterlevelseDokumentasjonId: string
   pvkDokument: IPvkDokument
   activeStep: number
@@ -17,33 +23,35 @@ interface IProps {
   formRef: RefObject<any>
 }
 
-export const IdentifiseringAvRisikoscenarioerOgTiltak = (props: IProps) => {
-  const {
-    etterlevelseDokumentasjonId,
-    pvkDokument,
-    activeStep,
-    setActiveStep,
-    setSelectedStep,
-    formRef,
-  } = props
+export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjonId,
+  pvkDokument,
+  activeStep,
+  setActiveStep,
+  setSelectedStep,
+  formRef,
+}) => {
+  const navigate: NavigateFunction = useNavigate()
+
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [allRisikoscenarioList, setAllRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
   const [isTiltakFormActive, setIsTiltakFormActive] = useState<boolean>(false)
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (pvkDokument) {
       ;(async () => {
         await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
-          (risikoscenarioer) => {
+          (risikoscenarioer: IPageResponse<IRisikoscenario>) => {
             setAllRisikoscenarioList(risikoscenarioer.content)
             setRisikoscenarioList(
-              risikoscenarioer.content.filter((risikoscenario) => risikoscenario.generelScenario)
+              risikoscenarioer.content.filter(
+                (risikoscenario: IRisikoscenario) => risikoscenario.generelScenario
+              )
             )
           }
         )
-        await getTiltakByPvkDokumentId(pvkDokument.id).then((response) => {
+        await getTiltakByPvkDokumentId(pvkDokument.id).then((response: IPageResponse<ITiltak>) => {
           setTiltakList(response.content)
         })
       })()

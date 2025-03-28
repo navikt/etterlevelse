@@ -1,10 +1,10 @@
-import {TrashIcon} from '@navikt/aksel-icons'
-import {Button, Heading, Table, TextField} from '@navikt/ds-react'
-import {FieldArray, FieldArrayRenderProps} from 'formik'
-import {ChangeEvent, useState} from 'react'
-import {FieldWrapper} from '../common/Inputs'
-import {Error, FormError} from '../common/ModalSchema'
-import {ExternalLink} from '../common/RouteLink'
+import { TrashIcon } from '@navikt/aksel-icons'
+import { Button, Heading, Table, TextField } from '@navikt/ds-react'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
+import { ChangeEvent, useState } from 'react'
+import { FieldWrapper } from '../common/Inputs'
+import { Error, FormError } from '../common/ModalSchema'
+import { ExternalLink } from '../common/RouteLink'
 
 export const ROSEdit = () => {
   const [url, setUrl] = useState('')
@@ -67,8 +67,8 @@ export const ROSEdit = () => {
                 </Button>
               </div>
 
-              {error && <Error message={error}/>}
-              {!error && <FormError fieldName="risikovurderinger" akselStyling/>}
+              {error && <Error message={error} />}
+              {!error && <FormError fieldName="risikovurderinger" akselStyling />}
 
               <Table className="mt-2.5 w-3/5" size="small">
                 <Table.Body>
@@ -89,7 +89,7 @@ export const ROSEdit = () => {
                                 <Button
                                   type="button"
                                   variant="tertiary"
-                                  icon={<TrashIcon aria-hidden aria-label=""/>}
+                                  icon={<TrashIcon aria-hidden aria-label="" />}
                                   onClick={() => fieldArrayRenderProps.remove(index)}
                                 >
                                   Slett lenke

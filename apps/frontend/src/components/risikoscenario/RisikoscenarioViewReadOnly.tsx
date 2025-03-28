@@ -1,21 +1,29 @@
-import {LinkIcon} from '@navikt/aksel-icons'
-import {BodyLong, CopyButton, List, ReadMore} from '@navikt/ds-react'
-import {useParams} from 'react-router'
-import {IRisikoscenario} from '../../constants'
-import {ExternalLink} from '../common/RouteLink'
+import { LinkIcon } from '@navikt/aksel-icons'
+import { BodyLong, CopyButton, List, ReadMore } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
+import { useParams } from 'react-router'
+import { IKravReference, IRisikoscenario } from '../../constants'
+import { ExternalLink } from '../common/RouteLink'
 import RisikoscenarioTag, {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
 } from './RisikoscenarioTag'
 
-interface IProps {
+type TProps = {
   risikoscenario: IRisikoscenario
   noCopyButton?: boolean
 }
 
-export const RisikoscenarioViewReadOnly = (props: IProps) => {
-  const {risikoscenario, noCopyButton} = props
-  const params = useParams<{ id?: string }>()
+export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
+  risikoscenario,
+  noCopyButton,
+}) => {
+  const params: Readonly<
+    Partial<{
+      id?: string
+    }>
+  > = useParams<{ id?: string }>()
+
   return (
     <div>
       {!noCopyButton && (
@@ -24,7 +32,7 @@ export const RisikoscenarioViewReadOnly = (props: IProps) => {
           copyText={window.location.href}
           text="Kopiér scenariolenke"
           activeText="Lenken er kopiert"
-          icon={<LinkIcon aria-hidden/>}
+          icon={<LinkIcon aria-hidden />}
         />
       )}
       <BodyLong className="mt-5">{risikoscenario.beskrivelse}</BodyLong>
@@ -38,16 +46,19 @@ export const RisikoscenarioViewReadOnly = (props: IProps) => {
       {!risikoscenario.generelScenario && (
         <ReadMore header="Vis etterlevelseskrav hvor risikoscenarioet inntreffer">
           <List as="ul">
-            {risikoscenario.relevanteKravNummer.map((relevantKrav, index) => {
-              const kravHref = `/dokumentasjon/${params.id}/${relevantKrav.temaCode || 'PVK'}/RELEVANTE_KRAV/krav/${relevantKrav.kravNummer}/${relevantKrav.kravVersjon}`
-              return (
-                <List.Item className="max-w-[75ch]" key={relevantKrav.kravNummer + '_' + index}>
-                  <ExternalLink href={kravHref}>
-                    K{relevantKrav.kravNummer}.{relevantKrav.kravVersjon} {relevantKrav.navn}
-                  </ExternalLink>
-                </List.Item>
-              )
-            })}
+            {risikoscenario.relevanteKravNummer.map(
+              (relevantKrav: IKravReference, index: number) => {
+                const kravHref: string = `/dokumentasjon/${params.id}/${relevantKrav.temaCode || 'PVK'}/RELEVANTE_KRAV/krav/${relevantKrav.kravNummer}/${relevantKrav.kravVersjon}`
+
+                return (
+                  <List.Item className="max-w-[75ch]" key={`${relevantKrav.kravNummer}_${index}`}>
+                    <ExternalLink href={kravHref}>
+                      K{relevantKrav.kravNummer}.{relevantKrav.kravVersjon} {relevantKrav.navn}
+                    </ExternalLink>
+                  </List.Item>
+                )
+              }
+            )}
           </List>
         </ReadMore>
       )}
@@ -80,4 +91,5 @@ export const RisikoscenarioViewReadOnly = (props: IProps) => {
     </div>
   )
 }
+
 export default RisikoscenarioViewReadOnly

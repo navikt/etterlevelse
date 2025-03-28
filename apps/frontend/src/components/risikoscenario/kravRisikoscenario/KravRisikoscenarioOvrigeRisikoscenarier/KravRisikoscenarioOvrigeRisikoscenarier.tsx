@@ -1,14 +1,17 @@
 import { Button } from '@navikt/ds-react'
-import { useNavigate } from 'react-router-dom'
+import { FunctionComponent } from 'react'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IPvkDokument } from '../../../../constants'
 import { user } from '../../../../services/User'
 
-interface IProps {
+type TProps = {
   pvkDokument: IPvkDokument
 }
 
-export const KravRisikoscenarioOvrigeRisikoscenarier = ({ pvkDokument }: IProps) => {
-  const navigate = useNavigate()
+export const KravRisikoscenarioOvrigeRisikoscenarier: FunctionComponent<TProps> = ({
+  pvkDokument,
+}) => {
+  const navigate: NavigateFunction = useNavigate()
 
   return (
     <div className="mt-5">

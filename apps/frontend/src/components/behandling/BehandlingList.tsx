@@ -1,8 +1,8 @@
-import {BodyLong, Label} from '@navikt/ds-react'
-import {behandlingName} from '../../api/BehandlingApi'
-import {IBehandling} from '../../constants'
-import {env} from '../../util/env'
-import {ExternalLink} from '../common/RouteLink'
+import { BodyLong, Label } from '@navikt/ds-react'
+import { behandlingName } from '../../api/BehandlingApi'
+import { IBehandling } from '../../constants'
+import { env } from '../../util/env'
+import { ExternalLink } from '../common/RouteLink'
 
 interface IProps {
   behandlingIds: string[]
@@ -11,7 +11,7 @@ interface IProps {
 }
 
 export const BehandlingList = (props: IProps) => {
-  const {behandlingIds, behandlinger, behandlerPersonopplysninger} = props
+  const { behandlingIds, behandlinger, behandlerPersonopplysninger } = props
 
   return (
     <div className="flex gap-2 mb-2.5">
@@ -26,7 +26,9 @@ export const BehandlingList = (props: IProps) => {
                   className="text-medium"
                   href={`${env.pollyBaseUrl}process/${behandlingId}`}
                 >
-                  {behandlinger?.length > 0 ? `${behandlingName(behandlinger[index])}` : 'Ingen data'}
+                  {behandlinger?.length > 0
+                    ? `${behandlingName(behandlinger[index])}`
+                    : 'Ingen data'}
                 </ExternalLink>
               )}
 
