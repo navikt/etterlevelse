@@ -21,6 +21,7 @@ type TProps = {
 export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
   risikoscenario,
   risikoscenarioList,
+  etterlevelseDokumentasjonId,
   setRisikosenarioList,
   allRisikoscenarioList,
   setAllRisikoscenarioList,
@@ -31,7 +32,11 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
 
   return (
     <div>
-      <RisikoscenarioView risikoscenario={activeRisikoscenario} />
+      <RisikoscenarioView
+        risikoscenario={activeRisikoscenario}
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+        stepUrl="6"
+      />
 
       {(!user.isPersonvernombud() || user.isAdmin()) && (
         <div className="mt-12">
