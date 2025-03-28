@@ -31,6 +31,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   risikoscenarioer,
   allRisikoscenarioList,
   tiltakList,
+  etterlevelseDokumentasjonId,
   setTiltakList,
   setRisikoscenarioer,
   setIsTiltakFormActive,
@@ -96,7 +97,12 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
   return (
     <div>
-      <RisikoscenarioView risikoscenario={activeRisikoscenario} noCopyButton={false} />
+      <RisikoscenarioView
+        risikoscenario={activeRisikoscenario}
+        noCopyButton={false}
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+        stepUrl="5"
+      />
 
       <div>
         {!isIngenTilgangFormDirty &&
