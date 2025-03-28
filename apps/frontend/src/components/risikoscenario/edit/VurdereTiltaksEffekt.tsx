@@ -15,7 +15,7 @@ import RisikoscenarioTag, {
   getSannsynlighetsnivaaText,
 } from '../RisikoscenarioTag'
 import { PVKFieldWrapper, TopBottomWrapper } from '../StylingLayout'
-import RisikoscenarioKonsekvensnivaaReadMore from './RisikoscenarioKonsekvensnivaaField/RisikoscenarioKonsekvensnivaaReadMore'
+import RisikoscenarioKonsekvensnivaaReadMore from '../common/RisikoscenarioKonsekvensnivaaReadMore'
 import RisikoscenarioSannsynlighetReadMore from './RisikoscenarioSannsynlighet/RisikoscenarioSannsynlighetReadMore'
 
 interface IProps {
