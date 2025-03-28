@@ -103,7 +103,11 @@ export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => 
     setData([r, ...data])
   }
   const replace = (newTilbakemelding: ITilbakemelding) => {
-    setData(data.map((tilbakemelding) => (tilbakemelding.id === newTilbakemelding.id ? newTilbakemelding : tilbakemelding)))
+    setData(
+      data.map((tilbakemelding) =>
+        tilbakemelding.id === newTilbakemelding.id ? newTilbakemelding : tilbakemelding
+      )
+    )
   }
   const remove = (fjernTilbakemelding: ITilbakemelding) => {
     if (fjernTilbakemelding.meldinger.length) {
