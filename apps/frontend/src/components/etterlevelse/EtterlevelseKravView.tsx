@@ -279,19 +279,19 @@ export const EtterlevelseKravView = (props: IProps) => {
   return (
     <div>
       {krav && (
-        <div className="flex flex-col gap-8">
+        <div className='flex flex-col gap-8'>
           <div>
-            <BodyShort size="small" id="kravTitle">
+            <BodyShort size='small' id='kravTitle'>
               {temaName} / K{krav.kravNummer}.{krav.kravVersjon}
             </BodyShort>
             <div>
-              <Heading size="medium" level="1">
+              <Heading size='medium' level='1'>
                 {krav.navn}
               </Heading>
 
               {varsleMelding && (
                 <div>
-                  <Alert size="small" variant="info" className="w-fit">
+                  <Alert size='small' variant='info' className='w-fit'>
                     {varsleMelding}
                   </Alert>
                 </div>
@@ -304,13 +304,13 @@ export const EtterlevelseKravView = (props: IProps) => {
               )}
             </div>
           </div>
-          <div className="w-full flex">
-            <div className="pr-4 flex flex-1 flex-col gap-4 col-span-8">
+          <div className='w-full flex'>
+            <div className='pr-4 flex flex-1 flex-col gap-4 col-span-8'>
               <div>
-                <div className="flex justify-between lg:flex-row flex-col">
+                <div className='flex justify-between lg:flex-row flex-col'>
                   <div>
                     {krav.aktivertDato !== null && krav.kravVersjon > 1 && (
-                      <Tag variant="warning">
+                      <Tag variant='warning'>
                         Ny versjon {moment(krav.aktivertDato).format('ll')}
                       </Tag>
                     )}
@@ -319,8 +319,8 @@ export const EtterlevelseKravView = (props: IProps) => {
                     )}
                   </div>
                   {kravFilter === EKravFilterType.RELEVANTE_KRAV && (
-                    <div className="flex items-center gap-2">
-                      <BodyShort size="small">
+                    <div className='flex items-center gap-2'>
+                      <BodyShort size='small'>
                         {etterlevelseMetadata &&
                         etterlevelseMetadata.tildeltMed &&
                         etterlevelseMetadata.tildeltMed.length >= 1
@@ -328,8 +328,8 @@ export const EtterlevelseKravView = (props: IProps) => {
                           : 'Ikke tildelt'}
                       </BodyShort>
                       <Button
-                        variant="tertiary"
-                        size="small"
+                        variant='tertiary'
+                        size='small'
                         onClick={() => {
                           const ident = user.getName()
                           if (
@@ -370,7 +370,7 @@ export const EtterlevelseKravView = (props: IProps) => {
                 </div>
 
                 {krav.versjonEndringer && (
-                  <ReadMore header="Se hva som er nytt">
+                  <ReadMore header='Se hva som er nytt'>
                     <Markdown source={krav.versjonEndringer} />
                   </ReadMore>
                 )}
@@ -383,8 +383,8 @@ export const EtterlevelseKravView = (props: IProps) => {
                   description={
                     krav.status === EKravStatus.UTGAATT &&
                     krav.beskrivelse && (
-                      <div className="py-3 mb-5">
-                        <Heading size="small" level="2">
+                      <div className='py-3 mb-5'>
+                        <Heading size='small' level='2'>
                           Begrunnelse for at kravet er utgått
                         </Heading>
                         <Markdown source={krav.beskrivelse} />
@@ -394,8 +394,8 @@ export const EtterlevelseKravView = (props: IProps) => {
                 />
               )}
 
-              <div className="rounded-sm bg-purple-50 p-8">
-                <Heading level="2" size="small">
+              <div className='rounded-sm bg-purple-50 p-8'>
+                <Heading level='2' size='small'>
                   Hensikten med kravet
                 </Heading>
                 <Markdown source={krav.hensikt} />
@@ -413,61 +413,61 @@ export const EtterlevelseKravView = (props: IProps) => {
               >
                 <Tabs.List>
                   <Tabs.Tab
-                    value="dokumentasjon"
+                    value='dokumentasjon'
                     label={
-                      <Heading level="2" size="small">
+                      <Heading level='2' size='small'>
                         Dokumentasjon
                       </Heading>
                     }
                   />
                   <Tabs.Tab
-                    value="etterlevelser"
+                    value='etterlevelser'
                     label={
-                      <Heading level="2" size="small">
+                      <Heading level='2' size='small'>
                         Hvordan har andre gjort det?
                       </Heading>
                     }
                   />
                   <Tabs.Tab
-                    value="tilbakemeldinger"
+                    value='tilbakemeldinger'
                     label={
-                      <Heading level="2" size="small">
+                      <Heading level='2' size='small'>
                         Spørsmål og svar
                       </Heading>
                     }
                   />
                 </Tabs.List>
-                <Tabs.Panel value="dokumentasjon">
+                <Tabs.Panel value='dokumentasjon'>
                   {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&
                     !isPvkTabActive && (
                       <ToggleGroup
-                        className="mt-6"
-                        defaultValue="OFF"
+                        className='mt-6'
+                        defaultValue='OFF'
                         value={isPreview ? 'ON' : 'OFF'}
                         onChange={(value) => setIsPreview(value === 'ON' ? true : false)}
                       >
-                        <ToggleGroup.Item value="OFF" label="Redigeringsvisning" />
-                        <ToggleGroup.Item value="ON" label="Forhåndsvisning" />
+                        <ToggleGroup.Item value='OFF' label='Redigeringsvisning' />
+                        <ToggleGroup.Item value='ON' label='Forhåndsvisning' />
                       </ToggleGroup>
                     )}
 
                   {isPvkTabActive && (
-                    <Alert className="mt-6" variant="info">
+                    <Alert className='mt-6' variant='info'>
                       Kan ikke redigeres når PVK tab på sidepanel er aktiv
                     </Alert>
                   )}
                   {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) && (
-                    <div className="mt-2">
+                    <div className='mt-2'>
                       {!isPreview && (
                         <CheckboxGroup
-                          legend="Legg til i Prioritert kravliste"
+                          legend='Legg til i Prioritert kravliste'
                           hideLegend
                           onChange={handleChange}
                           value={isPrioritised ? ['check'] : []}
                         >
                           {
                             <Checkbox
-                              value="check"
+                              value='check'
                               description={
                                 (((etterlevelseDokumentasjon?.hasCurrentUserAccess &&
                                   etterlevelseDokumentasjon?.forGjenbruk) ||
@@ -521,13 +521,13 @@ export const EtterlevelseKravView = (props: IProps) => {
                     />
                   )}
                 </Tabs.Panel>
-                <Tabs.Panel value="etterlevelser">
-                  <div className="mt-2">
+                <Tabs.Panel value='etterlevelser'>
+                  <div className='mt-2'>
                     <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />
                   </div>
                 </Tabs.Panel>
-                <Tabs.Panel value="tilbakemeldinger">
-                  <div className="mt-2">
+                <Tabs.Panel value='tilbakemeldinger'>
+                  <div className='mt-2'>
                     <Tilbakemeldinger krav={krav} hasKravExpired={false} />
                   </div>
                 </Tabs.Panel>
@@ -556,16 +556,16 @@ export const EtterlevelseKravView = (props: IProps) => {
           >
             <Modal.Body>
               {isSavingChanges && (
-                <div className="flex justify-center items-center w-full">
-                  <Loader size="2xlarge" title="lagrer endringer" />
+                <div className='flex justify-center items-center w-full'>
+                  <Loader size='2xlarge' title='lagrer endringer' />
                 </div>
               )}
               <br />
             </Modal.Body>
             <Modal.Footer>
               <Button
-                type="button"
-                variant="primary"
+                type='button'
+                variant='primary'
                 onClick={async () => {
                   setCurrentTab(selectedTab)
                   setIsSavingChanges(true)
@@ -576,8 +576,8 @@ export const EtterlevelseKravView = (props: IProps) => {
               </Button>
 
               <Button
-                type="button"
-                variant="secondary"
+                type='button'
+                variant='secondary'
                 onClick={() => {
                   setCurrentTab(selectedTab)
                   setIsTabAlertActive(false)
@@ -586,8 +586,8 @@ export const EtterlevelseKravView = (props: IProps) => {
                 Fortsett uten å lagre
               </Button>
               <Button
-                type="button"
-                variant="tertiary"
+                type='button'
+                variant='tertiary'
                 onClick={() => {
                   setIsTabAlertActive(false)
                 }}
@@ -608,7 +608,7 @@ export const EtterlevelseKravView = (props: IProps) => {
               </BodyShort>
             </Modal.Body>
             <Modal.Footer>
-              <div className="w-full flex flex-col gap-2">
+              <div className='w-full flex flex-col gap-2'>
                 <BodyShort>Hvor ønsker du å gå?</BodyShort>
                 {hasNextKrav && (
                   <Link
@@ -621,7 +621,7 @@ export const EtterlevelseKravView = (props: IProps) => {
                       })
                     }}
                   >
-                    <Button variant="secondary">
+                    <Button variant='secondary'>
                       Til neste krav som ikke er ferdig utfylt i dette temaet
                     </Button>
                   </Link>
@@ -631,14 +631,14 @@ export const EtterlevelseKravView = (props: IProps) => {
                     setIsNavigationModalOpen(false)
                     window.location.reload()
                   }}
-                  variant="secondary"
+                  variant='secondary'
                 >
                   Fortsett å redigere dokumentet
                 </Button>
 
                 <Link
                   href={'/dokumentasjon/' + etterlevelseDokumentasjon?.id + '/' + params.tema}
-                  className="flex w-full"
+                  className='flex w-full'
                   onClick={() => {
                     ampli.logEvent('knapp klikket', {
                       tekst: 'Til temaoversikten',
@@ -647,7 +647,7 @@ export const EtterlevelseKravView = (props: IProps) => {
                     })
                   }}
                 >
-                  <Button className="flex w-full" variant="secondary">
+                  <Button className='flex w-full' variant='secondary'>
                     Til temaoversikten
                   </Button>
                 </Link>
