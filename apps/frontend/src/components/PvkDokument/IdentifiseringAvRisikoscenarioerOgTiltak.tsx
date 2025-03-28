@@ -68,7 +68,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
 
           <BodyLong>
             I en PVK må dere vurdere sannsynligheten for at personvern ikke ivaretas på
-            tilstrekkelig vis, og konsekvensene det vil føre til. Hvor dette risikoscenariet er av
+            tilstrekkelig vis, og konsekvensene det vil føre til. Hvor dette risikoscenarioet er av
             betydning, må dere identifisere forebyggende tiltak som reduserer risiko.
           </BodyLong>
 

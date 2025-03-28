@@ -39,12 +39,12 @@ export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
 
       {risikoscenario.generelScenario && (
         <BodyLong className="mt-8">
-          Dette risikoscenariet er ikke tilknyttet spesifikke etterlevelseskrav.
+          Dette risikoscenarioet er ikke tilknyttet spesifikke etterlevelseskrav.
         </BodyLong>
       )}
 
       {!risikoscenario.generelScenario && (
-        <ReadMore header="Vis etterlevelseskrav hvor risikoscenariet inntreffer">
+        <ReadMore header="Vis etterlevelseskrav hvor risikoscenarioet inntreffer">
           <List as="ul">
             {risikoscenario.relevanteKravNummer.map(
               (relevantKrav: IKravReference, index: number) => {

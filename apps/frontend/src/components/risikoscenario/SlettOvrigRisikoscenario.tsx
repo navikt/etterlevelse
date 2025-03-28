@@ -69,13 +69,13 @@ export const SlettOvrigRisikoscenario: FunctionComponent<TProps> = ({
       {isOpen && (
         <Modal
           width="medium"
-          header={{ heading: 'Vil dere slette dette risikoscenariet?' }}
+          header={{ heading: 'Vil dere slette dette risikoscenarioet?' }}
           open={isOpen}
           onClose={() => setIsOpen(false)}
         >
           {risikoscenario.tiltakIds.length !== 0 && (
             <Modal.Body>
-              Dette risikoscenariet brukes ikke noe annet sted i dokumentasjonen deres.
+              Dette risikoscenarioet brukes ikke noe annet sted i dokumentasjonen deres.
               <br />
               <br />
               {tiltakList
@@ -84,7 +84,7 @@ export const SlettOvrigRisikoscenario: FunctionComponent<TProps> = ({
                 0 && (
                 <List
                   as="ul"
-                  title="Følgende tiltak er unike for dette risikoscenariet, og vil også slettes:"
+                  title="Følgende tiltak er unike for dette risikoscenarioet, og vil også slettes:"
                 >
                   {tiltakList
                     .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
@@ -108,7 +108,7 @@ export const SlettOvrigRisikoscenario: FunctionComponent<TProps> = ({
               deres.
               <br />
               <br />
-              Hvis risikoscenariet er tenkt brukt andre steder i samme PVK-dokumentasjon, lag den
+              Hvis risikoscenarioet er tenkt brukt andre steder i samme PVK-dokumentasjon, lag den
               koblingen først, og kom så tilbake og slett scenarioet herfra.
             </Modal.Body>
           )}

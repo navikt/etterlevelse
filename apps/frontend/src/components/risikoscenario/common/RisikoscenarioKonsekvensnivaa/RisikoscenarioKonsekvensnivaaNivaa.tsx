@@ -6,7 +6,7 @@ export const RisikoscenarioKonsekvensnivaaNivaa = () => (
   <Field name="konsekvensNivaa">
     {(fieldProps: FieldProps) => (
       <RadioGroup
-        legend="Vurdér risikoscenariets konsekvensnivå"
+        legend="Vurdér risikoscenarioets konsekvensnivå"
         value={fieldProps.field.value}
         onChange={(value: any) => {
           fieldProps.form.setFieldValue('konsekvensNivaa', value)

@@ -82,14 +82,14 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
       {isOpen && (
         <Modal
           header={{
-            heading: 'Vil dere slette dette risikoscenariet?',
+            heading: 'Vil dere slette dette risikoscenarioet?',
           }}
           open={isOpen}
           onClose={() => setIsOpen(false)}
         >
           <Modal.Body>
             {risikoscenario.relevanteKravNummer.length > 0 && (
-              <List title="Dette risikoscenariet brukes også ved følgende etterlevelseskrav:">
+              <List title="Dette risikoscenarioet brukes også ved følgende etterlevelseskrav:">
                 {risikoscenario.relevanteKravNummer.map((krav: IKravReference) => (
                   <List.Item key={`${risikoscenario.id}_${krav.kravNummer}.${krav.kravVersjon}`}>
                     K{krav.kravNummer}.{krav.kravVersjon} {krav.navn}
@@ -103,7 +103,7 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
           </Modal.Body>
           <Modal.Footer>
             <Button type="button" onClick={() => submit()}>
-              Ja, slett risikoscenariet
+              Ja, slett risikoscenarioet
             </Button>
             <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
               Avbryt
