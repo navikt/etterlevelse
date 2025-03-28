@@ -88,9 +88,9 @@ public class EtterlevelseDokumentasjonService {
 
     public List<EtterlevelseDokumentasjon> getByFilter(EtterlevelseDokumentasjonFilter filter) {
         if (!StringUtils.isBlank(filter.getId())) {
-            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(UUID.fromString(filter.getId()));
-            if (etterlevelseDokumentasjon != null) {
-                return List.of(etterlevelseDokumentasjon);
+            var etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.findById(UUID.fromString(filter.getId()));
+            if (!etterlevelseDokumentasjon.isEmpty()) {
+                return List.of(etterlevelseDokumentasjon.get());
             }
             return List.of();
         } else if (filter.isGetMineEtterlevelseDokumentasjoner()) {

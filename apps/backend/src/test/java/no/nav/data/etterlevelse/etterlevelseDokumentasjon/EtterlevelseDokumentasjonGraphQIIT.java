@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,7 +27,6 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
     class EtterlevelseDokumentasjonFilter {
 
         @Test
-        @Transactional
         @SneakyThrows
         void statsForEtterlevelseDokOnlyRelevenatKrav() {
 
@@ -68,7 +66,6 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
         }
 
         @Test
-        @Transactional
         @SneakyThrows
         void statsForEtterlevelseDokOnlyRelevenatEtterlevelser() {
 
