@@ -11,6 +11,7 @@ import { EPvkDokumentStatus, IPvkDokument, IPvoTilbakemelding } from '../../cons
 import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
 import FormButtons from './edit/FormButtons'
+import pvkDocumentSchema from './edit/pvkDocumentSchema'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
 import InvolveringSummary from './formSummary/InvolveringSummary'
 import RisikoscenarioSummary from './formSummary/RisikoscenarioSummary'
@@ -76,6 +77,7 @@ export const SendInnView = (props: IProps) => {
       validateOnBlur={false}
       onSubmit={submit}
       initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
+      validationSchema={pvkDocumentSchema}
     >
       {({ setFieldValue, submitForm, dirty }) => (
         <Form>

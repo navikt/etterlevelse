@@ -22,7 +22,7 @@ import {
 import { IEtterlevelseDokumentasjon, IPvkDokument } from '../../../constants'
 import { EListName, ICode, ICodelistProps } from '../../../services/Codelist'
 import { FieldWrapper, TextAreaField } from '../../common/Inputs'
-import pvkBehovSchema from './pvkBehovSchema'
+import { pvkBehovSchema } from './pvkDocumentSchema'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -99,11 +99,11 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
       >
         {({ setFieldValue, values, submitForm, dirty }) => (
           <Form>
-            <div id="ytterlige-egenskaper">
-              <FieldArray name="ytterligereEgenskaper">
+            <div id='ytterlige-egenskaper'>
+              <FieldArray name='ytterligereEgenskaper'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                   <CheckboxGroup
-                    legend="Les igjennom og velg eventuelt øvrige egenskaper som gjelder for behandlingene deres:"
+                    legend='Les igjennom og velg eventuelt øvrige egenskaper som gjelder for behandlingene deres:'
                     value={checkedYtterligereEgenskaper}
                     onChange={(selected: string[]) => {
                       setCheckedYtterligereEgenskaper(selected)
@@ -130,33 +130,33 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
               profilering ||
               automatiskBehandling ||
               saerligKategorier) && (
-              <Alert className="mb-5 mt-10" variant="info">
+              <Alert className='mb-5 mt-10' variant='info'>
                 Data som hentes og svarene dere har oppgitt gir en indikasjon på at det kan være
                 behov for gjennomføring av PVK. Likevel er dere ansvarlige for å vurdere behov.
               </Alert>
             )}
 
             <ReadMore
-              className="mt-10 mb-4"
-              header="Lurer dere fortsatt på om det er behov for PVK?"
+              className='mt-10 mb-4'
+              header='Lurer dere fortsatt på om det er behov for PVK?'
             >
               Personvernombudet (PVO) kan hjelpe dere å vurdere om dere skal gjøre en PVK. Ta
               kontakt via mail.
               <CopyButton
-                className="mt-3 border-2 border-solid"
-                variant="action"
-                copyText="pvk@nav.no"
-                text="Kopiér PVO sin e-postadresse"
-                activeText="E-postadressen er kopiert"
+                className='mt-3 border-2 border-solid'
+                variant='action'
+                copyText='pvk@nav.no'
+                text='Kopiér PVO sin e-postadresse'
+                activeText='E-postadressen er kopiert'
                 icon={<EnvelopeClosedIcon aria-hidden />}
               />
             </ReadMore>
 
             <FieldWrapper marginBottom marginTop>
-              <Field name="skalUtforePvk">
+              <Field name='skalUtforePvk'>
                 {(fieldProps: FieldProps) => (
                   <RadioGroup
-                    legend="Hvilken vurdering har dere kommet fram til?"
+                    legend='Hvilken vurdering har dere kommet fram til?'
                     value={fieldProps.field.value}
                     onChange={(value) => {
                       fieldProps.form.setFieldValue('skalUtforePvk', value)
@@ -173,15 +173,15 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
               <TextAreaField
                 rows={5}
                 noPlaceholder
-                label="Begrunn vurderingen deres"
-                name="pvkVurderingsBegrunnelse"
+                label='Begrunn vurderingen deres'
+                name='pvkVurderingsBegrunnelse'
               />
             )}
 
-            <div className="flex items-center mt-5 gap-2">
+            <div className='flex items-center mt-5 gap-2'>
               <Button
-                type="button"
-                variant="primary"
+                type='button'
+                variant='primary'
                 onClick={() => {
                   submitForm()
                 }}
@@ -190,8 +190,8 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
               </Button>
 
               <Button
-                type="button"
-                variant="secondary"
+                type='button'
+                variant='secondary'
                 onClick={() => {
                   window.location.reload()
                 }}
@@ -200,8 +200,8 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
               </Button>
 
               <Button
-                type="button"
-                variant="tertiary"
+                type='button'
+                variant='tertiary'
                 onClick={() => {
                   setFieldValue('skalUtforePvk', null)
                   setFieldValue('pvkVurderingsBegrunnelse', '')
@@ -212,10 +212,10 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 Nullstill alle svar
               </Button>
             </div>
-            <div className="mt-5 flex w-full gap-2 items-end">
+            <div className='mt-5 flex w-full gap-2 items-end'>
               <Button
-                type="button"
-                variant="tertiary"
+                type='button'
+                variant='tertiary'
                 onClick={() => {
                   if (dirty) {
                     setIsUnsavedModalOpen(true)
@@ -229,8 +229,8 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
               </Button>
               {pvkDokument && pvkDokument.id && values.skalUtforePvk && (
                 <Button
-                  iconPosition="right"
-                  type="button"
+                  iconPosition='right'
+                  type='button'
                   variant={'tertiary'}
                   onClick={() => {
                     if (dirty) {
@@ -274,7 +274,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
           </Modal.Body>
           <Modal.Footer>
             <Button
-              type="button"
+              type='button'
               onClick={() => {
                 formRef.current?.submitForm()
                 navigate(urlToNavigate)
@@ -284,8 +284,8 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
               Lagre og fortsette
             </Button>
             <Button
-              type="button"
-              variant="secondary"
+              type='button'
+              variant='secondary'
               onClick={() => {
                 navigate(urlToNavigate)
                 setIsUnsavedModalOpen(false)
@@ -294,8 +294,8 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
               Fortsett uten å lagre
             </Button>
             <Button
-              type="button"
-              variant="tertiary"
+              type='button'
+              variant='tertiary'
               onClick={() => {
                 setIsUnsavedModalOpen(false)
               }}
