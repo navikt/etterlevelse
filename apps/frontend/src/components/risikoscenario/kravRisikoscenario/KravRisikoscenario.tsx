@@ -1,10 +1,11 @@
 import { Accordion, Alert, Button } from '@navikt/ds-react'
-import { RefObject, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../../api/TiltakApi'
 import {
   ERisikoscenarioType,
+  IPageResponse,
   IPvkDokument,
   IRisikoscenario,
   ITiltak,
@@ -15,11 +16,11 @@ import { user } from '../../../services/User'
 import AccordianAlertModal from '../AccordianAlertModal'
 import CreateRisikoscenario from '../edit/CreateRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/LeggTilEksisterendeRisikoscenario'
-import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionContent'
+import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionContent/KravRisikoscenarioAccordionContent'
 import { KravRisikoscenarioOvrigeRisikoscenarier } from './KravRisikoscenarioOvrigeRisikoscenarier/KravRisikoscenarioOvrigeRisikoscenarier'
 import { KravRisikoscenarioReadMore } from './KravRisikoscenarioReadMore/KravRisikoscenarioReadMore'
 
-interface IProps {
+type TProps = {
   krav: TKravQL
   pvkDokument: IPvkDokument
   formRef: RefObject<any>
@@ -31,8 +32,12 @@ const unsavedAction = {
   leggTilEksisterendeRisikoscenario: 'leggTilEksisterendeRisikoscenario',
 }
 
-export const KravRisikoscenario = (props: IProps) => {
-  const { krav, pvkDokument, formRef, etterlevelseDokumentasjon } = props
+export const KravRisikoscenario: FunctionComponent<TProps> = ({
+  krav,
+  pvkDokument,
+  formRef,
+  etterlevelseDokumentasjon,
+}) => {
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
@@ -44,20 +49,21 @@ export const KravRisikoscenario = (props: IProps) => {
   const [selectedRisikoscenarioId, setSelectedRisikoscenarioId] = useState<string>('')
   const [editButtonClicked, setEditButtonClicked] = useState<string>('')
   const [isTiltakFormActive, setIsTiltakFormActive] = useState<boolean>(false)
-  const url = new URL(window.location.href)
-  const risikoscenarioId = url.searchParams.get('risikoscenario')
-  const navigate = useNavigate()
+
+  const url: URL = new URL(window.location.href)
+  const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
+  const navigate: NavigateFunction = useNavigate()
 
   useEffect(() => {
     ;(async () => {
       if (pvkDokument && krav) {
         await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
-          (response) => {
+          (response: IPageResponse<IRisikoscenario>) => {
             setAlleRisikoscenarioer(response.content)
 
             setRisikoscenarioer(
               response.content.filter(
-                (risikoscenario) =>
+                (risikoscenario: IRisikoscenario) =>
                   !risikoscenario.generelScenario &&
                   risikoscenario.relevanteKravNummer.filter(
                     (relevantekrav) => relevantekrav.kravNummer === krav.kravNummer
@@ -66,7 +72,7 @@ export const KravRisikoscenario = (props: IProps) => {
             )
             setRisikoscenarioForKrav(
               response.content.filter(
-                (risikoscenario) =>
+                (risikoscenario: IRisikoscenario) =>
                   !risikoscenario.generelScenario &&
                   risikoscenario.relevanteKravNummer.filter(
                     (relevantekrav) =>
@@ -78,20 +84,20 @@ export const KravRisikoscenario = (props: IProps) => {
           }
         )
 
-        await getTiltakByPvkDokumentId(pvkDokument.id).then((response) => {
+        await getTiltakByPvkDokumentId(pvkDokument.id).then((response: IPageResponse<ITiltak>) => {
           setTiltakList(response.content)
         })
       }
     })()
   }, [krav, pvkDokument])
 
-  const handleAccordionChange = (risikoscenarioId?: string) => {
+  const handleAccordionChange = (risikoscenarioId?: string): void => {
     if (risikoscenarioId) {
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
       } else {
         setActiveRisikoscenarioId(risikoscenarioId)
-        navigate(window.location.pathname + '?risikoscenario=' + risikoscenarioId)
+        navigate(`${window.location.pathname}?risikoscenario=${risikoscenarioId}`)
       }
     } else {
       if (formRef.current?.dirty) {
@@ -103,7 +109,7 @@ export const KravRisikoscenario = (props: IProps) => {
     }
   }
 
-  const userHasAccess = () => {
+  const userHasAccess = (): boolean => {
     return user.isAdmin() || etterlevelseDokumentasjon?.hasCurrentUserAccess || false
   }
 
@@ -133,16 +139,17 @@ export const KravRisikoscenario = (props: IProps) => {
         {!isLeggTilEksisterendeMode && (
           <div className="mb-5">
             <Accordion>
-              {risikoscenarioForKrav.map((risikoscenario, index) => {
-                const expanded = risikoscenarioId
+              {risikoscenarioForKrav.map((risikoscenario: IRisikoscenario, index: number) => {
+                const expanded: boolean = risikoscenarioId
                   ? risikoscenarioId === risikoscenario.id
                   : activeRisikoscenarioId === risikoscenario.id
+
                 return (
                   <Accordion.Item
                     open={expanded}
                     id={risikoscenario.id}
-                    key={index + '_' + risikoscenario.navn}
-                    onOpenChange={(open) => {
+                    key={`${index} ${risikoscenario.navn}`}
+                    onOpenChange={(open: boolean) => {
                       setSelectedRisikoscenarioId(open ? risikoscenario.id : '')
                       handleAccordionChange(open ? risikoscenario.id : '')
                     }}
@@ -157,9 +164,6 @@ export const KravRisikoscenario = (props: IProps) => {
                           alleRisikoscenarioer={alleRisikoscenarioer}
                           etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId}
                           isCreateMode={isCreateMode}
-                          kravnummer={krav.kravNummer}
-                          risikoscenarioer={risikoscenarioer}
-                          setRisikoscenarioer={setRisikoscenarioer}
                           risikoscenarioForKrav={risikoscenarioForKrav}
                           setRisikoscenarioForKrav={setRisikoscenarioForKrav}
                           tiltakList={tiltakList}
@@ -249,4 +253,5 @@ export const KravRisikoscenario = (props: IProps) => {
     </div>
   )
 }
+
 export default KravRisikoscenario

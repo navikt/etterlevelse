@@ -1,7 +1,7 @@
 import { PencilIcon } from '@navikt/aksel-icons'
-import { Alert, Button, Heading } from '@navikt/ds-react'
-import { RefObject, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Alert, Button } from '@navikt/ds-react'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenario, updateRisikoscenario } from '../../api/RisikoscenarioApi'
 import { createTiltakAndRelasjonWithRisikoscenario } from '../../api/TiltakApi'
 import { IRisikoscenario, ITiltak } from '../../constants'
@@ -10,10 +10,11 @@ import LeggTilEksisterendeTiltak from '../tiltak/edit/LeggTilEksisterendeTiltak'
 import TiltakForm from '../tiltak/edit/TiltakForm'
 import RisikoscenarioView from './RisikoscenarioView'
 import SlettOvrigRisikoscenario from './SlettOvrigRisikoscenario'
+import { RisikoscenarioTiltakHeader } from './common/KravRisikoscenarioHeaders'
 import IngenTiltakField from './edit/IngenTiltakField'
 import RisikoscenarioModalForm from './edit/RisikoscenarioModalForm'
 
-interface IProps {
+type TProps = {
   risikoscenario: IRisikoscenario
   risikoscenarioer: IRisikoscenario[]
   allRisikoscenarioList: IRisikoscenario[]
@@ -25,18 +26,18 @@ interface IProps {
   formRef: RefObject<any>
 }
 
-export const RisikoscenarioAccordionContent = (props: IProps) => {
-  const {
-    risikoscenario,
-    risikoscenarioer,
-    allRisikoscenarioList,
-    tiltakList,
-    etterlevelseDokumentasjonId,
-    setTiltakList,
-    setRisikoscenarioer,
-    setIsTiltakFormActive,
-    formRef,
-  } = props
+export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
+  risikoscenario,
+  risikoscenarioer,
+  allRisikoscenarioList,
+  tiltakList,
+  etterlevelseDokumentasjonId,
+  setTiltakList,
+  setRisikoscenarioer,
+  setIsTiltakFormActive,
+  formRef,
+}) => {
+  const navigate: NavigateFunction = useNavigate()
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   const [isCreateTiltakFormActive, setIsCreateTiltakFormActive] = useState<boolean>(false)
@@ -44,36 +45,35 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
 
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
   const [isIngenTilgangFormDirty, setIsIngenTilgangFormDirty] = useState<boolean>(false)
-  const navigate = useNavigate()
 
-  const submit = async (risikoscenario: IRisikoscenario) => {
-    await updateRisikoscenario(risikoscenario).then((response) => {
+  const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
+    await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
       setActiveRisikoscenario(response)
       setIsEditModalOpen(false)
       window.location.reload()
     })
   }
 
-  const submitIngenTiltak = async (submitedValues: IRisikoscenario) => {
-    await getRisikoscenario(risikoscenario.id).then((response) => {
+  const submitIngenTiltak = async (submitedValues: IRisikoscenario): Promise<void> => {
+    await getRisikoscenario(risikoscenario.id).then((response: IRisikoscenario) => {
       const updatedRisikoscenario = {
         ...submitedValues,
         ...response,
         ingenTiltak: submitedValues.ingenTiltak,
       }
 
-      updateRisikoscenario(updatedRisikoscenario).then((response) => {
+      updateRisikoscenario(updatedRisikoscenario).then((response: IRisikoscenario) => {
         setActiveRisikoscenario(response)
         window.location.reload()
       })
     })
   }
 
-  const submitCreateTiltak = async (submitedTiltakValues: ITiltak) => {
+  const submitCreateTiltak = async (submitedTiltakValues: ITiltak): Promise<void> => {
     await createTiltakAndRelasjonWithRisikoscenario(
       submitedTiltakValues,
       activeRisikoscenario.id
-    ).then((response) => {
+    ).then((response: ITiltak) => {
       setActiveRisikoscenario({
         ...activeRisikoscenario,
         tiltakIds: [...activeRisikoscenario.tiltakIds, response.id],
@@ -103,6 +103,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
         stepUrl="5"
       />
+
       <div>
         {!isIngenTilgangFormDirty &&
           !isCreateTiltakFormActive &&
@@ -128,9 +129,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
       </div>
 
       <div className="mt-12">
-        <Heading level="3" size="small">
-          Følgende tiltak gjelder for dette risikoscenarioet
-        </Heading>
+        <RisikoscenarioTiltakHeader />
         {!risikoscenario.ingenTiltak && (
           <div>
             {risikoscenario.tiltakIds.length === 0 &&
@@ -221,7 +220,7 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
 
       {isEditModalOpen && (
         <RisikoscenarioModalForm
-          headerText="Redigér øvirg risikoscenario"
+          headerText="Redigér øvrig risikoscenario"
           isOpen={isEditModalOpen}
           setIsOpen={setIsEditModalOpen}
           submit={submit}
@@ -231,4 +230,5 @@ export const RisikoscenarioAccordionContent = (props: IProps) => {
     </div>
   )
 }
+
 export default RisikoscenarioAccordionContent

@@ -28,5 +28,5 @@ public final class HibernateUtils {
             throw new TechnicalException("id error", e);
         }
     }
-    
+
 }

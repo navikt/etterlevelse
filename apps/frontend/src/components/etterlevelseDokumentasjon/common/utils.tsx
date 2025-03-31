@@ -1,5 +1,5 @@
 import moment from 'moment'
-import {EEtterlevelseStatus, ESuksesskriterieStatus, TKravQL} from '../../../constants'
+import { EEtterlevelseStatus, ESuksesskriterieStatus, TKravQL } from '../../../constants'
 
 export const getNewestKravVersjon = (list: any[]) => {
   let relevanteStatusListe = [...list]

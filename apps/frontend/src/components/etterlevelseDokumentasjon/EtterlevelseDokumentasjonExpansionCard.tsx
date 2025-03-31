@@ -8,7 +8,7 @@ import {Markdown} from '../common/Markdown'
 import {ExternalLink} from '../common/RouteLink'
 import {Teams} from '../common/TeamName'
 import {VarslingsadresserView} from './VarslingsAddresseView'
-import {user} from "../../services/User";
+import {user} from '../../services/User'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -16,7 +16,7 @@ interface IProps {
 }
 
 export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
-  const {etterlevelseDokumentasjon, relasjonLoading} = props
+  const { etterlevelseDokumentasjon, relasjonLoading } = props
   const navigate: NavigateFunction = useNavigate()
   const [codelistUtils] = CodelistService()
 
@@ -24,7 +24,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
     EListName.RELEVANS
   )
 
-  const {behandlerPersonopplysninger, behandlingIds, behandlinger, teams, irrelevansFor} =
+  const { behandlerPersonopplysninger, behandlingIds, behandlinger, teams, irrelevansFor } =
     etterlevelseDokumentasjon
 
   const getRelevans = (irrelevans: ICode[]) => {
@@ -91,7 +91,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                   <Heading className="mb-3" level="2" size="small">
                     Dokumentbeskrivelse
                   </Heading>
-                  <Markdown source={etterlevelseDokumentasjon.beskrivelse}/>
+                  <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
                 </div>
               )}
 
@@ -157,7 +157,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                 </div>
 
                 <div className="mb-2.5">
-                  {teams.length > 0 && <Teams teams={teams} link/>}
+                  {teams.length > 0 && <Teams teams={teams} link />}
                   {teams.length === 0 && (
                     <div className="flex flex-wrap gap-2 items-center">
                       <Label size="medium">Team:</Label>
@@ -167,9 +167,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                 </div>
 
                 <div className="flex items-start gap-2">
-                  <Label size="medium">
-                    Varslingsadresser:
-                  </Label>
+                  <Label size="medium">Varslingsadresser:</Label>
                   <div>
                     {etterlevelseDokumentasjon.varslingsadresser && (
                       <VarslingsadresserView
@@ -202,7 +200,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
           <div className="mt-5">
             <ReadMore header="Dette må du vite om gjenbruk">
               {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
-                <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse}/>
+                <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />
               )}
 
               {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (

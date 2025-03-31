@@ -1,17 +1,19 @@
-interface IPropsTopBottomWrapper {
-  children: React.ReactNode
+import { FunctionComponent, ReactNode } from 'react'
+
+type TPropsTopBottomWrapper = {
+  children: ReactNode
 }
 
 /* WIP, vankser rundt <FieldWrapper> */
-export const TopBottomWrapper = ({ children }: IPropsTopBottomWrapper) => (
+export const TopBottomWrapper: FunctionComponent<TPropsTopBottomWrapper> = ({ children }) => (
   <div className="py-7">{children}</div>
 )
 
-interface IPropsPVKFieldWrapper {
-  children: React.ReactNode
+type TPropsPVKFieldWrapper = {
+  children: ReactNode
 }
 
-/* WIP, vankser rundt <FieldWrapper> */
-export const PVKFieldWrapper = ({ children }: IPropsPVKFieldWrapper) => (
+/* WIP, vansker rundt <FieldWrapper> */
+export const PVKFieldWrapper: FunctionComponent<TPropsPVKFieldWrapper> = ({ children }) => (
   <div className="pb-5">{children}</div>
 )

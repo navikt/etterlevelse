@@ -1,11 +1,12 @@
-import { Alert, BodyLong, Heading, ReadMore } from '@navikt/ds-react'
-import { RefObject, useState } from 'react'
+import { Alert, BodyLong, ReadMore } from '@navikt/ds-react'
+import { FunctionComponent, RefObject, useState } from 'react'
 import { IRisikoscenario, ITiltak } from '../../../constants'
 import TiltakView from '../../tiltak/TiltakView'
 import RisikoscenarioView from '../RisikoscenarioView'
+import { RisikoscenarioTiltakHeader } from '../common/KravRisikoscenarioHeaders'
 import VurdereTiltaksEffekt from '../edit/VurdereTiltaksEffekt'
 
-interface IProps {
+type TProps = {
   risikoscenario: IRisikoscenario
   risikoscenarioList: IRisikoscenario[]
   etterlevelseDokumentasjonId: string
@@ -16,17 +17,16 @@ interface IProps {
   formRef: RefObject<any>
 }
 
-export const OppsumeringAccordianContent = (props: IProps) => {
-  const {
-    risikoscenario,
-    risikoscenarioList,
-    etterlevelseDokumentasjonId,
-    setRisikosenarioList,
-    allRisikoscenarioList,
-    setAllRisikoscenarioList,
-    tiltakList,
-    formRef,
-  } = props
+export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
+  risikoscenario,
+  risikoscenarioList,
+  etterlevelseDokumentasjonId,
+  setRisikosenarioList,
+  allRisikoscenarioList,
+  setAllRisikoscenarioList,
+  tiltakList,
+  formRef,
+}) => {
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
 
   return (
@@ -36,19 +36,19 @@ export const OppsumeringAccordianContent = (props: IProps) => {
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
         stepUrl="6"
       />
+
       <div className="mt-12">
-        <Heading level="3" size="small">
-          Følgende tiltak gjelder for dette risikoscenarioet
-        </Heading>
+        <RisikoscenarioTiltakHeader />
+
         {risikoscenario.ingenTiltak && <BodyLong>Vi skal ikke ha tiltak.</BodyLong>}
 
         {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length !== 0 && (
           <div className="mt-5">
             {tiltakList
-              .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
-              .map((tiltak, index) => (
+              .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
+              .map((tiltak: ITiltak, index: number) => (
                 <ReadMore
-                  key={risikoscenario.id + '_' + tiltak.id + '_' + index}
+                  key={`${risikoscenario.id}_${tiltak.id}_${index}`}
                   header={tiltak.navn}
                   className="mb-3"
                 >
@@ -94,4 +94,5 @@ export const OppsumeringAccordianContent = (props: IProps) => {
     </div>
   )
 }
+
 export default OppsumeringAccordianContent

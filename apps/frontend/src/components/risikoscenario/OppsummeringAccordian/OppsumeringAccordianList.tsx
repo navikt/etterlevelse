@@ -1,13 +1,13 @@
 import { Accordion } from '@navikt/ds-react'
-import { RefObject, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../../constants'
 import { tabValues } from '../../PvkDokument/OppsummeringAvAlleRisikoscenarioerOgTiltak'
 import AccordianAlertModal from '../AccordianAlertModal'
 import RisikoscenarioAccordianHeader from '../RisikoscenarioAccordionHeader'
 import OppsumeringAccordianContent from './OppsumeringAccordianContent'
 
-interface IProps {
+type TProps = {
   risikoscenarioList: IRisikoscenario[]
   setRisikosenarioList: (state: IRisikoscenario[]) => void
   allRisikoscenarioList: IRisikoscenario[]
@@ -19,29 +19,28 @@ interface IProps {
   setIsUnsaved: (state: boolean) => void
 }
 
-export const OppsumeringAccordianList = (props: IProps) => {
-  const {
-    risikoscenarioList,
-    setRisikosenarioList,
-    allRisikoscenarioList,
-    setAllRisikoscenarioList,
-    etterlevelseDokumentasjonId,
-    tiltakList,
-    formRef,
-    isUnsaved,
-    setIsUnsaved,
-  } = props
+export const OppsumeringAccordianList: FunctionComponent<TProps> = ({
+  risikoscenarioList,
+  setRisikosenarioList,
+  allRisikoscenarioList,
+  setAllRisikoscenarioList,
+  etterlevelseDokumentasjonId,
+  tiltakList,
+  formRef,
+  isUnsaved,
+  setIsUnsaved,
+}) => {
   const [navigateUrl, setNavigateUrl] = useState<string>('')
-  const url = new URL(window.location.href)
-  const risikoscenarioId = url.searchParams.get('risikoscenario')
-  const tabQuery = url.searchParams.get('tab')
-  const filterQuery = url.searchParams.get('filter')
-  const navigate = useNavigate()
+  const url: URL = new URL(window.location.href)
+  const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
+  const tabQuery: string | null = url.searchParams.get('tab')
+  const filterQuery: string | null = url.searchParams.get('filter')
+  const navigate: NavigateFunction = useNavigate()
 
   useEffect(() => {
     if (risikoscenarioId) {
       setTimeout(() => {
-        const element = document.getElementById(risikoscenarioId)
+        const element: HTMLElement | null = document.getElementById(risikoscenarioId)
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' })
         }
@@ -49,7 +48,7 @@ export const OppsumeringAccordianList = (props: IProps) => {
     }
   }, [])
 
-  const handleAccordionChange = (risikoscenarioId?: string) => {
+  const handleAccordionChange = (risikoscenarioId?: string): void => {
     if (risikoscenarioId) {
       setNavigateUrl(
         `${window.location.pathname}?tab=${tabQuery}&filter=${filterQuery}&risikoscenario=${risikoscenarioId}`
@@ -62,7 +61,8 @@ export const OppsumeringAccordianList = (props: IProps) => {
         )
       }
     } else {
-      const paramQuery = tabQuery === tabValues.risikoscenarioer ? '&filter=' + filterQuery : ''
+      const paramQuery: string =
+        tabQuery === tabValues.risikoscenarioer ? '&filter=' + filterQuery : ''
       setNavigateUrl(`${window.location.pathname}?tab=${tabQuery}${paramQuery}`)
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
@@ -75,14 +75,15 @@ export const OppsumeringAccordianList = (props: IProps) => {
   return (
     <div>
       <Accordion>
-        {risikoscenarioList.map((risikoscenario, index) => {
-          const expanded = risikoscenarioId === risikoscenario.id
+        {risikoscenarioList.map((risikoscenario: IRisikoscenario, index: number) => {
+          const expanded: boolean = risikoscenarioId === risikoscenario.id
+
           return (
             <Accordion.Item
               id={risikoscenario.id}
-              key={index + '_' + risikoscenario.id}
+              key={`${index}_${risikoscenario.id}`}
               open={expanded}
-              onOpenChange={(open) => {
+              onOpenChange={(open: boolean) => {
                 handleAccordionChange(open ? risikoscenario.id : undefined)
               }}
             >
@@ -113,4 +114,5 @@ export const OppsumeringAccordianList = (props: IProps) => {
     </div>
   )
 }
+
 export default OppsumeringAccordianList

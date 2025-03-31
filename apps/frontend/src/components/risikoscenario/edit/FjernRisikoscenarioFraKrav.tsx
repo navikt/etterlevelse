@@ -1,6 +1,6 @@
 import { TrashIcon } from '@navikt/aksel-icons'
 import { Button, List, Modal } from '@navikt/ds-react'
-import { useState } from 'react'
+import { FunctionComponent, useState } from 'react'
 import {
   deleteRisikoscenario,
   fjernKravFraRisikoscenario,
@@ -8,9 +8,9 @@ import {
   removeTiltakToRisikoscenario,
 } from '../../../api/RisikoscenarioApi'
 import { deleteTiltak, getTiltak } from '../../../api/TiltakApi'
-import { IRisikoscenario } from '../../../constants'
+import { IKravReference, IRisikoscenario, ITiltak } from '../../../constants'
 
-interface IProps {
+type TProps = {
   kravnummer: number
   risikoscenario: IRisikoscenario
   risikoscenarioer: IRisikoscenario[]
@@ -19,24 +19,23 @@ interface IProps {
   setRisikoscenarioForKrav: (state: IRisikoscenario[]) => void
 }
 
-export const FjernRisikoscenarioFraKrav = (props: IProps) => {
-  const {
-    kravnummer,
-    risikoscenario,
-    risikoscenarioer,
-    setRisikoscenarioer,
-    risikoscenarioForKrav,
-    setRisikoscenarioForKrav,
-  } = props
+export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
+  kravnummer,
+  risikoscenario,
+  risikoscenarioer,
+  setRisikoscenarioer,
+  risikoscenarioForKrav,
+  setRisikoscenarioForKrav,
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
-  const submit = async () => {
-    getRisikoscenario(risikoscenario.id).then(async (response) => {
-      const relevanteKravNummer = response.relevanteKravNummer
+  const submit = async (): Promise<void> => {
+    getRisikoscenario(risikoscenario.id).then(async (response: IRisikoscenario) => {
+      const relevanteKravNummer: IKravReference[] = response.relevanteKravNummer
 
       if (response.tiltakIds.length > 0) {
         for await (const tiltakId of response.tiltakIds) {
-          await getTiltak(tiltakId).then(async (tiltakResponse) => {
+          await getTiltak(tiltakId).then(async (tiltakResponse: ITiltak) => {
             await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(async () => {
               if (tiltakResponse.risikoscenarioIds.length === 1) {
                 await deleteTiltak(tiltakId)
@@ -47,18 +46,20 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
       }
 
       if (relevanteKravNummer.length > 1) {
-        await fjernKravFraRisikoscenario(risikoscenario.id, kravnummer).then((deleteResponse) => {
-          const updatedRisikoscenarioForKrav = risikoscenarioForKrav.filter(
-            (risikoscenario) => risikoscenario.id !== deleteResponse.id
-          )
-          setRisikoscenarioForKrav([...updatedRisikoscenarioForKrav])
-          setRisikoscenarioer([...risikoscenarioer, deleteResponse])
-          setIsOpen(false)
-        })
+        await fjernKravFraRisikoscenario(risikoscenario.id, kravnummer).then(
+          (deleteResponse: IRisikoscenario) => {
+            const updatedRisikoscenarioForKrav: IRisikoscenario[] = risikoscenarioForKrav.filter(
+              (risikoscenario: IRisikoscenario) => risikoscenario.id !== deleteResponse.id
+            )
+            setRisikoscenarioForKrav([...updatedRisikoscenarioForKrav])
+            setRisikoscenarioer([...risikoscenarioer, deleteResponse])
+            setIsOpen(false)
+          }
+        )
       } else {
-        await deleteRisikoscenario(risikoscenario.id).then((deleteResponse) => {
+        await deleteRisikoscenario(risikoscenario.id).then((deleteResponse: IRisikoscenario) => {
           const updatedRisikoscenarioForKrav = risikoscenarioForKrav.filter(
-            (risikoscenario) => risikoscenario.id !== deleteResponse.id
+            (risikoscenario: IRisikoscenario) => risikoscenario.id !== deleteResponse.id
           )
           setRisikoscenarioForKrav([...updatedRisikoscenarioForKrav])
           setIsOpen(false)
@@ -89,10 +90,8 @@ export const FjernRisikoscenarioFraKrav = (props: IProps) => {
           <Modal.Body>
             {risikoscenario.relevanteKravNummer.length > 0 && (
               <List title="Dette risikoscenarioet brukes også ved følgende etterlevelseskrav:">
-                {risikoscenario.relevanteKravNummer.map((krav) => (
-                  <List.Item
-                    key={risikoscenario.id + '_' + krav.kravNummer + '.' + krav.kravVersjon}
-                  >
+                {risikoscenario.relevanteKravNummer.map((krav: IKravReference) => (
+                  <List.Item key={`${risikoscenario.id}_${krav.kravNummer}.${krav.kravVersjon}`}>
                     K{krav.kravNummer}.{krav.kravVersjon} {krav.navn}
                   </List.Item>
                 ))}

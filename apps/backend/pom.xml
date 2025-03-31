@@ -18,9 +18,9 @@
         <java.version>17</java.version>
 
         <springdoc-openapi-starter-webmvc-ui.version>2.8.6</springdoc-openapi-starter-webmvc-ui.version>
-        <hypersistence-utils-hibernate-63.version>3.9.5</hypersistence-utils-hibernate-63.version>
+        <hypersistence-utils-hibernate-63.version>3.9.8</hypersistence-utils-hibernate-63.version>
         <logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
-        <shedlock.version>6.3.0</shedlock.version>
+        <shedlock.version>6.3.1</shedlock.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <graphql-spring-boot-starter.version>15.1.0</graphql-spring-boot-starter.version>
         <graphql.version>22.0</graphql.version>

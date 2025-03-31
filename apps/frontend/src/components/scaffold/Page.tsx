@@ -1,8 +1,7 @@
 import React from 'react'
-
+import { Helmet } from 'react-helmet-async'
 import { IBreadCrumbPath } from '../../constants'
 import CustomizedBreadcrumbs from '../common/CustomizedBreadcrumbs'
-import { Helmet } from 'react-helmet-async'
 
 interface IPropsPageLayout {
   children: React.ReactNode

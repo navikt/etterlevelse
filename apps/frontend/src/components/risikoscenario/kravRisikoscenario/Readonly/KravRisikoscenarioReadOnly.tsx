@@ -1,9 +1,11 @@
 import { Accordion, Alert } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '../../../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../../../api/TiltakApi'
 import {
   ERisikoscenarioType,
+  IKravReference,
+  IPageResponse,
   IPvkDokument,
   IRisikoscenario,
   ITiltak,
@@ -14,13 +16,12 @@ import { KravRisikoscenarioOvrigeRisikoscenarier } from '../KravRisikoscenarioOv
 import { KravRisikoscenarioReadMore } from '../KravRisikoscenarioReadMore/KravRisikoscenarioReadMore'
 import KravRisikoscenarioAccordionContentReadOnly from './KravRisikoscenarioAccordionContentReadOnly'
 
-interface IProps {
+type TProps = {
   krav: TKravQL
   pvkDokument: IPvkDokument
 }
 
-export const KravRisikoscenarioReadOnly = (props: IProps) => {
-  const { krav, pvkDokument } = props
+export const KravRisikoscenarioReadOnly: FunctionComponent<TProps> = ({ krav, pvkDokument }) => {
   const [alleRisikoscenarioer, setAlleRisikoscenarioer] = useState<IRisikoscenario[]>([])
   const [risikoscenarioForKrav, setRisikoscenarioForKrav] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
@@ -29,15 +30,15 @@ export const KravRisikoscenarioReadOnly = (props: IProps) => {
     ;(async () => {
       if (pvkDokument && krav) {
         await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
-          (response) => {
+          (response: IPageResponse<IRisikoscenario>) => {
             setAlleRisikoscenarioer(response.content)
 
             setRisikoscenarioForKrav(
               response.content.filter(
-                (risikoscenario) =>
+                (risikoscenario: IRisikoscenario) =>
                   !risikoscenario.generelScenario &&
                   risikoscenario.relevanteKravNummer.filter(
-                    (relevantekrav) =>
+                    (relevantekrav: IKravReference) =>
                       relevantekrav.kravNummer === krav.kravNummer &&
                       relevantekrav.kravVersjon === krav.kravVersjon
                   ).length > 0
@@ -46,7 +47,7 @@ export const KravRisikoscenarioReadOnly = (props: IProps) => {
           }
         )
 
-        await getTiltakByPvkDokumentId(pvkDokument.id).then((response) => {
+        await getTiltakByPvkDokumentId(pvkDokument.id).then((response: IPageResponse<ITiltak>) => {
           setTiltakList(response.content)
         })
       }

@@ -1,11 +1,11 @@
-import {PencilIcon, TrashIcon} from '@navikt/aksel-icons'
-import {Button, Modal, ReadMore} from '@navikt/ds-react'
-import {RefObject, useState} from 'react'
-import {useNavigate} from 'react-router-dom'
-import {removeTiltakToRisikoscenario} from '../../api/RisikoscenarioApi'
-import {deleteTiltak, getTiltak, updateTiltak} from '../../api/TiltakApi'
-import {IRisikoscenario, ITiltak} from '../../constants'
-import {user} from '../../services/User'
+import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
+import { Button, Modal, ReadMore } from '@navikt/ds-react'
+import { RefObject, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { removeTiltakToRisikoscenario } from '../../api/RisikoscenarioApi'
+import { deleteTiltak, getTiltak, updateTiltak } from '../../api/TiltakApi'
+import { IRisikoscenario, ITiltak } from '../../constants'
+import { user } from '../../services/User'
 import TiltakView from './TiltakView'
 import TiltakForm from './edit/TiltakForm'
 
@@ -41,7 +41,7 @@ export const TiltakReadMoreList = (props: IProps) => {
         .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
         .map((tiltak, index) => {
           return (
-            <div className="mt-3" key={risikoscenario.id + '_' + tiltak.id + '_' + index}>
+            <div className='mt-3' key={risikoscenario.id + '_' + tiltak.id + '_' + index}>
               <TiltakListContent
                 activeTiltak={activeTiltak}
                 setActiveTiltak={setActiveTiltak}
@@ -95,7 +95,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
       setTiltakList(
         tiltakList.map((tiltak) => {
           if (tiltak.id === response.id) {
-            return {...response}
+            return { ...response }
           } else {
             return tiltak
           }
@@ -134,7 +134,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
         <ReadMore
           open={tiltakId === tiltak.id}
           id={risikoscenario.id + '_' + tiltak.id}
-          className="mb-3"
+          className='mb-3'
           onOpenChange={(open) => {
             if (open) {
               setActiveTiltak(tiltak.id)
@@ -148,7 +148,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
           }}
           header={tiltak.navn}
         >
-          <TiltakView tiltak={tiltak} risikoscenarioList={risikoscenarioList}/>
+          <TiltakView tiltak={tiltak} risikoscenarioList={risikoscenarioList} />
         </ReadMore>
       )}
 
@@ -156,7 +156,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
         <div>
           {isEditMode && (
             <TiltakForm
-              title="Redigér tiltak"
+              title='Redigér tiltak'
               initialValues={tiltak}
               pvkDokumentId={tiltak.pvkDokumentId}
               submit={submit}
@@ -172,12 +172,12 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
             !isEditMode &&
             !isCreateTiltakFormActive &&
             !isAddExistingMode && (
-              <div className="flex gap-2 mt-5">
+              <div className='flex gap-2 mt-5'>
                 <Button
-                  type="button"
-                  variant="tertiary"
-                  size="small"
-                  icon={<PencilIcon title="" aria-hidden/>}
+                  type='button'
+                  variant='tertiary'
+                  size='small'
+                  icon={<PencilIcon title='' aria-hidden />}
                   onClick={() => {
                     setIsEditTiltakFormActive(true)
                     setIsEditMode(true)
@@ -187,10 +187,10 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
                 </Button>
 
                 <Button
-                  type="button"
-                  variant="tertiary"
-                  size="small"
-                  icon={<TrashIcon title="" aria-hidden/>}
+                  type='button'
+                  variant='tertiary'
+                  size='small'
+                  icon={<TrashIcon title='' aria-hidden />}
                   onClick={() => setIsDeleteModalOpen(true)}
                 >
                   Slett tiltak
@@ -203,7 +203,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
       {isDeleteModalOpen && (
         <Modal
           open={isDeleteModalOpen}
-          header={{heading: 'Slette tiltak fra risikoscenario'}}
+          header={{ heading: 'Slette tiltak fra risikoscenario' }}
           onClose={() => setIsDeleteModalOpen(false)}
         >
           <Modal.Body>Er du sikkert på at du vil slette tiltaket?</Modal.Body>

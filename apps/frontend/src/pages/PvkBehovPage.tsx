@@ -10,7 +10,13 @@ import PvkBehovMetadata from '../components/PvkDokument/common/PvkBehovMetadata'
 import PvkBehovReadOnly from '../components/PvkDokument/common/PvkBehovReadOnly'
 import PvkBehovForm from '../components/PvkDokument/edit/PvkBehovForm'
 import { PageLayout } from '../components/scaffold/Page'
-import { IBehandlingensLivslop, IBreadCrumbPath, IExternalCode, IPolicy } from '../constants'
+import {
+  IBehandling,
+  IBehandlingensLivslop,
+  IBreadCrumbPath,
+  IExternalCode,
+  IPolicy,
+} from '../constants'
 import { CodelistService, EListName, ICode } from '../services/Codelist'
 import { user } from '../services/User'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
@@ -35,12 +41,8 @@ export const PvkBehovPage = () => {
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
     {
-      href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,
-      pathName:
-        'E' +
-        etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
-        ' ' +
-        etterlevelseDokumentasjon?.title,
+      href: `/dokumentasjon/${etterlevelseDokumentasjon?.id}`,
+      pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
     },
   ]
 
@@ -54,7 +56,7 @@ export const PvkBehovPage = () => {
     ;(async () => {
       if (etterlevelseDokumentasjon) {
         await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjon?.id).then(
-          (response) => {
+          (response: IBehandlingensLivslop) => {
             if (response) {
               setBehandlingensLivslop(response)
             }
@@ -69,7 +71,7 @@ export const PvkBehovPage = () => {
       const alleOpplysningstyper: IPolicy[] = []
       const alleProfilering: any[] = []
       const alleAutomatiskBehandling: any[] = []
-      etterlevelseDokumentasjon.behandlinger.forEach((behandling) => {
+      etterlevelseDokumentasjon.behandlinger.forEach((behandling: IBehandling) => {
         if (behandling.policies) {
           if (behandling.policies.length === 0) {
             setOpplysningstyperMangler(true)
@@ -97,9 +99,9 @@ export const PvkBehovPage = () => {
       }
 
       const saerligKategorierOppsumert: IExternalCode[] = uniqBy(
-        alleOpplysningstyper.flatMap((opplysningstyper) => opplysningstyper.sensitivity),
+        alleOpplysningstyper.flatMap((opplysningstyper: IPolicy) => opplysningstyper.sensitivity),
         'code'
-      ).filter((kategori) => kategori.code === 'SAERLIGE')
+      ).filter((kategori: IExternalCode) => kategori.code === 'SAERLIGE')
 
       if (saerligKategorierOppsumert.length > 0) {
         setSaerligKategorier(true)
@@ -110,7 +112,7 @@ export const PvkBehovPage = () => {
   useEffect(() => {
     if (pvkdokument && pvkdokument.ytterligereEgenskaper.length > 0) {
       setCheckedYtterligereEgenskaper(
-        pvkdokument.ytterligereEgenskaper.map((egenskap) => egenskap.code)
+        pvkdokument.ytterligereEgenskaper.map((egenskap: ICode) => egenskap.code)
       )
     }
   }, [pvkdokument])
