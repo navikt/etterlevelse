@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Box, Heading, Label, ReadMore, Tag } from '@navikt/ds-react'
+import {Alert, BodyShort, Box, Heading, Label, ReadMore, Tag} from '@navikt/ds-react'
 import {
   EEtterlevelseStatus,
   ESuksesskriterieStatus,
@@ -6,8 +6,8 @@ import {
   ISuksesskriterie,
   ISuksesskriterieBegrunnelse,
 } from '../../constants'
-import { Markdown } from '../common/Markdown'
-import { LabelAboveContent } from '../common/PropertyLabel'
+import {Markdown} from '../common/Markdown'
+import {LabelAboveContent} from '../common/PropertyLabel'
 import {
   getLabelForSuksessKriterie,
   getSuksesskriterieBegrunnelse,
@@ -22,7 +22,7 @@ interface IProps {
 }
 
 export const EtterlevelseViewFields = (props: IProps) => {
-  const { etterlevelse, suksesskriterier, tidligereEtterlevelser, isBortfiltrert } = props
+  const {etterlevelse, suksesskriterier, tidligereEtterlevelser, isBortfiltrert} = props
 
   return (
     <div>
@@ -41,7 +41,7 @@ export const EtterlevelseViewFields = (props: IProps) => {
         <Label className="min-w-fit mt-3">Hvilke suksesskriterier er oppfylt?</Label>
         {tidligereEtterlevelser && tidligereEtterlevelser.length > 0 && (
           <div className="flex w-full justify-end">
-            <EtterlevelseCard etterlevelse={tidligereEtterlevelser[0]} />
+            <EtterlevelseCard etterlevelse={tidligereEtterlevelser[0]}/>
           </div>
         )}
       </div>
@@ -122,7 +122,7 @@ const KriterieBegrunnelse = (props: IKriterieBegrunnelseProps) => {
       borderWidth="3"
       borderRadius="medium"
     >
-      <div className="flex w-full lg:flex-row flex-col">
+      <div className="flex w-full lg:flex-row flex-col mb-2.5">
         <BodyShort className="min-w-fit">
           Suksesskriterium {index + 1} av {totalSuksesskriterie}
         </BodyShort>
@@ -143,7 +143,7 @@ const KriterieBegrunnelse = (props: IKriterieBegrunnelseProps) => {
         </Heading>
 
         <ReadMore defaultOpen header="Utfyllende om kriteriet">
-          <Markdown source={suksesskriterie.beskrivelse} />
+          <Markdown source={suksesskriterie.beskrivelse}/>
         </ReadMore>
       </div>
 
@@ -151,7 +151,7 @@ const KriterieBegrunnelse = (props: IKriterieBegrunnelseProps) => {
         <div className="my-5">
           <Alert variant="info">
             <Label>NAVs tolkning av loven og besluttede praksiser i denne konteksten:</Label>
-            <Markdown source={suksesskriterieBegrunnelse.veiledningsTekst} />
+            <Markdown source={suksesskriterieBegrunnelse.veiledningsTekst}/>
           </Alert>
         </div>
       )}
@@ -159,7 +159,7 @@ const KriterieBegrunnelse = (props: IKriterieBegrunnelseProps) => {
       {suksesskriterieBegrunnelse.veiledningsTekst2 && (
         <Alert variant="info">
           <Label>Slik kan suksesskriteriet etterleves:</Label>
-          <Markdown source={suksesskriterieBegrunnelse.veiledningsTekst2} />
+          <Markdown source={suksesskriterieBegrunnelse.veiledningsTekst2}/>
         </Alert>
       )}
 
