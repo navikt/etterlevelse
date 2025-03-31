@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.common.rest.ChangeStampResponse;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonGraphQlResponse;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingData;
@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class PvoTilbakemeldingGraphqlResponse extends PvoTilbakemeldingResponse {
     private PvkDokumentStatus pvkDokumentStatus;
     private String etterlevelseDokumentasjonId;
-    private EtterlevelseDokumentasjon etterlevelseDokumentasjonData;
+    private EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjonData;
     private LocalDateTime sistEndretAvMeg;
 
     public static PvoTilbakemeldingGraphqlResponse buildFrom(PvoTilbakemelding pvoTilbakemelding) {
