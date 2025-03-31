@@ -49,7 +49,6 @@ export const pvkDocumentSchema = () => {
       message: 'Dette er et påkrevd felt',
       test: function (tilgangsBeskrivelsePersonopplysningene) {
         const { parent } = this
-        console.debug(parent)
         if (
           parent.status !== EPvkDokumentStatus.UNDERARBEID &&
           parent.status !== EPvkDokumentStatus.AKTIV
@@ -58,16 +57,11 @@ export const pvkDocumentSchema = () => {
             tilgangsBeskrivelsePersonopplysningene === undefined ||
             tilgangsBeskrivelsePersonopplysningene === ''
           ) {
-            console.debug('test skal feile')
             return false
           } else {
-            console.debug('test skal ikke feile')
-
             return true
           }
         } else {
-          console.debug('ingen tester')
-
           return true
         }
       },
