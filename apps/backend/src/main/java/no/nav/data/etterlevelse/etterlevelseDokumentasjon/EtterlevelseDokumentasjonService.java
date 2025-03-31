@@ -59,6 +59,7 @@ public class EtterlevelseDokumentasjonService {
     private final TeamcatResourceClient teamcatResourceClient;
     private final DocumentRelationService documentRelationService;
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon get(UUID uuid) {
         if (uuid == null) {
             return null; 

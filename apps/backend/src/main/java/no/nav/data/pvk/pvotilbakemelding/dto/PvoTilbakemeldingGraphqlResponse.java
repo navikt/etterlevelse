@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.common.rest.ChangeStampResponse;
-import no.nav.data.common.utils.HibernateUtils;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
@@ -26,7 +25,6 @@ public class PvoTilbakemeldingGraphqlResponse extends PvoTilbakemeldingResponse 
     private LocalDateTime sistEndretAvMeg;
 
     public static PvoTilbakemeldingGraphqlResponse buildFrom(PvoTilbakemelding pvoTilbakemelding) {
-        HibernateUtils.initialize(pvoTilbakemelding); // Fully loads input if it is a detached proxy
         PvoTilbakemeldingData pvoTilbakemeldingData = pvoTilbakemelding.getPvoTilbakemeldingData();
         return PvoTilbakemeldingGraphqlResponse.builder()
                 .id(pvoTilbakemelding.getId())

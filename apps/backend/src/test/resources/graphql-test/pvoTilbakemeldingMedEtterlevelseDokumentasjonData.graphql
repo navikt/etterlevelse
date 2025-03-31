@@ -1,0 +1,16 @@
+query getPvoTilbakemeldingMedEtterlevelseDokData($pvoTilbakemeldingId: ID) {
+    pvoTilbakemelding(filter: { id: $pvoTilbakemeldingId }) {
+        content {
+            id
+            status
+            pvkDokumentId
+            pvkDokumentStatus
+            etterlevelseDokumentasjonId
+            etterlevelseDokumentasjonData {
+                title
+                etterlevelseNummer
+            }
+            merknadTilEtterleverEllerRisikoeier
+        }
+    }
+}
