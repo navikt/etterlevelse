@@ -1,7 +1,6 @@
 import { FilesIcon } from '@navikt/aksel-icons'
 import { Alert, BodyLong, Button, CopyButton, Heading, Label } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
-import { useState } from 'react'
 import {
   getPvkDokument,
   mapPvkDokumentToFormValue,
@@ -43,8 +42,6 @@ export const SendInnView = (props: IProps) => {
     pvoTilbakemelding,
   } = props
 
-  const [submitPvkStatus, setSubmitPvkStatus] = useState<EPvkDokumentStatus>(pvkDokument.status)
-
   const underarbeidCheck =
     pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
     pvkDokument.status === EPvkDokumentStatus.AKTIV
@@ -52,12 +49,12 @@ export const SendInnView = (props: IProps) => {
   const submit = async (pvkDokument: IPvkDokument) => {
     await getPvkDokument(pvkDokument.id).then((response) => {
       const updatedStatus =
-        submitPvkStatus !== EPvkDokumentStatus.VURDERT_AV_PVO &&
-        submitPvkStatus !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+        pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
+        pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
         (response.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
           response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
           ? response.status
-          : submitPvkStatus
+          : pvkDokument.status
 
       const updatedPvkDokument = {
         ...response,
@@ -165,16 +162,14 @@ export const SendInnView = (props: IProps) => {
                       <Button
                         type='button'
                         variant='secondary'
-                        onClick={() => {
+                        onClick={async () => {
                           if (
                             pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
                             pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
                           ) {
-                            setSubmitPvkStatus(EPvkDokumentStatus.UNDERARBEID)
-                            setFieldValue('status', EPvkDokumentStatus.UNDERARBEID)
+                            await setFieldValue('status', EPvkDokumentStatus.UNDERARBEID)
                           } else {
-                            setSubmitPvkStatus(pvkDokument.status)
-                            setFieldValue('status', pvkDokument.status)
+                            await setFieldValue('status', pvkDokument.status)
                           }
                           submitForm()
                         }}
@@ -186,9 +181,8 @@ export const SendInnView = (props: IProps) => {
                     {underarbeidCheck && (
                       <Button
                         type='button'
-                        onClick={() => {
-                          setSubmitPvkStatus(EPvkDokumentStatus.SENDT_TIL_PVO)
-                          setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO)
+                        onClick={async () => {
+                          await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO)
                           submitForm()
                         }}
                       >
@@ -199,9 +193,8 @@ export const SendInnView = (props: IProps) => {
                     {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
                       <Button
                         type='button'
-                        onClick={() => {
-                          setSubmitPvkStatus(EPvkDokumentStatus.VURDERT_AV_PVO)
-                          setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
+                        onClick={async () => {
+                          await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
                           submitForm()
                         }}
                       >
@@ -212,9 +205,8 @@ export const SendInnView = (props: IProps) => {
                     {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && (
                       <Button
                         type='button'
-                        onClick={() => {
-                          setSubmitPvkStatus(EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
-                          setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
+                        onClick={async () => {
+                          await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
                           submitForm()
                         }}
                       >
