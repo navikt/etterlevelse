@@ -77,11 +77,11 @@ export const SendInnView = (props: IProps) => {
       onSubmit={submit}
       initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
     >
-      {({ submitForm, dirty }) => (
+      {({ setFieldValue, submitForm, dirty }) => (
         <Form>
-          <div className="flex justify-center">
+          <div className='flex justify-center'>
             <div>
-              <Heading level="1" size="medium" className="mb-5">
+              <Heading level='1' size='medium' className='mb-5'>
                 Les og send inn
               </Heading>
               <BodyLong>
@@ -104,12 +104,12 @@ export const SendInnView = (props: IProps) => {
               <RisikoscenarioSummary />
 
               {underarbeidCheck && (
-                <div className="mt-5 mb-3 max-w-[75ch]">
+                <div className='mt-5 mb-3 max-w-[75ch]'>
                   <TextAreaField
                     rows={3}
                     noPlaceholder
-                    label="Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)"
-                    name="merknadTilPvoEllerRisikoeier"
+                    label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
+                    name='merknadTilPvoEllerRisikoeier'
                   />
                 </div>
               )}
@@ -118,7 +118,7 @@ export const SendInnView = (props: IProps) => {
                 (pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
                   pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) && (
                   <div>
-                    <div className="mt-5 mb-3 max-w-[75ch]">
+                    <div className='mt-5 mb-3 max-w-[75ch]'>
                       <Label>Beskjed til personvernombudet</Label>
                       <DataTextWrapper>
                         {pvkDokument.merknadTilPvoEllerRisikoeier
@@ -126,7 +126,7 @@ export const SendInnView = (props: IProps) => {
                           : 'Ingen beskjed'}
                       </DataTextWrapper>
                     </div>
-                    <div className="mt-5 mb-3 max-w-[75ch]">
+                    <div className='mt-5 mb-3 max-w-[75ch]'>
                       <Label>Beskjed til etterlever</Label>
                       <DataTextWrapper>
                         {pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
@@ -138,15 +138,15 @@ export const SendInnView = (props: IProps) => {
                 )}
 
               <CopyButton
-                variant="action"
+                variant='action'
                 copyText={window.location.href}
-                text="Kopiér lenken til denne siden"
-                activeText="Lenken er kopiert"
+                text='Kopiér lenken til denne siden'
+                activeText='Lenken er kopiert'
                 icon={<FilesIcon aria-hidden />}
               />
 
               {pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO && (
-                <Alert variant="success" className="my-5">
+                <Alert variant='success' className='my-5'>
                   Sendt til Personvernombudet
                 </Alert>
               )}
@@ -158,19 +158,21 @@ export const SendInnView = (props: IProps) => {
                 setSelectedStep={setSelectedStep}
                 submitForm={submitForm}
                 customButtons={
-                  <div className="mt-5 flex gap-2 items-center">
+                  <div className='mt-5 flex gap-2 items-center'>
                     {dirty && (
                       <Button
-                        type="button"
-                        variant="secondary"
+                        type='button'
+                        variant='secondary'
                         onClick={() => {
                           if (
                             pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
                             pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
                           ) {
                             setSubmitPvkStatus(EPvkDokumentStatus.UNDERARBEID)
+                            setFieldValue('status', EPvkDokumentStatus.UNDERARBEID)
                           } else {
                             setSubmitPvkStatus(pvkDokument.status)
+                            setFieldValue('status', pvkDokument.status)
                           }
                           submitForm()
                         }}
@@ -181,9 +183,10 @@ export const SendInnView = (props: IProps) => {
 
                     {underarbeidCheck && (
                       <Button
-                        type="button"
+                        type='button'
                         onClick={() => {
                           setSubmitPvkStatus(EPvkDokumentStatus.SENDT_TIL_PVO)
+                          setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO)
                           submitForm()
                         }}
                       >
@@ -193,9 +196,10 @@ export const SendInnView = (props: IProps) => {
 
                     {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
                       <Button
-                        type="button"
+                        type='button'
                         onClick={() => {
                           setSubmitPvkStatus(EPvkDokumentStatus.VURDERT_AV_PVO)
+                          setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
                           submitForm()
                         }}
                       >
@@ -205,9 +209,10 @@ export const SendInnView = (props: IProps) => {
 
                     {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && (
                       <Button
-                        type="button"
+                        type='button'
                         onClick={() => {
                           setSubmitPvkStatus(EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
+                          setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
                           submitForm()
                         }}
                       >
