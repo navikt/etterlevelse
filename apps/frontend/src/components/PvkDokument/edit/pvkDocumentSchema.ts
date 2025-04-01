@@ -22,6 +22,7 @@ export const pvkDocumentSchema = () => {
         }
       },
     }),
+
     personkategoriAntallBeskrivelse: yup.string().test({
       name: 'personkategoriAntallBeskrivelse',
       message: 'Dette er et påkrevd felt',
@@ -44,6 +45,7 @@ export const pvkDocumentSchema = () => {
         }
       },
     }),
+
     tilgangsBeskrivelsePersonopplysningene: yup.string().test({
       name: 'tilgangsBeskrivelsePersonopplysningene',
       message: 'Dette er et påkrevd felt',
@@ -66,6 +68,7 @@ export const pvkDocumentSchema = () => {
         }
       },
     }),
+
     lagringsBeskrivelsePersonopplysningene: yup.string().test({
       name: 'lagringsBeskrivelsePersonopplysningene',
       message: 'Dette er et påkrevd felt',
@@ -78,6 +81,95 @@ export const pvkDocumentSchema = () => {
           if (
             lagringsBeskrivelsePersonopplysningene === undefined ||
             lagringsBeskrivelsePersonopplysningene === ''
+          ) {
+            return false
+          } else {
+            return true
+          }
+        } else {
+          return true
+        }
+      },
+    }),
+
+    harInvolvertRepresentant: yup.boolean().test({
+      name: 'harInvolvertRepresentant',
+      message: 'Dette er et påkrevd felt',
+      test: function (harInvolvertRepresentant) {
+        const { parent } = this
+        if (
+          parent.status !== EPvkDokumentStatus.UNDERARBEID &&
+          parent.status !== EPvkDokumentStatus.AKTIV
+        ) {
+          if (harInvolvertRepresentant === undefined || harInvolvertRepresentant === null) {
+            return false
+          } else {
+            return true
+          }
+        } else {
+          return true
+        }
+      },
+    }),
+
+    representantInvolveringsBeskrivelse: yup.string().test({
+      name: 'representantInvolveringsBeskrivelse',
+      message: 'Dette er et påkrevd felt',
+      test: function (representantInvolveringsBeskrivelse) {
+        const { parent } = this
+        if (
+          parent.status !== EPvkDokumentStatus.UNDERARBEID &&
+          parent.status !== EPvkDokumentStatus.AKTIV
+        ) {
+          if (
+            representantInvolveringsBeskrivelse === undefined ||
+            representantInvolveringsBeskrivelse === ''
+          ) {
+            return false
+          } else {
+            return true
+          }
+        } else {
+          return true
+        }
+      },
+    }),
+
+    harDatabehandlerRepresentantInvolvering: yup.boolean().test({
+      name: 'harDatabehandlerRepresentantInvolvering',
+      message: 'Dette er et påkrevd felt',
+      test: function (harDatabehandlerRepresentantInvolvering) {
+        const { parent } = this
+        if (
+          parent.status !== EPvkDokumentStatus.UNDERARBEID &&
+          parent.status !== EPvkDokumentStatus.AKTIV
+        ) {
+          if (
+            harDatabehandlerRepresentantInvolvering === undefined ||
+            harDatabehandlerRepresentantInvolvering === null
+          ) {
+            return false
+          } else {
+            return true
+          }
+        } else {
+          return true
+        }
+      },
+    }),
+
+    dataBehandlerRepresentantInvolveringBeskrivelse: yup.string().test({
+      name: 'dataBehandlerRepresentantInvolveringBeskrivelse',
+      message: 'Dette er et påkrevd felt',
+      test: function (dataBehandlerRepresentantInvolveringBeskrivelse) {
+        const { parent } = this
+        if (
+          parent.status !== EPvkDokumentStatus.UNDERARBEID &&
+          parent.status !== EPvkDokumentStatus.AKTIV
+        ) {
+          if (
+            dataBehandlerRepresentantInvolveringBeskrivelse === undefined ||
+            dataBehandlerRepresentantInvolveringBeskrivelse === ''
           ) {
             return false
           } else {
