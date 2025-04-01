@@ -23,13 +23,13 @@ export const RedigerRisikoscenarioButtons: FunctionComponent<TProps> = ({
   risikoscenarioForKrav,
   setRisikoscenarioForKrav,
 }) => (
-  <div className="mt-5">
+  <div className='mt-5'>
     <Button
-      variant="tertiary"
-      type="button"
+      variant='tertiary'
+      type='button'
       icon={<PencilIcon aria-hidden />}
       onClick={() => setIsEditModalOpen(true)}
-      className="mb-2"
+      className='mb-2'
     >
       Redigèr risikoscenario
     </Button>

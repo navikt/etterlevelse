@@ -36,7 +36,7 @@ export const AccordionList = (props: IProps) => {
               className={`flex flex-col gap-2 ${kravForTema.length > 0 ? '' : 'hidden'}`}
             >
               <Accordion.Header>
-                <div className="flex gap-4">
+                <div className='flex gap-4'>
                   <span>
                     {tema.shortName} ({utfylteKrav.length} av {kravForTema.length} krav er ferdig
                     utfylt)
@@ -45,14 +45,14 @@ export const AccordionList = (props: IProps) => {
               </Accordion.Header>
               <Accordion.Content>
                 <CheckboxGroup
-                  legend="Velg krav du ønsker å prioritere"
+                  legend='Velg krav du ønsker å prioritere'
                   value={focusList}
                   onChange={(values) => {
                     setFocusList(values)
                     fieldArrayRenderProps.form.setFieldValue('prioritertKravNummer', values)
                   }}
                 >
-                  <div className="mt-4">
+                  <div className='mt-4'>
                     {kravForTema.map((krav, index) => (
                       <CheckList krav={krav} key={`krav_${index}`} />
                     ))}

@@ -58,11 +58,11 @@ const KriterieList = ({
   const suksesskriterier = fieldArrayRenderProps.form.values.suksesskriterier as ISuksesskriterie[]
 
   const AddSuksessKriterieButton = () => (
-    <div className="my-4 ml-2.5 self-end">
+    <div className='my-4 ml-2.5 self-end'>
       <Button
-        type="button"
-        icon={<PlusIcon aria-label="" aria-hidden />}
-        variant="secondary"
+        type='button'
+        icon={<PlusIcon aria-label='' aria-hidden />}
+        variant='secondary'
         disabled={suksesskriterier.length >= 15}
         onClick={() =>
           fieldArrayRenderProps.push({
@@ -79,7 +79,7 @@ const KriterieList = ({
   )
 
   return (
-    <div className="flex flex-col">
+    <div className='flex flex-col'>
       {suksesskriterier.map((suksesskriterium, index) => (
         <Kriterie
           key={suksesskriterium.id}
@@ -159,24 +159,24 @@ const Kriterie = ({
   }, [navn, beskrivelse, behovForBegrunnelse])
 
   return (
-    <Box padding="4" className="mb-4" background="surface-subtle" borderColor="border-on-inverted">
-      <div className="relative pt-1">
-        <div className="flex items-center absolute right-0 top-0">
+    <Box padding='4' className='mb-4' background='surface-subtle' borderColor='border-on-inverted'>
+      <div className='relative pt-1'>
+        <div className='flex items-center absolute right-0 top-0'>
           {(fieldArrayRenderProps.form.initialValues.status !== EKravStatus.AKTIV ||
             newVersion) && (
-            <Tooltip content="Fjern suksesskriterium">
+            <Tooltip content='Fjern suksesskriterium'>
               <Button
-                variant="secondary"
+                variant='secondary'
                 type={'button'}
                 icon={
-                  <TrashIcon title="Fjern suksesskriterium" arial-label="Fjern suksesskriterium" />
+                  <TrashIcon title='Fjern suksesskriterium' arial-label='Fjern suksesskriterium' />
                 }
                 onClick={remove}
               />
             </Tooltip>
           )}
           <RearrangeButtons
-            label="suksesskriterium"
+            label='suksesskriterium'
             index={index}
             arrayLength={arrayLength}
             updateIndex={updateIndex}
@@ -184,10 +184,10 @@ const Kriterie = ({
           />
         </div>
 
-        <div className="mb-5">
+        <div className='mb-5'>
           <LabelWithTooltip
             label={`Suksesskriterium ${nummer}`}
-            tooltip="Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers."
+            tooltip='Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'
           />
 
           <TextField
@@ -195,22 +195,22 @@ const Kriterie = ({
             hideLabel
             value={navnInput}
             onChange={(e) => setNavn((e.target as HTMLInputElement).value)}
-            placeholder="Navn"
+            placeholder='Navn'
             error={
               fieldArrayRenderProps.form.errors &&
               fieldArrayRenderProps.form.errors['suksesskriterier'] && (
-                <FormError fieldName="suksesskriterier" />
+                <FormError fieldName='suksesskriterier' />
               )
             }
           />
         </div>
 
         <div>
-          <div className="flex w-full items-center justify-between mb-1">
+          <div className='flex w-full items-center justify-between mb-1'>
             <div>
               <LabelWithTooltip
-                label="Beskrivelse av suksesskriteriet"
-                tooltip="Nærmere detaljer rundt oppnåelse av suksesskriteriet."
+                label='Beskrivelse av suksesskriteriet'
+                tooltip='Nærmere detaljer rundt oppnåelse av suksesskriteriet.'
                 noMarginBottom
               />
             </div>
@@ -220,27 +220,27 @@ const Kriterie = ({
             <TextEditor
               initialValue={beskrivelse}
               setValue={setBeskrivelse}
-              height="15.625rem"
+              height='15.625rem'
               setIsFormDirty={setIsFormDirty}
             />
           )}
 
           {mode === 'view' && (
-            <div className="p-8 border-border-subtle-hover border border-solid rounded-md bg-white">
+            <div className='p-8 border-border-subtle-hover border border-solid rounded-md bg-white'>
               <Markdown source={beskrivelse} />
             </div>
           )}
         </div>
-        <div className="flex justify-end mt-[-1px]">
-          <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
-            <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
-            <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+        <div className='flex justify-end mt-[-1px]'>
+          <ToggleGroup defaultValue='edit' onChange={setMode} size='small'>
+            <ToggleGroup.Item value='edit'>Redigering</ToggleGroup.Item>
+            <ToggleGroup.Item value='view'>Forhåndsvisning</ToggleGroup.Item>
           </ToggleGroup>
         </div>
 
-        <div className="flex flex-1 mt-1">
+        <div className='flex flex-1 mt-1'>
           <RadioGroup
-            legend="Velg type besvarelse:"
+            legend='Velg type besvarelse:'
             value={behovForBegrunnelse}
             onChange={(value) => {
               fieldArrayRenderProps.form.setFieldValue(
@@ -250,8 +250,8 @@ const Kriterie = ({
               setBehovForBegrunnelse(value)
             }}
           >
-            <Radio value="true">Bekreftelse med tekstlig begrunnelse</Radio>
-            <Radio value="false">Kun bekreftelse </Radio>
+            <Radio value='true'>Bekreftelse med tekstlig begrunnelse</Radio>
+            <Radio value='false'>Kun bekreftelse </Radio>
           </RadioGroup>
         </div>
       </div>

@@ -59,9 +59,9 @@ export const ObjectLink = (props: TObjectLinkProps) => {
     )
 
   return props.withHistory ? (
-    <div className="flex justify-between w-full items-center">
+    <div className='flex justify-between w-full items-center'>
       {link}
-      <AuditButton fontColor={props.fontColor} id={props.id} variant="tertiary" />
+      <AuditButton fontColor={props.fontColor} id={props.id} variant='tertiary' />
     </div>
   ) : (
     link
@@ -88,7 +88,7 @@ export const ExternalLink = ({
       className={className}
       href={href}
       target={openOnSamePage ? '_self' : '_blank'}
-      rel="noopener noreferrer"
+      rel='noopener noreferrer'
       aria-label={label}
     >
       {children} {!openOnSamePage && !noNewTabLabel && ' (åpner i en ny fane)'}

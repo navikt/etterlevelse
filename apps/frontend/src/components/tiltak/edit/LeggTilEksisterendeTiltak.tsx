@@ -38,7 +38,7 @@ export const LeggTilEksisterendeTiltak = (props: IProps) => {
   }
 
   return (
-    <div className="mt-5">
+    <div className='mt-5'>
       <Formik
         onSubmit={customSubmit ? customSubmit : submit}
         initialValues={
@@ -51,14 +51,14 @@ export const LeggTilEksisterendeTiltak = (props: IProps) => {
             <Field>
               {(fieldProps: FieldProps) => (
                 <Select
-                  label="Legg til eksisterende risikoscenario"
+                  label='Legg til eksisterende risikoscenario'
                   onChange={(event) => {
                     if (event.target.value) {
                       addTiltak(event.target.value, fieldProps)
                     }
                   }}
                 >
-                  <option value=""></option>
+                  <option value=''></option>
                   {tiltakList
                     .filter((tiltak) => !risikoscenario.tiltakIds.includes(tiltak.id))
                     .map((risikoscenario) => {
@@ -74,7 +74,7 @@ export const LeggTilEksisterendeTiltak = (props: IProps) => {
 
             <Field>
               {(fieldProps: FieldProps) => (
-                <VStack gap="10" className="mt-3">
+                <VStack gap='10' className='mt-3'>
                   <Chips>
                     {selectedTiltak.map((selectedTiltak) => {
                       const data = tiltakList.filter((tiltak) => tiltak.id === selectedTiltak)
@@ -94,13 +94,13 @@ export const LeggTilEksisterendeTiltak = (props: IProps) => {
               )}
             </Field>
 
-            <div className="flex gap-2 mt-5">
-              <Button type="button" onClick={submitForm}>
+            <div className='flex gap-2 mt-5'>
+              <Button type='button' onClick={submitForm}>
                 Lagre
               </Button>
               <Button
-                type="button"
-                variant="secondary"
+                type='button'
+                variant='secondary'
                 onClick={() => setIsAddExisitingMode(false)}
               >
                 Avbryt

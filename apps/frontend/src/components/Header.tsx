@@ -42,7 +42,7 @@ export const LoginHeaderButton = () => {
     <InternalHeader.Button
       as={Link}
       href={loginUrl(location, location.pathname)}
-      className="text-white"
+      className='text-white'
       underline={false}
     >
       Logg inn
@@ -57,7 +57,7 @@ export const LoginButton = () => {
     <Button
       as={Link}
       href={loginUrl(location, location.pathname)}
-      className="text-white"
+      className='text-white'
       underline={false}
     >
       Logg inn
@@ -72,13 +72,13 @@ const LoggedInHeader = () => {
     <div>
       <Button
         size={'xsmall'}
-        variant="tertiary"
+        variant='tertiary'
         onClick={() => setViewRoller(!viewRoller)}
         icon={
           viewRoller ? (
-            <ChevronUpIcon area-label="" aria-hidden />
+            <ChevronUpIcon area-label='' aria-hidden />
           ) : (
-            <ChevronDownIcon area-label="" aria-hidden />
+            <ChevronDownIcon area-label='' aria-hidden />
           )
         }
       >
@@ -88,7 +88,7 @@ const LoggedInHeader = () => {
         {user.getAvailableGroups().map((availableGroup) => {
           return (
             <Switch
-              size="small"
+              size='small'
               key={availableGroup.group}
               checked={user.hasGroup(availableGroup.group)}
               onChange={(event) =>
@@ -133,7 +133,7 @@ const LoggedInHeader = () => {
     : []
 
   return (
-    <div className="flex items-center justify-center">
+    <div className='flex items-center justify-center'>
       <Menu
         pages={[
           [{ label: <UserInfoView /> }],
@@ -143,41 +143,41 @@ const LoggedInHeader = () => {
           [{ label: roller }],
         ]}
         title={user.getIdent()}
-        icon={<PersonIcon area-label="" aria-hidden />}
+        icon={<PersonIcon area-label='' aria-hidden />}
       />
 
-      <div className="w-3" />
+      <div className='w-3' />
 
       <Menu
-        icon={<MenuHamburgerIcon area-label="" aria-hidden />}
+        icon={<MenuHamburgerIcon area-label='' aria-hidden />}
         pages={[
-          [{ label: 'Forsiden', href: '/', icon: <HouseIcon area-label="" aria-hidden /> }],
+          [{ label: 'Forsiden', href: '/', icon: <HouseIcon area-label='' aria-hidden /> }],
           [
             {
               label: 'Dokumentere etterlevelse',
               href: '/dokumentasjoner',
-              icon: <DocPencilIcon area-label="" aria-hidden />,
+              icon: <DocPencilIcon area-label='' aria-hidden />,
             },
           ],
           [
             {
               label: 'Status i organisasjonen',
               href: '//metabase.ansatt.nav.no/dashboard/116-dashboard-for-etterlevelse',
-              icon: <BarChartIcon area-label="" aria-hidden />,
+              icon: <BarChartIcon area-label='' aria-hidden />,
             },
           ],
           [
             {
               label: 'Forstå kravene',
               href: '/tema',
-              icon: <ReceiptIcon area-label="" aria-hidden />,
+              icon: <ReceiptIcon area-label='' aria-hidden />,
             },
           ],
           [
             {
               label: 'Mer om etterlevelse i NAV',
               href: '/omstottetiletterlevelse',
-              icon: <InformationIcon area-label="" aria-hidden />,
+              icon: <InformationIcon area-label='' aria-hidden />,
             },
           ],
         ]}
@@ -200,11 +200,11 @@ const UserInfoView = () => {
   // const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
   // const path = location.pathname
   return (
-    <div className="flex mb-4">
+    <div className='flex mb-4'>
       <Portrait ident={user.getIdent()} size={'3rem'} />
-      <div className="flex flex-col ml-6">
+      <div className='flex flex-col ml-6'>
         <Label>{user.getName()}</Label>
-        <Label size="small">{getUserRole()}</Label>
+        <Label size='small'>{getUserRole()}</Label>
       </div>
       {/* <div className="flex self-end ml-6">
         <Link href={`/logout?redirect_uri=${frontpage}${path}`}>Logg ut</Link>
@@ -243,7 +243,7 @@ const Menu = (props: {
       <InternalHeader.Button as={Dropdown.Toggle}>
         {props.icon} {props.title}
       </InternalHeader.Button>
-      <Dropdown.Menu className="min-w-max h-auto">
+      <Dropdown.Menu className='min-w-max h-auto'>
         <Dropdown.Menu.List>
           {allPages.map((page, index) => {
             const item =
@@ -261,8 +261,8 @@ const Menu = (props: {
                   }}
                   underline={false}
                 >
-                  <div className="flex items-center">
-                    {page.icon && <div className="mr-2">{page.icon}</div>}
+                  <div className='flex items-center'>
+                    {page.icon && <div className='mr-2'>{page.icon}</div>}
                     {page.label}
                   </div>
                 </Dropdown.Menu.List.Item>
@@ -270,7 +270,7 @@ const Menu = (props: {
                 <Dropdown.Menu.GroupedList.Heading>{page.label}</Dropdown.Menu.GroupedList.Heading>
               )
             return (
-              <div key={index} className="my-1">
+              <div key={index} className='my-1'>
                 {item}
               </div>
             )
@@ -311,24 +311,24 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }, [location.pathname])
 
   return (
-    <div className="w-full">
-      <div className="w-full flex justify-center">
+    <div className='w-full'>
+      <div className='w-full flex justify-center'>
         <SkipToContent />
-        <InternalHeader className="w-full justify-center items-center">
-          <div className="max-w-7xl flex w-full">
-            <InternalHeader.Title href="/">Støtte til etterlevelse</InternalHeader.Title>
+        <InternalHeader className='w-full justify-center items-center'>
+          <div className='max-w-7xl flex w-full'>
+            <InternalHeader.Title href='/'>Støtte til etterlevelse</InternalHeader.Title>
             <Spacer />
             {!props.noSearchBar && (
               <div
-                className="hidden lg:flex w-full max-w-xl justify-center items-center"
-                role="search"
+                className='hidden lg:flex w-full max-w-xl justify-center items-center'
+                role='search'
               >
                 <MainSearch />
               </div>
             )}
             <Spacer />
             {!props.noLoginButton && (
-              <div className="flex">
+              <div className='flex'>
                 {!user.isLoggedIn() && <LoginHeaderButton />}
                 {user.isLoggedIn() && <LoggedInHeader />}
               </div>
@@ -337,15 +337,15 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
         </InternalHeader>
       </div>
       <div
-        className="flex lg:hidden bg-gray-900 py-1 px-1 w-full justify-center items-center"
-        role="search"
+        className='flex lg:hidden bg-gray-900 py-1 px-1 w-full justify-center items-center'
+        role='search'
       >
-        <div className=" max-w-xl w-full ">
+        <div className=' max-w-xl w-full '>
           <MainSearch />
         </div>
       </div>
       {systemVarsel && systemVarsel.meldingStatus === EMeldingStatus.ACTIVE && (
-        <div className="w-full flex justify-center">
+        <div className='w-full flex justify-center'>
           <div
             className={`flex
           flex-col
@@ -359,15 +359,15 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
               ? 'bg-[#d8f9ff] border-[#66cbec]'
               : 'bg-[#ffeccc] border-[#ff9100]'
           }`}
-            aria-label="Systemvarsel"
-            role="status"
+            aria-label='Systemvarsel'
+            role='status'
           >
-            <div className="flex gap-2">
-              <div className="flex items-baseline pt-1">
+            <div className='flex gap-2'>
+              <div className='flex items-baseline pt-1'>
                 <img
                   src={systemVarsel.alertType === EAlertType.INFO ? informationIcon : warningAlert}
-                  width="18px"
-                  height="18px"
+                  width='18px'
+                  height='18px'
                   alt={
                     systemVarsel.alertType === EAlertType.INFO ? 'information icon' : 'warning icon'
                   }

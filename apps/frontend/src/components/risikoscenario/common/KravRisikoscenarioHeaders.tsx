@@ -1,7 +1,7 @@
 import { Heading } from '@navikt/ds-react'
 
 export const RisikoscenarioTiltakHeader = () => (
-  <Heading level="3" size="small">
+  <Heading level='3' size='small'>
     Følgende tiltak gjelder for dette risikoscenarioet
   </Heading>
 )
@@ -19,7 +19,7 @@ interface IPropsHeaderLayout {
 }
 
 const HeaderLayout = ({ children }: IPropsHeaderLayout) => (
-  <Heading level="3" size="small" className="my-5">
+  <Heading level='3' size='small' className='my-5'>
     {children}
   </Heading>
 )

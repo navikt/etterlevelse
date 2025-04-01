@@ -38,26 +38,26 @@ export const KravFormFields = (props: IProps) => {
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   return (
     <>
-      <div className="mt-5 mb-10">
-        <InputField marginBottom label="Krav navn" name="navn" />
-        <div className="mb-10">
+      <div className='mt-5 mb-10'>
+        <InputField marginBottom label='Krav navn' name='navn' />
+        <div className='mb-10'>
           <CheckboxGroup
-            legend="Send varselmelding"
+            legend='Send varselmelding'
             value={varselMeldingActive}
             onChange={(value) => {
               setVarselMeldingActive(value)
             }}
           >
-            <Checkbox value="VarselMelding">
+            <Checkbox value='VarselMelding'>
               Gi kravet en varselmelding (eks. for kommende krav)
             </Checkbox>
           </CheckboxGroup>
 
           {varselMeldingActive.length > 0 && (
-            <div className="w-full ml-8 mt-6">
+            <div className='w-full ml-8 mt-6'>
               <TextAreaField
-                label="Forklaring til etterlevere"
-                name="varselMelding"
+                label='Forklaring til etterlevere'
+                name='varselMelding'
                 maxCharacter={100}
                 rows={2}
                 noPlaceholder
@@ -66,22 +66,22 @@ export const KravFormFields = (props: IProps) => {
           )}
         </div>
         {isEditingUtgaattKrav && (
-          <div className="mb-10">
+          <div className='mb-10'>
             <TextAreaField
-              label="Beskriv hvorfor kravet er utgått"
-              name="beskrivelse"
-              height="15.625rem"
+              label='Beskriv hvorfor kravet er utgått'
+              name='beskrivelse'
+              height='15.625rem'
               markdown
             />
           </div>
         )}
-        <TextAreaField label="Hensikt" name="hensikt" height="15.625rem" markdown />
+        <TextAreaField label='Hensikt' name='hensikt' height='15.625rem' markdown />
       </div>
 
-      <div className="flex w-full justify-center">
-        <div className="w-full mb-2.5">
-          <div className="mb-10" id="suksesskriterier">
-            <Heading level="2" size="medium" className="mb-2">
+      <div className='flex w-full justify-center'>
+        <div className='w-full mb-2.5'>
+          <div className='mb-10' id='suksesskriterier'>
+            <Heading level='2' size='medium' className='mb-2'>
               Suksesskriterier
             </Heading>
             <KravSuksesskriterierEdit />
@@ -92,64 +92,64 @@ export const KravFormFields = (props: IProps) => {
           <RegelverkEdit />
 
           {kravVersjon > 1 && mode === 'edit' && (
-            <div className="w-full" id="versjonEndringer">
+            <div className='w-full' id='versjonEndringer'>
               <TextAreaField
-                label="Endringer siden siste versjon"
-                name="versjonEndringer"
-                height="15.625rem"
+                label='Endringer siden siste versjon'
+                name='versjonEndringer'
+                height='15.625rem'
                 markdown
               />
             </div>
           )}
 
-          <div className="mt-20">
-            <Heading level="2" size="medium">
+          <div className='mt-20'>
+            <Heading level='2' size='medium'>
               Gruppering
             </Heading>
           </div>
 
-          <div className="w-full max-w-md">
+          <div className='w-full max-w-md'>
             <EditKravMultiOptionField
               marginBottom
-              name="relevansFor"
-              label="Legg til relevante kategorier"
+              name='relevansFor'
+              label='Legg til relevante kategorier'
               listName={EListName.RELEVANS}
-              tooltip="Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n"
+              tooltip='Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'
             />
           </div>
 
-          <div className="w-full mb-20 max-w-md">
+          <div className='w-full mb-20 max-w-md'>
             <EditBegreper />
           </div>
 
-          <div className="w-full mb-20 max-w-md">
+          <div className='w-full mb-20 max-w-md'>
             <EditKravRelasjoner />
           </div>
 
           {user.isAdmin() && (
-            <div className="w-full mb-20 max-w-md">
+            <div className='w-full mb-20 max-w-md'>
               <EditKravTags />
             </div>
           )}
 
-          <div className="mb-8">
-            <Heading level="2" size="medium">
+          <div className='mb-8'>
+            <Heading level='2' size='medium'>
               Egenskaper
             </Heading>
           </div>
 
-          <div id="varslingsadresserQl">
-            <VarslingsadresserEdit fieldName="varslingsadresserQl" />
+          <div id='varslingsadresserQl'>
+            <VarslingsadresserEdit fieldName='varslingsadresserQl' />
           </div>
 
-          <FormError fieldName="varslingsadresserQl" akselStyling />
+          <FormError fieldName='varslingsadresserQl' akselStyling />
 
-          <div className="w-full">
+          <div className='w-full'>
             {Object.values(errors).some(Boolean) && (
               <ErrorSummary
                 ref={errorSummaryRef}
-                heading="Du må rette disse feilene før du kan fortsette"
-                className="mt-5"
+                heading='Du må rette disse feilene før du kan fortsette'
+                className='mt-5'
               >
                 {Object.entries(errors)
                   .filter(([, error]) => error)

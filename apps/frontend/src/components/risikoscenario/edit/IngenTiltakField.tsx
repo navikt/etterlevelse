@@ -25,10 +25,10 @@ export const IngenTiltakField: FunctionComponent<TProps> = ({
     >
       {({ submitForm, values, resetForm, dirty, initialValues }) => (
         <Form>
-          <Field name="ingenTiltak">
+          <Field name='ingenTiltak'>
             {(fieldProps: FieldProps) => (
               <CheckboxGroup
-                legend=""
+                legend=''
                 hideLegend
                 value={fieldProps.field.value ? ['ingenTiltak'] : []}
                 onChange={(value) => {
@@ -41,14 +41,14 @@ export const IngenTiltakField: FunctionComponent<TProps> = ({
                   }
                 }}
               >
-                <Checkbox value="ingenTiltak">Vi skal ikke ha tiltak</Checkbox>
+                <Checkbox value='ingenTiltak'>Vi skal ikke ha tiltak</Checkbox>
               </CheckboxGroup>
             )}
           </Field>
 
           {dirty && (
             <Button
-              type="button"
+              type='button'
               onClick={() => {
                 submitForm()
                 resetForm({ values })

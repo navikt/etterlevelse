@@ -14,7 +14,7 @@ export const DeleteItem = (props: {
   return (
     <>
       <Button
-        variant="danger"
+        variant='danger'
         onClick={() => setOpen(true)}
         size={props.buttonSize ? props.buttonSize : undefined}
       >

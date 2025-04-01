@@ -16,11 +16,11 @@ export const MineEtterlevelseDokumentasjoner = ({
   teams: TCustomTeamObject[]
   loading: boolean
 }) => (
-  <div className="my-5">
+  <div className='my-5'>
     {loading && (
       <div>
         <EtterlevelseDokumentasjonsPanels etterlevelseDokumentasjoner={[]} loading />
-        <div className="h-16" />
+        <div className='h-16' />
         <EtterlevelseDokumentasjonsPanels etterlevelseDokumentasjoner={[]} loading />
       </div>
     )}
@@ -42,14 +42,14 @@ export const MineEtterlevelseDokumentasjoner = ({
                 )
             )
           return (
-            <div key={team.id} className="mb-8">
-              <div className="flex justify-between">
+            <div key={team.id} className='mb-8'>
+              <div className='flex justify-between'>
                 <div>
-                  <Heading size="small" level="2">
+                  <Heading size='small' level='2'>
                     {team.name}
                   </Heading>
                   {etterlevelseDokumentasjoner.length > 0 && (
-                    <BodyShort className="mb-2">
+                    <BodyShort className='mb-2'>
                       Teamet skal etterleve krav i{' '}
                       <span style={{ fontWeight: 700 }}>
                         {teamDokumentasjoner.length} dokumentasjoner
@@ -68,7 +68,7 @@ export const MineEtterlevelseDokumentasjoner = ({
           )
         })}
 
-        <div className="max-w-[50rem] mt-48">
+        <div className='max-w-[50rem] mt-48'>
           <InfoBlock2
             icon={bamseIcon}
             alt={'Bamseikon'}
@@ -78,7 +78,7 @@ export const MineEtterlevelseDokumentasjoner = ({
             }
             backgroundColor={ettlevColors.grey25}
           >
-            <div className="mt-4">
+            <div className='mt-4'>
               <Link href={`${env.teamKatBaseUrl}`}>Teamkatalogen (åpner i en ny fane)</Link>
             </div>
           </InfoBlock2>

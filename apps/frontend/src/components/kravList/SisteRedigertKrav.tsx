@@ -46,7 +46,7 @@ export const SistRedigertKrav = () => {
   return (
     <div>
       {loading && data && data.krav?.numberOfElements === 0 && (
-        <Loader size={'large'} className="flex justify-self-center" />
+        <Loader size={'large'} className='flex justify-self-center' />
       )}
 
       {error && <Alert variant={'error'}>{JSON.stringify(error, null, 2)}</Alert>}
@@ -55,7 +55,7 @@ export const SistRedigertKrav = () => {
         <div>
           <div className={'justify-center content-center w-full my-5'}>
             <div className={'flex justify-start w-full'}>
-              <Label className="my-0">
+              <Label className='my-0'>
                 {sortedKravList.length ? sortedKravList.length : 0} Krav
               </Label>
             </div>

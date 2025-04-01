@@ -28,14 +28,14 @@ const CodeView = ({ audit }: { audit: IAuditItem }) => {
 
   return (
     <div>
-      <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant="tertiary">
+      <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant='tertiary'>
         Vis data
       </Button>
       <Modal
         key={audit.id}
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        className="max-h-[75%] overflow-y-scroll"
+        className='max-h-[75%] overflow-y-scroll'
         header={{ heading: 'Data visning' }}
       >
         <Modal.Body>
@@ -93,15 +93,15 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
 
   return (
     <div>
-      <div className="flex justify-between my-4">
-        <Heading size="small" level="2">
+      <div className='flex justify-between my-4'>
+        <Heading size='small' level='2'>
           {intl.lastChanges}
         </Heading>
         {!props.tableType && (
-          <div className="w-72 flex justify-between items-center">
-            <Label className="mr-2">{intl.table}:</Label>
+          <div className='w-72 flex justify-between items-center'>
+            <Label className='mr-2'>{intl.table}:</Label>
             <Select
-              label="Velg type for versjonering"
+              label='Velg type for versjonering'
               hideLabel
               onChange={(e) => {
                 if (e.target.value === 'Codelist') {
@@ -111,7 +111,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
                 }
               }}
             >
-              <option value="">Velg type for versjonering</option>
+              <option value=''>Velg type for versjonering</option>
               {tableOptions.map((tableOption, index) => (
                 <option key={index + '_' + tableOption.label} value={tableOption.value}>
                   {tableOption.label}
@@ -122,11 +122,11 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
         )}
       </div>
 
-      <Table size="large" zebraStripes>
+      <Table size='large' zebraStripes>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader className="w-[13%]">{intl.time}</Table.ColumnHeader>
-            <Table.ColumnHeader className="w-[17%]">{intl.action}</Table.ColumnHeader>
+            <Table.ColumnHeader className='w-[13%]'>{intl.time}</Table.ColumnHeader>
+            <Table.ColumnHeader className='w-[17%]'>{intl.action}</Table.ColumnHeader>
             <Table.ColumnHeader>{intl.id}</Table.ColumnHeader>
             <Table.ColumnHeader>{intl.user}</Table.ColumnHeader>
             <Table.ColumnHeader>Endring</Table.ColumnHeader>
@@ -138,23 +138,23 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
             const rowNum = audits.pageNumber * audits.pageSize + index + 1
             return (
               <Table.Row key={audit.id}>
-                <Table.HeaderCell className="w-[13%] text-end" scope="row">
-                  <div className="flex">
-                    <div className="mr-2">{rowNum}</div>
-                    <AuditButton variant="tertiary" id={audit.tableId} auditId={audit.id}>
-                      <Tooltip content={audit.time} placement="top">
+                <Table.HeaderCell className='w-[13%] text-end' scope='row'>
+                  <div className='flex'>
+                    <div className='mr-2'>{rowNum}</div>
+                    <AuditButton variant='tertiary' id={audit.tableId} auditId={audit.id}>
+                      <Tooltip content={audit.time} placement='top'>
                         <div>{moment(audit.time).fromNow()}</div>
                       </Tooltip>
                     </AuditButton>
                   </div>
                 </Table.HeaderCell>
-                <Table.DataCell className="w-[17%]">
-                  <div className="flex">
+                <Table.DataCell className='w-[17%]'>
+                  <div className='flex'>
                     <AuditActionIcon action={audit.action} /> {audit.table}
                   </div>
                 </Table.DataCell>
                 <Table.DataCell>
-                  <Tooltip content={audit.tableId} placement="top">
+                  <Tooltip content={audit.tableId} placement='top'>
                     <div>{_.truncate(audit.tableId, { length })}</div>
                   </Tooltip>
                 </Table.DataCell>
@@ -167,20 +167,20 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
           })}
         </Table.Body>
       </Table>
-      <div className="flex w-full justify-center items-center mt-3">
+      <div className='flex w-full justify-center items-center mt-3'>
         <Select
-          label="Antall rader:"
+          label='Antall rader:'
           value={limit}
           onChange={(e) => {
             setLimit(parseInt(e.target.value))
           }}
-          size="small"
+          size='small'
         >
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
+          <option value='5'>5</option>
+          <option value='10'>10</option>
+          <option value='20'>20</option>
+          <option value='50'>50</option>
+          <option value='100'>100</option>
         </Select>
         <Spacer />
         <div>
@@ -189,7 +189,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
             onPageChange={(page) => handlePageChange(page)}
             count={audits.pages}
             prevNextTexts
-            size="small"
+            size='small'
           />
         </div>
         <Spacer />

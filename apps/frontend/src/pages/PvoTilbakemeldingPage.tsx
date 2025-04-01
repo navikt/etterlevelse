@@ -150,26 +150,26 @@ export const PvoTilbakemeldingPage = () => {
   //   !isEtterlevelseDokumentaasjonLoading && !isPvkDokumentLoading && !isPvoTilbakemeldingLoading
 
   return (
-    <div id="content" role="main" className="flex flex-col w-full bg-white">
+    <div id='content' role='main' className='flex flex-col w-full bg-white'>
       <Helmet>
-        <meta charSet="utf-8" />
+        <meta charSet='utf-8' />
         <title>Pvk Dokument</title>
       </Helmet>
       {!etterlevelseDokumentasjon && (
-        <div className="flex w-full justify-center">
-          <Loader size="large" />
+        <div className='flex w-full justify-center'>
+          <Loader size='large' />
         </div>
       )}
 
       {etterlevelseDokumentasjon && !user.isAdmin() && !user.isPersonvernombud() && (
-        <div className="flex w-full justify-center mt-5">
-          <div className="flex items-center flex-col gap-5">
-            <Alert variant="warning">Du har ikke tilgang til å redigere på PVK dokument.</Alert>
+        <div className='flex w-full justify-center mt-5'>
+          <div className='flex items-center flex-col gap-5'>
+            <Alert variant='warning'>Du har ikke tilgang til å redigere på PVK dokument.</Alert>
 
             <img
-              src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXMyNngxa2djMXdhOXdhcXQwNG9hbWJ3czZ4MW42bDY3ZXVkNHd3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zaCojXv2S01zy/giphy.webp"
-              alt="no no no"
-              width="400px"
+              src='https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXMyNngxa2djMXdhOXdhcXQwNG9hbWJ3czZ4MW42bDY3ZXVkNHd3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zaCojXv2S01zy/giphy.webp'
+              alt='no no no'
+              width='400px'
             />
           </div>
         </div>
@@ -183,24 +183,24 @@ export const PvoTilbakemeldingPage = () => {
         etterlevelseDokumentasjon &&
           pvkDokument &&
           (user.isPersonvernombud() || user.isAdmin()) && (
-            <div className="w-full">
-              <div className="min-h-48 bg-[#8269A21F] flex flex-col w-full items-center">
-                <div className="w-full max-w-7xl">
-                  <div className="px-2 pb-6">
+            <div className='w-full'>
+              <div className='min-h-48 bg-[#8269A21F] flex flex-col w-full items-center'>
+                <div className='w-full max-w-7xl'>
+                  <div className='px-2 pb-6'>
                     <CustomizedBreadcrumbs currentPage={currentPage} paths={breadcrumbPaths} />
                     <div>
                       <Stepper
-                        aria-labelledby="stepper-heading"
+                        aria-labelledby='stepper-heading'
                         activeStep={activeStep}
                         onStepChange={(step) => {
                           setSelectedStep(step)
                           updateTitleUrlAndStep(step)
                         }}
-                        orientation="horizontal"
+                        orientation='horizontal'
                       >
                         {StepTitle.map((title) => {
                           return (
-                            <Stepper.Step key={title} as="button">
+                            <Stepper.Step key={title} as='button'>
                               {title}
                             </Stepper.Step>
                           )
@@ -211,9 +211,9 @@ export const PvoTilbakemeldingPage = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col w-full items-center mt-5">
-                <div className="w-full max-w-7xl">
-                  <div className="px-2 pb-6">
+              <div className='flex flex-col w-full items-center mt-5'>
+                <div className='w-full max-w-7xl'>
+                  <div className='px-2 pb-6'>
                     {activeStep === 1 && (
                       <OversiktPvoView
                         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -307,7 +307,7 @@ export const PvoTilbakemeldingPage = () => {
                 </Modal.Body>
                 <Modal.Footer>
                   <Button
-                    type="button"
+                    type='button'
                     onClick={() => {
                       formRef.current?.submitForm()
                       setActiveStep(selectedStep)
@@ -319,8 +319,8 @@ export const PvoTilbakemeldingPage = () => {
                     Lagre og fortsette
                   </Button>
                   <Button
-                    type="button"
-                    variant="secondary"
+                    type='button'
+                    variant='secondary'
                     onClick={() => {
                       setActiveStep(selectedStep)
                       updateUrlOnStepChange(selectedStep)
@@ -331,8 +331,8 @@ export const PvoTilbakemeldingPage = () => {
                     Fortsett uten å lagre
                   </Button>
                   <Button
-                    type="button"
-                    variant="tertiary"
+                    type='button'
+                    variant='tertiary'
                     onClick={() => {
                       setIsUnsaved(false)
                     }}

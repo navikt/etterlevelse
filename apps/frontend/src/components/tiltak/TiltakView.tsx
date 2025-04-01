@@ -16,36 +16,36 @@ export const TiltakView = (props: IProps) => {
   return (
     <div>
       <ReadOnlyField
-        label="Tiltaksbeskrivelse:"
+        label='Tiltaksbeskrivelse:'
         description={tiltak.beskrivelse}
-        className="my-3 flex gap-2"
+        className='my-3 flex gap-2'
       />
 
       <ReadOnlyFieldBool
-        label="Tiltaksansvarlig:"
+        label='Tiltaksansvarlig:'
         description={tiltak.ansvarlig.fullName}
-        className="flex gap-2"
+        className='flex gap-2'
         isFalse={!tiltak.ansvarlig}
-        descriptionFalse="Det er ikke satt en ansvarlig for tiltaket"
+        descriptionFalse='Det er ikke satt en ansvarlig for tiltaket'
       />
 
       <ReadOnlyFieldBool
-        label="Tiltaksfrist:"
+        label='Tiltaksfrist:'
         description={tiltak.frist}
-        className="mt-3 flex gap-2"
+        className='mt-3 flex gap-2'
         isFalse={!tiltak.frist}
-        descriptionFalse="Det er ikke satt en frist for tiltaket"
+        descriptionFalse='Det er ikke satt en frist for tiltaket'
       />
 
-      <div className="mt-3">
+      <div className='mt-3'>
         <ReadOnlyFieldDescriptionOptional
-          label="Tiltaket er gjenbrukt ved følgende scenarioer:"
-          description="Tiltaket er ikke gjenbrukt ved andre risikoscenarioer"
+          label='Tiltaket er gjenbrukt ved følgende scenarioer:'
+          description='Tiltaket er ikke gjenbrukt ved andre risikoscenarioer'
           isVisible={tiltak.risikoscenarioIds.length === 0}
         />
 
         {tiltak.risikoscenarioIds.length !== 0 && risikoscenarioList && (
-          <List as="ul">
+          <List as='ul'>
             {risikoscenarioList
               .filter((risikoscenario) => tiltak.risikoscenarioIds.includes(risikoscenario.id))
               .map((risikoscenario) => (

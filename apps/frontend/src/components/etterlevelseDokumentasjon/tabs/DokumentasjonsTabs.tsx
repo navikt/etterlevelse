@@ -96,28 +96,28 @@ export const DokumentasjonTabs = () => {
       }}
     >
       <Tabs.List>
-        <Tabs.Tab value="mine" label="Mine dokumentasjoner" />
-        <Tabs.Tab value="siste" label="Mine siste dokumentasjoner" />
-        <Tabs.Tab value="alle" label="Alle" />
-        <Tabs.Tab value="behandlingsok" label="Søk med behandling" />
+        <Tabs.Tab value='mine' label='Mine dokumentasjoner' />
+        <Tabs.Tab value='siste' label='Mine siste dokumentasjoner' />
+        <Tabs.Tab value='alle' label='Alle' />
+        <Tabs.Tab value='behandlingsok' label='Søk med behandling' />
       </Tabs.List>
-      <Tabs.Panel value="mine">
+      <Tabs.Panel value='mine'>
         <MineEtterlevelseDokumentasjoner
           teams={sortedTeams}
           etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content}
           loading={loading}
         />
       </Tabs.Panel>
-      <Tabs.Panel value="siste">
+      <Tabs.Panel value='siste'>
         <SisteEtterlevelseDokumentasjoner
           etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content}
           loading={loading}
         />
       </Tabs.Panel>
-      <Tabs.Panel value="alle">
+      <Tabs.Panel value='alle'>
         <AlleEtterlevelsesDokumentasjoner />
       </Tabs.Panel>
-      <Tabs.Panel value="behandlingsok">
+      <Tabs.Panel value='behandlingsok'>
         <BehandlingSok />
       </Tabs.Panel>
     </Tabs>

@@ -73,14 +73,14 @@ export const ArkiveringModal = ({
         setIsArchivingCancelled(false)
         setArkivModal(false)
       }}
-      aria-label="Arkiverings modal"
+      aria-label='Arkiverings modal'
       header={{
         heading: isStatusTilArkivering ? 'Arkivering bestilt' : 'Arkivér i Websak',
         closeButton: false,
       }}
     >
       <Modal.Body>
-        <BodyLong className="mb-4">
+        <BodyLong className='mb-4'>
           Arkiveringen skjer puljevis hver dag klokka 12.00 og 00.00. Etter disse tidspunktene vil
           du finne din etterlevelsesdokumentasjon i WebSak ved å søke på ditt etterlevelsesnummer.
           Etterlevelsesnummeret begynner med E etterfulgt av tre tall.
@@ -88,7 +88,7 @@ export const ArkiveringModal = ({
 
         {etterlevelseArkiv &&
           etterlevelseArkiv.status === EEtterlevelseArkivStatus.IKKE_ARKIVER && (
-            <BodyLong className="mb-4">
+            <BodyLong className='mb-4'>
               Arkivering av etterlevelsesdokumentasjon i Websak gir sporbarhet og dokumenterer
               grunnlaget for risikovurderinger og rapportering.
             </BodyLong>
@@ -102,7 +102,7 @@ export const ArkiveringModal = ({
             etterlevelseArkiv.status === EEtterlevelseArkivStatus.IKKE_ARKIVER) && (
             <div>
               <RadioGroup
-                legend="Dokumentet skal inneholde"
+                legend='Dokumentet skal inneholde'
                 hideLegend
                 value={onlyActiveKrav}
                 onChange={(val: boolean) => setOnlyActiveKrav(val)}
@@ -112,11 +112,11 @@ export const ArkiveringModal = ({
               </RadioGroup>
             </div>
           )}
-        <div className="flex justify-end pt-4 mt-4">
+        <div className='flex justify-end pt-4 mt-4'>
           <Button
-            className="mr-2.5"
-            type="button"
-            variant="secondary"
+            className='mr-2.5'
+            type='button'
+            variant='secondary'
             onClick={() => {
               setIsArchivingCancelled(false)
               setArkivModal(false)

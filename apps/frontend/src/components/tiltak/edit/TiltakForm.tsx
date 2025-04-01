@@ -44,37 +44,37 @@ export const TiltakForm = (props: IProps) => {
     >
       {({ values, resetForm, submitForm, errors }) => (
         <Form>
-          <div className="mb-5 border-t-2 mt-5">
-            <Heading size="medium" className="mt-5">
+          <div className='mb-5 border-t-2 mt-5'>
+            <Heading size='medium' className='mt-5'>
               {title}
             </Heading>
           </div>
 
           <InputField
             marginBottom
-            label="Navngi tiltaket"
-            description="Velg et navn som lett kan skilles fra andre tiltak dere oppretter"
-            name="navn"
+            label='Navngi tiltaket'
+            description='Velg et navn som lett kan skilles fra andre tiltak dere oppretter'
+            name='navn'
             disablePlaceHolder
           />
 
           <TextAreaField
-            label="Beskriv tiltaket nærmere"
-            name="beskrivelse"
+            label='Beskriv tiltaket nærmere'
+            name='beskrivelse'
             rows={3}
             noPlaceholder
             marginBottom
           />
 
-          <Field name="ansvarlig">
+          <Field name='ansvarlig'>
             {(fieldRenderProps: FieldProps) => (
-              <div className="mb-5">
-                <LabelWithTooltip label="Hvem er tiltaksansvarlig?" tooltip="" />
+              <div className='mb-5'>
+                <LabelWithTooltip label='Hvem er tiltaksansvarlig?' tooltip='' />
                 <Detail>Skriv for eksempel teamnavn, rolle(r), eller lignende.</Detail>
-                <div className="w-full">
+                <div className='w-full'>
                   <AsyncSelect
-                    aria-label="Søk etter person"
-                    placeholder=""
+                    aria-label='Søk etter person'
+                    placeholder=''
                     components={{ DropdownIndicator }}
                     noOptionsMessage={({ inputValue }) => {
                       return noOptionMessage(inputValue)
@@ -102,10 +102,10 @@ export const TiltakForm = (props: IProps) => {
                 </div>
 
                 {isDev && (
-                  <ReadMore header="Hva hvis jeg ikke finner person">
-                    <div className="flex gap-2 items-end my-2">
+                  <ReadMore header='Hva hvis jeg ikke finner person'>
+                    <div className='flex gap-2 items-end my-2'>
                       <TextField
-                        label="Skriv inn NAV ident dersom du ikke finner person over"
+                        label='Skriv inn NAV ident dersom du ikke finner person over'
                         value={customPersonForDev}
                         onChange={(event: ChangeEvent<HTMLInputElement>) =>
                           setCustomPersonForDev(event.target.value)
@@ -113,7 +113,7 @@ export const TiltakForm = (props: IProps) => {
                       />
                       <div>
                         <Button
-                          type="button"
+                          type='button'
                           onClick={() => {
                             fieldRenderProps.form.setFieldValue('ansvarlig', {
                               navIdent: customPersonForDev,
@@ -141,15 +141,15 @@ export const TiltakForm = (props: IProps) => {
             )}
           </Field>
 
-          <div className="mb-5">
-            <DateField label="Legg inn tiltaksfrist" name="frist" />
-            <FormError fieldName="frist" akselStyling />
+          <div className='mb-5'>
+            <DateField label='Legg inn tiltaksfrist' name='frist' />
+            <FormError fieldName='frist' akselStyling />
           </div>
 
           {Object.values(errors).some(Boolean) && (
             <ErrorSummary
               ref={errorSummaryRef}
-              heading="Du må rette disse feilene før du kan fortsette"
+              heading='Du må rette disse feilene før du kan fortsette'
             >
               {Object.entries(errors)
                 .filter(([, error]) => error)
@@ -161,9 +161,9 @@ export const TiltakForm = (props: IProps) => {
             </ErrorSummary>
           )}
 
-          <div className="flex gap-2 mt-5">
+          <div className='flex gap-2 mt-5'>
             <Button
-              type="button"
+              type='button'
               onClick={() => {
                 setValidateOnBlur(true)
                 submitForm()
@@ -172,8 +172,8 @@ export const TiltakForm = (props: IProps) => {
               Lagre tiltak
             </Button>
             <Button
-              type="button"
-              variant="secondary"
+              type='button'
+              variant='secondary'
               onClick={() => {
                 resetForm({ values })
                 close()

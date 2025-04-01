@@ -24,12 +24,12 @@ export const KravRisikoscenarioAccordionContentReadOnly: FunctionComponent<TProp
     <div>
       <RisikoscenarioViewReadOnly risikoscenario={risikoscenario} noCopyButton={true} />
 
-      <div className="mt-12">
+      <div className='mt-12'>
         <RisikoscenarioTiltakHeader />
 
         <div>
           {filterTiltakId.map((tiltak: ITiltak, index: number) => (
-            <div className="mt-3" key={risikoscenario.id + '_' + tiltak.id + '_' + index}>
+            <div className='mt-3' key={risikoscenario.id + '_' + tiltak.id + '_' + index}>
               {!risikoscenario.ingenTiltak && (
                 <div>
                   {risikoscenario.tiltakIds.length !== 0 && (

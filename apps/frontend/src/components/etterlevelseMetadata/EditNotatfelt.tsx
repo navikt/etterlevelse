@@ -43,17 +43,17 @@ export const EditNotatfelt = ({
 
   return (
     <Modal
-      className="w-full max-w-4xl"
+      className='w-full max-w-4xl'
       open={isOpen}
       onClose={() => {
         setIsNotatfeltOpen(false)
       }}
-      aria-label="Notat"
+      aria-label='Notat'
     >
       <Modal.Header>
-        <div className="flex items-center">
-          <FileTextIcon aria-label="" aria-hidden width="1.5rem" height="1.625rem" />
-          <Heading level="2" size="small">
+        <div className='flex items-center'>
+          <FileTextIcon aria-label='' aria-hidden width='1.5rem' height='1.625rem' />
+          <Heading level='2' size='small'>
             Notat
           </Heading>
         </div>
@@ -72,23 +72,23 @@ export const EditNotatfelt = ({
           {({ errors }: FormikProps<IEtterlevelseMetadata>) => (
             <Form>
               <div>
-                <BodyShort className="mb-6">
+                <BodyShort className='mb-6'>
                   Notatet er kun for internt bruk, og ikke en del av dokumentasjonen
                 </BodyShort>
 
                 <TextEditor
                   initialValue={notater}
                   setValue={setNotater}
-                  height="21.875rem"
+                  height='21.875rem'
                   errors={errors}
                   simple
                 />
 
-                <div className="w-full flex justify-end mt-6">
+                <div className='w-full flex justify-end mt-6'>
                   <Button
-                    type="button"
-                    className="mr-4"
-                    variant="secondary"
+                    type='button'
+                    className='mr-4'
+                    variant='secondary'
                     onClick={() => {
                       setNotater(etterlevelseMetadata.notater || '')
                       setIsNotatfeltOpen(false)
@@ -96,7 +96,7 @@ export const EditNotatfelt = ({
                   >
                     Avbryt
                   </Button>
-                  <Button type="submit">Lagre arbeidsnotat</Button>
+                  <Button type='submit'>Lagre arbeidsnotat</Button>
                 </div>
               </div>
             </Form>

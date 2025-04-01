@@ -1,7 +1,7 @@
 import { BodyLong, List, ReadMore } from '@navikt/ds-react'
 
 export const KravRisikoscenarioReadMore = () => (
-  <ReadMore header="Slik dokumenterer dere risikoscenarioer og tiltak">
+  <ReadMore header='Slik dokumenterer dere risikoscenarioer og tiltak'>
     <BodyLong>
       Her dokumenter dere risikoscenarioer og tiltak som gjelder for dette kravet. Her kan dere:
     </BodyLong>

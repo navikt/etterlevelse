@@ -46,23 +46,23 @@ export const MainPage = () => {
 
   return (
     <PageLayout noPadding fullWidth>
-      <div className="bg-blue-50 py-10 flex justify-center">
-        <div className="max-w-7xl w-full px-2">
-          <div className="flex flex-col">
-            <Heading className="flex justify-center" size="large" level="1">
+      <div className='bg-blue-50 py-10 flex justify-center'>
+        <div className='max-w-7xl w-full px-2'>
+          <div className='flex flex-col'>
+            <Heading className='flex justify-center' size='large' level='1'>
               Etterlevelse i NAV
             </Heading>
-            <span className="flex justify-center">Forstå og dokumentér</span>
+            <span className='flex justify-center'>Forstå og dokumentér</span>
           </div>
           {forsideVarsel?.meldingStatus === EMeldingStatus.ACTIVE && (
-            <div className=" my-16 w-full justify-center flex">
-              <div className="w-fit" id="forsideVarselMelding">
+            <div className=' my-16 w-full justify-center flex'>
+              <div className='w-fit' id='forsideVarselMelding'>
                 {forsideVarsel.alertType === EAlertType.INFO ? (
-                  <Alert fullWidth variant="info">
+                  <Alert fullWidth variant='info'>
                     <Markdown source={forsideVarsel.melding} />
                   </Alert>
                 ) : (
-                  <Alert fullWidth variant="warning">
+                  <Alert fullWidth variant='warning'>
                     <Markdown source={forsideVarsel.melding} />
                   </Alert>
                 )}
@@ -71,20 +71,20 @@ export const MainPage = () => {
           )}
 
           {etterlevelseDokumentasjonLoading && (
-            <div className="bg-white mt-8 p-8 shadow-md shadow-[#00000040]">
-              <Heading as={Skeleton} size="large">
+            <div className='bg-white mt-8 p-8 shadow-md shadow-[#00000040]'>
+              <Heading as={Skeleton} size='large'>
                 Card-title
               </Heading>
-              <Skeleton variant="text" width="100%" />
-              <Skeleton variant="text" width="100%" />
+              <Skeleton variant='text' width='100%' />
+              <Skeleton variant='text' width='100%' />
             </div>
           )}
 
           {!etterlevelseDokumentasjonLoading && data?.etterlevelseDokumentasjoner.content && (
-            <div className="bg-white mt-8 p-8 shadow-md shadow-[#00000040]">
+            <div className='bg-white mt-8 p-8 shadow-md shadow-[#00000040]'>
               {data?.etterlevelseDokumentasjoner.content.length === 0 && (
                 <div>
-                  <Heading size="medium" level="2">
+                  <Heading size='medium' level='2'>
                     Etterlevelse i NAV
                   </Heading>
                   <span>
@@ -99,8 +99,8 @@ export const MainPage = () => {
                   etterlevelseDokumentasjoner={data?.etterlevelseDokumentasjoner.content}
                 />
               )}
-              <div className="mt-8 flex justify-end">
-                <div className="mr-4">
+              <div className='mt-8 flex justify-end'>
+                <div className='mr-4'>
                   <Button
                     onClick={() => {
                       window.scrollTo(0, 0)
@@ -109,18 +109,18 @@ export const MainPage = () => {
                       })
                       navigate('/dokumentasjon/create')
                     }}
-                    size="medium"
+                    size='medium'
                     variant={
                       data?.etterlevelseDokumentasjoner.content.length ? 'secondary' : 'primary'
                     }
-                    className="whitespace-nowrap ml-5"
+                    className='whitespace-nowrap ml-5'
                   >
                     Nytt etterlevelsesdokument
                   </Button>
                 </div>
                 <Button
-                  variant="tertiary"
-                  className="underline hover:no-underline"
+                  variant='tertiary'
+                  className='underline hover:no-underline'
                   onClick={() => {
                     window.scrollTo(0, 0)
                     ampli.logEvent('navigere', {
@@ -140,9 +140,9 @@ export const MainPage = () => {
         </div>
       </div>
 
-      <div className="flex flex-col items-center w-full">
-        <div className="max-w-7xl w-full px-2">
-          <div className="flex my-10">
+      <div className='flex flex-col items-center w-full'>
+        <div className='max-w-7xl w-full px-2'>
+          <div className='flex my-10'>
             <ForstaKravene />
             <StatusIOrganisasjonen />
           </div>
@@ -183,10 +183,10 @@ const EtterlevelseDokumentasjonList = ({
 
   return (
     <div>
-      <Heading size="medium" level="2">
+      <Heading size='medium' level='2'>
         Mine sist dokumenterte
       </Heading>
-      <List className="mt-6 flex flex-col gap-2">
+      <List className='mt-6 flex flex-col gap-2'>
         {filteredEtterlevelsesDokumentasjoner.length !== 0 &&
           filteredEtterlevelsesDokumentasjoner
             .slice(0, 2)
@@ -218,9 +218,9 @@ const EtterlevelseDokumentasjonList = ({
 }
 
 const ForstaKravene = () => (
-  <div className="w-full mr-2.5">
+  <div className='w-full mr-2.5'>
     <LinkPanel
-      href="/tema"
+      href='/tema'
       onClick={() => {
         ampli.logEvent('navigere', {
           kilde: 'forside-panel',
@@ -240,9 +240,9 @@ const ForstaKravene = () => (
 )
 
 const StatusIOrganisasjonen = () => (
-  <div className="w-full ml-2.5">
+  <div className='w-full ml-2.5'>
     <LinkPanel
-      href="https://metabase.ansatt.nav.no/dashboard/116-dashboard-for-etterlevelse"
+      href='https://metabase.ansatt.nav.no/dashboard/116-dashboard-for-etterlevelse'
       onClick={() => {
         ampli.logEvent('navigere', {
           kilde: 'forside-panel',

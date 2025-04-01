@@ -1,16 +1,36 @@
 import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, CopyButton, Heading, Label } from '@navikt/ds-react'
-import { Form, Formik } from 'formik'
-import { useState } from 'react'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  CopyButton,
+  ErrorSummary,
+  Heading,
+  Label,
+  Loader,
+} from '@navikt/ds-react'
+import { AxiosError } from 'axios'
+import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
+import { useEffect, useRef, useState } from 'react'
+import {
+  getBehandlingensLivslopByEtterlevelseDokumentId,
+  mapBehandlingensLivslopToFormValue,
+} from '../../api/BehandlingensLivslopApi'
 import {
   getPvkDokument,
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '../../api/PvkDokumentApi'
-import { EPvkDokumentStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
+import {
+  EPvkDokumentStatus,
+  IBehandlingensLivslop,
+  IPvkDokument,
+  IPvoTilbakemelding,
+} from '../../constants'
 import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
 import FormButtons from './edit/FormButtons'
+import pvkDocumentSchema from './edit/pvkDocumentSchema'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
 import InvolveringSummary from './formSummary/InvolveringSummary'
 import RisikoscenarioSummary from './formSummary/RisikoscenarioSummary'
@@ -42,33 +62,66 @@ export const SendInnView = (props: IProps) => {
     pvoTilbakemelding,
   } = props
 
-  const [submitPvkStatus, setSubmitPvkStatus] = useState<EPvkDokumentStatus>(pvkDokument.status)
+  const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
+  const [behandlingensLivslopError, setBehandlingensLivslopError] = useState<boolean>(false)
+  const [behandlingensLivslopIsLoading, setBehandlingensLivslopIsLoading] = useState<boolean>(false)
+  const errorSummaryRef = useRef<HTMLDivElement>(null)
 
   const underarbeidCheck =
     pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
     pvkDokument.status === EPvkDokumentStatus.AKTIV
 
   const submit = async (pvkDokument: IPvkDokument) => {
-    await getPvkDokument(pvkDokument.id).then((response) => {
-      const updatedStatus =
-        submitPvkStatus !== EPvkDokumentStatus.VURDERT_AV_PVO &&
-        submitPvkStatus !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
-        (response.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
-          response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
-          ? response.status
-          : submitPvkStatus
+    if (!behandlingensLivslopError) {
+      await getPvkDokument(pvkDokument.id).then((response) => {
+        const updatedStatus =
+          pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
+          pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+          (response.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
+            response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
+            ? response.status
+            : pvkDokument.status
 
-      const updatedPvkDokument = {
-        ...response,
-        status: updatedStatus,
-        merknadTilPvoEllerRisikoeier: pvkDokument.merknadTilPvoEllerRisikoeier,
-      }
+        const updatedPvkDokument = {
+          ...response,
+          status: updatedStatus,
+          merknadTilPvoEllerRisikoeier: pvkDokument.merknadTilPvoEllerRisikoeier,
+        }
 
-      updatePvkDokument(updatedPvkDokument).then((savedResponse) => {
-        setPvkDokument(savedResponse)
+        updatePvkDokument(updatedPvkDokument).then((savedResponse) => {
+          setPvkDokument(savedResponse)
+        })
       })
-    })
+    }
   }
+
+  const behandlingensLivslopFieldCheck = () => {
+    if (behandlingensLivslop?.filer.length === 0 && behandlingensLivslop.beskrivelse === '') {
+      setBehandlingensLivslopError(true)
+    } else {
+      setBehandlingensLivslopError(false)
+    }
+  }
+
+  useEffect(() => {
+    ;(async () => {
+      if (etterlevelseDokumentasjonId) {
+        setBehandlingensLivslopIsLoading(true)
+        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
+          .then((response) => {
+            setBehandlingensLivslop(response)
+          })
+          .catch((error: AxiosError) => {
+            if (error.status === 404) {
+              setBehandlingensLivslop(mapBehandlingensLivslopToFormValue({}))
+            } else {
+              console.debug(error)
+            }
+          })
+          .finally(() => setBehandlingensLivslopIsLoading(false))
+      }
+    })()
+  }, [etterlevelseDokumentasjonId])
 
   return (
     <Formik
@@ -76,12 +129,20 @@ export const SendInnView = (props: IProps) => {
       validateOnBlur={false}
       onSubmit={submit}
       initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
+      validate={(value) => {
+        try {
+          behandlingensLivslopFieldCheck()
+          validateYupSchema(value, pvkDocumentSchema(), true)
+        } catch (err) {
+          return yupToFormErrors(err)
+        }
+      }}
     >
-      {({ submitForm, dirty }) => (
+      {({ setFieldValue, submitForm, dirty, errors }) => (
         <Form>
-          <div className="flex justify-center">
+          <div className='flex justify-center'>
             <div>
-              <Heading level="1" size="medium" className="mb-5">
+              <Heading level='1' size='medium' className='mb-5'>
                 Les og send inn
               </Heading>
               <BodyLong>
@@ -104,12 +165,12 @@ export const SendInnView = (props: IProps) => {
               <RisikoscenarioSummary />
 
               {underarbeidCheck && (
-                <div className="mt-5 mb-3 max-w-[75ch]">
+                <div className='mt-5 mb-3 max-w-[75ch]'>
                   <TextAreaField
                     rows={3}
                     noPlaceholder
-                    label="Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)"
-                    name="merknadTilPvoEllerRisikoeier"
+                    label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
+                    name='merknadTilPvoEllerRisikoeier'
                   />
                 </div>
               )}
@@ -118,7 +179,7 @@ export const SendInnView = (props: IProps) => {
                 (pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
                   pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) && (
                   <div>
-                    <div className="mt-5 mb-3 max-w-[75ch]">
+                    <div className='mt-5 mb-3 max-w-[75ch]'>
                       <Label>Beskjed til personvernombudet</Label>
                       <DataTextWrapper>
                         {pvkDokument.merknadTilPvoEllerRisikoeier
@@ -126,7 +187,7 @@ export const SendInnView = (props: IProps) => {
                           : 'Ingen beskjed'}
                       </DataTextWrapper>
                     </div>
-                    <div className="mt-5 mb-3 max-w-[75ch]">
+                    <div className='mt-5 mb-3 max-w-[75ch]'>
                       <Label>Beskjed til etterlever</Label>
                       <DataTextWrapper>
                         {pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
@@ -138,85 +199,114 @@ export const SendInnView = (props: IProps) => {
                 )}
 
               <CopyButton
-                variant="action"
+                variant='action'
                 copyText={window.location.href}
-                text="Kopiér lenken til denne siden"
-                activeText="Lenken er kopiert"
+                text='Kopiér lenken til denne siden'
+                activeText='Lenken er kopiert'
                 icon={<FilesIcon aria-hidden />}
               />
 
               {pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO && (
-                <Alert variant="success" className="my-5">
+                <Alert variant='success' className='my-5'>
                   Sendt til Personvernombudet
                 </Alert>
               )}
 
-              <FormButtons
-                etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-                activeStep={activeStep}
-                setActiveStep={setActiveStep}
-                setSelectedStep={setSelectedStep}
-                submitForm={submitForm}
-                customButtons={
-                  <div className="mt-5 flex gap-2 items-center">
-                    {dirty && (
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={() => {
-                          if (
-                            pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
-                            pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
-                          ) {
-                            setSubmitPvkStatus(EPvkDokumentStatus.UNDERARBEID)
-                          } else {
-                            setSubmitPvkStatus(pvkDokument.status)
-                          }
-                          submitForm()
-                        }}
-                      >
-                        Lagre og fortsett senere
-                      </Button>
-                    )}
+              {(Object.values(errors).some(Boolean) || behandlingensLivslopError) && (
+                <ErrorSummary
+                  ref={errorSummaryRef}
+                  heading='Du må rette disse feilene før du kan fortsette'
+                >
+                  {behandlingensLivslopError && (
+                    <ErrorSummary.Item>
+                      Behandlingens livsløp må ha en tegning eller en beskrivelse.
+                    </ErrorSummary.Item>
+                  )}
+                  {Object.entries(errors)
+                    .filter(([, error]) => error)
+                    .map(([key, error]) => (
+                      <ErrorSummary.Item href={`#${key}`} key={key}>
+                        {error as string}
+                      </ErrorSummary.Item>
+                    ))}
+                </ErrorSummary>
+              )}
 
-                    {underarbeidCheck && (
-                      <Button
-                        type="button"
-                        onClick={() => {
-                          setSubmitPvkStatus(EPvkDokumentStatus.SENDT_TIL_PVO)
-                          submitForm()
-                        }}
-                      >
-                        Send til Personvernombudet
-                      </Button>
-                    )}
+              {behandlingensLivslopIsLoading && (
+                <div className='flex justify-center items-center w-full'>
+                  <Loader size='2xlarge' title='lagrer endringer' />
+                </div>
+              )}
 
-                    {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
-                      <Button
-                        type="button"
-                        onClick={() => {
-                          setSubmitPvkStatus(EPvkDokumentStatus.VURDERT_AV_PVO)
-                          submitForm()
-                        }}
-                      >
-                        Angre godkjenning
-                      </Button>
-                    )}
+              {!behandlingensLivslopIsLoading && (
+                <FormButtons
+                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                  activeStep={activeStep}
+                  setActiveStep={setActiveStep}
+                  setSelectedStep={setSelectedStep}
+                  submitForm={submitForm}
+                  customButtons={
+                    <div className='mt-5 flex gap-2 items-center'>
+                      {dirty && (
+                        <Button
+                          type='button'
+                          variant='secondary'
+                          onClick={async () => {
+                            if (
+                              pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
+                              pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
+                            ) {
+                              await setFieldValue('status', EPvkDokumentStatus.UNDERARBEID)
+                            } else {
+                              await setFieldValue('status', pvkDokument.status)
+                            }
+                            submitForm()
+                          }}
+                        >
+                          Lagre og fortsett senere
+                        </Button>
+                      )}
 
-                    {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && (
-                      <Button
-                        type="button"
-                        onClick={() => {
-                          setSubmitPvkStatus(EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
-                          submitForm()
-                        }}
-                      >
-                        Godkjent
-                      </Button>
-                    )}
-                  </div>
-                }
-              />
+                      {underarbeidCheck && (
+                        <Button
+                          type='button'
+                          onClick={async () => {
+                            await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO)
+                            errorSummaryRef.current?.focus()
+                            submitForm()
+                          }}
+                        >
+                          Send til Personvernombudet
+                        </Button>
+                      )}
+
+                      {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
+                        <Button
+                          type='button'
+                          onClick={async () => {
+                            await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
+                            submitForm()
+                          }}
+                        >
+                          Angre godkjenning
+                        </Button>
+                      )}
+
+                      {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && (
+                        <Button
+                          type='button'
+                          onClick={async () => {
+                            await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
+                            submitForm()
+                          }}
+                        >
+                          Godkjent
+                        </Button>
+                      )}
+                    </div>
+                  }
+                />
+              )}
             </div>
           </div>
         </Form>

@@ -37,32 +37,32 @@ const getTemaMainHeader = (
   codelistUtils: ICodelistProps,
   noHeader?: boolean
 ) => (
-  <div className="lg:grid lg:grid-flow-col lg:gap-2">
+  <div className='lg:grid lg:grid-flow-col lg:gap-2'>
     <div>
       {!noHeader && (
-        <Heading level="1" size="medium" spacing>
+        <Heading level='1' size='medium' spacing>
           {tema.shortName}
         </Heading>
       )}
       <Markdown source={tema.description} />
     </div>
 
-    <div className="my-8 lg:border-l-2 lg:pl-2 lg:border-gray-200">
-      <Heading level="2" size="small" spacing>
+    <div className='my-8 lg:border-l-2 lg:pl-2 lg:border-gray-200'>
+      <Heading level='2' size='small' spacing>
         Ansvarlig for lovtolkning
       </Heading>
       {_.uniq(lover.map((lov: TLovCode) => lov.data?.underavdeling)).map(
         (code: string | undefined, index: number) => (
-          <BodyShort key={code + '_' + index} size="large" spacing>
+          <BodyShort key={code + '_' + index} size='large' spacing>
             {codelistUtils.getCode(EListName.UNDERAVDELING, code)?.shortName}
           </BodyShort>
         )
       )}
-      <Heading level="2" size="small" spacing>
+      <Heading level='2' size='small' spacing>
         Lovdata
       </Heading>
       {lover.map((lov: TLovCode, index: number) => (
-        <div key={lov.code + '_' + index} className="mb-1.5">
+        <div key={lov.code + '_' + index} className='mb-1.5'>
           <ExternalLink href={lovdataBase(lov.code, codelistUtils)}>{lov.shortName}</ExternalLink>
         </div>
       ))}
@@ -113,18 +113,18 @@ const TemaView = ({ tema, codelistUtils }: ITemaViewProps) => {
       currentPage={tema.shortName}
     >
       {getTemaMainHeader(tema, lover, codelistUtils)}
-      <div className="mt-6">
+      <div className='mt-6'>
         <Label>{loading ? '?' : data?.krav.numberOfElements || 0} krav</Label>
         {loading && <SkeletonPanel count={10} />}
         {!loading && kravList && (
-          <List className="grid gap-2 ">
+          <List className='grid gap-2 '>
             {kravList.map((krav, index) => (
               <List.Item
                 icon={<div />}
                 key={krav.kravNummer + '.' + krav.kravVersjon + '_' + index}
               >
                 <LinkPanel href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>
-                  <Detail weight="semibold">{kravNumView(krav)}</Detail>
+                  <Detail weight='semibold'>{kravNumView(krav)}</Detail>
                   <BodyShort>{krav.navn}</BodyShort>
                 </LinkPanel>
               </List.Item>

@@ -11,7 +11,7 @@ import { DropdownIndicator } from './KravBegreperEdit'
 export const EditKravRelasjoner = () => {
   return (
     <FieldWrapper>
-      <FieldArray name="kravRelasjoner">
+      <FieldArray name='kravRelasjoner'>
         {(fieldArrayRenderProps: FieldArrayRenderProps) => {
           return (
             <div>
@@ -20,8 +20,8 @@ export const EditKravRelasjoner = () => {
                 tooltip={'Legg ved lenke til relasjoner til andre krav'}
               />
               <AsyncSelect
-                aria-label="Søk etter krav"
-                placeholder="Søk etter krav"
+                aria-label='Søk etter krav'
+                placeholder='Søk etter krav'
                 components={{ DropdownIndicator }}
                 noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                 controlShouldRenderValue={false}
@@ -36,12 +36,12 @@ export const EditKravRelasjoner = () => {
                 styles={selectOverrides}
               />
 
-              <Chips className="mt-2.5">
+              <Chips className='mt-2.5'>
                 {fieldArrayRenderProps.form.values.kravRelasjoner.map(
                   (kravRelasjon: any, index: number) => (
                     <Chips.Removable
                       key={kravRelasjon.id}
-                      variant="neutral"
+                      variant='neutral'
                       onDelete={() => fieldArrayRenderProps.remove(index)}
                     >
                       {`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}
@@ -53,7 +53,7 @@ export const EditKravRelasjoner = () => {
           )
         }}
       </FieldArray>
-      <FormError fieldName="kravRelasjoner" akselStyling />
+      <FormError fieldName='kravRelasjoner' akselStyling />
     </FieldWrapper>
   )
 }

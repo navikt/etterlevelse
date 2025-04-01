@@ -28,7 +28,7 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
 
   return (
     <Modal
-      width="780px"
+      width='780px'
       header={{ heading: headerText }}
       open={isOpen}
       onClose={() => setIsOpen(false)}
@@ -51,10 +51,10 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
             </Modal.Body>
 
             {Object.values(errors).some(Boolean) && (
-              <div className="mx-5">
+              <div className='mx-5'>
                 <ErrorSummary
                   ref={errorSummaryRef}
-                  heading="Du må rette disse feilene før du kan fortsette"
+                  heading='Du må rette disse feilene før du kan fortsette'
                 >
                   {Object.entries(errors)
                     .filter(([, error]) => error)
@@ -68,9 +68,9 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
             )}
 
             <Modal.Footer>
-              <div className="flex gap-2 mt-5">
+              <div className='flex gap-2 mt-5'>
                 <Button
-                  type="button"
+                  type='button'
                   onClick={() => {
                     errorSummaryRef.current?.focus()
                     setValidateOnBlur(true)
@@ -79,7 +79,7 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
                 >
                   Lagre risikoscenario
                 </Button>
-                <Button onClick={() => setIsOpen(false)} type="button" variant="secondary">
+                <Button onClick={() => setIsOpen(false)} type='button' variant='secondary'>
                   Avbryt, ikke lagre
                 </Button>
               </div>

@@ -119,8 +119,8 @@ const useMainSearch = async (searchParam: string) => {
 const Option = (properties: OptionProps<TSearchItem>) => {
   return (
     <components.Option {...properties}>
-      <div className="flex justify-between">
-        <BodyShort className="text-icon-on-warning">{properties.data.label}</BodyShort>
+      <div className='flex justify-between'>
+        <BodyShort className='text-icon-on-warning'>{properties.data.label}</BodyShort>
       </div>
     </components.Option>
   )
@@ -129,7 +129,7 @@ const Option = (properties: OptionProps<TSearchItem>) => {
 const DropdownIndicator = (props: DropdownIndicatorProps<TSearchItem>) => {
   return (
     <components.DropdownIndicator {...props}>
-      <MagnifyingGlassIcon title="Søk" aria-label="Søk" />
+      <MagnifyingGlassIcon title='Søk' aria-label='Søk' />
     </components.DropdownIndicator>
   )
 }
@@ -138,10 +138,10 @@ const MainSearch = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       <AsyncSelect
-        aria-label="Søk etter krav, dokumentasjon eller behandling"
-        placeholder="Søk etter krav, dokumentasjon eller behandling"
+        aria-label='Søk etter krav, dokumentasjon eller behandling'
+        placeholder='Søk etter krav, dokumentasjon eller behandling'
         components={{ Option, DropdownIndicator }}
         controlShouldRenderValue={false}
         loadingMessage={() => 'Søker...'}

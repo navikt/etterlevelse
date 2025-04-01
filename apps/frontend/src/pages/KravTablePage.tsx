@@ -75,37 +75,37 @@ export const KravTablePage = () => {
   }, [])
 
   return (
-    <PageLayout pageTitle="Administrere Krav" currentPage="Administrere Krav">
-      <Heading size="medium" level="1">
+    <PageLayout pageTitle='Administrere Krav' currentPage='Administrere Krav'>
+      <Heading size='medium' level='1'>
         Administrere Krav
       </Heading>
 
       {tableContent.length && (
-        <div className="w-full">
+        <div className='w-full'>
           <Table
-            size="large"
+            size='large'
             zebraStripes
             sort={sort}
             onSortChange={(sortKey?: string) => handleSort(sort, setSort, sortKey)}
           >
             <Table.Header>
               <Table.Row>
-                <Table.ColumnHeader className="w-[6%]" sortKey="kravNummer" sortable>
+                <Table.ColumnHeader className='w-[6%]' sortKey='kravNummer' sortable>
                   Krav ID
                 </Table.ColumnHeader>
-                <Table.ColumnHeader className="w-[25%]" sortKey="navn" sortable>
+                <Table.ColumnHeader className='w-[25%]' sortKey='navn' sortable>
                   Kravnavn
                 </Table.ColumnHeader>
-                <Table.ColumnHeader sortKey="avdeling" sortable>
+                <Table.ColumnHeader sortKey='avdeling' sortable>
                   Ansvarlig
                 </Table.ColumnHeader>
-                <Table.ColumnHeader sortKey="tema" sortable>
+                <Table.ColumnHeader sortKey='tema' sortable>
                   Tema
                 </Table.ColumnHeader>
-                <Table.ColumnHeader sortKey="status" sortable>
+                <Table.ColumnHeader sortKey='status' sortable>
                   Status
                 </Table.ColumnHeader>
-                <Table.ColumnHeader className="w-[10%]" sortKey="changeStamp" sortable>
+                <Table.ColumnHeader className='w-[10%]' sortKey='changeStamp' sortable>
                   Siste endret
                 </Table.ColumnHeader>
               </Table.Row>
@@ -113,10 +113,10 @@ export const KravTablePage = () => {
             <Table.Body>
               {sortedData.map((krav: IKrav) => (
                 <Table.Row key={krav.id}>
-                  <Table.HeaderCell className="w-[6%] text-end" scope="row">
+                  <Table.HeaderCell className='w-[6%] text-end' scope='row'>
                     {krav.kravNummer}.{krav.kravVersjon}
                   </Table.HeaderCell>
-                  <Table.DataCell className="w-[25%]">
+                  <Table.DataCell className='w-[25%]'>
                     <Link href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</Link>
                   </Table.DataCell>
                   <Table.DataCell>
@@ -131,27 +131,27 @@ export const KravTablePage = () => {
                     )}
                   </Table.DataCell>
                   <Table.DataCell>{kravStatus(krav.status)}</Table.DataCell>
-                  <Table.DataCell className="w-[10%] text-end">
+                  <Table.DataCell className='w-[10%] text-end'>
                     {moment(krav.changeStamp.lastModifiedDate).format('ll')}
                   </Table.DataCell>
                 </Table.Row>
               ))}
             </Table.Body>
           </Table>
-          <div className="flex w-full justify-center items-center mt-3">
+          <div className='flex w-full justify-center items-center mt-3'>
             <Select
-              label="Antall rader:"
+              label='Antall rader:'
               value={rowsPerPage}
               onChange={(event: ChangeEvent<HTMLSelectElement>) =>
                 setRowsPerPage(parseInt(event.target.value))
               }
-              size="small"
+              size='small'
             >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
+              <option value='5'>5</option>
+              <option value='10'>10</option>
+              <option value='20'>20</option>
+              <option value='50'>50</option>
+              <option value='100'>100</option>
             </Select>
             <Spacer />
             <div>
@@ -160,7 +160,7 @@ export const KravTablePage = () => {
                 onPageChange={setPage}
                 count={Math.ceil(tableContent.length / rowsPerPage)}
                 prevNextTexts
-                size="small"
+                size='small'
               />
             </div>
             <Spacer />

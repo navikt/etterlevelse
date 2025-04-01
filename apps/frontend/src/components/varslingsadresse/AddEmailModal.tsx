@@ -37,11 +37,11 @@ export const AddEmailModal = (props: IProps) => {
       open={isOpen}
       onClose={close}
       header={{ heading: 'Legg til Epost adresse', closeButton: false }}
-      width="medium"
+      width='medium'
     >
-      <Modal.Body className="min-h-[18.75rem]">
+      <Modal.Body className='min-h-[18.75rem]'>
         <RadioGroup
-          legend="Hvem skal varsles på Epost?"
+          legend='Hvem skal varsles på Epost?'
           value={radioValue}
           onChange={(val) => {
             if (val === 'meg') {
@@ -51,19 +51,19 @@ export const AddEmailModal = (props: IProps) => {
             }
             setRadioValue(val)
           }}
-          className="w-full"
+          className='w-full'
         >
-          <Radio value="meg">Meg ({user.getEmail()})</Radio>
-          <Radio value="epost" className="w-full">
+          <Radio value='meg'>Meg ({user.getEmail()})</Radio>
+          <Radio value='epost' className='w-full'>
             Noen andre
           </Radio>
         </RadioGroup>
 
         {radioValue === 'epost' && (
-          <div className="w-full pl-8">
+          <div className='w-full pl-8'>
             <Label>Skriv Epost adresse</Label>
             <TextField
-              label=""
+              label=''
               hideLabel
               value={val}
               onFocus={() => setError('')}
@@ -75,10 +75,10 @@ export const AddEmailModal = (props: IProps) => {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button type="button" onClick={() => add(val)} className="ml-2.5">
+        <Button type='button' onClick={() => add(val)} className='ml-2.5'>
           Legg til Epost
         </Button>
-        <Button variant="secondary" type="button" onClick={close}>
+        <Button variant='secondary' type='button' onClick={close}>
           Avbryt
         </Button>
       </Modal.Footer>

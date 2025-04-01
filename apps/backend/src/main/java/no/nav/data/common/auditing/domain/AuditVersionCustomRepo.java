@@ -87,7 +87,7 @@ public class AuditVersionCustomRepo {
     public List<AuditVersion> findLatestEtterlevelseDokumentIdAndCurrentUser(String dokumentasjonId) {
         String query = """
                 select * from audit_version where 
-                                    table_name = 'EtterlevelseDokumentasjon' and
+                                    table_name in ('EtterlevelseDokumentasjon', 'ETTERLEVELSE_DOKUMENTASJON') and
                                     user_id like :currentUser and
                                     table_id = :dokumentasjonId
                                     ORDER BY time DESC        
@@ -96,6 +96,25 @@ public class AuditVersionCustomRepo {
         var par = new MapSqlParameterSource();
 
         par.addValue("dokumentasjonId", dokumentasjonId)
+                .addValue("currentUser", SecurityUtils.getCurrentIdent() + "%");
+
+
+        return fetch(jdbcTemplate.queryForList(query, par));
+
+    }
+
+    public List<AuditVersion> findLatestPvoTilbakemeldingIdAndCurrentUser(String pvoTilbakemeldingId) {
+        String query = """
+                select * from audit_version where 
+                                    table_name = 'PVO_TILBAKEMELDING' and
+                                    user_id like :currentUser and
+                                    table_id = :pvoTilbakemeldingId
+                                    ORDER BY time DESC        
+                """;
+
+        var par = new MapSqlParameterSource();
+
+        par.addValue("pvoTilbakemeldingId", pvoTilbakemeldingId)
                 .addValue("currentUser", SecurityUtils.getCurrentIdent() + "%");
 
 

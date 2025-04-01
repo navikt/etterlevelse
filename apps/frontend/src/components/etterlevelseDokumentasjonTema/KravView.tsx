@@ -76,9 +76,9 @@ export const KravView = (props: IProps) => {
   }, [])
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       {loadingEtterlevelseData && (
-        <div className="flex justify-center">
+        <div className='flex justify-center'>
           <Loader size={'large'} />
         </div>
       )}

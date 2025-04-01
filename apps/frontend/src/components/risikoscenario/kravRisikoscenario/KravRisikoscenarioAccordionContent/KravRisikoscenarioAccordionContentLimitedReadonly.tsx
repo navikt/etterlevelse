@@ -36,10 +36,10 @@ export const KravRisikoscenarioAccordionContentLimitedReadonly: FunctionComponen
       risikoscenario={activeRisikoscenario}
       noCopyButton={true}
       etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-      stepUrl="0"
+      stepUrl='0'
     />
 
-    <div className="mt-12">
+    <div className='mt-12'>
       <RisikoscenarioTiltakHeader />
 
       {!risikoscenario.ingenTiltak && (

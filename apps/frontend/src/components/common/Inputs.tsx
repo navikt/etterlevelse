@@ -100,7 +100,7 @@ export const InputField = (props: IPropsInputField) => {
     <FieldWrapper marginBottom={marginBottom} id={name}>
       <Field name={name}>
         {(fieldProps: FieldProps) => (
-          <div className="w-full">
+          <div className='w-full'>
             <TextField
               label={label}
               description={description}
@@ -149,10 +149,10 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
           <div>
             {markdown && (
               <div>
-                <div className="flex w-full justify-between mb-1">
+                <div className='flex w-full justify-between mb-1'>
                   <div>
                     <Label>{label}</Label>
-                    <BodyShort className="text-[var(--a-text-subtle)]">{caption}</BodyShort>
+                    <BodyShort className='text-[var(--a-text-subtle)]'>{caption}</BodyShort>
                   </div>
                 </div>
                 {mode === 'edit' && (
@@ -167,14 +167,14 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
                 )}
 
                 {mode === 'view' && (
-                  <div className="p-8 border-border-subtle-hover border border-solid rounded-md">
+                  <div className='p-8 border-border-subtle-hover border border-solid rounded-md'>
                     <Markdown source={fieldProps.field.value} />
                   </div>
                 )}
-                <div className="flex flex-col items-end justify-end mt-[-1px]">
-                  <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
-                    <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
-                    <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+                <div className='flex flex-col items-end justify-end mt-[-1px]'>
+                  <ToggleGroup defaultValue='edit' onChange={setMode} size='small'>
+                    <ToggleGroup.Item value='edit'>Redigering</ToggleGroup.Item>
+                    <ToggleGroup.Item value='view'>Forhåndsvisning</ToggleGroup.Item>
                   </ToggleGroup>
                 </div>
               </div>
@@ -223,7 +223,7 @@ export const BoolField = (props: IPropsBoolField) => {
     <FieldWrapper>
       <Field name={name}>
         {(fieldProps: FieldProps) => (
-          <div className="my-3">
+          <div className='my-3'>
             <RadioGroup
               legend={label}
               description={tooltip}
@@ -234,7 +234,7 @@ export const BoolField = (props: IPropsBoolField) => {
               error={fieldProps.form.errors[name] && <FormError fieldName={name} />}
             >
               <Stack
-                gap="0 6"
+                gap='0 6'
                 direction={{ xs: horizontal ? 'column' : 'row', sm: horizontal ? 'row' : 'column' }}
                 wrap={false}
               >
@@ -280,7 +280,7 @@ export const DateField = (props: IPropsDateField) => {
           >
             <DatePicker.Input
               {...inputProps}
-              className="mb-2"
+              className='mb-2'
               value={fieldProps.form.values[name]}
               label={label ? label : 'Velg dato'}
             />
@@ -347,7 +347,7 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
 
           return (
             <div>
-              <div className="flex w-full items-end">
+              <div className='flex w-full items-end'>
                 {link && (
                   <div
                     className={`w-full ${
@@ -382,8 +382,8 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
                   />
                 </div>
 
-                <div className="min-w-[6.688rem] ml-2.5">
-                  <Button type="button" onClick={() => add()} variant="secondary">
+                <div className='min-w-[6.688rem] ml-2.5'>
+                  <Button type='button' onClick={() => add()} variant='secondary'>
                     Legg til
                   </Button>
                 </div>
@@ -414,7 +414,7 @@ export const OptionList = (props: TPropsOptionList) => {
     <Select
       label={label}
       hideLabel
-      className="w-full"
+      className='w-full'
       value={value}
       error={error}
       onChange={(event: ChangeEvent<HTMLSelectElement>) => {
@@ -424,7 +424,7 @@ export const OptionList = (props: TPropsOptionList) => {
         return onChange(toSet)
       }}
     >
-      <option value=""> </option>
+      <option value=''> </option>
       {optionsList.map(
         (
           code: Readonly<{

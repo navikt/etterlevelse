@@ -41,10 +41,10 @@ export const TillatGjenbrukModal = (props: IProps) => {
   return (
     <div>
       <Button
-        size="small"
-        variant="tertiary"
-        className="whitespace-nowrap mt-3"
-        type="button"
+        size='small'
+        variant='tertiary'
+        className='whitespace-nowrap mt-3'
+        type='button'
         onClick={() => setIsOpen(true)}
       >
         {etterlevelseDokumentasjon.gjenbrukBeskrivelse &&
@@ -55,7 +55,7 @@ export const TillatGjenbrukModal = (props: IProps) => {
 
       {isOpen && (
         <Modal
-          className="min-w-[1000px] px-5 py-5"
+          className='min-w-[1000px] px-5 py-5'
           open={isOpen}
           onClose={() => setIsOpen(false)}
           header={{
@@ -78,7 +78,7 @@ export const TillatGjenbrukModal = (props: IProps) => {
             {({ setFieldValue, submitForm, isSubmitting, initialValues }) => (
               <Form>
                 <Modal.Body>
-                  <List as="ul" className="mb-5">
+                  <List as='ul' className='mb-5'>
                     <List.Item>
                       Når du tillater gjenbruk av dokumentet ditt, vil de som gjenbruker kunne arve
                       både veilending og svar, og bruke disse som utgangspunkt for sin egen
@@ -89,9 +89,9 @@ export const TillatGjenbrukModal = (props: IProps) => {
                     </List.Item>
                   </List>
                   <TextAreaField
-                    name="gjenbrukBeskrivelse"
-                    label="Skriv veiledning som hjelper andre å forstå om de skal gjenbruke dette dokumentet"
-                    height="150px"
+                    name='gjenbrukBeskrivelse'
+                    label='Skriv veiledning som hjelper andre å forstå om de skal gjenbruke dette dokumentet'
+                    height='150px'
                     markdown
                     noPlaceholder
                     caption={
@@ -101,8 +101,8 @@ export const TillatGjenbrukModal = (props: IProps) => {
                 </Modal.Body>
                 <Modal.Footer>
                   <Button
-                    type="submit"
-                    variant="primary"
+                    type='submit'
+                    variant='primary'
                     disabled={isSubmitting}
                     onClick={() => {
                       setFieldValue('tilgjengeligForGjenbruk', true)
@@ -114,9 +114,9 @@ export const TillatGjenbrukModal = (props: IProps) => {
                       : 'Slå på gjenbruk'}
                   </Button>
                   <Button
-                    type="button"
+                    type='button'
                     disabled={isSubmitting}
-                    variant="secondary"
+                    variant='secondary'
                     onClick={() => setIsOpen(false)}
                   >
                     Avbryt
@@ -124,8 +124,8 @@ export const TillatGjenbrukModal = (props: IProps) => {
                   {initialValues.tilgjengeligForGjenbruk &&
                     initialValues.gjenbrukBeskrivelse.length > 0 && (
                       <Button
-                        type="button"
-                        variant="danger"
+                        type='button'
+                        variant='danger'
                         disabled={isSubmitting}
                         onClick={() => {
                           setFieldValue('tilgjengeligForGjenbruk', false)

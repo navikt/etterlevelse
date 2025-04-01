@@ -39,7 +39,7 @@ export const RelasjonsOversikt = () => {
     }
   }, [etterlevelseDokumentasjon])
 
-  if (!etterlevelseDokumentasjon) return <LoadingSkeleton header="Dokumentasjon" />
+  if (!etterlevelseDokumentasjon) return <LoadingSkeleton header='Dokumentasjon' />
 
   const { etterlevelseNummer, title } = etterlevelseDokumentasjon
   const etterlevelseNavn: string = 'E' + etterlevelseNummer.toString() + ' ' + title
@@ -57,9 +57,9 @@ export const RelasjonsOversikt = () => {
       currentPage={'Dokumenter som gjenbruker ' + etterlevelseNavn}
       breadcrumbPaths={breadcrumbPaths}
     >
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <Heading level="1" size="medium">
+      <div className='flex flex-col gap-4'>
+        <div className='flex flex-col gap-2'>
+          <Heading level='1' size='medium'>
             Dokumenter som gjenbruker E{etterlevelseNummer.toString()} {title}
           </Heading>
           <Table zebraStripes>

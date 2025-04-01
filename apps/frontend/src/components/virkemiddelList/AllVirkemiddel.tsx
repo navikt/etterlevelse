@@ -71,25 +71,25 @@ export const AllVirkemiddel = ({
   }, [filter])
 
   return (
-    <div className="w-full pt-6">
-      {loading && <Loader size="large" className="flex justify-self-center" />}
+    <div className='w-full pt-6'>
+      {loading && <Loader size='large' className='flex justify-self-center' />}
 
       {!loading && (
         <div>
-          <div className="w-full justify-center my-5">
-            <div className="flex w-full mb-2.5">
-              <div className="w-full">
+          <div className='w-full justify-center my-5'>
+            <div className='flex w-full mb-2.5'>
+              <div className='w-full'>
                 <Label>{totalDataLength} Virkemiddel</Label>
                 <Search
-                  label="Søk i virkemiddel"
-                  variant="secondary"
-                  placeholder="Søk"
+                  label='Søk i virkemiddel'
+                  variant='secondary'
+                  placeholder='Søk'
                   onChange={(inputValue) => setSok(inputValue)}
                   clearButton
                 />
               </div>
 
-              <div className="flex justify-end w-full">
+              <div className='flex justify-end w-full'>
                 <div>
                   <Label>Filter</Label>
                   <Select
@@ -125,7 +125,7 @@ export const AllVirkemiddel = ({
           />
 
           {filteredVirkemiddel.length === 0 && (
-            <div className="w-full flex justify-center">
+            <div className='w-full flex justify-center'>
               <BodyShort>Fant ingen virkemiddel</BodyShort>
             </div>
           )}

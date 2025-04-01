@@ -24,13 +24,13 @@ export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({ risik
   return (
     <Accordion.Header>
       {risikoscenario.navn}
-      <div className="flex gap-2 mt-1">
-        {mangelfulScenario && <Tag variant="alt2">Scenario er mangelfullt </Tag>}
-        {risikoscenario.ingenTiltak && <Tag variant="neutral">Tiltak ikke aktuelt</Tag>}
+      <div className='flex gap-2 mt-1'>
+        {mangelfulScenario && <Tag variant='alt2'>Scenario er mangelfullt </Tag>}
+        {risikoscenario.ingenTiltak && <Tag variant='neutral'>Tiltak ikke aktuelt</Tag>}
         {!risikoscenario.ingenTiltak && ikkeFerdigVurdert && (
-          <Tag variant="alt1">Ikke ferdig vurdert </Tag>
+          <Tag variant='alt1'>Ikke ferdig vurdert </Tag>
         )}
-        {!risikoscenario.ingenTiltak && ferdigVurdert && <Tag variant="info">Ferdig vurdert </Tag>}
+        {!risikoscenario.ingenTiltak && ferdigVurdert && <Tag variant='info'>Ferdig vurdert </Tag>}
       </div>
     </Accordion.Header>
   )
@@ -46,13 +46,13 @@ export const IdentifiseringAvRisikoscenarioAccordianHeader: FunctionComponent<TP
     risikoscenario.sannsynlighetsNivaaBegrunnelse === ''
 
   return (
-    <Accordion.Header className="z-0">
+    <Accordion.Header className='z-0'>
       {risikoscenario.navn}
-      <div className="flex gap-2 mt-1">
-        {ikkeFerdigBeskrevet && <Tag variant="alt2">Ikke ferdig utfylt</Tag>}
-        {risikoscenario.ingenTiltak && <Tag variant="neutral">Tiltak ikke aktuelt</Tag>}
+      <div className='flex gap-2 mt-1'>
+        {ikkeFerdigBeskrevet && <Tag variant='alt2'>Ikke ferdig utfylt</Tag>}
+        {risikoscenario.ingenTiltak && <Tag variant='neutral'>Tiltak ikke aktuelt</Tag>}
         {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
-          <Tag variant="alt1">Savner tiltak</Tag>
+          <Tag variant='alt1'>Savner tiltak</Tag>
         )}
       </div>
     </Accordion.Header>

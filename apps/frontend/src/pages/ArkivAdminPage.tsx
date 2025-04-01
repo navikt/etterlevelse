@@ -95,29 +95,29 @@ export const ArkivAdminPage = () => {
   }, [reloadTable])
 
   return (
-    <PageLayout pageTitle="Administrere Arkivering" currentPage="Administrere Arkivering">
+    <PageLayout pageTitle='Administrere Arkivering' currentPage='Administrere Arkivering'>
       <div>
-        <Heading size="medium" level="1">
+        <Heading size='medium' level='1'>
           Administrere Arkivering
         </Heading>
       </div>
 
-      <div className="flex items-end">
+      <div className='flex items-end'>
         <TextField
-          label="Oppdatere arkivering status"
-          placeholder="Arkiverings UID"
+          label='Oppdatere arkivering status'
+          placeholder='Arkiverings UID'
           value={arkiveringId}
           onChange={(e) => setArkiveringId(e.target.value)}
-          className="flex-1 mr-3"
+          className='flex-1 mr-3'
         />
         <Select
-          label="Velg status"
-          className="flex-1 mr-3"
+          label='Velg status'
+          className='flex-1 mr-3'
           value={arkiveringsStatus}
           onChange={(e) => setArkiveringsStatus(e.target.value as EEtterlevelseArkivStatus)}
         >
           {options.map((option, index) => {
-            ;<option value="">Velg status</option>
+            ;<option value=''>Velg status</option>
             return (
               <option key={index + '_' + option.label} value={option.value}>
                 {option.label}
@@ -154,12 +154,12 @@ export const ArkivAdminPage = () => {
       </div>
       <UpdateMessage message={updateMessage} />
 
-      <div className="flex items-end mt-8">
+      <div className='flex items-end mt-8'>
         <TextField
-          label="Slett arkivering"
-          placeholder="Arkiverings UID"
+          label='Slett arkivering'
+          placeholder='Arkiverings UID'
           onChange={(e) => setDeleteArkiveringId(e.target.value)}
-          className="w-full mr-3"
+          className='w-full mr-3'
         />
         <Button
           disabled={!deleteArkiveringId}
@@ -180,14 +180,14 @@ export const ArkivAdminPage = () => {
       </div>
       <UpdateMessage message={deleteMessage} />
 
-      <div className="mt-8 w-full">
-        <Heading level="2" size="small">
+      <div className='mt-8 w-full'>
+        <Heading level='2' size='small'>
           Arkiv tabell
         </Heading>
         {tableContent.length && (
           <div>
             <Table
-              size="large"
+              size='large'
               zebraStripes
               sort={sort}
               onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
@@ -196,13 +196,13 @@ export const ArkivAdminPage = () => {
                 <Table.Row>
                   <Table.ColumnHeader>Arkivering UID</Table.ColumnHeader>
                   <Table.ColumnHeader>Etterlevelse Dokumentasjon ID</Table.ColumnHeader>
-                  <Table.ColumnHeader sortKey="status" sortable>
+                  <Table.ColumnHeader sortKey='status' sortable>
                     Status
                   </Table.ColumnHeader>
-                  <Table.ColumnHeader sortKey="tilArkiveringDato" sortable>
+                  <Table.ColumnHeader sortKey='tilArkiveringDato' sortable>
                     Bestilt Arkiverings dato
                   </Table.ColumnHeader>
-                  <Table.ColumnHeader sortKey="arkiveringDato" sortable>
+                  <Table.ColumnHeader sortKey='arkiveringDato' sortable>
                     Arkiverings dato
                   </Table.ColumnHeader>
                 </Table.Row>
@@ -211,7 +211,7 @@ export const ArkivAdminPage = () => {
                 {sortedData.map((arkivering: IEtterlevelseArkiv) => {
                   return (
                     <Table.Row key={arkivering.id}>
-                      <Table.HeaderCell scope="row">{arkivering.id}</Table.HeaderCell>
+                      <Table.HeaderCell scope='row'>{arkivering.id}</Table.HeaderCell>
                       <Table.DataCell>
                         <Link href={`/dokumentasjon/${arkivering.etterlevelseDokumentasjonId}`}>
                           {arkivering.etterlevelseDokumentasjonId}
@@ -230,18 +230,18 @@ export const ArkivAdminPage = () => {
                 })}
               </Table.Body>
             </Table>
-            <div className="flex w-full justify-center items-center mt-3">
+            <div className='flex w-full justify-center items-center mt-3'>
               <Select
-                label="Antall rader:"
+                label='Antall rader:'
                 value={rowsPerPage}
                 onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
-                size="small"
+                size='small'
               >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
+                <option value='5'>5</option>
+                <option value='10'>10</option>
+                <option value='20'>20</option>
+                <option value='50'>50</option>
+                <option value='100'>100</option>
               </Select>
               <Spacer />
               <div>
@@ -250,7 +250,7 @@ export const ArkivAdminPage = () => {
                   onPageChange={setPage}
                   count={Math.ceil(tableContent.length / rowsPerPage)}
                   prevNextTexts
-                  size="small"
+                  size='small'
                 />
               </div>
               <Spacer />

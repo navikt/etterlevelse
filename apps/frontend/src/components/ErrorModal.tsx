@@ -13,7 +13,7 @@ const ErrorModal = (props: {
     >
       <Modal.Body>{props.errorMessage}</Modal.Body>
       <Modal.Footer>
-        <Button onClick={() => props.submit(false)} type="button">
+        <Button onClick={() => props.submit(false)} type='button'>
           Lukk
         </Button>
       </Modal.Footer>

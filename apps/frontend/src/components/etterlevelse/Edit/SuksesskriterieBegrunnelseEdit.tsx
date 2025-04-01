@@ -263,18 +263,18 @@ const KriterieBegrunnelse = ({
 
   return (
     <Box
-      className="mb-4"
+      className='mb-4'
       borderColor={getBorderColor()}
-      padding="8"
-      borderWidth="3"
-      borderRadius="medium"
+      padding='8'
+      borderWidth='3'
+      borderRadius='medium'
     >
       <BodyShort>
         Suksesskriterium {index + 1} av {totalSuksesskriterie}
       </BodyShort>
 
-      <div className="flex flex-col gap-4 mb-4">
-        <Heading size="xsmall" level="3">
+      <div className='flex flex-col gap-4 mb-4'>
+        <Heading size='xsmall' level='3'>
           {suksesskriterie.navn}
         </Heading>
 
@@ -288,64 +288,64 @@ const KriterieBegrunnelse = ({
           //     })
           //   }
           // }}
-          header="Utfyllende om kriteriet"
+          header='Utfyllende om kriteriet'
         >
           <Markdown source={suksesskriterie.beskrivelse} />
         </ReadMore>
       </div>
 
       {forGjenbruk && (
-        <div className="my-5 flex flex-col">
+        <div className='my-5 flex flex-col'>
           <CheckboxGroup
-            legend="Skriv veiledning for gjenbruk"
+            legend='Skriv veiledning for gjenbruk'
             hideLegend
             value={veiledning ? [true] : []}
             onChange={(value: boolean[]) => setVeiledning(value.length !== 0 ? true : false)}
           >
             <Checkbox
               value={true}
-              description="De som gjenbruker vurderingen din må ta stilling til kravet."
+              description='De som gjenbruker vurderingen din må ta stilling til kravet.'
             >
               Skriv veiledning til hvordan kravet oppfylles i denne konteksten
             </Checkbox>
           </CheckboxGroup>
           {veiledning && (
             <div>
-              <div className="ml-8">
-                <div className="w-full flex mb-1 mt-3.5">
+              <div className='ml-8'>
+                <div className='w-full flex mb-1 mt-3.5'>
                   <LabelWithDescription
-                    label="Beskriv relevante, sentrale vurderinger."
-                    description="Dette kan inkludere blant annet tolkning av lov, forskrift og besluttede praksiser."
+                    label='Beskriv relevante, sentrale vurderinger.'
+                    description='Dette kan inkludere blant annet tolkning av lov, forskrift og besluttede praksiser.'
                   />
                 </div>
                 {veiledningsTekstMode === 'edit' && (
                   <TextEditor
                     initialValue={veiledningTekst}
                     setValue={setVeiledningTekst}
-                    height="11.75rem"
+                    height='11.75rem'
                     simple
-                    maxWidth="49.375rem"
-                    width="100%"
+                    maxWidth='49.375rem'
+                    width='100%'
                   />
                 )}
                 {veiledningsTekstMode === 'view' && (
-                  <Alert variant="info">
+                  <Alert variant='info'>
                     <Label>
                       NAVs tolkning av loven og besluttede praksiser i denne konteksten:
                     </Label>
                     <Markdown source={veiledningTekst} />
                   </Alert>
                 )}
-                <div className="flex-col flex items-end justify-end mt-[-1px]">
-                  <ToggleGroup defaultValue="edit" onChange={setVeiledningsTekstMode} size="small">
-                    <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
-                    <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+                <div className='flex-col flex items-end justify-end mt-[-1px]'>
+                  <ToggleGroup defaultValue='edit' onChange={setVeiledningsTekstMode} size='small'>
+                    <ToggleGroup.Item value='edit'>Redigering</ToggleGroup.Item>
+                    <ToggleGroup.Item value='view'>Forhåndsvisning</ToggleGroup.Item>
                   </ToggleGroup>
                 </div>
               </div>
-              <div className="ml-8">
-                <div className="w-full flex mb-1 mt-2.5">
-                  <Label className="mt-2.5">
+              <div className='ml-8'>
+                <div className='w-full flex mb-1 mt-2.5'>
+                  <Label className='mt-2.5'>
                     Skriv en praktisk veiledning om hvordan kravet kan etterleves
                   </Label>
                 </div>
@@ -353,22 +353,22 @@ const KriterieBegrunnelse = ({
                   <TextEditor
                     initialValue={veiledningTekst2}
                     setValue={setVeiledningTekst2}
-                    height="11.75rem"
+                    height='11.75rem'
                     simple
-                    maxWidth="49.375rem"
-                    width="100%"
+                    maxWidth='49.375rem'
+                    width='100%'
                   />
                 )}
                 {veiledningsTekst2Mode === 'view' && (
-                  <Alert variant="info">
+                  <Alert variant='info'>
                     <Label>Slik kan suksesskriteriet etterleves:</Label>
                     <Markdown source={veiledningTekst2} />
                   </Alert>
                 )}
-                <div className="flex-col flex items-end justify-end mt-[-1px]">
-                  <ToggleGroup defaultValue="edit" onChange={setVeiledningsTekst2Mode} size="small">
-                    <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
-                    <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+                <div className='flex-col flex items-end justify-end mt-[-1px]'>
+                  <ToggleGroup defaultValue='edit' onChange={setVeiledningsTekst2Mode} size='small'>
+                    <ToggleGroup.Item value='edit'>Redigering</ToggleGroup.Item>
+                    <ToggleGroup.Item value='view'>Forhåndsvisning</ToggleGroup.Item>
                   </ToggleGroup>
                 </div>
               </div>
@@ -379,7 +379,7 @@ const KriterieBegrunnelse = ({
 
       {morEtterlevelse &&
         hasVeildningTekstFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id) && (
-          <Alert variant="info" className="mb-5">
+          <Alert variant='info' className='mb-5'>
             <Label>
               Følgende veiledning er skrevet av{' '}
               {morEtterlevelse.changeStamp.lastModifiedBy.split(' - ')[1]}
@@ -394,7 +394,7 @@ const KriterieBegrunnelse = ({
 
       {morEtterlevelse &&
         hasVeildningTekst2FromMorEtterlevelse(morEtterlevelse, suksesskriterie.id) && (
-          <Alert variant="info" className="mb-5">
+          <Alert variant='info' className='mb-5'>
             <Label>
               Følgende veiledning er skrevet av{' '}
               {morEtterlevelse.changeStamp.lastModifiedBy.split(' - ')[1]}
@@ -407,12 +407,12 @@ const KriterieBegrunnelse = ({
           </Alert>
         )}
 
-      <div className="w-full mt-5">
-        <div className="min-w-fit">
+      <div className='w-full mt-5'>
+        <div className='min-w-fit'>
           <RadioGroup
             id={'suksesskriterieStatus_' + index}
             value={suksessKriterieStatus}
-            legend="Oppgi status på suksesskriteriet"
+            legend='Oppgi status på suksesskriteriet'
             onChange={(val) => setSuksessKriterieStatus(val as ESuksesskriterieStatus)}
             name={'suksesskriterieStatus' + suksesskriterie.id}
           >
@@ -420,8 +420,8 @@ const KriterieBegrunnelse = ({
               <div>
                 {veiledning && (
                   <ReadMore
-                    size="medium"
-                    header="Skal jeg som har skrevet veiledning endre på status?"
+                    size='medium'
+                    header='Skal jeg som har skrevet veiledning endre på status?'
                   >
                     Når noen gjenbruker etterlevelsesdokumentet ditt, vil de arve statusen du setter
                     her.
@@ -438,7 +438,7 @@ const KriterieBegrunnelse = ({
                   </ReadMore>
                 )}
               </div>
-              <div className="block lg:flex lg:gap-6">
+              <div className='block lg:flex lg:gap-6'>
                 <Radio value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</Radio>
                 <Radio value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</Radio>
                 <Radio value={ESuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</Radio>
@@ -448,13 +448,13 @@ const KriterieBegrunnelse = ({
           </RadioGroup>
         </div>
         {!disableEdit && suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
-          <div id={'begrunnelse_' + index} className="w-full mt-8">
-            <div className="flex w-full justify-between items-center mb-1">
+          <div id={'begrunnelse_' + index} className='w-full mt-8'>
+            <div className='flex w-full justify-between items-center mb-1'>
               <Label>{getLabelForSuksessKriterie(suksessKriterieStatus)}</Label>
             </div>
-            <div className="mb-3">
+            <div className='mb-3'>
               {veiledning && (
-                <ReadMore size="medium" header="Skal jeg som har skrevet veiledning svare her?">
+                <ReadMore size='medium' header='Skal jeg som har skrevet veiledning svare her?'>
                   De som gjenbruker vurderingen din skal svare i fritekstfeltet under. I noen
                   tilfeller kan det likevel være aktuelt for deg å skrive i feltet, for eksempel
                   hvis du skal forklare hvorfor du har satt status til “Ikke relevant”. Du kan også
@@ -467,27 +467,27 @@ const KriterieBegrunnelse = ({
               <TextEditor
                 initialValue={begrunnelse}
                 setValue={setBegrunnelse}
-                height="11.75rem"
+                height='11.75rem'
                 errors={feildArrayRenderProps.form.errors}
                 simple
-                maxWidth="49.375rem"
-                width="100%"
+                maxWidth='49.375rem'
+                width='100%'
               />
             )}
 
             {mode === 'view' && (
-              <div className="p-8 border-border-subtle-hover border border-solid rounded-md">
+              <div className='p-8 border-border-subtle-hover border border-solid rounded-md'>
                 <Markdown source={begrunnelse} />
               </div>
             )}
-            <div className="flex justify-end mt-[-1px]">
-              <ToggleGroup defaultValue="edit" onChange={setMode} size="small">
-                <ToggleGroup.Item value="edit">Redigering</ToggleGroup.Item>
-                <ToggleGroup.Item value="view">Forhåndsvisning</ToggleGroup.Item>
+            <div className='flex justify-end mt-[-1px]'>
+              <ToggleGroup defaultValue='edit' onChange={setMode} size='small'>
+                <ToggleGroup.Item value='edit'>Redigering</ToggleGroup.Item>
+                <ToggleGroup.Item value='view'>Forhåndsvisning</ToggleGroup.Item>
               </ToggleGroup>
             </div>
 
-            <div className="mt-1">
+            <div className='mt-1'>
               <FormError
                 fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`}
                 akselStyling
@@ -497,12 +497,12 @@ const KriterieBegrunnelse = ({
         )}
 
         {!disableEdit && !suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
-          <div className="w-full mt-4">
+          <div className='w-full mt-4'>
             <Label>Suksesskriteriet har ikke behov for begrunnelse.</Label>
           </div>
         )}
         {disableEdit && (
-          <div className="w-full mt-4">
+          <div className='w-full mt-4'>
             <LabelAboveContent
               fullWidth
               title={getLabelForSuksessKriterie()}
@@ -516,7 +516,7 @@ const KriterieBegrunnelse = ({
         akselStyling
       />
 
-      <div className="mt-2">
+      <div className='mt-2'>
         {suksesskriterieBegrunnelse.behovForBegrunnelse && begrunnelse.length > 0 && (
           <FormError fieldName={'status'} akselStyling />
         )}

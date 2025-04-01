@@ -11,9 +11,9 @@ interface IProps {
 
 export const PvoTilbakemeldingsList = ({ allPvkDocumentListItem, isLoading }: IProps) => (
   <div>
-    {isLoading && <Skeleton variant="rectangle" />}
+    {isLoading && <Skeleton variant='rectangle' />}
     {!isLoading && (
-      <List className="mb-2.5 flex flex-col gap-2">
+      <List className='mb-2.5 flex flex-col gap-2'>
         {allPvkDocumentListItem &&
           allPvkDocumentListItem.map((pvkDokument: IPvkDokumentListItem) => (
             <ListLayout
@@ -23,7 +23,7 @@ export const PvoTilbakemeldingsList = ({ allPvkDocumentListItem, isLoading }: IP
               documentNumber={`E${pvkDokument.etterlevelseNummer}`}
               title={pvkDokument.title}
               status={<PvoStatusView status={pvkDokument.status} />}
-              upperRightField="PVK dokument ble"
+              upperRightField='PVK dokument ble'
               changeStamp={
                 pvkDokument.changeStamp.lastModifiedDate !== undefined &&
                 pvkDokument.changeStamp.lastModifiedDate !== ''

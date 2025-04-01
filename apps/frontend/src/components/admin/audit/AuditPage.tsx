@@ -53,11 +53,11 @@ export const AuditPage = () => {
   useEffect(() => lookupVersion(idSearch), [idSearch])
 
   return (
-    <PageLayout pageTitle="Versjonering" currentPage="Versjonering">
-      <Heading size="medium" level="1">
+    <PageLayout pageTitle='Versjonering' currentPage='Versjonering'>
+      <Heading size='medium' level='1'>
         {intl.audit}
       </Heading>
-      <div className="my-4">
+      <div className='my-4'>
         <AuditLabel label={intl.searchId}>
           <TextField
             label={intl.searchId}
@@ -65,7 +65,7 @@ export const AuditPage = () => {
             value={idInput}
             placeholder={intl.id}
             onChange={(e) => setIdInput(format((e.target as HTMLInputElement).value))}
-            className="w-72"
+            className='w-72'
           />
         </AuditLabel>
       </div>

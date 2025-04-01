@@ -25,18 +25,18 @@ export const MeldingKnapper = (props: {
     <div>
       <div className={`${props.marginLeft ? 'ml-10' : undefined} w-1/2 flex`}>
         <Button
-          variant="tertiary"
-          size="xsmall"
-          icon={<DocPencilIcon aria-label="" aria-hidden />}
+          variant='tertiary'
+          size='xsmall'
+          icon={<DocPencilIcon aria-label='' aria-hidden />}
           onClick={() => setEditModal(true)}
         >
           Rediger
         </Button>
         <Button
-          className="ml-2.5"
-          variant="tertiary"
-          size="xsmall"
-          icon={<TrashIcon aria-label="" aria-hidden />}
+          className='ml-2.5'
+          variant='tertiary'
+          size='xsmall'
+          icon={<TrashIcon aria-label='' aria-hidden />}
           onClick={() => setDeleteModal(true)}
         >
           Slett
@@ -51,20 +51,20 @@ export const MeldingKnapper = (props: {
         >
           <Modal.Body>
             {meldingNr === 1 && <BodyShort>Hele meldingstråden vil bli slettet.</BodyShort>}
-            <BodyShort className="flex">
+            <BodyShort className='flex'>
               {moment(melding.tid).format('ll')}{' '}
-              <div className="ml-1">
+              <div className='ml-1'>
                 <PersonName ident={melding.fraIdent} />
               </div>
             </BodyShort>
             <BodyShort>{melding.innhold}</BodyShort>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setDeleteModal(false)}>
+            <Button variant='secondary' onClick={() => setDeleteModal(false)}>
               Avbryt
             </Button>
             <Button
-              className="ml-2.5"
+              className='ml-2.5'
               onClick={() =>
                 tilbakemeldingslettMelding({ tilbakemeldingId, meldingNr }).then((t) => {
                   if (meldingNr === 1) {
@@ -86,13 +86,13 @@ export const MeldingKnapper = (props: {
         <Modal
           open={editModal}
           onClose={() => setEditModal(false)}
-          className="w-2/3"
+          className='w-2/3'
           header={{ heading: 'Rediger melding', closeButton: false }}
         >
           <Modal.Body>
-            <BodyShort className="flex">
+            <BodyShort className='flex'>
               {moment(melding.tid).format('ll')}{' '}
-              <div className="ml-1">
+              <div className='ml-1'>
                 <PersonName ident={melding.fraIdent} />
               </div>
             </BodyShort>

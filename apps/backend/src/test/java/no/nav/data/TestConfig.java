@@ -44,6 +44,10 @@ public class TestConfig {
                 .claim(StandardClaimNames.NAME, "Name Nameson")
                 .claim(AzureConstants.IDENT_CLAIM, "A123457")
                 .build(), Set.of(AppRole.KRAVEIER.toAuthority()));
+        public static AzureUserInfo PVO = new AzureUserInfo(new Builder()
+                .claim(StandardClaimNames.NAME, "PVO pvoson")
+                .claim(AzureConstants.IDENT_CLAIM, "B123457")
+                .build(), Set.of(AppRole.PERSONVERNOMBUD.toAuthority()));
 
         public MockFilter() throws URISyntaxException {
             super(null, null, new AppIdMapping("[]", ""), new AADAuthenticationProperties(),

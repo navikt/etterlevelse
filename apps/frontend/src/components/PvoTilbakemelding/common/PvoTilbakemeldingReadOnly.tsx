@@ -18,12 +18,12 @@ export const PvoTilbakemeldingReadOnly = (props: IProps) => {
 
   return (
     <div>
-      <Heading level="2" size="small" className="mb-5">
+      <Heading level='2' size='small' className='mb-5'>
         Tilbakemelding fra personvernombudet
       </Heading>
 
       {sentDate.length !== 0 && (
-        <BodyShort size="small" className="pb-5">
+        <BodyShort size='small' className='pb-5'>
           Tilbakemeldings dato: {moment(sentDate).format('ll')}
         </BodyShort>
       )}
@@ -44,7 +44,7 @@ export const PvoTilbakemeldingReadOnly = (props: IProps) => {
         </BodyLong>
       </div>
 
-      <div className="my-5">
+      <div className='my-5'>
         <Label>Tilbakemelding</Label>
         <BodyLong>
           {tilbakemeldingsinnhold &&

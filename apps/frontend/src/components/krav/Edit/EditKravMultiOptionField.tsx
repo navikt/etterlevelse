@@ -42,7 +42,7 @@ export const EditKravMultiOptionField = (
           return (
             <div>
               <LabelWithTooltip label={label} tooltip={tooltip} />
-              {caption && <BodyShort className="text-[var(--a-text-subtle)]">{caption}</BodyShort>}
+              {caption && <BodyShort className='text-[var(--a-text-subtle)]'>{caption}</BodyShort>}
               <Select
                 aria-label={label}
                 isMulti

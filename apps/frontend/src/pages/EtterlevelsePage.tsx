@@ -90,14 +90,14 @@ export const EtterlevelsePage = () => {
   return (
     <PageLayout
       pageTitle={getPageTitle()}
-      currentPage="Etterlevelse"
+      currentPage='Etterlevelse'
       breadcrumbPaths={getBreadcrumPaths()}
     >
-      {loading && <LoadingSkeleton header="Etterlevelse" />}
+      {loading && <LoadingSkeleton header='Etterlevelse' />}
 
       {!loading && (
         <div>
-          <Heading level="1" size="medium">
+          <Heading level='1' size='medium'>
             Etterlevelse
           </Heading>
           {etterlevelse && etterlevelse?.kravNummer !== 0 && krav && (

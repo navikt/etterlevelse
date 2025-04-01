@@ -36,25 +36,25 @@ export const KravListPage = () => {
   })
 
   return (
-    <PageLayout pageTitle="Forvalte og opprette krav" currentPage="Forvalte og opprette krav">
-      <div className="pb-52 w-full">
-        <ListPageHeader headingText="Forvalte og opprette krav">
+    <PageLayout pageTitle='Forvalte og opprette krav' currentPage='Forvalte og opprette krav'>
+      <div className='pb-52 w-full'>
+        <ListPageHeader headingText='Forvalte og opprette krav'>
           {user.isKraveier() && (
             <Button
-              iconPosition="left"
-              icon={<PlusIcon area-label="" aria-hidden />}
-              size="medium"
-              as="a"
-              href="/kravliste/opprett"
+              iconPosition='left'
+              icon={<PlusIcon area-label='' aria-hidden />}
+              size='medium'
+              as='a'
+              href='/kravliste/opprett'
             >
               Nytt krav
             </Button>
           )}
         </ListPageHeader>
 
-        <div className="flex justify-center w-full">
-          <div className="w-full">
-            <div className="pt-6">
+        <div className='flex justify-center w-full'>
+          <div className='w-full'>
+            <div className='pt-6'>
               <KravTabs />
             </div>
           </div>
@@ -74,9 +74,9 @@ export const KravPanels = ({ kravene, loading }: IKravPanelsProps) => {
 
   return (
     <>
-      {loading && <Skeleton variant="rectangle" />}
+      {loading && <Skeleton variant='rectangle' />}
       {!loading && (
-        <List className="mb-2.5 flex flex-col gap-2">
+        <List className='mb-2.5 flex flex-col gap-2'>
           {kravene &&
             kravene.map((krav: IKrav | TKravQL) => {
               const lov: TLovCode = codelistUtils.getCode(
@@ -134,17 +134,17 @@ const KravTabs = () => {
       }}
     >
       <Tabs.List>
-        <Tabs.Tab value="siste" label="Sist endret av meg" />
-        <Tabs.Tab value="tema" label="Endre rekkefølge på krav (Temaoversikt)" />
-        <Tabs.Tab value="alle" label="Alle krav" />
+        <Tabs.Tab value='siste' label='Sist endret av meg' />
+        <Tabs.Tab value='tema' label='Endre rekkefølge på krav (Temaoversikt)' />
+        <Tabs.Tab value='alle' label='Alle krav' />
       </Tabs.List>
-      <Tabs.Panel value="siste">
+      <Tabs.Panel value='siste'>
         <SistRedigertKrav />
       </Tabs.Panel>
-      <Tabs.Panel value="tema">
+      <Tabs.Panel value='tema'>
         <TemaList />
       </Tabs.Panel>
-      <Tabs.Panel value="alle">
+      <Tabs.Panel value='alle'>
         <AllKrav />
       </Tabs.Panel>
     </Tabs>

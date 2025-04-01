@@ -27,9 +27,9 @@ export const PvoStatusView = (props: IProps) => {
   const { status } = props
   const getStatusDisplay = (variant: any) => {
     return (
-      <Tag variant={variant} className="h-fit">
+      <Tag variant={variant} className='h-fit'>
         <div className={'flex items-center'}>
-          <Detail className="whitespace-nowrap">{pvoStatusToText(status)}</Detail>
+          <Detail className='whitespace-nowrap'>{pvoStatusToText(status)}</Detail>
         </div>
       </Tag>
     )

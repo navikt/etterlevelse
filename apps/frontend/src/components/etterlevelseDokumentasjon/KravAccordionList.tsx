@@ -45,8 +45,8 @@ export const KravAccordionList = (props: IProps) => {
   return (
     <>
       {isRisikoscenarioLoading && (
-        <div className="flex w-full justify-center items-center mt-5">
-          <Loader size="3xlarge" className="flex justify-self-center" />
+        <div className='flex w-full justify-center items-center mt-5'>
+          <Loader size='3xlarge' className='flex justify-self-center' />
         </div>
       )}
       {!isRisikoscenarioLoading && (
@@ -76,7 +76,7 @@ export const KravAccordionList = (props: IProps) => {
                   open={openAccordions[index]}
                 >
                   <Accordion.Header id={tema.code} onClick={() => toggleAccordion(index)}>
-                    <div className="flex gap-4">
+                    <div className='flex gap-4'>
                       <span>
                         {tema.shortName} ({utfylteKrav.length} av {kravliste.length} krav er ferdig
                         utfylt)
@@ -87,7 +87,7 @@ export const KravAccordionList = (props: IProps) => {
                           (krav.etterlevelseStatus === undefined ||
                             krav.etterlevelseStatus === EEtterlevelseStatus.OPPFYLLES_SENERE) &&
                           getNumberOfDaysBetween(krav.aktivertDato, new Date()) < 30
-                      ) && <Tag variant="warning">Nytt krav</Tag>}
+                      ) && <Tag variant='warning'>Nytt krav</Tag>}
                       {kravliste.find(
                         (krav) =>
                           krav.kravVersjon > 1 &&
@@ -97,17 +97,17 @@ export const KravAccordionList = (props: IProps) => {
                             (kl) => kl.kravNummer === krav.kravNummer && kl.etterlevelser.length > 0
                           ).length > 0 &&
                           getNumberOfDaysBetween(krav.aktivertDato, new Date()) < 30
-                      ) && <Tag variant="warning">Ny versjon</Tag>}
+                      ) && <Tag variant='warning'>Ny versjon</Tag>}
                     </div>
                   </Accordion.Header>
                   <Accordion.Content>
-                    <div className="flex flex-col gap-6">
+                    <div className='flex flex-col gap-6'>
                       <div>
-                        <Link href={`/tema/${tema.code}`} target="_blank">
+                        <Link href={`/tema/${tema.code}`} target='_blank'>
                           Lær mer om {tema.shortName} (åpner i en ny fane)
                         </Link>
                       </div>
-                      <List className="flex flex-col gap-2">
+                      <List className='flex flex-col gap-2'>
                         {kravliste.map((krav, idx) => (
                           <List.Item icon={<div />} key={`krav_${idx}`}>
                             <KravCard

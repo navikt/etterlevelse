@@ -69,23 +69,23 @@ export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
                     <RisikoscenarioView
                       risikoscenario={risikoscenario}
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-                      stepUrl="5"
+                      stepUrl='5'
                     />
-                    <div className="mt-12">
-                      <Heading level="3" size="small">
+                    <div className='mt-12'>
+                      <Heading level='3' size='small'>
                         Følgende tiltak gjelder for dette risikoscenarioet
                       </Heading>
                       {risikoscenario.ingenTiltak && <BodyLong>Vi skal ikke ha tiltak.</BodyLong>}
 
                       {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length !== 0 && (
-                        <div className="mt-5">
+                        <div className='mt-5'>
                           {tiltakList
                             .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
                             .map((tiltak, index) => (
                               <ReadMore
                                 key={risikoscenario.id + '_' + tiltak.id + '_' + index}
                                 header={tiltak.navn}
-                                className="mb-3"
+                                className='mb-3'
                               >
                                 <TiltakView
                                   tiltak={tiltak}
@@ -97,8 +97,8 @@ export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
                       )}
 
                       {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
-                        <div className="mt-5">
-                          <Alert className="mt-3" variant="warning">
+                        <div className='mt-5'>
+                          <Alert className='mt-3' variant='warning'>
                             Dere må legge inn tiltak under Identifisering av risikoscenarioer og
                             tiltak.
                           </Alert>

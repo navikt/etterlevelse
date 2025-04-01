@@ -120,7 +120,7 @@ export const EtterlevelseEditFields = ({
   }, [morDokumentRelasjon])
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       <Formik
         onSubmit={submit}
         initialValues={
@@ -155,25 +155,25 @@ export const EtterlevelseEditFields = ({
           setFieldError,
           dirty,
         }: FormikProps<IEtterlevelse>) => (
-          <div className="w-full">
+          <div className='w-full'>
             {!isPreview && (
-              <div className="flex flex-col">
+              <div className='flex flex-col'>
                 <Form>
                   <div>
                     {(etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT ||
                       etterlevelse.status ===
                         EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
                       <div className={'mb-12'}>
-                        <Alert className="mb-1" size="small" variant="info">
+                        <Alert className='mb-1' size='small' variant='info'>
                           Dette kravet er dokumentert som ikke relevant 20.05.2022
                         </Alert>
                         <Label>Beskrivelse av hvorfor kraver er ikke relevant</Label>
                         <BodyShort>{etterlevelse.statusBegrunnelse}</BodyShort>
                       </div>
                     )}
-                    <div className="flex w-full items-center mb-4">
+                    <div className='flex w-full items-center mb-4'>
                       {tidligereEtterlevelser && tidligereEtterlevelser.length > 0 && (
-                        <div className="flex w-full justify-end">
+                        <div className='flex w-full justify-end'>
                           <EtterlevelseCard etterlevelse={tidligereEtterlevelser[0]} />
                         </div>
                       )}
@@ -188,9 +188,9 @@ export const EtterlevelseEditFields = ({
                   </div>
                 </Form>
 
-                <div className="w-full border-t border-[#071a3636] pt-5">
+                <div className='w-full border-t border-[#071a3636] pt-5'>
                   {kravFilter === EKravFilterType.RELEVANTE_KRAV && (
-                    <div className="w-full flex flex-col min-w-fit mb-4">
+                    <div className='w-full flex flex-col min-w-fit mb-4'>
                       <Checkbox
                         checked={isOppfylesSenere}
                         onChange={() => {
@@ -202,12 +202,12 @@ export const EtterlevelseEditFields = ({
                       </Checkbox>
 
                       {isOppfylesSenere && (
-                        <div className="w-full" id="fristForFerdigstillelse">
-                          <div className="w-full max-w-[10.625rem]">
-                            <DateField name="fristForFerdigstillelse" />
+                        <div className='w-full' id='fristForFerdigstillelse'>
+                          <div className='w-full max-w-[10.625rem]'>
+                            <DateField name='fristForFerdigstillelse' />
                           </div>
                           {errors.fristForFerdigstillelse && (
-                            <Alert variant="error" size="small">
+                            <Alert variant='error' size='small'>
                               {errors.fristForFerdigstillelse}
                             </Alert>
                           )}
@@ -219,7 +219,7 @@ export const EtterlevelseEditFields = ({
                   {!_.isEmpty(errors) && (
                     <ErrorSummary
                       ref={errorSummaryRef}
-                      heading="Du må rette disse feilene før du kan fortsette"
+                      heading='Du må rette disse feilene før du kan fortsette'
                       onClick={() => console.debug(errors)}
                     >
                       {errors.suksesskriterieBegrunnelser && (
@@ -238,11 +238,11 @@ export const EtterlevelseEditFields = ({
                     </ErrorSummary>
                   )}
 
-                  <div className="w-full justify-end mt-5">
-                    <div className="flex w-full pb-3 flex-row-reverse">
+                  <div className='w-full justify-end mt-5'>
+                    <div className='flex w-full pb-3 flex-row-reverse'>
                       <Button
                         disabled={disableEdit || isOppfylesSenere}
-                        type="button"
+                        type='button'
                         onClick={() => {
                           setValidateOnBlur(true)
                           values.status = EEtterlevelseStatus.FERDIG_DOKUMENTERT
@@ -268,8 +268,8 @@ export const EtterlevelseEditFields = ({
 
                       {kravFilter === EKravFilterType.UTGAATE_KRAV && (
                         <Button
-                          className="mr-6"
-                          type="button"
+                          className='mr-6'
+                          type='button'
                           disabled={isSubmitting || disableEdit}
                           onClick={() => {
                             submitForm()
@@ -280,11 +280,11 @@ export const EtterlevelseEditFields = ({
                       )}
 
                       {kravFilter === EKravFilterType.RELEVANTE_KRAV && (
-                        <div className="flex flex-row-reverse">
+                        <div className='flex flex-row-reverse'>
                           <Button
-                            className="mr-6"
-                            type="button"
-                            variant="secondary"
+                            className='mr-6'
+                            type='button'
+                            variant='secondary'
                             disabled={isSubmitting || disableEdit}
                             onClick={() => {
                               if (
@@ -308,10 +308,10 @@ export const EtterlevelseEditFields = ({
                           </Button>
 
                           <Button
-                            className="mr-6"
+                            className='mr-6'
                             disabled={krav.status === EKravStatus.UTGAATT ? false : disableEdit}
-                            type="button"
-                            variant="secondary"
+                            type='button'
+                            variant='secondary'
                             onClick={() => {
                               if (!dirty) {
                                 ampli.logEvent('knapp klikket', {
@@ -336,7 +336,7 @@ export const EtterlevelseEditFields = ({
 
                     {etterlevelse.changeStamp.lastModifiedDate &&
                       etterlevelse.changeStamp.lastModifiedBy && (
-                        <div className="pb-6 flex justify-end w-full">
+                        <div className='pb-6 flex justify-end w-full'>
                           <BodyShort>
                             Sist utfylt:{' '}
                             {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av{' '}
@@ -365,7 +365,7 @@ export const EtterlevelseEditFields = ({
                             })
                             close()
                           }}
-                          type="button"
+                          type='button'
                         >
                           Ja, jeg vil avbryte
                         </Button>
@@ -377,8 +377,8 @@ export const EtterlevelseEditFields = ({
                             })
                             setIsAvbryModalOpen(false)
                           }}
-                          type="button"
-                          variant="secondary"
+                          type='button'
+                          variant='secondary'
                         >
                           Nei, jeg vil fortsette
                         </Button>

@@ -11,9 +11,9 @@ export const RisikoscenarioSummary = (props: IProps) => {
   const risikoscenarioLink = currentPath.slice(0, -1) + `${customStepNumber ? customStepNumber : 6}`
 
   return (
-    <FormSummary className="my-3">
+    <FormSummary className='my-3'>
       <FormSummary.Header>
-        <FormSummary.Heading level="2">Risikoscenarioer og tiltak</FormSummary.Heading>
+        <FormSummary.Heading level='2'>Risikoscenarioer og tiltak</FormSummary.Heading>
       </FormSummary.Header>
       <FormSummary.Answers>
         <FormSummary.Answer>

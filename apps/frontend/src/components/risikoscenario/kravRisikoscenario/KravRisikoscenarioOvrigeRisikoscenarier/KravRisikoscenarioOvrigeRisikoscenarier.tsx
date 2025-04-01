@@ -14,10 +14,10 @@ export const KravRisikoscenarioOvrigeRisikoscenarier: FunctionComponent<TProps> 
   const navigate: NavigateFunction = useNavigate()
 
   return (
-    <div className="mt-5">
+    <div className='mt-5'>
       <Button
-        variant="tertiary"
-        type="button"
+        variant='tertiary'
+        type='button'
         onClick={() => {
           if (user.isPersonvernombud()) {
             navigate(`/pvkdokument/${pvkDokument.id}/pvotilbakemelding/5`)

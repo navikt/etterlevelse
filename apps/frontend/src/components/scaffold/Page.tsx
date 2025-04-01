@@ -21,8 +21,8 @@ export const PageLayout = ({
   breadcrumbPaths,
 }: IPropsPageLayout) => (
   <div
-    id="content"
-    role="main"
+    id='content'
+    role='main'
     className={`flex flex-col w-full bg-white ${fullWidth ? '' : 'max-w-7xl'}`}
   >
     <div className={`${noPadding ? '' : 'px-2 pb-6'}`}>
@@ -31,7 +31,7 @@ export const PageLayout = ({
       )}
       {pageTitle && (
         <Helmet>
-          <meta charSet="utf-8" />
+          <meta charSet='utf-8' />
           <title>{pageTitle}</title>
         </Helmet>
       )}

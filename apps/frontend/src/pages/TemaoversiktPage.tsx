@@ -12,9 +12,9 @@ export const TemaOversiktPage = () => {
   }, [])
 
   return (
-    <PageLayout pageTitle="Forstå kravene" currentPage="Forstå kravene">
-      <div className="w-full flex justify-center items-center flex-col">
-        <div className="w-full px-8">
+    <PageLayout pageTitle='Forstå kravene' currentPage='Forstå kravene'>
+      <div className='w-full flex justify-center items-center flex-col'>
+        <div className='w-full px-8'>
           <TemaPanels />
         </div>
       </div>
@@ -56,7 +56,7 @@ export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
           Totalt {kravAntall} krav fordelt på {temaListe.length} temaer
         </BodyLong>
       </div>
-      <List className="mt-6">
+      <List className='mt-6'>
         {temaListe.map((tema: TTemaCode) => (
           <List.Item icon={<div />} key={tema.code}>
             <TemaPanel subContent={subContent} tema={tema} setNum={updateNum} />
@@ -92,27 +92,27 @@ export const TemaPanel = ({ tema, setNum, subContent }: ITemaPanelProps) => {
 
   return (
     <>
-      {loading && <Loader size="large" className="flex justify-self-center" />}
+      {loading && <Loader size='large' className='flex justify-self-center' />}
       {!loading && (
-        <LinkPanel className="mb-2" key={tema.code} href={'/tema/' + tema.code}>
-          <div className="w-full flex items-center ">
+        <LinkPanel className='mb-2' key={tema.code} href={'/tema/' + tema.code}>
+          <div className='w-full flex items-center '>
             <div>
               <LinkPanel.Title className={`flex ${subContent ? ' text-xl' : ''}`}>
                 {tema.shortName}
               </LinkPanel.Title>
-              <LinkPanel.Description className="lg:flex items-center gap-2 flex-wrap">
+              <LinkPanel.Description className='lg:flex items-center gap-2 flex-wrap'>
                 {lover.map((lov, index) => (
-                  <div key={lov.code} className="flex items-center gap-2">
+                  <div key={lov.code} className='flex items-center gap-2'>
                     {lov.shortName}
                     {index < lover.length - 1 && (
-                      <span className="hidden lg:block h-2 w-2 rotate-45 rounded-[0.063rem] bg-red-200"></span>
+                      <span className='hidden lg:block h-2 w-2 rotate-45 rounded-[0.063rem] bg-red-200'></span>
                     )}
                   </div>
                 ))}
               </LinkPanel.Description>
             </div>
             <Spacer />
-            <Tag variant="info">{krav.length || 0} krav</Tag>
+            <Tag variant='info'>{krav.length || 0} krav</Tag>
           </div>
         </LinkPanel>
       )}

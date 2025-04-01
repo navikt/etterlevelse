@@ -3,17 +3,17 @@ import { Field, FieldProps } from 'formik'
 import { FormError } from '../../../common/ModalSchema'
 
 export const RisikoscenarioSannsynligNivaaRadioField = () => (
-  <Field name="sannsynlighetsNivaa">
+  <Field name='sannsynlighetsNivaa'>
     {(fieldProps: FieldProps) => (
       <RadioGroup
-        legend="Vurdér risikoscenarioets sannsynlighetsnivå"
+        legend='Vurdér risikoscenarioets sannsynlighetsnivå'
         value={fieldProps.field.value}
         onChange={(value: any) => {
           fieldProps.form.setFieldValue('sannsynlighetsNivaa', value)
         }}
         error={
           fieldProps.form.errors['sannsynlighetsNivaa'] && (
-            <FormError fieldName="sannsynlighetsNivaa" />
+            <FormError fieldName='sannsynlighetsNivaa' />
           )
         }
       >

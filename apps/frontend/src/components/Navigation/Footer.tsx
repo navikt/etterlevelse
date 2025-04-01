@@ -34,30 +34,30 @@ export const Footer = () => {
 
   return (
     <div
-      className="bg-[#8269a2] text-white px-12 py-7 w-full mt-auto justify-center flex"
-      role="contentinfo"
+      className='bg-[#8269a2] text-white px-12 py-7 w-full mt-auto justify-center flex'
+      role='contentinfo'
     >
-      <div className="max-w-7xl w-full">
+      <div className='max-w-7xl w-full'>
         {showButtonToTop && (
           <Button
-            className="text-white"
-            size="xsmall"
-            icon={<ArrowUpIcon aria-label="" aria-hidden />}
+            className='text-white'
+            size='xsmall'
+            icon={<ArrowUpIcon aria-label='' aria-hidden />}
             onClick={() => window.scrollTo(0, 0)}
-            variant="tertiary-neutral"
+            variant='tertiary-neutral'
           >
             Til toppen
           </Button>
         )}
-        <div className="flex mt-11">
-          <div className=" flex flex-col">
-            <BodyShort className="text-2xl mb-5 flex items-baseline">
+        <div className='flex mt-11'>
+          <div className=' flex flex-col'>
+            <BodyShort className='text-2xl mb-5 flex items-baseline'>
               <img
-                className="mr-2.5"
+                className='mr-2.5'
                 src={etterlevelseLogoWhiteIcon}
-                alt="Etterlevlese logo"
+                alt='Etterlevlese logo'
                 aria-hidden
-                aria-label=""
+                aria-label=''
               />
               Støtte til etterlevelse
             </BodyShort>
@@ -65,38 +65,38 @@ export const Footer = () => {
             <BodyShort>Arbeids- og velferdsetaten</BodyShort>
           </div>
           <Spacer />
-          <div className="flex flex-col gap-4">
+          <div className='flex flex-col gap-4'>
             <BodyShort>Nyttige lenker</BodyShort>
-            <Link className="text-white" href={statusPageLink}>
+            <Link className='text-white' href={statusPageLink}>
               Status på etterlevelse i NAV
             </Link>
-            <Link className="text-white" href={omEtterlevelsePaNavet}>
+            <Link className='text-white' href={omEtterlevelsePaNavet}>
               Om etterlevelse på Navet
             </Link>
-            <Link className="text-white" href={behandlingsKatalogLink}>
+            <Link className='text-white' href={behandlingsKatalogLink}>
               Behandlingskatalogen
             </Link>
-            <Link className="text-white" href={VeilederEtterlevelseskrav}>
+            <Link className='text-white' href={VeilederEtterlevelseskrav}>
               Veileder for å skrive etterlevelseskrav
             </Link>
           </div>
           <Spacer />
-          <div className="flex flex-col gap-4">
+          <div className='flex flex-col gap-4'>
             <BodyShort>Om nettstedet</BodyShort>
-            <Link className="text-white" href={documentationLink}>
+            <Link className='text-white' href={documentationLink}>
               Hva er Støtte til etterlevelse?
             </Link>
           </div>
           <Spacer />
-          <div className="flex flex-col gap-4">
+          <div className='flex flex-col gap-4'>
             <BodyShort>Finn oss</BodyShort>
-            <Link className="text-white" href={datajegerSlackLink}>
+            <Link className='text-white' href={datajegerSlackLink}>
               Slack
             </Link>
-            <Link className="text-white" href={githubRepo}>
+            <Link className='text-white' href={githubRepo}>
               Github
             </Link>
-            <Link className="text-white" href={teamInfoLink}>
+            <Link className='text-white' href={teamInfoLink}>
               Teamkatalogen
             </Link>
           </div>

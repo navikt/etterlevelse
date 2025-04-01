@@ -95,11 +95,11 @@ export const BehandlingSok = () => {
   }
 
   return (
-    <div className="my-5">
-      <div className="max-w-[37.5rem] mb-10 flex flex-col">
+    <div className='my-5'>
+      <div className='max-w-[37.5rem] mb-10 flex flex-col'>
         <AsyncSelect
-          aria-label="Søk etter behandlinger"
-          placeholder="Søk etter behandlinger"
+          aria-label='Søk etter behandlinger'
+          placeholder='Søk etter behandlinger'
           components={{ DropdownIndicator }}
           noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
           controlShouldRenderValue={false}
@@ -123,13 +123,13 @@ export const BehandlingSok = () => {
 
       {loading && (
         <div>
-          <div className="ml-2.5 mt-2.5">
-            <Loader size="large" className="flex justify-self-center" />
+          <div className='ml-2.5 mt-2.5'>
+            <Loader size='large' className='flex justify-self-center' />
           </div>
         </div>
       )}
 
-      <div className="mb-4">
+      <div className='mb-4'>
         <Label>{getBehandlingData()}</Label>
       </div>
 
@@ -139,11 +139,11 @@ export const BehandlingSok = () => {
       />
 
       {!loading && etterlevelseDokumentasjoner.totalElements !== 0 && (
-        <div className="flex justify-between mt-10">
-          <div className="flex items-center">
+        <div className='flex justify-between mt-10'>
+          <div className='flex items-center'>
             <Button
               onClick={lastMer}
-              icon={<PlusIcon title="" aria-label="" aria-hidden />}
+              icon={<PlusIcon title='' aria-label='' aria-hidden />}
               variant={'secondary'}
               disabled={
                 gqlLoading ||
@@ -155,12 +155,12 @@ export const BehandlingSok = () => {
             </Button>
 
             {gqlLoading && (
-              <div className="ml-2.5">
-                <Loader size="large" />
+              <div className='ml-2.5'>
+                <Loader size='large' />
               </div>
             )}
           </div>
-          <Label className="mr-2.5">
+          <Label className='mr-2.5'>
             Viser {etterlevelseDokumentasjoner.numberOfElements}/
             {etterlevelseDokumentasjoner.totalElements}
           </Label>

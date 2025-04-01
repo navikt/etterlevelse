@@ -116,20 +116,20 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
   return (
     <>
       <Table
-        size="large"
+        size='large'
         zebraStripes
         sort={sort}
         onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
       >
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader sortKey="code" className="w-[15%]" sortable>
+            <Table.ColumnHeader sortKey='code' className='w-[15%]' sortable>
               ICode
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey="navn" className="w-[25%]" sortable>
+            <Table.ColumnHeader sortKey='navn' className='w-[25%]' sortable>
               Navn
             </Table.ColumnHeader>
-            <Table.ColumnHeader className="w-1/2 break-all">Beskrivelse</Table.ColumnHeader>
+            <Table.ColumnHeader className='w-1/2 break-all'>Beskrivelse</Table.ColumnHeader>
             <Table.ColumnHeader aria-hidden></Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -137,47 +137,47 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
           {sortedData.map((code: ICode, index) => {
             return (
               <Table.Row key={index + '_' + code.shortName}>
-                <Table.DataCell className="w-[15%] break-all">{code.code}</Table.DataCell>
+                <Table.DataCell className='w-[15%] break-all'>{code.code}</Table.DataCell>
                 <Table.DataCell>{code.shortName}</Table.DataCell>
-                <Table.DataCell className="w-1/2 break-all">
+                <Table.DataCell className='w-1/2 break-all'>
                   <div>
                     <BodyLong>{code.description}</BodyLong>
-                    <div className="break-words text-icon-warning">
+                    <div className='break-words text-icon-warning'>
                       {code.data && JSON.stringify(code.data, null, 1)}
                     </div>
                   </div>
                 </Table.DataCell>
                 <Table.DataCell>
-                  <div className="flex justify-end w-full">
-                    <Tooltip content="Vis bruk">
+                  <div className='flex justify-end w-full'>
+                    <Tooltip content='Vis bruk'>
                       <Button
                         variant={code === selectedCode && showUsage ? 'primary' : 'tertiary'}
                         onClick={() => {
                           setSelectedCode(code)
                           setShowUsage(true)
                         }}
-                        icon={<GlassesIcon title="Vis bruk" />}
+                        icon={<GlassesIcon title='Vis bruk' />}
                       />
                     </Tooltip>
-                    <AuditButton id={`${code.list}-${code.code}`} variant="tertiary" />
-                    <Tooltip content="Rediger">
+                    <AuditButton id={`${code.list}-${code.code}`} variant='tertiary' />
+                    <Tooltip content='Rediger'>
                       <Button
-                        variant="tertiary"
+                        variant='tertiary'
                         onClick={() => {
                           setSelectedCode(code)
                           setShowEditModal(true)
                         }}
-                        icon={<DocPencilIcon title="Rediger" />}
+                        icon={<DocPencilIcon title='Rediger' />}
                       />
                     </Tooltip>
-                    <Tooltip content="Slett">
+                    <Tooltip content='Slett'>
                       <Button
-                        variant="tertiary"
+                        variant='tertiary'
                         onClick={() => {
                           setSelectedCode(code)
                           setShowDeleteModal(true)
                         }}
-                        icon={<TrashIcon title="Slett" />}
+                        icon={<TrashIcon title='Slett' />}
                       />
                     </Tooltip>
                   </div>
@@ -190,7 +190,7 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
 
       {showEditModal && selectedCode && (
         <UpdateCodeListModal
-          title="Rediger kode"
+          title='Rediger kode'
           initialValues={getInitailValues(selectedCode)}
           isOpen={showEditModal}
           onClose={() => {
@@ -203,7 +203,7 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
       )}
       {showDeleteModal && selectedCode && (
         <DeleteCodeListModal
-          title="Bekreft sletting"
+          title='Bekreft sletting'
           initialValues={{
             list: selectedCode.list ?? '',
             code: selectedCode.code ?? '',

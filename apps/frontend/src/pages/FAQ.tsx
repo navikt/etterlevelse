@@ -29,30 +29,30 @@ export const FAQ = () => {
   })
   /* eslint-disable jsx-a11y/media-has-caption */
   return (
-    <PageLayout pageTitle="Om Støtte til etterlevelse" currentPage="Om Støtte til etterlevelse">
+    <PageLayout pageTitle='Om Støtte til etterlevelse' currentPage='Om Støtte til etterlevelse'>
       <div>
-        <video controls src="videos/EtterlevelseskravMedTeksting.mp4"></video>
+        <video controls src='videos/EtterlevelseskravMedTeksting.mp4'></video>
       </div>
 
-      <div className="flex justify-center w-full">
+      <div className='flex justify-center w-full'>
         <div>
-          <div className="mb-5">
-            <Heading size="medium" level="1" className="mt-14 mb-8">
+          <div className='mb-5'>
+            <Heading size='medium' level='1' className='mt-14 mb-8'>
               Om Støtte til etterlevelse
             </Heading>
 
-            <BodyLong className="mt-0">{melding?.melding}</BodyLong>
+            <BodyLong className='mt-0'>{melding?.melding}</BodyLong>
           </div>
 
           <div>
             {melding?.secondaryTittel && (
-              <Heading level="2" size="small" className="mt-14 mb-6">
+              <Heading level='2' size='small' className='mt-14 mb-6'>
                 {melding?.secondaryTittel}
               </Heading>
             )}
             <Markdown source={melding?.secondaryMelding} />
 
-            <div className="mt-20">
+            <div className='mt-20'>
               {user.isAdmin() && melding && (
                 <Detail>
                   Sist endret: {moment(melding.changeStamp.lastModifiedDate).format('ll')} av{' '}

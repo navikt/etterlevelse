@@ -58,9 +58,9 @@ export const InvolveringAvEksterneView = (props: IProps) => {
   }
 
   return (
-    <div className="w-full">
-      <div className="flex w-full">
-        <div className="pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8">
+    <div className='w-full'>
+      <div className='flex w-full'>
+        <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
           <Formik
             validateOnChange={false}
             validateOnBlur={false}
@@ -70,21 +70,21 @@ export const InvolveringAvEksterneView = (props: IProps) => {
           >
             {({ submitForm, values }) => (
               <Form>
-                <div className="flex justify-center">
+                <div className='flex justify-center'>
                   <div>
-                    <Heading level="1" size="medium" className="mb-5">
+                    <Heading level='1' size='medium' className='mb-5'>
                       Involvering av eksterne deltakere
                     </Heading>
 
-                    <Heading level="2" size="small" className="mb-3">
+                    <Heading level='2' size='small' className='mb-3'>
                       Representanter for de registrerte
                     </Heading>
 
                     <List
-                      size="small"
-                      className="mt-5"
-                      headingTag="label"
-                      title="I Behandlingskatalogen står det at dere behandler personopplysninger om:"
+                      size='small'
+                      className='mt-5'
+                      headingTag='label'
+                      title='I Behandlingskatalogen står det at dere behandler personopplysninger om:'
                     >
                       {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
                       {personkategorier.length > 0 &&
@@ -98,7 +98,7 @@ export const InvolveringAvEksterneView = (props: IProps) => {
             Behandlingskatalogen.
           </Alert> */}
 
-                    <BodyLong className="my-5">
+                    <BodyLong className='my-5'>
                       Dersom disse typer personopplysninger ikke stemmer, må dere oppdatere
                       Behandlingskatalogen.
                     </BodyLong>
@@ -110,7 +110,7 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                       vurdere om det er behov for å involvere en representant for de registrerte.
                     </BodyLong>
 
-                    <BodyLong className="mt-3">
+                    <BodyLong className='mt-3'>
                       Hvis dere er usikre på om behandlingene treffer flere eller færre
                       personkategorier, kan det være til hjelp å se på behandlingens livsløp.
                     </BodyLong>
@@ -123,15 +123,15 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                     personopplysninger om.
                   </ReadMore> */}
 
-                    <div className="mt-3">
+                    <div className='mt-3'>
                       <BoolField
-                        label="Har dere involvert en representant for de registrerte?"
-                        name="harInvolvertRepresentant"
+                        label='Har dere involvert en representant for de registrerte?'
+                        name='harInvolvertRepresentant'
                         horizontal
                       />
                     </div>
 
-                    <div className="mt-5 max-w-[75ch]">
+                    <div className='mt-5 max-w-[75ch]'>
                       <TextAreaField
                         rows={3}
                         noPlaceholder
@@ -141,11 +141,11 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                             ? 'Utdyp hvordan dere har involvert representant(er) for de registrerte'
                             : 'Utdyp hvorfor dere ikke har involvert representant(er) for de registrerte'
                         }
-                        name="representantInvolveringsBeskrivelse"
+                        name='representantInvolveringsBeskrivelse'
                       />
                     </div>
 
-                    <List className="mt-10" title="Representanter for databehandlere">
+                    <List className='mt-10' title='Representanter for databehandlere'>
                       <BodyLong>
                         I Behandlingskatalogen står det at følgende databehandlere benyttes:
                       </BodyLong>
@@ -156,7 +156,7 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                         ))}
                     </List>
 
-                    <BodyLong className="my-3">
+                    <BodyLong className='my-3'>
                       Dersom listen over behandlere ikke stemmer, må dere gjøre endringer i
                       Behandlingskatalogen.
                     </BodyLong>
@@ -166,15 +166,15 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                       databehandlere, kan det være til hjelp å se på behandlingens livsløp.
                     </BodyLong>
 
-                    <BodyLong className="mt-5">
+                    <BodyLong className='mt-5'>
                       Dersom det skal benyttes en databehandler i hele eller deler av behandlingen,
                       skal dere som hovedregel inkludere en representant for databehandler i
                       vurderingen av personvernkonsekvenser (PVK).
                     </BodyLong>
 
                     <ReadMore
-                      className="mt-3 max-w-[75ch]"
-                      header="Trenger vi å snakke direkte med databehandlere?"
+                      className='mt-3 max-w-[75ch]'
+                      header='Trenger vi å snakke direkte med databehandlere?'
                     >
                       Når dere vurderer personvernrisiko, må dere sette dere inn i hvordan
                       databehandlere behandler personopplysninger. Det kan være aktuelt å diskutere
@@ -184,15 +184,15 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                       å melde fra om endringer dere ønsker å diskutere.
                     </ReadMore>
 
-                    <div className="mt-5">
+                    <div className='mt-5'>
                       <BoolField
-                        label="Har dere involvert en representant for databehandlere?"
-                        name="harDatabehandlerRepresentantInvolvering"
+                        label='Har dere involvert en representant for databehandlere?'
+                        name='harDatabehandlerRepresentantInvolvering'
                         horizontal
                       />
                     </div>
 
-                    <div className="mt-3 max-w-[75ch]">
+                    <div className='mt-3 max-w-[75ch]'>
                       <TextAreaField
                         rows={3}
                         noPlaceholder
@@ -202,13 +202,13 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                             ? 'Utdyp hvordan dere har involvert representant(er) for databehandler(e)'
                             : 'Utdyp hvorfor dere ikke har involvert representant(er) for databehandler(e)'
                         }
-                        name="dataBehandlerRepresentantInvolveringBeskrivelse"
+                        name='dataBehandlerRepresentantInvolveringBeskrivelse'
                       />
                     </div>
 
-                    <div className="mt-5">
+                    <div className='mt-5'>
                       <Button
-                        type="button"
+                        type='button'
                         onClick={() => {
                           if (submitForm) {
                             submitForm()

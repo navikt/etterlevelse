@@ -31,7 +31,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
       </BodyLong>
 
       {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-        <Heading level="2" size="small" className="mb-5">
+        <Heading level='2' size='small' className='mb-5'>
           Egenskaper som gjelder for behandlingene deres
         </Heading>
       )}
@@ -40,10 +40,10 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
         etterlevelseDokumentasjon.behandlinger.length === 0) && (
         <div>
           {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-            <Alert variant="info" className="mb-5">
+            <Alert variant='info' className='mb-5'>
               Dere har ikke ennå lagt til behandlinger under{' '}
               <ExternalLink
-                className="text-medium"
+                className='text-medium'
                 href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
               >
                 Dokumentegenskaper
@@ -53,7 +53,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
           )}
 
           {!etterlevelseDokumentasjon.hasCurrentUserAccess && !user.isAdmin() && (
-            <Alert variant="info" className="mb-5">
+            <Alert variant='info' className='mb-5'>
               Det har ikke blitt lagt til behandlinger under dokumentegenskaper.
             </Alert>
           )}
@@ -71,18 +71,18 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
                 '/behandlingens-livslop/' +
                 (behandlingensLivslop?.id ? behandlingensLivslop.id : 'ny')
               }
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="redigere etterlevelsesdokumentasjon"
-              className="inline"
+              target='_blank'
+              rel='noopener noreferrer'
+              aria-label='redigere etterlevelsesdokumentasjon'
+              className='inline'
             >
               dere har tegnet behandlingens livsløp (åpner i en ny fane).
             </Link>
           </BodyShort>
         )}
 
-      <List className="py-5">
-        <div className="pb-3">
+      <List className='py-5'>
+        <div className='pb-3'>
           <Label>Følgende egenskaper er hentet fra Behandlingskatalogen:</Label>
         </div>
         {profilering !== null && (
@@ -107,7 +107,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
       </List>
 
       {(profilering === null || automatiskBehandling === null || opplysningstyperMangler) && (
-        <Alert variant="warning">
+        <Alert variant='warning'>
           Dere har ikke vurdert følgende egenskaper i Behandlingskatalogen:
           <List>
             {profilering === null && <List.Item>Profilering</List.Item>}
@@ -117,7 +117,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
             )}
           </List>
           Dere bør fullføre dokumentasjon av behandlingene deres i{' '}
-          <ExternalLink className="text-medium" href={`${env.pollyBaseUrl}`}>
+          <ExternalLink className='text-medium' href={`${env.pollyBaseUrl}`}>
             Behandlingskatalogen
           </ExternalLink>{' '}
           før dere vurderer behov for PVK.

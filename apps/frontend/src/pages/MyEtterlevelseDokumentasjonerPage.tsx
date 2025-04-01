@@ -21,24 +21,24 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
   })
 
   return (
-    <PageLayout pageTitle="Dokumentere etterlevelse" currentPage="Dokumentere etterlevelse">
-      <div className="pb-52 w-full">
-        <ListPageHeader headingText="Dokumentere etterlevelse">
+    <PageLayout pageTitle='Dokumentere etterlevelse' currentPage='Dokumentere etterlevelse'>
+      <div className='pb-52 w-full'>
+        <ListPageHeader headingText='Dokumentere etterlevelse'>
           <Button
             onClick={() => {
               navigate('/dokumentasjon/create')
             }}
-            size="medium"
-            variant="primary"
-            className="whitespace-nowrap ml-5"
+            size='medium'
+            variant='primary'
+            className='whitespace-nowrap ml-5'
           >
             Nytt etterlevelsesdokument
           </Button>
         </ListPageHeader>
 
-        <div className="flex justify-center w-full">
-          <div className="w-full">
-            <div className="pt-6">
+        <div className='flex justify-center w-full'>
+          <div className='w-full'>
+            <div className='pt-6'>
               <DokumentasjonTabs />
             </div>
           </div>

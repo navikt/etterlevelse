@@ -86,10 +86,10 @@ export const Tilbakemeldinger = ({
   }
 
   return (
-    <div className="w-full py-5">
-      {loading && <Loader size="large" />}
+    <div className='w-full py-5'>
+      {loading && <Loader size='large' />}
       {!loading && !!tilbakemeldinger.length && (
-        <div className="flex flex-col">
+        <div className='flex flex-col'>
           <Accordion>
             {tilbakemeldinger.slice(0, count).map((tilbakemelding) => {
               const focused = focusNr === tilbakemelding.id
@@ -97,31 +97,31 @@ export const Tilbakemeldinger = ({
               return (
                 <Accordion.Item key={tilbakemelding.id} open={tilbakemelding.id === focusNr}>
                   <Accordion.Header onClick={() => setFocus(focused ? '' : tilbakemelding.id)}>
-                    <div className="w-full p-2 flex">
+                    <div className='w-full p-2 flex'>
                       <div>
                         {tilbakemelding.endretKrav && (
-                          <ShowWarningMessage warningMessage="Spørsmålet har ført til at innholdet i kravet er endret" />
+                          <ShowWarningMessage warningMessage='Spørsmålet har ført til at innholdet i kravet er endret' />
                         )}
                         <div className={`flex w-full ${tilbakemelding.endretKrav ? 'mt-2' : ''}`}>
                           <Portrait ident={tilbakemelding.melderIdent} />
-                          <div className="flex flex-col w-full ml-2.5">
-                            <div className="flex w-full items-center">
+                          <div className='flex flex-col w-full ml-2.5'>
+                            <div className='flex w-full items-center'>
                               <Label>
                                 <PersonName ident={tilbakemelding.melderIdent} />
                               </Label>
-                              <div className="flex ml-6">
+                              <div className='flex ml-6'>
                                 <BodyShort>
                                   Sendt: {moment(tilbakemelding.meldinger[0].tid).format('lll')}
                                 </BodyShort>
-                                <BodyShort className="ml-3.5">
+                                <BodyShort className='ml-3.5'>
                                   Kravversjon: K{tilbakemelding.kravNummer}.
                                   {tilbakemelding.kravVersjon}
                                 </BodyShort>
                               </div>
                             </div>
                             {!focused && (
-                              <div className="flex w-full">
-                                <BodyShort className="mr-7 mt-1 w-full">
+                              <div className='flex w-full'>
+                                <BodyShort className='mr-7 mt-1 w-full'>
                                   {_.truncate(tilbakemelding.meldinger[0].innhold, {
                                     length: 80,
                                     separator: /[.,] +/,
@@ -140,11 +140,11 @@ export const Tilbakemeldinger = ({
                   </Accordion.Header>
                   <Accordion.Content>
                     {focused && (
-                      <div className="flex w-full">
+                      <div className='flex w-full'>
                         <BodyLong>{tilbakemelding.meldinger[0].innhold}</BodyLong>
                       </div>
                     )}
-                    <div className="flex w-full items-center mt-4">
+                    <div className='flex w-full items-center mt-4'>
                       {focused && tilbakemelding.meldinger.length === 1 && (
                         <MeldingKnapper
                           marginLeft
@@ -160,7 +160,7 @@ export const Tilbakemeldinger = ({
 
                     {/* meldingsliste */}
                     {focused && (
-                      <div className="flex flex-col mt-4">
+                      <div className='flex flex-col mt-4'>
                         {tilbakemelding.meldinger.slice(1).map((melding) => (
                           <ResponseMelding
                             key={melding.meldingNr}
@@ -195,10 +195,10 @@ export const Tilbakemeldinger = ({
           </Accordion>
 
           {tilbakemeldinger.length > DEFAULT_COUNT_SIZE && (
-            <div className="self-end mt-2.5">
+            <div className='self-end mt-2.5'>
               <Button
-                variant="tertiary"
-                icon={<PlusIcon aria-label="" aria-hidden />}
+                variant='tertiary'
+                icon={<PlusIcon aria-label='' aria-hidden />}
                 onClick={() => setCount(count + DEFAULT_COUNT_SIZE)}
                 disabled={tilbakemeldinger.length <= count}
               >
@@ -220,12 +220,12 @@ export const Tilbakemeldinger = ({
 
       {!hasKravExpired && (
         <div>
-          <div className="mt-10">
-            <Heading size="medium" level="1">
+          <div className='mt-10'>
+            <Heading size='medium' level='1'>
               Spørsmål til kraveier
             </Heading>
             {user.isLoggedIn() ? (
-              <BodyLong className="max-w-xl">
+              <BodyLong className='max-w-xl'>
                 Her kan du stille kraveier et spørsmål dersom det er uklarheter vedrørende hvordan
                 kravet skal forstås. Spørsmål og svar fra kraveier blir synlig for alle på denne
                 siden.
@@ -349,24 +349,24 @@ const TilbakemeldingSvar = ({
   }
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       {(melderInfo.kanSkrive || user.isKraveier()) && (
-        <Heading size="medium" className="mb-2 mt-8">
+        <Heading size='medium' className='mb-2 mt-8'>
           {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
         </Heading>
       )}
 
       {user.isKraveier() && (
         <div>
-          <div className="w-fit mb-2">
+          <div className='w-fit mb-2'>
             <Checkbox value={isEndretKrav} onChange={() => setIsEndretKrav(!isEndretKrav)}>
               Tilbakemelding har ført til kravendring
             </Checkbox>
           </div>
-          <div className="flex items-center mb-2">
-            <Label className="mr-2 w-fit">Velg spørsmål status:</Label>
+          <div className='flex items-center mb-2'>
+            <Label className='mr-2 w-fit'>Velg spørsmål status:</Label>
             <Select
-              label="Velg spørsmål status"
+              label='Velg spørsmål status'
               hideLabel
               value={getTilbakeMeldingStatusToOption(tilbakeMeldingStatus)[0].id}
               onChange={(e) => {
@@ -382,11 +382,11 @@ const TilbakemeldingSvar = ({
           </div>
         </div>
       )}
-      <div className="flex w-full items-end justify-center">
+      <div className='flex w-full items-end justify-center'>
         {(melderInfo.kanSkrive || user.isKraveier()) && (
           <Textarea
-            className="w-full"
-            label="Ny tilbakemelding"
+            className='w-full'
+            label='Ny tilbakemelding'
             hideLabel
             minRows={6}
             onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)}
@@ -404,20 +404,20 @@ const TilbakemeldingSvar = ({
             }}
           >
             <Modal.Body>
-              <BodyShort className="flex">
+              <BodyShort className='flex'>
                 {moment(tilbakemelding.meldinger[0].tid).format('ll')}
-                <div className="ml-1">
+                <div className='ml-1'>
                   <PersonName ident={tilbakemelding.meldinger[0].fraIdent} />
                 </div>
               </BodyShort>
               <BodyLong>{tilbakemelding.meldinger[0].innhold}</BodyLong>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={() => setDeleteModal(false)}>
+              <Button variant='secondary' onClick={() => setDeleteModal(false)}>
                 Avbryt
               </Button>
               <Button
-                className="ml-2.5"
+                className='ml-2.5'
                 onClick={() =>
                   tilbakemeldingslettMelding({
                     tilbakemeldingId: tilbakemelding.id,
@@ -434,11 +434,11 @@ const TilbakemeldingSvar = ({
           </Modal>
         )}
       </div>
-      <div className="flex mt-2 w-full">
+      <div className='flex mt-2 w-full'>
         {user.isAdmin() && (
           <Button
-            icon={<TrashIcon aria-label="" aria-hidden />}
-            variant="secondary"
+            icon={<TrashIcon aria-label='' aria-hidden />}
+            variant='secondary'
             onClick={() => setDeleteModal(true)}
           >
             Slett hele samtalen
@@ -457,23 +457,23 @@ const TilbakemeldingSvar = ({
               </Block>
             )} */}
         {loading && (
-          <div className="self-center ml-2.5">
-            <Loader size="large" />
+          <div className='self-center ml-2.5'>
+            <Loader size='large' />
           </div>
         )}
 
         {(melderInfo.kanSkrive || user.isKraveier()) && (
-          <div className="flex flex-1 justify-end">
+          <div className='flex flex-1 justify-end'>
             {user.isKraveier() && (
               <div>
                 {isUpdatingStatus ? (
-                  <div className="self-center ml-2.5">
-                    <Loader size="large" />
+                  <div className='self-center ml-2.5'>
+                    <Loader size='large' />
                   </div>
                 ) : (
                   <Button
-                    variant="secondary"
-                    className="ml-2.5"
+                    variant='secondary'
+                    className='ml-2.5'
                     onClick={() => {
                       setIsUpdatingStatus(true)
                       updateTilbakemeldingStatusOgEndretKrav({
@@ -493,14 +493,14 @@ const TilbakemeldingSvar = ({
                 )}
               </div>
             )}
-            <Button className="ml-2.5" disabled={!response} onClick={submit}>
+            <Button className='ml-2.5' disabled={!response} onClick={submit}>
               {ubesvartOgKraveier ? 'Svar' : 'Send'}
               {user.isKraveier() ? ' og oppdater status' : ''}
             </Button>
           </div>
         )}
       </div>
-      {error && <Alert variant="error">{error}</Alert>}
+      {error && <Alert variant='error'>{error}</Alert>}
     </div>
   )
 }

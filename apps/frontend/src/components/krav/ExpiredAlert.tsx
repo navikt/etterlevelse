@@ -11,8 +11,8 @@ const ExpiredAlert = ({
   statusName?: EKravStatus
   description?: ReactNode
 }) => (
-  <Alert variant="warning" className={`${description ? 'w-full' : 'w-fit'} my-2`}>
-    <BodyLong className="ml-3">
+  <Alert variant='warning' className={`${description ? 'w-full' : 'w-fit'} my-2`}>
+    <BodyLong className='ml-3'>
       Dette er et {statusName == EKravStatus.UTKAST && 'utkast.'}
       {statusName == EKravStatus.UTGAATT && 'utgått krav.'}
       {alleKravVersjoner.length > 1 && (
@@ -27,7 +27,7 @@ const ExpiredAlert = ({
         </>
       )}
     </BodyLong>
-    {description && <div className="ml-3">{description}</div>}
+    {description && <div className='ml-3'>{description}</div>}
   </Alert>
 )
 

@@ -15,4 +15,6 @@ p {
   max-width: 75ch;
 }
 
-iframe#webpack-dev-server-client-overlay{display:none!important}
+iframe#webpack-dev-server-client-overlay {
+  display: none !important;
+}

@@ -72,7 +72,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
 
   return (
     <Modal
-      className="max-w-xl w-full"
+      className='max-w-xl w-full'
       open={open}
       onClose={() => close()}
       header={{ heading: 'Spørsmål til kraveier', closeButton: false }}
@@ -93,12 +93,12 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
             <Form>
               <Modal.Body>
                 {showNotification ? (
-                  <Box className="mb-9" padding="8">
-                    <div className="flex items-center">
-                      <FontAwesomeIcon icon={faThumbsUp} size="lg" />
-                      <Heading size="large">Spørsmålet er sendt til kraveier!</Heading>
+                  <Box className='mb-9' padding='8'>
+                    <div className='flex items-center'>
+                      <FontAwesomeIcon icon={faThumbsUp} size='lg' />
+                      <Heading size='large'>Spørsmålet er sendt til kraveier!</Heading>
                     </div>
-                    <BodyLong className="mt-4">
+                    <BodyLong className='mt-4'>
                       Du får varsel på {getMessageType(showNotification)} når spørsmålet er besvart.
                     </BodyLong>
                   </Box>
@@ -125,58 +125,58 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
                     </Accordion>
 
                     <TextAreaField
-                      label="Ditt spørsmål"
-                      name="foersteMelding"
-                      placeholder="Skriv her.."
+                      label='Ditt spørsmål'
+                      name='foersteMelding'
+                      placeholder='Skriv her..'
                     />
-                    <Field name="varslingsadresse.adresse">
+                    <Field name='varslingsadresse.adresse'>
                       {(fieldProps: FieldProps) => (
                         <div>
-                          <Tooltip content="Velg hvilken adresse du vil varsles på når kraveier svarer på spørsmålet">
+                          <Tooltip content='Velg hvilken adresse du vil varsles på når kraveier svarer på spørsmålet'>
                             <Label>Din varslingsadresse</Label>
                           </Tooltip>
                           <div>
-                            <div className="flex flex-col mt-4">
+                            <div className='flex flex-col mt-4'>
                               {adresseType === EAdresseType.SLACK && (
                                 <SlackChannelSearch add={setVarslingsadresse} />
                               )}
                               {adresseType !== EAdresseType.SLACK && !values.varslingsadresse && (
                                 <Button
-                                  type="button"
-                                  variant="secondary"
+                                  type='button'
+                                  variant='secondary'
                                   icon={<FontAwesomeIcon icon={faSlackHash} />}
                                   onClick={() => setAdresseType(EAdresseType.SLACK)}
                                 >
                                   Slack-kanal
                                 </Button>
                               )}
-                              <div className="mt-2.5">
+                              <div className='mt-2.5'>
                                 {adresseType === EAdresseType.SLACK_USER && (
                                   <SlackUserSearch add={setVarslingsadresse} />
                                 )}
                                 {adresseType !== EAdresseType.SLACK_USER &&
                                   !values.varslingsadresse && (
                                     <Button
-                                      type="button"
-                                      variant="secondary"
-                                      className="ml-2.5"
-                                      icon={<PersonCircleIcon aria-label="" aria-hidden />}
+                                      type='button'
+                                      variant='secondary'
+                                      className='ml-2.5'
+                                      icon={<PersonCircleIcon aria-label='' aria-hidden />}
                                       onClick={() => setAdresseType(EAdresseType.SLACK_USER)}
                                     >
                                       Slack-bruker
                                     </Button>
                                   )}
                               </div>
-                              <div className="mt-2.5">
+                              <div className='mt-2.5'>
                                 {adresseType === EAdresseType.EPOST && (
                                   <AddEmail add={setVarslingsadresse} />
                                 )}
                                 {adresseType !== EAdresseType.EPOST && !values.varslingsadresse && (
                                   <Button
-                                    type="button"
-                                    variant="secondary"
-                                    className="ml-2.5"
-                                    icon={<EnvelopeClosedIcon aria-label="" aria-hidden />}
+                                    type='button'
+                                    variant='secondary'
+                                    className='ml-2.5'
+                                    icon={<EnvelopeClosedIcon aria-label='' aria-hidden />}
                                     onClick={() => setAdresseType(EAdresseType.EPOST)}
                                   >
                                     Epost
@@ -185,7 +185,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
                               </div>
                             </div>
                             {fieldProps.meta.error && (
-                              <Alert variant="error">{fieldProps.meta.error}</Alert>
+                              <Alert variant='error'>{fieldProps.meta.error}</Alert>
                             )}
 
                             {values.varslingsadresse && (
@@ -203,9 +203,9 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
               </Modal.Body>
               <Modal.Footer>
                 {showNotification ? (
-                  <div className="flex justify-end">
+                  <div className='flex justify-end'>
                     <Button
-                      type="button"
+                      type='button'
                       onClick={() => {
                         close(newTilbakeMelding)
                         setShowNotification(undefined)
@@ -216,12 +216,12 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
                     </Button>
                   </div>
                 ) : (
-                  <div className="flex justify-end flex-1">
-                    <div>{error && <Alert variant="error">{error}</Alert>}</div>
-                    <Button type="button" variant="secondary" onClick={() => close()}>
+                  <div className='flex justify-end flex-1'>
+                    <div>{error && <Alert variant='error'>{error}</Alert>}</div>
+                    <Button type='button' variant='secondary' onClick={() => close()}>
                       Avbryt
                     </Button>
-                    <Button type="button" disabled={isSubmitting} onClick={() => submitForm()}>
+                    <Button type='button' disabled={isSubmitting} onClick={() => submitForm()}>
                       Send spørsmål
                     </Button>
                   </div>

@@ -17,9 +17,9 @@ export const TiltakAccordionList = (props: IProps) => {
           <Accordion.Item key={tiltak.id}>
             <Accordion.Header>
               {tiltak.navn}{' '}
-              <div className="flex gap-2">
-                {!tiltak.ansvarlig.navIdent && <Tag variant="alt2">Tiltaksansvarlig savnes</Tag>}
-                {!tiltak.frist && <Tag variant="alt2">Tiltaksfrist savnes</Tag>}
+              <div className='flex gap-2'>
+                {!tiltak.ansvarlig.navIdent && <Tag variant='alt2'>Tiltaksansvarlig savnes</Tag>}
+                {!tiltak.frist && <Tag variant='alt2'>Tiltaksfrist savnes</Tag>}
               </div>
             </Accordion.Header>
             <Accordion.Content>

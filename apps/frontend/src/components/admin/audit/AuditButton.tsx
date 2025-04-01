@@ -23,7 +23,7 @@ export const AuditButton = (props: IAuditButtonProps) => {
       ) : (
         <>
           <Tooltip content={intl.version}>
-            <Button {...restProps} icon={<ClockDashedIcon title="Versjonering" />} />
+            <Button {...restProps} icon={<ClockDashedIcon title='Versjonering' />} />
           </Tooltip>
         </>
       )}

@@ -91,17 +91,17 @@ export const OversiktView = (props: IProps) => {
   }, [])
 
   return (
-    <div className="flex justify-center">
+    <div className='flex justify-center'>
       <div>
-        <Heading level="1" size="medium" className="mb-5">
+        <Heading level='1' size='medium' className='mb-5'>
           Oversikt over PVK-prosessen
         </Heading>
-        <ReadMore className="mb-5 max-w-[766px]" header="Hvordan skal vi jobbe med PVK?">
+        <ReadMore className='mb-5 max-w-[766px]' header='Hvordan skal vi jobbe med PVK?'>
           <BodyShort>
             I PVK-en skal dere beskrive deres behandling av personopplysninger, og gjøre en
             risikoanalyse. Prosessen inkluderer:
           </BodyShort>
-          <List as="ol">
+          <List as='ol'>
             <List.Item>
               Dere beskriver behandlingen slik at det er enklere å identifisere risikoer.
             </List.Item>
@@ -118,9 +118,9 @@ export const OversiktView = (props: IProps) => {
           </List>
         </ReadMore>
 
-        <FormSummary className="my-3">
+        <FormSummary className='my-3'>
           <FormSummary.Header>
-            <FormSummary.Heading level="2">Status</FormSummary.Heading>
+            <FormSummary.Heading level='2'>Status</FormSummary.Heading>
           </FormSummary.Header>
           <FormSummary.Answers>
             <FormSummary.Answer>
@@ -128,25 +128,25 @@ export const OversiktView = (props: IProps) => {
                 <Link
                   onClick={() => updateTitleUrlAndStep(2)}
                   href={window.location.pathname.slice(0, -1) + 2}
-                  className="cursor-pointer"
+                  className='cursor-pointer'
                 >
                   Behandlingens livsløp
                 </Link>
               </FormSummary.Value>
-              <FormSummary.Value className="gap-2 flex">
-                <div className="gap-2 flex pt-1">
+              <FormSummary.Value className='gap-2 flex'>
+                <div className='gap-2 flex pt-1'>
                   {!behandlingensLivslop && (
-                    <Tag variant="warning" size="xsmall">
+                    <Tag variant='warning' size='xsmall'>
                       Ikke påbegynt
                     </Tag>
                   )}
                   {behandlingensLivslop && behandlingensLivslop.filer.length === 0 && (
-                    <Tag variant="neutral" size="xsmall">
+                    <Tag variant='neutral' size='xsmall'>
                       Ingen filer er lastet opp
                     </Tag>
                   )}
                   {behandlingensLivslop && behandlingensLivslop.filer.length !== 0 && (
-                    <Tag variant="success" size="xsmall">
+                    <Tag variant='success' size='xsmall'>
                       Lastet opp {behandlingensLivslop.filer.length}{' '}
                       {behandlingensLivslop.filer.length === 1 ? 'fil' : 'filer'}
                     </Tag>
@@ -159,7 +159,7 @@ export const OversiktView = (props: IProps) => {
                           ? 'success'
                           : 'neutral'
                       }
-                      size="xsmall"
+                      size='xsmall'
                     >
                       {behandlingensLivslop.beskrivelse !== '' &&
                       behandlingensLivslop.beskrivelse !== undefined
@@ -191,7 +191,7 @@ export const OversiktView = (props: IProps) => {
           </FormSummary.Answers>
         </FormSummary>
 
-        <List title="Deltaker og ansvarlige" className="w-full">
+        <List title='Deltaker og ansvarlige' className='w-full'>
           <List.Item>
             <BodyShort>
               <strong>Risikoeier:</strong>{' '}
@@ -225,15 +225,15 @@ export const OversiktView = (props: IProps) => {
         </List>
 
         {!etterlevelseDokumentasjon.risikoeiereData && (
-          <div className="w-fit">
-            <Alert variant="warning">
+          <div className='w-fit'>
+            <Alert variant='warning'>
               Dere har ikke lagt inn en risikoeier. Dere må gjøre dette før dere sender PVK-en til
               Personvernombudet. Dere kan redigere deltakere og ansvarlige under
               <Link
                 href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="redigere etterlevelsesdokumentasjon"
+                target='_blank'
+                rel='noopener noreferrer'
+                aria-label='redigere etterlevelsesdokumentasjon'
               >
                 Dokumentegenskaper (åpner i en ny fane).
               </Link>
@@ -281,20 +281,20 @@ const FormSummaryPanel = (props: IFormSummaryPanelProps) => {
   return (
     <FormSummary.Answer key={title}>
       <FormSummary.Value>
-        <Link onClick={onClick} href={href} className="cursor-pointer">
+        <Link onClick={onClick} href={href} className='cursor-pointer'>
           {title}
         </Link>
       </FormSummary.Value>
       <FormSummary.Value>
         {status && (
-          <Tag variant={status === 'Ikke påbegynt' ? 'warning' : 'info'} size="xsmall">
+          <Tag variant={status === 'Ikke påbegynt' ? 'warning' : 'info'} size='xsmall'>
             {status}
           </Tag>
         )}
         {step === 4 && (
           <Tag
             variant={pvkDokumentStatus !== EPvkDokumentStatus.UNDERARBEID ? 'info' : 'warning'}
-            size="xsmall"
+            size='xsmall'
           >
             {pvkDokumentStatusToText(pvkDokumentStatus)}
           </Tag>

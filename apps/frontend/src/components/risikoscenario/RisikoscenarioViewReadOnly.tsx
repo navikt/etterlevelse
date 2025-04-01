@@ -28,30 +28,30 @@ export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
     <div>
       {!noCopyButton && (
         <CopyButton
-          variant="action"
+          variant='action'
           copyText={window.location.href}
-          text="Kopiér scenariolenke"
-          activeText="Lenken er kopiert"
+          text='Kopiér scenariolenke'
+          activeText='Lenken er kopiert'
           icon={<LinkIcon aria-hidden />}
         />
       )}
-      <BodyLong className="mt-5">{risikoscenario.beskrivelse}</BodyLong>
+      <BodyLong className='mt-5'>{risikoscenario.beskrivelse}</BodyLong>
 
       {risikoscenario.generelScenario && (
-        <BodyLong className="mt-8">
+        <BodyLong className='mt-8'>
           Dette risikoscenarioet er ikke tilknyttet spesifikke etterlevelseskrav.
         </BodyLong>
       )}
 
       {!risikoscenario.generelScenario && (
-        <ReadMore header="Vis etterlevelseskrav hvor risikoscenarioet inntreffer">
-          <List as="ul">
+        <ReadMore header='Vis etterlevelseskrav hvor risikoscenarioet inntreffer'>
+          <List as='ul'>
             {risikoscenario.relevanteKravNummer.map(
               (relevantKrav: IKravReference, index: number) => {
                 const kravHref: string = `/dokumentasjon/${params.id}/${relevantKrav.temaCode || 'PVK'}/RELEVANTE_KRAV/krav/${relevantKrav.kravNummer}/${relevantKrav.kravVersjon}`
 
                 return (
-                  <List.Item className="max-w-[75ch]" key={`${relevantKrav.kravNummer}_${index}`}>
+                  <List.Item className='max-w-[75ch]' key={`${relevantKrav.kravNummer}_${index}`}>
                     <ExternalLink href={kravHref}>
                       K{relevantKrav.kravNummer}.{relevantKrav.kravVersjon} {relevantKrav.navn}
                     </ExternalLink>
@@ -64,7 +64,7 @@ export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
       )}
 
       {risikoscenario.sannsynlighetsNivaa !== 0 && (
-        <div className="mt-12">
+        <div className='mt-12'>
           <RisikoscenarioTag
             level={risikoscenario.sannsynlighetsNivaa}
             text={getSannsynlighetsnivaaText(risikoscenario.sannsynlighetsNivaa)}
@@ -73,11 +73,11 @@ export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
       )}
 
       {risikoscenario.sannsynlighetsNivaaBegrunnelse && (
-        <BodyLong className="mt-5">{risikoscenario.sannsynlighetsNivaaBegrunnelse}</BodyLong>
+        <BodyLong className='mt-5'>{risikoscenario.sannsynlighetsNivaaBegrunnelse}</BodyLong>
       )}
 
       {risikoscenario.konsekvensNivaa !== 0 && (
-        <div className="mt-12">
+        <div className='mt-12'>
           <RisikoscenarioTag
             level={risikoscenario.konsekvensNivaa}
             text={getKonsekvenssnivaaText(risikoscenario.konsekvensNivaa)}
@@ -86,7 +86,7 @@ export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
       )}
 
       {risikoscenario.konsekvensNivaaBegrunnelse && (
-        <BodyLong className="mt-5">{risikoscenario.konsekvensNivaaBegrunnelse}</BodyLong>
+        <BodyLong className='mt-5'>{risikoscenario.konsekvensNivaaBegrunnelse}</BodyLong>
       )}
     </div>
   )

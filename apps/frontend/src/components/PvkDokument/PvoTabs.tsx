@@ -33,17 +33,17 @@ const PvoTabs = ({ allPvkDocumentListItem, isLoading }: IProps) => {
       }}
     >
       <Tabs.List>
-        <Tabs.Tab value="siste" label="Mine sist redigerte" />
-        <Tabs.Tab value="alle" label="Alle PVKer" />
+        <Tabs.Tab value='siste' label='Mine sist redigerte' />
+        <Tabs.Tab value='alle' label='Alle PVKer' />
       </Tabs.List>
-      <Tabs.Panel value="siste">
+      <Tabs.Panel value='siste'>
         HER SKAL DET VÆRE SISTE REDIGERTE {/* <SistRedigertKrav /> */}
       </Tabs.Panel>
-      <Tabs.Panel value="alle">
-        <div className="w-full justify-center my-4">
-          <div className="flex justify-center content-center w-full">
-            <div className="flex justify-start align-middle w-full">
-              <Label size="medium">
+      <Tabs.Panel value='alle'>
+        <div className='w-full justify-center my-4'>
+          <div className='flex justify-center content-center w-full'>
+            <div className='flex justify-start align-middle w-full'>
+              <Label size='medium'>
                 {/* {kravene.totalElements ? kravene.totalElements : 0}  */}
                 {allPvkDocumentListItem.length} PVK dokumenter
               </Label>

@@ -6,11 +6,16 @@ import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingRepo;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingRepoCustom;
+import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemeldingFilter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,6 +24,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PvoTilbakemeldingService {
     private final PvoTilbakemeldingRepo pvoTilbakemeldingRepo;
+    private final PvoTilbakemeldingRepoCustom pvoTilbakemeldingRepoCustom;
 
     public PvoTilbakemelding get(UUID uuid) {
         if (uuid == null || !pvoTilbakemeldingRepo.existsById(uuid)) return null;
@@ -33,8 +39,24 @@ public class PvoTilbakemeldingService {
         return pvoTilbakemeldingRepo.findAll(pageParameters.createPage());
     }
 
+    public Page<PvoTilbakemelding> getAll(Pageable pageable) {
+        return pvoTilbakemeldingRepo.findAll(pageable);
+    }
+
     public Optional<PvoTilbakemelding> getByPvkDokumentId(UUID pvkDokumentId) {
         return pvoTilbakemeldingRepo.findByPvkDokumentId(pvkDokumentId);
+    }
+
+    public List<PvoTilbakemelding> getByFilter(PvoTilbakemeldingFilter filter) {
+        if (!StringUtils.isBlank(filter.getId())) {
+            PvoTilbakemelding pvoTilbakemelding = pvoTilbakemeldingRepo.getReferenceById(UUID.fromString(filter.getId()));
+            if (pvoTilbakemelding != null) {
+                return List.of(pvoTilbakemelding);
+            }
+            return List.of();
+        }
+
+        return pvoTilbakemeldingRepoCustom.findBy(filter);
     }
 
 

@@ -54,8 +54,8 @@ const CodeListPage = () => {
 
   if (!user.isAdmin() || !lists) {
     return (
-      <div role="main">
-        <Loader size="large" className="flex justify-self-center" />
+      <div role='main'>
+        <Loader size='large' className='flex justify-self-center' />
       </div>
     )
   }
@@ -63,21 +63,21 @@ const CodeListPage = () => {
   return (
     <PageLayout
       pageTitle={listname ? listname : 'Velg kodeverk'}
-      currentPage="Administrering av kodeverk"
+      currentPage='Administrering av kodeverk'
     >
-      <Heading size="medium" level="1">
+      <Heading size='medium' level='1'>
         Administrering av kodeverk
       </Heading>
-      {loading && <Loader size="large" />}
+      {loading && <Loader size='large' />}
       {!loading && (
-        <div className="flex justify-between w-full">
+        <div className='flex justify-between w-full'>
           <Select
-            label="Velg kodeverk"
+            label='Velg kodeverk'
             hideLabel
-            className="w-full max-w-xl"
+            className='w-full max-w-xl'
             onChange={(event: ChangeEvent<HTMLSelectElement>) => setListname(event.target.value)}
           >
-            <option value="">Velg kodeverk</option>
+            <option value=''>Velg kodeverk</option>
             {codelistUtils.makeValueLabelForAllCodeLists().map(
               (
                 codeLabel: {
@@ -96,8 +96,8 @@ const CodeListPage = () => {
           </Select>
           {listname && (
             <Button
-              icon={<PlusIcon area-label="" aria-hidden />}
-              variant="tertiary"
+              icon={<PlusIcon area-label='' aria-hidden />}
+              variant='tertiary'
               onClick={() => setCreateCodeListModal(!createCodeListModal)}
             >
               Opprett ny kode
@@ -107,13 +107,13 @@ const CodeListPage = () => {
       )}
 
       {!loading && currentCodelist && (
-        <div className="mt-4">
+        <div className='mt-4'>
           <CodeListTable tableData={currentCodelist || []} refresh={update} />
         </div>
       )}
       {listname && createCodeListModal && (
         <ModalCreateCodeList
-          title="Ny kode"
+          title='Ny kode'
           list={listname}
           isOpen={createCodeListModal}
           errorOnCreate={errorOnResponse}

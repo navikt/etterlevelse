@@ -164,10 +164,10 @@ export const AllKrav = () => {
   }
 
   const getSelector = (kravFilter: EKravListFilter, options: any[], value: string) => (
-    <div className="ml-3 min-w-fit">
+    <div className='ml-3 min-w-fit'>
       <Select
         key={'krav_filter_' + kravFilter}
-        size="small"
+        size='small'
         label={`Filter ${kravFilter}`}
         hideLabel
         //placeholder='tema'
@@ -185,7 +185,7 @@ export const AllKrav = () => {
             kravFilter
           )
         }}
-        className="flex"
+        className='flex'
       >
         {options.map((option: any) => (
           <option value={option.value} key={kravFilter + '_' + option.value}>
@@ -197,21 +197,21 @@ export const AllKrav = () => {
   )
 
   return loading && !kravene.numberOfElements ? (
-    <div className="justify-center flex flex-1 mt-10">
-      <Loader size="large" />
+    <div className='justify-center flex flex-1 mt-10'>
+      <Loader size='large' />
     </div>
   ) : error ? (
-    <Alert variant="error">{JSON.stringify(error, null, 2)}</Alert>
+    <Alert variant='error'>{JSON.stringify(error, null, 2)}</Alert>
   ) : (
     <div>
-      <div className="w-full justify-center my-4">
-        <div className="flex justify-center content-center w-full">
-          <div className="flex justify-start align-middle w-full">
-            <Label size="medium">{kravene.totalElements ? kravene.totalElements : 0} Krav</Label>
+      <div className='w-full justify-center my-4'>
+        <div className='flex justify-center content-center w-full'>
+          <div className='flex justify-start align-middle w-full'>
+            <Label size='medium'>{kravene.totalElements ? kravene.totalElements : 0} Krav</Label>
           </div>
-          <div className="flex w-full items-center">
-            <div className="flex items-center justify-end w-full">
-              <Label size="small">Filter</Label>
+          <div className='flex w-full items-center'>
+            <div className='flex items-center justify-end w-full'>
+              <Label size='small'>Filter</Label>
               {getSelector(
                 EKravListFilter.RELEVANS,
                 getOptions(
@@ -240,31 +240,31 @@ export const AllKrav = () => {
       </div>
       <KravPanels kravene={sortedKravList} loading={loading} />
       {sortedKravList.length === 0 && (
-        <div className="w-full flex justify-center">
-          <BodyShort size="small">Fant ingen krav</BodyShort>
+        <div className='w-full flex justify-center'>
+          <BodyShort size='small'>Fant ingen krav</BodyShort>
         </div>
       )}
 
       {!loading && kravene.totalElements !== 0 && (
-        <div className="flex justify-between mt-10">
-          <div className="flex items-center">
+        <div className='flex justify-between mt-10'>
+          <div className='flex items-center'>
             <Button
               onClick={lastMer}
-              icon={<PlusIcon area-label="" aria-hidden />}
-              variant="secondary"
-              size="medium"
+              icon={<PlusIcon area-label='' aria-hidden />}
+              variant='secondary'
+              size='medium'
               disabled={gqlLoading || kravene.numberOfElements >= kravene.totalElements}
             >
               Vis mer
             </Button>
 
             {gqlLoading && (
-              <div className="w-full flex justify-center">
-                <Loader size="large" />
+              <div className='w-full flex justify-center'>
+                <Loader size='large' />
               </div>
             )}
           </div>
-          <Label className="mr-2.5">
+          <Label className='mr-2.5'>
             Viser {kravene.numberOfElements}/{kravene.totalElements}
           </Label>
         </div>

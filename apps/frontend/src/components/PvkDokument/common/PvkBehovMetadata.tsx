@@ -13,7 +13,7 @@ export const PvkBehovMetadata = (props: IProps) => {
   const { etterlevelseDokumentasjon } = props
   return (
     <>
-      <Heading level="2" size="small" className="mb-5">
+      <Heading level='2' size='small' className='mb-5'>
         Hentet fra deres etterlevelsesdokumentasjon
       </Heading>
 
@@ -23,7 +23,7 @@ export const PvkBehovMetadata = (props: IProps) => {
           {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
             <List.Item key={behandling.nummer}>
               <ExternalLink
-                className="text-medium"
+                className='text-medium'
                 href={`${env.pollyBaseUrl}process/${behandling.id}`}
               >
                 {behandlingName(behandling)}
@@ -32,7 +32,7 @@ export const PvkBehovMetadata = (props: IProps) => {
           ))}
         </List>
       ) : (
-        <BodyShort className="my-5">Ingen behandling er valgt.</BodyShort>
+        <BodyShort className='my-5'>Ingen behandling er valgt.</BodyShort>
       )}
 
       <Label>Dere har koblet følgende dokumenter på denne etterlevelsesdokumentasjonen:</Label>
@@ -49,24 +49,24 @@ export const PvkBehovMetadata = (props: IProps) => {
                 </List.Item>
               )
             return (
-              <span className="flex" key={ros}>
+              <span className='flex' key={ros}>
                 {ros}
               </span>
             )
           })}
         </List>
       ) : (
-        <BodyShort className="my-5"> Ingen dokumenter valgt.</BodyShort>
+        <BodyShort className='my-5'> Ingen dokumenter valgt.</BodyShort>
       )}
 
       {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-        <BodyShort className="inline-block">
+        <BodyShort className='inline-block'>
           Dere kan redigere hvilke behandinger og dokumenter som er tilknyttet i{' '}
           <Link
             href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="redigere etterlevelsesdokumentasjon"
+            target='_blank'
+            rel='noopener noreferrer'
+            aria-label='redigere etterlevelsesdokumentasjon'
           >
             Dokumentegenskaper (åpner i en ny fane).
           </Link>

@@ -53,7 +53,7 @@ const ModalCreateCodeList = ({
 
   return (
     <Modal
-      className="w-full max-w-2xl px-8"
+      className='w-full max-w-2xl px-8'
       open={isOpen}
       onClose={() => onClose()}
       header={{ heading: title, closeButton: list === EListName.LOV ? true : false }}
@@ -73,38 +73,38 @@ const ModalCreateCodeList = ({
             <Form>
               <Modal.Body>
                 <Field
-                  name="code"
+                  name='code'
                   render={({ field }: FieldProps) => (
                     <TextField
                       {...field}
-                      className="w-full"
-                      label="Kode"
-                      error={errors.code && <FormError fieldName="code" />}
+                      className='w-full'
+                      label='Kode'
+                      error={errors.code && <FormError fieldName='code' />}
                     />
                   )}
                 />
 
                 <Field
-                  name="shortName"
+                  name='shortName'
                   render={({ field }: FieldProps) => (
                     <TextField
                       {...field}
-                      className="w-full mt-4"
-                      label="Navn"
-                      error={errors.shortName && <FormError fieldName="shortName" />}
+                      className='w-full mt-4'
+                      label='Navn'
+                      error={errors.shortName && <FormError fieldName='shortName' />}
                     />
                   )}
                 />
 
                 <Field
-                  name="description"
+                  name='description'
                   render={({ field }: FieldProps) => (
                     <Textarea
                       {...field}
-                      className="w-full mt-4"
-                      label="Beskrivelse"
+                      className='w-full mt-4'
+                      label='Beskrivelse'
                       minRows={10}
-                      error={errors.description && <FormError fieldName="description" />}
+                      error={errors.description && <FormError fieldName='description' />}
                     />
                   )}
                 />
@@ -114,19 +114,19 @@ const ModalCreateCodeList = ({
                 {list === EListName.LOV && <LovCodeDataForm />}
               </Modal.Body>
               <Modal.Footer>
-                <div className="flex justify-end">
-                  <div className="mr-auto">
+                <div className='flex justify-end'>
+                  <div className='mr-auto'>
                     {errorOnCreate && <BodyShort>{errorOnCreate}</BodyShort>}
                   </div>
                   <Button
-                    type="button"
-                    variant="secondary"
-                    className="mr-4"
+                    type='button'
+                    variant='secondary'
+                    className='mr-4'
                     onClick={() => onClose()}
                   >
                     Avbryt
                   </Button>
-                  <Button type="button" onClick={submitForm}>
+                  <Button type='button' onClick={submitForm}>
                     Lagre
                   </Button>
                 </div>

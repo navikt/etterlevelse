@@ -29,11 +29,11 @@ export const KravEditStatusModal = ({
     <Modal.Body>
       {brukerBeskjed}
 
-      {formComponent && <div className="mt-4">{formComponent}</div>}
+      {formComponent && <div className='mt-4'>{formComponent}</div>}
     </Modal.Body>
     <Modal.Footer>
       {children}
-      <Button type="button" variant="secondary" onClick={() => setKravMessage()}>
+      <Button type='button' variant='secondary' onClick={() => setKravMessage()}>
         Nei, avbryt handlingen
       </Button>
     </Modal.Footer>

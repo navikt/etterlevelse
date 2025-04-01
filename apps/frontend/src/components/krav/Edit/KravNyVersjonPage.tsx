@@ -67,14 +67,14 @@ export const KravNyVersjonPage = () => {
     <>
       {krav && (
         <PageLayout
-          pageTitle="Rediger krav"
-          currentPage="Rediger krav"
+          pageTitle='Rediger krav'
+          currentPage='Rediger krav'
           breadcrumbPaths={[kravBreadCrumbPath]}
           key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon}
         >
           {kravLoading && (
-            <div className="w-full flex items-center flex-col">
-              <Loader size="3xlarge" />{' '}
+            <div className='w-full flex items-center flex-col'>
+              <Loader size='3xlarge' />{' '}
             </div>
           )}
 
@@ -89,15 +89,15 @@ export const KravNyVersjonPage = () => {
               {({ values, errors, isSubmitting, submitForm }) => (
                 <Form>
                   <div>
-                    <div className="w-full">
-                      <Heading level="1" size="medium">
+                    <div className='w-full'>
+                      <Heading level='1' size='medium'>
                         Ny versjon
                       </Heading>
-                      <Heading level="2" size="small">
+                      <Heading level='2' size='small'>
                         {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}{' '}
                       </Heading>
-                      <Alert variant="warning">
-                        <Heading spacing size="small" level="3">
+                      <Alert variant='warning'>
+                        <Heading spacing size='small' level='3'>
                           Sikker på at du vil opprette en ny versjon?
                         </Heading>
                         Ny versjon av kravet skal opprettes når det er{' '}
@@ -109,21 +109,21 @@ export const KravNyVersjonPage = () => {
                     </div>
 
                     <KravFormFields
-                      mode="edit"
+                      mode='edit'
                       kravVersjon={values.kravVersjon}
                       errors={errors}
                       varselMeldingActive={varselMeldingActive}
                       setVarselMeldingActive={setVarselMeldingActive}
                     />
 
-                    <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white">
+                    <div className='button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white'>
                       {errors.status && (
-                        <div className="mb-3">
-                          <FormError fieldName="status" />
+                        <div className='mb-3'>
+                          <FormError fieldName='status' />
                         </div>
                       )}
 
-                      <div className="flex w-full">
+                      <div className='flex w-full'>
                         <KravStandardButtons
                           submitCancelButton={() => {
                             navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon - 1}`)
@@ -142,11 +142,11 @@ export const KravNyVersjonPage = () => {
                         />
                       </div>
                     </div>
-                    <div className="py-12">
+                    <div className='py-12'>
                       <TextAreaField
-                        label="Notater (Kun synlig for kraveier)"
-                        name="notat"
-                        height="15.625rem"
+                        label='Notater (Kun synlig for kraveier)'
+                        name='notat'
+                        height='15.625rem'
                         markdown
                       />
                     </div>

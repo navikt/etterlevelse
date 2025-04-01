@@ -36,24 +36,24 @@ const DeleteVirkemiddeltModal = ({
       onClose={() => setIsOpen(false)}
       open={isOpen}
       header={{ heading: 'Bekreft sletting.', closeButton: false }}
-      width="medium"
+      width='medium'
     >
       <Modal.Body>
         <BodyShort> Bekreft sletting av {virkemiddel?.navn}.</BodyShort>
       </Modal.Body>
 
       <Modal.Footer>
-        <div className="flex justify-end">
-          <div className="mr-auto">{errorOnDelete && <p>{errorOnDelete}</p>}</div>
+        <div className='flex justify-end'>
+          <div className='mr-auto'>{errorOnDelete && <p>{errorOnDelete}</p>}</div>
           <Button
-            variant="secondary"
-            type="button"
-            className="mr-2"
+            variant='secondary'
+            type='button'
+            className='mr-2'
             onClick={() => setIsOpen(false)}
           >
             Avbryt
           </Button>
-          <Button type="button" onClick={() => submit(virkemiddel?.id)}>
+          <Button type='button' onClick={() => submit(virkemiddel?.id)}>
             Slett
           </Button>
         </div>

@@ -8,8 +8,8 @@ export const Portrait = (props: { ident: string; size?: string }) => {
   const [image] = useState(personImageLink(props.ident))
   const [error, setError] = useState<boolean>(false)
   return (
-    <div className="w-11 h-11">
-      {loading && <Loader size={'large'} className="flex justify-self-center" />}
+    <div className='w-11 h-11'>
+      {loading && <Loader size={'large'} className='flex justify-self-center' />}
       {!error ? (
         <img
           onLoad={() => {
@@ -21,7 +21,7 @@ export const Portrait = (props: { ident: string; size?: string }) => {
             setLoading(false)
           }}
           src={image}
-          alt="Avatar icon"
+          alt='Avatar icon'
           aria-hidden
           style={{
             width: loading ? 0 : '100%',
@@ -32,7 +32,7 @@ export const Portrait = (props: { ident: string; size?: string }) => {
       ) : (
         <img
           src={avatarPlaceholder}
-          alt="Avatar icon"
+          alt='Avatar icon'
           aria-hidden
           style={{
             width: loading ? 0 : '100%',

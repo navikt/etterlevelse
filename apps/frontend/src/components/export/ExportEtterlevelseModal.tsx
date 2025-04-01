@@ -19,12 +19,12 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
 
   return (
     <div>
-      <Button variant="tertiary" size="small" onClick={() => setIsExportModalOpen(true)}>
+      <Button variant='tertiary' size='small' onClick={() => setIsExportModalOpen(true)}>
         Eksporter til Word
       </Button>
 
       <Modal
-        width="30rem"
+        width='30rem'
         open={isExportModalOpen}
         onClose={() => {
           setValgtTema('')
@@ -34,19 +34,19 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
       >
         <Modal.Body>
           {isLoading ? (
-            <div className="flex justify-center w-full">
-              <Loader size="large" />
+            <div className='flex justify-center w-full'>
+              <Loader size='large' />
             </div>
           ) : (
-            <div className="flex flex-col gap-4">
+            <div className='flex flex-col gap-4'>
               <Select
-                label="Velg et tema for eksportering"
+                label='Velg et tema for eksportering'
                 onChange={(event: ChangeEvent<HTMLSelectElement>) =>
                   setValgtTema(event.currentTarget.value)
                 }
                 value={valgtTema}
               >
-                <option key="" value="">
+                <option key='' value=''>
                   Alle tema
                 </option>
                 {codelistUtils
@@ -58,7 +58,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                   ))}
               </Select>
               <RadioGroup
-                legend="Dokumentet skal inneholde"
+                legend='Dokumentet skal inneholde'
                 hideLegend
                 value={onlyActiveKrav}
                 onChange={(value: boolean) => setOnlyActiveKrav(value)}
@@ -67,17 +67,17 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                 <Radio value={true}>Eksporter kun gjeldende versjon krav</Radio>
               </RadioGroup>
               {errorMessage && (
-                <div className="w-full mt-4">
-                  <Box className="mb-2.5" padding="4" background="surface-warning-subtle">
-                    <div className="flex justify-center">
+                <div className='w-full mt-4'>
+                  <Box className='mb-2.5' padding='4' background='surface-warning-subtle'>
+                    <div className='flex justify-center'>
                       <BodyShort>{errorMessage}</BodyShort>
                     </div>
                   </Box>
                 </div>
               )}
-              <div className="flex justify-end gap-2">
+              <div className='flex justify-end gap-2'>
                 <Button
-                  variant="tertiary"
+                  variant='tertiary'
                   onClick={() => {
                     setValgtTema('')
                     setIsExportModalOpen(false)
@@ -86,7 +86,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                   Avbryt
                 </Button>
                 <Button
-                  variant="primary"
+                  variant='primary'
                   onClick={() => {
                     ;(async () => {
                       setIsLoading(true)

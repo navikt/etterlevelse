@@ -32,16 +32,16 @@ export const ViewEtterlevelse = ({
   )
 
   return (
-    <div className="w-full mt-12">
+    <div className='w-full mt-12'>
       <div>
-        <Heading size="medium">{getHeaderText(etterlevelse.status)}</Heading>
+        <Heading size='medium'>{getHeaderText(etterlevelse.status)}</Heading>
         {etterlevelseDokumentasjon ? (
-          <div className="mb-12">
+          <div className='mb-12'>
             <BodyShort>
               E{etterlevelseDokumentasjon.etterlevelseNummer} - {etterlevelseDokumentasjon.title}
             </BodyShort>
             {!modalVersion && (
-              <div className="flex content-center">
+              <div className='flex content-center'>
                 <li />
                 <Link href={`/dokumentasjon/${etterlevelseDokumentasjon.id}`}>
                   Gå til etterlevelse dokumentasjon
@@ -49,7 +49,7 @@ export const ViewEtterlevelse = ({
               </div>
             )}
             {!modalVersion && (
-              <div className="mt-2 flex content-center">
+              <div className='mt-2 flex content-center'>
                 <li />
                 <Link href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>Gå til kravet</Link>
               </div>
@@ -59,16 +59,16 @@ export const ViewEtterlevelse = ({
           etterlevelse.etterlevelseDokumentasjonId && (
             <div>
               {' '}
-              <Loader size={'large'} className="flex justify-self-center" />
+              <Loader size={'large'} className='flex justify-self-center' />
               {etterlevelse.etterlevelseDokumentasjonId}
             </div>
           )
         )}
       </div>
 
-      <div className="mt-9 w-fit">
+      <div className='mt-9 w-fit'>
         <Tag
-          size="small"
+          size='small'
           variant={
             etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
             etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT
@@ -85,20 +85,20 @@ export const ViewEtterlevelse = ({
       </div>
 
       {etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT && (
-        <div className="my-8">
-          <Heading size="medium">Hvorfor er ikke kravet relevant?</Heading>
+        <div className='my-8'>
+          <Heading size='medium'>Hvorfor er ikke kravet relevant?</Heading>
           <BodyShort>
             <Markdown source={etterlevelse.statusBegrunnelse} />
           </BodyShort>
         </div>
       )}
       {etterlevelse.status === EEtterlevelseStatus.OPPFYLLES_SENERE && (
-        <div className="my-8">
-          <Heading size="medium">Oppfylles innen</Heading>
+        <div className='my-8'>
+          <Heading size='medium'>Oppfylles innen</Heading>
           <BodyShort>{moment(etterlevelse.fristForFerdigstillelse).format('ll')}</BodyShort>
         </div>
       )}
-      <div className="mt-4">
+      <div className='mt-4'>
         {etterlevelse &&
           !loading &&
           krav.suksesskriterier.map((suksesskriterium, index) => {
@@ -107,21 +107,21 @@ export const ViewEtterlevelse = ({
               suksesskriterium
             )
             return (
-              <div key={suksesskriterium.id} className="mb-5">
-                <Box className="bg-white" padding="4">
-                  <div className="flex justify-center mt-8 mb-4">
-                    <div className="flex flex-1">
-                      <BodyShort size="small">
+              <div key={suksesskriterium.id} className='mb-5'>
+                <Box className='bg-white' padding='4'>
+                  <div className='flex justify-center mt-8 mb-4'>
+                    <div className='flex flex-1'>
+                      <BodyShort size='small'>
                         Suksesskriterium {index + 1} av {krav.suksesskriterier.length}
                       </BodyShort>
                     </div>
                     {(!suksessbeskrivelseBegrunnelse.behovForBegrunnelse ||
                       suksessbeskrivelseBegrunnelse.begrunnelse) && (
-                      <div className="flex justify-end">
-                        <BodyShort size="small" className="flex items-center">
+                      <div className='flex justify-end'>
+                        <BodyShort size='small' className='flex items-center'>
                           {suksessbeskrivelseBegrunnelse.suksesskriterieStatus ===
                             ESuksesskriterieStatus.OPPFYLT && (
-                            <CheckmarkIcon aria-label="" aria-hidden color="#06893A" />
+                            <CheckmarkIcon aria-label='' aria-hidden color='#06893A' />
                           )}
                           {etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT ||
                           suksessbeskrivelseBegrunnelse.suksesskriterieStatus ===
@@ -137,11 +137,11 @@ export const ViewEtterlevelse = ({
                   </div>
                   <Label>{suksesskriterium.navn}</Label>
 
-                  <ReadMore defaultOpen header="Utfyllende om kriteriet">
+                  <ReadMore defaultOpen header='Utfyllende om kriteriet'>
                     <Markdown source={suksesskriterium.beskrivelse} />
                   </ReadMore>
 
-                  <div className="w-full h-[0.063rem] mt-4 mb-6 bg-gray-400" />
+                  <div className='w-full h-[0.063rem] mt-4 mb-6 bg-gray-400' />
 
                   {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse ||
                   suksessbeskrivelseBegrunnelse.begrunnelse ? (
@@ -155,7 +155,7 @@ export const ViewEtterlevelse = ({
                             ? 'Hvorfor er kriteriet ikke oppfylt?'
                             : 'Hvordan er kriteriet oppfylt?'}
                       </Label>
-                      <div className="mb-12">
+                      <div className='mb-12'>
                         {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse &&
                         !suksessbeskrivelseBegrunnelse.begrunnelse ? (
                           <BodyShort>Kriteriet har ikke behov for begrunnelse</BodyShort>
@@ -165,7 +165,7 @@ export const ViewEtterlevelse = ({
                       </div>
                     </div>
                   ) : (
-                    <div className="mb-12">
+                    <div className='mb-12'>
                       <BodyShort>
                         {etterlevelse.status === EEtterlevelseStatus.OPPFYLLES_SENERE
                           ? 'Oppfyles senere'
@@ -179,7 +179,7 @@ export const ViewEtterlevelse = ({
           })}
       </div>
 
-      <BodyShort size="small">
+      <BodyShort size='small'>
         Sist endret: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av{' '}
         {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
       </BodyShort>

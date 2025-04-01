@@ -101,7 +101,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         risikoscenario={activeRisikoscenario}
         noCopyButton={false}
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-        stepUrl="5"
+        stepUrl='5'
       />
 
       <div>
@@ -109,10 +109,10 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
           !isCreateTiltakFormActive &&
           !isEditTiltakFormActive &&
           !isAddExistingMode && (
-            <div className="mt-12 flex gap-2 items-center">
+            <div className='mt-12 flex gap-2 items-center'>
               <Button
-                variant="tertiary"
-                type="button"
+                variant='tertiary'
+                type='button'
                 icon={<PencilIcon aria-hidden />}
                 onClick={() => setIsEditModalOpen(true)}
               >
@@ -128,14 +128,14 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
           )}
       </div>
 
-      <div className="mt-12">
+      <div className='mt-12'>
         <RisikoscenarioTiltakHeader />
         {!risikoscenario.ingenTiltak && (
           <div>
             {risikoscenario.tiltakIds.length === 0 &&
               !isCreateTiltakFormActive &&
               !isEditTiltakFormActive && (
-                <Alert className="mt-5 mb-9" variant="warning">
+                <Alert className='mt-5 mb-9' variant='warning'>
                   Dere har ikke lagt inn tiltak
                 </Alert>
               )}
@@ -155,7 +155,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
             {isCreateTiltakFormActive && (
               <TiltakForm
-                title="Opprett nytt tiltak"
+                title='Opprett nytt tiltak'
                 initialValues={{} as ITiltak}
                 pvkDokumentId={risikoscenario.pvkDokumentId}
                 submit={submitCreateTiltak}
@@ -177,9 +177,9 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
               !isCreateTiltakFormActive &&
               !isEditTiltakFormActive &&
               !isAddExistingMode && (
-                <div className="mt-5 flex gap-2">
+                <div className='mt-5 flex gap-2'>
                   <Button
-                    type="button"
+                    type='button'
                     onClick={() => {
                       setIsCreateTiltakFormActive(true)
 
@@ -189,8 +189,8 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
                     Opprett nytt tiltak
                   </Button>
                   <Button
-                    type="button"
-                    variant="secondary"
+                    type='button'
+                    variant='secondary'
                     onClick={() => {
                       setIsAddExisitingMode(true)
                       setIsTiltakFormActive(true)
@@ -207,7 +207,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
           !isEditTiltakFormActive &&
           !isAddExistingMode &&
           activeRisikoscenario.tiltakIds.length === 0 && (
-            <div className="mt-3">
+            <div className='mt-3'>
               <IngenTiltakField
                 risikoscenario={activeRisikoscenario}
                 formRef={formRef}
@@ -220,7 +220,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
       {isEditModalOpen && (
         <RisikoscenarioModalForm
-          headerText="Redigér øvrig risikoscenario"
+          headerText='Redigér øvrig risikoscenario'
           isOpen={isEditModalOpen}
           setIsOpen={setIsEditModalOpen}
           submit={submit}

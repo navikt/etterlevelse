@@ -116,7 +116,7 @@ export const TextEditor = (props: TTextEditorProps) => {
   return (
     <div>
       <div
-        className="focus:border-[var(--a-deepblue-600)]"
+        className='focus:border-[var(--a-deepblue-600)]'
         style={{
           backgroundColor: ettlevColors.white,
           ...borderColor(hasError ? ettlevColors.red500 : ettlevColors.textAreaBorder),

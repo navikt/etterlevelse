@@ -41,11 +41,11 @@ export const AddSlackUserModal = (props: IProps) => {
       open={isOpen}
       onClose={close}
       header={{ heading: 'Legg til Slack-bruker', closeButton: false }}
-      width="medium"
+      width='medium'
     >
-      <Modal.Body className="min-h-[31rem]">
+      <Modal.Body className='min-h-[31rem]'>
         <RadioGroup
-          legend="Hvem skal varsles på Slack?"
+          legend='Hvem skal varsles på Slack?'
           value={radioValue}
           onChange={(val) => {
             if (val === 'meg') {
@@ -55,25 +55,25 @@ export const AddSlackUserModal = (props: IProps) => {
             }
             setRadioValue(val)
           }}
-          className="w-full"
+          className='w-full'
         >
-          <Radio value="meg">Meg ({user.getName()})</Radio>
-          <Radio value="slack" className="w-full">
+          <Radio value='meg'>Meg ({user.getName()})</Radio>
+          <Radio value='slack' className='w-full'>
             Noen andre
           </Radio>
         </RadioGroup>
         {radioValue === 'slack' && (
-          <div className="pl-8 w-full">
-            <div className="flex flex-col">
-              <div className="flex w-full">
-                <div className="w-full">
+          <div className='pl-8 w-full'>
+            <div className='flex flex-col'>
+              <div className='flex w-full'>
+                <div className='w-full'>
                   <LabelWithDescription
-                    label="Søk etter Slack-bruker"
-                    description="Skriv minst 3 tegn"
+                    label='Søk etter Slack-bruker'
+                    description='Skriv minst 3 tegn'
                   />
                   <AsyncSelect
-                    aria-label="Søk etter slack-bruker"
-                    placeholder=""
+                    aria-label='Søk etter slack-bruker'
+                    placeholder=''
                     noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                     loadingMessage={() => 'Søker...'}
                     isClearable={false}
@@ -93,9 +93,9 @@ export const AddSlackUserModal = (props: IProps) => {
                   />
                 </div>
               </div>
-              {loadingSlackId && <Loader size="large" className="flex justify-self-center" />}
+              {loadingSlackId && <Loader size='large' className='flex justify-self-center' />}
               {error && (
-                <Alert className="mt-2.5" variant="error">
+                <Alert className='mt-2.5' variant='error'>
                   {error}
                 </Alert>
               )}
@@ -104,10 +104,10 @@ export const AddSlackUserModal = (props: IProps) => {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button type="button" onClick={() => addEmail(val)} className="ml-2.5">
+        <Button type='button' onClick={() => addEmail(val)} className='ml-2.5'>
           Legg til Slack bruker
         </Button>
-        <Button variant="secondary" type="button" onClick={close}>
+        <Button variant='secondary' type='button' onClick={close}>
           Avbryt
         </Button>
       </Modal.Footer>
