@@ -132,11 +132,11 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
           innerRef={formRef}
           initialValues={mapRisikoscenarioToFormValue(risikoscenario)}
         >
-          {({ setFieldValue, submitForm }) => (
+          {({ values, setFieldValue, submitForm }) => (
             <Form className='w-full border-t border-[#071a3636]'>
               <TopBottomWrapper>
                 <Heading size='medium' level='3'>
-                  Vurdér tiltakenes antatte effekt på risikoscenarionivået
+                  Dokumentér antatt risikonivå etter gjennomførte tiltak
                 </Heading>
               </TopBottomWrapper>
 
@@ -195,6 +195,16 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                   )}
                 </Field>
               </PVKFieldWrapper>
+              <div className='flex gap-3 mb-5'>
+                <RisikoscenarioTag
+                  level={values.sannsynlighetsNivaaEtterTiltak}
+                  text={getSannsynlighetsnivaaText(values.sannsynlighetsNivaaEtterTiltak)}
+                />
+                <RisikoscenarioTag
+                  level={values.konsekvensNivaaEtterTiltak}
+                  text={getKonsekvenssnivaaText(values.konsekvensNivaaEtterTiltak)}
+                />
+              </div>
 
               <div>
                 <TextAreaField
