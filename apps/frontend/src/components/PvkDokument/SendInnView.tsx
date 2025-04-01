@@ -21,11 +21,16 @@ import {
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '../../api/PvkDokumentApi'
+import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
+import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
   EPvkDokumentStatus,
+  ERisikoscenarioType,
   IBehandlingensLivslop,
   IPvkDokument,
   IPvoTilbakemelding,
+  IRisikoscenario,
+  ITiltak,
 } from '../../constants'
 import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
@@ -63,8 +68,11 @@ export const SendInnView = (props: IProps) => {
   } = props
 
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
+  const [alleRisikoscenario, setAlleRisikoscenario] = useState<IRisikoscenario[]>([])
+  const [alleTiltak, setAlleTitltak] = useState<ITiltak[]>([])
   const [behandlingensLivslopError, setBehandlingensLivslopError] = useState<boolean>(false)
-  const [behandlingensLivslopIsLoading, setBehandlingensLivslopIsLoading] = useState<boolean>(false)
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
 
   const underarbeidCheck =
@@ -105,9 +113,9 @@ export const SendInnView = (props: IProps) => {
 
   useEffect(() => {
     ;(async () => {
-      if (etterlevelseDokumentasjonId) {
-        setBehandlingensLivslopIsLoading(true)
-        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
+      if (pvkDokument) {
+        setIsLoading(true)
+        await getBehandlingensLivslopByEtterlevelseDokumentId(pvkDokument.etterlevelseDokumentId)
           .then((response) => {
             setBehandlingensLivslop(response)
           })
@@ -118,10 +126,16 @@ export const SendInnView = (props: IProps) => {
               console.debug(error)
             }
           })
-          .finally(() => setBehandlingensLivslopIsLoading(false))
+        await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
+          (response) => setAlleRisikoscenario(response.content)
+        )
+        await getTiltakByPvkDokumentId(pvkDokument.id).then((response) =>
+          setAlleTitltak(response.content)
+        )
+        setIsLoading(false)
       }
     })()
-  }, [etterlevelseDokumentasjonId])
+  }, [pvkDokument])
 
   return (
     <Formik
@@ -162,7 +176,10 @@ export const SendInnView = (props: IProps) => {
                 updateTitleUrlAndStep={updateTitleUrlAndStep}
               />
 
-              <RisikoscenarioSummary />
+              <RisikoscenarioSummary
+                alleRisikoscenario={alleRisikoscenario}
+                alleTiltak={alleTiltak}
+              />
 
               {underarbeidCheck && (
                 <div className='mt-5 mb-3 max-w-[75ch]'>
@@ -232,13 +249,13 @@ export const SendInnView = (props: IProps) => {
                 </ErrorSummary>
               )}
 
-              {behandlingensLivslopIsLoading && (
+              {isLoading && (
                 <div className='flex justify-center items-center w-full'>
                   <Loader size='2xlarge' title='lagrer endringer' />
                 </div>
               )}
 
-              {!behandlingensLivslopIsLoading && (
+              {!isLoading && (
                 <FormButtons
                   etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                   activeStep={activeStep}
