@@ -3,6 +3,7 @@ import { BodyLong, Button, Heading, Label, Link, ReadMore, Tag } from '@navikt/d
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
 import { CodelistService, EListName, ICode, IGetParsedOptionsProps } from '../../services/Codelist'
+import { user } from '../../services/User'
 import { BehandlingList } from '../behandling/BehandlingList'
 import { Markdown } from '../common/Markdown'
 import { ExternalLink } from '../common/RouteLink'
@@ -177,6 +178,12 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                 </div>
               </div>
             </div>
+            {!(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+              <BodyLong>
+                Trenger du tilgang til å redigere dette dokumentet? I så fall ta kontakt med de som
+                er nevnt under Team eller Varslingsadresser.
+              </BodyLong>
+            )}
           </ReadMore>
         </div>
 
