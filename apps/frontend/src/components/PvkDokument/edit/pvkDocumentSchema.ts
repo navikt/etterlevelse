@@ -23,25 +23,28 @@ const stringCheck = (fielName: string, errorMessage?: string) =>
   })
 
 const boolCheck = (fieldName: string, errorMessage?: string) =>
-  yup.boolean().test({
-    name: fieldName,
-    message: errorMessage ? errorMessage : 'Dette er et påkrevd felt',
-    test: function (boolField) {
-      const { parent } = this
-      if (
-        parent.status !== EPvkDokumentStatus.UNDERARBEID &&
-        parent.status !== EPvkDokumentStatus.AKTIV
-      ) {
-        if (boolField === undefined || boolField === null) {
-          return false
+  yup
+    .boolean()
+    .test({
+      name: fieldName,
+      message: errorMessage ? errorMessage : 'Dette er et påkrevd felt',
+      test: function (boolField) {
+        const { parent } = this
+        if (
+          parent.status !== EPvkDokumentStatus.UNDERARBEID &&
+          parent.status !== EPvkDokumentStatus.AKTIV
+        ) {
+          if (boolField === undefined || boolField === null) {
+            return false
+          } else {
+            return true
+          }
         } else {
           return true
         }
-      } else {
-        return true
-      }
-    },
-  })
+      },
+    })
+    .nullable()
 
 export const pvkDocumentSchema = () => {
   return yup.object({
