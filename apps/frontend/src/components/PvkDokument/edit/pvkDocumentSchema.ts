@@ -48,22 +48,44 @@ const boolCheck = (fieldName: string, errorMessage?: string) =>
 
 export const pvkDocumentSchema = () => {
   return yup.object({
-    stemmerPersonkategorier: boolCheck('stemmerPersonkategorier'),
+    stemmerPersonkategorier: boolCheck(
+      'stemmerPersonkategorier',
+      'Du har ikke svart på: Stemmer denne lista over personkategorier?'
+    ),
 
-    personkategoriAntallBeskrivelse: stringCheck('personkategoriAntallBeskrivelse'),
+    personkategoriAntallBeskrivelse: stringCheck(
+      'personkategoriAntallBeskrivelse',
+      'Det må beskrive hvor mange personer dere behandler personopplysninger om.'
+    ),
 
-    tilgangsBeskrivelsePersonopplysningene: stringCheck('tilgangsBeskrivelsePersonopplysningene'),
+    tilgangsBeskrivelsePersonopplysningene: stringCheck(
+      'tilgangsBeskrivelsePersonopplysningene',
+      'Du må beskrive hvilke roller som skal ha tilgang til personopplysningene'
+    ),
 
-    lagringsBeskrivelsePersonopplysningene: stringCheck('lagringsBeskrivelsePersonopplysningene'),
+    lagringsBeskrivelsePersonopplysningene: stringCheck(
+      'lagringsBeskrivelsePersonopplysningene',
+      'Du må beskriv hvordan og hvor lenge personopplysningene skal lagres.'
+    ),
 
-    harInvolvertRepresentant: boolCheck('harInvolvertRepresentant'),
+    harInvolvertRepresentant: boolCheck(
+      'harInvolvertRepresentant',
+      'Du har ikke svart på: Har dere involvert en representant for databehandlere?'
+    ),
 
-    representantInvolveringsBeskrivelse: stringCheck('representantInvolveringsBeskrivelse'),
+    representantInvolveringsBeskrivelse: stringCheck(
+      'representantInvolveringsBeskrivelse',
+      'Du har ikke svart på: Beskriv hvordan dere har eller ikke har involvert representant(er) for databehandler(e)'
+    ),
 
-    harDatabehandlerRepresentantInvolvering: boolCheck('harDatabehandlerRepresentantInvolvering'),
+    harDatabehandlerRepresentantInvolvering: boolCheck(
+      'harDatabehandlerRepresentantInvolvering',
+      'Du har ikke svart på: Har dere involvert en representant for de registrerte?'
+    ),
 
     dataBehandlerRepresentantInvolveringBeskrivelse: stringCheck(
-      'dataBehandlerRepresentantInvolveringBeskrivelse'
+      'dataBehandlerRepresentantInvolveringBeskrivelse',
+      'Du har ikke svart på: Beskriv hvorfor dere ikke har eller har involvert representant(er) for databehandler(e) '
     ),
   })
 }

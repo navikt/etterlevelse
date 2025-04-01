@@ -138,8 +138,8 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                         label={
                           values.harInvolvertRepresentant ||
                           values.harInvolvertRepresentant === null
-                            ? 'Utdyp hvordan dere har involvert representant(er) for de registrerte'
-                            : 'Utdyp hvorfor dere ikke har involvert representant(er) for de registrerte'
+                            ? 'Beskriv hvordan dere har involvert representant(er) for de registrerte'
+                            : 'Beskriv hvorfor dere ikke har involvert representant(er) for de registrerte'
                         }
                         name='representantInvolveringsBeskrivelse'
                       />
@@ -199,8 +199,8 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                         label={
                           values.harDatabehandlerRepresentantInvolvering ||
                           values.harDatabehandlerRepresentantInvolvering === null
-                            ? 'Utdyp hvordan dere har involvert representant(er) for databehandler(e)'
-                            : 'Utdyp hvorfor dere ikke har involvert representant(er) for databehandler(e)'
+                            ? 'Beskriv hvordan dere har involvert representant(er) for databehandler(e)'
+                            : 'Beskriv hvorfor dere ikke har involvert representant(er) for databehandler(e)'
                         }
                         name='dataBehandlerRepresentantInvolveringBeskrivelse'
                       />
