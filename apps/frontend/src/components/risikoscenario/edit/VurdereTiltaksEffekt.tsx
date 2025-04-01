@@ -132,7 +132,7 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
           innerRef={formRef}
           initialValues={mapRisikoscenarioToFormValue(risikoscenario)}
         >
-          {({ submitForm }) => (
+          {({ setFieldValue, submitForm }) => (
             <Form className='w-full border-t border-[#071a3636]'>
               <TopBottomWrapper>
                 <Heading size='medium' level='3'>
@@ -208,11 +208,22 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
               <TopBottomWrapper>
                 <div className='flex gap-2'>
                   <Button type='button' onClick={() => submitForm()}>
-                    Lagre
+                    Lagre tiltakenes effekt
                   </Button>
 
                   <Button type='button' variant='secondary' onClick={() => setIsFormActive(false)}>
                     Avbryt
+                  </Button>
+
+                  <Button
+                    type='button'
+                    variant='tertiary'
+                    onClick={() => {
+                      setFieldValue('sannsynlighetsNivaaEtterTiltak', null)
+                      setFieldValue('konsekvensNivaaEtterTiltak', null)
+                    }}
+                  >
+                    Nullstill svar
                   </Button>
                 </div>
               </TopBottomWrapper>
