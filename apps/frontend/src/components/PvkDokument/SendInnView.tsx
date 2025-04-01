@@ -1,6 +1,7 @@
 import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, CopyButton, Heading, Label } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, CopyButton, ErrorSummary, Heading, Label } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
+import { useRef } from 'react'
 import {
   getPvkDokument,
   mapPvkDokumentToFormValue,
@@ -41,6 +42,7 @@ export const SendInnView = (props: IProps) => {
     setSelectedStep,
     pvoTilbakemelding,
   } = props
+  const errorSummaryRef = useRef<HTMLDivElement>(null)
 
   const underarbeidCheck =
     pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
@@ -76,7 +78,7 @@ export const SendInnView = (props: IProps) => {
       initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
       validationSchema={pvkDocumentSchema}
     >
-      {({ setFieldValue, submitForm, dirty }) => (
+      {({ setFieldValue, submitForm, dirty, errors }) => (
         <Form>
           <div className='flex justify-center'>
             <div>
@@ -150,6 +152,21 @@ export const SendInnView = (props: IProps) => {
                 </Alert>
               )}
 
+              {Object.values(errors).some(Boolean) && (
+                <ErrorSummary
+                  ref={errorSummaryRef}
+                  heading='Du må rette disse feilene før du kan fortsette'
+                >
+                  {Object.entries(errors)
+                    .filter(([, error]) => error)
+                    .map(([key, error]) => (
+                      <ErrorSummary.Item href={`#${key}`} key={key}>
+                        {error as string}
+                      </ErrorSummary.Item>
+                    ))}
+                </ErrorSummary>
+              )}
+
               <FormButtons
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                 activeStep={activeStep}
@@ -183,6 +200,7 @@ export const SendInnView = (props: IProps) => {
                         type='button'
                         onClick={async () => {
                           await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO)
+                          errorSummaryRef.current?.focus()
                           submitForm()
                         }}
                       >
