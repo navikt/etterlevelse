@@ -28,15 +28,15 @@ export const Markdown = ({
     p: (parProps: any) => {
       const { children } = parProps
       if (p1) {
-        return <BodyLong className="break-words">{children}</BodyLong>
+        return <BodyLong className='break-words'>{children}</BodyLong>
       }
-      return <BodyLong className="break-words">{children}</BodyLong>
+      return <BodyLong className='break-words'>{children}</BodyLong>
     },
 
     h1: (headerProps: any) => {
       const { children } = headerProps
       return (
-        <Heading size="small" level="2">
+        <Heading size='small' level='2'>
           {children}
         </Heading>
       )
@@ -45,7 +45,7 @@ export const Markdown = ({
       const { children } = headerProps
 
       return (
-        <Heading size="small" level="2">
+        <Heading size='small' level='2'>
           {children}
         </Heading>
       )
@@ -55,7 +55,7 @@ export const Markdown = ({
       const { children } = headerProps
 
       return (
-        <Heading size="xsmall" level="3">
+        <Heading size='xsmall' level='3'>
           {children}
         </Heading>
       )
@@ -64,7 +64,7 @@ export const Markdown = ({
       const { children } = headerProps
 
       return (
-        <Heading size="xsmall" level="4">
+        <Heading size='xsmall' level='4'>
           {children}
         </Heading>
       )
@@ -74,7 +74,7 @@ export const Markdown = ({
       const content =
         shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
       return (
-        <Link className="break-all" href={href} target="_blank" rel="noopener noreferrer">
+        <Link className='break-all' href={href} target='_blank' rel='noopener noreferrer'>
           {content} (åpner i en ny fane)
         </Link>
       )
@@ -85,7 +85,7 @@ export const Markdown = ({
         shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
 
       return (
-        <Link className="break-all" href={href} target="_blank" rel="noopener noreferrer">
+        <Link className='break-all' href={href} target='_blank' rel='noopener noreferrer'>
           {content} (åpner i en ny fane)
         </Link>
       )
@@ -107,7 +107,7 @@ export const Markdown = ({
       if (p1) {
         return (
           <List.Item>
-            <BodyShort className="break-words">{children}</BodyShort>
+            <BodyShort className='break-words'>{children}</BodyShort>
           </List.Item>
         )
       } else {
@@ -120,7 +120,7 @@ export const Markdown = ({
     },
     ol: (olProps: any) => {
       const { children } = olProps
-      return <List as="ol">{children}</List>
+      return <List as='ol'>{children}</List>
     },
   }
 
@@ -145,7 +145,7 @@ export const Markdown = ({
 }
 
 export const MarkdownInfo = () => (
-  <BodyShort className="mt-4 text-[var(--a-text-subtle)]">
+  <BodyShort className='mt-4 text-[var(--a-text-subtle)]'>
     <ExternalLink href={markdownLink}>Slik kan du bruke Markdown i dette feltet</ExternalLink>
   </BodyShort>
 )

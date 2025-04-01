@@ -70,7 +70,7 @@ export const DokumentasjonPageTabs = (props: IProps) => {
   return (
     <div>
       <Tabs
-        defaultValue="alleKrav"
+        defaultValue='alleKrav'
         value={tabQuery && tabQuery === 'pvk' ? 'pvkRelaterteKrav' : tabValue}
         onChange={(newValue) => {
           setTabValue(newValue)
@@ -78,14 +78,14 @@ export const DokumentasjonPageTabs = (props: IProps) => {
         }}
       >
         <Tabs.List>
-          <Tabs.Tab value="alleKrav" label="Alle Krav" />
-          <Tabs.Tab value="prioritertKravliste" label="Prioritert kravliste" />
+          <Tabs.Tab value='alleKrav' label='Alle Krav' />
+          <Tabs.Tab value='prioritertKravliste' label='Prioritert kravliste' />
           {pvkDokument && pvkDokument.skalUtforePvk && (
-            <Tabs.Tab value="pvkRelaterteKrav" label="PVK-relaterte krav" />
+            <Tabs.Tab value='pvkRelaterteKrav' label='PVK-relaterte krav' />
           )}
         </Tabs.List>
-        <Tabs.Panel value="alleKrav">
-          <div className="pt-4 flex flex-col gap-4">
+        <Tabs.Panel value='alleKrav'>
+          <div className='pt-4 flex flex-col gap-4'>
             <KravList
               temaListe={temaListe}
               relevanteStats={relevanteStats}
@@ -94,7 +94,7 @@ export const DokumentasjonPageTabs = (props: IProps) => {
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               loading={loading}
             />
-            <div className="w-full flex justify-end items-center">
+            <div className='w-full flex justify-end items-center'>
               <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
               {/* DISABLED UNTIL P360 arkivering is integrated and planned*/}
               {/* <Button variant="tertiary" size="small" onClick={() => setArkivModal(true)}>
@@ -110,8 +110,8 @@ export const DokumentasjonPageTabs = (props: IProps) => {
             </div>
           </div>
         </Tabs.Panel>
-        <Tabs.Panel value="prioritertKravliste">
-          <div className="pt-4 flex flex-col gap-4">
+        <Tabs.Panel value='prioritertKravliste'>
+          <div className='pt-4 flex flex-col gap-4'>
             <FocusList
               loading={loading}
               allKravPriority={allKravPriority}
@@ -123,8 +123,8 @@ export const DokumentasjonPageTabs = (props: IProps) => {
             />
           </div>
         </Tabs.Panel>
-        <Tabs.Panel value="pvkRelaterteKrav">
-          <div className="pt-4 flex flex-col gap-4">
+        <Tabs.Panel value='pvkRelaterteKrav'>
+          <div className='pt-4 flex flex-col gap-4'>
             <PvkRelatedKravList
               temaListe={temaListe}
               relevanteStats={relevanteStats}

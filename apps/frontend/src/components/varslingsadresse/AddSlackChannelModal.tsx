@@ -36,13 +36,13 @@ export const AddSlackChannelModal = (props: IProps) => {
       open={isOpen}
       onClose={close}
       header={{ heading: 'Legg til Slack-kanal', closeButton: false }}
-      width="medium"
+      width='medium'
     >
-      <Modal.Body className="min-h-[18.75rem]">
-        <LabelWithDescription label="Søk etter Slack-kanal" description="Skriv minst 3 tegn" />
+      <Modal.Body className='min-h-[18.75rem]'>
+        <LabelWithDescription label='Søk etter Slack-kanal' description='Skriv minst 3 tegn' />
         <AsyncSelect
-          aria-label="Søk etter slack-kanal"
-          placeholder=""
+          aria-label='Søk etter slack-kanal'
+          placeholder=''
           noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
           loadingMessage={() => 'Søker...'}
           isClearable={false}
@@ -58,10 +58,10 @@ export const AddSlackChannelModal = (props: IProps) => {
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button type="button" onClick={() => add(val)} className="ml-2.5">
+        <Button type='button' onClick={() => add(val)} className='ml-2.5'>
           Legg til Slack kanal
         </Button>
-        <Button variant="secondary" type="button" onClick={close}>
+        <Button variant='secondary' type='button' onClick={close}>
           Avbryt
         </Button>
       </Modal.Footer>

@@ -66,12 +66,12 @@ export const VarslingsadresserView = ({
         if (varslingsaddresse.type === EAdresseType.SLACK) {
           const channel = slackChannels.find((c) => c.id === varslingsaddresse.adresse)
           return (
-            <div className="flex items-center mb-2.5" key={'kravVarsling_list_SLACK_' + index}>
-              <BodyLong size="medium" className="mr-1">
+            <div className='flex items-center mb-2.5' key={'kravVarsling_list_SLACK_' + index}>
+              <BodyLong size='medium' className='mr-1'>
                 Slack:
               </BodyLong>
               <ExternalLink
-                className="text-medium"
+                className='text-medium'
                 href={slackLink(varslingsaddresse.adresse)}
               >{`#${channel?.name || varslingsaddresse.adresse}`}</ExternalLink>
             </div>
@@ -80,24 +80,24 @@ export const VarslingsadresserView = ({
         if (varslingsaddresse.type === EAdresseType.SLACK_USER) {
           const user = slackUsers.find((u) => u.id === varslingsaddresse.adresse)
           return (
-            <div className="flex items-center mb-2.5" key={'kravVarsling_list_SLACK_USER_' + index}>
-              <BodyLong size="medium" className="mr-1">
+            <div className='flex items-center mb-2.5' key={'kravVarsling_list_SLACK_USER_' + index}>
+              <BodyLong size='medium' className='mr-1'>
                 Slack:
               </BodyLong>
               <ExternalLink
-                className="text-medium"
+                className='text-medium'
                 href={slackUserLink(varslingsaddresse.adresse)}
               >{`${user?.name || varslingsaddresse.adresse}`}</ExternalLink>
             </div>
           )
         }
         return (
-          <div className="flex items-center mb-2.5" key={'kravVarsling_list_EMAIL_' + index}>
-            <BodyLong size="medium" className="mr-1">
+          <div className='flex items-center mb-2.5' key={'kravVarsling_list_EMAIL_' + index}>
+            <BodyLong size='medium' className='mr-1'>
               Epost:
             </BodyLong>
             <ExternalLink
-              className="text-medium"
+              className='text-medium'
               href={`mailto:${varslingsaddresse.adresse}`}
               openOnSamePage
             >

@@ -1,4 +1,4 @@
-import {Alert, BodyShort, Box, Heading, Label, ReadMore, Tag} from '@navikt/ds-react'
+import { Alert, BodyShort, Box, Heading, Label, ReadMore, Tag } from '@navikt/ds-react'
 import {
   EEtterlevelseStatus,
   ESuksesskriterieStatus,
@@ -6,8 +6,8 @@ import {
   ISuksesskriterie,
   ISuksesskriterieBegrunnelse,
 } from '../../constants'
-import {Markdown} from '../common/Markdown'
-import {LabelAboveContent} from '../common/PropertyLabel'
+import { Markdown } from '../common/Markdown'
+import { LabelAboveContent } from '../common/PropertyLabel'
 import {
   getLabelForSuksessKriterie,
   getSuksesskriterieBegrunnelse,
@@ -22,14 +22,14 @@ interface IProps {
 }
 
 export const EtterlevelseViewFields = (props: IProps) => {
-  const {etterlevelse, suksesskriterier, tidligereEtterlevelser, isBortfiltrert} = props
+  const { etterlevelse, suksesskriterier, tidligereEtterlevelser, isBortfiltrert } = props
 
   return (
     <div>
       {(etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT ||
         etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
         <div className={'mb-12'}>
-          <Alert className="mb-1" size="small" variant="info">
+          <Alert className='mb-1' size='small' variant='info'>
             Dette kravet er dokumentert som ikke relevant 20.05.2022, og senere blitt bortfiltrert
           </Alert>
           <Label>Beskrivelse av hvorfor kraver er ikke relevant</Label>
@@ -37,11 +37,11 @@ export const EtterlevelseViewFields = (props: IProps) => {
         </div>
       )}
 
-      <div className="flex w-full items-center mb-4">
-        <Label className="min-w-fit mt-3">Hvilke suksesskriterier er oppfylt?</Label>
+      <div className='flex w-full items-center mb-4'>
+        <Label className='min-w-fit mt-3'>Hvilke suksesskriterier er oppfylt?</Label>
         {tidligereEtterlevelser && tidligereEtterlevelser.length > 0 && (
-          <div className="flex w-full justify-end">
-            <EtterlevelseCard etterlevelse={tidligereEtterlevelser[0]}/>
+          <div className='flex w-full justify-end'>
+            <EtterlevelseCard etterlevelse={tidligereEtterlevelser[0]} />
           </div>
         )}
       </div>
@@ -67,25 +67,25 @@ export const getSuksesskriterieStatus = (status: ESuksesskriterieStatus) => {
   switch (status) {
     case ESuksesskriterieStatus.IKKE_OPPFYLT:
       return (
-        <Tag size="small" variant="warning">
+        <Tag size='small' variant='warning'>
           Ikke oppfylt
         </Tag>
       )
     case ESuksesskriterieStatus.IKKE_RELEVANT:
       return (
-        <Tag size="small" variant="info">
+        <Tag size='small' variant='info'>
           Ikke relevant
         </Tag>
       )
     case ESuksesskriterieStatus.OPPFYLT:
       return (
-        <Tag size="small" variant="success">
+        <Tag size='small' variant='success'>
           Oppfylt
         </Tag>
       )
     default:
       return (
-        <Tag size="small" variant="info">
+        <Tag size='small' variant='info'>
           Under arbeid
         </Tag>
       )
@@ -116,62 +116,62 @@ const KriterieBegrunnelse = (props: IKriterieBegrunnelseProps) => {
 
   return (
     <Box
-      className="mb-4"
-      borderColor="border-alt-1"
-      padding="8"
-      borderWidth="3"
-      borderRadius="medium"
+      className='mb-4'
+      borderColor='border-alt-1'
+      padding='8'
+      borderWidth='3'
+      borderRadius='medium'
     >
-      <div className="flex w-full lg:flex-row flex-col mb-2.5">
-        <BodyShort className="min-w-fit">
+      <div className='flex w-full lg:flex-row flex-col mb-2.5'>
+        <BodyShort className='min-w-fit'>
           Suksesskriterium {index + 1} av {totalSuksesskriterie}
         </BodyShort>
 
-        <div className="flex w-full lg:justify-end justify-normal">
-          {isBortfiltrert && <BodyShort className="text-text-danger">Bortfiltert</BodyShort>}
+        <div className='flex w-full lg:justify-end justify-normal'>
+          {isBortfiltrert && <BodyShort className='text-text-danger'>Bortfiltert</BodyShort>}
           {!isBortfiltrert && suksesskriterieBegrunnelse.suksesskriterieStatus && (
-            <BodyShort className="mb-1">
+            <BodyShort className='mb-1'>
               Status: {getSuksesskriterieStatus(suksesskriterieBegrunnelse.suksesskriterieStatus)}
             </BodyShort>
           )}
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 mb-4">
-        <Heading size="xsmall" level="3">
+      <div className='flex flex-col gap-4 mb-4'>
+        <Heading size='xsmall' level='3'>
           {suksesskriterie.navn}
         </Heading>
 
-        <ReadMore defaultOpen header="Utfyllende om kriteriet">
-          <Markdown source={suksesskriterie.beskrivelse}/>
+        <ReadMore defaultOpen header='Utfyllende om kriteriet'>
+          <Markdown source={suksesskriterie.beskrivelse} />
         </ReadMore>
       </div>
 
       {suksesskriterieBegrunnelse.veiledningsTekst && (
-        <div className="my-5">
-          <Alert variant="info">
+        <div className='my-5'>
+          <Alert variant='info'>
             <Label>NAVs tolkning av loven og besluttede praksiser i denne konteksten:</Label>
-            <Markdown source={suksesskriterieBegrunnelse.veiledningsTekst}/>
+            <Markdown source={suksesskriterieBegrunnelse.veiledningsTekst} />
           </Alert>
         </div>
       )}
 
       {suksesskriterieBegrunnelse.veiledningsTekst2 && (
-        <Alert variant="info">
+        <Alert variant='info'>
           <Label>Slik kan suksesskriteriet etterleves:</Label>
-          <Markdown source={suksesskriterieBegrunnelse.veiledningsTekst2}/>
+          <Markdown source={suksesskriterieBegrunnelse.veiledningsTekst2} />
         </Alert>
       )}
 
-      <div className="flex w-full">
+      <div className='flex w-full'>
         {!suksesskriterie.behovForBegrunnelse && (
-          <div className="w-full mt-8 ">
+          <div className='w-full mt-8 '>
             <Label>Suksesskriteriet har ikke behov for begrunnelse.</Label>
           </div>
         )}
 
         {suksesskriterie.behovForBegrunnelse && (
-          <div className="w-full mt-8 ">
+          <div className='w-full mt-8 '>
             <LabelAboveContent
               fullWidth
               title={getLabelForSuksessKriterie(suksesskriterieBegrunnelse.suksesskriterieStatus)}

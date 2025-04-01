@@ -28,18 +28,18 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
   } = props
 
   return (
-    <div className="w-full">
-      <div className="flex w-full">
-        <div className="pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8">
-          <div className="flex justify-center">
+    <div className='w-full'>
+      <div className='flex w-full'>
+        <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
+          <div className='flex justify-center'>
             <div>
-              <Heading level="1" size="medium" className="mb-5">
+              <Heading level='1' size='medium' className='mb-5'>
                 Behandlingens art og omfang
               </Heading>
 
               <List
-                headingTag="label"
-                title="I Behandlingskatalogen står det at dere behandler personopplysninger om:"
+                headingTag='label'
+                title='I Behandlingskatalogen står det at dere behandler personopplysninger om:'
               >
                 {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
                 {personkategorier.length > 0 &&
@@ -48,7 +48,7 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
                   ))}
               </List>
 
-              <div className="pt-5 pb-3 max-w-[75ch]">
+              <div className='pt-5 pb-3 max-w-[75ch]'>
                 <Label>Stemmer denne lista over personkategorier?</Label>
                 <DataTextWrapper>
                   {pvkDokument.stemmerPersonkategorier === null && 'Ikke besvart'}
@@ -57,7 +57,7 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
                 </DataTextWrapper>
               </div>
 
-              <div className="pt-5 pb-3 max-w-[75ch]">
+              <div className='pt-5 pb-3 max-w-[75ch]'>
                 <Label>
                   For hver av personkategoriene over, beskriv hvor mange personer dere behandler
                   personopplysninger om.
@@ -65,7 +65,7 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
                 <DataTextWrapper>{pvkDokument.personkategoriAntallBeskrivelse}</DataTextWrapper>
               </div>
 
-              <div className="pt-5 pb-3 max-w-[75ch]">
+              <div className='pt-5 pb-3 max-w-[75ch]'>
                 <Label>
                   Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av
                   rollene, beskriv hvor mange som har tilgang.
@@ -75,7 +75,7 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
                 </DataTextWrapper>
               </div>
 
-              <div className="pt-5 pb-3 max-w-[75ch]">
+              <div className='pt-5 pb-3 max-w-[75ch]'>
                 <Label>Beskriv hvordan og hvor lenge personopplysningene skal lagres.</Label>
                 <DataTextWrapper>
                   {pvkDokument.lagringsBeskrivelsePersonopplysningene}
@@ -89,7 +89,7 @@ export const BehandlingensArtOgOmfangPvoView = (props: IProps) => {
         <PvoSidePanelWrapper>
           <PvoTilbakemeldingForm
             pvkDokumentId={pvkDokument.id}
-            fieldName="behandlingensArtOgOmfang"
+            fieldName='behandlingensArtOgOmfang'
             initialValue={pvoTilbakemelding.behandlingensArtOgOmfang}
             formRef={formRef}
           />

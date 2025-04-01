@@ -13,13 +13,13 @@ import { ExternalLink } from '../common/RouteLink'
 import { SuksesskriterieCard } from './Suksesskriterie'
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
-  <div className="mb-4">{children}</div>
+  <div className='mb-4'>{children}</div>
 )
 
 export const ViewKrav = ({ krav }: { krav: TKravQL }) => {
   return (
     <div>
-      <div className="w-full">
+      <div className='w-full'>
         {krav.suksesskriterier.map((suksesskriterium, index) => (
           <SuksesskriterieCard
             key={suksesskriterium.id}
@@ -30,7 +30,7 @@ export const ViewKrav = ({ krav }: { krav: TKravQL }) => {
         ))}
         {/* {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />} */}
 
-        <BodyShort size="small" className="mt-6">
+        <BodyShort size='small' className='mt-6'>
           Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')}{' '}
           {user.isAdmin() || user.isKraveier()
             ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1]
@@ -56,14 +56,14 @@ export const AllInfo = ({
     <div>
       {krav.dokumentasjon.length > 0 && (
         <LabelWrapper>
-          <LabelAboveContent header={header} title="Kilder">
+          <LabelAboveContent header={header} title='Kilder'>
             <DotTags items={krav.dokumentasjon} markdown inColumn />
           </LabelAboveContent>
         </LabelWrapper>
       )}
 
       <LabelWrapper>
-        <LabelAboveContent header={header} title="Begreper">
+        <LabelAboveContent header={header} title='Begreper'>
           {krav.begreper.map((begrep, index) => (
             <BegrepView key={'begrep_' + index} begrep={begrep} />
           ))}
@@ -71,7 +71,7 @@ export const AllInfo = ({
       </LabelWrapper>
 
       <LabelWrapper>
-        <LabelAboveContent header={header} title="Relasjoner til andre krav">
+        <LabelAboveContent header={header} title='Relasjoner til andre krav'>
           {krav.kravRelasjoner.map((kravRelasjon, index) => (
             <KravRelasjonView key={'kravRelasjon' + index} kravRelasjon={kravRelasjon} />
           ))}
@@ -79,7 +79,7 @@ export const AllInfo = ({
       </LabelWrapper>
 
       <LabelWrapper>
-        <LabelAboveContent header={header} title="Kravet er relevant for">
+        <LabelAboveContent header={header} title='Kravet er relevant for'>
           <DotTags list={EListName.RELEVANS} codes={krav.relevansFor} inColumn />
         </LabelAboveContent>
       </LabelWrapper>
@@ -103,8 +103,8 @@ export const AllInfo = ({
               return null
             })}
             {krav.versjonEndringer && (
-              <div className="my-8">
-                <Label size="medium">Dette er nytt fra forrige versjon</Label>
+              <div className='my-8'>
+                <Label size='medium'>Dette er nytt fra forrige versjon</Label>
                 <Markdown source={krav.versjonEndringer} />
               </div>
             )}
@@ -114,25 +114,25 @@ export const AllInfo = ({
 
       {krav.regelverk.length && (
         <LabelWrapper>
-          <LabelAboveContent header={header} title="Regelverk">
+          <LabelAboveContent header={header} title='Regelverk'>
             <LovViewList regelverkListe={krav.regelverk} />
           </LabelAboveContent>
         </LabelWrapper>
       )}
 
       <LabelWrapper>
-        <LabelAboveContent header={header} title="Ansvarlig">
+        <LabelAboveContent header={header} title='Ansvarlig'>
           {krav.underavdeling?.shortName}
         </LabelAboveContent>
       </LabelWrapper>
 
       <LabelWrapper>
-        <LabelAboveContent header={header} title="Varslingsadresser">
+        <LabelAboveContent header={header} title='Varslingsadresser'>
           {krav.varslingsadresserQl.map((varslingsaddresse, index) => {
             if (varslingsaddresse.type === EAdresseType.SLACK)
               return (
-                <div className="flex mb-2" key={'kravVarsling_list_SLACK_' + index}>
-                  <div className="mr-1">Slack:</div>
+                <div className='flex mb-2' key={'kravVarsling_list_SLACK_' + index}>
+                  <div className='mr-1'>Slack:</div>
                   <ExternalLink href={slackLink(varslingsaddresse.adresse)}>{`#${
                     varslingsaddresse.slackChannel?.name || varslingsaddresse.adresse
                   }`}</ExternalLink>
@@ -140,16 +140,16 @@ export const AllInfo = ({
               )
             if (varslingsaddresse.type === EAdresseType.SLACK_USER)
               return (
-                <div className="flex mb-2" key={'kravVarsling_list_SLACK_USER_' + index}>
-                  <div className="mr-1">Slack:</div>
+                <div className='flex mb-2' key={'kravVarsling_list_SLACK_USER_' + index}>
+                  <div className='mr-1'>Slack:</div>
                   <ExternalLink href={slackUserLink(varslingsaddresse.adresse)}>{`${
                     varslingsaddresse.slackUser?.name || varslingsaddresse.adresse
                   }`}</ExternalLink>
                 </div>
               )
             return (
-              <div className="flex mb-2" key={'kravVarsling_list_EMAIL_' + index}>
-                <div className="mr-1">Epost:</div>
+              <div className='flex mb-2' key={'kravVarsling_list_EMAIL_' + index}>
+                <div className='mr-1'>Epost:</div>
                 <ExternalLink href={`mailto:${varslingsaddresse.adresse}`} openOnSamePage>
                   {varslingsaddresse.adresse}
                 </ExternalLink>
@@ -161,7 +161,7 @@ export const AllInfo = ({
 
       {!noLastModifiedDate && (
         <div>
-          <BodyShort size="small">
+          <BodyShort size='small'>
             Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')}{' '}
             {user.isAdmin() || user.isKraveier()
               ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1]
@@ -174,8 +174,8 @@ export const AllInfo = ({
 }
 
 const BegrepView = ({ begrep }: { begrep: IBegrep }) => (
-  <div className="max-w-2xl">
-    <BodyShort className="break-words">
+  <div className='max-w-2xl'>
+    <BodyShort className='break-words'>
       <ExternalLink href={termUrl(begrep.id)}>{begrep.navn}</ExternalLink>
       {/* {' '}
       - {begrep.beskrivelse} */}
@@ -184,8 +184,8 @@ const BegrepView = ({ begrep }: { begrep: IBegrep }) => (
 )
 
 const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<IKrav> }) => (
-  <div className="max-w-2xl">
-    <BodyShort className="break-words">
+  <div className='max-w-2xl'>
+    <BodyShort className='break-words'>
       <ExternalLink
         href={`/krav/${kravRelasjon.id}`}
       >{`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}</ExternalLink>{' '}

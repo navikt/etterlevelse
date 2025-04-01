@@ -28,30 +28,30 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
     <div>
       {!noCopyButton && (
         <CopyButton
-          variant="action"
+          variant='action'
           copyText={`${window.location.origin}/dokumentasjon/${etterlevelseDokumentasjonId}/pvkdokument/${risikoscenario.pvkDokumentId}/${stepUrl}?${queryUrl}`}
-          text="Kopiér scenariolenke"
-          activeText="Lenken er kopiert"
+          text='Kopiér scenariolenke'
+          activeText='Lenken er kopiert'
           icon={<LinkIcon aria-hidden />}
         />
       )}
-      <BodyLong className="mt-5">{risikoscenario.beskrivelse}</BodyLong>
+      <BodyLong className='mt-5'>{risikoscenario.beskrivelse}</BodyLong>
 
       {risikoscenario.generelScenario && (
-        <BodyLong className="mt-8">
+        <BodyLong className='mt-8'>
           Dette risikoscenarioet er ikke tilknyttet spesifikke etterlevelseskrav.
         </BodyLong>
       )}
 
       {!risikoscenario.generelScenario && (
-        <ReadMore header="Vis etterlevelseskrav hvor risikoscenarioet inntreffer">
-          <List as="ul">
+        <ReadMore header='Vis etterlevelseskrav hvor risikoscenarioet inntreffer'>
+          <List as='ul'>
             {risikoscenario.relevanteKravNummer.map(
               (relevantKrav: IKravReference, index: number) => {
                 const kravHref: string = `/dokumentasjon/${etterlevelseDokumentasjonId}/${relevantKrav.temaCode || 'PVK'}/RELEVANTE_KRAV/krav/${relevantKrav.kravNummer}/${relevantKrav.kravVersjon}`
 
                 return (
-                  <List.Item className="max-w-[75ch]" key={`${relevantKrav.kravNummer}_${index}`}>
+                  <List.Item className='max-w-[75ch]' key={`${relevantKrav.kravNummer}_${index}`}>
                     <ExternalLink href={kravHref}>
                       K{relevantKrav.kravNummer}.{relevantKrav.kravVersjon} {relevantKrav.navn}
                     </ExternalLink>
@@ -64,7 +64,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
       )}
 
       {risikoscenario.sannsynlighetsNivaa !== 0 && (
-        <div className="mt-12">
+        <div className='mt-12'>
           <RisikoscenarioTag
             level={risikoscenario.sannsynlighetsNivaa}
             text={getSannsynlighetsnivaaText(risikoscenario.sannsynlighetsNivaa)}
@@ -74,7 +74,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
 
       {(!risikoscenario.sannsynlighetsNivaaBegrunnelse ||
         risikoscenario.sannsynlighetsNivaa === 0) && (
-        <Alert className="mt-5" variant="warning">
+        <Alert className='mt-5' variant='warning'>
           {risikoscenario.sannsynlighetsNivaa === 0 &&
             !risikoscenario.sannsynlighetsNivaaBegrunnelse &&
             'Dere må gjøre sannsynlighetsvurdering'}
@@ -88,11 +88,11 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
       )}
 
       {risikoscenario.sannsynlighetsNivaaBegrunnelse && (
-        <BodyLong className="mt-5">{risikoscenario.sannsynlighetsNivaaBegrunnelse}</BodyLong>
+        <BodyLong className='mt-5'>{risikoscenario.sannsynlighetsNivaaBegrunnelse}</BodyLong>
       )}
 
       {risikoscenario.konsekvensNivaa !== 0 && (
-        <div className="mt-12">
+        <div className='mt-12'>
           <RisikoscenarioTag
             level={risikoscenario.konsekvensNivaa}
             text={getKonsekvenssnivaaText(risikoscenario.konsekvensNivaa)}
@@ -101,7 +101,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
       )}
 
       {(!risikoscenario.konsekvensNivaaBegrunnelse || risikoscenario.konsekvensNivaa === 0) && (
-        <Alert className="mt-5" variant="warning">
+        <Alert className='mt-5' variant='warning'>
           {risikoscenario.konsekvensNivaa === 0 &&
             !risikoscenario.konsekvensNivaaBegrunnelse &&
             'Dere må gjøre konsekvensvurdering'}
@@ -114,7 +114,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
         </Alert>
       )}
       {risikoscenario.konsekvensNivaaBegrunnelse && (
-        <BodyLong className="mt-5">{risikoscenario.konsekvensNivaaBegrunnelse}</BodyLong>
+        <BodyLong className='mt-5'>{risikoscenario.konsekvensNivaaBegrunnelse}</BodyLong>
       )}
     </div>
   )

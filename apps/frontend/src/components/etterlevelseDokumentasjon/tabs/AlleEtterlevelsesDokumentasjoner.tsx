@@ -62,12 +62,12 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
   }
 
   return (
-    <div className="my-5">
-      <div className="max-w-[37.5rem] mb-10 flex flex-col">
+    <div className='my-5'>
+      <div className='max-w-[37.5rem] mb-10 flex flex-col'>
         <Search
-          label="Søk i alle dokumentasjoner"
-          variant="secondary"
-          placeholder="Søk"
+          label='Søk i alle dokumentasjoner'
+          variant='secondary'
+          placeholder='Søk'
           onChange={(inputValue) => setSok(inputValue)}
           clearButton
         />
@@ -78,15 +78,15 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
         <>
           {loading && (
             <div>
-              <div className="mx-2.5">
-                <Loader size="large" className="flex justify-self-center" />
+              <div className='mx-2.5'>
+                <Loader size='large' className='flex justify-self-center' />
               </div>
             </div>
           )}
 
           {!loading && !!sok && (
             <div>
-              <Heading size="small" level="2">
+              <Heading size='small' level='2'>
                 {etterlevelseDokumentasjoner.totalElements} treff: “{sok}”
               </Heading>
               {!etterlevelseDokumentasjoner.totalElements && <Label>Ingen treff</Label>}
@@ -99,11 +99,11 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
           />
 
           {!loading && etterlevelseDokumentasjoner.totalElements !== 0 && (
-            <div className="flex justify-between mt-10">
-              <div className="flex items-center">
+            <div className='flex justify-between mt-10'>
+              <div className='flex items-center'>
                 <Button
                   onClick={lastMer}
-                  icon={<PlusIcon title="" aria-label="" aria-hidden />}
+                  icon={<PlusIcon title='' aria-label='' aria-hidden />}
                   variant={'secondary'}
                   disabled={
                     gqlLoading ||
@@ -115,12 +115,12 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
                 </Button>
 
                 {gqlLoading && (
-                  <div className="ml-2.5">
-                    <Loader size="large" />
+                  <div className='ml-2.5'>
+                    <Loader size='large' />
                   </div>
                 )}
               </div>
-              <Label className="mr-2.5">
+              <Label className='mr-2.5'>
                 Viser {etterlevelseDokumentasjoner.numberOfElements}/
                 {etterlevelseDokumentasjoner.totalElements}
               </Label>

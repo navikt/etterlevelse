@@ -34,7 +34,7 @@ export const EditVirkemidler = () => {
           )
         }}
       </FieldArray> */}
-      <FormError fieldName="virkemidler" />
+      <FormError fieldName='virkemidler' />
     </FieldWrapper>
   )
 }

@@ -13,14 +13,14 @@ export const EditEtterlevelseDokumentasjonPage = () => {
   return (
     <>
       {isLoading && (
-        <div className="flex w-full justify-center items-center mt-5">
-          <Loader size="3xlarge" className="flex justify-self-center" />
+        <div className='flex w-full justify-center items-center mt-5'>
+          <Loader size='3xlarge' className='flex justify-self-center' />
         </div>
       )}
       {!isLoading && etterlevelseDokumentasjon && (
         <PageLayout
-          pageTitle="Rediger etterlevelsesdokumentet"
-          currentPage="Rediger etterlevelsesdokumentet"
+          pageTitle='Rediger etterlevelsesdokumentet'
+          currentPage='Rediger etterlevelsesdokumentet'
           breadcrumbPaths={[
             { href: '/dokumentasjoner', pathName: 'Dokumentere etterlevelse' },
             {
@@ -31,21 +31,21 @@ export const EditEtterlevelseDokumentasjonPage = () => {
         >
           {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
             <EtterlevelseDokumentasjonForm
-              title="Rediger etterlevelsesdokumentet"
+              title='Rediger etterlevelsesdokumentet'
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               isEditButton
             />
           )}
 
           {!etterlevelseDokumentasjon.hasCurrentUserAccess && !user.isAdmin() && (
-            <div className="flex w-full justify-center">
-              <div className="flex items-center flex-col gap-5">
-                <Alert variant="warning">Du har ikke tilgang til å redigere egenskaper.</Alert>
+            <div className='flex w-full justify-center'>
+              <div className='flex items-center flex-col gap-5'>
+                <Alert variant='warning'>Du har ikke tilgang til å redigere egenskaper.</Alert>
 
                 <img
-                  src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXMyNngxa2djMXdhOXdhcXQwNG9hbWJ3czZ4MW42bDY3ZXVkNHd3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zaCojXv2S01zy/giphy.webp"
-                  alt="no no no"
-                  width="400px"
+                  src='https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXMyNngxa2djMXdhOXdhcXQwNG9hbWJ3czZ4MW42bDY3ZXVkNHd3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zaCojXv2S01zy/giphy.webp'
+                  alt='no no no'
+                  width='400px'
                 />
               </div>
             </div>

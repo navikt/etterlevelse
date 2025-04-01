@@ -20,22 +20,22 @@ export const ListLayout = ({
   upperRightField,
   changeStamp,
 }: IProps) => (
-  <List.Item icon={<div />} className="mb-0" key={id}>
+  <List.Item icon={<div />} className='mb-0' key={id}>
     <LinkPanel href={url}>
-      <LinkPanel.Title className="flex items-center">
-        <div className="max-w-xl">
-          <BodyShort size="small">{documentNumber}</BodyShort>
+      <LinkPanel.Title className='flex items-center'>
+        <div className='max-w-xl'>
+          <BodyShort size='small'>{documentNumber}</BodyShort>
           <BodyLong>
             <Label>{title}</Label>
           </BodyLong>
         </div>
         <Spacer />
-        <div className="mr-5">{status}</div>
-        <div className="w-44">
-          <BodyShort size="small" className="break-words">
+        <div className='mr-5'>{status}</div>
+        <div className='w-44'>
+          <BodyShort size='small' className='break-words'>
             {upperRightField}
           </BodyShort>
-          <BodyShort size="small">{changeStamp}</BodyShort>
+          <BodyShort size='small'>{changeStamp}</BodyShort>
         </div>
       </LinkPanel.Title>
     </LinkPanel>

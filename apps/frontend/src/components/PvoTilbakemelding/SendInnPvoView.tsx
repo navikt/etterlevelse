@@ -74,39 +74,39 @@ export const SendInnPvoView = (props: IProps) => {
     >
       {({ submitForm, dirty }) => (
         <Form>
-          <div className="pt-6 flex justify-center">
+          <div className='pt-6 flex justify-center'>
             <div>
-              <Heading level="1" size="medium" className="mb-5">
+              <Heading level='1' size='medium' className='mb-5'>
                 Send tilbakemelding til etterlever
               </Heading>
 
               {pvkDokument.merknadTilPvoEllerRisikoeier &&
                 pvkDokument.merknadTilPvoEllerRisikoeier.length > 0 && (
-                  <div className="mt-5 mb-3 max-w-[75ch]">
+                  <div className='mt-5 mb-3 max-w-[75ch]'>
                     <Label>Beskjed fra etterlever</Label>
                     <DataTextWrapper>{pvkDokument.merknadTilPvoEllerRisikoeier}</DataTextWrapper>
                   </div>
                 )}
 
-              <div className="mt-5 mb-3 max-w-[75ch]">
+              <div className='mt-5 mb-3 max-w-[75ch]'>
                 <TextAreaField
                   rows={3}
                   noPlaceholder
-                  label="Er det noe annet dere ønsker å formidle til etterlever? (valgfritt)"
-                  name="merknadTilEtterleverEllerRisikoeier"
+                  label='Er det noe annet dere ønsker å formidle til etterlever? (valgfritt)'
+                  name='merknadTilEtterleverEllerRisikoeier'
                 />
               </div>
 
               <CopyButton
-                variant="action"
+                variant='action'
                 copyText={window.location.href}
-                text="Kopiér lenken til denne siden"
-                activeText="Lenken er kopiert"
+                text='Kopiér lenken til denne siden'
+                activeText='Lenken er kopiert'
                 icon={<FilesIcon aria-hidden />}
               />
 
               {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-                <Alert variant="success" className="my-5">
+                <Alert variant='success' className='my-5'>
                   Tilbakemelding er sendt
                 </Alert>
               )}
@@ -117,11 +117,11 @@ export const SendInnPvoView = (props: IProps) => {
                 setSelectedStep={setSelectedStep}
                 submitForm={submitForm}
                 customButtons={
-                  <div className="mt-5 flex gap-2 items-center">
+                  <div className='mt-5 flex gap-2 items-center'>
                     {dirty && (
                       <Button
-                        type="button"
-                        variant="secondary"
+                        type='button'
+                        variant='secondary'
                         onClick={() => {
                           setSubmittedStatus(EPvoTilbakemeldingStatus.UNDERARBEID)
                           submitForm()
@@ -132,7 +132,7 @@ export const SendInnPvoView = (props: IProps) => {
                     )}
 
                     <Button
-                      type="button"
+                      type='button'
                       onClick={() => {
                         setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
                         submitForm()

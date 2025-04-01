@@ -61,19 +61,19 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
       validateOnBlur={false}
     >
       {({ values, setFieldValue, errors, submitForm }) => (
-        <Form className="flex flex-col gap-3">
+        <Form className='flex flex-col gap-3'>
           <FieldWrapper marginBottom>
-            <Field name="relationType">
+            <Field name='relationType'>
               {(fp: FieldProps) => (
                 <RadioGroup
-                  legend="Hvordan ønsker du å gjenbruke dette dokumentet?"
+                  legend='Hvordan ønsker du å gjenbruke dette dokumentet?'
                   onChange={(value) => fp.form.setFieldValue('relationType', value)}
                   description={
                     isInheritingFrom ? 'Kan ikke arve fra dette etterlevelsesdokumentet' : null
                   }
                   error={
                     fp.form.errors['relationType'] ? (
-                      <FormError fieldName="relationType" />
+                      <FormError fieldName='relationType' />
                     ) : undefined
                   }
                 >
@@ -93,39 +93,39 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
           <TextAreaField
             rows={2}
             noPlaceholder
-            label="Navngi ditt nye dokument"
-            caption="Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre, lignende"
-            name="title"
+            label='Navngi ditt nye dokument'
+            caption='Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre, lignende'
+            name='title'
           />
 
-          <div className="mt-5">
+          <div className='mt-5'>
             <TextAreaField
               rows={5}
               noPlaceholder
-              label="Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller arbeid som omfattes"
-              name="beskrivelse"
+              label='Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller arbeid som omfattes'
+              name='beskrivelse'
             />
           </div>
 
           <BoolField
-            label="Ønsker du å legge til eksisterende behandling(er) nå?"
-            name="behandlerPersonopplysninger"
-            tooltip="Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å legge til behandling senere."
+            label='Ønsker du å legge til eksisterende behandling(er) nå?'
+            name='behandlerPersonopplysninger'
+            tooltip='Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å legge til behandling senere.'
           />
 
           {values.behandlerPersonopplysninger && (
             <FieldWrapper>
-              <FieldArray name="behandlinger">
+              <FieldArray name='behandlinger'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                  <div className="my-3">
+                  <div className='my-3'>
                     <LabelWithDescription
                       label={'Legg til behandlinger fra Behandlingskatalogen'}
-                      description="Skriv minst 3 tegn for å søke"
+                      description='Skriv minst 3 tegn for å søke'
                     />
-                    <div className="w-full">
+                    <div className='w-full'>
                       <AsyncSelect
-                        aria-label="Søk etter behandlinger"
-                        placeholder=""
+                        aria-label='Søk etter behandlinger'
+                        placeholder=''
                         components={{ DropdownIndicator }}
                         noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                         controlShouldRenderValue={false}
@@ -162,15 +162,15 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
             </FieldWrapper>
           )}
 
-          <div id="teamsData" className="flex flex-col lg:flex-row gap-5">
-            <FieldArray name="teamsData">
+          <div id='teamsData' className='flex flex-col lg:flex-row gap-5'>
+            <FieldArray name='teamsData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className="flex-1">
-                  <LabelWithTooltip label="Søk team fra Teamkatalogen" tooltip="" />
-                  <div className="w-full">
+                <div className='flex-1'>
+                  <LabelWithTooltip label='Søk team fra Teamkatalogen' tooltip='' />
+                  <div className='w-full'>
                     <AsyncSelect
-                      aria-label="Søk etter team"
-                      placeholder=""
+                      aria-label='Søk etter team'
+                      placeholder=''
                       components={{ DropdownIndicator }}
                       noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                       controlShouldRenderValue={false}
@@ -199,14 +199,14 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
                 </div>
               )}
             </FieldArray>
-            <FieldArray name="resourcesData">
+            <FieldArray name='resourcesData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className="flex-1">
-                  <LabelWithTooltip label="Søk etter person" tooltip="" />
-                  <div className="w-full">
+                <div className='flex-1'>
+                  <LabelWithTooltip label='Søk etter person' tooltip='' />
+                  <div className='w-full'>
                     <AsyncSelect
-                      aria-label="Søk etter person"
-                      placeholder=""
+                      aria-label='Søk etter person'
+                      placeholder=''
                       components={{ DropdownIndicator }}
                       noOptionsMessage={({ inputValue }) => {
                         return noOptionMessage(inputValue)
@@ -241,16 +241,16 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
 
           {errors.teamsData && <Error message={errors.teamsData as string} />}
           <FieldWrapper>
-            <Field name="avdeling">
+            <Field name='avdeling'>
               {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
                 <div>
                   <LabelWithDescription
-                    label="Avdeling"
-                    description="Angi hvilken avdeling som er ansvarlig for etterlevelsen og som er risikoeier."
+                    label='Avdeling'
+                    description='Angi hvilken avdeling som er ansvarlig for etterlevelsen og som er risikoeier.'
                   />
                   <OptionList
                     listName={EListName.AVDELING}
-                    label="Avdeling"
+                    label='Avdeling'
                     value={fieldProps.field.value?.code}
                     onChange={(value) => {
                       fieldProps.form.setFieldValue('avdeling', value)
@@ -261,28 +261,28 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
             </Field>
           </FieldWrapper>
 
-          <div id="varslingsadresser" className="mt-3">
-            <VarslingsadresserEdit fieldName="varslingsadresser" />
+          <div id='varslingsadresser' className='mt-3'>
+            <VarslingsadresserEdit fieldName='varslingsadresser' />
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
 
-          <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white">
-            <div className="flex flex-row-reverse">
+          <div className='button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white'>
+            <div className='flex flex-row-reverse'>
               <Button
-                type="button"
+                type='button'
                 onClick={() => {
                   ampli.logEvent('knapp trykket', {
                     tekst: 'gjenbruk etterlevelsesdokument',
                   })
                   submitForm()
                 }}
-                className="ml-2.5"
+                className='ml-2.5'
               >
                 Opprett
               </Button>
               <Button
-                type="button"
-                variant="secondary"
+                type='button'
+                variant='secondary'
                 onClick={() => {
                   ampli.logEvent('knapp trykket', {
                     tekst: 'Avbryt gjenbruk etterlevelsesdokument',

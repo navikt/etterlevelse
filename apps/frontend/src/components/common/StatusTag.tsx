@@ -11,10 +11,10 @@ interface IStatusViewProps {
 export const StatusView = ({ status, variant, icon }: IStatusViewProps) => {
   const getStatusDisplay = (variant: any) => {
     return (
-      <Tag variant={variant} className="h-fit">
+      <Tag variant={variant} className='h-fit'>
         <div className={'flex items-center'}>
           {icon}
-          <Detail className="whitespace-nowrap">{kravStatus(status)}</Detail>
+          <Detail className='whitespace-nowrap'>{kravStatus(status)}</Detail>
         </div>
       </Tag>
     )

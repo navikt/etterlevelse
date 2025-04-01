@@ -85,29 +85,29 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
     <div>
       <div>
         {!isFormActive && (
-          <div className="mt-5">
+          <div className='mt-5'>
             <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
 
             {revurdertEffektCheck && (
-              <Alert className="mt-3" variant="warning">
+              <Alert className='mt-3' variant='warning'>
                 Du må vurdere tiltakenes effekt
               </Alert>
             )}
 
             {!revurdertEffektCheck && (
-              <div className="mt-3">
+              <div className='mt-3'>
                 <RisikoscenarioTag
                   level={risikoscenario.sannsynlighetsNivaaEtterTiltak}
                   text={getSannsynlighetsnivaaText(risikoscenario.sannsynlighetsNivaaEtterTiltak)}
                 />
 
-                <div className="mt-3">
+                <div className='mt-3'>
                   <RisikoscenarioTag
                     level={risikoscenario.konsekvensNivaaEtterTiltak}
                     text={getKonsekvenssnivaaText(risikoscenario.konsekvensNivaaEtterTiltak)}
                   />
                 </div>
-                <BodyLong className="mt-3">{risikoscenario.nivaaBegrunnelseEtterTiltak}</BodyLong>
+                <BodyLong className='mt-3'>{risikoscenario.nivaaBegrunnelseEtterTiltak}</BodyLong>
               </div>
             )}
           </div>
@@ -115,11 +115,11 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
 
         {!isFormActive && (
           <Button
-            className="mt-3"
-            type="button"
+            className='mt-3'
+            type='button'
             variant={revurdertEffektCheck ? 'primary' : 'tertiary'}
             onClick={() => setIsFormActive(true)}
-            icon={revurdertEffektCheck ? undefined : <PencilIcon aria-hidden title="" />}
+            icon={revurdertEffektCheck ? undefined : <PencilIcon aria-hidden title='' />}
           >
             {revurdertEffektCheck ? 'Vurdér tiltakenes effekt' : 'Redigér tiltakenes effekt'}
           </Button>
@@ -133,18 +133,18 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
           initialValues={mapRisikoscenarioToFormValue(risikoscenario)}
         >
           {({ submitForm }) => (
-            <Form className="w-full border-t border-[#071a3636]">
+            <Form className='w-full border-t border-[#071a3636]'>
               <TopBottomWrapper>
-                <Heading size="medium" level="3">
+                <Heading size='medium' level='3'>
                   Vurdér tiltakenes antatte effekt på risikoscenarionivået
                 </Heading>
               </TopBottomWrapper>
 
               <PVKFieldWrapper>
-                <Field name="sannsynlighetsNivaaEtterTiltak">
+                <Field name='sannsynlighetsNivaaEtterTiltak'>
                   {(fieldProps: FieldProps) => (
                     <RadioGroup
-                      legend="Beskriv risikoscenarioets antatte sannsynlighetsnivå etter at tiltakene er iverksatt"
+                      legend='Beskriv risikoscenarioets antatte sannsynlighetsnivå etter at tiltakene er iverksatt'
                       value={fieldProps.field.value}
                       onChange={(value) => {
                         fieldProps.form.setFieldValue('sannsynlighetsNivaaEtterTiltak', value)
@@ -156,7 +156,7 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                       }
                     >
                       <RisikoscenarioSannsynlighetReadMore />
-                      <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
+                      <Stack gap='0 6' direction={{ xs: 'column', sm: 'row' }} wrap={false}>
                         <Radio value={1}>Meget lite sannsynlig</Radio>
                         <Radio value={2}>Lite sannsynlig</Radio>
                         <Radio value={3}>Moderat sannsynlig</Radio>
@@ -169,10 +169,10 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
               </PVKFieldWrapper>
 
               <PVKFieldWrapper>
-                <Field name="konsekvensNivaaEtterTiltak">
+                <Field name='konsekvensNivaaEtterTiltak'>
                   {(fieldProps: FieldProps) => (
                     <RadioGroup
-                      legend="Beskriv risikoscenarioets antatte konsekvensnivå etter at tiltakene er iverksatt"
+                      legend='Beskriv risikoscenarioets antatte konsekvensnivå etter at tiltakene er iverksatt'
                       value={fieldProps.field.value}
                       onChange={(value) => {
                         fieldProps.form.setFieldValue('konsekvensNivaaEtterTiltak', value)
@@ -184,7 +184,7 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                       }
                     >
                       <RisikoscenarioKonsekvensnivaaReadMore />
-                      <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
+                      <Stack gap='0 6' direction={{ xs: 'column', sm: 'row' }} wrap={false}>
                         <Radio value={1}>Ubetydelig</Radio>
                         <Radio value={2}>Lav konsekvens</Radio>
                         <Radio value={3}>Moderat konsekvens</Radio>
@@ -200,18 +200,18 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                 <TextAreaField
                   rows={3}
                   noPlaceholder
-                  label="Gi en samlet begrunnelse for endringer i risikobildet som følge av tiltak"
-                  name="nivaaBegrunnelseEtterTiltak"
+                  label='Gi en samlet begrunnelse for endringer i risikobildet som følge av tiltak'
+                  name='nivaaBegrunnelseEtterTiltak'
                 />
               </div>
 
               <TopBottomWrapper>
-                <div className="flex gap-2">
-                  <Button type="button" onClick={() => submitForm()}>
+                <div className='flex gap-2'>
+                  <Button type='button' onClick={() => submitForm()}>
                     Lagre
                   </Button>
 
-                  <Button type="button" variant="secondary" onClick={() => setIsFormActive(false)}>
+                  <Button type='button' variant='secondary' onClick={() => setIsFormActive(false)}>
                     Avbryt
                   </Button>
                 </div>

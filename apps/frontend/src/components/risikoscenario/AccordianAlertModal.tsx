@@ -32,7 +32,7 @@ export const AccordianAlertModal: FunctionComponent<TProps> = ({
       </Modal.Body>
       <Modal.Footer>
         <Button
-          type="button"
+          type='button'
           onClick={async () => {
             await formRef.current?.submitForm()
             setIsOpen(false)
@@ -50,8 +50,8 @@ export const AccordianAlertModal: FunctionComponent<TProps> = ({
           Lagre og fortsette
         </Button>
         <Button
-          type="button"
-          variant="secondary"
+          type='button'
+          variant='secondary'
           onClick={async () => {
             const values: any = formRef.current?.values
             await formRef.current?.resetForm({ values })
@@ -67,8 +67,8 @@ export const AccordianAlertModal: FunctionComponent<TProps> = ({
           Fortsett uten å lagre
         </Button>
         <Button
-          type="button"
-          variant="tertiary"
+          type='button'
+          variant='tertiary'
           onClick={() => {
             setIsOpen(false)
           }}

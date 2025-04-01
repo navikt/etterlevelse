@@ -64,32 +64,32 @@ export const VarslingsadresserEdit = (props: IVarslingsadresserEditProps) => {
           }
           return (
             <div>
-              <LabelWithDescription label="Velg varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger på kravet." />
+              <LabelWithDescription label='Velg varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger på kravet.' />
               <div>
-                <div className="mb-2.5">
+                <div className='mb-2.5'>
                   <Button
-                    variant="secondary"
-                    type="button"
+                    variant='secondary'
+                    type='button'
                     onClick={() => setAddSlackChannel(true)}
-                    icon={<FontAwesomeIcon icon={faSlackHash} aria-hidden aria-label="" />}
+                    icon={<FontAwesomeIcon icon={faSlackHash} aria-hidden aria-label='' />}
                   >
                     Legg til slack-kanal
                   </Button>
                   <Button
-                    className="ml-2.5"
-                    variant="secondary"
-                    type="button"
+                    className='ml-2.5'
+                    variant='secondary'
+                    type='button'
                     onClick={() => setAddSlackUser(true)}
-                    icon={<PersonIcon aria-hidden aria-label="" />}
+                    icon={<PersonIcon aria-hidden aria-label='' />}
                   >
                     Legg til slack-bruker
                   </Button>
                   <Button
-                    variant="secondary"
-                    className="ml-2.5"
-                    type="button"
+                    variant='secondary'
+                    className='ml-2.5'
+                    type='button'
                     onClick={() => setAddEmail(true)}
-                    icon={<EnvelopeClosedIcon aria-hidden aria-label="" />}
+                    icon={<EnvelopeClosedIcon aria-hidden aria-label='' />}
                   >
                     Legg til epost
                   </Button>
@@ -209,8 +209,8 @@ type TAddVarslingsadresseProps = {
 export const SlackChannelSearch = ({ add, close }: TAddVarslingsadresseProps) => {
   return (
     <AsyncSelect
-      aria-label="Søk etter slack-kanal"
-      placeholder="Søk etter slack-kanal"
+      aria-label='Søk etter slack-kanal'
+      placeholder='Søk etter slack-kanal'
       noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
       controlShouldRenderValue={false}
       loadingMessage={() => 'Søker...'}
@@ -250,12 +250,12 @@ export const SlackUserSearch = ({ add, close }: TAddVarslingsadresseProps) => {
   }
 
   return (
-    <div className="flex flex-col">
-      <div className="flex w-full">
-        <div className="w-full">
+    <div className='flex flex-col'>
+      <div className='flex w-full'>
+        <div className='w-full'>
           <AsyncSelect
-            aria-label="Søk etter slack-bruker"
-            placeholder="Søk etter slack-bruker"
+            aria-label='Søk etter slack-bruker'
+            placeholder='Søk etter slack-bruker'
             noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
             controlShouldRenderValue={false}
             loadingMessage={() => 'Søker...'}
@@ -274,15 +274,15 @@ export const SlackUserSearch = ({ add, close }: TAddVarslingsadresseProps) => {
             styles={selectOverrides}
           />
         </div>
-        <div className="flex justify-end ml-2.5">
-          <Button type="button" onClick={() => addEmail(user.getEmail())}>
+        <div className='flex justify-end ml-2.5'>
+          <Button type='button' onClick={() => addEmail(user.getEmail())}>
             Meg
           </Button>
         </div>
       </div>
-      {loadingSlackId && <Loader size="large" className="flex justify-self-center" />}
+      {loadingSlackId && <Loader size='large' className='flex justify-self-center' />}
       {error && (
-        <Alert className="mt-2.5" variant="error">
+        <Alert className='mt-2.5' variant='error'>
           {error}
         </Alert>
       )}
@@ -317,10 +317,10 @@ export const AddEmail = ({ added, add: doAdd, close }: TAddVarslingsadresseProps
 
   const onKey = (e: React.KeyboardEvent) => e.key === 'Enter' && add()
   return (
-    <div className="flex flex-col">
-      <div className="flex w-full">
+    <div className='flex flex-col'>
+      <div className='flex w-full'>
         <TextField
-          label="epost"
+          label='epost'
           hideLabel
           onKeyDown={onKey}
           value={val}
@@ -329,12 +329,12 @@ export const AddEmail = ({ added, add: doAdd, close }: TAddVarslingsadresseProps
           onBlur={() => add()}
           className={`w-full ${error ? 'border-2 rounded-md border-[#c30000]' : ''}`}
         />
-        <div className="flex justify-between ml-2.5">
-          <Button type="button" onClick={() => add(user.getEmail())}>
+        <div className='flex justify-between ml-2.5'>
+          <Button type='button' onClick={() => add(user.getEmail())}>
             Meg
           </Button>
-          <Button type="button" onClick={() => add} className="ml-2.5">
-            <PlusIcon title="legg til epost" aria-label="legg til epost" />
+          <Button type='button' onClick={() => add} className='ml-2.5'>
+            <PlusIcon title='legg til epost' aria-label='legg til epost' />
           </Button>
         </div>
       </div>

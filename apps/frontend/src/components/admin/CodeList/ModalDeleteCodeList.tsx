@@ -28,9 +28,9 @@ const DeleteCodeListModal = ({
       </Modal.Body>
 
       <Modal.Footer>
-        <div className="flex justify-end">
-          <div className="mr-auto">{errorOnDelete && <BodyShort>{errorOnDelete}</BodyShort>}</div>
-          <Button variant="secondary" onClick={() => onClose()} className="mr-4">
+        <div className='flex justify-end'>
+          <div className='mr-auto'>{errorOnDelete && <BodyShort>{errorOnDelete}</BodyShort>}</div>
+          <Button variant='secondary' onClick={() => onClose()} className='mr-4'>
             Avbryt
           </Button>
           <Button onClick={() => submit({ list: initialValues.list, code: initialValues.code })}>

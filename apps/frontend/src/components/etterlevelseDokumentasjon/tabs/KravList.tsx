@@ -129,44 +129,44 @@ export const KravList = (props: IProps) => {
   })
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-end w-full gap-6 py-2">
-        <Label className="pb-3">Filter:</Label>
+    <div className='flex flex-col gap-4'>
+      <div className='flex items-end w-full gap-6 py-2'>
+        <Label className='pb-3'>Filter:</Label>
         <TextField
-          label="Søk etter kravet"
+          label='Søk etter kravet'
           onChange={(event) => setSearchKrav(event.target.value)}
         />
         <Select
-          label="Velg fullføringsgrad"
+          label='Velg fullføringsgrad'
           onChange={(event) => {
             setStatusFilter(event.target.value)
           }}
         >
-          <option value="ALLE">Alle</option>
+          <option value='ALLE'>Alle</option>
           <option value={EEtterlevelseStatus.UNDER_REDIGERING}>Under arbeid</option>
           <option value={EEtterlevelseStatus.OPPFYLLES_SENERE}>Oppfylles senere</option>
-          <option value="">Ikke påbegynt</option>
+          <option value=''>Ikke påbegynt</option>
           <option value={EEtterlevelseStatus.FERDIG_DOKUMENTERT}>Ferdig utfylt</option>
         </Select>
 
         <Select
-          label="Velg suksesskriterie status"
+          label='Velg suksesskriterie status'
           onChange={(event) => {
             setSuksesskriterieStatusFilter(event.target.value)
           }}
         >
-          <option value="ALLE">Alle</option>
+          <option value='ALLE'>Alle</option>
           <option value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</option>
           <option value={ESuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</option>
           <option value={ESuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</option>
           <option value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</option>
         </Select>
       </div>
-      <div className="flex items-center w-full pb-2">
-        <div className="flex items-center w-full gap-4">
+      <div className='flex items-center w-full pb-2'>
+        <div className='flex items-center w-full gap-4'>
           <Button
-            variant="tertiary"
-            size="xsmall"
+            variant='tertiary'
+            size='xsmall'
             onClick={() => {
               setOpenAccordions(temaListe.map(() => true))
               navigate(`/dokumentasjon/${params.id}/ALLE`)
@@ -175,8 +175,8 @@ export const KravList = (props: IProps) => {
             Åpne alle tema
           </Button>
           <Button
-            variant="tertiary"
-            size="xsmall"
+            variant='tertiary'
+            size='xsmall'
             onClick={() => {
               setOpenAccordions(temaListe.map(() => false))
               navigate(`/dokumentasjon/${params.id}/`)
@@ -186,8 +186,8 @@ export const KravList = (props: IProps) => {
           </Button>
         </div>
 
-        <div className="flex justify-end w-full items-center">
-          <BodyShort size="medium">
+        <div className='flex justify-end w-full items-center'>
+          <BodyShort size='medium'>
             Totalt {getNewestKravVersjon(relevanteStats).length} krav
             {statusFilter === 'ALLE'
               ? `, ${antallFylttKrav} ferdig
@@ -197,7 +197,7 @@ export const KravList = (props: IProps) => {
         </div>
       </div>
       {loading && (
-        <div className="flex w-full justify-center mt-3.5">
+        <div className='flex w-full justify-center mt-3.5'>
           <Loader size={'large'} />
         </div>
       )}
@@ -219,7 +219,7 @@ export const KravList = (props: IProps) => {
         (relevanteStats.length !== 0 || utgaattStats.length !== 0) &&
         relevantKravList.length === 0 &&
         utgaattKravList.length === 0 && (
-          <div className="flex w-full justify-center">
+          <div className='flex w-full justify-center'>
             <BodyShort>Fant ingen krav</BodyShort>
           </div>
         )}

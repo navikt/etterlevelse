@@ -122,18 +122,18 @@ export const KravEditPage = () => {
     <>
       {krav && krav.status === EKravStatus.UTGAATT && !user.isAdmin() && (
         <PageLayout
-          pageTitle="Rediger krav"
-          currentPage="Rediger krav"
+          pageTitle='Rediger krav'
+          currentPage='Rediger krav'
           breadcrumbPaths={[kravBreadCrumbPath]}
           key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon}
         >
-          <Box padding="4" background="surface-warning-subtle">
+          <Box padding='4' background='surface-warning-subtle'>
             Det er ikke lov å redigere på et utgått krav.
           </Box>
           <Button
-            className="mt-4"
-            variant="secondary"
-            type="button"
+            className='mt-4'
+            variant='secondary'
+            type='button'
             onClick={() => {
               if (krav.kravNummer && krav.kravVersjon) {
                 navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
@@ -147,14 +147,14 @@ export const KravEditPage = () => {
 
       {krav && (krav.status !== EKravStatus.UTGAATT || user.isAdmin()) && (
         <PageLayout
-          pageTitle="Rediger krav"
-          currentPage="Rediger krav"
+          pageTitle='Rediger krav'
+          currentPage='Rediger krav'
           breadcrumbPaths={[kravBreadCrumbPath]}
           key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon}
         >
           {kravLoading && (
-            <div className="w-full flex items-center flex-col">
-              <Loader size="3xlarge" />
+            <div className='w-full flex items-center flex-col'>
+              <Loader size='3xlarge' />
             </div>
           )}
 
@@ -170,24 +170,24 @@ export const KravEditPage = () => {
                 {({ values, errors, isSubmitting, submitForm, initialValues }) => (
                   <Form>
                     <div>
-                      <div className="w-full">
-                        <Heading level="1" size="medium">
+                      <div className='w-full'>
+                        <Heading level='1' size='medium'>
                           Rediger krav
                         </Heading>
-                        <Heading level="2" size="small">
+                        <Heading level='2' size='small'>
                           {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}{' '}
                         </Heading>
                       </div>
                       <KravFormFields
-                        mode="edit"
+                        mode='edit'
                         kravVersjon={values.kravVersjon}
                         errors={errors}
                         varselMeldingActive={varselMeldingActive}
                         setVarselMeldingActive={setVarselMeldingActive}
                         isEditingUtgaattKrav={isEditingUtgaattKrav}
                       />
-                      <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white">
-                        <div className="flex w-full flex-row-reverse">
+                      <div className='button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white'>
+                        <div className='flex w-full flex-row-reverse'>
                           <KravStandardButtons
                             submitCancelButton={() => {
                               if (krav.kravNummer && krav.kravVersjon) {
@@ -207,17 +207,17 @@ export const KravEditPage = () => {
                             }}
                             isSubmitting={isSubmitting}
                           />
-                          <div className="flex w-full">
+                          <div className='flex w-full'>
                             {krav.status === EKravStatus.AKTIV && (
-                              <div className="mr-2">
+                              <div className='mr-2'>
                                 <Button
-                                  variant="secondary"
+                                  variant='secondary'
                                   onClick={() => {
                                     values.status = EKravStatus.UTGAATT
                                     setUtgaattKravMessage(true)
                                   }}
                                   disabled={isSubmitting}
-                                  type="button"
+                                  type='button'
                                 >
                                   Sett kravet til utgått
                                 </Button>
@@ -225,12 +225,12 @@ export const KravEditPage = () => {
                             )}
 
                             {user.isAdmin() && krav.status === EKravStatus.UTGAATT && (
-                              <div className="mr-2">
+                              <div className='mr-2'>
                                 <Button
-                                  variant="secondary"
+                                  variant='secondary'
                                   onClick={() => setAktivKravMessage(true)}
                                   disabled={isSubmitting}
-                                  type="button"
+                                  type='button'
                                 >
                                   Sett versjonen til aktiv
                                 </Button>
@@ -238,15 +238,15 @@ export const KravEditPage = () => {
                             )}
 
                             {user.isAdmin() && krav.status !== EKravStatus.UTKAST && (
-                              <div className="mr-2">
+                              <div className='mr-2'>
                                 <Button
-                                  variant="secondary"
+                                  variant='secondary'
                                   onClick={() => {
                                     values.status = EKravStatus.UTKAST
                                     submitForm()
                                   }}
                                   disabled={isSubmitting}
-                                  type="button"
+                                  type='button'
                                 >
                                   Sett kravet til utkast
                                 </Button>
@@ -254,26 +254,26 @@ export const KravEditPage = () => {
                             )}
 
                             <KravEditStatusModal
-                              status="utgått"
+                              status='utgått'
                               open={utgaattKravMessage}
-                              brukerBeskjed="Denne handligen kan ikke reverseres"
+                              brukerBeskjed='Denne handligen kan ikke reverseres'
                               setKravMessage={() => {
                                 values.status = initialValues.status
                                 setUtgaattKravMessage(false)
                               }}
                               formComponent={
                                 <TextAreaField
-                                  label="Beskriv hvorfor kravet er utgått"
-                                  name="beskrivelse"
-                                  height="15.625rem"
+                                  label='Beskriv hvorfor kravet er utgått'
+                                  name='beskrivelse'
+                                  height='15.625rem'
                                   markdown
                                 />
                               }
                             >
                               <Button
-                                type="button"
-                                className="mr-4"
-                                variant="primary"
+                                type='button'
+                                className='mr-4'
+                                variant='primary'
                                 onClick={() => {
                                   submitForm()
 
@@ -287,14 +287,14 @@ export const KravEditPage = () => {
                             </KravEditStatusModal>
 
                             <KravEditStatusModal
-                              status="aktiv"
+                              status='aktiv'
                               open={aktivKravMessage}
-                              brukerBeskjed="Kravet har en nyere versjon som settes til utkast"
+                              brukerBeskjed='Kravet har en nyere versjon som settes til utkast'
                               setKravMessage={() => setAktivKravMessage(false)}
                             >
                               <Button
-                                type="button"
-                                variant="primary"
+                                type='button'
+                                variant='primary'
                                 onClick={async () => {
                                   const newVersionOfKrav: IKrav | undefined =
                                     await getKravByKravNumberAndVersion(
@@ -325,11 +325,11 @@ export const KravEditPage = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="py-12">
+                      <div className='py-12'>
                         <TextAreaField
-                          label="Notater (Kun synlig for kraveier)"
-                          name="notat"
-                          height="15.625rem"
+                          label='Notater (Kun synlig for kraveier)'
+                          name='notat'
+                          height='15.625rem'
                           markdown
                         />
                       </div>

@@ -18,12 +18,12 @@ type TSection =
 
 export const VarselPage = () => {
   return (
-    <PageLayout pageTitle="Varslinger" currentPage="Varslinger">
-      <Heading className="mt-2" size="medium" level="1">
+    <PageLayout pageTitle='Varslinger' currentPage='Varslinger'>
+      <Heading className='mt-2' size='medium' level='1'>
         Varslinger
       </Heading>
 
-      <div className="pt-6">
+      <div className='pt-6'>
         <VarselTabs />
       </div>
     </PageLayout>
@@ -68,32 +68,32 @@ const VarselTabs = () => {
   }, [tab])
 
   return (
-    <Tabs defaultValue="utsendtMelding">
+    <Tabs defaultValue='utsendtMelding'>
       <Tabs.List>
-        <Tabs.Tab value="utsendtMelding" label="Utsendte meldinger" />
+        <Tabs.Tab value='utsendtMelding' label='Utsendte meldinger' />
         <Tabs.Tab
           value={EMeldingType.SYSTEM}
-          label="Systemmelding"
+          label='Systemmelding'
           onClick={() => {
             setTab(EMeldingType.SYSTEM)
           }}
         />
         <Tabs.Tab
           value={EMeldingType.FORSIDE}
-          label="Informasjon på forsiden"
+          label='Informasjon på forsiden'
           onClick={() => {
             setTab(EMeldingType.FORSIDE)
           }}
         />
         <Tabs.Tab
           value={EMeldingType.OM_ETTERLEVELSE}
-          label="Om etterlevelse"
+          label='Om etterlevelse'
           onClick={() => {
             setTab(EMeldingType.OM_ETTERLEVELSE)
           }}
         />
       </Tabs.List>
-      <Tabs.Panel value="utsendtMelding">
+      <Tabs.Panel value='utsendtMelding'>
         <AuditRecentTable show={true} tableType={EObjectType.Melding} />
       </Tabs.Panel>
       <Tabs.Panel value={EMeldingType.SYSTEM}>

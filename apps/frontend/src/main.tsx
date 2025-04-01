@@ -21,11 +21,11 @@ const Main = () => {
       <ApolloProvider client={apolloClient}>
         <BrowserRouter window={window}>
           <Helmet>
-            <meta charSet="utf-8" />
+            <meta charSet='utf-8' />
             <title>Etterlevelse</title>
           </Helmet>
 
-          <div className="flex flex-col w-full items-center min-h-screen bg-white">
+          <div className='flex flex-col w-full items-center min-h-screen bg-white'>
             <Header />
             <AppRoutes />
             <Footer />

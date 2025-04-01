@@ -13,7 +13,7 @@ import { noOptionMessage, selectOverrides } from '../../search/util'
 export const DropdownIndicator = (props: DropdownIndicatorProps) => {
   return (
     <components.DropdownIndicator {...props}>
-      <MagnifyingGlassIcon title="Søk" aria-label="Søk" />
+      <MagnifyingGlassIcon title='Søk' aria-label='Søk' />
     </components.DropdownIndicator>
   )
 }
@@ -21,7 +21,7 @@ export const DropdownIndicator = (props: DropdownIndicatorProps) => {
 export const EditBegreper = () => {
   return (
     <FieldWrapper>
-      <FieldArray name="begreper">
+      <FieldArray name='begreper'>
         {(fieldArrayRenderProps: FieldArrayRenderProps) => {
           return (
             <div>
@@ -30,8 +30,8 @@ export const EditBegreper = () => {
                 tooltip={'Legg ved lenke til relevante begrep(er) i Begrepskatalogen.'}
               />
               <AsyncSelect
-                aria-label="Søk etter begrep"
-                placeholder="Søk etter begrep"
+                aria-label='Søk etter begrep'
+                placeholder='Søk etter begrep'
                 components={{ DropdownIndicator }}
                 noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                 controlShouldRenderValue={false}
@@ -56,7 +56,7 @@ export const EditBegreper = () => {
           )
         }}
       </FieldArray>
-      <FormError fieldName="begreper" akselStyling />
+      <FormError fieldName='begreper' akselStyling />
     </FieldWrapper>
   )
 }

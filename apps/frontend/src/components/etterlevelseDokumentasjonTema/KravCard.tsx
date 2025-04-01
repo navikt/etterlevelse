@@ -115,31 +115,31 @@ export const KravCard = (props: IProps) => {
     <LinkPanel
       href={`/dokumentasjon/${etterlevelseDokumentasjonId}/${temaCode}/${kravStatusFilter}/krav/${krav.kravNummer}/${krav.kravVersjon}`}
     >
-      <div className="md:flex justify-between">
-        <div className="self-start">
-          <div className="flex items-center">
-            <Detail weight="semibold">
+      <div className='md:flex justify-between'>
+        <div className='self-start'>
+          <div className='flex items-center'>
+            <Detail weight='semibold'>
               K{krav.kravNummer}.{krav.kravVersjon}
             </Detail>
-            <div className="ml-4">
+            <div className='ml-4'>
               {krav.status === EKravStatus.UTGAATT && (
-                <ShowWarningMessage warningMessage="Utgått krav" />
+                <ShowWarningMessage warningMessage='Utgått krav' />
               )}
               {isVarslingStatus && krav.kravVersjon === 1 && kravAge < 30 && (
-                <ShowWarningMessage warningMessage="Nytt krav" />
+                <ShowWarningMessage warningMessage='Nytt krav' />
               )}
               {isVarslingStatus &&
                 nyVersionFlag &&
                 kravFilter === EKravFilterType.RELEVANTE_KRAV &&
-                kravAge < 30 && <ShowWarningMessage warningMessage="Ny versjon" />}
+                kravAge < 30 && <ShowWarningMessage warningMessage='Ny versjon' />}
             </div>
           </div>
           <BodyShort>{krav.navn}</BodyShort>
-          <div className="flex gap-2">
+          <div className='flex gap-2'>
             {!krav.isIrrelevant && (
-              <div className="md:flex w-full gap-2">
+              <div className='md:flex w-full gap-2'>
                 {krav.etterlevelseChangeStamp?.lastModifiedDate && (
-                  <Detail className="whitespace-nowrap">
+                  <Detail className='whitespace-nowrap'>
                     {'Sist utfylt: ' +
                       moment(krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
                   </Detail>
@@ -147,7 +147,7 @@ export const KravCard = (props: IProps) => {
                 {etterlevelseMetadata &&
                   etterlevelseMetadata.tildeltMed &&
                   etterlevelseMetadata.tildeltMed.length >= 1 && (
-                    <Detail className="whitespace-nowrap">
+                    <Detail className='whitespace-nowrap'>
                       Tildelt:{' '}
                       {etterlevelseMetadata.tildeltMed[0].length > 12
                         ? etterlevelseMetadata.tildeltMed[0].substring(0, 11) + '...'
@@ -159,9 +159,9 @@ export const KravCard = (props: IProps) => {
           </div>
         </div>
         {kravFilter === EKravFilterType.RELEVANTE_KRAV && krav && krav.etterlevelseStatus && (
-          <div className="self-center flex gap-2">
+          <div className='self-center flex gap-2'>
             {kravMedRelevantRisikoscenario && (
-              <StatusView status="Inneholder risikoscenario" variant="alt1" />
+              <StatusView status='Inneholder risikoscenario' variant='alt1' />
             )}
 
             <StatusView
@@ -172,7 +172,7 @@ export const KravCard = (props: IProps) => {
         )}
 
         {kravFilter !== EKravFilterType.RELEVANTE_KRAV && (
-          <div className="self-center">
+          <div className='self-center'>
             <StatusView
               status={kravFilter === EKravFilterType.BORTFILTTERTE_KRAV ? 'Bortfiltrert' : 'Utgått'}
             />
@@ -184,8 +184,8 @@ export const KravCard = (props: IProps) => {
 }
 
 export const ShowWarningMessage = ({ warningMessage }: { warningMessage: string }) => (
-  <div className="flex items-center gap-2">
-    <img src={warningAlert} width="18px" height="18px" alt="warning icon" />
-    <Detail className="whitespace-nowrap">{warningMessage}</Detail>
+  <div className='flex items-center gap-2'>
+    <img src={warningAlert} width='18px' height='18px' alt='warning icon' />
+    <Detail className='whitespace-nowrap'>{warningMessage}</Detail>
   </div>
 )

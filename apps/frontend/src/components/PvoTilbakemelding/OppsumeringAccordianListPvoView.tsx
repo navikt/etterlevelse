@@ -74,23 +74,23 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
                 <RisikoscenarioView
                   risikoscenario={risikoscenario}
                   etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-                  stepUrl="6"
+                  stepUrl='6'
                 />
-                <div className="mt-12">
-                  <Heading level="3" size="small">
+                <div className='mt-12'>
+                  <Heading level='3' size='small'>
                     Følgende tiltak gjelder for dette risikoscenarioet
                   </Heading>
                   {risikoscenario.ingenTiltak && <BodyLong>Vi skal ikke ha tiltak.</BodyLong>}
 
                   {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length !== 0 && (
-                    <div className="mt-5">
+                    <div className='mt-5'>
                       {tiltakList
                         .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
                         .map((tiltak, index) => (
                           <ReadMore
                             key={risikoscenario.id + '_' + tiltak.id + '_' + index}
                             header={tiltak.navn}
-                            className="mb-3"
+                            className='mb-3'
                           >
                             <TiltakView
                               tiltak={tiltak}
@@ -102,24 +102,24 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
                   )}
 
                   {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
-                    <div className="mt-5">
-                      <Alert className="mt-3" variant="warning">
+                    <div className='mt-5'>
+                      <Alert className='mt-3' variant='warning'>
                         Dere må legge inn tiltak under Identifisering av risikoscenarioer og tiltak.
                       </Alert>
                     </div>
                   )}
 
-                  <div className="mt-5">
+                  <div className='mt-5'>
                     <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
 
                     {revurdertEffektCheck && (
-                      <Alert className="mt-3" variant="warning">
+                      <Alert className='mt-3' variant='warning'>
                         Du må vurdere tiltakenes effekt
                       </Alert>
                     )}
 
                     {!revurdertEffektCheck && (
-                      <div className="mt-3">
+                      <div className='mt-3'>
                         <RisikoscenarioTag
                           level={risikoscenario.sannsynlighetsNivaaEtterTiltak}
                           text={getSannsynlighetsnivaaText(
@@ -127,7 +127,7 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
                           )}
                         />
 
-                        <div className="mt-3">
+                        <div className='mt-3'>
                           <RisikoscenarioTag
                             level={risikoscenario.konsekvensNivaaEtterTiltak}
                             text={getKonsekvenssnivaaText(
@@ -135,7 +135,7 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
                             )}
                           />
                         </div>
-                        <BodyLong className="mt-3">
+                        <BodyLong className='mt-3'>
                           {risikoscenario.nivaaBegrunnelseEtterTiltak}
                         </BodyLong>
                       </div>

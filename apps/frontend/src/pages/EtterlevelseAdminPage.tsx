@@ -8,22 +8,22 @@ export const EtterlevelseAdminPage = () => {
   const [etterlevelseId, setEtterlevelseId] = useState<string>('')
 
   return (
-    <PageLayout pageTitle="Administrere Etterlevelse" currentPage="Administrere Etterlevelse">
-      <Heading size="medium" level="1">
+    <PageLayout pageTitle='Administrere Etterlevelse' currentPage='Administrere Etterlevelse'>
+      <Heading size='medium' level='1'>
         Administrere Etterlevelse
       </Heading>
 
-      <div className="mt-5">
-        <div className="flex items-end">
+      <div className='mt-5'>
+        <div className='flex items-end'>
           <TextField
-            label="Slette etterlevelse ved uid"
-            placeholder="Etterlevelse UID"
+            label='Slette etterlevelse ved uid'
+            placeholder='Etterlevelse UID'
             onChange={(e) => setEtterlevelseId(e.target.value)}
-            className="w-full mr-3"
+            className='w-full mr-3'
           />
           <Button
             disabled={!etterlevelseId}
-            variant="secondary"
+            variant='secondary'
             onClick={() => {
               setUpdateMessage('')
               deleteEtterlevelse(etterlevelseId)
@@ -53,7 +53,7 @@ export const UpdateMessage = ({ message }: { message?: string }) => {
       {message ? (
         <div>
           {message.match('error') ? (
-            <BodyShort className="text-nav-red">{message}</BodyShort>
+            <BodyShort className='text-nav-red'>{message}</BodyShort>
           ) : (
             <BodyShort>{message}</BodyShort>
           )}

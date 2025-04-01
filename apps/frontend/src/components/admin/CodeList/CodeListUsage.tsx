@@ -92,26 +92,26 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
   }
 
   return (
-    <div className="mt-8" ref={ref}>
-      <div className="flex justify-between mb-2">
+    <div className='mt-8' ref={ref}>
+      <div className='flex justify-between mb-2'>
         <Label>Bruk</Label>
         {!!usage?.inUse && (
-          <Button type="button" variant="secondary" onClick={() => setShowReplace(!showReplace)}>
+          <Button type='button' variant='secondary' onClick={() => setShowReplace(!showReplace)}>
             Erstatt all bruk
           </Button>
         )}
       </div>
 
       {showReplace && usage && usage.listName && (
-        <div className="flex m-4 justify-end">
+        <div className='flex m-4 justify-end'>
           <Select
-            label="Velg ny verdi"
+            label='Velg ny verdi'
             hideLabel
             value={newValue}
-            className="mr-4"
+            className='mr-4'
             onChange={(event: ChangeEvent<HTMLSelectElement>) => setNewValue(event.target.value)}
           >
-            <option value="">Ny verdi</option>
+            <option value=''>Ny verdi</option>
             {codelistUtils
               .getParsedOptions(usage.listName)
               .map((code: IGetParsedOptionsProps, index: number) => (
@@ -120,14 +120,14 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
                 </option>
               ))}
           </Select>
-          <Button type="button" onClick={replace} disabled={!newValue}>
+          <Button type='button' onClick={replace} disabled={!newValue}>
             Erstatt
           </Button>
         </div>
       )}
 
       {usage && <UsageTable usage={usage} />}
-      {!usage && <Loader size="large" className="flex justify-self-center" />}
+      {!usage && <Loader size='large' className='flex justify-self-center' />}
     </div>
   )
 }

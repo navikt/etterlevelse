@@ -142,8 +142,8 @@ export const QuestionAndAnswerLogPage = () => {
   }, [tableContent])
 
   return (
-    <PageLayout pageTitle="Spørsmål og svar" currentPage="Spørsmål og svar">
-      <Heading size="medium" level="1">
+    <PageLayout pageTitle='Spørsmål og svar' currentPage='Spørsmål og svar'>
+      <Heading size='medium' level='1'>
         Spørsmål og svar
       </Heading>
 
@@ -151,27 +151,27 @@ export const QuestionAndAnswerLogPage = () => {
         {!isloading && kravMessages.length ? (
           <div>
             <Table
-              size="large"
+              size='large'
               zebraStripes
               sort={sort}
               onSortChange={(sortKey?: string) => handleSort(sort, setSort, sortKey)}
             >
               <Table.Header>
                 <Table.Row>
-                  <Table.ColumnHeader className="w-[6%]" sortKey="kravNummer" sortable>
+                  <Table.ColumnHeader className='w-[6%]' sortKey='kravNummer' sortable>
                     Krav ID
                   </Table.ColumnHeader>
-                  <Table.ColumnHeader className="w-[25%]" sortKey="kravNavn" sortable>
+                  <Table.ColumnHeader className='w-[25%]' sortKey='kravNavn' sortable>
                     Kravtittel
                   </Table.ColumnHeader>
-                  <Table.ColumnHeader sortKey="tema" sortable>
+                  <Table.ColumnHeader sortKey='tema' sortable>
                     Tema
                   </Table.ColumnHeader>
                   <Table.ColumnHeader>Fra</Table.ColumnHeader>
-                  <Table.ColumnHeader sortKey="tidForSporsmaal" sortable>
+                  <Table.ColumnHeader sortKey='tidForSporsmaal' sortable>
                     Mottatt
                   </Table.ColumnHeader>
-                  <Table.ColumnHeader sortKey="tidForSvar" sortable>
+                  <Table.ColumnHeader sortKey='tidForSvar' sortable>
                     Besvart
                   </Table.ColumnHeader>
                 </Table.Row>
@@ -179,12 +179,12 @@ export const QuestionAndAnswerLogPage = () => {
               <Table.Body>
                 {sortedData.map((message: TKravMessage) => (
                   <Table.Row key={message.id}>
-                    <Table.HeaderCell className="w-[6%]" scope="row">
+                    <Table.HeaderCell className='w-[6%]' scope='row'>
                       {' '}
                       K{message.kravNummer}.{message.kravVersjon}
                     </Table.HeaderCell>
 
-                    <Table.DataCell className="w-[25%]">
+                    <Table.DataCell className='w-[25%]'>
                       <Link
                         href={`/krav/${message.kravNummer}/${message.kravVersjon}?tilbakemeldingId=${message.id}`}
                       >
@@ -208,20 +208,20 @@ export const QuestionAndAnswerLogPage = () => {
               </Table.Body>
             </Table>
 
-            <div className="flex w-full justify-center items-center mt-3">
+            <div className='flex w-full justify-center items-center mt-3'>
               <Select
-                label="Antall rader:"
+                label='Antall rader:'
                 value={rowsPerPage}
                 onChange={(event: ChangeEvent<HTMLSelectElement>) =>
                   setRowsPerPage(parseInt(event.target.value))
                 }
-                size="small"
+                size='small'
               >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
+                <option value='5'>5</option>
+                <option value='10'>10</option>
+                <option value='20'>20</option>
+                <option value='50'>50</option>
+                <option value='100'>100</option>
               </Select>
               <Spacer />
               <div>
@@ -230,7 +230,7 @@ export const QuestionAndAnswerLogPage = () => {
                   onPageChange={setPage}
                   count={Math.ceil(kravMessages.length / rowsPerPage)}
                   prevNextTexts
-                  size="small"
+                  size='small'
                 />
               </div>
               <Spacer />
@@ -238,7 +238,7 @@ export const QuestionAndAnswerLogPage = () => {
             </div>
           </div>
         ) : (
-          <div className="flex justify-center">
+          <div className='flex justify-center'>
             <Loader size={'large'} />
           </div>
         )}

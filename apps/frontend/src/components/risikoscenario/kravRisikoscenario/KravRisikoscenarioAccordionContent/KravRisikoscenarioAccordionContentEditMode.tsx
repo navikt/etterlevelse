@@ -48,10 +48,10 @@ export const KravRisikoscenarioAccordionContentEditMode: FunctionComponent<TProp
       risikoscenario={activeRisikoscenario}
       noCopyButton={true}
       etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-      stepUrl="0"
+      stepUrl='0'
     />
 
-    <div className="mt-12">
+    <div className='mt-12'>
       <RisikoscenarioTiltakHeader />
 
       {!risikoscenario.ingenTiltak && userHasAccess() && (
@@ -74,7 +74,7 @@ export const KravRisikoscenarioAccordionContentEditMode: FunctionComponent<TProp
 
       {isCreateTiltakFormActive && (
         <TiltakForm
-          title="Opprett nytt tiltak"
+          title='Opprett nytt tiltak'
           initialValues={{} as ITiltak}
           pvkDokumentId={risikoscenario.pvkDokumentId}
           submit={submitCreateTiltak}

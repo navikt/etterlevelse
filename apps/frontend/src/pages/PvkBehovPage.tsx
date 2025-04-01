@@ -119,22 +119,22 @@ export const PvkBehovPage = () => {
 
   return (
     <PageLayout
-      pageTitle="Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?"
-      currentPage="Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?"
+      pageTitle='Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?'
+      currentPage='Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?'
       breadcrumbPaths={breadcrumbPaths}
     >
-      <Heading level="1" size="medium" className="mb-5">
+      <Heading level='1' size='medium' className='mb-5'>
         Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?
       </Heading>
       {isEtterlevelseDokumentasjonLoading && (
-        <div className="flex w-full justify-center">
-          <Loader size="large" />
+        <div className='flex w-full justify-center'>
+          <Loader size='large' />
         </div>
       )}
 
       {!isEtterlevelseDokumentasjonLoading && etterlevelseDokumentasjon && pvkdokument && (
-        <div className="flex w-full">
-          <div className="pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8">
+        <div className='flex w-full'>
+          <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
             <PvkBehovInfoContent
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               profilering={profilering}
@@ -167,7 +167,7 @@ export const PvkBehovPage = () => {
           </div>
 
           {etterlevelseDokumentasjon && (
-            <div className="pl-4 border-l border-[#071a3636] w-full max-w-md">
+            <div className='pl-4 border-l border-[#071a3636] w-full max-w-md'>
               <PvkBehovMetadata etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
             </div>
           )}

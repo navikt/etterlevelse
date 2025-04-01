@@ -66,34 +66,34 @@ export const BehandlingensLivslopPvoView = (props: IProps) => {
   }, [etterlevelseDokumentasjon])
 
   return (
-    <div className="flex justify-center">
+    <div className='flex justify-center'>
       {isLoading && (
-        <div className="flex w-full justify-center items-center mt-5">
-          <Loader size="3xlarge" className="flex justify-self-center" />
+        <div className='flex w-full justify-center items-center mt-5'>
+          <Loader size='3xlarge' className='flex justify-self-center' />
         </div>
       )}
       {!isLoading && (
-        <div className="w-full">
-          <div className="flex w-full">
-            <div className="pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8">
-              <div className="flex justify-center">
+        <div className='w-full'>
+          <div className='flex w-full'>
+            <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
+              <div className='flex justify-center'>
                 <div>
-                  <Heading level="1" size="medium" className="mb-5">
+                  <Heading level='1' size='medium' className='mb-5'>
                     Behandlingens livsløp
                   </Heading>
 
                   <BehandlingensLivslopTextContent />
 
-                  <VStack gap="6" className="mt-5">
-                    <VStack gap="2">
-                      <Heading level="3" size="xsmall">
+                  <VStack gap='6' className='mt-5'>
+                    <VStack gap='2'>
+                      <Heading level='3' size='xsmall'>
                         {`Behandlingens livsløp filer som er lastet opp. (${files.length})`}
                       </Heading>
-                      <VStack as="ul" gap="3">
+                      <VStack as='ul' gap='3'>
                         {files.length > 0 &&
                           files.map((file, index) => (
                             <FileUpload.Item
-                              as="li"
+                              as='li'
                               key={file.file.name + '_' + index}
                               file={file.file}
                             />
@@ -103,7 +103,7 @@ export const BehandlingensLivslopPvoView = (props: IProps) => {
                     </VStack>
                   </VStack>
 
-                  <div className="mt-5">
+                  <div className='mt-5'>
                     <Label>Beskrivelse av behandlingens livsløp</Label>
                     <DataTextWrapper>
                       <BodyLong>
@@ -113,8 +113,8 @@ export const BehandlingensLivslopPvoView = (props: IProps) => {
                     </DataTextWrapper>
                   </div>
 
-                  <div className="mt-5">
-                    <div className="pt-6 border-t border-[#071a3636]">
+                  <div className='mt-5'>
+                    <div className='pt-6 border-t border-[#071a3636]'>
                       <BehandlingensLivsLopSidePanel
                         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       />
@@ -128,7 +128,7 @@ export const BehandlingensLivslopPvoView = (props: IProps) => {
             <PvoSidePanelWrapper>
               <PvoTilbakemeldingForm
                 pvkDokumentId={pvkDokument.id}
-                fieldName="behandlingenslivslop"
+                fieldName='behandlingenslivslop'
                 initialValue={pvoTilbakemelding.behandlingenslivslop}
                 formRef={formRef}
               />

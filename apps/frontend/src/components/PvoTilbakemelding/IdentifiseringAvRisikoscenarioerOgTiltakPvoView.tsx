@@ -42,10 +42,10 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView = (props: IProps) =
   }, [pvkDokument])
 
   return (
-    <div className="flex justify-center w-full">
-      <div className="pt-6 flex-col justify-items-center">
-        <div className="w-4/5">
-          <Heading level="1" size="medium" className="mb-5">
+    <div className='flex justify-center w-full'>
+      <div className='pt-6 flex-col justify-items-center'>
+        <div className='w-4/5'>
+          <Heading level='1' size='medium' className='mb-5'>
             Identifisering av risikoscenarioer og tiltak
           </Heading>
 
@@ -55,23 +55,23 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView = (props: IProps) =
             betydning, må dere identifisere forebyggende tiltak som reduserer risiko.
           </BodyLong>
 
-          <Alert variant="info" inline className="mt-5">
+          <Alert variant='info' inline className='mt-5'>
             <strong>Godt å vite:</strong> risikoscenarioer og tiltak som dere har dokumentert et
             sted, kan dere finne og gjenbruke andre steder hvor det er aktuelt.
           </Alert>
 
-          <Heading spacing size="small" level="2" className="mb-5 mt-10">
+          <Heading spacing size='small' level='2' className='mb-5 mt-10'>
             Legg til risikoscenarioer og tiltak med en tilknytning til etterlevelseskrav
           </Heading>
 
-          <BodyLong className="mb-5">
+          <BodyLong className='mb-5'>
             Disse vil nok utgjøre hovedparten av deres PVK. Slike risikoscenarioer, samt motvirkende
             tiltak, beskriver dere på den aktuelle kravsiden.
           </BodyLong>
 
           <Button
-            variant="secondary"
-            type="button"
+            variant='secondary'
+            type='button'
             onClick={() => {
               if (etterlevelseDokumentasjonId)
                 navigate('/dokumentasjon/' + etterlevelseDokumentasjonId + '?tab=pvk')
@@ -80,7 +80,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView = (props: IProps) =
             Gå til liste over PVK-relaterte krav
           </Button>
 
-          <Heading level="2" size="small" className="mb-5 mt-10">
+          <Heading level='2' size='small' className='mb-5 mt-10'>
             Legg til øvrige risikoscenarioer
           </Heading>
 
@@ -91,14 +91,14 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView = (props: IProps) =
           </BodyLong>
 
           {risikoscenarioList.length === 0 && (
-            <Alert variant="info" className="my-5 w-fit">
+            <Alert variant='info' className='my-5 w-fit'>
               Dere har ikke lagt inn noen øvrige risikoscenarioer.
             </Alert>
           )}
         </div>
-        <div className="w-full">
+        <div className='w-full'>
           {risikoscenarioList.length !== 0 && (
-            <div className="my-5">
+            <div className='my-5'>
               <RisikoscenarioAccordianListPvoView
                 risikoscenarioList={risikoscenarioList}
                 allRisikoscenarioList={allRisikoscenarioList}

@@ -37,8 +37,8 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
   }[] = codelistUtils.getParsedOptionsForLov(forVirkemiddel)
 
   return (
-    <FieldWrapper marginBottom id="regelverk">
-      <FieldArray name="regelverk">
+    <FieldWrapper marginBottom id='regelverk'>
+      <FieldArray name='regelverk'>
         {(fieldArrayRenderProps: FieldArrayRenderProps) => {
           const add = (): void => {
             if (!text || !lov) return
@@ -57,8 +57,8 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
           return (
             <div>
               <div>
-                <div className="flex items-end">
-                  <div className="w-full max-w-[25rem] mr-2.5">
+                <div className='flex items-end'>
+                  <div className='w-full max-w-[25rem] mr-2.5'>
                     <LabelWithTooltip
                       label={'Regelverk'}
                       tooltip={
@@ -67,8 +67,8 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
                     />
                     <Select
                       options={options}
-                      placeholder="Velg regelverk"
-                      aria-label="Velg regelverk"
+                      placeholder='Velg regelverk'
+                      aria-label='Velg regelverk'
                       value={lov}
                       onChange={(
                         value: SingleValue<{
@@ -99,33 +99,33 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
                       }}
                     />
                   </div>
-                  <div className="w-full">
+                  <div className='w-full'>
                     <LabelWithTooltip
-                      label="Paragraf, kapittel eller artikkel i regelverk"
-                      tooltip="Legg til paragraf, kapittel eller artikkel fra regelverk du har valgt."
+                      label='Paragraf, kapittel eller artikkel i regelverk'
+                      tooltip='Legg til paragraf, kapittel eller artikkel fra regelverk du har valgt.'
                     />
                     <TextField
-                      label="Paragraf, kapittel eller artikkel i regelverk"
+                      label='Paragraf, kapittel eller artikkel i regelverk'
                       hideLabel
                       value={text}
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>
                         setText((event.target as HTMLInputElement).value)
                       }
-                      placeholder="Beskrivelse, paragraf, artikkel eller kapittel i regelverk"
+                      placeholder='Beskrivelse, paragraf, artikkel eller kapittel i regelverk'
                     />
                   </div>
 
-                  <div className="min-w-[6.688rem] ml-2.5">
-                    <Button type="button" onClick={add} variant="secondary">
+                  <div className='min-w-[6.688rem] ml-2.5'>
+                    <Button type='button' onClick={add} variant='secondary'>
                       Legg til
                     </Button>
                   </div>
                 </div>
                 {error && <Error message={error} />}
-                {!error && <FormError fieldName="regelverk" akselStyling />}
+                {!error && <FormError fieldName='regelverk' akselStyling />}
                 {!!lov && text && (
-                  <div className="flex items-center mt-2.5">
-                    <Label className="mr-6">Forhåndsvisning: </Label>
+                  <div className='flex items-center mt-2.5'>
+                    <Label className='mr-6'>Forhåndsvisning: </Label>
                     <LovView regelverk={regelverkObject()} />
                   </div>
                 )}

@@ -10,7 +10,7 @@ export const EditKravTags = () => {
   ]
 
   return (
-    <FieldArray name="tagger">
+    <FieldArray name='tagger'>
       {(fieldArrayRenderProps: FieldArrayRenderProps) => {
         const selectedIds = (fieldArrayRenderProps.form.values['tagger'] as any[]).map(
           (value: any) => value
@@ -18,12 +18,12 @@ export const EditKravTags = () => {
 
         return (
           <div>
-            <LabelWithToolTip label="Tagger" />
-            <BodyLong className="text-[var(--a-text-subtle)]">
+            <LabelWithToolTip label='Tagger' />
+            <BodyLong className='text-[var(--a-text-subtle)]'>
               Tilgjengelig for admin til å sette på tagger
             </BodyLong>
             <Select
-              aria-label="Tagger"
+              aria-label='Tagger'
               isMulti
               options={options}
               value={selectedIds.map((value: any) =>

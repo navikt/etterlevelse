@@ -58,17 +58,17 @@ export const SlettOvrigRisikoscenario: FunctionComponent<TProps> = ({
   return (
     <div>
       <Button
-        type="button"
-        variant="tertiary"
+        type='button'
+        variant='tertiary'
         onClick={() => setIsOpen(true)}
-        icon={<TrashIcon aria-hidden title="" />}
+        icon={<TrashIcon aria-hidden title='' />}
       >
         Slett risikoscenario
       </Button>
 
       {isOpen && (
         <Modal
-          width="medium"
+          width='medium'
           header={{ heading: 'Vil dere slette dette risikoscenarioet?' }}
           open={isOpen}
           onClose={() => setIsOpen(false)}
@@ -83,8 +83,8 @@ export const SlettOvrigRisikoscenario: FunctionComponent<TProps> = ({
                 .filter((tiltak: ITiltak) => tiltak.risikoscenarioIds.length === 1).length !==
                 0 && (
                 <List
-                  as="ul"
-                  title="Følgende tiltak er unike for dette risikoscenarioet, og vil også slettes:"
+                  as='ul'
+                  title='Følgende tiltak er unike for dette risikoscenarioet, og vil også slettes:'
                 >
                   {tiltakList
                     .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
@@ -113,10 +113,10 @@ export const SlettOvrigRisikoscenario: FunctionComponent<TProps> = ({
             </Modal.Body>
           )}
           <Modal.Footer>
-            <Button type="button" onClick={() => submit()}>
+            <Button type='button' onClick={() => submit()}>
               Slett risikoscenario
             </Button>
-            <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
+            <Button type='button' variant='secondary' onClick={() => setIsOpen(false)}>
               Avbryt
             </Button>
           </Modal.Footer>

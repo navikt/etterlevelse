@@ -16,7 +16,7 @@ export const EtterlevelseDokumentasjonsPanels = ({
     {loading && <SkeletonPanel count={5} />}
 
     {!loading && (
-      <List className="mt-6 flex flex-col gap-2">
+      <List className='mt-6 flex flex-col gap-2'>
         {etterlevelseDokumentasjoner.map((etterlevelseDokumentasjon) => (
           <List.Item icon={<div />} key={etterlevelseDokumentasjon.id}>
             <EtterlevelseDokumentasjonsPanel

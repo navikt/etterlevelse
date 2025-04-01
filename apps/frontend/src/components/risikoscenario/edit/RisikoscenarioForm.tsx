@@ -45,10 +45,10 @@ export const RisikoscenarioForm: FunctionComponent<TProps> = ({
             </div>
 
             {Object.values(errors).some(Boolean) && (
-              <div className="mt-5">
+              <div className='mt-5'>
                 <ErrorSummary
                   ref={errorSummaryRef}
-                  heading="Du må rette disse feilene før du kan fortsette"
+                  heading='Du må rette disse feilene før du kan fortsette'
                 >
                   {Object.entries(errors)
                     .filter(([, error]) => error)
@@ -61,9 +61,9 @@ export const RisikoscenarioForm: FunctionComponent<TProps> = ({
               </div>
             )}
 
-            <div className="flex gap-2 mt-5">
+            <div className='flex gap-2 mt-5'>
               <Button
-                type="button"
+                type='button'
                 onClick={() => {
                   errorSummaryRef.current?.focus()
                   setValidateOnBlur(true)
@@ -72,7 +72,7 @@ export const RisikoscenarioForm: FunctionComponent<TProps> = ({
               >
                 Lagre risikoscenario
               </Button>
-              <Button onClick={() => onClose()} type="button" variant="secondary">
+              <Button onClick={() => onClose()} type='button' variant='secondary'>
                 Avbryt, ikke lagre
               </Button>
             </div>

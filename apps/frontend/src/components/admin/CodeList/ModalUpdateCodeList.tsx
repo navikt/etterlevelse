@@ -23,7 +23,7 @@ const UpdateCodeListModal = ({
   submit,
 }: TModalUpdateProps) => (
   <Modal
-    className="px-8 w-full max-w-2xl"
+    className='px-8 w-full max-w-2xl'
     onClose={onClose}
     open={isOpen}
     header={{ heading: title, closeButton: initialValues.list === EListName.LOV ? true : false }}
@@ -41,25 +41,25 @@ const UpdateCodeListModal = ({
       {(formik: FormikProps<ICodeListFormValues>) => (
         <Form>
           <Modal.Body>
-            <Field name="shortName">
+            <Field name='shortName'>
               {({ field }: FieldProps) => (
                 <TextField
-                  className="w-full"
-                  label="Navn"
+                  className='w-full'
+                  label='Navn'
                   {...field}
-                  error={formik.errors.shortName && <FormError fieldName="shortName" />}
+                  error={formik.errors.shortName && <FormError fieldName='shortName' />}
                 />
               )}
             </Field>
 
-            <Field name="description">
+            <Field name='description'>
               {({ field }: FieldProps) => (
                 <Textarea
-                  className="w-full mt-4"
-                  label="Beskrivelse"
+                  className='w-full mt-4'
+                  label='Beskrivelse'
                   {...field}
                   minRows={10}
-                  error={formik.errors.description && <FormError fieldName="description" />}
+                  error={formik.errors.description && <FormError fieldName='description' />}
                 />
               )}
             </Field>
@@ -71,14 +71,14 @@ const UpdateCodeListModal = ({
             {initialValues.list === EListName.LOV && <LovCodeDataForm />}
           </Modal.Body>
           <Modal.Footer>
-            <div className="flex justify-end">
-              <div className="mr-auto">
+            <div className='flex justify-end'>
+              <div className='mr-auto'>
                 {errorOnUpdate && <BodyShort>{errorOnUpdate}</BodyShort>}
               </div>
-              <Button type="button" variant="secondary" className="mr-4" onClick={() => onClose()}>
+              <Button type='button' variant='secondary' className='mr-4' onClick={() => onClose()}>
                 Avbryt
               </Button>
-              <Button type="button" onClick={formik.submitForm}>
+              <Button type='button' onClick={formik.submitForm}>
                 Lagre
               </Button>
             </div>

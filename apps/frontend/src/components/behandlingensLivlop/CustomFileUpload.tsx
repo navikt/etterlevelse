@@ -58,11 +58,11 @@ export const CustomFileUpload = (props: IProps) => {
   }
 
   return (
-    <VStack gap="6">
+    <VStack gap='6'>
       <FileUpload.Dropzone
-        label="Last opp behandlingens livsløp"
+        label='Last opp behandlingens livsløp'
         description={`Følgende filformater er tillatt: PDF, PNG, JPG og JPEG. Du kan laste opp maks 4 filer. Filstørrelse pr. fil må være mindre enn ${MAX_SIZE_MB} MB.`}
-        accept=".png,.jpeg,.pdf,.jpg"
+        accept='.png,.jpeg,.pdf,.jpg'
         maxSizeInBytes={MAX_SIZE}
         fileLimit={{ max: MAX_FILES, current: acceptedFiles.length }}
         validator={(file: File) => {
@@ -84,14 +84,14 @@ export const CustomFileUpload = (props: IProps) => {
       />
 
       {acceptedFiles.length > 0 && (
-        <VStack gap="2">
-          <Heading level="3" size="xsmall">
+        <VStack gap='2'>
+          <Heading level='3' size='xsmall'>
             {`Vedlegg (${acceptedFiles.length})`}
           </Heading>
-          <VStack as="ul" gap="3">
+          <VStack as='ul' gap='3'>
             {acceptedFiles.map((file, index) => (
               <FileUpload.Item
-                as="li"
+                as='li'
                 key={file.file.name + '_' + index}
                 file={file.file}
                 button={{
@@ -106,14 +106,14 @@ export const CustomFileUpload = (props: IProps) => {
         </VStack>
       )}
       {rejectedFiles.length > 0 && (
-        <VStack gap="2">
-          <Heading level="3" size="xsmall" id="vedleggMedFeil">
+        <VStack gap='2'>
+          <Heading level='3' size='xsmall' id='vedleggMedFeil'>
             Vedlegg med feil
           </Heading>
-          <VStack as="ul" gap="3">
+          <VStack as='ul' gap='3'>
             {rejectedFiles.map((rejected, index) => (
               <FileUpload.Item
-                as="li"
+                as='li'
                 key={index}
                 file={rejected.file}
                 button={{

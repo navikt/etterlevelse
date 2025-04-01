@@ -61,8 +61,8 @@ export const EditMelding = ({
 
   if (isLoading) {
     return (
-      <div className="flex justify-center">
-        <Loader size="large" />
+      <div className='flex justify-center'>
+        <Loader size='large' />
       </div>
     )
   }
@@ -73,16 +73,16 @@ export const EditMelding = ({
         <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
           {({ values, submitForm }: FormikProps<IMelding>) => (
             <div>
-              <div className="mb-6">
-                <Heading className="my-4" size="small" level="2">
+              <div className='mb-6'>
+                <Heading className='my-4' size='small' level='2'>
                   {melding.meldingType === EMeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'}
                 </Heading>
-                <Field name="alertType">
+                <Field name='alertType'>
                   {(fieldProps: FieldProps<string>) => (
                     <Form>
                       <RadioGroup
-                        className="mt-8"
-                        legend="Varseltype"
+                        className='mt-8'
+                        legend='Varseltype'
                         disabled={disableEdit}
                         value={meldingAlertType}
                         onChange={(event) => {
@@ -93,7 +93,7 @@ export const EditMelding = ({
                         {Object.values(EAlertType).map((id) => {
                           return (
                             <Radio value={id} key={id}>
-                              <div className="hover:underline">{getAlertTypeText(id)}</div>
+                              <div className='hover:underline'>{getAlertTypeText(id)}</div>
                             </Radio>
                           )
                         })}
@@ -107,17 +107,17 @@ export const EditMelding = ({
               <TextAreaField
                 maxCharacter={maxChar}
                 markdown
-                height="12.5rem"
+                height='12.5rem'
                 label={
                   melding.meldingType === EMeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'
                 }
                 noPlaceholder
-                name="melding"
+                name='melding'
               />
-              <div className="flex w-full mt-2.5">
+              <div className='flex w-full mt-2.5'>
                 <Button
-                  type="button"
-                  variant="secondary"
+                  type='button'
+                  variant='secondary'
                   disabled={disableEdit}
                   onClick={() => {
                     deleteMelding(melding.id).then(() => {
@@ -127,12 +127,12 @@ export const EditMelding = ({
                 >
                   Slett
                 </Button>
-                <div className="flex justify-end w-full">
+                <div className='flex justify-end w-full'>
                   {melding.meldingStatus === EMeldingStatus.ACTIVE && (
                     <Button
-                      type="button"
-                      className="mx-6"
-                      variant="secondary"
+                      type='button'
+                      className='mx-6'
+                      variant='secondary'
                       disabled={disableEdit}
                       onClick={() => {
                         values.meldingStatus = EMeldingStatus.DEACTIVE
@@ -143,8 +143,8 @@ export const EditMelding = ({
                     </Button>
                   )}
                   <Button
-                    type="button"
-                    variant="primary"
+                    type='button'
+                    variant='primary'
                     disabled={disableEdit}
                     onClick={() => {
                       values.meldingStatus = EMeldingStatus.ACTIVE

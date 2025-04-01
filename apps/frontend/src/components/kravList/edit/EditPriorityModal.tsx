@@ -94,7 +94,7 @@ export const EditPriorityModal = (props: {
       {({ submitForm, handleReset }) => (
         <Modal
           open={isOpen}
-          width="80rem"
+          width='80rem'
           onClose={() => {
             handleReset()
             close()
@@ -105,8 +105,8 @@ export const EditPriorityModal = (props: {
             <Label>{tema}</Label>
             <div>
               {loading && (
-                <div className="flex justify-center">
-                  <Loader size="large" />
+                <div className='flex justify-center'>
+                  <Loader size='large' />
                 </div>
               )}
               {!loading && kravListe && (
@@ -122,9 +122,9 @@ export const EditPriorityModal = (props: {
               )}
             </div>
 
-            <Modal.Footer className="button_container border-t-2 z-10 bg-white">
+            <Modal.Footer className='button_container border-t-2 z-10 bg-white'>
               <Button
-                type="button"
+                type='button'
                 onClick={() => {
                   submitForm()
                 }}
@@ -133,9 +133,9 @@ export const EditPriorityModal = (props: {
                 Lagre
               </Button>
               <Button
-                className="ml-2.5"
-                type="button"
-                variant="secondary"
+                className='ml-2.5'
+                type='button'
+                variant='secondary'
                 onClick={() => {
                   refresh()
                   handleReset()

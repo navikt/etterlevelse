@@ -25,7 +25,7 @@ const DataText = (props: TDataTextProps) => {
     if (props.header) {
       return (
         <div>
-          <Heading size="small" level="2">
+          <Heading size='small' level='2'>
             {props.label}
           </Heading>
         </div>

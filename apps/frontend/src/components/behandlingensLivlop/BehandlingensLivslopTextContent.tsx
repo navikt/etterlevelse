@@ -14,25 +14,25 @@ export const BehandlingensLivslopTextContent = () => {
         <List.Item>Hvor opplysningene flyter underveis i behandling.</List.Item>
         <List.Item>Om og hvor opplysningene sendes videre i NAV eller til eksterne.</List.Item>
       </List>
-      <Alert inline variant="info" className="mt-3">
+      <Alert inline variant='info' className='mt-3'>
         Det er kun påkrevd å tegne behandlingens livsløp hvis dere gjennomfører en PVK, men vi
         anbefaler at alle tegner flyten. Dette vil være til hjelp når dere svarer ut
         etterlevelseskrav innen Personvern og Arkiv og dokumentasjon.
       </Alert>
 
-      <BodyShort className="mt-3">
+      <BodyShort className='mt-3'>
         Illustrasjonen under viser hvordan dere kunne tegne behandlingens livsløp.
       </BodyShort>
 
       <img
-        className="mr-2.5"
+        className='mr-2.5'
         src={behandlingensLivslopImage}
-        alt="Behandligens livsløp tegning"
+        alt='Behandligens livsløp tegning'
         aria-hidden
-        aria-label=""
+        aria-label=''
       />
 
-      <ReadMore header="Slik lager dere en god tegning av behandlingens livsløp" className="mt-3">
+      <ReadMore header='Slik lager dere en god tegning av behandlingens livsløp' className='mt-3'>
         Du kan bruke verktøy som PowerPoint, Mural, eller Figma til å lage tegningen din som
         flytdiagram. Vi anbefaler ikke at du bruker Word.
         <br />

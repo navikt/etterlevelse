@@ -73,8 +73,8 @@ export const TemaList = () => {
               <KravPanelHeader title={tema.shortName} kravData={[]} />
             </Accordion.Header>
             <Accordion.Content>
-              <div className="flex w-full ml-6">
-                <BodyShort size="small">Ingen krav</BodyShort>
+              <div className='flex w-full ml-6'>
+                <BodyShort size='small'>Ingen krav</BodyShort>
               </div>
             </Accordion.Content>
           </Accordion.Item>
@@ -89,9 +89,9 @@ const getKravTemaRowsWithLabel = (kravListe: IKrav[], tema: string) => (
     {kravListe.map((krav: IKrav, index: number) => (
       <List.Item icon={<div />} key={`${krav.navn}_${krav.kravNummer}_${tema}_${index}`}>
         <LinkPanel href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>
-          <LinkPanel.Title className="flex items-center">
-            <div className="max-w-xl">
-              <BodyShort size="small">
+          <LinkPanel.Title className='flex items-center'>
+            <div className='max-w-xl'>
+              <BodyShort size='small'>
                 K{krav.kravNummer}.{krav.kravVersjon}
               </BodyShort>
               <BodyLong>
@@ -99,11 +99,11 @@ const getKravTemaRowsWithLabel = (kravListe: IKrav[], tema: string) => (
               </BodyLong>
             </div>
             <Spacer />
-            <div className="mr-5">
+            <div className='mr-5'>
               <StatusView status={krav.status} />
             </div>
-            <div className="w-44">
-              <BodyShort size="small">
+            <div className='w-44'>
+              <BodyShort size='small'>
                 {krav.changeStamp.lastModifiedDate !== undefined &&
                 krav.changeStamp.lastModifiedDate !== ''
                   ? `Sist endret: ${moment(krav.changeStamp.lastModifiedDate).format('ll')}`
@@ -144,13 +144,13 @@ const KravTemaList = (props: IKravTemaListProps) => {
   }, [kravPriorityList])
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className='flex flex-col gap-2'>
       <List>
         {getKravTemaRowsWithLabel(draftKrav, tema)}
         {getKravTemaRowsWithLabel(activeKravSortedWithPriority, tema)}
       </List>
       <div className={'w-full flex flex-row-reverse pt-5'}>
-        <Button variant="secondary" size="medium" onClick={() => setIsEditPriorityModalOpen(true)}>
+        <Button variant='secondary' size='medium' onClick={() => setIsEditPriorityModalOpen(true)}>
           Endre rekkefølge på krav
         </Button>
       </div>

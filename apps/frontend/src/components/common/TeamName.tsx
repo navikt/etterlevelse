@@ -22,7 +22,7 @@ export const TeamName = (props: IPropsTeamName) => {
   return link ? (
     <Link
       className={big ? '' : 'text-medium'}
-      rel="noopener noreferrer"
+      rel='noopener noreferrer'
       target={'_blank'}
       href={teamKatTeamLink(id)}
     >
@@ -37,8 +37,8 @@ export const Teams = (props: IPropsTeams) => {
   const { teams, link, big } = props
 
   return (
-    <div className="flex gap-2 items-start">
-      <Label size="medium">Team:</Label>
+    <div className='flex gap-2 items-start'>
+      <Label size='medium'>Team:</Label>
       <div>
         {teams.map((team, index) => (
           <TeamName key={`team_${index}`} id={team} link={link} big={big} />

@@ -71,10 +71,10 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
   return (
     <div>
       <Button
-        type="button"
-        variant="tertiary"
+        type='button'
+        variant='tertiary'
         onClick={() => setIsOpen(true)}
-        icon={<TrashIcon aria-hidden title="" />}
+        icon={<TrashIcon aria-hidden title='' />}
       >
         Slett risikoscenario
       </Button>
@@ -89,7 +89,7 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
         >
           <Modal.Body>
             {risikoscenario.relevanteKravNummer.length > 0 && (
-              <List title="Dette risikoscenarioet brukes også ved følgende etterlevelseskrav:">
+              <List title='Dette risikoscenarioet brukes også ved følgende etterlevelseskrav:'>
                 {risikoscenario.relevanteKravNummer.map((krav: IKravReference) => (
                   <List.Item key={`${risikoscenario.id}_${krav.kravNummer}.${krav.kravVersjon}`}>
                     K{krav.kravNummer}.{krav.kravVersjon} {krav.navn}
@@ -102,10 +102,10 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
             slettes derfra.
           </Modal.Body>
           <Modal.Footer>
-            <Button type="button" onClick={() => submit()}>
+            <Button type='button' onClick={() => submit()}>
               Ja, slett risikoscenarioet
             </Button>
-            <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
+            <Button type='button' variant='secondary' onClick={() => setIsOpen(false)}>
               Avbryt
             </Button>
           </Modal.Footer>

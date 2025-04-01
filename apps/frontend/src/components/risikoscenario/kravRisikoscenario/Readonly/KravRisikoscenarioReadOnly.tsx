@@ -55,17 +55,17 @@ export const KravRisikoscenarioReadOnly: FunctionComponent<TProps> = ({ krav, pv
   }, [krav, pvkDokument])
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       <KravRisikoscenarioReadMore />
 
-      <div className="mt-5">
+      <div className='mt-5'>
         {risikoscenarioForKrav.length === 0 && (
-          <Alert variant="info" className="mb-5">
+          <Alert variant='info' className='mb-5'>
             Foreløpig finnes det ingen risikoscenarioer tilknyttet dette kravet.
           </Alert>
         )}
 
-        <div className="mb-5">
+        <div className='mb-5'>
           <Accordion>
             {risikoscenarioForKrav.map((risikoscenario: IRisikoscenario, index: number) => (
               <Accordion.Item id={risikoscenario.id} key={`${index}_${risikoscenario.navn}`}>

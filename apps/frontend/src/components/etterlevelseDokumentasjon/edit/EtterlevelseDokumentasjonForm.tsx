@@ -174,15 +174,15 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
     >
       {({ values, submitForm, setFieldValue, errors }) => (
         <Form>
-          <Heading size="medium" level="1" spacing>
+          <Heading size='medium' level='1' spacing>
             {title}
           </Heading>
 
           {dokumentRelasjon && (
-            <Alert contentMaxWidth={false} variant="info" className="mb-5">
+            <Alert contentMaxWidth={false} variant='info' className='mb-5'>
               <Label>Dette må du vite om gjenbruk</Label>
 
-              <div className="mb-5">
+              <div className='mb-5'>
                 <Markdown source={dokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse} />
               </div>
             </Alert>
@@ -192,16 +192,16 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             rows={2}
             noPlaceholder
             label={labelNavngiDokument}
-            caption="Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre, lignende"
-            name="title"
+            caption='Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre, lignende'
+            name='title'
           />
 
-          <div className="mt-5">
+          <div className='mt-5'>
             <TextAreaField
-              height="150px"
+              height='150px'
               noPlaceholder
-              label="Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller arbeid som omfattes"
-              name="beskrivelse"
+              label='Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller arbeid som omfattes'
+              name='beskrivelse'
               markdown
             />
           </div>
@@ -249,15 +249,15 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                   ) : ( */}
 
           {!dokumentRelasjon && (
-            <FieldArray name="test">
+            <FieldArray name='test'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className="h-full pt-5 w-[calc(100% - 1rem)]">
-                  <Heading size="small" level="2" spacing>
+                <div className='h-full pt-5 w-[calc(100% - 1rem)]'>
+                  <Heading size='small' level='2' spacing>
                     Velg egenskaper
                   </Heading>
                   <CheckboxGroup
-                    legend="Hvilke egenskaper gjelder for etterlevelsen?"
-                    description="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
+                    legend='Hvilke egenskaper gjelder for etterlevelsen?'
+                    description='Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon.'
                     value={selectedFilter}
                     onChange={(selected: number[]) => {
                       setSelectedFilter(selected)
@@ -302,28 +302,28 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           {/* DONT REMOVE */}
           {/* )} */}
 
-          <Heading className="mt-5" size="small" level="2" spacing>
+          <Heading className='mt-5' size='small' level='2' spacing>
             Velg behandlinger
           </Heading>
           <BoolField
-            label="Ønsker du å legge til eksisterende behandling(er) nå?"
-            name="behandlerPersonopplysninger"
-            tooltip="Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å legge til behandling senere."
+            label='Ønsker du å legge til eksisterende behandling(er) nå?'
+            name='behandlerPersonopplysninger'
+            tooltip='Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å legge til behandling senere.'
           />
 
           {values.behandlerPersonopplysninger && (
             <FieldWrapper>
-              <FieldArray name="behandlinger">
+              <FieldArray name='behandlinger'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                  <div className="my-3">
+                  <div className='my-3'>
                     <LabelWithDescription
-                      label="Legg til behandlinger fra Behandlingskatalogen"
-                      description="Skriv minst 3 tegn for å søke"
+                      label='Legg til behandlinger fra Behandlingskatalogen'
+                      description='Skriv minst 3 tegn for å søke'
                     />
-                    <div className="w-full">
+                    <div className='w-full'>
                       <AsyncSelect
-                        aria-label="Søk etter behandlinger"
-                        placeholder=""
+                        aria-label='Søk etter behandlinger'
+                        placeholder=''
                         components={{ DropdownIndicator }}
                         noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                         controlShouldRenderValue={false}
@@ -362,19 +362,19 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
 
           <ROSEdit />
 
-          <Heading level="2" size="small" spacing>
+          <Heading level='2' size='small' spacing>
             Legg til minst et team og/eller en person
           </Heading>
 
-          <div id="teamsData" className="flex flex-col lg:flex-row gap-5 mb-5">
-            <FieldArray name="teamsData">
+          <div id='teamsData' className='flex flex-col lg:flex-row gap-5 mb-5'>
+            <FieldArray name='teamsData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className="flex-1">
-                  <LabelWithTooltip label="Søk team fra Teamkatalogen" tooltip="" />
-                  <div className="w-full">
+                <div className='flex-1'>
+                  <LabelWithTooltip label='Søk team fra Teamkatalogen' tooltip='' />
+                  <div className='w-full'>
                     <AsyncSelect
-                      aria-label="Søk etter team"
-                      placeholder=""
+                      aria-label='Søk etter team'
+                      placeholder=''
                       components={{ DropdownIndicator }}
                       noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                       controlShouldRenderValue={false}
@@ -403,17 +403,17 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                 </div>
               )}
             </FieldArray>
-            <div className="flex-1" />
+            <div className='flex-1' />
           </div>
-          <div id="resourcesData" className="flex flex-col lg:flex-row gap-5 mb-5">
-            <FieldArray name="resourcesData">
+          <div id='resourcesData' className='flex flex-col lg:flex-row gap-5 mb-5'>
+            <FieldArray name='resourcesData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className="flex-1">
-                  <LabelWithTooltip label="Søk etter person" tooltip="" />
-                  <div className="w-full">
+                <div className='flex-1'>
+                  <LabelWithTooltip label='Søk etter person' tooltip='' />
+                  <div className='w-full'>
                     <AsyncSelect
-                      aria-label="Søk etter person"
-                      placeholder=""
+                      aria-label='Søk etter person'
+                      placeholder=''
                       components={{ DropdownIndicator }}
                       noOptionsMessage={({ inputValue }) => {
                         return noOptionMessage(inputValue)
@@ -443,10 +443,10 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                   </div>
 
                   {isDev && (
-                    <ReadMore header="Hva hvis jeg ikke finner person">
-                      <div className="flex gap-2 items-end my-2">
+                    <ReadMore header='Hva hvis jeg ikke finner person'>
+                      <div className='flex gap-2 items-end my-2'>
                         <TextField
-                          label="Skriv inn NAV ident dersom du ikke finner person over"
+                          label='Skriv inn NAV ident dersom du ikke finner person over'
                           value={customPersonForDev}
                           onChange={(event: ChangeEvent<HTMLInputElement>) =>
                             setCustomPersonForDev(event.target.value)
@@ -454,7 +454,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                         />
                         <div>
                           <Button
-                            type="button"
+                            type='button'
                             onClick={() => {
                               fieldArrayRenderProps.push({
                                 navIdent: customPersonForDev,
@@ -481,25 +481,25 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                 </div>
               )}
             </FieldArray>
-            <div className="flex-1" />
+            <div className='flex-1' />
           </div>
 
           {errors.teamsData && <Error message={errors.teamsData as string} />}
 
-          <div id="varslingsadresser" className="mt-5">
-            <VarslingsadresserEdit fieldName="varslingsadresser" />
+          <div id='varslingsadresser' className='mt-5'>
+            <VarslingsadresserEdit fieldName='varslingsadresser' />
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-5">
+          <div className='flex flex-col lg:flex-row gap-5'>
             <FieldWrapper marginTop full>
-              <Field name="avdeling">
+              <Field name='avdeling'>
                 {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
                   <div>
-                    <LabelWithDescription label="Angi hvilken avdeling som er ansvarlig for etterlevelsen" />
+                    <LabelWithDescription label='Angi hvilken avdeling som er ansvarlig for etterlevelsen' />
                     <OptionList
                       listName={EListName.AVDELING}
-                      label="Avdeling"
+                      label='Avdeling'
                       value={fieldProps.field.value?.code}
                       onChange={(value: any) => {
                         fieldProps.form.setFieldValue('avdeling', value)
@@ -510,18 +510,18 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
               </Field>
             </FieldWrapper>
 
-            <div className="flex-1" />
+            <div className='flex-1' />
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-5 mt-5">
-            <FieldArray name="risikoeiereData">
+          <div className='flex flex-col lg:flex-row gap-5 mt-5'>
+            <FieldArray name='risikoeiereData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className="flex-1">
-                  <LabelWithTooltip label="Søk etter risikoeier" tooltip="" />
-                  <div className="w-full">
+                <div className='flex-1'>
+                  <LabelWithTooltip label='Søk etter risikoeier' tooltip='' />
+                  <div className='w-full'>
                     <AsyncSelect
-                      aria-label="Søk etter risikoeier"
-                      placeholder=""
+                      aria-label='Søk etter risikoeier'
+                      placeholder=''
                       components={{ DropdownIndicator }}
                       noOptionsMessage={({ inputValue }) => {
                         return noOptionMessage(inputValue)
@@ -551,10 +551,10 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                   </div>
 
                   {isDev && (
-                    <ReadMore header="Hva hvis jeg ikke finner risikoeier?">
-                      <div className="flex gap-2 items-end my-2">
+                    <ReadMore header='Hva hvis jeg ikke finner risikoeier?'>
+                      <div className='flex gap-2 items-end my-2'>
                         <TextField
-                          label="Skriv inn NAV ident dersom du ikke finner risikoeier over"
+                          label='Skriv inn NAV ident dersom du ikke finner risikoeier over'
                           value={customRisikoeierForDev}
                           onChange={(event: ChangeEvent<HTMLInputElement>) =>
                             setCustomRisikoeierForDev(event.target.value)
@@ -562,7 +562,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                         />
                         <div>
                           <Button
-                            type="button"
+                            type='button'
                             onClick={() => {
                               fieldArrayRenderProps.push({
                                 navIdent: customRisikoeierForDev,
@@ -590,16 +590,16 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
               )}
             </FieldArray>
 
-            <div className="flex-1" />
+            <div className='flex-1' />
           </div>
 
           {!dokumentRelasjon && (
-            <div className="mt-5">
+            <div className='mt-5'>
               <CheckboxGroup
-                legend="Skal dette dokumentet kunne gjenbrukes av andre?"
+                legend='Skal dette dokumentet kunne gjenbrukes av andre?'
                 onChange={(value: boolean[]) => setFieldValue('forGjenbruk', value.length !== 0)}
                 value={[values.forGjenbruk]}
-                description="Velger du gjenbruk, får du mulighet til å legge inn vurderinger og veiledning. Du får velge selv når du vil tillate gjenbruk."
+                description='Velger du gjenbruk, får du mulighet til å legge inn vurderinger og veiledning. Du får velge selv når du vil tillate gjenbruk.'
               >
                 <Checkbox value={true}>Ja, dette dokumentet skal gjenbrukes</Checkbox>
               </CheckboxGroup>
@@ -609,7 +609,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           {Object.values(errors).some(Boolean) && (
             <ErrorSummary
               ref={errorSummaryRef}
-              heading="Du må rette disse feilene før du kan fortsette"
+              heading='Du må rette disse feilene før du kan fortsette'
             >
               {Object.entries(errors)
                 .filter(([, error]) => error)
@@ -621,10 +621,10 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             </ErrorSummary>
           )}
 
-          <div className="button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-2 bg-white">
-            <div className="flex flex-row-reverse">
+          <div className='button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-2 bg-white'>
+            <div className='flex flex-row-reverse'>
               <Button
-                type="button"
+                type='button'
                 onClick={() => {
                   if (!isEditButton) {
                     ampli.logEvent('knapp trykket', {
@@ -635,13 +635,13 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                   setValidateOnBlur(true)
                   submitForm()
                 }}
-                className="ml-2.5"
+                className='ml-2.5'
               >
                 {isEditButton ? 'Lagre' : 'Opprett'}
               </Button>
               <Button
-                type="button"
-                variant="secondary"
+                type='button'
+                variant='secondary'
                 onClick={() => {
                   ampli.logEvent('knapp trykket', {
                     tekst: 'Avbryt opprett etterlevelsesdokument',

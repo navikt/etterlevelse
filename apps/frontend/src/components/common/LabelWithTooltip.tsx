@@ -15,9 +15,9 @@ const LabelWithToolTip = (props: {
       {props.tooltip && (
         <Tooltip content={props.tooltip} arrow>
           <Button
-            type="button"
-            variant="tertiary"
-            icon={<InformationSquareIcon title="Tooltip" aria-label="Tooltip" />}
+            type='button'
+            variant='tertiary'
+            icon={<InformationSquareIcon title='Tooltip' aria-label='Tooltip' />}
             // icon={<QuestionmarkDiamondIcon title="Tooltip" aria-label="Tooltip"/>}
           />
         </Tooltip>
@@ -38,7 +38,7 @@ export const LabelWithDescription = (props: {
         <Label>{props.label}</Label>
       </div>
       {props.description && (
-        <BodyShort className="navds-fieldset__description navds-body-short navds-body-short--medium">
+        <BodyShort className='navds-fieldset__description navds-body-short navds-body-short--medium'>
           {props.description}
         </BodyShort>
       )}

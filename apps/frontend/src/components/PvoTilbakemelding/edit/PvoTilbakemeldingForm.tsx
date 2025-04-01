@@ -100,26 +100,26 @@ export const PvoTilbakemeldingForm = (props: IProps) => {
       {({ submitForm }) => (
         <Form>
           <div>
-            <Heading level="2" size="small" className="mb-5">
+            <Heading level='2' size='small' className='mb-5'>
               Gi tilbakemelding
             </Heading>
 
             {initialValue.sistRedigertAv && initialValue.sistRedigertDato && (
-              <BodyShort size="small" className="pb-5">
+              <BodyShort size='small' className='pb-5'>
                 Sist endret: {moment(initialValue.sistRedigertDato).format('ll')} av{' '}
                 {initialValue.sistRedigertAv.split('-')[1]}
               </BodyShort>
             )}
 
-            <Field name="bidragsVurdering">
+            <Field name='bidragsVurdering'>
               {(fieldProps: FieldProps) => (
                 <RadioGroup
-                  legend="Vurdér om etterleverens bidrag er tilstrekkelig"
+                  legend='Vurdér om etterleverens bidrag er tilstrekkelig'
                   value={fieldProps.field.value}
                   onChange={(value) => {
                     fieldProps.form.setFieldValue('bidragsVurdering', value)
                   }}
-                  description="Denne vurderingen blir ikke tilgjengelig for etterleveren før dere har ferdigstilt selve vurderingen."
+                  description='Denne vurderingen blir ikke tilgjengelig for etterleveren før dere har ferdigstilt selve vurderingen.'
                 >
                   <Radio value={EBidragVerdier.TILSTREKKELIG}>Ja, tilstrekkelig </Radio>
                   <Radio value={EBidragVerdier.TILSTREKKELIG_FORBEHOLDT}>
@@ -134,40 +134,40 @@ export const PvoTilbakemeldingForm = (props: IProps) => {
             </Field>
           </div>
 
-          <div className="my-5">
+          <div className='my-5'>
             <TextAreaField
               noPlaceholder
               markdown
-              height="15.625rem"
-              name="internDiskusjon"
-              label="Skriv intern PVO diskusjon her"
-              caption="Denne teksten er privat for PVO og skal ikke deles med etterleveren"
+              height='15.625rem'
+              name='internDiskusjon'
+              label='Skriv intern PVO diskusjon her'
+              caption='Denne teksten er privat for PVO og skal ikke deles med etterleveren'
             />
           </div>
 
-          <div className="my-5">
+          <div className='my-5'>
             <TextAreaField
               noPlaceholder
               markdown
-              height="15.625rem"
-              name="tilbakemeldingTilEtterlevere"
-              label="Skriv tilbakemelding til etterleveren"
-              caption="Tilbakemeldingen blir ikke tilgjengelig for etterleveren før du velger å publisere
-              den."
+              height='15.625rem'
+              name='tilbakemeldingTilEtterlevere'
+              label='Skriv tilbakemelding til etterleveren'
+              caption='Tilbakemeldingen blir ikke tilgjengelig for etterleveren før du velger å publisere
+              den.'
             />
           </div>
 
-          <div className="mt-10 flex flex-row gap-2">
+          <div className='mt-10 flex flex-row gap-2'>
             <div>
-              <Button size="small" type="button" onClick={submitForm}>
+              <Button size='small' type='button' onClick={submitForm}>
                 Lagre
               </Button>
             </div>
             <div>
               <Button
-                size="small"
-                type="button"
-                variant="secondary"
+                size='small'
+                type='button'
+                variant='secondary'
                 onClick={() => {
                   window.location.reload()
                 }}

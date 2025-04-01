@@ -33,14 +33,14 @@ export const GjenbrukEtterlevelseDokumentasjonPage = () => {
   return (
     <>
       {isLoading && (
-        <div className="flex w-full justify-center items-center mt-5">
-          <Loader size="3xlarge" className="flex justify-self-center" />
+        <div className='flex w-full justify-center items-center mt-5'>
+          <Loader size='3xlarge' className='flex justify-self-center' />
         </div>
       )}
       {!isLoading && etterlevelseDokumentasjon && (
         <PageLayout
-          pageTitle="Gjenbruk etterlevelsesdokumentet"
-          currentPage="Gjenbruk etterlevelsesdokumentet"
+          pageTitle='Gjenbruk etterlevelsesdokumentet'
+          currentPage='Gjenbruk etterlevelsesdokumentet'
           breadcrumbPaths={[
             { href: '/dokumentasjoner', pathName: 'Dokumentere etterlevelse' },
             {
@@ -49,17 +49,17 @@ export const GjenbrukEtterlevelseDokumentasjonPage = () => {
             },
           ]}
         >
-          <Heading size="medium" level="1" spacing>
+          <Heading size='medium' level='1' spacing>
             Gjenbruk E{etterlevelseDokumentasjon.etterlevelseNummer}{' '}
             {etterlevelseDokumentasjon.title}
           </Heading>
 
           {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
             <div>
-              <Alert variant="info" className="mb-5">
+              <Alert variant='info' className='mb-5'>
                 <Label>Dette må du vite om gjenbruk</Label>
 
-                <div className="mb-5">
+                <div className='mb-5'>
                   <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />
                 </div>
               </Alert>
@@ -72,16 +72,16 @@ export const GjenbrukEtterlevelseDokumentasjonPage = () => {
           )}
 
           {!etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
-            <div className="flex w-full justify-center">
-              <div className="flex items-center flex-col gap-5">
-                <Alert variant="warning">
+            <div className='flex w-full justify-center'>
+              <div className='flex items-center flex-col gap-5'>
+                <Alert variant='warning'>
                   Denne etterlevelsesdokumentasjon er ikke tilgjengelig for gjenbruk
                 </Alert>
 
                 <img
-                  src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExaW01emp2bzZ1OWZlOWlyOHY4YmxncXQ0ZG9jZ2x0dWg0bGw1eGdvOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/6Q2KA5ly49368/giphy.webp"
-                  alt="no no no"
-                  width="400px"
+                  src='https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExaW01emp2bzZ1OWZlOWlyOHY4YmxncXQ0ZG9jZ2x0dWg0bGw1eGdvOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/6Q2KA5ly49368/giphy.webp'
+                  alt='no no no'
+                  width='400px'
                 />
               </div>
             </div>

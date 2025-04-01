@@ -69,11 +69,11 @@ export const EtterlevelseSidePanel = (props: IProps) => {
   }, [activeTab])
 
   return (
-    <div className="pl-4 border-l border-[#071a3636] w-full max-w-lg">
+    <div className='pl-4 border-l border-[#071a3636] w-full max-w-lg'>
       <Tabs
-        defaultValue="mer"
+        defaultValue='mer'
         value={activeTab}
-        size="small"
+        size='small'
         onChange={(tabValue) => {
           if (formRef.current?.dirty) {
             setSelectedTab(tabValue)
@@ -85,10 +85,10 @@ export const EtterlevelseSidePanel = (props: IProps) => {
       >
         <Tabs.List>
           <Tabs.Tab
-            className="whitespace-nowrap"
-            value="mer"
+            className='whitespace-nowrap'
+            value='mer'
             label={
-              <Heading level="2" size="xsmall">
+              <Heading level='2' size='xsmall'>
                 Mer om kravet
               </Heading>
             }
@@ -97,32 +97,32 @@ export const EtterlevelseSidePanel = (props: IProps) => {
             pvkDokument.skalUtforePvk &&
             krav.tagger.includes('Personvernkonsekvensvurdering') && (
               <Tabs.Tab
-                className="whitespace-nowrap"
-                value="pvkDokumentasjon"
+                className='whitespace-nowrap'
+                value='pvkDokumentasjon'
                 label={
-                  <Heading level="2" size="xsmall">
+                  <Heading level='2' size='xsmall'>
                     PVK-dokumentasjon
                   </Heading>
                 }
               />
             )}
           <Tabs.Tab
-            value="notat"
+            value='notat'
             label={
-              <Heading level="2" size="xsmall">
+              <Heading level='2' size='xsmall'>
                 Notat
               </Heading>
             }
           />
         </Tabs.List>
-        <Tabs.Panel value="mer">
-          <div className="mt-2 p-4">
+        <Tabs.Panel value='mer'>
+          <div className='mt-2 p-4'>
             <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />
           </div>
         </Tabs.Panel>
         {pvkDokument && pvkDokument.skalUtforePvk && (
-          <Tabs.Panel value="pvkDokumentasjon">
-            <div className="mt-2 p-4">
+          <Tabs.Panel value='pvkDokumentasjon'>
+            <div className='mt-2 p-4'>
               {userHasAccess() && (
                 <KravRisikoscenario
                   krav={krav}
@@ -138,14 +138,14 @@ export const EtterlevelseSidePanel = (props: IProps) => {
             </div>
           </Tabs.Panel>
         )}
-        <Tabs.Panel value="notat">
-          <div className="mt-2 p-4">
-            <div className="flex justify-between mb-2.5">
-              <Label className="flex gap-1" size="medium">
-                <FileTextIcon fontSize="1.5rem" area-label="" aria-hidden />
+        <Tabs.Panel value='notat'>
+          <div className='mt-2 p-4'>
+            <div className='flex justify-between mb-2.5'>
+              <Label className='flex gap-1' size='medium'>
+                <FileTextIcon fontSize='1.5rem' area-label='' aria-hidden />
                 Notat
               </Label>
-              <Button variant="secondary" size="xsmall" onClick={() => setIsNotatModalOpen(true)}>
+              <Button variant='secondary' size='xsmall' onClick={() => setIsNotatModalOpen(true)}>
                 Rediger
               </Button>
             </div>
@@ -157,7 +157,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
               setEtterlevelseMetadata={setEtterlevelseMetadata}
             />
 
-            <div className="break-words">
+            <div className='break-words'>
               <Markdown source={etterlevelseMetadata.notater} />
             </div>
           </div>

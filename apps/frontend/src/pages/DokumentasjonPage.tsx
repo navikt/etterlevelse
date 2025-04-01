@@ -180,7 +180,7 @@ export const DokumentasjonPage = () => {
     }
   }, [etterlevelseDokumentasjon])
 
-  if (!etterlevelseDokumentasjon) return <LoadingSkeleton header="Dokumentasjon" />
+  if (!etterlevelseDokumentasjon) return <LoadingSkeleton header='Dokumentasjon' />
 
   const breadcrumbPaths: IBreadCrumbPath[] = [dokumentasjonerBreadCrumbPath]
 
@@ -204,14 +204,14 @@ export const DokumentasjonPage = () => {
       currentPage={'E' + etterlevelseNummer.toString() + ' ' + title}
       breadcrumbPaths={breadcrumbPaths}
     >
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <Heading level="1" size="medium">
+      <div className='flex flex-col gap-4'>
+        <div className='flex flex-col gap-2'>
+          <Heading level='1' size='medium'>
             E{etterlevelseNummer.toString()} {title}
           </Heading>
 
           {morDokumentRelasjon && (
-            <BodyShort className="my-5">
+            <BodyShort className='my-5'>
               Dette dokumentet er et arv fra{' '}
               <Link href={`/dokumentasjon/${morDokumentRelasjon.fromDocumentWithData.id}`}>
                 E{morDokumentRelasjon.fromDocumentWithData.etterlevelseNummer}{' '}
@@ -221,17 +221,17 @@ export const DokumentasjonPage = () => {
             </BodyShort>
           )}
 
-          <div className="flex w-full">
-            <div className="max-w-5xl flex-1">
+          <div className='flex w-full'>
+            <div className='max-w-5xl flex-1'>
               {etterlevelseDokumentasjon.forGjenbruk &&
                 !etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
-                  <div className="max-w-5xl mb-5">
-                    <Alert contentMaxWidth={false} variant="success">
-                      <Heading spacing size="small" level="3">
+                  <div className='max-w-5xl mb-5'>
+                    <Alert contentMaxWidth={false} variant='success'>
+                      <Heading spacing size='small' level='3'>
                         Nå har dere låst opp mulighet for å skrive veiledning til de som skal
                         gjenbruke dette dokumentet.
                       </Heading>
-                      <Heading spacing size="small" level="3">
+                      <Heading spacing size='small' level='3'>
                         Slik gjør dere nå:
                       </Heading>
                       <List>
@@ -252,7 +252,7 @@ export const DokumentasjonPage = () => {
                   </div>
                 )}
 
-              <div className="flex mb-5">
+              <div className='flex mb-5'>
                 <EtterlevelseDokumentasjonExpansionCard
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   relasjonLoading={relasjonLoading}
@@ -260,18 +260,18 @@ export const DokumentasjonPage = () => {
               </div>
             </div>
 
-            <div className="flex justify-end">
+            <div className='flex justify-end'>
               {etterlevelseDokumentasjon && (
-                <div className="gap-4 ml-5 flex flex-col ">
+                <div className='gap-4 ml-5 flex flex-col '>
                   {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
                     <>
                       <Button
                         onClick={() => {
                           navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
                         }}
-                        size="small"
-                        variant="tertiary"
-                        className="whitespace-nowrap"
+                        size='small'
+                        variant='tertiary'
+                        className='whitespace-nowrap'
                       >
                         Redigér dokumentegenskaper
                       </Button>
@@ -301,9 +301,9 @@ export const DokumentasjonPage = () => {
                             }
                             navigate(behandlingensLivlopUrl)
                           }}
-                          size="small"
+                          size='small'
                           variant={getVariantForBLLButton(behandlingsLivslop)}
-                          className="whitespace-nowrap"
+                          className='whitespace-nowrap'
                         >
                           {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
                           Tegn behandlingens livsløp
@@ -325,9 +325,9 @@ export const DokumentasjonPage = () => {
                                   '/1'
                               )
                             }}
-                            size="small"
+                            size='small'
                             variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
-                            className="whitespace-nowrap"
+                            className='whitespace-nowrap'
                           >
                             {pvkDokument.skalUtforePvk && pvkDokumentStartedCheck
                               ? 'Fullfør PVK'
@@ -351,9 +351,9 @@ export const DokumentasjonPage = () => {
                             }
                             navigate(pvkBehovUrl)
                           }}
-                          size="small"
+                          size='small'
                           variant={getVariantForPVKBehovButton(pvkDokument, behandlingsLivslop)}
-                          className="whitespace-nowrap"
+                          className='whitespace-nowrap'
                         >
                           {pvkDokumentVurdertCheck
                             ? 'Revurdér behov for PVK'
@@ -369,12 +369,12 @@ export const DokumentasjonPage = () => {
         </div>
       </div>
 
-      <Heading level="2" size="medium" spacing className="mt-3">
+      <Heading level='2' size='medium' spacing className='mt-3'>
         Temaoversikt
       </Heading>
 
       {morDokumentRelasjon && (
-        <ReadMore header="Slik bruker du disse vurderingene" className="my-5">
+        <ReadMore header='Slik bruker du disse vurderingene' className='my-5'>
           Dokumenteieren har allerede besvart flere av suksesskriteriene for deg. Disse
           suksesskriteriene er merket med &#34;ikke relevant&#34; eller &#34;oppfylt&#34;, og du kan
           gjenbruke vurderingene. De øvrige suksesskriteriene må du ta stilling til. Noen av disse

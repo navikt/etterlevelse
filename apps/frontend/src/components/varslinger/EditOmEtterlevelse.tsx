@@ -45,8 +45,8 @@ export const EditOmEtterlevelse = ({
 
   if (isLoading) {
     return (
-      <div className="flex justify-center">
-        <Loader size="large" />
+      <div className='flex justify-center'>
+        <Loader size='large' />
       </div>
     )
   }
@@ -57,17 +57,17 @@ export const EditOmEtterlevelse = ({
         <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
           {({ values, submitForm }: FormikProps<IMelding>) => (
             <div>
-              <Heading size="small" level="2" className="my-4">
+              <Heading size='small' level='2' className='my-4'>
                 Om støtte til etterlevelse
               </Heading>
               {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
 
               <TextAreaField
                 maxCharacter={maxChar}
-                height="12.5rem"
+                height='12.5rem'
                 label={'Innledende tekst'}
                 noPlaceholder
-                name="melding"
+                name='melding'
               />
               <TextAreaField
                 rows={initialNumberOfRows}
@@ -79,16 +79,16 @@ export const EditOmEtterlevelse = ({
               <TextAreaField
                 maxCharacter={maxChar}
                 markdown
-                height="12.5rem"
+                height='12.5rem'
                 label={'Innhold'}
                 noPlaceholder
-                name="secondaryMelding"
+                name='secondaryMelding'
               />
 
-              <div className="flex w-full mt-2.5">
+              <div className='flex w-full mt-2.5'>
                 <Button
-                  type="button"
-                  variant="secondary"
+                  type='button'
+                  variant='secondary'
                   disabled={disableEdit}
                   onClick={() => {
                     deleteMelding(melding.id).then(() => {
@@ -98,9 +98,9 @@ export const EditOmEtterlevelse = ({
                 >
                   Slett
                 </Button>
-                <div className="flex justify-end w-full">
+                <div className='flex justify-end w-full'>
                   <Button
-                    type="button"
+                    type='button'
                     disabled={disableEdit}
                     onClick={() => {
                       values.meldingStatus = EMeldingStatus.ACTIVE

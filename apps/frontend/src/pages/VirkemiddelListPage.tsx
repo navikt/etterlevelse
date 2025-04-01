@@ -16,16 +16,16 @@ export const VirkemiddelListPage = () => {
 
   return (
     <PageLayout
-      pageTitle="Forvalte og opprette virkemiddel"
-      currentPage="Forvalte og opprette virkemiddel"
+      pageTitle='Forvalte og opprette virkemiddel'
+      currentPage='Forvalte og opprette virkemiddel'
     >
-      <div className="pb-52 w-full">
-        <ListPageHeader headingText="Forvalte og opprette virkemiddel">
+      <div className='pb-52 w-full'>
+        <ListPageHeader headingText='Forvalte og opprette virkemiddel'>
           {user.isKraveier() && (
             <Button
-              iconPosition="left"
-              icon={<PlusIcon area-label="" aria-hidden />}
-              size="medium"
+              iconPosition='left'
+              icon={<PlusIcon area-label='' aria-hidden />}
+              size='medium'
               onClick={() => setIsCreateModalOpen(true)}
             >
               Nytt virkemiddel

@@ -71,7 +71,7 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
   return (
     <div>
       <Modal
-        width="6.25rem"
+        width='6.25rem'
         open={!!isOpen}
         onClose={() => setIsOpen(false)}
         header={{
@@ -89,19 +89,19 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
           >
             {({ submitForm }) => (
               <Form>
-                <InputField label="Navn" name="navn" />
+                <InputField label='Navn' name='navn' />
                 <FieldWrapper>
-                  <Field name="virkemiddelType">
+                  <Field name='virkemiddelType'>
                     {(fieldProps: FieldProps) => (
-                      <div className="w-full max-w-[25rem]">
+                      <div className='w-full max-w-[25rem]'>
                         <LabelWithTooltip
-                          label="Legg til virkemiddeltype"
-                          tooltip="Søk og legg til virkemiddeltype fra kodeverket"
+                          label='Legg til virkemiddeltype'
+                          tooltip='Søk og legg til virkemiddeltype fra kodeverket'
                         />
                         <Select
                           options={virkemiddelTypeOptions}
-                          placeholder="Velg virkemiddeltype"
-                          aria-label="Velg virkemiddeltype"
+                          placeholder='Velg virkemiddeltype'
+                          aria-label='Velg virkemiddeltype'
                           value={valgtVirkemiddeltype}
                           onChange={(
                             value: SingleValue<{
@@ -137,18 +137,18 @@ export const EditVirkemiddelModal = (props: TEditVirkemiddelModalProps) => {
                     )}
                   </Field>
 
-                  <FormError fieldName="virkemiddelType" akselStyling />
+                  <FormError fieldName='virkemiddelType' akselStyling />
                 </FieldWrapper>
 
                 <RegelverkEdit forVirkemiddel />
-                <div className="flex justify-end">
-                  <Button variant="secondary" type="button" onClick={() => setIsOpen(false)}>
+                <div className='flex justify-end'>
+                  <Button variant='secondary' type='button' onClick={() => setIsOpen(false)}>
                     Avbryt
                   </Button>
 
                   <Button
-                    className="ml-2"
-                    type="button"
+                    className='ml-2'
+                    type='button'
                     onClick={() => {
                       submitForm()
                     }}

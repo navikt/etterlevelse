@@ -129,11 +129,11 @@ export const Etterlevelser = ({
   return (
     <div>
       {!loading && etterlevelser.length > 0 && (
-        <div className="flex items-center py-5">
+        <div className='flex items-center py-5'>
           <Label>Vis:</Label>
-          <div className="px-4 w-72">
+          <div className='px-4 w-72'>
             <Select
-              label="Velg etterlevelse filter"
+              label='Velg etterlevelse filter'
               hideLabel
               value={filter}
               onChange={(params) => {
@@ -149,7 +149,7 @@ export const Etterlevelser = ({
           </div>
         </div>
       )}
-      {loading && <Loader size="large" className="flex justify-self-center" />}
+      {loading && <Loader size='large' className='flex justify-self-center' />}
       {!loading && !etterlevelser.length && (
         <InfoBlock
           icon={sadFolderIcon}
@@ -181,13 +181,13 @@ export const Etterlevelser = ({
                     : ''}
                 </Accordion.Header>
                 <Accordion.Content>
-                  <div className="flex flex-col gap-2">
+                  <div className='flex flex-col gap-2'>
                     {productAreaEtterlevelser.map((etterlevelse, index) => (
                       <LinkPanel
                         key={etterlevelse.kravNummer + '_' + index}
                         href={modalVersion ? undefined : `/etterlevelse/${etterlevelse.id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        target='_blank'
+                        rel='noopener noreferrer'
                         onClick={
                           modalVersion
                             ? () => {
@@ -201,7 +201,7 @@ export const Etterlevelser = ({
                             : undefined
                         }
                       >
-                        <LinkPanel.Title className="flex items-center">
+                        <LinkPanel.Title className='flex items-center'>
                           <div>
                             <BodyShort>
                               <strong>
@@ -211,7 +211,7 @@ export const Etterlevelser = ({
                             </BodyShort>
                           </div>
                           <Spacer />
-                          <div className="w-44">
+                          <div className='w-44'>
                             <BodyShort>
                               {!!etterlevelse.etterlevelseDokumentasjon.teamsData &&
                               !!etterlevelse.etterlevelseDokumentasjon.teamsData.length
@@ -236,7 +236,7 @@ export const Etterlevelser = ({
       )}
 
       {productAreas.length === 0 && (
-        <div className="flex item-center">
+        <div className='flex item-center'>
           {etterlevelser.length >= 1 && (
             <Label>
               Ingen etterlevelser med {etterlevelseFilter.filter((ef) => ef.id === filter)[0].label}{' '}

@@ -27,7 +27,7 @@ export const PrivateRoute = ({
   }, [])
 
   if (isLoading && !user.isLoggedIn()) {
-    return <Loader size="large" className="flex justify-self-center" />
+    return <Loader size='large' className='flex justify-self-center' />
   } else {
     if (adminPage) {
       if (user.isAdmin()) {

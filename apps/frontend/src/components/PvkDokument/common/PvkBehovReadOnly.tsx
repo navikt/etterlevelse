@@ -15,7 +15,7 @@ export const PvkBehovReadOnly: FunctionComponent<TProps> = ({
 }) => {
   return (
     <>
-      <div id="ytterlige-egenskaper">
+      <div id='ytterlige-egenskaper'>
         <Label>Øvrige egenskaper for behandlingene:</Label>
         <DataTextWrapper>
           <List>
@@ -36,7 +36,7 @@ export const PvkBehovReadOnly: FunctionComponent<TProps> = ({
         </DataTextWrapper>
       </div>
 
-      <div className="my-5">
+      <div className='my-5'>
         <Label>Hvilken vurdering har dere kommet fram til?</Label>
         <DataTextWrapper>
           {pvkDokument.skalUtforePvk === undefined && 'Ingen vurdering'}

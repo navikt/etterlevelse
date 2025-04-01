@@ -16,22 +16,22 @@ export const EtterlevelseModal = ({
 }) => {
   return (
     <Modal
-      className="w-full max-w-4xl"
+      className='w-full max-w-4xl'
       onClose={() => setIsModalOpen(false)}
       open={isModalOpen}
-      aria-label="Etterlevelse Modal"
+      aria-label='Etterlevelse Modal'
     >
-      <Modal.Header className="w-full">
+      <Modal.Header className='w-full'>
         <BodyShort>{kravNumView(kravData)}</BodyShort>
-        <Heading size="medium" level="1">
+        <Heading size='medium' level='1'>
           {kravData.navn}
         </Heading>
       </Modal.Header>
       <Modal.Body>
         <ViewEtterlevelse etterlevelse={etterlevelse} krav={kravData} modalVersion />
-        <div className="flex justify-end pb-8 pt-24">
+        <div className='flex justify-end pb-8 pt-24'>
           <Button
-            type="button"
+            type='button'
             onClick={() => {
               setIsModalOpen(false)
             }}

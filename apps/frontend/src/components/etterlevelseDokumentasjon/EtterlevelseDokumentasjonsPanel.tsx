@@ -22,7 +22,7 @@ export const EtterlevelseDokumentasjonsPanel = ({
 
   return (
     <LinkPanel href={`/dokumentasjon/${etterlevelseDokumentasjon.id}`} onClick={onClick}>
-      <LinkPanel.Title className="text-xl">
+      <LinkPanel.Title className='text-xl'>
         E{etterlevelseDokumentasjon.etterlevelseNummer} {etterlevelseDokumentasjon.title}
       </LinkPanel.Title>
       <LinkPanel.Description>

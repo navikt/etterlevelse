@@ -23,9 +23,9 @@ export const RearrangeButtons = (props: IProps) => {
       {index !== 0 && (
         <Tooltip content={'Flytt ' + label + ' opp'}>
           <Button
-            className="mr-2.5"
-            type="button"
-            variant="secondary"
+            className='mr-2.5'
+            type='button'
+            variant='secondary'
             onClick={() => {
               updateIndex(index - 1)
             }}
@@ -41,9 +41,9 @@ export const RearrangeButtons = (props: IProps) => {
       {index !== arrayLength - 1 && (
         <Tooltip content={'Flytt ' + label + ' ned'}>
           <Button
-            className="mr-2.5"
-            type="button"
-            variant="secondary"
+            className='mr-2.5'
+            type='button'
+            variant='secondary'
             onClick={() => {
               updateIndex(index + 1)
             }}
@@ -61,8 +61,8 @@ export const RearrangeButtons = (props: IProps) => {
           <Tooltip content={'Endre ' + label + ' rekkefølge'}>
             <Button
               as={Dropdown.Toggle}
-              type="button"
-              variant="secondary"
+              type='button'
+              variant='secondary'
               icon={
                 <ArrowsSquarepathIcon
                   title={'Endre ' + label + ' rekkefølge'}
@@ -73,7 +73,7 @@ export const RearrangeButtons = (props: IProps) => {
           </Tooltip>
           <Dropdown.Menu>
             <TextField
-              label="Angi ønsket plassering"
+              label='Angi ønsket plassering'
               value={plassering}
               onChange={(event) => setPlassering(event.target.value)}
               error={parseInt(plassering) ? undefined : 'Skriv et tall større enn 0'}
@@ -81,8 +81,8 @@ export const RearrangeButtons = (props: IProps) => {
             <Dropdown.Menu.List>
               <Dropdown.Menu.List.Item
                 as={Button}
-                type="button"
-                variant="primary"
+                type='button'
+                variant='primary'
                 onClick={() => {
                   const newIndex = parseInt(plassering)
                   if (newIndex) {

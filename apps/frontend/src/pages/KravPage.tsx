@@ -192,21 +192,21 @@ export const KravPage = () => {
       })}
       breadcrumbPaths={getBreadcrumPaths()}
     >
-      {kravLoading && <LoadingSkeleton header="Krav" />}
+      {kravLoading && <LoadingSkeleton header='Krav' />}
       {!kravLoading && (
-        <div className="flex w-full pb-8">
-          <div className="flex flex-col w-full">
-            <div className="w-full">
+        <div className='flex w-full pb-8'>
+          <div className='flex flex-col w-full'>
+            <div className='w-full'>
               <BodyShort>{krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}</BodyShort>
-              <Heading className="mb-3" size="medium" level="1">
+              <Heading className='mb-3' size='medium' level='1'>
                 {krav?.navn ? krav.navn : 'Ny'}{' '}
               </Heading>
               {krav && <StatusTag status={krav.status} />}
 
               {krav?.varselMelding && (
-                <div className="w-fit flex justify-center items-center mt-5">
-                  <InformationSquareIcon fontSize="1.5rem" />
-                  <BodyLong className="ml-1">{krav.varselMelding}</BodyLong>
+                <div className='w-fit flex justify-center items-center mt-5'>
+                  <InformationSquareIcon fontSize='1.5rem' />
+                  <BodyLong className='ml-1'>{krav.varselMelding}</BodyLong>
                 </div>
               )}
             </div>
@@ -215,8 +215,8 @@ export const KravPage = () => {
       )}
 
       {krav && !kravLoading && (
-        <div className="flex w-full">
-          <div className="pr-14 w-full">
+        <div className='flex w-full'>
+          <div className='pr-14 w-full'>
             {hasKravExpired() && krav && (
               <ExpiredAlert
                 alleKravVersjoner={alleKravVersjoner}
@@ -224,8 +224,8 @@ export const KravPage = () => {
                 description={
                   krav.status === EKravStatus.UTGAATT &&
                   krav.beskrivelse && (
-                    <div className="py-3 mb-5">
-                      <Heading size="small" level="2">
+                    <div className='py-3 mb-5'>
+                      <Heading size='small' level='2'>
                         Begrunnelse for at kravet er utgått
                       </Heading>
                       <Markdown source={krav.beskrivelse} />
@@ -234,44 +234,44 @@ export const KravPage = () => {
                 }
               />
             )}
-            <div className="bg-blue-50 px-5 py-3 mb-5">
-              <Heading size="small" level="2">
+            <div className='bg-blue-50 px-5 py-3 mb-5'>
+              <Heading size='small' level='2'>
                 Hensikten med kravet
               </Heading>
               <Markdown source={krav.hensikt} />
             </div>
 
-            <div className="w-full">
+            <div className='w-full'>
               <Tabs defaultValue={tab} onChange={(section) => setTab(section as TSection)}>
                 <Tabs.List>
-                  <Tabs.Tab value="krav" label="Hvordan etterleve?" />
-                  <Tabs.Tab value="etterlevelser" label="Eksempler på etterlevelse" />
-                  <Tabs.Tab value="tilbakemeldinger" label="Spørsmål og svar" />
+                  <Tabs.Tab value='krav' label='Hvordan etterleve?' />
+                  <Tabs.Tab value='etterlevelser' label='Eksempler på etterlevelse' />
+                  <Tabs.Tab value='tilbakemeldinger' label='Spørsmål og svar' />
                 </Tabs.List>
-                <Tabs.Panel value="krav">
+                <Tabs.Panel value='krav'>
                   <ViewKrav krav={krav} />
                 </Tabs.Panel>
-                <Tabs.Panel value="etterlevelser">
+                <Tabs.Panel value='etterlevelser'>
                   <Etterlevelser loading={etterlevelserLoading} krav={krav} />
                 </Tabs.Panel>
-                <Tabs.Panel value="tilbakemeldinger">
+                <Tabs.Panel value='tilbakemeldinger'>
                   <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()} />
                 </Tabs.Panel>
               </Tabs>
             </div>
           </div>
-          <div className="max-w-sm w-full border-l-2 border-gray-200 pl-3">
+          <div className='max-w-sm w-full border-l-2 border-gray-200 pl-3'>
             <AllInfo header krav={krav} alleKravVersjoner={alleKravVersjoner} noLastModifiedDate />
 
-            <div className="mt-8">
+            <div className='mt-8'>
               {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
                 <div>
-                  <div className="flex flex-1">
+                  <div className='flex flex-1'>
                     {(!hasKravExpired() || user.isAdmin()) && (
                       <Button
-                        type="button"
-                        size="small"
-                        variant="primary"
+                        type='button'
+                        size='small'
+                        variant='primary'
                         onClick={() => {
                           navigate(`/krav/redigering/${krav.id}`)
                         }}
@@ -282,13 +282,13 @@ export const KravPage = () => {
 
                     {krav.status === EKravStatus.AKTIV && (
                       <Button
-                        type="button"
-                        className="ml-4"
-                        size="small"
+                        type='button'
+                        className='ml-4'
+                        size='small'
                         onClick={() => {
                           navigate(`/krav/ny-versjon/${krav.id}`)
                         }}
-                        variant="secondary"
+                        variant='secondary'
                       >
                         Ny versjon av krav
                       </Button>
@@ -296,12 +296,12 @@ export const KravPage = () => {
                     <Spacer />
                   </div>
                   {(slettKravButtonShouldOnlyBeVisibleOnUtkast || user.isAdmin()) && (
-                    <div className="mt-2.5 flex">
+                    <div className='mt-2.5 flex'>
                       <DeleteItem
-                        buttonLabel="Slett krav"
-                        buttonSize="small"
+                        buttonLabel='Slett krav'
+                        buttonSize='small'
                         fun={() => deleteKrav(krav.id)}
-                        redirect="/kravliste"
+                        redirect='/kravliste'
                       />
                     </div>
                   )}

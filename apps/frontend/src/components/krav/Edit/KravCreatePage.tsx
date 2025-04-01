@@ -47,16 +47,16 @@ export const KravCreatePage = () => {
 
   return (
     <PageLayout
-      pageTitle="Opprett ny krav"
-      currentPage="Opprett ny krav"
+      pageTitle='Opprett ny krav'
+      currentPage='Opprett ny krav'
       breadcrumbPaths={[kravBreadCrumbPath]}
     >
       {loading && (
-        <div className="w-full flex items-center flex-col">
-          <Heading level="1" size="medium">
+        <div className='w-full flex items-center flex-col'>
+          <Heading level='1' size='medium'>
             Oppretter nytt krav. Du vil bli sendt til kravet når det er opprettet
           </Heading>
-          <Loader size="3xlarge" />
+          <Loader size='3xlarge' />
         </div>
       )}
 
@@ -70,21 +70,21 @@ export const KravCreatePage = () => {
         >
           {({ values, errors, isSubmitting, submitForm }) => (
             <Form>
-              <Heading className="mb-6" level="1" size="medium">
+              <Heading className='mb-6' level='1' size='medium'>
                 Opprett nytt krav
               </Heading>
 
               <div>
                 <KravFormFields
-                  mode="create"
+                  mode='create'
                   kravVersjon={values.kravVersjon}
                   errors={errors}
                   varselMeldingActive={varselMeldingActive}
                   setVarselMeldingActive={setVarselMeldingActive}
                 />
 
-                <div className="button_container flex flex-col py-4 px-4 sticky mt-5 bottom-0 border-t-2 z-10 bg-white">
-                  <div className="flex w-full">
+                <div className='button_container flex flex-col py-4 px-4 sticky mt-5 bottom-0 border-t-2 z-10 bg-white'>
+                  <div className='flex w-full'>
                     <KravStandardButtons
                       submitCancelButton={() => {
                         navigate('/kravliste')
@@ -104,11 +104,11 @@ export const KravCreatePage = () => {
                   </div>
                 </div>
 
-                <div className=" py-12">
+                <div className=' py-12'>
                   <TextAreaField
-                    label="Notater (Kun synlig for kraveier)"
-                    name="notat"
-                    height="15.625rem"
+                    label='Notater (Kun synlig for kraveier)'
+                    name='notat'
+                    height='15.625rem'
                     markdown
                   />
                 </div>

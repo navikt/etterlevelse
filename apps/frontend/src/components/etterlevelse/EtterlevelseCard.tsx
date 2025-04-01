@@ -22,7 +22,7 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: IEtterlevelse
 
   return (
     <div>
-      <Button type="button" variant="tertiary" onClick={() => setIsModalOpen(true)}>
+      <Button type='button' variant='tertiary' onClick={() => setIsModalOpen(true)}>
         Se dokumentasjon på forrige versjon
       </Button>
       {kravData && (

@@ -134,17 +134,17 @@ export const BehandlingensLivslopPage = () => {
 
   return (
     <PageLayout
-      pageTitle="Behandlingens livsløp"
-      currentPage="Behandlingens livsløp"
+      pageTitle='Behandlingens livsløp'
+      currentPage='Behandlingens livsløp'
       breadcrumbPaths={breadcrumbPaths}
     >
-      <Heading level="1" size="medium" className="mb-5">
+      <Heading level='1' size='medium' className='mb-5'>
         Behandlingens livsløp
       </Heading>
 
       {isEtterlevelseDokumentasjonLoading && (
-        <div className="flex w-full justify-center">
-          <Loader size="large" />
+        <div className='flex w-full justify-center'>
+          <Loader size='large' />
         </div>
       )}
 
@@ -153,14 +153,14 @@ export const BehandlingensLivslopPage = () => {
         behandlingsLivslop &&
         !etterlevelseDokumentasjon.hasCurrentUserAccess &&
         !user.isAdmin() && (
-          <div className="flex w-full justify-center mt-5">
-            <div className="flex items-center flex-col gap-5">
-              <Alert variant="warning">Du har ikke tilgang til å redigere.</Alert>
+          <div className='flex w-full justify-center mt-5'>
+            <div className='flex items-center flex-col gap-5'>
+              <Alert variant='warning'>Du har ikke tilgang til å redigere.</Alert>
 
               <img
-                src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXMyNngxa2djMXdhOXdhcXQwNG9hbWJ3czZ4MW42bDY3ZXVkNHd3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zaCojXv2S01zy/giphy.webp"
-                alt="no no no"
-                width="400px"
+                src='https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXMyNngxa2djMXdhOXdhcXQwNG9hbWJ3czZ4MW42bDY3ZXVkNHd3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zaCojXv2S01zy/giphy.webp'
+                alt='no no no'
+                width='400px'
               />
             </div>
           </div>
@@ -170,7 +170,7 @@ export const BehandlingensLivslopPage = () => {
         etterlevelseDokumentasjon &&
         behandlingsLivslop &&
         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-          <div className="flex w-full">
+          <div className='flex w-full'>
             <Formik
               validateOnBlur={false}
               validateOnChange={false}
@@ -192,10 +192,10 @@ export const BehandlingensLivslopPage = () => {
             >
               {({ submitForm, initialValues, errors, isSubmitting }) => (
                 <Form>
-                  <div className="pr-6 flex flex-1 flex-col gap-4 col-span-8">
+                  <div className='pr-6 flex flex-1 flex-col gap-4 col-span-8'>
                     <BehandlingensLivslopTextContent />
 
-                    <BodyShort className="mt-3">
+                    <BodyShort className='mt-3'>
                       Dere kan velge å lage og laste opp flere tegninger hvis det gir bedre
                       oversikt.
                     </BodyShort>
@@ -207,17 +207,17 @@ export const BehandlingensLivslopPage = () => {
                       setFilesToUpload={setFilesToUpload}
                     />
 
-                    <div className="mt-3">
+                    <div className='mt-3'>
                       <TextAreaField
                         rows={3}
                         noPlaceholder
-                        label="Legg eventuelt inn en beskrivelse av behandlingens livsløp"
-                        name="beskrivelse"
+                        label='Legg eventuelt inn en beskrivelse av behandlingens livsløp'
+                        name='beskrivelse'
                       />
                     </div>
 
                     {!_.isEmpty(errors) && rejectedFiles.length > 0 && (
-                      <ErrorSummary className="mt-3">
+                      <ErrorSummary className='mt-3'>
                         <ErrorSummary.Item href={'#vedleggMedFeil'}>
                           Vedlegg med feil
                         </ErrorSummary.Item>
@@ -225,9 +225,9 @@ export const BehandlingensLivslopPage = () => {
                     )}
 
                     {!isSubmitting && (
-                      <div className="flex gap-2 mt-5 lg:flex-row flex-col">
+                      <div className='flex gap-2 mt-5 lg:flex-row flex-col'>
                         <Button
-                          type="button"
+                          type='button'
                           onClick={() => {
                             setTilPvkDokument(true)
                             submitForm()
@@ -238,8 +238,8 @@ export const BehandlingensLivslopPage = () => {
                             : 'Lagre og vurdér behov for PVK'}
                         </Button>
                         <Button
-                          type="button"
-                          variant="secondary"
+                          type='button'
+                          variant='secondary'
                           onClick={() => {
                             setTilTemaOversikt(true)
                             submitForm()
@@ -248,8 +248,8 @@ export const BehandlingensLivslopPage = () => {
                           Lagre og gå til Temaoversikt
                         </Button>
                         <Button
-                          type="button"
-                          variant="tertiary"
+                          type='button'
+                          variant='tertiary'
                           onClick={() => {
                             navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
                           }}
@@ -260,8 +260,8 @@ export const BehandlingensLivslopPage = () => {
                     )}
 
                     {isSubmitting && (
-                      <div className="flex mt-5 justify-center items-center">
-                        <Loader size="large" />
+                      <div className='flex mt-5 justify-center items-center'>
+                        <Loader size='large' />
                       </div>
                     )}
                   </div>
@@ -271,7 +271,7 @@ export const BehandlingensLivslopPage = () => {
 
             {/* right side */}
             {etterlevelseDokumentasjon && (
-              <div className="pl-6 border-l border-[#071a3636] w-full max-w-lg">
+              <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg'>
                 <BehandlingensLivsLopSidePanel
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                 />

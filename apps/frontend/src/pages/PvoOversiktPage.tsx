@@ -21,17 +21,17 @@ export const PvoOversiktPage = () => {
 
   return (
     <PageLayout pageTitle={EPVO.overskrift} currentPage={EPVO.overskrift}>
-      <div className="pb-52 w-full">
+      <div className='pb-52 w-full'>
         <ListPageHeader headingText={EPVO.overskrift} />
         {isLoading && (
-          <div className="flex w-full justify-center items-center mt-5">
-            <Loader size="3xlarge" className="flex justify-self-center" />
+          <div className='flex w-full justify-center items-center mt-5'>
+            <Loader size='3xlarge' className='flex justify-self-center' />
           </div>
         )}
         {!isLoading && allPvkDocumentListItem.length !== 0 && (
-          <div className="flex justify-center w-full">
-            <div className="w-full">
-              <div className="pt-6">
+          <div className='flex justify-center w-full'>
+            <div className='w-full'>
+              <div className='pt-6'>
                 <PvoTabs allPvkDocumentListItem={allPvkDocumentListItem} isLoading={isLoading} />
               </div>
             </div>

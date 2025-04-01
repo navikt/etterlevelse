@@ -4,11 +4,11 @@ import EtterlevelseDokumentasjonForm from './EtterlevelseDokumentasjonForm'
 export const CreateEtterlevelseDokumentasjonPage = () => {
   return (
     <PageLayout
-      pageTitle="Opprett nytt etterlevelsesdokument"
-      currentPage="Opprett nytt etterlevelsesdokument"
+      pageTitle='Opprett nytt etterlevelsesdokument'
+      currentPage='Opprett nytt etterlevelsesdokument'
       breadcrumbPaths={[{ href: '/dokumentasjoner', pathName: 'Dokumentere etterlevelse' }]}
     >
-      <EtterlevelseDokumentasjonForm title="Opprett nytt etterlevelsesdokument" />
+      <EtterlevelseDokumentasjonForm title='Opprett nytt etterlevelsesdokument' />
     </PageLayout>
   )
 }

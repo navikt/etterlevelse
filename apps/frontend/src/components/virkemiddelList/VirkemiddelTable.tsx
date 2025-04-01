@@ -56,21 +56,21 @@ export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: TVirkmid
       {!loading && (
         <div>
           <Table
-            size="large"
+            size='large'
             zebraStripes
             sort={sort}
             onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
           >
             <Table.Header>
               <Table.Row>
-                <Table.ColumnHeader className="w-[13%]" sortKey="navn" sortable>
+                <Table.ColumnHeader className='w-[13%]' sortKey='navn' sortable>
                   Navn
                 </Table.ColumnHeader>
-                <Table.ColumnHeader sortKey="virkemiddelType" sortable>
+                <Table.ColumnHeader sortKey='virkemiddelType' sortable>
                   Virkemiddeltype
                 </Table.ColumnHeader>
-                <Table.ColumnHeader sortKey="regelverk">Regelverk</Table.ColumnHeader>
-                <Table.ColumnHeader sortKey="sisteEndret" sortable>
+                <Table.ColumnHeader sortKey='regelverk'>Regelverk</Table.ColumnHeader>
+                <Table.ColumnHeader sortKey='sisteEndret' sortable>
                   Siste endret
                 </Table.ColumnHeader>
                 <Table.ColumnHeader></Table.ColumnHeader>
@@ -79,7 +79,7 @@ export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: TVirkmid
             <Table.Body>
               {sortedData.map((virkemiddel: IVirkemiddel, index: number) => (
                 <Table.Row key={index + '_' + virkemiddel.id}>
-                  <Table.DataCell className="w-[17%]" scope="row">
+                  <Table.DataCell className='w-[17%]' scope='row'>
                     {virkemiddel.navn}
                   </Table.DataCell>
                   <Table.DataCell>{virkemiddel.virkemiddelType?.shortName}</Table.DataCell>
@@ -102,24 +102,24 @@ export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: TVirkmid
                     {moment(virkemiddel.changeStamp.lastModifiedDate).format('ll')}
                   </Table.DataCell>
                   <Table.DataCell>
-                    <div className="flex justify-end w-full">
+                    <div className='flex justify-end w-full'>
                       <Button
-                        size="small"
-                        variant="tertiary"
+                        size='small'
+                        variant='tertiary'
                         onClick={() => {
                           setSelectedVirkemiddel(virkemiddel)
                           setIsEditModalOpen(true)
                         }}
-                        icon={<DocPencilIcon title="Rediger" aria-label="Rediger" />}
+                        icon={<DocPencilIcon title='Rediger' aria-label='Rediger' />}
                       />
                       <Button
-                        size="small"
+                        size='small'
                         variant={'tertiary'}
                         onClick={() => {
                           setSelectedVirkemiddel(virkemiddel)
                           setIsDeleteModalOpen(true)
                         }}
-                        icon={<TrashIcon title="Slett" aria-label="slett" />}
+                        icon={<TrashIcon title='Slett' aria-label='slett' />}
                       />
                     </div>
                   </Table.DataCell>
@@ -128,18 +128,18 @@ export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: TVirkmid
             </Table.Body>
           </Table>
 
-          <div className="flex w-full justify-center items-center mt-3">
+          <div className='flex w-full justify-center items-center mt-3'>
             <Select
-              label="Antall rader:"
+              label='Antall rader:'
               value={limit}
               onChange={(e) => setLimit(parseInt(e.target.value))}
-              size="small"
+              size='small'
             >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
+              <option value='5'>5</option>
+              <option value='10'>10</option>
+              <option value='20'>20</option>
+              <option value='50'>50</option>
+              <option value='100'>100</option>
             </Select>
             <Spacer />
             <div>
@@ -148,7 +148,7 @@ export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: TVirkmid
                 onPageChange={setPage}
                 count={Math.ceil(virkemidler.length / limit)}
                 prevNextTexts
-                size="small"
+                size='small'
               />
             </div>
             <Spacer />

@@ -7,19 +7,19 @@ interface IPropsKravEditDokumentasjon {
 
 export const KravEditDokumentasjon = ({ maxInputWidth }: IPropsKravEditDokumentasjon) => (
   <>
-    <Heading level="2" size="medium" className="mb-2">
+    <Heading level='2' size='medium' className='mb-2'>
       Dokumentasjon
     </Heading>
 
     <MultiInputField
       marginBottom
       maxInputWidth={maxInputWidth}
-      linkLabel="Navn på kilde"
-      name="dokumentasjon"
+      linkLabel='Navn på kilde'
+      name='dokumentasjon'
       link
-      label="Lenke eller websaknr"
-      tooltip="Lenke til dokumentasjon"
-      linkTooltip="Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller WebSak."
+      label='Lenke eller websaknr'
+      tooltip='Lenke til dokumentasjon'
+      linkTooltip='Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller WebSak.'
     />
   </>
 )

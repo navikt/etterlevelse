@@ -102,15 +102,15 @@ export const BehandlingensLivslopView = (props: IProps) => {
   }
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       {isLoading && (
-        <div className="flex w-full justify-center items-center mt-5">
-          <Loader size="3xlarge" className="flex justify-self-center" />
+        <div className='flex w-full justify-center items-center mt-5'>
+          <Loader size='3xlarge' className='flex justify-self-center' />
         </div>
       )}
       {!isLoading && behandlingensLivslop && (
-        <div className="flex w-full">
-          <div className="pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8">
+        <div className='flex w-full'>
+          <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
             <Formik
               validateOnBlur={false}
               validateOnChange={false}
@@ -131,14 +131,14 @@ export const BehandlingensLivslopView = (props: IProps) => {
             >
               {({ submitForm, initialValues, errors, isSubmitting }) => (
                 <Form>
-                  <div className="pr-6 flex flex-1 flex-col gap-4 col-span-8">
-                    <Heading level="1" size="medium" className="mb-5">
+                  <div className='pr-6 flex flex-1 flex-col gap-4 col-span-8'>
+                    <Heading level='1' size='medium' className='mb-5'>
                       Behandlingens livsløp
                     </Heading>
 
                     <BehandlingensLivslopTextContent />
 
-                    <BodyShort className="mt-3">
+                    <BodyShort className='mt-3'>
                       Dere kan velge å lage og laste opp flere tegninger hvis det gir bedre
                       oversikt.
                     </BodyShort>
@@ -150,17 +150,17 @@ export const BehandlingensLivslopView = (props: IProps) => {
                       setFilesToUpload={setFilesToUpload}
                     />
 
-                    <div className="mt-3">
+                    <div className='mt-3'>
                       <TextAreaField
                         rows={3}
                         noPlaceholder
-                        label="Legg eventuelt inn en beskrivelse av behandlingens livsløp"
-                        name="beskrivelse"
+                        label='Legg eventuelt inn en beskrivelse av behandlingens livsløp'
+                        name='beskrivelse'
                       />
                     </div>
 
                     {!_.isEmpty(errors) && rejectedFiles.length > 0 && (
-                      <ErrorSummary className="mt-3">
+                      <ErrorSummary className='mt-3'>
                         <ErrorSummary.Item href={'#vedleggMedFeil'}>
                           Vedlegg med feil
                         </ErrorSummary.Item>
@@ -168,9 +168,9 @@ export const BehandlingensLivslopView = (props: IProps) => {
                     )}
 
                     {!isSubmitting && (
-                      <div className="flex gap-2 mt-5 lg:flex-row flex-col">
+                      <div className='flex gap-2 mt-5 lg:flex-row flex-col'>
                         <Button
-                          type="button"
+                          type='button'
                           onClick={() => {
                             submitForm()
                           }}
@@ -181,15 +181,15 @@ export const BehandlingensLivslopView = (props: IProps) => {
                     )}
 
                     {isSubmitting && (
-                      <div className="flex mt-5 justify-center items-center">
-                        <Loader size="large" />
+                      <div className='flex mt-5 justify-center items-center'>
+                        <Loader size='large' />
                       </div>
                     )}
                   </div>
 
                   {pvoTilbakemelding && etterlevelseDokumentasjon && (
-                    <div className="mt-5">
-                      <div className="pt-6 border-t border-[#071a3636]">
+                    <div className='mt-5'>
+                      <div className='pt-6 border-t border-[#071a3636]'>
                         <BehandlingensLivsLopSidePanel
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                         />
@@ -212,7 +212,7 @@ export const BehandlingensLivslopView = (props: IProps) => {
           )}
 
           {!pvoTilbakemelding && etterlevelseDokumentasjon && (
-            <div className="pl-6 border-l border-[#071a3636] w-full max-w-lg">
+            <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg'>
               <BehandlingensLivsLopSidePanel
                 etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               />

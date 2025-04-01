@@ -32,15 +32,15 @@ const ComparisonView = (props: TComparisonViewProps) => {
       <Button
         key={audit.id}
         onClick={() => setModalOpen(!modalOpen)}
-        variant="tertiary"
-        icon={<ArrowRightLeftIcon title="se forskjell" />}
+        variant='tertiary'
+        icon={<ArrowRightLeftIcon title='se forskjell' />}
       />
       <Modal
         key={audit.id}
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        width="75%"
-        className="h-3/4 overflow-y-scroll"
+        width='75%'
+        className='h-3/4 overflow-y-scroll'
         header={{ heading: 'Sammenligning' }}
       >
         <Modal.Body>
@@ -74,20 +74,20 @@ export const AuditView = (props: TAuditViewProps) => {
   const newestAudit = auditLog?.audits[0]
 
   return (
-    <Box background="surface-default" padding="4">
-      {loading && <Loader size="large" className="flex justify-self-center" />}
+    <Box background='surface-default' padding='4'>
+      {loading && <Loader size='large' className='flex justify-self-center' />}
       {!loading && auditLog && !logFound && <Label>{intl.auditNotFound}</Label>}
 
       {logFound && (
         <div>
-          <div className="flex justify-between">
-            <div className="w-11/12 mb-4">
+          <div className='flex justify-between'>
+            <div className='w-11/12 mb-4'>
               <AuditLabel label={intl.id}>{auditLog?.id}</AuditLabel>
               <AuditLabel label={intl.table}>{newestAudit?.table}</AuditLabel>
               <AuditLabel label={intl.audits}>{auditLog?.audits.length}</AuditLabel>
             </div>
-            <div className="flex">
-              <Button variant="tertiary" className="mr-2" onClick={() => setOpenAll(!openAll)}>
+            <div className='flex'>
+              <Button variant='tertiary' className='mr-2' onClick={() => setOpenAll(!openAll)}>
                 {openAll ? 'Lukke' : 'Åpne'} alle
               </Button>
               {newestAudit?.action !== EAuditAction.DELETE && (
@@ -97,14 +97,14 @@ export const AuditView = (props: TAuditViewProps) => {
                   noNewTabLabel
                   audit={newestAudit}
                 >
-                  <Button variant="tertiary">Vis bruk (åpner i en ny fane)</Button>
+                  <Button variant='tertiary'>Vis bruk (åpner i en ny fane)</Button>
                 </ObjectLink>
               )}
-              <Tooltip content="Lukk" placement="top">
+              <Tooltip content='Lukk' placement='top'>
                 <Button
-                  variant="tertiary"
+                  variant='tertiary'
                   onClick={() => viewId('')}
-                  icon={<XMarkIcon title="Lukk" />}
+                  icon={<XMarkIcon title='Lukk' />}
                 />
               </Tooltip>
             </div>
@@ -114,9 +114,9 @@ export const AuditView = (props: TAuditViewProps) => {
             auditLog.audits.map((audit, index) => {
               const time = moment(audit.time)
               return (
-                <div key={audit.id} ref={refs[audit.id]} className="mb-4 mt-2">
-                  <div className="flex justify-between">
-                    <div className="w-11/12">
+                <div key={audit.id} ref={refs[audit.id]} className='mb-4 mt-2'>
+                  <div className='flex justify-between'>
+                    <div className='w-11/12'>
                       <AuditLabel label={intl.auditNr}>{auditLog.audits.length - index}</AuditLabel>
                       <AuditLabel label={intl.action}>
                         <AuditActionIcon action={audit.action} withText={true} />

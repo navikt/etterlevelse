@@ -42,8 +42,8 @@ export const CreateRisikoscenario = (props: IProps) => {
   }
 
   return (
-    <div className="w-full">
-      <Heading size="medium" level="2" className="mb-5">
+    <div className='w-full'>
+      <Heading size='medium' level='2' className='mb-5'>
         Legg til nytt risikoscenario
       </Heading>
       <RisikoscenarioForm

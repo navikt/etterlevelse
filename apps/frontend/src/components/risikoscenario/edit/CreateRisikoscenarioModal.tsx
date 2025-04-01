@@ -28,16 +28,16 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
   }
 
   return (
-    <div className="mt-5">
+    <div className='mt-5'>
       {!isEdit && (
-        <Button onClick={() => setIsEdit(true)} variant="secondary">
+        <Button onClick={() => setIsEdit(true)} variant='secondary'>
           Opprett nytt øvrig risikoscenario
         </Button>
       )}
 
       {isEdit && (
         <RisikoscenarioModalForm
-          headerText="Opprett nytt risikoscenario"
+          headerText='Opprett nytt risikoscenario'
           isOpen={isEdit}
           setIsOpen={setIsEdit}
           submit={submit}

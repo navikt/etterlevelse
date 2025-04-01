@@ -14,28 +14,28 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
 
   return (
     <PageLayout
-      pageTitle="dministrere Etterlevelse Dokumentasjon"
-      currentPage="Administrere Etterlevelse Dokumentasjon"
+      pageTitle='dministrere Etterlevelse Dokumentasjon'
+      currentPage='Administrere Etterlevelse Dokumentasjon'
     >
-      <Heading size="medium" level="1">
+      <Heading size='medium' level='1'>
         Administrere Etterlevelse Dokumentasjon
       </Heading>
 
-      <div className="mt-5 w-full">
-        <Box className="mb-2.5" padding="4" background="surface-warning-subtle">
+      <div className='mt-5 w-full'>
+        <Box className='mb-2.5' padding='4' background='surface-warning-subtle'>
           OBS! Når et etterlevelses dokument blir slettet vil alle dataene( etterlevelser,
           etterlevelses metadataer, og etterlevelse arkiv) koblet til den også bli slettet.
         </Box>
-        <div className="flex items-end">
+        <div className='flex items-end'>
           <TextField
-            label="Slett etterlevelse dokumentasjon med uid"
-            placeholder="Etterlevelse dokumentasjon UID"
+            label='Slett etterlevelse dokumentasjon med uid'
+            placeholder='Etterlevelse dokumentasjon UID'
             onChange={(e) => setEtterlevelseDokumentasjonId(e.target.value)}
-            className="w-full mr-3"
+            className='w-full mr-3'
           />
           <Button
             disabled={!etterlevelseDokumentasjonId}
-            variant="secondary"
+            variant='secondary'
             onClick={() => {
               setUpdateMessage('')
               deleteEtterlevelseDokumentasjon(etterlevelseDokumentasjonId)
@@ -54,7 +54,7 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
           </Button>
         </div>
 
-        <div className="pt-10">
+        <div className='pt-10'>
           Testing p360 intergation
           <Button
             onClick={() => {
@@ -63,9 +63,9 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
           >
             search for e101 / ping
           </Button>
-          <div className="flex my-5 gap-2">
+          <div className='flex my-5 gap-2'>
             <TextField
-              label="etterlevelseDok id"
+              label='etterlevelseDok id'
               onChange={(event) => setIDvalue(event.target.value)}
               value={idValue}
             />
@@ -79,14 +79,14 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
               lage sak
             </Button>
           </div>
-          <div className="flex my-5 gap-2">
+          <div className='flex my-5 gap-2'>
             <TextField
-              label="etterlevelseDok id"
+              label='etterlevelseDok id'
               onChange={(event) => setIDvalue(event.target.value)}
               value={idValue}
             />
             <TextField
-              label="Saksnummer"
+              label='Saksnummer'
               onChange={(event) => setSakvalue(event.target.value)}
               value={sakValue}
             />

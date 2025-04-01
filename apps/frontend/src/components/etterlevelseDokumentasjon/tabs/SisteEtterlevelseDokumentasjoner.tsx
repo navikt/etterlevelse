@@ -17,8 +17,8 @@ export const SisteEtterlevelseDokumentasjoner = ({
   ])
 
   return (
-    <div className="my-5">
-      {loading && <Loader size="large" className="flex justify-self-center" />}
+    <div className='my-5'>
+      {loading && <Loader size='large' className='flex justify-self-center' />}
       {!etterlevelseDokumentasjoner.length && !loading && (
         <BodyShort>Du har ikke dokumentert etterlevelse på krav</BodyShort>
       )}

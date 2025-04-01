@@ -83,21 +83,21 @@ export const DocumentRelationAdminPage = () => {
 
   return (
     <PageLayout
-      pageTitle="Administrer Dokument relasjon"
-      currentPage="Administrer Dokument relasjon"
+      pageTitle='Administrer Dokument relasjon'
+      currentPage='Administrer Dokument relasjon'
     >
       <div>
-        <Heading size="medium" level="1">
+        <Heading size='medium' level='1'>
           Administrer Dokument relasjon
         </Heading>
       </div>
 
-      <div className="flex items-end mt-8">
+      <div className='flex items-end mt-8'>
         <TextField
-          label="Slett dokument relasjon"
-          placeholder="Dokument relasjon UID"
+          label='Slett dokument relasjon'
+          placeholder='Dokument relasjon UID'
           onChange={(e) => setDeleteDokumentRelasjonId(e.target.value)}
-          className="w-full mr-3"
+          className='w-full mr-3'
         />
         <Button
           disabled={!deleleDokumentRelasjonId}
@@ -120,14 +120,14 @@ export const DocumentRelationAdminPage = () => {
       </div>
       <UpdateMessage message={deleteMessage} />
 
-      <div className="mt-8 w-full">
-        <Heading level="2" size="small">
+      <div className='mt-8 w-full'>
+        <Heading level='2' size='small'>
           Dokument relasjon tabell
         </Heading>
         {tableContent.length !== 0 && (
           <div>
             <Table
-              size="large"
+              size='large'
               zebraStripes
               sort={sort}
               onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
@@ -137,7 +137,7 @@ export const DocumentRelationAdminPage = () => {
                   <Table.ColumnHeader>Dokument relasjon ID</Table.ColumnHeader>
                   <Table.ColumnHeader>Fra Dokument relasjon ID</Table.ColumnHeader>
                   <Table.ColumnHeader>Til Dokument relasjon ID</Table.ColumnHeader>
-                  <Table.ColumnHeader sortKey="relationType" sortable>
+                  <Table.ColumnHeader sortKey='relationType' sortable>
                     Relasjonstype
                   </Table.ColumnHeader>
                 </Table.Row>
@@ -146,7 +146,7 @@ export const DocumentRelationAdminPage = () => {
                 {sortedData.map((documentRelation: IDocumentRelation) => {
                   return (
                     <Table.Row key={documentRelation.id}>
-                      <Table.HeaderCell scope="row">{documentRelation.id}</Table.HeaderCell>
+                      <Table.HeaderCell scope='row'>{documentRelation.id}</Table.HeaderCell>
                       <Table.DataCell>
                         <Link href={`/dokumentasjon/${documentRelation.fromDocument}`}>
                           {documentRelation.fromDocument}
@@ -165,18 +165,18 @@ export const DocumentRelationAdminPage = () => {
                 })}
               </Table.Body>
             </Table>
-            <div className="flex w-full justify-center items-center mt-3">
+            <div className='flex w-full justify-center items-center mt-3'>
               <Select
-                label="Antall rader:"
+                label='Antall rader:'
                 value={rowsPerPage}
                 onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
-                size="small"
+                size='small'
               >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
+                <option value='5'>5</option>
+                <option value='10'>10</option>
+                <option value='20'>20</option>
+                <option value='50'>50</option>
+                <option value='100'>100</option>
               </Select>
               <Spacer />
               <div>
@@ -185,7 +185,7 @@ export const DocumentRelationAdminPage = () => {
                   onPageChange={setPage}
                   count={Math.ceil(tableContent.length / rowsPerPage)}
                   prevNextTexts
-                  size="small"
+                  size='small'
                 />
               </div>
               <Spacer />

@@ -12,8 +12,8 @@ export const ROSEdit = () => {
   const [error, setError] = useState('')
 
   return (
-    <FieldWrapper marginBottom id="risikovurderinger">
-      <FieldArray name="risikovurderinger">
+    <FieldWrapper marginBottom id='risikovurderinger'>
+      <FieldArray name='risikovurderinger'>
         {(fieldArrayRenderProps: FieldArrayRenderProps) => {
           const add = (): void => {
             if (name == '') {
@@ -35,42 +35,42 @@ export const ROSEdit = () => {
           }
 
           return (
-            <div className="my-8">
-              <Heading level="2" size="small" spacing>
+            <div className='my-8'>
+              <Heading level='2' size='small' spacing>
                 Legg til ROS eller annen aktuell dokumentasjon
               </Heading>
 
-              <div className="w-full my-2.5">
+              <div className='w-full my-2.5'>
                 <TextField
-                  className="w-full"
-                  label="Legg inn navnet på dokumentet"
+                  className='w-full'
+                  label='Legg inn navnet på dokumentet'
                   value={name}
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     setName((event.target as HTMLInputElement).value)
                   }
                 />
                 <TextField
-                  className="w-full my-2.5"
-                  label="Legg inn lenken (URL) til dokumentet"
+                  className='w-full my-2.5'
+                  label='Legg inn lenken (URL) til dokumentet'
                   value={url}
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     setUrl((event.target as HTMLInputElement).value)
                   }
                 />
                 <Button
-                  className="min-w-[6.688rem] my-2.5 items-end"
-                  type="button"
+                  className='min-w-[6.688rem] my-2.5 items-end'
+                  type='button'
                   onClick={add}
-                  variant="secondary"
+                  variant='secondary'
                 >
                   Legg til
                 </Button>
               </div>
 
               {error && <Error message={error} />}
-              {!error && <FormError fieldName="risikovurderinger" akselStyling />}
+              {!error && <FormError fieldName='risikovurderinger' akselStyling />}
 
-              <Table className="mt-2.5 w-3/5" size="small">
+              <Table className='mt-2.5 w-3/5' size='small'>
                 <Table.Body>
                   {fieldArrayRenderProps.form.values.risikovurderinger &&
                     fieldArrayRenderProps.form.values.risikovurderinger.map(
@@ -85,11 +85,11 @@ export const ROSEdit = () => {
                                   {rosParts[1]}
                                 </ExternalLink>
                               </Table.DataCell>
-                              <Table.DataCell className="flex justify-end">
+                              <Table.DataCell className='flex justify-end'>
                                 <Button
-                                  type="button"
-                                  variant="tertiary"
-                                  icon={<TrashIcon aria-hidden aria-label="" />}
+                                  type='button'
+                                  variant='tertiary'
+                                  icon={<TrashIcon aria-hidden aria-label='' />}
                                   onClick={() => fieldArrayRenderProps.remove(index)}
                                 >
                                   Slett lenke
@@ -98,7 +98,7 @@ export const ROSEdit = () => {
                             </Table.Row>
                           )
                         return (
-                          <span className="flex" key={ros}>
+                          <span className='flex' key={ros}>
                             {ros}
                           </span>
                         )

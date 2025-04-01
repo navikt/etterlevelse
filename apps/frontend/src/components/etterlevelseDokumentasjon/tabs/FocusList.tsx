@@ -83,9 +83,9 @@ export const FocusList = (props: IProps) => {
 
           {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
             <Button
-              className="mt-4"
-              type="button"
-              variant="secondary"
+              className='mt-4'
+              type='button'
+              variant='secondary'
               onClick={() => setIsEditMode(true)}
             >
               Rediger prioriterte krav
@@ -105,8 +105,8 @@ export const FocusList = (props: IProps) => {
         >
           {({ submitForm }) => (
             <Form>
-              <div className="mt-4">
-                <FieldArray name="prioritertKravNummer">
+              <div className='mt-4'>
+                <FieldArray name='prioritertKravNummer'>
                   {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                     <AccordionList
                       fieldArrayRenderProps={fieldArrayRenderProps}
@@ -118,14 +118,14 @@ export const FocusList = (props: IProps) => {
                   )}
                 </FieldArray>
               </div>
-              <div className="border-border-subtle flex -mt-1 items-center gap-2 sticky bottom-0 border-black border-t-2 bg-white z-10 py-4">
-                <Button type="button" onClick={submitForm}>
+              <div className='border-border-subtle flex -mt-1 items-center gap-2 sticky bottom-0 border-black border-t-2 bg-white z-10 py-4'>
+                <Button type='button' onClick={submitForm}>
                   Lagre prioriterte krav
                 </Button>
 
                 <Button
-                  type="button"
-                  variant="secondary"
+                  type='button'
+                  variant='secondary'
                   onClick={() => {
                     setEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon)
                     setIsEditMode(false)

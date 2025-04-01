@@ -84,14 +84,14 @@ export const LeggTilEksisterendeRisikoscenario: FunctionComponent<TProps> = ({
             <Field>
               {(fieldProps: FieldProps) => (
                 <Select
-                  label="Legg til eksisterende risikoscenario"
+                  label='Legg til eksisterende risikoscenario'
                   onChange={(event: ChangeEvent<HTMLSelectElement>) => {
                     if (event.target.value) {
                       addRisikoscenario(event.target.value, fieldProps)
                     }
                   }}
                 >
-                  <option value=""></option>
+                  <option value=''></option>
                   {risikoscenarioer.map((risikoscenario: IRisikoscenario) => (
                     <option key={risikoscenario.id} value={risikoscenario.id}>
                       {risikoscenario.navn}
@@ -103,7 +103,7 @@ export const LeggTilEksisterendeRisikoscenario: FunctionComponent<TProps> = ({
 
             <Field>
               {(fieldProps: FieldProps) => (
-                <VStack gap="10" className="mt-3">
+                <VStack gap='10' className='mt-3'>
                   <Chips>
                     {selectedRisikoscenarier.map((selectedRisikoscenario: string) => {
                       const data: IRisikoscenario[] = risikoscenarioer.filter(
@@ -126,14 +126,14 @@ export const LeggTilEksisterendeRisikoscenario: FunctionComponent<TProps> = ({
               )}
             </Field>
 
-            <div className="mt-5 flex gap-2">
-              <Button type="button" onClick={submitForm}>
+            <div className='mt-5 flex gap-2'>
+              <Button type='button' onClick={submitForm}>
                 Lagre
               </Button>
 
               <Button
-                type="button"
-                variant="secondary"
+                type='button'
+                variant='secondary'
                 onClick={() => setIsLeggTilEksisterendeMode(false)}
               >
                 Avbryt

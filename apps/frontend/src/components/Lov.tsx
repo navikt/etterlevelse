@@ -18,9 +18,9 @@ interface ILovViewListProps {
 }
 
 export const LovViewList = (props: ILovViewListProps) => (
-  <div className="flex flex-col break-all">
+  <div className='flex flex-col break-all'>
     {props.regelverkListe.map((regelverk: IRegelverk, index: number) => (
-      <div key={index} className="mb-2">
+      <div key={index} className='mb-2'>
         <LovView regelverk={regelverk} openOnSamePage={props.openOnSamePage} />
       </div>
     ))}
@@ -96,7 +96,7 @@ const legalBasisLinkProcessor = (
           key={key}
           href={`${lovdataBase(law, codelistUtils)}/§${result[4]}${result[6]}`}
           target={openOnSamePage ? '_self' : '_blank'}
-          rel="noopener noreferrer"
+          rel='noopener noreferrer'
         >
           {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]}
           {result[6]} {result[7]} {openOnSamePage ? '' : ' (åpner i en ny fane)'}
@@ -110,7 +110,7 @@ const legalBasisLinkProcessor = (
           key={key}
           href={`${lovdataBase(law, codelistUtils)}/KAPITTEL_${result[3]}${result[4]}`}
           target={openOnSamePage ? '_self' : '_blank'}
-          rel="noopener noreferrer"
+          rel='noopener noreferrer'
         >
           {result[1]} Kapittel {result[3]} {result[4]} {result[5]}{' '}
           {openOnSamePage ? '' : ' (åpner i en ny fane)'}
@@ -124,7 +124,7 @@ const legalBasisLinkProcessor = (
           key={key}
           href={`${lovdataBase(law, codelistUtils)}/ARTIKKEL_${result[3]}${result[4]}`}
           target={openOnSamePage ? '_self' : '_blank'}
-          rel="noopener noreferrer"
+          rel='noopener noreferrer'
         >
           {result[1]} Artikkel {result[3]} {result[4]} {result[5]}{' '}
           {openOnSamePage ? '' : ' (åpner i en ny fane)'}

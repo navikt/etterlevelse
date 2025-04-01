@@ -187,7 +187,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
       {isEditModalOpen && (
         <RisikoscenarioModalForm
-          headerText="Redigér øvrig risikoscenario"
+          headerText='Redigér øvrig risikoscenario'
           isOpen={isEditModalOpen}
           setIsOpen={setIsEditModalOpen}
           submit={submit}

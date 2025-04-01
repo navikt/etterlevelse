@@ -56,7 +56,7 @@ const visTomListeBeskrivelse = (filter: string | null) => {
       break
     default:
   }
-  return <BodyLong className="my-5">{textBody}</BodyLong>
+  return <BodyLong className='my-5'>{textBody}</BodyLong>
 }
 
 export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
@@ -182,56 +182,56 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   }
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       <div className={`flex w-full ${pvoTilbakemelding ? '' : 'justify-center'}`}>
         <div className={`pt-6 ${pvoTilbakemelding ? 'w-[816px]' : 'min-w-[900px]'}`}>
           <div>
-            <Heading level="1" size="medium" className="mb-5">
+            <Heading level='1' size='medium' className='mb-5'>
               Risikobildet etter tiltak
             </Heading>
 
-            <BodyLong className="mt-5">
+            <BodyLong className='mt-5'>
               Her vurderer dere det samlede risikobildet pr. scenario etter at tiltak er
               gjennomført.
             </BodyLong>
           </div>
-          <div className="w-full mt-5">
-            <div className="pt-6 pr-4 flex flex-1 flex-row gap-4 col-span-8">
-              <div className="w-full">
+          <div className='w-full mt-5'>
+            <div className='pt-6 pr-4 flex flex-1 flex-row gap-4 col-span-8'>
+              <div className='w-full'>
                 <Tabs
                   value={tabQuery ? tabQuery : tabValues.risikoscenarioer}
                   onChange={onTabChange}
                   fill
                 >
                   <Tabs.List>
-                    <Tabs.Tab value={tabValues.risikoscenarioer} label="Vis risikoscenarioer" />
-                    <Tabs.Tab value={tabValues.tiltak} label=" Vis tiltak " />
+                    <Tabs.Tab value={tabValues.risikoscenarioer} label='Vis risikoscenarioer' />
+                    <Tabs.Tab value={tabValues.tiltak} label=' Vis tiltak ' />
                   </Tabs.List>
-                  <Tabs.Panel value={tabValues.risikoscenarioer} className="w-full">
+                  <Tabs.Panel value={tabValues.risikoscenarioer} className='w-full'>
                     <ToggleGroup
-                      className="mt-10"
+                      className='mt-10'
                       value={filterQuery ? filterQuery : 'alle'}
                       onChange={onFilterChange}
                       fill
                     >
                       <ToggleGroup.Item
                         value={filterValues.alleRisikoscenarioer}
-                        label="Alle risikoscenarioer"
+                        label='Alle risikoscenarioer'
                       />
                       <ToggleGroup.Item
                         value={filterValues.effektIkkeVurdert}
-                        label="Effekt ikke vurdert"
+                        label='Effekt ikke vurdert'
                       />
-                      <ToggleGroup.Item value={filterValues.hoyRisiko} label="Høy risiko" />
+                      <ToggleGroup.Item value={filterValues.hoyRisiko} label='Høy risiko' />
                       <ToggleGroup.Item
                         value={filterValues.tiltakIkkeAktuelt}
-                        label="Tiltak ikke aktuelt"
+                        label='Tiltak ikke aktuelt'
                       />
                     </ToggleGroup>
                     {risikoscenarioList.length === 0 && (
-                      <div className="my-5">
-                        <Alert variant="info">
-                          <Heading spacing size="small" level="3">
+                      <div className='my-5'>
+                        <Alert variant='info'>
+                          <Heading spacing size='small' level='3'>
                             Dere har foreløpig ingen risikoscenarioer
                           </Heading>
                           Risikoscenarioer legges inn under{' '}
@@ -249,7 +249,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                       visTomListeBeskrivelse(filterQuery)}
 
                     {risikoscenarioList.length !== 0 && filteredRisikoscenarioList.length !== 0 && (
-                      <div className="my-5">
+                      <div className='my-5'>
                         <OppsumeringAccordianList
                           risikoscenarioList={filteredRisikoscenarioList}
                           setRisikosenarioList={setFilteredRisikosenarioList}
@@ -264,11 +264,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                       </div>
                     )}
                   </Tabs.Panel>
-                  <Tabs.Panel value={tabValues.tiltak} className="w-full">
+                  <Tabs.Panel value={tabValues.tiltak} className='w-full'>
                     {tiltakList.length === 0 && (
-                      <div className="my-5">
-                        <Alert variant="info">
-                          <Heading spacing size="small" level="3">
+                      <div className='my-5'>
+                        <Alert variant='info'>
+                          <Heading spacing size='small' level='3'>
                             Foreløpig er ingen tiltak satt
                           </Heading>
                           Tiltak legges inn under{' '}
@@ -284,20 +284,20 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
 
                     {tiltakList.length !== 0 && (
                       <ToggleGroup
-                        className="mt-10"
+                        className='mt-10'
                         value={tiltakFilter}
                         onChange={onTiltakFilterChange}
                         fill
                       >
                         <ToggleGroup.Item
                           value={tiltakFilterValues.alleTiltak}
-                          label="Alle tiltak"
+                          label='Alle tiltak'
                         />
                         <ToggleGroup.Item
                           value={tiltakFilterValues.utenAnsvarlig}
-                          label="Uten tiltaksansvarlig"
+                          label='Uten tiltaksansvarlig'
                         />
-                        <ToggleGroup.Item value={tiltakFilterValues.utenFrist} label="Uten frist" />
+                        <ToggleGroup.Item value={tiltakFilterValues.utenFrist} label='Uten frist' />
                       </ToggleGroup>
                     )}
 
