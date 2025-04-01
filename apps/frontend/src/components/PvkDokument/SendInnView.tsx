@@ -1,13 +1,23 @@
 import { FilesIcon } from '@navikt/aksel-icons'
 import { Alert, BodyLong, Button, CopyButton, ErrorSummary, Heading, Label } from '@navikt/ds-react'
+import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import {
+  getBehandlingensLivslopByEtterlevelseDokumentId,
+  mapBehandlingensLivslopToFormValue,
+} from '../../api/BehandlingensLivslopApi'
 import {
   getPvkDokument,
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '../../api/PvkDokumentApi'
-import { EPvkDokumentStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
+import {
+  EPvkDokumentStatus,
+  IBehandlingensLivslop,
+  IPvkDokument,
+  IPvoTilbakemelding,
+} from '../../constants'
 import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
 import FormButtons from './edit/FormButtons'
@@ -42,6 +52,9 @@ export const SendInnView = (props: IProps) => {
     setSelectedStep,
     pvoTilbakemelding,
   } = props
+
+  const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
+  const [behandlingensLivslopError, setBehandlingensLivslopError] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
 
   const underarbeidCheck =
@@ -69,6 +82,34 @@ export const SendInnView = (props: IProps) => {
       })
     })
   }
+
+  const behandlingensLivslopFieldCheck = (): boolean => {
+    if (behandlingensLivslop?.filer.length === 0 && behandlingensLivslop.beskrivelse === '') {
+      setBehandlingensLivslopError(true)
+      return true
+    } else {
+      setBehandlingensLivslopError(false)
+      return false
+    }
+  }
+
+  useEffect(() => {
+    ;(async () => {
+      if (etterlevelseDokumentasjonId) {
+        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
+          .then((response) => {
+            setBehandlingensLivslop(response)
+          })
+          .catch((error: AxiosError) => {
+            if (error.status === 404) {
+              setBehandlingensLivslop(mapBehandlingensLivslopToFormValue({}))
+            } else {
+              console.debug(error)
+            }
+          })
+      }
+    })()
+  }, [etterlevelseDokumentasjonId])
 
   return (
     <Formik
@@ -152,11 +193,16 @@ export const SendInnView = (props: IProps) => {
                 </Alert>
               )}
 
-              {Object.values(errors).some(Boolean) && (
+              {(Object.values(errors).some(Boolean) || behandlingensLivslopError) && (
                 <ErrorSummary
                   ref={errorSummaryRef}
                   heading='Du må rette disse feilene før du kan fortsette'
                 >
+                  {behandlingensLivslopError && (
+                    <ErrorSummary.Item>
+                      Behandlingens livsløp må ha en tegning eller en beskrivelse.
+                    </ErrorSummary.Item>
+                  )}
                   {Object.entries(errors)
                     .filter(([, error]) => error)
                     .map(([key, error]) => (
@@ -201,7 +247,9 @@ export const SendInnView = (props: IProps) => {
                         onClick={async () => {
                           await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO)
                           errorSummaryRef.current?.focus()
-                          submitForm()
+                          if (!behandlingensLivslopFieldCheck()) {
+                            submitForm()
+                          }
                         }}
                       >
                         Send til Personvernombudet
@@ -213,7 +261,9 @@ export const SendInnView = (props: IProps) => {
                         type='button'
                         onClick={async () => {
                           await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
-                          submitForm()
+                          if (!behandlingensLivslopFieldCheck()) {
+                            submitForm()
+                          }
                         }}
                       >
                         Angre godkjenning
@@ -225,7 +275,9 @@ export const SendInnView = (props: IProps) => {
                         type='button'
                         onClick={async () => {
                           await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
-                          submitForm()
+                          if (!behandlingensLivslopFieldCheck()) {
+                            submitForm()
+                          }
                         }}
                       >
                         Godkjent
