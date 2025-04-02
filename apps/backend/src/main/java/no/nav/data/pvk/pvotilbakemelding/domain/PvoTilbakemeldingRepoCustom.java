@@ -30,7 +30,7 @@ public class PvoTilbakemeldingRepoCustom {
         if (filter.getSistRedigert() != null) {
             query += """
                      and id in (
-                       select pvoTilbakemeldingId
+                       select cast(pvoTilbakemeldingId as uuid)
                          from (
                                   select distinct on (data #>> '{data,id}') data #>> '{data,id}' pvoTilbakemeldingId, time
                                   from audit_version
