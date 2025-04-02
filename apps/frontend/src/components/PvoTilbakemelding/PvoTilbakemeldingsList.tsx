@@ -1,4 +1,4 @@
-import { Label, List, Skeleton } from '@navikt/ds-react'
+import { Label, List, Select, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { getAllPvkDokumentListItem } from '../../api/PvkDokumentApi'
@@ -7,9 +7,17 @@ import { EPVO, EPvkDokumentStatus, IPvkDokumentListItem, IPvoTilbakemelding } fr
 import { ListLayout2 } from '../common/ListLayout'
 import PvoStatusView from './common/PvoStatusView'
 
+enum EStatusFilter {
+  ALLE = 'ALLE',
+  IKKE_PAABEGYNT = 'IKKE_PABEGYNT',
+  PAABEGYNT = 'PABEGYNT',
+  SENDT_TILBAKE = 'SENDT_TILBAKE',
+}
+
 export const PvoTilbakemeldingsList = () => {
   const [allPvkDocumentListItem, setAllPvkDocumentListItem] = useState<IPvkDokumentListItem[]>([])
   const [allPvoTilbakemelding, setAllPvoTilbakemelding] = useState<IPvoTilbakemelding[]>([])
+  const [statusFilter, setStatusFilter] = useState<EStatusFilter>(EStatusFilter.ALLE)
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -36,6 +44,19 @@ export const PvoTilbakemeldingsList = () => {
       {isLoading && <Skeleton variant='rectangle' />}
       {!isLoading && (
         <div>
+          <div id='pvo filter' className='flex items-end w-full gap-6 py-2'>
+            <Label className='pb-3'>Filtrèr:</Label>
+            <Select
+              label='Velg status'
+              value={statusFilter}
+              onChange={(event) => setStatusFilter(event.target.value as EStatusFilter)}
+            >
+              <option value={EStatusFilter.ALLE}>Alle</option>
+              <option value={EStatusFilter.IKKE_PAABEGYNT}>Ikke påbegynt</option>
+              <option value={EStatusFilter.PAABEGYNT}>Påbegynt</option>
+              <option value={EStatusFilter.SENDT_TILBAKE}>Sendt tilbake</option>
+            </Select>
+          </div>
           <div className='w-full justify-center my-4'>
             <div className='flex justify-center content-center w-full'>
               <div className='flex justify-start align-middle w-full'>
