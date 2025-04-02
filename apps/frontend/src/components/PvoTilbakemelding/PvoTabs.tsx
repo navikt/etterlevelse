@@ -2,7 +2,7 @@ import { Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { EPVO } from '../../constants'
-import PvoSistRedigertView from '../PvoTilbakemelding/PvoSistRedigertView'
+import PvoSistRedigertView from './PvoSistRedigertView'
 import { PvoTilbakemeldingsList } from './PvoTilbakemeldingsList'
 
 type TSection = 'siste' | 'alle'

@@ -3,8 +3,8 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { getAllPvkDokumentListItem } from '../../api/PvkDokumentApi'
 import { EPVO, IPvkDokumentListItem } from '../../constants'
-import PvoStatusView from '../PvoTilbakemelding/common/PvoStatusView'
 import { ListLayout } from '../common/ListLayout'
+import PvoStatusView from './common/PvoStatusView'
 
 export const PvoTilbakemeldingsList = () => {
   const [allPvkDocumentListItem, setAllPvkDocumentListItem] = useState<IPvkDokumentListItem[]>([])

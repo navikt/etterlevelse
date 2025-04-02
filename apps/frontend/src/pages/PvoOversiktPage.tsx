@@ -1,4 +1,4 @@
-import PvoTabs from '../components/PvkDokument/PvoTabs'
+import PvoTabs from '../components/PvoTilbakemelding/PvoTabs'
 import { ListPageHeader } from '../components/scaffold/ListPageHeader'
 import { PageLayout } from '../components/scaffold/Page'
 import { EPVO } from '../constants'
