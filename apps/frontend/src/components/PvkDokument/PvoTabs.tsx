@@ -1,18 +1,13 @@
-import { Label, Tabs } from '@navikt/ds-react'
+import { Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
-import { EPVO, IPvkDokumentListItem } from '../../constants'
+import { EPVO } from '../../constants'
 import PvoSistRedigertView from '../PvoTilbakemelding/PvoSistRedigertView'
 import { PvoTilbakemeldingsList } from './PvoTilbakemeldingsList'
 
 type TSection = 'siste' | 'alle'
 
-interface IProps {
-  allPvkDocumentListItem: IPvkDokumentListItem[]
-  isLoading: false
-}
-
-const PvoTabs = ({ allPvkDocumentListItem, isLoading }: IProps) => {
+const PvoTabs = () => {
   const navigate: NavigateFunction = useNavigate()
   const params: Readonly<
     Partial<{
@@ -41,21 +36,7 @@ const PvoTabs = ({ allPvkDocumentListItem, isLoading }: IProps) => {
         <PvoSistRedigertView />
       </Tabs.Panel>
       <Tabs.Panel value='alle'>
-        <div className='w-full justify-center my-4'>
-          <div className='flex justify-center content-center w-full'>
-            <div className='flex justify-start align-middle w-full'>
-              <Label size='medium'>
-                {/* {kravene.totalElements ? kravene.totalElements : 0}  */}
-                {allPvkDocumentListItem.length} PVK dokumenter
-              </Label>
-            </div>
-          </div>
-        </div>
-
-        <PvoTilbakemeldingsList
-          allPvkDocumentListItem={allPvkDocumentListItem}
-          isLoading={isLoading}
-        />
+        <PvoTilbakemeldingsList />
       </Tabs.Panel>
     </Tabs>
   )
