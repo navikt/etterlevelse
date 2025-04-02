@@ -113,6 +113,22 @@ export const PvoTilbakemeldingsList = () => {
                 const pvoTilbakemelding = allPvoTilbakemelding.filter(
                   (pvo) => pvo.pvkDokumentId === pvkDokument.id
                 )
+
+                let changestamp = ''
+
+                if (
+                  pvoTilbakemelding.length !== 0 &&
+                  pvoTilbakemelding[0].status === EPvoTilbakemeldingStatus.FERDIG
+                ) {
+                  changestamp = `Vurdering sendt: ${moment(pvoTilbakemelding[0].sendtDato).format('ll')}`
+                } else {
+                  const date =
+                    pvkDokument.sendtTilPvoDato !== '' && pvkDokument.sendtTilPvoDato !== null
+                      ? moment(pvkDokument.sendtTilPvoDato).format('ll')
+                      : moment(pvkDokument.changeStamp.lastModifiedDate).format('ll')
+                  changestamp = `Mottat: ${date}`
+                }
+
                 return (
                   <ListLayout2
                     key={pvkDokument.id}
@@ -126,12 +142,7 @@ export const PvoTilbakemeldingsList = () => {
                         }
                       />
                     }
-                    changeStamp={
-                      pvkDokument.sendtTilPvoDato !== undefined &&
-                      pvkDokument.sendtTilPvoDato !== ''
-                        ? `Sendt inn: ${moment(pvkDokument.sendtTilPvoDato).format('ll')}`
-                        : `Sendt inn: ${moment(pvkDokument.changeStamp.lastModifiedDate).format('ll')}`
-                    }
+                    changeStamp={changestamp}
                   />
                 )
               })}
