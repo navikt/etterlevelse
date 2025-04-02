@@ -631,6 +631,13 @@ export interface IPvoTilbakemelding extends IDomainObject {
   sendtDato: string
 }
 
+export type TPvoTilbakemeldingQL = IPvoTilbakemelding & {
+  pvkDokumentStatus: string
+  etterlevelseDokumentasjonId: string
+  etterlevelseDokumentasjonData: TEtterlevelseDokumentasjonQL
+  sistEndretAvMeg: string
+}
+
 export interface ITilbakemeldingsinnhold {
   sistRedigertAv: string
   sistRedigertDato: string
