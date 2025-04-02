@@ -1,4 +1,4 @@
-import { Label, List, Select, Skeleton } from '@navikt/ds-react'
+import { Label, List, Select, Skeleton, TextField } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { getAllPvkDokumentListItem } from '../../api/PvkDokumentApi'
@@ -17,6 +17,7 @@ export const PvoTilbakemeldingsList = () => {
   const [allPvkDocumentListItem, setAllPvkDocumentListItem] = useState<IPvkDokumentListItem[]>([])
   const [allPvoTilbakemelding, setAllPvoTilbakemelding] = useState<IPvoTilbakemelding[]>([])
   const [statusFilter, setStatusFilter] = useState<string>('alle')
+  const [seachPvk, setSearchPvk] = useState<string>('')
 
   const [filteredPvkDokument, setFilteredPvkDokuement] = useState<IPvkDokumentListItem[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -41,27 +42,35 @@ export const PvoTilbakemeldingsList = () => {
   }, [])
 
   useEffect(() => {
+    let filteredData: IPvkDokumentListItem[] = allPvkDocumentListItem
+
     if (statusFilter !== 'alle') {
       if (statusFilter === 'ikke_påbegynt') {
-        setFilteredPvkDokuement(
-          allPvkDocumentListItem.filter(
-            (pvk) => !allPvoTilbakemelding.map((pvo) => pvo.pvkDokumentId).includes(pvk.id)
-          )
+        filteredData = allPvkDocumentListItem.filter(
+          (pvk) => !allPvoTilbakemelding.map((pvo) => pvo.pvkDokumentId).includes(pvk.id)
         )
       } else {
-        setFilteredPvkDokuement(
-          allPvkDocumentListItem.filter((pvk) =>
-            allPvoTilbakemelding
-              .filter((pvo) => pvo.status === statusFilter)
-              .map((pvo) => pvo.pvkDokumentId)
-              .includes(pvk.id)
-          )
+        filteredData = allPvkDocumentListItem.filter((pvk) =>
+          allPvoTilbakemelding
+            .filter((pvo) => pvo.status === statusFilter)
+            .map((pvo) => pvo.pvkDokumentId)
+            .includes(pvk.id)
         )
       }
     } else {
-      setFilteredPvkDokuement(allPvkDocumentListItem)
+      filteredData = allPvkDocumentListItem
     }
-  }, [statusFilter])
+
+    if (seachPvk !== '') {
+      filteredData = filteredData.filter((pvk) => {
+        const pvkName = 'E' + pvk.etterlevelseNummer + ' ' + pvk.title
+
+        return pvkName.toLowerCase().includes(seachPvk.toLowerCase())
+      })
+    }
+
+    setFilteredPvkDokuement(filteredData)
+  }, [statusFilter, seachPvk])
 
   return (
     <div>
@@ -80,13 +89,20 @@ export const PvoTilbakemeldingsList = () => {
               <option value={EPvoTilbakemeldingStatus.UNDERARBEID}>Påbegynt</option>
               <option value={EPvoTilbakemeldingStatus.FERDIG}>Sendt tilbake</option>
             </Select>
+
+            <TextField
+              label=''
+              placeholder='Søk'
+              onChange={(event) => setSearchPvk(event.target.value)}
+              className='w-[75ch]'
+            />
           </div>
           <div className='w-full justify-center my-4'>
             <div className='flex justify-center content-center w-full'>
               <div className='flex justify-start align-middle w-full'>
                 <Label size='medium'>
                   {/* {kravene.totalElements ? kravene.totalElements : 0}  */}
-                  {allPvkDocumentListItem.length} PVK dokumenter
+                  {filteredPvkDokument.length} PVK dokumenter
                 </Label>
               </div>
             </div>
