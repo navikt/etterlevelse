@@ -16,6 +16,7 @@ export const getAllPvoTilbakemelding = async () => {
         ...(await getPvoTilbakemeldingPage(currentPage, pageSize)).content,
       ]
     }
+    return allPvoTilbakemelding
   }
 }
 

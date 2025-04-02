@@ -2,20 +2,32 @@ import { Label, List, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { getAllPvkDokumentListItem } from '../../api/PvkDokumentApi'
-import { EPVO, IPvkDokumentListItem } from '../../constants'
+import { getAllPvoTilbakemelding } from '../../api/PvoApi'
+import { EPVO, EPvkDokumentStatus, IPvkDokumentListItem, IPvoTilbakemelding } from '../../constants'
 import { ListLayout } from '../common/ListLayout'
 import PvoStatusView from './common/PvoStatusView'
 
 export const PvoTilbakemeldingsList = () => {
   const [allPvkDocumentListItem, setAllPvkDocumentListItem] = useState<IPvkDokumentListItem[]>([])
+  const [allPvoTilbakemelding, setAllPvoTilbakemelding] = useState<IPvoTilbakemelding[]>([])
   const [isLoading, setIsLoading] = useState(false)
+
   useEffect(() => {
     ;(async () => {
       setIsLoading(true)
       await getAllPvkDokumentListItem().then((response) => {
-        setAllPvkDocumentListItem(response)
-        setIsLoading(false)
+        setAllPvkDocumentListItem(
+          response.filter(
+            (pvkDok) =>
+              pvkDok.status !== EPvkDokumentStatus.AKTIV &&
+              pvkDok.status !== EPvkDokumentStatus.UNDERARBEID
+          )
+        )
       })
+
+      await getAllPvoTilbakemelding().then((response) => setAllPvoTilbakemelding(response))
+
+      setIsLoading(false)
     })()
   }, [])
 
@@ -36,23 +48,34 @@ export const PvoTilbakemeldingsList = () => {
           </div>
           <List className='mb-2.5 flex flex-col gap-2'>
             {allPvkDocumentListItem &&
-              allPvkDocumentListItem.map((pvkDokument: IPvkDokumentListItem) => (
-                <ListLayout
-                  key={pvkDokument.id}
-                  id={pvkDokument.id}
-                  url={`/pvkdokument/${pvkDokument.id}${EPVO.tilbakemelding}/1`}
-                  documentNumber={`E${pvkDokument.etterlevelseNummer}`}
-                  title={pvkDokument.title}
-                  status={<PvoStatusView status={pvkDokument.status} />}
-                  upperRightField='PVK dokument ble'
-                  changeStamp={
-                    pvkDokument.changeStamp.lastModifiedDate !== undefined &&
-                    pvkDokument.changeStamp.lastModifiedDate !== ''
-                      ? `sist endret: ${moment(pvkDokument.changeStamp.lastModifiedDate).format('ll')}`
-                      : ''
-                  }
-                />
-              ))}
+              allPvkDocumentListItem.map((pvkDokument: IPvkDokumentListItem) => {
+                const pvoTilbakemelding = allPvoTilbakemelding.filter(
+                  (pvo) => pvo.pvkDokumentId === pvkDokument.id
+                )
+                return (
+                  <ListLayout
+                    key={pvkDokument.id}
+                    id={pvkDokument.id}
+                    url={`/pvkdokument/${pvkDokument.id}${EPVO.tilbakemelding}/1`}
+                    documentNumber={`E${pvkDokument.etterlevelseNummer}`}
+                    title={pvkDokument.title}
+                    status={
+                      <PvoStatusView
+                        status={
+                          pvoTilbakemelding.length !== 0 ? pvoTilbakemelding[0].status : undefined
+                        }
+                      />
+                    }
+                    upperRightField='PVK dokument ble'
+                    changeStamp={
+                      pvkDokument.changeStamp.lastModifiedDate !== undefined &&
+                      pvkDokument.changeStamp.lastModifiedDate !== ''
+                        ? `sist endret: ${moment(pvkDokument.changeStamp.lastModifiedDate).format('ll')}`
+                        : ''
+                    }
+                  />
+                )
+              })}
           </List>
         </div>
       )}

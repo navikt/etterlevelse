@@ -1,23 +1,17 @@
 import { Detail, Tag } from '@navikt/ds-react'
-import { EPvkDokumentStatus } from '../../../constants'
+import { EPvoTilbakemeldingStatus } from '../../../constants'
 
 interface IProps {
-  status: EPvkDokumentStatus
+  status?: EPvoTilbakemeldingStatus
 }
 
-export const pvoStatusToText = (status: EPvkDokumentStatus) => {
-  if (!status) return ''
+export const pvoStatusToText = (status?: EPvoTilbakemeldingStatus) => {
+  if (!status) return 'Ikke påbegynt'
   switch (status) {
-    case EPvkDokumentStatus.AKTIV:
-      return 'Under arbeid'
-    case EPvkDokumentStatus.UNDERARBEID:
-      return 'Under arbeid'
-    case EPvkDokumentStatus.SENDT_TIL_PVO:
-      return 'Trenger tilbakemelding'
-    case EPvkDokumentStatus.VURDERT_AV_PVO:
-      return 'Fått tilbakemelding'
-    case EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER:
-      return 'Godkjent av risikoeier'
+    case EPvoTilbakemeldingStatus.UNDERARBEID:
+      return 'Påbegynt'
+    case EPvoTilbakemeldingStatus.FERDIG:
+      return 'Sendt tilbake'
     default:
       return status
   }
@@ -36,15 +30,9 @@ export const PvoStatusView = (props: IProps) => {
   }
 
   switch (status) {
-    case EPvkDokumentStatus.AKTIV:
-      return getStatusDisplay('neutral')
-    case EPvkDokumentStatus.UNDERARBEID:
-      return getStatusDisplay('neutral')
-    case EPvkDokumentStatus.SENDT_TIL_PVO:
+    case EPvoTilbakemeldingStatus.UNDERARBEID:
       return getStatusDisplay('warning')
-    case EPvkDokumentStatus.VURDERT_AV_PVO:
-      return getStatusDisplay('success')
-    case EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER:
+    case EPvoTilbakemeldingStatus.FERDIG:
       return getStatusDisplay('success')
     default:
       return getStatusDisplay('neutral')

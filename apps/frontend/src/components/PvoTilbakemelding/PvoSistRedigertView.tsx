@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import { Label, List, Loader } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
-import { EPVO, EPvkDokumentStatus, IPageResponse, TPvoTilbakemeldingQL } from '../../constants'
+import { EPVO, IPageResponse, TPvoTilbakemeldingQL } from '../../constants'
 import { TPvoVariables, getPvoTilbakemeldingListQuery } from '../../query/PvoTilbakemeldingQuery'
 import { ListLayout } from '../common/ListLayout'
 import PvoStatusView from './common/PvoStatusView'
@@ -56,11 +56,7 @@ export const PvoSistRedigertView = () => {
                   url={`/pvkdokument/${pvoTilbakemelding.pvkDokumentId}${EPVO.tilbakemelding}/1`}
                   documentNumber={`E${pvoTilbakemelding.etterlevelseDokumentasjonData.etterlevelseNummer}`}
                   title={pvoTilbakemelding.etterlevelseDokumentasjonData.title}
-                  status={
-                    <PvoStatusView
-                      status={pvoTilbakemelding.pvkDokumentStatus as EPvkDokumentStatus}
-                    />
-                  }
+                  status={<PvoStatusView status={pvoTilbakemelding.status} />}
                   upperRightField='PVK dokument ble'
                   changeStamp={`sist endret av meg: ${moment(pvoTilbakemelding.sistEndretAvMeg).format('ll')}`}
                 />
