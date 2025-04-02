@@ -116,7 +116,7 @@ public class EtterlevelseDokumentasjonService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon save(EtterlevelseDokumentasjonRequest request) {
-        EtterlevelseDokumentasjon etterlevelseDokumentasjon = request.isUpdate() ? etterlevelseDokumentasjonRepo.getReferenceById(request.getIdAsUUID()) : new EtterlevelseDokumentasjon();
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = request.isUpdate() ? etterlevelseDokumentasjonRepo.getReferenceById(request.getId()) : new EtterlevelseDokumentasjon();
         request.mergeInto(etterlevelseDokumentasjon);
 
         if (!request.isUpdate()) {
@@ -124,7 +124,7 @@ public class EtterlevelseDokumentasjonService {
         }
 
         if (request.isUpdate() && !etterlevelseDokumentasjon.isForGjenbruk()) {
-            var documentRelations = documentRelationService.findByFromDocumentAndRelationType(request.getId(), RelationType.ARVER);
+            var documentRelations = documentRelationService.findByFromDocumentAndRelationType(request.getId().toString(), RelationType.ARVER);
             if (!documentRelations.isEmpty()) {
                 throw new ValidationException("Kan ikke fjerne gjenbruk fordi etterlevelses dokument er arvet av " + documentRelations.size() + " etterlevelsesdokumentasjon.");
             }
@@ -135,7 +135,7 @@ public class EtterlevelseDokumentasjonService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon updateKravPriority(EtterlevelseDokumentasjonRequest request) {
-        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getIdAsUUID());
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getId());
         etterlevelseDokumentasjon.setPrioritertKravNummer(request.getPrioritertKravNummer());
         return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
     }

@@ -13,6 +13,8 @@ import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.UUID;
+
 import static no.nav.data.common.utils.StringUtils.toUpperCaseAndTrim;
 
 @Data
@@ -41,8 +43,7 @@ public class CodelistRequest implements RequestElement {
     private Boolean update;
 
     @JsonIgnore
-    @Override
-    public String getId() {
+    public String getKey() {
         return list + "-" + code;
     }
 
@@ -72,6 +73,13 @@ public class CodelistRequest implements RequestElement {
         validator.checkCodelistCode(Fields.code, getCode());
         validator.checkBlank(Fields.shortName, getShortName());
         validator.checkBlank(Fields.description, getDescription());
+    }
+
+    @Override
+    @JsonIgnore
+    public UUID getId() {
+        // Not applicable for this request
+        return null;
     }
 
 }

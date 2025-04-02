@@ -14,6 +14,7 @@ import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.copyOf;
 import static no.nav.data.common.utils.StreamUtils.duplicates;
@@ -29,7 +30,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @AllArgsConstructor
 public class KravRequest implements RequestElement {
 
-    private String id;
+    private UUID id;
 
     private Integer kravNummer;
     private String navn;
@@ -69,7 +70,6 @@ public class KravRequest implements RequestElement {
 
     @Override
     public void format() {
-        setId(trimToNull(id));
         setNavn(trimToNull(navn));
         setBeskrivelse(trimToNull(beskrivelse));
         setHensikt(trimToNull(hensikt));
@@ -97,7 +97,6 @@ public class KravRequest implements RequestElement {
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(Fields.id, id);
         validator.checkId(this);
         validator.checkBlank(Fields.navn, navn);
         if (nyKravVersjon) {

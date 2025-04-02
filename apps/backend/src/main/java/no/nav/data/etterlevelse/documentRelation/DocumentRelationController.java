@@ -144,7 +144,7 @@ public class DocumentRelationController {
     @PutMapping("/{id}")
     public ResponseEntity<DocumentRelationResponse> updateDocumentRelation(@PathVariable UUID id, @Valid @RequestBody DocumentRelationRequest request) {
         log.debug("Update Document relation id={}", id);
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
         

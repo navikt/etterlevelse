@@ -134,7 +134,7 @@ public class EtterlevelseController {
     @PutMapping("/{id}")
     public ResponseEntity<EtterlevelseResponse> updateEtterlevelse(@PathVariable UUID id, @Valid @RequestBody EtterlevelseRequest request) {
         log.debug("Update Etterlevelse id={}", id);
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 

@@ -115,7 +115,7 @@ public class KravPriorityListController {
     public ResponseEntity<KravPriorityListResponse> updateKravPriorityList(@PathVariable UUID id,@Valid @RequestBody KravPriorityListRequest request) {
         log.info("Update krav priority list id={}", id);
 
-        if (!Objects.equals(id, request.getIdAsUUID())) {
+        if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 

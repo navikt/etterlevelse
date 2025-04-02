@@ -22,7 +22,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @AllArgsConstructor
 public class TiltakRequest implements RequestElement {
 
-    private String id;
+    private UUID id;
     private String pvkDokumentId;
     private String navn;
     private String beskrivelse;
@@ -33,7 +33,6 @@ public class TiltakRequest implements RequestElement {
 
     @Override
     public void format() {
-        setId(trimToNull(id));
         setPvkDokumentId(trimToNull(pvkDokumentId));
         setNavn(trimToNull(navn));
         setBeskrivelse(trimToNull(beskrivelse));
@@ -42,14 +41,13 @@ public class TiltakRequest implements RequestElement {
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(TiltakRequest.Fields.id, id);
         validator.checkUUID(TiltakRequest.Fields.pvkDokumentId, pvkDokumentId);
         validator.checkId(this);
     }
 
     public Tiltak convertToTiltak() {
         return Tiltak.builder()
-                .id(id != null && !id.isEmpty() ? UUID.fromString(id) : null)
+                .id(id)
                 .pvkDokumentId(UUID.fromString(pvkDokumentId))
                 .tiltakData(TiltakData.builder()
                         .navn(navn)

@@ -110,7 +110,7 @@ public class KravService extends DomainService<Krav> {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Krav save(KravRequest request) {
-        var krav = request.isUpdate() ? storage.get(request.getIdAsUUID()) : new Krav();
+        var krav = request.isUpdate() ? storage.get(request.getId()) : new Krav();
 
         krav.merge(request);
 

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -14,6 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RisikoscenarioTiltakRequest {
-    private String risikoscenarioId;
-    private List<String> tiltakIds;
+    private UUID risikoscenarioId;
+    private List<UUID> tiltakIds;
 }

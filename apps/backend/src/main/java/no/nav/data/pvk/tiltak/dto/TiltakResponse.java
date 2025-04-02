@@ -13,6 +13,7 @@ import no.nav.data.pvk.tiltak.domain.TiltakData;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -21,13 +22,13 @@ import java.util.List;
 @JsonPropertyOrder({"id", "pvkDokumentId", "navn", "beskrivelse", "ansvarlig", "frist", "risikoscenarioIds"})
 public class TiltakResponse {
 
-    private String id;
+    private UUID id;
     private String pvkDokumentId;
     private String navn;
     private String beskrivelse;
     private Resource ansvarlig;
     private LocalDate frist;
-    private List<String> risikoscenarioIds; // Merk: Settes ikke i buildFrom
+    private List<UUID> risikoscenarioIds; // Merk: Settes ikke i buildFrom
 
     private ChangeStampResponse changeStamp;
     private Integer version;
@@ -35,7 +36,7 @@ public class TiltakResponse {
     public static TiltakResponse buildFrom(Tiltak tiltak) {
         TiltakData td = tiltak.getTiltakData();
         return builder()
-                .id(tiltak.getId().toString())
+                .id(tiltak.getId())
                 .changeStamp(ChangeStampResponse.builder()
                         .createdDate(tiltak.getCreatedDate() == null ? LocalDateTime.now() : tiltak.getCreatedDate())
                         .lastModifiedBy(tiltak.getLastModifiedBy())

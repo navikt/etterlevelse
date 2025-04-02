@@ -91,7 +91,7 @@ public class EtterlevelseService {
                 .addValidations(this::validateKrav)
                 .ifErrorsThrowValidationException();
 
-        var etterlevelse = request.isUpdate() ? get(request.getIdAsUUID()) : new Etterlevelse();
+        var etterlevelse = request.isUpdate() ? get(request.getId()) : new Etterlevelse();
 
         if (!request.isUpdate()) {
             var existingEtterlevelse = repo.findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.getKravVersjon());
