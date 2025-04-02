@@ -48,7 +48,12 @@ export const ArtOgOmFangSummary = (props: IProps) => {
                   <FormSummary.Answer>
                     <FormSummary.Label>Stemmer disse personkategoriene?</FormSummary.Label>
                     <FormSummary.Value>
-                      {fieldProp.form.values.stemmerPersonkategorier ? 'Ja' : 'Nei'}
+                      {fieldProp.form.values.stemmerPersonkategorier === undefined ||
+                      fieldProp.form.values.stemmerPersonkategorier === null
+                        ? 'Ikke besvart'
+                        : fieldProp.form.values.stemmerPersonkategorier
+                          ? 'Ja'
+                          : 'Nei'}
                     </FormSummary.Value>
                   </FormSummary.Answer>
                 </FormSummary.Answers>

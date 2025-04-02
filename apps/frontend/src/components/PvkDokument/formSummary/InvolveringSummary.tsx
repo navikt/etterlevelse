@@ -53,19 +53,18 @@ export const InvolveringSummary = (props: IProps) => {
                       </List>
                     </FormSummary.Value>
                   </FormSummary.Answer>
-                  <FormSummary.Answer>
-                    <FormSummary.Label>Stemmer disse personkategoriene?</FormSummary.Label>
-                    <FormSummary.Value>
-                      {fieldProp.form.values.stemmerPersonkategorier ? 'Ja' : 'Nei'}
-                    </FormSummary.Value>
-                  </FormSummary.Answer>
 
                   <FormSummary.Answer>
                     <FormSummary.Label>
                       Har dere involvert en representant for de registrerte?
                     </FormSummary.Label>
                     <FormSummary.Value>
-                      {fieldProp.form.values.harInvolvertRepresentant ? 'Ja' : 'Nei'}
+                      {fieldProp.form.values.harInvolvertRepresentant === undefined ||
+                      fieldProp.form.values.harInvolvertRepresentant === null
+                        ? 'Ikke besvart'
+                        : fieldProp.form.values.harInvolvertRepresentant
+                          ? 'Ja'
+                          : 'Nei'}
                     </FormSummary.Value>
                   </FormSummary.Answer>
 
@@ -114,7 +113,13 @@ export const InvolveringSummary = (props: IProps) => {
                       Har dere involvert en representant for databehandlere?
                     </FormSummary.Label>
                     <FormSummary.Value>
-                      {fieldProp.form.values.harDatabehandlerRepresentantInvolvering ? 'Ja' : 'Nei'}
+                      {fieldProp.form.values.harDatabehandlerRepresentantInvolvering ===
+                        undefined ||
+                      fieldProp.form.values.harDatabehandlerRepresentantInvolvering === null
+                        ? 'Ikke besvart'
+                        : fieldProp.form.values.harDatabehandlerRepresentantInvolvering
+                          ? 'Ja'
+                          : 'Nei'}
                     </FormSummary.Value>
                   </FormSummary.Answer>
 
