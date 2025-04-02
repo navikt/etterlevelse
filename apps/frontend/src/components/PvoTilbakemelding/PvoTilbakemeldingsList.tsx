@@ -65,7 +65,12 @@ export const PvoTilbakemeldingsList = () => {
                         }
                       />
                     }
-                    changeStamp={`Sendt inn: ${moment(pvkDokument.changeStamp.createdDate).format('ll')}`}
+                    changeStamp={
+                      pvkDokument.sendtTilPvoDato !== undefined &&
+                      pvkDokument.sendtTilPvoDato !== ''
+                        ? `Sendt inn: ${moment(pvkDokument.sendtTilPvoDato).format('ll')}`
+                        : `Sendt inn: ${moment(pvkDokument.changeStamp.lastModifiedDate).format('ll')}`
+                    }
                   />
                 )
               })}
