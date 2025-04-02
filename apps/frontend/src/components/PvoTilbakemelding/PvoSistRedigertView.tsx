@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { Label, List, Loader } from '@navikt/ds-react'
 import moment from 'moment'
+import { useEffect, useState } from 'react'
 import { EPVO, EPvkDokumentStatus, IPageResponse, TPvoTilbakemeldingQL } from '../../constants'
 import { TPvoVariables, getPvoTilbakemeldingListQuery } from '../../query/PvoTilbakemeldingQuery'
 import { ListLayout } from '../common/ListLayout'
@@ -13,6 +14,19 @@ export const PvoSistRedigertView = () => {
   >(getPvoTilbakemeldingListQuery, {
     variables: { sistRedigert: 20, pageSize: 200 },
   })
+
+  const [sortedPvoTilbakemelding, setSortedPvoTilbakemelding] = useState<TPvoTilbakemeldingQL[]>([])
+
+  useEffect(() => {
+    if (!isLoading && data && data.pvoTilbakemeldinger.numberOfElements !== 0) {
+      //sort wont work without spread copy for some wierd reason
+      setSortedPvoTilbakemelding(
+        [...data.pvoTilbakemeldinger.content].sort((a, b) =>
+          b.sistEndretAvMeg.localeCompare(a.sistEndretAvMeg)
+        )
+      )
+    }
+  }, [isLoading, data])
 
   return (
     <div>
@@ -34,9 +48,8 @@ export const PvoSistRedigertView = () => {
             </div>
           </div>
           <List className='mb-2.5 flex flex-col gap-2'>
-            {data &&
-              data.pvoTilbakemeldinger &&
-              data.pvoTilbakemeldinger.content.map((pvoTilbakemelding: TPvoTilbakemeldingQL) => (
+            {sortedPvoTilbakemelding.length !== 0 &&
+              sortedPvoTilbakemelding.map((pvoTilbakemelding: TPvoTilbakemeldingQL) => (
                 <ListLayout
                   key={pvoTilbakemelding.id}
                   id={pvoTilbakemelding.id}
