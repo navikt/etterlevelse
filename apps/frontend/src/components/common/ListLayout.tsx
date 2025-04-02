@@ -54,7 +54,7 @@ export const ListLayout2 = ({ id, url, title, status, changeStamp }: IPropsLayou
   <List.Item icon={<div />} className='mb-0' key={id}>
     <LinkPanel href={url}>
       <LinkPanel.Title className='flex items-center'>
-        <div className='max-w-xl'>
+        <div className='max-w-[75ch] w-full'>
           <BodyLong>
             <Label>{title}</Label>
           </BodyLong>
