@@ -42,7 +42,7 @@ public class PvoTilbakemeldingRepoCustom {
                               ) sub
                          order by time desc
                          limit :limit
-                    ))
+                    )
                     """;
             par.addValue("limit", filter.getSistRedigert() -1)
                     .addValue("user_id", SecurityUtils.getCurrentIdent() + "%");
