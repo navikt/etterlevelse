@@ -2,6 +2,7 @@ import { Label, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { EPVO, IPvkDokumentListItem } from '../../constants'
+import PvoSistRedigertView from '../PvoTilbakemelding/PvoSistRedigertView'
 import { PvoTilbakemeldingsList } from './PvoTilbakemeldingsList'
 
 type TSection = 'siste' | 'alle'
@@ -37,7 +38,7 @@ const PvoTabs = ({ allPvkDocumentListItem, isLoading }: IProps) => {
         <Tabs.Tab value='alle' label='Alle PVKer' />
       </Tabs.List>
       <Tabs.Panel value='siste'>
-        HER SKAL DET VÆRE SISTE REDIGERTE {/* <SistRedigertKrav /> */}
+        <PvoSistRedigertView />
       </Tabs.Panel>
       <Tabs.Panel value='alle'>
         <div className='w-full justify-center my-4'>

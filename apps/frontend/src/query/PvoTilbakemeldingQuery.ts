@@ -36,3 +36,9 @@ export const getPvoTilbakemeldingListQuery = gql`
     }
   }
 `
+
+export type TPvoVariables = {
+  pageNumber?: number
+  pageSize?: number
+  sistRedigert?: number
+}
