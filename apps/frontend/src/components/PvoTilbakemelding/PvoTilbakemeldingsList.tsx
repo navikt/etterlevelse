@@ -1,4 +1,4 @@
-import { Label, List, Select, Skeleton, TextField } from '@navikt/ds-react'
+import { Label, List, Search, Select, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { getAllPvkDokumentListItem } from '../../api/PvkDokumentApi'
@@ -77,10 +77,9 @@ export const PvoTilbakemeldingsList = () => {
       {isLoading && <Skeleton variant='rectangle' />}
       {!isLoading && (
         <div>
-          <div id='pvo filter' className='flex items-end w-full gap-6 py-2'>
-            <Label className='pb-3'>Filtrèr:</Label>
+          <div id='pvo filter' className='flex items-end w-full gap-11 pb-5 pt-8 pl-7'>
             <Select
-              label='Velg status'
+              label='Filtrér status'
               value={statusFilter}
               onChange={(event) => setStatusFilter(event.target.value)}
             >
@@ -90,14 +89,15 @@ export const PvoTilbakemeldingsList = () => {
               <option value={EPvoTilbakemeldingStatus.FERDIG}>Sendt tilbake</option>
             </Select>
 
-            <TextField
-              label=''
-              placeholder='Søk'
-              onChange={(event) => setSearchPvk(event.target.value)}
+            <Search
+              label='Søk'
+              variant='secondary'
+              onChange={(value) => setSearchPvk(value)}
               className='w-[75ch]'
+              hideLabel={false}
             />
           </div>
-          <div className='w-full justify-center my-4'>
+          <div className='w-full justify-center my-4 pl-7'>
             <div className='flex justify-center content-center w-full'>
               <div className='flex justify-start align-middle w-full'>
                 <Label size='medium'>

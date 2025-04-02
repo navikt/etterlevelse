@@ -51,7 +51,7 @@ export const ListLayout = ({
 )
 
 export const ListLayout2 = ({ id, url, title, status, changeStamp }: IPropsLayout2) => (
-  <List.Item icon={<div />} className='mb-0' key={id}>
+  <List.Item icon={<div />} className='mb-2' key={id}>
     <LinkPanel href={url}>
       <LinkPanel.Title className='flex items-center'>
         <div className='max-w-[75ch] w-full'>

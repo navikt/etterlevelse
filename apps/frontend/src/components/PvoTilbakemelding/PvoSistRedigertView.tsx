@@ -40,7 +40,7 @@ export const PvoSistRedigertView = () => {
         <div>
           <div className='w-full justify-center my-4'>
             <div className='flex justify-center content-center w-full'>
-              <div className='flex justify-start align-middle w-full'>
+              <div className='flex justify-start align-middle w-full pl-7'>
                 <Label size='medium'>
                   {data?.pvoTilbakemeldinger.numberOfElements} PVK dokumenter
                 </Label>
