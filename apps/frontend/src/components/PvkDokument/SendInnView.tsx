@@ -11,7 +11,7 @@ import {
 } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
-import { useEffect, useRef, useState } from 'react'
+import { FunctionComponent, useEffect, useRef, useState } from 'react'
 import {
   getBehandlingensLivslopByEtterlevelseDokumentId,
   mapBehandlingensLivslopToFormValue,
@@ -34,13 +34,15 @@ import {
 } from '../../constants'
 import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
+import { risikoscenarioFieldCheck } from '../risikoscenario/common/util'
 import FormButtons from './edit/FormButtons'
 import pvkDocumentSchema from './edit/pvkDocumentSchema'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
 import InvolveringSummary from './formSummary/InvolveringSummary'
+import RisikoscenarioEtterTitak from './formSummary/RisikoscenarioEtterTiltakSummary'
 import RisikoscenarioSummary from './formSummary/RisikoscenarioSummary'
 
-interface IProps {
+type TProps = {
   pvkDokument: IPvkDokument
   setPvkDokument: (state: IPvkDokument) => void
   updateTitleUrlAndStep: (step: number) => void
@@ -53,20 +55,18 @@ interface IProps {
   pvoTilbakemelding?: IPvoTilbakemelding
 }
 
-export const SendInnView = (props: IProps) => {
-  const {
-    pvkDokument,
-    setPvkDokument,
-    updateTitleUrlAndStep,
-    personkategorier,
-    databehandlere,
-    etterlevelseDokumentasjonId,
-    activeStep,
-    setActiveStep,
-    setSelectedStep,
-    pvoTilbakemelding,
-  } = props
-
+export const SendInnView: FunctionComponent<TProps> = ({
+  pvkDokument,
+  setPvkDokument,
+  updateTitleUrlAndStep,
+  personkategorier,
+  databehandlere,
+  etterlevelseDokumentasjonId,
+  activeStep,
+  setActiveStep,
+  setSelectedStep,
+  pvoTilbakemelding,
+}) => {
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [alleRisikoscenario, setAlleRisikoscenario] = useState<IRisikoscenario[]>([])
   const [alleTiltak, setAlleTitltak] = useState<ITiltak[]>([])
@@ -112,16 +112,6 @@ export const SendInnView = (props: IProps) => {
   }
 
   const risikoscenarioCheck = () => {
-    const risikoscenarioFieldCheck = (risiko: IRisikoscenario) => {
-      return (
-        risiko.beskrivelse !== '' &&
-        risiko.konsekvensNivaa !== 0 &&
-        risiko.konsekvensNivaaBegrunnelse !== '' &&
-        risiko.sannsynlighetsNivaa !== 0 &&
-        risiko.sannsynlighetsNivaaBegrunnelse !== ''
-      )
-    }
-
     if (alleRisikoscenario.length === 0) {
       setRisikoscenarioError('Må ha minst 1 risikoscenario')
     } else {
@@ -230,6 +220,8 @@ export const SendInnView = (props: IProps) => {
                 alleRisikoscenario={alleRisikoscenario}
                 alleTiltak={alleTiltak}
               />
+
+              <RisikoscenarioEtterTitak alleRisikoscenario={alleRisikoscenario} />
 
               {underarbeidCheck && (
                 <div className='mt-5 mb-3 max-w-[75ch]'>
