@@ -42,6 +42,41 @@ export const PvoTilbakemeldingsList = () => {
   }, [])
 
   useEffect(() => {
+    const unsortedData: any = [
+      ...allPvkDocumentListItem.map((pvk) => {
+        const pvoTilbakemelding = allPvoTilbakemelding.filter((pvo) => pvo.pvkDokumentId === pvk.id)
+        return {
+          ...pvk,
+          dateToCompare:
+            pvoTilbakemelding.length !== 0 &&
+            pvoTilbakemelding[0].status === EPvoTilbakemeldingStatus.FERDIG
+              ? pvoTilbakemelding[0].sendtDato
+              : pvk.sendtTilPvoDato !== null && pvk.sendtTilPvoDato !== ''
+                ? pvk.sendtTilPvoDato
+                : pvk.changeStamp.lastModifiedDate,
+        }
+      }),
+    ]
+
+    const sortedPvk: IPvkDokumentListItem[] = unsortedData
+      .sort((a: any, b: any) => a.dateToCompare.localeCompare(b.dateToCompare))
+      .map((data: any) => {
+        return {
+          id: data.id,
+          changeStamp: data.changeStamp,
+          etterlevelseDokumentId: data.etterlevelseDokumentId,
+          status: data.status,
+          title: data.title,
+          etterlevelseNummer: data.etterlevelseNummer,
+          sendtTilPvoDato: data.sendtTilPvoDato,
+        } as IPvkDokumentListItem
+      })
+
+    setAllPvkDocumentListItem(sortedPvk)
+    setFilteredPvkDokuement(sortedPvk)
+  }, [allPvoTilbakemelding])
+
+  useEffect(() => {
     let filteredData: IPvkDokumentListItem[] = allPvkDocumentListItem
 
     if (statusFilter !== 'alle') {
