@@ -90,9 +90,13 @@ export const SendInnView: FunctionComponent<TProps> = ({
             ? response.status
             : pvkDokument.status
 
-        const updatedPvkDokument = {
+        const updatedPvkDokument: IPvkDokument = {
           ...response,
           status: updatedStatus,
+          sendtTilPvoDato:
+            updatedStatus === EPvkDokumentStatus.SENDT_TIL_PVO
+              ? new Date().toISOString()
+              : response.sendtTilPvoDato,
           merknadTilPvoEllerRisikoeier: pvkDokument.merknadTilPvoEllerRisikoeier,
         }
 
