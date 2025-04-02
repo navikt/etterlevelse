@@ -154,13 +154,14 @@ public abstract class IntegrationTestBase {
         repository.deleteAll();
         MockFilter.clearUser();
         etterlevelseRepo.deleteAll();
-        etterlevelseDokumentasjonRepo.deleteAll();
         behandlingensLivslopRepo.deleteAll();
         tiltakRepo.deleteAllTiltakRisikoscenarioRelations();
         tiltakRepo.deleteAll();
         risikoscenarioRepo.deleteAll();
         pvoTilbakemeldingRepo.deleteAll();
         pvkDokumentRepo.deleteAll();
+        dokumentRelasjonRepository.deleteAll();
+        etterlevelseDokumentasjonRepo.deleteAll();
     }
 
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -212,7 +213,7 @@ public abstract class IntegrationTestBase {
         return etterlevelseDokumentasjonService.save(
                 EtterlevelseDokumentasjonRequest.builder()
                         .title("test dokumentasjon")
-                        .etterlevelseNummer(101)
+                        .etterlevelseNummer(101) // Note: This will be overwritten
                         .knyttetTilVirkemiddel(false)
                         .virkemiddelId("")
                         .beskrivelse("")
