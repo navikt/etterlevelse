@@ -71,7 +71,7 @@ export const SendInnView = (props: IProps) => {
   const [alleRisikoscenario, setAlleRisikoscenario] = useState<IRisikoscenario[]>([])
   const [alleTiltak, setAlleTitltak] = useState<ITiltak[]>([])
   const [behandlingensLivslopError, setBehandlingensLivslopError] = useState<boolean>(false)
-
+  const [risikoscenarioError, setRisikoscenarioError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
 
@@ -80,7 +80,7 @@ export const SendInnView = (props: IProps) => {
     pvkDokument.status === EPvkDokumentStatus.AKTIV
 
   const submit = async (pvkDokument: IPvkDokument) => {
-    if (!behandlingensLivslopError) {
+    if (!behandlingensLivslopError && risikoscenarioError === '') {
       await getPvkDokument(pvkDokument.id).then((response) => {
         const updatedStatus =
           pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
@@ -108,6 +108,55 @@ export const SendInnView = (props: IProps) => {
       setBehandlingensLivslopError(true)
     } else {
       setBehandlingensLivslopError(false)
+    }
+  }
+
+  const risikoscenarioCheck = () => {
+    const risikoscenarioFieldCheck = (risiko: IRisikoscenario) => {
+      return (
+        risiko.beskrivelse !== '' &&
+        risiko.konsekvensNivaa !== 0 &&
+        risiko.konsekvensNivaaBegrunnelse !== '' &&
+        risiko.sannsynlighetsNivaa !== 0 &&
+        risiko.sannsynlighetsNivaaBegrunnelse !== ''
+      )
+    }
+
+    if (alleRisikoscenario.length === 0) {
+      setRisikoscenarioError('Må ha minst 1 risikoscenario')
+    } else {
+      const risikoscenarioMedIngenTiltak = alleRisikoscenario.filter((risiko) => risiko.ingenTiltak)
+      const risikoscenarioMedTiltak = alleRisikoscenario.filter((risiko) => !risiko.ingenTiltak)
+      if (risikoscenarioMedIngenTiltak.length === 0 && risikoscenarioMedTiltak.length !== 0) {
+        const ferdigVurdertRisikoscenario = risikoscenarioMedTiltak.filter((risiko) => {
+          return (
+            risiko.tiltakIds.length !== 0 &&
+            risikoscenarioFieldCheck(risiko) &&
+            risiko.sannsynlighetsNivaaEtterTiltak !== 0 &&
+            risiko.konsekvensNivaaEtterTiltak !== 0 &&
+            risiko.nivaaBegrunnelseEtterTiltak !== ''
+          )
+        })
+        if (ferdigVurdertRisikoscenario.length === 0) {
+          setRisikoscenarioError('Må ha minst 1 ferdig vurdert risikoscenario')
+        } else {
+          setRisikoscenarioError('')
+        }
+      } else if (
+        risikoscenarioMedIngenTiltak.length !== 0 &&
+        risikoscenarioMedTiltak.length === 0
+      ) {
+        const ferdigVurdertRisikoscenario = risikoscenarioMedIngenTiltak.filter((risiko) => {
+          return risikoscenarioFieldCheck(risiko)
+        })
+        if (ferdigVurdertRisikoscenario.length === 0) {
+          setRisikoscenarioError('Må ha minst 1 ferdig skrevet risikoscenario')
+        } else {
+          setRisikoscenarioError('')
+        }
+      } else {
+        setRisikoscenarioError('')
+      }
     }
   }
 
@@ -146,6 +195,7 @@ export const SendInnView = (props: IProps) => {
       validate={(value) => {
         try {
           behandlingensLivslopFieldCheck()
+          risikoscenarioCheck()
           validateYupSchema(value, pvkDocumentSchema(), true)
         } catch (err) {
           return yupToFormErrors(err)
@@ -229,7 +279,9 @@ export const SendInnView = (props: IProps) => {
                 </Alert>
               )}
 
-              {(Object.values(errors).some(Boolean) || behandlingensLivslopError) && (
+              {(Object.values(errors).some(Boolean) ||
+                behandlingensLivslopError ||
+                risikoscenarioError !== '') && (
                 <ErrorSummary
                   ref={errorSummaryRef}
                   heading='Du må rette disse feilene før du kan fortsette'
@@ -246,6 +298,9 @@ export const SendInnView = (props: IProps) => {
                         {error as string}
                       </ErrorSummary.Item>
                     ))}
+                  {risikoscenarioError !== '' && (
+                    <ErrorSummary.Item>{risikoscenarioError}</ErrorSummary.Item>
+                  )}
                 </ErrorSummary>
               )}
 
