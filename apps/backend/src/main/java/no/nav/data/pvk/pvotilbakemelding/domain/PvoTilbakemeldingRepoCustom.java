@@ -32,13 +32,12 @@ public class PvoTilbakemeldingRepoCustom {
                      and id in (
                        select cast(pvoTilbakemeldingId as uuid)
                          from (
-                                  select distinct on (data #>> '{data,id}') data #>> '{data,id}' pvoTilbakemeldingId, time
+                                  select distinct on (data ->> 'id') data ->> 'id' pvoTilbakemeldingId, time
                                   from audit_version
                                   where table_name = 'PVO_TILBAKEMELDING'
                                     and user_id like :user_id
-                                    and data #>> '{data,id}' is not null -- old data that lacks this field, probably only dev
                                     and exists (select 1 from pvo_tilbakemelding where id = cast(table_id as uuid))
-                                  order by data #>> '{data,id}', time desc
+                                  order by data ->> 'id', time desc
                               ) sub
                          order by time desc
                          limit :limit

@@ -11,7 +11,7 @@ export const PvoSistRedigertView = () => {
     { pvoTilbakemeldinger: IPageResponse<TPvoTilbakemeldingQL> },
     TPvoVariables
   >(getPvoTilbakemeldingListQuery, {
-    variables: { sistRedigert: 20 },
+    variables: { sistRedigert: 20, pageSize: 200 },
   })
 
   return (
