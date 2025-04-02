@@ -76,31 +76,29 @@ public class EtterlevelseDokumentasjonRepoCustom {
 
         if (filter.getSistRedigert() != null) {
             query += """
-                     and (data ->> 'id' in (
-                       select etterlevelseDokumentasjonId
+                     and (id in (
+                       select cast(etterlevelseDokumentasjonId as uuid)
                          from (
-                                  select distinct on (data #>> '{data,etterlevelseDokumentasjonId}') data #>> '{data,etterlevelseDokumentasjonId}' etterlevelseDokumentasjonId, time
+                                  select distinct on (data ->> 'etterlevelseDokumentasjonId') data ->> 'etterlevelseDokumentasjonId' etterlevelseDokumentasjonId, time
                                   from audit_version
-                                  where table_name in ('Etterlevelse', 'ETTERLEVELSE')
+                                  where table_name = 'ETTERLEVELSE'
                                     and user_id like :user_id
-                                    and data #>> '{data,etterlevelseDokumentasjonId}' is not null -- old data that lacks this field, probably only dev
                                     and exists (select 1 from etterlevelse_dokumentasjon where id = cast(table_id as uuid))
-                                  order by data #>> '{data,etterlevelseDokumentasjonId}', time desc
+                                  order by data ->> 'etterlevelseDokumentasjonId', time desc
                               ) sub
                          order by time desc
                          limit :limit
                     )
                     
-                    or data ->> 'id' in (
-                       select etterlevelseDokumentasjonId
+                    or id in (
+                       select cast(etterlevelseDokumentasjonId as uuid)
                          from (
-                                  select distinct on (data #>> '{data,id}') data #>> '{data,id}' etterlevelseDokumentasjonId, time
+                                  select distinct on (data ->> 'id') data ->> 'id' etterlevelseDokumentasjonId, time
                                   from audit_version
                                   where table_name in ('EtterlevelseDokumentasjon', 'ETTERLEVELSE_DOKUMENTASJON')
                                     and user_id like :user_id
-                                    and data #>> '{data,id}' is not null -- old data that lacks this field, probably only dev
                                     and exists (select 1 from etterlevelse_dokumentasjon where id = cast(table_id as uuid))
-                                  order by data #>> '{data,id}', time desc
+                                  order by data ->> 'id', time desc
                               ) sub
                          order by time desc
                          limit :limit
