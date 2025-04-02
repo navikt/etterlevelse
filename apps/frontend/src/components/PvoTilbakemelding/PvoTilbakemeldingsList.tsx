@@ -3,34 +3,35 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { getAllPvkDokumentListItem } from '../../api/PvkDokumentApi'
 import { getAllPvoTilbakemelding } from '../../api/PvoApi'
-import { EPVO, EPvkDokumentStatus, IPvkDokumentListItem, IPvoTilbakemelding } from '../../constants'
+import {
+  EPVO,
+  EPvkDokumentStatus,
+  EPvoTilbakemeldingStatus,
+  IPvkDokumentListItem,
+  IPvoTilbakemelding,
+} from '../../constants'
 import { ListLayout2 } from '../common/ListLayout'
 import PvoStatusView from './common/PvoStatusView'
-
-enum EStatusFilter {
-  ALLE = 'ALLE',
-  IKKE_PAABEGYNT = 'IKKE_PABEGYNT',
-  PAABEGYNT = 'PABEGYNT',
-  SENDT_TILBAKE = 'SENDT_TILBAKE',
-}
 
 export const PvoTilbakemeldingsList = () => {
   const [allPvkDocumentListItem, setAllPvkDocumentListItem] = useState<IPvkDokumentListItem[]>([])
   const [allPvoTilbakemelding, setAllPvoTilbakemelding] = useState<IPvoTilbakemelding[]>([])
-  const [statusFilter, setStatusFilter] = useState<EStatusFilter>(EStatusFilter.ALLE)
+  const [statusFilter, setStatusFilter] = useState<string>('alle')
+
+  const [filteredPvkDokument, setFilteredPvkDokuement] = useState<IPvkDokumentListItem[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     ;(async () => {
       setIsLoading(true)
       await getAllPvkDokumentListItem().then((response) => {
-        setAllPvkDocumentListItem(
-          response.filter(
-            (pvkDok) =>
-              pvkDok.status !== EPvkDokumentStatus.AKTIV &&
-              pvkDok.status !== EPvkDokumentStatus.UNDERARBEID
-          )
+        const filteredPvkDokument = response.filter(
+          (pvkDok) =>
+            pvkDok.status !== EPvkDokumentStatus.AKTIV &&
+            pvkDok.status !== EPvkDokumentStatus.UNDERARBEID
         )
+        setAllPvkDocumentListItem(filteredPvkDokument)
+        setFilteredPvkDokuement(filteredPvkDokument)
       })
 
       await getAllPvoTilbakemelding().then((response) => setAllPvoTilbakemelding(response))
@@ -38,6 +39,29 @@ export const PvoTilbakemeldingsList = () => {
       setIsLoading(false)
     })()
   }, [])
+
+  useEffect(() => {
+    if (statusFilter !== 'alle') {
+      if (statusFilter === 'ikke_påbegynt') {
+        setFilteredPvkDokuement(
+          allPvkDocumentListItem.filter(
+            (pvk) => !allPvoTilbakemelding.map((pvo) => pvo.pvkDokumentId).includes(pvk.id)
+          )
+        )
+      } else {
+        setFilteredPvkDokuement(
+          allPvkDocumentListItem.filter((pvk) =>
+            allPvoTilbakemelding
+              .filter((pvo) => pvo.status === statusFilter)
+              .map((pvo) => pvo.pvkDokumentId)
+              .includes(pvk.id)
+          )
+        )
+      }
+    } else {
+      setFilteredPvkDokuement(allPvkDocumentListItem)
+    }
+  }, [statusFilter])
 
   return (
     <div>
@@ -49,12 +73,12 @@ export const PvoTilbakemeldingsList = () => {
             <Select
               label='Velg status'
               value={statusFilter}
-              onChange={(event) => setStatusFilter(event.target.value as EStatusFilter)}
+              onChange={(event) => setStatusFilter(event.target.value)}
             >
-              <option value={EStatusFilter.ALLE}>Alle</option>
-              <option value={EStatusFilter.IKKE_PAABEGYNT}>Ikke påbegynt</option>
-              <option value={EStatusFilter.PAABEGYNT}>Påbegynt</option>
-              <option value={EStatusFilter.SENDT_TILBAKE}>Sendt tilbake</option>
+              <option value='alle'>Alle</option>
+              <option value='ikke_påbegynt'>Ikke påbegynt</option>
+              <option value={EPvoTilbakemeldingStatus.UNDERARBEID}>Påbegynt</option>
+              <option value={EPvoTilbakemeldingStatus.FERDIG}>Sendt tilbake</option>
             </Select>
           </div>
           <div className='w-full justify-center my-4'>
@@ -68,8 +92,8 @@ export const PvoTilbakemeldingsList = () => {
             </div>
           </div>
           <List className='mb-2.5 flex flex-col gap-2'>
-            {allPvkDocumentListItem &&
-              allPvkDocumentListItem.map((pvkDokument: IPvkDokumentListItem) => {
+            {filteredPvkDokument &&
+              filteredPvkDokument.map((pvkDokument: IPvkDokumentListItem) => {
                 const pvoTilbakemelding = allPvoTilbakemelding.filter(
                   (pvo) => pvo.pvkDokumentId === pvkDokument.id
                 )
