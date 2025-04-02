@@ -155,5 +155,6 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     dataBehandlerRepresentantInvolveringBeskrivelse:
       pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse || '',
     merknadTilPvoEllerRisikoeier: pvkDokument.merknadTilPvoEllerRisikoeier || '',
+    sendtTilPvoDato: pvkDokument.sendtTilPvoDato || '',
   }
 }

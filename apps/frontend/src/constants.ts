@@ -538,6 +538,7 @@ export interface IPvkDokument {
   dataBehandlerRepresentantInvolveringBeskrivelse: string
 
   merknadTilPvoEllerRisikoeier: string
+  sendtTilPvoDato: string
 }
 
 export interface IPvkDokumentListItem {
@@ -547,6 +548,7 @@ export interface IPvkDokumentListItem {
   status: EPvkDokumentStatus
   title: string
   etterlevelseNummer: number
+  sendtTilPvoDato: string
 }
 
 export interface IRisikoscenario {

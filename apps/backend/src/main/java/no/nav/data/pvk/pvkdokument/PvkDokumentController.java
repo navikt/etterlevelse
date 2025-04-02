@@ -65,6 +65,7 @@ public class PvkDokumentController {
                             .title(etterlevelseDokumentasjon.getTitle())
                             .etterlevelseNummer(etterlevelseDokumentasjon.getEtterlevelseNummer())
                             .status(pvkDokument.getStatus())
+                            .sendtTilPvoDato(pvkDokument.getPvkDokumentData().getSendtTilPvoDato())
                             .changeStamp(ChangeStampResponse.builder()
                                     .createdDate(pvkDokument.getCreatedDate() == null ? LocalDateTime.now() : pvkDokument.getCreatedDate())
                                     .lastModifiedBy(pvkDokument.getLastModifiedBy())

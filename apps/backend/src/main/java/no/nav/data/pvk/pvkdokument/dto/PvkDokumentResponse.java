@@ -43,6 +43,7 @@ public class PvkDokumentResponse {
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
     private String merknadTilPvoEllerRisikoeier;
+    private LocalDateTime sendtTilPvoDato;
 
     public static PvkDokumentResponse buildFrom(PvkDokument pvkDokument) {
         return PvkDokumentResponse.builder()
@@ -68,6 +69,7 @@ public class PvkDokumentResponse {
                 .harDatabehandlerRepresentantInvolvering(pvkDokument.getPvkDokumentData().getHarDatabehandlerRepresentantInvolvering())
                 .dataBehandlerRepresentantInvolveringBeskrivelse(pvkDokument.getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse())
                 .merknadTilPvoEllerRisikoeier(pvkDokument.getPvkDokumentData().getMerknadTilPvoEllerRisikoeier())
+                .sendtTilPvoDato(pvkDokument.getPvkDokumentData().getSendtTilPvoDato())
                 .build();
     }
 

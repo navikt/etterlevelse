@@ -11,6 +11,14 @@ interface IProps {
   changeStamp: string
 }
 
+interface IPropsLayout2 {
+  id: string
+  url: string
+  title: string
+  status: JSX.Element
+  changeStamp: string
+}
+
 export const ListLayout = ({
   id,
   url,
@@ -37,6 +45,23 @@ export const ListLayout = ({
           </BodyShort>
           <BodyShort size='small'>{changeStamp}</BodyShort>
         </div>
+      </LinkPanel.Title>
+    </LinkPanel>
+  </List.Item>
+)
+
+export const ListLayout2 = ({ id, url, title, status, changeStamp }: IPropsLayout2) => (
+  <List.Item icon={<div />} className='mb-0' key={id}>
+    <LinkPanel href={url}>
+      <LinkPanel.Title className='flex items-center'>
+        <div className='max-w-xl'>
+          <BodyLong>
+            <Label>{title}</Label>
+          </BodyLong>
+          <BodyShort size='small'>{changeStamp}</BodyShort>
+        </div>
+        <Spacer />
+        <div className='mr-5'>{status}</div>
       </LinkPanel.Title>
     </LinkPanel>
   </List.Item>

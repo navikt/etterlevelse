@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { getAllPvkDokumentListItem } from '../../api/PvkDokumentApi'
 import { getAllPvoTilbakemelding } from '../../api/PvoApi'
 import { EPVO, EPvkDokumentStatus, IPvkDokumentListItem, IPvoTilbakemelding } from '../../constants'
-import { ListLayout } from '../common/ListLayout'
+import { ListLayout2 } from '../common/ListLayout'
 import PvoStatusView from './common/PvoStatusView'
 
 export const PvoTilbakemeldingsList = () => {
@@ -53,12 +53,11 @@ export const PvoTilbakemeldingsList = () => {
                   (pvo) => pvo.pvkDokumentId === pvkDokument.id
                 )
                 return (
-                  <ListLayout
+                  <ListLayout2
                     key={pvkDokument.id}
                     id={pvkDokument.id}
                     url={`/pvkdokument/${pvkDokument.id}${EPVO.tilbakemelding}/1`}
-                    documentNumber={`E${pvkDokument.etterlevelseNummer}`}
-                    title={pvkDokument.title}
+                    title={`E${pvkDokument.etterlevelseNummer} ${pvkDokument.title}`}
                     status={
                       <PvoStatusView
                         status={
@@ -66,13 +65,7 @@ export const PvoTilbakemeldingsList = () => {
                         }
                       />
                     }
-                    upperRightField='PVK dokument ble'
-                    changeStamp={
-                      pvkDokument.changeStamp.lastModifiedDate !== undefined &&
-                      pvkDokument.changeStamp.lastModifiedDate !== ''
-                        ? `sist endret: ${moment(pvkDokument.changeStamp.lastModifiedDate).format('ll')}`
-                        : ''
-                    }
+                    changeStamp={`Sendt inn: ${moment(pvkDokument.changeStamp.createdDate).format('ll')}`}
                   />
                 )
               })}

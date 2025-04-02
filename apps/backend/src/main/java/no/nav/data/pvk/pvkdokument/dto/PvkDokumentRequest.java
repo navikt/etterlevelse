@@ -11,6 +11,7 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,6 +43,7 @@ public class PvkDokumentRequest implements RequestElement {
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
     private String merknadTilPvoEllerRisikoeier;
+    private LocalDateTime sendtTilPvoDato;
 
     private Boolean update;
 
@@ -86,6 +88,7 @@ public class PvkDokumentRequest implements RequestElement {
                 .harDatabehandlerRepresentantInvolvering(harDatabehandlerRepresentantInvolvering)
                 .dataBehandlerRepresentantInvolveringBeskrivelse(dataBehandlerRepresentantInvolveringBeskrivelse)
                 .merknadTilPvoEllerRisikoeier(merknadTilPvoEllerRisikoeier)
+                .sendtTilPvoDato(sendtTilPvoDato)
                 .build();
 
         return PvkDokument.builder()
@@ -111,6 +114,6 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.getPvkDokumentData().setHarDatabehandlerRepresentantInvolvering(harDatabehandlerRepresentantInvolvering);
         pvkDokumentToMerge.getPvkDokumentData().setDataBehandlerRepresentantInvolveringBeskrivelse(dataBehandlerRepresentantInvolveringBeskrivelse);
         pvkDokumentToMerge.getPvkDokumentData().setMerknadTilPvoEllerRisikoeier(merknadTilPvoEllerRisikoeier);
-
+        pvkDokumentToMerge.getPvkDokumentData().setSendtTilPvoDato(sendtTilPvoDato);
     }
 }

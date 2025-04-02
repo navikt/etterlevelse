@@ -9,6 +9,7 @@ import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -34,6 +35,8 @@ public class PvkDokumentData {
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
     private String merknadTilPvoEllerRisikoeier;
+
+    private LocalDateTime sendtTilPvoDato;
 
     public List<CodelistResponse> ytterligereEgenskaperAsCodes() {
         return CodelistService.getCodelistResponseList(ListName.YTTERLIGERE_EGENSKAPER, ytterligereEgenskaper);

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -22,4 +23,5 @@ public class PvkDokumentListItemResponse {
     private Integer etterlevelseNummer;
     private String title;
     private PvkDokumentStatus status;
+    private LocalDateTime sendtTilPvoDato;
 }
