@@ -37,10 +37,10 @@ public class DocumentRelation extends Auditable {
     private RelationType relationType;
 
     @Column(name = "FROM_DOCUMENT", nullable = false)
-    private String fromDocument;
+    private UUID fromDocument;
 
     @Column(name = "TO_DOCUMENT", nullable = false)
-    private String toDocument;
+    private UUID toDocument;
 
     @Type(value = JsonBinaryType.class)
     @Column(name = "DATA")

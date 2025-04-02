@@ -13,8 +13,6 @@ import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 
 import java.util.UUID;
 
-import static org.apache.commons.lang3.StringUtils.trimToNull;
-
 @Data
 @Builder
 @FieldNameConstants
@@ -22,13 +20,14 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @AllArgsConstructor
 public class DocumentRelationRequest implements RequestElement {
 
-    private UUID id;
+    @Builder.Default
+    private UUID id = UUID.randomUUID();
 
     private RelationType relationType;
 
-    private String fromDocument;
+    private UUID fromDocument;
 
-    private String toDocument;
+    private UUID toDocument;
 
     private JsonNode data;
 
@@ -37,14 +36,12 @@ public class DocumentRelationRequest implements RequestElement {
 
     @Override
     public void format(){
-        setFromDocument(trimToNull(fromDocument));
-        setToDocument(trimToNull(toDocument));
     };
 
     @Override
     public void validateFieldValues(Validator<?>validator) {
-        validator.checkUUID(Fields.fromDocument, fromDocument);
-        validator.checkUUID(Fields.toDocument, toDocument);
+        validator.checkNull(Fields.fromDocument, fromDocument);
+        validator.checkNull(Fields.toDocument, toDocument);
     };
     
     public DocumentRelation toDocumentRelation() {
