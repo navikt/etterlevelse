@@ -12,6 +12,7 @@ import {
 } from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
 import { ExternalLink } from '../common/RouteLink'
+import { pvkDokumentasjonPvkBehovUrl, pvkEditUrl } from '../common/RouteLinkPvk'
 import PvoFormButtons from './edit/PvoFormButtons'
 
 interface IProps {
@@ -128,7 +129,10 @@ export const OversiktView = (props: IProps) => {
               <FormSummary.Value>
                 {/* TODO: lage et readonly url/komponent for pvkdokument vurderings side */}
                 <ExternalLink
-                  href={`/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/pvkbehov/${pvkDokument.id}`}
+                  href={pvkDokumentasjonPvkBehovUrl(
+                    pvkDokument.etterlevelseDokumentId,
+                    pvkDokument.id
+                  )}
                 >
                   Vurdér behov for PVK
                 </ExternalLink>
@@ -246,7 +250,7 @@ export const OversiktView = (props: IProps) => {
               Dere har ikke lagt inn en risikoeier. Dere må gjøre dette før dere sender PVK-en til
               Personvernombudet. Dere kan redigere deltakere og ansvarlige under
               <Link
-                href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
+                href={pvkEditUrl(etterlevelseDokumentasjon.id)}
                 target='_blank'
                 rel='noopener noreferrer'
                 aria-label='redigere etterlevelsesdokumentasjon'

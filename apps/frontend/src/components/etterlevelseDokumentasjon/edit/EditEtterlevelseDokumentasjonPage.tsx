@@ -2,6 +2,10 @@ import { Alert, Loader } from '@navikt/ds-react'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../../../api/EtterlevelseDokumentasjonApi'
 import { user } from '../../../services/User'
+import {
+  etterlevelseDokumentasjonUrl,
+  etterlevelseDokumentasjonerUrl,
+} from '../../common/RouteLink'
 import { PageLayout } from '../../scaffold/Page'
 import EtterlevelseDokumentasjonForm from './EtterlevelseDokumentasjonForm'
 
@@ -22,9 +26,12 @@ export const EditEtterlevelseDokumentasjonPage = () => {
           pageTitle='Rediger etterlevelsesdokumentet'
           currentPage='Rediger etterlevelsesdokumentet'
           breadcrumbPaths={[
-            { href: '/dokumentasjoner', pathName: 'Dokumentere etterlevelse' },
             {
-              href: '/dokumentasjon/' + params.id,
+              href: etterlevelseDokumentasjonerUrl(undefined),
+              pathName: 'Dokumentere etterlevelse',
+            },
+            {
+              href: etterlevelseDokumentasjonUrl(params.id),
               pathName: `E${etterlevelseDokumentasjon.etterlevelseNummer} ${etterlevelseDokumentasjon.title}`,
             },
           ]}

@@ -4,6 +4,7 @@ import moment from 'moment'
 import { useEtterlevelseDokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
 import { EEtterlevelseStatus, ESuksesskriterieStatus, IEtterlevelse, IKrav } from '../../constants'
 import { Markdown } from '../common/Markdown'
+import { etterlevelseDokumentasjonUrl, kravNummerVersjonUrl } from '../common/RouteLink'
 import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
 
 const getHeaderText = (status: EEtterlevelseStatus) => {
@@ -43,7 +44,7 @@ export const ViewEtterlevelse = ({
             {!modalVersion && (
               <div className='flex content-center'>
                 <li />
-                <Link href={`/dokumentasjon/${etterlevelseDokumentasjon.id}`}>
+                <Link href={etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.id)}>
                   Gå til etterlevelse dokumentasjon
                 </Link>
               </div>
@@ -51,7 +52,9 @@ export const ViewEtterlevelse = ({
             {!modalVersion && (
               <div className='mt-2 flex content-center'>
                 <li />
-                <Link href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>Gå til kravet</Link>
+                <Link href={kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon)}>
+                  Gå til kravet
+                </Link>
               </div>
             )}
           </div>

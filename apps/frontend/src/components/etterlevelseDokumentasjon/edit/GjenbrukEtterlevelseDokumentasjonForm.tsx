@@ -22,6 +22,7 @@ import { ScrollToFieldError } from '../../../util/formikUtils'
 import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { Error, FormError } from '../../common/ModalSchema'
+import { etterlevelseDokumentasjonUrl } from '../../common/RouteLink'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 import { noOptionMessage, selectOverrides } from '../../search/util'
@@ -43,7 +44,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
     await createEtterlevelseDokumentasjonWithRelataion(
       etterlevelseDokumentasjon.id,
       etterlevelseDokumentasjonWithRelation
-    ).then((reps) => navigate(`/dokumentasjon/${reps.id}`))
+    ).then((reps) => navigate(etterlevelseDokumentasjonUrl(reps.id)))
   }
 
   return (

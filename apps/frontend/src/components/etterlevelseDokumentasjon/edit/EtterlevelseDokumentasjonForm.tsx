@@ -47,6 +47,7 @@ import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { Markdown } from '../../common/Markdown'
 import { Error } from '../../common/ModalSchema'
+import { etterlevelseDokumentasjonUrl } from '../../common/RouteLink'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 import { noOptionMessage, selectOverrides } from '../../search/util'
@@ -147,7 +148,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
       await createEtterlevelseDokumentasjon(mutatedEtterlevelsesDokumentasjon).then(
         (response: IEtterlevelseDokumentasjon) => {
           if (response.id) {
-            navigate('/dokumentasjon/' + response.id)
+            navigate(etterlevelseDokumentasjonUrl(response.id))
           }
         }
       )
@@ -155,7 +156,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
       await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then(
         (response: IEtterlevelseDokumentasjon) => {
           if (response.id) {
-            navigate('/dokumentasjon/' + response.id)
+            navigate(etterlevelseDokumentasjonUrl(response.id))
           }
         }
       )

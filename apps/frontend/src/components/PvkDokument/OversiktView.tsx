@@ -11,6 +11,7 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
+import { pvkEditUrl } from '../common/RouteLinkPvk'
 import FormButtons from './edit/FormButtons'
 
 interface IProps {
@@ -230,7 +231,7 @@ export const OversiktView = (props: IProps) => {
               Dere har ikke lagt inn en risikoeier. Dere må gjøre dette før dere sender PVK-en til
               Personvernombudet. Dere kan redigere deltakere og ansvarlige under
               <Link
-                href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
+                href={pvkEditUrl(etterlevelseDokumentasjon.id)}
                 target='_blank'
                 rel='noopener noreferrer'
                 aria-label='redigere etterlevelsesdokumentasjon'

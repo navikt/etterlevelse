@@ -16,6 +16,7 @@ import {
 } from '../../constants'
 import { getNumberOfDaysBetween } from '../../util/checkAge'
 import { warningAlert } from '../Images'
+import { etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl } from '../common/RouteLink'
 import StatusView from '../common/StatusTag'
 import {
   getEtterlevelseStatus,
@@ -113,7 +114,13 @@ export const KravCard = (props: IProps) => {
 
   return (
     <LinkPanel
-      href={`/dokumentasjon/${etterlevelseDokumentasjonId}/${temaCode}/${kravStatusFilter}/krav/${krav.kravNummer}/${krav.kravVersjon}`}
+      href={etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl(
+        etterlevelseDokumentasjonId,
+        temaCode,
+        kravStatusFilter,
+        krav.kravNummer,
+        krav.kravVersjon
+      )}
     >
       <div className='md:flex justify-between'>
         <div className='self-start'>

@@ -16,8 +16,15 @@ import {
 } from '@navikt/ds-react'
 import { FormikProps } from 'formik'
 import moment from 'moment'
-import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import React, {
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import { Location, NavigateFunction, useLocation, useNavigate, useParams } from 'react-router-dom'
 import {
   createEtterlevelse,
   getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
@@ -47,6 +54,11 @@ import { getKravWithEtterlevelseQuery } from '../../query/KravQuery'
 import { ampli, userRoleEventProp } from '../../services/Amplitude'
 import { user } from '../../services/User'
 import { Markdown } from '../common/Markdown'
+import {
+  etterlevelseDokumentasjonTemaUrl,
+  etterlevelseDokumentasjonUrl,
+  kravUrl,
+} from '../common/RouteLink'
 import { getEtterlevelseStatus } from '../etterlevelseDokumentasjon/common/utils'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import Etterlevelser from '../krav/Etterlevelser'
@@ -56,7 +68,7 @@ import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import EtterlevelseViewFields from './EtterlevelseViewFields'
 import EtterlevelseSidePanel from './tabs/EtterlevelseSidePanel'
 
-interface IProps {
+type TProps = {
   temaName?: string
   etterlevelse: IEtterlevelse
   setEtterlevelse: Dispatch<SetStateAction<IEtterlevelse | undefined>>
@@ -70,27 +82,29 @@ interface IProps {
   nextKravToDocument: string
 }
 
-export const EtterlevelseKravView = (props: IProps) => {
-  const {
-    temaName,
-    kravId,
-    etterlevelse,
-    setEtterlevelse,
-    varsleMelding,
-    etterlevelseDokumentasjon,
-    navigatePath,
-    tidligereEtterlevelser,
-    kravFilter,
-    nextKravToDocument,
-  } = props
-
+export const EtterlevelseKravView: FunctionComponent<TProps> = ({
+  temaName,
+  kravId,
+  etterlevelse,
+  setEtterlevelse,
+  varsleMelding,
+  etterlevelseDokumentasjon,
+  navigatePath,
+  tidligereEtterlevelser,
+  kravFilter,
+  nextKravToDocument,
+}) => {
   const { data, loading } = useQuery<{ kravById: TKravQL }, TKravId>(getKravWithEtterlevelseQuery, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
     fetchPolicy: 'no-cache',
   })
-  const params = useParams<{ tema?: string }>()
-  const etterlevelserLoading = loading
+  const params: Readonly<
+    Partial<{
+      tema?: string
+    }>
+  > = useParams<{ tema?: string }>()
+  const etterlevelserLoading: boolean = loading
   const [krav, setKrav] = useState<TKravQL>()
   const [nyereKrav, setNyereKrav] = React.useState<IKrav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
@@ -111,8 +125,8 @@ export const EtterlevelseKravView = (props: IProps) => {
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [isPvkTabActive, setIsPvkTabActive] = useState<boolean>(false)
 
-  const location = useLocation()
-  const navigate = useNavigate()
+  const location: Location<any> = useLocation()
+  const navigate: NavigateFunction = useNavigate()
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<IEtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
@@ -167,8 +181,8 @@ export const EtterlevelseKravView = (props: IProps) => {
   }, [])
 
   const getNextKravUrl = (nextKravPath: string): string => {
-    const currentPath = location.pathname.split('/krav')
-    return currentPath[0] + '/krav' + nextKravPath
+    const currentPath: string[] = location.pathname.split('/krav')
+    return kravUrl(currentPath[0], nextKravPath)
   }
 
   const activeAlertModalController = () => {
@@ -493,7 +507,10 @@ export const EtterlevelseKravView = (props: IProps) => {
                           disableEdit={disableEdit}
                           close={() => {
                             setTimeout(
-                              () => navigate(`/dokumentasjon/${etterlevelseDokumentasjon?.id}`),
+                              () =>
+                                navigate(
+                                  etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon?.id)
+                                ),
                               1
                             )
                           }}
@@ -637,7 +654,10 @@ export const EtterlevelseKravView = (props: IProps) => {
                 </Button>
 
                 <Link
-                  href={'/dokumentasjon/' + etterlevelseDokumentasjon?.id + '/' + params.tema}
+                  href={etterlevelseDokumentasjonTemaUrl(
+                    etterlevelseDokumentasjon?.id,
+                    params?.tema
+                  )}
                   className='flex w-full'
                   onClick={() => {
                     ampli.logEvent('knapp klikket', {

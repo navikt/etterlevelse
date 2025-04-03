@@ -2,6 +2,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
 import { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { etterlevelseDokumentasjonUrl } from '../../common/RouteLink'
 
 interface IProps {
   etterlevelseDokumentasjonId: string
@@ -27,7 +28,7 @@ export const FormButtons = (props: IProps) => {
             variant='tertiary'
             onClick={() => {
               if (activeStep === 1) {
-                navigate('/dokumentasjon/' + etterlevelseDokumentasjonId)
+                navigate(etterlevelseDokumentasjonUrl(etterlevelseDokumentasjonId))
               } else {
                 window.scrollTo(0, 0)
                 setActiveStep(activeStep - 1)

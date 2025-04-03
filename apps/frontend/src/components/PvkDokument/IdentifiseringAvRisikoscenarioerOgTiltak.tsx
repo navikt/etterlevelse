@@ -10,6 +10,7 @@ import {
   IRisikoscenario,
   ITiltak,
 } from '../../constants'
+import { etterlevelseDokumentasjonPvkTabUrl } from '../common/RouteLink'
 import RisikoscenarioAccordianList from '../risikoscenario/RisikoscenarioAccordianList'
 import CreateRisikoscenarioModal from '../risikoscenario/edit/CreateRisikoscenarioModal'
 import FormButtons from './edit/FormButtons'
@@ -91,7 +92,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
             type='button'
             onClick={() => {
               if (etterlevelseDokumentasjonId)
-                navigate('/dokumentasjon/' + etterlevelseDokumentasjonId + '?tab=pvk')
+                navigate(etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjonId))
             }}
           >
             Gå til liste over PVK-relaterte krav

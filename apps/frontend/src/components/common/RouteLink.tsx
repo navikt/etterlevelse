@@ -95,3 +95,53 @@ export const ExternalLink = ({
     </Link>
   )
 }
+
+export const behandlingskatalogenProcessUrl = (
+  pollyBaseUrl: string,
+  behandlingId: string
+): string => `${pollyBaseUrl}process/${behandlingId}`
+
+export const kravUrl = (currentPath: string, nextKravPath: string): string =>
+  `${currentPath}/krav${nextKravPath}`
+
+export const kravNummerVersjonUrl = (kravNummer: number, kravVersjon: number): string =>
+  `/krav/${kravNummer}/${kravVersjon}`
+
+export const etterlevelseDokumentasjonUrl = (
+  etterlevelseDokumentasjonId: string | undefined
+): string => `/dokumentasjon/${etterlevelseDokumentasjonId}`
+
+export const etterlevelseDokumentasjonAlleUrl = (
+  etterlevelseDokumentasjonId: string | undefined
+): string => `/dokumentasjon/${etterlevelseDokumentasjonId}/ALLE`
+
+export const etterlevelseDokumentasjonTemaUrl = (
+  etterlevelseDokumentasjonId: string | undefined,
+  tema: string | undefined
+): string => `/dokumentasjon/${etterlevelseDokumentasjonId}/${tema}`
+
+export const etterlevelseDokumentasjonPvkTabUrl = (etterlevelseDokumentasjonId: string) =>
+  `/dokumentasjon/${etterlevelseDokumentasjonId}?tab=pvk`
+
+export const etterlevelseDokumentasjonGjenbrukUrl = (etterlevelseDokumentasjonId: string): string =>
+  `/dokumentasjon/gjenbruk/${etterlevelseDokumentasjonId}`
+
+export const etterlevelseDokumentasjonRelasjonUrl = (etterlevelseDokumentasjonId: string): string =>
+  `/dokumentasjon/relasjon/${etterlevelseDokumentasjonId}`
+
+export const etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl = (
+  etterlevelseDokumentasjonId: string,
+  temaCode: string | undefined,
+  kravStatusFilter: string,
+  kravNummer: number,
+  kravVersjon: number
+): string =>
+  `/dokumentasjon/${etterlevelseDokumentasjonId}/${temaCode}/${kravStatusFilter}/krav/${kravNummer}/${kravVersjon}`
+
+export const etterlevelseDokumentasjonerUrl = (tab: undefined | string): string => {
+  if (tab) {
+    return `/dokumentasjoner/${tab}`
+  }
+
+  return `/dokumentasjoner`
+}

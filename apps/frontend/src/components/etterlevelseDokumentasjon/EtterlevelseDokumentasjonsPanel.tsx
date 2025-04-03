@@ -1,16 +1,18 @@
 import { LinkPanel } from '@navikt/ds-react'
 import moment from 'moment'
+import { FunctionComponent } from 'react'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
+import { etterlevelseDokumentasjonUrl } from '../common/RouteLink'
 
-interface IEtterlevelseDokumentasjonsPanel {
+type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   onClick?: () => void
 }
 
-export const EtterlevelseDokumentasjonsPanel = ({
+export const EtterlevelseDokumentasjonsPanel: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   onClick,
-}: IEtterlevelseDokumentasjonsPanel) => {
+}) => {
   const hasDateForLastModifiedByUser =
     etterlevelseDokumentasjon.sistEndretEtterlevelseAvMeg !== null &&
     etterlevelseDokumentasjon.sistEndretEtterlevelseAvMeg !== ''
@@ -21,7 +23,7 @@ export const EtterlevelseDokumentasjonsPanel = ({
   const hasNoLastModifiedDate = !hasDateForLastModifiedByUser && !hasDateForLastModified
 
   return (
-    <LinkPanel href={`/dokumentasjon/${etterlevelseDokumentasjon.id}`} onClick={onClick}>
+    <LinkPanel href={etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.id)} onClick={onClick}>
       <LinkPanel.Title className='text-xl'>
         E{etterlevelseDokumentasjon.etterlevelseNummer} {etterlevelseDokumentasjon.title}
       </LinkPanel.Title>

@@ -6,7 +6,11 @@ import { CodelistService, EListName, ICode, IGetParsedOptionsProps } from '../..
 import { user } from '../../services/User'
 import { BehandlingList } from '../behandling/BehandlingList'
 import { Markdown } from '../common/Markdown'
-import { ExternalLink } from '../common/RouteLink'
+import {
+  ExternalLink,
+  etterlevelseDokumentasjonGjenbrukUrl,
+  etterlevelseDokumentasjonRelasjonUrl,
+} from '../common/RouteLink'
 import { Teams } from '../common/TeamName'
 import { VarslingsadresserView } from './VarslingsAddresseView'
 
@@ -199,7 +203,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                   <div className='mt-5'>
                     <Button
                       onClick={() => {
-                        navigate('/dokumentasjon/gjenbruk/' + etterlevelseDokumentasjon.id)
+                        navigate(etterlevelseDokumentasjonGjenbrukUrl(etterlevelseDokumentasjon.id))
                       }}
                       size='small'
                       variant='secondary'
@@ -210,7 +214,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                     </Button>
                   </div>
                   <div className='mt-5'>
-                    <Link href={`/dokumentasjon/relasjon/${etterlevelseDokumentasjon.id}`}>
+                    <Link href={etterlevelseDokumentasjonRelasjonUrl(etterlevelseDokumentasjon.id)}>
                       Se hvilke etterlevelser som allerede gjenbruker dette dokumentet
                     </Link>
                   </div>

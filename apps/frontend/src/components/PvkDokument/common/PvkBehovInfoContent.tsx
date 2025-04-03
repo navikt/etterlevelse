@@ -4,6 +4,7 @@ import { IBehandlingensLivslop, IEtterlevelseDokumentasjon } from '../../../cons
 import { user } from '../../../services/User'
 import { env } from '../../../util/env'
 import { ExternalLink } from '../../common/RouteLink'
+import { pvkDokumentasjonBehandlingsenLivslopUrl, pvkEditUrl } from '../../common/RouteLinkPvk'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -42,10 +43,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
           {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
             <Alert variant='info' className='mb-5'>
               Dere har ikke ennå lagt til behandlinger under{' '}
-              <ExternalLink
-                className='text-medium'
-                href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
-              >
+              <ExternalLink className='text-medium' href={pvkEditUrl(etterlevelseDokumentasjon.id)}>
                 Dokumentegenskaper
               </ExternalLink>
               . Det anbefales at dere gjør dette før dere vurderer behov for PVK.
@@ -65,12 +63,10 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
           <BodyShort>
             Disse egenskapene blir enklere å vurdere hvis{' '}
             <Link
-              href={
-                '/dokumentasjon/' +
-                etterlevelseDokumentasjon.id +
-                '/behandlingens-livslop/' +
-                (behandlingensLivslop?.id ? behandlingensLivslop.id : 'ny')
-              }
+              href={pvkDokumentasjonBehandlingsenLivslopUrl(
+                etterlevelseDokumentasjon.id,
+                behandlingensLivslop?.id ? behandlingensLivslop.id : 'ny'
+              )}
               target='_blank'
               rel='noopener noreferrer'
               aria-label='redigere etterlevelsesdokumentasjon'

@@ -12,7 +12,8 @@ import {
 } from '../../constants'
 import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
-import { ExternalLink } from '../common/RouteLink'
+import { ExternalLink, etterlevelseDokumentasjonUrl } from '../common/RouteLink'
+import { pvkDokumentasjonUrl } from '../common/RouteLinkPvk'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/OppsumeringAccordianList'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
@@ -235,7 +236,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                             Dere har foreløpig ingen risikoscenarioer
                           </Heading>
                           Risikoscenarioer legges inn under{' '}
-                          <Link href={`/dokumentasjon/${etterlevelseDokumentasjonId}`}>
+                          <Link href={etterlevelseDokumentasjonUrl(etterlevelseDokumentasjonId)}>
                             PVK-relaterte krav
                           </Link>{' '}
                           (åpner i en ny fane) eller eventuelt under øvrige risikoscenarioer (åpner
@@ -273,7 +274,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                           </Heading>
                           Tiltak legges inn under{' '}
                           <ExternalLink
-                            href={`/dokumentasjon/${etterlevelseDokumentasjonId}/pvkdokument/${pvkDokument.id}/4`}
+                            href={pvkDokumentasjonUrl(
+                              etterlevelseDokumentasjonId,
+                              pvkDokument.id,
+                              4
+                            )}
                           >
                             Identifisering av risikoscenarioer og tiltak
                           </ExternalLink>

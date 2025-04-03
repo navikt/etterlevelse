@@ -5,6 +5,10 @@ import { getDocumentRelationByToIdAndRelationType } from '../../../api/DocumentR
 import { useEtterlevelseDokumentasjon } from '../../../api/EtterlevelseDokumentasjonApi'
 import { ERelationType } from '../../../constants'
 import { Markdown } from '../../common/Markdown'
+import {
+  etterlevelseDokumentasjonUrl,
+  etterlevelseDokumentasjonerUrl,
+} from '../../common/RouteLink'
 import { PageLayout } from '../../scaffold/Page'
 import GjenbrukEtterlevelseDokumentasjonForm from './GjenbrukEtterlevelseDokumentasjonForm'
 
@@ -42,9 +46,12 @@ export const GjenbrukEtterlevelseDokumentasjonPage = () => {
           pageTitle='Gjenbruk etterlevelsesdokumentet'
           currentPage='Gjenbruk etterlevelsesdokumentet'
           breadcrumbPaths={[
-            { href: '/dokumentasjoner', pathName: 'Dokumentere etterlevelse' },
             {
-              href: '/dokumentasjon/' + params.id,
+              href: etterlevelseDokumentasjonerUrl(undefined),
+              pathName: 'Dokumentere etterlevelse',
+            },
+            {
+              href: etterlevelseDokumentasjonUrl(params.id),
               pathName: `E${etterlevelseDokumentasjon.etterlevelseNummer} ${etterlevelseDokumentasjon.title}`,
             },
           ]}

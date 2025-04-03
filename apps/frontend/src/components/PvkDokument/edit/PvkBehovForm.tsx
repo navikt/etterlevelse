@@ -22,6 +22,8 @@ import {
 import { IEtterlevelseDokumentasjon, IPvkDokument } from '../../../constants'
 import { EListName, ICode, ICodelistProps } from '../../../services/Codelist'
 import { FieldWrapper, TextAreaField } from '../../common/Inputs'
+import { etterlevelseDokumentasjonUrl } from '../../common/RouteLink'
+import { pvkDokumentasjonPvkBehovUrl, pvkDokumentasjonUrl } from '../../common/RouteLinkPvk'
 import { pvkBehovSchema } from './pvkDocumentSchema'
 
 type TProps = {
@@ -76,12 +78,12 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
       if (pvkDokument.id || existingPvkDokumentId) {
         await updatePvkDokument(mutatedPvkDokument).then((response) => {
           setPvkDokument(response)
-          navigate(`/dokumentasjon/${response.etterlevelseDokumentId}/pvkbehov/${response.id}`)
+          navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
         })
       } else {
         await createPvkDokument(mutatedPvkDokument).then((response) => {
           setPvkDokument(response)
-          navigate(`/dokumentasjon/${response.etterlevelseDokumentId}/pvkbehov/${response.id}`)
+          navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
         })
       }
     }
@@ -219,9 +221,9 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 onClick={() => {
                   if (dirty) {
                     setIsUnsavedModalOpen(true)
-                    setUrlToNavigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
+                    setUrlToNavigate(etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.id))
                   } else {
-                    navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
+                    navigate(etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.id))
                   }
                 }}
               >
@@ -236,20 +238,10 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                     if (dirty) {
                       setIsUnsavedModalOpen(true)
                       setUrlToNavigate(
-                        '/dokumentasjon/' +
-                          etterlevelseDokumentasjon.id +
-                          '/pvkdokument/' +
-                          pvkDokument.id +
-                          '/1'
+                        pvkDokumentasjonUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
                       )
                     } else {
-                      navigate(
-                        '/dokumentasjon/' +
-                          etterlevelseDokumentasjon.id +
-                          '/pvkdokument/' +
-                          pvkDokument.id +
-                          '/1'
-                      )
+                      navigate(pvkDokumentasjonUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1))
                     }
                   }}
                 >

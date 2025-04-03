@@ -8,6 +8,7 @@ import { IPageResponse, ITeam, TEtterlevelseDokumentasjonQL } from '../../../con
 import { TCustomTeamObject, TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { getEtterlevelseDokumentasjonListQuery } from '../../../query/EtterlevelseDokumentasjonQuery'
 import { ampli } from '../../../services/Amplitude'
+import { etterlevelseDokumentasjonerUrl } from '../../common/RouteLink'
 import { AlleEtterlevelsesDokumentasjoner } from './AlleEtterlevelsesDokumentasjoner'
 import BehandlingSok from './BehandlingSok'
 import { MineEtterlevelseDokumentasjoner } from './MineEtterlevelseDokumentasjoner'
@@ -75,7 +76,7 @@ export const DokumentasjonTabs = () => {
         setVariables({ sistRedigert: 20 })
         break
     }
-    if (tab !== params.tab) navigate(`/dokumentasjoner/${tab}`, { replace: true })
+    if (tab !== params.tab) navigate(etterlevelseDokumentasjonerUrl(tab), { replace: true })
   }, [tab])
 
   useEffect(() => {
@@ -90,9 +91,9 @@ export const DokumentasjonTabs = () => {
         setTab(args as TSection)
         ampli.logEvent('knapp klikket', {
           tekst: 'Valgt dokumentasjons Tab',
-          pagePath: '/dokumentasjoner/' + args,
+          pagePath: etterlevelseDokumentasjonerUrl(args),
         })
-        navigate(`/dokumentasjoner/${args}`)
+        navigate(etterlevelseDokumentasjonerUrl(args))
       }}
     >
       <Tabs.List>

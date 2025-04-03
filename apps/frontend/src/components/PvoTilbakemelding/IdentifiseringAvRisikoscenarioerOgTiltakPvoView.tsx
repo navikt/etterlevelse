@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, ITiltak } from '../../constants'
+import { etterlevelseDokumentasjonPvkTabUrl } from '../common/RouteLink'
 import RisikoscenarioAccordianListPvoView from './RisikoscenarioAccordianListPvoView'
 import PvoFormButtons from './edit/PvoFormButtons'
 
@@ -74,7 +75,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView = (props: IProps) =
             type='button'
             onClick={() => {
               if (etterlevelseDokumentasjonId)
-                navigate('/dokumentasjon/' + etterlevelseDokumentasjonId + '?tab=pvk')
+                navigate(etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjonId))
             }}
           >
             Gå til liste over PVK-relaterte krav
