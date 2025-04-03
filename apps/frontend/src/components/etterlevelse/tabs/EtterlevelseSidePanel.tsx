@@ -124,12 +124,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
           <Tabs.Panel value='pvkDokumentasjon'>
             <div className='mt-2 p-4'>
               {userHasAccess() && (
-                <KravRisikoscenario
-                  krav={krav}
-                  pvkDokument={pvkDokument}
-                  formRef={formRef}
-                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                />
+                <KravRisikoscenario krav={krav} pvkDokument={pvkDokument} formRef={formRef} />
               )}
 
               {!userHasAccess() && (

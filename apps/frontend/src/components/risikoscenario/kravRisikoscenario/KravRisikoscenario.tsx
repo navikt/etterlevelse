@@ -9,10 +9,8 @@ import {
   IPvkDokument,
   IRisikoscenario,
   ITiltak,
-  TEtterlevelseDokumentasjonQL,
   TKravQL,
 } from '../../../constants'
-import { user } from '../../../services/User'
 import AccordianAlertModal from '../AccordianAlertModal'
 import CreateRisikoscenario from '../edit/CreateRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/LeggTilEksisterendeRisikoscenario'
@@ -24,7 +22,6 @@ type TProps = {
   krav: TKravQL
   pvkDokument: IPvkDokument
   formRef: RefObject<any>
-  etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
 }
 
 const unsavedAction = {
@@ -32,12 +29,7 @@ const unsavedAction = {
   leggTilEksisterendeRisikoscenario: 'leggTilEksisterendeRisikoscenario',
 }
 
-export const KravRisikoscenario: FunctionComponent<TProps> = ({
-  krav,
-  pvkDokument,
-  formRef,
-  etterlevelseDokumentasjon,
-}) => {
+export const KravRisikoscenario: FunctionComponent<TProps> = ({ krav, pvkDokument, formRef }) => {
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
@@ -109,10 +101,6 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
     }
   }
 
-  const userHasAccess = (): boolean => {
-    return user.isAdmin() || etterlevelseDokumentasjon?.hasCurrentUserAccess || false
-  }
-
   return (
     <div className='w-full'>
       <KravRisikoscenarioReadMore />
@@ -124,7 +112,7 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
           </Alert>
         )}
 
-        {isLeggTilEksisterendeMode && userHasAccess() && (
+        {isLeggTilEksisterendeMode && (
           <LeggTilEksisterendeRisikoscenario
             kravnummer={krav.kravNummer}
             risikoscenarioer={risikoscenarioer}
@@ -164,6 +152,9 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
                           alleRisikoscenarioer={alleRisikoscenarioer}
                           etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId}
                           isCreateMode={isCreateMode}
+                          kravnummer={krav.kravNummer}
+                          risikoscenarioer={risikoscenarioer}
+                          setRisikoscenarioer={setRisikoscenarioer}
                           risikoscenarioForKrav={risikoscenarioForKrav}
                           setRisikoscenarioForKrav={setRisikoscenarioForKrav}
                           tiltakList={tiltakList}
@@ -192,7 +183,7 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
           />
         )}
 
-        {!isCreateMode && !isLeggTilEksisterendeMode && !isTiltakFormActive && userHasAccess() && (
+        {!isCreateMode && !isLeggTilEksisterendeMode && !isTiltakFormActive && (
           <div className='flex gap-2 mt-8 lg:flex-row flex-col'>
             <Button
               size='small'
