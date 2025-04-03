@@ -23,6 +23,7 @@ import { intl } from '../util/intl/intl'
 import { informationIcon, warningAlert } from './Images'
 import { Markdown } from './common/Markdown'
 import { Portrait } from './common/Portrait'
+import { etterlevelseDokumentasjonerUrl } from './common/RouteLinkEtterlevelsesdokumentasjon'
 import SkipToContent from './common/SkipToContent/SkipToContent'
 import MainSearch from './search/MainSearch'
 
@@ -155,7 +156,7 @@ const LoggedInHeader = () => {
           [
             {
               label: 'Dokumentere etterlevelse',
-              href: '/dokumentasjoner',
+              href: etterlevelseDokumentasjonerUrl(),
               icon: <DocPencilIcon area-label='' aria-hidden />,
             },
           ],

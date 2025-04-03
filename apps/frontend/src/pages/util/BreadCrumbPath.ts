@@ -1,3 +1,4 @@
+import { etterlevelseDokumentasjonerUrl } from '../../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { IBreadCrumbPath } from '../../constants'
 
 export const kravBreadCrumbPath: IBreadCrumbPath = {
@@ -12,7 +13,7 @@ export const temaBreadCrumbPath: IBreadCrumbPath = {
 
 export const dokumentasjonerBreadCrumbPath: IBreadCrumbPath = {
   pathName: 'Dokumentere etterlevelse',
-  href: '/dokumentasjoner',
+  href: etterlevelseDokumentasjonerUrl(),
 }
 
 export const dokumentasjonBreadCrumbPath = (pathName: string, href: string): IBreadCrumbPath => {

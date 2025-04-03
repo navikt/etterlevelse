@@ -56,5 +56,16 @@ export const risikoscenarioTiltakUrl = (
   tiltakId: string
 ): string => `${pathname}?risikoscenario=${activeRisikoscenarioId}&tiltak=${tiltakId}`
 
-export const pvkDokumenteringPvoTilbakemeldingUrl = (pvkDokumentId: string) =>
-  `/pvkdokument/${pvkDokumentId}/pvotilbakemelding/5`
+export const pvkDokumenteringPvoTilbakemeldingUrl = (
+  pvkDokumentId: string | undefined,
+  step: number,
+  filter?: string
+) => {
+  const url: string = `/pvkdokument/${pvkDokumentId}/pvotilbakemelding/${step}`
+
+  if (filter) {
+    return `${url}${filter}`
+  }
+
+  return url
+}

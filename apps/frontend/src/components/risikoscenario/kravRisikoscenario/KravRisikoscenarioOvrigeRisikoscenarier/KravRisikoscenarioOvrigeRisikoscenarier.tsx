@@ -24,7 +24,7 @@ export const KravRisikoscenarioOvrigeRisikoscenarier: FunctionComponent<TProps> 
         type='button'
         onClick={() => {
           if (user.isPersonvernombud()) {
-            navigate(pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument.id))
+            navigate(pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument.id, 5))
           } else {
             navigate(pvkDokumentasjonStepUrl(pvkDokument.etterlevelseDokumentId, pvkDokument.id, 5))
           }

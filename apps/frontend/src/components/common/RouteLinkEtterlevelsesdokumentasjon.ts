@@ -1,6 +1,6 @@
 export const etterlevelseDokumentasjonCreateUrl = (): string => '/dokumentasjon/create'
 
-export const etterlevelsesDokumentasjonEditUrl = (etterlevelseDokumentasjonId: string) =>
+export const etterlevelsesDokumentasjonEditUrl = (etterlevelseDokumentasjonId?: string) =>
   `/dokumentasjon/edit/${etterlevelseDokumentasjonId}`
 
 export const etterlevelseDokumentasjonUrl = (etterlevelseDokumentasjonId?: string): string =>

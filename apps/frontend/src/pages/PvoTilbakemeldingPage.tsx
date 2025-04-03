@@ -15,6 +15,8 @@ import OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView from '../components/Pvo
 import OversiktPvoView from '../components/PvoTilbakemelding/OversiktPvoView'
 import SendInnPvoView from '../components/PvoTilbakemelding/SendInnPvoView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
+import { etterlevelsesDokumentasjonEditUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import { pvkDokumenteringPvoTilbakemeldingUrl } from '../components/common/RouteLinkPvk'
 import { risikoscenarioFilterAlleUrl } from '../components/common/RouteLinkRisiko'
 import {
   EPVO,
@@ -76,13 +78,17 @@ export const PvoTilbakemeldingPage = () => {
         etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
         ' ' +
         etterlevelseDokumentasjon?.title,
-      href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,
+      href: etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon?.id),
     },
   ]
 
   const updateUrlOnStepChange = (step: number) => {
     navigate(
-      `/pvkdokument/${params.id}${EPVO.tilbakemelding}/${step}${step === 6 ? risikoscenarioFilterAlleUrl() : ''}`
+      pvkDokumenteringPvoTilbakemeldingUrl(
+        params.id,
+        step,
+        step === 6 ? risikoscenarioFilterAlleUrl() : ''
+      )
     )
   }
 
