@@ -157,9 +157,9 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                     >
                       <RisikoscenarioSannsynlighetReadMore />
                       <Stack gap='0 6' direction={{ xs: 'column', sm: 'row' }} wrap={false}>
-                        <Radio value={1}>Meget lite sannsynlig</Radio>
-                        <Radio value={2}>Lite sannsynlig</Radio>
-                        <Radio value={3}>Moderat sannsynlig</Radio>
+                        <Radio value={1}>Meget lite</Radio>
+                        <Radio value={2}>Lite</Radio>
+                        <Radio value={3}>Moderat</Radio>
                         <Radio value={4}>Sannsynlig</Radio>
                         <Radio value={5}>Nesten sikkert</Radio>
                       </Stack>
@@ -186,10 +186,10 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                       <RisikoscenarioKonsekvensnivaaReadMore />
                       <Stack gap='0 6' direction={{ xs: 'column', sm: 'row' }} wrap={false}>
                         <Radio value={1}>Ubetydelig</Radio>
-                        <Radio value={2}>Lav konsekvens</Radio>
-                        <Radio value={3}>Moderat konsekvens</Radio>
-                        <Radio value={4}>Alvorlig konsekvens</Radio>
-                        <Radio value={5}>Svært alvorlig konsekvens</Radio>
+                        <Radio value={2}>Lav</Radio>
+                        <Radio value={3}>Moderat</Radio>
+                        <Radio value={4}>Alvorlig </Radio>
+                        <Radio value={5}>Svært alvorlig</Radio>
                       </Stack>
                     </RadioGroup>
                   )}
@@ -231,6 +231,7 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                     onClick={() => {
                       setFieldValue('sannsynlighetsNivaaEtterTiltak', null)
                       setFieldValue('konsekvensNivaaEtterTiltak', null)
+                      setFieldValue('nivaaBegrunnelseEtterTiltak', '')
                     }}
                   >
                     Nullstill svar
