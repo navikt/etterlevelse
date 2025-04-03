@@ -8,7 +8,7 @@ import { IPageResponse, ITeam, TEtterlevelseDokumentasjonQL } from '../../../con
 import { TCustomTeamObject, TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { getEtterlevelseDokumentasjonListQuery } from '../../../query/EtterlevelseDokumentasjonQuery'
 import { ampli } from '../../../services/Amplitude'
-import { etterlevelseDokumentasjonerUrl } from '../../common/RouteLink'
+import { etterlevelseDokumentasjonerUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 import { AlleEtterlevelsesDokumentasjoner } from './AlleEtterlevelsesDokumentasjoner'
 import BehandlingSok from './BehandlingSok'
 import { MineEtterlevelseDokumentasjoner } from './MineEtterlevelseDokumentasjoner'

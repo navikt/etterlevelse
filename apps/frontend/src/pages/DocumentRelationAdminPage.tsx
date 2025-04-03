@@ -17,6 +17,7 @@ import {
   dokumentRelationTypeToString,
   getAllDocumentRelation,
 } from '../api/DocumentRelationApi'
+import { etterlevelseDokumentasjonUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { PageLayout } from '../components/scaffold/Page'
 import { IDocumentRelation } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
@@ -143,26 +144,24 @@ export const DocumentRelationAdminPage = () => {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {sortedData.map((documentRelation: IDocumentRelation) => {
-                  return (
-                    <Table.Row key={documentRelation.id}>
-                      <Table.HeaderCell scope='row'>{documentRelation.id}</Table.HeaderCell>
-                      <Table.DataCell>
-                        <Link href={`/dokumentasjon/${documentRelation.fromDocument}`}>
-                          {documentRelation.fromDocument}
-                        </Link>
-                      </Table.DataCell>
-                      <Table.DataCell>
-                        <Link href={`/dokumentasjon/${documentRelation.toDocument}`}>
-                          {documentRelation.toDocument}
-                        </Link>
-                      </Table.DataCell>
-                      <Table.DataCell>
-                        {dokumentRelationTypeToString(documentRelation.RelationType)}
-                      </Table.DataCell>
-                    </Table.Row>
-                  )
-                })}
+                {sortedData.map((documentRelation: IDocumentRelation) => (
+                  <Table.Row key={documentRelation.id}>
+                    <Table.HeaderCell scope='row'>{documentRelation.id}</Table.HeaderCell>
+                    <Table.DataCell>
+                      <Link href={etterlevelseDokumentasjonUrl(documentRelation.toDocument)}>
+                        {documentRelation.fromDocument}
+                      </Link>
+                    </Table.DataCell>
+                    <Table.DataCell>
+                      <Link href={etterlevelseDokumentasjonUrl(documentRelation.toDocument)}>
+                        {documentRelation.toDocument}
+                      </Link>
+                    </Table.DataCell>
+                    <Table.DataCell>
+                      {dokumentRelationTypeToString(documentRelation.RelationType)}
+                    </Table.DataCell>
+                  </Table.Row>
+                ))}
               </Table.Body>
             </Table>
             <div className='flex w-full justify-center items-center mt-3'>

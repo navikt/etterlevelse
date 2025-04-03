@@ -10,7 +10,7 @@ import {
   IRisikoscenario,
   ITiltak,
 } from '../../constants'
-import { etterlevelseDokumentasjonPvkTabUrl } from '../common/RouteLink'
+import { etterlevelseDokumentasjonPvkTabUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import RisikoscenarioAccordianList from '../risikoscenario/RisikoscenarioAccordianList'
 import CreateRisikoscenarioModal from '../risikoscenario/edit/CreateRisikoscenarioModal'
 import FormButtons from './edit/FormButtons'

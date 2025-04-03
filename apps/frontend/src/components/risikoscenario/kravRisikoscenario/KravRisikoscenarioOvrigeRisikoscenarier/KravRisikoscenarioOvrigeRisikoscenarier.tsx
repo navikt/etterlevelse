@@ -4,7 +4,7 @@ import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IPvkDokument } from '../../../../constants'
 import { user } from '../../../../services/User'
 import {
-  pvkDokumentasjonUrl,
+  pvkDokumentasjonStepUrl,
   pvkDokumenteringPvoTilbakemeldingUrl,
 } from '../../../common/RouteLinkPvk'
 
@@ -26,7 +26,7 @@ export const KravRisikoscenarioOvrigeRisikoscenarier: FunctionComponent<TProps> 
           if (user.isPersonvernombud()) {
             navigate(pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument.id))
           } else {
-            navigate(pvkDokumentasjonUrl(pvkDokument.etterlevelseDokumentId, pvkDokument.id, 5))
+            navigate(pvkDokumentasjonStepUrl(pvkDokument.etterlevelseDokumentId, pvkDokument.id, 5))
           }
         }}
       >

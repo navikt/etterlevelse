@@ -16,7 +16,7 @@ import {
 } from '../../constants'
 import { getNumberOfDaysBetween } from '../../util/checkAge'
 import { warningAlert } from '../Images'
-import { etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl } from '../common/RouteLink'
+import { etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import StatusView from '../common/StatusTag'
 import {
   getEtterlevelseStatus,

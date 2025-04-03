@@ -4,8 +4,9 @@ import { behandlingName } from '../../api/BehandlingApi'
 import { IBehandling, IEtterlevelseDokumentasjon } from '../../constants'
 import { env } from '../../util/env'
 import { Markdown } from '../common/Markdown'
-import { ExternalLink, behandlingskatalogenProcessUrl } from '../common/RouteLink'
-import { pvkEditUrl } from '../common/RouteLinkPvk'
+import { ExternalLink } from '../common/RouteLink'
+import { behandlingskatalogenProcessUrl } from '../common/RouteLinkBehandlingskatalogen'
+import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -68,7 +69,7 @@ export const BehandlingensLivsLopSidePanel: FunctionComponent<TProps> = ({
     <BodyShort className='inline-block mb-5'>
       Dere kan redigere hvilke behandinger og risikovurderinger som gjelder i{' '}
       <Link
-        href={pvkEditUrl(etterlevelseDokumentasjon.id)}
+        href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
         target='_blank'
         rel='noopener noreferrer'
         aria-label='redigere etterlevelsesdokumentasjon'

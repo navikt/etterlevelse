@@ -1,4 +1,4 @@
-import { etterlevelseDokumentasjonerUrl } from '../../common/RouteLink'
+import { etterlevelseDokumentasjonerUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 import { PageLayout } from '../../scaffold/Page'
 import EtterlevelseDokumentasjonForm from './EtterlevelseDokumentasjonForm'
 
@@ -7,7 +7,7 @@ export const CreateEtterlevelseDokumentasjonPage = () => (
     pageTitle='Opprett nytt etterlevelsesdokument'
     currentPage='Opprett nytt etterlevelsesdokument'
     breadcrumbPaths={[
-      { href: etterlevelseDokumentasjonerUrl(undefined), pathName: 'Dokumentere etterlevelse' },
+      { href: etterlevelseDokumentasjonerUrl(), pathName: 'Dokumentere etterlevelse' },
     ]}
   >
     <EtterlevelseDokumentasjonForm title='Opprett nytt etterlevelsesdokument' />

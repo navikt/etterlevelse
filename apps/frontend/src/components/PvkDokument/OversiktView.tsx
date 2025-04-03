@@ -11,7 +11,8 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
-import { pvkEditUrl } from '../common/RouteLinkPvk'
+import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
+import { risikoscenarioFilterAlleUrl } from '../common/RouteLinkRisiko'
 import FormButtons from './edit/FormButtons'
 
 interface IProps {
@@ -175,7 +176,7 @@ export const OversiktView = (props: IProps) => {
             {StepTitle.slice(2).map((title, index) => {
               let panelHref = window.location.pathname.slice(0, -1) + (index + 3)
               if (index + 3 === 6) {
-                panelHref += '?tab=risikoscenarioer&filter=alle'
+                panelHref += risikoscenarioFilterAlleUrl()
               }
               return (
                 <FormSummaryPanel
@@ -231,7 +232,7 @@ export const OversiktView = (props: IProps) => {
               Dere har ikke lagt inn en risikoeier. Dere må gjøre dette før dere sender PVK-en til
               Personvernombudet. Dere kan redigere deltakere og ansvarlige under
               <Link
-                href={pvkEditUrl(etterlevelseDokumentasjon.id)}
+                href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
                 target='_blank'
                 rel='noopener noreferrer'
                 aria-label='redigere etterlevelsesdokumentasjon'

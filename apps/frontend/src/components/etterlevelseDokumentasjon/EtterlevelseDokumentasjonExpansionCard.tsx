@@ -6,11 +6,11 @@ import { CodelistService, EListName, ICode, IGetParsedOptionsProps } from '../..
 import { user } from '../../services/User'
 import { BehandlingList } from '../behandling/BehandlingList'
 import { Markdown } from '../common/Markdown'
+import { ExternalLink } from '../common/RouteLink'
 import {
-  ExternalLink,
   etterlevelseDokumentasjonGjenbrukUrl,
   etterlevelseDokumentasjonRelasjonUrl,
-} from '../common/RouteLink'
+} from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { Teams } from '../common/TeamName'
 import { VarslingsadresserView } from './VarslingsAddresseView'
 

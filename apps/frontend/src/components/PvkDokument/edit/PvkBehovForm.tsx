@@ -22,8 +22,8 @@ import {
 import { IEtterlevelseDokumentasjon, IPvkDokument } from '../../../constants'
 import { EListName, ICode, ICodelistProps } from '../../../services/Codelist'
 import { FieldWrapper, TextAreaField } from '../../common/Inputs'
-import { etterlevelseDokumentasjonUrl } from '../../common/RouteLink'
-import { pvkDokumentasjonPvkBehovUrl, pvkDokumentasjonUrl } from '../../common/RouteLinkPvk'
+import { etterlevelseDokumentasjonUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
+import { pvkDokumentasjonPvkBehovUrl, pvkDokumentasjonStepUrl } from '../../common/RouteLinkPvk'
 import { pvkBehovSchema } from './pvkDocumentSchema'
 
 type TProps = {
@@ -238,10 +238,12 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                     if (dirty) {
                       setIsUnsavedModalOpen(true)
                       setUrlToNavigate(
-                        pvkDokumentasjonUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                        pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
                       )
                     } else {
-                      navigate(pvkDokumentasjonUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1))
+                      navigate(
+                        pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                      )
                     }
                   }}
                 >

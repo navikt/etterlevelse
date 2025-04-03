@@ -20,7 +20,7 @@ import {
   getEtterlevelseArkiv,
   updateAsAdminEtterlevelseArkiv,
 } from '../api/ArkiveringApi'
-import { etterlevelseDokumentasjonUrl } from '../components/common/RouteLink'
+import { etterlevelseDokumentasjonUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { PageLayout } from '../components/scaffold/Page'
 import { EEtterlevelseArkivStatus, IEtterlevelseArkiv } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'

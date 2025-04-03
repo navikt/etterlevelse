@@ -18,7 +18,7 @@ import { TTemaCode } from '../../../services/Codelist'
 import {
   etterlevelseDokumentasjonAlleUrl,
   etterlevelseDokumentasjonUrl,
-} from '../../common/RouteLink'
+} from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 import { KravAccordionList } from '../KravAccordionList'
 import { filterStatus, filterSuksesskriterieStatus, getNewestKravVersjon } from '../common/utils'
 

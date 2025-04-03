@@ -12,8 +12,9 @@ import {
 } from '../../constants'
 import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
-import { ExternalLink, etterlevelseDokumentasjonUrl } from '../common/RouteLink'
-import { pvkDokumentasjonUrl } from '../common/RouteLinkPvk'
+import { ExternalLink } from '../common/RouteLink'
+import { etterlevelseDokumentasjonUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
+import { pvkDokumentasjonStepUrl } from '../common/RouteLinkPvk'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/OppsumeringAccordianList'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
@@ -274,7 +275,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                           </Heading>
                           Tiltak legges inn under{' '}
                           <ExternalLink
-                            href={pvkDokumentasjonUrl(
+                            href={pvkDokumentasjonStepUrl(
                               etterlevelseDokumentasjonId,
                               pvkDokument.id,
                               4

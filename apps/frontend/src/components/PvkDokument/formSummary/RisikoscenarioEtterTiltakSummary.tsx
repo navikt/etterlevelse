@@ -2,6 +2,7 @@ import { FormSummary } from '@navikt/ds-react'
 import { FunctionComponent, useEffect, useState } from 'react'
 import { IRisikoscenario } from '../../../constants'
 import { ExternalLink } from '../../common/RouteLink'
+import { risikoscenarioFilterAlleUrl } from '../../common/RouteLinkRisiko'
 import { risikoscenarioFieldCheck } from '../../risikoscenario/common/util'
 
 type TProps = {
@@ -61,7 +62,7 @@ export const RisikoscenarioEtterTitak: FunctionComponent<TProps> = ({
                 <FormSummary.Label>Risikoscenarioer</FormSummary.Label>
                 <FormSummary.Value>
                   Det er vurdert totalt sett {antallFerdigVurdert} risikoscenarioer.{' '}
-                  <ExternalLink href={risikoscenarioLink + '?tab=risikoscenarioer&filter=alle'}>
+                  <ExternalLink href={risikoscenarioLink + risikoscenarioFilterAlleUrl()}>
                     Se alle risikoscenarioer
                   </ExternalLink>
                   .

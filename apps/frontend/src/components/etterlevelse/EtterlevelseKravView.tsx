@@ -57,8 +57,8 @@ import { Markdown } from '../common/Markdown'
 import {
   etterlevelseDokumentasjonTemaUrl,
   etterlevelseDokumentasjonUrl,
-  kravUrl,
-} from '../common/RouteLink'
+} from '../common/RouteLinkEtterlevelsesdokumentasjon'
+import { kravUrl } from '../common/RouteLinkKrav'
 import { getEtterlevelseStatus } from '../etterlevelseDokumentasjon/common/utils'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import Etterlevelser from '../krav/Etterlevelser'

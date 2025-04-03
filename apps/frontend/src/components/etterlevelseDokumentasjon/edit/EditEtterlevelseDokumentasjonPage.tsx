@@ -5,7 +5,7 @@ import { user } from '../../../services/User'
 import {
   etterlevelseDokumentasjonUrl,
   etterlevelseDokumentasjonerUrl,
-} from '../../common/RouteLink'
+} from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 import { PageLayout } from '../../scaffold/Page'
 import EtterlevelseDokumentasjonForm from './EtterlevelseDokumentasjonForm'
 
@@ -27,7 +27,7 @@ export const EditEtterlevelseDokumentasjonPage = () => {
           currentPage='Rediger etterlevelsesdokumentet'
           breadcrumbPaths={[
             {
-              href: etterlevelseDokumentasjonerUrl(undefined),
+              href: etterlevelseDokumentasjonerUrl(),
               pathName: 'Dokumentere etterlevelse',
             },
             {

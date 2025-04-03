@@ -4,6 +4,11 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from '../components/common/Markdown'
+import {
+  etterlevelseDokumentasjonCreateUrl,
+  etterlevelseDokumentasjonUrl,
+  etterlevelseDokumentasjonerUrl,
+} from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { EtterlevelseDokumentasjonsPanel } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonsPanel'
 import { PageLayout } from '../components/scaffold/Page'
 import {
@@ -107,7 +112,7 @@ export const MainPage = () => {
                       ampli.logEvent('knapp klikket', {
                         tekst: 'Nytt etterlevelsesdokument fra forsiden',
                       })
-                      navigate('/dokumentasjon/create')
+                      navigate(etterlevelseDokumentasjonCreateUrl())
                     }}
                     size='medium'
                     variant={
@@ -126,10 +131,10 @@ export const MainPage = () => {
                     ampli.logEvent('navigere', {
                       app: 'etterlevelse',
                       kilde: 'forside-panel',
-                      til: '/dokumentasjoner',
+                      til: etterlevelseDokumentasjonerUrl(),
                       fra: '/',
                     })
-                    navigate('/dokumentasjoner')
+                    navigate(etterlevelseDokumentasjonerUrl())
                   }}
                 >
                   Alle etterlevelsesdokumenter
@@ -198,7 +203,7 @@ const EtterlevelseDokumentasjonList = ({
                     ampli.logEvent('navigere', {
                       app: 'etterlevelse',
                       kilde: 'forside-panel',
-                      til: `'/dokumentasjon/' + ${etterlevelseDokumentasjon.id}`,
+                      til: etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.id),
                       fra: '/',
                     })
                   }

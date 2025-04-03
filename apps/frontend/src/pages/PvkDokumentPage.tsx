@@ -15,6 +15,9 @@ import OppsummeringAvAlleRisikoscenarioerOgTiltak from '../components/PvkDokumen
 import OversiktView from '../components/PvkDokument/OversiktView'
 import SendInnView from '../components/PvkDokument/SendInnView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
+import { etterlevelseDokumentasjonUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import { pvkDokumentasjonStepUrl } from '../components/common/RouteLinkPvk'
+import { risikoscenarioFilterAlleUrl } from '../components/common/RouteLinkRisiko'
 import {
   EPvkDokumentStatus,
   ERisikoscenarioType,
@@ -72,13 +75,18 @@ export const PvkDokumentPage = () => {
         etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
         ' ' +
         etterlevelseDokumentasjon?.title,
-      href: '/dokumentasjon/' + params.id,
+      href: etterlevelseDokumentasjonUrl(params.id),
     },
   ]
 
   const updateUrlOnStepChange = (step: number) => {
     navigate(
-      `/dokumentasjon/${pvkDokument?.etterlevelseDokumentId}/pvkdokument/${pvkDokument?.id}/${step}${step === 6 ? '?tab=risikoscenarioer&filter=alle' : ''}`
+      pvkDokumentasjonStepUrl(
+        pvkDokument?.etterlevelseDokumentId,
+        pvkDokument?.id,
+        step,
+        step === 6 ? risikoscenarioFilterAlleUrl() : ''
+      )
     )
   }
 

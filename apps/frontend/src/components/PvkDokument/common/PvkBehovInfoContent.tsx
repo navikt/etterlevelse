@@ -4,7 +4,8 @@ import { IBehandlingensLivslop, IEtterlevelseDokumentasjon } from '../../../cons
 import { user } from '../../../services/User'
 import { env } from '../../../util/env'
 import { ExternalLink } from '../../common/RouteLink'
-import { pvkDokumentasjonBehandlingsenLivslopUrl, pvkEditUrl } from '../../common/RouteLinkPvk'
+import { etterlevelsesDokumentasjonEditUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
+import { pvkDokumentasjonBehandlingsenLivslopUrl } from '../../common/RouteLinkPvk'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -43,7 +44,10 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
           {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
             <Alert variant='info' className='mb-5'>
               Dere har ikke ennå lagt til behandlinger under{' '}
-              <ExternalLink className='text-medium' href={pvkEditUrl(etterlevelseDokumentasjon.id)}>
+              <ExternalLink
+                className='text-medium'
+                href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+              >
                 Dokumentegenskaper
               </ExternalLink>
               . Det anbefales at dere gjør dette før dere vurderer behov for PVK.

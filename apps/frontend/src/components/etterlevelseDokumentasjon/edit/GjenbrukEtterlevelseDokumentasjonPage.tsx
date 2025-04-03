@@ -8,7 +8,7 @@ import { Markdown } from '../../common/Markdown'
 import {
   etterlevelseDokumentasjonUrl,
   etterlevelseDokumentasjonerUrl,
-} from '../../common/RouteLink'
+} from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 import { PageLayout } from '../../scaffold/Page'
 import GjenbrukEtterlevelseDokumentasjonForm from './GjenbrukEtterlevelseDokumentasjonForm'
 
@@ -47,7 +47,7 @@ export const GjenbrukEtterlevelseDokumentasjonPage = () => {
           currentPage='Gjenbruk etterlevelsesdokumentet'
           breadcrumbPaths={[
             {
-              href: etterlevelseDokumentasjonerUrl(undefined),
+              href: etterlevelseDokumentasjonerUrl(),
               pathName: 'Dokumentere etterlevelse',
             },
             {

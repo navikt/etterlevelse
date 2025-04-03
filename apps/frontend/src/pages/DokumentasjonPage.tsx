@@ -8,6 +8,15 @@ import { getDocumentRelationByToIdAndRelationTypeWithData } from '../api/Documen
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import {
+  etterlevelseDokumentasjonUrl,
+  etterlevelsesDokumentasjonEditUrl,
+} from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import {
+  pvkDokumentasjonBehandlingsenLivslopUrl,
+  pvkDokumentasjonPvkBehovUrl,
+  pvkDokumentasjonStepUrl,
+} from '../components/common/RouteLinkPvk'
 import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
 import TillatGjenbrukModal from '../components/etterlevelseDokumentasjon/edit/TillatGjenbrukModal'
 import DokumentasjonPageTabs from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonPageTabs'
@@ -213,7 +222,9 @@ export const DokumentasjonPage = () => {
           {morDokumentRelasjon && (
             <BodyShort className='my-5'>
               Dette dokumentet er et arv fra{' '}
-              <Link href={`/dokumentasjon/${morDokumentRelasjon.fromDocumentWithData.id}`}>
+              <Link
+                href={etterlevelseDokumentasjonUrl(morDokumentRelasjon.fromDocumentWithData.id)}
+              >
                 E{morDokumentRelasjon.fromDocumentWithData.etterlevelseNummer}{' '}
                 {morDokumentRelasjon.fromDocumentWithData.title}
               </Link>
@@ -267,7 +278,7 @@ export const DokumentasjonPage = () => {
                     <>
                       <Button
                         onClick={() => {
-                          navigate('/dokumentasjon/edit/' + etterlevelseDokumentasjon.id)
+                          navigate(etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id))
                         }}
                         size='small'
                         variant='tertiary'
@@ -289,17 +300,12 @@ export const DokumentasjonPage = () => {
                         user.isAdmin()) && (
                         <Button
                           onClick={() => {
-                            let behandlingensLivlopUrl =
-                              '/dokumentasjon/' +
-                              etterlevelseDokumentasjon.id +
-                              '/behandlingens-livslop/'
-
-                            if (behandlingsLivslop) {
-                              behandlingensLivlopUrl += behandlingsLivslop.id
-                            } else {
-                              behandlingensLivlopUrl += 'ny'
-                            }
-                            navigate(behandlingensLivlopUrl)
+                            navigate(
+                              pvkDokumentasjonBehandlingsenLivslopUrl(
+                                etterlevelseDokumentasjon.id,
+                                behandlingsLivslop ? behandlingsLivslop.id : 'ny'
+                              )
+                            )
                           }}
                           size='small'
                           variant={getVariantForBLLButton(behandlingsLivslop)}
@@ -318,11 +324,11 @@ export const DokumentasjonPage = () => {
                           <Button
                             onClick={() => {
                               navigate(
-                                '/dokumentasjon/' +
-                                  etterlevelseDokumentasjon.id +
-                                  '/pvkdokument/' +
-                                  pvkDokument.id +
-                                  '/1'
+                                pvkDokumentasjonStepUrl(
+                                  etterlevelseDokumentasjon.id,
+                                  pvkDokument.id,
+                                  1
+                                )
                               )
                             }}
                             size='small'
@@ -341,15 +347,12 @@ export const DokumentasjonPage = () => {
                         user.isAdmin()) && (
                         <Button
                           onClick={() => {
-                            let pvkBehovUrl =
-                              '/dokumentasjon/' + etterlevelseDokumentasjon.id + '/pvkbehov/'
-
-                            if (pvkDokument) {
-                              pvkBehovUrl += pvkDokument.id
-                            } else {
-                              pvkBehovUrl += 'ny'
-                            }
-                            navigate(pvkBehovUrl)
+                            navigate(
+                              pvkDokumentasjonPvkBehovUrl(
+                                etterlevelseDokumentasjon.id,
+                                pvkDokument ? pvkDokument.id : 'ny'
+                              )
+                            )
                           }}
                           size='small'
                           variant={getVariantForPVKBehovButton(pvkDokument, behandlingsLivslop)}

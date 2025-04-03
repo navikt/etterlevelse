@@ -144,11 +144,11 @@ export const isFerdigUtfylt = (status: EEtterlevelseStatus | undefined) => {
 //   const breadcrumbPaths: IBreadcrumbPaths[] = [
 //     {
 //       pathName: 'Dokumenter etterlevelse',
-//       href: '/dokumentasjoner',
+//       href: etterlevelseDokumentasjonerUrl,
 //     },
 //     {
 //       pathName: 'Temaoversikt',
-//       href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,
+//       href: etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon?.id),
 //     },
 //   ]
 

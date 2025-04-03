@@ -25,6 +25,8 @@ import BehandlingensLivslopTextContent from '../components/behandlingensLivlop/B
 import { CustomFileUpload } from '../components/behandlingensLivlop/CustomFileUpload'
 import behandlingensLivslopSchema from '../components/behandlingensLivlop/behandlingensLivsLopSchema'
 import { TextAreaField } from '../components/common/Inputs'
+import { etterlevelseDokumentasjonUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import { pvkDokumentasjonPvkTypeStepUrl } from '../components/common/RouteLinkPvk'
 import { PageLayout } from '../components/scaffold/Page'
 import {
   IBehandlingensLivslop,
@@ -56,7 +58,7 @@ export const BehandlingensLivslopPage = () => {
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
     {
-      href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,
+      href: etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon?.id),
       pathName:
         'E' +
         etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
@@ -103,14 +105,15 @@ export const BehandlingensLivslopPage = () => {
         await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
           setBehandlingesLivslop(response)
           if (tilTemaOversikt) {
-            navigate('/dokumentasjon/' + response.etterlevelseDokumentasjonId)
+            navigate(etterlevelseDokumentasjonUrl(response.etterlevelseDokumentasjonId))
           } else if (tilPvkDokument) {
             navigate(
-              '/dokumentasjon/' +
-                response.etterlevelseDokumentasjonId +
-                pvkDokumentLink +
-                (pvkDokument ? pvkDokument.id : 'ny') +
-                '/1'
+              pvkDokumentasjonPvkTypeStepUrl(
+                response.etterlevelseDokumentasjonId,
+                pvkDokumentLink,
+                pvkDokument ? pvkDokument.id : 'ny',
+                1
+              )
             )
           }
         })
@@ -118,13 +121,14 @@ export const BehandlingensLivslopPage = () => {
         await createBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
           setBehandlingesLivslop(response)
           if (tilTemaOversikt) {
-            navigate('/dokumentasjon/' + response.etterlevelseDokumentasjonId)
+            navigate(etterlevelseDokumentasjonUrl(response.etterlevelseDokumentasjonId))
           } else if (tilPvkDokument) {
             navigate(
-              '/dokumentasjon/' +
-                response.etterlevelseDokumentasjonId +
-                pvkDokumentLink +
-                (pvkDokument ? pvkDokument.id : 'ny')
+              pvkDokumentasjonPvkTypeStepUrl(
+                response.etterlevelseDokumentasjonId,
+                pvkDokumentLink,
+                pvkDokument ? pvkDokument.id : 'ny'
+              )
             )
           }
         })
@@ -251,7 +255,7 @@ export const BehandlingensLivslopPage = () => {
                           type='button'
                           variant='tertiary'
                           onClick={() => {
-                            navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
+                            navigate(etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.id))
                           }}
                         >
                           Avbryt

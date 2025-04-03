@@ -2,7 +2,7 @@ import { LinkPanel } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
-import { etterlevelseDokumentasjonUrl } from '../common/RouteLink'
+import { etterlevelseDokumentasjonUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL

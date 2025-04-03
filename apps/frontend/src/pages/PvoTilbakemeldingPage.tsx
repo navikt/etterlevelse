@@ -15,6 +15,7 @@ import OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView from '../components/Pvo
 import OversiktPvoView from '../components/PvoTilbakemelding/OversiktPvoView'
 import SendInnPvoView from '../components/PvoTilbakemelding/SendInnPvoView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
+import { risikoscenarioFilterAlleUrl } from '../components/common/RouteLinkRisiko'
 import {
   EPVO,
   ERisikoscenarioType,
@@ -81,7 +82,7 @@ export const PvoTilbakemeldingPage = () => {
 
   const updateUrlOnStepChange = (step: number) => {
     navigate(
-      `/pvkdokument/${params.id}${EPVO.tilbakemelding}/${step}${step === 6 ? '?tab=risikoscenarioer&filter=alle' : ''}`
+      `/pvkdokument/${params.id}${EPVO.tilbakemelding}/${step}${step === 6 ? risikoscenarioFilterAlleUrl() : ''}`
     )
   }
 

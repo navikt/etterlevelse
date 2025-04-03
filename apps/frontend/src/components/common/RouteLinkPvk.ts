@@ -1,12 +1,32 @@
-export const pvkEditUrl = (etterlevelseDokumentasjonId: string) =>
-  `/dokumentasjon/edit/${etterlevelseDokumentasjonId}`
+export const pvkDokumentasjonStepUrl = (
+  etterlevelseDokumentId: string | undefined,
+  pvkDokumentId: string | undefined,
+  step: number,
+  filter?: string
+): string => {
+  const url: string = `/dokumentasjon/${etterlevelseDokumentId}/pvkdokument/${pvkDokumentId}/${step}`
 
-export const pvkDokumentasjonUrl = (
+  if (filter) {
+    return `${url}/${filter}`
+  }
+
+  return url
+}
+
+export const pvkDokumentasjonPvkTypeStepUrl = (
   etterlevelseDokumentId: string,
+  pvkType: string,
   pvkDokumentId: string,
-  step: number
-): string => `/dokumentasjon/${etterlevelseDokumentId}/pvkdokument/${pvkDokumentId}/${step}`
+  step?: number
+): string => {
+  const url: string = `/dokumentasjon/${etterlevelseDokumentId}/${pvkType}/${pvkDokumentId}`
 
+  if (step) {
+    return `${url}/${step}`
+  }
+
+  return url
+}
 export const pvkDokumentasjonCopyUrl = (
   locationOrigin: string,
   etterlevelseDokumentasjonId: string,

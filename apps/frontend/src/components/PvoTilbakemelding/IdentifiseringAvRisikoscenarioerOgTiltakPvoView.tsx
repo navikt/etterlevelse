@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import { ERisikoscenarioType, IPvkDokument, IRisikoscenario, ITiltak } from '../../constants'
-import { etterlevelseDokumentasjonPvkTabUrl } from '../common/RouteLink'
+import { etterlevelseDokumentasjonPvkTabUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import RisikoscenarioAccordianListPvoView from './RisikoscenarioAccordianListPvoView'
 import PvoFormButtons from './edit/PvoFormButtons'
 

@@ -4,7 +4,8 @@ import moment from 'moment'
 import { useEtterlevelseDokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
 import { EEtterlevelseStatus, ESuksesskriterieStatus, IEtterlevelse, IKrav } from '../../constants'
 import { Markdown } from '../common/Markdown'
-import { etterlevelseDokumentasjonUrl, kravNummerVersjonUrl } from '../common/RouteLink'
+import { etterlevelseDokumentasjonUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
+import { kravNummerVersjonUrl } from '../common/RouteLinkKrav'
 import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
 
 const getHeaderText = (status: EEtterlevelseStatus) => {

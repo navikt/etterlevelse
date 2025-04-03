@@ -1,5 +1,6 @@
 import { Button } from '@navikt/ds-react'
 import { useNavigate } from 'react-router-dom'
+import { etterlevelseDokumentasjonCreateUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { DokumentasjonTabs } from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonsTabs'
 import { ListPageHeader } from '../components/scaffold/ListPageHeader'
 import { PageLayout } from '../components/scaffold/Page'
@@ -26,7 +27,7 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
         <ListPageHeader headingText='Dokumentere etterlevelse'>
           <Button
             onClick={() => {
-              navigate('/dokumentasjon/create')
+              navigate(etterlevelseDokumentasjonCreateUrl())
             }}
             size='medium'
             variant='primary'

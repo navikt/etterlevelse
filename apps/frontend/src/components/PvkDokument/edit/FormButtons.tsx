@@ -2,7 +2,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
 import { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { etterlevelseDokumentasjonUrl } from '../../common/RouteLink'
+import { etterlevelseDokumentasjonUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 
 interface IProps {
   etterlevelseDokumentasjonId: string
