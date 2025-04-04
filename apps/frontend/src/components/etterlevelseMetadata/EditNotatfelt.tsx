@@ -30,7 +30,7 @@ export const EditNotatfelt = ({
 
   const submit = (values: IEtterlevelseMetadata) => {
     if (etterlevelseMetadata.id === 'ny') {
-      createEtterlevelseMetadata({ ...values, notater: notater }).then((resp) => {
+      createEtterlevelseMetadata({ ...values, notater: notater, id: '' }).then((resp) => {
         setEtterlevelseMetadata(resp)
       })
     } else {

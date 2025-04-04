@@ -353,6 +353,7 @@ export const EtterlevelseKravView = (props: IProps) => {
                           } else {
                             createEtterlevelseMetadata({
                               ...etterlevelseMetadata,
+                              id: '',
                               tildeltMed: [ident],
                             }).then((resp) => {
                               setEtterlevelseMetadata(resp)
