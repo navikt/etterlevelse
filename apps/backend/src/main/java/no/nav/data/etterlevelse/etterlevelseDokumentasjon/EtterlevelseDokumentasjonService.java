@@ -124,7 +124,7 @@ public class EtterlevelseDokumentasjonService {
         }
 
         if (request.isUpdate() && !etterlevelseDokumentasjon.isForGjenbruk()) {
-            var documentRelations = documentRelationService.findByFromDocumentAndRelationType(request.getId().toString(), RelationType.ARVER);
+            var documentRelations = documentRelationService.findByFromDocumentAndRelationType(request.getId(), RelationType.ARVER);
             if (!documentRelations.isEmpty()) {
                 throw new ValidationException("Kan ikke fjerne gjenbruk fordi etterlevelses dokument er arvet av " + documentRelations.size() + " etterlevelsesdokumentasjon.");
             }
@@ -141,19 +141,19 @@ public class EtterlevelseDokumentasjonService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public EtterlevelseDokumentasjon saveAndCreateRelationWithEtterlevelseCopy(UUID fromDocumentID, EtterlevelseDokumentasjonWithRelationRequest request) {
+    public EtterlevelseDokumentasjon saveAndCreateRelationWithEtterlevelseCopy(UUID fromDocumentId, EtterlevelseDokumentasjonWithRelationRequest request) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = new EtterlevelseDokumentasjon();
         request.mergeInto(etterlevelseDokumentasjon);
         etterlevelseDokumentasjon.setEtterlevelseNummer(etterlevelseDokumentasjonRepo.nextEtterlevelseDokumentasjonNummer());
         log.info("creating new Etterlevelse document with relation");
         var newEtterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
 
-        etterlevelseService.copyEtterlevelse(fromDocumentID, newEtterlevelseDokumentasjon.getId());
+        etterlevelseService.copyEtterlevelse(fromDocumentId, newEtterlevelseDokumentasjon.getId());
 
         var newDocumentRelation = documentRelationService.save(
                 DocumentRelation.builder()
-                        .fromDocument(fromDocumentID.toString())
-                        .toDocument(newEtterlevelseDokumentasjon.getId().toString())
+                        .fromDocument(fromDocumentId)
+                        .toDocument(newEtterlevelseDokumentasjon.getId())
                         .relationType(request.getRelationType())
                         .build(), false);
 
@@ -165,7 +165,7 @@ public class EtterlevelseDokumentasjonService {
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon deleteEtterlevelseDokumentasjonAndAllChildren(UUID id) {
 
-        if (!documentRelationService.findByFromDocument(id.toString()).isEmpty() || !documentRelationService.findByToDocument(id.toString()).isEmpty()) {
+        if (!documentRelationService.findByFromDocument(id).isEmpty() || !documentRelationService.findByToDocument(id).isEmpty()) {
             log.info("Requested to delete etterlevelses dokumentasjon id={} with relation.", id);
             throw new ForbiddenException("Kan ikke slette et dokument som har relasjoner.");
         }

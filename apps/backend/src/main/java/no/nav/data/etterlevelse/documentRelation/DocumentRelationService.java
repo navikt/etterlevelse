@@ -22,30 +22,30 @@ public class DocumentRelationService {
 
     public DocumentRelation getById(UUID id) {
         var documentRelation = repository.findById(id);
-        return documentRelation.orElseThrow(() -> new NotFoundException("Couldn't find GenericStorage with id " + id));
+        return documentRelation.orElseThrow(() -> new NotFoundException("Couldn't find DocumentRelation with id " + id));
     }
 
     public Page<DocumentRelation> getAll(Pageable pageable) {
         return repository.findAll(pageable);
     }
 
-    public List<DocumentRelation> findByFromDocument(String fromDocumentId) {
+    public List<DocumentRelation> findByFromDocument(UUID fromDocumentId) {
         return repository.findByFromDocument(fromDocumentId);
     }
 
-    public List<DocumentRelation> findByToDocument(String toDocumentId) {
+    public List<DocumentRelation> findByToDocument(UUID toDocumentId) {
         return repository.findByToDocument(toDocumentId);
     }
 
-    public List<DocumentRelation> findByFromDocumentAndRelationType (String fromDocumentId, RelationType relationType) {
+    public List<DocumentRelation> findByFromDocumentAndRelationType (UUID fromDocumentId, RelationType relationType) {
         return repository.findByFromDocumentAndRelationType(fromDocumentId, relationType);
     };
 
-    public List<DocumentRelation> findByToDocumentAndRelationType(String toDocumentId, RelationType relationType) {
+    public List<DocumentRelation> findByToDocumentAndRelationType(UUID toDocumentId, RelationType relationType) {
         return repository.findByToDocumentAndRelationType(toDocumentId, relationType);
     };
 
-    public DocumentRelation findByFromDocumentAndToDocumentAndRelationType(String fromDocumentId, String toDocumentId, RelationType relationType) {
+    public DocumentRelation findByFromDocumentAndToDocumentAndRelationType(UUID fromDocumentId, UUID toDocumentId, RelationType relationType) {
         return repository.findByFromDocumentAndToDocumentAndRelationType(fromDocumentId, toDocumentId, relationType);
     }
 

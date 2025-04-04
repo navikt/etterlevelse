@@ -25,8 +25,8 @@ public class DocumentRelationResponse {
     private ChangeStampResponse changeStamp;
     private Integer version;
     private RelationType relationType;
-    private String fromDocument;
-    private String toDocument;
+    private UUID fromDocument;
+    private UUID toDocument;
     private JsonNode data;
 
     private EtterlevelseDokumentasjonResponse fromDocumentWithData;
