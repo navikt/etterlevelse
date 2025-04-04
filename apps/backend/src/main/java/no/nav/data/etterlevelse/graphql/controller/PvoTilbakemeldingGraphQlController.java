@@ -70,7 +70,7 @@ public class PvoTilbakemeldingGraphQlController {
     }
 
     @SchemaMapping(typeName = "PvoTilbakemelding")
-    public String etterlevelseDokumentasjonId(PvoTilbakemeldingGraphqlResponse pvoTilbakemeldingGraphqlResponse) {
+    public UUID etterlevelseDokumentasjonId(PvoTilbakemeldingGraphqlResponse pvoTilbakemeldingGraphqlResponse) {
         var pvkDokument = pvkDokumentService.get(UUID.fromString(pvoTilbakemeldingGraphqlResponse.getPvkDokumentId()));
         return pvkDokument.getEtterlevelseDokumentId();
     }
@@ -78,7 +78,7 @@ public class PvoTilbakemeldingGraphQlController {
     @SchemaMapping(typeName = "PvoTilbakemelding")
     public EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjonData(PvoTilbakemeldingGraphqlResponse pvoTilbakemeldingGraphqlResponse) {
         var etterlevelseDokumentasjonId = pvkDokumentService.get(UUID.fromString(pvoTilbakemeldingGraphqlResponse.getPvkDokumentId())).getEtterlevelseDokumentId();
-        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelseDokumentasjonId));
+        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
         return EtterlevelseDokumentasjonGraphQlResponse.buildFrom(etterlevelseDokumentasjon);
     }
 

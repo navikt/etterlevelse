@@ -85,7 +85,7 @@ public class RisikoscenarioIT extends IntegrationTestBase {
     
     @Test
     void testCrate() {
-        PvkDokument pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
+        PvkDokument pvkDokument = createPvkDokument();
         RisikoscenarioRequest request = RisikoscenarioRequest.builder()
                 .pvkDokumentId(pvkDokument.getId().toString())
                 .build();
@@ -109,7 +109,7 @@ public class RisikoscenarioIT extends IntegrationTestBase {
 
     @Test
     void testCrateRisikoscenarioKnyttetTilKrav() {
-        PvkDokument pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
+        PvkDokument pvkDokument = createPvkDokument();
         kravStorageService.save(Krav.builder().navn("Krav 50").kravNummer(50).kravVersjon(1).regelverk(List.of(Regelverk.builder().lov("ARKIV").spesifisering("§1").build())).status(KravStatus.AKTIV).build());
         RisikoscenarioRequest request = RisikoscenarioRequest.builder()
                 .pvkDokumentId(pvkDokument.getId().toString())
@@ -280,7 +280,7 @@ public class RisikoscenarioIT extends IntegrationTestBase {
     }
    
     private Risikoscenario insertRisikoscenario() {
-        PvkDokument pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
+        PvkDokument pvkDokument = createPvkDokument();
         Krav krav = kravStorageService.save(Krav.builder().navn("Krav 50").kravNummer(50).kravVersjon(1).regelverk(List.of(Regelverk.builder().lov("ARKIV").spesifisering("§1").build())).status(KravStatus.AKTIV).build());
 
         Risikoscenario risikoscenario = Risikoscenario.builder()

@@ -19,7 +19,7 @@ import java.util.UUID;
 public class PvkDokumentListItemResponse {
     private UUID id;
     private ChangeStampResponse changeStamp;
-    private String etterlevelseDokumentId;
+    private UUID etterlevelseDokumentId;
     private Integer etterlevelseNummer;
     private String title;
     private PvkDokumentStatus status;

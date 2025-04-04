@@ -18,7 +18,7 @@ public class BehandlingensLivslopResponse {
     
     private UUID id;
 
-    private String etterlevelseDokumentasjonId;
+    private UUID etterlevelseDokumentasjonId;
 
     private String beskrivelse;
 

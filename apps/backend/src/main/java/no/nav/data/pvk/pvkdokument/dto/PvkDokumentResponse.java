@@ -25,7 +25,7 @@ public class PvkDokumentResponse {
     private ChangeStampResponse changeStamp;
     private Integer version;
 
-    private String etterlevelseDokumentId;
+    private UUID etterlevelseDokumentId;
     private PvkDokumentStatus status;
 
     private List<CodelistResponse> ytterligereEgenskaper;

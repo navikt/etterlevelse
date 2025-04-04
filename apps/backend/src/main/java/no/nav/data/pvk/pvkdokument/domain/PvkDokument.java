@@ -31,7 +31,7 @@ public class PvkDokument extends Auditable {
     private UUID id = UUID.randomUUID();
 
     @Column(name = "ETTERLEVELSE_DOKUMENTASJON_ID", nullable = false)
-    private String etterlevelseDokumentId;
+    private UUID etterlevelseDokumentId;
 
     @Builder.Default
     @Column(name = "STATUS")

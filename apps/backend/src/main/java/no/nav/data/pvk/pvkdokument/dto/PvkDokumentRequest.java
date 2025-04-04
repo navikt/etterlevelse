@@ -26,7 +26,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 public class PvkDokumentRequest implements RequestElement {
 
     private UUID id;
-    private String etterlevelseDokumentId;
+    private UUID etterlevelseDokumentId;
     private PvkDokumentStatus status;
 
     private List<String> ytterligereEgenskaper;
@@ -50,7 +50,6 @@ public class PvkDokumentRequest implements RequestElement {
 
     @Override
     public void format() {
-        setEtterlevelseDokumentId(trimToNull(etterlevelseDokumentId));
         setPvkVurderingsBegrunnelse(trimToNull(pvkVurderingsBegrunnelse));
         setPersonkategoriAntallBeskrivelse(trimToNull(personkategoriAntallBeskrivelse));
         setTilgangsBeskrivelsePersonopplysningene(trimToNull(tilgangsBeskrivelsePersonopplysningene));
@@ -68,7 +67,7 @@ public class PvkDokumentRequest implements RequestElement {
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(Fields.etterlevelseDokumentId, etterlevelseDokumentId);
+        validator.checkNull(Fields.etterlevelseDokumentId, etterlevelseDokumentId);
         validator.checkNull(Fields.status, status);
         validator.checkId(this);
     }
