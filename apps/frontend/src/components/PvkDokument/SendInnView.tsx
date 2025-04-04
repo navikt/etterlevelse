@@ -35,7 +35,7 @@ import {
 } from '../../constants'
 import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
-import { risikoscenarioFieldCheck } from '../risikoscenario/common/util'
+import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
 import FormButtons from './edit/FormButtons'
 import pvkDocumentSchema from './edit/pvkDocumentSchema'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
@@ -74,6 +74,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [behandlingensLivslopError, setBehandlingensLivslopError] = useState<boolean>(false)
   const [manglerBehandlingError, setManglerBehandlingError] = useState<boolean>(false)
   const [risikoscenarioError, setRisikoscenarioError] = useState<string>('')
+  const [savnerVurderingError, setsavnerVurderingError] = useState<string>('')
+  const [tiltakError, setTiltakError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
 
@@ -82,7 +84,13 @@ export const SendInnView: FunctionComponent<TProps> = ({
     pvkDokument.status === EPvkDokumentStatus.AKTIV
 
   const submit = async (pvkDokument: IPvkDokument) => {
-    if (!behandlingensLivslopError && risikoscenarioError === '' && !manglerBehandlingError) {
+    if (
+      !behandlingensLivslopError &&
+      risikoscenarioError === '' &&
+      savnerVurderingError === '' &&
+      tiltakError === '' &&
+      !manglerBehandlingError
+    ) {
       await getPvkDokument(pvkDokument.id).then((response) => {
         const updatedStatus =
           pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
@@ -127,40 +135,53 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
   const risikoscenarioCheck = () => {
     if (alleRisikoscenario.length === 0) {
-      setRisikoscenarioError('Må ha minst 1 risikoscenario')
+      setRisikoscenarioError('Dere må ha minst 1 risikoscenario.')
     } else {
-      const risikoscenarioMedIngenTiltak = alleRisikoscenario.filter((risiko) => risiko.ingenTiltak)
-      const risikoscenarioMedTiltak = alleRisikoscenario.filter((risiko) => !risiko.ingenTiltak)
-      if (risikoscenarioMedIngenTiltak.length === 0 && risikoscenarioMedTiltak.length !== 0) {
-        const ferdigVurdertRisikoscenario = risikoscenarioMedTiltak.filter((risiko) => {
-          return (
-            risiko.tiltakIds.length !== 0 &&
-            risikoscenarioFieldCheck(risiko) &&
-            risiko.sannsynlighetsNivaaEtterTiltak !== 0 &&
-            risiko.konsekvensNivaaEtterTiltak !== 0 &&
-            risiko.nivaaBegrunnelseEtterTiltak !== ''
-          )
-        })
-        if (ferdigVurdertRisikoscenario.length === 0) {
-          setRisikoscenarioError('Må ha minst 1 ferdig vurdert risikoscenario')
-        } else {
-          setRisikoscenarioError('')
-        }
-      } else if (
-        risikoscenarioMedIngenTiltak.length !== 0 &&
-        risikoscenarioMedTiltak.length === 0
-      ) {
-        const ferdigVurdertRisikoscenario = risikoscenarioMedIngenTiltak.filter((risiko) => {
-          return risikoscenarioFieldCheck(risiko)
-        })
-        if (ferdigVurdertRisikoscenario.length === 0) {
-          setRisikoscenarioError('Må ha minst 1 ferdig skrevet risikoscenario')
-        } else {
-          setRisikoscenarioError('')
-        }
+      const ikkeFerdigBeskrevetScenario = alleRisikoscenario.filter((risiko) =>
+        isRisikoUnderarbeidCheck(risiko)
+      )
+
+      if (ikkeFerdigBeskrevetScenario.length !== 0) {
+        setRisikoscenarioError(
+          `${ikkeFerdigBeskrevetScenario.length} risikoscenarioer er ikke ferdig beskrevet.`
+        )
       } else {
         setRisikoscenarioError('')
       }
+    }
+  }
+
+  const tiltakCheck = () => {
+    if (alleTiltak.length) {
+      const ikkeFerdigBeskrevetTiltak = alleTiltak.filter(
+        (tiltak) =>
+          tiltak.beskrivelse === '' || tiltak.navn === '' || tiltak.ansvarlig.navIdent === ''
+      )
+      if (ikkeFerdigBeskrevetTiltak.length !== 0) {
+        setTiltakError(`${ikkeFerdigBeskrevetTiltak.length} tiltak er ikke ferdig beskrevet`)
+      }
+    } else {
+      setTiltakError('')
+    }
+  }
+
+  const savnerVurderingCheck = () => {
+    const savnerVurdering = alleRisikoscenario
+      .filter((risiko) => !risiko.ingenTiltak)
+      .filter(
+        (risiko) =>
+          risiko.tiltakIds.length === 0 ||
+          risiko.konsekvensNivaaEtterTiltak === 0 ||
+          risiko.sannsynlighetsNivaa === 0 ||
+          risiko.nivaaBegrunnelseEtterTiltak === ''
+      )
+
+    if (savnerVurdering.length !== 0) {
+      setsavnerVurderingError(
+        `${savnerVurdering.length} risikoscenarioer savner en vurdering av tiltakenes effekt.`
+      )
+    } else {
+      setsavnerVurderingError('')
     }
   }
 
@@ -201,6 +222,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
           manglerBehandlingErrorCheck()
           behandlingensLivslopFieldCheck()
           risikoscenarioCheck()
+          tiltakCheck()
+          if (alleRisikoscenario.filter((risiko) => !risiko.ingenTiltak).length !== 0) {
+            savnerVurderingCheck()
+          }
           validateYupSchema(value, pvkDocumentSchema(), true)
         } catch (err) {
           return yupToFormErrors(err)
@@ -313,6 +338,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     ))}
                   {risikoscenarioError !== '' && (
                     <ErrorSummary.Item>{risikoscenarioError}</ErrorSummary.Item>
+                  )}
+                  {tiltakError !== '' && <ErrorSummary.Item>{tiltakError}</ErrorSummary.Item>}
+                  {savnerVurderingError !== '' && (
+                    <ErrorSummary.Item>{savnerVurderingError}</ErrorSummary.Item>
                   )}
                 </ErrorSummary>
               )}
