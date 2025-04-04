@@ -31,6 +31,7 @@ import {
   IPvoTilbakemelding,
   IRisikoscenario,
   ITiltak,
+  TEtterlevelseDokumentasjonQL,
 } from '../../constants'
 import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
@@ -48,7 +49,7 @@ type TProps = {
   updateTitleUrlAndStep: (step: number) => void
   personkategorier: string[]
   databehandlere: string[]
-  etterlevelseDokumentasjonId: string
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -61,7 +62,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   updateTitleUrlAndStep,
   personkategorier,
   databehandlere,
-  etterlevelseDokumentasjonId,
+  etterlevelseDokumentasjon,
   activeStep,
   setActiveStep,
   setSelectedStep,
@@ -71,6 +72,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [alleRisikoscenario, setAlleRisikoscenario] = useState<IRisikoscenario[]>([])
   const [alleTiltak, setAlleTitltak] = useState<ITiltak[]>([])
   const [behandlingensLivslopError, setBehandlingensLivslopError] = useState<boolean>(false)
+  const [manglerBehandlingError, setManglerBehandlingError] = useState<boolean>(false)
   const [risikoscenarioError, setRisikoscenarioError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
@@ -80,7 +82,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
     pvkDokument.status === EPvkDokumentStatus.AKTIV
 
   const submit = async (pvkDokument: IPvkDokument) => {
-    if (!behandlingensLivslopError && risikoscenarioError === '') {
+    if (!behandlingensLivslopError && risikoscenarioError === '' && !manglerBehandlingError) {
       await getPvkDokument(pvkDokument.id).then((response) => {
         const updatedStatus =
           pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
@@ -104,6 +106,14 @@ export const SendInnView: FunctionComponent<TProps> = ({
           setPvkDokument(savedResponse)
         })
       })
+    }
+  }
+
+  const manglerBehandlingErrorCheck = () => {
+    if (etterlevelseDokumentasjon.behandlingIds.length === 0) {
+      setManglerBehandlingError(true)
+    } else {
+      setManglerBehandlingError(false)
     }
   }
 
@@ -188,6 +198,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
       initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
       validate={(value) => {
         try {
+          manglerBehandlingErrorCheck()
           behandlingensLivslopFieldCheck()
           risikoscenarioCheck()
           validateYupSchema(value, pvkDocumentSchema(), true)
@@ -284,7 +295,13 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 >
                   {behandlingensLivslopError && (
                     <ErrorSummary.Item>
-                      Behandlingens livsløp må ha en tegning eller en beskrivelse.
+                      Behandlingens livsløp må få minst 1 opplastet tegning, eller en skriftlig
+                      beskrivelse.
+                    </ErrorSummary.Item>
+                  )}
+                  {manglerBehandlingError && (
+                    <ErrorSummary.Item>
+                      Dere må koble minst 1 behandling på denne etterlevelsesdokumentasjonen.
                     </ErrorSummary.Item>
                   )}
                   {Object.entries(errors)
@@ -308,7 +325,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
               {!isLoading && (
                 <FormButtons
-                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                  etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                   activeStep={activeStep}
                   setActiveStep={setActiveStep}
                   setSelectedStep={setSelectedStep}

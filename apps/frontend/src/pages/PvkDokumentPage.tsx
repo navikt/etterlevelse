@@ -272,7 +272,7 @@ export const PvkDokumentPage = () => {
                       personkategorier={personkategorier}
                       databehandlere={databehandlere}
                       updateTitleUrlAndStep={updateTitleUrlAndStep}
-                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvoTilbakemelding={pvoTilbakemelding}
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}
