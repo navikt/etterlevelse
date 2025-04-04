@@ -2,7 +2,6 @@ import { Alert, BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } fro
 import { useEffect, useState } from 'react'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../../api/BehandlingensLivslopApi'
 import {
-  EPvkDokumentStatus,
   IBehandlingensLivslop,
   IPvkDokument,
   IRisikoscenario,
@@ -11,6 +10,7 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
+import { FormSummaryPanel } from '../PvkDokument/common/FormSummaryPanel'
 import { ExternalLink } from '../common/RouteLink'
 import PvoFormButtons from './edit/PvoFormButtons'
 
@@ -75,7 +75,7 @@ export const OversiktView = (props: IProps) => {
     if (step === 4) {
       return undefined
     } else {
-      return formStatus[step] ? 'Påbegynt' : 'Ikke påbegynt'
+      return formStatus[step] ? 'Under arbeid' : 'Ikke påbegynt'
     }
   }
 
@@ -264,63 +264,6 @@ export const OversiktView = (props: IProps) => {
         />
       </div>
     </div>
-  )
-}
-
-interface IFormSummaryPanelProps {
-  title: string
-  onClick: () => void
-  href: string
-  step: number
-  pvkDokumentStatus: EPvkDokumentStatus
-  status?: 'Ikke påbegynt' | 'Påbegynt'
-}
-
-export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
-  switch (status) {
-    case EPvkDokumentStatus.AKTIV:
-      return 'Under arbeid'
-    case EPvkDokumentStatus.UNDERARBEID:
-      return 'Under arbeid'
-    case EPvkDokumentStatus.SENDT_TIL_PVO:
-      return 'Sendt inn til Personvernombudet'
-    case EPvkDokumentStatus.VURDERT_AV_PVO:
-      return 'Vurdert av Personvernombudet'
-    case EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER:
-      return 'Godkjent av Risikoeier'
-  }
-}
-
-const FormSummaryPanel = (props: IFormSummaryPanelProps) => {
-  const { title, onClick, href, status, pvkDokumentStatus, step } = props
-  return (
-    <FormSummary.Answer key={title}>
-      <FormSummary.Value>
-        <Link onClick={onClick} href={href} className='cursor-pointer'>
-          {title}
-        </Link>
-      </FormSummary.Value>
-      <FormSummary.Value>
-        {status && (
-          <Tag variant={status === 'Ikke påbegynt' ? 'warning' : 'info'} size='xsmall'>
-            {status}
-          </Tag>
-        )}
-        {step === 4 && (
-          <Tag
-            variant={pvkDokumentStatus !== EPvkDokumentStatus.UNDERARBEID ? 'info' : 'warning'}
-            size='xsmall'
-          >
-            {pvkDokumentStatusToText(pvkDokumentStatus)}
-          </Tag>
-        )}
-        {step === 4 && (
-          <BodyShort>
-            Her får dere oversikt over alle deres svar. PVK-dokumentasjon er ikke ennå sendt inn.
-          </BodyShort>
-        )}
-      </FormSummary.Value>
-    </FormSummary.Answer>
   )
 }
 
