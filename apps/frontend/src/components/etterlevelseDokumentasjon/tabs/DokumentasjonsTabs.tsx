@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { useMyTeams } from '../../../api/TeamApi'
 import { emptyPage } from '../../../api/util/EmptyPageConstant'
 import { IPageResponse, ITeam, TEtterlevelseDokumentasjonQL } from '../../../constants'
@@ -18,7 +18,7 @@ type TSection = 'mine' | 'siste' | 'alle' | 'behandlingsok'
 
 export const DokumentasjonTabs = () => {
   const params = useParams<{ tab?: TSection }>()
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
   const [tab, setTab] = useState<TSection>(params.tab || 'mine')
   const [doneLoading, setDoneLoading] = useState(false)
   const [variables, setVariables] = useState<TVariables>({})

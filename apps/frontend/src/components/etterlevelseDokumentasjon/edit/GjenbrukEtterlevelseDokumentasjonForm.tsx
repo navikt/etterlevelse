@@ -1,6 +1,7 @@
 import { Button, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import { useNavigate } from 'react-router-dom'
+import { FunctionComponent } from 'react'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
 import {
@@ -11,6 +12,7 @@ import { searchResourceByNameOptions, useSearchTeamOptions } from '../../../api/
 import {
   ERelationType,
   IBehandling,
+  IEtterlevelseDokumentasjon,
   IEtterlevelseDokumentasjonWithRelation,
   ITeam,
   ITeamResource,
@@ -29,22 +31,26 @@ import { noOptionMessage, selectOverrides } from '../../search/util'
 import { VarslingsadresserEdit } from '../../varslingsadresse/VarslingsadresserEdit'
 import { etterlevelseDokumentasjonWithRelationSchema } from './etterlevelseDokumentasjonSchema'
 
-interface IProps {
+type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   isInheritingFrom: boolean
 }
 
-export const GjenbrukEtterlevelseDokumentasjonForm = (props: IProps) => {
-  const { etterlevelseDokumentasjon, isInheritingFrom } = props
-  const navigate = useNavigate()
+export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  isInheritingFrom,
+}) => {
+  const navigate: NavigateFunction = useNavigate()
 
   const submit = async (
     etterlevelseDokumentasjonWithRelation: IEtterlevelseDokumentasjonWithRelation
-  ) => {
+  ): Promise<void> => {
     await createEtterlevelseDokumentasjonWithRelataion(
       etterlevelseDokumentasjon.id,
       etterlevelseDokumentasjonWithRelation
-    ).then((reps) => navigate(etterlevelseDokumentasjonUrl(reps.id)))
+    ).then((response: IEtterlevelseDokumentasjon) =>
+      navigate(etterlevelseDokumentasjonUrl(response.id))
+    )
   }
 
   return (

@@ -98,7 +98,7 @@ export const BehandlingensLivslopPage = () => {
         mutatedBehandlingensLivslop.id = existingBehandlingensLivsLop.id
       }
 
-      const pvkDokumentLink =
+      const pvkDokumentLink: '/pvkdokument/' | '/pvkbehov/' =
         pvkDokument && pvkDokument.skalUtforePvk ? '/pvkdokument/' : '/pvkbehov/'
 
       if (behandlingensLivslop.id || existingBehandlingsLivslopId) {

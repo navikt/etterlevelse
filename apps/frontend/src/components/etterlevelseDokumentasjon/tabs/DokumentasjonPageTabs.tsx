@@ -1,6 +1,6 @@
 import { Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../../../api/ArkiveringApi'
 import { getAllKravPriorityList } from '../../../api/KravPriorityListApi'
 import {
@@ -52,7 +52,7 @@ export const DokumentasjonPageTabs = (props: IProps) => {
   const [tabValue, setTabValue] = useState('alleKrav')
   const url = new URL(window.location.href)
   const tabQuery = url.searchParams.get('tab')
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
 
   useEffect(() => {
     getAllKravPriorityList().then((priority) => setAllKravPriority(priority))

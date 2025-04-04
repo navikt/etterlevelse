@@ -9,6 +9,7 @@ import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
 import { CodelistService, EListName, ICode, TLovCode } from '../../../services/Codelist'
 import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
+import { kravNummerVersjonUrl } from '../../common/RouteLinkKrav'
 import { PageLayout } from '../../scaffold/Page'
 import { kravNewVersionValidation } from './KravSchemaValidation'
 import { KravFormFields } from './components/KravFormFields'
@@ -48,7 +49,7 @@ export const KravNyVersjonPage = () => {
 
   const close = (krav: IKrav): void => {
     if (krav) {
-      navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
+      navigate(kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon))
     }
   }
 
@@ -126,7 +127,7 @@ export const KravNyVersjonPage = () => {
                       <div className='flex w-full'>
                         <KravStandardButtons
                           submitCancelButton={() => {
-                            navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon - 1}`)
+                            navigate(kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon - 1))
                           }}
                           submitSaveButton={() => {
                             values.status = EKravStatus.UTKAST

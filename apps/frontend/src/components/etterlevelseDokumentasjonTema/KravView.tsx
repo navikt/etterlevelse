@@ -1,5 +1,5 @@
 import { Loader } from '@navikt/ds-react'
-import React, { useEffect, useState } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import {
   getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
   mapEtterlevelseToFormValue,
@@ -9,7 +9,7 @@ import { EKravFilterType, IEtterlevelse, TEtterlevelseDokumentasjonQL } from '..
 import { EtterlevelseKravView } from '../etterlevelse/EtterlevelseKravView'
 import { toKravId } from './common/utils'
 
-interface IProps {
+type TProps = {
   temaName?: string
   kravId: TKravId
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -18,16 +18,14 @@ interface IProps {
   nextKravToDocument: string
 }
 
-export const KravView = (props: IProps) => {
-  const {
-    temaName,
-    kravId,
-    etterlevelseDokumentasjon,
-    navigatePath,
-    kravFilter,
-    nextKravToDocument,
-  } = props
-
+export const KravView: FunctionComponent<TProps> = ({
+  temaName,
+  kravId,
+  etterlevelseDokumentasjon,
+  navigatePath,
+  kravFilter,
+  nextKravToDocument,
+}) => {
   const [varsleMelding, setVarsleMelding] = useState('')
 
   const [etterlevelse, setEtterlevelse] = useState<IEtterlevelse>()
