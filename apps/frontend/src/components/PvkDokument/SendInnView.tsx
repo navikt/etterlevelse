@@ -222,8 +222,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
           manglerBehandlingErrorCheck()
           behandlingensLivslopFieldCheck()
           risikoscenarioCheck()
-          tiltakCheck()
           if (alleRisikoscenario.filter((risiko) => !risiko.ingenTiltak).length !== 0) {
+            tiltakCheck()
             savnerVurderingCheck()
           }
           validateYupSchema(value, pvkDocumentSchema(), true)
