@@ -62,7 +62,7 @@ public class BehandlingensLivslopController {
     @Operation(summary = "Get Behandlingens Livsløp by etterlevelsedokument id")
     @ApiResponse(description = "ok")
     @GetMapping("/etterlevelsedokument/{etterlevelseDokumentId}")
-    public ResponseEntity<BehandlingensLivslopResponse> getPvkDokumentByEtterlevelseDokumentId(@PathVariable String etterlevelseDokumentId) {
+    public ResponseEntity<BehandlingensLivslopResponse> getPvkDokumentByEtterlevelseDokumentId(@PathVariable UUID etterlevelseDokumentId) {
         log.info("Get Behandlingens Livsløp by etterlevelseDokument id={}", etterlevelseDokumentId);
         Optional<BehandlingensLivslop> behandlingensLivslop = service.getByEtterlevelseDokumentasjon(etterlevelseDokumentId);
         if (behandlingensLivslop.isPresent()) {
@@ -80,7 +80,7 @@ public class BehandlingensLivslopController {
             @RequestPart BehandlingensLivslopRequest request
     ) {
         log.info("Create Behandlingens Livsløp");
-        if(filer != null && !filer.isEmpty()) {
+        if (filer != null && !filer.isEmpty()) {
             request.setFiler(filer);
         }
         var behandlingensLivslop = service.save(request.convertToBehandlingensLivslop(), request.isUpdate());

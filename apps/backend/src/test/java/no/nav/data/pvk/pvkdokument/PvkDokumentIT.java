@@ -2,6 +2,7 @@ package no.nav.data.pvk.pvkdokument;
 
 import no.nav.data.IntegrationTestBase;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
@@ -25,46 +26,46 @@ public class PvkDokumentIT extends IntegrationTestBase {
 
     @Test
     void getPvkDokument() {
-        var pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
+        PvkDokument pvkDokument = createPvkDokument();
 
         var resp = restTemplate.getForEntity("/pvkdokument/{id}", PvkDokumentResponse.class, pvkDokument.getId());
+        
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         PvkDokumentResponse pvkDokumentResponse = resp.getBody();
-        assertThat(pvkDokumentResponse).isNotNull();
+        assertThat(pvkDokumentResponse.getId()).isEqualTo(pvkDokument.getId());
     }
 
     @Test
     void getPvkDokumentByEtterlevelseDokumentasjonId() {
-        var pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
-        pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
+        PvkDokument pvkDokument = createPvkDokument();
 
         var resp = restTemplate.getForEntity("/pvkdokument/etterlevelsedokument/{etterlevelseDokumentId}", PvkDokumentResponse.class, pvkDokument.getEtterlevelseDokumentId());
+
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         PvkDokumentResponse pvkDokumentResponse = resp.getBody();
-        assertThat(pvkDokumentResponse).isNotNull();
-        assertThat(pvkDokumentResponse.getEtterlevelseDokumentId()).isEqualTo(pvkDokument.getEtterlevelseDokumentId());
+        assertThat(pvkDokumentResponse.getId()).isEqualTo(pvkDokument.getId());
     }
 
     @Test
-    void createPvkDokument() {
+    void testCreatePvkDokument() {
+        UUID ettDokId = createEtterlevelseDokumentasjon().getId();
 
-        var request = PvkDokumentRequest.builder()
-                .etterlevelseDokumentId(UUID.randomUUID().toString())
+        PvkDokumentRequest request = PvkDokumentRequest.builder()
+                .etterlevelseDokumentId(ettDokId)
                 .status(PvkDokumentStatus.UNDERARBEID)
                 .ytterligereEgenskaper(List.of())
                 .build();
-
-
         var resp = restTemplate.postForEntity("/pvkdokument",request,  PvkDokumentResponse.class);
+
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         PvkDokumentResponse pvkDokumentResponse = resp.getBody();
-        assertThat(pvkDokumentResponse).isNotNull();
         assertThat(pvkDokumentResponse.getEtterlevelseDokumentId()).isEqualTo(request.getEtterlevelseDokumentId());
+        assertThat(pvkDokumentRepo.count()).isOne();
     }
 
     @Test
     void updatePvkDokument() {
-        var pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
+        PvkDokument pvkDokument = createPvkDokument();
 
         var request = PvkDokumentRequest.builder()
                 .id(pvkDokument.getId())
@@ -72,19 +73,19 @@ public class PvkDokumentIT extends IntegrationTestBase {
                 .status(PvkDokumentStatus.UNDERARBEID)
                 .ytterligereEgenskaper(List.of("PROFILERING", "TEKNOLOGI"))
                 .build();
-
-
         var resp = restTemplate.exchange("/pvkdokument/{id}", HttpMethod.PUT, new HttpEntity<>(request), PvkDokumentResponse.class, request.getId());
+
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         PvkDokumentResponse pvkDokumentResponse = resp.getBody();
-        assertThat(pvkDokumentResponse).isNotNull();
         assertThat(pvkDokumentResponse.getEtterlevelseDokumentId()).isEqualTo(request.getEtterlevelseDokumentId());
         assertThat(pvkDokumentResponse.getYtterligereEgenskaper().size()).isEqualTo(2);
+        assertThat(pvkDokumentRepo.count()).isOne();
     }
 
     @Test
     void deletePvkDokument() {
-        var pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
+        PvkDokument pvkDokument = createPvkDokument();
+
         restTemplate.delete("/pvkdokument/{id}", pvkDokument.getId());
 
         assertThat(pvkDokumentRepo.count()).isEqualTo(0);

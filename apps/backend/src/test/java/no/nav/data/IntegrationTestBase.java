@@ -177,9 +177,9 @@ public abstract class IntegrationTestBase {
         }
     }
 
-    public static PvoTilbakemelding generatePvoTilbakemelding(UUID id) {
+    public static PvoTilbakemelding buildPvoTilbakemelding(UUID pvkDokumentId) {
         return PvoTilbakemelding.builder()
-                .pvkDokumentId(id)
+                .pvkDokumentId(pvkDokumentId)
                 .status(PvoTilbakemeldingStatus.UNDERARBEID)
                 .pvoTilbakemeldingData(
                         PvoTilbakemeldingData.builder().build()
@@ -187,18 +187,29 @@ public abstract class IntegrationTestBase {
         .build();
     }
 
-    public static PvkDokument generatePvkDokument(UUID etterlevelseDokumentasjonId) {
+    public static PvkDokument buildPvkDokument() {
         return PvkDokument.builder()
-                .etterlevelseDokumentId(etterlevelseDokumentasjonId.toString())
                 .status(PvkDokumentStatus.UNDERARBEID)
-                .pvkDokumentData(
-                        PvkDokumentData.builder()
-                                .ytterligereEgenskaper(List.of())
-                                .build()
+                .pvkDokumentData(PvkDokumentData.builder()
+                        .ytterligereEgenskaper(List.of())
+                        .build()
                 )
                 .build();
     }
 
+    public PvkDokument createPvkDokument() {
+        EtterlevelseDokumentasjon ettDok = createEtterlevelseDokumentasjon();
+        PvkDokument pvkDok = buildPvkDokument();
+        pvkDok.setEtterlevelseDokumentId(ettDok.getId());
+        return pvkDokumentService.save(pvkDok, false);
+    }
+
+    public PvoTilbakemelding createPvoTilbakemelding() {
+        UUID pdokId = createPvkDokument().getId();
+        return pvoTilbakemeldingService.save(buildPvoTilbakemelding(pdokId), false);
+    }
+
+    
     public static Risikoscenario generateRisikoscenario(UUID pvkDokumentId) {
         return Risikoscenario.builder()
                 .pvkDokumentId(pvkDokumentId)
@@ -245,6 +256,5 @@ public abstract class IntegrationTestBase {
             new SpringUtils().setApplicationContext(ctx);
         }
     }
-
 
 }

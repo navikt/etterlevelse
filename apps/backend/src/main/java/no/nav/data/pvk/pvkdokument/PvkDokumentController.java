@@ -66,7 +66,7 @@ public class PvkDokumentController {
         Page<PvkDokument> page = pvkDokumentService.getAll(pageParameters);
 
         page.forEach(pvkDokument -> {
-            var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(pvkDokument.getEtterlevelseDokumentId()));
+            var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
             pvkDokumentListItemResponses.add(
                     PvkDokumentListItemResponse.builder()
                             .id(pvkDokument.getId())
@@ -98,7 +98,7 @@ public class PvkDokumentController {
     @Operation(summary = "Get Pvk Document by etterlevelsedokument id")
     @ApiResponse(description = "ok")
     @GetMapping("/etterlevelsedokument/{etterlevelseDokumentId}")
-    public ResponseEntity<PvkDokumentResponse> getPvkDokumentByEtterlevelseDokumentId(@PathVariable String etterlevelseDokumentId) {
+    public ResponseEntity<PvkDokumentResponse> getPvkDokumentByEtterlevelseDokumentId(@PathVariable UUID etterlevelseDokumentId) {
         log.info("Get Pvk Document by etterlevelseDokument id={}", etterlevelseDokumentId);
         Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentId);
 
