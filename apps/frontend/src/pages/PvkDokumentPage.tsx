@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
 import { getPvoTilbakemeldingByPvkDokumentId } from '../api/PvoApi'
-import { getRisikoscenarioByPvkDokumentId } from '../api/RisikoscenarioApi'
 import BehandlingensArtOgOmfangView from '../components/PvkDokument/BehandlingensArtOgOmfangView'
 import BehandlingensLivslopView from '../components/PvkDokument/BehandlingensLivslopView'
 import IdentifiseringAvRisikoscenarioerOgTiltak from '../components/PvkDokument/IdentifiseringAvRisikoscenarioerOgTiltak'
@@ -17,12 +16,10 @@ import SendInnView from '../components/PvkDokument/SendInnView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import {
   EPvkDokumentStatus,
-  ERisikoscenarioType,
   IBreadCrumbPath,
   IDataBehandler,
   IExternalCode,
   IPvoTilbakemelding,
-  IRisikoscenario,
 } from '../constants'
 import { user } from '../services/User'
 import { isInLimitedAccess } from '../util/config'
@@ -53,7 +50,7 @@ export const PvkDokumentPage = () => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const [personkategorier, setPersonKategorier] = useState<string[]>([])
   const [pvkDokument, setPvkDokument] = usePvkDokument(params.pvkdokumentId)
-  const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
+
   const [databehandlere, setDatabehandlere] = useState<string[]>([])
   const [pvoTilbakemelding, setPvoTilbakemelding] = useState<IPvoTilbakemelding>()
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
@@ -126,11 +123,6 @@ export const PvkDokumentPage = () => {
   useEffect(() => {
     ;(async () => {
       if (pvkDokument && pvkDokument.id) {
-        await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
-          (response) => {
-            setAllRisikoscenario(response.content)
-          }
-        )
         if (
           pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
           pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
@@ -210,7 +202,6 @@ export const PvkDokumentPage = () => {
                     <OversiktView
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvkDokument={pvkDokument}
-                      allRisikoscenarioList={allRisikoscenario}
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}
                       updateTitleUrlAndStep={updateTitleUrlAndStep}

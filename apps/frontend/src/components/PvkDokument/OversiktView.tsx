@@ -1,22 +1,26 @@
 import { Alert, BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { FunctionComponent, ReactNode, useEffect, useState } from 'react'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../../api/BehandlingensLivslopApi'
+import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
+import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
   EPvkDokumentStatus,
+  ERisikoscenarioType,
   IBehandlingensLivslop,
   IPvkDokument,
   IRisikoscenario,
   ITeam,
   ITeamResource,
+  ITiltak,
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
+import { risikoscenarioFieldCheck } from '../risikoscenario/common/util'
 import FormButtons from './edit/FormButtons'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   pvkDokument: IPvkDokument
-  allRisikoscenarioList: IRisikoscenario[]
   activeStep: number
   setSelectedStep: (step: number) => void
   updateTitleUrlAndStep: (step: number) => void
@@ -26,13 +30,14 @@ export const OversiktView = (props: IProps) => {
   const {
     etterlevelseDokumentasjon,
     pvkDokument,
-    allRisikoscenarioList,
     activeStep,
     setSelectedStep,
     updateTitleUrlAndStep,
   } = props
 
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
+  const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
+  const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
 
   const formStatus = [
     pvkDokument.stemmerPersonkategorier !== null ||
@@ -43,8 +48,8 @@ export const OversiktView = (props: IProps) => {
       pvkDokument.representantInvolveringsBeskrivelse ||
       pvkDokument.harDatabehandlerRepresentantInvolvering !== null ||
       pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse,
-    allRisikoscenarioList.length > 0,
-    allRisikoscenarioList.filter(
+    allRisikoscenario.length > 0,
+    allRisikoscenario.filter(
       (risikoscenario) =>
         risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
         risikoscenario.sannsynlighetsNivaaEtterTiltak ||
@@ -74,9 +79,119 @@ export const OversiktView = (props: IProps) => {
     if (step === 4) {
       return undefined
     } else {
-      return formStatus[step] ? 'Påbegynt' : 'Ikke påbegynt'
+      return formStatus[step] ? 'Under arbeid' : 'Ikke påbegynt'
     }
   }
+
+  const risikoCheck = (risiko: IRisikoscenario) =>
+    risiko.beskrivelse === '' ||
+    risiko.konsekvensNivaa === 0 ||
+    risiko.sannsynlighetsNivaa === 0 ||
+    risiko.konsekvensNivaaBegrunnelse === '' ||
+    risiko.sannsynlighetsNivaaBegrunnelse === '' ||
+    (risiko.tiltakIds.length === 0 && !risiko.ingenTiltak)
+
+  const getRisikoscenarioStatus = (step: number) => {
+    if (step === 2) {
+      const generelSenario = allRisikoscenario.filter((risiko) => risiko.generelScenario)
+      if (generelSenario.length === 0) {
+        return (
+          <Tag variant='warning' size='xsmall'>
+            Ikke påbegynt
+          </Tag>
+        )
+      } else {
+        const isUnderarbeid = generelSenario.filter((risiko) => risikoCheck(risiko)).length > 0
+        return (
+          <div className='gap-2 flex pt-1'>
+            <Tag variant={isUnderarbeid ? 'info' : 'success'} size='xsmall'>
+              Antall risikoscenario: {generelSenario.length}
+            </Tag>
+            <Tag variant={isUnderarbeid ? 'info' : 'success'} size='xsmall'>
+              Antall tiltak: {allTiltak.length}
+            </Tag>
+            {isUnderarbeid && (
+              <Tag variant='warning' size='xsmall'>
+                Under arbeid
+              </Tag>
+            )}
+          </div>
+        )
+      }
+    } else {
+      return getRisikoscenarioEtterTiltakStatus()
+    }
+  }
+
+  const getRisikoscenarioEtterTiltakStatus = () => {
+    if (allRisikoscenario.length === 0) {
+      return (
+        <Tag variant='warning' size='xsmall'>
+          Ikke påbegynt
+        </Tag>
+      )
+    } else {
+      let antallFerdigVurdert = 0
+      const risikoscenarioMedIngenTiltak = allRisikoscenario.filter((risiko) => risiko.ingenTiltak)
+      const risikoscenarioMedTiltak = allRisikoscenario.filter((risiko) => !risiko.ingenTiltak)
+      const isUnderarbeid =
+        allRisikoscenario.filter(
+          (risiko) =>
+            risikoCheck(risiko) ||
+            (!risiko.ingenTiltak &&
+              (risiko.konsekvensNivaaEtterTiltak === 0 ||
+                risiko.sannsynlighetsNivaaEtterTiltak === 0 ||
+                risiko.nivaaBegrunnelseEtterTiltak === ''))
+        ).length > 0
+
+      if (risikoscenarioMedTiltak.length !== 0) {
+        const ferdigVurdertRisikoscenarioMedTiltak = risikoscenarioMedTiltak.filter(
+          (risiko) =>
+            risiko.tiltakIds.length !== 0 &&
+            risikoscenarioFieldCheck(risiko) &&
+            risiko.sannsynlighetsNivaaEtterTiltak !== 0 &&
+            risiko.konsekvensNivaaEtterTiltak !== 0 &&
+            risiko.nivaaBegrunnelseEtterTiltak !== ''
+        )
+        antallFerdigVurdert += ferdigVurdertRisikoscenarioMedTiltak.length
+      }
+
+      if (risikoscenarioMedIngenTiltak.length !== 0) {
+        const ferdigVurdertRisikoscenarioUtenTiltak = risikoscenarioMedIngenTiltak.filter(
+          (risiko) => risikoscenarioFieldCheck(risiko)
+        )
+        antallFerdigVurdert += ferdigVurdertRisikoscenarioUtenTiltak.length
+      }
+
+      return (
+        <div className='gap-2 flex pt-1'>
+          <Tag variant={isUnderarbeid ? 'info' : 'success'} size='xsmall'>
+            Antall ferdig vurdert: {antallFerdigVurdert}
+          </Tag>
+          {isUnderarbeid && (
+            <Tag variant='warning' size='xsmall'>
+              Under arbeid
+            </Tag>
+          )}
+        </div>
+      )
+    }
+  }
+
+  useEffect(() => {
+    ;(async () => {
+      if (pvkDokument && pvkDokument.id) {
+        await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
+          (response) => {
+            setAllRisikoscenario(response.content)
+          }
+        )
+        await getTiltakByPvkDokumentId(pvkDokument.id).then((response) =>
+          setAllTiltak(response.content)
+        )
+      }
+    })()
+  }, [pvkDokument])
 
   useEffect(() => {
     ;(async () => {
@@ -185,6 +300,9 @@ export const OversiktView = (props: IProps) => {
                   step={index}
                   pvkDokumentStatus={pvkDokument.status}
                   status={getStatus(index)}
+                  customStatusTag={
+                    index === 2 || index === 3 ? getRisikoscenarioStatus(index) : undefined
+                  }
                 />
               )
             })}
@@ -252,13 +370,14 @@ export const OversiktView = (props: IProps) => {
   )
 }
 
-interface IFormSummaryPanelProps {
+type TFormSummaryPanelProps = {
   title: string
   onClick: () => void
   href: string
   step: number
   pvkDokumentStatus: EPvkDokumentStatus
-  status?: 'Ikke påbegynt' | 'Påbegynt'
+  status?: 'Under arbeid' | 'Ikke påbegynt'
+  customStatusTag?: ReactNode
 }
 
 export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
@@ -276,8 +395,15 @@ export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
   }
 }
 
-const FormSummaryPanel = (props: IFormSummaryPanelProps) => {
-  const { title, onClick, href, status, pvkDokumentStatus, step } = props
+const FormSummaryPanel: FunctionComponent<TFormSummaryPanelProps> = ({
+  title,
+  onClick,
+  href,
+  status,
+  customStatusTag,
+  pvkDokumentStatus,
+  step,
+}) => {
   return (
     <FormSummary.Answer key={title}>
       <FormSummary.Value>
@@ -286,11 +412,12 @@ const FormSummaryPanel = (props: IFormSummaryPanelProps) => {
         </Link>
       </FormSummary.Value>
       <FormSummary.Value>
-        {status && (
-          <Tag variant={status === 'Ikke påbegynt' ? 'warning' : 'info'} size='xsmall'>
+        {status && !customStatusTag && (
+          <Tag variant={status === 'Under arbeid' ? 'warning' : 'neutral'} size='xsmall'>
             {status}
           </Tag>
         )}
+        {customStatusTag && customStatusTag}
         {step === 4 && (
           <Tag
             variant={pvkDokumentStatus !== EPvkDokumentStatus.UNDERARBEID ? 'info' : 'warning'}
