@@ -454,7 +454,7 @@ export const EtterlevelseKravView = (props: IProps) => {
 
                   {isPvkTabActive && (
                     <Alert className='mt-6' variant='info'>
-                      Kan ikke redigeres når PVK tab på sidepanel er aktiv
+                      Kan ikke redigeres når PVK skjema er aktiv på sidepanelet
                     </Alert>
                   )}
                   {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) && (
