@@ -42,6 +42,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
   const [activeTab, setActiveTab] = useState<string>('mer')
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [selectedTab, setSelectedTab] = useState<string>('')
+  const [isPvkFormActive, setIsPvkFormActive] = useState<boolean>(false)
   const formRef: RefObject<any> = useRef(undefined)
 
   const userHasAccess = () => {
@@ -59,14 +60,14 @@ export const EtterlevelseSidePanel = (props: IProps) => {
   }, [pvkDokument])
 
   useEffect(() => {
-    if (activeTab === 'pvkDokumentasjon') {
+    if (isPvkFormActive) {
       setIsPreview(true)
       setIsPvkTabActive(true)
     } else {
       setIsPreview(false)
       setIsPvkTabActive(false)
     }
-  }, [activeTab])
+  }, [isPvkFormActive])
 
   return (
     <div className='pl-4 border-l border-[#071a3636] w-full max-w-lg'>
@@ -124,7 +125,12 @@ export const EtterlevelseSidePanel = (props: IProps) => {
           <Tabs.Panel value='pvkDokumentasjon'>
             <div className='mt-2 p-4'>
               {userHasAccess() && (
-                <KravRisikoscenario krav={krav} pvkDokument={pvkDokument} formRef={formRef} />
+                <KravRisikoscenario
+                  krav={krav}
+                  pvkDokument={pvkDokument}
+                  setIsPvkFormActive={setIsPvkFormActive}
+                  formRef={formRef}
+                />
               )}
 
               {!userHasAccess() && (

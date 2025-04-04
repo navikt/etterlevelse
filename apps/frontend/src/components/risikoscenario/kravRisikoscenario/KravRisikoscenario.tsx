@@ -21,6 +21,7 @@ import { KravRisikoscenarioReadMore } from './KravRisikoscenarioReadMore/KravRis
 type TProps = {
   krav: TKravQL
   pvkDokument: IPvkDokument
+  setIsPvkFormActive: (state: boolean) => void
   formRef: RefObject<any>
 }
 
@@ -29,7 +30,12 @@ const unsavedAction = {
   leggTilEksisterendeRisikoscenario: 'leggTilEksisterendeRisikoscenario',
 }
 
-export const KravRisikoscenario: FunctionComponent<TProps> = ({ krav, pvkDokument, formRef }) => {
+export const KravRisikoscenario: FunctionComponent<TProps> = ({
+  krav,
+  pvkDokument,
+  setIsPvkFormActive,
+  formRef,
+}) => {
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
@@ -100,6 +106,14 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({ krav, pvkDokumen
       }
     }
   }
+
+  useEffect(() => {
+    if (isCreateMode || isLeggTilEksisterendeMode || isTiltakFormActive) {
+      setIsPvkFormActive(true)
+    } else {
+      setIsPvkFormActive(false)
+    }
+  }, [isCreateMode, isLeggTilEksisterendeMode, isTiltakFormActive])
 
   return (
     <div className='w-full'>

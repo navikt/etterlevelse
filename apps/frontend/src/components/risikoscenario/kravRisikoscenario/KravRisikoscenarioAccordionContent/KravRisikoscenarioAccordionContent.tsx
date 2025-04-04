@@ -59,7 +59,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
   const [isAddExistingMode, setIsAddExisitingMode] = useState<boolean>(false)
 
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
-  const [isIngenTilgangFormDirty, setIsIngenTilgangFormDirty] = useState<boolean>(false)
+  const [isIngenTiltakFormDirty, setIsIngenTilktakFormDirty] = useState<boolean>(false)
 
   const updateRisikoscenarioList = (updatedRisikoscenario: IRisikoscenario) => {
     setRisikoscenarioForKrav(
@@ -92,7 +92,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
       updateRisikoscenario(updatedRisikoscenario).then((response) => {
         setActiveRisikoscenario(response)
         updateRisikoscenarioList(response)
-        setIsIngenTilgangFormDirty(false)
+        setIsIngenTilktakFormDirty(false)
       })
     })
   }
@@ -170,7 +170,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
         stepUrl='0'
       />
 
-      {!isIngenTilgangFormDirty &&
+      {!isIngenTiltakFormDirty &&
         !isCreateTiltakFormActive &&
         !isEditTiltakFormActive &&
         !isAddExistingMode &&
@@ -228,7 +228,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
               />
             )}
 
-            {!isIngenTilgangFormDirty &&
+            {!isIngenTiltakFormDirty &&
               !isCreateTiltakFormActive &&
               !isEditTiltakFormActive &&
               !isAddExistingMode &&
@@ -263,7 +263,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
                 risikoscenario={activeRisikoscenario}
                 submit={submitIngenTiltak}
                 formRef={formRef}
-                setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
+                setIsIngenTilgangFormDirty={setIsIngenTilktakFormDirty}
               />
             </div>
           )}
