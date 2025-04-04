@@ -14,7 +14,7 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
-import { risikoscenarioFieldCheck } from '../risikoscenario/common/util'
+import { isRisikoUnderarbeidCheck, risikoscenarioFieldCheck } from '../risikoscenario/common/util'
 import FormSummaryPanel from './common/FormSummaryPanel'
 import FormButtons from './edit/FormButtons'
 
@@ -83,14 +83,6 @@ export const OversiktView = (props: IProps) => {
     }
   }
 
-  const risikoCheck = (risiko: IRisikoscenario) =>
-    risiko.beskrivelse === '' ||
-    risiko.konsekvensNivaa === 0 ||
-    risiko.sannsynlighetsNivaa === 0 ||
-    risiko.konsekvensNivaaBegrunnelse === '' ||
-    risiko.sannsynlighetsNivaaBegrunnelse === '' ||
-    (risiko.tiltakIds.length === 0 && !risiko.ingenTiltak)
-
   const getRisikoscenarioStatus = (step: number) => {
     if (step === 2) {
       const generelSenario = allRisikoscenario.filter((risiko) => risiko.generelScenario)
@@ -101,7 +93,8 @@ export const OversiktView = (props: IProps) => {
           </Tag>
         )
       } else {
-        const isUnderarbeid = generelSenario.filter((risiko) => risikoCheck(risiko)).length > 0
+        const isUnderarbeid =
+          generelSenario.filter((risiko) => isRisikoUnderarbeidCheck(risiko)).length > 0
         return (
           <div className='gap-2 flex pt-1'>
             <Tag variant={isUnderarbeid ? 'info' : 'success'} size='xsmall'>
@@ -137,7 +130,7 @@ export const OversiktView = (props: IProps) => {
       const isUnderarbeid =
         allRisikoscenario.filter(
           (risiko) =>
-            risikoCheck(risiko) ||
+            isRisikoUnderarbeidCheck(risiko) ||
             (!risiko.ingenTiltak &&
               (risiko.konsekvensNivaaEtterTiltak === 0 ||
                 risiko.sannsynlighetsNivaaEtterTiltak === 0 ||

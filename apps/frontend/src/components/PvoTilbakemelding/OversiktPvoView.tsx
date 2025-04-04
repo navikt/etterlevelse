@@ -1,12 +1,16 @@
 import { Alert, BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../../api/BehandlingensLivslopApi'
+import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
+import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
+  ERisikoscenarioType,
   IBehandlingensLivslop,
   IPvkDokument,
   IRisikoscenario,
   ITeam,
   ITeamResource,
+  ITiltak,
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
@@ -17,41 +21,23 @@ import PvoFormButtons from './edit/PvoFormButtons'
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   pvkDokument: IPvkDokument
-  allRisikoscenarioList: IRisikoscenario[]
   activeStep: number
   setSelectedStep: (step: number) => void
   updateTitleUrlAndStep: (step: number) => void
 }
 
-export const OversiktView = (props: IProps) => {
+export const OversiktPvoView = (props: IProps) => {
   const {
     etterlevelseDokumentasjon,
     pvkDokument,
-    allRisikoscenarioList,
     activeStep,
     setSelectedStep,
     updateTitleUrlAndStep,
   } = props
 
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
-
-  const formStatus = [
-    pvkDokument.stemmerPersonkategorier !== null ||
-      pvkDokument.personkategoriAntallBeskrivelse ||
-      pvkDokument.tilgangsBeskrivelsePersonopplysningene ||
-      pvkDokument.lagringsBeskrivelsePersonopplysningene,
-    pvkDokument.harInvolvertRepresentant !== null ||
-      pvkDokument.representantInvolveringsBeskrivelse ||
-      pvkDokument.harDatabehandlerRepresentantInvolvering !== null ||
-      pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse,
-    allRisikoscenarioList.length > 0,
-    allRisikoscenarioList.filter(
-      (risikoscenario) =>
-        risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
-        risikoscenario.sannsynlighetsNivaaEtterTiltak ||
-        risikoscenario.nivaaBegrunnelseEtterTiltak !== ''
-    ).length > 0,
-  ]
+  const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
+  const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
 
   const getMemberListToString = (membersData: ITeamResource[]): string => {
     let memberList = ''
@@ -71,12 +57,43 @@ export const OversiktView = (props: IProps) => {
     return teamList.substring(2)
   }
 
-  const getStatus = (step: number) => {
-    if (step === 4) {
-      return undefined
+  const getRisikoscenarioStatus = (step: number) => {
+    if (step === 2) {
+      const generelSenario = allRisikoscenario.filter((risiko) => risiko.generelScenario)
+      const kravSenario = allRisikoscenario.filter((risiko) => !risiko.generelScenario)
+      return (
+        <div className='gap-2 flex pt-1'>
+          <Tag variant='success' size='xsmall'>
+            Antall kravspesifikk risikoscenario: {kravSenario.length}
+          </Tag>
+          <Tag variant='success' size='xsmall'>
+            Antall øvrig risikoscenario: {generelSenario.length}
+          </Tag>
+          <Tag variant='success' size='xsmall'>
+            Antall tiltak: {allTiltak.length}
+          </Tag>
+        </div>
+      )
     } else {
-      return formStatus[step] ? 'Under arbeid' : 'Ikke påbegynt'
+      return getRisikoscenarioEtterTiltakStatus()
     }
+  }
+
+  const getRisikoscenarioEtterTiltakStatus = () => {
+    const risikoscenarioMedIngenTiltak = allRisikoscenario.filter((risiko) => risiko.ingenTiltak)
+    const risikoscenarioMedTiltak = allRisikoscenario.filter((risiko) => !risiko.ingenTiltak)
+
+    return (
+      <div className='gap-2 flex pt-1'>
+        <Tag variant='success' size='xsmall'>
+          Antall ferdig vurdert: {risikoscenarioMedTiltak.length}
+        </Tag>
+
+        <Tag variant='neutral' size='xsmall'>
+          Antall risikoscenario med tiltak ikke aktuelt: {risikoscenarioMedIngenTiltak.length}
+        </Tag>
+      </div>
+    )
   }
 
   useEffect(() => {
@@ -90,6 +107,22 @@ export const OversiktView = (props: IProps) => {
       })
     })()
   }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      if (pvkDokument && pvkDokument.id) {
+        await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
+          (response) => {
+            setAllRisikoscenario(response.content)
+          }
+        )
+
+        await getTiltakByPvkDokumentId(pvkDokument.id).then((response) =>
+          setAllTiltak(response.content)
+        )
+      }
+    })()
+  }, [pvkDokument])
 
   return (
     <div className='flex justify-center'>
@@ -200,7 +233,9 @@ export const OversiktView = (props: IProps) => {
                   href={panelHref}
                   step={index}
                   pvkDokumentStatus={pvkDokument.status}
-                  status={getStatus(index)}
+                  customStatusTag={
+                    index === 2 || index === 3 ? getRisikoscenarioStatus(index) : undefined
+                  }
                 />
               )
             })}
@@ -267,4 +302,4 @@ export const OversiktView = (props: IProps) => {
   )
 }
 
-export default OversiktView
+export default OversiktPvoView

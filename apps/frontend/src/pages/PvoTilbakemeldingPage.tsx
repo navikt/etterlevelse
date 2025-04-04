@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { getEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
 import { usePvoTilbakemelding } from '../api/PvoApi'
-import { getRisikoscenarioByPvkDokumentId } from '../api/RisikoscenarioApi'
 import BehandlingensArtOgOmfangPvoView from '../components/PvoTilbakemelding/BehandlingensArtOgOmfangPvoView'
 import BehandlingensLivslopPvoView from '../components/PvoTilbakemelding/BehandlingsLivslopPvoView'
 import IdentifiseringAvRisikoscenarioerOgTiltakPvoView from '../components/PvoTilbakemelding/IdentifiseringAvRisikoscenarioerOgTiltakPvoView'
@@ -17,12 +16,10 @@ import SendInnPvoView from '../components/PvoTilbakemelding/SendInnPvoView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import {
   EPVO,
-  ERisikoscenarioType,
   IBreadCrumbPath,
   IDataBehandler,
   IEtterlevelseDokumentasjon,
   IExternalCode,
-  IRisikoscenario,
 } from '../constants'
 import { user } from '../services/User'
 
@@ -54,7 +51,6 @@ export const PvoTilbakemeldingPage = () => {
   const [personkategorier, setPersonKategorier] = useState<string[]>([])
   const [pvkDokument, , isPvkDokumentLoading] = usePvkDokument(params.id)
   const [pvoTilbakemelding, , isPvoTilbakemeldingLoading] = usePvoTilbakemelding(params.id)
-  const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [databehandlere, setDatabehandlere] = useState<string[]>([])
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [activeStep, setActiveStep] = useState<number>(
@@ -130,11 +126,6 @@ export const PvoTilbakemeldingPage = () => {
     ;(async () => {
       if (pvkDokument && pvkDokument.id) {
         setIsEtterlevelseDokumentaasjonLoading(true)
-        await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
-          (response) => {
-            setAllRisikoscenario(response.content)
-          }
-        )
         await getEtterlevelseDokumentasjon(pvkDokument.etterlevelseDokumentId).then((response) => {
           setEtterlevelseDokumentasjon(response)
           setIsEtterlevelseDokumentaasjonLoading(false)
@@ -218,7 +209,6 @@ export const PvoTilbakemeldingPage = () => {
                       <OversiktPvoView
                         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                         pvkDokument={pvkDokument}
-                        allRisikoscenarioList={allRisikoscenario}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
                         updateTitleUrlAndStep={updateTitleUrlAndStep}
