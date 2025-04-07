@@ -389,13 +389,13 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   heading='Du må rette disse feilene før du kan fortsette'
                 >
                   {manglerBehandlingError && (
-                    <ErrorSummary.Item href='#behandling-error'>
+                    <ErrorSummary.Item href='#behandling-error' className='max-w-[75ch]'>
                       Dere må koble minst 1 behandling til denne etterlevelsesdokumentasjonen.
                     </ErrorSummary.Item>
                   )}
 
                   {behandlingensLivslopError && (
-                    <ErrorSummary.Item href='#behandlingensLivslop'>
+                    <ErrorSummary.Item href='#behandlingensLivslop' className='max-w-[75ch]'>
                       Behandlingens livsløp må ha minimum 1 opplastet tegning, eller en skriftlig
                       beskrivelse.
                     </ErrorSummary.Item>
@@ -404,20 +404,24 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   {Object.entries(errors)
                     .filter(([, error]) => error)
                     .map(([key, error]) => (
-                      <ErrorSummary.Item href={`#${key}`} key={key}>
+                      <ErrorSummary.Item href={`#${key}`} key={key} className='max-w-[75ch]'>
                         {error as string}
                       </ErrorSummary.Item>
                     ))}
                   {risikoscenarioError !== '' && (
-                    <ErrorSummary.Item href='#risikoscenarioer'>
+                    <ErrorSummary.Item href='#risikoscenarioer' className='max-w-[75ch]'>
                       {risikoscenarioError}
                     </ErrorSummary.Item>
                   )}
                   {tiltakError !== '' && (
-                    <ErrorSummary.Item href='#tiltak'>{tiltakError}</ErrorSummary.Item>
+                    <ErrorSummary.Item href='#tiltak' className='max-w-[75ch]'>
+                      {tiltakError}
+                    </ErrorSummary.Item>
                   )}
-                  {savnerVurderingError !== '#effektEtterTiltak' && (
-                    <ErrorSummary.Item>{savnerVurderingError}</ErrorSummary.Item>
+                  {savnerVurderingError !== '' && (
+                    <ErrorSummary.Item href='#effektEtterTiltak' className='max-w-[75ch]'>
+                      {savnerVurderingError}
+                    </ErrorSummary.Item>
                   )}
                 </ErrorSummary>
               )}
