@@ -109,7 +109,10 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                 )}
 
                 <div className='flex items-start gap-2 mb-2.5'>
-                  <Label size='medium'>Egenskaper:</Label>
+                  <div className='mt-0.75'>
+                    <Label size='medium'>Egenskaper:</Label>
+                  </div>
+
                   {irrelevansFor.length === relevansCodeList.length && (
                     <div className='flex items-center gap-1'>
                       <ExclamationmarkTriangleFillIcon
