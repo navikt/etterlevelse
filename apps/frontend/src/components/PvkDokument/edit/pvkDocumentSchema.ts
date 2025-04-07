@@ -97,7 +97,11 @@ export const pvkBehovSchema = () => {
       message: 'Dere må begrunne hvorfor dere ikke skal gjennomføre PVK',
       test: function (pvkVurderingsBegrunnelse) {
         const { parent } = this
-        if (parent.skalUtforePvk !== undefined && !parent.skalUtforePvk) {
+        if (
+          parent.skalUtforePvk !== undefined &&
+          parent.skalUtforePvk !== null &&
+          !parent.skalUtforePvk
+        ) {
           if (pvkVurderingsBegrunnelse === '' || pvkVurderingsBegrunnelse === undefined) {
             return false
           } else {
