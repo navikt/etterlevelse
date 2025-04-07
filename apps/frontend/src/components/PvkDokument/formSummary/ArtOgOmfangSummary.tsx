@@ -46,7 +46,9 @@ export const ArtOgOmFangSummary = (props: IProps) => {
                     </FormSummary.Value>
                   </FormSummary.Answer>
                   <FormSummary.Answer>
-                    <FormSummary.Label>Stemmer disse personkategoriene?</FormSummary.Label>
+                    <FormSummary.Label id='stemmerPersonkategorier'>
+                      Stemmer disse personkategoriene?
+                    </FormSummary.Label>
                     <FormSummary.Value>
                       {fieldProp.form.values.stemmerPersonkategorier === undefined ||
                       fieldProp.form.values.stemmerPersonkategorier === null
@@ -64,7 +66,7 @@ export const ArtOgOmFangSummary = (props: IProps) => {
               <FormSummary.Value>
                 <FormSummary.Answers>
                   <FormSummary.Answer>
-                    <FormSummary.Label>
+                    <FormSummary.Label id='personkategoriAntallBeskrivelse'>
                       Beskriv antall personer dere behandler personopplysninger om
                     </FormSummary.Label>
                     {fieldProp.form.values.personkategoriAntallBeskrivelse && (
@@ -88,7 +90,9 @@ export const ArtOgOmFangSummary = (props: IProps) => {
               <FormSummary.Value>
                 <FormSummary.Answers>
                   <FormSummary.Answer>
-                    <FormSummary.Label>Beskriv hvilke roller som skal ha tilgang</FormSummary.Label>
+                    <FormSummary.Label id='tilgangsBeskrivelsePersonopplysningene'>
+                      Beskriv hvilke roller som skal ha tilgang
+                    </FormSummary.Label>
                     <FormSummary.Value>
                       {fieldProp.form.values.tilgangsBeskrivelsePersonopplysningene && (
                         <BodyShort>
@@ -108,7 +112,7 @@ export const ArtOgOmFangSummary = (props: IProps) => {
               <FormSummary.Value>
                 <FormSummary.Answers>
                   <FormSummary.Answer>
-                    <FormSummary.Label>
+                    <FormSummary.Label id='lagringsBeskrivelsePersonopplysningene'>
                       Beskriv hvordan og hvor lenge personopplysningene skal lagres
                     </FormSummary.Label>
                     <FormSummary.Value>

@@ -55,7 +55,7 @@ export const InvolveringSummary = (props: IProps) => {
                   </FormSummary.Answer>
 
                   <FormSummary.Answer>
-                    <FormSummary.Label>
+                    <FormSummary.Label id='harInvolvertRepresentant'>
                       Har dere involvert en representant for de registrerte?
                     </FormSummary.Label>
                     <FormSummary.Value>
@@ -69,7 +69,7 @@ export const InvolveringSummary = (props: IProps) => {
                   </FormSummary.Answer>
 
                   <FormSummary.Answer>
-                    <FormSummary.Label>
+                    <FormSummary.Label id='representantInvolveringsBeskrivelse'>
                       Utdyp hvordan dere har involvert representant(er) for de registrerte
                     </FormSummary.Label>
                     {fieldProp.form.values.representantInvolveringsBeskrivelse && (
@@ -109,7 +109,7 @@ export const InvolveringSummary = (props: IProps) => {
                   </FormSummary.Answer>
 
                   <FormSummary.Answer>
-                    <FormSummary.Label>
+                    <FormSummary.Label id='harDatabehandlerRepresentantInvolvering'>
                       Har dere involvert en representant for databehandlere?
                     </FormSummary.Label>
                     <FormSummary.Value>
@@ -124,7 +124,7 @@ export const InvolveringSummary = (props: IProps) => {
                   </FormSummary.Answer>
 
                   <FormSummary.Answer>
-                    <FormSummary.Label>
+                    <FormSummary.Label id='dataBehandlerRepresentantInvolveringBeskrivelse'>
                       Utdyp hvordan dere har involvert representant(er) for databehandler(e)
                     </FormSummary.Label>
                     {fieldProp.form.values.dataBehandlerRepresentantInvolveringBeskrivelse && (
