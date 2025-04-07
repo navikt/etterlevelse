@@ -2,11 +2,9 @@ import { FilesIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyLong,
-  BodyShort,
   Button,
   CopyButton,
   ErrorSummary,
-  FormSummary,
   Heading,
   Label,
   Link,
@@ -43,7 +41,6 @@ import FormButtons from './edit/FormButtons'
 import pvkDocumentSchema from './edit/pvkDocumentSchema'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
 import BehandlingensLivslopSummary from './formSummary/BehandlingensLivslopSummary'
-import FormAlert from './formSummary/FormAlert'
 import InvolveringSummary from './formSummary/InvolveringSummary'
 import RisikoscenarioEtterTitak from './formSummary/RisikoscenarioEtterTiltakSummary'
 import RisikoscenarioSummary from './formSummary/RisikoscenarioSummary'
@@ -270,50 +267,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 behandlingensLivslopError={behandlingensLivslopError}
                 updateTitleUrlAndStep={updateTitleUrlAndStep}
               />
-
-              <FormSummary className='my-3'>
-                <FormSummary.Header>
-                  <FormSummary.Heading level='2' id='behandlingensLivslop'>
-                    Tegn behandlingens livslop
-                  </FormSummary.Heading>
-                  <FormSummary.EditLink
-                    className='cursor-pointer'
-                    onClick={() => updateTitleUrlAndStep(2)}
-                    href={window.location.pathname.slice(0, -1) + 2}
-                  >
-                    Endre svar
-                  </FormSummary.EditLink>
-                </FormSummary.Header>
-                <FormSummary.Answers>
-                  <FormSummary.Answer>
-                    <FormSummary.Value>
-                      <FormSummary.Answers>
-                        <FormSummary.Answer>
-                          <FormSummary.Label>Behandlingens livsløp</FormSummary.Label>
-                          <FormSummary.Value>
-                            <div>
-                              {behandlingensLivslopError && (
-                                <FormAlert>
-                                  Behandlingens livsløp må ha minimum 1 opplastet tegning eller en
-                                  skriftlig beskrivelse.
-                                </FormAlert>
-                              )}
-
-                              {!behandlingensLivslopError && (
-                                <div>
-                                  <BodyShort>
-                                    Antall filer: {behandlingensLivslop?.filer.length}
-                                  </BodyShort>
-                                </div>
-                              )}
-                            </div>
-                          </FormSummary.Value>
-                        </FormSummary.Answer>
-                      </FormSummary.Answers>
-                    </FormSummary.Value>
-                  </FormSummary.Answer>
-                </FormSummary.Answers>
-              </FormSummary>
 
               <ArtOgOmFangSummary
                 personkategorier={personkategorier}

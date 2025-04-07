@@ -51,7 +51,7 @@ export const RisikoscenarioEtterTitak: FunctionComponent<TProps> = ({
   return (
     <FormSummary className='my-3'>
       <FormSummary.Header>
-        <FormSummary.Heading level='2'>Vurdér tiltakets effekt</FormSummary.Heading>
+        <FormSummary.Heading level='2'>Vurdér tiltakenes effekt</FormSummary.Heading>
       </FormSummary.Header>
       <FormSummary.Answers>
         <FormSummary.Answer>
