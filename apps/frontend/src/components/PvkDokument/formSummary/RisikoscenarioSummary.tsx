@@ -1,15 +1,19 @@
 import { FormSummary } from '@navikt/ds-react'
 import { IRisikoscenario, ITiltak } from '../../../constants'
 import { ExternalLink } from '../../common/RouteLink'
+import FormAlert from './FormAlert'
 
 interface IProps {
   alleRisikoscenario: IRisikoscenario[]
   alleTiltak: ITiltak[]
+  risikoscenarioError: string
+  tiltakError: string
   customStepNumber?: number
 }
 
 export const RisikoscenarioSummary = (props: IProps) => {
-  const { alleRisikoscenario, alleTiltak, customStepNumber } = props
+  const { alleRisikoscenario, alleTiltak, risikoscenarioError, tiltakError, customStepNumber } =
+    props
   const currentPath = window.location.pathname
   const risikoscenarioLink = currentPath.slice(0, -1) + `${customStepNumber ? customStepNumber : 6}`
 
@@ -30,6 +34,8 @@ export const RisikoscenarioSummary = (props: IProps) => {
                     Se alle risikoscenarioer
                   </ExternalLink>
                   .
+                  <br />
+                  {risikoscenarioError !== '' && <FormAlert>{risikoscenarioError}</FormAlert>}
                 </FormSummary.Value>
               </FormSummary.Answer>
               <FormSummary.Answer>
@@ -40,6 +46,8 @@ export const RisikoscenarioSummary = (props: IProps) => {
                     Se alle tiltak
                   </ExternalLink>
                   .
+                  <br />
+                  {tiltakError !== '' && <FormAlert>{tiltakError}</FormAlert>}
                 </FormSummary.Value>
               </FormSummary.Answer>
             </FormSummary.Answers>

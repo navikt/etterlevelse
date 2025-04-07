@@ -282,9 +282,14 @@ export const SendInnView: FunctionComponent<TProps> = ({
               <RisikoscenarioSummary
                 alleRisikoscenario={alleRisikoscenario}
                 alleTiltak={alleTiltak}
+                risikoscenarioError={risikoscenarioError}
+                tiltakError={tiltakError}
               />
 
-              <RisikoscenarioEtterTitak alleRisikoscenario={alleRisikoscenario} />
+              <RisikoscenarioEtterTitak
+                alleRisikoscenario={alleRisikoscenario}
+                savnerVurderingError={savnerVurderingError}
+              />
 
               {underarbeidCheck && (
                 <div className='mt-5 mb-3 max-w-[75ch]'>

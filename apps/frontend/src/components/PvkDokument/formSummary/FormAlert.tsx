@@ -8,7 +8,7 @@ type TProps = {
 
 export const FormAlert: FunctionComponent<TProps> = ({ children }) => {
   return (
-    <BodyLong className='text-[#BC002A] flex gap-3 w-full'>
+    <BodyLong className='text-[#BC002A] flex gap-3 w-full pt-3'>
       <ExclamationmarkTriangleFillIcon title='Advarsel' height='1.5em' width='1.5em' />{' '}
       <strong>{children}</strong>
     </BodyLong>

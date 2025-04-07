@@ -3,14 +3,17 @@ import { FunctionComponent, useEffect, useState } from 'react'
 import { IRisikoscenario } from '../../../constants'
 import { ExternalLink } from '../../common/RouteLink'
 import { risikoscenarioFieldCheck } from '../../risikoscenario/common/util'
+import FormAlert from './FormAlert'
 
 type TProps = {
   alleRisikoscenario: IRisikoscenario[]
+  savnerVurderingError: string
   customStepNumber?: number
 }
 
 export const RisikoscenarioEtterTitak: FunctionComponent<TProps> = ({
   alleRisikoscenario,
+  savnerVurderingError,
   customStepNumber,
 }) => {
   const [antallFerdigVurdert, setAntallFerdigVurdert] = useState<number>(0)
@@ -65,6 +68,8 @@ export const RisikoscenarioEtterTitak: FunctionComponent<TProps> = ({
                     Se alle risikoscenarioer
                   </ExternalLink>
                   .
+                  <br />
+                  {savnerVurderingError !== '' && <FormAlert>{savnerVurderingError}</FormAlert>}
                 </FormSummary.Value>
               </FormSummary.Answer>
             </FormSummary.Answers>
