@@ -1,5 +1,6 @@
 import { Button, Heading } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   addTiltakToRisikoscenario,
   getRisikoscenario,
@@ -60,6 +61,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
 
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
   const [isIngenTiltakFormDirty, setIsIngenTilktakFormDirty] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   const updateRisikoscenarioList = (updatedRisikoscenario: IRisikoscenario) => {
     setRisikoscenarioForKrav(
@@ -111,8 +113,10 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
         tiltakIds: [...activeRisikoscenario.tiltakIds, response.id],
       })
       setTiltakList([...tiltakList, response])
-
       setIsCreateTiltakFormActive(false)
+      navigate(
+        `${window.location.pathname}?risikoscenario=${risikoscenario.id}&tiltak=${response.id}`
+      )
     })
   }
 

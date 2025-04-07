@@ -77,11 +77,13 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
         await updatePvkDokument(mutatedPvkDokument).then((response) => {
           setPvkDokument(response)
           navigate(`/dokumentasjon/${response.etterlevelseDokumentId}/pvkbehov/${response.id}`)
+          window.location.reload()
         })
       } else {
         await createPvkDokument(mutatedPvkDokument).then((response) => {
           setPvkDokument(response)
           navigate(`/dokumentasjon/${response.etterlevelseDokumentId}/pvkbehov/${response.id}`)
+          window.location.reload()
         })
       }
     }
