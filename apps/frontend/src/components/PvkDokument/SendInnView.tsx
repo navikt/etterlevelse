@@ -426,6 +426,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   submitForm={submitForm}
                   customButtons={
                     <div className='mt-5 flex gap-2 items-center'>
+                      {!dirty && <div className='min-w-[223px]'></div>}
                       {dirty && (
                         <Button
                           type='button'
