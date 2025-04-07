@@ -1,6 +1,6 @@
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Button, Modal, ReadMore } from '@navikt/ds-react'
-import { RefObject, useState } from 'react'
+import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { removeTiltakToRisikoscenario } from '../../api/RisikoscenarioApi'
 import { deleteTiltak, getTiltak, updateTiltak } from '../../api/TiltakApi'
@@ -34,6 +34,14 @@ export const TiltakReadMoreList = (props: IProps) => {
     formRef,
   } = props
   const [activeTiltak, setActiveTiltak] = useState<string>('')
+  const url = new URL(window.location.href)
+  const tiltakId = url.searchParams.get('tiltak')
+
+  useEffect(() => {
+    if (tiltakId) {
+      setActiveTiltak(tiltakId)
+    }
+  }, [])
 
   return (
     <div>
