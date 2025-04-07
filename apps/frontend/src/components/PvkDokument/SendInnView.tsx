@@ -409,10 +409,14 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       </ErrorSummary.Item>
                     ))}
                   {risikoscenarioError !== '' && (
-                    <ErrorSummary.Item>{risikoscenarioError}</ErrorSummary.Item>
+                    <ErrorSummary.Item href='#risikoscenarioer'>
+                      {risikoscenarioError}
+                    </ErrorSummary.Item>
                   )}
-                  {tiltakError !== '' && <ErrorSummary.Item>{tiltakError}</ErrorSummary.Item>}
-                  {savnerVurderingError !== '' && (
+                  {tiltakError !== '' && (
+                    <ErrorSummary.Item href='#tiltak'>{tiltakError}</ErrorSummary.Item>
+                  )}
+                  {savnerVurderingError !== '#effektEtterTiltak' && (
                     <ErrorSummary.Item>{savnerVurderingError}</ErrorSummary.Item>
                   )}
                 </ErrorSummary>

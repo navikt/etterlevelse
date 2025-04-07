@@ -23,7 +23,7 @@ export const RisikoscenarioSummary = (props: IProps) => {
           <FormSummary.Value>
             <FormSummary.Answers>
               <FormSummary.Answer>
-                <FormSummary.Label>Risikoscenarioer</FormSummary.Label>
+                <FormSummary.Label id='risikoscenarioer'>Risikoscenarioer</FormSummary.Label>
                 <FormSummary.Value>
                   Det er beskrevet totalt sett {alleRisikoscenario.length} risikoscenarioer.{' '}
                   <ExternalLink href={risikoscenarioLink + '?tab=risikoscenarioer&filter=alle'}>
@@ -33,7 +33,7 @@ export const RisikoscenarioSummary = (props: IProps) => {
                 </FormSummary.Value>
               </FormSummary.Answer>
               <FormSummary.Answer>
-                <FormSummary.Label>Tiltak</FormSummary.Label>
+                <FormSummary.Label id='tiltak'>Tiltak</FormSummary.Label>
                 <FormSummary.Value>
                   Det er beskrevet totalt sett {alleTiltak.length} tiltak.{' '}
                   <ExternalLink href={risikoscenarioLink + '?tab=tiltak'}>
