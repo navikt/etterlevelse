@@ -42,6 +42,7 @@ import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
 import FormButtons from './edit/FormButtons'
 import pvkDocumentSchema from './edit/pvkDocumentSchema'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
+import FormAlert from './formSummary/FormAlert'
 import InvolveringSummary from './formSummary/InvolveringSummary'
 import RisikoscenarioEtterTitak from './formSummary/RisikoscenarioEtterTiltakSummary'
 import RisikoscenarioSummary from './formSummary/RisikoscenarioSummary'
@@ -277,13 +278,12 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           <FormSummary.Value>
                             <div>
                               {behandlingensLivslopError && (
-                                <Alert variant='warning' inline className='text-[#BC002A]'>
-                                  <strong>
-                                    Behandlingens livsløp må ha minimum 1 opplastet tegning eller en
-                                    skriftlig beskrivelse.
-                                  </strong>
-                                </Alert>
+                                <FormAlert>
+                                  Behandlingens livsløp må ha minimum 1 opplastet tegning eller en
+                                  skriftlig beskrivelse.
+                                </FormAlert>
                               )}
+
                               {!behandlingensLivslopError && (
                                 <div>
                                   <BodyShort>
