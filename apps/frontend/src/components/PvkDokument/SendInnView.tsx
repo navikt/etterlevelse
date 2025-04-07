@@ -42,6 +42,7 @@ import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
 import FormButtons from './edit/FormButtons'
 import pvkDocumentSchema from './edit/pvkDocumentSchema'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
+import BehandlingensLivslopSummary from './formSummary/BehandlingensLivslopSummary'
 import FormAlert from './formSummary/FormAlert'
 import InvolveringSummary from './formSummary/InvolveringSummary'
 import RisikoscenarioEtterTitak from './formSummary/RisikoscenarioEtterTiltakSummary'
@@ -263,6 +264,12 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   </Link>
                 </Alert>
               )}
+
+              <BehandlingensLivslopSummary
+                behandlingensLivslop={behandlingensLivslop}
+                behandlingensLivslopError={behandlingensLivslopError}
+                updateTitleUrlAndStep={updateTitleUrlAndStep}
+              />
 
               <FormSummary className='my-3'>
                 <FormSummary.Header>
