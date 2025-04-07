@@ -146,6 +146,8 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
               ...activeRisikoscenario,
               tiltakIds: activeRisikoscenario.tiltakIds.filter((id) => id !== tiltakId),
             })
+            navigate(`${window.location.pathname}?risikoscenario=${risikoscenario.id}`)
+            window.location.reload()
           })
         })
       } else {
@@ -154,6 +156,8 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
             ...activeRisikoscenario,
             tiltakIds: activeRisikoscenario.tiltakIds.filter((id) => id !== tiltakId),
           })
+          navigate(`${window.location.pathname}?risikoscenario=${risikoscenario.id}`)
+          window.location.reload()
         })
       }
     })
