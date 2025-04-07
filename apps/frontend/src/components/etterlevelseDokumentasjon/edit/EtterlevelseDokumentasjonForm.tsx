@@ -302,7 +302,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           {/* DONT REMOVE */}
           {/* )} */}
 
-          <Heading className='mt-5' size='small' level='2' spacing>
+          <Heading className='mt-5' size='small' level='2' spacing id='behandling'>
             Velg behandlinger
           </Heading>
           <BoolField

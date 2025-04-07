@@ -252,7 +252,15 @@ export const SendInnView: FunctionComponent<TProps> = ({
               {manglerBehandlingError && (
                 <Alert variant='warning' id='behandling-error' className='mt-7 mb-4'>
                   Dere må legge inn minst 1 behandling fra Behandlingskatalogen. Dette kan dere
-                  gjøre under <Link>Redigér dokumentegenskaper.</Link>
+                  gjøre under{' '}
+                  <Link
+                    href={`/dokumentasjon/edit/${etterlevelseDokumentasjon.id}#behandling`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    aria-label='redigere etterlevelsesdokumentasjon'
+                  >
+                    Redigér dokumentegenskaper.
+                  </Link>
                 </Alert>
               )}
 
