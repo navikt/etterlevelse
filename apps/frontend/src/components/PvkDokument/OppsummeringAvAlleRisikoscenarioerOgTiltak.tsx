@@ -49,7 +49,7 @@ const visTomListeBeskrivelse = (filter: string | null) => {
       textBody = 'Det finnes ingen risikoscenarioer med høy risiko 🎉'
       break
     case filterValues.tiltakIkkeAktuelt:
-      textBody = 'Det finnes ingen risikoscenarioer uten tiltak 🎉'
+      textBody = 'Det finnes ingen risikoscenario hvor tiltak ikke er aktuelt  🎉'
       break
     case filterValues.effektIkkeVurdert:
       textBody = 'Det finnes ingen risikoscenarioer der effekt ikke er vurdert'
