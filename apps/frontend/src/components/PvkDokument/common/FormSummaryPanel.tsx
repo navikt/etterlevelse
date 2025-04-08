@@ -60,7 +60,9 @@ export const FormSummaryPanel: FunctionComponent<TFormSummaryPanelProps> = ({
         )}
         {step === 4 && (
           <BodyShort>
-            Her får dere oversikt over alle deres svar. PVK-dokumentasjon er ikke ennå sendt inn.
+            Her får dere oversikt over alle deres svar.{' '}
+            {pvkDokumentStatus === EPvkDokumentStatus.UNDERARBEID &&
+              'PVK-dokumentasjon er ikke ennå sendt inn.'}
           </BodyShort>
         )}
       </FormSummary.Value>
