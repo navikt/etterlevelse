@@ -512,7 +512,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                             submitForm()
                           }}
                         >
-                          Lagre og godkjent
+                          Akseptér restrisiko
                         </Button>
                       )}
                     </div>
