@@ -132,11 +132,11 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
           innerRef={formRef}
           initialValues={mapRisikoscenarioToFormValue(risikoscenario)}
         >
-          {({ submitForm }) => (
+          {({ values, setFieldValue, submitForm }) => (
             <Form className='w-full border-t border-[#071a3636]'>
               <TopBottomWrapper>
                 <Heading size='medium' level='3'>
-                  Vurdér tiltakenes antatte effekt på risikoscenarionivået
+                  Dokumentér antatt risikonivå etter gjennomførte tiltak
                 </Heading>
               </TopBottomWrapper>
 
@@ -157,9 +157,9 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                     >
                       <RisikoscenarioSannsynlighetReadMore />
                       <Stack gap='0 6' direction={{ xs: 'column', sm: 'row' }} wrap={false}>
-                        <Radio value={1}>Meget lite sannsynlig</Radio>
-                        <Radio value={2}>Lite sannsynlig</Radio>
-                        <Radio value={3}>Moderat sannsynlig</Radio>
+                        <Radio value={1}>Meget lite</Radio>
+                        <Radio value={2}>Lite</Radio>
+                        <Radio value={3}>Moderat</Radio>
                         <Radio value={4}>Sannsynlig</Radio>
                         <Radio value={5}>Nesten sikkert</Radio>
                       </Stack>
@@ -186,15 +186,29 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                       <RisikoscenarioKonsekvensnivaaReadMore />
                       <Stack gap='0 6' direction={{ xs: 'column', sm: 'row' }} wrap={false}>
                         <Radio value={1}>Ubetydelig</Radio>
-                        <Radio value={2}>Lav konsekvens</Radio>
-                        <Radio value={3}>Moderat konsekvens</Radio>
-                        <Radio value={4}>Alvorlig konsekvens</Radio>
-                        <Radio value={5}>Svært alvorlig konsekvens</Radio>
+                        <Radio value={2}>Lav</Radio>
+                        <Radio value={3}>Moderat</Radio>
+                        <Radio value={4}>Alvorlig </Radio>
+                        <Radio value={5}>Svært alvorlig</Radio>
                       </Stack>
                     </RadioGroup>
                   )}
                 </Field>
               </PVKFieldWrapper>
+              <div className='flex gap-3 mb-5'>
+                {values.sannsynlighetsNivaaEtterTiltak > 0 && (
+                  <RisikoscenarioTag
+                    level={values.sannsynlighetsNivaaEtterTiltak}
+                    text={getSannsynlighetsnivaaText(values.sannsynlighetsNivaaEtterTiltak)}
+                  />
+                )}
+                {values.konsekvensNivaaEtterTiltak > 0 && (
+                  <RisikoscenarioTag
+                    level={values.konsekvensNivaaEtterTiltak}
+                    text={getKonsekvenssnivaaText(values.konsekvensNivaaEtterTiltak)}
+                  />
+                )}
+              </div>
 
               <div>
                 <TextAreaField
@@ -208,11 +222,23 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
               <TopBottomWrapper>
                 <div className='flex gap-2'>
                   <Button type='button' onClick={() => submitForm()}>
-                    Lagre
+                    Lagre tiltakenes effekt
                   </Button>
 
                   <Button type='button' variant='secondary' onClick={() => setIsFormActive(false)}>
                     Avbryt
+                  </Button>
+
+                  <Button
+                    type='button'
+                    variant='tertiary'
+                    onClick={() => {
+                      setFieldValue('sannsynlighetsNivaaEtterTiltak', null)
+                      setFieldValue('konsekvensNivaaEtterTiltak', null)
+                      setFieldValue('nivaaBegrunnelseEtterTiltak', '')
+                    }}
+                  >
+                    Nullstill svar
                   </Button>
                 </div>
               </TopBottomWrapper>
