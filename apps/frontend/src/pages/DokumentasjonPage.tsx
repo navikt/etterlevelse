@@ -206,7 +206,7 @@ export const DokumentasjonPage = () => {
     >
       <div className='flex flex-col gap-4'>
         <div className='flex flex-col gap-2'>
-          <Heading level='1' size='medium'>
+          <Heading level='1' size='medium' className='max-w-[75ch]'>
             E{etterlevelseNummer.toString()} {title}
           </Heading>
 
