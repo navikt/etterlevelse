@@ -196,14 +196,18 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
                 </Field>
               </PVKFieldWrapper>
               <div className='flex gap-3 mb-5'>
-                <RisikoscenarioTag
-                  level={values.sannsynlighetsNivaaEtterTiltak}
-                  text={getSannsynlighetsnivaaText(values.sannsynlighetsNivaaEtterTiltak)}
-                />
-                <RisikoscenarioTag
-                  level={values.konsekvensNivaaEtterTiltak}
-                  text={getKonsekvenssnivaaText(values.konsekvensNivaaEtterTiltak)}
-                />
+                {values.sannsynlighetsNivaaEtterTiltak > 0 && (
+                  <RisikoscenarioTag
+                    level={values.sannsynlighetsNivaaEtterTiltak}
+                    text={getSannsynlighetsnivaaText(values.sannsynlighetsNivaaEtterTiltak)}
+                  />
+                )}
+                {values.konsekvensNivaaEtterTiltak > 0 && (
+                  <RisikoscenarioTag
+                    level={values.konsekvensNivaaEtterTiltak}
+                    text={getKonsekvenssnivaaText(values.konsekvensNivaaEtterTiltak)}
+                  />
+                )}
               </div>
 
               <div>
