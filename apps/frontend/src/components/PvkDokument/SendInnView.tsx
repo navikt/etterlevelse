@@ -85,7 +85,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
     pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
     pvkDokument.status === EPvkDokumentStatus.AKTIV
 
-  const submit = async (pvkDokument: IPvkDokument) => {
+  const submit = async (submitedValues: IPvkDokument) => {
     if (
       !behandlingensLivslopError &&
       risikoscenarioError === '' &&
@@ -93,14 +93,14 @@ export const SendInnView: FunctionComponent<TProps> = ({
       tiltakError === '' &&
       !manglerBehandlingError
     ) {
-      await getPvkDokument(pvkDokument.id).then((response) => {
+      await getPvkDokument(submitedValues.id).then((response) => {
         const updatedStatus =
-          pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
-          pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+          submitedValues.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
+          submitedValues.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
           (response.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
             response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
             ? response.status
-            : pvkDokument.status
+            : submitedValues.status
 
         const updatedPvkDokument: IPvkDokument = {
           ...response,
@@ -109,7 +109,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
             updatedStatus === EPvkDokumentStatus.SENDT_TIL_PVO
               ? new Date().toISOString()
               : response.sendtTilPvoDato,
-          merknadTilPvoEllerRisikoeier: pvkDokument.merknadTilPvoEllerRisikoeier,
+          merknadTilPvoEllerRisikoeier: submitedValues.merknadTilPvoEllerRisikoeier,
+          merknadTilRisikoeier: submitedValues.merknadTilPvoEllerRisikoeier,
+          merknadFraRisikoeier: submitedValues.merknadFraRisikoeier,
         }
 
         updatePvkDokument(updatedPvkDokument).then((savedResponse) => {
@@ -325,6 +327,50 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   </div>
                 )}
 
+              {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && (
+                <div className='mt-5 mb-3 max-w-[75ch]'>
+                  <TextAreaField
+                    rows={3}
+                    noPlaceholder
+                    label='Kommentar til risikoeier? (valgfritt)'
+                    name='merknadTilRisikoeier'
+                  />
+                </div>
+              )}
+
+              {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
+                <div className='mt-5 mb-3 max-w-[75ch]'>
+                  <Label>Etterleverens kommmentarer til risikoeier</Label>
+                  <DataTextWrapper>
+                    {pvkDokument.merknadTilRisikoeier
+                      ? pvkDokument.merknadTilRisikoeier
+                      : 'Ingen beskjed'}
+                  </DataTextWrapper>
+                </div>
+              )}
+
+              {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
+                <div className='mt-5 mb-3 max-w-[75ch]'>
+                  <TextAreaField
+                    rows={3}
+                    noPlaceholder
+                    label='Kommentar til etterlever? (valgfritt)'
+                    name='merknadFraRisikoeier'
+                  />
+                </div>
+              )}
+
+              {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
+                <div className='mt-5 mb-3 max-w-[75ch]'>
+                  <Label>Risikoeierens kommmentarer</Label>
+                  <DataTextWrapper>
+                    {pvkDokument.merknadFraRisikoeier
+                      ? pvkDokument.merknadFraRisikoeier
+                      : 'Ingen beskjed'}
+                  </DataTextWrapper>
+                </div>
+              )}
+
               <CopyButton
                 variant='action'
                 copyText={window.location.href}
@@ -433,7 +479,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         </Button>
                       )}
 
-                      {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
+                      {(pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER ||
+                        pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING) && (
                         <Button
                           type='button'
                           onClick={async () => {
@@ -449,11 +496,23 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         <Button
                           type='button'
                           onClick={async () => {
+                            await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
+                            submitForm()
+                          }}
+                        >
+                          Send til godkjenning av risikoeier
+                        </Button>
+                      )}
+
+                      {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
+                        <Button
+                          type='button'
+                          onClick={async () => {
                             await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
                             submitForm()
                           }}
                         >
-                          Godkjent
+                          Lagre og godkjent
                         </Button>
                       )}
                     </div>
