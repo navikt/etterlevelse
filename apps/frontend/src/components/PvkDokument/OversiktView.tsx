@@ -307,8 +307,12 @@ export const OversiktView = (props: IProps) => {
             <BodyShort>
               <strong>Risikoeier:</strong>{' '}
               {etterlevelseDokumentasjon.risikoeiereData &&
+                etterlevelseDokumentasjon.risikoeiereData.length !== 0 &&
                 getMemberListToString(etterlevelseDokumentasjon.risikoeiereData)}
-              {!etterlevelseDokumentasjon.risikoeiereData && 'Ingen risikoeier angitt'}
+              {!etterlevelseDokumentasjon.risikoeiereData ||
+                (etterlevelseDokumentasjon.risikoeiereData &&
+                  etterlevelseDokumentasjon.risikoeiereData.length === 0 &&
+                  'Ingen risikoeier angitt')}
             </BodyShort>
           </List.Item>
           <List.Item>
