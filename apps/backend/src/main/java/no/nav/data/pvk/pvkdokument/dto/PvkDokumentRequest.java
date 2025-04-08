@@ -44,6 +44,9 @@ public class PvkDokumentRequest implements RequestElement {
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
     private String merknadTilPvoEllerRisikoeier;
+    private String merknadTilRisikoeier;
+    private String merknadFraRisikoeier;
+
     private LocalDateTime sendtTilPvoDato;
 
     private Boolean update;
@@ -59,6 +62,8 @@ public class PvkDokumentRequest implements RequestElement {
         setDataBehandlerRepresentantInvolveringBeskrivelse(trimToNull(dataBehandlerRepresentantInvolveringBeskrivelse));
 
         setMerknadTilPvoEllerRisikoeier(trimToNull(merknadTilPvoEllerRisikoeier));
+        setMerknadTilRisikoeier(trimToNull(merknadTilRisikoeier));
+        setMerknadFraRisikoeier(trimToNull(merknadFraRisikoeier));
 
         if (status == null || status == PvkDokumentStatus.AKTIV) {
             status = PvkDokumentStatus.UNDERARBEID;
@@ -86,6 +91,8 @@ public class PvkDokumentRequest implements RequestElement {
                 .harDatabehandlerRepresentantInvolvering(harDatabehandlerRepresentantInvolvering)
                 .dataBehandlerRepresentantInvolveringBeskrivelse(dataBehandlerRepresentantInvolveringBeskrivelse)
                 .merknadTilPvoEllerRisikoeier(merknadTilPvoEllerRisikoeier)
+                .merknadTilRisikoeier(merknadTilRisikoeier)
+                .merknadFraRisikoeier(merknadFraRisikoeier)
                 .sendtTilPvoDato(sendtTilPvoDato)
                 .build();
 
@@ -112,6 +119,8 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.getPvkDokumentData().setHarDatabehandlerRepresentantInvolvering(harDatabehandlerRepresentantInvolvering);
         pvkDokumentToMerge.getPvkDokumentData().setDataBehandlerRepresentantInvolveringBeskrivelse(dataBehandlerRepresentantInvolveringBeskrivelse);
         pvkDokumentToMerge.getPvkDokumentData().setMerknadTilPvoEllerRisikoeier(merknadTilPvoEllerRisikoeier);
+        pvkDokumentToMerge.getPvkDokumentData().setMerknadTilRisikoeier(merknadTilRisikoeier);
+        pvkDokumentToMerge.getPvkDokumentData().setMerknadFraRisikoeier(merknadFraRisikoeier);
         pvkDokumentToMerge.getPvkDokumentData().setSendtTilPvoDato(sendtTilPvoDato);
     }
 }
