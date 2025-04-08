@@ -32,6 +32,16 @@ export const isDev: boolean =
   window.location.origin.includes('.dev.') || window.location.origin.includes('localhost')
 
 export const isInLimitedAccess = (ident: string) =>
-  ['H103464', 'R154124', 'J142849', 'T139680', 'A132855', 'E171300', 'G103103', 'B156859'].includes(
-    ident
-  )
+  [
+    'H103464',
+    'R154124',
+    'J142849',
+    'T139680',
+    'A132855',
+    'E171300',
+    'G103103',
+    'B156859',
+    'R107763',
+    'B100673',
+    'E157419',
+  ].includes(ident)
