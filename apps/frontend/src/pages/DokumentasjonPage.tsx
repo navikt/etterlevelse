@@ -187,16 +187,16 @@ export const DokumentasjonPage = () => {
 
   const { etterlevelseNummer, title } = etterlevelseDokumentasjon
 
-  const pvkDokumentStartedCheck =
+  const pvkDokumentNotStarted =
     pvkDokument &&
-    (pvkDokument.personkategoriAntallBeskrivelse !== '' ||
-      pvkDokument.tilgangsBeskrivelsePersonopplysningene !== '' ||
-      pvkDokument.lagringsBeskrivelsePersonopplysningene !== '' ||
-      pvkDokument.representantInvolveringsBeskrivelse !== '' ||
-      pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse !== '' ||
-      pvkDokument.stemmerPersonkategorier !== null ||
-      pvkDokument.harInvolvertRepresentant !== null ||
-      pvkDokument.harDatabehandlerRepresentantInvolvering !== null)
+    pvkDokument.personkategoriAntallBeskrivelse === '' &&
+    pvkDokument.tilgangsBeskrivelsePersonopplysningene === '' &&
+    pvkDokument.lagringsBeskrivelsePersonopplysningene === '' &&
+    pvkDokument.representantInvolveringsBeskrivelse === '' &&
+    pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse === '' &&
+    pvkDokument.stemmerPersonkategorier === null &&
+    pvkDokument.harInvolvertRepresentant === null &&
+    pvkDokument.harDatabehandlerRepresentantInvolvering === null
 
   const pvkDokumentVurdertCheck =
     pvkDokument &&
@@ -333,14 +333,21 @@ export const DokumentasjonPage = () => {
                             variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
                             className='whitespace-nowrap'
                           >
-                            {!pvkDokumentStartedCheck && 'Påbegynn PVK'}
-                            {pvkDokumentStartedCheck && 'Fullfør PVK'}
-                            {pvkDokument.status !== EPvkDokumentStatus.SENDT_TIL_PVO && 'Les PVK'}
-                            {[
-                              EPvkDokumentStatus.VURDERT_AV_PVO,
-                              EPvkDokumentStatus.TRENGER_GODKJENNING,
-                            ].includes(pvkDokument.status) && 'Les PVO-tilbakemelding'}
-                            {pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+                            {pvkDokumentNotStarted && 'Påbegynn PVK'}
+                            {!pvkDokumentNotStarted &&
+                              pvkDokument.status === EPvkDokumentStatus.UNDERARBEID &&
+                              'Fullfør PVK'}
+                            {!pvkDokumentNotStarted &&
+                              pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO &&
+                              'Les PVK'}
+                            {!pvkDokumentNotStarted &&
+                              [
+                                EPvkDokumentStatus.VURDERT_AV_PVO,
+                                EPvkDokumentStatus.TRENGER_GODKJENNING,
+                              ].includes(pvkDokument.status) &&
+                              'Les PVO-tilbakemelding'}
+                            {!pvkDokumentNotStarted &&
+                              pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
                               'Revurdér PVK'}
                           </Button>
                         )}
