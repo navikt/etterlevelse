@@ -13,6 +13,7 @@ import TillatGjenbrukModal from '../components/etterlevelseDokumentasjon/edit/Ti
 import DokumentasjonPageTabs from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonPageTabs'
 import { PageLayout } from '../components/scaffold/Page'
 import {
+  EPvkDokumentStatus,
   ERelationType,
   IBehandlingensLivslop,
   IBreadCrumbPath,
@@ -188,11 +189,14 @@ export const DokumentasjonPage = () => {
 
   const pvkDokumentStartedCheck =
     pvkDokument &&
-    (pvkDokument.personkategoriAntallBeskrivelse ||
-      pvkDokument.tilgangsBeskrivelsePersonopplysningene ||
-      pvkDokument.lagringsBeskrivelsePersonopplysningene ||
-      pvkDokument.representantInvolveringsBeskrivelse ||
-      pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse)
+    (pvkDokument.personkategoriAntallBeskrivelse !== '' ||
+      pvkDokument.tilgangsBeskrivelsePersonopplysningene !== '' ||
+      pvkDokument.lagringsBeskrivelsePersonopplysningene !== '' ||
+      pvkDokument.representantInvolveringsBeskrivelse !== '' ||
+      pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse !== '' ||
+      pvkDokument.stemmerPersonkategorier !== null ||
+      pvkDokument.harInvolvertRepresentant !== null ||
+      pvkDokument.harDatabehandlerRepresentantInvolvering !== null)
 
   const pvkDokumentVurdertCheck =
     pvkDokument &&
@@ -329,9 +333,15 @@ export const DokumentasjonPage = () => {
                             variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
                             className='whitespace-nowrap'
                           >
-                            {pvkDokument.skalUtforePvk && pvkDokumentStartedCheck
-                              ? 'Fullfør PVK'
-                              : 'Påbegynn PVK'}
+                            {!pvkDokumentStartedCheck && 'Påbegynn PVK'}
+                            {pvkDokumentStartedCheck && 'Fullfør PVK'}
+                            {pvkDokument.status !== EPvkDokumentStatus.SENDT_TIL_PVO && 'Les PVK'}
+                            {[
+                              EPvkDokumentStatus.VURDERT_AV_PVO,
+                              EPvkDokumentStatus.TRENGER_GODKJENNING,
+                            ].includes(pvkDokument.status) && 'Les PVO-tilbakemelding'}
+                            {pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+                              'Revurdér PVK'}
                           </Button>
                         )}
 
