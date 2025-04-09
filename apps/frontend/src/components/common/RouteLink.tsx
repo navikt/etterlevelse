@@ -96,5 +96,5 @@ export const ExternalLink = ({
   )
 }
 
-export const paramQueryUrl = (pathname: string, tabQuery: string, paramQuery: string): string =>
-  `${pathname}?tab=${tabQuery}${paramQuery}`
+export const paramQueryUrl = (tabQuery: string, paramQuery: string): string =>
+  `${window.location.pathname}?tab=${tabQuery}${paramQuery}`

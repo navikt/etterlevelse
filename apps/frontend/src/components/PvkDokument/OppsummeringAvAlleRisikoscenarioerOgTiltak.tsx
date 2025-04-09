@@ -128,12 +128,12 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   const onTabChange = (tab: string) => {
     const filter = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
     const paramQuery = tab === tabValues.risikoscenarioer ? '&filter=' + filter : ''
-    setNavigateUrl(paramQueryUrl(window.location.pathname, tab, paramQuery))
+    setNavigateUrl(paramQueryUrl(tab, paramQuery))
 
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
     } else {
-      navigate(paramQueryUrl(window.location.pathname, tab, paramQuery))
+      navigate(paramQueryUrl(tab, paramQuery))
     }
   }
 
