@@ -85,12 +85,11 @@ export const pvkDokumentasjonTabFilterRisikoscenarioUrl = (
 }
 
 export const pvkDokumentasjonTabFilterUrl = (
-  pathname: string,
   tabQuery: string | null,
   filter: string | null,
   risikoscenarioer: string
 ): string => {
-  const url: string = `${pathname}?tab=${tabQuery}`
+  const url: string = `${window.location.pathname}?tab=${tabQuery}`
 
   if (tabQuery === risikoscenarioer) {
     return `${url}&filter=${filter}`

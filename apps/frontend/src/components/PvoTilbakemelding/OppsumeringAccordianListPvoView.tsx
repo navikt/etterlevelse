@@ -46,14 +46,7 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
     if (risikoscenarioId) {
       navigate(pvkDokumentasjonTabFilterRisikoscenarioUrl(tabQuery, filterQuery, risikoscenarioId))
     } else {
-      navigate(
-        pvkDokumentasjonTabFilterUrl(
-          window.location.pathname,
-          tabQuery,
-          filterQuery,
-          tabValues.risikoscenarioer
-        )
-      )
+      navigate(pvkDokumentasjonTabFilterUrl(tabQuery, filterQuery, tabValues.risikoscenarioer))
     }
   }
 

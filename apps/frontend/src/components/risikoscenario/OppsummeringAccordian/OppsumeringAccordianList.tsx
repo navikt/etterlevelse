@@ -66,24 +66,12 @@ export const OppsumeringAccordianList: FunctionComponent<TProps> = ({
       }
     } else {
       setNavigateUrl(
-        pvkDokumentasjonTabFilterUrl(
-          window.location.pathname,
-          tabQuery,
-          filterQuery,
-          tabValues.risikoscenarioer
-        )
+        pvkDokumentasjonTabFilterUrl(tabQuery, filterQuery, tabValues.risikoscenarioer)
       )
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
       } else {
-        navigate(
-          pvkDokumentasjonTabFilterUrl(
-            window.location.pathname,
-            tabQuery,
-            filterQuery,
-            tabValues.risikoscenarioer
-          )
-        )
+        navigate(pvkDokumentasjonTabFilterUrl(tabQuery, filterQuery, tabValues.risikoscenarioer))
       }
     }
   }
