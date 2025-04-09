@@ -6,4 +6,4 @@ export const risikoDokumentasjonTemaKravNummerVersjonUrl = (
 ): string =>
   `/dokumentasjon/${etterlevelseDokumentasjonId}/${tema}/RELEVANTE_KRAV/krav/${kravNummer}/${kravVersjon}`
 
-export const risikoscenarioFilterAlleUrl = (): string => '?tab=risikoscenarioer&filter=alle'
+export const risikoscenarioFilterAlleUrl = (): string => `?tab=risikoscenarioer&filter=alle`

@@ -31,7 +31,7 @@ export const RisikoscenarioSummary = (props: IProps) => {
                 <FormSummary.Label id='risikoscenarioer'>Risikoscenarioer</FormSummary.Label>
                 <FormSummary.Value>
                   Det er beskrevet totalt sett {alleRisikoscenario.length} risikoscenarioer.{' '}
-                  <ExternalLink href={risikoscenarioLink + risikoscenarioFilterAlleUrl()}>
+                  <ExternalLink href={`${risikoscenarioLink}${risikoscenarioFilterAlleUrl()}`}>
                     Se alle risikoscenarioer
                   </ExternalLink>
                   .
