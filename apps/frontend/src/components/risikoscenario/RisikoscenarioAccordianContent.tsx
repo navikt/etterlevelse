@@ -82,9 +82,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
       setTiltakList([...tiltakList, response])
       setIsCreateTiltakFormActive(false)
 
-      navigate(
-        risikoscenarioTiltakUrl(window.location.pathname, activeRisikoscenario.id, response.id)
-      )
+      navigate(risikoscenarioTiltakUrl(activeRisikoscenario.id, response.id))
       window.location.reload()
     })
   }

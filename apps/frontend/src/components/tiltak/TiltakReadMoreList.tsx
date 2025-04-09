@@ -148,9 +148,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
           onOpenChange={(open) => {
             if (open) {
               setActiveTiltak(tiltak.id)
-              navigate(
-                risikoscenarioTiltakUrl(window.location.pathname, risikoscenario.id, tiltak.id)
-              )
+              navigate(risikoscenarioTiltakUrl(risikoscenario.id, tiltak.id))
             } else {
               setActiveTiltak('')
               navigate(risikoscenarioUrl(window.location.pathname, risikoscenario.id))
