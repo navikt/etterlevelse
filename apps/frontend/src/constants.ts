@@ -538,6 +538,9 @@ export interface IPvkDokument {
   dataBehandlerRepresentantInvolveringBeskrivelse: string
 
   merknadTilPvoEllerRisikoeier: string
+  merknadTilRisikoeier: string
+  merknadFraRisikoeier: string
+
   sendtTilPvoDato: string
 }
 
@@ -657,6 +660,7 @@ export enum EPvkDokumentStatus {
   UNDERARBEID = 'UNDERARBEID',
   SENDT_TIL_PVO = 'SENDT_TIL_PVO',
   VURDERT_AV_PVO = 'VURDERT_AV_PVO',
+  TRENGER_GODKJENNING = 'TRENGER_GODKJENNING',
   GODKJENT_AV_RISIKOEIER = 'GODKJENT_AV_RISIKOEIER',
   AKTIV = 'AKTIV',
 }

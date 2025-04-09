@@ -33,7 +33,7 @@ public class PvkDokumentService {
         return pvkDokumentRepo.findAll(pageParameters.createPage());
     }
 
-    public Optional<PvkDokument> getByEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId) {
+    public Optional<PvkDokument> getByEtterlevelseDokumentasjon(UUID etterlevelseDokumentasjonId) {
         return pvkDokumentRepo.findByEtterlevelseDokumensjon(etterlevelseDokumentasjonId);
     }
 

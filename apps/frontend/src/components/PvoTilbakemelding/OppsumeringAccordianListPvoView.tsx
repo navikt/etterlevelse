@@ -90,6 +90,7 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
                   risikoscenario={risikoscenario}
                   etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                   stepUrl='6'
+                  markdownCopyLinkButton={true}
                 />
                 <div className='mt-12'>
                   <Heading level='3' size='small'>

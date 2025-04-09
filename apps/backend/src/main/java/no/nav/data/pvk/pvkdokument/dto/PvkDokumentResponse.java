@@ -25,7 +25,7 @@ public class PvkDokumentResponse {
     private ChangeStampResponse changeStamp;
     private Integer version;
 
-    private String etterlevelseDokumentId;
+    private UUID etterlevelseDokumentId;
     private PvkDokumentStatus status;
 
     private List<CodelistResponse> ytterligereEgenskaper;
@@ -43,6 +43,9 @@ public class PvkDokumentResponse {
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
     private String merknadTilPvoEllerRisikoeier;
+    private String merknadTilRisikoeier;
+    private String merknadFraRisikoeier;
+
     private LocalDateTime sendtTilPvoDato;
 
     public static PvkDokumentResponse buildFrom(PvkDokument pvkDokument) {
@@ -69,6 +72,8 @@ public class PvkDokumentResponse {
                 .harDatabehandlerRepresentantInvolvering(pvkDokument.getPvkDokumentData().getHarDatabehandlerRepresentantInvolvering())
                 .dataBehandlerRepresentantInvolveringBeskrivelse(pvkDokument.getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse())
                 .merknadTilPvoEllerRisikoeier(pvkDokument.getPvkDokumentData().getMerknadTilPvoEllerRisikoeier())
+                .merknadTilRisikoeier(pvkDokument.getPvkDokumentData().getMerknadTilRisikoeier())
+                .merknadFraRisikoeier(pvkDokument.getPvkDokumentData().getMerknadFraRisikoeier())
                 .sendtTilPvoDato(pvkDokument.getPvkDokumentData().getSendtTilPvoDato())
                 .build();
     }

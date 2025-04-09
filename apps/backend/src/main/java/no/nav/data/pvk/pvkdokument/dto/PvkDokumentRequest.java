@@ -26,7 +26,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 public class PvkDokumentRequest implements RequestElement {
 
     private UUID id;
-    private String etterlevelseDokumentId;
+    private UUID etterlevelseDokumentId;
     private PvkDokumentStatus status;
 
     private List<String> ytterligereEgenskaper;
@@ -44,13 +44,15 @@ public class PvkDokumentRequest implements RequestElement {
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
     private String merknadTilPvoEllerRisikoeier;
+    private String merknadTilRisikoeier;
+    private String merknadFraRisikoeier;
+
     private LocalDateTime sendtTilPvoDato;
 
     private Boolean update;
 
     @Override
     public void format() {
-        setEtterlevelseDokumentId(trimToNull(etterlevelseDokumentId));
         setPvkVurderingsBegrunnelse(trimToNull(pvkVurderingsBegrunnelse));
         setPersonkategoriAntallBeskrivelse(trimToNull(personkategoriAntallBeskrivelse));
         setTilgangsBeskrivelsePersonopplysningene(trimToNull(tilgangsBeskrivelsePersonopplysningene));
@@ -60,6 +62,8 @@ public class PvkDokumentRequest implements RequestElement {
         setDataBehandlerRepresentantInvolveringBeskrivelse(trimToNull(dataBehandlerRepresentantInvolveringBeskrivelse));
 
         setMerknadTilPvoEllerRisikoeier(trimToNull(merknadTilPvoEllerRisikoeier));
+        setMerknadTilRisikoeier(trimToNull(merknadTilRisikoeier));
+        setMerknadFraRisikoeier(trimToNull(merknadFraRisikoeier));
 
         if (status == null || status == PvkDokumentStatus.AKTIV) {
             status = PvkDokumentStatus.UNDERARBEID;
@@ -68,7 +72,7 @@ public class PvkDokumentRequest implements RequestElement {
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(Fields.etterlevelseDokumentId, etterlevelseDokumentId);
+        validator.checkNull(Fields.etterlevelseDokumentId, etterlevelseDokumentId);
         validator.checkNull(Fields.status, status);
         validator.checkId(this);
     }
@@ -87,6 +91,8 @@ public class PvkDokumentRequest implements RequestElement {
                 .harDatabehandlerRepresentantInvolvering(harDatabehandlerRepresentantInvolvering)
                 .dataBehandlerRepresentantInvolveringBeskrivelse(dataBehandlerRepresentantInvolveringBeskrivelse)
                 .merknadTilPvoEllerRisikoeier(merknadTilPvoEllerRisikoeier)
+                .merknadTilRisikoeier(merknadTilRisikoeier)
+                .merknadFraRisikoeier(merknadFraRisikoeier)
                 .sendtTilPvoDato(sendtTilPvoDato)
                 .build();
 
@@ -113,6 +119,8 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.getPvkDokumentData().setHarDatabehandlerRepresentantInvolvering(harDatabehandlerRepresentantInvolvering);
         pvkDokumentToMerge.getPvkDokumentData().setDataBehandlerRepresentantInvolveringBeskrivelse(dataBehandlerRepresentantInvolveringBeskrivelse);
         pvkDokumentToMerge.getPvkDokumentData().setMerknadTilPvoEllerRisikoeier(merknadTilPvoEllerRisikoeier);
+        pvkDokumentToMerge.getPvkDokumentData().setMerknadTilRisikoeier(merknadTilRisikoeier);
+        pvkDokumentToMerge.getPvkDokumentData().setMerknadFraRisikoeier(merknadFraRisikoeier);
         pvkDokumentToMerge.getPvkDokumentData().setSendtTilPvoDato(sendtTilPvoDato);
     }
 }

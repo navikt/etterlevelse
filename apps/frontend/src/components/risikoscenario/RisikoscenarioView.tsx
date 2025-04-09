@@ -15,6 +15,7 @@ type TProps = {
   etterlevelseDokumentasjonId: string
   stepUrl: string
   noCopyButton?: boolean
+  markdownCopyLinkButton?: boolean
 }
 
 export const RisikoscenarioView: FunctionComponent<TProps> = ({
@@ -22,6 +23,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjonId,
   stepUrl,
   noCopyButton,
+  markdownCopyLinkButton,
 }) => {
   const splittedUrl: string[] = window.location.href.split('?')
   const queryUrl: string = splittedUrl[1]
@@ -39,6 +41,15 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
             queryUrl
           )}
           text='Kopiér scenariolenke'
+          activeText='Lenken er kopiert'
+          icon={<LinkIcon aria-hidden />}
+        />
+      )}
+      {markdownCopyLinkButton && (
+        <CopyButton
+          variant='action'
+          copyText={`[${risikoscenario.navn}](${window.location.origin}/dokumentasjon/${etterlevelseDokumentasjonId}/pvkdokument/${risikoscenario.pvkDokumentId}/${stepUrl}?${queryUrl})`}
+          text='Kopiér scenario riktekstfelt lenke med titel'
           activeText='Lenken er kopiert'
           icon={<LinkIcon aria-hidden />}
         />

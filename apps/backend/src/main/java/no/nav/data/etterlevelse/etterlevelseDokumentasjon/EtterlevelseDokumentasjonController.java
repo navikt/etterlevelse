@@ -15,6 +15,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokume
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest;
 import no.nav.data.integration.team.dto.MemberResponse;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -195,8 +196,13 @@ public class EtterlevelseDokumentasjonController {
     @DeleteMapping("/{id}")
     public ResponseEntity<EtterlevelseDokumentasjonResponse> deleteEtterlevelseById(@PathVariable UUID id) {
         log.info("Delete Etterlevelse Dokumentasjon By Id={}", id);
-        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.deleteEtterlevelseDokumentasjonAndAllChildren(id);
-        return ResponseEntity.ok(EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon));
+        try {
+            var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.deleteEtterlevelseDokumentasjonAndAllChildren(id);
+            return ResponseEntity.ok(EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon));
+        } catch (DataIntegrityViolationException e) {
+            log.warn("Requested to delete referenced EtterlevelseDokumentasjon with id {}", id, e);
+            throw new ValidationException("Can not delete EtterlevelseDokumentasjon that is referenced by other entities");
+        }
     }
 
     static class EtterlevelseDokumentasjonPage extends RestResponsePage<EtterlevelseDokumentasjonResponse> {

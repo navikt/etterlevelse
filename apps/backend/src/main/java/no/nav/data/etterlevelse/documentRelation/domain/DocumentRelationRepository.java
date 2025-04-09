@@ -9,14 +9,14 @@ public interface DocumentRelationRepository extends JpaRepository<DocumentRelati
 
     Optional<DocumentRelation> findById(UUID uuid);
 
-    List<DocumentRelation> findByFromDocument(String from);
+    List<DocumentRelation> findByFromDocument(UUID from);
 
-    List<DocumentRelation> findByToDocument(String to);
+    List<DocumentRelation> findByToDocument(UUID to);
 
-    DocumentRelation findByFromDocumentAndToDocumentAndRelationType(String from,String to, RelationType relationType);
+    DocumentRelation findByFromDocumentAndToDocumentAndRelationType(UUID from, UUID to, RelationType relationType);
 
-    List<DocumentRelation> findByFromDocumentAndRelationType (String fromDocument, RelationType relationType);
+    List<DocumentRelation> findByFromDocumentAndRelationType (UUID fromDocument, RelationType relationType);
 
-    List<DocumentRelation> findByToDocumentAndRelationType(String toDocument, RelationType relationType);
+    List<DocumentRelation> findByToDocumentAndRelationType(UUID toDocument, RelationType relationType);
 
 }

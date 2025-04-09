@@ -58,7 +58,21 @@ const visTomListeBeskrivelse = (filter: string | null) => {
       textBody = 'Det finnes ingen risikoscenarioer uten tiltak 🎉'
       break
     case filterValues.effektIkkeVurdert:
-      textBody = 'Det finnes ingen risikoscenarioer der effekt ikke er vurdert'
+      textBody = 'Det finnes ingen risikoscenarioer der effekt ikke er vurdert 🎉'
+      break
+    default:
+  }
+  return <BodyLong className='my-5'>{textBody}</BodyLong>
+}
+
+const visTomTiltakListeBeskrivelse = (filter: string | null) => {
+  let textBody = ''
+  switch (filter) {
+    case tiltakFilterValues.utenAnsvarlig:
+      textBody = 'Det finnes tiltak uten en ansvarlig 🎉'
+      break
+    case tiltakFilterValues.utenFrist:
+      textBody = 'Det finnes ingen tiltak uten frist 🎉'
       break
     default:
   }
@@ -341,6 +355,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
                           risikoscenarioList={risikoscenarioList}
                         />
                       )}
+
+                      {filteredTiltakList.length === 0 &&
+                        visTomTiltakListeBeskrivelse(tiltakFilter)}
                     </Tabs.Panel>
                   </Tabs>
                 </div>

@@ -22,6 +22,7 @@ import TillatGjenbrukModal from '../components/etterlevelseDokumentasjon/edit/Ti
 import DokumentasjonPageTabs from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonPageTabs'
 import { PageLayout } from '../components/scaffold/Page'
 import {
+  EPvkDokumentStatus,
   ERelationType,
   IBehandlingensLivslop,
   IBreadCrumbPath,
@@ -195,13 +196,16 @@ export const DokumentasjonPage = () => {
 
   const { etterlevelseNummer, title } = etterlevelseDokumentasjon
 
-  const pvkDokumentStartedCheck =
+  const pvkDokumentNotStarted =
     pvkDokument &&
-    (pvkDokument.personkategoriAntallBeskrivelse ||
-      pvkDokument.tilgangsBeskrivelsePersonopplysningene ||
-      pvkDokument.lagringsBeskrivelsePersonopplysningene ||
-      pvkDokument.representantInvolveringsBeskrivelse ||
-      pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse)
+    pvkDokument.personkategoriAntallBeskrivelse === '' &&
+    pvkDokument.tilgangsBeskrivelsePersonopplysningene === '' &&
+    pvkDokument.lagringsBeskrivelsePersonopplysningene === '' &&
+    pvkDokument.representantInvolveringsBeskrivelse === '' &&
+    pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse === '' &&
+    pvkDokument.stemmerPersonkategorier === null &&
+    pvkDokument.harInvolvertRepresentant === null &&
+    pvkDokument.harDatabehandlerRepresentantInvolvering === null
 
   const pvkDokumentVurdertCheck =
     pvkDokument &&
@@ -215,7 +219,7 @@ export const DokumentasjonPage = () => {
     >
       <div className='flex flex-col gap-4'>
         <div className='flex flex-col gap-2'>
-          <Heading level='1' size='medium'>
+          <Heading level='1' size='medium' className='max-w-[75ch]'>
             E{etterlevelseNummer.toString()} {title}
           </Heading>
 
@@ -335,9 +339,22 @@ export const DokumentasjonPage = () => {
                             variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
                             className='whitespace-nowrap'
                           >
-                            {pvkDokument.skalUtforePvk && pvkDokumentStartedCheck
-                              ? 'Fullfør PVK'
-                              : 'Påbegynn PVK'}
+                            {pvkDokumentNotStarted && 'Påbegynn PVK'}
+                            {!pvkDokumentNotStarted &&
+                              pvkDokument.status === EPvkDokumentStatus.UNDERARBEID &&
+                              'Fullfør PVK'}
+                            {!pvkDokumentNotStarted &&
+                              pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO &&
+                              'Les PVK'}
+                            {!pvkDokumentNotStarted &&
+                              [
+                                EPvkDokumentStatus.VURDERT_AV_PVO,
+                                EPvkDokumentStatus.TRENGER_GODKJENNING,
+                              ].includes(pvkDokument.status) &&
+                              'Les PVO-tilbakemelding'}
+                            {!pvkDokumentNotStarted &&
+                              pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+                              'Revurdér PVK'}
                           </Button>
                         )}
 

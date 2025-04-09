@@ -35,6 +35,8 @@ public class PvkDokumentData {
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
     private String merknadTilPvoEllerRisikoeier;
+    private String merknadTilRisikoeier;
+    private String merknadFraRisikoeier;
 
     private LocalDateTime sendtTilPvoDato;
 

@@ -29,7 +29,7 @@ public class PvoTilbakemeldingGrahpIT extends GraphQLTestBase {
         
         EtterlevelseDokumentasjon eDok1 = createEtterlevelseDokumentasjon();
         PvkDokument pvkDokument = pvkDokumentRepo.save(PvkDokument.builder()
-                .etterlevelseDokumentId(eDok1.getId().toString())
+                .etterlevelseDokumentId(eDok1.getId())
                 .status(PvkDokumentStatus.SENDT_TIL_PVO)
                 .pvkDokumentData(PvkDokumentData.builder()
                         .merknadTilPvoEllerRisikoeier("test")

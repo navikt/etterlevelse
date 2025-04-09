@@ -2,15 +2,19 @@ import { FormSummary } from '@navikt/ds-react'
 import { IRisikoscenario, ITiltak } from '../../../constants'
 import { ExternalLink } from '../../common/RouteLink'
 import { risikoscenarioFilterAlleUrl } from '../../common/RouteLinkRisiko'
+import FormAlert from './FormAlert'
 
 interface IProps {
   alleRisikoscenario: IRisikoscenario[]
   alleTiltak: ITiltak[]
+  risikoscenarioError: string
+  tiltakError: string
   customStepNumber?: number
 }
 
 export const RisikoscenarioSummary = (props: IProps) => {
-  const { alleRisikoscenario, alleTiltak, customStepNumber } = props
+  const { alleRisikoscenario, alleTiltak, risikoscenarioError, tiltakError, customStepNumber } =
+    props
   const currentPath = window.location.pathname
   const risikoscenarioLink = currentPath.slice(0, -1) + `${customStepNumber ? customStepNumber : 6}`
 
@@ -24,23 +28,27 @@ export const RisikoscenarioSummary = (props: IProps) => {
           <FormSummary.Value>
             <FormSummary.Answers>
               <FormSummary.Answer>
-                <FormSummary.Label>Risikoscenarioer</FormSummary.Label>
+                <FormSummary.Label id='risikoscenarioer'>Risikoscenarioer</FormSummary.Label>
                 <FormSummary.Value>
                   Det er beskrevet totalt sett {alleRisikoscenario.length} risikoscenarioer.{' '}
                   <ExternalLink href={risikoscenarioLink + risikoscenarioFilterAlleUrl()}>
                     Se alle risikoscenarioer
                   </ExternalLink>
                   .
+                  <br />
+                  {risikoscenarioError !== '' && <FormAlert>{risikoscenarioError}</FormAlert>}
                 </FormSummary.Value>
               </FormSummary.Answer>
               <FormSummary.Answer>
-                <FormSummary.Label>Tiltak</FormSummary.Label>
+                <FormSummary.Label id='tiltak'>Tiltak</FormSummary.Label>
                 <FormSummary.Value>
                   Det er beskrevet totalt sett {alleTiltak.length} tiltak.{' '}
                   <ExternalLink href={risikoscenarioLink + '?tab=tiltak'}>
                     Se alle tiltak
                   </ExternalLink>
                   .
+                  <br />
+                  {tiltakError !== '' && <FormAlert>{tiltakError}</FormAlert>}
                 </FormSummary.Value>
               </FormSummary.Answer>
             </FormSummary.Answers>

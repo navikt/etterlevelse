@@ -60,7 +60,7 @@ public class TiltakIT extends IntegrationTestBase {
     
     @Test
     void testCrate() {
-        PvkDokument pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
+        PvkDokument pvkDokument = createPvkDokument();
         Risikoscenario risikoscenario = risikoscenarioService.save(generateRisikoscenario(pvkDokument.getId()), false);
         TiltakRequest request = TiltakRequest.builder()
                 .pvkDokumentId(pvkDokument.getId().toString())
@@ -104,7 +104,7 @@ public class TiltakIT extends IntegrationTestBase {
 
     @Test
     void testDelete() {
-        PvkDokument pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
+        PvkDokument pvkDokument = createPvkDokument();
         Tiltak tiltak = insertTiltak();
 
         // Delete should fail if tiltak has a relation to one or more risikoscenarioer...
@@ -122,7 +122,7 @@ public class TiltakIT extends IntegrationTestBase {
     }
     
     private Tiltak insertTiltak() {
-        PvkDokument pvkDokument = pvkDokumentService.save(generatePvkDokument(UUID.randomUUID()), false);
+        PvkDokument pvkDokument = createPvkDokument();
         Tiltak tiltak = Tiltak.builder()
                 .pvkDokumentId(pvkDokument.getId())
                 .tiltakData(new TiltakData())

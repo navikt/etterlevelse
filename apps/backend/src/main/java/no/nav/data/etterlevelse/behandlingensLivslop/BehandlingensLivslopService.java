@@ -30,18 +30,11 @@ public class BehandlingensLivslopService {
         return repo.findById(uuid).orElseThrow(() -> new NotFoundException("Couldn't find behandlingens livsløp with id " + uuid));
     }
 
-    @Transactional
-    public BehandlingensLivslop saveTestData(BehandlingensLivslop behandlingensLivslop) {
-        behandlingensLivslop = repo.save(behandlingensLivslop);
-        repo.flush();
-        return behandlingensLivslop;
-    }
-
     public Page<BehandlingensLivslop> getAll(PageParameters pageParameters) {
         return repo.findAll(pageParameters.createPage());
     }
 
-    public Optional<BehandlingensLivslop> getByEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId) {
+    public Optional<BehandlingensLivslop> getByEtterlevelseDokumentasjon(UUID etterlevelseDokumentasjonId) {
         return repo.findByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
     }
 

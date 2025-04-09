@@ -20,22 +20,21 @@ export const BehandlingensLivslopTextContent = () => {
         etterlevelseskrav innen Personvern og Arkiv og dokumentasjon.
       </Alert>
 
-      <BodyShort className='mt-3'>
-        Illustrasjonen under viser hvordan dere kunne tegne behandlingens livsløp.
-      </BodyShort>
-
-      <img
-        className='mr-2.5'
-        src={behandlingensLivslopImage}
-        alt='Behandligens livsløp tegning'
-        aria-hidden
-        aria-label=''
-      />
-
       <ReadMore header='Slik lager dere en god tegning av behandlingens livsløp' className='mt-3'>
         Du kan bruke verktøy som PowerPoint, Mural, eller Figma til å lage tegningen din som
         flytdiagram. Vi anbefaler ikke at du bruker Word.
         <br />
+        <br />
+        <BodyShort className='mt-3'>
+          Illustrasjonen under viser hvordan dere kunne tegne behandlingens livsløp.
+        </BodyShort>
+        <img
+          className='mr-2.5'
+          src={behandlingensLivslopImage}
+          alt='Behandligens livsløp tegning'
+          aria-hidden
+          aria-label=''
+        />
         <br />
         Noen tips til hvordan lage gode tegninger:
         <List>

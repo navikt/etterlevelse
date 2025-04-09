@@ -25,7 +25,7 @@ public class BehandlingensLivslopRequest implements RequestElement {
     
     private UUID id;
 
-    private String etterlevelseDokumentasjonId;
+    private UUID etterlevelseDokumentasjonId;
 
     private String beskrivelse;
 

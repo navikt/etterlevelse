@@ -8,6 +8,7 @@ import {
   documentationLink,
   githubRepo,
   omEtterlevelsePaNavet,
+  rutineForArkivering,
   statusPageLink,
   teamInfoLink,
 } from '../../util/config'
@@ -78,6 +79,9 @@ export const Footer = () => {
             </Link>
             <Link className='text-white' href={VeilederEtterlevelseskrav}>
               Veileder for å skrive etterlevelseskrav
+            </Link>
+            <Link className='text-white' href={rutineForArkivering}>
+              Rutine for arkivering av Etterlevelse
             </Link>
           </div>
           <Spacer />

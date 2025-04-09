@@ -79,11 +79,13 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
         await updatePvkDokument(mutatedPvkDokument).then((response) => {
           setPvkDokument(response)
           navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
+          window.location.reload()
         })
       } else {
         await createPvkDokument(mutatedPvkDokument).then((response) => {
           setPvkDokument(response)
           navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
+          window.location.reload()
         })
       }
     }

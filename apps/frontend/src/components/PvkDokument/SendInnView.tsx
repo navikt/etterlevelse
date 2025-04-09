@@ -7,6 +7,7 @@ import {
   ErrorSummary,
   Heading,
   Label,
+  Link,
   Loader,
 } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
@@ -31,13 +32,15 @@ import {
   IPvoTilbakemelding,
   IRisikoscenario,
   ITiltak,
+  TEtterlevelseDokumentasjonQL,
 } from '../../constants'
 import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
-import { risikoscenarioFieldCheck } from '../risikoscenario/common/util'
+import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
 import FormButtons from './edit/FormButtons'
 import pvkDocumentSchema from './edit/pvkDocumentSchema'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
+import BehandlingensLivslopSummary from './formSummary/BehandlingensLivslopSummary'
 import InvolveringSummary from './formSummary/InvolveringSummary'
 import RisikoscenarioEtterTitak from './formSummary/RisikoscenarioEtterTiltakSummary'
 import RisikoscenarioSummary from './formSummary/RisikoscenarioSummary'
@@ -48,7 +51,7 @@ type TProps = {
   updateTitleUrlAndStep: (step: number) => void
   personkategorier: string[]
   databehandlere: string[]
-  etterlevelseDokumentasjonId: string
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -61,7 +64,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   updateTitleUrlAndStep,
   personkategorier,
   databehandlere,
-  etterlevelseDokumentasjonId,
+  etterlevelseDokumentasjon,
   activeStep,
   setActiveStep,
   setSelectedStep,
@@ -71,7 +74,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [alleRisikoscenario, setAlleRisikoscenario] = useState<IRisikoscenario[]>([])
   const [alleTiltak, setAlleTitltak] = useState<ITiltak[]>([])
   const [behandlingensLivslopError, setBehandlingensLivslopError] = useState<boolean>(false)
+  const [manglerBehandlingError, setManglerBehandlingError] = useState<boolean>(false)
   const [risikoscenarioError, setRisikoscenarioError] = useState<string>('')
+  const [savnerVurderingError, setsavnerVurderingError] = useState<string>('')
+  const [tiltakError, setTiltakError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
 
@@ -79,16 +85,22 @@ export const SendInnView: FunctionComponent<TProps> = ({
     pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
     pvkDokument.status === EPvkDokumentStatus.AKTIV
 
-  const submit = async (pvkDokument: IPvkDokument) => {
-    if (!behandlingensLivslopError && risikoscenarioError === '') {
-      await getPvkDokument(pvkDokument.id).then((response) => {
+  const submit = async (submitedValues: IPvkDokument) => {
+    if (
+      !behandlingensLivslopError &&
+      risikoscenarioError === '' &&
+      savnerVurderingError === '' &&
+      tiltakError === '' &&
+      !manglerBehandlingError
+    ) {
+      await getPvkDokument(submitedValues.id).then((response) => {
         const updatedStatus =
-          pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
-          pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+          submitedValues.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
+          submitedValues.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
           (response.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
             response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
             ? response.status
-            : pvkDokument.status
+            : submitedValues.status
 
         const updatedPvkDokument: IPvkDokument = {
           ...response,
@@ -97,13 +109,23 @@ export const SendInnView: FunctionComponent<TProps> = ({
             updatedStatus === EPvkDokumentStatus.SENDT_TIL_PVO
               ? new Date().toISOString()
               : response.sendtTilPvoDato,
-          merknadTilPvoEllerRisikoeier: pvkDokument.merknadTilPvoEllerRisikoeier,
+          merknadTilPvoEllerRisikoeier: submitedValues.merknadTilPvoEllerRisikoeier,
+          merknadTilRisikoeier: submitedValues.merknadTilPvoEllerRisikoeier,
+          merknadFraRisikoeier: submitedValues.merknadFraRisikoeier,
         }
 
         updatePvkDokument(updatedPvkDokument).then((savedResponse) => {
           setPvkDokument(savedResponse)
         })
       })
+    }
+  }
+
+  const manglerBehandlingErrorCheck = () => {
+    if (etterlevelseDokumentasjon.behandlingIds.length === 0) {
+      setManglerBehandlingError(true)
+    } else {
+      setManglerBehandlingError(false)
     }
   }
 
@@ -117,40 +139,53 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
   const risikoscenarioCheck = () => {
     if (alleRisikoscenario.length === 0) {
-      setRisikoscenarioError('Må ha minst 1 risikoscenario')
+      setRisikoscenarioError('Dere må ha minst 1 risikoscenario.')
     } else {
-      const risikoscenarioMedIngenTiltak = alleRisikoscenario.filter((risiko) => risiko.ingenTiltak)
-      const risikoscenarioMedTiltak = alleRisikoscenario.filter((risiko) => !risiko.ingenTiltak)
-      if (risikoscenarioMedIngenTiltak.length === 0 && risikoscenarioMedTiltak.length !== 0) {
-        const ferdigVurdertRisikoscenario = risikoscenarioMedTiltak.filter((risiko) => {
-          return (
-            risiko.tiltakIds.length !== 0 &&
-            risikoscenarioFieldCheck(risiko) &&
-            risiko.sannsynlighetsNivaaEtterTiltak !== 0 &&
-            risiko.konsekvensNivaaEtterTiltak !== 0 &&
-            risiko.nivaaBegrunnelseEtterTiltak !== ''
-          )
-        })
-        if (ferdigVurdertRisikoscenario.length === 0) {
-          setRisikoscenarioError('Må ha minst 1 ferdig vurdert risikoscenario')
-        } else {
-          setRisikoscenarioError('')
-        }
-      } else if (
-        risikoscenarioMedIngenTiltak.length !== 0 &&
-        risikoscenarioMedTiltak.length === 0
-      ) {
-        const ferdigVurdertRisikoscenario = risikoscenarioMedIngenTiltak.filter((risiko) => {
-          return risikoscenarioFieldCheck(risiko)
-        })
-        if (ferdigVurdertRisikoscenario.length === 0) {
-          setRisikoscenarioError('Må ha minst 1 ferdig skrevet risikoscenario')
-        } else {
-          setRisikoscenarioError('')
-        }
+      const ikkeFerdigBeskrevetScenario = alleRisikoscenario.filter((risiko) =>
+        isRisikoUnderarbeidCheck(risiko)
+      )
+
+      if (ikkeFerdigBeskrevetScenario.length !== 0) {
+        setRisikoscenarioError(
+          `${ikkeFerdigBeskrevetScenario.length} risikoscenarioer er ikke ferdig beskrevet.`
+        )
       } else {
         setRisikoscenarioError('')
       }
+    }
+  }
+
+  const tiltakCheck = () => {
+    if (alleTiltak.length) {
+      const ikkeFerdigBeskrevetTiltak = alleTiltak.filter(
+        (tiltak) =>
+          tiltak.beskrivelse === '' || tiltak.navn === '' || tiltak.ansvarlig.navIdent === ''
+      )
+      if (ikkeFerdigBeskrevetTiltak.length !== 0) {
+        setTiltakError(`${ikkeFerdigBeskrevetTiltak.length} tiltak er ikke ferdig beskrevet`)
+      }
+    } else {
+      setTiltakError('')
+    }
+  }
+
+  const savnerVurderingCheck = () => {
+    const savnerVurdering = alleRisikoscenario
+      .filter((risiko) => !risiko.ingenTiltak)
+      .filter(
+        (risiko) =>
+          risiko.tiltakIds.length === 0 ||
+          risiko.konsekvensNivaaEtterTiltak === 0 ||
+          risiko.sannsynlighetsNivaa === 0 ||
+          risiko.nivaaBegrunnelseEtterTiltak === ''
+      )
+
+    if (savnerVurdering.length !== 0) {
+      setsavnerVurderingError(
+        `${savnerVurdering.length} risikoscenarioer savner en vurdering av tiltakenes effekt.`
+      )
+    } else {
+      setsavnerVurderingError('')
     }
   }
 
@@ -188,8 +223,13 @@ export const SendInnView: FunctionComponent<TProps> = ({
       initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
       validate={(value) => {
         try {
+          manglerBehandlingErrorCheck()
           behandlingensLivslopFieldCheck()
           risikoscenarioCheck()
+          if (alleRisikoscenario.filter((risiko) => !risiko.ingenTiltak).length !== 0) {
+            tiltakCheck()
+            savnerVurderingCheck()
+          }
           validateYupSchema(value, pvkDocumentSchema(), true)
         } catch (err) {
           return yupToFormErrors(err)
@@ -209,6 +249,27 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 til ytterligere informasjon dersom det er aktuelt.
               </BodyLong>
 
+              {manglerBehandlingError && (
+                <Alert variant='warning' id='behandling-error' className='mt-7 mb-4'>
+                  Dere må legge inn minst 1 behandling fra Behandlingskatalogen. Dette kan dere
+                  gjøre under{' '}
+                  <Link
+                    href={`/dokumentasjon/edit/${etterlevelseDokumentasjon.id}#behandling`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    aria-label='redigere etterlevelsesdokumentasjon'
+                  >
+                    Redigér dokumentegenskaper.
+                  </Link>
+                </Alert>
+              )}
+
+              <BehandlingensLivslopSummary
+                behandlingensLivslop={behandlingensLivslop}
+                behandlingensLivslopError={behandlingensLivslopError}
+                updateTitleUrlAndStep={updateTitleUrlAndStep}
+              />
+
               <ArtOgOmFangSummary
                 personkategorier={personkategorier}
                 updateTitleUrlAndStep={updateTitleUrlAndStep}
@@ -223,9 +284,14 @@ export const SendInnView: FunctionComponent<TProps> = ({
               <RisikoscenarioSummary
                 alleRisikoscenario={alleRisikoscenario}
                 alleTiltak={alleTiltak}
+                risikoscenarioError={risikoscenarioError}
+                tiltakError={tiltakError}
               />
 
-              <RisikoscenarioEtterTitak alleRisikoscenario={alleRisikoscenario} />
+              <RisikoscenarioEtterTitak
+                alleRisikoscenario={alleRisikoscenario}
+                savnerVurderingError={savnerVurderingError}
+              />
 
               {underarbeidCheck && (
                 <div className='mt-5 mb-3 max-w-[75ch]'>
@@ -261,6 +327,50 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   </div>
                 )}
 
+              {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && (
+                <div className='mt-5 mb-3 max-w-[75ch]'>
+                  <TextAreaField
+                    rows={3}
+                    noPlaceholder
+                    label='Kommentar til risikoeier? (valgfritt)'
+                    name='merknadTilRisikoeier'
+                  />
+                </div>
+              )}
+
+              {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
+                <div className='mt-5 mb-3 max-w-[75ch]'>
+                  <Label>Etterleverens kommmentarer til risikoeier</Label>
+                  <DataTextWrapper>
+                    {pvkDokument.merknadTilRisikoeier
+                      ? pvkDokument.merknadTilRisikoeier
+                      : 'Ingen beskjed'}
+                  </DataTextWrapper>
+                </div>
+              )}
+
+              {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
+                <div className='mt-5 mb-3 max-w-[75ch]'>
+                  <TextAreaField
+                    rows={3}
+                    noPlaceholder
+                    label='Kommentar til etterlever? (valgfritt)'
+                    name='merknadFraRisikoeier'
+                  />
+                </div>
+              )}
+
+              {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
+                <div className='mt-5 mb-3 max-w-[75ch]'>
+                  <Label>Risikoeierens kommmentarer</Label>
+                  <DataTextWrapper>
+                    {pvkDokument.merknadFraRisikoeier
+                      ? pvkDokument.merknadFraRisikoeier
+                      : 'Ingen beskjed'}
+                  </DataTextWrapper>
+                </div>
+              )}
+
               <CopyButton
                 variant='action'
                 copyText={window.location.href}
@@ -282,20 +392,40 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   ref={errorSummaryRef}
                   heading='Du må rette disse feilene før du kan fortsette'
                 >
-                  {behandlingensLivslopError && (
-                    <ErrorSummary.Item>
-                      Behandlingens livsløp må ha en tegning eller en beskrivelse.
+                  {manglerBehandlingError && (
+                    <ErrorSummary.Item href='#behandling-error' className='max-w-[75ch]'>
+                      Dere må koble minst 1 behandling til denne etterlevelsesdokumentasjonen.
                     </ErrorSummary.Item>
                   )}
+
+                  {behandlingensLivslopError && (
+                    <ErrorSummary.Item href='#behandlingensLivslop' className='max-w-[75ch]'>
+                      Behandlingens livsløp må ha minimum 1 opplastet tegning, eller en skriftlig
+                      beskrivelse.
+                    </ErrorSummary.Item>
+                  )}
+
                   {Object.entries(errors)
                     .filter(([, error]) => error)
                     .map(([key, error]) => (
-                      <ErrorSummary.Item href={`#${key}`} key={key}>
+                      <ErrorSummary.Item href={`#${key}`} key={key} className='max-w-[75ch]'>
                         {error as string}
                       </ErrorSummary.Item>
                     ))}
                   {risikoscenarioError !== '' && (
-                    <ErrorSummary.Item>{risikoscenarioError}</ErrorSummary.Item>
+                    <ErrorSummary.Item href='#risikoscenarioer' className='max-w-[75ch]'>
+                      {risikoscenarioError}
+                    </ErrorSummary.Item>
+                  )}
+                  {tiltakError !== '' && (
+                    <ErrorSummary.Item href='#tiltak' className='max-w-[75ch]'>
+                      {tiltakError}
+                    </ErrorSummary.Item>
+                  )}
+                  {savnerVurderingError !== '' && (
+                    <ErrorSummary.Item href='#effektEtterTiltak' className='max-w-[75ch]'>
+                      {savnerVurderingError}
+                    </ErrorSummary.Item>
                   )}
                 </ErrorSummary>
               )}
@@ -308,13 +438,14 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
               {!isLoading && (
                 <FormButtons
-                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                  etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                   activeStep={activeStep}
                   setActiveStep={setActiveStep}
                   setSelectedStep={setSelectedStep}
                   submitForm={submitForm}
                   customButtons={
                     <div className='mt-5 flex gap-2 items-center'>
+                      {!dirty && <div className='min-w-[223px]'></div>}
                       {dirty && (
                         <Button
                           type='button'
@@ -348,7 +479,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         </Button>
                       )}
 
-                      {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
+                      {(pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER ||
+                        pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING) && (
                         <Button
                           type='button'
                           onClick={async () => {
@@ -364,11 +496,23 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         <Button
                           type='button'
                           onClick={async () => {
+                            await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
+                            submitForm()
+                          }}
+                        >
+                          Send til godkjenning av risikoeier
+                        </Button>
+                      )}
+
+                      {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
+                        <Button
+                          type='button'
+                          onClick={async () => {
                             await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
                             submitForm()
                           }}
                         >
-                          Godkjent
+                          Akseptér restrisiko
                         </Button>
                       )}
                     </div>

@@ -30,7 +30,7 @@ public class BehandlingensLivslop extends Auditable {
     private UUID id = UUID.randomUUID();
 
     @Column(name = "ETTERLEVELSE_DOKUMENTASJON_ID", nullable = false)
-    private String etterlevelseDokumentasjonId;
+    private UUID etterlevelseDokumentasjonId;
 
     @Type(value = JsonBinaryType.class)
     @Column(name = "DATA", nullable = false)

@@ -18,6 +18,8 @@ export const VeilederEtterlevelseskrav =
   'https://navno.sharepoint.com/:w:/s/SttteforetterlevelseDIR/ERm9VrgVX4REo-ksMNyrlEUBK9RROHbqPhJXPq_h5wxgPA?e=kLeUO5'
 export const omEtterlevelsePaNavet =
   'https://navno.sharepoint.com/sites/intranett-utvikling/SitePages/Etterlevelseskrav.aspx'
+export const rutineForArkivering =
+  'https://navno.sharepoint.com/sites/intranett-arkiv-og-dokumenthandtering/SitePages/Rutine-for-arkivering-av-Etterlevelse.aspx?csf=1&web=1&e=Yj4x9i&CID=ab5f84d4-b45c-4f49-9234-86bcfa8d07e4'
 
 export const teamKatPersonLink = (navIdent: string) => `${env.teamKatBaseUrl}resource/${navIdent}`
 export const personImageLink = (navIdent: string) => `/api/team/resource/${navIdent}/photo`
@@ -30,6 +32,16 @@ export const isDev: boolean =
   window.location.origin.includes('.dev.') || window.location.origin.includes('localhost')
 
 export const isInLimitedAccess = (ident: string) =>
-  ['H103464', 'R154124', 'J142849', 'T139680', 'A132855', 'E171300', 'G103103', 'B156859'].includes(
-    ident
-  )
+  [
+    'H103464',
+    'R154124',
+    'J142849',
+    'T139680',
+    'A132855',
+    'E171300',
+    'G103103',
+    'B156859',
+    'R107763',
+    'B100673',
+    'E157419',
+  ].includes(ident)
