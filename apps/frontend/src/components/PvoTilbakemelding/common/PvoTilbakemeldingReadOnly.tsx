@@ -23,7 +23,7 @@ export const PvoTilbakemeldingReadOnly = (props: IProps) => {
       </Heading>
 
       {sentDate.length !== 0 && (
-        <BodyShort size='small' className='pb-5'>
+        <BodyShort size='medium' className='pb-5'>
           Tilbakemeldings dato: {moment(sentDate).format('LL')}
         </BodyShort>
       )}

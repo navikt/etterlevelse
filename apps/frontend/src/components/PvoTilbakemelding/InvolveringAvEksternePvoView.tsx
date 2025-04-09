@@ -44,7 +44,7 @@ export const InvolveringAvEksternePvoView = (props: IProps) => {
               </Heading>
 
               <List
-                size='small'
+                size='medium'
                 className='mt-5'
                 headingTag='label'
                 title='I Behandlingskatalogen står det at dere behandler personopplysninger om:'
