@@ -34,19 +34,19 @@ export const PrivateRoute = ({
       if (user.isAdmin()) {
         return component
       } else {
-        return <Navigate to={{ pathname: forbiddenUrl() }} />
+        return <Navigate to={{ pathname: forbiddenUrl }} />
       }
     } else if (kraveierPage) {
       if (user.isKraveier() || user.isAdmin()) {
         return component
       } else {
-        return <Navigate to={{ pathname: forbiddenUrl() }} />
+        return <Navigate to={{ pathname: forbiddenUrl }} />
       }
     } else if (pvoPage) {
       if (user.isPersonvernombud() || user.isAdmin()) {
         return component
       } else {
-        return <Navigate to={{ pathname: forbiddenUrl() }} />
+        return <Navigate to={{ pathname: forbiddenUrl }} />
       }
     }
   }

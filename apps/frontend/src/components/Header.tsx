@@ -136,16 +136,16 @@ const LoggedInHeader = () => {
     href: string
   }[] = user.isAdmin()
     ? [
-        { label: 'Administrere krav', href: adminKravUrl() },
-        { label: 'Administrere dokumentasjon', href: adminDokumentasjonUrl() },
-        { label: 'Administrere dokument relasjon', href: adminDokumentrelasjonUrl() },
-        { label: 'Administrere etterlevelse', href: adminEtterlevelseUrl() },
-        { label: 'Administrere arkivering', href: adminArkivUrl() },
+        { label: 'Administrere krav', href: adminKravUrl },
+        { label: 'Administrere dokumentasjon', href: adminDokumentasjonUrl },
+        { label: 'Administrere dokument relasjon', href: adminDokumentrelasjonUrl },
+        { label: 'Administrere etterlevelse', href: adminEtterlevelseUrl },
+        { label: 'Administrere arkivering', href: adminArkivUrl },
         { label: intl.audit, href: adminAuditUrl() },
-        { label: 'Kodeverk', href: adminCodelistUrl() },
-        { label: intl.questionAndAnswers, href: adminMessagesLogUrl() },
-        { label: intl.notifications, href: adminVarselUrl() },
-        { label: 'Sendt e-post log', href: adminMaillog() },
+        { label: 'Kodeverk', href: adminCodelistUrl },
+        { label: intl.questionAndAnswers, href: adminMessagesLogUrl },
+        { label: intl.notifications, href: adminVarselUrl },
+        { label: 'Sendt e-post log', href: adminMaillog },
         // { label: intl.settings, href: '/admin/settings', disabled: true },
       ]
     : []
