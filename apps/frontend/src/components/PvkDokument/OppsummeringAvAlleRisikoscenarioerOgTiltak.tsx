@@ -94,6 +94,8 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   const [antallEffektIkkeVurdert, setAntallEffektIkkeVurdert] = useState<number>(0)
   const [antallHoyRisiko, setAntallHoyRisiko] = useState<number>(0)
   const [antallTiltakIkkeAktuelt, setAntallTiltakIkkeAktuelt] = useState<number>(0)
+  const [antallUtenTiltakAnsvarlig, setAntallUtenTiltakAnsvarlig] = useState<number>(0)
+  const [antallUtenFrist, setAntallUtenFrist] = useState<number>(0)
 
   const url = new URL(window.location.href)
   const tabQuery = url.searchParams.get('tab')
@@ -136,6 +138,14 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
         await getTiltakByPvkDokumentId(pvkDokument.id).then((tiltak) => {
           setTiltakList(tiltak.content)
           setFilteredTiltakList(tiltak.content)
+
+          setAntallUtenTiltakAnsvarlig(
+            tiltak.content.filter(
+              (tiltak) =>
+                !tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')
+            ).length
+          )
+          setAntallUtenFrist(tiltak.content.filter((tiltak) => !tiltak.frist).length)
         })
 
         setIsLoading(false)
@@ -216,7 +226,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
         setFilteredTiltakList(tiltakList)
         break
       case tiltakFilterValues.utenAnsvarlig:
-        setFilteredTiltakList(tiltakList.filter((tiltak) => !tiltak.ansvarlig))
+        setFilteredTiltakList(
+          tiltakList.filter(
+            (tiltak) => !tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')
+          )
+        )
         break
       case tiltakFilterValues.utenFrist:
         setFilteredTiltakList(tiltakList.filter((tiltak) => !tiltak.frist))
@@ -356,15 +370,15 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                         >
                           <ToggleGroup.Item
                             value={tiltakFilterValues.alleTiltak}
-                            label='Alle tiltak'
+                            label={`Alle tiltak (${tiltakList.length})`}
                           />
                           <ToggleGroup.Item
                             value={tiltakFilterValues.utenAnsvarlig}
-                            label='Uten tiltaksansvarlig'
+                            label={`Uten tiltaksansvarlig (${antallUtenTiltakAnsvarlig})`}
                           />
                           <ToggleGroup.Item
                             value={tiltakFilterValues.utenFrist}
-                            label='Uten frist'
+                            label={`Uten frist (${antallUtenFrist})`}
                           />
                         </ToggleGroup>
                       )}

@@ -26,7 +26,7 @@ export const TiltakView = (props: IProps) => {
         label='Tiltaksansvarlig:'
         description={tiltak.ansvarlig.fullName}
         className='flex gap-2'
-        isFalse={!tiltak.ansvarlig}
+        isFalse={!tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')}
         descriptionFalse='Det er ikke satt en ansvarlig for tiltaket'
       />
 
