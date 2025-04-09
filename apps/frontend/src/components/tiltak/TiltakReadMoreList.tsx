@@ -6,6 +6,7 @@ import { removeTiltakToRisikoscenario } from '../../api/RisikoscenarioApi'
 import { deleteTiltak, getTiltak, updateTiltak } from '../../api/TiltakApi'
 import { IRisikoscenario, ITiltak } from '../../constants'
 import { user } from '../../services/User'
+import { risikoscenarioTiltakUrl, risikoscenarioUrl } from '../common/RouteLinkPvk'
 import TiltakView from './TiltakView'
 import TiltakForm from './edit/TiltakForm'
 
@@ -107,21 +108,22 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
   }
 
   const onDeleteSubmit = async (tiltakId: string) => {
-    await getTiltak(tiltakId).then(async (response) => {
+    await getTiltak(tiltakId).then(async (response: ITiltak) => {
       if (
         response.risikoscenarioIds.length === 1 &&
         response.risikoscenarioIds[0] === risikoscenario.id
       ) {
-        await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(async () => {
-          await deleteTiltak(tiltakId).then(() => {
-            setIsDeleteModalOpen(false)
-            navigate(`${window.location.pathname}?risikoscenario=${risikoscenario.id}`)
-            window.location.reload()
-          })
-        })
+        await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(
+          async () =>
+            await deleteTiltak(tiltakId).then(() => {
+              setIsDeleteModalOpen(false)
+              navigate(risikoscenarioUrl(window.location.pathname, risikoscenario.id))
+              window.location.reload()
+            })
+        )
       } else {
         await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(() => {
-          navigate(`${window.location.pathname}?risikoscenario=${risikoscenario.id}`)
+          navigate(risikoscenarioUrl(window.location.pathname, risikoscenario.id))
           window.location.reload()
         })
       }
@@ -139,11 +141,11 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
             if (open) {
               setActiveTiltak(tiltak.id)
               navigate(
-                `${window.location.pathname}?risikoscenario=${risikoscenario.id}&tiltak=${tiltak.id}`
+                risikoscenarioTiltakUrl(window.location.pathname, risikoscenario.id, tiltak.id)
               )
             } else {
               setActiveTiltak('')
-              navigate(`${window.location.pathname}?risikoscenario=${risikoscenario.id}`)
+              navigate(risikoscenarioUrl(window.location.pathname, risikoscenario.id))
             }
           }}
           header={tiltak.navn}

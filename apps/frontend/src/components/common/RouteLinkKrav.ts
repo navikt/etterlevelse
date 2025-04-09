@@ -1,9 +1,23 @@
+export const kravTemaUrl = () => '/tema'
+
 export const kravUrl = (currentPath: string, nextKravPath: string): string =>
   `${currentPath}/krav${nextKravPath}`
 
+export const kravRedigeringIdUrl = (kravId: string) => `/krav/redigering/${kravId}`
+
+export const kravNyVersjonIdUrl = (kravId: string) => `/krav/ny-versjon/${kravId}`
+
 export const kravRelevanteUrl = (tema: string): string => `/${tema}/RELEVANTE_KRAV`
 
-export const kravlisteUrl = (): string => '/kravliste'
+export const kravlisteUrl = (tabQuery?: string): string => {
+  const url: string = '/kravliste'
+
+  if (tabQuery) {
+    return `${url}/${tabQuery}`
+  }
+
+  return url
+}
 
 export const kravTemaFilterUrl = (tema: string, filter: string) => `${tema}/${filter}`
 

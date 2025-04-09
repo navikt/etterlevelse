@@ -2,6 +2,7 @@ import { Accordion } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../constants'
+import { risikoscenarioUrl } from '../common/RouteLinkPvk'
 import AccordianAlertModal from './AccordianAlertModal'
 import { RisikoscenarioAccordionContent } from './RisikoscenarioAccordianContent'
 import { IdentifiseringAvRisikoscenarioAccordianHeader } from './RisikoscenarioAccordionHeader'
@@ -57,11 +58,11 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
 
   const handleAccordionChange = (risikoscenarioId?: string) => {
     if (risikoscenarioId) {
-      setNavigateUrl(`${window.location.pathname}?risikoscenario=${risikoscenarioId}`)
+      setNavigateUrl(risikoscenarioUrl(window.location.pathname, risikoscenarioId))
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
       } else {
-        navigate(`${window.location.pathname}?risikoscenario=${risikoscenarioId}`)
+        navigate(risikoscenarioUrl(window.location.pathname, risikoscenarioId))
       }
     } else {
       setNavigateUrl(window.location.pathname)

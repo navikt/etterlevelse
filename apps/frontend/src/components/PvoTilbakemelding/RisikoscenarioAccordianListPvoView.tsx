@@ -1,7 +1,8 @@
 import { Accordion, Alert, BodyLong, Heading, ReadMore } from '@navikt/ds-react'
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../constants'
+import { risikoscenarioUrl } from '../common/RouteLinkPvk'
 import { IdentifiseringAvRisikoscenarioAccordianHeader } from '../risikoscenario/RisikoscenarioAccordionHeader'
 import RisikoscenarioView from '../risikoscenario/RisikoscenarioView'
 import TiltakView from '../tiltak/TiltakView'
@@ -16,10 +17,10 @@ interface IProps {
 export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
   const { risikoscenarioList, allRisikoscenarioList, tiltakList, etterlevelseDokumentasjonId } =
     props
-  const url = new URL(window.location.href)
-  const risikoscenarioId = url.searchParams.get('risikoscenario')
-  const tiltakId = url.searchParams.get('tiltak')
-  const navigate = useNavigate()
+  const url: URL = new URL(window.location.href)
+  const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
+  const tiltakId: string | null = url.searchParams.get('tiltak')
+  const navigate: NavigateFunction = useNavigate()
 
   useEffect(() => {
     if (risikoscenarioId) {
@@ -40,9 +41,9 @@ export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
     }
   }, [])
 
-  const handleAccordionChange = (risikoscenarioId?: string) => {
+  const handleAccordionChange = (risikoscenarioId?: string): void => {
     if (risikoscenarioId) {
-      navigate(window.location.pathname + '?risikoscenario=' + risikoscenarioId)
+      navigate(risikoscenarioUrl(window.location.pathname, risikoscenarioId))
     } else {
       navigate(window.location.pathname)
     }

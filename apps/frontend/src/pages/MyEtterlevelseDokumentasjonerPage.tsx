@@ -1,5 +1,5 @@
 import { Button } from '@navikt/ds-react'
-import { useNavigate } from 'react-router-dom'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { etterlevelseDokumentasjonCreateUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { DokumentasjonTabs } from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonsTabs'
 import { ListPageHeader } from '../components/scaffold/ListPageHeader'
@@ -14,7 +14,7 @@ interface IDokumentasjonCount {
 export type TCustomTeamObject = IDokumentasjonCount & ITeam
 
 export const MyEtterlevelseDokumentasjonerPage = () => {
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
   ampli.logEvent('sidevisning', {
     side: 'Side for Dokumentasjoner',
     sidetittel: 'Dokumentere etterlevelse',

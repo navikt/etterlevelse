@@ -2,7 +2,7 @@ import { Alert, Button, Loader, Modal, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { RefObject, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { useNavigate, useParams } from 'react-router-dom'
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
 import { getPvoTilbakemeldingByPvkDokumentId } from '../api/PvoApi'
@@ -64,22 +64,18 @@ export const PvkDokumentPage = () => {
     currentStep !== null ? parseInt(currentStep) : 1
   )
   const [selectedStep, setSelectedStep] = useState<number>(1)
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
   const formRef: RefObject<any> = useRef(undefined)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
     {
-      pathName:
-        'E' +
-        etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
-        ' ' +
-        etterlevelseDokumentasjon?.title,
+      pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
       href: etterlevelseDokumentasjonUrl(params.id),
     },
   ]
 
-  const updateUrlOnStepChange = (step: number) => {
+  const updateUrlOnStepChange = (step: number): void => {
     navigate(
       pvkDokumentasjonStepUrl(
         pvkDokument?.etterlevelseDokumentId,

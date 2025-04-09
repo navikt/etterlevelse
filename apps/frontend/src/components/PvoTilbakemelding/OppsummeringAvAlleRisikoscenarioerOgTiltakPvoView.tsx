@@ -1,6 +1,6 @@
 import { Alert, BodyLong, Heading, Link, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
@@ -12,7 +12,11 @@ import {
 } from '../../constants'
 import { ExternalLink } from '../common/RouteLink'
 import { etterlevelseDokumentasjonUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
-import { pvkDokumentasjonStepUrl } from '../common/RouteLinkPvk'
+import {
+  pvkDokumentasjonStepUrl,
+  pvkDokumentasjonTabFilterRisikoscenarioUrl,
+  pvkDokumentasjonTabFilterUrl,
+} from '../common/RouteLinkPvk'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
 import OppsumeringAccordianListPvoView from './OppsumeringAccordianListPvoView'
@@ -80,9 +84,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
   const [navigateUrl, setNavigateUrl] = useState<string>('')
   const url = new URL(window.location.href)
   const tabQuery = url.searchParams.get('tab')
-  const risikoscenarioId = url.searchParams.get('risikoscenario')
+  const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
   const filterQuery = url.searchParams.get('filter')
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
 
   useEffect(() => {
     if (pvkDokument) {
@@ -108,20 +112,33 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
     }
   }, [filterQuery, risikoscenarioList])
 
-  const onTabChange = (tab: string) => {
-    const filter = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
-    const paramQuery = tab === tabValues.risikoscenarioer ? '&filter=' + filter : ''
-    setNavigateUrl(`${window.location.pathname}?tab=${tab}${paramQuery}`)
+  const onTabChange = (tabQuery: string) => {
+    const filter: string = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
+    setNavigateUrl(
+      pvkDokumentasjonTabFilterUrl(
+        window.location.pathname,
+        tabQuery,
+        filter,
+        tabValues.risikoscenarioer
+      )
+    )
 
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
     } else {
-      navigate(`${window.location.pathname}?tab=${tab}${paramQuery}`)
+      navigate(
+        pvkDokumentasjonTabFilterUrl(
+          window.location.pathname,
+          tabQuery,
+          filter,
+          tabValues.risikoscenarioer
+        )
+      )
     }
   }
 
   const onFilterChange = (filter: string) => {
-    const tab = tabQuery ? tabQuery : tabValues.risikoscenarioer
+    const tab: string = tabQuery ? tabQuery : tabValues.risikoscenarioer
 
     switch (filter) {
       case filterValues.alleRisikoscenarioer:
@@ -129,13 +146,13 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
         break
       case filterValues.tiltakIkkeAktuelt:
         setFilteredRisikosenarioList(
-          risikoscenarioList.filter((risikoscenario) => risikoscenario.ingenTiltak)
+          risikoscenarioList.filter((risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak)
         )
         break
       case filterValues.effektIkkeVurdert:
         setFilteredRisikosenarioList(
           risikoscenarioList.filter(
-            (risikoscenario) =>
+            (risikoscenario: IRisikoscenario) =>
               !risikoscenario.ingenTiltak &&
               (risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
                 risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
@@ -146,7 +163,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
       case filterValues.hoyRisiko:
         setFilteredRisikosenarioList(
           risikoscenarioList.filter(
-            (risikoscenario) =>
+            (risikoscenario: IRisikoscenario) =>
               risikoscenario.konsekvensNivaa === 5 || risikoscenario.sannsynlighetsNivaa === 5
           )
         )
@@ -157,18 +174,29 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
     }
 
     setNavigateUrl(
-      `${window.location.pathname}?tab=${tab}&filter=${filter}${risikoscenarioId ? '&risikoscenario=' + risikoscenarioId : ''}`
+      pvkDokumentasjonTabFilterRisikoscenarioUrl(
+        window.location.pathname,
+        tab,
+        filter,
+        risikoscenarioId
+      )
     )
+
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
     } else {
       navigate(
-        `${window.location.pathname}?tab=${tab}&filter=${filter}${risikoscenarioId ? '&risikoscenario=' + risikoscenarioId : ''}`
+        pvkDokumentasjonTabFilterRisikoscenarioUrl(
+          window.location.pathname,
+          tab,
+          filter,
+          risikoscenarioId
+        )
       )
     }
   }
 
-  const onTiltakFilterChange = (filter: string) => {
+  const onTiltakFilterChange = (filter: string): void => {
     setTiltakFilter(filter)
     switch (filter) {
       case tiltakFilterValues.alleTiltak:

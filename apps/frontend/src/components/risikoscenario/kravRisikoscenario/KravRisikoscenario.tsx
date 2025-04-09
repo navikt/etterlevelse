@@ -13,6 +13,7 @@ import {
   TKravQL,
 } from '../../../constants'
 import { user } from '../../../services/User'
+import { risikoscenarioUrl } from '../../common/RouteLinkPvk'
 import AccordianAlertModal from '../AccordianAlertModal'
 import CreateRisikoscenario from '../edit/CreateRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/LeggTilEksisterendeRisikoscenario'
@@ -97,7 +98,8 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
         setIsUnsaved(true)
       } else {
         setActiveRisikoscenarioId(risikoscenarioId)
-        navigate(`${window.location.pathname}?risikoscenario=${risikoscenarioId}`)
+
+        navigate(risikoscenarioUrl(window.location.pathname, risikoscenarioId))
       }
     } else {
       if (formRef.current?.dirty) {

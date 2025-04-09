@@ -4,6 +4,7 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { ListLayout } from '../components/common/ListLayout'
+import { kravlisteUrl } from '../components/common/RouteLinkKrav'
 import StatusView from '../components/common/StatusTag'
 import { AllKrav } from '../components/kravList/AllKrav'
 import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
@@ -128,9 +129,9 @@ const KravTabs = () => {
   return (
     <Tabs
       defaultValue={tab}
-      onChange={(args: string) => {
-        setTab(args)
-        navigate(`/kravliste/${args}`)
+      onChange={(tabQuery: string) => {
+        setTab(tabQuery)
+        navigate(kravlisteUrl(tabQuery))
       }}
     >
       <Tabs.List>

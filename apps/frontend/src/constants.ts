@@ -685,10 +685,6 @@ export enum EKonsekvensnivaa {
 
 export enum EPVO {
   overskrift = 'Oversiktsside for Personvernombudet',
-  url = '/pvo',
-  tilbakemelding = `${url}tilbakemelding`,
-  dokument = `${url}/pvkdokument`,
-  oversikt = `${url}/oversikt`,
 }
 
 export type TReplace<T, K> = Omit<T, keyof K> & K

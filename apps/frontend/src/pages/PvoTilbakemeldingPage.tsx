@@ -2,7 +2,7 @@ import { Alert, Button, Loader, Modal, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { RefObject, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { useNavigate, useParams } from 'react-router-dom'
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { getEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
 import { usePvoTilbakemelding } from '../api/PvoApi'
@@ -17,9 +17,9 @@ import SendInnPvoView from '../components/PvoTilbakemelding/SendInnPvoView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { etterlevelsesDokumentasjonEditUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { pvkDokumenteringPvoTilbakemeldingUrl } from '../components/common/RouteLinkPvk'
+import { pvoOversiktUrl } from '../components/common/RouteLinkPvo'
 import { risikoscenarioFilterAlleUrl } from '../components/common/RouteLinkRisiko'
 import {
-  EPVO,
   ERisikoscenarioType,
   IBreadCrumbPath,
   IDataBehandler,
@@ -64,13 +64,13 @@ export const PvoTilbakemeldingPage = () => {
     currentStep !== null ? parseInt(currentStep) : 1
   )
   const [selectedStep, setSelectedStep] = useState<number>(1)
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
   const formRef: RefObject<any> = useRef(undefined)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     {
       pathName: 'Oversikt siden for personvernombudet',
-      href: EPVO.oversikt,
+      href: pvoOversiktUrl(),
     },
     {
       pathName:
