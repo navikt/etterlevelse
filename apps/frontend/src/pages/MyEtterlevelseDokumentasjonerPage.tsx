@@ -27,7 +27,7 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
         <ListPageHeader headingText='Dokumentere etterlevelse'>
           <Button
             onClick={() => {
-              navigate(etterlevelseDokumentasjonCreateUrl())
+              navigate(etterlevelseDokumentasjonCreateUrl)
             }}
             size='medium'
             variant='primary'

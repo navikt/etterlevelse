@@ -112,7 +112,7 @@ export const MainPage = () => {
                       ampli.logEvent('knapp klikket', {
                         tekst: 'Nytt etterlevelsesdokument fra forsiden',
                       })
-                      navigate(etterlevelseDokumentasjonCreateUrl())
+                      navigate(etterlevelseDokumentasjonCreateUrl)
                     }}
                     size='medium'
                     variant={
