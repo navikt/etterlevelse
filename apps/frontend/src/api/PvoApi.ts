@@ -20,25 +20,27 @@ export const getAllPvoTilbakemelding = async () => {
   }
 }
 
-export const getPvoTilbakemeldingPage = async (pageNumber: number, pageSize: number) => {
-  return (
+export const getPvoTilbakemeldingPage = async (
+  pageNumber: number,
+  pageSize: number
+): Promise<IPageResponse<IPvoTilbakemelding>> =>
+  (
     await axios.get<IPageResponse<IPvoTilbakemelding>>(
       `${env.backendBaseUrl}/pvotilbakemelding?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
   ).data
-}
 
-export const getPvoTilbakemelding = async (id: string) => {
-  return (await axios.get<IPvoTilbakemelding>(`${env.backendBaseUrl}/pvotilbakemelding/${id}`)).data
-}
+export const getPvoTilbakemelding = async (id: string): Promise<IPvoTilbakemelding> =>
+  (await axios.get<IPvoTilbakemelding>(`${env.backendBaseUrl}/pvotilbakemelding/${id}`)).data
 
-export const getPvoTilbakemeldingByPvkDokumentId = async (pvkDokumentId: string) => {
-  return (
+export const getPvoTilbakemeldingByPvkDokumentId = async (
+  pvkDokumentId: string
+): Promise<IPvoTilbakemelding> =>
+  (
     await axios.get<IPvoTilbakemelding>(
       `${env.backendBaseUrl}/pvotilbakemelding/pvkdokument/${pvkDokumentId}`
     )
   ).data
-}
 
 export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
   const [data, setData] = useState<IPvoTilbakemelding>(mapPvoTilbakemeldingToFormValue({}))

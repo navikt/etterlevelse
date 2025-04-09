@@ -39,6 +39,7 @@ import { mailboxPoppingIcon } from '../../Images'
 import { InfoBlock } from '../../common/InfoBlock'
 import { PersonName } from '../../common/PersonName'
 import { Portrait } from '../../common/Portrait'
+import { kravNummerVersjonUrl } from '../../common/RouteLinkKrav'
 import StatusView from '../../common/StatusTag'
 import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
 import ResponseMelding from './ResponseMelding'
@@ -80,7 +81,7 @@ export const Tilbakemeldinger = ({
   const setFocus = (id: string) => {
     setFocusNr(id)
     if (location.pathname.split('/')[1] === 'krav')
-      navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}?tilbakemeldingId=${id}`, {
+      navigate(kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon, id), {
         replace: true,
       })
   }

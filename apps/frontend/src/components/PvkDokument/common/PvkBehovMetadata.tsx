@@ -4,6 +4,7 @@ import { IBehandling, IEtterlevelseDokumentasjon } from '../../../constants'
 import { user } from '../../../services/User'
 import { env } from '../../../util/env'
 import { ExternalLink } from '../../common/RouteLink'
+import { etterlevelsesDokumentasjonEditUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 
 interface IProps {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -63,7 +64,7 @@ export const PvkBehovMetadata = (props: IProps) => {
         <BodyShort className='inline-block'>
           Dere kan redigere hvilke behandinger og dokumenter som er tilknyttet i{' '}
           <Link
-            href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
+            href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
             target='_blank'
             rel='noopener noreferrer'
             aria-label='redigere etterlevelsesdokumentasjon'

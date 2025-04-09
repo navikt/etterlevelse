@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react'
 import { getAllPvkDokumentListItem } from '../../api/PvkDokumentApi'
 import { getAllPvoTilbakemelding } from '../../api/PvoApi'
 import {
-  EPVO,
   EPvkDokumentStatus,
   EPvoTilbakemeldingStatus,
   IPvkDokumentListItem,
   IPvoTilbakemelding,
 } from '../../constants'
 import { ListLayout2 } from '../common/ListLayout'
+import { pvkDokumenteringPvoTilbakemeldingUrl } from '../common/RouteLinkPvk'
 import PvoStatusView from './common/PvoStatusView'
 
 export const PvoTilbakemeldingsList = () => {
@@ -168,7 +168,7 @@ export const PvoTilbakemeldingsList = () => {
                   <ListLayout2
                     key={pvkDokument.id}
                     id={pvkDokument.id}
-                    url={`/pvkdokument/${pvkDokument.id}${EPVO.tilbakemelding}/1`}
+                    url={pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument.id, 1)}
                     title={`E${pvkDokument.etterlevelseNummer} ${pvkDokument.title}`}
                     status={
                       <PvoStatusView

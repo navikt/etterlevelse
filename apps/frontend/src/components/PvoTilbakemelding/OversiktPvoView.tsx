@@ -16,6 +16,9 @@ import {
 import { StepTitle } from '../../pages/PvkDokumentPage'
 import { FormSummaryPanel } from '../PvkDokument/common/FormSummaryPanel'
 import { ExternalLink } from '../common/RouteLink'
+import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
+import { pvkDokumentasjonPvkBehovUrl } from '../common/RouteLinkPvk'
+import { risikoscenarioFilterAlleUrl } from '../common/RouteLinkRisiko'
 import PvoFormButtons from './edit/PvoFormButtons'
 
 interface IProps {
@@ -161,7 +164,10 @@ export const OversiktPvoView = (props: IProps) => {
               <FormSummary.Value>
                 {/* TODO: lage et readonly url/komponent for pvkdokument vurderings side */}
                 <ExternalLink
-                  href={`/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/pvkbehov/${pvkDokument.id}`}
+                  href={pvkDokumentasjonPvkBehovUrl(
+                    pvkDokument.etterlevelseDokumentId,
+                    pvkDokument.id
+                  )}
                 >
                   Vurdér behov for PVK
                 </ExternalLink>
@@ -223,7 +229,7 @@ export const OversiktPvoView = (props: IProps) => {
             {StepTitle.slice(2).map((title, index) => {
               let panelHref = window.location.pathname.slice(0, -1) + (index + 3)
               if (index + 3 === 6) {
-                panelHref += '?tab=risikoscenarioer&filter=alle'
+                panelHref += risikoscenarioFilterAlleUrl()
               }
               return (
                 <FormSummaryPanel
@@ -285,7 +291,7 @@ export const OversiktPvoView = (props: IProps) => {
               Dere har ikke lagt inn en risikoeier. Dere må gjøre dette før dere sender PVK-en til
               Personvernombudet. Dere kan redigere deltakere og ansvarlige under
               <Link
-                href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
+                href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
                 target='_blank'
                 rel='noopener noreferrer'
                 aria-label='redigere etterlevelsesdokumentasjon'

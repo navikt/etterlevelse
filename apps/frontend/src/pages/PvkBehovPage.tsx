@@ -9,6 +9,7 @@ import PvkBehovInfoContent from '../components/PvkDokument/common/PvkBehovInfoCo
 import PvkBehovMetadata from '../components/PvkDokument/common/PvkBehovMetadata'
 import PvkBehovReadOnly from '../components/PvkDokument/common/PvkBehovReadOnly'
 import PvkBehovForm from '../components/PvkDokument/edit/PvkBehovForm'
+import { etterlevelseDokumentasjonUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { PageLayout } from '../components/scaffold/Page'
 import {
   IBehandling,
@@ -41,7 +42,7 @@ export const PvkBehovPage = () => {
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
     {
-      href: `/dokumentasjon/${etterlevelseDokumentasjon?.id}`,
+      href: etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon?.id),
       pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
     },
   ]

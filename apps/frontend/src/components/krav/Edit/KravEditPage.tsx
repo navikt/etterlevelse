@@ -24,6 +24,7 @@ import { CodelistService, EListName, ICode, TLovCode } from '../../../services/C
 import { user } from '../../../services/User'
 import ErrorModal from '../../ErrorModal'
 import { TextAreaField } from '../../common/Inputs'
+import { kravNummerVersjonUrl, kravlisteUrl } from '../../common/RouteLinkKrav'
 import { PageLayout } from '../../scaffold/Page'
 import { kravEditValidation } from './KravSchemaValidation'
 import { KravEditStatusModal } from './components/KravEditStatusModal'
@@ -80,7 +81,7 @@ export const KravEditPage = () => {
 
   const close = (krav: IKrav): void => {
     if (krav) {
-      navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
+      navigate(kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon))
     }
   }
 
@@ -136,7 +137,7 @@ export const KravEditPage = () => {
             type='button'
             onClick={() => {
               if (krav.kravNummer && krav.kravVersjon) {
-                navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
+                navigate(kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon))
               }
             }}
           >
@@ -191,9 +192,9 @@ export const KravEditPage = () => {
                           <KravStandardButtons
                             submitCancelButton={() => {
                               if (krav.kravNummer && krav.kravVersjon) {
-                                navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}`)
+                                navigate(kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon))
                               } else {
-                                navigate('/kravliste')
+                                navigate(kravlisteUrl())
                               }
                             }}
                             submitSaveButton={() => {

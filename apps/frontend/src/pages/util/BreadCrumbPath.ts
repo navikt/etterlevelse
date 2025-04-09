@@ -1,18 +1,20 @@
+import { etterlevelseDokumentasjonerUrl } from '../../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import { kravTemaUrl, kravlisteUrl } from '../../components/common/RouteLinkKrav'
 import { IBreadCrumbPath } from '../../constants'
 
 export const kravBreadCrumbPath: IBreadCrumbPath = {
-  href: '/kravliste',
+  href: kravlisteUrl(),
   pathName: 'Forvalte og opprette krav',
 }
 
 export const temaBreadCrumbPath: IBreadCrumbPath = {
   pathName: 'Forstå kravene',
-  href: '/tema',
+  href: kravTemaUrl(),
 }
 
 export const dokumentasjonerBreadCrumbPath: IBreadCrumbPath = {
   pathName: 'Dokumentere etterlevelse',
-  href: '/dokumentasjoner',
+  href: etterlevelseDokumentasjonerUrl(),
 }
 
 export const dokumentasjonBreadCrumbPath = (pathName: string, href: string): IBreadCrumbPath => {

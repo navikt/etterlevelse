@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { getDocumentRelationByFromIdAndRelationTypeWithData } from '../api/DocumentRelationApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { etterlevelseDokumentasjonUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { PageLayout } from '../components/scaffold/Page'
 import {
   ERelationType,
@@ -48,7 +49,7 @@ export const RelasjonsOversikt = () => {
       dokumentasjonerBreadCrumbPath.pathName,
       dokumentasjonerBreadCrumbPath.href
     ),
-    dokumentasjonBreadCrumbPath(etterlevelseNavn, `/dokumentasjon/${params.id}`),
+    dokumentasjonBreadCrumbPath(etterlevelseNavn, etterlevelseDokumentasjonUrl(params.id)),
   ]
 
   return (
@@ -70,7 +71,7 @@ export const RelasjonsOversikt = () => {
               {dokumentRelasjonBarn?.map((dokument, index) => (
                 <Table.Row key={index + dokument.toDocumentWithData.etterlevelseNummer}>
                   <Table.DataCell>
-                    <Link href={`/dokumentasjon/${dokument.toDocumentWithData.id}`}>
+                    <Link href={etterlevelseDokumentasjonUrl(dokument.toDocumentWithData.id)}>
                       {'E' +
                         dokument.toDocumentWithData.etterlevelseNummer.toString() +
                         ' ' +

@@ -5,6 +5,7 @@ import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenario, updateRisikoscenario } from '../../api/RisikoscenarioApi'
 import { createTiltakAndRelasjonWithRisikoscenario } from '../../api/TiltakApi'
 import { IRisikoscenario, ITiltak } from '../../constants'
+import { risikoscenarioTiltakUrl } from '../common/RouteLinkPvk'
 import TiltakReadMoreList from '../tiltak/TiltakReadMoreList'
 import LeggTilEksisterendeTiltak from '../tiltak/edit/LeggTilEksisterendeTiltak'
 import TiltakForm from '../tiltak/edit/TiltakForm'
@@ -80,8 +81,9 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
       })
       setTiltakList([...tiltakList, response])
       setIsCreateTiltakFormActive(false)
+
       navigate(
-        `${window.location.pathname}?risikoscenario=${activeRisikoscenario.id}&tiltak=${response.id}`
+        risikoscenarioTiltakUrl(window.location.pathname, activeRisikoscenario.id, response.id)
       )
       window.location.reload()
     })

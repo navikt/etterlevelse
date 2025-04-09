@@ -1,6 +1,6 @@
 import { Button, Modal } from '@navikt/ds-react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 
 export const DeleteItem = (props: {
   fun: () => Promise<any>
@@ -9,7 +9,7 @@ export const DeleteItem = (props: {
   buttonSize?: 'small' | 'medium' | 'xsmall'
 }) => {
   const [open, setOpen] = useState(false)
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
 
   return (
     <>

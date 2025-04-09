@@ -1,10 +1,11 @@
 import { BodyLong, Heading, TextField } from '@navikt/ds-react'
 import _ from 'lodash'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { getAuditLog } from '../../../api/AuditApi'
 import { useDebouncedState } from '../../../util/hooks/customHooks'
 import { intl } from '../../../util/intl/intl'
+import { adminAuditUrl } from '../../common/RouteLinkAdmin'
 import { PageLayout } from '../../scaffold/Page'
 import { AuditLabel } from './AuditComponents'
 import { AuditRecentTable } from './AuditRecentTable'
@@ -15,7 +16,7 @@ const format = (id: string) => _.trim(id, '"')
 
 export const AuditPage = () => {
   const params = useParams<{ id?: string; auditId?: string }>()
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
   const [auditLog, setAuditLog] = useState<IAuditLog>()
@@ -30,7 +31,7 @@ export const AuditPage = () => {
       setError(undefined)
       if (!id) {
         if (params.id) {
-          navigate('/admin/audit')
+          navigate(adminAuditUrl())
         } else {
           return
         }
@@ -40,7 +41,7 @@ export const AuditPage = () => {
         const log = await getAuditLog(_.escape(id))
         setAuditLog(log)
         if (log.audits.length && id !== params.id) {
-          navigate(`/admin/audit/${id}`)
+          navigate(adminAuditUrl(id))
         }
       } catch (e: any) {
         setError(e)

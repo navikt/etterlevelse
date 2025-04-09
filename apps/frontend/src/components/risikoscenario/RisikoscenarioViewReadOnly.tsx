@@ -4,6 +4,7 @@ import { FunctionComponent } from 'react'
 import { useParams } from 'react-router'
 import { IKravReference, IRisikoscenario } from '../../constants'
 import { ExternalLink } from '../common/RouteLink'
+import { risikoDokumentasjonTemaKravNummerVersjonUrl } from '../common/RouteLinkRisiko'
 import RisikoscenarioTag, {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
@@ -48,7 +49,12 @@ export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
           <List as='ul'>
             {risikoscenario.relevanteKravNummer.map(
               (relevantKrav: IKravReference, index: number) => {
-                const kravHref: string = `/dokumentasjon/${params.id}/${relevantKrav.temaCode || 'PVK'}/RELEVANTE_KRAV/krav/${relevantKrav.kravNummer}/${relevantKrav.kravVersjon}`
+                const kravHref: string = risikoDokumentasjonTemaKravNummerVersjonUrl(
+                  params.id,
+                  relevantKrav.temaCode || 'PVK',
+                  relevantKrav.kravNummer,
+                  relevantKrav.kravVersjon
+                )
 
                 return (
                   <List.Item className='max-w-[75ch]' key={`${relevantKrav.kravNummer}_${index}`}>

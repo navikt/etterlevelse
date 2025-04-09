@@ -1,17 +1,27 @@
 import { Loader } from '@navikt/ds-react'
 import { JSX, useEffect } from 'react'
-import { Route, Routes, useNavigate, useParams } from 'react-router-dom'
+import { NavigateFunction, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import { searchEtterlevelsedokumentasjonByBehandlingId } from './api/EtterlevelseDokumentasjonApi'
 import CodeListPage from './components/admin/CodeList/CodelistPage'
 import { AuditPage } from './components/admin/audit/AuditPage'
 import { MailLogPage } from './components/admin/maillog/MailLogPage'
+import { behandlingskatalogenBehandlingsIdUrl } from './components/common/RouteLinkBehandlingskatalogen'
+import {
+  etterlevelseDokumentasjonUrl,
+  etterlevelseDokumentasjonerUrl,
+} from './components/common/RouteLinkEtterlevelsesdokumentasjon'
+import {
+  kravNummerVersjonUrl,
+  kravRelevanteUrl,
+  kravTemaFilterUrl,
+} from './components/common/RouteLinkKrav'
 import CreateEtterlevelseDokumentasjonPage from './components/etterlevelseDokumentasjon/edit/CreateEtterlevelseDokumentasjonPage'
 import { EditEtterlevelseDokumentasjonPage } from './components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonPage'
 import GjenbrukEtterlevelseDokumentasjonPage from './components/etterlevelseDokumentasjon/edit/GjenbrukEtterlevelseDokumentasjonPage'
 import { KravCreatePage } from './components/krav/Edit/KravCreatePage'
 import { KravEditPage } from './components/krav/Edit/KravEditPage'
 import { KravNyVersjonPage } from './components/krav/Edit/KravNyVersjonPage'
-import { EPVO } from './constants'
+import { IEtterlevelseDokumentasjon } from './constants'
 import ArkivAdminPage from './pages/ArkivAdminPage'
 import BehandlingensLivslopPage from './pages/BehandlingensLivslopPage'
 import DocumentRelationAdminPage from './pages/DocumentRelationAdminPage'
@@ -164,19 +174,19 @@ const AppRoutes = (): JSX.Element => {
       />
 
       <Route
-        path={`${EPVO.url}/:tab`}
+        path='/pvo/:tab'
         element={<PrivateRoute component={<PvoOversiktPage />} pvoPage />}
         caseSensitive={true}
       />
 
       <Route
-        path={EPVO.oversikt}
+        path='/pvo/oversikt'
         element={<PrivateRoute component={<PvoOversiktPage />} pvoPage />}
         caseSensitive={true}
       />
 
       <Route
-        path={`/pvkdokument/:id${EPVO.tilbakemelding}/:steg`}
+        path={`/pvkdokument/:id/pvotilbakemelding/:steg`}
         element={<PvoTilbakemeldingPage />}
         caseSensitive={true}
       />
@@ -297,32 +307,34 @@ const RedirectHelpUrl = () => {
 
 const RedirectToEtterlevelseDokumentasjonPage = () => {
   const { id, tema, filter, kravNummer, kravVersjon } = useParams()
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
 
   ampli.logEvent('besøk', { type: 'redirect til etterlevelse' })
 
   if (id) {
-    searchEtterlevelsedokumentasjonByBehandlingId(id).then((resp) => {
-      if (resp.length === 1) {
-        let redirectUrl = '/dokumentasjon/' + resp[0].id
+    searchEtterlevelsedokumentasjonByBehandlingId(id).then(
+      (response: IEtterlevelseDokumentasjon[]) => {
+        if (response.length === 1) {
+          let redirectUrl: string = etterlevelseDokumentasjonUrl(response[0].id)
 
-        if (tema && !filter) {
-          redirectUrl += '/' + tema.toUpperCase() + '/RELEVANTE_KRAV'
-        } else if (tema && filter) {
-          redirectUrl += '/' + tema.toUpperCase() + '/' + filter.toUpperCase()
+          if (tema && !filter) {
+            redirectUrl += kravRelevanteUrl(tema.toUpperCase())
+          } else if (tema && filter) {
+            redirectUrl += kravTemaFilterUrl(tema.toUpperCase(), filter.toUpperCase())
+          }
+
+          if (kravNummer && kravVersjon) {
+            redirectUrl += kravNummerVersjonUrl(kravNummer, kravVersjon)
+          }
+
+          navigate(redirectUrl, { replace: true })
+        } else {
+          navigate(behandlingskatalogenBehandlingsIdUrl(id), { replace: true })
         }
-
-        if (kravNummer && kravVersjon) {
-          redirectUrl += '/krav/' + kravNummer + '/' + kravVersjon
-        }
-
-        navigate(redirectUrl, { replace: true })
-      } else {
-        navigate('/dokumentasjoner/behandlingsok?behandlingId=' + id, { replace: true })
       }
-    })
+    )
   } else {
-    navigate('/dokumentasjoner', { replace: true })
+    navigate(etterlevelseDokumentasjonerUrl(), { replace: true })
   }
 
   return (

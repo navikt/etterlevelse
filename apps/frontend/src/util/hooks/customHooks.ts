@@ -1,5 +1,5 @@
 import React, { Dispatch, RefObject, SetStateAction, createRef, useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Location, NavigateFunction, useLocation, useNavigate } from 'react-router-dom'
 import { user } from '../../services/User'
 
 export function useDebouncedState<T>(
@@ -75,8 +75,8 @@ export function useQueryParam<T extends string>(queryParam: string) {
 }
 
 export function useLocationState<T>() {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate: NavigateFunction = useNavigate()
+  const location: Location<any> = useLocation()
 
   const changeState = (newState: Partial<T>) => {
     navigate(

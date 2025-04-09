@@ -3,6 +3,7 @@ import { FunctionComponent, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { createRisikoscenario } from '../../../api/RisikoscenarioApi'
 import { IPvkDokument, IRisikoscenario } from '../../../constants'
+import { risikoscenarioUrl } from '../../common/RouteLinkPvk'
 import RisikoscenarioModalForm from './RisikoscenarioModalForm'
 
 type TProps = {
@@ -23,7 +24,8 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
         onSubmitStateUpdate(response)
       }
       setIsEdit(false)
-      navigate(`${window.location.pathname}?risikoscenario=${response.id}`)
+
+      navigate(risikoscenarioUrl(window.location.pathname, response.id))
     })
   }
 

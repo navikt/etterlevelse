@@ -2,7 +2,7 @@ import axios from 'axios'
 import { IPageResponse, ITeamResource, ITiltak } from '../constants'
 import { env } from '../util/env'
 
-export const getAllTiltak = async () => {
+export const getAllTiltak = async (): Promise<ITiltak[]> => {
   const pageSize = 100
   const firstPage = await getTiltakPage(0, pageSize)
   if (firstPage.pages === 1) {
@@ -16,30 +16,32 @@ export const getAllTiltak = async () => {
   }
 }
 
-export const getTiltakPage = async (pageNumber: number, pageSize: number) => {
-  return (
+export const getTiltakPage = async (
+  pageNumber: number,
+  pageSize: number
+): Promise<IPageResponse<ITiltak>> =>
+  (
     await axios.get<IPageResponse<ITiltak>>(
       `${env.backendBaseUrl}/tiltak?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
   ).data
-}
 
-export const getTiltak = async (id: string) => {
-  return (await axios.get<ITiltak>(`${env.backendBaseUrl}/tiltak/${id}`)).data
-}
+export const getTiltak = async (id: string): Promise<ITiltak> =>
+  (await axios.get<ITiltak>(`${env.backendBaseUrl}/tiltak/${id}`)).data
 
-export const getTiltakByPvkDokumentId = async (pvkDokumentId: string) => {
-  return (
+export const getTiltakByPvkDokumentId = async (
+  pvkDokumentId: string
+): Promise<IPageResponse<ITiltak>> =>
+  (
     await axios.get<IPageResponse<ITiltak>>(
       `${env.backendBaseUrl}/tiltak/pvkdokument/${pvkDokumentId}`
     )
   ).data
-}
 
 export const createTiltakAndRelasjonWithRisikoscenario = async (
   tiltak: ITiltak,
   risikoscenarioId: string
-) => {
+): Promise<ITiltak> => {
   const dto = tiltakTotiltakDto(tiltak)
   return (
     await axios.post<ITiltak>(
@@ -49,14 +51,13 @@ export const createTiltakAndRelasjonWithRisikoscenario = async (
   ).data
 }
 
-export const updateTiltak = async (tiltak: ITiltak) => {
+export const updateTiltak = async (tiltak: ITiltak): Promise<ITiltak> => {
   const dto = tiltakTotiltakDto(tiltak)
   return (await axios.put<ITiltak>(`${env.backendBaseUrl}/tiltak/${tiltak.id}`, dto)).data
 }
 
-export const deleteTiltak = async (id: string) => {
-  return (await axios.delete<ITiltak>(`${env.backendBaseUrl}/tiltak/${id}`)).data
-}
+export const deleteTiltak = async (id: string): Promise<ITiltak> =>
+  (await axios.delete<ITiltak>(`${env.backendBaseUrl}/tiltak/${id}`)).data
 
 const tiltakTotiltakDto = (tiltak: ITiltak) => {
   const dto = {
