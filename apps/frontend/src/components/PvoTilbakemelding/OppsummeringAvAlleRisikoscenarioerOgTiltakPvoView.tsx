@@ -187,26 +187,12 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
         break
     }
 
-    setNavigateUrl(
-      pvkDokumentasjonTabFilterRisikoscenarioUrl(
-        window.location.pathname,
-        tab,
-        filter,
-        risikoscenarioId
-      )
-    )
+    setNavigateUrl(pvkDokumentasjonTabFilterRisikoscenarioUrl(tab, filter, risikoscenarioId))
 
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
     } else {
-      navigate(
-        pvkDokumentasjonTabFilterRisikoscenarioUrl(
-          window.location.pathname,
-          tab,
-          filter,
-          risikoscenarioId
-        )
-      )
+      navigate(pvkDokumentasjonTabFilterRisikoscenarioUrl(tab, filter, risikoscenarioId))
     }
   }
 

@@ -55,23 +55,13 @@ export const OppsumeringAccordianList: FunctionComponent<TProps> = ({
   const handleAccordionChange = (risikoscenarioId?: string): void => {
     if (risikoscenarioId) {
       setNavigateUrl(
-        pvkDokumentasjonTabFilterRisikoscenarioUrl(
-          window.location.pathname,
-          tabQuery,
-          filterQuery,
-          risikoscenarioId
-        )
+        pvkDokumentasjonTabFilterRisikoscenarioUrl(tabQuery, filterQuery, risikoscenarioId)
       )
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
       } else {
         navigate(
-          pvkDokumentasjonTabFilterRisikoscenarioUrl(
-            window.location.pathname,
-            tabQuery,
-            filterQuery,
-            risikoscenarioId
-          )
+          pvkDokumentasjonTabFilterRisikoscenarioUrl(tabQuery, filterQuery, risikoscenarioId)
         )
       }
     } else {
