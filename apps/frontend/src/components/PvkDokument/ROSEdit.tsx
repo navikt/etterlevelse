@@ -57,14 +57,6 @@ export const ROSEdit = () => {
                     setUrl((event.target as HTMLInputElement).value)
                   }
                 />
-                <Button
-                  className='min-w-[6.688rem] my-2.5 items-end'
-                  type='button'
-                  onClick={add}
-                  variant='secondary'
-                >
-                  Legg til
-                </Button>
               </div>
 
               {error && <Error message={error} />}
@@ -106,6 +98,15 @@ export const ROSEdit = () => {
                     )}
                 </Table.Body>
               </Table>
+
+              <Button
+                className='min-w-[6.688rem] my-2.5 items-end'
+                type='button'
+                onClick={add}
+                variant='secondary'
+              >
+                Legg til
+              </Button>
             </div>
           )
         }}
