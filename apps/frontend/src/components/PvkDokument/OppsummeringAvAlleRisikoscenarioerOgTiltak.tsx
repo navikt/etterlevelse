@@ -59,6 +59,20 @@ const visTomListeBeskrivelse = (filter: string | null) => {
   return <BodyLong className='my-5'>{textBody}</BodyLong>
 }
 
+const visTomTiltakListeBeskrivelse = (filter: string | null) => {
+  let textBody = ''
+  switch (filter) {
+    case tiltakFilterValues.utenAnsvarlig:
+      textBody = 'Det finnes tiltak uten en ansvarlig 🎉'
+      break
+    case tiltakFilterValues.utenFrist:
+      textBody = 'Det finnes ingen tiltak uten frist 🎉'
+      break
+    default:
+  }
+  return <BodyLong className='my-5'>{textBody}</BodyLong>
+}
+
 export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   const {
     etterlevelseDokumentasjonId,
@@ -307,6 +321,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                         risikoscenarioList={risikoscenarioList}
                       />
                     )}
+                    {filteredTiltakList.length === 0 && visTomTiltakListeBeskrivelse(tiltakFilter)}
                   </Tabs.Panel>
                 </Tabs>
               </div>
