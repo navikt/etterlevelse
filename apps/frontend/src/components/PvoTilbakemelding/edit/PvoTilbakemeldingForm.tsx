@@ -106,7 +106,7 @@ export const PvoTilbakemeldingForm = (props: IProps) => {
 
             {initialValue.sistRedigertAv && initialValue.sistRedigertDato && (
               <BodyShort size='small' className='pb-5'>
-                Sist endret: {moment(initialValue.sistRedigertDato).format('ll')} av{' '}
+                Sist endret: {moment(initialValue.sistRedigertDato).format('LL')} av{' '}
                 {initialValue.sistRedigertAv.split('-')[1]}
               </BodyShort>
             )}

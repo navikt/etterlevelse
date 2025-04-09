@@ -220,10 +220,10 @@ export const ArkivAdminPage = () => {
                       <Table.DataCell>{arkiveringStatusToString(arkivering.status)}</Table.DataCell>
                       <Table.DataCell>
                         {' '}
-                        {moment(arkivering.tilArkiveringDato).format('lll')}
+                        {moment(arkivering.tilArkiveringDato).format('LLL')}
                       </Table.DataCell>
                       <Table.DataCell>
-                        {moment(arkivering.arkiveringDato).format('lll')}
+                        {moment(arkivering.arkiveringDato).format('LLL')}
                       </Table.DataCell>
                     </Table.Row>
                   )

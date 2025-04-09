@@ -27,10 +27,10 @@ export const EtterlevelseDokumentasjonsPanel = ({
       </LinkPanel.Title>
       <LinkPanel.Description>
         {hasDateForLastModifiedByUser &&
-          `Sist endret: ${moment(etterlevelseDokumentasjon.sistEndretEtterlevelseAvMeg).format('ll')}`}
+          `Sist endret: ${moment(etterlevelseDokumentasjon.sistEndretEtterlevelseAvMeg).format('LL')}`}
         {hasDateForLastModified &&
           !hasDateForLastModifiedByUser &&
-          `Sist endret: ${moment(etterlevelseDokumentasjon.sistEndretEtterlevelse).format('ll')}`}
+          `Sist endret: ${moment(etterlevelseDokumentasjon.sistEndretEtterlevelse).format('LL')}`}
         {hasNoLastModifiedDate && 'Ikke påbegynt'}
       </LinkPanel.Description>
     </LinkPanel>

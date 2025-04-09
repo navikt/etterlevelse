@@ -100,7 +100,7 @@ export const KravPanels = ({ kravene, loading }: IKravPanelsProps) => {
                   changeStamp={
                     krav.changeStamp.lastModifiedDate !== undefined &&
                     krav.changeStamp.lastModifiedDate !== ''
-                      ? `Sist endret: ${moment(krav.changeStamp.lastModifiedDate).format('ll')}`
+                      ? `Sist endret: ${moment(krav.changeStamp.lastModifiedDate).format('LL')}`
                       : ''
                   }
                 />

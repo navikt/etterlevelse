@@ -31,7 +31,7 @@ export const ViewKrav = ({ krav }: { krav: TKravQL }) => {
         {/* {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />} */}
 
         <BodyShort size='small' className='mt-6'>
-          Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')}{' '}
+          Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('LL')}{' '}
           {user.isAdmin() || user.isKraveier()
             ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1]
             : ''}
@@ -162,7 +162,7 @@ export const AllInfo = ({
       {!noLastModifiedDate && (
         <div>
           <BodyShort size='small'>
-            Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')}{' '}
+            Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('LL')}{' '}
             {user.isAdmin() || user.isKraveier()
               ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1]
               : ''}

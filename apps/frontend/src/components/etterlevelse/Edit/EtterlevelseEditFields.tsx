@@ -339,7 +339,7 @@ export const EtterlevelseEditFields = ({
                         <div className='pb-6 flex justify-end w-full'>
                           <BodyShort>
                             Sist utfylt:{' '}
-                            {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av{' '}
+                            {moment(etterlevelse.changeStamp.lastModifiedDate).format('LL')} av{' '}
                             {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
                           </BodyShort>
                         </div>

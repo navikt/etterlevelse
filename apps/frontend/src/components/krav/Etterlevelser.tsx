@@ -222,7 +222,7 @@ export const Etterlevelser = ({
                             </BodyShort>
                             <BodyShort>{`Utfylt: ${moment(
                               etterlevelse.changeStamp.lastModifiedDate
-                            ).format('ll')}`}</BodyShort>
+                            ).format('LL')}`}</BodyShort>
                           </div>
                         </LinkPanel.Title>
                       </LinkPanel>

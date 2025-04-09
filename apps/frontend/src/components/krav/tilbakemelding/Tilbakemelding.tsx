@@ -111,7 +111,7 @@ export const Tilbakemeldinger = ({
                               </Label>
                               <div className='flex ml-6'>
                                 <BodyShort>
-                                  Sendt: {moment(tilbakemelding.meldinger[0].tid).format('lll')}
+                                  Sendt: {moment(tilbakemelding.meldinger[0].tid).format('LLL')}
                                 </BodyShort>
                                 <BodyShort className='ml-3.5'>
                                   Kravversjon: K{tilbakemelding.kravNummer}.
@@ -405,7 +405,7 @@ const TilbakemeldingSvar = ({
           >
             <Modal.Body>
               <BodyShort className='flex'>
-                {moment(tilbakemelding.meldinger[0].tid).format('ll')}
+                {moment(tilbakemelding.meldinger[0].tid).format('LL')}
                 <div className='ml-1'>
                   <PersonName ident={tilbakemelding.meldinger[0].fraIdent} />
                 </div>

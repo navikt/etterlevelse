@@ -99,7 +99,7 @@ export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: TVirkmid
                   </Table.DataCell>
 
                   <Table.DataCell>
-                    {moment(virkemiddel.changeStamp.lastModifiedDate).format('ll')}
+                    {moment(virkemiddel.changeStamp.lastModifiedDate).format('LL')}
                   </Table.DataCell>
                   <Table.DataCell>
                     <div className='flex justify-end w-full'>

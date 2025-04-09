@@ -52,7 +52,7 @@ export const MeldingKnapper = (props: {
           <Modal.Body>
             {meldingNr === 1 && <BodyShort>Hele meldingstråden vil bli slettet.</BodyShort>}
             <BodyShort className='flex'>
-              {moment(melding.tid).format('ll')}{' '}
+              {moment(melding.tid).format('LL')}{' '}
               <div className='ml-1'>
                 <PersonName ident={melding.fraIdent} />
               </div>
@@ -91,7 +91,7 @@ export const MeldingKnapper = (props: {
         >
           <Modal.Body>
             <BodyShort className='flex'>
-              {moment(melding.tid).format('ll')}{' '}
+              {moment(melding.tid).format('LL')}{' '}
               <div className='ml-1'>
                 <PersonName ident={melding.fraIdent} />
               </div>

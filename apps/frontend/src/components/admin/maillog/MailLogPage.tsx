@@ -57,7 +57,7 @@ export const MailLogPage = () => {
         return (
           <div key={index} className='mb-6'>
             <BodyShort>
-              #{rowNum} Tid: {moment(mailLog.time).format('lll')} Til: {mailLog.to}
+              #{rowNum} Tid: {moment(mailLog.time).format('LLL')} Til: {mailLog.to}
             </BodyShort>
             <BodyShort className='mb-3'>Emne: {mailLog.subject}</BodyShort>
             <Box
