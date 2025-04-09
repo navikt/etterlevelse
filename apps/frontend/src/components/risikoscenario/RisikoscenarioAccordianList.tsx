@@ -1,5 +1,5 @@
 import { Accordion } from '@navikt/ds-react'
-import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../constants'
 import AccordianAlertModal from './AccordianAlertModal'
@@ -33,28 +33,33 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
   const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
   const tiltakId: string | null = url.searchParams.get('tiltak')
   const navigate: NavigateFunction = useNavigate()
-  const accordionRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (risikoscenarioId) {
       setTimeout(() => {
         const element: HTMLElement | null = document.getElementById(risikoscenarioId)
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth' })
-
+          element.focus()
+          window.scrollTo({
+            top: element.getBoundingClientRect().top + window.pageYOffset - 30,
+            behavior: 'smooth',
+          })
           if (tiltakId) {
             const tiltakElement: HTMLElement | null = document.getElementById(
               `${risikoscenarioId}_${tiltakId}`
             )
             if (tiltakElement) {
               tiltakElement.focus()
-              tiltakElement.scrollIntoView({ behavior: 'smooth' })
+              window.scrollTo({
+                top: tiltakElement.getBoundingClientRect().top + window.pageYOffset - 30,
+                behavior: 'smooth',
+              })
             }
           }
         }
       }, 200)
     }
-  }, [])
+  }, [risikoscenarioId, tiltakId])
 
   const handleAccordionChange = (risikoscenarioId?: string) => {
     if (risikoscenarioId) {
@@ -64,11 +69,6 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
       } else {
         navigate(`${window.location.pathname}?risikoscenario=${risikoscenarioId}`)
       }
-      setTimeout(() => {
-        if (accordionRef.current) {
-          window.scrollTo({ top: accordionRef.current.offsetTop - 30, behavior: 'smooth' })
-        }
-      }, 200)
     } else {
       setNavigateUrl(window.location.pathname)
       if (formRef.current?.dirty) {
@@ -94,10 +94,7 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
                 handleAccordionChange(open ? risikoscenario.id : undefined)
               }}
             >
-              <IdentifiseringAvRisikoscenarioAccordianHeader
-                risikoscenario={risikoscenario}
-                ref={expanded ? accordionRef : undefined}
-              />
+              <IdentifiseringAvRisikoscenarioAccordianHeader risikoscenario={risikoscenario} />
               <Accordion.Content>
                 {expanded && (
                   <RisikoscenarioAccordionContent
