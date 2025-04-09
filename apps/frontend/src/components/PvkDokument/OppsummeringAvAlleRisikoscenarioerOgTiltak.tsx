@@ -12,12 +12,11 @@ import {
 } from '../../constants'
 import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
-import { ExternalLink } from '../common/RouteLink'
+import { ExternalLink, paramQueryUrl } from '../common/RouteLink'
 import { etterlevelseDokumentasjonUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import {
   pvkDokumentasjonStepUrl,
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
-  pvkDokumentasjonTabUrl,
 } from '../common/RouteLinkPvk'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/OppsumeringAccordianList'
@@ -129,12 +128,12 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   const onTabChange = (tab: string) => {
     const filter = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
     const paramQuery = tab === tabValues.risikoscenarioer ? '&filter=' + filter : ''
-    setNavigateUrl(pvkDokumentasjonTabUrl(window.location.pathname, tab, paramQuery))
+    setNavigateUrl(paramQueryUrl(window.location.pathname, tab, paramQuery))
 
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
     } else {
-      navigate(pvkDokumentasjonTabUrl(window.location.pathname, tab, paramQuery))
+      navigate(paramQueryUrl(window.location.pathname, tab, paramQuery))
     }
   }
 

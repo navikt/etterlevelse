@@ -70,12 +70,6 @@ export const pvkDokumenteringPvoTilbakemeldingUrl = (
   return url
 }
 
-export const pvkDokumentasjonTabUrl = (
-  pathname: string,
-  tabQuery: string,
-  paramQuery: string
-): string => `${pathname}?tab=${tabQuery}${paramQuery}`
-
 export const pvkDokumentasjonTabFilterRisikoscenarioUrl = (
   pathname: string,
   tabQuery: string | null,
