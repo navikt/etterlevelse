@@ -65,7 +65,7 @@ export const RisikoscenarioEtterTitak: FunctionComponent<TProps> = ({
                 <FormSummary.Label id='effektEtterTiltak'>Risikoscenarioer</FormSummary.Label>
                 <FormSummary.Value>
                   Det er vurdert totalt sett {antallFerdigVurdert} risikoscenarioer.{' '}
-                  <ExternalLink href={risikoscenarioLink + risikoscenarioFilterAlleUrl()}>
+                  <ExternalLink href={`${risikoscenarioLink}${risikoscenarioFilterAlleUrl()}`}>
                     Se alle risikoscenarioer
                   </ExternalLink>
                   .
