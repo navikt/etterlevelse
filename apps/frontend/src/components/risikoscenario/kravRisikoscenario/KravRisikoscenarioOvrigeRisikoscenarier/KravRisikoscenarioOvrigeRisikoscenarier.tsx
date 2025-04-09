@@ -6,10 +6,12 @@ import { user } from '../../../../services/User'
 
 type TProps = {
   pvkDokument: IPvkDokument
+  pvoLink?: boolean
 }
 
 export const KravRisikoscenarioOvrigeRisikoscenarier: FunctionComponent<TProps> = ({
   pvkDokument,
+  pvoLink,
 }) => {
   const navigate: NavigateFunction = useNavigate()
 
@@ -19,7 +21,7 @@ export const KravRisikoscenarioOvrigeRisikoscenarier: FunctionComponent<TProps> 
         variant='tertiary'
         type='button'
         onClick={() => {
-          if (user.isPersonvernombud()) {
+          if (pvoLink && user.isPersonvernombud()) {
             navigate(`/pvkdokument/${pvkDokument.id}/pvotilbakemelding/5`)
           } else {
             navigate(

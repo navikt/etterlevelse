@@ -83,7 +83,7 @@ export const KravRisikoscenarioReadOnly: FunctionComponent<TProps> = ({ krav, pv
         </div>
 
         {user.isPersonvernombud() && (
-          <KravRisikoscenarioOvrigeRisikoscenarier pvkDokument={pvkDokument} />
+          <KravRisikoscenarioOvrigeRisikoscenarier pvkDokument={pvkDokument} pvoLink />
         )}
       </div>
     </div>
