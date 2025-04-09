@@ -287,9 +287,15 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                           </Heading>
                           Tiltak legges inn under{' '}
                           <ExternalLink
-                            href={`/dokumentasjon/${etterlevelseDokumentasjonId}/pvkdokument/${pvkDokument.id}/4`}
+                            href={'/dokumentasjon/' + etterlevelseDokumentasjonId + '?tab=pvk'}
                           >
-                            Identifisering av risikoscenarioer og tiltak
+                            PVK-relaterte krav{' '}
+                          </ExternalLink>{' '}
+                          eller eventuelt under{' '}
+                          <ExternalLink
+                            href={`/dokumentasjon/${etterlevelseDokumentasjonId}/pvkdokument/${pvkDokument.id}/5`}
+                          >
+                            øvrige risikoscenarioer
                           </ExternalLink>
                           .
                         </Alert>
