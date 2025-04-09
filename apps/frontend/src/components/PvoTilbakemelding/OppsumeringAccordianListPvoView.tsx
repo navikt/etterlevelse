@@ -1,5 +1,5 @@
 import { Accordion, Alert, BodyLong, Heading, Label, ReadMore } from '@navikt/ds-react'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../constants'
 import RisikoscenarioAccordianHeader from '../risikoscenario/RisikoscenarioAccordionHeader'
@@ -26,6 +26,7 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
   const tabQuery = url.searchParams.get('tab')
   const filterQuery = url.searchParams.get('filter')
   const navigate = useNavigate()
+  const accordionRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (risikoscenarioId) {
@@ -43,6 +44,11 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
       navigate(
         `${window.location.pathname}?tab=${tabQuery}&filter=${filterQuery}&risikoscenario=${risikoscenarioId}`
       )
+      setTimeout(() => {
+        if (accordionRef.current) {
+          window.scrollTo({ top: accordionRef.current.offsetTop - 30, behavior: 'smooth' })
+        }
+      }, 200)
     } else {
       const paramQuery = tabQuery === tabValues.risikoscenarioer ? '&filter=' + filterQuery : ''
       navigate(`${window.location.pathname}?tab=${tabQuery}${paramQuery}`)
@@ -69,7 +75,10 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
                 handleAccordionChange(open ? risikoscenario.id : undefined)
               }}
             >
-              <RisikoscenarioAccordianHeader risikoscenario={risikoscenario} />
+              <RisikoscenarioAccordianHeader
+                risikoscenario={risikoscenario}
+                ref={expanded ? accordionRef : undefined}
+              />
               <Accordion.Content>
                 <RisikoscenarioView
                   risikoscenario={risikoscenario}

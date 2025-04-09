@@ -1,5 +1,5 @@
 import { Accordion, Alert, BodyLong, Heading, ReadMore } from '@navikt/ds-react'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../constants'
 import { IdentifiseringAvRisikoscenarioAccordianHeader } from '../risikoscenario/RisikoscenarioAccordionHeader'
@@ -20,6 +20,7 @@ export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
   const risikoscenarioId = url.searchParams.get('risikoscenario')
   const tiltakId = url.searchParams.get('tiltak')
   const navigate = useNavigate()
+  const accordionRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (risikoscenarioId) {
@@ -43,6 +44,11 @@ export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
   const handleAccordionChange = (risikoscenarioId?: string) => {
     if (risikoscenarioId) {
       navigate(window.location.pathname + '?risikoscenario=' + risikoscenarioId)
+      setTimeout(() => {
+        if (accordionRef.current) {
+          window.scrollTo({ top: accordionRef.current.offsetTop - 30, behavior: 'smooth' })
+        }
+      }, 200)
     } else {
       navigate(window.location.pathname)
     }
@@ -62,7 +68,10 @@ export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
                 handleAccordionChange(open ? risikoscenario.id : undefined)
               }}
             >
-              <IdentifiseringAvRisikoscenarioAccordianHeader risikoscenario={risikoscenario} />
+              <IdentifiseringAvRisikoscenarioAccordianHeader
+                risikoscenario={risikoscenario}
+                ref={expanded ? accordionRef : undefined}
+              />
               <Accordion.Content>
                 {expanded && (
                   <div>
