@@ -1,6 +1,6 @@
 export const etterlevelseDokumentasjonCreateUrl = (): string => '/dokumentasjon/create'
 
-export const etterlevelsesDokumentasjonEditUrl = (etterlevelseDokumentasjonId?: string) =>
+export const etterlevelsesDokumentasjonEditUrl = (etterlevelseDokumentasjonId?: string): string =>
   `/dokumentasjon/edit/${etterlevelseDokumentasjonId}`
 
 export const etterlevelseDokumentasjonUrl = (etterlevelseDokumentasjonId?: string): string =>
@@ -15,7 +15,7 @@ export const etterlevelseDokumentasjonTemaUrl = (
   tema: string | undefined
 ): string => `/dokumentasjon/${etterlevelseDokumentasjonId}/${tema}`
 
-export const etterlevelseDokumentasjonPvkTabUrl = (etterlevelseDokumentasjonId: string) =>
+export const etterlevelseDokumentasjonPvkTabUrl = (etterlevelseDokumentasjonId: string): string =>
   `/dokumentasjon/${etterlevelseDokumentasjonId}?tab=pvk`
 
 export const etterlevelseDokumentasjonGjenbrukUrl = (etterlevelseDokumentasjonId: string): string =>

@@ -60,7 +60,7 @@ export const pvkDokumenteringPvoTilbakemeldingUrl = (
   pvkDokumentId: string | undefined,
   step: number,
   filter?: string
-) => {
+): string => {
   const url: string = `/pvkdokument/${pvkDokumentId}/pvotilbakemelding/${step}`
 
   if (filter) {
@@ -70,15 +70,18 @@ export const pvkDokumenteringPvoTilbakemeldingUrl = (
   return url
 }
 
-export const pvkDokumentasjonTabUrl = (pathname: string, tabQuery: string, paramQuery: string) =>
-  `${pathname}?tab=${tabQuery}${paramQuery}`
+export const pvkDokumentasjonTabUrl = (
+  pathname: string,
+  tabQuery: string,
+  paramQuery: string
+): string => `${pathname}?tab=${tabQuery}${paramQuery}`
 
 export const pvkDokumentasjonTabFilterRisikoscenarioUrl = (
   pathname: string,
   tabQuery: string | null,
   filter: string | null,
   risikoscenarioId: string | null
-) => {
+): string => {
   const url: string = `${pathname}?tab=${tabQuery}&filter=${filter}`
   if (risikoscenarioId) {
     return `${url}&risikoscenario=${risikoscenarioId}`
@@ -92,7 +95,7 @@ export const pvkDokumentasjonTabFilterUrl = (
   tabQuery: string | null,
   filter: string | null,
   risikoscenarioer: string
-) => {
+): string => {
   const url: string = `${pathname}?tab=${tabQuery}`
 
   if (tabQuery === risikoscenarioer) {
